@@ -10,6 +10,12 @@ from enum import Enum
 
 import streamlit as st
 from streamlit.delta_generator import DeltaGenerator
+try:
+    # Verfügbar ab Streamlit >=1.20; liefert None, wenn kein aktiver Run-Kontext
+    from streamlit.runtime.scriptrunner import get_script_run_ctx  # type: ignore
+except Exception:  # pragma: no cover
+    def get_script_run_ctx():  # type: ignore
+        return None
 
 
 class ProgressStyle(Enum):
@@ -45,15 +51,25 @@ class ProgressManager:
 
     def _initialize_session_state(self):
         """Initialisiert Session State für Progress Manager"""
-        if 'progress_config' not in st.session_state:
-            st.session_state.progress_config = self.config
-        if 'progress_active' not in st.session_state:
-            st.session_state.progress_active = {}
+        if not _is_session_alive():
+            return
+        try:
+            if 'progress_config' not in st.session_state:
+                st.session_state.progress_config = self.config
+            if 'progress_active' not in st.session_state:
+                st.session_state.progress_active = {}
+        except Exception:
+            # Session evtl. bereits beendet
+            pass
 
     def set_style(self, style: ProgressStyle):
         """Ändert den globalen Ladebalken-Style"""
         self.config.style = style
-        st.session_state.progress_config.style = style
+        if _is_session_alive():
+            try:
+                st.session_state.progress_config.style = style
+            except Exception:
+                pass
 
     def set_colors(
             self,
@@ -66,7 +82,11 @@ class ProgressManager:
             self.config.color_secondary = secondary
         if background:
             self.config.color_background = background
-        st.session_state.progress_config = self.config
+        if _is_session_alive():
+            try:
+                st.session_state.progress_config = self.config
+            except Exception:
+                pass
 
     @contextmanager
     def progress_context(self, title: str = "Verarbeitung läuft...",
@@ -82,8 +102,12 @@ class ProgressManager:
             yield progress_bar
         finally:
             # Cleanup
-            if progress_id in st.session_state.progress_active:
-                del st.session_state.progress_active[progress_id]
+            if _is_session_alive():
+                try:
+                    if progress_id in st.session_state.progress_active:
+                        del st.session_state.progress_active[progress_id]
+                except Exception:
+                    pass
 
     def create_progress_bar(
             self,
@@ -92,22 +116,36 @@ class ProgressManager:
             container: DeltaGenerator | None = None) -> 'ProgressBar':
         """Erstellt einen neuen Ladebalken"""
         if container is None:
-            container = st.container()
+            try:
+                container = st.container()
+            except Exception:
+                # Kein aktiver UI-Kontext -> No-Op ProgressBar zurückgeben
+                return ProgressBarNoOp(progress_id, title)
 
         progress_bar = ProgressBar(
             progress_id, title, container, self.config
         )
 
-        st.session_state.progress_active[progress_id] = {
-            'bar': progress_bar,
-            'container': container
-        }
+        if _is_session_alive():
+            try:
+                st.session_state.progress_active[progress_id] = {
+                    'bar': progress_bar,
+                    'container': container
+                }
+            except Exception:
+                pass
 
         return progress_bar
 
     def get_style_css(self) -> str:
         """Generiert CSS für den aktuellen Style im shadcn Design"""
-        config = st.session_state.progress_config
+        config = self.config
+        if _is_session_alive():
+            try:
+                # nutze Session-Override falls vorhanden
+                config = st.session_state.get('progress_config', self.config)
+            except Exception:
+                pass
 
         base_css = """
         <style>
@@ -333,21 +371,31 @@ class ProgressBar:
 
     def _initialize(self):
         """Initialisiert den Ladebalken"""
-        with self.container:
-            self._placeholder = st.empty()
-            self._render()
+        try:
+            with self.container:
+                self._placeholder = st.empty()
+                self._render()
+        except Exception:
+            # UI evtl. schon weg
+            self._placeholder = None
 
     def update(self, value: int, text: str = None):
         """Aktualisiert den Ladebalken"""
         self.current_value = min(max(0, value), self.max_value)
         if text:
             self.title = text
-        self._render()
+        try:
+            self._render()
+        except Exception:
+            pass
 
     def set_max(self, max_value: int):
         """Setzt den Maximalwert"""
         self.max_value = max_value
-        self._render()
+        try:
+            self._render()
+        except Exception:
+            pass
 
     def increment(self, step: int = 1, text: str = None):
         """Erhöht den Fortschritt um einen Schritt"""
@@ -355,12 +403,15 @@ class ProgressBar:
 
     def complete(self, text: str = "Abgeschlossen!"):
         """Setzt den Ladebalken auf 100%"""
-        self.update(100, text)
-        time.sleep(0.5)  # Kurz anzeigen bevor cleanup
+        try:
+            self.update(100, text)
+            time.sleep(0.2)
+        except Exception:
+            pass
 
     def _render(self):
         """Rendert den Ladebalken im shadcn Design"""
-        if not self._placeholder:
+        if not self._placeholder or not _is_session_alive():
             return
 
         percentage = (self.current_value / self.max_value) * 100
@@ -384,15 +435,16 @@ class ProgressBar:
 
         html += "</div>"
 
-        with self._placeholder.container():
-            st.markdown(
-                progress_manager.get_style_css(),
-                unsafe_allow_html=True)
-            st.markdown(html, unsafe_allow_html=True)
+        try:
+            with self._placeholder.container():
+                st.markdown(
+                    progress_manager.get_style_css(),
+                    unsafe_allow_html=True)
+                st.markdown(html, unsafe_allow_html=True)
+        except Exception:
+            # Schreibversuch nach Verbindungsende verhindern
+            pass
 
-
-# Globale Instanz
-progress_manager = ProgressManager()
 
 # Convenience Funktionen
 
@@ -425,6 +477,47 @@ def create_progress_bar(
     return progress_manager.create_progress_bar(
         f"progress_{int(time.time() * 1000)}", title, container)
 
+
+# --- Hilfsfunktionen / No-Op Variante ---
+
+def _is_session_alive() -> bool:
+    """Prüft, ob ein aktiver Streamlit Run-Kontext existiert.
+
+    Rückgabe False z. B. nach Tab-Close/Reload oder außerhalb von streamlit run.
+    """
+    try:
+        ctx = get_script_run_ctx()
+        if ctx is None:
+            return False
+        # Zusätzliche heuristische Checks möglich (Session-Objekt/ID)
+        return True
+    except Exception:
+        return False
+
+
+class ProgressBarNoOp:
+    """Fallback-ProgressBar ohne UI-Ausgaben (für beendete Sessions/CLI)."""
+
+    def __init__(self, progress_id: str, title: str):
+        self.progress_id = progress_id
+        self.title = title
+        self.current_value = 0
+        self.max_value = 100
+
+    def update(self, value: int, text: str | None = None):
+        self.current_value = min(max(0, value), self.max_value)
+        if text:
+            self.title = text
+
+    def set_max(self, max_value: int):
+        self.max_value = max_value
+
+    def increment(self, step: int = 1, text: str | None = None):
+        self.update(self.current_value + step, text)
+
+    def complete(self, text: str = "Abgeschlossen!"):
+        self.update(100, text)
+
 # Decorator für automatische Progress-Anzeige
 
 
@@ -444,3 +537,7 @@ def with_progress(title: str = "Verarbeitung läuft..."):
                 return result
         return wrapper
     return decorator
+
+
+# Globale Instanz am Ende initialisieren (nach Hilfsfunktionen)
+progress_manager = ProgressManager()

@@ -15,6 +15,267 @@ import contextlib
 from typing import Any
 
 import streamlit as st
+try:
+    # Für Session-Liveness-Prüfung (None außerhalb von streamlit run)
+    from streamlit.runtime.scriptrunner import get_script_run_ctx  # type: ignore
+except Exception:  # pragma: no cover
+    def get_script_run_ctx():  # type: ignore
+        return None
+
+def _is_session_alive() -> bool:
+    """Prüft, ob eine aktive Streamlit-Session vorhanden ist.
+
+    Verhindert UI-Schreiboperationen (st.write, st.markdown, ...),
+    wenn der WebSocket/Session bereits beendet wurde.
+    """
+    try:
+        return get_script_run_ctx() is not None
+    except Exception:
+        return False
+
+# Globale, zentrale Absicherung für Streamlit-UI-Funktionen in diesem Modul.
+# Wir patchen häufig genutzte st.* Aufrufe, um WebSocketClosedError & Co.
+# zentral abzufangen und sinnvolle Fallbacks zu liefern, wenn die Session
+# nicht mehr aktiv ist.
+_ST_PATCHED = False
+_ST_ORIG: dict[str, any] = {}
+
+
+class _NoOpContext:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    # No-Op UI Methoden
+    def write(self, *args, **kwargs):
+        return None
+
+    def markdown(self, *args, **kwargs):
+        return None
+
+    def text(self, *args, **kwargs):
+        return None
+
+    def caption(self, *args, **kwargs):
+        return None
+
+    def subheader(self, *args, **kwargs):
+        return None
+
+    def header(self, *args, **kwargs):
+        return None
+
+    def info(self, *args, **kwargs):
+        return None
+
+    def warning(self, *args, **kwargs):
+        return None
+
+    def error(self, *args, **kwargs):
+        return None
+
+    def success(self, *args, **kwargs):
+        return None
+
+
+def _patch_streamlit_ui_safeguards():
+    global _ST_PATCHED
+    if _ST_PATCHED:
+        return
+    try:
+        # Speichere Originale nur einmal
+        for name in (
+            'write', 'markdown', 'text', 'caption', 'subheader', 'header',
+            'info', 'warning', 'error', 'success',
+            'columns', 'expander', 'number_input', 'slider', 'selectbox',
+            'toggle', 'text_area', 'button'
+        ):
+            if name in _ST_ORIG:
+                continue
+            _ST_ORIG[name] = getattr(st, name, None)
+
+        def safe_call(name, *args, **kwargs):
+            fn = _ST_ORIG.get(name)
+            if not callable(fn):
+                return None
+            try:
+                if not _is_session_alive():
+                    # Session ist nicht aktiv → Fallback
+                    return _fallback_for(name, *args, **kwargs)
+                return fn(*args, **kwargs)
+            except Exception as e:  # z.B. WebSocketClosedError
+                try:
+                    debug_log("solar_calculator.ui", f"safe_{name} unterdrückt Fehler", error=str(e))
+                except Exception:
+                    pass
+                return _fallback_for(name, *args, **kwargs)
+
+        # Wrapper je Funktion setzen
+        for name in ('write', 'markdown', 'text', 'caption', 'subheader', 'header', 'info', 'warning', 'error', 'success'):
+            if _ST_ORIG.get(name):
+                setattr(st, name, lambda *a, __n=name, **k: safe_call(__n, *a, **k))
+
+        # columns: muss Liste von Context-Managern liefern
+        def safe_columns(*args, **kwargs):
+            # Ermittele Zahl der Spalten
+            count = 1
+            if args:
+                spec = args[0]
+                if isinstance(spec, int):
+                    count = spec
+                elif isinstance(spec, (list, tuple)):
+                    count = len(spec)
+            if _is_session_alive() and callable(_ST_ORIG.get('columns')):
+                try:
+                    return _ST_ORIG['columns'](*args, **kwargs)
+                except Exception:
+                    pass
+            # Fallback: No-Op Columns
+            return [_NoOpContext() for _ in range(max(1, int(count)))]
+
+        if _ST_ORIG.get('columns'):
+            st.columns = safe_columns  # type: ignore
+
+        # expander: muss Context-Manager liefern
+        def safe_expander(*args, **kwargs):
+            if _is_session_alive() and callable(_ST_ORIG.get('expander')):
+                try:
+                    return _ST_ORIG['expander'](*args, **kwargs)
+                except Exception:
+                    pass
+            return _NoOpContext()
+
+        if _ST_ORIG.get('expander'):
+            st.expander = safe_expander  # type: ignore
+
+        # Interaktive Widgets mit sinnvollen Defaults
+        def safe_number_input(*args, **kwargs):
+            if _is_session_alive() and callable(_ST_ORIG.get('number_input')):
+                try:
+                    return _ST_ORIG['number_input'](*args, **kwargs)
+                except Exception:
+                    pass
+            # Fallback: gebe den übergebenen Default-Wert zurück
+            if 'value' in kwargs:
+                return kwargs['value']
+            # versuche positional default (selten genutzt, aber der Vollständigkeit halber)
+            return 0
+
+        if _ST_ORIG.get('number_input'):
+            st.number_input = safe_number_input  # type: ignore
+
+        def safe_slider(*args, **kwargs):
+            if _is_session_alive() and callable(_ST_ORIG.get('slider')):
+                try:
+                    return _ST_ORIG['slider'](*args, **kwargs)
+                except Exception:
+                    pass
+            return kwargs.get('value', 0)
+
+        if _ST_ORIG.get('slider'):
+            st.slider = safe_slider  # type: ignore
+
+        def safe_selectbox(*args, **kwargs):
+            if _is_session_alive() and callable(_ST_ORIG.get('selectbox')):
+                try:
+                    return _ST_ORIG['selectbox'](*args, **kwargs)
+                except Exception:
+                    pass
+            options = []
+            if 'options' in kwargs:
+                options = kwargs['options']
+            elif args:
+                # signatur: label, options, index=0, ...
+                try:
+                    options = args[1]
+                except Exception:
+                    options = []
+            if isinstance(options, (list, tuple)) and options:
+                idx = kwargs.get('index', 0)
+                try:
+                    return options[idx]
+                except Exception:
+                    return options[0]
+            return None
+
+        if _ST_ORIG.get('selectbox'):
+            st.selectbox = safe_selectbox  # type: ignore
+
+        def safe_toggle(*args, **kwargs):
+            if _is_session_alive() and callable(_ST_ORIG.get('toggle')):
+                try:
+                    return _ST_ORIG['toggle'](*args, **kwargs)
+                except Exception:
+                    pass
+            return kwargs.get('value', False)
+
+        if _ST_ORIG.get('toggle'):
+            st.toggle = safe_toggle  # type: ignore
+
+        def safe_text_area(*args, **kwargs):
+            if _is_session_alive() and callable(_ST_ORIG.get('text_area')):
+                try:
+                    return _ST_ORIG['text_area'](*args, **kwargs)
+                except Exception:
+                    pass
+            return kwargs.get('value', "")
+
+        if _ST_ORIG.get('text_area'):
+            st.text_area = safe_text_area  # type: ignore
+
+        def safe_button(*args, **kwargs):
+            if _is_session_alive() and callable(_ST_ORIG.get('button')):
+                try:
+                    return _ST_ORIG['button'](*args, **kwargs)
+                except Exception:
+                    pass
+            return False
+
+        if _ST_ORIG.get('button'):
+            st.button = safe_button  # type: ignore
+
+        _ST_PATCHED = True
+    except Exception as e:
+        # Falls Patching fehlschlägt, läuft der Code weiter mit Originalen
+        try:
+            debug_log("solar_calculator.ui", "Patching st.* fehlgeschlagen", error=str(e))
+        except Exception:
+            pass
+
+
+def _fallback_for(name: str, *args, **kwargs):
+    # zentrale Fallbacks für häufige UI-Funktionen
+    if name == 'columns':
+        # handled in safe_columns
+        return [_NoOpContext()]
+    if name == 'expander':
+        return _NoOpContext()
+    if name == 'number_input':
+        return kwargs.get('value', 0)
+    if name == 'slider':
+        return kwargs.get('value', 0)
+    if name == 'selectbox':
+        options = kwargs.get('options', [])
+        if isinstance(options, (list, tuple)) and options:
+            try:
+                return options[kwargs.get('index', 0)]
+            except Exception:
+                return options[0]
+        return None
+    if name == 'toggle':
+        return kwargs.get('value', False)
+    if name == 'text_area':
+        return kwargs.get('value', "")
+    if name == 'button':
+        return False
+    # write/markdown/etc. → No-Op
+    return None
+
+
+# Patching sofort aktivieren (idempotent)
+_patch_streamlit_ui_safeguards()
 
 from debug_tools import (
     debug_log,
@@ -128,6 +389,10 @@ def _display_pricing_information(
         details: dict[str, Any], texts: dict[str, str]) -> None:
     """Display enhanced real-time pricing information for selected components with categorization"""
     if not PRICING_INTEGRATION_AVAILABLE:
+        return
+
+    # Session-Liveness-Guard: Keine UI-Updates nach Session-Ende
+    if not _is_session_alive():
         return
 
     try:
@@ -406,6 +671,9 @@ def _display_pricing_information(
                 formatted_zwischensumme = formatted_preis_mit_mwst
 
                 st.markdown("---")
+                # Guard vor UI-Block: Session kann während schneller Eingaben enden
+                if not _is_session_alive():
+                    return
                 st.markdown("#### **Manuelle Provision**")
                 col_prov_percent, col_prov_euro = st.columns(2)
                 with col_prov_percent:
@@ -431,7 +699,20 @@ def _display_pricing_information(
                         help="Manuelle Provision als fester Euro-Betrag",
                     )
 
-                if provision_percent > 0 or provision_euro > 0:
+                # Debounce: bei sehr schnellen Änderungen keine Flut an UI-Updates
+                do_heavy_ui = True
+                try:
+                    import time
+                    now = time.monotonic()
+                    last = st.session_state.get('_provision_update_last_ts', 0.0)
+                    if (now - float(last)) < 0.2:
+                        do_heavy_ui = False
+                    else:
+                        st.session_state['_provision_update_last_ts'] = now
+                except Exception:
+                    pass
+
+                if do_heavy_ui and (provision_percent > 0 or provision_euro > 0):
                     net_total_amount = float(net_total)
                     provision_percent_amount = net_total_amount * \
                         (provision_percent / 100.0)
@@ -441,52 +722,56 @@ def _display_pricing_information(
                     formatted_provision_total = _format_german_currency(
                         total_provision_amount)
 
-                    st.markdown("**Provisionsberechnung:**")
-                    col_base_label, col_base_value = st.columns([3, 1])
-                    with col_base_label:
-                        st.write("Basis (finaler Angebotspreis):")
-                    with col_base_value:
-                        st.write(
-                            pricing_display.get(
-                                "formatted_net_total",
-                                _format_german_currency(net_total_amount)))
-
-                    if provision_percent > 0:
-                        col_break_label, col_break_value = st.columns([3, 1])
-                        with col_break_label:
-                            st.write(f"+ Provision ({provision_percent}%)")
-                        with col_break_value:
-                            st.write(f"+ {formatted_provision_percent}")
-
-                    if provision_euro > 0:
-                        col_break_label, col_break_value = st.columns([3, 1])
-                        with col_break_label:
-                            st.write("+ Provision (Festbetrag)")
-                        with col_break_value:
+                    try:
+                        st.markdown("**Provisionsberechnung:**")
+                        col_base_label, col_base_value = st.columns([3, 1])
+                        with col_base_label:
+                            st.write("Basis (finaler Angebotspreis):")
+                        with col_base_value:
                             st.write(
-                                f"+ {_format_german_currency(provision_euro)}")
+                                pricing_display.get(
+                                    "formatted_net_total",
+                                    _format_german_currency(net_total_amount)))
 
-                    st.markdown("---")
+                        if provision_percent > 0:
+                            col_break_label, col_break_value = st.columns([3, 1])
+                            with col_break_label:
+                                st.write(f"+ Provision ({provision_percent}%)")
+                            with col_break_value:
+                                st.write(f"+ {formatted_provision_percent}")
 
-                    final_end_preis = net_total_amount + total_provision_amount
-                    formatted_final_endpreis = _format_german_currency(
-                        final_end_preis)
-                    minus_mwst_value = calculate_vat_amount(
-                        final_end_preis, vat_rate)
-                    formatted_minus_mwst = _format_german_currency(
-                        minus_mwst_value)
-                    preis_mit_mwst = calculate_gross_from_net(
-                        final_end_preis, vat_rate)
-                    formatted_preis_mit_mwst = _format_german_currency(
-                        preis_mit_mwst)
-                    zwischensumme_brutto = preis_mit_mwst
-                    formatted_zwischensumme = formatted_preis_mit_mwst
+                        if provision_euro > 0:
+                            col_break_label, col_break_value = st.columns([3, 1])
+                            with col_break_label:
+                                st.write("+ Provision (Festbetrag)")
+                            with col_break_value:
+                                st.write(
+                                    f"+ {_format_german_currency(provision_euro)}")
 
-                    col_final_label, col_final_value = st.columns([3, 1])
-                    with col_final_label:
-                        st.markdown("### **🎯 Endpreis mit Provision:**")
-                    with col_final_value:
-                        st.markdown(f"### **{formatted_final_endpreis}**")
+                        st.markdown("---")
+
+                        final_end_preis = net_total_amount + total_provision_amount
+                        formatted_final_endpreis = _format_german_currency(
+                            final_end_preis)
+                        minus_mwst_value = calculate_vat_amount(
+                            final_end_preis, vat_rate)
+                        formatted_minus_mwst = _format_german_currency(
+                            minus_mwst_value)
+                        preis_mit_mwst = calculate_gross_from_net(
+                            final_end_preis, vat_rate)
+                        formatted_preis_mit_mwst = _format_german_currency(
+                            preis_mit_mwst)
+                        zwischensumme_brutto = preis_mit_mwst
+                        formatted_zwischensumme = formatted_preis_mit_mwst
+
+                        col_final_label, col_final_value = st.columns([3, 1])
+                        with col_final_label:
+                            st.markdown("### **🎯 Endpreis mit Provision:**")
+                        with col_final_value:
+                            st.markdown(f"### **{formatted_final_endpreis}**")
+                    except Exception as _ui_err:
+                        # UI-Schreibfehler (z.B. WebSocketClosedError) ignorieren
+                        debug_log("solar_calculator.ui", "UI-Update unterdrückt", error=str(_ui_err))
 
                 st.markdown("---")
                 st.markdown(
@@ -930,8 +1215,19 @@ def _trigger_pricing_update(details: dict[str, Any]) -> None:
     """Trigger pricing update when component selection changes"""
     if not PRICING_INTEGRATION_AVAILABLE:
         return
-
+    # Verbindungs-/Session-Check: vermeidet Sends nach Session-Ende
     try:
+        if get_script_run_ctx() is None:
+            return
+
+        # Debounce: vermeidet Flut an Updates bei schneller Auswahl
+        import time
+        now = time.monotonic()
+        last = st.session_state.get('_pricing_update_last_ts', 0.0)
+        if (now - float(last)) < 0.2:  # 200 ms Mindestabstand
+            return
+        st.session_state['_pricing_update_last_ts'] = now
+
         debug_log(
             "solar_calculator.pricing",
             "Pricing-Update ausgelöst",
@@ -1079,9 +1375,18 @@ def render_solar_calculator(
                 'technology_selection_header',
                 'Auswahl der Technik'))
 
+        # Session-Guard vor Modul-Block
+        if not _is_session_alive():
+            return
+
         # --- MODULE ---
-        module_products = _products_by_category('Modul')
-        module_brands = _brands_from_products(module_products)
+        try:
+            module_products = _products_by_category('Modul')
+            module_brands = _brands_from_products(module_products)
+        except Exception as e:
+            debug_log("solar_calculator.module", "Fehler beim Laden der Module", error=str(e))
+            module_products = []
+            module_brands = []
 
         cols_mod_top = st.columns([1, 1, 2])
         with cols_mod_top[0]:
@@ -1097,6 +1402,10 @@ def render_solar_calculator(
                 st.session_state.get(
                     'module_quantity_sc_v1',
                     0) or 0)
+
+            # Guard vor number_input
+            if not _is_session_alive():
+                return
 
             # Anzeige des aktuellen Werts (read-only) + Zahleneingabe via
             # separate number_input ohne gleichen Key Konflikt
@@ -1134,6 +1443,11 @@ def render_solar_calculator(
                 idx_brand = brand_options.index(current_brand)
             except ValueError:
                 idx_brand = 0
+            
+            # Guard vor selectbox
+            if not _is_session_alive():
+                return
+                
             selected_brand = st.selectbox(
                 _get_text(texts, 'module_brand_label', 'PV Modul Hersteller'),
                 options=brand_options,
@@ -1143,10 +1457,15 @@ def render_solar_calculator(
             details['selected_module_brand'] = selected_brand if selected_brand != please_select_text else None
         with cols_mod_top[2]:
             # Modelle je Hersteller
-            filtered_mods = _filter_models_by_brand(
-                module_products, details.get('selected_module_brand'))
-            model_names = [p.get('model_name')
-                           for p in filtered_mods if p.get('model_name')]
+            try:
+                filtered_mods = _filter_models_by_brand(
+                    module_products, details.get('selected_module_brand'))
+                model_names = [p.get('model_name')
+                               for p in filtered_mods if p.get('model_name')]
+            except Exception as e:
+                debug_log("solar_calculator.module", "Fehler beim Filtern der Modelle", error=str(e))
+                model_names = []
+                
             current_module = details.get(
                 'selected_module_name', please_select_text)
             module_options = [please_select_text] + model_names
@@ -1154,6 +1473,11 @@ def render_solar_calculator(
                 idx_mod = module_options.index(current_module)
             except ValueError:
                 idx_mod = 0
+            
+            # Guard vor selectbox
+            if not _is_session_alive():
+                return
+                
             selected_module = st.selectbox(
                 _get_text(texts, 'module_model_label', 'PV Modul Modell'),
                 options=module_options,
@@ -1162,20 +1486,25 @@ def render_solar_calculator(
             )
             details['selected_module_name'] = selected_module if selected_module != please_select_text else None
             if details.get('selected_module_name'):
-                md = get_product_by_model_name_safe(
-                    details['selected_module_name'])
-                if md:
-                    details['selected_module_id'] = md.get('id')
-                    details['selected_module_capacity_w'] = float(
-                        md.get('capacity_w', 0.0) or 0.0)
-                else:
+                try:
+                    md = get_product_by_model_name_safe(
+                        details['selected_module_name'])
+                    if md:
+                        details['selected_module_id'] = md.get('id')
+                        details['selected_module_capacity_w'] = float(
+                            md.get('capacity_w', 0.0) or 0.0)
+                    else:
+                        details['selected_module_id'] = None
+                        details['selected_module_capacity_w'] = 0.0
+                except Exception as e:
+                    debug_log("solar_calculator.module", "Fehler beim Laden der Modulkapazität", error=str(e))
                     details['selected_module_id'] = None
                     details['selected_module_capacity_w'] = 0.0
             else:
                 details['selected_module_id'] = None
                 details['selected_module_capacity_w'] = 0.0
 
-        if details.get('selected_module_capacity_w', 0.0) > 0:
+        if _is_session_alive() and details.get('selected_module_capacity_w', 0.0) > 0:
             st.info(
                 f"{
                     _get_text(
@@ -1188,16 +1517,28 @@ def render_solar_calculator(
         anlage_kwp = ((details.get('module_quantity', 0) or 0) *
                       (details.get('selected_module_capacity_w', 0.0) or 0.0)) / 1000.0
         details['anlage_kwp'] = anlage_kwp
-        st.info(f"{_get_text(texts,
-                             'anlage_size_label',
-                             'Anlagengröße (kWp)')}: {anlage_kwp:.2f} kWp")
+        
+        if _is_session_alive():
+            st.info(f"{_get_text(texts,
+                                 'anlage_size_label',
+                                 'Anlagengröße (kWp)')}: {anlage_kwp:.2f} kWp")
 
         # Trigger pricing update for modules
         _trigger_pricing_update(details)
 
+        # Session-Guard vor Wechselrichter-Block
+        if not _is_session_alive():
+            return
+
         # --- WECHSELRICHTER ---
-        inverter_products = _products_by_category('Wechselrichter')
-        inverter_brands = _brands_from_products(inverter_products)
+        try:
+            inverter_products = _products_by_category('Wechselrichter')
+            inverter_brands = _brands_from_products(inverter_products)
+        except Exception as e:
+            debug_log("solar_calculator.inverter", "Fehler beim Laden der Wechselrichter", error=str(e))
+            inverter_products = []
+            inverter_brands = []
+            
         st.markdown('---')
         st.markdown('### Wechselrichter')
         cols_inv_top = st.columns([1, 2, 1])
@@ -1209,6 +1550,11 @@ def render_solar_calculator(
                 idx_inv_brand = inv_brand_options.index(current_inv_brand)
             except ValueError:
                 idx_inv_brand = 0
+            
+            # Guard vor selectbox
+            if not _is_session_alive():
+                return
+                
             selected_inv_brand = st.selectbox(
                 _get_text(
                     texts,
@@ -1219,10 +1565,15 @@ def render_solar_calculator(
                 key='selected_inverter_brand_sc_v1')
             details['selected_inverter_brand'] = selected_inv_brand if selected_inv_brand != please_select_text else None
         with cols_inv_top[1]:
-            filtered_inv = _filter_models_by_brand(
-                inverter_products, details.get('selected_inverter_brand'))
-            inv_model_names = [p.get('model_name')
-                               for p in filtered_inv if p.get('model_name')]
+            try:
+                filtered_inv = _filter_models_by_brand(
+                    inverter_products, details.get('selected_inverter_brand'))
+                inv_model_names = [p.get('model_name')
+                                   for p in filtered_inv if p.get('model_name')]
+            except Exception as e:
+                debug_log("solar_calculator.inverter", "Fehler beim Filtern der Wechselrichter", error=str(e))
+                inv_model_names = []
+                
             current_inv_model = details.get(
                 'selected_inverter_name', please_select_text)
             inv_model_options = [please_select_text] + inv_model_names
@@ -1230,6 +1581,11 @@ def render_solar_calculator(
                 idx_inv_model = inv_model_options.index(current_inv_model)
             except ValueError:
                 idx_inv_model = 0
+            
+            # Guard vor selectbox
+            if not _is_session_alive():
+                return
+                
             selected_inv_model = st.selectbox(
                 _get_text(
                     texts,
@@ -1240,6 +1596,10 @@ def render_solar_calculator(
                 key='selected_inverter_name_sc_v1')
             details['selected_inverter_name'] = selected_inv_model if selected_inv_model != please_select_text else None
         with cols_inv_top[2]:
+            # Guard vor number_input
+            if not _is_session_alive():
+                return
+                
             details['selected_inverter_quantity'] = int(st.number_input(
                 _get_text(texts, 'inverter_quantity_label', 'Anzahl WR'),
                 min_value=1,
@@ -1250,13 +1610,17 @@ def render_solar_calculator(
 
         base_inverter_power_kw = 0.0
         if details.get('selected_inverter_name'):
-            invd = get_product_by_model_name_safe(
-                details['selected_inverter_name'])
-            if invd:
-                details['selected_inverter_id'] = invd.get('id')
-                base_inverter_power_kw = float(
-                    invd.get('power_kw', 0.0) or 0.0)
-            else:
+            try:
+                invd = get_product_by_model_name_safe(
+                    details['selected_inverter_name'])
+                if invd:
+                    details['selected_inverter_id'] = invd.get('id')
+                    base_inverter_power_kw = float(
+                        invd.get('power_kw', 0.0) or 0.0)
+                else:
+                    details['selected_inverter_id'] = None
+            except Exception as e:
+                debug_log("solar_calculator.inverter", "Fehler beim Laden der Wechselrichter-Leistung", error=str(e))
                 details['selected_inverter_id'] = None
         else:
             details['selected_inverter_id'] = None
@@ -1274,7 +1638,7 @@ def render_solar_calculator(
         with contextlib.suppress(Exception):
             st.session_state.project_data['inverter_power_kw'] = total_inverter_power_kw
 
-        if total_inverter_power_kw > 0:
+        if _is_session_alive() and total_inverter_power_kw > 0:
             st.info(
                 f"{
                     _get_text(
@@ -1291,8 +1655,14 @@ def render_solar_calculator(
         # Trigger pricing update for inverters
         _trigger_pricing_update(details)
 
+
         # --- SPEICHER (optional) ---
         st.markdown('---')
+        
+        # Session-Guard vor Speicher-Block
+        if not _is_session_alive():
+            return
+        
         details['include_storage'] = st.checkbox(
             _get_text(
                 texts,
@@ -1305,8 +1675,24 @@ def render_solar_calculator(
             key='include_storage_sc_v1')
 
         if details['include_storage']:
-            storage_products = _products_by_category('Batteriespeicher')
-            storage_brands = _brands_from_products(storage_products)
+            # Debounce: bei schnellen Änderungen keine UI-Flut
+            import time
+            now = time.monotonic()
+            last_storage = st.session_state.get('_storage_update_last_ts', 0.0)
+            debounce_storage = (now - float(last_storage)) < 0.25  # 250ms für Speicher (etwas länger)
+            
+            try:
+                storage_products = _products_by_category('Batteriespeicher')
+                storage_brands = _brands_from_products(storage_products)
+            except Exception as e:
+                debug_log("solar_calculator.storage", "Fehler beim Laden der Speicherprodukte", error=str(e))
+                storage_products = []
+                storage_brands = []
+            
+            # Guard vor Columns
+            if not _is_session_alive():
+                return
+            
             cols_storage = st.columns([1, 2, 1])
             with cols_storage[0]:
                 current_storage_brand = details.get(
@@ -1317,6 +1703,11 @@ def render_solar_calculator(
                         current_storage_brand)
                 except ValueError:
                     idx_st_brand = 0
+                
+                # Guard vor Selectbox
+                if not _is_session_alive():
+                    return
+                    
                 selected_st_brand = st.selectbox(
                     _get_text(
                         texts,
@@ -1326,11 +1717,17 @@ def render_solar_calculator(
                     index=idx_st_brand,
                     key='selected_storage_brand_sc_v1')
                 details['selected_storage_brand'] = selected_st_brand if selected_st_brand != please_select_text else None
+                
             with cols_storage[1]:
-                filtered_storage = _filter_models_by_brand(
-                    storage_products, details.get('selected_storage_brand'))
-                storage_model_names = [
-                    p.get('model_name') for p in filtered_storage if p.get('model_name')]
+                try:
+                    filtered_storage = _filter_models_by_brand(
+                        storage_products, details.get('selected_storage_brand'))
+                    storage_model_names = [
+                        p.get('model_name') for p in filtered_storage if p.get('model_name')]
+                except Exception as e:
+                    debug_log("solar_calculator.storage", "Fehler beim Filtern der Modelle", error=str(e))
+                    storage_model_names = []
+                    
                 current_storage_model = details.get(
                     'selected_storage_name', please_select_text)
                 storage_model_options = [
@@ -1340,6 +1737,11 @@ def render_solar_calculator(
                         current_storage_model)
                 except ValueError:
                     idx_st_model = 0
+                
+                # Guard vor Selectbox
+                if not _is_session_alive():
+                    return
+                    
                 selected_storage = st.selectbox(
                     _get_text(texts, 'storage_model_label', 'Speicher Modell'),
                     options=storage_model_options,
@@ -1347,19 +1749,29 @@ def render_solar_calculator(
                     key='selected_storage_name_sc_v1'
                 )
                 details['selected_storage_name'] = selected_storage if selected_storage != please_select_text else None
+                
             with cols_storage[2]:
                 default_cap = float(
                     details.get(
                         'selected_storage_storage_power_kw',
                         0.0) or 0.0)
                 if details.get('selected_storage_name') and not default_cap:
-                    std = get_product_by_model_name_safe(
-                        details['selected_storage_name'])
-                    if std:
-                        default_cap = float(
-                            std.get('storage_power_kw', 0.0) or 0.0)
+                    try:
+                        std = get_product_by_model_name_safe(
+                            details['selected_storage_name'])
+                        if std:
+                            default_cap = float(
+                                std.get('storage_power_kw', 0.0) or 0.0)
+                    except Exception as e:
+                        debug_log("solar_calculator.storage", "Fehler beim Laden der Speicherkapazität", error=str(e))
+                        
                 if default_cap == 0.0:
                     default_cap = 5.0
+                
+                # Guard vor number_input
+                if not _is_session_alive():
+                    return
+                    
                 details['selected_storage_storage_power_kw'] = st.number_input(
                     _get_text(
                         texts,
@@ -1369,16 +1781,26 @@ def render_solar_calculator(
                     value=default_cap,
                     step=0.1,
                     key='selected_storage_storage_power_kw_sc_v1')
-            if details.get('selected_storage_name'):
-                std = get_product_by_model_name_safe(
-                    details['selected_storage_name'])
-                if std:
-                    cap_model = float(std.get('storage_power_kw', 0.0) or 0.0)
-                    st.info(f"{_get_text(texts,
-                                         'storage_capacity_model_label',
-                                         'Kapazität Modell (kWh)')}: {cap_model:.2f} kWh")
+            
+            # Info-Block nur wenn Session aktiv und nicht gedrosselt
+            if not debounce_storage and _is_session_alive() and details.get('selected_storage_name'):
+                try:
+                    std = get_product_by_model_name_safe(
+                        details['selected_storage_name'])
+                    if std:
+                        cap_model = float(std.get('storage_power_kw', 0.0) or 0.0)
+                        st.info(f"{_get_text(texts,
+                                             'storage_capacity_model_label',
+                                             'Kapazität Modell (kWh)')}: {cap_model:.2f} kWh")
+                except Exception as e:
+                    debug_log("solar_calculator.storage", "Fehler beim Anzeigen der Speicherkapazität", error=str(e))
 
-            _trigger_pricing_update(details)
+            # Aktualisiere Debounce-Timestamp
+            st.session_state['_storage_update_last_ts'] = now
+            
+            # Pricing-Update nur wenn nicht gedrosselt
+            if not debounce_storage:
+                _trigger_pricing_update(details)
         else:
             details['selected_storage_name'] = None
             details['selected_storage_id'] = None
