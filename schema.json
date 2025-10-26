@@ -1,0 +1,160 @@
+{
+  "version": "14",
+  "extractedFrom": ["crm.py", "database.py", "product_db.py"],
+  "tables": {
+    "customers": {
+      "tableName": "customers",
+      "pythonSource": "crm.py:create_tables_crm",
+      "columns": [
+        {"name": "id", "type": "INTEGER", "primaryKey": true, "autoIncrement": true},
+        {"name": "salutation", "type": "TEXT", "nullable": true},
+        {"name": "title", "type": "TEXT", "nullable": true},
+        {"name": "first_name", "type": "TEXT", "notNull": true},
+        {"name": "last_name", "type": "TEXT", "notNull": true},
+        {"name": "company_name", "type": "TEXT", "nullable": true},
+        {"name": "address", "type": "TEXT", "nullable": true},
+        {"name": "house_number", "type": "TEXT", "nullable": true},
+        {"name": "zip_code", "type": "TEXT", "nullable": true},
+        {"name": "city", "type": "TEXT", "nullable": true},
+        {"name": "state", "type": "TEXT", "nullable": true},
+        {"name": "region", "type": "TEXT", "nullable": true},
+        {"name": "email", "type": "TEXT", "nullable": true},
+        {"name": "phone_landline", "type": "TEXT", "nullable": true},
+        {"name": "phone_mobile", "type": "TEXT", "nullable": true},
+        {"name": "income_tax_rate_percent", "type": "REAL", "default": 0.0},
+        {"name": "creation_date", "type": "TEXT", "nullable": true},
+        {"name": "last_updated", "type": "TEXT", "nullable": true}
+      ],
+      "crudOperations": [
+        {"method": "save_customer", "pythonRef": "crm.py:save_customer"},
+        {"method": "load_customer", "pythonRef": "crm.py:load_customer"},
+        {"method": "delete_customer", "pythonRef": "crm.py:delete_customer"},
+        {"method": "load_all_customers", "pythonRef": "crm.py:load_all_customers"}
+      ]
+    },
+    "projects": {
+      "tableName": "projects",
+      "pythonSource": "crm.py:create_tables_crm",
+      "columns": [
+        {"name": "id", "type": "INTEGER", "primaryKey": true, "autoIncrement": true},
+        {"name": "customer_id", "type": "INTEGER", "notNull": true, "foreignKey": "customers(id)"},
+        {"name": "project_name", "type": "TEXT", "notNull": true},
+        {"name": "project_status", "type": "TEXT", "nullable": true},
+        {"name": "roof_type", "type": "TEXT", "nullable": true},
+        {"name": "roof_covering_type", "type": "TEXT", "nullable": true},
+        {"name": "free_roof_area_sqm", "type": "REAL", "nullable": true},
+        {"name": "roof_orientation", "type": "TEXT", "nullable": true},
+        {"name": "roof_inclination_deg", "type": "INTEGER", "nullable": true},
+        {"name": "building_height_gt_7m", "type": "INTEGER", "nullable": true},
+        {"name": "annual_consumption_kwh", "type": "REAL", "nullable": true},
+        {"name": "costs_household_euro_mo", "type": "REAL", "nullable": true},
+        {"name": "annual_heating_kwh", "type": "REAL", "nullable": true},
+        {"name": "costs_heating_euro_mo", "type": "REAL", "nullable": true},
+        {"name": "anlage_type", "type": "TEXT", "nullable": true},
+        {"name": "feed_in_type", "type": "TEXT", "nullable": true},
+        {"name": "module_quantity", "type": "INTEGER", "nullable": true},
+        {"name": "selected_module_id", "type": "INTEGER", "nullable": true},
+        {"name": "selected_inverter_id", "type": "INTEGER", "nullable": true},
+        {"name": "include_storage", "type": "INTEGER", "nullable": true},
+        {"name": "selected_storage_id", "type": "INTEGER", "nullable": true},
+        {"name": "selected_storage_storage_power_kw", "type": "REAL", "nullable": true},
+        {"name": "include_additional_components", "type": "INTEGER", "nullable": true},
+        {"name": "selected_wallbox_id", "type": "INTEGER", "nullable": true},
+        {"name": "selected_ems_id", "type": "INTEGER", "nullable": true},
+        {"name": "selected_optimizer_id", "type": "INTEGER", "nullable": true},
+        {"name": "selected_carport_id", "type": "INTEGER", "nullable": true},
+        {"name": "selected_notstrom_id", "type": "INTEGER", "nullable": true},
+        {"name": "selected_tierabwehr_id", "type": "INTEGER", "nullable": true},
+        {"name": "visualize_roof_in_pdf", "type": "INTEGER", "nullable": true},
+        {"name": "latitude", "type": "REAL", "nullable": true},
+        {"name": "longitude", "type": "REAL", "nullable": true},
+        {"name": "creation_date", "type": "TEXT", "nullable": true},
+        {"name": "last_updated", "type": "TEXT", "nullable": true}
+      ],
+      "crudOperations": [
+        {"method": "save_project", "pythonRef": "crm.py:save_project"},
+        {"method": "load_project", "pythonRef": "crm.py:load_project"},
+        {"method": "delete_project", "pythonRef": "crm.py:delete_project"},
+        {"method": "load_projects_for_customer", "pythonRef": "crm.py:load_projects_for_customer"}
+      ]
+    },
+    "customer_documents": {
+      "tableName": "customer_documents",
+      "pythonSource": "database.py:_create_customer_documents_table",
+      "columns": [
+        {"name": "id", "type": "INTEGER", "primaryKey": true, "autoIncrement": true},
+        {"name": "customer_id", "type": "INTEGER", "notNull": true},
+        {"name": "project_id", "type": "INTEGER", "nullable": true},
+        {"name": "doc_type", "type": "TEXT", "nullable": true, "comment": "e.g. 'offer_pdf', 'image', 'note', 'other'"},
+        {"name": "display_name", "type": "TEXT", "nullable": true},
+        {"name": "file_name", "type": "TEXT", "nullable": true},
+        {"name": "absolute_file_path", "type": "TEXT", "nullable": true},
+        {"name": "uploaded_at", "type": "TIMESTAMP", "default": "CURRENT_TIMESTAMP"}
+      ],
+      "crudOperations": [
+        {"method": "add_customer_document", "pythonRef": "database.py:add_customer_document"},
+        {"method": "list_customer_documents", "pythonRef": "database.py:list_customer_documents"},
+        {"method": "delete_customer_document", "pythonRef": "database.py:delete_customer_document"}
+      ]
+    },
+    "products": {
+      "tableName": "products",
+      "pythonSource": "product_db.py:create_product_table",
+      "columns": [
+        {"name": "id", "type": "INTEGER", "primaryKey": true, "autoIncrement": true},
+        {"name": "category", "type": "TEXT", "notNull": true},
+        {"name": "model_name", "type": "TEXT", "notNull": true, "unique": true},
+        {"name": "brand", "type": "TEXT", "nullable": true},
+        {"name": "price_euro", "type": "REAL", "nullable": true},
+        {"name": "capacity_w", "type": "REAL", "nullable": true},
+        {"name": "storage_power_kw", "type": "REAL", "nullable": true},
+        {"name": "power_kw", "type": "REAL", "nullable": true},
+        {"name": "max_cycles", "type": "INTEGER", "nullable": true},
+        {"name": "warranty_years", "type": "INTEGER", "nullable": true},
+        {"name": "length_m", "type": "REAL", "nullable": true},
+        {"name": "width_m", "type": "REAL", "nullable": true},
+        {"name": "weight_kg", "type": "REAL", "nullable": true},
+        {"name": "efficiency_percent", "type": "REAL", "nullable": true},
+        {"name": "origin_country", "type": "TEXT", "nullable": true},
+        {"name": "description", "type": "TEXT", "nullable": true},
+        {"name": "pros", "type": "TEXT", "nullable": true},
+        {"name": "cons", "type": "TEXT", "nullable": true},
+        {"name": "rating", "type": "REAL", "nullable": true},
+        {"name": "image_base64", "type": "TEXT", "nullable": true},
+        {"name": "created_at", "type": "TEXT", "default": "CURRENT_TIMESTAMP"},
+        {"name": "updated_at", "type": "TEXT", "default": "CURRENT_TIMESTAMP"},
+        {"name": "datasheet_link_db_path", "type": "TEXT", "nullable": true},
+        {"name": "additional_cost_netto", "type": "REAL", "default": 0.0},
+        {"name": "company_id", "type": "INTEGER", "nullable": true},
+        {"name": "cell_technology", "type": "TEXT", "nullable": true},
+        {"name": "module_structure", "type": "TEXT", "nullable": true},
+        {"name": "cell_type", "type": "TEXT", "nullable": true},
+        {"name": "version", "type": "TEXT", "nullable": true},
+        {"name": "module_warranty_text", "type": "TEXT", "nullable": true},
+        {"name": "labor_hours", "type": "REAL", "nullable": true}
+      ],
+      "crudOperations": [
+        {"method": "add_product", "pythonRef": "product_db.py:add_product"},
+        {"method": "list_products", "pythonRef": "product_db.py:list_products"},
+        {"method": "get_product_by_id", "pythonRef": "product_db.py:get_product_by_id"},
+        {"method": "update_product", "pythonRef": "product_db.py:update_product"},
+        {"method": "delete_product", "pythonRef": "product_db.py:delete_product"}
+      ]
+    }
+  },
+  "pdfGeneration": {
+    "mainFunction": "generate_offer_pdf",
+    "pythonSource": "pdf_generator.py:generate_offer_pdf",
+    "checkboxOptions": {
+      "extended_pages": "Extended PDF pages",
+      "wp_additional_pages": "Wärmepumpen additional pages",
+      "include_charts": "Include analysis charts",
+      "include_company_docs": "Include company documents"
+    },
+    "templateEngine": "pdf_template_engine with YML coordinates and static backgrounds"
+  },
+  "legacy": {
+    "note": "legacy schema omitted for brevity"
+  },
+  "crud": {}
+}

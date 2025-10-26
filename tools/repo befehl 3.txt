@@ -1,0 +1,21 @@
+cd "C:\123456\1\corba 4\corba"
+
+@"
+# Ignoriere alles in data/ ...
+data/*
+
+# ... aber tracke gezielt diese Dateien:
+!data/price_matrix.csv
+!data/price_matrix.xlsx
+!data/MeineProdukte.xlsx
+
+# (Optional, falls du den Ordner im Repo sichtbar halten willst)
+!data/.gitkeep
+"@ | Set-Content -Encoding utf8 .gitignore
+
+# Optional: leere Datei, damit data/ im Repo bleibt
+ni -Type File "data\.gitkeep" -Force
+
+git add .gitignore data\.gitkeep
+git rm -r --cached -- data 2>$null   # Index aufräumen (lokal bleibt alles erhalten)
+git commit -m "Refine ignore rules for data/"

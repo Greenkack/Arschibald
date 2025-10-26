@@ -1,0 +1,496 @@
+/* ============================================================================
+   MODERN DARK THEME - Glasmorphism + Neumorphism + Cyan Accents
+   Für Streamlit-App mit bestehenden Funktionen
+   ============================================================================ */
+
+/* === Fonts & Variables === */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap');
+
+:root {
+  /* Farben */
+  --bg: #0B0F14;
+  --bg-2: #111720;
+  --text: #E6F7FF;
+  --muted: #9AB3BF;
+  --accent: #00E5FF;
+  --accent-2: #00BCD4;
+  
+  /* Effekte */
+  --glass: rgba(17, 23, 32, .55);
+  --shadow-dark: rgba(0,0,0,.55);
+  --shadow-light: rgba(255,255,255,.06);
+  
+  /* Abstände */
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+/* === Page base === */
+/* Überschreibe ALLE Streamlit-Hintergrundfarben */
+html, 
+body, 
+.stApp,
+[data-testid="stAppViewContainer"],
+.main .block-container,
+section[data-testid="stMain"],
+section[data-testid="stMain"] > div,
+.css-1d391kg,
+.css-zt5igj,
+.e1fqkh3o3,
+.e1fqkh3o4 {
+  font-family: 'Nunito', system-ui, -apple-system, Segoe UI, Roboto, sans-serif !important;
+  color: var(--text) !important;
+}
+
+/* Hintergrund mit Gradienten - HÖCHSTE PRIORITÄT */
+body,
+.stApp {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(0,229,255,.08), transparent 40%),
+    radial-gradient(1000px 600px at 110% 10%, rgba(0,188,212,.07), transparent 45%),
+    #0B0F14 !important;
+  background-attachment: fixed !important;
+}
+
+[data-testid="stAppViewContainer"],
+section[data-testid="stMain"] {
+  background: transparent !important;
+}
+
+/* Streamlit Main Container */
+.main .block-container,
+section[data-testid="stMain"] > div > div {
+  background: transparent !important;
+}
+
+/* Haupt-Container */
+.block-container {
+  padding-top: 2rem !important;
+  padding-bottom: 4rem !important;
+}
+
+/* === Glass panels - Utility-Klasse === */
+.glass {
+  background: var(--glass) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  box-shadow: 0 12px 30px var(--shadow-dark), inset 0 1px 0 var(--shadow-light) !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+/* === Neumorph core - Utility-Klassen === */
+.neu {
+  background: var(--bg-2) !important;
+  border-radius: 14px !important;
+  box-shadow: 10px 10px 18px rgba(0,0,0,.65), -10px -10px 18px rgba(255,255,255,.03) !important;
+}
+
+.neu-inset {
+  background: var(--bg-2) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 8px 8px 14px rgba(0,0,0,.7), inset -6px -6px 14px rgba(255,255,255,.03) !important;
+}
+
+/* === Buttons - MAXIMALE SPEZIFITÄT === */
+.stButton > button,
+button[kind="primary"],
+button[kind="secondary"],
+.stButton button,
+div[data-testid="stButton"] button,
+div[data-testid="stButton"] > button,
+button[data-testid="baseButton-primary"],
+button[data-testid="baseButton-secondary"] {
+  position: relative !important;
+  border: none !important;
+  outline: none !important;
+  color: #E6F7FF !important;
+  background: linear-gradient(180deg, #171C24, #0F141B) !important;
+  border-radius: 14px !important;
+  padding: .7rem 1.1rem !important;
+  letter-spacing: .2px !important;
+  box-shadow:
+    6px 6px 14px rgba(0,0,0,.6),
+    -6px -6px 14px rgba(255,255,255,.02),
+    0 0 0 1px rgba(255,255,255,.06) inset !important;
+  transition: all .18s ease !important;
+  font-weight: 600 !important;
+  font-family: 'Nunito', sans-serif !important;
+}
+
+.stButton > button:hover,
+button[kind="primary"]:hover,
+.stButton button:hover,
+div[data-testid="stButton"] button:hover {
+  filter: brightness(1.1) !important;
+  box-shadow:
+    8px 8px 18px rgba(0,0,0,.7),
+    -8px -8px 18px rgba(255,255,255,.03),
+    0 0 20px rgba(0,229,255,.3) !important;
+  transform: translateY(-2px) !important;
+  background: linear-gradient(135deg, #00E5FF, #00BCD4) !important;
+}
+
+.stButton > button:active,
+.stButton button:active {
+  transform: translateY(0) scale(.98) !important;
+}
+
+/* Primary Button Glow Effect */
+.stButton > button[kind="primary"]::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  pointer-events: none;
+  box-shadow: 0 0 22px rgba(0,229,255,.18);
+}
+
+/* === Sidebar / Drawer (Glas) === */
+section[data-testid="stSidebar"] {
+  background: rgba(8,12,18,.55) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-right: 1px solid rgba(255,255,255,.06) !important;
+}
+
+section[data-testid="stSidebar"] .css-1d391kg {
+  background: transparent !important;
+}
+
+/* Sidebar Header */
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2, 
+section[data-testid="stSidebar"] h3 {
+  color: var(--text) !important;
+}
+
+/* === Inputs === */
+div[data-testid="stTextInput"] input,
+div[data-testid="stNumberInput"] input,
+div[data-testid="stTextArea"] textarea {
+  background: linear-gradient(180deg, #0F141B, #0B0F14) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text) !important;
+  box-shadow: inset 6px 6px 12px rgba(0,0,0,.65), inset -6px -6px 12px rgba(255,255,255,.02) !important;
+  transition: box-shadow .18s ease, border-color .18s ease !important;
+}
+
+div[data-testid="stTextInput"] input:focus,
+div[data-testid="stNumberInput"] input:focus,
+div[data-testid="stTextArea"] textarea:focus {
+  border-color: rgba(0,229,255,.45) !important;
+  box-shadow: 0 0 0 2px rgba(0,229,255,.22), inset 6px 6px 12px rgba(0,0,0,.65) !important;
+  outline: none !important;
+}
+
+/* === Select / Dropdown (BaseWeb Select) === */
+div[data-baseweb="select"] > div {
+  background: rgba(16,22,30,.6) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: var(--radius-md) !important;
+  backdrop-filter: blur(10px) !important;
+  color: var(--text) !important;
+}
+
+div[data-baseweb="popover"] {
+  background: rgba(16,22,30,.95) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+div[data-baseweb="select"] [role="option"] {
+  color: var(--text) !important;
+}
+
+div[data-baseweb="select"] [role="option"]:hover {
+  background: rgba(0,229,255,.12) !important;
+}
+
+/* === Sliders === */
+div[data-baseweb="slider"] > div {
+  padding: 10px 6px;
+}
+
+div[data-baseweb="slider"] [role="slider"] {
+  height: 18px !important;
+  width: 18px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 30% 30%, #22303F, #0F141B) !important;
+  border: 2px solid var(--accent) !important;
+  box-shadow: 0 0 12px rgba(0,229,255,.35) !important;
+  transition: transform .12s ease, box-shadow .18s ease !important;
+}
+
+div[data-baseweb="slider"] [role="slider"]:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 0 18px rgba(0,229,255,.45) !important;
+}
+
+div[data-baseweb="slider"] .st-emotion-cache-1gulkj5 {
+  background: linear-gradient(90deg, rgba(0,229,255,.7), rgba(0,188,212,.3)) !important;
+  height: 4px !important;
+  border-radius: 999px !important;
+}
+
+/* === Expander === */
+details[data-testid="stExpander"] {
+  border-radius: 14px !important;
+  background: rgba(16,22,30,.55) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+details[data-testid="stExpander"] summary {
+  color: var(--text) !important;
+  font-weight: 600 !important;
+}
+
+/* === Tabs (Top-Navigation-Look) === */
+.stTabs [data-baseweb="tab-list"] {
+  gap: 8px !important;
+  border-bottom: 0 !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+  background: rgba(16,22,30,.55) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text) !important;
+  transition: transform .12s ease, box-shadow .18s ease !important;
+  font-weight: 600 !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+  background: rgba(20,28,38,.65) !important;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+  background: rgba(0,229,255,.08) !important;
+  box-shadow: 0 0 18px rgba(0,229,255,.18), inset 0 0 0 1px rgba(0,229,255,.18) !important;
+  color: var(--accent) !important;
+}
+
+/* === Progress / Loader === */
+.progress-glow {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(0,229,255,.15), rgba(0,229,255,.05));
+  border: 1px solid rgba(255,255,255,.08);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,.6), transparent);
+  animation: sweep 1.8s infinite;
+}
+
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Streamlit native progress bar */
+div[data-testid="stProgress"] > div {
+  background: rgba(16,22,30,.6) !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+}
+
+div[data-testid="stProgress"] > div > div {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)) !important;
+  border-radius: 999px !important;
+}
+
+/* === Metrics (st.metric) === */
+div[data-testid="stMetric"] {
+  background: rgba(16,22,30,.4) !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 12px !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+div[data-testid="stMetricLabel"] {
+  color: var(--muted) !important;
+  font-weight: 600 !important;
+}
+
+div[data-testid="stMetricValue"] {
+  color: var(--text) !important;
+  font-size: 1.8rem !important;
+  font-weight: 800 !important;
+}
+
+/* === Dataframe / Table === */
+div[data-testid="stDataFrame"],
+div[data-testid="stTable"] {
+  background: rgba(16,22,30,.4) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: var(--radius-md) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* === Alerts (st.info, st.success, etc.) === */
+div[data-testid="stAlert"] {
+  border-radius: var(--radius-md) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+}
+
+/* === Columns === */
+div[data-testid="column"] {
+  padding: 0 8px !important;
+}
+
+/* === Intro Overlay === */
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: radial-gradient(60% 60% at 50% 40%, rgba(0,229,255,.06), transparent 60%), #0B0F14;
+  transition: opacity .4s ease, visibility .4s ease;
+}
+
+#intro-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.logo-glow {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  color: var(--text);
+  text-shadow: 0 0 18px rgba(0,229,255,.35), 0 0 3px rgba(0,229,255,.35);
+}
+
+.intro-bar {
+  margin-top: 18px;
+  width: 280px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+.intro-bar span {
+  display: block;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, rgba(0,229,255,.9), rgba(0,188,212,.7));
+  border-radius: 999px;
+  animation: load 1.6s ease-in-out infinite;
+}
+
+@keyframes load {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(40%); }
+  100% { transform: translateX(180%); }
+}
+
+/* === Custom right-click context menu === */
+#cxmenu {
+  position: fixed;
+  z-index: 9998;
+  min-width: 220px;
+  background: rgba(16,22,30,.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 24px rgba(0,0,0,.5);
+  display: none;
+  padding: 4px;
+}
+
+#cxmenu .item {
+  padding: 10px 14px;
+  cursor: pointer;
+  color: var(--text);
+  transition: background .12s ease, transform .08s ease;
+  border-radius: 8px;
+  margin: 2px 0;
+}
+
+#cxmenu .item:hover {
+  background: rgba(0,229,255,.12);
+  transform: translateX(2px);
+}
+
+/* === Utility: Glass Line === */
+hr.glass-line {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+  margin: 12px 0 18px;
+}
+
+/* === Scrollbar Styling === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0,229,255,.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,229,255,.5);
+}
+
+/* === Headings === */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text) !important;
+  font-weight: 700 !important;
+}
+
+/* === Links === */
+a {
+  color: var(--accent) !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  text-decoration: underline !important;
+}
+
+/* === Code Blocks === */
+code {
+  background: rgba(16,22,30,.6) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+  color: var(--accent) !important;
+}
+
+pre {
+  background: rgba(16,22,30,.6) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 12px !important;
+}

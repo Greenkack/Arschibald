@@ -1,0 +1,22 @@
+{
+  "name": "kakerlake",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+  "dev": "concurrently -k \"pnpm run dev:renderer\" \"pnpm run dev:watch\" \"pnpm run dev:electron\"",
+    "build": "pnpm --filter @kakerlake/core run build && pnpm --filter renderer run build && pnpm --filter @kakerlake/main run build",
+  "dev:renderer": "pnpm exec vite --config apps/renderer/vite.config.ts",
+    "dev:watch": "cd apps/main && ..\\..\\node_modules\\.bin\\tsup --watch --config tsup.config.ts",
+  "dev:electron": "pnpm exec wait-on -t 90000 tcp:127.0.0.1:5173 && cd apps/main && ..\\..\\node_modules\\.bin\\electron ."
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.0.1",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.0.0",
+    "electron": "31.7.7",
+    "wait-on": "^8.0.4"
+  }
+}

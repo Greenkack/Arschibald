@@ -1,0 +1,49 @@
+# ---------- SERVER ----------
+[server]
+headless = false
+folderWatchList = []                # absolute Pfade hier eintragen, z.B. ["/abs/pfad/pages"]
+fileWatcherType = "poll"           # "auto"|"watchdog"|"poll"|"none"
+enableCORS = true
+enableXsrfProtection = true
+maxUploadSize = 512                 # MB
+
+# ---------- BROWSER ----------
+[browser]
+serverAddress = "localhost"
+serverPort = 8501
+gatherUsageStats = true
+
+# ---------- CLIENT ----------
+[client]
+showErrorDetails = "full"           # "full"|"stacktrace"|"type"|"none"
+toolbarMode = "developer"           # "auto"|"developer"|"viewer"|"minimal"
+showSidebarNavigation = true
+
+# ---------- RUNNER ----------
+[runner]
+magicEnabled = true
+
+# ---------- THEME ----------
+[theme]
+base = "dark"                        # "light"|"dark"
+primaryColor = "#00E5FF"             # Türkis/Cyan Akzent
+backgroundColor = "#0B0F14"          # Dunkler Basis-Hintergrund
+secondaryBackgroundColor = "#111720" # Sekundärer Hintergrund (Sidebar, Cards)
+textColor = "#E6F7FF"                # Heller Text (leicht bläulich)
+linkColor = "#4EA1FF"                # Link-Farbe
+codeBackgroundColor = "#0B1220"      # Code-Block Hintergrund
+font = "Nunito, sans-serif"          # Haupt-Schriftart
+baseFontSize = 16                    # px
+headingFont = "Nunito, sans-serif"   # Überschriften-Schriftart
+
+# Font-Einbindung für Nunito
+[[theme.fontFaces]]
+family = "Nunito"
+url = "https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap"
+weight = "400"
+style = "normal"
+
+# ---------- LOGGER ----------
+[logger]
+level = "error"
+messageFormat = "%(asctime)s %(message)s"

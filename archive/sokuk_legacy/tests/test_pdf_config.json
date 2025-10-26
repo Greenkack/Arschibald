@@ -1,0 +1,36 @@
+{
+  "project_data": {
+    "customer_name": "Max Mustermann",
+    "customer_address": "Musterstraße 123, 12345 Musterstadt",
+    "customer_phone": "+49 123 456789",
+    "customer_email": "max@mustermann.de",
+    "anlage_kwp": 10.5,
+    "module_count": 25,
+    "inverter_model": "Fronius Symo 10.0",
+    "installation_date": "2025-03-15",
+    "system_description": "Hochwertige PV-Anlage mit Optimierern"
+  },
+  "calculation_results": {
+    "total_investment_netto": 18500.00,
+    "total_investment_brutto": 22015.00,
+    "annual_pv_production_kwh": 10500,
+    "annual_savings": 2800.00,
+    "payback_period_years": 7.8,
+    "roi_percent": 12.5,
+    "co2_savings_tons_per_year": 5.25,
+    "einspeiseverguetung_annual": 850.00,
+    "eigenverbrauch_percent": 65,
+    "final_price": 22015.00
+  },
+  "company_info": {
+    "name": "Mustermann Solar GmbH",
+    "address": "Solarstraße 1, 54321 Solarstadt",
+    "phone": "+49 987 654321",
+    "email": "info@mustermann-solar.de",
+    "website": "www.mustermann-solar.de",
+    "tax_number": "123/456/78901"
+  },
+  "output_file": "test_pv_angebot.pdf",
+  "pdf_type": "pv",
+  "page_count": 7
+}

@@ -1,0 +1,143 @@
+2025-10-23 14:08:38 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 15:22:07 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 15:23:28 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:387 - Lazy loading knowledge base on first use
+2025-10-23 15:23:28 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:87 - Setting up knowledge base from knowledge_base
+2025-10-23 15:23:28 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:154 - Found 0 PDF files in knowledge_base
+2025-10-23 15:23:28 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:157 - No PDF files found in knowledge_base/
+2025-10-23 15:23:28 - agent.agent.agent_core - [32mINFO[0m - __init__:104 - Initializing AgentCore with model=gpt-4o, temperature=0.7
+2025-10-23 15:23:29 - agent.agent.agent_core - [32mINFO[0m - __init__:120 - ChatOpenAI initialized successfully with model: gpt-4o
+2025-10-23 15:23:29 - agent.agent.agent_core - [32mINFO[0m - __init__:133 - Registered 11 tools: ['write_file', 'read_file', 'list_files', 'generate_project_structure', 'execute_python_code_in_sandbox', 'run_terminal_command_in_sandbox', 'execute_pytest_in_sandbox', 'tavily_search', 'knowledge_base_search', 'start_interactive_call', 'update_call_summary']
+2025-10-23 15:23:29 - agent.agent.agent_core - [32mINFO[0m - __init__:139 - System prompt configured with dual-expertise persona
+2025-10-23 15:23:29 - agent.agent.agent_core - [32mINFO[0m - __init__:148 - Conversation memory initialized
+2025-10-23 15:23:29 - agent.agent.agent_core - [32mINFO[0m - __init__:162 - AgentExecutor configured with ReAct pattern
+2025-10-23 15:23:29 - agent.agent.agent_core - [32mINFO[0m - __init__:168 - AgentCore initialization complete
+2025-10-23 15:25:15 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 15:25:37 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 15:25:52 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 15:26:17 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 15:30:28 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 15:58:22 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 15:59:59 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:15:34 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:16:27 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:30:26 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:34:53 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:35:12 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:36:59 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:38:30 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:40:12 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:43:02 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:43:24 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:43:52 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:53:41 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:387 - Lazy loading knowledge base on first use
+2025-10-23 16:53:41 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:87 - Setting up knowledge base from knowledge_base
+2025-10-23 16:53:41 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:154 - Found 0 PDF files in knowledge_base
+2025-10-23 16:53:41 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:157 - No PDF files found in knowledge_base/
+2025-10-23 16:53:41 - agent.agent.agent_core - [32mINFO[0m - __init__:104 - Initializing AgentCore with model=gpt-4o, temperature=0.7
+2025-10-23 16:53:41 - agent.agent.agent_core - [32mINFO[0m - __init__:120 - ChatOpenAI initialized successfully with model: gpt-4o
+2025-10-23 16:53:41 - agent.agent.agent_core - [32mINFO[0m - __init__:133 - Registered 11 tools: ['write_file', 'read_file', 'list_files', 'generate_project_structure', 'execute_python_code_in_sandbox', 'run_terminal_command_in_sandbox', 'execute_pytest_in_sandbox', 'tavily_search', 'knowledge_base_search', 'start_interactive_call', 'update_call_summary']
+2025-10-23 16:53:41 - agent.agent.agent_core - [32mINFO[0m - __init__:139 - System prompt configured with dual-expertise persona
+2025-10-23 16:53:41 - agent.agent.agent_core - [32mINFO[0m - __init__:148 - Conversation memory initialized
+2025-10-23 16:53:41 - agent.agent.agent_core - [32mINFO[0m - __init__:162 - AgentExecutor configured with ReAct pattern
+2025-10-23 16:53:41 - agent.agent.agent_core - [32mINFO[0m - __init__:168 - AgentCore initialization complete
+2025-10-23 16:57:12 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 16:59:51 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:02:03 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:04:01 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:05:46 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:08:07 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:10:04 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:13:17 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:16:53 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:19:35 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:27:36 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:30:41 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:32:30 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:33:02 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:37:59 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:38:06 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:43:47 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:46:09 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:47:59 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:52:59 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 17:56:28 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:02:13 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:07:04 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:15:15 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:18:18 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:23:07 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:23:44 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:24:05 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:24:48 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:25:53 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:28:16 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:29:00 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:30:31 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:30:49 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:31:01 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:31:14 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:31:24 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:31:42 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:32:02 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:32:15 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:32:28 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:33:00 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:34:04 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:34:33 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:34:46 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:35:00 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:35:38 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:35:53 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 18:37:04 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:35:30 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:36:23 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:36:35 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:36:54 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:37:03 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:37:56 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:38:35 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:40:53 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:51:14 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:54:12 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:57:09 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 19:57:55 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 20:00:02 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 20:01:13 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 20:04:50 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 20:09:00 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 20:11:44 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 20:41:09 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 20:51:37 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 20:57:08 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 21:02:34 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 21:09:37 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 21:15:41 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 21:33:55 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 21:45:40 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 21:52:36 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:08:10 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:09:26 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:09:52 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:10:26 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:10:56 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:11:22 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:13:11 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:37:14 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:46:30 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:49:09 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:51:59 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:52:48 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:56:06 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:57:30 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:58:27 - agent - [32mINFO[0m - setup_logging:227 - Logging configured: level=INFO, file=True, console=True
+2025-10-23 22:59:11 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:387 - Lazy loading knowledge base on first use
+2025-10-23 22:59:11 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:87 - Setting up knowledge base from knowledge_base
+2025-10-23 22:59:11 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:154 - Found 0 PDF files in knowledge_base
+2025-10-23 22:59:11 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:157 - No PDF files found in knowledge_base/
+2025-10-23 22:59:11 - agent.agent.agent_core - [32mINFO[0m - __init__:104 - Initializing AgentCore with model=gpt-4o, temperature=0.7
+2025-10-23 22:59:13 - agent.agent.agent_core - [32mINFO[0m - __init__:120 - ChatOpenAI initialized successfully with model: gpt-4o
+2025-10-23 22:59:13 - agent.agent.agent_core - [32mINFO[0m - __init__:133 - Registered 11 tools: ['write_file', 'read_file', 'list_files', 'generate_project_structure', 'execute_python_code_in_sandbox', 'run_terminal_command_in_sandbox', 'execute_pytest_in_sandbox', 'tavily_search', 'knowledge_base_search', 'start_interactive_call', 'update_call_summary']
+2025-10-23 22:59:13 - agent.agent.agent_core - [32mINFO[0m - __init__:139 - System prompt configured with dual-expertise persona
+2025-10-23 22:59:13 - agent.agent.agent_core - [32mINFO[0m - __init__:148 - Conversation memory initialized
+2025-10-23 22:59:13 - agent.agent.agent_core - [32mINFO[0m - __init__:162 - AgentExecutor configured with ReAct pattern
+2025-10-23 22:59:13 - agent.agent.agent_core - [32mINFO[0m - __init__:168 - AgentCore initialization complete
