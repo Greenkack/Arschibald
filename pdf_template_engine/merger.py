@@ -24,7 +24,7 @@ def merge_first_eight_pages(overlay_bytes: bytes) -> bytes:
     # Changed from range(1, 8) to range(1, 9) for 8 pages
     for i in range(1, 9):
         base = PdfReader(BG / f"nt_nt_{i:02d}.pdf").pages[0]
-        base.merge_page(ovl.pages[i - 1])    # Overlay drüber
+        base.merge_page(ovl.pages[i - 1])  # Overlay drüber
         writer.add_page(base)
 
     out = io.BytesIO()
@@ -47,10 +47,10 @@ def merge_first_seven_pages(overlay_bytes: bytes) -> bytes:
             merge_first_eight_pages)
     """
     import warnings
+
     warnings.warn(
-        "merge_first_seven_pages is deprecated, use "
-        "merge_first_eight_pages instead",
+        "merge_first_seven_pages is deprecated, use " "merge_first_eight_pages instead",
         DeprecationWarning,
-        stacklevel=2
+        stacklevel=2,
     )
     return merge_first_eight_pages(overlay_bytes)

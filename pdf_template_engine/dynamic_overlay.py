@@ -34,6 +34,7 @@ from .placeholders import PLACEHOLDER_MAPPING
 try:
     from database import load_admin_setting  # type: ignore
 except Exception:  # Fallback, wenn DB nicht verfügbar ist (z. B. Tests)
+
     def load_admin_setting(key: str, default=None):  # type: ignore
         return default
 
@@ -68,7 +69,7 @@ def _as_image_reader(val: Any) -> Any:
             raw = base64.b64decode(s)
 
             # Prüfe Bildformat - nur PNG/JPEG unterstützt
-            if raw.startswith(b'<?xml') or raw.startswith(b'<svg'):
+            if raw.startswith(b"<?xml") or raw.startswith(b"<svg"):
                 return None  # SVG nicht unterstützt
 
             return ImageReader(io.BytesIO(raw))
@@ -91,20 +92,15 @@ def _as_image_reader(val: Any) -> Any:
 
 
 def _draw_global_watermark(
-        c: canvas.Canvas,
-        page_width: float,
-        page_height: float) -> None:
+    c: canvas.Canvas, page_width: float, page_height: float
+) -> None:
     """Zeichnet optional ein globales Wasserzeichen (aus Admin-Settings) diagonal über die Seite."""
-    enabled = _to_bool(
-        load_admin_setting(
-            "pdf_global_watermark_enabled",
-            False),
-        False)
+    enabled = _to_bool(load_admin_setting("pdf_global_watermark_enabled", False), False)
     if not enabled:
         return
-    text = load_admin_setting(
-        "pdf_global_watermark_text",
-        "VERTRAULICH") or "VERTRAULICH"
+    text = (
+        load_admin_setting("pdf_global_watermark_text", "VERTRAULICH") or "VERTRAULICH"
+    )
     # Opazität optional (0..1); wenn nicht unterstützt, dann sehr helle Farbe
     opacity = load_admin_setting("pdf_global_watermark_opacity", 0.10)
     try:
@@ -155,8 +151,9 @@ def parse_coords_file(path: Path) -> list[dict[str, Any]]:
                 continue
             # Einträge sind durch Linien aus '-' getrennt (z.B.
             # "----------------------------------------")
-            if (line.startswith("---") or (set(line) ==
-                                           {"-"} and len(line) >= 3)) and current:
+            if (
+                line.startswith("---") or (set(line) == {"-"} and len(line) >= 3)
+            ) and current:
                 elements.append(current)
                 current = {}
                 continue
@@ -170,7 +167,9 @@ def parse_coords_file(path: Path) -> list[dict[str, Any]]:
                     current["position"] = tuple(float(n) for n in nums[:4])
             elif line.startswith("Schriftart:"):
                 current["font"] = line.split(":", 1)[1].strip()
-            elif line.lower().startswith("schriftgröße:") or line.lower().startswith("schriftgroesse:"):
+            elif line.lower().startswith("schriftgröße:") or line.lower().startswith(
+                "schriftgroesse:"
+            ):
                 try:
                     val = line.split(":", 1)[1].strip().replace(",", ".")
                     current["font_size"] = float(val)
@@ -223,16 +222,12 @@ def _draw_company_logo(
             c.setStrokeColorRGB(1, 1, 1)
             c.rect(
                 15,
-                page_height -
-                20 -
-                max_h -
-                5,
-                max_w +
-                20,
-                max_h +
-                10,
+                page_height - 20 - max_h - 5,
+                max_w + 20,
+                max_h + 10,
                 stroke=0,
-                fill=1)
+                fill=1,
+            )
         except Exception:
             pass
         if is_first_page:
@@ -249,7 +244,7 @@ def _draw_company_logo(
                 width=max_w,
                 height=max_h,
                 preserveAspectRatio=True,
-                mask='auto',
+                mask="auto",
             )
         else:
             c.drawImage(
@@ -259,7 +254,7 @@ def _draw_company_logo(
                 width=max_w,
                 height=max_h,
                 preserveAspectRatio=True,
-                mask='auto',
+                mask="auto",
             )
         c.restoreState()
     except Exception:
@@ -270,43 +265,40 @@ def _parse_percent(value: str | float | int) -> float:
     try:
         if isinstance(value, (int, float)):
             return max(0.0, min(100.0, float(value)))
-        s = str(value).strip().replace(
-            '%',
-            '').replace(
-            ',',
-            '.').replace(
-            ' ',
-            '')
+        s = str(value).strip().replace("%", "").replace(",", ".").replace(" ", "")
         return max(0.0, min(100.0, float(s)))
     except Exception:
         return 0.0
 
 
-def _first_valid_percent(
-        dynamic_data: dict[str, str], keys: list[str]) -> float:
+def _first_valid_percent(dynamic_data: dict[str, str], keys: list[str]) -> float:
     for k in keys:
         if k in dynamic_data and dynamic_data.get(k) not in (None, ""):
             v = _parse_percent(dynamic_data.get(k))
             print(
-                f"DEBUG: _first_valid_percent - Key: {k}, Value: {dynamic_data.get(k)}, Parsed: {v}")
+                f"DEBUG: _first_valid_percent - Key: {k}, Value: {dynamic_data.get(k)}, Parsed: {v}"
+            )
             if v > 0:
                 return v
     print(
-        f"DEBUG: _first_valid_percent - Keine gültigen Werte gefunden für Keys: {keys}")
+        f"DEBUG: _first_valid_percent - Keine gültigen Werte gefunden für Keys: {keys}"
+    )
     return 0.0
 
 
 def _draw_donut(
-        c: canvas.Canvas,
-        cx: float,
-        cy: float,
-        pct: float,
-        outer_r: float,
-        inner_r: float,
-        color_fg: Color,
-        color_bg: Color) -> None:
+    c: canvas.Canvas,
+    cx: float,
+    cy: float,
+    pct: float,
+    outer_r: float,
+    inner_r: float,
+    color_fg: Color,
+    color_bg: Color,
+) -> None:
     """Zeichnet einen Donut (Ring) mit farbigem Anteil pct in % (0-100)."""
     from reportlab.lib.colors import white
+
     # Voller Hintergrund-Ring
     c.saveState()
     # Hintergrund-Kreis (voll)
@@ -324,7 +316,8 @@ def _draw_donut(
             90,
             extent,
             stroke=0,
-            fill=1)
+            fill=1,
+        )
     except Exception:
         pass
     # Loch stanzen
@@ -333,11 +326,12 @@ def _draw_donut(
     c.restoreState()
 
 
-def _draw_page1_new_content(c: canvas.Canvas,
-                            dynamic_data: dict[str,
-                                               str],
-                            page_width: float,
-                            page_height: float) -> None:
+def _draw_page1_new_content(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Zeichnet Inhalte für die neue Seite 1.
 
     TODO: Implementierung der neuen Seite 1 Inhalte.
@@ -354,14 +348,16 @@ def _draw_page1_new_content(c: canvas.Canvas,
     # Zukünftige Implementierung kann hier Grafiken, Text oder andere Elemente
     # hinzufügen
 
+
 # OLD: page 3 -> NEW: page 4
 
 
-def _draw_page4_waterfall_chart(c: canvas.Canvas,
-                                dynamic_data: dict[str,
-                                                   str],
-                                page_width: float,
-                                page_height: float) -> None:
+def _draw_page4_waterfall_chart(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Zeichnet ein Wasserfall-Diagramm auf Seite 4 mit den Berechnungsergebnissen.
 
     Positionierung basierend auf den exakten Koordinaten aus seite4.yml:
@@ -377,7 +373,8 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
         print(
             f"DEBUG: Verfügbare dynamic_data Keys: {
                 list(
-                    dynamic_data.keys())}")
+                    dynamic_data.keys())}"
+        )
 
         # Werte aus den berechneten Ergebnissen - verschiedene Keys probieren
         direkt_eur = 0.0
@@ -390,52 +387,51 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
             if value is None or value == "":
                 return 0.0
             try:
-                clean_value = str(value).replace(
-                    '€', '').replace(' ', '').strip()
+                clean_value = str(value).replace("€", "").replace(" ", "").strip()
 
                 # Bestimme das Format basierend auf der Struktur
-                if ',' in clean_value and '.' in clean_value:
+                if "," in clean_value and "." in clean_value:
                     # Deutsches Format: 1.503,32 (Punkt als Tausender, Komma als Dezimal)
                     # Finde die Position von Komma und Punkt
-                    comma_pos = clean_value.rfind(',')
-                    dot_pos = clean_value.rfind('.')
+                    comma_pos = clean_value.rfind(",")
+                    dot_pos = clean_value.rfind(".")
 
                     if comma_pos > dot_pos:
                         # Deutsches Format: 1.503,32
-                        integer_part = clean_value[:comma_pos].replace('.', '')
-                        decimal_part = clean_value[comma_pos + 1:]
+                        integer_part = clean_value[:comma_pos].replace(".", "")
+                        decimal_part = clean_value[comma_pos + 1 :]
                         clean_value = f"{integer_part}.{decimal_part}"
                     else:
                         # Englisches Format: 1,503.32
-                        integer_part = clean_value[:dot_pos].replace(',', '')
-                        decimal_part = clean_value[dot_pos + 1:]
+                        integer_part = clean_value[:dot_pos].replace(",", "")
+                        decimal_part = clean_value[dot_pos + 1 :]
                         clean_value = f"{integer_part}.{decimal_part}"
 
-                elif ',' in clean_value:
+                elif "," in clean_value:
                     # Nur Komma vorhanden
                     # Prüfe ob es Dezimaltrennzeichen oder
                     # Tausendertrennzeichen ist
-                    comma_pos = clean_value.rfind(',')
-                    after_comma = clean_value[comma_pos + 1:]
+                    comma_pos = clean_value.rfind(",")
+                    after_comma = clean_value[comma_pos + 1 :]
 
                     if len(after_comma) <= 2 and after_comma.isdigit():
                         # Wahrscheinlich Dezimaltrennzeichen: 1503,32
-                        clean_value = clean_value.replace(',', '.')
+                        clean_value = clean_value.replace(",", ".")
                     else:
                         # Wahrscheinlich Tausendertrennzeichen: 1,503
-                        clean_value = clean_value.replace(',', '')
+                        clean_value = clean_value.replace(",", "")
 
-                elif '.' in clean_value:
+                elif "." in clean_value:
                     # Nur Punkt vorhanden
-                    dot_pos = clean_value.rfind('.')
-                    after_dot = clean_value[dot_pos + 1:]
+                    dot_pos = clean_value.rfind(".")
+                    after_dot = clean_value[dot_pos + 1 :]
 
                     if len(after_dot) <= 2 and after_dot.isdigit():
                         # Wahrscheinlich Dezimaltrennzeichen: 1503.32
                         pass  # Bereits korrekt
                     else:
                         # Wahrscheinlich Tausendertrennzeichen: 1.503
-                        clean_value = clean_value.replace('.', '')
+                        clean_value = clean_value.replace(".", "")
 
                 return float(clean_value)
             except Exception as e:
@@ -445,72 +441,72 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
         # Direktverbrauch - KORREKTE Keys basierend auf placeholders.py
         # "Direkt": "self_consumption_without_battery_eur"
         direkt_keys = [
-            'self_consumption_without_battery_eur',  # Hauptkey aus placeholders.py
-            'direct_consumption_savings_eur',
-            'einsparung_direktverbrauch_eur',
-            'direktverbrauch_einsparung_eur'
+            "self_consumption_without_battery_eur",  # Hauptkey aus placeholders.py
+            "direct_consumption_savings_eur",
+            "einsparung_direktverbrauch_eur",
+            "direktverbrauch_einsparung_eur",
         ]
 
         for key in direkt_keys:
-            if key in dynamic_data and dynamic_data[key] not in (
-                    None, "", "0", 0):
+            if key in dynamic_data and dynamic_data[key] not in (None, "", "0", 0):
                 direkt_eur = safe_float_convert(dynamic_data[key])
                 print(
                     f"DEBUG: Direktverbrauch gefunden - Key: {key}, Wert: {
-                        dynamic_data[key]} -> {direkt_eur}€")
+                        dynamic_data[key]} -> {direkt_eur}€"
+                )
                 break
 
         # Einspeisevergütung - KORREKTE Keys basierend auf placeholders.py
         # "Einspeisung": "annual_feed_in_revenue_eur"
         einspeisung_keys = [
-            'annual_feed_in_revenue_eur',  # Hauptkey aus placeholders.py
-            'direct_grid_feed_in_eur',     # Alias aus placeholders.py
-            'feed_in_revenue_eur',
-            'einnahmen_einspeisung_eur'
+            "annual_feed_in_revenue_eur",  # Hauptkey aus placeholders.py
+            "direct_grid_feed_in_eur",  # Alias aus placeholders.py
+            "feed_in_revenue_eur",
+            "einnahmen_einspeisung_eur",
         ]
 
         for key in einspeisung_keys:
-            if key in dynamic_data and dynamic_data[key] not in (
-                    None, "", "0", 0):
+            if key in dynamic_data and dynamic_data[key] not in (None, "", "0", 0):
                 einspeisung_eur = safe_float_convert(dynamic_data[key])
                 print(
                     f"DEBUG: Einspeisevergütung gefunden - Key: {key}, Wert: {
-                        dynamic_data[key]} -> {einspeisung_eur}€")
+                        dynamic_data[key]} -> {einspeisung_eur}€"
+                )
                 break
 
         # Steuervorteile - KORREKTE Keys basierend auf placeholders.py
         # "platz1": "tax_benefits_eur"  # Steuerliche Vorteile
         steuer_keys = [
-            'tax_benefits_eur',  # Hauptkey aus placeholders.py
-            'steuerliche_vorteile_eur',
-            'vorteile_steuerfrei_eur',
-            'steuervorteile_eur'
+            "tax_benefits_eur",  # Hauptkey aus placeholders.py
+            "steuerliche_vorteile_eur",
+            "vorteile_steuerfrei_eur",
+            "steuervorteile_eur",
         ]
 
         for key in steuer_keys:
-            if key in dynamic_data and dynamic_data[key] not in (
-                    None, "", "0", 0):
+            if key in dynamic_data and dynamic_data[key] not in (None, "", "0", 0):
                 steuer_eur = safe_float_convert(dynamic_data[key])
                 print(
                     f"DEBUG: Steuervorteile gefunden - Key: {key}, Wert: {
-                        dynamic_data[key]} -> {steuer_eur}€")
+                        dynamic_data[key]} -> {steuer_eur}€"
+                )
                 break
 
         # Gesamt - KORREKTE Keys basierend auf placeholders.py
         # "Gesamt": "total_annual_savings_eur"
         gesamt_keys = [
-            'total_annual_savings_eur',  # Hauptkey aus placeholders.py
-            'gesamt_ertraege_jahr_eur',
-            'annual_total_benefits_eur',
-            'total_benefits_eur'
+            "total_annual_savings_eur",  # Hauptkey aus placeholders.py
+            "gesamt_ertraege_jahr_eur",
+            "annual_total_benefits_eur",
+            "total_benefits_eur",
         ]
 
         for key in gesamt_keys:
-            if key in dynamic_data and dynamic_data[key] not in (
-                    None, "", "0", 0):
+            if key in dynamic_data and dynamic_data[key] not in (None, "", "0", 0):
                 gesamt_eur = safe_float_convert(dynamic_data[key])
                 print(
-                    f"DEBUG: Gesamt gefunden - Key: {key}, Wert: {dynamic_data[key]} -> {gesamt_eur}€")
+                    f"DEBUG: Gesamt gefunden - Key: {key}, Wert: {dynamic_data[key]} -> {gesamt_eur}€"
+                )
                 break
 
         # Falls Gesamt nicht direkt verfügbar, berechne es
@@ -518,10 +514,16 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
             gesamt_eur = direkt_eur + einspeisung_eur + steuer_eur
 
         print(
-            f"DEBUG: Wasserfall-Werte - Direkt: {direkt_eur}€, Einspeisung: {einspeisung_eur}€, Steuer: {steuer_eur}€, Gesamt: {gesamt_eur}€")
+            f"DEBUG: Wasserfall-Werte - Direkt: {direkt_eur}€, Einspeisung: {einspeisung_eur}€, Steuer: {steuer_eur}€, Gesamt: {gesamt_eur}€"
+        )
 
         # Nur Fallback verwenden wenn wirklich ALLE Werte fehlen
-        if direkt_eur <= 0 and einspeisung_eur <= 0 and steuer_eur <= 0 and gesamt_eur <= 0:
+        if (
+            direkt_eur <= 0
+            and einspeisung_eur <= 0
+            and steuer_eur <= 0
+            and gesamt_eur <= 0
+        ):
             print("DEBUG: Keine Wasserfall-Werte vorhanden - verwende Demo-Werte")
             direkt_eur = 1200.0
             einspeisung_eur = 800.0
@@ -529,7 +531,8 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
             gesamt_eur = 2300.0
         else:
             print(
-                f"DEBUG: Verwende echte Wasserfall-Werte - Direkt: {direkt_eur}€, Einspeisung: {einspeisung_eur}€, Steuer: {steuer_eur}€, Gesamt: {gesamt_eur}€")
+                f"DEBUG: Verwende echte Wasserfall-Werte - Direkt: {direkt_eur}€, Einspeisung: {einspeisung_eur}€, Steuer: {steuer_eur}€, Gesamt: {gesamt_eur}€"
+            )
 
     except Exception as e:
         print(f"DEBUG: Fehler beim Extrahieren der Wasserfall-Werte: {e}")
@@ -556,9 +559,11 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
     chart_height = chart_top - chart_bottom
 
     print(
-        f"DEBUG: Wasserfall-Chart EXAKTE Position - Links: {chart_left}, Rechts: {chart_right}, Oben: {chart_top}, Unten: {chart_bottom}")
+        f"DEBUG: Wasserfall-Chart EXAKTE Position - Links: {chart_left}, Rechts: {chart_right}, Oben: {chart_top}, Unten: {chart_bottom}"
+    )
     print(
-        f"DEBUG: Chart-Dimensionen - Breite: {chart_width:.1f}, Höhe: {chart_height:.1f}")
+        f"DEBUG: Chart-Dimensionen - Breite: {chart_width:.1f}, Höhe: {chart_height:.1f}"
+    )
 
     if chart_width <= 0 or chart_height <= 0:
         print("DEBUG: Ungültige Chart-Dimensionen")
@@ -568,21 +573,23 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
 
     # Farben: Verschiedene Blau-Töne wie in der PDF verwendet
     from reportlab.lib.colors import Color
+
     bar_colors = [
         Color(0.07, 0.34, 0.60),  # Dunkelblau für Direktverbrauch
         Color(0.12, 0.42, 0.68),  # Mittelblau für Einspeisevergütung
         Color(0.18, 0.50, 0.76),  # Hellblau für Steuervorteile
         Color(0.05, 0.28, 0.52),  # Sehr dunkelblau für Gesamt
     ]
-    text_color = Color(0.2, 0.2, 0.2)    # Dunkelgrau für Text
-    line_color = Color(0.4, 0.4, 0.4)    # Grau für Verbindungslinien
+    text_color = Color(0.2, 0.2, 0.2)  # Dunkelgrau für Text
+    line_color = Color(0.4, 0.4, 0.4)  # Grau für Verbindungslinien
 
     # Daten für das Wasserfall-Diagramm
     values = [direkt_eur, einspeisung_eur, steuer_eur]
     labels = [
         "Einsparung durch\nDirektverbrauch",
         "Einnahmen aus\nEinspeisevergütung",
-        "Vorteile durch\nsteuerfreie Einspeisung"]
+        "Vorteile durch\nsteuerfreie Einspeisung",
+    ]
 
     # Maximaler Wert für Skalierung (verwende Gesamt als Referenz)
     max_value = max(gesamt_eur, max(values)) if values else 1000
@@ -611,42 +618,41 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
     bar_positions = []  # Speichere Positionen für Verbindungslinien
 
     for i, (value, label, color) in enumerate(
-            zip(values, labels, bar_colors[:3], strict=False)):
+        zip(values, labels, bar_colors[:3], strict=False)
+    ):
         # WICHTIG: Zeige alle Balken an, auch wenn Wert 0 ist (für bessere
         # Visualisierung)
         if value < 0:  # Nur negative Werte überspringen
             continue
 
         # Balken-Position
-        bar_x = chart_left + (i + 0.5) * \
-            individual_bar_spacing - individual_bar_width / 2
+        bar_x = (
+            chart_left + (i + 0.5) * individual_bar_spacing - individual_bar_width / 2
+        )
 
         # Mindesthöhe für Balken mit Wert 0 (für bessere Sichtbarkeit)
         if value <= 0:
             bar_height = 5.0  # Minimale Höhe für 0-Werte
         else:
-            bar_height = (value / max_value) * chart_height * \
-                0.75  # 75% der verfügbaren Höhe nutzen
+            bar_height = (
+                (value / max_value) * chart_height * 0.75
+            )  # 75% der verfügbaren Höhe nutzen
 
         bar_y = chart_bottom + cumulative_height
 
         # Zeichne Balken (auch für 0-Werte)
         c.setFillColor(color)
-        c.rect(
-            bar_x,
-            bar_y,
-            individual_bar_width,
-            bar_height,
-            stroke=0,
-            fill=1)
+        c.rect(bar_x, bar_y, individual_bar_width, bar_height, stroke=0, fill=1)
 
         # Speichere Position für Verbindungslinien
-        bar_positions.append({
-            'x': bar_x + individual_bar_width / 2,
-            'y_bottom': bar_y,
-            'y_top': bar_y + bar_height,
-            'value': value
-        })
+        bar_positions.append(
+            {
+                "x": bar_x + individual_bar_width / 2,
+                "y_bottom": bar_y,
+                "y_top": bar_y + bar_height,
+                "value": value,
+            }
+        )
 
         # Wert über dem Balken (auch für 0-Werte anzeigen)
         c.setFillColor(text_color)
@@ -654,18 +660,24 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
         if value <= 0:
             value_text = "0 €"
         else:
-            value_text = f"{value:,.0f} €".replace(',', '.')
+            value_text = f"{value:,.0f} €".replace(",", ".")
         text_width = c.stringWidth(value_text, "Helvetica-Bold", 7)
-        c.drawString(bar_x + (individual_bar_width - text_width) /
-                     2, bar_y + bar_height + 3, value_text)
+        c.drawString(
+            bar_x + (individual_bar_width - text_width) / 2,
+            bar_y + bar_height + 3,
+            value_text,
+        )
 
         # Label unter dem Balken (mehrzeilig)
         c.setFont("Helvetica", 6)
-        label_lines = label.split('\n')
+        label_lines = label.split("\n")
         for j, line in enumerate(label_lines):
             line_width = c.stringWidth(line, "Helvetica", 6)
-            c.drawString(bar_x + (individual_bar_width -
-                         line_width) / 2, bar_y - 12 - (j * 8), line)
+            c.drawString(
+                bar_x + (individual_bar_width - line_width) / 2,
+                bar_y - 12 - (j * 8),
+                line,
+            )
 
         # Aktualisiere kumulative Höhe für Wasserfall-Effekt (nur für echte
         # Werte)
@@ -682,7 +694,8 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
                     bar_x:.1f}, Y={
                         bar_y:.1f}, Breite={
                             individual_bar_width:.1f}, Höhe={
-                                bar_height:.1f}, Wert={value}€")
+                                bar_height:.1f}, Wert={value}€"
+        )
 
     # Zeichne Verbindungslinien zwischen den Balken (Wasserfall-Effekt)
     c.setStrokeColor(line_color)
@@ -701,14 +714,11 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
         # Linie von der Oberseite des aktuellen Balkens zur Unterseite des
         # nächsten
         c.line(
-            current_pos['x'] +
-            individual_bar_width /
-            4,
-            current_pos['y_top'],
-            next_pos['x'] -
-            individual_bar_width /
-            4,
-            next_pos['y_bottom'])
+            current_pos["x"] + individual_bar_width / 4,
+            current_pos["y_top"],
+            next_pos["x"] - individual_bar_width / 4,
+            next_pos["y_bottom"],
+        )
 
     # Zeichne den Gesamtbalken (rechts)
     total_bar_x = chart_left + individual_area_width + gap_width
@@ -722,29 +732,31 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
         pass
     c.setFillColor(bar_colors[3])  # Dunkelblau für Gesamt
     c.rect(
-        total_bar_x,
-        total_bar_y,
-        total_bar_width,
-        total_bar_height,
-        stroke=0,
-        fill=1)
+        total_bar_x, total_bar_y, total_bar_width, total_bar_height, stroke=0, fill=1
+    )
 
     # Wert über dem Gesamtbalken
     c.setFillColor(text_color)
     c.setFont("Helvetica-Bold", 8)
-    total_text = f"{gesamt_eur:,.0f} €".replace(',', '.')
+    total_text = f"{gesamt_eur:,.0f} €".replace(",", ".")
     total_text_width = c.stringWidth(total_text, "Helvetica-Bold", 8)
-    c.drawString(total_bar_x + (total_bar_width - total_text_width) /
-                 2, total_bar_y + total_bar_height + 3, total_text)
+    c.drawString(
+        total_bar_x + (total_bar_width - total_text_width) / 2,
+        total_bar_y + total_bar_height + 3,
+        total_text,
+    )
 
     # Label unter dem Gesamtbalken
     c.setFont("Helvetica-Bold", 7)
     total_label = "Gesamt Erträge\npro Jahr"
-    total_label_lines = total_label.split('\n')
+    total_label_lines = total_label.split("\n")
     for j, line in enumerate(total_label_lines):
         line_width = c.stringWidth(line, "Helvetica-Bold", 7)
-        c.drawString(total_bar_x + (total_bar_width - line_width) /
-                     2, total_bar_y - 12 - (j * 9), line)
+        c.drawString(
+            total_bar_x + (total_bar_width - line_width) / 2,
+            total_bar_y - 12 - (j * 9),
+            line,
+        )
 
     # Verbindungslinie vom letzten Einzelbalken zum Gesamtbalken
     if bar_positions:
@@ -754,36 +766,49 @@ def _draw_page4_waterfall_chart(c: canvas.Canvas,
             c.setDash([2, 2])  # Gestrichelte Linie
         except AttributeError:
             pass  # Fallback auf durchgezogene Linie
-        c.line(last_pos['x'] + individual_bar_width / 4, last_pos['y_top'],
-               total_bar_x - 5, total_bar_y + total_bar_height)
+        c.line(
+            last_pos["x"] + individual_bar_width / 4,
+            last_pos["y_top"],
+            total_bar_x - 5,
+            total_bar_y + total_bar_height,
+        )
 
     print(
         f"DEBUG: Gesamtbalken: X={
             total_bar_x:.1f}, Y={
             total_bar_y:.1f}, Breite={
                 total_bar_width:.1f}, Höhe={
-                    total_bar_height:.1f}, Wert={gesamt_eur}€")
+                    total_bar_height:.1f}, Wert={gesamt_eur}€"
+    )
 
     c.restoreState()
 
 
 # OLD: page 1 -> NEW: page 2
-def _draw_page2_test_donuts(c: canvas.Canvas,
-                            dynamic_data: dict[str,
-                                               str],
-                            page_width: float,
-                            page_height: float) -> None:
+def _draw_page2_test_donuts(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Zeichnet Test-Donut-Diagramme auf Seite 2 links unten zum Testen der Sichtbarkeit."""
     # Werte aus dynamic_data ziehen
-    pct_consumption = _first_valid_percent(dynamic_data, [
-        "storage_consumption_ratio_percent",
-    ])
-    pct_production = _first_valid_percent(dynamic_data, [
-        "storage_production_ratio_percent",
-    ])
+    pct_consumption = _first_valid_percent(
+        dynamic_data,
+        [
+            "storage_consumption_ratio_percent",
+        ],
+    )
+    pct_production = _first_valid_percent(
+        dynamic_data,
+        [
+            "storage_production_ratio_percent",
+        ],
+    )
 
     print(
-        f"DEBUG: Seite 2 Test-Donut-Charts - Consumption: {pct_consumption}%, Production: {pct_production}%")
+        f"DEBUG: Seite 2 Test-Donut-Charts - Consumption: {pct_consumption}%, Production: {pct_production}%"
+    )
 
     if pct_consumption <= 0 and pct_production <= 0:
         print("DEBUG: Keine Test-Donut-Charts gezeichnet - beide Werte <= 0")
@@ -800,13 +825,14 @@ def _draw_page2_test_donuts(c: canvas.Canvas,
 
     # Position unterhalb der technischen Spezifikationen
     consumption_cy = page_height - (tech_specs_y + 50)  # 50 Punkte unterhalb
-    production_cy = page_height - (tech_specs_y + 100)   # 100 Punkte unterhalb
+    production_cy = page_height - (tech_specs_y + 100)  # 100 Punkte unterhalb
 
     # X-Position: Links, aber sichtbar
     chart_cx = 150.0  # Links von "Photovoltaik Module" (X=394)
 
     print(
-        f"DEBUG: Test-Chart-Positionen - Consumption: ({chart_cx}, {consumption_cy}), Production: ({chart_cx}, {production_cy})")
+        f"DEBUG: Test-Chart-Positionen - Consumption: ({chart_cx}, {consumption_cy}), Production: ({chart_cx}, {production_cy})"
+    )
     print(f"DEBUG: Seitengröße: {page_width} x {page_height}")
 
     outer_r = 40.0  # GROßE Charts für maximale Sichtbarkeit
@@ -814,6 +840,7 @@ def _draw_page2_test_donuts(c: canvas.Canvas,
 
     # SEHR SICHTBARE Farben
     from reportlab.lib.colors import Color
+
     bg = Color(0.9, 0.9, 0.9)  # Hellgrau Hintergrund
     # REINES ROT für maximale Sichtbarkeit
     fg_consumption = Color(1.0, 0.0, 0.0)
@@ -823,7 +850,8 @@ def _draw_page2_test_donuts(c: canvas.Canvas,
     # Oberer Donut: Speicher zu Tagesverbrauch
     if pct_consumption > 0:
         print(
-            f"DEBUG: Zeichne Test-Consumption Donut bei ({chart_cx}, {consumption_cy}) mit {pct_consumption}%")
+            f"DEBUG: Zeichne Test-Consumption Donut bei ({chart_cx}, {consumption_cy}) mit {pct_consumption}%"
+        )
         _draw_donut(
             c,
             chart_cx,
@@ -832,7 +860,8 @@ def _draw_page2_test_donuts(c: canvas.Canvas,
             outer_r,
             inner_r,
             fg_consumption,
-            bg)
+            bg,
+        )
         # Zentrumstext
         txt = f"{int(round(pct_consumption))}%"
         c.setFont("Helvetica-Bold", 12)
@@ -850,7 +879,8 @@ def _draw_page2_test_donuts(c: canvas.Canvas,
     # Unterer Donut: Speicher zu PV-Produktion
     if pct_production > 0:
         print(
-            f"DEBUG: Zeichne Test-Production Donut bei ({chart_cx}, {production_cy}) mit {pct_production}%")
+            f"DEBUG: Zeichne Test-Production Donut bei ({chart_cx}, {production_cy}) mit {pct_production}%"
+        )
         _draw_donut(
             c,
             chart_cx,
@@ -859,7 +889,8 @@ def _draw_page2_test_donuts(c: canvas.Canvas,
             outer_r,
             inner_r,
             fg_production,
-            bg)
+            bg,
+        )
         # Zentrumstext
         txt = f"{int(round(pct_production))}%"
         c.setFont("Helvetica-Bold", 12)
@@ -878,22 +909,30 @@ def _draw_page2_test_donuts(c: canvas.Canvas,
 
 
 # OLD: page 6 -> NEW: page 7
-def _draw_page7_storage_donuts_fixed(c: canvas.Canvas,
-                                     dynamic_data: dict[str,
-                                                        str],
-                                     page_width: float,
-                                     page_height: float) -> None:
+def _draw_page7_storage_donuts_fixed(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Zeichnet Donut-Diagramme für Speicher-Relationen auf Seite 7 mit verbesserter Sichtbarkeit."""
     # Werte aus dynamic_data ziehen
-    pct_consumption = _first_valid_percent(dynamic_data, [
-        "storage_consumption_ratio_percent",
-    ])
-    pct_production = _first_valid_percent(dynamic_data, [
-        "storage_production_ratio_percent",
-    ])
+    pct_consumption = _first_valid_percent(
+        dynamic_data,
+        [
+            "storage_consumption_ratio_percent",
+        ],
+    )
+    pct_production = _first_valid_percent(
+        dynamic_data,
+        [
+            "storage_production_ratio_percent",
+        ],
+    )
 
     print(
-        f"DEBUG: Seite 7 Donut-Charts (FIXED) - Consumption: {pct_consumption}%, Production: {pct_production}%")
+        f"DEBUG: Seite 7 Donut-Charts (FIXED) - Consumption: {pct_consumption}%, Production: {pct_production}%"
+    )
 
     if pct_consumption <= 0 and pct_production <= 0:
         print("DEBUG: Keine Donut-Charts gezeichnet - beide Werte <= 0")
@@ -910,10 +949,11 @@ def _draw_page7_storage_donuts_fixed(c: canvas.Canvas,
 
     # Y-Positionen: Vertikal verteilt in der Mitte der Seite
     consumption_cy = page_height - 400  # Oberer Chart
-    production_cy = page_height - 500   # Unterer Chart
+    production_cy = page_height - 500  # Unterer Chart
 
     print(
-        f"DEBUG: FIXED Chart-Positionen - Consumption: ({chart_cx}, {consumption_cy}), Production: ({chart_cx}, {production_cy})")
+        f"DEBUG: FIXED Chart-Positionen - Consumption: ({chart_cx}, {consumption_cy}), Production: ({chart_cx}, {production_cy})"
+    )
     print(f"DEBUG: Seitengröße: {page_width} x {page_height}")
 
     outer_r = 35.0  # Große Charts für gute Sichtbarkeit
@@ -921,14 +961,16 @@ def _draw_page7_storage_donuts_fixed(c: canvas.Canvas,
 
     # SEHR SICHTBARE Farben
     from reportlab.lib.colors import Color
+
     bg = Color(0.9, 0.9, 0.9)  # Hellgrau Hintergrund
     fg_consumption = Color(0.0, 0.5, 1.0)  # Helles Blau für Verbrauch
-    fg_production = Color(1.0, 0.3, 0.0)   # Orange für Produktion
+    fg_production = Color(1.0, 0.3, 0.0)  # Orange für Produktion
 
     # Oberer Donut: Speicher zu Tagesverbrauch
     if pct_consumption > 0:
         print(
-            f"DEBUG: Zeichne FIXED Consumption Donut bei ({chart_cx}, {consumption_cy}) mit {pct_consumption}%")
+            f"DEBUG: Zeichne FIXED Consumption Donut bei ({chart_cx}, {consumption_cy}) mit {pct_consumption}%"
+        )
         _draw_donut(
             c,
             chart_cx,
@@ -937,7 +979,8 @@ def _draw_page7_storage_donuts_fixed(c: canvas.Canvas,
             outer_r,
             inner_r,
             fg_consumption,
-            bg)
+            bg,
+        )
         # Zentrumstext
         txt = f"{int(round(pct_consumption))}%"
         c.setFont("Helvetica-Bold", 10)
@@ -951,15 +994,13 @@ def _draw_page7_storage_donuts_fixed(c: canvas.Canvas,
         # Schwarz für maximale Sichtbarkeit
         c.setFillColor(Color(0.0, 0.0, 0.0))
         lw = c.stringWidth(label_txt, "Helvetica-Bold", 8)
-        c.drawString(
-            chart_cx - lw / 2,
-            consumption_cy - outer_r - 15,
-            label_txt)
+        c.drawString(chart_cx - lw / 2, consumption_cy - outer_r - 15, label_txt)
 
     # Unterer Donut: Speicher zu PV-Produktion
     if pct_production > 0:
         print(
-            f"DEBUG: Zeichne FIXED Production Donut bei ({chart_cx}, {production_cy}) mit {pct_production}%")
+            f"DEBUG: Zeichne FIXED Production Donut bei ({chart_cx}, {production_cy}) mit {pct_production}%"
+        )
         _draw_donut(
             c,
             chart_cx,
@@ -968,7 +1009,8 @@ def _draw_page7_storage_donuts_fixed(c: canvas.Canvas,
             outer_r,
             inner_r,
             fg_production,
-            bg)
+            bg,
+        )
         # Zentrumstext
         txt = f"{int(round(pct_production))}%"
         c.setFont("Helvetica-Bold", 10)
@@ -982,31 +1024,36 @@ def _draw_page7_storage_donuts_fixed(c: canvas.Canvas,
         # Schwarz für maximale Sichtbarkeit
         c.setFillColor(Color(0.0, 0.0, 0.0))
         lw = c.stringWidth(label_txt, "Helvetica-Bold", 8)
-        c.drawString(
-            chart_cx - lw / 2,
-            production_cy - outer_r - 15,
-            label_txt)
+        c.drawString(chart_cx - lw / 2, production_cy - outer_r - 15, label_txt)
 
     c.restoreState()
 
 
 # OLD: page 6 -> NEW: page 7
-def _draw_page7_storage_donuts(c: canvas.Canvas,
-                               dynamic_data: dict[str,
-                                                  str],
-                               page_width: float,
-                               page_height: float) -> None:
+def _draw_page7_storage_donuts(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Zeichnet Donut-Diagramme an den EXAKTEN Platzhalter-Positionen auf Seite 7."""
     # Werte aus dynamic_data ziehen
-    pct_consumption = _first_valid_percent(dynamic_data, [
-        "storage_consumption_ratio_percent",
-    ])
-    pct_production = _first_valid_percent(dynamic_data, [
-        "storage_production_ratio_percent",
-    ])
+    pct_consumption = _first_valid_percent(
+        dynamic_data,
+        [
+            "storage_consumption_ratio_percent",
+        ],
+    )
+    pct_production = _first_valid_percent(
+        dynamic_data,
+        [
+            "storage_production_ratio_percent",
+        ],
+    )
 
     print(
-        f"DEBUG: Seite 7 Donut-Charts - Consumption: {pct_consumption}%, Production: {pct_production}%")
+        f"DEBUG: Seite 7 Donut-Charts - Consumption: {pct_consumption}%, Production: {pct_production}%"
+    )
 
     if pct_consumption <= 0 and pct_production <= 0:
         print("DEBUG: Keine Donut-Charts gezeichnet - beide Werte <= 0")
@@ -1028,7 +1075,8 @@ def _draw_page7_storage_donuts(c: canvas.Canvas,
     production_center_y = page_height - 663.5
 
     print(
-        f"DEBUG: EXAKTE Chart-Positionen - Consumption: ({consumption_center_x}, {consumption_center_y}), Production: ({production_center_x}, {production_center_y})")
+        f"DEBUG: EXAKTE Chart-Positionen - Consumption: ({consumption_center_x}, {consumption_center_y}), Production: ({production_center_x}, {production_center_y})"
+    )
     print(f"DEBUG: Seitengröße: {page_width} x {page_height}")
 
     # Angemessene Größe für die Position
@@ -1037,14 +1085,16 @@ def _draw_page7_storage_donuts(c: canvas.Canvas,
 
     # Sichtbare Farben
     from reportlab.lib.colors import Color
+
     bg = Color(0.9, 0.9, 0.9)  # Hellgrauer Hintergrund
     fg_consumption = Color(0.07, 0.34, 0.60)  # Blau wie in der PDF
-    fg_production = Color(0.12, 0.42, 0.68)   # Etwas helleres Blau
+    fg_production = Color(0.12, 0.42, 0.68)  # Etwas helleres Blau
 
     # Donut für Tagesverbrauch
     if pct_consumption > 0:
         print(
-            f"DEBUG: Zeichne Consumption Donut bei ({consumption_center_x}, {consumption_center_y}) mit {pct_consumption}%")
+            f"DEBUG: Zeichne Consumption Donut bei ({consumption_center_x}, {consumption_center_y}) mit {pct_consumption}%"
+        )
         _draw_donut(
             c,
             consumption_center_x,
@@ -1053,19 +1103,20 @@ def _draw_page7_storage_donuts(c: canvas.Canvas,
             outer_r,
             inner_r,
             fg_consumption,
-            bg)
+            bg,
+        )
         # Zentrumstext
         txt = f"{int(round(pct_consumption))}%"
         c.setFont("Helvetica-Bold", 8)
         c.setFillColor(fg_consumption)
         tw = c.stringWidth(txt, "Helvetica-Bold", 8)
-        c.drawString(consumption_center_x - tw / 2,
-                     consumption_center_y - 3, txt)
+        c.drawString(consumption_center_x - tw / 2, consumption_center_y - 3, txt)
 
     # Donut für PV-Produktion
     if pct_production > 0:
         print(
-            f"DEBUG: Zeichne Production Donut bei ({production_center_x}, {production_center_y}) mit {pct_production}%")
+            f"DEBUG: Zeichne Production Donut bei ({production_center_x}, {production_center_y}) mit {pct_production}%"
+        )
         _draw_donut(
             c,
             production_center_x,
@@ -1074,14 +1125,14 @@ def _draw_page7_storage_donuts(c: canvas.Canvas,
             outer_r,
             inner_r,
             fg_production,
-            bg)
+            bg,
+        )
         # Zentrumstext
         txt = f"{int(round(pct_production))}%"
         c.setFont("Helvetica-Bold", 8)
         c.setFillColor(fg_production)
         tw = c.stringWidth(txt, "Helvetica-Bold", 8)
-        c.drawString(production_center_x - tw / 2,
-                     production_center_y - 3, txt)
+        c.drawString(production_center_x - tw / 2, production_center_y - 3, txt)
 
     c.restoreState()
 
@@ -1098,8 +1149,10 @@ def _draw_page1_monthly_production_consumption_chart(
         if not raw:
             return []
         tokens = [
-            part.strip() for part in str(raw).replace(
-                ";", ",").split(",") if part.strip()]
+            part.strip()
+            for part in str(raw).replace(";", ",").split(",")
+            if part.strip()
+        ]
         values: list[float] = []
         for token in tokens:
             cleaned = re.sub(r"[^0-9.,\-]", "", token).replace(",", ".")
@@ -1125,8 +1178,18 @@ def _draw_page1_monthly_production_consumption_chart(
 
     if not month_labels or len(month_labels) != 12:
         month_labels = [
-            "Jan", "Feb", "Mrz", "Apr", "Mai", "Jun",
-            "Jul", "Aug", "Sep", "Okt", "Nov", "Dez",
+            "Jan",
+            "Feb",
+            "Mrz",
+            "Apr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dez",
         ]
 
     max_val = max(max(prod_values), max(cons_values), 0.0)
@@ -1230,35 +1293,39 @@ def _draw_page1_monthly_production_consumption_chart(
             label_center_y = row_base_y + row_height / 2.0
             c.setFillColor(Color(0.15, 0.20, 0.27))
             c.setFont("Helvetica-Bold", 8)
-            c.drawRightString(
-                chart_x - 10,
-                label_center_y - 3,
-                month_labels[idx])
+            c.drawRightString(chart_x - 10, label_center_y - 3, month_labels[idx])
 
     finally:
         c.restoreState()
 
 
 # OLD: page 1 -> NEW: page 2
-def _draw_page2_kpi_donuts(c: canvas.Canvas,
-                           dynamic_data: dict[str,
-                                              str],
-                           page_width: float,
-                           page_height: float) -> None:
+def _draw_page2_kpi_donuts(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Zeichnet zwei Donut-Diagramme (Unabhängigkeit, Eigenverbrauch) auf Seite 2 unterhalb der KPI-Überschrift."""
     # Werte aus dynamic_data ziehen (formatiert wie "54%" / "42%")
     # Robuste Ermittlung mit Fallback-Keys
-    pct_autark = _first_valid_percent(dynamic_data, [
-        "self_supply_rate_percent",
-        "self_sufficiency_percent",
-        "autarky_percent",
-    ])
-    pct_ev = _first_valid_percent(dynamic_data, [
-        "self_consumption_percent",
-        # Seite 2 abgeleiteter Wert (nur Zahl): direkter Deckungsanteil am
-        # Verbrauch
-        "direct_cover_consumption_percent_number",
-    ])
+    pct_autark = _first_valid_percent(
+        dynamic_data,
+        [
+            "self_supply_rate_percent",
+            "self_sufficiency_percent",
+            "autarky_percent",
+        ],
+    )
+    pct_ev = _first_valid_percent(
+        dynamic_data,
+        [
+            "self_consumption_percent",
+            # Seite 2 abgeleiteter Wert (nur Zahl): direkter Deckungsanteil am
+            # Verbrauch
+            "direct_cover_consumption_percent_number",
+        ],
+    )
     if pct_autark <= 0 and pct_ev <= 0:
         return
     c.saveState()
@@ -1272,21 +1339,20 @@ def _draw_page2_kpi_donuts(c: canvas.Canvas,
     inner_r = 26.0
     # Farben (beide Donuts in Blau, Hintergrund hellgrau)
     from reportlab.lib.colors import Color
+
     bg = Color(0.85, 0.88, 0.90)
     fg_blue = Color(0.07, 0.34, 0.60)
     if pct_autark > 0:
         _draw_donut(c, left_cx, cy, pct_autark, outer_r, inner_r, fg_blue, bg)
         # Zentrumstext
-        txt = dynamic_data.get("self_supply_rate_percent",
-                               f"{int(round(pct_autark))}%")
+        txt = dynamic_data.get("self_supply_rate_percent", f"{int(round(pct_autark))}%")
         c.setFont("Helvetica-Bold", 12)
         c.setFillColor(fg_blue)
         tw = c.stringWidth(txt, "Helvetica-Bold", 12)
         c.drawString(left_cx - tw / 2, cy - 6, txt)
     if pct_ev > 0:
         _draw_donut(c, right_cx, cy, pct_ev, outer_r, inner_r, fg_blue, bg)
-        txt = dynamic_data.get("self_consumption_percent",
-                               f"{int(round(pct_ev))}%")
+        txt = dynamic_data.get("self_consumption_percent", f"{int(round(pct_ev))}%")
         c.setFont("Helvetica-Bold", 12)
         c.setFillColor(fg_blue)
         tw = c.stringWidth(txt, "Helvetica-Bold", 12)
@@ -1295,10 +1361,8 @@ def _draw_page2_kpi_donuts(c: canvas.Canvas,
 
 
 def _draw_top_right_triangle(
-        c: canvas.Canvas,
-        page_width: float,
-        page_height: float,
-        size: float = 36.0) -> None:
+    c: canvas.Canvas, page_width: float, page_height: float, size: float = 36.0
+) -> None:
     """Zeichnet ein kleines, gefülltes Dreieck oben rechts (nur Seite 1).
 
     Farbe: identisch zum Blau der Fußzeilen/Charts (dezentes Dunkelblau).
@@ -1322,10 +1386,9 @@ def _draw_top_right_triangle(
         c.restoreState()
 
 
-def validate_page_files(page_num: int,
-                        coords_dir: Path,
-                        template_dir: Path | None = None) -> tuple[bool,
-                                                                   list[str]]:
+def validate_page_files(
+    page_num: int, coords_dir: Path, template_dir: Path | None = None
+) -> tuple[bool, list[str]]:
     """Validates that all required files exist for a given page number.
 
     Args:
@@ -1356,8 +1419,7 @@ def validate_page_files(page_num: int,
 
     # Check template file
     if template_dir is None:
-        template_dir = Path(__file__).parent.parent / \
-            "pdf_templates_static" / "notext"
+        template_dir = Path(__file__).parent.parent / "pdf_templates_static" / "notext"
 
     template_prefix = "hp_nt_" if is_heatpump else "nt_nt_"
     template_file = template_dir / f"{template_prefix}{page_num:02d}.pdf"
@@ -1369,23 +1431,23 @@ def validate_page_files(page_num: int,
 
 # pdf_template_engine/dynamic_overlay.py
 
-def generate_overlay(coords_dir: Path,
-                     dynamic_data: dict[str,
-                                        str],
-                     total_pages: int = 8) -> bytes:
+
+def generate_overlay(
+    coords_dir: Path, dynamic_data: dict[str, str], total_pages: int = 8
+) -> bytes:
     """Erzeugt ein Overlay-PDF für acht Seiten anhand der coords-Dateien.
 
     total_pages steuert die Fußzeilen-Nummerierung als "Seite x von XX".
     """
     # Validate that all required page files exist before starting generation
-    template_dir = Path(__file__).parent.parent / \
-        "pdf_templates_static" / "notext"
+    template_dir = Path(__file__).parent.parent / "pdf_templates_static" / "notext"
     missing_files_summary = []
     missing_pages = set()
 
     for page_num in range(1, total_pages + 1):
         is_valid, missing_files = validate_page_files(
-            page_num, coords_dir, template_dir)
+            page_num, coords_dir, template_dir
+        )
         if not is_valid:
             missing_files_summary.extend(missing_files)
             missing_pages.add(page_num)
@@ -1396,7 +1458,9 @@ def generate_overlay(coords_dir: Path,
     # Graceful degradation: If page 8 files are missing, fall back to 7 pages
     if 8 in missing_pages and total_pages == 8:
         print("\n⚠️  Page 8 files are missing. Falling back to 7-page generation.")
-        print("    This is expected if you haven't yet created the new page 8 templates.")
+        print(
+            "    This is expected if you haven't yet created the new page 8 templates."
+        )
         print("    PDF will be generated with 7 pages instead.\n")
         total_pages = 7
         # Re-validate with reduced page count
@@ -1404,7 +1468,8 @@ def generate_overlay(coords_dir: Path,
         missing_pages = set()
         for page_num in range(1, total_pages + 1):
             is_valid, missing_files = validate_page_files(
-                page_num, coords_dir, template_dir)
+                page_num, coords_dir, template_dir
+            )
             if not is_valid:
                 missing_files_summary.extend(missing_files)
                 missing_pages.add(page_num)
@@ -1412,7 +1477,9 @@ def generate_overlay(coords_dir: Path,
     # If any files are still missing after fallback, provide a clear summary
     if missing_files_summary:
         print(f"\n⚠️  Total missing files: {len(missing_files_summary)}")
-        print("    PDF generation will continue but may fail if these files are accessed.")
+        print(
+            "    PDF generation will continue but may fail if these files are accessed."
+        )
         print("    Please ensure all required template and coordinate files exist.\n")
 
     buffer = io.BytesIO()
@@ -1420,18 +1487,12 @@ def generate_overlay(coords_dir: Path,
     page_width, page_height = A4
     # Use total_pages (which may have been adjusted by graceful degradation)
     for i in range(
-            1,
-            total_pages +
-            1):  # MIGRATION: 7→8 pages (supports both 7 and 8 pages)
+        1, total_pages + 1
+    ):  # MIGRATION: 7→8 pages (supports both 7 and 8 pages)
         yml_path = coords_dir / f"seite{i}.yml"
         elements = parse_coords_file(yml_path)
         # Firmenlogo zuerst
-        _draw_company_logo(
-            c,
-            dynamic_data,
-            page_width,
-            page_height,
-            page_index=i)
+        _draw_company_logo(c, dynamic_data, page_width, page_height, page_index=i)
         # Dreieck
         _draw_top_right_triangle(c, page_width, page_height, size=0.0)
         # Seite 1: Neue Seite 1 Inhalte
@@ -1441,41 +1502,32 @@ def generate_overlay(coords_dir: Path,
         elif i == 2:
             _draw_page2_kpi_donuts(c, dynamic_data, page_width, page_height)
             _draw_page1_monthly_production_consumption_chart(
-                c, dynamic_data, page_width, page_height)
+                c, dynamic_data, page_width, page_height
+            )
         # OLD: page 6 -> NEW: page 7
         if i == 7:
-            _draw_page7_storage_donuts(
-                c, dynamic_data, page_width, page_height)
+            _draw_page7_storage_donuts(c, dynamic_data, page_width, page_height)
 
         # OLD: page 3 -> NEW: page 4
         if i == 4:
-            _draw_page4_waterfall_chart(
-                c, dynamic_data, page_width, page_height)
+            _draw_page4_waterfall_chart(c, dynamic_data, page_width, page_height)
         # OLD: page 3 -> NEW: page 4 (rechter Chart)
         if i == 4:
             try:
                 c.saveState()
                 try:
                     c.setFillColorRGB(1, 1, 1)
-                    c.rect(
-                        350,
-                        page_height -
-                        170 -
-                        230,
-                        260,
-                        250,
-                        stroke=0,
-                        fill=1)
+                    c.rect(350, page_height - 170 - 230, 260, 250, stroke=0, fill=1)
                 finally:
                     c.restoreState()
                 _draw_page4_right_chart_and_separator(
-                    c, elements, dynamic_data, page_width, page_height)
+                    c, elements, dynamic_data, page_width, page_height
+                )
             except Exception:
                 pass
         # OLD: page 4 -> NEW: page 5
         if i == 5:
-            _draw_page5_component_images(
-                c, dynamic_data, page_width, page_height)
+            _draw_page5_component_images(c, dynamic_data, page_width, page_height)
             # Hersteller-Brand-Logos (nach Produktbildern, vor Textlayer optional)
             # Logos werden später auch nach dem Text gerendert um Überdeckung
             # sicherzustellen
@@ -1493,9 +1545,9 @@ def generate_overlay(coords_dir: Path,
 
         # Seite 1: bestimmte dynamische Werte rechtsbündig ausrichten
         right_align_tokens_s1 = {
-            "36.958,00 EUR*",        # anlage_kwp (tatsächlicher Beispieltext!)
-            "8.251,92 kWh/Jahr",     # annual_pv_production_kwh
-            "29.150,00 EUR*",        # amortization_time
+            "36.958,00 EUR*",  # anlage_kwp (tatsächlicher Beispieltext!)
+            "8.251,92 kWh/Jahr",  # annual_pv_production_kwh
+            "29.150,00 EUR*",  # amortization_time
         }
 
         # Seite 3: bestimmte Werte rechtsbündig an der rechten Boxkante (x1)
@@ -1545,9 +1597,11 @@ def generate_overlay(coords_dir: Path,
             }
             for elem in elements:
                 ttxt = (elem.get("text") or "").strip()
-                if ttxt in _cost_token_map and isinstance(
-                        elem.get("position"), tuple) and len(
-                        elem.get("position")) == 4:
+                if (
+                    ttxt in _cost_token_map
+                    and isinstance(elem.get("position"), tuple)
+                    and len(elem.get("position")) == 4
+                ):
                     # Speichere Position + Font-Infos und referenzierten
                     # dynamischen Key
                     page3_cost_tokens[_cost_token_map[ttxt]] = {
@@ -1561,8 +1615,7 @@ def generate_overlay(coords_dir: Path,
         # OLD: page 6 -> NEW: page 7
         if i == 7:
             try:
-                elements = _compact_page7_elements(
-                    elements, dynamic_data, page_height)
+                elements = _compact_page7_elements(elements, dynamic_data, page_height)
             except Exception as e:
                 print(f"WARN: Compacting Seite7 fehlgeschlagen: {e}")
 
@@ -1577,9 +1630,11 @@ def generate_overlay(coords_dir: Path,
             # durch Donut-Charts ersetzt)
             if i == 6 and text in [
                 "relation_tagverbrauch_prozent",
-                    "relation_pvproduktion_prozent"]:
+                "relation_pvproduktion_prozent",
+            ]:
                 print(
-                    f"DEBUG: Überspringe Platzhalter-Text '{text}' - wird durch Donut-Chart ersetzt")
+                    f"DEBUG: Überspringe Platzhalter-Text '{text}' - wird durch Donut-Chart ersetzt"
+                )
                 continue
 
             # Seite 4 & 5: Firmenname und TÜV-Text dynamisch behandeln
@@ -1588,12 +1643,13 @@ def generate_overlay(coords_dir: Path,
                 if company_name:
                     draw_text = company_name
                     print(
-                        f"DEBUG: Seite {i} Firmenname ersetzt: '{text}' -> '{company_name}'")
+                        f"DEBUG: Seite {i} Firmenname ersetzt: '{text}' -> '{company_name}'"
+                    )
                 else:
                     draw_text = "Ihr Unternehmen"  # Fallback
             else:
                 # Normale Text-Behandlung
-                draw_text = (dynamic_data.get(key, "") if key else text)
+                draw_text = dynamic_data.get(key, "") if key else text
 
             pos = elem.get("position", (0, 0, 0, 0))
             if len(pos) == 4:
@@ -1607,11 +1663,12 @@ def generate_overlay(coords_dir: Path,
             font_size = float(elem.get("font_size", 10.0))
 
             # Seite 4 & 5: TÜV-Text dynamisch nach Firmennamen positionieren
-            if i in (
-                    4,
-                    5) and text == "verwendet ausschließlich TÜV geprüfte Komponenten, die sämtlichen gängigen Normen und Zertifizierungen entsprechen.":
-                company_name = dynamic_data.get(
-                    "company_name", "Ihr Unternehmen")
+            if (
+                i in (4, 5)
+                and text
+                == "verwendet ausschließlich TÜV geprüfte Komponenten, die sämtlichen gängigen Normen und Zertifizierungen entsprechen."
+            ):
+                company_name = dynamic_data.get("company_name", "Ihr Unternehmen")
 
                 # Font setzen für Breitenberechnung
                 try:
@@ -1623,7 +1680,8 @@ def generate_overlay(coords_dir: Path,
                 # ReportLab-kompatible Font-Namen verwenden
                 safe_font_name = "Helvetica" if "Helvetica" in font_name else font_name
                 company_width = c.stringWidth(
-                    company_name + " ", safe_font_name, font_size)
+                    company_name + " ", safe_font_name, font_size
+                )
 
                 # Neue X-Position: Start des Firmennamens (45.0) + Breite des
                 # Firmennamens + Leertaste
@@ -1631,7 +1689,8 @@ def generate_overlay(coords_dir: Path,
 
                 print(
                     f"DEBUG: Seite {i} TÜV-Text dynamisch positioniert bei X={
-                        draw_x:.1f} (nach '{company_name}')")
+                        draw_x:.1f} (nach '{company_name}')"
+                )
                 draw_text = text  # Originaler TÜV-Text
             try:
                 c.setFont(font_name, font_size)
@@ -1642,23 +1701,23 @@ def generate_overlay(coords_dir: Path,
             if i == 6 and key:
                 try:
                     # Service-Design-Farben aus dynamic_data
-                    sym_color_hex = dynamic_data.get('service_symbol_color')
-                    lbl_color_hex = dynamic_data.get('service_label_color')
-                    hide_val_col = bool(
-                        dynamic_data.get('service_value_column_hidden'))
-                    is_label = text.startswith('X_LBL_')
-                    is_value = text.startswith(
-                        'X_SRV_') or text.startswith('X_PROD_')
+                    sym_color_hex = dynamic_data.get("service_symbol_color")
+                    lbl_color_hex = dynamic_data.get("service_label_color")
+                    hide_val_col = bool(dynamic_data.get("service_value_column_hidden"))
+                    is_label = text.startswith("X_LBL_")
+                    is_value = text.startswith("X_SRV_") or text.startswith("X_PROD_")
 
                     def _hex_to_color(h):
                         from reportlab.lib.colors import Color
-                        h = h.lstrip('#')
+
+                        h = h.lstrip("#")
                         if len(h) == 6:
                             r = int(h[0:2], 16) / 255.0
                             g = int(h[2:4], 16) / 255.0
                             b = int(h[4:6], 16) / 255.0
                             return Color(r, g, b)
                         return int_to_color(color_int)
+
                     if is_label and lbl_color_hex:
                         c.setFillColor(_hex_to_color(lbl_color_hex))
                     elif is_value and sym_color_hex:
@@ -1667,9 +1726,12 @@ def generate_overlay(coords_dir: Path,
                         c.setFillColor(int_to_color(color_int))
                     # Value-Spalte ausblenden erzwingen (leer zeichnen) – wenn
                     # hide aktiv und es ist Value
-                    if hide_val_col and is_value and (
-                            text.startswith('X_SRV_') or text.startswith('X_PROD_')):
-                        draw_text = ''
+                    if (
+                        hide_val_col
+                        and is_value
+                        and (text.startswith("X_SRV_") or text.startswith("X_PROD_"))
+                    ):
+                        draw_text = ""
                 except Exception:
                     c.setFillColor(int_to_color(color_int))
             else:
@@ -1703,11 +1765,11 @@ def generate_overlay(coords_dir: Path,
 
             if i == 1 and key in {
                 "self_supply_rate_percent",
-                    "self_consumption_percent"}:
+                "self_consumption_percent",
+            }:
                 continue
 
-            if i == 3 and text and "JAHRE SIMULATION" in text and len(
-                    pos) == 4:
+            if i == 3 and text and "JAHRE SIMULATION" in text and len(pos) == 4:
                 c.saveState()
                 try:
                     c.setFillColorRGB(1, 1, 1)
@@ -1720,17 +1782,20 @@ def generate_overlay(coords_dir: Path,
                         (pos[2] - pos[0]) + 4,
                         rect_height,
                         stroke=0,
-                        fill=1)
+                        fill=1,
+                    )
                 finally:
                     c.restoreState()
 
             try:
                 raw = (text or "").strip()
                 is_footer_candidate = (
-                    not key and raw.isdigit() and
-                    len(pos) == 4 and (pos[3] >= 780.0) and
-                    (pos[0] >= 520.0) and
-                    color_int == 0xFFFFFF
+                    not key
+                    and raw.isdigit()
+                    and len(pos) == 4
+                    and (pos[3] >= 780.0)
+                    and (pos[0] >= 520.0)
+                    and color_int == 0xFFFFFF
                 )
             except Exception:
                 is_footer_candidate = False
@@ -1746,8 +1811,7 @@ def generate_overlay(coords_dir: Path,
             else:
                 if key in center_keys and len(pos) == 4:
                     try:
-                        tw = c.stringWidth(
-                            str(draw_text), font_name, font_size)
+                        tw = c.stringWidth(str(draw_text), font_name, font_size)
                         mid_x = (x0 + x1) / 2.0
                         c.drawString(mid_x - tw / 2.0, draw_y, str(draw_text))
                     except Exception:
@@ -1789,6 +1853,7 @@ def generate_overlay(coords_dir: Path,
             c.saveState()
             try:
                 from reportlab.lib.colors import Color as _Color
+
                 dark_blue = _Color(0.07, 0.34, 0.60)
                 for dyn_key, meta in page3_cost_tokens.items():
                     pos = meta.get("position")
@@ -1796,8 +1861,7 @@ def generate_overlay(coords_dir: Path,
                         continue
                     x0, y0, x1, y1 = pos
                     draw_y = page_height - y1
-                    val = dynamic_data.get(dyn_key) or meta.get(
-                        "original_text") or ""
+                    val = dynamic_data.get(dyn_key) or meta.get("original_text") or ""
                     font_name = meta.get("font", "Helvetica-Bold")
                     font_size = float(meta.get("font_size", 10.49))
                     c.setFont(font_name, font_size)
@@ -1812,7 +1876,8 @@ def generate_overlay(coords_dir: Path,
                         bw + 2 * pad_x,
                         font_size + 2 * pad_y,
                         stroke=0,
-                        fill=1)
+                        fill=1,
+                    )
                     c.restoreState()
                     c.setFillColor(colors.black)
                     c.drawString(x0, draw_y, str(val))
@@ -1823,11 +1888,9 @@ def generate_overlay(coords_dir: Path,
         # zeichnen)
         if i == 5:
             try:
-                _draw_page5_brand_logos(
-                    c, dynamic_data, page_width, page_height)
+                _draw_page5_brand_logos(c, dynamic_data, page_width, page_height)
             except Exception as e:
-                print(
-                    f"WARN: Fehler beim Zeichnen der Hersteller-Logos Seite5: {e}")
+                print(f"WARN: Fehler beim Zeichnen der Hersteller-Logos Seite5: {e}")
 
         c.showPage()
     c.save()
@@ -1836,7 +1899,8 @@ def generate_overlay(coords_dir: Path,
 
 # OLD: page 6 -> NEW: page 7
 def _compact_page7_elements(
-        elements: list[dict[str, Any]], dynamic_data: dict[str, str], page_height: float) -> list[dict[str, Any]]:
+    elements: list[dict[str, Any]], dynamic_data: dict[str, str], page_height: float
+) -> list[dict[str, Any]]:
     """Verdichtet Seite 7 vertikal: Entfernt deaktivierte Dienstleistungszeilen.
 
     Strategie:
@@ -1859,9 +1923,9 @@ def _compact_page7_elements(
             return None
         # YAML speichert (x0, y0, x1, y1) mit y1 als maxY (unten?) -> In Vorlage: (70, 200, 200, 215)
         # Wir nehmen das obere Ende als y1
-        return float(
-            pos_tuple[1]) if pos_tuple[1] < pos_tuple[3] else float(
-            pos_tuple[3])
+        return (
+            float(pos_tuple[1]) if pos_tuple[1] < pos_tuple[3] else float(pos_tuple[3])
+        )
 
     # Sammle Kandidaten in Reihenfolge, wie sie im YAML stehen
     service_rows: list[dict[str, Any]] = []
@@ -1874,8 +1938,11 @@ def _compact_page7_elements(
         if y_top is None:
             other_elements.append(el)
             continue
-        if Y_MIN <= y_top <= Y_MAX and (txt.startswith(
-                "X_LBL_") or txt.startswith("X_SRV_") or txt.startswith("X_PROD_")):
+        if Y_MIN <= y_top <= Y_MAX and (
+            txt.startswith("X_LBL_")
+            or txt.startswith("X_SRV_")
+            or txt.startswith("X_PROD_")
+        ):
             service_rows.append(el)
         else:
             other_elements.append(el)
@@ -1883,8 +1950,8 @@ def _compact_page7_elements(
     # Gruppiere Zeilenpaare: Label (X_LBL_*) + Wert (X_SRV_* oder X_PROD_*)
     # Vorgehen: Sortiere nach y (aufsteigend) und verarbeite sequentiell
     service_rows_sorted = sorted(
-        service_rows, key=lambda e: _y_top(
-            e.get("position")) or 0.0)
+        service_rows, key=lambda e: _y_top(e.get("position")) or 0.0
+    )
 
     compacted: list[dict[str, Any]] = []
     buffer_pair: list[dict[str, Any]] = []
@@ -1913,11 +1980,17 @@ def _compact_page7_elements(
             val_el = buffer_pair[1] if len(buffer_pair) > 1 else None
             # Prüfe dyn Werte: Wenn sowohl Label als auch Value leer ->
             # verwerfen
-            lbl_key = PLACEHOLDER_MAPPING.get(
-                (lbl_el.get("text") or "").strip()) if lbl_el else None
+            lbl_key = (
+                PLACEHOLDER_MAPPING.get((lbl_el.get("text") or "").strip())
+                if lbl_el
+                else None
+            )
             lbl_val = dynamic_data.get(lbl_key, "") if lbl_key else ""
-            val_key = PLACEHOLDER_MAPPING.get(
-                (val_el.get("text") or "").strip()) if val_el else None
+            val_key = (
+                PLACEHOLDER_MAPPING.get((val_el.get("text") or "").strip())
+                if val_el
+                else None
+            )
             val_val = dynamic_data.get(val_key, "") if val_key else ""
             if lbl_val or val_val:
                 _flush_pair(buffer_pair)
@@ -1939,10 +2012,14 @@ def _compact_page7_elements(
     if not service_rows_sorted:
         return elements
 
-    first_top = min(
-        _y_top(
-            el.get("position")) for el in service_rows_sorted if _y_top(
-            el.get("position")) is not None) or 0.0
+    first_top = (
+        min(
+            _y_top(el.get("position"))
+            for el in service_rows_sorted
+            if _y_top(el.get("position")) is not None
+        )
+        or 0.0
+    )
     # Zeilenhöhenabschätzung: typischer Abstand zwischen aufeinanderfolgenden Label-Zeilen aus Vorlage
     # Wir lesen Mittelwert der Deltas aus originalen service_rows_sorted
     deltas = []
@@ -1965,8 +2042,11 @@ def _compact_page7_elements(
     processed_ids = set()
     for el in compacted:
         txt = (el.get("text") or "").strip()
-        if not (txt.startswith("X_LBL_") or txt.startswith(
-                "X_SRV_") or txt.startswith("X_PROD_")):
+        if not (
+            txt.startswith("X_LBL_")
+            or txt.startswith("X_SRV_")
+            or txt.startswith("X_PROD_")
+        ):
             continue
         pos = el.get("position")
         if not (isinstance(pos, tuple) and len(pos) == 4):
@@ -1977,7 +2057,7 @@ def _compact_page7_elements(
         # Annahme: y0 < y1 (wie in YAML) – belasse Höhe
         new_y0 = new_y_top
         new_y1 = new_y_top + height
-        el['position'] = (x0, new_y0, x1, new_y1)
+        el["position"] = (x0, new_y0, x1, new_y1)
         processed_ids.add(id(el))
         # Nach Value-Zeile erhöhen (wir erkennen Value-Zeile an X_SRV_/X_PROD_
         # und daran, dass vorher Label kam)
@@ -1993,16 +2073,17 @@ def _compact_page7_elements(
         final_list.append(el)
     return final_list
 
+
 # OLD: page 3 -> NEW: page 4
 
 
-def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
-                                          elements: list[dict[str,
-                                                              Any]],
-                                          dynamic_data: dict[str,
-                                                             str],
-                                          page_width: float,
-                                          page_height: float) -> None:
+def _draw_page4_right_chart_and_separator(
+    c: canvas.Canvas,
+    elements: list[dict[str, Any]],
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Seite 4: Rechts NUR die 20-Jahres-Gesamtergebnisse als Text + vertikale Trennlinie.
 
     - Linke Diagrammhöhe (aus Tick-Positionen) wird genutzt, um die Text-Vertikalmitte zu bestimmen.
@@ -2017,13 +2098,17 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
         bottom_label_y1 = None
         for el in elements:
             t = (el.get("text") or "").strip()
-            if t == "25.000" and isinstance(
-                    el.get("position"), tuple) and len(
-                    el.get("position")) == 4:
+            if (
+                t == "25.000"
+                and isinstance(el.get("position"), tuple)
+                and len(el.get("position")) == 4
+            ):
                 top_label_y1 = el["position"][3]
-            if t == "0" and isinstance(
-                    el.get("position"), tuple) and len(
-                    el.get("position")) == 4:
+            if (
+                t == "0"
+                and isinstance(el.get("position"), tuple)
+                and len(el.get("position")) == 4
+            ):
                 bottom_label_y1 = el["position"][3]
         # Fallbacks, falls tokens bereits dynamisch ersetzt wurden und oben
         # nicht gefunden wurden
@@ -2032,16 +2117,10 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
             # Bereich der linken Achse
             candidates = []
             for el in elements:
-                t = (
-                    el.get("text") or "").strip().replace(
-                    ".",
-                    "").replace(
-                    ",",
-                    ".")
+                t = (el.get("text") or "").strip().replace(".", "").replace(",", ".")
                 if re.fullmatch(r"[0-9]+(\.[0-9]+)?", t):
                     pos = el.get("position")
-                    if isinstance(pos, tuple) and len(
-                            pos) == 4 and pos[0] < 100.0:
+                    if isinstance(pos, tuple) and len(pos) == 4 and pos[0] < 100.0:
                         candidates.append(pos[3])
             if candidates:
                 top_label_y1 = min(candidates)
@@ -2063,7 +2142,7 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
         c.setStrokeColor(int_to_color(0x1B3670))
         c.setLineWidth(0.6)
         # Linie über die Diagrammhöhe ziehen (mit kleiner Überlappung)
-        c.line(sep_x, axis_bottom_y - .0, sep_x, axis_top_y + 8.0)
+        c.line(sep_x, axis_bottom_y - 0.0, sep_x, axis_top_y + 8.0)
         c.restoreState()
 
         # 3) Rechte Diagrammfläche definieren – nur ZWEI Balken (Totals 20J)
@@ -2073,6 +2152,7 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
         y0 = axis_bottom_y
         y1 = axis_top_y
         from reportlab.lib.colors import Color
+
         axis_color = int_to_color(0xB0B0B0)  # Achse in Hellgrau
         dark_blue = Color(0.07, 0.34, 0.60)
         light_blue = Color(0.63, 0.78, 0.90)
@@ -2080,25 +2160,25 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
         # Totals aus Platzhaltern holen
         def _parse_money(s: str) -> float:
             try:
-                ss = re.sub(
-                    r"[^0-9,\.]",
-                    "",
-                    (s or "")).replace(
-                    ".",
-                    "").replace(
-                    ",",
-                    ".")
+                ss = (
+                    re.sub(r"[^0-9,\.]", "", (s or ""))
+                    .replace(".", "")
+                    .replace(",", ".")
+                )
                 return float(ss or 0.0)
             except Exception:
                 return 0.0
 
         v_no_inc_total = _parse_money(
-            dynamic_data.get("cost_20y_no_increase_number") or "0")
+            dynamic_data.get("cost_20y_no_increase_number") or "0"
+        )
         v_with_inc_total = _parse_money(
-            dynamic_data.get("cost_20y_with_increase_number") or "0")
+            dynamic_data.get("cost_20y_with_increase_number") or "0"
+        )
 
         # Dynamische Obergrenze bestimmen
         import math
+
         max_val = max(v_no_inc_total, v_with_inc_total, 0.0)
         if max_val > 0:
             top = math.ceil(max_val / 1000.0) * 1000.0
@@ -2132,14 +2212,14 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
             c.setStrokeColor(int_to_color(0xC9D4E5))
             c.line(y_axis_x, py, chart_right_x, py)
             c.restoreState()
-            lbl = f"{
+            lbl = (
+                f"{
                 tv:,.2f}".replace(
-                ",",
-                "#").replace(
-                ".",
-                ",").replace(
-                "#",
-                ".")
+                    ",", "#"
+                )
+                .replace(".", ",")
+                .replace("#", ".")
+            )
             try:
                 tw = c.stringWidth(lbl, "Helvetica", 6.0)
             except Exception:
@@ -2150,8 +2230,8 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
 
         # Balken zeichnen
         def _h(val: float) -> float:
-            return 0.0 if top <= 0 else (
-                max(0.0, min(1.0, val / top)) * (y1 - y0))
+            return 0.0 if top <= 0 else (max(0.0, min(1.0, val / top)) * (y1 - y0))
+
         bar_w = 16.0  # halb so breit
         gap = 40.0
         # Balken leicht nach rechts verschieben
@@ -2228,40 +2308,25 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
         # Eintrag 1 (hellblau) - Quadrat an ursprünglicher Position
         c.saveState()
         c.setFillColor(light_blue)
-        c.rect(
-            legend_x,
-            legend1_base_y,
-            square_size,
-            square_size,
-            stroke=0,
-            fill=1)
+        c.rect(legend_x, legend1_base_y, square_size, square_size, stroke=0, fill=1)
         c.restoreState()
         c.setFillColor(colors.black)  # Schwarz statt Dunkelblau
         c.drawString(
-            legend_x +
-            square_size +
-            label_gap +
-            text_offset_x,
-            legend1_base_y -
-            1.0 +
-            text_offset_y,
-            legend_texts[0])
+            legend_x + square_size + label_gap + text_offset_x,
+            legend1_base_y - 1.0 + text_offset_y,
+            legend_texts[0],
+        )
         # Eintrag 2 (dunkelblau) - Quadrat an ursprünglicher Position
         c.saveState()
         c.setFillColor(dark_blue)
-        c.rect(
-            legend_x,
-            legend2_base_y,
-            square_size,
-            square_size,
-            stroke=0,
-            fill=1)
+        c.rect(legend_x, legend2_base_y, square_size, square_size, stroke=0, fill=1)
         c.restoreState()
         c.setFillColor(colors.black)  # Schwarz statt Dunkelblau
         c.drawString(
             legend_x + square_size + label_gap + text_offset_x,
             legend2_base_y - 1.0 + text_offset_y,
-            legend_texts[1] if len(legend_texts) > 1 else "")
+            legend_texts[1] if len(legend_texts) > 1 else "",
+        )
 
     finally:
         # Canvas-Zustand wiederherstellen, damit nachfolgende Texte nicht
@@ -2270,11 +2335,12 @@ def _draw_page4_right_chart_and_separator(c: canvas.Canvas,
 
 
 # OLD: page 4 -> NEW: page 5
-def _draw_page5_component_images(c: canvas.Canvas,
-                                 dynamic_data: dict[str,
-                                                    str],
-                                 page_width: float,
-                                 page_height: float) -> None:
+def _draw_page5_component_images(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Zeigt bis zu drei Produktbilder (Module, WR, Speicher) auf Seite 5 an.
 
     Erwartet Base64 in Keys: module_image_b64, inverter_image_b64, storage_image_b64.
@@ -2283,15 +2349,33 @@ def _draw_page5_component_images(c: canvas.Canvas,
     """
     try:
         images = [
-            (dynamic_data.get("module_image_b64"), {
-                "x": 50.0, "y_top": page_height - 250.0, "max_w": 140.0, "max_h": 90.0
-            }),
-            (dynamic_data.get("inverter_image_b64"), {
-                "x": 50.0, "y_top": page_height - 440.0, "max_w": 140.0, "max_h": 90.0
-            }),
-            (dynamic_data.get("storage_image_b64"), {
-                "x": 50.0, "y_top": page_height - 630.0, "max_w": 140.0, "max_h": 90.0
-            }),
+            (
+                dynamic_data.get("module_image_b64"),
+                {
+                    "x": 50.0,
+                    "y_top": page_height - 250.0,
+                    "max_w": 140.0,
+                    "max_h": 90.0,
+                },
+            ),
+            (
+                dynamic_data.get("inverter_image_b64"),
+                {
+                    "x": 50.0,
+                    "y_top": page_height - 440.0,
+                    "max_w": 140.0,
+                    "max_h": 90.0,
+                },
+            ),
+            (
+                dynamic_data.get("storage_image_b64"),
+                {
+                    "x": 50.0,
+                    "y_top": page_height - 630.0,
+                    "max_w": 140.0,
+                    "max_h": 90.0,
+                },
+            ),
         ]
         for img_b64, pos in images:
             img = _as_image_reader(img_b64)
@@ -2317,7 +2401,8 @@ def _draw_page5_component_images(c: canvas.Canvas,
                     width=dw,
                     height=dh,
                     preserveAspectRatio=True,
-                    mask='auto')
+                    mask="auto",
+                )
             finally:
                 c.restoreState()
     except Exception:
@@ -2325,11 +2410,12 @@ def _draw_page5_component_images(c: canvas.Canvas,
 
 
 # OLD: page 4 -> NEW: page 5
-def _draw_page5_brand_logos(c: canvas.Canvas,
-                            dynamic_data: dict[str,
-                                               str],
-                            page_width: float,
-                            page_height: float) -> None:
+def _draw_page5_brand_logos(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
     """Zeichnet Hersteller-Logos (Module / WR / Speicher) auf Seite 5 rechts neben den Überschriften.
 
     Verwendet Admin-Setting 'pdf_logo_positions' (Struktur wie DEFAULT_POSITIONS in admin_logo_positions_ui.py):
@@ -2354,14 +2440,15 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
         # Die Default-Y Positionen sind Platzhalter, werden aber bei
         # aktivierter Titel-Ausrichtung überschrieben.
         default_positions = {
-            "batteriespeicher": {
-                "x": 520.0, "y": 180.0, "width": 60.0, "height": 30.0}, "wechselrichter": {
-                "x": 520.0, "y": 370.0, "width": 60.0, "height": 30.0}, "modul": {
-                "x": 520.0, "y": 560.0, "width": 60.0, "height": 30.0}, }
+            "batteriespeicher": {"x": 520.0, "y": 180.0, "width": 60.0, "height": 30.0},
+            "wechselrichter": {"x": 520.0, "y": 370.0, "width": 60.0, "height": 30.0},
+            "modul": {"x": 520.0, "y": 560.0, "width": 60.0, "height": 30.0},
+        }
         try:
-            positions = load_admin_setting(
-                "pdf_logo_positions",
-                default_positions) or default_positions
+            positions = (
+                load_admin_setting("pdf_logo_positions", default_positions)
+                or default_positions
+            )
             if not isinstance(positions, dict):
                 positions = default_positions
         except Exception:
@@ -2383,8 +2470,10 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
 
         # Titel-Ausrichtung aktiv?
         try:
-            align_with_titles = load_admin_setting(
-                "pdf_logo_align_with_titles", True) and not manual_mode
+            align_with_titles = (
+                load_admin_setting("pdf_logo_align_with_titles", True)
+                and not manual_mode
+            )
         except Exception:
             align_with_titles = not manual_mode
 
@@ -2408,22 +2497,24 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
         if admin_customized and not manual_mode:
             try:
                 keep_align = load_admin_setting(
-                    "pdf_logo_keep_alignment_when_customized", False)
+                    "pdf_logo_keep_alignment_when_customized", False
+                )
             except Exception:
                 keep_align = False
             if align_with_titles and not keep_align:
                 align_with_titles = False
                 print(
-                    "DEBUG LOGO AUTO-DISABLE ALIGN: Admin-Positionen weichen von Defaults ab -> benutze Admin-Y")
+                    "DEBUG LOGO AUTO-DISABLE ALIGN: Admin-Positionen weichen von Defaults ab -> benutze Admin-Y"
+                )
             else:
                 if align_with_titles:
                     print(
-                        "DEBUG LOGO ALIGN trotz Admin-Anpassung aktiv (keep_alignment_when_customized=True)")
+                        "DEBUG LOGO ALIGN trotz Admin-Anpassung aktiv (keep_alignment_when_customized=True)"
+                    )
 
         # Optionale vertikale Offsets (in pt) je Kategorie für Feintuning
         try:
-            vertical_offsets = load_admin_setting(
-                "pdf_logo_vertical_offsets", {}) or {}
+            vertical_offsets = load_admin_setting("pdf_logo_vertical_offsets", {}) or {}
             if not isinstance(vertical_offsets, dict):
                 vertical_offsets = {}
         except Exception:
@@ -2437,11 +2528,10 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
             # Position: (x1, y1, x2, y2)
             import os
             import re
+
             coords_path = os.path.join(
-                os.path.dirname(
-                    os.path.dirname(__file__)),
-                "coords",
-                "seite4.yml")
+                os.path.dirname(os.path.dirname(__file__)), "coords", "seite4.yml"
+            )
             try:
                 with open(coords_path, encoding="utf-8") as fh:
                     lines = fh.readlines()
@@ -2454,7 +2544,8 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
                         m = pattern.search(line)
                         if m:
                             parts = [
-                                p.strip() for p in m.group(1).split(",") if p.strip()]
+                                p.strip() for p in m.group(1).split(",") if p.strip()
+                            ]
                             if len(parts) == 4:
                                 try:
                                     _, y1, _, y2 = [float(p) for p in parts]
@@ -2479,12 +2570,10 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
             # Optional benutzerdefinierte Reihenfolge (z.B.
             # ['modul','wechselrichter','batteriespeicher'])
             try:
-                custom_order = load_admin_setting(
-                    "pdf_logo_custom_order", []) or []
+                custom_order = load_admin_setting("pdf_logo_custom_order", []) or []
                 if not custom_order:
                     # Fallback harte Wunsch-Reihenfolge
-                    custom_order = [
-                        "modul", "wechselrichter", "batteriespeicher"]
+                    custom_order = ["modul", "wechselrichter", "batteriespeicher"]
                 if not isinstance(custom_order, list):
                     custom_order = []
             except Exception:
@@ -2493,12 +2582,12 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
             # Falls custom_order gesetzt ist und alle Kategorien enthält,
             # verteilen wir die Y-Center gemäß Sortierung (oben->unten) nach
             # den vorhandenen Y-Werten sortiert.
-            if len(custom_order) == 3 and set(
-                    custom_order) == set(title_y_centers.keys()):
+            if len(custom_order) == 3 and set(custom_order) == set(
+                title_y_centers.keys()
+            ):
                 # Sortiere existierende Zentren nach Y (aufsteigend) ->
                 # unterste zuerst
-                centers_sorted = sorted(
-                    title_y_centers.items(), key=lambda kv: kv[1])
+                centers_sorted = sorted(title_y_centers.items(), key=lambda kv: kv[1])
                 # Weisen von unten nach oben den gewünschten Kategorien ihre Ziel-Y zu.
                 # Ziel: custom_order[0] soll ganz oben, also größtes Y
                 # bekommen.
@@ -2516,23 +2605,21 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
 
             for cat, y_center in title_y_centers.items():
                 pos = positions.get(cat, {})
-                box_h = float(
-                    pos.get(
-                        "height",
-                        default_positions[cat]["height"]))
+                box_h = float(pos.get("height", default_positions[cat]["height"]))
                 offset = float(vertical_offsets.get(cat, 0.0))
                 new_y_bottom = max(0.0, y_center - box_h / 2.0 + offset)
                 pos["y"] = new_y_bottom
                 positions[cat] = pos
-            print(
-                f"DEBUG LOGO ALIGN aktiv – Titel-Zentren genutzt: {title_y_centers}")
+            print(f"DEBUG LOGO ALIGN aktiv – Titel-Zentren genutzt: {title_y_centers}")
         else:
             if align_with_titles:
                 print(
-                    "DEBUG LOGO ALIGN keine Titel-Zentren gefunden – Fallback auf Admin/Default-Y")
+                    "DEBUG LOGO ALIGN keine Titel-Zentren gefunden – Fallback auf Admin/Default-Y"
+                )
             if manual_mode:
                 print(
-                    "DEBUG LOGO MANUAL MODE aktiv – verwende reine Admin-Positionen ohne Alignment")
+                    "DEBUG LOGO MANUAL MODE aktiv – verwende reine Admin-Positionen ohne Alignment"
+                )
 
         # Zeichnen
         for category, key in logo_keys.items():
@@ -2545,29 +2632,25 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
             pos = positions.get(category, {})
             x = float(pos.get("x", default_positions[category]["x"]))
             y_bottom = float(pos.get("y", default_positions[category]["y"]))
-            box_w = float(
-                pos.get(
-                    "width",
-                    default_positions[category]["width"]))
-            box_h = float(
-                pos.get(
-                    "height",
-                    default_positions[category]["height"]))
+            box_w = float(pos.get("width", default_positions[category]["width"]))
+            box_h = float(pos.get("height", default_positions[category]["height"]))
 
             # Optional: 2cm vom rechten Rand erzwingen falls Admin-x sehr weit links (< rechte Rand - 2cm)
             # 2 cm ≈ 56.7 pt. Rechter Rand (A4 width ~595). Ziel-x = 595 - 56.7
             # - box_w
             try:
                 enforce_margin = load_admin_setting(
-                    "pdf_logo_right_margin_enforce", True)
+                    "pdf_logo_right_margin_enforce", True
+                )
             except Exception:
                 enforce_margin = True
             if enforce_margin:
                 right_margin_cm = 2.0
                 right_margin_pt = right_margin_cm * 28.3465
                 desired_x = page_width - right_margin_pt - box_w
-                if x > desired_x + 40 or x < desired_x - \
-                        120:  # Falls Admin versehentlich zu weit rechts (überlappt Rand), korrigieren
+                if (
+                    x > desired_x + 40 or x < desired_x - 120
+                ):  # Falls Admin versehentlich zu weit rechts (überlappt Rand), korrigieren
                     x = desired_x
 
             # Bildgröße an Box anpassen (Aspect Ratio beibehalten)
@@ -2591,13 +2674,15 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
                     width=dw,
                     height=dh,
                     preserveAspectRatio=True,
-                    mask='auto')
+                    mask="auto",
+                )
                 print(
                     f"DEBUG LOGO DRAW {category}: x={
                         x:.1f}, y={
                         y:.1f}, w={
                         dw:.1f}, h={
-                        dh:.1f}")
+                        dh:.1f}"
+                )
             except Exception as e:
                 print(f"Fehler beim Zeichnen Logo {category}: {e}")
             finally:
@@ -2609,7 +2694,7 @@ def _draw_page5_brand_logos(c: canvas.Canvas,
 def _remove_text_from_page(page, texts_to_remove: list[str]):
     """Entfernt spezifische Texte aus dem Content-Stream einer PDF-Seite."""
     try:
-        if not hasattr(page, 'get_contents') or not texts_to_remove:
+        if not hasattr(page, "get_contents") or not texts_to_remove:
             return
 
         content = page.get_contents()
@@ -2617,14 +2702,14 @@ def _remove_text_from_page(page, texts_to_remove: list[str]):
             return
 
         # Content-Stream als String laden
-        if hasattr(content, 'get_data'):
+        if hasattr(content, "get_data"):
             content_data = content.get_data()
         else:
             content_data = content.read()
 
         if isinstance(content_data, bytes):
             try:
-                content_str = content_data.decode('latin-1', errors='ignore')
+                content_str = content_data.decode("latin-1", errors="ignore")
             except Exception:
                 return
         else:
@@ -2651,10 +2736,8 @@ def _remove_text_from_page(page, texts_to_remove: list[str]):
 
         if modified:
             # Modifizierten Content zurückschreiben
-            new_content = io.BytesIO(
-                content_str.encode(
-                    'latin-1', errors='ignore'))
-            if hasattr(page, '_contents'):
+            new_content = io.BytesIO(content_str.encode("latin-1", errors="ignore"))
+            if hasattr(page, "_contents"):
                 page._contents = new_content
 
     except Exception:
@@ -2666,15 +2749,17 @@ def merge_with_background(overlay_bytes: bytes, bg_dir: Path) -> bytes:
     overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
     writer = PdfWriter()
     for page_num in range(
-            1, 9):  # MIGRATION: Changed from range(1, 8) to range(1, 9) for 8 pages
+        1, 9
+    ):  # MIGRATION: Changed from range(1, 8) to range(1, 9) for 8 pages
         # Unterstütze beide Muster: nt_nt_XX.pdf und nt_XX.pdf
         candidates = [
-            bg_dir /
-            f"nt_nt_{
+            bg_dir
+            / f"nt_nt_{
                 page_num:02d}.pdf",
-            bg_dir /
-            f"nt_{
-                page_num:02d}.pdf"]
+            bg_dir
+            / f"nt_{
+                page_num:02d}.pdf",
+        ]
         bg_page = None
         for cand in candidates:
             if cand.exists():
@@ -2711,13 +2796,7 @@ def merge_with_background(overlay_bytes: bytes, bg_dir: Path) -> bytes:
             # Seite 3: Problematische Legendentexte aus dem Hintergrund
             # entfernen
             if page_num == 3:
-                texts_to_remove = [
-                    "",
-                    "",
-                    "",
-                    "",
-                    ""
-                ]
+                texts_to_remove = ["", "", "", "", ""]
                 _remove_text_from_page(base_page, texts_to_remove)
 
             # Falls eine zusätzliche Haus-Seite vorhanden ist, zuerst darüber
@@ -2741,6 +2820,7 @@ def merge_with_background(overlay_bytes: bytes, bg_dir: Path) -> bytes:
                         pass
             # WICHTIG: Erstelle eine Kopie der base_page vor dem Merge
             from copy import deepcopy
+
             merged_page = deepcopy(base_page)
 
             # Overlay über den zusammengesetzten Hintergrund legen
@@ -2758,7 +2838,8 @@ def merge_with_background(overlay_bytes: bytes, bg_dir: Path) -> bytes:
                     except Exception:
                         bw, bh = A4
                     base = PageObject.create_blank_page(
-                        width=bw, height=bh)  # type: ignore
+                        width=bw, height=bh
+                    )  # type: ignore
                     hw = float(extra_bg_page.mediabox.width)
                     hh = float(extra_bg_page.mediabox.height)
                     scale = 0.3
@@ -2768,6 +2849,7 @@ def merge_with_background(overlay_bytes: bytes, bg_dir: Path) -> bytes:
                     base.merge_transformed_page(extra_bg_page, t)
                     # WICHTIG: Erstelle Kopie vor Overlay-Merge
                     from copy import deepcopy
+
                     merged_base = deepcopy(base)
                     merged_base.merge_page(ov_page)
                     writer.add_page(merged_base)
@@ -2781,8 +2863,7 @@ def merge_with_background(overlay_bytes: bytes, bg_dir: Path) -> bytes:
     return out.getvalue()
 
 
-def append_additional_pages(base_pdf: bytes,
-                            additional_pdf: bytes | None) -> bytes:
+def append_additional_pages(base_pdf: bytes, additional_pdf: bytes | None) -> bytes:
     """Hängt optional weitere Seiten hinten an."""
     if not additional_pdf:
         return base_pdf
@@ -2805,11 +2886,78 @@ def generate_custom_offer_pdf(
     additional_pdf: bytes | None = None,
 ) -> bytes:
     """End-to-End-Erzeugung des Angebots: Overlay -> Merge -> Optional anhängen."""
-    # Bestimme Gesamtseiten für Fußzeile (7 + ggf. Zusatzseiten)
-    total_pages = 7
+    print(f"DEBUG: generate_custom_offer_pdf called with {len(dynamic_data)} dynamic_data keys")
+    
+    # Bestimme Gesamtseiten für Fußzeile (8 + ggf. Zusatzseiten)
+    total_pages = 8
     if additional_pdf:
         try:
             add_reader = PdfReader(io.BytesIO(additional_pdf))
-            total_pages = 7 + len(add_reader.pages)
-        except Exception:
-            total_pages = 7
+            total_pages = 8 + len(add_reader.pages)
+            print(f"DEBUG: Additional PDF has {len(add_reader.pages)} pages, total_pages={total_pages}")
+        except Exception as e:
+            print(f"DEBUG: Error reading additional PDF: {e}")
+            total_pages = 8
+    
+    print(f"DEBUG: total_pages={total_pages}, starting PDF generation...")
+    
+    try:
+        # 1. Generiere komplettes 8-seitiges Overlay-PDF
+        print("DEBUG: Calling generate_overlay()...")
+        overlay_bytes = generate_overlay(coords_dir, dynamic_data, total_pages)
+        
+        if not overlay_bytes:
+            print("ERROR: generate_overlay() returned None!")
+            return None
+        
+        print(f"DEBUG: Overlay generated successfully: {len(overlay_bytes)} bytes")
+        
+        # 2. Merge Overlay mit Background-Templates (alle 8 Seiten)
+        print("DEBUG: Calling merge_with_background()...")
+        merged_bytes = merge_with_background(overlay_bytes, bg_dir)
+        
+        if not merged_bytes:
+            print("ERROR: merge_with_background() returned None!")
+            return None
+        
+        print(f"DEBUG: Merge successful: {len(merged_bytes)} bytes")
+        
+        # 3. Optional: Zusatz-PDF anhängen
+        if additional_pdf:
+            try:
+                print("DEBUG: Appending additional PDF...")
+                main_reader = PdfReader(io.BytesIO(merged_bytes))
+                add_reader = PdfReader(io.BytesIO(additional_pdf))
+                
+                writer = PdfWriter()
+                
+                # Hauptdokument (8 Seiten)
+                for page in main_reader.pages:
+                    writer.add_page(page)
+                
+                # Zusätzliche Seiten
+                for page in add_reader.pages:
+                    writer.add_page(page)
+                
+                output_buffer = io.BytesIO()
+                writer.write(output_buffer)
+                result = output_buffer.getvalue()
+                print(f"DEBUG: Final PDF with additional pages: {len(result)} bytes, {len(writer.pages)} pages")
+                return result
+                
+            except Exception as e:
+                print(f"ERROR: Failed to append additional PDF: {e}")
+                import traceback
+                traceback.print_exc()
+                # Gib wenigstens das Haupt-PDF zurück
+                return merged_bytes
+        
+        # 4. Kein Zusatz-PDF: Gib merged PDF zurück
+        print(f"DEBUG: Final PDF generated: {len(merged_bytes)} bytes")
+        return merged_bytes
+        
+    except Exception as e:
+        print(f"ERROR: PDF generation failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return None

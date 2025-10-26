@@ -8,6 +8,7 @@ Datum: 2025-06-03
 # pdf_ui.py (ehemals doc_output.py)
 # Modul für die Angebotsausgabe (PDF)
 
+import base64
 import os
 import traceback
 from collections.abc import Callable
@@ -100,14 +101,28 @@ try:
 except ImportError:
     DEBUG_WIDGET_AVAILABLE = False
 
+# PDF-Generierung: Primär Template-Engine (8-seitige PDF), Fallback auf alte Methode
 _generate_offer_pdf_safe = _dummy_generate_offer_pdf
+_use_template_engine = False
+
 try:
-    from pdf_generator import generate_offer_pdf
-    _generate_offer_pdf_safe = generate_offer_pdf
-except (ImportError, ModuleNotFoundError):
-    pass
-except Exception:
-    pass
+    from pdf_template_engine import generate_custom_offer_pdf, build_dynamic_data
+    _generate_offer_pdf_safe = generate_custom_offer_pdf
+    _use_template_engine = True
+except (ImportError, ModuleNotFoundError) as e:
+    print(f"INFO: pdf_template_engine nicht verfügbar ({e}), verwende Fallback")
+    try:
+        from pdf_generator import generate_offer_pdf
+        _generate_offer_pdf_safe = generate_offer_pdf
+    except (ImportError, ModuleNotFoundError):
+        pass
+except Exception as e:
+    print(f"WARN: Fehler beim Laden der PDF-Engine: {e}")
+    try:
+        from pdf_generator import generate_offer_pdf
+        _generate_offer_pdf_safe = generate_offer_pdf
+    except Exception:
+        pass
 
 # --- Hilfsfunktionen ---
 
@@ -1000,13 +1015,12 @@ def render_pdf_ui(
 
                             if uploaded_file is not None:
                                 # Bild in Base64 konvertieren für Speicherung
-                                import base64
+                                # (base64 bereits oben importiert)
                                 item['content'] = base64.b64encode(
                                     uploaded_file.read()).decode()
                                 item['filename'] = uploaded_file.name
                                 st.success(
-                                    f" Bild '{
-                                        uploaded_file.name}' hochgeladen")
+                                    f"✅ Bild '{uploaded_file.name}' hochgeladen")
 
                             item['caption'] = st.text_input(
                                 "Bildunterschrift:",
@@ -1763,21 +1777,22 @@ def render_pdf_ui(
             effects_col1, effects_col2 = st.columns(2)
 
             with effects_col1:
-                st.markdown("** SCHATTEN-EFFEKTE:**")
+                st.markdown("**🎨 SCHATTEN-EFFEKTE:**")
                 shadow_enabled = st.checkbox("Schatten aktivieren")
                 if shadow_enabled:
                     shadow_blur = st.slider("Unschärfe:", 0, 20, 5)
                     shadow_offset_x = st.slider("X-Versatz:", -10, 10, 2)
                     shadow_offset_y = st.slider("Y-Versatz:", -10, 10, 2)
                     shadow_color = st.color_picker(
-                        "Schatten-Farbe:", "#00000040")
+                        "Schatten-Farbe:", "#000000")  # Nur RGB ohne Alpha
+                    shadow_opacity = st.slider("Transparenz:", 0, 100, 25, help="0 = transparent, 100 = undurchsichtig")
 
             with effects_col2:
-                st.markdown("** SPEZIAL-EFFEKTE:**")
-                glow_effect = st.checkbox(" Glow-Effekt")
-                emboss_effect = st.checkbox(" Prägung")
-                glass_effect = st.checkbox(" Glas-Effekt")
-                neon_effect = st.checkbox(" Neon-Effekt")
+                st.markdown("**✨ SPEZIAL-EFFEKTE:**")
+                glow_effect = st.checkbox("💡 Glow-Effekt")
+                emboss_effect = st.checkbox("🔲 Prägung")
+                glass_effect = st.checkbox("🪟 Glas-Effekt")
+                neon_effect = st.checkbox("🌟 Neon-Effekt")
 
         with advanced_design_tabs[3]:  # Responsive
             st.markdown("** RESPONSIVE DESIGN:**")
@@ -2056,34 +2071,53 @@ def render_pdf_ui(
                     "#ff7f0e",
                     key="custom_secondary_color")
 
-    with st.expander(" FINANZANALYSE & WIRTSCHAFTLICHKEIT", expanded=False):
+    with st.expander("💰 FINANZANALYSE & WIRTSCHAFTLICHKEIT", expanded=False):
         col1, col2 = st.columns(2)
 
         with col1:
+            # Session State mit Defaults initialisieren (BEVOR Widgets erstellt werden)
+            if 'pdf_fin_include_analysis' not in st.session_state:
+                st.session_state['pdf_fin_include_analysis'] = True
+            if 'pdf_fin_include_roi' not in st.session_state:
+                st.session_state['pdf_fin_include_roi'] = True
+            if 'pdf_fin_include_payback' not in st.session_state:
+                st.session_state['pdf_fin_include_payback'] = True
+            
             include_financing = st.checkbox(
-                " Finanzierungsanalyse einbinden", value=True)
+                "💰 Finanzierungsanalyse einbinden", 
+                value=st.session_state['pdf_fin_include_analysis'],
+                key="pdf_fin_include_analysis")
             include_roi_analysis = st.checkbox(
-                " ROI-Analyse detailliert", value=True)
+                "📊 ROI-Analyse detailliert", 
+                value=st.session_state['pdf_fin_include_roi'],
+                key="pdf_fin_include_roi")
             include_payback_calculation = st.checkbox(
-                "⏱ Amortisationsrechnung", value=True)
-
-            # Session State für PDF-Integration setzen
-            st.session_state['pdf_include_financing'] = include_financing
-            st.session_state['pdf_include_roi'] = include_roi_analysis
-            st.session_state['pdf_include_payback'] = include_payback_calculation
+                "⏱ Amortisationsrechnung", 
+                value=st.session_state['pdf_fin_include_payback'],
+                key="pdf_fin_include_payback")
 
         with col2:
+            # Session State mit Defaults initialisieren
+            if 'pdf_fin_include_cashflow' not in st.session_state:
+                st.session_state['pdf_fin_include_cashflow'] = False
+            if 'pdf_fin_include_sensitivity' not in st.session_state:
+                st.session_state['pdf_fin_include_sensitivity'] = False
+            if 'pdf_fin_financing_years' not in st.session_state:
+                st.session_state['pdf_fin_financing_years'] = 15
+            
             include_cash_flow = st.checkbox(
-                " Cash-Flow Projektion", value=False)
+                "💸 Cash-Flow Projektion", 
+                value=st.session_state['pdf_fin_include_cashflow'],
+                key="pdf_fin_include_cashflow")
             include_sensitivity = st.checkbox(
-                " Sensitivitätsanalyse", value=False)
+                "📈 Sensitivitätsanalyse", 
+                value=st.session_state['pdf_fin_include_sensitivity'],
+                key="pdf_fin_include_sensitivity")
             financing_years = st.slider(
-                "Finanzierungslaufzeit (Jahre)", 5, 25, 15)
-
-            # Session State für erweiterte Finanzfeatures
-            st.session_state['pdf_include_cashflow'] = include_cash_flow
-            st.session_state['pdf_include_sensitivity'] = include_sensitivity
-            st.session_state['pdf_financing_years'] = financing_years
+                "Finanzierungslaufzeit (Jahre)", 
+                5, 25, 
+                st.session_state['pdf_fin_financing_years'],
+                key="pdf_fin_financing_years")
 
         # Finanzierungsdaten für PDF vorbereiten
         if include_financing and analysis_results:
@@ -2121,6 +2155,80 @@ def render_pdf_ui(
                 st.warning(
                     f" Finanzierungsdaten konnten nicht geladen werden: {e}")
                 st.session_state['pdf_financing_data'] = None
+
+    # === ZAHLUNGSMODALITÄTEN ===
+    with st.expander("💳 ZAHLUNGSMODALITÄTEN", expanded=False):
+        st.markdown("**Wählen Sie die Zahlungsbedingungen für das Angebot:**")
+        
+        try:
+            from admin_payment_terms_ui import get_default_payment_variants
+            from database import load_admin_setting
+            
+            # Lade konfigurierte Zahlungsvarianten
+            configured_variants = load_admin_setting(
+                'dynamic_payment_variants', 
+                get_default_payment_variants()
+            )
+            
+            # Erstelle Auswahlliste (nur aktivierte Varianten)
+            payment_options = {}
+            for key, variant in configured_variants.items():
+                if variant.get('enabled', True):
+                    payment_options[variant.get('name', key)] = key
+            
+            if payment_options:
+                # Session State initialisieren
+                if 'selected_payment_variant_key' not in st.session_state:
+                    st.session_state['selected_payment_variant_key'] = list(payment_options.values())[0]
+                
+                # Zahlungsvariante auswählen
+                selected_payment_name = st.selectbox(
+                    "📋 Zahlungsvariante",
+                    options=list(payment_options.keys()),
+                    index=list(payment_options.values()).index(
+                        st.session_state['selected_payment_variant_key']
+                    ) if st.session_state['selected_payment_variant_key'] in payment_options.values() else 0,
+                    key="payment_variant_selector"
+                )
+                
+                # Speichere ausgewählten Key in Session State
+                st.session_state['selected_payment_variant_key'] = payment_options[selected_payment_name]
+                
+                # Checkbox für Betragsanzeige
+                if 'payment_include_amounts' not in st.session_state:
+                    st.session_state['payment_include_amounts'] = True
+                
+                st.checkbox(
+                    "💰 Beträge in Zahlungsplan anzeigen",
+                    value=st.session_state['payment_include_amounts'],
+                    key='payment_include_amounts',
+                    help="Wenn aktiviert, werden konkrete Beträge angezeigt. Sonst nur Prozentsätze."
+                )
+                
+                # Zeige Vorschau der ausgewählten Zahlungsvariante
+                selected_variant = configured_variants.get(
+                    st.session_state['selected_payment_variant_key']
+                )
+                if selected_variant:
+                    st.info(f"📄 **{selected_variant.get('name')}**\n\n{selected_variant.get('description', '')}")
+                    
+                    # Zeige Zahlungsbedingungen
+                    phases = selected_variant.get('phases', [])
+                    if phases:
+                        st.markdown("**Zahlungsplan:**")
+                        for i, phase in enumerate(phases, 1):
+                            percent = phase.get('percent', 0)
+                            desc = phase.get('description', f'Phase {i}')
+                            st.markdown(f"- **{percent}%**: {desc}")
+                
+                st.success(f"✅ Zahlungsmodalität '{selected_payment_name}' wird in PDF aufgenommen")
+            else:
+                st.warning("⚠️ Keine Zahlungsvarianten konfiguriert. Bitte konfigurieren Sie Zahlungsmodalitäten im Admin-Panel.")
+                
+        except ImportError as e:
+            st.error(f"❌ Zahlungsmodalitäten-Modul nicht verfügbar: {e}")
+        except Exception as e:
+            st.error(f"❌ Fehler beim Laden der Zahlungsmodalitäten: {e}")
 
     with st.expander(" INDIVIDUELLE INHALTE", expanded=False):
         st.markdown("**Benutzerdefinierte Texte & Bilder:**")
@@ -2324,12 +2432,12 @@ def render_pdf_ui(
 
     submit_button_disabled = st.session_state.pdf_generating_lock_v1
 
-    with st.form(key="pdf_generation_form_v12_final_locked_options", clear_on_submit=False):
-        st.subheader(
-            get_text_pdf_ui(
-                texts,
-                "pdf_config_header",
-                "PDF-Konfiguration"))
+    # PDF-Konfiguration Header (außerhalb Formular)
+    st.subheader(
+        get_text_pdf_ui(
+            texts,
+            "pdf_config_header",
+            "📄 PDF-Konfiguration"))
 
     with st.container():  # Vorlagenauswahl
         st.markdown(
@@ -2869,22 +2977,30 @@ def render_pdf_ui(
                     st.rerun()
 
                 if st.button(
-                    " Keine Diagramme",
+                    "🚫 Keine Diagramme",
                         help="Alle Diagramme abwählen"):
                     st.session_state.pdf_inclusion_options["selected_charts_for_pdf"] = [
                     ]
                     st.rerun()
 
-        st.markdown("---")
+    # Container ENDE - Button kommt außerhalb
+    st.markdown("---")
 
-        submitted_generate_pdf = st.form_submit_button(
-            f"**{get_text_pdf_ui(texts, 'pdf_generate_button', 'Angebots-PDF erstellen')}**",
-            type="primary",
-            disabled=submit_button_disabled
-        )
+    # PDF-Generierung Button (außerhalb Container, damit er sichtbar ist)
+    submitted_generate_pdf = st.button(
+        f"**📄 {get_text_pdf_ui(texts, 'pdf_generate_button', 'Angebots-PDF erstellen')}**",
+        type="primary",
+        disabled=submit_button_disabled,
+        use_container_width=True
+    )
+
+    # Initialisiere extended_features BEVOR es verwendet wird
+    extended_features = st.session_state.get('pdf_extended_features', {})
+    if not isinstance(extended_features, dict):
+        extended_features = {}
 
     # WOW Features (experimentell)
-    with st.expander(" Erweiterte Features (Experimental)", expanded=False):
+    with st.expander("✨ Erweiterte Features (Experimental)", expanded=False):
         st.markdown("** Visuelle Verbesserungen:**")
 
         wow_col1, wow_col2 = st.columns(2)
@@ -2966,9 +3082,10 @@ def render_pdf_ui(
                     :]
 
                 # === ERWEITERTE PROFESSIONAL PDF FEATURES INTEGRATION ===
-                # Füge Professional PDF Features zu inclusion_options hinzu
-                extended_features = st.session_state.get(
-                    'pdf_extended_features', {})
+                # Aktualisiere extended_features aus Session State (falls zwischenzeitlich geändert)
+                extended_features_from_session = st.session_state.get('pdf_extended_features', {})
+                if isinstance(extended_features_from_session, dict):
+                    extended_features.update(extended_features_from_session)
 
                 # === FINANZIERUNGSANALYSE INTEGRATION ===
                 financing_config = st.session_state.get('financing_config', {})
@@ -3070,24 +3187,102 @@ def render_pdf_ui(
                 # Fallback auf Standard-PDF-Generierung falls erweiterte
                 # Generierung fehlgeschlagen
                 if pdf_bytes is None:
-                    pdf_bytes = _generate_offer_pdf_safe(
-                        project_data=enhanced_project_data,
-                        analysis_results=analysis_results,
-                        company_info=company_info_for_pdf,
-                        company_logo_base64=company_logo_b64_for_pdf,
-                        selected_title_image_b64=st.session_state.selected_title_image_b64_data_doc_output,
-                        selected_offer_title_text=st.session_state.selected_offer_title_text_content_doc_output,
-                        selected_cover_letter_text=st.session_state.selected_cover_letter_text_content_doc_output,
-                        sections_to_include=final_sections_to_include_to_pass,
-                        inclusion_options=final_inclusion_options_to_pass,
-                        load_admin_setting_func=load_admin_setting_func,
-                        save_admin_setting_func=save_admin_setting_func,
-                        list_products_func=list_products_func,
-                        get_product_by_id_func=get_product_by_id_func,
-                        db_list_company_documents_func=db_list_company_documents_func,
-                        active_company_id=active_company_id_for_docs,
-                        texts=texts)
-            st.session_state.generated_pdf_bytes_for_download_v1 = pdf_bytes
+                    if _use_template_engine:
+                        # Verwende moderne Template-Engine (8-seitige PDF mit coords)
+                        st.info("📄 Verwende Template-basierte PDF-Generierung (8 Seiten)...")
+                        try:
+                            # Build dynamic data aus Projektdaten
+                            # WICHTIG: build_dynamic_data benötigt nur 3 Parameter!
+                            dynamic_data = build_dynamic_data(
+                                project_data=enhanced_project_data,
+                                analysis_results=analysis_results,
+                                company_info=company_info_for_pdf
+                            )
+                            
+                            # Optional: Alte Generator-Seiten anhängen (ab Seite 9)
+                            additional_pdf_bytes = None
+                            if final_inclusion_options_to_pass.get('append_additional_pages_after_main6'):
+                                try:
+                                    from pdf_generator import generate_offer_pdf
+                                    additional_pdf_bytes = generate_offer_pdf(
+                                        project_data=enhanced_project_data,
+                                        analysis_results=analysis_results,
+                                        company_info=company_info_for_pdf,
+                                        company_logo_base64=company_logo_b64_for_pdf,
+                                        selected_title_image_b64=st.session_state.selected_title_image_b64_data_doc_output,
+                                        selected_offer_title_text=st.session_state.selected_offer_title_text_content_doc_output,
+                                        selected_cover_letter_text=st.session_state.selected_cover_letter_text_content_doc_output,
+                                        sections_to_include=final_sections_to_include_to_pass,
+                                        inclusion_options=final_inclusion_options_to_pass,
+                                        load_admin_setting_func=load_admin_setting_func,
+                                        save_admin_setting_func=save_admin_setting_func,
+                                        list_products_func=list_products_func,
+                                        get_product_by_id_func=get_product_by_id_func,
+                                        db_list_company_documents_func=db_list_company_documents_func,
+                                        active_company_id=active_company_id_for_docs,
+                                        texts=texts
+                                    )
+                                except Exception as e_additional:
+                                    st.warning(f"Zusatzseiten konnten nicht angehängt werden: {e_additional}")
+                            
+                            # Generiere Template-basierte PDF
+                            from pathlib import Path
+                            
+                            st.write(f"📊 Debug: coords_dir={COORDS_DIR_PDF_UI}")
+                            st.write(f"📊 Debug: bg_dir={BG_DIR_PDF_UI}")
+                            st.write(f"📊 Debug: dynamic_data keys={len(dynamic_data)}")
+                            
+                            pdf_bytes = generate_custom_offer_pdf(
+                                coords_dir=Path(COORDS_DIR_PDF_UI),
+                                bg_dir=Path(BG_DIR_PDF_UI),
+                                dynamic_data=dynamic_data,
+                                additional_pdf=additional_pdf_bytes
+                            )
+                            
+                            if pdf_bytes:
+                                st.success(f"✅ 8-seitige Template-PDF erfolgreich erstellt! ({len(pdf_bytes)} Bytes)")
+                            else:
+                                st.error("❌ generate_custom_offer_pdf hat None zurückgegeben!")
+                            
+                        except Exception as e_template:
+                            st.error(f"Template-Engine fehlgeschlagen: {e_template}")
+                            st.text_area("Traceback:", traceback.format_exc(), height=200)
+                            pdf_bytes = None
+                    
+                    # Fallback auf alte Methode falls Template-Engine fehlschlägt
+                    if pdf_bytes is None and not _use_template_engine:
+                        st.warning("⚠️ Verwende Fallback-PDF-Generierung (alte Methode)...")
+                        try:
+                            from pdf_generator import generate_offer_pdf
+                            pdf_bytes = generate_offer_pdf(
+                                project_data=enhanced_project_data,
+                                analysis_results=analysis_results,
+                                company_info=company_info_for_pdf,
+                                company_logo_base64=company_logo_b64_for_pdf,
+                                selected_title_image_b64=st.session_state.selected_title_image_b64_data_doc_output,
+                                selected_offer_title_text=st.session_state.selected_offer_title_text_content_doc_output,
+                                selected_cover_letter_text=st.session_state.selected_cover_letter_text_content_doc_output,
+                                sections_to_include=final_sections_to_include_to_pass,
+                                inclusion_options=final_inclusion_options_to_pass,
+                                load_admin_setting_func=load_admin_setting_func,
+                                save_admin_setting_func=save_admin_setting_func,
+                                list_products_func=list_products_func,
+                                get_product_by_id_func=get_product_by_id_func,
+                                db_list_company_documents_func=db_list_company_documents_func,
+                                active_company_id=active_company_id_for_docs,
+                                texts=texts)
+                        except Exception as e_fallback:
+                            st.error(f"Auch Fallback-Generierung fehlgeschlagen: {e_fallback}")
+                            pdf_bytes = None
+            
+            # Speichere PDF-Bytes nur wenn erfolgreich generiert
+            if pdf_bytes and isinstance(pdf_bytes, bytes):
+                st.session_state.generated_pdf_bytes_for_download_v1 = pdf_bytes
+                st.success(f"✅ PDF erfolgreich generiert ({len(pdf_bytes)} Bytes)")
+            else:
+                st.error("❌ PDF-Generierung fehlgeschlagen - keine Daten generiert")
+                st.session_state.generated_pdf_bytes_for_download_v1 = None
+                
         except Exception as e_gen_final_outer:
             st.error(
                 f"{
@@ -3102,14 +3297,17 @@ def render_pdf_ui(
             st.session_state.generated_pdf_bytes_for_download_v1 = None
         finally:
             st.session_state.pdf_generating_lock_v1 = False
-            # KORREKTUR: Sicherstellen, dass Seite erhalten bleibt
-            set_current_page("doc_output")
-            st.rerun()
+            # Kein automatisches Rerun mehr - nur wenn PDF erfolgreich generiert wurde
+            # wird die Seite neu geladen, um den Download-Button anzuzeigen
 
+    # PDF-Download anbieten wenn verfügbar
     if 'generated_pdf_bytes_for_download_v1' in st.session_state:
-        pdf_bytes_to_download = st.session_state.pop(
-            'generated_pdf_bytes_for_download_v1')
+        pdf_bytes_to_download = st.session_state.get('generated_pdf_bytes_for_download_v1')
         if pdf_bytes_to_download and isinstance(pdf_bytes_to_download, bytes):
+            # Zeige Download-Button
+            st.markdown("---")
+            st.success("✅ PDF wurde erfolgreich generiert!")
+            
             customer_name_for_file = customer_data_pdf.get(
                 'last_name', 'Angebot')
             if not customer_name_for_file or not str(
@@ -3129,17 +3327,24 @@ def render_pdf_ui(
                 label=get_text_pdf_ui(
                     texts,
                     "pdf_download_button",
-                    "PDF herunterladen"),
+                    "📥 PDF herunterladen"),
                 data=pdf_bytes_to_download,
                 file_name=file_name,
                 mime="application/pdf",
-                key=f"pdf_download_btn_final_{timestamp_file}")
-        elif pdf_bytes_to_download is None and st.session_state.get('pdf_generating_lock_v1', True) is False:
-            st.error(
-                get_text_pdf_ui(
-                    texts,
-                    "pdf_generation_failed_no_bytes_after_rerun",
-                    "PDF-Generierung fehlgeschlagen (keine Daten nach Rerun)."))
+                key=f"pdf_download_btn_final_{timestamp_file}",
+                use_container_width=True)
+            
+            # Button zum Zurücksetzen (neues PDF generieren)
+            if st.button("🔄 Neues PDF erstellen", key="reset_pdf_generation", use_container_width=True):
+                del st.session_state['generated_pdf_bytes_for_download_v1']
+                st.rerun()
+                
+        elif pdf_bytes_to_download is None:
+            # Nur Fehler zeigen wenn Lock nicht aktiv ist (Generation abgeschlossen)
+            if not st.session_state.get('pdf_generating_lock_v1', False):
+                st.warning(
+                    "⚠️ PDF-Generierung wurde durchgeführt, aber keine Daten zurückgegeben. "
+                    "Bitte versuchen Sie es erneut.")
 
     # DRAG & DROP INTERFACE (wenn aktiviert)
     if st.session_state.get(

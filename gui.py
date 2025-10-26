@@ -2106,7 +2106,7 @@ def main():
 
         # === PDF-VORSCHAU TAB ===
         with tab_pdf_preview:
-            st.subheader(" Live PDF-Vorschau & Bearbeitung")
+            st.subheader("👁️ Live PDF-Vorschau & Bearbeitung")
 
             # PDF-Vorschau Modul importieren und verwenden
             try:
@@ -2116,44 +2116,8 @@ def main():
                 )
 
                 if not PDF_PREVIEW_AVAILABLE:
-                    st.error(" PDF-Vorschau nicht verfügbar")
-                    st.info(" Installieren Sie PyMuPDF für die Vorschau-Funktion: `pip install pymupdf`")
-
-                    # Fallback: Basis-PDF-Generierung ohne Vorschau
-                    st.markdown("---")
-                    st.markdown("###  Basis-PDF-Generierung (Fallback)")
-
-                    project_data_fallback = st.session_state.get('project_data', {})
-                    calc_results_fallback = st.session_state.get("calculation_results", {})
-
-                    if not project_data_fallback or not calc_results_fallback:
-                        st.info("ℹ Bitte führen Sie zuerst eine Projektanalyse durch.")
-                    else:
-                        if st.button(" Standard-PDF generieren"):
-                            with st.spinner("Generiere PDF..."):
-                                # Standard PDF-Generierung
-                                if doc_output_module and callable(getattr(doc_output_module, 'generate_simple_pdf', None)):
-                                    try:
-                                        pdf_bytes = doc_output_module.generate_simple_pdf(
-                                            project_data_fallback,
-                                            calc_results_fallback
-                                        )
-                                        if pdf_bytes:
-                                            customer_name = project_data_fallback.get('customer_data', {}).get('last_name', 'Unbekannt')
-                                            filename = f"Angebot_{customer_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-
-                                            st.download_button(
-                                                label=" PDF herunterladen",
-                                                data=pdf_bytes,
-                                                file_name=filename,
-                                                mime="application/pdf"
-                                            )
-                                        else:
-                                            st.error(" Fehler bei der PDF-Generierung")
-                                    except Exception as e:
-                                        st.error(f" Fehler: {e}")
-                                else:
-                                    st.error(" PDF-Generator nicht verfügbar")
+                    # Shim-Modul zeigt hilfreiche Meldung mit Schritt-für-Schritt-Anleitung
+                    render_pdf_preview_interface()
                 else:
                     # HAUPT-PDF-VORSCHAU-FUNKTIONALITÄT
                     project_data_preview = st.session_state.get('project_data', {})
@@ -2398,7 +2362,7 @@ if __name__ == "__main__":
         analysis_module = import_module_with_fallback("analysis", import_errors)
         crm_module = import_module_with_fallback("crm", import_errors)
         admin_panel_module = import_module_with_fallback("admin_panel", import_errors)
-        doc_output_module = import_module_with_fallback("pdf_ui", import_errors)
+        doc_output_module = import_module_with_fallback("doc_output", import_errors)
         quick_calc_module = import_module_with_fallback("quick_calc", import_errors)
         # Import Agent UI module from Agent directory
         sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "Agent"))
