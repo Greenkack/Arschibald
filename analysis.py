@@ -7776,30 +7776,30 @@ def render_analysis(
             key="analysis_annual_savings_manual_override",
             help="Standardmäßig wird das Ergebnis aus dem Solar Calculator übernommen. Aktivieren, um den Wert manuell anzupassen.")
 
-        if manual_override_active:
-            st.session_state["analysis_annual_savings"] = manual_cached_value
-        else:
+        # Update session state based on override status
+        if not manual_override_active:
             st.session_state["analysis_annual_savings"] = dynamic_annual_savings
 
         st.caption(
             f"Berechneter Wert: {
                 _format_german_currency(dynamic_annual_savings)}")
 
+        # Initialize session state BEFORE creating widget
+        if "analysis_annual_savings" not in st.session_state:
+            st.session_state["analysis_annual_savings"] = dynamic_annual_savings
+
         annual_savings_analysis = st.number_input(
             "Jährliche Gesamtvorteile (€)",
             min_value=0.0,
             max_value=50000.0,
-            value=float(
-                st.session_state.get(
-                    "analysis_annual_savings",
-                    dynamic_annual_savings)),
             step=50.0,
             key="analysis_annual_savings",
             disabled=not manual_override_active,
             help="Jährliche Einsparungen + Einspeisevergütung")
 
         if manual_override_active:
-            st.session_state["analysis_annual_savings_manual_value"] = annual_savings_analysis
+            st.session_state["analysis_annual_savings_manual_value"] = st.session_state["analysis_annual_savings"]
+            annual_savings_analysis = st.session_state["analysis_annual_savings"]
         else:
             annual_savings_analysis = dynamic_annual_savings
 
