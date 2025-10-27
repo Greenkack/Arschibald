@@ -3045,41 +3045,62 @@ def generate_multi_offer_pdfs(
             # 3. Baue Dynamic Data mit rotierten Produkten
             print(f"\n[3/4] Dynamic Data erstellen...")
             
-            # Kopiere Standard Dynamic Data
-            multi_dynamic_data = {}
+            # Erstelle modifizierte analysis_results mit neuem Preis
+            modified_analysis = analysis_results.copy() if analysis_results else {}
             
-            # Baue neue Dynamic Data mit rotierten Produkten und Firmen-Info
-            # Hier müssen wir die gleiche Logik wie build_dynamic_data() verwenden
-            # aber mit rotierten Produkten und modifiziertem Preis
+            # WICHTIG: Setze alle möglichen Preis-Keys mit modifiziertem Preis
+            modified_analysis['total_price'] = modified_price
+            modified_analysis['FINAL_END_PREIS'] = modified_price
+            modified_analysis['final_end_preis'] = modified_price
+            modified_analysis['endpreis'] = modified_price
+            modified_analysis['gesamtpreis'] = modified_price
+            modified_analysis['total_cost'] = modified_price
             
-            # Aktualisiere Firmen-Informationen
+            # Formatierter Preis (z.B. "19.550,00 €")
+            formatted_price = f"{modified_price:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+            modified_analysis['FINAL_END_PREIS_FORMATTED'] = formatted_price
+            modified_analysis['final_end_preis_formatted'] = formatted_price
+            
+            # Rotierte Produkte speichern
+            modified_analysis['rotated_products'] = rotated_products
+            
+            # Firmen-Info kopieren und erweitern
             multi_company_info = firm.copy()
             
-            # Baue Dynamic Data (vereinfachte Version - muss an tatsächliche Struktur angepasst werden)
+            print(f"✓ Modifizierter Preis in analysis_results: {modified_price:.2f}€")
+            print(f"✓ Formatierter Preis: {formatted_price}")
+            
+            # Baue Dynamic Data mit modifizierten Daten
             try:
-                from calculations import build_dynamic_data
+                from pdf_template_engine.placeholders import build_dynamic_data
                 
-                # Erstelle modifizierte analysis_results mit neuem Preis
-                modified_analysis = analysis_results.copy()
-                modified_analysis['total_price'] = modified_price
-                modified_analysis['rotated_products'] = rotated_products
-                
-                # Baue Dynamic Data
                 multi_dynamic_data = build_dynamic_data(
                     project_data=project_data,
-                    analysis_results=modified_analysis,
+                    analysis_results=modified_analysis,  # Mit modifiziertem Preis!
                     company_info=multi_company_info
                 )
                 
+                # DOPPELTE SICHERHEIT: Überschreibe Preis-Keys in Dynamic Data
+                multi_dynamic_data['FINAL_END_PREIS'] = f"{modified_price:.2f}"
+                multi_dynamic_data['FINAL_END_PREIS_FORMATTED'] = formatted_price
+                multi_dynamic_data['final_end_preis'] = f"{modified_price:.2f}"
+                multi_dynamic_data['final_end_preis_formatted'] = formatted_price
+                
                 print(f"✓ Dynamic Data: {len(multi_dynamic_data)} Einträge")
+                print(f"✓ FINAL_END_PREIS_FORMATTED in Dynamic Data: {multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')}")
                 
             except Exception as e:
-                print(f"WARNING: build_dynamic_data() nicht verfügbar: {e}")
-                # Fallback: Minimal Dynamic Data
+                print(f"ERROR: build_dynamic_data() fehlgeschlagen: {e}")
+                import traceback
+                traceback.print_exc()
+                
+                # Fallback: Minimal Dynamic Data mit Preis
                 multi_dynamic_data = {
                     'firma_name': firm_name,
-                    'endpreis': f"{modified_price:,.2f}",
-                    # ... weitere Felder müssen manuell gemappt werden
+                    'FINAL_END_PREIS': f"{modified_price:.2f}",
+                    'FINAL_END_PREIS_FORMATTED': formatted_price,
+                    'final_end_preis': f"{modified_price:.2f}",
+                    'final_end_preis_formatted': formatted_price,
                 }
             
             # 4. Generiere PDF mit firma-spezifischen Templates
