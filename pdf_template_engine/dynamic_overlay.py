@@ -3082,14 +3082,24 @@ def generate_multi_offer_pdfs(
                     company_info=multi_company_info
                 )
                 
-                # DOPPELTE SICHERHEIT: Überschreibe Preis-Keys in Dynamic Data
+                print(f"✓ Dynamic Data: {len(multi_dynamic_data)} Einträge")
+                
+                # KRITISCH: Überschreibe Preise NACH build_dynamic_data()
+                # weil build_dynamic_data() die Preise aus anderen Quellen liest!
                 multi_dynamic_data['FINAL_END_PREIS'] = f"{modified_price:.2f}"
                 multi_dynamic_data['FINAL_END_PREIS_FORMATTED'] = formatted_price
                 multi_dynamic_data['final_end_preis'] = f"{modified_price:.2f}"
                 multi_dynamic_data['final_end_preis_formatted'] = formatted_price
                 
-                print(f"✓ Dynamic Data: {len(multi_dynamic_data)} Einträge")
-                print(f"✓ FINAL_END_PREIS_FORMATTED in Dynamic Data: {multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')}")
+                # Auch Netto-Preis berechnen (ohne MwSt)
+                netto_price = modified_price / 1.19  # 19% MwSt
+                formatted_netto = f"{netto_price:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                multi_dynamic_data['FINAL_END_PREIS_NETTO'] = f"{netto_price:.2f}"
+                multi_dynamic_data['final_end_preis_netto'] = formatted_netto
+                
+                # Debug-Ausgabe ZUR SICHERHEIT
+                print(f"✓ ÜBERSCHRIEBEN: FINAL_END_PREIS_FORMATTED = {multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')}")
+                print(f"✓ ÜBERSCHRIEBEN: final_end_preis = {multi_dynamic_data.get('final_end_preis')}")
                 
             except Exception as e:
                 print(f"ERROR: build_dynamic_data() fehlgeschlagen: {e}")
