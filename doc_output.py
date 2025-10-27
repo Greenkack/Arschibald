@@ -2376,70 +2376,19 @@ def render_pdf_ui(
                     # PDF-Generierung
                     st.markdown("### 🎯 PDF-Generierung starten")
                     
-                    # Voraussetzungs-Prüfung
-                    prerequisites_met = True
-                    prerequisites_status = []
-                    
-                    # Prüfe Project Data
+                    # Hole Session State Daten
                     project_data = st.session_state.get('project_data', {})
-                    if project_data and project_data.get('customer_name'):
-                        prerequisites_status.append("✅ Projektdaten vorhanden")
-                    else:
-                        prerequisites_status.append("❌ Projektdaten fehlen (Kundendaten)")
-                        prerequisites_met = False
-                    
-                    # Prüfe Analysis Results
                     analysis_results = st.session_state.get('analysis_results', {})
-                    if analysis_results and analysis_results.get('annual_yield_kwh'):
-                        prerequisites_status.append("✅ Projektanalyse durchgeführt")
-                    else:
-                        prerequisites_status.append("❌ Projektanalyse fehlt (Solar-Kalkulation)")
-                        prerequisites_met = False
-                    
-                    # Prüfe Produktauswahl
                     pv_module = st.session_state.get('selected_pv_module')
                     inverter = st.session_state.get('selected_inverter')
                     battery = st.session_state.get('selected_battery')
                     
-                    if pv_module:
-                        prerequisites_status.append("✅ PV-Module gewählt")
-                    else:
-                        prerequisites_status.append("❌ PV-Module nicht gewählt")
-                        prerequisites_met = False
-                    
-                    if inverter:
-                        prerequisites_status.append("✅ Wechselrichter gewählt")
-                    else:
-                        prerequisites_status.append("❌ Wechselrichter nicht gewählt")
-                        prerequisites_met = False
-                    
-                    if battery:
-                        prerequisites_status.append("✅ Batteriespeicher gewählt")
-                    else:
-                        prerequisites_status.append("❌ Batteriespeicher nicht gewählt")
-                        prerequisites_met = False
-                    
-                    # Zeige Status
-                    with st.expander("📋 Voraussetzungen Status", expanded=not prerequisites_met):
-                        for status in prerequisites_status:
-                            st.markdown(status)
-                        
-                        if not prerequisites_met:
-                            st.error(
-                                "⚠️ **Nicht alle Voraussetzungen erfüllt!**\n\n"
-                                "Bitte vervollständigen Sie zuerst:\n"
-                                "- Kundendaten im Projektbereich\n"
-                                "- Solar-Kalkulation (Verbrauch, PV-Leistung, etc.)\n"
-                                "- Produktauswahl (PV-Module, Wechselrichter, Batteriespeicher)"
-                            )
-                    
-                    # Generierungs-Button (nur aktiv wenn Voraussetzungen erfüllt)
+                    # Generierungs-Button (immer aktiv)
                     if st.button(
                         f"🚀 {len(selected_firms)} Multi-PDF(s) generieren",
                         type="primary",
                         use_container_width=True,
-                        key="generate_multi_pdfs_btn",
-                        disabled=not prerequisites_met
+                        key="generate_multi_pdfs_btn"
                     ):
                         with st.spinner(f"⏳ Generiere {len(selected_firms)} Angebote..."):
                             try:
