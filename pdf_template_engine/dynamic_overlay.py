@@ -2972,6 +2972,7 @@ def generate_multi_offer_pdfs(
     profit_margin: float = 0,
     modifier_pct: float = 15.0,
     progression_pct: float = 5.0,
+    pdf_options: dict | None = None,
     additional_pdf: bytes | None = None,
 ) -> list[tuple[str, bytes]]:
     """
@@ -2986,6 +2987,7 @@ def generate_multi_offer_pdfs(
         profit_margin: Gewinnmarge in Prozent
         modifier_pct: Basis-Aufschlag für Multi-PDFs
         progression_pct: Progressive Aufschlag-Steigerung pro Firma
+        pdf_options: Optional - PDF-Inhaltsoptionen aus UI
         additional_pdf: Optional zusätzliche PDF-Seiten
     
     Returns:
@@ -3103,32 +3105,30 @@ def generate_multi_offer_pdfs(
                     'final_end_preis_formatted': formatted_price,
                 }
             
-            # 4. Generiere PDF mit firma-spezifischen Templates
-            print(f"\n[4/4] PDF-Generierung mit Firma-Templates...")
+            # 4. Generiere PDF mit Standard-Templates aber modifizierten Daten
+            print(f"\n[4/4] PDF-Generierung...")
             
-            # Firma-spezifische Pfade (f1, f2, f3, ...)
-            firm_suffix = f"f{firm_index + 1}"
+            # VERWENDE STANDARD generate_custom_offer_pdf() mit modifizierten Daten!
+            # Keine firma-spezifischen Templates nötig - Dynamic Data enthält alle Unterschiede
             
-            coords_dir = Path(f"coords_multi")  # Verwendet seite1_f1.yml, seite2_f1.yml, etc.
-            bg_dir = Path(f"pdf_templates_static/multi")  # Verwendet multi_nt_01_f1.pdf, etc.
-            
-            # Erstelle temporäre Symlinks oder kopiere Dateien mit richtigem Namen
-            # Da generate_custom_offer_pdf() seite1.yml ... seite8.yml erwartet,
-            # müssen wir eine angepasste Version verwenden
-            
-            pdf_bytes = generate_multi_firm_pdf(
-                coords_dir=coords_dir,
-                bg_dir=bg_dir,
-                dynamic_data=multi_dynamic_data,
-                firm_suffix=firm_suffix,
-                additional_pdf=additional_pdf
-            )
-            
-            if not pdf_bytes:
-                print(f"ERROR: PDF-Generierung fehlgeschlagen für {firm_name}")
+            try:
+                pdf_bytes = generate_custom_offer_pdf(
+                    dynamic_data=multi_dynamic_data,
+                    additional_pdf=additional_pdf
+                )
+                
+                if not pdf_bytes:
+                    print(f"ERROR: PDF-Generierung fehlgeschlagen für {firm_name}")
+                    continue
+                
+                print(f"✓ PDF generiert: {len(pdf_bytes)} bytes")
+                print(f"✓ Preis in PDF: {multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')}")
+                
+            except Exception as pdf_error:
+                print(f"ERROR: PDF-Generierung fehlgeschlagen: {pdf_error}")
+                import traceback
+                traceback.print_exc()
                 continue
-            
-            print(f"✓ PDF generiert: {len(pdf_bytes)} bytes")
             
             # 5. Speichere Resultat
             results.append((firm_name, pdf_bytes))
