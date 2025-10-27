@@ -2961,3 +2961,303 @@ def generate_custom_offer_pdf(
         import traceback
         traceback.print_exc()
         return None
+
+
+def generate_multi_offer_pdfs(
+    selected_firms: list,
+    standard_products: dict,
+    project_data: dict,
+    analysis_results: dict,
+    company_info: dict,
+    profit_margin: float = 0,
+    modifier_pct: float = 15.0,
+    progression_pct: float = 5.0,
+    additional_pdf: bytes | None = None,
+) -> list[tuple[str, bytes]]:
+    """
+    Generiere Multiple PDFs für verschiedene Firmen mit rotierenden Produkten
+    
+    Args:
+        selected_firms: Liste von Firmen-Dicts aus Firmendatenbank
+        standard_products: {category: product_dict} vom Standard-Angebot
+        project_data: Projekt-Daten (Kunde, Verbräuche, etc.)
+        analysis_results: Analyse-Resultate mit Berechnungen
+        company_info: Firmen-Info für Standard-Angebot
+        profit_margin: Gewinnmarge in Prozent
+        modifier_pct: Basis-Aufschlag für Multi-PDFs
+        progression_pct: Progressive Aufschlag-Steigerung pro Firma
+        additional_pdf: Optional zusätzliche PDF-Seiten
+    
+    Returns:
+        Liste von (firmenname, pdf_bytes) Tupeln
+    """
+    from product_rotation_engine import rotate_products, track_used_brands, track_used_models
+    from price_modification_engine import calculate_price_with_products
+    
+    print(f"\n{'='*80}")
+    print(f"MULTI-PDF GENERIERUNG: {len(selected_firms)} Firmen")
+    print(f"{'='*80}\n")
+    
+    results = []
+    used_brands = track_used_brands(standard_products)
+    used_models = track_used_models(standard_products)
+    
+    print(f"Standard-Angebot verwendet Marken: {used_brands}")
+    print(f"Standard-Angebot verwendet Modelle: {used_models}")
+    
+    for firm_index, firm in enumerate(selected_firms):
+        firm_name = firm.get('name') or firm.get('Name') or f"Firma_{firm_index + 1}"
+        
+        print(f"\n{'-'*80}")
+        print(f"Firma {firm_index + 1}/{len(selected_firms)}: {firm_name}")
+        print(f"{'-'*80}")
+        
+        try:
+            # 1. Rotiere Produkte für diese Firma
+            print(f"\n[1/4] Produkt-Rotation...")
+            rotated_products = rotate_products(
+                standard_products=standard_products,
+                used_brands=used_brands,
+                firm_index=firm_index,
+                used_models=used_models
+            )
+            
+            if not rotated_products:
+                print(f"ERROR: Keine Produkte rotiert für {firm_name}")
+                continue
+            
+            print(f"✓ {len(rotated_products)} Produkte rotiert")
+            
+            # 2. Berechne Preis mit Modifikation
+            print(f"\n[2/4] Preisberechnung...")
+            price_result = calculate_price_with_products(
+                products=rotated_products,
+                analysis_results=analysis_results,
+                profit_margin=profit_margin,
+                modifier_pct=modifier_pct,
+                firm_index=firm_index,
+                progression_pct=progression_pct
+            )
+            
+            modified_price = price_result['modified_price']
+            print(f"✓ Preis: {modified_price:.2f}€ (Aufschlag: +{price_result['modifier_applied']:.1f}%)")
+            
+            # 3. Baue Dynamic Data mit rotierten Produkten
+            print(f"\n[3/4] Dynamic Data erstellen...")
+            
+            # Kopiere Standard Dynamic Data
+            multi_dynamic_data = {}
+            
+            # Baue neue Dynamic Data mit rotierten Produkten und Firmen-Info
+            # Hier müssen wir die gleiche Logik wie build_dynamic_data() verwenden
+            # aber mit rotierten Produkten und modifiziertem Preis
+            
+            # Aktualisiere Firmen-Informationen
+            multi_company_info = firm.copy()
+            
+            # Baue Dynamic Data (vereinfachte Version - muss an tatsächliche Struktur angepasst werden)
+            try:
+                from calculations import build_dynamic_data
+                
+                # Erstelle modifizierte analysis_results mit neuem Preis
+                modified_analysis = analysis_results.copy()
+                modified_analysis['total_price'] = modified_price
+                modified_analysis['rotated_products'] = rotated_products
+                
+                # Baue Dynamic Data
+                multi_dynamic_data = build_dynamic_data(
+                    project_data=project_data,
+                    analysis_results=modified_analysis,
+                    company_info=multi_company_info
+                )
+                
+                print(f"✓ Dynamic Data: {len(multi_dynamic_data)} Einträge")
+                
+            except Exception as e:
+                print(f"WARNING: build_dynamic_data() nicht verfügbar: {e}")
+                # Fallback: Minimal Dynamic Data
+                multi_dynamic_data = {
+                    'firma_name': firm_name,
+                    'endpreis': f"{modified_price:,.2f}",
+                    # ... weitere Felder müssen manuell gemappt werden
+                }
+            
+            # 4. Generiere PDF mit firma-spezifischen Templates
+            print(f"\n[4/4] PDF-Generierung mit Firma-Templates...")
+            
+            # Firma-spezifische Pfade (f1, f2, f3, ...)
+            firm_suffix = f"f{firm_index + 1}"
+            
+            coords_dir = Path(f"coords_multi")  # Verwendet seite1_f1.yml, seite2_f1.yml, etc.
+            bg_dir = Path(f"pdf_templates_static/multi")  # Verwendet multi_nt_01_f1.pdf, etc.
+            
+            # Erstelle temporäre Symlinks oder kopiere Dateien mit richtigem Namen
+            # Da generate_custom_offer_pdf() seite1.yml ... seite8.yml erwartet,
+            # müssen wir eine angepasste Version verwenden
+            
+            pdf_bytes = generate_multi_firm_pdf(
+                coords_dir=coords_dir,
+                bg_dir=bg_dir,
+                dynamic_data=multi_dynamic_data,
+                firm_suffix=firm_suffix,
+                additional_pdf=additional_pdf
+            )
+            
+            if not pdf_bytes:
+                print(f"ERROR: PDF-Generierung fehlgeschlagen für {firm_name}")
+                continue
+            
+            print(f"✓ PDF generiert: {len(pdf_bytes)} bytes")
+            
+            # 5. Speichere Resultat
+            results.append((firm_name, pdf_bytes))
+            
+            # 6. Aktualisiere verwendete Marken/Modelle für nächste Firma
+            used_brands.update(track_used_brands(rotated_products))
+            
+            for category, models in track_used_models(rotated_products).items():
+                if category not in used_models:
+                    used_models[category] = set()
+                used_models[category].update(models)
+            
+            print(f"\n✓ Firma {firm_name} abgeschlossen")
+            
+        except Exception as e:
+            print(f"ERROR bei Firma {firm_name}: {e}")
+            import traceback
+            traceback.print_exc()
+            continue
+    
+    print(f"\n{'='*80}")
+    print(f"MULTI-PDF GENERIERUNG ABGESCHLOSSEN: {len(results)}/{len(selected_firms)} erfolgreich")
+    print(f"{'='*80}\n")
+    
+    return results
+
+
+def generate_multi_firm_pdf(
+    coords_dir: Path,
+    bg_dir: Path,
+    dynamic_data: dict[str, str],
+    firm_suffix: str,
+    additional_pdf: bytes | None = None,
+) -> bytes:
+    """
+    Generiere PDF für eine spezifische Firma mit firma-spezifischen Templates
+    
+    Args:
+        coords_dir: Basis-Pfad zu coords_multi/
+        bg_dir: Basis-Pfad zu pdf_templates_static/multi/
+        dynamic_data: Dynamic Data Dictionary
+        firm_suffix: "f1", "f2", "f3", ... für Firma-Nummer
+        additional_pdf: Optional zusätzliche PDF-Seiten
+    
+    Returns:
+        PDF bytes oder None bei Fehler
+    """
+    import yaml
+    
+    print(f"DEBUG: generate_multi_firm_pdf für {firm_suffix}")
+    print(f"DEBUG: coords_dir={coords_dir}, bg_dir={bg_dir}")
+    
+    try:
+        # Bestimme Gesamtseiten
+        total_pages = 8
+        if additional_pdf:
+            try:
+                add_reader = PdfReader(io.BytesIO(additional_pdf))
+                total_pages = 8 + len(add_reader.pages)
+            except Exception:
+                pass
+        
+        # Generiere Overlay für alle 8 Seiten mit firma-spezifischen Koordinaten
+        overlay_buffer = io.BytesIO()
+        c = canvas.Canvas(overlay_buffer, pagesize=A4)
+        page_width, page_height = A4
+        
+        for page_num in range(1, 9):
+            # Lade firma-spezifische YML: seite1_f1.yml, seite2_f2.yml, etc.
+            yml_file = coords_dir / f"seite{page_num}_{firm_suffix}.yml"
+            
+            if not yml_file.exists():
+                print(f"WARNING: {yml_file} nicht gefunden, überspringe Seite {page_num}")
+                c.showPage()
+                continue
+            
+            # Lade Koordinaten
+            with open(yml_file, 'r', encoding='utf-8') as f:
+                coords = yaml.safe_load(f) or []
+            
+            print(f"DEBUG: Seite {page_num}: {len(coords)} Platzhalter aus {yml_file}")
+            
+            # Zeichne Platzhalter auf dieser Seite
+            for item in coords:
+                placeholder = item.get('placeholder', '')
+                value = dynamic_data.get(placeholder, '')
+                
+                x = item.get('x', 0)
+                y = item.get('y', 0)
+                font = item.get('font', 'Helvetica')
+                size = item.get('size', 12)
+                color_str = item.get('color', 'black')
+                
+                # Zeichne Text
+                c.setFont(font, size)
+                c.drawString(x, y, str(value))
+            
+            c.showPage()
+        
+        c.save()
+        overlay_bytes = overlay_buffer.getvalue()
+        
+        if not overlay_bytes:
+            print("ERROR: Overlay-Generierung fehlgeschlagen")
+            return None
+        
+        print(f"DEBUG: Overlay generiert: {len(overlay_bytes)} bytes")
+        
+        # Merge mit firma-spezifischen Backgrounds
+        overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
+        writer = PdfWriter()
+        
+        for page_num in range(8):
+            # Lade firma-spezifisches Background: multi_nt_01_f1.pdf, etc.
+            bg_file = bg_dir / f"multi_nt_{page_num+1:02d}_{firm_suffix}.pdf"
+            
+            if not bg_file.exists():
+                print(f"WARNING: {bg_file} nicht gefunden, überspringe Background für Seite {page_num+1}")
+                # Verwende nur Overlay
+                writer.add_page(overlay_reader.pages[page_num])
+                continue
+            
+            # Merge Overlay + Background
+            bg_reader = PdfReader(bg_file)
+            bg_page = bg_reader.pages[0]
+            overlay_page = overlay_reader.pages[page_num]
+            
+            bg_page.merge_page(overlay_page)
+            writer.add_page(bg_page)
+        
+        # Optional: Zusatz-PDF anhängen
+        if additional_pdf:
+            try:
+                add_reader = PdfReader(io.BytesIO(additional_pdf))
+                for page in add_reader.pages:
+                    writer.add_page(page)
+            except Exception as e:
+                print(f"WARNING: Zusatz-PDF konnte nicht angehängt werden: {e}")
+        
+        # Schreibe finales PDF
+        final_buffer = io.BytesIO()
+        writer.write(final_buffer)
+        final_bytes = final_buffer.getvalue()
+        
+        print(f"DEBUG: Final PDF für {firm_suffix}: {len(final_bytes)} bytes")
+        
+        return final_bytes
+        
+    except Exception as e:
+        print(f"ERROR: PDF-Generierung für {firm_suffix} fehlgeschlagen: {e}")
+        import traceback
+        traceback.print_exc()
+        return None

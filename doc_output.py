@@ -9,6 +9,7 @@ Datum: 2025-06-03
 # Modul für die Angebotsausgabe (PDF)
 
 import base64
+import io
 import os
 import traceback
 from collections.abc import Callable
@@ -2229,6 +2230,233 @@ def render_pdf_ui(
             st.error(f"❌ Zahlungsmodalitäten-Modul nicht verfügbar: {e}")
         except Exception as e:
             st.error(f"❌ Fehler beim Laden der Zahlungsmodalitäten: {e}")
+
+    # ============================================================================
+    # MULTI-PDF ANGEBOTSERSTELLUNG
+    # ============================================================================
+    with st.expander("🏢 MULTI-PDF ANGEBOTSERSTELLUNG", expanded=False):
+        st.markdown("### 📦 Mehrere Angebote gleichzeitig erstellen")
+        st.info(
+            "Erstellen Sie automatisch mehrere Angebote für verschiedene Firmen. "
+            "Jede Firma erhält andere Produkt-Marken mit gleichen Spezifikationen, "
+            "aber angepassten Preisen."
+        )
+        
+        # Firmen aus Datenbank laden
+        try:
+            from database import list_companies
+            
+            all_firms = list_companies()
+            
+            if not all_firms:
+                st.warning("⚠️ Keine Firmen in der Datenbank gefunden. Bitte fügen Sie erst Firmen hinzu.")
+            else:
+                st.markdown(f"**Verfügbare Firmen:** {len(all_firms)}")
+                
+                # Firmen-Auswahl mit Multi-Select
+                firm_options = {f"{firm.get('name', 'Unbekannt')} ({firm.get('location', 'Kein Ort')})": firm 
+                               for firm in all_firms}
+                
+                col1, col2 = st.columns([3, 1])
+                
+                with col1:
+                    selected_firm_names = st.multiselect(
+                        "🏢 Firmen auswählen (mindestens 1)",
+                        options=list(firm_options.keys()),
+                        default=[],
+                        key="multi_pdf_selected_firms",
+                        help="Wählen Sie die Firmen aus, für die Angebote erstellt werden sollen"
+                    )
+                
+                with col2:
+                    if st.button("✅ Alle auswählen", key="select_all_firms", use_container_width=True):
+                        st.session_state['multi_pdf_selected_firms'] = list(firm_options.keys())
+                        st.rerun()
+                
+                # Konvertiere Namen zu Firmen-Objekten
+                selected_firms = [firm_options[name] for name in selected_firm_names]
+                
+                if selected_firms:
+                    st.success(f"✓ {len(selected_firms)} Firma(n) ausgewählt")
+                    
+                    # Zeige Vorschau der ausgewählten Firmen
+                    with st.expander("👀 Ausgewählte Firmen", expanded=False):
+                        for i, firm in enumerate(selected_firms, 1):
+                            st.markdown(f"**{i}. {firm.get('name', 'Unbekannt')}**")
+                            st.text(f"   Ort: {firm.get('location', 'Nicht angegeben')}")
+                            if firm.get('description'):
+                                st.text(f"   Info: {firm.get('description')[:100]}...")
+                    
+                    st.markdown("---")
+                    
+                    # Preis-Modifikations-Einstellungen
+                    st.markdown("### 💰 Preis-Modifikation")
+                    
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        base_modifier = st.slider(
+                            "📊 Basis-Aufschlag (%)",
+                            min_value=0,
+                            max_value=50,
+                            value=15,
+                            step=1,
+                            key="multi_pdf_base_modifier",
+                            help="Grundlegender Preisaufschlag für alle Multi-PDFs (Standard-Angebot bleibt günstiger)"
+                        )
+                    
+                    with col2:
+                        progression = st.slider(
+                            "📈 Progressions-Faktor (%)",
+                            min_value=0,
+                            max_value=20,
+                            value=5,
+                            step=1,
+                            key="multi_pdf_progression",
+                            help="Zusätzlicher Aufschlag pro weiterer Firma (z.B. Firma 1: +15%, Firma 2: +20%, etc.)"
+                        )
+                    
+                    # Zeige Preis-Vorschau
+                    st.markdown("**📊 Preis-Vorschau (beispielhaft bei 17.000€ Basis):**")
+                    
+                    preview_base = 17000.0
+                    preview_cols = st.columns(min(len(selected_firms), 4))
+                    
+                    for i in range(min(len(selected_firms), 4)):
+                        with preview_cols[i]:
+                            total_modifier = base_modifier + (progression * i)
+                            preview_price = preview_base * (1 + total_modifier / 100)
+                            st.metric(
+                                label=f"Firma {i+1}",
+                                value=f"{preview_price:,.2f}€",
+                                delta=f"+{total_modifier}%"
+                            )
+                    
+                    if len(selected_firms) > 4:
+                        st.caption(f"... und {len(selected_firms) - 4} weitere Firma(n)")
+                    
+                    st.markdown("---")
+                    
+                    # Produkt-Rotations-Einstellungen
+                    st.markdown("### 🔄 Produkt-Rotation")
+                    
+                    st.info(
+                        "🎯 **Automatische Marken-Rotation:** Jede Firma erhält automatisch andere "
+                        "Produkt-Marken als das Standard-Angebot und die vorherigen Firmen. "
+                        "Die Spezifikationen (Leistung, Kapazität) bleiben gleich."
+                    )
+                    
+                    strict_rotation = st.checkbox(
+                        "⚠️ Strikte Rotation (Fehler bei Marken-Erschöpfung)",
+                        value=False,
+                        key="multi_pdf_strict_rotation",
+                        help="Bei aktiviert: Fehler wenn keine neuen Marken verfügbar. "
+                             "Bei deaktiviert: Erlaube Duplikate mit anderen Modellen."
+                    )
+                    
+                    st.markdown("---")
+                    
+                    # PDF-Generierung
+                    st.markdown("### 🎯 PDF-Generierung starten")
+                    
+                    if st.button(
+                        f"🚀 {len(selected_firms)} Multi-PDF(s) generieren",
+                        type="primary",
+                        use_container_width=True,
+                        key="generate_multi_pdfs_btn"
+                    ):
+                        with st.spinner(f"⏳ Generiere {len(selected_firms)} Angebote..."):
+                            try:
+                                # Lade benötigte Daten
+                                project_data = st.session_state.get('project_data', {})
+                                analysis_results = st.session_state.get('analysis_results', {})
+                                company_info = st.session_state.get('company_info', {})
+                                
+                                # Standard-Produkte aus Session State
+                                standard_products = {
+                                    'pv_modules': st.session_state.get('selected_pv_module'),
+                                    'inverters': st.session_state.get('selected_inverter'),
+                                    'battery_storage': st.session_state.get('selected_battery')
+                                }
+                                
+                                # Validierung
+                                if not all(standard_products.values()):
+                                    st.error("❌ Bitte wählen Sie erst PV-Module, Wechselrichter und Batteriespeicher aus!")
+                                else:
+                                    # Generiere Multi-PDFs
+                                    from pdf_template_engine.dynamic_overlay import generate_multi_offer_pdfs
+                                    import zipfile
+                                    from datetime import datetime
+                                    
+                                    results = generate_multi_offer_pdfs(
+                                        selected_firms=selected_firms,
+                                        standard_products=standard_products,
+                                        project_data=project_data,
+                                        analysis_results=analysis_results,
+                                        company_info=company_info,
+                                        profit_margin=st.session_state.get('profit_margin', 0),
+                                        modifier_pct=base_modifier,
+                                        progression_pct=progression,
+                                        additional_pdf=None  # TODO: Optional implementieren
+                                    )
+                                    
+                                    if not results:
+                                        st.error("❌ Keine PDFs konnten generiert werden!")
+                                    else:
+                                        st.success(f"✅ {len(results)} PDF(s) erfolgreich generiert!")
+                                        
+                                        # Erstelle ZIP-Archiv
+                                        zip_buffer = io.BytesIO()
+                                        
+                                        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                                            
+                                            for firm_name, pdf_bytes in results:
+                                                # Sanitize Firmenname für Dateinamen
+                                                safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
+                                                filename = f"Angebot_{safe_name}_{timestamp}.pdf"
+                                                
+                                                zip_file.writestr(filename, pdf_bytes)
+                                        
+                                        zip_bytes = zip_buffer.getvalue()
+                                        
+                                        # Download-Button für ZIP
+                                        st.download_button(
+                                            label=f"📦 Alle {len(results)} PDFs herunterladen (ZIP)",
+                                            data=zip_bytes,
+                                            file_name=f"Multi_Angebote_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
+                                            mime="application/zip",
+                                            use_container_width=True
+                                        )
+                                        
+                                        # Optional: Einzelne Download-Buttons
+                                        with st.expander("📄 Einzelne PDFs herunterladen", expanded=False):
+                                            for firm_name, pdf_bytes in results:
+                                                safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
+                                                
+                                                st.download_button(
+                                                    label=f"📄 {firm_name}",
+                                                    data=pdf_bytes,
+                                                    file_name=f"Angebot_{safe_name}_{datetime.now().strftime('%Y%m%d')}.pdf",
+                                                    mime="application/pdf",
+                                                    key=f"download_{safe_name}"
+                                                )
+                                
+                            except Exception as e:
+                                st.error(f"❌ Fehler bei Multi-PDF Generierung: {e}")
+                                import traceback
+                                with st.expander("🔍 Fehlerdetails", expanded=False):
+                                    st.code(traceback.format_exc())
+                else:
+                    st.warning("⚠️ Bitte wählen Sie mindestens 1 Firma aus!")
+        
+        except ImportError:
+            st.error("❌ Firmendatenbank-Modul nicht gefunden. Bitte installieren Sie die benötigten Module.")
+        except Exception as e:
+            st.error(f"❌ Fehler beim Laden der Firmen: {e}")
+            import traceback
+            with st.expander("🔍 Fehlerdetails", expanded=False):
+                st.code(traceback.format_exc())
 
     with st.expander(" INDIVIDUELLE INHALTE", expanded=False):
         st.markdown("**Benutzerdefinierte Texte & Bilder:**")
