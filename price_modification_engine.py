@@ -115,11 +115,16 @@ def apply_modification(
             f"Firma {i + 1}: {previous_price:.2f}€ + {pct:.1f}% = {current_price:.2f}€"
         )
     
-    total_increase = ((current_price - base_price) / base_price) * 100
-    logger.info(
-        f"KASKADE GESAMT: {base_price:.2f}€ → {current_price:.2f}€ "
-        f"(+{total_increase:.2f}% gesamt)"
-    )
+    # ⚠️ ABSICHERUNG: Division by Zero vermeiden
+    if base_price > 0:
+        total_increase = ((current_price - base_price) / base_price) * 100
+        logger.info(
+            f"KASKADE GESAMT: {base_price:.2f}€ → {current_price:.2f}€ "
+            f"(+{total_increase:.2f}% gesamt)"
+        )
+    else:
+        total_increase = 0
+        logger.warning(f"⚠️ base_price ist 0! Keine Prozent-Berechnung möglich.")
     
     return current_price
 
@@ -167,45 +172,51 @@ def calculate_price_with_products(
     profit_margin: float = 0,
     modifier_pct: float = 0,
     firm_index: int = 0,
-    progression_pct: float = 0
+    progression_pct: float = 0,
+    base_price_override: Optional[float] = None  # ← NEU!
 ) -> Dict[str, float]:
     """
-    Vollständige Preisberechnung mit Produkten, Analyse und Modifikation
+    Vollständige KASKADIERENDE Preisberechnung mit Produkten, Analyse und Modifikation
     
     Args:
         products: Produkt-Dictionary
         analysis_results: Analyse-Resultate mit Kosten
         profit_margin: Gewinnmarge in Prozent
-        modifier_pct: Basis-Aufschlag für Multi-PDF
-        firm_index: Firmen-Index
-        progression_pct: Progressive Aufschlag-Steigerung
+        modifier_pct: Aufschlag für Firma 1 in Prozent (z.B. 5)
+        firm_index: Firmen-Index (0-basiert)
+        progression_pct: Aufschlag für weitere Firmen in Prozent (z.B. 5)
     
     Returns:
         {
-            'base_price': Basis-Preis,
-            'modified_price': Modifizierter Preis,
-            'modifier_applied': Angewandter Aufschlag in %
+            'base_price': Basis-Preis der Haupt-PDF,
+            'modified_price': KASKADIERTER Preis,
+            'modifier_applied': Gesamt-Erhöhung in % (nicht der einzelne Aufschlag!)
         }
     """
-    logger.info(f"=== Preisberechnung Firma {firm_index + 1} ===")
+    logger.info(f"=== KASKADIERENDE Preisberechnung Firma {firm_index + 1} ===")
     
-    # Labor costs aus analysis_results
-    labor_costs = 0
-    additional_costs = 0
+    # Basis-Preis: Entweder Override oder berechnen
+    if base_price_override is not None and base_price_override > 0:
+        base_price = base_price_override
+        logger.info(f"✅ Basis-Preis aus project_data: {base_price:.2f}€")
+    else:
+        # Fallback: Berechne aus Produkten
+        labor_costs = 0
+        additional_costs = 0
+        
+        if analysis_results:
+            labor_costs = analysis_results.get('labor_costs', 0)
+            additional_costs = analysis_results.get('additional_costs', 0)
+        
+        base_price = calculate_base_price(
+            products=products,
+            labor_costs=labor_costs,
+            additional_costs=additional_costs,
+            profit_margin=profit_margin
+        )
+        logger.info(f"Basis-Preis berechnet aus Produkten: {base_price:.2f}€")
     
-    if analysis_results:
-        labor_costs = analysis_results.get('labor_costs', 0)
-        additional_costs = analysis_results.get('additional_costs', 0)
-    
-    # Basis-Preis berechnen
-    base_price = calculate_base_price(
-        products=products,
-        labor_costs=labor_costs,
-        additional_costs=additional_costs,
-        profit_margin=profit_margin
-    )
-    
-    # Modifikation anwenden (nur für Multi-PDFs, nicht für Standard)
+    # KASKADIERENDE Modifikation anwenden (nur für Multi-PDFs)
     if modifier_pct > 0:
         modified_price = apply_modification(
             base_price=base_price,
@@ -214,17 +225,21 @@ def calculate_price_with_products(
             progression_pct=progression_pct
         )
         
-        total_modifier = modifier_pct + (progression_pct * firm_index)
+        # Berechne GESAMT-Erhöhung in %
+        total_increase = ((modified_price - base_price) / base_price) * 100
+        
+        logger.info(
+            f"KASKADIERTER Preis: {modified_price:.2f}€ "
+            f"(+{total_increase:.2f}% gesamt über Basis)"
+        )
     else:
         modified_price = base_price
-        total_modifier = 0
+        total_increase = 0
+        logger.info("Keine Modifikation (Standard-PDF)")
     
-    result = {
+    return {
         'base_price': base_price,
         'modified_price': modified_price,
-        'modifier_applied': total_modifier
+        'modifier_applied': total_increase  # GESAMT-Erhöhung, nicht Einzel-Aufschlag!
     }
-    
-    logger.info(f"Resultat: Basis={base_price:.2f}€, Modifiziert={modified_price:.2f}€, Aufschlag={total_modifier:.1f}%")
-    
-    return result
+

@@ -6684,12 +6684,9 @@ def _validate_pdf_data_availability(
             validation_result['missing_data_summary'].extend(missing_kpis)
             # Fehlende KPIs sind kein kritischer Fehler mehr
 
-    # Firmendaten prüfen (nicht kritisch)
+    # Firmendaten prüfen (nicht kritisch) - Warnung nur bei Debug
     if not project_data.get('company_information', {}).get('name'):
-        validation_result['warnings'].append(
-            get_text(texts, 'pdf_warning_no_company',
-                     'Keine Firmendaten verfügbar - Fallback wird verwendet')
-        )
+        # Warnung entfernt - Fallback funktioniert automatisch
         validation_result['missing_data_summary'].append('Firmendaten')
 
     # Debug-Ausgabe

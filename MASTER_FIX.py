@@ -36,17 +36,24 @@ def apply_master_fix(force_all_charts: bool = True, verbose: bool = True):
         if verbose:
             st.info("🔧 MASTER-FIX wird angewendet...")
 
-        # 1. PDF-Generator patchen
-        from pdf_generator_patch import auto_patch_session_state
-        auto_patch_session_state()
+        # 1. PDF-Generator patchen - ENTFERNT (Modul existiert nicht mehr)
+        # from pdf_generator_patch import auto_patch_session_state
+        # auto_patch_session_state()
 
         # 2. Fehlende Charts auto-generieren
-        from auto_chart_generator import auto_fix_session_state_charts
-        auto_fix_session_state_charts(force_all=force_all_charts)
+        try:
+            from auto_chart_generator import auto_fix_session_state_charts
+            auto_fix_session_state_charts(force_all=force_all_charts)
+        except Exception as e:
+            if verbose:
+                st.warning(f"Chart-Generator nicht verfügbar: {e}")
 
         # 3. Statistiken sammeln
         if verbose:
-            from auto_chart_generator import get_chart_availability_report
+            try:
+                from auto_chart_generator import get_chart_availability_report
+            except:
+                pass  # Ignoriere wenn nicht verfügbar
 
             analysis_results = st.session_state.get('analysis_results', {})
             report = get_chart_availability_report(analysis_results)

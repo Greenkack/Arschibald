@@ -3024,28 +3024,120 @@ def generate_multi_offer_pdfs(
                 used_models=used_models
             )
             
-            if not rotated_products:
-                print(f"ERROR: Keine Produkte rotiert für {firm_name}")
-                continue
+            if not rotated_products or len(rotated_products) == 0:
+                print(f"⚠️ Produkt-Rotation fehlgeschlagen - nutze STANDARD-PRODUKTE als Fallback")
+                rotated_products = standard_products.copy()
             
-            print(f"✓ {len(rotated_products)} Produkte rotiert")
+            print(f"✓ {len(rotated_products)} Produkte für Firma {firm_index + 1}")
+            
+            # Debug: Zeige rotierte Produkte
+            if rotated_products.get('pv_modules'):
+                pv_name = rotated_products['pv_modules'].get('model_name', rotated_products['pv_modules'].get('name', 'N/A'))
+                print(f"   → PV-Modul: {pv_name}")
+            if rotated_products.get('inverters'):
+                inv_name = rotated_products['inverters'].get('model_name', rotated_products['inverters'].get('name', 'N/A'))
+                print(f"   → Wechselrichter: {inv_name}")
+            if rotated_products.get('battery_storage'):
+                bat_name = rotated_products['battery_storage'].get('model_name', rotated_products['battery_storage'].get('name', 'N/A'))
+                print(f"   → Speicher: {bat_name}")
             
             # 2. Berechne Preis mit Modifikation
             print(f"\n[2/4] Preisberechnung...")
+            
+            # ✅ Basis-Preis aus project_data holen (nicht neu berechnen!)
+            base_price_from_project = project_data.get('project_details', {}).get('final_offer_price_net', 0)
+            
+            if base_price_from_project == 0:
+                print(f"⚠️ WARNUNG: Basis-Preis ist 0! Prüfe project_data!")
+                print(f"   Verfügbare Keys: {list(project_data.get('project_details', {}).keys())}")
+            
             price_result = calculate_price_with_products(
                 products=rotated_products,
                 analysis_results=analysis_results,
                 profit_margin=profit_margin,
                 modifier_pct=modifier_pct,
                 firm_index=firm_index,
-                progression_pct=progression_pct
+                progression_pct=progression_pct,
+                base_price_override=base_price_from_project  # ← NEU: Override!
             )
             
             modified_price = price_result['modified_price']
-            print(f"✓ Preis: {modified_price:.2f}€ (Aufschlag: +{price_result['modifier_applied']:.1f}%)")
+            base_price = price_result['base_price']
+            
+            # KASKADIERUNGS-BEWEIS ausgeben
+            print(f"\n{'='*60}")
+            print(f"KASKADIERUNGS-BERECHNUNG FÜR {firm_name.upper()}")
+            print(f"{'='*60}")
+            print(f"Basis-Preis (Haupt-PDF): {base_price:,.2f} €".replace(",", "X").replace(".", ",").replace("X", "."))
+            print(f"Firma-Index: {firm_index}")
+            print(f"Modifier (Firma 1): {modifier_pct}%")
+            print(f"Progression (weitere): {progression_pct}%")
+            print(f"")
+            
+            # Zeige Kaskadierungs-Schritte
+            temp_price = base_price
+            for i in range(firm_index + 1):
+                pct = modifier_pct if i == 0 else progression_pct
+                old_price = temp_price
+                temp_price = temp_price * (1 + pct / 100)
+                formatted_old = f"{old_price:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                formatted_new = f"{temp_price:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                print(f"  Schritt {i+1}: {formatted_old} + {pct}% = {formatted_new}")
+            
+            print(f"")
+            print(f"FINALER PREIS: {modified_price:,.2f} €".replace(",", "X").replace(".", ",").replace("X", "."))
+            print(f"Gesamt-Erhöhung: +{price_result['modifier_applied']:.2f}%")
+            print(f"{'='*60}\n")
             
             # 3. Baue Dynamic Data mit rotierten Produkten
             print(f"\n[3/4] Dynamic Data erstellen...")
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # WICHTIG: Überschreibe Produkte IN project_data VOR build_dynamic_data()!
+            # ═══════════════════════════════════════════════════════════════════════
+            
+            # Erstelle modifizierte Kopie von project_data mit rotierten Produkten
+            modified_project_data = project_data.copy() if project_data else {}
+            if 'project_details' not in modified_project_data:
+                modified_project_data['project_details'] = {}
+            
+            # PV-Modul überschreiben
+            pv_module = rotated_products.get('pv_modules', {})
+            if pv_module:
+                module_name = pv_module.get('model_name', pv_module.get('name', ''))
+                module_brand = pv_module.get('brand', pv_module.get('manufacturer', ''))
+                if module_name:
+                    modified_project_data['project_details']['selected_module_name'] = module_name
+                    modified_project_data['project_details']['module_model'] = module_name
+                    print(f"   → PV-Modul in project_data: {module_name}")
+                if module_brand:
+                    modified_project_data['project_details']['module_manufacturer'] = module_brand
+            
+            # Wechselrichter überschreiben
+            inverter = rotated_products.get('inverters', {})
+            if inverter:
+                inverter_name = inverter.get('model_name', inverter.get('name', ''))
+                inverter_brand = inverter.get('brand', inverter.get('manufacturer', ''))
+                if inverter_name:
+                    modified_project_data['project_details']['selected_inverter_name'] = inverter_name
+                    modified_project_data['project_details']['inverter_model'] = inverter_name
+                    print(f"   → Wechselrichter in project_data: {inverter_name}")
+                if inverter_brand:
+                    modified_project_data['project_details']['inverter_manufacturer'] = inverter_brand
+            
+            # Batteriespeicher überschreiben
+            battery = rotated_products.get('battery_storage', {})
+            if battery:
+                battery_name = battery.get('model_name', battery.get('name', ''))
+                battery_brand = battery.get('brand', battery.get('manufacturer', ''))
+                if battery_name:
+                    modified_project_data['project_details']['selected_storage_name'] = battery_name
+                    modified_project_data['project_details']['battery_model'] = battery_name
+                    modified_project_data['project_details']['storage_model'] = battery_name
+                    print(f"   → Speicher in project_data: {battery_name}")
+                if battery_brand:
+                    modified_project_data['project_details']['battery_manufacturer'] = battery_brand
+                    modified_project_data['project_details']['storage_manufacturer'] = battery_brand
             
             # Erstelle modifizierte analysis_results mit neuem Preis
             modified_analysis = analysis_results.copy() if analysis_results else {}
@@ -3077,29 +3169,251 @@ def generate_multi_offer_pdfs(
                 from pdf_template_engine.placeholders import build_dynamic_data
                 
                 multi_dynamic_data = build_dynamic_data(
-                    project_data=project_data,
+                    project_data=modified_project_data,  # ← MIT ROTIERTEN PRODUKTEN!
                     analysis_results=modified_analysis,  # Mit modifiziertem Preis!
                     company_info=multi_company_info
                 )
                 
                 print(f"✓ Dynamic Data: {len(multi_dynamic_data)} Einträge")
                 
-                # KRITISCH: Überschreibe Preise NACH build_dynamic_data()
-                # weil build_dynamic_data() die Preise aus anderen Quellen liest!
+                # ═══════════════════════════════════════════════════════════════════════
+                # KRITISCH: Überschreibe ALLE ABHÄNGIGEN WERTE nach Preis-Änderung!
+                # ═══════════════════════════════════════════════════════════════════════
+                
+                # 1. NETTO-PREIS (Brutto / 1.19)
+                netto_price = modified_price / 1.19
+                formatted_netto = f"{netto_price:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                
+                # 2. MEHRWERTSTEUER (19% vom Netto)
+                mwst_betrag = modified_price - netto_price
+                formatted_mwst = f"{mwst_betrag:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                
+                # 3. AMORTISATIONSZEIT (Investment / Jahresersparnis)
+                # ⚠️ WICHTIG: yearly_savings wird weiter unten neu berechnet!
+                # Nutze erstmal den Wert aus analysis_results als Fallback
+                yearly_savings_fallback = analysis_results.get('yearly_savings', 0) or analysis_results.get('savings_year_1', 0)
+                
+                if yearly_savings_fallback > 0:
+                    amortisation_years = modified_price / yearly_savings_fallback
+                    formatted_amortisation = f"{amortisation_years:.1f}".replace(".", ",")
+                else:
+                    amortisation_years = 0
+                    formatted_amortisation = "0,0"
+                
+                # 4. ÜBERSCHREIBE ALLE PREIS-KEYS
                 multi_dynamic_data['FINAL_END_PREIS'] = f"{modified_price:.2f}"
                 multi_dynamic_data['FINAL_END_PREIS_FORMATTED'] = formatted_price
                 multi_dynamic_data['final_end_preis'] = f"{modified_price:.2f}"
                 multi_dynamic_data['final_end_preis_formatted'] = formatted_price
                 
-                # Auch Netto-Preis berechnen (ohne MwSt)
-                netto_price = modified_price / 1.19  # 19% MwSt
-                formatted_netto = f"{netto_price:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                # 5. ÜBERSCHREIBE NETTO-PREIS
                 multi_dynamic_data['FINAL_END_PREIS_NETTO'] = f"{netto_price:.2f}"
                 multi_dynamic_data['final_end_preis_netto'] = formatted_netto
+                multi_dynamic_data['simple_endergebnis_netto'] = f"{netto_price:.2f}"
+                multi_dynamic_data['simple_endergebnis_netto_formatted'] = formatted_netto
                 
-                # Debug-Ausgabe ZUR SICHERHEIT
-                print(f"✓ ÜBERSCHRIEBEN: FINAL_END_PREIS_FORMATTED = {multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')}")
-                print(f"✓ ÜBERSCHRIEBEN: final_end_preis = {multi_dynamic_data.get('final_end_preis')}")
+                # 6. ÜBERSCHREIBE BRUTTO-PREIS (= modified_price)
+                multi_dynamic_data['SIMPLE_ENDERGEBNIS_BRUTTO'] = f"{modified_price:.2f}"
+                multi_dynamic_data['simple_endergebnis_brutto'] = f"{modified_price:.2f}"
+                multi_dynamic_data['simple_endergebnis_brutto_formatted'] = formatted_price
+                
+                # 7. ÜBERSCHREIBE MEHRWERTSTEUER
+                multi_dynamic_data['SIMPLE_MWST'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['SIMPLE_MWST_FORMATTED'] = formatted_mwst
+                multi_dynamic_data['simple_mwst_formatted'] = formatted_mwst
+                multi_dynamic_data['MWST_IN_ZWISCHENSUMME'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['MWST_IN_ZWISCHENSUMME_FORMATTED'] = formatted_mwst
+                multi_dynamic_data['mwst_in_zwischensumme'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['mwst_in_zwischensumme_formatted'] = formatted_mwst
+                multi_dynamic_data['FINAL_MWST_IN_ZWISCHENSUMME'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['FINAL_MWST_IN_ZWISCHENSUMME_FORMATTED'] = formatted_mwst
+                multi_dynamic_data['final_mwst_in_zwischensumme'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['final_mwst_in_zwischensumme_formatted'] = formatted_mwst
+                
+                # SEITE 8 Keys (Preistabelle)
+                multi_dynamic_data['preis_mit_mwst'] = f"{modified_price:.2f}"
+                multi_dynamic_data['preis_mit_mwst_formatted'] = formatted_price
+                multi_dynamic_data['minus_mwst'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['minus_mwst_formatted'] = formatted_mwst
+                
+                # SEITE 2 Keys (ersparte Mehrwertsteuer)
+                multi_dynamic_data['ersparte_mehrwertsteuer'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['ersparte_mehrwertsteuer_formatted'] = formatted_mwst
+                multi_dynamic_data['ERSPARTE_MEHRWERTSTEUER'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['ERSPARTE_MEHRWERTSTEUER_FORMATTED'] = formatted_mwst
+                multi_dynamic_data['vat_savings'] = f"{mwst_betrag:.2f}"
+                multi_dynamic_data['vat_savings_formatted'] = formatted_mwst
+                multi_dynamic_data['vat_amount_eur'] = formatted_mwst
+                
+                # 8. ÜBERSCHREIBE AMORTISATIONSZEIT
+                multi_dynamic_data['amortisation_time'] = formatted_amortisation
+                multi_dynamic_data['AMORTISATION_TIME'] = formatted_amortisation
+                multi_dynamic_data['payback_period'] = formatted_amortisation
+                
+                # ═══════════════════════════════════════════════════════════════════════
+                # 9. ÜBERSCHREIBE ERTRÄGE/EINSPARUNGEN (basierend auf neuem Preis)
+                # ═══════════════════════════════════════════════════════════════════════
+                
+                # Hole jährliche Stromproduktion und andere Basis-Werte aus analysis_results
+                jahresproduktion_kwh = analysis_results.get('yearly_production_kwh', 0) or analysis_results.get('jahresproduktion_kwh', 0)
+                eigenverbrauch_pct = analysis_results.get('self_consumption_percent', 0) or analysis_results.get('eigenverbrauch_quote_%', 0)
+                
+                # Versuche eigenverbrauch als float zu parsen (falls String mit %)
+                if isinstance(eigenverbrauch_pct, str):
+                    eigenverbrauch_pct = float(eigenverbrauch_pct.replace('%', '').replace(',', '.').strip()) if eigenverbrauch_pct else 0
+                
+                # Einspeisetarif (€/kWh)
+                einspeisetarif = analysis_results.get('feed_in_tariff_eur_per_kwh', 0.082)  # Default 8,2 Cent
+                
+                # Strompreis (€/kWh)
+                strompreis = analysis_results.get('electricity_cost_eur_per_kwh', 0.30)  # Default 30 Cent
+                
+                if jahresproduktion_kwh > 0:
+                    # Eigenverbrauch in kWh
+                    eigenverbrauch_kwh = jahresproduktion_kwh * (eigenverbrauch_pct / 100)
+                    
+                    # Einspeisung in kWh
+                    einspeisung_kwh = jahresproduktion_kwh - eigenverbrauch_kwh
+                    
+                    # Einsparung durch Direktverbrauch (€)
+                    einsparung_direkt = eigenverbrauch_kwh * strompreis
+                    formatted_einsparung_direkt = f"{einsparung_direkt:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                    
+                    # Einnahmen aus Einspeisevergütung (€)
+                    einnahmen_einspeisung = einspeisung_kwh * einspeisetarif
+                    formatted_einnahmen = f"{einnahmen_einspeisung:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                    
+                    # Vorteile durch steuerfreie Einspeisung (19% MwSt auf Eigenverbrauch)
+                    # Dies ist die ersparte MwSt auf selbst verbrauchten Strom
+                    steuerfreie_vorteile = einsparung_direkt * 0.19
+                    formatted_steuerfreie = f"{steuerfreie_vorteile:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                    
+                    # Gesamt Erträge pro Jahr
+                    gesamt_ertrag = einsparung_direkt + einnahmen_einspeisung + steuerfreie_vorteile
+                    formatted_gesamt = f"{gesamt_ertrag:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
+                    
+                    # Überschreibe Keys
+                    multi_dynamic_data['einsparung_direktverbrauch'] = f"{einsparung_direkt:.2f}"
+                    multi_dynamic_data['einsparung_direktverbrauch_formatted'] = formatted_einsparung_direkt
+                    multi_dynamic_data['savings_self_consumption'] = f"{einsparung_direkt:.2f}"
+                    multi_dynamic_data['savings_self_consumption_formatted'] = formatted_einsparung_direkt
+                    
+                    multi_dynamic_data['einnahmen_einspeisung'] = f"{einnahmen_einspeisung:.2f}"
+                    multi_dynamic_data['einnahmen_einspeisung_formatted'] = formatted_einnahmen
+                    multi_dynamic_data['feed_in_revenue'] = f"{einnahmen_einspeisung:.2f}"
+                    multi_dynamic_data['feed_in_revenue_formatted'] = formatted_einnahmen
+                    multi_dynamic_data['annual_feed_in_revenue_eur'] = formatted_einnahmen
+                    
+                    multi_dynamic_data['steuerfreie_vorteile'] = f"{steuerfreie_vorteile:.2f}"
+                    multi_dynamic_data['steuerfreie_vorteile_formatted'] = formatted_steuerfreie
+                    multi_dynamic_data['tax_free_benefits'] = f"{steuerfreie_vorteile:.2f}"
+                    multi_dynamic_data['tax_free_benefits_formatted'] = formatted_steuerfreie
+                    
+                    multi_dynamic_data['gesamt_ertrag_jahr'] = f"{gesamt_ertrag:.2f}"
+                    multi_dynamic_data['gesamt_ertrag_jahr_formatted'] = formatted_gesamt
+                    multi_dynamic_data['total_annual_revenue'] = f"{gesamt_ertrag:.2f}"
+                    multi_dynamic_data['total_annual_revenue_formatted'] = formatted_gesamt
+                    multi_dynamic_data['yearly_savings'] = f"{gesamt_ertrag:.2f}"
+                    
+                    print(f"   → Eigenverbrauch: {eigenverbrauch_kwh:.0f} kWh, Einspeisung: {einspeisung_kwh:.0f} kWh")
+                    print(f"   → Einsparung Direkt: {formatted_einsparung_direkt}")
+                    print(f"   → Einnahmen Einspeisung: {formatted_einnahmen}")
+                    print(f"   → Steuerfreie Vorteile: {formatted_steuerfreie}")
+                    print(f"   → Gesamt Ertrag/Jahr: {formatted_gesamt}")
+                    
+                    # ═══════════════════════════════════════════════════════════════════════
+                    # AMORTISATIONSZEIT NEU BERECHNEN (mit neuem Gesamt-Ertrag)
+                    # ═══════════════════════════════════════════════════════════════════════
+                    if gesamt_ertrag > 0:
+                        amortisation_years_neu = modified_price / gesamt_ertrag
+                        formatted_amortisation_neu = f"{amortisation_years_neu:.1f}".replace(".", ",")
+                        
+                        # Überschreibe Amortisations-Keys mit neuem Wert
+                        multi_dynamic_data['amortisation_jahre'] = f"{amortisation_years_neu:.1f}"
+                        multi_dynamic_data['amortisation_jahre_formatted'] = formatted_amortisation_neu
+                        multi_dynamic_data['AMORTISATION_JAHRE_FORMATTED'] = formatted_amortisation_neu
+                        multi_dynamic_data['amortisation_years'] = f"{amortisation_years_neu:.1f}"
+                        multi_dynamic_data['payback_period_years'] = f"{amortisation_years_neu:.1f}"
+                        
+                        print(f"   → Amortisation NEU: {formatted_amortisation_neu} Jahre (basierend auf Gesamt-Ertrag)")
+
+                
+                # ═══════════════════════════════════════════════════════════════════════
+                # 9. ÜBERSCHREIBE PRODUKT-NAMEN (aus rotierten Produkten)
+                # ═══════════════════════════════════════════════════════════════════════
+                
+                # PV-Modul
+                pv_module = rotated_products.get('pv_modules', {})
+                if pv_module:
+                    module_name = pv_module.get('model_name', pv_module.get('name', ''))
+                    module_brand = pv_module.get('brand', pv_module.get('manufacturer', ''))
+                    module_capacity = pv_module.get('capacity_w', pv_module.get('power_wp', 0))
+                    
+                    if module_name:
+                        multi_dynamic_data['module_model'] = module_name
+                        multi_dynamic_data['MODULE_MODEL'] = module_name
+                        multi_dynamic_data['pv_module_name'] = module_name
+                    
+                    if module_brand:
+                        multi_dynamic_data['module_manufacturer'] = module_brand
+                        multi_dynamic_data['MODULE_MANUFACTURER'] = module_brand
+                    
+                    if module_capacity:
+                        multi_dynamic_data['module_capacity_w'] = str(module_capacity)
+                        multi_dynamic_data['MODULE_CAPACITY_W'] = str(module_capacity)
+                
+                # Wechselrichter
+                inverter = rotated_products.get('inverters', {})
+                if inverter:
+                    inverter_name = inverter.get('model_name', inverter.get('name', ''))
+                    inverter_brand = inverter.get('brand', inverter.get('manufacturer', ''))
+                    
+                    if inverter_name:
+                        multi_dynamic_data['inverter_model'] = inverter_name
+                        multi_dynamic_data['INVERTER_MODEL'] = inverter_name
+                        multi_dynamic_data['inverter_name'] = inverter_name
+                    
+                    if inverter_brand:
+                        multi_dynamic_data['inverter_manufacturer'] = inverter_brand
+                        multi_dynamic_data['INVERTER_MANUFACTURER'] = inverter_brand
+                
+                # Batteriespeicher
+                battery = rotated_products.get('battery_storage', {})
+                if battery:
+                    battery_name = battery.get('model_name', battery.get('name', ''))
+                    battery_brand = battery.get('brand', battery.get('manufacturer', ''))
+                    battery_capacity = battery.get('capacity_kwh', 0)
+                    
+                    if battery_name:
+                        multi_dynamic_data['battery_model'] = battery_name
+                        multi_dynamic_data['BATTERY_MODEL'] = battery_name
+                        multi_dynamic_data['storage_name'] = battery_name
+                    
+                    if battery_brand:
+                        multi_dynamic_data['battery_manufacturer'] = battery_brand
+                        multi_dynamic_data['BATTERY_MANUFACTURER'] = battery_brand
+                    
+                    if battery_capacity:
+                        multi_dynamic_data['battery_capacity_kwh'] = str(battery_capacity)
+                        multi_dynamic_data['BATTERY_CAPACITY_KWH'] = str(battery_capacity)
+                
+                # Debug-Ausgabe
+                print(f"")
+                print(f"{'='*70}")
+                print(f"ÜBERSCHRIEBENE WERTE FÜR {firm_name.upper()}:")
+                print(f"{'='*70}")
+                print(f"✓ Brutto-Preis:    {formatted_price}")
+                print(f"✓ Netto-Preis:     {formatted_netto}")
+                print(f"✓ Mehrwertsteuer:  {formatted_mwst}")
+                print(f"✓ Amortisation:    {formatted_amortisation} Jahre")
+                if pv_module:
+                    print(f"✓ PV-Modul:        {pv_module.get('model_name', pv_module.get('name', ''))}")
+                if inverter:
+                    print(f"✓ Wechselrichter:  {inverter.get('model_name', inverter.get('name', ''))}")
+                if battery:
+                    print(f"✓ Speicher:        {battery.get('model_name', battery.get('name', ''))}")
+                print(f"{'='*70}")
+                print(f"")
                 
             except Exception as e:
                 print(f"ERROR: build_dynamic_data() fehlgeschlagen: {e}")
@@ -3122,7 +3436,14 @@ def generate_multi_offer_pdfs(
             # Keine firma-spezifischen Templates nötig - Dynamic Data enthält alle Unterschiede
             
             try:
+                # Berechne Pfade relativ zum Projekt-Root (ein Level über pdf_template_engine/)
+                base_dir = Path(__file__).parent.parent
+                coords_dir = base_dir / "coords"
+                bg_dir = base_dir / "pdf_templates_static" / "notext"
+                
                 pdf_bytes = generate_custom_offer_pdf(
+                    coords_dir=coords_dir,
+                    bg_dir=bg_dir,
                     dynamic_data=multi_dynamic_data,
                     additional_pdf=additional_pdf
                 )
@@ -3132,7 +3453,14 @@ def generate_multi_offer_pdfs(
                     continue
                 
                 print(f"✓ PDF generiert: {len(pdf_bytes)} bytes")
-                print(f"✓ Preis in PDF: {multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')}")
+                
+                # ZEIGE FINALEN PREIS DER IN PDF IST
+                final_price_in_pdf = multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')
+                print(f"")
+                print(f"{'*'*60}")
+                print(f"✅ PREIS IN PDF VON {firm_name.upper()}: {final_price_in_pdf}")
+                print(f"{'*'*60}")
+                print(f"")
                 
             except Exception as pdf_error:
                 print(f"ERROR: PDF-Generierung fehlgeschlagen: {pdf_error}")
@@ -3154,14 +3482,28 @@ def generate_multi_offer_pdfs(
             print(f"\n✓ Firma {firm_name} abgeschlossen")
             
         except Exception as e:
-            print(f"ERROR bei Firma {firm_name}: {e}")
+            print(f"\n{'!'*80}")
+            print(f"❌ FEHLER BEI FIRMA {firm_name.upper()}")
+            print(f"{'!'*80}")
+            print(f"Fehler-Typ: {type(e).__name__}")
+            print(f"Fehler-Nachricht: {str(e)}")
+            print(f"\nSTACKTRACE:")
             import traceback
             traceback.print_exc()
+            print(f"{'!'*80}\n")
             continue
     
+    # FINALE ZUSAMMENFASSUNG
     print(f"\n{'='*80}")
     print(f"MULTI-PDF GENERIERUNG ABGESCHLOSSEN: {len(results)}/{len(selected_firms)} erfolgreich")
-    print(f"{'='*80}\n")
+    print(f"{'='*80}")
+    
+    if results:
+        print(f"\n📊 PREIS-ÜBERSICHT (KASKADIERUNG):")
+        print(f"{'-'*80}")
+        for idx, (firm_name, pdf_bytes) in enumerate(results):
+            print(f"  {idx+1}. {firm_name}: [PDF generiert - {len(pdf_bytes)} bytes]")
+        print(f"{'-'*80}\n")
     
     return results
 

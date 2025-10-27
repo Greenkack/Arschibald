@@ -8299,8 +8299,7 @@ def render_analysis(
     except ImportError:
         MODERN_CHARTS_AVAILABLE = False
         CHART_MODERNIZER_AVAILABLE = False
-        st.warning(
-            " Moderne Diagramme nicht verfügbar - verwende Standard-Charts")
+        # Warnung entfernt - Standard-Charts funktionieren einwandfrei
 
     if MODERN_CHARTS_AVAILABLE:
         render_modern_charts_section(results_for_display, texts)

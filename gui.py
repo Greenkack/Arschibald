@@ -2239,15 +2239,27 @@ def main():
 
         # Multi-Angebote Tab wieder aktiviert
         with tab_multi_offers:
-            st.markdown("### 📦 Multi-Firmen-Angebotsgenerator")
+            st.markdown("### 📦 Multi-Firmen-Angebotsgenerator (KASKADIEREND) v2.0")
             
-            # Voraussetzungen Info-Box
+            # Cache-Buster: Timestamp hinzugefügt
+            from datetime import datetime
+            st.markdown(f"<small>Zuletzt aktualisiert: {datetime.now().strftime('%H:%M:%S')}</small>", unsafe_allow_html=True)
+            
+            # WICHTIG: Kaskadierende Preisberechnung Info
             st.info(
-                "**💡 Multi-Firmen-Angebote: Voraussetzungen**\n\n"
-                "Für die Generierung von Angeboten für mehrere Firmen benötigen Sie:\n\n"
-                "1️⃣ **Mehrere Firmen** konfiguriert im Admin-Panel → Firmenverwaltung\n\n"
-                "2️⃣ **Vollständige Projektanalyse** durchgeführt (PV-Konfiguration, Verbrauch, etc.)\n\n"
-                "3️⃣ **Produktauswahl** abgeschlossen (PV-Module, Wechselrichter, Batteriespeicher)\n\n"
+                "**💡 Multi-Firmen-Angebote: KASKADIERENDE Preisberechnung**\n\n"
+                "**Wichtig:** Die Preise werden KASKADIEREND berechnet!\n\n"
+                "🔹 Firma 1: Haupt-PDF Preis + Basis-Aufschlag %\n\n"
+                "🔹 Firma 2: Preis von Firma 1 + Progression %\n\n"
+                "🔹 Firma 3: Preis von Firma 2 + Progression %\n\n"
+                "➡️ Beispiel: Basis 100.000 €, +5%, +5%\n"
+                "   • Firma 1: 105.000 €\n"
+                "   • Firma 2: 110.250 € (NICHT 110.000!)\n"
+                "   • Firma 3: 115.762,50 € (NICHT 115.000!)\n\n"
+                "**Voraussetzungen:**\n\n"
+                "1️⃣ **Mehrere Firmen** konfiguriert im Admin-Panel\n\n"
+                "2️⃣ **Vollständige Projektanalyse** durchgeführt\n\n"
+                "3️⃣ **Produktauswahl** abgeschlossen\n\n"
                 "👉 Für **Einzel-Firmen-PDFs** nutzen Sie den Tab '📄 PDF-Ausgabe' oben."
             )
             
@@ -2263,10 +2275,20 @@ def main():
                     else:
                         # === FIRMEN-AUSWAHL ===
                         st.markdown("### 🏢 Firmen-Auswahl")
-                        st.markdown(f"**Verfügbare Firmen:** {len(all_firms)}")
                         
+                        # ERST firm_options definieren (wird im Button gebraucht!)
                         firm_options = {f"{firm.get('name', 'Unbekannt')} ({firm.get('location', 'Kein Ort')})": firm 
                                        for firm in all_firms}
+                        
+                        col_select, col_button = st.columns([3, 1])
+                        
+                        with col_select:
+                            st.markdown(f"**Verfügbare Firmen:** {len(all_firms)}")
+                        
+                        with col_button:
+                            if st.button("✅ Alle auswählen", key="select_all_firms_multi"):
+                                st.session_state.multi_pdf_selected_firms = list(firm_options.keys())
+                                st.rerun()
                         
                         selected_firm_names = st.multiselect(
                             "Firmen auswählen",
@@ -2486,9 +2508,36 @@ def main():
                             # Hole Session State Daten
                             project_data = st.session_state.get('project_data', {})
                             analysis_results = st.session_state.get('analysis_results', {})
-                            pv_module = st.session_state.get('selected_pv_module')
-                            inverter = st.session_state.get('selected_inverter')
-                            battery = st.session_state.get('selected_battery')
+                            
+                            # ✅ PRODUKTE aus project_data holen (RICHTIGE Feldnamen!)
+                            pv_module_id = project_data.get('project_details', {}).get('selected_module_id')
+                            inverter_id = project_data.get('project_details', {}).get('selected_inverter_id')
+                            battery_id = project_data.get('project_details', {}).get('selected_storage_id')
+                            
+                            # Lade Produkte aus Datenbank
+                            pv_module = None
+                            inverter = None
+                            battery = None
+                            
+                            if product_db_module and callable(getattr(product_db_module, 'get_product_by_id', None)):
+                                try:
+                                    if pv_module_id:
+                                        pv_module = product_db_module.get_product_by_id(pv_module_id)
+                                    if inverter_id:
+                                        inverter = product_db_module.get_product_by_id(inverter_id)
+                                    if battery_id:
+                                        battery = product_db_module.get_product_by_id(battery_id)
+                                except Exception as e:
+                                    st.error(f"❌ Fehler beim Laden der Produkte: {e}")
+                            
+                            # ⚠️ VALIDIERUNG: Produkte müssen ausgewählt sein!
+                            if not pv_module:
+                                st.error("❌ **FEHLER:** Kein PV-Modul ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie ein PV-Modul aus.")
+                                st.stop()
+                            
+                            if not inverter:
+                                st.error("❌ **FEHLER:** Kein Wechselrichter ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie einen Wechselrichter aus.")
+                                st.stop()
                             
                             # Sammle alle Optionen
                             pdf_options = {
@@ -2533,6 +2582,7 @@ def main():
                                         # Generiere Multi-PDFs
                                         from pdf_template_engine.dynamic_overlay import generate_multi_offer_pdfs
                                         import zipfile
+                                        import io
                                         from datetime import datetime
                                         
                                         results = generate_multi_offer_pdfs(
@@ -2550,6 +2600,11 @@ def main():
                                         
                                         if not results:
                                             st.error("❌ Keine PDFs konnten generiert werden!")
+                                            st.warning("⚠️ **BITTE KONSOLE PRÜFEN!** Dort stehen die Fehlerdetails.")
+                                            st.info("💡 Häufige Ursachen:\n"
+                                                   "- Produkte können nicht aus DB geladen werden\n"
+                                                   "- Produkt-Rotation schlägt fehl (keine Alternativen gefunden)\n"
+                                                   "- Preis-Berechnung schlägt fehl")
                                         else:
                                             st.success(f"✅ {len(results)} PDF(s) erfolgreich generiert!")
                                             

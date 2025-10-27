@@ -36,55 +36,107 @@ def load_all_products() -> Dict[str, List[dict]]:
         'battery_storage': []
     }
     
+    # 1. PRIMÄR: Lade aus Produktdatenbank-Modul
+    try:
+        import product_db  # ← RICHTIGER Modulname!
+        logger.info(f"✅ product_db Modul importiert")
+        
+        if hasattr(product_db, 'list_products'):
+            logger.info(f"✅ list_products() Funktion gefunden")
+            
+            if callable(product_db.list_products):
+                logger.info(f"🔍 Rufe list_products() für alle Kategorien auf...")
+                
+                # ⚠️ WICHTIG: Die Datenbank nutzt DEUTSCHE Kategorienamen!
+                # list_products(category) gibt Liste für EINE Kategorie zurück!
+                pv_modules_raw = product_db.list_products(category='Modul') or []
+                inverters_raw = product_db.list_products(category='Wechselrichter') or []
+                battery_raw = product_db.list_products(category='Batteriespeicher') or []
+                
+                # Konvertiere zu einheitlichem Format (mit brand, model, etc.)
+                products['pv_modules'] = [
+                    {
+                        'brand': p.get('manufacturer', p.get('brand', '')),
+                        'model': p.get('model_name', p.get('name', '')),
+                        'model_name': p.get('model_name', p.get('name', '')),
+                        'name': p.get('name', p.get('model_name', '')),
+                        'manufacturer': p.get('manufacturer', p.get('brand', '')),
+                        'power_w': p.get('power_wp', p.get('capacity_w', 0)),
+                        'capacity_w': p.get('capacity_w', p.get('power_wp', 0)),
+                        'power_wp': p.get('power_wp', p.get('capacity_w', 0)),
+                        'id': p.get('id'),
+                        'price': p.get('price', 0)
+                    }
+                    for p in pv_modules_raw
+                ]
+                
+                products['inverters'] = [
+                    {
+                        'brand': p.get('manufacturer', p.get('brand', '')),
+                        'model': p.get('model_name', p.get('name', '')),
+                        'model_name': p.get('model_name', p.get('name', '')),
+                        'name': p.get('name', p.get('model_name', '')),
+                        'manufacturer': p.get('manufacturer', p.get('brand', '')),
+                        'power_kw': p.get('power_kw', 0),
+                        'id': p.get('id'),
+                        'price': p.get('price', 0)
+                    }
+                    for p in inverters_raw
+                ]
+                
+                products['battery_storage'] = [
+                    {
+                        'brand': p.get('manufacturer', p.get('brand', '')),
+                        'model': p.get('model_name', p.get('name', '')),
+                        'model_name': p.get('model_name', p.get('name', '')),
+                        'name': p.get('name', p.get('model_name', '')),
+                        'manufacturer': p.get('manufacturer', p.get('brand', '')),
+                        'capacity_kwh': p.get('capacity_kwh', 0),
+                        'id': p.get('id'),
+                        'price': p.get('price', 0)
+                    }
+                    for p in battery_raw
+                ]
+                
+                total = sum(len(p) for p in products.values())
+                if total > 0:
+                    logger.info(f"✅ Produkte aus Datenbank geladen: {total} gesamt (PV={len(products['pv_modules'])}, INV={len(products['inverters'])}, BAT={len(products['battery_storage'])})")
+                    return products
+                else:
+                    logger.warning("⚠️ Produktdatenbank ist LEER!")
+            else:
+                logger.warning("⚠️ list_products ist NICHT callable")
+        else:
+            logger.warning("⚠️ list_products() Funktion NICHT gefunden in product_db")
+    except Exception as e:
+        logger.error(f"❌ Produktdatenbank konnte nicht geladen werden: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+    
+    # 2. FALLBACK: Session State
     try:
         # Versuche aus Session State zu laden (wenn in Streamlit)
         import streamlit as st
         
         if hasattr(st, 'session_state'):
+            # DEBUG: Zeige Session State Keys
+            logger.info(f"Session State Keys verfügbar: {list(st.session_state.keys())}")
+            
             # Lade aus Session State Product Lists
             products['pv_modules'] = st.session_state.get('pv_modules_list', [])
             products['inverters'] = st.session_state.get('inverters_list', [])
             products['battery_storage'] = st.session_state.get('battery_storage_list', [])
             
+            logger.info(f"Geladene Produkte: PV={len(products['pv_modules'])}, INV={len(products['inverters'])}, BAT={len(products['battery_storage'])}")
+            
             if any(products.values()):
                 logger.info(f"Produkte aus Session State geladen: {sum(len(p) for p in products.values())} gesamt")
                 return products
+            else:
+                logger.warning("Session State hat KEINE Produkte in pv_modules_list/inverters_list/battery_storage_list!")
+                return products
     except Exception as e:
         logger.debug(f"Session State nicht verfügbar: {e}")
-    
-    # Fallback: Versuche aus Datenbank zu laden
-    try:
-        from database import load_admin_setting
-        
-        # Produkte sind in Admin Settings gespeichert
-        products['pv_modules'] = load_admin_setting('pv_modules_list', [])
-        products['inverters'] = load_admin_setting('inverters_list', [])
-        products['battery_storage'] = load_admin_setting('battery_storage_list', [])
-        
-        logger.info(f"Produkte aus Admin Settings geladen: {sum(len(p) for p in products.values())} gesamt")
-        
-    except Exception as e:
-        logger.warning(f"Produkte konnten nicht aus Datenbank geladen werden: {e}")
-        
-        # Fallback: Mock-Daten für Testing
-        products = {
-            'pv_modules': [
-                {'brand': 'Viessmann', 'model': 'VM450', 'power_w': 450, 'price': 120},
-                {'brand': 'TrinaSolar', 'model': 'TS445', 'power_w': 445, 'price': 115},
-                {'brand': 'AikoSolar', 'model': 'AS450', 'power_w': 450, 'price': 118},
-            ],
-            'inverters': [
-                {'brand': 'Huawei', 'model': 'HW10K', 'power_kw': 10, 'price': 2500},
-                {'brand': 'GoodWe', 'model': 'GW10K', 'power_kw': 10, 'price': 2400},
-                {'brand': 'Fronius', 'model': 'FR10K', 'power_kw': 10, 'price': 2800},
-            ],
-            'battery_storage': [
-                {'brand': 'Huawei', 'model': 'HW7K', 'capacity_kwh': 7, 'price': 5000},
-                {'brand': 'GoodWe', 'model': 'GW6.6K', 'capacity_kwh': 6.6, 'price': 4800},
-                {'brand': 'Viessmann', 'model': 'VM5K', 'capacity_kwh': 5, 'price': 4500},
-            ]
-        }
-        logger.warning("Verwende Mock-Daten für Produkte")
     
     return products
 
@@ -109,7 +161,8 @@ def get_available_brands(category: str, exclude_brands: Set[str] = None) -> List
     Returns:
         Liste von Marken-Namen
     """
-    from database import load_all_products
+    # load_all_products() ist bereits in DIESEM Modul definiert (Zeile 22)!
+    # KEIN Import notwendig!
     
     exclude_brands = exclude_brands or set()
     
@@ -151,7 +204,7 @@ def get_product_by_specs(
     Returns:
         Produkt-Dict oder None
     """
-    from database import load_all_products
+    # load_all_products() ist bereits in DIESEM Modul definiert!
     
     used_models = used_models or set()
     
@@ -273,23 +326,32 @@ def rotate_products(
     # PV Module Specs
     if 'pv_modules' in standard_products:
         pv = standard_products['pv_modules']
-        power_w = pv.get('power_w') or pv.get('Leistung_W')
-        specs['pv_modules'] = ProductSpecs(power_w=power_w)
-        logger.info(f"PV Module Ziel-Specs: {power_w}W")
+        if pv is not None:  # ⬅️ ABSICHERUNG gegen None!
+            power_w = pv.get('power_w') or pv.get('Leistung_W')
+            specs['pv_modules'] = ProductSpecs(power_w=power_w)
+            logger.info(f"PV Module Ziel-Specs: {power_w}W")
+        else:
+            logger.warning("PV Module ist None - wird nicht rotiert")
     
     # Wechselrichter Specs
     if 'inverters' in standard_products:
         inv = standard_products['inverters']
-        power_kw = inv.get('power_kw') or inv.get('Leistung_kW')
-        specs['inverters'] = ProductSpecs(power_kw=power_kw)
-        logger.info(f"Wechselrichter Ziel-Specs: {power_kw}kW")
+        if inv is not None:  # ⬅️ ABSICHERUNG gegen None!
+            power_kw = inv.get('power_kw') or inv.get('Leistung_kW')
+            specs['inverters'] = ProductSpecs(power_kw=power_kw)
+            logger.info(f"Wechselrichter Ziel-Specs: {power_kw}kW")
+        else:
+            logger.warning("Wechselrichter ist None - wird nicht rotiert")
     
     # Batteriespeicher Specs
     if 'battery_storage' in standard_products:
         bat = standard_products['battery_storage']
-        capacity_kwh = bat.get('capacity_kwh') or bat.get('Kapazität_kWh')
-        specs['battery_storage'] = ProductSpecs(capacity_kwh=capacity_kwh)
-        logger.info(f"Batteriespeicher Ziel-Specs: {capacity_kwh}kWh")
+        if bat is not None:  # ⬅️ ABSICHERUNG gegen None!
+            capacity_kwh = bat.get('capacity_kwh') or bat.get('Kapazität_kWh')
+            specs['battery_storage'] = ProductSpecs(capacity_kwh=capacity_kwh)
+            logger.info(f"Batteriespeicher Ziel-Specs: {capacity_kwh}kWh")
+        else:
+            logger.warning("Batteriespeicher ist None - wird nicht rotiert")
     
     # Schritt 1: Versuche gemeinsame Marke für WR + Speicher zu finden
     inverter_brand = None
