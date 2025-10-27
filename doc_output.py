@@ -2234,7 +2234,7 @@ def render_pdf_ui(
     # ============================================================================
     # MULTI-PDF ANGEBOTSERSTELLUNG
     # ============================================================================
-    with st.expander("🏢 MULTI-PDF ANGEBOTSERSTELLUNG", expanded=False):
+    with st.expander("🏢 MULTI-PDF ANGEBOTSERSTELLUNG", expanded=True):
         st.markdown("### 📦 Multi-Firmen-Angebotsgenerator")
         
         # Voraussetzungen Info-Box
