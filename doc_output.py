@@ -2235,12 +2235,29 @@ def render_pdf_ui(
     # MULTI-PDF ANGEBOTSERSTELLUNG
     # ============================================================================
     with st.expander("🏢 MULTI-PDF ANGEBOTSERSTELLUNG", expanded=False):
-        st.markdown("### 📦 Mehrere Angebote gleichzeitig erstellen")
+        st.markdown("### 📦 Multi-Firmen-Angebotsgenerator")
+        
+        # Voraussetzungen Info-Box
         st.info(
-            "Erstellen Sie automatisch mehrere Angebote für verschiedene Firmen. "
-            "Jede Firma erhält andere Produkt-Marken mit gleichen Spezifikationen, "
-            "aber angepassten Preisen."
+            "**💡 Multi-Firmen-Angebote: Voraussetzungen**\n\n"
+            "Für die Generierung von Angeboten für mehrere Firmen benötigen Sie:\n\n"
+            "1️⃣ **Mehrere Firmen** konfiguriert im Admin-Panel → Firmenverwaltung\n\n"
+            "2️⃣ **Vollständige Projektanalyse** durchgeführt (PV-Konfiguration, Verbrauch, etc.)\n\n"
+            "3️⃣ **Produktauswahl** abgeschlossen (PV-Module, Wechselrichter, Batteriespeicher)\n\n"
+            "👉 Für **Einzel-Firmen-PDFs** nutzen Sie den Tab '📄 PDF-Ausgabe' oben."
         )
+        
+        st.markdown("---")
+        
+        st.markdown("### 🎯 Funktionsweise")
+        st.markdown(
+            "- **Automatische Marken-Rotation**: Jede Firma erhält andere Produkt-Marken\n"
+            "- **Gleiche Spezifikationen**: Alle Angebote haben vergleichbare Leistung\n"
+            "- **Progressive Preise**: Standard-Angebot bleibt am günstigsten\n"
+            "- **Individuelle Templates**: Jedes Angebot sieht einzigartig aus"
+        )
+        
+        st.markdown("---")
         
         # Firmen aus Datenbank laden
         try:
@@ -2359,86 +2376,138 @@ def render_pdf_ui(
                     # PDF-Generierung
                     st.markdown("### 🎯 PDF-Generierung starten")
                     
+                    # Voraussetzungs-Prüfung
+                    prerequisites_met = True
+                    prerequisites_status = []
+                    
+                    # Prüfe Project Data
+                    project_data = st.session_state.get('project_data', {})
+                    if project_data and project_data.get('customer_name'):
+                        prerequisites_status.append("✅ Projektdaten vorhanden")
+                    else:
+                        prerequisites_status.append("❌ Projektdaten fehlen (Kundendaten)")
+                        prerequisites_met = False
+                    
+                    # Prüfe Analysis Results
+                    analysis_results = st.session_state.get('analysis_results', {})
+                    if analysis_results and analysis_results.get('annual_yield_kwh'):
+                        prerequisites_status.append("✅ Projektanalyse durchgeführt")
+                    else:
+                        prerequisites_status.append("❌ Projektanalyse fehlt (Solar-Kalkulation)")
+                        prerequisites_met = False
+                    
+                    # Prüfe Produktauswahl
+                    pv_module = st.session_state.get('selected_pv_module')
+                    inverter = st.session_state.get('selected_inverter')
+                    battery = st.session_state.get('selected_battery')
+                    
+                    if pv_module:
+                        prerequisites_status.append("✅ PV-Module gewählt")
+                    else:
+                        prerequisites_status.append("❌ PV-Module nicht gewählt")
+                        prerequisites_met = False
+                    
+                    if inverter:
+                        prerequisites_status.append("✅ Wechselrichter gewählt")
+                    else:
+                        prerequisites_status.append("❌ Wechselrichter nicht gewählt")
+                        prerequisites_met = False
+                    
+                    if battery:
+                        prerequisites_status.append("✅ Batteriespeicher gewählt")
+                    else:
+                        prerequisites_status.append("❌ Batteriespeicher nicht gewählt")
+                        prerequisites_met = False
+                    
+                    # Zeige Status
+                    with st.expander("📋 Voraussetzungen Status", expanded=not prerequisites_met):
+                        for status in prerequisites_status:
+                            st.markdown(status)
+                        
+                        if not prerequisites_met:
+                            st.error(
+                                "⚠️ **Nicht alle Voraussetzungen erfüllt!**\n\n"
+                                "Bitte vervollständigen Sie zuerst:\n"
+                                "- Kundendaten im Projektbereich\n"
+                                "- Solar-Kalkulation (Verbrauch, PV-Leistung, etc.)\n"
+                                "- Produktauswahl (PV-Module, Wechselrichter, Batteriespeicher)"
+                            )
+                    
+                    # Generierungs-Button (nur aktiv wenn Voraussetzungen erfüllt)
                     if st.button(
                         f"🚀 {len(selected_firms)} Multi-PDF(s) generieren",
                         type="primary",
                         use_container_width=True,
-                        key="generate_multi_pdfs_btn"
+                        key="generate_multi_pdfs_btn",
+                        disabled=not prerequisites_met
                     ):
                         with st.spinner(f"⏳ Generiere {len(selected_firms)} Angebote..."):
                             try:
-                                # Lade benötigte Daten
-                                project_data = st.session_state.get('project_data', {})
-                                analysis_results = st.session_state.get('analysis_results', {})
-                                company_info = st.session_state.get('company_info', {})
-                                
                                 # Standard-Produkte aus Session State
                                 standard_products = {
-                                    'pv_modules': st.session_state.get('selected_pv_module'),
-                                    'inverters': st.session_state.get('selected_inverter'),
-                                    'battery_storage': st.session_state.get('selected_battery')
+                                    'pv_modules': pv_module,
+                                    'inverters': inverter,
+                                    'battery_storage': battery
                                 }
                                 
-                                # Validierung
-                                if not all(standard_products.values()):
-                                    st.error("❌ Bitte wählen Sie erst PV-Module, Wechselrichter und Batteriespeicher aus!")
+                                company_info = st.session_state.get('company_info', {})
+                                
+                                # Generiere Multi-PDFs
+                                from pdf_template_engine.dynamic_overlay import generate_multi_offer_pdfs
+                                import zipfile
+                                from datetime import datetime
+                                
+                                results = generate_multi_offer_pdfs(
+                                    selected_firms=selected_firms,
+                                    standard_products=standard_products,
+                                    project_data=project_data,
+                                    analysis_results=analysis_results,
+                                    company_info=company_info,
+                                    profit_margin=st.session_state.get('profit_margin', 0),
+                                    modifier_pct=base_modifier,
+                                    progression_pct=progression,
+                                    additional_pdf=None  # TODO: Optional implementieren
+                                )
+                                
+                                if not results:
+                                    st.error("❌ Keine PDFs konnten generiert werden!")
                                 else:
-                                    # Generiere Multi-PDFs
-                                    from pdf_template_engine.dynamic_overlay import generate_multi_offer_pdfs
-                                    import zipfile
-                                    from datetime import datetime
+                                    st.success(f"✅ {len(results)} PDF(s) erfolgreich generiert!")
                                     
-                                    results = generate_multi_offer_pdfs(
-                                        selected_firms=selected_firms,
-                                        standard_products=standard_products,
-                                        project_data=project_data,
-                                        analysis_results=analysis_results,
-                                        company_info=company_info,
-                                        profit_margin=st.session_state.get('profit_margin', 0),
-                                        modifier_pct=base_modifier,
-                                        progression_pct=progression,
-                                        additional_pdf=None  # TODO: Optional implementieren
+                                    # Erstelle ZIP-Archiv
+                                    zip_buffer = io.BytesIO()
+                                    
+                                    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                                        
+                                        for firm_name, pdf_bytes in results:
+                                            # Sanitize Firmenname für Dateinamen
+                                            safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
+                                            filename = f"Angebot_{safe_name}_{timestamp}.pdf"
+                                            
+                                            zip_file.writestr(filename, pdf_bytes)
+                                    
+                                    zip_bytes = zip_buffer.getvalue()
+                                    
+                                    # Download-Button für ZIP
+                                    st.download_button(
+                                        label=f"📦 Alle {len(results)} PDFs herunterladen (ZIP)",
+                                        data=zip_bytes,
+                                        file_name=f"Multi_Angebote_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
+                                        mime="application/zip",
+                                        use_container_width=True
                                     )
                                     
-                                    if not results:
-                                        st.error("❌ Keine PDFs konnten generiert werden!")
-                                    else:
-                                        st.success(f"✅ {len(results)} PDF(s) erfolgreich generiert!")
-                                        
-                                        # Erstelle ZIP-Archiv
-                                        zip_buffer = io.BytesIO()
-                                        
-                                        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-                                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                                    # Optional: Einzelne Download-Buttons
+                                    with st.expander("📄 Einzelne PDFs herunterladen", expanded=False):
+                                        for firm_name, pdf_bytes in results:
+                                            safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
                                             
-                                            for firm_name, pdf_bytes in results:
-                                                # Sanitize Firmenname für Dateinamen
-                                                safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
-                                                filename = f"Angebot_{safe_name}_{timestamp}.pdf"
-                                                
-                                                zip_file.writestr(filename, pdf_bytes)
-                                        
-                                        zip_bytes = zip_buffer.getvalue()
-                                        
-                                        # Download-Button für ZIP
-                                        st.download_button(
-                                            label=f"📦 Alle {len(results)} PDFs herunterladen (ZIP)",
-                                            data=zip_bytes,
-                                            file_name=f"Multi_Angebote_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
-                                            mime="application/zip",
-                                            use_container_width=True
-                                        )
-                                        
-                                        # Optional: Einzelne Download-Buttons
-                                        with st.expander("📄 Einzelne PDFs herunterladen", expanded=False):
-                                            for firm_name, pdf_bytes in results:
-                                                safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
-                                                
-                                                st.download_button(
-                                                    label=f"📄 {firm_name}",
-                                                    data=pdf_bytes,
-                                                    file_name=f"Angebot_{safe_name}_{datetime.now().strftime('%Y%m%d')}.pdf",
-                                                    mime="application/pdf",
+                                            st.download_button(
+                                                label=f"📄 {firm_name}",
+                                                data=pdf_bytes,
+                                                file_name=f"Angebot_{safe_name}_{datetime.now().strftime('%Y%m%d')}.pdf",
+                                                mime="application/pdf",
                                                     key=f"download_{safe_name}"
                                                 )
                                 
