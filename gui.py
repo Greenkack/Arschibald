@@ -2277,21 +2277,29 @@ def main():
                         firm_options = {f"{firm.get('name', 'Unbekannt')} ({firm.get('location', 'Kein Ort')})": firm 
                                        for firm in all_firms}
                         
+                        # "Alle auswählen" Button MUSS VOR dem Widget sein
                         col1, col2 = st.columns([3, 1])
+                        
+                        with col2:
+                            if st.button("✅ Alle auswählen", key="select_all_firms", use_container_width=True):
+                                # Setze Flag für nächsten Run
+                                st.session_state['_select_all_firms_flag'] = True
+                                st.rerun()
+                        
+                        # Prüfe ob "Alle auswählen" geklickt wurde
+                        default_selection = []
+                        if st.session_state.get('_select_all_firms_flag', False):
+                            default_selection = list(firm_options.keys())
+                            st.session_state['_select_all_firms_flag'] = False  # Reset Flag
                         
                         with col1:
                             selected_firm_names = st.multiselect(
                                 "🏢 Firmen auswählen (mindestens 1)",
                                 options=list(firm_options.keys()),
-                                default=[],
+                                default=default_selection,
                                 key="multi_pdf_selected_firms",
                                 help="Wählen Sie die Firmen aus, für die Angebote erstellt werden sollen"
                             )
-                        
-                        with col2:
-                            if st.button("✅ Alle auswählen", key="select_all_firms", use_container_width=True):
-                                st.session_state['multi_pdf_selected_firms'] = list(firm_options.keys())
-                                st.rerun()
                         
                         # Konvertiere Namen zu Firmen-Objekten
                         selected_firms = [firm_options[name] for name in selected_firm_names]
