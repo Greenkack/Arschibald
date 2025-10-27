@@ -2253,16 +2253,6 @@ def main():
             
             st.markdown("---")
             
-            st.markdown("### 🎯 Funktionsweise")
-            st.markdown(
-                "- **Automatische Marken-Rotation**: Jede Firma erhält andere Produkt-Marken\n"
-                "- **Gleiche Spezifikationen**: Alle Angebote haben vergleichbare Leistung\n"
-                "- **Progressive Preise**: Standard-Angebot bleibt am günstigsten\n"
-                "- **Individuelle Templates**: Jedes Angebot sieht einzigartig aus"
-            )
-            
-            st.markdown("---")
-            
             # Firmen aus Datenbank laden
             try:
                 if database_module and callable(getattr(database_module, 'list_companies', None)):
@@ -2271,35 +2261,20 @@ def main():
                     if not all_firms:
                         st.warning("⚠️ Keine Firmen in der Datenbank gefunden. Bitte fügen Sie erst Firmen hinzu.")
                     else:
+                        # === FIRMEN-AUSWAHL ===
+                        st.markdown("### 🏢 Firmen-Auswahl")
                         st.markdown(f"**Verfügbare Firmen:** {len(all_firms)}")
                         
-                        # Firmen-Auswahl mit Multi-Select
                         firm_options = {f"{firm.get('name', 'Unbekannt')} ({firm.get('location', 'Kein Ort')})": firm 
                                        for firm in all_firms}
                         
-                        # "Alle auswählen" Button MUSS VOR dem Widget sein
-                        col1, col2 = st.columns([3, 1])
-                        
-                        with col2:
-                            if st.button("✅ Alle auswählen", key="select_all_firms", use_container_width=True):
-                                # Setze Flag für nächsten Run
-                                st.session_state['_select_all_firms_flag'] = True
-                                st.rerun()
-                        
-                        # Prüfe ob "Alle auswählen" geklickt wurde
-                        default_selection = []
-                        if st.session_state.get('_select_all_firms_flag', False):
-                            default_selection = list(firm_options.keys())
-                            st.session_state['_select_all_firms_flag'] = False  # Reset Flag
-                        
-                        with col1:
-                            selected_firm_names = st.multiselect(
-                                "🏢 Firmen auswählen (mindestens 1)",
-                                options=list(firm_options.keys()),
-                                default=default_selection,
-                                key="multi_pdf_selected_firms",
-                                help="Wählen Sie die Firmen aus, für die Angebote erstellt werden sollen"
-                            )
+                        selected_firm_names = st.multiselect(
+                            "Firmen auswählen",
+                            options=list(firm_options.keys()),
+                            default=st.session_state.get('multi_pdf_selected_firms', []),
+                            key="multi_pdf_selected_firms",
+                            help="Wählen Sie die Firmen aus, für die Angebote erstellt werden sollen"
+                        )
                         
                         # Konvertiere Namen zu Firmen-Objekten
                         selected_firms = [firm_options[name] for name in selected_firm_names]
@@ -2307,17 +2282,9 @@ def main():
                         if selected_firms:
                             st.success(f"✓ {len(selected_firms)} Firma(n) ausgewählt")
                             
-                            # Zeige Vorschau der ausgewählten Firmen
-                            with st.expander("👀 Ausgewählte Firmen", expanded=False):
-                                for i, firm in enumerate(selected_firms, 1):
-                                    st.markdown(f"**{i}. {firm.get('name', 'Unbekannt')}**")
-                                    st.text(f"   Ort: {firm.get('location', 'Nicht angegeben')}")
-                                    if firm.get('description'):
-                                        st.text(f"   Info: {firm.get('description')[:100]}...")
-                            
                             st.markdown("---")
                             
-                            # Preis-Modifikations-Einstellungen
+                            # === PREIS-EINSTELLUNGEN ===
                             st.markdown("### 💰 Preis-Modifikation")
                             
                             col1, col2 = st.columns(2)
@@ -2330,7 +2297,7 @@ def main():
                                     value=15,
                                     step=1,
                                     key="multi_pdf_base_modifier",
-                                    help="Grundlegender Preisaufschlag für alle Multi-PDFs (Standard-Angebot bleibt günstiger)"
+                                    help="Grundlegender Preisaufschlag für alle Multi-PDFs"
                                 )
                             
                             with col2:
@@ -2341,50 +2308,179 @@ def main():
                                     value=5,
                                     step=1,
                                     key="multi_pdf_progression",
-                                    help="Zusätzlicher Aufschlag pro weiterer Firma (z.B. Firma 1: +15%, Firma 2: +20%, etc.)"
+                                    help="Zusätzlicher Aufschlag pro weiterer Firma"
                                 )
-                            
-                            # Zeige Preis-Vorschau
-                            st.markdown("**📊 Preis-Vorschau (beispielhaft bei 17.000€ Basis):**")
-                            
-                            preview_base = 17000.0
-                            preview_cols = st.columns(min(len(selected_firms), 4))
-                            
-                            for i in range(min(len(selected_firms), 4)):
-                                with preview_cols[i]:
-                                    total_modifier = base_modifier + (progression * i)
-                                    preview_price = preview_base * (1 + total_modifier / 100)
-                                    st.metric(
-                                        label=f"Firma {i+1}",
-                                        value=f"{preview_price:,.2f}€",
-                                        delta=f"+{total_modifier}%"
-                                    )
-                            
-                            if len(selected_firms) > 4:
-                                st.caption(f"... und {len(selected_firms) - 4} weitere Firma(n)")
                             
                             st.markdown("---")
                             
-                            # Produkt-Rotations-Einstellungen
+                            # === PDF-INHALTSOPTIONEN ===
+                            st.markdown("### 📄 PDF-Inhalte & Features")
+                            
+                            col1, col2, col3 = st.columns(3)
+                            
+                            with col1:
+                                st.markdown("**📊 Diagramme & Visualisierungen:**")
+                                include_charts = st.checkbox(
+                                    "Diagramme einbinden",
+                                    value=True,
+                                    key="multi_pdf_include_charts",
+                                    help="Ertragsprognose, Eigenverbrauch, etc."
+                                )
+                                
+                                if include_charts:
+                                    chart_type = st.selectbox(
+                                        "Diagramm-Stil",
+                                        options=["Modern", "Klassisch", "Minimal"],
+                                        key="multi_pdf_chart_style"
+                                    )
+                                    
+                                    include_energy_flow = st.checkbox(
+                                        "Energiefluss-Diagramm",
+                                        value=True,
+                                        key="multi_pdf_energy_flow"
+                                    )
+                                    
+                                    include_yield_chart = st.checkbox(
+                                        "Jahresertrag-Diagramm",
+                                        value=True,
+                                        key="multi_pdf_yield_chart"
+                                    )
+                                    
+                                    include_savings_chart = st.checkbox(
+                                        "Einsparungen-Chart",
+                                        value=True,
+                                        key="multi_pdf_savings_chart"
+                                    )
+                            
+                            with col2:
+                                st.markdown("**💰 Wirtschaftlichkeit:**")
+                                include_roi = st.checkbox(
+                                    "ROI-Analyse",
+                                    value=True,
+                                    key="multi_pdf_include_roi",
+                                    help="Return on Investment Berechnung"
+                                )
+                                
+                                include_payback = st.checkbox(
+                                    "Amortisationszeit",
+                                    value=True,
+                                    key="multi_pdf_include_payback",
+                                    help="Break-Even Berechnung"
+                                )
+                                
+                                include_cashflow = st.checkbox(
+                                    "Cash-Flow Projektion",
+                                    value=False,
+                                    key="multi_pdf_include_cashflow",
+                                    help="20-Jahres Cash-Flow Prognose"
+                                )
+                                
+                                include_sensitivity = st.checkbox(
+                                    "Sensitivitätsanalyse",
+                                    value=False,
+                                    key="multi_pdf_include_sensitivity",
+                                    help="Verschiedene Szenarien"
+                                )
+                            
+                            with col3:
+                                st.markdown("**🔧 Technische Details:**")
+                                include_tech_specs = st.checkbox(
+                                    "Technische Spezifikationen",
+                                    value=True,
+                                    key="multi_pdf_tech_specs",
+                                    help="Detaillierte Produktdaten"
+                                )
+                                
+                                include_installation = st.checkbox(
+                                    "Installationsplan",
+                                    value=False,
+                                    key="multi_pdf_installation",
+                                    help="Montageübersicht"
+                                )
+                                
+                                include_warranty = st.checkbox(
+                                    "Garantie-Informationen",
+                                    value=True,
+                                    key="multi_pdf_warranty",
+                                    help="Herstellergarantien"
+                                )
+                                
+                                include_maintenance = st.checkbox(
+                                    "Wartungshinweise",
+                                    value=False,
+                                    key="multi_pdf_maintenance",
+                                    help="Wartungsempfehlungen"
+                                )
+                            
+                            st.markdown("---")
+                            
+                            # === ZUSÄTZLICHE OPTIONEN ===
+                            with st.expander("⚙️ Erweiterte Optionen", expanded=False):
+                                col1, col2 = st.columns(2)
+                                
+                                with col1:
+                                    st.markdown("**🎨 Design & Layout:**")
+                                    
+                                    page_format = st.selectbox(
+                                        "Seitenformat",
+                                        options=["A4 Hochformat", "A4 Querformat"],
+                                        key="multi_pdf_page_format"
+                                    )
+                                    
+                                    color_scheme = st.selectbox(
+                                        "Farbschema",
+                                        options=["Standard", "Blau", "Grün", "Orange"],
+                                        key="multi_pdf_color_scheme"
+                                    )
+                                    
+                                    include_page_numbers = st.checkbox(
+                                        "Seitenzahlen",
+                                        value=True,
+                                        key="multi_pdf_page_numbers"
+                                    )
+                                
+                                with col2:
+                                    st.markdown("**📋 Zahlungsmodalitäten:**")
+                                    
+                                    include_payment_terms = st.checkbox(
+                                        "Zahlungsbedingungen einbinden",
+                                        value=True,
+                                        key="multi_pdf_payment_terms"
+                                    )
+                                    
+                                    if include_payment_terms:
+                                        payment_variant = st.selectbox(
+                                            "Zahlungsvariante",
+                                            options=["Standard (50/50)", "30/30/40", "Vollzahlung"],
+                                            key="multi_pdf_payment_variant"
+                                        )
+                                    
+                                    include_financing = st.checkbox(
+                                        "Finanzierungsoptionen",
+                                        value=False,
+                                        key="multi_pdf_financing"
+                                    )
+                            
+                            st.markdown("---")
+                            
+                            # === PRODUKT-ROTATION ===
                             st.markdown("### 🔄 Produkt-Rotation")
                             
                             st.info(
                                 "🎯 **Automatische Marken-Rotation:** Jede Firma erhält automatisch andere "
-                                "Produkt-Marken als das Standard-Angebot und die vorherigen Firmen. "
-                                "Die Spezifikationen (Leistung, Kapazität) bleiben gleich."
+                                "Produkt-Marken. Die Spezifikationen (Leistung, Kapazität) bleiben gleich."
                             )
                             
                             strict_rotation = st.checkbox(
                                 "⚠️ Strikte Rotation (Fehler bei Marken-Erschöpfung)",
                                 value=False,
                                 key="multi_pdf_strict_rotation",
-                                help="Bei aktiviert: Fehler wenn keine neuen Marken verfügbar. "
-                                     "Bei deaktiviert: Erlaube Duplikate mit anderen Modellen."
+                                help="Bei deaktiviert: Erlaube Duplikate mit anderen Modellen"
                             )
                             
                             st.markdown("---")
                             
-                            # PDF-Generierung
+                            # === PDF-GENERIERUNG ===
                             st.markdown("### 🎯 PDF-Generierung starten")
                             
                             # Hole Session State Daten
@@ -2393,6 +2489,28 @@ def main():
                             pv_module = st.session_state.get('selected_pv_module')
                             inverter = st.session_state.get('selected_inverter')
                             battery = st.session_state.get('selected_battery')
+                            
+                            # Sammle alle Optionen
+                            pdf_options = {
+                                'include_charts': include_charts,
+                                'chart_style': chart_type if include_charts else None,
+                                'include_energy_flow': include_energy_flow if include_charts else False,
+                                'include_yield_chart': include_yield_chart if include_charts else False,
+                                'include_savings_chart': include_savings_chart if include_charts else False,
+                                'include_roi': include_roi,
+                                'include_payback': include_payback,
+                                'include_cashflow': include_cashflow,
+                                'include_sensitivity': include_sensitivity,
+                                'include_tech_specs': include_tech_specs,
+                                'include_installation': include_installation,
+                                'include_warranty': include_warranty,
+                                'include_maintenance': include_maintenance,
+                                'page_format': page_format,
+                                'color_scheme': color_scheme,
+                                'include_page_numbers': include_page_numbers,
+                                'include_payment_terms': include_payment_terms,
+                                'include_financing': include_financing
+                            }
                             
                             # Generierungs-Button
                             if st.button(
@@ -2426,6 +2544,7 @@ def main():
                                             profit_margin=st.session_state.get('profit_margin', 0),
                                             modifier_pct=base_modifier,
                                             progression_pct=progression,
+                                            pdf_options=pdf_options,
                                             additional_pdf=None
                                         )
                                         
