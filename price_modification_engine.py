@@ -79,38 +79,49 @@ def apply_modification(
     progression_pct: float = 0
 ) -> float:
     """
-    Wende Preis-Modifikation an mit progressivem Aufschlag
+    KASKADIERENDE Preis-Modifikation: Jede Firma schlägt % auf VORHERIGEN Preis drauf!
     
     Args:
-        base_price: Basis-Preis ohne Modifikation
-        modifier_pct: Basis-Aufschlag in Prozent (z.B. 15)
+        base_price: Basis-Preis der Haupt-PDF
+        modifier_pct: Aufschlag für Firma 1 in Prozent (z.B. 5)
         firm_index: Index der Firma (0-basiert)
-        progression_pct: Progressions-Aufschlag pro Firma in Prozent (z.B. 5)
+        progression_pct: Aufschlag für jede weitere Firma in Prozent (z.B. 5)
     
     Returns:
-        Modifizierter Preis in Euro
+        KASKADIERTER Preis in Euro
     
-    Beispiel:
-        base_price = 17000€
-        modifier_pct = 15%
-        progression_pct = 5%
+    Beispiel KASKADIERUNG:
+        Basis: 100.000€, modifier_pct=5%, progression_pct=5%
         
-        Firma 0 (Index 0): 17000 × 1.15 = 19.550€
-        Firma 1 (Index 1): 17000 × 1.20 = 20.400€
-        Firma 2 (Index 2): 17000 × 1.25 = 21.250€
+        Firma 0: 100.000€ + 5% = 105.000€
+        Firma 1: 105.000€ + 5% = 110.250€ (NICHT 100.000€ + 10%!)
+        Firma 2: 110.250€ + 5% = 115.762,50€ (NICHT 100.000€ + 15%!)
     """
-    # Berechne totalen Aufschlag
-    total_modifier = modifier_pct + (progression_pct * firm_index)
+    current_price = base_price
     
-    # Wende Modifikation an
-    modified_price = base_price * (1 + total_modifier / 100)
+    # KASKADIERENDE Berechnung: Jede Firma nimmt Preis der vorherigen!
+    for i in range(firm_index + 1):
+        if i == 0:
+            # Erste Firma: Basis-Aufschlag
+            pct = modifier_pct
+        else:
+            # Weitere Firmen: Progressions-Aufschlag AUF vorherigen Preis
+            pct = progression_pct
+        
+        previous_price = current_price
+        current_price = current_price * (1 + pct / 100)
+        
+        logger.info(
+            f"Firma {i + 1}: {previous_price:.2f}€ + {pct:.1f}% = {current_price:.2f}€"
+        )
     
+    total_increase = ((current_price - base_price) / base_price) * 100
     logger.info(
-        f"Firma {firm_index + 1}: {base_price:.2f}€ × {1 + total_modifier/100:.3f} "
-        f"(+{total_modifier:.1f}%) = {modified_price:.2f}€"
+        f"KASKADE GESAMT: {base_price:.2f}€ → {current_price:.2f}€ "
+        f"(+{total_increase:.2f}% gesamt)"
     )
     
-    return modified_price
+    return current_price
 
 
 def get_progressive_modifier(
