@@ -3429,30 +3429,62 @@ def generate_multi_offer_pdfs(
                     'final_end_preis_formatted': formatted_price,
                 }
             
-            # 4. Generiere PDF mit Standard-Templates aber modifizierten Daten
-            print(f"\n[4/4] PDF-Generierung...")
+            # 4. Generiere PDF mit FIRMA-SPEZIFISCHEN Templates und Koordinaten
+            print(f"\n[4/4] PDF-Generierung mit firma-spezifischem Design...")
             
-            # VERWENDE STANDARD generate_custom_offer_pdf() mit modifizierten Daten!
-            # Keine firma-spezifischen Templates nötig - Dynamic Data enthält alle Unterschiede
+            # Bestimme Firma-Suffix (f1, f2, f3, ...)
+            # firm_index startet bei 0, aber Templates sind f1, f2, ...
+            firm_suffix = f"f{firm_index + 1}"
+            
+            print(f"   → Firma-Index: {firm_index}")
+            print(f"   → Firma-Suffix: {firm_suffix}")
+            print(f"   → Templates: multi_nt_01_{firm_suffix}.pdf bis multi_nt_08_{firm_suffix}.pdf")
+            print(f"   → Koordinaten: seite1_{firm_suffix}.yml bis seite8_{firm_suffix}.yml")
             
             try:
                 # Berechne Pfade relativ zum Projekt-Root (ein Level über pdf_template_engine/)
                 base_dir = Path(__file__).parent.parent
-                coords_dir = base_dir / "coords"
-                bg_dir = base_dir / "pdf_templates_static" / "notext"
+                coords_dir = base_dir / "coords_multi"  # ← Multi-Koordinaten!
+                bg_dir = base_dir / "pdf_templates_static" / "multi"  # ← Multi-Templates!
                 
-                pdf_bytes = generate_custom_offer_pdf(
-                    coords_dir=coords_dir,
-                    bg_dir=bg_dir,
-                    dynamic_data=multi_dynamic_data,
-                    additional_pdf=additional_pdf
-                )
+                # Prüfe ob Ordner existieren
+                if not coords_dir.exists():
+                    print(f"ERROR: coords_multi Ordner nicht gefunden: {coords_dir}")
+                    print(f"FALLBACK: Nutze Standard-Templates")
+                    coords_dir = base_dir / "coords"
+                    bg_dir = base_dir / "pdf_templates_static" / "notext"
+                    firm_suffix = None  # Kein firma-spezifisches Template
+                
+                if not bg_dir.exists():
+                    print(f"ERROR: multi Template-Ordner nicht gefunden: {bg_dir}")
+                    print(f"FALLBACK: Nutze Standard-Templates")
+                    coords_dir = base_dir / "coords"
+                    bg_dir = base_dir / "pdf_templates_static" / "notext"
+                    firm_suffix = None
+                
+                # Verwende firma-spezifische Generierung wenn verfügbar
+                if firm_suffix and coords_dir.name == "coords_multi":
+                    pdf_bytes = generate_multi_firm_pdf(
+                        coords_dir=coords_dir,
+                        bg_dir=bg_dir,
+                        dynamic_data=multi_dynamic_data,
+                        firm_suffix=firm_suffix,
+                        additional_pdf=additional_pdf
+                    )
+                else:
+                    # Fallback: Standard-Templates
+                    pdf_bytes = generate_custom_offer_pdf(
+                        coords_dir=coords_dir,
+                        bg_dir=bg_dir,
+                        dynamic_data=multi_dynamic_data,
+                        additional_pdf=additional_pdf
+                    )
                 
                 if not pdf_bytes:
                     print(f"ERROR: PDF-Generierung fehlgeschlagen für {firm_name}")
                     continue
                 
-                print(f"✓ PDF generiert: {len(pdf_bytes)} bytes")
+                print(f"✓ PDF generiert: {len(pdf_bytes)} bytes mit {firm_suffix if firm_suffix else 'Standard'}-Design")
                 
                 # ZEIGE FINALEN PREIS DER IN PDF IST
                 final_price_in_pdf = multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')
@@ -3528,10 +3560,13 @@ def generate_multi_firm_pdf(
     Returns:
         PDF bytes oder None bei Fehler
     """
-    import yaml
-    
-    print(f"DEBUG: generate_multi_firm_pdf für {firm_suffix}")
-    print(f"DEBUG: coords_dir={coords_dir}, bg_dir={bg_dir}")
+    print(f"\n{'='*70}")
+    print(f"MULTI-FIRMA-PDF GENERIERUNG: {firm_suffix.upper()}")
+    print(f"{'='*70}")
+    print(f"Coords-Dir: {coords_dir}")
+    print(f"BG-Dir: {bg_dir}")
+    print(f"Firma-Suffix: {firm_suffix}")
+    print(f"{'='*70}\n")
     
     try:
         # Bestimme Gesamtseiten
@@ -3539,9 +3574,13 @@ def generate_multi_firm_pdf(
         if additional_pdf:
             try:
                 add_reader = PdfReader(io.BytesIO(additional_pdf))
-                total_pages = 8 + len(add_reader.pages)
-            except Exception:
-                pass
+                additional_page_count = len(add_reader.pages)
+                total_pages = 8 + additional_page_count
+                print(f"   → Zusätzliche Seiten: {additional_page_count}")
+            except Exception as e:
+                print(f"   ⚠️ Zusatz-PDF konnte nicht gelesen werden: {e}")
+        
+        print(f"   → Gesamt-Seiten: {total_pages}\n")
         
         # Generiere Overlay für alle 8 Seiten mit firma-spezifischen Koordinaten
         overlay_buffer = io.BytesIO()
@@ -3549,36 +3588,100 @@ def generate_multi_firm_pdf(
         page_width, page_height = A4
         
         for page_num in range(1, 9):
-            # Lade firma-spezifische YML: seite1_f1.yml, seite2_f2.yml, etc.
+            print(f"[Seite {page_num}/8] Verarbeite...")
+            
+            # Lade firma-spezifische YML: seite1_f1.yml, seite2_f1.yml, etc.
             yml_file = coords_dir / f"seite{page_num}_{firm_suffix}.yml"
             
             if not yml_file.exists():
-                print(f"WARNING: {yml_file} nicht gefunden, überspringe Seite {page_num}")
+                print(f"   ⚠️ WARNUNG: {yml_file.name} nicht gefunden")
+                print(f"      → Überspringe Text-Overlays für Seite {page_num}")
                 c.showPage()
                 continue
             
-            # Lade Koordinaten
-            with open(yml_file, 'r', encoding='utf-8') as f:
-                coords = yaml.safe_load(f) or []
+            # Lade Koordinaten mit parse_coords_file()
+            elements = parse_coords_file(yml_file)
+            print(f"   → {len(elements)} Platzhalter aus {yml_file.name}")
             
-            print(f"DEBUG: Seite {page_num}: {len(coords)} Platzhalter aus {yml_file}")
+            # Firmenlogo auf jeder Seite
+            _draw_company_logo(c, dynamic_data, page_width, page_height, page_index=page_num)
             
-            # Zeichne Platzhalter auf dieser Seite
-            for item in coords:
-                placeholder = item.get('placeholder', '')
-                value = dynamic_data.get(placeholder, '')
+            # Dreieck (falls benötigt)
+            _draw_top_right_triangle(c, page_width, page_height, size=0.0)
+            
+            # Spezielle Seiten-Inhalte (nur für Seite 1, da nur diese Funktion existiert)
+            if page_num == 1:
+                _draw_page1_new_content(c, dynamic_data, page_width, page_height)
+            
+            # Zeichne Text-Platzhalter aus YML
+            for el in elements:
+                text_key = el.get("text", "")
+                position = el.get("position")
+                font = el.get("font", "Helvetica")
+                font_size = el.get("font_size", 10.0)
+                color = el.get("color", 0)
                 
-                x = item.get('x', 0)
-                y = item.get('y', 0)
-                font = item.get('font', 'Helvetica')
-                size = item.get('size', 12)
-                color_str = item.get('color', 'black')
+                if not position or len(position) < 4:
+                    continue
+                
+                # Hole Wert aus dynamic_data oder verwende Literal-Text
+                if text_key in dynamic_data:
+                    value = dynamic_data[text_key]
+                else:
+                    # Falls kein Platzhalter gefunden, verwende den Text als Literal
+                    value = text_key if text_key and not text_key.startswith("_") else ""
+                
+                if not value:
+                    continue
+                
+                # Position: (x0, y0, x1, y1) - verwende x0, y0 als Startpunkt
+                x, y = position[0], position[1]
+                
+                # FONT-NAME NORMALISIERUNG für ReportLab
+                # YML verwendet "Helvetica-Regular", ReportLab kennt nur "Helvetica"
+                # Behandle auch Tippfehler wie "Helvetica-Regulat"
+                font_normalized = font
+                
+                # Fehlertoleranz: Prüfe ob Font mit bekanntem Präfix beginnt
+                if font.startswith("Helvetica"):
+                    if "Bold" in font and "Oblique" in font or "Bold" in font and "Italic" in font:
+                        font_normalized = "Helvetica-BoldOblique"
+                    elif "Bold" in font:
+                        font_normalized = "Helvetica-Bold"
+                    elif "Oblique" in font or "Italic" in font:
+                        font_normalized = "Helvetica-Oblique"
+                    else:
+                        font_normalized = "Helvetica"  # Regular, Medium, oder Tippfehler
+                
+                elif font.startswith("Times"):
+                    if "Bold" in font and ("Italic" in font or "Oblique" in font):
+                        font_normalized = "Times-BoldItalic"
+                    elif "Bold" in font:
+                        font_normalized = "Times-Bold"
+                    elif "Italic" in font or "Oblique" in font:
+                        font_normalized = "Times-Italic"
+                    else:
+                        font_normalized = "Times-Roman"
+                
+                elif font.startswith("Courier"):
+                    if "Bold" in font and ("Oblique" in font or "Italic" in font):
+                        font_normalized = "Courier-BoldOblique"
+                    elif "Bold" in font:
+                        font_normalized = "Courier-Bold"
+                    elif "Oblique" in font or "Italic" in font:
+                        font_normalized = "Courier-Oblique"
+                    else:
+                        font_normalized = "Courier"
+                
+                # Setze Farbe und Font
+                c.setFillColor(int_to_color(color))
+                c.setFont(font_normalized, font_size)
                 
                 # Zeichne Text
-                c.setFont(font, size)
                 c.drawString(x, y, str(value))
             
             c.showPage()
+            print(f"   ✓ Seite {page_num} abgeschlossen")
         
         c.save()
         overlay_bytes = overlay_buffer.getvalue()
@@ -3587,9 +3690,10 @@ def generate_multi_firm_pdf(
             print("ERROR: Overlay-Generierung fehlgeschlagen")
             return None
         
-        print(f"DEBUG: Overlay generiert: {len(overlay_bytes)} bytes")
+        print(f"\n✓ Overlay generiert: {len(overlay_bytes)} bytes\n")
         
         # Merge mit firma-spezifischen Backgrounds
+        print(f"[MERGE] Overlay + Backgrounds...")
         overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
         writer = PdfWriter()
         
@@ -3598,39 +3702,60 @@ def generate_multi_firm_pdf(
             bg_file = bg_dir / f"multi_nt_{page_num+1:02d}_{firm_suffix}.pdf"
             
             if not bg_file.exists():
-                print(f"WARNING: {bg_file} nicht gefunden, überspringe Background für Seite {page_num+1}")
+                print(f"   ⚠️ WARNUNG: {bg_file.name} nicht gefunden")
+                print(f"      → Verwende nur Overlay für Seite {page_num+1}")
                 # Verwende nur Overlay
                 writer.add_page(overlay_reader.pages[page_num])
                 continue
             
             # Merge Overlay + Background
-            bg_reader = PdfReader(bg_file)
-            bg_page = bg_reader.pages[0]
-            overlay_page = overlay_reader.pages[page_num]
-            
-            bg_page.merge_page(overlay_page)
-            writer.add_page(bg_page)
+            try:
+                bg_reader = PdfReader(bg_file)
+                bg_page = bg_reader.pages[0]
+                overlay_page = overlay_reader.pages[page_num]
+                
+                bg_page.merge_page(overlay_page)
+                writer.add_page(bg_page)
+                print(f"   ✓ Seite {page_num+1}: {bg_file.name} + Overlay")
+            except Exception as e:
+                print(f"   ERROR: Merge fehlgeschlagen für Seite {page_num+1}: {e}")
+                # Fallback: nur Overlay
+                writer.add_page(overlay_reader.pages[page_num])
         
         # Optional: Zusatz-PDF anhängen
         if additional_pdf:
+            print(f"\n[ZUSATZ-PDF] Anhängen...")
             try:
                 add_reader = PdfReader(io.BytesIO(additional_pdf))
-                for page in add_reader.pages:
+                for idx, page in enumerate(add_reader.pages):
                     writer.add_page(page)
+                    print(f"   ✓ Zusatzseite {idx+1}")
             except Exception as e:
-                print(f"WARNING: Zusatz-PDF konnte nicht angehängt werden: {e}")
+                print(f"   ⚠️ WARNING: Zusatz-PDF konnte nicht angehängt werden: {e}")
         
         # Schreibe finales PDF
+        print(f"\n[FINALISIERUNG] Schreibe PDF...")
         final_buffer = io.BytesIO()
         writer.write(final_buffer)
         final_bytes = final_buffer.getvalue()
         
-        print(f"DEBUG: Final PDF für {firm_suffix}: {len(final_bytes)} bytes")
+        print(f"\n{'='*70}")
+        print(f"✅ ERFOLG: PDF für {firm_suffix.upper()} generiert!")
+        print(f"{'='*70}")
+        print(f"Größe: {len(final_bytes):,} bytes")
+        print(f"Seiten: {len(writer.pages)}")
+        print(f"{'='*70}\n")
         
         return final_bytes
         
     except Exception as e:
-        print(f"ERROR: PDF-Generierung für {firm_suffix} fehlgeschlagen: {e}")
+        print(f"\n{'!'*70}")
+        print(f"❌ ERROR: PDF-Generierung für {firm_suffix} fehlgeschlagen!")
+        print(f"{'!'*70}")
+        print(f"Fehler-Typ: {type(e).__name__}")
+        print(f"Fehler-Nachricht: {str(e)}")
+        print(f"\nSTACKTRACE:")
         import traceback
         traceback.print_exc()
+        print(f"{'!'*70}\n")
         return None
