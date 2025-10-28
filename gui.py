@@ -2239,17 +2239,426 @@ def main():
 
         # Multi-Angebote Tab wieder aktiviert
         with tab_multi_offers:
-            st.subheader(" Multi-Firmen-Angebotsgenerator")
-            if multi_offer_module and callable(getattr(multi_offer_module, 'render_multi_offer_generator', None)):
-                project_data_doc = st.session_state.get('project_data', {})
-                calc_results_doc = st.session_state.get("calculation_results", {})
-                multi_offer_module.render_multi_offer_generator(TEXTS, project_data_doc, calc_results_doc)
-
-                # Aufruf der neuen Produktauswahl-Logik
-                if hasattr(multi_offer_module, 'render_product_selection'):
-                    multi_offer_module.render_product_selection()
-            else:
-                st.warning(" Multi-Angebots-Modul nicht verfügbar.")
+            st.markdown("### 📦 Multi-Firmen-Angebotsgenerator (KASKADIEREND) v2.0")
+            
+            # Cache-Buster: Timestamp hinzugefügt
+            from datetime import datetime
+            st.markdown(f"<small>Zuletzt aktualisiert: {datetime.now().strftime('%H:%M:%S')}</small>", unsafe_allow_html=True)
+            
+            # WICHTIG: Kaskadierende Preisberechnung Info
+            st.info(
+                "**💡 Multi-Firmen-Angebote: KASKADIERENDE Preisberechnung**\n\n"
+                "**Wichtig:** Die Preise werden KASKADIEREND berechnet!\n\n"
+                "🔹 Firma 1: Haupt-PDF Preis + Basis-Aufschlag %\n\n"
+                "🔹 Firma 2: Preis von Firma 1 + Progression %\n\n"
+                "🔹 Firma 3: Preis von Firma 2 + Progression %\n\n"
+                "➡️ Beispiel: Basis 100.000 €, +5%, +5%\n"
+                "   • Firma 1: 105.000 €\n"
+                "   • Firma 2: 110.250 € (NICHT 110.000!)\n"
+                "   • Firma 3: 115.762,50 € (NICHT 115.000!)\n\n"
+                "**Voraussetzungen:**\n\n"
+                "1️⃣ **Mehrere Firmen** konfiguriert im Admin-Panel\n\n"
+                "2️⃣ **Vollständige Projektanalyse** durchgeführt\n\n"
+                "3️⃣ **Produktauswahl** abgeschlossen\n\n"
+                "👉 Für **Einzel-Firmen-PDFs** nutzen Sie den Tab '📄 PDF-Ausgabe' oben."
+            )
+            
+            st.markdown("---")
+            
+            # Firmen aus Datenbank laden
+            try:
+                if database_module and callable(getattr(database_module, 'list_companies', None)):
+                    all_firms = database_module.list_companies()
+                    
+                    if not all_firms:
+                        st.warning("⚠️ Keine Firmen in der Datenbank gefunden. Bitte fügen Sie erst Firmen hinzu.")
+                    else:
+                        # === FIRMEN-AUSWAHL ===
+                        st.markdown("### 🏢 Firmen-Auswahl")
+                        
+                        # ERST firm_options definieren (wird im Button gebraucht!)
+                        firm_options = {f"{firm.get('name', 'Unbekannt')} ({firm.get('location', 'Kein Ort')})": firm 
+                                       for firm in all_firms}
+                        
+                        col_select, col_button = st.columns([3, 1])
+                        
+                        with col_select:
+                            st.markdown(f"**Verfügbare Firmen:** {len(all_firms)}")
+                        
+                        with col_button:
+                            if st.button("✅ Alle auswählen", key="select_all_firms_multi"):
+                                st.session_state.multi_pdf_selected_firms = list(firm_options.keys())
+                                st.rerun()
+                        
+                        selected_firm_names = st.multiselect(
+                            "Firmen auswählen",
+                            options=list(firm_options.keys()),
+                            default=st.session_state.get('multi_pdf_selected_firms', []),
+                            key="multi_pdf_selected_firms",
+                            help="Wählen Sie die Firmen aus, für die Angebote erstellt werden sollen"
+                        )
+                        
+                        # Konvertiere Namen zu Firmen-Objekten
+                        selected_firms = [firm_options[name] for name in selected_firm_names]
+                        
+                        if selected_firms:
+                            st.success(f"✓ {len(selected_firms)} Firma(n) ausgewählt")
+                            
+                            st.markdown("---")
+                            
+                            # === PREIS-EINSTELLUNGEN ===
+                            st.markdown("### 💰 Preis-Modifikation")
+                            
+                            col1, col2 = st.columns(2)
+                            
+                            with col1:
+                                base_modifier = st.slider(
+                                    "📊 Basis-Aufschlag (%)",
+                                    min_value=0,
+                                    max_value=50,
+                                    value=15,
+                                    step=1,
+                                    key="multi_pdf_base_modifier",
+                                    help="Grundlegender Preisaufschlag für alle Multi-PDFs"
+                                )
+                            
+                            with col2:
+                                progression = st.slider(
+                                    "📈 Progressions-Faktor (%)",
+                                    min_value=0,
+                                    max_value=20,
+                                    value=5,
+                                    step=1,
+                                    key="multi_pdf_progression",
+                                    help="Zusätzlicher Aufschlag pro weiterer Firma"
+                                )
+                            
+                            st.markdown("---")
+                            
+                            # === PDF-INHALTSOPTIONEN ===
+                            st.markdown("### 📄 PDF-Inhalte & Features")
+                            
+                            col1, col2, col3 = st.columns(3)
+                            
+                            with col1:
+                                st.markdown("**📊 Diagramme & Visualisierungen:**")
+                                include_charts = st.checkbox(
+                                    "Diagramme einbinden",
+                                    value=True,
+                                    key="multi_pdf_include_charts",
+                                    help="Ertragsprognose, Eigenverbrauch, etc."
+                                )
+                                
+                                if include_charts:
+                                    chart_type = st.selectbox(
+                                        "Diagramm-Stil",
+                                        options=["Modern", "Klassisch", "Minimal"],
+                                        key="multi_pdf_chart_style"
+                                    )
+                                    
+                                    include_energy_flow = st.checkbox(
+                                        "Energiefluss-Diagramm",
+                                        value=True,
+                                        key="multi_pdf_energy_flow"
+                                    )
+                                    
+                                    include_yield_chart = st.checkbox(
+                                        "Jahresertrag-Diagramm",
+                                        value=True,
+                                        key="multi_pdf_yield_chart"
+                                    )
+                                    
+                                    include_savings_chart = st.checkbox(
+                                        "Einsparungen-Chart",
+                                        value=True,
+                                        key="multi_pdf_savings_chart"
+                                    )
+                            
+                            with col2:
+                                st.markdown("**💰 Wirtschaftlichkeit:**")
+                                include_roi = st.checkbox(
+                                    "ROI-Analyse",
+                                    value=True,
+                                    key="multi_pdf_include_roi",
+                                    help="Return on Investment Berechnung"
+                                )
+                                
+                                include_payback = st.checkbox(
+                                    "Amortisationszeit",
+                                    value=True,
+                                    key="multi_pdf_include_payback",
+                                    help="Break-Even Berechnung"
+                                )
+                                
+                                include_cashflow = st.checkbox(
+                                    "Cash-Flow Projektion",
+                                    value=False,
+                                    key="multi_pdf_include_cashflow",
+                                    help="20-Jahres Cash-Flow Prognose"
+                                )
+                                
+                                include_sensitivity = st.checkbox(
+                                    "Sensitivitätsanalyse",
+                                    value=False,
+                                    key="multi_pdf_include_sensitivity",
+                                    help="Verschiedene Szenarien"
+                                )
+                            
+                            with col3:
+                                st.markdown("**🔧 Technische Details:**")
+                                include_tech_specs = st.checkbox(
+                                    "Technische Spezifikationen",
+                                    value=True,
+                                    key="multi_pdf_tech_specs",
+                                    help="Detaillierte Produktdaten"
+                                )
+                                
+                                include_installation = st.checkbox(
+                                    "Installationsplan",
+                                    value=False,
+                                    key="multi_pdf_installation",
+                                    help="Montageübersicht"
+                                )
+                                
+                                include_warranty = st.checkbox(
+                                    "Garantie-Informationen",
+                                    value=True,
+                                    key="multi_pdf_warranty",
+                                    help="Herstellergarantien"
+                                )
+                                
+                                include_maintenance = st.checkbox(
+                                    "Wartungshinweise",
+                                    value=False,
+                                    key="multi_pdf_maintenance",
+                                    help="Wartungsempfehlungen"
+                                )
+                            
+                            st.markdown("---")
+                            
+                            # === ZUSÄTZLICHE OPTIONEN ===
+                            with st.expander("⚙️ Erweiterte Optionen", expanded=False):
+                                col1, col2 = st.columns(2)
+                                
+                                with col1:
+                                    st.markdown("**🎨 Design & Layout:**")
+                                    
+                                    page_format = st.selectbox(
+                                        "Seitenformat",
+                                        options=["A4 Hochformat", "A4 Querformat"],
+                                        key="multi_pdf_page_format"
+                                    )
+                                    
+                                    color_scheme = st.selectbox(
+                                        "Farbschema",
+                                        options=["Standard", "Blau", "Grün", "Orange"],
+                                        key="multi_pdf_color_scheme"
+                                    )
+                                    
+                                    include_page_numbers = st.checkbox(
+                                        "Seitenzahlen",
+                                        value=True,
+                                        key="multi_pdf_page_numbers"
+                                    )
+                                
+                                with col2:
+                                    st.markdown("**📋 Zahlungsmodalitäten:**")
+                                    
+                                    include_payment_terms = st.checkbox(
+                                        "Zahlungsbedingungen einbinden",
+                                        value=True,
+                                        key="multi_pdf_payment_terms"
+                                    )
+                                    
+                                    if include_payment_terms:
+                                        payment_variant = st.selectbox(
+                                            "Zahlungsvariante",
+                                            options=["Standard (50/50)", "30/30/40", "Vollzahlung"],
+                                            key="multi_pdf_payment_variant"
+                                        )
+                                    
+                                    include_financing = st.checkbox(
+                                        "Finanzierungsoptionen",
+                                        value=False,
+                                        key="multi_pdf_financing"
+                                    )
+                            
+                            st.markdown("---")
+                            
+                            # === PRODUKT-ROTATION ===
+                            st.markdown("### 🔄 Produkt-Rotation")
+                            
+                            st.info(
+                                "🎯 **Automatische Marken-Rotation:** Jede Firma erhält automatisch andere "
+                                "Produkt-Marken. Die Spezifikationen (Leistung, Kapazität) bleiben gleich."
+                            )
+                            
+                            strict_rotation = st.checkbox(
+                                "⚠️ Strikte Rotation (Fehler bei Marken-Erschöpfung)",
+                                value=False,
+                                key="multi_pdf_strict_rotation",
+                                help="Bei deaktiviert: Erlaube Duplikate mit anderen Modellen"
+                            )
+                            
+                            st.markdown("---")
+                            
+                            # === PDF-GENERIERUNG ===
+                            st.markdown("### 🎯 PDF-Generierung starten")
+                            
+                            # Hole Session State Daten
+                            project_data = st.session_state.get('project_data', {})
+                            analysis_results = st.session_state.get('analysis_results', {})
+                            
+                            # ✅ PRODUKTE aus project_data holen (RICHTIGE Feldnamen!)
+                            pv_module_id = project_data.get('project_details', {}).get('selected_module_id')
+                            inverter_id = project_data.get('project_details', {}).get('selected_inverter_id')
+                            battery_id = project_data.get('project_details', {}).get('selected_storage_id')
+                            
+                            # Lade Produkte aus Datenbank
+                            pv_module = None
+                            inverter = None
+                            battery = None
+                            
+                            if product_db_module and callable(getattr(product_db_module, 'get_product_by_id', None)):
+                                try:
+                                    if pv_module_id:
+                                        pv_module = product_db_module.get_product_by_id(pv_module_id)
+                                    if inverter_id:
+                                        inverter = product_db_module.get_product_by_id(inverter_id)
+                                    if battery_id:
+                                        battery = product_db_module.get_product_by_id(battery_id)
+                                except Exception as e:
+                                    st.error(f"❌ Fehler beim Laden der Produkte: {e}")
+                            
+                            # ⚠️ VALIDIERUNG: Produkte müssen ausgewählt sein!
+                            if not pv_module:
+                                st.error("❌ **FEHLER:** Kein PV-Modul ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie ein PV-Modul aus.")
+                                st.stop()
+                            
+                            if not inverter:
+                                st.error("❌ **FEHLER:** Kein Wechselrichter ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie einen Wechselrichter aus.")
+                                st.stop()
+                            
+                            # Sammle alle Optionen
+                            pdf_options = {
+                                'include_charts': include_charts,
+                                'chart_style': chart_type if include_charts else None,
+                                'include_energy_flow': include_energy_flow if include_charts else False,
+                                'include_yield_chart': include_yield_chart if include_charts else False,
+                                'include_savings_chart': include_savings_chart if include_charts else False,
+                                'include_roi': include_roi,
+                                'include_payback': include_payback,
+                                'include_cashflow': include_cashflow,
+                                'include_sensitivity': include_sensitivity,
+                                'include_tech_specs': include_tech_specs,
+                                'include_installation': include_installation,
+                                'include_warranty': include_warranty,
+                                'include_maintenance': include_maintenance,
+                                'page_format': page_format,
+                                'color_scheme': color_scheme,
+                                'include_page_numbers': include_page_numbers,
+                                'include_payment_terms': include_payment_terms,
+                                'include_financing': include_financing
+                            }
+                            
+                            # Generierungs-Button
+                            if st.button(
+                                f"🚀 {len(selected_firms)} Multi-PDF(s) generieren",
+                                type="primary",
+                                use_container_width=True,
+                                key="generate_multi_pdfs_btn"
+                            ):
+                                with st.spinner(f"⏳ Generiere {len(selected_firms)} Angebote..."):
+                                    try:
+                                        # Standard-Produkte aus Session State
+                                        standard_products = {
+                                            'pv_modules': pv_module,
+                                            'inverters': inverter,
+                                            'battery_storage': battery
+                                        }
+                                        
+                                        company_info = st.session_state.get('company_info', {})
+                                        
+                                        # Generiere Multi-PDFs
+                                        from pdf_template_engine.dynamic_overlay import generate_multi_offer_pdfs
+                                        import zipfile
+                                        import io
+                                        from datetime import datetime
+                                        
+                                        results = generate_multi_offer_pdfs(
+                                            selected_firms=selected_firms,
+                                            standard_products=standard_products,
+                                            project_data=project_data,
+                                            analysis_results=analysis_results,
+                                            company_info=company_info,
+                                            profit_margin=st.session_state.get('profit_margin', 0),
+                                            modifier_pct=base_modifier,
+                                            progression_pct=progression,
+                                            pdf_options=pdf_options,
+                                            additional_pdf=None
+                                        )
+                                        
+                                        if not results:
+                                            st.error("❌ Keine PDFs konnten generiert werden!")
+                                            st.warning("⚠️ **BITTE KONSOLE PRÜFEN!** Dort stehen die Fehlerdetails.")
+                                            st.info("💡 Häufige Ursachen:\n"
+                                                   "- Produkte können nicht aus DB geladen werden\n"
+                                                   "- Produkt-Rotation schlägt fehl (keine Alternativen gefunden)\n"
+                                                   "- Preis-Berechnung schlägt fehl")
+                                        else:
+                                            st.success(f"✅ {len(results)} PDF(s) erfolgreich generiert!")
+                                            
+                                            # Erstelle ZIP-Archiv
+                                            zip_buffer = io.BytesIO()
+                                            
+                                            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                                                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                                                
+                                                for firm_name, pdf_bytes in results:
+                                                    safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
+                                                    filename = f"Angebot_{safe_name}_{timestamp}.pdf"
+                                                    zip_file.writestr(filename, pdf_bytes)
+                                            
+                                            zip_bytes = zip_buffer.getvalue()
+                                            
+                                            # Download-Button für ZIP
+                                            st.download_button(
+                                                label=f"📦 Alle {len(results)} PDFs herunterladen (ZIP)",
+                                                data=zip_bytes,
+                                                file_name=f"Multi_Angebote_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
+                                                mime="application/zip",
+                                                use_container_width=True
+                                            )
+                                            
+                                            # Optional: Einzelne Download-Buttons
+                                            with st.expander("📄 Einzelne PDFs herunterladen", expanded=False):
+                                                for firm_name, pdf_bytes in results:
+                                                    safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
+                                                    st.download_button(
+                                                        label=f"📄 {firm_name}",
+                                                        data=pdf_bytes,
+                                                        file_name=f"Angebot_{safe_name}_{datetime.now().strftime('%Y%m%d')}.pdf",
+                                                        mime="application/pdf",
+                                                        key=f"download_{safe_name}"
+                                                    )
+                                    
+                                    except Exception as e:
+                                        st.error(f"❌ Fehler bei Multi-PDF Generierung: {e}")
+                                        import traceback
+                                        with st.expander("🔍 Fehlerdetails", expanded=False):
+                                            st.code(traceback.format_exc())
+                        else:
+                            st.warning("⚠️ Bitte wählen Sie mindestens 1 Firma aus!")
+                else:
+                    st.error("❌ Datenbank-Modul nicht verfügbar")
+            
+            except ImportError:
+                st.error("❌ Firmendatenbank-Modul nicht gefunden")
+            except Exception as e:
+                st.error(f"❌ Fehler beim Laden der Firmen: {e}")
+                import traceback
+                with st.expander("🔍 Fehlerdetails", expanded=False):
+                    st.code(traceback.format_exc())
 
     elif selected_page_key == "quick_calc":
         # A.G.E.N.T. - Autonomous AI Expert System

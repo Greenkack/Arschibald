@@ -6,8 +6,6 @@ fileWatcherType = "poll"           # "auto"|"watchdog"|"poll"|"none"
 enableCORS = true
 enableXsrfProtection = true
 maxUploadSize = 512                 # MB
-websocketPingTimeoutSec = 120       # Mehr Toleranz für langsame/instabile Netze
-maxMessageSize = 2000               # Größere Nachrichten erlauben (in MB)
 
 # ---------- BROWSER ----------
 [browser]

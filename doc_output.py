@@ -9,6 +9,7 @@ Datum: 2025-06-03
 # Modul für die Angebotsausgabe (PDF)
 
 import base64
+import io
 import os
 import traceback
 from collections.abc import Callable
@@ -279,21 +280,11 @@ def _show_pdf_data_status(
                 "Bitte führen Sie eine Wirtschaftlichkeitsberechnung durch, bevor Sie ein PDF erstellen."))
     elif validation_result.get('warnings'):
         warn_list = validation_result.get('warnings', []) or []
-        st.warning(
-            " " +
-            get_text_pdf_ui(
-                texts,
-                "pdf_creation_warnings",
-                "PDF kann erstellt werden, enthält aber möglicherweise nicht alle gewünschten Informationen."))
-        st.info(
-            get_text_pdf_ui(
-                texts,
-                "pdf_creation_with_warnings",
-                f"Bei unvollständigen Daten wird ein vereinfachtes PDF mit den verfügbaren Informationen erstellt. ({
-                    len(warn_list)} Warnungen)"))
-        with st.expander("Warnungsdetails anzeigen"):
-            for w in warn_list:
-                st.warning(f"- {w}")
+        # Warnungen nur in Expander zeigen (nicht gelb anzeigen)
+        if len(warn_list) > 0:
+            with st.expander(f"ℹ️ {len(warn_list)} optionale Hinweise"):
+                for w in warn_list:
+                    st.info(f"• {w}")
     else:
         st.success(
             " " +
@@ -2230,6 +2221,9 @@ def render_pdf_ui(
         except Exception as e:
             st.error(f"❌ Fehler beim Laden der Zahlungsmodalitäten: {e}")
 
+    # HINWEIS: Multi-PDF Angebotserstellung ist jetzt im separaten Tab " Multi-Firmen-Angebote"
+    # Der Code wurde nach gui.py verschoben für bessere Organisation
+
     with st.expander(" INDIVIDUELLE INHALTE", expanded=False):
         st.markdown("**Benutzerdefinierte Texte & Bilder:**")
 
@@ -2310,13 +2304,14 @@ def render_pdf_ui(
                         st.session_state.pdf_section_manager = PDFSectionManager()
                         st.session_state.pdf_section_manager.initialize_session_state()
 
-                    st.markdown("** PDF-Struktur anpassen:**")
+                    st.markdown("**📄 PDF-Struktur anpassen:**")
                     with st.container():
                         st.info(
-                            " Drag & Drop Manager aktiviert - Scrollen Sie nach unten für die Bearbeitungsoberfläche")
+                            "✅ Drag & Drop Manager aktiviert - Scrollen Sie nach unten für die Bearbeitungsoberfläche")
                         show_dragdrop_later = True
                 except ImportError:
-                    st.warning(" Drag & Drop System nicht verfügbar")
+                    # Warnung entfernt - Feature ist optional
+                    pass
 
         with col2:
             st.markdown("**PDF-Format Optionen:**")
