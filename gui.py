@@ -906,6 +906,15 @@ def main():
 
         st.set_page_config(page_title=get_text_gui("app_title"), layout="wide")
     _apply_active_app_theme()
+    
+    # ============================================================================
+    # UI-SETTINGS HANDLER - Lädt Benutzer-Einstellungen
+    # ============================================================================
+    try:
+        from ui_settings_handler import apply_ui_settings
+        apply_ui_settings()
+    except Exception as e:
+        st.warning(f"⚠️ UI-Einstellungen konnten nicht geladen werden: {e}")
 
     # ============================================================================
     # DYNAMISCHE GLOBALE UI-EFFEKTE (10 verschiedene Stile zur Auswahl)
@@ -2373,6 +2382,24 @@ def main():
                                         value=True,
                                         key="multi_pdf_savings_chart"
                                     )
+                                
+                                # ✅ NEU: Erweiterte Ausgabe für Multi-PDF
+                                st.markdown("---")
+                                st.markdown("**📄 Erweiterte Ausgabe:**")
+                                append_additional_pages = st.checkbox(
+                                    "📑 Zusätzliche Angebotsseiten anhängen",
+                                    value=False,
+                                    key="multi_pdf_append_additional",
+                                    help="Fügt detaillierte Berechnungen, Diagramme und individuelle Inhalte hinzu"
+                                )
+                                
+                                if append_additional_pages:
+                                    include_all_docs = st.checkbox(
+                                        "📋 Datenblätter & Dokumente anhängen",
+                                        value=True,
+                                        key="multi_pdf_include_all_docs",
+                                        help="Produktdatenblätter und Firmendokumente"
+                                    )
                             
                             with col2:
                                 st.markdown("**💰 Wirtschaftlichkeit:**")
@@ -2558,7 +2585,10 @@ def main():
                                 'color_scheme': color_scheme,
                                 'include_page_numbers': include_page_numbers,
                                 'include_payment_terms': include_payment_terms,
-                                'include_financing': include_financing
+                                'include_financing': include_financing,
+                                # ✅ NEU: Erweiterte Ausgabe Optionen
+                                'append_additional_pages_after_main6': st.session_state.get('multi_pdf_append_additional', False),
+                                'include_all_documents': st.session_state.get('multi_pdf_include_all_docs', False) if st.session_state.get('multi_pdf_append_additional', False) else False
                             }
                             
                             # Generierungs-Button
@@ -2731,13 +2761,32 @@ def main():
     elif selected_page_key == "options":
         st.header(get_text_gui("menu_item_options"))
 
+        # DEBUG: Prüfe ob options_module geladen ist
+        print("=" * 80)
+        print("DEBUG: Options Page aufgerufen")
+        print(f"  options_module: {options_module}")
+        print(f"  options_module type: {type(options_module)}")
+        if options_module:
+            print(f"  render_options callable: {callable(getattr(options_module, 'render_options', None))}")
+        print("=" * 80)
+
         # Tabs für die Optionen erstellen
-        tab_general, tab_ai = st.tabs([" Allgemeine Einstellungen", "A.G.E.N.T. Begleiter"])
+        tab_general, tab_ai = st.tabs([" Allgemeine Einstellungen", "🤖 A.G.E.N.T. Begleiter"])
 
         with tab_general:
             if options_module and callable(getattr(options_module, 'render_options', None)):
-                options_module.render_options(TEXTS, module_name=get_text_gui("menu_item_options")) # type: ignore
+                try:
+                    print("DEBUG: Rufe options_module.render_options() auf...")
+                    options_module.render_options(TEXTS, module_name=get_text_gui("menu_item_options")) # type: ignore
+                    print("DEBUG: options_module.render_options() erfolgreich ausgeführt")
+                except Exception as e:
+                    import traceback
+                    error_msg = traceback.format_exc()
+                    print(f"ERROR: options_module.render_options() fehlgeschlagen:\n{error_msg}")
+                    st.error(f"❌ Fehler beim Laden der Einstellungen: {e}")
+                    st.text_area("Fehlerdetails:", error_msg, height=200)
             else:
+                print("WARNING: options_module nicht verfügbar oder render_options nicht callable")
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_options","Optionen nicht verfügbar.")))
 
         with tab_ai:
