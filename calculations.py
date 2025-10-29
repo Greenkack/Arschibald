@@ -15,6 +15,27 @@ import requests  # Für HTTP-Anfragen an PVGIS
 
 from financial_calculations import calculate_final_price
 
+# ========================================
+# CORE INTEGRATION - Performance Caching
+# ========================================
+try:
+    from core_integration import (
+        log_info,
+        log_error,
+        cache_get,
+        cache_set,
+        is_feature_enabled,
+    )
+    CORE_AVAILABLE = True
+except ImportError:
+    CORE_AVAILABLE = False
+    def log_info(msg, **kwargs): pass
+    def log_error(msg, **kwargs): pass
+    def cache_get(key): return None
+    def cache_set(key, val, **kwargs): return False
+    def is_feature_enabled(f): return False
+# ========================================
+
 # Import der erweiterten PV-Berechnungsalgorithmen
 try:
     from pv_calculations_core import (
@@ -248,6 +269,39 @@ try:
             "Eine oder mehrere Produkt-DB Funktionen sind nicht aufrufbar."
         )
     _PRODUCT_DB_AVAILABLE = True
+except ImportError:
+    real_list_products, real_get_product_by_id, real_get_product_by_model_name = (
+        Dummy_list_products_calc,
+        Dummy_get_product_by_id_calc,
+        Dummy_get_product_by_model_name_calc,
+    )
+except Exception:
+    real_list_products, real_get_product_by_id, real_get_product_by_model_name = (
+        Dummy_list_products_calc,
+        Dummy_get_product_by_id_calc,
+        Dummy_get_product_by_model_name_calc,
+    )
+
+# Performance-Handler importieren
+try:
+    from performance_handler import (
+        get_calculation_precision,
+        get_precision_config,
+        is_monte_carlo_enabled,
+        is_weather_integration_enabled,
+        is_degradation_analysis_enabled,
+        is_caching_enabled
+    )
+    PERFORMANCE_HANDLER_AVAILABLE = True
+except ImportError:
+    PERFORMANCE_HANDLER_AVAILABLE = False
+    # Fallback-Funktionen
+    def get_calculation_precision(): return 'standard'
+    def get_precision_config(): return {'decimal_places': 2, 'simulation_steps': 12}
+    def is_monte_carlo_enabled(): return False
+    def is_weather_integration_enabled(): return True
+    def is_degradation_analysis_enabled(): return True
+    def is_caching_enabled(): return True
 except ImportError:
     real_list_products, real_get_product_by_id, real_get_product_by_model_name = (
         Dummy_list_products_calc,
@@ -794,6 +848,21 @@ def calculate_enhanced_pricing(
         Enhanced pricing calculation result or None if calculation fails
     """
     try:
+        # ========================================
+        # CORE INTEGRATION - Smart Caching
+        # ========================================
+        # Versuche Core-Cache zu nutzen für bessere Performance
+        if CORE_AVAILABLE and is_feature_enabled('cache') and use_cache:
+            import hashlib
+            cache_key_data = f"{system_type}_{str(components)}_{vat_rate}"
+            cache_key = f"pricing:{hashlib.md5(cache_key_data.encode()).hexdigest()[:12]}"
+            
+            cached_result = cache_get(cache_key)
+            if cached_result:
+                log_info("pricing_cache_hit", system_type=system_type, key=cache_key[:20])
+                return cached_result
+        # ========================================
+        
         # Prepare calculation data
         modifications = _pricing_session_manager.get_pricing_modifications_from_session()
 
@@ -803,11 +872,14 @@ def calculate_enhanced_pricing(
             'vat_rate': vat_rate
         }
 
-        # Check cache first if enabled
+        # Check cache first if enabled (existing cache system)
         if use_cache:
             cached_result = _pricing_session_manager.get_cached_pricing(
                 calculation_data, system_type)
             if cached_result:
+                # Store in core cache too for faster access next time
+                if CORE_AVAILABLE and is_feature_enabled('cache'):
+                    cache_set(cache_key, cached_result, ttl=3600, tags={'pricing', system_type})
                 return cached_result
 
         # Update session state with new calculation
@@ -819,11 +891,22 @@ def calculate_enhanced_pricing(
             import streamlit as st
             if hasattr(st, "session_state"):
                 enhanced_pricing = st.session_state.get('enhanced_pricing', {})
-                return enhanced_pricing.get(system_type)
+                result = enhanced_pricing.get(system_type)
+                
+                # ========================================
+                # CORE INTEGRATION - Cache fresh results
+                # ========================================
+                if result and CORE_AVAILABLE and is_feature_enabled('cache') and use_cache:
+                    cache_set(cache_key, result, ttl=3600, tags={'pricing', system_type})
+                    log_info("pricing_calculated", system_type=system_type, cached=True)
+                # ========================================
+                
+                return result
 
         return None
 
     except Exception as e:
+        log_error("pricing_calculation_failed", error=e, system_type=system_type)
         print(f"Error in enhanced pricing calculation: {e}")
         return None
 
@@ -835,6 +918,23 @@ def invalidate_pricing_cache(system_type: str | None = None) -> None:
         system_type: System type to invalidate, or None for all systems
     """
     _pricing_session_manager.invalidate_pricing_cache(system_type)
+    
+    # ========================================
+    # CORE INTEGRATION - Invalidate core cache too
+    # ========================================
+    if CORE_AVAILABLE and is_feature_enabled('cache'):
+        from core.cache import get_cache
+        cache = get_cache()
+        if cache:
+            if system_type:
+                # Invalidate specific system type
+                cache.invalidate_by_tags({system_type, 'pricing'})
+                log_info("cache_invalidated", system_type=system_type)
+            else:
+                # Invalidate all pricing
+                cache.invalidate_by_tags({'pricing'})
+                log_info("cache_invalidated", scope="all_pricing")
+    # ========================================
 
 
 def get_enhanced_pricing_from_session(
@@ -1766,8 +1866,17 @@ class AdvancedCalculationsIntegrator:
         opex_rate = lcoe_params.get("opex_rate", 0.01)
         degradation_rate = lcoe_params.get("degradation_rate", 0.005)
 
+        # Sicherheitsprüfungen gegen Division durch Null
+        if annual_production <= 0:
+            annual_production = 1  # Fallback-Wert
+        if lifetime <= 0:
+            lifetime = 25  # Fallback-Wert
+        if investment <= 0:
+            investment = 1  # Fallback-Wert
+
         # Einfache LCOE
-        lcoe_simple = investment / (annual_production * lifetime)
+        total_lifetime_production = annual_production * lifetime
+        lcoe_simple = investment / total_lifetime_production if total_lifetime_production > 0 else 0
 
         # Diskontierte LCOE mit Degradation
         total_discounted_energy = 0
@@ -1803,7 +1912,7 @@ class AdvancedCalculationsIntegrator:
 
         # Vergleich mit Netzstrom
         grid_price = 0.32  # EUR/kWh
-        grid_comparison = lcoe_discounted / grid_price if grid_price > 0 else 0
+        grid_comparison = lcoe_discounted / grid_price if grid_price > 0 and lcoe_discounted > 0 else 1.0
         savings_potential = grid_price - lcoe_discounted
 
         return {
@@ -1823,11 +1932,22 @@ class AdvancedCalculationsIntegrator:
             "annual_financial_benefit_year1", 1500)
         lifetime = 25
 
+        # Sicherheitsprüfungen
+        if investment <= 0:
+            investment = 20000  # Fallback
+        if annual_benefit <= 0:
+            annual_benefit = 1500  # Fallback
+        if discount_rate < 0:
+            discount_rate = 0.04  # Fallback
+
         # NPV berechnen
         npv = -investment
-        for year in range(1, lifetime + 1):
-            discounted_benefit = annual_benefit / (1 + discount_rate) ** year
-            npv += discounted_benefit
+        try:
+            for year in range(1, lifetime + 1):
+                discounted_benefit = annual_benefit / (1 + discount_rate) ** year
+                npv += discounted_benefit
+        except (ZeroDivisionError, OverflowError):
+            npv = 0  # Fallback bei Berechnungsfehler
 
         return npv
 
@@ -1838,6 +1958,12 @@ class AdvancedCalculationsIntegrator:
         annual_benefit = calc_results.get(
             "annual_financial_benefit_year1", 1500)
         lifetime = 25
+
+        # Sicherheitsprüfungen
+        if investment <= 0:
+            investment = 20000  # Fallback
+        if annual_benefit <= 0:
+            annual_benefit = 1500  # Fallback
 
         # Cash Flow generieren
         cash_flows = [-investment] + [annual_benefit] * lifetime
@@ -1855,14 +1981,20 @@ class AdvancedCalculationsIntegrator:
         except BaseException:
             irr = 0.05  # Fallback
 
-        # MIRR (vereinfacht)
+        # MIRR (vereinfacht) - mit Sicherheitsprüfung
         finance_rate = 0.04
         reinvest_rate = 0.03
-        mirr = ((annual_benefit * lifetime / investment) ** (1 / lifetime)) - 1
+        try:
+            mirr = ((annual_benefit * lifetime / investment) ** (1 / lifetime)) - 1
+        except (ZeroDivisionError, ValueError):
+            mirr = 0.05  # Fallback
 
-        # Profitability Index
-        pi = (sum(annual_benefit / (1 + 0.04) **
-                  year for year in range(1, lifetime + 1)) / investment)
+        # Profitability Index - mit Sicherheitsprüfung
+        try:
+            pi = (sum(annual_benefit / (1 + 0.04) **
+                      year for year in range(1, lifetime + 1)) / investment)
+        except ZeroDivisionError:
+            pi = 1.0  # Fallback
 
         return {
             "irr": irr * 100,
@@ -3862,27 +3994,34 @@ def perform_calculations(
                 final_investment_amount = float(
                     project_details['final_modified_price_net'])
                 print(
-                    f"DEBUG: Amortisation verwendet final_modified_price_net: {final_investment_amount}")
+                    f"✓ Amortisation verwendet final_modified_price_net: {final_investment_amount:.2f}€")
             elif project_details.get('final_price_with_provision'):
                 final_investment_amount = float(
                     project_details['final_price_with_provision'])
                 print(
-                    f"DEBUG: Amortisation verwendet final_price_with_provision: {final_investment_amount}")
+                    f"✓ Amortisation verwendet final_price_with_provision: {final_investment_amount:.2f}€")
             elif project_details.get('final_offer_price_net'):
                 final_investment_amount = float(
                     project_details['final_offer_price_net'])
                 print(
-                    f"DEBUG: Amortisation verwendet final_offer_price_net: {final_investment_amount}")
+                    f"✓ Amortisation verwendet final_offer_price_net: {final_investment_amount:.2f}€")
             else:
                 print(
-                    f"DEBUG: Amortisation verwendet Fallback total_investment_netto: {final_investment_amount}")
+                    f"⚠️ Amortisation verwendet Fallback total_investment_netto: {final_investment_amount:.2f}€")
+                if final_investment_amount < 5000:
+                    print(
+                        f"   ⚠️ WARNUNG: Investitionsbetrag sehr niedrig! Prüfen Sie:")
+                    print(f"      - base_matrix_price_netto: {results.get('base_matrix_price_netto', 0):.2f}€")
+                    print(f"      - total_additional_costs_netto: {total_additional_costs_netto:.2f}€")
+                    print(f"      - subtotal_netto: {subtotal_netto:.2f}€")
+                    print(f"      - one_time_bonus_eur: {one_time_bonus_eur:.2f}€")
         else:
             print(
-                f"DEBUG: Amortisation - keine project_details gefunden, verwende Fallback: {final_investment_amount}")
+                f"⚠️ Amortisation - keine project_details gefunden, verwende Fallback: {final_investment_amount:.2f}€")
 
     except Exception as e:
         # Fallback auf ursprüngliche Berechnung
-        print(f"DEBUG: Amortisation Exception: {e}")
+        print(f"❌ Amortisation Exception: {e}")
 
     amortization_time_calc = (
         final_investment_amount / annual_financial_benefit_year1

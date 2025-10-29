@@ -19,6 +19,19 @@ import streamlit as st
 
 from ui_state_manager import set_current_page
 
+# ========================================
+# CORE INTEGRATION - Logging
+# ========================================
+try:
+    from core_integration import log_info, log_error, log_warning
+    CORE_LOGGING = True
+except ImportError:
+    CORE_LOGGING = False
+    def log_info(msg, **kwargs): pass
+    def log_error(msg, **kwargs): pass
+    def log_warning(msg, **kwargs): pass
+# ========================================
+
 # Dynamische PDF-Overlay-Pfade (Koordinatendateien und PDF-Hintergründe)
 _PDF_UI_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 COORDS_DIR_PDF_UI = os.path.join(_PDF_UI_BASE_DIR, "coords")
@@ -3346,9 +3359,34 @@ def render_pdf_ui(
             if pdf_bytes and isinstance(pdf_bytes, bytes):
                 st.session_state.generated_pdf_bytes_for_download_v1 = pdf_bytes
                 st.success(f"✅ PDF erfolgreich generiert ({len(pdf_bytes)} Bytes)")
+                
+                # ========================================
+                # CORE INTEGRATION - Log Success
+                # ========================================
+                if CORE_LOGGING:
+                    log_info(
+                        "pdf_generated_success",
+                        size_bytes=len(pdf_bytes),
+                        template=selected_template_name_pdf_ui,
+                        sections=len(final_sections_to_include_to_pass),
+                        charts=len(final_inclusion_options_to_pass.get('selected_charts_for_pdf', [])),
+                        extended_pages=final_inclusion_options_to_pass.get('append_additional_pages_after_main6', False)
+                    )
+                # ========================================
             else:
                 st.error("❌ PDF-Generierung fehlgeschlagen - keine Daten generiert")
                 st.session_state.generated_pdf_bytes_for_download_v1 = None
+                
+                # ========================================
+                # CORE INTEGRATION - Log Failure
+                # ========================================
+                if CORE_LOGGING:
+                    log_error(
+                        "pdf_generation_failed",
+                        template=selected_template_name_pdf_ui,
+                        reason="no_pdf_bytes"
+                    )
+                # ========================================
                 
         except Exception as e_gen_final_outer:
             st.error(
@@ -3362,6 +3400,18 @@ def render_pdf_ui(
                 traceback.format_exc(),
                 height=250)
             st.session_state.generated_pdf_bytes_for_download_v1 = None
+            
+            # ========================================
+            # CORE INTEGRATION - Log Critical Error
+            # ========================================
+            if CORE_LOGGING:
+                log_error(
+                    "pdf_generation_critical_error",
+                    error=str(e_gen_final_outer),
+                    traceback=traceback.format_exc()[:500],  # First 500 chars
+                    template=selected_template_name_pdf_ui
+                )
+            # ========================================
         finally:
             st.session_state.pdf_generating_lock_v1 = False
             # Kein automatisches Rerun mehr - nur wenn PDF erfolgreich generiert wurde

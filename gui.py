@@ -16,6 +16,42 @@ from typing import Any, Dict
 import streamlit as st
 import streamlit.components.v1 as components
 
+# ========================================
+# CORE INTEGRATION - Phase 1: Config & Logging
+# ========================================
+# Sichere Integration der core-Module für Stabilität & Performance
+# Alle Features sind optional und haben Fallbacks
+try:
+    from core_integration import (
+        init_core_integration,
+        log_info,
+        log_error,
+        log_warning,
+        is_feature_enabled,
+    )
+    
+    # Initialisiere Core-Module beim App-Start
+    if 'core_initialized' not in st.session_state:
+        core_status = init_core_integration(enable_logging=True)
+        st.session_state.core_initialized = True
+        st.session_state.core_status = core_status
+        
+        # Log successful initialization
+        if core_status.get('logging'):
+            log_info(
+                "bokuk2_startup",
+                version="2.0.0",
+                core_features=core_status
+            )
+except Exception as e:
+    # Fallback - App funktioniert auch ohne core-Module
+    print(f"⚠️ Core integration disabled: {e}")
+    def log_info(msg, **kwargs): print(f"INFO: {msg}")
+    def log_error(msg, **kwargs): print(f"ERROR: {msg}")
+    def log_warning(msg, **kwargs): print(f"WARNING: {msg}")
+    def is_feature_enabled(f): return False
+# ========================================
+
 from emoji_toggle import initialize_emoji_support
 from live_preview_helpers import (
     render_live_cost_preview as render_live_cost_preview_sidebar,
