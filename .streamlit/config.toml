@@ -1,27 +1,48 @@
 # ---------- SERVER ----------
 [server]
 headless = false
-folderWatchList = []                # absolute Pfade hier eintragen, z.B. ["/abs/pfad/pages"]
 fileWatcherType = "poll"           # "auto"|"watchdog"|"poll"|"none"
 enableCORS = true
 enableXsrfProtection = true
 maxUploadSize = 512                 # MB
+# Stabilität & Performance
+runOnSave = true                    # Auto-reload bei Dateiänderungen
+enableStaticServing = true          # Statische Dateien effizienter bereitstellen
+enableWebsocketCompression = true   # WebSocket Kompression für bessere Performance
+port = 8501                         # Standard-Port
+address = "localhost"               # Server-Adresse
+baseUrlPath = ""                    # Base URL Path für Reverse Proxy
+cookieSecret = "auto"               # Cookie Secret für Session-Security
+# Memory & Connection Management
+maxMessageSize = 200                # Max WebSocket Message Size in MB
+maxCachedMessageAge = 2             # Max Alter gecachter Messages in Sekunden
 
 # ---------- BROWSER ----------
 [browser]
 serverAddress = "localhost"
 serverPort = 8501
-gatherUsageStats = true
+gatherUsageStats = false            # Keine Telemetrie an Streamlit senden (Performance)
 
 # ---------- CLIENT ----------
 [client]
 showErrorDetails = "full"           # "full"|"stacktrace"|"type"|"none"
 toolbarMode = "developer"           # "auto"|"developer"|"viewer"|"minimal"
 showSidebarNavigation = true
+# Stabilität
+caching = true                      # Client-seitiges Caching aktivieren
+displayEnabled = true               # Display-Komponenten aktiviert
+# Performance
+showSpinner = true                  # Spinner bei langen Operationen zeigen
 
 # ---------- RUNNER ----------
 [runner]
 magicEnabled = true
+# Stabilität & Performance
+fastReruns = true                   # Schnellere Reruns bei kleinen Änderungen
+postScriptGC = true                 # Garbage Collection nach Script-Ausführung
+fixMatplotlib = true                # Matplotlib Memory Leak Fix
+# Memory Management
+enforceSerializableSessionState = false  # Für komplexe Objekte in Session State
 
 # ---------- THEME ----------
 [theme]
@@ -47,3 +68,23 @@ style = "normal"
 [logger]
 level = "error"
 messageFormat = "%(asctime)s %(message)s"
+# Stabilität
+enableRich = false                  # Einfaches Logging (weniger Overhead)
+
+# ---------- DEPRECATION ----------
+[deprecation]
+showPyplotGlobalUse = false         # Keine Warnungen für pyplot.show()
+showfileUploaderEncoding = false    # Keine Encoding-Warnungen
+showImageFormat = false             # Keine Image-Format-Warnungen
+
+# ---------- GLOBAL ----------
+[global]
+# Development vs Production
+developmentMode = true              # Development-Modus für besseres Debugging
+# Performance
+dataFrameSerialization = "arrow"    # Arrow statt Legacy (schneller)
+showWarningOnDirectExecution = false # Keine Warnung bei direkter Ausführung
+unitTest = false                    # Unit-Test-Modus deaktiviert
+# UI
+minCachedMessageSize = 0            # Alle Messages cachen (keine Größenbeschränkung)
+maxCachedMessageAge = 2             # Max Alter gecachter Messages in Sekunden
