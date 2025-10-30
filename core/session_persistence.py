@@ -235,13 +235,16 @@ class SessionPersistenceEngine:
                     existing.user_id = session.user_id
                 else:
                     # Create new session
+                    # ✅ Robust: last_activity ist direkt auf session, nicht unter metrics
+                    last_activity_time = getattr(session, 'last_activity', datetime.now())
+                    
                     new_session = SessionModel(
                         session_id=session.session_id,
                         user_id=session.user_id,
                         session_data=session.to_json(),
                         created_at=session.created_at,
                         updated_at=datetime.now(),
-                        last_activity=session.metrics.last_activity,
+                        last_activity=last_activity_time,
                         expires_at=expires_at,
                     )
                     db_session.add(new_session)

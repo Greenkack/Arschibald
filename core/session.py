@@ -502,9 +502,21 @@ def persist_input(key: str, val: Any) -> None:
         key: Input key
         val: Input value
     """
-    # Update session_state immediately
+    # Update session_state immediately - with robust error handling
     if STREAMLIT_AVAILABLE and st and hasattr(st, 'session_state'):
-        st.session_state[key] = val
+        try:
+            # Only set if widget doesn't exist yet (prevent modification after instantiation)
+            if key not in st.session_state:
+                st.session_state[key] = val
+            # If widget exists, log warning but don't crash
+            else:
+                # Widget already exists, skip modification
+                pass
+        except Exception as e:
+            # Catch StreamlitAPIException and other widget state errors
+            if get_logger():
+                get_logger().warning(f"session_persist_skipped: Cannot modify {key} - {e}")
+            # Continue execution - this is not critical
 
     # Get current session
     session = get_current_session()

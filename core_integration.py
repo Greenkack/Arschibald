@@ -266,20 +266,30 @@ def _init_advanced_modules(status: dict):
         try:
             from core.cache_invalidation import CacheDependencyTracker
             from core.cache_monitoring import CacheMonitor
-            from core.cache_warming import CacheWarmer
+            from core.cache_warming import CacheWarmingEngine  # ✅ Korrekter Name
             
             _cache_invalidator = CacheDependencyTracker(_cache)
             _cache_monitor = CacheMonitor(_cache)
-            _cache_warmer = CacheWarmer(_cache)
+            _cache_warmer = CacheWarmingEngine(_cache)  # ✅ Korrekter Name
             
             status['cache_extensions'] = True
             print("✅ Cache Extensions initialized (Invalidation, Monitoring, Warming)")
             if _logger:
                 _logger.info("cache_extensions_initialized")
+        except ImportError as e:
+            status['errors'].append(f"Cache Extensions import failed: {e}")
+            print(f"⚠️ Cache Extensions disabled (import error): {e}")
+            status['cache_extensions'] = False
+            _cache_invalidator = None
+            _cache_monitor = None
+            _cache_warmer = None
         except Exception as e:
             status['errors'].append(f"Cache Extensions init failed: {e}")
             print(f"⚠️ Cache Extensions disabled: {e}")
             status['cache_extensions'] = False
+            _cache_invalidator = None
+            _cache_monitor = None
+            _cache_warmer = None
     
     # PHASE 11: DATABASE EXTENSIONS
     if FEATURES['db_ext'] and _database_manager:
