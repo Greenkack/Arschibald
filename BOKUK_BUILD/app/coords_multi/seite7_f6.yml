@@ -1,0 +1,651 @@
+Text: IHR INDIVIDUELLES ANGEBOT |
+Position: (150.0, 75.0, 400.0, 85.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 26.0
+Farbe: 30920
+---------------------------------------
+Text: - auf einen Blick, ZUSAMMENGEFASST |
+Position: (204.5, 98.0, 300.0, 108.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 18.0
+Farbe: 3487029
+---------------------------------------
+Text: KUNDENSERVICE: 
+Position: (45.0, 148.0, 180.0, 158.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 866432
+---------------------------------------
+Text: - Anlagenplanung, Anmeldung PV & Stromspeicher
+Position: (60.0, 168.0, 300.0, 178.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Anfrage Netzbetreibergenehmigung
+Position: (60.0, 180.0, 300.0, 190.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Projektierung & Visualisierung
+Position: (60.0, 191.5, 300.0, 201.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Unterstützung bei Förderbeantragung
+Position: (60.0, 203.0, 300.0, 213.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Unterstützung Anmeldung im Marktstammdatenregister
+Position: (60.0, 214.5, 300.0, 224.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Fernwartungsservice 
+Position: (60.0, 226.0, 300.0, 236.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: PV - MODULE:
+Position: (320.0, 148.0, 390.0, 158.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 866432
+---------------------------------------
+Text: X_MODULE_COUNT_FORMATTED
+Position: (337.0, 168.0, 390.0, 178.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -
+Position: (330.0, 168.0, 390.0, 178.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: X_PROD_MODULE
+Position: (358.0, 168.0, 392.0, 178.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Anlagenleistung gesamt
+Position: (385.0, 180.0, 400.0, 190.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: kWp_anlage_anlage
+Position: (336.0, 180.0, 390.0, 190.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -
+Position: (330.0, 180.0, 390.0, 190.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - 
+Position: (330.0, 191.5, 385.0, 201.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: Modulaufbau1
+Position: (337.0, 191.5, 392.0, 201.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - 
+Position: (330.0, 203.0, 385.0, 213.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: PV-Zellentechnologie1
+Position: (337.0, 203.0, 392.0, 213.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -  mehr Details siehe Produktdatenblatt
+Position: (330.0, 214.5, 540.0, 224.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: WECHSELRICHTER:
+Position: (320.0, 300.0, 420.0, 310.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 866432
+---------------------------------------
+Text: X_INVERTER_POWER_FORMATTED
+Position: (336.0, 336.0, 580.0, 346.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -
+Position: (330.0, 336.0, 580.0, 346.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Wechselrichterleistung
+Position: (380.0, 336.0, 580.0, 346.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: X_PROD_INVERTER
+Position: (336.0, 410.0, 540.0, 555.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -
+Position: (330.0, 323.0, 540.0, 333.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -
+Position: (330.0, 348.0, 440.0, 358.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: WR-Typ
+Position: (336.0, 348.0, 440.0, 358.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - mehr Details siehe Produktdatenblatt
+Position: (330.0, 359.5, 540.0, 369.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: BATTERIESPEICHER:
+Position: (320.0, 450.0, 440.0, 460.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 866432
+---------------------------------------
+Text: X_PROD_STORAGE
+Position: (336.0, 470.0, 540.0, 610.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -
+Position: (330.0, 473.0, 540.0, 483.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Speicherkapazität
+Position: (384.0, 486.0, 435.0, 496.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: 
+Position: (335.0, 555.0, 540.0, 565.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -
+Position: (330.0, 458.5, 435.0, 508.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: Speicherzellentechnologie
+Position: (336.0, 498.5, 540.0, 508.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - mehr Details siehe Produktdatenblatt
+Position: (330.0, 509.5, 540.0, 519.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: MONTAGE DER PV-ANLAGE: 
+Position: (45.0, 300.0, 180.0, 310.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 866432
+---------------------------------------
+Text: ELEKTRISCHE INSTALLATION: 
+Position: (45.0, 450.0, 180.0, 460.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 866432
+---------------------------------------
+Text: X_STORAGE_CAPACITY_FORMATTED
+Position: (336.0, 486.0, 550.0, 496.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: -
+Position: (330.0, 486.0, 550.0, 496.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Gerüststellung Abhängig von örtlichen Gegebenheiten 
+Position: (60.0, 325.0, 180.0, 335.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Montage der vorgesehenen Dachhaken  
+Position: (60.0, 337.0, 180.0, 347.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Befestigung der Unterkonstruktion   
+Position: (60.0, 348.0, 180.0, 358.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Anbringung der PV Module auf Unterkonstruktion 
+Position: (60.0, 359.0, 180.0, 369.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - geplante Stringverlegung und  
+Position: (60.0, 370.0, 180.0, 380.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Vorbereitung der Elektroinstallation  
+Position: (60.0, 381.0, 180.0, 391.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - optionale Leistungsoptimierung
+Position: (60.0, 392.0, 180.0, 402.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Elektrischer Anschluss gemäß der VDE-N-4105
+Position: (60.0, 475.0, 180.0, 485.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Installation Potentialausgleiche
+Position: (60.0, 486.5, 180.0, 496.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Installation & Konfiguration des Wechselrichters 
+Position: (60.0, 498.0, 180.0, 508.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Installation Zählerschrankbauteile
+Position: (60.0, 509.5, 180.0, 519.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Installation & Konfiguration des Batteriespeichersystems
+Position: (60.0, 521.0, 180.0, 531.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - optionaler Anschluss und Aktivierung der Notstromversorgung
+Position: (60.0, 532.5, 180.0, 542.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Durchführung Messung der Leistung und Spannung
+Position: (60.0, 544.0, 180.0, 554.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Dokumentation der Fertigmeldung für EVU
+Position: (60.0, 555.5, 180.0, 565.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Inbetriebnahme mit Netzbetreiber
+Position: (60.0, 567.0, 180.0, 577.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Freischaltung der Garantie der PV Komponente
+Position: (60.0, 578.5, 180.0, 588.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: RENTABILITÄT & WIRTSCHAFTLICHKEIT:
+Position: (45.0, 600.0, 180.0, 640.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 866432
+---------------------------------------
+Text: - Amortisationszeit
+Position: (115.0, 689.5, 180.0, 699.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: amortisation_time
+Position: (65.0, 689.5, 180.0, 699.5)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - jährliche Stromproduktion
+Position: (130.0, 655.0, 180.0, 665.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: annual_electricity_produce
+Position: (65.0, 655.0, 180.0, 665.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Autarkiegrad
+Position: (90.0, 678.0, 180.0, 688.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: autarkie_grad_%
+Position: (65.0, 678.0, 180.0, 688.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Eigenverbrauchsquote
+Position: (90.0, 666.5, 180.0, 676.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: eigenverbrauch_quote_%
+Position: (65.0, 666.5, 180.0, 676.5)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Gesamt Erträge pro Jahr
+Position: (385.0, 678.0, 540.0, 688.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: annual_euro_savings
+Position: (335.0, 678.0, 540.0, 688.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Einspeisetarif
+Position: (405.0, 655.0, 540.0, 665.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: on_grid_tariffs
+Position: (335.0, 655.0, 540.0, 665.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: - Gültigkeit der Einspeisevergütung 
+Position: (380.0, 666.5, 540.0, 676.5)
+Schriftart: Helvetica-Regular
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: 20 Jahre
+Position: (335.0, 666.5, 540.0, 676.5)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.0
+Farbe: 3487029
+---------------------------------------
+Text: FINANZIELLES:
+Position: (320.0, 600.0, 440.0, 640.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (330.0, 418.0, 500.0, 433.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: 
+Position: (315.0, 418.0, 500.0, 433.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (480.0, 418.0, 550.0, 433.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (470.0, 418.0, 550.0, 433.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text:  
+Position: (60.0, 418.0, 320.0, 433.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (330.0, 451.0, 500.0, 466.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: 
+Position: (315.0, 451.0, 500.0, 466.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (480.0, 451.0, 550.0, 466.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (470.0, 451.0, 550.0, 466.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text:  
+Position: (60.0, 451.0, 320.0, 466.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (330.0, 482.0, 520.0, 499.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: 
+Position: (315.0, 482.0, 520.0, 499.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (480.0, 482.0, 550.0, 499.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (470.0, 482.0, 550.0, 499.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: 
+Position: (60.0, 482.0, 320.0, 499.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 866432
+---------------------------------------
+Text: 
+Position: (330.0, 581.0, 500.0, 596.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: 
+Position: (330.0, 611.0, 500.0, 626.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+# Optionale Dienstleistungen
+Text: X_LBL_WEITERE
+Position: (60.0, 410.0, 220.0, 425.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_SRV_WEITERE
+Position: (200.0, 520.0, 520.0, 535.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_LBL_WALLBOX_LEITUNG
+Position: (60.0, 430.0, 220.0, 445.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_SRV_WALLBOX_LEITUNG
+Position: (200.0, 545.0, 520.0, 560.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_LBL_NOTSTROM_AKTIVIERUNG
+Position: (60.0, 450.0, 220.0, 465.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_SRV_NOTSTROM_AKTIVIERUNG
+Position: (200.0, 570.0, 520.0, 585.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_LBL_ENERGIEMANAGEMENT
+Position: (60.0, 470.0, 230.0, 485.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_SRV_ENERGIEMANAGEMENT
+Position: (200.0, 595.0, 520.0, 610.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_LBL_DYNAMISCHER_TARIF
+Position: (60.0, 490.0, 230.0, 505.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_SRV_DYNAMISCHER_TARIF
+Position: (200.0, 620.0, 520.0, 635.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_LBL_SONSTIGES
+Position: (60.0, 510.0, 250.0, 525.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_SRV_SONSTIGES
+Position: (200.0, 645.0, 520.0, 680.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: X_SRV_SUMMARY
+Position: (60.0, 585.0, 520.0, 600.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+---------------------------------------
+Text: tom-90
+Position: (39.658077239990234, 814.5894775390625, 72.79461669921875, 827.7636108398438)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.989105224609375
+Farbe: 16777215
+---------------------------------------
+Text: 29.11.2024
+Position: (265.26416015625, 814.5894775390625, 316.9228210449219, 827.7636108398438)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.989105224609375
+Farbe: 16777215
+---------------------------------------
+Text: 6
+Position: (549.3937377929688, 814.5894775390625, 555.1275024414062, 827.7636108398438)
+Schriftart: Helvetica-Bold
+Schriftgröße: 9.989105224609375
+Farbe: 16777215
+----------------------------------------
+ Speichergröße entspricht 43 % des durchschnittlichen Tagesstromverbrauchs
+ * Größe ausreichend für Einspeicherung von 32 % der durchschnittlichen PV-Tagesproduktio

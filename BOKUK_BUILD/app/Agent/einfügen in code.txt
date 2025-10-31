@@ -1,0 +1,125 @@
+KAI Agent: Projekt-Grundgerüst (Phase A)
+Dieses Dokument definiert die initiale Code-Struktur und die Konfiguration der sicheren Sandbox-Umgebung, wie in Phase A des Projektplans beschrieben.
+
+1. Verzeichnisstruktur
+Eine modulare Struktur ist entscheidend, um die verschiedenen Komponenten des Agenten (Kernlogik, Werkzeuge, Sandbox) sauber zu trennen.
+
+kai_agent/
+├── agent/
+│   ├── __init__.py
+│   ├── agent_core.py      # Hier wird die zentrale Agenten-Logik (ReAct-Schleife) leben.
+│   └── tools/
+│       ├── __init__.py
+│       ├── coding_tools.py  # Werkzeuge für Dateizugriff (lesen, schreiben, auflisten).
+│       └── execution_tools.py # Werkzeug zur Interaktion mit der Sandbox.
+│
+├── sandbox/
+│   ├── Dockerfile         # Bauplan für die sichere, isolierte Code-Ausführungsumgebung.
+│   └── requirements.txt   # Python-Pakete, die *innerhalb* der Sandbox verfügbar sein sollen.
+│
+├── .env.example           # Vorlage für Umgebungsvariablen (API-Schlüssel).
+├── main.py                # Haupt-Einstiegspunkt zum Starten und Interagieren mit dem Agenten.
+├── requirements.txt         # Python-Pakete für das Hauptprojekt (Agenten-Framework etc.).
+└── README.md              # Anweisungen zur Einrichtung und zum Start des Projekts.
+
+2. Dateiinhalte (Initial-Setup)
+Hier sind die Startinhalte für die wichtigsten Dateien.
+
+a) Sandbox-Konfiguration (sandbox/Dockerfile)
+Dies ist das Herzstück der Sicherheit. Der Code des Agenten wird in diesem isolierten Container ausgeführt, ohne Zugriff auf das Host-System.
+
+# sandbox/Dockerfile
+
+# 1. Ein schlankes, sicheres Python-Basis-Image verwenden.
+FROM python:3.11-slim
+
+# 2. Einen dedizierten, unprivilegierten Benutzer erstellen, um das Ausführen als root zu verhindern.
+RUN useradd --create-home --shell /bin/bash sandboxuser
+
+# 3. Das Arbeitsverzeichnis erstellen und die Berechtigungen festlegen.
+WORKDIR /app
+COPY --chown=sandboxuser:sandboxuser ./sandbox/requirements.txt /app/requirements.txt
+
+# 4. Abhängigkeiten innerhalb der Sandbox installieren.
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 5. Zum unprivilegierten Benutzer wechseln.
+USER sandboxuser
+
+# 6. Ein Verzeichnis für den generierten Code erstellen.
+RUN mkdir /app/workspace
+WORKDIR /app/workspace
+
+# Standardbefehl (kann später für einen persistenten Dienst geändert werden).
+CMD ["/bin/bash"]
+
+b) Projekt-Abhängigkeiten (requirements.txt)
+Diese Pakete werden für den Agenten selbst benötigt, nicht für den Code, den er ausführt.
+
+# requirements.txt (im Hauptverzeichnis)
+
+# Agenten-Framework
+langchain
+langchain-openai
+langchain-community
+
+# Docker-Interaktion
+docker
+
+# Für zukünftige API-Server (optional am Anfang)
+# fastapi
+# uvicorn
+
+# Zur Verwaltung von Umgebungsvariablen
+python-dotenv
+
+c) Haupt-Einstiegspunkt (main.py)
+Eine einfache Startdatei, die wir später ausbauen werden.
+
+# main.py
+
+import os
+from dotenv import load_dotenv
+
+def main():
+    """
+    Hauptfunktion zum Initialisieren und Starten des KAI-Agenten.
+    """
+    # Lädt API-Schlüssel und andere Konfigurationen aus einer .env-Datei.
+    load_dotenv()
+    
+    print("KAI Agent wird initialisiert...")
+    
+    # Hier werden wir später die Agenten-Klasse aus agent/agent_core.py instanziieren.
+    # agent = AgentCore()
+    
+    # Hier starten wir die Interaktionsschleife.
+    # agent.run("Erstelle eine einfache Flask-App.")
+
+    print("Projekt-Grundgerüst ist bereit. Nächster Schritt: Implementierung der Agenten-Logik.")
+    
+    # Beispiel: Überprüfen, ob der OpenAI API-Schlüssel geladen wurde.
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if openai_api_key:
+        print("OpenAI API-Schlüssel erfolgreich geladen.")
+    else:
+        print("WARNUNG: OPENAI_API_KEY nicht gefunden. Bitte in .env-Datei eintragen.")
+
+
+if __name__ == "__main__":
+    main()
+
+d) Umgebungs-Vorlage (.env.example)
+Eine Vorlage, damit klar ist, welche Geheimnisse benötigt werden. Niemals die echte .env-Datei in Git einchecken!
+
+# .env.example - Kopieren Sie diese Datei nach .env und tragen Sie Ihre Schlüssel ein.
+
+# LLM Provider
+OPENAI_API_KEY="sk-..."
+
+# Telefonie Provider
+TWILIO_ACCOUNT_SID="AC..."
+TWILIO_AUTH_TOKEN="..."
+
+# Andere APIs (z.B. für die Websuche)
+# SERPER_API_KEY="..."

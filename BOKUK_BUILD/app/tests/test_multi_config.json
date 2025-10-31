@@ -1,0 +1,32 @@
+{
+  "project_data": {
+    "customer_name": "Batch Test Kunde",
+    "base_configuration": {
+      "anlage_kwp": 8.0,
+      "module_count": 20,
+      "system_type": "PV-Anlage"
+    }
+  },
+  "calculation_results": {
+    "total_investment_netto": 15000.00,
+    "annual_pv_production_kwh": 8000,
+    "final_price": 17850.00
+  },
+  "companies": [
+    {
+      "name": "Solar Company A",
+      "address": "Solar Straße 1, 12345 Stadt A",
+      "phone": "+49 111 222333",
+      "email": "info@solar-a.de"
+    },
+    {
+      "name": "Solar Company B", 
+      "address": "Energie Allee 2, 54321 Stadt B",
+      "phone": "+49 444 555666",
+      "email": "info@solar-b.de"
+    }
+  ],
+  "output_file": "test_multi_angebote.pdf",
+  "pdf_type": "multi",
+  "page_count": 7
+}

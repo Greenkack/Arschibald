@@ -22,6 +22,17 @@ from typing import Any
 from calculations_extended import run_all_extended_analyses
 from theming.pdf_styles import get_theme
 
+# Optional 3D Visualization import
+try:
+    from utils.pdf_visual_inject import make_pv3d_image_flowable
+    from utils.pv3d import BuildingDims, LayoutConfig
+    _PV3D_AVAILABLE = True
+except ImportError:
+    _PV3D_AVAILABLE = False
+    make_pv3d_image_flowable = None
+    BuildingDims = None
+    LayoutConfig = None
+
 # Optional PDF Templates import
 try:
     from pdf_templates import get_cover_letter_template, get_project_summary_template
@@ -318,6 +329,7 @@ class PDFGenerator:
             "preisaufstellung": self._draw_pricing_breakdown,
             "wirtschaftlichkeit": self._draw_economic_analysis,
             "technische_daten": self._draw_technical_data,
+            "3d_visualisierung": self._draw_3d_visualization,
             "benutzerdefiniert": self._draw_custom_content
         }
 
@@ -687,6 +699,95 @@ class PDFGenerator:
         ])
         table.setStyle(style)
         self.story.append(table)
+
+    def _draw_3d_visualization(self):
+        """Draw 3D PV visualization section"""
+        self.story.append(Paragraph("3D-Visualisierung", self.styles['H1']))
+        self.story.append(Spacer(1, 1 * cm))
+
+        # Check if 3D visualization is available
+        if not _PV3D_AVAILABLE or make_pv3d_image_flowable is None:
+            self.story.append(
+                Paragraph(
+                    "3D-Visualisierung nicht verfügbar. Bitte installieren Sie die erforderlichen Pakete (pyvista, vtk).",
+                    self.styles['Body']))
+            return
+
+        try:
+            # Extract building dimensions from project_data or offer_data
+            project_data = self.offer_data.get('project_data', {})
+            if not project_data:
+                # Try to get from offer_data directly
+                project_data = self.offer_data
+
+            # Extract or use default building dimensions
+            project_details = project_data.get('project_details', {})
+            
+            # Create BuildingDims from project data
+            # Try to extract dimensions, use sensible defaults if not available
+            building_type = project_details.get('building_type', 'Einfamilienhaus')
+            
+            # Default dimensions based on building type
+            if building_type == 'Einfamilienhaus':
+                default_length, default_width, default_height = 10.0, 6.0, 6.0
+            elif building_type == 'Mehrfamilienhaus':
+                default_length, default_width, default_height = 15.0, 10.0, 9.0
+            else:
+                default_length, default_width, default_height = 12.0, 8.0, 7.0
+
+            dims = BuildingDims(
+                length_m=project_details.get('building_length_m', default_length),
+                width_m=project_details.get('building_width_m', default_width),
+                wall_height_m=project_details.get('wall_height_m', default_height)
+            )
+
+            # Extract roof type
+            roof_type = project_details.get('roof_type', 'Flachdach')
+
+            # Extract module quantity
+            module_quantity = self.offer_data.get('module_quantity', 0)
+            if module_quantity == 0:
+                # Try analysis_results
+                analysis_results = self.offer_data.get('analysis_results', {})
+                module_quantity = analysis_results.get('module_quantity', 20)
+
+            # Create default LayoutConfig (automatic mode)
+            layout_config = LayoutConfig(mode="auto")
+
+            # Generate 3D image flowable
+            image_flowable = make_pv3d_image_flowable(
+                project_data=project_data,
+                dims=dims,
+                roof_type=roof_type,
+                module_quantity=module_quantity,
+                layout_config=layout_config,
+                width_cm=17.0
+            )
+
+            if image_flowable:
+                # Add image to story
+                self.story.append(image_flowable)
+                self.story.append(Spacer(1, 0.5 * cm))
+                
+                # Add caption
+                caption_text = "Abb.: 3D-Visualisierung der geplanten PV-Belegung"
+                self.story.append(
+                    Paragraph(caption_text, self.styles['Body']))
+            else:
+                # Rendering failed
+                self.story.append(
+                    Paragraph(
+                        "3D-Visualisierung konnte nicht erstellt werden.",
+                        self.styles['Body']))
+
+        except Exception as e:
+            # Error handling: Continue PDF generation without 3D image
+            error_msg = f"Fehler beim Erstellen der 3D-Visualisierung: {str(e)}"
+            logging.error(error_msg)
+            self.story.append(
+                Paragraph(
+                    "3D-Visualisierung konnte nicht erstellt werden.",
+                    self.styles['Body']))
 
     def _draw_custom_content(self, content: dict):
         """Draw custom content section"""
@@ -1388,6 +1489,7 @@ class PDFGenerator:
             "anschreiben": self._draw_cover_letter,
             "angebotstabelle": self._draw_offer_table,
             "preisaufstellung": self._draw_pricing_breakdown,
+            "3d_visualisierung": self._draw_3d_visualization,
             "benutzerdefiniert": self._draw_custom_content,
             "waermepumpe": self._draw_heatpump_section,
         }

@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "media_type": "image",
+  "image_path": "data/company_logos/wppv.png",
+  "image_left_path": "data\\company_logos\\intro_left_wp.png",
+  "image_right_path": "data\\company_logos\\intro_right_pv1.png",
+  "show_side_images": true,
+  "video_url": "",
+  "require_login": true,
+  "allow_registration": true,
+  "require_company_info": true,
+  "allow_guest": false,
+  "allow_quick_start": false,
+  "title": "Ömers All in One Machine",
+  "subtitle": "",
+  "description": ""
+}

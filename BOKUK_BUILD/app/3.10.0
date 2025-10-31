@@ -1,0 +1,4 @@
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: apscheduler in c:\users\win10\appdata\roaming\python\python313\site-packages (3.11.0)
+Requirement already satisfied: tzlocal>=3.0 in c:\users\win10\appdata\roaming\python\python313\site-packages (from apscheduler) (5.3.1)
+Requirement already satisfied: tzdata in c:\users\win10\appdata\roaming\python\python313\site-packages (from tzlocal>=3.0->apscheduler) (2025.2)

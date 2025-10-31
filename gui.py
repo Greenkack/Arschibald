@@ -8,7 +8,7 @@ import json
 import logging
 import os
 import sys
-import traceback
+import traceback as tb_module
 import warnings
 from datetime import datetime
 from typing import Any, Dict
@@ -43,6 +43,31 @@ try:
                 version="2.0.0",
                 core_features=core_status
             )
+        
+        # SESSION RECOVERY (Phase 3) - Browser-Refresh-Unterstützung
+        if core_status.get('session') and is_feature_enabled('session'):
+            from core_integration import bootstrap_session
+            
+            # Versuche Session aus URL-Parameter oder Cookie zu recovern
+            session_id_param = st.query_params.get('session_id')
+            
+            # Bootstrap session (neu oder recovery)
+            user_session = bootstrap_session(
+                session_id=session_id_param,
+                user_id=st.session_state.get('user_id')
+            )
+            
+            if user_session:
+                st.session_state.user_session_recovered = True
+                log_info("session_recovered", session_id=user_session.session_id)
+                
+                # Zeige Recovery-Hinweis (nur einmal)
+                if not st.session_state.get('recovery_notice_shown'):
+                    st.toast("✅ Sitzung wiederhergestellt", icon="🔄")
+                    st.session_state.recovery_notice_shown = True
+            else:
+                st.session_state.user_session_recovered = False
+                
 except Exception as e:
     # Fallback - App funktioniert auch ohne core-Module
     print(f"⚠️ Core integration disabled: {e}")
@@ -1551,6 +1576,7 @@ def main():
         main_menu = [
             {"icon": "📊", "label": get_text_gui("menu_item_input"), "key": "input"},
             {"icon": "☀️", "label": TEXTS.get("menu_item_solar_calculator", "Solar Calculator"), "key": "solar_calculator"},
+            {"icon": "🏠", "label": "3D PV-Visualisierung", "key": "3d_view"},
             {"icon": "🔥", "label": get_text_gui("menu_item_heatpump"), "key": "heatpump"},
             {"icon": "💰", "label": get_text_gui("menu_item_analysis"), "key": "analysis"},
         ]
@@ -2030,7 +2056,7 @@ def main():
                 
             except Exception as e_render_analysis:
                 st.error(f"Fehler beim Rendern des Analyse-Tabs: {e_render_analysis}")
-                st.text_area("Traceback Analysis:", traceback.format_exc(), height=200)
+                st.text_area("Traceback Analysis:", tb_module.format_exc(), height=200)
         else:
             st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_analysis", "Analysemodul nicht verfügbar.")))
 
@@ -2075,7 +2101,7 @@ def main():
                     admin_panel_module.render_admin_panel(**admin_kwargs_pass) # type: ignore
                 except Exception as e_render_admin:
                     st.error(f"Fehler im Admin-Panel: {e_render_admin}")
-                    st.text_area("Traceback Admin:", traceback.format_exc(), height=200)
+                    st.text_area("Traceback Admin:", tb_module.format_exc(), height=200)
         else:
             missing_modules_admin_list = [name for name, mod in [("Admin-Panel", admin_panel_module), ("Datenbank", database_module), ("Produkt-DB", product_db_module), ("Berechnungen", calculations_module)] if not mod]
             st.warning(get_text_gui("module_unavailable_details", f"Admin-Panel oder dessen Abhängigkeiten ({', '.join(missing_modules_admin_list)}) nicht verfügbar."))
@@ -2143,7 +2169,7 @@ def main():
                             doc_output_module.render_pdf_ui(**pdf_ui_kwargs_pass) # type: ignore
                         except Exception as e_render_pdf:
                             st.error(f"Fehler beim Rendern der PDF UI: {e_render_pdf}")
-                            st.text_area("Traceback PDF UI:", traceback.format_exc(), height=200)
+                            st.text_area("Traceback PDF UI:", tb_module.format_exc(), height=200)
             else:
                 st.warning(get_text_gui("module_unavailable_details", "PDF-Ausgabemodul oder dessen Abhängigkeiten sind nicht verfügbar."))
 
@@ -2263,7 +2289,7 @@ def main():
                             """)
 
                             if st.checkbox(" Detaillierte Fehlermeldung anzeigen", key="preview_debug"):
-                                st.code(traceback.format_exc())
+                                st.code(tb_module.format_exc())
 
             except ImportError as e_import:
                 st.error(f" PDF-Vorschau-Modul konnte nicht importiert werden: {e_import}")
@@ -2280,7 +2306,7 @@ def main():
             except Exception as e_general:
                 st.error(f" Unerwarteter Fehler im PDF-Vorschau-Tab: {e_general}")
                 if st.checkbox(" Debug-Informationen anzeigen", key="preview_general_debug"):
-                    st.code(traceback.format_exc())
+                    st.code(tb_module.format_exc())
 
         # Multi-Angebote Tab wieder aktiviert
         with tab_multi_offers:
@@ -2712,7 +2738,7 @@ def main():
                                         st.error(f"❌ Fehler bei Multi-PDF Generierung: {e}")
                                         import traceback
                                         with st.expander("🔍 Fehlerdetails", expanded=False):
-                                            st.code(traceback.format_exc())
+                                            st.code(tb_module.format_exc())
                         else:
                             st.warning("⚠️ Bitte wählen Sie mindestens 1 Firma aus!")
                 else:
@@ -2724,7 +2750,7 @@ def main():
                 st.error(f"❌ Fehler beim Laden der Firmen: {e}")
                 import traceback
                 with st.expander("🔍 Fehlerdetails", expanded=False):
-                    st.code(traceback.format_exc())
+                    st.code(tb_module.format_exc())
 
     elif selected_page_key == "quick_calc":
         # A.G.E.N.T. - Autonomous AI Expert System
@@ -2817,7 +2843,7 @@ def main():
                     print("DEBUG: options_module.render_options() erfolgreich ausgeführt")
                 except Exception as e:
                     import traceback
-                    error_msg = traceback.format_exc()
+                    error_msg = tb_module.format_exc()
                     print(f"ERROR: options_module.render_options() fehlgeschlagen:\n{error_msg}")
                     st.error(f"❌ Fehler beim Laden der Einstellungen: {e}")
                     st.text_area("Fehlerdetails:", error_msg, height=200)
@@ -2845,6 +2871,28 @@ def main():
             solar_calculator_module.render_solar_calculator(TEXTS, module_name=TEXTS.get("menu_item_solar_calculator", "Solar Calculator")) # type: ignore
         else:
             st.warning(get_text_gui("module_unavailable_details", "Solar Calculator Modul nicht verfügbar."))
+    
+    elif selected_page_key == "3d_view":
+        st.header("🏠 3D PV-Visualisierung")
+        try:
+            # Execute the 3D view page code directly
+            import os
+            page_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages", "solar_3d_view.py")
+            with open(page_path, 'r', encoding='utf-8') as f:
+                page_code = f.read()
+            # Remove the page config line as it's already set in gui.py
+            page_code = page_code.replace('st.set_page_config(', '# st.set_page_config(')
+            exec(page_code, {'st': st, '__name__': '__main__'})
+        except FileNotFoundError:
+            st.error("3D-Visualisierung Seite nicht gefunden.")
+            st.info("Bitte stellen Sie sicher, dass pages/solar_3d_view.py existiert.")
+        except ImportError as e:
+            st.error(f"3D-Visualisierung konnte nicht geladen werden: {e}")
+            st.info("Bitte stellen Sie sicher, dass alle erforderlichen Pakete installiert sind (pyvista, stpyvista, trimesh).")
+        except Exception as e:
+            st.error(f"Fehler beim Laden der 3D-Visualisierung: {e}")
+            import traceback
+            st.code(traceback.format_exc())
 
 if __name__ == "__main__":
     try:
@@ -2894,7 +2942,7 @@ if __name__ == "__main__":
         try:
             st.set_page_config(page_title="Kritischer Fehler", layout="wide")
             st.error(f"{critical_error_text_for_display_main_block}\nDetails: {e_global_gui_main_block}")
-            st.text_area("Traceback Global:", traceback.format_exc(), height=300)
+            st.text_area("Traceback Global:", tb_module.format_exc(), height=300)
         except Exception:
             pass
 

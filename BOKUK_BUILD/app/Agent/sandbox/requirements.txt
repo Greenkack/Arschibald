@@ -1,0 +1,20 @@
+# Python packages available in the KAI Agent sandbox
+# These packages can be used by code executed in the sandbox
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Common utilities
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# Data processing (optional, uncomment if needed)
+# numpy>=1.24.0
+# pandas>=2.0.0
+
+# Web frameworks (optional, uncomment if needed)
+# flask>=2.3.0
+# fastapi>=0.100.0
+
+# Add more packages as needed for your use cases

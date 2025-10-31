@@ -1,0 +1,4 @@
+kategorie,produkt_modell,hersteller,preis_stück,pv_modul_leistung,kapazitaet_speicher_kwh,wr_leistung_kw,garantie_zeit,wirkungsgrad_prozent
+Modul,Test Solar Panel 400W,SolarTech,200.50,400,,,"25","21.5"
+Wechselrichter,Test Inverter 5kW,InverterPro,800.00,,,"5","25","96.5"
+Batteriespeicher,Test Battery 10kWh,BatteryMax,3500.00,,,10,,"15","95.0"

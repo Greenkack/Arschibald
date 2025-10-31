@@ -1,0 +1,375 @@
+"""
+intro_screen.py
+Zweck: Intro-Bildschirm für die Bokuk2-Anwendung mit Video/Bild-Optionen
+"""
+import streamlit as st
+from pathlib import Path
+import base64
+import json
+
+def get_image_base64(image_path):
+    """Konvertiert Bild zu Base64 für HTML-Einbettung"""
+    try:
+        with open(image_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    except:
+        return None
+
+def load_intro_settings():
+    """Lädt Intro-Einstellungen aus JSON oder gibt Standardwerte zurück"""
+    settings_file = Path("data/intro_settings.json")
+    default_settings = {
+        "enabled": True,
+        "media_type": "image",  # "none", "image", "video"
+        "image_path": "data/company_logos/default_company_logo.png",
+        "video_url": "",
+        "require_login": False,
+        "allow_guest": True,
+        "allow_quick_start": True,
+        "title": "Bokuk2",
+        "subtitle": "Photovoltaik & Wärmepumpen Kalkulationssystem",
+        "description": """Willkommen bei Bokuk2 - Ihrer professionellen Lösung für:
+            <br><br>
+            • Photovoltaik-Anlagen Kalkulation<br>
+            • Wärmepumpen-Wirtschaftlichkeit<br>
+            • Angebotserstellung & PDF-Generierung<br>
+            • KI-gestützter Agent für automatisierte Aufgaben<br>
+            • CRM & Kundenverwaltung"""
+    }
+    
+    try:
+        if settings_file.exists():
+            with open(settings_file, 'r', encoding='utf-8') as f:
+                return {**default_settings, **json.load(f)}
+    except:
+        pass
+    return default_settings
+
+def save_intro_settings(settings):
+    """Speichert Intro-Einstellungen in JSON"""
+    settings_file = Path("data/intro_settings.json")
+    settings_file.parent.mkdir(exist_ok=True)
+    try:
+        with open(settings_file, 'w', encoding='utf-8') as f:
+            json.dump(settings, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception as e:
+        st.error(f"Fehler beim Speichern: {e}")
+        return False
+
+def render_intro_screen():
+    """
+    Rendert den Intro-Bildschirm mit Login/Weiter-Optionen.
+    
+    Returns:
+        bool: True wenn Benutzer fortfahren möchte, False sonst
+    """
+    
+    # Lade Einstellungen
+    settings = load_intro_settings()
+    
+    # Prüfe ob Intro deaktiviert ist
+    if not settings.get('enabled', True):
+        st.session_state['intro_completed'] = True
+        st.session_state['user_mode'] = 'quick_start'
+        st.session_state['username'] = 'Schnellstart-Benutzer'
+        return True
+    
+    # Prüfe ob bereits eingeloggt/weitergegangen
+    if st.session_state.get('intro_completed', False):
+        return True
+    
+    # Zentriertes Layout
+    st.markdown("""
+        <style>
+        .intro-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+        }
+        .intro-logo {
+            max-width: 400px;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+        .intro-video {
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+        .intro-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f77b4;
+        }
+        .intro-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+        .intro-description {
+            font-size: 1.1rem;
+            color: #444;
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+            line-height: 1.6;
+        }
+        .stButton button {
+            font-size: 1.2rem;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # Haupt-Container
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        st.markdown('<div class="intro-container">', unsafe_allow_html=True)
+        
+        # Media-Anzeige (Video oder Bild)
+        media_type = settings.get('media_type', 'image')
+        
+        if media_type == 'video' and settings.get('video_url'):
+            # Video einbetten
+            video_url = settings['video_url']
+            if 'youtube.com' in video_url or 'youtu.be' in video_url:
+                # YouTube-Video
+                if 'youtu.be' in video_url:
+                    video_id = video_url.split('/')[-1].split('?')[0]
+                else:
+                    video_id = video_url.split('v=')[-1].split('&')[0]
+                st.markdown(f'''
+                    <iframe class="intro-video" height="400" 
+                        src="https://www.youtube.com/embed/{video_id}" 
+                        frameborder="0" allowfullscreen>
+                    </iframe>
+                ''', unsafe_allow_html=True)
+            else:
+                # Direktes Video
+                st.video(video_url)
+        
+        elif media_type == 'image':
+            # Bild anzeigen
+            image_path = Path(settings.get('image_path', 'data/company_logos/default_company_logo.png'))
+            if image_path.exists():
+                img_base64 = get_image_base64(image_path)
+                if img_base64:
+                    st.markdown(f'<img src="data:image/png;base64,{img_base64}" class="intro-logo">', unsafe_allow_html=True)
+        
+        # Titel und Beschreibung
+        st.markdown(f'<h1 class="intro-title">{settings.get("title", "Bokuk2")}</h1>', unsafe_allow_html=True)
+        st.markdown(f'<p class="intro-subtitle">{settings.get("subtitle", "Kalkulationssystem")}</p>', unsafe_allow_html=True)
+        
+        # Beschreibung
+        st.markdown(f'''
+        <div class="intro-description">
+            {settings.get("description", "Willkommen!")}
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        st.markdown("---")
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+        .intro-description {
+            font-size: 1.1rem;
+            color: #444;
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+            line-height: 1.6;
+        }
+        .stButton button {
+            font-size: 1.2rem;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # Haupt-Container
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        st.markdown('<div class="intro-container">', unsafe_allow_html=True)
+        
+        # Logo (falls vorhanden)
+        logo_path = Path("data/company_logos/default_company_logo.png")
+        if logo_path.exists():
+            img_base64 = get_image_base64(logo_path)
+            if img_base64:
+                st.markdown(f'<img src="data:image/png;base64,{img_base64}" class="intro-logo">', unsafe_allow_html=True)
+        
+        # Titel
+        st.markdown('<h1 class="intro-title">Bokuk2</h1>', unsafe_allow_html=True)
+        st.markdown('<p class="intro-subtitle">Photovoltaik & Wärmepumpen Kalkulationssystem</p>', unsafe_allow_html=True)
+        
+        # Beschreibung
+        st.markdown("""
+        <div class="intro-description">
+            Willkommen bei Bokuk2 - Ihrer professionellen Lösung für:
+            <br><br>
+            • Photovoltaik-Anlagen Kalkulation<br>
+            • Wärmepumpen-Wirtschaftlichkeit<br>
+            • Angebotserstellung & PDF-Generierung<br>
+            • KI-gestützter Agent für automatisierte Aufgaben<br>
+            • CRM & Kundenverwaltung
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Zugangsoptionen (dynamisch basierend auf Einstellungen)
+        st.markdown("### Zugang zur Anwendung")
+        
+        # Erstelle Tabs basierend auf Einstellungen
+        tabs_to_show = []
+        tab_names = []
+        
+        if settings.get('allow_quick_start', True):
+            tabs_to_show.append('quick_start')
+            tab_names.append("Schnellstart")
+        
+        if settings.get('require_login', False):
+            tabs_to_show.append('login')
+            tab_names.append("Login")
+        
+        if settings.get('allow_guest', True):
+            tabs_to_show.append('guest')
+            tab_names.append("Gastmodus")
+        
+        # Wenn keine Tabs aktiviert, zeige nur Weiter-Button
+        if not tabs_to_show:
+            if st.button("Weiter zur Anwendung", type="primary", use_container_width=True, key="continue_only"):
+                st.session_state['intro_completed'] = True
+                st.session_state['user_mode'] = 'quick_start'
+                st.session_state['username'] = 'Benutzer'
+                st.rerun()
+        else:
+            tabs = st.tabs(tab_names)
+            
+            for i, tab_type in enumerate(tabs_to_show):
+                with tabs[i]:
+                    if tab_type == 'quick_start':
+                        st.markdown("#### Direkt starten")
+                        st.info("Starten Sie sofort mit allen Funktionen")
+                        
+                        if st.button("Weiter zur Anwendung", type="primary", use_container_width=True, key="quick_start"):
+                            st.session_state['intro_completed'] = True
+                            st.session_state['user_mode'] = 'quick_start'
+                            st.session_state['username'] = 'Schnellstart-Benutzer'
+                            st.rerun()
+                    
+                    elif tab_type == 'login':
+                        st.markdown("#### Benutzer-Login")
+                        
+                        with st.form("login_form"):
+                            username = st.text_input("Benutzername", placeholder="Ihr Benutzername")
+                            password = st.text_input("Passwort", type="password", placeholder="Ihr Passwort")
+                            
+                            col_login1, col_login2 = st.columns(2)
+                            with col_login1:
+                                login_button = st.form_submit_button("Anmelden", use_container_width=True)
+                            with col_login2:
+                                guest_button = st.form_submit_button("Als Gast fortfahren", use_container_width=True)
+                            
+                            if login_button:
+                                if username and password:
+                                    # Einfache Authentifizierung (kann später erweitert werden)
+                                    if username == "admin" and password == "admin":
+                                        st.session_state['intro_completed'] = True
+                                        st.session_state['user_mode'] = 'admin'
+                                        st.session_state['username'] = username
+                                        st.success("Erfolgreich angemeldet!")
+                                        st.rerun()
+                                    else:
+                                        st.error("Ungültige Anmeldedaten")
+                                else:
+                                    st.warning("Bitte Benutzername und Passwort eingeben")
+                            
+                            if guest_button and settings.get('allow_guest', True):
+                                st.session_state['intro_completed'] = True
+                                st.session_state['user_mode'] = 'guest'
+                                st.session_state['username'] = 'Gast'
+                                st.rerun()
+                    
+                    elif tab_type == 'guest':
+                        st.markdown("#### Gastmodus")
+                        st.info("Testen Sie die Anwendung ohne Anmeldung")
+                        
+                        if st.button("Als Gast fortfahren", use_container_width=True, key="guest_mode"):
+                            st.session_state['intro_completed'] = True
+                            st.session_state['user_mode'] = 'guest'
+                            st.session_state['username'] = 'Gast'
+                            st.rerun()
+        
+        st.markdown("---")
+        
+        # Keyboard-Shortcut Hinweis
+        st.caption("💡 Tipp: Drücken Sie Enter im Schnellstart-Tab um direkt zu starten")
+        
+        # Footer
+        st.markdown("""
+        <div style="text-align: center; margin-top: 3rem; color: #888; font-size: 0.9rem;">
+            Bokuk2 v2.0 | © 2025 | Powered by Streamlit & OpenAI
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Keyboard-Shortcut mit JavaScript
+    st.markdown("""
+    <script>
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && !event.target.matches('input, textarea')) {
+            const quickStartButton = document.querySelector('[data-testid="baseButton-primary"]');
+            if (quickStartButton) {
+                quickStartButton.click();
+            }
+        }
+    });
+    </script>
+    """, unsafe_allow_html=True)
+    
+    return False
+
+
+def show_user_info():
+    """Zeigt Benutzer-Info in der Sidebar"""
+    if st.session_state.get('intro_completed', False):
+        username = st.session_state.get('username', 'Unbekannt')
+        user_mode = st.session_state.get('user_mode', 'guest')
+        
+        mode_icons = {
+            'admin': '👑',
+            'quick_start': '🚀',
+            'guest': '👤'
+        }
+        
+        mode_labels = {
+            'admin': 'Administrator',
+            'quick_start': 'Schnellstart',
+            'guest': 'Gastmodus'
+        }
+        
+        icon = mode_icons.get(user_mode, '👤')
+        label = mode_labels.get(user_mode, 'Gast')
+        
+        with st.sidebar:
+            st.markdown("---")
+            st.markdown(f"**{icon} Angemeldet als:**")
+            st.markdown(f"`{username}`")
+            st.caption(f"Modus: {label}")
+            
+            if st.button("🚪 Abmelden", use_container_width=True):
+                st.session_state['intro_completed'] = False
+                st.session_state.pop('username', None)
+                st.session_state.pop('user_mode', None)
+                st.rerun()

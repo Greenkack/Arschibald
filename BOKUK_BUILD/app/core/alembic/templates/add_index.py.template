@@ -1,0 +1,11 @@
+"""Add index template
+
+Revision ID: ${revision}
+"""
+from alembic import op
+
+def upgrade() -> None:
+    op.create_index('idx_table_column', 'table_name', ['column_name'])
+
+def downgrade() -> None:
+    op.drop_index('idx_table_column', 'table_name')

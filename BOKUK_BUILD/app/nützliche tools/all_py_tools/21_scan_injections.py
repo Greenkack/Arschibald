@@ -1,0 +1,20 @@
+import os
+import re
+
+
+def scan_injections(directory="."):
+    suspicious_patterns = [
+        r'__import__\(.+\)',
+        r'(exec|eval)\(.+\)',
+        r'compile\(.+\)',
+        r'base64\.b64decode\(.+\)',
+        r'open\(.*\,\s*[\'\"]w[\'\"]\)',
+        r'os\.system\(.+\)',
+    ]
+    for file in os.listdir(directory):
+        if file.endswith(".py"):
+            with open(file, encoding="utf-8") as f:
+                code = f.read()
+            for pat in suspicious_patterns:
+                for m in re.finditer(pat, code):
+                    print(f"‼️ Verdächtig in {file}: {m.group(0)}")

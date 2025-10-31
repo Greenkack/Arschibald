@@ -1,0 +1,25 @@
+# ignore large build artifacts
+/dist/*.tar.gz
+
+# ignore specific archived PDFs missing from LFS server
+/archive/sokuk_legacy/data/product_datasheets/206/EcoFlow_PowerPulse_Wallbox_11_kW_20250920213908.pdf
+/archive/sokuk_legacy/data/imports/module_pdfs/20250818_204648/modul.pdf
+/archive/sokuk_legacy/utils/sikik.pdf
+/archive/sokuk_legacy/utils/sokuk.pdf
+/archive/sokuk_legacy/tools/pv_berechnungen_50.pdf
+/archive/sokuk_legacy/data/product_datasheets/203/Alpha_Datenblatt_BackupBox_20250920210829.pdf
+
+# same PDFs outside of archive path (also missing in LFS)
+/data/product_datasheets/203/Alpha_Datenblatt_BackupBox_20250920210829.pdf
+/data/product_datasheets/206/EcoFlow_PowerPulse_Wallbox_11_kW_20250920213908.pdf
+/tools/pv_berechnungen_50.pdf
+/utils/sikik.pdf
+/utils/sokuk.pdf
+/archive/sokuk_legacy/data/imports/module_pdfs/20250818_204747/modul.pdf
+
+# broad ignore to prevent further missing LFS in archive and numeric datasheet folders
+/archive/sokuk_legacy/**/*.pdf
+/data/product_datasheets/[0-9]*/**/*.pdf
+/utils/*.pdf
+/tools/*.pdf
+/data/imports/module_pdfs/**/*.pdf

@@ -1,0 +1,2706 @@
+{
+  "export_timestamp": "2025-09-25T19:19:19.831148",
+  "total_metrics": 250,
+  "metrics": [
+    {
+      "operation_name": "query_0",
+      "execution_time_ms": 31.630277633666992,
+      "timestamp": "2025-09-25T19:19:15.560442",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_1",
+      "execution_time_ms": 33.03980827331543,
+      "timestamp": "2025-09-25T19:19:15.593518",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_2",
+      "execution_time_ms": 26.808977127075195,
+      "timestamp": "2025-09-25T19:19:15.620367",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_3",
+      "execution_time_ms": 25.867938995361328,
+      "timestamp": "2025-09-25T19:19:15.646264",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_4",
+      "execution_time_ms": 27.765989303588867,
+      "timestamp": "2025-09-25T19:19:15.674069",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_5",
+      "execution_time_ms": 29.109954833984375,
+      "timestamp": "2025-09-25T19:19:15.703203",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_6",
+      "execution_time_ms": 31.871795654296875,
+      "timestamp": "2025-09-25T19:19:15.735101",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_7",
+      "execution_time_ms": 22.98140525817871,
+      "timestamp": "2025-09-25T19:19:15.758108",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_8",
+      "execution_time_ms": 23.634910583496094,
+      "timestamp": "2025-09-25T19:19:15.781781",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_9",
+      "execution_time_ms": 22.890806198120117,
+      "timestamp": "2025-09-25T19:19:15.804710",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_10",
+      "execution_time_ms": 24.580001831054688,
+      "timestamp": "2025-09-25T19:19:15.829316",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_11",
+      "execution_time_ms": 33.544063568115234,
+      "timestamp": "2025-09-25T19:19:15.862889",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_12",
+      "execution_time_ms": 28.33414077758789,
+      "timestamp": "2025-09-25T19:19:15.891251",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_13",
+      "execution_time_ms": 24.916887283325195,
+      "timestamp": "2025-09-25T19:19:15.916196",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_14",
+      "execution_time_ms": 25.62999725341797,
+      "timestamp": "2025-09-25T19:19:15.941866",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_15",
+      "execution_time_ms": 25.26545524597168,
+      "timestamp": "2025-09-25T19:19:15.967162",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_16",
+      "execution_time_ms": 28.918027877807617,
+      "timestamp": "2025-09-25T19:19:15.996106",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_17",
+      "execution_time_ms": 28.41663360595703,
+      "timestamp": "2025-09-25T19:19:16.024553",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_18",
+      "execution_time_ms": 28.60856056213379,
+      "timestamp": "2025-09-25T19:19:16.053190",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_19",
+      "execution_time_ms": 21.723508834838867,
+      "timestamp": "2025-09-25T19:19:16.074940",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_20",
+      "execution_time_ms": 27.288198471069336,
+      "timestamp": "2025-09-25T19:19:16.102254",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_21",
+      "execution_time_ms": 30.27200698852539,
+      "timestamp": "2025-09-25T19:19:16.132555",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_22",
+      "execution_time_ms": 26.489734649658203,
+      "timestamp": "2025-09-25T19:19:16.159084",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_23",
+      "execution_time_ms": 23.25153350830078,
+      "timestamp": "2025-09-25T19:19:16.182363",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_24",
+      "execution_time_ms": 26.058435440063477,
+      "timestamp": "2025-09-25T19:19:16.208449",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_25",
+      "execution_time_ms": 27.088403701782227,
+      "timestamp": "2025-09-25T19:19:16.235569",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_26",
+      "execution_time_ms": 29.001951217651367,
+      "timestamp": "2025-09-25T19:19:16.264599",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_27",
+      "execution_time_ms": 24.499893188476562,
+      "timestamp": "2025-09-25T19:19:16.289124",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_28",
+      "execution_time_ms": 21.09384536743164,
+      "timestamp": "2025-09-25T19:19:16.310246",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_29",
+      "execution_time_ms": 27.24623680114746,
+      "timestamp": "2025-09-25T19:19:16.337552",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_30",
+      "execution_time_ms": 23.60081672668457,
+      "timestamp": "2025-09-25T19:19:16.361191",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_31",
+      "execution_time_ms": 29.741525650024414,
+      "timestamp": "2025-09-25T19:19:16.390959",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_32",
+      "execution_time_ms": 26.782512664794922,
+      "timestamp": "2025-09-25T19:19:16.417772",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_33",
+      "execution_time_ms": 24.924278259277344,
+      "timestamp": "2025-09-25T19:19:16.442724",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_34",
+      "execution_time_ms": 23.615598678588867,
+      "timestamp": "2025-09-25T19:19:16.466372",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_35",
+      "execution_time_ms": 35.02345085144043,
+      "timestamp": "2025-09-25T19:19:16.501427",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_36",
+      "execution_time_ms": 32.50932693481445,
+      "timestamp": "2025-09-25T19:19:16.533980",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_37",
+      "execution_time_ms": 24.145126342773438,
+      "timestamp": "2025-09-25T19:19:16.558152",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_38",
+      "execution_time_ms": 22.01223373413086,
+      "timestamp": "2025-09-25T19:19:16.580193",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_39",
+      "execution_time_ms": 27.542829513549805,
+      "timestamp": "2025-09-25T19:19:16.607763",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_40",
+      "execution_time_ms": 25.25806427001953,
+      "timestamp": "2025-09-25T19:19:16.633048",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_41",
+      "execution_time_ms": 34.79433059692383,
+      "timestamp": "2025-09-25T19:19:16.667869",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_42",
+      "execution_time_ms": 28.32174301147461,
+      "timestamp": "2025-09-25T19:19:16.696217",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_43",
+      "execution_time_ms": 23.324251174926758,
+      "timestamp": "2025-09-25T19:19:16.719568",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_44",
+      "execution_time_ms": 21.52562141418457,
+      "timestamp": "2025-09-25T19:19:16.741139",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_45",
+      "execution_time_ms": 25.042295455932617,
+      "timestamp": "2025-09-25T19:19:16.766206",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_46",
+      "execution_time_ms": 32.469749450683594,
+      "timestamp": "2025-09-25T19:19:16.798700",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_47",
+      "execution_time_ms": 22.26114273071289,
+      "timestamp": "2025-09-25T19:19:16.820987",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_48",
+      "execution_time_ms": 23.252010345458984,
+      "timestamp": "2025-09-25T19:19:16.844265",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_49",
+      "execution_time_ms": 23.27585220336914,
+      "timestamp": "2025-09-25T19:19:16.867580",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_50",
+      "execution_time_ms": 22.427082061767578,
+      "timestamp": "2025-09-25T19:19:16.890031",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_51",
+      "execution_time_ms": 32.32288360595703,
+      "timestamp": "2025-09-25T19:19:16.922389",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_52",
+      "execution_time_ms": 24.205446243286133,
+      "timestamp": "2025-09-25T19:19:16.946626",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_53",
+      "execution_time_ms": 23.917675018310547,
+      "timestamp": "2025-09-25T19:19:16.970571",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_54",
+      "execution_time_ms": 21.06642723083496,
+      "timestamp": "2025-09-25T19:19:16.991678",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_55",
+      "execution_time_ms": 26.558399200439453,
+      "timestamp": "2025-09-25T19:19:17.018277",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_56",
+      "execution_time_ms": 28.998374938964844,
+      "timestamp": "2025-09-25T19:19:17.047303",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_57",
+      "execution_time_ms": 41.710615158081055,
+      "timestamp": "2025-09-25T19:19:17.089042",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_58",
+      "execution_time_ms": 20.615816116333008,
+      "timestamp": "2025-09-25T19:19:17.109685",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_59",
+      "execution_time_ms": 20.253419876098633,
+      "timestamp": "2025-09-25T19:19:17.129978",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_60",
+      "execution_time_ms": 28.813600540161133,
+      "timestamp": "2025-09-25T19:19:17.158817",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_61",
+      "execution_time_ms": 28.996706008911133,
+      "timestamp": "2025-09-25T19:19:17.187845",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_62",
+      "execution_time_ms": 24.00684356689453,
+      "timestamp": "2025-09-25T19:19:17.211888",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_63",
+      "execution_time_ms": 24.358510971069336,
+      "timestamp": "2025-09-25T19:19:17.236273",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_64",
+      "execution_time_ms": 20.58243751525879,
+      "timestamp": "2025-09-25T19:19:17.256897",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_65",
+      "execution_time_ms": 23.102998733520508,
+      "timestamp": "2025-09-25T19:19:17.280029",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_66",
+      "execution_time_ms": 37.7955436706543,
+      "timestamp": "2025-09-25T19:19:17.317855",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_67",
+      "execution_time_ms": 23.085355758666992,
+      "timestamp": "2025-09-25T19:19:17.340976",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_68",
+      "execution_time_ms": 20.02549171447754,
+      "timestamp": "2025-09-25T19:19:17.361025",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_69",
+      "execution_time_ms": 33.180952072143555,
+      "timestamp": "2025-09-25T19:19:17.394229",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_70",
+      "execution_time_ms": 28.46050262451172,
+      "timestamp": "2025-09-25T19:19:17.422728",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_71",
+      "execution_time_ms": 28.295278549194336,
+      "timestamp": "2025-09-25T19:19:17.451050",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_72",
+      "execution_time_ms": 22.499799728393555,
+      "timestamp": "2025-09-25T19:19:17.473575",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_73",
+      "execution_time_ms": 33.91909599304199,
+      "timestamp": "2025-09-25T19:19:17.507520",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_74",
+      "execution_time_ms": 22.33290672302246,
+      "timestamp": "2025-09-25T19:19:17.529892",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_75",
+      "execution_time_ms": 27.25362777709961,
+      "timestamp": "2025-09-25T19:19:17.557176",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_76",
+      "execution_time_ms": 28.66983413696289,
+      "timestamp": "2025-09-25T19:19:17.585872",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_77",
+      "execution_time_ms": 24.55615997314453,
+      "timestamp": "2025-09-25T19:19:17.610464",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_78",
+      "execution_time_ms": 23.77939224243164,
+      "timestamp": "2025-09-25T19:19:17.634271",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_79",
+      "execution_time_ms": 21.391868591308594,
+      "timestamp": "2025-09-25T19:19:17.655690",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_80",
+      "execution_time_ms": 25.203466415405273,
+      "timestamp": "2025-09-25T19:19:17.680919",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_81",
+      "execution_time_ms": 39.38889503479004,
+      "timestamp": "2025-09-25T19:19:17.720344",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_82",
+      "execution_time_ms": 28.985261917114258,
+      "timestamp": "2025-09-25T19:19:17.749357",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_83",
+      "execution_time_ms": 23.959636688232422,
+      "timestamp": "2025-09-25T19:19:17.773357",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_84",
+      "execution_time_ms": 25.219440460205078,
+      "timestamp": "2025-09-25T19:19:17.798612",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_85",
+      "execution_time_ms": 23.34761619567871,
+      "timestamp": "2025-09-25T19:19:17.822001",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_86",
+      "execution_time_ms": 27.904510498046875,
+      "timestamp": "2025-09-25T19:19:17.849938",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_87",
+      "execution_time_ms": 28.603076934814453,
+      "timestamp": "2025-09-25T19:19:17.878573",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_88",
+      "execution_time_ms": 26.20387077331543,
+      "timestamp": "2025-09-25T19:19:17.904802",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_89",
+      "execution_time_ms": 20.877838134765625,
+      "timestamp": "2025-09-25T19:19:17.925711",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_90",
+      "execution_time_ms": 27.189016342163086,
+      "timestamp": "2025-09-25T19:19:17.952928",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_91",
+      "execution_time_ms": 28.043031692504883,
+      "timestamp": "2025-09-25T19:19:17.980995",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_92",
+      "execution_time_ms": 23.13995361328125,
+      "timestamp": "2025-09-25T19:19:18.004161",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_93",
+      "execution_time_ms": 28.11574935913086,
+      "timestamp": "2025-09-25T19:19:18.032306",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_94",
+      "execution_time_ms": 24.432659149169922,
+      "timestamp": "2025-09-25T19:19:18.056765",
+      "query_type": "SELECT",
+      "result_count": 25,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_95",
+      "execution_time_ms": 22.97663688659668,
+      "timestamp": "2025-09-25T19:19:18.079765",
+      "query_type": "SELECT",
+      "result_count": 138,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE category = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_96",
+      "execution_time_ms": 36.75961494445801,
+      "timestamp": "2025-09-25T19:19:18.116547",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE calculate_per = ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_97",
+      "execution_time_ms": 24.104833602905273,
+      "timestamp": "2025-09-25T19:19:18.140679",
+      "query_type": "SELECT",
+      "result_count": 11,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE purchase_price_net > ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_98",
+      "execution_time_ms": 21.085023880004883,
+      "timestamp": "2025-09-25T19:19:18.161787",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT COUNT(*) FROM products GROUP BY category"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "query_99",
+      "execution_time_ms": 27.10700035095215,
+      "timestamp": "2025-09-25T19:19:18.188916",
+      "query_type": "SELECT",
+      "result_count": 0,
+      "parameters": {
+        "query": "SELECT * FROM products WHERE model_name LIKE ?"
+      },
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_0",
+      "execution_time_ms": 28.6710262298584,
+      "timestamp": "2025-09-25T19:19:18.218674",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_1",
+      "execution_time_ms": 22.112369537353516,
+      "timestamp": "2025-09-25T19:19:18.240811",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_2",
+      "execution_time_ms": 26.129722595214844,
+      "timestamp": "2025-09-25T19:19:18.266967",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_3",
+      "execution_time_ms": 24.335622787475586,
+      "timestamp": "2025-09-25T19:19:18.291337",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_4",
+      "execution_time_ms": 29.37150001525879,
+      "timestamp": "2025-09-25T19:19:18.320733",
+      "query_type": "CALCULATION",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_5",
+      "execution_time_ms": 20.962238311767578,
+      "timestamp": "2025-09-25T19:19:18.341735",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_6",
+      "execution_time_ms": 21.204710006713867,
+      "timestamp": "2025-09-25T19:19:18.362963",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_7",
+      "execution_time_ms": 27.401208877563477,
+      "timestamp": "2025-09-25T19:19:18.390387",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_8",
+      "execution_time_ms": 23.602724075317383,
+      "timestamp": "2025-09-25T19:19:18.414019",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_9",
+      "execution_time_ms": 33.86735916137695,
+      "timestamp": "2025-09-25T19:19:18.447910",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_10",
+      "execution_time_ms": 26.534557342529297,
+      "timestamp": "2025-09-25T19:19:18.474481",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_11",
+      "execution_time_ms": 22.4151611328125,
+      "timestamp": "2025-09-25T19:19:18.496923",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_12",
+      "execution_time_ms": 22.562503814697266,
+      "timestamp": "2025-09-25T19:19:18.519508",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_13",
+      "execution_time_ms": 26.80063247680664,
+      "timestamp": "2025-09-25T19:19:18.546333",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_14",
+      "execution_time_ms": 27.265548706054688,
+      "timestamp": "2025-09-25T19:19:18.573622",
+      "query_type": "CALCULATION",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_15",
+      "execution_time_ms": 21.502971649169922,
+      "timestamp": "2025-09-25T19:19:18.595152",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_16",
+      "execution_time_ms": 25.63762664794922,
+      "timestamp": "2025-09-25T19:19:18.620813",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_17",
+      "execution_time_ms": 25.699853897094727,
+      "timestamp": "2025-09-25T19:19:18.646536",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_18",
+      "execution_time_ms": 20.992517471313477,
+      "timestamp": "2025-09-25T19:19:18.667551",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_19",
+      "execution_time_ms": 29.23750877380371,
+      "timestamp": "2025-09-25T19:19:18.696817",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_20",
+      "execution_time_ms": 21.992921829223633,
+      "timestamp": "2025-09-25T19:19:18.718840",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_21",
+      "execution_time_ms": 28.592824935913086,
+      "timestamp": "2025-09-25T19:19:18.747460",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_22",
+      "execution_time_ms": 22.523164749145508,
+      "timestamp": "2025-09-25T19:19:18.770018",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_23",
+      "execution_time_ms": 27.301549911499023,
+      "timestamp": "2025-09-25T19:19:18.797344",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_24",
+      "execution_time_ms": 25.3603458404541,
+      "timestamp": "2025-09-25T19:19:18.822725",
+      "query_type": "CALCULATION",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_25",
+      "execution_time_ms": 23.65708351135254,
+      "timestamp": "2025-09-25T19:19:18.846407",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_26",
+      "execution_time_ms": 28.441667556762695,
+      "timestamp": "2025-09-25T19:19:18.874887",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_27",
+      "execution_time_ms": 28.168439865112305,
+      "timestamp": "2025-09-25T19:19:18.903079",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_28",
+      "execution_time_ms": 24.307727813720703,
+      "timestamp": "2025-09-25T19:19:18.927412",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_29",
+      "execution_time_ms": 29.024600982666016,
+      "timestamp": "2025-09-25T19:19:18.956462",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_30",
+      "execution_time_ms": 27.695417404174805,
+      "timestamp": "2025-09-25T19:19:18.984187",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_31",
+      "execution_time_ms": 25.338411331176758,
+      "timestamp": "2025-09-25T19:19:19.009562",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_32",
+      "execution_time_ms": 25.14362335205078,
+      "timestamp": "2025-09-25T19:19:19.034740",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_33",
+      "execution_time_ms": 27.718544006347656,
+      "timestamp": "2025-09-25T19:19:19.062488",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_34",
+      "execution_time_ms": 40.634870529174805,
+      "timestamp": "2025-09-25T19:19:19.103146",
+      "query_type": "CALCULATION",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_35",
+      "execution_time_ms": 21.28458023071289,
+      "timestamp": "2025-09-25T19:19:19.124461",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_36",
+      "execution_time_ms": 30.75122833251953,
+      "timestamp": "2025-09-25T19:19:19.155242",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_37",
+      "execution_time_ms": 24.276018142700195,
+      "timestamp": "2025-09-25T19:19:19.179554",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_38",
+      "execution_time_ms": 23.2851505279541,
+      "timestamp": "2025-09-25T19:19:19.202871",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_39",
+      "execution_time_ms": 28.1069278717041,
+      "timestamp": "2025-09-25T19:19:19.231016",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_40",
+      "execution_time_ms": 24.370670318603516,
+      "timestamp": "2025-09-25T19:19:19.255411",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_41",
+      "execution_time_ms": 23.470640182495117,
+      "timestamp": "2025-09-25T19:19:19.278921",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_42",
+      "execution_time_ms": 30.257463455200195,
+      "timestamp": "2025-09-25T19:19:19.309214",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_43",
+      "execution_time_ms": 21.10743522644043,
+      "timestamp": "2025-09-25T19:19:19.330348",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_44",
+      "execution_time_ms": 22.67909049987793,
+      "timestamp": "2025-09-25T19:19:19.353062",
+      "query_type": "CALCULATION",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_45",
+      "execution_time_ms": 28.9614200592041,
+      "timestamp": "2025-09-25T19:19:19.382050",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_46",
+      "execution_time_ms": 27.240991592407227,
+      "timestamp": "2025-09-25T19:19:19.409320",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_47",
+      "execution_time_ms": 43.61462593078613,
+      "timestamp": "2025-09-25T19:19:19.452971",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_48",
+      "execution_time_ms": 25.073528289794922,
+      "timestamp": "2025-09-25T19:19:19.478073",
+      "query_type": "CALCULATION",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "pricing_calc_49",
+      "execution_time_ms": 29.40225601196289,
+      "timestamp": "2025-09-25T19:19:19.507504",
+      "query_type": "CALCULATION",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_0",
+      "execution_time_ms": 21.53325080871582,
+      "timestamp": "2025-09-25T19:19:19.538294",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_0",
+      "execution_time_ms": 22.254228591918945,
+      "timestamp": "2025-09-25T19:19:19.538415",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_0",
+      "execution_time_ms": 21.933317184448242,
+      "timestamp": "2025-09-25T19:19:19.538445",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_1",
+      "execution_time_ms": 10.071992874145508,
+      "timestamp": "2025-09-25T19:19:19.548534",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_1",
+      "execution_time_ms": 10.356664657592773,
+      "timestamp": "2025-09-25T19:19:19.548694",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_1",
+      "execution_time_ms": 10.335922241210938,
+      "timestamp": "2025-09-25T19:19:19.548764",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_2",
+      "execution_time_ms": 1.3468265533447266,
+      "timestamp": "2025-09-25T19:19:19.549906",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_2",
+      "execution_time_ms": 1.7611980438232422,
+      "timestamp": "2025-09-25T19:19:19.550540",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_2",
+      "execution_time_ms": 2.086639404296875,
+      "timestamp": "2025-09-25T19:19:19.550795",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_3",
+      "execution_time_ms": 3.6742687225341797,
+      "timestamp": "2025-09-25T19:19:19.553603",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_0",
+      "execution_time_ms": 36.83757781982422,
+      "timestamp": "2025-09-25T19:19:19.554097",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_0",
+      "execution_time_ms": 37.11891174316406,
+      "timestamp": "2025-09-25T19:19:19.554170",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_3",
+      "execution_time_ms": 3.8063526153564453,
+      "timestamp": "2025-09-25T19:19:19.554364",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_3",
+      "execution_time_ms": 3.7822723388671875,
+      "timestamp": "2025-09-25T19:19:19.554600",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_1",
+      "execution_time_ms": 3.6170482635498047,
+      "timestamp": "2025-09-25T19:19:19.557734",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_2",
+      "execution_time_ms": 7.588386535644531,
+      "timestamp": "2025-09-25T19:19:19.565343",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_3",
+      "execution_time_ms": 1.2125968933105469,
+      "timestamp": "2025-09-25T19:19:19.566579",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_4",
+      "execution_time_ms": 1.1053085327148438,
+      "timestamp": "2025-09-25T19:19:19.567716",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_5",
+      "execution_time_ms": 1.050710678100586,
+      "timestamp": "2025-09-25T19:19:19.568789",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_1",
+      "execution_time_ms": 17.682790756225586,
+      "timestamp": "2025-09-25T19:19:19.571871",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_4",
+      "execution_time_ms": 17.294645309448242,
+      "timestamp": "2025-09-25T19:19:19.571912",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_6",
+      "execution_time_ms": 3.263235092163086,
+      "timestamp": "2025-09-25T19:19:19.572071",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_4",
+      "execution_time_ms": 17.937660217285156,
+      "timestamp": "2025-09-25T19:19:19.572316",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_4",
+      "execution_time_ms": 48.61569404602051,
+      "timestamp": "2025-09-25T19:19:19.602244",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_5",
+      "execution_time_ms": 17.645835876464844,
+      "timestamp": "2025-09-25T19:19:19.619920",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_6",
+      "execution_time_ms": 19.37556266784668,
+      "timestamp": "2025-09-25T19:19:19.639331",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_7",
+      "execution_time_ms": 7.397174835205078,
+      "timestamp": "2025-09-25T19:19:19.646750",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_8",
+      "execution_time_ms": 0.9224414825439453,
+      "timestamp": "2025-09-25T19:19:19.647694",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_9",
+      "execution_time_ms": 0.8368492126464844,
+      "timestamp": "2025-09-25T19:19:19.648543",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_10",
+      "execution_time_ms": 0.8366107940673828,
+      "timestamp": "2025-09-25T19:19:19.649391",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_11",
+      "execution_time_ms": 1.1146068572998047,
+      "timestamp": "2025-09-25T19:19:19.650519",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_12",
+      "execution_time_ms": 1.1167526245117188,
+      "timestamp": "2025-09-25T19:19:19.651658",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_13",
+      "execution_time_ms": 1.007080078125,
+      "timestamp": "2025-09-25T19:19:19.652686",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_14",
+      "execution_time_ms": 0.8542537689208984,
+      "timestamp": "2025-09-25T19:19:19.653556",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_15",
+      "execution_time_ms": 0.7183551788330078,
+      "timestamp": "2025-09-25T19:19:19.654286",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_16",
+      "execution_time_ms": 0.7445812225341797,
+      "timestamp": "2025-09-25T19:19:19.655040",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_17",
+      "execution_time_ms": 0.7634162902832031,
+      "timestamp": "2025-09-25T19:19:19.655814",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_18",
+      "execution_time_ms": 0.7383823394775391,
+      "timestamp": "2025-09-25T19:19:19.656562",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_1_19",
+      "execution_time_ms": 0.8864402770996094,
+      "timestamp": "2025-09-25T19:19:19.657458",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_7",
+      "execution_time_ms": 92.75150299072266,
+      "timestamp": "2025-09-25T19:19:19.664838",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_2",
+      "execution_time_ms": 92.96131134033203,
+      "timestamp": "2025-09-25T19:19:19.664865",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_5",
+      "execution_time_ms": 92.61846542358398,
+      "timestamp": "2025-09-25T19:19:19.664948",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_5",
+      "execution_time_ms": 93.10531616210938,
+      "timestamp": "2025-09-25T19:19:19.665031",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_3",
+      "execution_time_ms": 4.7435760498046875,
+      "timestamp": "2025-09-25T19:19:19.669623",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_8",
+      "execution_time_ms": 4.850625991821289,
+      "timestamp": "2025-09-25T19:19:19.669710",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_9",
+      "execution_time_ms": 7.592678070068359,
+      "timestamp": "2025-09-25T19:19:19.677319",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_4",
+      "execution_time_ms": 7.6961517333984375,
+      "timestamp": "2025-09-25T19:19:19.677358",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_10",
+      "execution_time_ms": 1.3687610626220703,
+      "timestamp": "2025-09-25T19:19:19.678708",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_5",
+      "execution_time_ms": 1.3840198516845703,
+      "timestamp": "2025-09-25T19:19:19.678755",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_11",
+      "execution_time_ms": 1.2481212615966797,
+      "timestamp": "2025-09-25T19:19:19.679967",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_6",
+      "execution_time_ms": 1.2593269348144531,
+      "timestamp": "2025-09-25T19:19:19.680026",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_12",
+      "execution_time_ms": 1.1799335479736328,
+      "timestamp": "2025-09-25T19:19:19.681158",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_7",
+      "execution_time_ms": 1.1701583862304688,
+      "timestamp": "2025-09-25T19:19:19.681208",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_13",
+      "execution_time_ms": 1.062154769897461,
+      "timestamp": "2025-09-25T19:19:19.682230",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_8",
+      "execution_time_ms": 1.12152099609375,
+      "timestamp": "2025-09-25T19:19:19.682340",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_14",
+      "execution_time_ms": 1.0960102081298828,
+      "timestamp": "2025-09-25T19:19:19.683337",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_9",
+      "execution_time_ms": 1.1394023895263672,
+      "timestamp": "2025-09-25T19:19:19.683491",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_15",
+      "execution_time_ms": 1.7905235290527344,
+      "timestamp": "2025-09-25T19:19:19.685146",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_10",
+      "execution_time_ms": 2.2661685943603516,
+      "timestamp": "2025-09-25T19:19:19.685772",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_6",
+      "execution_time_ms": 20.92885971069336,
+      "timestamp": "2025-09-25T19:19:19.685890",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_6",
+      "execution_time_ms": 21.16084098815918,
+      "timestamp": "2025-09-25T19:19:19.686203",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_11",
+      "execution_time_ms": 3.822803497314453,
+      "timestamp": "2025-09-25T19:19:19.689620",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_16",
+      "execution_time_ms": 4.656076431274414,
+      "timestamp": "2025-09-25T19:19:19.689832",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_12",
+      "execution_time_ms": 7.555484771728516,
+      "timestamp": "2025-09-25T19:19:19.697196",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_17",
+      "execution_time_ms": 12.886762619018555,
+      "timestamp": "2025-09-25T19:19:19.702738",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_7",
+      "execution_time_ms": 16.955852508544922,
+      "timestamp": "2025-09-25T19:19:19.702864",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_7",
+      "execution_time_ms": 16.68691635131836,
+      "timestamp": "2025-09-25T19:19:19.702903",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_18",
+      "execution_time_ms": 6.519556045532227,
+      "timestamp": "2025-09-25T19:19:19.709292",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_8",
+      "execution_time_ms": 6.895542144775391,
+      "timestamp": "2025-09-25T19:19:19.709818",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_13",
+      "execution_time_ms": 12.712717056274414,
+      "timestamp": "2025-09-25T19:19:19.709930",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_8",
+      "execution_time_ms": 7.071495056152344,
+      "timestamp": "2025-09-25T19:19:19.709955",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_9",
+      "execution_time_ms": 11.820554733276367,
+      "timestamp": "2025-09-25T19:19:19.721794",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_14",
+      "execution_time_ms": 11.880874633789062,
+      "timestamp": "2025-09-25T19:19:19.721829",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_15",
+      "execution_time_ms": 7.607936859130859,
+      "timestamp": "2025-09-25T19:19:19.729453",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_10",
+      "execution_time_ms": 7.696628570556641,
+      "timestamp": "2025-09-25T19:19:19.729510",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_16",
+      "execution_time_ms": 1.6713142395019531,
+      "timestamp": "2025-09-25T19:19:19.731146",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_11",
+      "execution_time_ms": 1.6677379608154297,
+      "timestamp": "2025-09-25T19:19:19.731189",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_17",
+      "execution_time_ms": 1.1570453643798828,
+      "timestamp": "2025-09-25T19:19:19.732317",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_12",
+      "execution_time_ms": 1.3730525970458984,
+      "timestamp": "2025-09-25T19:19:19.732574",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_18",
+      "execution_time_ms": 1.2485980987548828,
+      "timestamp": "2025-09-25T19:19:19.733578",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_13",
+      "execution_time_ms": 1.2013912200927734,
+      "timestamp": "2025-09-25T19:19:19.733787",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_3_19",
+      "execution_time_ms": 2.1257400512695312,
+      "timestamp": "2025-09-25T19:19:19.735722",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_4_19",
+      "execution_time_ms": 26.772499084472656,
+      "timestamp": "2025-09-25T19:19:19.736094",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_9",
+      "execution_time_ms": 26.5505313873291,
+      "timestamp": "2025-09-25T19:19:19.736391",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_14",
+      "execution_time_ms": 2.783536911010742,
+      "timestamp": "2025-09-25T19:19:19.736584",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_10",
+      "execution_time_ms": 3.6318302154541016,
+      "timestamp": "2025-09-25T19:19:19.740045",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_11",
+      "execution_time_ms": 7.390260696411133,
+      "timestamp": "2025-09-25T19:19:19.747465",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_12",
+      "execution_time_ms": 0.9493827819824219,
+      "timestamp": "2025-09-25T19:19:19.748436",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_13",
+      "execution_time_ms": 0.7455348968505859,
+      "timestamp": "2025-09-25T19:19:19.749194",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_14",
+      "execution_time_ms": 0.7734298706054688,
+      "timestamp": "2025-09-25T19:19:19.749978",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_15",
+      "execution_time_ms": 0.8697509765625,
+      "timestamp": "2025-09-25T19:19:19.750860",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_15",
+      "execution_time_ms": 15.093564987182617,
+      "timestamp": "2025-09-25T19:19:19.751697",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_16",
+      "execution_time_ms": 2.2063255310058594,
+      "timestamp": "2025-09-25T19:19:19.753081",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_16",
+      "execution_time_ms": 8.847236633300781,
+      "timestamp": "2025-09-25T19:19:19.760567",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_17",
+      "execution_time_ms": 7.56382942199707,
+      "timestamp": "2025-09-25T19:19:19.760668",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_17",
+      "execution_time_ms": 9.432077407836914,
+      "timestamp": "2025-09-25T19:19:19.770022",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_18",
+      "execution_time_ms": 9.516000747680664,
+      "timestamp": "2025-09-25T19:19:19.770198",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_2_19",
+      "execution_time_ms": 9.213685989379883,
+      "timestamp": "2025-09-25T19:19:19.779437",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_18",
+      "execution_time_ms": 24.02210235595703,
+      "timestamp": "2025-09-25T19:19:19.794091",
+      "query_type": "CONCURRENT",
+      "result_count": 1,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    },
+    {
+      "operation_name": "concurrent_0_19",
+      "execution_time_ms": 27.178287506103516,
+      "timestamp": "2025-09-25T19:19:19.821293",
+      "query_type": "CONCURRENT",
+      "result_count": 0,
+      "parameters": {},
+      "success": true,
+      "error_message": null
+    }
+  ]
+}

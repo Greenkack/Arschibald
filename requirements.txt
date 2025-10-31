@@ -191,3 +191,11 @@ twilio==9.4.0
 elevenlabs==2.20.1
 faiss-cpu==1.10.0
 websockets==14.1
+
+# 3D PV Visualization Dependencies
+# =================================
+pyvista>=0.43.10
+vtk>=9.3.0
+stpyvista>=0.1.4
+trimesh>=4.4.9
+pikepdf>=9.0.0

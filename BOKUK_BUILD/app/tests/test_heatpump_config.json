@@ -1,0 +1,34 @@
+{
+  "project_data": {
+    "customer_data": {
+      "first_name": "Anna",
+      "last_name": "Schmidt",
+      "street": "Heizungsstraße 89",
+      "city": "Berlin",
+      "zip_code": "10115",
+      "email": "anna@schmidt.de",
+      "phone": "+49 30 98765432"
+    }
+  },
+  "heatpump_calculation_results": {
+    "hp_power_kw": 12.5,
+    "hp_cop": 4.2,
+    "annual_heating_demand_kwh": 15000,
+    "electricity_consumption_kwh": 3571,
+    "annual_savings_euro": 1850,
+    "investment_total_netto": 18500.00,
+    "amortization_time_years": 10.2,
+    "co2_savings_annual_kg": 4200,
+    "efficiency_rating": "A+++",
+    "refrigerant_type": "R32"
+  },
+  "company_info": {
+    "name": "WärmePumpen Pro GmbH",
+    "street": "Energiestraße 67",
+    "city": "Berlin",
+    "zip_code": "10117",
+    "phone": "+49 30 11223344",
+    "email": "info@waermepumpen-pro.de"
+  },
+  "output_file": "test_heatpump_angebot.pdf"
+}
