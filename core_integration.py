@@ -268,9 +268,9 @@ def _init_advanced_modules(status: dict):
             from core.cache_monitoring import CacheMonitor
             from core.cache_warming import CacheWarmingEngine  # ✅ Korrekter Name
             
-            _cache_invalidator = CacheDependencyTracker(_cache)
-            _cache_monitor = CacheMonitor(_cache)
-            _cache_warmer = CacheWarmingEngine(_cache)  # ✅ Korrekter Name
+            _cache_invalidator = CacheDependencyTracker()
+            _cache_monitor = CacheMonitor()
+            _cache_warmer = CacheWarmingEngine()  # ✅ Ohne Parameter
             
             status['cache_extensions'] = True
             print("✅ Cache Extensions initialized (Invalidation, Monitoring, Warming)")

@@ -24,6 +24,18 @@ except ImportError:
 class PDFSectionManager:
     """Manager für PDF-Sektionen mit Drag & Drop."""
 
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
+    def __reduce__(self):
+        """Pickle reduce protocol für vollständige Serialisierung"""
+        return (self.__class__, (), self.__getstate__())
+
     def __init__(self):
         # Verfügbare Sektionen (Kern + Platz für Custom)
         self.available_sections: Dict[str, Dict[str, Any]] = {
@@ -336,11 +348,10 @@ class PDFSectionManager:
 
 # ...existing code...
 
-def render_pdf_structure_manager(texts: Dict[str, str]):
+def render_pdf_structure_manager(texts: dict[str, str]):
     st.header(" PDF-Struktur & Reihenfolgen-Manager")
-    if "pdf_section_manager" not in st.session_state:
-        st.session_state.pdf_section_manager = PDFSectionManager()
-    manager = st.session_state.pdf_section_manager
+    # NICHT in session_state speichern - erstelle lokal!
+    manager = PDFSectionManager()
     manager.initialize_session_state()
 
     tab1, tab2, tab3 = st.tabs([" Reihenfolge", " Import/Export", " Vorlagen"])

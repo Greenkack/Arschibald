@@ -18,6 +18,14 @@ from .session_recovery import (
 
 class TestSessionRecoveryManager:
     """Test SessionRecoveryManager class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_recovery_manager(self):
         """Test creating recovery manager"""
@@ -290,6 +298,14 @@ class TestSessionRecoveryManager:
 
 class TestSessionRecoveryFunctions:
     """Test module-level recovery functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_recovery_manager(self):
         """Test getting global recovery manager"""
@@ -319,6 +335,14 @@ class TestSessionRecoveryFunctions:
 
 class TestSessionRecoveryIntegration:
     """Integration tests for session recovery"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @patch('core.session.bootstrap_session')
     def test_recover_session_after_refresh_no_session_id(

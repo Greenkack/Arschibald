@@ -21,6 +21,14 @@ logger = logging.getLogger(__name__)
 
 class DatabaseConnectionPool:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Connection pool for SQLite database to handle high-load scenarios.
     """
 
@@ -128,6 +136,14 @@ class DatabaseConnectionPool:
 
 class DatabaseOptimizer:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Database optimization utilities for pricing system.
     """
 
@@ -615,6 +631,14 @@ def get_optimized_connection():
 
 class PricingQueryBuilder:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Builder class for constructing optimized pricing queries.
     """
 

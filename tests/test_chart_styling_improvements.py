@@ -46,6 +46,14 @@ from chart_styling_improvements import (
 
 class TestTask41_DiagrammStyling:
     """Tests für Task 4.1: Diagramm-Styling in allen Modulen verbessern"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_font_sizes(self):
         """Test dass alle Schriftgrößen den Anforderungen entsprechen"""
@@ -135,6 +143,14 @@ class TestTask41_DiagrammStyling:
 
 class TestTask42_FarbenUndGitternetz:
     """Tests für Task 4.2: Farben und Gitternetz optimieren"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_grid_alpha(self):
         """Test dass Gitternetz-Transparenz korrekt ist"""
@@ -186,6 +202,14 @@ class TestTask42_FarbenUndGitternetz:
 
 class TestTask43_AufloesungUndDimensionen:
     """Tests für Task 4.3: Hohe Auflösung und optimale Dimensionen"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_dpi(self):
         """Test dass DPI = 300 ist"""
@@ -240,6 +264,14 @@ class TestTask43_AufloesungUndDimensionen:
 
 class TestTask44_Beschreibungen:
     """Tests für Task 4.4: Beschreibungen für Diagramme generieren"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_generate_chart_description_basic(self):
         """Test dass Basis-Beschreibung generiert wird"""
@@ -310,6 +342,14 @@ class TestTask44_Beschreibungen:
 
 class TestIntegration:
     """Integrationstests für alle Tasks zusammen"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_complete_matplotlib_workflow(self):
         """Test kompletter Workflow für Matplotlib-Diagramm"""

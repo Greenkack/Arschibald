@@ -22,6 +22,14 @@ from .containers import (
 
 class TestContainerConfig:
     """Test ContainerConfig class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_default_config(self):
         """Test default configuration"""
@@ -52,6 +60,14 @@ class TestContainerConfig:
 
 class TestStableContainer:
     """Test StableContainer class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_container_initialization(self):
         """Test container initialization"""
@@ -109,6 +125,14 @@ class TestStableContainer:
 
 class TestPlaceholderContainer:
     """Test PlaceholderContainer class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_placeholder_initialization(self):
         """Test placeholder initialization"""
@@ -128,6 +152,14 @@ class TestPlaceholderContainer:
 
 class TestTransitionContainer:
     """Test TransitionContainer class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_transition_initialization(self):
         """Test transition container initialization"""
@@ -184,6 +216,14 @@ class TestErrorBoundary:
 
 class TestPageContainer:
     """Test PageContainer class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_page_container_initialization(self):
         """Test page container initialization"""
@@ -210,6 +250,14 @@ class TestPageContainer:
 
 class TestContainerRegistry:
     """Test ContainerRegistry class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_registry_initialization(self):
         """Test registry initialization"""
@@ -281,6 +329,14 @@ class TestContainerRegistry:
 
 class TestGlobalRegistry:
     """Test global registry functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_container_registry(self):
         """Test getting global registry"""

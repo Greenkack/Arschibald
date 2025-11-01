@@ -3585,6 +3585,32 @@ def render_admin_panel(
     selected_tab_label = tab_labels_map.get(selected_tab_key, selected_tab_key)
     st.markdown("---")
 
+    # SICHERHEITS-CHECK: Prüfe ob dieser Bereich passwortgeschützt ist
+    from admin_security import require_admin_auth
+    
+    # Mapping von Tab-Keys zu area_ids
+    tab_to_area_map = {
+        "admin_tab_company_management_new": "company_management",
+        "admin_tab_user_management": "user_management",
+        "admin_tab_product_management": "product_database",
+        "admin_tab_logo_management": "logo_management",
+        "admin_tab_product_database_crud": "product_database",
+        "admin_tab_general_settings": "economic_settings",
+        "admin_tab_intro_settings": "intro_settings",
+        "admin_tab_tariff_management": "economic_settings",
+        "admin_tab_pdf_design": "pdf_settings",
+        "admin_tab_payment_terms": "payment_terms",
+        "admin_tab_services": "services_management",
+        "admin_tab_ui_customization": "ui_customization",
+        "admin_tab_build_infos": "build_infos",
+    }
+    
+    area_id = tab_to_area_map.get(selected_tab_key, selected_tab_key.replace("admin_tab_", ""))
+    
+    # Prüfe Authentifizierung für diesen Bereich
+    if not require_admin_auth(area_id, selected_tab_label):
+        return  # Bereich ist gesperrt, zeige Passwort-Dialog
+
     render_func = tab_functions_map.get(selected_tab_key)
     if callable(render_func):
         try:

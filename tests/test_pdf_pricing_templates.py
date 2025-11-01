@@ -27,6 +27,14 @@ except ImportError:
 
 class TestPricingTemplateConfig:
     """Test cases for PricingTemplateConfig"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_default_config(self):
         """Test default configuration values"""
@@ -62,6 +70,14 @@ class TestPricingTemplateConfig:
 
 class TestPVPricingTemplate:
     """Test cases for PVPricingTemplate"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -163,6 +179,14 @@ class TestPVPricingTemplate:
 
 class TestHeatPumpPricingTemplate:
     """Test cases for HeatPumpPricingTemplate"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -224,6 +248,14 @@ class TestHeatPumpPricingTemplate:
 
 class TestCombinedPricingTemplate:
     """Test cases for CombinedPricingTemplate"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -278,6 +310,14 @@ class TestCombinedPricingTemplate:
 
 class TestPricingTemplateManager:
     """Test cases for PricingTemplateManager"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -444,6 +484,14 @@ class TestPricingTemplateManager:
 
 class TestConvenienceFunctions:
     """Test cases for convenience functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_pv_pricing_template(self):
         """Test PV template creation function"""
@@ -478,6 +526,14 @@ class TestConvenienceFunctions:
 
 class TestTemplateIntegration:
     """Integration tests for template system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_full_pv_template_workflow(self):
         """Test complete PV template workflow"""

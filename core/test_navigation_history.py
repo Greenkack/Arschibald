@@ -15,6 +15,14 @@ from .navigation_history import (
 
 class TestHistoryEntry:
     """Test HistoryEntry class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_history_entry_creation(self):
         """Test history entry creation"""
@@ -71,6 +79,14 @@ class TestHistoryEntry:
 
 class TestBreadcrumb:
     """Test Breadcrumb class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_breadcrumb_creation(self):
         """Test breadcrumb creation"""
@@ -91,6 +107,14 @@ class TestBreadcrumb:
 
 class TestNavigationHistory:
     """Test NavigationHistory class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_history_initialization(self):
         """Test history initialization"""
@@ -390,6 +414,14 @@ class TestNavigationHistory:
 
 class TestNavigationAnalytics:
     """Test NavigationAnalytics class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_analytics_initialization(self):
         """Test analytics initialization"""
@@ -507,6 +539,14 @@ class TestNavigationAnalytics:
 
 class TestGlobalAnalytics:
     """Test global analytics functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_navigation_analytics(self):
         """Test getting global analytics"""

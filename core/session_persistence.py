@@ -49,6 +49,14 @@ class DebouncedWriter:
     Batches write operations and executes them after a delay period
     to reduce database load while ensuring data persistence.
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self, delay_seconds: float = 2.0):
         """
@@ -159,7 +167,15 @@ class SessionPersistenceEngine:
     - Conflict resolution using last-write-wins
     - Automatic cleanup of expired sessions
     """
-
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def __init__(
         self,
         db_manager: DatabaseManager | None = None,

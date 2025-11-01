@@ -95,6 +95,14 @@ def mock_product_db():
 
 class TestCalculatePerIntegration:
     """Test calculate_per integration with product database"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_calculate_price_by_method_enhanced(self):
         """Test enhanced calculate_price_by_method function"""
@@ -337,6 +345,14 @@ class TestCalculatePerIntegration:
 
 class TestFeatureIntegrationScenarios:
     """Test real-world feature integration scenarios"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_premium_pv_module_scenario(self):
         """Test premium PV module with multiple features"""

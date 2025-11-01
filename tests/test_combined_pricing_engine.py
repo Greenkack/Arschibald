@@ -23,6 +23,14 @@ except ImportError as e:
 
 class TestCombinedPricingResult:
     """Test combined pricing result data structure"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_combined_pricing_result_creation(self):
         """Test creating combined pricing result"""
@@ -42,6 +50,14 @@ class TestCombinedPricingResult:
 
 class TestCombinedPricingEngine:
     """Test combined pricing engine functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def combined_engine(self):
@@ -525,6 +541,14 @@ class TestCombinedPricingEngine:
 
 class TestCombinedPricingConvenienceFunctions:
     """Test convenience functions for combined pricing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_combined_pricing_engine(self):
         """Test combined pricing engine creation"""
@@ -552,6 +576,14 @@ class TestCombinedPricingConvenienceFunctions:
 
 class TestCombinedPricingIntegration:
     """Integration tests for combined pricing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @patch('pricing.combined_pricing_engine.PVPricingEngine')
     @patch('pricing.combined_pricing_engine.EnhancedHeatPumpPricingEngine')

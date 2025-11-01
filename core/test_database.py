@@ -65,6 +65,14 @@ def repository(db_manager):
 
 class TestDatabaseManager:
     """Test DatabaseManager functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_initialization(self, db_manager):
         """Test database manager initialization"""
@@ -114,6 +122,14 @@ class TestDatabaseManager:
 
 class TestRepository:
     """Test Repository functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create(self, repository):
         """Test entity creation"""
@@ -314,6 +330,14 @@ class TestRepository:
 
 class TestUnitOfWork:
     """Test UnitOfWork functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_basic_transaction(self, db_manager):
         """Test basic transaction"""
@@ -394,6 +418,14 @@ class TestUnitOfWork:
 
 class TestAuditLogs:
     """Test audit log functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_audit_logs(self, db_manager, repository):
         """Test querying audit logs"""
@@ -434,6 +466,14 @@ class TestAuditLogs:
 
 class TestHelperFunctions:
     """Test helper functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_db_manager(self):
         """Test get_db_manager singleton"""

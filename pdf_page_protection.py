@@ -72,6 +72,14 @@ class ConditionalPageBreak(Flowable):
 
 class PageProtectionManager:
     """Manages page protection for extended PDF pages.
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     This class provides intelligent page protection that ensures related
     elements stay together on the same page. It applies only to pages 9+

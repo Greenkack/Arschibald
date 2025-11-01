@@ -11,6 +11,14 @@ import random
 
 class NeuralCodeMutator:
 
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def __init__(self):
         self.obfuscation_techniques = [
             self.variable_name_mutation,
@@ -42,6 +50,14 @@ class NeuralCodeMutator:
 
         # Wende Mutationen an
         class VariableMutator(ast.NodeTransformer):
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def visit_Name(self, node):
                 if node.id in mutation_map:
                     node.id = mutation_map[node.id]
@@ -58,6 +74,14 @@ class NeuralCodeMutator:
         tree = ast.parse(code)
 
         class FlowObfuscator(ast.NodeTransformer):
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def visit_If(self, node):
                 # Erstelle opaque predicate (immer True, aber schwer zu erkennen)
                 # Beispiel: (x*x + x) % 2 == x % 2 (immer True für jede ganze
@@ -119,6 +143,14 @@ class NeuralCodeMutator:
         encryption_key = random.randint(1, 255)
 
         class StringEncryptor(ast.NodeTransformer):
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def visit_Str(self, node):
                 if len(node.s) > 3:  # Nur längere Strings verschlüsseln
                     encrypted = xor_encrypt(node.s, encryption_key)
@@ -175,6 +207,14 @@ def __neural_decrypt__(encrypted_bytes, key):
                                                                         3, 8)})} ", ]
 
         class DeadCodeInjector(ast.NodeTransformer):
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def visit_FunctionDef(self, node):
                 # Füge toten Code am Anfang der Funktion hinzu
                 dead_stmt = ast.parse(
@@ -194,6 +234,14 @@ def __neural_decrypt__(encrypted_bytes, key):
         tree = ast.parse(code)
 
         class FunctionSplitter(ast.NodeTransformer):
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def visit_FunctionDef(self, node):
                 if len(node.body) > 5:  # Nur große Funktionen teilen
                     # Teile Funktion in der Mitte

@@ -25,13 +25,14 @@ from theming.pdf_styles import get_theme
 # Optional 3D Visualization import
 try:
     from utils.pdf_visual_inject import make_pv3d_image_flowable
-    from utils.pv3d import BuildingDims, LayoutConfig
+    from utils.pv3d import BuildingDims, LayoutConfig, AdvancedLayoutConfig
     _PV3D_AVAILABLE = True
 except ImportError:
     _PV3D_AVAILABLE = False
     make_pv3d_image_flowable = None
     BuildingDims = None
     LayoutConfig = None
+    AdvancedLayoutConfig = None
 
 # Optional PDF Templates import
 try:
@@ -126,6 +127,14 @@ except Exception:
 
 class PDFGenerator:
     """Kapselt die gesamte PDF-Erstellungslogik."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
             self,

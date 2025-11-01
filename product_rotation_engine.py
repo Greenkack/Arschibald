@@ -144,6 +144,14 @@ def load_all_products() -> Dict[str, List[dict]]:
 @dataclass
 class ProductSpecs:
     """Produkt-Spezifikationen für Matching"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     power_w: Optional[float] = None  # PV Module Leistung in W
     power_kw: Optional[float] = None  # Wechselrichter Leistung in kW
     capacity_kwh: Optional[float] = None  # Batteriespeicher Kapazität in kWh

@@ -31,6 +31,14 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class TestPathValidation:
     """Test path validation and traversal prevention."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_valid_path(self):
         """Test that valid paths are accepted."""
@@ -75,6 +83,14 @@ class TestPathValidation:
 
 class TestCommandValidation:
     """Test command validation and injection prevention."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_valid_command(self):
         """Test that valid commands are accepted."""
@@ -144,6 +160,14 @@ class TestCommandValidation:
 
 class TestInputValidation:
     """Test user input validation."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_valid_input(self):
         """Test that valid input is accepted."""
@@ -178,6 +202,14 @@ class TestInputValidation:
 
 class TestFilenameValidation:
     """Test filename validation."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_valid_filename(self):
         """Test that valid filenames are accepted."""
@@ -222,6 +254,14 @@ class TestFilenameValidation:
 
 class TestSensitiveDataMasking:
     """Test sensitive data masking."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_mask_openai_key(self):
         """Test that OpenAI API keys are masked."""
@@ -267,6 +307,14 @@ class TestSensitiveDataMasking:
 
 class TestSecurityIntegration:
     """Integration tests for security features."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_file_operations_security(self):
         """Test that file operations use security validation."""

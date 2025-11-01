@@ -55,6 +55,14 @@ def migration_manager(temp_db):
 
 class TestMigrationManager:
     """Test MigrationManager class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_initialization(self, migration_manager):
         """Test migration manager initialization"""
@@ -119,6 +127,14 @@ class TestMigrationManager:
 
 class TestMigrationFunctions:
     """Test migration helper functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_migration_manager(self, temp_db):
         """Test getting global migration manager"""
@@ -164,6 +180,14 @@ class TestMigrationFunctions:
 
 class TestMigrationTemplates:
     """Test migration templates"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_add_column_template(self):
         """Test add column template"""
@@ -292,6 +316,14 @@ class TestMigrationTemplates:
 
 class TestMigrationIntegration:
     """Integration tests for migration system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_full_migration_workflow(self, temp_db):
         """Test complete migration workflow"""

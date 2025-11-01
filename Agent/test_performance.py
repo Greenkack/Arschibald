@@ -104,6 +104,14 @@ class TestKnowledgeBasePerformance:
 
 class TestAgentResponseTime:
     """Test agent response times (Performance NFR)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @patch.dict(os.environ, {
         'OPENAI_API_KEY': 'test-key-123',
@@ -170,6 +178,14 @@ class TestAgentResponseTime:
 
 class TestConcurrentSessions:
     """Test concurrent agent sessions (Scalability NFR)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_multiple_file_operations_concurrent(self):
         """Test multiple file operations can run concurrently"""
@@ -281,6 +297,14 @@ class TestConcurrentSessions:
 
 class TestResourceUsage:
     """Monitor resource usage (Performance NFR)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_memory_usage_reasonable(self):
         """Test memory usage stays within reasonable bounds"""
@@ -361,6 +385,14 @@ class TestResourceUsage:
 
 class TestPerformanceMetrics:
     """Collect and report performance metrics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_generate_performance_report(self):
         """Generate comprehensive performance report"""

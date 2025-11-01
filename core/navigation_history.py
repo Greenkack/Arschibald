@@ -25,6 +25,14 @@ except ImportError:
 @dataclass
 class HistoryEntry:
     """Navigation history entry with metadata"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     page: str
     params: dict[str, Any]
     timestamp: datetime
@@ -68,6 +76,14 @@ class HistoryEntry:
 @dataclass
 class Breadcrumb:
     """Breadcrumb item for navigation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     label: str
     page: str
     params: dict[str, Any] = field(default_factory=dict)
@@ -82,6 +98,14 @@ class NavigationHistory:
     Manages navigation history with support for back/forward,
     breadcrumbs, and analytics.
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self, max_size: int = 100):
         """
@@ -349,6 +373,14 @@ class NavigationAnalytics:
 
     Tracks and analyzes user navigation patterns.
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         self.sessions: dict[str, NavigationHistory] = {}

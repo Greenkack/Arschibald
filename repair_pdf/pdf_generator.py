@@ -82,6 +82,14 @@ except Exception as e_pypdf_import:
     _PYPDF_AVAILABLE = True
 class PDFGenerator:
     """Kapselt die gesamte PDF-Erstellungslogik."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, offer_data: Dict, module_order: List[Dict], theme_name: str, filename: str):
         self.offer_data = offer_data

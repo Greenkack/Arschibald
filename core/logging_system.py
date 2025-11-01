@@ -33,6 +33,14 @@ correlation_id_var: ContextVar[str | None] = ContextVar(
 
 class CorrelationIDProcessor:
     """Processor to add correlation ID to log entries"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __call__(self, logger: Any, method_name: str,
                  event_dict: EventDict) -> EventDict:
@@ -45,6 +53,14 @@ class CorrelationIDProcessor:
 
 class TimestampProcessor:
     """Processor to add ISO 8601 timestamp"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __call__(self, logger: Any, method_name: str,
                  event_dict: EventDict) -> EventDict:
@@ -55,6 +71,14 @@ class TimestampProcessor:
 
 class EnvironmentProcessor:
     """Processor to add environment information"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, env: str):
         self.env = env
@@ -308,6 +332,14 @@ def get_log_level() -> str:
 
 class LogContext:
     """Context manager for adding context to logs"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, **kwargs):
         self.context = kwargs
@@ -325,6 +357,14 @@ class LogContext:
 
 class CorrelationContext:
     """Context manager for correlation ID"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, correlation_id: str | None = None):
         self.correlation_id = correlation_id

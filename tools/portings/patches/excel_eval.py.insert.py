@@ -477,6 +477,22 @@ class FormulaRow:
 
 class ExcelEngineXlwings:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Nutzt Excel für Berechnung (maximale Übereinstimmung, erfordert Excel).
     """
 
@@ -514,6 +530,14 @@ class ExcelEngineXlwings:
 
 class ExcelEngineHeadless:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Headless-Auswertung mit xlcalculator (ohne Excel).
     """
 
@@ -534,6 +558,14 @@ class ExcelEngineHeadless:
 
 @dataclass
 class Mismatch:
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     ref: str
     excel_value: Any
     headless_value: Any

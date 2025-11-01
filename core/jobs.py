@@ -48,6 +48,14 @@ class ErrorType(str, Enum):
 @dataclass
 class Job:
     """Enhanced job definition for background processing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     name: str = ""
     function: Callable | None = None
@@ -136,6 +144,14 @@ class Job:
 @dataclass
 class JobResult:
     """Job execution result stored in JobResult-Table"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     job_id: str = ""
     status: JobStatus = JobStatus.PENDING
@@ -238,6 +254,14 @@ class JobResult:
 
 class ProgressCallback:
     """Progress callback for job functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
             self,
@@ -266,6 +290,14 @@ class ProgressCallback:
 
 class JobQueue:
     """Priority queue for jobs"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self._queue: list[tuple[int, datetime, Job]] = []
@@ -324,6 +356,14 @@ class JobQueue:
 
 class JobManager:
     """Enhanced job manager with priority queues and scheduling"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, max_workers: int = 4, auto_recover: bool = True):
         self.max_workers = max_workers

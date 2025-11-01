@@ -22,6 +22,14 @@ except ImportError as e:
 
 class TestHeatPumpPriceComponent:
     """Test heat pump-specific price component"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_heatpump_component_creation(self):
         """Test creating heat pump price component with all fields"""
@@ -138,6 +146,14 @@ class TestHeatPumpPriceComponent:
 
 class TestEnhancedHeatPumpPricingEngine:
     """Test enhanced heat pump pricing engine functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def hp_engine(self):
@@ -553,6 +569,14 @@ class TestEnhancedHeatPumpPricingEngine:
 
 class TestHeatPumpPricingConvenienceFunctions:
     """Test convenience functions for heat pump pricing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_enhanced_heatpump_pricing_engine(self):
         """Test enhanced heat pump pricing engine creation"""
@@ -584,6 +608,14 @@ class TestHeatPumpPricingConvenienceFunctions:
 
 class TestHeatPumpCategories:
     """Test heat pump category definitions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_heatpump_categories_structure(self):
         """Test heat pump categories are properly defined"""

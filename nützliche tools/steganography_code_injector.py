@@ -11,6 +11,14 @@ import zlib
 
 class SteganographyInjector:
 
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def hide_code_in_comments(self, source_file, hidden_code):
         """Versteckt Code in Kommentaren mittels Unicode-Steganographie"""
 
@@ -94,6 +102,14 @@ class SteganographyInjector:
 
         # Modifiziere AST - füge Docstrings hinzu
         class DocstringInjector(ast.NodeTransformer):
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def __init__(self):
                 self.chunk_index = 0
 

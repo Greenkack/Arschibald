@@ -260,6 +260,14 @@ class ComponentCost:
     description: str = ""
 
     @property
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def labor_cost_net(self) -> float:
         return self.labor_hours * self.labor_rate
 
@@ -280,6 +288,14 @@ class ComponentCost:
 # --- DEF BLOCK START: class BegConfig ---
 @dataclass
 class BegConfig:
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     base_pct: float = 30.0
     refrigerant_bonus_pct: float = 5.0
     heating_replacement_bonus_pct: float = 20.0

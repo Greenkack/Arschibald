@@ -20,6 +20,14 @@ from pricing.pricing_validation import get_pricing_validator
 
 class TestPricingValidationIntegration:
     """Test integration of validation with pricing engine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup test environment"""
@@ -217,6 +225,14 @@ class TestPricingValidationIntegration:
 
 class TestPricingAuditIntegration:
     """Test integration of audit system with pricing engine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup test environment"""
@@ -417,6 +433,14 @@ class TestErrorHandlingIntegration:
 
 class TestBusinessRuleValidation:
     """Test business rule validation integration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup test environment"""

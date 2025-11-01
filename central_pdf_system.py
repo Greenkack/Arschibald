@@ -28,6 +28,14 @@ from ui_state_manager import request_rerun
 
 class PDFSystemManager:
     """Zentrale Verwaltung aller PDF-Systeme"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.available_systems = {}
@@ -914,6 +922,14 @@ PDF_MANAGER = PDFSystemManager()
 
 class CentralPDFInterface:
     """Zentrale PDF-Benutzeroberfläche - ersetzt alle anderen PDF-UIs"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.session_prefix = "central_pdf_"

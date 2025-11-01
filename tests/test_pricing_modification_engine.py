@@ -17,6 +17,14 @@ from pricing.pricing_modification_engine import (
 
 class TestDiscountConfig:
     """Test DiscountConfig class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_discount_config_creation(self):
         """Test basic discount config creation"""
@@ -62,6 +70,14 @@ class TestDiscountConfig:
 
 class TestSurchargeConfig:
     """Test SurchargeConfig class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_surcharge_config_creation(self):
         """Test basic surcharge config creation"""
@@ -93,6 +109,14 @@ class TestSurchargeConfig:
 
 class TestAccessoryConfig:
     """Test AccessoryConfig class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_accessory_config_creation(self):
         """Test basic accessory config creation"""
@@ -127,6 +151,14 @@ class TestAccessoryConfig:
 
 class TestPricingModificationEngine:
     """Test PricingModificationEngine class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def engine(self):

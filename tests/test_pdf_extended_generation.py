@@ -28,6 +28,14 @@ import product_db
 
 class TestResult:
     """Container for test results"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def __init__(self, test_name: str):
         self.test_name = test_name
         self.passed = False
@@ -41,6 +49,14 @@ class TestResult:
 
 class PDFExtendedGenerationTester:
     """Test suite for extended PDF generation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     def __init__(self):
         self.results: List[TestResult] = []

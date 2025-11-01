@@ -96,6 +96,14 @@ def _get_db_echo():
 @dataclass
 class DatabaseConfig:
     """Database configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     url: str = field(default_factory=_get_database_url)
     pool_size: int = field(default_factory=_get_db_pool_size)
@@ -127,6 +135,14 @@ def _get_cache_max_entries():
 @dataclass
 class CacheConfig:
     """Cache configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     redis_url: str | None = field(default_factory=_get_redis_url)
     default_ttl: int = field(default_factory=_get_cache_ttl)
@@ -155,6 +171,14 @@ def _get_job_timeout():
 @dataclass
 class JobConfig:
     """Job system configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     backend: str = field(default_factory=_get_job_backend)
     redis_url: str | None = field(default_factory=_get_redis_url)
@@ -186,6 +210,14 @@ def _get_bcrypt_rounds():
 @dataclass
 class SecurityConfig:
     """Security configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     secret_key: str = field(default_factory=_get_secret_key)
     session_timeout: int = field(default_factory=_get_session_timeout)
@@ -219,6 +251,14 @@ def _get_backup_schedule_inc():
 @dataclass
 class BackupConfig:
     """Backup configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     enabled: bool = field(default_factory=_get_backup_enabled)
     storage_path: Path = field(default_factory=_get_backup_path)
@@ -246,6 +286,14 @@ def _get_perf_max_memory():
 @dataclass
 class PerformanceConfig:
     """Performance configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     response_time_target_ms: int = field(
         default_factory=_get_perf_response_time
@@ -319,6 +367,14 @@ def _get_reload_lock():
 @dataclass
 class AppConfig:
     """Main application configuration with enhanced features"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # Environment
     env: str = field(default_factory=_get_env)
@@ -720,6 +776,14 @@ if PYDANTIC_AVAILABLE:
         @validator("env")
         def validate_env(cls, v):
             """Validate environment value"""
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             valid = {"dev", "stage", "staging", "prod", "production"}
             if v not in valid:
                 msg = f"env must be one of {valid}"

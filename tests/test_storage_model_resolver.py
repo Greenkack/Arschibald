@@ -12,6 +12,14 @@ from storage_model_resolver import StorageModelResolver, resolve_storage_model_n
 
 class TestStorageModelResolver:
     """Test cases for StorageModelResolver class."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures."""
@@ -247,6 +255,14 @@ class TestStorageModelResolver:
 
 class TestStorageModelResolverIntegration:
     """Integration tests with real-world scenarios."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_real_world_scenario_with_storage(self):
         """Test a complete real-world scenario with storage."""

@@ -20,6 +20,14 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 class TestDockerIsolation:
     """Verify Docker isolation and security (Requirement 5)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_dockerfile_uses_unprivileged_user(self):
         """Test Dockerfile creates and uses unprivileged user (Requirement 5.2)"""
@@ -156,6 +164,14 @@ except:
 
 class TestPathValidation:
     """Test path validation and directory traversal prevention (Requirement 6)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_directory_traversal_prevention_write(self):
         """Test write_file prevents directory traversal (Requirement 6.3)"""
@@ -267,6 +283,14 @@ class TestPathValidation:
 
 class TestAPIKeySecurity:
     """Test API key security measures (Requirement 12)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_api_keys_loaded_from_env_only(self):
         """Test API keys are loaded from environment only (Requirement 12.1)"""
@@ -364,6 +388,14 @@ class TestAPIKeySecurity:
 
 class TestInputSanitization:
     """Test input sanitization and validation (Requirement 12.1)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_file_path_sanitization(self):
         """Test file paths are sanitized"""
@@ -432,6 +464,14 @@ class TestInputSanitization:
 
 class TestSecurityConfiguration:
     """Test security configuration and settings"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_docker_resource_limits(self):
         """Test Docker containers have resource limits"""

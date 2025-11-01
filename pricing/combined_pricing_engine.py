@@ -55,6 +55,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class CombinedPricingResult:
     """Result of combined PV + heat pump pricing calculation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     pv_result: PricingResult | None = None
     heatpump_result: PricingResult | None = None
     combined_base_price: float = 0.0
@@ -67,6 +75,14 @@ class CombinedPricingResult:
 
 class CombinedPricingEngine(PricingEngine):
     """Combined pricing engine for PV + heat pump systems"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         """Initialize combined pricing engine"""

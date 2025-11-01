@@ -24,6 +24,14 @@ except ImportError:
     # Dummy st für Kompatibilität
     class DummySt:
         @staticmethod
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def info(msg): print(f"INFO: {msg}")
         @staticmethod
         def warning(msg): print(f"WARNING: {msg}")
@@ -482,6 +490,14 @@ def parse_module_price_matrix_excel(
 
 class AdvancedCalculationsIntegrator:
     """Integriert erweiterte Berechnungen in Dashboard und PDF"""
+
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         # Liste der erweiterten Berechnungen aus calculations.py
@@ -3866,6 +3882,14 @@ def perform_calculations(
 
 class EnergyPriceComparison:
     """Energiepreisvergleichstool"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -3913,6 +3937,14 @@ class EnergyPriceComparison:
 
 class TechnicalDegradation:
     """Detaillierte Degradationsanalyse"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -3971,6 +4003,14 @@ class TechnicalDegradation:
 
 class MaintenanceMonitoring:
     """Wartungs- und Überwachungsmodul"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, components: List[Dict[str, Any]], installation_date: str):
         self.components = components

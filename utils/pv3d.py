@@ -62,8 +62,7 @@ def _deg_to_rad(degrees: float) -> float:
 
 @dataclass
 class BuildingDims:
-    """
-    Gebäudedimensionen für 3D-Modellierung.
+    """Gebäudedimensionen für 3D-Modellierung.
 
     Attributes:
         length_m: Gebäudelänge in Metern
@@ -77,8 +76,7 @@ class BuildingDims:
 
 @dataclass
 class ModuleTransform:
-    """
-    Transformation für einzelnes PV-Modul.
+    """Transformation für einzelnes PV-Modul.
 
     Diese Klasse speichert individuelle Transformationsparameter für ein
     einzelnes PV-Modul, einschließlich Rotation (Azimuth und Neigung) und
@@ -170,8 +168,7 @@ class ModuleTransform:
 
 @dataclass
 class ModuleGroup:
-    """
-    Gruppe von PV-Modulen mit gemeinsamen Eigenschaften.
+    """Gruppe von PV-Modulen mit gemeinsamen Eigenschaften.
 
     Diese Klasse ermöglicht die Verwaltung von Modulgruppen, die gemeinsame
     Transformationsparameter (Azimuth, Neigung) und visuelle Eigenschaften
@@ -286,8 +283,7 @@ class ModuleGroup:
 
 @dataclass
 class LayoutConfig:
-    """
-    Konfiguration für PV-Modul-Layout.
+    """Konfiguration für PV-Modul-Layout.
 
     Attributes:
         mode: Belegungsmodus ("auto" oder "manual")
@@ -361,8 +357,7 @@ class LayoutConfig:
 
 @dataclass
 class AdvancedLayoutConfig(LayoutConfig):
-    """
-    Erweiterte Konfiguration für PV-Modul-Layout mit individuellen
+    """Erweiterte Konfiguration für PV-Modul-Layout mit individuellen
     Modul-Transformationen und Gruppen-Verwaltung.
 
     Diese Klasse erweitert LayoutConfig um erweiterte Funktionen für

@@ -291,7 +291,8 @@ def render_pdf_ui(
             animate_charts = st.checkbox(" Animierte Diagramme", value=False, key="pdf_animate_charts")
             
             # Erweiterte Chart-Optionen
-            with st.expander(" Erweiterte Chart-Einstellungen", expanded=False):
+            st.markdown("**📊 Erweiterte Chart-Einstellungen**")
+            with st.container():
                 chart_resolution = st.selectbox(" Auflösung", ["Standard", "Hoch", "Ultra"], key="pdf_chart_resolution")
                 chart_style = st.selectbox(" Stil", ["Modern", "Classic", "Minimal", "Bold"], key="pdf_chart_style_detailed")
                 
@@ -1803,9 +1804,9 @@ def render_pdf_ui(
                 try:
                     from pdf_widgets import PDFSectionManager
                     
-                    if 'pdf_section_manager' not in st.session_state:
-                        st.session_state.pdf_section_manager = PDFSectionManager()
-                        st.session_state.pdf_section_manager.initialize_session_state()
+                    # NICHT in session_state speichern - erstelle lokal!
+                    pdf_section_manager = PDFSectionManager()
+                    pdf_section_manager.initialize_session_state()
                     
                     st.markdown("** PDF-Struktur anpassen:**")
                     with st.container():
@@ -2392,7 +2393,10 @@ def render_pdf_ui(
         """, unsafe_allow_html=True)
         
         try:
-            st.session_state.pdf_section_manager.render_drag_drop_interface(texts)
+            # Erstelle Manager lokal, nicht aus session_state
+            from pdf_widgets import PDFSectionManager
+            pdf_section_manager = PDFSectionManager()
+            pdf_section_manager.render_drag_drop_interface(texts)
         except Exception as e:
             st.error(f"Drag & Drop Interface Fehler: {e}")
             st.info("Drag & Drop System vorübergehend nicht verfügbar.")

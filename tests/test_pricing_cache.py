@@ -31,6 +31,14 @@ from pricing.pricing_cache import (
 
 class TestCacheEntry:
     """Test CacheEntry functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_cache_entry_creation(self):
         """Test cache entry creation and basic properties"""
@@ -94,6 +102,14 @@ class TestCacheEntry:
 
 class TestPricingCache:
     """Test PricingCache functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test cache"""
@@ -249,6 +265,14 @@ class TestPricingCache:
 
 class TestPricingCacheManager:
     """Test PricingCacheManager functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test cache manager"""
@@ -358,6 +382,14 @@ class TestPricingCacheManager:
 
 class TestPerformanceMonitoring:
     """Test performance monitoring functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up performance monitor"""
@@ -411,6 +443,14 @@ class TestPerformanceMonitoring:
 
 class TestCacheBenchmark:
     """Test cache benchmarking functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up benchmark suite"""
@@ -468,6 +508,14 @@ class TestCacheBenchmark:
 
 class TestGlobalCacheInstances:
     """Test global cache instance management"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_global_cache_singleton(self):
         """Test global cache singleton behavior"""
@@ -505,6 +553,14 @@ class TestGlobalCacheInstances:
 
 class TestCacheIntegration:
     """Test cache integration with pricing engine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up integration test environment"""

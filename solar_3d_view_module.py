@@ -18,19 +18,15 @@ try:
         AdvancedLayoutConfig,
         ModuleTransform,
         ModuleGroup,
-        build_scene,
-        render_image_bytes,
-        export_stl,
-        export_gltf,
         detect_collisions,
         calculate_sun_position,
         calculate_shading_for_module,
-        visualize_shading,
         _safe_get_orientation,
         _safe_get_roof_inclination_deg,
         _safe_get_roof_covering
     )
-    from stpyvista import stpyvista
+    # Neue Plotly-basierte 3D-Visualisierung
+    from utils.pv3d_plotly import build_plotly_scene
     PV3D_AVAILABLE = True
 except ImportError:
     PV3D_AVAILABLE = False
@@ -1331,7 +1327,7 @@ def _render_3d_view_impl():
             top_configs = st.session_state["optimization_results"]
             
             # Zeige jede Konfiguration mit Score
-            from utils.pv3d import AdvancedLayoutConfig
+            # AdvancedLayoutConfig ist bereits im Top-Level importiert
             for i, (config, score) in enumerate(top_configs, 1):
                 # Falls serialisiert (JSON-String), zurückkonvertieren
                 try:
@@ -1854,75 +1850,19 @@ def _render_3d_view_impl():
                 # Hole ausgewählte Module aus Session State
                 selected_modules = st.session_state.get("pv3d_selected_modules", [])
                 
-                # Rufe build_scene() auf
-                # Performance-Optimierung: build_scene() führt automatisch
-                # Mesh-Zusammenführung durch, um Draw-Calls zu reduzieren
-                plotter, panels = build_scene(
-                    project_data=project_data,
-                    dims=dims,
-                    roof_type=selected_roof_type,
-                    module_quantity=module_quantity,
-                    layout_config=layout_config,
-                    off_screen=False,
-                    selected_modules=selected_modules
-                )
-                
-                # Prüfe Kollisionen wenn AdvancedLayoutConfig verwendet wird
-                # oder wenn enable_collision_detection aktiviert ist
-                collision_pairs = []
-                if isinstance(layout_config, AdvancedLayoutConfig) and layout_config.enable_collision_detection:
-                    # Sammle alle Module
-                    all_modules = []
-                    all_modules.extend(panels.get("main", []))
-                    all_modules.extend(panels.get("garage", []))
-                    all_modules.extend(panels.get("facade", []))
-                    
-                    # Erkenne Kollisionen
-                    if len(all_modules) > 0:
-                        collision_pairs = detect_collisions(all_modules)
-                
-                # Verschattungs-Analyse wenn aktiviert
-                shading_values = {}
-                if isinstance(layout_config, AdvancedLayoutConfig) and layout_config.enable_shading_analysis:
-                    # Berechne Sonnenposition
+                # Berechne Sonnenposition für Shading-Analyse (falls aktiviert)
+                sun_azimuth, sun_elevation = None, None
+                if enable_shading_analysis:
                     sun_azimuth, sun_elevation = calculate_sun_position(
                         latitude=latitude,
                         day_of_year=day_of_year,
                         hour=hour_of_day
                     )
-                    
-                    # Sammle alle Module
-                    all_modules = []
-                    all_modules.extend(panels.get("main", []))
-                    all_modules.extend(panels.get("garage", []))
-                    all_modules.extend(panels.get("facade", []))
-                    
-                    # Visualisiere Verschattung
-                    if len(all_modules) > 0:
-                        # Erstelle neuen Plotter für Verschattungs-Visualisierung
-                        # (der alte Plotter hat bereits schwarze Module)
-                        import pyvista as pv
-                        shading_plotter = pv.Plotter(off_screen=False)
-                        
-                        # Kopiere Gebäude und Dach vom alten Plotter
-                        # (vereinfacht: erstelle neue Szene mit Verschattungs-Visualisierung)
-                        shading_values = visualize_shading(
-                            plotter=shading_plotter,
-                            module_meshes=all_modules,
-                            sun_azimuth=sun_azimuth,
-                            sun_elevation=sun_elevation,
-                            show_legend=True
-                        )
-                        
-                        # Verwende Verschattungs-Plotter statt normalem Plotter
-                        plotter = shading_plotter
                 
-                # NICHT den Plotter in session_state speichern (nicht serialisierbar)!
-                # Stattdessen: Speichere nur die Daten und erstelle Plotter bei Bedarf neu
+                # Speichere Scene-Daten (keine Plotter-Objekte mehr!)
                 st.session_state["_pv3d_scene_data"] = {
-                    "panels": panels,
-                    "collisions": collision_pairs,
-                    "shading_values": shading_values,
+                    "collisions": [],  # Kollisionserkennung später hinzufügen
+                    "shading_values": {},  # Verschattungswerte später hinzufügen
                     "sun_position": (sun_azimuth, sun_elevation) if enable_shading_analysis else None,
                     "building_dims": {
                         "length_m": dims.length_m,
@@ -1930,7 +1870,7 @@ def _render_3d_view_impl():
                         "wall_height_m": dims.wall_height_m
                     },
                     "layout_config_json": layout_config.to_json() if hasattr(layout_config, 'to_json') else None,
-                    "roof_type": selected_roof_type,  # Speichere den aktuell gewählten Typ
+                    "roof_type": selected_roof_type,
                     "roof_covering": roof_covering,
                     "project_data": project_data,
                     "module_quantity": module_quantity,
@@ -1941,18 +1881,11 @@ def _render_3d_view_impl():
                 # Speichere aktuellen Settings-Hash
                 st.session_state["pv3d_last_settings_hash"] = current_settings_hash
                 
-                # Zeige Erfolgsmeldung oder Kollisionswarnung
-                if collision_pairs and len(collision_pairs) > 0:
-                    st.warning(
-                        f"⚠️ 3D-Visualisierung erstellt, aber {len(collision_pairs)} Kollision(en) erkannt!\n\n"
-                        f"Kollidierende Module: {', '.join([f'({i},{j})' for i, j in collision_pairs[:5]])}"
-                        f"{'...' if len(collision_pairs) > 5 else ''}"
-                    )
+                # Zeige Erfolgsmeldung
+                if auto_update:
+                    st.success("✓ 3D-Visualisierung automatisch aktualisiert")
                 else:
-                    if auto_update:
-                        st.success("✓ 3D-Visualisierung automatisch aktualisiert")
-                    else:
-                        st.success("✓ 3D-Visualisierung erfolgreich erstellt")
+                    st.success("✓ 3D-Visualisierung erfolgreich erstellt")
                 
             except Exception as e:
                 st.error(f"❌ Fehler beim Erstellen der 3D-Visualisierung: {e}")
@@ -1973,228 +1906,156 @@ def _render_3d_view_impl():
 
     # Linke Spalte: 3D-Viewer
     with col_viewer:
-        st.subheader("🎨 3D-Ansicht")
+        with st.expander("🎨 3D-Ansicht", expanded=True):
+            # Prüfe ob Scene-Daten vorhanden sind
+            scene_data = st.session_state.get("_pv3d_scene_data")
         
-        # Prüfe ob Scene-Daten vorhanden sind
-        scene_data = st.session_state.get("_pv3d_scene_data")
-        
-        if scene_data is not None:
-            try:
-                # Erstelle Plotter neu aus gespeicherten Daten
-                import pyvista as pv
-                
-                # Rekonstruiere BuildingDims
-                bd = scene_data["building_dims"]
-                dims = BuildingDims(
-                    length_m=bd["length_m"],
-                    width_m=bd["width_m"],
-                    wall_height_m=bd["wall_height_m"]
-                )
-                
-                # Rekonstruiere LayoutConfig
-                layout_config_json = scene_data.get("layout_config_json")
-                if layout_config_json:
-                    try:
-                        layout_config = AdvancedLayoutConfig.from_json(layout_config_json)
-                    except:
-                        layout_config = LayoutConfig.from_json(layout_config_json)
-                else:
-                    layout_config = LayoutConfig()
-                
-                # Baue Szene neu auf mit korrekten Parametern
-                # Debug: Zeige was wir haben
-                st.write("DEBUG - Scene Data Keys:", list(scene_data.keys()))
-                
-                # Berechne module_quantity aus gespeicherten Panels (falls vorhanden)
-                saved_panels = scene_data.get("panels", {})
-                calculated_module_quantity = (
-                    len(saved_panels.get("main", [])) +
-                    len(saved_panels.get("garage", [])) +
-                    len(saved_panels.get("facade", []))
-                )
-                
-                module_qty_from_storage = scene_data.get("module_quantity", 0)
-                # Verwende die höhere Zahl (gespeichert oder berechnet)
-                effective_module_quantity = max(calculated_module_quantity, module_qty_from_storage)
-                
-                st.write("DEBUG - Module Quantity (storage):", module_qty_from_storage)
-                st.write("DEBUG - Module Quantity (calculated from panels):", calculated_module_quantity)
-                st.write("DEBUG - Effective Module Quantity:", effective_module_quantity)
-                st.write("DEBUG - Roof Type:", scene_data.get("roof_type", "Flachdach"))
-                
-                # WICHTIG: Wenn effective_module_quantity immer noch 0 ist,
-                # verwenden wir die gespeicherten Panels direkt!
-                if effective_module_quantity > 0:
-                    plotter, panels = build_scene(
+            if scene_data is not None:
+                try:
+                    # Rekonstruiere BuildingDims
+                    bd = scene_data["building_dims"]
+                    dims = BuildingDims(
+                        length_m=bd["length_m"],
+                        width_m=bd["width_m"],
+                        wall_height_m=bd["wall_height_m"]
+                    )
+                    
+                    # Rekonstruiere LayoutConfig
+                    layout_config_json = scene_data.get("layout_config_json")
+                    if layout_config_json:
+                        try:
+                            layout_config = AdvancedLayoutConfig.from_json(layout_config_json)
+                        except:
+                            layout_config = LayoutConfig.from_json(layout_config_json)
+                    else:
+                        layout_config = LayoutConfig()
+                    
+                    # Hole module_quantity
+                    module_quantity = scene_data.get("module_quantity", 20)
+                    
+                    # Erstelle Plotly 3D-Szene
+                    fig = build_plotly_scene(
                         project_data=scene_data.get("project_data", {}),
                         dims=dims,
                         roof_type=scene_data.get("roof_type", "Flachdach"),
-                        module_quantity=effective_module_quantity,
+                        module_quantity=module_quantity,
                         layout_config=layout_config,
-                        off_screen=False,
                         selected_modules=scene_data.get("selected_modules", [])
                     )
-                else:
-                    # Fallback: Verwende Standard-Module-Quantity
-                    st.warning("⚠️ Keine Module in gespeicherten Daten gefunden. Verwende Standard-Wert.")
-                    plotter, panels = build_scene(
-                        project_data=scene_data.get("project_data", {}),
-                        dims=dims,
-                        roof_type=scene_data.get("roof_type", "Flachdach"),
-                        module_quantity=20,  # Standard-Wert
-                        layout_config=layout_config,
-                        off_screen=False,
-                        selected_modules=scene_data.get("selected_modules", [])
-                    )
-                
-                st.write("DEBUG - Panels Keys:", list(panels.keys()) if panels else "None")
-                if panels:
-                    st.write("DEBUG - Main Panels Count:", len(panels.get("main", [])))
-                
-                # Zeige 3D-Viewer mit stpyvista (ohne 'interactive' Parameter)
-                stpyvista(
-                    plotter,
-                    key="pv3d_viewer",
-                    panel_kwargs={
-                        "orientation_widget": True
-                    }
-                )
-            except Exception as e:
-                st.error(f"❌ Fehler beim Anzeigen des 3D-Viewers: {e}")
-                import traceback
-                st.code(traceback.format_exc())
-                st.info("Bitte aktualisieren Sie die Visualisierung.")
-        else:
-            # Fehler-Fallback
-            st.info("👆 Klicken Sie auf 'Visualisierung aktualisieren' in der Sidebar, um die 3D-Ansicht zu erstellen.")
-            st.image(
-                "https://via.placeholder.com/800x500/f0f0f0/666666?text=3D+Visualisierung+wird+geladen...",
-                use_container_width=True
-            )
+                    
+                    # Zeige Plotly Figure in Streamlit
+                    st.plotly_chart(fig, use_container_width=True)
+                    
+                except Exception as e:
+                    st.error(f"❌ Fehler beim Anzeigen der 3D-Visualisierung: {e}")
+                    import traceback
+                    st.code(traceback.format_exc())
+            else:
+                st.info("👆 Klicken Sie auf '🎨 3D-Visualisierung erstellen/aktualisieren' um die 3D-Ansicht zu generieren.")
 
     # Rechte Spalte: Status-Metriken
     with col_status:
-        st.subheader("📊 Status")
-
-        
-        # Berechne geschätzte Dachkapazität (gecacht)
-        estimated_capacity = _calculate_roof_capacity(
-            building_length, 
-            building_width, 
-            selected_roof_type
-        )
-        
-        # Berechne platzierte Module aus Scene-Daten
-        scene_data = st.session_state.get("_pv3d_scene_data", {})
-        panels = scene_data.get("panels", {})
-        main_panels = len(panels.get("main", []))
-        garage_panels = len(panels.get("garage", []))
-        facade_panels = len(panels.get("facade", []))
-        total_placed = main_panels + garage_panels + facade_panels
-        
-        # Berechne fehlende Module
-        missing_modules = max(0, module_quantity - total_placed)
-        
-        # Zeige Metriken
-        st.metric(
-            label="Gewählte Module",
-            value=module_quantity,
-            help="Anzahl der Module aus der Bedarfsanalyse"
-        )
-        
-        st.metric(
-            label="Platzierte Module",
-            value=total_placed,
-            delta=f"{main_panels} Dach, {garage_panels} Garage, {facade_panels} Fassade",
-            help="Anzahl der tatsächlich platzierten Module"
-        )
-        
-        st.metric(
-            label="Fehlende Module",
-            value=missing_modules,
-            delta=f"-{missing_modules}" if missing_modules > 0 else "Alle platziert",
-            delta_color="inverse",
-            help="Anzahl der Module, die nicht platziert werden konnten"
-        )
-        
-        st.metric(
-            label="Geschätzte Dachkapazität",
-            value=estimated_capacity,
-            help="Geschätzte maximale Anzahl Module auf dem Hauptdach"
-        )
-        
-        st.divider()
-        
-        # Zeige Warnung oder Erfolg
-        if missing_modules > 0:
-            st.warning(
-                f"⚠️ {missing_modules} Module konnten nicht platziert werden.\n\n"
-                "**Tipp:** Aktivieren Sie 'Garage/Carport' oder 'Fassadenbelegung' "
-                "in der Sidebar, um zusätzliche Flächen zu nutzen."
-            )
-        else:
-            st.success(
-                "✅ Alle Module wurden erfolgreich platziert!"
-            )
-        
-        # Kollisionserkennung-Status
-        collision_pairs = scene_data.get("collisions", [])
-        if collision_pairs and len(collision_pairs) > 0:
-            st.divider()
-            st.error(
-                f"⚠️ **Kollisionen erkannt: {len(collision_pairs)}**\n\n"
-                f"Kollidierende Modul-Paare:\n"
+        with st.expander("📊 Status", expanded=False):
+            # Berechne geschätzte Dachkapazität (gecacht)
+            estimated_capacity = _calculate_roof_capacity(
+                building_length, 
+                building_width, 
+                selected_roof_type
             )
             
-            # Zeige erste 10 Kollisionen
-            for i, (idx1, idx2) in enumerate(collision_pairs[:10]):
-                st.text(f"  • Module {idx1} ↔ {idx2}")
+            # Hole Modulanzahl aus Scene-Daten
+            scene_data = st.session_state.get("_pv3d_scene_data", {})
+            total_placed = scene_data.get("module_quantity", 0)
             
-            if len(collision_pairs) > 10:
-                st.text(f"  ... und {len(collision_pairs) - 10} weitere")
+            # Berechne fehlende Module
+            missing_modules = max(0, module_quantity - total_placed)
             
-            st.caption(
-                "💡 **Tipp:** Passen Sie die Modul-Positionen an oder entfernen Sie "
-                "kollidierende Module im manuellen Modus."
+            # Zeige Metriken
+            st.metric(
+                label="Gewählte Module",
+                value=module_quantity,
+                help="Anzahl der Module aus der Bedarfsanalyse"
             )
-        
-        # Verschattungs-Analyse-Status
-        shading_values = scene_data.get("shading_values", {})
-        if shading_values and len(shading_values) > 0:
+            
+            st.metric(
+                label="Platzierte Module",
+                value=total_placed,
+                help="Anzahl der tatsächlich platzierten Module"
+            )
+            
+            st.metric(
+                label="Geschätzte Dachkapazität",
+                value=estimated_capacity,
+                help="Geschätzte maximale Anzahl Module auf dem Hauptdach"
+            )
+            
             st.divider()
             
-            # Berechne Statistiken
-            shading_list = list(shading_values.values())
-            min_shading = min(shading_list)
-            max_shading = max(shading_list)
-            avg_shading = sum(shading_list) / len(shading_list)
+            # Zeige Erfolg
+            if total_placed > 0:
+                st.success(
+                    f"✅ {total_placed} Module wurden visualisiert!"
+                )
             
-            # Zähle Module nach Verschattungsgrad
-            no_shading = sum(1 for v in shading_list if v < 10.0)
-            partial_shading = sum(1 for v in shading_list if 10.0 <= v < 75.0)
-            full_shading = sum(1 for v in shading_list if v >= 75.0)
+            # Kollisionserkennung-Status
+            collision_pairs = scene_data.get("collisions", [])
+            if collision_pairs and len(collision_pairs) > 0:
+                st.divider()
+                st.error(
+                    f"⚠️ **Kollisionen erkannt: {len(collision_pairs)}**\n\n"
+                    f"Kollidierende Modul-Paare:\n"
+                )
+                
+                # Zeige erste 10 Kollisionen
+                for i, (idx1, idx2) in enumerate(collision_pairs[:10]):
+                    st.text(f"  • Module {idx1} ↔ {idx2}")
+                
+                if len(collision_pairs) > 10:
+                    st.text(f"  ... und {len(collision_pairs) - 10} weitere")
+                
+                st.caption(
+                    "💡 **Tipp:** Passen Sie die Modul-Positionen an oder entfernen Sie "
+                    "kollidierende Module im manuellen Modus."
+                )
             
-            # Hole Sonnenposition
-            sun_position = scene_data.get("sun_position", (180.0, 45.0))
-            sun_azimuth, sun_elevation = sun_position
-            
-            st.info(
-                f"☀️ **Verschattungs-Analyse**\n\n"
-                f"**Sonnenstand:**\n"
-                f"- Azimuth: {sun_azimuth:.1f}° (0°=N, 90°=O, 180°=S, 270°=W)\n"
-                f"- Elevation: {sun_elevation:.1f}° (0°=Horizont, 90°=Zenit)\n\n"
-                f"**Verschattungsgrad:**\n"
-                f"- Minimum: {min_shading:.1f}%\n"
-                f"- Maximum: {max_shading:.1f}%\n"
-                f"- Durchschnitt: {avg_shading:.1f}%\n\n"
-                f"**Module nach Verschattung:**\n"
-                f"- 🟢 Keine (<10%): {no_shading}\n"
-                f"- 🟡 Teilweise (10-75%): {partial_shading}\n"
-                f"- 🔴 Stark (≥75%): {full_shading}"
-            )
-            
-            # Zeige Tabelle mit Verschattungswerten (optional, in Expander)
-            with st.expander("📊 Detaillierte Verschattungswerte"):
+            # Verschattungs-Analyse-Status
+            shading_values = scene_data.get("shading_values", {})
+            if shading_values and len(shading_values) > 0:
+                st.divider()
+                
+                # Berechne Statistiken
+                shading_list = list(shading_values.values())
+                min_shading = min(shading_list)
+                max_shading = max(shading_list)
+                avg_shading = sum(shading_list) / len(shading_list)
+                
+                # Zähle Module nach Verschattungsgrad
+                no_shading = sum(1 for v in shading_list if v < 10.0)
+                partial_shading = sum(1 for v in shading_list if 10.0 <= v < 75.0)
+                full_shading = sum(1 for v in shading_list if v >= 75.0)
+                
+                # Hole Sonnenposition
+                sun_position = scene_data.get("sun_position", (180.0, 45.0))
+                sun_azimuth, sun_elevation = sun_position
+                
+                st.info(
+                    f"☀️ **Verschattungs-Analyse**\n\n"
+                    f"**Sonnenstand:**\n"
+                    f"- Azimuth: {sun_azimuth:.1f}° (0°=N, 90°=O, 180°=S, 270°=W)\n"
+                    f"- Elevation: {sun_elevation:.1f}° (0°=Horizont, 90°=Zenit)\n\n"
+                    f"**Verschattungsgrad:**\n"
+                    f"- Minimum: {min_shading:.1f}%\n"
+                    f"- Maximum: {max_shading:.1f}%\n"
+                    f"- Durchschnitt: {avg_shading:.1f}%\n\n"
+                    f"**Module nach Verschattung:**\n"
+                    f"- 🟢 Keine (<10%): {no_shading}\n"
+                    f"- 🟡 Teilweise (10-75%): {partial_shading}\n"
+                    f"- 🔴 Stark (≥75%): {full_shading}"
+                )
+                
+                # Zeige Tabelle mit Verschattungswerten
+                st.divider()
+                st.markdown("**📊 Detaillierte Verschattungswerte**")
                 st.caption("Verschattungsgrad pro Modul:")
                 
                 # Erstelle DataFrame für bessere Darstellung
@@ -2233,70 +2094,72 @@ def _render_3d_view_impl():
                         st.caption(f"... und {len(sorted_shading) - display_count} weitere Module")
                 else:
                     st.caption("Keine Verschattungsdaten verfügbar.")
-        
-        # Zusätzliche Informationen
-        st.info(
-            f"**Gebäudedaten:**\n"
-            f"- Dachform: {selected_roof_type}\n"
-            f"- Ausrichtung: {orientation}\n"
-            f"- Dachneigung: {roof_inclination_deg}°\n"
-            f"- Dachdeckung: {roof_covering}"
-        )
-        
-        # ====================================================================
-        # NEU: LIVE-ERTRAGSPROGNOSE ANZEIGE
-        # ====================================================================
-        if enable_yield_forecast and total_placed > 0:
-            st.divider()
-            st.subheader("⚡ Ertragsprognose")
             
-            # Berechne Prognose
-            try:
-                # Verwende Durchschnittswerte für Azimuth/Tilt
-                avg_azimuth = 0.0  # Süd
-                avg_tilt = roof_inclination_deg if selected_roof_type != "Flachdach" else 15.0
+            # Zusätzliche Informationen
+            st.info(
+                f"**Gebäudedaten:**\n"
+                f"- Dachform: {selected_roof_type}\n"
+                f"- Ausrichtung: {orientation}\n"
+                f"- Dachneigung: {roof_inclination_deg}°\n"
+                f"- Dachdeckung: {roof_covering}"
+            )
+            
+            # ====================================================================
+            # NEU: LIVE-ERTRAGSPROGNOSE ANZEIGE
+            # ====================================================================
+            if enable_yield_forecast and total_placed > 0:
+                st.divider()
+                st.subheader("⚡ Ertragsprognose")
                 
-                forecast = _calculate_yield_forecast(
-                    module_count=total_placed,
-                    latitude=latitude if enable_shading_analysis else 51.0,
-                    azimuth=avg_azimuth,
-                    tilt=avg_tilt,
-                    efficiency=module_efficiency
-                )
-                
-                # Zeige Metriken
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.metric(
-                        "Jahresertrag",
-                        f"{forecast['yearly_kwh']:,.0f} kWh",
-                        help="Erwarteter Jahresertrag der Anlage"
+                # Berechne Prognose
+                try:
+                    # Verwende Durchschnittswerte für Azimuth/Tilt
+                    avg_azimuth = 0.0  # Süd
+                    avg_tilt = roof_inclination_deg if selected_roof_type != "Flachdach" else 15.0
+                    
+                    forecast = _calculate_yield_forecast(
+                        module_count=total_placed,
+                        latitude=latitude if enable_shading_analysis else 51.0,
+                        azimuth=avg_azimuth,
+                        tilt=avg_tilt,
+                        efficiency=module_efficiency
                     )
                     
-                    st.metric(
-                        "Anlagengröße",
-                        f"{forecast['system_kwp']:.2f} kWp",
-                        help="Installierte Leistung"
-                    )
-                
-                with col2:
-                    st.metric(
-                        "Tagesertrag Ø",
-                        f"{forecast['daily_avg_kwh']:.1f} kWh",
-                        help="Durchschnittlicher Tagesertrag"
-                    )
+                    # Zeige Metriken
+                    col1, col2 = st.columns(2)
                     
-                    # Berechne Ersparnis
-                    yearly_savings = forecast['yearly_kwh'] * electricity_price
-                    st.metric(
-                        "Ersparnis/Jahr",
-                        f"{yearly_savings:,.0f} €",
-                        help=f"Bei {electricity_price:.2f} €/kWh"
-                    )
-                
-                # Zeige Optimierungs-Faktoren
-                with st.expander("📊 Optimierungs-Faktoren"):
+                    with col1:
+                        st.metric(
+                            "Jahresertrag",
+                            f"{forecast['yearly_kwh']:,.0f} kWh",
+                            help="Erwarteter Jahresertrag der Anlage"
+                        )
+                        
+                        st.metric(
+                            "Anlagengröße",
+                            f"{forecast['system_kwp']:.2f} kWp",
+                            help="Installierte Leistung"
+                        )
+                    
+                    with col2:
+                        st.metric(
+                            "Tagesertrag Ø",
+                            f"{forecast['daily_avg_kwh']:.1f} kWh",
+                            help="Durchschnittlicher Tagesertrag"
+                        )
+                        
+                        # Berechne Ersparnis
+                        yearly_savings = forecast['yearly_kwh'] * electricity_price
+                        st.metric(
+                            "Ersparnis/Jahr",
+                            f"{yearly_savings:,.0f} €",
+                            help=f"Bei {electricity_price:.2f} €/kWh"
+                        )
+                    
+                    # Zeige Optimierungs-Faktoren
+                    st.divider()
+                    st.markdown("**📊 Optimierungs-Faktoren**")
+                    
                     st.write(f"**Azimuth-Faktor:** {forecast['azimuth_factor']:.1%}")
                     st.progress(forecast['azimuth_factor'])
                     
@@ -2307,87 +2170,87 @@ def _render_3d_view_impl():
                     st.progress(forecast['latitude_factor'])
                     
                     st.caption("💡 Werte nahe 100% bedeuten optimale Bedingungen")
-                
-            except Exception as e:
-                st.error(f"❌ Fehler bei Ertragsprognose: {e}")
-        
-        # ====================================================================
-        # NEU: ERTRAGS-HEATMAP ANZEIGE
-        # ====================================================================
-        if enable_yield_heatmap and total_placed > 0:
-            st.divider()
-            st.subheader("🔥 Ertrags-Heatmap")
+                    
+                except Exception as e:
+                    st.error(f"❌ Fehler bei Ertragsprognose: {e}")
             
-            try:
-                # Hole Modul-Positionen
-                from utils.pv3d import grid_positions
-                positions_2d = grid_positions(
-                    area_length=building_length,
-                    area_width=building_width
-                )
+            # ====================================================================
+            # NEU: ERTRAGS-HEATMAP ANZEIGE
+            # ====================================================================
+            if enable_yield_heatmap and total_placed > 0:
+                st.divider()
+                st.subheader("🔥 Ertrags-Heatmap")
                 
-                base_z = building_height + 0.12
-                positions_3d = [(x, y, base_z) for x, y in positions_2d[:total_placed]]
-                
-                # Hole Transformationen
                 try:
-                    current_config = AdvancedLayoutConfig.from_json(
-                        st.session_state.get("pv3d_layout_json", "{}")
+                    # Hole Modul-Positionen
+                    from utils.pv3d import grid_positions
+                    positions_2d = grid_positions(
+                        area_length=building_length,
+                        area_width=building_width
                     )
-                    transforms = current_config.module_transforms
-                except:
-                    transforms = {}
-                
-                # Berechne Heatmap
-                module_yields = _calculate_module_yield_heatmap(
-                    module_positions=positions_3d,
-                    module_transforms=transforms,
-                    latitude=latitude if enable_shading_analysis else 51.0,
-                    efficiency=module_efficiency
-                )
-                
-                if module_yields:
-                    # Statistiken
-                    yields = list(module_yields.values())
-                    min_yield = min(yields)
-                    max_yield = max(yields)
-                    avg_yield = sum(yields) / len(yields)
                     
-                    st.write(f"**Ertragsspanne:** {min_yield:.0f} - {max_yield:.0f} kWh/Jahr")
-                    st.write(f"**Durchschnitt:** {avg_yield:.0f} kWh/Jahr")
+                    base_z = building_height + 0.12
+                    positions_3d = [(x, y, base_z) for x, y in positions_2d[:total_placed]]
                     
-                    # Zeige Top 5 und Bottom 5 Module
-                    sorted_modules = sorted(module_yields.items(), key=lambda x: x[1], reverse=True)
+                    # Hole Transformationen
+                    try:
+                        current_config = AdvancedLayoutConfig.from_json(
+                            st.session_state.get("pv3d_layout_json", "{}")
+                        )
+                        transforms = current_config.module_transforms
+                    except:
+                        transforms = {}
                     
-                    col1, col2 = st.columns(2)
+                    # Berechne Heatmap
+                    module_yields = _calculate_module_yield_heatmap(
+                        module_positions=positions_3d,
+                        module_transforms=transforms,
+                        latitude=latitude if enable_shading_analysis else 51.0,
+                        efficiency=module_efficiency
+                    )
                     
-                    with col1:
-                        st.caption("**🏆 Top 5 Module:**")
-                        for idx, yield_val in sorted_modules[:5]:
-                            st.text(f"Modul #{idx}: {yield_val:.0f} kWh/Jahr")
+                    if module_yields:
+                        # Statistiken
+                        yields = list(module_yields.values())
+                        min_yield = min(yields)
+                        max_yield = max(yields)
+                        avg_yield = sum(yields) / len(yields)
+                        
+                        st.write(f"**Ertragsspanne:** {min_yield:.0f} - {max_yield:.0f} kWh/Jahr")
+                        st.write(f"**Durchschnitt:** {avg_yield:.0f} kWh/Jahr")
+                        
+                        # Zeige Top 5 und Bottom 5 Module
+                        sorted_modules = sorted(module_yields.items(), key=lambda x: x[1], reverse=True)
+                        
+                        col1, col2 = st.columns(2)
+                        
+                        with col1:
+                            st.caption("**🏆 Top 5 Module:**")
+                            for idx, yield_val in sorted_modules[:5]:
+                                st.text(f"Modul #{idx}: {yield_val:.0f} kWh/Jahr")
+                        
+                        with col2:
+                            st.caption("**⚠️ Schwächste 5 Module:**")
+                            for idx, yield_val in sorted_modules[-5:]:
+                                st.text(f"Modul #{idx}: {yield_val:.0f} kWh/Jahr")
+                        
+                        st.caption("💡 Tipp: Schwache Module ggf. neu positionieren oder entfernen")
                     
-                    with col2:
-                        st.caption("**⚠️ Schwächste 5 Module:**")
-                        for idx, yield_val in sorted_modules[-5:]:
-                            st.text(f"Modul #{idx}: {yield_val:.0f} kWh/Jahr")
-                    
-                    st.caption("💡 Tipp: Schwache Module ggf. neu positionieren oder entfernen")
-                
-            except Exception as e:
-                st.error(f"❌ Fehler bei Heatmap: {e}")
-        
-        # ====================================================================
-        # NEU: SONNENVERLAUF-ANIMATION STEUERUNG
-        # ====================================================================
-        if enable_sun_animation:
-            st.divider()
-            st.subheader("🌅 Sonnenverlauf")
+                except Exception as e:
+                    st.error(f"❌ Fehler bei Heatmap: {e}")
             
-            st.info("🎬 Animation-Steuerung wird nach dem Rendern verfügbar sein")
-            
-            # Placeholder für Animation-Controls
-            st.caption(f"⏱️ Animation: {anim_start_hour:.0f}:00 - {anim_end_hour:.0f}:00 Uhr")
-            st.caption(f"⚡ Geschwindigkeit: {anim_speed}x")
+            # ====================================================================
+            # NEU: SONNENVERLAUF-ANIMATION STEUERUNG
+            # ====================================================================
+            if enable_sun_animation:
+                st.divider()
+                st.subheader("🌅 Sonnenverlauf")
+                
+                st.info("🎬 Animation-Steuerung wird nach dem Rendern verfügbar sein")
+                
+                # Placeholder für Animation-Controls
+                st.caption(f"⏱️ Animation: {anim_start_hour:.0f}:00 - {anim_end_hour:.0f}:00 Uhr")
+                st.caption(f"⚡ Geschwindigkeit: {anim_speed}x")
 
 
 

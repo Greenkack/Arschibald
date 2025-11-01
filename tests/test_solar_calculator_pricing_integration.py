@@ -213,6 +213,14 @@ def mock_product_db_functions(sample_product_data):
                     reason="Integration module not available")
 class TestSolarCalculatorPricingIntegration:
     """Test cases for solar calculator pricing integration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_initialization(self):
         """Test integration class initialization"""
@@ -544,6 +552,14 @@ class TestSolarCalculatorPricingIntegration:
                     reason="Integration module not available")
 class TestIntegrationFunctions:
     """Test standalone integration functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @patch('solar_calculator_pricing_integration.solar_pricing_integration')
     def test_integrate_pricing_with_solar_calculator(

@@ -6,7 +6,7 @@ enableCORS = true
 enableXsrfProtection = true
 maxUploadSize = 512                 # MB
 # Stabilität & Performance
-runOnSave = false                    # Auto-reload bei Dateiänderungen
+runOnSave = true                    # Auto-reload bei Dateiänderungen
 enableStaticServing = true          # Statische Dateien effizienter bereitstellen
 enableWebsocketCompression = true   # WebSocket Kompression für bessere Performance
 port = 8501                         # Standard-Port (funktioniert mit developmentMode=false)
@@ -19,13 +19,13 @@ maxMessageSize = 200                # Max WebSocket Message Size in MB
 [browser]
 serverAddress = "localhost"
 serverPort = 8501
-gatherUsageStats = true            # Keine Telemetrie an Streamlit senden (Performance)
+gatherUsageStats = false            # Keine Telemetrie an Streamlit senden (Performance)
 
 # ---------- CLIENT ----------
 [client]
 showErrorDetails = true             # Zeige Fehler-Details
 toolbarMode = "developer"           # "auto"|"developer"|"viewer"|"minimal"
-showSidebarNavigation = false       # Verstecke Streamlit Multipage-Navigation
+showSidebarNavigation = true
 
 # ---------- RUNNER ----------
 [runner]
@@ -34,7 +34,7 @@ magicEnabled = true
 fastReruns = true                   # Schnellere Reruns bei kleinen Änderungen
 postScriptGC = true                 # Garbage Collection nach Script-Ausführung
 # Memory Management
-enforceSerializableSessionState = true  # Für komplexe Objekte in Session State
+enforceSerializableSessionState = false  # Für komplexe Objekte in Session State
 
 # ---------- THEME ----------
 [theme]

@@ -112,9 +112,9 @@ def get_admin_protected_areas() -> dict[str, bool]:
         if conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT setting_value 
+                SELECT value 
                 FROM admin_settings 
-                WHERE setting_key = 'protected_admin_areas'
+                WHERE key = 'protected_admin_areas'
             """)
             result = cursor.fetchone()
             
@@ -152,9 +152,9 @@ def save_admin_protected_areas(protected_areas: dict[str, bool]) -> bool:
         
         cursor = conn.cursor()
         
-        # Upsert
+        # Upsert mit korrekten Spaltennamen: key und value
         cursor.execute("""
-            INSERT OR REPLACE INTO admin_settings (setting_key, setting_value)
+            INSERT OR REPLACE INTO admin_settings (key, value)
             VALUES ('protected_admin_areas', ?)
         """, (json.dumps(protected_areas),))
         
@@ -283,21 +283,21 @@ def render_admin_security_settings():
                 new_areas[area_id] = new_value
                 changed = True
     
-    if changed:
-        st.divider()
-        col_save, col_cancel = st.columns(2)
-        
-        with col_save:
-            if st.button("💾 Änderungen speichern", type="primary", use_container_width=True):
-                if save_admin_protected_areas(new_areas):
-                    st.success("✅ Sicherheitseinstellungen gespeichert!")
-                    st.rerun()
-                else:
-                    st.error("❌ Fehler beim Speichern!")
-        
-        with col_cancel:
-            if st.button("↩️ Abbrechen", use_container_width=True):
+    # Speichern-Button IMMER anzeigen
+    st.divider()
+    col_save, col_cancel = st.columns(2)
+    
+    with col_save:
+        if st.button("💾 Änderungen speichern", type="primary", use_container_width=True, disabled=not changed):
+            if save_admin_protected_areas(new_areas):
+                st.success("✅ Sicherheitseinstellungen gespeichert!")
                 st.rerun()
+            else:
+                st.error("❌ Fehler beim Speichern!")
+    
+    with col_cancel:
+        if st.button("↩️ Abbrechen", use_container_width=True, disabled=not changed):
+            st.rerun()
     
     # Aktuelle Authentifizierungen anzeigen
     st.divider()

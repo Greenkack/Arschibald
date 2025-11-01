@@ -267,6 +267,14 @@ def scan_injections(directory="."):
     ("22_inject_tracing.py", '''
 import ast, astor
 class TraceInjector(ast.NodeTransformer):
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def visit_FunctionDef(self, node):
         name = node.name
         args = [a.arg for a in node.args.args]
@@ -289,6 +297,14 @@ from cryptography.fernet import Fernet
 key = Fernet.generate_key()
 fernet = Fernet(key)
 class EncryptStrings(ast.NodeTransformer):
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def visit_Str(self, node):
         encrypted = fernet.encrypt(node.s.encode()).decode()
         return ast.copy_location(

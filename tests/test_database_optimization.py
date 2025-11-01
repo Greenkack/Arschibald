@@ -25,6 +25,14 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class TestDatabaseConnectionPool:
     """Test the database connection pool functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def temp_db(self):
@@ -124,6 +132,14 @@ class TestDatabaseConnectionPool:
 
 class TestDatabaseOptimizer:
     """Test the database optimizer functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def temp_db_with_optimizer(self):
@@ -480,6 +496,14 @@ class TestDatabaseOptimizer:
 
 class TestPricingQueryBuilder:
     """Test the pricing query builder functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def query_builder_with_data(self):
@@ -588,6 +612,14 @@ class TestPricingQueryBuilder:
 
 class TestPerformanceBenchmarks:
     """Performance benchmark tests"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_connection_pool_vs_direct_performance(self):
         """Compare performance of connection pool vs direct connections"""

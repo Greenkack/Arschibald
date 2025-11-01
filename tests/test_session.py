@@ -19,6 +19,14 @@ from core.session import (
 
 class TestNavigationEntry:
     """Test NavigationEntry"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_navigation_entry(self):
         """Test creating navigation entry"""
@@ -54,6 +62,14 @@ class TestNavigationEntry:
 
 class TestFormSnapshot:
     """Test FormSnapshot"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_form_snapshot(self):
         """Test creating form snapshot"""
@@ -90,6 +106,14 @@ class TestFormSnapshot:
 
 class TestFormState:
     """Test FormState"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_form_state(self):
         """Test creating form state"""
@@ -124,6 +148,14 @@ class TestFormState:
 
 class TestUserPreferences:
     """Test UserPreferences"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_default_preferences(self):
         """Test default preferences"""
@@ -153,6 +185,14 @@ class TestUserPreferences:
 
 class TestSessionMetrics:
     """Test SessionMetrics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_record_page_view(self):
         """Test recording page views"""
@@ -201,6 +241,14 @@ class TestSessionMetrics:
 
 class TestUserSession:
     """Test UserSession"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_session(self):
         """Test creating new session"""

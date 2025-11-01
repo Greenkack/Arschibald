@@ -80,6 +80,14 @@ import streamlit as st
 # Initialisiere Session State
 if not hasattr(st, 'session_state'):
     class MockSessionState:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(self):
             self._data = {}
         def get(self, key, default=None):

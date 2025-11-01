@@ -18,6 +18,14 @@ from pricing.vat_manager import (
 
 class TestVATRate:
     """Test VAT rate configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_valid_vat_rate_creation(self):
         """Test creating valid VAT rate"""
@@ -72,6 +80,14 @@ class TestVATRate:
 
 class TestVATManager:
     """Test VAT manager functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_initialization_germany(self):
         """Test VAT manager initialization for Germany"""
@@ -173,6 +189,14 @@ class TestVATManager:
 
 class TestVATCalculation:
     """Test VAT calculation functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_basic_vat_calculation(self):
         """Test basic VAT calculation"""
@@ -254,6 +278,14 @@ class TestVATCalculation:
 
 class TestMixedVATCalculation:
     """Test mixed VAT calculations for multiple items"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_mixed_vat_empty_items(self):
         """Test mixed VAT calculation with empty items"""
@@ -345,6 +377,14 @@ class TestMixedVATCalculation:
 
 class TestNetFromGrossCalculation:
     """Test net from gross calculation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_calculate_net_from_gross_standard(self):
         """Test calculating net from gross with standard VAT"""
@@ -396,6 +436,14 @@ class TestNetFromGrossCalculation:
 
 class TestVATSummaryAndValidation:
     """Test VAT summary and validation functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_vat_summary(self):
         """Test getting VAT configuration summary"""
@@ -458,6 +506,14 @@ class TestVATSummaryAndValidation:
 
 class TestGlobalVATManager:
     """Test global VAT manager instance"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_vat_manager_singleton(self):
         """Test that get_vat_manager returns singleton instance"""
@@ -478,6 +534,14 @@ class TestGlobalVATManager:
 
 class TestVATIntegrationScenarios:
     """Test real-world VAT calculation scenarios"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_pv_system_vat_calculation(self):
         """Test VAT calculation for complete PV system"""

@@ -16,6 +16,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class PricingTemplateConfig:
     """Configuration for pricing template generation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     system_type: str  # 'pv', 'heatpump', 'combined'
     include_components: bool = True
     include_modifications: bool = True
@@ -28,6 +36,14 @@ class PricingTemplateConfig:
 
 class PVPricingTemplate:
     """Template for PV system pricing sections"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, config: PricingTemplateConfig):
         self.config = config
@@ -164,6 +180,14 @@ class PVPricingTemplate:
 
 class HeatPumpPricingTemplate:
     """Template for heat pump system pricing sections"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, config: PricingTemplateConfig):
         self.config = config
@@ -325,6 +349,14 @@ class HeatPumpPricingTemplate:
 
 class CombinedPricingTemplate:
     """Template for combined PV + heat pump system pricing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, config: PricingTemplateConfig):
         self.config = config
@@ -442,6 +474,14 @@ class CombinedPricingTemplate:
 
 class PricingTemplateManager:
     """Manager for pricing template generation and rendering"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.templates = {}

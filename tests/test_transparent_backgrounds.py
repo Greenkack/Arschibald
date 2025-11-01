@@ -28,6 +28,14 @@ matplotlib.use('Agg')
 
 class TestTransparentBackgrounds:
     """Test suite for transparent chart backgrounds"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @staticmethod
     def has_transparent_background(image_bytes: bytes) -> bool:
@@ -261,6 +269,14 @@ class TestTransparentBackgrounds:
 
 class TestPlotlyTransparentBackgrounds:
     """Test suite for Plotly transparent backgrounds"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @staticmethod
     def check_plotly_layout_transparency(fig) -> bool:
@@ -370,6 +386,14 @@ class TestPlotlyTransparentBackgrounds:
 
 class TestCalculationsTransparency:
     """Test transparency in calculations.py chart functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_calculations_module_imports(self):
         """Test that calculations module can be imported"""
@@ -409,6 +433,14 @@ class TestCalculationsTransparency:
 
 class TestCalculationsExtendedTransparency:
     """Test transparency in calculations_extended.py chart functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_calculations_extended_module_imports(self):
         """Test that calculations_extended module can be imported"""
@@ -442,6 +474,14 @@ class TestCalculationsExtendedTransparency:
 
 class TestAnalysisTransparency:
     """Test transparency in analysis.py chart functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_analysis_module_imports(self):
         """Test that analysis module can be imported"""
@@ -473,6 +513,14 @@ class TestAnalysisTransparency:
 
 class TestDocOutputTransparency:
     """Test transparency in doc_output.py chart functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_doc_output_module_imports(self):
         """Test that doc_output module can be imported"""

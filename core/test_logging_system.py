@@ -72,6 +72,14 @@ def logger(temp_log_dir):
 
 class TestCorrelationID:
     """Test correlation ID functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_set_and_get_correlation_id(self):
         """Test setting and getting correlation ID"""
@@ -135,6 +143,14 @@ class TestCorrelationID:
 
 class TestLogContext:
     """Test log context functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_log_context_binding(self, logger):
         """Test context variable binding"""
@@ -153,6 +169,14 @@ class TestLogContext:
 
 class TestLogLevelManagement:
     """Test log level management"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_set_log_level(self):
         """Test setting log level"""
@@ -176,6 +200,14 @@ class TestLogLevelManagement:
 
 class TestStructuredLogging:
     """Test structured logging functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_basic_logging(self, logger, temp_log_dir):
         """Test basic structured logging"""
@@ -279,6 +311,14 @@ class TestStructuredLogging:
 
 class TestConvenienceFunctions:
     """Test convenience logging functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_log_request(self, logger):
         """Test HTTP request logging"""
@@ -336,6 +376,14 @@ class TestConvenienceFunctions:
 
 class TestEnvironmentConfiguration:
     """Test environment-specific configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_dev_environment_setup(self, temp_log_dir):
         """Test development environment setup"""
@@ -376,6 +424,14 @@ class TestEnvironmentConfiguration:
 
 class TestLogAggregationPreparation:
     """Test log aggregation preparation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_json_format_for_aggregation(self, temp_log_dir):
         """Test JSON format suitable for log aggregation"""

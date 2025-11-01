@@ -22,6 +22,14 @@ except ImportError as e:
 
 class TestPVPriceComponent:
     """Test PV-specific price component"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_pv_component_creation(self):
         """Test creating PV price component with all fields"""
@@ -108,6 +116,14 @@ class TestPVPriceComponent:
 
 class TestPVPricingEngine:
     """Test PV pricing engine functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def pv_engine(self):
@@ -472,6 +488,14 @@ class TestPVPricingEngine:
 
 class TestPVPricingConvenienceFunctions:
     """Test convenience functions for PV pricing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_pv_pricing_engine(self):
         """Test PV pricing engine creation"""
@@ -502,6 +526,14 @@ class TestPVPricingConvenienceFunctions:
 
 class TestPVCategories:
     """Test PV category definitions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_pv_categories_structure(self):
         """Test PV categories are properly defined"""

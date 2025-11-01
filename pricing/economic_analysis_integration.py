@@ -93,6 +93,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class EconomicAnalysisResult:
     """Complete economic analysis result with enhanced pricing integration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # Investment data from enhanced pricing
     total_investment_net: float
@@ -134,6 +142,14 @@ class EconomicAnalysisResult:
 @dataclass
 class ProfitabilityReport:
     """Comprehensive profitability analysis report"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # Profit margin analysis
     total_purchase_cost: float
@@ -165,6 +181,14 @@ class ProfitabilityReport:
 
 class EconomicAnalysisIntegration:
     """Integrates enhanced pricing system with economic analysis calculations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, system_type: str = "pv"):
         """Initialize economic analysis integration

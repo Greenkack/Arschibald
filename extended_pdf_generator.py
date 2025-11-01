@@ -23,6 +23,14 @@ from reportlab.lib.colors import HexColor
 
 class ChartCache:
     """Cache for rendered charts to improve performance.
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     This cache stores rendered chart images in memory to avoid re-rendering
     the same charts multiple times. Charts are cached by a hash of their
@@ -173,6 +181,14 @@ class ChartCache:
 
 class ExtendedPDFLogger:
     """Logger for Extended PDF generation with error tracking and summary reporting.
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     This logger tracks errors, warnings, and info messages during extended PDF generation,
     providing a summary of all issues encountered. It helps with debugging and provides
@@ -293,6 +309,14 @@ class ExtendedPDFLogger:
 
 class ExtendedPDFGenerator:
     """Main class for generating extended PDF pages."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     def __init__(
         self,
@@ -509,6 +533,14 @@ class ExtendedPDFGenerator:
 
 class FinancingPageGenerator:
     """Generates financing detail pages."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     def __init__(self, offer_data: dict, analysis_results: dict, theme: dict, logger: ExtendedPDFLogger | None = None):
         """Initialize financing page generator.
@@ -1446,6 +1478,14 @@ class FinancingPageGenerator:
 
 class ProductDatasheetMerger:
     """Merges product datasheets from database.
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     This class handles loading product datasheets from the database and merging them
     into a single PDF. It supports both PDF and image formats, converting images to
@@ -1701,6 +1741,14 @@ class ProductDatasheetMerger:
 
 class CompanyDocumentMerger:
     """Merges company documents from database.
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     This class handles loading company documents from the database and merging them
     into a single PDF. It supports PDF documents and includes robust error handling
@@ -1868,6 +1916,14 @@ class CompanyDocumentMerger:
 
 class ChartPageGenerator:
     """Generates pages with charts and visualizations."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     
     # Class-level cache shared across instances
     _chart_cache = ChartCache(max_size=100)

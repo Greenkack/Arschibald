@@ -97,6 +97,14 @@ def guess_is_binary(head: bytes) -> bool:
 def try_decode_text(data: bytes, prefer_ext: bool,
                     ext: str) -> tuple[bool, str | None, str | None]:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Gibt (is_text, decoded_text, encoding) zurück.
     Versucht utf-8, utf-8-sig, latin-1.
     """

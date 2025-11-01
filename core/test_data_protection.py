@@ -40,6 +40,14 @@ def retention_policy(db_manager):
 
 class TestPIIMasking:
     """Test PII masking functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_mask_email(self, data_protection_manager):
         """Test email masking"""
@@ -100,6 +108,14 @@ class TestPIIMasking:
 
 class TestPIIIdentification:
     """Test PII field identification"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_identify_email_field(self, data_protection_manager):
         """Test identifying email field"""
@@ -156,6 +172,14 @@ class TestPIIIdentification:
 
 class TestDictMasking:
     """Test dictionary masking"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_mask_dict_auto_detect(self, data_protection_manager):
         """Test masking dictionary with auto-detection"""
@@ -213,6 +237,14 @@ class TestDictMasking:
 
 class TestDataEncryption:
     """Test data encryption"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_encrypt_decrypt(self, data_protection_manager):
         """Test encryption and decryption"""
@@ -255,6 +287,14 @@ class TestDataEncryption:
 
 class TestDataAccessLogging:
     """Test data access logging"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_log_data_access(self, db_manager):
         """Test logging data access"""
@@ -347,6 +387,14 @@ class TestDataAccessLogging:
 
 class TestDataRetentionPolicy:
     """Test data retention policy"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_set_policy(self, retention_policy):
         """Test setting retention policy"""
@@ -411,6 +459,14 @@ class TestDataRetentionPolicy:
 
 class TestIntegration:
     """Integration tests for data protection"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_full_pii_protection_workflow(
             self, data_protection_manager, db_manager):
@@ -473,6 +529,14 @@ class TestIntegration:
 
 class TestConvenienceFunctions:
     """Test convenience functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_data_protection_manager(self):
         """Test getting data protection manager"""

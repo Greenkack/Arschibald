@@ -27,6 +27,14 @@ except ImportError:
 
 class ValidationRule:
     """Base validation rule"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, error_message: str = None, warning_message: str = None):
         self.error_message = error_message
@@ -44,6 +52,14 @@ class ValidationRule:
 
 class RequiredRule(ValidationRule):
     """Value is required"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, error_message: str = "This field is required"):
         super().__init__(error_message=error_message)
@@ -57,6 +73,14 @@ class RequiredRule(ValidationRule):
 
 class MinLengthRule(ValidationRule):
     """Minimum string length"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, min_length: int, error_message: str = None):
         self.min_length = min_length
@@ -74,6 +98,14 @@ class MinLengthRule(ValidationRule):
 
 class MaxLengthRule(ValidationRule):
     """Maximum string length"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
             self,
@@ -103,6 +135,14 @@ class MaxLengthRule(ValidationRule):
 
 class MinValueRule(ValidationRule):
     """Minimum numeric value"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, min_value: int | float, error_message: str = None):
         self.min_value = min_value
@@ -124,6 +164,14 @@ class MinValueRule(ValidationRule):
 
 class MaxValueRule(ValidationRule):
     """Maximum numeric value"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, max_value: int | float, error_message: str = None):
         self.max_value = max_value
@@ -145,6 +193,14 @@ class MaxValueRule(ValidationRule):
 
 class RangeRule(ValidationRule):
     """Value within range"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -173,6 +229,14 @@ class RangeRule(ValidationRule):
 
 class PatternRule(ValidationRule):
     """Regex pattern matching"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, pattern: str, error_message: str = "Invalid format"):
         self.pattern = re.compile(pattern)
@@ -190,6 +254,14 @@ class PatternRule(ValidationRule):
 
 class EmailRule(PatternRule):
     """Email validation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, error_message: str = "Invalid email address"):
         pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
@@ -198,6 +270,14 @@ class EmailRule(PatternRule):
 
 class URLRule(PatternRule):
     """URL validation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, error_message: str = "Invalid URL"):
         pattern = r'^https?://[^\s/$.?#].[^\s]*$'
@@ -206,6 +286,14 @@ class URLRule(PatternRule):
 
 class PhoneRule(PatternRule):
     """Phone number validation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, error_message: str = "Invalid phone number"):
         # Simple pattern, adjust based on requirements
@@ -215,6 +303,14 @@ class PhoneRule(PatternRule):
 
 class DateRangeRule(ValidationRule):
     """Date within range"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -261,6 +357,14 @@ class DateRangeRule(ValidationRule):
 
 class CustomRule(ValidationRule):
     """Custom validation function"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -282,6 +386,14 @@ class CustomRule(ValidationRule):
 
 class Validator:
     """Validator with multiple rules"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, rules: list[ValidationRule] = None):
         self.rules = rules or []
@@ -322,6 +434,14 @@ class Validator:
 
 class ValidationEngine:
     """Central validation engine for managing validators"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self._validators: dict[str, Validator] = {}

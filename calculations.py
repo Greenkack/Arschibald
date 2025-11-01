@@ -69,6 +69,14 @@ except ImportError:
 
     class DummySt:
         @staticmethod
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def info(msg): print(f"INFO: {msg}")
         @staticmethod
         def warning(msg): print(f"WARNING: {msg}")
@@ -383,6 +391,14 @@ def _collect_pricing_modifications_from_session() -> dict[str, float]:
 
 class EnhancedPricingSessionManager:
     """Manages enhanced pricing system integration with Streamlit session state"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.cache_timeout_seconds = 30  # Cache timeout for pricing calculations
@@ -1093,6 +1109,14 @@ def _calculate_final_price_with_correct_formula(
 
 class AdvancedCalculationsIntegrator:
     """Integriert erweiterte Berechnungen in Dashboard und PDF"""
+
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         # Liste der erweiterten Berechnungen aus calculations.py
@@ -4801,6 +4825,14 @@ def perform_calculations(
 
 class BreakEvenAnalysis:
     """Break-Even Analyseklasse für Wirtschaftlichkeitsberechnungen"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
             self,
@@ -4940,6 +4972,14 @@ class BreakEvenAnalysis:
 
 class EnergyPriceComparison:
     """Energiepreisvergleichstool"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -4987,6 +5027,14 @@ class EnergyPriceComparison:
 
 class TechnicalDegradation:
     """Detaillierte Degradationsanalyse"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -5048,6 +5096,14 @@ class TechnicalDegradation:
 
 class MaintenanceMonitoring:
     """Wartungs- und Überwachungsmodul"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
             self, components: list[dict[str, Any]], installation_date: str):

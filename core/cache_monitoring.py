@@ -29,6 +29,14 @@ from .cache import get_cache
 @dataclass
 class CacheMetric:
     """Single cache metric data point"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     timestamp: datetime
     layer: str
     metric_type: str
@@ -39,6 +47,14 @@ class CacheMetric:
 @dataclass
 class CacheAlert:
     """Cache performance alert"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     alert_id: str
     severity: str  # info, warning, critical
     message: str
@@ -51,6 +67,14 @@ class CacheAlert:
 
 class CacheMetricsCollector:
     """Collect and track cache performance metrics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, history_size: int = 1000):
         self.history_size = history_size
@@ -180,6 +204,14 @@ class CacheMetricsCollector:
 
 class CachePerformanceAnalyzer:
     """Analyze cache performance and generate insights"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, metrics_collector: CacheMetricsCollector):
         self.metrics_collector = metrics_collector
@@ -671,6 +703,14 @@ class CachePerformanceAnalyzer:
 
 class CacheMonitor:
     """Automated cache monitoring with periodic collection"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,

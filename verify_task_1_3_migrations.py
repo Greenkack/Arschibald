@@ -20,6 +20,14 @@ except ImportError:
     print("Install rich for better output: pip install rich")
 
     class Console:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def print(self, *args, **kwargs):
             print(*args)
 

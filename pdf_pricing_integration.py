@@ -16,6 +16,14 @@ try:
 except ImportError:
     # Fallback for testing
     class PDFGenerator:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(self, *args, **kwargs):
             pass
     def generate_offer_pdf(*args, **kwargs):
@@ -41,6 +49,22 @@ except ImportError:
         TOTALS = "totals"
 
     class DynamicKeyManager:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(self):
             self.key_registry = {}
         def generate_keys(self, *args, **kwargs):
@@ -57,6 +81,14 @@ except ImportError:
             pass
 
     class PricingEngine:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(self, *args, **kwargs):
             pass
 
@@ -70,6 +102,14 @@ logger = logging.getLogger(__name__)
 
 class EnhancedPDFGenerator:
     """Enhanced PDF generator with integrated pricing system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self,
                  project_data: dict[str, Any],

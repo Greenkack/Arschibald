@@ -63,6 +63,14 @@ Datum: 2025-06-21
 @dataclass
 class ColorScheme:
     """Farbschema für PDF-Themes"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     primary: str
     secondary: str
     accent: str
@@ -87,6 +95,14 @@ class ColorScheme:
 
 class PDFVisualEnhancer:
     """Erweiterte Visualisierungskomponente für PDFs"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.chart_themes = {
@@ -123,6 +139,14 @@ class PDFVisualEnhancer:
 
 class PDFThemeManager:
     """Manager für PDF-Themes und Visualisierungen"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.predefined_themes = {

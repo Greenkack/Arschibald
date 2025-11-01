@@ -27,6 +27,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class AgentConfig:
     """Configuration container for KAI Agent."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # API Keys
     openai_api_key: str

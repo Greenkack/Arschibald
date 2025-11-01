@@ -31,6 +31,14 @@ def mock_product_db(mock_db_connection):
 
 class TestEnhancedProductDatabase:
     """Test enhanced product database functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_product_table_with_new_columns(
             self, mock_product_db, mock_db_connection):
@@ -125,6 +133,14 @@ class TestEnhancedProductDatabase:
 
 class TestDynamicKeyGeneration:
     """Test dynamic key generation for products"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_generate_pv_module_dynamic_keys(self, mock_product_db):
         """Test dynamic key generation for PV modules"""
@@ -277,6 +293,14 @@ class TestDynamicKeyGeneration:
 
 class TestDatabaseReset:
     """Test database reset functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_clear_all_products(self, mock_product_db):
         """Test clearing all products from database"""
@@ -334,6 +358,14 @@ class TestDatabaseReset:
 
 class TestProductFieldValidation:
     """Test validation of new product fields"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_boolean_field_conversion(self, mock_product_db):
         """Test that boolean fields are properly converted to integers"""
@@ -377,6 +409,14 @@ class TestProductFieldValidation:
 
 class TestCategorySpecificFields:
     """Test category-specific field handling"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_pv_module_specific_fields(self, mock_product_db):
         """Test PV module specific fields are properly handled"""

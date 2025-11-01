@@ -25,6 +25,14 @@ except ImportError:
 
 class TestEnhancedPDFGenerator:
     """Test cases for EnhancedPDFGenerator class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -305,6 +313,14 @@ class TestEnhancedPDFGenerator:
 
 class TestPricingBreakdownSection:
     """Test cases for pricing breakdown section creation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_pricing_breakdown_section(self):
         """Test pricing breakdown section creation"""
@@ -349,6 +365,14 @@ class TestPricingBreakdownSection:
 
 class TestPlaceholderUpdates:
     """Test cases for placeholder updates with pricing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_update_pdf_placeholders_with_pricing(self):
         """Test updating PDF placeholders with pricing data"""
@@ -393,6 +417,14 @@ class TestPlaceholderUpdates:
 
 class TestIntegrationFunctions:
     """Test cases for integration functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @patch('pdf_pricing_integration.EnhancedPDFGenerator')
     def test_generate_enhanced_pdf_with_pricing(self, mock_generator_class):
@@ -445,6 +477,14 @@ class TestIntegrationFunctions:
 
 class TestPDFKeyFormatting:
     """Test cases for PDF key formatting"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_pricing_key_formatting(self):
         """Test that pricing keys are properly formatted for PDF"""
@@ -499,6 +539,14 @@ class TestPDFKeyFormatting:
 
 class TestPDFGeneratorEnhancements:
     """Test cases for enhanced PDF generator functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -779,6 +827,14 @@ class TestPDFGeneratorEnhancements:
 
 class TestPDFPricingIntegration:
     """Integration tests for PDF pricing system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_end_to_end_pdf_generation_with_pricing(self):
         """Test complete PDF generation with pricing integration"""

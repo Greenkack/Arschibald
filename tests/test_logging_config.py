@@ -75,6 +75,14 @@ def capture_logs():
 
 class TestCorrelationId:
     """Test correlation ID generation and propagation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_generate_correlation_id(self):
         """Test correlation ID generation"""
@@ -137,6 +145,14 @@ class TestCorrelationId:
 
 class TestLoggingSetup:
     """Test logging setup and configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_setup_logging_dev(self, dev_config):
         """Test logging setup for development"""
@@ -182,6 +198,14 @@ class TestLoggingSetup:
 
 class TestStructuredLogging:
     """Test structured logging functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_log_with_context(self, dev_config, capture_logs):
         """Test logging with additional context"""
@@ -221,6 +245,14 @@ class TestStructuredLogging:
 
 class TestPIIMasking:
     """Test PII masking in logs"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_password_masking(self, dev_config, capture_logs):
         """Test password is masked in logs"""
@@ -314,6 +346,14 @@ class TestErrorLogging:
 
 class TestEventTracking:
     """Test event tracking functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_track_event_basic(self, dev_config, capture_logs):
         """Test basic event tracking"""
@@ -352,6 +392,14 @@ class TestEventTracking:
 
 class TestProductionLogging:
     """Test production-specific logging features"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_json_output_in_production(self, prod_config, capture_logs):
         """Test JSON output format in production"""
@@ -386,6 +434,14 @@ class TestProductionLogging:
 
 class TestLogLevelConfiguration:
     """Test log level configuration per environment"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_dev_log_level(self, dev_config):
         """Test development uses DEBUG level"""

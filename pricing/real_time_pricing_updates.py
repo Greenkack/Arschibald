@@ -44,6 +44,14 @@ class UpdatePriority(Enum):
 @dataclass
 class PricingEvent:
     """Represents a pricing change event"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     event_type: PricingEventType
     event_data: dict[str, Any]
     timestamp: datetime = field(default_factory=datetime.now)
@@ -59,6 +67,14 @@ class PricingEvent:
 @dataclass
 class UpdateRequest:
     """Represents a pending update request"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     request_id: str
     events: list[PricingEvent]
     calculation_data: dict[str, Any]
@@ -71,6 +87,14 @@ class UpdateRequest:
 
 class ChangeDetector:
     """Detects changes in pricing-related data"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self._previous_states: dict[str, str] = {}
@@ -244,6 +268,14 @@ class ChangeDetector:
 
 class DebouncedUpdateManager:
     """Manages debounced updates to prevent excessive calculations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, debounce_delay: float = 0.5, max_delay: float = 5.0):
         """Initialize debounced update manager
@@ -405,6 +437,14 @@ class DebouncedUpdateManager:
 
 class PricingUpdateNotifier:
     """Notification system for pricing changes"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self._subscribers: dict[str, list[Callable]] = defaultdict(list)
@@ -563,6 +603,14 @@ class PricingUpdateNotifier:
 
 class RealTimePricingUpdateSystem:
     """Main real-time pricing update system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, debounce_delay: float = 0.5, max_delay: float = 5.0):
         """Initialize real-time pricing update system

@@ -174,6 +174,14 @@ def calculate_final_price(
     vat_rate: float = VAT_RATE_DEFAULT,
 ) -> FinalPriceBreakdown:
     """Return a structured summary of a final price including VAT."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     base = _safe_float(base_net_price)
     discount_pct_amount = calculate_discount_amount(base, discount_percent)

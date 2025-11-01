@@ -21,25 +21,20 @@ import streamlit.components.v1 as components
 # ========================================
 # Muss VOR allen anderen Imports passieren, um Serialisierungsfehler zu vermeiden
 
-# Liste aller bekannten nicht-serialisierbaren Klassen
-NON_SERIALIZABLE_CLASSES = ['ProgressConfig', 'UserSession', 'FormState', 'NavigationEntry', 'FormSnapshot']
+import pickle
 
-# Liste von Session State Keys, die direkt gelöscht werden sollen (PyVista Objekte etc.)
-KEYS_TO_DELETE = ['_pv3d_plotter']
-
-# Durchsuche Session State und lösche nicht-serialisierbare Objekte
-keys_to_delete = list(KEYS_TO_DELETE)  # Start mit direkten Keys
+# FORCE CLEANUP: Teste JEDES Objekt auf Serialisierbarkeit
+keys_to_delete = []
 for key in list(st.session_state.keys()):
     try:
+        # Versuche das Objekt zu picklen
         obj = st.session_state[key]
-        if hasattr(obj, '__class__') and hasattr(obj.__class__, '__name__'):
-            class_name = obj.__class__.__name__
-            if class_name in NON_SERIALIZABLE_CLASSES and not isinstance(obj, dict):
-                keys_to_delete.append(key)
-    except Exception:
-        pass
+        pickle.dumps(obj)
+    except (TypeError, AttributeError, pickle.PicklingError):
+        # Objekt kann nicht serialisiert werden -> löschen!
+        keys_to_delete.append(key)
 
-# Lösche gefundene Objekte
+# Lösche ALLE nicht-serialisierbaren Objekte
 for key in keys_to_delete:
     try:
         del st.session_state[key]
@@ -2974,9 +2969,42 @@ def main():
                 page_code = f.read()
             # Remove the page config line as it's already set in gui.py
             page_code = page_code.replace('st.set_page_config(', '# st.set_page_config(')
-            # Execute with proper globals to allow imports
+            
+            # Prepare execution context with all necessary imports
             import sys
-            exec(page_code, {'st': st, '__name__': '__main__', '__builtins__': __builtins__, 'sys': sys})
+            exec_globals = {
+                'st': st,
+                '__name__': '__main__',
+                '__builtins__': __builtins__,
+                'sys': sys
+            }
+            
+            # Pre-import critical modules for 3D visualization
+            try:
+                from utils.pv3d import (
+                    BuildingDims, LayoutConfig, AdvancedLayoutConfig,
+                    ModuleTransform, ModuleGroup
+                )
+                exec_globals['BuildingDims'] = BuildingDims
+                exec_globals['LayoutConfig'] = LayoutConfig
+                exec_globals['AdvancedLayoutConfig'] = AdvancedLayoutConfig
+                exec_globals['ModuleTransform'] = ModuleTransform
+                exec_globals['ModuleGroup'] = ModuleGroup
+            except ImportError:
+                # Provide dummy classes if import fails
+                class BuildingDims: pass
+                class LayoutConfig: pass
+                class AdvancedLayoutConfig(LayoutConfig): pass
+                class ModuleTransform: pass
+                class ModuleGroup: pass
+                exec_globals['BuildingDims'] = BuildingDims
+                exec_globals['LayoutConfig'] = LayoutConfig
+                exec_globals['AdvancedLayoutConfig'] = AdvancedLayoutConfig
+                exec_globals['ModuleTransform'] = ModuleTransform
+                exec_globals['ModuleGroup'] = ModuleGroup
+            
+            # Execute with proper globals to allow imports
+            exec(page_code, exec_globals)
         except FileNotFoundError:
             st.error("3D-Visualisierung Seite nicht gefunden.")
             st.info("Bitte stellen Sie sicher, dass pages/solar_3d_view.py existiert.")

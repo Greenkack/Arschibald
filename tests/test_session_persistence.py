@@ -34,6 +34,14 @@ def persistence_engine(db_manager):
 
 class TestDebouncedWriter:
     """Test DebouncedWriter"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_schedule_write(self):
         """Test scheduling writes"""
@@ -120,6 +128,14 @@ class TestDebouncedWriter:
 
 class TestSessionPersistenceEngine:
     """Test SessionPersistenceEngine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_persist_session_immediate(self, persistence_engine):
         """Test immediate session persistence"""

@@ -118,6 +118,14 @@ class FormValidationModel(Base):
 @dataclass
 class FormSnapshot:
     """Form state snapshot for undo/redo"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     snapshot_id: str
     form_id: str
     data: dict[str, Any]
@@ -158,6 +166,14 @@ class FormSnapshot:
 @dataclass
 class ValidationResult:
     """Form validation result"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     is_valid: bool
     errors: dict[str, list[str]] = field(default_factory=dict)
     warnings: dict[str, list[str]] = field(default_factory=dict)
@@ -213,6 +229,14 @@ class ValidationResult:
 @dataclass
 class FormState:
     """Enhanced form state with comprehensive undo/redo functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     form_id: str
     data: dict[str, Any] = field(default_factory=dict)
 
@@ -601,6 +625,14 @@ def init_form_tables():
 
 class FormRepository:
     """Repository for form data persistence"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, db_manager: DatabaseManager = None):
         self.db_manager = db_manager or get_db_manager()
@@ -1060,6 +1092,14 @@ def save_form(
 
 class FormValidator:
     """Form validation engine with configurable rules"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self._validators: dict[str, list[Callable]] = {}
@@ -1267,6 +1307,14 @@ def get_form_validator() -> FormValidator:
 
 class FormAutoSave:
     """Auto-save system with debouncing and conflict resolution"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -1571,6 +1619,14 @@ def get_auto_save() -> FormAutoSave:
 
 class FormManager:
     """High-level form management with undo/redo, validation, and auto-save"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,

@@ -73,6 +73,14 @@ class AuditLog(Base):
 
 class DatabaseMetrics:
     """Database performance metrics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.query_count = 0
@@ -126,6 +134,14 @@ class DatabaseMetrics:
 
 class DatabaseManager:
     """Enhanced database connection and session management with monitoring"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, use_enhanced_connection_manager: bool = True):
         self.config = get_config()
@@ -504,6 +520,14 @@ class DatabaseManager:
 
 class Repository(Generic[T]):
     """Enhanced repository with audit logging, soft delete, and bulk operations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -1013,6 +1037,14 @@ class Repository(Generic[T]):
 
 class UnitOfWork:
     """Enhanced Unit of Work pattern with transaction nesting and monitoring"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,

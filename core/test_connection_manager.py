@@ -59,6 +59,14 @@ def connection_manager(pool_config, test_db_url):
 
 class TestConnectionPoolConfig:
     """Test ConnectionPoolConfig"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_default_config(self):
         """Test default configuration values"""
@@ -87,6 +95,14 @@ class TestConnectionPoolConfig:
 
 class TestConnectionInfo:
     """Test ConnectionInfo"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_connection_info_creation(self):
         """Test creating connection info"""
@@ -124,6 +140,14 @@ class TestConnectionInfo:
 
 class TestConnectionLeakDetector:
     """Test ConnectionLeakDetector"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_track_checkout_checkin(self):
         """Test tracking checkout and checkin"""
@@ -168,6 +192,14 @@ class TestConnectionLeakDetector:
 
 class TestConnectionHealthMonitor:
     """Test ConnectionHealthMonitor"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_health_check_success(self):
         """Test successful health check"""
@@ -244,6 +276,14 @@ class TestConnectionHealthMonitor:
 
 class TestDatabaseFailoverManager:
     """Test DatabaseFailoverManager"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_initialization(self):
         """Test failover manager initialization"""
@@ -283,6 +323,14 @@ class TestDatabaseFailoverManager:
 
 class TestEnhancedConnectionManager:
     """Test EnhancedConnectionManager"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_initialization(self, connection_manager):
         """Test connection manager initialization"""
@@ -433,6 +481,14 @@ class TestEnhancedConnectionManager:
 
 class TestCreateConnectionManager:
     """Test create_connection_manager helper function"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_with_defaults(self):
         """Test creating connection manager with defaults"""
@@ -479,6 +535,14 @@ class TestCreateConnectionManager:
 
 class TestIntegration:
     """Integration tests for connection management"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_full_lifecycle(self):
         """Test complete connection manager lifecycle"""

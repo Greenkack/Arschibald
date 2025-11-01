@@ -35,6 +35,14 @@ class ValidationCategory(Enum):
 @dataclass
 class ValidationIssue:
     """Represents a validation issue"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     severity: ValidationSeverity
     category: ValidationCategory
     code: str
@@ -69,6 +77,14 @@ class ValidationIssue:
 @dataclass
 class ValidationResult:
     """Result of validation checks"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     is_valid: bool
     issues: list[ValidationIssue] | None = None
     warnings: list[ValidationIssue] | None = None
@@ -117,6 +133,14 @@ class ValidationResult:
 
 class PricingValidator:
     """Comprehensive pricing validation system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         """Initialize pricing validator"""

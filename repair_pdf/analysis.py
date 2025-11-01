@@ -61,6 +61,14 @@ except ImportError:
         return {"calculation_errors": ["Berechnungsmodul nicht geladen."]}
 
     class ExtendedCalculations:  # Dummy-Klasse für Notfall
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __getattr__(self, name):
             def dummy(*args, **kwargs):
                 return {"error": "ExtendedCalculations-Modul nicht geladen."}
@@ -3207,6 +3215,14 @@ def render_extended_calculations_dashboard(
     if "extended_calculator" not in st.session_state:
         # Einfache Mock-Implementierung für erweiterte Berechnungen
         class MockExtendedCalculations:
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def calculate_energy_optimization(self, system_data):
                 return {
                     "base_self_consumption_kwh": system_data.get(
@@ -3316,9 +3332,10 @@ def render_extended_calculations_dashboard(
                     "battery_payback_years": 9.5,
                 }
 
-        st.session_state.extended_calculator = MockExtendedCalculations()
-
-    calculator = st.session_state.extended_calculator
+        # Calculator lokal erstellen (NICHT in session_state!)
+        calculator = MockExtendedCalculations()
+    else:
+        calculator = MockExtendedCalculations()
 
     # System-Daten vorbereiten
     system_data = {
@@ -5521,11 +5538,8 @@ def get_pricing_modifications_data():
 def integrate_advanced_calculations(texts: Dict[str, str]):
     """Haupt-Integration der erweiterten Berechnungen"""
 
-    # Integrator initialisieren
-    if "calculations_integrator" not in st.session_state:
-        st.session_state.calculations_integrator = AdvancedCalculationsIntegrator()
-
-    integrator = st.session_state.calculations_integrator
+    # Integrator lokal erstellen (NICHT in session_state!)
+    integrator = AdvancedCalculationsIntegrator()
 
     # System-Daten aus Session State holen
     calculation_results = st.session_state.get("calculation_results", {})
@@ -8780,10 +8794,8 @@ def prepare_advanced_calculations_for_pdf_export(
 ) -> Dict[str, Any]:
     """Bereitet erweiterte Berechnungen für PDF-Export vor"""
     try:
-        if "calculations_integrator" not in st.session_state:
-            st.session_state.calculations_integrator = AdvancedCalculationsIntegrator()
-
-        integrator = st.session_state.calculations_integrator
+        # Integrator lokal erstellen (NICHT in session_state!)
+        integrator = AdvancedCalculationsIntegrator()
 
         # Sammle alle erweiterten Berechnungsergebnisse
         pdf_export_data = {}

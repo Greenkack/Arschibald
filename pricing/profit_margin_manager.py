@@ -46,6 +46,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MarginConfig:
     """Configuration for profit margins"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     margin_type: str  # 'percentage' or 'fixed'
     margin_value: float
     applies_to: str  # 'product', 'category', 'global'
@@ -77,6 +85,14 @@ class MarginConfig:
 @dataclass
 class MarginBreakdown:
     """Detailed breakdown of margin calculation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     purchase_price: float
     margin_amount: float
     selling_price: float
@@ -117,6 +133,14 @@ class MarginBreakdown:
 
 class ProfitMarginManager:
     """Manages profit margins with calculate_per support"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         """Initialize profit margin manager"""

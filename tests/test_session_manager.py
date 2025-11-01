@@ -14,6 +14,14 @@ def session_manager():
 
 class TestSessionManager:
     """Test SessionManager (without Streamlit)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_bootstrap_new_session(self, session_manager):
         """Test bootstrapping new session"""
@@ -132,6 +140,14 @@ class TestSessionManager:
 
 class TestSessionManagerFunctions:
     """Test module-level functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_bootstrap_session_function(self):
         """Test bootstrap_session function"""

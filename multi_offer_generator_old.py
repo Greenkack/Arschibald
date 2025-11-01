@@ -58,6 +58,14 @@ def get_text_mog(key: str, fallback: str) -> str:
 
 class MultiCompanyOfferGenerator:
     """Generator für Multi-Firmen-Angebote"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.customer_data = {}
@@ -440,6 +448,14 @@ def get_text_mog(key: str, fallback: str) -> str:
 
 class MultiCompanyOfferGenerator:
     """Generator für Multi-Firmen-Angebote"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.customer_data = {}
@@ -1002,6 +1018,14 @@ except ImportError:
 
 class EnhancedMultiOfferGenerator:
     """Erweiterte Multi-Firmen-Angebotsgenerator-Klasse mit voller PDF-Funktionalität"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.max_concurrent_pdfs = 5  # Maximale gleichzeitige PDF-Generierungen

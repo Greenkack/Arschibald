@@ -19,6 +19,14 @@ except ImportError:
 
 class TestPDFGeneratorPricingIntegration:
     """Test cases for PDF generator pricing integration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -521,6 +529,14 @@ class TestPDFGeneratorPricingIntegration:
 
 class TestPDFPricingBreakdownSections:
     """Test cases for specific pricing breakdown sections"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -621,6 +637,14 @@ class TestPDFPricingBreakdownSections:
 
 class TestPDFSystemSpecificPricing:
     """Test cases for system-specific pricing sections"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""

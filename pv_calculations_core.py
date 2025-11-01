@@ -529,9 +529,15 @@ def calculate_leasing_costs(total_investment: float,
 # =============================================================================
 
 class PVCalculationsAdvanced:
-    """
-    Erweiterte PV-Berechnungsklasse mit komplexen Analysen.
-    """
+    """Erweiterte PV-Berechnungsklasse mit komplexen Analysen."""
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         self.years = LIFESPAN_YEARS
