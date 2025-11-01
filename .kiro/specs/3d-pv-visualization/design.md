@@ -471,46 +471,461 @@ sudo apt-get install libgl1-mesa-glx libglu1-mesa
 
 Keine spezielle Konfiguration erforderlich. Das Modul nutzt die bestehende Streamlit-Konfiguration.
 
-## Future Enhancements
+## Advanced Features (Phase 2)
 
-### Phase 2 (Optional)
+### 1. Individuelle Modul-Kontrolle
 
-1. **Erweiterte Interaktivität**
-   - Drag & Drop für Module (Custom Streamlit Component)
-   - Echtzeit-Verschattungsanalyse
-   - Sonnenverlauf-Animation
+#### Erweiterte Datenstrukturen
 
-2. **Zusätzliche Features**
-   - Mehrere Gebäude im Modell
-   - Bäume und Hindernisse
-   - Geländeprofil-Import
+```python
+@dataclass
+class ModuleTransform:
+    """Transformation für einzelnes Modul"""
+    index: int
+    azimuth_deg: float = 0.0      # 0=Süd, 90=West, 180=Nord, 270=Ost
+    tilt_deg: float = 15.0         # 0=horizontal, 90=vertikal
+    offset_x: float = 0.0          # Verschiebung in X (m)
+    offset_y: float = 0.0          # Verschiebung in Y (m)
+    offset_z: float = 0.0          # Verschiebung in Z (m)
+    group_id: Optional[str] = None # Gruppen-Zugehörigkeit
 
-3. **Visualisierungs-Modi**
-   - Heatmap für Einstrahlung
-   - Ertragsprognose pro Modul
-   - Verschattungs-Simulation
+@dataclass
+class ModuleGroup:
+    """Gruppe von Modulen mit gemeinsamen Eigenschaften"""
+    name: str
+    module_indices: List[int]
+    azimuth_deg: float = 0.0
+    tilt_deg: float = 15.0
+    color: str = "#000000"         # Optionale Gruppen-Farbe
 
-4. **Export-Optionen**
-   - Interaktive 3D-PDFs
-   - VR/AR-Export
-   - CAD-Format-Export (DXF, DWG)
+@dataclass
+class AdvancedLayoutConfig(LayoutConfig):
+    """Erweiterte Layout-Konfiguration"""
+    module_transforms: Dict[int, ModuleTransform] = None
+    module_groups: Dict[str, ModuleGroup] = None
+    mounting_mode: str = "south"   # "south", "east-west", "south-east", "south-west", "custom"
+    custom_azimuth: float = 0.0
+    custom_tilt: float = 15.0
+    enable_collision_detection: bool = True
+    enable_shading_analysis: bool = False
+```
 
-### Technische Verbesserungen
+#### Erweiterte Funktionen
+
+**apply_module_transform()**
+- **Zweck**: Wendet individuelle Transformation auf Modul an
+- **Input**: ModuleTransform, Basis-Position
+- **Output**: Transformiertes PyVista Mesh
+- **Logik**:
+  1. Erstellt Modul an Basis-Position
+  2. Rotiert um Y-Achse (Neigung)
+  3. Rotiert um Z-Achse (Azimuth)
+  4. Verschiebt um Offset (X, Y, Z)
+  5. Prüft Kollisionen wenn aktiviert
+
+**detect_collisions()**
+- **Zweck**: Erkennt Überschneidungen zwischen Modulen
+- **Input**: Liste von Modul-Meshes
+- **Output**: Liste von Kollisions-Paaren
+- **Algorithmus**: Bounding-Box Intersection Test
+
+**calculate_shading()**
+- **Zweck**: Berechnet Verschattung für gegebene Sonnenposition
+- **Input**: Modul-Liste, Sonnen-Azimuth, Sonnen-Elevation
+- **Output**: Verschattungsgrad pro Modul (0-100%)
+- **Methode**: Ray-Casting von Modulzentrum zur Sonne
+
+### 2. Interaktive Modul-Auswahl
+
+#### UI-Komponenten
+
+**ModuleSelector**
+- Klick-basierte Auswahl im 3D-Viewer
+- Hervorhebung durch Farb-Änderung (z.B. gelb)
+- Mehrfachauswahl mit Strg+Klick
+- Eigenschaften-Panel für ausgewählte Module
+
+**TransformControls**
+- Visuelle Rotations-Handles (Ringe)
+- Verschiebe-Pfeile (X, Y, Z)
+- Snap-to-Grid Funktion
+- Echtzeit-Vorschau
+
+#### Implementierung
+
+```python
+# In solar_3d_view.py
+if "selected_modules" not in st.session_state:
+    st.session_state["selected_modules"] = []
+
+# Auswahl-Logik
+selected_idx = st.number_input("Modul auswählen (Index)", 0, max_modules-1)
+if st.button("Auswählen"):
+    st.session_state["selected_modules"].append(selected_idx)
+
+# Transformations-Controls für ausgewählte Module
+if st.session_state["selected_modules"]:
+    st.subheader("Ausgewählte Module bearbeiten")
+    azimuth = st.slider("Azimuth (°)", 0, 360, 0)
+    tilt = st.slider("Neigung (°)", 0, 90, 15)
+    offset_x = st.number_input("X-Offset (m)", -5.0, 5.0, 0.0, 0.1)
+    offset_y = st.number_input("Y-Offset (m)", -5.0, 5.0, 0.0, 0.1)
+    offset_z = st.number_input("Z-Offset (m)", -2.0, 2.0, 0.0, 0.1)
+```
+
+### 3. Verschattungs-Analyse
+
+#### Sonnenpositions-Berechnung
+
+```python
+def calculate_sun_position(latitude: float, day_of_year: int, hour: float) -> Tuple[float, float]:
+    """
+    Berechnet Sonnenposition (Azimuth, Elevation)
+    
+    Args:
+        latitude: Breitengrad (z.B. 51.0 für Deutschland)
+        day_of_year: Tag im Jahr (1-365)
+        hour: Stunde (0-24)
+    
+    Returns:
+        (azimuth_deg, elevation_deg)
+    """
+    # Vereinfachte Berechnung (für Präzision: pvlib verwenden)
+    declination = 23.45 * np.sin(np.radians(360/365 * (day_of_year - 81)))
+    hour_angle = 15 * (hour - 12)
+    
+    elevation = np.arcsin(
+        np.sin(np.radians(latitude)) * np.sin(np.radians(declination)) +
+        np.cos(np.radians(latitude)) * np.cos(np.radians(declination)) * np.cos(np.radians(hour_angle))
+    )
+    
+    azimuth = np.arctan2(
+        np.sin(np.radians(hour_angle)),
+        np.cos(np.radians(hour_angle)) * np.sin(np.radians(latitude)) - 
+        np.tan(np.radians(declination)) * np.cos(np.radians(latitude))
+    )
+    
+    return np.degrees(azimuth), np.degrees(elevation)
+```
+
+#### Verschattungs-Visualisierung
+
+```python
+def visualize_shading(plotter, modules, sun_azimuth, sun_elevation):
+    """
+    Färbt Module basierend auf Verschattungsgrad
+    
+    Args:
+        plotter: PyVista Plotter
+        modules: Liste von Modul-Meshes
+        sun_azimuth: Sonnen-Azimuth (°)
+        sun_elevation: Sonnen-Elevation (°)
+    """
+    for i, module in enumerate(modules):
+        shading_pct = calculate_shading_for_module(module, modules, sun_azimuth, sun_elevation)
+        
+        # Farbskala: Grün (0%) -> Gelb (50%) -> Rot (100%)
+        if shading_pct < 50:
+            color = interpolate_color("#00ff00", "#ffff00", shading_pct / 50)
+        else:
+            color = interpolate_color("#ffff00", "#ff0000", (shading_pct - 50) / 50)
+        
+        plotter.add_mesh(module, color=color, opacity=0.9)
+```
+
+### 4. Optimierungs-Assistent
+
+#### Optimierungs-Algorithmus
+
+```python
+def optimize_layout(
+    building_dims: BuildingDims,
+    roof_type: str,
+    target_modules: int,
+    optimization_goal: str = "max_modules"  # "max_modules" | "max_yield" | "balanced"
+) -> List[AdvancedLayoutConfig]:
+    """
+    Findet optimale Layout-Konfigurationen
+    
+    Returns:
+        Top 3 Konfigurationen sortiert nach Score
+    """
+    configurations = []
+    
+    # Strategie 1: Süd-Aufständerung
+    config1 = generate_south_config(building_dims, target_modules)
+    score1 = evaluate_config(config1, optimization_goal)
+    configurations.append((config1, score1))
+    
+    # Strategie 2: Ost-West-Aufständerung
+    config2 = generate_east_west_config(building_dims, target_modules)
+    score2 = evaluate_config(config2, optimization_goal)
+    configurations.append((config2, score2))
+    
+    # Strategie 3: Süd-Ost
+    config3 = generate_south_east_config(building_dims, target_modules)
+    score3 = evaluate_config(config3, optimization_goal)
+    configurations.append((config3, score3))
+    
+    # Strategie 4: Gemischt (Süd + Ost-West)
+    config4 = generate_mixed_config(building_dims, target_modules)
+    score4 = evaluate_config(config4, optimization_goal)
+    configurations.append((config4, score4))
+    
+    # Sortiere nach Score
+    configurations.sort(key=lambda x: x[1], reverse=True)
+    
+    return [c[0] for c in configurations[:3]]
+
+def evaluate_config(config: AdvancedLayoutConfig, goal: str) -> float:
+    """
+    Bewertet Konfiguration basierend auf Ziel
+    
+    Returns:
+        Score (0-100)
+    """
+    score = 0.0
+    
+    if goal == "max_modules":
+        # Maximiere Modulanzahl
+        score += config.placed_modules * 10
+        score -= config.shading_total * 0.5
+    
+    elif goal == "max_yield":
+        # Maximiere Ertrag (berücksichtigt Verschattung stark)
+        score += config.placed_modules * 5
+        score -= config.shading_total * 2
+        score += config.optimal_orientation_bonus * 3
+    
+    elif goal == "balanced":
+        # Ausgewogen
+        score += config.placed_modules * 7
+        score -= config.shading_total * 1
+        score += config.optimal_orientation_bonus * 1.5
+    
+    return min(score, 100.0)
+```
+
+### 5. Erweiterte Export-Funktionen
+
+#### CSV-Export
+
+```python
+def export_module_details_csv(modules: List[ModuleTransform], filename: str):
+    """
+    Exportiert Modul-Details als CSV
+    
+    CSV-Format:
+    Index,X,Y,Z,Azimuth,Tilt,Group,Shading%
+    """
+    import csv
+    
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['Index', 'X', 'Y', 'Z', 'Azimuth', 'Tilt', 'Group', 'Shading%'])
+        
+        for module in modules:
+            writer.writerow([
+                module.index,
+                f"{module.offset_x:.2f}",
+                f"{module.offset_y:.2f}",
+                f"{module.offset_z:.2f}",
+                f"{module.azimuth_deg:.1f}",
+                f"{module.tilt_deg:.1f}",
+                module.group_id or "",
+                f"{module.shading_pct:.1f}"
+            ])
+```
+
+#### Multi-View Screenshot
+
+```python
+def export_multi_view_screenshots(
+    project_data, building_dims, roof_type, module_qty, layout_config
+) -> Dict[str, bytes]:
+    """
+    Erstellt Screenshots aus verschiedenen Perspektiven
+    
+    Returns:
+        Dict mit View-Namen und PNG-Bytes
+    """
+    views = {}
+    
+    # Isometrisch (Standard)
+    views["isometric"] = render_image_bytes(
+        project_data, building_dims, roof_type, module_qty, layout_config,
+        camera_position="isometric"
+    )
+    
+    # Von oben
+    views["top"] = render_image_bytes(
+        project_data, building_dims, roof_type, module_qty, layout_config,
+        camera_position=(0, 0, 50)
+    )
+    
+    # Von Süden
+    views["south"] = render_image_bytes(
+        project_data, building_dims, roof_type, module_qty, layout_config,
+        camera_position=(0, -30, 10)
+    )
+    
+    # Von Osten
+    views["east"] = render_image_bytes(
+        project_data, building_dims, roof_type, module_qty, layout_config,
+        camera_position=(30, 0, 10)
+    )
+    
+    return views
+```
+
+#### 360° Animation
+
+```python
+def export_360_animation(
+    project_data, building_dims, roof_type, module_qty, layout_config,
+    frames: int = 36, output_format: str = "gif"
+) -> bytes:
+    """
+    Erstellt 360° Rotations-Animation
+    
+    Args:
+        frames: Anzahl Frames (36 = 10° pro Frame)
+        output_format: "gif" oder "mp4"
+    
+    Returns:
+        Animation als Bytes
+    """
+    from PIL import Image
+    import io
+    
+    images = []
+    
+    for i in range(frames):
+        angle = (360 / frames) * i
+        
+        # Render Frame
+        img_bytes = render_image_bytes(
+            project_data, building_dims, roof_type, module_qty, layout_config,
+            camera_rotation_z=angle
+        )
+        
+        images.append(Image.open(io.BytesIO(img_bytes)))
+    
+    # Erstelle GIF
+    output = io.BytesIO()
+    images[0].save(
+        output,
+        format='GIF',
+        save_all=True,
+        append_images=images[1:],
+        duration=100,  # 100ms pro Frame
+        loop=0
+    )
+    
+    return output.getvalue()
+```
+
+### 6. UI-Erweiterungen
+
+#### Erweiterte Sidebar-Struktur
+
+```
+Sidebar
+├── Basis-Einstellungen (Collapsible)
+│   ├── Gebäudedimensionen
+│   ├── Dachform
+│   └── Ausrichtung
+├── Modul-Belegung (Collapsible)
+│   ├── Belegungsmodus
+│   ├── Aufständerung
+│   └── Platzmangel-Fallbacks
+├── Erweiterte Kontrolle (Collapsible) ← NEU
+│   ├── Modul-Auswahl
+│   ├── Azimuth-Steuerung
+│   ├── Neigungs-Steuerung
+│   ├── Positions-Offsets
+│   └── Gruppen-Verwaltung
+├── Analyse (Collapsible) ← NEU
+│   ├── Verschattungs-Analyse
+│   ├── Sonnenstand-Simulation
+│   └── Optimierungs-Assistent
+└── Export (Collapsible)
+    ├── Screenshot
+    ├── 3D-Modelle
+    ├── Detailbericht ← NEU
+    └── Animation ← NEU
+```
+
+#### Implementierung Erweiterte Kontrolle
+
+```python
+with st.sidebar.expander("🎛️ Erweiterte Kontrolle", expanded=False):
+    st.subheader("Modul-Auswahl")
+    
+    # Auswahl-Modus
+    selection_mode = st.radio(
+        "Auswahl-Modus",
+        ["Einzeln", "Gruppe", "Bereich"]
+    )
+    
+    if selection_mode == "Einzeln":
+        selected_idx = st.number_input("Modul-Index", 0, max_modules-1, 0)
+        if st.button("Auswählen"):
+            st.session_state.selected_modules = [selected_idx]
+    
+    elif selection_mode == "Gruppe":
+        group_name = st.selectbox("Gruppe", list(module_groups.keys()))
+        if st.button("Gruppe auswählen"):
+            st.session_state.selected_modules = module_groups[group_name].module_indices
+    
+    elif selection_mode == "Bereich":
+        start_idx = st.number_input("Von Index", 0, max_modules-1, 0)
+        end_idx = st.number_input("Bis Index", 0, max_modules-1, 10)
+        if st.button("Bereich auswählen"):
+            st.session_state.selected_modules = list(range(start_idx, end_idx+1))
+    
+    # Transformations-Controls
+    if st.session_state.selected_modules:
+        st.subheader(f"{len(st.session_state.selected_modules)} Module ausgewählt")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            azimuth = st.slider("Azimuth (°)", 0, 360, 0, 5)
+        with col2:
+            tilt = st.slider("Neigung (°)", 0, 90, 15, 5)
+        
+        col3, col4, col5 = st.columns(3)
+        with col3:
+            offset_x = st.number_input("X-Offset (m)", -5.0, 5.0, 0.0, 0.1)
+        with col4:
+            offset_y = st.number_input("Y-Offset (m)", -5.0, 5.0, 0.0, 0.1)
+        with col5:
+            offset_z = st.number_input("Z-Offset (m)", -2.0, 2.0, 0.0, 0.1)
+        
+        if st.button("Transformation anwenden", type="primary"):
+            apply_transform_to_selected(azimuth, tilt, offset_x, offset_y, offset_z)
+            st.success("Transformation angewendet!")
+```
+
+## Future Enhancements (Phase 3)
+
+### Weitere Optimierungen
 
 1. **Performance**
-   - GPU-Beschleunigung für Berechnungen
-   - Level-of-Detail (LOD) System
-   - Streaming für große Modelle
+   - GPU-Beschleunigung für Verschattungs-Berechnung
+   - Level-of-Detail (LOD) System für große Anlagen
+   - Streaming für Echtzeit-Updates
 
 2. **Qualität**
    - Realistische Materialien und Texturen
-   - Schatten und Beleuchtung
+   - Dynamische Schatten und Beleuchtung
    - Photorealistische Rendering-Option
 
 3. **Integration**
    - API für externe Tools
    - Import von CAD-Modellen
-   - Export zu PV-Simulations-Software
+   - Export zu PV-Simulations-Software (PVsyst, PVsol)
+   - VR/AR-Export für immersive Präsentationen
 
 ## Conclusion
 

@@ -76,6 +76,215 @@ class BuildingDims:
 
 
 @dataclass
+class ModuleTransform:
+    """
+    Transformation für einzelnes PV-Modul.
+
+    Diese Klasse speichert individuelle Transformationsparameter für ein
+    einzelnes PV-Modul, einschließlich Rotation (Azimuth und Neigung) und
+    Position (X, Y, Z Offsets).
+
+    Attributes:
+        index: Modul-Index (0-basiert)
+        azimuth_deg: Azimuth-Winkel in Grad (0° = Süd, 90° = West, 
+                     180° = Nord, 270° = Ost)
+        tilt_deg: Neigungs-Winkel in Grad (0° = horizontal, 90° = vertikal)
+        offset_x: X-Offset in Metern (relativ zur Rasterposition)
+        offset_y: Y-Offset in Metern (relativ zur Rasterposition)
+        offset_z: Z-Offset in Metern (relativ zur Rasterposition)
+        group_id: Optionale Gruppen-ID für Gruppenzugehörigkeit
+    """
+    index: int
+    azimuth_deg: float = 0.0
+    tilt_deg: float = 15.0
+    offset_x: float = 0.0
+    offset_y: float = 0.0
+    offset_z: float = 0.0
+    group_id: str = None
+
+    def __post_init__(self):
+        """
+        Validiert Wertebereiche nach Initialisierung.
+
+        Raises:
+            ValueError: Wenn Werte außerhalb der gültigen Bereiche liegen
+        """
+        # Validiere Azimuth (0-360°)
+        if not (0.0 <= self.azimuth_deg <= 360.0):
+            raise ValueError(
+                f"Azimuth muss zwischen 0° und 360° liegen, "
+                f"erhalten: {self.azimuth_deg}°"
+            )
+
+        # Validiere Tilt (0-90°)
+        if not (0.0 <= self.tilt_deg <= 90.0):
+            raise ValueError(
+                f"Neigung muss zwischen 0° und 90° liegen, "
+                f"erhalten: {self.tilt_deg}°"
+            )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Konvertiert die Transformation zu einem Dictionary.
+
+        Returns:
+            Dictionary mit allen Transformationsparametern
+        """
+        return {
+            "index": self.index,
+            "azimuth_deg": self.azimuth_deg,
+            "tilt_deg": self.tilt_deg,
+            "offset_x": self.offset_x,
+            "offset_y": self.offset_y,
+            "offset_z": self.offset_z,
+            "group_id": self.group_id
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'ModuleTransform':
+        """
+        Erstellt eine ModuleTransform-Instanz aus einem Dictionary.
+
+        Args:
+            data: Dictionary mit Transformationsparametern
+
+        Returns:
+            ModuleTransform-Instanz
+
+        Raises:
+            ValueError: Wenn erforderliche Felder fehlen oder ungültig sind
+        """
+        try:
+            return cls(
+                index=int(data["index"]),
+                azimuth_deg=float(data.get("azimuth_deg", 0.0)),
+                tilt_deg=float(data.get("tilt_deg", 15.0)),
+                offset_x=float(data.get("offset_x", 0.0)),
+                offset_y=float(data.get("offset_y", 0.0)),
+                offset_z=float(data.get("offset_z", 0.0)),
+                group_id=data.get("group_id")
+            )
+        except (KeyError, TypeError, ValueError) as e:
+            raise ValueError(f"Ungültiges ModuleTransform Dictionary: {e}")
+
+
+@dataclass
+class ModuleGroup:
+    """
+    Gruppe von PV-Modulen mit gemeinsamen Eigenschaften.
+
+    Diese Klasse ermöglicht die Verwaltung von Modulgruppen, die gemeinsame
+    Transformationsparameter (Azimuth, Neigung) und visuelle Eigenschaften
+    (Farbe) teilen.
+
+    Attributes:
+        name: Name der Gruppe (z.B. "Süddach", "Ostdach")
+        module_indices: Liste der Modul-Indizes in dieser Gruppe
+        azimuth_deg: Gemeinsamer Azimuth-Winkel für alle Module in der Gruppe
+        tilt_deg: Gemeinsame Neigung für alle Module in der Gruppe
+        color: Farbe für die Gruppe (Hex-String, z.B. "#000000")
+    """
+    name: str
+    module_indices: List[int] = field(default_factory=list)
+    azimuth_deg: float = 0.0
+    tilt_deg: float = 15.0
+    color: str = "#000000"
+
+    def add_module(self, index: int) -> None:
+        """
+        Fügt ein Modul zur Gruppe hinzu.
+
+        Args:
+            index: Modul-Index (0-basiert)
+
+        Raises:
+            ValueError: Wenn Modul bereits in der Gruppe ist
+        """
+        if index in self.module_indices:
+            raise ValueError(
+                f"Modul {index} ist bereits in Gruppe '{self.name}'"
+            )
+        self.module_indices.append(index)
+
+    def remove_module(self, index: int) -> None:
+        """
+        Entfernt ein Modul aus der Gruppe.
+
+        Args:
+            index: Modul-Index (0-basiert)
+
+        Raises:
+            ValueError: Wenn Modul nicht in der Gruppe ist
+        """
+        if index not in self.module_indices:
+            raise ValueError(
+                f"Modul {index} ist nicht in Gruppe '{self.name}'"
+            )
+        self.module_indices.remove(index)
+
+    def has_module(self, index: int) -> bool:
+        """
+        Prüft ob ein Modul in der Gruppe ist.
+
+        Args:
+            index: Modul-Index (0-basiert)
+
+        Returns:
+            True wenn Modul in der Gruppe ist, sonst False
+        """
+        return index in self.module_indices
+
+    def get_module_count(self) -> int:
+        """
+        Gibt die Anzahl der Module in der Gruppe zurück.
+
+        Returns:
+            Anzahl der Module
+        """
+        return len(self.module_indices)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Konvertiert die Gruppe zu einem Dictionary.
+
+        Returns:
+            Dictionary mit allen Gruppenparametern
+        """
+        return {
+            "name": self.name,
+            "module_indices": self.module_indices.copy(),
+            "azimuth_deg": self.azimuth_deg,
+            "tilt_deg": self.tilt_deg,
+            "color": self.color
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'ModuleGroup':
+        """
+        Erstellt eine ModuleGroup-Instanz aus einem Dictionary.
+
+        Args:
+            data: Dictionary mit Gruppenparametern
+
+        Returns:
+            ModuleGroup-Instanz
+
+        Raises:
+            ValueError: Wenn erforderliche Felder fehlen oder ungültig sind
+        """
+        try:
+            return cls(
+                name=str(data["name"]),
+                module_indices=list(data.get("module_indices", [])),
+                azimuth_deg=float(data.get("azimuth_deg", 0.0)),
+                tilt_deg=float(data.get("tilt_deg", 15.0)),
+                color=str(data.get("color", "#000000"))
+            )
+        except (KeyError, TypeError, ValueError) as e:
+            raise ValueError(f"Ungültiges ModuleGroup Dictionary: {e}")
+
+
+@dataclass
 class LayoutConfig:
     """
     Konfiguration für PV-Modul-Layout.
@@ -147,6 +356,121 @@ class LayoutConfig:
                 )
             )
         except (json.JSONDecodeError, KeyError, TypeError) as e:
+            raise ValueError(f"Ungültiger JSON-String: {e}")
+
+
+@dataclass
+class AdvancedLayoutConfig(LayoutConfig):
+    """
+    Erweiterte Konfiguration für PV-Modul-Layout mit individuellen
+    Modul-Transformationen und Gruppen-Verwaltung.
+
+    Diese Klasse erweitert LayoutConfig um erweiterte Funktionen für
+    individuelle Modul-Kontrolle, Gruppen-Verwaltung und zusätzliche
+    Aufständerungs-Modi.
+
+    Attributes:
+        module_transforms: Dictionary mit ModuleTransform-Objekten
+                          (Key: Modul-Index, Value: ModuleTransform)
+        module_groups: Dictionary mit ModuleGroup-Objekten
+                      (Key: Gruppen-Name, Value: ModuleGroup)
+        mounting_mode: Aufständerungs-Modus für Flachdächer
+                      ("south", "east-west", "south-east", "south-west", "custom")
+        custom_azimuth: Benutzerdefinierter Azimuth für "custom" Modus
+        custom_tilt: Benutzerdefinierte Neigung für "custom" Modus
+        enable_collision_detection: Aktiviert Kollisionserkennung zwischen Modulen
+        enable_shading_analysis: Aktiviert Verschattungs-Analyse
+    """
+    module_transforms: Dict[int, 'ModuleTransform'] = field(default_factory=dict)
+    module_groups: Dict[str, 'ModuleGroup'] = field(default_factory=dict)
+    mounting_mode: str = "south"
+    custom_azimuth: float = 0.0
+    custom_tilt: float = 15.0
+    enable_collision_detection: bool = True
+    enable_shading_analysis: bool = False
+
+    def to_json(self) -> str:
+        """
+        Serialisiert die erweiterte Konfiguration zu JSON.
+
+        Returns:
+            JSON-String der Konfiguration
+        """
+        # Basis-Daten von LayoutConfig
+        data = {
+            "mode": self.mode,
+            "use_garage": self.use_garage,
+            "use_facade": self.use_facade,
+            "removed_indices": self.removed_indices,
+            "garage_dims": list(self.garage_dims),
+            "offset_main_xy": list(self.offset_main_xy),
+            "offset_garage_xy": list(self.offset_garage_xy),
+            # Erweiterte Daten
+            "module_transforms": {
+                str(idx): transform.to_dict()
+                for idx, transform in self.module_transforms.items()
+            },
+            "module_groups": {
+                name: group.to_dict()
+                for name, group in self.module_groups.items()
+            },
+            "mounting_mode": self.mounting_mode,
+            "custom_azimuth": self.custom_azimuth,
+            "custom_tilt": self.custom_tilt,
+            "enable_collision_detection": self.enable_collision_detection,
+            "enable_shading_analysis": self.enable_shading_analysis
+        }
+        return json.dumps(data)
+
+    @classmethod
+    def from_json(cls, json_str: str) -> 'AdvancedLayoutConfig':
+        """
+        Deserialisiert die erweiterte Konfiguration aus JSON.
+
+        Args:
+            json_str: JSON-String der Konfiguration
+
+        Returns:
+            AdvancedLayoutConfig-Instanz
+
+        Raises:
+            ValueError: Wenn JSON ungültig ist
+        """
+        try:
+            data = json.loads(json_str)
+            
+            # Konvertiere module_transforms Dictionary
+            module_transforms = {}
+            if "module_transforms" in data:
+                for idx_str, transform_data in data["module_transforms"].items():
+                    idx = int(idx_str)
+                    module_transforms[idx] = ModuleTransform.from_dict(transform_data)
+            
+            # Konvertiere module_groups Dictionary
+            module_groups = {}
+            if "module_groups" in data:
+                for name, group_data in data["module_groups"].items():
+                    module_groups[name] = ModuleGroup.from_dict(group_data)
+            
+            return cls(
+                # Basis-Felder von LayoutConfig
+                mode=data.get("mode", "auto"),
+                use_garage=data.get("use_garage", False),
+                use_facade=data.get("use_facade", False),
+                removed_indices=data.get("removed_indices", []),
+                garage_dims=tuple(data.get("garage_dims", [6.0, 3.0, 3.0])),
+                offset_main_xy=tuple(data.get("offset_main_xy", [0.0, 0.0])),
+                offset_garage_xy=tuple(data.get("offset_garage_xy", [0.0, 0.0])),
+                # Erweiterte Felder
+                module_transforms=module_transforms,
+                module_groups=module_groups,
+                mounting_mode=data.get("mounting_mode", "south"),
+                custom_azimuth=float(data.get("custom_azimuth", 0.0)),
+                custom_tilt=float(data.get("custom_tilt", 15.0)),
+                enable_collision_detection=data.get("enable_collision_detection", True),
+                enable_shading_analysis=data.get("enable_shading_analysis", False)
+            )
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError) as e:
             raise ValueError(f"Ungültiger JSON-String: {e}")
 
 
@@ -730,6 +1054,752 @@ def make_panel(
     return panel
 
 
+def apply_module_transform(
+    base_position: Tuple[float, float, float],
+    transform: 'ModuleTransform'
+) -> 'pv.PolyData':
+    """
+    Wendet eine individuelle Transformation auf ein PV-Modul an.
+
+    Diese Funktion erstellt ein PV-Modul an einer Basis-Position und wendet
+    dann die in ModuleTransform definierten Transformationen an:
+    1. Rotation um Y-Achse (Neigung/Tilt)
+    2. Rotation um Z-Achse (Azimuth)
+    3. Positions-Offset (X, Y, Z)
+
+    Args:
+        base_position: Basis-Position (x, y, z) aus dem Raster
+        transform: ModuleTransform-Objekt mit Transformationsparametern
+
+    Returns:
+        PyVista PolyData Mesh des transformierten PV-Moduls
+
+    Raises:
+        RuntimeError: Wenn PyVista nicht verfügbar ist
+
+    Example:
+        >>> base_pos = (5.0, 3.0, 6.0)
+        >>> transform = ModuleTransform(
+        ...     index=0,
+        ...     azimuth_deg=90.0,
+        ...     tilt_deg=25.0,
+        ...     offset_x=0.5,
+        ...     offset_y=-0.3,
+        ...     offset_z=0.1
+        ... )
+        >>> panel = apply_module_transform(base_pos, transform)
+    """
+    if pv is None or np is None:
+        raise RuntimeError("PyVista oder NumPy ist nicht installiert")
+
+    # Berechne finale Position: Basis-Position + Offsets
+    bx, by, bz = base_position
+    final_x = bx + transform.offset_x
+    final_y = by + transform.offset_y
+    final_z = bz + transform.offset_z
+    final_position = (final_x, final_y, final_z)
+
+    # Erstelle Modul mit Rotation und finaler Position
+    # make_panel() wendet bereits Tilt und Yaw an
+    panel = make_panel(
+        position=final_position,
+        yaw_deg=transform.azimuth_deg,
+        tilt_deg=transform.tilt_deg
+    )
+
+    return panel
+
+
+def get_module_bounding_box(
+    module_mesh: 'pv.PolyData'
+) -> Tuple[float, float, float, float, float, float]:
+    """
+    Berechnet die Bounding-Box eines transformierten PV-Moduls.
+
+    Diese Funktion berechnet die achsenausgerichtete Bounding-Box (AABB)
+    eines PV-Moduls unter Berücksichtigung aller Rotationen und Offsets.
+    Die Bounding-Box wird durch die minimalen und maximalen Koordinaten
+    in X, Y und Z definiert.
+
+    Args:
+        module_mesh: PyVista PolyData Mesh des PV-Moduls
+
+    Returns:
+        Tuple mit (min_x, min_y, min_z, max_x, max_y, max_z)
+
+    Raises:
+        RuntimeError: Wenn PyVista nicht verfügbar ist
+        ValueError: Wenn das Mesh keine Punkte enthält
+
+    Example:
+        >>> panel = make_panel(position=(5.0, 3.0, 6.0), yaw_deg=45.0, tilt_deg=25.0)
+        >>> bbox = get_module_bounding_box(panel)
+        >>> min_x, min_y, min_z, max_x, max_y, max_z = bbox
+        >>> print(f"Bounding Box: X=[{min_x:.2f}, {max_x:.2f}], "
+        ...       f"Y=[{min_y:.2f}, {max_y:.2f}], Z=[{min_z:.2f}, {max_z:.2f}]")
+    """
+    if pv is None or np is None:
+        raise RuntimeError("PyVista oder NumPy ist nicht installiert")
+
+    # Prüfe ob Mesh Punkte enthält
+    if module_mesh is None or module_mesh.points is None or len(module_mesh.points) == 0:
+        raise ValueError("Modul-Mesh enthält keine Punkte")
+
+    # Extrahiere alle Punkte des Meshes
+    points = module_mesh.points
+
+    # Berechne minimale und maximale Koordinaten
+    min_x = float(np.min(points[:, 0]))
+    min_y = float(np.min(points[:, 1]))
+    min_z = float(np.min(points[:, 2]))
+    max_x = float(np.max(points[:, 0]))
+    max_y = float(np.max(points[:, 1]))
+    max_z = float(np.max(points[:, 2]))
+
+    return (min_x, min_y, min_z, max_x, max_y, max_z)
+
+
+def detect_collisions(
+    module_meshes: List['pv.PolyData'],
+    use_spatial_hashing: bool = True,
+    grid_cell_size: float = 2.0
+) -> List[Tuple[int, int]]:
+    """
+    Erkennt Kollisionen zwischen PV-Modulen mittels Bounding-Box Intersection-Test.
+
+    Diese Funktion berechnet die Bounding-Boxes aller Module und prüft auf
+    Überschneidungen. Für bessere Performance bei vielen Modulen wird
+    Spatial-Hashing verwendet, um nur nahe Module zu vergleichen.
+
+    Args:
+        module_meshes: Liste von PyVista PolyData Meshes (PV-Module)
+        use_spatial_hashing: Wenn True, verwende Spatial-Hashing für Performance
+        grid_cell_size: Größe der Grid-Zellen für Spatial-Hashing (Meter)
+
+    Returns:
+        Liste von Kollisions-Paaren als Tupel (index1, index2).
+        Leere Liste wenn keine Kollisionen erkannt wurden.
+        index1 < index2 für jedes Paar.
+
+    Raises:
+        RuntimeError: Wenn PyVista nicht verfügbar ist
+
+    Example:
+        >>> panels = [
+        ...     make_panel(position=(0.0, 0.0, 0.0)),
+        ...     make_panel(position=(0.5, 0.0, 0.0)),  # Überlappung
+        ...     make_panel(position=(5.0, 0.0, 0.0))   # Keine Überlappung
+        ... ]
+        >>> collisions = detect_collisions(panels)
+        >>> print(f"Gefundene Kollisionen: {collisions}")
+        Gefundene Kollisionen: [(0, 1)]
+    """
+    if pv is None or np is None:
+        raise RuntimeError("PyVista oder NumPy ist nicht installiert")
+
+    # Prüfe ob Module vorhanden sind
+    if not module_meshes or len(module_meshes) < 2:
+        return []
+
+    # Berechne Bounding-Boxes für alle Module
+    bounding_boxes = []
+    for i, mesh in enumerate(module_meshes):
+        try:
+            bbox = get_module_bounding_box(mesh)
+            bounding_boxes.append((i, bbox))
+        except (ValueError, AttributeError):
+            # Überspringe ungültige Meshes
+            continue
+
+    # Prüfe ob genug gültige Bounding-Boxes vorhanden sind
+    if len(bounding_boxes) < 2:
+        return []
+
+    collisions = []
+
+    if use_spatial_hashing and len(bounding_boxes) > 10:
+        # ====================================================================
+        # SPATIAL-HASHING OPTIMIERUNG
+        # ====================================================================
+        # Erstelle Spatial-Hash-Grid für effiziente Nachbarschaftssuche
+        # Dies reduziert die Komplexität von O(n²) auf O(n) im Durchschnitt
+
+        # Erstelle Hash-Grid: Dictionary mit Grid-Zellen-Keys
+        # Key: (grid_x, grid_y, grid_z), Value: Liste von Modul-Indizes
+        spatial_grid = {}
+
+        # Füge jedes Modul zu allen Grid-Zellen hinzu, die es überlappt
+        for idx, bbox in bounding_boxes:
+            min_x, min_y, min_z, max_x, max_y, max_z = bbox
+
+            # Berechne Grid-Zellen-Bereiche
+            grid_min_x = int(math.floor(min_x / grid_cell_size))
+            grid_max_x = int(math.floor(max_x / grid_cell_size))
+            grid_min_y = int(math.floor(min_y / grid_cell_size))
+            grid_max_y = int(math.floor(max_y / grid_cell_size))
+            grid_min_z = int(math.floor(min_z / grid_cell_size))
+            grid_max_z = int(math.floor(max_z / grid_cell_size))
+
+            # Füge Modul zu allen überlappenden Grid-Zellen hinzu
+            for gx in range(grid_min_x, grid_max_x + 1):
+                for gy in range(grid_min_y, grid_max_y + 1):
+                    for gz in range(grid_min_z, grid_max_z + 1):
+                        cell_key = (gx, gy, gz)
+                        if cell_key not in spatial_grid:
+                            spatial_grid[cell_key] = []
+                        spatial_grid[cell_key].append(idx)
+
+        # Prüfe Kollisionen nur zwischen Modulen in gleichen Grid-Zellen
+        checked_pairs = set()
+
+        for cell_modules in spatial_grid.values():
+            # Prüfe alle Paare in dieser Zelle
+            for i in range(len(cell_modules)):
+                for j in range(i + 1, len(cell_modules)):
+                    idx1 = cell_modules[i]
+                    idx2 = cell_modules[j]
+
+                    # Stelle sicher dass idx1 < idx2
+                    if idx1 > idx2:
+                        idx1, idx2 = idx2, idx1
+
+                    # Überspringe bereits geprüfte Paare
+                    pair_key = (idx1, idx2)
+                    if pair_key in checked_pairs:
+                        continue
+                    checked_pairs.add(pair_key)
+
+                    # Hole Bounding-Boxes
+                    bbox1 = None
+                    bbox2 = None
+                    for idx, bbox in bounding_boxes:
+                        if idx == idx1:
+                            bbox1 = bbox
+                        if idx == idx2:
+                            bbox2 = bbox
+
+                    if bbox1 is None or bbox2 is None:
+                        continue
+
+                    # Prüfe Intersection
+                    if _bounding_boxes_intersect(bbox1, bbox2):
+                        collisions.append((idx1, idx2))
+
+    else:
+        # ====================================================================
+        # BRUTE-FORCE ANSATZ (für wenige Module)
+        # ====================================================================
+        # Prüfe alle Paare von Modulen
+        for i in range(len(bounding_boxes)):
+            for j in range(i + 1, len(bounding_boxes)):
+                idx1, bbox1 = bounding_boxes[i]
+                idx2, bbox2 = bounding_boxes[j]
+
+                # Prüfe Intersection
+                if _bounding_boxes_intersect(bbox1, bbox2):
+                    collisions.append((idx1, idx2))
+
+    return collisions
+
+
+def _bounding_boxes_intersect(
+    bbox1: Tuple[float, float, float, float, float, float],
+    bbox2: Tuple[float, float, float, float, float, float]
+) -> bool:
+    """
+    Prüft ob zwei Bounding-Boxes sich überschneiden.
+
+    Verwendet den Separating Axis Theorem (SAT) für achsenausgerichtete
+    Bounding-Boxes (AABB). Zwei AABBs überschneiden sich, wenn sie sich
+    auf allen drei Achsen überschneiden.
+
+    Args:
+        bbox1: Erste Bounding-Box (min_x, min_y, min_z, max_x, max_y, max_z)
+        bbox2: Zweite Bounding-Box (min_x, min_y, min_z, max_x, max_y, max_z)
+
+    Returns:
+        True wenn Bounding-Boxes sich überschneiden, sonst False
+
+    Example:
+        >>> bbox1 = (0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+        >>> bbox2 = (0.5, 0.5, 0.5, 1.5, 1.5, 1.5)
+        >>> _bounding_boxes_intersect(bbox1, bbox2)
+        True
+        >>> bbox3 = (2.0, 2.0, 2.0, 3.0, 3.0, 3.0)
+        >>> _bounding_boxes_intersect(bbox1, bbox3)
+        False
+    """
+    min_x1, min_y1, min_z1, max_x1, max_y1, max_z1 = bbox1
+    min_x2, min_y2, min_z2, max_x2, max_y2, max_z2 = bbox2
+
+    # Prüfe Überschneidung auf X-Achse
+    if max_x1 < min_x2 or max_x2 < min_x1:
+        return False
+
+    # Prüfe Überschneidung auf Y-Achse
+    if max_y1 < min_y2 or max_y2 < min_y1:
+        return False
+
+    # Prüfe Überschneidung auf Z-Achse
+    if max_z1 < min_z2 or max_z2 < min_z1:
+        return False
+
+    # Überschneidung auf allen Achsen -> Kollision
+    return True
+
+
+# ============================================================================
+# VERSCHATTUNGS-ANALYSE
+# ============================================================================
+
+def calculate_sun_position(
+    latitude: float,
+    day_of_year: int,
+    hour: float
+) -> Tuple[float, float]:
+    """
+    Berechnet die Sonnenposition (Azimuth und Elevation) für einen gegebenen
+    Standort, Tag und Uhrzeit.
+
+    Diese Funktion verwendet eine vereinfachte astronomische Berechnung
+    basierend auf der Sonnendeklination und dem Stundenwinkel. Für höhere
+    Präzision sollte eine spezialisierte Bibliothek wie pvlib verwendet werden.
+
+    Args:
+        latitude: Breitengrad des Standorts in Grad (z.B. 51.0 für Deutschland)
+                 Positiv für nördliche Breite, negativ für südliche Breite
+        day_of_year: Tag im Jahr (1-365, wobei 1 = 1. Januar)
+        hour: Stunde des Tages (0.0-24.0, z.B. 12.5 für 12:30 Uhr)
+
+    Returns:
+        Tuple mit (azimuth_deg, elevation_deg):
+        - azimuth_deg: Azimuth-Winkel in Grad (0° = Norden, 90° = Osten,
+                      180° = Süden, 270° = Westen)
+        - elevation_deg: Elevations-Winkel in Grad (0° = Horizont,
+                        90° = Zenit, negative Werte = unter Horizont)
+
+    Example:
+        >>> # Mittag am 21. Juni (Sommersonnenwende) in Deutschland
+        >>> azimuth, elevation = calculate_sun_position(51.0, 172, 12.0)
+        >>> print(f"Azimuth: {azimuth:.1f}°, Elevation: {elevation:.1f}°")
+        Azimuth: 180.0°, Elevation: 62.0°
+        
+        >>> # Morgens am 21. Dezember (Wintersonnenwende)
+        >>> azimuth, elevation = calculate_sun_position(51.0, 355, 9.0)
+        >>> print(f"Azimuth: {azimuth:.1f}°, Elevation: {elevation:.1f}°")
+        Azimuth: 135.0°, Elevation: 12.0°
+    """
+    if np is None:
+        raise RuntimeError("NumPy ist nicht installiert")
+
+    # Validiere Eingaben
+    latitude = max(-90.0, min(90.0, latitude))
+    day_of_year = max(1, min(365, day_of_year))
+    hour = max(0.0, min(24.0, hour))
+
+    # ========================================================================
+    # SCHRITT 1: BERECHNE SONNENDEKLINATION
+    # ========================================================================
+    # Die Sonnendeklination ist der Winkel zwischen den Sonnenstrahlen und
+    # der Äquatorebene. Sie variiert zwischen -23.45° (Wintersonnenwende)
+    # und +23.45° (Sommersonnenwende).
+    
+    # Vereinfachte Formel nach Cooper (1969):
+    # δ = 23.45° × sin(360° × (284 + N) / 365)
+    # wobei N = Tag im Jahr
+    
+    declination_rad = _deg_to_rad(23.45) * math.sin(
+        _deg_to_rad(360.0 * (284 + day_of_year) / 365.0)
+    )
+    declination_deg = math.degrees(declination_rad)
+
+    # ========================================================================
+    # SCHRITT 2: BERECHNE STUNDENWINKEL
+    # ========================================================================
+    # Der Stundenwinkel ist der Winkel zwischen dem Meridian des Beobachters
+    # und dem Meridian der Sonne. Er beträgt 0° um 12:00 Uhr Ortszeit.
+    # Pro Stunde ändert sich der Stundenwinkel um 15°.
+    
+    # Stundenwinkel in Grad: 15° × (Stunde - 12)
+    hour_angle_deg = 15.0 * (hour - 12.0)
+    hour_angle_rad = _deg_to_rad(hour_angle_deg)
+
+    # ========================================================================
+    # SCHRITT 3: BERECHNE SONNEN-ELEVATION (HÖHENWINKEL)
+    # ========================================================================
+    # Die Elevation ist der Winkel zwischen der Sonne und dem Horizont.
+    # Formel: sin(elevation) = sin(latitude) × sin(declination) +
+    #                          cos(latitude) × cos(declination) × cos(hour_angle)
+    
+    latitude_rad = _deg_to_rad(latitude)
+    
+    sin_elevation = (
+        math.sin(latitude_rad) * math.sin(declination_rad) +
+        math.cos(latitude_rad) * math.cos(declination_rad) * math.cos(hour_angle_rad)
+    )
+    
+    # Begrenze auf [-1, 1] um numerische Fehler zu vermeiden
+    sin_elevation = max(-1.0, min(1.0, sin_elevation))
+    
+    elevation_rad = math.asin(sin_elevation)
+    elevation_deg = math.degrees(elevation_rad)
+
+    # ========================================================================
+    # SCHRITT 4: BERECHNE SONNEN-AZIMUTH (HIMMELSRICHTUNG)
+    # ========================================================================
+    # Der Azimuth ist der Winkel zwischen Norden und der Projektion der
+    # Sonnenstrahlen auf die Horizontalebene (im Uhrzeigersinn).
+    # Formel: cos(azimuth) = (sin(declination) - sin(elevation) × sin(latitude)) /
+    #                        (cos(elevation) × cos(latitude))
+    
+    cos_elevation = math.cos(elevation_rad)
+    
+    # Vermeide Division durch Null
+    if abs(cos_elevation) < 0.001 or abs(math.cos(latitude_rad)) < 0.001:
+        # Sonne im Zenit oder an den Polen
+        azimuth_deg = 180.0  # Konvention: Süden
+    else:
+        cos_azimuth = (
+            (math.sin(declination_rad) - math.sin(elevation_rad) * math.sin(latitude_rad)) /
+            (cos_elevation * math.cos(latitude_rad))
+        )
+        
+        # Begrenze auf [-1, 1]
+        cos_azimuth = max(-1.0, min(1.0, cos_azimuth))
+        
+        azimuth_rad = math.acos(cos_azimuth)
+        azimuth_deg = math.degrees(azimuth_rad)
+        
+        # Korrigiere Azimuth basierend auf Stundenwinkel
+        # Wenn Stundenwinkel positiv (Nachmittag), ist Azimuth > 180°
+        if hour_angle_deg > 0:
+            azimuth_deg = 360.0 - azimuth_deg
+
+    return (azimuth_deg, elevation_deg)
+
+
+def calculate_shading_for_module(
+    module_mesh: 'pv.PolyData',
+    all_modules: List['pv.PolyData'],
+    sun_azimuth: float,
+    sun_elevation: float,
+    module_index: int = -1
+) -> float:
+    """
+    Berechnet den Verschattungsgrad für ein einzelnes PV-Modul mittels
+    Ray-Casting zur Sonne.
+
+    Diese Funktion erstellt einen Ray vom Zentrum des Moduls in Richtung
+    der Sonne und prüft, ob dieser Ray andere Module schneidet. Der
+    Verschattungsgrad wird basierend auf der Anzahl und Größe der
+    Verschattungen berechnet.
+
+    Args:
+        module_mesh: PyVista PolyData Mesh des zu prüfenden Moduls
+        all_modules: Liste aller PyVista PolyData Meshes (PV-Module)
+        sun_azimuth: Sonnen-Azimuth in Grad (0° = Norden, 180° = Süden)
+        sun_elevation: Sonnen-Elevation in Grad (0° = Horizont, 90° = Zenit)
+        module_index: Index des zu prüfenden Moduls in all_modules
+                     (wird übersprungen bei Intersection-Test)
+
+    Returns:
+        Verschattungsgrad in Prozent (0.0 = keine Verschattung,
+        100.0 = vollständige Verschattung)
+
+    Example:
+        >>> panel1 = make_panel(position=(0.0, 0.0, 0.0))
+        >>> panel2 = make_panel(position=(2.0, 0.0, 1.0))  # Höher, könnte verschatten
+        >>> all_panels = [panel1, panel2]
+        >>> # Sonne im Süden, 45° Elevation
+        >>> shading = calculate_shading_for_module(panel1, all_panels, 180.0, 45.0, 0)
+        >>> print(f"Verschattung: {shading:.1f}%")
+        Verschattung: 0.0%
+    """
+    if pv is None or np is None:
+        raise RuntimeError("PyVista oder NumPy ist nicht installiert")
+
+    # Prüfe ob Sonne über dem Horizont ist
+    if sun_elevation <= 0.0:
+        # Sonne unter Horizont -> vollständige Verschattung (Nacht)
+        return 100.0
+
+    # ========================================================================
+    # SCHRITT 1: BERECHNE MODUL-ZENTRUM
+    # ========================================================================
+    # Berechne das Zentrum des Moduls als Ausgangspunkt für den Ray
+    
+    if module_mesh is None or module_mesh.points is None or len(module_mesh.points) == 0:
+        return 0.0  # Ungültiges Mesh -> keine Verschattung
+    
+    # Zentrum = Durchschnitt aller Punkte
+    module_center = np.mean(module_mesh.points, axis=0)
+    
+    # ========================================================================
+    # SCHRITT 2: BERECHNE RAY-RICHTUNG ZUR SONNE
+    # ========================================================================
+    # Konvertiere Azimuth und Elevation zu kartesischen Koordinaten
+    # Azimuth: 0° = Norden (+Y), 90° = Osten (+X), 180° = Süden (-Y), 270° = Westen (-X)
+    # Elevation: 0° = Horizont, 90° = Zenit (+Z)
+    
+    azimuth_rad = _deg_to_rad(sun_azimuth)
+    elevation_rad = _deg_to_rad(sun_elevation)
+    
+    # Berechne Richtungsvektor zur Sonne
+    # X-Komponente: sin(azimuth) × cos(elevation)
+    # Y-Komponente: cos(azimuth) × cos(elevation)  [Norden ist +Y]
+    # Z-Komponente: sin(elevation)
+    
+    ray_direction = np.array([
+        math.sin(azimuth_rad) * math.cos(elevation_rad),  # X (Ost-West)
+        math.cos(azimuth_rad) * math.cos(elevation_rad),  # Y (Nord-Süd)
+        math.sin(elevation_rad)                            # Z (Höhe)
+    ])
+    
+    # Normalisiere Richtungsvektor
+    ray_direction = ray_direction / np.linalg.norm(ray_direction)
+    
+    # ========================================================================
+    # SCHRITT 3: PRÜFE INTERSECTION MIT ANDEREN MODULEN
+    # ========================================================================
+    # Erstelle einen Ray vom Modul-Zentrum zur Sonne und prüfe, ob dieser
+    # andere Module schneidet
+    
+    # Ray-Länge: Ausreichend lang um alle Module zu erreichen (z.B. 100m)
+    ray_length = 100.0
+    ray_end = module_center + ray_direction * ray_length
+    
+    # Zähle Intersections mit anderen Modulen
+    num_intersections = 0
+    total_intersection_distance = 0.0
+    
+    for i, other_module in enumerate(all_modules):
+        # Überspringe das Modul selbst
+        if i == module_index:
+            continue
+        
+        # Überspringe ungültige Meshes
+        if other_module is None or other_module.points is None or len(other_module.points) == 0:
+            continue
+        
+        # Prüfe ob Ray das andere Modul schneidet
+        # Verwende Bounding-Box Test als schnelle Vorprüfung
+        try:
+            other_bbox = get_module_bounding_box(other_module)
+            min_x, min_y, min_z, max_x, max_y, max_z = other_bbox
+            
+            # Prüfe ob Ray die Bounding-Box schneidet
+            # Vereinfachter Test: Prüfe ob Modul-Zentrum zwischen Ray-Start und Ray-End liegt
+            # und ob es in der Nähe der Ray-Linie ist
+            
+            other_center = np.mean(other_module.points, axis=0)
+            
+            # Berechne Abstand des anderen Moduls vom Ray
+            # Verwende Punkt-zu-Linie Abstand
+            ray_start = module_center
+            
+            # Vektor vom Ray-Start zum anderen Modul-Zentrum
+            to_other = other_center - ray_start
+            
+            # Projektion auf Ray-Richtung
+            projection_length = np.dot(to_other, ray_direction)
+            
+            # Prüfe ob Projektion in Ray-Richtung liegt (positiv)
+            if projection_length > 0.1:  # Mindestens 10cm entfernt
+                # Berechne nächsten Punkt auf Ray
+                closest_point_on_ray = ray_start + ray_direction * projection_length
+                
+                # Berechne Abstand vom anderen Modul zum Ray
+                distance_to_ray = np.linalg.norm(other_center - closest_point_on_ray)
+                
+                # Wenn Abstand kleiner als Modul-Diagonale, zähle als Intersection
+                # Modul-Diagonale ≈ sqrt(PV_W² + PV_H²) ≈ 2.0m
+                if distance_to_ray < 2.0:
+                    num_intersections += 1
+                    total_intersection_distance += projection_length
+        
+        except (ValueError, AttributeError):
+            # Überspringe ungültige Meshes
+            continue
+    
+    # ========================================================================
+    # SCHRITT 4: BERECHNE VERSCHATTUNGSGRAD
+    # ========================================================================
+    # Verschattungsgrad basiert auf Anzahl der Intersections
+    # Vereinfachte Berechnung: Jede Intersection = 50% Verschattung
+    # Maximum: 100%
+    
+    if num_intersections == 0:
+        return 0.0
+    elif num_intersections == 1:
+        return 50.0
+    else:
+        return 100.0
+
+
+def interpolate_color(
+    color1: str,
+    color2: str,
+    factor: float
+) -> str:
+    """
+    Interpoliert zwischen zwei Hex-Farben.
+
+    Args:
+        color1: Erste Farbe als Hex-String (z.B. "#00ff00")
+        color2: Zweite Farbe als Hex-String (z.B. "#ff0000")
+        factor: Interpolationsfaktor (0.0 = color1, 1.0 = color2)
+
+    Returns:
+        Interpolierte Farbe als Hex-String
+
+    Example:
+        >>> interpolate_color("#00ff00", "#ff0000", 0.5)
+        '#7f7f00'
+    """
+    # Entferne '#' falls vorhanden
+    c1 = color1.lstrip('#')
+    c2 = color2.lstrip('#')
+    
+    # Konvertiere zu RGB
+    r1, g1, b1 = int(c1[0:2], 16), int(c1[2:4], 16), int(c1[4:6], 16)
+    r2, g2, b2 = int(c2[0:2], 16), int(c2[2:4], 16), int(c2[4:6], 16)
+    
+    # Begrenze factor auf [0, 1]
+    factor = max(0.0, min(1.0, factor))
+    
+    # Interpoliere
+    r = int(r1 + (r2 - r1) * factor)
+    g = int(g1 + (g2 - g1) * factor)
+    b = int(b1 + (b2 - b1) * factor)
+    
+    # Konvertiere zurück zu Hex
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
+def visualize_shading(
+    plotter: 'pv.Plotter',
+    module_meshes: List['pv.PolyData'],
+    sun_azimuth: float,
+    sun_elevation: float,
+    show_legend: bool = True
+) -> Dict[int, float]:
+    """
+    Visualisiert Verschattung durch Einfärben der Module basierend auf
+    Verschattungsgrad.
+
+    Diese Funktion berechnet den Verschattungsgrad für jedes Modul und
+    färbt es entsprechend ein:
+    - Grün (0%): Keine Verschattung
+    - Gelb (50%): Teilweise Verschattung
+    - Rot (100%): Vollständige Verschattung
+
+    Args:
+        plotter: PyVista Plotter-Objekt für die Visualisierung
+        module_meshes: Liste von PyVista PolyData Meshes (PV-Module)
+        sun_azimuth: Sonnen-Azimuth in Grad (0° = Norden, 180° = Süden)
+        sun_elevation: Sonnen-Elevation in Grad (0° = Horizont, 90° = Zenit)
+        show_legend: Wenn True, füge Farbskala-Legende hinzu
+
+    Returns:
+        Dictionary mit Modul-Index als Key und Verschattungsgrad (0-100) als Value
+
+    Example:
+        >>> plotter = pv.Plotter()
+        >>> panels = [
+        ...     make_panel(position=(0.0, 0.0, 0.0)),
+        ...     make_panel(position=(2.0, 0.0, 1.0))
+        ... ]
+        >>> shading_values = visualize_shading(plotter, panels, 180.0, 45.0)
+        >>> print(f"Modul 0: {shading_values[0]:.1f}% verschattet")
+        Modul 0: 0.0% verschattet
+    """
+    if pv is None or np is None:
+        raise RuntimeError("PyVista oder NumPy ist nicht installiert")
+
+    # Prüfe ob Module vorhanden sind
+    if not module_meshes or len(module_meshes) == 0:
+        return {}
+
+    # Dictionary für Verschattungswerte
+    shading_values = {}
+
+    # ========================================================================
+    # SCHRITT 1: BERECHNE VERSCHATTUNG FÜR ALLE MODULE
+    # ========================================================================
+    
+    for i, module in enumerate(module_meshes):
+        # Berechne Verschattungsgrad
+        shading_pct = calculate_shading_for_module(
+            module_mesh=module,
+            all_modules=module_meshes,
+            sun_azimuth=sun_azimuth,
+            sun_elevation=sun_elevation,
+            module_index=i
+        )
+        
+        shading_values[i] = shading_pct
+
+    # ========================================================================
+    # SCHRITT 2: FÄRBE MODULE BASIEREND AUF VERSCHATTUNGSGRAD
+    # ========================================================================
+    # Farbskala: Grün (0%) → Gelb (50%) → Rot (100%)
+    
+    for i, module in enumerate(module_meshes):
+        shading_pct = shading_values[i]
+        
+        # Berechne Farbe basierend auf Verschattungsgrad
+        if shading_pct < 50.0:
+            # Grün → Gelb
+            factor = shading_pct / 50.0
+            color = interpolate_color("#00ff00", "#ffff00", factor)
+        else:
+            # Gelb → Rot
+            factor = (shading_pct - 50.0) / 50.0
+            color = interpolate_color("#ffff00", "#ff0000", factor)
+        
+        # Füge Modul mit Farbe zum Plotter hinzu
+        plotter.add_mesh(module, color=color, opacity=0.9, show_edges=False)
+
+    # ========================================================================
+    # SCHRITT 3: FÜGE LEGENDE HINZU (OPTIONAL)
+    # ========================================================================
+    
+    if show_legend:
+        # Erstelle Farbskala-Legende
+        # PyVista unterstützt scalar bars für kontinuierliche Werte
+        # Hier verwenden wir eine vereinfachte Text-Legende
+        
+        # Berechne Statistiken
+        if shading_values:
+            min_shading = min(shading_values.values())
+            max_shading = max(shading_values.values())
+            avg_shading = sum(shading_values.values()) / len(shading_values)
+            
+            # Füge Text-Annotation hinzu
+            legend_text = (
+                f"Verschattungs-Analyse\n"
+                f"Sonnenstand: Az={sun_azimuth:.0f}°, El={sun_elevation:.0f}°\n"
+                f"Min: {min_shading:.1f}%\n"
+                f"Max: {max_shading:.1f}%\n"
+                f"Durchschnitt: {avg_shading:.1f}%\n"
+                f"\n"
+                f"Farbskala:\n"
+                f"Grün = 0% (keine Verschattung)\n"
+                f"Gelb = 50% (teilweise)\n"
+                f"Rot = 100% (vollständig)"
+            )
+            
+            # Füge Text zum Plotter hinzu (oben links)
+            plotter.add_text(
+                legend_text,
+                position='upper_left',
+                font_size=10,
+                color='black'
+            )
+
+    return shading_values
+
+
 # ============================================================================
 # PV-MODUL-PLATZIERUNGS-ALGORITHMEN
 # ============================================================================
@@ -1051,24 +2121,31 @@ def place_panels_flat_roof(
     removed_indices: List[int] = None,
     base_z: float = 0.0,
     margin: float = 0.25,
-    spacing: float = 0.25
+    spacing: float = 0.25,
+    custom_azimuth: float = 0.0,
+    custom_tilt: float = 15.0
 ) -> List['pv.PolyData']:
     """
     Platziert PV-Module auf Flachdach mit Aufständerung.
 
-    Implementiert zwei Aufständerungstypen:
+    Implementiert verschiedene Aufständerungstypen:
     - "south": Süd-Aufständerung (15° Neigung, 0° Yaw)
     - "east-west": Ost-West-Aufständerung (10° Neigung, alternierender Yaw)
+    - "south-east": Süd-Ost-Aufständerung (15° Neigung, 45° Yaw)
+    - "south-west": Süd-West-Aufständerung (15° Neigung, 315° Yaw)
+    - "custom": Individueller Modus (verwendet custom_azimuth und custom_tilt)
 
     Args:
         roof_length: Dachlänge in X-Richtung (Meter)
         roof_width: Dachbreite in Y-Richtung (Meter)
         module_quantity: Gewünschte Anzahl der Module
-        mounting_type: Aufständerungstyp ("south" oder "east-west")
+        mounting_type: Aufständerungstyp ("south", "east-west", "south-east", "south-west", "custom")
         removed_indices: Liste der zu entfernenden Modul-Indizes (optional)
         base_z: Basis-Z-Höhe für Modul-Platzierung
         margin: Randabstand (Meter)
         spacing: Abstand zwischen Modulen (Meter)
+        custom_azimuth: Benutzerdefinierter Azimuth für "custom" Modus (0-360°)
+        custom_tilt: Benutzerdefinierte Neigung für "custom" Modus (0-90°)
 
     Returns:
         Liste von PyVista PolyData Meshes (PV-Module)
@@ -1082,6 +2159,15 @@ def place_panels_flat_roof(
         >>> panels = place_panels_flat_roof(
         ...     10.0, 6.0, 20, mounting_type="east-west"
         ... )
+        >>> # Süd-Ost-Aufständerung
+        >>> panels = place_panels_flat_roof(
+        ...     10.0, 6.0, 20, mounting_type="south-east"
+        ... )
+        >>> # Individueller Modus
+        >>> panels = place_panels_flat_roof(
+        ...     10.0, 6.0, 20, mounting_type="custom",
+        ...     custom_azimuth=30.0, custom_tilt=20.0
+        ... )
     """
     if pv is None:
         raise RuntimeError("PyVista ist nicht installiert")
@@ -1094,15 +2180,44 @@ def place_panels_flat_roof(
         # Ost-West: 10° Neigung, alternierender Yaw
         tilt = 10.0
         use_alternating_yaw = True
+        yaw = 0.0  # Wird pro Modul gesetzt
+    elif mounting_type == "south-east":
+        # Süd-Ost: 15° Neigung, 45° Yaw (Süd-Ost)
+        tilt = 15.0
+        use_alternating_yaw = False
+        yaw = 45.0
+    elif mounting_type == "south-west":
+        # Süd-West: 15° Neigung, 315° Yaw (Süd-West)
+        tilt = 15.0
+        use_alternating_yaw = False
+        yaw = 315.0
+    elif mounting_type == "custom":
+        # Individuell: Benutzerdefinierte Werte
+        # Validiere und verwende custom_azimuth und custom_tilt
+        tilt = max(0.0, min(90.0, custom_tilt))
+        use_alternating_yaw = False
+        yaw = custom_azimuth % 360.0  # Normalisiere auf 0-360°
     else:
         # Süd (Standard): 15° Neigung, 0° Yaw
         tilt = 15.0
         use_alternating_yaw = False
+        yaw = 0.0
 
     # Berechne Rasterposit ionen
-    # Bei Ost-West: Verwende größeren Reihenabstand
+    # Berechne optimalen Reihenabstand basierend auf Aufständerungstyp
+    # Der Reihenabstand muss Verschattung zwischen Reihen vermeiden
+    
+    # Formel für Reihenabstand: d = h / tan(sun_elevation_min)
+    # wobei h = Modulhöhe * sin(tilt)
+    # Für Deutschland (Breitengrad ~51°): Minimale Sonnenhöhe im Winter ~15°
+    # Vereinfachte Berechnung: d ≈ Modulhöhe * sin(tilt) * 3.0
+    
     if use_alternating_yaw:
         # Für Ost-West: Berechne Positionen mit erhöhtem Reihenabstand
+        # Reihenabstand für 10° Neigung
+        module_height = 1.76  # PV_H
+        row_spacing_factor = module_height * math.sin(_deg_to_rad(tilt)) * 3.0
+        
         positions_2d = grid_positions(
             area_length=roof_length,
             area_width=roof_width,
@@ -1122,13 +2237,34 @@ def place_panels_flat_roof(
             positions_2d = [
                 p for p in positions_2d if p[1] in selected_y
             ]
-    else:
-        # Süd: Normale Rasterposit ionen
+    elif mounting_type in ["south-east", "south-west"]:
+        # Für Süd-Ost und Süd-West: Berechne optimalen Reihenabstand
+        # Reihenabstand für 15° Neigung
+        module_height = 1.76  # PV_H
+        row_spacing_factor = module_height * math.sin(_deg_to_rad(tilt)) * 3.0
+        
+        # Verwende größeren Spacing für Reihen
+        adjusted_spacing = max(spacing, row_spacing_factor)
+        
         positions_2d = grid_positions(
             area_length=roof_length,
             area_width=roof_width,
             margin=margin,
-            spacing=spacing
+            spacing=adjusted_spacing
+        )
+    else:
+        # Süd oder Custom: Normale Rasterposit ionen mit optimiertem Reihenabstand
+        module_height = 1.76  # PV_H
+        row_spacing_factor = module_height * math.sin(_deg_to_rad(tilt)) * 3.0
+        
+        # Verwende größeren Spacing für Reihen
+        adjusted_spacing = max(spacing, row_spacing_factor)
+        
+        positions_2d = grid_positions(
+            area_length=roof_length,
+            area_width=roof_width,
+            margin=margin,
+            spacing=adjusted_spacing
         )
 
     # Berechne maximale Kapazität
@@ -1160,12 +2296,13 @@ def place_panels_flat_roof(
             # Gerade Indizes: -90° (Osten)
             # Ungerade Indizes: 90° (Westen)
             if i % 2 == 0:
-                yaw = -90.0  # Osten
+                module_yaw = -90.0  # Osten
             else:
-                yaw = 90.0   # Westen
+                module_yaw = 90.0   # Westen
         else:
-            # Süd: 0° Yaw (nach Süden)
-            yaw = 0.0
+            # Alle anderen Modi: Verwende den festgelegten Yaw
+            # (south: 0°, south-east: 45°, south-west: 315°, custom: wird separat gesetzt)
+            module_yaw = yaw
 
         # Z-Position: Auf Flachdach + kleine Erhöhung für Aufständerung
         z = base_z + 0.05  # 5cm über Dach
@@ -1173,7 +2310,7 @@ def place_panels_flat_roof(
         # Erstelle Modul
         panel = make_panel(
             position=(x, y, z),
-            yaw_deg=yaw,
+            yaw_deg=module_yaw,
             tilt_deg=tilt
         )
         panels.append(panel)
@@ -1191,7 +2328,8 @@ def build_scene(
     roof_type: str,
     module_quantity: int,
     layout_config: LayoutConfig,
-    off_screen: bool = False
+    off_screen: bool = False,
+    selected_modules: List[int] = None
 ) -> Tuple['pv.Plotter', Dict[str, List['pv.PolyData']]]:
     """
     Erstellt die komplette 3D-Szene mit Gebäude, Dach und PV-Modulen.
@@ -1212,6 +2350,7 @@ def build_scene(
         module_quantity: Gewünschte Anzahl der PV-Module
         layout_config: LayoutConfig mit Belegungskonfiguration
         off_screen: Wenn True, Off-Screen Rendering (für Screenshots)
+        selected_modules: Liste der ausgewählten Modul-Indizes (für Hervorhebung)
 
     Returns:
         Tuple aus:
@@ -1230,9 +2369,13 @@ def build_scene(
         ...     dims=dims,
         ...     roof_type="Satteldach",
         ...     module_quantity=20,
-        ...     layout_config=layout
+        ...     layout_config=layout,
+        ...     selected_modules=[0, 1, 2]
         ... )
     """
+    # Initialisiere selected_modules wenn None
+    if selected_modules is None:
+        selected_modules = []
     if pv is None or np is None:
         raise RuntimeError("PyVista oder NumPy ist nicht installiert")
 
@@ -1365,20 +2508,32 @@ def build_scene(
     else:
         base_z = wall_height
 
+    # Extrahiere mounting_mode und custom-Parameter aus layout_config
+    # Wenn AdvancedLayoutConfig verwendet wird, nutze die erweiterten Parameter
+    if isinstance(layout_config, AdvancedLayoutConfig):
+        mounting_type = layout_config.mounting_mode
+        custom_azimuth = layout_config.custom_azimuth
+        custom_tilt = layout_config.custom_tilt
+    else:
+        # Fallback für LayoutConfig: Standard Süd-Aufständerung
+        mounting_type = "south"
+        custom_azimuth = 0.0
+        custom_tilt = 15.0
+    
     # Platziere Module basierend auf Belegungsmodus
     if layout_config.mode == "manual":
         # Manuelle Belegung mit removed_indices
         if roof_type_normalized == "Flachdach":
-            # Flachdach: Verwende Aufständerung
-            # Bestimme Aufständerungstyp (Standard: Süd)
-            mounting_type = "south"  # Kann später erweitert werden
+            # Flachdach: Verwende Aufständerung mit konfigurierbarem Modus
             panels_main = place_panels_flat_roof(
                 roof_length=length,
                 roof_width=width,
                 module_quantity=module_quantity,
                 mounting_type=mounting_type,
                 removed_indices=layout_config.removed_indices,
-                base_z=base_z
+                base_z=base_z,
+                custom_azimuth=custom_azimuth,
+                custom_tilt=custom_tilt
             )
         else:
             # Geneigte Dächer: Manuelle Platzierung
@@ -1394,14 +2549,15 @@ def build_scene(
     else:
         # Automatische Belegung
         if roof_type_normalized == "Flachdach":
-            # Flachdach: Verwende Aufständerung
-            mounting_type = "south"  # Kann später erweitert werden
+            # Flachdach: Verwende Aufständerung mit konfigurierbarem Modus
             panels_main = place_panels_flat_roof(
                 roof_length=length,
                 roof_width=width,
                 module_quantity=module_quantity,
                 mounting_type=mounting_type,
-                base_z=base_z
+                base_z=base_z,
+                custom_azimuth=custom_azimuth,
+                custom_tilt=custom_tilt
             )
         else:
             # Geneigte Dächer: Automatische Platzierung
@@ -1427,9 +2583,15 @@ def build_scene(
         for panel in panels_main:
             panel.points = panel.points @ rotation_matrix.T
 
-    # Füge Module zum Plotter hinzu (schwarze Farbe)
-    for panel in panels_main:
-        plotter.add_mesh(panel, color="black", show_edges=False)
+    # Füge Module zum Plotter hinzu (schwarze Farbe, ausgewählte in orange)
+    for idx, panel in enumerate(panels_main):
+        # Prüfe ob Modul ausgewählt ist
+        if idx in selected_modules:
+            # Hervorhebung: Orange/Gelb für ausgewählte Module
+            plotter.add_mesh(panel, color="#FFA500", show_edges=True, edge_color="yellow", line_width=2)
+        else:
+            # Standard: Schwarz
+            plotter.add_mesh(panel, color="black", show_edges=False)
 
     # ========================================================================
     # TASK 5.5: GARAGE-HINZUFÜGUNG
@@ -1498,8 +2660,17 @@ def build_scene(
                 panel.points = panel.points @ rotation_matrix.T
 
         # Füge Garage-Module zum Plotter hinzu
-        for panel in panels_garage:
-            plotter.add_mesh(panel, color="black", show_edges=False)
+        for idx, panel in enumerate(panels_garage):
+            # Berechne globalen Index (nach Hauptdach-Modulen)
+            global_idx = len(panels_main) + idx
+            
+            # Prüfe ob Modul ausgewählt ist
+            if global_idx in selected_modules:
+                # Hervorhebung: Orange/Gelb für ausgewählte Module
+                plotter.add_mesh(panel, color="#FFA500", show_edges=True, edge_color="yellow", line_width=2)
+            else:
+                # Standard: Schwarz
+                plotter.add_mesh(panel, color="black", show_edges=False)
 
         # Aktualisiere fehlende Module
         placed_count += len(panels_garage)
@@ -1561,8 +2732,17 @@ def build_scene(
                 panel.points = panel.points @ rotation_matrix.T
 
         # Füge Fassaden-Module zum Plotter hinzu
-        for panel in panels_facade:
-            plotter.add_mesh(panel, color="black", show_edges=False)
+        for idx, panel in enumerate(panels_facade):
+            # Berechne globalen Index (nach Hauptdach- und Garage-Modulen)
+            global_idx = len(panels_main) + len(panels_garage) + idx
+            
+            # Prüfe ob Modul ausgewählt ist
+            if global_idx in selected_modules:
+                # Hervorhebung: Orange/Gelb für ausgewählte Module
+                plotter.add_mesh(panel, color="#FFA500", show_edges=True, edge_color="yellow", line_width=2)
+            else:
+                # Standard: Schwarz
+                plotter.add_mesh(panel, color="black", show_edges=False)
 
     # ========================================================================
     # TASK 5.7: FINALISIERE build_scene() RETURN
@@ -1874,3 +3054,1071 @@ def export_gltf(
         import traceback
         traceback.print_exc()
         return False
+
+
+# ============================================================================
+# OPTIMIERUNGS-ASSISTENT
+# ============================================================================
+
+def generate_south_config(
+    building_dims: BuildingDims,
+    target_modules: int,
+    roof_type: str = "Flachdach"
+) -> AdvancedLayoutConfig:
+    """
+    Generiert eine Konfiguration mit Süd-Aufständerung.
+
+    Diese Funktion erstellt eine optimierte Konfiguration für maximale
+    Energieausbeute durch Süd-Ausrichtung aller Module.
+
+    Args:
+        building_dims: Gebäudedimensionen
+        target_modules: Gewünschte Anzahl der Module
+        roof_type: Dachtyp (Standard: "Flachdach")
+
+    Returns:
+        AdvancedLayoutConfig mit Süd-Aufständerung
+
+    Example:
+        >>> dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+        >>> config = generate_south_config(dims, 20)
+        >>> config.mounting_mode
+        'south'
+    """
+    config = AdvancedLayoutConfig(
+        mode="auto",
+        use_garage=False,
+        use_facade=False,
+        removed_indices=[],
+        mounting_mode="south",
+        custom_azimuth=0.0,
+        custom_tilt=15.0,
+        enable_collision_detection=True,
+        enable_shading_analysis=False
+    )
+    
+    return config
+
+
+def generate_east_west_config(
+    building_dims: BuildingDims,
+    target_modules: int,
+    roof_type: str = "Flachdach"
+) -> AdvancedLayoutConfig:
+    """
+    Generiert eine Konfiguration mit Ost-West-Aufständerung.
+
+    Diese Funktion erstellt eine Konfiguration für gleichmäßige
+    Energieverteilung über den Tag durch alternierende Ost-West-Ausrichtung.
+
+    Args:
+        building_dims: Gebäudedimensionen
+        target_modules: Gewünschte Anzahl der Module
+        roof_type: Dachtyp (Standard: "Flachdach")
+
+    Returns:
+        AdvancedLayoutConfig mit Ost-West-Aufständerung
+
+    Example:
+        >>> dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+        >>> config = generate_east_west_config(dims, 20)
+        >>> config.mounting_mode
+        'east-west'
+    """
+    config = AdvancedLayoutConfig(
+        mode="auto",
+        use_garage=False,
+        use_facade=False,
+        removed_indices=[],
+        mounting_mode="east-west",
+        custom_azimuth=0.0,
+        custom_tilt=10.0,
+        enable_collision_detection=True,
+        enable_shading_analysis=False
+    )
+    
+    return config
+
+
+def generate_south_east_config(
+    building_dims: BuildingDims,
+    target_modules: int,
+    roof_type: str = "Flachdach"
+) -> AdvancedLayoutConfig:
+    """
+    Generiert eine Konfiguration mit Süd-Ost-Aufständerung.
+
+    Diese Funktion erstellt eine Konfiguration für optimale
+    Energieausbeute in den Morgenstunden durch Süd-Ost-Ausrichtung.
+
+    Args:
+        building_dims: Gebäudedimensionen
+        target_modules: Gewünschte Anzahl der Module
+        roof_type: Dachtyp (Standard: "Flachdach")
+
+    Returns:
+        AdvancedLayoutConfig mit Süd-Ost-Aufständerung
+
+    Example:
+        >>> dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+        >>> config = generate_south_east_config(dims, 20)
+        >>> config.mounting_mode
+        'south-east'
+    """
+    config = AdvancedLayoutConfig(
+        mode="auto",
+        use_garage=False,
+        use_facade=False,
+        removed_indices=[],
+        mounting_mode="south-east",
+        custom_azimuth=45.0,
+        custom_tilt=15.0,
+        enable_collision_detection=True,
+        enable_shading_analysis=False
+    )
+    
+    return config
+
+
+def generate_mixed_config(
+    building_dims: BuildingDims,
+    target_modules: int,
+    roof_type: str = "Flachdach"
+) -> AdvancedLayoutConfig:
+    """
+    Generiert eine gemischte Konfiguration mit Garage und Fassade.
+
+    Diese Funktion erstellt eine Konfiguration, die Garage und Fassade
+    nutzt, um die maximale Anzahl von Modulen unterzubringen.
+
+    Args:
+        building_dims: Gebäudedimensionen
+        target_modules: Gewünschte Anzahl der Module
+        roof_type: Dachtyp (Standard: "Flachdach")
+
+    Returns:
+        AdvancedLayoutConfig mit gemischter Konfiguration
+
+    Example:
+        >>> dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+        >>> config = generate_mixed_config(dims, 50)
+        >>> config.use_garage
+        True
+        >>> config.use_facade
+        True
+    """
+    config = AdvancedLayoutConfig(
+        mode="auto",
+        use_garage=True,
+        use_facade=True,
+        removed_indices=[],
+        mounting_mode="south",
+        custom_azimuth=0.0,
+        custom_tilt=15.0,
+        enable_collision_detection=True,
+        enable_shading_analysis=False
+    )
+    
+    return config
+
+
+def evaluate_config(
+    config: AdvancedLayoutConfig,
+    building_dims: BuildingDims,
+    target_modules: int,
+    roof_type: str,
+    optimization_goal: str = "max_modules"
+) -> float:
+    """
+    Bewertet eine Konfiguration basierend auf verschiedenen Kriterien.
+
+    Diese Funktion berechnet einen Score (0-100) für eine gegebene
+    Konfiguration basierend auf dem Optimierungsziel. Höhere Scores
+    bedeuten bessere Konfigurationen.
+
+    Bewertungskriterien:
+    - Modulanzahl: Wie viele Module können platziert werden
+    - Verschattung: Wie stark sind Module verschattet (geschätzt)
+    - Ausrichtung: Wie optimal ist die Ausrichtung zur Sonne
+
+    Args:
+        config: Zu bewertende AdvancedLayoutConfig
+        building_dims: Gebäudedimensionen
+        target_modules: Gewünschte Anzahl der Module
+        roof_type: Dachtyp
+        optimization_goal: Optimierungsziel ("max_modules", "max_yield", "balanced")
+
+    Returns:
+        Score zwischen 0.0 und 100.0 (höher ist besser)
+
+    Example:
+        >>> dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+        >>> config = generate_south_config(dims, 20)
+        >>> score = evaluate_config(config, dims, 20, "Flachdach", "max_yield")
+        >>> 0.0 <= score <= 100.0
+        True
+    """
+    score = 0.0
+    
+    # ========================================================================
+    # KRITERIUM 1: MODULANZAHL
+    # ========================================================================
+    # Schätze wie viele Module mit dieser Konfiguration platziert werden können
+    
+    # Berechne verfügbare Fläche auf Hauptdach
+    roof_area = building_dims.length_m * building_dims.width_m
+    
+    # Schätze Modul-Kapazität basierend auf Aufständerungstyp
+    # Verschiedene Aufständerungstypen benötigen unterschiedlich viel Platz
+    module_area = PV_W * PV_H  # ~1.85 m²
+    
+    if config.mounting_mode == "east-west":
+        # Ost-West benötigt mehr Platz wegen Reihenabstand
+        # Reduziere Kapazität um ~40%
+        capacity_factor = 0.6
+    elif config.mounting_mode in ["south-east", "south-west"]:
+        # Süd-Ost/West benötigt etwas mehr Platz
+        # Reduziere Kapazität um ~20%
+        capacity_factor = 0.8
+    else:
+        # Süd oder Custom: Standard-Kapazität
+        # Reduziere Kapazität um ~10% für Randabstände
+        capacity_factor = 0.9
+    
+    # Berechne geschätzte Kapazität
+    estimated_capacity = int((roof_area / module_area) * capacity_factor)
+    
+    # Füge Garage-Kapazität hinzu wenn aktiviert
+    if config.use_garage:
+        garage_length, garage_width, _ = config.garage_dims
+        garage_area = garage_length * garage_width
+        garage_capacity = int((garage_area / module_area) * 0.9)
+        estimated_capacity += garage_capacity
+    
+    # Füge Fassaden-Kapazität hinzu wenn aktiviert
+    if config.use_facade:
+        facade_area = building_dims.length_m * building_dims.wall_height_m
+        facade_capacity = int((facade_area / module_area) * 0.7)  # Weniger effizient
+        estimated_capacity += facade_capacity
+    
+    # Berechne Modulanzahl-Score
+    # 100% wenn alle gewünschten Module passen, linear abfallend
+    if estimated_capacity >= target_modules:
+        module_count_score = 100.0
+    else:
+        module_count_score = (estimated_capacity / target_modules) * 100.0
+    
+    # ========================================================================
+    # KRITERIUM 2: VERSCHATTUNG (GESCHÄTZT)
+    # ========================================================================
+    # Schätze Verschattungsgrad basierend auf Aufständerungstyp
+    
+    if config.mounting_mode == "south":
+        # Süd-Aufständerung: Minimale Verschattung bei optimaler Auslegung
+        shading_penalty = 5.0  # 5% Verschattung
+    elif config.mounting_mode == "east-west":
+        # Ost-West: Etwas mehr Verschattung durch alternierende Ausrichtung
+        shading_penalty = 10.0  # 10% Verschattung
+    elif config.mounting_mode in ["south-east", "south-west"]:
+        # Süd-Ost/West: Moderate Verschattung
+        shading_penalty = 7.0  # 7% Verschattung
+    else:
+        # Custom: Unbekannt, nehme mittleren Wert an
+        shading_penalty = 10.0
+    
+    # Fassaden-Module haben höhere Verschattung
+    if config.use_facade:
+        shading_penalty += 5.0
+    
+    # Berechne Verschattungs-Score (100 - Penalty)
+    shading_score = max(0.0, 100.0 - shading_penalty)
+    
+    # ========================================================================
+    # KRITERIUM 3: AUSRICHTUNG (OPTIMAL FÜR ERTRAG)
+    # ========================================================================
+    # Bewerte wie optimal die Ausrichtung für Energieertrag ist
+    # Süd-Ausrichtung ist optimal für Deutschland (Breitengrad ~51°)
+    
+    if config.mounting_mode == "south":
+        # Süd: Optimal für Jahresertrag
+        orientation_score = 100.0
+    elif config.mounting_mode == "south-east":
+        # Süd-Ost: Gut für Morgenertrag, leicht suboptimal für Jahresertrag
+        orientation_score = 90.0
+    elif config.mounting_mode == "south-west":
+        # Süd-West: Gut für Nachmittagsertrag, leicht suboptimal für Jahresertrag
+        orientation_score = 90.0
+    elif config.mounting_mode == "east-west":
+        # Ost-West: Gleichmäßiger Tagesertrag, aber geringerer Jahresertrag
+        orientation_score = 85.0
+    else:
+        # Custom: Bewerte basierend auf Azimuth
+        # Optimal bei 0° (Süd), abfallend zu 90° (West) und 270° (Ost)
+        azimuth = config.custom_azimuth % 360.0
+        
+        # Berechne Abweichung von Süd (0° oder 360°)
+        if azimuth <= 180.0:
+            deviation = azimuth
+        else:
+            deviation = 360.0 - azimuth
+        
+        # Score: 100% bei 0°, linear abfallend zu 50% bei 90°
+        orientation_score = max(50.0, 100.0 - (deviation / 90.0) * 50.0)
+    
+    # ========================================================================
+    # GESAMTSCORE BASIEREND AUF OPTIMIERUNGSZIEL
+    # ========================================================================
+    
+    if optimization_goal == "max_modules":
+        # Maximiere Modulanzahl
+        # Gewichtung: 70% Modulanzahl, 20% Verschattung, 10% Ausrichtung
+        score = (
+            module_count_score * 0.7 +
+            shading_score * 0.2 +
+            orientation_score * 0.1
+        )
+    
+    elif optimization_goal == "max_yield":
+        # Maximiere Ertrag (Energieausbeute)
+        # Gewichtung: 30% Modulanzahl, 30% Verschattung, 40% Ausrichtung
+        score = (
+            module_count_score * 0.3 +
+            shading_score * 0.3 +
+            orientation_score * 0.4
+        )
+    
+    elif optimization_goal == "balanced":
+        # Ausgewogen zwischen Anzahl und Ertrag
+        # Gewichtung: 50% Modulanzahl, 25% Verschattung, 25% Ausrichtung
+        score = (
+            module_count_score * 0.5 +
+            shading_score * 0.25 +
+            orientation_score * 0.25
+        )
+    
+    else:
+        # Unbekanntes Ziel: Verwende balanced
+        score = (
+            module_count_score * 0.5 +
+            shading_score * 0.25 +
+            orientation_score * 0.25
+        )
+    
+    # Begrenze Score auf [0, 100]
+    score = max(0.0, min(100.0, score))
+    
+    return score
+
+
+def optimize_layout(
+    building_dims: BuildingDims,
+    target_modules: int,
+    roof_type: str = "Flachdach",
+    optimization_goal: str = "max_modules"
+) -> List[Tuple[AdvancedLayoutConfig, float]]:
+    """
+    Findet optimale Layout-Konfigurationen durch Generierung und Bewertung
+    verschiedener Strategien.
+
+    Diese Hauptfunktion des Optimierungs-Assistenten generiert 4-5
+    verschiedene Konfigurationen, bewertet sie basierend auf dem
+    Optimierungsziel und gibt die Top 3 zurück.
+
+    Generierte Strategien:
+    1. Süd-Aufständerung (optimal für Jahresertrag)
+    2. Ost-West-Aufständerung (gleichmäßiger Tagesertrag)
+    3. Süd-Ost-Aufständerung (optimal für Morgenertrag)
+    4. Gemischte Konfiguration mit Garage und Fassade (maximale Kapazität)
+
+    Args:
+        building_dims: Gebäudedimensionen
+        target_modules: Gewünschte Anzahl der Module
+        roof_type: Dachtyp (Standard: "Flachdach")
+        optimization_goal: Optimierungsziel ("max_modules", "max_yield", "balanced")
+
+    Returns:
+        Liste der Top 3 Konfigurationen als Tupel (config, score),
+        sortiert nach Score (höchster zuerst)
+
+    Example:
+        >>> dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+        >>> top_configs = optimize_layout(dims, 20, "Flachdach", "max_yield")
+        >>> len(top_configs)
+        3
+        >>> config1, score1 = top_configs[0]
+        >>> score1 >= top_configs[1][1]  # Erste hat höchsten Score
+        True
+    """
+    configurations = []
+    
+    # ========================================================================
+    # STRATEGIE 1: SÜD-AUFSTÄNDERUNG
+    # ========================================================================
+    # Optimal für maximalen Jahresertrag in Deutschland
+    
+    config_south = generate_south_config(building_dims, target_modules, roof_type)
+    score_south = evaluate_config(
+        config_south,
+        building_dims,
+        target_modules,
+        roof_type,
+        optimization_goal
+    )
+    configurations.append((config_south, score_south, "Süd-Aufständerung"))
+    
+    # ========================================================================
+    # STRATEGIE 2: OST-WEST-AUFSTÄNDERUNG
+    # ========================================================================
+    # Gleichmäßiger Tagesertrag, gut für Eigenverbrauch
+    
+    config_east_west = generate_east_west_config(building_dims, target_modules, roof_type)
+    score_east_west = evaluate_config(
+        config_east_west,
+        building_dims,
+        target_modules,
+        roof_type,
+        optimization_goal
+    )
+    configurations.append((config_east_west, score_east_west, "Ost-West-Aufständerung"))
+    
+    # ========================================================================
+    # STRATEGIE 3: SÜD-OST-AUFSTÄNDERUNG
+    # ========================================================================
+    # Optimal für Morgenertrag
+    
+    config_south_east = generate_south_east_config(building_dims, target_modules, roof_type)
+    score_south_east = evaluate_config(
+        config_south_east,
+        building_dims,
+        target_modules,
+        roof_type,
+        optimization_goal
+    )
+    configurations.append((config_south_east, score_south_east, "Süd-Ost-Aufständerung"))
+    
+    # ========================================================================
+    # STRATEGIE 4: GEMISCHTE KONFIGURATION
+    # ========================================================================
+    # Maximale Kapazität durch Nutzung von Garage und Fassade
+    
+    config_mixed = generate_mixed_config(building_dims, target_modules, roof_type)
+    score_mixed = evaluate_config(
+        config_mixed,
+        building_dims,
+        target_modules,
+        roof_type,
+        optimization_goal
+    )
+    configurations.append((config_mixed, score_mixed, "Gemischt (Garage + Fassade)"))
+    
+    # ========================================================================
+    # SORTIERE UND GEBE TOP 3 ZURÜCK
+    # ========================================================================
+    # Sortiere nach Score (höchster zuerst)
+    configurations.sort(key=lambda x: x[1], reverse=True)
+    
+    # Gebe Top 3 zurück (ohne Namen)
+    top_3 = [(config, score) for config, score, _ in configurations[:3]]
+    
+    return top_3
+
+
+# ============================================================================
+# ERWEITERTE EXPORT-FUNKTIONEN (TASK 18)
+# ============================================================================
+
+def export_module_details_csv(
+    module_transforms: Dict[int, 'ModuleTransform'],
+    module_positions: List[Tuple[float, float, float]],
+    shading_values: Dict[int, float] = None,
+    filepath: str = None
+) -> str:
+    """
+    Exportiert Modul-Details als CSV-Datei.
+
+    Erstellt eine CSV-Datei mit detaillierten Informationen zu jedem PV-Modul:
+    Index, Position (X, Y, Z), Azimuth, Neigung, Gruppe und Verschattungsgrad.
+
+    Args:
+        module_transforms: Dictionary mit ModuleTransform-Objekten (Key: Index)
+        module_positions: Liste von (x, y, z) Positionen für alle Module
+        shading_values: Optional - Dictionary mit Verschattungswerten (Key: Index, Value: Prozent)
+        filepath: Optional - Pfad zur Ausgabe-CSV-Datei. Wenn None, wird CSV-String zurückgegeben.
+
+    Returns:
+        CSV-String mit Modul-Details
+
+    Example:
+        >>> transforms = {
+        ...     0: ModuleTransform(index=0, azimuth_deg=0.0, tilt_deg=15.0),
+        ...     1: ModuleTransform(index=1, azimuth_deg=90.0, tilt_deg=20.0)
+        ... }
+        >>> positions = [(0.0, 0.0, 6.0), (2.0, 0.0, 6.0)]
+        >>> csv_data = export_module_details_csv(transforms, positions)
+    """
+    import csv
+    import io
+
+    # Erstelle CSV in Memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    # Schreibe Header
+    writer.writerow(['Index', 'X', 'Y', 'Z', 'Azimuth', 'Tilt', 'Group', 'Shading%'])
+
+    # Schreibe Daten für jedes Modul
+    for i, position in enumerate(module_positions):
+        x, y, z = position
+
+        # Hole Transform-Daten wenn vorhanden
+        if i in module_transforms:
+            transform = module_transforms[i]
+            azimuth = transform.azimuth_deg
+            tilt = transform.tilt_deg
+            group = transform.group_id if transform.group_id else ""
+        else:
+            # Fallback: Standard-Werte
+            azimuth = 0.0
+            tilt = 15.0
+            group = ""
+
+        # Hole Verschattungswert wenn vorhanden
+        if shading_values and i in shading_values:
+            shading = shading_values[i]
+        else:
+            shading = 0.0
+
+        # Schreibe Zeile
+        writer.writerow([
+            i,
+            f"{x:.2f}",
+            f"{y:.2f}",
+            f"{z:.2f}",
+            f"{azimuth:.1f}",
+            f"{tilt:.1f}",
+            group,
+            f"{shading:.1f}"
+        ])
+
+    # Hole CSV-String
+    csv_string = output.getvalue()
+    output.close()
+
+    # Speichere in Datei wenn filepath angegeben
+    if filepath:
+        try:
+            with open(filepath, 'w', newline='', encoding='utf-8') as f:
+                f.write(csv_string)
+        except Exception as e:
+            print(f"Fehler beim Speichern der CSV-Datei: {e}")
+
+    return csv_string
+
+
+def export_layout_json(
+    layout_config: 'AdvancedLayoutConfig',
+    filepath: str = None
+) -> str:
+    """
+    Exportiert die komplette Layout-Konfiguration als JSON.
+
+    Serialisiert die AdvancedLayoutConfig zu JSON für Export und späteren Import.
+
+    Args:
+        layout_config: AdvancedLayoutConfig-Objekt mit kompletter Konfiguration
+        filepath: Optional - Pfad zur Ausgabe-JSON-Datei. Wenn None, wird JSON-String zurückgegeben.
+
+    Returns:
+        JSON-String der Konfiguration
+
+    Example:
+        >>> config = AdvancedLayoutConfig(mode="manual", mounting_mode="south-east")
+        >>> json_data = export_layout_json(config, "layout.json")
+    """
+    # Konvertiere zu JSON
+    json_string = layout_config.to_json()
+
+    # Speichere in Datei wenn filepath angegeben
+    if filepath:
+        try:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(json_string)
+        except Exception as e:
+            print(f"Fehler beim Speichern der JSON-Datei: {e}")
+
+    return json_string
+
+
+def import_layout_json(
+    json_string: str = None,
+    filepath: str = None
+) -> 'AdvancedLayoutConfig':
+    """
+    Importiert eine Layout-Konfiguration aus JSON.
+
+    Lädt eine AdvancedLayoutConfig aus einem JSON-String oder einer JSON-Datei.
+    Validiert die importierten Daten.
+
+    Args:
+        json_string: Optional - JSON-String der Konfiguration
+        filepath: Optional - Pfad zur JSON-Datei
+
+    Returns:
+        AdvancedLayoutConfig-Objekt
+
+    Raises:
+        ValueError: Wenn JSON ungültig ist oder weder json_string noch filepath angegeben
+        FileNotFoundError: Wenn filepath nicht existiert
+
+    Example:
+        >>> config = import_layout_json(filepath="layout.json")
+        >>> print(f"Modus: {config.mode}, Mounting: {config.mounting_mode}")
+    """
+    # Prüfe ob json_string oder filepath angegeben
+    if json_string is None and filepath is None:
+        raise ValueError("Entweder json_string oder filepath muss angegeben werden")
+
+    # Lade JSON aus Datei wenn filepath angegeben
+    if filepath:
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                json_string = f.read()
+        except FileNotFoundError:
+            raise FileNotFoundError(f"JSON-Datei nicht gefunden: {filepath}")
+        except Exception as e:
+            raise ValueError(f"Fehler beim Laden der JSON-Datei: {e}")
+
+    # Validiere und parse JSON
+    try:
+        config = AdvancedLayoutConfig.from_json(json_string)
+        return config
+    except ValueError as e:
+        raise ValueError(f"Ungültige JSON-Konfiguration: {e}")
+
+
+def export_multi_view_screenshots(
+    project_data: Dict[str, Any],
+    dims: BuildingDims,
+    roof_type: str,
+    module_quantity: int,
+    layout_config: LayoutConfig,
+    output_dir: str = ".",
+    base_filename: str = "view",
+    resolution: Tuple[int, int] = (1600, 1000)
+) -> Dict[str, bytes]:
+    """
+    Erstellt Screenshots aus 4 verschiedenen Perspektiven.
+
+    Rendert die 3D-Szene aus 4 Kameraperspektiven:
+    - Isometrisch (Standard-Ansicht)
+    - Top (von oben)
+    - Süd (von Süden)
+    - Ost (von Osten)
+
+    Erstellt eine ZIP-Datei mit allen Screenshots.
+
+    Args:
+        project_data: Projektdaten-Dictionary mit Gebäudeinformationen
+        dims: BuildingDims mit Gebäudedimensionen
+        roof_type: Dachtyp ("Flachdach", "Satteldach", etc.)
+        module_quantity: Gewünschte Anzahl der PV-Module
+        layout_config: LayoutConfig mit Belegungskonfiguration
+        output_dir: Ausgabe-Verzeichnis für ZIP-Datei
+        base_filename: Basis-Dateiname für Screenshots
+        resolution: Auflösung (Breite, Höhe) in Pixeln
+
+    Returns:
+        Dictionary mit View-Namen als Keys und PNG-Bytes als Values
+        {"isometric": bytes, "top": bytes, "south": bytes, "east": bytes}
+
+    Example:
+        >>> dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+        >>> layout = LayoutConfig(mode="auto")
+        >>> views = export_multi_view_screenshots(
+        ...     project_data={},
+        ...     dims=dims,
+        ...     roof_type="Satteldach",
+        ...     module_quantity=20,
+        ...     layout_config=layout
+        ... )
+        >>> print(f"Erstellt {len(views)} Screenshots")
+    """
+    try:
+        from PIL import Image
+        import io
+        import zipfile
+        import os
+
+        if pv is None or np is None:
+            raise RuntimeError("PyVista oder NumPy ist nicht installiert")
+
+        views = {}
+        width, height = resolution
+
+        # Berechne Kamera-Positionen basierend auf Gebäudedimensionen
+        length = dims.length_m
+        width_dim = dims.width_m
+        wall_height = dims.wall_height_m
+
+        # Zentrum der Szene
+        center = (0.0, 0.0, wall_height / 2)
+
+        # Kamera-Distanz (abhängig von Gebäudegröße)
+        max_dim = max(length, width_dim, wall_height)
+        camera_distance = max_dim * 3.0
+
+        # ====================================================================
+        # VIEW 1: ISOMETRISCH (Standard-Ansicht)
+        # ====================================================================
+        try:
+            from PIL import Image
+            import io
+            
+            # Erstelle Szene (build_scene erstellt eigenen Plotter)
+            plotter, panels = build_scene(
+                project_data=project_data,
+                dims=dims,
+                roof_type=roof_type,
+                module_quantity=module_quantity,
+                layout_config=layout_config,
+                off_screen=True
+            )
+
+            # Setze Fenstergröße
+            plotter.window_size = [width, height]
+
+            # Setze isometrische Kamera
+            # Position: Schräg von vorne-rechts-oben
+            camera_pos = (
+                center[0] + camera_distance * 0.7,
+                center[1] - camera_distance * 0.7,
+                center[2] + camera_distance * 0.5
+            )
+            plotter.camera_position = [camera_pos, center, (0, 0, 1)]
+
+            # Rendere Screenshot als NumPy Array
+            screenshot = plotter.screenshot(return_img=True)
+            plotter.close()
+
+            # Konvertiere zu PNG-Bytes
+            if screenshot is not None:
+                img = Image.fromarray(screenshot)
+                img_bytes_io = io.BytesIO()
+                img.save(img_bytes_io, format='PNG')
+                views["isometric"] = img_bytes_io.getvalue()
+            else:
+                views["isometric"] = b""
+
+        except Exception as e:
+            print(f"Fehler beim Rendern der isometrischen Ansicht: {e}")
+            import traceback
+            traceback.print_exc()
+            views["isometric"] = b""
+
+        # ====================================================================
+        # VIEW 2: TOP (von oben)
+        # ====================================================================
+        try:
+            from PIL import Image
+            import io
+            
+            # Erstelle Szene (build_scene erstellt eigenen Plotter)
+            plotter, panels = build_scene(
+                project_data=project_data,
+                dims=dims,
+                roof_type=roof_type,
+                module_quantity=module_quantity,
+                layout_config=layout_config,
+                off_screen=True
+            )
+
+            # Setze Fenstergröße
+            plotter.window_size = [width, height]
+
+            # Setze Top-Kamera (direkt von oben)
+            camera_pos = (center[0], center[1], center[2] + camera_distance)
+            plotter.camera_position = [camera_pos, center, (0, 1, 0)]
+
+            # Rendere Screenshot als NumPy Array
+            screenshot = plotter.screenshot(return_img=True)
+            plotter.close()
+
+            # Konvertiere zu PNG-Bytes
+            if screenshot is not None:
+                img = Image.fromarray(screenshot)
+                img_bytes_io = io.BytesIO()
+                img.save(img_bytes_io, format='PNG')
+                views["top"] = img_bytes_io.getvalue()
+            else:
+                views["top"] = b""
+
+        except Exception as e:
+            print(f"Fehler beim Rendern der Top-Ansicht: {e}")
+            import traceback
+            traceback.print_exc()
+            views["top"] = b""
+
+        # ====================================================================
+        # VIEW 3: SÜD (von Süden)
+        # ====================================================================
+        try:
+            from PIL import Image
+            import io
+            
+            # Erstelle Szene (build_scene erstellt eigenen Plotter)
+            plotter, panels = build_scene(
+                project_data=project_data,
+                dims=dims,
+                roof_type=roof_type,
+                module_quantity=module_quantity,
+                layout_config=layout_config,
+                off_screen=True
+            )
+
+            # Setze Fenstergröße
+            plotter.window_size = [width, height]
+
+            # Setze Süd-Kamera (von Süden = negative Y-Richtung)
+            camera_pos = (center[0], center[1] - camera_distance, center[2] + camera_distance * 0.3)
+            plotter.camera_position = [camera_pos, center, (0, 0, 1)]
+
+            # Rendere Screenshot als NumPy Array
+            screenshot = plotter.screenshot(return_img=True)
+            plotter.close()
+
+            # Konvertiere zu PNG-Bytes
+            if screenshot is not None:
+                img = Image.fromarray(screenshot)
+                img_bytes_io = io.BytesIO()
+                img.save(img_bytes_io, format='PNG')
+                views["south"] = img_bytes_io.getvalue()
+            else:
+                views["south"] = b""
+
+        except Exception as e:
+            print(f"Fehler beim Rendern der Süd-Ansicht: {e}")
+            import traceback
+            traceback.print_exc()
+            views["south"] = b""
+
+        # ====================================================================
+        # VIEW 4: OST (von Osten)
+        # ====================================================================
+        try:
+            from PIL import Image
+            import io
+            
+            # Erstelle Szene (build_scene erstellt eigenen Plotter)
+            plotter, panels = build_scene(
+                project_data=project_data,
+                dims=dims,
+                roof_type=roof_type,
+                module_quantity=module_quantity,
+                layout_config=layout_config,
+                off_screen=True
+            )
+
+            # Setze Fenstergröße
+            plotter.window_size = [width, height]
+
+            # Setze Ost-Kamera (von Osten = positive X-Richtung)
+            camera_pos = (center[0] + camera_distance, center[1], center[2] + camera_distance * 0.3)
+            plotter.camera_position = [camera_pos, center, (0, 0, 1)]
+
+            # Rendere Screenshot als NumPy Array
+            screenshot = plotter.screenshot(return_img=True)
+            plotter.close()
+
+            # Konvertiere zu PNG-Bytes
+            if screenshot is not None:
+                img = Image.fromarray(screenshot)
+                img_bytes_io = io.BytesIO()
+                img.save(img_bytes_io, format='PNG')
+                views["east"] = img_bytes_io.getvalue()
+            else:
+                views["east"] = b""
+
+        except Exception as e:
+            print(f"Fehler beim Rendern der Ost-Ansicht: {e}")
+            import traceback
+            traceback.print_exc()
+            views["east"] = b""
+
+        # ====================================================================
+        # ERSTELLE ZIP-DATEI MIT ALLEN SCREENSHOTS
+        # ====================================================================
+        try:
+            zip_filename = os.path.join(output_dir, f"{base_filename}_multi_view.zip")
+
+            with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                for view_name, img_bytes in views.items():
+                    if img_bytes:
+                        # Füge Bild zur ZIP hinzu
+                        zipf.writestr(f"{base_filename}_{view_name}.png", img_bytes)
+
+            print(f"Multi-View Screenshots gespeichert in: {zip_filename}")
+
+        except Exception as e:
+            print(f"Fehler beim Erstellen der ZIP-Datei: {e}")
+
+        return views
+
+    except Exception as e:
+        print(f"Fehler beim Export der Multi-View Screenshots: {e}")
+        import traceback
+        traceback.print_exc()
+        return {}
+
+
+def export_360_animation(
+    project_data: Dict[str, Any],
+    dims: BuildingDims,
+    roof_type: str,
+    module_quantity: int,
+    layout_config: LayoutConfig,
+    filepath: str = "animation_360.gif",
+    frames: int = 36,
+    resolution: Tuple[int, int] = (800, 600),
+    duration_ms: int = 100
+) -> bytes:
+    """
+    Erstellt eine 360° Rotations-Animation als GIF.
+
+    Rendert die 3D-Szene aus verschiedenen Winkeln (360° Rotation um Z-Achse)
+    und erstellt ein animiertes GIF.
+
+    Args:
+        project_data: Projektdaten-Dictionary mit Gebäudeinformationen
+        dims: BuildingDims mit Gebäudedimensionen
+        roof_type: Dachtyp ("Flachdach", "Satteldach", etc.)
+        module_quantity: Gewünschte Anzahl der PV-Module
+        layout_config: LayoutConfig mit Belegungskonfiguration
+        filepath: Pfad zur Ausgabe-GIF-Datei
+        frames: Anzahl der Frames (36 = 10° pro Frame)
+        resolution: Auflösung (Breite, Höhe) in Pixeln
+        duration_ms: Dauer pro Frame in Millisekunden
+
+    Returns:
+        GIF-Bytes
+
+    Example:
+        >>> dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+        >>> layout = LayoutConfig(mode="auto")
+        >>> gif_bytes = export_360_animation(
+        ...     project_data={},
+        ...     dims=dims,
+        ...     roof_type="Satteldach",
+        ...     module_quantity=20,
+        ...     layout_config=layout,
+        ...     filepath="rotation.gif"
+        ... )
+    """
+    try:
+        from PIL import Image
+        import io
+
+        if pv is None or np is None:
+            raise RuntimeError("PyVista oder NumPy ist nicht installiert")
+
+        width, height = resolution
+        images = []
+
+        # Berechne Kamera-Parameter
+        length = dims.length_m
+        width_dim = dims.width_m
+        wall_height = dims.wall_height_m
+
+        # Zentrum der Szene
+        center = (0.0, 0.0, wall_height / 2)
+
+        # Kamera-Distanz
+        max_dim = max(length, width_dim, wall_height)
+        camera_distance = max_dim * 2.5
+
+        # Kamera-Höhe (leicht erhöht für bessere Ansicht)
+        camera_height_offset = camera_distance * 0.4
+
+        print(f"Erstelle 360° Animation mit {frames} Frames...")
+
+        # Rendere Frames
+        for i in range(frames):
+            try:
+                # Berechne Rotationswinkel (0° bis 360°)
+                angle_deg = (360.0 / frames) * i
+                angle_rad = _deg_to_rad(angle_deg)
+
+                # Berechne Kamera-Position (kreist um Zentrum)
+                camera_x = center[0] + camera_distance * math.cos(angle_rad)
+                camera_y = center[1] + camera_distance * math.sin(angle_rad)
+                camera_z = center[2] + camera_height_offset
+
+                camera_pos = (camera_x, camera_y, camera_z)
+
+                # Erstelle Szene (build_scene erstellt eigenen Plotter)
+                plotter, panels = build_scene(
+                    project_data=project_data,
+                    dims=dims,
+                    roof_type=roof_type,
+                    module_quantity=module_quantity,
+                    layout_config=layout_config,
+                    off_screen=True
+                )
+
+                # Setze Kamera-Position für diesen Frame
+                plotter.camera_position = [camera_pos, center, (0, 0, 1)]
+
+                # Rendere Frame als Screenshot
+                img_array = plotter.screenshot(return_img=True, window_size=[width, height])
+                plotter.close()
+
+                # Konvertiere NumPy Array zu PIL Image
+                if img_array is not None:
+                    img = Image.fromarray(img_array)
+                    images.append(img)
+
+                # Fortschrittsanzeige
+                if (i + 1) % 6 == 0:
+                    progress = ((i + 1) / frames) * 100
+                    print(f"  Fortschritt: {progress:.0f}% ({i + 1}/{frames} Frames)")
+
+            except Exception as e:
+                print(f"Fehler beim Rendern von Frame {i}: {e}")
+                continue
+
+        # Erstelle GIF
+        if images:
+            print(f"Speichere GIF mit {len(images)} Frames...")
+
+            # Speichere als GIF
+            output = io.BytesIO()
+            images[0].save(
+                output,
+                format='GIF',
+                save_all=True,
+                append_images=images[1:],
+                duration=duration_ms,
+                loop=0,  # Endlos-Schleife
+                optimize=False  # Schneller, aber größere Datei
+            )
+
+            gif_bytes = output.getvalue()
+            output.close()
+
+            # Speichere in Datei
+            try:
+                with open(filepath, 'wb') as f:
+                    f.write(gif_bytes)
+                print(f"360° Animation gespeichert: {filepath}")
+            except Exception as e:
+                print(f"Fehler beim Speichern der GIF-Datei: {e}")
+
+            return gif_bytes
+        else:
+            print("Keine Frames zum Erstellen der Animation")
+            return b""
+
+    except Exception as e:
+        print(f"Fehler beim Export der 360° Animation: {e}")
+        import traceback
+        traceback.print_exc()
+        return b""

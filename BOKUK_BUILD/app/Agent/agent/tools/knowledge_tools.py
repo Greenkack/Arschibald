@@ -10,16 +10,13 @@ Requirements: 3.1, 3.2, 3.3, 3.4, 3.5
 
 import os
 import time
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from pathlib import Path
 
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings
-
-# LangChain 1.0+ Import-Updates
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_core.tools import Tool
+if TYPE_CHECKING:
+    # Nur für Typprüfungen, nicht zur Laufzeit importieren
+    from langchain_community.vectorstores import FAISS  # noqa: F401
+    from langchain_core.tools import Tool  # noqa: F401
 
 # Import logging utilities
 from agent.logging_config import get_logger, log_tool_execution
@@ -41,7 +38,7 @@ def setup_knowledge_base(
     chunk_size: int = 800,
     chunk_overlap: int = 150,
     lazy_load: bool = True
-) -> Optional[FAISS]:
+) -> Optional["FAISS"]:
     """
     Load PDFs, create embeddings, and build FAISS vector store.
 
@@ -83,6 +80,12 @@ def setup_knowledge_base(
     if _cached_vector_store is not None and not lazy_load:
         logger.info("Returning cached knowledge base from memory")
         return _cached_vector_store
+
+    # Laufzeit-Imports, um optionale Abhängigkeiten nur bei Bedarf zu laden
+    from langchain_community.document_loaders import PyPDFLoader
+    from langchain_community.vectorstores import FAISS
+    from langchain_openai import OpenAIEmbeddings
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
 
     logger.info(f"Setting up knowledge base from {path}")
     start_time = time.time()
@@ -365,7 +368,7 @@ def get_cache_info() -> dict:
 def lazy_load_knowledge_base(
     path: str = "knowledge_base",
     db_path: str = "faiss_index"
-) -> Optional[FAISS]:
+) -> Optional["FAISS"]:
     """
     Lazy load knowledge base on first use.
 
@@ -404,7 +407,7 @@ def lazy_load_knowledge_base(
     return vector_store
 
 
-def knowledge_base_search(vector_store: Optional[FAISS]) -> Tool:
+def knowledge_base_search(vector_store: Optional["FAISS"]) -> "Tool":
     """
     Create a search tool with vector store access.
 
@@ -505,6 +508,9 @@ def knowledge_base_search(vector_store: Optional[FAISS]) -> Tool:
             )
 
             return error_msg
+
+    # Laufzeit-Import für Tool, um Top-Level-Abhängigkeit zu vermeiden
+    from langchain_core.tools import Tool
 
     return Tool(
         name="knowledge_base_search", description=(

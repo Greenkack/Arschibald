@@ -189,36 +189,38 @@ _ensure_plotly_chart_unwrapped()
 # sodass man Inhalte nur einmal aufklappen muss.
 try:
     from contextlib import contextmanager
+    import inspect
 
     ALLOW_NESTED_EXPANDERS = False
-    _EXPANDER_DEPTH = 0
     _orig_expander = getattr(st, "expander", None)
 
     if callable(_orig_expander):
 
         @contextmanager
         def _smart_expander(label: str, expanded: bool = False, **kwargs):
-            global _EXPANDER_DEPTH
+            # Prüfe ob wir bereits in einem Expander sind (Stack-Analyse)
+            frame = inspect.currentframe()
+            depth = 0
+            try:
+                while frame:
+                    if frame.f_code.co_name == '_smart_expander':
+                        depth += 1
+                    frame = frame.f_back
+            finally:
+                del frame
+            
             # Wenn bereits in einem Expander und verschachtelte nicht erlaubt
             # -> Container statt Expander
-            if not ALLOW_NESTED_EXPANDERS and _EXPANDER_DEPTH > 0:
-                _EXPANDER_DEPTH += 1
-                try:
-                    container = st.container()
-                    # Überschrift anzeigen, damit die Struktur sichtbar bleibt
-                    if isinstance(label, str) and label.strip():
-                        container.markdown(f"#### {label}")
-                    with container:
-                        yield
-                finally:
-                    _EXPANDER_DEPTH -= 1
+            if not ALLOW_NESTED_EXPANDERS and depth > 1:
+                container = st.container()
+                # Überschrift anzeigen, damit die Struktur sichtbar bleibt
+                if isinstance(label, str) and label.strip():
+                    container.markdown(f"#### {label}")
+                with container:
+                    yield
             else:
-                _EXPANDER_DEPTH += 1
-                try:
-                    with _orig_expander(label, expanded=expanded, **kwargs):
-                        yield
-                finally:
-                    _EXPANDER_DEPTH -= 1
+                with _orig_expander(label, expanded=expanded, **kwargs):
+                    yield
 
         # Monkey-Patch nur anwenden, wenn noch nicht aktiv
         if getattr(st.expander, "__name__", "") != "_smart_expander":

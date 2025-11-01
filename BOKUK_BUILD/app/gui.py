@@ -17,6 +17,19 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 # ========================================
+# MIGRATION: Cleanup nicht-serialisierbarer Session State Objekte
+# ========================================
+# Muss VOR allen anderen Imports passieren, um Serialisierungsfehler zu vermeiden
+if 'progress_config' in st.session_state:
+    # Prüfe ob progress_config ein nicht-serialisierbares Objekt ist
+    config = st.session_state.progress_config
+    if hasattr(config, '__class__') and hasattr(config.__class__, '__name__'):
+        class_name = config.__class__.__name__
+        # Wenn es ProgressConfig Objekt ist, lösche es (wird neu als Dict initialisiert)
+        if class_name == 'ProgressConfig' and not isinstance(config, dict):
+            del st.session_state.progress_config
+
+# ========================================
 # CORE INTEGRATION - Phase 1: Config & Logging
 # ========================================
 # Sichere Integration der core-Module für Stabilität & Performance
@@ -1301,8 +1314,9 @@ def main():
             if isinstance(action, str) and action:
                 handle_context_menu_action(action)
     
-    # Ausfahrbarer Drawer - unten rechts
-    drawer_action = components.html("""
+    # Ausfahrbarer Drawer - unten rechts mit funktionierenden Click Events
+    # JavaScript manipuliert das DOM direkt und setzt Session State für Callbacks
+    components.html("""
     <script>
     (function() {
         const parentDoc = window.parent?.document;
@@ -1409,33 +1423,39 @@ def main():
         drawer.innerHTML = `
             <button class="drawer-close">×</button>
             <div class="drawer-title">Quick Actions</div>
-            <button class="drawer-btn" data-action="action1">📊 Button 1</button>
-            <button class="drawer-btn" data-action="action2">🔧 Button 2</button>
-            <button class="drawer-btn" data-action="action3">⚙️ Button 3</button>
-            <button class="drawer-btn" data-action="action4">📈 Button 4</button>
-            <button class="drawer-btn" data-action="action5">🎯 Button 5</button>
+            <button class="drawer-btn" data-action="voice_command">🎤 Sprachbefehl</button>
+            <button class="drawer-btn" data-action="3d_view">🏠 3D Visualisierung</button>
+            <button class="drawer-btn" data-action="save_customer">💾 Kunde ins CRM</button>
+            <button class="drawer-btn" data-action="quick_pdf">⚡ Blitz-Angebot</button>
+            <button class="drawer-btn" data-action="help_menu">❓ Hilfe-Menü</button>
             <button class="drawer-btn" data-action="logout" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);">🚪 Abmelden</button>
         `;
         parentDoc.body.appendChild(drawer);
         
-        // Event Listeners für Drawer Buttons
+        // Event Listeners für Drawer Buttons - Direkt Streamlit Query Params setzen
         drawer.querySelectorAll('.drawer-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
+                e.preventDefault();
                 const action = this.getAttribute('data-action');
-                console.log('Drawer action:', action);
+                console.log('Drawer action clicked:', action);
                 
-                if (action === 'logout') {
-                    // Trigger Streamlit Logout via setComponentValue
-                    console.log('Triggering logout...');
-                    
-                    // Sende Logout-Signal zurück an Streamlit
-                    if (window.Streamlit) {
-                        window.Streamlit.setComponentValue('logout');
-                    }
-                    
-                    // Schließe Drawer
-                    drawer.classList.remove('open');
+                // Setze URL Query Parameter für Streamlit
+                const url = new URL(window.parent.location.href);
+                url.searchParams.set('drawer_action', action);
+                url.searchParams.set('drawer_nonce', Date.now()); // Force refresh
+                window.parent.history.pushState({}, '', url);
+                
+                // Trigger Streamlit rerun
+                const buttons = window.parent.document.querySelectorAll('button[kind="primary"]');
+                if (buttons.length > 0) {
+                    buttons[0].click();
+                } else {
+                    // Alternative: Sende Custom Event
+                    window.parent.dispatchEvent(new Event('popstate'));
                 }
+                
+                // Schließe Drawer
+                drawer.classList.remove('open');
             });
         });
         
@@ -1460,11 +1480,43 @@ def main():
     </script>
     """, height=0, width=0)
     
-    # Logout-Handler: Wenn Drawer "logout" zurückgibt
-    if drawer_action == 'logout':
-        from user_menu import logout_user
-        logout_user()
+    # Drawer Action Handler via Query Params
+    drawer_action = st.query_params.get('drawer_action')
+    drawer_nonce = st.query_params.get('drawer_nonce')
+    
+    if drawer_action and drawer_nonce != st.session_state.get('last_drawer_nonce'):
+        st.session_state['last_drawer_nonce'] = drawer_nonce
+        
+        # Clear query params
+        st.query_params.clear()
+        
+        if drawer_action == 'logout':
+            from user_menu import logout_user
+            logout_user()
+            st.rerun()
+        elif drawer_action == 'voice_command':
+            from drawer_actions import handle_drawer_action_voice_command
+            handle_drawer_action_voice_command()
+            st.rerun()
+        elif drawer_action == '3d_view':
+            from drawer_actions import handle_drawer_action_3d_visualization
+            handle_drawer_action_3d_visualization()
+            st.rerun()
+        elif drawer_action == 'save_customer':
+            from drawer_actions import handle_drawer_action_save_customer
+            handle_drawer_action_save_customer()
+            st.rerun()
+        elif drawer_action == 'quick_pdf':
+            from drawer_actions import handle_drawer_action_quick_pdf
+            handle_drawer_action_quick_pdf()
+            st.rerun()
+        elif drawer_action == 'help_menu':
+            st.session_state['show_help_drawer'] = True
         st.rerun()
+    
+    # Show drawer notifications
+    from drawer_actions import show_drawer_notifications
+    show_drawer_notifications()
 
 
 
@@ -1576,6 +1628,7 @@ def main():
         main_menu = [
             {"icon": "📊", "label": get_text_gui("menu_item_input"), "key": "input"},
             {"icon": "☀️", "label": TEXTS.get("menu_item_solar_calculator", "Solar Calculator"), "key": "solar_calculator"},
+            {"icon": "🏠", "label": "3D PV-Visualisierung", "key": "3d_view"},
             {"icon": "🔥", "label": get_text_gui("menu_item_heatpump"), "key": "heatpump"},
             {"icon": "💰", "label": get_text_gui("menu_item_analysis"), "key": "analysis"},
         ]
@@ -2753,6 +2806,29 @@ def main():
 
     elif selected_page_key == "quick_calc":
         # A.G.E.N.T. - Autonomous AI Expert System
+        # Check for voice mode activation
+        if st.session_state.get('voice_mode'):
+            st.info("🎤 **Sprachsteuerung aktiviert!** Sprechen Sie Ihre Anfrage.")
+            # Add voice input handling here if speech_recognition available
+            try:
+                import speech_recognition as sr
+                recognizer = sr.Recognizer()
+                with sr.Microphone() as source:
+                    st.write("Höre zu...")
+                    audio = recognizer.listen(source, timeout=5)
+                    try:
+                        text = recognizer.recognize_google(audio, language='de-DE')
+                        st.session_state['voice_input'] = text
+                        st.success(f"Erkannt: {text}")
+                    except sr.UnknownValueError:
+                        st.error("Sprache konnte nicht verstanden werden")
+                    except sr.RequestError:
+                        st.error("Spracherkennung nicht verfügbar")
+            except ImportError:
+                st.warning("⚠️ Spracherkennung nicht installiert. Bitte installieren Sie 'SpeechRecognition' und 'pyaudio'.")
+            
+            st.session_state['voice_mode'] = False
+        
         # Use agent_ui module if available, fallback to quick_calc for backward compatibility
         if agent_ui_module and callable(getattr(agent_ui_module, 'render_agent_menu', None)):
             agent_ui_module.render_agent_menu() # type: ignore
@@ -2870,6 +2946,38 @@ def main():
             solar_calculator_module.render_solar_calculator(TEXTS, module_name=TEXTS.get("menu_item_solar_calculator", "Solar Calculator")) # type: ignore
         else:
             st.warning(get_text_gui("module_unavailable_details", "Solar Calculator Modul nicht verfügbar."))
+    
+    elif selected_page_key == "3d_view":
+        st.header("🏠 3D PV-Visualisierung")
+        try:
+            # Execute the 3D view page code directly
+            import os
+            page_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages", "solar_3d_view.py")
+            with open(page_path, 'r', encoding='utf-8') as f:
+                page_code = f.read()
+            # Remove the page config line as it's already set in gui.py
+            page_code = page_code.replace('st.set_page_config(', '# st.set_page_config(')
+            exec(page_code, {'st': st, '__name__': '__main__'})
+        except FileNotFoundError:
+            st.error("3D-Visualisierung Seite nicht gefunden.")
+            st.info("Bitte stellen Sie sicher, dass pages/solar_3d_view.py existiert.")
+        except ImportError as e:
+            st.error(f"Import-Fehler in 3D-Visualisierung: {e}")
+            st.info("Bitte stellen Sie sicher, dass alle erforderlichen Pakete installiert sind (pyvista, stpyvista, trimesh).")
+        except Exception as e:
+            st.error(f"Fehler beim Laden der 3D-Visualisierung: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+    
+    # Hilfe-Menü (nur über Drawer erreichbar)
+    elif st.session_state.get('show_help_drawer'):
+        from drawer_actions import render_help_menu
+        render_help_menu()
+        
+        # Back button
+        if st.button("← Zurück", key="help_back_btn"):
+            st.session_state['show_help_drawer'] = False
+            st.rerun()
 
 if __name__ == "__main__":
     try:

@@ -167,6 +167,8 @@ ADMIN_TAB_KEYS_DEFINITION_GLOBAL = [
     "admin_tab_pdf_design",
     "admin_tab_payment_terms",
     "admin_tab_visualization_settings",
+    "admin_tab_build_infos",  # NEU: Build Infos & Dokumentation
+    "admin_tab_security_settings",  # NEU: Sicherheitseinstellungen
     "admin_tab_advanced"]
 
 # Icon-Mapping für Admin-Menü-Kategorien (Deutsche Emojis)
@@ -184,6 +186,8 @@ ADMIN_TAB_ICONS = {
     "admin_tab_payment_terms": "💳",
     "admin_tab_visualization_settings": "📊",
     "admin_tab_ui_effects": "✨",
+    "admin_tab_build_infos": "📋",  # NEU
+    "admin_tab_security_settings": "🔐",  # NEU
     "admin_tab_advanced": "🧠"
 }
 
@@ -200,6 +204,8 @@ ADMIN_TAB_DESCRIPTIONS = {
     "admin_tab_pdf_design": "PDF-Looks, Cover und Layouts definieren",
     "admin_tab_payment_terms": "Zahlungsbedingungen & Varianten steuern",
     "admin_tab_visualization_settings": "Themes, UI-Effekte, Charts & Farben",
+    "admin_tab_build_infos": "Build-Informationen & Dokumentation (Passwortgeschützt)",  # NEU
+    "admin_tab_security_settings": "Sicherheit & Passwortschutz konfigurieren",  # NEU
     "admin_tab_advanced": "Erweiterte Tools, Debugging & Integrationen"}
 
 # Deutsche Beschriftungen für Admin-Tabs
@@ -216,6 +222,8 @@ ADMIN_TAB_LABELS_DE = {
     "admin_tab_pdf_design": "PDF-Design Einstellungen",
     "admin_tab_payment_terms": "Zahlungsbedingungen Einstellungen",
     "admin_tab_visualization_settings": "Anzeigeeinstellungen",
+    "admin_tab_build_infos": "📋 Build Infos",  # NEU
+    "admin_tab_security_settings": "🔐 Sicherheitseinstellungen",  # NEU
     "admin_tab_ui_effects": "UI-Effekte",
     "admin_tab_advanced": "Erweiterte Einstellungen"
 }
@@ -3549,6 +3557,8 @@ def render_admin_panel(
         "admin_tab_visualization_settings": lambda: render_visualization_settings(
             load_admin_setting_func,
             save_admin_setting_func),
+        "admin_tab_build_infos": lambda: render_build_infos_tab(),  # NEU
+        "admin_tab_security_settings": lambda: render_security_settings_tab(),  # NEU
         "admin_tab_advanced": lambda: render_advanced_settings(
             load_admin_setting_func,
             save_admin_setting_func),
@@ -3881,3 +3891,31 @@ def render_company_image_templates_tab(company_id: int):
 
     except ImportError:
         st.error(" Datenbankfunktionen für Bildvorlagen nicht verfügbar.")
+
+
+# === NEUE FUNKTIONEN FÜR PASSWORTSCHUTZ UND BUILD INFOS ===
+
+def render_build_infos_tab():
+    """Rendert den Build Infos Tab mit Passwortschutz"""
+    try:
+        from admin_build_infos_ui import render_build_infos_tab as render_build_infos
+        render_build_infos()
+    except ImportError as e:
+        st.error(f"Build Infos UI konnte nicht geladen werden: {e}")
+        st.info("Stellen Sie sicher, dass admin_build_infos_ui.py verfügbar ist.")
+    except Exception as e:
+        st.error(f"Fehler beim Rendern der Build Infos: {e}")
+        st.text(traceback.format_exc())
+
+
+def render_security_settings_tab():
+    """Rendert den Sicherheitseinstellungen Tab"""
+    try:
+        from admin_security import render_admin_security_settings
+        render_admin_security_settings()
+    except ImportError as e:
+        st.error(f"Admin Security Modul konnte nicht geladen werden: {e}")
+        st.info("Stellen Sie sicher, dass admin_security.py verfügbar ist.")
+    except Exception as e:
+        st.error(f"Fehler beim Rendern der Sicherheitseinstellungen: {e}")
+        st.text(traceback.format_exc())

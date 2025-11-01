@@ -422,7 +422,12 @@ Dieser Plan beschreibt die schrittweise Implementierung des 3D-Visualisierungsto
     - Optimiere Imports
     - Formatiere Code (PEP 8)
   
-  - [ ] 10.4 Finale Integration und Deployment
+  - [x] 10.4 Finale Integration und Deployment
+
+
+
+
+
     - Merge in Hauptbranch
     - Aktualisiere requirements.txt
     - Teste auf verschiedenen Systemen (Windows, Linux, macOS)
@@ -435,3 +440,417 @@ Dieser Plan beschreibt die schrittweise Implementierung des 3D-Visualisierungsto
 - Regelmäßig committen nach jedem abgeschlossenen Task
 - Bei Performance-Problemen: Profiling durchführen und optimieren
 - Die Implementierung folgt dem Code aus utils/3d_visuals.md als Referenz
+
+## Phase 2: Erweiterte Funktionen
+
+- [x] 11. Erweiterte Datenstrukturen und Core-Funktionen
+
+
+
+
+  - [x] 11.1 Implementiere ModuleTransform Datenklasse
+
+
+    - Erstelle ModuleTransform mit index, azimuth_deg, tilt_deg, offset_x/y/z, group_id
+    - Implementiere to_dict() und from_dict() Methoden
+    - Füge Validierung für Wertebereiche hinzu (Azimuth 0-360°, Tilt 0-90°)
+    - _Requirements: 21.2, 21.7, 22.1, 22.7, 24.1, 24.7_
+  
+
+
+  - [x] 11.2 Implementiere ModuleGroup Datenklasse
+    - Erstelle ModuleGroup mit name, module_indices, azimuth_deg, tilt_deg, color
+    - Implementiere Methoden zum Hinzufügen/Entfernen von Modulen
+    - Implementiere to_dict() und from_dict() Methoden
+
+
+    - _Requirements: 23.1, 23.2, 23.6_
+  
+  - [x] 11.3 Erweitere LayoutConfig zu AdvancedLayoutConfig
+    - Füge module_transforms Dictionary hinzu
+    - Füge module_groups Dictionary hinzu
+    - Füge mounting_mode, custom_azimuth, custom_tilt hinzu
+    - Füge enable_collision_detection und enable_shading_analysis Flags hinzu
+    - Implementiere erweiterte to_json() und from_json() Methoden
+    - _Requirements: 21.7, 22.7, 23.6, 24.7, 26.7_
+  
+  - [x] 11.4 Implementiere apply_module_transform() Funktion
+
+
+    - Erstelle Modul an Basis-Position
+    - Implementiere Rotation um Y-Achse (Neigung)
+    - Implementiere Rotation um Z-Achse (Azimuth)
+    - Implementiere Positions-Offset (X, Y, Z)
+    - Integriere in build_scene() Workflow
+    - _Requirements: 21.5, 22.4, 22.5, 24.3_
+
+- [x] 12. Kollisionserkennung und Validierung
+
+
+
+
+  - [x] 12.1 Implementiere Bounding-Box Berechnung
+
+
+    - Schreibe get_module_bounding_box() für transformierte Module
+    - Berücksichtige Rotation und Offset
+    - Gebe (min_x, min_y, min_z, max_x, max_y, max_z) zurück
+    - _Requirements: 24.5_
+  
+  - [x] 12.2 Implementiere detect_collisions() Funktion
+
+
+    - Berechne Bounding-Boxes für alle Module
+    - Implementiere Intersection-Test zwischen Boxes
+    - Gebe Liste von Kollisions-Paaren zurück
+    - Optimiere mit Spatial-Hashing für Performance
+    - _Requirements: 24.5, 24.6_
+  
+  - [x] 12.3 Integriere Kollisionserkennung in UI
+
+
+    - Prüfe Kollisionen nach jeder Transformation
+    - Zeige Warnung bei erkannten Kollisionen
+    - Markiere kollidierende Module in rot
+    - Biete "Rückgängig" Option an
+    - _Requirements: 24.6_
+
+- [x] 13. Verschattungs-Analyse
+
+
+
+
+  - [x] 13.1 Implementiere Sonnenpositions-Berechnung
+
+
+    - Schreibe calculate_sun_position(latitude, day_of_year, hour)
+    - Berechne Deklination basierend auf Tag im Jahr
+    - Berechne Stundenwinkel basierend auf Uhrzeit
+    - Berechne Azimuth und Elevation
+    - Gebe (azimuth_deg, elevation_deg) zurück
+    - _Requirements: 28.5_
+  
+  - [x] 13.2 Implementiere Ray-Casting für Verschattung
+
+
+    - Schreibe calculate_shading_for_module(module, all_modules, sun_azimuth, sun_elevation)
+    - Erstelle Ray von Modul-Zentrum zur Sonne
+    - Prüfe Intersection mit anderen Modulen
+    - Berechne Verschattungsgrad (0-100%)
+    - _Requirements: 28.2, 28.7_
+  
+  - [x] 13.3 Implementiere Verschattungs-Visualisierung
+
+
+    - Schreibe visualize_shading() Funktion
+    - Färbe Module basierend auf Verschattungsgrad (Grün → Gelb → Rot)
+    - Implementiere Farbinterpolation
+    - Füge Legende für Farbskala hinzu
+    - _Requirements: 28.2, 28.6_
+  
+  - [x] 13.4 Integriere Verschattungs-Analyse in UI
+
+
+    - Erstelle "Verschattungs-Analyse" Expander in Sidebar
+    - Füge Slider für Tageszeit (6-20 Uhr) hinzu
+    - Füge Selectbox für Jahreszeit (Sommer/Winter/Äquinoktium) hinzu
+    - Füge Eingabefeld für Breitengrad hinzu (Standard: 51.0 für Deutschland)
+    - Zeige Verschattungsgrad pro Modul in Tabelle
+    - _Requirements: 28.1, 28.3, 28.4, 28.5_
+
+- [x] 14. Interaktive Modul-Auswahl und Bearbeitung
+
+
+
+
+  - [x] 14.1 Implementiere Modul-Auswahl-System
+
+
+    - Erstelle selected_modules Liste in Session State
+    - Implementiere Auswahl-Modi: Einzeln, Gruppe, Bereich
+    - Implementiere Einzelauswahl per Index-Eingabe
+    - Implementiere Gruppenauswahl per Dropdown
+    - Implementiere Bereichsauswahl mit Start/End-Index
+    - _Requirements: 25.1, 25.2, 25.4_
+  
+  - [x] 14.2 Implementiere Modul-Hervorhebung
+
+
+    - Färbe ausgewählte Module in gelb/orange
+    - Zeige Auswahl-Indikator (z.B. Rahmen)
+    - Aktualisiere Visualisierung bei Auswahl-Änderung
+    - _Requirements: 25.2_
+  
+  - [x] 14.3 Implementiere Eigenschaften-Panel
+
+
+    - Zeige Eigenschaften ausgewählter Module (Index, Position, Azimuth, Neigung)
+    - Erstelle Bearbeitungs-Controls (Slider, Number-Inputs)
+    - Implementiere "Transformation anwenden" Button
+    - Implementiere "Auswahl aufheben" Button
+    - Zeige Echtzeit-Vorschau der Änderungen
+    - _Requirements: 25.3, 25.5, 25.6, 25.7_
+
+- [x] 15. Erweiterte Aufständerungs-Modi
+
+
+
+
+
+  - [x] 15.1 Implementiere Süd-Ost Aufständerung
+
+
+    - Erstelle mounting_mode "south-east"
+    - Setze Azimuth auf 45° (Süd-Ost)
+    - Setze Neigung auf 15°
+    - Berechne optimalen Reihenabstand
+    - _Requirements: 26.1, 26.2_
+  
+  - [x] 15.2 Implementiere Süd-West Aufständerung
+
+
+    - Erstelle mounting_mode "south-west"
+    - Setze Azimuth auf 315° (Süd-West)
+    - Setze Neigung auf 15°
+    - Berechne optimalen Reihenabstand
+    - _Requirements: 26.1, 26.3_
+  
+  - [x] 15.3 Implementiere Individuellen Aufständerungs-Modus
+
+
+    - Erstelle mounting_mode "custom"
+    - Füge Eingabefelder für custom_azimuth und custom_tilt hinzu
+    - Wende benutzerdefinierte Werte auf alle Module an
+    - Berechne Reihenabstand dynamisch
+    - _Requirements: 26.1, 26.4, 26.5_
+  
+  - [x] 15.4 Integriere neue Modi in UI
+
+
+    - Erweitere Aufständerungs-Selectbox um neue Optionen
+    - Zeige custom-Eingabefelder nur bei "Individuell" Modus
+    - Aktualisiere Visualisierung bei Modus-Wechsel
+    - Speichere Modus in AdvancedLayoutConfig
+    - _Requirements: 26.7_
+
+- [x] 16. Modul-Gruppen-Verwaltung
+
+
+
+
+  - [x] 16.1 Implementiere Gruppen-Erstellung
+
+
+    - Erstelle "Neue Gruppe" Button in UI
+    - Füge Eingabefeld für Gruppen-Name hinzu
+    - Füge Modul-Indizes-Eingabe hinzu (komma-separiert)
+    - Erstelle ModuleGroup-Objekt und speichere in AdvancedLayoutConfig
+    - _Requirements: 23.1, 23.2_
+  
+  - [x] 16.2 Implementiere Gruppen-Übersicht
+
+    - Zeige Liste aller Gruppen mit Namen und Modul-Anzahl
+    - Implementiere "Gruppe bearbeiten" Funktion
+    - Implementiere "Gruppe löschen" Funktion
+    - Zeige Gruppen-Farbe als Indikator
+    - _Requirements: 23.4_
+  
+  - [x] 16.3 Implementiere Gruppen-Transformationen
+
+
+    - Wende Azimuth/Neigung auf alle Gruppen-Module an
+    - Implementiere "Gruppe transformieren" Button
+    - Zeige Vorschau der Gruppen-Transformation
+    - _Requirements: 23.3_
+  
+  - [x] 16.4 Implementiere Gruppen-Templates
+
+
+    - Erstelle vordefinierte Templates: "Süddach", "Ostdach", "Westdach", "Norddach"
+    - Setze passende Azimuth-Werte für Templates (Süd: 0°, Ost: 270°, West: 90°, Nord: 180°)
+    - Füge "Template anwenden" Dropdown hinzu
+    - _Requirements: 23.7_
+
+- [x] 17. Optimierungs-Assistent
+
+
+
+
+  - [x] 17.1 Implementiere Konfigurations-Generator
+
+
+    - Schreibe generate_south_config() für Süd-Aufständerung
+    - Schreibe generate_east_west_config() für Ost-West-Aufständerung
+    - Schreibe generate_south_east_config() für Süd-Ost-Aufständerung
+    - Schreibe generate_mixed_config() für gemischte Konfiguration
+    - _Requirements: 29.2_
+  
+  - [x] 17.2 Implementiere Konfigurations-Bewertung
+
+    - Schreibe evaluate_config() Funktion
+    - Implementiere Bewertungs-Kriterien: Modulanzahl, Verschattung, Ausrichtung
+    - Implementiere verschiedene Optimierungs-Ziele: "max_modules", "max_yield", "balanced"
+    - Berechne Score (0-100) für jede Konfiguration
+    - _Requirements: 29.3, 29.7_
+  
+  - [x] 17.3 Implementiere Optimierungs-Workflow
+
+    - Schreibe optimize_layout() Hauptfunktion
+    - Generiere 4-5 verschiedene Konfigurationen
+    - Bewerte alle Konfigurationen
+    - Sortiere nach Score und gebe Top 3 zurück
+    - _Requirements: 29.1, 29.2, 29.4_
+  
+  - [x] 17.4 Integriere Optimierung in UI
+
+
+    - Erstelle "Optimierung" Expander in Sidebar
+    - Füge "Optimierungs-Ziel" Radio-Buttons hinzu
+    - Füge "Optimierung starten" Button hinzu
+    - Zeige Top 3 Konfigurationen mit Scores
+    - Implementiere Vorschau-Funktion für jede Konfiguration
+    - Implementiere "Konfiguration übernehmen" Button
+    - _Requirements: 29.1, 29.4, 29.5, 29.6_
+
+- [x] 18. Erweiterte Export-Funktionen
+
+
+
+
+
+  - [x] 18.1 Implementiere CSV-Export
+
+
+    - Schreibe export_module_details_csv() Funktion
+    - Exportiere für jedes Modul: Index, X, Y, Z, Azimuth, Tilt, Group, Shading%
+    - Erstelle Download-Button für CSV
+    - _Requirements: 30.2, 30.3_
+  
+
+  - [x] 18.2 Implementiere JSON-Export/Import
+
+    - Schreibe export_layout_json() für komplette Konfiguration
+    - Schreibe import_layout_json() zum Laden von Konfigurationen
+    - Erstelle Download-Button für JSON
+    - Erstelle Upload-Widget für JSON-Import
+    - Validiere importierte Daten
+    - _Requirements: 30.4, 30.5_
+  
+
+
+  - [x] 18.3 Implementiere Multi-View Screenshot
+
+
+
+
+
+    - Schreibe export_multi_view_screenshots() Funktion
+    - Erstelle Screenshots aus 4 Perspektiven: Isometrisch, Top, Süd, Ost
+    - Erstelle ZIP-Datei mit allen Screenshots
+    - Erstelle Download-Button für ZIP
+    - _Requirements: 30.6_
+
+
+  
+  - [x] 18.4 Implementiere 360° Animation
+
+
+
+
+
+    - Schreibe export_360_animation() Funktion
+    - Rendere 36 Frames (10° Rotation pro Frame)
+    - Erstelle GIF mit PIL
+    - Implementiere Fortschrittsanzeige während Rendering
+    - Erstelle Download-Button für GIF
+
+    - _Requirements: 30.7_
+  
+  - [x] 18.5 Integriere neue Exports in UI
+
+    - Erstelle "Erweiterte Exports" Expander
+    - Füge alle neuen Export-Buttons hinzu
+    - Implementiere Fehlerbehandlung für alle Exports
+    - Zeige Erfolgsmeldungen nach Export
+    - _Requirements: 30.1_
+
+- [ ] 19. UI-Refactoring und Optimierung
+
+
+
+
+  - [x] 19.1 Reorganisiere Sidebar mit Collapsible Sections
+
+
+    - Erstelle "Basis-Einstellungen" Expander
+    - Erstelle "Modul-Belegung" Expander
+    - Erstelle "Erweiterte Kontrolle" Expander
+    - Erstelle "Analyse" Expander
+    - Erstelle "Export" Expander
+    - Setze sinnvolle Default-Zustände (expanded/collapsed)
+  
+  - [x] 19.2 Implementiere Echtzeit-Vorschau
+
+
+    - Aktualisiere 3D-Viewer automatisch bei Änderungen
+    - Implementiere Debouncing für Performance
+    - Zeige Loading-Spinner während Neuberechnung
+  
+  - [x] 19.3 Optimiere Performance
+
+
+    - Implementiere Caching für häufige Berechnungen
+    - Reduziere unnötige Neuberechnungen
+    - Optimiere Mesh-Zusammenführung
+    - Teste mit 100+ Modulen
+
+
+- [-] 20. Testing und Validierung (Phase 2)
+
+
+  - [x] 20.1 Teste Modul-Transformationen
+
+
+
+
+
+
+
+
+
+
+
+
+    - Teste apply_module_transform() mit verschiedenen Werten
+    - Teste Azimuth-Rotation (0°, 90°, 180°, 270°)
+    - Teste Neigungs-Rotation (0°, 15°, 45°, 90°)
+    - Teste Positions-Offsets (positiv/negativ)
+  
+  - [ ] 20.2 Teste Kollisionserkennung
+    - Teste mit überlappenden Modulen
+    - Teste mit nicht-überlappenden Modulen
+    - Teste Performance mit vielen Modulen
+  
+  - [ ] 20.3 Teste Verschattungs-Analyse
+    - Teste Sonnenpositions-Berechnung für verschiedene Zeiten
+    - Teste Verschattungs-Berechnung mit bekannten Szenarien
+    - Validiere Farbskala-Darstellung
+  
+  - [ ] 20.4 Teste Optimierungs-Assistent
+    - Teste alle Optimierungs-Ziele
+    - Validiere Score-Berechnung
+    - Teste mit verschiedenen Gebäudegrößen
+  
+  - [ ] 20.5 Teste Export-Funktionen
+    - Teste CSV-Export und validiere Format
+    - Teste JSON-Export/Import Roundtrip
+    - Teste Multi-View Screenshots
+    - Teste 360° Animation-Generierung
+
+## Hinweise Phase 2
+
+- Phase 2 Features sind optional und können schrittweise implementiert werden
+- Jeder Task sollte mit funktionsfähigem, getesteten Code abgeschlossen werden
+- Erweiterte Features sollten die Basis-Funktionalität nicht beeinträchtigen
+- Bei Performance-Problemen: Profiling durchführen und optimieren
+- Alle neuen Features sollten abwärtskompatibel sein (alte Konfigurationen funktionieren weiter)
