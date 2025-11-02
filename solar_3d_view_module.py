@@ -2965,16 +2965,18 @@ def _render_3d_view_impl():
                     import os
                     
                     with tempfile.TemporaryDirectory() as tmp_dir:
-                    # Exportiere Multi-View Screenshots (NEUE PLOTLY VERSION)
-                    views = export_plotly_multi_view_screenshots(
-                        project_data=project_data,
-                        dims=dims,
-                        roof_type=selected_roof_type,
-                        module_quantity=module_quantity,
-                        layout_config=layout_config,
-                        output_dir=tmp_dir,
-                        base_filename="pv_3d"
-                    )                        # Lese ZIP-Datei
+                        # Exportiere Multi-View Screenshots (NEUE PLOTLY VERSION)
+                        views = export_plotly_multi_view_screenshots(
+                            project_data=project_data,
+                            dims=dims,
+                            roof_type=selected_roof_type,
+                            module_quantity=module_quantity,
+                            layout_config=layout_config,
+                            output_dir=tmp_dir,
+                            base_filename="pv_3d"
+                        )
+                        
+                        # Lese ZIP-Datei
                         zip_filepath = os.path.join(tmp_dir, "pv_3d_multi_view.zip")
                         
                         if os.path.exists(zip_filepath):
