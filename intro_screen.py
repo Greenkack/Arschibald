@@ -5,15 +5,65 @@ Zweck: Intro-Bildschirm für die Bokuk2-Anwendung mit Video/Bild-Optionen
 import base64
 import json
 from pathlib import Path
+from datetime import datetime
 
 import streamlit as st
 
 
+def get_daily_tip():
+    """Gibt einen zufälligen Tipp des Tages basierend auf dem aktuellen Datum zurück"""
+    tips = [
+        "Nutzen Sie die Produktdatenbank, um schnell Artikel zu finden und Angebote zu erstellen",
+        "Im Admin-Panel können Sie Logos und Firmenlogos für Ihre PDF-Dokumente hochladen",
+        "Preisregeln ermöglichen automatische Rabatte basierend auf Menge oder Kundentyp",
+        "Die Diagramm-Funktion visualisiert Ihre Amortisationszeiten und Einsparungen",
+        "Nutzen Sie die Carousel-Funktion im Intro-Screen für professionelle Präsentationen",
+        "Im Admin-Bereich können Sie Zahlungsbedingungen für Ihre Angebote vordefinieren",
+        "Produktattribute helfen bei der detaillierten Beschreibung Ihrer Artikel",
+        "Die Benutzerverwaltung erlaubt Ihnen, verschiedene Rollen und Berechtigungen zu vergeben",
+        "PDF-Einstellungen im Admin-Panel passen Ihre Dokumente an Ihr Corporate Design an",
+        "Gewinnmargen können pro Produkt oder Kategorie individuell festgelegt werden",
+        "Nutzen Sie die Suchfunktion mit Filtern, um schnell relevante Produkte zu finden",
+        "Datenblätter können direkt aus der Produktdatenbank heruntergeladen werden",
+        "Die Statistik-Funktion zeigt Ihnen einen Überblick über Ihre Verkaufsaktivitäten",
+        "Favoritenlisten helfen Ihnen, häufig verwendete Produkte schnell wiederzufinden",
+        "Im Admin-Panel können Sie Serviceleistungen definieren und zu Angeboten hinzufügen",
+        "Die Export-Funktion ermöglicht das Speichern von Angeboten als PDF oder Excel",
+        "Nutzen Sie Tastenkombinationen: Enter für Login, Strg+S für Speichern",
+        "Die Backup-Funktion im Admin-Bereich sichert Ihre wichtigen Daten regelmäßig",
+        "Produktbilder werden automatisch optimiert und in verschiedenen Größen gespeichert",
+        "Die Währungsumrechnung erfolgt automatisch basierend auf aktuellen Wechselkursen",
+        "Nutzen Sie die Notizfunktion, um wichtige Informationen zu Kunden zu speichern",
+        "Die Duplikat-Funktion spart Zeit beim Erstellen ähnlicher Angebote",
+        "Vordefinierte Textbausteine beschleunigen die Angebotserstellung erheblich",
+        "Die Versionshistorie zeigt alle Änderungen an Ihren Dokumenten",
+        "Nutzen Sie Tags, um Produkte in eigene Kategorien zu organisieren",
+        "Die Dashboard-Ansicht gibt Ihnen einen schnellen Überblick über wichtige Kennzahlen",
+        "Erinnerungen können für Folgeaktivitäten bei Kunden eingerichtet werden",
+        "Die Mehrsprachigkeit unterstützt Sie bei internationalen Geschäftsbeziehungen",
+        "Nutzen Sie die Batch-Bearbeitung, um mehrere Datensätze gleichzeitig zu ändern",
+        "Die integrierte Hilfe-Funktion bietet Unterstützung zu allen Features der App"
+    ]
+    
+    # Verwende den Tag des Jahres als Index (1-365/366)
+    day_of_year = datetime.now().timetuple().tm_yday
+    tip_index = day_of_year % len(tips)
+    
+    return tips[tip_index]
+
+
 def get_image_base64(image_path):
-    """Konvertiert Bild zu Base64 für HTML-Einbettung"""
+    """Konvertiert Bild zu Base64 für HTML-Einbettung mit Caching"""
     try:
+        # Cache im Session State für schnelleres Laden
+        cache_key = f"img_cache_{image_path}"
+        if cache_key in st.session_state:
+            return st.session_state[cache_key]
+        
         with open(image_path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
+            img_base64 = base64.b64encode(f.read()).decode()
+            st.session_state[cache_key] = img_base64
+            return img_base64
     except BaseException:
         return None
 
@@ -34,7 +84,7 @@ def load_intro_settings():
         "allow_quick_start": False,  # DEAKTIVIERT
         "allow_registration": True,  # NEU: Registrierung erlauben
         "require_company_info": True,  # NEU: Firmeninfo bei Registrierung
-        "title": "Ömers All in One Machine",
+        "title": "ÖMERs ALL in ONE DINGSBUMS",
         "subtitle": "",
         "description": ""
     }
@@ -82,10 +132,73 @@ def render_intro_screen():
     # Prüfe ob bereits eingeloggt/weitergegangen
     if st.session_state.get('intro_completed', False):
         return True
+    
+    # FORCE PRELOAD: Bilder müssen SOFORT geladen werden, bevor irgendwas rendert
+    media_type = settings.get('media_type', 'image')
+    images_ready = False
+    
+    if media_type == 'image':
+        image_path = Path(settings.get('image_path', 'data/company_logos/wppv.png'))
+        if image_path.exists():
+            # Force load immediately
+            img_data = get_image_base64(str(image_path))
+            if img_data:
+                images_ready = True
+        
+        if settings.get('show_side_images', False):
+            image_left_path = Path(settings.get('image_left_path', ''))
+            if image_left_path.exists():
+                get_image_base64(str(image_left_path))
+            
+            image_right_path = Path(settings.get('image_right_path', ''))
+            if image_right_path.exists():
+                get_image_base64(str(image_right_path))
+    
+    # Falls Bilder nicht bereit sind, warten und neu laden
+    if media_type == 'image' and not images_ready:
+        st.warning("Lade Intro-Bildschirm...")
+        st.stop()
 
     # Zentriertes Layout mit CSS - OHNE EMOJIS
     st.markdown("""
         <style>
+        /* Dunkelgrauer Hintergrund für gesamte Seite */
+        .stApp {
+            background-color: #1a1a1a !important;
+        }
+        [data-testid="stAppViewContainer"] {
+            background-color: #1a1a1a !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: #1a1a1a !important;
+        }
+        
+        /* Eingabefelder - dunkelgrau mit weißer Schrift */
+        .stTextInput > div > div > input {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+            border: 2px solid #444444 !important;
+            border-radius: 8px !important;
+        }
+        .stTextInput > div > div > input:focus {
+            border-color: #00ffff !important;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3) !important;
+        }
+        .stTextInput > div > div > input::placeholder {
+            color: #888888 !important;
+        }
+        
+        /* Labels - weiße Schrift */
+        .stTextInput > label {
+            color: #ffffff !important;
+            font-weight: 500 !important;
+        }
+        
+        /* Markdown Text - weiß */
+        .stMarkdown {
+            color: #ffffff !important;
+        }
+        
         /* Verstecke leere Streamlit-Container im Intro */
         .intro-container .element-container:empty {
             display: none !important;
@@ -224,7 +337,23 @@ def render_intro_screen():
             font-size: 1.3rem !important;
             padding: 1rem 2.5rem !important;
             border-radius: 50px !important;
-            font-weight: 700 !important;
+            font-weight: 900 !important;
+            color: #000000 !important;
+            text-shadow: none !important;
+        }
+        
+        /* Form Submit Button - speziell für Anmelden */
+        button[type="submit"],
+        .stButton > button[kind="primary"] {
+            background-color: #00ffff !important;
+            color: #000000 !important;
+            font-weight: 900 !important;
+            border: none !important;
+        }
+        button[type="submit"]:hover,
+        .stButton > button[kind="primary"]:hover {
+            background-color: #40e0d0 !important;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5) !important;
         }
 
         /* Dynamische Effekte werden aus den globalen Einstellungen geladen */
@@ -342,7 +471,7 @@ def render_intro_screen():
             f'<h1 class="intro-title">{
                 settings.get(
                     "title",
-                    "Ömers All in One Machine")}</h1>',
+                    "ÖMERs ALL in ONE DINGSBUMS")}</h1>',
             unsafe_allow_html=True)
 
         st.markdown("---")
@@ -404,13 +533,14 @@ def render_intro_screen():
 
         st.markdown("---")
 
-        # Keyboard-Shortcut Hinweis - OHNE EMOJI
-        st.caption("Tipp: Drücken Sie Enter zum Anmelden")
+        # Tipp des Tages
+        daily_tip = get_daily_tip()
+        st.info(f"💡 **Tipp des Tages:** {daily_tip}")
 
         # Footer - OHNE EMOJIS - OHNE EMOJIS
         st.markdown("""
         <div style="text-align: center; margin-top: 3rem; color: #ffffff; font-size: 1rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
-            Ömers All in One Machine v2.0 | 2025 | Powered by Streamlit, OpenAI & LangChain
+            Ömers All in One DingsBums v2.0 | 2025 | Powered by Ömer
         </div>
         """, unsafe_allow_html=True)
 

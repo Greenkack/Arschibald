@@ -147,12 +147,12 @@ try:
             if isinstance(loaded_texts, dict) and loaded_texts:
                 _texts_initial = loaded_texts
             else:
-                _texts_initial = {"app_title": "Omers Solar Kakerlake"}
+                _texts_initial = {"app_title": "ÖMERs ALL in ONE DINGSBUMS"}
     else:
         raise FileNotFoundError("de.json nicht gefunden.")
 except (FileNotFoundError, ValueError, json.JSONDecodeError):
     _texts_initial = {
-        "app_title": "Omers Solar Kakerlake", "menu_item_input": "Projekt- Bedarfsanalyse",
+        "app_title": "ÖMERs ALL in ONE DINGSBUMS", "menu_item_input": "Projekt- Bedarfsanalyse",
     "menu_item_analysis": "Ergebnisse & Visualisierungen", "menu_item_quick_calc": "A.G.E.N.T.",
         "menu_item_crm": "Kundenmanagement CRM", "menu_item_info_platform": "Kundenmanagement CRM",
         "menu_item_options": "Administration & Verwaltung", "menu_item_admin": "Administration & Verwaltung",
@@ -173,7 +173,7 @@ except (FileNotFoundError, ValueError, json.JSONDecodeError):
         "crm_tab_calendar": "Kalender"
     }
 except Exception:
-    _texts_initial = { "app_title": "Omers Solar Kakerlake" }
+    _texts_initial = {"app_title": "ÖMERs ALL in ONE DINGSBUMS"}
 
 TEXTS: dict[str, str] = {}
 
