@@ -27,9 +27,249 @@ try:
     )
     # Neue Plotly-basierte 3D-Visualisierung
     from utils.pv3d_plotly import build_plotly_scene
+    import plotly.graph_objects as go
     PV3D_AVAILABLE = True
 except ImportError:
     PV3D_AVAILABLE = False
+
+
+# ============================================================================
+# PLOTLY SCREENSHOT HELPER
+# ============================================================================
+
+def render_plotly_image_bytes(
+    project_data: Dict[str, Any],
+    dims: BuildingDims,
+    roof_type: str,
+    module_quantity: int,
+    layout_config: Any = None,
+    width: int = 1600,
+    height: int = 1000
+) -> bytes:
+    """
+    Erstellt einen Screenshot der Plotly 3D-Szene als PNG-Bytes.
+    """
+    try:
+        # Erstelle Plotly Figure mit den neuen geschlossenen Dachformen
+        fig = build_plotly_scene(
+            project_data=project_data,
+            dims=dims,
+            roof_type=roof_type,
+            module_quantity=module_quantity,
+            layout_config=layout_config,
+            selected_modules=[]
+        )
+        
+        # Setze Größe
+        fig.update_layout(width=width, height=height)
+        
+        # Konvertiere zu PNG-Bytes
+        png_bytes = fig.to_image(format="png")
+        
+        return png_bytes
+    except Exception as e:
+        print(f"Fehler beim Plotly-Rendering: {e}")
+        return b""
+
+
+def export_plotly_multi_view_screenshots(
+    project_data: Dict[str, Any],
+    dims: BuildingDims,
+    roof_type: str,
+    module_quantity: int,
+    layout_config: Any,
+    output_dir: str = ".",
+    base_filename: str = "view",
+    resolution: Tuple[int, int] = (1600, 1000)
+) -> Dict[str, bytes]:
+    """
+    Erstellt Multi-View Screenshots mit Plotly (mit geschlossenen Dächern).
+    """
+    try:
+        import zipfile
+        import os
+        from PIL import Image
+        import io
+        
+        views = {}
+        width, height = resolution
+        
+        # Basis-Szene erstellen
+        fig = build_plotly_scene(
+            project_data=project_data,
+            dims=dims,
+            roof_type=roof_type,
+            module_quantity=module_quantity,
+            layout_config=layout_config,
+            selected_modules=[]
+        )
+        
+        # 4 verschiedene Kamera-Ansichten
+        camera_configs = {
+            "isometric": {
+                "eye": {"x": 0.7, "y": -0.7, "z": 0.5},
+                "center": {"x": 0, "y": 0, "z": 0},
+                "up": {"x": 0, "y": 0, "z": 1}
+            },
+            "top": {
+                "eye": {"x": 0, "y": 0, "z": 2.5},
+                "center": {"x": 0, "y": 0, "z": 0},
+                "up": {"x": 0, "y": 1, "z": 0}
+            },
+            "south": {
+                "eye": {"x": 0, "y": -2.0, "z": 0.3},
+                "center": {"x": 0, "y": 0, "z": 0},
+                "up": {"x": 0, "y": 0, "z": 1}
+            },
+            "east": {
+                "eye": {"x": 2.0, "y": 0, "z": 0.3},
+                "center": {"x": 0, "y": 0, "z": 0},
+                "up": {"x": 0, "y": 0, "z": 1}
+            }
+        }
+        
+        # Rendere jede Ansicht
+        for view_name, camera_config in camera_configs.items():
+            try:
+                # Kopiere Figure und setze Kamera
+                view_fig = go.Figure(fig)
+                view_fig.update_layout(
+                    width=width,
+                    height=height,
+                    scene_camera=camera_config,
+                    title=dict(text=f"3D Ansicht - {view_name.upper()}", font=dict(color='#FFFFFF'))
+                )
+                
+                # Konvertiere zu PNG
+                png_bytes = view_fig.to_image(format="png")
+                views[view_name] = png_bytes
+                
+            except Exception as e:
+                print(f"Fehler beim Rendern von {view_name}: {e}")
+        
+        # Erstelle ZIP-Datei
+        if views:
+            zip_path = os.path.join(output_dir, f"{base_filename}_multi_view.zip")
+            
+            with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                for view_name, png_bytes in views.items():
+                    filename = f"{base_filename}_{view_name}.png"
+                    zipf.writestr(filename, png_bytes)
+            
+            print(f"Multi-View ZIP erstellt: {zip_path} ({len(views)} Ansichten)")
+        
+        return views
+        
+    except Exception as e:
+        print(f"Fehler bei Multi-View Export: {e}")
+        import traceback
+        traceback.print_exc()
+        return {}
+
+
+def export_plotly_360_animation(
+    project_data: Dict[str, Any],
+    dims: BuildingDims,
+    roof_type: str,
+    module_quantity: int,
+    layout_config: Any,
+    filepath: str = "animation_360.gif",
+    frames: int = 36,
+    resolution: Tuple[int, int] = (800, 600),
+    duration_ms: int = 100
+) -> bytes:
+    """
+    Erstellt 360° Animation mit Plotly (mit geschlossenen Dächern).
+    """
+    try:
+        from PIL import Image
+        import io
+        import math
+        
+        width, height = resolution
+        images = []
+        
+        print(f"Erstelle 360° Animation mit {frames} Frames (Plotly)...")
+        
+        # Erstelle Basis-Szene
+        fig = build_plotly_scene(
+            project_data=project_data,
+            dims=dims,
+            roof_type=roof_type,
+            module_quantity=module_quantity,
+            layout_config=layout_config,
+            selected_modules=[]
+        )
+        
+        # Berechne Kamera-Parameter
+        camera_distance = 2.5  # Relative Distanz für Plotly
+        camera_height = 0.4  # Relative Höhe
+        
+        # Rendere jeden Frame
+        for i in range(frames):
+            try:
+                # Berechne Rotationswinkel
+                angle_deg = (360.0 / frames) * i
+                angle_rad = math.radians(angle_deg)
+                
+                # Berechne Kamera-Position (kreist um Zentrum)
+                camera_x = camera_distance * math.cos(angle_rad)
+                camera_y = camera_distance * math.sin(angle_rad)
+                camera_z = camera_height
+                
+                # Kopiere Figure und setze Kamera für diesen Frame
+                frame_fig = go.Figure(fig)
+                frame_fig.update_layout(
+                    width=width,
+                    height=height,
+                    scene_camera=dict(
+                        eye=dict(x=camera_x, y=camera_y, z=camera_z),
+                        center=dict(x=0, y=0, z=0),
+                        up=dict(x=0, y=0, z=1)
+                    ),
+                    title=dict(text=f"360° Animation - {angle_deg:.0f}°", font=dict(color='#FFFFFF'))
+                )
+                
+                # Konvertiere zu PNG und dann zu PIL Image
+                png_bytes = frame_fig.to_image(format="png")
+                img = Image.open(io.BytesIO(png_bytes))
+                images.append(img)
+                
+                # Fortschritt
+                if (i + 1) % 6 == 0:
+                    progress = ((i + 1) / frames) * 100
+                    print(f"  Fortschritt: {progress:.0f}% ({i + 1}/{frames} Frames)")
+                
+            except Exception as e:
+                print(f"Fehler beim Rendern von Frame {i}: {e}")
+        
+        # Erstelle GIF
+        if images:
+            # Speichere als GIF
+            images[0].save(
+                filepath,
+                save_all=True,
+                append_images=images[1:],
+                duration=duration_ms,
+                loop=0,
+                optimize=False
+            )
+            
+            # Lese GIF-Bytes
+            with open(filepath, 'rb') as f:
+                gif_bytes = f.read()
+            
+            print(f"360° Animation erstellt: {filepath} ({len(images)} Frames)")
+            return gif_bytes
+        else:
+            print("Keine Frames für GIF erstellt")
+            return b""
+            
+    except Exception as e:
+        print(f"Fehler bei 360° Animation: {e}")
+        import traceback
+        traceback.print_exc()
+        return b""
 
 
 # ============================================================================
@@ -2307,8 +2547,8 @@ def _render_3d_view_impl():
                         enable_shading_analysis=False
                     )
                     
-                    # Rufe render_image_bytes() auf
-                    png_bytes = render_image_bytes(
+                    # Rufe render_plotly_image_bytes() auf (neue Plotly-basierte Funktion)
+                    png_bytes = render_plotly_image_bytes(
                         project_data=project_data,
                         dims=dims,
                         roof_type=selected_roof_type,
@@ -2725,18 +2965,16 @@ def _render_3d_view_impl():
                     import os
                     
                     with tempfile.TemporaryDirectory() as tmp_dir:
-                        # Exportiere Multi-View Screenshots
-                        views = export_multi_view_screenshots(
-                            project_data=project_data,
-                            dims=dims,
-                            roof_type=selected_roof_type,
-                            module_quantity=module_quantity,
-                            layout_config=layout_config,
-                            output_dir=tmp_dir,
-                            base_filename="pv_3d"
-                        )
-                        
-                        # Lese ZIP-Datei
+                    # Exportiere Multi-View Screenshots (NEUE PLOTLY VERSION)
+                    views = export_plotly_multi_view_screenshots(
+                        project_data=project_data,
+                        dims=dims,
+                        roof_type=selected_roof_type,
+                        module_quantity=module_quantity,
+                        layout_config=layout_config,
+                        output_dir=tmp_dir,
+                        base_filename="pv_3d"
+                    )                        # Lese ZIP-Datei
                         zip_filepath = os.path.join(tmp_dir, "pv_3d_multi_view.zip")
                         
                         if os.path.exists(zip_filepath):
@@ -2831,8 +3069,8 @@ def _render_3d_view_impl():
                     with tempfile.NamedTemporaryFile(mode='wb', suffix='.gif', delete=False) as tmp_file:
                         tmp_filepath = tmp_file.name
                     
-                    # Exportiere 360° Animation
-                    gif_bytes = export_360_animation(
+                    # Exportiere 360° Animation (NEUE PLOTLY VERSION)
+                    gif_bytes = export_plotly_360_animation(
                         project_data=project_data,
                         dims=dims,
                         roof_type=selected_roof_type,
