@@ -30,23 +30,29 @@ from utils.pv3d import (
 # ============================================================================
 
 def create_complete_box(x_min, x_max, y_min, y_max, z_min, z_max, color="#d4d4d4", name="Box"):
-    """Erstellt eine vollständige Box mit allen 6 Seiten."""
+    """Erstellt eine vollständige Box mit allen 6 Seiten - hochqualitativ."""
     # 8 Ecken der Box
     vertices = np.array([
-        [x_min, y_min, z_min],  # 0
-        [x_max, y_min, z_min],  # 1
-        [x_max, y_max, z_min],  # 2
-        [x_min, y_max, z_min],  # 3
-        [x_min, y_min, z_max],  # 4
-        [x_max, y_min, z_max],  # 5
-        [x_max, y_max, z_max],  # 6
-        [x_min, y_max, z_max],  # 7
+        [x_min, y_min, z_min],  # 0: vorne links unten
+        [x_max, y_min, z_min],  # 1: vorne rechts unten
+        [x_max, y_max, z_min],  # 2: hinten rechts unten
+        [x_min, y_max, z_min],  # 3: hinten links unten
+        [x_min, y_min, z_max],  # 4: vorne links oben
+        [x_max, y_min, z_max],  # 5: vorne rechts oben
+        [x_max, y_max, z_max],  # 6: hinten rechts oben
+        [x_min, y_max, z_max],  # 7: hinten links oben
     ])
     
-    # Alle 12 Dreiecke (6 Seiten * 2 Dreiecke)
-    i = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 5, 5, 1, 1, 6, 6, 2, 2, 7, 7, 3, 3]
-    j = [1, 3, 2, 5, 3, 6, 0, 7, 5, 7, 4, 1, 6, 4, 5, 0, 7, 5, 6, 1, 4, 6, 7, 2]
-    k = [3, 2, 5, 6, 6, 7, 7, 4, 7, 6, 5, 4, 4, 5, 0, 4, 5, 6, 1, 2, 6, 7, 2, 3]
+    # Alle 12 Dreiecke für 6 vollständige Seiten (2 Dreiecke pro Seite)
+    # Unten (z_min): 0,1,2 und 0,2,3
+    # Oben (z_max): 4,6,5 und 4,7,6
+    # Vorne (y_min): 0,5,1 und 0,4,5
+    # Hinten (y_max): 2,6,7 und 2,7,3
+    # Links (x_min): 0,3,7 und 0,7,4
+    # Rechts (x_max): 1,5,6 und 1,6,2
+    i = [0, 0, 4, 4, 0, 0, 2, 2, 0, 0, 1, 1]
+    j = [1, 2, 6, 7, 5, 4, 6, 7, 3, 7, 5, 6]
+    k = [2, 3, 5, 6, 1, 5, 7, 3, 7, 4, 6, 2]
     
     return go.Mesh3d(
         x=vertices[:, 0],
@@ -54,33 +60,38 @@ def create_complete_box(x_min, x_max, y_min, y_max, z_min, z_max, color="#d4d4d4
         z=vertices[:, 2],
         i=i, j=j, k=k,
         color=color,
-        opacity=0.85,
+        opacity=1.0,
         name=name,
         showlegend=False,
-        lighting=dict(ambient=0.6, diffuse=0.8, specular=0.3, roughness=0.5),
-        lightposition=dict(x=100, y=100, z=100)
+        flatshading=False,
+        lighting=dict(ambient=0.7, diffuse=0.9, specular=0.5, roughness=0.3, fresnel=0.2),
+        lightposition=dict(x=1000, y=1000, z=2000)
     )
 
 
 def create_gabled_roof_complete(length, width, height, base_z, color="#c96a2d", name="Roof"):
-    """Erstellt ein vollständiges Satteldach mit beiden Dachflächen und Giebeln."""
-    # 6 Punkte für Satteldach
+    """Erstellt ein VOLLSTÄNDIG GESCHLOSSENES Satteldach - wirklich KEINE Löcher mehr!"""
     half_l = length / 2
     half_w = width / 2
     
+    # 6 Punkte für Satteldach
     vertices = np.array([
-        [-half_l, -half_w, base_z],  # 0: links vorne unten
-        [half_l, -half_w, base_z],   # 1: rechts vorne unten
-        [half_l, half_w, base_z],    # 2: rechts hinten unten
-        [-half_l, half_w, base_z],   # 3: links hinten unten
-        [-half_l, 0, base_z + height],  # 4: links oben (First)
-        [half_l, 0, base_z + height],   # 5: rechts oben (First)
+        [-half_l, -half_w, base_z],        # 0: Ecke vorne links
+        [half_l, -half_w, base_z],         # 1: Ecke vorne rechts
+        [half_l, half_w, base_z],          # 2: Ecke hinten rechts
+        [-half_l, half_w, base_z],         # 3: Ecke hinten links
+        [-half_l, 0, base_z + height],     # 4: First links oben
+        [half_l, 0, base_z + height],      # 5: First rechts oben
     ])
     
-    # Dreiecke für alle Flächen
-    i = [0, 0, 3, 3, 0, 2]
-    j = [1, 5, 4, 5, 4, 5]
-    k = [5, 4, 5, 2, 1, 3]
+    # ALLE Flächen als Dreiecke - komplett geschlossen:
+    # Linke Dachfläche: (0,4,5) und (0,5,1)
+    # Rechte Dachfläche: (3,2,5) und (3,5,4)
+    # Giebel LINKS vollständig: (0,3,4)
+    # Giebel RECHTS vollständig: (1,5,2)
+    i = [0, 0, 3, 3, 0, 1]
+    j = [4, 5, 2, 5, 3, 5]
+    k = [5, 1, 5, 4, 4, 2]
     
     return go.Mesh3d(
         x=vertices[:, 0],
@@ -88,11 +99,168 @@ def create_gabled_roof_complete(length, width, height, base_z, color="#c96a2d", 
         z=vertices[:, 2],
         i=i, j=j, k=k,
         color=color,
-        opacity=0.9,
+        opacity=1.0,
         name=name,
         showlegend=False,
-        lighting=dict(ambient=0.6, diffuse=0.8, specular=0.4, roughness=0.3),
-        lightposition=dict(x=100, y=100, z=100)
+        flatshading=False,
+        lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
+        lightposition=dict(x=1000, y=1000, z=2000)
+    )
+
+
+def create_hipped_roof(length, width, height, base_z, color="#c96a2d", name="Roof"):
+    """Erstellt ein VOLLSTÄNDIG GESCHLOSSENES Walmdach - keine Löcher!"""
+    half_l = length / 2
+    half_w = width / 2
+    
+    # Walmdach mit First-Linie
+    first_length = length * 0.4
+    vertices = np.array([
+        [-half_l, -half_w, base_z],              # 0: Ecke vorne links
+        [half_l, -half_w, base_z],               # 1: Ecke vorne rechts
+        [half_l, half_w, base_z],                # 2: Ecke hinten rechts
+        [-half_l, half_w, base_z],               # 3: Ecke hinten links
+        [-first_length/2, 0, base_z + height],   # 4: First Anfang
+        [first_length/2, 0, base_z + height],    # 5: First Ende
+    ])
+    
+    # KOMPLETT GESCHLOSSEN - alle Flächen:
+    # Walm links: 0-3-4
+    # Walm rechts: 1-2-5
+    # Dachfläche vorne: 0-4-5 und 0-5-1
+    # Dachfläche hinten: 3-5-4 und 3-2-5
+    i = [0, 1, 0, 0, 3, 3]
+    j = [3, 2, 4, 5, 5, 2]
+    k = [4, 5, 5, 1, 4, 5]
+    
+    return go.Mesh3d(
+        x=vertices[:, 0],
+        y=vertices[:, 1],
+        z=vertices[:, 2],
+        i=i, j=j, k=k,
+        color=color,
+        opacity=1.0,
+        name=name,
+        showlegend=False,
+        flatshading=False,
+        lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
+        lightposition=dict(x=1000, y=1000, z=2000)
+    )
+
+
+def create_half_hipped_roof(length, width, height, base_z, color="#c96a2d", name="Roof"):
+    """Erstellt ein VOLLSTÄNDIG GESCHLOSSENES Krüppelwalmdach - Satteldach mit abgeschrägten Giebeln!"""
+    half_l = length / 2
+    half_w = width / 2
+    
+    # Krüppelwalm: First ist kürzer, Giebel sind teilweise abgewalmt
+    first_offset = length * 0.15  # First ist 30% kürzer (15% pro Seite)
+    hip_height = height * 0.6     # Walm-Punkte bei 60% der Firsthöhe
+    
+    vertices = np.array([
+        [-half_l, -half_w, base_z],                    # 0: Ecke vorne links
+        [half_l, -half_w, base_z],                     # 1: Ecke vorne rechts
+        [half_l, half_w, base_z],                      # 2: Ecke hinten rechts
+        [-half_l, half_w, base_z],                     # 3: Ecke hinten links
+        [-half_l + first_offset, 0, base_z + height],  # 4: First Anfang links
+        [half_l - first_offset, 0, base_z + height],   # 5: First Ende rechts
+        [-half_l, 0, base_z + hip_height],             # 6: Walm-Punkt links
+        [half_l, 0, base_z + hip_height],              # 7: Walm-Punkt rechts
+    ])
+    
+    # ALLE Flächen komplett geschlossen:
+    # Hauptdachflächen vorne/hinten: (0,4,5), (0,5,1) und (3,2,5), (3,5,4)
+    # Walme links: (0,6,4), (3,4,6)
+    # Walme rechts: (1,5,7), (2,7,5)
+    # Untere Giebel-Dreiecke: (0,3,6) und (1,7,2)
+    i = [0, 0, 3, 3, 0, 3, 1, 2, 0, 1]
+    j = [4, 5, 2, 5, 6, 4, 5, 7, 3, 7]
+    k = [5, 1, 5, 4, 4, 6, 7, 5, 6, 2]
+    
+    return go.Mesh3d(
+        x=vertices[:, 0],
+        y=vertices[:, 1],
+        z=vertices[:, 2],
+        i=i, j=j, k=k,
+        color=color,
+        opacity=1.0,
+        name=name,
+        showlegend=False,
+        flatshading=False,
+        lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
+        lightposition=dict(x=1000, y=1000, z=2000)
+    )
+
+
+def create_pent_roof(length, width, height, base_z, color="#c96a2d", name="Roof"):
+    """Erstellt ein VOLLSTÄNDIG GESCHLOSSENES Pultdach - wirklich keine Löcher!"""
+    half_l = length / 2
+    half_w = width / 2
+    
+    vertices = np.array([
+        [-half_l, -half_w, base_z],              # 0: vorne links niedrig
+        [half_l, -half_w, base_z],               # 1: vorne rechts niedrig
+        [half_l, half_w, base_z],                # 2: hinten rechts niedrig
+        [-half_l, half_w, base_z],               # 3: hinten links niedrig
+        [-half_l, -half_w, base_z + height],     # 4: vorne links hoch
+        [half_l, -half_w, base_z + height],      # 5: vorne rechts hoch
+    ])
+    
+    # ALLE Flächen komplett geschlossen:
+    # Hauptdachfläche schräg: (4,5,2) und (4,2,3)
+    # Stirnwand links: (0,4,3)
+    # Stirnwand rechts: (1,2,5)
+    # Vorderseite hoch: (4,5,1) und (4,1,0)
+    i = [4, 4, 0, 1, 4, 4]
+    j = [5, 2, 4, 2, 5, 1]
+    k = [2, 3, 3, 5, 1, 0]
+    
+    return go.Mesh3d(
+        x=vertices[:, 0],
+        y=vertices[:, 1],
+        z=vertices[:, 2],
+        i=i, j=j, k=k,
+        color=color,
+        opacity=1.0,
+        name=name,
+        showlegend=False,
+        flatshading=False,
+        lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
+        lightposition=dict(x=1000, y=1000, z=2000)
+    )
+
+
+def create_pyramid_roof(length, width, height, base_z, color="#c96a2d", name="Roof"):
+    """Erstellt ein Zeltdach - pyramidenförmiges Dach."""
+    half_l = length / 2
+    half_w = width / 2
+    
+    # Zeltdach: Alle Seiten laufen zu einem Punkt zusammen
+    vertices = np.array([
+        [-half_l, -half_w, base_z],        # 0: vorne links
+        [half_l, -half_w, base_z],         # 1: vorne rechts
+        [half_l, half_w, base_z],          # 2: hinten rechts
+        [-half_l, half_w, base_z],         # 3: hinten links
+        [0, 0, base_z + height],           # 4: Spitze
+    ])
+    
+    # 4 Dreiecke für alle Seiten
+    i = [0, 1, 2, 3]
+    j = [1, 2, 3, 0]
+    k = [4, 4, 4, 4]
+    
+    return go.Mesh3d(
+        x=vertices[:, 0],
+        y=vertices[:, 1],
+        z=vertices[:, 2],
+        i=i, j=j, k=k,
+        color=color,
+        opacity=1.0,
+        name=name,
+        showlegend=False,
+        flatshading=False,
+        lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
+        lightposition=dict(x=1000, y=1000, z=2000)
     )
 
 
@@ -258,20 +426,21 @@ def build_plotly_scene(
         y_max=dims.width_m/2,
         z_min=0,
         z_max=dims.wall_height_m,
-        color="#e8e8e8",
+        color="#7a7a7a",  # Helleres Grau für bessere Sichtbarkeit
         name="Gebäude"
     )
     fig.add_trace(building)
     
     # ========== 2. DACH (vollständig) ==========
-    roof_color = ROOF_COLORS.get(
-        project_data.get("roof_covering", "default"),
-        ROOF_COLORS["default"]
-    )
+    # Hole Dachfarbe aus project_data
+    roof_covering = project_data.get("roof_covering", "Ziegel")
+    roof_color = ROOF_COLORS.get(roof_covering, ROOF_COLORS.get("default", "#8B4513"))
     
     roof_z = dims.wall_height_m
     default_tilt = 15.0
+    roof_inclination = project_data.get("roof_inclination_deg", 35.0)
     
+    # Erstelle das entsprechende Dach basierend auf dem Dachtyp
     if roof_type == "Flachdach":
         # Flachdach als dünne Box
         roof = create_complete_box(
@@ -280,44 +449,98 @@ def build_plotly_scene(
             y_min=-dims.width_m/2,
             y_max=dims.width_m/2,
             z_min=roof_z,
-            z_max=roof_z + 0.1,
+            z_max=roof_z + 0.2,
             color=roof_color,
-            name="Dach"
+            name="Dach (Flachdach)"
         )
         fig.add_trace(roof)
-        module_base_z = roof_z + 0.15
+        module_base_z = roof_z + 0.25
         default_tilt = 15.0
         
     elif roof_type == "Satteldach":
-        roof_inclination = project_data.get("roof_inclination_deg", 35.0)
         roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
-        
         roof = create_gabled_roof_complete(
             length=dims.length_m,
             width=dims.width_m,
             height=roof_height,
             base_z=roof_z,
             color=roof_color,
-            name="Dach"
+            name="Dach (Satteldach)"
         )
         fig.add_trace(roof)
-        module_base_z = roof_z + 0.1
+        module_base_z = roof_z + 0.15
         default_tilt = roof_inclination
-    
+        
+    elif roof_type == "Walmdach":
+        roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
+        roof = create_hipped_roof(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color=roof_color,
+            name="Dach (Walmdach)"
+        )
+        fig.add_trace(roof)
+        module_base_z = roof_z + 0.15
+        default_tilt = roof_inclination
+        
+    elif roof_type == "Krüppelwalmdach":
+        roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
+        roof = create_half_hipped_roof(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color=roof_color,
+            name="Dach (Krüppelwalmdach)"
+        )
+        fig.add_trace(roof)
+        module_base_z = roof_z + 0.15
+        default_tilt = roof_inclination
+        
+    elif roof_type == "Pultdach":
+        roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
+        roof = create_pent_roof(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color=roof_color,
+            name="Dach (Pultdach)"
+        )
+        fig.add_trace(roof)
+        module_base_z = roof_z + 0.15
+        default_tilt = roof_inclination
+        
+    elif roof_type == "Zeltdach":
+        roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
+        roof = create_pyramid_roof(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color=roof_color,
+            name="Dach (Zeltdach)"
+        )
+        fig.add_trace(roof)
+        module_base_z = roof_z + 0.15
+        default_tilt = roof_inclination
+        
     else:
-        # Fallback: Flachdach
+        # Fallback: Sonstiges als Flachdach
         roof = create_complete_box(
             x_min=-dims.length_m/2,
             x_max=dims.length_m/2,
             y_min=-dims.width_m/2,
             y_max=dims.width_m/2,
             z_min=roof_z,
-            z_max=roof_z + 0.1,
+            z_max=roof_z + 0.2,
             color=roof_color,
-            name="Dach"
+            name="Dach (Sonstiges)"
         )
         fig.add_trace(roof)
-        module_base_z = roof_z + 0.15
+        module_base_z = roof_z + 0.25
         default_tilt = 15.0
     
     # ========== 3. PV-MODULE ==========
@@ -368,47 +591,52 @@ def build_plotly_scene(
             xaxis=dict(
                 title='Länge (m)',
                 showgrid=True,
-                gridcolor='lightgray',
+                gridcolor='#1a2332',
+                gridwidth=1,
                 showbackground=True,
-                backgroundcolor='#f5f5f5'
+                backgroundcolor='#0B0F14'
             ),
             yaxis=dict(
                 title='Breite (m)',
                 showgrid=True,
-                gridcolor='lightgray',
+                gridcolor='#1a2332',
+                gridwidth=1,
                 showbackground=True,
-                backgroundcolor='#f5f5f5'
+                backgroundcolor='#0B0F14'
             ),
             zaxis=dict(
                 title='Höhe (m)',
                 showgrid=True,
-                gridcolor='lightgray',
+                gridcolor='#1a2332',
+                gridwidth=1,
                 showbackground=True,
-                backgroundcolor='#f5f5f5'
+                backgroundcolor='#0B0F14'
             ),
             aspectmode='data',
             camera=dict(
-                eye=dict(x=1.8, y=-1.8, z=1.3),
-                center=dict(x=0, y=0, z=0.3),
+                eye=dict(x=1.5, y=-1.8, z=1.5),
+                center=dict(x=0, y=0, z=0.2),
                 up=dict(x=0, y=0, z=1)
             ),
-            bgcolor='#e8f4f8'
+            bgcolor='#0B0F14'
         ),
         title=dict(
             text=f'🏠 3D PV-Visualisierung ({module_quantity} Module)',
-            font=dict(size=18, color='#333')
+            font=dict(size=20, color='#FFFFFF', family='Arial, sans-serif')
         ),
         showlegend=True,
         legend=dict(
             x=0.02,
             y=0.98,
-            bgcolor='rgba(255,255,255,0.8)',
-            bordercolor='#ccc',
-            borderwidth=1
+            bgcolor='rgba(17, 23, 32, 0.95)',
+            bordercolor='#00E5FF',
+            borderwidth=1,
+            font=dict(size=12, color='#FFFFFF')
         ),
-        height=750,
-        margin=dict(l=0, r=0, t=50, b=0),
-        paper_bgcolor='white',
+        height=800,
+        margin=dict(l=0, r=0, t=60, b=0),
+        paper_bgcolor='#0B0F14',
+        plot_bgcolor='#0B0F14',
         hovermode='closest'
     )
     

@@ -359,10 +359,14 @@ def _render_3d_view_impl():
             "Sonstiges"
         ]
 
+        # Verwende die letzte gespeicherte Dachform aus scene_data, falls vorhanden
+        scene_data = st.session_state.get("_pv3d_scene_data", {})
+        last_selected_roof = scene_data.get("roof_type", roof_type)
+
         selected_roof_type = st.selectbox(
             "Dachform",
             options=roof_types,
-            index=roof_types.index(roof_type) if roof_type in roof_types else 0,
+            index=roof_types.index(last_selected_roof) if last_selected_roof in roof_types else 0,
             help="Wählen Sie die Dachform Ihres Gebäudes",
             key="roof_type_select"
         )
@@ -1376,8 +1380,9 @@ def _render_3d_view_impl():
                             st.success(f"✓ Konfiguration {i} übernommen!")
                             st.rerun()
                     
-                    # Zeige Details
-                    with st.expander("Details anzeigen"):
+                    # Zeige Details (als einfacher Container statt verschachteltem Expander)
+                    with st.container():
+                        st.caption("**📋 Details:**")
                         st.write(f"- Aufständerung: {config.mounting_mode}")
                         st.write(f"- Garage: {'Ja' if config.use_garage else 'Nein'}")
                         st.write(f"- Fassade: {'Ja' if config.use_facade else 'Nein'}")
