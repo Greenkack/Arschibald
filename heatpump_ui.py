@@ -26,6 +26,24 @@ try:
         get_default_heating_system_efficiency,
         recommend_heat_pump,
     )
+    from heatpump_advanced_features import (
+        calculate_insulation_upgrade,
+        compare_heating_systems,
+        calculate_window_upgrade,
+        create_renovation_roadmap,
+    )
+    from heatpump_advanced_features_part2 import (
+        optimize_heating_schedule,
+        simulate_climate_scenarios,
+        compare_heatpump_types,
+        simulate_annual_load_profile,
+    )
+    from heatpump_advanced_features_part3 import (
+        calculate_subsidies,
+        calculate_co2_footprint,
+        monte_carlo_roi_analysis,
+        benchmark_building,
+    )
     from database import get_db_connection
     from locales import get_text
     HEATPUMP_MODULES_AVAILABLE = True
@@ -50,9 +68,13 @@ def render_heatpump_analysis(
     tabs = st.tabs([
         "🏠 Gebäudeanalyse",
         "🔧 Wärmepumpen-Auswahl",
-        "🌡️ Radiator-Check",  # NEU!
+        "🌡️ Radiator-Check",
         "💰 Wirtschaftlichkeit",
         "⚡ PV-Integration",
+        "🏗️ Renovierungs-Planer",  # NEU: Features 1-4
+        "⚙️ Optimierung",  # NEU: Features 5-8
+        "💵 Förderung & CO2",  # NEU: Features 9-10
+        "📈 ROI & Benchmarking",  # NEU: Features 11-12
         "📦 Komponenten & Angebot",
         "📊 Ergebnisse"
     ])
@@ -114,10 +136,34 @@ def render_heatpump_analysis(
                         "PV-Daten optional. Für PV+WP-Integration bitte zuerst PV-Analyse durchführen.")
                 pv_integration_data = None
 
-    with tabs[4]:
+    with tabs[5]:  # Renovierungs-Planer
+        if 'building_data' in st.session_state:
+            render_renovation_planner(texts, st.session_state.building_data)
+        else:
+            st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
+
+    with tabs[6]:  # Optimierung
+        if 'building_data' in st.session_state:
+            render_optimization_tools(texts, st.session_state.building_data)
+        else:
+            st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
+
+    with tabs[7]:  # Förderung & CO2
+        if 'building_data' in st.session_state:
+            render_subsidy_co2(texts, st.session_state.building_data)
+        else:
+            st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
+
+    with tabs[8]:  # ROI & Benchmarking
+        if 'building_data' in st.session_state:
+            render_roi_benchmarking(texts, st.session_state.building_data)
+        else:
+            st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
+
+    with tabs[9]:  # Komponenten & Angebot
         render_components_offer_tab(texts)
 
-    with tabs[5]:
+    with tabs[10]:  # Ergebnisse
         render_results_summary(texts)
 
 
@@ -2268,6 +2314,666 @@ def get_heatpump_database() -> list[dict[str, Any]]:
             'efficiency_class': 'A++'
         }
     ]
+
+
+# ============================================================================
+# NEUE FEATURES: UI-FUNKTIONEN
+# ============================================================================
+
+def render_renovation_planner(texts: dict[str, str], building_data: dict[str, Any]):
+    """Renovierungs-Planer Tab (Features 1-4)"""
+    
+    st.subheader("🏗️ Renovierungs-Planer")
+    st.markdown("Optimale Sanierungsmaßnahmen für maximale Effizienz")
+    
+    # Feature 1: Dämmungs-Upgrade-Rechner
+    with st.expander("🏠 Dämmungs-Upgrade-Rechner", expanded=True):
+        st.markdown("### Vergleichen Sie verschiedene Dämmungs-Optionen")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write("**Aktueller Zustand:**")
+            current_roof = st.selectbox("Dach", ["uninsulated", "10cm", "20cm", "30cm"], key="current_roof")
+            current_facade = st.selectbox("Fassade", ["uninsulated", "poor", "12cm", "16cm", "20cm"], key="current_facade")
+            current_basement = st.selectbox("Kellerdecke", ["uninsulated", "8cm", "12cm", "16cm"], key="current_basement")
+            current_windows = st.selectbox("Fenster", ["single", "double_old", "double_new", "triple"], key="current_windows")
+        
+        with col2:
+            st.write("**Ziel-Zustand:**")
+            target_roof = st.selectbox("Dach", ["uninsulated", "10cm", "20cm", "30cm"], index=2, key="target_roof")
+            target_facade = st.selectbox("Fassade", ["uninsulated", "poor", "12cm", "16cm", "20cm"], index=3, key="target_facade")
+            target_basement = st.selectbox("Kellerdecke", ["uninsulated", "8cm", "12cm", "16cm"], index=2, key="target_basement")
+            target_windows = st.selectbox("Fenster", ["single", "double_old", "double_new", "triple"], index=3, key="target_windows")
+        
+        if st.button("Dämmung berechnen", key="calc_insulation"):
+            current_state = {
+                "roof": current_roof,
+                "facade": current_facade,
+                "basement": current_basement,
+                "windows": current_windows
+            }
+            target_state = {
+                "roof": target_roof,
+                "facade": target_facade,
+                "basement": target_basement,
+                "windows": target_windows
+            }
+            
+            result = calculate_insulation_upgrade(building_data, current_state, target_state)
+            
+            st.success(f"💰 **Gesamt-Investition:** {result['total_investment_eur']:,.2f} €")
+            st.success(f"💵 **Jährliche Einsparung:** {result['total_annual_savings_eur']:,.2f} €/Jahr")
+            st.success(f"⏱️ **Amortisation:** {result['total_payback_years']:.1f} Jahre")
+            st.success(f"📈 **Gewinn nach 20 Jahren:** {result['savings_20_years_eur']:,.2f} €")
+            
+            st.markdown("### 📊 Optimale Reihenfolge (nach ROI)")
+            for i, measure in enumerate(result['optimal_order'], 1):
+                data = result['measures'][measure]
+                st.write(f"**{i}. {measure.upper()}**")
+                col1, col2, col3 = st.columns(3)
+                col1.metric("Investition", f"{data['investment_eur']:,.0f} €")
+                col2.metric("Einsparung/Jahr", f"{data['annual_savings_eur']:,.0f} €")
+                col3.metric("Amortisation", f"{data['payback_years']:.1f} J")
+            
+            # Visualisierung
+            fig = go.Figure()
+            components = list(result['measures'].keys())
+            paybacks = [result['measures'][c]['payback_years'] for c in components]
+            
+            fig.add_trace(go.Bar(
+                x=components,
+                y=paybacks,
+                text=[f"{p:.1f} J" for p in paybacks],
+                textposition='auto',
+                marker_color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A']
+            ))
+            
+            fig.update_layout(
+                title="Amortisationszeit nach Komponente",
+                xaxis_title="Komponente",
+                yaxis_title="Jahre",
+                height=400
+            )
+            st.plotly_chart(fig, use_container_width=True)
+    
+    # Feature 2: Heizkörper vs. Fußbodenheizung
+    with st.expander("🌡️ Heizkörper vs. Fußbodenheizung Optimizer"):
+        st.markdown("### Welches System ist optimal?")
+        
+        current_system = st.radio("Aktuelles System", ["radiators", "underfloor"], format_func=lambda x: "Heizkörper" if x == "radiators" else "Fußbodenheizung")
+        
+        if st.button("Systeme vergleichen", key="compare_heating"):
+            result = compare_heating_systems(building_data, current_system)
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("#### 🔥 Niedertemperatur-Radiatoren")
+                rad = result['systems']['radiators_new']
+                st.metric("Vorlauftemperatur", f"{rad['flow_temperature_c']}°C")
+                st.metric("COP", f"{rad['cop']:.2f}")
+                st.metric("Installationskosten", f"{rad['installation_cost_eur']:,.0f} €")
+                st.metric("Jahreskosten Strom", f"{rad['annual_cost_eur']:,.0f} €")
+            
+            with col2:
+                st.markdown("#### 🌊 Fußbodenheizung")
+                uf = result['systems']['underfloor']
+                st.metric("Vorlauftemperatur", f"{uf['flow_temperature_c']}°C")
+                st.metric("COP", f"{uf['cop']:.2f}")
+                st.metric("Installationskosten", f"{uf['installation_cost_eur']:,.0f} €")
+                st.metric("Jahreskosten Strom", f"{uf['annual_cost_eur']:,.0f} €")
+            
+            comp = result['comparison']
+            st.markdown("### 🎯 Empfehlung")
+            st.success(f"**{comp['recommendation']}**")
+            st.info(f"Jährliche Einsparung: {comp['annual_savings_eur']:,.2f} €/Jahr")
+            st.info(f"Amortisation: {comp['payback_years']:.1f} Jahre")
+            st.info(f"COP-Verbesserung: +{comp['cop_improvement_percent']:.1f}%")
+    
+    # Feature 3: Fenster-Sanierungs-Assistent
+    with st.expander("🪟 Fenster-Sanierungs-Assistent"):
+        st.markdown("### U-Wert-Vergleich mit solaren Gewinnen")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            current_glaz = st.selectbox("Aktuelle Verglasung", ["single", "double_old", "double_new", "triple"], key="current_glaz")
+        with col2:
+            target_glaz = st.selectbox("Ziel-Verglasung", ["double_new", "triple", "triple_plus"], index=1, key="target_glaz")
+        
+        st.markdown("**Fenster-Ausrichtung (Anteil):**")
+        col1, col2, col3, col4 = st.columns(4)
+        north = col1.number_input("Norden", min_value=0.0, max_value=1.0, value=0.20, step=0.05)
+        east = col2.number_input("Osten", min_value=0.0, max_value=1.0, value=0.20, step=0.05)
+        south = col3.number_input("Süden", min_value=0.0, max_value=1.0, value=0.35, step=0.05)
+        west = col4.number_input("Westen", min_value=0.0, max_value=1.0, value=0.25, step=0.05)
+        
+        if st.button("Fenster-Sanierung berechnen", key="calc_windows"):
+            orientation_mix = {"north": north, "east": east, "south": south, "west": west}
+            result = calculate_window_upgrade(building_data, current_glaz, target_glaz, orientation_mix)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Fensterfläche", f"{result['window_area_m2']:.1f} m²")
+                st.metric("U-Wert Verbesserung", f"-{result['u_value_improvement']['reduction_percent']:.1f}%")
+                st.metric("Wärmeverlust-Reduktion", f"{result['heat_loss_reduction_kwh']:,.0f} kWh")
+            
+            with col2:
+                st.metric("Investition (brutto)", f"{result['investment_eur']:,.0f} €")
+                st.metric("Förderung (15%)", f"{result['subsidy_eur']:,.0f} €")
+                st.metric("Netto-Investition", f"{result['net_investment_eur']:,.0f} €")
+            
+            st.success(f"📈 **Gewinn nach 20 Jahren:** {result['savings_20_years_eur']:,.2f} €")
+            st.info(f"⏱️ **Amortisation:** {result['payback_years']:.1f} Jahre")
+    
+    # Feature 4: Gesamt-Renovierungs-Planer
+    with st.expander("📋 Gesamt-Renovierungs-Planer"):
+        st.markdown("### Optimaler Sanierungsfahrplan mit Budget-Optimierung")
+        
+        budget_total = st.number_input("Verfügbares Budget (€)", min_value=10000, max_value=200000, value=50000, step=5000)
+        
+        st.markdown("**Aktueller Zustand aller Komponenten:**")
+        col1, col2, col3, col4 = st.columns(4)
+        curr_roof = col1.selectbox("Dach", ["uninsulated", "10cm", "20cm"], key="roadmap_roof")
+        curr_facade = col2.selectbox("Fassade", ["uninsulated", "poor", "12cm"], key="roadmap_facade")
+        curr_basement = col3.selectbox("Keller", ["uninsulated", "8cm", "12cm"], key="roadmap_basement")
+        curr_windows = col4.selectbox("Fenster", ["single", "double_old", "double_new"], key="roadmap_windows")
+        
+        if st.button("Sanierungsplan erstellen", key="create_roadmap"):
+            current_states = {
+                "roof": curr_roof,
+                "facade": curr_facade,
+                "basement": curr_basement,
+                "windows": curr_windows
+            }
+            
+            result = create_renovation_roadmap(building_data, budget_total, current_states)
+            
+            st.markdown("### 📊 Sanierungsfahrplan")
+            for step in result['roadmap']:
+                with st.container():
+                    st.markdown(f"### Schritt {step['step']}: {step['measure'].replace('_', ' ').title()}")
+                    col1, col2, col3 = st.columns(3)
+                    col1.metric("Investition", f"{step['investment_eur']:,.0f} €")
+                    col2.metric("Einsparung/Jahr", f"{step['annual_savings_eur']:,.0f} €")
+                    col3.metric("Amortisation", f"{step['payback_years']:.1f} J")
+                    st.progress(step['cumulative_investment'] / budget_total)
+                    st.write(f"Kumulative Investition: {step['cumulative_investment']:,.0f} € von {budget_total:,.0f} €")
+            
+            summary = result['summary']
+            st.markdown("### 💰 Zusammenfassung")
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("Maßnahmen", summary['total_measures'])
+            col2.metric("Investition", f"{summary['net_investment_eur']:,.0f} €")
+            col3.metric("Förderung", f"{summary['total_subsidy_eur']:,.0f} €")
+            col4.metric("Einsparung/Jahr", f"{summary['total_annual_savings_eur']:,.0f} €")
+            
+            st.success(f"📈 **Gewinn nach 20 Jahren:** {summary['savings_20_years_eur']:,.2f} €")
+            st.info(f"⏱️ **Gesamt-Amortisation:** {summary['overall_payback_years']:.1f} Jahre")
+
+
+def render_optimization_tools(texts: dict[str, str], building_data: dict[str, Any]):
+    """Optimierungs-Tools Tab (Features 5-8)"""
+    
+    st.subheader("⚙️ Optimierungs-Tools")
+    st.markdown("Intelligente Analyse und Optimierung")
+    
+    # Feature 5: Verbrauchsoptimierer Turbo
+    with st.expander("⚡ Verbrauchsoptimierer Turbo", expanded=True):
+        st.markdown("### Heizplan-Optimierung mit Stromtarifen")
+        
+        st.markdown("**Anwesenheitsprofil (Wochentag):**")
+        st.info("1 = Anwesend, 0 = Abwesend")
+        
+        # Vereinfachte Eingabe: 24 Stunden für Wochentag
+        hours_occupied = st.multiselect(
+            "Anwesenheitszeiten (Wochentag)",
+            list(range(24)),
+            default=[7, 8, 18, 19, 20, 21, 22]
+        )
+        
+        occupancy_weekday = [1 if h in hours_occupied else 0 for h in range(24)]
+        occupancy_weekend = [1] * 24  # Wochenende: Ganztags anwesend
+        
+        occupancy_profile = {
+            "monday": occupancy_weekday,
+            "tuesday": occupancy_weekday,
+            "wednesday": occupancy_weekday,
+            "thursday": occupancy_weekday,
+            "friday": occupancy_weekday,
+            "saturday": occupancy_weekend,
+            "sunday": occupancy_weekend
+        }
+        
+        col1, col2, col3 = st.columns(3)
+        tariff_night = col1.number_input("Nachttarif (€/kWh)", value=0.22, step=0.01)
+        tariff_day = col2.number_input("Tagtarif (€/kWh)", value=0.32, step=0.01)
+        tariff_peak = col3.number_input("Spitzentarif (€/kWh)", value=0.42, step=0.01)
+        
+        electricity_tariff = {"night": tariff_night, "day": tariff_day, "peak": tariff_peak}
+        
+        if st.button("Heizplan optimieren", key="optimize_schedule"):
+            result = optimize_heating_schedule(building_data, occupancy_profile, electricity_tariff)
+            
+            st.markdown("### 💰 Einsparung durch Optimierung")
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.metric("Baseline (konstant)", f"{result['baseline']['annual_cost_eur']:,.0f} €/Jahr")
+            with col2:
+                st.metric("Optimiert (Vorheizen)", f"{result['optimized']['annual_cost_eur']:,.0f} €/Jahr")
+            
+            st.success(f"💵 **Jährliche Einsparung:** {result['savings']['annual_eur']:,.2f} € ({result['savings']['percent']:.1f}%)")
+            
+            # Visualisierung: Wochenplan
+            schedule_df = pd.DataFrame(result['schedule'][:168])  # Erste Woche
+            
+            fig = go.Figure()
+            
+            # Heizmodus als Farbe
+            mode_colors = {"normal": "green", "preheat": "orange", "reduced": "blue"}
+            
+            for mode in ["normal", "preheat", "reduced"]:
+                df_mode = schedule_df[schedule_df['mode'] == mode]
+                fig.add_trace(go.Scatter(
+                    x=df_mode.index,
+                    y=df_mode['power_kw'],
+                    mode='markers',
+                    name=mode.title(),
+                    marker=dict(color=mode_colors[mode], size=8)
+                ))
+            
+            fig.update_layout(
+                title="Optimierter Heizplan (1 Woche)",
+                xaxis_title="Stunde",
+                yaxis_title="Heizleistung (kW)",
+                height=400
+            )
+            st.plotly_chart(fig, use_container_width=True)
+    
+    # Feature 6: Klimawandel-Szenarien
+    with st.expander("🌍 Klimawandel-Szenarien 2025-2050"):
+        st.markdown("### Langzeit-Prognose mit Temperaturanstieg")
+        
+        if st.button("Szenarien berechnen", key="climate_scenarios"):
+            result = simulate_climate_scenarios(building_data)
+            
+            st.markdown("### 📊 Vergleich der Szenarien")
+            
+            # Tabelle
+            summary_data = []
+            for scenario_key, scenario_data in result['scenarios'].items():
+                summary = scenario_data['summary_2050']
+                summary_data.append({
+                    "Szenario": scenario_data['name'],
+                    "Temperaturanstieg": f"+{summary['temp_increase_c']:.1f}°C",
+                    "Heizlast-Reduktion": f"-{summary['heating_reduction_percent']:.1f}%",
+                    "COP 2050": f"{summary['final_cop']:.2f}",
+                    "Strompreis 2050": f"{summary['electricity_price_2050']:.3f} €/kWh",
+                    "Kosten 2024-2050": f"{summary['cumulative_cost_2024_2050_eur']:,.0f} €"
+                })
+            
+            st.dataframe(pd.DataFrame(summary_data))
+            
+            st.success(f"💵 **Differenz Best/Worst Case:** {result['comparison']['difference_eur']:,.0f} €")
+            
+            # Visualisierung: Kosten-Entwicklung
+            fig = go.Figure()
+            
+            for scenario_key, scenario_data in result['scenarios'].items():
+                yearly = scenario_data['yearly_data']
+                years = [d['year'] for d in yearly]
+                costs = [d['annual_cost_eur'] for d in yearly]
+                
+                fig.add_trace(go.Scatter(
+                    x=years,
+                    y=costs,
+                    mode='lines+markers',
+                    name=scenario_data['name']
+                ))
+            
+            fig.update_layout(
+                title="Jährliche Heizkosten-Entwicklung bis 2050",
+                xaxis_title="Jahr",
+                yaxis_title="Kosten (€/Jahr)",
+                height=500
+            )
+            st.plotly_chart(fig, use_container_width=True)
+    
+    # Feature 7: Wärmepumpen-Auswahl-Matrix
+    with st.expander("🔧 Wärmepumpen-Auswahl-Matrix"):
+        st.markdown("### Vergleichen Sie alle WP-Typen")
+        
+        col1, col2 = st.columns(2)
+        plot_size = col1.number_input("Grundstücksgröße (m²)", min_value=100, max_value=5000, value=500)
+        groundwater = col2.checkbox("Grundwasser verfügbar?", value=False)
+        
+        if st.button("WP-Typen vergleichen", key="compare_heatpumps"):
+            result = compare_heatpump_types(building_data, plot_size, groundwater)
+            
+            st.markdown("### 🏆 Ranking nach Lebenszykluskosten")
+            for rank_data in result['ranking']:
+                st.write(f"**{rank_data['rank']}. {rank_data['name']}**")
+            
+            st.success(f"🎯 **Empfehlung:** {result['comparison'][result['recommendation']]['name']}")
+            
+            # Vergleichs-Tabelle
+            comparison_data = []
+            for wp_type, data in result['comparison'].items():
+                comparison_data.append({
+                    "Typ": data['name'],
+                    "COP": f"{data['cop']:.2f}",
+                    "Investition": f"{data['net_installation_eur']:,.0f} €",
+                    "Stromkosten/Jahr": f"{data['annual_electricity_cost_eur']:,.0f} €",
+                    "Wartung/Jahr": f"{data['annual_maintenance_eur']} €",
+                    "Lebenszykluskosten": f"{data['lifetime_cost_eur']:,.0f} €",
+                    "Lautstärke": f"{data['noise_db']} dB",
+                    "Lebensdauer": f"{data['lifespan_years']} Jahre"
+                })
+            
+            st.dataframe(pd.DataFrame(comparison_data))
+    
+    # Feature 8: 8760h-Lastgang-Analyse
+    with st.expander("📈 8760h-Lastgang-Analyse"):
+        st.markdown("### Stündliche Simulation über ganzes Jahr")
+        
+        if st.button("Jahres-Simulation starten", key="simulate_annual"):
+            with st.spinner("Simuliere 8760 Stunden..."):
+                result = simulate_annual_load_profile(building_data)
+            
+            st.markdown("### 📊 Jahres-Zusammenfassung")
+            col1, col2, col3, col4 = st.columns(4)
+            summary = result['annual_summary']
+            col1.metric("Wärmebedarf", f"{summary['total_heat_kwh']:,.0f} kWh")
+            col2.metric("Stromverbrauch", f"{summary['total_electricity_kwh']:,.0f} kWh")
+            col3.metric("Ø COP", f"{summary['annual_average_cop']:.2f}")
+            col4.metric("Betriebsstunden", f"{summary['operating_hours']:,.0f} h")
+            
+            st.success(f"💰 **Jahreskosten:** {summary['annual_cost_eur']:,.2f} €")
+            
+            # Monats-Übersicht
+            st.markdown("### 📅 Monats-Übersicht")
+            monthly_df = pd.DataFrame(result['monthly_summary'])
+            monthly_df['month_name'] = monthly_df['month'].map({
+                1: "Jan", 2: "Feb", 3: "Mär", 4: "Apr", 5: "Mai", 6: "Jun",
+                7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez"
+            })
+            
+            fig = go.Figure()
+            
+            fig.add_trace(go.Bar(
+                x=monthly_df['month_name'],
+                y=monthly_df['total_electricity_kwh'],
+                name="Stromverbrauch",
+                marker_color='#FF6B6B'
+            ))
+            
+            fig.add_trace(go.Scatter(
+                x=monthly_df['month_name'],
+                y=monthly_df['avg_cop'],
+                name="Ø COP",
+                yaxis='y2',
+                marker_color='#4ECDC4'
+            ))
+            
+            fig.update_layout(
+                title="Monats-Übersicht: Stromverbrauch & COP",
+                xaxis_title="Monat",
+                yaxis_title="Stromverbrauch (kWh)",
+                yaxis2=dict(title="Ø COP", overlaying='y', side='right'),
+                height=500
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+
+def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
+    """Förderung & CO2 Tab (Features 9-10)"""
+    
+    st.subheader("💵 Förderung & CO2-Dashboard")
+    
+    # Feature 9: Fördermittel-Optimizer
+    with st.expander("🎁 Fördermittel-Optimizer", expanded=True):
+        st.markdown("### Alle verfügbaren Förderungen (BAFA, KfW, Länder)")
+        
+        st.markdown("**Welche Maßnahmen planen Sie?**")
+        col1, col2, col3 = st.columns(3)
+        measure_hp = col1.checkbox("Wärmepumpe", value=True)
+        measure_insulation = col2.checkbox("Dämmung", value=True)
+        measure_windows = col3.checkbox("Fenster", value=True)
+        
+        building_age = st.number_input("Gebäudealter (Jahre)", min_value=0, max_value=100, value=30)
+        
+        measures = {
+            "heatpump": measure_hp,
+            "insulation": measure_insulation,
+            "windows": measure_windows
+        }
+        
+        if st.button("Förderungen berechnen", key="calc_subsidies"):
+            result = calculate_subsidies(building_data, measures, building_age)
+            
+            st.markdown("### 💰 Finanzierung")
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Gesamt-Investition", f"{result['total_investment_eur']:,.0f} €")
+            col2.metric("Förderung", f"{result['total_subsidy_eur']:,.0f} € ({result['subsidy_rate']:.1f}%)")
+            col3.metric("Netto-Investition", f"{result['net_investment_eur']:,.0f} €")
+            
+            st.markdown("### 📋 Förderungen im Detail")
+            for subsidy in result['subsidies']:
+                with st.container():
+                    st.markdown(f"#### {subsidy['program']}")
+                    col1, col2, col3 = st.columns(3)
+                    col1.write(f"**Typ:** {subsidy['type']}")
+                    col2.write(f"**Betrag:** {subsidy['amount_eur']:,.2f} €")
+                    if subsidy['rate'] > 0:
+                        col3.write(f"**Rate:** {subsidy['rate']:.1f}%")
+            
+            if result['loan_option']:
+                st.markdown("### 🏦 KfW-Kredit-Option")
+                loan = result['loan_option']
+                col1, col2, col3 = st.columns(3)
+                col1.metric("Kreditbetrag", f"{loan['loan_amount_eur']:,.0f} €")
+                col2.metric("Tilgungszuschuss", f"{loan['tilgung_grant_eur']:,.0f} €")
+                col3.metric("Monatliche Rate", f"{loan['monthly_rate_eur']:.2f} €")
+                st.info(f"Laufzeit: {loan['duration_years']} Jahre, Zinssatz: {loan['interest_rate']*100:.1f}%")
+            
+            st.markdown("### ✅ Antrags-Checkliste")
+            for item in result['application_checklist']:
+                st.checkbox(item, key=f"checklist_{item}")
+    
+    # Feature 10: CO2-Dashboard Live
+    with st.expander("🌱 CO2-Dashboard Live"):
+        st.markdown("### Langfristige CO2-Bilanz (20 Jahre)")
+        
+        col1, col2 = st.columns(2)
+        current_sys = col1.selectbox("Aktuelles System", ["gas", "oil", "district_heating"], format_func=lambda x: {"gas": "Erdgas", "oil": "Heizöl", "district_heating": "Fernwärme"}[x])
+        future_sys = col2.selectbox("Zukünftiges System", ["heatpump", "heatpump_pv"], format_func=lambda x: {"heatpump": "Wärmepumpe (Grid)", "heatpump_pv": "Wärmepumpe + PV"}[x])
+        
+        if st.button("CO2-Bilanz berechnen", key="calc_co2"):
+            result = calculate_co2_footprint(building_data, current_sys, future_sys)
+            
+            st.markdown("### 🌍 20-Jahres-Zusammenfassung")
+            col1, col2, col3, col4 = st.columns(4)
+            summary = result['summary_20_years']
+            col1.metric("CO2-Einsparung", f"{summary['total_co2_savings_t']:.1f} Tonnen")
+            col2.metric("Kostenersparnis", f"{summary['total_co2_cost_savings_eur']:,.0f} €")
+            col3.metric("≈ Bäume gepflanzt", f"{summary['equivalent_trees_planted']:,.0f}")
+            col4.metric("≈ PKW-km eingespart", f"{summary['equivalent_car_km']:,.0f}")
+            
+            st.success(f"💚 **Pro Jahr:** {summary['avg_annual_savings_t']:.2f} Tonnen CO2")
+            
+            # Visualisierung: CO2-Entwicklung
+            yearly_df = pd.DataFrame(result['yearly_data'])
+            
+            fig = go.Figure()
+            
+            fig.add_trace(go.Scatter(
+                x=yearly_df['year'],
+                y=yearly_df['current_co2_t'],
+                mode='lines',
+                name=current_sys.upper(),
+                line=dict(color='red', width=2)
+            ))
+            
+            fig.add_trace(go.Scatter(
+                x=yearly_df['year'],
+                y=yearly_df['future_co2_t'],
+                mode='lines',
+                name=future_sys.upper(),
+                line=dict(color='green', width=2)
+            ))
+            
+            fig.add_trace(go.Scatter(
+                x=yearly_df['year'],
+                y=yearly_df['savings_co2_t'],
+                mode='lines',
+                name="Einsparung",
+                fill='tozeroy',
+                line=dict(color='lightgreen', width=1)
+            ))
+            
+            fig.update_layout(
+                title="CO2-Emissionen über 20 Jahre",
+                xaxis_title="Jahr",
+                yaxis_title="CO2 (Tonnen/Jahr)",
+                height=500
+            )
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # CO2-Preis-Entwicklung
+            fig2 = go.Figure()
+            
+            fig2.add_trace(go.Scatter(
+                x=yearly_df['year'],
+                y=yearly_df['co2_price_eur_t'],
+                mode='lines+markers',
+                name="CO2-Preis",
+                marker=dict(color='orange')
+            ))
+            
+            fig2.update_layout(
+                title="CO2-Preis-Entwicklung",
+                xaxis_title="Jahr",
+                yaxis_title="€/Tonne CO2",
+                height=400
+            )
+            st.plotly_chart(fig2, use_container_width=True)
+
+
+def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]):
+    """ROI & Benchmarking Tab (Features 11-12)"""
+    
+    st.subheader("📈 ROI-Analyse & Benchmarking")
+    
+    # Feature 11: Monte-Carlo ROI-Calculator
+    with st.expander("🎲 ROI-Calculator Monte-Carlo", expanded=True):
+        st.markdown("### Probabilistische Wirtschaftlichkeits-Analyse")
+        st.info("Simuliert 10.000 Szenarien mit unterschiedlichen Parametern")
+        
+        investment = st.number_input("Investitionssumme (€)", min_value=5000, max_value=100000, value=20000, step=1000)
+        simulations = st.slider("Anzahl Simulationen", min_value=1000, max_value=10000, value=10000, step=1000)
+        
+        if st.button("Monte-Carlo-Simulation starten", key="monte_carlo"):
+            with st.spinner(f"Führe {simulations:,} Simulationen durch..."):
+                result = monte_carlo_roi_analysis(building_data, investment, simulations)
+            
+            st.markdown("### 📊 Amortisations-Statistik")
+            col1, col2, col3, col4 = st.columns(4)
+            payback = result['payback_statistics']
+            col1.metric("Ø Amortisation", f"{payback['mean_years']:.1f} Jahre")
+            col2.metric("Median", f"{payback['median_years']:.1f} Jahre")
+            col3.metric("Best Case (10%)", f"{payback['p10_years']:.1f} Jahre")
+            col4.metric("Worst Case (90%)", f"{payback['p90_years']:.1f} Jahre")
+            
+            st.success(f"✅ **Wahrscheinlichkeit für Amortisation <15 Jahre:** {payback['probability_under_15_years']:.1f}%")
+            
+            st.markdown("### 💰 Nettobarwert (NPV)")
+            col1, col2, col3 = st.columns(3)
+            npv = result['npv_statistics']
+            col1.metric("Ø NPV", f"{npv['mean_eur']:,.0f} €")
+            col2.metric("Median NPV", f"{npv['median_eur']:,.0f} €")
+            col3.metric("Wahrscheinlichkeit NPV>0", f"{npv['probability_positive']:.1f}%")
+            
+            st.markdown("### 📈 ROI-Statistik")
+            col1, col2, col3 = st.columns(3)
+            roi = result['roi_statistics']
+            col1.metric("Ø ROI", f"{roi['mean_percent']:.1f}%")
+            col2.metric("Median ROI", f"{roi['median_percent']:.1f}%")
+            col3.metric("ROI-Spanne", f"{roi['p10_percent']:.1f}% bis {roi['p90_percent']:.1f}%")
+            
+            # Visualisierung: Verteilung der Amortisationszeiten
+            raw_results = result['raw_results']
+            payback_values = [r['payback_years'] for r in raw_results if r['payback_years'] < 30]
+            
+            fig = go.Figure()
+            
+            fig.add_trace(go.Histogram(
+                x=payback_values,
+                nbinsx=30,
+                marker_color='#4ECDC4',
+                name="Häufigkeit"
+            ))
+            
+            fig.add_vline(x=payback['mean_years'], line_dash="dash", line_color="red", annotation_text=f"Ø {payback['mean_years']:.1f} J")
+            fig.add_vline(x=payback['median_years'], line_dash="dash", line_color="green", annotation_text=f"Median {payback['median_years']:.1f} J")
+            
+            fig.update_layout(
+                title="Verteilung der Amortisationszeiten",
+                xaxis_title="Jahre",
+                yaxis_title="Häufigkeit",
+                height=400
+            )
+            st.plotly_chart(fig, use_container_width=True)
+    
+    # Feature 12: Benchmarking-Tool
+    with st.expander("🏆 Benchmarking-Tool"):
+        st.markdown("### Vergleich mit ähnlichen Gebäuden")
+        
+        region = st.selectbox("Region", ["Germany", "Bayern", "NRW", "Baden-Württemberg"], index=0)
+        
+        if st.button("Benchmarking durchführen", key="benchmark"):
+            result = benchmark_building(building_data, region)
+            
+            own = result['own_building']
+            ranking = result['ranking']
+            comparison = result['comparison']
+            
+            st.markdown("### 📊 Ihr Gebäude")
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Verbrauch", f"{own['specific_consumption_kwh_m2']:.1f} kWh/m²/Jahr")
+            col2.metric("Wohnfläche", f"{own['living_area_m2']:.0f} m²")
+            col3.metric("Baujahr", own['year_built'])
+            
+            st.markdown("### 🎯 Ranking")
+            rank_color = "green" if ranking['percentile'] <= 25 else "orange" if ranking['percentile'] <= 50 else "red"
+            st.markdown(f"**Platz {ranking['rank']} von {ranking['total_buildings']}** ({ranking['percentile']:.1f}. Perzentil)")
+            st.markdown(f"**Bewertung:** :{rank_color}[{ranking['interpretation']}]")
+            
+            st.markdown("### 📉 Vergleich")
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Durchschnitt", f"{comparison['avg_consumption_kwh_m2']:.1f} kWh/m²", 
+                        delta=f"{comparison['difference_to_avg_kwh_m2']:.1f}", delta_color="inverse")
+            col2.metric("Bestes Gebäude", f"{comparison['best_consumption_kwh_m2']:.1f} kWh/m²",
+                        delta=f"{comparison['difference_to_best_kwh_m2']:.1f}", delta_color="inverse")
+            col3.metric("Schlechtestes", f"{comparison['worst_consumption_kwh_m2']:.1f} kWh/m²")
+            
+            st.success(f"💰 **Einsparpotenzial:** {result['potential_annual_savings_eur']:,.2f} €/Jahr")
+            
+            # Best Performer
+            best = result['best_performer']
+            st.markdown("### 🏅 Best Performer")
+            st.info(f"**System:** {best['system'].upper()}, **Gedämmt:** {'Ja' if best['insulated'] else 'Nein'}, **Baujahr:** {best['year']}, **Verbrauch:** {best['consumption_kwh_m2']} kWh/m²")
+            
+            # Empfehlungen
+            if result['recommendations']:
+                st.markdown("### 💡 Empfehlungen")
+                for rec in result['recommendations']:
+                    priority_color = "red" if rec['priority'] == "high" else "orange"
+                    st.markdown(f":{priority_color}[**{rec['priority'].upper()}**] {rec['measure']}")
+                    col1, col2 = st.columns(2)
+                    col1.write(f"Einsparung: {rec['potential_savings_kwh_m2']:.0f} kWh/m²/Jahr")
+                    col2.write(f"Investition: {rec['investment_eur']:,.0f} €")
+
 
 # Haupt-Export-Funktion
 
