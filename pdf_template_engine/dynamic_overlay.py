@@ -1348,6 +1348,65 @@ def _draw_page2_kpi_donuts(
         txt = dynamic_data.get("self_supply_rate_percent", f"{int(round(pct_autark))}%")
         c.setFont("Helvetica-Bold", 12)
         c.setFillColor(fg_blue)
+
+
+def _draw_page6_3d_visual(
+    c: canvas.Canvas,
+    dynamic_data: dict[str, str],
+    page_width: float,
+    page_height: float,
+) -> None:
+    """Zeichnet das 3D-Visualisierungs-Bild auf Seite 6 im Platzhalter '3d_visuals'."""
+    try:
+        # Hole 3D-Screenshot aus dynamic_data (als Base64 PNG)
+        screenshot_b64 = dynamic_data.get("pv_3d_screenshot_b64")
+        
+        if not screenshot_b64:
+            print("DEBUG: Kein 3D-Screenshot in dynamic_data gefunden (pv_3d_screenshot_b64)")
+            return
+        
+        # Konvertiere Base64 zu ImageReader
+        img = _as_image_reader(screenshot_b64)
+        if img is None:
+            print("DEBUG: 3D-Screenshot konnte nicht geladen werden")
+            return
+        
+        # Position aus seite6.yml: (65.158, 670.898, 429.334, 836.805)
+        # Canvas Y = page_height - YAML Y (weil Canvas Ursprung unten links)
+        x = 65.158
+        y_top_yaml = 670.898
+        x2 = 429.334
+        y_bottom_yaml = 836.805
+        
+        # Breite und Höhe berechnen
+        width = x2 - x  # 364.176 pt
+        height = y_bottom_yaml - y_top_yaml  # 165.907 pt
+        
+        # Canvas Y-Position (unten links des Bildes)
+        y = page_height - y_bottom_yaml
+        
+        print(f"DEBUG: 3D-Visual auf Seite 6 - Position: x={x}, y={y}, width={width}, height={height}")
+        
+        # Bild einfügen
+        c.saveState()
+        try:
+            c.drawImage(
+                img,
+                x,
+                y,
+                width=width,
+                height=height,
+                preserveAspectRatio=True,
+                mask="auto"
+            )
+            print(f"DEBUG: 3D-Visual erfolgreich auf Seite 6 gezeichnet")
+        finally:
+            c.restoreState()
+            
+    except Exception as e:
+        print(f"Fehler beim Zeichnen des 3D-Visuals auf Seite 6: {e}")
+        import traceback
+        traceback.print_exc()
         tw = c.stringWidth(txt, "Helvetica-Bold", 12)
         c.drawString(left_cx - tw / 2, cy - 6, txt)
     if pct_ev > 0:
@@ -1531,6 +1590,10 @@ def generate_overlay(
             # Hersteller-Brand-Logos (nach Produktbildern, vor Textlayer optional)
             # Logos werden später auch nach dem Text gerendert um Überdeckung
             # sicherzustellen
+
+        # Seite 6: 3D-Visualisierung
+        if i == 6:
+            _draw_page6_3d_visual(c, dynamic_data, page_width, page_height)
 
         # Keys für horizontale Zentrierung innerhalb Box
         # Keys für horizontale Zentrierung innerhalb Box

@@ -7,6 +7,7 @@ Datum: 2025-06-04 (Überarbeitet für Syntaxkonsistenz)
 """
 import base64
 import json
+import os
 import traceback
 from collections.abc import Callable
 from datetime import datetime
@@ -28,6 +29,18 @@ from ui_state_manager import (
     mirror_widget_value,
     set_current_page,
 )
+
+# Attribute-CRUD aus flexibler Attributtabelle (Key/Value)
+try:
+    from product_attributes import (
+        list_attributes as pa_list_attributes,
+        upsert_attribute as pa_upsert_attribute,
+        delete_attribute as pa_delete_attribute,
+    )
+except Exception:
+    pa_list_attributes = None  # type: ignore
+    pa_upsert_attribute = None  # type: ignore
+    pa_delete_attribute = None  # type: ignore
 
 # === WIDGET KEY SUFFIX (global, damit alle Funktionen es nutzen können) ===
 WIDGET_KEY_SUFFIX = "_v16_admin_definitiv"
@@ -1039,6 +1052,14 @@ def render_product_management(
         get_product_by_id_func,
         list_product_categories_func,
         get_product_by_model_name_func):
+
+    # Datasheets-Verzeichnis definieren
+    PRODUCT_DATASHEETS_BASE_DIR_ADMIN = os.path.join(os.getcwd(), "data", "product_datasheets")
+    if not os.path.exists(PRODUCT_DATASHEETS_BASE_DIR_ADMIN):
+        try:
+            os.makedirs(PRODUCT_DATASHEETS_BASE_DIR_ADMIN)
+        except OSError as e:
+            st.error(f"Fehler beim Erstellen des Verzeichnisses '{PRODUCT_DATASHEETS_BASE_DIR_ADMIN}': {e}")
 
     if 'product_to_edit_id_manual' not in st.session_state:
         st.session_state.product_to_edit_id_manual = None

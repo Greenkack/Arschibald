@@ -7,6 +7,7 @@ Das neue Admin-Passwortschutz-System ermöglicht es, einzelne Admin-Bereiche mit
 ## Neue Features
 
 ### 1. **Build Infos Tab** (📋)
+
 - **Zweck**: Zeigt Hauptdokumentation und detaillierte Docs
 - **Schutz**: Standardmäßig passwortgeschützt
 - **Inhalt**:
@@ -17,6 +18,7 @@ Das neue Admin-Passwortschutz-System ermöglicht es, einzelne Admin-Bereiche mit
   - Download-Funktion für einzelne Dokumente
 
 ### 2. **Sicherheitseinstellungen Tab** (🔐)
+
 - **Zweck**: Konfiguration des Passwortschutzes
 - **Funktionen**:
   - Ein/Ausschalten des Schutzes pro Bereich
@@ -24,6 +26,7 @@ Das neue Admin-Passwortschutz-System ermöglicht es, einzelne Admin-Bereiche mit
   - Abmelden von einzelnen Bereichen
 
 ### 3. **Passwortschutz-System**
+
 - **Authentifizierung**: Admin-Benutzername + Passwort
 - **Passwort-Hashing**: SHA-256 für sichere Speicherung
 - **Session-basiert**: Authentifizierung bleibt während der Session aktiv
@@ -32,6 +35,7 @@ Das neue Admin-Passwortschutz-System ermöglicht es, einzelne Admin-Bereiche mit
 ## Dateien
 
 ### Neue Dateien
+
 1. **admin_security.py** - Kern des Sicherheitssystems
    - `verify_admin_password()` - Passwort-Verifizierung
    - `require_admin_auth()` - Schutz-Enforcement
@@ -46,6 +50,7 @@ Das neue Admin-Passwortschutz-System ermöglicht es, einzelne Admin-Bereiche mit
    - `render_build_info_statistics()` - Build-Statistiken
 
 ### Geänderte Dateien
+
 1. **admin_panel.py**
    - Neue Tabs hinzugefügt: `admin_tab_build_infos`, `admin_tab_security_settings`
    - Icons und Labels ergänzt
@@ -74,6 +79,7 @@ Das neue Admin-Passwortschutz-System ermöglicht es, einzelne Admin-Bereiche mit
 ### Als Entwickler
 
 **Neuen Bereich schützen**:
+
 ```python
 from admin_security import require_admin_auth
 
@@ -87,6 +93,7 @@ def render_my_protected_area():
 ```
 
 **Geschützte Bereiche in Datenbank**:
+
 ```python
 # In admin_security.py → get_admin_protected_areas()
 default_areas = {
@@ -115,15 +122,18 @@ Standardmäßig konfigurierbare Bereiche:
 ## Sicherheitsaspekte
 
 ### Passwort-Hashing
+
 - SHA-256 Hash für Passwörter
 - Legacy-Support für Klartext-Passwörter (wird automatisch konvertiert)
 
 ### Session-Management
+
 - Authentifizierung wird in `st.session_state` gespeichert
 - Format: `admin_auth_{area_id}` = True/False
 - User: `admin_auth_{area_id}_user` = Username
 
 ### Datenbank
+
 - Geschützte Bereiche in `admin_settings` Tabelle
 - Key: `protected_admin_areas`
 - Value: JSON mit Bereich-IDs
@@ -145,6 +155,7 @@ Standardmäßig konfigurierbare Bereiche:
 ## Fehlerbehebung
 
 ### "Module nicht gefunden"
+
 ```bash
 # Prüfe ob Dateien existieren
 ls admin_security.py
@@ -152,15 +163,18 @@ ls admin_build_infos_ui.py
 ```
 
 ### "Passwort falsch" obwohl korrekt
+
 - Prüfe ob User in Datenbank als Admin markiert ist
 - Prüfe password_hash Spalte in users Tabelle
 
 ### Authentifizierung bleibt nicht
+
 - Session State wurde gelöscht → Neu authentifizieren
 
 ## Changelog
 
 **2025-10-31**: Erste Implementierung
+
 - Admin-Passwortschutz-System erstellt
 - Build Infos Tab mit Dokumentation
 - Sicherheitseinstellungen Tab

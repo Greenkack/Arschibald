@@ -9,6 +9,7 @@
 ## 📊 Quellenanalyse - ABGESCHLOSSEN ✅
 
 ### PDF-Manual (28 Seiten)
+
 - ✅ Produktspezifikationen: Vitocal 250-A, 13kW, COP 5.3, R290, 70°C max
 - ✅ Heizlastberechnung: `heat_load_kw = annual_demand_kwh / 1800`
 - ✅ Radiator-Check: `Q ~ (ΔT)^1.3` Formel
@@ -18,11 +19,13 @@
 - ✅ 360°-Visualisierung: 24-Frame-Animation Konzept
 
 ### Excel-Dateien (5 Stück)
+
 - ✅ **1-3.xlsx:** Investitions- & Wartungskosten (I&W), Finanzierung & Folgekosten (Fi&Fo), Annuitätenrechnung, Barwertfaktoren
 - ✅ **4.xlsx:** econ calc light - Kostenvergleich Öl/Gas/WP mit CO2-Preis, Amortisation
 - ✅ **5.xlsx:** GEG-Regelungen, grüne Brennstoffe, CO2-Preis (2025: 55€/t → 2045: 85€/t), JAZ-Infos (3.3-5.2)
 
 ### Bestehender Code
+
 - ✅ **heatpump_ui.py** (1603 Zeilen): 6 Tabs - Gebäudeanalyse, WP-Auswahl, Wirtschaftlichkeit, PV-Integration, Komponenten, Ergebnisse
 - ✅ **calculations_heatpump.py** (303 Zeilen): Basis-Funktionen für Heizlast, WP-Empfehlung, JAZ, Wirtschaftlichkeit
 - ✅ **heatpump_pricing.py** (1056+ Zeilen): HeatPumpPriceComponent-Klasse, COP-Anpassungen, Preisberechnung
@@ -32,9 +35,11 @@
 ## 🎯 Feature-Liste - Was NEU implementiert werden muss
 
 ### 1️⃣ Erweiterte Heizlastberechnung
+
 **Datei:** `calculations_heatpump.py`
 
-#### Neue Funktionen:
+#### Neue Funktionen
+
 ```python
 def calculate_domestic_hot_water_demand(
     living_area_m2: float,
@@ -67,6 +72,7 @@ def calculate_heat_load_with_climate_zone(
 ```
 
 **Basis aus Excel:**
+
 - Heizlast = Jahresbedarf / 1800 Volllaststunden
 - Warmwasser = 12-15% von Gesamt-Wärmebedarf
 - Klimafaktor: Kalt 1.2, Gemäßigt 1.0, Mild 0.8
@@ -74,9 +80,11 @@ def calculate_heat_load_with_climate_zone(
 ---
 
 ### 2️⃣ Radiator-Kompatibilitätsprüfung
+
 **Datei:** `calculations_heatpump.py`
 
-#### Neue Funktionen:
+#### Neue Funktionen
+
 ```python
 def calculate_required_flow_temperature(
     heat_load_kw: float,
@@ -107,6 +115,7 @@ def check_radiator_compatibility(
 ```
 
 **Basis aus PDF Seite 11:**
+
 - Q ~ (ΔT)^1.3 Beziehung zwischen Wärmeleistung und Temperaturdifferenz
 - Ideal: Vorlauf ≤55°C (hoher COP)
 - Grenzwertig: 55-65°C (mittlerer COP)
@@ -115,9 +124,11 @@ def check_radiator_compatibility(
 ---
 
 ### 3️⃣ CO2-Preis & GEG-Konformität
+
 **Datei:** `calculations_heatpump.py`
 
-#### Neue Funktionen:
+#### Neue Funktionen
+
 ```python
 def calculate_co2_costs_fossil_heating(
     fuel_type: str,  # "Heizöl", "Erdgas"
@@ -150,6 +161,7 @@ def calculate_green_fuel_premium(
 ```
 
 **Basis aus Excel 5.xlsx:**
+
 - CO2-Preis 2025: 55€/t → 2045: 85€/t (Durchschnitt)
 - GEG-Pflicht grüne Brennstoffe: 2029: 15%, 2035: 30%, 2040: 60%, 2045: 100%
 - Mehrkosten grüne Brennstoffe: +42.5% (Öl), +28.3% (Gas)
@@ -157,9 +169,11 @@ def calculate_green_fuel_premium(
 ---
 
 ### 4️⃣ BEG-Förderung & NPV-Berechnung
+
 **Datei:** `calculations_heatpump.py`
 
-#### Neue Funktionen:
+#### Neue Funktionen
+
 ```python
 def calculate_beg_subsidy(
     investment_cost_eur: float,
@@ -199,6 +213,7 @@ def calculate_npv_20_years(
 ```
 
 **Basis aus PDF Seite 13:**
+
 - BEG-Förderung: 35% base + 10% Gas/Öl-Ersatz + 5% Einkommensbonus (< €40k Bruttojahreseinkommen)
 - Max. förderfähige Kosten: €60.000
 - Diskontrate: 3% (Nominalzins Land Vorarlberg laut Excel)
@@ -206,9 +221,11 @@ def calculate_npv_20_years(
 ---
 
 ### 5️⃣ Erweiterte Wirtschaftlichkeitsanalyse
+
 **Datei:** `calculations_heatpump.py`
 
-#### Neue Funktionen:
+#### Neue Funktionen
+
 ```python
 def compare_heating_systems_20_years(
     building_data: dict,
@@ -237,6 +254,7 @@ def compare_heating_systems_20_years(
 ```
 
 **Basis aus Excel 4.xlsx:**
+
 - Vergleich: Ölheizung €12.8k, WP €30.5k (vor Förderung), Gasheizung €12.8k
 - Förderung WP: 50% → Netto €15.3k
 - Amortisation WP vs. Öl: ~4.7 Jahre
@@ -245,9 +263,11 @@ def compare_heating_systems_20_years(
 ---
 
 ### 6️⃣ PV-Eigenverbrauch-Optimierung
+
 **Datei:** `calculations_heatpump.py`
 
-#### Neue Funktionen:
+#### Neue Funktionen
+
 ```python
 def calculate_pv_self_consumption_heatpump(
     heatpump_annual_consumption_kwh: float,
@@ -269,6 +289,7 @@ def calculate_pv_self_consumption_heatpump(
 ```
 
 **Basis aus Excel 3.xlsx (PV-Einspeisung Sheet):**
+
 - PV-Ertrag: ~1000 kWh/kWp/Jahr
 - Eigenverbrauch ohne Speicher: ~30%
 - Eigenverbrauch mit WP: ~50-60% (erhöht durch Tages-Lastprofil)
@@ -276,9 +297,11 @@ def calculate_pv_self_consumption_heatpump(
 ---
 
 ### 7️⃣ 360°-Visualisierung
+
 **Datei:** `heatpump_ui.py` (neue Funktion)
 
-#### Neue UI-Komponenten:
+#### Neue UI-Komponenten
+
 ```python
 def render_energy_flow_visualization(heatpump_data: dict) -> None:
     """
@@ -300,6 +323,7 @@ def render_cost_comparison_chart(comparison_data: dict) -> None:
 ```
 
 **Basis aus PDF Seite 16-17:**
+
 - 24-Frame-Animation (360° / 15° pro Frame)
 - Sankey-Diagramm für Energieflüsse
 - Farbcodierung: Fossil (rot), Erneuerbar (grün), Strom (blau)
@@ -307,9 +331,11 @@ def render_cost_comparison_chart(comparison_data: dict) -> None:
 ---
 
 ### 8️⃣ PDF-Generierung (16-seitiges Angebot)
+
 **Datei:** `pdf_generator.py` (erweitern) + `heatpump_ui.py`
 
-#### Template-Struktur:
+#### Template-Struktur
+
 ```
 Seite 1: Deckblatt
   - Kundenname, Adresse
@@ -359,7 +385,8 @@ Seite 16: Zusammenfassung & Konditionen
   - Kontaktdaten
 ```
 
-#### Neue Funktionen:
+#### Neue Funktionen
+
 ```python
 def generate_heatpump_offer_pdf(
     customer_data: dict,
@@ -380,6 +407,7 @@ def generate_heatpump_offer_pdf(
 ## 🛠️ Implementierungsreihenfolge
 
 ### Phase 1: Backend-Berechnungen (2-3 Stunden)
+
 1. ✅ Erweiterte Heizlastberechnung (Warmwasser, Klimazone)
 2. ✅ Radiator-Check (Vorlauftemperatur, Kompatibilität)
 3. ✅ CO2-Kosten & GEG-Regelungen
@@ -390,6 +418,7 @@ def generate_heatpump_offer_pdf(
 **Alle neuen Funktionen in `calculations_heatpump.py` hinzufügen**
 
 ### Phase 2: UI-Erweiterungen (1-2 Stunden)
+
 1. ✅ Neuer Tab "Radiator-Check" in heatpump_ui.py
 2. ✅ Erweiterte Wirtschaftlichkeits-Ansicht mit CO2-Kosten
 3. ✅ Visualisierungen: Energiefluss, Kostenvergleich-Charts
@@ -398,6 +427,7 @@ def generate_heatpump_offer_pdf(
 **UI in `heatpump_ui.py` erweitern, NICHT komplett neu schreiben**
 
 ### Phase 3: PDF-Generierung (2-3 Stunden)
+
 1. ✅ Template-Struktur erstellen (16 Seiten)
 2. ✅ Koordinatenbasierte Textplatzierung mit PyPDF2
 3. ✅ Diagramme/Charts als Bilder einbetten
@@ -406,6 +436,7 @@ def generate_heatpump_offer_pdf(
 **Bestehende `pdf_generator.py` erweitern**
 
 ### Phase 4: Testing & Integration (1 Stunde)
+
 1. ✅ Unit-Tests für neue Berechnungsfunktionen
 2. ✅ End-to-End-Test: Gebäudeanalyse → WP-Auswahl → PDF
 3. ✅ Kompatibilität mit Rest der App prüfen
@@ -415,14 +446,16 @@ def generate_heatpump_offer_pdf(
 
 ## 📋 Konkrete TODOs - Schritt für Schritt
 
-### ✅ ERLEDIGT:
+### ✅ ERLEDIGT
+
 - [x] PDF-Manual vollständig analysiert (28 Seiten)
 - [x] Alle 5 Excel-Dateien extrahiert und verstanden
 - [x] Bestehenden Code analysiert (heatpump_ui.py, calculations_heatpump.py)
 - [x] Angebot-PDFs angeschaut (Struktur)
 - [x] Implementierungsplan erstellt
 
-### 🔄 IN ARBEIT:
+### 🔄 IN ARBEIT
+
 - [ ] **TODO 1:** Funktionen in calculations_heatpump.py erweitern
   - [ ] `calculate_domestic_hot_water_demand()`
   - [ ] `calculate_heat_load_with_climate_zone()`
