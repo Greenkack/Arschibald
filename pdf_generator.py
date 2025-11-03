@@ -7001,3 +7001,370 @@ def _filter_unwanted_words_from_model_name(model_name: str) -> str:
         Unveränderten Modellnamen
     """
     return model_name if model_name else ""
+
+
+# ============================================================================
+# WÄRMEPUMPEN-PDF-GENERATOR (TODO 3)
+# ============================================================================
+
+def generate_heatpump_offer_pdf(
+    building_data: dict[str, Any],
+    heatpump_data: dict[str, Any],
+    economics_data: dict[str, Any],
+    company_info: dict[str, Any],
+    radiator_data: dict[str, Any] | None = None,
+    integration_data: dict[str, Any] | None = None,
+    customer_data: dict[str, Any] | None = None
+) -> bytes:
+    """
+    Generiert ein kompaktes 6-seitiges Wärmepumpen-Angebot als PDF.
+    
+    SEITEN-STRUKTUR:
+    1. Deckblatt (Logo, Kunde, Datum, Firma)
+    2. Gebäudeanalyse + Radiator-Check
+    3. Wärmepumpen-Auswahl (technische Daten)
+    4. Wirtschaftlichkeit (Investition, Betriebskosten, Amortisation)
+    5. BEG-Förderung + PV-Integration
+    6. Zusammenfassung + Unterschrift
+    
+    Args:
+        building_data: Gebäudedaten (Fläche, Heizlast, etc.)
+        heatpump_data: Wärmepumpendaten (Modell, JAZ, etc.)
+        economics_data: Wirtschaftlichkeitsdaten (Investition, Amortisation, etc.)
+        company_info: Firmendaten (Name, Logo, Kontakt)
+        radiator_data: Optional - Radiator-Kompatibilitätsdaten
+        integration_data: Optional - PV-Integrationsdaten
+        customer_data: Optional - Kundendaten
+    
+    Returns:
+        PDF als bytes
+    """
+    if not _REPORTLAB_AVAILABLE:
+        raise ImportError("ReportLab nicht verfügbar - PDF-Generierung nicht möglich")
+    
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import cm
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle, Image
+    from reportlab.lib import colors
+    from reportlab.lib.colors import HexColor
+    
+    # PDF-Buffer erstellen
+    buffer = io.BytesIO()
+    
+    # Dokument erstellen
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=2*cm,
+        leftMargin=2*cm,
+        topMargin=2.5*cm,
+        bottomMargin=2*cm,
+        title="Wärmepumpen-Angebot"
+    )
+    
+    # Styles definieren
+    styles = getSampleStyleSheet()
+    
+    title_style = ParagraphStyle(
+        'WPTitle',
+        parent=styles['Heading1'],
+        fontSize=22,
+        textColor=HexColor('#2E7D32'),
+        spaceAfter=25,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    h2_style = ParagraphStyle(
+        'WPH2',
+        parent=styles['Heading2'],
+        fontSize=14,
+        textColor=HexColor('#1976D2'),
+        spaceAfter=10,
+        spaceBefore=15,
+        fontName='Helvetica-Bold'
+    )
+    
+    h3_style = ParagraphStyle(
+        'WPH3',
+        parent=styles['Heading3'],
+        fontSize=11,
+        textColor=HexColor('#424242'),
+        spaceAfter=6,
+        spaceBefore=10,
+        fontName='Helvetica-Bold'
+    )
+    
+    body_style = ParagraphStyle(
+        'WPBody',
+        parent=styles['Normal'],
+        fontSize=9,
+        leading=13,
+        spaceAfter=6,
+        alignment=TA_JUSTIFY,
+        fontName='Helvetica'
+    )
+    
+    # Story sammeln
+    story = []
+    
+    # ========================================================================
+    # SEITE 1: DECKBLATT
+    # ========================================================================
+    
+    # Logo (wenn vorhanden)
+    if company_info.get('logo_base64'):
+        try:
+            logo_data = base64.b64decode(company_info['logo_base64'])
+            logo_buffer = io.BytesIO(logo_data)
+            logo_img = Image(logo_buffer, width=4*cm, height=2*cm)
+            story.append(logo_img)
+            story.append(Spacer(1, 0.8*cm))
+        except Exception:
+            pass
+    
+    # Titel
+    story.append(Paragraph("Wärmepumpen-Angebot", title_style))
+    story.append(Spacer(1, 0.4*cm))
+    
+    # Kunde
+    if customer_data:
+        customer_name = customer_data.get('name', 'Kunde')
+        story.append(Paragraph(f"<b>Für:</b> {customer_name}", body_style))
+        if customer_data.get('address'):
+            story.append(Paragraph(customer_data['address'], body_style))
+        story.append(Spacer(1, 0.8*cm))
+    
+    # Datum
+    today = datetime.now().strftime("%d.%m.%Y")
+    story.append(Paragraph(f"<b>Datum:</b> {today}", body_style))
+    story.append(Spacer(1, 2*cm))
+    
+    # Firma
+    company_name = company_info.get('name', 'Unser Unternehmen')
+    story.append(Paragraph(f"<b>{company_name}</b>", h3_style))
+    if company_info.get('address'):
+        story.append(Paragraph(company_info['address'], body_style))
+    if company_info.get('phone'):
+        story.append(Paragraph(f"Tel: {company_info['phone']}", body_style))
+    if company_info.get('email'):
+        story.append(Paragraph(f"Email: {company_info['email']}", body_style))
+    
+    story.append(PageBreak())
+    
+    # ========================================================================
+    # SEITE 2: GEBÄUDEANALYSE + RADIATOR-CHECK
+    # ========================================================================
+    
+    story.append(Paragraph("1. Gebäudeanalyse", h2_style))
+    
+    # Gebäudedaten extrahieren
+    building_area = building_data.get('building_area', building_data.get('area', 150))
+    heat_load = building_data.get('heat_load_kw', 10.0)
+    building_type = building_data.get('building_type', building_data.get('type', 'EFH'))
+    
+    building_table = Table([
+        ['Fläche', f'{building_area:.0f} m²'],
+        ['Heizlast', f'{heat_load:.1f} kW'],
+        ['Typ', building_type],
+    ], colWidths=[8*cm, 8*cm])
+    
+    building_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (0, -1), HexColor('#E3F2FD')),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+    ]))
+    
+    story.append(building_table)
+    story.append(Spacer(1, 0.8*cm))
+    
+    # Radiator-Check (wenn vorhanden)
+    if radiator_data:
+        story.append(Paragraph("2. Radiator-Kompatibilität", h2_style))
+        
+        required_temp = radiator_data.get('required_flow_temp', 0)
+        compat = radiator_data.get('compatibility', {})
+        status = compat.get('status', 'Unbekannt')
+        
+        # Status-Icon
+        if 'Optimal' in status:
+            icon = "✓"
+            color_hex = '#2E7D32'
+        elif 'Grenz' in status:
+            icon = "○"
+            color_hex = '#F57C00'
+        else:
+            icon = "!"
+            color_hex = '#C62828'
+        
+        story.append(Paragraph(f'<font color="{color_hex}" size="12"><b>{icon} {status}</b></font>', body_style))
+        story.append(Paragraph(f"Vorlauftemperatur: {required_temp:.1f}°C", body_style))
+    
+    story.append(PageBreak())
+    
+    # ========================================================================
+    # SEITE 3: WÄRMEPUMPE
+    # ========================================================================
+    
+    story.append(Paragraph("3. Empfohlene Wärmepumpe", h2_style))
+    
+    hp = heatpump_data.get('selected_heatpump', {})
+    manufacturer = hp.get('manufacturer', '')
+    model = hp.get('model', '')
+    heating_power = hp.get('heating_power', 0)
+    scop = hp.get('scop', 0)
+    price = hp.get('price', 0)
+    
+    story.append(Paragraph(f"<b>{manufacturer} {model}</b>", h3_style))
+    
+    hp_table = Table([
+        ['Heizleistung', f'{heating_power} kW'],
+        ['SCOP (JAZ)', f'{scop:.1f}'],
+        ['Typ', hp.get('type', 'Luft-Wasser')],
+        ['Preis', f'{price:,.0f} €'],
+    ], colWidths=[8*cm, 8*cm])
+    
+    hp_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (0, -1), HexColor('#C8E6C9')),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+    ]))
+    
+    story.append(hp_table)
+    story.append(Spacer(1, 0.5*cm))
+    
+    story.append(Paragraph(
+        f"Ein SCOP von {scop:.1f} bedeutet: Aus 1 kWh Strom werden {scop:.1f} kWh Wärme erzeugt. "
+        f"Das entspricht einem Wirkungsgrad von {scop*100:.0f}% gegenüber Direktheizung.",
+        body_style
+    ))
+    
+    story.append(PageBreak())
+    
+    # ========================================================================
+    # SEITE 4: WIRTSCHAFTLICHKEIT
+    # ========================================================================
+    
+    story.append(Paragraph("4. Wirtschaftlichkeit", h2_style))
+    
+    total_invest = economics_data.get('total_investment', 0)
+    subsidy = economics_data.get('subsidy_amount', 0)
+    annual_savings = economics_data.get('annual_savings', 0)
+    payback = economics_data.get('payback_time', 0)
+    
+    # Investition
+    invest_table = Table([
+        ['Wärmepumpe', f'{price:,.0f} €'],
+        ['Installation', f'{economics_data.get("installation_cost", 6000):,.0f} €'],
+        ['./. Förderung', f'-{subsidy:,.0f} €'],
+        ['Netto-Investition', f'{total_invest:,.0f} €'],
+    ], colWidths=[10*cm, 6*cm])
+    
+    invest_table.setStyle(TableStyle([
+        ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('LINEABOVE', (0, 3), (-1, 3), 1, colors.black),
+        ('FONTNAME', (0, 3), (-1, 3), 'Helvetica-Bold'),
+        ('BACKGROUND', (0, 3), (-1, 3), HexColor('#E8F5E9')),
+    ]))
+    
+    story.append(invest_table)
+    story.append(Spacer(1, 0.8*cm))
+    
+    # Betriebskosten
+    story.append(Paragraph("<b>Jährliche Kosten:</b>", h3_style))
+    story.append(Paragraph(
+        f"• Wärmepumpe: {economics_data.get('annual_hp_cost', 0):,.0f} €/Jahr<br/>"
+        f"• Altes System: {economics_data.get('annual_old_cost', 0):,.0f} €/Jahr<br/>"
+        f"<b>→ Ersparnis: {annual_savings:,.0f} €/Jahr</b>",
+        body_style
+    ))
+    story.append(Spacer(1, 0.5*cm))
+    
+    # Amortisation
+    story.append(Paragraph(f"<b>Amortisation nach {payback:.1f} Jahren</b>", h3_style))
+    story.append(Paragraph(
+        f"Über 20 Jahre sparen Sie: <b>{annual_savings * 20 - total_invest:,.0f} €</b>",
+        body_style
+    ))
+    
+    story.append(PageBreak())
+    
+    # ========================================================================
+    # SEITE 5: FÖRDERUNG + PV
+    # ========================================================================
+    
+    story.append(Paragraph("5. BEG-Förderung", h2_style))
+    
+    story.append(Paragraph(
+        "Die Bundesförderung für effiziente Gebäude (BEG) fördert Wärmepumpen mit:<br/>"
+        "• Basis: 35%<br/>"
+        "• Heizungstausch-Bonus: +10%<br/>"
+        "• Einkommensbonus: +5% (optional)<br/>"
+        f"<b>→ Ihre Förderung: {subsidy:,.0f} €</b>",
+        body_style
+    ))
+    story.append(Spacer(1, 1*cm))
+    
+    # PV-Integration (wenn vorhanden)
+    if integration_data:
+        story.append(Paragraph("PV-Integration", h2_style))
+        
+        pv_coverage = integration_data.get('pv_coverage_hp', 0) * 100
+        pv_savings = integration_data.get('annual_pv_savings_hp', 0)
+        
+        story.append(Paragraph(
+            f"Mit Ihrer PV-Anlage decken Sie <b>{pv_coverage:.0f}%</b> des Wärmepumpen-Stroms selbst. "
+            f"Zusätzliche Ersparnis: <b>{pv_savings:,.0f} €/Jahr</b>",
+            body_style
+        ))
+    
+    story.append(PageBreak())
+    
+    # ========================================================================
+    # SEITE 6: ZUSAMMENFASSUNG
+    # ========================================================================
+    
+    story.append(Paragraph("6. Zusammenfassung", h2_style))
+    
+    # Zusammenfassungs-Tabelle
+    summary_data = [
+        ['Position', 'Wert'],
+        ['Gebäude', f'{building_area:.0f} m², {heat_load:.1f} kW Heizlast'],
+        ['Wärmepumpe', f'{manufacturer} {model}, {scop:.1f} SCOP'],
+        ['Investition (netto)', f'{total_invest:,.0f} €'],
+        ['Jährliche Ersparnis', f'{annual_savings:,.0f} €'],
+        ['Amortisation', f'{payback:.1f} Jahre'],
+        ['20-Jahre-Ersparnis', f'{annual_savings * 20 - total_invest:,.0f} €'],
+    ]
+    
+    summary_table = Table(summary_data, colWidths=[10*cm, 6*cm])
+    summary_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), HexColor('#1976D2')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('ALIGN', (1, 1), (1, -1), 'RIGHT'),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#F5F5F5')]),
+    ]))
+    
+    story.append(summary_table)
+    story.append(Spacer(1, 2*cm))
+    
+    # Unterschrift
+    story.append(Paragraph("_" * 40, body_style))
+    story.append(Paragraph("Datum, Unterschrift Kunde", body_style))
+    story.append(Spacer(1, 1*cm))
+    story.append(Paragraph("_" * 40, body_style))
+    story.append(Paragraph(f"Datum, Unterschrift {company_name}", body_style))
+    
+    # PDF bauen
+    doc.build(story)
+    
+    pdf_bytes = buffer.getvalue()
+    buffer.close()
+    
+    return pdf_bytes
+
