@@ -407,15 +407,25 @@ def create_gabled_roof_with_dormer(length, width, height, base_z,
     return [main_roof, dormer_mesh, window_mesh]
 
 
-def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False):
+def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True):
     """
     Erstellt ein detailliertes PV-Modul mit Dicke und korrekter Rotation.
     Gibt Tuple zurück: (mesh, vertices) für Kanten-Rendering.
+    
+    FIX: Aufständerung wird jetzt deutlicher dargestellt durch:
+    - Erhöhte Z-Position bei Neigung > 5°
+    - Optionale Montage-Gestelle (show_mounting=True)
     """
     # Lokale Koordinaten (Modul zentriert im Ursprung)
     hw = PV_W / 2
     hh = PV_H / 2
     ht = PV_T / 2
+    
+    # FIX: Bei Aufständerung (tilt > 5°) erhöhe Z-Position um Gestell-Höhe
+    if tilt_deg > 5.0 and show_mounting:
+        # Gestell-Höhe abhängig von Neigung (min 0.3m, max 0.8m)
+        mounting_height = 0.3 + (tilt_deg / 90.0) * 0.5
+        z += mounting_height
     
     # 8 Ecken des Moduls (wie ein flacher Quader)
     local_vertices = np.array([
@@ -750,18 +760,28 @@ def create_pv_module_edges(vertices, color='black', line_width=1):
     )
 
 
-def calculate_grid_positions(length, width, count, spacing_x=0.15, spacing_y=0.15):
-    """Berechnet Grid-Positionen für PV-Module mit Spacing."""
+def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.25):
+    """
+    Berechnet Grid-Positionen für PV-Module mit Spacing.
+    
+    FIX: Verbesserte Berechnung mit korrektem Spacing und Zentrierung.
+    """
     positions = []
     
-    # Berechne wie viele Module in X und Y passen
-    modules_x = int(length / (PV_W + spacing_x))
-    modules_y = int(width / (PV_H + spacing_y))
+    # FIX: Berechne wie viele Module in X und Y passen (mit Spacing)
+    # Formel: (Länge - 2*Rand) / (Modul + Spacing)
+    margin = 0.5  # 50cm Randabstand
+    available_length = length - 2 * margin
+    available_width = width - 2 * margin
     
-    # Zentriere das Grid
-    total_width_x = modules_x * (PV_W + spacing_x) - spacing_x
-    total_width_y = modules_y * (PV_H + spacing_y) - spacing_y
+    modules_x = max(1, int(available_length / (PV_W + spacing_x)))
+    modules_y = max(1, int(available_width / (PV_H + spacing_y)))
     
+    # FIX: Berechne tatsächliche Größe des Grids
+    total_width_x = modules_x * PV_W + (modules_x - 1) * spacing_x
+    total_width_y = modules_y * PV_H + (modules_y - 1) * spacing_y
+    
+    # FIX: Zentriere das Grid korrekt
     start_x = -total_width_x / 2
     start_y = -total_width_y / 2
     
@@ -771,12 +791,19 @@ def calculate_grid_positions(length, width, count, spacing_x=0.15, spacing_y=0.1
             if len(positions) >= count:
                 break
             
+            # FIX: Korrekte Positionsberechnung
             x = start_x + col * (PV_W + spacing_x) + PV_W / 2
             y = start_y + row * (PV_H + spacing_y) + PV_H / 2
             positions.append((x, y))
         
         if len(positions) >= count:
             break
+    
+    # FIX: Wenn nicht genug Platz, fülle mit Warnmeldung
+    if len(positions) < count:
+        print(f"⚠️ WARNUNG: Nur {len(positions)} von {count} Modulen passen auf das Dach!")
+        print(f"   Dachgröße: {length}m x {width}m")
+        print(f"   Modulraster: {modules_x} x {modules_y} = {modules_x * modules_y} Module")
     
     return positions
 

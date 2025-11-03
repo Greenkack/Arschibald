@@ -321,11 +321,11 @@ def _get_default_dimensions(building_type: str) -> Tuple[float, float, float]:
         Tuple (Länge, Breite, Höhe) in Metern
     """
     default_dims = {
-        "Einfamilienhaus": (10.0, 6.0, 6.0),
-        "Mehrfamilienhaus": (15.0, 10.0, 9.0),
-        "Wohnblock": (25.0, 15.0, 12.0)
+        "Einfamilienhaus": (10.0, 6.0, 3.0),  # FIX: Traufhöhe auf 3m
+        "Mehrfamilienhaus": (15.0, 10.0, 6.0),  # FIX: Traufhöhe auf 6m
+        "Wohnblock": (25.0, 15.0, 9.0)  # FIX: Traufhöhe auf 9m
     }
-    return default_dims.get(building_type, (10.0, 6.0, 6.0))
+    return default_dims.get(building_type, (10.0, 6.0, 3.0))
 
 
 @st.cache_data(ttl=300, show_spinner=False)
@@ -477,26 +477,35 @@ def _render_3d_view_impl():
         return "Flachdach"
 
     def get_module_quantity() -> int:
-        """Extrahiert Modulanzahl mit Fallback."""
+        """
+        Extrahiert Modulanzahl mit Fallback.
+        
+        FIX: Verbesserte Priorität und Logging für bessere Nachvollziehbarkeit.
+        """
         # Primäre Quelle: analysis_results
         if analysis_results:
             module_qty = analysis_results.get("module_quantity")
             if module_qty is not None:
                 try:
-                    return int(module_qty)
+                    qty = int(module_qty)
+                    print(f"✓ Modulanzahl aus analysis_results: {qty}")
+                    return qty
                 except (ValueError, TypeError):
-                    pass
+                    print(f"⚠️ Ungültige Modulanzahl in analysis_results: {module_qty}")
         
         # Fallback: project_data
         if project_data:
             module_qty = project_data.get("module_quantity")
             if module_qty is not None:
                 try:
-                    return int(module_qty)
+                    qty = int(module_qty)
+                    print(f"✓ Modulanzahl aus project_data: {qty}")
+                    return qty
                 except (ValueError, TypeError):
-                    pass
+                    print(f"⚠️ Ungültige Modulanzahl in project_data: {module_qty}")
         
         # Letzter Fallback: 20 Module (vernünftiger Default)
+        print("⚠️ Keine Modulanzahl gefunden, verwende Default: 20")
         return 20
 
     def get_building_type() -> str:
@@ -579,7 +588,7 @@ def _render_3d_view_impl():
             "Traufhöhe (m)",
             min_value=3.0,
             max_value=20.0,
-            value=default_height,
+            value=3.0,  # FIX: Standard auf 3m gesetzt
             step=0.5,
             help="Höhe der Außenwände (Traufhöhe)",
             key="building_height_input"
@@ -2221,25 +2230,9 @@ def _render_3d_view_impl():
                     # Zeige Plotly Figure in Streamlit
                     st.plotly_chart(fig, use_container_width=True)
                     
-                    # ===================================================================
-                    # MODUL-PLATZIERUNG UI (NEU!)
-                    # ===================================================================
-                    try:
-                        from utils.pv_module_placement_ui import render_module_placement_ui
-                        
-                        render_module_placement_ui(
-                            fig=fig,
-                            dims=dims,
-                            roof_type=scene_data.get("roof_type", "Flachdach"),
-                            project_data=scene_data.get("project_data", {}),
-                            module_quantity=scene_data.get("module_quantity", 20)  # Modulanzahl aus scene_data
-                        )
-                    except ImportError as ie:
-                        st.warning(f"⚠️ Modul-Platzierung UI nicht verfügbar: {ie}")
-                    except Exception as e_placement:
-                        st.error(f"❌ Fehler bei Modul-Platzierung: {e_placement}")
-                        import traceback
-                        st.code(traceback.format_exc())
+                    # FIX: Entferne doppelten Visualisierer
+                    # Die Modul-Platzierung UI wird nicht mehr benötigt, da die Module
+                    # bereits in der Hauptvisualisierung enthalten sind
                     
                 except Exception as e:
                     st.error(f"❌ Fehler beim Anzeigen der 3D-Visualisierung: {e}")

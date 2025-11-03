@@ -91,17 +91,25 @@ def render_module_placement_ui(fig: go.Figure,
             st.markdown("**Modul-Einstellungen**")
             
             # Modulanzahl aus verschiedenen Quellen holen (Priorität: Parameter > project_data)
-            if module_quantity is not None:
+            if module_quantity is not None and module_quantity > 0:
                 default_count = module_quantity
             else:
                 default_count = project_data.get("module_quantity", 20)
+            
+            # Stelle sicher dass default_count mindestens 1 ist
+            if default_count <= 0:
+                default_count = 20
+            
+            # Info für User
+            st.info(f"💡 Empfohlene Modulanzahl: **{default_count}** Module")
             
             max_modules = st.number_input(
                 "Maximale Anzahl Module",
                 min_value=1,
                 max_value=200,
                 value=default_count,
-                help=f"Aus Solarcalculator: {default_count} Module"
+                key="pv_max_modules_input",
+                help=f"Passe die Anzahl an oder übernimm den empfohlenen Wert"
             )
             
             # Modultyp auswählen
@@ -199,24 +207,38 @@ def render_module_placement_ui(fig: go.Figure,
             )
         
         # Platzierungs-Buttons
-        col_btn1, col_btn2 = st.columns([3, 1])
+        col_btn1, col_btn2, col_btn3 = st.columns([2, 1, 1])
         
         with col_btn1:
-            place_button = st.button("🚀 Module automatisch platzieren", type="primary", use_container_width=True)
+            place_button = st.button(
+                "🚀 Automatisch platzieren",
+                type="primary",
+                use_container_width=True
+            )
         
         with col_btn2:
-            reset_button = st.button("🗑️ Reset", help="Alle Module löschen und neu starten", use_container_width=True)
+            # Warnung wenn max_modules = 0
+            if max_modules == 0:
+                st.error("❌ Anzahl ist 0!")
         
-        # Reset-Funktionalität
-        if reset_button:
-            manager.modules.clear()
-            manager.next_module_id = 1
-            manager.roof_surfaces.clear()
-            st.success("✓ Alle Module gelöscht!")
-            st.rerun()
+        with col_btn3:
+            if st.button("🔄 Alles löschen", use_container_width=True):
+                manager.modules.clear()
+                manager.next_module_id = 1
+                manager.roof_surfaces.clear()
+                # WICHTIG: Lösche auch den gecachten Input-Wert
+                if "pv_max_modules_input" in st.session_state:
+                    del st.session_state["pv_max_modules_input"]
+                st.success("✓ Alle Module gelöscht!")
+                st.rerun()
         
         # Platzierungs-Funktionalität
         if place_button:
+            # Validierung: Prüfe ob max_modules > 0
+            if max_modules <= 0:
+                st.error("❌ Anzahl Module muss mindestens 1 sein!")
+                st.stop()
+            
             with st.spinner("Platziere Module..."):
                 # Lösche alte Module UND Dachflächen
                 manager.modules.clear()
