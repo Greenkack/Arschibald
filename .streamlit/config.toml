@@ -1,27 +1,40 @@
 # ---------- SERVER ----------
 [server]
 headless = false
-folderWatchList = []                # absolute Pfade hier eintragen, z.B. ["/abs/pfad/pages"]
 fileWatcherType = "poll"           # "auto"|"watchdog"|"poll"|"none"
 enableCORS = true
 enableXsrfProtection = true
 maxUploadSize = 512                 # MB
+# Stabilität & Performance
+runOnSave = false                    # Auto-reload bei Dateiänderungen
+enableStaticServing = true          # Statische Dateien effizienter bereitstellen
+enableWebsocketCompression = true   # WebSocket Kompression für bessere Performance
+port = 8501                         # Standard-Port (funktioniert mit developmentMode=false)
+address = "localhost"               # Server-Adresse
+baseUrlPath = ""                    # Base URL Path für Reverse Proxy
+# Memory & Connection Management
+maxMessageSize = 500                # Max WebSocket Message Size in MB
 
 # ---------- BROWSER ----------
 [browser]
 serverAddress = "localhost"
 serverPort = 8501
-gatherUsageStats = true
+gatherUsageStats = true            # Keine Telemetrie an Streamlit senden (Performance)
 
 # ---------- CLIENT ----------
 [client]
-showErrorDetails = "full"           # "full"|"stacktrace"|"type"|"none"
+showErrorDetails = true             # Zeige Fehler-Details
 toolbarMode = "developer"           # "auto"|"developer"|"viewer"|"minimal"
 showSidebarNavigation = true
 
 # ---------- RUNNER ----------
 [runner]
 magicEnabled = true
+# Stabilität & Performance
+fastReruns = true                   # Schnellere Reruns bei kleinen Änderungen
+postScriptGC = true                 # Garbage Collection nach Script-Ausführung
+# Memory Management
+enforceSerializableSessionState = false  # Für komplexe Objekte in Session State
 
 # ---------- THEME ----------
 [theme]
@@ -47,3 +60,16 @@ style = "normal"
 [logger]
 level = "error"
 messageFormat = "%(asctime)s %(message)s"
+# Stabilität
+enableRich = false                  # Einfaches Logging (weniger Overhead)
+
+# ---------- DEPRECATION ----------
+# Alle veralteten Optionen entfernt
+
+# ---------- GLOBAL ----------
+[global]
+# Development vs Production
+developmentMode = false              # Production-Modus (kompatibel mit server.port)
+# Performance
+showWarningOnDirectExecution = false # Keine Warnung bei direkter Ausführung
+unitTest = false                    # Unit-Test-Modus deaktiviert

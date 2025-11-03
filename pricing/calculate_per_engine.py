@@ -69,6 +69,14 @@ class CalculationMethod(Enum):
 @dataclass
 class CalculationContext:
     """Context information for price calculations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     # Product specifications
     capacity_w: float | None = None
     power_kw: float | None = None
@@ -108,6 +116,14 @@ class CalculationContext:
 @dataclass
 class CalculationResult:
     """Result of a calculate_per calculation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     base_price: float
     quantity: float
     calculation_method: CalculationMethod
@@ -131,6 +147,14 @@ class CalculationResult:
 
 class CalculatePerEngine:
     """Engine for handling different calculation methods with product feature integration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.logger = logging.getLogger(f"{__name__}.CalculatePerEngine")

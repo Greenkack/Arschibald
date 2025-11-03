@@ -16,6 +16,14 @@ from pricing.vat_manager import VATCategory
 
 class TestVATPricingEngineIntegration:
     """Test VAT integration with pricing engines"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_pricing_engine_vat_initialization(self):
         """Test that pricing engine initializes VAT manager correctly"""
@@ -127,6 +135,14 @@ class TestVATPricingEngineIntegration:
 
 class TestPVPricingEngineVATIntegration:
     """Test VAT integration with PV pricing engine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_pv_engine_vat_mappings(self):
         """Test that PV engine sets up correct VAT mappings"""
@@ -194,6 +210,14 @@ class TestPVPricingEngineVATIntegration:
 
 class TestHeatPumpPricingEngineVATIntegration:
     """Test VAT integration with heat pump pricing engine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_heatpump_engine_vat_mappings(self):
         """Test that heat pump engine sets up correct VAT mappings"""
@@ -275,6 +299,14 @@ class TestHeatPumpPricingEngineVATIntegration:
 
 class TestVATDynamicKeyIntegration:
     """Test VAT dynamic key integration with pricing system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_vat_keys_in_final_pricing_result(self):
         """Test that VAT keys are properly included in final pricing result"""
@@ -390,6 +422,14 @@ class TestVATErrorHandling:
 
 class TestVATConfigurationIntegration:
     """Test VAT configuration integration with pricing system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_vat_configuration_summary(self):
         """Test VAT configuration summary includes pricing engine mappings"""

@@ -16,6 +16,14 @@ from pricing.pricing_cache import CacheLevel, CacheStrategy, PricingCache
 
 class TestCachePerformance:
     """Performance tests for pricing cache"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up performance test environment"""
@@ -247,6 +255,14 @@ class TestCachePerformance:
 
 class TestBenchmarkSuite:
     """Test the benchmark suite functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up benchmark test environment"""
@@ -338,6 +354,14 @@ class TestBenchmarkSuite:
 
 class TestPerformanceMonitoring:
     """Test performance monitoring functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up performance monitoring test environment"""
@@ -426,6 +450,14 @@ class TestPerformanceMonitoring:
 
 class TestCacheStrategies:
     """Test different cache strategies performance"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_lru_strategy_performance(self):
         """Test LRU strategy performance"""
@@ -494,6 +526,14 @@ class TestCacheStrategies:
 @pytest.mark.performance
 class TestPerformanceRegression:
     """Performance regression tests to catch performance degradation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_baseline_performance_metrics(self):
         """Test baseline performance metrics for regression detection"""

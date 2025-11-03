@@ -23,6 +23,14 @@ from pdf_page_protection import (
 
 class TestPageProtectionManager:
     """Tests for PageProtectionManager class."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_initialization(self):
         """Test that PageProtectionManager initializes correctly."""
@@ -326,6 +334,14 @@ class TestPageProtectionManager:
 
 class TestConditionalPageBreak:
     """Tests for ConditionalPageBreak class."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_initialization(self):
         """Test ConditionalPageBreak initialization."""
@@ -354,6 +370,14 @@ class TestConditionalPageBreak:
 
 class TestHelperFunctions:
     """Tests for helper functions."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_protected_chart_element_with_manager(self):
         """Test creating protected chart element with manager."""
@@ -451,6 +475,14 @@ class TestHelperFunctions:
 
 class TestIntegration:
     """Integration tests for page protection."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_multiple_charts_with_protection(self):
         """Test protecting multiple charts in sequence."""

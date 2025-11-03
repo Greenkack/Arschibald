@@ -8,6 +8,14 @@ fernet = Fernet(key)
 
 
 class EncryptStrings(ast.NodeTransformer):
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def visit_Str(self, node):
         encrypted = fernet.encrypt(node.s.encode()).decode()
         return ast.copy_location(

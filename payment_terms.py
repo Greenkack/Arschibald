@@ -117,13 +117,20 @@ COMPREHENSIVE_PAYMENT_KEY = "comprehensive_payment_config"
 
 
 class PaymentTermsManager:
-    """
-    Erweiterte Zahlungsmodalitäten-Manager-Klasse.
+    """Erweiterte Zahlungsmodalitäten-Manager-Klasse.
 
     Diese Klasse verwaltet sowohl das Legacy-Varianten-System als auch
     das neue umfassende Zahlungssystem mit verschiedenen Zahlungsarten,
     Rabatten und Finanzierungsoptionen.
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         self.legacy_config = None

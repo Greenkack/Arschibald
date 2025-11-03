@@ -33,6 +33,14 @@ from .config import get_config
 @dataclass
 class CacheEntry:
     """Single cache entry with metadata"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     key: str
     value: Any
     created_at: datetime
@@ -56,6 +64,14 @@ class CacheEntry:
 
 class CacheKeys:
     """Centralized cache key management with namespacing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # Namespace prefixes
     USER_SESSION = "user_session"
@@ -120,6 +136,14 @@ class CacheKeys:
 
 class InMemoryCache:
     """In-memory cache with LRU eviction and TTL support"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, max_entries: int = 1000, default_ttl: int = 3600):
         self.max_entries = max_entries
@@ -273,6 +297,14 @@ class InMemoryCache:
 
 class StreamlitCacheWrapper:
     """Wrapper for Streamlit's caching with enhanced tagging"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self._tag_registry: dict[str, set[str]] = {}
@@ -364,6 +396,14 @@ class StreamlitCacheWrapper:
 
 class DatabaseCache:
     """Database-level caching for expensive query results"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self._enabled = True
@@ -526,6 +566,14 @@ class DatabaseCache:
 
 class MultiLayerCache:
     """Multi-layer cache coordinator (memory + Streamlit + database)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         config = get_config()

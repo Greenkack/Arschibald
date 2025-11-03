@@ -29,6 +29,14 @@ class VATCategory(Enum):
 @dataclass
 class VATRate:
     """VAT rate configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     category: VATCategory
     rate_percent: float
     description: str
@@ -52,6 +60,14 @@ class VATRate:
 @dataclass
 class VATCalculation:
     """Result of VAT calculation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     net_amount: float
     vat_rate_percent: float
     vat_amount: float
@@ -64,6 +80,14 @@ class VATCalculation:
 @dataclass
 class CategoryVATMapping:
     """Maps product categories to VAT rates"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     product_category: str
     vat_category: VATCategory
     override_rate: float | None = None  # Override default rate for this category
@@ -72,6 +96,14 @@ class CategoryVATMapping:
 
 class VATManager:
     """Manages VAT calculations and tax handling"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, country_code: str = "DE"):
         """Initialize VAT manager for specific country

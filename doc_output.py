@@ -11,13 +11,27 @@ Datum: 2025-06-03
 import base64
 import io
 import os
-import traceback
+import traceback as tb_module
 from collections.abc import Callable
 from typing import Any
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 from ui_state_manager import set_current_page
+
+# ========================================
+# CORE INTEGRATION - Logging
+# ========================================
+try:
+    from core_integration import log_info, log_error, log_warning
+    CORE_LOGGING = True
+except ImportError:
+    CORE_LOGGING = False
+    def log_info(msg, **kwargs): pass
+    def log_error(msg, **kwargs): pass
+    def log_warning(msg, **kwargs): pass
+# ========================================
 
 # Dynamische PDF-Overlay-Pfade (Koordinatendateien und PDF-Hintergründe)
 _PDF_UI_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -307,19 +321,21 @@ def render_pdf_ui(
     get_active_company_details_func: Callable[[], dict[str, Any] | None] = _dummy_get_active_company_details,
     db_list_company_documents_func: Callable[[int, str | None], list[dict[str, Any]]] = _dummy_list_company_documents
 ):
-    #  PREMIUM PDF UI HEADER
-    st.markdown("""
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border-radius: 20px; padding: 30px; margin: 20px 0;
-                box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: center;">
-        <h1 style="color: white; margin: 0; font-weight: 700; font-size: 32px;">
-             PREMIUM PDF GENERATOR
-        </h1>
-        <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">
-            Erstellen Sie professionelle Angebots-PDFs mit erweiterten Optionen
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    """Render PDF UI - Hauptfunktion für PDF-Generierung und Vorschau"""
+    
+    # PDF Design Config initialisieren (falls nicht vorhanden)
+    if 'pdf_design_config' not in st.session_state:
+        st.session_state.pdf_design_config = {
+            'theme': 'professional',
+            'color_scheme': 'blue_gradient',
+            'typography': 'modern',
+            'layout_style': 'clean',
+            'header_style': 'modern',
+            'footer_style': 'minimal',
+            'page_margins': 'standard',
+            'spacing': 'comfortable'
+        }
+        print("✓ PDF Design Config initialisiert")
 
     # SESSION STATE DATEN KONSOLIDIERUNG - FIX FÜR FEHLENDE DATEN
     if not project_data or not isinstance(
@@ -360,18 +376,6 @@ def render_pdf_ui(
     # DATENSTATUS-ANZEIGE
     data_sufficient = _show_pdf_data_status(
         project_data, analysis_results, texts)
-
-    #  ERWEITERTE OPTIONEN BEREICH
-    st.markdown("---")
-    st.markdown("""
-    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                border-radius: 15px; padding: 20px; margin: 15px 0;
-                box-shadow: 0 8px 25px rgba(0,0,0,0.15);">
-        <h3 style="color: white; margin: 0; font-weight: 600; text-align: center;">
-             ERWEITERTE PDF-OPTIONEN
-        </h3>
-    </div>
-    """, unsafe_allow_html=True)
 
     #  VISUALISIERUNGEN & DIAGRAMME SEKTION
     with st.expander(" VISUALISIERUNGEN & DIAGRAMME", expanded=False):
@@ -471,7 +475,8 @@ def render_pdf_ui(
                 key="pdf_animate_charts")
 
             # Erweiterte Chart-Optionen
-            with st.expander(" Erweiterte Chart-Einstellungen", expanded=False):
+            st.markdown("**📊 Erweiterte Chart-Einstellungen**")
+            with st.container():
                 chart_resolution = st.selectbox(
                     " Auflösung", [
                         "Standard", "Hoch", "Ultra"], key="pdf_chart_resolution")
@@ -1120,16 +1125,6 @@ def render_pdf_ui(
         else:
             st.info(" **Tipp:** Fügen Sie unbegrenzt eigene Texte, Bilder und Tabellen zu Ihrem PDF hinzu. Jedes Element kann individuell positioniert und gestaltet werden!")
 
-    #  PDF DRAG & DROP EDITOR (REAL-TIME)
-    with st.expander(" PDF DRAG & DROP EDITOR (REAL-TIME)", expanded=False):
-        st.markdown("""
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    border-radius: 10px; padding: 15px; margin: 10px 0; color: white;">
-            <h4 style="margin: 0; color: white;"> INTERAKTIVER PDF EDITOR</h4>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">Drag & Drop Editor mit Real-Time Vorschau und Echtzeit-Änderungen</p>
-        </div>
-        """, unsafe_allow_html=True)
-
         # PDF Editor Configuration
         if 'pdf_editor_config' not in st.session_state:
             st.session_state.pdf_editor_config = {
@@ -1373,24 +1368,25 @@ def render_pdf_ui(
 
         # Drag & Drop Zone Simulation
         st.markdown("---")
-        st.markdown("** DRAG & DROP EDITOR ZONE:**")
+        st.markdown("**🎯 DRAG & DROP EDITOR ZONE:**")
 
-        # Simulated Canvas
-        st.markdown("""
-        <div style="border: 2px dashed #ccc; border-radius: 10px; padding: 30px;
-                    min-height: 300px; background: #f8f9fa; text-align: center;">
-            <h3 style="color: #666; margin-top: 50px;"> DRAG & DROP CANVAS</h3>
-            <p style="color: #888;">Ziehen Sie Elemente aus der Bibliothek hierher</p>
-            <p style="color: #888;"> Real-Time Vorschau |  Auto-Save |  Grid-Snap</p>
+        # Simulated Canvas mit components.html - DARK THEME
+        canvas_html = """
+        <div style="border: 2px dashed #555; border-radius: 10px; padding: 30px;
+                    min-height: 300px; background: #1e1e1e; text-align: center;">
+            <h3 style="color: #e0e0e0; margin-top: 50px;">🎨 DRAG & DROP CANVAS</h3>
+            <p style="color: #b0b0b0;">Ziehen Sie Elemente aus der Bibliothek hierher</p>
+            <p style="color: #b0b0b0;">⚡ Real-Time Vorschau | 💾 Auto-Save | 📐 Grid-Snap</p>
 
-            <div style="margin: 20px 0; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <h4> BEISPIEL PDF-SEITE</h4>
-                <p>Hier würden Ihre Drag & Drop Elemente erscheinen...</p>
+            <div style="margin: 20px 0; padding: 20px; background: #2a2a2a; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                <h4 style="color: #e0e0e0;">📄 BEISPIEL PDF-SEITE</h4>
+                <p style="color: #b0b0b0;">Hier würden Ihre Drag & Drop Elemente erscheinen...</p>
                 <div style="height: 2px; background: linear-gradient(90deg, #667eea, #764ba2); margin: 10px 0;"></div>
-                <p><em> Interaktiver Editor mit Real-Time Updates</em></p>
+                <p style="color: #b0b0b0;"><em>✨ Interaktiver Editor mit Real-Time Updates</em></p>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """
+        components.html(canvas_html, height=450)
 
         # Editor Tools
         st.markdown("** EDITOR-WERKZEUGE:**")
@@ -1807,37 +1803,53 @@ def render_pdf_ui(
 
         # Design Preview
         st.markdown("---")
-        st.markdown("** DESIGN-VORSCHAU:**")
+        st.markdown("**⭐ DESIGN-VORSCHAU:**")
 
-        # Live Preview Simulation
-        current_theme = st.session_state.pdf_design_config['theme']
-        st.markdown(f"""
-        <div style="border: 2px solid #ddd; border-radius: 12px; padding: 20px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        # Live Preview Simulation - mit Sicherheitsprüfung
+        if 'pdf_design_config' not in st.session_state or 'theme' not in st.session_state.pdf_design_config:
+            # Fallback zur Initialisierung
+            st.session_state.pdf_design_config = {
+                'theme': 'professional',
+                'color_scheme': 'blue_gradient',
+                'typography': 'modern',
+                'layout_style': 'clean',
+                'header_style': 'modern',
+                'footer_style': 'minimal',
+                'page_margins': 'standard',
+                'spacing': 'comfortable'
+            }
+        
+        current_theme = st.session_state.pdf_design_config.get('theme', 'professional')
+        
+        # HTML Preview mit components.html für bessere Kompatibilität - DARK THEME
+        preview_html = f"""
+        <div style="border: 2px solid #4a4a4a; border-radius: 12px; padding: 20px; background: #1e1e1e; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                <h3 style="margin: 0;"> {current_theme.upper()} THEME PREVIEW</h3>
+                <h3 style="margin: 0;">🎨 {current_theme.upper()} THEME PREVIEW</h3>
                 <p style="margin: 5px 0 0 0; opacity: 0.9;">Live-Vorschau Ihres PDF-Designs</p>
             </div>
 
             <div style="margin: 15px 0;">
-                <h4 style="color: #333; margin-bottom: 10px;"> Beispiel-Chart</h4>
+                <h4 style="color: #e0e0e0; margin-bottom: 10px;">📊 Beispiel-Chart</h4>
                 <div style="height: 120px; background: linear-gradient(90deg, #ff7b7b, #667eea); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
                     Ihr Chart hier mit aktuellen Design-Einstellungen
                 </div>
             </div>
 
             <div style="margin: 15px 0;">
-                <h4 style="color: #333;"> Beispiel-Text</h4>
-                <p style="color: #666; line-height: 1.6;">
+                <h4 style="color: #e0e0e0;">📝 Beispiel-Text</h4>
+                <p style="color: #b0b0b0; line-height: 1.6;">
                     Dies ist ein Beispieltext, der zeigt, wie Ihr PDF mit den aktuellen Design-Einstellungen aussehen wird.
                     Schriftart: {font_family}, Größe: {font_size_base}pt, Ausrichtung: {text_alignment}
                 </p>
             </div>
 
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #667eea;">
-                <strong> Design-Status:</strong> {current_theme.title()} Theme aktiv mit erweiterten Styling-Optionen
+            <div style="background: #2a2a2a; padding: 15px; border-radius: 6px; border-left: 4px solid #667eea;">
+                <strong style="color: #e0e0e0;">✅ Design-Status:</strong> <span style="color: #b0b0b0;">{current_theme.title()} Theme aktiv mit erweiterten Styling-Optionen</span>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """
+        components.html(preview_html, height=500)
 
         # Design Export/Import
         st.markdown("---")
@@ -2300,9 +2312,9 @@ def render_pdf_ui(
                 try:
                     from pdf_widgets import PDFSectionManager
 
-                    if 'pdf_section_manager' not in st.session_state:
-                        st.session_state.pdf_section_manager = PDFSectionManager()
-                        st.session_state.pdf_section_manager.initialize_session_state()
+                    # Erstelle Manager LOKAL (nicht in session_state speichern!)
+                    pdf_section_manager = PDFSectionManager()
+                    pdf_section_manager.initialize_session_state()
 
                     st.markdown("**📄 PDF-Struktur anpassen:**")
                     with st.container():
@@ -2942,6 +2954,41 @@ def render_pdf_ui(
             else:
                 st.info("ℹ Keine Diagramme ausgewählt")
 
+            # 📐 Chart Layout Auswahl
+            if len(selected_chart_keys_for_pdf_ui_col3) > 0:
+                st.markdown("---")
+                st.markdown("**📐 Layout der Diagramme**")
+                st.caption("Wählen Sie, wie viele Diagramme pro Seite angezeigt werden sollen")
+                
+                chart_layout_options = {
+                    "one_per_page": "📄 1 Diagramm pro Seite (groß & detailliert)",
+                    "2_per_page": "📊 2 Diagramme pro Seite (ausgewogen)",
+                    "4_per_page": "📈 4 Diagramme pro Seite (kompakt)"
+                }
+                
+                current_layout = st.session_state.pdf_inclusion_options.get("chart_layout", "one_per_page")
+                
+                # Radio ohne key Parameter - Wert wird direkt zurückgegeben
+                selected_layout = st.radio(
+                    "Anzahl Diagramme pro Seite",
+                    options=list(chart_layout_options.keys()),
+                    format_func=lambda x: chart_layout_options[x],
+                    index=list(chart_layout_options.keys()).index(current_layout),
+                    horizontal=False,
+                    label_visibility="collapsed"
+                )
+                
+                # Wert in pdf_inclusion_options speichern
+                st.session_state.pdf_inclusion_options["chart_layout"] = selected_layout
+                
+                # Info je nach Layout
+                layout_info = {
+                    "one_per_page": "Jedes Diagramm nimmt eine volle Seite ein - ideal für Präsentationen",
+                    "2_per_page": "Zwei Diagramme nebeneinander - gute Balance zwischen Größe und Kompaktheit",
+                    "4_per_page": "Vier Diagramme im Raster - maximale Informationsdichte"
+                }
+                st.info(f"ℹ️ {layout_info[selected_layout]}")
+
             # Quick-Select für Diagramme
             with st.expander(" Diagramm-Schnellauswahl", expanded=False):
                 basic_charts = [
@@ -2972,7 +3019,7 @@ def render_pdf_ui(
                     st.rerun()
 
                 if st.button(
-                    "🚫 Keine Diagramme",
+                    " Keine Diagramme",
                         help="Alle Diagramme abwählen"):
                     st.session_state.pdf_inclusion_options["selected_charts_for_pdf"] = [
                     ]
@@ -2983,7 +3030,7 @@ def render_pdf_ui(
 
     # PDF-Generierung Button (außerhalb Container, damit er sichtbar ist)
     submitted_generate_pdf = st.button(
-        f"**📄 {get_text_pdf_ui(texts, 'pdf_generate_button', 'Angebots-PDF erstellen')}**",
+        f"** {get_text_pdf_ui(texts, 'pdf_generate_button', 'Angebots-PDF erstellen')}**",
         type="primary",
         disabled=submit_button_disabled,
         use_container_width=True
@@ -2995,7 +3042,7 @@ def render_pdf_ui(
         extended_features = {}
 
     # WOW Features (experimentell)
-    with st.expander("✨ Erweiterte Features (Experimental)", expanded=False):
+    with st.expander(" Erweiterte Features (Experimental)", expanded=False):
         st.markdown("** Visuelle Verbesserungen:**")
 
         wow_col1, wow_col2 = st.columns(2)
@@ -3139,6 +3186,9 @@ def render_pdf_ui(
 
                 # Versuche erweiterte PDF-Generierung mit modernem Design
                 pdf_bytes = None
+                # Template-Name für Logging (Fallback wenn nicht gesetzt)
+                selected_template_name_pdf_ui = st.session_state.get('selected_pdf_template_name', 'Professional')
+                
                 try:
                     from doc_output_modern_patch import (
                         enhance_pdf_generation_with_modern_design,
@@ -3199,6 +3249,29 @@ def render_pdf_ui(
                             if final_inclusion_options_to_pass.get('append_additional_pages_after_main6'):
                                 try:
                                     from pdf_generator import generate_offer_pdf
+                                    
+                                    # WICHTIG: Kopie der Options mit skip_cover_and_letter=True erstellen
+                                    # um Duplikate von Deckblatt/Anschreiben zu vermeiden
+                                    inclusion_options_for_additional = final_inclusion_options_to_pass.copy()
+                                    inclusion_options_for_additional['skip_cover_and_letter'] = True
+                                    
+                                    # ✅ CHARTS BEHALTEN - Alle ausgewählten Charts werden in Zusatzseiten eingefügt!
+                                    # Charts sind bereits in final_inclusion_options_to_pass['selected_charts_for_pdf']
+                                    # und werden durch .copy() übernommen
+                                    
+                                    # Aktiviere Dokumentenanhängen für das additional_pdf
+                                    if not inclusion_options_for_additional.get('include_all_documents', False):
+                                        st.info("ℹ️ Erweiterte PDF-Ausgabe: Aktiviere automatisch 'include_all_documents' für Zusatzseiten")
+                                        inclusion_options_for_additional['include_all_documents'] = True
+                                    
+                                    print(f"[DOC_OUTPUT] Generiere Zusatz-PDF mit folgenden Optionen:")
+                                    print(f"  - skip_cover_and_letter: {inclusion_options_for_additional.get('skip_cover_and_letter')}")
+                                    print(f"  - include_all_documents: {inclusion_options_for_additional.get('include_all_documents')}")
+                                    print(f"  - selected_charts_for_pdf: {inclusion_options_for_additional.get('selected_charts_for_pdf', [])}")
+                                    print(f"  - Anzahl Charts: {len(inclusion_options_for_additional.get('selected_charts_for_pdf', []))}")
+                                    print(f"  - chart_layout: {inclusion_options_for_additional.get('chart_layout', 'one_per_page')}")
+                                    print(f"  - Aktive Sektionen: {final_sections_to_include_to_pass}")
+                                    
                                     additional_pdf_bytes = generate_offer_pdf(
                                         project_data=enhanced_project_data,
                                         analysis_results=analysis_results,
@@ -3208,17 +3281,38 @@ def render_pdf_ui(
                                         selected_offer_title_text=st.session_state.selected_offer_title_text_content_doc_output,
                                         selected_cover_letter_text=st.session_state.selected_cover_letter_text_content_doc_output,
                                         sections_to_include=final_sections_to_include_to_pass,
-                                        inclusion_options=final_inclusion_options_to_pass,
+                                        inclusion_options=inclusion_options_for_additional,
                                         load_admin_setting_func=load_admin_setting_func,
                                         save_admin_setting_func=save_admin_setting_func,
                                         list_products_func=list_products_func,
                                         get_product_by_id_func=get_product_by_id_func,
                                         db_list_company_documents_func=db_list_company_documents_func,
                                         active_company_id=active_company_id_for_docs,
-                                        texts=texts
+                                        texts=texts,
+                                        disable_main_template_combiner=True  # KRITISCH: Verhindert Rekursion!
                                     )
+                                    
+                                    # Debug-Ausgabe zur Analyse
+                                    if additional_pdf_bytes:
+                                        try:
+                                            from pypdf import PdfReader
+                                            temp_reader = PdfReader(io.BytesIO(additional_pdf_bytes))
+                                            page_count = len(temp_reader.pages)
+                                            print(f"✅ [DOC_OUTPUT] Zusatz-PDF erfolgreich generiert: {page_count} Seiten, {len(additional_pdf_bytes)} Bytes")
+                                            st.success(f"✅ Zusatz-PDF generiert: {page_count} Seiten")
+                                        except Exception as e_debug:
+                                            print(f"⚠️ [DOC_OUTPUT] Debug-Auswertung fehlgeschlagen: {e_debug}")
+                                            st.info(f"✅ Zusatz-PDF generiert: {len(additional_pdf_bytes)} Bytes")
+                                    else:
+                                        print("❌ [DOC_OUTPUT] Zusatz-PDF ist None - keine Seiten generiert")
+                                        st.warning("⚠️ Zusatz-PDF konnte nicht generiert werden (None)")
+                                        
                                 except Exception as e_additional:
-                                    st.warning(f"Zusatzseiten konnten nicht angehängt werden: {e_additional}")
+                                    import traceback
+                                    error_details = tb_module.format_exc()
+                                    print(f"❌ [DOC_OUTPUT] Fehler bei Zusatzseiten-Generierung:\n{error_details}")
+                                    st.error(f"❌ Zusatzseiten konnten nicht angehängt werden: {e_additional}")
+                                    st.text_area("Fehlerdetails:", error_details, height=150)
                             
                             # Generiere Template-basierte PDF
                             from pathlib import Path
@@ -3241,7 +3335,7 @@ def render_pdf_ui(
                             
                         except Exception as e_template:
                             st.error(f"Template-Engine fehlgeschlagen: {e_template}")
-                            st.text_area("Traceback:", traceback.format_exc(), height=200)
+                            st.text_area("Traceback:", tb_module.format_exc(), height=200)
                             pdf_bytes = None
                     
                     # Fallback auf alte Methode falls Template-Engine fehlschlägt
@@ -3274,9 +3368,34 @@ def render_pdf_ui(
             if pdf_bytes and isinstance(pdf_bytes, bytes):
                 st.session_state.generated_pdf_bytes_for_download_v1 = pdf_bytes
                 st.success(f"✅ PDF erfolgreich generiert ({len(pdf_bytes)} Bytes)")
+                
+                # ========================================
+                # CORE INTEGRATION - Log Success
+                # ========================================
+                if CORE_LOGGING:
+                    log_info(
+                        "pdf_generated_success",
+                        size_bytes=len(pdf_bytes),
+                        template=selected_template_name_pdf_ui,
+                        sections=len(final_sections_to_include_to_pass),
+                        charts=len(final_inclusion_options_to_pass.get('selected_charts_for_pdf', [])),
+                        extended_pages=final_inclusion_options_to_pass.get('append_additional_pages_after_main6', False)
+                    )
+                # ========================================
             else:
                 st.error("❌ PDF-Generierung fehlgeschlagen - keine Daten generiert")
                 st.session_state.generated_pdf_bytes_for_download_v1 = None
+                
+                # ========================================
+                # CORE INTEGRATION - Log Failure
+                # ========================================
+                if CORE_LOGGING:
+                    log_error(
+                        "pdf_generation_failed",
+                        template=selected_template_name_pdf_ui,
+                        reason="no_pdf_bytes"
+                    )
+                # ========================================
                 
         except Exception as e_gen_final_outer:
             st.error(
@@ -3287,9 +3406,21 @@ def render_pdf_ui(
                         'Kritischer Fehler im PDF-Prozess (pdf_ui.py):')} {e_gen_final_outer}")
             st.text_area(
                 "Traceback PDF Erstellung (pdf_ui.py):",
-                traceback.format_exc(),
+                tb_module.format_exc(),
                 height=250)
             st.session_state.generated_pdf_bytes_for_download_v1 = None
+            
+            # ========================================
+            # CORE INTEGRATION - Log Critical Error
+            # ========================================
+            if CORE_LOGGING:
+                log_error(
+                    "pdf_generation_critical_error",
+                    error=str(e_gen_final_outer),
+                    traceback=tb_module.format_exc()[:500],  # First 500 chars
+                    template=selected_template_name_pdf_ui
+                )
+            # ========================================
         finally:
             st.session_state.pdf_generating_lock_v1 = False
             # Kein automatisches Rerun mehr - nur wenn PDF erfolgreich generiert wurde
@@ -3360,8 +3491,10 @@ def render_pdf_ui(
         """, unsafe_allow_html=True)
 
         try:
-            st.session_state.pdf_section_manager.render_drag_drop_interface(
-                texts)
+            # Erstelle Manager lokal, nicht aus session_state
+            from pdf_widgets import PDFSectionManager
+            pdf_section_manager = PDFSectionManager()
+            pdf_section_manager.render_drag_drop_interface(texts)
         except Exception as e:
             st.error(f"Drag & Drop Interface Fehler: {e}")
             st.info("Drag & Drop System vorübergehend nicht verfügbar.")

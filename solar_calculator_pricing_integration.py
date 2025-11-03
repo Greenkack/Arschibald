@@ -20,6 +20,14 @@ except ImportError:
 
     class DummySt:
         @staticmethod
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def info(msg): print(f"INFO: {msg}")
         @staticmethod
         def warning(msg): print(f"WARNING: {msg}")
@@ -73,6 +81,14 @@ logger = logging.getLogger(__name__)
 
 class SolarCalculatorPricingIntegration:
     """Handles pricing integration for the solar calculator"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.pricing_engine = None

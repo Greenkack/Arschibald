@@ -31,6 +31,14 @@ class InvalidationStrategy(Enum):
 @dataclass
 class DataRelationship:
     """Define relationship between data entities for smart invalidation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     source_type: str  # e.g., "user", "product", "form"
     target_types: set[str]  # Related types to invalidate
     relationship_type: str  # "one_to_many", "many_to_many", "parent_child"
@@ -53,6 +61,14 @@ class DataRelationship:
 @dataclass
 class InvalidationRule:
     """Enhanced cache invalidation rule with smart conditions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     name: str
     trigger_tags: set[str]
     invalidate_tags: set[str]
@@ -122,6 +138,14 @@ class InvalidationRule:
 
 class CacheDependencyTracker:
     """Track cache dependencies for smart invalidation"""
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         self._dependencies: dict[str, set[str]] = defaultdict(set)
@@ -220,6 +244,14 @@ class CacheDependencyTracker:
 
 class InvalidationEngine:
     """Smart cache invalidation engine with batching and relationships"""
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         self._rules: dict[str, InvalidationRule] = {}

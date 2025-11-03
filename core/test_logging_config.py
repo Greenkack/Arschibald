@@ -65,6 +65,14 @@ def reset_logging():
 
 class TestEnvironmentLogLevels:
     """Test environment-specific log levels"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_dev_log_level(self):
         """Test development environment log level"""
@@ -104,6 +112,14 @@ class TestEnvironmentLogLevels:
 
 class TestJSONFormatConfiguration:
     """Test JSON format configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_json_format_in_production(self):
         """Test JSON format is enabled in production"""
@@ -134,6 +150,14 @@ class TestJSONFormatConfiguration:
 
 class TestLoggingInitialization:
     """Test logging initialization from config"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_init_logging_from_config(self, test_config):
         """Test logging initialization from AppConfig"""
@@ -170,6 +194,14 @@ class TestLoggingInitialization:
 
 class TestRuntimeLogLevelAdjustment:
     """Test runtime log level adjustment"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_adjust_log_level(self, test_config):
         """Test adjusting log level at runtime"""
@@ -197,6 +229,14 @@ class TestRuntimeLogLevelAdjustment:
 
 class TestLoggingConfigManager:
     """Test LoggingConfigManager"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_manager_initialization(self, test_config):
         """Test manager initialization"""
@@ -236,6 +276,14 @@ class TestLoggingConfigManager:
 
 class TestGlobalLoggingManager:
     """Test global logging manager"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_logging_manager(self, test_config):
         """Test getting global logging manager"""
@@ -261,6 +309,14 @@ class TestGlobalLoggingManager:
 
 class TestLoggingWithConfig:
     """Test logging with configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_logging_respects_config_level(self, test_config):
         """Test logging respects configured level"""
@@ -302,6 +358,14 @@ class TestLoggingWithConfig:
 
 class TestEnvironmentSpecificBehavior:
     """Test environment-specific logging behavior"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_dev_environment_behavior(self, temp_dirs):
         """Test development environment logging behavior"""

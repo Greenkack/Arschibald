@@ -46,6 +46,14 @@ class AuditSeverity(Enum):
 @dataclass
 class AuditEvent:
     """Represents an audit event"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     event_type: AuditEventType
     severity: AuditSeverity
     message: str
@@ -121,6 +129,14 @@ class AuditEvent:
 @dataclass
 class AuditQuery:
     """Query parameters for audit log search"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     event_types: list[AuditEventType] | None = None
     severities: list[AuditSeverity] | None = None
     user_id: str | None = None
@@ -138,6 +154,14 @@ class AuditQuery:
 
 class PricingAuditLogger:
     """Comprehensive audit logging system for pricing operations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, db_path: str = "data/pricing_audit.db",
                  max_log_size_mb: int = 100, retention_days: int = 90):
@@ -578,6 +602,14 @@ class PricingAuditLogger:
 
 class PricingCalculationLogger:
     """Specialized logger for pricing calculations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, audit_logger: PricingAuditLogger):
         """Initialize calculation logger
@@ -758,6 +790,14 @@ class PricingCalculationLogger:
 
 class PricingMonitor:
     """Real-time monitoring and alerting for pricing issues"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, audit_logger: PricingAuditLogger):
         """Initialize pricing monitor

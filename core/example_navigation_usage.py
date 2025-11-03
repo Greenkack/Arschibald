@@ -18,6 +18,14 @@ from core import (
 # Define custom pages
 class HomePage(Page):
     """Home page"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def render(self):
         st.title("🏠 Home Page")
@@ -32,6 +40,14 @@ class HomePage(Page):
 
 class DashboardPage(Page):
     """Dashboard page"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, router, session=None):
         super().__init__(router, session)
@@ -59,6 +75,14 @@ class DashboardPage(Page):
 
 class SettingsPage(Page):
     """Settings page"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, router, session=None):
         super().__init__(router, session)
@@ -82,6 +106,14 @@ class SettingsPage(Page):
 
 class AdminPage(Page):
     """Admin page (requires admin role)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, router, session=None):
         super().__init__(router, session)

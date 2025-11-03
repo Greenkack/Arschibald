@@ -25,6 +25,23 @@ except ImportError:
     SUI_AVAILABLE = False
     sui = None
 
+# Import session widgets for automatic persistence (Phase 3)
+try:
+    from session_widgets import (
+        session_text_input,
+        session_number_input,
+        session_selectbox,
+        session_checkbox,
+    )
+    SESSION_WIDGETS_AVAILABLE = True
+except ImportError:
+    # Fallback to standard Streamlit widgets
+    SESSION_WIDGETS_AVAILABLE = False
+    session_text_input = st.text_input
+    session_number_input = st.number_input
+    session_selectbox = st.selectbox
+    session_checkbox = st.checkbox
+
 # --- Hilfsfunktion für Texte ---
 
 
@@ -500,56 +517,67 @@ def render_data_input(texts: dict[str, str]) -> None:
         default_salutation = inputs['customer_data'].get(
             'salutation', SALUTATION_OPTIONS[0] if SALUTATION_OPTIONS else '')
         with col4:
-            inputs['customer_data']['salutation'] = st.selectbox(
+            inputs['customer_data']['salutation'] = session_selectbox(
                 get_text_di(
                     texts,
                     "salutation_label",
                     "Anrede"),
                 options=SALUTATION_OPTIONS,
-                index=SALUTATION_OPTIONS.index(default_salutation) if default_salutation in SALUTATION_OPTIONS else 0,
-                key='salutation_di_v6_exp_stable')
+                key='salutation_di_v6_exp_stable',
+                form_id="customer_data",
+                index=SALUTATION_OPTIONS.index(default_salutation) if default_salutation in SALUTATION_OPTIONS else 0)
         default_title = inputs['customer_data'].get(
             'title', TITLE_OPTIONS[-1] if TITLE_OPTIONS else '')
         with col5:
-            inputs['customer_data']['title'] = st.selectbox(
+            inputs['customer_data']['title'] = session_selectbox(
                 get_text_di(
                     texts,
                     "title_label",
                     "Titel"),
                 options=TITLE_OPTIONS,
+                key='title_di_v6_exp_stable',
+                form_id="customer_data",
                 index=TITLE_OPTIONS.index(default_title) if default_title in TITLE_OPTIONS else len(TITLE_OPTIONS) -
-                1,
-                key='title_di_v6_exp_stable')
+                1)
         with col6:
-            inputs['customer_data']['first_name'] = st.text_input(
+            inputs['customer_data']['first_name'] = session_text_input(
                 get_text_di(
-                    texts, "first_name_label", "Vorname"), value=str(
+                    texts, "first_name_label", "Vorname"),
+                key='first_name_di_v6_exp_stable',
+                form_id="customer_data",
+                value=str(
                     inputs['customer_data'].get(
-                        'first_name', '')), key='first_name_di_v6_exp_stable')
+                        'first_name', '')))
         col7, col8 = st.columns(2)
         with col7:
-            inputs['customer_data']['last_name'] = st.text_input(
+            inputs['customer_data']['last_name'] = session_text_input(
                 get_text_di(
-                    texts, "last_name_label", "Nachname"), value=str(
+                    texts, "last_name_label", "Nachname"),
+                key='last_name_di_v6_exp_stable',
+                form_id="customer_data",
+                value=str(
                     inputs['customer_data'].get(
-                        'last_name', '')), key='last_name_di_v6_exp_stable')
+                        'last_name', '')))
         with col8:
-            inputs['customer_data']['num_persons'] = st.number_input(
+            inputs['customer_data']['num_persons'] = session_number_input(
                 get_text_di(
                     texts,
                     "num_persons_label",
                     "Anzahl Personen im Haushalt"),
+                key='num_persons_di_v6_exp_stable',
+                form_id="customer_data",
                 min_value=1,
                 value=int(
                     inputs['customer_data'].get(
                         'num_persons',
-                        1) or 1),
-                key='num_persons_di_v6_exp_stable')
-        full_address_input_val = st.text_input(
+                        1) or 1))
+        full_address_input_val = session_text_input(
             get_text_di(
                 texts,
                 "full_address_label",
                 "Komplette Adresse"),
+            key='full_address_widget_key_di_v6_exp_stable',
+            form_id="customer_data",
             value=str(
                 inputs['customer_data'].get(
                     'full_address',
@@ -557,8 +585,7 @@ def render_data_input(texts: dict[str, str]) -> None:
             help=get_text_di(
                 texts,
                 "full_address_help",
-                "Z.B. Musterweg 18, 12345 Musterstadt"),
-            key='full_address_widget_key_di_v6_exp_stable')
+                "Z.B. Musterweg 18, 12345 Musterstadt"))
         inputs['customer_data']['full_address'] = full_address_input_val
 
         # KORREKTUR: `st.rerun()` aus dem Button-Callback entfernen. Streamlit führt nach Button-Klicks automatisch einen Rerun durch.
@@ -605,33 +632,45 @@ def render_data_input(texts: dict[str, str]) -> None:
         col_addr1, col_addr2 = st.columns(2)
         col_addr3, col_addr4 = st.columns(2)
         with col_addr1:
-            inputs['customer_data']['address'] = st.text_input(
+            inputs['customer_data']['address'] = session_text_input(
                 get_text_di(
-                    texts, "street_label", "Straße"), value=str(
+                    texts, "street_label", "Straße"),
+                key='address_di_manual_v6_exp_stable',
+                form_id="customer_data",
+                value=str(
                     inputs['customer_data'].get(
-                        'address', '')), key='address_di_manual_v6_exp_stable')
+                        'address', '')))
         with col_addr2:
-            inputs['customer_data']['house_number'] = st.text_input(
+            inputs['customer_data']['house_number'] = session_text_input(
                 get_text_di(
-                    texts, "house_number_label", "Hausnummer"), value=str(
+                    texts, "house_number_label", "Hausnummer"),
+                key='house_number_di_manual_v6_exp_stable',
+                form_id="customer_data",
+                value=str(
                     inputs['customer_data'].get(
-                        'house_number', '')), key='house_number_di_manual_v6_exp_stable')
+                        'house_number', '')))
         with col_addr3:
-            inputs['customer_data']['zip_code'] = st.text_input(
+            inputs['customer_data']['zip_code'] = session_text_input(
                 get_text_di(
-                    texts, "zip_code_label", "PLZ"), value=str(
+                    texts, "zip_code_label", "PLZ"),
+                key='zip_code_di_manual_v6_exp_stable',
+                form_id="customer_data",
+                value=str(
                     inputs['customer_data'].get(
-                        'zip_code', '')), key='zip_code_di_manual_v6_exp_stable')
+                        'zip_code', '')))
         with col_addr4:
-            inputs['customer_data']['city'] = st.text_input(
+            inputs['customer_data']['city'] = session_text_input(
                 get_text_di(
-                    texts, "city_label", "Ort"), value=str(
+                    texts, "city_label", "Ort"),
+                key='city_di_manual_v6_exp_stable',
+                form_id="customer_data",
+                value=str(
                     inputs['customer_data'].get(
-                        'city', '')), key='city_di_manual_v6_exp_stable')
+                        'city', '')))
         default_state = inputs['customer_data'].get(
             'state', please_select_text)
         state_options_with_ps = [please_select_text] + BUNDESLAND_OPTIONS
-        inputs['customer_data']['state'] = st.selectbox(
+        inputs['customer_data']['state'] = session_selectbox(
             get_text_di(
                 texts,
                 "state_label",
@@ -753,13 +792,14 @@ def render_data_input(texts: dict[str, str]) -> None:
                             "Satellitenansicht"))
                     default_visualize_satellite = inputs['project_details'].get(
                         'visualize_roof_in_pdf_satellite', False)
-                    inputs['project_details']['visualize_roof_in_pdf_satellite'] = st.checkbox(
+                    inputs['project_details']['visualize_roof_in_pdf_satellite'] = session_checkbox(
                         get_text_di(
                             texts,
                             "visualize_satellite_in_pdf_label",
                             "Satellitenbild in PDF anzeigen"),
-                        value=default_visualize_satellite,
-                        key="visualize_satellite_in_pdf_di_val_v6_final_exp_stable")
+                        key="visualize_satellite_in_pdf_di_val_v6_final_exp_stable",
+                        form_id="project_details",
+                        value=default_visualize_satellite)
                     if inputs['project_details'].get(
                             'visualize_roof_in_pdf_satellite') and st.session_state.satellite_image_url_di:
                         if not inputs['project_details'].get('satellite_image_base64_data') or inputs['project_details'].get(
@@ -794,33 +834,42 @@ def render_data_input(texts: dict[str, str]) -> None:
         # "Keine (gültigen) Koordinaten für Satellitenbild...")) # Optional
         col_contact1, col_contact2, col_contact3 = st.columns(3)
         with col_contact1:
-            inputs['customer_data']['email'] = st.text_input(
+            inputs['customer_data']['email'] = session_text_input(
                 get_text_di(
                     texts,
                     "email_label",
                     "E-Mail"),
+                key='email_di_v6_exp_stable',
+                form_id="customer_data",
                 value=str(
                     inputs['customer_data'].get(
                         'email',
-                        '')),
-                key='email_di_v6_exp_stable')
+                        '')))
         with col_contact2:
-            inputs['customer_data']['phone_landline'] = st.text_input(
+            inputs['customer_data']['phone_landline'] = session_text_input(
                 get_text_di(
-                    texts, "phone_landline_label", "Telefon (Festnetz)"), value=str(
+                    texts, "phone_landline_label", "Telefon (Festnetz)"),
+                key='phone_landline_di_v6_exp_stable',
+                form_id="customer_data",
+                value=str(
                     inputs['customer_data'].get(
-                        'phone_landline', '')), key='phone_landline_di_v6_exp_stable')
+                        'phone_landline', '')))
         with col_contact3:
-            inputs['customer_data']['phone_mobile'] = st.text_input(
+            inputs['customer_data']['phone_mobile'] = session_text_input(
                 get_text_di(
-                    texts, "phone_mobile_label", "Telefon (Mobil)"), value=str(
+                    texts, "phone_mobile_label", "Telefon (Mobil)"),
+                key='phone_mobile_di_v6_exp_stable',
+                form_id="customer_data",
+                value=str(
                     inputs['customer_data'].get(
-                        'phone_mobile', '')), key='phone_mobile_di_v6_exp_stable')
-        inputs['customer_data']['income_tax_rate_percent'] = st.number_input(
+                        'phone_mobile', '')))
+        inputs['customer_data']['income_tax_rate_percent'] = session_number_input(
             label=get_text_di(
                 texts,
                 "income_tax_rate_label",
                 "ESt.-Satz (%)"),
+            key='income_tax_rate_percent_di_v6_exp_stable',
+            form_id="customer_data",
             min_value=0.0,
             max_value=100.0,
             value=float(
@@ -829,7 +878,6 @@ def render_data_input(texts: dict[str, str]) -> None:
                     0.0) or 0.0),
             step=0.1,
             format="%.2f",
-            key='income_tax_rate_percent_di_v6_exp_stable',
             help=get_text_di(
                 texts,
                 "income_tax_rate_help",

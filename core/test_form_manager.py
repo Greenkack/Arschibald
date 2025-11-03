@@ -69,6 +69,14 @@ def form_manager(form_repository, form_validator, form_auto_save):
 
 class TestFormState:
     """Test FormState class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_form_state(self):
         """Test creating form state"""
@@ -224,6 +232,14 @@ class TestFormState:
 
 class TestFormRepository:
     """Test FormRepository class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_save_and_load_form(self, form_repository):
         """Test saving and loading form"""
@@ -354,6 +370,14 @@ class TestFormRepository:
 
 class TestFormValidator:
     """Test FormValidator class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_register_and_validate_field(self, form_validator):
         """Test field validation"""
@@ -436,6 +460,14 @@ class TestFormValidator:
 
 class TestFormAutoSave:
     """Test FormAutoSave class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_schedule_save(self, form_auto_save):
         """Test scheduling auto-save"""
@@ -528,6 +560,14 @@ class TestFormAutoSave:
 
 class TestFormManager:
     """Test FormManager class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_form(self, form_manager):
         """Test getting form"""
@@ -646,6 +686,14 @@ class TestFormManager:
 
 class TestConvenienceFunctions:
     """Test convenience functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_form(self, db_manager):
         """Test create_form function"""

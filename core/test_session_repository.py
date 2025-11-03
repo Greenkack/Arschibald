@@ -56,6 +56,14 @@ def sample_session():
 
 class TestSessionModel:
     """Test SessionModel database model"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_create_session_model(self, test_db):
         """Test creating session model"""
@@ -91,6 +99,14 @@ class TestSessionModel:
 
 class TestSessionRepository:
     """Test SessionRepository operations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_save_new_session(self, session_repo, sample_session):
         """Test saving new session"""
@@ -363,6 +379,14 @@ class TestSessionRepository:
 
 class TestSessionIntegration:
     """Integration tests for session repository"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_complete_session_persistence_cycle(self, session_repo):
         """Test complete persistence cycle"""
@@ -419,6 +443,14 @@ class TestSessionIntegration:
 
 class TestInitSessionTables:
     """Test session table initialization"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_init_session_tables(self, test_db):
         """Test initializing session tables"""

@@ -257,6 +257,14 @@ class AuthenticationAuditLog(Base):
 @dataclass
 class AuthenticationResult:
     """Result of authentication attempt"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     status: AuthenticationStatus
     user: User | None = None
     session_token: str | None = None
@@ -267,6 +275,14 @@ class AuthenticationResult:
 
 class PasswordHasher:
     """Secure password hashing with bcrypt"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, rounds: int = None):
         if not BCRYPT_AVAILABLE:
@@ -295,6 +311,14 @@ class PasswordHasher:
 
 class MFAManager:
     """Multi-factor authentication manager"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         if not PYOTP_AVAILABLE:
@@ -335,6 +359,14 @@ class MFAManager:
 
 class SessionManager:
     """User session management with configurable timeouts"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, db_manager: DatabaseManager = None):
         self.db_manager = db_manager or get_db_manager()
@@ -434,6 +466,14 @@ class SessionManager:
 
 class AuthenticationManager:
     """Comprehensive authentication manager"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, db_manager: DatabaseManager = None):
         self.db_manager = db_manager or get_db_manager()
@@ -840,6 +880,14 @@ def get_mfa_manager() -> MFAManager:
 
 class PermissionCache:
     """Cache for permission lookups to improve performance"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, ttl: int = 300):
         self.ttl = ttl
@@ -868,6 +916,14 @@ class PermissionCache:
 
 class AuthorizationManager:
     """Role-based access control with hierarchical roles"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, db_manager: DatabaseManager = None):
         self.db_manager = db_manager or get_db_manager()
@@ -1186,6 +1242,14 @@ class PIIField(str, Enum):
 
 class DataProtectionManager:
     """Data protection with PII masking and encryption"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.config = get_config()
@@ -1408,6 +1472,14 @@ class DataAccessLog(Base):
 
 class DataRetentionPolicy:
     """Data retention policy manager"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, db_manager: DatabaseManager = None):
         self.db_manager = db_manager or get_db_manager()
@@ -1576,6 +1648,14 @@ class SecuritySeverity(str, Enum):
 
 class ThreatDetector:
     """Threat detection engine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, db_manager: DatabaseManager = None):
         self.db_manager = db_manager or get_db_manager()
@@ -1696,6 +1776,14 @@ class ThreatDetector:
 
 class SecurityMonitor:
     """Security monitoring and alerting system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, db_manager: DatabaseManager = None):
         self.db_manager = db_manager or get_db_manager()

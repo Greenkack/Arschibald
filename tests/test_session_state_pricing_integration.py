@@ -23,6 +23,14 @@ with patch.dict('sys.modules', {'streamlit': mock_st}):
 
 class TestEnhancedPricingSessionManager:
     """Test the EnhancedPricingSessionManager class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup for each test method"""
@@ -266,6 +274,14 @@ class TestEnhancedPricingSessionManager:
 
 class TestIntegrationFunctions:
     """Test the integration functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup for each test method"""

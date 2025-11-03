@@ -62,12 +62,28 @@ PY_EXT = {".py"}
 
 @dataclass(frozen=True)
 class SymbolKey:
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     module_rel: str   # z.B. "pkg/modul.py"
     qualname: str     # z.B. "funktion" oder "Klasse" oder "Klasse.methode"
 
 
 @dataclass
 class DefInfo:
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     kind: str                  # "func" | "class" | "method"
     name: str                  # Kurzname (funktion | Klasse | methode)
     qualname: str              # Voll, z.B. "Klasse.methode" oder "funktion"
@@ -86,6 +102,14 @@ class DefInfo:
 
 @dataclass
 class ModuleIndex:
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     module_rel: str
     file_path: Path
     src_lines: list[str]
@@ -283,6 +307,14 @@ def index_repo(root: Path) -> dict[str, ModuleIndex]:
 
 @dataclass
 class MissingItem:
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     module_rel: str
     kind: str              # func | class | method
     qualname: str

@@ -48,12 +48,13 @@ def render_heatpump_analysis(
 
     # Tabs für verschiedene Analyse-Bereiche
     tabs = st.tabs([
-        " Gebäudeanalyse",
-        " Wärmepumpen-Auswahl",
-        " Wirtschaftlichkeit",
-        " PV-Integration",
-        " Komponenten & Angebot",
-        " Ergebnisse"
+        "🏠 Gebäudeanalyse",
+        "🔧 Wärmepumpen-Auswahl",
+        "🌡️ Radiator-Check",  # NEU!
+        "💰 Wirtschaftlichkeit",
+        "⚡ PV-Integration",
+        "📦 Komponenten & Angebot",
+        "📊 Ergebnisse"
     ])
 
     with tabs[0]:
@@ -67,7 +68,15 @@ def render_heatpump_analysis(
             st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
             heatpump_data = None
 
-    with tabs[2]:
+    with tabs[2]:  # NEU: Radiator-Check
+        if 'building_data' in st.session_state:
+            radiator_data = render_radiator_check(
+                texts, st.session_state.building_data)
+        else:
+            st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
+            radiator_data = None
+
+    with tabs[3]:
         if 'heatpump_data' in st.session_state:
             economics_data = render_economics_analysis(
                 texts, st.session_state.heatpump_data)
@@ -75,7 +84,7 @@ def render_heatpump_analysis(
             st.info("Bitte wählen Sie zuerst eine Wärmepumpe aus.")
             economics_data = None
 
-    with tabs[3]:
+    with tabs[4]:
         # Check demand mode to determine if PV integration is needed
         demand_mode = st.session_state.get('demand_mode_selection', None)
 
@@ -556,6 +565,172 @@ def render_heatpump_selection(
     return None
 
 
+def render_radiator_check(
+        texts: dict[str, str], building_data: dict[str, Any]) -> dict[str, Any]:
+    """Radiator-Kompatibilitätsprüfung für Wärmepumpe"""
+    import streamlit as st
+    from calculations_heatpump import (
+        calculate_required_flow_temperature,
+        check_radiator_compatibility
+    )
+
+    st.subheader("🌡️ Radiator-Kompatibilitätsprüfung")
+
+    heat_load_kw = building_data.get('heat_load_kw', 0)
+    
+    if heat_load_kw <= 0:
+        st.error("Keine gültige Heizlast verfügbar. Bitte Gebäudeanalyse wiederholen.")
+        return None
+
+    st.info(f"📊 Heizlast: {heat_load_kw:.1f} kW")
+
+    with st.form("radiator_check_form"):
+        st.markdown("### Radiator-Daten eingeben")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            radiator_area_m2 = st.number_input(
+                "Gesamte Radiator-Fläche (m²)",
+                min_value=1.0,
+                max_value=200.0,
+                value=30.0,
+                step=1.0,
+                help="Summe aller Heizkörper-Oberflächen im Gebäude"
+            )
+            
+            outdoor_temp_design = st.number_input(
+                "Auslegungstemperatur außen (°C)",
+                min_value=-20.0,
+                max_value=0.0,
+                value=-10.0,
+                step=1.0,
+                help="Niedrigste Außentemperatur in Ihrer Region"
+            )
+        
+        with col2:
+            indoor_temp_target = st.number_input(
+                "Ziel-Raumtemperatur (°C)",
+                min_value=18.0,
+                max_value=24.0,
+                value=20.0,
+                step=0.5,
+                help="Gewünschte Innentemperatur"
+            )
+            
+            radiator_type = st.selectbox(
+                "Radiator-Typ",
+                options=[
+                    "Standard-Plattenheizkörper",
+                    "Konvektoren",
+                    "Rippenheizkörper (alt)",
+                    "Fußbodenheizung"
+                ],
+                help="Typ der installierten Heizkörper"
+            )
+
+        submitted = st.form_submit_button("🔍 Kompatibilität prüfen", use_container_width=True)
+
+        if submitted:
+            try:
+                # Berechne erforderliche Vorlauftemperatur
+                flow_temp_result = calculate_required_flow_temperature(
+                    heat_load_kw=heat_load_kw,
+                    radiator_area_m2=radiator_area_m2,
+                    outdoor_temp=outdoor_temp_design,
+                    indoor_temp=indoor_temp_target
+                )
+                
+                required_flow_temp = flow_temp_result['required_flow_temp_celsius']
+                
+                # Prüfe Kompatibilität
+                compatibility_result = check_radiator_compatibility(
+                    required_flow_temp_celsius=required_flow_temp
+                )
+                
+                # Speichere Ergebnis in session_state
+                radiator_data = {
+                    'radiator_area_m2': radiator_area_m2,
+                    'outdoor_temp_design': outdoor_temp_design,
+                    'indoor_temp_target': indoor_temp_target,
+                    'radiator_type': radiator_type,
+                    'required_flow_temp': required_flow_temp,
+                    'compatibility': compatibility_result
+                }
+                st.session_state.radiator_data = radiator_data
+                
+                # Visualisierung der Ergebnisse
+                st.markdown("---")
+                st.markdown("### 📊 Prüfungsergebnis")
+                
+                # Status-Badge mit Farbe
+                status = compatibility_result['status']
+                if status == "Optimal für Wärmepumpe":
+                    status_color = "🟢"
+                    status_bg = "#d4edda"
+                elif status == "Grenzwertig":
+                    status_color = "🟡"
+                    status_bg = "#fff3cd"
+                else:  # "Upgrade empfohlen"
+                    status_color = "🔴"
+                    status_bg = "#f8d7da"
+                
+                st.markdown(
+                    f'<div style="background-color: {status_bg}; padding: 20px; border-radius: 10px; text-align: center;">'
+                    f'<h2>{status_color} {status}</h2>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+                
+                # Metriken
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric(
+                        "Erforderliche Vorlauftemperatur",
+                        f"{required_flow_temp:.1f} °C"
+                    )
+                
+                with col2:
+                    cop_loss_percent = compatibility_result.get('cop_loss_percent', 0)
+                    st.metric(
+                        "COP-Verlust",
+                        f"{cop_loss_percent:.0f} %",
+                        delta=f"-{cop_loss_percent:.0f}%" if cop_loss_percent > 0 else "Optimal"
+                    )
+                
+                with col3:
+                    upgrade_cost = compatibility_result.get('upgrade_cost_euros', 0)
+                    if upgrade_cost > 0:
+                        st.metric(
+                            "Geschätzte Upgrade-Kosten",
+                            f"{upgrade_cost:,.0f} €"
+                        )
+                    else:
+                        st.metric(
+                            "Upgrade-Kosten",
+                            "0 €",
+                            delta="Keine erforderlich"
+                        )
+                
+                # Empfehlungen
+                st.markdown("### 💡 Empfehlungen")
+                recommendation = compatibility_result.get('recommendation', '')
+                st.info(recommendation)
+                
+                # Technische Details in Expander
+                with st.expander("🔧 Technische Details"):
+                    st.json(flow_temp_result)
+                
+                return radiator_data
+                
+            except Exception as e:
+                st.error(f"Fehler bei der Radiator-Prüfung: {e}")
+                return None
+    
+    return None
+
+
 def render_economics_analysis(
         texts: dict[str, str], heatpump_data: dict[str, Any]) -> dict[str, Any]:
     """Wirtschaftlichkeitsanalyse der Wärmepumpe"""
@@ -767,6 +942,211 @@ def render_economics_analysis(
             )
 
             st.plotly_chart(fig_cashflow, use_container_width=True)
+
+            # NEU: CO2-Kosten und 20-Jahres-Vergleich
+            st.markdown("---")
+            st.subheader("🌍 CO2-Kosten & Langfristvergleich")
+            
+            try:
+                from calculations_heatpump import (
+                    compare_heating_systems_20_years,
+                    calculate_co2_costs_fossil_heating
+                )
+                
+                # Bestimme aktuelles Heizsystem
+                current_system = building_data.get('heating_system', '')
+                fuel_type = "Erdgas"
+                if 'Öl' in current_system:
+                    fuel_type = "Heizöl"
+                elif 'Gas' in current_system:
+                    fuel_type = "Erdgas"
+                
+                # CO2-Kosten für fossile Heizung berechnen
+                co2_cost_result = calculate_co2_costs_fossil_heating(
+                    annual_heat_demand_kwh=heat_demand_kwh,
+                    fuel_type=fuel_type,
+                    co2_price_euro_per_ton=55,  # Aktueller CO2-Preis
+                    year=2025
+                )
+                
+                # 20-Jahres-Systemvergleich
+                comparison_result = compare_heating_systems_20_years(
+                    annual_heat_demand_kwh=heat_demand_kwh,
+                    wp_investment_euros=heatpump['price'] + installation_cost,
+                    wp_jaz=heatpump['scop'],
+                    electricity_price_euro_per_kwh=electricity_price / 100,
+                    fossil_system_type=fuel_type,
+                    fossil_investment_euros=12800,  # Durchschnittliche Heizungsmodernisierung
+                    fossil_fuel_price_euro_per_kwh=gas_price / 100 if fuel_type == "Erdgas" else oil_price / 100,
+                    beg_subsidy_wp=subsidy_amount,
+                    has_gas_oil_heater=True,
+                    low_income_bonus=False,
+                    co2_price_start=55,
+                    discount_rate=0.03,
+                    annual_cost_increase=0.02
+                )
+                
+                # CO2-Kosten-Vergleich visualisieren
+                col_co2_1, col_co2_2, col_co2_3 = st.columns(3)
+                
+                with col_co2_1:
+                    st.metric(
+                        f"CO2-Kosten {fuel_type} (Jahr 1)",
+                        f"{co2_cost_result['annual_co2_cost_euros']:,.0f} €",
+                        help="CO2-Preis × Emissionen pro Jahr"
+                    )
+                
+                with col_co2_2:
+                    st.metric(
+                        "CO2-Einsparung (20 Jahre)",
+                        f"{comparison_result['co2_savings_tons_20y']:,.1f} t",
+                        help="Eingesparte CO2-Emissionen über 20 Jahre"
+                    )
+                
+                with col_co2_3:
+                    st.metric(
+                        "Monetäre CO2-Ersparnis",
+                        f"{comparison_result['co2_savings_monetary_20y']:,.0f} €",
+                        help="Vermiedene CO2-Kosten über 20 Jahre"
+                    )
+                
+                # 20-Jahres-Kostenvergleich (NPV)
+                st.markdown("### 💰 20-Jahres-Kostenvergleich (NPV)")
+                
+                years_npv = list(range(1, 21))
+                wp_cumulative = [comparison_result['wp_net_investment']]
+                fossil_cumulative = [comparison_result['fossil_investment']]
+                
+                # Berechne kumulierte Kosten über 20 Jahre
+                for year in range(1, 20):
+                    annual_cost_increase_factor = (1 + 0.02) ** year
+                    
+                    # Wärmepumpe
+                    wp_annual_cost = (
+                        (heat_demand_kwh / heatpump['scop']) * 
+                        (electricity_price / 100) * 
+                        annual_cost_increase_factor +
+                        maintenance_cost_annual
+                    )
+                    wp_cumulative.append(wp_cumulative[-1] + wp_annual_cost)
+                    
+                    # Fossil
+                    fossil_fuel_price = gas_price / 100 if fuel_type == "Erdgas" else oil_price / 100
+                    fossil_annual_cost = (
+                        heat_demand_kwh * 
+                        fossil_fuel_price * 
+                        annual_cost_increase_factor +
+                        co2_cost_result['annual_co2_cost_euros'] * (1 + 0.05) ** year +  # CO2-Preis steigt 5%/Jahr
+                        maintenance_cost_annual * 1.5  # Fossil-Wartung teurer
+                    )
+                    fossil_cumulative.append(fossil_cumulative[-1] + fossil_annual_cost)
+                
+                # Chart: 20-Jahres-Kostenvergleich
+                fig_20y = go.Figure()
+                
+                fig_20y.add_trace(go.Scatter(
+                    x=years_npv,
+                    y=wp_cumulative,
+                    mode='lines+markers',
+                    name='Wärmepumpe',
+                    line=dict(color='#2E7D32', width=3),
+                    fill='tonexty'
+                ))
+                
+                fig_20y.add_trace(go.Scatter(
+                    x=years_npv,
+                    y=fossil_cumulative,
+                    mode='lines+markers',
+                    name=f'{fuel_type}-Heizung',
+                    line=dict(color='#C62828', width=3)
+                ))
+                
+                # Amortisationspunkt markieren
+                if comparison_result['payback_years'] < 20:
+                    fig_20y.add_vline(
+                        x=comparison_result['payback_years'],
+                        line_dash="dash",
+                        line_color="orange",
+                        opacity=0.7,
+                        annotation_text=f"Amortisation: {comparison_result['payback_years']:.1f} Jahre"
+                    )
+                
+                fig_20y.update_layout(
+                    title="Kumulierte Gesamtkosten über 20 Jahre (inkl. CO2-Kosten)",
+                    xaxis_title="Jahre",
+                    yaxis_title="Kumulierte Kosten (€)",
+                    hovermode='x unified',
+                    height=500
+                )
+                
+                st.plotly_chart(fig_20y, use_container_width=True)
+                
+                # Zusammenfassung 20-Jahres-Vergleich
+                st.markdown("### 📊 Ergebnis 20-Jahres-Vergleich")
+                
+                col_res1, col_res2, col_res3, col_res4 = st.columns(4)
+                
+                with col_res1:
+                    st.metric(
+                        "WP Gesamtkosten (20J)",
+                        f"{comparison_result['wp_total_cost_20y']:,.0f} €"
+                    )
+                
+                with col_res2:
+                    st.metric(
+                        f"{fuel_type} Gesamtkosten (20J)",
+                        f"{comparison_result['fossil_total_cost_20y']:,.0f} €"
+                    )
+                
+                with col_res3:
+                    total_savings_20y = comparison_result['fossil_total_cost_20y'] - comparison_result['wp_total_cost_20y']
+                    st.metric(
+                        "Ersparnis (20J)",
+                        f"{total_savings_20y:,.0f} €",
+                        delta=f"+{(total_savings_20y / comparison_result['fossil_total_cost_20y'] * 100):.1f}%"
+                    )
+                
+                with col_res4:
+                    st.metric(
+                        "Amortisation",
+                        f"{comparison_result['payback_years']:.1f} Jahre"
+                    )
+                
+                # CO2-Emissionen visualisieren
+                st.markdown("### 🌱 CO2-Emissionen im Vergleich")
+                
+                fig_co2 = go.Figure(data=[
+                    go.Bar(
+                        name='Wärmepumpe',
+                        x=['Jährlich', '20 Jahre'],
+                        y=[
+                            co2_cost_result['annual_emissions_tons_co2'] * 0.3,  # WP: ~30% der fossilen Emissionen (bei deutschem Strommix)
+                            co2_cost_result['annual_emissions_tons_co2'] * 0.3 * 20
+                        ],
+                        marker_color='#2E7D32'
+                    ),
+                    go.Bar(
+                        name=f'{fuel_type}-Heizung',
+                        x=['Jährlich', '20 Jahre'],
+                        y=[
+                            co2_cost_result['annual_emissions_tons_co2'],
+                            co2_cost_result['annual_emissions_tons_co2'] * 20
+                        ],
+                        marker_color='#C62828'
+                    )
+                ])
+                
+                fig_co2.update_layout(
+                    title="CO2-Emissionen: Wärmepumpe vs. Fossil",
+                    yaxis_title="CO2-Emissionen (Tonnen)",
+                    barmode='group',
+                    height=400
+                )
+                
+                st.plotly_chart(fig_co2, use_container_width=True)
+                
+            except Exception as e:
+                st.warning(f"CO2-Analyse konnte nicht durchgeführt werden: {e}")
 
             # Ergebnisse speichern
             economics_data = {
@@ -992,6 +1372,102 @@ def render_pv_integration(
 
     st.plotly_chart(fig_profile, use_container_width=True)
 
+    # NEU: Energiefluss-Sankey-Diagramm
+    st.markdown("---")
+    st.subheader("🔄 Energiefluss-Visualisierung")
+    
+    try:
+        # Energiemengen berechnen
+        pv_to_hp = hp_consumption * pv_coverage_hp  # PV → WP
+        grid_to_hp = hp_consumption - pv_to_hp  # Netz → WP
+        pv_to_grid = pv_production_annual - pv_to_hp  # PV → Netz (Einspeisung)
+        
+        # Wärmepumpe erzeugt Wärme mit JAZ/SCOP
+        heat_output = hp_consumption * heatpump_data['selected_heatpump']['scop']
+        
+        # Sankey-Diagramm erstellen
+        fig_sankey = go.Figure(data=[go.Sankey(
+            node=dict(
+                pad=15,
+                thickness=20,
+                line=dict(color="black", width=0.5),
+                label=[
+                    "☀️ PV-Anlage",           # 0
+                    "⚡ Stromnetz",            # 1
+                    "🔌 Wärmepumpe",          # 2
+                    "🏠 Wärme (Heizung)",     # 3
+                    "💾 Einspeisung"          # 4
+                ],
+                color=[
+                    "#f39c12",  # PV: Orange
+                    "#3498db",  # Netz: Blau
+                    "#2ecc71",  # WP: Grün
+                    "#e74c3c",  # Wärme: Rot
+                    "#95a5a6"   # Einspeisung: Grau
+                ]
+            ),
+            link=dict(
+                source=[0, 1, 2, 0],  # Von: PV, Netz, WP, PV
+                target=[2, 2, 3, 4],  # Nach: WP, WP, Wärme, Einspeisung
+                value=[
+                    pv_to_hp,      # PV → WP
+                    grid_to_hp,    # Netz → WP
+                    heat_output,   # WP → Wärme
+                    pv_to_grid     # PV → Einspeisung
+                ],
+                color=[
+                    "rgba(243, 156, 18, 0.4)",  # PV → WP
+                    "rgba(52, 152, 219, 0.4)",   # Netz → WP
+                    "rgba(231, 76, 60, 0.6)",    # WP → Wärme
+                    "rgba(149, 165, 166, 0.3)"   # PV → Einspeisung
+                ],
+                label=[
+                    f"{pv_to_hp:,.0f} kWh (PV-Eigenverbrauch)",
+                    f"{grid_to_hp:,.0f} kWh (Netzbezug)",
+                    f"{heat_output:,.0f} kWh (Wärmeerzeugung, JAZ={heatpump_data['selected_heatpump']['scop']:.1f})",
+                    f"{pv_to_grid:,.0f} kWh (Netzeinspeisung)"
+                ]
+            )
+        )])
+        
+        fig_sankey.update_layout(
+            title=f"Energiefluss: PV + Wärmepumpe (Jahresbetrachtung)<br><sub>PV-Deckungsgrad WP: {pv_coverage_hp*100:.0f}%</sub>",
+            font=dict(size=12),
+            height=500
+        )
+        
+        st.plotly_chart(fig_sankey, use_container_width=True)
+        
+        # Energiebilanz-Tabelle
+        with st.expander("📊 Detaillierte Energiebilanz"):
+            energy_balance = pd.DataFrame({
+                'Energiestrom': [
+                    'PV-Erzeugung gesamt',
+                    '├─ Eigenverbrauch Wärmepumpe',
+                    '└─ Netzeinspeisung',
+                    'Strombezug Wärmepumpe',
+                    '├─ aus PV-Eigenverbrauch',
+                    '└─ aus Stromnetz',
+                    'Wärmeerzeugung (Output)',
+                    'Jahresarbeitszahl (JAZ)'
+                ],
+                'Menge': [
+                    f"{pv_production_annual:,.0f} kWh",
+                    f"{pv_to_hp:,.0f} kWh ({pv_to_hp/pv_production_annual*100:.1f}%)",
+                    f"{pv_to_grid:,.0f} kWh ({pv_to_grid/pv_production_annual*100:.1f}%)",
+                    f"{hp_consumption:,.0f} kWh",
+                    f"{pv_to_hp:,.0f} kWh ({pv_coverage_hp*100:.0f}%)",
+                    f"{grid_to_hp:,.0f} kWh ({(1-pv_coverage_hp)*100:.0f}%)",
+                    f"{heat_output:,.0f} kWh",
+                    f"{heatpump_data['selected_heatpump']['scop']:.2f}"
+                ]
+            })
+            
+            st.dataframe(energy_balance, use_container_width=True, hide_index=True)
+        
+    except Exception as e:
+        st.warning(f"Energiefluss-Diagramm konnte nicht erstellt werden: {e}")
+
     # Integration speichern
     integration_data = {
         'pv_coverage_hp': pv_coverage_hp,
@@ -1198,6 +1674,11 @@ def render_results_summary(texts: dict[str, str]):
             help="Gesamte Ersparnis über 20 Jahre"
         )
 
+    # NEU: 3D-Visualisierung
+    st.markdown("---")
+    with st.expander("🎬 3D-Gebäudevisualisierung mit Wärmepumpe", expanded=False):
+        render_3d_building_animation(building_data, heatpump_data)
+
     # Empfehlungen
     st.markdown("###  Empfehlungen")
 
@@ -1240,69 +1721,301 @@ def render_results_summary(texts: dict[str, str]):
     with col_export1:
         if st.button(" Ergebnisse als PDF exportieren"):
             try:
-                from pdf_generator import generate_offer_pdf
-                # Minimaler PV-Dummy damit Validator zufrieden ist
-                project_data_hp = {
-                    'customer_data': st.session_state.get(
-                        'project_customer_data',
-                        {}),
-                    'project_details': {
-                        'module_quantity': 1,
-                        'selected_module_name': 'Placeholder Modul',
-                        'selected_inverter_name': 'Placeholder WR',
-                        'anlage_kwp': 0.1,
-                    },
-                    'heatpump_offer': st.session_state.get('heatpump_offer'),
-                }
-                analysis_results_hp = {
-                    'anlage_kwp': 0.1,
-                    'annual_pv_production_kwh': 0.0,
-                    'total_investment_netto': (
-                        st.session_state.get(
-                            'heatpump_offer',
-                            {}) or {}).get(
-                        'beg_subsidy',
-                        {}).get('effective_total_after_subsidy_net')}
-                company_info = st.session_state.get(
-                    'active_company_info', {}) or {}
-                pdf_bytes = generate_offer_pdf(
-                    project_data=project_data_hp,
-                    analysis_results=analysis_results_hp,
+                from pdf_generator import generate_heatpump_offer_pdf
+                
+                # Kundendaten aus session_state holen
+                customer_data = st.session_state.get('project_customer_data', {})
+                company_info = st.session_state.get('active_company_info', {}) or {}
+                
+                # Radiator-Daten holen (falls vorhanden)
+                radiator_data = st.session_state.get('radiator_data', None)
+                
+                # Integration-Daten holen (falls vorhanden)
+                integration_data = st.session_state.get('integration_data', None)
+                
+                # PDF generieren mit neuer Wärmepumpen-spezifischer Funktion
+                pdf_bytes = generate_heatpump_offer_pdf(
+                    building_data=building_data,
+                    heatpump_data=heatpump_data,
+                    economics_data=economics_data,
                     company_info=company_info,
-                    company_logo_base64=company_info.get('logo_base64'),
-                    selected_title_image_b64=None,
-                    selected_offer_title_text='Angebot Wärmepumpe',
-                    selected_cover_letter_text='Sehr geehrte Damen und Herren,\n\nwir freuen uns, Ihnen unser Wärmepumpen-Angebot zu präsentieren.',
-                    sections_to_include=None,
-                    inclusion_options={
-                        'include_company_logo': True,
-                        'include_product_images': False},
-                    load_admin_setting_func=lambda k,
-                    d=None: d,
-                    save_admin_setting_func=lambda k,
-                    v: False,
-                    list_products_func=lambda *a,
-                    **k: [],
-                    get_product_by_id_func=lambda x: None,
-                    db_list_company_documents_func=lambda *a,
-                    **k: [],
-                    active_company_id=None,
-                    texts={},
+                    radiator_data=radiator_data,
+                    integration_data=integration_data,
+                    customer_data=customer_data
                 )
+                
                 if pdf_bytes:
+                    # Download-Button anzeigen
+                    filename = f"Waermepumpe_Angebot_{datetime.now().strftime('%Y%m%d')}.pdf"
                     st.download_button(
                         " Wärmepumpen-Angebot PDF herunterladen",
                         data=pdf_bytes,
-                        file_name="Waermepumpe_Angebot.pdf",
-                        mime="application/pdf")
+                        file_name=filename,
+                        mime="application/pdf"
+                    )
+                    st.success("✅ PDF erfolgreich erstellt!")
                 else:
                     st.error("PDF-Erstellung fehlgeschlagen.")
+            except ImportError as e:
+                st.error(f"PDF-Modul nicht verfügbar: {e}")
+            except Exception as e:
+                st.error(f"Fehler bei PDF-Erstellung: {e}")
+                import traceback
+                st.text(traceback.format_exc())
             except Exception as e:
                 st.error(f"Fehler beim PDF-Export: {e}")
 
     with col_export2:
         if st.button(" Konfiguration speichern"):
             st.info("Konfiguration wird gespeichert...")
+
+
+def render_3d_building_animation(building_data: dict[str, Any], heatpump_data: dict[str, Any] = None) -> None:
+    """
+    Erstellt eine 360°-Animation des Gebäudes mit Wärmepumpe und Energiefluss-Visualisierung.
+    
+    Args:
+        building_data: Gebäudedaten (Fläche, Höhe, etc.)
+        heatpump_data: Optional - Wärmepumpen-Daten für erweiterte Visualisierung
+    """
+    import plotly.graph_objects as go
+    import numpy as np
+    
+    st.subheader("🏠 3D-Gebäudevisualisierung mit Energiefluss")
+    
+    try:
+        # Gebäudedimensionen aus building_data extrahieren
+        building_area = building_data.get('building_area', 150)
+        
+        # Vereinfachte Gebäudeabmessungen (quadratisch fürDemo)
+        building_side = np.sqrt(building_area)
+        building_height = 6.0  # Durchschnittliche Gebäudehöhe
+        roof_height = 3.0      # Dachhöhe
+        
+        # Gebäude-Eckpunkte (zentriert um Ursprung)
+        half_side = building_side / 2
+        
+        # Gebäude-Wände (Box)
+        building_vertices = np.array([
+            [-half_side, -half_side, 0],           # 0: vorne links unten
+            [half_side, -half_side, 0],            # 1: vorne rechts unten
+            [half_side, half_side, 0],             # 2: hinten rechts unten
+            [-half_side, half_side, 0],            # 3: hinten links unten
+            [-half_side, -half_side, building_height],  # 4: vorne links oben
+            [half_side, -half_side, building_height],   # 5: vorne rechts oben
+            [half_side, half_side, building_height],    # 6: hinten rechts oben
+            [-half_side, half_side, building_height],   # 7: hinten links oben
+        ])
+        
+        # Gebäude-Mesh (vereinfacht - nur sichtbare Flächen)
+        building_i = [0, 0, 1, 2, 3, 4, 4, 5, 6, 7]
+        building_j = [1, 4, 5, 6, 7, 5, 7, 6, 7, 4]
+        building_k = [4, 5, 6, 7, 4, 1, 5, 2, 3, 0]
+        
+        # Satteldach-Eckpunkte
+        roof_peak_height = building_height + roof_height
+        roof_vertices = np.array([
+            [-half_side, -half_side, building_height],  # 0: Dachbasis vorne links
+            [half_side, -half_side, building_height],   # 1: Dachbasis vorne rechts
+            [half_side, half_side, building_height],    # 2: Dachbasis hinten rechts
+            [-half_side, half_side, building_height],   # 3: Dachbasis hinten links
+            [0, -half_side, roof_peak_height],          # 4: First vorne
+            [0, half_side, roof_peak_height],           # 5: First hinten
+        ])
+        
+        # Dach-Mesh
+        roof_i = [0, 1, 3, 2]
+        roof_j = [4, 4, 5, 5]
+        roof_k = [1, 5, 5, 4]
+        
+        # Wärmepumpe (Box außen am Gebäude)
+        hp_width = 1.2
+        hp_depth = 0.8
+        hp_height = 1.5
+        hp_x_offset = half_side + 1.5  # 1,5m von Gebäude entfernt
+        
+        hp_vertices = np.array([
+            [hp_x_offset, -hp_depth/2, 0],
+            [hp_x_offset + hp_width, -hp_depth/2, 0],
+            [hp_x_offset + hp_width, hp_depth/2, 0],
+            [hp_x_offset, hp_depth/2, 0],
+            [hp_x_offset, -hp_depth/2, hp_height],
+            [hp_x_offset + hp_width, -hp_depth/2, hp_height],
+            [hp_x_offset + hp_width, hp_depth/2, hp_height],
+            [hp_x_offset, hp_depth/2, hp_height],
+        ])
+        
+        hp_i = [0, 0, 1, 2, 3, 4]
+        hp_j = [1, 4, 5, 6, 7, 5]
+        hp_k = [4, 5, 6, 7, 4, 1]
+        
+        # Erstelle Plotly-Figure mit Frames für 360°-Rotation
+        frames = []
+        num_frames = 36  # 36 Frames = 10° pro Frame
+        
+        for i in range(num_frames):
+            angle = i * (360 / num_frames)
+            
+            # Kamera-Position berechnen (kreisförmige Rotation)
+            camera_distance = building_side * 2.5
+            camera_x = camera_distance * np.cos(np.radians(angle))
+            camera_y = camera_distance * np.sin(np.radians(angle))
+            camera_z = building_height + roof_height
+            
+            frame = go.Frame(
+                data=[
+                    # Gebäude
+                    go.Mesh3d(
+                        x=building_vertices[:, 0],
+                        y=building_vertices[:, 1],
+                        z=building_vertices[:, 2],
+                        i=building_i, j=building_j, k=building_k,
+                        color='#d4d4d4',
+                        opacity=0.9,
+                        name='Gebäude',
+                        showlegend=False,
+                        flatshading=True
+                    ),
+                    # Dach
+                    go.Mesh3d(
+                        x=roof_vertices[:, 0],
+                        y=roof_vertices[:, 1],
+                        z=roof_vertices[:, 2],
+                        i=roof_i, j=roof_j, k=roof_k,
+                        color='#c96a2d',
+                        opacity=0.9,
+                        name='Dach',
+                        showlegend=False,
+                        flatshading=True
+                    ),
+                    # Wärmepumpe
+                    go.Mesh3d(
+                        x=hp_vertices[:, 0],
+                        y=hp_vertices[:, 1],
+                        z=hp_vertices[:, 2],
+                        i=hp_i, j=hp_j, k=hp_k,
+                        color='#2ecc71',
+                        opacity=1.0,
+                        name='Wärmepumpe',
+                        showlegend=True,
+                        flatshading=True
+                    ),
+                    # Energiefluss-Pfeile (animiert)
+                    go.Scatter3d(
+                        x=[hp_x_offset + hp_width/2, 0],
+                        y=[0, 0],
+                        z=[hp_height/2, building_height/2],
+                        mode='lines+markers',
+                        line=dict(color='#e74c3c', width=8),
+                        marker=dict(size=8, color='#e74c3c'),
+                        name='Wärmefluss',
+                        showlegend=True
+                    )
+                ],
+                layout=go.Layout(
+                    scene=dict(
+                        camera=dict(
+                            eye=dict(
+                                x=camera_x / camera_distance * 1.5,
+                                y=camera_y / camera_distance * 1.5,
+                                z=0.8
+                            ),
+                            center=dict(x=0, y=0, z=building_height/2)
+                        )
+                    )
+                ),
+                name=str(i)
+            )
+            frames.append(frame)
+        
+        # Initial-Figure (Frame 0)
+        fig = go.Figure(
+            data=frames[0].data,
+            layout=go.Layout(
+                title=dict(
+                    text=f"🏠 Gebäudevisualisierung mit Wärmepumpe<br><sub>Fläche: {building_area:.0f}m² | Höhe: {building_height + roof_height:.1f}m</sub>",
+                    x=0.5,
+                    xanchor='center'
+                ),
+                scene=dict(
+                    xaxis=dict(title='X (m)', showgrid=True, zeroline=True),
+                    yaxis=dict(title='Y (m)', showgrid=True, zeroline=True),
+                    zaxis=dict(title='Z (m)', showgrid=True, zeroline=True),
+                    aspectmode='data',
+                    camera=frames[0].layout.scene.camera
+                ),
+                updatemenus=[
+                    dict(
+                        type='buttons',
+                        showactive=False,
+                        buttons=[
+                            dict(
+                                label='▶️ 360° Animation',
+                                method='animate',
+                                args=[None, dict(
+                                    frame=dict(duration=100, redraw=True),
+                                    fromcurrent=True,
+                                    mode='immediate',
+                                    transition=dict(duration=50)
+                                )]
+                            ),
+                            dict(
+                                label='⏸️ Pause',
+                                method='animate',
+                                args=[[None], dict(
+                                    frame=dict(duration=0, redraw=False),
+                                    mode='immediate',
+                                    transition=dict(duration=0)
+                                )]
+                            )
+                        ],
+                        x=0.1,
+                        y=1.15
+                    )
+                ],
+                height=700,
+                showlegend=True
+            ),
+            frames=frames
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Info-Box mit Energiedaten
+        if heatpump_data:
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                heat_load = building_data.get('heat_load_kw', 0)
+                st.metric(
+                    "🔥 Heizlast",
+                    f"{heat_load:.1f} kW",
+                    help="Maximale benötigte Heizleistung"
+                )
+            
+            with col2:
+                hp = heatpump_data.get('selected_heatpump', {})
+                st.metric(
+                    "💚 WP-Leistung",
+                    f"{hp.get('heating_power', 0):.1f} kW",
+                    help="Installierte Wärmepumpenleistung"
+                )
+            
+            with col3:
+                st.metric(
+                    "⚡ JAZ",
+                    f"{hp.get('scop', 0):.1f}",
+                    help="Jahresarbeitszahl (Effizienz)"
+                )
+        
+        st.info(
+            "💡 **Interaktiv**: Klicken Sie auf '▶️ 360° Animation' für automatische Rotation. "
+            "Sie können das Modell auch manuell mit der Maus drehen."
+        )
+        
+    except Exception as e:
+        st.error(f"Fehler bei der 3D-Visualisierung: {e}")
+        st.warning("3D-Animation konnte nicht erstellt werden. Bitte prüfen Sie die Gebäudedaten.")
 
 
 def render_components_offer_tab(texts: dict[str, str]):

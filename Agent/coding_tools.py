@@ -174,6 +174,14 @@ def execute_python_code_in_sandbox(code: str) -> str:
 
 
 class AgentCore:
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def __init__(self):
         # API-Schlüssel aus der .env-Datei holen.
         # Wenn nicht vorhanden, wird LangChain versuchen, ihn aus den

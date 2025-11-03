@@ -21,6 +21,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 class TestFileOperations:
     """Test basic file operations."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Clean workspace before each test."""
@@ -118,6 +126,14 @@ class TestFileOperations:
 
 class TestProjectStructureGeneration:
     """Test project structure generation."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Clean workspace before each test."""

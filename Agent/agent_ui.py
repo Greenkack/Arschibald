@@ -14,10 +14,6 @@ Performance Optimizations (Task 15.3):
 - Caching: Reuse expensive computations
 """
 
-from agent.tools.knowledge_tools import lazy_load_knowledge_base
-from config import check_api_keys, get_missing_keys, get_setup_instructions
-from agent.security import InputValidationError, sanitize_user_input
-from agent.agent_core import AgentCore
 import os
 import queue
 import sys
@@ -29,6 +25,35 @@ import streamlit as st
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Lazy imports with error handling
+try:
+    from agent.tools.knowledge_tools import lazy_load_knowledge_base
+except ImportError as e:
+    def lazy_load_knowledge_base():
+        """Fallback wenn langchain fehlt"""
+        return None
+    st.warning(f"⚠️ Knowledge Tools nicht verfügbar: {e}")
+
+try:
+    from config import check_api_keys, get_missing_keys, get_setup_instructions
+except ImportError as e:
+    def check_api_keys():
+        return True
+    def get_missing_keys():
+        return []
+    def get_setup_instructions(keys):
+        return ""
+    st.warning(f"⚠️ Config nicht verfügbar: {e}")
+
+try:
+    from agent.security import InputValidationError, sanitize_user_input
+except ImportError as e:
+    class InputValidationError(Exception):
+        pass
+    def sanitize_user_input(text):
+        return text
+    st.warning(f"⚠️ Security Module nicht verfügbar: {e}")
 
 
 # Import error handling
@@ -45,6 +70,14 @@ class AsyncExecutionState:
     - Progress queue for real-time updates
     - Efficient state management
     """
+
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         self.running = False
@@ -510,18 +543,45 @@ def render_agent_menu():
     if 'agent_core' not in st.session_state:
         with st.spinner("Initializing agent..."):
             try:
+                # Lazy import to avoid heavy dependencies at app startup
+                from agent.agent_core import AgentCore
                 st.session_state.agent_core = AgentCore(
                     vector_store=st.session_state.vector_store
                 )
                 st.success("✅ Agent initialized successfully!")
             except Exception as e:
                 st.error(f"Failed to initialize agent: {e}")
+                # Helpful hint if a known optional dependency is missing
+                if isinstance(e, ModuleNotFoundError) and 'langchain_classic' in str(e):
+                    st.info(
+                        "Optionales Paket 'langchain_classic' fehlt. "
+                        "Bitte das passende Wheel in den Ordner 'BOKUK_BUILD/wheelhouse' legen "
+                        "und offline installieren, damit die Agent-Funktionalität aktiv wird."
+                    )
                 st.stop()
 
     st.markdown("---")
 
     # Task input interface
     st.markdown("### 🎯 Task Input")
+    
+    # Voice input option
+    if st.session_state.get('voice_mode'):
+        st.info("🎤 **Sprachsteuerung aktiviert!**")
+        try:
+            from voice_command import render_voice_input_ui, integrate_voice_with_agent
+            
+            voice_result = render_voice_input_ui()
+            voice_text = integrate_voice_with_agent(voice_result)
+            
+            if voice_text:
+                st.success(f"Erkannt: {voice_text}")
+                st.session_state['task_input'] = voice_text
+                st.session_state['voice_mode'] = False
+                st.rerun()
+        except ImportError:
+            st.warning("⚠️ Sprachmodul nicht verfügbar.")
+            st.session_state['voice_mode'] = False
 
     # Help button and dialog (Task 13.2)
     col_help1, col_help2 = st.columns([6, 1])

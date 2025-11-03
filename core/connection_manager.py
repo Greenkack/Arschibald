@@ -25,6 +25,14 @@ except ImportError:
 @dataclass
 class ConnectionPoolConfig:
     """Configuration for connection pooling"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     pool_size: int = 5
     max_overflow: int = 10
     pool_timeout: int = 30
@@ -50,6 +58,14 @@ class ConnectionPoolConfig:
 @dataclass
 class ConnectionInfo:
     """Information about a database connection"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     connection_id: str
     checked_out_at: datetime
     checked_out_by: str  # Thread name
@@ -67,6 +83,14 @@ class ConnectionInfo:
 @dataclass
 class HealthCheckResult:
     """Result of a health check"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     healthy: bool
     timestamp: datetime
     response_time: float
@@ -77,6 +101,14 @@ class HealthCheckResult:
 @dataclass
 class PoolMetrics:
     """Connection pool metrics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     size: int = 0
     checked_in: int = 0
     checked_out: int = 0
@@ -105,6 +137,14 @@ class PoolMetrics:
 
 class ConnectionLeakDetector:
     """Detects and reports connection leaks"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, threshold_seconds: float = 300.0):
         self.threshold_seconds = threshold_seconds
@@ -164,6 +204,14 @@ class ConnectionLeakDetector:
 
 class ConnectionHealthMonitor:
     """Monitors connection health and performs automatic recovery"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -331,6 +379,14 @@ class ConnectionHealthMonitor:
 
 class DatabaseFailoverManager:
     """Manages database failover to backup connections"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
         self,
@@ -447,6 +503,14 @@ class EnhancedConnectionManager:
     Enhanced connection manager with pooling, health monitoring,
     leak detection, and failover support
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self, config: ConnectionPoolConfig, database_url: str):
         self.config = config

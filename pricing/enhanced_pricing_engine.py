@@ -51,6 +51,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class PriceComponent:
     """Represents a single pricing component with all product fields"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     product_id: int
     model_name: str
     category: str
@@ -246,6 +254,14 @@ class PriceComponent:
 @dataclass
 class PricingResult:
     """Result of pricing calculation with dynamic keys"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     base_price: float
     components: list[PriceComponent]
     dynamic_keys: dict[str, Any]
@@ -256,6 +272,14 @@ class PricingResult:
 @dataclass
 class FinalPricingResult(PricingResult):
     """Final pricing result with all modifications applied"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     final_price_net: float = 0.0
     final_price_gross: float = 0.0
     total_discounts: float = 0.0
@@ -268,6 +292,14 @@ class FinalPricingResult(PricingResult):
 
 class PricingEngine:
     """Core pricing calculation engine with dynamic key generation and intelligent caching"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
             self,

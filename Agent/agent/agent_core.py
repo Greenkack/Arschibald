@@ -50,6 +50,14 @@ from agent.tools.knowledge_tools import knowledge_base_search
 
 class AgentCore:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Main agent orchestration class using LangChain's ReAct pattern.
 
     The agent has dual expertise:

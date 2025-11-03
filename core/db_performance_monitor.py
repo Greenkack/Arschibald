@@ -45,6 +45,14 @@ class QueryType(Enum):
 @dataclass
 class QueryMetrics:
     """Metrics for a single query execution"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     query: str
     query_type: QueryType
     duration: float
@@ -75,6 +83,14 @@ class QueryMetrics:
 @dataclass
 class PerformanceAlert:
     """Performance alert"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     severity: AlertSeverity
     message: str
     timestamp: datetime
@@ -99,6 +115,14 @@ class PerformanceAlert:
 @dataclass
 class PerformanceThresholds:
     """Performance monitoring thresholds"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     slow_query_threshold: float = 1.0  # seconds
     very_slow_query_threshold: float = 5.0  # seconds
     error_rate_threshold: float = 0.05  # 5%
@@ -112,6 +136,14 @@ class PerformanceThresholds:
 @dataclass
 class DatabasePerformanceStats:
     """Aggregated database performance statistics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     total_queries: int = 0
     slow_queries: int = 0
     very_slow_queries: int = 0
@@ -168,6 +200,14 @@ class DatabasePerformanceStats:
 @dataclass
 class OptimizationRecommendation:
     """Database optimization recommendation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     priority: str  # high, medium, low
     category: str  # index, query, connection, configuration
     title: str
@@ -191,6 +231,14 @@ class OptimizationRecommendation:
 
 class DatabasePerformanceMonitor:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Comprehensive database performance monitoring system
 
     Features:

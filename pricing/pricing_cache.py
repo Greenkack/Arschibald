@@ -39,6 +39,14 @@ class CacheStrategy(Enum):
 @dataclass
 class CacheEntry:
     """Represents a single cache entry"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     key: str
     value: Any
     created_at: datetime
@@ -63,6 +71,14 @@ class CacheEntry:
 @dataclass
 class CacheStats:
     """Cache performance statistics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -82,6 +98,14 @@ class CacheStats:
 @dataclass
 class PerformanceMetrics:
     """Performance monitoring metrics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     operation_name: str
     start_time: float
     end_time: float | None = None
@@ -97,6 +121,14 @@ class PerformanceMetrics:
 
 class PricingCache:
     """Intelligent caching system for pricing calculations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self,
                  max_size: int = 1000,
@@ -478,6 +510,14 @@ class PricingCache:
 
 class PricingCacheManager:
     """Manager for pricing cache with intelligent key generation and invalidation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, cache: PricingCache | None = None):
         """Initialize cache manager

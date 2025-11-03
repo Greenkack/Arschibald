@@ -96,6 +96,14 @@ PV_CATEGORIES = {
 @dataclass
 class PVPriceComponent(PriceComponent):
     """Extended PriceComponent for PV-specific calculations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # PV-specific fields
     system_capacity_kwp: float | None = None
@@ -157,6 +165,14 @@ class PVPriceComponent(PriceComponent):
 
 class PVPricingEngine(PricingEngine):
     """PV-specific pricing engine with comprehensive product integration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, country_code: str = "DE"):
         """Initialize PV pricing engine"""

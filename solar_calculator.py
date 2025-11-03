@@ -2098,15 +2098,27 @@ def render_solar_calculator(
                         texts,
                         'tech_selection_saved_info',
                         'Technik-Auswahl übernommen.'))
-                with contextlib.suppress(Exception):
-                    st.session_state['selected_page_key'] = 'analysis'
-                # Reset für nächsten Aufruf
-                st.session_state['solar_calc_step'] = 1
-                debug_log(
-                    "solar_calculator",
-                    "Wizard abgeschlossen",
-                    target_page=st.session_state.get('selected_page_key'))
-                st.rerun()
+                
+                # Link zur 3D-Visualisierung anzeigen
+                st.info("💡 **Tipp:** Sehen Sie sich Ihre PV-Anlage in 3D an!")
+                col_3d_link, col_analysis_link = st.columns(2)
+                with col_3d_link:
+                    if st.button("🏠 Zur 3D-Visualisierung", key='btn_goto_3d_view', use_container_width=True):
+                        with contextlib.suppress(Exception):
+                            st.session_state['selected_page_key'] = '3d_view'
+                        st.session_state['solar_calc_step'] = 1
+                        st.rerun()
+                with col_analysis_link:
+                    if st.button("📊 Zur Analyse", key='btn_goto_analysis', use_container_width=True):
+                        with contextlib.suppress(Exception):
+                            st.session_state['selected_page_key'] = 'analysis'
+                        st.session_state['solar_calc_step'] = 1
+                        st.rerun()
+                
+                # Fallback: Automatische Navigation nach 3 Sekunden zur Analyse
+                # (nur wenn kein Button geklickt wurde)
+                import time
+                time.sleep(0.5)  # Kurze Pause damit Buttons sichtbar sind
 
     # Abschluss Hinweis (nur Schritt 1 zeigt fortlaufend Info, Schritt 2 via
     # Button)

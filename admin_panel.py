@@ -167,6 +167,8 @@ ADMIN_TAB_KEYS_DEFINITION_GLOBAL = [
     "admin_tab_pdf_design",
     "admin_tab_payment_terms",
     "admin_tab_visualization_settings",
+    "admin_tab_build_infos",  # NEU: Build Infos & Dokumentation
+    "admin_tab_security_settings",  # NEU: Sicherheitseinstellungen
     "admin_tab_advanced"]
 
 # Icon-Mapping für Admin-Menü-Kategorien (Deutsche Emojis)
@@ -184,6 +186,8 @@ ADMIN_TAB_ICONS = {
     "admin_tab_payment_terms": "💳",
     "admin_tab_visualization_settings": "📊",
     "admin_tab_ui_effects": "✨",
+    "admin_tab_build_infos": "📋",  # NEU
+    "admin_tab_security_settings": "🔐",  # NEU
     "admin_tab_advanced": "🧠"
 }
 
@@ -200,6 +204,8 @@ ADMIN_TAB_DESCRIPTIONS = {
     "admin_tab_pdf_design": "PDF-Looks, Cover und Layouts definieren",
     "admin_tab_payment_terms": "Zahlungsbedingungen & Varianten steuern",
     "admin_tab_visualization_settings": "Themes, UI-Effekte, Charts & Farben",
+    "admin_tab_build_infos": "Build-Informationen & Dokumentation (Passwortgeschützt)",  # NEU
+    "admin_tab_security_settings": "Sicherheit & Passwortschutz konfigurieren",  # NEU
     "admin_tab_advanced": "Erweiterte Tools, Debugging & Integrationen"}
 
 # Deutsche Beschriftungen für Admin-Tabs
@@ -216,6 +222,8 @@ ADMIN_TAB_LABELS_DE = {
     "admin_tab_pdf_design": "PDF-Design Einstellungen",
     "admin_tab_payment_terms": "Zahlungsbedingungen Einstellungen",
     "admin_tab_visualization_settings": "Anzeigeeinstellungen",
+    "admin_tab_build_infos": "📋 Build Infos",  # NEU
+    "admin_tab_security_settings": "🔐 Sicherheitseinstellungen",  # NEU
     "admin_tab_ui_effects": "UI-Effekte",
     "admin_tab_advanced": "Erweiterte Einstellungen"
 }
@@ -349,30 +357,17 @@ def _render_horizontal_menu_selector(
         description = ADMIN_TAB_DESCRIPTIONS.get(option_key, "")
         is_active = option_key == current_selection
 
-        nav_class = "admin-nav-item active" if is_active else "admin-nav-item"
-        badge = "●" if is_active else ""
-
-        st.markdown(f'<div class="{nav_class}">', unsafe_allow_html=True)
-
-        button_content = f'<span class="admin-nav-icon">{icon}</span><span class="admin-nav-label">{display_label}</span>'
-        if badge:
-            button_content += f'<span class="admin-nav-badge">{badge}</span>'
-
-        # Use column to ensure proper button rendering
-        col1, = st.columns([1])
-        with col1:
-            if st.button(
-                display_label,
-                key=f"{state_key}_{option_key}",
-                help=description,
-                use_container_width=True,
-                type="primary" if is_active else "secondary",
-            ):
-                if option_key != current_selection:
-                    st.session_state[state_key] = option_key
-                    st.rerun()
-
-        st.markdown('</div>', unsafe_allow_html=True)
+        # VEREINFACHTER FIX: Buttons OHNE HTML-Wrapper
+        # Das HTML interferiert mit Streamlit's Button-Event-Handling
+        if st.button(
+            f"{icon} {display_label}",
+            key=f"{state_key}_{option_key}",
+            help=description,
+            use_container_width=True,
+            type="primary" if is_active else "secondary",
+        ):
+            st.session_state[state_key] = option_key
+            st.rerun()
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -3562,6 +3557,8 @@ def render_admin_panel(
         "admin_tab_visualization_settings": lambda: render_visualization_settings(
             load_admin_setting_func,
             save_admin_setting_func),
+        "admin_tab_build_infos": lambda: render_build_infos_tab(),  # NEU
+        "admin_tab_security_settings": lambda: render_security_settings_tab(),  # NEU
         "admin_tab_advanced": lambda: render_advanced_settings(
             load_admin_setting_func,
             save_admin_setting_func),
@@ -3587,6 +3584,32 @@ def render_admin_panel(
 
     selected_tab_label = tab_labels_map.get(selected_tab_key, selected_tab_key)
     st.markdown("---")
+
+    # SICHERHEITS-CHECK: Prüfe ob dieser Bereich passwortgeschützt ist
+    from admin_security import require_admin_auth
+    
+    # Mapping von Tab-Keys zu area_ids
+    tab_to_area_map = {
+        "admin_tab_company_management_new": "company_management",
+        "admin_tab_user_management": "user_management",
+        "admin_tab_product_management": "product_database",
+        "admin_tab_logo_management": "logo_management",
+        "admin_tab_product_database_crud": "product_database",
+        "admin_tab_general_settings": "economic_settings",
+        "admin_tab_intro_settings": "intro_settings",
+        "admin_tab_tariff_management": "economic_settings",
+        "admin_tab_pdf_design": "pdf_settings",
+        "admin_tab_payment_terms": "payment_terms",
+        "admin_tab_services": "services_management",
+        "admin_tab_ui_customization": "ui_customization",
+        "admin_tab_build_infos": "build_infos",
+    }
+    
+    area_id = tab_to_area_map.get(selected_tab_key, selected_tab_key.replace("admin_tab_", ""))
+    
+    # Prüfe Authentifizierung für diesen Bereich
+    if not require_admin_auth(area_id, selected_tab_label):
+        return  # Bereich ist gesperrt, zeige Passwort-Dialog
 
     render_func = tab_functions_map.get(selected_tab_key)
     if callable(render_func):
@@ -3894,3 +3917,31 @@ def render_company_image_templates_tab(company_id: int):
 
     except ImportError:
         st.error(" Datenbankfunktionen für Bildvorlagen nicht verfügbar.")
+
+
+# === NEUE FUNKTIONEN FÜR PASSWORTSCHUTZ UND BUILD INFOS ===
+
+def render_build_infos_tab():
+    """Rendert den Build Infos Tab mit Passwortschutz"""
+    try:
+        from admin_build_infos_ui import render_build_infos_tab as render_build_infos
+        render_build_infos()
+    except ImportError as e:
+        st.error(f"Build Infos UI konnte nicht geladen werden: {e}")
+        st.info("Stellen Sie sicher, dass admin_build_infos_ui.py verfügbar ist.")
+    except Exception as e:
+        st.error(f"Fehler beim Rendern der Build Infos: {e}")
+        st.text(traceback.format_exc())
+
+
+def render_security_settings_tab():
+    """Rendert den Sicherheitseinstellungen Tab"""
+    try:
+        from admin_security import render_admin_security_settings
+        render_admin_security_settings()
+    except ImportError as e:
+        st.error(f"Admin Security Modul konnte nicht geladen werden: {e}")
+        st.info("Stellen Sie sicher, dass admin_security.py verfügbar ist.")
+    except Exception as e:
+        st.error(f"Fehler beim Rendern der Sicherheitseinstellungen: {e}")
+        st.text(traceback.format_exc())

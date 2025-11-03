@@ -37,6 +37,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ComponentCostAnalysis:
     """Analysis of component costs and profitability"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     component_name: str
     category: str
     total_quantity: int
@@ -53,6 +61,14 @@ class ComponentCostAnalysis:
 @dataclass
 class PricingTrendAnalysis:
     """Analysis of pricing trends over time"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     component_name: str
     trend_direction: str  # "increasing", "decreasing", "stable", "volatile"
     trend_strength: float  # 0.0 to 1.0
@@ -65,6 +81,14 @@ class PricingTrendAnalysis:
 @dataclass
 class OptimizationSuggestion:
     """Detailed optimization suggestion with impact analysis"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     suggestion_id: str
     # "margin_improvement", "bulk_purchasing", "supplier_optimization", etc.
     type: str
@@ -84,6 +108,14 @@ class OptimizationSuggestion:
 @dataclass
 class ComprehensiveProfitabilityReport:
     """Comprehensive profitability analysis report"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # Executive Summary
     total_revenue: float
@@ -121,6 +153,14 @@ class ComprehensiveProfitabilityReport:
 
 class ProfitabilityReportingEngine:
     """Advanced profitability reporting and analysis engine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, system_type: str = "pv"):
         """Initialize profitability reporting engine

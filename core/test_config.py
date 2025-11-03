@@ -21,6 +21,14 @@ from core.config import (
 
 class TestAppConfig:
     """Test AppConfig dataclass"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Reset config before each test"""
@@ -189,6 +197,14 @@ class TestAppConfig:
 
 class TestConfigReloading:
     """Test configuration hot-reloading"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Reset config before each test"""
@@ -230,6 +246,14 @@ class TestConfigReloading:
 
 class TestSubConfigs:
     """Test sub-configuration objects"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Reset config before each test"""

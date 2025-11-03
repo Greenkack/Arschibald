@@ -26,6 +26,14 @@ except ImportError:
 @dataclass
 class NavigationEntry:
     """Single navigation history entry"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     page: str
     params: dict[str, Any]
     timestamp: datetime
@@ -51,6 +59,14 @@ class NavigationEntry:
 @dataclass
 class FormSnapshot:
     """Form state snapshot for undo/redo"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     snapshot_id: str
     form_id: str
     data: dict[str, Any]
@@ -82,6 +98,14 @@ class FormSnapshot:
 @dataclass
 class FormState:
     """Enhanced form state with validation and history"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     form_id: str
     data: dict[str, Any] = field(default_factory=dict)
 
@@ -156,6 +180,14 @@ class FormState:
 @dataclass
 class UserSession:
     """Enhanced user session with complete state management"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     session_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str | None = None
 
@@ -352,6 +384,14 @@ class UserSession:
 # Session persistence with debouncing
 class SessionPersistence:
     """Debounced session state persistence engine"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, debounce_ms: int = 500):
         self.debounce_ms = debounce_ms
@@ -502,9 +542,21 @@ def persist_input(key: str, val: Any) -> None:
         key: Input key
         val: Input value
     """
-    # Update session_state immediately
+    # Update session_state immediately - with robust error handling
     if STREAMLIT_AVAILABLE and st and hasattr(st, 'session_state'):
-        st.session_state[key] = val
+        try:
+            # Only set if widget doesn't exist yet (prevent modification after instantiation)
+            if key not in st.session_state:
+                st.session_state[key] = val
+            # If widget exists, log warning but don't crash
+            else:
+                # Widget already exists, skip modification
+                pass
+        except Exception as e:
+            # Catch StreamlitAPIException and other widget state errors
+            if get_logger():
+                get_logger().warning(f"session_persist_skipped: Cannot modify {key} - {e}")
+            # Continue execution - this is not critical
 
     # Get current session
     session = get_current_session()

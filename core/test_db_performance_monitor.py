@@ -18,6 +18,14 @@ from core.db_performance_monitor import (
 
 class TestQueryMetrics:
     """Test QueryMetrics dataclass"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_query_metrics_creation(self):
         """Test creating query metrics"""
@@ -64,6 +72,14 @@ class TestQueryMetrics:
 
 class TestPerformanceAlert:
     """Test PerformanceAlert dataclass"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_alert_creation(self):
         """Test creating performance alert"""
@@ -99,6 +115,14 @@ class TestPerformanceAlert:
 
 class TestDatabasePerformanceMonitor:
     """Test DatabasePerformanceMonitor class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_monitor_creation(self):
         """Test creating performance monitor"""
@@ -449,6 +473,14 @@ class TestDatabasePerformanceMonitor:
 
 class TestPerformanceThresholds:
     """Test PerformanceThresholds configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_default_thresholds(self):
         """Test default threshold values"""
@@ -472,6 +504,14 @@ class TestPerformanceThresholds:
 
 class TestOptimizationRecommendation:
     """Test OptimizationRecommendation dataclass"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_recommendation_creation(self):
         """Test creating optimization recommendation"""

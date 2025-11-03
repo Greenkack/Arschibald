@@ -25,6 +25,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 class TestAdditionalCostsIntegration:
     """Test-Suite für die Zusatzkosten-Integration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup für jeden Test"""

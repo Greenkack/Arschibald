@@ -21,6 +21,14 @@ from .cache import CacheKeys, get_or_compute
 @dataclass
 class WarmingTask:
     """Cache warming task definition"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     task_id: str
     name: str
     cache_key: str
@@ -52,6 +60,14 @@ class WarmingTask:
 
 class UsagePatternTracker:
     """Track cache usage patterns for intelligent warming"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, history_size: int = 1000):
         self.history_size = history_size
@@ -130,6 +146,14 @@ class UsagePatternTracker:
 
 class CacheWarmingEngine:
     """Engine for proactive cache warming with performance optimization"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self._tasks: dict[str, WarmingTask] = {}

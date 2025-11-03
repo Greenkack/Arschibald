@@ -27,6 +27,14 @@ def test_ensure_project_data_dicts():
 
         # Mock st.session_state
         class MockSessionState:
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def __init__(self):
                 self.data = {}
 
@@ -79,6 +87,14 @@ def test_render_solar_calculator_start():
 
         # Mock st.session_state
         class MockSessionState:
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def __init__(self):
                 self.data = {}
 

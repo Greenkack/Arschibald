@@ -23,6 +23,14 @@ class NotificationChannel(ABC):
 
 class LogNotificationChannel(NotificationChannel):
     """Log-based notification channel"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def send(self, job: Job, result: JobResult, message: str) -> bool:
         """Send notification via logging"""
@@ -38,6 +46,14 @@ class LogNotificationChannel(NotificationChannel):
 
 class EmailNotificationChannel(NotificationChannel):
     """Email notification channel (placeholder)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(
             self,
@@ -64,6 +80,14 @@ class EmailNotificationChannel(NotificationChannel):
 
 class WebhookNotificationChannel(NotificationChannel):
     """Webhook notification channel"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, webhook_url: str):
         self.webhook_url = webhook_url
@@ -96,6 +120,14 @@ class WebhookNotificationChannel(NotificationChannel):
 
 class JobNotificationManager:
     """Manage job failure notifications"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.channels: list[NotificationChannel] = []

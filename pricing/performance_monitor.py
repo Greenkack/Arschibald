@@ -22,6 +22,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class PerformanceMetric:
     """Data class for storing performance metrics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     operation_name: str
     execution_time_ms: float
     timestamp: datetime
@@ -35,6 +43,14 @@ class PerformanceMetric:
 @dataclass
 class BenchmarkResult:
     """Data class for benchmark results"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     test_name: str
     total_operations: int
     total_time_ms: float
@@ -50,6 +66,14 @@ class BenchmarkResult:
 
 class PerformanceMonitor:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Monitor and track performance of database operations.
     """
 
@@ -183,6 +207,14 @@ class PerformanceMonitor:
 
 class DatabaseBenchmark:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Comprehensive benchmarking suite for database operations.
     """
 

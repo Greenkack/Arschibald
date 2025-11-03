@@ -26,6 +26,14 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BenchmarkResult:
     """Result of a performance benchmark"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     operation_name: str
     total_operations: int
     total_duration_ms: float
@@ -43,6 +51,14 @@ class BenchmarkResult:
 @dataclass
 class PerformanceReport:
     """Comprehensive performance report"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     report_id: str
     start_time: datetime
     end_time: datetime
@@ -55,6 +71,14 @@ class PerformanceReport:
 
 class PerformanceMonitor:
     """Real-time performance monitoring for pricing cache"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, cache: PricingCache, window_size: int = 1000):
         """Initialize performance monitor
@@ -168,6 +192,14 @@ class PerformanceMonitor:
 
 class CacheBenchmark:
     """Benchmarking suite for pricing cache performance"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, cache: PricingCache):
         """Initialize benchmark suite

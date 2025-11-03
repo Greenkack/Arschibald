@@ -74,6 +74,14 @@ except ImportError:
         return {"calculation_errors": ["Berechnungsmodul nicht geladen."]}
 
     class ExtendedCalculations:  # Dummy-Klasse für Notfall
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __getattr__(self, name):
             def dummy(*args, **kwargs):
                 return {"error": "ExtendedCalculations-Modul nicht geladen."}
@@ -189,36 +197,38 @@ _ensure_plotly_chart_unwrapped()
 # sodass man Inhalte nur einmal aufklappen muss.
 try:
     from contextlib import contextmanager
+    import inspect
 
     ALLOW_NESTED_EXPANDERS = False
-    _EXPANDER_DEPTH = 0
     _orig_expander = getattr(st, "expander", None)
 
     if callable(_orig_expander):
 
         @contextmanager
         def _smart_expander(label: str, expanded: bool = False, **kwargs):
-            global _EXPANDER_DEPTH
+            # Prüfe ob wir bereits in einem Expander sind (Stack-Analyse)
+            frame = inspect.currentframe()
+            depth = 0
+            try:
+                while frame:
+                    if frame.f_code.co_name == '_smart_expander':
+                        depth += 1
+                    frame = frame.f_back
+            finally:
+                del frame
+            
             # Wenn bereits in einem Expander und verschachtelte nicht erlaubt
             # -> Container statt Expander
-            if not ALLOW_NESTED_EXPANDERS and _EXPANDER_DEPTH > 0:
-                _EXPANDER_DEPTH += 1
-                try:
-                    container = st.container()
-                    # Überschrift anzeigen, damit die Struktur sichtbar bleibt
-                    if isinstance(label, str) and label.strip():
-                        container.markdown(f"#### {label}")
-                    with container:
-                        yield
-                finally:
-                    _EXPANDER_DEPTH -= 1
+            if not ALLOW_NESTED_EXPANDERS and depth > 1:
+                container = st.container()
+                # Überschrift anzeigen, damit die Struktur sichtbar bleibt
+                if isinstance(label, str) and label.strip():
+                    container.markdown(f"#### {label}")
+                with container:
+                    yield
             else:
-                _EXPANDER_DEPTH += 1
-                try:
-                    with _orig_expander(label, expanded=expanded, **kwargs):
-                        yield
-                finally:
-                    _EXPANDER_DEPTH -= 1
+                with _orig_expander(label, expanded=expanded, **kwargs):
+                    yield
 
         # Monkey-Patch nur anwenden, wenn noch nicht aktiv
         if getattr(st.expander, "__name__", "") != "_smart_expander":
@@ -2636,7 +2646,14 @@ def render_project_roi_matrix_switcher(
         not isinstance(annual_financial_benefit_year1_val, (int, float))
         or annual_financial_benefit_year1_val <= 0
     ):
+        print(f"⚠️ ROI-Analyse: annual_financial_benefit_year1 ungültig ({annual_financial_benefit_year1_val}), verwende Fallback 700€/Jahr")
+        print(f"   → Überprüfen Sie die Berechnungsgrundlagen:")
+        print(f"      - Eigenverbrauch und Strompreise korrekt?")
+        print(f"      - Einspeisevergütung aktiviert?")
+        print(f"      - Bedarfsanalyse vollständig?")
         annual_financial_benefit_year1_val = 700.0
+    else:
+        print(f"✓ ROI-Analyse: Jährlicher Benefit = {annual_financial_benefit_year1_val:.2f}€")
 
     # ROI für verschiedene Szenarien berechnen
     scenarios = ["Konservativ", "Realistisch", "Optimistisch"]
@@ -3298,125 +3315,151 @@ def render_extended_calculations_dashboard(
 ):
     """Rendert das erweiterte Berechnungs-Dashboard"""
     st.header("Erweiterte Berechnungen & Analysen")
-    # Calculator initialisieren
-    if "extended_calculator" not in st.session_state:
-        # Einfache Mock-Implementierung für erweiterte Berechnungen
-        class MockExtendedCalculations:
-            def calculate_energy_optimization(self, system_data):
-                return {
-                    "base_self_consumption_kwh": system_data.get(
-                        "self_consumption_kwh", 3000
-                    ),
-                    "optimized_self_consumption_kwh": system_data.get(
-                        "self_consumption_kwh", 3000
-                    )
-                    * 1.15,
-                    "optimization_potential_percent": 15.0,
-                    "annual_savings_optimization": 450,
-                }
+    
+    # Calculator LOKAL initialisieren (NICHT in session_state!)
+    # Einfache Mock-Implementierung für erweiterte Berechnungen
+    class MockExtendedCalculations:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
+        def calculate_energy_optimization(self, system_data):
+            # Dynamische Werte aus tatsächlichen Berechnungsergebnissen verwenden
+            annual_consumption = system_data.get("annual_consumption_kwh", 4000)
+            base_self_consumption = system_data.get("self_consumption_kwh", 3000)
+            
+            # Sicherheitsprüfung gegen Division durch Null
+            if annual_consumption <= 0:
+                annual_consumption = 4000  # Fallback
+            if base_self_consumption <= 0:
+                base_self_consumption = annual_consumption * 0.75  # 75% Eigenverbrauch als Fallback
+            
+            # Optimierungspotenzial: 15% mehr durch intelligentes Lastmanagement
+            optimized_self_consumption = base_self_consumption * 1.15
+            optimization_potential = 15.0
+            
+            # Berechne zusätzliche Einsparungen
+            electricity_price = system_data.get("electricity_price_per_kwh", 0.32)
+            additional_consumption = optimized_self_consumption - base_self_consumption
+            annual_savings = additional_consumption * electricity_price
+            
+            # Basis-Eigenverbrauchsquote
+            base_ratio = (base_self_consumption / annual_consumption * 100) if annual_consumption > 0 else 0
+            
+            return {
+                "base_self_consumption_kwh": base_self_consumption,
+                "optimized_self_consumption_kwh": optimized_self_consumption,
+                "optimization_potential_percent": optimization_potential,
+                "annual_savings_optimization": annual_savings,
+                "base_self_consumption_ratio": base_ratio,
+                "total_annual_consumption": annual_consumption,
+            }
 
-            def calculate_grid_analysis(self, system_data):
-                return {
-                    "grid_feed_in_kwh": system_data.get(
-                        "annual_pv_production_kwh", 10000
-                    )
+        def calculate_grid_analysis(self, system_data):
+            return {
+                "grid_feed_in_kwh": system_data.get(
+                    "annual_pv_production_kwh", 10000
+                )
+                - system_data.get("self_consumption_kwh", 3000),
+                "grid_purchase_kwh": max(
+                    0,
+                    system_data.get("annual_consumption_kwh", 4000)
                     - system_data.get("self_consumption_kwh", 3000),
-                    "grid_purchase_kwh": max(
-                        0,
-                        system_data.get("annual_consumption_kwh", 4000)
-                        - system_data.get("self_consumption_kwh", 3000),
-                    ),
-                    "grid_independence_percent": (
-                        system_data.get("self_consumption_kwh", 3000)
-                        / system_data.get("annual_consumption_kwh", 4000)
-                    )
-                    * 100,
-                    "peak_load_reduction_kw": 3.2,
-                    "peak_load_cost_savings": 280,
-                }
+                ),
+                "grid_independence_percent": (
+                    system_data.get("self_consumption_kwh", 3000)
+                    / system_data.get("annual_consumption_kwh", 4000)
+                )
+                * 100,
+                "peak_load_reduction_kw": 3.2,
+                "peak_load_cost_savings": 280,
+            }
 
-            def calculate_weather_impact(self, system_data):
-                annual_yield = system_data.get(
-                    "annual_pv_production_kwh", 10000)
-                return {
-                    "yield_sunny_days_kwh": annual_yield * 0.6,
-                    "yield_partly_cloudy_kwh": annual_yield * 0.25,
-                    "yield_cloudy_kwh": annual_yield * 0.1,
-                    "yield_rainy_kwh": annual_yield * 0.05,
-                    "weather_adjusted_annual_yield_kwh": annual_yield * 0.95,
-                    "weather_impact_percent": -5.0,
-                }
+        def calculate_weather_impact(self, system_data):
+            annual_yield = system_data.get(
+                "annual_pv_production_kwh", 10000)
+            return {
+                "yield_sunny_days_kwh": annual_yield * 0.6,
+                "yield_partly_cloudy_kwh": annual_yield * 0.25,
+                "yield_cloudy_kwh": annual_yield * 0.1,
+                "yield_rainy_kwh": annual_yield * 0.05,
+                "weather_adjusted_annual_yield_kwh": annual_yield * 0.95,
+                "weather_impact_percent": -5.0,
+            }
 
-            def calculate_degradation_analysis(self, system_data):
-                system_kwp = system_data.get("system_kwp", 10)
-                annual_prod = system_data.get(
-                    "annual_pv_production_kwh", 10000)
-                return {
-                    "power_year_10_kwp": system_kwp * (1 - 0.005) ** 10,
-                    "power_year_20_kwp": system_kwp * (1 - 0.005) ** 20,
-                    "cumulative_degradation_percent_20y": 9.6,
-                    "total_energy_loss_kwh": annual_prod
-                    * 0.096
-                    * 20,  # 9.6% über 20 Jahre
-                    "average_performance_ratio": 0.95,  # Durchschnittliches Performance-Verhältnis
-                }
+        def calculate_degradation_analysis(self, system_data):
+            system_kwp = system_data.get("system_kwp", 10)
+            annual_prod = system_data.get(
+                "annual_pv_production_kwh", 10000)
+            return {
+                "power_year_10_kwp": system_kwp * (1 - 0.005) ** 10,
+                "power_year_20_kwp": system_kwp * (1 - 0.005) ** 20,
+                "cumulative_degradation_percent_20y": 9.6,
+                "total_energy_loss_kwh": annual_prod
+                * 0.096
+                * 20,  # 9.6% über 20 Jahre
+                "average_performance_ratio": 0.95,  # Durchschnittliches Performance-Verhältnis
+            }
 
-            def calculate_financial_scenarios(self, system_data):
-                base_npv = system_data.get("total_investment", 20000) * 0.8
-                return {
-                    "pessimistic_scenario": {
-                        "npv": base_npv * 0.7,
-                        "roi_percent": 4.2,
-                        "payback_years": 16.8,
-                    },
-                    "realistic_scenario": {
-                        "npv": base_npv,
-                        "roi_percent": 6.5,
-                        "payback_years": 12.3,
-                    },
-                    "optimistic_scenario": {
-                        "npv": base_npv * 1.4,
-                        "roi_percent": 9.1,
-                        "payback_years": 8.7,
-                    },
-                }
+        def calculate_financial_scenarios(self, system_data):
+            base_npv = system_data.get("total_investment", 20000) * 0.8
+            return {
+                "pessimistic_scenario": {
+                    "npv": base_npv * 0.7,
+                    "roi_percent": 4.2,
+                    "payback_years": 16.8,
+                },
+                "realistic_scenario": {
+                    "npv": base_npv,
+                    "roi_percent": 6.5,
+                    "payback_years": 12.3,
+                },
+                "optimistic_scenario": {
+                    "npv": base_npv * 1.4,
+                    "roi_percent": 9.1,
+                    "payback_years": 8.7,
+                },
+            }
 
-            def calculate_environmental_impact(self, system_data):
-                annual_prod = system_data.get(
-                    "annual_pv_production_kwh", 10000)
-                return {
-                    "annual_co2_savings_tons": annual_prod * 0.474 / 1000,
-                    "total_co2_savings_25y": annual_prod * 0.474 * 25 / 1000,
-                    "trees_equivalent": int(annual_prod * 0.474 * 25 / 22000),
-                    "cars_off_road_equivalent": int(annual_prod * 0.474 * 25 / 2300),
-                    "car_km_equivalent": int(
-                        annual_prod * 0.474 * 2.3
-                    ),  # CO2-Äquivalent in Auto-Kilometern
-                    "water_savings_liters": int(
-                        annual_prod * 2.5
-                    ),  # Wassereinsparung in Litern
-                }
+        def calculate_environmental_impact(self, system_data):
+            annual_prod = system_data.get(
+                "annual_pv_production_kwh", 10000)
+            return {
+                "annual_co2_savings_tons": annual_prod * 0.474 / 1000,
+                "total_co2_savings_25y": annual_prod * 0.474 * 25 / 1000,
+                "trees_equivalent": int(annual_prod * 0.474 * 25 / 22000),
+                "cars_off_road_equivalent": int(annual_prod * 0.474 * 25 / 2300),
+                "car_km_equivalent": int(
+                    annual_prod * 0.474 * 2.3
+                ),  # CO2-Äquivalent in Auto-Kilometern
+                "water_savings_liters": int(
+                    annual_prod * 2.5
+                ),  # Wassereinsparung in Litern
+            }
 
-            def calculate_battery_optimization(self, system_data):
-                return {
-                    "small_battery_kwh": 5,
-                    "optimal_battery_kwh": 8,
-                    "large_battery_kwh": 12,
-                    "small_self_consumption_percent": 65,
-                    "optimal_self_consumption_percent": 78,
-                    "large_self_consumption_percent": 82,
-                    "small_self_consumption_increase_percent": 15,
-                    "optimal_self_consumption_increase_percent": 28,
-                    "large_self_consumption_increase_percent": 32,
-                    # Fehlende Keys ergänzen
-                    "optimal_battery_size_kwh": 8.0,
-                    "optimal_battery_investment": 12000,
-                    "battery_payback_years": 9.5,
-                }
+        def calculate_battery_optimization(self, system_data):
+            return {
+                "small_battery_kwh": 5,
+                "optimal_battery_kwh": 8,
+                "large_battery_kwh": 12,
+                "small_self_consumption_percent": 65,
+                "optimal_self_consumption_percent": 78,
+                "large_self_consumption_percent": 82,
+                "small_self_consumption_increase_percent": 15,
+                "optimal_self_consumption_increase_percent": 28,
+                "large_self_consumption_increase_percent": 32,
+                # Fehlende Keys ergänzen
+                "optimal_battery_size_kwh": 8.0,
+                "optimal_battery_investment": 12000,
+                "battery_payback_years": 9.5,
+            }
 
-        st.session_state.extended_calculator = MockExtendedCalculations()
-
-    calculator = st.session_state.extended_calculator
+    # Calculator lokal erstellen (NICHT in session_state!)
+    calculator = MockExtendedCalculations()
 
     # System-Daten vorbereiten
     system_data = {
@@ -3459,13 +3502,21 @@ def render_extended_calculations_dashboard(
 
         opt_results = calculator.calculate_energy_optimization(system_data)
 
+        # Info-Box mit Gesamtverbrauch
+        st.info(f"""
+        📊 **Berechnungsgrundlagen:**
+        • Jährlicher Gesamtverbrauch: {opt_results.get('total_annual_consumption', 0):,.2f} kWh
+        • Basis-Eigenverbrauchsquote: {opt_results.get('base_self_consumption_ratio', 0):.1f}%
+        • Strompreis: {system_data.get('electricity_price_per_kwh', 0.32):.3f} €/kWh
+        """)
+
         col1, col2, col3 = st.columns(3)
 
         with col1:
             st.metric(
                 "Basis-Eigenverbrauch",
                 f"{opt_results['base_self_consumption_kwh']:,.2f} kWh",
-                f"{opt_results['base_self_consumption_kwh'] / system_data['annual_consumption_kwh'] * 100:.2f}%",
+                f"{opt_results.get('base_self_consumption_ratio', 75):.2f}%",
             )
 
         with col2:
@@ -5329,7 +5380,19 @@ def _render_consumption_coverage_pie(
     total_cons_raw = analysis_results_local.get("total_consumption_kwh_yr")
     self_supply_val_raw = analysis_results_local.get(
         "self_supply_rate_percent")
+    
+    # DIAGNOSE: Prüfe welche Werte fehlen
     if total_cons_raw is None or self_supply_val_raw is None:
+        missing_values = []
+        if total_cons_raw is None:
+            missing_values.append("total_consumption_kwh_yr")
+        if self_supply_val_raw is None:
+            missing_values.append("self_supply_rate_percent")
+        
+        print(f"⚠️ Verbrauchsdeckungs-Diagramm: Fehlende Werte: {', '.join(missing_values)}")
+        print(f"   → Prüfen Sie:")
+        print(f"      - Jährlicher Verbrauch eingegeben?")
+        print(f"      - Bedarfsanalyse durchgeführt?")
         st.info(
             get_text(
                 texts_local,
@@ -5402,6 +5465,10 @@ def _render_consumption_coverage_pie(
         dynamic_color_list = [default_color_1, default_color_2]
 
     if total_cons > 0:
+        print(f"✓ Verbrauchsdeckungs-Diagramm: Gesamtverbrauch = {total_cons:,.2f} kWh")
+        print(f"  - Eigenversorgung: {self_supply_float:.2f}%")
+        print(f"  - Netzbezug: {grid_cons_float:.2f}%")
+        
         labels = [
             get_text(
                 texts_local,
@@ -5481,11 +5548,18 @@ def _render_pv_usage_pie(
     annual_pv_prod_kwh_val_raw = analysis_results_local.get(
         "annual_pv_production_kwh")
 
-    if (
-        direct_cons_prod_perc_raw is None
-        or storage_cons_prod_perc_raw is None
-        or annual_pv_prod_kwh_val_raw is None
-    ):
+    # DIAGNOSE: Prüfe welche Werte fehlen
+    missing_values = []
+    if direct_cons_prod_perc_raw is None:
+        missing_values.append("direktverbrauch_anteil_pv_produktion_pct")
+    if storage_cons_prod_perc_raw is None:
+        missing_values.append("speichernutzung_anteil_pv_produktion_pct")
+    if annual_pv_prod_kwh_val_raw is None:
+        missing_values.append("annual_pv_production_kwh")
+    
+    if missing_values:
+        print(f"⚠️ PV-Nutzungs-Diagramm: Fehlende Werte: {', '.join(missing_values)}")
+        print(f"   Verfügbare Keys: {list(analysis_results_local.keys())[:10]}...")  # Erste 10 Keys
         st.info(
             get_text(
                 texts_local,
@@ -5571,6 +5645,12 @@ def _render_pv_usage_pie(
             100.0 -
             direct_cons_float -
             storage_cons_float)
+        
+        print(f"✓ PV-Nutzungs-Diagramm: PV-Produktion = {annual_pv_prod_kwh_val:,.2f} kWh")
+        print(f"  - Direktverbrauch: {direct_cons_float:.2f}%")
+        print(f"  - Speichernutzung: {storage_cons_float:.2f}%")
+        print(f"  - Einspeisung: {feed_in_prod_perc:.2f}%")
+        
         labels = [
             get_text(
                 texts_local, "direct_consumption_pie_label", "Direktverbrauch"), get_text(
@@ -5611,6 +5691,11 @@ def _render_pv_usage_pie(
         analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = _export_plotly_fig_to_bytes(
             fig, texts_local)
     else:
+        print(f"⚠️ PV-Nutzungs-Diagramm: Keine PV-Produktion (annual_pv_production_kwh = {annual_pv_prod_kwh_val_raw})")
+        print(f"   → Prüfen Sie die Berechnungsgrundlagen:")
+        print(f"      - System-Größe (kWp) korrekt?")
+        print(f"      - Module ausgewählt?")
+        print(f"      - Standort/Ausrichtung eingegeben?")
         st.info(
             get_text(
                 texts_local,
@@ -5686,11 +5771,8 @@ def get_pricing_modifications_data():
 def integrate_advanced_calculations(texts: dict[str, str]):
     """Haupt-Integration der erweiterten Berechnungen"""
 
-    # Integrator initialisieren
-    if "calculations_integrator" not in st.session_state:
-        st.session_state.calculations_integrator = AdvancedCalculationsIntegrator()
-
-    integrator = st.session_state.calculations_integrator
+    # Integrator lokal erstellen (NICHT in session_state speichern!)
+    integrator = AdvancedCalculationsIntegrator()
 
     # System-Daten aus Session State holen
     calculation_results = st.session_state.get("calculation_results", {})
@@ -5845,18 +5927,31 @@ def render_advanced_economics(
 
     # LCOE (Levelized Cost of Energy) Berechnung
     with st.expander("LCOE - Stromgestehungskosten", expanded=False):
+        # Sichere Werte mit Fallbacks
+        investment = max(get_final_investment_amount(calc_results), 1000)  # Mindestens 1000€
+        annual_production = max(calc_results.get("annual_pv_production_kwh", 10000), 1000)  # Mindestens 1000 kWh
+        
         lcoe_params = {
-            "investment": get_final_investment_amount(calc_results),
-            "annual_production": calc_results.get(
-                "annual_pv_production_kwh",
-                10000),
+            "investment": investment,
+            "annual_production": annual_production,
             "lifetime": 25,
             "discount_rate": 0.04,
             "opex_rate": 0.01,
             "degradation_rate": 0.005,
         }
 
-        lcoe_result = integrator.calculate_lcoe_advanced(lcoe_params)
+        try:
+            lcoe_result = integrator.calculate_lcoe_advanced(lcoe_params)
+        except Exception as e:
+            st.error(f"❌ Fehler bei LCOE-Berechnung: {str(e)}")
+            st.warning("⚠️ Bitte prüfen Sie die Berechnungsgrundlagen (Investition, Jahresertrag)")
+            lcoe_result = {
+                "lcoe_simple": 0,
+                "lcoe_discounted": 0,
+                "yearly_lcoe": [0] * 25,
+                "grid_comparison": 1.0,
+                "savings_potential": 0
+            }
 
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -8667,8 +8762,8 @@ def render_analysis(
         texts=texts)
     integrate_advanced_calculations(
         texts
-    )  # Integrator für die erweiterten Berechnungen holen
-    integrator = st.session_state.get("calculations_integrator")
+    )  # Integrator für die erweiterten Berechnungen lokal erstellen
+    integrator = AdvancedCalculationsIntegrator()
     if integrator:
         try:
             render_technical_calculations(
@@ -9973,10 +10068,8 @@ def prepare_advanced_calculations_for_pdf_export(
 ) -> dict[str, Any]:
     """Bereitet erweiterte Berechnungen für PDF-Export vor"""
     try:
-        if "calculations_integrator" not in st.session_state:
-            st.session_state.calculations_integrator = AdvancedCalculationsIntegrator()
-
-        integrator = st.session_state.calculations_integrator
+        # Integrator lokal erstellen (NICHT in session_state speichern!)
+        integrator = AdvancedCalculationsIntegrator()
 
         # Sammle alle erweiterten Berechnungsergebnisse
         pdf_export_data = {}

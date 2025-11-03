@@ -31,6 +31,14 @@ class FormulaMode(Enum):
 @dataclass
 class PricingStep:
     """Individual step in pricing calculation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     step_number: int
     step_name: str
     input_amount: float
@@ -44,6 +52,14 @@ class PricingStep:
 @dataclass
 class FormulaResult:
     """Result of advanced pricing formula calculation"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     formula_mode: FormulaMode
     base_price: float
     final_price: float
@@ -58,6 +74,14 @@ class FormulaResult:
 
 class AdvancedPricingFormula:
     """Advanced pricing formula calculator with multiple modes"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, formula_mode: FormulaMode = FormulaMode.STANDARD):
         """Initialize the advanced pricing formula calculator

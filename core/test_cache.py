@@ -29,6 +29,14 @@ from .cache_warming import (
 
 class TestCacheKeys:
     """Test CacheKeys namespace management"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_user_session_key(self):
         key = CacheKeys.user_session("user123")
@@ -50,6 +58,14 @@ class TestCacheKeys:
 
 class TestInMemoryCache:
     """Test in-memory cache with LRU eviction"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_basic_get_set(self):
         cache = InMemoryCache(max_entries=10)
@@ -125,6 +141,14 @@ class TestInMemoryCache:
 
 class TestMultiLayerCache:
     """Test multi-layer cache coordination"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_cache_layers(self):
         cache = MultiLayerCache()
@@ -157,6 +181,14 @@ class TestMultiLayerCache:
 
 class TestGetOrCompute:
     """Test get_or_compute function"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_compute_and_cache(self):
         call_count = 0
@@ -198,6 +230,14 @@ class TestGetOrCompute:
 
 class TestCacheInvalidation:
     """Test cache invalidation system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_invalidation_rule(self):
         rule = InvalidationRule(
@@ -241,6 +281,14 @@ class TestCacheInvalidation:
 
 class TestCacheMonitoring:
     """Test cache performance monitoring"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_metrics_collector(self):
         collector = CacheMetricsCollector()
@@ -271,6 +319,14 @@ class TestCacheMonitoring:
 
 class TestCacheWarming:
     """Test cache warming system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_usage_pattern_tracker(self):
         tracker = UsagePatternTracker()
@@ -333,6 +389,14 @@ class TestCacheWarming:
 
 class TestCacheIntegration:
     """Integration tests for complete caching system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_end_to_end_caching(self):
         """Test complete caching workflow"""

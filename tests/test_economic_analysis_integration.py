@@ -24,6 +24,14 @@ from pricing.pricing_errors import CalculationError
 
 class TestEconomicAnalysisIntegration:
     """Test cases for EconomicAnalysisIntegration class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def integration(self):
@@ -385,6 +393,14 @@ class TestEconomicAnalysisIntegration:
 
 class TestFactoryFunction:
     """Test cases for factory function"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_economic_analysis_integration_default(self):
         """Test factory function with default parameters"""
@@ -403,6 +419,14 @@ class TestFactoryFunction:
 
 class TestDataClasses:
     """Test cases for data classes"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_economic_analysis_result_creation(self):
         """Test EconomicAnalysisResult creation"""

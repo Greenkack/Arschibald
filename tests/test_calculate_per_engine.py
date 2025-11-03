@@ -19,6 +19,14 @@ from pricing.pricing_errors import CalculationError
 
 class TestCalculationMethod:
     """Test CalculationMethod enum and string conversion"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_from_string_standard_values(self):
         """Test conversion of standard string values"""
@@ -70,6 +78,14 @@ class TestCalculationMethod:
 
 class TestCalculationContext:
     """Test CalculationContext data class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_context_initialization(self):
         """Test basic context initialization"""
@@ -107,6 +123,14 @@ class TestCalculationContext:
 
 class TestCalculatePerEngine:
     """Test main CalculatePerEngine functionality"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def engine(self):
@@ -254,6 +278,14 @@ class TestCalculatePerEngine:
 
 class TestFeatureAdjustments:
     """Test feature-based pricing adjustments"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def engine(self):
@@ -393,6 +425,14 @@ class TestFeatureAdjustments:
 
 class TestValidation:
     """Test input validation and error handling"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def engine(self):
@@ -438,6 +478,14 @@ class TestValidation:
 
 class TestBackwardCompatibility:
     """Test backward compatibility functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_calculate_price_by_method_basic(self):
         """Test legacy calculate_price_by_method function"""
@@ -479,6 +527,14 @@ class TestBackwardCompatibility:
 
 class TestRealWorldScenarios:
     """Test real-world calculation scenarios"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def engine(self):

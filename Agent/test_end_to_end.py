@@ -25,6 +25,14 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 class TestInstallationProcess:
     """Test complete installation process (Requirement 1.4, 12.3, 12.4)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_directory_structure_exists(self):
         """Verify all required directories exist"""
@@ -104,6 +112,14 @@ class TestInstallationProcess:
 
 class TestFeatureFunctionality:
     """Test all features work correctly (Requirements 2-9)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     @pytest.fixture
     def temp_workspace(self):
@@ -215,6 +231,14 @@ class TestErrorScenarios:
 
 class TestSecurityMeasures:
     """Validate security measures (Requirements 5, 6, 12)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_path_traversal_prevention(self):
         """Test directory traversal is prevented (Requirement 6.3)"""
@@ -272,6 +296,14 @@ class TestSecurityMeasures:
 
 class TestIntegrationWithMainApp:
     """Test integration with main application (Requirement 14)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_agent_ui_module_importable(self):
         """Test agent_ui module can be imported (Requirement 14.2)"""
@@ -303,6 +335,14 @@ class TestIntegrationWithMainApp:
 
 class TestDocumentation:
     """Test documentation completeness (Requirement 15)"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_readme_exists_and_complete(self):
         """Test README.md exists and is comprehensive (Requirement 15.1)"""

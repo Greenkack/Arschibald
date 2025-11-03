@@ -37,6 +37,14 @@ class NavigationEventType(str, Enum):
 @dataclass
 class NavigationEvent:
     """Navigation event for tracking and analytics"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     event_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     event_type: NavigationEventType = NavigationEventType.NAVIGATE
     from_page: str | None = None
@@ -116,6 +124,14 @@ class RouteGuard(ABC):
 
 class AuthenticationMiddleware(Middleware):
     """Middleware for authentication checks"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, public_pages: set[str] = None):
         self.public_pages = public_pages or {'home', 'login', 'register'}
@@ -147,6 +163,14 @@ class AuthenticationMiddleware(Middleware):
 
 class LoggingMiddleware(Middleware):
     """Middleware for logging navigation events"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def process(
         self,
@@ -169,6 +193,14 @@ class LoggingMiddleware(Middleware):
 
 class PermissionGuard(RouteGuard):
     """Guard for permission-based access control"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, required_permissions: dict[str, set[str]] = None):
         """
@@ -210,6 +242,14 @@ class PermissionGuard(RouteGuard):
 
 class RoleGuard(RouteGuard):
     """Guard for role-based access control"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, required_roles: dict[str, set[str]] = None):
         """
@@ -251,6 +291,14 @@ class RoleGuard(RouteGuard):
 @dataclass
 class Route:
     """Route configuration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     name: str
     page_class: type['Page']
     title: str = ""
@@ -306,6 +354,14 @@ class Page(ABC):
 
 class Router:
     """Enhanced navigation router with container-based page swapping"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, session_key: str = 'router_state'):
         """

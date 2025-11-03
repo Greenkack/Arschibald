@@ -68,6 +68,14 @@ except ImportError:
         description: str = ""
 
         @property
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def labor_cost_net(self) -> float:
             return self.labor_hours * self.labor_rate
 
@@ -77,6 +85,14 @@ except ImportError:
 
     @dataclass
     class BegConfig:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         base_pct: float = 30.0
         refrigerant_bonus_pct: float = 5.0
         heating_replacement_bonus_pct: float = 20.0
@@ -146,6 +162,14 @@ HEATPUMP_CATEGORIES = {
 @dataclass
 class HeatPumpPriceComponent(PriceComponent):
     """Extended PriceComponent for heat pump-specific calculations"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # Heat pump specific fields
     heating_capacity_kw: float | None = None
@@ -224,6 +248,14 @@ class HeatPumpPriceComponent(PriceComponent):
 
 class EnhancedHeatPumpPricingEngine(PricingEngine):
     """Enhanced heat pump pricing engine with comprehensive product integration"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, country_code: str = "DE"):
         """Initialize enhanced heat pump pricing engine"""

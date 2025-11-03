@@ -11,7 +11,10 @@ Requirements: 9.1, 9.2, 9.3, 9.4, 9.5
 import os
 import time
 from langchain_core.tools import tool
-from tavily import TavilyClient
+try:
+    from tavily import TavilyClient
+except Exception:
+    TavilyClient = None
 
 # Import logging utilities
 from agent.logging_config import get_logger, log_api_call
@@ -49,6 +52,15 @@ def tavily_search(query: str) -> str:
     """
     start_time = time.time()
     logger.info(f"Starting Tavily search: {query[:100]}")
+
+    # Prüfe ob Tavily-Client verfügbar (optional import)
+    if TavilyClient is None:
+        logger.error("Tavily client library not installed")
+        raise APIError(
+            "Tavily client library not installed",
+            api_name="Tavily",
+            solution="Install the package 'tavily-python' in the runtime Python environment or disable Tavily features."
+        )
 
     try:
         # Check API key

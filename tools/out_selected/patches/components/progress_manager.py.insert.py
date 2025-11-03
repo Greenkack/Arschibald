@@ -83,6 +83,14 @@ class ProgressStyle(Enum):
 @dataclass
 class ProgressConfig:
     """Konfiguration für Ladebalken"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     style: ProgressStyle = ProgressStyle.SHADCN_DEFAULT
     color_primary: str = "#18181b"  # shadcn zinc-900
     color_secondary: str = "#3b82f6"  # shadcn blue-500
@@ -98,6 +106,14 @@ class ProgressConfig:
 # --- DEF BLOCK START: class ProgressManager ---
 class ProgressManager:
     """Zentraler Manager für alle Ladebalken in der App"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.config = ProgressConfig()
@@ -382,6 +398,14 @@ class ProgressManager:
 # --- DEF BLOCK START: class ProgressBar ---
 class ProgressBar:
     """Einzelner Ladebalken mit shadcn UI Design"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, progress_id: str, title: str, container: st.container,
                  config: ProgressConfig):

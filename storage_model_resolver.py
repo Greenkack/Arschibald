@@ -14,6 +14,14 @@ logger = logging.getLogger(__name__)
 
 class StorageModelResolver:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Resolves storage IDs to model names for price matrix lookups.
 
     This class handles the conversion from storage product IDs (used in the UI)

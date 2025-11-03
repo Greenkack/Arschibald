@@ -1533,6 +1533,14 @@ if __name__ == "__main__":
     print("--- Testlauf für crm.py ---")
 
     class MockDatabase:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def get_db_connection(self):
             conn = sqlite3.connect(':memory:')
             conn.row_factory = sqlite3.Row
@@ -1540,6 +1548,14 @@ if __name__ == "__main__":
             return conn
 
     class MockAdminSettings:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def load_admin_setting(self, key, default=None):
             if key == 'salutation_options':
                 return ['Herr', 'Frau', 'Familie', 'Divers']
@@ -1548,6 +1564,14 @@ if __name__ == "__main__":
             return default
 
     class MockProductDB:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def list_products(self, category: str |
                           None = None) -> list[dict[str, Any]]:
             if category == 'Modul':

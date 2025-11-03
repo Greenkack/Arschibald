@@ -30,6 +30,14 @@ from pricing.pricing_errors import CalculationError, ValidationError
 
 class TestAuditEvent:
     """Test AuditEvent class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_audit_event_creation(self):
         """Test audit event creation"""
@@ -106,6 +114,14 @@ class TestAuditEvent:
 
 class TestPricingAuditLogger:
     """Test PricingAuditLogger class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup test environment"""
@@ -314,6 +330,14 @@ class TestPricingAuditLogger:
 
 class TestPricingCalculationLogger:
     """Test PricingCalculationLogger class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup test environment"""
@@ -450,6 +474,14 @@ class TestPricingCalculationLogger:
 
 class TestPricingMonitor:
     """Test PricingMonitor class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup test environment"""
@@ -614,6 +646,14 @@ class TestPricingMonitor:
 
 class TestGlobalInstances:
     """Test global instance functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_audit_logger(self):
         """Test global audit logger instance"""
@@ -642,6 +682,14 @@ class TestGlobalInstances:
 
 class TestConvenienceFunctions:
     """Test convenience functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup test environment"""
@@ -707,6 +755,14 @@ class TestConvenienceFunctions:
 
 class TestAuditQuery:
     """Test AuditQuery class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_audit_query_defaults(self):
         """Test AuditQuery default values"""
@@ -743,6 +799,14 @@ class TestAuditQuery:
 
 class TestIntegration:
     """Integration tests for audit system"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Setup test environment"""

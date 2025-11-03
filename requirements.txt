@@ -183,11 +183,19 @@ xlrd==2.0.2
 
 # KAI Agent Dependencies
 # ======================
-langchain==0.3.20
+langchain==0.3.27
 langchain-openai==0.3.0
-langchain-community==0.3.20
+langchain-community==0.3.21
 tavily-python==0.5.0
 twilio==9.4.0
-elevenlabs==1.96.0
-faiss-cpu==1.9.0
+elevenlabs==2.20.1
+faiss-cpu==1.10.0
 websockets==14.1
+
+# 3D PV Visualization Dependencies
+# =================================
+pyvista>=0.43.10
+vtk>=9.3.0
+stpyvista>=0.1.4
+trimesh>=4.4.9
+pikepdf>=9.0.0

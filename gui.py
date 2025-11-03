@@ -8,13 +8,99 @@ import json
 import logging
 import os
 import sys
-import traceback
+import traceback as tb_module
 import warnings
 from datetime import datetime
 from typing import Any, Dict
 
 import streamlit as st
 import streamlit.components.v1 as components
+
+# ========================================
+# MIGRATION: Cleanup nicht-serialisierbarer Session State Objekte
+# ========================================
+# Muss VOR allen anderen Imports passieren, um Serialisierungsfehler zu vermeiden
+
+import pickle
+
+# FORCE CLEANUP: Teste JEDES Objekt auf Serialisierbarkeit
+keys_to_delete = []
+for key in list(st.session_state.keys()):
+    try:
+        # Versuche das Objekt zu picklen
+        obj = st.session_state[key]
+        pickle.dumps(obj)
+    except (TypeError, AttributeError, pickle.PicklingError):
+        # Objekt kann nicht serialisiert werden -> löschen!
+        keys_to_delete.append(key)
+
+# Lösche ALLE nicht-serialisierbaren Objekte
+for key in keys_to_delete:
+    try:
+        del st.session_state[key]
+    except Exception:
+        pass
+
+# ========================================
+# CORE INTEGRATION - Phase 1: Config & Logging
+# ========================================
+# Sichere Integration der core-Module für Stabilität & Performance
+# Alle Features sind optional und haben Fallbacks
+try:
+    from core_integration import (
+        init_core_integration,
+        log_info,
+        log_error,
+        log_warning,
+        is_feature_enabled,
+    )
+    
+    # Initialisiere Core-Module beim App-Start
+    if 'core_initialized' not in st.session_state:
+        core_status = init_core_integration(enable_logging=True)
+        st.session_state.core_initialized = True
+        st.session_state.core_status = core_status
+        
+        # Log successful initialization
+        if core_status.get('logging'):
+            log_info(
+                "bokuk2_startup",
+                version="2.0.0",
+                core_features=core_status
+            )
+        
+        # SESSION RECOVERY (Phase 3) - Browser-Refresh-Unterstützung
+        if core_status.get('session') and is_feature_enabled('session'):
+            from core_integration import bootstrap_session
+            
+            # Versuche Session aus URL-Parameter oder Cookie zu recovern
+            session_id_param = st.query_params.get('session_id')
+            
+            # Bootstrap session (neu oder recovery)
+            user_session = bootstrap_session(
+                session_id=session_id_param,
+                user_id=st.session_state.get('user_id')
+            )
+            
+            if user_session:
+                st.session_state.user_session_recovered = True
+                log_info("session_recovered", session_id=user_session.session_id)
+                
+                # Zeige Recovery-Hinweis (nur einmal)
+                if not st.session_state.get('recovery_notice_shown'):
+                    st.toast("✅ Sitzung wiederhergestellt", icon="🔄")
+                    st.session_state.recovery_notice_shown = True
+            else:
+                st.session_state.user_session_recovered = False
+                
+except Exception as e:
+    # Fallback - App funktioniert auch ohne core-Module
+    print(f"⚠️ Core integration disabled: {e}")
+    def log_info(msg, **kwargs): print(f"INFO: {msg}")
+    def log_error(msg, **kwargs): print(f"ERROR: {msg}")
+    def log_warning(msg, **kwargs): print(f"WARNING: {msg}")
+    def is_feature_enabled(f): return False
+# ========================================
 
 from emoji_toggle import initialize_emoji_support
 from live_preview_helpers import (
@@ -61,12 +147,12 @@ try:
             if isinstance(loaded_texts, dict) and loaded_texts:
                 _texts_initial = loaded_texts
             else:
-                _texts_initial = {"app_title": "Omers Solar Kakerlake"}
+                _texts_initial = {"app_title": "ÖMERs ALL in ONE DINGSBUMS"}
     else:
         raise FileNotFoundError("de.json nicht gefunden.")
 except (FileNotFoundError, ValueError, json.JSONDecodeError):
     _texts_initial = {
-        "app_title": "Omers Solar Kakerlake", "menu_item_input": "Projekt- Bedarfsanalyse",
+        "app_title": "ÖMERs ALL in ONE DINGSBUMS", "menu_item_input": "Projekt- Bedarfsanalyse",
     "menu_item_analysis": "Ergebnisse & Visualisierungen", "menu_item_quick_calc": "A.G.E.N.T.",
         "menu_item_crm": "Kundenmanagement CRM", "menu_item_info_platform": "Kundenmanagement CRM",
         "menu_item_options": "Administration & Verwaltung", "menu_item_admin": "Administration & Verwaltung",
@@ -87,7 +173,7 @@ except (FileNotFoundError, ValueError, json.JSONDecodeError):
         "crm_tab_calendar": "Kalender"
     }
 except Exception:
-    _texts_initial = { "app_title": "Omers Solar Kakerlake" }
+    _texts_initial = {"app_title": "ÖMERs ALL in ONE DINGSBUMS"}
 
 TEXTS: dict[str, str] = {}
 
@@ -906,6 +992,15 @@ def main():
 
         st.set_page_config(page_title=get_text_gui("app_title"), layout="wide")
     _apply_active_app_theme()
+    
+    # ============================================================================
+    # UI-SETTINGS HANDLER - Lädt Benutzer-Einstellungen
+    # ============================================================================
+    try:
+        from ui_settings_handler import apply_ui_settings
+        apply_ui_settings()
+    except Exception as e:
+        st.warning(f"⚠️ UI-Einstellungen konnten nicht geladen werden: {e}")
 
     # ============================================================================
     # DYNAMISCHE GLOBALE UI-EFFEKTE (10 verschiedene Stile zur Auswahl)
@@ -1231,8 +1326,9 @@ def main():
             if isinstance(action, str) and action:
                 handle_context_menu_action(action)
     
-    # Ausfahrbarer Drawer - unten rechts
-    drawer_action = components.html("""
+    # Ausfahrbarer Drawer - unten rechts mit funktionierenden Click Events
+    # JavaScript manipuliert das DOM direkt und setzt Session State für Callbacks
+    components.html("""
     <script>
     (function() {
         const parentDoc = window.parent?.document;
@@ -1339,33 +1435,39 @@ def main():
         drawer.innerHTML = `
             <button class="drawer-close">×</button>
             <div class="drawer-title">Quick Actions</div>
-            <button class="drawer-btn" data-action="action1">📊 Button 1</button>
-            <button class="drawer-btn" data-action="action2">🔧 Button 2</button>
-            <button class="drawer-btn" data-action="action3">⚙️ Button 3</button>
-            <button class="drawer-btn" data-action="action4">📈 Button 4</button>
-            <button class="drawer-btn" data-action="action5">🎯 Button 5</button>
+            <button class="drawer-btn" data-action="voice_command">🎤 Sprachbefehl</button>
+            <button class="drawer-btn" data-action="3d_view">🏠 3D Visualisierung</button>
+            <button class="drawer-btn" data-action="save_customer">💾 Kunde ins CRM</button>
+            <button class="drawer-btn" data-action="quick_pdf">⚡ Blitz-Angebot</button>
+            <button class="drawer-btn" data-action="help_menu">❓ Hilfe-Menü</button>
             <button class="drawer-btn" data-action="logout" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);">🚪 Abmelden</button>
         `;
         parentDoc.body.appendChild(drawer);
         
-        // Event Listeners für Drawer Buttons
+        // Event Listeners für Drawer Buttons - Direkt Streamlit Query Params setzen
         drawer.querySelectorAll('.drawer-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
+                e.preventDefault();
                 const action = this.getAttribute('data-action');
-                console.log('Drawer action:', action);
+                console.log('Drawer action clicked:', action);
                 
-                if (action === 'logout') {
-                    // Trigger Streamlit Logout via setComponentValue
-                    console.log('Triggering logout...');
-                    
-                    // Sende Logout-Signal zurück an Streamlit
-                    if (window.Streamlit) {
-                        window.Streamlit.setComponentValue('logout');
-                    }
-                    
-                    // Schließe Drawer
-                    drawer.classList.remove('open');
+                // Setze URL Query Parameter für Streamlit
+                const url = new URL(window.parent.location.href);
+                url.searchParams.set('drawer_action', action);
+                url.searchParams.set('drawer_nonce', Date.now()); // Force refresh
+                window.parent.history.pushState({}, '', url);
+                
+                // Trigger Streamlit rerun
+                const buttons = window.parent.document.querySelectorAll('button[kind="primary"]');
+                if (buttons.length > 0) {
+                    buttons[0].click();
+                } else {
+                    // Alternative: Sende Custom Event
+                    window.parent.dispatchEvent(new Event('popstate'));
                 }
+                
+                // Schließe Drawer
+                drawer.classList.remove('open');
             });
         });
         
@@ -1390,11 +1492,43 @@ def main():
     </script>
     """, height=0, width=0)
     
-    # Logout-Handler: Wenn Drawer "logout" zurückgibt
-    if drawer_action == 'logout':
-        from user_menu import logout_user
-        logout_user()
-        st.rerun()
+    # Drawer Action Handler via Query Params
+    drawer_action = st.query_params.get('drawer_action')
+    drawer_nonce = st.query_params.get('drawer_nonce')
+    
+    if drawer_action and drawer_nonce != st.session_state.get('last_drawer_nonce'):
+        st.session_state['last_drawer_nonce'] = drawer_nonce
+        
+        # Clear query params
+        st.query_params.clear()
+        
+        if drawer_action == 'logout':
+            from user_menu import logout_user
+            logout_user()
+            st.rerun()
+        elif drawer_action == 'voice_command':
+            from drawer_actions import handle_drawer_action_voice_command
+            handle_drawer_action_voice_command()
+            st.rerun()
+        elif drawer_action == '3d_view':
+            from drawer_actions import handle_drawer_action_3d_visualization
+            handle_drawer_action_3d_visualization()
+            st.rerun()
+        elif drawer_action == 'save_customer':
+            from drawer_actions import handle_drawer_action_save_customer
+            handle_drawer_action_save_customer()
+            st.rerun()
+        elif drawer_action == 'quick_pdf':
+            from drawer_actions import handle_drawer_action_quick_pdf
+            handle_drawer_action_quick_pdf()
+            st.rerun()
+        elif drawer_action == 'help_menu':
+            st.session_state['show_help_drawer'] = True
+            st.rerun()
+    
+    # Show drawer notifications
+    from drawer_actions import show_drawer_notifications
+    show_drawer_notifications()
 
 
 
@@ -1506,6 +1640,7 @@ def main():
         main_menu = [
             {"icon": "📊", "label": get_text_gui("menu_item_input"), "key": "input"},
             {"icon": "☀️", "label": TEXTS.get("menu_item_solar_calculator", "Solar Calculator"), "key": "solar_calculator"},
+            {"icon": "🏠", "label": "3D PV-Visualisierung", "key": "3d_view"},
             {"icon": "🔥", "label": get_text_gui("menu_item_heatpump"), "key": "heatpump"},
             {"icon": "💰", "label": get_text_gui("menu_item_analysis"), "key": "analysis"},
         ]
@@ -1985,7 +2120,7 @@ def main():
                 
             except Exception as e_render_analysis:
                 st.error(f"Fehler beim Rendern des Analyse-Tabs: {e_render_analysis}")
-                st.text_area("Traceback Analysis:", traceback.format_exc(), height=200)
+                st.text_area("Traceback Analysis:", tb_module.format_exc(), height=200)
         else:
             st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_analysis", "Analysemodul nicht verfügbar.")))
 
@@ -2030,7 +2165,7 @@ def main():
                     admin_panel_module.render_admin_panel(**admin_kwargs_pass) # type: ignore
                 except Exception as e_render_admin:
                     st.error(f"Fehler im Admin-Panel: {e_render_admin}")
-                    st.text_area("Traceback Admin:", traceback.format_exc(), height=200)
+                    st.text_area("Traceback Admin:", tb_module.format_exc(), height=200)
         else:
             missing_modules_admin_list = [name for name, mod in [("Admin-Panel", admin_panel_module), ("Datenbank", database_module), ("Produkt-DB", product_db_module), ("Berechnungen", calculations_module)] if not mod]
             st.warning(get_text_gui("module_unavailable_details", f"Admin-Panel oder dessen Abhängigkeiten ({', '.join(missing_modules_admin_list)}) nicht verfügbar."))
@@ -2098,7 +2233,7 @@ def main():
                             doc_output_module.render_pdf_ui(**pdf_ui_kwargs_pass) # type: ignore
                         except Exception as e_render_pdf:
                             st.error(f"Fehler beim Rendern der PDF UI: {e_render_pdf}")
-                            st.text_area("Traceback PDF UI:", traceback.format_exc(), height=200)
+                            st.text_area("Traceback PDF UI:", tb_module.format_exc(), height=200)
             else:
                 st.warning(get_text_gui("module_unavailable_details", "PDF-Ausgabemodul oder dessen Abhängigkeiten sind nicht verfügbar."))
 
@@ -2218,7 +2353,7 @@ def main():
                             """)
 
                             if st.checkbox(" Detaillierte Fehlermeldung anzeigen", key="preview_debug"):
-                                st.code(traceback.format_exc())
+                                st.code(tb_module.format_exc())
 
             except ImportError as e_import:
                 st.error(f" PDF-Vorschau-Modul konnte nicht importiert werden: {e_import}")
@@ -2235,7 +2370,7 @@ def main():
             except Exception as e_general:
                 st.error(f" Unerwarteter Fehler im PDF-Vorschau-Tab: {e_general}")
                 if st.checkbox(" Debug-Informationen anzeigen", key="preview_general_debug"):
-                    st.code(traceback.format_exc())
+                    st.code(tb_module.format_exc())
 
         # Multi-Angebote Tab wieder aktiviert
         with tab_multi_offers:
@@ -2372,6 +2507,24 @@ def main():
                                         "Einsparungen-Chart",
                                         value=True,
                                         key="multi_pdf_savings_chart"
+                                    )
+                                
+                                # ✅ NEU: Erweiterte Ausgabe für Multi-PDF
+                                st.markdown("---")
+                                st.markdown("**📄 Erweiterte Ausgabe:**")
+                                append_additional_pages = st.checkbox(
+                                    "📑 Zusätzliche Angebotsseiten anhängen",
+                                    value=False,
+                                    key="multi_pdf_append_additional",
+                                    help="Fügt detaillierte Berechnungen, Diagramme und individuelle Inhalte hinzu"
+                                )
+                                
+                                if append_additional_pages:
+                                    include_all_docs = st.checkbox(
+                                        "📋 Datenblätter & Dokumente anhängen",
+                                        value=True,
+                                        key="multi_pdf_include_all_docs",
+                                        help="Produktdatenblätter und Firmendokumente"
                                     )
                             
                             with col2:
@@ -2558,7 +2711,10 @@ def main():
                                 'color_scheme': color_scheme,
                                 'include_page_numbers': include_page_numbers,
                                 'include_payment_terms': include_payment_terms,
-                                'include_financing': include_financing
+                                'include_financing': include_financing,
+                                # ✅ NEU: Erweiterte Ausgabe Optionen
+                                'append_additional_pages_after_main6': st.session_state.get('multi_pdf_append_additional', False),
+                                'include_all_documents': st.session_state.get('multi_pdf_include_all_docs', False) if st.session_state.get('multi_pdf_append_additional', False) else False
                             }
                             
                             # Generierungs-Button
@@ -2646,7 +2802,7 @@ def main():
                                         st.error(f"❌ Fehler bei Multi-PDF Generierung: {e}")
                                         import traceback
                                         with st.expander("🔍 Fehlerdetails", expanded=False):
-                                            st.code(traceback.format_exc())
+                                            st.code(tb_module.format_exc())
                         else:
                             st.warning("⚠️ Bitte wählen Sie mindestens 1 Firma aus!")
                 else:
@@ -2658,10 +2814,33 @@ def main():
                 st.error(f"❌ Fehler beim Laden der Firmen: {e}")
                 import traceback
                 with st.expander("🔍 Fehlerdetails", expanded=False):
-                    st.code(traceback.format_exc())
+                    st.code(tb_module.format_exc())
 
     elif selected_page_key == "quick_calc":
         # A.G.E.N.T. - Autonomous AI Expert System
+        # Check for voice mode activation
+        if st.session_state.get('voice_mode'):
+            st.info("🎤 **Sprachsteuerung aktiviert!** Sprechen Sie Ihre Anfrage.")
+            # Add voice input handling here if speech_recognition available
+            try:
+                import speech_recognition as sr
+                recognizer = sr.Recognizer()
+                with sr.Microphone() as source:
+                    st.write("Höre zu...")
+                    audio = recognizer.listen(source, timeout=5)
+                    try:
+                        text = recognizer.recognize_google(audio, language='de-DE')
+                        st.session_state['voice_input'] = text
+                        st.success(f"Erkannt: {text}")
+                    except sr.UnknownValueError:
+                        st.error("Sprache konnte nicht verstanden werden")
+                    except sr.RequestError:
+                        st.error("Spracherkennung nicht verfügbar")
+            except ImportError:
+                st.warning("⚠️ Spracherkennung nicht installiert. Bitte installieren Sie 'SpeechRecognition' und 'pyaudio'.")
+            
+            st.session_state['voice_mode'] = False
+        
         # Use agent_ui module if available, fallback to quick_calc for backward compatibility
         if agent_ui_module and callable(getattr(agent_ui_module, 'render_agent_menu', None)):
             agent_ui_module.render_agent_menu() # type: ignore
@@ -2731,13 +2910,32 @@ def main():
     elif selected_page_key == "options":
         st.header(get_text_gui("menu_item_options"))
 
+        # DEBUG: Prüfe ob options_module geladen ist
+        print("=" * 80)
+        print("DEBUG: Options Page aufgerufen")
+        print(f"  options_module: {options_module}")
+        print(f"  options_module type: {type(options_module)}")
+        if options_module:
+            print(f"  render_options callable: {callable(getattr(options_module, 'render_options', None))}")
+        print("=" * 80)
+
         # Tabs für die Optionen erstellen
-        tab_general, tab_ai = st.tabs([" Allgemeine Einstellungen", "A.G.E.N.T. Begleiter"])
+        tab_general, tab_ai = st.tabs([" Allgemeine Einstellungen", "🤖 A.G.E.N.T. Begleiter"])
 
         with tab_general:
             if options_module and callable(getattr(options_module, 'render_options', None)):
-                options_module.render_options(TEXTS, module_name=get_text_gui("menu_item_options")) # type: ignore
+                try:
+                    print("DEBUG: Rufe options_module.render_options() auf...")
+                    options_module.render_options(TEXTS, module_name=get_text_gui("menu_item_options")) # type: ignore
+                    print("DEBUG: options_module.render_options() erfolgreich ausgeführt")
+                except Exception as e:
+                    import traceback
+                    error_msg = tb_module.format_exc()
+                    print(f"ERROR: options_module.render_options() fehlgeschlagen:\n{error_msg}")
+                    st.error(f"❌ Fehler beim Laden der Einstellungen: {e}")
+                    st.text_area("Fehlerdetails:", error_msg, height=200)
             else:
+                print("WARNING: options_module nicht verfügbar oder render_options nicht callable")
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_options","Optionen nicht verfügbar.")))
 
         with tab_ai:
@@ -2760,6 +2958,73 @@ def main():
             solar_calculator_module.render_solar_calculator(TEXTS, module_name=TEXTS.get("menu_item_solar_calculator", "Solar Calculator")) # type: ignore
         else:
             st.warning(get_text_gui("module_unavailable_details", "Solar Calculator Modul nicht verfügbar."))
+    
+    elif selected_page_key == "3d_view":
+        st.header("🏠 3D PV-Visualisierung")
+        try:
+            # Execute the 3D view page code directly
+            import os
+            page_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solar_3d_view_module.py")
+            with open(page_path, 'r', encoding='utf-8') as f:
+                page_code = f.read()
+            # Remove the page config line as it's already set in gui.py
+            page_code = page_code.replace('st.set_page_config(', '# st.set_page_config(')
+            
+            # Prepare execution context with all necessary imports
+            import sys
+            exec_globals = {
+                'st': st,
+                '__name__': '__main__',
+                '__builtins__': __builtins__,
+                'sys': sys
+            }
+            
+            # Pre-import critical modules for 3D visualization
+            try:
+                from utils.pv3d import (
+                    BuildingDims, LayoutConfig, AdvancedLayoutConfig,
+                    ModuleTransform, ModuleGroup
+                )
+                exec_globals['BuildingDims'] = BuildingDims
+                exec_globals['LayoutConfig'] = LayoutConfig
+                exec_globals['AdvancedLayoutConfig'] = AdvancedLayoutConfig
+                exec_globals['ModuleTransform'] = ModuleTransform
+                exec_globals['ModuleGroup'] = ModuleGroup
+            except ImportError:
+                # Provide dummy classes if import fails
+                class BuildingDims: pass
+                class LayoutConfig: pass
+                class AdvancedLayoutConfig(LayoutConfig): pass
+                class ModuleTransform: pass
+                class ModuleGroup: pass
+                exec_globals['BuildingDims'] = BuildingDims
+                exec_globals['LayoutConfig'] = LayoutConfig
+                exec_globals['AdvancedLayoutConfig'] = AdvancedLayoutConfig
+                exec_globals['ModuleTransform'] = ModuleTransform
+                exec_globals['ModuleGroup'] = ModuleGroup
+            
+            # Execute with proper globals to allow imports
+            exec(page_code, exec_globals)
+        except FileNotFoundError:
+            st.error("3D-Visualisierung Seite nicht gefunden.")
+            st.info("Bitte stellen Sie sicher, dass pages/solar_3d_view.py existiert.")
+        except ImportError as e:
+            st.error(f"Import-Fehler in 3D-Visualisierung: {e}")
+            st.info("Bitte stellen Sie sicher, dass alle erforderlichen Pakete installiert sind (pyvista, stpyvista, trimesh).")
+        except Exception as e:
+            st.error(f"Fehler beim Laden der 3D-Visualisierung: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+    
+    # Hilfe-Menü (nur über Drawer erreichbar)
+    elif st.session_state.get('show_help_drawer'):
+        from drawer_actions import render_help_menu
+        render_help_menu()
+        
+        # Back button
+        if st.button("← Zurück", key="help_back_btn"):
+            st.session_state['show_help_drawer'] = False
+            st.rerun()
 
 if __name__ == "__main__":
     try:
@@ -2809,7 +3074,7 @@ if __name__ == "__main__":
         try:
             st.set_page_config(page_title="Kritischer Fehler", layout="wide")
             st.error(f"{critical_error_text_for_display_main_block}\nDetails: {e_global_gui_main_block}")
-            st.text_area("Traceback Global:", traceback.format_exc(), height=300)
+            st.text_area("Traceback Global:", tb_module.format_exc(), height=300)
         except Exception:
             pass
 

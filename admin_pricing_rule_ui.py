@@ -26,6 +26,14 @@ except ImportError as e:
 
     # Fallback classes for UI testing
     class DiscountConfig:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(
                 self,
                 discount_type: str,
@@ -51,6 +59,14 @@ except ImportError as e:
                     ' ', '_')}"
 
     class SurchargeConfig:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(
                 self,
                 surcharge_type: str,
@@ -76,6 +92,14 @@ except ImportError as e:
                     ' ', '_')}"
 
     class AccessoryConfig:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(self, accessory_id: int, name: str, price: float,
                      quantity: int = 1, category: str = "accessory",
                      description: str = "", is_optional: bool = True):
@@ -89,6 +113,14 @@ except ImportError as e:
             self.dynamic_key = f"ACCESSORY_{name.upper().replace(' ', '_')}"
 
     class PricingModificationEngine:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(self):
             self.discounts = []
             self.surcharges = []

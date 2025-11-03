@@ -20,6 +20,14 @@ from .router import (
 
 class MockPage(Page):
     """Mock page for testing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def render(self):
         pass
@@ -27,6 +35,14 @@ class MockPage(Page):
 
 class TestRouter:
     """Test Router class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_router_initialization(self):
         """Test router initialization"""
@@ -99,6 +115,14 @@ class TestRouter:
 
 class TestMiddleware:
     """Test Middleware classes"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_authentication_middleware_public_page(self):
         """Test authentication middleware with public page"""
@@ -166,6 +190,14 @@ class TestMiddleware:
 
 class TestRouteGuards:
     """Test RouteGuard classes"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_permission_guard_no_requirements(self):
         """Test permission guard with no requirements"""
@@ -272,6 +304,14 @@ class TestRouteGuards:
 
 class TestNavigationEvent:
     """Test NavigationEvent class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_navigation_event_creation(self):
         """Test navigation event creation"""
@@ -312,6 +352,14 @@ class TestNavigationEvent:
 
 class TestPage:
     """Test Page base class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_page_initialization(self):
         """Test page initialization"""
@@ -357,6 +405,14 @@ class TestPage:
 
 class TestGlobalRouter:
     """Test global router functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_router(self):
         """Test getting global router"""

@@ -36,6 +36,14 @@ class ModificationType(Enum):
 @dataclass
 class DiscountConfig:
     """Configuration for discount application"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     discount_type: str  # 'percentage', 'fixed', 'tiered'
     discount_value: float
     conditions: dict[str, Any] = field(default_factory=dict)
@@ -62,6 +70,14 @@ class DiscountConfig:
 @dataclass
 class SurchargeConfig:
     """Configuration for surcharge application"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     surcharge_type: str  # 'percentage', 'fixed', 'tiered'
     surcharge_value: float
     conditions: dict[str, Any] = field(default_factory=dict)
@@ -88,6 +104,14 @@ class SurchargeConfig:
 @dataclass
 class AccessoryConfig:
     """Configuration for accessory pricing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     accessory_id: int
     name: str
     price: float
@@ -110,6 +134,14 @@ class AccessoryConfig:
 @dataclass
 class ModificationApplication:
     """Record of an applied modification"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     modification_type: ModificationType
     config: DiscountConfig | SurchargeConfig | AccessoryConfig
     applied_amount: float
@@ -121,6 +153,14 @@ class ModificationApplication:
 @dataclass
 class ModificationResult:
     """Result of pricing modifications"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     original_amount: float
     accessories_cost: float
     total_discounts: float
@@ -148,6 +188,14 @@ class ModificationResult:
 
 class PricingModificationEngine:
     """Engine for applying discounts, surcharges, and accessories to pricing"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         """Initialize the pricing modification engine"""

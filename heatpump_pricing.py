@@ -58,13 +58,37 @@ try:
 except ImportError:
     # Fallback classes for standalone operation
     class PricingEngine:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(self, system_type: str = "heatpump"):
             self.system_type = system_type
 
     class PriceComponent:
         pass
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
 
     class PricingResult:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(
                 self,
                 base_price: float,
@@ -78,12 +102,36 @@ except ImportError:
 
     class FinalPricingResult(PricingResult):
         pass
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
 
     class DynamicKeyManager:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def generate_keys(self, data: dict, prefix: str = "") -> dict:
             return {f"{prefix}{k}": v for k, v in data.items()}
 
     class ProfitMarginManager:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def calculate_selling_price(
                 self,
                 purchase_price: float,
@@ -130,6 +178,14 @@ class ComponentCost:
     installation_complexity: str | None = None
 
     @property
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def labor_cost_net(self) -> float:
         return self.labor_hours * self.labor_rate
 
@@ -170,6 +226,14 @@ class ComponentCost:
 @dataclass
 class HeatPumpPriceComponent(PriceComponent):
     """Heat pump specific price component extending base PriceComponent"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     # Heat pump specific fields
     power_kw: float | None = None
@@ -231,6 +295,14 @@ class HeatPumpPriceComponent(PriceComponent):
 
 class HeatPumpPricingEngine(PricingEngine):
     """Enhanced heat pump pricing engine with profit margins and dynamic keys"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         """Initialize heat pump pricing engine"""
@@ -703,6 +775,14 @@ def apply_discounts_and_surcharges(base_total_net: float,
 
 @dataclass
 class BegConfig:
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     base_pct: float = 30.0
     refrigerant_bonus_pct: float = 5.0
     heating_replacement_bonus_pct: float = 20.0

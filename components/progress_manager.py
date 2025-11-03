@@ -30,6 +30,14 @@ class ProgressStyle(Enum):
 @dataclass
 class ProgressConfig:
     """Konfiguration für Ladebalken"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     style: ProgressStyle = ProgressStyle.SHADCN_DEFAULT
     color_primary: str = "#18181b"  # shadcn zinc-900
     color_secondary: str = "#3b82f6"  # shadcn blue-500
@@ -39,10 +47,39 @@ class ProgressConfig:
     animation_speed: float = 1.0
     height: int = 8
     border_radius: int = 6
+    
+    def to_dict(self):
+        """Konvertiert Config zu serialisierbarem Dictionary"""
+        return {
+            'style': self.style.value,
+            'color_primary': self.color_primary,
+            'color_secondary': self.color_secondary,
+            'color_background': self.color_background,
+            'show_percentage': self.show_percentage,
+            'show_text': self.show_text,
+            'animation_speed': self.animation_speed,
+            'height': self.height,
+            'border_radius': self.border_radius
+        }
+    
+    @classmethod
+    def from_dict(cls, data: dict):
+        """Erstellt Config aus Dictionary"""
+        if isinstance(data.get('style'), str):
+            data['style'] = ProgressStyle(data['style'])
+        return cls(**data)
 
 
 class ProgressManager:
     """Zentraler Manager für alle Ladebalken in der App"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self):
         self.config = ProgressConfig()
@@ -54,8 +91,18 @@ class ProgressManager:
         if not _is_session_alive():
             return
         try:
-            if 'progress_config' not in st.session_state:
-                st.session_state.progress_config = self.config
+            # Migration: Konvertiere alte ProgressConfig Objekte zu Dictionaries
+            if 'progress_config' in st.session_state:
+                old_config = st.session_state.progress_config
+                # Prüfe ob es ein Objekt ist (nicht-serialisierbar)
+                if isinstance(old_config, ProgressConfig):
+                    st.session_state.progress_config = old_config.to_dict()
+                elif not isinstance(old_config, dict):
+                    # Falls es etwas anderes ist, neu initialisieren
+                    st.session_state.progress_config = self.config.to_dict()
+            else:
+                st.session_state.progress_config = self.config.to_dict()
+                
             if 'progress_active' not in st.session_state:
                 st.session_state.progress_active = {}
         except Exception:
@@ -67,7 +114,9 @@ class ProgressManager:
         self.config.style = style
         if _is_session_alive():
             try:
-                st.session_state.progress_config.style = style
+                config_dict = st.session_state.get('progress_config', self.config.to_dict())
+                config_dict['style'] = style.value
+                st.session_state.progress_config = config_dict
             except Exception:
                 pass
 
@@ -84,7 +133,7 @@ class ProgressManager:
             self.config.color_background = background
         if _is_session_alive():
             try:
-                st.session_state.progress_config = self.config
+                st.session_state.progress_config = self.config.to_dict()
             except Exception:
                 pass
 
@@ -143,7 +192,8 @@ class ProgressManager:
         if _is_session_alive():
             try:
                 # nutze Session-Override falls vorhanden
-                config = st.session_state.get('progress_config', self.config)
+                config_dict = st.session_state.get('progress_config', self.config.to_dict())
+                config = ProgressConfig.from_dict(config_dict)
             except Exception:
                 pass
 
@@ -357,6 +407,14 @@ class ProgressManager:
 
 class ProgressBar:
     """Einzelner Ladebalken mit shadcn UI Design"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, progress_id: str, title: str, container: st.container,
                  config: ProgressConfig):
@@ -497,6 +555,14 @@ def _is_session_alive() -> bool:
 
 class ProgressBarNoOp:
     """Fallback-ProgressBar ohne UI-Ausgaben (für beendete Sessions/CLI)."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def __init__(self, progress_id: str, title: str):
         self.progress_id = progress_id

@@ -304,6 +304,14 @@ def scan_injections(directory="."):
 import ast, astor, os
 
 class TraceInjector(ast.NodeTransformer):
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def visit_FunctionDef(self, node):
         name = node.name
         args = [a.arg for a in node.args.args]
@@ -328,6 +336,14 @@ key = Fernet.generate_key()
 fernet = Fernet(key)
 
 class EncryptStrings(ast.NodeTransformer):
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def visit_Str(self, node):
         encrypted = fernet.encrypt(node.s.encode()).decode()
         return ast.copy_location(
@@ -496,6 +512,14 @@ def inject(pid, shellcode):
 import importlib.abc, importlib.util, marshal, base64
 
 class EncryptedLoader(importlib.abc.Loader):
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     def exec_module(self, module):
         with open(module.__spec__.origin, "rb") as f:
             code = base64.b64decode(f.read())

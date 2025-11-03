@@ -26,6 +26,14 @@ from pricing.real_time_pricing_updates import (
 
 class TestPricingEvent:
     """Test PricingEvent class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_pricing_event_creation(self):
         """Test creating a pricing event"""
@@ -66,6 +74,14 @@ class TestPricingEvent:
 
 class TestChangeDetector:
     """Test ChangeDetector class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -184,6 +200,14 @@ class TestChangeDetector:
 
 class TestDebouncedUpdateManager:
     """Test DebouncedUpdateManager class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -306,6 +330,14 @@ class TestDebouncedUpdateManager:
 
 class TestPricingUpdateNotifier:
     """Test PricingUpdateNotifier class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -420,6 +452,14 @@ class TestPricingUpdateNotifier:
 
 class TestRealTimePricingUpdateSystem:
     """Test RealTimePricingUpdateSystem class"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""
@@ -591,6 +631,14 @@ class TestRealTimePricingUpdateSystem:
 
 class TestGlobalUpdateSystem:
     """Test global update system functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_global_instance(self):
         """Test getting global update system instance"""
@@ -614,6 +662,14 @@ class TestGlobalUpdateSystem:
 
 class TestIntegrationScenarios:
     """Test integration scenarios"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def setup_method(self):
         """Set up test fixtures"""

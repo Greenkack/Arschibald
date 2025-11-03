@@ -33,6 +33,14 @@ class ContainerState(str, Enum):
 @dataclass
 class ContainerConfig:
     """Configuration for stable containers"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     min_height: int | None = None  # Minimum height in pixels
     max_height: int | None = None  # Maximum height in pixels
     fixed_height: int | None = None  # Fixed height in pixels
@@ -51,6 +59,14 @@ class StableContainer:
     This container maintains a stable size during content loading
     and transitions, preventing UI jumps.
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(
         self,
@@ -183,10 +199,15 @@ class StableContainer:
 class PlaceholderContainer:
     """
     Placeholder container for loading states without spinners
-
-    Maintains layout stability by showing a placeholder
-    instead of dynamic content insertion.
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(
         self,
@@ -196,6 +217,9 @@ class PlaceholderContainer:
     ):
         """
         Initialize placeholder container
+
+        Maintains layout stability by showing a placeholder
+        instead of dynamic content insertion.
 
         Args:
             container_id: Unique container identifier
@@ -266,6 +290,14 @@ class TransitionContainer:
     Provides fade-in/fade-out effects for content changes
     without layout shifts.
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(
         self,
@@ -400,10 +432,18 @@ class ErrorBoundary:
 class PageContainer:
     """
     Main page container for stable page rendering
-
+    
     Combines stable container, placeholder, and error boundary
     for complete page stability.
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(
         self,
@@ -480,6 +520,14 @@ class PageContainer:
 # Container registry for managing multiple containers
 class ContainerRegistry:
     """Registry for managing stable containers"""
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     def __init__(self):
         self.containers: dict[str, StableContainer] = {}

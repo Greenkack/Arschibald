@@ -4,6 +4,7 @@ Einstellungen für den Progress Manager im shadcn UI Design
 import streamlit as st
 
 from .progress_manager import (
+    ProgressConfig,
     ProgressStyle,
     progress_manager,
     set_progress_colors,
@@ -20,8 +21,10 @@ def render_progress_settings():
     col1, col2 = st.columns(2)
 
     with col1:
-        current_style = st.session_state.get(
-            'progress_config', progress_manager.config).style
+        # Config aus Session State laden und in Objekt konvertieren
+        config_dict = st.session_state.get('progress_config', progress_manager.config.to_dict())
+        current_config = ProgressConfig.from_dict(config_dict) if isinstance(config_dict, dict) else config_dict
+        current_style = current_config.style
 
         style_options = {
             "Standard (shadcn)": ProgressStyle.SHADCN_DEFAULT,
@@ -52,9 +55,9 @@ def render_progress_settings():
             st.rerun()
 
     with col2:
-        # Farbauswahl
-        current_config = st.session_state.get(
-            'progress_config', progress_manager.config)
+        # Farbauswahl - Config erneut laden
+        config_dict = st.session_state.get('progress_config', progress_manager.config.to_dict())
+        current_config = ProgressConfig.from_dict(config_dict) if isinstance(config_dict, dict) else config_dict
 
         primary_color = st.color_picker(
             "Primärfarbe",
@@ -129,7 +132,8 @@ def render_progress_settings():
         current_config.show_text = show_text
         current_config.height = height
         current_config.animation_speed = animation_speed
-        st.session_state.progress_config = current_config
+        # Als Dictionary speichern für Serialisierung
+        st.session_state.progress_config = current_config.to_dict()
 
     # Vorschau
     st.subheader("👀 Vorschau")

@@ -27,6 +27,14 @@ from .cache_monitoring import (
 
 class TestCacheMetric:
     """Test CacheMetric dataclass"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_cache_metric_creation(self):
         metric = CacheMetric(
@@ -45,6 +53,14 @@ class TestCacheMetric:
 
 class TestCacheAlert:
     """Test CacheAlert dataclass"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_cache_alert_creation(self):
         alert = CacheAlert(
@@ -64,6 +80,14 @@ class TestCacheAlert:
 
 class TestCacheMetricsCollector:
     """Test CacheMetricsCollector"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_record_metric(self):
         collector = CacheMetricsCollector()
@@ -194,6 +218,14 @@ class TestCacheMetricsCollector:
 
 class TestCachePerformanceAnalyzer:
     """Test CachePerformanceAnalyzer"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_analyze_hit_rate(self):
         collector = CacheMetricsCollector()
@@ -362,6 +394,14 @@ class TestCachePerformanceAnalyzer:
 
 class TestCacheMonitor:
     """Test CacheMonitor"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_monitor_creation(self):
         monitor = CacheMonitor(collection_interval_seconds=30)
@@ -413,6 +453,14 @@ class TestCacheMonitor:
 
 class TestCacheMonitoringAPI:
     """Test cache monitoring API functions"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_get_cache_monitor(self):
         monitor = get_cache_monitor()
@@ -498,6 +546,14 @@ class TestCacheMonitoringAPI:
 
 class TestCacheMonitoringIntegration:
     """Integration tests for cache monitoring"""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_end_to_end_monitoring(self):
         """Test complete monitoring workflow"""

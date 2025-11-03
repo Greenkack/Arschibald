@@ -150,6 +150,14 @@ def analysis_results_with_self_consumption(
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestCheckChartAvailabilityBasic:
     """Tests für check_chart_availability() mit Basis-Diagrammen."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_basic_charts_available_with_minimal_data(
         self,
@@ -220,6 +228,14 @@ class TestCheckChartAvailabilityBasic:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestCheckChartAvailabilityFinancing:
     """Tests für check_chart_availability() mit Finanzierungs-Diagrammen."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_financing_charts_available_with_financing_data(
         self,
@@ -281,6 +297,14 @@ class TestCheckChartAvailabilityFinancing:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestCheckChartAvailabilityBattery:
     """Tests für check_chart_availability() mit Batterie-Diagrammen."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_battery_charts_available_with_storage(
         self,
@@ -329,6 +353,14 @@ class TestCheckChartAvailabilityBattery:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestCheckChartAvailabilityScenarios:
     """Tests für check_chart_availability() mit Szenario-Diagrammen."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_scenario_charts_available_with_multiple_scenarios(
         self,
@@ -387,6 +419,14 @@ class TestCheckChartAvailabilityScenarios:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestCheckChartAvailabilityAnalysis:
     """Tests für check_chart_availability() mit Analyse-Diagrammen."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_analysis_charts_available_with_advanced_analysis(
         self,
@@ -436,6 +476,14 @@ class TestCheckChartAvailabilityAnalysis:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestCheckChartAvailabilitySpecial:
     """Tests für check_chart_availability() mit speziellen Diagrammtypen."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_co2_charts_available_with_co2_data(
         self,
@@ -617,6 +665,14 @@ class TestCheckChartAvailabilityErrorHandling:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestSessionStateManagement:
     """Tests für Session State Management der Diagrammauswahl."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_selected_charts_stored_in_session_state(self):
         """Test dass ausgewählte Diagramme im Session State gespeichert werden."""
@@ -717,6 +773,14 @@ class TestSessionStateManagement:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestOnlySelectedChartsGenerated:
     """Tests dass nur ausgewählte Diagramme generiert werden."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_only_selected_charts_are_included(self):
         """Test dass nur ausgewählte Diagramme in die PDF eingefügt werden."""
@@ -813,6 +877,14 @@ class TestOnlySelectedChartsGenerated:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestChartConfigurationIntegrity:
     """Tests für die Integrität der Chart-Konfiguration."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_all_charts_have_friendly_names(self):
         """Test dass alle Diagramme benutzerfreundliche Namen haben."""
@@ -871,6 +943,14 @@ class TestChartConfigurationIntegrity:
 @pytest.mark.skipif(not PDF_UI_AVAILABLE, reason="pdf_ui module not available")
 class TestChartSelectionIntegration:
     """Integrationstests für die gesamte Diagrammauswahl-Funktionalität."""
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
 
     def test_complete_workflow_basic_project(
         self,

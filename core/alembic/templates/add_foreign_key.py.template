@@ -1,0 +1,15 @@
+"""Add foreign key template
+
+Revision ID: ${revision}
+"""
+from alembic import op
+
+def upgrade() -> None:
+    op.create_foreign_key(
+        'fk_table_ref_id',
+        'table_name', 'ref_table',
+        ['ref_id'], ['id']
+    )
+
+def downgrade() -> None:
+    op.drop_constraint('fk_table_ref_id', 'table_name', type_='foreignkey')

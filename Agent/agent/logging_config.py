@@ -31,6 +31,14 @@ class SensitiveDataFilter(logging.Filter):
     - Phone numbers
     - Email addresses (partially)
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     # Patterns for sensitive data
     PATTERNS = [
@@ -104,6 +112,14 @@ class AgentLogFormatter(logging.Formatter):
     """
     Custom formatter for agent logs with color support (for console).
     """
+    
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
 
     # Color codes for different log levels
     COLORS = {

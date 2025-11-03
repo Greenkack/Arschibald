@@ -36,6 +36,14 @@ class CacheRecoveryError(SessionRecoveryError):
 
 class SessionRecoveryManager:
     """
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Session State"""
+        self.__dict__.update(state)
+    
     Manages complete session state restoration after browser refresh
 
     This class handles:

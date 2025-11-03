@@ -24,6 +24,14 @@ def test_pdf_ui_base_cost_fix():
 
     # Mock Session State
     class MockSessionState:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
         def __init__(self):
             self.data = {}
 
@@ -178,6 +186,14 @@ def test_complete_integration():
     import streamlit as st
     if not hasattr(st, 'session_state'):
         class MockSessionState:
+            def __getstate__(self):
+                """Ermöglicht Pickle-Serialisierung für Session State"""
+                return self.__dict__.copy()
+            
+            def __setstate__(self, state):
+                """Ermöglicht Pickle-Deserialisierung für Session State"""
+                self.__dict__.update(state)
+            
             def __init__(self):
                 self.data = {}
 

@@ -167,6 +167,14 @@ def test_real_integration():
         if not hasattr(st, 'session_state'):
             # Erstelle Mock Session State für Test
             class MockSessionState:
+                def __getstate__(self):
+                    """Ermöglicht Pickle-Serialisierung für Session State"""
+                    return self.__dict__.copy()
+                
+                def __setstate__(self, state):
+                    """Ermöglicht Pickle-Deserialisierung für Session State"""
+                    self.__dict__.update(state)
+                
                 def __init__(self):
                     self.data = {}
 
