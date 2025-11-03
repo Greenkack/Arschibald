@@ -458,6 +458,9 @@ PLACEHOLDER_MAPPING.update(
         "Speicher-Garantie-Text": "storage_warranty_text",
         # Wert neben der Überschrift BATTERIESPEICHER (ausgewählte Kapazität)
         "Speicherkapazität (Titel)": "storage_capacity_kwh",
+        "– Batteriespeicher-Kapazität": "storage_capacity_kwh",
+        # Seite 7: Dynamischer Wert vor "- Speicherkapazität"
+        "Speicherkapazität-Wert": "storage_capacity_kwh",
     }
 )
 
@@ -468,7 +471,8 @@ PLACEHOLDER_MAPPING.update(
         "SOLARMODULE": "module_section_title",
         "PHOTOVOLTAIK MODULE": "module_section_title",
         "WECHSELRICHTER": "inverter_section_title",
-        "BATTERIESPEICHER": "storage_section_title",
+        # BATTERIESPEICHER bleibt statisch, nur "– Batteriespeicher-Kapazität" wird dynamisch ersetzt
+        # "BATTERIESPEICHER": "storage_section_title",  # ENTFERNT - verursacht doppelte Anzeige
         # Neue/angepasste Werte-Felder rechte Spalte (Labels sind statisch in YAML)
         "Leistung pro PV-Modul": "module_power_per_panel_watt",
         # Fehlende direkte Mappings aus seite4.yml (Wertfelder):
