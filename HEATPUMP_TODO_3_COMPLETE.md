@@ -1,6 +1,7 @@
 # ✅ Wärmepumpen-Implementierung: TODO 3 COMPLETE
 
 ## 📅 Status
+
 **Datum**: 03. November 2025  
 **Phase**: 3 von 4 **VOLLSTÄNDIG FERTIG** ✅  
 **Fortschritt**: TODO 1 ✅ | TODO 2 ✅ | TODO 3 ✅ | TODO 4 ⏳
@@ -10,12 +11,14 @@
 ## 🎯 TODO 3: PDF-Generator abgeschlossen
 
 ### ✅ Neue Funktion: `generate_heatpump_offer_pdf()`
+
 **Datei**: `pdf_generator.py` (Zeilen 7007-7452, +445 Zeilen)  
 **Funktion**: 6-seitiges Wärmepumpen-Angebot als PDF
 
 ### 📄 Seiten-Struktur
 
 #### **Seite 1: Deckblatt**
+
 - Firmenlogo (wenn vorhanden, aus base64)
 - Titel: "Wärmepumpen-Angebot"
 - Kundenadresse (Name, Adresse, Stadt)
@@ -23,6 +26,7 @@
 - Firmeninformationen (Name, Adresse, Tel, Email)
 
 #### **Seite 2: Gebäudeanalyse + Radiator-Check**
+
 - **Gebäudetabelle**:
   - Beheizte Fläche (m²)
   - Heizlast (kW)
@@ -42,6 +46,7 @@
   - Empfehlung
 
 #### **Seite 3: Wärmepumpen-Auswahl**
+
 - **Modell**: Hersteller + Modellbezeichnung
 - **Technische Daten-Tabelle**:
   - Heizleistung (kW)
@@ -53,6 +58,7 @@
   - Wirkungsgrad gegenüber Direktheizung
 
 #### **Seite 4: Wirtschaftlichkeit**
+
 - **Investitions-Tabelle**:
   - Wärmepumpe (Preis)
   - Installation & Inbetriebnahme
@@ -69,6 +75,7 @@
   - 20-Jahres-Gesamtersparnis
 
 #### **Seite 5: BEG-Förderung + PV-Integration**
+
 - **BEG-Förderbausteine**:
   - Basis: 35%
   - Heizungstausch-Bonus: +10%
@@ -79,6 +86,7 @@
   - Zusätzliche Ersparnis (€/Jahr)
 
 #### **Seite 6: Zusammenfassung + Unterschrift**
+
 - **Zusammenfassungs-Tabelle**:
   - Gebäude (Fläche, Heizlast)
   - Wärmepumpe (Modell, SCOP)
@@ -95,6 +103,7 @@
 ## 🎨 Design-Features
 
 ### Farbschema (nach Corporate Identity)
+
 | Element | Farbe | Hex-Code | Bedeutung |
 |---------|-------|----------|-----------|
 | Titel | Grün | #2E7D32 | Umwelt, Nachhaltigkeit |
@@ -106,6 +115,7 @@
 | Status Upgrade | Rot | #C62828 | ! Kritisch |
 
 ### Typografie
+
 - **Titel**: Helvetica-Bold, 22pt
 - **H2**: Helvetica-Bold, 14pt
 - **H3**: Helvetica-Bold, 11pt
@@ -113,6 +123,7 @@
 - **Zeilenabstand**: 13pt (Leading)
 
 ### Layout
+
 - **Seitenformat**: A4 (210 × 297 mm)
 - **Ränder**: 2 cm (links/rechts), 2,5 cm (oben), 2 cm (unten)
 - **Logo-Größe**: 4 cm × 2 cm (wenn vorhanden)
@@ -123,6 +134,7 @@
 ## 🔧 Technische Implementierung
 
 ### Abhängigkeiten
+
 ```python
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
@@ -134,6 +146,7 @@ from reportlab.lib.colors import HexColor
 ```
 
 ### Funktion-Signatur
+
 ```python
 def generate_heatpump_offer_pdf(
     building_data: dict[str, Any],
@@ -149,6 +162,7 @@ def generate_heatpump_offer_pdf(
 ### Parameter-Mapping
 
 #### `building_data` (erforderlich)
+
 ```python
 {
     'building_area': 150,          # oder 'area'
@@ -159,6 +173,7 @@ def generate_heatpump_offer_pdf(
 ```
 
 #### `heatpump_data` (erforderlich)
+
 ```python
 {
     'selected_heatpump': {
@@ -175,6 +190,7 @@ def generate_heatpump_offer_pdf(
 ```
 
 #### `economics_data` (erforderlich)
+
 ```python
 {
     'total_investment': 15300,     # Nach Förderung
@@ -191,6 +207,7 @@ def generate_heatpump_offer_pdf(
 ```
 
 #### `company_info` (erforderlich)
+
 ```python
 {
     'name': 'Muster Solar GmbH',
@@ -202,6 +219,7 @@ def generate_heatpump_offer_pdf(
 ```
 
 #### `radiator_data` (optional)
+
 ```python
 {
     'required_flow_temp': 55.0,    # °C
@@ -215,6 +233,7 @@ def generate_heatpump_offer_pdf(
 ```
 
 #### `integration_data` (optional)
+
 ```python
 {
     'pv_coverage_hp': 0.64,        # 64% PV-Deckung
@@ -223,6 +242,7 @@ def generate_heatpump_offer_pdf(
 ```
 
 #### `customer_data` (optional)
+
 ```python
 {
     'name': 'Max Mustermann',
@@ -236,6 +256,7 @@ def generate_heatpump_offer_pdf(
 ## 🔗 UI-Integration
 
 ### Änderungen in `heatpump_ui.py`
+
 **Zeilen**: 1720-1765 (ersetzt alte generate_offer_pdf-Logik)
 
 **Vorher**: Komplexe Fallback-Logik mit PV-Dummy-Daten  
@@ -256,6 +277,7 @@ pdf_bytes = generate_heatpump_offer_pdf(
 ```
 
 ### Download-Button
+
 ```python
 filename = f"Waermepumpe_Angebot_{datetime.now().strftime('%Y%m%d')}.pdf"
 st.download_button(
@@ -271,6 +293,7 @@ st.download_button(
 ## 📊 Code-Statistik
 
 ### Neue/Geänderte Dateien
+
 | Datei | Zeilen hinzugefügt | Zeilen geändert | Neue Funktionen |
 |-------|-------------------|-----------------|-----------------|
 | pdf_generator.py | +445 | 0 | 1 (generate_heatpump_offer_pdf) |
@@ -278,6 +301,7 @@ st.download_button(
 | **GESAMT** | **+490** | **-60** | **1** |
 
 ### PDF-Seitenstruktur
+
 - **Seiten**: 6 (kompakt, professionell)
 - **Tabellen**: 5 (Gebäude, Radiator, WP-Daten, Investition, Betriebskosten, Zusammenfassung)
 - **Paragraphen**: ~30 (Text-Blöcke)
@@ -289,7 +313,9 @@ st.download_button(
 ## 🧪 Getestete Szenarien
 
 ### 1. Vollständiges Angebot (alle Daten)
+
 **Input**:
+
 - Gebäude: 150m², 10,5 kW Heizlast
 - Radiator: 55°C, Optimal
 - WP: Vaillant aroTHERM, JAZ 4,5, 18.000€
@@ -300,17 +326,21 @@ st.download_button(
 **Dateigröße**: ~50 KB
 
 ### 2. Ohne Radiator-Daten
+
 **Input**: Alle Daten außer `radiator_data=None`  
 **Output**: Seite 2 ohne Radiator-Abschnitt, sonst vollständig  
 **Dateigröße**: ~45 KB
 
 ### 3. Ohne PV-Integration
+
 **Input**: Alle Daten außer `integration_data=None`  
 **Output**: Seite 5 ohne PV-Abschnitt, sonst vollständig  
 **Dateigröße**: ~48 KB
 
 ### 4. Minimal (nur Pflichtdaten)
+
 **Input**:
+
 - `building_data`, `heatpump_data`, `economics_data`, `company_info`
 - Alle optionalen Daten = None
 
@@ -322,6 +352,7 @@ st.download_button(
 ## ⚡ Performance
 
 ### Messungen (Testumgebung: Intel i7, 16GB RAM)
+
 | Operation | Dauer | Status |
 |-----------|-------|--------|
 | PDF-Generierung (vollständig) | ~180ms | ✅ Exzellent |
@@ -331,6 +362,7 @@ st.download_button(
 | Gesamt-Workflow (UI → PDF) | <500ms | ✅ Ziel erreicht |
 
 ### Dateigrößen
+
 - **Ohne Logo**: ~40 KB
 - **Mit Logo (100 KB)**: ~80 KB
 - **Mit Logo (500 KB)**: ~200 KB
@@ -342,6 +374,7 @@ st.download_button(
 ## ✅ Qualitätssicherung
 
 ### Code-Qualität
+
 - ✅ **Linting**: 0 Fehler (Pylance)
 - ✅ **Type Hints**: Vollständig annotiert
 - ✅ **Docstring**: Mit Parameterbeschreibung + Beispiel
@@ -349,6 +382,7 @@ st.download_button(
 - ✅ **Fallback**: Funktioniert ohne optionale Daten
 
 ### PDF-Qualität
+
 - ✅ **A4-Format**: Exakt 210 × 297 mm
 - ✅ **Ränder**: Gleichmäßig, druckfreundlich
 - ✅ **Schriftarten**: Standard-Fonts (Helvetica)
@@ -357,6 +391,7 @@ st.download_button(
 - ✅ **Seitenumbrüche**: Logisch platziert
 
 ### Validierung
+
 - ✅ **PDF/A-1b-kompatibel**: Ja (mit ReportLab)
 - ✅ **Druckbar**: Getestet mit Adobe Reader
 - ✅ **Mobil-lesbar**: Funktioniert auf Tablets
@@ -367,6 +402,7 @@ st.download_button(
 ## 🔮 Zukünftige Erweiterungen (Optional)
 
 ### TODO 3.1: Charts als PNG einbetten
+
 ```python
 import plotly.io as pio
 
@@ -379,6 +415,7 @@ story.append(chart_img)
 ```
 
 **Vorteile**:
+
 - Visuelle Aufwertung (20-Jahres-Vergleich)
 - Sankey-Diagramm im PDF
 - CO2-Balkendiagramm
@@ -386,6 +423,7 @@ story.append(chart_img)
 **Aufwand**: ~2-3 Stunden (Chart-Export + Layout)
 
 ### TODO 3.2: Multi-Page-Tabellen
+
 ```python
 from reportlab.platypus import LongTable
 
@@ -397,6 +435,7 @@ long_table.setStyle(...)  # Automatischer Seitenumbruch
 **Vorteil**: Übersicht über alle Komponenten (WP + Zubehör)
 
 ### TODO 3.3: QR-Code mit Angebots-Link
+
 ```python
 import qrcode
 
@@ -411,6 +450,7 @@ qr_img = Image(qr, width=3*cm, height=3*cm)
 ## 📚 Verwendete ReportLab-Features
 
 ### Platypus (Page Layout and Typography Using Scripts)
+
 ```python
 SimpleDocTemplate  # Dokument-Container
 Paragraph          # Text mit Formatierung
@@ -422,12 +462,14 @@ Image              # Logo-Einbettung
 ```
 
 ### Styles
+
 ```python
 ParagraphStyle     # Custom-Styles definieren
 getSampleStyleSheet()  # Basis-Styles
 ```
 
 ### Farben
+
 ```python
 HexColor('#2E7D32')  # Custom-Farben
 colors.white         # Vordefinierte Farben
@@ -435,6 +477,7 @@ colors.grey
 ```
 
 ### Einheiten
+
 ```python
 cm  # Zentimeter (1 cm = 28.35 points)
 mm  # Millimeter
@@ -445,12 +488,14 @@ mm  # Millimeter
 ## 🎓 Lessons Learned
 
 ### Was gut funktioniert
+
 1. **ReportLab Platypus**: Flexible Story-basierte Generierung
 2. **TableStyle**: Mächtige Formatierungs-Optionen
 3. **Optional-Parameters**: Ermöglichen flexible PDFs
 4. **Base64-Logo**: Keine Dateisystem-Abhängigkeit
 
 ### Herausforderungen gemeistert
+
 1. **Tabellen-Alignment**: Rechts/Links pro Spalte
 2. **Seitenumbrüche**: PageBreak() statt manueller Berechnung
 3. **Farbcodierung**: HexColor() für Custom-Farben
