@@ -65,7 +65,8 @@ def create_complete_box(x_min, x_max, y_min, y_max, z_min, z_max, color="#d4d4d4
         showlegend=False,
         flatshading=False,
         lighting=dict(ambient=0.7, diffuse=0.9, specular=0.5, roughness=0.3, fresnel=0.2),
-        lightposition=dict(x=1000, y=1000, z=2000)
+        lightposition=dict(x=1000, y=1000, z=2000),
+        contour=dict(show=True, color='black', width=2)
     )
 
 
@@ -104,7 +105,8 @@ def create_gabled_roof_complete(length, width, height, base_z, color="#c96a2d", 
         showlegend=False,
         flatshading=False,
         lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
-        lightposition=dict(x=1000, y=1000, z=2000)
+        lightposition=dict(x=1000, y=1000, z=2000),
+        contour=dict(show=True, color='black', width=2)
     )
 
 
@@ -144,7 +146,8 @@ def create_hipped_roof(length, width, height, base_z, color="#c96a2d", name="Roo
         showlegend=False,
         flatshading=False,
         lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
-        lightposition=dict(x=1000, y=1000, z=2000)
+        lightposition=dict(x=1000, y=1000, z=2000),
+        contour=dict(show=True, color='black', width=2)
     )
 
 
@@ -188,7 +191,8 @@ def create_half_hipped_roof(length, width, height, base_z, color="#c96a2d", name
         showlegend=False,
         flatshading=False,
         lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
-        lightposition=dict(x=1000, y=1000, z=2000)
+        lightposition=dict(x=1000, y=1000, z=2000),
+        contour=dict(show=True, color='black', width=2)
     )
 
 
@@ -226,7 +230,8 @@ def create_pent_roof(length, width, height, base_z, color="#c96a2d", name="Roof"
         showlegend=False,
         flatshading=False,
         lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
-        lightposition=dict(x=1000, y=1000, z=2000)
+        lightposition=dict(x=1000, y=1000, z=2000),
+        contour=dict(show=True, color='black', width=2)
     )
 
 
@@ -260,13 +265,152 @@ def create_pyramid_roof(length, width, height, base_z, color="#c96a2d", name="Ro
         showlegend=False,
         flatshading=False,
         lighting=dict(ambient=0.7, diffuse=0.9, specular=0.6, roughness=0.2, fresnel=0.3),
-        lightposition=dict(x=1000, y=1000, z=2000)
+        lightposition=dict(x=1000, y=1000, z=2000),
+        contour=dict(show=True, color='black', width=2)
     )
+
+
+def create_gabled_roof_with_dormer(length, width, height, base_z, 
+                                   dormer_width=2.0, dormer_height=0.5, dormer_depth=1.0,
+                                   dormer_position=0.0, color="#c96a2d", name="Roof"):
+    """
+    Erstellt ein VOLLSTÄNDIG GESCHLOSSENES Satteldach mit DREIECK-GAUBE!
+    
+    Gaube = Dreieckiger Giebel (wie vom Satteldach) wird FLACH auf Dachfläche gelegt.
+    Die Ecken wo das Dreieck durchs Dach stößt werden abgeschnitten.
+    Das ist eine klassische Giebelgaube / Spitzgaube.
+    """
+    half_l = length / 2
+    half_w = width / 2
+    
+    # === HAUPTDACH: KOMPLETT GESCHLOSSEN ===
+    main_roof = create_gabled_roof_complete(
+        length=length,
+        width=width,
+        height=height,
+        base_z=base_z,
+        color=color,
+        name=name
+    )
+    
+    # === DREIECK-GAUBE ===
+    dormer_x = dormer_position  # Position entlang Hauptfirst
+    dormer_half_w = dormer_width / 2
+    
+    # Position auf vorderer Dachfläche (näher am First = weiter oben)
+    dormer_y_on_roof = -width / 6  # War 1/3, jetzt 1/6 = näher am First!
+    # Z auf Dachschräge: z = base_z + height * (1 - abs(y) / (width/2))
+    dormer_z_base = base_z + height * (1 - abs(dormer_y_on_roof) / (width/2))
+    
+    # Gaube ragt nach vorne raus (aus dem Dach)
+    dormer_front_y = dormer_y_on_roof - dormer_depth
+    dormer_front_z = base_z + height * (1 - abs(dormer_front_y) / (width/2))
+    
+    # Dreiecksspitze (Giebelspitze) - jetzt flacher!
+    dormer_peak_z = dormer_z_base + dormer_height
+    
+    # === GAUBE VERTICES (Dreieck auf Dachfläche) ===
+    dormer_vertices = np.array([
+        # BODEN: Rechteck auf Hauptdach (wo Gaube aufsitzt)
+        [dormer_x - dormer_half_w, dormer_y_on_roof, dormer_z_base],      # 0: hinten links
+        [dormer_x + dormer_half_w, dormer_y_on_roof, dormer_z_base],      # 1: hinten rechts
+        [dormer_x + dormer_half_w, dormer_front_y, dormer_front_z],       # 2: vorne rechts
+        [dormer_x - dormer_half_w, dormer_front_y, dormer_front_z],       # 3: vorne links
+        
+        # DREIECKSSPITZE (in der Mitte oben)
+        [dormer_x, dormer_y_on_roof, dormer_peak_z],                       # 4: Spitze hinten
+        [dormer_x, dormer_front_y, dormer_peak_z],                         # 5: Spitze vorne
+    ])
+    
+    # === GAUBE DREIECKE ===
+    i_dormer = []
+    j_dormer = []
+    k_dormer = []
+    
+    # BODEN (Rechteck auf Dachfläche) - 2 Dreiecke
+    i_dormer.extend([0, 2])
+    j_dormer.extend([1, 3])
+    k_dormer.extend([2, 0])
+    
+    # VORDERE GIEBEL-DREIECK (das charakteristische Dreieck!)
+    i_dormer.extend([3])
+    j_dormer.extend([2])
+    k_dormer.extend([5])
+    
+    # HINTERE GIEBEL-DREIECK
+    i_dormer.extend([0])
+    j_dormer.extend([4])
+    k_dormer.extend([1])
+    
+    # LINKE DACHFLÄCHE (von unten links zur Spitze)
+    i_dormer.extend([0, 3])
+    j_dormer.extend([3, 5])
+    k_dormer.extend([4, 4])
+    
+    # RECHTE DACHFLÄCHE (von unten rechts zur Spitze)
+    i_dormer.extend([1, 2])
+    j_dormer.extend([4, 5])
+    k_dormer.extend([2, 5])
+    
+    # === GAUBE MESH ===
+    dormer_mesh = go.Mesh3d(
+        x=dormer_vertices[:, 0],
+        y=dormer_vertices[:, 1],
+        z=dormer_vertices[:, 2],
+        i=i_dormer, j=j_dormer, k=k_dormer,
+        color=color,  # Gleiche Farbe wie Hauptdach
+        opacity=1.0,
+        name="Dreieck-Gaube",
+        showlegend=False,
+        flatshading=False,
+        lighting=dict(ambient=0.7, diffuse=0.9, specular=0.5, roughness=0.3, fresnel=0.2),
+        lightposition=dict(x=1000, y=1000, z=2000),
+        contour=dict(show=True, color='black', width=1)
+    )
+    
+    # === FENSTER IM VORDEREN GIEBEL ===
+    # Fenster als Dreieck im Giebel (oben schmaler)
+    window_margin_side = 0.4
+    window_margin_bottom = 0.3
+    window_height_factor = 0.6  # Fenster geht 60% hoch
+    
+    window_vertices = np.array([
+        # Unten links
+        [dormer_x - dormer_half_w + window_margin_side, dormer_front_y - 0.01, 
+         dormer_front_z + window_margin_bottom],
+        # Unten rechts
+        [dormer_x + dormer_half_w - window_margin_side, dormer_front_y - 0.01, 
+         dormer_front_z + window_margin_bottom],
+        # Oben (Spitze, etwas unter der Giebelspitze)
+        [dormer_x, dormer_front_y - 0.01, 
+         dormer_front_z + window_margin_bottom + dormer_height * window_height_factor],
+    ])
+    
+    window_mesh = go.Mesh3d(
+        x=window_vertices[:, 0],
+        y=window_vertices[:, 1],
+        z=window_vertices[:, 2],
+        i=[0],
+        j=[1],
+        k=[2],
+        color="#2E4057",  # Dunkelblau (Fenster)
+        opacity=1.0,
+        name="Fenster",
+        showlegend=False,
+        flatshading=True,
+        lighting=dict(ambient=0.8, diffuse=0.5, specular=0.9, roughness=0.1, fresnel=0.5),
+        lightposition=dict(x=1000, y=1000, z=2000),
+        contour=dict(show=True, color='black', width=1)
+    )
+    
+    # Rückgabe: Hauptdach + Gaube + Fenster
+    return [main_roof, dormer_mesh, window_mesh]
 
 
 def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False):
     """
     Erstellt ein detailliertes PV-Modul mit Dicke und korrekter Rotation.
+    Gibt Tuple zurück: (mesh, vertices) für Kanten-Rendering.
     """
     # Lokale Koordinaten (Modul zentriert im Ursprung)
     hw = PV_W / 2
@@ -317,7 +461,7 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     
     module_color = "#ff6b35" if selected else color
     
-    return go.Mesh3d(
+    mesh = go.Mesh3d(
         x=final_vertices[:, 0],
         y=final_vertices[:, 1],
         z=final_vertices[:, 2],
@@ -327,8 +471,11 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         name="PV Module",
         showlegend=False,
         lighting=dict(ambient=0.5, diffuse=0.9, specular=0.5, roughness=0.2),
-        lightposition=dict(x=100, y=100, z=100)
+        lightposition=dict(x=100, y=100, z=100),
+        contour=dict(show=True, color='black', width=1)
     )
+    
+    return mesh, final_vertices
 
 
 def create_sun_marker(azimuth_deg, elevation_deg, distance=20.0):
@@ -353,6 +500,253 @@ def create_sun_marker(azimuth_deg, elevation_deg, distance=20.0):
         name='☀️ Sonne',
         showlegend=True,
         hovertemplate=f'Sonne<br>Azimuth: {azimuth_deg:.1f}°<br>Elevation: {elevation_deg:.1f}°<extra></extra>'
+    )
+
+
+# ============================================================================
+# KANTEN-LINIEN FÜR 3D-MESHES
+# ============================================================================
+
+def create_box_edges(x_min, x_max, y_min, y_max, z_min, z_max, color='black', line_width=2):
+    """Erstellt schwarze Kanten-Linien für eine Box."""
+    # 8 Ecken der Box
+    corners = np.array([
+        [x_min, y_min, z_min],  # 0
+        [x_max, y_min, z_min],  # 1
+        [x_max, y_max, z_min],  # 2
+        [x_min, y_max, z_min],  # 3
+        [x_min, y_min, z_max],  # 4
+        [x_max, y_min, z_max],  # 5
+        [x_max, y_max, z_max],  # 6
+        [x_min, y_max, z_max],  # 7
+    ])
+    
+    # 12 Kanten einer Box (jede Kante einmal)
+    edges = [
+        (0, 1), (1, 2), (2, 3), (3, 0),  # Untere Fläche
+        (4, 5), (5, 6), (6, 7), (7, 4),  # Obere Fläche
+        (0, 4), (1, 5), (2, 6), (3, 7)   # Vertikale Kanten
+    ]
+    
+    x_lines, y_lines, z_lines = [], [], []
+    for start, end in edges:
+        x_lines.extend([corners[start][0], corners[end][0], None])
+        y_lines.extend([corners[start][1], corners[end][1], None])
+        z_lines.extend([corners[start][2], corners[end][2], None])
+    
+    return go.Scatter3d(
+        x=x_lines, y=y_lines, z=z_lines,
+        mode='lines',
+        line=dict(color=color, width=line_width),
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def create_gabled_roof_edges(length, width, height, base_z, color='black', line_width=2):
+    """Erstellt schwarze Kanten-Linien für ein Satteldach."""
+    half_l = length / 2
+    half_w = width / 2
+    
+    # 6 Punkte des Satteldachs
+    points = np.array([
+        [-half_l, -half_w, base_z],        # 0
+        [half_l, -half_w, base_z],         # 1
+        [half_l, half_w, base_z],          # 2
+        [-half_l, half_w, base_z],         # 3
+        [-half_l, 0, base_z + height],     # 4
+        [half_l, 0, base_z + height],      # 5
+    ])
+    
+    # Kanten: Grundfläche + First + Dachkanten
+    edges = [
+        (0, 1), (1, 2), (2, 3), (3, 0),  # Basis-Rechteck
+        (4, 5),                           # First
+        (0, 4), (1, 5), (2, 5), (3, 4)   # Dachkanten zu First
+    ]
+    
+    x_lines, y_lines, z_lines = [], [], []
+    for start, end in edges:
+        x_lines.extend([points[start][0], points[end][0], None])
+        y_lines.extend([points[start][1], points[end][1], None])
+        z_lines.extend([points[start][2], points[end][2], None])
+    
+    return go.Scatter3d(
+        x=x_lines, y=y_lines, z=z_lines,
+        mode='lines',
+        line=dict(color=color, width=line_width),
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def create_hipped_roof_edges(length, width, height, base_z, color='black', line_width=2):
+    """Erstellt schwarze Kanten-Linien für ein Walmdach."""
+    half_l = length / 2
+    half_w = width / 2
+    first_length = length * 0.4
+    
+    points = np.array([
+        [-half_l, -half_w, base_z],              # 0
+        [half_l, -half_w, base_z],               # 1
+        [half_l, half_w, base_z],                # 2
+        [-half_l, half_w, base_z],               # 3
+        [-first_length/2, 0, base_z + height],   # 4
+        [first_length/2, 0, base_z + height],    # 5
+    ])
+    
+    edges = [
+        (0, 1), (1, 2), (2, 3), (3, 0),  # Basis
+        (4, 5),                           # First
+        (0, 4), (1, 5), (2, 5), (3, 4)   # Dachkanten
+    ]
+    
+    x_lines, y_lines, z_lines = [], [], []
+    for start, end in edges:
+        x_lines.extend([points[start][0], points[end][0], None])
+        y_lines.extend([points[start][1], points[end][1], None])
+        z_lines.extend([points[start][2], points[end][2], None])
+    
+    return go.Scatter3d(
+        x=x_lines, y=y_lines, z=z_lines,
+        mode='lines',
+        line=dict(color=color, width=line_width),
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def create_half_hipped_roof_edges(length, width, height, base_z, color='black', line_width=2):
+    """Erstellt schwarze Kanten-Linien für ein Krüppelwalmdach."""
+    half_l = length / 2
+    half_w = width / 2
+    first_offset = length * 0.15
+    hip_height = height * 0.6
+    
+    points = np.array([
+        [-half_l, -half_w, base_z],                    # 0
+        [half_l, -half_w, base_z],                     # 1
+        [half_l, half_w, base_z],                      # 2
+        [-half_l, half_w, base_z],                     # 3
+        [-half_l + first_offset, 0, base_z + height],  # 4
+        [half_l - first_offset, 0, base_z + height],   # 5
+        [-half_l, 0, base_z + hip_height],             # 6
+        [half_l, 0, base_z + hip_height],              # 7
+    ])
+    
+    edges = [
+        (0, 1), (1, 2), (2, 3), (3, 0),  # Basis
+        (4, 5),                           # First
+        (0, 6), (3, 6), (6, 4),          # Linker Walm
+        (1, 7), (2, 7), (7, 5),          # Rechter Walm
+        (0, 4), (3, 4), (1, 5), (2, 5)   # Hauptdachkanten
+    ]
+    
+    x_lines, y_lines, z_lines = [], [], []
+    for start, end in edges:
+        x_lines.extend([points[start][0], points[end][0], None])
+        y_lines.extend([points[start][1], points[end][1], None])
+        z_lines.extend([points[start][2], points[end][2], None])
+    
+    return go.Scatter3d(
+        x=x_lines, y=y_lines, z=z_lines,
+        mode='lines',
+        line=dict(color=color, width=line_width),
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def create_pent_roof_edges(length, width, height, base_z, color='black', line_width=2):
+    """Erstellt schwarze Kanten-Linien für ein Pultdach."""
+    half_l = length / 2
+    half_w = width / 2
+    
+    points = np.array([
+        [-half_l, -half_w, base_z],              # 0
+        [half_l, -half_w, base_z],               # 1
+        [half_l, half_w, base_z],                # 2
+        [-half_l, half_w, base_z],               # 3
+        [-half_l, -half_w, base_z + height],     # 4
+        [half_l, -half_w, base_z + height],      # 5
+    ])
+    
+    edges = [
+        (0, 1), (1, 2), (2, 3), (3, 0),  # Basis
+        (4, 5),                           # Obere vordere Kante
+        (0, 4), (1, 5),                  # Vertikale vordere Kanten
+        (4, 3), (5, 2)                   # Schräge Dachkanten
+    ]
+    
+    x_lines, y_lines, z_lines = [], [], []
+    for start, end in edges:
+        x_lines.extend([points[start][0], points[end][0], None])
+        y_lines.extend([points[start][1], points[end][1], None])
+        z_lines.extend([points[start][2], points[end][2], None])
+    
+    return go.Scatter3d(
+        x=x_lines, y=y_lines, z=z_lines,
+        mode='lines',
+        line=dict(color=color, width=line_width),
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def create_pyramid_roof_edges(length, width, height, base_z, color='black', line_width=2):
+    """Erstellt schwarze Kanten-Linien für ein Zeltdach."""
+    half_l = length / 2
+    half_w = width / 2
+    
+    points = np.array([
+        [-half_l, -half_w, base_z],        # 0
+        [half_l, -half_w, base_z],         # 1
+        [half_l, half_w, base_z],          # 2
+        [-half_l, half_w, base_z],         # 3
+        [0, 0, base_z + height],           # 4: Spitze
+    ])
+    
+    edges = [
+        (0, 1), (1, 2), (2, 3), (3, 0),  # Basis
+        (0, 4), (1, 4), (2, 4), (3, 4)   # Kanten zur Spitze
+    ]
+    
+    x_lines, y_lines, z_lines = [], [], []
+    for start, end in edges:
+        x_lines.extend([points[start][0], points[end][0], None])
+        y_lines.extend([points[start][1], points[end][1], None])
+        z_lines.extend([points[start][2], points[end][2], None])
+    
+    return go.Scatter3d(
+        x=x_lines, y=y_lines, z=z_lines,
+        mode='lines',
+        line=dict(color=color, width=line_width),
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def create_pv_module_edges(vertices, color='black', line_width=1):
+    """Erstellt schwarze Kanten-Linien für ein PV-Modul (Quader mit 8 Vertices)."""
+    # 12 Kanten eines Quaders
+    edges = [
+        (0, 1), (1, 2), (2, 3), (3, 0),  # Untere Fläche
+        (4, 5), (5, 6), (6, 7), (7, 4),  # Obere Fläche
+        (0, 4), (1, 5), (2, 6), (3, 7)   # Vertikale Kanten
+    ]
+    
+    x_lines, y_lines, z_lines = [], [], []
+    for start, end in edges:
+        x_lines.extend([vertices[start][0], vertices[end][0], None])
+        y_lines.extend([vertices[start][1], vertices[end][1], None])
+        z_lines.extend([vertices[start][2], vertices[end][2], None])
+    
+    return go.Scatter3d(
+        x=x_lines, y=y_lines, z=z_lines,
+        mode='lines',
+        line=dict(color=color, width=line_width),
+        showlegend=False,
+        hoverinfo='skip'
     )
 
 
@@ -431,6 +825,19 @@ def build_plotly_scene(
     )
     fig.add_trace(building)
     
+    # GEBÄUDE-KANTEN hinzufügen
+    building_edges = create_box_edges(
+        x_min=-dims.length_m/2,
+        x_max=dims.length_m/2,
+        y_min=-dims.width_m/2,
+        y_max=dims.width_m/2,
+        z_min=0,
+        z_max=dims.wall_height_m,
+        color='black',
+        line_width=2
+    )
+    fig.add_trace(building_edges)
+    
     # ========== 2. DACH (vollständig) ==========
     # Hole Dachfarbe aus project_data
     roof_covering = project_data.get("roof_covering", "Ziegel")
@@ -454,6 +861,18 @@ def build_plotly_scene(
             name="Dach (Flachdach)"
         )
         fig.add_trace(roof)
+        # Flachdach-Kanten
+        roof_edges = create_box_edges(
+            x_min=-dims.length_m/2,
+            x_max=dims.length_m/2,
+            y_min=-dims.width_m/2,
+            y_max=dims.width_m/2,
+            z_min=roof_z,
+            z_max=roof_z + 0.2,
+            color='black',
+            line_width=2
+        )
+        fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.25
         default_tilt = 15.0
         
@@ -468,6 +887,47 @@ def build_plotly_scene(
             name="Dach (Satteldach)"
         )
         fig.add_trace(roof)
+        # Satteldach-Kanten
+        roof_edges = create_gabled_roof_edges(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color='black',
+            line_width=2
+        )
+        fig.add_trace(roof_edges)
+        module_base_z = roof_z + 0.15
+        default_tilt = roof_inclination
+        
+    elif roof_type == "Satteldach mit Gaube":
+        roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
+        # Erstelle Satteldach mit Gaube (gibt Liste von Meshes zurück)
+        roof_meshes = create_gabled_roof_with_dormer(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            dormer_width=2.0,
+            dormer_height=1.5,
+            dormer_depth=1.5,
+            dormer_position=0.0,
+            color=roof_color,
+            name="Dach (Satteldach mit Gaube)"
+        )
+        # Füge alle Meshes hinzu
+        for mesh in roof_meshes:
+            fig.add_trace(mesh)
+        # Satteldach-Kanten (Basis)
+        roof_edges = create_gabled_roof_edges(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color='black',
+            line_width=2
+        )
+        fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
         default_tilt = roof_inclination
         
@@ -482,6 +942,16 @@ def build_plotly_scene(
             name="Dach (Walmdach)"
         )
         fig.add_trace(roof)
+        # Walmdach-Kanten
+        roof_edges = create_hipped_roof_edges(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color='black',
+            line_width=2
+        )
+        fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
         default_tilt = roof_inclination
         
@@ -496,6 +966,16 @@ def build_plotly_scene(
             name="Dach (Krüppelwalmdach)"
         )
         fig.add_trace(roof)
+        # Krüppelwalmdach-Kanten
+        roof_edges = create_half_hipped_roof_edges(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color='black',
+            line_width=2
+        )
+        fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
         default_tilt = roof_inclination
         
@@ -510,6 +990,16 @@ def build_plotly_scene(
             name="Dach (Pultdach)"
         )
         fig.add_trace(roof)
+        # Pultdach-Kanten
+        roof_edges = create_pent_roof_edges(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color='black',
+            line_width=2
+        )
+        fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
         default_tilt = roof_inclination
         
@@ -524,6 +1014,16 @@ def build_plotly_scene(
             name="Dach (Zeltdach)"
         )
         fig.add_trace(roof)
+        # Zeltdach-Kanten
+        roof_edges = create_pyramid_roof_edges(
+            length=dims.length_m,
+            width=dims.width_m,
+            height=roof_height,
+            base_z=roof_z,
+            color='black',
+            line_width=2
+        )
+        fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
         default_tilt = roof_inclination
         
@@ -540,41 +1040,127 @@ def build_plotly_scene(
             name="Dach (Sonstiges)"
         )
         fig.add_trace(roof)
+        # Fallback-Dach-Kanten
+        roof_edges = create_box_edges(
+            x_min=-dims.length_m/2,
+            x_max=dims.length_m/2,
+            y_min=-dims.width_m/2,
+            y_max=dims.width_m/2,
+            z_min=roof_z,
+            z_max=roof_z + 0.2,
+            color='black',
+            line_width=2
+        )
+        fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.25
         default_tilt = 15.0
     
     # ========== 3. PV-MODULE ==========
-    positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
-    
-    for i, (x, y) in enumerate(positions):
-        if i >= module_quantity:
-            break
-        
-        # Standard-Werte
-        azimuth = 0.0  # Süd
-        tilt = default_tilt
-        z = module_base_z
-        
-        # Transformationen anwenden wenn AdvancedLayoutConfig
-        if isinstance(layout_config, AdvancedLayoutConfig):
-            if i in layout_config.module_transforms:
-                transform = layout_config.module_transforms[i]
-                azimuth = transform.azimuth_deg
-                tilt = transform.tilt_deg
-                x += transform.offset_x
-                y += transform.offset_y
-                z += transform.offset_z
-        
-        # Modul erstellen
-        is_selected = i in selected_modules
-        module = create_pv_module_3d(
-            x, y, z,
-            azimuth_deg=azimuth,
-            tilt_deg=tilt,
-            color="#1a1a2e",
-            selected=is_selected
-        )
-        fig.add_trace(module)
+    # NEUE LOGIK: Prüfe ob ModulePlacementManager Module hat
+    try:
+        import streamlit as st
+        if hasattr(st, 'session_state') and 'pv_placement_manager' in st.session_state:
+            manager = st.session_state.pv_placement_manager
+            
+            # Rendere Module aus ModulePlacementManager
+            if len(manager.modules) > 0:
+                from utils.pv_module_rendering_3d import render_all_modules
+                
+                module_traces = render_all_modules(
+                    manager=manager,
+                    show_edges=True,
+                    show_selection=True
+                )
+                
+                for trace in module_traces:
+                    fig.add_trace(trace)
+                
+                print(f"✓ {len(manager.modules)} Module aus PlacementManager gerendert!")
+            else:
+                # Fallback: Alte Grid-basierte Module wenn keine im Manager
+                positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
+                
+                for i, (x, y) in enumerate(positions):
+                    if i >= module_quantity:
+                        break
+                    
+                    # Standard-Werte
+                    azimuth = 0.0  # Süd
+                    tilt = default_tilt
+                    z = module_base_z
+                    
+                    # Transformationen anwenden wenn AdvancedLayoutConfig
+                    if isinstance(layout_config, AdvancedLayoutConfig):
+                        if i in layout_config.module_transforms:
+                            transform = layout_config.module_transforms[i]
+                            azimuth = transform.azimuth_deg
+                            tilt = transform.tilt_deg
+                            x += transform.offset_x
+                            y += transform.offset_y
+                            z += transform.offset_z
+                    
+                    # Modul erstellen
+                    is_selected = i in selected_modules
+                    module, module_vertices = create_pv_module_3d(
+                        x, y, z,
+                        azimuth_deg=azimuth,
+                        tilt_deg=tilt,
+                        color="#1a1a2e",
+                        selected=is_selected
+                    )
+                    fig.add_trace(module)
+                    
+                    # Modul-Kanten hinzufügen
+                    module_edges = create_pv_module_edges(
+                        vertices=module_vertices,
+                        color='black',
+                        line_width=1
+                    )
+                    fig.add_trace(module_edges)
+        else:
+            # Kein Streamlit Session State - Fallback zu Grid
+            positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
+            
+            for i, (x, y) in enumerate(positions):
+                if i >= module_quantity:
+                    break
+                
+                # Standard-Werte
+                azimuth = 0.0  # Süd
+                tilt = default_tilt
+                z = module_base_z
+                
+                # Transformationen anwenden wenn AdvancedLayoutConfig
+                if isinstance(layout_config, AdvancedLayoutConfig):
+                    if i in layout_config.module_transforms:
+                        transform = layout_config.module_transforms[i]
+                        azimuth = transform.azimuth_deg
+                        tilt = transform.tilt_deg
+                        x += transform.offset_x
+                        y += transform.offset_y
+                        z += transform.offset_z
+                
+                # Modul erstellen
+                is_selected = i in selected_modules
+                module, module_vertices = create_pv_module_3d(
+                    x, y, z,
+                    azimuth_deg=azimuth,
+                    tilt_deg=tilt,
+                    color="#1a1a2e",
+                    selected=is_selected
+                )
+                fig.add_trace(module)
+                
+                # Modul-Kanten hinzufügen
+                module_edges = create_pv_module_edges(
+                    vertices=module_vertices,
+                    color='black',
+                    line_width=1
+                )
+                fig.add_trace(module_edges)
+    except Exception as e:
+        # Fallback bei Fehler - zeige keine Module
+        print(f"Fehler beim Rendern von Modulen: {e}")
     
     # ========== 4. SONNE (optional) ==========
     if isinstance(layout_config, AdvancedLayoutConfig) and layout_config.enable_shading_analysis:

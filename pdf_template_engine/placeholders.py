@@ -6442,4 +6442,24 @@ def build_dynamic_data(
         formatter=_format_amort_value,
     )
 
+    # ═══════════════════════════════════════════════════════════════════════
+    # 3D-VISUALISIERUNGS-SCREENSHOT INTEGRATION
+    # ═══════════════════════════════════════════════════════════════════════
+    # Versuche 3D-Screenshot zu generieren und als Base64 zu speichern
+    try:
+        # Prüfe ob 3D-Modul verfügbar ist
+        pv_3d_screenshot_b64 = project_data.get("pv_3d_screenshot_b64")
+        
+        if not pv_3d_screenshot_b64:
+            # Falls noch nicht vorhanden, versuche zu generieren
+            # (wird normalerweise in solar_3d_view_module.py generiert)
+            print("DEBUG: Kein 3D-Screenshot in project_data, verwende Platzhalter")
+            # Optional: Hier könnte man render_plotly_image_bytes() aufrufen
+            # Aber besser: Screenshot wird VOR PDF-Generierung erstellt
+        else:
+            result["pv_3d_screenshot_b64"] = pv_3d_screenshot_b64
+            print("DEBUG: 3D-Screenshot in dynamic_data gespeichert")
+    except Exception as e:
+        print(f"DEBUG: Fehler beim Laden des 3D-Screenshots: {e}")
+
     return result

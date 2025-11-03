@@ -26,11 +26,22 @@ try:
         _safe_get_roof_covering
     )
     # Neue Plotly-basierte 3D-Visualisierung
+    import importlib
+    import sys
+    
+    # Force reload wenn Modul bereits geladen
+    if 'utils.pv3d_plotly' in sys.modules:
+        importlib.reload(sys.modules['utils.pv3d_plotly'])
+    
     from utils.pv3d_plotly import build_plotly_scene
     import plotly.graph_objects as go
     PV3D_AVAILABLE = True
-except ImportError:
+except ImportError as e:
     PV3D_AVAILABLE = False
+    print(f"WARNUNG: 3D-Visualisierung nicht verfügbar: {e}")
+except Exception as e:
+    PV3D_AVAILABLE = False
+    print(f"FEHLER beim Laden der 3D-Visualisierung: {e}")
 
 
 # ============================================================================
@@ -80,10 +91,10 @@ def export_plotly_multi_view_screenshots(
     layout_config: Any,
     output_dir: str = ".",
     base_filename: str = "view",
-    resolution: Tuple[int, int] = (1600, 1000)
+    resolution: Tuple[int, int] = (1200, 750)  # ← Reduziert von 1600x1000
 ) -> Dict[str, bytes]:
     """
-    Erstellt Multi-View Screenshots mit Plotly (mit geschlossenen Dächern).
+    Erstellt Multi-View Screenshots mit Plotly (SCHNELL - Optimierte Auflösung).
     """
     try:
         import zipfile
@@ -94,7 +105,9 @@ def export_plotly_multi_view_screenshots(
         views = {}
         width, height = resolution
         
-        # Basis-Szene erstellen
+        print(f"Multi-View Export: Erstelle Basis-Szene...")
+        
+        # Basis-Szene EINMAL erstellen (nicht 4x!)
         fig = build_plotly_scene(
             project_data=project_data,
             dims=dims,
@@ -104,45 +117,32 @@ def export_plotly_multi_view_screenshots(
             selected_modules=[]
         )
         
-        # 4 verschiedene Kamera-Ansichten
+        # Setze Größe einmal für alle Views
+        fig.update_layout(width=width, height=height)
+        
+        print(f"Basis-Szene erstellt, rendere 4 Ansichten...")
+        
+        # 4 verschiedene Kamera-Ansichten (vereinfacht)
         camera_configs = {
-            "isometric": {
-                "eye": {"x": 0.7, "y": -0.7, "z": 0.5},
-                "center": {"x": 0, "y": 0, "z": 0},
-                "up": {"x": 0, "y": 0, "z": 1}
-            },
-            "top": {
-                "eye": {"x": 0, "y": 0, "z": 2.5},
-                "center": {"x": 0, "y": 0, "z": 0},
-                "up": {"x": 0, "y": 1, "z": 0}
-            },
-            "south": {
-                "eye": {"x": 0, "y": -2.0, "z": 0.3},
-                "center": {"x": 0, "y": 0, "z": 0},
-                "up": {"x": 0, "y": 0, "z": 1}
-            },
-            "east": {
-                "eye": {"x": 2.0, "y": 0, "z": 0.3},
-                "center": {"x": 0, "y": 0, "z": 0},
-                "up": {"x": 0, "y": 0, "z": 1}
-            }
+            "isometric": {"eye": {"x": 0.7, "y": -0.7, "z": 0.5}},
+            "top": {"eye": {"x": 0, "y": 0, "z": 2.5}},
+            "south": {"eye": {"x": 0, "y": -2.0, "z": 0.3}},
+            "east": {"eye": {"x": 2.0, "y": 0, "z": 0.3}}
         }
         
-        # Rendere jede Ansicht
+        # Rendere jede Ansicht (NUR Kamera ändern, Rest bleibt gleich)
         for view_name, camera_config in camera_configs.items():
             try:
-                # Kopiere Figure und setze Kamera
-                view_fig = go.Figure(fig)
-                view_fig.update_layout(
-                    width=width,
-                    height=height,
-                    scene_camera=camera_config,
-                    title=dict(text=f"3D Ansicht - {view_name.upper()}", font=dict(color='#FFFFFF'))
-                )
+                print(f"  Rendere {view_name}...")
                 
-                # Konvertiere zu PNG
-                png_bytes = view_fig.to_image(format="png")
+                # Ändere NUR die Kamera (keine Figure-Kopie!)
+                fig.update_layout(scene_camera=camera_config)
+                
+                # Konvertiere zu PNG mit REDUZIERTER Qualität für Speed
+                png_bytes = fig.to_image(format="png", scale=1.0)  # scale=1.0 (nicht 2.0!)
                 views[view_name] = png_bytes
+                
+                print(f"  ✓ {view_name} fertig ({len(png_bytes)} bytes)")
                 
             except Exception as e:
                 print(f"Fehler beim Rendern von {view_name}: {e}")
@@ -175,11 +175,11 @@ def export_plotly_360_animation(
     layout_config: Any,
     filepath: str = "animation_360.gif",
     frames: int = 36,
-    resolution: Tuple[int, int] = (800, 600),
+    resolution: Tuple[int, int] = (600, 450),  # ← Reduziert von 800x600
     duration_ms: int = 100
 ) -> bytes:
     """
-    Erstellt 360° Animation mit Plotly (mit geschlossenen Dächern).
+    Erstellt 360° Animation mit Plotly (SCHNELL - Optimierte Auflösung & Frames).
     """
     try:
         from PIL import Image
@@ -189,9 +189,9 @@ def export_plotly_360_animation(
         width, height = resolution
         images = []
         
-        print(f"Erstelle 360° Animation mit {frames} Frames (Plotly)...")
+        print(f"360° Animation: Erstelle Basis-Szene...")
         
-        # Erstelle Basis-Szene
+        # Erstelle Basis-Szene EINMAL
         fig = build_plotly_scene(
             project_data=project_data,
             dims=dims,
@@ -201,41 +201,42 @@ def export_plotly_360_animation(
             selected_modules=[]
         )
         
-        # Berechne Kamera-Parameter
-        camera_distance = 2.5  # Relative Distanz für Plotly
-        camera_height = 0.4  # Relative Höhe
+        # Setze Größe einmal
+        fig.update_layout(width=width, height=height)
         
-        # Rendere jeden Frame
+        # Kamera-Parameter
+        camera_distance = 2.5
+        camera_height = 0.4
+        
+        print(f"Basis-Szene erstellt, rendere {frames} Frames...")
+        
+        # Rendere jeden Frame (NUR Kamera ändern!)
         for i in range(frames):
             try:
                 # Berechne Rotationswinkel
                 angle_deg = (360.0 / frames) * i
                 angle_rad = math.radians(angle_deg)
                 
-                # Berechne Kamera-Position (kreist um Zentrum)
+                # Berechne Kamera-Position
                 camera_x = camera_distance * math.cos(angle_rad)
                 camera_y = camera_distance * math.sin(angle_rad)
                 camera_z = camera_height
                 
-                # Kopiere Figure und setze Kamera für diesen Frame
-                frame_fig = go.Figure(fig)
-                frame_fig.update_layout(
-                    width=width,
-                    height=height,
+                # Ändere NUR die Kamera (keine Figure-Kopie!)
+                fig.update_layout(
                     scene_camera=dict(
                         eye=dict(x=camera_x, y=camera_y, z=camera_z),
                         center=dict(x=0, y=0, z=0),
                         up=dict(x=0, y=0, z=1)
-                    ),
-                    title=dict(text=f"360° Animation - {angle_deg:.0f}°", font=dict(color='#FFFFFF'))
+                    )
                 )
                 
-                # Konvertiere zu PNG und dann zu PIL Image
-                png_bytes = frame_fig.to_image(format="png")
+                # Konvertiere zu PNG mit REDUZIERTER Qualität für Speed
+                png_bytes = fig.to_image(format="png", scale=1.0)  # scale=1.0!
                 img = Image.open(io.BytesIO(png_bytes))
                 images.append(img)
                 
-                # Fortschritt
+                # Fortschritt (jedes 6. Frame)
                 if (i + 1) % 6 == 0:
                     progress = ((i + 1) / frames) * 100
                     print(f"  Fortschritt: {progress:.0f}% ({i + 1}/{frames} Frames)")
@@ -245,14 +246,14 @@ def export_plotly_360_animation(
         
         # Erstelle GIF
         if images:
-            # Speichere als GIF
+            # Speichere als GIF (OHNE optimize für Speed)
             images[0].save(
                 filepath,
                 save_all=True,
                 append_images=images[1:],
                 duration=duration_ms,
                 loop=0,
-                optimize=False
+                optimize=False  # ← Spart viel Zeit!
             )
             
             # Lese GIF-Bytes
@@ -592,6 +593,7 @@ def _render_3d_view_impl():
         roof_types = [
             "Flachdach",
             "Satteldach",
+            "Satteldach mit Gaube",
             "Walmdach",
             "Krüppelwalmdach",
             "Pultdach",
@@ -2152,6 +2154,19 @@ def _render_3d_view_impl():
     # Linke Spalte: 3D-Viewer
     with col_viewer:
         with st.expander("🎨 3D-Ansicht", expanded=True):
+            # AUTO-UPDATE: Prüfe ob Module geändert wurden
+            if "trigger_3d_update" in st.session_state:
+                current_trigger = st.session_state.get("trigger_3d_update", 0)
+                last_trigger = st.session_state.get("_last_3d_trigger", -1)
+                
+                if current_trigger != last_trigger:
+                    # Module wurden geändert - erstelle Szene neu!
+                    st.session_state["_last_3d_trigger"] = current_trigger
+                    # Trigger die Szenen-Erstellung indem wir die scene_data aktualisieren
+                    if "_pv3d_scene_data" in st.session_state:
+                        # Trigger update by marking as needing refresh
+                        st.session_state["_pv3d_needs_refresh"] = True
+            
             # Prüfe ob Scene-Daten vorhanden sind
             scene_data = st.session_state.get("_pv3d_scene_data")
         
@@ -2188,8 +2203,43 @@ def _render_3d_view_impl():
                         selected_modules=scene_data.get("selected_modules", [])
                     )
                     
+                    # WICHTIG: Füge bereits platzierte Module zur Figure hinzu
+                    placement_manager = st.session_state.get("pv_placement_manager")
+                    if placement_manager and hasattr(placement_manager, 'modules') and len(placement_manager.modules) > 0:
+                        try:
+                            from utils.pv_module_rendering_3d import render_all_modules
+                            module_traces = render_all_modules(
+                                manager=placement_manager,
+                                show_edges=True,
+                                show_selection=False
+                            )
+                            for trace in module_traces:
+                                fig.add_trace(trace)
+                        except Exception as e_render:
+                            st.warning(f"⚠️ Fehler beim Rendern der Module: {e_render}")
+                    
                     # Zeige Plotly Figure in Streamlit
                     st.plotly_chart(fig, use_container_width=True)
+                    
+                    # ===================================================================
+                    # MODUL-PLATZIERUNG UI (NEU!)
+                    # ===================================================================
+                    try:
+                        from utils.pv_module_placement_ui import render_module_placement_ui
+                        
+                        render_module_placement_ui(
+                            fig=fig,
+                            dims=dims,
+                            roof_type=scene_data.get("roof_type", "Flachdach"),
+                            project_data=scene_data.get("project_data", {}),
+                            module_quantity=scene_data.get("module_quantity", 20)  # Modulanzahl aus scene_data
+                        )
+                    except ImportError as ie:
+                        st.warning(f"⚠️ Modul-Platzierung UI nicht verfügbar: {ie}")
+                    except Exception as e_placement:
+                        st.error(f"❌ Fehler bei Modul-Platzierung: {e_placement}")
+                        import traceback
+                        st.code(traceback.format_exc())
                     
                 except Exception as e:
                     st.error(f"❌ Fehler beim Anzeigen der 3D-Visualisierung: {e}")
@@ -2208,9 +2258,16 @@ def _render_3d_view_impl():
                 selected_roof_type
             )
             
-            # Hole Modulanzahl aus Scene-Daten
+            # Hole Modulanzahl aus Scene-Daten UND PlacementManager
             scene_data = st.session_state.get("_pv3d_scene_data", {})
-            total_placed = scene_data.get("module_quantity", 0)
+            module_quantity = scene_data.get("module_quantity", 0)  # Geplante Anzahl
+            
+            # Hole tatsächlich platzierte Module aus PlacementManager
+            placement_manager = st.session_state.get("pv_placement_manager")
+            if placement_manager and hasattr(placement_manager, 'modules'):
+                total_placed = len(placement_manager.modules)
+            else:
+                total_placed = 0
             
             # Berechne fehlende Module
             missing_modules = max(0, module_quantity - total_placed)
@@ -2348,6 +2405,78 @@ def _render_3d_view_impl():
                 f"- Dachneigung: {roof_inclination_deg}°\n"
                 f"- Dachdeckung: {roof_covering}"
             )
+            
+            # Screenshot-Button direkt unter Gebäudedaten
+            if scene_data is not None:
+                if st.button("📸 3D-Screenshot erstellen", use_container_width=True):
+                    try:
+                        # Rekonstruiere BuildingDims
+                        bd = scene_data["building_dims"]
+                        dims = BuildingDims(
+                            length_m=bd["length_m"],
+                            width_m=bd["width_m"],
+                            wall_height_m=bd["wall_height_m"]
+                        )
+                        
+                        # Rekonstruiere LayoutConfig
+                        layout_config_json = scene_data.get("layout_config_json")
+                        if layout_config_json:
+                            try:
+                                layout_config = AdvancedLayoutConfig.from_json(layout_config_json)
+                            except:
+                                layout_config = LayoutConfig.from_json(layout_config_json)
+                        else:
+                            layout_config = LayoutConfig()
+                        
+                        # Hole module_quantity
+                        module_quantity = scene_data.get("module_quantity", 20)
+                        
+                        # Erstelle Screenshot
+                        with st.spinner("📸 Erstelle Screenshot..."):
+                            png_bytes = render_plotly_image_bytes(
+                                project_data=scene_data.get("project_data", {}),
+                                dims=dims,
+                                roof_type=scene_data.get("roof_type", "Flachdach"),
+                                module_quantity=module_quantity,
+                                layout_config=layout_config,
+                                width=1600,
+                                height=1000
+                            )
+                            
+                            # Konvertiere PNG zu Base64 für PDF
+                            import base64
+                            screenshot_b64 = base64.b64encode(png_bytes).decode('utf-8')
+                            
+                            # Speichere in Session State für PDF-Erstellung
+                            if "pdf_dynamic_data" not in st.session_state:
+                                st.session_state.pdf_dynamic_data = {}
+                            st.session_state.pdf_dynamic_data["pv_3d_screenshot_b64"] = screenshot_b64
+                            
+                            # Zeige Download-Buttons
+                            col_dl1, col_dl2 = st.columns(2)
+                            
+                            with col_dl1:
+                                import datetime
+                                timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+                                st.download_button(
+                                    label="💾 Screenshot herunterladen",
+                                    data=png_bytes,
+                                    file_name=f"pv_3d_screenshot_{timestamp}.png",
+                                    mime="image/png",
+                                    use_container_width=True
+                                )
+                            
+                            with col_dl2:
+                                st.info("📄 Screenshot für PDF-Seite 6 gespeichert!")
+                            
+                            st.success("✓ Screenshot erstellt und für PDF vorbereitet!")
+                            st.info(
+                                "💡 **Hinweis:** Der Screenshot wird automatisch auf Seite 6 des PDF-Angebots "
+                                "im Platzhalter '3d_visuals' eingefügt, wenn Sie das PDF erstellen."
+                            )
+                            
+                    except Exception as e:
+                        st.error(f"❌ Fehler beim Erstellen des Screenshots: {e}")
             
             # ====================================================================
             # NEU: LIVE-ERTRAGSPROGNOSE ANZEIGE
