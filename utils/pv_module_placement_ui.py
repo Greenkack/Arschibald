@@ -163,7 +163,7 @@ def render_module_placement_ui(fig: go.Figure,
                               if "Quer" in orientation 
                               else ModuleOrientation.PORTRAIT)
             
-            # NEU: Aufständerungstyp für Flachdach
+            # Aufständerungstyp (nur relevant für Flachdach)
             mounting_type = "south"  # Default
             if roof_type == "Flachdach":
                 mounting_type = st.radio(
@@ -172,6 +172,8 @@ def render_module_placement_ui(fig: go.Figure,
                     format_func=lambda x: "☀️ Süd-Aufständerung (15°)" if x == "south" else "🔄 Ost-West-Aufständerung (Dreieck)",
                     help="Süd: Klassische Aufständerung nach Süden. Ost-West: Module abwechselnd nach Osten und Westen für bessere Flächennutzung"
                 )
+            else:
+                st.info(f"ℹ️ Aufständerung nur für Flachdächer verfügbar. Aktuell: **{roof_type}**")
             
             spacing = st.slider(
                 "Abstand zwischen Modulen (cm)",
@@ -294,30 +296,16 @@ def render_module_placement_ui(fig: go.Figure,
                 st.success(f"✓ {placed_count} Module erfolgreich platziert!")
                 
                 # DEBUG: Zeige Modul-Info
-                st.write(f"**DEBUG:** Manager hat jetzt {len(manager.modules)} Module:")
-                for mid, mod in list(manager.modules.items())[:3]:  # Zeige erste 3
-                    st.write(f"  - Modul {mid}: Position ({mod.transform.x:.2f}, {mod.transform.y:.2f}, {mod.transform.z:.2f})")
-                
-                # KRITISCH: Füge Module zur Figure hinzu!
-                try:
-                    st.write(f"🔍 Füge {len(manager.modules)} Module zur 3D-Szene hinzu...")
+                if len(manager.modules) > 0:
+                    st.write(f"**DEBUG:** Manager hat jetzt {len(manager.modules)} Module:")
+                    for mid, mod in list(manager.modules.items())[:3]:  # Zeige erste 3
+                        st.write(f"  - Modul {mid}: Position ({mod.transform.x:.2f}, {mod.transform.y:.2f}, {mod.transform.z:.2f})")
                     
-                    module_traces = render_all_modules(
-                        manager=manager,
-                        show_edges=True,
-                        show_selection=False
-                    )
-                    
-                    for trace in module_traces:
-                        fig.add_trace(trace)
-                    
-                    st.write(f"✓ {len(module_traces)} Traces zur Figure hinzugefügt!")
-                    
-                    # Figure NEU anzeigen
-                    st.plotly_chart(fig, use_container_width=True, key=f"plotly_with_modules_{placed_count}")
-                    
-                except Exception as e:
-                    st.error(f"❌ Fehler beim Hinzufügen der Module: {e}")
+                    # WICHTIG: Rerun auslösen damit die Module in der ERSTEN Figure erscheinen
+                    st.info("🔄 Seite wird neu geladen um Module anzuzeigen...")
+                    st.rerun()
+                else:
+                    st.warning("⚠️ Keine Module platziert - prüfe Dachfläche und Parameter")
                     import traceback
                     st.code(traceback.format_exc())
     

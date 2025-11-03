@@ -496,8 +496,8 @@ def _render_3d_view_impl():
                 except (ValueError, TypeError):
                     pass
         
-        # Letzter Fallback
-        return 0
+        # Letzter Fallback: 20 Module (vernünftiger Default)
+        return 20
 
     def get_building_type() -> str:
         """Extrahiert Gebäudeart mit Fallback."""
