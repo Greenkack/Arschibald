@@ -10,10 +10,79 @@ Date: 2025-01-12
 
 from datetime import datetime
 from typing import Any
+from pathlib import Path
+import json
 
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+
+
+# Deutsche Zahlenformatierung
+def format_german_number(number, decimals=2):
+    """
+    Formatiert Zahlen nach deutscher Notation:
+    - Tausender-Trennzeichen: Punkt (.)
+    - Dezimal-Trennzeichen: Komma (,)
+    - Immer 2 Dezimalstellen für Geldbeträge
+    
+    Beispiel: 12345.67 -> "12.345,67"
+    """
+    if number is None:
+        return "0,00" if decimals == 2 else "0"
+    
+    # Format mit englischer Notation
+    if decimals == 0:
+        formatted = f"{number:,.0f}"
+    else:
+        formatted = f"{number:,.{decimals}f}"
+    
+    # Tausche Trennzeichen: , -> TEMP, . -> ,, TEMP -> .
+    formatted = formatted.replace(',', 'TEMP')
+    formatted = formatted.replace('.', ',')
+    formatted = formatted.replace('TEMP', '.')
+    
+    return formatted
+
+
+# Heizkosten-Konfiguration laden
+def load_heating_costs_config():
+    """Lädt die Heizkosten-Konfiguration aus der Admin-Einstellung"""
+    config_file = Path(__file__).parent / "config" / "heating_costs_config.json"
+    
+    # Standardwerte falls Datei nicht existiert
+    default_config = {
+        "co2_factors": {
+            "oil_kg_per_liter": 2.66,
+            "gas_g_per_kwh": 428,
+            "electricity_g_per_kwh": 420,
+            "pellets_kg_per_ton": 26,
+            "co2_price_euro_per_ton": 55
+        },
+        "fuel_prices": {
+            "gas_cent_per_kwh": 12.0,
+            "oil_cent_per_liter": 90.0,
+            "wood_euro_per_ster": 80.0,
+            "pellets_euro_per_ton": 350.0,
+            "electricity_cent_per_kwh": 32.0
+        },
+        "operating_costs": {
+            "gas": {"chimney_sweep": 120, "maintenance": 150, "repair": 200, "pump_power_kwh": 300},
+            "oil": {"chimney_sweep": 120, "maintenance": 200, "repair": 250, "pump_power_kwh": 400},
+            "pellets": {"chimney_sweep": 120, "maintenance": 300, "repair": 300, "pump_power_kwh": 500},
+            "heatpump": {"chimney_sweep": 0, "maintenance": 150, "repair": 100, "pump_power_kwh": 0}
+        }
+    }
+    
+    try:
+        if config_file.exists():
+            with open(config_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception:
+        pass
+    
+    return default_config
+
 
 # Import der notwendigen Funktionen
 try:
@@ -43,6 +112,21 @@ try:
         calculate_co2_footprint,
         monte_carlo_roi_analysis,
         benchmark_building,
+    )
+    from heatpump_dynamic_tariff import (
+        calculate_dynamic_tariff_comparison,
+        calculate_stromcloud_economics,
+        simulate_energy_management_system,
+        calculate_smart_home_benefits,
+        get_dynamic_tariff_pros_cons,
+        compare_tariff_providers,
+        simulate_annual_price_profile,
+    )
+    from heatpump_dynamic_tariff_charts import (
+        create_hourly_price_chart,
+        create_annual_cost_chart,
+        create_stromcloud_waterfall,
+        create_load_shifting_heatmap,
     )
     from database import get_db_connection
     from locales import get_text
@@ -75,8 +159,8 @@ def render_heatpump_analysis(
         "⚙️ Optimierung",  # NEU: Features 5-8
         "💵 Förderung & CO2",  # NEU: Features 9-10
         "📈 ROI & Benchmarking",  # NEU: Features 11-12
-        "📦 Komponenten & Angebot",
-        "📊 Ergebnisse"
+        "⚡ Dynamischer Stromtarif",  # NEU: Feature 13 (Todo 8)
+        " Ergebnisse"
     ])
 
     with tabs[0]:
@@ -160,8 +244,11 @@ def render_heatpump_analysis(
         else:
             st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
 
-    with tabs[9]:  # Komponenten & Angebot
-        render_components_offer_tab(texts)
+    with tabs[9]:  # Dynamischer Stromtarif (NEU)
+        if 'building_data' in st.session_state:
+            render_dynamic_tariff_tab(texts, st.session_state.building_data)
+        else:
+            st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
 
     with tabs[10]:  # Ergebnisse
         render_results_summary(texts)
@@ -286,6 +373,82 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
                 value=1800,
                 step=100)
 
+        # Heizkosten-Konfiguration laden
+        heating_config = load_heating_costs_config()
+        fuel_prices = heating_config.get("fuel_prices", {})
+
+        # Heizkosten-Eingabefelder
+        st.markdown("**💰 Jährliche Heizkosten**")
+        st.caption("Geben Sie die Kosten für Ihre aktuelle(n) Heizart(en) ein")
+
+        cost_col1, cost_col2, cost_col3 = st.columns(3)
+        
+        with cost_col1:
+            st.markdown("**Gasheizung**")
+            gas_monthly_cost = st.number_input(
+                "Monatliche Gaskosten (€)",
+                min_value=0.0,
+                value=0.0,
+                step=10.0,
+                help="Monatlicher Abschlag für Erdgas"
+            )
+            gas_annual_cost = gas_monthly_cost * 12
+            if gas_monthly_cost > 0:
+                st.info(f"📊 Jährlich: {format_german_number(gas_annual_cost, 2)} €")
+        
+        with cost_col2:
+            st.markdown("**Ölheizung**")
+            default_oil_price = fuel_prices.get("oil_cent_per_liter", 90.0) / 100.0 * 1190.0  # Cent/L → €/Tonne
+            oil_price_per_ton = st.number_input(
+                "Preis pro Tonne Heizöl (€)",
+                min_value=0.0,
+                value=float(default_oil_price),
+                step=50.0,
+                help="Aktueller Preis für 1.000 Liter Heizöl (Standard aus Admin-Konfiguration)"
+            )
+            # Berechnung: Liter → Tonnen (1 Tonne ≈ 1.190 Liter bei Dichte 0.84 kg/l)
+            oil_tons = oil_l / 1190.0 if oil_l > 0 else 0
+            oil_annual_cost = oil_tons * oil_price_per_ton
+            if oil_price_per_ton > 0 and oil_l > 0:
+                st.info(f"📊 Jährlich: {format_german_number(oil_annual_cost, 2)} €")
+        
+        with cost_col3:
+            st.markdown("**Holzheizung**")
+            default_wood_price = fuel_prices.get("wood_euro_per_ster", 80.0)
+            wood_price_per_ster = st.number_input(
+                "Preis pro Ster Holz (€)",
+                min_value=0.0,
+                value=float(default_wood_price),
+                step=10.0,
+                help="Preis für 1 Ster (Raummeter) Brennholz (Standard aus Admin-Konfiguration)"
+            )
+            wood_annual_cost = wood_ster * wood_price_per_ster
+            if wood_price_per_ster > 0 and wood_ster > 0:
+                st.info(f"📊 Jährlich: {format_german_number(wood_annual_cost, 2)} €")
+        
+        # Gesamtkosten berechnen und anzeigen
+        total_annual_heating_cost = gas_annual_cost + oil_annual_cost + wood_annual_cost
+        
+        if total_annual_heating_cost > 0:
+            st.markdown("---")
+            st.markdown("### 💵 **Gesamte jährliche Heizkosten**")
+            st.metric(
+                label="Summe aller Heizkosten",
+                value=f"{format_german_number(total_annual_heating_cost, 2)} €",
+                delta=None
+            )
+            
+            # Breakdown anzeigen
+            if gas_annual_cost > 0 or oil_annual_cost > 0 or wood_annual_cost > 0:
+                breakdown_text = []
+                if gas_annual_cost > 0:
+                    breakdown_text.append(f"Gas: {format_german_number(gas_annual_cost, 2)} €")
+                if oil_annual_cost > 0:
+                    breakdown_text.append(f"Öl: {format_german_number(oil_annual_cost, 2)} €")
+                if wood_annual_cost > 0:
+                    breakdown_text.append(f"Holz: {format_german_number(wood_annual_cost, 2)} €")
+                st.caption(" + ".join(breakdown_text))
+
         st.markdown("**Erweiterte Parameter**")
 
         col3, col4 = st.columns(2)
@@ -366,6 +529,15 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
                     'heating_hours': heating_hours,
                     'system_efficiency_pct': custom_eff,
                 },
+                'heating_costs': {
+                    'gas_monthly': gas_monthly_cost,
+                    'gas_annual': gas_annual_cost,
+                    'oil_price_per_ton': oil_price_per_ton,
+                    'oil_annual': oil_annual_cost,
+                    'wood_price_per_ster': wood_price_per_ster,
+                    'wood_annual': wood_annual_cost,
+                    'total_annual': total_annual_heating_cost
+                },
                 'desired_temp': desired_temperature,
                 'heating_days': heating_days,
                 'outside_temp': outside_temp_design,
@@ -396,7 +568,7 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
                 specific_load = heat_load * 1000 / building_area  # W/m²
                 st.metric(
                     "Spezifische Heizlast",
-                    f"{specific_load:.0f} W/m²",
+                    f"{format_german_number(specific_load, 0)} W/m²",
                     help="Heizlast pro Quadratmeter Wohnfläche"
                 )
 
@@ -461,21 +633,125 @@ def render_heatpump_selection(
         )
 
     with col2:
-        manufacturer_preference = st.selectbox(
-            "Hersteller-Präferenz",
-            options=[
-                "Keine Präferenz",
-                "Vaillant",
-                "Viessmann",
-                "Daikin",
-                "Mitsubishi",
-                "Panasonic",
-                "Stiebel Eltron"])
-
-        budget_category = st.selectbox(
-            "Budget-Kategorie",
-            options=["Economy", "Standard", "Premium"]
+        # Wahl zwischen automatischer Auswahl oder manuelle Produktauswahl
+        selection_mode = st.radio(
+            "Auswahl-Modus",
+            options=["🤖 Automatische Empfehlung", "📋 Manuelle Produktauswahl"],
+            horizontal=True
         )
+        
+        # Initialisiere Variablen
+        manufacturer_preference = None
+        budget_category = None
+        selected_manufacturer = None
+        selected_product = None
+        selected_power = None
+        
+        if selection_mode == "📋 Manuelle Produktauswahl":
+            from heatpump_products_database import (
+                get_all_manufacturers,
+                get_available_types_for_manufacturer,
+                get_heatpump_models
+            )
+            
+            # Hersteller-Dropdown
+            manufacturers = ["Viessmann", "Buderus", "Vaillant"]
+            selected_manufacturer = st.selectbox(
+                "🏭 Hersteller",
+                options=manufacturers,
+                index=0
+            )
+            
+            # Wärmepumpentyp basierend auf Hersteller
+            available_types = get_available_types_for_manufacturer(selected_manufacturer)
+            if available_types:
+                selected_type = st.selectbox(
+                    "🔧 Wärmepumpentyp",
+                    options=available_types,
+                    index=0
+                )
+                
+                # Modelle für ausgewählten Hersteller und Typ
+                models = get_heatpump_models(selected_manufacturer, selected_type)
+                if models:
+                    model_names = [m["model"] for m in models]
+                    selected_model_name = st.selectbox(
+                        "📦 Produktmodell",
+                        options=model_names,
+                        index=0
+                    )
+                    
+                    # Finde ausgewähltes Modell
+                    selected_product = next(
+                        (m for m in models if m["model"] == selected_model_name),
+                        None
+                    )
+                    
+                    if selected_product:
+                        # Leistungsvariante auswählen
+                        power_variants = selected_product["heating_power_kw"]
+                        selected_power = st.selectbox(
+                            "⚡ Heizleistung (kW)",
+                            options=power_variants,
+                            index=0
+                        )
+                        
+                        # Lade konfigurierten Preis aus Admin-Einstellungen
+                        price_info = None
+                        price_text = selected_product['price_range']
+                        try:
+                            from admin_heatpump_settings_ui import get_heatpump_price
+                            price_info = get_heatpump_price(
+                                selected_manufacturer,
+                                selected_type,
+                                selected_model_name,
+                                selected_power
+                            )
+                            if price_info and price_info.get('total_price_eur', 0) > 0:
+                                total_price = price_info.get('total_price_eur', 0)
+                                base_price = price_info.get('base_price_eur', 0)
+                                install_price = price_info.get('installation_price_eur', 0)
+                                price_text = f"**{format_german_number(total_price, 0)} €** (Gerät: {format_german_number(base_price, 0)} € + Installation: {format_german_number(install_price, 0)} €)"
+                        except Exception:
+                            pass
+                        
+                        # Rating und Awards anzeigen (falls vorhanden)
+                        rating = selected_product.get('rating', 0)
+                        awards = selected_product.get('awards', [])
+                        
+                        rating_text = ""
+                        if rating > 0:
+                            rating_stars = "⭐" * int(rating)
+                            rating_text = f"\n        - **Bewertung: {rating_stars} ({rating:.1f}/5.0)**"
+                        
+                        awards_text = ""
+                        if awards:
+                            awards_text = "\n        - **Auszeichnungen:** " + ", ".join([f"🏆 {a}" for a in awards])
+                        
+                        # Produktdetails anzeigen
+                        st.info(f"""
+                        **{selected_product['model']}**{rating_text}{awards_text}
+                        - SCOP: {selected_product['scop']}
+                        - Max. Vorlauftemperatur: {selected_product['max_flow_temp']}°C
+                        - Kältemittel: {selected_product['refrigerant']}
+                        - Features: {', '.join(selected_product['features'])}
+                        - Preis: {price_text}
+                        """)
+        else:
+            # Bisherige automatische Auswahl - NUR HERSTELLER AUS DATENBANK
+            from heatpump_products_database import get_all_manufacturers
+            
+            available_manufacturers = ["Keine Präferenz"] + get_all_manufacturers()
+            
+            manufacturer_preference = st.selectbox(
+                "Hersteller-Präferenz",
+                options=available_manufacturers
+            )
+
+            budget_category = st.selectbox(
+                "Budget-Kategorie",
+                options=["Economy", "Standard", "Premium"]
+            )
 
     # Erweiterte Parameter
     with st.expander(" Erweiterte Einstellungen"):
@@ -504,109 +780,305 @@ def render_heatpump_selection(
 
             smart_control = st.checkbox("Smart Grid Ready", value=True)
 
-    if st.button(" Wärmepumpen suchen", use_container_width=True):
+    # Button-Text abhängig vom Modus
+    if selection_mode == "📋 Manuelle Produktauswahl":
+        button_text = "✅ Ausgewählte Wärmepumpe übernehmen"
+        button_help = "Übernimmt die manuell ausgewählte Wärmepumpe direkt"
+    else:
+        button_text = "🔍 Empfehlungen anzeigen"
+        button_help = "Zeigt Top 5 Empfehlungen basierend auf Ihren Anforderungen"
+
+    if st.button(button_text, use_container_width=True, type="primary", help=button_help):
         try:
-            # Dummy-Wärmepumpen-Datenbank (in echter Implementierung aus DB
-            # laden)
-            heatpumps_db = get_heatpump_database()
-
-            # Lokale Empfehlung basierend auf UI-Parametern (Kompatibel mit
-            # Dummy-DB)
             required_kw = heat_load * sizing_factor
-            candidates = [
-                hp for hp in heatpumps_db if hp.get('type') == heatpump_type]
-            if manufacturer_preference and manufacturer_preference != "Keine Präferenz":
-                candidates = [hp for hp in candidates if hp.get(
-                    'manufacturer') == manufacturer_preference]
-
-            # Bevorzugt kleinste, die reicht; sonst dichteste über/unter dem
-            # Bedarf
-            suitable = [
-                hp for hp in candidates if hp.get(
-                    'heating_power',
-                    0) >= required_kw]
-            if suitable:
-                suitable = sorted(
-                    suitable, key=lambda hp: hp.get(
-                        'heating_power', 0))
-                recommended_list = suitable
-            else:
-                # Fallback: nächstgrößte Abweichung (unterdimensioniert)
-                candidates = sorted(
-                    candidates,
-                    key=lambda hp: abs(
-                        hp.get(
-                            'heating_power',
-                            0) - required_kw))
-                recommended_list = candidates
-
-            if recommended_list:
-                st.success(
-                    f" {len(recommended_list)} passende Wärmepumpen gefunden!")
-
-                # Top-Empfehlung anzeigen
-                top_heatpump = recommended_list[0]
-
-                st.subheader(" Top-Empfehlung")
-
-                col_hp1, col_hp2, col_hp3 = st.columns(3)
-
-                with col_hp1:
-                    st.write(
-                        f"**{top_heatpump['manufacturer']} {top_heatpump['model']}**")
-                    st.write(f"Typ: {top_heatpump['type']}")
-                    st.write(f"Leistung: {top_heatpump['heating_power']} kW")
-
-                with col_hp2:
-                    st.metric("COP (A2/W35)", f"{top_heatpump['cop']:.1f}")
-                    st.metric("SCOP", f"{top_heatpump['scop']:.1f}")
-                    st.write(
-                        f"Schallpegel: {
-                            top_heatpump['noise_level']} dB(A)")
-
-                with col_hp3:
-                    st.metric(
-                        "Anschaffungskosten", f"{
-                            top_heatpump['price']:,.0f} €")
-                    st.write(f"Größe: {top_heatpump['dimensions']}")
-                    st.write(f"Gewicht: {top_heatpump['weight']} kg")
-
-                # Weitere Optionen anzeigen
-                if len(recommended_list) > 1:
-                    with st.expander(" Weitere Optionen anzeigen"):
-                        for i, hp in enumerate(
-                                recommended_list[1:4], 2):  # Top 3 weitere
-                            st.write(
-                                f"**Option {i}: {hp['manufacturer']} {hp['model']}**")
-                            col_alt1, col_alt2, col_alt3 = st.columns(3)
-                            with col_alt1:
-                                st.write(f"Leistung: {hp['heating_power']} kW")
-                            with col_alt2:
-                                st.write(f"SCOP: {hp['scop']:.1f}")
-                            with col_alt3:
-                                st.write(f"Preis: {hp['price']:,.0f} €")
-                            st.markdown("---")
-
-                # Auswahl speichern
+            
+            # ============================================================
+            # MANUELLE PRODUKTAUSWAHL - DIREKTE ÜBERNAHME
+            # ============================================================
+            if selection_mode == "📋 Manuelle Produktauswahl":
+                if not selected_product or not selected_power:
+                    st.error("⚠️ Bitte wählen Sie zuerst einen Hersteller, Typ, Modell und Leistung aus!")
+                    st.stop()
+                
+                # Lade Preisinformationen
+                price_info = None
+                try:
+                    from admin_heatpump_settings_ui import get_heatpump_price
+                    price_info = get_heatpump_price(
+                        selected_manufacturer,
+                        selected_type,
+                        selected_model_name,
+                        selected_power
+                    )
+                except Exception:
+                    pass
+                
+                # Erstelle Wärmepumpen-Daten aus manueller Auswahl
                 heatpump_data = {
-                    'selected_heatpump': top_heatpump,
-                    'alternatives': recommended_list[1:],
+                    'manufacturer': selected_manufacturer,
+                    'type': selected_type,
+                    'model': selected_model_name,
+                    'heating_power': selected_power,
+                    'scop': selected_product['scop'],
+                    'cop': selected_product['scop'],
+                    'max_flow_temp': selected_product['max_flow_temp'],
+                    'features': selected_product['features'],
+                    'refrigerant': selected_product['refrigerant'],
+                    'price_range': selected_product['price_range'],
+                    'rating': selected_product.get('rating', 0),
+                    'awards': selected_product.get('awards', []),
+                    'price': price_info.get('total_price_eur', 0) if price_info else 0,
+                    'base_price': price_info.get('base_price_eur', 0) if price_info else 0,
+                    'installation_price': price_info.get('installation_price_eur', 0) if price_info else 0,
+                    'noise_level': 45,
+                    'dimensions': "Standard",
+                    'weight': 150,
                     'sizing_factor': sizing_factor,
                     'hot_water_storage': hot_water_storage,
                     'backup_heating': backup_heating,
                     'smart_control': smart_control,
-                    'building_data': building_data
+                    'building_data': building_data,
+                    'selected_heatpump': {
+                        'manufacturer': selected_manufacturer,
+                        'type': selected_type,
+                        'model': selected_model_name,
+                        'power_kw': selected_power,
+                        'heating_power': selected_power,  # Für Konsistenz beide Keys
+                        'scop': selected_product['scop'],
+                        'max_flow_temp': selected_product['max_flow_temp'],
+                        'features': selected_product['features'],
+                        'refrigerant': selected_product['refrigerant'],
+                        'price_range': selected_product['price_range'],
+                        'rating': selected_product.get('rating', 0),
+                        'awards': selected_product.get('awards', [])
+                    }
                 }
-
+                
                 st.session_state.heatpump_data = heatpump_data
-
-                return heatpump_data
-
-            st.warning(
-                "Keine passenden Wärmepumpen gefunden. Bitte Parameter anpassen.")
+                st.success(f"✅ {selected_manufacturer} {selected_model_name} ({selected_power} kW) erfolgreich übernommen!")
+                st.balloons()
+                st.rerun()
+            
+            # ============================================================
+            # AUTOMATISCHE EMPFEHLUNG - ZEIGE TOP 5
+            # ============================================================
+            else:
+                # Lade Produkte aus der Datenbank
+                from heatpump_products_database import HEATPUMP_PRODUCTS
+                
+                # Finde passende Modelle aus der Datenbank
+                recommendations = []
+                
+                for manufacturer, types in HEATPUMP_PRODUCTS.items():
+                    # Filter nach Hersteller-Präferenz (wenn vorhanden)
+                    if manufacturer_preference and manufacturer_preference != "Keine Präferenz":
+                        if manufacturer != manufacturer_preference:
+                            continue
+                
+                    for hp_type, models in types.items():
+                        for model in models:
+                            model_name = model.get("model", "Unknown")
+                            heating_powers = model.get("heating_power_kw", [])
+                            scop = model.get("scop", 0)
+                            max_flow_temp = model.get("max_flow_temp", 0)
+                            features = model.get("features", [])
+                            refrigerant = model.get("refrigerant", "")
+                            price_range = model.get("price_range", "")
+                            rating = model.get("rating", 0)
+                            awards = model.get("awards", [])
+                            
+                            # Prüfe jede Leistungsvariante
+                            for power in heating_powers:
+                                if power >= required_kw * 0.9:  # Min. 90% der benötigten Leistung
+                                    # Berechne Qualitäts-Score (Rating ist Hauptkriterium!)
+                                    rating_score = rating * 20  # Rating 5.0 = 100 Punkte
+                                    
+                                    # Bonus für SCOP
+                                    scop_score = scop * 8
+                                    
+                                    # Bonus für Auszeichnungen
+                                    awards_score = len(awards) * 5
+                                    
+                                    # Malus für große Leistungsabweichung
+                                    power_diff = abs(power - required_kw)
+                                    power_penalty = (power_diff / required_kw) * 10
+                                    
+                                    total_score = rating_score + scop_score + awards_score - power_penalty
+                                    
+                                    recommendations.append({
+                                        "manufacturer": manufacturer,
+                                        "type": hp_type,
+                                        "model": model_name,
+                                        "power_kw": power,
+                                        "scop": scop,
+                                        "max_flow_temp": max_flow_temp,
+                                        "features": features,
+                                        "refrigerant": refrigerant,
+                                        "price_range": price_range,
+                                        "rating": rating,
+                                        "awards": awards,
+                                        "score": total_score,
+                                        "power_diff": power_diff
+                                    })
+                
+                # Sortiere nach Qualitäts-Score (Rating dominiert)
+                recommendations = sorted(recommendations, key=lambda x: x["score"], reverse=True)
+                
+                # LIMIT AUF TOP 5 (beste Bewertungen)
+                recommendations = recommendations[:5]
+            
+            if recommendations:
+                st.success(f"✅ Top 5 Testsieger & beste Wärmepumpen aus der Datenbank!")
+                
+                # Speichere Empfehlungen im Session State
+                st.session_state.heatpump_recommendations = recommendations
+                st.session_state.required_power_kw = required_kw
+                
+                st.markdown("---")
+                st.subheader("� Top 5 - Beste Wärmepumpen für Ihr Gebäude")
+                st.caption(f"Benötigte Heizleistung: {required_kw:.1f} kW | Sortiert nach Bewertung & Qualität")
+                
+                # Zeige Top 5 mit Auswahl-Buttons
+                for idx, rec in enumerate(recommendations, 1):  # NUR Top 5
+                    with st.container():
+                        # Header mit Ranking und Rating
+                        if idx == 1:
+                            medal = "🥇"
+                            title = f"{medal} **Testsieger: {rec['manufacturer']} {rec['model']}**"
+                        elif idx == 2:
+                            medal = "🥈"
+                            title = f"{medal} **Top-Alternative: {rec['manufacturer']} {rec['model']}**"
+                        elif idx == 3:
+                            medal = "🥉"
+                            title = f"{medal} **Empfohlen: {rec['manufacturer']} {rec['model']}**"
+                        else:
+                            medal = f"#{idx}"
+                            title = f"{medal} **{rec['manufacturer']} {rec['model']}**"
+                        
+                        st.markdown(f"### {title}")
+                        
+                        # Rating-Anzeige
+                        rating_stars = "⭐" * int(rec['rating'])
+                        st.markdown(f"**Bewertung: {rating_stars} ({rec['rating']:.1f}/5.0)**")
+                        
+                        # Auszeichnungen
+                        if rec['awards']:
+                            awards_text = " | ".join([f"🏆 {award}" for award in rec['awards']])
+                            st.markdown(f"_{awards_text}_")
+                        
+                        # Lade konfigurierten Preis aus Admin-Einstellungen
+                        price_info = None
+                        try:
+                            from admin_heatpump_settings_ui import get_heatpump_price
+                            price_info = get_heatpump_price(
+                                rec['manufacturer'],
+                                rec['type'],
+                                rec['model'],
+                                rec['power_kw']
+                            )
+                        except Exception:
+                            pass
+                        
+                        col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
+                        
+                        with col1:
+                            st.metric("Heizleistung", f"{rec['power_kw']} kW")
+                            st.caption(f"Typ: {rec['type']}")
+                        
+                        with col2:
+                            st.metric("SCOP", f"{format_german_number(rec['scop'], 2)}")
+                            st.caption(f"Max. Vorlauf: {rec['max_flow_temp']}°C")
+                        
+                        with col3:
+                            # Zeige echten Preis oder Kategorie
+                            if price_info and price_info.get('total_price_eur', 0) > 0:
+                                total_price = price_info.get('total_price_eur', 0)
+                                st.metric("Preis", f"{format_german_number(total_price, 0)} €")
+                                st.caption(f"inkl. Installation")
+                            else:
+                                st.metric("Kältemittel", rec['refrigerant'])
+                                st.caption(f"Preis: {rec['price_range']}")
+                        
+                        with col4:
+                            # AUSWAHL-BUTTON FÜR JEDE EMPFEHLUNG
+                            button_type = "primary" if idx == 1 else "secondary"
+                            if st.button(
+                                f"✅ Wählen" if idx == 1 else "Auswählen",
+                                key=f"select_hp_{idx}_{rec['manufacturer']}_{rec['model']}_{rec['power_kw']}",
+                                type=button_type,
+                                use_container_width=True
+                            ):
+                                # Speichere ausgewählte Wärmepumpe
+                                # Füge heating_power zu rec hinzu für Konsistenz
+                                rec_with_heating_power = rec.copy()
+                                rec_with_heating_power['heating_power'] = rec['power_kw']
+                                
+                                heatpump_data = {
+                                    'manufacturer': rec['manufacturer'],
+                                    'type': rec['type'],
+                                    'model': rec['model'],
+                                    'heating_power': rec['power_kw'],
+                                    'scop': rec['scop'],
+                                    'cop': rec['scop'],  # Vereinfacht
+                                    'max_flow_temp': rec['max_flow_temp'],
+                                    'features': rec['features'],
+                                    'refrigerant': rec['refrigerant'],
+                                    'price_range': rec['price_range'],
+                                    'rating': rec['rating'],
+                                    'awards': rec['awards'],
+                                    'price': price_info.get('total_price_eur', 0) if price_info else 0,
+                                    'base_price': price_info.get('base_price_eur', 0) if price_info else 0,
+                                    'installation_price': price_info.get('installation_price_eur', 0) if price_info else 0,
+                                    'noise_level': 45,  # Standardwert
+                                    'dimensions': "Standard",
+                                    'weight': 150,  # Standardwert
+                                    'sizing_factor': sizing_factor,
+                                    'hot_water_storage': hot_water_storage,
+                                    'backup_heating': backup_heating,
+                                    'smart_control': smart_control,
+                                    'building_data': building_data,
+                                    'selected_heatpump': rec_with_heating_power
+                                }
+                                
+                                st.session_state.heatpump_data = heatpump_data
+                                st.success(f"✅ {rec['manufacturer']} {rec['model']} ({rec['power_kw']} kW) ausgewählt!")
+                                st.balloons()
+                                st.rerun()
+                        
+                        # Features und Preis-Details anzeigen
+                        if rec['features']:
+                            st.caption(f"🔧 Features: {', '.join(rec['features'][:4])}")
+                        
+                        # Preis-Breakdown anzeigen
+                        if price_info and price_info.get('total_price_eur', 0) > 0:
+                            st.caption(f"💰 Gerätepreis: {format_german_number(price_info.get('base_price_eur', 0), 0)} € | Installation: {format_german_number(price_info.get('installation_price_eur', 0), 0)} € | **Gesamt: {format_german_number(price_info.get('total_price_eur', 0), 0)} €**")
+                        
+                        st.markdown("---")
+                    
+                    return st.session_state.get('heatpump_data')
+                
+                else:
+                    st.warning("⚠️ Keine passenden Wärmepumpen in der Datenbank gefunden. Bitte Parameter anpassen.")
 
         except Exception as e:
-            st.error(f"Fehler bei der Wärmepumpen-Suche: {e}")
+            st.error(f"Fehler bei der Wärmepumpen-Auswahl: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+
+    # Zeige aktuelle Auswahl, falls vorhanden
+    if 'heatpump_data' in st.session_state and st.session_state.heatpump_data:
+        st.success("✅ Wärmepumpe ausgewählt!")
+        selected = st.session_state.heatpump_data.get('selected_heatpump', {})
+        if selected:
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.info(f"**{selected.get('manufacturer')} {selected.get('model')}**")
+            with col2:
+                st.info(f"⚡ {selected.get('power_kw')} kW")
+            with col3:
+                st.info(f"📊 SCOP: {selected.get('scop')}")
+        
+        return st.session_state.heatpump_data
 
     return None
 
@@ -683,15 +1155,14 @@ def render_radiator_check(
                 flow_temp_result = calculate_required_flow_temperature(
                     heat_load_kw=heat_load_kw,
                     radiator_area_m2=radiator_area_m2,
-                    outdoor_temp=outdoor_temp_design,
-                    indoor_temp=indoor_temp_target
+                    room_temperature_c=indoor_temp_target
                 )
 
-                required_flow_temp = flow_temp_result['required_flow_temp_celsius']
+                required_flow_temp = flow_temp_result['required_flow_temp_c']
 
                 # Prüfe Kompatibilität
                 compatibility_result = check_radiator_compatibility(
-                    required_flow_temp_celsius=required_flow_temp
+                    required_flow_temp_c=required_flow_temp
                 )
 
                 # Speichere Ergebnis in session_state
@@ -710,20 +1181,20 @@ def render_radiator_check(
                 st.markdown("### 📊 Prüfungsergebnis")
 
                 # Status-Badge mit Farbe
-                status = compatibility_result['status']
-                if status == "Optimal für Wärmepumpe":
+                compatibility = compatibility_result['compatibility']
+                if compatibility in ["Optimal", "Gut"]:
                     status_color = "🟢"
                     status_bg = "#d4edda"
-                elif status == "Grenzwertig":
+                elif compatibility == "Grenzwertig":
                     status_color = "🟡"
                     status_bg = "#fff3cd"
-                else:  # "Upgrade empfohlen"
+                else:  # "Kritisch" oder "Ungeeignet"
                     status_color = "🔴"
                     status_bg = "#f8d7da"
 
                 st.markdown(
                     f'<div style="background-color: {status_bg}; padding: 20px; border-radius: 10px; text-align: center;">'
-                    f'<h2>{status_color} {status}</h2>'
+                    f'<h2>{status_color} {compatibility}</h2>'
                     f'</div>',
                     unsafe_allow_html=True
                 )
@@ -741,8 +1212,8 @@ def render_radiator_check(
                     cop_loss_percent = compatibility_result.get('cop_loss_percent', 0)
                     st.metric(
                         "COP-Verlust",
-                        f"{cop_loss_percent:.0f} %",
-                        delta=f"-{cop_loss_percent:.0f}%" if cop_loss_percent > 0 else "Optimal"
+                        f"{format_german_number(cop_loss_percent, 0)} %",
+                        delta=f"-{format_german_number(cop_loss_percent, 0)}%" if cop_loss_percent > 0 else "Optimal"
                     )
 
                 with col3:
@@ -750,12 +1221,12 @@ def render_radiator_check(
                     if upgrade_cost > 0:
                         st.metric(
                             "Geschätzte Upgrade-Kosten",
-                            f"{upgrade_cost:,.0f} €"
+                            f"{format_german_number(upgrade_cost, 0)} €"
                         )
                     else:
                         st.metric(
                             "Upgrade-Kosten",
-                            "0 €",
+                            "0,00 €",
                             delta="Keine erforderlich"
                         )
 
@@ -809,11 +1280,12 @@ def render_economics_analysis(
         )
 
         oil_price = st.number_input(
-            "Ölpreis (ct/kWh)",
-            min_value=5.0,
-            max_value=20.0,
-            value=10.0,
-            step=0.5
+            "Ölpreis (ct/Liter)",
+            min_value=50.0,
+            max_value=150.0,
+            value=90.0,
+            step=1.0,
+            help="Preis pro Liter Heizöl in Cent"
         )
 
     with col2:
@@ -844,6 +1316,54 @@ def render_economics_analysis(
             step=50
         )
 
+    # Zusätzliche Betriebskosten
+    st.markdown("**💸 Zusätzliche jährliche Betriebskosten**")
+    cost_col1, cost_col2, cost_col3 = st.columns(3)
+    
+    with cost_col1:
+        chimney_sweep_cost = st.number_input(
+            "Schornsteinfeger (€/Jahr)",
+            min_value=0.0,
+            max_value=500.0,
+            value=0.0,
+            step=10.0,
+            help="Kosten für Schornsteinfeger (entfällt meist bei WP)"
+        )
+        
+        heating_system_power_kwh = st.number_input(
+            "Stromverbrauch Heizungsanlage (kWh/Jahr)",
+            min_value=0.0,
+            max_value=2000.0,
+            value=0.0,
+            step=50.0,
+            help="Zusätzlicher Stromverbrauch für Pumpen, Regelung etc."
+        )
+    
+    with cost_col2:
+        repair_cost_annual = st.number_input(
+            "Reparaturkosten (€/Jahr)",
+            min_value=0.0,
+            max_value=2000.0,
+            value=150.0,
+            step=50.0,
+            help="Durchschnittliche jährliche Reparaturkosten"
+        )
+    
+    with cost_col3:
+        st.markdown("**CO₂-Steuer-Faktoren**")
+        st.caption("(Admin-Einstellungen verwenden)")
+        
+        # Hole CO2-Faktoren aus Admin-Settings (später implementiert)
+        # Vorläufig: Hardcoded mit Option zur Anpassung
+        co2_price_per_ton = st.number_input(
+            "CO₂-Preis (€/Tonne)",
+            min_value=0.0,
+            max_value=200.0,
+            value=55.0,
+            step=5.0,
+            help="Aktueller CO₂-Preis pro Tonne"
+        )
+
     # Berechnung durchführen
     if st.button(" Wirtschaftlichkeit berechnen", use_container_width=True):
         try:
@@ -855,21 +1375,74 @@ def render_economics_analysis(
             # Wärmepumpen-Stromverbrauch
             hp_electricity_consumption = heat_demand_kwh / heatpump['scop']
 
-            # Kosten berechnen
-            total_investment = heatpump['price'] + \
-                installation_cost - subsidy_amount
-
-            annual_hp_cost = (hp_electricity_consumption *
-                              electricity_price / 100) + maintenance_cost_annual
-
-            # Vergleich mit aktueller Heizung
+            # CO₂-Emissionen und Kosten berechnen
+            # Alte Heizung CO₂-Kosten
             current_system = building_data['heating_system']
+            co2_emission_old_kg = 0
+            co2_cost_old = 0
+            
             if 'Gas' in current_system:
-                annual_old_cost = heat_demand_kwh * gas_price / 100
+                # Gas: 428g CO₂ pro kWh (Erdgas)
+                co2_emission_old_kg = heat_demand_kwh * 0.428  # kg CO₂
+                co2_cost_old = (co2_emission_old_kg / 1000) * co2_price_per_ton  # Tonnen → Euro
+                fuel_cost_old = heat_demand_kwh * gas_price / 100
             elif 'Öl' in current_system:
-                annual_old_cost = heat_demand_kwh * oil_price / 100
+                # Heizöl: 1 Liter = 2.66 kg CO₂
+                # 1 Liter Heizöl ≈ 10 kWh
+                oil_liters = heat_demand_kwh / 10
+                co2_emission_old_kg = oil_liters * 2.66  # kg CO₂
+                co2_cost_old = (co2_emission_old_kg / 1000) * co2_price_per_ton
+                fuel_cost_old = heat_demand_kwh * oil_price / 100
             else:
-                annual_old_cost = heat_demand_kwh * electricity_price / 100
+                fuel_cost_old = heat_demand_kwh * electricity_price / 100
+            
+            # Wärmepumpe CO₂-Kosten (Strommix Deutschland: ~420g/kWh)
+            co2_emission_wp_kg = hp_electricity_consumption * 0.420  # kg CO₂
+            co2_cost_wp = (co2_emission_wp_kg / 1000) * co2_price_per_ton
+            
+            # Stromkosten für Heizungsanlage (Pumpen, Regelung)
+            heating_system_power_cost = heating_system_power_kwh * electricity_price / 100
+            
+            # Gesamte jährliche Betriebskosten
+            annual_hp_cost = (
+                hp_electricity_consumption * electricity_price / 100  # WP-Strom
+                + heating_system_power_cost  # Zusätzlicher Strom
+                + maintenance_cost_annual  # Wartung
+                + repair_cost_annual  # Reparatur
+                + chimney_sweep_cost  # Schornsteinfeger
+                + co2_cost_wp  # CO₂-Steuer
+            )
+            
+            annual_old_cost = (
+                fuel_cost_old  # Brennstoffkosten
+                + heating_system_power_cost  # Strom (falls alte Heizung)
+                + maintenance_cost_annual * 1.2  # Alte Heizung hat höhere Wartungskosten
+                + repair_cost_annual * 1.5  # Höhere Reparaturkosten
+                + chimney_sweep_cost  # Schornsteinfeger (bei Öl/Gas)
+                + co2_cost_old  # CO₂-Steuer
+            )
+            
+            # Kosten berechnen
+            # Hole Preis aus heatpump_data (dynamisch konfiguriert)
+            heatpump_price = heatpump_data.get('price', 0)
+            
+            # Fallback: Wenn kein Preis gesetzt, aus Admin-Konfiguration laden
+            if heatpump_price == 0:
+                try:
+                    from admin_heatpump_settings_ui import get_heatpump_price
+                    price_info = get_heatpump_price(
+                        heatpump.get('manufacturer', ''),
+                        heatpump.get('type', ''),
+                        heatpump.get('model', ''),
+                        heatpump.get('power_kw') or heatpump.get('heating_power', 0)
+                    )
+                    heatpump_price = price_info.get('total_price_eur', 0)
+                except Exception:
+                    # Letzter Fallback: Schätzung basierend auf Leistung
+                    power = heatpump.get('power_kw') or heatpump.get('heating_power', 10)
+                    heatpump_price = 800 + (power * 200)
+            
+            total_investment = heatpump_price + installation_cost - subsidy_amount
 
             annual_savings = annual_old_cost - annual_hp_cost
             payback_time = total_investment / \
@@ -884,14 +1457,14 @@ def render_economics_analysis(
             with col_kpi1:
                 st.metric(
                     "Gesamtinvestition",
-                    f"{total_investment:,.0f} €",
+                    f"{format_german_number(total_investment, 0)} €",
                     help="Anschaffung + Installation - Förderung"
                 )
 
             with col_kpi2:
                 st.metric(
                     "Jährliche Ersparnis",
-                    f"{annual_savings:,.0f} €",
+                    f"{format_german_number(annual_savings, 0)} €",
                     help="Einsparung gegenüber altem System"
                 )
 
@@ -911,7 +1484,7 @@ def render_economics_analysis(
             with col_kpi4:
                 st.metric(
                     "20-Jahre-Ersparnis",
-                    f"{(annual_savings * 20 - total_investment):,.0f} €",
+                    f"{format_german_number((annual_savings * 20 - total_investment), 0)} €",
                     help="Gesamtersparnis über 20 Jahre"
                 )
 
@@ -920,32 +1493,56 @@ def render_economics_analysis(
 
             cost_breakdown = pd.DataFrame({
                 'Position': [
-                    'Wärmepumpe',
-                    'Installation',
-                    'Förderung BEG',
-                    'Netto-Investition',
+                    '📦 Wärmepumpe',
+                    '🔧 Installation',
+                    '💰 Förderung BEG',
+                    '💵 Netto-Investition',
                     '',
-                    'Jährlicher Stromverbrauch WP',
-                    'Jährliche Stromkosten WP',
-                    'Jährliche Wartungskosten',
-                    'Gesamte jährliche Kosten WP',
+                    '⚡ Jährlicher Stromverbrauch WP',
+                    '💡 Jährliche Stromkosten WP',
+                    '🛠️ Jährliche Wartungskosten',
+                    '🔩 Jährliche Reparaturkosten',
+                    '🏭 Stromverbrauch Heizung',
+                    '🧹 Schornsteinfeger',
+                    '🌍 CO₂-Steuer WP',
+                    '💸 Gesamte jährliche Kosten WP',
                     '',
-                    'Jährliche Kosten altes System',
-                    'Jährliche Ersparnis'
+                    '🔥 Brennstoffkosten alte Heizung',
+                    '🛠️ Wartung alte Heizung',
+                    '🔩 Reparatur alte Heizung',
+                    '🏭 Strom alte Heizung',
+                    '🧹 Schornsteinfeger',
+                    '🌍 CO₂-Steuer alte Heizung',
+                    '💸 Gesamte jährliche Kosten alt',
+                    '',
+                    '✅ Jährliche Ersparnis',
+                    '📊 CO₂-Einsparung (kg/Jahr)'
                 ],
                 'Betrag': [
-                    f"{heatpump['price']:,.0f} €",
-                    f"{installation_cost:,.0f} €",
-                    f"-{subsidy_amount:,.0f} €",
-                    f"{total_investment:,.0f} €",
+                    f"{format_german_number(heatpump_price, 0)} €",
+                    f"{format_german_number(installation_cost, 0)} €",
+                    f"-{format_german_number(subsidy_amount, 0)} €",
+                    f"{format_german_number(total_investment, 0)} €",
                     '',
-                    f"{hp_electricity_consumption:,.0f} kWh",
-                    f"{hp_electricity_consumption * electricity_price / 100:,.0f} €",
-                    f"{maintenance_cost_annual:,.0f} €",
-                    f"{annual_hp_cost:,.0f} €",
+                    f"{format_german_number(hp_electricity_consumption, 0)} kWh",
+                    f"{format_german_number(hp_electricity_consumption * electricity_price / 100, 0)} €",
+                    f"{format_german_number(maintenance_cost_annual, 0)} €",
+                    f"{format_german_number(repair_cost_annual, 0)} €",
+                    f"{format_german_number(heating_system_power_cost, 2)} €",
+                    f"{format_german_number(chimney_sweep_cost, 0)} €",
+                    f"{format_german_number(co2_cost_wp, 2)} €",
+                    f"{format_german_number(annual_hp_cost, 2)} €",
                     '',
-                    f"{annual_old_cost:,.0f} €",
-                    f"{annual_savings:,.0f} €"
+                    f"{format_german_number(fuel_cost_old, 2)} €" if 'fuel_cost_old' in locals() else "0,00 €",
+                    f"{format_german_number(maintenance_cost_annual * 1.2, 0)} €",
+                    f"{format_german_number(repair_cost_annual * 1.5, 0)} €",
+                    f"{format_german_number(heating_system_power_cost, 2)} €",
+                    f"{format_german_number(chimney_sweep_cost, 0)} €",
+                    f"{format_german_number(co2_cost_old, 2)} €",
+                    f"{format_german_number(annual_old_cost, 2)} €",
+                    '',
+                    f"{format_german_number(annual_savings, 2)} €",
+                    f"{format_german_number((co2_emission_old_kg - co2_emission_wp_kg), 0)} kg"
                 ]
             })
 
@@ -953,6 +1550,33 @@ def render_economics_analysis(
                 cost_breakdown,
                 use_container_width=True,
                 hide_index=True)
+            
+            # Zusätzliche Metriken für CO₂
+            st.markdown("### 🌱 Umweltbilanz")
+            co2_col1, co2_col2, co2_col3 = st.columns(3)
+            
+            with co2_col1:
+                st.metric(
+                    "CO₂-Emission alt",
+                    f"{format_german_number(co2_emission_old_kg, 0)} kg/Jahr",
+                    help="Jährliche CO₂-Emissionen alte Heizung"
+                )
+            
+            with co2_col2:
+                st.metric(
+                    "CO₂-Emission Wärmepumpe",
+                    f"{format_german_number(co2_emission_wp_kg, 0)} kg/Jahr",
+                    delta=f"-{((1 - co2_emission_wp_kg/co2_emission_old_kg) * 100) if co2_emission_old_kg > 0 else 0:.1f}%",
+                    delta_color="inverse",
+                    help="Jährliche CO₂-Emissionen mit Wärmepumpe"
+                )
+            
+            with co2_col3:
+                st.metric(
+                    "CO₂-Einsparung 20 Jahre",
+                    f"{(co2_emission_old_kg - co2_emission_wp_kg) * 20 / 1000:,.1f} Tonnen",
+                    help="Gesamte CO₂-Einsparung über 20 Jahre"
+                )
 
             # Cashflow-Diagramm
             st.subheader(" Cashflow-Entwicklung")
@@ -966,12 +1590,17 @@ def render_economics_analysis(
 
             fig_cashflow = go.Figure()
 
+            # Formatiere Werte für Hover-Text
+            cashflow_formatted = [format_german_number(val, 2) for val in cumulative_cashflow]
+            
             fig_cashflow.add_trace(go.Scatter(
                 x=years,
                 y=cumulative_cashflow,
                 mode='lines+markers',
                 name='Kumulierter Cashflow',
-                line=dict(color='#1f77b4', width=3)
+                line=dict(color='#1f77b4', width=3),
+                hovertemplate='Jahr: %{x}<br>Cashflow: %{text} €<extra></extra>',
+                text=cashflow_formatted
             ))
 
             fig_cashflow.add_hline(
@@ -984,7 +1613,8 @@ def render_economics_analysis(
                 title="Kumulierter Cashflow über 20 Jahre",
                 xaxis_title="Jahre",
                 yaxis_title="Kumulierter Cashflow (€)",
-                hovermode='x unified'
+                hovermode='x unified',
+                separators=',.'  # Deutsche Trennzeichen für Achsen,
             )
 
             st.plotly_chart(fig_cashflow, use_container_width=True)
@@ -1009,27 +1639,25 @@ def render_economics_analysis(
 
                 # CO2-Kosten für fossile Heizung berechnen
                 co2_cost_result = calculate_co2_costs_fossil_heating(
-                    annual_heat_demand_kwh=heat_demand_kwh,
+                    annual_consumption_kwh=heat_demand_kwh,
                     fuel_type=fuel_type,
-                    co2_price_euro_per_ton=55,  # Aktueller CO2-Preis
+                    co2_price_per_ton=55,  # Aktueller CO2-Preis
                     year=2025
                 )
 
                 # 20-Jahres-Systemvergleich
+                building_data_dict = {
+                    "annual_heat_demand_kwh": heat_demand_kwh
+                }
+                heatpump_data_dict = {
+                    "investment_cost_eur": heatpump_price + installation_cost,
+                    "jaz": heatpump['scop'],
+                    "electricity_price_kwh": electricity_price / 100
+                }
                 comparison_result = compare_heating_systems_20_years(
-                    annual_heat_demand_kwh=heat_demand_kwh,
-                    wp_investment_euros=heatpump['price'] + installation_cost,
-                    wp_jaz=heatpump['scop'],
-                    electricity_price_euro_per_kwh=electricity_price / 100,
-                    fossil_system_type=fuel_type,
-                    fossil_investment_euros=12800,  # Durchschnittliche Heizungsmodernisierung
-                    fossil_fuel_price_euro_per_kwh=gas_price / 100 if fuel_type == "Erdgas" else oil_price / 100,
-                    beg_subsidy_wp=subsidy_amount,
-                    has_gas_oil_heater=True,
-                    low_income_bonus=False,
-                    co2_price_start=55,
-                    discount_rate=0.03,
-                    annual_cost_increase=0.02
+                    building_data=building_data_dict,
+                    heatpump_data=heatpump_data_dict,
+                    fossil_heating_type=fuel_type
                 )
 
                 # CO2-Kosten-Vergleich visualisieren
@@ -1038,7 +1666,7 @@ def render_economics_analysis(
                 with col_co2_1:
                     st.metric(
                         f"CO2-Kosten {fuel_type} (Jahr 1)",
-                        f"{co2_cost_result['annual_co2_cost_euros']:,.0f} €",
+                        f"{format_german_number(co2_cost_result['annual_co2_cost_euros'], 0)} €",
                         help="CO2-Preis × Emissionen pro Jahr"
                     )
 
@@ -1052,7 +1680,7 @@ def render_economics_analysis(
                 with col_co2_3:
                     st.metric(
                         "Monetäre CO2-Ersparnis",
-                        f"{comparison_result['co2_savings_monetary_20y']:,.0f} €",
+                        f"{format_german_number(comparison_result['co2_savings_monetary_20y'], 0)} €",
                         help="Vermiedene CO2-Kosten über 20 Jahre"
                     )
 
@@ -1090,13 +1718,19 @@ def render_economics_analysis(
                 # Chart: 20-Jahres-Kostenvergleich
                 fig_20y = go.Figure()
 
+                # Formatiere Werte für Hover-Text
+                wp_cumulative_formatted = [format_german_number(val, 2) for val in wp_cumulative]
+                fossil_cumulative_formatted = [format_german_number(val, 2) for val in fossil_cumulative]
+
                 fig_20y.add_trace(go.Scatter(
                     x=years_npv,
                     y=wp_cumulative,
                     mode='lines+markers',
                     name='Wärmepumpe',
                     line=dict(color='#2E7D32', width=3),
-                    fill='tonexty'
+                    fill='tonexty',
+                    hovertemplate='Jahr: %{x}<br>Kosten: %{text} €<extra></extra>',
+                    text=wp_cumulative_formatted
                 ))
 
                 fig_20y.add_trace(go.Scatter(
@@ -1104,7 +1738,9 @@ def render_economics_analysis(
                     y=fossil_cumulative,
                     mode='lines+markers',
                     name=f'{fuel_type}-Heizung',
-                    line=dict(color='#C62828', width=3)
+                    line=dict(color='#C62828', width=3),
+                    hovertemplate='Jahr: %{x}<br>Kosten: %{text} €<extra></extra>',
+                    text=fossil_cumulative_formatted
                 ))
 
                 # Amortisationspunkt markieren
@@ -1122,7 +1758,8 @@ def render_economics_analysis(
                     xaxis_title="Jahre",
                     yaxis_title="Kumulierte Kosten (€)",
                     hovermode='x unified',
-                    height=500
+                    height=500,
+                    separators=',.'  # Deutsche Trennzeichen,
                 )
 
                 st.plotly_chart(fig_20y, use_container_width=True)
@@ -1135,20 +1772,20 @@ def render_economics_analysis(
                 with col_res1:
                     st.metric(
                         "WP Gesamtkosten (20J)",
-                        f"{comparison_result['wp_total_cost_20y']:,.0f} €"
+                        f"{format_german_number(comparison_result['wp_total_cost_20y'], 0)} €"
                     )
 
                 with col_res2:
                     st.metric(
                         f"{fuel_type} Gesamtkosten (20J)",
-                        f"{comparison_result['fossil_total_cost_20y']:,.0f} €"
+                        f"{format_german_number(comparison_result['fossil_total_cost_20y'], 0)} €"
                     )
 
                 with col_res3:
                     total_savings_20y = comparison_result['fossil_total_cost_20y'] - comparison_result['wp_total_cost_20y']
                     st.metric(
                         "Ersparnis (20J)",
-                        f"{total_savings_20y:,.0f} €",
+                        f"{format_german_number(total_savings_20y, 0)} €",
                         delta=f"+{(total_savings_20y / comparison_result['fossil_total_cost_20y'] * 100):.1f}%"
                     )
 
@@ -1186,7 +1823,8 @@ def render_economics_analysis(
                     title="CO2-Emissionen: Wärmepumpe vs. Fossil",
                     yaxis_title="CO2-Emissionen (Tonnen)",
                     barmode='group',
-                    height=400
+                    height=400,
+                    separators=',.'  # Deutsche Trennzeichen
                 )
 
                 st.plotly_chart(fig_co2, use_container_width=True)
@@ -1204,7 +1842,21 @@ def render_economics_analysis(
                 'annual_old_cost': annual_old_cost,
                 'heat_demand_kwh': heat_demand_kwh,
                 'electricity_price': electricity_price,
-                'subsidy_amount': subsidy_amount
+                'subsidy_amount': subsidy_amount,
+                # Neue erweiterte Kostenfelder
+                'chimney_sweep_cost': chimney_sweep_cost,
+                'heating_system_power_kwh': heating_system_power_kwh,
+                'heating_system_power_cost': heating_system_power_cost,
+                'repair_cost_annual': repair_cost_annual,
+                'maintenance_cost_annual': maintenance_cost_annual,
+                'co2_price_per_ton': co2_price_per_ton,
+                'co2_emission_old_kg': co2_emission_old_kg,
+                'co2_emission_wp_kg': co2_emission_wp_kg,
+                'co2_cost_old': co2_cost_old,
+                'co2_cost_wp': co2_cost_wp,
+                'co2_savings_kg_annual': co2_emission_old_kg - co2_emission_wp_kg,
+                'co2_savings_tons_20y': (co2_emission_old_kg - co2_emission_wp_kg) * 20 / 1000,
+                'fuel_cost_old': fuel_cost_old if 'fuel_cost_old' in locals() else 0
             }
 
             st.session_state.economics_data = economics_data
@@ -1247,8 +1899,8 @@ def render_pv_integration(
 
     st.info(
         f"PV-Anlage: {
-            pv_size_kwp:.1f} kWp, Jahresproduktion: {
-            pv_production_annual:,.0f} kWh")
+            pv_size_kwp:.1f} kWp, Jahresproduktion: {format_german_number(
+            pv_production_annual, 0)} kWh")
 
     # Integration berechnen
     hp_consumption = float(
@@ -1292,7 +1944,7 @@ def render_pv_integration(
 
         st.metric(
             "PV-Deckung Wärmepumpe",
-            f"{pv_coverage_hp * 100:.0f}%",
+            f"{format_german_number(pv_coverage_hp * 100, 0)}%",
             help="Anteil des WP-Stroms aus PV"
         )
 
@@ -1310,7 +1962,7 @@ def render_pv_integration(
 
         st.metric(
             "Zusätzliche PV-Ersparnis",
-            f"{annual_pv_savings_hp:,.0f} €/Jahr",
+            f"{format_german_number(annual_pv_savings_hp, 0)} €/Jahr",
             help="Ersparnis durch PV-Eigenverbrauch der WP"
         )
 
@@ -1320,7 +1972,7 @@ def render_pv_integration(
 
         st.metric(
             "Gesamte jährliche Ersparnis",
-            f"{total_annual_savings:,.0f} €/Jahr",
+            f"{format_german_number(total_annual_savings, 0)} €/Jahr",
             help="WP-Ersparnis + PV-Eigenverbrauch"
         )
 
@@ -1413,7 +2065,8 @@ def render_pv_integration(
         title="Tages-Lastprofil: PV-Erzeugung vs. Wärmepumpen-Verbrauch",
         xaxis_title="Stunde",
         yaxis_title="Relative Leistung (%)",
-        hovermode='x unified'
+        hovermode='x unified',
+        separators=',.'  # Deutsche Trennzeichen
     )
 
     st.plotly_chart(fig_profile, use_container_width=True)
@@ -1468,18 +2121,19 @@ def render_pv_integration(
                     "rgba(149, 165, 166, 0.3)"   # PV → Einspeisung
                 ],
                 label=[
-                    f"{pv_to_hp:,.0f} kWh (PV-Eigenverbrauch)",
-                    f"{grid_to_hp:,.0f} kWh (Netzbezug)",
-                    f"{heat_output:,.0f} kWh (Wärmeerzeugung, JAZ={heatpump_data['selected_heatpump']['scop']:.1f})",
-                    f"{pv_to_grid:,.0f} kWh (Netzeinspeisung)"
+                    f"{format_german_number(pv_to_hp, 0)} kWh (PV-Eigenverbrauch)",
+                    f"{format_german_number(grid_to_hp, 0)} kWh (Netzbezug)",
+                    f"{format_german_number(heat_output, 0)} kWh (Wärmeerzeugung, JAZ={heatpump_data['selected_heatpump']['scop']:.1f})",
+                    f"{format_german_number(pv_to_grid, 0)} kWh (Netzeinspeisung)"
                 ]
             )
         )])
 
         fig_sankey.update_layout(
-            title=f"Energiefluss: PV + Wärmepumpe (Jahresbetrachtung)<br><sub>PV-Deckungsgrad WP: {pv_coverage_hp*100:.0f}%</sub>",
+            title=f"Energiefluss: PV + Wärmepumpe (Jahresbetrachtung)<br><sub>PV-Deckungsgrad WP: {format_german_number(pv_coverage_hp*100, 0)}%</sub>",
             font=dict(size=12),
-            height=500
+            height=500,
+            separators=',.'  # Deutsche Trennzeichen
         )
 
         st.plotly_chart(fig_sankey, use_container_width=True)
@@ -1498,14 +2152,14 @@ def render_pv_integration(
                     'Jahresarbeitszahl (JAZ)'
                 ],
                 'Menge': [
-                    f"{pv_production_annual:,.0f} kWh",
-                    f"{pv_to_hp:,.0f} kWh ({pv_to_hp/pv_production_annual*100:.1f}%)",
-                    f"{pv_to_grid:,.0f} kWh ({pv_to_grid/pv_production_annual*100:.1f}%)",
-                    f"{hp_consumption:,.0f} kWh",
-                    f"{pv_to_hp:,.0f} kWh ({pv_coverage_hp*100:.0f}%)",
-                    f"{grid_to_hp:,.0f} kWh ({(1-pv_coverage_hp)*100:.0f}%)",
-                    f"{heat_output:,.0f} kWh",
-                    f"{heatpump_data['selected_heatpump']['scop']:.2f}"
+                    f"{format_german_number(pv_production_annual, 0)} kWh",
+                    f"{format_german_number(pv_to_hp, 0)} kWh ({pv_to_hp/pv_production_annual*100:.1f}%)",
+                    f"{format_german_number(pv_to_grid, 0)} kWh ({pv_to_grid/pv_production_annual*100:.1f}%)",
+                    f"{format_german_number(hp_consumption, 0)} kWh",
+                    f"{format_german_number(pv_to_hp, 0)} kWh ({format_german_number(pv_coverage_hp*100, 0)}%)",
+                    f"{format_german_number(grid_to_hp, 0)} kWh ({format_german_number((1-pv_coverage_hp)*100, 0)}%)",
+                    f"{format_german_number(heat_output, 0)} kWh",
+                    f"{format_german_number(heatpump_data['selected_heatpump']['scop'], 2)}"
                 ]
             })
 
@@ -1608,8 +2262,26 @@ def render_results_summary(texts: dict[str, str]):
             hp_electricity_consumption = heat_demand_kwh / \
                 max(heatpump.get('scop', 3.5), 0.1)
 
-            total_investment = heatpump['price'] + \
-                installation_cost - subsidy_amount
+            # Hole Preis aus heatpump_data (dynamisch konfiguriert)
+            heatpump_price = heatpump_data.get('price', 0)
+            
+            # Fallback: Wenn kein Preis gesetzt, aus Admin-Konfiguration laden
+            if heatpump_price == 0:
+                try:
+                    from admin_heatpump_settings_ui import get_heatpump_price
+                    price_info = get_heatpump_price(
+                        heatpump.get('manufacturer', ''),
+                        heatpump.get('type', ''),
+                        heatpump.get('model', ''),
+                        heatpump.get('power_kw') or heatpump.get('heating_power', 0)
+                    )
+                    heatpump_price = price_info.get('total_price_eur', 0)
+                except Exception:
+                    # Letzter Fallback: Schätzung basierend auf Leistung
+                    power = heatpump.get('power_kw') or heatpump.get('heating_power', 10)
+                    heatpump_price = 800 + (power * 200)
+
+            total_investment = heatpump_price + installation_cost - subsidy_amount
             annual_hp_cost = (hp_electricity_consumption *
                               electricity_price / 100) + maintenance_cost_annual
 
@@ -1675,22 +2347,28 @@ def render_results_summary(texts: dict[str, str]):
 
     with col_summary2:
         heatpump = heatpump_data['selected_heatpump']
+        # Unterstütze beide Key-Formate
+        heating_power = heatpump.get('heating_power') or heatpump.get('power_kw', 0)
+        manufacturer = heatpump.get('manufacturer', 'N/A')
+        model = heatpump.get('model', 'N/A')
+        scop = heatpump.get('scop', 0)
+        
         st.metric(
             "Wärmepumpe",
-            f"{heatpump['heating_power']} kW",
-            help=f"{heatpump['manufacturer']} {heatpump['model']}"
+            f"{heating_power} kW",
+            help=f"{manufacturer} {model}"
         )
 
         st.metric(
             "SCOP",
-            f"{heatpump['scop']:.1f}",
+            f"{scop:.1f}",
             help="Saisonale Leistungszahl"
         )
 
     with col_summary3:
         st.metric(
             "Investition",
-            f"{economics_data['total_investment']:,.0f} €",
+            f"{format_german_number(economics_data['total_investment'], 0)} €",
             help="Nach Förderung"
         )
 
@@ -1708,7 +2386,7 @@ def render_results_summary(texts: dict[str, str]):
 
         st.metric(
             "Jährliche Ersparnis",
-            f"{annual_savings:,.0f} €",
+            f"{format_german_number(annual_savings, 0)} €",
             help="Gegenüber altem System"
         )
 
@@ -1716,7 +2394,7 @@ def render_results_summary(texts: dict[str, str]):
             economics_data['total_investment']
         st.metric(
             "20-Jahre-Ersparnis",
-            f"{savings_20_years:,.0f} €",
+            f"{format_german_number(savings_20_years, 0)} €",
             help="Gesamte Ersparnis über 20 Jahre"
         )
 
@@ -1979,7 +2657,7 @@ def render_3d_building_animation(building_data: dict[str, Any], heatpump_data: d
             data=frames[0].data,
             layout=go.Layout(
                 title=dict(
-                    text=f"🏠 Gebäudevisualisierung mit Wärmepumpe<br><sub>Fläche: {building_area:.0f}m² | Höhe: {building_height + roof_height:.1f}m</sub>",
+                    text=f"🏠 Gebäudevisualisierung mit Wärmepumpe<br><sub>Fläche: {format_german_number(building_area, 0)}m² | Höhe: {building_height + roof_height:.1f}m</sub>",
                     x=0.5,
                     xanchor='center'
                 ),
@@ -2062,212 +2740,6 @@ def render_3d_building_animation(building_data: dict[str, Any], heatpump_data: d
     except Exception as e:
         st.error(f"Fehler bei der 3D-Visualisierung: {e}")
         st.warning("3D-Animation konnte nicht erstellt werden. Bitte prüfen Sie die Gebäudedaten.")
-
-
-def render_components_offer_tab(texts: dict[str, str]):
-    """Neue Tab-Seite: Strukturierte Anzeige Hauptkomponenten + Zubehör, Preislogik, Förderung & Finanzierung."""
-    st.subheader(" Komponenten & Angebot")
-    try:
-        from heatpump_pricing import (
-            apply_discounts_and_surcharges,
-            build_full_heatpump_offer,
-            calculate_annuity_loan,
-            calculate_base_price,
-            calculate_beg_subsidy,
-            load_heatpump_components,
-        )
-    except Exception as e:
-        st.warning(f"Preis-/Fördermodul nicht verfügbar: {e}")
-        return
-
-    # Komponenten laden
-    comps = load_heatpump_components()
-    main_comps = comps.get("main", [])
-    accessory_comps = comps.get("accessories", [])
-
-    if not (main_comps or accessory_comps):
-        st.info(
-            "Keine Wärmepumpen-Komponenten in der Produkt-DB gefunden. Bitte im Admin-Panel anlegen.")
-        return
-
-    # Hauptkomponenten Abschnitt
-    st.markdown("### Hauptkomponenten")
-    for c in main_comps:
-        col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
-        with col1:
-            st.markdown(f"**{c.name}**")
-            if c.description:
-                st.caption(c.description[:180])
-        with col2:
-            st.write(f"Material: {c.material_net:,.0f} €")
-        with col3:
-            if c.labor_hours:
-                st.write(f"Arbeitsstd.: {c.labor_hours:g}")
-            else:
-                st.write("-")
-        with col4:
-            st.write(f"Gesamt: {c.total_net:,.0f} €")
-
-    # Zubehör / Dienstleistungen
-    with st.expander("Zubehör und Leistungen", expanded=False):
-        for c in accessory_comps:
-            col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
-            with col1:
-                st.write(c.name)
-            with col2:
-                st.write(f"{c.material_net:,.0f} €")
-            with col3:
-                st.write(f"{c.labor_hours:g}h" if c.labor_hours else "-")
-            with col4:
-                st.write(f"{c.total_net:,.0f} €")
-
-    base = calculate_base_price(comps)
-    st.markdown("### Basispreis")
-    colb1, colb2, colb3 = st.columns(3)
-    colb1.metric("Material", f"{base['material_sum_net']:,.0f} €")
-    colb2.metric("Arbeit", f"{base['labor_sum_net']:,.0f} €")
-    colb3.metric("Summe Netto", f"{base['base_total_net']:,.0f} €")
-
-    st.markdown("### Rabatte / Aufpreise")
-    colr1, colr2, colr3, colr4 = st.columns(4)
-    with colr1:
-        rabatt_pct = st.number_input(
-            "Rabatt %",
-            min_value=0.0,
-            max_value=50.0,
-            value=0.0,
-            step=1.0)
-    with colr2:
-        rabatt_abs = st.number_input(
-            "Rabatt €",
-            min_value=0.0,
-            max_value=50000.0,
-            value=0.0,
-            step=500.0)
-    with colr3:
-        zuschlag_pct = st.number_input(
-            "Zuschlag %",
-            min_value=0.0,
-            max_value=50.0,
-            value=0.0,
-            step=1.0)
-    with colr4:
-        zuschlag_abs = st.number_input(
-            "Zuschlag €",
-            min_value=0.0,
-            max_value=50000.0,
-            value=0.0,
-            step=500.0)
-
-    mods = apply_discounts_and_surcharges(
-        base['base_total_net'],
-        rabatt_pct,
-        rabatt_abs,
-        zuschlag_pct,
-        zuschlag_abs)
-    colm1, colm2, colm3 = st.columns(3)
-    colm1.metric("Nach Rabatt/Zuschlag", f"{mods['final_price_net']:,.0f} €")
-    colm2.metric("Rabatt gesamt",
-                 f"-{mods['rabatt_pct_amount'] + mods['rabatt_abs']:,.0f} €")
-    colm3.metric(
-        "Zuschläge gesamt", f"{
-            mods['zuschlag_pct_amount'] + mods['zuschlag_abs']:,.0f} €")
-
-    st.markdown("### BEG-Förderung")
-    colf1, colf2, colf3, colf4 = st.columns(4)
-    with colf1:
-        natural_ref = st.checkbox(
-            "Natürliches Kältemittel",
-            value=True,
-            help="R290 Bonus +5%")
-    with colf2:
-        replace_old = st.checkbox(
-            "Heizungstausch",
-            value=False,
-            help="+20% Bonus")
-    with colf3:
-        low_income = st.checkbox(
-            "Einkommen <40 T€",
-            value=False,
-            help="+20% Bonus")
-    with colf4:
-        st.write("Max 70%")
-    subsidy = calculate_beg_subsidy(
-        mods['final_price_net'],
-        natural_ref,
-        replace_old,
-        low_income)
-    colsub1, colsub2, colsub3 = st.columns(3)
-    colsub1.metric("Förder-%", f"{subsidy['applied_pct']:.0f}%")
-    colsub2.metric("Förderbetrag", f"{subsidy['subsidy_amount_net']:,.0f} €")
-    colsub3.metric(
-        "Netto nach Förderung", f"{
-            subsidy['effective_total_after_subsidy_net']:,.0f} €")
-
-    st.markdown("### Finanzierung (Annuität)")
-    colfin1, colfin2, colfin3, colfin4 = st.columns(4)
-    with colfin1:
-        years = st.number_input(
-            "Laufzeit Jahre",
-            min_value=1,
-            max_value=30,
-            value=15)
-    with colfin2:
-        interest = st.number_input(
-            "Zins % p.a.",
-            min_value=0.0,
-            max_value=15.0,
-            value=3.0,
-            step=0.1)
-    with colfin3:
-        equity_pct = st.number_input(
-            "Eigenkapital %",
-            min_value=0.0,
-            max_value=100.0,
-            value=0.0,
-            step=5.0)
-    with colfin4:
-        st.write("")
-    equity_amount = subsidy['effective_total_after_subsidy_net'] * \
-        (equity_pct / 100.0)
-    principal = subsidy['effective_total_after_subsidy_net'] - equity_amount
-    fin = calculate_annuity_loan(
-        principal,
-        interest,
-        int(years)) if principal > 0 else {
-        "monthly_rate": 0,
-        "total_interest": 0}
-    colfinm1, colfinm2, colfinm3 = st.columns(3)
-    colfinm1.metric("Kreditsumme", f"{principal:,.0f} €")
-    colfinm2.metric("Monatsrate", f"{fin['monthly_rate']:,.0f} €")
-    colfinm3.metric("Gesamtzinsen", f"{fin['total_interest']:,.0f} €")
-
-    # Komplettes Angebotsobjekt im Session-State bereitstellen für PDF /
-    # Platzhalter
-    try:
-        from heatpump_pricing import (
-            build_full_heatpump_offer,
-        )
-        offer = build_full_heatpump_offer(
-            rabatt_pct=rabatt_pct,
-            rabatt_abs=rabatt_abs,
-            zuschlag_pct=zuschlag_pct,
-            zuschlag_abs=zuschlag_abs,
-            beg_flags={
-                "natural_refrigerant": natural_ref,
-                "replace_old": replace_old,
-                "low_income": low_income},
-            financing={
-                "equity_amount": equity_amount,
-                "interest_pct": interest,
-                "years": years})
-        st.session_state['heatpump_offer'] = offer
-        st.success("Angebotsdaten aktualisiert und gespeichert.")
-    except Exception as e:
-        st.warning(f"Offer-Erstellung fehlgeschlagen: {e}")
-
-    if st.checkbox("Details anzeigen (Debug)"):
-        st.json(st.session_state.get('heatpump_offer'))
 
 
 def get_heatpump_database() -> list[dict[str, Any]]:
@@ -2362,18 +2834,18 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
             
             result = calculate_insulation_upgrade(building_data, current_state, target_state)
             
-            st.success(f"💰 **Gesamt-Investition:** {result['total_investment_eur']:,.2f} €")
-            st.success(f"💵 **Jährliche Einsparung:** {result['total_annual_savings_eur']:,.2f} €/Jahr")
+            st.success(f"💰 **Gesamt-Investition:** {format_german_number(result['total_investment_eur'], 2)} €")
+            st.success(f"💵 **Jährliche Einsparung:** {format_german_number(result['total_annual_savings_eur'], 2)} €/Jahr")
             st.success(f"⏱️ **Amortisation:** {result['total_payback_years']:.1f} Jahre")
-            st.success(f"📈 **Gewinn nach 20 Jahren:** {result['savings_20_years_eur']:,.2f} €")
+            st.success(f"📈 **Gewinn nach 20 Jahren:** {format_german_number(result['savings_20_years_eur'], 2)} €")
             
             st.markdown("### 📊 Optimale Reihenfolge (nach ROI)")
             for i, measure in enumerate(result['optimal_order'], 1):
                 data = result['measures'][measure]
                 st.write(f"**{i}. {measure.upper()}**")
                 col1, col2, col3 = st.columns(3)
-                col1.metric("Investition", f"{data['investment_eur']:,.0f} €")
-                col2.metric("Einsparung/Jahr", f"{data['annual_savings_eur']:,.0f} €")
+                col1.metric("Investition", f"{format_german_number(data['investment_eur'], 0)} €")
+                col2.metric("Einsparung/Jahr", f"{format_german_number(data['annual_savings_eur'], 0)} €")
                 col3.metric("Amortisation", f"{data['payback_years']:.1f} J")
             
             # Visualisierung
@@ -2393,7 +2865,8 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
                 title="Amortisationszeit nach Komponente",
                 xaxis_title="Komponente",
                 yaxis_title="Jahre",
-                height=400
+                height=400,
+                separators=',.'  # Deutsche Trennzeichen
             )
             st.plotly_chart(fig, use_container_width=True)
     
@@ -2412,22 +2885,22 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
                 st.markdown("#### 🔥 Niedertemperatur-Radiatoren")
                 rad = result['systems']['radiators_new']
                 st.metric("Vorlauftemperatur", f"{rad['flow_temperature_c']}°C")
-                st.metric("COP", f"{rad['cop']:.2f}")
-                st.metric("Installationskosten", f"{rad['installation_cost_eur']:,.0f} €")
-                st.metric("Jahreskosten Strom", f"{rad['annual_cost_eur']:,.0f} €")
+                st.metric("COP", f"{format_german_number(rad['cop'], 2)}")
+                st.metric("Installationskosten", f"{format_german_number(rad['installation_cost_eur'], 0)} €")
+                st.metric("Jahreskosten Strom", f"{format_german_number(rad['annual_cost_eur'], 0)} €")
             
             with col2:
                 st.markdown("#### 🌊 Fußbodenheizung")
                 uf = result['systems']['underfloor']
                 st.metric("Vorlauftemperatur", f"{uf['flow_temperature_c']}°C")
-                st.metric("COP", f"{uf['cop']:.2f}")
-                st.metric("Installationskosten", f"{uf['installation_cost_eur']:,.0f} €")
-                st.metric("Jahreskosten Strom", f"{uf['annual_cost_eur']:,.0f} €")
+                st.metric("COP", f"{format_german_number(uf['cop'], 2)}")
+                st.metric("Installationskosten", f"{format_german_number(uf['installation_cost_eur'], 0)} €")
+                st.metric("Jahreskosten Strom", f"{format_german_number(uf['annual_cost_eur'], 0)} €")
             
             comp = result['comparison']
             st.markdown("### 🎯 Empfehlung")
             st.success(f"**{comp['recommendation']}**")
-            st.info(f"Jährliche Einsparung: {comp['annual_savings_eur']:,.2f} €/Jahr")
+            st.info(f"Jährliche Einsparung: {format_german_number(comp['annual_savings_eur'], 2)} €/Jahr")
             st.info(f"Amortisation: {comp['payback_years']:.1f} Jahre")
             st.info(f"COP-Verbesserung: +{comp['cop_improvement_percent']:.1f}%")
     
@@ -2456,14 +2929,14 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
             with col1:
                 st.metric("Fensterfläche", f"{result['window_area_m2']:.1f} m²")
                 st.metric("U-Wert Verbesserung", f"-{result['u_value_improvement']['reduction_percent']:.1f}%")
-                st.metric("Wärmeverlust-Reduktion", f"{result['heat_loss_reduction_kwh']:,.0f} kWh")
+                st.metric("Wärmeverlust-Reduktion", f"{format_german_number(result['heat_loss_reduction_kwh'], 0)} kWh")
             
             with col2:
-                st.metric("Investition (brutto)", f"{result['investment_eur']:,.0f} €")
-                st.metric("Förderung (15%)", f"{result['subsidy_eur']:,.0f} €")
-                st.metric("Netto-Investition", f"{result['net_investment_eur']:,.0f} €")
+                st.metric("Investition (brutto)", f"{format_german_number(result['investment_eur'], 0)} €")
+                st.metric("Förderung (15%)", f"{format_german_number(result['subsidy_eur'], 0)} €")
+                st.metric("Netto-Investition", f"{format_german_number(result['net_investment_eur'], 0)} €")
             
-            st.success(f"📈 **Gewinn nach 20 Jahren:** {result['savings_20_years_eur']:,.2f} €")
+            st.success(f"📈 **Gewinn nach 20 Jahren:** {format_german_number(result['savings_20_years_eur'], 2)} €")
             st.info(f"⏱️ **Amortisation:** {result['payback_years']:.1f} Jahre")
     
     # Feature 4: Gesamt-Renovierungs-Planer
@@ -2494,21 +2967,21 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
                 with st.container():
                     st.markdown(f"### Schritt {step['step']}: {step['measure'].replace('_', ' ').title()}")
                     col1, col2, col3 = st.columns(3)
-                    col1.metric("Investition", f"{step['investment_eur']:,.0f} €")
-                    col2.metric("Einsparung/Jahr", f"{step['annual_savings_eur']:,.0f} €")
+                    col1.metric("Investition", f"{format_german_number(step['investment_eur'], 0)} €")
+                    col2.metric("Einsparung/Jahr", f"{format_german_number(step['annual_savings_eur'], 0)} €")
                     col3.metric("Amortisation", f"{step['payback_years']:.1f} J")
                     st.progress(step['cumulative_investment'] / budget_total)
-                    st.write(f"Kumulative Investition: {step['cumulative_investment']:,.0f} € von {budget_total:,.0f} €")
+                    st.write(f"Kumulative Investition: {format_german_number(step['cumulative_investment'], 0)} € von {format_german_number(budget_total, 0)} €")
             
             summary = result['summary']
             st.markdown("### 💰 Zusammenfassung")
             col1, col2, col3, col4 = st.columns(4)
             col1.metric("Maßnahmen", summary['total_measures'])
-            col2.metric("Investition", f"{summary['net_investment_eur']:,.0f} €")
-            col3.metric("Förderung", f"{summary['total_subsidy_eur']:,.0f} €")
-            col4.metric("Einsparung/Jahr", f"{summary['total_annual_savings_eur']:,.0f} €")
+            col2.metric("Investition", f"{format_german_number(summary['net_investment_eur'], 0)} €")
+            col3.metric("Förderung", f"{format_german_number(summary['total_subsidy_eur'], 0)} €")
+            col4.metric("Einsparung/Jahr", f"{format_german_number(summary['total_annual_savings_eur'], 0)} €")
             
-            st.success(f"📈 **Gewinn nach 20 Jahren:** {summary['savings_20_years_eur']:,.2f} €")
+            st.success(f"📈 **Gewinn nach 20 Jahren:** {format_german_number(summary['savings_20_years_eur'], 2)} €")
             st.info(f"⏱️ **Gesamt-Amortisation:** {summary['overall_payback_years']:.1f} Jahre")
 
 
@@ -2559,11 +3032,11 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
             col1, col2 = st.columns(2)
             
             with col1:
-                st.metric("Baseline (konstant)", f"{result['baseline']['annual_cost_eur']:,.0f} €/Jahr")
+                st.metric("Baseline (konstant)", f"{format_german_number(result['baseline']['annual_cost_eur'], 0)} €/Jahr")
             with col2:
-                st.metric("Optimiert (Vorheizen)", f"{result['optimized']['annual_cost_eur']:,.0f} €/Jahr")
+                st.metric("Optimiert (Vorheizen)", f"{format_german_number(result['optimized']['annual_cost_eur'], 0)} €/Jahr")
             
-            st.success(f"💵 **Jährliche Einsparung:** {result['savings']['annual_eur']:,.2f} € ({result['savings']['percent']:.1f}%)")
+            st.success(f"💵 **Jährliche Einsparung:** {format_german_number(result['savings']['annual_eur'], 2)} € ({result['savings']['percent']:.1f}%)")
             
             # Visualisierung: Wochenplan
             schedule_df = pd.DataFrame(result['schedule'][:168])  # Erste Woche
@@ -2587,7 +3060,8 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
                 title="Optimierter Heizplan (1 Woche)",
                 xaxis_title="Stunde",
                 yaxis_title="Heizleistung (kW)",
-                height=400
+                height=400,
+                separators=',.'  # Deutsche Trennzeichen
             )
             st.plotly_chart(fig, use_container_width=True)
     
@@ -2608,14 +3082,14 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
                     "Szenario": scenario_data['name'],
                     "Temperaturanstieg": f"+{summary['temp_increase_c']:.1f}°C",
                     "Heizlast-Reduktion": f"-{summary['heating_reduction_percent']:.1f}%",
-                    "COP 2050": f"{summary['final_cop']:.2f}",
+                    "COP 2050": f"{format_german_number(summary['final_cop'], 2)}",
                     "Strompreis 2050": f"{summary['electricity_price_2050']:.3f} €/kWh",
-                    "Kosten 2024-2050": f"{summary['cumulative_cost_2024_2050_eur']:,.0f} €"
+                    "Kosten 2024-2050": f"{format_german_number(summary['cumulative_cost_2024_2050_eur'], 0)} €"
                 })
             
             st.dataframe(pd.DataFrame(summary_data))
             
-            st.success(f"💵 **Differenz Best/Worst Case:** {result['comparison']['difference_eur']:,.0f} €")
+            st.success(f"💵 **Differenz Best/Worst Case:** {format_german_number(result['comparison']['difference_eur'], 0)} €")
             
             # Visualisierung: Kosten-Entwicklung
             fig = go.Figure()
@@ -2636,7 +3110,8 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
                 title="Jährliche Heizkosten-Entwicklung bis 2050",
                 xaxis_title="Jahr",
                 yaxis_title="Kosten (€/Jahr)",
-                height=500
+                height=500,
+                separators=',.'  # Deutsche Trennzeichen
             )
             st.plotly_chart(fig, use_container_width=True)
     
@@ -2662,11 +3137,11 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
             for wp_type, data in result['comparison'].items():
                 comparison_data.append({
                     "Typ": data['name'],
-                    "COP": f"{data['cop']:.2f}",
-                    "Investition": f"{data['net_installation_eur']:,.0f} €",
-                    "Stromkosten/Jahr": f"{data['annual_electricity_cost_eur']:,.0f} €",
+                    "COP": f"{format_german_number(data['cop'], 2)}",
+                    "Investition": f"{format_german_number(data['net_installation_eur'], 0)} €",
+                    "Stromkosten/Jahr": f"{format_german_number(data['annual_electricity_cost_eur'], 0)} €",
                     "Wartung/Jahr": f"{data['annual_maintenance_eur']} €",
-                    "Lebenszykluskosten": f"{data['lifetime_cost_eur']:,.0f} €",
+                    "Lebenszykluskosten": f"{format_german_number(data['lifetime_cost_eur'], 0)} €",
                     "Lautstärke": f"{data['noise_db']} dB",
                     "Lebensdauer": f"{data['lifespan_years']} Jahre"
                 })
@@ -2684,12 +3159,12 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
             st.markdown("### 📊 Jahres-Zusammenfassung")
             col1, col2, col3, col4 = st.columns(4)
             summary = result['annual_summary']
-            col1.metric("Wärmebedarf", f"{summary['total_heat_kwh']:,.0f} kWh")
-            col2.metric("Stromverbrauch", f"{summary['total_electricity_kwh']:,.0f} kWh")
-            col3.metric("Ø COP", f"{summary['annual_average_cop']:.2f}")
-            col4.metric("Betriebsstunden", f"{summary['operating_hours']:,.0f} h")
+            col1.metric("Wärmebedarf", f"{format_german_number(summary['total_heat_kwh'], 0)} kWh")
+            col2.metric("Stromverbrauch", f"{format_german_number(summary['total_electricity_kwh'], 0)} kWh")
+            col3.metric("Ø COP", f"{format_german_number(summary['annual_average_cop'], 2)}")
+            col4.metric("Betriebsstunden", f"{format_german_number(summary['operating_hours'], 0)} h")
             
-            st.success(f"💰 **Jahreskosten:** {summary['annual_cost_eur']:,.2f} €")
+            st.success(f"💰 **Jahreskosten:** {format_german_number(summary['annual_cost_eur'], 2)} €")
             
             # Monats-Übersicht
             st.markdown("### 📅 Monats-Übersicht")
@@ -2721,7 +3196,8 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
                 xaxis_title="Monat",
                 yaxis_title="Stromverbrauch (kWh)",
                 yaxis2=dict(title="Ø COP", overlaying='y', side='right'),
-                height=500
+                height=500,
+                separators=',.'  # Deutsche Trennzeichen
             )
             st.plotly_chart(fig, use_container_width=True)
 
@@ -2754,9 +3230,9 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
             
             st.markdown("### 💰 Finanzierung")
             col1, col2, col3 = st.columns(3)
-            col1.metric("Gesamt-Investition", f"{result['total_investment_eur']:,.0f} €")
-            col2.metric("Förderung", f"{result['total_subsidy_eur']:,.0f} € ({result['subsidy_rate']:.1f}%)")
-            col3.metric("Netto-Investition", f"{result['net_investment_eur']:,.0f} €")
+            col1.metric("Gesamt-Investition", f"{format_german_number(result['total_investment_eur'], 0)} €")
+            col2.metric("Förderung", f"{format_german_number(result['total_subsidy_eur'], 0)} € ({result['subsidy_rate']:.1f}%)")
+            col3.metric("Netto-Investition", f"{format_german_number(result['net_investment_eur'], 0)} €")
             
             st.markdown("### 📋 Förderungen im Detail")
             for subsidy in result['subsidies']:
@@ -2764,7 +3240,7 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
                     st.markdown(f"#### {subsidy['program']}")
                     col1, col2, col3 = st.columns(3)
                     col1.write(f"**Typ:** {subsidy['type']}")
-                    col2.write(f"**Betrag:** {subsidy['amount_eur']:,.2f} €")
+                    col2.write(f"**Betrag:** {format_german_number(subsidy['amount_eur'], 2)} €")
                     if subsidy['rate'] > 0:
                         col3.write(f"**Rate:** {subsidy['rate']:.1f}%")
             
@@ -2772,9 +3248,9 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
                 st.markdown("### 🏦 KfW-Kredit-Option")
                 loan = result['loan_option']
                 col1, col2, col3 = st.columns(3)
-                col1.metric("Kreditbetrag", f"{loan['loan_amount_eur']:,.0f} €")
-                col2.metric("Tilgungszuschuss", f"{loan['tilgung_grant_eur']:,.0f} €")
-                col3.metric("Monatliche Rate", f"{loan['monthly_rate_eur']:.2f} €")
+                col1.metric("Kreditbetrag", f"{format_german_number(loan['loan_amount_eur'], 0)} €")
+                col2.metric("Tilgungszuschuss", f"{format_german_number(loan['tilgung_grant_eur'], 0)} €")
+                col3.metric("Monatliche Rate", f"{format_german_number(loan['monthly_rate_eur'], 2)} €")
                 st.info(f"Laufzeit: {loan['duration_years']} Jahre, Zinssatz: {loan['interest_rate']*100:.1f}%")
             
             st.markdown("### ✅ Antrags-Checkliste")
@@ -2796,11 +3272,11 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
             col1, col2, col3, col4 = st.columns(4)
             summary = result['summary_20_years']
             col1.metric("CO2-Einsparung", f"{summary['total_co2_savings_t']:.1f} Tonnen")
-            col2.metric("Kostenersparnis", f"{summary['total_co2_cost_savings_eur']:,.0f} €")
-            col3.metric("≈ Bäume gepflanzt", f"{summary['equivalent_trees_planted']:,.0f}")
-            col4.metric("≈ PKW-km eingespart", f"{summary['equivalent_car_km']:,.0f}")
+            col2.metric("Kostenersparnis", f"{format_german_number(summary['total_co2_cost_savings_eur'], 0)} €")
+            col3.metric("≈ Bäume gepflanzt", f"{format_german_number(summary['equivalent_trees_planted'], 0)}")
+            col4.metric("≈ PKW-km eingespart", f"{format_german_number(summary['equivalent_car_km'], 0)}")
             
-            st.success(f"💚 **Pro Jahr:** {summary['avg_annual_savings_t']:.2f} Tonnen CO2")
+            st.success(f"💚 **Pro Jahr:** {format_german_number(summary['avg_annual_savings_t'], 2)} Tonnen CO2")
             
             # Visualisierung: CO2-Entwicklung
             yearly_df = pd.DataFrame(result['yearly_data'])
@@ -2836,7 +3312,8 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
                 title="CO2-Emissionen über 20 Jahre",
                 xaxis_title="Jahr",
                 yaxis_title="CO2 (Tonnen/Jahr)",
-                height=500
+                height=500,
+                separators=',.'  # Deutsche Trennzeichen
             )
             st.plotly_chart(fig, use_container_width=True)
             
@@ -2855,7 +3332,8 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
                 title="CO2-Preis-Entwicklung",
                 xaxis_title="Jahr",
                 yaxis_title="€/Tonne CO2",
-                height=400
+                height=400,
+                separators=',.'  # Deutsche Trennzeichen
             )
             st.plotly_chart(fig2, use_container_width=True)
 
@@ -2890,8 +3368,8 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
             st.markdown("### 💰 Nettobarwert (NPV)")
             col1, col2, col3 = st.columns(3)
             npv = result['npv_statistics']
-            col1.metric("Ø NPV", f"{npv['mean_eur']:,.0f} €")
-            col2.metric("Median NPV", f"{npv['median_eur']:,.0f} €")
+            col1.metric("Ø NPV", f"{format_german_number(npv['mean_eur'], 0)} €")
+            col2.metric("Median NPV", f"{format_german_number(npv['median_eur'], 0)} €")
             col3.metric("Wahrscheinlichkeit NPV>0", f"{npv['probability_positive']:.1f}%")
             
             st.markdown("### 📈 ROI-Statistik")
@@ -2921,7 +3399,8 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
                 title="Verteilung der Amortisationszeiten",
                 xaxis_title="Jahre",
                 yaxis_title="Häufigkeit",
-                height=400
+                height=400,
+                separators=',.'  # Deutsche Trennzeichen
             )
             st.plotly_chart(fig, use_container_width=True)
     
@@ -2941,7 +3420,7 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
             st.markdown("### 📊 Ihr Gebäude")
             col1, col2, col3 = st.columns(3)
             col1.metric("Verbrauch", f"{own['specific_consumption_kwh_m2']:.1f} kWh/m²/Jahr")
-            col2.metric("Wohnfläche", f"{own['living_area_m2']:.0f} m²")
+            col2.metric("Wohnfläche", f"{format_german_number(own['living_area_m2'], 0)} m²")
             col3.metric("Baujahr", own['year_built'])
             
             st.markdown("### 🎯 Ranking")
@@ -2957,7 +3436,7 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
                         delta=f"{comparison['difference_to_best_kwh_m2']:.1f}", delta_color="inverse")
             col3.metric("Schlechtestes", f"{comparison['worst_consumption_kwh_m2']:.1f} kWh/m²")
             
-            st.success(f"💰 **Einsparpotenzial:** {result['potential_annual_savings_eur']:,.2f} €/Jahr")
+            st.success(f"💰 **Einsparpotenzial:** {format_german_number(result['potential_annual_savings_eur'], 2)} €/Jahr")
             
             # Best Performer
             best = result['best_performer']
@@ -2971,8 +3450,8 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
                     priority_color = "red" if rec['priority'] == "high" else "orange"
                     st.markdown(f":{priority_color}[**{rec['priority'].upper()}**] {rec['measure']}")
                     col1, col2 = st.columns(2)
-                    col1.write(f"Einsparung: {rec['potential_savings_kwh_m2']:.0f} kWh/m²/Jahr")
-                    col2.write(f"Investition: {rec['investment_eur']:,.0f} €")
+                    col1.write(f"Einsparung: {format_german_number(rec['potential_savings_kwh_m2'], 0)} kWh/m²/Jahr")
+                    col2.write(f"Investition: {format_german_number(rec['investment_eur'], 0)} €")
 
 
 # Haupt-Export-Funktion
@@ -3001,6 +3480,856 @@ def render_heatpump(texts: dict[str,
         or {}
     )
     render_heatpump_analysis(texts, project_data_effective)
+
+
+# ============================================================================
+# DYNAMISCHER STROMTARIF TAB (NEU - Feature 13)
+# ============================================================================
+
+def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, Any]) -> None:
+    """
+    Dynamischer Stromtarif & Stromcloud Analyse
+    
+    Todos 8-14: Komplette UI mit 6 Expandern
+    """
+    
+    st.subheader("⚡ Dynamischer Stromtarif & Stromcloud")
+    st.markdown("""
+    Sparen Sie **15-25%** Stromkosten durch dynamische Tarife mit stundengenauer Abrechnung.
+    Optimal für Wärmepumpen, E-Autos und Smart-Home-Systeme.
+    """)
+    
+    # ========================================================================
+    # EXPANDER 1: Dynamischer vs Statischer Tarif (Todo 9)
+    # ========================================================================
+    
+    with st.expander("📊 Dynamischer vs Statischer Tarif", expanded=True):
+        st.markdown("""
+        Vergleichen Sie statischen Festpreis-Tarif mit dynamischem Börsenpreis-Tarif.
+        **Dynamische Tarife** passen sich stündlich an Stromangebot an.
+        """)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            annual_consumption = st.number_input(
+                "Jahresverbrauch Haushalt (kWh/Jahr)",
+                min_value=2000,
+                max_value=15000,
+                value=4500,
+                step=500,
+                help="Normaler Haushaltsstrom ohne WP"
+            )
+            
+            static_price = st.number_input(
+                "Aktueller Strompreis (EUR/kWh)",
+                min_value=0.20,
+                max_value=0.50,
+                value=0.32,
+                step=0.01,
+                format="%.3f"
+            )
+        
+        with col2:
+            wp_power_kw = building_data.get("heat_load_kw", 10)
+            wp_annual_hours = st.number_input(
+                "WP Betriebsstunden/Jahr",
+                min_value=1000,
+                max_value=2500,
+                value=1800,
+                step=100
+            )
+            
+            cop = building_data.get("cop", 3.5)
+            st.metric("JAZ (Jahresarbeitszahl)", f"{cop:.1f}")
+        
+        if st.button("🔍 Tarife vergleichen", type="primary"):
+            with st.spinner("Berechne Einsparpotenzial..."):
+                # Berechnung
+                comparison = calculate_dynamic_tariff_comparison(
+                    building_data,
+                    annual_consumption,
+                    static_price
+                )
+                
+                # Ergebnisse
+                st.markdown("---")
+                st.markdown("### 💰 Ergebnisse")
+                
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric(
+                        "Statischer Tarif (Gesamt)",
+                        f"{format_german_number(comparison['static_tariff']['annual_cost_total_eur'], 0)} €/Jahr",
+                        help="Festpreis für kompletten Verbrauch"
+                    )
+                    st.caption(f"WP: {format_german_number(comparison['static_tariff']['annual_cost_wp_eur'], 0)} €")
+                    st.caption(f"Haushalt: {format_german_number(comparison['static_tariff']['annual_cost_household_eur'], 0)} €")
+                
+                with col2:
+                    st.metric(
+                        "Dynamischer Tarif (Gesamt)",
+                        f"{format_german_number(comparison['dynamic_tariff']['annual_cost_total_eur'], 0)} €/Jahr",
+                        delta=f"-{format_german_number(comparison['savings']['annual_eur'], 0)} €",
+                        delta_color="normal",
+                        help="Börsenpreis mit intelligentem Load-Shifting"
+                    )
+                    st.caption(f"WP: {format_german_number(comparison['dynamic_tariff']['annual_cost_energy_eur'] * 0.25, 0)} €")
+                    st.caption(f"Haushalt: {format_german_number(comparison['dynamic_tariff']['annual_cost_energy_eur'] * 0.75, 0)} €")
+                
+                with col3:
+                    st.metric(
+                        "Einsparung",
+                        f"{comparison['savings']['annual_percent']:.1f}%",
+                        help=f"{format_german_number(comparison['savings']['annual_eur'], 0)} € pro Jahr"
+                    )
+                    st.caption(f"Monatlich: {format_german_number(comparison['savings']['monthly_eur'], 0)} €")
+                
+                # Smart Meter ROI
+                st.markdown("---")
+                st.markdown("### 📟 Smart Meter Investment")
+                
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric("Einmalkosten", f"{format_german_number(comparison['investment']['smart_meter_cost_eur'], 0)} €")
+                
+                with col2:
+                    st.metric("Amortisation", f"{comparison['investment']['payback_years']:.1f} Jahre")
+                
+                with col3:
+                    st.metric("10-Jahres-Bilanz", f"{format_german_number(comparison['savings']['10_years_eur'], 0)} €")
+                
+                
+                # VISUALISIERUNG 1: Stündliche Preiskurve (Todo 15)
+                st.markdown("---")
+                st.markdown("### 📊 Visualisierung: 24h-Preisverlauf")
+                
+                # Generiere stündliche Daten für Chart
+                from heatpump_dynamic_tariff import calculate_hourly_electricity_costs
+                hourly_data = calculate_hourly_electricity_costs(
+                    consumption_kwh=comparison['consumption']['total_kwh'] / 365,  # Tagesverbrauch
+                    base_price_eur_kwh=comparison['static_tariff']['price_eur_kwh']
+                )
+                
+                hourly_chart = create_hourly_price_chart(hourly_data)
+                st.plotly_chart(hourly_chart, use_container_width=True)
+    
+    
+    # ========================================================================
+    # EXPANDER 2: Stromcloud-Analyse (Todo 10)
+    # ========================================================================
+    
+    with st.expander("☁️ Stromcloud-Analyse"):
+        st.markdown("""
+        **Stromcloud** = Virtueller Stromspeicher beim Anbieter statt physischer Batterie.
+        Überschuss-Strom wird "eingelagert" und später kostenfrei entnommen.
+        """)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            pv_size_kwp = st.number_input(
+                "PV-Anlagengröße (kWp)",
+                min_value=3.0,
+                max_value=30.0,
+                value=10.0,
+                step=1.0
+            )
+            
+            annual_pv_kwh = pv_size_kwp * 1000  # Vereinfacht: 1000 kWh/kWp
+            
+            feed_in_tariff = st.number_input(
+                "Einspeisevergütung (EUR/kWh)",
+                min_value=0.05,
+                max_value=0.15,
+                value=0.08,
+                step=0.01,
+                format="%.3f"
+            )
+        
+        with col2:
+            total_consumption = annual_consumption + (wp_power_kw * wp_annual_hours / cop)
+            
+            st.metric("Jahresverbrauch Gesamt", f"{format_german_number(total_consumption, 0)} kWh")
+            st.metric("PV-Ertrag (geschätzt)", f"{format_german_number(annual_pv_kwh, 0)} kWh")
+            
+            cloud_provider = st.selectbox(
+                "Stromcloud-Anbieter",
+                options=["E.ON SolarCloud", "SENEC.Cloud", "sonnenFlat"]
+            )
+        
+        if st.button("☁️ Stromcloud berechnen", type="primary"):
+            with st.spinner("Berechne Cloud-Ökonomie..."):
+                pv_data = {
+                    "annual_production_kwh": annual_pv_kwh,
+                    "direct_consumption_kwh": annual_pv_kwh * 0.30  # 30% Eigenverbrauch ohne Cloud
+                }
+                
+                cloud_result = calculate_stromcloud_economics(
+                    building_data,
+                    pv_data,
+                    feed_in_tariff
+                )
+                
+                st.markdown("---")
+                st.markdown("### 📊 Stromcloud Vergleich")
+                
+                # Vor Cloud
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown("#### Ohne Stromcloud")
+                    st.metric("Netzstrom-Bezug", f"{format_german_number(cloud_result['without_cloud']['grid_consumption_kwh'], 0)} kWh")
+                    st.metric("Stromkosten", f"{format_german_number(cloud_result['without_cloud']['grid_cost_eur'], 0)} €/Jahr")
+                    st.metric("Einspeisung", f"{format_german_number(cloud_result['without_cloud']['feed_in_kwh'], 0)} kWh")
+                    st.metric("Einnahmen", f"{format_german_number(cloud_result['without_cloud']['feed_in_revenue_eur'], 0)} €/Jahr")
+                    st.metric("**Netto-Kosten**", f"**{format_german_number(cloud_result['without_cloud']['net_cost_eur'], 0)} €/Jahr**")
+                
+                with col2:
+                    st.markdown("#### Mit Stromcloud")
+                    cloud_grid_kwh = cloud_result['with_cloud'].get('overage_kwh', 0)
+                    st.metric("Cloud-Bezug", f"{format_german_number(cloud_result['with_cloud']['cloud_consumption_kwh'], 0)} kWh")
+                    st.metric("Cloud-Kosten", f"{format_german_number(cloud_result['with_cloud']['total_cloud_cost_eur'], 0)} €/Jahr")
+                    st.metric("Überschuss", f"{format_german_number(cloud_result['with_cloud']['overage_kwh'], 0)} kWh")
+                    st.metric("Autarkie", f"{cloud_result['pv_system']['autarkie_with_cloud_percent']:.1f}%")
+                    st.metric("**Netto-Kosten**", f"**{format_german_number(cloud_result['with_cloud']['net_cost_eur'], 0)} €/Jahr**")
+                
+                # Verbesserung
+                st.markdown("---")
+                comparison = cloud_result['comparison']
+                
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric(
+                        "Einsparung/Jahr",
+                        f"{format_german_number(comparison['annual_savings_eur'], 0)} €",
+                        delta=f"{comparison['savings_percent']:.1f}%"
+                    )
+                
+                with col2:
+                    st.metric(
+                        "Autarkie-Steigerung",
+                        f"{comparison['autarkie_improvement_percent']:.1f} %",
+                        delta="mehr Eigenverbrauch"
+                    )
+                
+                with col3:
+                    st.metric(
+                        "10-Jahres-Ersparnis",
+                        f"{format_german_number(comparison['annual_savings_eur'] * 10, 0)} €"
+                    )
+                
+                # Anbieter-Pläne
+                st.markdown("---")
+                st.markdown("### 📋 Verfügbare Cloud-Pläne")
+                
+                # Erstelle Tabelle aus verfügbaren Plänen
+                plans_data = []
+                for provider, plans in cloud_result['available_plans'].items():
+                    for plan_size, plan_details in plans.items():
+                        plans_data.append({
+                            "Anbieter": provider,
+                            "Tarif": f"{plan_size} kWh",
+                            "Freimenge (kWh/Jahr)": plan_details['free_kwh'],
+                            "Grundgebühr (€/Monat)": plan_details['base_fee_monthly']
+                        })
+                
+                plans_df = pd.DataFrame(plans_data)
+                st.dataframe(plans_df, use_container_width=True, hide_index=True)
+                
+                # VISUALISIERUNG 3: Stromcloud Waterfall (Todo 17)
+                st.markdown("---")
+                st.markdown("### 📊 Visualisierung: Kosten-Wasserfall")
+                
+                waterfall_chart = create_stromcloud_waterfall(cloud_result)
+                st.plotly_chart(waterfall_chart, use_container_width=True)
+    
+    
+    # ========================================================================
+    # EXPANDER 3: Energiemanagement-System (Todo 11)
+    # ========================================================================
+    
+    with st.expander("🤖 Energiemanagement-System (EMS)"):
+        st.markdown("""
+        **EMS** koordiniert Wärmepumpe, Batterie und PV intelligent für maximale Autarkie.
+        Nutzt Wetterprognosen und dynamische Tarife für optimales Load-Shifting.
+        """)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            ems_type = st.selectbox(
+                "EMS-System",
+                options=["SolarEdge", "SMA", "Fronius", "SENEC"],
+                help="Jedes System hat unterschiedliche Funktionen und Preise"
+            )
+            
+            battery_size = st.slider(
+                "Batteriegröße (kWh)",
+                min_value=5,
+                max_value=30,
+                value=10,
+                step=5
+            )
+        
+        with col2:
+            st.info(f"""
+            **{ems_type}**
+            - AI-Optimierung
+            - Wetterprognose
+            - Smart-Grid Ready
+            """)
+        
+        if st.button("🤖 EMS simulieren", type="primary"):
+            with st.spinner(f"Simuliere {ems_type} EMS..."):
+                pv_data = {
+                    "annual_production_kwh": pv_size_kwp * 1000,
+                    "direct_consumption_kwh": pv_size_kwp * 300
+                }
+                
+                ems_result = simulate_energy_management_system(
+                    building_data,
+                    pv_data,
+                    battery_size,
+                    ems_type
+                )
+                
+                st.markdown("---")
+                st.markdown(f"### ⚡ {ems_type} Simulation")
+                
+                # System-Info
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric("System", ems_result['ems_system']['type'])
+                    st.caption(f"Wirkungsgrad: {format_german_number(ems_result['ems_system']['efficiency']*100, 0)}%")
+                
+                with col2:
+                    st.metric("Batterie", f"{format_german_number(ems_result['ems_system']['battery_size_kwh'], 0)} kWh")
+                
+                with col3:
+                    st.metric("System-Preis", f"{format_german_number(ems_result['ems_system']['price_eur'], 0)} €")
+                
+                # Vorher/Nachher
+                st.markdown("---")
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown("#### 📊 Ohne EMS")
+                    st.metric("PV-Eigenverbrauch", f"{format_german_number(ems_result['without_ems']['pv_usage_kwh'], 0)} kWh")
+                    st.metric("Autarkie", f"{ems_result['without_ems']['autarkie_percent']:.1f}%")
+                    st.metric("Stromkosten", f"{format_german_number(ems_result['without_ems']['annual_cost_eur'], 0)} €/Jahr")
+                
+                with col2:
+                    st.markdown("#### 🚀 Mit EMS")
+                    st.metric("PV-Eigenverbrauch", f"{format_german_number(ems_result['with_ems']['pv_usage_kwh'], 0)} kWh")
+                    st.metric("Autarkie", f"{ems_result['with_ems']['autarkie_percent']:.1f}%")
+                    st.metric("Stromkosten", f"{format_german_number(ems_result['with_ems']['annual_cost_eur'], 0)} €/Jahr")
+                    st.caption(f"Load-Shifting: {format_german_number(ems_result['with_ems']['load_shifted_kwh'], 0)} kWh")
+                
+                # Verbesserung
+                st.markdown("---")
+                imp = ems_result['improvement']
+                
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric(
+                        "Zusätzlicher PV-Nutzen",
+                        f"{format_german_number(imp['additional_pv_usage_kwh'], 0)} kWh/Jahr"
+                    )
+                
+                with col2:
+                    st.metric(
+                        "Autarkie-Steigerung",
+                        f"+{imp['autarkie_increase_percent']:.1f}%"
+                    )
+                
+                with col3:
+                    st.metric(
+                        "Einsparung",
+                        f"{format_german_number(imp['annual_savings_eur'], 0)} €/Jahr"
+                    )
+                
+                # Investment
+                st.markdown("---")
+                st.markdown("### 💰 Investment & ROI")
+                
+                col1, col2, col3, col4 = st.columns(4)
+                
+                with col1:
+                    st.metric("EMS-Kosten", f"{format_german_number(ems_result['investment']['ems_cost_eur'], 0)} €")
+                
+                with col2:
+                    st.metric("Batterie-Kosten", f"{format_german_number(ems_result['investment']['battery_cost_eur'], 0)} €")
+                
+                with col3:
+                    st.metric("Gesamt-Investment", f"{format_german_number(ems_result['investment']['total_investment_eur'], 0)} €")
+                
+                with col4:
+                    st.metric("Amortisation", f"{ems_result['investment']['payback_years']:.1f} Jahre")
+                
+                if ems_result['investment']['worth_it']:
+                    st.success("✅ Investment lohnt sich - Amortisation unter 10 Jahren!")
+                else:
+                    st.warning("⚠️ Amortisation über 10 Jahre - gut abwägen!")
+    
+    
+    # ========================================================================
+    # EXPANDER 4: Smart-Home-Vorteile (Todo 12)
+    # ========================================================================
+    
+    with st.expander("🏠 Smart-Home-Integration"):
+        st.markdown("""
+        Vernetzen Sie alle Großverbraucher für automatisches Last-Management.
+        **Ziel:** Geräte laufen automatisch wenn Strom günstig ist.
+        """)
+        
+        st.markdown("### Steuerbare Geräte")
+        
+        col1, col2, col3 = st.columns(3)
+        
+        devices = {}
+        
+        with col1:
+            devices['heatpump'] = st.checkbox("⚡ Wärmepumpe", value=True)
+            devices['battery'] = st.checkbox("🔋 Batteriespeicher", value=False)
+            devices['wallbox'] = st.checkbox("🚗 E-Auto Wallbox", value=False)
+        
+        with col2:
+            devices['washing_machine'] = st.checkbox("👕 Waschmaschine", value=False)
+            devices['dishwasher'] = st.checkbox("🍽️ Geschirrspüler", value=False)
+            devices['dryer'] = st.checkbox("🌬️ Wäschetrockner", value=False)
+        
+        with col3:
+            automation_level = st.select_slider(
+                "Automatisierungs-Level",
+                options=["low", "medium", "high"],
+                value="medium",
+                help="low=Manuell | medium=Zeit-basiert | high=KI-gesteuert"
+            )
+        
+        if st.button("🏠 Smart-Home analysieren", type="primary"):
+            with st.spinner("Berechne Smart-Home-Potenzial..."):
+                sh_result = calculate_smart_home_benefits(
+                    building_data,
+                    devices,
+                    automation_level
+                )
+                
+                st.markdown("---")
+                st.markdown(f"### 🤖 {sh_result['automation']['description']}")
+                
+                # Automatisierungs-Info
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric("Automatisierungs-Level", sh_result['automation']['level'].upper())
+                
+                with col2:
+                    st.metric("Effizienz", f"{format_german_number(sh_result['automation']['efficiency_percent'], 0)}%")
+                
+                with col3:
+                    st.metric("Komplexität", sh_result['automation']['setup_complexity'])
+                
+                # Geräte-Details
+                st.markdown("---")
+                st.markdown("### 📱 Geräte-Übersicht")
+                
+                if sh_result['devices']:
+                    devices_data = []
+                    for device_name, device_info in sh_result['devices'].items():
+                        devices_data.append({
+                            "Gerät": device_name.replace("_", " ").title(),
+                            "Last verschiebbar": f"{device_info['shiftable_percent']}%",
+                            "Einsparung/Jahr": f"{format_german_number(device_info['annual_savings_eur'], 0)} €",
+                            "Setup-Kosten": f"{format_german_number(device_info['setup_cost_eur'], 0)} €",
+                            "Amortisation": f"{device_info['payback_years']:.1f} Jahre",
+                            "Komfort": f"{device_info['comfort_impact']*10:.1f}/10"
+                        })
+                    
+                    devices_df = pd.DataFrame(devices_data)
+                    st.dataframe(devices_df, use_container_width=True, hide_index=True)
+                else:
+                    st.warning("Keine Geräte ausgewählt")
+                
+                # Zusammenfassung
+                st.markdown("---")
+                st.markdown("### 💰 Gesamt-Bilanz")
+                
+                col1, col2, col3, col4 = st.columns(4)
+                
+                with col1:
+                    st.metric("Aktive Geräte", sh_result['summary']['active_devices'])
+                
+                with col2:
+                    st.metric("Einsparung/Jahr", f"{format_german_number(sh_result['summary']['total_annual_savings_eur'], 0)} €")
+                
+                with col3:
+                    st.metric("Setup-Kosten", f"{format_german_number(sh_result['summary']['total_setup_cost_eur'], 0)} €")
+                
+                with col4:
+                    st.metric("Amortisation", f"{sh_result['summary']['payback_years']:.1f} Jahre")
+                
+                # Comfort-Score
+                st.markdown("---")
+                col1, col2 = st.columns([1, 3])
+                
+                with col1:
+                    comfort = sh_result['comfort']['score_0_10']
+                    st.metric("Komfort-Score", f"{comfort:.1f}/10")
+                
+                with col2:
+                    st.info(f"""
+                    **{sh_result['comfort']['description']}**
+                    
+                    {sh_result['comfort']['recommendation']}
+                    """)
+                
+                # Vorteile
+                st.markdown("---")
+                st.markdown("### ✨ Zusätzliche Vorteile")
+                for benefit in sh_result['convenience_benefits']:
+                    st.success(benefit)
+    
+    
+    # ========================================================================
+    # EXPANDER 5: Vor- & Nachteile (Todo 13)
+    # ========================================================================
+    
+    with st.expander("⚖️ Vor- & Nachteile Dynamischer Tarife"):
+        st.markdown("""
+        Ist ein dynamischer Tarif das Richtige für Sie? 
+        Hier finden Sie alle Pros & Cons mit Gewichtung.
+        """)
+        
+        building_type_map = {
+            "Neubau KfW40": "residential",
+            "Neubau KfW55": "residential",
+            "Neubau Standard": "residential",
+            "Altbau saniert": "residential",
+            "Altbau teilsaniert": "residential",
+            "Altbau unsaniert": "residential"
+        }
+        
+        building_type_raw = building_data.get("building_type", "Neubau Standard")
+        building_type_clean = building_type_map.get(building_type_raw, "residential")
+        
+        pros_cons = get_dynamic_tariff_pros_cons(building_type_clean)
+        
+        # Empfehlung
+        st.markdown(f"### {pros_cons['scoring']['recommendation']}")
+        st.info(pros_cons['scoring']['recommendation_detail'])
+        
+        # Scores
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.metric("Pro-Score", pros_cons['scoring']['pro_score'], help="Summe aller Vorteile-Gewichte")
+        
+        with col2:
+            st.metric("Contra-Score", pros_cons['scoring']['con_score'], help="Summe aller Nachteile-Gewichte")
+        
+        with col3:
+            total = pros_cons['scoring']['total_score']
+            st.metric(
+                "Gesamt-Score",
+                total,
+                delta="Positiv" if total > 0 else "Negativ",
+                help="Pro-Score minus Contra-Score"
+            )
+        
+        # Pros & Cons nebeneinander
+        st.markdown("---")
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("### ✅ Vorteile")
+            for pro in pros_cons['pros']:
+                weight_stars = "⭐" * pro['weight']
+                st.success(f"""
+                **{pro['title']}**
+                
+                {pro['description']}
+                
+                Gewichtung: {weight_stars} ({pro['weight']}/10)
+                """)
+        
+        with col2:
+            st.markdown("### ❌ Nachteile")
+            for con in pros_cons['cons']:
+                weight_stars = "⚠️" * min(con['weight'], 5)  # Max 5 Warnungen
+                st.warning(f"""
+                **{con['title']}**
+                
+                {con['description']}
+                
+                Gewichtung: {weight_stars} ({con['weight']}/10)
+                """)
+        
+        # Idealer Nutzer
+        st.markdown("---")
+        st.markdown("### 🎯 Ideal für:")
+        for profile in pros_cons['ideal_user']:
+            st.info(profile)
+    
+    
+    # ========================================================================
+    # EXPANDER 6: Anbieter-Vergleich (Todo 14)
+    # ========================================================================
+    
+    with st.expander("🏆 Anbieter im Vergleich"):
+        st.markdown("""
+        Alle dynamischen Tarif-Anbieter in Deutschland im direkten Vergleich.
+        Finden Sie den besten Tarif für Ihr Profil.
+        """)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            comp_consumption = st.number_input(
+                "Jahresverbrauch Gesamt (kWh)",
+                min_value=3000,
+                max_value=20000,
+                value=8000,
+                step=500,
+                help="Haushalt + Wärmepumpe"
+            )
+        
+        with col2:
+            has_ev_comp = st.checkbox("E-Auto vorhanden", value=False)
+            has_wp_comp = st.checkbox("Wärmepumpe vorhanden", value=True)
+        
+        if st.button("🏆 Anbieter vergleichen", type="primary"):
+            with st.spinner("Vergleiche alle Anbieter..."):
+                provider_result = compare_tariff_providers(
+                    comp_consumption,
+                    has_ev_comp,
+                    has_wp_comp
+                )
+                
+                # Empfehlung
+                st.markdown("---")
+                st.markdown("### 🥇 Unsere Empfehlung")
+                
+                recommended = provider_result['summary']['recommended_provider']
+                reason = provider_result['summary']['recommendation_reason']
+                
+                st.success(f"""
+                ## {recommended}
+                
+                **Grund:** {reason}
+                
+                Website: {provider_result['providers'][recommended]['website']}
+                """)
+                
+                # Ranking
+                st.markdown("---")
+                st.markdown("### 📊 Kosten-Ranking")
+                
+                ranking_data = []
+                for rank_entry in provider_result['ranking']:
+                    provider_name = rank_entry['provider']
+                    provider_info = provider_result['providers'][provider_name]
+                    
+                    ranking_data.append({
+                        "Rang": f"#{rank_entry['rank']}",
+                        "Anbieter": provider_name,
+                        "Grundgebühr": f"{format_german_number(provider_info['costs']['base_fee_eur_month'], 2)} €/Monat",
+                        "Aufschlag": f"{provider_info['costs']['markup_eur_kwh']*100:.1f} ct/kWh",
+                        "Jahreskosten": f"{format_german_number(rank_entry['annual_cost_eur'], 0)} €",
+                        "Rating": f"{'⭐' * int(provider_info['rating'])} ({provider_info['rating']:.1f})",
+                        "Land": provider_info['country']
+                    })
+                
+                ranking_df = pd.DataFrame(ranking_data)
+                st.dataframe(ranking_df, use_container_width=True, hide_index=True)
+                
+                # Max Einsparung
+                st.info(f"""
+                **Maximale Einsparung:** {format_german_number(provider_result['summary']['max_savings_eur_year'], 0)} € pro Jahr 
+                zwischen günstigstem ({provider_result['summary']['cheapest_provider']}) 
+                und teuerstem ({provider_result['summary']['most_expensive_provider']}) Anbieter.
+                """)
+                
+                # Detaillierter Vergleich
+                st.markdown("---")
+                st.markdown("### 🔍 Detaillierter Vergleich")
+                
+                for provider_name, provider_info in provider_result['providers'].items():
+                    with st.expander(f"{provider_name} - {provider_info['rating']:.1f}⭐"):
+                        col1, col2 = st.columns(2)
+                        
+                        with col1:
+                            st.markdown("#### 💰 Kosten")
+                            st.metric("Grundgebühr", f"{format_german_number(provider_info['costs']['base_fee_eur_month'], 2)} €/Monat")
+                            st.metric("kWh-Aufschlag", f"{provider_info['costs']['markup_eur_kwh']*100:.1f} ct/kWh")
+                            st.metric("Effektiv-Preis", f"{provider_info['costs']['effective_price_eur_kwh']:.3f} €/kWh")
+                            st.metric("**Jahreskosten**", f"**{format_german_number(provider_info['costs']['total_annual_cost_eur'], 0)} €**")
+                        
+                        with col2:
+                            st.markdown("#### ✨ Features")
+                            for feature in provider_info['features']:
+                                st.success(feature)
+                        
+                        # Pros & Cons
+                        col1, col2 = st.columns(2)
+                        
+                        with col1:
+                            st.markdown("**Vorteile:**")
+                            for pro in provider_info['pros']:
+                                st.write(f"✅ {pro}")
+                        
+                        with col2:
+                            st.markdown("**Nachteile:**")
+                            for con in provider_info['cons']:
+                                st.write(f"❌ {con}")
+                        
+                        # Boni
+                        if has_ev_comp or has_wp_comp:
+                            st.markdown("---")
+                            st.markdown("**🎁 Ihre Rabatte:**")
+                            if provider_info['bonuses']['ev_discount_eur_kwh'] != 0:
+                                st.write(f"E-Auto: {provider_info['bonuses']['ev_discount_eur_kwh']*100:.1f} ct/kWh")
+                            if provider_info['bonuses']['wp_discount_eur_kwh'] != 0:
+                                st.write(f"Wärmepumpe: {provider_info['bonuses']['wp_discount_eur_kwh']*100:.1f} ct/kWh")
+    
+    
+    # ========================================================================
+    # BONUS-VISUALISIERUNGEN: Jahres-Analyse & Load-Shifting (Todos 16 & 18)
+    # ========================================================================
+    
+    st.markdown("---")
+    st.markdown("## 📊 Erweiterte Analysen")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        simulate_annual = st.checkbox("📈 Jahres-Simulation anzeigen", value=False)
+    
+    with col2:
+        simulate_heatmap = st.checkbox("🔥 Load-Shifting Heatmap anzeigen", value=False)
+    
+    # VISUALISIERUNG 2: Jährliche Kostenentwicklung (Todo 16)
+    if simulate_annual:
+        with st.spinner("Simuliere 8760 Stunden..."):
+            st.markdown("---")
+            st.markdown("### 📈 Jahres-Simulation (8760h)")
+            
+            annual_simulation = simulate_annual_price_profile(
+                building_data,
+                include_seasonal_variations=True
+            )
+            
+            # Zusammenfassung
+            col1, col2, col3, col4 = st.columns(4)
+            
+            with col1:
+                st.metric(
+                    "Jahresverbrauch",
+                    f"{format_german_number(annual_simulation['annual_summary']['total_consumption_kwh'], 0)} kWh"
+                )
+            
+            with col2:
+                st.metric(
+                    "Durchschnittspreis",
+                    f"{annual_simulation['annual_summary']['avg_price_eur_kwh']:.3f} €/kWh"
+                )
+            
+            with col3:
+                st.metric(
+                    "Jahreskosten",
+                    f"{format_german_number(annual_simulation['annual_summary']['total_cost_eur'], 0)} €"
+                )
+            
+            with col4:
+                st.metric(
+                    "WP-Anteil",
+                    f"{format_german_number(annual_simulation['annual_summary']['wp_consumption_kwh'], 0)} kWh"
+                )
+            
+            # Chart
+            st.markdown("### 📊 Kumulative Kostenentwicklung")
+            annual_chart = create_annual_cost_chart(
+                annual_simulation['monthly_summaries'],
+                static_price=0.32
+            )
+            st.plotly_chart(annual_chart, use_container_width=True)
+            
+            # Peak-Hours
+            st.markdown("---")
+            st.markdown("### ⏰ Extremwerte")
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.markdown("**Teuerste Stunde:**")
+                peak = annual_simulation['peak_hours']['most_expensive_hour']
+                st.info(f"""
+                Stunde {peak['hour']}: {peak['price_eur_kwh']:.3f} €/kWh
+                Verbrauch: {format_german_number(peak['total_load_kw'], 2)} kW
+                """)
+            
+            with col2:
+                st.markdown("**Günstigste Stunde:**")
+                cheapest = annual_simulation['peak_hours']['cheapest_hour']
+                st.success(f"""
+                Stunde {cheapest['hour']}: {cheapest['price_eur_kwh']:.3f} €/kWh
+                Verbrauch: {format_german_number(cheapest['total_load_kw'], 2)} kW
+                """)
+            
+            with col3:
+                st.markdown("**Höchster Verbrauch:**")
+                highest = annual_simulation['peak_hours']['highest_consumption_hour']
+                st.warning(f"""
+                Stunde {highest['hour']}: {format_german_number(highest['total_load_kw'], 2)} kW
+                Preis: {highest['price_eur_kwh']:.3f} €/kWh
+                """)
+    
+    # VISUALISIERUNG 4: Load-Shifting Heatmap (Todo 18)
+    if simulate_heatmap:
+        with st.spinner("Erstelle Load-Shifting Heatmap..."):
+            st.markdown("---")
+            st.markdown("### 🔥 Load-Shifting Heatmap (Woche)")
+            st.info("""
+            **Grün** = Günstige Zeiten (ideal für WP, E-Auto, Waschmaschine)  
+            **Rot** = Teure Zeiten (Vermeiden!)
+            """)
+            
+            # Nutze Jahres-Simulation falls vorhanden, sonst neue erstellen
+            if 'annual_simulation' not in locals():
+                annual_simulation = simulate_annual_price_profile(
+                    building_data,
+                    include_seasonal_variations=True
+                )
+            
+            heatmap = create_load_shifting_heatmap(annual_simulation['hourly_data'])
+            st.plotly_chart(heatmap, use_container_width=True)
+            
+            # Empfehlungen
+            st.markdown("---")
+            st.markdown("### 💡 Load-Shifting Empfehlungen")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.success("""
+                **✅ Beste Zeiten (Grün):**
+                - Nachts 22:00 - 06:00 Uhr
+                - Mittags 11:00 - 15:00 Uhr (Solar-Peak)
+                - Sonntags ganztägig günstiger
+                """)
+            
+            with col2:
+                st.error("""
+                **❌ Meiden (Rot):**
+                - Morgens 06:00 - 09:00 Uhr
+                - Abends 17:00 - 21:00 Uhr
+                - Montag/Dienstag (höchste Nachfrage)
+                """)
 
 
 if __name__ == "__main__":
