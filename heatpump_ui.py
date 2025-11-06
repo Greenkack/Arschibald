@@ -128,6 +128,32 @@ try:
         create_stromcloud_waterfall,
         create_load_shifting_heatmap,
     )
+    # Neue erweiterte Features (Phase 1-3)
+    from heatpump_advanced_calculations import (
+        calculate_jaz_prognosis,
+        calculate_buffer_tank_size,
+        calculate_price_scenarios,
+        calculate_tax_benefits,
+        calculate_noise_analysis,
+        generate_annual_load_profile,
+        calculate_smart_grid_benefits,
+        calculate_grid_service_bonus,
+        compare_hybrid_heating,
+        calculate_lifecycle_co2,
+        compare_refrigerants,
+        calculate_maintenance_schedule,
+        simulate_extreme_weather,
+    )
+    from heatpump_advanced_charts import (
+        create_system_3d_visualization,
+        create_kpi_dashboard,
+        create_jaz_comparison_chart,
+        create_annual_profile_chart,
+        create_noise_map,
+        create_lifecycle_chart,
+        create_price_scenario_chart,
+        create_maintenance_timeline,
+    )
     from database import get_db_connection
     from locales import get_text
     HEATPUMP_MODULES_AVAILABLE = True
@@ -155,12 +181,13 @@ def render_heatpump_analysis(
         "🌡️ Radiator-Check",
         "💰 Wirtschaftlichkeit",
         "⚡ PV-Integration",
-        "🏗️ Renovierungs-Planer",  # NEU: Features 1-4
-        "⚙️ Optimierung",  # NEU: Features 5-8
-        "💵 Förderung & CO2",  # NEU: Features 9-10
-        "📈 ROI & Benchmarking",  # NEU: Features 11-12
-        "⚡ Dynamischer Stromtarif",  # NEU: Feature 13 (Todo 8)
-        " Ergebnisse"
+        "� Erweiterte Analyse",  # NEU: Features 1.1-8.2
+        "🏗️ Renovierungs-Planer",
+        "⚙️ Optimierung",
+        "💵 Förderung & CO2",
+        "📈 ROI & Benchmarking",
+        "⚡ Dynamischer Stromtarif",
+        "📊 Ergebnisse"
     ])
 
     with tabs[0]:
@@ -220,37 +247,43 @@ def render_heatpump_analysis(
                         "PV-Daten optional. Für PV+WP-Integration bitte zuerst PV-Analyse durchführen.")
                 pv_integration_data = None
 
-    with tabs[5]:  # Renovierungs-Planer
+    with tabs[5]:  # ERWEITERTE ANALYSE (NEU)
+        if 'building_data' in st.session_state and 'heatpump_data' in st.session_state:
+            render_advanced_analysis(texts, st.session_state.building_data, st.session_state.heatpump_data)
+        else:
+            st.info("🎯 Bitte führen Sie zuerst die Gebäude- und Wärmepumpen-Analyse durch.")
+
+    with tabs[6]:  # Renovierungs-Planer
         if 'building_data' in st.session_state:
             render_renovation_planner(texts, st.session_state.building_data)
         else:
             st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
 
-    with tabs[6]:  # Optimierung
+    with tabs[7]:  # Optimierung
         if 'building_data' in st.session_state:
             render_optimization_tools(texts, st.session_state.building_data)
         else:
             st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
 
-    with tabs[7]:  # Förderung & CO2
+    with tabs[8]:  # Förderung & CO2
         if 'building_data' in st.session_state:
             render_subsidy_co2(texts, st.session_state.building_data)
         else:
             st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
 
-    with tabs[8]:  # ROI & Benchmarking
+    with tabs[9]:  # ROI & Benchmarking
         if 'building_data' in st.session_state:
             render_roi_benchmarking(texts, st.session_state.building_data)
         else:
             st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
 
-    with tabs[9]:  # Dynamischer Stromtarif (NEU)
+    with tabs[10]:  # Dynamischer Stromtarif
         if 'building_data' in st.session_state:
             render_dynamic_tariff_tab(texts, st.session_state.building_data)
         else:
             st.info("Bitte führen Sie zuerst die Gebäudeanalyse durch.")
 
-    with tabs[10]:  # Ergebnisse
+    with tabs[11]:  # Ergebnisse
         render_results_summary(texts)
 
 
@@ -4330,6 +4363,660 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 - Abends 17:00 - 21:00 Uhr
                 - Montag/Dienstag (höchste Nachfrage)
                 """)
+
+
+# ============================================================================
+# NEUE FUNKTION: ERWEITERTE ANALYSE (FEATURES 1.1-8.2)
+# ============================================================================
+
+def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any], heatpump_data: dict[str, Any]):
+    """
+    Neue Tab: 🎯 Erweiterte Analyse
+    
+    Zeigt alle erweiterten Features:
+    - JAZ-Prognose (1.1)
+    - Pufferspeicher-Dimensionierung (1.2)
+    - Preisszenario-Analyse (2.2)
+    - Steuerliche Vorteile (2.3)
+    - Lautstärke-Analyse (3.2)
+    - Jahresganglinie (3.3)
+    - Smart-Grid Integration (4.1)
+    - Netzdienlichkeits-Bonus (4.2)
+    - Hybrid-Heizung Vergleich (4.3)
+    - Lebenszyklus-CO2 (6.1)
+    - Kältemittel-Vergleich (6.2)
+    - Wartungsplan (8.1)
+    - Extremwetter-Simulation (8.2)
+    """
+    
+    st.header("🎯 Erweiterte Analyse")
+    st.markdown("**Professionelle Detailanalysen für optimale Planung**")
+    
+    # Sub-Tabs für verschiedene Analysebereiche
+    sub_tabs = st.tabs([
+        "📐 Dimensionierung",
+        "💰 Finanzen",
+        "🌡️ Komfort & Betrieb",
+        "⚡ Energie-Management",
+        "🌱 Nachhaltigkeit",
+        "🔧 Wartung & Szenarien"
+    ])
+    
+    # ========================================================================
+    # TAB 1: DIMENSIONIERUNG (Features 1.1, 1.2)
+    # ========================================================================
+    with sub_tabs[0]:
+        st.subheader("📐 Präzise Dimensionierung")
+        
+        # Feature 1.1: JAZ-Prognose
+        st.markdown("### 📊 Realistische JAZ-Prognose")
+        st.info("Berücksichtigt 7 Einflussfaktoren für präzise Effizienz-Vorhersage")
+        
+        jaz_data = calculate_jaz_prognosis(building_data, heatpump_data)
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "JAZ Realistisch",
+                f"{jaz_data['jaz_realistic']:.2f}",
+                delta=f"{jaz_data['deviation_percent']:+.1f}% vs. SCOP"
+            )
+        with col2:
+            st.metric("JAZ Optimistisch", f"{jaz_data['jaz_optimistic']:.2f}")
+        with col3:
+            st.metric("JAZ Pessimistisch", f"{jaz_data['jaz_pessimistic']:.2f}")
+        
+        # JAZ-Faktoren Visualisierung
+        st.plotly_chart(create_jaz_comparison_chart(jaz_data), use_container_width=True)
+        
+        # Empfehlungen
+        with st.expander("💡 Optimierungs-Empfehlungen anzeigen"):
+            for rec in jaz_data['recommendations']:
+                st.markdown(f"- {rec}")
+        
+        st.markdown("---")
+        
+        # Feature 1.2: Pufferspeicher
+        st.markdown("### 🔵 Pufferspeicher-Dimensionierung")
+        
+        buffer_data = calculate_buffer_tank_size(heatpump_data, building_data)
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "Empfohlene Größe",
+                f"{format_german_number(buffer_data['recommended_size_liters'], 0)} Liter"
+            )
+        with col2:
+            st.metric(
+                "Kostenrahmen",
+                f"{format_german_number(buffer_data['estimated_cost_eur'], 0)} €"
+            )
+        with col3:
+            buffer_priority = buffer_data['buffer_priority']
+            priority_emoji = "🔴" if buffer_priority == "Sehr wichtig" else "🟡" if buffer_priority == "Empfohlen" else "🟢"
+            st.metric(
+                "Priorität",
+                f"{priority_emoji} {buffer_priority}"
+            )
+        
+        st.info(f"**Begründung:** {buffer_data['reasoning']}")
+        
+        with st.expander("🎁 Vorteile eines Pufferspeichers"):
+            for benefit in buffer_data['benefits']:
+                st.markdown(f"- {benefit}")
+    
+    # ========================================================================
+    # TAB 2: FINANZEN (Features 2.2, 2.3)
+    # ========================================================================
+    with sub_tabs[1]:
+        st.subheader("💰 Finanzielle Analyse")
+        
+        # Feature 2.2: Preisszenario-Analyse
+        st.markdown("### 📈 Preisentwicklungs-Szenarien (20 Jahre)")
+        
+        economics_data = st.session_state.get('economics_data', {})
+        price_scenarios = calculate_price_scenarios(building_data, heatpump_data, economics_data)
+        
+        # Szenarien-Vergleich
+        scenarios_df = pd.DataFrame([
+            {
+                'Szenario': name.capitalize(),
+                'Wahrscheinlichkeit': f"{data.get('probability', 0)*100:.0f}%",
+                'Amortisation (Jahre)': data.get('payback_year', 'N/A'),
+                'Einsparung 20J': f"{format_german_number(data.get('total_savings_20y', 0), 0)} €",
+                'ROI': f"{data.get('roi_percent', 0):.1f}%"
+            }
+            for name, data in price_scenarios['scenarios'].items()
+        ])
+        
+        st.dataframe(scenarios_df, use_container_width=True, hide_index=True)
+        
+        # Preisentwicklungs-Chart
+        st.plotly_chart(create_price_scenario_chart(price_scenarios), use_container_width=True)
+        
+        # Best/Worst Case
+        col1, col2 = st.columns(2)
+        with col1:
+            st.success(f"""
+            **✅ Best Case (Konservativ):**
+            - Einsparung: {format_german_number(price_scenarios['scenarios']['konservativ']['total_savings_20y'], 0)} €
+            - Amortisation: {price_scenarios['scenarios']['konservativ']['payback_year']} Jahre
+            """)
+        with col2:
+            st.warning(f"""
+            **⚠️ Worst Case (Pessimistisch):**
+            - Einsparung: {format_german_number(price_scenarios['scenarios']['pessimistisch']['total_savings_20y'], 0)} €
+            - Amortisation: {price_scenarios['scenarios']['pessimistisch']['payback_year']} Jahre
+            """)
+        
+        st.markdown("---")
+        
+        # Feature 2.3: Steuerliche Vorteile
+        st.markdown("### 🧾 Steuerliche Absetzbarkeit")
+        
+        installation_cost = economics_data.get('installation_cost', 20000)
+        tax_benefits = calculate_tax_benefits(installation_cost, building_data)
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "Gesamter Steuervorteil",
+                f"{format_german_number(tax_benefits['total_benefit'], 2)} €"
+            )
+        with col2:
+            st.metric(
+                "Netto-Investition",
+                f"{format_german_number(tax_benefits['net_investment_after_tax'], 2)} €"
+            )
+        with col3:
+            benefit_percent = (tax_benefits['total_benefit'] / installation_cost) * 100
+            st.metric(
+                "Ersparnis",
+                f"{benefit_percent:.1f}%"
+            )
+        
+        # Details zu beiden Steuervorteilen
+        col1, col2 = st.columns(2)
+        with col1:
+            hw = tax_benefits['handwerkerleistungen']
+            st.info(f"""
+            **🔧 Handwerkerleistungen (§35a EStG)**
+            - Max. pro Jahr: {format_german_number(hw['max_benefit_per_year'], 2)} €
+            - Über {hw['years']} Jahre: {format_german_number(hw['total_benefit'], 2)} €
+            - Anteilige Arbeitskosten: {format_german_number(hw['labor_cost_estimate'], 2)} €
+            """)
+        with col2:
+            es = tax_benefits.get('energetische_sanierung', {})
+            if es.get('eligible', False):
+                st.success(f"""
+                **🏡 Energetische Sanierung (§35c EStG)**
+                - Förderung: {format_german_number(es['total_benefit'], 2)} €
+                - Jahr 1-2: je {format_german_number(es['year_1_2'], 2)} € (7%)
+                - Jahr 3: {format_german_number(es['year_3'], 2)} € (6%)
+                """)
+            else:
+                st.warning(f"""
+                **⚠️ Energetische Sanierung nicht möglich**
+                Grund: {es.get('reason', 'Gebäude zu neu')}
+                """)
+        
+        st.markdown(tax_benefits['recommendation'])
+    
+    # ========================================================================
+    # TAB 3: KOMFORT & BETRIEB (Features 3.2, 3.3)
+    # ========================================================================
+    with sub_tabs[2]:
+        st.subheader("🌡️ Komfort & Betriebsverhalten")
+        
+        # Feature 3.2: Lautstärke-Analyse
+        st.markdown("### 🔊 Lautstärke & Aufstellort (TA Lärm)")
+        
+        neighbor_distance = st.slider(
+            "Abstand zur Grundstücksgrenze (m)",
+            min_value=3.0,
+            max_value=20.0,
+            value=5.0,
+            step=0.5
+        )
+        
+        noise_data = calculate_noise_analysis(heatpump_data, building_data, neighbor_distance)
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "WP-Lautstärke",
+                f"{noise_data['wp_noise_level_dba']} dB(A)"
+            )
+        with col2:
+            st.metric(
+                "Beim Nachbarn",
+                f"{noise_data['noise_at_neighbor_dba']} dB(A)",
+                delta=f"-{noise_data['attenuation']['total']} dB"
+            )
+        with col3:
+            compliant = noise_data['compliance']['night_compliant']
+            st.metric(
+                "TA Lärm Konform",
+                "✅ Ja" if compliant else "❌ Nein"
+            )
+        
+        # Beurteilung
+        assessment_color = "success" if "UNKRITISCH" in noise_data['assessment'] else "warning" if "GRENZWERTIG" in noise_data['assessment'] else "error"
+        getattr(st, assessment_color)(noise_data['assessment'])
+        
+        # Schallausbreitungs-Karte
+        st.plotly_chart(create_noise_map(noise_data, building_data), use_container_width=True)
+        
+        # Optimaler Aufstellort
+        with st.expander("📍 Empfehlungen für optimalen Aufstellort"):
+            optimal_location = noise_data['optimal_location']
+            st.markdown(f"**Erforderlicher Mindestabstand:** {optimal_location['min_distance_required_m']} m")
+            for rec in optimal_location['recommendations']:
+                st.markdown(f"- {rec}")
+        
+        # Schallschutzmaßnahmen (falls erforderlich)
+        if noise_data['measures']:
+            with st.expander("🛠️ Mögliche Schallschutzmaßnahmen"):
+                for measure in noise_data['measures']:
+                    st.markdown(f"""
+                    **{measure['measure']}**
+                    - Reduktion: {measure['reduction_db']} dB
+                    - Kosten: {measure['cost_eur']}
+                    - {measure['description']}
+                    """)
+        
+        st.markdown("---")
+        
+        # Feature 3.3: Jahresganglinie
+        st.markdown("### 📆 Jahresganglinie & Heizprofil")
+        
+        load_profile = generate_annual_load_profile(building_data, heatpump_data)
+        
+        # Jahres-Zusammenfassung
+        annual = load_profile['annual_summary']
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric(
+                "Wärmebedarf/Jahr",
+                f"{format_german_number(annual['total_heat_and_hw_kwh'], 0)} kWh"
+            )
+        with col2:
+            st.metric(
+                "Stromverbrauch/Jahr",
+                f"{format_german_number(annual['total_electricity_kwh'], 0)} kWh"
+            )
+        with col3:
+            st.metric(
+                "Durchschnittliche JAZ",
+                f"{annual['average_jaz']:.2f}"
+            )
+        with col4:
+            st.metric(
+                "Heiztage/Jahr",
+                f"{annual['heating_days_per_year']}"
+            )
+        
+        # Monatsprofil-Chart
+        st.plotly_chart(create_annual_profile_chart(load_profile), use_container_width=True)
+        
+        # Monats-Tabelle
+        with st.expander("📊 Monatliche Details anzeigen"):
+            monthly_df = pd.DataFrame(load_profile['monthly_profile'])
+            monthly_df['Heizenergie (kWh)'] = monthly_df['heat_demand_kwh'].apply(lambda x: format_german_number(x, 0))
+            monthly_df['Strom WP (kWh)'] = monthly_df['total_electricity_kwh'].apply(lambda x: format_german_number(x, 0))
+            monthly_df['Außentemp (°C)'] = monthly_df['avg_temp_c']
+            monthly_df['Heiztage'] = monthly_df['heating_days']
+            
+            st.dataframe(
+                monthly_df[['month', 'Außentemp (°C)', 'Heiztage', 'Heizenergie (kWh)', 'Strom WP (kWh)']],
+                use_container_width=True,
+                hide_index=True
+            )
+    
+    # ========================================================================
+    # TAB 4: ENERGIE-MANAGEMENT (Features 4.1, 4.2, 4.3)
+    # ========================================================================
+    with sub_tabs[3]:
+        st.subheader("⚡ Energie-Management & Flexibilität")
+        
+        # Feature 4.1: Smart-Grid-Ready
+        st.markdown("### 🔌 Smart-Grid-Ready Integration")
+        
+        pv_data = st.session_state.get('pv_integration_data', None)
+        sg_benefits = calculate_smart_grid_benefits(building_data, heatpump_data, pv_data)
+        
+        # Szenarien-Vergleich
+        scenarios_comparison = []
+        base_cost = sg_benefits['base_annual_cost']
+        
+        for name, data in sg_benefits['scenarios'].items():
+            scenarios_comparison.append({
+                'Szenario': name.replace('_', ' ').title(),
+                'Jahreskosten': f"{format_german_number(data['annual_cost'], 2)} €",
+                'Einsparung': f"{format_german_number(base_cost - data['annual_cost'], 2)} €",
+                'Beschreibung': data['description']
+            })
+        
+        st.dataframe(pd.DataFrame(scenarios_comparison), use_container_width=True, hide_index=True)
+        
+        # Best Scenario
+        best = sg_benefits['best_scenario']
+        st.success(f"""
+        **✅ Bestes Szenario: {best['name'].replace('_', ' ').title()}**
+        - Jährliche Einsparung: {format_german_number(best['annual_savings'], 2)} €
+        - Gesamtkosten: {format_german_number(best['annual_cost'], 2)} €/Jahr
+        """)
+        
+        # Anforderungen
+        with st.expander("📋 Technische Anforderungen"):
+            for req in sg_benefits['requirements']:
+                st.markdown(f"- {req}")
+        
+        # Empfehlungen
+        with st.expander("💡 Empfehlungen"):
+            for rec in sg_benefits['recommendations']:
+                st.markdown(f"- {rec}")
+        
+        st.markdown("---")
+        
+        # Feature 4.2: §14a EnWG Bonus
+        st.markdown("### 💶 Netzdienlichkeits-Bonus (§14a EnWG)")
+        
+        grid_bonus = calculate_grid_service_bonus(heatpump_data, building_data)
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "Jährlicher Bonus",
+                f"{format_german_number(grid_bonus['bonus_annual_eur'], 2)} €"
+            )
+        with col2:
+            st.metric(
+                "Variante",
+                grid_bonus['bonus_variant']
+            )
+        with col3:
+            st.metric(
+                "20-Jahres-Vorteil",
+                f"{format_german_number(grid_bonus['benefit_20_years'], 2)} €"
+            )
+        
+        # Dimming-Details
+        with st.expander("🔌 Was bedeutet Netzdienlichkeit?"):
+            dimming = grid_bonus['dimming_details']
+            st.info(f"""
+            **Verpflichtung:**
+            - Netzbetreiber kann WP dimmen bei Netzengpässen
+            - Max. Abregelung: {dimming['max_dimming_percentage']}%
+            - Max. Dauer: {dimming['max_dimming_duration_hours']}h pro Eingriff
+            - Max. Eingriffe: {dimming['max_interventions_per_day']}/Tag
+            - Comfort-Einfluss: {dimming['comfort_impact']}
+            """)
+        
+        # Anmeldeprozess
+        with st.expander("📝 Anmeldeprozess beim Netzbetreiber"):
+            for step in grid_bonus['application_process']:
+                st.markdown(f"- {step}")
+        
+        st.markdown("---")
+        
+        # Feature 4.3: Hybrid-Heizung
+        st.markdown("### 🔀 Hybrid-System Vergleich (Bivalent)")
+        
+        backup_system = st.selectbox(
+            "Backup-System auswählen",
+            ['Gaskessel', 'Ölkessel', 'Elektroheizstab']
+        )
+        
+        hybrid_comparison = compare_hybrid_heating(building_data, heatpump_data, backup_system)
+        
+        # Vergleichstabelle
+        comparison_df = pd.DataFrame([
+            {
+                'System': 'Monovalent (nur WP)',
+                'WP-Größe': f"{hybrid_comparison['monovalent_system']['wp_size_kw']:.1f} kW",
+                'Investition': f"{format_german_number(hybrid_comparison['monovalent_system']['investment_eur'], 0)} €",
+                'Jahreskosten': f"{format_german_number(hybrid_comparison['monovalent_system']['annual_operating_cost_eur'], 0)} €",
+                'Kosten 20J': f"{format_german_number(hybrid_comparison['monovalent_system']['total_cost_20y_eur'], 0)} €"
+            },
+            {
+                'System': f"Hybrid (WP + {backup_system})",
+                'WP-Größe': f"{hybrid_comparison['hybrid_system']['wp_size_kw']:.1f} kW + Backup",
+                'Investition': f"{format_german_number(hybrid_comparison['hybrid_system']['investment_eur'], 0)} €",
+                'Jahreskosten': f"{format_german_number(hybrid_comparison['hybrid_system']['annual_operating_cost_eur'], 0)} €",
+                'Kosten 20J': f"{format_german_number(hybrid_comparison['hybrid_system']['total_cost_20y_eur'], 0)} €"
+            }
+        ])
+        
+        st.dataframe(comparison_df, use_container_width=True, hide_index=True)
+        
+        # Empfehlung
+        recommendation = hybrid_comparison['comparison']['recommendation']
+        rec_color = "success" if "SINNVOLL" in recommendation else "warning" if "GRENZWERTIG" in recommendation else "error"
+        getattr(st, rec_color)(recommendation)
+        
+        # Vor-/Nachteile
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("**✅ Vorteile Hybrid:**")
+            for adv in hybrid_comparison['advantages_hybrid']:
+                st.markdown(f"- {adv}")
+        with col2:
+            st.markdown("**❌ Nachteile Hybrid:**")
+            for dis in hybrid_comparison['disadvantages_hybrid']:
+                st.markdown(f"- {dis}")
+    
+    # ========================================================================
+    # TAB 5: NACHHALTIGKEIT (Features 6.1, 6.2)
+    # ========================================================================
+    with sub_tabs[4]:
+        st.subheader("🌱 Nachhaltigkeit & Umwelt")
+        
+        # Feature 6.1: Lebenszyklus-CO2
+        st.markdown("### ♻️ Vollständige Ökobilanz (20 Jahre)")
+        
+        old_system = building_data.get('heating_system', 'Gasheizung')
+        co2_data = calculate_lifecycle_co2(building_data, heatpump_data, old_system)
+        
+        # Hauptkennzahlen
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "CO2-Einsparung (20J)",
+                f"{format_german_number(co2_data['einsparung']['total_20y_tonnen_co2'], 1)} t"
+            )
+        with col2:
+            st.metric(
+                "Einsparung/Jahr",
+                f"{format_german_number(co2_data['einsparung']['annual_kg_co2']/1000, 1)} t"
+            )
+        with col3:
+            break_even = co2_data['einsparung']['break_even_year']
+            st.metric(
+                "Break-Even",
+                f"{break_even} Jahre" if isinstance(break_even, int) else "Nie"
+            )
+        
+        # Bewertung
+        interpretation = co2_data['interpretation']
+        interp_color = "success" if "HERVORRAGEND" in interpretation or "SEHR GUT" in interpretation else "warning" if "AKZEPTABEL" in interpretation else "error"
+        getattr(st, interp_color)(interpretation)
+        
+        # Lebenszyklus-Chart
+        st.plotly_chart(create_lifecycle_chart(co2_data), use_container_width=True)
+        
+        # Details
+        with st.expander("📊 Detaillierte CO2-Bilanz"):
+            col1, col2 = st.columns(2)
+            with col1:
+                wp_data = co2_data['wärmepumpe']
+                st.markdown(f"""
+                **Wärmepumpe:**
+                - Herstellung: {format_german_number(wp_data['herstellung_kg_co2']/1000, 1)} t
+                - Betrieb (20J): {format_german_number(wp_data['betrieb_20y_kg_co2']/1000, 1)} t
+                - Entsorgung: {format_german_number(wp_data['entsorgung_kg_co2']/1000, 1)} t
+                - **Gesamt: {format_german_number(wp_data['gesamt_20y_kg_co2']/1000, 1)} t**
+                """)
+            with col2:
+                old_data = co2_data['alte_heizung']
+                st.markdown(f"""
+                **{old_data['system']}:**
+                - Herstellung: {format_german_number(old_data['herstellung_kg_co2']/1000, 1)} t
+                - Betrieb (20J): {format_german_number(old_data['betrieb_20y_kg_co2']/1000, 1)} t
+                - Entsorgung: {format_german_number(old_data['entsorgung_kg_co2']/1000, 1)} t
+                - **Gesamt: {format_german_number(old_data['gesamt_20y_kg_co2']/1000, 1)} t**
+                """)
+        
+        st.markdown("---")
+        
+        # Feature 6.2: Kältemittel-Vergleich
+        st.markdown("### ❄️ Kältemittel & F-Gas-Compliance")
+        
+        refrigerant_data = compare_refrigerants(heatpump_data)
+        
+        current = refrigerant_data['current_refrigerant']
+        
+        # Aktuelles Kältemittel
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "Aktuelles Kältemittel",
+                current['name']
+            )
+        with col2:
+            gwp = current['gwp']
+            gwp_color = "🟢" if gwp < 150 else "🟡" if gwp < 700 else "🔴"
+            st.metric(
+                "GWP (CO2-Äquivalent)",
+                f"{gwp_color} {gwp}"
+            )
+        with col3:
+            st.metric(
+                "Compliant bis",
+                current['f_gas_compliant_until']
+            )
+        
+        # Bewertung
+        assessment = refrigerant_data['assessment']
+        assess_color = "success" if "HERVORRAGEND" in assessment or "SEHR GUT" in assessment else "warning" if "AKZEPTABEL" in assessment or "GRENZWERTIG" in assessment else "error"
+        getattr(st, assess_color)(assessment)
+        
+        # Alternative Kältemittel
+        st.markdown("#### 🔄 Zukunftssichere Alternativen")
+        
+        alternatives_df = pd.DataFrame([
+            {
+                'Kältemittel': alt['refrigerant'],
+                'GWP': alt['gwp'],
+                'Status': alt['status'],
+                'Effizienz': alt['efficiency'],
+                'Sicherheit': alt['safety_class'],
+                'Score': f"{alt['score']}/100"
+            }
+            for alt in refrigerant_data['alternatives']
+        ])
+        
+        st.dataframe(alternatives_df, use_container_width=True, hide_index=True)
+        
+        # Empfehlung
+        future_proofing = refrigerant_data['future_proofing']
+        st.info(f"""
+        **💡 Empfehlung für nächsten Kauf:**
+        {future_proofing['recommendation']} - {future_proofing['reason']}
+        """)
+    
+    # ========================================================================
+    # TAB 6: WARTUNG & SZENARIEN (Features 8.1, 8.2)
+    # ========================================================================
+    with sub_tabs[5]:
+        st.subheader("🔧 Wartung & Extrem-Szenarien")
+        
+        # Feature 8.1: Wartungsplan
+        st.markdown("### 📅 20-Jahres-Wartungsplan")
+        
+        maintenance = calculate_maintenance_schedule(heatpump_data, building_data)
+        
+        # Zusammenfassung
+        summary = maintenance['summary']
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "Wartungskosten (20J)",
+                f"{format_german_number(summary['total_maintenance_cost_20y_eur'], 0)} €"
+            )
+        with col2:
+            st.metric(
+                "Durchschnitt/Jahr",
+                f"{format_german_number(summary['average_annual_cost_eur'], 0)} €"
+            )
+        with col3:
+            st.metric(
+                "Größte Services",
+                "Jahr 5, 10, 15"
+            )
+        
+        # Wartungsplan-Timeline
+        st.plotly_chart(create_maintenance_timeline(maintenance), use_container_width=True)
+        
+        # Große Wartungen
+        with st.expander("🔧 Wichtige Wartungs-Meilensteine"):
+            for service in summary['major_services']:
+                st.markdown(f"- {service}")
+        
+        # Garantie
+        with st.expander("📜 Garantie & Versicherung"):
+            warranty = maintenance['warranty_info']
+            st.info(f"""
+            **Standard-Garantie:** {warranty['standard_warranty_years']} Jahre
+            
+            **Erweiterte Garantie verfügbar:**
+            - Laufzeit: {warranty['extended_warranty_years']} Jahre
+            - Kosten: {format_german_number(warranty['extended_warranty_cost_eur'], 0)} €
+            - Empfehlung: {warranty['recommendation']}
+            """)
+        
+        st.markdown("---")
+        
+        # Feature 8.2: Extremwetter-Simulation
+        st.markdown("### 🌡️ Extremwetter-Szenarien")
+        
+        scenario = st.selectbox(
+            "Szenario auswählen",
+            ['Kältewelle', 'Blackout', 'Hitzewelle']
+        )
+        
+        extreme_weather = simulate_extreme_weather(building_data, heatpump_data, scenario)
+        
+        # Szenario-Titel
+        st.markdown(f"#### {extreme_weather['scenario']}")
+        
+        # Bedingungen
+        if 'conditions' in extreme_weather:
+            st.info(f"""
+            **Bedingungen:**
+            {', '.join([f"{k.replace('_', ' ').title()}: {v}" for k, v in extreme_weather['conditions'].items()])}
+            """)
+        
+        # Bewertung
+        assessment = extreme_weather['assessment']
+        assess_color = "success" if "UNKRITISCH" in assessment or "AUSREICHEND" in assessment or "VERFÜGBAR" in assessment else "warning" if "UNBEQUEM" in assessment or "UNTERDIMENSIONIERT" in assessment else "error"
+        getattr(st, assess_color)(assessment)
+        
+        # Auswirkungen
+        if 'impact' in extreme_weather:
+            st.markdown("**📊 Auswirkungen:**")
+            impact_df = pd.DataFrame([
+                {'Kennzahl': k.replace('_', ' ').title(), 'Wert': str(v)}
+                for k, v in extreme_weather['impact'].items()
+            ])
+            st.dataframe(impact_df, use_container_width=True, hide_index=True)
+        
+        # Empfehlungen
+        if 'recommendations' in extreme_weather:
+            with st.expander("💡 Empfehlungen & Maßnahmen"):
+                for rec in extreme_weather['recommendations']:
+                    st.markdown(f"- {rec}")
 
 
 if __name__ == "__main__":
