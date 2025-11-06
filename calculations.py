@@ -3831,6 +3831,20 @@ def perform_calculations(
     # if app_debug_mode_is_enabled: print(f"CALC:
     # total_optional_components_cost_netto={total_optional_components_cost_netto:.2f}")
     # # Bereinigt
+    
+    # === PV MOUNTING COSTS INTEGRATION ===
+    cost_pv_mounting_netto = 0.0
+    if project_details.get('include_pv_mounting'):
+        try:
+            from solar_calculator_pv_mounting_integration import get_mounting_total_price
+            cost_pv_mounting_netto = get_mounting_total_price(project_details)
+        except ImportError:
+            # Mounting integration not available
+            pass
+        except Exception as e_mount_calc:
+            # Log error but don't break calculations
+            print(f"CALC WARNING: PV Mounting cost calculation failed: {e_mount_calc}")
+    results["cost_pv_mounting_netto"] = cost_pv_mounting_netto
 
     # Summe aller Zusatzkosten (die nicht im Matrix-Pauschalpreis sind)
     total_additional_costs_netto = sum(
@@ -3846,6 +3860,7 @@ def perform_calculations(
                 cost_scaffolding_netto,
                 cost_custom_netto,
                 total_optional_components_cost_netto,
+                cost_pv_mounting_netto,  # NEW: PV Mounting costs
             ],
         )
     )

@@ -22,6 +22,15 @@ from admin_payment_terms_ui import (
 from admin_product_database_ui import render_product_admin_ui
 from admin_services_ui import render_services_admin_ui
 from admin_user_management_ui import render_user_management_tab
+from admin_heating_costs_config_ui import render_admin_heating_costs_ui as render_heating_costs_config_tab
+
+# PV-Unterkonstruktions-Verwaltung
+try:
+    from admin_pv_mounting_tab_v2 import render_pv_mounting_admin_tab_v2 as render_pv_mounting_admin_tab
+    PV_MOUNTING_TAB_AVAILABLE = True
+except ImportError:
+    PV_MOUNTING_TAB_AVAILABLE = False
+    render_pv_mounting_admin_tab = None  # type: ignore
 from ui_state_manager import (
     commit_widget_value,
     ensure_session_defaults,
@@ -173,10 +182,12 @@ ADMIN_TAB_KEYS_DEFINITION_GLOBAL = [
     "admin_tab_product_management",
     "admin_tab_logo_management",
     "admin_tab_product_database_crud",
+    "admin_tab_pv_mounting",  # NEU: PV-Unterkonstruktions-Verwaltung
     "admin_tab_services_management",
     "admin_tab_general_settings",
     "admin_tab_intro_settings",
     "admin_tab_tariff_management",
+    "admin_tab_heatpump_settings",  # NEU: Wärmepumpen-Einstellungen (inkl. Preise & Heizkosten)
     "admin_tab_pdf_design",
     "admin_tab_payment_terms",
     "admin_tab_visualization_settings",
@@ -191,10 +202,12 @@ ADMIN_TAB_ICONS = {
     "admin_tab_product_management": "📦",
     "admin_tab_logo_management": "🖼️",
     "admin_tab_product_database_crud": "🗄️",
+    "admin_tab_pv_mounting": "🔧",  # NEU: PV-Unterkonstruktions-Verwaltung
     "admin_tab_services_management": "🛠️",
     "admin_tab_general_settings": "⚙️",
     "admin_tab_intro_settings": "🎬",
     "admin_tab_tariff_management": "💡",
+    "admin_tab_heatpump_settings": "🔥",  # NEU: Wärmepumpen-Einstellungen
     "admin_tab_pdf_design": "📝",
     "admin_tab_payment_terms": "💳",
     "admin_tab_visualization_settings": "📊",
@@ -210,10 +223,12 @@ ADMIN_TAB_DESCRIPTIONS = {
     "admin_tab_product_management": "Produkte, Varianten und Preise verwalten",
     "admin_tab_logo_management": "Logos, Brand-Assets und Platzierungen",
     "admin_tab_product_database_crud": "Produktdatenbank synchronisieren und pflegen",
+    "admin_tab_pv_mounting": "PV-Unterkonstruktions-Komponenten verwalten (Dachhaken, Schienen, Klemmen)",  # NEU
     "admin_tab_services_management": "Dienstleistungen strukturieren und bündeln",
     "admin_tab_general_settings": "Globale Parameter, Einheiten und Defaults",
     "admin_tab_intro_settings": "Intro-Inhalte und Onboarding-Story anpassen",
     "admin_tab_tariff_management": "Einspeisevergütungen & Tarife konfigurieren",
+    "admin_tab_heatpump_settings": "Wärmepumpen-Preise, Heizkosten & Konfiguration (Passwortgeschützt)",  # NEU
     "admin_tab_pdf_design": "PDF-Looks, Cover und Layouts definieren",
     "admin_tab_payment_terms": "Zahlungsbedingungen & Varianten steuern",
     "admin_tab_visualization_settings": "Themes, UI-Effekte, Charts & Farben",
@@ -228,10 +243,12 @@ ADMIN_TAB_LABELS_DE = {
     "admin_tab_product_management": "Produktverwaltung",
     "admin_tab_logo_management": "Logo-Verwaltung",
     "admin_tab_product_database_crud": "Produktdatenbank",
+    "admin_tab_pv_mounting": "PV-Unterkonstruktionen",  # NEU: PV Mounting Components
     "admin_tab_services_management": "Dienstleistungen Management",
     "admin_tab_general_settings": "Allgemeine Einstellungen",
     "admin_tab_intro_settings": "Intro-Einstellungen",
     "admin_tab_tariff_management": "Einspeisung Tarifverwaltung",
+    "admin_tab_heatpump_settings": "Wärmepumpen-Einstellungen",  # NEU: Umbenannt
     "admin_tab_pdf_design": "PDF-Design Einstellungen",
     "admin_tab_payment_terms": "Zahlungsbedingungen Einstellungen",
     "admin_tab_visualization_settings": "Anzeigeeinstellungen",
@@ -3561,6 +3578,7 @@ def render_admin_panel(
             get_product_by_model_name_func),
         "admin_tab_logo_management": lambda: render_logo_management_tab(),
         "admin_tab_product_database_crud": lambda: render_product_admin_ui(),
+        "admin_tab_pv_mounting": lambda: render_pv_mounting_admin_tab() if PV_MOUNTING_TAB_AVAILABLE else st.warning("PV-Montage-Modul nicht verfügbar"),  # NEU
         "admin_tab_general_settings": lambda: render_general_settings_extended(
             load_admin_setting_func,
             save_admin_setting_func),
@@ -3568,6 +3586,7 @@ def render_admin_panel(
         "admin_tab_tariff_management": lambda: render_tariff_management(
             load_admin_setting_func,
             save_admin_setting_func),
+        "admin_tab_heatpump_settings": lambda: render_heatpump_settings_tab(),  # NEU: Wärmepumpen-Einstellungen
         "admin_tab_pdf_design": lambda: render_pdf_design_settings(
             load_admin_setting_func,
             save_admin_setting_func),
@@ -3956,13 +3975,109 @@ def render_build_infos_tab():
 
 
 def render_security_settings_tab():
-    """Rendert den Sicherheitseinstellungen Tab"""
+    """Rendert den Sicherheitseinstellungen Tab mit Passwortschutz"""
     try:
+        # Passwortschutz für Sicherheitseinstellungen
+        if "security_settings_unlocked" not in st.session_state:
+            st.session_state.security_settings_unlocked = False
+        
+        if not st.session_state.security_settings_unlocked:
+            st.warning("🔒 Dieser Bereich ist nur für Administratoren zugänglich.")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                username = st.text_input("Admin-Benutzername", key="security_settings_username")
+            
+            with col2:
+                password = st.text_input("Admin-Passwort", type="password", key="security_settings_password")
+            
+            col_btn1, col_btn2 = st.columns([1, 4])
+            with col_btn1:
+                if st.button("🔓 Entsperren", key="unlock_security_settings", type="primary"):
+                    if not username or not password:
+                        st.error("❌ Bitte Benutzername und Passwort eingeben!")
+                    else:
+                        from admin_security import verify_admin_password
+                        if verify_admin_password(username, password):
+                            st.session_state.security_settings_unlocked = True
+                            st.success(f"✅ Willkommen, {username}!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Ungültige Anmeldedaten!")
+            
+            with col_btn2:
+                st.info("💡 Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
+            
+            return
+        
+        # Entsperrt - zeige Sicherheitseinstellungen
         from admin_security import render_admin_security_settings
         render_admin_security_settings()
+        
+        # Sperre-Button
+        if st.button("🔒 Bereich wieder sperren", key="lock_security_settings"):
+            st.session_state.security_settings_unlocked = False
+            st.rerun()
+            
     except ImportError as e:
         st.error(f"Admin Security Modul konnte nicht geladen werden: {e}")
         st.info("Stellen Sie sicher, dass admin_security.py verfügbar ist.")
     except Exception as e:
         st.error(f"Fehler beim Rendern der Sicherheitseinstellungen: {e}")
         st.text(traceback.format_exc())
+
+
+def render_heatpump_settings_tab():
+    """Rendert den Wärmepumpen-Einstellungen Tab mit Passwortschutz"""
+    try:
+        # Passwortschutz für Wärmepumpen-Einstellungen
+        if "heatpump_settings_unlocked" not in st.session_state:
+            st.session_state.heatpump_settings_unlocked = False
+        
+        if not st.session_state.heatpump_settings_unlocked:
+            st.warning("🔒 Dieser Bereich ist nur für Administratoren zugänglich.")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                username = st.text_input("Admin-Benutzername", key="heatpump_settings_username")
+            
+            with col2:
+                password = st.text_input("Admin-Passwort", type="password", key="heatpump_settings_password")
+            
+            col_btn1, col_btn2 = st.columns([1, 4])
+            with col_btn1:
+                if st.button("🔓 Entsperren", key="unlock_heatpump_settings", type="primary"):
+                    if not username or not password:
+                        st.error("❌ Bitte Benutzername und Passwort eingeben!")
+                    else:
+                        from admin_security import verify_admin_password
+                        if verify_admin_password(username, password):
+                            st.session_state.heatpump_settings_unlocked = True
+                            st.success(f"✅ Willkommen, {username}!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Ungültige Anmeldedaten!")
+            
+            with col_btn2:
+                st.info("💡 Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
+            
+            return
+        
+        # Entsperrt - zeige Wärmepumpen-Einstellungen
+        from admin_heatpump_settings_ui import render_admin_heatpump_settings_ui
+        render_admin_heatpump_settings_ui()
+        
+        # Sperre-Button
+        if st.button("🔒 Bereich wieder sperren", key="lock_heatpump_settings"):
+            st.session_state.heatpump_settings_unlocked = False
+            st.rerun()
+            
+    except ImportError as e:
+        st.error(f"Wärmepumpen-Einstellungs-Modul konnte nicht geladen werden: {e}")
+        st.info("Stellen Sie sicher, dass admin_heatpump_settings_ui.py verfügbar ist.")
+    except Exception as e:
+        st.error(f"Fehler beim Rendern der Wärmepumpen-Einstellungen: {e}")
+        st.text(traceback.format_exc())
+

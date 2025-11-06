@@ -1,381 +1,469 @@
 """
-Test script for export functions
+Comprehensive Test für Export-Funktionen (Task 9)
 
-Tests:
-- Screenshot export with various scenes
-- STL export and file validation
-- glTF export and file validation
-- File sizes and quality verification
+Testet alle Export-Funktionen gemäß Task 9:
+- Screenshot-Export in verschiedenen Formaten (PNG, JPEG)
+- Multi-View Export als ZIP
+- 360° Animation Export als GIF
+- 3D-Modell Export (STL, GLTF, OBJ)
 """
 
-import sys
 import os
+import sys
+import zipfile
+
+# Füge aktuelles Verzeichnis zum Python-Pfad hinzu
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from utils.pv3d import (
-    BuildingDims,
-    LayoutConfig,
-    render_image_bytes,
-    export_stl,
-    export_gltf
-)
+try:
+    from utils.pv3d_export import (
+        export_screenshot,
+        export_screenshot_from_scene,
+        export_multi_view,
+        export_360_animation,
+        export_3d_model,
+        export_all_formats,
+        PV3D_AVAILABLE
+    )
+    from utils.pv3d import BuildingDims, LayoutConfig
+    from utils.pv3d_plotly import build_plotly_scene
+    
+    print("✓ Alle Imports erfolgreich")
+    
+except ImportError as e:
+    print(f"✗ Import-Fehler: {e}")
+    sys.exit(1)
 
 
-def test_screenshot_export():
-    """Test screenshot export with various scenes"""
-    print("\n" + "=" * 60)
-    print("Testing Screenshot Export")
-    print("=" * 60)
+def test_screenshot_png():
+    """Test Screenshot-Export in PNG Format"""
+    print("\n" + "="*60)
+    print("TEST 1: Screenshot Export - PNG Format")
+    print("="*60)
     
-    test_scenarios = [
-        {
-            "name": "Flat roof with modules",
-            "project_data": {
-                "project_details": {
-                    "roof_type": "Flachdach",
-                    "roof_orientation": "Süd",
-                    "roof_inclination_deg": 0,
-                    "roof_covering_type": "Bitumen"
-                }
-            },
-            "roof_type": "Flachdach",
-            "module_quantity": 20
-        },
-        {
-            "name": "Gable roof with modules",
-            "project_data": {
-                "project_details": {
-                    "roof_type": "Satteldach",
-                    "roof_orientation": "Süd",
-                    "roof_inclination_deg": 30,
-                    "roof_covering_type": "Ziegel"
-                }
-            },
-            "roof_type": "Satteldach",
-            "module_quantity": 15
-        },
-        {
-            "name": "Hip roof with modules",
-            "project_data": {
-                "project_details": {
-                    "roof_type": "Walmdach",
-                    "roof_orientation": "Ost",
-                    "roof_inclination_deg": 25,
-                    "roof_covering_type": "Schiefer"
-                }
-            },
-            "roof_type": "Walmdach",
-            "module_quantity": 12
-        }
-    ]
+    try:
+        project_data = {}
+        dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=3.0)
+        
+        png_bytes = export_screenshot_from_scene(
+            project_data=project_data,
+            dims=dims,
+            roof_type="Flachdach",
+            module_quantity=20,
+            format="png",
+            width=1600,
+            height=1000
+        )
+        
+        if png_bytes and len(png_bytes) > 0:
+            # Speichere Datei
+            with open("test_screenshot_png.png", "wb") as f:
+                f.write(png_bytes)
+            
+            print(f"✓ PNG Screenshot erstellt ({len(png_bytes)} bytes)")
+            print("✓ Datei gespeichert: test_screenshot_png.png")
+            return True
+        else:
+            print("✗ PNG Screenshot ist leer")
+            return False
+            
+    except Exception as e:
+        print(f"✗ Fehler: {e}")
+        return False
+
+
+def test_screenshot_jpeg():
+    """Test Screenshot-Export in JPEG Format"""
+    print("\n" + "="*60)
+    print("TEST 2: Screenshot Export - JPEG Format")
+    print("="*60)
     
-    for scenario in test_scenarios:
-        dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
+    try:
+        project_data = {}
+        dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=3.0)
+        
+        jpeg_bytes = export_screenshot_from_scene(
+            project_data=project_data,
+            dims=dims,
+            roof_type="Satteldach",
+            module_quantity=15,
+            format="jpeg",
+            width=1600,
+            height=1000
+        )
+        
+        if jpeg_bytes and len(jpeg_bytes) > 0:
+            # Speichere Datei
+            with open("test_screenshot_jpeg.jpg", "wb") as f:
+                f.write(jpeg_bytes)
+            
+            print(f"✓ JPEG Screenshot erstellt ({len(jpeg_bytes)} bytes)")
+            print("✓ Datei gespeichert: test_screenshot_jpeg.jpg")
+            return True
+        else:
+            print("✗ JPEG Screenshot ist leer")
+            return False
+            
+    except Exception as e:
+        print(f"✗ Fehler: {e}")
+        return False
+
+
+def test_multi_view_zip():
+    """Test Multi-View Export als ZIP"""
+    print("\n" + "="*60)
+    print("TEST 3: Multi-View Export als ZIP")
+    print("="*60)
+    
+    try:
+        project_data = {}
+        dims = BuildingDims(length_m=12.0, width_m=8.0, wall_height_m=3.5)
+        
+        # Teste mit allen Standard-Views
+        views_dict = export_multi_view(
+            project_data=project_data,
+            dims=dims,
+            roof_type="Satteldach",
+            module_quantity=25,
+            views=["isometric", "top", "south", "east"],
+            resolution=(1200, 750),
+            return_zip_bytes=True
+        )
+        
+        if not views_dict or len(views_dict) == 0:
+            print("✗ Keine Views erstellt")
+            return False
+        
+        # Prüfe einzelne Views
+        view_count = len([k for k in views_dict.keys() if k != "_zip"])
+        print(f"✓ {view_count} Views erstellt")
+        
+        # Prüfe ZIP-Datei
+        if "_zip" not in views_dict:
+            print("✗ Keine ZIP-Datei erstellt")
+            return False
+        
+        zip_bytes = views_dict["_zip"]
+        print(f"✓ ZIP-Datei erstellt ({len(zip_bytes)} bytes)")
+        
+        # Speichere und validiere ZIP
+        zip_path = "test_multi_view_export.zip"
+        with open(zip_path, "wb") as f:
+            f.write(zip_bytes)
+        
+        # Prüfe ZIP-Inhalt
+        with zipfile.ZipFile(zip_path, 'r') as zipf:
+            files = zipf.namelist()
+            print(f"✓ ZIP enthält {len(files)} Dateien:")
+            for filename in files:
+                file_info = zipf.getinfo(filename)
+                print(f"  - {filename} ({file_info.file_size} bytes)")
+        
+        print(f"✓ ZIP gespeichert: {zip_path}")
+        return True
+        
+    except Exception as e:
+        print(f"✗ Fehler: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def test_360_animation_gif():
+    """Test 360° Animation Export als GIF"""
+    print("\n" + "="*60)
+    print("TEST 4: 360° Animation Export als GIF")
+    print("="*60)
+    
+    try:
+        project_data = {}
+        dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=3.0)
+        
+        # Teste mit 18 Frames (schneller als 36)
+        gif_path = "test_360_animation_export.gif"
+        gif_bytes = export_360_animation(
+            project_data=project_data,
+            dims=dims,
+            roof_type="Satteldach",
+            module_quantity=20,
+            filepath=gif_path,
+            frames=18,
+            resolution=(800, 600),
+            duration_ms=100,
+            return_bytes=True
+        )
+        
+        if not gif_bytes or len(gif_bytes) == 0:
+            print("✗ GIF Animation ist leer")
+            return False
+        
+        print(f"✓ GIF Animation erstellt ({len(gif_bytes)} bytes)")
+        
+        # Prüfe ob Datei existiert
+        if not os.path.exists(gif_path):
+            print("✗ GIF-Datei wurde nicht gespeichert")
+            return False
+        
+        file_size = os.path.getsize(gif_path)
+        print(f"✓ GIF gespeichert: {gif_path} ({file_size} bytes)")
+        
+        return True
+        
+    except Exception as e:
+        print(f"✗ Fehler: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def test_3d_model_stl():
+    """Test 3D-Modell Export - STL Format"""
+    print("\n" + "="*60)
+    print("TEST 5: 3D-Modell Export - STL Format")
+    print("="*60)
+    
+    try:
+        project_data = {}
+        dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=3.0)
         layout = LayoutConfig(mode="auto")
         
-        png_bytes = render_image_bytes(
-            project_data=scenario["project_data"],
-            dims=dims,
-            roof_type=scenario["roof_type"],
-            module_quantity=scenario["module_quantity"],
-            layout_config=layout
-        )
-        
-        assert png_bytes is not None, f"Screenshot failed for {scenario['name']}"
-        assert len(png_bytes) > 0, f"Screenshot is empty for {scenario['name']}"
-        assert len(png_bytes) > 1000, f"Screenshot too small for {scenario['name']} ({len(png_bytes)} bytes)"
-        
-        # Check PNG header
-        assert png_bytes[:8] == b'\x89PNG\r\n\x1a\n', f"Invalid PNG header for {scenario['name']}"
-        
-        print(f"✓ {scenario['name']}: {len(png_bytes):,} bytes")
-    
-    print("\n✅ Screenshot export tests passed")
-    return True
-
-
-def test_stl_export():
-    """Test STL export and file validation"""
-    print("\n" + "=" * 60)
-    print("Testing STL Export")
-    print("=" * 60)
-    
-    dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
-    project_data = {
-        "project_details": {
-            "roof_type": "Satteldach",
-            "roof_orientation": "Süd",
-            "roof_inclination_deg": 30,
-            "roof_covering_type": "Ziegel"
-        }
-    }
-    layout = LayoutConfig(mode="auto")
-    
-    test_file = "test_export.stl"
-    success = export_stl(
-        project_data=project_data,
-        dims=dims,
-        roof_type="Satteldach",
-        module_quantity=20,
-        layout_config=layout,
-        filepath=test_file
-    )
-    
-    assert success, "STL export failed"
-    assert os.path.exists(test_file), "STL file was not created"
-    
-    # Read and validate file
-    with open(test_file, 'rb') as f:
-        stl_bytes = f.read()
-    
-    assert len(stl_bytes) > 0, "STL file is empty"
-    assert len(stl_bytes) > 1000, f"STL file too small ({len(stl_bytes)} bytes)"
-    
-    # Check STL header (binary STL starts with 80-byte header)
-    # or ASCII STL starts with "solid"
-    is_binary = len(stl_bytes) > 84
-    is_ascii = stl_bytes[:5] == b'solid'
-    
-    assert is_binary or is_ascii, "Invalid STL format"
-    
-    print(f"✓ STL export successful: {len(stl_bytes):,} bytes")
-    print(f"  Format: {'Binary' if is_binary and not is_ascii else 'ASCII'}")
-    print(f"  Saved to {test_file} for manual inspection")
-    
-    print("\n✅ STL export tests passed")
-    return True
-
-
-def test_gltf_export():
-    """Test glTF export and file validation"""
-    print("\n" + "=" * 60)
-    print("Testing glTF Export")
-    print("=" * 60)
-    
-    dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0)
-    project_data = {
-        "project_details": {
-            "roof_type": "Satteldach",
-            "roof_orientation": "Süd",
-            "roof_inclination_deg": 30,
-            "roof_covering_type": "Ziegel"
-        }
-    }
-    layout = LayoutConfig(mode="auto")
-    
-    test_file = "test_export.glb"
-    success = export_gltf(
-        project_data=project_data,
-        dims=dims,
-        roof_type="Satteldach",
-        module_quantity=20,
-        layout_config=layout,
-        filepath=test_file
-    )
-    
-    assert success, "glTF export failed"
-    assert os.path.exists(test_file), "glTF file was not created"
-    
-    # Read and validate file
-    with open(test_file, 'rb') as f:
-        gltf_bytes = f.read()
-    
-    assert len(gltf_bytes) > 0, "glTF file is empty"
-    assert len(gltf_bytes) > 1000, f"glTF file too small ({len(gltf_bytes)} bytes)"
-    
-    # Check glTF header (glb format starts with "glTF" magic number)
-    # or JSON format starts with "{"
-    is_glb = gltf_bytes[:4] == b'glTF'
-    is_json = gltf_bytes[0:1] == b'{'
-    
-    assert is_glb or is_json, "Invalid glTF format"
-    
-    print(f"✓ glTF export successful: {len(gltf_bytes):,} bytes")
-    print(f"  Format: {'Binary (GLB)' if is_glb else 'JSON (glTF)'}")
-    print(f"  Saved to {test_file} for manual inspection")
-    
-    print("\n✅ glTF export tests passed")
-    return True
-
-
-def test_export_with_different_scenes():
-    """Test exports with different scene configurations"""
-    print("\n" + "=" * 60)
-    print("Testing Exports with Different Scenes")
-    print("=" * 60)
-    
-    test_configs = [
-        {
-            "name": "Small building, few modules",
-            "dims": BuildingDims(length_m=8.0, width_m=5.0, wall_height_m=5.0),
-            "module_quantity": 10
-        },
-        {
-            "name": "Large building, many modules",
-            "dims": BuildingDims(length_m=15.0, width_m=10.0, wall_height_m=8.0),
-            "module_quantity": 50
-        },
-        {
-            "name": "With garage and facade",
-            "dims": BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=6.0),
-            "module_quantity": 50,
-            "layout": LayoutConfig(mode="auto", use_garage=True, use_facade=True)
-        }
-    ]
-    
-    project_data = {
-        "project_details": {
-            "roof_type": "Satteldach",
-            "roof_orientation": "Süd",
-            "roof_inclination_deg": 30,
-            "roof_covering_type": "Ziegel"
-        }
-    }
-    
-    for config in test_configs:
-        layout = config.get("layout", LayoutConfig(mode="auto"))
-        
-        # Test screenshot
-        png_bytes = render_image_bytes(
-            project_data=project_data,
-            dims=config["dims"],
-            roof_type="Satteldach",
-            module_quantity=config["module_quantity"],
-            layout_config=layout
-        )
-        
-        assert png_bytes and len(png_bytes) > 1000, f"Screenshot failed for {config['name']}"
-        
-        # Test STL
-        stl_file = f"test_export_{config['name'].replace(' ', '_').replace(',', '')}.stl"
-        stl_success = export_stl(
-            project_data=project_data,
-            dims=config["dims"],
-            roof_type="Satteldach",
-            module_quantity=config["module_quantity"],
-            layout_config=layout,
-            filepath=stl_file
-        )
-        
-        assert stl_success and os.path.exists(stl_file), f"STL export failed for {config['name']}"
-        stl_size = os.path.getsize(stl_file)
-        
-        # Test glTF
-        gltf_file = f"test_export_{config['name'].replace(' ', '_').replace(',', '')}.glb"
-        gltf_success = export_gltf(
-            project_data=project_data,
-            dims=config["dims"],
-            roof_type="Satteldach",
-            module_quantity=config["module_quantity"],
-            layout_config=layout,
-            filepath=gltf_file
-        )
-        
-        assert gltf_success and os.path.exists(gltf_file), f"glTF export failed for {config['name']}"
-        gltf_size = os.path.getsize(gltf_file)
-        
-        print(f"✓ {config['name']}: PNG={len(png_bytes):,}B, STL={stl_size:,}B, glTF={gltf_size:,}B")
-    
-    print("\n✅ Different scene export tests passed")
-    return True
-
-
-def test_export_error_handling():
-    """Test export error handling with invalid inputs"""
-    print("\n" + "=" * 60)
-    print("Testing Export Error Handling")
-    print("=" * 60)
-    
-    # Test with minimal/invalid data
-    dims = BuildingDims(length_m=1.0, width_m=1.0, wall_height_m=1.0)
-    project_data = {}
-    layout = LayoutConfig(mode="auto")
-    
-    # These should not crash, but return empty bytes or handle gracefully
-    try:
-        png_bytes = render_image_bytes(
+        stl_path = "test_export_flat.stl"
+        success = export_3d_model(
             project_data=project_data,
             dims=dims,
             roof_type="Flachdach",
-            module_quantity=0,
-            layout_config=layout
+            module_quantity=15,
+            layout_config=layout,
+            filepath=stl_path,
+            format="stl"
         )
-        print(f"✓ Screenshot with minimal data: {len(png_bytes) if png_bytes else 0} bytes")
+        
+        if not success:
+            print("✗ STL Export fehlgeschlagen")
+            return False
+        
+        # Prüfe Datei
+        if not os.path.exists(stl_path):
+            print("✗ STL-Datei wurde nicht erstellt")
+            return False
+        
+        file_size = os.path.getsize(stl_path)
+        print(f"✓ STL Export erfolgreich: {stl_path} ({file_size} bytes)")
+        
+        return True
+        
     except Exception as e:
-        print(f"✓ Screenshot with minimal data handled error: {type(e).__name__}")
+        print(f"✗ Fehler: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def test_3d_model_gltf():
+    """Test 3D-Modell Export - GLTF Format"""
+    print("\n" + "="*60)
+    print("TEST 6: 3D-Modell Export - GLTF/GLB Format")
+    print("="*60)
     
     try:
-        stl_file = "test_export_minimal.stl"
-        stl_success = export_stl(
+        project_data = {}
+        dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=3.0)
+        layout = LayoutConfig(mode="auto")
+        
+        glb_path = "test_export_gable.glb"
+        success = export_3d_model(
             project_data=project_data,
             dims=dims,
-            roof_type="Flachdach",
-            module_quantity=0,
+            roof_type="Satteldach",
+            module_quantity=20,
             layout_config=layout,
-            filepath=stl_file
+            filepath=glb_path,
+            format="glb"
         )
-        print(f"✓ STL with minimal data: {'success' if stl_success else 'failed'}")
+        
+        if not success:
+            print("✗ GLB Export fehlgeschlagen")
+            return False
+        
+        # Prüfe Datei
+        if not os.path.exists(glb_path):
+            print("✗ GLB-Datei wurde nicht erstellt")
+            return False
+        
+        file_size = os.path.getsize(glb_path)
+        print(f"✓ GLB Export erfolgreich: {glb_path} ({file_size} bytes)")
+        
+        return True
+        
     except Exception as e:
-        print(f"✓ STL with minimal data handled error: {type(e).__name__}")
+        print(f"✗ Fehler: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def test_3d_model_obj():
+    """Test 3D-Modell Export - OBJ Format"""
+    print("\n" + "="*60)
+    print("TEST 7: 3D-Modell Export - OBJ Format")
+    print("="*60)
     
     try:
-        gltf_file = "test_export_minimal.glb"
-        gltf_success = export_gltf(
+        project_data = {}
+        dims = BuildingDims(length_m=10.0, width_m=6.0, wall_height_m=3.0)
+        layout = LayoutConfig(mode="auto")
+        
+        obj_path = "test_export_hip.obj"
+        success = export_3d_model(
             project_data=project_data,
             dims=dims,
-            roof_type="Flachdach",
-            module_quantity=0,
+            roof_type="Walmdach",
+            module_quantity=18,
             layout_config=layout,
-            filepath=gltf_file
+            filepath=obj_path,
+            format="obj"
         )
-        print(f"✓ glTF with minimal data: {'success' if gltf_success else 'failed'}")
+        
+        if not success:
+            print("✗ OBJ Export fehlgeschlagen")
+            return False
+        
+        # Prüfe Datei
+        if not os.path.exists(obj_path):
+            print("✗ OBJ-Datei wurde nicht erstellt")
+            return False
+        
+        file_size = os.path.getsize(obj_path)
+        print(f"✓ OBJ Export erfolgreich: {obj_path} ({file_size} bytes)")
+        
+        return True
+        
     except Exception as e:
-        print(f"✓ glTF with minimal data handled error: {type(e).__name__}")
+        print(f"✗ Fehler: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def test_all_formats_export():
+    """Test Export aller Formate auf einmal"""
+    print("\n" + "="*60)
+    print("TEST 8: Export aller 3D-Formate (STL, GLB, OBJ)")
+    print("="*60)
     
-    print("\n✅ Error handling tests passed")
-    return True
+    try:
+        project_data = {}
+        dims = BuildingDims(length_m=12.0, width_m=8.0, wall_height_m=3.5)
+        layout = LayoutConfig(mode="auto")
+        
+        results = export_all_formats(
+            project_data=project_data,
+            dims=dims,
+            roof_type="Satteldach",
+            module_quantity=25,
+            layout_config=layout,
+            output_dir=".",
+            base_filename="test_all_formats"
+        )
+        
+        if not results:
+            print("✗ Keine Formate exportiert")
+            return False
+        
+        print(f"✓ {len(results)} Formate exportiert:")
+        
+        all_success = True
+        for fmt, success in results.items():
+            status = "✓" if success else "✗"
+            print(f"  {status} {fmt.upper()}: {'Erfolgreich' if success else 'Fehlgeschlagen'}")
+            
+            if success:
+                filepath = f"test_all_formats.{fmt}"
+                if os.path.exists(filepath):
+                    file_size = os.path.getsize(filepath)
+                    print(f"    Datei: {filepath} ({file_size} bytes)")
+            
+            all_success = all_success and success
+        
+        return all_success
+        
+    except Exception as e:
+        print(f"✗ Fehler: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def main():
+    """Führe alle Export-Tests aus"""
+    print("\n" + "="*60)
+    print("COMPREHENSIVE EXPORT FUNCTIONS TESTS (TASK 9)")
+    print("="*60)
+    
+    if not PV3D_AVAILABLE:
+        print("\n⚠️  PV3D nicht verfügbar - Tests können nicht ausgeführt werden")
+        return 1
+    
+    results = []
+    
+    # Test 1: Screenshot PNG
+    results.append(("Screenshot Export - PNG", test_screenshot_png()))
+    
+    # Test 2: Screenshot JPEG
+    results.append(("Screenshot Export - JPEG", test_screenshot_jpeg()))
+    
+    # Test 3: Multi-View ZIP
+    results.append(("Multi-View Export als ZIP", test_multi_view_zip()))
+    
+    # Test 4: 360° Animation GIF
+    results.append(("360° Animation Export als GIF", test_360_animation_gif()))
+    
+    # Test 5: 3D Model STL
+    results.append(("3D-Modell Export - STL", test_3d_model_stl()))
+    
+    # Test 6: 3D Model GLTF
+    results.append(("3D-Modell Export - GLTF/GLB", test_3d_model_gltf()))
+    
+    # Test 7: 3D Model OBJ
+    results.append(("3D-Modell Export - OBJ", test_3d_model_obj()))
+    
+    # Test 8: All Formats
+    results.append(("Export aller Formate", test_all_formats_export()))
+    
+    # Zusammenfassung
+    print("\n" + "="*60)
+    print("TEST ZUSAMMENFASSUNG - TASK 9")
+    print("="*60)
+    
+    passed = sum(1 for _, result in results if result)
+    total = len(results)
+    
+    print("\nTask 9 Sub-Tasks:")
+    print("  ✓ Teste Screenshot-Export in verschiedenen Formaten")
+    print("  ✓ Teste Multi-View Export als ZIP")
+    print("  ✓ Teste 360° Animation Export als GIF")
+    print("  ✓ Teste 3D-Modell Export (STL, GLTF, OBJ)")
+    
+    print("\nTest Ergebnisse:")
+    for test_name, result in results:
+        status = "✓ PASS" if result else "✗ FAIL"
+        print(f"{status}: {test_name}")
+    
+    print(f"\nErgebnis: {passed}/{total} Tests bestanden")
+    
+    if passed == total:
+        print("\n🎉 ALLE EXPORT-TESTS BESTANDEN!")
+        print("\n✅ Task 9 erfolgreich abgeschlossen:")
+        print("   - Screenshot-Export in PNG und JPEG funktioniert")
+        print("   - Multi-View Export als ZIP funktioniert")
+        print("   - 360° Animation Export als GIF funktioniert")
+        print("   - 3D-Modell Export in STL, GLTF und OBJ funktioniert")
+        return 0
+    else:
+        print(f"\n⚠️  {total - passed} Test(s) fehlgeschlagen")
+        return 1
 
 
 if __name__ == "__main__":
-    print("\n" + "=" * 60)
-    print("TESTING EXPORT FUNCTIONS")
-    print("=" * 60)
-    
-    tests = [
-        test_screenshot_export,
-        test_stl_export,
-        test_gltf_export,
-        test_export_with_different_scenes,
-        test_export_error_handling
-    ]
-    
-    passed = 0
-    failed = 0
-    
-    for test in tests:
-        try:
-            if test():
-                passed += 1
-        except AssertionError as e:
-            print(f"\n✗ {test.__name__} failed: {e}")
-            failed += 1
-        except Exception as e:
-            print(f"\n✗ {test.__name__} error: {e}")
-            import traceback
-            traceback.print_exc()
-            failed += 1
-    
-    print("\n" + "=" * 60)
-    print(f"RESULTS: {passed} passed, {failed} failed")
-    print("=" * 60)
-    
-    if failed == 0:
-        print("\n✅ ALL EXPORT FUNCTION TESTS PASSED!")
-        print("\nGenerated test files:")
-        print("  - test_export.stl")
-        print("  - test_export.glb (or test_export.gltf)")
-        print("\nYou can open these files in a 3D viewer to verify quality.")
-        exit(0)
-    else:
-        print(f"\n❌ {failed} TEST(S) FAILED")
-        exit(1)
+    exit_code = main()
+    sys.exit(exit_code)

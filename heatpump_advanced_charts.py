@@ -449,7 +449,8 @@ def create_jaz_comparison_chart(jaz_data: Dict[str, Any]) -> go.Figure:
         showlegend=False,
         paper_bgcolor='white',
         plot_bgcolor='rgba(240,240,240,0.9)',
-        separators=',.'
+        # ✅ FIX: separatethousands gehört in yaxis dict, nicht in layout
+        yaxis=dict(separatethousands=True)
     )
     
     return fig
@@ -506,7 +507,7 @@ def create_annual_profile_chart(load_profile: Dict[str, Any]) -> go.Figure:
     )
     
     fig.update_xaxes(title_text="Monat")
-    fig.update_yaxes(title_text="Energie [kWh]", secondary_y=False, separators=',.')
+    fig.update_yaxes(title_text="Energie [kWh]", secondary_y=False, separatethousands=True)  # ✅ FIX
     fig.update_yaxes(title_text="Temperatur [°C]", secondary_y=True)
     
     fig.update_layout(
@@ -647,7 +648,7 @@ def create_lifecycle_chart(co2_data: Dict[str, Any]) -> go.Figure:
         height=550,
         paper_bgcolor='white',
         plot_bgcolor='rgba(240,240,240,0.9)',
-        yaxis=dict(separators=',.'),
+        yaxis=dict(separatethousands=True),  # ✅ FIX
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
     
@@ -673,9 +674,10 @@ def create_price_scenario_chart(price_scenarios: Dict[str, Any]) -> go.Figure:
         yearly_data = scenario_data.get('yearly_data', [])
         
         if yearly_data:
-            years = [d['year'] for d in yearly_data]
-            costs_wp = [d['cost_wp'] for d in yearly_data]
-            costs_old = [d['cost_old'] for d in yearly_data]
+            years = [d.get('year', 0) for d in yearly_data]
+            # ✅ FIX: Verwende .get() mit Fallback statt direktem Key-Zugriff
+            costs_wp = [d.get('cost_wp', d.get('costs_wp', 0)) for d in yearly_data]
+            costs_old = [d.get('cost_old', d.get('costs_old', 0)) for d in yearly_data]
             
             # WP-Kosten
             fig.add_trace(go.Scatter(
@@ -705,7 +707,7 @@ def create_price_scenario_chart(price_scenarios: Dict[str, Any]) -> go.Figure:
         paper_bgcolor='white',
         plot_bgcolor='rgba(240,240,240,0.9)',
         hovermode='x unified',
-        yaxis=dict(separators=',.'),
+        yaxis=dict(separatethousands=True),  # ✅ FIX: Korrekter Property-Name
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
     
@@ -1072,7 +1074,7 @@ def create_comparison_cost_chart(comparison_data: Dict[str, Any]) -> go.Figure:
             xanchor='center'
         ),
         xaxis=dict(title=''),
-        yaxis=dict(title='Kosten [€]', separators=',.'),
+        yaxis=dict(title='Kosten [€]', separatethousands=True),  # ✅ FIX
         barmode='group',
         height=500,
         paper_bgcolor='white',

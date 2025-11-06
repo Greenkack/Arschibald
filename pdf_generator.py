@@ -710,15 +710,100 @@ class PDFGenerator:
         self.story.append(table)
 
     def _draw_3d_visualization(self):
-        """Draw 3D PV visualization section"""
+        """Draw 3D PV visualization section
+        
+        ENHANCED 2024: Detailliertes Logging und robuste Fehlerbehandlung für PDF-Integration.
+        """
+        import traceback
+        
         self.story.append(Paragraph("3D-Visualisierung", self.styles['H1']))
         self.story.append(Spacer(1, 1 * cm))
 
+        # FIX 2024: Prüfe zuerst ob Screenshot in Session State vorhanden ist
+        print(f"\n📄 PDF 3D-Integration:")
+        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        try:
+            import streamlit as st
+            
+            # Prüfe ob Session State verfügbar ist
+            if not hasattr(st, 'session_state'):
+                print(f"   ⚠️  Session State nicht verfügbar")
+                raise AttributeError("Session State nicht verfügbar")
+            
+            png_bytes = st.session_state.get("pdf_3d_screenshot")
+            
+            print(f"   Screenshot-Status:")
+            print(f"     • In Session State: {'Ja' if png_bytes else 'Nein'}")
+            
+            if png_bytes:
+                print(f"     • Größe: {len(png_bytes)} bytes ({len(png_bytes)/1024:.1f} KB)")
+                
+                # Validiere PNG-Bytes
+                if not isinstance(png_bytes, bytes):
+                    print(f"     ❌ Ungültiger Typ: {type(png_bytes)}")
+                    raise TypeError(f"png_bytes ist kein bytes-Objekt: {type(png_bytes)}")
+                
+                if len(png_bytes) < 100:
+                    print(f"     ❌ Datei zu klein (möglicherweise korrupt)")
+                    raise ValueError(f"PNG-Bytes zu klein: {len(png_bytes)} bytes")
+                
+                # Screenshot aus Session State verwenden
+                from io import BytesIO
+                from reportlab.platypus import Image
+                
+                print(f"   Erstelle PDF-Image:")
+                
+                img_buffer = BytesIO(png_bytes)
+                
+                # Erstelle Image mit 17cm Breite, Höhe automatisch (16:10 Verhältnis)
+                img_width_cm = 17.0
+                img_height_cm = 10.625  # 17 / 1.6 für 16:10 Verhältnis
+                
+                print(f"     • Breite: {img_width_cm}cm")
+                print(f"     • Höhe: {img_height_cm}cm")
+                print(f"     • Seitenverhältnis: 16:10")
+                
+                img = Image(img_buffer, width=img_width_cm*cm, height=img_height_cm*cm)
+                
+                self.story.append(img)
+                self.story.append(Spacer(1, 0.5*cm))
+                self.story.append(Paragraph(
+                    "Abb.: 3D-Visualisierung der geplanten PV-Anlage",
+                    self.styles["Body"]
+                ))
+                
+                print(f"   ✅ 3D-Screenshot erfolgreich in PDF eingefügt!")
+                print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+                return
+            else:
+                print(f"     • Kein Screenshot vorhanden")
+                
+        except AttributeError as e:
+            print(f"   ❌ Session State Fehler: {e}")
+            print(f"   Traceback:")
+            traceback.print_exc()
+        except Exception as e:
+            print(f"   ❌ Fehler beim Laden des Screenshots:")
+            print(f"     • Fehler: {str(e)}")
+            print(f"     • Typ: {type(e).__name__}")
+            print(f"   Traceback:")
+            traceback.print_exc()
+        
+        # Fallback: Versuche 3D-Visualisierung zu generieren
+        print(f"   Fallback: Versuche 3D-Visualisierung zu generieren")
+        
         # Check if 3D visualization is available
         if not _PV3D_AVAILABLE or make_pv3d_image_flowable is None:
+            print(f"     ⚠️  3D-Modul nicht verfügbar")
+            print(f"     • _PV3D_AVAILABLE: {_PV3D_AVAILABLE}")
+            print(f"     • make_pv3d_image_flowable: {make_pv3d_image_flowable is not None}")
+            print(f"   Fallback: Platzhalter-Text wird eingefügt")
+            print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            
             self.story.append(
                 Paragraph(
-                    "3D-Visualisierung nicht verfügbar. Bitte installieren Sie die erforderlichen Pakete (pyvista, vtk).",
+                    "3D-Visualisierung: Bitte erstellen Sie einen Screenshot in der 3D-Ansicht.",
                     self.styles['Body']))
             return
 
@@ -3777,6 +3862,8 @@ def _prepare_cost_table_for_pdf(
          'cost_storage', True, 'TableText'),
         ('total_optional_components_cost_netto',
          'total_optional_components_cost_netto_label', True, 'TableText'),
+        ('cost_pv_mounting_netto',
+         'cost_pv_mounting_netto_label', True, 'TableText'),  # NEW: PV Mounting
         ('cost_accessories_aufpreis_netto',
          'cost_accessories_aufpreis_netto', True, 'TableText'),
         ('cost_scaffolding_netto', 'cost_scaffolding_netto', True, 'TableText'),
@@ -5125,6 +5212,107 @@ def generate_offer_pdf(
                                         "pdf_no_optional_components_selected_for_details",
                                         "Keine optionalen Komponenten für Detailanzeige ausgewählt."),
                                     STYLES.get('NormalLeft')))
+                    
+                    # === PV-UNTERKONSTRUKTION INTEGRATION ===
+                    if pv_details_pdf.get('include_pv_mounting'):
+                        try:
+                            from solar_calculator_pv_mounting_integration import (
+                                get_mounting_components_for_pdf,
+                                get_mounting_total_price
+                            )
+                            
+                            mounting_components = get_mounting_components_for_pdf(pv_details_pdf)
+                            
+                            if mounting_components:
+                                story.append(Spacer(1, 0.5 * cm))
+                                story.append(
+                                    Paragraph(
+                                        get_text(
+                                            texts,
+                                            "pdf_mounting_components_header",
+                                            "PV-Unterkonstruktion"),
+                                        STYLES.get('SubSectionTitle')))
+                                
+                                # Mounting components table
+                                mounting_table_data = [
+                                    [
+                                        Paragraph("<b>Komponente</b>", STYLES.get('TableLabel')),
+                                        Paragraph("<b>Menge</b>", STYLES.get('TableLabel')),
+                                        Paragraph("<b>Preis/Einheit</b>", STYLES.get('TableLabel')),
+                                        Paragraph("<b>Gesamt</b>", STYLES.get('TableLabel'))
+                                    ]
+                                ]
+                                
+                                for comp in mounting_components:
+                                    product_name = comp.get('product_name', 'N/A')
+                                    manufacturer = comp.get('manufacturer', '')
+                                    quantity = comp.get('quantity', 0)
+                                    unit = comp.get('unit', 'Stk')
+                                    price_per_unit = comp.get('price_netto', 0.0)
+                                    total_price = comp.get('total_price', 0.0)
+                                    
+                                    # Full name with manufacturer
+                                    full_name = f"{product_name}"
+                                    if manufacturer:
+                                        full_name += f" ({manufacturer})"
+                                    
+                                    mounting_table_data.append([
+                                        Paragraph(full_name, STYLES.get('TableText')),
+                                        Paragraph(f"{quantity:.0f} {unit}", STYLES.get('TableText')),
+                                        Paragraph(format_kpi_value(price_per_unit, "€", precision=2, texts_dict=texts), STYLES.get('TableText')),
+                                        Paragraph(format_kpi_value(total_price, "€", precision=2, texts_dict=texts), STYLES.get('TableText'))
+                                    ])
+                                
+                                # Total row
+                                total_mounting_price = get_mounting_total_price(pv_details_pdf)
+                                mounting_table_data.append([
+                                    Paragraph("<b>Gesamt Unterkonstruktion</b>", STYLES.get('TableLabel')),
+                                    Paragraph("", STYLES.get('TableText')),
+                                    Paragraph("", STYLES.get('TableText')),
+                                    Paragraph(f"<b>{format_kpi_value(total_mounting_price, '€', precision=2, texts_dict=texts)}</b>", STYLES.get('TableLabel'))
+                                ])
+                                
+                                mounting_table = Table(
+                                    mounting_table_data,
+                                    colWidths=[
+                                        available_width_content * 0.40,
+                                        available_width_content * 0.20,
+                                        available_width_content * 0.20,
+                                        available_width_content * 0.20
+                                    ]
+                                )
+                                mounting_table.setStyle(TABLE_STYLE_DEFAULT)
+                                story.append(mounting_table)
+                                
+                                # Calculation notes if available
+                                if pv_details_pdf.get('mounting_quantities_calculated'):
+                                    calc_result = pv_details_pdf.get('mounting_calculation_result', {})
+                                    notes = calc_result.get('calculation_notes', [])
+                                    if notes:
+                                        story.append(Spacer(1, 0.3 * cm))
+                                        story.append(
+                                            Paragraph(
+                                                "<i><b>Berechnungshinweise:</b></i>",
+                                                STYLES.get('TableTextSmall')))
+                                        for note in notes[:5]:  # Max 5 notes
+                                            story.append(
+                                                Paragraph(
+                                                    f"<i>• {note}</i>",
+                                                    STYLES.get('TableTextSmall')))
+                        
+                        except ImportError:
+                            # Mounting integration not available, skip silently
+                            pass
+                        except Exception as e_mounting_pdf:
+                            # Log error but don't break PDF generation
+                            print(f"PDF WARNING - Mounting components error: {e_mounting_pdf}")
+                            story.append(
+                                Paragraph(
+                                    get_text(
+                                        texts,
+                                        "pdf_mounting_load_error",
+                                        "<i>Hinweis: Unterkonstruktions-Details konnten nicht geladen werden.</i>"),
+                                    STYLES.get('TableTextSmall')))
 
                 elif section_key_current == "CostDetails":
                     cost_table_data_final_pdf = _prepare_cost_table_for_pdf(

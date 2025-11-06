@@ -4117,3 +4117,290 @@ def export_360_animation(
         import traceback
         traceback.print_exc()
         return b""
+
+
+# ============================================================================
+# OPTIMIERUNGS-ASSISTENT
+# ============================================================================
+
+def optimize_layout(
+    building_dims: BuildingDims,
+    target_modules: int,
+    roof_type: str,
+    optimization_goal: str = "balanced"
+) -> List[Tuple[AdvancedLayoutConfig, float]]:
+    """
+    Generiert und bewertet verschiedene PV-Layout-Konfigurationen.
+    
+    FIX 2024: Neu implementiert für funktionierenden Optimierungs-Assistenten.
+    ENHANCED 2024: Detailliertes Logging und robuste Fehlerbehandlung.
+    
+    Args:
+        building_dims: Gebäudedimensionen
+        target_modules: Gewünschte Modulanzahl
+        roof_type: Dachform
+        optimization_goal: "max_modules", "max_yield", oder "balanced"
+    
+    Returns:
+        Liste von (Konfiguration, Score) Tupeln, sortiert nach Score (höchster zuerst)
+    """
+    import traceback
+    
+    try:
+        # Validiere Eingabeparameter
+        if not isinstance(building_dims, BuildingDims):
+            print(f"❌ FEHLER: Ungültige BuildingDims: {type(building_dims)}")
+            return []
+        
+        if target_modules <= 0:
+            print(f"❌ FEHLER: Ungültige Modulanzahl: {target_modules}")
+            return []
+        
+        if optimization_goal not in ["max_modules", "max_yield", "balanced"]:
+            print(f"⚠️  WARNUNG: Unbekanntes Optimierungsziel '{optimization_goal}', verwende 'balanced'")
+            optimization_goal = "balanced"
+        
+        # DETAILLIERTES LOGGING: Zeige Optimierungsparameter
+        print(f"\n🚀 Optimierung gestartet:")
+        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print(f"   Eingabeparameter:")
+        print(f"     • Optimierungsziel: {optimization_goal}")
+        print(f"     • Gewünschte Module: {target_modules}")
+        print(f"     • Dachform: {roof_type}")
+        print(f"     • Gebäudedimensionen:")
+        print(f"       - Länge: {building_dims.length_m:.1f}m")
+        print(f"       - Breite: {building_dims.width_m:.1f}m")
+        print(f"       - Wandhöhe: {building_dims.wall_height_m:.1f}m")
+        print(f"       - Dachfläche: {building_dims.length_m * building_dims.width_m:.1f}m²")
+        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    
+        configurations = []
+        
+        print(f"   Generiere Konfigurationen:")
+        
+        # Strategie 1: Süd-Aufständerung (optimal für Ertrag)
+        try:
+            config1 = AdvancedLayoutConfig(
+                mode="auto",
+                mounting_mode="south",
+                custom_azimuth=0.0,
+                custom_tilt=15.0,
+                use_garage=False,
+                use_facade=False
+            )
+            score1 = evaluate_config(config1, building_dims, target_modules, optimization_goal)
+            configurations.append((config1, score1))
+            print(f"     ✓ 1. Süd-Aufständerung: Score {score1:.1f}")
+        except Exception as e:
+            print(f"     ❌ 1. Süd-Aufständerung fehlgeschlagen: {e}")
+        
+        # Strategie 2: Ost-West-Aufständerung (mehr Module, weniger Ertrag pro Modul)
+        try:
+            config2 = AdvancedLayoutConfig(
+                mode="auto",
+                mounting_mode="east-west",
+                custom_azimuth=0.0,
+                custom_tilt=10.0,
+                use_garage=False,
+                use_facade=False
+            )
+            score2 = evaluate_config(config2, building_dims, target_modules, optimization_goal)
+            configurations.append((config2, score2))
+            print(f"     ✓ 2. Ost-West-Aufständerung: Score {score2:.1f}")
+        except Exception as e:
+            print(f"     ❌ 2. Ost-West-Aufständerung fehlgeschlagen: {e}")
+        
+        # Strategie 3: Süd-Ost (Kompromiss)
+        try:
+            config3 = AdvancedLayoutConfig(
+                mode="auto",
+                mounting_mode="south-east",
+                custom_azimuth=45.0,
+                custom_tilt=15.0,
+                use_garage=False,
+                use_facade=False
+            )
+            score3 = evaluate_config(config3, building_dims, target_modules, optimization_goal)
+            configurations.append((config3, score3))
+            print(f"     ✓ 3. Süd-Ost-Aufständerung: Score {score3:.1f}")
+        except Exception as e:
+            print(f"     ❌ 3. Süd-Ost-Aufständerung fehlgeschlagen: {e}")
+        
+        # Strategie 4: Gemischt (mit Garage und Fassade für maximale Modulanzahl)
+        try:
+            config4 = AdvancedLayoutConfig(
+                mode="auto",
+                use_garage=True,
+                use_facade=True,
+                mounting_mode="south",
+                custom_azimuth=0.0,
+                custom_tilt=15.0
+            )
+            score4 = evaluate_config(config4, building_dims, target_modules, optimization_goal)
+            configurations.append((config4, score4))
+            print(f"     ✓ 4. Gemischt (Garage + Fassade): Score {score4:.1f}")
+        except Exception as e:
+            print(f"     ❌ 4. Gemischt fehlgeschlagen: {e}")
+        
+        # Prüfe ob Konfigurationen generiert wurden
+        if not configurations:
+            print(f"   ❌ FEHLER: Keine Konfigurationen konnten generiert werden!")
+            return []
+        
+        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        # Sortiere nach Score (höchster zuerst)
+        configurations.sort(key=lambda x: x[1], reverse=True)
+        
+        print(f"   ✅ Optimierung abgeschlossen!")
+        print(f"   Top 3 Konfigurationen:")
+        for i, (config, score) in enumerate(configurations[:3], 1):
+            mode_name = config.mounting_mode
+            extras = []
+            if config.use_garage:
+                extras.append("Garage")
+            if config.use_facade:
+                extras.append("Fassade")
+            if extras:
+                mode_name += " + " + " + ".join(extras)
+            print(f"     {i}. {mode_name}: Score {score:.1f}")
+        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+        
+        # Gebe Top 3 zurück
+        return configurations[:3]
+        
+    except Exception as e:
+        # FEHLERBEHANDLUNG: Logge Fehler mit Traceback
+        print(f"\n❌ KRITISCHER FEHLER in optimize_layout():")
+        print(f"   Fehler: {str(e)}")
+        print(f"   Parameter: target_modules={target_modules}, goal={optimization_goal}")
+        print(f"   Traceback:")
+        traceback.print_exc()
+        print(f"   Fallback: Rückgabe leere Liste\n")
+        return []
+
+
+def evaluate_config(
+    config: AdvancedLayoutConfig,
+    building_dims: BuildingDims,
+    target_modules: int,
+    goal: str
+) -> float:
+    """
+    Bewertet eine Konfiguration basierend auf Optimierungsziel.
+    
+    FIX 2024: Neu implementiert für funktionierenden Optimierungs-Assistenten.
+    ENHANCED 2024: Robuste Fehlerbehandlung.
+    
+    Args:
+        config: Layout-Konfiguration
+        building_dims: Gebäudedimensionen
+        target_modules: Gewünschte Modulanzahl
+        goal: "max_modules", "max_yield", oder "balanced"
+    
+    Returns:
+        Score von 0-100
+    """
+    import traceback
+    
+    try:
+        # Validiere Eingabeparameter
+        if not isinstance(config, AdvancedLayoutConfig):
+            print(f"❌ FEHLER in evaluate_config: Ungültige Konfiguration")
+            return 0.0
+        
+        if target_modules <= 0:
+            print(f"❌ FEHLER in evaluate_config: Ungültige Modulanzahl: {target_modules}")
+            return 0.0
+        
+        score = 0.0
+        
+        # Berechne geschätzte Modulanzahl für diese Konfiguration
+        roof_area = building_dims.length_m * building_dims.width_m
+        module_area = 1.05 * 1.76  # PV_W * PV_H
+        
+        # Effizienzfaktor basierend auf Mounting Mode
+        efficiency_factors = {
+            "south": 0.75,
+            "east-west": 0.65,  # Weniger Platz wegen Reihenabstand
+            "south-east": 0.70,
+            "south-west": 0.70,
+            "custom": 0.70
+        }
+        efficiency = efficiency_factors.get(config.mounting_mode, 0.70)
+        
+        # Zusätzliche Kapazität durch Garage/Fassade
+        if config.use_garage:
+            efficiency += 0.15
+        if config.use_facade:
+            efficiency += 0.10
+        
+        estimated_modules = int((roof_area / module_area) * efficiency)
+        
+        # Bewertung basierend auf Ziel
+        if goal == "max_modules":
+            # Maximiere Modulanzahl
+            # Je näher an target_modules, desto besser
+            if estimated_modules >= target_modules:
+                score = 100.0
+            else:
+                score = (estimated_modules / target_modules) * 100
+            
+        elif goal == "max_yield":
+            # Maximiere Ertrag (Süd-Ausrichtung bevorzugt)
+            # 70% Modulanzahl, 30% Ausrichtung
+            module_score = min(100, (estimated_modules / target_modules) * 70)
+            
+            # Ausrichtungs-Bonus
+            orientation_bonus = 0
+            if config.mounting_mode == "south":
+                orientation_bonus = 30
+            elif config.mounting_mode in ["south-east", "south-west"]:
+                orientation_bonus = 20
+            elif config.mounting_mode == "east-west":
+                orientation_bonus = 15
+            else:
+                orientation_bonus = 10
+            
+            score = module_score + orientation_bonus
+            
+        elif goal == "balanced":
+            # Ausgewogen: 60% Modulanzahl, 25% Ausrichtung, 15% Einfachheit
+            module_score = min(100, (estimated_modules / target_modules) * 60)
+            
+            # Ausrichtungs-Bonus
+            orientation_bonus = 0
+            if config.mounting_mode == "south":
+                orientation_bonus = 25
+            elif config.mounting_mode in ["south-east", "south-west"]:
+                orientation_bonus = 20
+            elif config.mounting_mode == "east-west":
+                orientation_bonus = 15
+            else:
+                orientation_bonus = 10
+            
+            # Bonus für einfache Konfiguration (ohne Garage/Fassade)
+            simplicity_bonus = 0
+            if not config.use_garage and not config.use_facade:
+                simplicity_bonus = 15
+            elif not config.use_garage or not config.use_facade:
+                simplicity_bonus = 7
+            
+            score = module_score + orientation_bonus + simplicity_bonus
+        
+        # Stelle sicher dass Score im Bereich 0-100 liegt
+        final_score = min(100.0, max(0.0, score))
+        
+        # Logging für Debugging
+        if final_score < 0 or final_score > 100:
+            print(f"⚠️  WARNUNG: Score außerhalb des Bereichs vor Clipping: {score}")
+        
+        return final_score
+        
+    except Exception as e:
+        # FEHLERBEHANDLUNG: Logge Fehler und gebe 0 zurück
+        print(f"❌ FEHLER in evaluate_config():")
+        print(f"   Fehler: {str(e)}")
+        print(f"   Traceback:")
+        traceback.print_exc()
+        return 0.0

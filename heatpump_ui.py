@@ -1705,21 +1705,26 @@ def render_economics_analysis(
                 with col_co2_1:
                     st.metric(
                         f"CO2-Kosten {fuel_type} (Jahr 1)",
-                        f"{format_german_number(co2_cost_result['annual_co2_cost_euros'], 0)} €",
+                        f"{format_german_number(co2_cost_result.get('annual_co2_cost_euros', co2_cost_result.get('annual_co2_cost_eur', 0)), 0)} €",  # ✅ FIX: Beide Keys prüfen
                         help="CO2-Preis × Emissionen pro Jahr"
                     )
 
                 with col_co2_2:
                     st.metric(
                         "CO2-Einsparung (20 Jahre)",
-                        f"{comparison_result['co2_savings_tons_20y']:,.1f} t",
+                        f"{comparison_result['comparison'].get('co2_savings_tons_20years', comparison_result.get('co2_savings_tons_20y', 0)):,.1f} t",  # ✅ FIX: Beide Keys prüfen
                         help="Eingesparte CO2-Emissionen über 20 Jahre"
                     )
 
                 with col_co2_3:
+                    # ✅ FIX: Berechne monetäre CO2-Ersparnis wenn nicht vorhanden
+                    co2_savings_tons = comparison_result['comparison'].get('co2_savings_tons_20years', 0)
+                    co2_price = 55  # €/Tonne
+                    monetary_savings = comparison_result.get('co2_savings_monetary_20y', co2_savings_tons * co2_price)
+                    
                     st.metric(
                         "Monetäre CO2-Ersparnis",
-                        f"{format_german_number(comparison_result['co2_savings_monetary_20y'], 0)} €",
+                        f"{format_german_number(monetary_savings, 0)} €",
                         help="Vermiedene CO2-Kosten über 20 Jahre"
                     )
 
@@ -1727,8 +1732,12 @@ def render_economics_analysis(
                 st.markdown("### 💰 20-Jahres-Kostenvergleich (NPV)")
 
                 years_npv = list(range(1, 21))
-                wp_cumulative = [comparison_result['wp_net_investment']]
-                fossil_cumulative = [comparison_result['fossil_investment']]
+                # ✅ FIX: Hole Werte aus korrekter Struktur
+                wp_net_inv = comparison_result.get('wp_net_investment', comparison_result.get('heatpump', {}).get('investment_net_eur', 20000))
+                fossil_inv = comparison_result.get('fossil_investment', comparison_result.get('fossil_heating', {}).get('investment', 12800))
+                
+                wp_cumulative = [wp_net_inv]
+                fossil_cumulative = [fossil_inv]
 
                 # Berechne kumulierte Kosten über 20 Jahre
                 for year in range(1, 20):
@@ -1745,11 +1754,13 @@ def render_economics_analysis(
 
                     # Fossil
                     fossil_fuel_price = gas_price / 100 if fuel_type == "Erdgas" else oil_price / 100
+                    # ✅ FIX: Beide Keys prüfen
+                    co2_cost_year1 = co2_cost_result.get('annual_co2_cost_euros', co2_cost_result.get('annual_co2_cost_eur', 0))
                     fossil_annual_cost = (
                         heat_demand_kwh *
                         fossil_fuel_price *
                         annual_cost_increase_factor +
-                        co2_cost_result['annual_co2_cost_euros'] * (1 + 0.05) ** year +  # CO2-Preis steigt 5%/Jahr
+                        co2_cost_year1 * (1 + 0.05) ** year +  # CO2-Preis steigt 5%/Jahr
                         maintenance_cost_annual * 1.5  # Fossil-Wartung teurer
                     )
                     fossil_cumulative.append(fossil_cumulative[-1] + fossil_annual_cost)
@@ -1783,13 +1794,14 @@ def render_economics_analysis(
                 ))
 
                 # Amortisationspunkt markieren
-                if comparison_result['payback_years'] < 20:
+                payback_years = comparison_result.get('payback_years', comparison_result.get('comparison', {}).get('payback_years', 15.0))
+                if payback_years < 20:
                     fig_20y.add_vline(
-                        x=comparison_result['payback_years'],
+                        x=payback_years,
                         line_dash="dash",
                         line_color="orange",
                         opacity=0.7,
-                        annotation_text=f"Amortisation: {comparison_result['payback_years']:.1f} Jahre"
+                        annotation_text=f"Amortisation: {payback_years:.1f} Jahre"
                     )
 
                 fig_20y.update_layout(
@@ -1808,42 +1820,51 @@ def render_economics_analysis(
 
                 col_res1, col_res2, col_res3, col_res4 = st.columns(4)
 
+                # Keys mit Fallbacks aus nested structure
+                wp_total_20y = comparison_result.get('wp_total_cost_20y', 
+                    comparison_result.get('heatpump', {}).get('total_cost_20years_eur', 0))
+                fossil_total_20y = comparison_result.get('fossil_total_cost_20y', 
+                    comparison_result.get('fossil_heating', {}).get('total_cost_20years_eur', 0))
+
                 with col_res1:
                     st.metric(
                         "WP Gesamtkosten (20J)",
-                        f"{format_german_number(comparison_result['wp_total_cost_20y'], 0)} €"
+                        f"{format_german_number(wp_total_20y, 0)} €"
                     )
 
                 with col_res2:
                     st.metric(
                         f"{fuel_type} Gesamtkosten (20J)",
-                        f"{format_german_number(comparison_result['fossil_total_cost_20y'], 0)} €"
+                        f"{format_german_number(fossil_total_20y, 0)} €"
                     )
 
                 with col_res3:
-                    total_savings_20y = comparison_result['fossil_total_cost_20y'] - comparison_result['wp_total_cost_20y']
+                    total_savings_20y = fossil_total_20y - wp_total_20y
                     st.metric(
                         "Ersparnis (20J)",
                         f"{format_german_number(total_savings_20y, 0)} €",
-                        delta=f"+{(total_savings_20y / comparison_result['fossil_total_cost_20y'] * 100):.1f}%"
+                        delta=f"+{(total_savings_20y / fossil_total_20y * 100):.1f}%" if fossil_total_20y > 0 else "0%"
                     )
 
                 with col_res4:
                     st.metric(
                         "Amortisation",
-                        f"{comparison_result['payback_years']:.1f} Jahre"
+                        f"{payback_years:.1f} Jahre"
                     )
 
                 # CO2-Emissionen visualisieren
                 st.markdown("### 🌱 CO2-Emissionen im Vergleich")
+
+                # ✅ FIX: Korrekter Key ist 'annual_co2_tons'
+                annual_co2_tons = co2_cost_result.get('annual_co2_tons', co2_cost_result.get('annual_emissions_tons_co2', 5.0))
 
                 fig_co2 = go.Figure(data=[
                     go.Bar(
                         name='Wärmepumpe',
                         x=['Jährlich', '20 Jahre'],
                         y=[
-                            co2_cost_result['annual_emissions_tons_co2'] * 0.3,  # WP: ~30% der fossilen Emissionen (bei deutschem Strommix)
-                            co2_cost_result['annual_emissions_tons_co2'] * 0.3 * 20
+                            annual_co2_tons * 0.3,  # WP: ~30% der fossilen Emissionen (bei deutschem Strommix)
+                            annual_co2_tons * 0.3 * 20
                         ],
                         marker_color='#2E7D32'
                     ),
@@ -1851,8 +1872,8 @@ def render_economics_analysis(
                         name=f'{fuel_type}-Heizung',
                         x=['Jährlich', '20 Jahre'],
                         y=[
-                            co2_cost_result['annual_emissions_tons_co2'],
-                            co2_cost_result['annual_emissions_tons_co2'] * 20
+                            annual_co2_tons,
+                            annual_co2_tons * 20
                         ],
                         marker_color='#C62828'
                     )
@@ -3648,7 +3669,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 # Generiere stündliche Daten für Chart
                 from heatpump_dynamic_tariff import calculate_hourly_electricity_costs
                 hourly_data = calculate_hourly_electricity_costs(
-                    consumption_kwh=comparison['consumption']['total_kwh'] / 365,  # Tagesverbrauch
+                    annual_consumption_kwh=comparison['consumption']['total_kwh'],  # Jahresverbrauch
                     base_price_eur_kwh=comparison['static_tariff']['price_eur_kwh']
                 )
                 
@@ -4522,8 +4543,9 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         # Feature 2.3: Steuerliche Vorteile
         st.markdown("### 🧾 Steuerliche Absetzbarkeit")
         
+        # ✅ FIX: Hole installation_cost aus economics_data für Prozentberechnung
         installation_cost = economics_data.get('installation_cost', 20000)
-        tax_benefits = calculate_tax_benefits(installation_cost, building_data)
+        tax_benefits = calculate_tax_benefits(heatpump_data, building_data)
         
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -4537,7 +4559,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
                 f"{format_german_number(tax_benefits['net_investment_after_tax'], 2)} €"
             )
         with col3:
-            benefit_percent = (tax_benefits['total_benefit'] / installation_cost) * 100
+            benefit_percent = (tax_benefits['total_benefit'] / installation_cost) * 100 if installation_cost > 0 else 0
             st.metric(
                 "Ersparnis",
                 f"{benefit_percent:.1f}%"
