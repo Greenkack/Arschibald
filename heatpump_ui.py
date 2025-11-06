@@ -128,7 +128,7 @@ try:
         create_stromcloud_waterfall,
         create_load_shifting_heatmap,
     )
-    # Neue erweiterte Features (Phase 1-3)
+    # Neue erweiterte Features (Phase 1-4)
     from heatpump_advanced_calculations import (
         calculate_jaz_prognosis,
         calculate_buffer_tank_size,
@@ -143,6 +143,8 @@ try:
         compare_refrigerants,
         calculate_maintenance_schedule,
         simulate_extreme_weather,
+        compare_multiple_heatpumps,
+        generate_extended_heatpump_report_data,
     )
     from heatpump_advanced_charts import (
         create_system_3d_visualization,
@@ -153,6 +155,10 @@ try:
         create_lifecycle_chart,
         create_price_scenario_chart,
         create_maintenance_timeline,
+        create_comparison_radar_chart,
+        create_comparison_bar_chart,
+        create_comparison_heatmap,
+        create_comparison_cost_chart,
     )
     from database import get_db_connection
     from locales import get_text
@@ -4399,7 +4405,8 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         "🌡️ Komfort & Betrieb",
         "⚡ Energie-Management",
         "🌱 Nachhaltigkeit",
-        "🔧 Wartung & Szenarien"
+        "🔧 Wartung & Szenarien",
+        "🏆 Vergleichsrechner"
     ])
     
     # ========================================================================
@@ -5017,6 +5024,249 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
             with st.expander("💡 Empfehlungen & Maßnahmen"):
                 for rec in extreme_weather['recommendations']:
                     st.markdown(f"- {rec}")
+    
+    # ========================================================================
+    # TAB 7: VERGLEICHSRECHNER (Feature 7.1)
+    # ========================================================================
+    with sub_tabs[6]:
+        st.subheader("🏆 Wärmepumpen-Vergleichsrechner")
+        st.info("Vergleichen Sie bis zu 6 Wärmepumpen-Modelle nach 10 Kriterien mit gewichteter Bewertung")
+        
+        st.markdown("### ⚙️ Wärmepumpen auswählen")
+        
+        # Liste für Vergleichs-WPs aufbauen
+        if 'comparison_heatpumps' not in st.session_state:
+            st.session_state['comparison_heatpumps'] = [heatpump_data.copy()]  # Aktuelle WP als erste
+        
+        # Anzahl der WPs zum Vergleich
+        num_heatpumps = st.slider(
+            "Anzahl Wärmepumpen im Vergleich:",
+            min_value=2,
+            max_value=6,
+            value=min(len(st.session_state['comparison_heatpumps']), 6),
+            help="Mindestens 2, maximal 6 Wärmepumpen"
+        )
+        
+        # Passe Liste an
+        current_count = len(st.session_state['comparison_heatpumps'])
+        if num_heatpumps > current_count:
+            # Füge neue WPs hinzu (als Kopien der ersten)
+            for _ in range(num_heatpumps - current_count):
+                new_hp = heatpump_data.copy()
+                new_hp['model'] = f"Modell {len(st.session_state['comparison_heatpumps']) + 1}"
+                st.session_state['comparison_heatpumps'].append(new_hp)
+        elif num_heatpumps < current_count:
+            # Entferne überschüssige WPs
+            st.session_state['comparison_heatpumps'] = st.session_state['comparison_heatpumps'][:num_heatpumps]
+        
+        # Editierbare Parameter für jede WP
+        st.markdown("---")
+        st.markdown("**📝 Wärmepumpen-Daten bearbeiten:**")
+        
+        hp_cols = st.columns(min(num_heatpumps, 3))  # Max. 3 Spalten
+        
+        for idx in range(num_heatpumps):
+            col_idx = idx % 3
+            with hp_cols[col_idx]:
+                with st.expander(f"**WP {idx + 1}:** {st.session_state['comparison_heatpumps'][idx].get('manufacturer', 'Hersteller')} {st.session_state['comparison_heatpumps'][idx].get('model', 'Modell')}", expanded=(idx < 2)):
+                    hp = st.session_state['comparison_heatpumps'][idx]
+                    
+                    hp['manufacturer'] = st.text_input(
+                        "Hersteller:",
+                        value=hp.get('manufacturer', 'Unbekannt'),
+                        key=f"hp_manufacturer_{idx}"
+                    )
+                    
+                    hp['model'] = st.text_input(
+                        "Modell:",
+                        value=hp.get('model', 'Modell'),
+                        key=f"hp_model_{idx}"
+                    )
+                    
+                    hp['price'] = st.number_input(
+                        "Preis [€]:",
+                        min_value=5000,
+                        max_value=50000,
+                        value=int(hp.get('price', 15000)),
+                        step=500,
+                        key=f"hp_price_{idx}"
+                    )
+                    
+                    hp['heating_power'] = st.number_input(
+                        "Heizleistung [kW]:",
+                        min_value=3.0,
+                        max_value=30.0,
+                        value=float(hp.get('heating_power', 10.0)),
+                        step=0.5,
+                        key=f"hp_power_{idx}"
+                    )
+                    
+                    hp['scop'] = st.number_input(
+                        "SCOP:",
+                        min_value=2.0,
+                        max_value=6.0,
+                        value=float(hp.get('scop', 4.0)),
+                        step=0.1,
+                        key=f"hp_scop_{idx}"
+                    )
+                    
+                    hp['noise_level'] = st.number_input(
+                        "Schallleistung [dB(A)]:",
+                        min_value=30,
+                        max_value=70,
+                        value=int(hp.get('noise_level', 45)),
+                        key=f"hp_noise_{idx}"
+                    )
+                    
+                    hp['refrigerant'] = st.selectbox(
+                        "Kältemittel:",
+                        options=['R32', 'R290', 'R410A', 'R454C', 'R1234yf', 'R744'],
+                        index=['R32', 'R290', 'R410A', 'R454C', 'R1234yf', 'R744'].index(hp.get('refrigerant', 'R32')),
+                        key=f"hp_refrigerant_{idx}"
+                    )
+        
+        st.markdown("---")
+        
+        # Button zum Vergleich starten
+        if st.button("🔍 Vergleich durchführen", type="primary", use_container_width=True):
+            with st.spinner("Umfassende Analyse läuft... (10 Kriterien werden bewertet)"):
+                comparison_result = compare_multiple_heatpumps(
+                    building_data,
+                    st.session_state['comparison_heatpumps']
+                )
+                
+                if 'error' in comparison_result:
+                    st.error(comparison_result['error'])
+                else:
+                    st.success(f"✅ Vergleich abgeschlossen: {comparison_result['count']} Wärmepumpen analysiert")
+                    
+                    # ===== RANKING =====
+                    st.markdown("### 🥇 Ranking")
+                    
+                    # Ranking-Tabelle
+                    ranking_df = pd.DataFrame(comparison_result['ranking'])
+                    ranking_df = ranking_df[['rank', 'medal', 'name', 'total_score', 'rating']]
+                    ranking_df.columns = ['#', '🏅', 'Modell', 'Punkte', 'Bewertung']
+                    
+                    st.dataframe(
+                        ranking_df,
+                        use_container_width=True,
+                        hide_index=True
+                    )
+                    
+                    # Gesamtpunktzahl Balkendiagramm
+                    bar_fig = create_comparison_bar_chart(comparison_result)
+                    st.plotly_chart(bar_fig, use_container_width=True)
+                    
+                    # ===== EMPFEHLUNG =====
+                    st.markdown("### 💡 Unsere Empfehlung")
+                    
+                    rec = comparison_result['recommendation']
+                    winner = rec['winner']
+                    
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.metric(
+                            "🥇 Testsieger",
+                            winner['name'],
+                            f"{winner['total_score']:.1f} Punkte"
+                        )
+                    with col2:
+                        st.metric(
+                            "Preis",
+                            format_german_number(winner['price'], 0) + " €"
+                        )
+                    with col3:
+                        st.metric(
+                            "Jährl. Einsparung vs. #2",
+                            format_german_number(winner['annual_savings_vs_runner_up'], 2) + " €"
+                        )
+                    
+                    # Stärken des Siegers
+                    if winner['strengths']:
+                        st.success("**Besondere Stärken:**")
+                        for strength in winner['strengths']:
+                            st.markdown(f"- ✅ {strength}")
+                    
+                    # Allgemeine Ratschläge
+                    if rec['general_advice']:
+                        with st.expander("⚠️ Allgemeine Hinweise"):
+                            for advice in rec['general_advice']:
+                                st.warning(advice)
+                    
+                    # ===== DETAILLIERTER VERGLEICH =====
+                    st.markdown("### 📊 Detaillierter Vergleich")
+                    
+                    # Radar Chart (Multi-Kriterien)
+                    radar_fig = create_comparison_radar_chart(comparison_result)
+                    st.plotly_chart(radar_fig, use_container_width=True)
+                    
+                    # Heatmap (Score-Breakdown)
+                    heatmap_fig = create_comparison_heatmap(comparison_result)
+                    st.plotly_chart(heatmap_fig, use_container_width=True)
+                    
+                    # Kostenvergleich
+                    cost_fig = create_comparison_cost_chart(comparison_result)
+                    st.plotly_chart(cost_fig, use_container_width=True)
+                    
+                    # ===== KATEGORIE-GEWINNER =====
+                    st.markdown("### 🏅 Kategorie-Gewinner")
+                    
+                    cat_winners = comparison_result['category_winners']
+                    
+                    cat_cols = st.columns(5)
+                    
+                    with cat_cols[0]:
+                        st.metric(
+                            "Beste Effizienz",
+                            cat_winners['beste_effizienz']['name'][:20] + "..." if len(cat_winners['beste_effizienz']['name']) > 20 else cat_winners['beste_effizienz']['name'],
+                            f"JAZ {cat_winners['beste_effizienz']['value']:.2f}"
+                        )
+                    
+                    with cat_cols[1]:
+                        st.metric(
+                            "Günstigste",
+                            cat_winners['guenstigste_anschaffung']['name'][:20] + "..." if len(cat_winners['guenstigste_anschaffung']['name']) > 20 else cat_winners['guenstigste_anschaffung']['name'],
+                            format_german_number(cat_winners['guenstigste_anschaffung']['value'], 0) + " €"
+                        )
+                    
+                    with cat_cols[2]:
+                        st.metric(
+                            "Niedrigste Kosten",
+                            cat_winners['niedrigste_betriebskosten']['name'][:20] + "..." if len(cat_winners['niedrigste_betriebskosten']['name']) > 20 else cat_winners['niedrigste_betriebskosten']['name'],
+                            format_german_number(cat_winners['niedrigste_betriebskosten']['value'], 0) + " €/Jahr"
+                        )
+                    
+                    with cat_cols[3]:
+                        st.metric(
+                            "Beste Ökobilanz",
+                            cat_winners['beste_oekobilanz']['name'][:20] + "..." if len(cat_winners['beste_oekobilanz']['name']) > 20 else cat_winners['beste_oekobilanz']['name'],
+                            format_german_number(cat_winners['beste_oekobilanz']['value'], 0) + " kg CO2 gespart"
+                        )
+                    
+                    with cat_cols[4]:
+                        st.metric(
+                            "Leiseste",
+                            cat_winners['leiseste']['name'][:20] + "..." if len(cat_winners['leiseste']['name']) > 20 else cat_winners['leiseste']['name'],
+                            f"{cat_winners['leiseste']['value']:.1f} dB(A)"
+                        )
+                    
+                    # ===== SCORING-METHODIK =====
+                    with st.expander("ℹ️ Bewertungs-Methodik (Gewichtung)"):
+                        st.markdown("""
+                        **Gewichtete 10-Kriterien-Bewertung:**
+                        
+                        Die Gesamtpunktzahl (0-100) ergibt sich aus:
+                        """)
+                        
+                        weights = comparison_result['score_breakdown']['weights']
+                        weight_df = pd.DataFrame([
+                            {'Kriterium': k, 'Gewichtung': v}
+                            for k, v in weights.items()
+                        ])
+                        st.dataframe(weight_df, use_container_width=True, hide_index=True)
+                        
+                        st.info("Jedes Kriterium wird auf 0-100 Punkte normalisiert und mit dem Gewicht multipliziert.")
 
 
 if __name__ == "__main__":

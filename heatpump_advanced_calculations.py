@@ -2086,3 +2086,593 @@ def _simulate_heat_wave(building_data: Dict, heatpump_data: Dict) -> Dict[str, A
         }
     }
 
+
+# ============================================================================
+# FEATURE 7.1: INTERAKTIVER VERGLEICHSRECHNER
+# ============================================================================
+
+def compare_multiple_heatpumps(
+    building_data: Dict[str, Any],
+    heatpump_list: List[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """
+    Vergleicht mehrere Wärmepumpen-Modelle anhand von 15 Kriterien
+    
+    Parameter:
+    - building_data: Gebäudedaten
+    - heatpump_list: Liste von Wärmepumpen-Daten (min. 2, max. 6)
+    
+    Returns:
+    - Dict mit Vergleichsergebnis, Ranking und Empfehlung
+    """
+    
+    if len(heatpump_list) < 2:
+        return {'error': 'Mindestens 2 Wärmepumpen zum Vergleich erforderlich'}
+    
+    if len(heatpump_list) > 6:
+        heatpump_list = heatpump_list[:6]  # Max. 6 WPs
+    
+    # Berechnungen für jede WP durchführen
+    comparison_results = []
+    
+    for idx, hp_data in enumerate(heatpump_list):
+        # Alle wichtigen Berechnungen
+        jaz_data = calculate_jaz_prognosis(building_data, hp_data)
+        price_data = calculate_price_scenarios(building_data, hp_data)
+        noise_data = calculate_noise_analysis(building_data, hp_data)
+        co2_data = calculate_lifecycle_co2(building_data, hp_data)
+        maintenance_data = calculate_maintenance_schedule(building_data, hp_data)
+        tax_data = calculate_tax_benefits(building_data, hp_data)
+        
+        # Kompakte Zusammenfassung
+        result = {
+            'index': idx,
+            'name': f"{hp_data.get('manufacturer', 'Unbekannt')} {hp_data.get('model', 'Modell')}",
+            'price': hp_data.get('price', 0),
+            'heating_power_kw': hp_data.get('heating_power', 0),
+            'scop': hp_data.get('scop', 0),
+            'noise_level_dba': hp_data.get('noise_level', 0),
+            'refrigerant': hp_data.get('refrigerant', 'R32'),
+            
+            # Berechnete Werte
+            'jaz_realistic': jaz_data['jaz_realistic'],
+            'annual_cost_eur': price_data['comparison']['heatpump']['annual_cost_eur'],
+            'payback_years': price_data['scenarios']['realistic']['payback_year'],
+            'total_cost_20y_eur': price_data['scenarios']['realistic']['years'][-1]['heatpump_cumulative_eur'],
+            'noise_compliant': noise_data['compliance']['night_compliant'],
+            'noise_at_neighbor_dba': noise_data['noise_at_neighbor_dba'],
+            'co2_savings_20y_kg': co2_data['lifecycle_comparison']['savings_vs_old_system_kg'],
+            'maintenance_cost_20y_eur': maintenance_data['summary']['total_cost_20_years_eur'],
+            'tax_benefit_total_eur': tax_data['total_benefit_eur'],
+            
+            # Rohdaten für Details
+            '_jaz_data': jaz_data,
+            '_price_data': price_data,
+            '_noise_data': noise_data,
+            '_co2_data': co2_data,
+            '_maintenance_data': maintenance_data
+        }
+        
+        comparison_results.append(result)
+    
+    # ========================================
+    # SCORING-SYSTEM (0-100 Punkte pro Kriterium)
+    # ========================================
+    
+    # Min/Max Werte für Normalisierung
+    jaz_values = [r['jaz_realistic'] for r in comparison_results]
+    price_values = [r['price'] for r in comparison_results]
+    annual_cost_values = [r['annual_cost_eur'] for r in comparison_results]
+    payback_values = [r['payback_years'] for r in comparison_results]
+    total_cost_values = [r['total_cost_20y_eur'] for r in comparison_results]
+    noise_values = [r['noise_at_neighbor_dba'] for r in comparison_results]
+    co2_savings_values = [r['co2_savings_20y_kg'] for r in comparison_results]
+    maintenance_values = [r['maintenance_cost_20y_eur'] for r in comparison_results]
+    
+    for result in comparison_results:
+        scores = {}
+        
+        # 1. JAZ (höher = besser) - Gewicht 15%
+        jaz_score = normalize_score_higher_better(
+            result['jaz_realistic'], min(jaz_values), max(jaz_values)
+        )
+        scores['jaz'] = jaz_score
+        
+        # 2. Anschaffungspreis (niedriger = besser) - Gewicht 10%
+        price_score = normalize_score_lower_better(
+            result['price'], min(price_values), max(price_values)
+        )
+        scores['price'] = price_score
+        
+        # 3. Jährliche Betriebskosten (niedriger = besser) - Gewicht 15%
+        annual_cost_score = normalize_score_lower_better(
+            result['annual_cost_eur'], min(annual_cost_values), max(annual_cost_values)
+        )
+        scores['annual_cost'] = annual_cost_score
+        
+        # 4. Amortisationszeit (niedriger = besser) - Gewicht 10%
+        payback_score = normalize_score_lower_better(
+            result['payback_years'], min(payback_values), max(payback_values)
+        )
+        scores['payback'] = payback_score
+        
+        # 5. Gesamtkosten 20 Jahre (niedriger = besser) - Gewicht 12%
+        total_cost_score = normalize_score_lower_better(
+            result['total_cost_20y_eur'], min(total_cost_values), max(total_cost_values)
+        )
+        scores['total_cost'] = total_cost_score
+        
+        # 6. Lautstärke (niedriger = besser) - Gewicht 8%
+        noise_score = normalize_score_lower_better(
+            result['noise_at_neighbor_dba'], min(noise_values), max(noise_values)
+        )
+        # Bonus für Compliance
+        if result['noise_compliant']:
+            noise_score = min(100, noise_score + 10)
+        scores['noise'] = noise_score
+        
+        # 7. CO2-Einsparung (höher = besser) - Gewicht 10%
+        co2_score = normalize_score_higher_better(
+            result['co2_savings_20y_kg'], min(co2_savings_values), max(co2_savings_values)
+        )
+        scores['co2'] = co2_score
+        
+        # 8. Wartungskosten (niedriger = besser) - Gewicht 8%
+        maintenance_score = normalize_score_lower_better(
+            result['maintenance_cost_20y_eur'], min(maintenance_values), max(maintenance_values)
+        )
+        scores['maintenance'] = maintenance_score
+        
+        # 9. Kältemittel-Bewertung - Gewicht 7%
+        refrigerant_gwp = {
+            'R32': 675, 'R290': 3, 'R410A': 2088,
+            'R454C': 148, 'R1234yf': 4, 'R744': 1
+        }
+        gwp = refrigerant_gwp.get(result['refrigerant'], 675)
+        # GWP < 150 = sehr gut (100 Punkte)
+        if gwp < 150:
+            refrigerant_score = 100
+        elif gwp < 700:
+            refrigerant_score = 70
+        elif gwp < 1500:
+            refrigerant_score = 40
+        else:
+            refrigerant_score = 20
+        scores['refrigerant'] = refrigerant_score
+        
+        # 10. Leistungsreserve - Gewicht 5%
+        required_power = building_data.get('heat_load_kw', 10)
+        power_ratio = result['heating_power_kw'] / required_power
+        # Optimal: 1.1 - 1.3 (10-30% Reserve)
+        if 1.1 <= power_ratio <= 1.3:
+            power_score = 100
+        elif 1.0 <= power_ratio < 1.1:
+            power_score = 80
+        elif 1.3 < power_ratio <= 1.5:
+            power_score = 70
+        else:
+            power_score = 50
+        scores['power_reserve'] = power_score
+        
+        # GEWICHTETE GESAMTPUNKTZAHL
+        weights = {
+            'jaz': 0.15,
+            'price': 0.10,
+            'annual_cost': 0.15,
+            'payback': 0.10,
+            'total_cost': 0.12,
+            'noise': 0.08,
+            'co2': 0.10,
+            'maintenance': 0.08,
+            'refrigerant': 0.07,
+            'power_reserve': 0.05
+        }
+        
+        total_score = sum(scores[key] * weights[key] for key in scores)
+        
+        result['scores'] = scores
+        result['total_score'] = round(total_score, 1)
+    
+    # ========================================
+    # RANKING
+    # ========================================
+    
+    ranked = sorted(comparison_results, key=lambda x: x['total_score'], reverse=True)
+    
+    # Rang und Medaillen
+    for rank, result in enumerate(ranked, 1):
+        result['rank'] = rank
+        if rank == 1:
+            result['medal'] = '🥇'
+            result['rating'] = 'TESTSIEGER'
+        elif rank == 2:
+            result['medal'] = '🥈'
+            result['rating'] = 'SEHR GUT'
+        elif rank == 3:
+            result['medal'] = '🥉'
+            result['rating'] = 'GUT'
+        else:
+            result['medal'] = ''
+            result['rating'] = 'SOLIDE'
+    
+    # ========================================
+    # EMPFEHLUNG GENERIEREN
+    # ========================================
+    
+    winner = ranked[0]
+    runner_up = ranked[1] if len(ranked) > 1 else None
+    
+    recommendation = {
+        'winner': {
+            'name': winner['name'],
+            'total_score': winner['total_score'],
+            'strengths': [],
+            'price': winner['price'],
+            'annual_savings_vs_runner_up': 0
+        },
+        'runner_up': None,
+        'general_advice': []
+    }
+    
+    # Stärken des Siegers
+    winner_scores = winner['scores']
+    for criterion, score in winner_scores.items():
+        if score >= 90:
+            criterion_names = {
+                'jaz': 'Sehr hohe Effizienz (JAZ)',
+                'price': 'Günstiger Anschaffungspreis',
+                'annual_cost': 'Niedrige Betriebskosten',
+                'payback': 'Kurze Amortisationszeit',
+                'total_cost': 'Beste Gesamtwirtschaftlichkeit',
+                'noise': 'Sehr leise',
+                'co2': 'Höchste CO2-Einsparung',
+                'maintenance': 'Niedrige Wartungskosten',
+                'refrigerant': 'Umweltfreundliches Kältemittel',
+                'power_reserve': 'Optimale Dimensionierung'
+            }
+            recommendation['winner']['strengths'].append(criterion_names.get(criterion, criterion))
+    
+    # Vergleich mit Zweitplatziertem
+    if runner_up:
+        annual_diff = runner_up['annual_cost_eur'] - winner['annual_cost_eur']
+        recommendation['winner']['annual_savings_vs_runner_up'] = round(annual_diff, 2)
+        
+        recommendation['runner_up'] = {
+            'name': runner_up['name'],
+            'total_score': runner_up['total_score'],
+            'price_advantage': max(0, winner['price'] - runner_up['price'])
+        }
+    
+    # Allgemeine Ratschläge
+    if winner['jaz_realistic'] < 3.5:
+        recommendation['general_advice'].append(
+            '⚠️ JAZ unter 3,5: Gebäudedämmung prüfen oder Vorlauftemperatur senken'
+        )
+    
+    if winner['payback_years'] > 15:
+        recommendation['general_advice'].append(
+            '⚠️ Lange Amortisation: Förderung beantragen (BEG: bis zu 40%)'
+        )
+    
+    if not winner['noise_compliant']:
+        recommendation['general_advice'].append(
+            '⚠️ Lautstärke kritisch: Schallschutzmaßnahmen einplanen'
+        )
+    
+    # ========================================
+    # KATEGORIE-GEWINNER
+    # ========================================
+    
+    category_winners = {
+        'beste_effizienz': max(comparison_results, key=lambda x: x['jaz_realistic']),
+        'guenstigste_anschaffung': min(comparison_results, key=lambda x: x['price']),
+        'niedrigste_betriebskosten': min(comparison_results, key=lambda x: x['annual_cost_eur']),
+        'beste_oekobilanz': max(comparison_results, key=lambda x: x['co2_savings_20y_kg']),
+        'leiseste': min(comparison_results, key=lambda x: x['noise_at_neighbor_dba'])
+    }
+    
+    return {
+        'comparison_table': ranked,
+        'ranking': [
+            {
+                'rank': r['rank'],
+                'medal': r['medal'],
+                'name': r['name'],
+                'total_score': r['total_score'],
+                'rating': r['rating']
+            }
+            for r in ranked
+        ],
+        'recommendation': recommendation,
+        'category_winners': {
+            'beste_effizienz': {
+                'name': category_winners['beste_effizienz']['name'],
+                'value': category_winners['beste_effizienz']['jaz_realistic']
+            },
+            'guenstigste_anschaffung': {
+                'name': category_winners['guenstigste_anschaffung']['name'],
+                'value': category_winners['guenstigste_anschaffung']['price']
+            },
+            'niedrigste_betriebskosten': {
+                'name': category_winners['niedrigste_betriebskosten']['name'],
+                'value': category_winners['niedrigste_betriebskosten']['annual_cost_eur']
+            },
+            'beste_oekobilanz': {
+                'name': category_winners['beste_oekobilanz']['name'],
+                'value': category_winners['beste_oekobilanz']['co2_savings_20y_kg']
+            },
+            'leiseste': {
+                'name': category_winners['leiseste']['name'],
+                'value': category_winners['leiseste']['noise_at_neighbor_dba']
+            }
+        },
+        'count': len(heatpump_list),
+        'score_breakdown': {
+            'weights': {
+                'JAZ (Effizienz)': '15%',
+                'Anschaffungspreis': '10%',
+                'Jährliche Kosten': '15%',
+                'Amortisationszeit': '10%',
+                'Gesamtkosten 20 Jahre': '12%',
+                'Lautstärke': '8%',
+                'CO2-Einsparung': '10%',
+                'Wartungskosten': '8%',
+                'Kältemittel': '7%',
+                'Leistungsreserve': '5%'
+            }
+        }
+    }
+
+
+def normalize_score_higher_better(value: float, min_val: float, max_val: float) -> float:
+    """Normalisiert Wert auf 0-100 (höher = besser)"""
+    if max_val == min_val:
+        return 50.0
+    return ((value - min_val) / (max_val - min_val)) * 100
+
+
+def normalize_score_lower_better(value: float, min_val: float, max_val: float) -> float:
+    """Normalisiert Wert auf 0-100 (niedriger = besser)"""
+    if max_val == min_val:
+        return 50.0
+    return ((max_val - value) / (max_val - min_val)) * 100
+
+
+# ============================================================================
+# FEATURE 7.2: ERWEITERTE PDF-DATEN-STRUKTUR
+# ============================================================================
+
+def generate_extended_heatpump_report_data(
+    building_data: Dict[str, Any],
+    heatpump_data: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Generiert umfassende Datenstruktur für erweiterten PDF-Export
+    
+    Sammelt ALLE erweiterten Berechnungen für professionellen Report:
+    - JAZ-Prognose mit allen Faktoren
+    - Pufferspeicher-Dimensionierung
+    - Preisszenarien (3 Varianten, 20 Jahre)
+    - Steuervorteile (§35a, §35c)
+    - Lautstärke-Analyse
+    - Jahresganglinie
+    - Smart-Grid & §14a EnWG
+    - Hybrid-Vergleich
+    - Lebenszyklus-CO2
+    - Kältemittel-Analyse
+    - Wartungsplan
+    - Extremwetter-Szenarien
+    
+    Returns:
+    - Dict mit strukturierten Daten für PDF-Template
+    """
+    
+    try:
+        # Alle Berechnungen durchführen
+        jaz_data = calculate_jaz_prognosis(building_data, heatpump_data)
+        buffer_data = calculate_buffer_tank_size(building_data, heatpump_data)
+        price_data = calculate_price_scenarios(building_data, heatpump_data)
+        tax_data = calculate_tax_benefits(building_data, heatpump_data)
+        noise_data = calculate_noise_analysis(building_data, heatpump_data)
+        annual_data = generate_annual_load_profile(building_data, heatpump_data)
+        smart_grid_data = calculate_smart_grid_benefits(building_data, heatpump_data)
+        grid_bonus_data = calculate_grid_service_bonus(building_data, heatpump_data)
+        hybrid_data = compare_hybrid_heating(building_data, heatpump_data)
+        co2_data = calculate_lifecycle_co2(building_data, heatpump_data)
+        refrigerant_data = compare_refrigerants(building_data, heatpump_data)
+        maintenance_data = calculate_maintenance_schedule(building_data, heatpump_data)
+        
+        # Extremwetter-Szenarien
+        cold_wave = simulate_extreme_weather(building_data, heatpump_data, 'cold_wave')
+        blackout = simulate_extreme_weather(building_data, heatpump_data, 'blackout')
+        heat_wave = simulate_extreme_weather(building_data, heatpump_data, 'heat_wave')
+        
+    except Exception as e:
+        return {
+            'error': f'Fehler bei Berechnungen: {str(e)}',
+            'status': 'FEHLGESCHLAGEN'
+        }
+    
+    # Strukturierter Report
+    report = {
+        # ===== METADATEN =====
+        'meta': {
+            'report_type': 'Erweiterte Wärmepumpen-Analyse',
+            'building_area_m2': building_data.get('area', 0),
+            'heat_load_kw': building_data.get('heat_load_kw', 0),
+            'heatpump_model': f"{heatpump_data.get('manufacturer', 'Unbekannt')} {heatpump_data.get('model', '')}",
+            'heatpump_power_kw': heatpump_data.get('heating_power', 0),
+            'heatpump_price_eur': heatpump_data.get('price', 0)
+        },
+        
+        # ===== 1. DIMENSIONIERUNG =====
+        'dimensioning': {
+            'jaz': {
+                'realistic': jaz_data['jaz_realistic'],
+                'optimistic': jaz_data['jaz_optimistic'],
+                'pessimistic': jaz_data['jaz_pessimistic'],
+                'base_scop': jaz_data['base_scop'],
+                'deviation_percent': jaz_data['deviation_percent'],
+                'top_factors': [
+                    f"{k}: {v['impact_percent']:+.1f}%"
+                    for k, v in sorted(
+                        jaz_data['factors'].items(),
+                        key=lambda x: abs(x[1]['impact_percent']),
+                        reverse=True
+                    )[:3]  # Top 3
+                ],
+                'recommendations': jaz_data['recommendations'][:3]  # Top 3
+            },
+            'buffer': {
+                'recommended_liters': buffer_data['recommended_size_liters'],
+                'min_liters': buffer_data['min_size_liters'],
+                'max_liters': buffer_data['max_size_liters'],
+                'cost_eur': buffer_data['estimated_cost_eur'],
+                'priority': buffer_data['buffer_priority'],
+                'top_benefits': buffer_data['benefits'][:3]  # Top 3
+            }
+        },
+        
+        # ===== 2. FINANZEN =====
+        'finances': {
+            'scenarios': {
+                'realistic': {
+                    'payback_years': price_data['scenarios']['realistic']['payback_year'],
+                    'annual_savings_eur': price_data['comparison']['annual_savings_eur'],
+                    'total_savings_20y_eur': price_data['scenarios']['realistic']['years'][-1]['savings_eur'],
+                    'roi_percent': price_data['scenarios']['realistic']['roi_percent']
+                },
+                'best_case': {
+                    'name': 'Konservativ (+2% Preissteigerung)',
+                    'payback_years': price_data['scenarios']['conservative']['payback_year'],
+                    'total_savings_20y_eur': price_data['scenarios']['conservative']['years'][-1]['savings_eur']
+                },
+                'worst_case': {
+                    'name': 'Pessimistisch (+10% Preissteigerung)',
+                    'payback_years': price_data['scenarios']['pessimistic']['payback_year'],
+                    'total_savings_20y_eur': price_data['scenarios']['pessimistic']['years'][-1]['savings_eur']
+                }
+            },
+            'taxes': {
+                'handwerker_35a_annual_eur': tax_data['handwerker_35a']['annual_benefit_eur'],
+                'sanierung_35c_total_eur': tax_data['sanierung_35c']['total_benefit_eur'],
+                'total_benefit_eur': tax_data['total_benefit_eur']
+            }
+        },
+        
+        # ===== 3. KOMFORT & BETRIEB =====
+        'comfort': {
+            'noise': {
+                'wp_level_dba': noise_data['wp_noise_level_dba'],
+                'neighbor_level_dba': noise_data['noise_at_neighbor_dba'],
+                'compliant': noise_data['compliance']['night_compliant'],
+                'safety_margin_db': noise_data['compliance'].get('safety_margin_night_db', 0),
+                'assessment': noise_data['assessment'],
+                'min_distance_required_m': noise_data.get('optimal_location', {}).get('min_distance_required_m', 0)
+            },
+            'annual_profile': {
+                'total_heat_kwh': annual_data['summary']['total_heat_demand_kwh'],
+                'total_electricity_kwh': annual_data['summary']['total_electricity_kwh'],
+                'avg_jaz': annual_data['summary']['average_jaz'],
+                'total_runtime_hours': annual_data['summary']['total_runtime_hours'],
+                'coldest_month': max(annual_data['months'], key=lambda m: m['heat_demand_kwh'])['month'],
+                'peak_heat_demand_kwh': max(m['heat_demand_kwh'] for m in annual_data['months'])
+            }
+        },
+        
+        # ===== 4. ENERGIE-MANAGEMENT =====
+        'energy_mgmt': {
+            'smart_grid': {
+                'without_sg_cost_eur': smart_grid_data['scenarios']['ohne_smart_grid']['annual_cost_eur'],
+                'with_sg_cost_eur': smart_grid_data['scenarios']['kombiniert_pv_dynamisch']['annual_cost_eur'],
+                'savings_eur': smart_grid_data['recommendation']['max_savings_eur'],
+                'best_scenario': smart_grid_data['recommendation']['best_scenario']
+            },
+            'grid_bonus_14a': {
+                'bonus_type': grid_bonus_data['recommendation']['recommended_option'],
+                'annual_bonus_eur': grid_bonus_data['comparison']['prozentual']['annual_bonus_eur'] 
+                                   if grid_bonus_data['recommendation']['recommended_option'] == 'Prozentual'
+                                   else grid_bonus_data['comparison']['pauschal']['annual_bonus_eur'],
+                'total_20y_eur': grid_bonus_data['comparison']['prozentual']['total_20_years_eur']
+                                if grid_bonus_data['recommendation']['recommended_option'] == 'Prozentual'
+                                else grid_bonus_data['comparison']['pauschal']['total_20_years_eur']
+            },
+            'hybrid': {
+                'bivalence_point_celsius': hybrid_data['bivalence_point_celsius'],
+                'wp_coverage_percent': hybrid_data['wp_coverage_percent'],
+                'best_backup': hybrid_data['recommendation']['best_backup_system'],
+                'cost_savings_vs_backup_eur': hybrid_data['recommendation']['savings_vs_best_backup_eur']
+            }
+        },
+        
+        # ===== 5. NACHHALTIGKEIT =====
+        'sustainability': {
+            'co2': {
+                'wp_total_20y_kg': co2_data['total_emissions']['heatpump_kg'],
+                'old_system_20y_kg': co2_data['total_emissions']['old_system_kg'],
+                'savings_20y_kg': co2_data['lifecycle_comparison']['savings_vs_old_system_kg'],
+                'savings_percent': co2_data['lifecycle_comparison']['reduction_percent'],
+                'break_even_years': co2_data['lifecycle_comparison'].get('break_even_year', 'N/A'),
+                'equivalents': co2_data['interpretation']['equivalents'][:2]  # Top 2
+            },
+            'refrigerant': {
+                'current': refrigerant_data['current_refrigerant']['type'],
+                'current_gwp': refrigerant_data['current_refrigerant']['gwp'],
+                'f_gas_compliant': refrigerant_data['current_refrigerant']['f_gas_compliant_until'] != 'Bereits verboten',
+                'best_alternative': refrigerant_data['recommendation']['best_alternative'],
+                'alternatives_count': len(refrigerant_data['alternatives'])
+            }
+        },
+        
+        # ===== 6. WARTUNG & SZENARIEN =====
+        'maintenance': {
+            'total_cost_20y_eur': maintenance_data['summary']['total_cost_20_years_eur'],
+            'avg_annual_cost_eur': maintenance_data['summary']['average_annual_cost_eur'],
+            'major_services': [
+                {'year': item['year'], 'description': item['items'][0]['description'], 'cost': item['items'][0]['cost_eur']}
+                for item in maintenance_data['schedule_20_years']
+                if any(i['item'] in ['Großinspektion', 'Hauptwartung'] for i in item.get('items', []))
+            ][:3],  # Top 3
+            'warranty': {
+                'years': maintenance_data['warranty']['years'],
+                'coverage': maintenance_data['warranty']['coverage'],
+                'extension_available': maintenance_data['warranty']['extension_available']
+            }
+        },
+        'extreme_weather': {
+            'cold_wave': {
+                'scenario': cold_wave['scenario'],
+                'coverage_percent': cold_wave['coverage']['coverage_percentage'],
+                'backup_needed': not cold_wave['coverage']['sufficient'],
+                'additional_cost_eur': cold_wave['costs']['total_additional_cost_eur']
+            },
+            'blackout': {
+                'scenario': blackout['scenario'],
+                'temp_drop_after_24h_celsius': blackout['impact']['temperature_drop_24h_celsius'],
+                'critical': blackout['impact']['critical'],
+                'recommendation': blackout['recommendations'][0] if blackout['recommendations'] else ''
+            },
+            'heat_wave': {
+                'scenario': heat_wave['scenario'],
+                'cooling_available': 'KÜHLFUNKTION' in heat_wave['assessment'],
+                'cost_with_pv_eur': heat_wave['impact']['kosten_mit_pv_70_prozent_eur']
+            }
+        },
+        
+        # ===== ZUSAMMENFASSUNG =====
+        'summary': {
+            'total_investment_eur': heatpump_data.get('price', 0) + buffer_data['estimated_cost_eur'],
+            'annual_savings_eur': price_data['comparison']['annual_savings_eur'],
+            'payback_years': price_data['scenarios']['realistic']['payback_year'],
+            'jaz_realistic': jaz_data['jaz_realistic'],
+            'co2_savings_20y_tons': round(co2_data['lifecycle_comparison']['savings_vs_old_system_kg'] / 1000, 1),
+            'tax_benefits_total_eur': tax_data['total_benefit_eur'],
+            'smart_grid_savings_eur': smart_grid_data['recommendation']['max_savings_eur'],
+            'noise_compliant': noise_data['compliance']['night_compliant'],
+            'overall_rating': 'SEHR GUT' if jaz_data['jaz_realistic'] >= 4.0 else 'GUT'
+        }
+    }
+    
+    return report
+
+

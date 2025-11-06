@@ -768,3 +768,323 @@ def create_maintenance_timeline(maintenance_schedule: Dict[str, Any]) -> go.Figu
     )
     
     return fig
+
+
+# ============================================================================
+# FEATURE 7.1: VERGLEICHSRECHNER VISUALISIERUNG
+# ============================================================================
+
+def create_comparison_radar_chart(comparison_data: Dict[str, Any]) -> go.Figure:
+    """
+    Radar Chart für Multi-Kriterien-Vergleich mehrerer Wärmepumpen
+    """
+    
+    results = comparison_data.get('comparison_table', [])
+    
+    if len(results) < 2:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="Mindestens 2 Wärmepumpen zum Vergleich erforderlich",
+            showarrow=False,
+            font=dict(size=16)
+        )
+        return fig
+    
+    # Kriterien für Radar
+    criteria = [
+        'JAZ',
+        'Preis',
+        'Betriebskosten',
+        'Amortisation',
+        'Gesamtkosten',
+        'Lautstärke',
+        'CO2',
+        'Wartung',
+        'Kältemittel',
+        'Leistung'
+    ]
+    
+    # Mapping zu score-keys
+    score_keys = [
+        'jaz', 'price', 'annual_cost', 'payback', 'total_cost',
+        'noise', 'co2', 'maintenance', 'refrigerant', 'power_reserve'
+    ]
+    
+    fig = go.Figure()
+    
+    # Farben für bis zu 6 WPs
+    colors = [
+        'rgb(31, 119, 180)',   # Blau
+        'rgb(255, 127, 14)',   # Orange
+        'rgb(44, 160, 44)',    # Grün
+        'rgb(214, 39, 40)',    # Rot
+        'rgb(148, 103, 189)',  # Lila
+        'rgb(140, 86, 75)'     # Braun
+    ]
+    
+    for idx, result in enumerate(results[:6]):  # Max. 6
+        scores = result.get('scores', {})
+        values = [scores.get(key, 0) for key in score_keys]
+        
+        # Schließe Polygon
+        values_closed = values + [values[0]]
+        criteria_closed = criteria + [criteria[0]]
+        
+        medal = result.get('medal', '')
+        name = f"{medal} {result['name']}" if medal else result['name']
+        
+        fig.add_trace(go.Scatterpolar(
+            r=values_closed,
+            theta=criteria_closed,
+            fill='toself',
+            name=name,
+            line=dict(color=colors[idx % len(colors)], width=2),
+            opacity=0.6
+        ))
+    
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, 100],
+                tickmode='linear',
+                tick0=0,
+                dtick=20
+            )
+        ),
+        title=dict(
+            text='<b>Multi-Kriterien-Vergleich</b><br><sub>0-100 Punkte pro Kriterium</sub>',
+            x=0.5,
+            xanchor='center'
+        ),
+        height=600,
+        showlegend=True,
+        legend=dict(
+            orientation='v',
+            yanchor='top',
+            y=1,
+            xanchor='left',
+            x=1.05
+        )
+    )
+    
+    return fig
+
+
+def create_comparison_bar_chart(comparison_data: Dict[str, Any]) -> go.Figure:
+    """
+    Horizontales Balkendiagramm mit Gesamtpunktzahl
+    """
+    
+    ranking = comparison_data.get('ranking', [])
+    
+    if not ranking:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="Keine Vergleichsdaten verfügbar",
+            showarrow=False,
+            font=dict(size=16)
+        )
+        return fig
+    
+    # Daten extrahieren
+    names = [f"{r['medal']} {r['name']}" if r['medal'] else r['name'] for r in ranking]
+    scores = [r['total_score'] for r in ranking]
+    ratings = [r['rating'] for r in ranking]
+    
+    # Farben nach Rating
+    color_map = {
+        'TESTSIEGER': 'rgb(255, 215, 0)',     # Gold
+        'SEHR GUT': 'rgb(192, 192, 192)',     # Silber
+        'GUT': 'rgb(205, 127, 50)',           # Bronze
+        'SOLIDE': 'rgb(100, 149, 237)'        # Blau
+    }
+    
+    colors_list = [color_map.get(r, 'rgb(100, 149, 237)') for r in ratings]
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        y=names,
+        x=scores,
+        orientation='h',
+        marker=dict(
+            color=colors_list,
+            line=dict(color='rgba(0,0,0,0.3)', width=1)
+        ),
+        text=[f"{s:.1f}" for s in scores],
+        textposition='outside',
+        textfont=dict(size=14, color='black'),
+        hovertemplate='<b>%{y}</b><br>Gesamtpunktzahl: %{x:.1f}<extra></extra>'
+    ))
+    
+    fig.update_layout(
+        title=dict(
+            text='<b>Ranking: Gesamtpunktzahl</b><br><sub>Gewichtete Bewertung aller Kriterien</sub>',
+            x=0.5,
+            xanchor='center'
+        ),
+        xaxis=dict(
+            title='Gesamtpunktzahl (0-100)',
+            range=[0, 105]
+        ),
+        yaxis=dict(
+            title='',
+            autorange='reversed'  # Platz 1 oben
+        ),
+        height=max(400, len(ranking) * 80),
+        paper_bgcolor='white',
+        plot_bgcolor='rgba(240,240,240,0.9)',
+        showlegend=False
+    )
+    
+    return fig
+
+
+def create_comparison_heatmap(comparison_data: Dict[str, Any]) -> go.Figure:
+    """
+    Heatmap mit detailliertem Score-Breakdown
+    """
+    
+    results = comparison_data.get('comparison_table', [])
+    
+    if not results:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="Keine Vergleichsdaten verfügbar",
+            showarrow=False,
+            font=dict(size=16)
+        )
+        return fig
+    
+    # Kriterien
+    criteria_labels = [
+        'JAZ<br>(15%)',
+        'Preis<br>(10%)',
+        'Betriebs-<br>kosten<br>(15%)',
+        'Amortisa-<br>tion<br>(10%)',
+        'Gesamt-<br>kosten<br>(12%)',
+        'Laut-<br>stärke<br>(8%)',
+        'CO2<br>(10%)',
+        'Wartung<br>(8%)',
+        'Kälte-<br>mittel<br>(7%)',
+        'Leistung<br>(5%)'
+    ]
+    
+    score_keys = [
+        'jaz', 'price', 'annual_cost', 'payback', 'total_cost',
+        'noise', 'co2', 'maintenance', 'refrigerant', 'power_reserve'
+    ]
+    
+    # Namen
+    names = [f"{r['medal']} {r['name']}" if r['medal'] else r['name'] for r in results]
+    
+    # Score-Matrix
+    score_matrix = []
+    for result in results:
+        scores = result.get('scores', {})
+        row = [scores.get(key, 0) for key in score_keys]
+        score_matrix.append(row)
+    
+    # Heatmap
+    fig = go.Figure(data=go.Heatmap(
+        z=score_matrix,
+        x=criteria_labels,
+        y=names,
+        colorscale='RdYlGn',  # Rot-Gelb-Grün
+        zmin=0,
+        zmax=100,
+        text=[[f"{val:.0f}" for val in row] for row in score_matrix],
+        texttemplate='%{text}',
+        textfont=dict(size=12, color='black'),
+        hovertemplate='<b>%{y}</b><br>%{x}: %{z:.1f} Punkte<extra></extra>',
+        colorbar=dict(
+            title='Punkte',
+            tickmode='linear',
+            tick0=0,
+            dtick=20
+        )
+    ))
+    
+    fig.update_layout(
+        title=dict(
+            text='<b>Detaillierter Kriterien-Vergleich</b><br><sub>Gewichtung in % angegeben</sub>',
+            x=0.5,
+            xanchor='center'
+        ),
+        xaxis=dict(title='Kriterium (Gewichtung)', side='top'),
+        yaxis=dict(title='', autorange='reversed'),
+        height=max(400, len(results) * 60 + 100),
+        paper_bgcolor='white'
+    )
+    
+    return fig
+
+
+def create_comparison_cost_chart(comparison_data: Dict[str, Any]) -> go.Figure:
+    """
+    Kostenvergleich: Anschaffung vs. 20-Jahres-Gesamtkosten
+    """
+    
+    results = comparison_data.get('comparison_table', [])
+    
+    if not results:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="Keine Vergleichsdaten verfügbar",
+            showarrow=False,
+            font=dict(size=16)
+        )
+        return fig
+    
+    names = [f"{r['medal']} {r['name']}" if r['medal'] else r['name'] for r in results]
+    prices = [r['price'] for r in results]
+    total_costs = [r['total_cost_20y_eur'] for r in results]
+    
+    fig = go.Figure()
+    
+    # Anschaffungspreis
+    fig.add_trace(go.Bar(
+        name='Anschaffungspreis',
+        x=names,
+        y=prices,
+        marker=dict(color='rgb(55, 83, 109)'),
+        text=[f"{p:,.0f}".replace(",", ".") + ' €' for p in prices],
+        textposition='outside',
+        textfont=dict(size=11)
+    ))
+    
+    # Gesamtkosten 20 Jahre
+    fig.add_trace(go.Bar(
+        name='Gesamtkosten 20 Jahre',
+        x=names,
+        y=total_costs,
+        marker=dict(color='rgb(26, 118, 255)'),
+        text=[f"{c:,.0f}".replace(",", ".") + ' €' for c in total_costs],
+        textposition='outside',
+        textfont=dict(size=11)
+    ))
+    
+    fig.update_layout(
+        title=dict(
+            text='<b>Kostenvergleich</b><br><sub>Anschaffung vs. Gesamtkosten (20 Jahre)</sub>',
+            x=0.5,
+            xanchor='center'
+        ),
+        xaxis=dict(title=''),
+        yaxis=dict(title='Kosten [€]', separators=',.'),
+        barmode='group',
+        height=500,
+        paper_bgcolor='white',
+        plot_bgcolor='rgba(240,240,240,0.9)',
+        legend=dict(
+            orientation='h',
+            yanchor='bottom',
+            y=1.02,
+            xanchor='center',
+            x=0.5
+        )
+    )
+    
+    return fig
+
