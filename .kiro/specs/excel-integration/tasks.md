@@ -8,20 +8,36 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 ## Phase 1: Grundlagen und Infrastruktur
 
-- [ ] 1. Datenmodelle und Basis-Klassen erstellen
+- [x] 1. Datenmodelle und Basis-Klassen erstellen
+
+
+
+
+
   - Cell, ExcelMatrix Dataclasses implementieren
   - Basis-Struktur für ExcelManager erstellen
   - Hilfsfunktionen für Zellreferenzen (A1-Notation)
   - _Requirements: 1.1, 2.1, 2.2_
 
-- [ ] 2. Formula Engine Grundgerüst
+- [x] 2. Formula Engine Grundgerüst
+
+
+
+
+
   - FormulaEngine Klasse mit Parser-Grundstruktur
   - Regex-basiertes Parsing für einfache Formeln
   - Integration der bestehenden `python_function_recipes.py`
   - Basis-Fehlerbehandlung (FormulaError Klassen)
   - _Requirements: 5.1, 5.2, 5.3, 10.1, 10.2_
 
-- [ ] 3. Erweiterte Formel-Funktionen implementieren
+- [x] 3. Erweiterte Formel-Funktionen implementieren
+
+
+
+
+
+
   - Alle mathematischen Funktionen (SUM, AVERAGE, MIN, MAX, ROUND, etc.)
   - Logische Funktionen (IF, AND, OR, IFERROR)
   - Lookup-Funktionen (VLOOKUP, HLOOKUP, INDEX, MATCH)
@@ -29,7 +45,8 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - Verschachtelte Formeln unterstützen
   - _Requirements: 5.2, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
-- [ ] 3.1 Unit Tests für Formel-Engine
+- [x] 3.1 Unit Tests für Formel-Engine
+
   - Tests für alle Excel-Funktionen
   - Tests für verschachtelte Formeln
   - Tests für Fehlerbehandlung
@@ -40,7 +57,17 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 ## Phase 2: Excel Manager und Zustandsverwaltung
 
-- [ ] 4. ExcelManager Kern-Funktionalität
+- [x] 4. ExcelManager Kern-Funktionalität
+
+
+
+
+
+
+
+
+
+
   - Matrix laden und initialisieren
   - get_cell_value und set_cell_value implementieren
   - Formel-Parsing und -Ausführung integrieren
@@ -48,7 +75,12 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - Automatische Neuberechnung bei Änderungen
   - _Requirements: 5.5, 11.4_
 
-- [ ] 5. CRUD-Operationen für Zeilen und Spalten
+- [x] 5. CRUD-Operationen für Zeilen und Spalten
+
+
+
+
+
   - add_row mit Position-Parameter
   - add_column mit Position-Parameter
   - delete_row mit Formel-Anpassung

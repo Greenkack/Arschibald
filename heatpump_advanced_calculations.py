@@ -18,17 +18,63 @@ Enthält professionelle Berechnungen für:
 - Extremwetter-Szenario (Feature 8.2)
 
 Author: GitHub Copilot
+Version: 2.0.0 - Enhanced with Robustness Patterns
 Date: 2025-11-06
 """
 
 from typing import Dict, List, Tuple, Any
 import math
 
+# Robustness Integration
+try:
+    from robustness_core import (
+        safe_function,
+        validate_numeric,
+        validate_dict_keys,
+        logger,
+        performance_timer,
+        error_context
+    )
+    ROBUSTNESS_AVAILABLE = True
+except ImportError:
+    # Fallback: Basic functionality without robustness
+    ROBUSTNESS_AVAILABLE = False
+    
+    def safe_function(fallback_value=None, error_message=""):
+        def decorator(func):
+            return func
+        return decorator
+    
+    def validate_numeric(value, **kwargs):
+        try:
+            return float(value) if value is not None else kwargs.get('default', 0.0)
+        except:
+            return kwargs.get('default', 0.0)
+    
+    def validate_dict_keys(data, required_keys, optional_keys=None):
+        return data if isinstance(data, dict) else {}
+    
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    from contextlib import contextmanager
+    @contextmanager
+    def performance_timer(operation, **kwargs):
+        yield
+    
+    @contextmanager
+    def error_context(operation, **kwargs):
+        try:
+            yield
+        except Exception as e:
+            logger.error(f"Error in {operation}: {e}")
+
 
 # ============================================================================
-# FEATURE 1.1: INTELLIGENTE JAZ-PROGNOSE
+# FEATURE 1.1: INTELLIGENTE JAZ-PROGNOSE (mit Robustness)
 # ============================================================================
 
+@safe_function(fallback_value={}, error_message="JAZ-Prognose calculation failed")
 def calculate_jaz_prognosis(
     building_data: Dict[str, Any],
     heatpump_data: Dict[str, Any]
@@ -44,60 +90,74 @@ def calculate_jaz_prognosis(
     - Dict mit JAZ-Prognosen und Einflussfaktoren
     """
     
-    # Basis: SCOP (Seasonal Coefficient of Performance)
-    base_scop = heatpump_data.get('scop', 4.0)
-    
-    # Faktor 1: Vorlauftemperatur-Einfluss
-    system_temp = building_data.get('system_temp', 55)
-    if system_temp <= 35:
-        temp_factor = 1.15  # Fußbodenheizung optimal
-    elif system_temp <= 45:
-        temp_factor = 1.05  # Niedertemperatur-Heizkörper
-    elif system_temp <= 55:
-        temp_factor = 0.95  # Standard-Heizkörper
-    else:
-        temp_factor = 0.85  # Alte Heizkörper, hohe Vorlauftemp
-    
-    # Faktor 2: Dämmqualität
-    insulation = building_data.get('insulation', 'Durchschnittlich')
-    if insulation in ['Sehr gut', 'Passivhaus']:
-        insulation_factor = 1.10
-    elif insulation == 'Gut':
-        insulation_factor = 1.05
-    elif insulation == 'Durchschnittlich':
-        insulation_factor = 1.00
-    else:  # Schlecht, Unsaniert
-        insulation_factor = 0.90
-    
-    # Faktor 3: Klimazone (Außentemperatur)
-    outside_temp = building_data.get('outside_temp', -12)
-    if outside_temp >= -10:
-        climate_factor = 1.05  # Mild
-    elif outside_temp >= -15:
-        climate_factor = 1.00  # Standard
-    else:
-        climate_factor = 0.95  # Kalt
-    
-    # Faktor 4: Wärmepumpentyp
-    wp_type = heatpump_data.get('type', 'Luft-Wasser')
-    if 'Sole' in wp_type or 'Wasser' in wp_type:
-        type_factor = 1.10  # Erdwärme/Grundwasser effizienter
-    else:
-        type_factor = 1.00  # Luft-Wasser
-    
-    # Faktor 5: Teillastbetrieb & Regelung
-    # Moderne Inverter-WP arbeiten im Teillast besser
-    inverter_factor = 0.98  # Kleine Verluste durch Regelung
-    
-    # Faktor 6: Abtauverluste (nur Luft-WP)
-    if 'Luft' in wp_type:
-        defrost_factor = 0.95  # 5% Verlust durch Abtauen
-    else:
-        defrost_factor = 1.00
-    
-    # Faktor 7: Hydraulischer Abgleich
-    # Annahme: Neubau hat hydraulischen Abgleich
-    building_year = building_data.get('year', 2000)
+    with performance_timer("JAZ Prognosis Calculation", log_threshold_ms=100.0):
+        # Validate input
+        building_data = validate_dict_keys(
+            building_data,
+            required_keys=['system_temp', 'insulation'],
+            optional_keys=['outside_temp', 'year']
+        )
+        
+        heatpump_data = validate_dict_keys(
+            heatpump_data,
+            required_keys=['scop'],
+            optional_keys=['type', 'manufacturer']
+        )
+        
+        # Basis: SCOP (Seasonal Coefficient of Performance)
+        base_scop = validate_numeric(heatpump_data.get('scop'), min_value=2.0, max_value=7.0, default=4.0)
+        
+        # Faktor 1: Vorlauftemperatur-Einfluss
+        system_temp = validate_numeric(building_data.get('system_temp'), min_value=25, max_value=75, default=55)
+        if system_temp <= 35:
+            temp_factor = 1.15  # Fußbodenheizung optimal
+        elif system_temp <= 45:
+            temp_factor = 1.05  # Niedertemperatur-Heizkörper
+        elif system_temp <= 55:
+            temp_factor = 0.95  # Standard-Heizkörper
+        else:
+            temp_factor = 0.85  # Alte Heizkörper, hohe Vorlauftemp
+        
+        # Faktor 2: Dämmqualität
+        insulation = building_data.get('insulation', 'Durchschnittlich')
+        if insulation in ['Sehr gut', 'Passivhaus']:
+            insulation_factor = 1.10
+        elif insulation == 'Gut':
+            insulation_factor = 1.05
+        elif insulation == 'Durchschnittlich':
+            insulation_factor = 1.00
+        else:  # Schlecht, Unsaniert
+            insulation_factor = 0.90
+        
+        # Faktor 3: Klimazone (Außentemperatur)
+        outside_temp = validate_numeric(building_data.get('outside_temp'), min_value=-30, max_value=5, default=-12)
+        if outside_temp >= -10:
+            climate_factor = 1.05  # Mild
+        elif outside_temp >= -15:
+            climate_factor = 1.00  # Standard
+        else:
+            climate_factor = 0.95  # Kalt
+        
+        # Faktor 4: Wärmepumpentyp
+        wp_type = heatpump_data.get('type', 'Luft-Wasser')
+        if 'Sole' in wp_type or 'Wasser' in wp_type:
+            type_factor = 1.10  # Erdwärme/Grundwasser effizienter
+        else:
+            type_factor = 1.00  # Luft-Wasser
+        
+        # Faktor 5: Teillastbetrieb & Regelung
+        # Moderne Inverter-WP arbeiten im Teillast besser
+        inverter_factor = 0.98  # Kleine Verluste durch Regelung
+        
+        # Faktor 6: Abtauverluste (nur Luft-WP)
+        if 'Luft' in wp_type:
+            defrost_factor = 0.95  # 5% Verlust durch Abtauen
+        else:
+            defrost_factor = 1.00
+        
+        # Faktor 7: Hydraulischer Abgleich
+        # Annahme: Neubau hat hydraulischen Abgleich
+        building_year = validate_numeric(building_data.get('year'), min_value=1900, max_value=2030, default=2000)
     if building_year >= 2010:
         hydraulic_factor = 1.00
     else:
@@ -477,7 +537,31 @@ def calculate_tax_benefits(
     installation_price = heatpump_data.get('installation_price', 3000)
     total_investment = device_price + installation_price
     
-    building_year = building_data.get('year', 2000)
+    # ✅ FIX: Parse building_year (kann String wie "Nach 2020", "Vor 1995" sein)
+    building_year_raw = building_data.get('year', 2000)
+    
+    # Konvertiere verschiedene Formate
+    if isinstance(building_year_raw, int):
+        building_year = building_year_raw
+    elif isinstance(building_year_raw, str):
+        # Parse Strings wie "Nach 2020", "Vor 1995", "1985-1994", etc.
+        if 'Nach 2020' in building_year_raw or '2021' in building_year_raw:
+            building_year = 2021
+        elif 'Vor 1995' in building_year_raw or '1994' in building_year_raw:
+            building_year = 1990
+        elif '1995-2001' in building_year_raw:
+            building_year = 1998
+        elif '2002-2020' in building_year_raw:
+            building_year = 2010
+        else:
+            # Versuche direkte Konvertierung
+            try:
+                building_year = int(building_year_raw)
+            except ValueError:
+                building_year = 2000  # Fallback
+    else:
+        building_year = 2000  # Fallback
+        
     is_old_building = building_year < 2002  # Vor 2002 = Altbau
     
     tax_benefits = {
@@ -498,6 +582,10 @@ def calculate_tax_benefits(
         'labor_cost': labor_cost,
         'deductible_amount': max_deductible_labor,
         'tax_benefit': handwerker_benefit,
+        'max_benefit_per_year': handwerker_benefit,  # ✅ FIX: Key für UI
+        'total_benefit': handwerker_benefit,  # ✅ FIX: Key für UI
+        'labor_cost_estimate': labor_cost,  # ✅ FIX: Key für UI
+        'years': 1,  # ✅ FIX: Key für UI
         'description': 'Jährlich absetzbar für Arbeitskosten',
         'paragraph': '§35a EStG',
         'requirements': [
@@ -520,10 +608,14 @@ def calculate_tax_benefits(
         total_sanierung_benefit = year1_benefit + year2_benefit + year3_benefit
         
         tax_benefits['energetische_sanierung'] = {
+            'eligible': True,  # ✅ FIX: Key für UI
             'eligible_amount': eligible_amount,
             'year1_benefit': year1_benefit,
             'year2_benefit': year2_benefit,
             'year3_benefit': year3_benefit,
+            'year_1_2': year1_benefit,  # ✅ FIX: Key für UI (Jahr 1 und 2 gleich)
+            'year_3': year3_benefit,  # ✅ FIX: Key für UI
+            'total_benefit': total_sanierung_benefit,  # ✅ FIX: Key für UI
             'total_benefit_3years': total_sanierung_benefit,
             'description': 'Steuerermäßigung für energetische Sanierung',
             'paragraph': '§35c EStG',
@@ -566,6 +658,9 @@ def calculate_tax_benefits(
         # Nur Handwerkerleistungen möglich
         tax_benefits['energetische_sanierung'] = {
             'eligible': False,
+            'total_benefit': 0,  # ✅ FIX: Key für UI
+            'year_1_2': 0,  # ✅ FIX: Key für UI
+            'year_3': 0,  # ✅ FIX: Key für UI
             'reason': f'Gebäude von {building_year} ist noch keine 10 Jahre alt',
             'alternative': 'Nur Handwerkerleistungen (§35a) absetzbar'
         }

@@ -6,7 +6,7 @@ Dynamische Berechnungen für PV-Montagekomponenten basierend auf
 Modulanzahl, Dachtyp, Ausrichtung und Herstellersystem.
 
 Autor: Bokuk2 System
-Version: 1.0.0
+Version: 2.0.0 - Enhanced with Robustness Patterns
 Datum: 2025-11-06
 """
 
@@ -16,11 +16,44 @@ import math
 
 from pv_mounting_database import read_components
 
+# Robustness Integration
+try:
+    from robustness_core import (
+        PickleSerializable,
+        safe_function,
+        validate_numeric,
+        logger,
+        performance_timer
+    )
+    ROBUSTNESS_AVAILABLE = True
+except ImportError:
+    # Fallback: No robustness features
+    ROBUSTNESS_AVAILABLE = False
+    
+    class PickleSerializable:
+        pass
+    
+    def safe_function(fallback_value=None, error_message=""):
+        def decorator(func):
+            return func
+        return decorator
+    
+    def validate_numeric(value, **kwargs):
+        return float(value) if value is not None else kwargs.get('default')
+    
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    from contextlib import contextmanager
+    @contextmanager
+    def performance_timer(operation, **kwargs):
+        yield
 
-# ==================== Datenklassen ====================
+
+# ==================== Datenklassen (mit Pickle-Support) ====================
 
 @dataclass
-class ModuleConfiguration:
+class ModuleConfiguration(PickleSerializable):
     """Konfiguration der PV-Module."""
     count: int  # Anzahl Module
     width_mm: float = 1134  # Standard: 1134mm
@@ -32,7 +65,7 @@ class ModuleConfiguration:
 
 
 @dataclass
-class RoofConfiguration:
+class RoofConfiguration(PickleSerializable):
     """Konfiguration des Daches."""
     roof_type: str  # Ziegeldach, Flachdach, etc.
     pitch_degrees: float = 35.0  # Dachneigung in Grad
@@ -43,7 +76,7 @@ class RoofConfiguration:
 
 
 @dataclass
-class ComponentRequirement:
+class ComponentRequirement(PickleSerializable):
     """Berechnete Komponentenanforderung."""
     component_id: int
     product_name: str
@@ -57,7 +90,7 @@ class ComponentRequirement:
 
 
 @dataclass
-class MountingCalculationResult:
+class MountingCalculationResult(PickleSerializable):
     """Ergebnis der Unterkonstruktions-Berechnung."""
     module_config: ModuleConfiguration
     roof_config: RoofConfiguration
@@ -69,8 +102,9 @@ class MountingCalculationResult:
     warnings: List[str]
 
 
-# ==================== Berechnungsfunktionen ====================
+# ==================== Berechnungsfunktionen (mit Robustness) ====================
 
+@safe_function(fallback_value=0, error_message="Module-per-row calculation failed")
 def calculate_modules_per_row(module_config: ModuleConfiguration) -> int:
     """
     Berechnet Module pro Reihe basierend auf Gesamtanzahl und Reihen.
@@ -84,9 +118,14 @@ def calculate_modules_per_row(module_config: ModuleConfiguration) -> int:
     if module_config.modules_per_row:
         return module_config.modules_per_row
     
-    return math.ceil(module_config.count / module_config.rows)
+    # Validation
+    count = validate_numeric(module_config.count, min_value=1, default=1)
+    rows = validate_numeric(module_config.rows, min_value=1, default=1)
+    
+    return math.ceil(count / rows)
 
 
+@safe_function(fallback_value=(0, ["Calculation failed"]), error_message="Roof hooks calculation failed")
 def calculate_roof_hooks_required(
     module_config: ModuleConfiguration,
     roof_config: RoofConfiguration
@@ -118,21 +157,27 @@ def calculate_roof_hooks_required(
     notes.append(f"Basis: {hooks_per_module} Dachhaken pro Modul")
     
     # Betondach oder hohe Schneelast
-    if roof_config.roof_type == "Betondach" or roof_config.snow_load_zone >= 3:
+    snow_zone = validate_numeric(roof_config.snow_load_zone, min_value=1, max_value=5, default=2)
+    if roof_config.roof_type == "Betondach" or snow_zone >= 3:
         hooks_per_module = 3.0
-        notes.append(f"Betondach/Schneelastzone {roof_config.snow_load_zone}: {hooks_per_module} Dachhaken pro Modul")
+        notes.append(f"Betondach/Schneelastzone {snow_zone}: {hooks_per_module} Dachhaken pro Modul")
     
     # Großer Sparrenabstand
-    if roof_config.rafter_spacing_mm > 900:
+    rafter_spacing = validate_numeric(roof_config.rafter_spacing_mm, min_value=300, max_value=1500, default=800)
+    if rafter_spacing > 900:
         hooks_per_module += 1.0
-        notes.append(f"Sparrenabstand {roof_config.rafter_spacing_mm}mm > 900mm: +1 Dachhaken pro Modul")
+        notes.append(f"Sparrenabstand {rafter_spacing}mm > 900mm: +1 Dachhaken pro Modul")
     
-    total_hooks = int(math.ceil(module_config.count * hooks_per_module))
-    notes.append(f"Gesamt: {module_config.count} Module × {hooks_per_module} = {total_hooks} Dachhaken")
+    module_count = validate_numeric(module_config.count, min_value=1, default=1)
+    total_hooks = int(math.ceil(module_count * hooks_per_module))
+    notes.append(f"Gesamt: {module_count} Module × {hooks_per_module} = {total_hooks} Dachhaken")
+    
+    logger.info("Roof hooks calculated", total=total_hooks, per_module=hooks_per_module)
     
     return total_hooks, notes
 
 
+@safe_function(fallback_value=(0.0, ["Calculation failed"]), error_message="Rails calculation failed")
 def calculate_rails_required(
     module_config: ModuleConfiguration,
     roof_config: RoofConfiguration
@@ -158,10 +203,10 @@ def calculate_rails_required(
     
     # Modul-Abmessung je nach Ausrichtung
     if module_config.orientation == "Portrait":
-        module_length_mm = module_config.width_mm  # 1134mm
+        module_length_mm = validate_numeric(module_config.width_mm, min_value=500, max_value=2000, default=1134)
         rails_per_row = 2
     else:  # Landscape
-        module_length_mm = module_config.height_mm  # 1722mm
+        module_length_mm = validate_numeric(module_config.height_mm, min_value=500, max_value=2500, default=1722)
         rails_per_row = 2
     
     # Schienenlänge pro Reihe

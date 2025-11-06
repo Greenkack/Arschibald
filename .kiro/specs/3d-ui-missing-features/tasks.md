@@ -162,6 +162,7 @@ Dieser Plan beschreibt die schrittweise Wiederherstellung aller fehlenden Funkti
 
 
 
+
   - Teste vollständigen Workflow von Anfang bis Ende
   - Teste mit verschiedenen Gebäudetypen und Dachformen
   - Teste mit verschiedenen Modulanzahlen (10, 50, 100+)

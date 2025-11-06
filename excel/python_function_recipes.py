@@ -310,3 +310,463 @@ def xl_YEAR(d):
     if isinstance(d, (datetime, date)):
         return d.year
     return None
+
+
+def xl_COUNT(*args):
+    """Zählt die Anzahl der Zellen mit Zahlen"""
+    vals = []
+    for a in args:
+        if isinstance(a, (list, tuple)):
+            vals.extend(a)
+        else:
+            vals.append(a)
+    count = 0
+    for v in vals:
+        try:
+            float(v)
+            count += 1
+        except (ValueError, TypeError):
+            pass
+    return count
+
+
+def xl_COUNTA(*args):
+    """Zählt die Anzahl nicht-leerer Zellen"""
+    vals = []
+    for a in args:
+        if isinstance(a, (list, tuple)):
+            vals.extend(a)
+        else:
+            vals.append(a)
+    return sum(1 for v in vals if v is not None and v != '')
+
+
+def xl_COUNTIF(range_vals, criteria):
+    """Zählt Zellen die ein Kriterium erfüllen"""
+    rv = pd.Series(list(range_vals))
+    crit = str(criteria).strip()
+    ops = ['>=', '<=', '<>', '>', '<', '=']
+    op = next((o for o in ops if crit.startswith(o)), '=')
+    rhs = crit[len(op):]
+    as_num = pd.to_numeric(rv, errors='coerce')
+    if op == '=':
+        mask = (rv.astype(str) == rhs) if not rhs.replace(
+            '.', '', 1).isdigit() else (as_num == float(rhs))
+    elif op == '<>':
+        mask = (rv.astype(str) != rhs) if not rhs.replace(
+            '.', '', 1).isdigit() else (as_num != float(rhs))
+    elif op == '>':
+        mask = (as_num > float(rhs))
+    elif op == '>=':
+        mask = (as_num >= float(rhs))
+    elif op == '<':
+        mask = (as_num < float(rhs))
+    elif op == '<=':
+        mask = (as_num <= float(rhs))
+    return int(mask.sum())
+
+
+def xl_ABS(number):
+    """Gibt den Absolutwert einer Zahl zurück"""
+    return abs(float(number))
+
+
+def xl_POWER(number, power):
+    """Potenziert eine Zahl"""
+    return float(number) ** float(power)
+
+
+def xl_SQRT(number):
+    """Gibt die Quadratwurzel zurück"""
+    return math.sqrt(float(number))
+
+
+def xl_LN(number):
+    """Gibt den natürlichen Logarithmus zurück"""
+    return math.log(float(number))
+
+
+def xl_LOG(number, base=10):
+    """Gibt den Logarithmus zur angegebenen Basis zurück"""
+    return math.log(float(number), float(base))
+
+
+def xl_LOG10(number):
+    """Gibt den Logarithmus zur Basis 10 zurück"""
+    return math.log10(float(number))
+
+
+def xl_EXP(number):
+    """Gibt e hoch der angegebenen Zahl zurück"""
+    return math.exp(float(number))
+
+
+def xl_PI():
+    """Gibt die Zahl Pi zurück"""
+    return math.pi
+
+
+def xl_SIN(number):
+    """Gibt den Sinus zurück"""
+    return math.sin(float(number))
+
+
+def xl_COS(number):
+    """Gibt den Kosinus zurück"""
+    return math.cos(float(number))
+
+
+def xl_TAN(number):
+    """Gibt den Tangens zurück"""
+    return math.tan(float(number))
+
+
+def xl_ASIN(number):
+    """Gibt den Arkussinus zurück"""
+    return math.asin(float(number))
+
+
+def xl_ACOS(number):
+    """Gibt den Arkuskosinus zurück"""
+    return math.acos(float(number))
+
+
+def xl_ATAN(number):
+    """Gibt den Arkustangens zurück"""
+    return math.atan(float(number))
+
+
+def xl_ATAN2(x_num, y_num):
+    """Gibt den Arkustangens von x- und y-Koordinaten zurück"""
+    return math.atan2(float(y_num), float(x_num))
+
+
+def xl_DEGREES(angle):
+    """Konvertiert Bogenmaß in Grad"""
+    return math.degrees(float(angle))
+
+
+def xl_RADIANS(angle):
+    """Konvertiert Grad in Bogenmaß"""
+    return math.radians(float(angle))
+
+
+def xl_CEILING(number, significance=1):
+    """Rundet eine Zahl auf das nächste Vielfache auf"""
+    sig = float(significance)
+    return math.ceil(float(number) / sig) * sig
+
+
+def xl_FLOOR(number, significance=1):
+    """Rundet eine Zahl auf das nächste Vielfache ab"""
+    sig = float(significance)
+    return math.floor(float(number) / sig) * sig
+
+
+def xl_INT(number):
+    """Rundet eine Zahl auf die nächste ganze Zahl ab"""
+    return int(math.floor(float(number)))
+
+
+def xl_TRUNC(number, num_digits=0):
+    """Schneidet eine Zahl auf eine bestimmte Anzahl Dezimalstellen ab"""
+    scale = 10 ** int(num_digits)
+    return int(float(number) * scale) / scale
+
+
+def xl_SIGN(number):
+    """Gibt das Vorzeichen einer Zahl zurück"""
+    n = float(number)
+    if n > 0:
+        return 1
+    elif n < 0:
+        return -1
+    else:
+        return 0
+
+
+def xl_RAND():
+    """Gibt eine Zufallszahl zwischen 0 und 1 zurück"""
+    import random
+    return random.random()
+
+
+def xl_RANDBETWEEN(bottom, top):
+    """Gibt eine ganzzahlige Zufallszahl im angegebenen Bereich zurück"""
+    import random
+    return random.randint(int(bottom), int(top))
+
+
+def xl_NOT(logical):
+    """Kehrt den Wahrheitswert um"""
+    return not bool(logical)
+
+
+def xl_XOR(*args):
+    """Gibt ein exklusives ODER zurück"""
+    count = sum(1 for a in args if bool(a))
+    return count % 2 == 1
+
+
+def xl_TRUE():
+    """Gibt den Wahrheitswert WAHR zurück"""
+    return True
+
+
+def xl_FALSE():
+    """Gibt den Wahrheitswert FALSCH zurück"""
+    return False
+
+
+def xl_CONCATENATE(*args):
+    """Verknüpft mehrere Textwerte"""
+    return ''.join(str(a) for a in args)
+
+
+def xl_LEFT(text, num_chars=1):
+    """Gibt die ersten Zeichen eines Textes zurück"""
+    return str(text)[:int(num_chars)]
+
+
+def xl_RIGHT(text, num_chars=1):
+    """Gibt die letzten Zeichen eines Textes zurück"""
+    return str(text)[-int(num_chars):]
+
+
+def xl_MID(text, start_num, num_chars):
+    """Gibt Zeichen aus der Mitte eines Textes zurück"""
+    start = int(start_num) - 1  # Excel ist 1-basiert
+    return str(text)[start:start + int(num_chars)]
+
+
+def xl_LEN(text):
+    """Gibt die Länge eines Textes zurück"""
+    return len(str(text))
+
+
+def xl_LOWER(text):
+    """Konvertiert Text in Kleinbuchstaben"""
+    return str(text).lower()
+
+
+def xl_UPPER(text):
+    """Konvertiert Text in Großbuchstaben"""
+    return str(text).upper()
+
+
+def xl_PROPER(text):
+    """Konvertiert Text so dass jedes Wort mit Großbuchstaben beginnt"""
+    return str(text).title()
+
+
+def xl_TRIM(text):
+    """Entfernt überflüssige Leerzeichen"""
+    return ' '.join(str(text).split())
+
+
+def xl_SUBSTITUTE(text, old_text, new_text, instance_num=None):
+    """Ersetzt Text durch neuen Text"""
+    text_str = str(text)
+    old_str = str(old_text)
+    new_str = str(new_text)
+    if instance_num is None:
+        return text_str.replace(old_str, new_str)
+    else:
+        parts = text_str.split(old_str)
+        instance = int(instance_num)
+        if instance <= 0 or instance > len(parts) - 1:
+            return text_str
+        parts[instance] = new_str + parts[instance]
+        return old_str.join(parts[:instance]) + parts[instance] + old_str.join(
+            parts[instance + 1:])
+
+
+def xl_FIND(find_text, within_text, start_num=1):
+    """Findet einen Text in einem anderen Text (Groß-/Kleinschreibung beachten)"""
+    within = str(within_text)
+    find = str(find_text)
+    start = int(start_num) - 1  # Excel ist 1-basiert
+    pos = within.find(find, start)
+    if pos == -1:
+        raise ValueError(f"Text '{find}' nicht gefunden")
+    return pos + 1  # Excel ist 1-basiert
+
+
+def xl_SEARCH(find_text, within_text, start_num=1):
+    """Findet einen Text (Groß-/Kleinschreibung ignorieren)"""
+    within = str(within_text).lower()
+    find = str(find_text).lower()
+    start = int(start_num) - 1
+    pos = within.find(find, start)
+    if pos == -1:
+        raise ValueError(f"Text '{find}' nicht gefunden")
+    return pos + 1
+
+
+def xl_REPLACE(old_text, start_num, num_chars, new_text):
+    """Ersetzt Zeichen in einem Text"""
+    old = str(old_text)
+    start = int(start_num) - 1  # Excel ist 1-basiert
+    num = int(num_chars)
+    new = str(new_text)
+    return old[:start] + new + old[start + num:]
+
+
+def xl_REPT(text, number_times):
+    """Wiederholt Text eine bestimmte Anzahl von Malen"""
+    return str(text) * int(number_times)
+
+
+def xl_VALUE(text):
+    """Konvertiert Text in eine Zahl"""
+    text_str = str(text).strip()
+    # Entferne Tausendertrennzeichen
+    text_str = text_str.replace(',', '').replace(' ', '')
+    try:
+        if '.' in text_str:
+            return float(text_str)
+        else:
+            return int(text_str)
+    except ValueError:
+        raise ValueError(f"'{text}' kann nicht in eine Zahl konvertiert werden")
+
+
+def xl_ISBLANK(value):
+    """Prüft ob ein Wert leer ist"""
+    return value is None or value == ''
+
+
+def xl_ISNUMBER(value):
+    """Prüft ob ein Wert eine Zahl ist"""
+    try:
+        float(value)
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+def xl_ISTEXT(value):
+    """Prüft ob ein Wert Text ist"""
+    return isinstance(value, str)
+
+
+def xl_ISERROR(value):
+    """Prüft ob ein Wert ein Fehler ist"""
+    if isinstance(value, str):
+        return value.startswith('#')
+    return False
+
+
+def xl_NOW():
+    """Gibt das aktuelle Datum und die aktuelle Uhrzeit zurück"""
+    return dt.datetime.now()
+
+
+def xl_DATEDIF(start_date, end_date, unit):
+    """Berechnet die Differenz zwischen zwei Daten"""
+    if not isinstance(start_date, (date, datetime)):
+        raise ValueError("start_date muss ein Datum sein")
+    if not isinstance(end_date, (date, datetime)):
+        raise ValueError("end_date muss ein Datum sein")
+
+    unit = str(unit).upper()
+
+    if unit == 'D':
+        # Tage
+        return (end_date - start_date).days
+    elif unit == 'M':
+        # Monate
+        months = (end_date.year - start_date.year) * 12
+        months += end_date.month - start_date.month
+        return months
+    elif unit == 'Y':
+        # Jahre
+        return end_date.year - start_date.year
+    elif unit == 'MD':
+        # Tage ohne Monate und Jahre
+        return (end_date.day - start_date.day) % 30
+    elif unit == 'YM':
+        # Monate ohne Jahre
+        return (end_date.month - start_date.month) % 12
+    elif unit == 'YD':
+        # Tage ohne Jahre
+        start_this_year = start_date.replace(year=end_date.year)
+        return (end_date - start_this_year).days
+    else:
+        raise ValueError(f"Ungültige Einheit: {unit}")
+
+
+def xl_EDATE(start_date, months):
+    """Gibt ein Datum zurück das eine bestimmte Anzahl Monate vor/nach liegt"""
+    if not isinstance(start_date, (date, datetime)):
+        raise ValueError("start_date muss ein Datum sein")
+
+    months_to_add = int(months)
+    new_month = start_date.month + months_to_add
+    new_year = start_date.year
+
+    while new_month > 12:
+        new_month -= 12
+        new_year += 1
+    while new_month < 1:
+        new_month += 12
+        new_year -= 1
+
+    # Behandle Tage die im neuen Monat nicht existieren
+    try:
+        return start_date.replace(year=new_year, month=new_month)
+    except ValueError:
+        # Tag existiert nicht im neuen Monat (z.B. 31. Feb)
+        # Verwende letzten Tag des Monats
+        import calendar
+        last_day = calendar.monthrange(new_year, new_month)[1]
+        return start_date.replace(year=new_year, month=new_month, day=last_day)
+
+
+def xl_EOMONTH(start_date, months):
+    """Gibt den letzten Tag des Monats zurück"""
+    import calendar
+    if not isinstance(start_date, (date, datetime)):
+        raise ValueError("start_date muss ein Datum sein")
+
+    # Berechne Zielmonat
+    months_to_add = int(months)
+    new_month = start_date.month + months_to_add
+    new_year = start_date.year
+
+    while new_month > 12:
+        new_month -= 12
+        new_year += 1
+    while new_month < 1:
+        new_month += 12
+        new_year -= 1
+
+    # Letzter Tag des Monats
+    last_day = calendar.monthrange(new_year, new_month)[1]
+    return date(new_year, new_month, last_day)
+
+
+def xl_NETWORKDAYS(start_date, end_date, holidays=None):
+    """Berechnet die Anzahl der Arbeitstage zwischen zwei Daten"""
+    if not isinstance(start_date, (date, datetime)):
+        raise ValueError("start_date muss ein Datum sein")
+    if not isinstance(end_date, (date, datetime)):
+        raise ValueError("end_date muss ein Datum sein")
+
+    holidays_set = set()
+    if holidays:
+        if isinstance(holidays, (list, tuple)):
+            holidays_set = set(holidays)
+        else:
+            holidays_set = {holidays}
+
+    current = start_date
+    workdays = 0
+
+    while current <= end_date:
+        # Montag = 0, Sonntag = 6
+        if current.weekday() < 5 and current not in holidays_set:
+            workdays += 1
+        current += dt.timedelta(days=1)
+
+    return workdays

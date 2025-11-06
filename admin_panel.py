@@ -26,7 +26,7 @@ from admin_heating_costs_config_ui import render_admin_heating_costs_ui as rende
 
 # PV-Unterkonstruktions-Verwaltung
 try:
-    from admin_pv_mounting_tab import render_pv_mounting_admin_tab
+    from admin_pv_mounting_tab_v2 import render_pv_mounting_admin_tab_v2 as render_pv_mounting_admin_tab
     PV_MOUNTING_TAB_AVAILABLE = True
 except ImportError:
     PV_MOUNTING_TAB_AVAILABLE = False

@@ -328,6 +328,14 @@ except ImportError as e:
         formatted = f"{amount:.2f}"
         if '.' in formatted:
             integer_part, decimal_part = formatted.split('.')
+        else:
+            integer_part, decimal_part = formatted, "00"
+        if len(integer_part) > 3:
+            reversed_int = integer_part[::-1]
+            grouped = '.'.join(reversed_int[i:i + 3]
+                               for i in range(0, len(reversed_int), 3))
+            integer_part = grouped[::-1]
+        return f"{integer_part},{decimal_part} €"
 
 # Import PV mounting component selection
 try:
@@ -348,14 +356,6 @@ except ImportError as e:
     def get_selected_mounting_components_summary(details):  # type: ignore
         """Fallback when PV mounting module not available"""
         return {}
-        else:
-            integer_part, decimal_part = formatted, "00"
-        if len(integer_part) > 3:
-            reversed_int = integer_part[::-1]
-            grouped = '.'.join(reversed_int[i:i + 3]
-                               for i in range(0, len(reversed_int), 3))
-            integer_part = grouped[::-1]
-        return f"{integer_part},{decimal_part} €"
 
     def _safe_float_conversion(price_string: str) -> float:
         """Fallback function if import fails"""

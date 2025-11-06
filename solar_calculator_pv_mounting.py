@@ -5,6 +5,8 @@ PV Mounting Component Selection for Solar Calculator.
 Renders dropdown-based selection interface for mounting system components.
 
 Integrated into solar_calculator.py Step 1 (Component Selection).
+
+VERSION 2.0: Automatic quantity calculation integration
 """
 
 import streamlit as st
@@ -19,8 +21,16 @@ try:
         get_pv_mounting_roof_types,
         PV_MOUNTING_DB_AVAILABLE,
     )
+    from solar_calculator_pv_mounting_integration import (
+        calculate_mounting_requirements_from_details,
+        update_mounting_quantities_in_details,
+        render_mounting_calculation_summary,
+        get_mounting_total_price
+    )
+    PV_MOUNTING_INTEGRATION_FULL = True
 except ImportError:
     PV_MOUNTING_DB_AVAILABLE = False
+    PV_MOUNTING_INTEGRATION_FULL = False
 
 
 def _get_text(texts: Dict[str, str], key: str, default: str) -> str:
@@ -72,6 +82,18 @@ def render_pv_mounting_selection(
     
     # === ROOF TYPE SELECTION ===
     st.markdown("#### Dachtyp")
+    
+    # ✅ FIX: Auto-fill from Bedarfsanalyse (data_input.py)
+    # Prüfe ob Dachtyp bereits in Bedarfsanalyse gewählt wurde
+    from_bedarfsanalyse = details.get('roof_type')  # Aus data_input.py
+    
+    # Wenn Dachtyp aus Bedarfsanalyse vorhanden, übernehme ihn
+    if from_bedarfsanalyse and from_bedarfsanalyse != please_select_text:
+        # Nur übernehmen wenn noch nicht gesetzt
+        if not details.get('pv_mounting_roof_type'):
+            details['pv_mounting_roof_type'] = from_bedarfsanalyse
+            st.success(f"✅ Dachtyp aus Bedarfsanalyse übernommen: **{from_bedarfsanalyse}**")
+    
     current_roof_type = details.get('pv_mounting_roof_type', please_select_text)
     roof_type_options = [please_select_text] + roof_types
     
@@ -81,11 +103,11 @@ def render_pv_mounting_selection(
         idx_roof = 0
     
     selected_roof_type = st.selectbox(
-        "Dachtyp auswählen *",
+        "Dachtyp auswählen *" + (" (aus Bedarfsanalyse)" if from_bedarfsanalyse and from_bedarfsanalyse != please_select_text else ""),
         options=roof_type_options,
         index=idx_roof,
         key='pv_mounting_roof_type_select',
-        help="Bestimmt verfügbare Komponenten"
+        help="Bestimmt verfügbare Komponenten. Wird automatisch aus Bedarfsanalyse übernommen, falls vorhanden."
     )
     
     details['pv_mounting_roof_type'] = selected_roof_type if selected_roof_type != please_select_text else None
@@ -93,6 +115,41 @@ def render_pv_mounting_selection(
     if not details.get('pv_mounting_roof_type'):
         st.info("👆 Bitte Dachtyp auswählen, um Komponenten zu konfigurieren.")
         return
+    
+    # === AUTOMATIC QUANTITY CALCULATION ===
+    if PV_MOUNTING_INTEGRATION_FULL:
+        st.markdown("---")
+        col_calc1, col_calc2 = st.columns([3, 1])
+        
+        with col_calc1:
+            st.markdown("#### 🔢 Automatische Mengenberechnung")
+            
+        with col_calc2:
+            if st.button("🔄 Berechnen", key='calc_mounting_quantities'):
+                # ✅ FIX: Prüfe beide mögliche Keys für Modulanzahl
+                module_count = (
+                    details.get('module_count', 0) or 
+                    details.get('module_quantity', 0) or 
+                    st.session_state.get('module_quantity_sc_v1', 0) or 
+                    0
+                )
+                
+                if module_count > 0:
+                    with st.spinner("Berechne Unterkonstruktion..."):
+                        calc_result = calculate_mounting_requirements_from_details(details)
+                        if calc_result:
+                            update_mounting_quantities_in_details(details, calc_result)
+                            st.success(f"✅ Berechnung für {module_count} Module abgeschlossen!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Berechnung fehlgeschlagen. Bitte Eingaben prüfen.")
+                else:
+                    st.warning("⚠️ Bitte zuerst Modulanzahl in Step 1 angeben.")
+        
+        # Show calculation summary if available
+        if details.get('mounting_quantities_calculated'):
+            render_mounting_calculation_summary(details)
+            st.markdown("---")
     
     # === COMPONENT SELECTION ===
     # Define component categories to configure
