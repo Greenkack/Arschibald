@@ -1,6 +1,11 @@
 # ignore large build artifacts
 /dist/*.tar.gz
 
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
 # ignore specific archived PDFs missing from LFS server
 /archive/sokuk_legacy/data/product_datasheets/206/EcoFlow_PowerPulse_Wallbox_11_kW_20250920213908.pdf
 /archive/sokuk_legacy/data/imports/module_pdfs/20250818_204648/modul.pdf

@@ -21,7 +21,7 @@ Author: GitHub Copilot
 Date: 2025-11-06
 """
 
-from typing import Dict, List, Tuple, Any
+from typing import Dict, List, Any
 import math
 
 
@@ -337,9 +337,6 @@ def calculate_price_scenarios(
     investment = heatpump_data.get('price', 15000) + economics_data.get('installation_cost', 3000)
     subsidy = economics_data.get('subsidy_amount', 4500)
     net_investment = investment - subsidy
-    
-    # Strompreis-Annahmen
-    electricity_price_kwh = economics_data.get('electricity_price', 32) / 100
     
     scenarios = {}
     
@@ -819,7 +816,6 @@ def generate_annual_load_profile(
     
     heat_load_kw = building_data.get('heat_load_kw', 10)
     outside_temp_design = building_data.get('outside_temp', -12)
-    heating_days = building_data.get('heating_days', 220)
     
     # Typische Außentemperaturen pro Monat (Deutschland, Mittelwert)
     monthly_temps = {
@@ -1198,7 +1194,6 @@ def compare_hybrid_heating(
     """
     
     heat_load_kw = building_data.get('heat_load_kw', 10)
-    outside_temp_design = building_data.get('outside_temp', -12)
     wp_power_kw = heatpump_data.get('heating_power', 8)
     
     # Bivalenzpunkt berechnen
@@ -1207,7 +1202,6 @@ def compare_hybrid_heating(
     
     # Vereinfacht: Bivalenzpunkt so wählen, dass WP 95% der Jahresarbeit leistet
     bivalence_temp_95_percent = -5  # °C (typischer Wert)
-    bivalence_temp_monovalent = -10  # °C (WP alleine bis -10°C)
     
     # Jahresganglinie
     load_profile = generate_annual_load_profile(building_data, heatpump_data)
@@ -1907,7 +1901,6 @@ def _simulate_cold_wave(
         
         # Notheizung erforderlich
         emergency_heating_kwh_per_day = deficit_kw * (24 - min(buffer_runtime_hours, 24))
-        emergency_cost_per_day = emergency_heating_kwh_per_day * 0.32  # Elektroheizstab
         
         electricity_per_day_kwh = (wp_power_at_extreme * 18) / (scop * 0.8) + emergency_heating_kwh_per_day
         electricity_7_days_kwh = electricity_per_day_kwh * 7

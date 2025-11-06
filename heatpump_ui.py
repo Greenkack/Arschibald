@@ -147,8 +147,6 @@ try:
         generate_extended_heatpump_report_data,
     )
     from heatpump_advanced_charts import (
-        create_system_3d_visualization,
-        create_kpi_dashboard,
         create_jaz_comparison_chart,
         create_annual_profile_chart,
         create_noise_map,
@@ -4522,8 +4520,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         # Feature 2.3: Steuerliche Vorteile
         st.markdown("### 🧾 Steuerliche Absetzbarkeit")
         
-        installation_cost = economics_data.get('installation_cost', 20000)
-        tax_benefits = calculate_tax_benefits(installation_cost, building_data)
+        tax_benefits = calculate_tax_benefits(heatpump_data, building_data)
         
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -4537,7 +4534,8 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
                 f"{format_german_number(tax_benefits['net_investment_after_tax'], 2)} €"
             )
         with col3:
-            benefit_percent = (tax_benefits['total_benefit'] / installation_cost) * 100
+            total_investment = heatpump_data.get('price', 15000) + heatpump_data.get('installation_price', 3000)
+            benefit_percent = (tax_benefits['total_benefit'] / total_investment) * 100 if total_investment > 0 else 0
             st.metric(
                 "Ersparnis",
                 f"{benefit_percent:.1f}%"
@@ -4549,18 +4547,18 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
             hw = tax_benefits['handwerkerleistungen']
             st.info(f"""
             **🔧 Handwerkerleistungen (§35a EStG)**
-            - Max. pro Jahr: {format_german_number(hw['max_benefit_per_year'], 2)} €
-            - Über {hw['years']} Jahre: {format_german_number(hw['total_benefit'], 2)} €
-            - Anteilige Arbeitskosten: {format_german_number(hw['labor_cost_estimate'], 2)} €
+            - Arbeitskosten: {format_german_number(hw['labor_cost'], 2)} €
+            - Absetzbarer Anteil: {format_german_number(hw['deductible_amount'], 2)} €
+            - Steuervorteil: {format_german_number(hw['tax_benefit'], 2)} €
             """)
         with col2:
             es = tax_benefits.get('energetische_sanierung', {})
             if es.get('eligible', False):
                 st.success(f"""
                 **🏡 Energetische Sanierung (§35c EStG)**
-                - Förderung: {format_german_number(es['total_benefit'], 2)} €
-                - Jahr 1-2: je {format_german_number(es['year_1_2'], 2)} € (7%)
-                - Jahr 3: {format_german_number(es['year_3'], 2)} € (6%)
+                - Förderung: {format_german_number(es['total_benefit_3years'], 2)} €
+                - Jahr 1-2: je {format_german_number(es['year1_benefit'], 2)} € (7%)
+                - Jahr 3: {format_german_number(es['year3_benefit'], 2)} € (6%)
                 """)
             else:
                 st.warning(f"""
