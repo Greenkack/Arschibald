@@ -755,7 +755,7 @@ def compare_heating_systems_20_years(
         green_fuel_share=avg_green_share
     )
 
-    fossil_annual_cost = co2_costs["total_annual_cost_eur"]
+    fossil_annual_cost = co2_costs["total_climate_cost"]
 
     # Wartungskosten fossil (ca. 300€/Jahr - Schornsteinfeger, Service)
     fossil_annual_maintenance = 300.0
@@ -777,7 +777,7 @@ def compare_heating_systems_20_years(
     payback_years = (wp_net_investment - fossil_investment) / annual_savings if annual_savings > 0 else 99
 
     # CO2-Einsparungen
-    co2_savings_tons_per_year = co2_costs["co2_emissions_tons"]
+    co2_savings_tons_per_year = co2_costs["annual_co2_tons"]
     co2_savings_20years = co2_savings_tons_per_year * 20
 
     return {
@@ -795,7 +795,7 @@ def compare_heating_systems_20_years(
             "annual_operating_cost_eur": round(fossil_total_annual_cost, 2),
             "npv_20years_eur": fossil_npv["npv_eur"],
             "total_cost_20years_eur": fossil_npv["total_cost_undiscounted_eur"],
-            "co2_emissions_tons_per_year": co2_costs["co2_emissions_tons"]
+            "co2_emissions_tons_per_year": co2_costs["annual_co2_tons"]
         },
         "comparison": {
             "savings_20years_eur": round(savings_eur, 2),

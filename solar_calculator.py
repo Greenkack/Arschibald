@@ -328,6 +328,26 @@ except ImportError as e:
         formatted = f"{amount:.2f}"
         if '.' in formatted:
             integer_part, decimal_part = formatted.split('.')
+
+# Import PV mounting component selection
+try:
+    from solar_calculator_pv_mounting import (
+        render_pv_mounting_selection,
+        get_selected_mounting_components_summary,
+    )
+    PV_MOUNTING_INTEGRATION_AVAILABLE = True
+except ImportError as e:
+    PV_MOUNTING_INTEGRATION_AVAILABLE = False
+    print(f"Info: PV mounting integration not available: {e}")
+    
+    # Fallback functions
+    def render_pv_mounting_selection(details, texts, please_select_text=""):  # type: ignore
+        """Fallback when PV mounting module not available"""
+        pass
+    
+    def get_selected_mounting_components_summary(details):  # type: ignore
+        """Fallback when PV mounting module not available"""
+        return {}
         else:
             integer_part, decimal_part = formatted, "00"
         if len(integer_part) > 3:
@@ -1805,6 +1825,26 @@ def render_solar_calculator(
             details['selected_storage_name'] = None
             details['selected_storage_id'] = None
             details['selected_storage_storage_power_kw'] = 0.0
+
+        # === PV MOUNTING COMPONENTS ===
+        # Session-Guard vor PV-Mounting-Block
+        if not _is_session_alive():
+            return
+        
+        # Render PV mounting component selection
+        if PV_MOUNTING_INTEGRATION_AVAILABLE:
+            try:
+                render_pv_mounting_selection(
+                    details=details,
+                    texts=texts,
+                    please_select_text=please_select_text
+                )
+                # Trigger pricing update if components selected
+                if details.get('include_pv_mounting'):
+                    _trigger_pricing_update(details)
+            except Exception as e_mount:
+                debug_log("solar_calculator.pv_mounting", "Fehler beim Rendern der Unterkonstruktion", error=str(e_mount))
+                st.warning(f"⚠️ PV-Unterkonstruktion konnte nicht geladen werden: {e_mount}")
 
         # Display pricing information for step 1 components
         st.markdown('---')

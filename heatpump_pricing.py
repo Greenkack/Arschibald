@@ -186,6 +186,7 @@ class ComponentCost:
         """Ermöglicht Pickle-Deserialisierung für Session State"""
         self.__dict__.update(state)
     
+    @property
     def labor_cost_net(self) -> float:
         return self.labor_hours * self.labor_rate
 

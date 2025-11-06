@@ -23,6 +23,12 @@ from utils.pv3d import (
     ROOF_COLORS,
     _deg_to_rad
 )
+from utils.pv3d_performance import (
+    cached,
+    monitor_performance,
+    calculate_module_positions_cached,
+    should_render_module
+)
 
 
 # ============================================================================
@@ -407,25 +413,65 @@ def create_gabled_roof_with_dormer(length, width, height, base_z,
     return [main_roof, dormer_mesh, window_mesh]
 
 
-def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True):
+def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True, roof_type="Flachdach"):
     """
     Erstellt ein detailliertes PV-Modul mit Dicke und korrekter Rotation.
     Gibt Tuple zurück: (mesh, vertices) für Kanten-Rendering.
     
-    FIX: Aufständerung wird jetzt deutlicher dargestellt durch:
-    - Erhöhte Z-Position bei Neigung > 5°
-    - Optionale Montage-Gestelle (show_mounting=True)
+    FIX 2024: Mounting Height wird jetzt basierend auf Dachform berechnet:
+    - Geneigte Dächer (Satteldach, Walmdach, etc.): Sichtbare Aufständerung 0.1-0.3m
+    - Flachdach mit Aufständerung: Höhere Aufständerung 0.3-0.8m
+    - Module sinken NICHT mehr in die Dachfläche ein
+    
+    Args:
+        x, y, z: Position des Moduls
+        azimuth_deg: Azimuth-Winkel (0° = Süd)
+        tilt_deg: Neigungs-Winkel (0° = horizontal)
+        color: Farbe des Moduls
+        selected: Ob Modul ausgewählt ist (orange Farbe)
+        show_mounting: Ob Montage-Gestell visualisiert werden soll
+        roof_type: Dachform ("Flachdach", "Satteldach", "Walmdach", etc.)
     """
     # Lokale Koordinaten (Modul zentriert im Ursprung)
     hw = PV_W / 2
     hh = PV_H / 2
     ht = PV_T / 2
     
-    # FIX: Bei Aufständerung (tilt > 5°) erhöhe Z-Position um Gestell-Höhe
-    if tilt_deg > 5.0 and show_mounting:
-        # Gestell-Höhe abhängig von Neigung (min 0.3m, max 0.8m)
+    # FIX 2024: Berechne Mounting Height basierend auf Dachform und Neigung
+    mounting_height = 0.0
+    original_z = z  # Speichere Original-Z für Logging
+    
+    # Liste der geneigten Dachformen
+    pitched_roofs = ["Satteldach", "Satteldach mit Gaube", "Walmdach", "Krüppelwalmdach", "Pultdach", "Zeltdach"]
+    
+    if roof_type in pitched_roofs and tilt_deg > 5.0:
+        # Geneigte Dächer: Sichtbare Aufständerung
+        # Formel: min(0.3m, neigung/90 * 0.5m)
+        mounting_height = min(0.3, (tilt_deg / 90.0) * 0.5)
+        
+        if show_mounting:
+            # Zusätzliche Höhe für Gestell-Visualisierung
+            mounting_height += 0.05
+        
+    elif roof_type == "Flachdach" and tilt_deg > 5.0:
+        # Flachdach mit Aufständerung: Höhere Aufständerung
         mounting_height = 0.3 + (tilt_deg / 90.0) * 0.5
-        z += mounting_height
+        mounting_height = min(0.8, mounting_height)
+        
+        if show_mounting:
+            mounting_height += 0.05
+    
+    # Erhöhe Z-Position um Mounting Height
+    z += mounting_height
+    
+    # Detailliertes Logging: Dachform, Neigung, Mounting Height, Z-Position
+    if mounting_height > 0:
+        print(f"   🔧 Modul-Aufständerung:")
+        print(f"      Dachform: {roof_type}")
+        print(f"      Neigung: {tilt_deg:.1f}°")
+        print(f"      Mounting Height: {mounting_height:.3f}m")
+        print(f"      Z-Position (vorher): {original_z:.3f}m")
+        print(f"      Z-Position (nachher): {z:.3f}m")
     
     # 8 Ecken des Moduls (wie ein flacher Quader)
     local_vertices = np.array([
@@ -762,36 +808,88 @@ def create_pv_module_edges(vertices, color='black', line_width=1):
 
 def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.25):
     """
-    Berechnet Grid-Positionen für PV-Module mit Spacing.
+    Berechnet EXAKT 'count' Grid-Positionen für PV-Module (oder weniger wenn nicht genug Platz).
     
-    FIX: Verbesserte Berechnung mit korrektem Spacing und Zentrierung.
+    FIX 2024: Komplett überarbeitete Berechnung für exakte Modulanzahl mit optimaler Zentrierung.
+    
+    Args:
+        length: Dachlänge in Metern
+        width: Dachbreite in Metern
+        count: Gewünschte Anzahl Module
+        spacing_x: Abstand zwischen Modulen in X-Richtung (m)
+        spacing_y: Abstand zwischen Modulen in Y-Richtung (m)
+    
+    Returns:
+        Liste von (x, y) Positionen für Module
     """
-    positions = []
+    import math
     
-    # FIX: Berechne wie viele Module in X und Y passen (mit Spacing)
-    # Formel: (Länge - 2*Rand) / (Modul + Spacing)
+    positions = []
     margin = 0.5  # 50cm Randabstand
+    
+    # Verfügbare Fläche berechnen
     available_length = length - 2 * margin
     available_width = width - 2 * margin
     
-    modules_x = max(1, int(available_length / (PV_W + spacing_x)))
-    modules_y = max(1, int(available_width / (PV_H + spacing_y)))
+    # Maximale Anzahl Module die passen (in jede Richtung)
+    max_modules_x = max(1, int((available_length + spacing_x) / (PV_W + spacing_x)))
+    max_modules_y = max(1, int((available_width + spacing_y) / (PV_H + spacing_y)))
+    max_total = max_modules_x * max_modules_y
     
-    # FIX: Berechne tatsächliche Größe des Grids
+    # Logging: Zeige Berechnungsdetails
+    print(f"\n📐 Grid-Positionierung:")
+    print(f"   Dachgröße: {length:.1f}m x {width:.1f}m")
+    print(f"   Verfügbare Fläche: {available_length:.1f}m x {available_width:.1f}m")
+    print(f"   Max. Module: {max_modules_x} x {max_modules_y} = {max_total}")
+    print(f"   Gewünschte Module: {count}")
+    
+    # Warnung wenn nicht genug Platz
+    if count > max_total:
+        print(f"   ⚠️ WARNUNG: Nur {max_total} von {count} Modulen passen!")
+        count = max_total
+    
+    # Berechne optimales Layout für 'count' Module
+    # Ziel: Möglichst quadratisches Layout (ähnliche Anzahl Reihen/Spalten)
+    best_layout = None
+    min_waste = float('inf')
+    
+    # Probiere verschiedene Spalten-Anzahlen
+    for cols in range(1, max_modules_x + 1):
+        rows = math.ceil(count / cols)
+        
+        # Prüfe ob Layout passt
+        if rows <= max_modules_y:
+            # Berechne "Verschwendung" (leere Plätze im Grid)
+            waste = (cols * rows) - count
+            
+            # Bevorzuge Layout mit weniger Verschwendung
+            if waste < min_waste:
+                min_waste = waste
+                best_layout = (cols, rows)
+    
+    # Fallback wenn kein Layout gefunden
+    if not best_layout:
+        best_layout = (max_modules_x, math.ceil(count / max_modules_x))
+    
+    modules_x, modules_y = best_layout
+    
+    print(f"   Gewähltes Layout: {modules_x} x {modules_y}")
+    
+    # Berechne tatsächliche Grid-Größe
     total_width_x = modules_x * PV_W + (modules_x - 1) * spacing_x
     total_width_y = modules_y * PV_H + (modules_y - 1) * spacing_y
     
-    # FIX: Zentriere das Grid korrekt
+    # Zentriere Grid auf Dachfläche
     start_x = -total_width_x / 2
     start_y = -total_width_y / 2
     
-    # Erstelle Grid
+    # Erstelle EXAKT 'count' Positionen
     for row in range(modules_y):
         for col in range(modules_x):
             if len(positions) >= count:
                 break
             
-            # FIX: Korrekte Positionsberechnung
+            # Berechne Position
             x = start_x + col * (PV_W + spacing_x) + PV_W / 2
             y = start_y + row * (PV_H + spacing_y) + PV_H / 2
             positions.append((x, y))
@@ -799,11 +897,10 @@ def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.2
         if len(positions) >= count:
             break
     
-    # FIX: Wenn nicht genug Platz, fülle mit Warnmeldung
+    print(f"   ✓ Platzierte Module: {len(positions)}")
+    
     if len(positions) < count:
-        print(f"⚠️ WARNUNG: Nur {len(positions)} von {count} Modulen passen auf das Dach!")
-        print(f"   Dachgröße: {length}m x {width}m")
-        print(f"   Modulraster: {modules_x} x {modules_y} = {modules_x * modules_y} Module")
+        print(f"   ⚠️ {count - len(positions)} Module konnten nicht platziert werden!")
     
     return positions
 
@@ -812,6 +909,7 @@ def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.2
 # HAUPTFUNKTION: VOLLSTÄNDIGE 3D-SZENE
 # ============================================================================
 
+@monitor_performance("build_3d_scene")
 def build_plotly_scene(
     project_data: Dict[str, Any],
     dims: BuildingDims,
@@ -1133,7 +1231,8 @@ def build_plotly_scene(
                         azimuth_deg=azimuth,
                         tilt_deg=tilt,
                         color="#1a1a2e",
-                        selected=is_selected
+                        selected=is_selected,
+                        roof_type=roof_type  # FIX: Übergebe Dachform für korrekte Mounting Height
                     )
                     fig.add_trace(module)
                     
@@ -1174,7 +1273,8 @@ def build_plotly_scene(
                     azimuth_deg=azimuth,
                     tilt_deg=tilt,
                     color="#1a1a2e",
-                    selected=is_selected
+                    selected=is_selected,
+                    roof_type=roof_type  # FIX: Übergebe Dachform für korrekte Mounting Height
                 )
                 fig.add_trace(module)
                 

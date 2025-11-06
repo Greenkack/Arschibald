@@ -714,11 +714,42 @@ class PDFGenerator:
         self.story.append(Paragraph("3D-Visualisierung", self.styles['H1']))
         self.story.append(Spacer(1, 1 * cm))
 
+        # FIX 2024: Prüfe zuerst ob Screenshot in Session State vorhanden ist
+        try:
+            import streamlit as st
+            png_bytes = st.session_state.get("pdf_3d_screenshot")
+            
+            if png_bytes:
+                # Screenshot aus Session State verwenden
+                print(f"✓ 3D-Screenshot aus Session State geladen: {len(png_bytes)} bytes")
+                
+                from io import BytesIO
+                from reportlab.platypus import Image
+                
+                img_buffer = BytesIO(png_bytes)
+                
+                # Erstelle Image mit 17cm Breite, Höhe automatisch (16:10 Verhältnis)
+                img = Image(img_buffer, width=17*cm, height=10.625*cm)
+                
+                self.story.append(img)
+                self.story.append(Spacer(1, 0.5*cm))
+                self.story.append(Paragraph(
+                    "Abb.: 3D-Visualisierung der geplanten PV-Anlage",
+                    self.styles["Body"]
+                ))
+                
+                print("✓ 3D-Screenshot in PDF eingefügt")
+                return
+                
+        except Exception as e:
+            print(f"⚠️ Fehler beim Laden des Screenshots aus Session State: {e}")
+        
+        # Fallback: Versuche 3D-Visualisierung zu generieren
         # Check if 3D visualization is available
         if not _PV3D_AVAILABLE or make_pv3d_image_flowable is None:
             self.story.append(
                 Paragraph(
-                    "3D-Visualisierung nicht verfügbar. Bitte installieren Sie die erforderlichen Pakete (pyvista, vtk).",
+                    "3D-Visualisierung: Bitte erstellen Sie einen Screenshot in der 3D-Ansicht.",
                     self.styles['Body']))
             return
 

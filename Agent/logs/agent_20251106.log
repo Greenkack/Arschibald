@@ -1,0 +1,4 @@
+2025-11-06 15:00:24 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-06 15:08:45 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-06 18:24:13 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-06 20:23:03 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True

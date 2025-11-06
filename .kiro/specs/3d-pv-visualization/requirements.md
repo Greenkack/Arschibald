@@ -91,10 +91,12 @@ Dieses Dokument definiert die Anforderungen für ein vollständig integriertes, 
 2. WHEN der Belegungsmodus "Automatisch" ist, THE System SHALL PV-Module in einem gleichmäßigen Raster auf der Dachfläche platzieren
 3. THE System SHALL PV-Module mit Standardmaßen (Breite: 1.05m, Höhe: 1.76m, Dicke: 0.04m) erstellen
 4. THE System SHALL PV-Module in schwarzer Farbe (#000000) darstellen
-5. THE System SHALL die nutzbare Dachfläche unter Berücksichtigung von Randabständen (0.25m) berechnen
+5. THE System SHALL die nutzbare Dachfläche unter Berücksichtigung von Randabständen (0.5m) berechnen
 6. THE System SHALL Module in Reihen und Spalten anordnen mit Abstand von 0.25m zwischen Modulen
 7. WHEN die Dachfläche nicht ausreicht, THE System SHALL eine Warnung anzeigen
 8. THE System SHALL bei geneigten Dächern Module parallel zur Dachfläche platzieren
+9. THE System SHALL EXAKT die gewünschte Modulanzahl platzieren wenn genug Platz vorhanden ist
+10. THE System SHALL Module zentriert auf der Dachfläche positionieren
 
 ### Requirement 6: Manuelle PV-Modul-Belegung
 
