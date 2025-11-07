@@ -37,5 +37,7 @@
   "test_calculations_heatpump.py::TestPVSelfConsumptionHeatpump::test_cost_savings": true,
   "test_calculations_heatpump.py::TestPVSelfConsumptionHeatpump::test_excel_validation": true,
   "test_calculations_heatpump.py::TestPerformance::test_dhw_performance": true,
-  "test_calculations_heatpump.py::TestPerformance::test_climate_zone_performance": true
+  "test_calculations_heatpump.py::TestPerformance::test_climate_zone_performance": true,
+  "test_excel_manager.py::TestCRUDOperationsComprehensive::test_row_operations_comprehensive": true,
+  "test_excel_manager.py::TestCRUDOperationsComprehensive::test_column_operations_comprehensive": true
 }

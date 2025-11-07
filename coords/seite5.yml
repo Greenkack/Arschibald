@@ -250,7 +250,7 @@ Schriftart: Helvetica-Bold
 Schriftgröße: 9.985486030578613
 Farbe: 3487029
 ----------------------------------------
-Text: Größe des Batteriespeichers
+Text: X_STORAGE_CAPACITY_FORMATTED
 Position: (350.0, 625.2479248046875, 500.0, 648.4124755859375)
 Schriftart: Helvetica-Regular
 Schriftgröße: 9.985486030578613
@@ -364,14 +364,14 @@ Schriftart: Helvetica-Bold
 Schriftgröße: 13.978181838989258
 Farbe: 30920
 ----------------------------------------
-Text: BATTERIESPEICHER
+Text: BATTERIESPEICHER -
 Position: (74.656005859375, 577.4154052734375, 204.2754364013672, 595.8438110351562)
 Schriftart: Helvetica-Bold
 Schriftgröße: 13.978181838989258
 Farbe: 30920
 ----------------------------------------
-Text: – Batteriespeicher-Kapazität
-Position: (245.0, 577.4154052734375, 350.0, 595.8438110351562)
+Text: X_STORAGE_CAPACITY_FORMATTED
+Position: (230.0, 577.4154052734375, 350.0, 595.8438110351562)
 Schriftart: Helvetica-Bold
 Schriftgröße: 13.978181838989258
 Farbe: 30920

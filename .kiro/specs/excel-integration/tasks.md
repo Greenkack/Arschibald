@@ -88,14 +88,26 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - Formel-Referenzen automatisch aktualisieren
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 6. Undo/Redo Funktionalität
+- [x] 6. Undo/Redo Funktionalität
+
+
+
+
+
   - Undo-Stack implementieren
   - Redo-Stack implementieren
   - State-Snapshots für Operationen
   - Integration in alle Änderungs-Operationen
   - _Requirements: 12.3_
 
-- [ ] 6.1 Unit Tests für ExcelManager
+
+
+- [x] 6.1 Unit Tests für ExcelManager
+
+
+
+
+
   - Tests für CRUD-Operationen
   - Tests für Undo/Redo
   - Tests für Dependency Graph
@@ -106,13 +118,21 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 ## Phase 3: UI-Komponenten
 
-- [ ] 7. Admin Panel Integration
+- [x] 7. Admin Panel Integration
+
+
+
+
+
   - Neuen Tab "Preis Matrix" in ADMIN_TAB_KEYS_DEFINITION_GLOBAL hinzufügen
   - Tab-Rendering in admin_panel.py integrieren
   - Navigation und State-Management
   - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 8. Excel Grid UI Basis-Komponente
+- [-] 8. Excel Grid UI Basis-Komponente
+
+
+
   - Neue Datei `excel_grid_ui.py` erstellen
   - Matrix-Auswahl Dropdown
   - Toolbar mit Basis-Buttons (Neu, Speichern, Laden)

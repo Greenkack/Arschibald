@@ -184,6 +184,7 @@ ADMIN_TAB_KEYS_DEFINITION_GLOBAL = [
     "admin_tab_product_database_crud",
     "admin_tab_pv_mounting",  # NEU: PV-Unterkonstruktions-Verwaltung
     "admin_tab_services_management",
+    "admin_tab_price_matrix",  # NEU: Excel-Integration für Preismatrizen
     "admin_tab_general_settings",
     "admin_tab_intro_settings",
     "admin_tab_tariff_management",
@@ -204,6 +205,7 @@ ADMIN_TAB_ICONS = {
     "admin_tab_product_database_crud": "🗄️",
     "admin_tab_pv_mounting": "🔧",  # NEU: PV-Unterkonstruktions-Verwaltung
     "admin_tab_services_management": "🛠️",
+    "admin_tab_price_matrix": "📊",  # NEU: Excel-Integration für Preismatrizen
     "admin_tab_general_settings": "⚙️",
     "admin_tab_intro_settings": "🎬",
     "admin_tab_tariff_management": "💡",
@@ -225,6 +227,7 @@ ADMIN_TAB_DESCRIPTIONS = {
     "admin_tab_product_database_crud": "Produktdatenbank synchronisieren und pflegen",
     "admin_tab_pv_mounting": "PV-Unterkonstruktions-Komponenten verwalten (Dachhaken, Schienen, Klemmen)",  # NEU
     "admin_tab_services_management": "Dienstleistungen strukturieren und bündeln",
+    "admin_tab_price_matrix": "Excel-ähnliche Preismatrizen erstellen und verwalten",  # NEU
     "admin_tab_general_settings": "Globale Parameter, Einheiten und Defaults",
     "admin_tab_intro_settings": "Intro-Inhalte und Onboarding-Story anpassen",
     "admin_tab_tariff_management": "Einspeisevergütungen & Tarife konfigurieren",
@@ -245,6 +248,7 @@ ADMIN_TAB_LABELS_DE = {
     "admin_tab_product_database_crud": "Produktdatenbank",
     "admin_tab_pv_mounting": "PV-Unterkonstruktionen",  # NEU: PV Mounting Components
     "admin_tab_services_management": "Dienstleistungen Management",
+    "admin_tab_price_matrix": "Preis Matrix",  # NEU: Excel-Integration
     "admin_tab_general_settings": "Allgemeine Einstellungen",
     "admin_tab_intro_settings": "Intro-Einstellungen",
     "admin_tab_tariff_management": "Einspeisung Tarifverwaltung",
@@ -3579,6 +3583,8 @@ def render_admin_panel(
         "admin_tab_logo_management": lambda: render_logo_management_tab(),
         "admin_tab_product_database_crud": lambda: render_product_admin_ui(),
         "admin_tab_pv_mounting": lambda: render_pv_mounting_admin_tab() if PV_MOUNTING_TAB_AVAILABLE else st.warning("PV-Montage-Modul nicht verfügbar"),  # NEU
+        "admin_tab_services_management": lambda: render_services_management_tab(),
+        "admin_tab_price_matrix": lambda: render_price_matrix_tab(),  # NEU: Excel-Integration
         "admin_tab_general_settings": lambda: render_general_settings_extended(
             load_admin_setting_func,
             save_admin_setting_func),
@@ -3602,7 +3608,6 @@ def render_admin_panel(
         "admin_tab_advanced": lambda: render_advanced_settings(
             load_admin_setting_func,
             save_admin_setting_func),
-        "admin_tab_services_management": lambda: render_services_management_tab(),
     }
     tab_labels_map = {
         key: admin_tab_labels_definition[idx]
@@ -3635,6 +3640,7 @@ def render_admin_panel(
         "admin_tab_product_management": "product_database",
         "admin_tab_logo_management": "logo_management",
         "admin_tab_product_database_crud": "product_database",
+        "admin_tab_price_matrix": "price_matrix",
         "admin_tab_general_settings": "economic_settings",
         "admin_tab_intro_settings": "intro_settings",
         "admin_tab_tariff_management": "economic_settings",
@@ -4081,3 +4087,43 @@ def render_heatpump_settings_tab():
         st.error(f"Fehler beim Rendern der Wärmepumpen-Einstellungen: {e}")
         st.text(traceback.format_exc())
 
+
+
+def render_price_matrix_tab():
+    """
+    Rendert den Preis Matrix Tab im Admin-Panel.
+    
+    Diese Funktion lädt die Excel-Grid-UI-Komponente für die Verwaltung
+    von Preismatrizen. Falls das Modul noch nicht verfügbar ist, wird
+    eine Platzhalter-Nachricht angezeigt.
+    
+    Requirements: 1.1, 1.2, 1.3, 1.4
+    """
+    try:
+        # Versuche die Excel-Grid-UI zu laden
+        from excel_grid_ui import render_excel_grid_ui
+        render_excel_grid_ui()
+    except ImportError:
+        # Fallback: Zeige Platzhalter-UI wenn Modul noch nicht existiert
+        st.subheader("📊 Preis Matrix Verwaltung")
+        st.info(
+            "Die Excel-Grid-Oberfläche wird in einer späteren Phase implementiert. "
+            "Hier können Sie zukünftig Excel-ähnliche Preismatrizen erstellen und verwalten."
+        )
+        
+        # Zeige Vorschau der geplanten Features
+        st.markdown("### Geplante Features:")
+        st.markdown("""
+        - ✅ Excel-ähnliche Grid-Oberfläche
+        - ✅ Formel-Unterstützung (SUM, AVERAGE, VLOOKUP, etc.)
+        - ✅ Import/Export (CSV, XLS, XLSX)
+        - ✅ Dynamische Tabellengröße
+        - ✅ Undo/Redo Funktionalität
+        - ✅ Integration mit Produktpreisen
+        """)
+        
+        st.markdown("---")
+        st.caption("Modul: excel_grid_ui.py (wird in Task 8 implementiert)")
+    except Exception as e:
+        st.error(f"Fehler beim Laden der Preis Matrix UI: {e}")
+        st.text(traceback.format_exc())

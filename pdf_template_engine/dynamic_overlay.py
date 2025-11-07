@@ -1342,12 +1342,28 @@ def _draw_page2_kpi_donuts(
 
     bg = Color(0.85, 0.88, 0.90)
     fg_blue = Color(0.07, 0.34, 0.60)
+    
+    # Linker Donut: Autarkiegrad
     if pct_autark > 0:
         _draw_donut(c, left_cx, cy, pct_autark, outer_r, inner_r, fg_blue, bg)
         # Zentrumstext
         txt = dynamic_data.get("self_supply_rate_percent", f"{int(round(pct_autark))}%")
         c.setFont("Helvetica-Bold", 12)
         c.setFillColor(fg_blue)
+        tw = c.stringWidth(txt, "Helvetica-Bold", 12)
+        c.drawString(left_cx - tw / 2, cy - 6, txt)
+    
+    # Rechter Donut: Eigenverbrauchsquote
+    if pct_ev > 0:
+        _draw_donut(c, right_cx, cy, pct_ev, outer_r, inner_r, fg_blue, bg)
+        # Zentrumstext
+        txt_ev = dynamic_data.get("self_consumption_percent", f"{int(round(pct_ev))}%")
+        c.setFont("Helvetica-Bold", 12)
+        c.setFillColor(fg_blue)
+        tw_ev = c.stringWidth(txt_ev, "Helvetica-Bold", 12)
+        c.drawString(right_cx - tw_ev / 2, cy - 6, txt_ev)
+    
+    c.restoreState()
 
 
 def _draw_page6_3d_visual(

@@ -350,6 +350,287 @@ class TestUndoRedo:
         manager.undo()
         assert manager.can_undo() is False
         assert manager.can_redo() is True
+    
+    def test_undo_formula_change(self):
+        """Test: Undo bei Formel-Änderung"""
+        manager = ExcelManager()
+        
+        # Setze Werte
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        
+        # Setze Formel
+        manager.set_cell_value(0, 2, None, raw_input="=A1+B1")
+        assert manager.get_cell_value(0, 2) == 30
+        
+        # Undo Formel
+        manager.undo()
+        assert manager.get_cell_value(0, 2) is None
+        
+        # Redo Formel
+        manager.redo()
+        assert manager.get_cell_value(0, 2) == 30
+    
+    def test_undo_clear_cell(self):
+        """Test: Undo bei Zelle löschen"""
+        manager = ExcelManager()
+        
+        # Setze Wert
+        manager.set_cell_value(0, 0, 42)
+        assert manager.get_cell_value(0, 0) == 42
+        
+        # Lösche Zelle
+        manager.clear_cell(0, 0)
+        assert manager.get_cell_value(0, 0) is None
+        
+        # Undo
+        manager.undo()
+        assert manager.get_cell_value(0, 0) == 42
+    
+    def test_undo_add_row(self):
+        """Test: Undo bei Zeile hinzufügen"""
+        manager = ExcelManager()
+        
+        # Setze Werte
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(1, 0, 20)
+        
+        initial_rows = manager.matrix.rows
+        
+        # Füge Zeile hinzu
+        manager.add_row(position=1)
+        assert manager.matrix.rows == initial_rows + 1
+        assert manager.get_cell_value(2, 0) == 20  # Verschoben
+        
+        # Undo
+        manager.undo()
+        assert manager.matrix.rows == initial_rows
+        assert manager.get_cell_value(1, 0) == 20  # Zurück
+    
+    def test_undo_add_column(self):
+        """Test: Undo bei Spalte hinzufügen"""
+        manager = ExcelManager()
+        
+        # Setze Werte
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        
+        initial_cols = manager.matrix.columns
+        
+        # Füge Spalte hinzu
+        manager.add_column(position=1)
+        assert manager.matrix.columns == initial_cols + 1
+        assert manager.get_cell_value(0, 2) == 20  # Verschoben
+        
+        # Undo
+        manager.undo()
+        assert manager.matrix.columns == initial_cols
+        assert manager.get_cell_value(0, 1) == 20  # Zurück
+    
+    def test_undo_delete_row(self):
+        """Test: Undo bei Zeile löschen"""
+        manager = ExcelManager()
+        
+        # Setze Werte
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(1, 0, 20)
+        manager.set_cell_value(2, 0, 30)
+        
+        initial_rows = manager.matrix.rows
+        
+        # Lösche Zeile
+        manager.delete_row(1)
+        assert manager.matrix.rows == initial_rows - 1
+        assert manager.get_cell_value(1, 0) == 30  # Verschoben
+        
+        # Undo
+        manager.undo()
+        assert manager.matrix.rows == initial_rows
+        assert manager.get_cell_value(1, 0) == 20  # Wiederhergestellt
+        assert manager.get_cell_value(2, 0) == 30
+    
+    def test_undo_delete_column(self):
+        """Test: Undo bei Spalte löschen"""
+        manager = ExcelManager()
+        
+        # Setze Werte
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        manager.set_cell_value(0, 2, 30)
+        
+        initial_cols = manager.matrix.columns
+        
+        # Lösche Spalte
+        manager.delete_column(1)
+        assert manager.matrix.columns == initial_cols - 1
+        assert manager.get_cell_value(0, 1) == 30  # Verschoben
+        
+        # Undo
+        manager.undo()
+        assert manager.matrix.columns == initial_cols
+        assert manager.get_cell_value(0, 1) == 20  # Wiederhergestellt
+        assert manager.get_cell_value(0, 2) == 30
+    
+    def test_redo_clears_on_new_change(self):
+        """Test: Redo-Stack wird bei neuer Änderung gelöscht"""
+        manager = ExcelManager()
+        
+        # Änderung 1
+        manager.set_cell_value(0, 0, 10)
+        
+        # Undo
+        manager.undo()
+        assert manager.can_redo() is True
+        
+        # Neue Änderung
+        manager.set_cell_value(0, 1, 20)
+        
+        # Redo sollte nicht mehr verfügbar sein
+        assert manager.can_redo() is False
+    
+    def test_undo_stack_limit(self):
+        """Test: Undo-Stack hat maximale Größe"""
+        manager = ExcelManager()
+        max_steps = manager.max_undo_steps
+        
+        # Mache mehr Änderungen als das Limit
+        for i in range(max_steps + 10):
+            manager.set_cell_value(0, 0, i)
+        
+        # Prüfe dass Stack nicht größer als Limit ist
+        assert len(manager.undo_stack) <= max_steps
+    
+    def test_undo_redo_preserves_formulas(self):
+        """Test: Undo/Redo erhält Formeln"""
+        manager = ExcelManager()
+        
+        # Setze Werte und Formel
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        manager.set_cell_value(0, 2, None, raw_input="=A1+B1")
+        
+        # Prüfe Formel
+        cell = manager.get_cell(0, 2)
+        assert cell.formula == "=A1+B1"
+        assert cell.value == 30
+        
+        # Ändere Wert
+        manager.set_cell_value(0, 0, 100)
+        assert manager.get_cell_value(0, 2) == 120
+        
+        # Undo
+        manager.undo()
+        
+        # Prüfe dass Formel noch existiert und neu berechnet wurde
+        cell = manager.get_cell(0, 2)
+        assert cell.formula == "=A1+B1"
+        assert cell.value == 30
+    
+    def test_undo_redo_preserves_dependency_graph(self):
+        """Test: Undo/Redo erhält Dependency Graph"""
+        manager = ExcelManager()
+        
+        # Setze Abhängigkeiten
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, None, raw_input="=A1*2")
+        manager.set_cell_value(0, 2, None, raw_input="=B1+5")
+        
+        # Prüfe Dependencies
+        assert (0, 1) in manager.dependency_graph
+        assert (0, 2) in manager.dependency_graph
+        
+        # Ändere Wert
+        manager.set_cell_value(0, 0, 20)
+        
+        # Undo
+        manager.undo()
+        
+        # Prüfe dass Dependencies noch existieren
+        assert (0, 1) in manager.dependency_graph
+        assert (0, 2) in manager.dependency_graph
+        
+        # Prüfe dass Werte korrekt sind
+        assert manager.get_cell_value(0, 0) == 10
+        assert manager.get_cell_value(0, 1) == 20
+        assert manager.get_cell_value(0, 2) == 25
+    
+    def test_multiple_undo_redo_sequence(self):
+        """Test: Mehrfache Undo/Redo-Sequenz"""
+        manager = ExcelManager()
+        
+        # Änderungen
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        manager.set_cell_value(0, 2, 30)
+        
+        # Undo 2x
+        manager.undo()
+        manager.undo()
+        assert manager.get_cell_value(0, 2) is None
+        assert manager.get_cell_value(0, 1) is None
+        
+        # Redo 1x
+        manager.redo()
+        assert manager.get_cell_value(0, 1) == 20
+        assert manager.get_cell_value(0, 2) is None
+        
+        # Undo 1x
+        manager.undo()
+        assert manager.get_cell_value(0, 1) is None
+        
+        # Redo 2x
+        manager.redo()
+        manager.redo()
+        assert manager.get_cell_value(0, 1) == 20
+        assert manager.get_cell_value(0, 2) == 30
+    
+    def test_undo_when_empty_stack(self):
+        """Test: Undo bei leerem Stack"""
+        manager = ExcelManager()
+        
+        # Versuche Undo ohne Änderungen
+        success = manager.undo()
+        assert success is False
+    
+    def test_redo_when_empty_stack(self):
+        """Test: Redo bei leerem Stack"""
+        manager = ExcelManager()
+        
+        # Versuche Redo ohne Undo
+        success = manager.redo()
+        assert success is False
+    
+    def test_undo_with_save_undo_false(self):
+        """Test: Änderung ohne Undo-Speicherung"""
+        manager = ExcelManager()
+        
+        # Setze Wert mit save_undo=False
+        manager.set_cell_value(0, 0, 10, save_undo=False)
+        
+        # Undo sollte nicht verfügbar sein
+        assert manager.can_undo() is False
+    
+    def test_undo_redo_with_complex_operations(self):
+        """Test: Undo/Redo mit komplexen Operationen"""
+        manager = ExcelManager()
+        
+        # Komplexe Sequenz
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        manager.set_cell_value(0, 2, None, raw_input="=SUM(A1:B1)")
+        manager.add_row(position=1)
+        manager.set_cell_value(1, 0, 30)
+        manager.delete_column(1)
+        
+        # Undo alle Operationen
+        for _ in range(6):
+            if manager.can_undo():
+                manager.undo()
+        
+        # Prüfe dass alles zurückgesetzt wurde
+        assert len(manager.matrix.cells) == 0
+        assert manager.matrix.rows == 100
+        assert manager.matrix.columns == 26
 
 
 class TestMatrixInfo:
@@ -776,6 +1057,348 @@ class TestRowColumnOperations:
         # Prüfe dass Formel aktualisiert wurde
         cell = manager.get_cell(0, 4)
         assert cell.formula == "=IF(A1>5, SUM(A1:D1), C1)"
+
+
+class TestCRUDOperationsComprehensive:
+    """Umfassende Tests für CRUD-Operationen"""
+    
+    def test_create_multiple_cells(self):
+        """Test: Mehrere Zellen erstellen"""
+        manager = ExcelManager()
+        
+        # Erstelle 10x10 Grid
+        for row in range(10):
+            for col in range(10):
+                manager.set_cell_value(row, col, row * 10 + col)
+        
+        # Prüfe alle Werte
+        for row in range(10):
+            for col in range(10):
+                assert manager.get_cell_value(row, col) == row * 10 + col
+    
+    def test_read_nonexistent_cell(self):
+        """Test: Lesen einer nicht existierenden Zelle"""
+        manager = ExcelManager()
+        
+        # Lese Zelle die nicht existiert
+        value = manager.get_cell_value(99, 99)
+        assert value is None
+    
+    def test_update_existing_cell(self):
+        """Test: Bestehende Zelle aktualisieren"""
+        manager = ExcelManager()
+        
+        # Erstelle Zelle
+        manager.set_cell_value(0, 0, 10)
+        assert manager.get_cell_value(0, 0) == 10
+        
+        # Aktualisiere Zelle
+        manager.set_cell_value(0, 0, 20)
+        assert manager.get_cell_value(0, 0) == 20
+    
+    def test_delete_cell_with_clear(self):
+        """Test: Zelle mit clear_cell löschen"""
+        manager = ExcelManager()
+        
+        # Erstelle Zelle
+        manager.set_cell_value(0, 0, 42)
+        assert (0, 0) in manager.matrix.cells
+        
+        # Lösche Zelle
+        manager.clear_cell(0, 0)
+        assert (0, 0) not in manager.matrix.cells
+    
+    def test_bulk_operations(self):
+        """Test: Bulk-Operationen"""
+        manager = ExcelManager()
+        
+        # Erstelle viele Zellen
+        for i in range(100):
+            manager.set_cell_value(i, 0, i, save_undo=False)
+        
+        # Prüfe Anzahl
+        assert len(manager.matrix.cells) == 100
+        
+        # Lösche alle
+        for i in range(100):
+            manager.clear_cell(i, 0, save_undo=False)
+        
+        # Prüfe dass alle gelöscht wurden
+        assert len(manager.matrix.cells) == 0
+    
+    def test_crud_with_formulas(self):
+        """Test: CRUD mit Formeln"""
+        manager = ExcelManager()
+        
+        # Create: Erstelle Zellen mit Formeln
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        manager.set_cell_value(0, 2, None, raw_input="=A1+B1")
+        
+        # Read: Lese Formel-Ergebnis
+        assert manager.get_cell_value(0, 2) == 30
+        
+        # Update: Aktualisiere Formel
+        manager.set_cell_value(0, 2, None, raw_input="=A1*B1")
+        assert manager.get_cell_value(0, 2) == 200
+        
+        # Delete: Lösche Formel
+        manager.clear_cell(0, 2)
+        assert manager.get_cell_value(0, 2) is None
+
+
+class TestDependencyGraphComprehensive:
+    """Umfassende Tests für Dependency Graph"""
+    
+    def test_simple_dependency(self):
+        """Test: Einfache Abhängigkeit"""
+        manager = ExcelManager()
+        
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, None, raw_input="=A1")
+        
+        # Prüfe Dependency
+        assert (0, 1) in manager.dependency_graph
+        assert (0, 0) in manager.dependency_graph[(0, 1)]
+    
+    def test_multiple_dependencies(self):
+        """Test: Mehrere Abhängigkeiten"""
+        manager = ExcelManager()
+        
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        manager.set_cell_value(0, 2, 30)
+        manager.set_cell_value(0, 3, None, raw_input="=A1+B1+C1")
+        
+        # Prüfe Dependencies
+        deps = manager.dependency_graph[(0, 3)]
+        assert (0, 0) in deps
+        assert (0, 1) in deps
+        assert (0, 2) in deps
+    
+    def test_range_dependency(self):
+        """Test: Bereichs-Abhängigkeit"""
+        manager = ExcelManager()
+        
+        for i in range(5):
+            manager.set_cell_value(i, 0, i * 10)
+        
+        manager.set_cell_value(5, 0, None, raw_input="=SUM(A1:A5)")
+        
+        # Prüfe dass alle Zellen im Bereich als Dependencies erfasst sind
+        deps = manager.dependency_graph[(5, 0)]
+        for i in range(5):
+            assert (i, 0) in deps
+    
+    def test_nested_dependencies(self):
+        """Test: Verschachtelte Abhängigkeiten"""
+        manager = ExcelManager()
+        
+        # A1 = 10
+        manager.set_cell_value(0, 0, 10)
+        
+        # B1 = A1 * 2
+        manager.set_cell_value(0, 1, None, raw_input="=A1*2")
+        
+        # C1 = B1 + 5
+        manager.set_cell_value(0, 2, None, raw_input="=B1+5")
+        
+        # D1 = C1 * 2
+        manager.set_cell_value(0, 3, None, raw_input="=C1*2")
+        
+        # Prüfe Dependency Chain
+        assert (0, 0) in manager.dependency_graph[(0, 1)]
+        assert (0, 1) in manager.dependency_graph[(0, 2)]
+        assert (0, 2) in manager.dependency_graph[(0, 3)]
+    
+    def test_dependency_update_on_formula_change(self):
+        """Test: Dependency-Update bei Formel-Änderung"""
+        manager = ExcelManager()
+        
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, 20)
+        manager.set_cell_value(0, 2, None, raw_input="=A1")
+        
+        # Prüfe initiale Dependency
+        assert (0, 0) in manager.dependency_graph[(0, 2)]
+        assert (0, 1) not in manager.dependency_graph[(0, 2)]
+        
+        # Ändere Formel
+        manager.set_cell_value(0, 2, None, raw_input="=B1")
+        
+        # Prüfe aktualisierte Dependency
+        assert (0, 0) not in manager.dependency_graph[(0, 2)]
+        assert (0, 1) in manager.dependency_graph[(0, 2)]
+    
+    def test_dependency_removal_on_clear(self):
+        """Test: Dependency-Entfernung bei clear_cell"""
+        manager = ExcelManager()
+        
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, None, raw_input="=A1")
+        
+        # Prüfe Dependency existiert
+        assert (0, 1) in manager.dependency_graph
+        
+        # Lösche Zelle
+        manager.clear_cell(0, 1)
+        
+        # Prüfe Dependency wurde entfernt
+        assert (0, 1) not in manager.dependency_graph
+    
+    def test_affected_cells_calculation(self):
+        """Test: Berechnung betroffener Zellen"""
+        manager = ExcelManager()
+        
+        # Erstelle Dependency Chain
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, None, raw_input="=A1*2")
+        manager.set_cell_value(0, 2, None, raw_input="=B1+5")
+        
+        # Hole betroffene Zellen
+        affected = manager._get_all_affected_cells_recursive((0, 0), set())
+        
+        # Prüfe dass beide abhängigen Zellen gefunden wurden
+        assert (0, 1) in affected
+        assert (0, 2) in affected
+    
+    def test_dependency_graph_rebuild(self):
+        """Test: Dependency Graph Rebuild"""
+        manager = ExcelManager()
+        
+        # Erstelle Formeln
+        manager.set_cell_value(0, 0, 10)
+        manager.set_cell_value(0, 1, None, raw_input="=A1")
+        
+        # Lösche Graph
+        manager.dependency_graph.clear()
+        assert len(manager.dependency_graph) == 0
+        
+        # Rebuild
+        manager._rebuild_dependency_graph()
+        
+        # Prüfe dass Graph wiederhergestellt wurde
+        assert (0, 1) in manager.dependency_graph
+        assert (0, 0) in manager.dependency_graph[(0, 1)]
+    
+    def test_circular_reference_detection(self):
+        """Test: Zirkelbezug-Erkennung"""
+        manager = ExcelManager()
+        
+        # A1 = B1
+        manager.set_cell_value(0, 0, None, raw_input="=B1")
+        
+        # Prüfe ob B1 = A1 einen Zirkelbezug erstellen würde
+        would_create = manager._would_create_circular_reference(0, 1, "=A1")
+        assert would_create is True
+    
+    def test_complex_dependency_network(self):
+        """Test: Komplexes Dependency-Netzwerk"""
+        manager = ExcelManager()
+        
+        # Erstelle komplexes Netzwerk
+        # A1 = 10
+        manager.set_cell_value(0, 0, 10)
+        
+        # B1 = A1, C1 = A1
+        manager.set_cell_value(0, 1, None, raw_input="=A1")
+        manager.set_cell_value(0, 2, None, raw_input="=A1")
+        
+        # D1 = B1 + C1
+        manager.set_cell_value(0, 3, None, raw_input="=B1+C1")
+        
+        # Prüfe Dependencies
+        assert (0, 0) in manager.dependency_graph[(0, 1)]
+        assert (0, 0) in manager.dependency_graph[(0, 2)]
+        assert (0, 1) in manager.dependency_graph[(0, 3)]
+        assert (0, 2) in manager.dependency_graph[(0, 3)]
+        
+        # Ändere A1 und prüfe dass alle neu berechnet werden
+        manager.set_cell_value(0, 0, 20)
+        assert manager.get_cell_value(0, 1) == 20
+        assert manager.get_cell_value(0, 2) == 20
+        assert manager.get_cell_value(0, 3) == 40
+
+
+class TestPerformance:
+    """Performance-Tests für ExcelManager"""
+    
+    def test_large_matrix_creation(self):
+        """Test: Große Matrix erstellen"""
+        import time
+        
+        manager = ExcelManager()
+        
+        start = time.time()
+        
+        # Erstelle 1000 Zellen
+        for i in range(1000):
+            manager.set_cell_value(i, 0, i, save_undo=False)
+        
+        elapsed = time.time() - start
+        
+        # Sollte unter 1 Sekunde sein
+        assert elapsed < 1.0
+        assert len(manager.matrix.cells) == 1000
+    
+    def test_formula_recalculation_performance(self):
+        """Test: Performance der Formel-Neuberechnung"""
+        import time
+        
+        manager = ExcelManager()
+        
+        # Erstelle 100 Formeln die voneinander abhängen
+        manager.set_cell_value(0, 0, 1)
+        
+        for i in range(1, 100):
+            ref = f"A{i}"
+            manager.set_cell_value(i, 0, None, raw_input=f"={ref}+1", save_undo=False)
+        
+        start = time.time()
+        
+        # Ändere erste Zelle (triggert Neuberechnung aller)
+        manager.set_cell_value(0, 0, 10, save_undo=False)
+        
+        elapsed = time.time() - start
+        
+        # Sollte unter 2 Sekunden sein (Requirement 11.2)
+        assert elapsed < 2.0
+        
+        # Prüfe dass letzte Zelle korrekt berechnet wurde
+        assert manager.get_cell_value(99, 0) == 109  # 10 + 99
+    
+    def test_undo_stack_memory_efficiency(self):
+        """Test: Speicher-Effizienz des Undo-Stacks"""
+        manager = ExcelManager()
+        
+        # Mache viele Änderungen
+        for i in range(100):
+            manager.set_cell_value(0, 0, i)
+        
+        # Prüfe dass Stack begrenzt ist
+        assert len(manager.undo_stack) <= manager.max_undo_steps
+    
+    def test_dependency_graph_performance(self):
+        """Test: Performance des Dependency Graphs"""
+        import time
+        
+        manager = ExcelManager()
+        
+        # Erstelle 50 Zellen mit Formeln
+        for i in range(50):
+            manager.set_cell_value(i, 0, i)
+            manager.set_cell_value(i, 1, None, raw_input=f"=A{i+1}*2", save_undo=False)
+        
+        start = time.time()
+        
+        # Rebuild Dependency Graph
+        manager._rebuild_dependency_graph()
+        
+        elapsed = time.time() - start
+        
+        # Sollte sehr schnell sein
+        assert elapsed < 0.5
+        assert len(manager.dependency_graph) == 50
 
 
 if __name__ == "__main__":
