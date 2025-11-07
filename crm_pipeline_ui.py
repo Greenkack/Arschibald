@@ -104,44 +104,76 @@ class CRMPipeline:
 
     def _render_pipeline_overview(self):
         """Rendert die Pipeline-Übersicht im Kanban-Stil"""
-        st.subheader(" Pipeline-Übersicht")
+        st.subheader("🎯 Pipeline-Übersicht")
 
-        # Pipeline-Statistiken
+        # Pipeline-Statistiken mit modernen Cards
         stats = self._get_pipeline_statistics()
 
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
-            st.metric(
-                "Gesamte Leads",
-                stats['total_leads'],
-                delta=f"+{stats['new_leads_this_month']} diesen Monat"
-            )
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 15px;
+                    border-radius: 12px;
+                    color: white;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                ">
+                    <p style="margin: 0; font-size: 0.9em; opacity: 0.9;">Gesamte Leads</p>
+                    <h2 style="margin: 5px 0; font-size: 2em;">{}</h2>
+                    <p style="margin: 0; font-size: 0.8em;">+{} diesen Monat ↗️</p>
+                </div>
+            """.format(stats['total_leads'], stats['new_leads_this_month']), unsafe_allow_html=True)
 
         with col2:
-            st.metric(
-                "Pipeline-Wert",
-                f"{stats['total_pipeline_value']:,.0f} €",
-                delta=f"{stats['avg_deal_value']:,.0f} € Ø"
-            )
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 15px;
+                    border-radius: 12px;
+                    color: white;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                ">
+                    <p style="margin: 0; font-size: 0.9em; opacity: 0.9;">Pipeline-Wert</p>
+                    <h2 style="margin: 5px 0; font-size: 2em;">{:,.0f}€</h2>
+                    <p style="margin: 0; font-size: 0.8em;">Ø {:,.0f}€</p>
+                </div>
+            """.format(stats['total_pipeline_value'], stats['avg_deal_value']), unsafe_allow_html=True)
 
         with col3:
-            st.metric(
-                "Conversion Rate",
-                f"{stats['conversion_rate']:.1f}%",
-                delta=f"{stats['monthly_conversion_change']:+.1f}%"
-            )
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 15px;
+                    border-radius: 12px;
+                    color: white;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                ">
+                    <p style="margin: 0; font-size: 0.9em; opacity: 0.9;">Conversion Rate</p>
+                    <h2 style="margin: 5px 0; font-size: 2em;">{:.1f}%</h2>
+                    <p style="margin: 0; font-size: 0.8em;">{:+.1f}% Trend</p>
+                </div>
+            """.format(stats['conversion_rate'], stats['monthly_conversion_change']), unsafe_allow_html=True)
 
         with col4:
-            st.metric(
-                "Ø Verkaufszyklus",
-                f"{stats['avg_sales_cycle']} Tage",
-                delta=f"{stats['cycle_trend']:+.0f} Tage"
-            )
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 15px;
+                    border-radius: 12px;
+                    color: white;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                ">
+                    <p style="margin: 0; font-size: 0.9em; opacity: 0.9;">Ø Verkaufszyklus</p>
+                    <h2 style="margin: 5px 0; font-size: 2em;">{} Tage</h2>
+                    <p style="margin: 0; font-size: 0.8em;">{:+.0f} Tage Trend</p>
+                </div>
+            """.format(stats['avg_sales_cycle'], stats['cycle_trend']), unsafe_allow_html=True)
 
         st.markdown("---")
 
-        # Kanban-Board
+        # Kanban-Board mit verbessertem Design
         stages = sorted(
             self.pipeline_stages.items(),
             key=lambda x: x[1]['order'])
@@ -157,12 +189,20 @@ class CRMPipeline:
                                   for lead in leads_in_stage)
 
                 st.markdown(f"""
-                    <div style="background-color: {stage_info['color']}20; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
-                        <h4 style="margin: 0; color: {stage_info['color']};">
+                    <div style="
+                        background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                        padding: 15px;
+                        border-radius: 12px;
+                        margin-bottom: 15px;
+                        border-left: 4px solid #555;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                        color: white;
+                    ">
+                        <h4 style="margin: 0; font-size: 1.1em;">
                             {stage_info['icon']} {stage_info['name']}
                         </h4>
-                        <p style="margin: 5px 0; font-size: 0.8em; color: #666;">
-                            {len(leads_in_stage)} Leads • {stage_value:,.0f} €
+                        <p style="margin: 8px 0 0 0; font-size: 0.85em; opacity: 0.9;">
+                            <strong>{len(leads_in_stage)}</strong> Leads • <strong>{stage_value:,.0f} €</strong>
                         </p>
                     </div>
                 """, unsafe_allow_html=True)
@@ -176,27 +216,47 @@ class CRMPipeline:
 
         # Geschlossene Deals (separate Sektion)
         st.markdown("---")
-        st.subheader(" Geschlossene Deals (letzte 30 Tage)")
+        st.subheader("🏆 Geschlossene Deals (letzte 30 Tage)")
 
         col1, col2 = st.columns(2)
 
         with col1:
             won_leads = self._get_recent_closed_leads('won')
-            st.markdown("###  Gewonnene Aufträge")
+            st.markdown("### ✅ Gewonnene Aufträge")
             if won_leads:
                 for lead in won_leads[:3]:
-                    st.success(
-                        f" {lead['company_name']} - {lead['estimated_value']:,.0f} €")
+                    st.markdown(f"""
+                        <div style="
+                            background-color: #d4edda;
+                            border-left: 4px solid #28a745;
+                            padding: 10px;
+                            border-radius: 5px;
+                            margin-bottom: 8px;
+                        ">
+                            <strong>{lead['company_name']}</strong><br>
+                            <span style="color: #28a745; font-size: 1.1em;">{lead['estimated_value']:,.0f} €</span>
+                        </div>
+                    """, unsafe_allow_html=True)
             else:
                 st.info("Keine gewonnenen Aufträge in den letzten 30 Tagen")
 
         with col2:
             lost_leads = self._get_recent_closed_leads('lost')
-            st.markdown("###  Verlorene Aufträge")
+            st.markdown("### ❌ Verlorene Aufträge")
             if lost_leads:
                 for lead in lost_leads[:3]:
-                    st.error(
-                        f" {lead['company_name']} - {lead['estimated_value']:,.0f} €")
+                    st.markdown(f"""
+                        <div style="
+                            background-color: #f8d7da;
+                            border-left: 4px solid #dc3545;
+                            padding: 10px;
+                            border-radius: 5px;
+                            margin-bottom: 8px;
+                        ">
+                            <strong>{lead['company_name']}</strong><br>
+                            <span style="color: #dc3545; font-size: 1.1em;">{lead['estimated_value']:,.0f} €</span>
+                        </div>
+                    """, unsafe_allow_html=True)
             else:
                 st.info("Keine verlorenen Aufträge in den letzten 30 Tagen")
 
@@ -208,20 +268,41 @@ class CRMPipeline:
                 lead['stage_changed_at'])).days
 
         with st.container():
-            # Lead-Info
+            # Moderne Lead-Karte
             st.markdown(f"""
-                <div style="border: 1px solid #ddd; padding: 8px; margin: 5px 0; border-radius: 5px; background-color: white;">
-                    <strong>{lead['company_name']}</strong><br>
-                    <small> {lead['estimated_value']:,.0f} €</small><br>
-                    <small> {days_in_stage} Tage in Stufe</small>
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    border: 1px solid #666;
+                    border-left: 3px solid #555;
+                    padding: 12px;
+                    border-radius: 8px;
+                    margin: 8px 0;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+                    color: white;
+                ">
+                    <h5 style="margin: 0 0 8px 0; font-size: 0.95em;">
+                        🏢 {lead['company_name']}
+                    </h5>
+                    <div style="margin: 5px 0; font-size: 0.8em;">
+                        <span style="
+                            background: rgba(255,255,255,0.2);
+                            color: white;
+                            padding: 3px 8px;
+                            border-radius: 12px;
+                            font-weight: bold;
+                        ">💰 {lead['estimated_value']:,.0f} €</span>
+                    </div>
+                    <p style="margin: 8px 0 0 0; font-size: 0.75em; opacity: 0.8;">
+                        ⏱️ {days_in_stage} Tage in Stufe
+                    </p>
                 </div>
             """, unsafe_allow_html=True)
 
-            # Aktions-Buttons (klein)
+            # Aktions-Buttons (klein und modern)
             col1, col2 = st.columns(2)
             with col1:
                 if st.button(
-                        "",
+                        "👁️",
                         key=f"view_{
                             lead['id']}",
                         help="Details anzeigen"):
@@ -230,7 +311,7 @@ class CRMPipeline:
 
             with col2:
                 if st.button(
-                        "",
+                        "↔️",
                         key=f"move_{
                             lead['id']}",
                         help="Stufe ändern"):

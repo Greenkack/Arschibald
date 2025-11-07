@@ -72,56 +72,88 @@ def render_crm_dashboard(
 def render_overview_section(texts: dict[str, str]):
     """Übersichts-Sektion des CRM Dashboards"""
 
-    st.subheader(" Geschäftsübersicht")
+    st.subheader("📊 Geschäftsübersicht")
 
-    # KPIs in Spalten
+    # KPIs in modernen Cards
     col1, col2, col3, col4 = st.columns(4)
 
     try:
         customers = get_all_active_customers()
 
         with col1:
-            st.metric(
-                label="Aktive Kunden",
-                value=len(customers),
-                delta="+5 diese Woche"
-            )
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 20px;
+                    border-radius: 15px;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                ">
+                    <h3 style="margin: 0; font-size: 1.2em;">👥 Aktive Kunden</h3>
+                    <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
+                    <p style="margin: 0; opacity: 0.9;">+5 diese Woche ↗️</p>
+                </div>
+            """.format(len(customers)), unsafe_allow_html=True)
 
         with col2:
             # Projekte berechnen (vereinfacht)
             projects_count = sum(
                 1 for customer in customers if customer.get('project_status') == 'active')
-            st.metric(
-                label="Laufende Projekte",
-                value=projects_count,
-                delta="+2 diese Woche"
-            )
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 20px;
+                    border-radius: 15px;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                ">
+                    <h3 style="margin: 0; font-size: 1.2em;">🚀 Laufende Projekte</h3>
+                    <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
+                    <p style="margin: 0; opacity: 0.9;">+2 diese Woche ↗️</p>
+                </div>
+            """.format(projects_count), unsafe_allow_html=True)
 
         with col3:
             # Angebote berechnen (vereinfacht)
             offers_count = sum(
                 1 for customer in customers if customer.get('offer_status') == 'pending')
-            st.metric(
-                label="Offene Angebote",
-                value=offers_count,
-                delta="-1 diese Woche"
-            )
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 20px;
+                    border-radius: 15px;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                ">
+                    <h3 style="margin: 0; font-size: 1.2em;">📋 Offene Angebote</h3>
+                    <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
+                    <p style="margin: 0; opacity: 0.9;">-1 diese Woche ↘️</p>
+                </div>
+            """.format(offers_count), unsafe_allow_html=True)
 
         with col4:
             # Umsatz berechnen (vereinfacht)
             total_revenue = sum(customer.get('project_value', 0)
                                 for customer in customers)
-            st.metric(
-                label="Gesamtumsatz",
-                value=f"{total_revenue:,.0f} €",
-                delta="+15.2% zum Vormonat"
-            )
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 20px;
+                    border-radius: 15px;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                ">
+                    <h3 style="margin: 0; font-size: 1.2em;">💰 Gesamtumsatz</h3>
+                    <h1 style="margin: 10px 0; font-size: 2.5em;">{:,.0f}€</h1>
+                    <p style="margin: 0; opacity: 0.9;">+12% vs Vormonat ↗️</p>
+                </div>
+            """.format(total_revenue), unsafe_allow_html=True)
 
     except Exception as e:
         st.error(f"Fehler beim Laden der Übersichtsdaten: {e}")
 
-    # Aktivitäts-Timeline
-    st.subheader(" Letzte Aktivitäten")
+    # Aktivitäts-Timeline mit modernen Cards
+    st.subheader("📋 Letzte Aktivitäten")
 
     # Dummy-Daten für Aktivitäten
     activities = [{"time": "Heute 14:30",
@@ -139,12 +171,26 @@ def render_overview_section(texts: dict[str, str]):
                   ]
 
     for activity in activities:
-        with st.container():
-            col_time, col_action = st.columns([1, 3])
-            with col_time:
-                st.caption(activity["time"])
-            with col_action:
-                st.write(f"**{activity['action']}** - {activity['details']}")
+        st.markdown(f"""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 15px;
+                border-radius: 10px;
+                margin-bottom: 10px;
+                color: white;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="font-size: 1.1em;">{activity['action']}</strong><br>
+                        <span style="opacity: 0.8;">{activity['details']}</span>
+                    </div>
+                    <div style="text-align: right; opacity: 0.8; font-size: 0.9em;">
+                        ⏰ {activity['time']}
+                    </div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
 
 
 def render_customers_section(texts: dict[str, str]):
@@ -253,19 +299,58 @@ def render_customer_details(customer: dict[str, Any], texts: dict[str, str]):
 def render_projects_section(texts: dict[str, str]):
     """Projekte-Sektion des CRM Dashboards"""
 
-    st.subheader(" Projektübersicht")
+    st.subheader("📁 Projektübersicht")
 
-    # Projekt-Status Übersicht
+    # Projekt-Status Übersicht mit modernen Cards
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.metric("Neue Anfragen", "12", "+3")
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">Neue Anfragen</h3>
+                <h1 style="margin: 10px 0; font-size: 2.2em;">12</h1>
+                <p style="margin: 0; opacity: 0.8;">+3 ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
 
     with col2:
-        st.metric("In Planung", "8", "+1")
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">In Planung</h3>
+                <h1 style="margin: 10px 0; font-size: 2.2em;">8</h1>
+                <p style="margin: 0; opacity: 0.8;">+1 ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
 
     with col3:
-        st.metric("In Umsetzung", "5", "-1")
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">In Umsetzung</h3>
+                <h1 style="margin: 10px 0; font-size: 2.2em;">5</h1>
+                <p style="margin: 0; opacity: 0.8;">-1 ↘️</p>
+            </div>
+        """, unsafe_allow_html=True)
 
     # Projekt-Pipeline Visualisierung
     st.subheader(" Projekt-Pipeline")
@@ -297,22 +382,74 @@ def render_projects_section(texts: dict[str, str]):
 def render_revenue_section(texts: dict[str, str]):
     """Umsatz-Sektion des CRM Dashboards"""
 
-    st.subheader(" Umsatzanalyse")
+    st.subheader("💰 Umsatzanalyse")
 
-    # Umsatz-KPIs
+    # Umsatz-KPIs mit modernen Cards
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric("Monatsumsatz", "85.000 €", "+12.5%")
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Monatsumsatz</h3>
+                <h1 style="margin: 10px 0; font-size: 1.8em;">85.000 €</h1>
+                <p style="margin: 0; opacity: 0.8;">+12.5% ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
 
     with col2:
-        st.metric("Jahresumsatz", "920.000 €", "+18.2%")
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Jahresumsatz</h3>
+                <h1 style="margin: 10px 0; font-size: 1.8em;">920.000 €</h1>
+                <p style="margin: 0; opacity: 0.8;">+18.2% ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
 
     with col3:
-        st.metric("Ø Projektgröße", "18.400 €", "+5.1%")
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Ø Projektgröße</h3>
+                <h1 style="margin: 10px 0; font-size: 1.8em;">18.400 €</h1>
+                <p style="margin: 0; opacity: 0.8;">+5.1% ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
 
     with col4:
-        st.metric("Conversion Rate", "68%", "+3%")
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Conversion Rate</h3>
+                <h1 style="margin: 10px 0; font-size: 1.8em;">68%</h1>
+                <p style="margin: 0; opacity: 0.8;">+3% ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
 
     # Umsatz-Chart
     st.subheader(" Umsatzentwicklung")
