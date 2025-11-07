@@ -348,98 +348,209 @@ def render_crm(
                 "crm_customer_list_header",
                 "Alle Kunden"))
 
-        if st.button(
-                get_text_crm(
-                    texts,
-                    "crm_add_new_customer_button",
-                    " Neuen Kunden anlegen"),
-                key="add_new_customer_btn"):
-            st.session_state['crm_view_mode'] = 'add_customer'
-            st.session_state['selected_customer_id'] = None
-            st.session_state['selected_project_id'] = None
-            st.rerun()
+        # Neuer Kunde Button
+        col_btn, col_search = st.columns([1, 3])
+        with col_btn:
+            if st.button(
+                    "➕ " + get_text_crm(
+                        texts,
+                        "crm_add_new_customer_button",
+                        "Neuen Kunden anlegen"),
+                    key="add_new_customer_btn",
+                    use_container_width=True):
+                st.session_state['crm_view_mode'] = 'add_customer'
+                st.session_state['selected_customer_id'] = None
+                st.session_state['selected_project_id'] = None
+                st.rerun()
 
         customers = load_all_customers(conn)
+        
         if customers:
-            df_customers = pd.DataFrame(customers)
-            # KORREKTUR: hide_row_index durch hide_index ersetzen
-            st.dataframe(
-                df_customers,
-                use_container_width=True,
-                hide_index=True)
-
-            for customer in customers:
-                col_c_id, col_c_name, col_c_actions = st.columns([0.5, 2, 2])
-                col_c_id.write(customer['id'])
-                col_c_name.write(
-                    f"{
-                        customer.get(
-                            'first_name',
-                            '')} {
-                        customer.get(
-                            'last_name',
-                            '')} ({
-                        customer.get(
-                            'city',
-                            '')})")
-
-                with col_c_actions:
-                    btn_view = col_c_actions.button(
-                        get_text_crm(
-                            texts,
-                            "crm_view_button",
-                            "Ansehen"),
-                        key=f"view_customer_{
-                            customer['id']}")
-                    btn_edit = col_c_actions.button(
-                        get_text_crm(
-                            texts,
-                            "crm_edit_button",
-                            "Bearbeiten"),
-                        key=f"edit_customer_{
-                            customer['id']}")
-
-                    delete_button_key = f"del_customer_{customer['id']}"
-                    confirm_delete_key = f"confirm_delete_customer_{
-                        customer['id']}"
-
-                    if btn_view:
-                        st.session_state['selected_customer_id'] = customer['id']
-                        st.session_state['crm_view_mode'] = 'view_customer'
-                        st.rerun()
-                    if btn_edit:
-                        st.session_state['selected_customer_id'] = customer['id']
-                        st.session_state['crm_view_mode'] = 'edit_customer'
-                        st.rerun()
-
-                    if col_c_actions.button(
-                            get_text_crm(
-                                texts,
-                                "crm_delete_button",
-                                "Löschen"),
-                            key=delete_button_key):
-                        if st.session_state.get(confirm_delete_key, False):
-                            if delete_customer(conn, customer['id']):
-                                st.success(
-                                    get_text_crm(
-                                        texts,
-                                        "crm_customer_deleted",
-                                        "Kunde gelöscht."))
-                                del st.session_state[confirm_delete_key]
+            # Suchfunktion und Filter
+            with col_search:
+                search_query = st.text_input(
+                    "🔍 Suche nach Name, Stadt, E-Mail oder Telefon",
+                    key="customer_search",
+                    placeholder="Kunde suchen..."
+                )
+            
+            # Filteroptionen
+            col_filter1, col_filter2, col_filter3 = st.columns(3)
+            with col_filter1:
+                sort_by = st.selectbox(
+                    "Sortieren nach",
+                    ["Name (A-Z)", "Name (Z-A)", "Stadt", "Neueste zuerst", "Älteste zuerst"],
+                    key="customer_sort"
+                )
+            with col_filter2:
+                city_filter = st.multiselect(
+                    "Stadt filtern",
+                    options=sorted(list(set([c.get('city', '') for c in customers if c.get('city')]))),
+                    key="customer_city_filter"
+                )
+            with col_filter3:
+                view_style = st.radio(
+                    "Ansicht",
+                    ["Karten", "Tabelle"],
+                    horizontal=True,
+                    key="customer_view_style"
+                )
+            
+            # Filter anwenden
+            filtered_customers = customers.copy()
+            
+            # Suchfilter
+            if search_query:
+                search_lower = search_query.lower()
+                filtered_customers = [
+                    c for c in filtered_customers
+                    if search_lower in f"{c.get('first_name', '')} {c.get('last_name', '')}".lower()
+                    or search_lower in c.get('city', '').lower()
+                    or search_lower in c.get('email', '').lower()
+                    or search_lower in c.get('phone', '').lower()
+                ]
+            
+            # Stadt-Filter
+            if city_filter:
+                filtered_customers = [c for c in filtered_customers if c.get('city', '') in city_filter]
+            
+            # Sortierung
+            if sort_by == "Name (A-Z)":
+                filtered_customers.sort(key=lambda x: f"{x.get('first_name', '')} {x.get('last_name', '')}".lower())
+            elif sort_by == "Name (Z-A)":
+                filtered_customers.sort(key=lambda x: f"{x.get('first_name', '')} {x.get('last_name', '')}".lower(), reverse=True)
+            elif sort_by == "Stadt":
+                filtered_customers.sort(key=lambda x: x.get('city', '').lower())
+            elif sort_by == "Neueste zuerst":
+                filtered_customers.sort(key=lambda x: x.get('id', 0), reverse=True)
+            elif sort_by == "Älteste zuerst":
+                filtered_customers.sort(key=lambda x: x.get('id', 0))
+            
+            st.markdown(f"**{len(filtered_customers)}** von **{len(customers)}** Kunden angezeigt")
+            st.markdown("---")
+            
+            if filtered_customers:
+                if view_style == "Karten":
+                    # Moderne Card-Ansicht (4 Spalten - kompakt)
+                    cols_per_row = 4
+                    for i in range(0, len(filtered_customers), cols_per_row):
+                        cols = st.columns(cols_per_row)
+                        for j in range(cols_per_row):
+                            if i + j < len(filtered_customers):
+                                customer = filtered_customers[i + j]
+                                with cols[j]:
+                                    with st.container():
+                                        st.markdown(f"""
+                                        <div style="
+                                            border: 1px solid #666;
+                                            border-radius: 8px;
+                                            padding: 10px;
+                                            margin-bottom: 8px;
+                                            background-color: #c0c0c0;
+                                            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+                                        ">
+                                            <h4 style="margin: 0 0 6px 0; color: #1f77b4; font-size: 0.95em;">
+                                                👤 {customer.get('first_name', '')} {customer.get('last_name', '')}
+                                            </h4>
+                                            <p style="margin: 2px 0; font-size: 0.75em; color: #1a1a1a;">
+                                                📍 {customer.get('city', 'N/A')}
+                                            </p>
+                                            <p style="margin: 2px 0; font-size: 0.7em; color: #2a2a2a;">
+                                                📧 {customer.get('email', 'N/A')[:25]}{'...' if len(customer.get('email', '')) > 25 else ''}
+                                            </p>
+                                            <p style="margin: 2px 0; font-size: 0.75em; color: #2a2a2a;">
+                                                📞 {customer.get('phone', 'N/A')}
+                                            </p>
+                                        </div>
+                                        """, unsafe_allow_html=True)
+                                        
+                                        col1, col2, col3 = st.columns(3)
+                                        with col1:
+                                            if st.button("👁️", key=f"view_customer_{customer['id']}", help="Ansehen", use_container_width=True):
+                                                st.session_state['selected_customer_id'] = customer['id']
+                                                st.session_state['crm_view_mode'] = 'view_customer'
+                                                st.rerun()
+                                        with col2:
+                                            if st.button("✏️", key=f"edit_customer_{customer['id']}", help="Bearbeiten", use_container_width=True):
+                                                st.session_state['selected_customer_id'] = customer['id']
+                                                st.session_state['crm_view_mode'] = 'edit_customer'
+                                                st.rerun()
+                                        with col3:
+                                            delete_button_key = f"del_customer_{customer['id']}"
+                                            confirm_delete_key = f"confirm_delete_customer_{customer['id']}"
+                                            
+                                            if st.button("🗑️", key=delete_button_key, help="Löschen", use_container_width=True):
+                                                if st.session_state.get(confirm_delete_key, False):
+                                                    if delete_customer(conn, customer['id']):
+                                                        st.success("Kunde gelöscht.")
+                                                        del st.session_state[confirm_delete_key]
+                                                        st.rerun()
+                                                    else:
+                                                        st.error("Löschen fehlgeschlagen.")
+                                                else:
+                                                    st.warning("Nochmal klicken zum Bestätigen!")
+                                                    st.session_state[confirm_delete_key] = True
+                
+                else:  # Tabellen-Ansicht
+                    # Erstelle DataFrame mit Aktions-Spalte
+                    df_data = []
+                    for customer in filtered_customers:
+                        df_data.append({
+                            'ID': customer['id'],
+                            'Name': f"{customer.get('first_name', '')} {customer.get('last_name', '')}",
+                            'Stadt': customer.get('city', ''),
+                            'E-Mail': customer.get('email', ''),
+                            'Telefon': customer.get('phone', ''),
+                            'PLZ': customer.get('zip_code', ''),
+                        })
+                    
+                    df_customers = pd.DataFrame(df_data)
+                    
+                    # Interaktive Tabelle
+                    st.dataframe(
+                        df_customers,
+                        use_container_width=True,
+                        hide_index=True,
+                        column_config={
+                            "ID": st.column_config.NumberColumn("ID", width="small"),
+                            "Name": st.column_config.TextColumn("Name", width="medium"),
+                            "Stadt": st.column_config.TextColumn("Stadt", width="small"),
+                            "E-Mail": st.column_config.TextColumn("E-Mail", width="medium"),
+                            "Telefon": st.column_config.TextColumn("Telefon", width="small"),
+                            "PLZ": st.column_config.TextColumn("PLZ", width="small"),
+                        }
+                    )
+                    
+                    # Aktionsleiste unter Tabelle
+                    st.markdown("### Aktionen")
+                    selected_id = st.number_input(
+                        "Kunden-ID auswählen für Aktion:",
+                        min_value=1,
+                        max_value=max([c['id'] for c in filtered_customers]),
+                        step=1,
+                        key="selected_customer_id_action"
+                    )
+                    
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        if st.button("👁️ Ansehen", key="view_selected_customer", use_container_width=True):
+                            st.session_state['selected_customer_id'] = selected_id
+                            st.session_state['crm_view_mode'] = 'view_customer'
+                            st.rerun()
+                    with col2:
+                        if st.button("✏️ Bearbeiten", key="edit_selected_customer", use_container_width=True):
+                            st.session_state['selected_customer_id'] = selected_id
+                            st.session_state['crm_view_mode'] = 'edit_customer'
+                            st.rerun()
+                    with col3:
+                        if st.button("🗑️ Löschen", key="delete_selected_customer", use_container_width=True):
+                            if delete_customer(conn, selected_id):
+                                st.success("Kunde gelöscht.")
                                 st.rerun()
                             else:
-                                st.error(
-                                    get_text_crm(
-                                        texts,
-                                        "crm_delete_customer_failed",
-                                        "Löschen fehlgeschlagen."))
-                        else:
-                            st.warning(
-                                get_text_crm(
-                                    texts,
-                                    "crm_confirm_delete_customer",
-                                    "Sicher? Klick nochmal zum Bestätigen."))
-                            st.session_state[confirm_delete_key] = True
+                                st.error("Löschen fehlgeschlagen.")
+            else:
+                st.info("Keine Kunden gefunden mit den aktuellen Filterkriterien.")
 
         else:
             st.info(

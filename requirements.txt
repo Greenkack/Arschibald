@@ -199,3 +199,24 @@ vtk>=9.3.0
 stpyvista>=0.1.4
 trimesh>=4.4.9
 pikepdf>=9.0.0
+
+# Excel Integration Dependencies
+# ===============================
+openpyxl>=3.1.5        # Excel read/write (.xlsx)
+xlrd>=2.0.2            # Excel read (.xls - legacy)
+chardet>=5.0.0         # Character encoding detection for CSV import
+pandas>=2.3.2          # Data manipulation and DataFrame support
+
+# Testing Dependencies
+# ====================
+pytest>=8.4.2          # Core testing framework
+pytest-asyncio>=1.2.0  # Async test support
+pytest-sugar>=1.1.1    # Enhanced test output with colors and progress bar
+pytest-cov>=7.0.0      # Code coverage reporting
+pytest-django>=4.11.1  # Django-specific test utilities
+pytest-anyio>=4.10.0   # AnyIO compatibility for async tests
+# Note: Die folgenden werden als Standard-Pakete installiert (keine pytest-Plugins):
+# - langsmith (für AI/Agent Testing)
+# - Faker (für Test-Datengenerierung)
+# - django-constance (für Django Settings Testing)
+# - dash (für Dashboard Testing)
