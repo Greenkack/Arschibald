@@ -256,11 +256,23 @@ Schriftart: Helvetica-Bold
 Schriftgröße: 9.989105224609375
 Farbe: 3487029
 ----------------------------------------
+Text: 
+Position: (62.26412582397461, 475.0, 120.0, 488.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 12.0
+Farbe: 866432
+----------------------------------------
 Text: Eigenverbrauchsquote
 Position: (158.70863342285156, 460.88677978515625, 228.42373657226562, 474.0608825683594)
 Schriftart: Helvetica-Bold
 Schriftgröße: 9.989105224609375
 Farbe: 3487029
+----------------------------------------
+Text: 
+Position: (158.70863342285156, 475.0, 220.0, 488.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 12.0
+Farbe: 866432
 ----------------------------------------
 Text: TECHNISCHE SPEZIFIKATIONEN 
 Position: (294.93820571899414, 513.9118347167969, 440.88389587402344, 532.3536376953125)

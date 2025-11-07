@@ -600,6 +600,8 @@ def render_data_input(texts: dict[str, str]) -> None:
             if full_address_input_val:
                 parsed_data = parse_full_address_string(
                     full_address_input_val, texts)
+                
+                # Update inputs dict
                 inputs['customer_data']['address'] = parsed_data.get(
                     "street", inputs['customer_data'].get('address', ''))
                 inputs['customer_data']['house_number'] = parsed_data.get(
@@ -608,6 +610,7 @@ def render_data_input(texts: dict[str, str]) -> None:
                     "zip_code", inputs['customer_data'].get('zip_code', ''))
                 inputs['customer_data']['city'] = parsed_data.get(
                     "city", inputs['customer_data'].get('city', ''))
+                
                 if parsed_data.get("zip_code") and parsed_data.get("city"):
                     st.success(
                         get_text_di(
@@ -621,7 +624,8 @@ def render_data_input(texts: dict[str, str]) -> None:
                             "parse_address_partial_success",
                             "Adresse teilweise geparst. Bitte fehlende Felder ergänzen."))
                 st.session_state.satellite_image_url_di = None
-                # st.rerun() # ENTFERNT - Streamlit macht das automatisch.
+                # ✅ FIX: Rerun erzwingen um geparste Werte in Feldern anzuzeigen
+                st.rerun()
             else:
                 st.warning(
                     get_text_di(
