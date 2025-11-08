@@ -39,5 +39,16 @@
   "test_calculations_heatpump.py::TestPerformance::test_dhw_performance": true,
   "test_calculations_heatpump.py::TestPerformance::test_climate_zone_performance": true,
   "test_excel_manager.py::TestCRUDOperationsComprehensive::test_row_operations_comprehensive": true,
-  "test_excel_manager.py::TestCRUDOperationsComprehensive::test_column_operations_comprehensive": true
+  "test_excel_manager.py::TestCRUDOperationsComprehensive::test_column_operations_comprehensive": true,
+  "test_formula_bar_cell_editing.py::TestActiveCellDisplay::test_error_cell_detection": true,
+  "test_formula_bar_cell_editing.py::TestFormulaInput::test_simple_formula_input": true,
+  "test_formula_bar_cell_editing.py::TestErrorDisplay::test_division_by_zero_error_display": true,
+  "test_formula_bar_cell_editing.py::TestErrorDisplay::test_error_help_text": true,
+  "test_formula_bar_cell_editing.py::TestCellEditing::test_edit_cell_formula": true,
+  "test_formula_bar_cell_editing.py::TestFormulaDetails::test_show_dependent_cells": true,
+  "test_formula_bar_cell_editing.py::TestErrorSummary::test_get_error_cells": true,
+  "test_formula_bar_cell_editing.py::TestErrorSummary::test_no_errors": true,
+  "test_formula_bar_cell_editing.py::TestIntegration::test_complete_workflow": true,
+  "test_formula_bar_cell_editing.py::TestIntegration::test_error_recovery": true,
+  "test_export_import_roundtrip.py": true
 }

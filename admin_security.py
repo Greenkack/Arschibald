@@ -91,16 +91,23 @@ def get_admin_protected_areas() -> dict[str, bool]:
     """
     default_areas = {
         'build_infos': True,  # Build Infos immer geschützt
-        'user_management': False,
-        'company_management': False,
-        'product_database': False,
-        'economic_settings': False,
-        'ui_customization': False,
-        'logo_management': False,
-        'intro_settings': False,
-        'payment_terms': False,
-        'services_management': False,
-        'pdf_settings': False,
+        'user_management': True,  # Benutzerverwaltung geschützt
+        'company_management': True,  # Firmenverwaltung geschützt
+        'product_management': True,  # Produktverwaltung geschützt
+        'product_database': True,  # Produktdatenbank geschützt
+        'pv_mounting': True,  # ✅ PV-Unterkonstruktionen GESCHÜTZT
+        'services_management': True,  # Dienstleistungen geschützt
+        'price_matrix': True,  # ✅ Preis Matrix GESCHÜTZT
+        'economic_settings': True,  # ✅ Allgemeine Einstellungen GESCHÜTZT
+        'tariff_management': True,  # ✅ Einspeisevergütungen GESCHÜTZT
+        'heatpump_settings': True,  # Wärmepumpen geschützt
+        'ui_customization': True,  # UI-Anpassungen geschützt
+        'logo_management': True,  # Logo-Verwaltung geschützt
+        'intro_settings': True,  # Intro-Einstellungen geschützt
+        'payment_terms': True,  # Zahlungsbedingungen geschützt
+        'visualization_settings': True,  # ✅ Anzeige & Designeinstellungen GESCHÜTZT
+        'pdf_settings': True,  # ✅ PDF Design & Vorlagen GESCHÜTZT
+        'advanced_settings': True,  # ✅ Erweiterte Einstellungen GESCHÜTZT
     }
     
     # Lade aus Session State oder Datenbank
@@ -132,6 +139,20 @@ def get_admin_protected_areas() -> dict[str, bool]:
     
     st.session_state.admin_protected_areas = default_areas
     return default_areas
+
+
+def is_area_protected(area_id: str) -> bool:
+    """
+    Prüft ob ein bestimmter Admin-Bereich passwortgeschützt ist
+    
+    Args:
+        area_id: ID des Bereichs (z.B. 'price_matrix', 'pv_mounting')
+    
+    Returns:
+        bool: True wenn Bereich geschützt ist, False sonst
+    """
+    protected_areas = get_admin_protected_areas()
+    return protected_areas.get(area_id, False)
 
 
 def save_admin_protected_areas(protected_areas: dict[str, bool]) -> bool:
@@ -250,14 +271,21 @@ def render_admin_security_settings():
         'build_infos': '📋 Build Infos & Dokumentation',
         'user_management': '👥 Benutzerverwaltung',
         'company_management': '🏢 Firmenverwaltung',
-        'product_database': '📦 Produktdatenbank',
+        'product_management': '📦 Produktverwaltung',
+        'product_database': '�️ Produktdatenbank CRUD',
+        'pv_mounting': '🔧 PV-Unterkonstruktionen',
+        'services_management': '🛠️ Dienstleistungsverwaltung',
+        'price_matrix': '📊 Preis Matrix',
         'economic_settings': '💰 Wirtschaftlichkeitseinstellungen',
+        'tariff_management': '💡 Einspeisung Tarifverwaltung',
+        'heatpump_settings': '🔥 Wärmepumpen-Einstellungen',
         'ui_customization': '🎨 UI-Anpassungen',
         'logo_management': '🖼️ Logo-Verwaltung',
-        'intro_settings': '📝 Intro-Einstellungen',
+        'intro_settings': '🎬 Intro-Einstellungen',
         'payment_terms': '💳 Zahlungsbedingungen',
-        'services_management': '🔧 Dienstleistungsverwaltung',
-        'pdf_settings': '📄 PDF-Einstellungen',
+        'visualization_settings': '� Anzeigeeinstellungen',
+        'pdf_settings': '� PDF-Design Einstellungen',
+        'advanced_settings': '🧠 Erweiterte Einstellungen',
     }
     
     st.write("### Geschützte Bereiche konfigurieren")

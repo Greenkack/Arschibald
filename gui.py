@@ -1651,10 +1651,12 @@ def main():
             
             # Button direkt - kein HTML
             if st.button(f"{item['icon']}  {item['label']}", key=f"nav_btn_{item['key']}", use_container_width=True, type=button_type):
-                st.session_state.active_page = item['key']
-                st.session_state.selected_page_key_sui = item['key']
-                st.session_state.nav_event = True
-                st.rerun()
+                # Nur Rerun wenn wirklich eine ANDERE Seite gewählt wurde
+                if st.session_state.active_page != item['key']:
+                    st.session_state.active_page = item['key']
+                    st.session_state.selected_page_key_sui = item['key']
+                    st.session_state.nav_event = True
+                    st.rerun()
         
         st.markdown("---")
         
@@ -1672,10 +1674,12 @@ def main():
             button_type = "primary" if is_active else "secondary"
             
             if st.button(f"{item['icon']}  {item['label']}", key=f"nav_btn_{item['key']}", use_container_width=True, type=button_type):
-                st.session_state.active_page = item['key']
-                st.session_state.selected_page_key_sui = item['key']
-                st.session_state.nav_event = True
-                st.rerun()
+                # Nur Rerun wenn wirklich eine ANDERE Seite gewählt wurde
+                if st.session_state.active_page != item['key']:
+                    st.session_state.active_page = item['key']
+                    st.session_state.selected_page_key_sui = item['key']
+                    st.session_state.nav_event = True
+                    st.rerun()
         
         st.markdown("---")
         
@@ -1693,10 +1697,12 @@ def main():
             button_type = "primary" if is_active else "secondary"
             
             if st.button(f"{item['icon']}  {item['label']}", key=f"nav_btn_{item['key']}", use_container_width=True, type=button_type):
-                st.session_state.active_page = item['key']
-                st.session_state.selected_page_key_sui = item['key']
-                st.session_state.nav_event = True
-                st.rerun()
+                # Nur Rerun wenn wirklich eine ANDERE Seite gewählt wurde
+                if st.session_state.active_page != item['key']:
+                    st.session_state.active_page = item['key']
+                    st.session_state.selected_page_key_sui = item['key']
+                    st.session_state.nav_event = True
+                    st.rerun()
         
         # Setze selected_page_key für Kompatibilität
         selected_page_key = st.session_state.active_page

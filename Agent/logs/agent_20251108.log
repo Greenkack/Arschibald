@@ -1,0 +1,19 @@
+2025-11-08 17:35:20 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 18:22:58 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 18:26:29 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 18:33:11 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 18:36:09 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 18:36:10 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:392 - Lazy loading knowledge base on first use
+2025-11-08 18:36:45 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:90 - Setting up knowledge base from knowledge_base
+2025-11-08 18:36:45 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:157 - Found 0 PDF files in knowledge_base
+2025-11-08 18:36:45 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:160 - No PDF files found in knowledge_base/
+2025-11-08 18:46:24 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 18:52:44 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 18:54:29 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 19:04:17 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 19:08:26 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 19:54:58 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 20:03:01 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 21:10:45 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 21:11:19 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-08 21:14:11 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True

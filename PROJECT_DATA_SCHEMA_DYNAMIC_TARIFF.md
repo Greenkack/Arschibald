@@ -1,4 +1,5 @@
 # project_data Schema Erweiterung: Dynamischer Stromtarif
+
 """
 Dokumentation der neuen project_data Felder für Dynamischer Stromtarif & Stromcloud
 
@@ -10,6 +11,7 @@ Author: GitHub Copilot
 ## Neue Felder für project_data dict:
 
 ### 1. Dynamischer Stromtarif
+
 ```python
 project_data = {
     # ... Existing fields (anlage_kwp, electricity_price_eur_per_kwh, etc.) ...
@@ -125,26 +127,31 @@ project_data = {
 ## Integration in bestehende Systeme:
 
 ### 1. heatpump_ui.py
+
 - Alle Werte werden in `st.session_state.building_data` gespeichert
 - Bei Berechnung werden Ergebnisse in `project_data` übertragen
 - Format: `project_data.update(st.session_state.building_data)`
 
 ### 2. pdf_generator.py (Todo 19)
+
 - Neue Funktion: `add_dynamic_tariff_section(pdf, project_data)`
 - Liest alle `dynamic_tariff_*`, `stromcloud_*`, `ems_*`, `smart_home_*` Felder
 - Rendert Tabellen, Charts (als PNG), Pros/Cons, Anbieter-Vergleich
 
 ### 3. calculations.py
+
 - `perform_calculations()` ruft optional neue Berechnungen auf
 - Bei `project_data.get("dynamic_tariff_enabled", False) == True`
 - Speichert Ergebnisse zurück in `project_data`
 
 ### 4. database.py
+
 - Bestehende `project_data` JSON-Spalte erweitert sich automatisch
 - Keine Schema-Migration nötig (PostgreSQL JSONB)
 - Neue Felder werden beim nächsten Save gespeichert
 
 ### 5. Abwärtskompatibilität
+
 - Alle neuen Felder sind **optional**
 - Default-Werte: `project_data.get("dynamic_tariff_enabled", False)`
 - Alte Projekte ohne diese Felder funktionieren weiterhin

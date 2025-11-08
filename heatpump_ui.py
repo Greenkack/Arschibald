@@ -3668,12 +3668,13 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 
                 # Generiere stündliche Daten für Chart
                 from heatpump_dynamic_tariff import calculate_hourly_electricity_costs
-                hourly_data = calculate_hourly_electricity_costs(
+                hourly_result = calculate_hourly_electricity_costs(
                     annual_consumption_kwh=comparison['consumption']['total_kwh'],  # Jahresverbrauch
                     base_price_eur_kwh=comparison['static_tariff']['price_eur_kwh']
                 )
                 
-                hourly_chart = create_hourly_price_chart(hourly_data)
+                # Extrahiere hourly_data Liste aus dem Ergebnis-Dictionary
+                hourly_chart = create_hourly_price_chart(hourly_result['hourly_data'])
                 st.plotly_chart(hourly_chart, use_container_width=True)
     
     

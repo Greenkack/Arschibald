@@ -11,7 +11,7 @@ import os
 import traceback
 from collections.abc import Callable
 from datetime import datetime
-from typing import Any
+from typing import Any, Tuple
 
 import streamlit as st
 
@@ -31,6 +31,16 @@ try:
 except ImportError:
     PV_MOUNTING_TAB_AVAILABLE = False
     render_pv_mounting_admin_tab = None  # type: ignore
+
+# Excel-Integration für Preismatrizen
+try:
+    from excel_grid_ui import render_price_matrix_tab
+    EXCEL_GRID_AVAILABLE = True
+except ImportError:
+    EXCEL_GRID_AVAILABLE = False
+    def render_price_matrix_tab():
+        st.warning("Excel-Integration ist nicht verfügbar. Bitte prüfen Sie die Installation der Excel-Module.")
+
 from ui_state_manager import (
     commit_widget_value,
     ensure_session_defaults,
@@ -2734,6 +2744,11 @@ def render_advanced_settings(
         get_text_local(
             "admin_advanced_header",
             "Erweiterte Einstellungen"))
+    
+    # Preisberechnungsmodus-Einstellungen
+    render_pricing_mode_settings(load_admin_setting_func, save_admin_setting_func)
+    st.markdown("---")
+    
     render_api_key_settings(load_admin_setting_func, save_admin_setting_func)
     st.markdown("---")
     st.subheader(
@@ -3328,6 +3343,180 @@ def manage_templates_local(
     st.markdown("---")
 
 
+def render_pricing_mode_settings(
+        load_admin_setting_func: Callable,
+        save_admin_setting_func: Callable):
+    """
+    Rendert die Preisberechnungsmodus-Einstellungen in 'Erweiterte Einstellungen'
+    
+    Ermöglicht Umschaltung zwischen:
+    - Standardberechnung (Einzelprodukte)
+    - Preismatrix (Schlüsselfertige Preise)
+    """
+    st.subheader("💰 Preisberechnungsmodus")
+    
+    # Lade aktuellen Modus
+    try:
+        from database import get_pricing_calculation_mode, set_pricing_calculation_mode
+        current_mode = get_pricing_calculation_mode()
+    except ImportError:
+        st.error("Preisberechnungsmodus-Funktionen nicht verfügbar. Bitte database.py prüfen.")
+        return
+    except Exception as e:
+        st.error(f"Fehler beim Laden des Preisberechnungsmodus: {e}")
+        return
+    
+    # Beschreibung
+    st.info(
+        "Wählen Sie die Methode zur Preisberechnung für PV-Anlagen. "
+        "Diese Einstellung beeinflusst, wie Preise im Solarcalculator berechnet werden."
+    )
+    
+    # Zeige aktuellen Modus prominent
+    if current_mode == "matrix":
+        st.success("🔵 **Aktuell aktiv:** Preismatrix (Schlüsselfertige Preise)")
+    else:
+        st.success("🟢 **Aktuell aktiv:** Standardberechnung (Einzelprodukte)")
+    
+    st.markdown("---")
+    
+    # Modus-Auswahl mit Radio-Buttons
+    st.markdown("### Berechnungsmethode wählen")
+    
+    # Erstelle zwei Spalten für bessere Darstellung
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### 📊 Standardberechnung")
+        st.caption(
+            "**Einzelprodukt-Kalkulation**\n\n"
+            "• Preise basieren auf einzelnen Produkten\n"
+            "• Automatische Aufschläge (Montage, Installation)\n"
+            "• Flexible Anpassung pro Komponente\n"
+            "• Ideal für individuelle Angebote"
+        )
+    
+    with col2:
+        st.markdown("#### 📈 Preismatrix")
+        st.caption(
+            "**Schlüsselfertige Paketpreise**\n\n"
+            "• Preise aus vordefinierter Matrix\n"
+            "• Basierend auf Modulanzahl × Speichermodell\n"
+            "• Keine automatischen Aufschläge\n"
+            "• Ideal für standardisierte Angebote"
+        )
+    
+    st.markdown("---")
+    
+    # Radio-Button-Auswahl
+    mode_options = {
+        "standard": "📊 Standardberechnung (Einzelprodukte)",
+        "matrix": "📈 Preismatrix (Schlüsselfertige Preise)"
+    }
+    
+    selected_mode = st.radio(
+        "Wählen Sie die Berechnungsmethode:",
+        options=list(mode_options.keys()),
+        format_func=lambda x: mode_options[x],
+        index=0 if current_mode == "standard" else 1,
+        key=f"pricing_mode_radio{WIDGET_KEY_SUFFIX}",
+        help="Diese Einstellung bestimmt, wie Preise im Solarcalculator berechnet werden."
+    )
+    
+    # Warnung bei Matrix-Modus
+    if selected_mode == "matrix":
+        st.warning(
+            "⚠️ **Wichtig bei Preismatrix-Modus:**\n\n"
+            "• Stellen Sie sicher, dass eine aktive Preismatrix konfiguriert ist\n"
+            "• Die Matrix muss Modulanzahlen in Spalte A enthalten\n"
+            "• Die Matrix muss Speichermodelle in Zeile 1 enthalten\n"
+            "• Eine 'Kein Speicher' Spalte wird empfohlen\n\n"
+            "Konfigurieren Sie die Preismatrix unter: **Admin → Preis Matrix**"
+        )
+        
+        # Validierung der Preismatrix
+        try:
+            from price_matrix_store import get_active_matrix_id, get_matrix_full
+            active_matrix_id = get_active_matrix_id()
+            
+            if active_matrix_id:
+                matrix_data = get_matrix_full(active_matrix_id)
+                if matrix_data:
+                    st.success(
+                        f"✓ Aktive Preismatrix gefunden: **{matrix_data['meta']['name']}** "
+                        f"({len(matrix_data['rows'])} Zeilen, {len(matrix_data['columns'])} Spalten)"
+                    )
+                else:
+                    st.error("✗ Aktive Preismatrix konnte nicht geladen werden")
+            else:
+                st.error(
+                    "✗ Keine aktive Preismatrix gefunden. "
+                    "Bitte konfigurieren Sie eine Preismatrix, bevor Sie diesen Modus aktivieren."
+                )
+        except ImportError:
+            st.warning("Preismatrix-Validierung nicht verfügbar (price_matrix_store nicht gefunden)")
+        except Exception as e:
+            st.warning(f"Preismatrix-Validierung fehlgeschlagen: {e}")
+    
+    # Speichern-Button
+    st.markdown("---")
+    
+    col1, col2, col3 = st.columns([2, 1, 2])
+    
+    with col2:
+        save_button = st.button(
+            "💾 Speichern",
+            key=f"save_pricing_mode_btn{WIDGET_KEY_SUFFIX}",
+            type="primary",
+            use_container_width=True,
+            disabled=(selected_mode == current_mode)
+        )
+    
+    if save_button:
+        if selected_mode == current_mode:
+            st.info("Keine Änderung - Modus ist bereits aktiv")
+        else:
+            # Speichere neuen Modus
+            try:
+                success = set_pricing_calculation_mode(selected_mode)
+                
+                if success:
+                    mode_name = "Preismatrix" if selected_mode == "matrix" else "Standardberechnung"
+                    st.success(
+                        f"✓ Preisberechnungsmodus erfolgreich auf **{mode_name}** umgestellt!\n\n"
+                        "Die Änderung ist sofort aktiv."
+                    )
+                    
+                    # Hinweis auf Auswirkungen
+                    if selected_mode == "matrix":
+                        st.info(
+                            "ℹ️ **Auswirkungen:**\n\n"
+                            "• Solarcalculator verwendet jetzt Preise aus der Preismatrix\n"
+                            "• Einzelprodukt-Preise werden ignoriert\n"
+                            "• Keine automatischen Aufschläge für Montage/Installation\n"
+                            "• Nur Sonderprodukte und Extras werden zum Matrixpreis addiert"
+                        )
+                    else:
+                        st.info(
+                            "ℹ️ **Auswirkungen:**\n\n"
+                            "• Solarcalculator verwendet wieder Einzelprodukt-Preise\n"
+                            "• Automatische Aufschläge sind aktiv\n"
+                            "• Flexible Preisanpassung pro Komponente möglich"
+                        )
+                    
+                    # Rerun um UI zu aktualisieren
+                    import time
+                    time.sleep(1)
+                    st.rerun()
+                else:
+                    st.error(
+                        "✗ Fehler beim Speichern des Preisberechnungsmodus. "
+                        "Bitte prüfen Sie die Logs."
+                    )
+            except Exception as e:
+                st.error(f"✗ Fehler beim Speichern: {e}")
+
+
 def render_api_key_settings(
         load_admin_setting_func: Callable,
         save_admin_setting_func: Callable):
@@ -3458,6 +3647,83 @@ def manage_tariff_list_ui(tariff_list_input: list[dict[str, Any]],
     return collected_tariffs_from_ui, all_entries_valid
 
 
+def create_protected_tab_renderer(area_id: str, area_label: str, render_function: Callable):
+    """
+    Generische Funktion zum Erstellen einer passwortgeschützten Tab-Render-Funktion.
+    
+    Args:
+        area_id: Eindeutige ID des Bereichs (z.B. 'price_matrix')
+        area_label: Anzeigename des Bereichs (z.B. 'Preis Matrix')
+        render_function: Die eigentliche Render-Funktion, die nach erfolgreicher Authentifizierung aufgerufen wird
+    """
+    def protected_renderer():
+        try:
+            # Prüfe ob Passwortschutz für diesen Bereich aktiv ist
+            from admin_security import is_area_protected
+            
+            if not is_area_protected(area_id):
+                # Bereich ist nicht geschützt - direkt rendern
+                render_function()
+                return
+            
+            # Bereich ist geschützt - Authentifizierung erforderlich
+            session_key = f"admin_auth_{area_id}"
+            
+            if session_key not in st.session_state:
+                st.session_state[session_key] = False
+            
+            if not st.session_state[session_key]:
+                st.warning(f"🔒 {area_label} ist nur für Administratoren zugänglich.")
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    username = st.text_input("Admin-Benutzername", key=f"{area_id}_username")
+                
+                with col2:
+                    password = st.text_input("Admin-Passwort", type="password", key=f"{area_id}_password")
+                
+                col_btn1, col_btn2 = st.columns([1, 4])
+                with col_btn1:
+                    if st.button("🔓 Entsperren", key=f"unlock_{area_id}", type="primary"):
+                        if not username or not password:
+                            st.error("❌ Bitte Benutzername und Passwort eingeben!")
+                        else:
+                            from admin_security import verify_admin_password
+                            if verify_admin_password(username, password):
+                                st.session_state[session_key] = True
+                                st.session_state[f"{session_key}_user"] = username
+                                st.success(f"✅ Willkommen, {username}!")
+                                st.rerun()
+                            else:
+                                st.error("❌ Ungültige Anmeldedaten!")
+                
+                with col_btn2:
+                    st.info("💡 Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
+                
+                return
+            
+            # Authentifiziert - zeige Inhalt
+            render_function()
+            
+            # Sperre-Button
+            if st.button(f"🔒 {area_label} wieder sperren", key=f"lock_{area_id}"):
+                st.session_state[session_key] = False
+                if f"{session_key}_user" in st.session_state:
+                    del st.session_state[f"{session_key}_user"]
+                st.rerun()
+                
+        except ImportError as e:
+            st.error(f"Security-Modul konnte nicht geladen werden: {e}")
+            st.info("Zeige Bereich ohne Passwortschutz an.")
+            render_function()
+        except Exception as e:
+            st.error(f"Fehler beim Rendern von {area_label}: {e}")
+            st.text(traceback.format_exc())
+    
+    return protected_renderer
+
+
 def render_admin_panel(
     texts: dict[str, str] | tuple,
     get_db_connection_func: Callable[[], Any | None],
@@ -3559,55 +3825,123 @@ def render_admin_panel(
         return
 
     tab_functions_map = {
-        "admin_tab_company_management_new": lambda: render_company_crud_tab(
-            db_list_companies_func,
-            db_add_company_func,
-            db_get_company_by_id_func,
-            db_update_company_func,
-            db_delete_company_func,
-            db_set_default_company_func,
-            load_admin_setting_func,
-            save_admin_setting_func,
-            db_add_company_document_func,
-            db_list_company_documents_func,
-            db_delete_company_document_func),
-        "admin_tab_user_management": lambda: render_user_management_tab(),
-        "admin_tab_product_management": lambda: render_product_management(
-            list_products_func,
-            add_product_func,
-            update_product_func,
-            delete_product_func,
-            get_product_by_id_func,
-            list_product_categories_func,
-            get_product_by_model_name_func),
-        "admin_tab_logo_management": lambda: render_logo_management_tab(),
-        "admin_tab_product_database_crud": lambda: render_product_admin_ui(),
-        "admin_tab_pv_mounting": lambda: render_pv_mounting_admin_tab() if PV_MOUNTING_TAB_AVAILABLE else st.warning("PV-Montage-Modul nicht verfügbar"),  # NEU
-        "admin_tab_services_management": lambda: render_services_management_tab(),
-        "admin_tab_price_matrix": lambda: render_price_matrix_tab(),  # NEU: Excel-Integration
-        "admin_tab_general_settings": lambda: render_general_settings_extended(
-            load_admin_setting_func,
-            save_admin_setting_func),
-        "admin_tab_intro_settings": lambda: render_intro_settings_tab(),
-        "admin_tab_tariff_management": lambda: render_tariff_management(
-            load_admin_setting_func,
-            save_admin_setting_func),
-        "admin_tab_heatpump_settings": lambda: render_heatpump_settings_tab(),  # NEU: Wärmepumpen-Einstellungen
-        "admin_tab_pdf_design": lambda: render_pdf_design_settings(
-            load_admin_setting_func,
-            save_admin_setting_func),
-        "admin_tab_payment_terms": lambda: render_comprehensive_admin_payment_terms_ui_with_variants(
-            load_admin_setting_func,
-            save_admin_setting_func,
-            WIDGET_KEY_SUFFIX),
-        "admin_tab_visualization_settings": lambda: render_visualization_settings(
-            load_admin_setting_func,
-            save_admin_setting_func),
-        "admin_tab_build_infos": lambda: render_build_infos_tab(),  # NEU
-        "admin_tab_security_settings": lambda: render_security_settings_tab(),  # NEU
-        "admin_tab_advanced": lambda: render_advanced_settings(
-            load_admin_setting_func,
-            save_admin_setting_func),
+        "admin_tab_company_management_new": create_protected_tab_renderer(
+            "company_management",
+            "Firmenverwaltung",
+            lambda: render_company_crud_tab(
+                db_list_companies_func,
+                db_add_company_func,
+                db_get_company_by_id_func,
+                db_update_company_func,
+                db_delete_company_func,
+                db_set_default_company_func,
+                load_admin_setting_func,
+                save_admin_setting_func,
+                db_add_company_document_func,
+                db_list_company_documents_func,
+                db_delete_company_document_func)
+        ),
+        "admin_tab_user_management": create_protected_tab_renderer(
+            "user_management",
+            "Benutzerverwaltung",
+            lambda: render_user_management_tab()
+        ),
+        "admin_tab_product_management": create_protected_tab_renderer(
+            "product_management",
+            "Produktverwaltung",
+            lambda: render_product_management(
+                list_products_func,
+                add_product_func,
+                update_product_func,
+                delete_product_func,
+                get_product_by_id_func,
+                list_product_categories_func,
+                get_product_by_model_name_func)
+        ),
+        "admin_tab_logo_management": create_protected_tab_renderer(
+            "logo_management",
+            "Logo-Verwaltung",
+            lambda: render_logo_management_tab()
+        ),
+        "admin_tab_product_database_crud": create_protected_tab_renderer(
+            "product_database",
+            "Produktdatenbank CRUD",
+            lambda: render_product_admin_ui()
+        ),
+        "admin_tab_pv_mounting": create_protected_tab_renderer(
+            "pv_mounting",
+            "PV-Unterkonstruktionen",
+            lambda: render_pv_mounting_admin_tab() if PV_MOUNTING_TAB_AVAILABLE else st.warning("PV-Montage-Modul nicht verfügbar")
+        ),
+        "admin_tab_services_management": create_protected_tab_renderer(
+            "services_management",
+            "Dienstleistungsverwaltung",
+            lambda: render_services_management_tab()
+        ),
+        "admin_tab_price_matrix": create_protected_tab_renderer(
+            "price_matrix",
+            "Preis Matrix",
+            lambda: render_price_matrix_tab()
+        ),
+        "admin_tab_general_settings": create_protected_tab_renderer(
+            "economic_settings",
+            "Allgemeine Einstellungen",
+            lambda: render_general_settings_extended(
+                load_admin_setting_func,
+                save_admin_setting_func)
+        ),
+        "admin_tab_intro_settings": create_protected_tab_renderer(
+            "intro_settings",
+            "Intro-Einstellungen",
+            lambda: render_intro_settings_tab()
+        ),
+        "admin_tab_tariff_management": create_protected_tab_renderer(
+            "tariff_management",
+            "Einspeisung Tarifverwaltung",
+            lambda: render_tariff_management(
+                load_admin_setting_func,
+                save_admin_setting_func)
+        ),
+        "admin_tab_heatpump_settings": create_protected_tab_renderer(
+            "heatpump_settings",
+            "Wärmepumpen-Einstellungen",
+            lambda: render_heatpump_settings_tab()
+        ),
+        "admin_tab_pdf_design": create_protected_tab_renderer(
+            "pdf_settings",
+            "PDF-Design Einstellungen",
+            lambda: render_pdf_design_settings(
+                load_admin_setting_func,
+                save_admin_setting_func)
+        ),
+        "admin_tab_payment_terms": create_protected_tab_renderer(
+            "payment_terms",
+            "Zahlungsbedingungen",
+            lambda: render_comprehensive_admin_payment_terms_ui_with_variants(
+                load_admin_setting_func,
+                save_admin_setting_func,
+                WIDGET_KEY_SUFFIX)
+        ),
+        "admin_tab_visualization_settings": create_protected_tab_renderer(
+            "visualization_settings",
+            "Anzeigeeinstellungen",
+            lambda: render_visualization_settings(
+                load_admin_setting_func,
+                save_admin_setting_func)
+        ),
+        "admin_tab_build_infos": create_protected_tab_renderer(
+            "build_infos",
+            "Build Infos & Dokumentation",
+            lambda: render_build_infos_tab()
+        ),
+        "admin_tab_security_settings": lambda: render_security_settings_tab(),  # Security Settings selbst nicht schützen
+        "admin_tab_advanced": create_protected_tab_renderer(
+            "advanced_settings",
+            "Erweiterte Einstellungen",
+            lambda: render_advanced_settings(
+                load_admin_setting_func,
+                save_admin_setting_func)
+        ),
     }
     tab_labels_map = {
         key: admin_tab_labels_definition[idx]
@@ -4088,42 +4422,3 @@ def render_heatpump_settings_tab():
         st.text(traceback.format_exc())
 
 
-
-def render_price_matrix_tab():
-    """
-    Rendert den Preis Matrix Tab im Admin-Panel.
-    
-    Diese Funktion lädt die Excel-Grid-UI-Komponente für die Verwaltung
-    von Preismatrizen. Falls das Modul noch nicht verfügbar ist, wird
-    eine Platzhalter-Nachricht angezeigt.
-    
-    Requirements: 1.1, 1.2, 1.3, 1.4
-    """
-    try:
-        # Versuche die Excel-Grid-UI zu laden
-        from excel_grid_ui import render_excel_grid_ui
-        render_excel_grid_ui()
-    except ImportError:
-        # Fallback: Zeige Platzhalter-UI wenn Modul noch nicht existiert
-        st.subheader("📊 Preis Matrix Verwaltung")
-        st.info(
-            "Die Excel-Grid-Oberfläche wird in einer späteren Phase implementiert. "
-            "Hier können Sie zukünftig Excel-ähnliche Preismatrizen erstellen und verwalten."
-        )
-        
-        # Zeige Vorschau der geplanten Features
-        st.markdown("### Geplante Features:")
-        st.markdown("""
-        - ✅ Excel-ähnliche Grid-Oberfläche
-        - ✅ Formel-Unterstützung (SUM, AVERAGE, VLOOKUP, etc.)
-        - ✅ Import/Export (CSV, XLS, XLSX)
-        - ✅ Dynamische Tabellengröße
-        - ✅ Undo/Redo Funktionalität
-        - ✅ Integration mit Produktpreisen
-        """)
-        
-        st.markdown("---")
-        st.caption("Modul: excel_grid_ui.py (wird in Task 8 implementiert)")
-    except Exception as e:
-        st.error(f"Fehler beim Laden der Preis Matrix UI: {e}")
-        st.text(traceback.format_exc())

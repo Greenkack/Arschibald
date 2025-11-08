@@ -25,6 +25,7 @@ from excel.excel_utils import (
     update_formula_references
 )
 from excel.excel_formula_engine import FormulaEngine
+from excel.excel_batch_operations import BatchOperationManager
 
 
 class ExcelManager:
@@ -39,25 +40,40 @@ class ExcelManager:
     - Integration mit der Datenbank
     """
     
-    def __init__(self, matrix: Optional[ExcelMatrix] = None):
+    def __init__(
+        self,
+        matrix: Optional[ExcelMatrix] = None,
+        enable_cache: bool = True
+    ):
         """
         Initialisiert den ExcelManager
         
         Args:
             matrix: Optionale ExcelMatrix, erstellt neue wenn None
+            enable_cache: Ob Formel-Caching aktiviert werden soll
         """
         if matrix is None:
             matrix = ExcelMatrix()
         
         self.matrix = matrix
-        self.formula_engine = FormulaEngine()
+        self.formula_engine = FormulaEngine(enable_cache=enable_cache)
         self.undo_stack: List[ExcelMatrix] = []
         self.redo_stack: List[ExcelMatrix] = []
         self.dependency_graph: Dict[Tuple[int, int], List[Tuple[int, int]]] = {}
         self.max_undo_steps = 50
         
+        # Batch-Operations-Manager
+        self.batch_manager = BatchOperationManager(self)
+        
+        # Änderungs-Tracking für Auto-Save
+        self.has_unsaved_changes = False
+        self.last_save_time: Optional[datetime] = None
+        
         # Baue initialen Dependency Graph
         self._build_dependency_graph()
+        
+        # Baue Dependency-Cache für schnelle Abfragen
+        self.formula_engine.build_dependency_cache(self.matrix.cells)
     
     def get_cell(self, row: int, col: int) -> Cell:
         """
@@ -137,11 +153,15 @@ class ExcelManager:
             # Normaler Wert (keine Formel)
             self.matrix.set_cell_value(row, col, value, raw_input)
         
+        # Invalidiere Cache für betroffene Zellen
+        self.formula_engine.invalidate_cache([(row, col)])
+        
         # Trigger Neuberechnung abhängiger Zellen
         self._recalculate_affected_cells(row, col)
         
-        # Update timestamp
+        # Update timestamp und markiere als geändert
         self.matrix.updated_at = datetime.now()
+        self.has_unsaved_changes = True
     
     def clear_cell(self, row: int, col: int, save_undo: bool = True):
         """
@@ -161,10 +181,14 @@ class ExcelManager:
         if (row, col) in self.dependency_graph:
             del self.dependency_graph[(row, col)]
         
+        # Invalidiere Cache für betroffene Zellen
+        self.formula_engine.invalidate_cache([(row, col)])
+        
         # Trigger Neuberechnung abhängiger Zellen
         self._recalculate_affected_cells(row, col)
         
         self.matrix.updated_at = datetime.now()
+        self.has_unsaved_changes = True
     
     def add_row(self, position: Optional[int] = None, save_undo: bool = True):
         """
@@ -200,6 +224,7 @@ class ExcelManager:
         self.matrix.rows += 1
         self._rebuild_dependency_graph()
         self.matrix.updated_at = datetime.now()
+        self.has_unsaved_changes = True
     
     def add_column(self, position: Optional[int] = None, save_undo: bool = True):
         """
@@ -235,6 +260,7 @@ class ExcelManager:
         self.matrix.columns += 1
         self._rebuild_dependency_graph()
         self.matrix.updated_at = datetime.now()
+        self.has_unsaved_changes = True
     
     def delete_row(self, row: int, save_undo: bool = True):
         """
@@ -272,6 +298,7 @@ class ExcelManager:
         self.matrix.rows -= 1
         self._rebuild_dependency_graph()
         self.matrix.updated_at = datetime.now()
+        self.has_unsaved_changes = True
     
     def delete_column(self, col: int, save_undo: bool = True):
         """
@@ -309,6 +336,7 @@ class ExcelManager:
         self.matrix.columns -= 1
         self._rebuild_dependency_graph()
         self.matrix.updated_at = datetime.now()
+        self.has_unsaved_changes = True
     
     def undo(self) -> bool:
         """
@@ -385,6 +413,10 @@ class ExcelManager:
     def _rebuild_dependency_graph(self):
         """Baut den Abhängigkeitsgraphen neu"""
         self._build_dependency_graph()
+        # Baue auch Dependency-Cache neu
+        self.formula_engine.build_dependency_cache(self.matrix.cells)
+        # Invalidiere Formel-Cache da sich Abhängigkeiten geändert haben
+        self.formula_engine.clear_cache()
     
     def _update_dependencies_for_cell(self, row: int, col: int, formula: str):
         """
@@ -714,6 +746,77 @@ class ExcelManager:
                 cell.value = None
                 context[(cell.row, cell.col)] = None
     
+    def save_to_database(self) -> bool:
+        """
+        Speichert die Matrix in die Datenbank
+        
+        Returns:
+            True wenn erfolgreich, False bei Fehler
+        """
+        try:
+            from price_matrix_store import get_matrix_full, set_cell_value as db_set_cell_value
+            
+            matrix_id = self.matrix.id
+            
+            if matrix_id is None:
+                raise ValueError("Matrix hat keine ID. Kann nicht gespeichert werden.")
+            
+            # Lade Matrix-Struktur aus Datenbank
+            matrix_data = get_matrix_full(matrix_id)
+            if not matrix_data:
+                raise ValueError(f"Matrix mit ID {matrix_id} nicht in Datenbank gefunden")
+            
+            # Erstelle Mapping von Position zu DB-IDs
+            row_id_map = {r['position']: r['id'] for r in matrix_data['rows']}
+            col_id_map = {c['position']: c['id'] for c in matrix_data['columns']}
+            
+            # Speichere alle Zellen
+            for (row, col), cell in self.matrix.cells.items():
+                if row in row_id_map and col in col_id_map:
+                    row_id = row_id_map[row]
+                    col_id = col_id_map[col]
+                    
+                    # Speichere in Datenbank (Task 3.2: mit data_type)
+                    db_set_cell_value(
+                        matrix_id,
+                        row_id,
+                        col_id,
+                        cell.value,
+                        raw_input=cell.formula or cell.raw_input,
+                        data_type=cell.data_type
+                    )
+            
+            # Markiere als gespeichert
+            self.has_unsaved_changes = False
+            self.last_save_time = datetime.now()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Fehler beim Speichern: {str(e)}")
+            return False
+    
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """
+        Gibt Cache-Statistiken zurück
+        
+        Returns:
+            Dictionary mit Cache-Statistiken
+        """
+        return self.formula_engine.get_cache_stats()
+    
+    def clear_cache(self):
+        """Leert den Formel-Cache"""
+        self.formula_engine.clear_cache()
+    
+    def enable_cache(self):
+        """Aktiviert das Formel-Caching"""
+        self.formula_engine.enable_cache()
+    
+    def disable_cache(self):
+        """Deaktiviert das Formel-Caching"""
+        self.formula_engine.disable_cache()
+    
     @staticmethod
     def load_from_database(matrix_id: int) -> 'ExcelManager':
         """
@@ -774,6 +877,10 @@ class ExcelManager:
             
             # Berechne alle Formeln
             manager.recalculate_all_formulas()
+            
+            # Markiere als gespeichert
+            manager.has_unsaved_changes = False
+            manager.last_save_time = datetime.now()
             
             return manager
             

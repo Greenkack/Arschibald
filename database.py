@@ -251,6 +251,7 @@ def delete_customer_document(document_id: int) -> bool:
 
 INITIAL_ADMIN_SETTINGS: dict[str, Any] = {
     "price_matrix_csv_data": None,
+    "pricing_calculation_mode": "standard",  # "standard" | "matrix"
     "feed_in_tariffs": {
         "parts": [
             {"kwp_min": 0.0, "kwp_max": 10.0, "ct_per_kwh": 8.1},
@@ -493,6 +494,44 @@ def load_admin_setting(key: str, default: Any = None) -> Any:
         return default
     finally:
         conn.close()
+
+
+# --- Preisberechnungsmodus-Verwaltung ---
+
+def get_pricing_calculation_mode() -> str:
+    """
+    Gibt den aktuellen Preisberechnungsmodus zurück.
+    
+    Returns:
+        "standard" für Einzelprodukt-Kalkulation
+        "matrix" für Preismatrix-basierte Kalkulation
+    """
+    mode = load_admin_setting('pricing_calculation_mode', 'standard')
+    # Validierung: Nur erlaubte Werte
+    if mode not in ['standard', 'matrix']:
+        print(f"DB Warnung: Ungültiger pricing_calculation_mode '{mode}', verwende 'standard'")
+        return 'standard'
+    return mode
+
+
+def set_pricing_calculation_mode(mode: str) -> bool:
+    """
+    Setzt den Preisberechnungsmodus.
+    
+    Args:
+        mode: "standard" oder "matrix"
+    
+    Returns:
+        True bei Erfolg, False bei Fehler oder ungültigem Modus
+    """
+    if mode not in ['standard', 'matrix']:
+        print(f"DB Fehler: Ungültiger pricing_calculation_mode '{mode}'. Erlaubt: 'standard', 'matrix'")
+        return False
+    
+    success = save_admin_setting('pricing_calculation_mode', mode)
+    if success:
+        print(f"DB: Preisberechnungsmodus auf '{mode}' gesetzt")
+    return success
 
 
 def get_brand_logo(brand_name: str) -> str | None:
@@ -2489,3 +2528,230 @@ def get_customer_by_id(customer_id: int) -> dict[str, Any] | None:
     except Exception as e:
         print(f"Fehler beim Abrufen des Kunden mit ID {customer_id}: {e}")
         return None
+
+
+# ============================================================================
+# CRM ENHANCEMENT - Task 1.1: Neue Tabellen für erweiterte CRM-Funktionen
+# ============================================================================
+
+def create_crm_enhancement_tables(conn: sqlite3.Connection) -> None:
+    """Erstellt alle neuen Tabellen für CRM-Erweiterungen (Task 1.1).
+    
+    Erstellt folgende Tabellen:
+    - project_calculations: Berechnungsversionierung
+    - crm_tasks: Aufgabenverwaltung
+    - crm_activities: Notizen und Kommunikationshistorie
+    - crm_reminders: Automatische Erinnerungen
+    
+    Erweitert außerdem die projects Tabelle um Angebots-Felder.
+    
+    Args:
+        conn: SQLite Datenbankverbindung
+    """
+    cursor = conn.cursor()
+    
+    try:
+        # 1. Tabelle: project_calculations (Berechnungsversionierung)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS project_calculations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                project_id INTEGER NOT NULL,
+                version INTEGER DEFAULT 1,
+                calculation_data TEXT NOT NULL,
+                dynamic_keys TEXT NOT NULL,
+                is_main_offer BOOLEAN DEFAULT 0,
+                archived BOOLEAN DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+            )
+        """)
+        print("DB: Tabelle 'project_calculations' erstellt/überprüft.")
+        
+        # 2. Tabelle: crm_tasks (Aufgabenverwaltung)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS crm_tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                description TEXT,
+                status TEXT DEFAULT 'open',
+                priority TEXT DEFAULT 'medium',
+                due_date DATE,
+                customer_id INTEGER,
+                project_id INTEGER,
+                lead_id INTEGER,
+                assigned_to TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                completed_at TIMESTAMP,
+                FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
+                FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+                FOREIGN KEY (lead_id) REFERENCES crm_leads(id) ON DELETE CASCADE
+            )
+        """)
+        print("DB: Tabelle 'crm_tasks' erstellt/überprüft.")
+        
+        # 3. Tabelle: crm_activities (Notizen und Historie)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS crm_activities (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                customer_id INTEGER NOT NULL,
+                activity_type TEXT NOT NULL,
+                title TEXT NOT NULL,
+                content TEXT,
+                created_by TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_important BOOLEAN DEFAULT 0,
+                archived BOOLEAN DEFAULT 0,
+                FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+            )
+        """)
+        print("DB: Tabelle 'crm_activities' erstellt/überprüft.")
+        
+        # 4. Tabelle: crm_reminders (Automatische Erinnerungen)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS crm_reminders (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                reminder_type TEXT NOT NULL,
+                related_id INTEGER,
+                related_type TEXT,
+                due_date TIMESTAMP NOT NULL,
+                status TEXT DEFAULT 'pending',
+                message TEXT,
+                repeat_count INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        print("DB: Tabelle 'crm_reminders' erstellt/überprüft.")
+        
+        # 5. Erweitere projects Tabelle um Angebots-Felder
+        projects_new_columns = {
+            'offer_status': 'TEXT DEFAULT "draft"',
+            'offer_sent_date': 'DATE',
+            'offer_version': 'INTEGER DEFAULT 1',
+            'offer_value': 'REAL',
+            'offer_accepted_date': 'DATE',
+            'rejection_reason': 'TEXT'
+        }
+        
+        # Prüfe welche Spalten bereits existieren
+        cursor.execute("PRAGMA table_info(projects);")
+        existing_columns = {row[1] for row in cursor.fetchall()}
+        
+        for col_name, col_definition in projects_new_columns.items():
+            if col_name not in existing_columns:
+                try:
+                    cursor.execute(f"ALTER TABLE projects ADD COLUMN {col_name} {col_definition}")
+                    conn.commit()
+                    print(f"DB: Spalte '{col_name}' zur Tabelle 'projects' hinzugefügt.")
+                except sqlite3.OperationalError as e:
+                    if "duplicate column name" in str(e).lower():
+                        print(f"DB: Spalte '{col_name}' existiert bereits in 'projects'.")
+                    else:
+                        print(f"DB WARNUNG: Konnte Spalte '{col_name}' nicht hinzufügen: {e}")
+        
+        # 6. Erstelle Indizes für Performance
+        indices = [
+            ("idx_project_calculations_project_id", "project_calculations", "project_id"),
+            ("idx_project_calculations_version", "project_calculations", "version"),
+            ("idx_crm_tasks_customer_id", "crm_tasks", "customer_id"),
+            ("idx_crm_tasks_project_id", "crm_tasks", "project_id"),
+            ("idx_crm_tasks_status", "crm_tasks", "status"),
+            ("idx_crm_tasks_due_date", "crm_tasks", "due_date"),
+            ("idx_crm_activities_customer_id", "crm_activities", "customer_id"),
+            ("idx_crm_activities_type", "crm_activities", "activity_type"),
+            ("idx_crm_activities_created_at", "crm_activities", "created_at"),
+            ("idx_crm_reminders_due_date", "crm_reminders", "due_date"),
+            ("idx_crm_reminders_status", "crm_reminders", "status"),
+            ("idx_projects_offer_status", "projects", "offer_status"),
+        ]
+        
+        for index_name, table_name, column_name in indices:
+            try:
+                cursor.execute(f"CREATE INDEX IF NOT EXISTS {index_name} ON {table_name}({column_name})")
+                print(f"DB: Index '{index_name}' erstellt/überprüft.")
+            except sqlite3.OperationalError as e:
+                print(f"DB WARNUNG: Index '{index_name}' konnte nicht erstellt werden: {e}")
+        
+        conn.commit()
+        print("DB: CRM-Erweiterungstabellen erfolgreich erstellt/aktualisiert.")
+        
+    except Exception as e:
+        print(f"DB FEHLER beim Erstellen der CRM-Erweiterungstabellen: {e}")
+        traceback.print_exc()
+        conn.rollback()
+        raise
+
+
+def backup_database_before_migration() -> str | None:
+    """Erstellt ein Backup der Datenbank vor Migrations-Operationen.
+    
+    Returns:
+        Pfad zum Backup-File oder None bei Fehler
+    """
+    try:
+        if not os.path.exists(DB_PATH):
+            print("DB: Keine Datenbank zum Backup vorhanden.")
+            return None
+        
+        backup_dir = os.path.join(DATA_DIR, 'backups')
+        os.makedirs(backup_dir, exist_ok=True)
+        
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        backup_filename = f"migration_backup_{timestamp}.db"
+        backup_path = os.path.join(backup_dir, backup_filename)
+        
+        # Kopiere Datenbank
+        import shutil
+        shutil.copy2(DB_PATH, backup_path)
+        
+        print(f"DB: Migrations-Backup erstellt: {backup_path}")
+        return backup_path
+        
+    except Exception as e:
+        print(f"DB FEHLER beim Erstellen des Migrations-Backups: {e}")
+        return None
+
+
+def migrate_crm_enhancements() -> bool:
+    """Führt die CRM-Erweiterungs-Migration durch (Task 1.1).
+    
+    Erstellt ein Backup und führt dann die Tabellenerstellung aus.
+    
+    Returns:
+        True bei Erfolg, False bei Fehler
+    """
+    try:
+        # 1. Backup erstellen
+        backup_path = backup_database_before_migration()
+        if backup_path:
+            print(f"DB: Backup erstellt vor Migration: {backup_path}")
+        
+        # 2. Verbindung herstellen
+        conn = get_db_connection()
+        if not conn:
+            print("DB FEHLER: Keine Datenbankverbindung für Migration.")
+            return False
+        
+        try:
+            # 3. CRM-Erweiterungstabellen erstellen
+            create_crm_enhancement_tables(conn)
+            
+            # 4. Schema-Version aktualisieren
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE admin_settings 
+                SET value = '15' 
+                WHERE key = 'schema_version'
+            """)
+            cursor.execute("PRAGMA user_version = 15;")
+            conn.commit()
+            
+            print("DB: CRM-Erweiterungs-Migration erfolgreich abgeschlossen.")
+            return True
+            
+        finally:
+            conn.close()
+            
+    except Exception as e:
+        print(f"DB FEHLER bei CRM-Erweiterungs-Migration: {e}")
+        traceback.print_exc()
+        return False

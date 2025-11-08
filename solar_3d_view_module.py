@@ -372,24 +372,28 @@ def _render_3d_view_impl():
             roof_type
         )
         
+        # ✅ FIX: render_advanced_controls braucht building_length und building_width
+        building_length = basis_settings.get("building_length", 10.0)
+        building_width = basis_settings.get("building_width", 8.0)
         advanced_settings = safe_render_component(
             render_advanced_controls,
             "Erweiterte Kontrolle",
-            project_data
+            building_length,
+            building_width
         )
         
         if ANALYSIS_AVAILABLE:
+            # ✅ FIX: render_analysis_panel braucht keine Parameter
             analysis_settings = safe_render_component(
                 render_analysis_panel,
-                "Analyse",
-                project_data
+                "Analyse"
             )
         
         if EXPORT_AVAILABLE:
+            # ✅ FIX: render_export_options braucht keine Parameter
             export_settings = safe_render_component(
                 render_export_options,
-                "Export-Optionen",
-                project_data
+                "Export-Optionen"
             )
     else:
         st.sidebar.error("❌ UI-Komponenten nicht verfügbar")
