@@ -37,16 +37,32 @@ class FormulaEngine:
     - Zellreferenzen (A1, B2, etc.)
     - Bereiche (A1:A10)
     - Verschachtelte Formeln
+    - Caching für Performance-Optimierung
 
     Attributes:
         functions: Dictionary mit verfügbaren Excel-Funktionen
         dependency_graph: Graph der Zellabhängigkeiten
+        formula_cache: Cache für berechnete Formelergebnisse
+        dependency_cache: Cache für Zellabhängigkeiten
+        cache_enabled: Flag ob Caching aktiviert ist
     """
 
-    def __init__(self):
-        """Initialisiert die Formel-Engine"""
+    def __init__(self, enable_cache: bool = True):
+        """
+        Initialisiert die Formel-Engine
+
+        Args:
+            enable_cache: Ob Caching aktiviert werden soll (Standard: True)
+        """
         self.functions = self._load_excel_functions()
         self.dependency_graph: Dict[Tuple[int, int], Set[Tuple[int, int]]] = {}
+
+        # Caching-System
+        self.cache_enabled = enable_cache
+        self.formula_cache: Dict[str, Any] = {}
+        self.dependency_cache: Dict[Tuple[int, int], Set[Tuple[int, int]]] = {}
+        self._cache_hits = 0
+        self._cache_misses = 0
 
     def _load_excel_functions(self) -> Dict[str, callable]:
         """
@@ -140,7 +156,7 @@ class FormulaEngine:
         context: Dict[Tuple[int, int], Any]
     ) -> Any:
         """
-        Führt eine Excel-Formel aus
+        Führt eine Excel-Formel aus (mit Caching)
 
         Args:
             formula: Die auszuführende Formel (mit oder ohne '=')
@@ -152,25 +168,35 @@ class FormulaEngine:
         Raises:
             FormulaError: Bei Fehlern in der Formel oder Berechnung
         """
+        # Prüfe Cache wenn aktiviert
+        if self.cache_enabled:
+            cache_key = self._build_cache_key(formula, context)
+            if cache_key in self.formula_cache:
+                self._cache_hits += 1
+                return self.formula_cache[cache_key]
+            self._cache_misses += 1
+
         try:
             # Parse die Formel
             parsed = self.parse_formula(formula)
 
             # Entferne führendes '=' falls vorhanden
             if formula.startswith('='):
-                formula = formula[1:].strip()
+                formula_clean = formula[1:].strip()
+            else:
+                formula_clean = formula
 
             # Ersetze Zellreferenzen durch Werte
             formula_with_values = self._replace_cell_references(
-                formula,
+                formula_clean,
                 context
             )
 
             # Führe die Formel aus basierend auf dem Typ
             if parsed['type'] == 'function':
-                return self._execute_function(formula_with_values, context)
+                result = self._execute_function(formula_with_values, context)
             elif parsed['type'] == 'arithmetic':
-                return self._execute_arithmetic(formula_with_values)
+                result = self._execute_arithmetic(formula_with_values)
             elif parsed['type'] == 'reference':
                 # Einfache Referenz - gib den Wert zurück
                 cell_ref = parsed['cell_refs'][0]
@@ -180,10 +206,19 @@ class FormulaEngine:
                         f"Zelle {cell_ref} nicht gefunden",
                         display="#REF!"
                     )
-                return context[(row, col)]
+                result = context[(row, col)]
             elif parsed['type'] == 'value':
                 # Konstanter Wert
-                return self._parse_value(formula)
+                result = self._parse_value(formula_clean)
+            else:
+                result = None
+
+            # Speichere im Cache wenn aktiviert
+            if self.cache_enabled:
+                cache_key = self._build_cache_key(formula, context)
+                self.formula_cache[cache_key] = result
+
+            return result
 
         except FormulaError:
             raise
@@ -781,3 +816,195 @@ class FormulaEngine:
             )
 
         return affected
+
+    # Cache-Management-Methoden
+
+    def _build_cache_key(
+        self,
+        formula: str,
+        context: Dict[Tuple[int, int], Any]
+    ) -> str:
+        """
+        Erstellt einen Cache-Key aus Formel und relevanten Zellwerten
+
+        Der Cache-Key besteht aus der Formel und den Werten aller
+        referenzierten Zellen. So wird sichergestellt dass der Cache
+        nur verwendet wird wenn sich keine Abhängigkeiten geändert haben.
+
+        Args:
+            formula: Die Formel
+            context: Dictionary mit Zellwerten
+
+        Returns:
+            Cache-Key als String
+        """
+        # Extrahiere Zellreferenzen aus der Formel
+        cell_refs = extract_cell_references(formula)
+
+        # Sammle Werte aller referenzierten Zellen
+        ref_values = []
+        for ref in cell_refs:
+            if ':' in ref:
+                # Bereich
+                try:
+                    cells = parse_range(ref)
+                    for cell in cells:
+                        value = context.get(cell, None)
+                        ref_values.append(f"{cell}:{value}")
+                except ValueError:
+                    pass
+            else:
+                # Einzelne Zelle
+                try:
+                    row, col = a1_to_cell(ref)
+                    value = context.get((row, col), None)
+                    ref_values.append(f"{ref}:{value}")
+                except ValueError:
+                    pass
+
+        # Erstelle Cache-Key
+        # Format: "formula|ref1:val1|ref2:val2|..."
+        cache_key = formula + "|" + "|".join(sorted(ref_values))
+        return cache_key
+
+    def invalidate_cache(
+        self,
+        changed_cells: Optional[List[Tuple[int, int]]] = None
+    ):
+        """
+        Invalidiert den Cache für betroffene Zellen
+
+        Wenn changed_cells angegeben ist, werden nur Cache-Einträge
+        invalidiert die von diesen Zellen abhängen. Sonst wird der
+        gesamte Cache geleert.
+
+        Args:
+            changed_cells: Liste von geänderten Zellen (optional)
+        """
+        if changed_cells is None:
+            # Leere gesamten Cache
+            self.formula_cache.clear()
+            return
+
+        # Finde alle betroffenen Zellen
+        affected = set()
+        for cell in changed_cells:
+            affected.update(
+                self._get_all_affected_cells(cell, set())
+            )
+            affected.add(cell)
+
+        # Entferne Cache-Einträge die betroffene Zellen referenzieren
+        keys_to_remove = []
+        for cache_key in self.formula_cache.keys():
+            # Extrahiere Formel aus Cache-Key (vor dem ersten |)
+            formula = cache_key.split('|')[0]
+
+            # Prüfe ob Formel betroffene Zellen referenziert
+            cell_refs = extract_cell_references(formula)
+            for ref in cell_refs:
+                if ':' in ref:
+                    # Bereich
+                    try:
+                        cells = parse_range(ref)
+                        if any(cell in affected for cell in cells):
+                            keys_to_remove.append(cache_key)
+                            break
+                    except ValueError:
+                        pass
+                else:
+                    # Einzelne Zelle
+                    try:
+                        row, col = a1_to_cell(ref)
+                        if (row, col) in affected:
+                            keys_to_remove.append(cache_key)
+                            break
+                    except ValueError:
+                        pass
+
+        # Entferne gefundene Keys
+        for key in keys_to_remove:
+            del self.formula_cache[key]
+
+    def clear_cache(self):
+        """Leert den gesamten Cache"""
+        self.formula_cache.clear()
+        self.dependency_cache.clear()
+        self._cache_hits = 0
+        self._cache_misses = 0
+
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """
+        Gibt Cache-Statistiken zurück
+
+        Returns:
+            Dictionary mit Cache-Statistiken
+        """
+        total_requests = self._cache_hits + self._cache_misses
+        hit_rate = (
+            self._cache_hits / total_requests * 100
+            if total_requests > 0
+            else 0
+        )
+
+        return {
+            'enabled': self.cache_enabled,
+            'size': len(self.formula_cache),
+            'hits': self._cache_hits,
+            'misses': self._cache_misses,
+            'hit_rate': hit_rate,
+            'dependency_cache_size': len(self.dependency_cache)
+        }
+
+    def enable_cache(self):
+        """Aktiviert das Caching"""
+        self.cache_enabled = True
+
+    def disable_cache(self):
+        """Deaktiviert das Caching"""
+        self.cache_enabled = False
+        self.clear_cache()
+
+    def build_dependency_cache(
+        self,
+        cells: Dict[Tuple[int, int], Cell]
+    ):
+        """
+        Erstellt einen Dependency-Cache für schnelle Abhängigkeitsabfragen
+
+        Der Dependency-Cache speichert für jede Zelle die Liste aller
+        Zellen die von ihr abhängen (umgekehrter Dependency-Graph).
+
+        Args:
+            cells: Dictionary mit allen Zellen
+        """
+        self.dependency_cache.clear()
+
+        # Baue Dependency-Graph falls noch nicht vorhanden
+        if not self.dependency_graph:
+            self.build_dependency_graph(cells)
+
+        # Erstelle umgekehrten Graph (welche Zellen hängen von mir ab?)
+        for cell_pos, dependencies in self.dependency_graph.items():
+            for dep_cell in dependencies:
+                if dep_cell not in self.dependency_cache:
+                    self.dependency_cache[dep_cell] = set()
+                self.dependency_cache[dep_cell].add(cell_pos)
+
+    def get_dependents_from_cache(
+        self,
+        cell: Tuple[int, int]
+    ) -> Set[Tuple[int, int]]:
+        """
+        Gibt abhängige Zellen aus dem Cache zurück
+
+        Dies ist schneller als get_dependent_cells() da keine
+        Iteration über den gesamten Dependency-Graph nötig ist.
+
+        Args:
+            cell: Zelle für die Abhängigkeiten gesucht werden
+
+        Returns:
+            Set von abhängigen Zellen
+        """
+        return self.dependency_cache.get(cell, set())

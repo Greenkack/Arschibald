@@ -10,20 +10,12 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 - [x] 1. Datenmodelle und Basis-Klassen erstellen
 
-
-
-
-
   - Cell, ExcelMatrix Dataclasses implementieren
   - Basis-Struktur für ExcelManager erstellen
   - Hilfsfunktionen für Zellreferenzen (A1-Notation)
   - _Requirements: 1.1, 2.1, 2.2_
 
 - [x] 2. Formula Engine Grundgerüst
-
-
-
-
 
   - FormulaEngine Klasse mit Parser-Grundstruktur
   - Regex-basiertes Parsing für einfache Formeln
@@ -32,11 +24,6 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - _Requirements: 5.1, 5.2, 5.3, 10.1, 10.2_
 
 - [x] 3. Erweiterte Formel-Funktionen implementieren
-
-
-
-
-
 
   - Alle mathematischen Funktionen (SUM, AVERAGE, MIN, MAX, ROUND, etc.)
   - Logische Funktionen (IF, AND, OR, IFERROR)
@@ -59,15 +46,6 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 - [x] 4. ExcelManager Kern-Funktionalität
 
-
-
-
-
-
-
-
-
-
   - Matrix laden und initialisieren
   - get_cell_value und set_cell_value implementieren
   - Formel-Parsing und -Ausführung integrieren
@@ -76,10 +54,6 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - _Requirements: 5.5, 11.4_
 
 - [x] 5. CRUD-Operationen für Zeilen und Spalten
-
-
-
-
 
   - add_row mit Position-Parameter
   - add_column mit Position-Parameter
@@ -90,23 +64,13 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 - [x] 6. Undo/Redo Funktionalität
 
-
-
-
-
   - Undo-Stack implementieren
   - Redo-Stack implementieren
   - State-Snapshots für Operationen
   - Integration in alle Änderungs-Operationen
   - _Requirements: 12.3_
 
-
-
 - [x] 6.1 Unit Tests für ExcelManager
-
-
-
-
 
   - Tests für CRUD-Operationen
   - Tests für Undo/Redo
@@ -120,18 +84,12 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 - [x] 7. Admin Panel Integration
 
-
-
-
-
   - Neuen Tab "Preis Matrix" in ADMIN_TAB_KEYS_DEFINITION_GLOBAL hinzufügen
   - Tab-Rendering in admin_panel.py integrieren
   - Navigation und State-Management
   - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [-] 8. Excel Grid UI Basis-Komponente
-
-
+- [x] 8. Excel Grid UI Basis-Komponente
 
   - Neue Datei `excel_grid_ui.py` erstellen
   - Matrix-Auswahl Dropdown
@@ -140,7 +98,8 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - Zeilen- und Spalten-Header (A, B, C... / 1, 2, 3...)
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 9. Formelleiste und Zell-Bearbeitung
+- [x] 9. Formelleiste und Zell-Bearbeitung
+
   - Formelleiste über dem Grid
   - Aktive Zelle anzeigen
   - Formel-Eingabe und -Anzeige
@@ -148,7 +107,8 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - Fehleranzeige in Zellen
   - _Requirements: 2.3, 5.1, 10.1, 10.2, 10.3, 10.4, 10.5, 12.4_
 
-- [ ] 10. Erweiterte Grid-Features
+- [x] 10. Erweiterte Grid-Features
+
   - Zeilen/Spalten hinzufügen/löschen Buttons
   - Tastaturnavigation (Pfeiltasten, Tab, Enter)
   - Copy-Paste Funktionalität
@@ -160,7 +120,8 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 ## Phase 4: Persistenz und CRUD
 
-- [ ] 11. Matrix-Verwaltung UI
+- [x] 11. Matrix-Verwaltung UI
+
   - Dialog für neue Matrix erstellen
   - Matrix-Liste anzeigen
   - Matrix laden
@@ -169,14 +130,16 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - Matrix klonen
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-- [ ] 12. Speichern und Laden
+- [x] 12. Speichern und Laden
+
   - Speichern-Funktion mit price_matrix_store Integration
   - Laden-Funktion mit Formel-Wiederherstellung
   - Auto-Save Funktionalität (optional)
   - Änderungs-Tracking
   - _Requirements: 4.2, 4.3_
 
-- [ ] 12.1 Integration Tests für Persistenz
+- [x] 12.1 Integration Tests für Persistenz
+
   - Test: Matrix erstellen → Speichern → Laden
   - Test: Formeln bleiben erhalten
   - Test: Große Matrizen (1000+ Zeilen)
@@ -186,7 +149,8 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 ## Phase 5: Import/Export
 
-- [ ] 13. CSV Import
+- [x] 13. CSV Import
+
   - Datei-Upload Widget
   - CSV-Parser mit Encoding-Erkennung
   - Delimiter-Erkennung (;, ,, \t)
@@ -194,7 +158,8 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - Fehlerbehandlung bei ungültigen Dateien
   - _Requirements: 8.1, 8.4, 8.6_
 
-- [ ] 14. Excel Import (XLS/XLSX)
+- [x] 14. Excel Import (XLS/XLSX)
+
   - Excel-Datei-Upload
   - openpyxl Integration
   - Formel-Erkennung und -Übernahme
@@ -202,14 +167,17 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
   - Fehlerbehandlung
   - _Requirements: 8.2, 8.3, 8.4, 8.5, 8.6_
 
-- [ ] 15. Export-Funktionalität
+- [x] 15. Export-Funktionalität
+
   - Export als CSV
   - Export als Excel (XLSX) mit Formeln
   - Download-Dialog
   - Dateiname-Generierung
   - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
-- [ ] 15.1 Import/Export Tests
+- [x] 15.1 Import/Export Tests
+
+
   - Test: CSV Import → Export → Re-Import
   - Test: Excel Import mit Formeln
   - Test: Große Dateien (10 MB)
@@ -220,25 +188,29 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 ## Phase 6: Performance-Optimierung
 
-- [ ] 16. Caching implementieren
+- [x] 16. Caching implementieren
+
   - Formel-Cache in FormulaEngine
   - Cache-Invalidierung bei Änderungen
   - Dependency-Cache für schnelle Neuberechnung
   - _Requirements: 11.2, 11.4_
 
-- [ ] 17. Lazy Loading für große Datensätze
+- [x] 17. Lazy Loading für große Datensätze
+
   - Virtuelles Scrolling im Grid
   - Nur sichtbare Zellen laden
   - Batch-Loading bei Scroll
   - _Requirements: 11.1, 11.3_
 
-- [ ] 18. Batch-Operationen
+- [x] 18. Batch-Operationen
+
   - Batch-Update für mehrere Zellen
   - Transaktionale DB-Operationen
   - Performance-Optimierung für große Updates
   - _Requirements: 11.2_
 
-- [ ] 18.1 Performance Tests
+- [x] 18.1 Performance Tests
+
   - Test: 1000 Zeilen × 50 Spalten
   - Test: 100 Formeln mit Abhängigkeiten
   - Test: Neuberechnung unter 2 Sekunden
@@ -248,21 +220,24 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 ## Phase 7: Produktpreis-Integration
 
-- [ ] 19. Produktpreis-Berechnung aus Matrix
+- [x] 19. Produktpreis-Berechnung aus Matrix
+
   - calculate_product_price_from_matrix Funktion
   - Integration mit lookup_price aus price_matrix_store
   - Unterstützung für Pauschal- und Additiv-Modus
   - Zubehör-Preise einbeziehen (optional)
   - _Requirements: 7.1, 7.2, 7.3_
 
-- [ ] 20. UI für Produktpreis-Konfiguration
+- [x] 20. UI für Produktpreis-Konfiguration
+
   - Radio-Button: Einzelpreis vs. Matrix-Preis
   - Matrix-Auswahl für Produkte
   - Vorschau der berechneten Preise
   - Integration in Produktverwaltung
   - _Requirements: 7.4, 7.5_
 
-- [ ] 20.1 Integration Tests für Produktpreise
+- [x] 20.1 Integration Tests für Produktpreise
+
   - Test: Preis aus Matrix berechnen
   - Test: Pauschal-Modus
   - Test: Additiv-Modus mit Zubehör
@@ -273,14 +248,19 @@ Dieser Implementierungsplan beschreibt die schrittweise Umsetzung der Excel-Inte
 
 ## Phase 8: Finalisierung und Dokumentation
 
-- [ ] 21. Fehlerbehandlung und Validierung
+- [x] 21. Fehlerbehandlung und Validierung
+
   - Alle Fehlertypen implementieren (#ERROR!, #REF!, #DIV/0!, etc.)
   - Tooltip-Hilfe für Fehler
   - Input-Validierung für alle Felder
   - Zirkelbezug-Erkennung
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [ ] 22. Benutzerfreundlichkeit
+- [x] 22. Benutzerfreundlichkeit
+
+
+
+
   - Tastatur-Shortcuts dokumentieren
   - Hilfe-Tooltips für alle Funktionen
   - Beispiel-Matrizen erstellen

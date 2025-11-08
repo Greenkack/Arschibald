@@ -105,6 +105,7 @@ def _ensure_tables(conn: sqlite3.Connection) -> None:
             column_id INTEGER NOT NULL,
             value REAL,
             raw_input TEXT, -- Falls künftig Formeln oder Strings gespeichert werden
+            data_type TEXT DEFAULT 'text', -- Datentyp: 'text', 'number', 'formula', 'date' (Task 3.2)
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE(matrix_id, row_id, column_id),
             FOREIGN KEY(matrix_id) REFERENCES price_matrix_sets(id) ON DELETE CASCADE,
@@ -132,13 +133,20 @@ def _ensure_tables(conn: sqlite3.Connection) -> None:
             cur.execute(cmd)
         except Exception:
             pass
-    # price_matrix_cells: raw_input
+    # price_matrix_cells: raw_input and data_type
     cur.execute("PRAGMA table_info(price_matrix_cells)")
     cell_cols = {r[1] for r in cur.fetchall()}
     if 'raw_input' not in cell_cols:
         try:
             cur.execute(
                 "ALTER TABLE price_matrix_cells ADD COLUMN raw_input TEXT")
+        except Exception:
+            pass
+    # Task 3.2: Add data_type column for text/number distinction
+    if 'data_type' not in cell_cols:
+        try:
+            cur.execute(
+                "ALTER TABLE price_matrix_cells ADD COLUMN data_type TEXT DEFAULT 'text'")
         except Exception:
             pass
     conn.commit()
@@ -466,7 +474,22 @@ def set_cell_value(
         row_id: int,
         column_id: int,
         value: float | None,
-        raw_input: str | None = None) -> bool:
+        raw_input: str | None = None,
+        data_type: str = 'text') -> bool:
+    """
+    Setzt den Wert einer Zelle in der Preismatrix
+    
+    Args:
+        matrix_id: ID der Matrix
+        row_id: ID der Zeile
+        column_id: ID der Spalte
+        value: Numerischer Wert (für Zahlen) oder None (für Text/Formeln)
+        raw_input: Ursprüngliche Eingabe als String
+        data_type: Datentyp ('text', 'number', 'formula', 'date') - Task 3.2
+        
+    Returns:
+        True bei Erfolg, False bei Fehler
+    """
     try:
         conn = get_db_connection()
         if not conn:
@@ -495,18 +518,20 @@ def set_cell_value(
         existing = cur.fetchone()
         if existing:
             cur.execute(
-                "UPDATE price_matrix_cells SET value=?, raw_input=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
+                "UPDATE price_matrix_cells SET value=?, raw_input=?, data_type=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
                 (value,
                  raw_input,
+                 data_type,
                  existing[0]))
         else:
             cur.execute(
-                "INSERT INTO price_matrix_cells (matrix_id, row_id, column_id, value, raw_input) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO price_matrix_cells (matrix_id, row_id, column_id, value, raw_input, data_type) VALUES (?, ?, ?, ?, ?, ?)",
                 (matrix_id,
                  row_id,
                  column_id,
                  value,
-                 raw_input))
+                 raw_input,
+                 data_type))
         conn.commit()
         conn.close()
         return True
@@ -556,13 +581,17 @@ def get_matrix_full(matrix_id: int) -> dict[str, Any] | None:
         cols = [{"id": c[0], "position": c[1], "label": c[2]}
                 for c in cur.fetchall()]
         cur.execute(
-            "SELECT row_id, column_id, value, raw_input FROM price_matrix_cells WHERE matrix_id=?",
+            "SELECT row_id, column_id, value, raw_input, data_type FROM price_matrix_cells WHERE matrix_id=?",
             (matrix_id,
              ))
         cells_raw = cur.fetchall()
         cells_map: dict[tuple[int, int], float] = {}
-        for rr, cc, val, raw_input in cells_raw:
-            cells_map[(rr, cc)] = {"value": val, "raw_input": raw_input}
+        for rr, cc, val, raw_input, data_type in cells_raw:
+            cells_map[(rr, cc)] = {
+                "value": val, 
+                "raw_input": raw_input,
+                "data_type": data_type or 'text'  # Default to 'text' if None (Task 3.2)
+            }
         # Wide DataFrame aufbauen
         if rows and cols:
             data = []

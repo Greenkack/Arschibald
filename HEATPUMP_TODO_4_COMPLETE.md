@@ -15,9 +15,10 @@
 #### Linting (Pylance/Pylint)
 
 **calculations_heatpump.py**:
+
 - **Score**: 8.76/10
 - **Fehler**: 0 kritische Fehler
-- **Warnungen**: 
+- **Warnungen**:
   - Duplikate entfernt (5 Funktionen waren doppelt definiert)
   - Trailing Whitespace bereinigt
   - Unused variables entfernt
@@ -27,9 +28,10 @@
   - Imports geprüft und validiert
 
 **heatpump_ui.py**:
+
 - **Import-Status**: ✅ Erfolgreich
 - **Module**: Alle erforderlichen Module verfügbar
-- **Abhängigkeiten**: 
+- **Abhängigkeiten**:
   - calculations_heatpump ✅
   - plotly ✅
   - numpy ✅
@@ -40,6 +42,7 @@
 **Status**: ✅ Vollständig
 
 Alle Funktionen haben vollständige Type Hints:
+
 ```python
 def calculate_building_heat_load(
     building_type: str,
@@ -56,6 +59,7 @@ def calculate_building_heat_load(
 **Status**: ✅ Vollständig
 
 Alle Funktionen haben strukturierte Docstrings:
+
 - Args-Beschreibungen
 - Returns-Beschreibungen
 - Quellen-Referenzen (Excel, PDF)
@@ -72,6 +76,7 @@ Alle Funktionen haben strukturierte Docstrings:
 **Gefundene Error-Handler**: 30+ try/except Blöcke
 
 Beispiele:
+
 ```python
 # calculations_heatpump.py Import
 try:
@@ -100,6 +105,7 @@ except Exception as e:
 ```
 
 **Kategorien**:
+
 - ✅ Import-Fehler (Module nicht verfügbar)
 - ✅ Berechnungsfehler (Division by Zero, etc.)
 - ✅ Validierungsfehler (ungültige Eingaben)
@@ -133,6 +139,7 @@ if radiator_data is None:
 ```
 
 **Validierungs-Level**: ✅ Robust
+
 - Pflichtfelder geprüft
 - Fallback-Werte definiert
 - Fehler werden abgefangen
@@ -162,6 +169,7 @@ if radiator_data is None:
 | 11 | compare_heating_systems_20_years | 0.05 | ✅ OK |
 
 **Zusammenfassung**:
+
 - **Gesamt-Zeit**: 0.15ms (< 1ms!)
 - **Durchschnitt**: 0.01ms
 - **Schnellste**: 0.00ms (calculate_building_heat_load)
@@ -187,11 +195,13 @@ if radiator_data is None:
 #### Technologie-Stack
 
 **Framework**: Streamlit 1.x
+
 - ✅ Browser-agnostisch (serverseitiges Rendering)
 - ✅ Responsive Layout (automatisch)
 - ✅ Cross-Browser-Kompatibilität (Streamlit-garantiert)
 
 **Visualisierungen**: Plotly
+
 - ✅ WebGL-basiert (alle modernen Browser)
 - ✅ SVG-Fallback verfügbar
 - ✅ Touch-Support (mobile)
@@ -199,12 +209,14 @@ if radiator_data is None:
 #### Unterstützte Browser
 
 **Desktop**:
+
 - ✅ Chrome 90+ (empfohlen)
 - ✅ Firefox 88+
 - ✅ Edge 90+
 - ✅ Safari 14+
 
 **Mobile**:
+
 - ✅ Chrome Mobile
 - ✅ Safari iOS
 - ✅ Firefox Mobile
@@ -212,11 +224,13 @@ if radiator_data is None:
 #### Bekannte Einschränkungen
 
 **3D-Animation**:
+
 - Erfordert WebGL
 - Fallback: Statisches Bild bei WebGL-Fehler
 - Performance: Best auf Desktop
 
 **PDF-Export**:
+
 - Server-seitig (ReportLab)
 - Keine Browser-Abhängigkeit
 - Download funktioniert in allen Browsern

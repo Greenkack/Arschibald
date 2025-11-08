@@ -169,7 +169,7 @@ def check_api_keys_ui() -> dict[str, bool]:
         st.markdown(f"- ❌ **{key}**")
 
     # Show setup instructions
-    with st.expander("📝 Setup Instructions", expanded=True):
+    with st.expander("📝 Setup Instructions", expanded=False):
         st.code(get_setup_instructions(), language="text")
 
     return keys_status
@@ -328,7 +328,7 @@ def format_agent_output(
 
             # Truncate very long outputs for performance
             if len(output) > 5000:
-                with st.expander("View full output", expanded=True):
+                with st.expander("View full output", expanded=false):
                     st.markdown(output[:5000] + "\n\n... (truncated)")
                     st.download_button(
                         "Download full output",
@@ -454,33 +454,33 @@ def render_agent_menu():
 
     keys_status = check_api_keys_ui()
 
-    # Check if OpenAI key is available (required)
+    # Check if OpenAI key is available (optional warning, but don't block)
     if not keys_status.get('OPENAI_API_KEY', False):
         st.warning(
-            "⚠️ Cannot proceed without OPENAI_API_KEY. "
-            "Please configure it and restart the application."
+            "⚠️ OPENAI_API_KEY nicht konfiguriert. "
+            "Agent-Funktionalität ist eingeschränkt, aber Du kannst alle Bereiche erkunden."
         )
-        with st.expander("🔧 How to Configure API Keys", expanded=True):
+        with st.expander("🔧 Wie API Keys konfigurieren (optional)", expanded=False):
             st.markdown("""
             ### Quick Setup
 
-            1. **Create or edit `.env` file** in the project root directory
-            2. **Add your OpenAI API key**:
+            1. **Erstelle/Bearbeite `.env` Datei** im Projektverzeichnis
+            2. **Füge deinen OpenAI API Key hinzu**:
                ```
                OPENAI_API_KEY=sk-your-key-here
                ```
-            3. **Get your API key** from [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-            4. **Restart the application**
+            3. **Hole deinen API Key** von [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+            4. **Starte die Anwendung neu**
 
-            ### Optional Keys (for additional features)
+            ### Optionale Keys (für zusätzliche Features)
 
-            - **TAVILY_API_KEY**: Web search capability
-            - **TWILIO_***: Telephony features
-            - **ELEVEN_LABS_API_KEY**: Voice synthesis
+            - **TAVILY_API_KEY**: Web-Suche
+            - **TWILIO_***: Telefonie-Features
+            - **ELEVEN_LABS_API_KEY**: Voice Synthesis
 
-            See `AGENT_INSTALLATION_GUIDE.md` for detailed instructions.
+            Siehe `AGENT_INSTALLATION_GUIDE.md` für Details.
             """)
-        st.stop()
+        # Don't stop - let the owner explore all areas!
 
     st.markdown("---")
 
@@ -558,7 +558,8 @@ def render_agent_menu():
                         "Bitte das passende Wheel in den Ordner 'BOKUK_BUILD/wheelhouse' legen "
                         "und offline installieren, damit die Agent-Funktionalität aktiv wird."
                     )
-                st.stop()
+                # Don't stop - let the owner explore all areas!
+                st.session_state.agent_core = None  # Mark as not initialized
 
     st.markdown("---")
 
@@ -591,7 +592,7 @@ def render_agent_menu():
 
     # Help dialog (Task 13.2)
     if st.session_state.get('show_help_dialog', False):
-        with st.expander("📖 Complete Help Guide", expanded=True):
+        with st.expander("📖 Complete Help Guide", expanded=false):
             st.markdown("""
             ## How to Use the KAI Agent
 
@@ -887,6 +888,390 @@ def render_agent_menu():
         💡 **Check the reasoning**: Watch the agent's thinking process to understand its approach
         """)
 
+    # ====================================================================
+    # TELEPHONY MEGA EXTENSION - ALL NEW FEATURES
+    # ====================================================================
+    
+    with st.expander("📞 Telephony System - Bria Softphone & Advanced Features", expanded=False):
+        st.markdown("### Telephony Management Console")
+        st.markdown("Vollständiges Telefonsystem mit 36 Tools für professionelle Anrufverwaltung")
+        
+        # Tabs für verschiedene Bereiche
+        phone_tab1, phone_tab2, phone_tab3, phone_tab4, phone_tab5 = st.tabs([
+            "📞 Bria Softphone",
+            "📇 Kontakte",
+            "📊 Analytics",
+            "📚 Knowledge Base",
+            "🎯 Erweiterte Features"
+        ])
+        
+        # TAB 1: Bria Softphone
+        with phone_tab1:
+            with st.expander("🔌 SIP Verbindung", expanded=False):
+                st.markdown("**Bria Softphone Verbindung konfigurieren**")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    sip_server = st.text_input("SIP Server", placeholder="sip.example.com", key="sip_server")
+                    sip_user = st.text_input("Benutzername", placeholder="user123", key="sip_user")
+                with col2:
+                    sip_pass = st.text_input("Passwort", type="password", key="sip_pass")
+                    
+                if st.button("Verbinden", key="bria_connect"):
+                    if sip_server and sip_user and sip_pass:
+                        st.code(f"bria_connect('{sip_server}', '{sip_user}', '***')")
+                        st.info("Führe diesen Befehl im Agent-Chat aus")
+                    else:
+                        st.warning("Bitte alle Felder ausfüllen")
+                
+                if st.button("Trennen", key="bria_disconnect"):
+                    st.code("bria_disconnect()")
+            
+            with st.expander("📞 Ausgehende Anrufe", expanded=False):
+                st.markdown("**Anruf starten**")
+                
+                col1, col2 = st.columns([2, 1])
+                with col1:
+                    out_phone = st.text_input("Telefonnummer", placeholder="+49301234567", key="out_phone")
+                    out_goal = st.text_input("Anrufziel", placeholder="Beratungstermin vereinbaren", key="out_goal")
+                with col2:
+                    st.markdown("**Schnellwahl**")
+                    fav_contact = st.selectbox("Favorit", ["", "Max Mustermann", "Firma ABC", "VIP Kunde"], key="fav")
+                    if st.button("Anrufen", key="quick_dial"):
+                        if fav_contact:
+                            st.code(f"quick_dial_favorite('{fav_contact}')")
+                
+                if st.button("Anruf starten", key="make_call"):
+                    if out_phone:
+                        st.code(f"bria_make_call('{out_phone}', '{out_goal}')")
+                    else:
+                        st.warning("Bitte Telefonnummer eingeben")
+            
+            with st.expander("📲 Anrufsteuerung", expanded=False):
+                st.markdown("**Aktiven Anruf verwalten**")
+                
+                call_id_control = st.text_input("Call ID", placeholder="CALL-12345678", key="call_id_control")
+                
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    if st.button("⏸️ Halten", key="hold_call"):
+                        st.code(f"bria_hold_call('{call_id_control}')")
+                with col2:
+                    if st.button("▶️ Fortsetzen", key="resume_call"):
+                        st.code(f"bria_resume_call('{call_id_control}')")
+                with col3:
+                    if st.button("➡️ Weiterleiten", key="transfer_btn"):
+                        target = st.text_input("Ziel", key="transfer_target")
+                        if target:
+                            st.code(f"bria_transfer_call('{call_id_control}', '{target}')")
+                with col4:
+                    if st.button("❌ Auflegen", key="hangup_call"):
+                        st.code(f"bria_hangup('{call_id_control}')")
+        
+        # TAB 2: Kontakte
+        with phone_tab2:
+            with st.expander("➕ Kontakt hinzufügen", expanded=False):
+                st.markdown("**Neuen Kontakt anlegen**")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    contact_name = st.text_input("Name", placeholder="Max Mustermann", key="contact_name")
+                    contact_phone = st.text_input("Telefon", placeholder="+49301234567", key="contact_phone")
+                    contact_email = st.text_input("E-Mail", placeholder="max@example.com", key="contact_email")
+                with col2:
+                    contact_company = st.text_input("Firma", placeholder="Musterfirma GmbH", key="contact_company")
+                    contact_tags = st.text_input("Tags", placeholder="lead,vip,interessiert", key="contact_tags")
+                    contact_notes = st.text_area("Notizen", placeholder="Weitere Informationen...", key="contact_notes", height=100)
+                
+                if st.button("Kontakt speichern", key="save_contact"):
+                    if contact_name and contact_phone:
+                        st.code(f"""add_phone_contact(
+    name='{contact_name}',
+    phone_number='{contact_phone}',
+    email='{contact_email}',
+    company='{contact_company}',
+    tags='{contact_tags}',
+    notes='{contact_notes}'
+)""")
+                    else:
+                        st.warning("Name und Telefonnummer sind Pflichtfelder")
+            
+            with st.expander("🔍 Kontakte suchen", expanded=False):
+                st.markdown("**Kontaktdatenbank durchsuchen**")
+                
+                search_query = st.text_input("Suche nach Name, Nummer oder Firma", key="contact_search")
+                if st.button("Suchen", key="search_contacts"):
+                    if search_query:
+                        st.code(f"search_phone_contacts('{search_query}')")
+                    else:
+                        st.warning("Bitte Suchbegriff eingeben")
+            
+            with st.expander("📁 Bulk Import (CSV/XLSX)", expanded=False):
+                st.markdown("**Mehrere Kontakte auf einmal importieren**")
+                st.markdown("""
+                **Erforderliche Spalten:**
+                - `name` - Kontaktname (Pflicht)
+                - `phone_number` - Telefonnummer (Pflicht)
+                - `email` - E-Mail Adresse (optional)
+                - `company` - Firmenname (optional)
+                - `tags` - Tags kommagetrennt (optional)
+                - `notes` - Notizen (optional)
+                """)
+                
+                import_file = st.text_input("Dateipfad", placeholder="C:/contacts.xlsx", key="import_file")
+                if st.button("Import starten", key="bulk_import"):
+                    if import_file:
+                        st.code(f"bulk_import_phone_numbers('{import_file}')")
+                    else:
+                        st.warning("Bitte Dateipfad angeben")
+        
+        # TAB 3: Analytics
+        with phone_tab3:
+            with st.expander("📈 Anruf-Statistiken", expanded=False):
+                st.markdown("**Auswertung der Anrufaktivitäten**")
+                
+                analytics_days = st.slider("Zeitraum (Tage)", min_value=1, max_value=90, value=30, key="analytics_days")
+                
+                if st.button("Statistiken abrufen", key="get_analytics"):
+                    st.code(f"get_call_analytics(days={analytics_days})")
+                
+                st.markdown("""
+                **Metriken:**
+                - Gesamtanzahl Anrufe
+                - Erfolgreiche vs. fehlgeschlagene Anrufe
+                - Conversion Rate
+                - Durchschnittliche Anrufdauer
+                - Gesamte Gesprächszeit
+                - Durchschnittliche Stimmung
+                """)
+            
+            with st.expander("🔍 Anruf-Historie durchsuchen", expanded=False):
+                st.markdown("**Vergangene Anrufe finden**")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    history_phone = st.text_input("Nach Nummer filtern", placeholder="+49301234567", key="history_phone")
+                    history_days = st.number_input("Tage zurück", min_value=1, max_value=365, value=30, key="history_days")
+                with col2:
+                    history_outcome = st.text_input("Nach Ergebnis filtern", placeholder="success, scheduled, ...", key="history_outcome")
+                
+                if st.button("Historie durchsuchen", key="search_history"):
+                    filters = []
+                    if history_phone:
+                        filters.append(f"phone_number='{history_phone}'")
+                    filters.append(f"days={history_days}")
+                    if history_outcome:
+                        filters.append(f"outcome_filter='{history_outcome}'")
+                    
+                    st.code(f"search_call_history({', '.join(filters)})")
+            
+            with st.expander("💭 Sentiment-Analyse", expanded=False):
+                st.markdown("**Stimmungsanalyse eines Anrufs**")
+                
+                sentiment_call_id = st.text_input("Call ID", placeholder="CALL-12345678", key="sentiment_call_id")
+                
+                if st.button("Stimmung analysieren", key="analyze_sentiment"):
+                    if sentiment_call_id:
+                        st.code(f"analyze_call_sentiment('{sentiment_call_id}')")
+                    else:
+                        st.warning("Bitte Call ID eingeben")
+                
+                st.markdown("""
+                **Analysiert:**
+                - Positive/Negative Keywords
+                - Sentiment Score (-1 bis +1)
+                - Stimmungskategorie (Positiv/Neutral/Negativ)
+                """)
+        
+        # TAB 4: Knowledge Base
+        with phone_tab4:
+            with st.expander("💾 Call-Skript speichern", expanded=False):
+                st.markdown("**Neues Anruf-Skript in Knowledge Base ablegen**")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    script_name = st.text_input("Skriptname", placeholder="PV-Beratung Standard", key="script_name")
+                    script_category = st.selectbox("Kategorie", ["Verkauf", "Support", "Beratung", "Follow-up"], key="script_category")
+                    script_opening = st.text_area("Eröffnungssatz", placeholder="Guten Tag, hier ist KAI von...", key="script_opening", height=100)
+                with col2:
+                    script_keypoints = st.text_input("Key Points (kommagetrennt)", placeholder="Kostenersparnis,Umweltschutz,Unabhängigkeit", key="script_keypoints")
+                    script_objections = st.text_area("Einwandbehandlung", placeholder="JSON format", key="script_objections", height=80)
+                    script_closing = st.text_area("Abschlusssatz", placeholder="Vielen Dank für das Gespräch...", key="script_closing", height=80)
+                
+                if st.button("Skript speichern", key="save_script"):
+                    if script_name and script_category and script_opening:
+                        st.code(f"""save_call_script(
+    name='{script_name}',
+    category='{script_category}',
+    opening_statement='{script_opening}',
+    key_points='{script_keypoints}',
+    objection_responses='{script_objections}',
+    closing_statement='{script_closing}'
+)""")
+                    else:
+                        st.warning("Name, Kategorie und Eröffnung sind Pflichtfelder")
+            
+            with st.expander("📚 Call-Skripte abrufen", expanded=False):
+                st.markdown("**Gespeicherte Skripte anzeigen**")
+                
+                script_filter = st.selectbox("Kategorie filtern", ["", "Verkauf", "Support", "Beratung", "Follow-up"], key="script_filter")
+                
+                if st.button("Skripte laden", key="load_scripts"):
+                    if script_filter:
+                        st.code(f"get_call_script(category='{script_filter}')")
+                    else:
+                        st.code("get_call_script()")
+        
+        # TAB 5: Erweiterte Features
+        with phone_tab5:
+            with st.expander("🎙️ Call Recording", expanded=False):
+                st.markdown("**Anrufaufnahme starten & transkribieren**")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    rec_call_id = st.text_input("Call ID", placeholder="CALL-12345678", key="rec_call_id")
+                    rec_path = st.text_input("Aufnahmepfad (optional)", placeholder="C:/recordings/call.wav", key="rec_path")
+                    
+                    if st.button("Aufnahme starten", key="start_recording"):
+                        if rec_call_id:
+                            if rec_path:
+                                st.code(f"start_call_recording('{rec_call_id}', '{rec_path}')")
+                            else:
+                                st.code(f"start_call_recording('{rec_call_id}')")
+                        else:
+                            st.warning("Bitte Call ID eingeben")
+                
+                with col2:
+                    trans_path = st.text_input("Audiodatei transkribieren", placeholder="C:/recordings/call.wav", key="trans_path")
+                    
+                    if st.button("Transkribieren (Whisper)", key="transcribe"):
+                        if trans_path:
+                            st.code(f"transcribe_call_recording('{trans_path}')")
+                        else:
+                            st.warning("Bitte Dateipfad angeben")
+            
+            with st.expander("🔗 CRM Integration", expanded=False):
+                st.markdown("**Anruf ins CRM-System protokollieren**")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    crm_call_id = st.text_input("Call ID", placeholder="CALL-12345678", key="crm_call_id")
+                with col2:
+                    crm_customer_id = st.text_input("CRM Kunden-ID (optional)", placeholder="CRM-001", key="crm_customer_id")
+                
+                if st.button("Ins CRM protokollieren", key="log_crm"):
+                    if crm_call_id:
+                        if crm_customer_id:
+                            st.code(f"log_call_to_crm('{crm_call_id}', '{crm_customer_id}')")
+                        else:
+                            st.code(f"log_call_to_crm('{crm_call_id}')")
+                    else:
+                        st.warning("Bitte Call ID eingeben")
+            
+            with st.expander("📅 Follow-up planen", expanded=False):
+                st.markdown("**Wiedervorlage nach Anruf setzen**")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    followup_call_id = st.text_input("Call ID", placeholder="CALL-12345678", key="followup_call_id")
+                    followup_date = st.date_input("Follow-up Datum", key="followup_date")
+                with col2:
+                    followup_action = st.text_area("Geplante Aktion", placeholder="Angebot nachfassen", key="followup_action", height=100)
+                
+                if st.button("Wiedervorlage setzen", key="schedule_followup"):
+                    if followup_call_id and followup_action:
+                        st.code(f"""schedule_follow_up(
+    call_id='{followup_call_id}',
+    follow_up_date='{followup_date}',
+    follow_up_action='{followup_action}'
+)""")
+                    else:
+                        st.warning("Call ID und Aktion sind Pflichtfelder")
+            
+            with st.expander("🚀 Auto-Dialer Kampagne", expanded=False):
+                st.markdown("**Automatische Anrufkampagne für Kontakte mit Tag**")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    dialer_tag = st.text_input("Kontakt-Tag", placeholder="lead", key="dialer_tag")
+                    dialer_goal = st.text_input("Kampagnenziel", placeholder="Beratungstermin vereinbaren", key="dialer_goal")
+                with col2:
+                    dialer_max = st.number_input("Max. Anrufe", min_value=1, max_value=100, value=10, key="dialer_max")
+                
+                if st.button("Kampagne starten", key="start_campaign"):
+                    if dialer_tag and dialer_goal:
+                        st.code(f"""auto_dialer_campaign(
+    contact_tag='{dialer_tag}',
+    call_goal='{dialer_goal}',
+    max_calls={dialer_max}
+)""")
+                    else:
+                        st.warning("Tag und Ziel sind Pflichtfelder")
+            
+            with st.expander("🏷️ Weitere Features", expanded=False):
+                st.markdown("**Zusätzliche Telephony-Tools**")
+                
+                # Call Tags
+                st.markdown("**Call Tags hinzufügen:**")
+                col1, col2 = st.columns(2)
+                with col1:
+                    tag_call_id = st.text_input("Call ID", placeholder="CALL-12345678", key="tag_call_id")
+                with col2:
+                    call_tags = st.text_input("Tags", placeholder="wichtig,hot-lead", key="call_tags")
+                if st.button("Tags hinzufügen", key="add_tags"):
+                    if tag_call_id and call_tags:
+                        st.code(f"add_call_tags('{tag_call_id}', '{call_tags}')")
+                
+                st.markdown("---")
+                
+                # Conference Call
+                st.markdown("**Konferenzschaltung:**")
+                col1, col2 = st.columns(2)
+                with col1:
+                    conf_call_id = st.text_input("Konferenz Call ID", placeholder="CALL-12345678", key="conf_call_id")
+                with col2:
+                    conf_participant = st.text_input("Teilnehmer hinzufügen", placeholder="+49301234567", key="conf_participant")
+                if st.button("Teilnehmer hinzufügen", key="add_participant"):
+                    if conf_call_id and conf_participant:
+                        st.code(f"conference_call_add_participant('{conf_call_id}', '{conf_participant}')")
+                
+                st.markdown("---")
+                
+                # DND Mode
+                st.markdown("**Bitte nicht stören:**")
+                col1, col2 = st.columns(2)
+                with col1:
+                    dnd_enabled = st.checkbox("Aktivieren", key="dnd_enabled")
+                with col2:
+                    dnd_until = st.text_input("Bis (YYYY-MM-DD HH:MM)", placeholder="2024-01-15 17:00", key="dnd_until")
+                if st.button("DND setzen", key="set_dnd"):
+                    if dnd_until:
+                        st.code(f"set_do_not_disturb({str(dnd_enabled)}, '{dnd_until}')")
+                    else:
+                        st.code(f"set_do_not_disturb({str(dnd_enabled)})")
+                
+                st.markdown("---")
+                
+                # Call Routing
+                st.markdown("**Call Routing konfigurieren:**")
+                routing_rules = st.text_area("Routing-Regeln (JSON)", 
+                    placeholder='{"vip": "agent1", "support": "agent2", "sales": "agent3"}',
+                    key="routing_rules", height=100)
+                if st.button("Routing aktivieren", key="enable_routing"):
+                    if routing_rules:
+                        st.code(f"enable_call_routing('{routing_rules}')")
+                
+                st.markdown("---")
+                
+                # Voicemail
+                st.markdown("**Voicemail prüfen:**")
+                voicemail_box = st.text_input("Mailbox", placeholder="default", key="voicemail_box")
+                if st.button("Voicemail abrufen", key="check_voicemail"):
+                    if voicemail_box:
+                        st.code(f"check_voicemail('{voicemail_box}')")
+                    else:
+                        st.code("check_voicemail()")
+
     # Task input with tooltip (Task 13.2)
     st.markdown("""
     <div style="margin-bottom: 5px;">
@@ -930,20 +1315,30 @@ def render_agent_menu():
 
     # Handle clear memory
     if clear_memory:
-        if hasattr(st.session_state.agent_core, 'clear_memory'):
+        if st.session_state.agent_core is not None and hasattr(st.session_state.agent_core, 'clear_memory'):
             st.session_state.agent_core.clear_memory()
             st.success("Memory cleared!")
+        else:
+            st.warning("Agent nicht initialisiert - kann Memory nicht löschen.")
         st.rerun()
 
     # Handle show status
     if show_status:
-        status = st.session_state.agent_core.get_status()
-        st.json(status)
+        if st.session_state.agent_core is not None:
+            status = st.session_state.agent_core.get_status()
+            st.json(status)
+        else:
+            st.warning("Agent nicht initialisiert - kein Status verfügbar.")
 
     st.markdown("---")
 
     # Execute agent task (optimized execution loop)
     if start_button and user_task:
+        # Check if agent is initialized
+        if st.session_state.agent_core is None:
+            st.error("❌ Agent nicht initialisiert. Bitte OpenAI API Key konfigurieren.")
+            st.stop()
+        
         # Validate user input (Task 12.1)
         try:
             sanitize_user_input(user_task, max_length=10000)

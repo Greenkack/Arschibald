@@ -770,3 +770,444 @@ def xl_NETWORKDAYS(start_date, end_date, holidays=None):
         current += dt.timedelta(days=1)
 
     return workdays
+
+
+# ============================================================================
+# ERWEITERTE EXCEL-FUNKTIONEN (20+ zusätzliche Funktionen)
+# ============================================================================
+
+def xl_MEDIAN(*args):
+    """Gibt den Median (mittleren Wert) zurück"""
+    vals = []
+    for a in args:
+        if isinstance(a, (list, tuple)):
+            vals.extend(a)
+        else:
+            vals.append(a)
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    return float(np.median(arr)) if arr.size else float('nan')
+
+
+def xl_MODE(* args):
+    """Gibt den häufigsten Wert zurück"""
+    vals = []
+    for a in args:
+        if isinstance(a, (list, tuple)):
+            vals.extend(a)
+        else:
+            vals.append(a)
+    s = pd.Series(vals)
+    return s.mode()[0] if not s.mode().empty else None
+
+
+def xl_STDEV(*args):
+    """Gibt die Standardabweichung zurück (Stichprobe)"""
+    vals = []
+    for a in args:
+        if isinstance(a, (list, tuple)):
+            vals.extend(a)
+        else:
+            vals.append(a)
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    return float(np.std(arr, ddof=1)) if arr.size > 1 else float('nan')
+
+
+def xl_STDEVP(*args):
+    """Gibt die Standardabweichung zurück (Grundgesamtheit)"""
+    vals = []
+    for a in args:
+        if isinstance(a, (list, tuple)):
+            vals.extend(a)
+        else:
+            vals.append(a)
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    return float(np.std(arr, ddof=0)) if arr.size else float('nan')
+
+
+def xl_VAR(*args):
+    """Gibt die Varianz zurück (Stichprobe)"""
+    vals = []
+    for a in args:
+        if isinstance(a, (list, tuple)):
+            vals.extend(a)
+        else:
+            vals.append(a)
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    return float(np.var(arr, ddof=1)) if arr.size > 1 else float('nan')
+
+
+def xl_VARP(*args):
+    """Gibt die Varianz zurück (Grundgesamtheit)"""
+    vals = []
+    for a in args:
+        if isinstance(a, (list, tuple)):
+            vals.extend(a)
+        else:
+            vals.append(a)
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    return float(np.var(arr, ddof=0)) if arr.size else float('nan')
+
+
+def xl_PERCENTILE(array, k):
+    """Gibt das k-te Perzentil zurück"""
+    vals = list(array) if isinstance(array, (list, tuple)) else [array]
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    return float(np.percentile(arr, float(k) * 100)) if arr.size else float('nan')
+
+
+def xl_QUARTILE(array, quart):
+    """Gibt das Quartil zurück"""
+    vals = list(array) if isinstance(array, (list, tuple)) else [array]
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    q = int(quart)
+    if q == 0:
+        return float(np.min(arr))
+    elif q == 1:
+        return float(np.percentile(arr, 25))
+    elif q == 2:
+        return float(np.percentile(arr, 50))
+    elif q == 3:
+        return float(np.percentile(arr, 75))
+    elif q == 4:
+        return float(np.max(arr))
+    else:
+        raise ValueError("Quartil muss zwischen 0 und 4 liegen")
+
+
+def xl_RANK(number, ref, order=0):
+    """Gibt den Rang einer Zahl zurück"""
+    vals = list(ref) if isinstance(ref, (list, tuple)) else [ref]
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    num = float(number)
+    
+    if int(order) == 0:
+        # Absteigende Reihenfolge (größte Zahl = Rang 1)
+        sorted_arr = np.sort(arr)[::-1]
+    else:
+        # Aufsteigende Reihenfolge (kleinste Zahl = Rang 1)
+        sorted_arr = np.sort(arr)
+    
+    rank = np.where(sorted_arr == num)[0]
+    return int(rank[0] + 1) if rank.size > 0 else None
+
+
+def xl_LARGE(array, k):
+    """Gibt den k-größten Wert zurück"""
+    vals = list(array) if isinstance(array, (list, tuple)) else [array]
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    sorted_arr = np.sort(arr)[::-1]
+    k_idx = int(k) - 1
+    return float(sorted_arr[k_idx]) if k_idx < len(sorted_arr) else float('nan')
+
+
+def xl_SMALL(array, k):
+    """Gibt den k-kleinsten Wert zurück"""
+    vals = list(array) if isinstance(array, (list, tuple)) else [array]
+    arr = np.array([float(v) for v in vals if v is not None], dtype=float)
+    sorted_arr = np.sort(arr)
+    k_idx = int(k) - 1
+    return float(sorted_arr[k_idx]) if k_idx < len(sorted_arr) else float('nan')
+
+
+def xl_COUNTBLANK(range_vals):
+    """Zählt leere Zellen"""
+    vals = list(range_vals) if isinstance(range_vals, (list, tuple)) else [range_vals]
+    return sum(1 for v in vals if v is None or v == '')
+
+
+def xl_AVERAGEIF(range_vals, criteria, average_range=None):
+    """Berechnet den Durchschnitt von Zellen die ein Kriterium erfüllen"""
+    rv = pd.Series(list(range_vals))
+    ar = pd.Series(list(average_range)) if average_range is not None else rv
+    crit = str(criteria).strip()
+    ops = ['>=', '<=', '<>', '>', '<', '=']
+    op = next((o for o in ops if crit.startswith(o)), '=')
+    rhs = crit[len(op):]
+    as_num = pd.to_numeric(rv, errors='coerce')
+    
+    if op == '=':
+        mask = (rv.astype(str) == rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num == float(rhs))
+    elif op == '<>':
+        mask = (rv.astype(str) != rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num != float(rhs))
+    elif op == '>':
+        mask = (as_num > float(rhs))
+    elif op == '>=':
+        mask = (as_num >= float(rhs))
+    elif op == '<':
+        mask = (as_num < float(rhs))
+    elif op == '<=':
+        mask = (as_num <= float(rhs))
+    
+    filtered = pd.to_numeric(ar[mask], errors='coerce')
+    return float(filtered.mean()) if not filtered.empty else float('nan')
+
+
+def xl_AVERAGEIFS(average_range, *criteria_pairs):
+    """Berechnet den Durchschnitt mit mehreren Kriterien"""
+    ar = pd.Series(list(average_range))
+    mask = pd.Series([True] * len(ar))
+    
+    for i in range(0, len(criteria_pairs), 2):
+        rng = pd.Series(list(criteria_pairs[i]))
+        crit = str(criteria_pairs[i + 1]).strip()
+        ops = ['>=', '<=', '<>', '>', '<', '=']
+        op = next((o for o in ops if crit.startswith(o)), '=')
+        rhs = crit[len(op):]
+        as_num = pd.to_numeric(rng, errors='coerce')
+        
+        if op == '=':
+            m = (rng.astype(str) == rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num == float(rhs))
+        elif op == '<>':
+            m = (rng.astype(str) != rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num != float(rhs))
+        elif op == '>':
+            m = (as_num > float(rhs))
+        elif op == '>=':
+            m = (as_num >= float(rhs))
+        elif op == '<':
+            m = (as_num < float(rhs))
+        elif op == '<=':
+            m = (as_num <= float(rhs))
+        mask &= m
+    
+    filtered = pd.to_numeric(ar[mask], errors='coerce')
+    return float(filtered.mean()) if not filtered.empty else float('nan')
+
+
+def xl_MAXIFS(max_range, *criteria_pairs):
+    """Gibt den Maximalwert mit mehreren Kriterien zurück"""
+    mr = pd.Series(list(max_range))
+    mask = pd.Series([True] * len(mr))
+    
+    for i in range(0, len(criteria_pairs), 2):
+        rng = pd.Series(list(criteria_pairs[i]))
+        crit = str(criteria_pairs[i + 1]).strip()
+        ops = ['>=', '<=', '<>', '>', '<', '=']
+        op = next((o for o in ops if crit.startswith(o)), '=')
+        rhs = crit[len(op):]
+        as_num = pd.to_numeric(rng, errors='coerce')
+        
+        if op == '=':
+            m = (rng.astype(str) == rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num == float(rhs))
+        elif op == '<>':
+            m = (rng.astype(str) != rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num != float(rhs))
+        elif op == '>':
+            m = (as_num > float(rhs))
+        elif op == '>=':
+            m = (as_num >= float(rhs))
+        elif op == '<':
+            m = (as_num < float(rhs))
+        elif op == '<=':
+            m = (as_num <= float(rhs))
+        mask &= m
+    
+    filtered = pd.to_numeric(mr[mask], errors='coerce')
+    return float(filtered.max()) if not filtered.empty else float('nan')
+
+
+def xl_MINIFS(min_range, *criteria_pairs):
+    """Gibt den Minimalwert mit mehreren Kriterien zurück"""
+    mr = pd.Series(list(min_range))
+    mask = pd.Series([True] * len(mr))
+    
+    for i in range(0, len(criteria_pairs), 2):
+        rng = pd.Series(list(criteria_pairs[i]))
+        crit = str(criteria_pairs[i + 1]).strip()
+        ops = ['>=', '<=', '<>', '>', '<', '=']
+        op = next((o for o in ops if crit.startswith(o)), '=')
+        rhs = crit[len(op):]
+        as_num = pd.to_numeric(rng, errors='coerce')
+        
+        if op == '=':
+            m = (rng.astype(str) == rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num == float(rhs))
+        elif op == '<>':
+            m = (rng.astype(str) != rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num != float(rhs))
+        elif op == '>':
+            m = (as_num > float(rhs))
+        elif op == '>=':
+            m = (as_num >= float(rhs))
+        elif op == '<':
+            m = (as_num < float(rhs))
+        elif op == '<=':
+            m = (as_num <= float(rhs))
+        mask &= m
+    
+    filtered = pd.to_numeric(mr[mask], errors='coerce')
+    return float(filtered.min()) if not filtered.empty else float('nan')
+
+
+def xl_COUNTIFS(*criteria_pairs):
+    """Zählt Zellen mit mehreren Kriterien"""
+    if len(criteria_pairs) < 2:
+        return 0
+    
+    first_range = pd.Series(list(criteria_pairs[0]))
+    mask = pd.Series([True] * len(first_range))
+    
+    for i in range(0, len(criteria_pairs), 2):
+        rng = pd.Series(list(criteria_pairs[i]))
+        crit = str(criteria_pairs[i + 1]).strip()
+        ops = ['>=', '<=', '<>', '>', '<', '=']
+        op = next((o for o in ops if crit.startswith(o)), '=')
+        rhs = crit[len(op):]
+        as_num = pd.to_numeric(rng, errors='coerce')
+        
+        if op == '=':
+            m = (rng.astype(str) == rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num == float(rhs))
+        elif op == '<>':
+            m = (rng.astype(str) != rhs) if not rhs.replace('.', '', 1).isdigit() else (as_num != float(rhs))
+        elif op == '>':
+            m = (as_num > float(rhs))
+        elif op == '>=':
+            m = (as_num >= float(rhs))
+        elif op == '<':
+            m = (as_num < float(rhs))
+        elif op == '<=':
+            m = (as_num <= float(rhs))
+        mask &= m
+    
+    return int(mask.sum())
+
+
+def xl_CHOOSE(index_num, *values):
+    """Wählt einen Wert aus einer Liste basierend auf dem Index"""
+    idx = int(index_num) - 1  # Excel ist 1-basiert
+    if 0 <= idx < len(values):
+        return values[idx]
+    else:
+        raise ValueError(f"Index {index_num} außerhalb des gültigen Bereichs")
+
+
+def xl_SWITCH(expression, *args):
+    """Vergleicht einen Ausdruck mit mehreren Werten und gibt das Ergebnis zurück"""
+    if len(args) < 2:
+        raise ValueError("SWITCH benötigt mindestens ein Wert-Ergebnis-Paar")
+    
+    # Letztes Argument könnte der Default-Wert sein
+    has_default = len(args) % 2 == 1
+    default_value = args[-1] if has_default else None
+    pairs = args[:-1] if has_default else args
+    
+    # Durchsuche Paare
+    for i in range(0, len(pairs), 2):
+        if expression == pairs[i]:
+            return pairs[i + 1]
+    
+    # Kein Match gefunden
+    if default_value is not None:
+        return default_value
+    else:
+        raise ValueError(f"Kein Match für '{expression}' gefunden")
+
+
+def xl_IFS(*conditions_and_values):
+    """Prüft mehrere Bedingungen und gibt den ersten wahren Wert zurück"""
+    if len(conditions_and_values) % 2 != 0:
+        raise ValueError("IFS benötigt Paare von Bedingung und Wert")
+    
+    for i in range(0, len(conditions_and_values), 2):
+        condition = conditions_and_values[i]
+        value = conditions_and_values[i + 1]
+        if bool(condition):
+            return value
+    
+    raise ValueError("Keine Bedingung ist wahr")
+
+
+def xl_TEXTJOIN(delimiter, ignore_empty, *text_values):
+    """Verbindet Text mit einem Trennzeichen"""
+    delim = str(delimiter)
+    ignore = bool(ignore_empty)
+    
+    texts = []
+    for val in text_values:
+        if isinstance(val, (list, tuple)):
+            texts.extend(val)
+        else:
+            texts.append(val)
+    
+    if ignore:
+        texts = [str(t) for t in texts if t is not None and t != '']
+    else:
+        texts = [str(t) if t is not None else '' for t in texts]
+    
+    return delim.join(texts)
+
+
+def xl_CONCAT(*text_values):
+    """Verbindet Text (moderne Version von CONCATENATE)"""
+    texts = []
+    for val in text_values:
+        if isinstance(val, (list, tuple)):
+            texts.extend(val)
+        else:
+            texts.append(val)
+    
+    return ''.join(str(t) for t in texts if t is not None)
+
+
+def xl_EXACT(text1, text2):
+    """Vergleicht zwei Texte (Groß-/Kleinschreibung beachten)"""
+    return str(text1) == str(text2)
+
+
+def xl_CHAR(number):
+    """Gibt das Zeichen für einen ASCII-Code zurück"""
+    return chr(int(number))
+
+
+def xl_CODE(text):
+    """Gibt den ASCII-Code des ersten Zeichens zurück"""
+    text_str = str(text)
+    return ord(text_str[0]) if text_str else 0
+
+
+def xl_CLEAN(text):
+    """Entfernt nicht druckbare Zeichen"""
+    text_str = str(text)
+    return ''.join(char for char in text_str if char.isprintable())
+
+
+def xl_DOLLAR(number, decimals=2):
+    """Formatiert eine Zahl als Währung"""
+    num = float(number)
+    dec = int(decimals)
+    if dec >= 0:
+        return f"${num:,.{dec}f}"
+    else:
+        # Runde auf Vielfache von 10^(-decimals)
+        factor = 10 ** (-dec)
+        rounded = round(num / factor) * factor
+        return f"${rounded:,.0f}"
+
+
+def xl_FIXED(number, decimals=2, no_commas=False):
+    """Formatiert eine Zahl mit fester Anzahl Dezimalstellen"""
+    num = float(number)
+    dec = int(decimals)
+    no_comma = bool(no_commas)
+    
+    if no_comma:
+        return f"{num:.{dec}f}"
+    else:
+        return f"{num:,.{dec}f}"
+
+
+def xl_T(value):
+    """Gibt Text zurück oder leeren String wenn kein Text"""
+    return str(value) if isinstance(value, str) else ''
+
+
+def xl_NUMBERVALUE(text, decimal_separator='.', group_separator=','):
+    """Konvertiert Text in eine Zahl mit benutzerdefinierten Trennzeichen"""
+    text_str = str(text).strip()
+    dec_sep = str(decimal_separator)
+    grp_sep = str(group_separator)
+    
+    # Ersetze Trennzeichen
+    text_str = text_str.replace(grp_sep, '')
+    text_str = text_str.replace(dec_sep, '.')
+    
+    try:
+        return float(text_str)
+    except ValueError:
+        raise ValueError(f"'{text}' kann nicht in eine Zahl konvertiert werden")

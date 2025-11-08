@@ -4,6 +4,23 @@
 
 Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-System. Die Tasks sind nach Priorität und Abhängigkeiten sortiert.
 
+**Aktueller Stand:**
+- ✅ Basis-CRM existiert: `crm.py`, `crm_dashboard_ui.py`, `crm_pipeline_ui.py`, `crm_calendar_ui.py`
+- ✅ Kundenverwaltung (CRUD) vorhanden
+- ✅ Projektverwaltung vorhanden
+- ✅ Kundenakte mit Dokumenten-Upload vorhanden (`customer_documents` Tabelle)
+- ✅ Dashboard mit KPIs vorhanden
+- ✅ Sales Pipeline vorhanden (`crm_leads` Tabelle)
+- ✅ Kalender mit Terminverwaltung vorhanden (`crm_appointments` Tabelle)
+- ✅ "Kunde in CRM speichern" Button existiert in `gui.py` und `drawer_actions.py`
+- ❌ Keine automatische Datenübernahme aus Bedarfsanalyse
+- ❌ Keine Berechnungsversionierung
+- ❌ Keine automatische PDF-Archivierung
+- ❌ Keine Aufgabenverwaltung
+- ❌ Keine Notizen/Kommunikationshistorie
+- ❌ Keine Angebotsverfolgung
+- ❌ Keine automatischen Erinnerungen
+
 **Hinweis:** Tasks mit "*" am Ende sind optional (z.B. Unit Tests) und können übersprungen werden.
 
 ---
@@ -17,8 +34,9 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
   - Erstelle Tabelle `crm_tasks` für Aufgabenverwaltung
   - Erstelle Tabelle `crm_activities` für Notizen und Historie
   - Erstelle Tabelle `crm_reminders` für automatische Erinnerungen
-  - Erweitere `projects` Tabelle um Angebots-Felder
-  - Erstelle Migrations-Skript mit Backup-Funktion
+  - Erweitere `projects` Tabelle um Angebots-Felder (offer_status, offer_sent_date, offer_version, offer_value, offer_accepted_date, rejection_reason)
+  - Erstelle Migrations-Skript in `database.py` mit Backup-Funktion
+  - Füge Indizes für Performance hinzu
   - _Requirements: 1.1, 2.1, 5.1, 6.1, 7.1, 8.1_
 
 - [ ]* 1.2 Schreibe Unit Tests für Datenbankstruktur
@@ -30,23 +48,29 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 ### 2. Funktion 1: Automatische Datenübernahme aus Bedarfsanalyse
 
 - [ ] 2.1 Erstelle Data Input Bridge Modul
+  - Erstelle Verzeichnis `crm/integration/` falls nicht vorhanden
+  - Erstelle `crm/integration/__init__.py`
   - Erstelle `crm/integration/data_input_bridge.py`
-  - Implementiere Funktion `extract_customer_data_from_session()`
-  - Implementiere Funktion `extract_project_data_from_session()`
-  - Implementiere Duplikatserkennung via E-Mail
+  - Implementiere Funktion `extract_customer_data_from_session()` - extrahiert alle Kundendaten aus st.session_state
+  - Implementiere Funktion `extract_project_data_from_session()` - extrahiert Projektdetails (Dachfläche, Ausrichtung, etc.)
+  - Implementiere Funktion `check_duplicate_customer(email)` - prüft ob Kunde mit E-Mail bereits existiert
+  - Nutze bestehende `save_customer()` und `save_project()` Funktionen aus `crm.py`
   - _Requirements: 1.1, 1.2, 1.3_
 
-- [ ] 2.2 Erweitere Bedarfsanalyse-UI
-  - Verbessere "Kunde in CRM speichern" Button
-  - Füge Vorschau-Dialog mit allen zu übernehmenden Daten hinzu
-  - Implementiere Duplikat-Warnung mit Optionen (Aktualisieren/Neu anlegen)
-  - Füge Erfolgsbestätigung mit Link zum Kundenprofil hinzu
+- [ ] 2.2 Erweitere bestehenden "Kunde in CRM speichern" Button
+  - Aktualisiere `_handle_context_menu_save_to_crm()` in `gui.py`
+  - Nutze neue `data_input_bridge` Funktionen für vollständige Datenextraktion
+  - Füge Vorschau-Dialog mit allen zu übernehmenden Daten hinzu (st.expander)
+  - Implementiere Duplikat-Warnung mit Radio-Buttons (Aktualisieren/Neu anlegen/Abbrechen)
+  - Füge Erfolgsbestätigung mit st.success und Link zum Kundenprofil hinzu
+  - Aktualisiere auch `drawer_actions.py` für Konsistenz
   - _Requirements: 1.1, 1.3, 1.4_
 
 - [ ] 2.3 Implementiere Validierung und Fehlerbehandlung
-  - Validiere Pflichtfelder vor Übernahme
-  - Zeige klare Fehlermeldungen bei fehlenden Daten
-  - Implementiere Rollback bei Fehlern
+  - Validiere Pflichtfelder (first_name, last_name, email) vor Übernahme
+  - Zeige klare Fehlermeldungen mit st.error bei fehlenden Daten
+  - Implementiere try-except mit Rollback bei Datenbankfehlern
+  - Protokolliere Fehler in Logdatei
   - _Requirements: 1.5_
 
 - [ ]* 2.4 Schreibe Tests für Datenübernahme
@@ -59,20 +83,26 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 
 - [ ] 3.1 Erstelle PDF Bridge Modul
   - Erstelle `crm/integration/pdf_bridge.py`
-  - Implementiere Funktion `auto_save_pdf_to_customer_documents()`
-  - Implementiere Metadaten-Extraktion (Typ, Version, Datum)
+  - Implementiere Funktion `auto_save_pdf_to_customer_documents(customer_id, project_id, pdf_bytes, pdf_type, version)`
+  - Nutze bestehende `add_customer_document()` Funktion aus `database.py`
+  - Implementiere Metadaten-Extraktion (Typ: 'offer_pdf', 'calculation_pdf', 'contract_pdf', Version, Datum)
+  - Implementiere automatische Versionsnummerierung basierend auf existierenden PDFs
   - _Requirements: 3.1, 3.2_
 
 - [ ] 3.2 Erweitere PDF-Generator
   - Integriere `pdf_bridge.auto_save_pdf_to_customer_documents()` in `pdf_generator.py`
-  - Füge Kundenzuordnung vor PDF-Generierung hinzu (falls nicht vorhanden)
-  - Implementiere automatische Versionsnummerierung
+  - Finde alle PDF-Generierungs-Funktionen (z.B. `generate_offer_pdf()`)
+  - Füge Kundenzuordnung vor PDF-Generierung hinzu falls nicht vorhanden (Dialog mit Kundenauswahl)
+  - Rufe `auto_save_pdf_to_customer_documents()` nach erfolgreicher PDF-Erstellung auf
+  - Zeige Bestätigung "PDF wurde in Kundenakte gespeichert"
   - _Requirements: 3.1, 3.2, 3.3_
 
-- [ ] 3.3 Erweitere Kundenakte-UI
-  - Zeige PDF-Typ und Version in Dokumentenliste
-  - Implementiere chronologische Sortierung
-  - Füge Download-Protokollierung hinzu
+- [ ] 3.3 Erweitere Kundenakte-UI in crm.py
+  - Aktualisiere Dokumentenliste-Anzeige um PDF-Typ und Version zu zeigen
+  - Implementiere chronologische Sortierung (neueste zuerst)
+  - Füge Badges für PDF-Typ hinzu (🔵 Angebot, 🟢 Berechnung, 🟡 Vertrag)
+  - Füge Download-Protokollierung in `crm_activities` Tabelle hinzu
+  - Zeige Anzahl der Versionen pro PDF-Typ
   - _Requirements: 3.3, 3.4_
 
 - [ ]* 3.4 Schreibe Tests für PDF-Archivierung
@@ -85,27 +115,35 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 
 - [ ] 4.1 Erstelle Calculation Bridge Modul
   - Erstelle `crm/integration/calculation_bridge.py`
-  - Implementiere Funktion `save_calculation_to_project()`
-  - Implementiere Versionierungs-Logik
-  - Implementiere dynamische Keys Extraktion
+  - Implementiere Funktion `save_calculation_to_project(project_id, calculation_data, dynamic_keys, is_main_offer=False)`
+  - Implementiere Versionierungs-Logik: Zähle existierende Versionen und inkrementiere
+  - Implementiere dynamische Keys Extraktion aus st.session_state (alle Berechnungsergebnisse)
+  - Speichere in `project_calculations` Tabelle als JSON
+  - Nutze `json.dumps()` für Serialisierung
   - _Requirements: 2.1, 2.2_
 
 - [ ] 4.2 Erweitere Berechnungs-Module
-  - Integriere `calculation_bridge` in `calculations.py`
-  - Integriere `calculation_bridge` in `analysis.py`
-  - Füge automatisches Speichern nach Berechnung hinzu
+  - Integriere `calculation_bridge` in `calculations.py` nach erfolgreicher Berechnung
+  - Integriere `calculation_bridge` in `analysis.py` nach Analyse
+  - Füge automatisches Speichern nach Berechnung hinzu (optional mit Checkbox "In CRM speichern")
+  - Zeige Bestätigung "Berechnung wurde als Version X gespeichert"
+  - Verknüpfe mit aktuellem Projekt aus Session State
   - _Requirements: 2.1, 2.2_
 
 - [ ] 4.3 Erstelle Berechnungs-Historie UI
-  - Erstelle neue Sektion in `crm.py` für Berechnungshistorie
-  - Zeige alle Versionen chronologisch
-  - Implementiere Vergleichs-Ansicht für zwei Versionen
-  - Füge "Als Hauptangebot markieren" Funktion hinzu
+  - Erstelle neue Sektion "📊 Berechnungshistorie" in `crm.py` unter Projektdetails
+  - Zeige alle Versionen chronologisch in Tabelle (Version, Datum, Hauptwerte, Status)
+  - Implementiere Vergleichs-Ansicht für zwei Versionen (Side-by-Side mit Differenzen)
+  - Füge "⭐ Als Hauptangebot markieren" Button hinzu (setzt is_main_offer=1)
+  - Zeige Hauptangebot mit Badge hervorgehoben
+  - Füge "👁️ Details anzeigen" Button für jede Version hinzu
   - _Requirements: 2.2, 2.3, 2.4_
 
 - [ ] 4.4 Implementiere Archivierungs-Logik
-  - Markiere Berechnungen älter als 90 Tage als "archiviert"
-  - Füge Filter für aktive/archivierte Berechnungen hinzu
+  - Füge `archived` Boolean-Feld zur `project_calculations` Tabelle hinzu
+  - Implementiere Funktion `archive_old_calculations()` die Berechnungen älter als 90 Tage markiert
+  - Füge Filter-Toggle "Archivierte anzeigen" in UI hinzu
+  - Zeige archivierte Berechnungen ausgegraut
   - _Requirements: 2.5_
 
 - [ ]* 4.5 Schreibe Tests für Berechnungsverknüpfung
@@ -117,31 +155,41 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 ### 5. Funktion 18: Automatische Datensicherung
 
 - [ ] 5.1 Implementiere Backup-Scheduler
-  - Installiere APScheduler
+  - Prüfe ob APScheduler bereits in requirements.txt ist (✅ bereits vorhanden in setup.py)
+  - Erstelle Verzeichnis `crm/utils/` falls nicht vorhanden
+  - Erstelle `crm/utils/__init__.py`
   - Erstelle `crm/utils/backup_scheduler.py`
-  - Implementiere tägliche Backups (2:00 Uhr)
-  - Implementiere wöchentliche Backups (Sonntag)
-  - Implementiere monatliche Backups (1. des Monats)
+  - Nutze bestehende `backup_database()` Funktion aus `database.py`
+  - Implementiere BackgroundScheduler mit täglichen Backups (2:00 Uhr)
+  - Implementiere wöchentliche Backups (Sonntag 3:00 Uhr)
+  - Implementiere monatliche Backups (1. des Monats 4:00 Uhr)
+  - Starte Scheduler beim App-Start in `gui.py`
   - _Requirements: 18.1, 18.2_
 
 - [ ] 5.2 Implementiere Backup-Rotation
-  - Behalte letzte 7 tägliche Backups
-  - Behalte letzte 4 wöchentliche Backups
-  - Behalte letzte 12 monatliche Backups
-  - Lösche ältere Backups automatisch
+  - Implementiere Funktion `cleanup_old_backups()` in `backup_scheduler.py`
+  - Behalte letzte 7 tägliche Backups (Präfix: `daily_`)
+  - Behalte letzte 4 wöchentliche Backups (Präfix: `weekly_`)
+  - Behalte letzte 12 monatliche Backups (Präfix: `monthly_`)
+  - Lösche ältere Backups automatisch nach jedem Backup
+  - Protokolliere gelöschte Backups in Logdatei
   - _Requirements: 18.2_
 
 - [ ] 5.3 Erweitere Admin-Panel
-  - Füge Backup-Verwaltungs-Sektion hinzu
-  - Zeige Liste aller Backups mit Größe und Datum
-  - Implementiere manuelle Backup-Erstellung
-  - Implementiere Wiederherstellungs-Funktion mit Bestätigung
+  - Füge neuen Tab "💾 Backup-Verwaltung" zu `admin_panel.py` hinzu
+  - Zeige Liste aller Backups mit Größe, Datum und Typ (täglich/wöchentlich/monatlich)
+  - Implementiere "🔄 Manuelles Backup erstellen" Button
+  - Implementiere "📥 Wiederherstellen" Button mit Bestätigungs-Dialog
+  - Zeige Warnung: "Aktuelle Daten werden überschrieben!"
+  - Implementiere "🗑️ Backup löschen" Funktion
+  - Zeige Backup-Status (letztes Backup, nächstes geplantes Backup)
   - _Requirements: 18.3, 18.4_
 
-- [ ] 5.4 Implementiere E-Mail-Benachrichtigungen
+- [ ] 5.4 Implementiere E-Mail-Benachrichtigungen (Optional - benötigt E-Mail-System)
   - Sende E-Mail bei Backup-Fehlern
   - Sende wöchentliche Backup-Status-E-Mail
   - _Requirements: 18.5_
+  - _Hinweis: Abhängig von Funktion 4 (E-Mail-Integration)_
 
 - [ ]* 5.5 Schreibe Tests für Backup-System
   - Teste Backup-Erstellung
@@ -151,33 +199,43 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 
 ### 6. Funktion 7: Angebotsverfolgung
 
-- [ ] 6.1 Erweitere Projekt-Datenmodell
-  - Füge Angebots-Status-Felder zur `projects` Tabelle hinzu
-  - Implementiere Status-Workflow (Draft → Sent → Accepted/Rejected)
+- [ ] 6.1 Erweitere Projekt-Datenmodell (bereits in Task 1.1 enthalten)
+  - Felder werden in Task 1.1 zur `projects` Tabelle hinzugefügt
+  - Implementiere Status-Workflow: 'draft' → 'sent' → 'accepted'/'rejected'
   - _Requirements: 7.1, 7.2_
 
 - [ ] 6.2 Erstelle Offer Tracker Modul
+  - Erstelle Verzeichnis `crm/features/` falls nicht vorhanden
+  - Erstelle `crm/features/__init__.py`
   - Erstelle `crm/features/offer_tracker.py`
-  - Implementiere Funktion `update_offer_status()`
-  - Implementiere Funktion `get_offers_by_status()`
-  - Implementiere Funktion `get_offers_needing_followup()`
+  - Implementiere Funktion `update_offer_status(project_id, new_status, rejection_reason=None)`
+  - Implementiere Funktion `get_offers_by_status(status)` - gibt alle Projekte mit diesem Status zurück
+  - Implementiere Funktion `get_offers_needing_followup()` - gibt Angebote zurück die >7 Tage alt sind und Status 'sent' haben
+  - Implementiere Funktion `set_offer_sent(project_id, offer_value)` - setzt Status auf 'sent' und Datum
   - _Requirements: 7.1, 7.2, 7.3_
 
 - [ ] 6.3 Erstelle Angebotsverfolgung UI
-  - Erstelle neue Sektion in CRM-Dashboard
-  - Zeige alle Angebote mit Status
-  - Implementiere Status-Änderungs-Buttons
-  - Füge Ablehnungsgrund-Erfassung hinzu
+  - Erstelle neue Sektion "📋 Angebotsverfolgung" in `crm_dashboard_ui.py`
+  - Zeige alle Angebote gruppiert nach Status (Draft, Versendet, Angenommen, Abgelehnt)
+  - Implementiere Status-Änderungs-Dropdown für jedes Angebot
+  - Füge Ablehnungsgrund-Erfassung hinzu (Text-Input bei Status 'rejected')
+  - Zeige Angebotswert und Versanddatum
+  - Markiere Angebote die Follow-up benötigen (>7 Tage) mit 🔔 Icon
+  - Implementiere Filter nach Status und Zeitraum
   - _Requirements: 7.2, 7.4, 7.5_
 
 - [ ] 6.4 Integriere mit PDF-Generierung
-  - Setze Status auf "Sent" bei PDF-Versand
-  - Speichere Versanddatum
+  - Aktualisiere `pdf_generator.py` nach erfolgreicher PDF-Erstellung
+  - Rufe `offer_tracker.set_offer_sent()` auf wenn PDF generiert wird
+  - Setze Status auf "sent" und speichere Versanddatum
+  - Extrahiere Angebotswert aus Berechnungsdaten
+  - Zeige Bestätigung "Angebotsstatus aktualisiert"
   - _Requirements: 7.2_
 
 - [ ] 6.5 Implementiere automatische Follow-up-Erinnerungen
-  - Erstelle Erinnerung 7 Tage nach Versand
-  - Integriere mit Erinnerungs-System (Funktion 8)
+  - Erstelle Erinnerung 7 Tage nach Versand in `crm_reminders` Tabelle
+  - Integriere mit Erinnerungs-System (wird in Task 9 implementiert)
+  - Trigger: Wenn offer_status auf 'sent' gesetzt wird
   - _Requirements: 7.3_
 
 - [ ]* 6.6 Schreibe Tests für Angebotsverfolgung
@@ -190,35 +248,54 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 
 - [ ] 7.1 Erstelle Note Manager Modul
   - Erstelle `crm/features/note_manager.py`
-  - Implementiere CRUD-Funktionen für Aktivitäten
-  - Implementiere Funktion `get_customer_timeline()`
-  - Implementiere Volltextsuche mit SQLite FTS5
+  - Implementiere CRUD-Funktionen für Aktivitäten:
+    - `add_activity(customer_id, activity_type, title, content, created_by, is_important=False)`
+    - `get_activities(customer_id, activity_type=None, is_important=None)`
+    - `update_activity(activity_id, title, content, is_important)`
+    - `delete_activity(activity_id)`
+  - Implementiere Funktion `get_customer_timeline(customer_id)` - gibt alle Aktivitäten chronologisch zurück
+  - Implementiere Volltextsuche mit SQLite FTS5 (CREATE VIRTUAL TABLE für content-Suche)
+  - Implementiere Funktion `search_activities(customer_id, search_term)`
   - _Requirements: 6.1, 6.2, 6.3_
 
 - [ ] 7.2 Erstelle Timeline UI
-  - Erstelle Timeline-Komponente in `crm.py`
-  - Zeige alle Aktivitäten chronologisch
-  - Implementiere Aktivitäts-Typen (Notiz, E-Mail, Anruf, Termin)
-  - Füge Icons für jeden Typ hinzu
+  - Erstelle neue Sektion "📝 Kommunikationshistorie" in `crm.py` unter Kundendetails
+  - Zeige alle Aktivitäten chronologisch (neueste zuerst)
+  - Implementiere Aktivitäts-Typen mit Icons:
+    - 📝 Notiz
+    - 📧 E-Mail (für später)
+    - 📞 Anruf
+    - 📅 Termin
+    - 📄 Dokument hochgeladen
+    - 💰 Angebot versendet
+  - Zeige Zeitstempel, Ersteller, Titel und Content
+  - Markiere wichtige Aktivitäten mit ⭐
   - _Requirements: 6.2_
 
 - [ ] 7.3 Implementiere Notiz-Erstellung
-  - Füge "Neue Notiz" Button hinzu
-  - Implementiere Notiz-Editor mit Rich Text
-  - Füge "Als wichtig markieren" Option hinzu
-  - Speichere Benutzer und Zeitstempel automatisch
+  - Füge "➕ Neue Notiz" Button in Timeline-Sektion hinzu
+  - Implementiere Notiz-Editor mit st.text_area (Rich Text optional später)
+  - Füge Titel-Feld hinzu
+  - Füge Checkbox "⭐ Als wichtig markieren" hinzu
+  - Speichere Benutzer automatisch (aus Session State oder "System")
+  - Speichere Zeitstempel automatisch (CURRENT_TIMESTAMP)
+  - Zeige Erfolgsbestätigung nach Speichern
   - _Requirements: 6.1, 6.4_
 
 - [ ] 7.4 Implementiere Suche und Filter
-  - Füge Suchfeld für Volltextsuche hinzu
-  - Implementiere Filter nach Aktivitätstyp
-  - Implementiere Filter nach Datum
-  - Implementiere Filter "Nur wichtige"
+  - Füge Suchfeld für Volltextsuche hinzu (st.text_input)
+  - Implementiere Filter nach Aktivitätstyp (st.multiselect)
+  - Implementiere Datumsfilter (st.date_input für Von/Bis)
+  - Implementiere Toggle "Nur wichtige anzeigen" (st.checkbox)
+  - Aktualisiere Timeline basierend auf Filtern
   - _Requirements: 6.3_
 
 - [ ] 7.5 Implementiere Archivierung
-  - Markiere Aktivitäten älter als 30 Tage als "archiviert"
-  - Füge Toggle für Anzeige archivierter Aktivitäten hinzu
+  - Füge `archived` Boolean-Feld zur `crm_activities` Tabelle hinzu
+  - Implementiere Funktion `archive_old_activities()` - markiert Aktivitäten älter als 30 Tage
+  - Füge Toggle "Archivierte anzeigen" in UI hinzu
+  - Zeige archivierte Aktivitäten ausgegraut
+  - Implementiere "Archivieren" Button für einzelne Aktivitäten
   - _Requirements: 6.5_
 
 - [ ]* 7.6 Schreibe Tests für Notizen-System
@@ -231,38 +308,62 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 
 - [ ] 8.1 Erstelle Task Manager Modul
   - Erstelle `crm/features/task_manager.py`
-  - Implementiere CRUD-Funktionen für Tasks
-  - Implementiere Funktion `get_tasks_by_status()`
-  - Implementiere Funktion `get_overdue_tasks()`
-  - Implementiere Funktion `get_tasks_due_today()`
+  - Implementiere CRUD-Funktionen für Tasks:
+    - `create_task(title, description, status, priority, due_date, customer_id, project_id, lead_id, assigned_to)`
+    - `get_tasks(customer_id=None, project_id=None, lead_id=None, status=None)`
+    - `update_task(task_id, **kwargs)`
+    - `complete_task(task_id)` - setzt status='completed' und completed_at
+    - `delete_task(task_id)`
+  - Implementiere Funktion `get_tasks_by_status(status)` - gibt alle Tasks mit diesem Status zurück
+  - Implementiere Funktion `get_overdue_tasks()` - gibt Tasks mit due_date < heute und status != 'completed' zurück
+  - Implementiere Funktion `get_tasks_due_today()` - gibt Tasks mit due_date = heute zurück
   - _Requirements: 5.1, 5.2, 5.3_
 
 - [ ] 8.2 Erstelle Task UI
-  - Erstelle Task-Verwaltungs-Sektion im Dashboard
-  - Implementiere Task-Erstellungs-Dialog
-  - Zeige Tasks gruppiert nach Status (Offen, In Arbeit, Erledigt)
-  - Implementiere Drag & Drop für Status-Änderung (optional)
+  - Erstelle neue Sektion "✅ Aufgabenverwaltung" in `crm_dashboard_ui.py`
+  - Implementiere Task-Erstellungs-Dialog mit st.form
+  - Zeige Tasks gruppiert nach Status in Tabs:
+    - 📋 Offen (status='open')
+    - 🔄 In Arbeit (status='in_progress')
+    - ✅ Erledigt (status='completed')
+  - Zeige Task-Details: Titel, Beschreibung, Priorität, Fälligkeit, Zuordnung
+  - Implementiere Status-Änderungs-Buttons für jede Task
+  - Optional: Drag & Drop für Status-Änderung (später)
   - _Requirements: 5.1, 5.3_
 
 - [ ] 8.3 Implementiere Task-Zuordnung
-  - Füge Zuordnung zu Kunde, Projekt oder Lead hinzu
-  - Zeige zugeordnete Tasks in jeweiligen Profilen
+  - Füge Zuordnungs-Felder zum Task-Formular hinzu:
+    - st.selectbox für Kunde (aus customers Tabelle)
+    - st.selectbox für Projekt (aus projects Tabelle, gefiltert nach Kunde)
+    - st.selectbox für Lead (aus crm_leads Tabelle)
+  - Zeige zugeordnete Tasks in jeweiligen Profilen:
+    - In Kundendetails-Seite
+    - In Projektdetails-Seite
+    - In Lead-Details in Pipeline
+  - Implementiere Filter "Meine Tasks" vs "Alle Tasks"
   - _Requirements: 5.1_
 
 - [ ] 8.4 Implementiere Prioritäten und Fälligkeiten
-  - Füge Prioritäts-Auswahl hinzu (Niedrig, Mittel, Hoch, Dringend)
-  - Implementiere Fälligkeitsdatum-Auswahl
-  - Zeige überfällige Tasks rot hervorgehoben
+  - Füge Prioritäts-Auswahl hinzu: st.selectbox(['Niedrig', 'Mittel', 'Hoch', 'Dringend'])
+  - Implementiere Fälligkeitsdatum-Auswahl mit st.date_input
+  - Zeige überfällige Tasks rot hervorgehoben (🔴)
+  - Zeige heute fällige Tasks orange hervorgehoben (🟠)
+  - Zeige Priorität mit Badges (🔵 Niedrig, 🟡 Mittel, 🟠 Hoch, 🔴 Dringend)
+  - Sortiere Tasks nach Priorität und Fälligkeit
   - _Requirements: 5.2, 5.3, 5.5_
 
 - [ ] 8.5 Integriere mit Benachrichtigungssystem
-  - Erstelle Benachrichtigung bei fälliger Task
-  - Zeige Anzahl offener Tasks im Dashboard
+  - Erstelle Benachrichtigung in `crm_reminders` Tabelle bei fälliger Task
+  - Zeige Anzahl offener Tasks im Dashboard (Badge)
+  - Zeige Anzahl überfälliger Tasks prominent (Warnung)
+  - Implementiere Dashboard-Widget "Meine Aufgaben heute"
   - _Requirements: 5.2_
 
 - [ ] 8.6 Implementiere Aktivitäts-Protokollierung
-  - Protokolliere Task-Erstellung in Timeline
-  - Protokolliere Task-Abschluss in Timeline
+  - Protokolliere Task-Erstellung in `crm_activities` Timeline (activity_type='task_created')
+  - Protokolliere Task-Abschluss in Timeline (activity_type='task_completed')
+  - Nutze `note_manager.add_activity()` aus Task 7.1
+  - Zeige Tasks in Kommunikationshistorie
   - _Requirements: 5.4_
 
 - [ ]* 8.7 Schreibe Tests für Task-Management
@@ -275,34 +376,55 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 
 - [ ] 9.1 Erstelle Notification Manager Modul
   - Erstelle `crm/utils/notification_manager.py`
-  - Implementiere CRUD-Funktionen für Erinnerungen
-  - Implementiere Funktion `create_reminder()`
-  - Implementiere Funktion `get_due_reminders()`
-  - Implementiere Funktion `mark_reminder_as_completed()`
+  - Implementiere CRUD-Funktionen für Erinnerungen:
+    - `create_reminder(reminder_type, related_id, related_type, due_date, message)`
+    - `get_reminders(status=None, due_before=None)`
+    - `get_due_reminders()` - gibt Erinnerungen mit due_date <= jetzt und status='pending' zurück
+    - `mark_reminder_as_completed(reminder_id)`
+    - `snooze_reminder(reminder_id, days=2)` - verschiebt due_date um X Tage
+    - `delete_reminder(reminder_id)`
+  - Implementiere Funktion `get_customer_reminders(customer_id)` für Kundenansicht
   - _Requirements: 8.1, 8.2, 8.4_
 
 - [ ] 9.2 Implementiere Regel-Engine
-  - Erstelle Regel: Lead erstellt → Follow-up nach 3 Tagen
-  - Erstelle Regel: Angebot versendet → Follow-up nach 7 Tagen
-  - Erstelle Regel: Termin → Follow-up nach 1 Tag
-  - Implementiere konfigurierbare Regeln im Admin-Panel
+  - Erstelle `crm/utils/reminder_rules.py`
+  - Implementiere Regel-Funktionen:
+    - `create_lead_followup_reminder(lead_id)` - Follow-up nach 3 Tagen
+    - `create_offer_followup_reminder(project_id)` - Follow-up nach 7 Tagen
+    - `create_appointment_followup_reminder(appointment_id)` - Follow-up nach 1 Tag
+  - Integriere Regel-Aufrufe in entsprechende Module:
+    - In `crm_pipeline_ui.py` bei Lead-Erstellung
+    - In `offer_tracker.py` bei Angebot-Versand (Task 6.4)
+    - In `crm_calendar_ui.py` nach Termin
+  - Implementiere konfigurierbare Regeln im Admin-Panel (Tage anpassbar)
   - _Requirements: 8.1, 8.2, 8.3_
 
 - [ ] 9.3 Implementiere Erinnerungs-Scheduler
-  - Integriere mit APScheduler
-  - Prüfe stündlich auf fällige Erinnerungen
+  - Erweitere `backup_scheduler.py` um Erinnerungs-Check
+  - Integriere mit APScheduler (bereits vorhanden aus Task 5.1)
+  - Prüfe stündlich auf fällige Erinnerungen mit `get_due_reminders()`
   - Erstelle automatisch Erinnerungen basierend auf Regeln
+  - Protokolliere Erinnerungs-Erstellung in Logdatei
+  - Optional: Zeige Benachrichtigung in Streamlit (st.toast)
   - _Requirements: 8.1, 8.4_
 
 - [ ] 9.4 Erstelle Erinnerungs-UI
-  - Füge Erinnerungs-Widget zum Dashboard hinzu
-  - Zeige fällige Erinnerungen prominent
-  - Implementiere "Erledigt" und "Später erinnern" Buttons
+  - Füge Erinnerungs-Widget "🔔 Erinnerungen" zum Dashboard hinzu (`crm_dashboard_ui.py`)
+  - Zeige fällige Erinnerungen prominent (rot hervorgehoben)
+  - Zeige kommende Erinnerungen (nächste 7 Tage)
+  - Implementiere "✅ Erledigt" Button - ruft `mark_reminder_as_completed()` auf
+  - Implementiere "⏰ Später erinnern" Button - ruft `snooze_reminder()` auf
+  - Zeige Anzahl fälliger Erinnerungen als Badge
+  - Gruppiere Erinnerungen nach Typ (Lead, Angebot, Termin, Task)
   - _Requirements: 8.4_
 
 - [ ] 9.5 Implementiere Wiederholungs-Logik
-  - Erstelle Erinnerung erneut nach 2 Tagen wenn ignoriert
-  - Begrenze auf maximal 3 Wiederholungen
+  - Füge `repeat_count` Feld zur `crm_reminders` Tabelle hinzu
+  - Implementiere Funktion `auto_snooze_ignored_reminders()` in Scheduler
+  - Erstelle Erinnerung erneut nach 2 Tagen wenn status='pending' und due_date < jetzt - 1 Tag
+  - Inkrementiere repeat_count bei jeder Wiederholung
+  - Begrenze auf maximal 3 Wiederholungen (dann status='expired')
+  - Zeige Wiederholungs-Anzahl in UI
   - _Requirements: 8.5_
 
 - [ ]* 9.6 Schreibe Tests für Erinnerungs-System
@@ -552,7 +674,17 @@ Dieses Dokument enthält die Implementierungs-Tasks für das erweiterte CRM-Syst
 
 ### Reihenfolge
 
-Die Tasks sind so angeordnet, dass Abhängigkeiten berücksichtigt werden. Folge der Reihenfolge für optimale Ergebnisse.
+Die Tasks sind so angeordnet, dass Abhängigkeiten berücksichtigt werden. Folge der Reihenfolge für optimale Ergebnisse:
+
+1. **Task 1.1** - Datenbankstruktur (Fundament für alles)
+2. **Tasks 2.x** - Datenübernahme (nutzt bestehende Funktionen)
+3. **Tasks 3.x** - PDF-Archivierung (nutzt bestehende Infrastruktur)
+4. **Tasks 4.x** - Berechnungsversionierung (benötigt DB aus 1.1)
+5. **Tasks 5.x** - Backup-System (unabhängig, kann parallel)
+6. **Tasks 6.x** - Angebotsverfolgung (benötigt DB aus 1.1)
+7. **Tasks 7.x** - Notizen/Historie (benötigt DB aus 1.1)
+8. **Tasks 8.x** - Aufgabenverwaltung (benötigt DB aus 1.1 und 7.x)
+9. **Tasks 9.x** - Erinnerungen (benötigt 5.x, 6.x, 7.x, 8.x)
 
 ### Optionale Tasks
 
@@ -560,7 +692,24 @@ Tasks mit "*" am Ende sind optional (hauptsächlich Unit Tests). Diese können �
 
 ### Dynamische Keys
 
-Alle Berechnungsergebnisse und Daten sollten mit dynamischen Keys gespeichert werden für maximale Flexibilität.
+Alle Berechnungsergebnisse und Daten sollten mit dynamischen Keys gespeichert werden für maximale Flexibilität. Beispiel:
+```python
+{
+    "SYSTEM_SIZE_KWP": 15.0,
+    "ANNUAL_PRODUCTION_KWH": 14250,
+    "INVESTMENT_TOTAL_EUR": 25000,
+    "PAYBACK_PERIOD_YEARS": 12.5,
+    # ... alle weiteren Werte
+}
+```
+
+### Bestehende Infrastruktur nutzen
+
+- ✅ `add_customer_document()` für PDF-Speicherung vorhanden
+- ✅ `save_customer()` und `save_project()` in `crm.py` vorhanden
+- ✅ `backup_database()` in `database.py` vorhanden
+- ✅ APScheduler bereits in `setup.py` definiert
+- ✅ Basis-CRM-UI vorhanden, nur erweitern
 
 ### Testing
 
@@ -568,27 +717,49 @@ Auch wenn Unit Tests optional sind, sollte jede Funktion manuell getestet werden
 
 ### Dokumentation
 
-Dokumentiere jeden neuen Modul und jede neue Funktion inline mit Docstrings.
+Dokumentiere jeden neuen Modul und jede neue Funktion inline mit Docstrings im Google-Style:
+```python
+def function_name(param1: str, param2: int) -> bool:
+    """Kurzbeschreibung der Funktion.
+    
+    Längere Beschreibung falls nötig.
+    
+    Args:
+        param1: Beschreibung von param1
+        param2: Beschreibung von param2
+        
+    Returns:
+        Beschreibung des Rückgabewerts
+        
+    Raises:
+        ValueError: Wenn param2 < 0
+    """
+```
 
 ---
 
-## Geschätzter Gesamtaufwand
+## Geschätzter Gesamtaufwand (Phase 1 nur)
 
-- **Phase 1 (MVP + Essentials):** 60-90 Stunden
-- **Phase 2 (Erweiterte Funktionen):** 80-120 Stunden
-- **Phase 3 (Optionale Funktionen):** 100-150 Stunden
-- **Integration & Testing:** 20-30 Stunden
+- **Task 1: Datenbankstruktur:** 4-6 Stunden
+- **Task 2: Datenübernahme:** 6-8 Stunden
+- **Task 3: PDF-Archivierung:** 4-6 Stunden
+- **Task 4: Berechnungsversionierung:** 10-14 Stunden
+- **Task 5: Backup-System:** 6-8 Stunden
+- **Task 6: Angebotsverfolgung:** 10-14 Stunden
+- **Task 7: Notizen/Historie:** 12-16 Stunden
+- **Task 8: Aufgabenverwaltung:** 14-18 Stunden
+- **Task 9: Erinnerungen:** 12-16 Stunden
 
-**Gesamt:** 260-390 Stunden (je nach gewählten Funktionen)
+**Gesamt Phase 1:** 78-106 Stunden ≈ 2-3 Monate bei Teilzeit (20h/Woche)
 
 ---
 
 ## Nächste Schritte
 
-1. Wähle welche Phase(n) du implementieren möchtest
-2. Beginne mit Task 1.1 (Datenbankstruktur)
-3. Arbeite dich sequenziell durch die Tasks
-4. Teste jede Funktion nach Fertigstellung
-5. Dokumentiere Änderungen
+1. ✅ Spec-Dokumente sind vollständig (Requirements, Design, Tasks)
+2. ⏭️ Beginne mit **Task 1.1** (Datenbankstruktur) - dies ist das Fundament
+3. 📝 Teste jede Funktion nach Fertigstellung manuell
+4. 📚 Dokumentiere Änderungen inline mit Docstrings
+5. 🔄 Committe nach jedem abgeschlossenen Task
 
-**Bereit zum Start? Sag mir, mit welchem Task ich beginnen soll!**
+**Bereit zum Start? Öffne tasks.md und klicke auf "Start task" neben Task 1.1!**

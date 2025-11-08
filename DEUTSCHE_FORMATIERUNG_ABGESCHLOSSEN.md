@@ -7,6 +7,7 @@ Die deutsche Zahlenformatierung wurde **vollständig** im gesamten Wärmepumpen-
 ## 🎯 Änderungen
 
 ### 1. Zentrale Formatierungsfunktion
+
 - **Datei**: `heatpump_ui.py`
 - **Funktion**: `format_german_number(number, decimals=2)`
 - **Funktion**:
@@ -17,6 +18,7 @@ Die deutsche Zahlenformatierung wurde **vollständig** im gesamten Wärmepumpen-
 ### 2. Angewandte Bereiche
 
 #### ✅ Alle Beträge (188x formatiert)
+
 - Investitionskosten: `25.000,00 €`
 - Jährliche Einsparungen: `1.850,50 €`
 - Förderbeträge: `8.500,00 €`
@@ -24,27 +26,32 @@ Die deutsche Zahlenformatierung wurde **vollständig** im gesamten Wärmepumpen-
 - Stromkosten: `1.200,00 €`
 
 #### ✅ Alle Heizkosten-Eingaben
+
 - Gas-Kosten: `2.400,00 €`
 - Öl-Kosten: `3.500,00 €`
 - Holz-Kosten: `1.800,00 €`
 
 #### ✅ Alle Metrics und Zusammenfassungen
+
 - Gesamtinvestition
 - ROI-Berechnung
 - 20-Jahres-Vergleich
 - CO2-Einsparungen
 
 #### ✅ Alle DataFrames (10 Stück)
+
 - Kostenaufstellungen
 - Vergleichstabellen
 - Monatliche/Jährliche Übersichten
 
 #### ✅ Alle Plotly-Charts (10 Stück)
+
 - Hover-Templates mit deutscher Formatierung
 - Achsenbeschriftungen mit `separators=',.'`
 - Korrekte Anzeige von Tausender/Dezimal-Trennzeichen
 
 #### ✅ Alle Empfehlungen
+
 - Produktpreise in manueller Auswahl
 - Top-5-Empfehlungen mit Preisangaben
 - Preis-Breakdowns (Gerät + Installation)
@@ -70,12 +77,14 @@ Alle Testfälle bestanden:
 ## 📝 Beispiele
 
 ### Vorher (Englisch)
+
 ```python
 f"{total_cost:,.2f} €"  # 12,345.67 €
 f"{investment:,.0f} €"  # 25,000 €
 ```
 
 ### Nachher (Deutsch)
+
 ```python
 f"{format_german_number(total_cost, 2)} €"  # 12.345,67 €
 f"{format_german_number(investment, 2)} €"  # 25.000,00 €
@@ -84,6 +93,7 @@ f"{format_german_number(investment, 2)} €"  # 25.000,00 €
 ## 🔧 Technische Details
 
 ### Funktion
+
 ```python
 def format_german_number(number, decimals=2):
     if number is None:
@@ -103,6 +113,7 @@ def format_german_number(number, decimals=2):
 ```
 
 ### Plotly-Charts
+
 ```python
 fig.update_layout(
     ...

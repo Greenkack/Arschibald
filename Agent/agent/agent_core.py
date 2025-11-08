@@ -50,14 +50,6 @@ from agent.tools.knowledge_tools import knowledge_base_search
 
 class AgentCore:
     """
-    def __getstate__(self):
-        """Ermöglicht Pickle-Serialisierung für Session State"""
-        return self.__dict__.copy()
-    
-    def __setstate__(self, state):
-        """Ermöglicht Pickle-Deserialisierung für Session State"""
-        self.__dict__.update(state)
-    
     Main agent orchestration class using LangChain's ReAct pattern.
 
     The agent has dual expertise:
@@ -165,6 +157,20 @@ class AgentCore:
         self.verbose = verbose
 
         self.logger.info("AgentCore initialization complete")
+
+    def __getstate__(self):
+        """Ermoglicht Pickle-Serialisierung fur Session State"""
+        state = self.__dict__.copy()
+        # Remove non-picklable objects
+        if 'logger' in state:
+            del state['logger']
+        return state
+    
+    def __setstate__(self, state):
+        """Ermoglicht Pickle-Deserialisierung fur Session State"""
+        self.__dict__.update(state)
+        # Restore logger
+        self.logger = get_logger(__name__)
 
     def _setup_tools(self, vector_store) -> list:
         """
