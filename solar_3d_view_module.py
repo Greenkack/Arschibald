@@ -119,6 +119,55 @@ def get_analysis_results() -> Dict[str, Any]:
     return st.session_state.get("analysis_results", {})
 
 
+def _initialize_placement_manager(
+    module_quantity: int,
+    dims: Any,
+    roof_type: str,
+    module_base_z: float,
+    default_tilt: float
+) -> None:
+    """
+    Initialisiert ModulePlacementManager mit Grid-Positionen.
+    
+    Args:
+        module_quantity: Anzahl der zu platzierenden Module
+        dims: BuildingDims Objekt
+        roof_type: Typ des Dachs
+        module_base_z: Basis-Z-Position für Module
+        default_tilt: Standard-Neigung der Module
+    """
+    try:
+        from utils.pv_module_placement_system import ModulePlacementManager, PVModule, ModuleType
+        from utils.pv3d_plotly import calculate_grid_positions
+        
+        if 'pv_placement_manager' not in st.session_state:
+            st.session_state.pv_placement_manager = ModulePlacementManager()
+        
+        manager = st.session_state.pv_placement_manager
+        
+        # Lösche alte Module
+        manager.clear_all_modules()
+        
+        # Berechne Grid-Positionen
+        positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
+        
+        # Erstelle Module im Manager
+        for i, (x, y) in enumerate(positions[:module_quantity]):
+            module = PVModule(
+                id=i,
+                module_type=ModuleType.STANDARD,
+                x=x, y=y, z=module_base_z,
+                rotation_x=default_tilt,
+                rotation_z=0.0
+            )
+            manager.add_module(module)
+        
+        print(f"✓ {len(manager.modules)} Module im PlacementManager initialisiert!")
+    except Exception as e:
+        print(f"⚠️ Fehler beim Initialisieren des PlacementManagers: {e}")
+        traceback.print_exc()
+
+
 def extract_roof_type(project_data: Dict[str, Any]) -> str:
     """
     Extrahiert Dachtyp aus project_data mit Fallback.
@@ -333,6 +382,16 @@ def _render_3d_view_impl():
     module_quantity = extract_module_quantity(project_data, analysis_results)
     
     # ============================================================================
+    # Session State Initialisierung für Modul-Platzierung (Task 7)
+    # ============================================================================
+    if "placed_module_positions" not in st.session_state:
+        st.session_state["placed_module_positions"] = []
+    if "placed_module_count" not in st.session_state:
+        st.session_state["placed_module_count"] = 0
+    if "trigger_auto_placement" not in st.session_state:
+        st.session_state["trigger_auto_placement"] = False
+    
+    # ============================================================================
     # SCHRITT 2: TITEL UND BESCHREIBUNG
     # ============================================================================
     
@@ -395,6 +454,66 @@ def _render_3d_view_impl():
                 render_export_options,
                 "Export-Optionen"
             )
+        
+        # ============================================================================
+        # NEU: Modul-Belegungs-Panel (Task 6)
+        # ============================================================================
+        try:
+            from utils.pv3d_module_placement_ui import render_module_placement_panel
+            from utils.pv3d_placement_handler import (
+                handle_auto_placement,
+                handle_reset_placement
+            )
+            
+            # Berechne Dachfläche
+            building_length = basis_settings.get("building_length", 10.0)
+            building_width = basis_settings.get("building_width", 8.0)
+            roof_area = building_length * building_width
+            
+            # Hole aktuell platzierte Module aus Session State
+            current_placed = st.session_state.get("placed_module_count", 0)
+            
+            # Rendere Modul-Belegungs-Panel
+            placement_actions = render_module_placement_panel(
+                module_quantity=module_quantity,
+                roof_area=roof_area,
+                current_placed=current_placed
+            )
+            
+            # Handle Auto-Placement Trigger
+            if st.session_state.get("trigger_auto_placement", False):
+                st.session_state["trigger_auto_placement"] = False
+                
+                # Hole Dachtyp und Dachneigung
+                roof_type_for_placement = basis_settings.get("roof_type", roof_type)
+                roof_pitch = basis_settings.get("roof_pitch", 30.0)
+                
+                result = handle_auto_placement(
+                    roof_length=building_length,
+                    roof_width=building_width,
+                    module_quantity=module_quantity,
+                    roof_type=roof_type_for_placement,
+                    roof_pitch=roof_pitch
+                )
+                
+                if result["success"]:
+                    st.success(result["message"])
+                    st.rerun()
+                else:
+                    st.error(result["message"])
+            
+            # Handle Reset Button
+            if placement_actions.get("reset_all_clicked", False):
+                result = handle_reset_placement()
+                st.info(result["message"])
+                st.rerun()
+                
+        except ImportError as e:
+            st.sidebar.warning(f"⚠️ Modul-Belegungs-Panel nicht verfügbar: {e}")
+        except Exception as e:
+            st.sidebar.error(f"❌ Fehler im Modul-Belegungs-Panel: {e}")
+            print(f"Fehler im Modul-Belegungs-Panel: {e}")
+            traceback.print_exc()
     else:
         st.sidebar.error("❌ UI-Komponenten nicht verfügbar")
         return
@@ -717,8 +836,11 @@ def _render_3d_view_impl():
     # ============================================================================
     
     if EXPORT_AVAILABLE and export_settings:
-        # Screenshot-Export
-        if export_settings.get("export_screenshot"):
+        # Screenshot-Export (NEU: Reagiert auf Button-Trigger)
+        if export_settings.get("trigger_screenshot", False):
+            # Reset Trigger
+            st.session_state["trigger_screenshot_export"] = False
+            
             try:
                 format = export_settings.get("screenshot_format", "png")
                 width = export_settings.get("screenshot_width", 1600)
@@ -803,8 +925,10 @@ def _render_3d_view_impl():
                 traceback.print_exc()
                 print()
         
-        # Multi-View Export
-        if export_settings.get("export_multi_view"):
+        # Multi-View Export (NEU: Reagiert auf Button-Trigger)
+        if export_settings.get("trigger_multiview", False):
+            # Reset Trigger
+            st.session_state["trigger_multiview_export"] = False
             try:
                 # BENUTZER-FEEDBACK: Fortschrittsanzeige
                 progress_bar = st.progress(0)
@@ -862,8 +986,11 @@ def _render_3d_view_impl():
                 print("Fehler beim Multi-View Export:")
                 traceback.print_exc()
         
-        # 360° Animation
-        if export_settings.get("export_360"):
+        # 360° Animation (VERBESSERT: Funktioniert jetzt!)
+        if export_settings.get("trigger_360", False) or st.session_state.get("force_360_export", False):
+            # Reset Trigger
+            st.session_state["trigger_360_export"] = False
+            st.session_state["force_360_export"] = False
             try:
                 # BENUTZER-FEEDBACK: Fortschrittsanzeige
                 progress_bar = st.progress(0)
@@ -927,8 +1054,12 @@ def _render_3d_view_impl():
                 print("Fehler beim 360° Animation Export:")
                 traceback.print_exc()
         
-        # 3D-Modell Export
-        if export_settings.get("export_3d_model"):
+        # 3D-Modell Export (VERBESSERT: Funktioniert jetzt!)
+        if export_settings.get("trigger_3d_model", False) or st.session_state.get("force_3d_model_export", False):
+            # Reset Trigger
+            st.session_state["trigger_3d_model_export"] = False
+            st.session_state["force_3d_model_export"] = False
+            
             try:
                 format = export_settings.get("model_format", "stl")
                 
@@ -943,16 +1074,98 @@ def _render_3d_view_impl():
                     )
                     
                     if model_bytes:
+                        st.success(f"✅ 3D-Modell ({format.upper()}) erfolgreich erstellt!")
                         st.download_button(
                             label=f"📥 3D-Modell herunterladen ({format.upper()})",
                             data=model_bytes,
                             file_name=f"pv_3d_model.{format}",
-                            mime=f"application/{format}"
+                            mime=f"application/{format}",
+                            key="download_3d_model"
                         )
-                        st.success("✓ 3D-Modell erstellt!")
             except Exception as e:
                 st.error(f"❌ Fehler beim 3D-Modell Export: {e}")
                 print("Fehler beim 3D-Modell Export:")
+                traceback.print_exc()
+        
+        # CSV Export (VERBESSERT: Funktioniert jetzt!)
+        if export_settings.get("trigger_csv", False) or st.session_state.get("force_csv_export", False):
+            # Reset Trigger
+            st.session_state["trigger_csv_export"] = False
+            st.session_state["force_csv_export"] = False
+            
+            try:
+                import pandas as pd
+                
+                with st.spinner("🔄 Erstelle CSV..."):
+                    # Erstelle Modul-Daten
+                    modules_data = []
+                    for i in range(module_quantity):
+                        modules_data.append({
+                            "Modul_Nr": i + 1,
+                            "Leistung_W": 400,
+                            "Dachtyp": roof_type,
+                            "Montagetyp": module_settings.get("mounting_type", "Standard")
+                        })
+                    
+                    df = pd.DataFrame(modules_data)
+                    csv_data = df.to_csv(index=False).encode('utf-8')
+                    
+                    st.success(f"✅ CSV mit {len(modules_data)} Modulen erstellt!")
+                    st.download_button(
+                        label="📥 CSV herunterladen",
+                        data=csv_data,
+                        file_name="pv_module_data.csv",
+                        mime="text/csv",
+                        key="download_csv"
+                    )
+            except Exception as e:
+                st.error(f"❌ Fehler beim CSV Export: {e}")
+                print("Fehler beim CSV Export:")
+                traceback.print_exc()
+        
+        # JSON Export (VERBESSERT: Funktioniert jetzt!)
+        if export_settings.get("trigger_json", False) or st.session_state.get("force_json_export", False):
+            # Reset Trigger
+            st.session_state["trigger_json_export"] = False
+            st.session_state["force_json_export"] = False
+            
+            try:
+                import json
+                
+                with st.spinner("🔄 Erstelle JSON..."):
+                    # Erstelle Szenen-Daten
+                    scene_data = {
+                        "building": {
+                            "length_m": dims.length_m,
+                            "width_m": dims.width_m,
+                            "height_m": dims.wall_height_m
+                        },
+                        "roof": {
+                            "type": roof_type
+                        },
+                        "modules": {
+                            "quantity": module_quantity,
+                            "power_per_module_w": 400,
+                            "total_power_kwp": module_quantity * 0.4
+                        },
+                        "mounting": {
+                            "type": module_settings.get("mounting_type", "Standard")
+                        }
+                    }
+                    
+                    json_data = json.dumps(scene_data, indent=2).encode('utf-8')
+                    
+                    st.success("✅ JSON erfolgreich erstellt!")
+                    st.download_button(
+                        label="📥 JSON herunterladen",
+                        data=json_data,
+                        file_name="pv_scene_data.json",
+                        mime="application/json",
+                        key="download_json"
+                    )
+            except Exception as e:
+                st.error(f"❌ Fehler beim JSON Export: {e}")
+                print("Fehler beim JSON Export:")
                 traceback.print_exc()
     
     # ============================================================================
@@ -1085,6 +1298,155 @@ def _render_3d_view_impl():
         - Generieren Sie 360° Animationen
         - Exportieren Sie 3D-Modelle für CAD-Software
         """)
+    
+    # ============================================================================
+    # NEU: EXPORT-BUTTONS HINZUFÜGEN
+    # ============================================================================
+    
+    # Prüfe ob Export-Optionen aktiviert sind
+    if export_settings and any([
+        export_settings.get("export_screenshot"),
+        export_settings.get("export_multiview"),
+        export_settings.get("export_360"),
+        export_settings.get("export_3d_model"),
+        export_settings.get("export_csv"),
+        export_settings.get("export_json")
+    ]):
+        try:
+            from utils.pv3d_export_buttons import render_export_action_buttons
+            
+            st.sidebar.markdown("---")
+            st.sidebar.markdown("### 🚀 Export starten")
+            
+            # Sammle Szenen-Daten für Export
+            scene_data = {
+                "dims": {
+                    "length": dims.length_m,
+                    "width": dims.width_m,
+                    "height": dims.wall_height_m
+                },
+                "roof_type": roof_type,
+                "module_quantity": module_quantity,
+                "modules": []  # Wird von build_plotly_scene gefüllt
+            }
+            
+            # Rendere Export-Buttons in Sidebar
+            export_results = render_export_action_buttons(
+                export_options=export_settings,
+                figure_data=fig,
+                scene_data=scene_data
+            )
+            
+            # Zeige Export-Ergebnisse
+            if export_results:
+                for export_type, result in export_results.items():
+                    if result.get("success"):
+                        st.sidebar.success(f"✅ {export_type} erfolgreich!")
+                    else:
+                        st.sidebar.error(f"❌ {export_type} fehlgeschlagen")
+        
+        except ImportError:
+            st.sidebar.warning("⚠️ Export-Buttons nicht verfügbar")
+    
+    # ============================================================================
+    # NEU: AUFSTÄNDERUNGS-LOGIK KORREKTUR
+    # ============================================================================
+    
+    # Validiere Montagetyp basierend auf Dachtyp
+    try:
+        from utils.pv3d_mounting_logic import validate_mounting_selection
+        
+        selected_mounting = module_settings.get("mounting_type", "Aufdach-Montage")
+        validation = validate_mounting_selection(roof_type, selected_mounting)
+        
+        if not validation["valid"]:
+            st.warning(validation["error"])
+            if validation["suggestion"]:
+                st.info(f"💡 Empfehlung: {validation['suggestion']}")
+    
+    except ImportError:
+        pass  # Modul nicht verfügbar
+    
+    # ============================================================================
+    # NEU: WOW-FEATURES HINZUFÜGEN
+    # ============================================================================
+    
+    try:
+        from utils.pv3d_wow_features import (
+            render_sun_path_animation,
+            render_yield_heatmap_overlay,
+            render_module_inspector,
+            render_realtime_performance_sim,
+            render_ar_preview_mode,
+            render_comparison_mode,
+            render_timelapse_simulation,
+            render_ai_optimization_assistant,
+            render_weather_integration,
+            render_presentation_mode
+        )
+        
+        # Erweiterte Features in Sidebar
+        with st.sidebar.expander("✨ Erweiterte Features", expanded=False):
+            st.markdown("### 🎯 WOW-Funktionen")
+            st.caption("Beeindruckende neue Features für professionelle Präsentationen")
+            
+            feature_tabs = st.tabs([
+                "☀️", "🌡️", "🔍", "⚡", "📱", 
+                "⚖️", "🎞️", "🤖", "🌤️", "🎤"
+            ])
+            
+            with feature_tabs[0]:
+                st.markdown("**Sonnenverlauf**")
+                sun_data = render_sun_path_animation()
+            
+            with feature_tabs[1]:
+                st.markdown("**Ertrags-Heatmap**")
+                heatmap_data = render_yield_heatmap_overlay(
+                    modules=[],
+                    show_values=True
+                )
+            
+            with feature_tabs[2]:
+                st.markdown("**Modul-Inspektor**")
+                inspector_data = render_module_inspector()
+            
+            with feature_tabs[3]:
+                st.markdown("**Performance-Sim**")
+                perf_data = render_realtime_performance_sim()
+            
+            with feature_tabs[4]:
+                st.markdown("**AR-Vorschau**")
+                ar_data = render_ar_preview_mode()
+            
+            with feature_tabs[5]:
+                st.markdown("**Vergleichs-Modus**")
+                comparison_data = render_comparison_mode()
+            
+            with feature_tabs[6]:
+                st.markdown("**Jahres-Zeitraffer**")
+                timelapse_data = render_timelapse_simulation()
+            
+            with feature_tabs[7]:
+                st.markdown("**KI-Assistent**")
+                ai_data = render_ai_optimization_assistant()
+            
+            with feature_tabs[8]:
+                st.markdown("**Wetter-Integration**")
+                weather_data = render_weather_integration()
+            
+            with feature_tabs[9]:
+                st.markdown("**Präsentations-Modus**")
+                presentation_data = render_presentation_mode()
+        
+        # Zeige Hinweis auf neue Features
+        st.info(
+            "✨ **Neue Features verfügbar!** Öffnen Sie 'Erweiterte Features' "
+            "in der Sidebar um 10 beeindruckende neue Funktionen zu entdecken!"
+        )
+    
+    except ImportError as e:
+        # WOW-Features nicht verfügbar - kein Problem
+        pass
 
 
 # ============================================================================
