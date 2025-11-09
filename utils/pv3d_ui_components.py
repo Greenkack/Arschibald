@@ -183,31 +183,60 @@ def render_module_placement(project_data: Dict[str, Any], selected_roof_type: st
 
         st.divider()
 
-        # Flachdach-Aufständerung (nur bei Flachdach)
-        mounting_type = "Süd"
+        # Montagetyp-Auswahl mit Validierung (NEU: Aufständerungs-Logik)
+        mounting_type = "Aufdach-Montage"  # Default
         custom_azimuth = 0.0
         custom_tilt = 15.0
         
-        if selected_roof_type == "Flachdach":
-            st.markdown("**Aufständerung**")
+        try:
+            from utils.pv3d_mounting_logic import (
+                is_flat_roof,
+                get_allowed_mounting_types,
+                validate_mounting_selection
+            )
             
+            # Hole erlaubte Montagetypen für diesen Dachtyp
+            allowed_types = get_allowed_mounting_types(selected_roof_type)
+            
+            # Info-Box über Dachtyp
+            if is_flat_roof(selected_roof_type):
+                st.info(
+                    f"ℹ️ **Flachdach erkannt**: Aufständerungen verfügbar. "
+                    f"Module werden mit optimaler Neigung montiert."
+                )
+            else:
+                st.info(
+                    f"ℹ️ **Schrägdach erkannt** ({selected_roof_type}): Module werden "
+                    f"direkt auf der Dachfläche montiert. Aufständerungen nicht verfügbar."
+                )
+            
+            st.markdown("**Montagetyp**")
+            
+            # Selectbox mit nur erlaubten Optionen
             mounting_type = st.selectbox(
-                "Aufständerungstyp",
-                options=["Süd", "Ost-West", "Süd-Ost", "Süd-West", "Individuell"],
+                "Montageart",
+                options=allowed_types,
                 index=0,
                 help=get_tooltip("mounting_type"),
                 key="mounting_type_select"
             )
             
-            # Zeige custom-Eingabefelder nur bei "Individuell" Modus
-            if mounting_type == "Individuell":
+            # Validiere Auswahl
+            validation = validate_mounting_selection(selected_roof_type, mounting_type)
+            if not validation["valid"]:
+                st.warning(validation["error"])
+                if validation["suggestion"]:
+                    st.info(f"💡 Empfehlung: {validation['suggestion']}")
+            
+            # Custom-Parameter nur bei bestimmten Typen
+            if "Individuell" in mounting_type or "Optimal" in mounting_type:
                 st.caption("**Individuelle Parameter:**")
                 
                 custom_azimuth = st.slider(
                     "Azimuth (°)",
                     min_value=0.0,
                     max_value=360.0,
-                    value=0.0,
+                    value=180.0,  # Süd
                     step=5.0,
                     help=get_tooltip("azimuth"),
                     key="custom_azimuth_slider"
@@ -217,11 +246,47 @@ def render_module_placement(project_data: Dict[str, Any], selected_roof_type: st
                     "Neigung (°)",
                     min_value=0.0,
                     max_value=90.0,
-                    value=15.0,
+                    value=30.0 if is_flat_roof(selected_roof_type) else 15.0,
                     step=1.0,
                     help=get_tooltip("tilt"),
                     key="custom_tilt_slider"
                 )
+        
+        except ImportError:
+            # Fallback: Alte Logik wenn Modul nicht verfügbar
+            if selected_roof_type == "Flachdach":
+                st.markdown("**Aufständerung**")
+                
+                mounting_type = st.selectbox(
+                    "Aufständerungstyp",
+                    options=["Süd", "Ost-West", "Süd-Ost", "Süd-West", "Individuell"],
+                    index=0,
+                    help=get_tooltip("mounting_type"),
+                    key="mounting_type_select"
+                )
+                
+                if mounting_type == "Individuell":
+                    st.caption("**Individuelle Parameter:**")
+                    
+                    custom_azimuth = st.slider(
+                        "Azimuth (°)",
+                        min_value=0.0,
+                        max_value=360.0,
+                        value=0.0,
+                        step=5.0,
+                        help=get_tooltip("azimuth"),
+                        key="custom_azimuth_slider"
+                    )
+                    
+                    custom_tilt = st.slider(
+                        "Neigung (°)",
+                        min_value=0.0,
+                        max_value=90.0,
+                        value=15.0,
+                        step=1.0,
+                        help=get_tooltip("tilt"),
+                        key="custom_tilt_slider"
+                    )
 
         st.divider()
 
@@ -747,43 +812,42 @@ def render_export_options() -> Dict[str, Any]:
         
         # Screenshot-Export
         st.markdown("**📷 Screenshot**")
-        export_screenshot = st.checkbox(
-            "Screenshot exportieren",
-            value=False,
-            help=get_tooltip("screenshot"),
-            key="export_screenshot_checkbox"
-        )
         
-        if export_screenshot:
-            col_format, col_res = st.columns(2)
+        # FIX: Button statt Checkbox verwenden um Dauerschleife zu vermeiden
+        col_format, col_res = st.columns(2)
+        
+        with col_format:
+            screenshot_format = st.selectbox(
+                "Format",
+                options=["PNG", "JPEG"],
+                index=0,
+                help=get_tooltip("screenshot_format")
+            )
+        
+        with col_res:
+            resolution_options = {
+                "HD (1280x720)": (1280, 720),
+                "Full HD (1920x1080)": (1920, 1080),
+                "2K (2560x1440)": (2560, 1440),
+                "4K (3840x2160)": (3840, 2160)
+            }
             
-            with col_format:
-                screenshot_format = st.selectbox(
-                    "Format",
-                    options=["PNG", "JPEG"],
-                    index=0,
-                    help=get_tooltip("screenshot_format")
-                )
+            selected_res = st.selectbox(
+                "Auflösung",
+                options=list(resolution_options.keys()),
+                index=1,
+                help=get_tooltip("screenshot_resolution")
+            )
             
-            with col_res:
-                resolution_options = {
-                    "HD (1280x720)": (1280, 720),
-                    "Full HD (1920x1080)": (1920, 1080),
-                    "2K (2560x1440)": (2560, 1440),
-                    "4K (3840x2160)": (3840, 2160)
-                }
-                
-                selected_res = st.selectbox(
-                    "Auflösung",
-                    options=list(resolution_options.keys()),
-                    index=1,
-                    help=get_tooltip("screenshot_resolution")
-                )
-                
-                screenshot_resolution = resolution_options[selected_res]
-        else:
-            screenshot_format = "PNG"
-            screenshot_resolution = (1920, 1080)
+            screenshot_resolution = resolution_options[selected_res]
+        
+        # Button für Screenshot-Export (verhindert Dauerschleife)
+        export_screenshot = st.button(
+            "📸 Screenshot exportieren",
+            help="Klicken Sie hier, um einen Screenshot zu erstellen",
+            key="export_screenshot_button",
+            use_container_width=True
+        )
         
         st.divider()
         
@@ -900,11 +964,90 @@ def render_export_options() -> Dict[str, Any]:
                 help=get_tooltip("export_json"),
                 key="export_json_checkbox"
             )
+        
+        # NEU: Export-Buttons direkt hier anzeigen
+        st.divider()
+        st.markdown("### 🚀 Export starten")
+        st.caption("Klicken Sie auf einen Button um den Export zu starten")
+        
+        # Screenshot Button
+        if export_screenshot:
+            if st.button(
+                f"📷 Screenshot exportieren ({screenshot_format.upper()})",
+                key="btn_export_screenshot_inline",
+                use_container_width=True,
+                type="primary"
+            ):
+                st.session_state["trigger_screenshot_export"] = True
+                st.success("✅ Screenshot wird erstellt...")
+        
+        # Multi-View Button
+        if export_multiview:
+            if st.button(
+                "🎬 Multi-View exportieren",
+                key="btn_export_multiview_inline",
+                use_container_width=True
+            ):
+                st.session_state["trigger_multiview_export"] = True
+                st.success("✅ Multi-View wird erstellt...")
+        
+        # 360° Animation Button - VERBESSERT
+        if export_360:
+            if st.button(
+                f"🔄 360° Animation ({animation_frames} Frames)",
+                key="btn_export_360_inline",
+                use_container_width=True,
+                type="secondary"
+            ):
+                st.session_state["trigger_360_export"] = True
+                st.session_state["force_360_export"] = True  # Zusätzlicher Flag
+                st.info("🔄 360° Animation wird erstellt... Bitte warten Sie.")
+                st.rerun()  # Sofort neu laden um Export zu triggern
+        
+        # 3D-Modell Button - VERBESSERT
+        if export_3d_model:
+            if st.button(
+                f"🎨 3D-Modell exportieren ({model_format})",
+                key="btn_export_3d_model_inline",
+                use_container_width=True,
+                type="secondary"
+            ):
+                st.session_state["trigger_3d_model_export"] = True
+                st.session_state["force_3d_model_export"] = True  # Zusätzlicher Flag
+                st.info(f"🎨 3D-Modell ({model_format}) wird erstellt... Bitte warten Sie.")
+                st.rerun()  # Sofort neu laden um Export zu triggern
+        
+        # CSV Button - VERBESSERT
+        if export_csv:
+            if st.button(
+                "📊 CSV exportieren",
+                key="btn_export_csv_inline",
+                use_container_width=True,
+                type="secondary"
+            ):
+                st.session_state["trigger_csv_export"] = True
+                st.session_state["force_csv_export"] = True  # Zusätzlicher Flag
+                st.info("📊 CSV wird erstellt... Bitte warten Sie.")
+                st.rerun()  # Sofort neu laden um Export zu triggern
+        
+        # JSON Button - VERBESSERT
+        if export_json:
+            if st.button(
+                "📋 JSON exportieren",
+                key="btn_export_json_inline",
+                use_container_width=True,
+                type="secondary"
+            ):
+                st.session_state["trigger_json_export"] = True
+                st.session_state["force_json_export"] = True  # Zusätzlicher Flag
+                st.info("📋 JSON wird erstellt... Bitte warten Sie.")
+                st.rerun()  # Sofort neu laden um Export zu triggern
     
     return {
         "export_screenshot": export_screenshot,
-        "screenshot_format": screenshot_format,
-        "screenshot_resolution": screenshot_resolution,
+        "screenshot_format": screenshot_format.lower(),  # png oder jpeg
+        "screenshot_width": screenshot_resolution[0],
+        "screenshot_height": screenshot_resolution[1],
         "export_multiview": export_multiview,
         "multiview_resolution": multiview_resolution,
         "export_360": export_360,
@@ -913,5 +1056,12 @@ def render_export_options() -> Dict[str, Any]:
         "export_3d_model": export_3d_model,
         "model_format": model_format,
         "export_csv": export_csv,
-        "export_json": export_json
+        "export_json": export_json,
+        # NEU: Trigger-Flags für Exports
+        "trigger_screenshot": st.session_state.get("trigger_screenshot_export", False),
+        "trigger_multiview": st.session_state.get("trigger_multiview_export", False),
+        "trigger_360": st.session_state.get("trigger_360_export", False),
+        "trigger_3d_model": st.session_state.get("trigger_3d_model_export", False),
+        "trigger_csv": st.session_state.get("trigger_csv_export", False),
+        "trigger_json": st.session_state.get("trigger_json_export", False)
     }

@@ -143,45 +143,68 @@ Diese Implementierung erweitert die Preismatrix-Funktionalität um eine vollstä
     - Umfassende Fehlerbehandlung
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-- [ ] 6. Solarcalculator - Preismatrix-Integration
-  - [ ] 6.1 Modus-Prüfung implementieren
+- [x] 6. Solarcalculator - Preismatrix-Integration
+
+
+
+
+
+
+  - [x] 6.1 Modus-Prüfung implementieren
     - Preisberechnungsmodus aus Datenbank laden
     - Verzweigung zwischen Standard und Matrix
     - UI-Hinweis auf aktiven Modus
+
     - _Requirements: 4.1, 5.1, 5.5_
 
-  - [ ] 6.2 Matrix-Preisberechnung
+  - [x] 6.2 Matrix-Preisberechnung
+
     - Funktion `get_total_price_with_matrix_mode()` erstellen
     - Basispreis aus Matrix abrufen
     - NUR Sonderprodukte/Extras/Dienstleistungen addieren
     - KEINE Standard-Aufschläge (Montage, Installation)
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4_
 
-  - [ ] 6.3 UI-Anpassungen für Matrix-Modus
+  - [x] 6.3 UI-Anpassungen für Matrix-Modus
+
+
     - Preisaufschlüsselung anzeigen (Basis + Extras)
     - Matrix-Info anzeigen (welche Zeile/Spalte verwendet)
     - Hinweis dass Standard-Aufschläge deaktiviert sind
     - _Requirements: 6.6_
 
-  - [ ] 6.4 Standard-Berechnung deaktivieren
+  - [x] 6.4 Standard-Berechnung deaktivieren
+
+
     - Einzelprodukt-Preise ignorieren im Matrix-Modus
     - Montage-/Installations-Aufschläge deaktivieren
     - Nur explizite Extras berücksichtigen
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 7. Zusatzkosten-Logik für Sonderprodukte
-  - [ ] 7.1 Sonderprodukte identifizieren
+- [x] 7. Zusatzkosten-Logik für Sonderprodukte
+
+
+
+
+
+  - [x] 7.1 Sonderprodukte identifizieren
+
+
     - Kennzeichnung von Sonderprodukten in Produktdatenbank
     - Filter-Funktion für Sonderprodukte
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 7.2 Extras und Dienstleistungen
+  - [x] 7.2 Extras und Dienstleistungen
+
+
     - Zusätzliche Dienstleistungen erfassen
     - Extras-Preise berechnen
     - Rabatte und Aufpreise anwenden
     - _Requirements: 6.4, 6.5_
 
-  - [ ] 7.3 Preisaufschlüsselung
+  - [x] 7.3 Preisaufschlüsselung
+
+
     - Detaillierte Aufschlüsselung erstellen
     - Basispreis (Matrix) + Extras separat anzeigen
     - Gesamtpreis berechnen

@@ -405,6 +405,415 @@ def _get_text(texts: dict[str, str], key: str,
         return fallback
 
 
+def _display_matrix_pricing(details: dict[str, Any], texts: dict[str, str]) -> None:
+    """Display pricing information when using matrix-based pricing mode.
+    
+    This function handles the complete pricing display for matrix mode:
+    - Retrieves base price from price matrix
+    - Adds only special products, extras, and services
+    - Does NOT add standard markups (installation, mounting, etc.)
+    - Shows detailed breakdown of base price + extras
+    """
+    # Session-Liveness-Guard
+    if not _is_session_alive():
+        return
+    
+    try:
+        # Extract module count and storage model from details
+        module_count = int(details.get('module_quantity', 0))
+        storage_model = details.get('selected_storage_name')
+        
+        # If storage_model is the placeholder text, treat as None
+        if storage_model and ('bitte' in storage_model.lower() or 'select' in storage_model.lower()):
+            storage_model = None
+        
+        # Validate inputs
+        if module_count <= 0:
+            st.warning("⚠️ Bitte wählen Sie die Anzahl der Module aus.")
+            return
+        
+        # Calculate total price using matrix mode
+        pricing_result = get_total_price_with_matrix_mode(details)
+        
+        if not pricing_result['success']:
+            # Display error with helpful message
+            st.error(f"❌ **Preismatrix-Fehler:** {pricing_result['error']}")
+            
+            # Provide specific guidance based on error type
+            matrix_info = pricing_result.get('matrix_info', {})
+            error_type = matrix_info.get('error_type')
+            
+            if error_type == 'no_matrix':
+                st.info("💡 **Lösung:** Aktivieren Sie eine Preismatrix in den Admin-Einstellungen.")
+            elif error_type == 'no_row':
+                st.info(f"💡 **Lösung:** Fügen Sie die Modulanzahl {module_count} zur Preismatrix hinzu oder wählen Sie eine andere Anzahl.")
+            elif error_type == 'no_column':
+                if storage_model:
+                    st.info(f"💡 **Lösung:** Fügen Sie das Speichermodell '{storage_model}' zur Preismatrix hinzu oder wählen Sie ein anderes Modell.")
+                else:
+                    st.info("💡 **Lösung:** Fügen Sie eine 'Kein Speicher' Spalte zur Preismatrix hinzu.")
+            elif error_type == 'no_price':
+                row_used = matrix_info.get('row_used', '?')
+                col_used = matrix_info.get('column_used', '?')
+                st.info(f"💡 **Lösung:** Tragen Sie einen Preis für die Kombination {row_used} Module + {col_used} in die Preismatrix ein.")
+            
+            return
+        
+        # Success! Display matrix pricing
+        base_price = pricing_result['base_price']
+        extras_price = pricing_result['extras_price']
+        net_total = pricing_result['net_total']
+        vat_amount = pricing_result['vat_amount']
+        gross_total = pricing_result['gross_total']
+        matrix_info = pricing_result['matrix_info']
+        breakdown = pricing_result['breakdown']
+        
+        st.markdown("### 💰 Preisübersicht (Preismatrix-Modus)")
+        
+        # Show matrix lookup information
+        with st.expander("📊 Matrix-Lookup-Details", expanded=False):
+            st.markdown(f"""
+            **Verwendete Matrix:** {matrix_info.get('matrix_name', 'Unbekannt')}
+            
+            **Lookup-Parameter:**
+            - Modulanzahl: {module_count} → Zeile: {matrix_info.get('row_used', '?')}
+            - Speichermodell: {storage_model or 'Kein Speicher'} → Spalte: {matrix_info.get('column_used', '?')}
+            
+            **Gefundener Basispreis:** {_format_german_currency(base_price)}
+            """)
+        
+        # Display price breakdown
+        st.markdown("#### Preisaufschlüsselung")
+        
+        col_label, col_value = st.columns([3, 1])
+        
+        with col_label:
+            st.markdown("**Basispreis (aus Preismatrix):**")
+        with col_value:
+            st.markdown(f"**{_format_german_currency(base_price)}**")
+        
+        # Show extras breakdown if any
+        if extras_price > 0:
+            with col_label:
+                st.markdown("**+ Extras & Sonderprodukte:**")
+            with col_value:
+                st.markdown(f"**+ {_format_german_currency(extras_price)}**")
+            
+            # Show detailed breakdown in expander
+            if breakdown.get('special_products') or breakdown.get('services') or breakdown.get('extras'):
+                with st.expander("🔍 Extras-Details", expanded=False):
+                    # Sonderprodukte
+                    if breakdown.get('special_products'):
+                        st.markdown("**Sonderprodukte:**")
+                        for item in breakdown['special_products']:
+                            quantity = item.get('quantity', 1)
+                            unit_price = item.get('unit_price', item.get('price', 0))
+                            total_price = item.get('price', 0)
+                            
+                            if quantity > 1:
+                                st.write(f"- {item.get('name', 'Unbekannt')}: {quantity}x {_format_german_currency(unit_price)} = {_format_german_currency(total_price)}")
+                            else:
+                                st.write(f"- {item.get('name', 'Unbekannt')}: {_format_german_currency(total_price)}")
+                    
+                    # Dienstleistungen
+                    if breakdown.get('services'):
+                        st.markdown("**Dienstleistungen:**")
+                        for item in breakdown['services']:
+                            quantity = item.get('quantity', 1)
+                            unit_price = item.get('unit_price', item.get('price', 0))
+                            total_price = item.get('price', 0)
+                            description = item.get('description', '')
+                            
+                            if quantity > 1:
+                                st.write(f"- {item.get('name', 'Unbekannt')}: {quantity}x {_format_german_currency(unit_price)} = {_format_german_currency(total_price)}")
+                            else:
+                                st.write(f"- {item.get('name', 'Unbekannt')}: {_format_german_currency(total_price)}")
+                            
+                            if description:
+                                st.caption(f"  _{description}_")
+                    
+                    # Zusätzliche Extras
+                    if breakdown.get('extras'):
+                        st.markdown("**Zusätzliche Extras:**")
+                        for item in breakdown['extras']:
+                            quantity = item.get('quantity', 1)
+                            unit_price = item.get('unit_price', item.get('price', 0))
+                            total_price = item.get('price', 0)
+                            description = item.get('description', '')
+                            
+                            if quantity > 1:
+                                st.write(f"- {item.get('name', 'Unbekannt')}: {quantity}x {_format_german_currency(unit_price)} = {_format_german_currency(total_price)}")
+                            else:
+                                st.write(f"- {item.get('name', 'Unbekannt')}: {_format_german_currency(total_price)}")
+                            
+                            if description:
+                                st.caption(f"  _{description}_")
+        
+        st.markdown("---")
+        
+        with col_label:
+            st.markdown("**Netto-Gesamtpreis:**")
+        with col_value:
+            st.markdown(f"**{_format_german_currency(net_total)}**")
+        
+        with col_label:
+            st.markdown(f"**+ MwSt. (19%):**")
+        with col_value:
+            st.markdown(f"**+ {_format_german_currency(vat_amount)}**")
+        
+        st.markdown("---")
+        
+        with col_label:
+            st.markdown("### **🎯 Brutto-Gesamtpreis:**")
+        with col_value:
+            st.markdown(f"### **{_format_german_currency(gross_total)}**")
+        
+        # Store pricing data in details for PDF generation
+        details['pricing_mode'] = 'matrix'
+        details['matrix_price_info'] = {
+            'base_price': base_price,
+            'row_used': matrix_info.get('row_used'),
+            'column_used': matrix_info.get('column_used'),
+            'matrix_id': matrix_info.get('matrix_id'),
+            'matrix_name': matrix_info.get('matrix_name')
+        }
+        details['net_total'] = net_total
+        details['vat_amount'] = vat_amount
+        details['gross_total'] = gross_total
+        details['extras_total'] = extras_price
+        
+        # Store in session state for PDF access
+        if hasattr(st, 'session_state'):
+            st.session_state["solar_calculator_pricing_mode"] = "matrix"
+            st.session_state["solar_calculator_matrix_pricing"] = {
+                "base_price": base_price,
+                "extras_total": extras_price,
+                "net_total": net_total,
+                "vat_amount": vat_amount,
+                "gross_total": gross_total,
+                "matrix_info": matrix_info,
+                "breakdown": breakdown,
+                "formatted_totals": {
+                    "base": _format_german_currency(base_price),
+                    "extras": _format_german_currency(extras_price),
+                    "net": _format_german_currency(net_total),
+                    "vat": _format_german_currency(vat_amount),
+                    "gross": _format_german_currency(gross_total),
+                }
+            }
+        
+        # Important note about disabled standard markups
+        st.info("""
+        ℹ️ **Hinweis:** Im Preismatrix-Modus sind Standard-Aufschläge (Montage, Installation, etc.) 
+        deaktiviert. Der Basispreis aus der Matrix ist ein schlüsselfertiger Preis. 
+        Nur explizit ausgewählte Extras und Sonderprodukte werden hinzugefügt.
+        """)
+        
+    except ImportError as e:
+        st.error(f"❌ Preismatrix-Modul nicht verfügbar: {e}")
+    except Exception as e:
+        st.error(f"❌ Fehler bei der Preisberechnung: {e}")
+        import traceback
+        st.code(traceback.format_exc())
+
+
+def get_total_price_with_matrix_mode(details: dict[str, Any]) -> dict[str, Any]:
+    """Calculate total price using matrix-based pricing mode.
+    
+    This is the main pricing calculation function for matrix mode.
+    
+    Logic:
+    1. Retrieve base price from matrix based on module count and storage model
+    2. Add ONLY special products, extras, and services
+    3. Do NOT add standard markups (installation, mounting, etc.)
+    4. Calculate VAT and gross total
+    
+    Args:
+        details: Project details dictionary containing:
+            - module_quantity: Number of modules
+            - selected_storage_name: Storage model name or None
+            
+    Returns:
+        Dictionary with:
+        {
+            'success': bool,
+            'base_price': float,
+            'extras_price': float,
+            'net_total': float,
+            'vat_amount': float,
+            'gross_total': float,
+            'breakdown': dict,
+            'matrix_info': dict,
+            'error': str | None
+        }
+    """
+    result = {
+        'success': False,
+        'base_price': 0.0,
+        'extras_price': 0.0,
+        'net_total': 0.0,
+        'vat_amount': 0.0,
+        'gross_total': 0.0,
+        'breakdown': {},
+        'matrix_info': {},
+        'error': None
+    }
+    
+    try:
+        from price_matrix_lookup import calculate_price_from_matrix
+        
+        # Extract parameters
+        module_count = int(details.get('module_quantity', 0))
+        storage_model = details.get('selected_storage_name')
+        
+        # Clean storage model (remove placeholder text)
+        if storage_model and ('bitte' in storage_model.lower() or 'select' in storage_model.lower()):
+            storage_model = None
+        
+        # Validate module count
+        if module_count <= 0:
+            result['error'] = "Modulanzahl muss größer als 0 sein"
+            return result
+        
+        # Get base price from matrix
+        matrix_result = calculate_price_from_matrix(module_count, storage_model)
+        
+        if not matrix_result['success']:
+            result['error'] = matrix_result['error']
+            result['matrix_info'] = matrix_result
+            return result
+        
+        base_price = matrix_result['base_price']
+        result['base_price'] = base_price
+        result['matrix_info'] = matrix_result
+        
+        # Calculate extras (special products, services, etc.)
+        extras_breakdown = _calculate_matrix_extras_detailed(details)
+        extras_price = extras_breakdown['total']
+        result['extras_price'] = extras_price
+        result['breakdown'] = extras_breakdown
+        
+        # Calculate totals
+        net_total = base_price + extras_price
+        vat_rate = 0.19
+        vat_amount = calculate_vat_amount(net_total, vat_rate)
+        gross_total = calculate_gross_from_net(net_total, vat_rate)
+        
+        result['net_total'] = net_total
+        result['vat_amount'] = vat_amount
+        result['gross_total'] = gross_total
+        result['success'] = True
+        
+        return result
+        
+    except Exception as e:
+        result['error'] = f"Fehler bei der Preisberechnung: {str(e)}"
+        return result
+
+
+def _calculate_matrix_extras(details: dict[str, Any]) -> float:
+    """Calculate extras and special products for matrix pricing mode.
+    
+    This function calculates ONLY:
+    - Special products (marked as special in product database)
+    - Additional services (explicitly selected)
+    - Extras and custom additions
+    
+    It does NOT include:
+    - Standard installation costs
+    - Standard mounting costs
+    - Standard component markups
+    
+    Args:
+        details: Project details dictionary
+        
+    Returns:
+        Total extras cost as float
+    """
+    breakdown = _calculate_matrix_extras_detailed(details)
+    return breakdown['total']
+
+
+def _calculate_matrix_extras_detailed(details: dict[str, Any]) -> dict[str, Any]:
+    """Calculate detailed breakdown of extras for matrix pricing mode.
+    
+    Returns:
+        Dictionary with:
+        {
+            'total': float,
+            'special_products': list[dict],
+            'services': list[dict],
+            'extras': list[dict]
+        }
+    """
+    try:
+        from matrix_extras_calculator import calculate_all_extras
+        
+        # Berechne alle Extras mit vollständiger Aufschlüsselung
+        extras_result = calculate_all_extras(details)
+        
+        # Konvertiere in das erwartete Format
+        breakdown = {
+            'total': extras_result['total'],
+            'special_products': [],
+            'services': [],
+            'extras': []
+        }
+        
+        # Sonderprodukte
+        if 'special_products' in extras_result and extras_result['special_products']['items']:
+            for item in extras_result['special_products']['items']:
+                breakdown['special_products'].append({
+                    'name': item['name'],
+                    'price': item['price'],
+                    'quantity': item.get('quantity', 1),
+                    'unit_price': item.get('unit_price', item['price'])
+                })
+        
+        # Dienstleistungen
+        if 'services' in extras_result and extras_result['services']['items']:
+            for item in extras_result['services']['items']:
+                breakdown['services'].append({
+                    'name': item['name'],
+                    'price': item['price'],
+                    'quantity': item.get('quantity', 1),
+                    'unit_price': item.get('unit_price', item['price']),
+                    'description': item.get('description', '')
+                })
+        
+        # Extras
+        if 'extras' in extras_result and extras_result['extras']['items']:
+            for item in extras_result['extras']['items']:
+                breakdown['extras'].append({
+                    'name': item['name'],
+                    'price': item['price'],
+                    'quantity': item.get('quantity', 1),
+                    'unit_price': item.get('unit_price', item['price']),
+                    'description': item.get('description', '')
+                })
+        
+        return breakdown
+        
+    except ImportError as e:
+        print(f"Warning: matrix_extras_calculator not available: {e}")
+        # Fallback to simple calculation
+        breakdown = {
+            'total': 0.0,
+            'special_products': [],
+            'services': [],
+            'extras': []
+        }
+        
+        # Check for additional extras in details
+        if 'additional_extras' in details and isinstance(details['additional_extras'], list):
+            for extra in details['additional_extras']:
+                if isinstance(extra, dict) and 'price' in extra:
+                    breakdown['extras'].append(extra)
+                    breakdown['total'] += float(extra.get('price', 0))
+        
+        return breakdown
+
+
 def _display_pricing_information(
         details: dict[str, Any], texts: dict[str, str]) -> None:
     """Display enhanced real-time pricing information for selected components with categorization"""
@@ -416,6 +825,25 @@ def _display_pricing_information(
         return
 
     try:
+        # Import database functions for pricing mode
+        from database import get_pricing_calculation_mode
+        
+        # Check pricing calculation mode
+        pricing_mode = get_pricing_calculation_mode()
+        
+        # Display mode indicator
+        if pricing_mode == "matrix":
+            st.info("ℹ️ **Preisberechnungsmodus:** Preismatrix (Schlüsselfertige Preise)")
+        else:
+            st.info("ℹ️ **Preisberechnungsmodus:** Standardberechnung (Einzelprodukte)")
+        
+        # Branch based on pricing mode
+        if pricing_mode == "matrix":
+            # Matrix-based pricing
+            _display_matrix_pricing(details, texts)
+            return
+        
+        # Standard pricing calculation (existing code)
         # Get pricing display data
         pricing_display = get_pricing_display_for_ui(details)
 

@@ -120,7 +120,10 @@ def _migrate_product_table_columns(conn: sqlite3.Connection):
         # Shadow fading feature (0/1 boolean)
         "shadow_fading": "INTEGER",
         # Smart home integration (0/1 boolean)
-        "smart_home": "INTEGER"
+        "smart_home": "INTEGER",
+        # Special product flag for matrix pricing mode (0/1 boolean)
+        # Special products are added to matrix base price, standard products are not
+        "is_special_product": "INTEGER"
     }
 
     if 'added_date' in existing_columns and 'created_at' not in existing_columns:

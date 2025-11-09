@@ -8,6 +8,7 @@ Verwendet Plotly für interaktive, browserbasierte 3D-Grafiken.
 import math
 import plotly.graph_objects as go
 import numpy as np
+import traceback
 from typing import Dict, List, Tuple, Any, Optional
 
 # Import der Datenklassen aus der Original-Datei
@@ -441,19 +442,11 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     mounting_height = 0.0
     original_z = z  # Speichere Original-Z für Logging
     
-    # Liste der geneigten Dachformen
+    # Liste der geneigten Dachformen - KEINE Aufständerung bei diesen Dachtypen!
     pitched_roofs = ["Satteldach", "Satteldach mit Gaube", "Walmdach", "Krüppelwalmdach", "Pultdach", "Zeltdach"]
     
-    if roof_type in pitched_roofs and tilt_deg > 5.0:
-        # Geneigte Dächer: Sichtbare Aufständerung
-        # Formel: min(0.3m, neigung/90 * 0.5m)
-        mounting_height = min(0.3, (tilt_deg / 90.0) * 0.5)
-        
-        if show_mounting:
-            # Zusätzliche Höhe für Gestell-Visualisierung
-            mounting_height += 0.05
-        
-    elif roof_type == "Flachdach" and tilt_deg > 5.0:
+    # KRITISCH: Nur bei Flachdach Aufständerung verwenden!
+    if roof_type == "Flachdach" and tilt_deg > 5.0:
         # Flachdach mit Aufständerung: Höhere Aufständerung
         mounting_height = 0.3 + (tilt_deg / 90.0) * 0.5
         mounting_height = min(0.8, mounting_height)
@@ -461,7 +454,10 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         if show_mounting:
             mounting_height += 0.05
     
-    # Erhöhe Z-Position um Mounting Height
+    # BEI ALLEN ANDEREN DACHTYPEN: KEINE AUFSTÄNDERUNG!
+    # Module liegen direkt auf der Dachfläche
+    
+    # Erhöhe Z-Position um Mounting Height (nur bei Flachdach > 0)
     z += mounting_height
     
     # Detailliertes Logging: Dachform, Neigung, Mounting Height, Z-Position
@@ -523,7 +519,7 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         z=final_vertices[:, 2],
         i=i, j=j, k=k,
         color=module_color,
-        opacity=0.95,
+        opacity=0.9,
         name="PV Module",
         showlegend=False,
         lighting=dict(ambient=0.5, diffuse=0.9, specular=0.5, roughness=0.2),
@@ -1023,7 +1019,7 @@ def build_plotly_scene(
         )
         fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
-        default_tilt = roof_inclination
+        default_tilt = 0.0  # FIX: Module liegen flach auf Dachfläche, keine Aufständerung
         
     elif roof_type == "Satteldach mit Gaube":
         roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
@@ -1054,7 +1050,7 @@ def build_plotly_scene(
         )
         fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
-        default_tilt = roof_inclination
+        default_tilt = 0.0  # FIX: Module liegen flach auf Dachfläche, keine Aufständerung
         
     elif roof_type == "Walmdach":
         roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
@@ -1078,7 +1074,7 @@ def build_plotly_scene(
         )
         fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
-        default_tilt = roof_inclination
+        default_tilt = 0.0  # FIX: Module liegen flach auf Dachfläche, keine Aufständerung
         
     elif roof_type == "Krüppelwalmdach":
         roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
@@ -1102,7 +1098,7 @@ def build_plotly_scene(
         )
         fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
-        default_tilt = roof_inclination
+        default_tilt = 0.0  # FIX: Module liegen flach auf Dachfläche, keine Aufständerung
         
     elif roof_type == "Pultdach":
         roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
@@ -1126,7 +1122,7 @@ def build_plotly_scene(
         )
         fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
-        default_tilt = roof_inclination
+        default_tilt = 0.0  # FIX: Module liegen flach auf Dachfläche, keine Aufständerung
         
     elif roof_type == "Zeltdach":
         roof_height = (dims.width_m / 2) * np.tan(np.deg2rad(roof_inclination))
@@ -1150,7 +1146,7 @@ def build_plotly_scene(
         )
         fig.add_trace(roof_edges)
         module_base_z = roof_z + 0.15
-        default_tilt = roof_inclination
+        default_tilt = 0.0  # FIX: Module liegen flach auf Dachfläche, keine Aufständerung
         
     else:
         # Fallback: Sonstiges als Flachdach
@@ -1181,76 +1177,183 @@ def build_plotly_scene(
         default_tilt = 15.0
     
     # ========== 3. PV-MODULE ==========
-    # NEUE LOGIK: Prüfe ob ModulePlacementManager Module hat
+    # TASK 4: 3D-Rendering Integration
+    # Load module positions from session state and render them
     try:
         import streamlit as st
-        if hasattr(st, 'session_state') and 'pv_placement_manager' in st.session_state:
-            manager = st.session_state.pv_placement_manager
+        
+        # Requirement 10.1: Load positions from session state
+        # Requirement 11.3: Try-Catch around rendering
+        placed_positions = st.session_state.get("placed_module_positions", [])
+        
+        # Requirement 11.1: Validate positions data
+        if not isinstance(placed_positions, list):
+            print(
+                f"⚠️ Invalid placed_positions type: "
+                f"{type(placed_positions).__name__}, expected list"
+            )
+            placed_positions = []
+        
+        if placed_positions:
+            # Requirement 10.2: Loop over all placed positions
+            print(
+                f"✓ Rendering {len(placed_positions)} PV modules "
+                "from session state..."
+            )
             
-            # Rendere Module aus ModulePlacementManager
-            if len(manager.modules) > 0:
-                from utils.pv_module_rendering_3d import render_all_modules
-                
-                module_traces = render_all_modules(
-                    manager=manager,
-                    show_edges=True,
-                    show_selection=True
-                )
-                
-                for trace in module_traces:
-                    fig.add_trace(trace)
-                
-                print(f"✓ {len(manager.modules)} Module aus PlacementManager gerendert!")
-            else:
-                # Fallback: Alte Grid-basierte Module wenn keine im Manager
-                positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
-                
-                for i, (x, y) in enumerate(positions):
-                    if i >= module_quantity:
-                        break
+            successful_renders = 0
+            failed_renders = 0
+            
+            for i, position in enumerate(placed_positions):
+                try:
+                    # Requirement 11.1: Validate position format
+                    if not isinstance(position, (tuple, list)):
+                        print(
+                            f"⚠️ Invalid position type at index {i}: "
+                            f"{type(position).__name__}"
+                        )
+                        failed_renders += 1
+                        continue
                     
-                    # Standard-Werte
-                    azimuth = 0.0  # Süd
-                    tilt = default_tilt
-                    z = module_base_z
+                    # Requirement 10.3: Extract position coordinates
+                    if len(position) == 3:
+                        x, y, z_relative = position
+                        
+                        # Requirement 11.1: Validate coordinate values
+                        if not all(isinstance(coord, (int, float))
+                                   for coord in [x, y, z_relative]):
+                            print(
+                                f"⚠️ Invalid coordinate types at index {i}: "
+                                f"{position}"
+                            )
+                            failed_renders += 1
+                            continue
+                        
+                        # Check for NaN or Inf values
+                        import math
+                        if any(math.isnan(coord) or math.isinf(coord)
+                               for coord in [x, y, z_relative]):
+                            print(
+                                f"⚠️ Invalid coordinate values (NaN/Inf) "
+                                f"at index {i}: {position}"
+                            )
+                            failed_renders += 1
+                            continue
+                        
+                        # FIX: Add building height to z-position
+                        # z_relative is relative to roof surface,
+                        # we need absolute position
+                        z = dims.wall_height_m + z_relative
+                    else:
+                        print(
+                            f"⚠️ Invalid position format at index {i}: "
+                            f"{position} (expected 3 coordinates)"
+                        )
+                        failed_renders += 1
+                        continue
                     
-                    # Transformationen anwenden wenn AdvancedLayoutConfig
-                    if isinstance(layout_config, AdvancedLayoutConfig):
-                        if i in layout_config.module_transforms:
-                            transform = layout_config.module_transforms[i]
-                            azimuth = transform.azimuth_deg
-                            tilt = transform.tilt_deg
-                            x += transform.offset_x
-                            y += transform.offset_y
-                            z += transform.offset_z
+                    # TASK 8: Calculate rotation based on roof type and pitch
+                    # Requirement 6.1: Flat roof with 30° tilt
+                    # Requirement 6.5: Pitched roofs use roof pitch angle
+                    try:
+                        if roof_type == "Flachdach":
+                            tilt_deg = 30.0  # Aufständerung with 30° tilt
+                        else:
+                            # Requirement 6.2, 6.3, 6.5: Pitched roofs
+                            # use roof inclination
+                            tilt_deg = roof_inclination  # Use actual roof pitch
+                        
+                        azimuth_deg = 0.0  # South-facing (default)
+                    except Exception as angle_error:
+                        # Requirement 11.4: Meaningful error messages
+                        print(
+                            f"⚠️ Error calculating angles for module {i}: "
+                            f"{angle_error}, using defaults"
+                        )
+                        tilt_deg = 30.0
+                        azimuth_deg = 0.0
                     
-                    # Modul erstellen
+                    # Check if module is selected
                     is_selected = i in selected_modules
-                    module, module_vertices = create_pv_module_3d(
-                        x, y, z,
-                        azimuth_deg=azimuth,
-                        tilt_deg=tilt,
-                        color="#1a1a2e",
-                        selected=is_selected,
-                        roof_type=roof_type  # FIX: Übergebe Dachform für korrekte Mounting Height
-                    )
-                    fig.add_trace(module)
                     
-                    # Modul-Kanten hinzufügen
-                    module_edges = create_pv_module_edges(
-                        vertices=module_vertices,
-                        color='black',
-                        line_width=1
+                    # Requirement 10.3, 11.3: Call create_pv_module_3d()
+                    # with error handling
+                    try:
+                        module_mesh, module_vertices = create_pv_module_3d(
+                            x=x,
+                            y=y,
+                            z=z,
+                            azimuth_deg=azimuth_deg,
+                            tilt_deg=tilt_deg,
+                            color="#1a1a2e",  # Dark blue/black
+                            selected=is_selected,
+                            show_mounting=True,
+                            roof_type=roof_type
+                        )
+                    except Exception as mesh_error:
+                        # Requirement 11.2, 11.4: Error handling
+                        print(
+                            f"⚠️ Error creating mesh for module {i}: "
+                            f"{mesh_error}"
+                        )
+                        failed_renders += 1
+                        continue
+                    
+                    # Requirement 10.4: Add mesh to Plotly figure
+                    try:
+                        fig.add_trace(module_mesh)
+                        
+                        # Add module edges for better visibility
+                        module_edges = create_pv_module_edges(
+                            vertices=module_vertices,
+                            color='black',
+                            line_width=1
+                        )
+                        fig.add_trace(module_edges)
+                        
+                        successful_renders += 1
+                        
+                    except Exception as add_error:
+                        # Requirement 11.2, 11.4: Error handling
+                        print(
+                            f"⚠️ Error adding module {i} to figure: "
+                            f"{add_error}"
+                        )
+                        failed_renders += 1
+                        continue
+                    
+                except Exception as module_error:
+                    # Requirement 10.5, 11.2: Error handling for
+                    # individual modules
+                    print(
+                        f"⚠️ Unexpected error rendering module {i}: "
+                        f"{module_error}"
                     )
-                    fig.add_trace(module_edges)
+                    failed_renders += 1
+                    import traceback
+                    traceback.print_exc()
+                    continue
+            
+            # Requirement 11.4: Meaningful status messages
+            if successful_renders > 0:
+                print(
+                    f"✓ Successfully rendered {successful_renders} of "
+                    f"{len(placed_positions)} modules"
+                )
+            if failed_renders > 0:
+                print(
+                    f"⚠️ Failed to render {failed_renders} modules "
+                    "(see warnings above)"
+                )
+            
         else:
-            # Kein Streamlit Session State - Fallback zu Grid
+            # No modules in session state - use fallback grid-based placement
+            print("ℹ️ No modules in session state, using fallback grid placement...")
+            
+            # Fallback: Calculate grid positions
             positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
             
-            for i, (x, y) in enumerate(positions):
-                if i >= module_quantity:
-                    break
-                
+            for i, (x, y) in enumerate(positions[:module_quantity]):
                 # Standard-Werte
                 azimuth = 0.0  # Süd
                 tilt = default_tilt
@@ -1274,7 +1377,7 @@ def build_plotly_scene(
                     tilt_deg=tilt,
                     color="#1a1a2e",
                     selected=is_selected,
-                    roof_type=roof_type  # FIX: Übergebe Dachform für korrekte Mounting Height
+                    roof_type=roof_type
                 )
                 fig.add_trace(module)
                 
@@ -1285,9 +1388,67 @@ def build_plotly_scene(
                     line_width=1
                 )
                 fig.add_trace(module_edges)
+            
+            print(f"✓ Fallback: {len(positions[:module_quantity])} modules rendered")
+    
     except Exception as e:
-        # Fallback bei Fehler - zeige keine Module
-        print(f"Fehler beim Rendern von Modulen: {e}")
+        # Requirement 10.5, 11.2, 11.4: Error handling for rendering
+        # with meaningful messages
+        print(f"❌ Kritischer Fehler beim Rendern der PV-Module: {e}")
+        print(f"   Fehlertyp: {type(e).__name__}")
+        print(f"   Fehlerdetails: {str(e)}")
+        traceback.print_exc()
+        
+        # Last resort fallback: Simple grid-based modules
+        try:
+            print("⚠️ Attempting last resort fallback rendering...")
+            positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
+            
+            for i, (x, y) in enumerate(positions[:module_quantity]):
+                if i >= module_quantity:
+                    break
+                
+                # Standard values
+                azimuth = 0.0  # South
+                tilt = default_tilt
+                z = module_base_z
+                
+                # Apply transformations if AdvancedLayoutConfig
+                if isinstance(layout_config, AdvancedLayoutConfig):
+                    if i in layout_config.module_transforms:
+                        transform = layout_config.module_transforms[i]
+                        azimuth = transform.azimuth_deg
+                        tilt = transform.tilt_deg
+                        x += transform.offset_x
+                        y += transform.offset_y
+                        z += transform.offset_z
+                
+                # Create module
+                is_selected = i in selected_modules
+                module, module_vertices = create_pv_module_3d(
+                    x, y, z,
+                    azimuth_deg=azimuth,
+                    tilt_deg=tilt,
+                    color="#1a1a2e",
+                    selected=is_selected,
+                    roof_type=roof_type
+                )
+                fig.add_trace(module)
+                
+                # Add module edges
+                module_edges = create_pv_module_edges(
+                    vertices=module_vertices,
+                    color='black',
+                    line_width=1
+                )
+                fig.add_trace(module_edges)
+            
+            print(f"✓ Last resort fallback: {len(positions[:module_quantity])} modules rendered")
+        
+        except Exception as fallback_error:
+            # Requirement 11.3: Fallback to previous state on error
+            print(f"❌ Complete failure rendering modules: {fallback_error}")
+            print("⚠️ No modules will be displayed")
     
     # ========== 4. SONNE (optional) ==========
     if isinstance(layout_config, AdvancedLayoutConfig) and layout_config.enable_shading_analysis:

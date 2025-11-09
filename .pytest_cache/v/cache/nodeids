@@ -416,6 +416,7 @@
   "test_product_pricing_ui_integration.py::TestPriceCalculationFromMatrix::test_calculate_price_with_floor_matching",
   "test_product_pricing_ui_integration.py::TestPricePreview::test_preview_returns_limited_data",
   "test_product_pricing_ui_integration.py::TestPricePreview::test_preview_shows_all_prices",
+  "test_task6_integration.py::test_session_state_initialization",
   "test_user_friendliness.py::TestErrorTooltips::test_all_error_codes_have_tooltips",
   "test_user_friendliness.py::TestErrorTooltips::test_format_error_help",
   "test_user_friendliness.py::TestErrorTooltips::test_get_error_tooltip",
