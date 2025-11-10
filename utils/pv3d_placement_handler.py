@@ -108,55 +108,63 @@ def check_module_collision(
     half_height = module_height / 2
 
     # Requirement 7.2: Check for roof boundary violations
-    # Calculate roof boundaries (accounting for margin)
-    # FIX: Die Grenzen sollten die Modulhälfte bereits berücksichtigen
-    # da die Grid-Berechnung Module MIT Margin platziert
-    max_x = (roof_length / 2) - margin - half_width
-    min_x = -(roof_length / 2) + margin + half_width
-    max_y = (roof_width / 2) - margin - half_height
-    min_y = -(roof_width / 2) + margin + half_height
+    # FIX: Die Grid-Berechnung platziert Module bereits MIT Margin
+    # Die Kollisionserkennung sollte nur prüfen, ob die Modul-KANTEN
+    # über die Dachkante hinausgehen (nicht das Zentrum!)
+    
+    # Berechne die Modul-Kanten
+    module_left = new_x - half_width
+    module_right = new_x + half_width
+    module_bottom = new_y - half_height
+    module_top = new_y + half_height
+    
+    # Berechne die Dach-Grenzen (ohne zusätzlichen Margin-Abzug)
+    roof_left = -(roof_length / 2)
+    roof_right = (roof_length / 2)
+    roof_bottom = -(roof_width / 2)
+    roof_top = (roof_width / 2)
 
-    # Check if module CENTER extends beyond allowed boundaries
-    if new_x < min_x:
+    # Check if module EDGES extend beyond roof boundaries
+    if module_left < roof_left:
         return {
             "collision": True,
             "type": "boundary",
             "message": (
                 f"⚠️ Modul überschreitet linke Dachkante "
-                f"(Modul-Zentrum X: {new_x:.2f}m < Minimum: {min_x:.2f}m)"
+                f"(Modul-Kante: {module_left:.2f}m < Dachkante: {roof_left:.2f}m)"
             ),
             "colliding_index": None
         }
 
-    if new_x > max_x:
+    if module_right > roof_right:
         return {
             "collision": True,
             "type": "boundary",
             "message": (
                 f"⚠️ Modul überschreitet rechte Dachkante "
-                f"(Modul-Zentrum X: {new_x:.2f}m > Maximum: {max_x:.2f}m)"
+                f"(Modul-Kante: {module_right:.2f}m > Dachkante: {roof_right:.2f}m)"
             ),
             "colliding_index": None
         }
 
-    if new_y < min_y:
+    if module_bottom < roof_bottom:
         return {
             "collision": True,
             "type": "boundary",
             "message": (
                 f"⚠️ Modul überschreitet untere Dachkante "
-                f"(Modul-Zentrum Y: {new_y:.2f}m < Minimum: {min_y:.2f}m)"
+                f"(Modul-Kante: {module_bottom:.2f}m < Dachkante: {roof_bottom:.2f}m)"
             ),
             "colliding_index": None
         }
 
-    if new_y > max_y:
+    if module_top > roof_top:
         return {
             "collision": True,
             "type": "boundary",
             "message": (
                 f"⚠️ Modul überschreitet obere Dachkante "
-                f"(Modul-Zentrum Y: {new_y:.2f}m > Maximum: {max_y:.2f}m)"
+                f"(Modul-Kante: {module_top:.2f}m > Dachkante: {roof_top:.2f}m)"
             ),
             "colliding_index": None
         }
@@ -347,6 +355,10 @@ def handle_auto_placement(
                 )
             }
 
+        # FIX: Unterscheide zwischen Flachdach und geneigten Dächern
+        # Normalisiere roof_type
+        roof_type_normalized = roof_type.strip() if roof_type else "Flachdach"
+        
         # TASK 13: Check cache first for performance
         # Requirement 10.5: Caching von berechneten Positionen
         cache_key = _get_cache_key(
@@ -396,34 +408,72 @@ def handle_auto_placement(
                 )
             }
 
-        # Requirement 6.1-6.5: Calculate Z-position based on roof type
+        # FIX: Berechne Z-Position basierend auf Dachtyp
+        # Für geneigte Dächer muss die Z-Position für jedes Modul individuell berechnet werden
+        import math
+        
         try:
-            z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
-        except Exception as z_error:
+            positions_3d = []
+            
+            if roof_type_normalized == "Flachdach":
+                # Flachdach: Alle Module auf gleicher Höhe
+                z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
+                positions_3d = [
+                    (float(x), float(y), float(z_position))
+                    for x, y in grid_positions_2d
+                ]
+            elif roof_type_normalized in ["Satteldach", "Walmdach", "Krüppelwalmdach"]:
+                # Satteldach/Walmdach: Z steigt vom Rand zur Mitte
+                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
+                
+                if roof_pitch > 0:
+                    inclination_rad = math.radians(roof_pitch)
+                    for x, y in grid_positions_2d:
+                        # Abstand von Traufe (y = -roof_width/2)
+                        dist_from_eave = y + roof_width / 2
+                        z_offset = dist_from_eave * math.tan(inclination_rad)
+                        z = base_z + z_offset
+                        positions_3d.append((float(x), float(y), float(z)))
+                else:
+                    # Keine Neigung
+                    positions_3d = [
+                        (float(x), float(y), float(base_z))
+                        for x, y in grid_positions_2d
+                    ]
+            elif roof_type_normalized == "Pultdach":
+                # Pultdach: Z steigt linear von vorne nach hinten
+                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
+                
+                if roof_pitch > 0:
+                    inclination_rad = math.radians(roof_pitch)
+                    for x, y in grid_positions_2d:
+                        # Abstand von vorderer Kante (y = -roof_width/2)
+                        dist_from_front = y + roof_width / 2
+                        z_offset = dist_from_front * math.tan(inclination_rad)
+                        z = base_z + z_offset
+                        positions_3d.append((float(x), float(y), float(z)))
+                else:
+                    # Keine Neigung
+                    positions_3d = [
+                        (float(x), float(y), float(base_z))
+                        for x, y in grid_positions_2d
+                    ]
+            else:
+                # Andere Dachtypen: Konstante Z-Höhe
+                z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
+                positions_3d = [
+                    (float(x), float(y), float(z_position))
+                    for x, y in grid_positions_2d
+                ]
+                
+        except (TypeError, ValueError, Exception) as conv_error:
             # Requirement 11.4: Meaningful error messages
             return {
                 "success": False,
                 "positions": [],
                 "count": 0,
                 "message": (
-                    f"❌ Fehler bei der Z-Positions-Berechnung: {str(z_error)}"
-                )
-            }
-
-        # Convert 2D positions to 3D positions
-        try:
-            positions_3d = [
-                (float(x), float(y), float(z_position))
-                for x, y in grid_positions_2d
-            ]
-        except (TypeError, ValueError) as conv_error:
-            # Requirement 11.4: Meaningful error messages
-            return {
-                "success": False,
-                "positions": [],
-                "count": 0,
-                "message": (
-                    f"❌ Fehler bei der Positions-Konvertierung: "
+                    f"❌ Fehler bei der Positions-Berechnung: "
                     f"{str(conv_error)}"
                 )
             }

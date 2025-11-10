@@ -996,6 +996,32 @@ def _render_3d_view_impl():
     # SCHRITT 6: FÜHRE EXPORTS AUS (FALLS ANGEFORDERT)
     # ============================================================================
     
+    # FIX: Stelle sicher, dass dims, roof_type, etc. verfügbar sind
+    # Falls sie nicht im vorherigen try-Block definiert wurden, erstelle Defaults
+    try:
+        if dims is None:
+            dims = create_building_dims(basis_settings)
+    except (NameError, UnboundLocalError):
+        dims = create_building_dims(basis_settings)
+    
+    try:
+        if layout_config is None:
+            layout_config = create_layout_config(module_settings, advanced_settings)
+    except (NameError, UnboundLocalError):
+        layout_config = create_layout_config(module_settings, advanced_settings)
+    
+    try:
+        if roof_type is None:
+            roof_type = extract_roof_type(project_data)
+    except (NameError, UnboundLocalError):
+        roof_type = extract_roof_type(project_data)
+    
+    try:
+        if module_quantity is None:
+            module_quantity = extract_module_quantity(project_data, analysis_results)
+    except (NameError, UnboundLocalError):
+        module_quantity = extract_module_quantity(project_data, analysis_results)
+    
     if EXPORT_AVAILABLE and export_settings:
         # Screenshot-Export (NEU: Reagiert auf Button-Trigger)
         if export_settings.get("trigger_screenshot", False):
@@ -1645,6 +1671,13 @@ def _render_3d_view_impl():
     
     # Animation-Features
     if ANIMATION_AVAILABLE:
+        # FIX: Stelle sicher, dass dims verfügbar ist
+        try:
+            if dims is None:
+                dims = create_building_dims(basis_settings)
+        except (NameError, UnboundLocalError):
+            dims = create_building_dims(basis_settings)
+        
         with st.expander("🎬 Animationen", expanded=False):
             st.markdown("### 🌟 3D-Animationen")
             st.caption("Erstellen Sie beeindruckende Animationen Ihrer PV-Anlage")
@@ -1661,11 +1694,15 @@ def _render_3d_view_impl():
                 if st.button("🎬 Animation erstellen", key="sun_anim"):
                     try:
                         params = render_animation_controls("sun_path")
-                        building_center = (
-                            dims.length_m / 2 if 'dims' in locals() else 5.0,
-                            dims.width_m / 2 if 'dims' in locals() else 4.0,
-                            dims.wall_height_m if 'dims' in locals() else 5.0
-                        )
+                        # FIX: Sichere Berechnung des building_center
+                        if 'dims' in locals() and dims is not None:
+                            building_center = (
+                                dims.length_m / 2,
+                                dims.width_m / 2,
+                                dims.wall_height_m
+                            )
+                        else:
+                            building_center = (5.0, 4.0, 5.0)
                         
                         if 'fig' in locals():
                             animated_fig = create_sun_path_animation(
@@ -1684,11 +1721,15 @@ def _render_3d_view_impl():
                 if st.button("🔄 Rotation starten", key="rotation_anim"):
                     try:
                         params = render_animation_controls("rotation")
-                        building_center = (
-                            dims.length_m / 2 if 'dims' in locals() else 5.0,
-                            dims.width_m / 2 if 'dims' in locals() else 4.0,
-                            dims.wall_height_m if 'dims' in locals() else 5.0
-                        )
+                        # FIX: Sichere Berechnung des building_center
+                        if 'dims' in locals() and dims is not None:
+                            building_center = (
+                                dims.length_m / 2,
+                                dims.width_m / 2,
+                                dims.wall_height_m
+                            )
+                        else:
+                            building_center = (5.0, 4.0, 5.0)
                         
                         if 'fig' in locals():
                             animated_fig = create_360_rotation_animation(
