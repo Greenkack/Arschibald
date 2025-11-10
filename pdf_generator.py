@@ -34,6 +34,30 @@ except ImportError:
     LayoutConfig = None
     AdvancedLayoutConfig = None
 
+# Optional PDF Text Removal import (für PDF-Template-Vorbereitung)
+try:
+    from utils.remove_text import remove_text_from_pdf
+    _PDF_TEXT_REMOVAL_AVAILABLE = True
+except ImportError:
+    _PDF_TEXT_REMOVAL_AVAILABLE = False
+    
+    def remove_text_from_pdf(input_path, output_path):
+        """Fallback wenn remove_text.py nicht verfügbar"""
+        logging.warning("PDF-Text-Removal nicht verfügbar")
+        return False
+
+# Optional PDF Coordinates Export import (für PDF-Template-Koordinaten)
+try:
+    from utils.export_coords import export_pdf_coordinates
+    _PDF_COORDS_EXPORT_AVAILABLE = True
+except ImportError:
+    _PDF_COORDS_EXPORT_AVAILABLE = False
+    
+    def export_pdf_coordinates(pdf_path, output_yaml):
+        """Fallback wenn export_coords.py nicht verfügbar"""
+        logging.warning("PDF-Koordinaten-Export nicht verfügbar")
+        return False
+
 # Optional PDF Templates import
 try:
     from pdf_templates import get_cover_letter_template, get_project_summary_template

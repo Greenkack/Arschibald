@@ -2,20 +2,21 @@
 PV Module Placement Handler
 
 This module handles the business logic for placing PV modules on roof surfaces.
-It manages automatic placement, manual placement, reset operations, and
-session state management.
+It manages automatic placement, manual placement, reset operations, collision
+detection, and session state management.
 
 Key Functions:
+    - check_module_collision: Check for module overlaps and boundary violations
     - handle_auto_placement: Automatic module placement
     - handle_reset_placement: Reset all modules
-    - handle_manual_add: Add single module manually
+    - handle_manual_add: Add single module manually with collision detection
     - handle_remove_selected: Remove selected modules
     - calculate_z_position: Calculate height based on roof type
     - calculate_tilt_angle: Calculate tilt angle based on roof type
     - initialize_session_state: Initialize session state variables
 
-Requirements: 2.2, 2.6, 4.4, 6.1, 6.2, 6.3, 6.4, 6.5, 9.1, 9.2,
-              11.1, 11.2, 11.3, 11.4, 11.5
+Requirements: 2.2, 2.6, 4.4, 6.1, 6.2, 6.3, 6.4, 6.5, 7.1, 7.2, 7.3,
+              7.4, 9.1, 9.2, 11.1, 11.2, 11.3, 11.4, 11.5
 """
 
 from typing import Dict, Any, List
@@ -25,7 +26,9 @@ try:
     from utils.pv3d_grid_calculator import (
         calculate_module_grid,
         DEFAULT_SPACING,
-        DEFAULT_MARGIN
+        DEFAULT_MARGIN,
+        PV_W,
+        PV_H
     )
 except ImportError:
     # Fallback if grid calculator is not available
@@ -33,6 +36,150 @@ except ImportError:
         return []
     DEFAULT_SPACING = 0.05
     DEFAULT_MARGIN = 0.30
+    PV_W = 1.05
+    PV_H = 1.76
+
+
+def check_module_collision(
+    new_position: tuple,
+    existing_positions: List[tuple],
+    roof_length: float,
+    roof_width: float,
+    margin: float = DEFAULT_MARGIN,
+    orientation: str = "portrait"
+) -> Dict[str, Any]:
+    """
+    Check if a new module position collides with existing modules or roof edges.
+
+    This function performs two types of collision detection:
+    1. Module-to-module overlap detection
+    2. Roof boundary violation detection
+
+    Args:
+        new_position: (x, y, z) tuple for the new module position
+        existing_positions: List of (x, y, z) tuples for existing modules
+        roof_length: Length of the roof in meters (X-axis)
+        roof_width: Width of the roof in meters (Y-axis)
+        margin: Minimum margin from roof edges in meters
+        orientation: Module orientation ("portrait" or "landscape")
+
+    Returns:
+        Dictionary with:
+            - collision: bool - True if collision detected
+            - type: str - Type of collision ("module", "boundary", "none")
+            - message: str - Description of the collision
+            - colliding_index: int or None - Index of colliding module (if any)
+
+    Requirements:
+        - 7.1: Check for module-to-module overlap
+        - 7.2: Check for roof edge violation
+        - 7.3: Display warning when collision detected
+        - 7.4: Prevent placement when collision detected
+
+    Algorithm:
+        1. Extract x, y coordinates from new position
+        2. Calculate module bounding box based on orientation
+        3. Check if module exceeds roof boundaries (with margin)
+        4. Check if module overlaps with any existing module
+        5. Return collision status and details
+    """
+    # Extract coordinates
+    new_x, new_y = new_position[0], new_position[1]
+
+    # Determine module dimensions based on orientation
+    if orientation == "landscape":
+        module_width = PV_H  # 1.76m
+        module_height = PV_W  # 1.05m
+    else:  # portrait (default)
+        module_width = PV_W  # 1.05m
+        module_height = PV_H  # 1.76m
+
+    # Calculate half-dimensions for bounding box
+    half_width = module_width / 2
+    half_height = module_height / 2
+
+    # Requirement 7.2: Check for roof boundary violations
+    # Calculate roof boundaries (accounting for margin)
+    max_x = (roof_length / 2) - margin
+    min_x = -(roof_length / 2) + margin
+    max_y = (roof_width / 2) - margin
+    min_y = -(roof_width / 2) + margin
+
+    # Check if module extends beyond roof boundaries
+    if (new_x - half_width) < min_x:
+        return {
+            "collision": True,
+            "type": "boundary",
+            "message": (
+                f"⚠️ Modul überschreitet linke Dachkante "
+                f"(X: {new_x - half_width:.2f}m < {min_x:.2f}m)"
+            ),
+            "colliding_index": None
+        }
+
+    if (new_x + half_width) > max_x:
+        return {
+            "collision": True,
+            "type": "boundary",
+            "message": (
+                f"⚠️ Modul überschreitet rechte Dachkante "
+                f"(X: {new_x + half_width:.2f}m > {max_x:.2f}m)"
+            ),
+            "colliding_index": None
+        }
+
+    if (new_y - half_height) < min_y:
+        return {
+            "collision": True,
+            "type": "boundary",
+            "message": (
+                f"⚠️ Modul überschreitet untere Dachkante "
+                f"(Y: {new_y - half_height:.2f}m < {min_y:.2f}m)"
+            ),
+            "colliding_index": None
+        }
+
+    if (new_y + half_height) > max_y:
+        return {
+            "collision": True,
+            "type": "boundary",
+            "message": (
+                f"⚠️ Modul überschreitet obere Dachkante "
+                f"(Y: {new_y + half_height:.2f}m > {max_y:.2f}m)"
+            ),
+            "colliding_index": None
+        }
+
+    # Requirement 7.1: Check for module-to-module overlap
+    for idx, existing_pos in enumerate(existing_positions):
+        existing_x, existing_y = existing_pos[0], existing_pos[1]
+
+        # Calculate distance between module centers
+        dx = abs(new_x - existing_x)
+        dy = abs(new_y - existing_y)
+
+        # Check for overlap using bounding box collision detection
+        # Two rectangles overlap if:
+        # - Distance between centers in X < sum of half-widths
+        # - Distance between centers in Y < sum of half-heights
+        if dx < module_width and dy < module_height:
+            return {
+                "collision": True,
+                "type": "module",
+                "message": (
+                    f"⚠️ Modul überlappt mit bestehendem Modul #{idx + 1} "
+                    f"(Abstand: X={dx:.2f}m, Y={dy:.2f}m)"
+                ),
+                "colliding_index": idx
+            }
+
+    # No collision detected
+    return {
+        "collision": False,
+        "type": "none",
+        "message": "✓ Keine Kollision erkannt",
+        "colliding_index": None
+    }
 
 
 def handle_auto_placement(
@@ -361,19 +508,26 @@ def handle_manual_add(
     x: float,
     y: float,
     roof_type: str,
-    roof_pitch: float = 0.0
+    roof_pitch: float = 0.0,
+    roof_length: float = 10.0,
+    roof_width: float = 8.0,
+    orientation: str = "portrait"
 ) -> Dict[str, Any]:
     """
-    Add a single module at a specific position.
+    Add a single module at a specific position with collision detection.
 
     This function allows manual placement of individual modules at
-    user-specified coordinates.
+    user-specified coordinates. It performs collision detection to
+    prevent overlapping modules and boundary violations.
 
     Args:
         x: X-coordinate in meters (relative to roof center)
         y: Y-coordinate in meters (relative to roof center)
         roof_type: Type of roof
         roof_pitch: Roof pitch angle in degrees
+        roof_length: Length of the roof in meters
+        roof_width: Width of the roof in meters
+        orientation: Module orientation ("portrait" or "landscape")
 
     Returns:
         Dictionary with:
@@ -383,6 +537,7 @@ def handle_manual_add(
     Requirements:
         - 4.1: Manual add button functionality
         - 6.4: Calculate Z-position based on roof type
+        - 7.1-7.4: Collision detection and prevention
         - 9.1-9.2: Session state management
         - 11.1-11.3: Error handling and collision detection
     """
@@ -397,11 +552,26 @@ def handle_manual_add(
         # Create new position
         new_position = (x, y, z)
 
-        # Requirement 11.1, 11.3: Check for collisions (basic check)
-        # Note: Full collision detection is implemented in Task 11
+        # Requirement 7.1-7.4: Check for collisions
         existing_positions = st.session_state["placed_module_positions"]
 
-        # Add the module
+        collision_result = check_module_collision(
+            new_position=new_position,
+            existing_positions=existing_positions,
+            roof_length=roof_length,
+            roof_width=roof_width,
+            margin=DEFAULT_MARGIN,
+            orientation=orientation
+        )
+
+        # Requirement 7.3, 7.4: Prevent placement if collision detected
+        if collision_result["collision"]:
+            return {
+                "success": False,
+                "message": collision_result["message"]
+            }
+
+        # Add the module (no collision)
         existing_positions.append(new_position)
 
         # Requirement 9.1, 9.2: Update session state
@@ -581,7 +751,10 @@ if __name__ == "__main__":
 
     print("Test 2: Calculate tilt angle for different roof types")
     print(f"  Flachdach: {calculate_tilt_angle('Flachdach', 0.0)}°")
-    print(f"  Satteldach (35° pitch): {calculate_tilt_angle('Satteldach', 35.0)}°")
+    print(
+        f"  Satteldach (35° pitch): "
+        f"{calculate_tilt_angle('Satteldach', 35.0)}°"
+    )
     print(f"  Pultdach (25° pitch): {calculate_tilt_angle('Pultdach', 25.0)}°")
     print(f"  Walmdach (40° pitch): {calculate_tilt_angle('Walmdach', 40.0)}°")
     print()

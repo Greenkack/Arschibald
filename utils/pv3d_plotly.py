@@ -414,7 +414,7 @@ def create_gabled_roof_with_dormer(length, width, height, base_z,
     return [main_roof, dormer_mesh, window_mesh]
 
 
-def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True, roof_type="Flachdach"):
+def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True, roof_type="Flachdach", invalid=False, module_number=None):
     """
     Erstellt ein detailliertes PV-Modul mit Dicke und korrekter Rotation.
     Gibt Tuple zurück: (mesh, vertices) für Kanten-Rendering.
@@ -424,14 +424,26 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     - Flachdach mit Aufständerung: Höhere Aufständerung 0.3-0.8m
     - Module sinken NICHT mehr in die Dachfläche ein
     
+    TASK 12: Visualisierungs-Verbesserungen:
+    - Farb-Unterscheidung für normale Module (dunkelblau #1a1a2e)
+    - Farb-Unterscheidung für ausgewählte Module (hellblau #4a90e2)
+    - Farb-Unterscheidung für ungültige Positionen (rot #e74c3c)
+    - Modul-Nummern Anzeige (optional)
+    
     Args:
         x, y, z: Position des Moduls
         azimuth_deg: Azimuth-Winkel (0° = Süd)
         tilt_deg: Neigungs-Winkel (0° = horizontal)
-        color: Farbe des Moduls
-        selected: Ob Modul ausgewählt ist (orange Farbe)
+        color: Farbe des Moduls (Standard: dunkelblau)
+        selected: Ob Modul ausgewählt ist (hellblau Farbe)
         show_mounting: Ob Montage-Gestell visualisiert werden soll
         roof_type: Dachform ("Flachdach", "Satteldach", "Walmdach", etc.)
+        invalid: Ob Modul an ungültiger Position ist (rot Farbe)
+        module_number: Optionale Modul-Nummer für Anzeige
+    
+    Requirements:
+        - 1.2: Module haben erkennbare Farbe
+        - 8.5: Visualisierungs-Optionen (Nummern)
     """
     # Lokale Koordinaten (Modul zentriert im Ursprung)
     hw = PV_W / 2
@@ -511,7 +523,25 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     j = [1, 3, 2, 5, 3, 6, 0, 7, 5, 7, 4, 1, 6, 4, 5, 0, 7, 5, 6, 1, 4, 6, 7, 2]
     k = [3, 2, 5, 6, 6, 7, 7, 4, 7, 6, 5, 4, 4, 5, 0, 4, 5, 6, 1, 2, 6, 7, 2, 3]
     
-    module_color = "#ff6b35" if selected else color
+    # TASK 12: Farb-Unterscheidung für verschiedene Modul-Zustände
+    # Requirement 1.2: Erkennbare Farben für verschiedene Zustände
+    if invalid:
+        # Ungültige Position: Rot
+        module_color = "#e74c3c"
+        module_name = "PV Module (Ungültig)"
+    elif selected:
+        # Ausgewähltes Modul: Hellblau
+        module_color = "#4a90e2"
+        module_name = "PV Module (Ausgewählt)"
+    else:
+        # Normales Modul: Dunkelblau (Standard)
+        module_color = color
+        module_name = "PV Module"
+    
+    # Füge Modul-Nummer zum Namen hinzu wenn vorhanden
+    # Requirement 8.5: Modul-Nummern Anzeige (optional)
+    if module_number is not None:
+        module_name = f"{module_name} #{module_number}"
     
     mesh = go.Mesh3d(
         x=final_vertices[:, 0],
@@ -520,7 +550,7 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         i=i, j=j, k=k,
         color=module_color,
         opacity=0.9,
-        name="PV Module",
+        name=module_name,
         showlegend=False,
         lighting=dict(ambient=0.5, diffuse=0.9, specular=0.5, roughness=0.2),
         lightposition=dict(x=100, y=100, z=100),
@@ -553,6 +583,146 @@ def create_sun_marker(azimuth_deg, elevation_deg, distance=20.0):
         showlegend=True,
         hovertemplate=f'Sonne<br>Azimuth: {azimuth_deg:.1f}°<br>Elevation: {elevation_deg:.1f}°<extra></extra>'
     )
+
+
+# ============================================================================
+# TASK 12: VISUALISIERUNGS-VERBESSERUNGEN
+# ============================================================================
+
+def create_module_number_annotation(x, y, z, module_number, offset_z=0.1):
+    """
+    Erstellt eine Text-Annotation für Modul-Nummern.
+    
+    TASK 12: Modul-Nummern Anzeige (optional)
+    
+    Args:
+        x, y, z: Position des Moduls
+        module_number: Nummer des Moduls
+        offset_z: Vertikaler Offset über dem Modul (Standard: 0.1m)
+    
+    Returns:
+        Plotly Scatter3d Objekt mit Text-Annotation
+    
+    Requirements:
+        - 8.5: Modul-Nummern anzeigen (optional)
+    """
+    return go.Scatter3d(
+        x=[x],
+        y=[y],
+        z=[z + offset_z],
+        mode='text',
+        text=[str(module_number)],
+        textfont=dict(
+            size=12,
+            color='white',
+            family='Arial Black'
+        ),
+        textposition='middle center',
+        name=f'Modul #{module_number}',
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def create_placement_grid(roof_length, roof_width, base_z, grid_spacing=1.0, color='rgba(128, 128, 128, 0.3)', line_width=1):
+    """
+    Erstellt ein Raster-Overlay zur Orientierung auf der Dachfläche.
+    
+    TASK 12: Raster-Overlay (optional)
+    
+    Args:
+        roof_length: Länge des Dachs in Metern
+        roof_width: Breite des Dachs in Metern
+        base_z: Z-Position der Dachfläche
+        grid_spacing: Abstand zwischen Rasterlinien in Metern
+        color: Farbe der Rasterlinien (RGBA mit Transparenz)
+        line_width: Breite der Rasterlinien
+    
+    Returns:
+        Plotly Scatter3d Objekt mit Rasterlinien
+    
+    Requirements:
+        - 8.5: Raster anzeigen (optional)
+    """
+    half_l = roof_length / 2
+    half_w = roof_width / 2
+    
+    x_lines, y_lines, z_lines = [], [], []
+    
+    # Vertikale Linien (parallel zur Y-Achse)
+    x_pos = -half_l
+    while x_pos <= half_l:
+        x_lines.extend([x_pos, x_pos, None])
+        y_lines.extend([-half_w, half_w, None])
+        z_lines.extend([base_z + 0.01, base_z + 0.01, None])
+        x_pos += grid_spacing
+    
+    # Horizontale Linien (parallel zur X-Achse)
+    y_pos = -half_w
+    while y_pos <= half_w:
+        x_lines.extend([-half_l, half_l, None])
+        y_lines.extend([y_pos, y_pos, None])
+        z_lines.extend([base_z + 0.01, base_z + 0.01, None])
+        y_pos += grid_spacing
+    
+    return go.Scatter3d(
+        x=x_lines,
+        y=y_lines,
+        z=z_lines,
+        mode='lines',
+        line=dict(color=color, width=line_width),
+        name='Platzierungs-Raster',
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def create_color_legend():
+    """
+    Erstellt eine Legende für die Modul-Farben.
+    
+    TASK 12: Farb-Unterscheidung Dokumentation
+    
+    Returns:
+        Liste von Plotly Scatter3d Objekten für die Legende
+    
+    Requirements:
+        - 1.2: Erkennbare Farben
+    """
+    # Erstelle unsichtbare Marker für die Legende
+    legend_items = []
+    
+    # Normales Modul (Dunkelblau)
+    legend_items.append(go.Scatter3d(
+        x=[0], y=[0], z=[0],
+        mode='markers',
+        marker=dict(size=10, color='#1a1a2e'),
+        name='Normal',
+        showlegend=True,
+        visible='legendonly'
+    ))
+    
+    # Ausgewähltes Modul (Hellblau)
+    legend_items.append(go.Scatter3d(
+        x=[0], y=[0], z=[0],
+        mode='markers',
+        marker=dict(size=10, color='#4a90e2'),
+        name='Ausgewählt',
+        showlegend=True,
+        visible='legendonly'
+    ))
+    
+    # Ungültiges Modul (Rot)
+    legend_items.append(go.Scatter3d(
+        x=[0], y=[0], z=[0],
+        mode='markers',
+        marker=dict(size=10, color='#e74c3c'),
+        name='Ungültig',
+        showlegend=True,
+        visible='legendonly'
+    ))
+    
+    return legend_items
 
 
 # ============================================================================
@@ -1276,8 +1446,19 @@ def build_plotly_scene(
                     # Check if module is selected
                     is_selected = i in selected_modules
                     
+                    # TASK 12: Get visualization options from session state
+                    # Requirement 8.5: Module numbers and grid display
+                    show_module_numbers = st.session_state.get(
+                        "show_module_numbers", False
+                    )
+                    
+                    # TASK 12: Determine if module is at invalid position
+                    # (for future collision detection visualization)
+                    is_invalid = False  # Placeholder for collision detection
+                    
                     # Requirement 10.3, 11.3: Call create_pv_module_3d()
                     # with error handling
+                    # TASK 12: Pass module_number and invalid flag
                     try:
                         module_mesh, module_vertices = create_pv_module_3d(
                             x=x,
@@ -1285,10 +1466,12 @@ def build_plotly_scene(
                             z=z,
                             azimuth_deg=azimuth_deg,
                             tilt_deg=tilt_deg,
-                            color="#1a1a2e",  # Dark blue/black
-                            selected=is_selected,
+                            color="#1a1a2e",  # Dark blue/black (normal)
+                            selected=is_selected,  # Hellblau if selected
                             show_mounting=True,
-                            roof_type=roof_type
+                            roof_type=roof_type,
+                            invalid=is_invalid,  # TASK 12: Red if invalid
+                            module_number=(i + 1) if show_module_numbers else None
                         )
                     except Exception as mesh_error:
                         # Requirement 11.2, 11.4: Error handling
@@ -1450,14 +1633,81 @@ def build_plotly_scene(
             print(f"❌ Complete failure rendering modules: {fallback_error}")
             print("⚠️ No modules will be displayed")
     
-    # ========== 4. SONNE (optional) ==========
+    # ========== 4. TASK 12: VISUALISIERUNGS-VERBESSERUNGEN ==========
+    try:
+        # TASK 12: Module Number Annotations (optional)
+        # Requirement 8.5: Show module numbers if enabled
+        show_module_numbers = st.session_state.get("show_module_numbers", False)
+        
+        if show_module_numbers and placed_positions:
+            print(f"✓ Adding module number annotations for {len(placed_positions)} modules...")
+            
+            for i, position in enumerate(placed_positions):
+                try:
+                    if len(position) == 3:
+                        x, y, z_relative = position
+                        z = dims.wall_height_m + z_relative
+                        
+                        # Create number annotation above module
+                        number_annotation = create_module_number_annotation(
+                            x=x,
+                            y=y,
+                            z=z,
+                            module_number=i + 1,
+                            offset_z=0.3  # 30cm above module
+                        )
+                        fig.add_trace(number_annotation)
+                except Exception as annotation_error:
+                    print(f"⚠️ Error adding annotation for module {i}: {annotation_error}")
+                    continue
+            
+            print(f"✓ Module number annotations added")
+        
+        # TASK 12: Placement Grid Overlay (optional)
+        # Requirement 8.5: Show grid if enabled
+        show_placement_grid = st.session_state.get("show_placement_grid", False)
+        
+        if show_placement_grid:
+            print("✓ Adding placement grid overlay...")
+            
+            try:
+                # Create grid at roof level
+                grid_overlay = create_placement_grid(
+                    roof_length=dims.length_m,
+                    roof_width=dims.width_m,
+                    base_z=module_base_z - 0.05,  # Slightly below modules
+                    grid_spacing=1.0,  # 1m grid
+                    color='rgba(128, 128, 128, 0.3)',  # Semi-transparent gray
+                    line_width=1
+                )
+                fig.add_trace(grid_overlay)
+                
+                print("✓ Placement grid overlay added")
+            except Exception as grid_error:
+                print(f"⚠️ Error adding placement grid: {grid_error}")
+        
+        # TASK 12: Color Legend (always add for reference)
+        # Requirement 1.2: Document color meanings
+        try:
+            legend_items = create_color_legend()
+            for legend_item in legend_items:
+                fig.add_trace(legend_item)
+            print("✓ Color legend added")
+        except Exception as legend_error:
+            print(f"⚠️ Error adding color legend: {legend_error}")
+    
+    except Exception as viz_error:
+        print(f"⚠️ Error adding visualization improvements: {viz_error}")
+        # Continue without visualization improvements
+    
+    # ========== 5. SONNE (optional) ==========
     if isinstance(layout_config, AdvancedLayoutConfig) and layout_config.enable_shading_analysis:
         sun_azimuth = project_data.get("sun_azimuth", 180.0)
         sun_elevation = project_data.get("sun_elevation", 45.0)
         sun = create_sun_marker(sun_azimuth, sun_elevation)
         fig.add_trace(sun)
     
-    # ========== 5. LAYOUT & KAMERA ==========
+    # ========== 6. LAYOUT & KAMERA ==========
     max_dim = max(dims.length_m, dims.width_m, dims.wall_height_m)
     
     fig.update_layout(

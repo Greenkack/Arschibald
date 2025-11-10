@@ -7,7 +7,7 @@ von Photovoltaik-Anlagen auf Gebäuden bereit.
 
 import math
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple, Any
+from typing import Dict, List, Tuple, Any, Optional, Callable
 import json
 
 try:
@@ -3974,7 +3974,8 @@ def export_360_animation(
     filepath: str = "animation_360.gif",
     frames: int = 36,
     resolution: Tuple[int, int] = (800, 600),
-    duration_ms: int = 100
+    duration_ms: int = 100,
+    progress_callback: Optional[Callable] = None
 ) -> bytes:
     """
     Erstellt eine 360° Rotations-Animation als GIF.
