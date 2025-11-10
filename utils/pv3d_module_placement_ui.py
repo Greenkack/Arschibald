@@ -81,7 +81,7 @@ def render_module_placement_panel(
         # Validate current_placed
         if not isinstance(current_placed, (int, float)):
             st.warning(
-                f"⚠️ Warnung: Ungültiger Typ für platzierte Module, "
+                "⚠️ Warnung: Ungültiger Typ für platzierte Module, "
                 "wird auf 0 gesetzt"
             )
             current_placed = 0
@@ -172,31 +172,91 @@ def render_module_placement_panel(
             ):
                 actions["reset_all_clicked"] = True
 
-        # Optionale manuelle Steuerungs-Buttons
-        # (für zukünftige Erweiterung)
-        # Diese werden in späteren Tasks implementiert
+        # Manuelle Steuerungs-Buttons (Task 10)
         st.divider()
 
         manual_col1, manual_col2 = st.columns(2)
 
         with manual_col1:
+            # Requirement 4.1: Manual add button
+            manual_add_help = (
+                "Fügt ein Modul an der nächsten verfügbaren Position hinzu"
+            )
             if st.button(
                 "➕ Modul hinzufügen",
                 use_container_width=True,
-                disabled=True,
-                help="Manuelle Platzierung (in Entwicklung)"
+                disabled=False,
+                help=manual_add_help
             ):
                 actions["manual_add_clicked"] = True
 
         with manual_col2:
+            # Requirement 4.2: Remove selected button
+            selected_count = len(
+                st.session_state.get("selected_module_indices", [])
+            )
+            remove_help = (
+                f"Entfernt {selected_count} ausgewählte Module" 
+                if selected_count > 0 
+                else "Keine Module ausgewählt"
+            )
+            remove_disabled = (selected_count == 0)
+            
             if st.button(
-                "➖ Ausgewählte entfernen",
+                f"➖ Ausgewählte entfernen ({selected_count})",
                 use_container_width=True,
-                disabled=True,
-                help="Entfernt ausgewählte Module (in Entwicklung)"
+                disabled=remove_disabled,
+                help=remove_help
             ):
                 actions["remove_selected_clicked"] = True
 
+        st.divider()
+
+        # Modul-Auswahl für manuelle Steuerung (Task 10)
+        if current_placed > 0:
+            st.subheader("Modul-Auswahl")
+            
+            # Zeige Info über ausgewählte Module
+            selected_indices = st.session_state.get(
+                "selected_module_indices", []
+            )
+            
+            if selected_indices:
+                st.info(
+                    f"✓ **{len(selected_indices)} Module ausgewählt:** "
+                    f"Indizes {', '.join(map(str, selected_indices[:5]))}"
+                    f"{'...' if len(selected_indices) > 5 else ''}"
+                )
+            else:
+                st.info(
+                    "ℹ️ Keine Module ausgewählt. Klicken Sie auf Module "
+                    "in der 3D-Ansicht um sie auszuwählen."
+                )
+            
+            # Auswahl-Buttons
+            sel_col1, sel_col2 = st.columns(2)
+            
+            with sel_col1:
+                if st.button(
+                    "Alle auswählen",
+                    use_container_width=True,
+                    help="Wählt alle platzierten Module aus"
+                ):
+                    st.session_state["selected_module_indices"] = list(
+                        range(current_placed)
+                    )
+                    st.rerun()
+            
+            with sel_col2:
+                if st.button(
+                    "Auswahl aufheben",
+                    use_container_width=True,
+                    disabled=(len(selected_indices) == 0),
+                    help="Hebt die Auswahl aller Module auf"
+                ):
+                    st.session_state["selected_module_indices"] = []
+                    st.rerun()
+        
         st.divider()
 
         # Visualisierungs-Optionen
@@ -205,11 +265,12 @@ def render_module_placement_panel(
         opt_col1, opt_col2 = st.columns(2)
 
         with opt_col1:
+            # TASK 12: Raster-Overlay aktivieren
             show_grid = st.checkbox(
                 "Raster anzeigen",
                 value=st.session_state.get("show_placement_grid", False),
                 help="Zeigt ein Raster zur Orientierung an",
-                disabled=True  # Wird in späteren Tasks implementiert
+                disabled=False  # TASK 12: Jetzt aktiviert!
             )
             actions["show_grid"] = show_grid
             if show_grid != st.session_state.get(
@@ -218,11 +279,12 @@ def render_module_placement_panel(
                 st.session_state["show_placement_grid"] = show_grid
 
         with opt_col2:
+            # TASK 12: Modul-Nummern aktivieren
             show_numbers = st.checkbox(
                 "Modul-Nummern anzeigen",
                 value=st.session_state.get("show_module_numbers", False),
                 help="Zeigt Nummern auf den Modulen an",
-                disabled=True  # Wird in späteren Tasks implementiert
+                disabled=False  # TASK 12: Jetzt aktiviert!
             )
             actions["show_numbers"] = show_numbers
             if show_numbers != st.session_state.get(

@@ -601,15 +601,32 @@ def render_data_input(texts: dict[str, str]) -> None:
                 parsed_data = parse_full_address_string(
                     full_address_input_val, texts)
                 
-                # Update inputs dict
-                inputs['customer_data']['address'] = parsed_data.get(
-                    "street", inputs['customer_data'].get('address', ''))
-                inputs['customer_data']['house_number'] = parsed_data.get(
-                    "house_number", inputs['customer_data'].get('house_number', ''))
-                inputs['customer_data']['zip_code'] = parsed_data.get(
-                    "zip_code", inputs['customer_data'].get('zip_code', ''))
-                inputs['customer_data']['city'] = parsed_data.get(
-                    "city", inputs['customer_data'].get('city', ''))
+                # 🔍 DEBUG: Zeige geparste Daten
+                st.info(f"📍 Geparst: Straße={parsed_data.get('street')} | Nr={parsed_data.get('house_number')} | PLZ={parsed_data.get('zip_code')} | Stadt={parsed_data.get('city')}")
+                
+                # ✅ FIX: Direkt in session_state UND inputs schreiben
+                # Update session_state DIREKT (damit Widgets die Werte sofort sehen)
+                if 'project_data' not in st.session_state:
+                    st.session_state.project_data = {}
+                if 'customer_data' not in st.session_state.project_data:
+                    st.session_state.project_data['customer_data'] = {}
+                
+                st.session_state.project_data['customer_data']['address'] = parsed_data.get("street", "")
+                st.session_state.project_data['customer_data']['house_number'] = parsed_data.get("house_number", "")
+                st.session_state.project_data['customer_data']['zip_code'] = parsed_data.get("zip_code", "")
+                st.session_state.project_data['customer_data']['city'] = parsed_data.get("city", "")
+                
+                # Update inputs dict (für lokale Konsistenz)
+                inputs['customer_data']['address'] = parsed_data.get("street", "")
+                inputs['customer_data']['house_number'] = parsed_data.get("house_number", "")
+                inputs['customer_data']['zip_code'] = parsed_data.get("zip_code", "")
+                inputs['customer_data']['city'] = parsed_data.get("city", "")
+                
+                # ✅ KRITISCH: Widget-Keys DIREKT setzen damit Streamlit die Werte beim Rerun verwendet
+                st.session_state['address_di_manual_v6_exp_stable'] = parsed_data.get("street", "")
+                st.session_state['house_number_di_manual_v6_exp_stable'] = parsed_data.get("house_number", "")
+                st.session_state['zip_code_di_manual_v6_exp_stable'] = parsed_data.get("zip_code", "")
+                st.session_state['city_di_manual_v6_exp_stable'] = parsed_data.get("city", "")
                 
                 if parsed_data.get("zip_code") and parsed_data.get("city"):
                     st.success(

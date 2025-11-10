@@ -2,30 +2,36 @@
 PV Module Placement Handler
 
 This module handles the business logic for placing PV modules on roof surfaces.
-It manages automatic placement, manual placement, reset operations, and
-session state management.
+It manages automatic placement, manual placement, reset operations, collision
+detection, and session state management.
 
 Key Functions:
+    - check_module_collision: Check for module overlaps and boundary violations
     - handle_auto_placement: Automatic module placement
     - handle_reset_placement: Reset all modules
-    - handle_manual_add: Add single module manually
+    - handle_manual_add: Add single module manually with collision detection
     - handle_remove_selected: Remove selected modules
     - calculate_z_position: Calculate height based on roof type
     - calculate_tilt_angle: Calculate tilt angle based on roof type
     - initialize_session_state: Initialize session state variables
 
-Requirements: 2.2, 2.6, 4.4, 6.1, 6.2, 6.3, 6.4, 6.5, 9.1, 9.2,
-              11.1, 11.2, 11.3, 11.4, 11.5
+Requirements: 2.2, 2.6, 4.4, 6.1, 6.2, 6.3, 6.4, 6.5, 7.1, 7.2, 7.3,
+              7.4, 9.1, 9.2, 11.1, 11.2, 11.3, 11.4, 11.5
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 import streamlit as st
+import hashlib
+import json
 
 try:
     from utils.pv3d_grid_calculator import (
         calculate_module_grid,
         DEFAULT_SPACING,
-        DEFAULT_MARGIN
+        DEFAULT_MARGIN,
+        PV_W,
+        PV_H,
+        MAX_MODULES
     )
 except ImportError:
     # Fallback if grid calculator is not available
@@ -33,6 +39,208 @@ except ImportError:
         return []
     DEFAULT_SPACING = 0.05
     DEFAULT_MARGIN = 0.30
+    PV_W = 1.05
+    PV_H = 1.76
+    MAX_MODULES = 200
+
+
+# TASK 13: Position cache for performance
+# Caches calculated positions to avoid recalculation
+_position_cache: Dict[str, List[Tuple[float, float]]] = {}
+
+
+def check_module_collision(
+    new_position: tuple,
+    existing_positions: List[tuple],
+    roof_length: float,
+    roof_width: float,
+    margin: float = DEFAULT_MARGIN,
+    orientation: str = "portrait"
+) -> Dict[str, Any]:
+    """
+    Check if a new module position collides with existing modules or roof edges.
+
+    This function performs two types of collision detection:
+    1. Module-to-module overlap detection
+    2. Roof boundary violation detection
+
+    Args:
+        new_position: (x, y, z) tuple for the new module position
+        existing_positions: List of (x, y, z) tuples for existing modules
+        roof_length: Length of the roof in meters (X-axis)
+        roof_width: Width of the roof in meters (Y-axis)
+        margin: Minimum margin from roof edges in meters
+        orientation: Module orientation ("portrait" or "landscape")
+
+    Returns:
+        Dictionary with:
+            - collision: bool - True if collision detected
+            - type: str - Type of collision ("module", "boundary", "none")
+            - message: str - Description of the collision
+            - colliding_index: int or None - Index of colliding module (if any)
+
+    Requirements:
+        - 7.1: Check for module-to-module overlap
+        - 7.2: Check for roof edge violation
+        - 7.3: Display warning when collision detected
+        - 7.4: Prevent placement when collision detected
+
+    Algorithm:
+        1. Extract x, y coordinates from new position
+        2. Calculate module bounding box based on orientation
+        3. Check if module exceeds roof boundaries (with margin)
+        4. Check if module overlaps with any existing module
+        5. Return collision status and details
+    """
+    # Extract coordinates
+    new_x, new_y = new_position[0], new_position[1]
+
+    # Determine module dimensions based on orientation
+    if orientation == "landscape":
+        module_width = PV_H  # 1.76m
+        module_height = PV_W  # 1.05m
+    else:  # portrait (default)
+        module_width = PV_W  # 1.05m
+        module_height = PV_H  # 1.76m
+
+    # Calculate half-dimensions for bounding box
+    half_width = module_width / 2
+    half_height = module_height / 2
+
+    # Requirement 7.2: Check for roof boundary violations
+    # FIX: Die Grid-Berechnung platziert Module bereits MIT Margin
+    # Die Kollisionserkennung sollte nur prüfen, ob die Modul-KANTEN
+    # über die Dachkante hinausgehen (nicht das Zentrum!)
+    
+    # Berechne die Modul-Kanten
+    module_left = new_x - half_width
+    module_right = new_x + half_width
+    module_bottom = new_y - half_height
+    module_top = new_y + half_height
+    
+    # Berechne die Dach-Grenzen (ohne zusätzlichen Margin-Abzug)
+    roof_left = -(roof_length / 2)
+    roof_right = (roof_length / 2)
+    roof_bottom = -(roof_width / 2)
+    roof_top = (roof_width / 2)
+
+    # Check if module EDGES extend beyond roof boundaries
+    if module_left < roof_left:
+        return {
+            "collision": True,
+            "type": "boundary",
+            "message": (
+                f"⚠️ Modul überschreitet linke Dachkante "
+                f"(Modul-Kante: {module_left:.2f}m < Dachkante: {roof_left:.2f}m)"
+            ),
+            "colliding_index": None
+        }
+
+    if module_right > roof_right:
+        return {
+            "collision": True,
+            "type": "boundary",
+            "message": (
+                f"⚠️ Modul überschreitet rechte Dachkante "
+                f"(Modul-Kante: {module_right:.2f}m > Dachkante: {roof_right:.2f}m)"
+            ),
+            "colliding_index": None
+        }
+
+    if module_bottom < roof_bottom:
+        return {
+            "collision": True,
+            "type": "boundary",
+            "message": (
+                f"⚠️ Modul überschreitet untere Dachkante "
+                f"(Modul-Kante: {module_bottom:.2f}m < Dachkante: {roof_bottom:.2f}m)"
+            ),
+            "colliding_index": None
+        }
+
+    if module_top > roof_top:
+        return {
+            "collision": True,
+            "type": "boundary",
+            "message": (
+                f"⚠️ Modul überschreitet obere Dachkante "
+                f"(Modul-Kante: {module_top:.2f}m > Dachkante: {roof_top:.2f}m)"
+            ),
+            "colliding_index": None
+        }
+
+    # Requirement 7.1: Check for module-to-module overlap
+    for idx, existing_pos in enumerate(existing_positions):
+        existing_x, existing_y = existing_pos[0], existing_pos[1]
+
+        # Calculate distance between module centers
+        dx = abs(new_x - existing_x)
+        dy = abs(new_y - existing_y)
+
+        # Check for overlap using bounding box collision detection
+        # Two rectangles overlap if:
+        # - Distance between centers in X < sum of half-widths
+        # - Distance between centers in Y < sum of half-heights
+        if dx < module_width and dy < module_height:
+            return {
+                "collision": True,
+                "type": "module",
+                "message": (
+                    f"⚠️ Modul überlappt mit bestehendem Modul #{idx + 1} "
+                    f"(Abstand: X={dx:.2f}m, Y={dy:.2f}m)"
+                ),
+                "colliding_index": idx
+            }
+
+    # No collision detected
+    return {
+        "collision": False,
+        "type": "none",
+        "message": "✓ Keine Kollision erkannt",
+        "colliding_index": None
+    }
+
+
+def _get_cache_key(
+    roof_length: float,
+    roof_width: float,
+    module_quantity: int,
+    spacing: float,
+    margin: float,
+    orientation: str
+) -> str:
+    """
+    Generate a cache key for position calculations.
+    
+    TASK 13: Caching of calculated positions for performance.
+    
+    Args:
+        roof_length: Length of the roof
+        roof_width: Width of the roof
+        module_quantity: Number of modules
+        spacing: Spacing between modules
+        margin: Margin from edges
+        orientation: Module orientation
+    
+    Returns:
+        Hash string to use as cache key
+    
+    Requirements:
+        - 10.5: Caching von berechneten Positionen
+    """
+    # Create a dictionary of parameters
+    params = {
+        "length": round(roof_length, 2),
+        "width": round(roof_width, 2),
+        "quantity": module_quantity,
+        "spacing": round(spacing, 3),
+        "margin": round(margin, 3),
+        "orientation": orientation
+    }
+    
+    # Convert to JSON string and hash it
+    params_str = json.dumps(params, sort_keys=True)
+    return hashlib.md5(params_str.encode()).hexdigest()
 
 
 def handle_auto_placement(
@@ -47,6 +255,8 @@ def handle_auto_placement(
 ) -> Dict[str, Any]:
     """
     Handle automatic module placement on roof surface.
+
+    TASK 13: Performance-optimized version with caching and module limit.
 
     This function calculates optimal module positions using the grid
     calculator, converts 2D positions to 3D positions with appropriate
@@ -75,12 +285,18 @@ def handle_auto_placement(
         - 6.1-6.5: Roof type specific placement
         - 9.1-9.2: Session state management
         - 11.1-11.5: Error handling
+        - 10.5: Performance optimization with caching
     """
     # Requirement 11.5: Store previous state for fallback
     previous_positions = st.session_state.get("placed_module_positions", [])
     previous_count = st.session_state.get("placed_module_count", 0)
     
     try:
+        # TASK 13: Limit module quantity for performance
+        # Requirement 10.5: Begrenzung auf maximal 200 Module
+        if module_quantity > MAX_MODULES:
+            print(f"⚠️ Module quantity limited to {MAX_MODULES} for performance")
+            module_quantity = MAX_MODULES
         # Requirement 11.1: Validate roof dimensions (> 0)
         if roof_length <= 0:
             return {
@@ -139,26 +355,47 @@ def handle_auto_placement(
                 )
             }
 
-        # Requirement 11.3: Try-Catch around grid calculation
-        try:
-            grid_positions_2d = calculate_module_grid(
-                roof_length=roof_length,
-                roof_width=roof_width,
-                module_quantity=module_quantity,
-                spacing=spacing,
-                margin=margin,
-                orientation=orientation
-            )
-        except Exception as grid_error:
-            # Requirement 11.4: Meaningful error messages
-            return {
-                "success": False,
-                "positions": [],
-                "count": 0,
-                "message": (
-                    f"❌ Fehler bei der Grid-Berechnung: {str(grid_error)}"
+        # FIX: Unterscheide zwischen Flachdach und geneigten Dächern
+        # Normalisiere roof_type
+        roof_type_normalized = roof_type.strip() if roof_type else "Flachdach"
+        
+        # TASK 13: Check cache first for performance
+        # Requirement 10.5: Caching von berechneten Positionen
+        cache_key = _get_cache_key(
+            roof_length, roof_width, module_quantity,
+            spacing, margin, orientation
+        )
+        
+        if cache_key in _position_cache:
+            print(f"✓ Using cached positions for {module_quantity} modules")
+            grid_positions_2d = _position_cache[cache_key]
+        else:
+            # Requirement 11.3: Try-Catch around grid calculation
+            try:
+                grid_positions_2d = calculate_module_grid(
+                    roof_length=roof_length,
+                    roof_width=roof_width,
+                    module_quantity=module_quantity,
+                    spacing=spacing,
+                    margin=margin,
+                    orientation=orientation
                 )
-            }
+                
+                # TASK 13: Cache the result for future use
+                # Requirement 10.5: Caching von berechneten Positionen
+                _position_cache[cache_key] = grid_positions_2d
+                print(f"✓ Cached positions for {module_quantity} modules")
+                
+            except Exception as grid_error:
+                # Requirement 11.4: Meaningful error messages
+                return {
+                    "success": False,
+                    "positions": [],
+                    "count": 0,
+                    "message": (
+                        f"❌ Fehler bei der Grid-Berechnung: {str(grid_error)}"
+                    )
+                }
 
         if not grid_positions_2d:
             return {
@@ -171,34 +408,72 @@ def handle_auto_placement(
                 )
             }
 
-        # Requirement 6.1-6.5: Calculate Z-position based on roof type
+        # FIX: Berechne Z-Position basierend auf Dachtyp
+        # Für geneigte Dächer muss die Z-Position für jedes Modul individuell berechnet werden
+        import math
+        
         try:
-            z_position = calculate_z_position(roof_type, roof_pitch)
-        except Exception as z_error:
+            positions_3d = []
+            
+            if roof_type_normalized == "Flachdach":
+                # Flachdach: Alle Module auf gleicher Höhe
+                z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
+                positions_3d = [
+                    (float(x), float(y), float(z_position))
+                    for x, y in grid_positions_2d
+                ]
+            elif roof_type_normalized in ["Satteldach", "Walmdach", "Krüppelwalmdach"]:
+                # Satteldach/Walmdach: Z steigt vom Rand zur Mitte
+                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
+                
+                if roof_pitch > 0:
+                    inclination_rad = math.radians(roof_pitch)
+                    for x, y in grid_positions_2d:
+                        # Abstand von Traufe (y = -roof_width/2)
+                        dist_from_eave = y + roof_width / 2
+                        z_offset = dist_from_eave * math.tan(inclination_rad)
+                        z = base_z + z_offset
+                        positions_3d.append((float(x), float(y), float(z)))
+                else:
+                    # Keine Neigung
+                    positions_3d = [
+                        (float(x), float(y), float(base_z))
+                        for x, y in grid_positions_2d
+                    ]
+            elif roof_type_normalized == "Pultdach":
+                # Pultdach: Z steigt linear von vorne nach hinten
+                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
+                
+                if roof_pitch > 0:
+                    inclination_rad = math.radians(roof_pitch)
+                    for x, y in grid_positions_2d:
+                        # Abstand von vorderer Kante (y = -roof_width/2)
+                        dist_from_front = y + roof_width / 2
+                        z_offset = dist_from_front * math.tan(inclination_rad)
+                        z = base_z + z_offset
+                        positions_3d.append((float(x), float(y), float(z)))
+                else:
+                    # Keine Neigung
+                    positions_3d = [
+                        (float(x), float(y), float(base_z))
+                        for x, y in grid_positions_2d
+                    ]
+            else:
+                # Andere Dachtypen: Konstante Z-Höhe
+                z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
+                positions_3d = [
+                    (float(x), float(y), float(z_position))
+                    for x, y in grid_positions_2d
+                ]
+                
+        except (TypeError, ValueError, Exception) as conv_error:
             # Requirement 11.4: Meaningful error messages
             return {
                 "success": False,
                 "positions": [],
                 "count": 0,
                 "message": (
-                    f"❌ Fehler bei der Z-Positions-Berechnung: {str(z_error)}"
-                )
-            }
-
-        # Convert 2D positions to 3D positions
-        try:
-            positions_3d = [
-                (float(x), float(y), float(z_position))
-                for x, y in grid_positions_2d
-            ]
-        except (TypeError, ValueError) as conv_error:
-            # Requirement 11.4: Meaningful error messages
-            return {
-                "success": False,
-                "positions": [],
-                "count": 0,
-                "message": (
-                    f"❌ Fehler bei der Positions-Konvertierung: "
+                    f"❌ Fehler bei der Positions-Berechnung: "
                     f"{str(conv_error)}"
                 )
             }
@@ -290,20 +565,21 @@ def handle_reset_placement() -> Dict[str, Any]:
         }
 
 
-def calculate_z_position(roof_type: str, roof_pitch: float = 0.0) -> float:
+def calculate_z_position(roof_type: str, roof_pitch: float = 0.0, roof_width: float = 10.0) -> float:
     """
     Calculate Z-position (height) for modules based on roof type.
 
     Different roof types require different mounting heights:
     - Flat roofs: Modules are mounted on elevated frames (Aufständerung)
-    - Pitched roofs: Modules are mounted directly on the roof surface
+    - Pitched roofs: Modules are mounted on the roof surface at ridge height
 
     Args:
         roof_type: Type of roof (e.g., "Flachdach", "Satteldach", "Pultdach")
-        roof_pitch: Roof pitch angle in degrees (not used currently)
+        roof_pitch: Roof pitch angle in degrees
+        roof_width: Width of the roof in meters (for calculating ridge height)
 
     Returns:
-        Z-position in meters above the roof surface
+        Z-position in meters above the wall height (relative to roof base)
 
     Requirements:
         - 6.1: Flat roof with elevated mounting (30° tilt)
@@ -311,6 +587,8 @@ def calculate_z_position(roof_type: str, roof_pitch: float = 0.0) -> float:
         - 6.3: Shed roof parallel to surface
         - 6.4: Calculate Z-position based on roof type
     """
+    import math
+    
     # Normalize roof type string (case-insensitive, strip whitespace)
     roof_type_normalized = roof_type.strip().lower()
 
@@ -319,9 +597,14 @@ def calculate_z_position(roof_type: str, roof_pitch: float = 0.0) -> float:
         return 0.3  # 30cm elevation for mounting frame (Aufständerung)
 
     # Requirement 6.2, 6.3: Pitched roofs (Satteldach, Pultdach, etc.)
-    # Modules are mounted directly on the roof surface
+    # Modules are mounted on the roof surface
+    # For pitched roofs, place modules slightly above the roof base
     else:
-        return 0.05  # 5cm clearance above roof surface
+        # For pitched roofs, modules sit on the roof surface
+        # The roof itself is already at the correct height in the scene
+        # We just need a small clearance above the roof base
+        # The actual roof slope is handled by the roof geometry itself
+        return 0.15  # 15cm clearance above roof base (Traufhöhe)
 
 
 def calculate_tilt_angle(roof_type: str, roof_pitch: float = 0.0) -> float:
@@ -361,19 +644,26 @@ def handle_manual_add(
     x: float,
     y: float,
     roof_type: str,
-    roof_pitch: float = 0.0
+    roof_pitch: float = 0.0,
+    roof_length: float = 10.0,
+    roof_width: float = 8.0,
+    orientation: str = "portrait"
 ) -> Dict[str, Any]:
     """
-    Add a single module at a specific position.
+    Add a single module at a specific position with collision detection.
 
     This function allows manual placement of individual modules at
-    user-specified coordinates.
+    user-specified coordinates. It performs collision detection to
+    prevent overlapping modules and boundary violations.
 
     Args:
         x: X-coordinate in meters (relative to roof center)
         y: Y-coordinate in meters (relative to roof center)
         roof_type: Type of roof
         roof_pitch: Roof pitch angle in degrees
+        roof_length: Length of the roof in meters
+        roof_width: Width of the roof in meters
+        orientation: Module orientation ("portrait" or "landscape")
 
     Returns:
         Dictionary with:
@@ -383,6 +673,7 @@ def handle_manual_add(
     Requirements:
         - 4.1: Manual add button functionality
         - 6.4: Calculate Z-position based on roof type
+        - 7.1-7.4: Collision detection and prevention
         - 9.1-9.2: Session state management
         - 11.1-11.3: Error handling and collision detection
     """
@@ -392,16 +683,31 @@ def handle_manual_add(
             st.session_state["placed_module_positions"] = []
 
         # Calculate Z-position based on roof type
-        z = calculate_z_position(roof_type, roof_pitch)
+        z = calculate_z_position(roof_type, roof_pitch, roof_width)
 
         # Create new position
         new_position = (x, y, z)
 
-        # Requirement 11.1, 11.3: Check for collisions (basic check)
-        # Note: Full collision detection is implemented in Task 11
+        # Requirement 7.1-7.4: Check for collisions
         existing_positions = st.session_state["placed_module_positions"]
 
-        # Add the module
+        collision_result = check_module_collision(
+            new_position=new_position,
+            existing_positions=existing_positions,
+            roof_length=roof_length,
+            roof_width=roof_width,
+            margin=DEFAULT_MARGIN,
+            orientation=orientation
+        )
+
+        # Requirement 7.3, 7.4: Prevent placement if collision detected
+        if collision_result["collision"]:
+            return {
+                "success": False,
+                "message": collision_result["message"]
+            }
+
+        # Add the module (no collision)
         existing_positions.append(new_position)
 
         # Requirement 9.1, 9.2: Update session state
@@ -574,14 +880,17 @@ if __name__ == "__main__":
     # In a real environment, this would be run within a Streamlit app
 
     print("Test 1: Calculate Z-position for different roof types")
-    print(f"  Flachdach: {calculate_z_position('Flachdach')}m")
-    print(f"  Satteldach: {calculate_z_position('Satteldach')}m")
-    print(f"  Pultdach: {calculate_z_position('Pultdach')}m")
+    print(f"  Flachdach: {calculate_z_position('Flachdach', 0.0, 10.0)}m")
+    print(f"  Satteldach: {calculate_z_position('Satteldach', 35.0, 10.0)}m")
+    print(f"  Pultdach: {calculate_z_position('Pultdach', 25.0, 10.0)}m")
     print()
 
     print("Test 2: Calculate tilt angle for different roof types")
     print(f"  Flachdach: {calculate_tilt_angle('Flachdach', 0.0)}°")
-    print(f"  Satteldach (35° pitch): {calculate_tilt_angle('Satteldach', 35.0)}°")
+    print(
+        f"  Satteldach (35° pitch): "
+        f"{calculate_tilt_angle('Satteldach', 35.0)}°"
+    )
     print(f"  Pultdach (25° pitch): {calculate_tilt_angle('Pultdach', 25.0)}°")
     print(f"  Walmdach (40° pitch): {calculate_tilt_angle('Walmdach', 40.0)}°")
     print()
@@ -591,7 +900,7 @@ if __name__ == "__main__":
     roof_pitches = [0.0, 35.0, 25.0, 40.0]
     
     for roof_type, pitch in zip(roof_types, roof_pitches):
-        z_pos = calculate_z_position(roof_type, pitch)
+        z_pos = calculate_z_position(roof_type, pitch, 10.0)
         tilt = calculate_tilt_angle(roof_type, pitch)
         print(f"  {roof_type} (pitch={pitch}°):")
         print(f"    Z-position: {z_pos}m")

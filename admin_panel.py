@@ -3673,6 +3673,20 @@ def create_protected_tab_renderer(area_id: str, area_label: str, render_function
                 st.session_state[session_key] = False
             
             if not st.session_state[session_key]:
+                # ✅ FIX: Tab-Menü verstecken während Passwort-Eingabe (NICHT Sidebar!)
+                st.markdown("""
+                <style>
+                    /* Verstecke ALLE Tab-Buttons im Admin-Bereich */
+                    div[data-testid="stHorizontalBlock"] button[data-baseweb="tab"] {
+                        display: none !important;
+                    }
+                    /* Verstecke Tab-Container */
+                    div[data-testid="stTabs"] > div[data-baseweb="tab-list"] {
+                        display: none !important;
+                    }
+                </style>
+                """, unsafe_allow_html=True)
+                
                 st.warning(f"🔒 {area_label} ist nur für Administratoren zugänglich.")
                 
                 col1, col2 = st.columns(2)
@@ -3703,7 +3717,7 @@ def create_protected_tab_renderer(area_id: str, area_label: str, render_function
                 
                 return
             
-            # Authentifiziert - zeige Inhalt
+            # Authentifiziert - zeige Inhalt (Sidebar wieder sichtbar)
             render_function()
             
             # Sperre-Button

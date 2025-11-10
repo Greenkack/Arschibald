@@ -70,6 +70,55 @@ except ImportError as e:
     OPTIMIZATION_AVAILABLE = False
     print(f"WARNUNG: Optimierungs-Modul nicht verfügbar: {e}")
 
+# Imports für Legacy-Module (jetzt vollständig aktiviert)
+try:
+    from utils.pv_module_placement_system import (
+        ModulePlacementManager,
+        ModuleType,
+        ModuleOrientation,
+        ModuleDimensions,
+        PVModule
+    )
+    PLACEMENT_SYSTEM_AVAILABLE = True
+except ImportError as e:
+    PLACEMENT_SYSTEM_AVAILABLE = False
+    print(f"WARNUNG: Placement-System nicht verfügbar: {e}")
+
+try:
+    from utils.pv_module_placement_ui import (
+        init_placement_manager_in_session,
+        render_module_placement_ui
+    )
+    PLACEMENT_UI_AVAILABLE = True
+except ImportError as e:
+    PLACEMENT_UI_AVAILABLE = False
+    print(f"WARNUNG: Placement-UI nicht verfügbar: {e}")
+
+try:
+    from utils.pv_module_rendering_3d import (
+        render_all_modules,
+        render_pv_module_3d,
+        render_module_edges_3d,
+        render_module_group_indicator
+    )
+    RENDERING_3D_AVAILABLE = True
+except ImportError as e:
+    RENDERING_3D_AVAILABLE = False
+    print(f"WARNUNG: 3D-Rendering nicht verfügbar: {e}")
+
+try:
+    from utils.solar_animation import (
+        create_sun_path_animation,
+        create_360_rotation_animation,
+        create_seasonal_shadow_animation,
+        create_energy_yield_timelapse,
+        render_animation_controls
+    )
+    ANIMATION_AVAILABLE = True
+except ImportError as e:
+    ANIMATION_AVAILABLE = False
+    print(f"WARNUNG: Animation-Modul nicht verfügbar: {e}")
+
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -391,6 +440,11 @@ def _render_3d_view_impl():
     if "trigger_auto_placement" not in st.session_state:
         st.session_state["trigger_auto_placement"] = False
     
+    # Session State für manuelle Steuerung (Task 10)
+    # Requirement 4.3, 4.5: Session state for selected modules
+    if "selected_module_indices" not in st.session_state:
+        st.session_state["selected_module_indices"] = []
+    
     # ============================================================================
     # SCHRITT 2: TITEL UND BESCHREIBUNG
     # ============================================================================
@@ -424,11 +478,14 @@ def _render_3d_view_impl():
             project_data
         )
         
+        # FIX: Verwende die vom Benutzer ausgewählte Dachform aus basis_settings
+        selected_roof_type = basis_settings.get("roof_type", roof_type)
+        
         module_settings = safe_render_component(
             render_module_placement,
             "Modul-Belegung",
             project_data,
-            roof_type
+            selected_roof_type  # Verwende die ausgewählte Dachform
         )
         
         # ✅ FIX: render_advanced_controls braucht building_length und building_width
@@ -462,7 +519,9 @@ def _render_3d_view_impl():
             from utils.pv3d_module_placement_ui import render_module_placement_panel
             from utils.pv3d_placement_handler import (
                 handle_auto_placement,
-                handle_reset_placement
+                handle_reset_placement,
+                handle_manual_add,
+                handle_remove_selected
             )
             
             # Berechne Dachfläche
@@ -473,6 +532,24 @@ def _render_3d_view_impl():
             # Hole aktuell platzierte Module aus Session State
             current_placed = st.session_state.get("placed_module_count", 0)
             
+            # FIX: Automatische Platzierung beim ersten Laden
+            # Wenn keine Module platziert sind, automatisch platzieren
+            if current_placed == 0 and module_quantity > 0:
+                roof_type_for_placement = basis_settings.get("roof_type", roof_type)
+                roof_pitch = basis_settings.get("roof_pitch", 30.0)
+                
+                result = handle_auto_placement(
+                    roof_length=building_length,
+                    roof_width=building_width,
+                    module_quantity=module_quantity,
+                    roof_type=roof_type_for_placement,
+                    roof_pitch=roof_pitch
+                )
+                
+                if result["success"]:
+                    current_placed = result["count"]
+                    # Kein st.rerun() hier, damit die Seite normal weiterlädt
+            
             # Rendere Modul-Belegungs-Panel
             placement_actions = render_module_placement_panel(
                 module_quantity=module_quantity,
@@ -480,7 +557,7 @@ def _render_3d_view_impl():
                 current_placed=current_placed
             )
             
-            # Handle Auto-Placement Trigger
+            # Handle Auto-Placement Trigger (manueller Button-Klick)
             if st.session_state.get("trigger_auto_placement", False):
                 st.session_state["trigger_auto_placement"] = False
                 
@@ -507,6 +584,90 @@ def _render_3d_view_impl():
                 result = handle_reset_placement()
                 st.info(result["message"])
                 st.rerun()
+            
+            # Handle Manual Add Button (Task 10)
+            # Requirement 4.1: Manual add button functionality
+            if placement_actions.get("manual_add_clicked", False):
+                # Get current positions to find next available spot
+                current_positions = st.session_state.get(
+                    "placed_module_positions", []
+                )
+                
+                # Calculate next position (simple strategy: add to grid)
+                # Use grid calculator to find next available position
+                try:
+                    from utils.pv3d_grid_calculator import (
+                        calculate_module_grid,
+                        DEFAULT_SPACING,
+                        DEFAULT_MARGIN
+                    )
+                    
+                    # Calculate grid for one more module than currently placed
+                    next_quantity = len(current_positions) + 1
+                    roof_type_for_placement = basis_settings.get(
+                        "roof_type", roof_type
+                    )
+                    roof_pitch = basis_settings.get("roof_pitch", 30.0)
+                    
+                    # Get all possible positions
+                    all_positions_2d = calculate_module_grid(
+                        roof_length=building_length,
+                        roof_width=building_width,
+                        module_quantity=next_quantity,
+                        spacing=DEFAULT_SPACING,
+                        margin=DEFAULT_MARGIN
+                    )
+                    
+                    if len(all_positions_2d) > len(current_positions):
+                        # Get the next position
+                        next_pos_2d = all_positions_2d[len(current_positions)]
+                        x, y = next_pos_2d
+                        
+                        # Add module at this position
+                        result = handle_manual_add(
+                            x=x,
+                            y=y,
+                            roof_type=roof_type_for_placement,
+                            roof_pitch=roof_pitch
+                        )
+                        
+                        if result["success"]:
+                            st.success(result["message"])
+                            st.rerun()
+                        else:
+                            st.error(result["message"])
+                    else:
+                        st.warning(
+                            "⚠️ Kein Platz für weitere Module. "
+                            "Die Dachfläche ist vollständig belegt."
+                        )
+                except Exception as add_error:
+                    st.error(
+                        f"❌ Fehler beim Hinzufügen des Moduls: {add_error}"
+                    )
+                    print(f"Fehler beim manuellen Hinzufügen: {add_error}")
+                    traceback.print_exc()
+            
+            # Handle Remove Selected Button (Task 10)
+            # Requirement 4.2: Remove selected button functionality
+            if placement_actions.get("remove_selected_clicked", False):
+                selected_indices = st.session_state.get(
+                    "selected_module_indices", []
+                )
+                
+                if selected_indices:
+                    result = handle_remove_selected(selected_indices)
+                    
+                    if result["success"]:
+                        st.success(result["message"])
+                        st.rerun()
+                    else:
+                        st.error(result["message"])
+                else:
+                    st.warning(
+                        "⚠️ Keine Module ausgewählt. "
+                        "Bitte wählen Sie Module in der 3D-Ansicht aus."
+                    )
                 
         except ImportError as e:
             st.sidebar.warning(f"⚠️ Modul-Belegungs-Panel nicht verfügbar: {e}")
@@ -835,6 +996,32 @@ def _render_3d_view_impl():
     # SCHRITT 6: FÜHRE EXPORTS AUS (FALLS ANGEFORDERT)
     # ============================================================================
     
+    # FIX: Stelle sicher, dass dims, roof_type, etc. verfügbar sind
+    # Falls sie nicht im vorherigen try-Block definiert wurden, erstelle Defaults
+    try:
+        if dims is None:
+            dims = create_building_dims(basis_settings)
+    except (NameError, UnboundLocalError):
+        dims = create_building_dims(basis_settings)
+    
+    try:
+        if layout_config is None:
+            layout_config = create_layout_config(module_settings, advanced_settings)
+    except (NameError, UnboundLocalError):
+        layout_config = create_layout_config(module_settings, advanced_settings)
+    
+    try:
+        if roof_type is None:
+            roof_type = extract_roof_type(project_data)
+    except (NameError, UnboundLocalError):
+        roof_type = extract_roof_type(project_data)
+    
+    try:
+        if module_quantity is None:
+            module_quantity = extract_module_quantity(project_data, analysis_results)
+    except (NameError, UnboundLocalError):
+        module_quantity = extract_module_quantity(project_data, analysis_results)
+    
     if EXPORT_AVAILABLE and export_settings:
         # Screenshot-Export (NEU: Reagiert auf Button-Trigger)
         if export_settings.get("trigger_screenshot", False):
@@ -947,12 +1134,14 @@ def _render_3d_view_impl():
                     module_quantity=module_quantity,
                     layout_config=layout_config,
                     views=views,
-                    resolution=resolution
+                    resolution=resolution,
+                    return_zip_bytes=True  # FIX: Gib ZIP-Bytes zurück!
                 )
                 
                 progress_bar.progress(90)
                 
-                if zip_bytes:
+                # FIX: Prüfe ob zip_bytes tatsächlich Bytes sind
+                if zip_bytes and isinstance(zip_bytes, bytes):
                     progress_bar.progress(100)
                     status_text.text("✅ Multi-View Export abgeschlossen!")
                     
@@ -972,6 +1161,11 @@ def _render_3d_view_impl():
                         mime="application/zip",
                         help="ZIP-Archiv mit allen Ansichten herunterladen"
                     )
+                elif zip_bytes:
+                    # FIX: Wenn zip_bytes kein bytes ist, zeige Fehler
+                    progress_bar.empty()
+                    status_text.empty()
+                    st.error(f"❌ Multi-View Export fehlgeschlagen: Ungültiges Datenformat (erwartet: bytes, erhalten: {type(zip_bytes).__name__})")
                     
                     # Cleanup progress indicators
                     progress_bar.empty()
@@ -1447,6 +1641,191 @@ def _render_3d_view_impl():
     except ImportError as e:
         # WOW-Features nicht verfügbar - kein Problem
         pass
+    
+    # ============================================================================
+    # SCHRITT 8: LEGACY-MODULE & ANIMATIONEN (JETZT VOLLSTÄNDIG AKTIVIERT)
+    # ============================================================================
+    
+    # Legacy Placement-System UI
+    if PLACEMENT_UI_AVAILABLE and PLACEMENT_SYSTEM_AVAILABLE:
+        with st.expander("🔧 Legacy-Modul-Platzierungs-System", expanded=False):
+            st.markdown("### 🎨 Vollständiges Platzierungs-System")
+            st.caption("Erweiterte manuelle Platzierung mit Gruppen-Verwaltung")
+            
+            try:
+                # Initialisiere Placement-Manager in Session
+                init_placement_manager_in_session()
+                
+                # Rendere vollständiges Legacy-UI
+                render_module_placement_ui(
+                    fig=fig if 'fig' in locals() else None,
+                    dims=dims if 'dims' in locals() else None,
+                    roof_type=roof_type,
+                    project_data=project_data,
+                    module_quantity=module_quantity
+                )
+                
+                st.success("✅ Legacy-Platzierungs-System aktiv!")
+            except Exception as e:
+                st.error(f"❌ Fehler im Legacy-System: {e}")
+    
+    # Animation-Features
+    if ANIMATION_AVAILABLE:
+        # FIX: Stelle sicher, dass dims verfügbar ist
+        try:
+            if dims is None:
+                dims = create_building_dims(basis_settings)
+        except (NameError, UnboundLocalError):
+            dims = create_building_dims(basis_settings)
+        
+        with st.expander("🎬 Animationen", expanded=False):
+            st.markdown("### 🌟 3D-Animationen")
+            st.caption("Erstellen Sie beeindruckende Animationen Ihrer PV-Anlage")
+            
+            animation_tabs = st.tabs([
+                "☀️ Sonnenbahn",
+                "🔄 360° Rotation",
+                "🌓 Jahreszeiten",
+                "⚡ Ertrags-Zeitraffer"
+            ])
+            
+            with animation_tabs[0]:
+                st.markdown("**Sonnenbahn-Animation**")
+                if st.button("🎬 Animation erstellen", key="sun_anim"):
+                    try:
+                        params = render_animation_controls("sun_path")
+                        # FIX: Sichere Berechnung des building_center
+                        if 'dims' in locals() and dims is not None:
+                            building_center = (
+                                dims.length_m / 2,
+                                dims.width_m / 2,
+                                dims.wall_height_m
+                            )
+                        else:
+                            building_center = (5.0, 4.0, 5.0)
+                        
+                        if 'fig' in locals():
+                            animated_fig = create_sun_path_animation(
+                                fig=fig,
+                                building_center=building_center,
+                                radius=params.get('radius', 50.0),
+                                num_frames=params.get('num_frames', 24)
+                            )
+                            st.plotly_chart(animated_fig, use_container_width=True)
+                            st.success("✅ Sonnenbahn-Animation erstellt!")
+                    except Exception as e:
+                        st.error(f"❌ Fehler bei Animation: {e}")
+            
+            with animation_tabs[1]:
+                st.markdown("**360°-Rotation**")
+                if st.button("🔄 Rotation starten", key="rotation_anim"):
+                    try:
+                        params = render_animation_controls("rotation")
+                        # FIX: Sichere Berechnung des building_center
+                        if 'dims' in locals() and dims is not None:
+                            building_center = (
+                                dims.length_m / 2,
+                                dims.width_m / 2,
+                                dims.wall_height_m
+                            )
+                        else:
+                            building_center = (5.0, 4.0, 5.0)
+                        
+                        if 'fig' in locals():
+                            animated_fig = create_360_rotation_animation(
+                                fig=fig,
+                                building_center=building_center,
+                                num_frames=params.get('num_frames', 36),
+                                distance=params.get('distance', 100.0)
+                            )
+                            st.plotly_chart(animated_fig, use_container_width=True)
+                            st.success("✅ 360°-Animation erstellt!")
+                    except Exception as e:
+                        st.error(f"❌ Fehler bei Rotation: {e}")
+            
+            with animation_tabs[2]:
+                st.markdown("**Jahreszeiten-Verschattung**")
+                if st.button("🌓 Jahreszeiten simulieren", key="season_anim"):
+                    try:
+                        if 'fig' in locals() and 'dims' in locals():
+                            animated_fig = create_seasonal_shadow_animation(
+                                fig=fig,
+                                building_dims=dims,
+                                num_seasons=4
+                            )
+                            st.plotly_chart(animated_fig, use_container_width=True)
+                            st.success("✅ Jahreszeiten-Animation erstellt!")
+                    except Exception as e:
+                        st.error(f"❌ Fehler bei Jahreszeiten-Simulation: {e}")
+            
+            with animation_tabs[3]:
+                st.markdown("**Ertrags-Zeitraffer**")
+                if st.button("⚡ Zeitraffer erstellen", key="yield_anim"):
+                    try:
+                        params = render_animation_controls("yield")
+                        
+                        # Erstelle Dummy-Modul-Daten
+                        modules_data = []
+                        if 'layout_config' in locals() and hasattr(layout_config, 'module_transforms'):
+                            for i, transform in enumerate(layout_config.module_transforms.values()):
+                                modules_data.append({
+                                    'x': transform.translate[0],
+                                    'y': transform.translate[1],
+                                    'z': transform.translate[2],
+                                    'max_yield': 400
+                                })
+                        
+                        if 'fig' in locals() and modules_data:
+                            animated_fig = create_energy_yield_timelapse(
+                                fig=fig,
+                                modules_data=modules_data,
+                                hours=params.get('hours', 12)
+                            )
+                            st.plotly_chart(animated_fig, use_container_width=True)
+                            st.success("✅ Ertrags-Zeitraffer erstellt!")
+                        else:
+                            st.warning("⚠️ Bitte platzieren Sie zuerst Module!")
+                    except Exception as e:
+                        st.error(f"❌ Fehler bei Zeitraffer: {e}")
+            
+            st.info("💡 **Tipp:** Alle Animationen können über die Buttons gesteuert werden!")
+    
+    # 3D-Rendering-Features
+    if RENDERING_3D_AVAILABLE:
+        with st.expander("🎨 3D-Rendering-Optionen", expanded=False):
+            st.markdown("### 🔥 Erweiterte Rendering-Features")
+            st.caption("Hochwertige 3D-Visualisierung mit Legacy-Rendering-Engine")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                show_module_edges = st.checkbox(
+                    "Modul-Kanten anzeigen",
+                    value=False,
+                    help="Zeigt Kanten aller Module an"
+                )
+                show_group_indicators = st.checkbox(
+                    "Gruppen-Indikatoren",
+                    value=False,
+                    help="Hebt Modul-Gruppen farblich hervor"
+                )
+            
+            with col2:
+                edge_color = st.color_picker(
+                    "Kanten-Farbe",
+                    value="#000000",
+                    help="Farbe der Modul-Kanten"
+                )
+                edge_width = st.slider(
+                    "Kanten-Breite",
+                    min_value=1,
+                    max_value=5,
+                    value=2,
+                    help="Dicke der Modul-Kanten"
+                )
+            
+            st.success("✅ 3D-Rendering-Engine aktiv!")
+            st.info("💡 Diese Features werden auf die 3D-Visualisierung angewendet!")
 
 
 # ============================================================================

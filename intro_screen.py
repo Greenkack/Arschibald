@@ -535,7 +535,12 @@ def render_intro_screen():
 
         # Tipp des Tages
         daily_tip = get_daily_tip()
-        st.info(f"💡 **Tipp des Tages:** {daily_tip}")
+        st.markdown(f"""
+        <div style="background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #0c5460;">
+            <span style="color: #000000; font-weight: bold; font-size: 1.1rem;">💡 Tipp des Tages:</span>
+            <span style="color: #0c5460;"> {daily_tip}</span>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Footer - OHNE EMOJIS - OHNE EMOJIS
         st.markdown("""

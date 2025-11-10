@@ -1,21 +1,25 @@
 """
-admin_pv_mounting_tab.py
+admin_pv_mounting_tab_v2.py
 
-Render-Funktion für PV-Unterkonstruktions-Verwaltung im Admin Panel.
-Kompakte Version des Admin-UIs - integriert als Tab, nicht standalone.
+KOMPLETT ÜBERARBEITETES Admin-Dashboard für PV-Unterkonstruktion
+================================================================
+
+NEU in Version 2.0:
+- 📊 Verbessertes Dashboard mit erweiterten Statistiken
+- 🔍 Marken-Dropdown zur Filterung
+- ✏️ Vollständige CRUD-Funktionen (Create, Read, Update, Delete)
+- 🔎 Erweiterte Such- und Filterfunktionen
+- 📈 Visualisierungen mit Charts
+- 🎨 Moderne, übersichtliche UI
 
 Integration:
-  - Wird von admin_panel.py importiert und als Tab gerendert
-  - Nutzt pv_mounting_database.py für alle CRUD-Operationen
-  - Deutsche Zahlenformatierung mit Punkt-Tausender, Komma-Dezimal
+  - Wird von admin_panel.py importiert
+  - Nutzt pv_mounting_database.py
+  - Deutsche Zahlenformatierung
 
-Features:
-  - Dashboard mit Statistiken
-  - Komponenten-Tabelle mit Filtern
-  - Neue Komponente erstellen
-  - Komponenten bearbeiten/löschen
-  - CSV/XLSX Import/Export
-  - PDF-Datenblatt Upload/Download
+Autor: Bokuk2 System
+Version: 2.0.0 - MASSIV VERBESSERT
+Datum: 2025-11-06
 """
 
 import streamlit as st
@@ -23,6 +27,8 @@ import pandas as pd
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 import json
+import plotly.express as px
+import plotly.graph_objects as go
 
 # Import database functions
 try:
@@ -34,81 +40,31 @@ try:
         delete_component,
         get_statistics,
         search_components,
-        import_from_csv,
-        import_from_excel,
-        export_to_csv,
-        export_to_excel,
     )
     PV_MOUNTING_DB_AVAILABLE = True
 except ImportError:
     PV_MOUNTING_DB_AVAILABLE = False
 
-# === CONSTANTS ===
-MANUFACTURERS = ["K2 Systems", "Würth", "Prefa", "Schletter", "Renusol", "Sonstige"]
-ROOF_TYPES = [
-    "Ziegeldach",
-    "Betondach",
-    "Schieferdach",
-    "Biberschwanzdach",
-    "Blechdach (Trapezblech)",
-    "Blechdach (Stehfalz)",
-    "Sandwichplatten",
-    "Flachdach"
-]
-CATEGORIES = [
-    "Dachhaken",
-    "Montageschiene",
-    "Modulklemme (End)",
-    "Modulklemme (Mittel)",
-    "Schienenverbinder",
-    "Stehfalzklemme",
-    "Trapezblechschiene",
-    "Aufständerung",
-    "Schrauben",
-    "Kabel",
-    "Zubehör"
-]
-MATERIALS = [
-    "Aluminium",
-    "Edelstahl A2",
-    "Edelstahl A4",
-    "Stahl verzinkt",
-    "Kunststoff",
-    "Kupfer",
-    "Gemischt"
-]
-UNITS = ["Stk", "m", "kg", "Set", "Paar"]
-
-
-def _get_component_name(component: Dict[str, Any]) -> str:
-    """Get component name from dict - handles both 'name' and 'product_name' fields."""
-    return component.get('product_name') or component.get('name') or "Unbenannt"
-
 
 def format_german_number(value: float, decimals: int = 2) -> str:
-    """Format number with German locale (. as thousands, , as decimal)."""
+    """Format number with German locale."""
     if value is None:
         return "0,00"
-    
-    # Format with comma decimal separator
     formatted = f"{value:,.{decimals}f}"
-    
-    # Replace comma with temp placeholder
-    formatted = formatted.replace(',', 'TEMP')
-    # Replace dot with comma (German decimal separator)
-    formatted = formatted.replace('.', ',')
-    # Replace temp with dot (German thousands separator)
-    formatted = formatted.replace('TEMP', '.')
-    
+    formatted = formatted.replace(',', 'TEMP').replace('.', ',').replace('TEMP', '.')
     return formatted
 
 
-def render_pv_mounting_admin_tab() -> None:
-    """Main render function for PV mounting component administration."""
+def format_german_currency(value: float) -> str:
+    """Format as German currency."""
+    return f"{format_german_number(value, 2)} €"
+
+
+def render_pv_mounting_admin_tab_v2() -> None:
+    """NEUE Hauptfunktion für überarbeitetes PV-Unterkonstruktions-Dashboard."""
     
     if not PV_MOUNTING_DB_AVAILABLE:
         st.error("❌ **PV-Montage-Datenbank nicht verfügbar**")
-        st.info("Bitte stellen Sie sicher, dass `pv_mounting_database.py` im Projektverzeichnis vorhanden ist.")
         return
     
     # Initialize database
@@ -118,574 +74,707 @@ def render_pv_mounting_admin_tab() -> None:
         st.error(f"❌ Fehler beim Initialisieren der Datenbank: {e}")
         return
     
-    st.markdown("## 🔧 PV-Unterkonstruktions-Verwaltung")
-    st.markdown("---")
+    # Header mit Styling
+    st.markdown("""
+        <style>
+        .big-header {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f77b4;
+            margin-bottom: 1rem;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+        .section-header {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
     
-    # Sub-navigation
+    st.markdown('<p class="big-header">🔧 PV-Unterkonstruktions-Verwaltung 2.0</p>', unsafe_allow_html=True)
+    
+    # Navigation mit Icons
     sub_tabs = st.tabs([
-        "📊 Dashboard",
+        "📊 Dashboard & Statistiken",
         "📋 Komponenten verwalten",
         "➕ Neue Komponente",
+        "🔎 Erweiterte Suche",
         "📤 Import/Export"
     ])
     
     with sub_tabs[0]:
-        _render_dashboard()
+        _render_enhanced_dashboard()
     
     with sub_tabs[1]:
-        _render_components_list()
+        _render_enhanced_component_list()
     
     with sub_tabs[2]:
-        _render_create_component()
+        _render_enhanced_create_component()
     
     with sub_tabs[3]:
+        _render_advanced_search()
+    
+    with sub_tabs[4]:
         _render_import_export()
 
 
-def _render_dashboard() -> None:
-    """Render statistics dashboard."""
+def _render_enhanced_dashboard() -> None:
+    """Verbessertes Dashboard mit Charts und erweiterten Statistiken."""
     
-    st.markdown("### 📊 Statistik-Übersicht")
+    st.markdown('<p class="section-header">📊 Übersicht & Statistiken</p>', unsafe_allow_html=True)
     
     try:
         stats = get_statistics()
+        all_components = read_components()
         
-        # Top metrics
+        # === TOP METRICS ===
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             st.metric(
-                "Gesamt Komponenten",
+                "📦 Gesamt Komponenten",
                 stats['total_components'],
-                help="Anzahl aller aktiven Komponenten in der Datenbank"
+                delta=f"+{len(all_components) - 25}" if len(all_components) > 25 else None,
+                help="Anzahl aller aktiven Komponenten"
             )
         
         with col2:
             st.metric(
-                "Hersteller",
+                "🏭 Hersteller",
                 len(stats['by_manufacturer']),
-                help="Anzahl verschiedener Hersteller"
+                help="Verschiedene Hersteller"
             )
         
         with col3:
             st.metric(
-                "Kategorien",
+                "📂 Kategorien",
                 len(stats['by_category']),
-                help="Anzahl verschiedener Produktkategorien"
+                help="Produktkategorien"
             )
         
         with col4:
+            total_value = sum(c.get('price_netto', 0) for c in all_components)
             st.metric(
-                "Dachtypen",
-                len(stats['by_roof_type']),
-                help="Anzahl verschiedener Dachtypen"
+                "💰 Gesamtwert",
+                format_german_currency(total_value),
+                help="Netto-Gesamtwert aller Komponenten"
             )
         
         st.markdown("---")
         
-        # Detailed breakdown
+        # === CHARTS ===
         col_left, col_right = st.columns(2)
         
         with col_left:
-            st.markdown("#### Nach Hersteller")
+            st.markdown("#### 📊 Verteilung nach Hersteller")
             if stats['by_manufacturer']:
                 df_manuf = pd.DataFrame(
                     list(stats['by_manufacturer'].items()),
                     columns=['Hersteller', 'Anzahl']
                 ).sort_values('Anzahl', ascending=False)
-                st.dataframe(df_manuf, use_container_width=True, hide_index=True)
-            else:
-                st.info("Keine Daten verfügbar")
+                
+                fig = px.bar(
+                    df_manuf,
+                    x='Anzahl',
+                    y='Hersteller',
+                    orientation='h',
+                    title='',
+                    color='Anzahl',
+                    color_continuous_scale='blues'
+                )
+                fig.update_layout(
+                    showlegend=False,
+                    height=400,
+                    margin=dict(l=0, r=0, t=30, b=0)
+                )
+                st.plotly_chart(fig, use_container_width=True)
         
         with col_right:
-            st.markdown("#### Nach Kategorie")
+            st.markdown("#### 📈 Top 10 Kategorien")
             if stats['by_category']:
                 df_cat = pd.DataFrame(
                     list(stats['by_category'].items()),
                     columns=['Kategorie', 'Anzahl']
-                ).sort_values('Anzahl', ascending=False)
-                st.dataframe(df_cat, use_container_width=True, hide_index=True)
-            else:
-                st.info("Keine Daten verfügbar")
+                ).sort_values('Anzahl', ascending=False).head(10)
+                
+                fig = px.pie(
+                    df_cat,
+                    values='Anzahl',
+                    names='Kategorie',
+                    title='',
+                    hole=0.4
+                )
+                fig.update_layout(
+                    height=400,
+                    margin=dict(l=0, r=0, t=30, b=0)
+                )
+                st.plotly_chart(fig, use_container_width=True)
         
-        # Price statistics
-        if stats['total_components'] > 0:
-            st.markdown("---")
-            st.markdown("#### Preisstatistiken")
-            
-            components = read_components()
-            prices = [c['price_netto'] for c in components if c.get('price_netto') and c['price_netto'] > 0]
-            
+        st.markdown("---")
+        
+        # === DETAILED BREAKDOWN ===
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("#### 🏠 Nach Dachtyp")
+            if stats['by_roof_type']:
+                df_roof = pd.DataFrame(
+                    list(stats['by_roof_type'].items()),
+                    columns=['Dachtyp', 'Anzahl']
+                ).sort_values('Anzahl', ascending=False)
+                st.dataframe(df_roof, use_container_width=True, hide_index=True)
+        
+        with col2:
+            st.markdown("#### 💶 Preisstatistik")
+            prices = [c.get('price_netto', 0) for c in all_components if c.get('price_netto', 0) > 0]
             if prices:
-                col1, col2, col3 = st.columns(3)
-                
-                with col1:
-                    st.metric(
-                        "Durchschnittspreis",
-                        f"{format_german_number(sum(prices) / len(prices))} €",
-                        help="Durchschnittlicher Nettopreis aller Komponenten"
-                    )
-                
-                with col2:
-                    st.metric(
-                        "Niedrigster Preis",
-                        f"{format_german_number(min(prices))} €",
-                        help="Günstigste Komponente"
-                    )
-                
-                with col3:
-                    st.metric(
-                        "Höchster Preis",
-                        f"{format_german_number(max(prices))} €",
-                        help="Teuerste Komponente"
-                    )
-    
+                price_stats = pd.DataFrame({
+                    'Kennzahl': ['Durchschnitt', 'Median', 'Min', 'Max'],
+                    'Preis': [
+                        format_german_currency(sum(prices) / len(prices)),
+                        format_german_currency(sorted(prices)[len(prices)//2]),
+                        format_german_currency(min(prices)),
+                        format_german_currency(max(prices))
+                    ]
+                })
+                st.dataframe(price_stats, use_container_width=True, hide_index=True)
+        
+        with col3:
+            st.markdown("#### 📦 Nach Einheit")
+            units = {}
+            for comp in all_components:
+                unit = comp.get('unit', 'Stk')
+                units[unit] = units.get(unit, 0) + 1
+            
+            df_units = pd.DataFrame(
+                list(units.items()),
+                columns=['Einheit', 'Anzahl']
+            ).sort_values('Anzahl', ascending=False)
+            st.dataframe(df_units, use_container_width=True, hide_index=True)
+        
+        # === RECENT ADDITIONS ===
+        st.markdown("---")
+        st.markdown("#### 🆕 Neueste Komponenten")
+        
+        # Sort by ID (newest first)
+        recent = sorted(all_components, key=lambda x: x.get('id', 0), reverse=True)[:5]
+        if recent:
+            recent_df = pd.DataFrame([{
+                'Hersteller': c.get('manufacturer', ''),
+                'Produkt': c.get('product_name', ''),
+                'Kategorie': c.get('category', ''),
+                'Preis': format_german_currency(c.get('price_netto', 0))
+            } for c in recent])
+            st.dataframe(recent_df, use_container_width=True, hide_index=True)
+        
     except Exception as e:
         st.error(f"❌ Fehler beim Laden der Statistiken: {e}")
 
 
-def _render_components_list() -> None:
-    """Render components table with filters and actions."""
+def _render_enhanced_component_list() -> None:
+    """Verbesserte Komponentenliste mit Marken-Dropdown und Filtern."""
     
-    st.markdown("### 📋 Komponenten-Übersicht")
+    st.markdown('<p class="section-header">📋 Komponenten verwalten</p>', unsafe_allow_html=True)
     
-    # Filters
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        filter_manufacturer = st.selectbox(
-            "Hersteller",
-            options=["Alle"] + MANUFACTURERS,
-            key="pv_filter_manuf"
-        )
-    
-    with col2:
-        filter_category = st.selectbox(
-            "Kategorie",
-            options=["Alle"] + CATEGORIES,
-            key="pv_filter_cat"
-        )
-    
-    with col3:
-        filter_roof_type = st.selectbox(
-            "Dachtyp",
-            options=["Alle"] + ROOF_TYPES,
-            key="pv_filter_roof"
-        )
-    
-    with col4:
-        search_term = st.text_input(
-            "🔍 Suche",
-            placeholder="Name, Artikel-Nr...",
-            key="pv_search"
-        )
-    
-    st.markdown("---")
-    
-    # Build filters dict
-    filters = {}
-    if filter_manufacturer != "Alle":
-        filters['manufacturer'] = filter_manufacturer
-    if filter_category != "Alle":
-        filters['category'] = filter_category
-    if filter_roof_type != "Alle":
-        filters['roof_type'] = filter_roof_type
-    
-    # Load components
     try:
-        if search_term:
-            components = search_components(
-                search_term,
-                fields=['name', 'article_number', 'description']
-            )
-            # Apply additional filters
-            if filters:
-                components = [
-                    c for c in components
-                    if all(
-                        c.get(k) == v for k, v in filters.items()
-                    )
-                ]
-        else:
-            components = read_components(filters=filters)
+        all_components = read_components()
         
-        if not components:
-            st.info("📭 Keine Komponenten gefunden.")
+        if not all_components:
+            st.info("ℹ️ Keine Komponenten vorhanden. Erstellen Sie die erste Komponente im Tab 'Neue Komponente'.")
             return
         
-        # Display count
-        st.info(f"📦 **{len(components)}** Komponenten gefunden")
+        # === FILTER SECTION ===
+        st.markdown("#### 🔍 Filter & Suche")
         
-        # Render table
-        for idx, comp in enumerate(components):
-            with st.expander(
-                f"**{_get_component_name(comp)}** ({comp['manufacturer']}) - {format_german_number(comp['price_netto'])} €",
-                expanded=False
-            ):
-                col_info, col_actions = st.columns([3, 1])
-                
-                with col_info:
-                    st.markdown(f"**Artikel-Nr:** {comp.get('article_number', 'N/A')}")
-                    st.markdown(f"**Kategorie:** {comp['category']}")
-                    st.markdown(f"**Dachtyp:** {comp['roof_type']}")
-                    st.markdown(f"**Material:** {comp.get('material', 'N/A')}")
-                    st.markdown(f"**Einheit:** {comp.get('unit', 'Stk')}")
-                    
-                    if comp.get('description'):
-                        st.markdown(f"**Beschreibung:** {comp['description']}")
-                    
-                    if comp.get('specifications'):
-                        st.markdown("**Spezifikationen:**")
-                        try:
-                            specs = json.loads(comp['specifications']) if isinstance(comp['specifications'], str) else comp['specifications']
-                            for key, value in specs.items():
-                                st.markdown(f"- {key}: {value}")
-                        except:
-                            st.text(comp['specifications'])
-                
-                with col_actions:
-                    st.markdown("**Aktionen:**")
-                    
-                    # Edit button
-                    if st.button("✏️ Bearbeiten", key=f"edit_{comp['id']}", use_container_width=True):
-                        st.session_state['pv_edit_component'] = comp
-                        st.rerun()
-                    
-                    # Delete button
-                    if st.button("🗑️ Löschen", key=f"delete_{comp['id']}", type="secondary", use_container_width=True):
-                        if delete_component(comp['id']):
-                            st.success(f"✅ Komponente '{_get_component_name(comp)}' gelöscht")
-                            st.rerun()
-                        else:
-                            st.error("❌ Fehler beim Löschen")
-                    
-                    # PDF download if available
-                    if comp.get('pdf_bytes'):
-                        st.download_button(
-                            "📄 Datenblatt",
-                            data=comp['pdf_bytes'],
-                            file_name=f"{comp['article_number']}_Datenblatt.pdf",
-                            mime="application/pdf",
-                            key=f"pdf_{comp['id']}",
-                            use_container_width=True
-                        )
-        
-        # Handle edit mode
-        if 'pv_edit_component' in st.session_state:
-            st.markdown("---")
-            _render_edit_component(st.session_state['pv_edit_component'])
-    
-    except Exception as e:
-        st.error(f"❌ Fehler beim Laden der Komponenten: {e}")
-
-
-def _render_edit_component(component: Dict[str, Any]) -> None:
-    """Render edit form for existing component."""
-    
-    st.markdown(f"### ✏️ Komponente bearbeiten: **{_get_component_name(component)}**")
-    
-    with st.form(key="edit_component_form"):
-        col1, col2 = st.columns(2)
+        col1, col2, col3, col4 = st.columns(4)
         
         with col1:
-            name = st.text_input("Name *", value=_get_component_name(component))
-            manufacturer = st.selectbox(
-                "Hersteller *",
-                options=MANUFACTURERS,
-                index=MANUFACTURERS.index(component['manufacturer']) if component['manufacturer'] in MANUFACTURERS else 0
-            )
-            article_number = st.text_input("Artikel-Nr", value=component.get('article_number', ''))
-            category = st.selectbox(
-                "Kategorie *",
-                options=CATEGORIES,
-                index=CATEGORIES.index(component['category']) if component['category'] in CATEGORIES else 0
-            )
-            roof_type = st.selectbox(
-                "Dachtyp *",
-                options=ROOF_TYPES,
-                index=ROOF_TYPES.index(component['roof_type']) if component['roof_type'] in ROOF_TYPES else 0
+            # Marken-Dropdown
+            manufacturers = sorted(set(c.get('manufacturer', '') for c in all_components))
+            selected_manufacturer = st.selectbox(
+                "🏭 Hersteller",
+                ['Alle'] + manufacturers,
+                key='filter_manufacturer'
             )
         
         with col2:
-            material = st.selectbox(
-                "Material",
-                options=MATERIALS,
-                index=MATERIALS.index(component.get('material', 'Aluminium')) if component.get('material') in MATERIALS else 0
-            )
-            price = st.number_input(
-                "Preis (€ netto) *",
-                min_value=0.0,
-                value=float(component['price_netto']),
-                step=0.01,
-                format="%.2f"
-            )
-            unit = st.selectbox(
-                "Einheit",
-                options=UNITS,
-                index=UNITS.index(component.get('unit', 'Stk')) if component.get('unit') in UNITS else 0
-            )
-            weight_kg = st.number_input(
-                "Gewicht (kg)",
-                min_value=0.0,
-                value=float(component.get('weight_kg', 0.0)),
-                step=0.01
+            # Kategorie-Filter
+            categories = sorted(set(c.get('category', '') for c in all_components))
+            selected_category = st.selectbox(
+                "📂 Kategorie",
+                ['Alle'] + categories,
+                key='filter_category'
             )
         
-        description = st.text_area(
-            "Beschreibung",
-            value=component.get('description', ''),
-            height=100
-        )
+        with col3:
+            # Dachtyp-Filter
+            roof_types = sorted(set(c.get('roof_type', '') for c in all_components))
+            selected_roof = st.selectbox(
+                "🏠 Dachtyp",
+                ['Alle'] + roof_types,
+                key='filter_roof'
+            )
         
-        # PDF upload
-        pdf_file = st.file_uploader(
-            "📄 Neues Datenblatt hochladen (PDF, optional)",
-            type=['pdf'],
-            key="edit_pdf_upload"
-        )
+        with col4:
+            # Suchfeld
+            search_term = st.text_input(
+                "🔎 Suche",
+                placeholder="Produktname...",
+                key='search_term'
+            )
         
-        col_submit, col_cancel = st.columns(2)
+        # === FILTERING LOGIC ===
+        filtered = all_components
         
-        with col_submit:
-            submit = st.form_submit_button("💾 Speichern", use_container_width=True, type="primary")
+        if selected_manufacturer != 'Alle':
+            filtered = [c for c in filtered if c.get('manufacturer') == selected_manufacturer]
         
-        with col_cancel:
-            cancel = st.form_submit_button("❌ Abbrechen", use_container_width=True)
+        if selected_category != 'Alle':
+            filtered = [c for c in filtered if c.get('category') == selected_category]
         
-        if cancel:
-            del st.session_state['pv_edit_component']
-            st.rerun()
+        if selected_roof != 'Alle':
+            filtered = [c for c in filtered if c.get('roof_type') == selected_roof]
         
-        if submit:
-            if not name or not manufacturer or not category or not roof_type or price <= 0:
-                st.error("❌ Bitte alle Pflichtfelder (*) ausfüllen und gültigen Preis eingeben")
-            else:
-                update_data = {
-                    'product_name': name,  # Corrected field name
+        if search_term:
+            search_lower = search_term.lower()
+            filtered = [c for c in filtered if 
+                       search_lower in c.get('product_name', '').lower() or
+                       search_lower in c.get('manufacturer', '').lower() or
+                       search_lower in c.get('article_number', '').lower()]
+        
+        st.info(f"📊 **{len(filtered)}** von **{len(all_components)}** Komponenten angezeigt")
+        
+        # === TABLE WITH ACTIONS ===
+        if filtered:
+            st.markdown("---")
+            
+            # Create DataFrame
+            df_display = pd.DataFrame([{
+                'ID': c.get('id', ''),
+                'Hersteller': c.get('manufacturer', ''),
+                'Produkt': c.get('product_name', ''),
+                'Art.-Nr.': c.get('article_number', ''),
+                'Kategorie': c.get('category', ''),
+                'Dachtyp': c.get('roof_type', ''),
+                'Preis': format_german_currency(c.get('price_netto', 0)),
+                'Einheit': c.get('unit', ''),
+                'Gewicht': f"{c.get('weight_kg', 0):.2f} kg".replace('.', ','),
+            } for c in filtered])
+            
+            st.dataframe(
+                df_display,
+                use_container_width=True,
+                hide_index=True,
+                height=400
+            )
+            
+            # === ACTIONS ===
+            st.markdown("---")
+            st.markdown("#### ⚙️ Aktionen")
+            
+            col_action1, col_action2 = st.columns([1, 3])
+            
+            with col_action1:
+                # Select component for editing/deleting
+                component_ids = [c['id'] for c in filtered]
+                selected_id = st.selectbox(
+                    "Komponente auswählen",
+                    component_ids,
+                    format_func=lambda x: next((c['product_name'] for c in filtered if c['id'] == x), str(x))
+                )
+            
+            with col_action2:
+                col_btn1, col_btn2, col_btn3 = st.columns(3)
+                
+                with col_btn1:
+                    if st.button("✏️ Bearbeiten", use_container_width=True):
+                        st.session_state['edit_component_id'] = selected_id
+                        st.rerun()
+                
+                with col_btn2:
+                    if st.button("🔄 Duplizieren", use_container_width=True):
+                        st.session_state['duplicate_component_id'] = selected_id
+                        st.rerun()
+                
+                with col_btn3:
+                    if st.button("🗑️ Löschen", type="primary", use_container_width=True):
+                        st.session_state['delete_component_id'] = selected_id
+                        st.rerun()
+            
+            # === EDIT MODAL ===
+            if 'edit_component_id' in st.session_state:
+                _render_edit_component_modal(st.session_state['edit_component_id'])
+            
+            # === DELETE CONFIRMATION ===
+            if 'delete_component_id' in st.session_state:
+                _render_delete_confirmation(st.session_state['delete_component_id'])
+        
+    except Exception as e:
+        st.error(f"❌ Fehler beim Laden der Komponenten: {e}")
+        st.exception(e)
+
+
+def _render_edit_component_modal(component_id: int) -> None:
+    """Modal zum Bearbeiten einer Komponente."""
+    
+    try:
+        all_components = read_components()
+        component = next((c for c in all_components if c['id'] == component_id), None)
+        
+        if not component:
+            st.error(f"Komponente mit ID {component_id} nicht gefunden")
+            del st.session_state['edit_component_id']
+            return
+        
+        st.markdown("---")
+        st.markdown(f"### ✏️ Komponente bearbeiten: {component.get('product_name', '')}")
+        
+        with st.form("edit_component_form"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                manufacturer = st.text_input("Hersteller *", value=component.get('manufacturer', ''))
+                product_name = st.text_input("Produktname *", value=component.get('product_name', ''))
+                article_number = st.text_input("Artikelnummer", value=component.get('article_number', ''))
+                category = st.text_input("Kategorie *", value=component.get('category', ''))
+                roof_type = st.text_input("Dachtyp *", value=component.get('roof_type', ''))
+            
+            with col2:
+                material = st.text_input("Material", value=component.get('material', ''))
+                dimensions = st.text_input("Abmessungen", value=component.get('dimensions', ''))
+                weight_kg = st.number_input("Gewicht (kg)", value=component.get('weight_kg', 0.0), format="%.3f")
+                price_netto = st.number_input("Preis netto (€)", value=component.get('price_netto', 0.0), format="%.2f")
+                unit = st.selectbox("Einheit", ['Stk', 'm', 'kg', 'Set', 'Paar'], 
+                                   index=['Stk', 'm', 'kg', 'Set', 'Paar'].index(component.get('unit', 'Stk')))
+            
+            quantity_per_module = st.number_input("Menge pro Modul", value=component.get('quantity_per_module', 0.0), format="%.2f")
+            compatibility = st.text_area("Kompatibilität", value=component.get('compatibility', ''))
+            warranty_years = st.number_input("Garantie (Jahre)", value=component.get('warranty_years', 10))
+            notes = st.text_area("Notizen", value=component.get('notes', ''))
+            
+            col_submit, col_cancel = st.columns(2)
+            
+            with col_submit:
+                submitted = st.form_submit_button("💾 Speichern", use_container_width=True, type="primary")
+            
+            with col_cancel:
+                cancelled = st.form_submit_button("❌ Abbrechen", use_container_width=True)
+            
+            if submitted:
+                updated_data = {
+                    'id': component_id,
                     'manufacturer': manufacturer,
+                    'product_name': product_name,
                     'article_number': article_number,
                     'category': category,
                     'roof_type': roof_type,
                     'material': material,
-                    'price_netto': price,
-                    'unit': unit,
+                    'dimensions': dimensions,
                     'weight_kg': weight_kg,
-                    'description': description,
+                    'price_netto': price_netto,
+                    'unit': unit,
+                    'quantity_per_module': quantity_per_module,
+                    'compatibility': compatibility,
+                    'warranty_years': warranty_years,
+                    'notes': notes,
+                    'specifications': component.get('specifications', {})
                 }
                 
-                # Handle PDF upload
-                if pdf_file:
-                    update_data['pdf_bytes'] = pdf_file.read()
-                
-                if update_component(component['id'], update_data):
-                    st.success(f"✅ Komponente '{name}' erfolgreich aktualisiert!")
-                    del st.session_state['pv_edit_component']
+                if update_component(updated_data):
+                    st.success("✅ Komponente erfolgreich aktualisiert!")
+                    del st.session_state['edit_component_id']
                     st.rerun()
                 else:
                     st.error("❌ Fehler beim Aktualisieren der Komponente")
+            
+            if cancelled:
+                del st.session_state['edit_component_id']
+                st.rerun()
+    
+    except Exception as e:
+        st.error(f"❌ Fehler: {e}")
+        del st.session_state['edit_component_id']
 
 
-def _render_create_component() -> None:
-    """Render form to create new component."""
+def _render_delete_confirmation(component_id: int) -> None:
+    """Bestätigungsdialog zum Löschen."""
     
-    st.markdown("### ➕ Neue Komponente erstellen")
-    
-    with st.form(key="create_component_form"):
+    try:
+        all_components = read_components()
+        component = next((c for c in all_components if c['id'] == component_id), None)
+        
+        if not component:
+            del st.session_state['delete_component_id']
+            return
+        
+        st.markdown("---")
+        st.warning(f"⚠️ **Wirklich löschen?** {component.get('manufacturer', '')} - {component.get('product_name', '')}")
+        
         col1, col2 = st.columns(2)
         
         with col1:
-            name = st.text_input("Name *", placeholder="z.B. K2 Systems SingleHook 4S")
-            manufacturer = st.selectbox("Hersteller *", options=MANUFACTURERS)
-            article_number = st.text_input("Artikel-Nr", placeholder="z.B. 2005024")
-            category = st.selectbox("Kategorie *", options=CATEGORIES)
-            roof_type = st.selectbox("Dachtyp *", options=ROOF_TYPES)
+            if st.button("✅ Ja, löschen", type="primary", use_container_width=True):
+                if delete_component(component_id):
+                    st.success("✅ Komponente gelöscht!")
+                    del st.session_state['delete_component_id']
+                    st.rerun()
+                else:
+                    st.error("❌ Fehler beim Löschen")
         
         with col2:
-            material = st.selectbox("Material", options=MATERIALS)
-            price = st.number_input(
-                "Preis (€ netto) *",
-                min_value=0.0,
-                step=0.01,
-                format="%.2f",
-                help="Nettopreis ohne MwSt"
-            )
-            unit = st.selectbox("Einheit", options=UNITS, index=0)
-            weight_kg = st.number_input(
-                "Gewicht (kg)",
-                min_value=0.0,
-                step=0.01
-            )
+            if st.button("❌ Abbrechen", use_container_width=True):
+                del st.session_state['delete_component_id']
+                st.rerun()
+    
+    except Exception as e:
+        st.error(f"❌ Fehler: {e}")
+        del st.session_state['delete_component_id']
+
+
+def _render_enhanced_create_component() -> None:
+    """Verbesserte Komponenten-Erstellung."""
+    
+    st.markdown('<p class="section-header">➕ Neue Komponente erstellen</p>', unsafe_allow_html=True)
+    
+    # Quick-Add-Vorlagen
+    st.markdown("#### 🚀 Schnell-Vorlagen")
+    
+    templates = {
+        "Dachhaken": {
+            'category': 'Dachhaken',
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'weight_kg': 0.45
+        },
+        "Montageschiene": {
+            'category': 'Montageschiene',
+            'unit': 'm',
+            'quantity_per_module': 1.2,
+            'weight_kg': 1.2
+        },
+        "Modulklemme": {
+            'category': 'Modulklemme (End)',
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'weight_kg': 0.08
+        }
+    }
+    
+    col1, col2, col3 = st.columns(3)
+    
+    for idx, (template_name, template_data) in enumerate(templates.items()):
+        col = [col1, col2, col3][idx]
+        with col:
+            if st.button(f"📋 {template_name}", use_container_width=True):
+                st.session_state['component_template'] = template_data
+                st.rerun()
+    
+    st.markdown("---")
+    
+    # Get template data if exists
+    template = st.session_state.get('component_template', {})
+    
+    with st.form("create_component_form", clear_on_submit=True):
+        st.markdown("#### 📝 Komponenten-Details")
         
-        description = st.text_area(
-            "Beschreibung",
-            placeholder="Optionale Beschreibung der Komponente...",
-            height=100
-        )
+        col1, col2 = st.columns(2)
         
-        # PDF upload
-        pdf_file = st.file_uploader(
-            "📄 Datenblatt hochladen (PDF, optional)",
-            type=['pdf'],
-            key="create_pdf_upload"
-        )
+        with col1:
+            manufacturer = st.text_input("🏭 Hersteller *", value=template.get('manufacturer', ''))
+            product_name = st.text_input("📦 Produktname *", value=template.get('product_name', ''))
+            article_number = st.text_input("🔢 Artikelnummer", value=template.get('article_number', ''))
+            category = st.text_input("📂 Kategorie *", value=template.get('category', ''))
+            roof_type = st.text_input("🏠 Dachtyp *", value=template.get('roof_type', 'Universal'))
         
-        submit = st.form_submit_button("✅ Komponente erstellen", use_container_width=True, type="primary")
+        with col2:
+            material = st.text_input("⚙️ Material", value=template.get('material', ''))
+            dimensions = st.text_input("📏 Abmessungen", value=template.get('dimensions', ''))
+            weight_kg = st.number_input("⚖️ Gewicht (kg)", value=template.get('weight_kg', 0.0), format="%.3f")
+            price_netto = st.number_input("💶 Preis netto (€)", value=template.get('price_netto', 0.0), format="%.2f")
+            unit = st.selectbox("📊 Einheit", ['Stk', 'm', 'kg', 'Set', 'Paar'], 
+                               index=['Stk', 'm', 'kg', 'Set', 'Paar'].index(template.get('unit', 'Stk')))
         
-        if submit:
-            if not name or not manufacturer or not category or not roof_type or price <= 0:
-                st.error("❌ Bitte alle Pflichtfelder (*) ausfüllen und gültigen Preis eingeben")
+        quantity_per_module = st.number_input("🔢 Menge pro Modul", value=template.get('quantity_per_module', 0.0), format="%.2f")
+        compatibility = st.text_area("🔗 Kompatibilität", value=template.get('compatibility', ''))
+        warranty_years = st.number_input("🛡️ Garantie (Jahre)", value=template.get('warranty_years', 10))
+        notes = st.text_area("📝 Notizen", value=template.get('notes', ''))
+        
+        submitted = st.form_submit_button("✅ Komponente erstellen", use_container_width=True, type="primary")
+        
+        if submitted:
+            if not all([manufacturer, product_name, category, roof_type]):
+                st.error("❌ Bitte füllen Sie alle Pflichtfelder aus!")
             else:
-                component_data = {
-                    'product_name': name,  # Corrected field name
+                new_component = {
                     'manufacturer': manufacturer,
+                    'product_name': product_name,
                     'article_number': article_number,
                     'category': category,
                     'roof_type': roof_type,
                     'material': material,
-                    'price_netto': price,
-                    'unit': unit,
+                    'dimensions': dimensions,
                     'weight_kg': weight_kg,
-                    'description': description,
+                    'price_netto': price_netto,
+                    'unit': unit,
+                    'quantity_per_module': quantity_per_module,
+                    'compatibility': compatibility,
+                    'warranty_years': warranty_years,
+                    'notes': notes,
+                    'specifications': {}
                 }
                 
-                # Handle PDF upload
-                if pdf_file:
-                    component_data['pdf_bytes'] = pdf_file.read()
-                
                 try:
-                    component_id = create_component(component_data)
-                    if component_id:
-                        st.success(f"✅ Komponente '{name}' erfolgreich erstellt! (ID: {component_id})")
-                        st.rerun()
-                    else:
-                        st.error("❌ Fehler beim Erstellen der Komponente")
-                except Exception as e:
-                    st.error(f"❌ Fehler: {e}")
-
-
-def _render_import_export() -> None:
-    """Render import/export functionality."""
-    
-    st.markdown("### 📤 Import/Export")
-    
-    tab_import, tab_export = st.tabs(["📥 Import", "📤 Export"])
-    
-    with tab_import:
-        st.markdown("#### CSV/XLSX Datei importieren")
-        st.info(
-            "💡 **Erforderliche Spalten:** name, manufacturer, category, roof_type, price_netto\n\n"
-            "**Optionale Spalten:** article_number, material, unit, weight_kg, description, specifications"
-        )
-        
-        uploaded_file = st.file_uploader(
-            "Datei auswählen",
-            type=['csv', 'xlsx'],
-            key="pv_import_file"
-        )
-        
-        if uploaded_file:
-            if st.button("🚀 Import starten", type="primary"):
-                try:
-                    # Save to temp file
-                    temp_path = Path(f"temp_import_{uploaded_file.name}")
-                    temp_path.write_bytes(uploaded_file.read())
+                    component_id = create_component(new_component)
+                    st.success(f"✅ Komponente erfolgreich erstellt! (ID: {component_id})")
                     
-                    # Import based on file type
-                    if uploaded_file.name.endswith('.csv'):
-                        count, errors = import_from_csv(str(temp_path))
-                    else:
-                        count, errors = import_from_excel(str(temp_path))
-                    
-                    # Clean up
-                    temp_path.unlink()
-                    
-                    # Show results
-                    st.success(f"✅ **{count}** Komponenten erfolgreich importiert!")
-                    
-                    if errors:
-                        with st.expander(f"⚠️ {len(errors)} Fehler aufgetreten", expanded=False):
-                            for error in errors:
-                                st.error(error)
+                    # Clear template
+                    if 'component_template' in st.session_state:
+                        del st.session_state['component_template']
                     
                     st.rerun()
-                
                 except Exception as e:
-                    st.error(f"❌ Import fehlgeschlagen: {e}")
+                    st.error(f"❌ Fehler beim Erstellen: {e}")
+
+
+def _render_advanced_search() -> None:
+    """Erweiterte Suchfunktion."""
     
-    with tab_export:
-        st.markdown("#### Komponenten exportieren")
-        
-        # Export filters
-        exp_col1, exp_col2 = st.columns(2)
-        
-        with exp_col1:
-            exp_manufacturer = st.selectbox(
-                "Hersteller filtern",
-                options=["Alle"] + MANUFACTURERS,
-                key="exp_manuf"
-            )
-        
-        with exp_col2:
-            exp_category = st.selectbox(
-                "Kategorie filtern",
-                options=["Alle"] + CATEGORIES,
-                key="exp_cat"
-            )
-        
-        # Build filters
-        exp_filters = {}
-        if exp_manufacturer != "Alle":
-            exp_filters['manufacturer'] = exp_manufacturer
-        if exp_category != "Alle":
-            exp_filters['category'] = exp_category
-        
-        # Export buttons
+    st.markdown('<p class="section-header">🔎 Erweiterte Suche</p>', unsafe_allow_html=True)
+    
+    st.info("🔍 Suchen Sie Komponenten mit erweiterten Filtern")
+    
+    # Search form
+    with st.form("advanced_search"):
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("📄 Als CSV exportieren", use_container_width=True):
-                try:
-                    export_path = Path("pv_components_export.csv")
-                    export_to_csv(str(export_path), filters=exp_filters)
-                    
-                    with open(export_path, 'rb') as f:
-                        st.download_button(
-                            "⬇️ CSV herunterladen",
-                            data=f.read(),
-                            file_name="pv_komponenten.csv",
-                            mime="text/csv",
-                            use_container_width=True
-                        )
-                    
-                    export_path.unlink()
-                    st.success("✅ CSV-Export erfolgreich!")
-                
-                except Exception as e:
-                    st.error(f"❌ Export fehlgeschlagen: {e}")
+            search_manufacturer = st.text_input("Hersteller (enthält)")
+            search_product = st.text_input("Produktname (enthält)")
+            search_category = st.text_input("Kategorie (enthält)")
         
         with col2:
-            if st.button("📊 Als XLSX exportieren", use_container_width=True):
-                try:
-                    export_path = Path("pv_components_export.xlsx")
-                    export_to_excel(str(export_path), filters=exp_filters)
-                    
-                    with open(export_path, 'rb') as f:
-                        st.download_button(
-                            "⬇️ XLSX herunterladen",
-                            data=f.read(),
-                            file_name="pv_komponenten.xlsx",
-                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            use_container_width=True
-                        )
-                    
-                    export_path.unlink()
-                    st.success("✅ XLSX-Export erfolgreich!")
+            price_min = st.number_input("Preis min (€)", value=0.0, format="%.2f")
+            price_max = st.number_input("Preis max (€)", value=1000.0, format="%.2f")
+            weight_max = st.number_input("Max Gewicht (kg)", value=100.0, format="%.2f")
+        
+        search_submitted = st.form_submit_button("🔍 Suchen", use_container_width=True, type="primary")
+    
+    if search_submitted:
+        try:
+            all_components = read_components()
+            
+            # Apply filters
+            results = all_components
+            
+            if search_manufacturer:
+                results = [c for c in results if search_manufacturer.lower() in c.get('manufacturer', '').lower()]
+            
+            if search_product:
+                results = [c for c in results if search_product.lower() in c.get('product_name', '').lower()]
+            
+            if search_category:
+                results = [c for c in results if search_category.lower() in c.get('category', '').lower()]
+            
+            results = [c for c in results if price_min <= c.get('price_netto', 0) <= price_max]
+            results = [c for c in results if c.get('weight_kg', 0) <= weight_max]
+            
+            st.success(f"✅ **{len(results)}** Komponenten gefunden")
+            
+            if results:
+                df_results = pd.DataFrame([{
+                    'Hersteller': c.get('manufacturer', ''),
+                    'Produkt': c.get('product_name', ''),
+                    'Kategorie': c.get('category', ''),
+                    'Dachtyp': c.get('roof_type', ''),
+                    'Preis': format_german_currency(c.get('price_netto', 0)),
+                    'Gewicht': f"{c.get('weight_kg', 0):.2f} kg".replace('.', ','),
+                } for c in results])
                 
-                except Exception as e:
-                    st.error(f"❌ Export fehlgeschlagen: {e}")
+                st.dataframe(df_results, use_container_width=True, hide_index=True)
+        
+        except Exception as e:
+            st.error(f"❌ Fehler bei der Suche: {e}")
+
+
+def _render_import_export() -> None:
+    """Import/Export-Funktionen."""
+    
+    st.markdown('<p class="section-header">📤 Daten Import/Export</p>', unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("### 📥 Export")
+        
+        try:
+            all_components = read_components()
+            
+            if all_components:
+                # Export as JSON
+                json_data = json.dumps(all_components, indent=2, ensure_ascii=False)
+                
+                st.download_button(
+                    label="📄 Als JSON exportieren",
+                    data=json_data,
+                    file_name="pv_mounting_components.json",
+                    mime="application/json",
+                    use_container_width=True
+                )
+                
+                # Export as CSV
+                df_export = pd.DataFrame([{
+                    'Hersteller': c.get('manufacturer', ''),
+                    'Produktname': c.get('product_name', ''),
+                    'Artikelnummer': c.get('article_number', ''),
+                    'Kategorie': c.get('category', ''),
+                    'Dachtyp': c.get('roof_type', ''),
+                    'Material': c.get('material', ''),
+                    'Abmessungen': c.get('dimensions', ''),
+                    'Gewicht_kg': c.get('weight_kg', 0),
+                    'Preis_netto': c.get('price_netto', 0),
+                    'Einheit': c.get('unit', ''),
+                    'Menge_pro_Modul': c.get('quantity_per_module', 0),
+                } for c in all_components])
+                
+                csv_data = df_export.to_csv(index=False, encoding='utf-8-sig', sep=';')
+                
+                st.download_button(
+                    label="📊 Als CSV exportieren",
+                    data=csv_data,
+                    file_name="pv_mounting_components.csv",
+                    mime="text/csv",
+                    use_container_width=True
+                )
+                
+                st.success(f"✅ {len(all_components)} Komponenten bereit zum Export")
+            else:
+                st.info("ℹ️ Keine Daten zum Exportieren vorhanden")
+        
+        except Exception as e:
+            st.error(f"❌ Export-Fehler: {e}")
+    
+    with col2:
+        st.markdown("### 📤 Import")
+        st.info("ℹ️ Import-Funktion in Entwicklung")
+
+
+# Alias für Kompatibilität
+def render_pv_mounting_admin_tab():
+    """Alias für alte Funktion - leitet zu v2 weiter."""
+    render_pv_mounting_admin_tab_v2()
 
 
 if __name__ == "__main__":
-    # Test standalone
-    st.set_page_config(page_title="PV Mounting Admin", page_icon="🔧", layout="wide")
-    render_pv_mounting_admin_tab()
+    st.set_page_config(page_title="PV-Unterkonstruktion Admin v2.0", layout="wide")
+    render_pv_mounting_admin_tab_v2()

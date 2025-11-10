@@ -13,7 +13,7 @@ import math
 import os
 import tempfile
 import zipfile
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Dict, Any, List, Tuple, Optional, Callable
 from PIL import Image
 import plotly.graph_objects as go
 
@@ -261,17 +261,21 @@ def export_multi_view(
                     zipf.writestr(filename, png_bytes)
             
             if return_zip_bytes:
-                # Gib ZIP-Bytes zurück
+                # Gib ZIP-Bytes zurück (NUR die Bytes, kein Dictionary!)
                 zip_buffer.seek(0)
-                return {"_zip": zip_buffer.read(), **view_images}
+                return zip_buffer.read()
             else:
                 # Schreibe ZIP-Datei
                 zip_path = os.path.join(output_dir, f"{base_filename}_multi_view.zip")
                 with open(zip_path, 'wb') as f:
                     f.write(zip_buffer.getvalue())
                 print(f"Multi-View ZIP erstellt: {zip_path} ({len(view_images)} Ansichten)")
+                
+                # Gib Dictionary mit View-Images zurück
+                return view_images
         
-        return view_images
+        # Wenn keine Images erstellt wurden, gib leeres Dictionary zurück
+        return {}
         
     except Exception as e:
         print(f"Fehler bei Multi-View Export: {e}")
@@ -296,7 +300,8 @@ def export_360_animation(
     duration_ms: int = 100,
     camera_distance: float = 2.5,
     camera_height: float = 0.4,
-    return_bytes: bool = False
+    return_bytes: bool = False,
+    progress_callback: Optional[Callable] = None
 ) -> bytes:
     """
     Erstellt eine 360° Animation als GIF.
@@ -360,9 +365,13 @@ def export_360_animation(
                 angle_rad = math.radians(angle_deg)
                 
                 # Berechne Kamera-Position (Rotation um Z-Achse)
-                camera_x = camera_distance * math.cos(angle_rad)
-                camera_y = camera_distance * math.sin(angle_rad)
-                camera_z = camera_height
+                # FIX: Stelle sicher dass camera_distance und camera_height nicht None sind
+                safe_distance = camera_distance if camera_distance is not None else 2.5
+                safe_height = camera_height if camera_height is not None else 0.4
+                
+                camera_x = safe_distance * math.cos(angle_rad)
+                camera_y = safe_distance * math.sin(angle_rad)
+                camera_z = safe_height
                 
                 # Ändere NUR die Kamera
                 fig.update_layout(

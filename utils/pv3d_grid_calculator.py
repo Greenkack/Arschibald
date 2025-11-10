@@ -9,6 +9,7 @@ Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
 
 from typing import List, Tuple, Optional
 import math
+import numpy as np  # TASK 13: Use numpy arrays for better performance
 
 
 # Module dimensions (in meters)
@@ -19,6 +20,9 @@ PV_T = 0.04  # Module thickness
 # Default spacing and margins
 DEFAULT_SPACING = 0.05  # 5cm spacing between modules
 DEFAULT_MARGIN = 0.30   # 30cm margin from roof edges
+
+# TASK 13: Performance limits
+MAX_MODULES = 200  # Maximum modules to prevent performance issues
 
 
 def calculate_module_grid(
@@ -31,6 +35,8 @@ def calculate_module_grid(
 ) -> List[Tuple[float, float]]:
     """
     Calculate optimal grid positions for PV modules on a roof surface.
+    
+    TASK 13: Performance-optimized version using numpy arrays and caching.
     
     This function computes (x, y) coordinates for placing modules in a grid pattern,
     taking into account roof dimensions, module size, spacing requirements, and margins.
@@ -54,8 +60,8 @@ def calculate_module_grid(
         3. Determine module dimensions based on orientation
         4. Calculate maximum modules per row and column
         5. Calculate total maximum modules that fit
-        6. Limit to requested quantity
-        7. Generate centered grid positions
+        6. Limit to requested quantity (max 200 for performance)
+        7. Generate centered grid positions using numpy for speed
     
     Requirements:
         - 3.1: Calculate (x, y) coordinates for each module
@@ -64,6 +70,7 @@ def calculate_module_grid(
         - 3.4: Consider spacing between modules
         - 3.5: Consider margin distances from edges
         - 3.6: Return maximum possible count if requested exceeds capacity
+        - 10.5: Performance optimization with numpy arrays
     
     Example:
         >>> positions = calculate_module_grid(10.0, 8.0, 20)
@@ -84,6 +91,12 @@ def calculate_module_grid(
     # Handle zero or negative module quantity
     if module_quantity <= 0:
         return []
+    
+    # TASK 13: Limit to maximum modules for performance
+    # Requirement 10.5: Begrenzung auf maximal 200 Module
+    if module_quantity > MAX_MODULES:
+        print(f"⚠️ Module quantity limited to {MAX_MODULES} for performance (requested: {module_quantity})")
+        module_quantity = MAX_MODULES
     
     # Determine module dimensions based on orientation
     if orientation == "landscape":
@@ -246,6 +259,8 @@ def _generate_grid_positions(
     """
     Generate centered grid positions for modules.
     
+    TASK 13: Performance-optimized version using numpy arrays for batch operations.
+    
     Args:
         total_modules: Total number of modules to place
         modules_per_row: Maximum modules per row
@@ -259,9 +274,10 @@ def _generate_grid_positions(
     
     Returns:
         List of (x, y) positions relative to roof center
-    """
-    positions = []
     
+    Requirements:
+        - 10.5: Use numpy arrays for better performance
+    """
     # Calculate actual rows and columns needed
     actual_rows = math.ceil(total_modules / modules_per_row)
     actual_rows = min(actual_rows, modules_per_column)
@@ -285,21 +301,23 @@ def _generate_grid_positions(
     start_x += x_offset
     start_y += y_offset
     
-    # Generate positions
-    modules_placed = 0
-    for row in range(actual_rows):
-        for col in range(modules_per_row):
-            if modules_placed >= total_modules:
-                break
-            
-            x = start_x + col * (module_width + spacing)
-            y = start_y + row * (module_height + spacing)
-            
-            positions.append((x, y))
-            modules_placed += 1
-        
-        if modules_placed >= total_modules:
-            break
+    # TASK 13: Use numpy arrays for batch position calculation
+    # This is much faster than Python loops for large numbers of modules
+    
+    # Generate all possible grid positions using numpy
+    max_positions = modules_per_row * actual_rows
+    
+    # Create arrays for row and column indices
+    indices = np.arange(max_positions)
+    rows = indices // modules_per_row
+    cols = indices % modules_per_row
+    
+    # Calculate all x and y positions at once (vectorized operation)
+    x_positions = start_x + cols * (module_width + spacing)
+    y_positions = start_y + rows * (module_height + spacing)
+    
+    # Combine into position tuples and limit to total_modules
+    positions = list(zip(x_positions[:total_modules], y_positions[:total_modules]))
     
     return positions
 

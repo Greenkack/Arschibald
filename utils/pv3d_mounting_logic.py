@@ -190,11 +190,18 @@ def render_mounting_selection_with_validation(
         if not validation["valid"]:
             st.warning(validation["error"])
             if validation["suggestion"]:
+                # FIX: Zeige Empfehlung, aber überschreibe Auswahl NICHT automatisch
+                # Der Benutzer soll selbst entscheiden
                 st.info(f"💡 Empfehlung: {validation['suggestion']}")
-                current_selection = validation["suggestion"]
+                # ENTFERNT: current_selection = validation["suggestion"]
     
-    # Setze Default wenn keine Auswahl
-    if not current_selection or current_selection not in allowed_types:
+    # Setze Default wenn keine Auswahl ODER wenn aktuelle Auswahl ungültig ist
+    # FIX: Nur setzen wenn current_selection None ist, nicht wenn ungültig
+    if not current_selection:
+        current_selection = allowed_types[0] if allowed_types else "Aufdach-Montage"
+    elif current_selection not in allowed_types:
+        # Wenn ungültig, verwende ersten erlaubten Typ als Fallback
+        # aber zeige Warnung (wurde bereits oben gemacht)
         current_selection = allowed_types[0] if allowed_types else "Aufdach-Montage"
     
     # Render Selectbox mit nur erlaubten Optionen

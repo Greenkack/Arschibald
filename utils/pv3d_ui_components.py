@@ -140,12 +140,30 @@ def render_basis_settings(project_data: Dict[str, Any]) -> Dict[str, Any]:
             help=get_tooltip("roof_type"),
             key="roof_type_select"
         )
+        
+        # FIX: Dachneigung hinzufügen (wichtig für Schrägdächer!)
+        st.divider()
+        st.markdown("**Dachneigung**")
+        
+        # Standard-Dachneigung basierend auf Dachtyp
+        default_pitch = 0.0 if "Flach" in selected_roof_type else 35.0
+        
+        roof_pitch = st.number_input(
+            "Dachneigung (°)",
+            min_value=0.0,
+            max_value=60.0,
+            value=default_pitch,
+            step=5.0,
+            help="Neigungswinkel des Dachs in Grad (0° = flach, 45° = steil)",
+            key="roof_pitch_input"
+        )
     
     return {
         "building_length": building_length,
         "building_width": building_width,
         "building_height": building_height,
-        "roof_type": selected_roof_type
+        "roof_type": selected_roof_type,
+        "roof_pitch": roof_pitch  # FIX: Dachneigung zurückgeben!
     }
 
 
@@ -222,11 +240,16 @@ def render_module_placement(project_data: Dict[str, Any], selected_roof_type: st
             )
             
             # Validiere Auswahl
+            # FIX: Nur validieren wenn der Montagetyp nicht in den erlaubten Typen ist
+            # (sollte nicht passieren, da Selectbox nur erlaubte Typen anzeigt)
             validation = validate_mounting_selection(selected_roof_type, mounting_type)
             if not validation["valid"]:
-                st.warning(validation["error"])
-                if validation["suggestion"]:
-                    st.info(f"💡 Empfehlung: {validation['suggestion']}")
+                # Zeige Warnung nur wenn es wirklich ein Problem gibt
+                # (z.B. wenn Session State einen alten Wert hat)
+                if mounting_type not in allowed_types:
+                    st.warning(validation["error"])
+                    if validation["suggestion"]:
+                        st.info(f"💡 Empfehlung: {validation['suggestion']}")
             
             # Custom-Parameter nur bei bestimmten Typen
             if "Individuell" in mounting_type or "Optimal" in mounting_type:

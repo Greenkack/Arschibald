@@ -7,7 +7,7 @@ von Photovoltaik-Anlagen auf Gebäuden bereit.
 
 import math
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple, Any
+from typing import Dict, List, Tuple, Any, Optional, Callable
 import json
 
 try:
@@ -2299,8 +2299,16 @@ def place_panels_flat_roof(
             # (south: 0°, south-east: 45°, south-west: 315°, custom: wird separat gesetzt)
             module_yaw = yaw
 
-        # Z-Position: Auf Flachdach + kleine Erhöhung für Aufständerung
-        z = base_z + 0.05  # 5cm über Dach
+        # Z-Position: Berechne so dass Unterseite des Moduls auf dem Dach liegt
+        # Bei geneigten Modulen muss die Erhöhung die Rotation berücksichtigen
+        # Die Unterseite des geneigten Moduls soll auf base_z liegen
+        
+        # Berechne vertikale Projektion der Modulhöhe nach Rotation
+        # Modul wird um Y-Achse gekippt, daher ändert sich die Z-Höhe
+        elevation = (PV_H / 2) * math.sin(_deg_to_rad(tilt))
+        
+        # Z-Position: Dachoberkante + Elevation + kleiner Abstand
+        z = base_z + elevation + 0.10  # Unterseite + 10cm Abstand
 
         # Erstelle Modul
         panel = make_panel(
@@ -3974,7 +3982,8 @@ def export_360_animation(
     filepath: str = "animation_360.gif",
     frames: int = 36,
     resolution: Tuple[int, int] = (800, 600),
-    duration_ms: int = 100
+    duration_ms: int = 100,
+    progress_callback: Optional[Callable] = None
 ) -> bytes:
     """
     Erstellt eine 360° Rotations-Animation als GIF.

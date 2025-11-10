@@ -130,7 +130,11 @@ Diese Task-Liste beschreibt die schrittweise Implementierung der vollständigen 
   - Implementiere Fallback auf vorherigen Zustand bei Fehler
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
-- [ ] 10. Manuelle Steuerungs-Buttons hinzufügen
+- [x] 10. Manuelle Steuerungs-Buttons hinzufügen
+
+
+
+
   - Implementiere Button "Modul hinzufügen" in UI-Komponente
   - Implementiere Button "Ausgewählte entfernen" in UI-Komponente
   - Implementiere `handle_manual_add()` in Placement Handler
@@ -138,7 +142,12 @@ Diese Task-Liste beschreibt die schrittweise Implementierung der vollständigen 
   - Implementiere Session State für ausgewählte Module
   - _Requirements: 4.1, 4.2, 4.3, 4.5_
 
-- [ ] 11. Kollisionserkennung implementieren
+- [x] 11. Kollisionserkennung implementieren
+
+
+
+
+
   - Implementiere `check_module_collision()` Funktion
   - Implementiere Prüfung auf Modul-Modul Überlappung
   - Implementiere Prüfung auf Dach-Rand Überschreitung
@@ -146,7 +155,12 @@ Diese Task-Liste beschreibt die schrittweise Implementierung der vollständigen 
   - Implementiere Verhinderung von Platzierung bei Kollision
   - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-- [ ] 12. Visualisierungs-Verbesserungen
+- [x] 12. Visualisierungs-Verbesserungen
+
+
+
+
+
   - Implementiere Farb-Unterscheidung für normale Module (dunkelblau)
   - Implementiere Farb-Unterscheidung für ausgewählte Module (hellblau)
   - Implementiere Farb-Unterscheidung für ungültige Positionen (rot)
@@ -154,7 +168,12 @@ Diese Task-Liste beschreibt die schrittweise Implementierung der vollständigen 
   - Implementiere Raster-Overlay (optional)
   - _Requirements: 1.2, 8.5_
 
-- [ ] 13. Performance-Optimierung
+- [x] 13. Performance-Optimierung
+
+
+
+
+
   - Implementiere Batch-Hinzufügen von Meshes zur Figure
   - Implementiere Caching von berechneten Positionen
   - Implementiere Begrenzung auf maximal 200 Module
@@ -162,7 +181,13 @@ Diese Task-Liste beschreibt die schrittweise Implementierung der vollständigen 
   - Teste Performance mit 50, 100, 200 Modulen
   - _Requirements: 10.5_
 
-- [ ]* 14. Unit Tests schreiben
+- [x] 14. Unit Tests schreiben
+
+
+
+
+
+
   - Schreibe Tests für `calculate_module_grid()` mit verschiedenen Parametern
   - Schreibe Tests für `handle_auto_placement()` mit verschiedenen Dachtypen
   - Schreibe Tests für `handle_reset_placement()`
