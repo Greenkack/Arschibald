@@ -450,36 +450,17 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     hh = PV_H / 2
     ht = PV_T / 2
     
-    # FIX 2024: Berechne Mounting Height basierend auf Dachform und Neigung
-    mounting_height = 0.0
-    original_z = z  # Speichere Original-Z für Logging
-    
-    # Liste der geneigten Dachformen - KEINE Aufständerung bei diesen Dachtypen!
-    pitched_roofs = ["Satteldach", "Satteldach mit Gaube", "Walmdach", "Krüppelwalmdach", "Pultdach", "Zeltdach"]
-    
-    # KRITISCH: Nur bei Flachdach Aufständerung verwenden!
-    if roof_type == "Flachdach" and tilt_deg > 5.0:
-        # Flachdach mit Aufständerung: Höhere Aufständerung
-        mounting_height = 0.3 + (tilt_deg / 90.0) * 0.5
-        mounting_height = min(0.8, mounting_height)
-        
-        if show_mounting:
-            mounting_height += 0.05
-    
-    # BEI ALLEN ANDEREN DACHTYPEN: KEINE AUFSTÄNDERUNG!
-    # Module liegen direkt auf der Dachfläche
-    
-    # Erhöhe Z-Position um Mounting Height (nur bei Flachdach > 0)
-    z += mounting_height
-    
-    # Detailliertes Logging: Dachform, Neigung, Mounting Height, Z-Position
-    if mounting_height > 0:
-        print(f"   🔧 Modul-Aufständerung:")
-        print(f"      Dachform: {roof_type}")
-        print(f"      Neigung: {tilt_deg:.1f}°")
-        print(f"      Mounting Height: {mounting_height:.3f}m")
-        print(f"      Z-Position (vorher): {original_z:.3f}m")
-        print(f"      Z-Position (nachher): {z:.3f}m")
+    # CRITICAL FIX 2025-01-10:
+    # Z-Position ist bereits korrekt berechnet (absolut)!
+    # calculate_z_position() gibt relative Position zurück
+    # build_plotly_scene addiert wall_height_m dazu
+    # Wir dürfen NICHT nochmal mounting_height addieren!
+    # 
+    # Die Z-Position die hier ankommt ist bereits:
+    # - Für Flachdach: wall_height_m + 0.30m (Aufständerung)
+    # - Für geneigte Dächer: wall_height_m + 0.15m (auf Dachfläche)
+    #
+    # KEINE weitere Modifikation der Z-Position!
     
     # 8 Ecken des Moduls (wie ein flacher Quader)
     local_vertices = np.array([
@@ -1348,6 +1329,7 @@ def build_plotly_scene(
     
     # ========== 3. PV-MODULE ==========
     # TASK 4: 3D-Rendering Integration
+    # TASK 13: Performance-optimized batch rendering
     # Load module positions from session state and render them
     try:
         import streamlit as st
@@ -1365,11 +1347,22 @@ def build_plotly_scene(
             placed_positions = []
         
         if placed_positions:
+            # TASK 13: Limit rendering for performance
+            # Requirement 10.5: Begrenzung auf maximal 200 Module
+            if len(placed_positions) > 200:
+                print(f"⚠️ Limiting rendering to 200 modules (total: {len(placed_positions)})")
+                placed_positions = placed_positions[:200]
+            
             # Requirement 10.2: Loop over all placed positions
             print(
                 f"✓ Rendering {len(placed_positions)} PV modules "
                 "from session state..."
             )
+            
+            # TASK 13: Collect all meshes first, then add in batch
+            # Requirement 10.5: Batch-Hinzufügen von Meshes zur Figure
+            module_meshes = []
+            edge_meshes = []
             
             successful_renders = 0
             failed_renders = 0
@@ -1482,9 +1475,10 @@ def build_plotly_scene(
                         failed_renders += 1
                         continue
                     
-                    # Requirement 10.4: Add mesh to Plotly figure
+                    # TASK 13: Collect meshes for batch addition
+                    # Requirement 10.5: Batch-Hinzufügen von Meshes zur Figure
                     try:
-                        fig.add_trace(module_mesh)
+                        module_meshes.append(module_mesh)
                         
                         # Add module edges for better visibility
                         module_edges = create_pv_module_edges(
@@ -1492,7 +1486,7 @@ def build_plotly_scene(
                             color='black',
                             line_width=1
                         )
-                        fig.add_trace(module_edges)
+                        edge_meshes.append(module_edges)
                         
                         successful_renders += 1
                         
@@ -1516,6 +1510,17 @@ def build_plotly_scene(
                     import traceback
                     traceback.print_exc()
                     continue
+            
+            # TASK 13: Add all meshes to figure in batch
+            # Requirement 10.5: Batch-Hinzufügen von Meshes zur Figure
+            # This is much faster than adding one at a time
+            print(f"✓ Adding {len(module_meshes)} module meshes to figure (batch)...")
+            for mesh in module_meshes:
+                fig.add_trace(mesh)
+            
+            print(f"✓ Adding {len(edge_meshes)} edge meshes to figure (batch)...")
+            for edges in edge_meshes:
+                fig.add_trace(edges)
             
             # Requirement 11.4: Meaningful status messages
             if successful_renders > 0:

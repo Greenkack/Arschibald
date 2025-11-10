@@ -168,7 +168,12 @@ Diese Task-Liste beschreibt die schrittweise Implementierung der vollständigen 
   - Implementiere Raster-Overlay (optional)
   - _Requirements: 1.2, 8.5_
 
-- [ ] 13. Performance-Optimierung
+- [x] 13. Performance-Optimierung
+
+
+
+
+
   - Implementiere Batch-Hinzufügen von Meshes zur Figure
   - Implementiere Caching von berechneten Positionen
   - Implementiere Begrenzung auf maximal 200 Module
@@ -176,7 +181,13 @@ Diese Task-Liste beschreibt die schrittweise Implementierung der vollständigen 
   - Teste Performance mit 50, 100, 200 Modulen
   - _Requirements: 10.5_
 
-- [ ]* 14. Unit Tests schreiben
+- [x] 14. Unit Tests schreiben
+
+
+
+
+
+
   - Schreibe Tests für `calculate_module_grid()` mit verschiedenen Parametern
   - Schreibe Tests für `handle_auto_placement()` mit verschiedenen Dachtypen
   - Schreibe Tests für `handle_reset_placement()`

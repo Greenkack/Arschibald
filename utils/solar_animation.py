@@ -235,11 +235,12 @@ def create_seasonal_shadow_animation(
         shadow_offset_y = 20 * np.sin(np.radians(sun_angle))
         
         # Schatten als halbtransparente Fläche
+        # FIX: BuildingDims verwendet width_m und length_m, nicht width/depth
         shadow_trace = go.Mesh3d(
-            x=[0, building_dims.width, building_dims.width, 0],
+            x=[0, building_dims.width_m, building_dims.width_m, 0],
             y=[shadow_offset_y, shadow_offset_y, 
-               building_dims.depth + shadow_offset_y, 
-               building_dims.depth + shadow_offset_y],
+               building_dims.length_m + shadow_offset_y, 
+               building_dims.length_m + shadow_offset_y],
             z=[0, 0, 0, 0],
             i=[0, 0],
             j=[1, 2],

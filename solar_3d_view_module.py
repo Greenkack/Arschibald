@@ -532,6 +532,24 @@ def _render_3d_view_impl():
             # Hole aktuell platzierte Module aus Session State
             current_placed = st.session_state.get("placed_module_count", 0)
             
+            # FIX: Automatische Platzierung beim ersten Laden
+            # Wenn keine Module platziert sind, automatisch platzieren
+            if current_placed == 0 and module_quantity > 0:
+                roof_type_for_placement = basis_settings.get("roof_type", roof_type)
+                roof_pitch = basis_settings.get("roof_pitch", 30.0)
+                
+                result = handle_auto_placement(
+                    roof_length=building_length,
+                    roof_width=building_width,
+                    module_quantity=module_quantity,
+                    roof_type=roof_type_for_placement,
+                    roof_pitch=roof_pitch
+                )
+                
+                if result["success"]:
+                    current_placed = result["count"]
+                    # Kein st.rerun() hier, damit die Seite normal weiterlädt
+            
             # Rendere Modul-Belegungs-Panel
             placement_actions = render_module_placement_panel(
                 module_quantity=module_quantity,
@@ -539,7 +557,7 @@ def _render_3d_view_impl():
                 current_placed=current_placed
             )
             
-            # Handle Auto-Placement Trigger
+            # Handle Auto-Placement Trigger (manueller Button-Klick)
             if st.session_state.get("trigger_auto_placement", False):
                 st.session_state["trigger_auto_placement"] = False
                 

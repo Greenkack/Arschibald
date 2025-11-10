@@ -365,9 +365,13 @@ def export_360_animation(
                 angle_rad = math.radians(angle_deg)
                 
                 # Berechne Kamera-Position (Rotation um Z-Achse)
-                camera_x = camera_distance * math.cos(angle_rad)
-                camera_y = camera_distance * math.sin(angle_rad)
-                camera_z = camera_height
+                # FIX: Stelle sicher dass camera_distance und camera_height nicht None sind
+                safe_distance = camera_distance if camera_distance is not None else 2.5
+                safe_height = camera_height if camera_height is not None else 0.4
+                
+                camera_x = safe_distance * math.cos(angle_rad)
+                camera_y = safe_distance * math.sin(angle_rad)
+                camera_z = safe_height
                 
                 # Ändere NUR die Kamera
                 fig.update_layout(
