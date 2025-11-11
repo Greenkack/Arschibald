@@ -7,6 +7,25 @@ from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
 from typing import Any
+__all__ = [
+    'DEFAULT_THEME_DESCRIPTION',
+    'DEFAULT_THEME_KEY',
+    'MODULE_ROOT',
+    'THEMES_ROOT',
+    'ThemeDefinition',
+    'build_theme_css',
+    'clear_theme_cache',
+    'get_theme_description',
+    'get_theme_menu_items',
+    'get_theme_overrides',
+    'get_theme_payload_json',
+    'get_theme_preview_data',
+    'get_theme_title',
+    'load_available_themes',
+    'menu_label',
+    'set_theme_overrides',
+]
+
 
 try:  # Python 3.11+
     import tomllib  # type: ignore[attr-defined]

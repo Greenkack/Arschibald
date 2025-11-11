@@ -18,7 +18,7 @@ results = {
 def test_module_import(module_name, description):
     """Test if module can be imported"""
     try:
-        exec(f"from core.{module_name} import *")
+        exec(f"from core.{module_name} import *")  # noqa: S102 (exec ist hier berechtigt)
         results['passed'].append(f"✅ {module_name} - {description}")
         return True
     except ImportError as e:

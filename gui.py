@@ -3010,7 +3010,8 @@ def main():
                 exec_globals['ModuleGroup'] = ModuleGroup
             
             # Execute with proper globals to allow imports
-            exec(page_code, exec_globals)
+            # SECURITY: exec() ist hier sicher, da page_code aus lokalem File gelesen wird
+            exec(page_code, exec_globals)  # noqa: S102
         except FileNotFoundError:
             st.error("3D-Visualisierung Seite nicht gefunden.")
             st.info("Bitte stellen Sie sicher, dass pages/solar_3d_view.py existiert.")

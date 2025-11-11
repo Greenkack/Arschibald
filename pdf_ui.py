@@ -8,6 +8,8 @@ Hinweismeldung statt die App abstürzen zu lassen.
 from __future__ import annotations
 
 from typing import Any
+__all__ = ['main', 'render', 'render_pdf_ui', 'run', 'show']
+
 
 
 def _show_unavailable(feature_name: str = "PDF UI") -> None:

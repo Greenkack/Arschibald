@@ -6,6 +6,20 @@ import os
 import sqlite3
 import traceback
 from typing import Any
+__all__ = [
+    'DB_AVAILABLE',
+    'add_brand_logo',
+    'create_brand_logos_table',
+    'deactivate_brand_logo',
+    'delete_brand_logo',
+    'get_brand_logo',
+    'get_db_connection',
+    'get_logos_for_brands',
+    'list_all_brand_logos',
+    'update_logo_position',
+    'upload_logo_from_file',
+]
+
 
 try:
     from database import get_db_connection, init_db

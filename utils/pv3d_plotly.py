@@ -419,50 +419,60 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     Erstellt ein detailliertes PV-Modul mit Dicke und korrekter Rotation.
     Gibt Tuple zurück: (mesh, vertices) für Kanten-Rendering.
     
-    FIX 2024: Mounting Height wird jetzt basierend auf Dachform berechnet:
-    - Geneigte Dächer (Satteldach, Walmdach, etc.): Sichtbare Aufständerung 0.1-0.3m
-    - Flachdach mit Aufständerung: Höhere Aufständerung 0.3-0.8m
-    - Module sinken NICHT mehr in die Dachfläche ein
+    TASK 2.1: Modul-Geometrie korrigieren
+    - Module werden als vollständige 3D-Meshes mit korrekten Dimensionen erstellt
+    - PV_W (1.05m), PV_H (1.76m), PV_T (0.04m) werden korrekt verwendet
+    - Sichtbare Farben für verschiedene Zustände (normal, ausgewählt, ungültig)
     
-    TASK 12: Visualisierungs-Verbesserungen:
-    - Farb-Unterscheidung für normale Module (dunkelblau #1a1a2e)
-    - Farb-Unterscheidung für ausgewählte Module (hellblau #4a90e2)
-    - Farb-Unterscheidung für ungültige Positionen (rot #e74c3c)
-    - Modul-Nummern Anzeige (optional)
+    TASK 2.2: Modul-Positionierung korrigieren
+    - Z-Position wird korrekt aus calculate_z_position() übernommen
+    - Keine zusätzliche Modifikation der Z-Position
+    - Position berücksichtigt Dachtyp (Flach vs. Schrägdach)
+    
+    TASK 2.3: Modul-Rotation korrigieren
+    - Korrekte Rotation für Schrägdächer (folgt Dachneigung)
+    - Korrekte Aufständerungs-Winkel für Flachdächer (30°)
+    - Rotation um Y-Achse (Tilt) und Z-Achse (Azimuth)
     
     Args:
-        x, y, z: Position des Moduls
-        azimuth_deg: Azimuth-Winkel (0° = Süd)
-        tilt_deg: Neigungs-Winkel (0° = horizontal)
-        color: Farbe des Moduls (Standard: dunkelblau)
-        selected: Ob Modul ausgewählt ist (hellblau Farbe)
-        show_mounting: Ob Montage-Gestell visualisiert werden soll
+        x, y, z: Position des Moduls (absolute Koordinaten)
+        azimuth_deg: Azimuth-Winkel (0° = Süd, 90° = West, 180° = Nord, 270° = Ost)
+        tilt_deg: Neigungs-Winkel (0° = horizontal, 90° = vertikal)
+        color: Farbe des Moduls (Standard: dunkelblau #1a1a2e)
+        selected: Ob Modul ausgewählt ist (hellblau Farbe #4a90e2)
+        show_mounting: Ob Montage-Gestell visualisiert werden soll (aktuell nicht implementiert)
         roof_type: Dachform ("Flachdach", "Satteldach", "Walmdach", etc.)
-        invalid: Ob Modul an ungültiger Position ist (rot Farbe)
+        invalid: Ob Modul an ungültiger Position ist (rot Farbe #e74c3c)
         module_number: Optionale Modul-Nummer für Anzeige
     
-    Requirements:
-        - 1.2: Module haben erkennbare Farbe
-        - 8.5: Visualisierungs-Optionen (Nummern)
-    """
-    # Lokale Koordinaten (Modul zentriert im Ursprung)
-    hw = PV_W / 2
-    hh = PV_H / 2
-    ht = PV_T / 2
+    Returns:
+        Tuple (mesh, vertices):
+            - mesh: Plotly Mesh3d Objekt für das Modul
+            - vertices: NumPy Array mit finalen Vertex-Positionen (8x3)
     
-    # CRITICAL FIX 2025-01-10:
-    # Z-Position ist bereits korrekt berechnet (absolut)!
-    # calculate_z_position() gibt relative Position zurück
-    # build_plotly_scene addiert wall_height_m dazu
-    # Wir dürfen NICHT nochmal mounting_height addieren!
-    # 
-    # Die Z-Position die hier ankommt ist bereits:
+    Requirements:
+        - 2.1.1: Module als 3D-Meshes mit korrekten Dimensionen
+        - 2.1.2: Sichtbare Farben (dunkelblau, hellblau, rot)
+        - 2.2.1: Korrekte X, Y, Z Koordinaten
+        - 2.2.2: Berücksichtigung von Dachtyp
+        - 2.3.1: Korrekte Rotation für Schrägdächer
+        - 2.3.2: Korrekte Aufständerungs-Winkel für Flachdächer
+    """
+    # TASK 2.1: Modul-Geometrie korrigieren
+    # Requirement 2.1.1: Korrekte Modul-Dimensionen verwenden
+    # Lokale Koordinaten (Modul zentriert im Ursprung)
+    hw = PV_W / 2  # Halbe Breite: 0.525m
+    hh = PV_H / 2  # Halbe Höhe: 0.88m
+    ht = PV_T / 2  # Halbe Dicke: 0.02m
+    
+    # TASK 2.2: Modul-Positionierung korrigieren
+    # Requirement 2.2.1: Z-Position ist bereits korrekt berechnet
+    # Die Z-Position die hier ankommt ist bereits absolut:
     # - Für Flachdach: wall_height_m + 0.30m (Aufständerung)
     # - Für geneigte Dächer: wall_height_m + 0.15m (auf Dachfläche)
-    #
-    # KEINE weitere Modifikation der Z-Position!
+    # KEINE weitere Modifikation der Z-Position notwendig!
     
-    # 8 Ecken des Moduls (wie ein flacher Quader)
+    # Requirement 2.1.1: 8 Ecken des Moduls (vollständiger Quader)
     local_vertices = np.array([
         [-hw, -hh, -ht],  # 0: links vorne unten
         [hw, -hh, -ht],   # 1: rechts vorne unten
@@ -474,7 +484,12 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         [-hw, hh, ht],    # 7: links hinten oben
     ])
     
+    # TASK 2.3: Modul-Rotation korrigieren
+    # Requirement 2.3.1, 2.3.2: Korrekte Rotation basierend auf Dachtyp
+    
     # Rotation um Y-Achse (Tilt/Neigung)
+    # Requirement 2.3.2: Flachdach = 30° Aufständerung
+    # Requirement 2.3.1: Schrägdach = Dachneigung
     tilt_rad = np.deg2rad(tilt_deg)
     Ry = np.array([
         [np.cos(tilt_rad), 0, np.sin(tilt_rad)],
@@ -482,7 +497,8 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         [-np.sin(tilt_rad), 0, np.cos(tilt_rad)]
     ])
     
-    # Rotation um Z-Achse (Azimuth)
+    # Rotation um Z-Achse (Azimuth/Ausrichtung)
+    # 0° = Süd, 90° = West, 180° = Nord, 270° = Ost
     az_rad = np.deg2rad(azimuth_deg)
     Rz = np.array([
         [np.cos(az_rad), -np.sin(az_rad), 0],
@@ -490,52 +506,59 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         [0, 0, 1]
     ])
     
-    # Kombinierte Rotation: erst Tilt, dann Azimuth
+    # Kombinierte Rotation: erst Tilt (Y-Achse), dann Azimuth (Z-Achse)
+    # Dies stellt sicher dass Module korrekt auf Dachflächen liegen
     R = Rz @ Ry
     
     # Rotiere alle Vertices
     rotated = (R @ local_vertices.T).T
     
-    # Verschiebe zur finalen Position
+    # TASK 2.2: Modul-Positionierung korrigieren
+    # Requirement 2.2.1: Verschiebe zur finalen Position (x, y, z)
     final_vertices = rotated + np.array([x, y, z])
     
-    # Alle 12 Dreiecke für vollständigen Quader
+    # Requirement 2.1.1: Alle 12 Dreiecke für vollständigen Quader
+    # (6 Seiten × 2 Dreiecke pro Seite = 12 Dreiecke)
     i = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 5, 5, 1, 1, 6, 6, 2, 2, 7, 7, 3, 3]
     j = [1, 3, 2, 5, 3, 6, 0, 7, 5, 7, 4, 1, 6, 4, 5, 0, 7, 5, 6, 1, 4, 6, 7, 2]
     k = [3, 2, 5, 6, 6, 7, 7, 4, 7, 6, 5, 4, 4, 5, 0, 4, 5, 6, 1, 2, 6, 7, 2, 3]
     
-    # TASK 12: Farb-Unterscheidung für verschiedene Modul-Zustände
-    # Requirement 1.2: Erkennbare Farben für verschiedene Zustände
+    # Requirement 2.1.2: Farb-Unterscheidung für verschiedene Modul-Zustände
     if invalid:
-        # Ungültige Position: Rot
+        # Ungültige Position: Rot (#e74c3c)
         module_color = "#e74c3c"
         module_name = "PV Module (Ungültig)"
     elif selected:
-        # Ausgewähltes Modul: Hellblau
+        # Ausgewähltes Modul: Hellblau (#4a90e2)
         module_color = "#4a90e2"
         module_name = "PV Module (Ausgewählt)"
     else:
-        # Normales Modul: Dunkelblau (Standard)
+        # Normales Modul: Dunkelblau (Standard #1a1a2e)
         module_color = color
         module_name = "PV Module"
     
     # Füge Modul-Nummer zum Namen hinzu wenn vorhanden
-    # Requirement 8.5: Modul-Nummern Anzeige (optional)
     if module_number is not None:
         module_name = f"{module_name} #{module_number}"
     
+    # Erstelle Mesh3d Objekt mit hoher Qualität
     mesh = go.Mesh3d(
         x=final_vertices[:, 0],
         y=final_vertices[:, 1],
         z=final_vertices[:, 2],
         i=i, j=j, k=k,
         color=module_color,
-        opacity=0.9,
+        opacity=0.9,  # Leicht transparent für bessere Sichtbarkeit
         name=module_name,
         showlegend=False,
-        lighting=dict(ambient=0.5, diffuse=0.9, specular=0.5, roughness=0.2),
+        lighting=dict(
+            ambient=0.5,    # Umgebungslicht
+            diffuse=0.9,    # Diffuses Licht
+            specular=0.5,   # Spiegelung
+            roughness=0.2   # Rauheit
+        ),
         lightposition=dict(x=100, y=100, z=100),
-        contour=dict(show=True, color='black', width=1)
+        contour=dict(show=True, color='black', width=1)  # Schwarze Kanten
     )
     
     return mesh, final_vertices
@@ -1415,24 +1438,28 @@ def build_plotly_scene(
                         failed_renders += 1
                         continue
                     
-                    # TASK 8: Calculate rotation based on roof type and pitch
-                    # Requirement 6.1: Flat roof with 30° tilt
-                    # Requirement 6.5: Pitched roofs use roof pitch angle
+                    # TASK 2.3: Modul-Rotation korrigieren
+                    # Requirement 2.3.1: Korrekte Rotation für Schrägdächer
+                    # Requirement 2.3.2: Aufständerungs-Winkel für Flachdächer
+                    # Calculate rotation based on roof type and pitch
                     try:
-                        if roof_type == "Flachdach":
-                            tilt_deg = 30.0  # Aufständerung with 30° tilt
-                        else:
-                            # Requirement 6.2, 6.3, 6.5: Pitched roofs
-                            # use roof inclination
-                            tilt_deg = roof_inclination  # Use actual roof pitch
+                        # Import calculate_tilt_angle from placement handler
+                        from utils.pv3d_placement_handler import calculate_tilt_angle
                         
+                        # Requirement 2.3.1, 2.3.2: Use calculate_tilt_angle for correct rotation
+                        tilt_deg = calculate_tilt_angle(roof_type, roof_inclination)
+                        
+                        # Azimuth: 0° = Süd (Standard-Ausrichtung)
+                        # TODO: In Zukunft aus project_data oder layout_config lesen
                         azimuth_deg = 0.0  # South-facing (default)
+                        
                     except Exception as angle_error:
                         # Requirement 11.4: Meaningful error messages
                         print(
                             f"⚠️ Error calculating angles for module {i}: "
                             f"{angle_error}, using defaults"
                         )
+                        # Fallback: Flachdach-Werte
                         tilt_deg = 30.0
                         azimuth_deg = 0.0
                     

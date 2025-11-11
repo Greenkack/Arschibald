@@ -1208,7 +1208,8 @@ def _render_3d_view_impl():
                     module_quantity=module_quantity,
                     layout_config=layout_config,
                     frames=frames,
-                    resolution=resolution
+                    resolution=resolution,
+                    return_bytes=True  # ✅ FIX: GIF-Bytes zurückgeben statt Datei schreiben
                 )
                 
                 progress_bar.progress(90)

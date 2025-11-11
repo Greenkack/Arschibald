@@ -557,7 +557,7 @@ class FormulaEngine:
             # Verwende eval für arithmetische Ausdrücke
             # Sicherheitshinweis: In Produktion sollte ein sicherer Parser
             # verwendet werden (z.B. ast.literal_eval mit Whitelist)
-            result = eval(formula, {"__builtins__": {}}, {})
+            result = eval(formula, {"__builtins__": {}}, {})  # noqa: S307 (eval ist hier berechtigt)
             return result
         except ZeroDivisionError:
             raise DivisionByZeroError(

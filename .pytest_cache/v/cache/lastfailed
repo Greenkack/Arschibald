@@ -50,5 +50,11 @@
   "test_formula_bar_cell_editing.py::TestErrorSummary::test_no_errors": true,
   "test_formula_bar_cell_editing.py::TestIntegration::test_complete_workflow": true,
   "test_formula_bar_cell_editing.py::TestIntegration::test_error_recovery": true,
-  "test_export_import_roundtrip.py": true
+  "test_export_import_roundtrip.py": true,
+  "multi_pdf_positioning/test_yml_generator.py::TestYMLGeneratorIntegration::test_generate_from_real_file": true,
+  "multi_pdf_positioning/test_yml_generator.py::TestYMLGeneratorIntegration::test_format_preservation_with_real_file": true,
+  "multi_pdf_positioning/test_integration_comprehensive.py::TestBackupAndRestore::test_create_backup": true,
+  "multi_pdf_positioning/test_integration_comprehensive.py::TestBackupAndRestore::test_restore_backup": true,
+  "multi_pdf_positioning/test_integration_comprehensive.py::TestBackupAndRestore::test_list_backups": true,
+  "multi_pdf_positioning/test_integration_comprehensive.py::TestErrorHandling::test_recover_from_backup_on_error": true
 }

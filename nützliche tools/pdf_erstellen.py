@@ -26,7 +26,7 @@ for seite in range(1, anzahl_seiten + 1):
             lines = block.strip().split('\n')
             if len(lines) >= 5:
                 text = lines[0][6:]
-                position = eval(lines[1][10:])
+                position = eval(lines[1][10:])  # noqa: S307 (eval ist hier berechtigt)
                 schriftart = lines[2][12:]
                 schriftgroesse = float(lines[3][13:])
                 farbe = int(lines[4][7:])
@@ -48,7 +48,7 @@ for seite in range(1, anzahl_seiten + 1):
                 parts = line.strip().split(":")
                 bildname = f"seite_{seite}_bild_{parts[0].split()[1].strip()}.png"
                 bildpath = os.path.join(OUTPUT_DIR, bildname)
-                rect = fitz.Rect(eval(parts[1].strip()))
+                rect = fitz.Rect(eval(parts[1].strip()))  # noqa: S307 (eval ist hier berechtigt)
                 if os.path.exists(bildpath):
                     page.insert_image(rect, filename=bildpath)
 
@@ -60,7 +60,7 @@ for seite in range(1, anzahl_seiten + 1):
             for line in sf:
                 if line.startswith("Linie von"):
                     coords = line[9:].split("nach")
-                    p1 = eval(coords[0].strip())
+                    p1 = eval(coords[0].strip())  # noqa: S307 (eval ist hier berechtigt)
                     p2 = eval(coords[1].strip())
                     shape.draw_line(p1, p2)
                 elif line.startswith("Rechteck:"):

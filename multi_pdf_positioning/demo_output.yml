@@ -1,0 +1,223 @@
+Text: ERSTELLT FÜR:
+Position: (58.0, 80.0, 230.0, 97.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 20.0
+Farbe: 30920
+
+----------------------------------------
+
+Text: anrede_kunde
+Position: (59.0, 97.0, 230.0, 115.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: kunde_vorname_und_nachname
+Position: (100.0, 97.0, 230.0, 115.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 14.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: kunde_wohnort
+Position: (82.0, 132.0, 260.0, 140.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: __
+Position: (60.0, 105.0, 260.0, 113.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 100.0
+Farbe: 30920
+
+----------------------------------------
+
+Text: aus
+Position: (60.0, 132.0, 260.0, 140.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (60.0, 215.0, 230.0, 233.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (60.0, 235.0, 230.0, 253.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (60.0, 255.0, 290.0, 273.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (60.0, 275.0, 250.0, 293.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (60.0, 295.0, 130.0, 313.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (60.0, 315.0, 290.0, 333.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (60.0, 355.0, 310.0, 373.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (60.0, 375.0, 330.0, 393.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: PHOTOVOLTAIK
+Position: (60.0, 655.0, 330.0, 665.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 40.0
+Farbe: 30920
+
+----------------------------------------
+
+Text: ANGEBOT
+Position: (60.0, 700.0, 270.0, 710.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 52.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: kWp_anlage_anlage
+Position: (60.0, 735.0, 240.0, 745.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 30.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (90.0, 585.0, 310.0, 602.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 12.0
+Farbe: 866432
+
+----------------------------------------
+
+Text: 
+Position: (90.0, 610.0, 330.0, 628.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (335.0, 610.0, 400.0, 628.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (90.0, 632.0, 330.0, 650.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (335.0, 632.0, 400.0, 650.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (90.0, 654.0, 290.0, 672.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: 
+Position: (335.0, 654.0, 410.0, 672.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: erstellt am:
+Position: (370.0, 758.0, 490.0, 773.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: langes_datum_heute
+Position: (370.0, 770.0, 440.0, 788.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: Angebotsnummer:
+Position: (370.0, 788.0, 440.0, 803.0)
+Schriftart: Helvetica-Regular
+Schriftgröße: 10.0
+Farbe: 3487029
+
+----------------------------------------
+
+Text: ANG-2025 / 23156
+Position: (370.0, 803.0, 440.0, 818.0)
+Schriftart: Helvetica-Bold
+Schriftgröße: 10.0
+Farbe: 3487029
+
+----------------------------------------
