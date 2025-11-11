@@ -1,0 +1,218 @@
+/**
+ * menu-handler.js
+ * Permanente Datei für die Menüinteraktivität
+ * Diese Datei bleibt nach der Erstellung des statischen Menüs in der Seite
+ */
+
+// Hilfsfunktion: Prüft, ob ein Knoten vor einem anderen im DOM steht
+function nodeIsBefore(node1, node2) {
+    return (node1.compareDocumentPosition(node2) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+}
+
+// Funktion, um ein statisches Menü zu verbessern (IDs setzen, Events, etc.)
+function enhanceMenu() {
+    const contentContainer = document.getElementById('os_content_mainwrapper_cnt_hd24');
+    const asideMenu = document.querySelector('.aside-menu');
+    const menu = document.getElementById('dynamic-menu');
+    const headings = contentContainer.querySelectorAll('h2,h3,h4,h5,h6');
+    
+    // Prüfen, ob das Menü statisch ist
+    const hasStaticContent = asideMenu.getAttribute('data-static-content') === 'true';
+    
+    // Wenn das Menü statisch ist und nach speziellen Menüpunkten suchen soll
+    const scanForSpecials = hasStaticContent && asideMenu.getAttribute('data-scan-specials') === 'true';
+    
+    // Wenn wir nach speziellen Menüpunkten suchen sollen
+    if (scanForSpecials) {
+        // Arbeite mit dem DOM, um spezielle Menüpunkte zu finden
+        const contentNodes = contentContainer.childNodes;
+        const menuSpecials = [];
+        
+        // Suche nach Kommentarknoten im DOM
+        for (let i = 0; i < contentNodes.length; i++) {
+            const node = contentNodes[i];
+            if (node.nodeType === Node.COMMENT_NODE) {
+                const commentText = node.textContent.trim();
+                if (commentText.startsWith('menuspecial:')) {
+                    const content = commentText.substring('menuspecial:'.length);
+                    menuSpecials.push({
+                        content: content,
+                        node: node,
+                        used: false
+                    });
+                }
+            }
+        }
+        
+        // Wenn wir spezielle Menüpunkte gefunden haben, aktualisieren wir das Menü
+        if (menuSpecials.length > 0) {
+            // Bestehende Menülinks finden
+            const menuLinks = menu.querySelectorAll('a');
+            const menuItems = Array.from(menu.children);
+            
+            // Neue Struktur erstellen
+            const newMenuItems = [];
+            
+            // Durch alle Überschriften iterieren
+            headings.forEach((heading) => {
+                // Den entsprechenden Menüpunkt finden
+                let menuItem = null;
+                for (let i = 0; i < menuItems.length; i++) {
+                    const link = menuItems[i].querySelector('a');
+                    if (link && link.textContent.trim() === heading.textContent.replace(/^\d+\)\s*/, '').trim()) {
+                        menuItem = menuItems[i];
+                        break;
+                    }
+                }
+                
+                // Wenn wir einen Menüpunkt gefunden haben, fügen wir ihn und alle
+                // speziellen Menüpunkte vor dieser Überschrift zur neuen Struktur hinzu
+                if (menuItem) {
+                    // Spezielle Menüpunkte finden, die vor dieser Überschrift kommen
+                    menuSpecials.forEach(special => {
+                        if (!special.used && nodeIsBefore(special.node, heading)) {
+                            // Neues Li-Element erstellen
+                            const li = document.createElement('li');
+                            li.className = 'menu-special';
+                            li.innerHTML = special.content;
+                            newMenuItems.push(li);
+                            special.used = true;
+                        }
+                    });
+                    
+                    // Den regulären Menüpunkt hinzufügen
+                    newMenuItems.push(menuItem);
+                }
+            });
+            
+            // Alle übrigen speziellen Menüpunkte am Ende hinzufügen
+            menuSpecials.forEach(special => {
+                if (!special.used) {
+                    const li = document.createElement('li');
+                    li.className = 'menu-special';
+                    li.innerHTML = special.content;
+                    newMenuItems.push(li);
+                }
+            });
+            
+            // Wenn wir neue Menüpunkte haben, aktualisieren wir das Menü
+            if (newMenuItems.length > 0) {
+                // Menü leeren
+                menu.innerHTML = '';
+                
+                // Neue Menüpunkte hinzufügen
+                newMenuItems.forEach(item => {
+                    menu.appendChild(item);
+                });
+            }
+        }
+    }
+    
+    // Bestehende Menüpunkte finden
+    const menuLinks = menu.querySelectorAll('a');
+    
+    // Prüfen, ob wir genug Informationen haben, um die Links richtig zuzuordnen
+    if (headings.length === 0 || menuLinks.length === 0) return;
+    
+    // Wenn die Anzahl der Links und Überschriften nicht übereinstimmt, verwenden wir einen anderen Ansatz
+    const useTextMatching = headings.length !== menuLinks.length;
+    
+    // Für jede Überschrift
+    headings.forEach((heading, index) => {
+        // Text der Überschrift bereinigen
+        const headingText = heading.textContent.replace(/^\d+\)\s*/, '');
+        
+        // ID prüfen und ggf. setzen
+        let id = heading.id;
+        if (!id || id === '') {
+            // Falls keine ID vorhanden, generiere eine eindeutige ID
+            // entweder basierend auf Text oder fallback auf index
+            if (headingText) {
+                // Erstelle eine URL-freundliche Version des Titels
+                id = headingText.toLowerCase()
+                    .replace(/[^\w\s-]/g, '') // Entferne Sonderzeichen
+                    .replace(/\s+/g, '-')     // Ersetze Leerzeichen durch Bindestriche
+                    .replace(/--+/g, '-')     // Entferne mehrfache Bindestriche
+                    .replace(/^-+|-+$/g, ''); // Entferne führende/nachfolgende Bindestriche
+            }
+            
+            // Falls die ID leer ist oder bereits existiert, verwende einen indexbasierten Fallback
+            if (!id || document.getElementById(id)) {
+                id = 'section-' + index;
+            }
+            
+            heading.id = id;
+        }
+        
+        // Entsprechenden Menülink finden und aktualisieren
+        if (useTextMatching) {
+            // Suche Link mit passendem Text
+            for (let i = 0; i < menuLinks.length; i++) {
+                if (menuLinks[i].textContent.trim() === headingText.trim()) {
+                    menuLinks[i].href = '#' + id;
+                    break;
+                }
+            }
+        } else {
+            // Annahme: Links sind in der gleichen Reihenfolge wie Überschriften
+            if (index < menuLinks.length) {
+                menuLinks[index].href = '#' + id;
+            }
+        }
+    });
+}
+
+// Wird ausgeführt, sobald die Seite vollständig geladen ist
+document.addEventListener('DOMContentLoaded', function () {
+    // Menü initial aufbauen oder verbessern
+    enhanceMenu();
+
+    // Falls eine Funktion zum Setzen dynamischer Box-IDs vorhanden ist, diese aufrufen
+    if (typeof assignDynamicBoxIds === 'function') {
+        assignDynamicBoxIds();
+    }
+
+    // Menü umschalten (öffnen/schließen) beim Klick auf div in der Sidebar
+    document.querySelectorAll('.aside-menu div').forEach(header => {
+        header.removeEventListener('click', toggleMenu); // Doppelte Events vermeiden
+        header.addEventListener('click', toggleMenu);
+    });
+
+    // Öffnet oder schließt das Menü (z.B. per Klick auf Überschrift)
+    function toggleMenu(e) {
+        if (e.target.tagName === 'BUTTON') return; // Button-Klicks ignorieren
+        e.preventDefault();
+        e.stopPropagation();
+        const menu = document.querySelector('.aside-menu');
+        menu.classList.toggle('open');
+    }
+
+    // Beim Klick auf Menü-Links: sanft scrollen und Menü schließen (auf kleineren Bildschirmen)
+    document.querySelectorAll('.aside-menu #dynamic-menu a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            if (window.innerWidth <= 1329) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector('.aside-menu').classList.remove('open');
+                setTimeout(() => {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const offset = targetElement.getBoundingClientRect().top + window.scrollY - 60;
+                        window.scrollTo({
+                            top: offset,
+                            behavior: 'smooth' // Sanftes Scrollen
+                        });
+                    }
+                }, 300); // Kurz warten, bis das Menü zu ist
+            }
+        });
+    });
+
+    // Wenn außerhalb des Menüs geklickt wird: Menü schließen
+    document.addEventListener('click', function (event) {
+        const asideMenu = document.querySelector('.aside-menu');
+        if (asideMenu.classList.contains('open') && !asideMenu.contains(event.target)) {
+            asideMenu.classList.remove('open');
+        }
+    });
+});

@@ -1,3 +1,5 @@
+
+
 # admin_heatpump_settings_ui.py
 """
 Wärmepumpen-Einstellungen Admin UI
@@ -306,7 +308,8 @@ def render_admin_heatpump_settings_ui():
     tabs = st.tabs([
         "💰 Wärmepumpen-Preise",
         "🌡️ Heizkosten-Konfiguration",
-        "📊 Übersicht & Export",
+        "� Bulk-Upload",  # ✅ NEU: Bulk-Upload Tab
+        "�📊 Übersicht & Export",
         "🔗 Integration & Tests"
     ])
     
@@ -318,12 +321,16 @@ def render_admin_heatpump_settings_ui():
     with tabs[1]:
         render_heating_costs_tab()
     
-    # Tab 3: Übersicht & Export
+    # Tab 3: Bulk-Upload (NEU!)
     with tabs[2]:
+        render_bulk_upload_tab()
+    
+    # Tab 4: Übersicht & Export
+    with tabs[3]:
         render_overview_tab()
     
-    # Tab 4: Integration & Tests
-    with tabs[3]:
+    # Tab 5: Integration & Tests
+    with tabs[4]:
         render_integration_tab()
 
 
@@ -597,6 +604,827 @@ def render_integration_tab():
     st.dataframe(df, use_container_width=True, hide_index=True)
     
     st.info("💡 Die Preise werden automatisch in allen Wärmepumpen-Berechnungen und PDF-Generierungen verwendet.")
+
+
+# ============================================================================
+# TAB 3: BULK-UPLOAD
+# ============================================================================
+
+def clean_heatpump_data(df: pd.DataFrame) -> pd.DataFrame:
+    """Bereinigt und korrigiert Wärmepumpen-Daten"""
+    
+    import pandas as pd
+    import numpy as np
+    
+    # Brand-Korrektur: FISMAN → Viessmann, PODEROS → Buderus, PHYLAND → Vaillant
+    brand_mapping = {
+        'FISMAN': 'Viessmann',
+        'PODEROS': 'Buderus',
+        'PHYLAND': 'Vaillant',
+        'fisman': 'Viessmann',
+        'poderos': 'Buderus',
+        'phyland': 'Vaillant'
+    }
+    
+    # Arbeite mit manufacturer (nach Mapping)
+    if 'manufacturer' in df.columns:
+        df['manufacturer'] = df['manufacturer'].replace(brand_mapping)
+    
+    # SKU-basierte Brand-Erkennung und Model-Korrektur
+    if 'sku' in df.columns:
+        for idx, row in df.iterrows():
+            sku = str(row.get('sku', ''))
+            sku_lower = sku.lower()
+            
+            # Hersteller aus SKU extrahieren (case-insensitive)
+            if sku_lower.startswith('buderus-') or sku_lower.startswith('buderus_'):
+                df.at[idx, 'manufacturer'] = 'Buderus'
+                # SKU als Model Name verwenden (ohne Prefix)
+                if 'model' in df.columns:
+                    model_from_sku = sku.split('-', 1)[1] if '-' in sku else sku.split('_', 1)[1] if '_' in sku else sku
+                    parts = model_from_sku.rsplit('-', 1)
+                    if len(parts) > 1 and parts[-1].isdigit() and len(parts[-1]) > 8:
+                        model_from_sku = parts[0]
+                    df.at[idx, 'model'] = model_from_sku
+                    
+            elif sku_lower.startswith('viessmann-') or sku_lower.startswith('viessmann_'):
+                df.at[idx, 'manufacturer'] = 'Viessmann'
+                if 'model' in df.columns:
+                    model_from_sku = sku.split('-', 1)[1] if '-' in sku else sku.split('_', 1)[1] if '_' in sku else sku
+                    parts = model_from_sku.rsplit('-', 1)
+                    if len(parts) > 1 and parts[-1].isdigit() and len(parts[-1]) > 8:
+                        model_from_sku = parts[0]
+                    df.at[idx, 'model'] = model_from_sku
+                    
+            elif sku_lower.startswith('vaillant-') or sku_lower.startswith('vaillant_'):
+                df.at[idx, 'manufacturer'] = 'Vaillant'
+                if 'model' in df.columns:
+                    model_from_sku = sku.split('-', 1)[1] if '-' in sku else sku.split('_', 1)[1] if '_' in sku else sku
+                    parts = model_from_sku.rsplit('-', 1)
+                    if len(parts) > 1 and parts[-1].isdigit() and len(parts[-1]) > 8:
+                        model_from_sku = parts[0]
+                    df.at[idx, 'model'] = model_from_sku
+    
+    # Model bereinigen: "HeizungsDiscount24 GmbH" und ähnliche entfernen
+    unwanted_names = [
+        'HeizungsDiscount24 GmbH',
+        'HeizungsDiscount24',
+        'Heizungsdiscount',
+        'GmbH',
+        'Amazon',
+        'eBay'
+    ]
+    
+    if 'model' in df.columns:
+        for unwanted in unwanted_names:
+            df['model'] = df['model'].str.replace(unwanted, '', case=False, regex=False)
+        
+        # Trimme Whitespace
+        df['model'] = df['model'].str.strip()
+        
+        # Entferne reine Zahlen als Modellnamen
+        # Behalte nur Models mit mindestens einem Buchstaben
+        df = df[df['model'].str.contains(r'[A-Za-z]', na=False)]
+        
+        # Entferne zu kurze Models (< 3 Zeichen)
+        df = df[df['model'].str.len() >= 3]
+        
+        # Formatiere Modellnamen: Großbuchstaben am Anfang, Rest klein (außer bei Codes)
+        for idx, row in df.iterrows():
+            model = str(row.get('model', ''))
+            
+            # Wenn Model nur aus Großbuchstaben und Zahlen besteht (z.B. "VWL-250"), behalte es
+            if not model.isupper() and not any(char.isdigit() for char in model):
+                # Sonst: Title Case
+                df.at[idx, 'model'] = model.title()
+        
+        # Entferne leere Models
+        df = df[df['model'].str.len() > 0]
+    
+    # Type-Korrektur: MONOBLOC → Luft-Wasser-Wärmepumpe
+    type_mapping = {
+        'MONOBLOC': 'Luft-Wasser-Wärmepumpe',
+        'SPLIT': 'Luft-Wasser-Wärmepumpe',
+        'SOLE': 'Sole-Wasser-Wärmepumpe',
+        'ERDWÄRME': 'Sole-Wasser-Wärmepumpe',
+        'GRUNDWASSER': 'Wasser-Wasser-Wärmepumpe',
+        'WASSER': 'Wasser-Wasser-Wärmepumpe',
+        'LUFT-WASSER': 'Luft-Wasser-Wärmepumpe',
+        'SOLE-WASSER': 'Sole-Wasser-Wärmepumpe',
+        'WASSER-WASSER': 'Wasser-Wasser-Wärmepumpe'
+    }
+    
+    if 'heatpump_type' in df.columns:
+        df['heatpump_type'] = df['heatpump_type'].str.upper()
+        df['heatpump_type'] = df['heatpump_type'].replace(type_mapping)
+    
+    # SCOP-Werte bereinigen
+    if 'scop' in df.columns:
+        # NaN durch 4.0 ersetzen
+        df['scop'] = df['scop'].fillna(4.0)
+        # Ungültige Werte (< 2.0 oder > 6.0) auf 4.0 setzen
+        df.loc[(df['scop'] < 2.0) | (df['scop'] > 6.0), 'scop'] = 4.0
+    
+    # Max Flow Temp bereinigen
+    if 'max_flow_temp' in df.columns:
+        # NaN durch 65 ersetzen
+        df['max_flow_temp'] = df['max_flow_temp'].fillna(65)
+        # Ungültige Werte (< 45 oder > 80) auf 65 setzen
+        df.loc[(df['max_flow_temp'] < 45) | (df['max_flow_temp'] > 80), 'max_flow_temp'] = 65
+    
+    # Price Range bereinigen
+    if 'price_range' in df.columns:
+        # Entferne ungültige Preisklassen
+        valid_ranges = ['€', '€€', '€€€', '€€€€']
+        # Wenn price_range keine gültige Preisklasse ist und numerisch aussieht, berechne aus Preis
+        for idx, val in df['price_range'].items():
+            if pd.notna(val) and str(val) not in valid_ranges:
+                # Versuche als Zahl zu interpretieren
+                try:
+                    price = float(str(val).replace('€', '').strip())
+                    if price < 8000:
+                        df.at[idx, 'price_range'] = '€'
+                    elif price < 12000:
+                        df.at[idx, 'price_range'] = '€€'
+                    elif price < 18000:
+                        df.at[idx, 'price_range'] = '€€€'
+                    else:
+                        df.at[idx, 'price_range'] = '€€€€'
+                except:
+                    # Fallback: €€
+                    df.at[idx, 'price_range'] = '€€'
+        
+        # NaN-Werte auffüllen
+        df['price_range'] = df['price_range'].fillna('€€')
+    
+    # Duplikate entfernen (behalte erste)
+    if 'manufacturer' in df.columns and 'heatpump_type' in df.columns and 'model' in df.columns:
+        df = df.drop_duplicates(subset=['manufacturer', 'heatpump_type', 'model'], keep='first')
+    
+    return df
+
+
+def render_bulk_upload_tab():
+    """Tab für Bulk-Upload von Wärmepumpen-Daten"""
+    
+    st.subheader("📤 Bulk-Upload Wärmepumpen-Daten")
+    st.caption("Importieren Sie mehrere Wärmepumpen gleichzeitig via CSV, Excel oder JSON")
+    
+    # Info-Box mit Formatbeschreibung
+    with st.expander("ℹ️ Format-Informationen & Beispiele", expanded=False):
+        st.markdown("""
+        ### 📋 Erforderliche Spalten/Felder:
+        
+        | Feld | Beschreibung | Beispiel |
+        |------|--------------|----------|
+        | `manufacturer` | Hersteller | Viessmann, Buderus, Vaillant |
+        | `heatpump_type` | Typ | Luft-Wasser-Wärmepumpe, Sole-Wasser-Wärmepumpe, Wasser-Wasser-Wärmepumpe |
+        | `model` | Modellname | Vitocal 250-A, aroTHERM plus, Logatherm WLW196i AR |
+        | `heating_power_kw` | Leistungen in kW (kommasepariert) | 6.0,8.0,10.0,12.0 oder 8.5 |
+        | `scop` | Jahresarbeitszahl | 4.6, 4.5, 5.1 |
+        | `max_flow_temp` | Max. Vorlauftemperatur °C | 65, 70, 75 |
+        | `price_range` | Preisklasse | €, €€, €€€, €€€€ |
+        | `features` | Features (optional, pipe-separiert) | Smart Grid Ready&#124;Active Cooling |
+        | `refrigerant` | Kältemittel (optional) | R290 (Propan), R32 |
+        | `rating` | Bewertung (optional) | 4.5, 4.8, 5.0 |
+        | `awards` | Auszeichnungen (optional, pipe-separiert) | Testsieger 2024&#124;Öko-Test SEHR GUT |
+        
+        ### 📁 CSV-Format Beispiel:
+        ```csv
+        manufacturer,heatpump_type,model,heating_power_kw,scop,max_flow_temp,price_range,features,refrigerant,rating,awards
+        Viessmann,Luft-Wasser-Wärmepumpe,Vitocal 250-A,"6.0,8.0,10.0,12.0",4.6,70,€€€,Smart Grid Ready|Active Cooling,R290 (Propan),4.8,Testsieger 2024
+        Vaillant,Luft-Wasser-Wärmepumpe,aroTHERM plus,8.5,4.5,65,€€,Smart Grid Ready,R32,4.5,
+        Buderus,Sole-Wasser-Wärmepumpe,Logatherm WSW196i,"8.0,11.0,15.0",5.1,70,€€€,Erdwärmesonden|Smart Grid,R290 (Propan),4.7,
+        ```
+        
+        ### 📊 Excel-Format:
+        - Erste Zeile: Spaltenüberschriften (wie oben)
+        - Ab Zeile 2: Daten
+        - Bei mehreren Leistungswerten: Kommasepariert in einer Zelle
+        
+        ### 🔧 JSON-Format Beispiel:
+        ```json
+        [
+            {
+                "manufacturer": "Viessmann",
+                "heatpump_type": "Luft-Wasser-Wärmepumpe",
+                "model": "Vitocal 250-A",
+                "heating_power_kw": [6.0, 8.0, 10.0, 12.0],
+                "scop": 4.6,
+                "max_flow_temp": 70,
+                "price_range": "€€€",
+                "features": ["Smart Grid Ready", "Active Cooling"],
+                "refrigerant": "R290 (Propan)",
+                "rating": 4.8,
+                "awards": ["Testsieger 2024"]
+            }
+        ]
+        ```
+        """)
+    
+    # Upload-Bereich
+    st.markdown("### 📁 Datei hochladen")
+    
+    upload_format = st.radio(
+        "Format wählen:",
+        ["CSV", "Excel (XLSX)", "JSON"],
+        horizontal=True,
+        help="Wählen Sie das Format Ihrer Upload-Datei"
+    )
+    
+    uploaded_file = None
+    
+    if upload_format == "CSV":
+        uploaded_file = st.file_uploader(
+            "CSV-Datei hochladen",
+            type=['csv'],
+            help="CSV-Datei mit Komma- oder Semikolon-Trennung"
+        )
+    elif upload_format == "Excel (XLSX)":
+        uploaded_file = st.file_uploader(
+            "Excel-Datei hochladen",
+            type=['xlsx', 'xls'],
+            help="Excel-Datei (.xlsx oder .xls)"
+        )
+    else:  # JSON
+        uploaded_file = st.file_uploader(
+            "JSON-Datei hochladen",
+            type=['json'],
+            help="JSON-Datei mit Array von Wärmepumpen-Objekten"
+        )
+    
+    if uploaded_file is not None:
+        try:
+            # Datei verarbeiten
+            import pandas as pd
+            import json
+            import io
+            
+            df = None
+            
+            if upload_format == "CSV":
+                # CSV einlesen (Auto-detect Delimiter)
+                df = pd.read_csv(uploaded_file, sep=None, engine='python')
+                st.success(f"✅ CSV-Datei eingelesen: {len(df)} Zeilen")
+                
+            elif upload_format == "Excel (XLSX)":
+                # Excel einlesen
+                df = pd.read_excel(uploaded_file)
+                st.success(f"✅ Excel-Datei eingelesen: {len(df)} Zeilen")
+                
+            else:  # JSON
+                # JSON einlesen
+                content = uploaded_file.read().decode('utf-8')
+                data = json.loads(content)
+                
+                # Prüfen ob es verschachtelte HEATPUMP_PRODUCTS-Struktur ist
+                if isinstance(data, dict) and any(isinstance(v, dict) for v in data.values()):
+                    # Verschachtelte Struktur: {Hersteller: {Typ: [Modelle]}}
+                    st.info("📦 Verschachtelte Datenbank-Struktur erkannt, wird in Tabelle konvertiert...")
+                    flat_data = []
+                    for manufacturer, types in data.items():
+                        if isinstance(types, dict):
+                            for heatpump_type, models in types.items():
+                                if isinstance(models, list):
+                                    for model in models:
+                                        model_copy = model.copy()
+                                        model_copy['manufacturer'] = manufacturer
+                                        model_copy['heatpump_type'] = heatpump_type
+                                        flat_data.append(model_copy)
+                    data = flat_data
+                
+                df = pd.DataFrame(data)
+                st.success(f"✅ JSON-Datei eingelesen: {len(df)} Zeilen")
+            
+            # Datenvalidierung
+            required_columns = ['manufacturer', 'heatpump_type', 'model', 'heating_power_kw', 'scop', 'max_flow_temp', 'price_range']
+            
+            # Debug: Zeige vorhandene Spalten
+            st.info(f"🔍 Gefundene Spalten: {', '.join(df.columns.tolist())}")
+            
+            missing_columns = [col for col in required_columns if col not in df.columns]
+            
+            if missing_columns:
+                # Versuche Spalten-Mapping
+                st.warning("🔧 Versuche automatisches Spalten-Mapping...")
+                
+                column_mapping = {}
+                # Mögliche alternative Spaltennamen
+                alternatives = {
+                    'model': ['Model', 'Modell', 'name', 'Name', 'product_name'],
+                    'heating_power_kw': ['heating_power', 'power_kw', 'power', 'Leistung', 'kW', 'sizes_kw'],
+                    'max_flow_temp': ['max_temp', 'flow_temp', 'vorlauftemperatur', 'temp', 'max_flow_temp_c'],
+                    'price_range': ['price', 'preis', 'preisklasse', 'price_eur', 'price_range_calc'],
+                    'scop': ['SCOP', 'cop', 'COP', 'efficiency'],
+                    'manufacturer': ['Manufacturer', 'Hersteller', 'brand', 'Brand'],
+                    'heatpump_type': ['type', 'Type', 'Typ', 'category']
+                }
+                
+                for required, alts in alternatives.items():
+                    if required not in df.columns:
+                        for alt in alts:
+                            if alt in df.columns:
+                                column_mapping[alt] = required
+                                st.success(f"✓ '{alt}' → '{required}'")
+                                break
+                
+                if column_mapping:
+                    df = df.rename(columns=column_mapping)
+                    missing_columns = [col for col in required_columns if col not in df.columns]
+                
+                # Wenn price_range fehlt aber price_eur vorhanden ist, berechne Preisklasse
+                if 'price_range' not in df.columns and 'price_eur' in df.columns:
+                    st.info("💰 Berechne Preisklassen aus Preisen...")
+                    def calculate_price_range(price):
+                        if pd.isna(price):
+                            return '€€'
+                        price = float(price)
+                        if price < 8000:
+                            return '€'
+                        elif price < 12000:
+                            return '€€'
+                        elif price < 18000:
+                            return '€€€'
+                        else:
+                            return '€€€€'
+                    
+                    df['price_range'] = df['price_eur'].apply(calculate_price_range)
+                    st.success("✓ Preisklassen berechnet")
+                    missing_columns = [col for col in required_columns if col not in df.columns]
+                
+                # Nochmal prüfen nach allen Mappings
+                if missing_columns:
+                    st.error(f"❌ Immer noch fehlende Felder: {', '.join(missing_columns)}")
+                    
+                    # Zeige erste Zeile als Beispiel
+                    st.markdown("### 🔍 Erste Zeile der Daten:")
+                    st.json(df.head(1).to_dict(orient='records')[0] if len(df) > 0 else {})
+                    
+                    st.info("💡 Bitte stellen Sie sicher, dass Ihre JSON-Datei die korrekten Feldnamen hat.")
+                    return
+                else:
+                    st.success("✅ Alle Pflichtfelder gefunden oder erfolgreich gemappt!")
+            
+            # JETZT Datenbereinigung durchführen (NACH dem Mapping!)
+            st.info("🧹 Bereinige Daten...")
+            df = clean_heatpump_data(df)
+            st.success(f"✅ Datenbereinigung abgeschlossen - {len(df)} Zeilen übrig")
+            
+            # Datenvorschau
+            st.markdown("### 👀 Datenvorschau")
+            st.dataframe(df.head(10), use_container_width=True)
+            
+            # Statistiken
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Gesamt Wärmepumpen", len(df))
+            with col2:
+                st.metric("Hersteller", df['manufacturer'].nunique())
+            with col3:
+                st.metric("Typen", df['heatpump_type'].nunique())
+            
+            # Import-Optionen
+            st.markdown("### ⚙️ Import-Optionen")
+            
+            col_opt1, col_opt2 = st.columns(2)
+            
+            with col_opt1:
+                overwrite_existing = st.checkbox(
+                    "Bestehende Einträge überschreiben",
+                    value=False,
+                    help="Wenn aktiviert, werden bestehende Wärmepumpen mit gleichen Daten überschrieben"
+                )
+            
+            with col_opt2:
+                validate_data = st.checkbox(
+                    "Daten validieren",
+                    value=True,
+                    help="Prüft SCOP-Werte, Temperaturen und Preisklassen"
+                )
+            
+            # Import-Button
+            st.markdown("---")
+            
+            col_btn1, col_btn2, col_btn3 = st.columns([2, 1, 1])
+            
+            with col_btn1:
+                if st.button("🚀 Import starten", type="primary", use_container_width=True):
+                    import_heatpump_bulk_data(df, overwrite_existing, validate_data)
+            
+            with col_btn2:
+                if st.button("📋 Validierung", use_container_width=True):
+                    validate_bulk_data(df, validate_data)
+            
+            with col_btn3:
+                if st.button("❌ Abbrechen", use_container_width=True):
+                    st.rerun()
+                    
+        except Exception as e:
+            st.error(f"❌ Fehler beim Einlesen der Datei: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+    
+    # Template-Download
+    st.markdown("---")
+    st.markdown("### 📥 Vorlagen herunterladen")
+    st.caption("Laden Sie eine Vorlage herunter um die richtige Struktur zu sehen")
+    
+    col_tpl1, col_tpl2, col_tpl3 = st.columns(3)
+    
+    with col_tpl1:
+        # CSV-Template
+        csv_template = """manufacturer,heatpump_type,model,heating_power_kw,scop,max_flow_temp,price_range,features,refrigerant,rating,awards
+Viessmann,Luft-Wasser-Wärmepumpe,Vitocal 250-A,"6.0,8.0,10.0,12.0",4.6,70,€€€,Smart Grid Ready|Active Cooling,R290 (Propan),4.8,Testsieger 2024
+Vaillant,Luft-Wasser-Wärmepumpe,aroTHERM plus,8.5,4.5,65,€€,Smart Grid Ready,R32,4.5,
+Buderus,Sole-Wasser-Wärmepumpe,Logatherm WSW196i,"8.0,11.0,15.0",5.1,70,€€€,Erdwärmesonden|Smart Grid,R290 (Propan),4.7,"""
+        
+        st.download_button(
+            label="📄 CSV-Vorlage",
+            data=csv_template,
+            file_name="wärmepumpen_vorlage.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+    
+    with col_tpl2:
+        # Excel-Template
+        import pandas as pd
+        import io
+        
+        template_data = {
+            'manufacturer': ['Viessmann', 'Vaillant', 'Buderus'],
+            'heatpump_type': ['Luft-Wasser-Wärmepumpe', 'Luft-Wasser-Wärmepumpe', 'Sole-Wasser-Wärmepumpe'],
+            'model': ['Vitocal 250-A', 'aroTHERM plus', 'Logatherm WSW196i'],
+            'heating_power_kw': ['6.0,8.0,10.0,12.0', '8.5', '8.0,11.0,15.0'],
+            'scop': [4.6, 4.5, 5.1],
+            'max_flow_temp': [70, 65, 70],
+            'price_range': ['€€€', '€€', '€€€'],
+            'features': ['Smart Grid Ready|Active Cooling', 'Smart Grid Ready', 'Erdwärmesonden|Smart Grid'],
+            'refrigerant': ['R290 (Propan)', 'R32', 'R290 (Propan)'],
+            'rating': [4.8, 4.5, 4.7],
+            'awards': ['Testsieger 2024', '', '']
+        }
+        
+        template_df = pd.DataFrame(template_data)
+        excel_buffer = io.BytesIO()
+        with pd.ExcelWriter(excel_buffer, engine='openpyxl') as writer:
+            template_df.to_excel(writer, index=False, sheet_name='Wärmepumpen')
+        excel_buffer.seek(0)
+        
+        st.download_button(
+            label="📊 Excel-Vorlage",
+            data=excel_buffer,
+            file_name="wärmepumpen_vorlage.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            use_container_width=True
+        )
+    
+    with col_tpl3:
+        # JSON-Template
+        import json
+        
+        json_template = [
+            {
+                "manufacturer": "Viessmann",
+                "heatpump_type": "Luft-Wasser-Wärmepumpe",
+                "model": "Vitocal 250-A",
+                "heating_power_kw": [6.0, 8.0, 10.0, 12.0],
+                "scop": 4.6,
+                "max_flow_temp": 70,
+                "price_range": "€€€",
+                "features": ["Smart Grid Ready", "Active Cooling"],
+                "refrigerant": "R290 (Propan)",
+                "rating": 4.8,
+                "awards": ["Testsieger 2024"]
+            },
+            {
+                "manufacturer": "Vaillant",
+                "heatpump_type": "Luft-Wasser-Wärmepumpe",
+                "model": "aroTHERM plus",
+                "heating_power_kw": [8.5],
+                "scop": 4.5,
+                "max_flow_temp": 65,
+                "price_range": "€€",
+                "features": ["Smart Grid Ready"],
+                "refrigerant": "R32",
+                "rating": 4.5,
+                "awards": []
+            }
+        ]
+        
+        st.download_button(
+            label="🔧 JSON-Vorlage",
+            data=json.dumps(json_template, indent=2, ensure_ascii=False),
+            file_name="wärmepumpen_vorlage.json",
+            mime="application/json",
+            use_container_width=True
+        )
+
+
+def validate_bulk_data(df: pd.DataFrame, validate_data: bool = True):
+    """Validiert die Bulk-Daten vor dem Import"""
+    
+    st.markdown("### 🔍 Validierungs-Ergebnisse")
+    
+    errors = []
+    warnings = []
+    
+    # Pflichtfelder prüfen
+    required_fields = ['manufacturer', 'heatpump_type', 'model', 'heating_power_kw', 'scop', 'max_flow_temp', 'price_range']
+    for field in required_fields:
+        null_count = df[field].isnull().sum()
+        if null_count > 0:
+            errors.append(f"❌ {field}: {null_count} leere Werte gefunden")
+    
+    # Daten validieren
+    if validate_data:
+        # SCOP-Werte
+        invalid_scop = df[(df['scop'] < 2.0) | (df['scop'] > 6.0)]
+        if len(invalid_scop) > 0:
+            warnings.append(f"⚠️ {len(invalid_scop)} SCOP-Werte außerhalb 2.0-6.0")
+        
+        # Vorlauftemperatur
+        invalid_temp = df[(df['max_flow_temp'] < 45) | (df['max_flow_temp'] > 80)]
+        if len(invalid_temp) > 0:
+            warnings.append(f"⚠️ {len(invalid_temp)} Vorlauftemperaturen außerhalb 45-80 °C")
+        
+        # Preisklassen
+        valid_price_ranges = ['€', '€€', '€€€', '€€€€']
+        invalid_price_range = df[~df['price_range'].isin(valid_price_ranges)]
+        if len(invalid_price_range) > 0:
+            warnings.append(f"⚠️ {len(invalid_price_range)} ungültige Preisklassen (erlaubt: {', '.join(valid_price_ranges)})")
+    
+    # Duplikate prüfen
+    duplicates = df.duplicated(subset=['manufacturer', 'heatpump_type', 'model'], keep=False)
+    if duplicates.sum() > 0:
+        warnings.append(f"⚠️ {duplicates.sum()} Duplikate gefunden (gleiche Hersteller/Typ/Modell)")
+    
+    # Hersteller prüfen
+    known_manufacturers = ['Viessmann', 'Buderus', 'Vaillant']
+    unknown_manufacturers = df[~df['manufacturer'].isin(known_manufacturers)]['manufacturer'].unique()
+    if len(unknown_manufacturers) > 0:
+        warnings.append(f"⚠️ Unbekannte Hersteller: {', '.join(unknown_manufacturers)}")
+    
+    # Ergebnisse anzeigen
+    if errors:
+        for error in errors:
+            st.error(error)
+    
+    if warnings:
+        for warning in warnings:
+            st.warning(warning)
+    
+    if not errors and not warnings:
+        st.success("✅ Alle Validierungen bestanden! Daten können importiert werden.")
+    elif not errors:
+        st.info("ℹ️ Validierung erfolgreich mit Warnungen. Import möglich.")
+    else:
+        st.error("❌ Validierung fehlgeschlagen. Bitte Fehler korrigieren.")
+
+
+def import_heatpump_bulk_data(df: pd.DataFrame, overwrite: bool = False, validate: bool = True):
+    """Importiert Wärmepumpen-Daten aus DataFrame in die Datenbank"""
+    
+    # Validierung durchführen
+    if validate:
+        validate_bulk_data(df, validate)
+    
+    try:
+        from heatpump_products_database import HEATPUMP_PRODUCTS
+        import json
+        
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        success_count = 0
+        error_count = 0
+        skipped_count = 0
+        
+        total = len(df)
+        current = 0
+        
+        for idx, row in df.iterrows():
+            try:
+                current += 1
+                # Fortschritt aktualisieren
+                progress = min(current / total, 1.0)  # Limitiere auf max 1.0
+                progress_bar.progress(progress)
+                status_text.text(f"Importiere {current}/{total}: {row['manufacturer']} {row['model']}")
+                
+                manufacturer = str(row['manufacturer'])
+                heatpump_type = str(row['heatpump_type'])
+                
+                # Hersteller-Struktur erstellen falls nicht vorhanden
+                if manufacturer not in HEATPUMP_PRODUCTS:
+                    HEATPUMP_PRODUCTS[manufacturer] = {}
+                
+                # Typ-Struktur erstellen falls nicht vorhanden
+                if heatpump_type not in HEATPUMP_PRODUCTS[manufacturer]:
+                    HEATPUMP_PRODUCTS[manufacturer][heatpump_type] = []
+                
+                # Prüfen ob Modell bereits existiert
+                existing_models = HEATPUMP_PRODUCTS[manufacturer][heatpump_type]
+                model_exists = any(m['model'] == str(row['model']) for m in existing_models)
+                
+                if model_exists and not overwrite:
+                    skipped_count += 1
+                    continue
+                
+                # Heating Power verarbeiten (kann String mit Kommas oder Array sein)
+                heating_power = row['heating_power_kw']
+                if isinstance(heating_power, str):
+                    # String wie "6.0,8.0,10.0" in Liste umwandeln
+                    heating_power_kw = [float(x.strip()) for x in heating_power.split(',')]
+                elif isinstance(heating_power, (list, tuple)):
+                    heating_power_kw = [float(x) for x in heating_power]
+                else:
+                    # Einzelwert
+                    heating_power_kw = [float(heating_power)]
+                
+                # Features verarbeiten (kann String mit | oder Array sein)
+                features = []
+                if 'features' in row and pd.notna(row['features']):
+                    if isinstance(row['features'], str):
+                        features = [f.strip() for f in row['features'].split('|') if f.strip()]
+                    elif isinstance(row['features'], list):
+                        features = row['features']
+                
+                # Awards verarbeiten
+                awards = []
+                if 'awards' in row and pd.notna(row['awards']):
+                    if isinstance(row['awards'], str):
+                        awards = [a.strip() for a in row['awards'].split('|') if a.strip()]
+                    elif isinstance(row['awards'], list):
+                        awards = row['awards']
+                
+                # Neues Modell-Dict erstellen
+                new_model = {
+                    'model': str(row['model']),
+                    'heating_power_kw': heating_power_kw,
+                    'scop': float(row['scop']) if pd.notna(row['scop']) else 4.0,
+                    'max_flow_temp': int(row['max_flow_temp']) if pd.notna(row['max_flow_temp']) else 65,
+                    'price_range': str(row['price_range']),
+                    'features': features,
+                    'refrigerant': str(row.get('refrigerant', '')) if pd.notna(row.get('refrigerant')) else '',
+                    'rating': float(row.get('rating', 0.0)) if pd.notna(row.get('rating')) else 0.0,
+                    'awards': awards
+                }
+                
+                # Modell hinzufügen oder überschreiben
+                if model_exists and overwrite:
+                    # Bestehendes Modell ersetzen
+                    for i, m in enumerate(existing_models):
+                        if m['model'] == str(row['model']):
+                            HEATPUMP_PRODUCTS[manufacturer][heatpump_type][i] = new_model
+                            break
+                else:
+                    # Neues Modell hinzufügen
+                    HEATPUMP_PRODUCTS[manufacturer][heatpump_type].append(new_model)
+                
+                # Preise auch in heatpump_prices.json speichern (falls vorhanden)
+                if 'price_eur' in row and pd.notna(row['price_eur']):
+                    try:
+                        prices = load_heatpump_prices()
+                        
+                        # Struktur erstellen
+                        if manufacturer not in prices:
+                            prices[manufacturer] = {}
+                        if heatpump_type not in prices[manufacturer]:
+                            prices[manufacturer][heatpump_type] = {}
+                        if str(row['model']) not in prices[manufacturer][heatpump_type]:
+                            prices[manufacturer][heatpump_type][str(row['model'])] = {}
+                        
+                        # Für jede Leistungsvariante Preis setzen
+                        for power in heating_power_kw:
+                            power_str = str(power)
+                            base_price = float(row['price_eur'])
+                            installation = base_price * 0.3  # 30% Installationskosten
+                            
+                            prices[manufacturer][heatpump_type][str(row['model'])][power_str] = {
+                                "base_price_eur": round(base_price, 2),
+                                "installation_price_eur": round(installation, 2),
+                                "total_price_eur": round(base_price + installation, 2)
+                            }
+                        
+                        # Speichere Preise
+                        save_heatpump_prices(prices)
+                    except Exception as price_error:
+                        # Ignoriere Preisfehler, importiere trotzdem das Modell
+                        pass
+                
+                success_count += 1
+                        
+            except Exception as e:
+                error_count += 1
+                st.warning(f"⚠️ Zeile {idx + 1}: {e}")
+        
+        # Datenbank-Datei aktualisieren
+        try:
+            st.info("💾 Speichere Daten in heatpump_products_database.py...")
+            
+            # heatpump_products_database.py neu schreiben
+            db_file_path = "heatpump_products_database.py"
+            
+            # Lese Original-Datei
+            with open(db_file_path, 'r', encoding='utf-8') as f:
+                original_content = f.read()
+            
+            # Finde Anfang und Ende des HEATPUMP_PRODUCTS Dictionary
+            start_marker = 'HEATPUMP_PRODUCTS = {'
+            start_pos = original_content.find(start_marker)
+            
+            if start_pos == -1:
+                raise ValueError("HEATPUMP_PRODUCTS nicht gefunden in Datei")
+            
+            # Finde das Ende - suche nach der letzten Funktion
+            func_marker = '\n\ndef get_heatpump_models'
+            func_pos = original_content.find(func_marker)
+            
+            if func_pos == -1:
+                raise ValueError("Funktionen nicht gefunden in Datei")
+            
+            # Teile: Header (bis HEATPUMP_PRODUCTS) + neue Daten + Funktionen
+            header = original_content[:start_pos]
+            functions = original_content[func_pos:]
+            
+            # Erstelle JSON-String mit korrektem Python-Format
+            import json
+            json_str = json.dumps(HEATPUMP_PRODUCTS, indent=4, ensure_ascii=False)
+            
+            # Ersetze JSON-null mit Python-4.0 für fehlende SCOP-Werte
+            json_str = json_str.replace(': null', ': 4.0')
+            
+            # Schreibe neue Datei
+            new_content = f"{header}HEATPUMP_PRODUCTS = {json_str}\n{functions}"
+            
+            with open(db_file_path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+            
+            st.success(f"✅ {success_count} Wärmepumpen in heatpump_products_database.py gespeichert!")
+            
+        except Exception as e:
+            st.error(f"❌ Fehler beim Speichern: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+        
+        # Abschluss
+        progress_bar.progress(1.0)
+        status_text.empty()
+        progress_bar.empty()
+        
+        # Ergebnis anzeigen
+        st.markdown("---")
+        st.markdown("### 📊 Import-Ergebnis")
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("✅ Erfolgreich", success_count)
+        with col2:
+            st.metric("⚠️ Übersprungen", skipped_count)
+        with col3:
+            st.metric("❌ Fehler", error_count)
+        
+        if success_count > 0:
+            st.success(f"✅ {success_count} Wärmepumpen erfolgreich importiert!")
+        
+        if skipped_count > 0:
+            st.info(f"ℹ️ {skipped_count} Einträge übersprungen (bereits vorhanden). Aktivieren Sie 'Bestehende Einträge überschreiben' um diese zu aktualisieren.")
+        
+        if error_count > 0:
+            st.error(f"❌ {error_count} Fehler beim Import aufgetreten.")
+            
+    except Exception as e:
+        st.error(f"❌ Kritischer Fehler beim Import: {e}")
+        import traceback
+
+__all__ = [
+    'CONFIG_DIR',
+    'DEFAULT_HEATING_CONFIG',
+    'DEFAULT_HEATPUMP_PRICES',
+    'HEATING_COSTS_CONFIG_FILE',
+    'HEATPUMP_PRICES_CONFIG_FILE',
+    'HEATPUMP_PRODUCTS',
+    'calculate_price_range',
+    'clean_heatpump_data',
+    'create_default_heatpump_prices',
+    'format_german_number',
+    'get_configured_heatpump_price',
+    'get_heatpump_price',
+    'import_heatpump_bulk_data',
+    'load_heating_config',
+    'load_heatpump_prices',
+    'render_admin_heatpump_settings_ui',
+    'render_bulk_upload_tab',
+    'render_heating_costs_tab',
+    'render_heatpump_prices_tab',
+    'render_integration_tab',
+    'render_overview_tab',
+    'save_heating_config',
+    'save_heatpump_prices',
+    'validate_bulk_data',
+]
+
+        st.code(traceback.format_exc())
 
 
 # ============================================================================

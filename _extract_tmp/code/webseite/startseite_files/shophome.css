@@ -1,0 +1,742 @@
+
+/* ---------- HOMEPAGE ---------- */
+
+
+/*.os_prod_content { padding-top:0 }
+
+.os_home_title { color:#133F6D ; margin:10px 0 25px 0 ; font-size:1.417em ; font-weight:600 ; text-align:center }
+.os_home_title span { padding:0 20px ; background:#fff ; display:inline-block }
+.os_home_title { text-align:center ; position:relative ; z-index:2 }
+.os_home_title:after { content:"" ; position:absolute ; top:50% ; left:0 ; right:0 ; border-top:solid 1px #133F6D ; z-index:-1 }*/
+
+/* Slider-Skin */
+
+/*.os_home_slider { position:relative ; margin:0 ; padding: 0 0 20px 0 }
+.os_home_slider .slicktop > div img { width:100% ; height:auto }
+.os_home_slider .slicktop > div { display:none }
+.os_home_slider .slicktop > div:first-child { display:block }
+.os_home_slider .slick-initialized > div { display:block }
+.os_home_slider .slick-dots { bottom:-30px } 
+
+.os_home_prodnewwrapper .slick-prev { left: -12px }
+.os_home_prodnewwrapper .slick-next { right: -15px }
+.os_home_prodnewwrapper .slick-prev:before { content: "\f104" ; color:#000 }
+.os_home_prodnewwrapper .slick-next:before { content: "\f105" ; color:#000 }
+
+@media ( max-width:767px ) {
+
+	.os_home_slider { display:none }
+	.os_home_slider * { display:none }
+}*/
+
+/* Teaser */
+
+/*.os_home_text { margin-top:50px }
+.os_home_text2 { margin-top:50px }*/
+
+/* Kategorien */
+
+/*.os_home_cats { margin-top:50px ; font-size:0.917em }
+.os_home_cats .cols { margin-bottom:20px }
+.os_home_cats img { width:100% ; height:auto }*/
+
+/* Herstellerlogos */
+
+/*.os_home_vendorwrapper { margin-top:50px }
+.os_home_vendorwrapper img { vertical-align:middle ; width:130px ; height: 43px; margin:6px 30px 6px 0 }
+.os_home_vendorwrapper img:hover { filter: none; }*/
+
+
+/* ---------- END ---------- */
+
+
+/* ---------- HOMEPAGE  New ---------- */
+
+
+/* * Prefixed by https://autoprefixer.github.io * PostCSS: v8.4.14, * Autoprefixer: v10.4.7 * Browsers: last 4 version */
+ @font-face {
+     font-family: Bebas;
+     src: url('/shop/images/appserv/addon/fonts/bebasneue-regular.woff2');
+     font-weight: 400;
+     font-style: normal;
+     font-display: swap;
+}
+
+/******************Reset-Startseite*********************************/
+ div#os_main_shop.col-lg-10.col-md-9.col-sm-12.col-xs-12.os_main_shop {
+     padding-right: 10px;
+     padding-left: 10px;
+}
+ .os_contenttext{
+     margin-top: 20px;
+}
+#os_content_mainwrapper_cnt_hd24 figcaption {
+     line-height: 1.6;
+}
+  
+ #box3 ul, #box7 ul {
+     padding: 0;
+     margin: 0;
+     list-style-type: none;
+}
+/****************Logo-Heizungsdiscount24*********************/
+ .logo-start {
+     color: #133F6D;
+     font-weight: bold;
+     font-family: Arial, Helvetica, sans-serif;
+     letter-spacing: -1px;
+     font-stretch: ultra-condensed;
+     text-rendering: geometricPrecision;
+}
+ .logo-end {
+     color: #cb2327;
+     font-weight: bold;
+     font-family: Arial, Helvetica, sans-serif;
+     letter-spacing: -1px;
+     font-stretch: condensed;
+     padding-left: 2px;
+     text-rendering: geometricPrecision;
+}
+/****************Allgemeine Styles*********************/
+ #os_content_mainwrapper_cnt_hd24 p {
+     font-size: 15px;
+     line-height: 1.6;
+     color: #161616;
+     margin: 0;
+     padding: 10px 0 0 0;
+}
+ .cnt-img {
+     display: block;
+     width: 100%;
+     height: auto;
+}
+ .bold {
+     font-weight: 600;
+}
+/*********************************Links********************************/
+ #box1 a, #box4 a, #box5 a, #box8 a {
+     color: #161616;
+     text-decoration: none;
+}
+ #box3 .link-vorteil{
+     text-decoration: underline;
+}
+/******************Kundeninfo********************************/
+ #kunden-info {
+     background-color: #a0d1c3;
+     margin-bottom: 10px;
+   	 display: flex;
+     justify-content: space-between;
+}
+ #kunden-info div:first-child {
+     background: #a0d1c3 url("/shop/images/main/content/cnt-startseite/info_icon.svg") no-repeat;
+}
+ #kunden-info div p {
+     color: white;
+     font-size: 13px;
+  	margin: 0;
+    padding: 5px 0 5px 55px;
+}
+  
+ #kunden-info div a {
+    font-size: 13px;
+    color: white;
+   display: block;
+   padding: 5px 10px;
+}
+
+ @media (min-width: 447px) {
+    #kunden-info div p {
+    padding: 5px 0 5px 40px;
+}
+
+}
+ @media (min-width: 768px) {
+    #kunden-info div p {
+     font-size: 15px;
+}
+ #kunden-info div a {
+    font-size: 15px;
+}
+  }
+/*____________________________________________________________*/
+/*________________________Mobile______________________________*/
+/*___________________________________________________________*/
+/**********************Titles********************************/
+ #box1 h2, #box4 h2, #box5 h2, #box8 h2 {
+     font-family: 'Bebas', Arial, Helvetica, sans-serif;
+     color: #161616;
+     font-weight: normal;
+     font-size: 24px;
+     padding: 0;
+     margin: 0;
+     text-rendering: optimizeLegibility;
+     letter-spacing: 1px;
+     border: none;
+     text-align: center;
+}
+ #box3 h3 {
+     font-family: "Bebas", Arial, Helvetica, sans-serif;
+     color: #161616;
+     font-weight: normal;
+     font-size: 36px;
+     letter-spacing: 1px;
+     margin: 30px 0;
+     text-rendering: geometricPrecision;
+     text-align: center;
+     line-height: 1.2;
+     border: none;
+     word-spacing: 5px;
+}
+ #box6 h1 {
+     display: block;
+     font-size: 28px;
+     font-family: "Bebas", Arial, Helvetica, sans-serif;
+     color: #161616;
+     font-weight: 100;
+     text-rendering: geometricPrecision;
+     margin: 0;
+     padding:0;
+     line-height: 1.1;
+     letter-spacing: 1px;
+     border: none;
+}
+ .bck-title {
+     font-size: 30px;
+     padding: 10px;
+     background: url(/shop/images/main/content/cnt-startseite/Heizschlange-Weiss.svg) no-repeat #f1f1f1;
+     background-size: contain;
+     background-position: right;
+}
+/**************************Banner**************************************/
+ figure {
+     margin-bottom: 25px;
+}
+ figcaption {
+     padding: 10px;
+     border: 1px solid #f1f1f1;
+     text-align: left;
+     background: rgba(255, 255, 255, 0.8);
+}
+ hr {
+     padding: 0;
+     margin: 4px 0;
+     border-top: 1px solid #161616;
+}
+ .grid-item-3 figure, .grid-item-4 figure, .grid-item-8 figure{
+     position: relative;
+}
+ .grid-item-3 figcaption, .grid-item-4 figcaption, .grid-item-8 figcaption{
+     position: absolute;
+     border: 1px solid #f1f1f1;
+     bottom: 0;
+     width: 100%;
+}
+figure .danfoss {
+    background: url(/shop/images/main/content/cnt-startseite/danfoss-logo-white-compressed-130x43.svg) no-repeat #D92826;
+    position: absolute;
+    top: 0;
+    height: 35px;
+    width: 100%;
+    background-position: center;
+}
+  .danfoss a{
+   display:block;
+  width: 100%;
+  height: 35px;
+  }
+figure .wilo {
+    background: url(/shop/images/main/content/cnt-startseite/wilo-logo-white-compressed-130x43.svg) no-repeat #009C82;
+    position: absolute;
+    top: 0;
+    height: 35px;
+    width: 100%;
+    background-position: center;
+  background-size: 90px;
+}
+.wilo a{
+   display:block;
+  width: 100%;
+  height: 35px;
+  }
+
+ figure .vaillant {
+    background: url(/shop/images/main/content/cnt-startseite/vaillant-logo-white-compressed.svg) no-repeat #00897E;
+    position: absolute;
+    top: 0;
+    height: 35px;
+    width: 100%;
+    background-position: center;
+  background-size: 90px;
+}
+
+.vaillant a{
+   display:block;
+  width: 100%;
+  height: 35px;
+ }
+/**************************Box2-Marken**************************************/
+#box2 {
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 25px;
+  }
+
+  .fade-carousel {
+    text-align: -webkit-center;
+  }
+
+  .fade-item .item-inner {
+    display: block;
+    height: 43px;
+    width: 130px;
+    background: url('/shop/images/main/content/cnt-startseite/marken-carousel/css_sprites_v12.png');
+    background-color: white;
+  }
+
+  .fade-item a.item-1 {
+    background-position: -10px -199px;
+  }
+
+  .fade-item a.item-2 {
+    background-position: -160px -136px;
+  }
+
+  .fade-item a.item-3 {
+    background-position: -310px -73px;
+  }
+
+  .fade-item a.item-4 {
+    background-position: -10px -325px;
+  }
+
+  .fade-item a.item-5 {
+    background-position: -160px -388px;
+  }
+
+  .fade-item a.item-6 {
+    background-position: -10px -10px;
+  }
+
+  .fade-item a.item-7 {
+    background-position: -310px -136px;
+  }
+
+  .fade-item a.item-8 {
+    background-position: -160px -262px;
+  }
+
+  .fade-item a.item-9 {
+    background-position: -160px -199px;
+  }
+
+  .fade-item a.item-10 {
+    background-position: -310px -262px;
+  }
+
+  .fade-item a.item-11 {
+    background-position: -10px -73px;
+  }
+
+  .fade-item a.item-12 {
+    background-position: -160px -73px;
+  }
+
+  .fade-item a.item-13 {
+    background-position: -310px -10px;
+  }
+
+  .fade-item a.item-14 {
+    background-position: -10px -136px;
+  }
+
+  .fade-item a.item-15 {
+    background-position: -160px -325px;
+  }
+
+  .fade-item a.item-16 {
+    background-position: -310px -325px;
+  }
+
+  .fade-item a.item-17 {
+    background-position: -10px -262px;
+  }
+
+  .fade-item a.item-18 {
+    background-position: -160px -10px;
+  }
+
+  .fade-item a.item-19 {
+    background-position: -10px -388px;
+  }
+/*****************-Vorteile-BOX3/BOX7-*********************************/
+ #box3 ul li, #box7 ul li {
+     padding: 20px 10px;
+     margin: 0 0 25px 0;
+     border: 1px solid #f1f1f1;
+}
+ #box3 h3>span{
+     display: block;
+     font-size: 30px;
+}
+ #box3 .fa, #box7 .fa {
+     color: #133F6D;
+     display: block;
+     text-align: center;
+     font-size: 21px;
+     margin-bottom: 10px;
+}
+ .vorteil-title {
+     display: block;
+     color: #133F6D;
+     font-size: 21px;
+     text-align: center;
+     font-family: "Bebas", Arial, Helvetica, sans-serif;
+     font-weight: normal;
+     text-rendering: geometricPrecision;
+     letter-spacing: 1px;
+     margin: 0;
+     padding: 0;
+}
+ .vorteil-title a{
+     color: #133F6D;
+}
+ #box3 .fa.hd24-icon {
+     font-family: Roboto, Arial, Helvetica, sans-serif;
+     font-size: 18px;
+   font-weight: bold;
+   letter-spacing: -0.5px;
+}
+ #box7 a span:hover, #box7 a h4:hover {
+     color: #2581e3;
+}
+/*****************-Text-BOX6-*********************************/
+ #box6{
+     margin-bottom: 30px;
+     border: 1px solid #f1f1f1;
+}
+ .text-home{
+     padding: 10px;
+}
+ .text-home a{
+     text-decoration: none;
+}
+/*____________________________________________________________*/
+/*________________________Tablet______________________________*/
+/*___________________________________________________________*/
+ @media all and (min-width: 768px) {
+     #box1, #box2, #box3, #box4, #box5, #box6, #box8 {
+         margin-bottom: 20px;
+    }
+     .grid-item-1, .grid-item-2 figure, .grid-item-4, .grid-item-5, .grid-item-7, .grid-item-8 {
+         margin-bottom: 20px;
+    }
+    /**********************Titles********************************/
+     #box1 .banner-title, #box4 .banner-title, #box5 .banner-title {
+         font-size: 41px;
+    }
+     #box6 h1 {
+         font-size: 28px;
+    }
+     .bck-title {
+         padding: 20px 180px 20px 20px;
+    }
+    /*******************Flex-Display*********************/
+     .grid-item-3, .grid-item-4, .grid-item-8{
+         display: -webkit-box;
+         display: -ms-flexbox;
+         display: flex;
+         gap: 20px;
+    }
+     .grid-item-3 figure,.grid-item-4 figure, .grid-item-8 figure{
+         width: 50%;
+    }
+    /**************************Banner***************************************/
+     figure {
+         margin: 0;
+         position: relative;
+         border: none;
+    }
+     figcaption {
+         position: absolute;
+         color: #fff;
+         border: none;
+         font-size: 14px;
+    }
+     .grid-item-1 figcaption, .grid-item-2 figure:last-child figcaption, .grid-item-6 figcaption, .grid-item-9 figcaption {
+         top: 0;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         padding: 10px;
+    }
+     .grid-item-1 figcaption{
+         width: 638px;
+         margin: 0 auto 17px auto;
+    }
+     .grid-item-2 figure:last-child figcaption{
+         width: 600px;
+         margin: 0 auto 25px auto;
+    }
+     .grid-item-2 figure:first-child figcaption {
+         top: 30%;
+         right: 0;
+         padding: 20px;
+         width: 360px;
+    }
+     .grid-item-3 figcaption, .grid-item-4 figcaption {
+         top: 0;
+         margin: 0 20px;
+         padding: 20px;
+         height: 145px;
+         width: auto;
+         border: none;
+    }
+     .grid-item-5 figure figcaption {
+         top: 37%;
+         right: 0;
+         padding: 20px;
+         width: 400px;
+    }
+     .grid-item-6 figcaption{
+         width: 580px;
+         margin: 0 auto 15px auto;
+    }
+     .grid-item-7 figure figcaption {
+         top: 37%;
+         left: 0;
+         padding: 20px;
+         width: 441px;
+    }
+     .grid-item-8 figcaption {
+         top: 0;
+         margin: 0 20px;
+         height: 160px;
+         padding: 20px;
+         width: auto;
+         border: none;
+    }
+     .grid-item-9 figcaption{
+         width: 595px;
+         margin: 0 auto 15px auto;
+    }
+
+figure .danfoss {
+  top: unset;
+    bottom: 0;
+}
+figure .wilo {
+  top: unset;
+    bottom: 0;
+}
+figure .vaillant {
+    top: unset;
+      bottom: 0;
+}
+    /*****************-Vorteile-BOX3/BOX7-*********************************/
+     #box3 ul li, #box7 ul li {
+         padding: 20px;
+         margin-bottom: 20px;
+    }
+     .text-home{
+         padding: 20px;
+    }
+}
+ @media all and (min-width: 992px) {
+     .bck-title {
+         padding: 20px 140px 20px 20px;
+    }
+}
+/*____________________________________________________________*/
+/*________________________Desktop______________________________*/
+/*___________________________________________________________*/
+ @media all and (min-width: 1330px) {
+    /**********************Titles********************************/
+     #box1 .banner-title, #box4 .banner-title, #box5 .banner-title, #box8 .banner-title {
+         font-size: 45px;
+    }
+     #box1 h2, #box4 h2, #box5 h2, #box8 h2{
+         font-size: 25px;
+    }
+     #box3 h3 {
+         margin: 35px 0;
+    }
+     .vorteil-title{
+         font-size: 23px;
+    }
+     .bck-title {
+         font-size: 30px;
+         padding: 20px 280px 20px 20px;
+         background-position: 95%;
+    }
+     #box6 h1 {
+         font-size: 36px;
+    }
+     #box1{
+         margin-bottom: 0;
+    }
+     #box2, #box3, #box4, #box5, #box6, #box8 {
+         margin-bottom: 30px;
+    }
+     #box3 ul li, #box7 ul li {
+         padding: 20px;
+         margin: 0;
+    }
+    /*******************Flex-Reset*********************/
+     .grid-item-3, .grid-item-4, .grid-item-8{
+         display: block;
+         gap: 0;
+    }
+     .grid-item-3 figure,.grid-item-4 figure, .grid-item-8 figure{
+         width: auto;
+    }
+    /*********************Flex*************************/
+     .flex-container {
+         display: -webkit-box;
+         display: -ms-flexbox;
+         display: flex;
+         -ms-flex-wrap: wrap;
+         flex-wrap: wrap;
+         gap: 30px;
+    }
+     .flex-item{
+         width: 48.5%;
+    }
+    /*********************************Grid-Display********************************/
+     .grid-container-1 {
+         display: -ms-grid;
+         display: grid;
+         column-gap: 30px;
+         -webkit-column-gap: 30px;
+         -moz-column-gap: 30px;
+         -ms-grid-columns: 75% 30px 25%;
+         grid-template-columns: 75% 25%;
+         padding-right: 30px;
+    }
+     .grid-container-2 {
+         display: -ms-grid;
+         display: grid;
+         -webkit-column-gap: 30px;
+         -moz-column-gap: 30px;
+         column-gap: 30px;
+         -ms-grid-columns: 25% 30px 75%;
+         grid-template-columns: 25% 75%;
+         padding-right: 30px;
+    }
+     .grid-container-3 {
+         display: -ms-grid;
+         display: grid;
+         -webkit-column-gap: 30px;
+         -moz-column-gap: 30px;
+         column-gap: 30px;
+         -ms-grid-columns: 75% 30px 25%;
+         grid-template-columns: 75% 25%;
+         padding-right: 30px;
+    }
+    /*********************************Grid-Items********************************/
+     .grid-item-1, .grid-item-2 figure, .grid-item-8 figure{
+         margin-bottom: 30px;
+    }
+     .grid-item-4, .grid-item-5, .grid-item-7, .grid-item-8{
+         margin-bottom: 0;
+    }
+     .grid-item-1 {
+         -ms-grid-column: 1;
+         grid-column: 1/3;
+         -ms-grid-row: 1;
+         grid-row: 1;
+    }
+     .grid-item-2 {
+         -ms-grid-column: 1;
+         grid-column: 1;
+         -ms-grid-row: 2;
+         grid-row: 2;
+    }
+     .grid-item-3 figure{
+         margin-bottom: 30px;
+    }
+     .grid-item-3 {
+         -ms-grid-column: 2;
+         grid-column: 2;
+         -ms-grid-row: 2;
+         grid-row: 2;
+    }
+     .grid-item-4 figure{
+         margin-bottom: 30px;
+    }
+     .grid-item-4 {
+         -ms-grid-column: 1;
+         grid-column: 1;
+         -ms-grid-row: 1;
+         grid-row: 1;
+    }
+     .grid-item-5 {
+         -ms-grid-column: 2;
+         grid-column: 2;
+         -ms-grid-row: 1;
+         grid-row: 1;
+    }
+     .grid-item-6 {
+         -ms-grid-column: 1;
+         grid-column: 1/3;
+         -ms-grid-row: 2;
+         grid-row: 2;
+    }
+     .grid-item-7 {
+         -ms-grid-column: 1;
+         grid-column: 1;
+         -ms-grid-row: 2;
+         grid-row: 2;
+    }
+     .grid-item-8 {
+         -ms-grid-column: 2;
+         grid-column: 2;
+         -ms-grid-row: 2;
+         grid-row: 2;
+    }
+     .grid-item-9 {
+         -ms-grid-column: 1;
+         grid-column: 1/3;
+         -ms-grid-row: 1;
+         grid-row: 3;
+    }
+    /**************************Banner***************************************/
+     .grid-item-1 figcaption, .grid-item-2 figure:last-child figcaption, .grid-item-6 figcaption, .grid-item-9 figcaption {
+         padding: 20px;
+    }
+     .grid-item-1 figcaption{
+         width: 648px;
+         margin: 0 auto 43px auto;
+    }
+     .grid-item-2 figure:last-child figcaption{
+         width: 617px;
+         margin: 0 auto 15px auto;
+    }
+     .grid-item-2 figure:first-child figcaption {
+         top: 40%;
+         width: 400px;
+    }
+     .grid-item-3 figcaption{
+         height: 185px;
+    }
+     .grid-item-4 figcaption {
+         height: 160px;
+    }
+     .grid-item-6 figcaption{
+         width: 600px;
+         margin: 0 auto 45px auto;
+       text-align: center;
+    }
+     .grid-item-7 figure figcaption {
+         top: 37%;
+         width: 441px;
+    }
+     .grid-item-8 figcaption {
+         height: 210px;
+    }
+     .grid-item-9 figcaption{
+         width: 615px;
+         margin: 0 auto 45px auto;
+    }
+}
+/* ---------- END  New ---------- */

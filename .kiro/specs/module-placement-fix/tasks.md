@@ -13,27 +13,42 @@ Vollständige Überarbeitung der Modul-Platzierungs-Logik für die 3D-Visualisie
 
 ## Tasks
 
-- [ ] 1. Diagnose und Analyse
+- [x] 1. Diagnose und Analyse
+
+
+
+
+
   - Identifiziere alle Probleme in der Modul-Platzierungs-Logik
   - Prüfe `utils/pv3d_plotly.py` auf Fehler
   - Prüfe `utils/pv3d.py` auf Fehler
   - Analysiere Modul-Sichtbarkeit
   - _Requirements: Alle_
 
-- [ ] 2. Modul-Rendering reparieren
-  - [ ] 2.1 Modul-Geometrie korrigieren
+- [x] 2. Modul-Rendering reparieren
+
+
+
+
+  - [x] 2.1 Modul-Geometrie korrigieren
+
+
     - Stelle sicher dass Module als 3D-Meshes erstellt werden
     - Korrigiere Modul-Dimensionen (PV_W, PV_H, PV_T)
     - Füge sichtbare Farben hinzu
     - _Requirements: Module müssen sichtbar sein_
   
-  - [ ] 2.2 Modul-Positionierung korrigieren
+
+  - [x] 2.2 Modul-Positionierung korrigieren
+
     - Berechne korrekte X, Y, Z Koordinaten
     - Berücksichtige Dachtyp (Flach vs. Schrägdach)
     - Berücksichtige Aufständerung
     - _Requirements: Module auf Dachfläche_
   
-  - [ ] 2.3 Modul-Rotation korrigieren
+
+  - [x] 2.3 Modul-Rotation korrigieren
+
     - Implementiere korrekte Rotation für Schrägdächer
     - Implementiere Aufständerungs-Winkel für Flachdächer
     - Teste alle Dachtypen

@@ -1,0 +1,63 @@
+{
+  "firma": 1,
+  "seite": 1,
+  "timestamp": "2025-11-11T20:39:13.276841",
+  "is_valid": false,
+  "total_elements": 3,
+  "summary": {
+    "total_messages": 2,
+    "errors": 2,
+    "warnings": 0,
+    "info": 0,
+    "collisions": 1,
+    "elements_validated": 3
+  },
+  "messages": [
+    {
+      "level": "ERROR",
+      "message": "Found 1 collision(s) between elements",
+      "element_index": null,
+      "position": null,
+      "details": null
+    },
+    {
+      "level": "ERROR",
+      "message": "Collision between elements 0 and 1",
+      "element_index": null,
+      "position": null,
+      "details": "Overlap area: 3850.00 sq pts, Overlap rect: (95, 70, 205, 105)"
+    },
+    {
+      "level": "ERROR",
+      "message": "Validation failed with 2 error(s) and 0 warning(s)",
+      "element_index": null,
+      "position": null,
+      "details": null
+    }
+  ],
+  "collisions": [
+    {
+      "element1_index": 0,
+      "element2_index": 1,
+      "element1_position": [
+        50,
+        50,
+        200,
+        100
+      ],
+      "element2_position": [
+        100,
+        75,
+        250,
+        125
+      ],
+      "overlap_area": 3850,
+      "overlap_rect": [
+        95,
+        70,
+        205,
+        105
+      ]
+    }
+  ]
+}

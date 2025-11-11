@@ -356,8 +356,8 @@ def handle_auto_placement(
             }
 
         # FIX: Unterscheide zwischen Flachdach und geneigten Dächern
-        # Normalisiere roof_type
-        roof_type_normalized = roof_type.strip() if roof_type else "Flachdach"
+        # Normalisiere roof_type (lowercase für case-insensitive Vergleich)
+        roof_type_normalized = roof_type.strip().lower() if roof_type else "flachdach"
         
         # TASK 13: Check cache first for performance
         # Requirement 10.5: Caching von berechneten Positionen
@@ -408,63 +408,128 @@ def handle_auto_placement(
                 )
             }
 
-        # FIX: Berechne Z-Position basierend auf Dachtyp
+        # TASK 2.2: Modul-Positionierung korrigieren
+        # Requirement 2.2.1: Berechne korrekte X, Y, Z Koordinaten
+        # Requirement 2.2.2: Berücksichtige Dachtyp (Flach vs. Schrägdach)
+        # Requirement 2.2.3: Berücksichtige Aufständerung
+        
         # Für geneigte Dächer muss die Z-Position für jedes Modul individuell berechnet werden
+        # da die Dachfläche geneigt ist und Module auf unterschiedlichen Höhen liegen
         import math
         
         try:
             positions_3d = []
             
-            if roof_type_normalized == "Flachdach":
+            # Requirement 2.2.2: Unterscheide zwischen Flachdach und geneigten Dächern
+            if roof_type_normalized == "flachdach":
                 # Flachdach: Alle Module auf gleicher Höhe
+                # Requirement 2.2.3: Mit Aufständerung (0.30m)
                 z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
                 positions_3d = [
                     (float(x), float(y), float(z_position))
                     for x, y in grid_positions_2d
                 ]
-            elif roof_type_normalized in ["Satteldach", "Walmdach", "Krüppelwalmdach"]:
-                # Satteldach/Walmdach: Z steigt vom Rand zur Mitte
+                print(f"   Flachdach: Z-Position = {z_position:.2f}m (konstant)")
+                
+            elif roof_type_normalized in ["satteldach", "satteldach mit gaube"]:
+                # Satteldach: Z steigt vom Rand zur Mitte (First)
+                # Module liegen auf der Dachfläche
                 base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
                 
                 if roof_pitch > 0:
                     inclination_rad = math.radians(roof_pitch)
                     for x, y in grid_positions_2d:
+                        # Requirement 2.2.1: Berechne Z basierend auf Y-Position
                         # Abstand von Traufe (y = -roof_width/2)
                         dist_from_eave = y + roof_width / 2
                         z_offset = dist_from_eave * math.tan(inclination_rad)
                         z = base_z + z_offset
                         positions_3d.append((float(x), float(y), float(z)))
+                    print(f"   Satteldach: Z-Position variiert von {base_z:.2f}m bis {base_z + roof_width/2 * math.tan(inclination_rad):.2f}m")
                 else:
-                    # Keine Neigung
+                    # Keine Neigung (sollte nicht vorkommen)
                     positions_3d = [
                         (float(x), float(y), float(base_z))
                         for x, y in grid_positions_2d
                     ]
-            elif roof_type_normalized == "Pultdach":
+                    print(f"   Satteldach (keine Neigung): Z-Position = {base_z:.2f}m (konstant)")
+                    
+            elif roof_type_normalized in ["walmdach", "krüppelwalmdach"]:
+                # Walmdach/Krüppelwalmdach: Ähnlich wie Satteldach
+                # Z steigt vom Rand zur Mitte
+                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
+                
+                if roof_pitch > 0:
+                    inclination_rad = math.radians(roof_pitch)
+                    for x, y in grid_positions_2d:
+                        # Requirement 2.2.1: Berechne Z basierend auf Y-Position
+                        dist_from_eave = y + roof_width / 2
+                        z_offset = dist_from_eave * math.tan(inclination_rad)
+                        z = base_z + z_offset
+                        positions_3d.append((float(x), float(y), float(z)))
+                    print(f"   {roof_type}: Z-Position variiert von {base_z:.2f}m bis {base_z + roof_width/2 * math.tan(inclination_rad):.2f}m")
+                else:
+                    positions_3d = [
+                        (float(x), float(y), float(base_z))
+                        for x, y in grid_positions_2d
+                    ]
+                    print(f"   {roof_type} (keine Neigung): Z-Position = {base_z:.2f}m (konstant)")
+                    
+            elif roof_type_normalized == "pultdach":
                 # Pultdach: Z steigt linear von vorne nach hinten
                 base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
                 
                 if roof_pitch > 0:
                     inclination_rad = math.radians(roof_pitch)
                     for x, y in grid_positions_2d:
+                        # Requirement 2.2.1: Berechne Z basierend auf Y-Position
                         # Abstand von vorderer Kante (y = -roof_width/2)
                         dist_from_front = y + roof_width / 2
                         z_offset = dist_from_front * math.tan(inclination_rad)
                         z = base_z + z_offset
                         positions_3d.append((float(x), float(y), float(z)))
+                    print(f"   Pultdach: Z-Position variiert von {base_z:.2f}m bis {base_z + roof_width * math.tan(inclination_rad):.2f}m")
                 else:
-                    # Keine Neigung
                     positions_3d = [
                         (float(x), float(y), float(base_z))
                         for x, y in grid_positions_2d
                     ]
+                    print(f"   Pultdach (keine Neigung): Z-Position = {base_z:.2f}m (konstant)")
+                    
+            elif roof_type_normalized == "zeltdach":
+                # Zeltdach: Z steigt vom Rand zur Mitte (pyramidenförmig)
+                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
+                
+                if roof_pitch > 0:
+                    inclination_rad = math.radians(roof_pitch)
+                    for x, y in grid_positions_2d:
+                        # Requirement 2.2.1: Berechne Z basierend auf Abstand vom Rand
+                        # Minimaler Abstand von allen 4 Kanten
+                        dist_from_edge = min(
+                            y + roof_width / 2,   # Abstand von vorderer Kante
+                            roof_width / 2 - y,   # Abstand von hinterer Kante
+                            x + roof_length / 2,  # Abstand von linker Kante
+                            roof_length / 2 - x   # Abstand von rechter Kante
+                        )
+                        z_offset = dist_from_edge * math.tan(inclination_rad)
+                        z = base_z + z_offset
+                        positions_3d.append((float(x), float(y), float(z)))
+                    print(f"   Zeltdach: Z-Position variiert von {base_z:.2f}m bis {base_z + min(roof_width, roof_length)/2 * math.tan(inclination_rad):.2f}m")
+                else:
+                    positions_3d = [
+                        (float(x), float(y), float(base_z))
+                        for x, y in grid_positions_2d
+                    ]
+                    print(f"   Zeltdach (keine Neigung): Z-Position = {base_z:.2f}m (konstant)")
+                    
             else:
-                # Andere Dachtypen: Konstante Z-Höhe
+                # Andere/Unbekannte Dachtypen: Konstante Z-Höhe (Fallback)
                 z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
                 positions_3d = [
                     (float(x), float(y), float(z_position))
                     for x, y in grid_positions_2d
                 ]
+                print(f"   {roof_type} (Fallback): Z-Position = {z_position:.2f}m (konstant)")
                 
         except (TypeError, ValueError, Exception) as conv_error:
             # Requirement 11.4: Meaningful error messages
@@ -569,19 +634,28 @@ def calculate_z_position(roof_type: str, roof_pitch: float = 0.0, roof_width: fl
     """
     Calculate Z-position (height) for modules based on roof type.
 
+    TASK 2.2: Modul-Positionierung korrigieren
+    - Berechnet korrekte Z-Position basierend auf Dachtyp
+    - Berücksichtigt Aufständerung für Flachdächer
+    - Berücksichtigt Dachflächen-Position für geneigte Dächer
+
     Different roof types require different mounting heights:
-    - Flat roofs: Modules are mounted on elevated frames (Aufständerung)
-    - Pitched roofs: Modules are mounted on the roof surface at ridge height
+    - Flat roofs: Modules are mounted on elevated frames (Aufständerung) at 30cm
+    - Pitched roofs: Modules are mounted on the roof surface with 15cm clearance
 
     Args:
         roof_type: Type of roof (e.g., "Flachdach", "Satteldach", "Pultdach")
-        roof_pitch: Roof pitch angle in degrees
-        roof_width: Width of the roof in meters (for calculating ridge height)
+        roof_pitch: Roof pitch angle in degrees (not used for z-position, only for tilt)
+        roof_width: Width of the roof in meters (not used for base z-position)
 
     Returns:
         Z-position in meters above the wall height (relative to roof base)
+        This is a RELATIVE position that will be added to wall_height_m
 
     Requirements:
+        - 2.2.1: Korrekte Z-Koordinaten berechnen
+        - 2.2.2: Dachtyp berücksichtigen (Flach vs. Schrägdach)
+        - 2.2.3: Aufständerung für Flachdächer
         - 6.1: Flat roof with elevated mounting (30° tilt)
         - 6.2: Gable roof parallel to surface
         - 6.3: Shed roof parallel to surface
@@ -590,20 +664,21 @@ def calculate_z_position(roof_type: str, roof_pitch: float = 0.0, roof_width: fl
     import math
     
     # Normalize roof type string (case-insensitive, strip whitespace)
-    roof_type_normalized = roof_type.strip().lower()
+    roof_type_normalized = roof_type.strip().lower() if roof_type else "flachdach"
 
-    # Requirement 6.1: Flat roof with elevated mounting
+    # Requirement 2.2.2, 2.2.3, 6.1: Flat roof with elevated mounting
     if "flach" in roof_type_normalized:
-        return 0.3  # 30cm elevation for mounting frame (Aufständerung)
+        # Flachdach: Module werden auf Aufständerung montiert
+        # 30cm Höhe für Montagegestell (ermöglicht 30° Neigung)
+        return 0.30  # 30cm elevation for mounting frame (Aufständerung)
 
-    # Requirement 6.2, 6.3: Pitched roofs (Satteldach, Pultdach, etc.)
+    # Requirement 2.2.2, 6.2, 6.3: Pitched roofs (Satteldach, Pultdach, etc.)
     # Modules are mounted on the roof surface
-    # For pitched roofs, place modules slightly above the roof base
     else:
-        # For pitched roofs, modules sit on the roof surface
-        # The roof itself is already at the correct height in the scene
-        # We just need a small clearance above the roof base
-        # The actual roof slope is handled by the roof geometry itself
+        # Geneigte Dächer: Module liegen auf der Dachfläche
+        # Kleine Erhöhung über Dachbasis für Montage-Schienen
+        # Die tatsächliche Dachneigung wird durch die Dachgeometrie selbst dargestellt
+        # Module folgen der Dachneigung (siehe calculate_tilt_angle)
         return 0.15  # 15cm clearance above roof base (Traufhöhe)
 
 
@@ -611,32 +686,43 @@ def calculate_tilt_angle(roof_type: str, roof_pitch: float = 0.0) -> float:
     """
     Calculate tilt angle for modules based on roof type.
 
+    TASK 2.3: Modul-Rotation korrigieren
+    - Berechnet korrekten Neigungs-Winkel basierend auf Dachtyp
+    - Flachdächer: 30° Aufständerung für optimale Sonneneinstrahlung
+    - Geneigte Dächer: Folgen der Dachneigung (parallel zur Dachfläche)
+
     Different roof types require different tilt angles:
     - Flat roofs: Modules are tilted at 30° for optimal solar exposure
-    - Pitched roofs: Modules follow the roof pitch angle
+    - Pitched roofs: Modules follow the roof pitch angle (parallel to roof surface)
 
     Args:
         roof_type: Type of roof (e.g., "Flachdach", "Satteldach", "Pultdach")
         roof_pitch: Roof pitch angle in degrees
 
     Returns:
-        Tilt angle in degrees
+        Tilt angle in degrees (0-90°)
 
     Requirements:
+        - 2.3.1: Korrekte Rotation für Schrägdächer
+        - 2.3.2: Aufständerungs-Winkel für Flachdächer
+        - 2.3.3: Alle Dachtypen testen
         - 6.1: Flat roof with 30° tilt (Aufständerung)
         - 6.5: Pitched roofs use roof pitch angle
     """
     # Normalize roof type string (case-insensitive, strip whitespace)
-    roof_type_normalized = roof_type.strip().lower()
+    roof_type_normalized = roof_type.strip().lower() if roof_type else "flachdach"
 
-    # Requirement 6.1: Flat roof with 30° tilt
+    # Requirement 2.3.2, 6.1: Flat roof with 30° tilt
     if "flach" in roof_type_normalized:
+        # Flachdach: Module werden mit 30° Neigung aufgeständert
+        # Dies ist optimal für Sonneneinstrahlung in Mitteleuropa
         return 30.0  # 30° tilt for optimal solar exposure
 
-    # Requirement 6.5: Pitched roofs use roof pitch angle
+    # Requirement 2.3.1, 6.5: Pitched roofs use roof pitch angle
     else:
-        # For pitched roofs, modules lie parallel to the roof surface
-        # So they use the roof's pitch angle
+        # Geneigte Dächer: Module liegen parallel zur Dachfläche
+        # Sie verwenden die Dachneigung als Neigungs-Winkel
+        # Wenn roof_pitch = 0, dann sind Module horizontal (sollte nicht vorkommen)
         return roof_pitch if roof_pitch > 0 else 0.0
 
 

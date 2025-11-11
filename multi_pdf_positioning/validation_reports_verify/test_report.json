@@ -1,0 +1,25 @@
+{
+  "firma": 1,
+  "seite": 1,
+  "timestamp": "2025-11-11T20:43:08.091357",
+  "is_valid": true,
+  "total_elements": 1,
+  "summary": {
+    "total_messages": 0,
+    "errors": 0,
+    "warnings": 0,
+    "info": 0,
+    "collisions": 0,
+    "elements_validated": 1
+  },
+  "messages": [
+    {
+      "level": "INFO",
+      "message": "All 1 positions are valid",
+      "element_index": null,
+      "position": null,
+      "details": null
+    }
+  ],
+  "collisions": []
+}

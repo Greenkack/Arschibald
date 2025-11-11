@@ -1,0 +1,1693 @@
+{
+  "summary": {
+    "total_files": 64,
+    "passed": 8,
+    "failed": 56,
+    "total_elements": 3016,
+    "total_errors": 480,
+    "total_warnings": 272,
+    "total_collisions": 3696
+  },
+  "test_results": {
+    "seite1_f1.yml": {
+      "file": "seite1_f1.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 0 and 1 overlap (1810.00 sq pts)",
+        "  Elements 0 and 2 overlap (1400.00 sq pts)",
+        "  Elements 0 and 4 overlap (360.00 sq pts)",
+        "  Elements 1 and 2 overlap (3920.00 sq pts)",
+        "  Elements 1 and 4 overlap (3240.00 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 28,
+      "collision_count": 30
+    },
+    "seite1_f2.yml": {
+      "file": "seite1_f2.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 0 and 1 overlap (1810.00 sq pts)",
+        "  Elements 0 and 2 overlap (1400.00 sq pts)",
+        "  Elements 0 and 4 overlap (360.00 sq pts)",
+        "  Elements 1 and 2 overlap (3920.00 sq pts)",
+        "  Elements 1 and 4 overlap (3240.00 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 28,
+      "collision_count": 30
+    },
+    "seite1_f3.yml": {
+      "file": "seite1_f3.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 0 and 1 overlap (1810.00 sq pts)",
+        "  Elements 0 and 2 overlap (1400.00 sq pts)",
+        "  Elements 0 and 4 overlap (360.00 sq pts)",
+        "  Elements 1 and 2 overlap (3920.00 sq pts)",
+        "  Elements 1 and 4 overlap (3240.00 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 28,
+      "collision_count": 30
+    },
+    "seite1_f4.yml": {
+      "file": "seite1_f4.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 0 and 1 overlap (1810.00 sq pts)",
+        "  Elements 0 and 2 overlap (1400.00 sq pts)",
+        "  Elements 0 and 4 overlap (360.00 sq pts)",
+        "  Elements 1 and 2 overlap (3920.00 sq pts)",
+        "  Elements 1 and 4 overlap (3240.00 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 28,
+      "collision_count": 30
+    },
+    "seite1_f5.yml": {
+      "file": "seite1_f5.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 0 and 1 overlap (1810.00 sq pts)",
+        "  Elements 0 and 2 overlap (1400.00 sq pts)",
+        "  Elements 0 and 4 overlap (360.00 sq pts)",
+        "  Elements 1 and 2 overlap (3920.00 sq pts)",
+        "  Elements 1 and 4 overlap (3240.00 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 28,
+      "collision_count": 30
+    },
+    "seite1_f6.yml": {
+      "file": "seite1_f6.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 0 and 1 overlap (1810.00 sq pts)",
+        "  Elements 0 and 2 overlap (1400.00 sq pts)",
+        "  Elements 0 and 4 overlap (360.00 sq pts)",
+        "  Elements 1 and 2 overlap (3920.00 sq pts)",
+        "  Elements 1 and 4 overlap (3240.00 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 28,
+      "collision_count": 30
+    },
+    "seite1_f7.yml": {
+      "file": "seite1_f7.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 0 and 1 overlap (1810.00 sq pts)",
+        "  Elements 0 and 2 overlap (1400.00 sq pts)",
+        "  Elements 0 and 4 overlap (360.00 sq pts)",
+        "  Elements 1 and 2 overlap (3920.00 sq pts)",
+        "  Elements 1 and 4 overlap (3240.00 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 28,
+      "collision_count": 30
+    },
+    "seite1_f8.yml": {
+      "file": "seite1_f8.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 0 and 1 overlap (1810.00 sq pts)",
+        "  Elements 0 and 2 overlap (1400.00 sq pts)",
+        "  Elements 0 and 4 overlap (360.00 sq pts)",
+        "  Elements 1 and 2 overlap (3920.00 sq pts)",
+        "  Elements 1 and 4 overlap (3240.00 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 28,
+      "collision_count": 30
+    },
+    "seite2_f1.yml": {
+      "file": "seite2_f1.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 10 ('Position: (297.38287353515625,'): Invalid height (y2 429.46 <= y1 438.38)",
+        "Found 26 collision(s)",
+        "  Elements 0 and 1 overlap (205.41 sq pts)",
+        "  Elements 0 and 2 overlap (998.67 sq pts)",
+        "  Elements 0 and 5 overlap (2458.41 sq pts)",
+        "  Elements 1 and 5 overlap (205.12 sq pts)",
+        "  Elements 2 and 5 overlap (1091.72 sq pts)",
+        "Element 10: Invalid Y coordinates (438.3769836425781, 429.4575500488281)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 6 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 10 ('Position: (297.38287353515625,'): Very small height (-8.92 pts)"
+      ],
+      "element_count": 48,
+      "collision_count": 26
+    },
+    "seite2_f2.yml": {
+      "file": "seite2_f2.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 10 ('Position: (297.38287353515625,'): Invalid height (y2 429.46 <= y1 438.38)",
+        "Found 26 collision(s)",
+        "  Elements 0 and 1 overlap (205.41 sq pts)",
+        "  Elements 0 and 2 overlap (998.67 sq pts)",
+        "  Elements 0 and 5 overlap (2458.41 sq pts)",
+        "  Elements 1 and 5 overlap (205.12 sq pts)",
+        "  Elements 2 and 5 overlap (1091.72 sq pts)",
+        "Element 10: Invalid Y coordinates (438.3769836425781, 429.4575500488281)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 6 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 10 ('Position: (297.38287353515625,'): Very small height (-8.92 pts)"
+      ],
+      "element_count": 48,
+      "collision_count": 26
+    },
+    "seite2_f3.yml": {
+      "file": "seite2_f3.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 10 ('Position: (297.38287353515625,'): Invalid height (y2 429.46 <= y1 438.38)",
+        "Found 26 collision(s)",
+        "  Elements 0 and 1 overlap (205.41 sq pts)",
+        "  Elements 0 and 2 overlap (998.67 sq pts)",
+        "  Elements 0 and 5 overlap (2458.41 sq pts)",
+        "  Elements 1 and 5 overlap (205.12 sq pts)",
+        "  Elements 2 and 5 overlap (1091.72 sq pts)",
+        "Element 10: Invalid Y coordinates (438.3769836425781, 429.4575500488281)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 6 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 10 ('Position: (297.38287353515625,'): Very small height (-8.92 pts)"
+      ],
+      "element_count": 48,
+      "collision_count": 26
+    },
+    "seite2_f4.yml": {
+      "file": "seite2_f4.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 10 ('Position: (297.38287353515625,'): Invalid height (y2 429.46 <= y1 438.38)",
+        "Found 26 collision(s)",
+        "  Elements 0 and 1 overlap (205.41 sq pts)",
+        "  Elements 0 and 2 overlap (998.67 sq pts)",
+        "  Elements 0 and 5 overlap (2458.41 sq pts)",
+        "  Elements 1 and 5 overlap (205.12 sq pts)",
+        "  Elements 2 and 5 overlap (1091.72 sq pts)",
+        "Element 10: Invalid Y coordinates (438.3769836425781, 429.4575500488281)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 6 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 10 ('Position: (297.38287353515625,'): Very small height (-8.92 pts)"
+      ],
+      "element_count": 48,
+      "collision_count": 26
+    },
+    "seite2_f5.yml": {
+      "file": "seite2_f5.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 10 ('Position: (297.38287353515625,'): Invalid height (y2 429.46 <= y1 438.38)",
+        "Found 26 collision(s)",
+        "  Elements 0 and 1 overlap (205.41 sq pts)",
+        "  Elements 0 and 2 overlap (998.67 sq pts)",
+        "  Elements 0 and 5 overlap (2458.41 sq pts)",
+        "  Elements 1 and 5 overlap (205.12 sq pts)",
+        "  Elements 2 and 5 overlap (1091.72 sq pts)",
+        "Element 10: Invalid Y coordinates (438.3769836425781, 429.4575500488281)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 6 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 10 ('Position: (297.38287353515625,'): Very small height (-8.92 pts)"
+      ],
+      "element_count": 48,
+      "collision_count": 26
+    },
+    "seite2_f6.yml": {
+      "file": "seite2_f6.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 10 ('Position: (297.38287353515625,'): Invalid height (y2 429.46 <= y1 438.38)",
+        "Found 26 collision(s)",
+        "  Elements 0 and 1 overlap (205.41 sq pts)",
+        "  Elements 0 and 2 overlap (998.67 sq pts)",
+        "  Elements 0 and 5 overlap (2458.41 sq pts)",
+        "  Elements 1 and 5 overlap (205.12 sq pts)",
+        "  Elements 2 and 5 overlap (1091.72 sq pts)",
+        "Element 10: Invalid Y coordinates (438.3769836425781, 429.4575500488281)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 6 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 10 ('Position: (297.38287353515625,'): Very small height (-8.92 pts)"
+      ],
+      "element_count": 48,
+      "collision_count": 26
+    },
+    "seite2_f7.yml": {
+      "file": "seite2_f7.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 10 ('Position: (297.38287353515625,'): Invalid height (y2 429.46 <= y1 438.38)",
+        "Found 26 collision(s)",
+        "  Elements 0 and 1 overlap (205.41 sq pts)",
+        "  Elements 0 and 2 overlap (998.67 sq pts)",
+        "  Elements 0 and 5 overlap (2458.41 sq pts)",
+        "  Elements 1 and 5 overlap (205.12 sq pts)",
+        "  Elements 2 and 5 overlap (1091.72 sq pts)",
+        "Element 10: Invalid Y coordinates (438.3769836425781, 429.4575500488281)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 6 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 10 ('Position: (297.38287353515625,'): Very small height (-8.92 pts)"
+      ],
+      "element_count": 48,
+      "collision_count": 26
+    },
+    "seite2_f8.yml": {
+      "file": "seite2_f8.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 10 ('Position: (297.38287353515625,'): Invalid height (y2 429.46 <= y1 438.38)",
+        "Found 26 collision(s)",
+        "  Elements 0 and 1 overlap (205.41 sq pts)",
+        "  Elements 0 and 2 overlap (998.67 sq pts)",
+        "  Elements 0 and 5 overlap (2458.41 sq pts)",
+        "  Elements 1 and 5 overlap (205.12 sq pts)",
+        "  Elements 2 and 5 overlap (1091.72 sq pts)",
+        "Element 10: Invalid Y coordinates (438.3769836425781, 429.4575500488281)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 6 ('Position: (404.1798400878906, '): Very small width (1.99 pts)",
+        "Element 10 ('Position: (297.38287353515625,'): Very small height (-8.92 pts)"
+      ],
+      "element_count": 48,
+      "collision_count": 26
+    },
+    "seite3_f1.yml": {
+      "file": "seite3_f1.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 28 collision(s)",
+        "  Elements 0 and 1 overlap (744.60 sq pts)",
+        "  Elements 2 and 3 overlap (1272.77 sq pts)",
+        "  Elements 3 and 4 overlap (770.66 sq pts)",
+        "  Elements 4 and 5 overlap (770.67 sq pts)",
+        "  Elements 5 and 6 overlap (914.55 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 55,
+      "collision_count": 28
+    },
+    "seite3_f2.yml": {
+      "file": "seite3_f2.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 28 collision(s)",
+        "  Elements 0 and 1 overlap (744.60 sq pts)",
+        "  Elements 2 and 3 overlap (1272.77 sq pts)",
+        "  Elements 3 and 4 overlap (770.66 sq pts)",
+        "  Elements 4 and 5 overlap (770.67 sq pts)",
+        "  Elements 5 and 6 overlap (914.55 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 55,
+      "collision_count": 28
+    },
+    "seite3_f3.yml": {
+      "file": "seite3_f3.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 28 collision(s)",
+        "  Elements 0 and 1 overlap (744.60 sq pts)",
+        "  Elements 2 and 3 overlap (1272.77 sq pts)",
+        "  Elements 3 and 4 overlap (770.66 sq pts)",
+        "  Elements 4 and 5 overlap (770.67 sq pts)",
+        "  Elements 5 and 6 overlap (914.55 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 55,
+      "collision_count": 28
+    },
+    "seite3_f4.yml": {
+      "file": "seite3_f4.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 28 collision(s)",
+        "  Elements 0 and 1 overlap (744.60 sq pts)",
+        "  Elements 2 and 3 overlap (1272.77 sq pts)",
+        "  Elements 3 and 4 overlap (770.66 sq pts)",
+        "  Elements 4 and 5 overlap (770.67 sq pts)",
+        "  Elements 5 and 6 overlap (914.55 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 55,
+      "collision_count": 28
+    },
+    "seite3_f5.yml": {
+      "file": "seite3_f5.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 28 collision(s)",
+        "  Elements 0 and 1 overlap (744.60 sq pts)",
+        "  Elements 2 and 3 overlap (1272.77 sq pts)",
+        "  Elements 3 and 4 overlap (770.66 sq pts)",
+        "  Elements 4 and 5 overlap (770.67 sq pts)",
+        "  Elements 5 and 6 overlap (914.55 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 55,
+      "collision_count": 28
+    },
+    "seite3_f6.yml": {
+      "file": "seite3_f6.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 28 collision(s)",
+        "  Elements 0 and 1 overlap (744.60 sq pts)",
+        "  Elements 2 and 3 overlap (1272.77 sq pts)",
+        "  Elements 3 and 4 overlap (770.66 sq pts)",
+        "  Elements 4 and 5 overlap (770.67 sq pts)",
+        "  Elements 5 and 6 overlap (914.55 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 55,
+      "collision_count": 28
+    },
+    "seite3_f7.yml": {
+      "file": "seite3_f7.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 28 collision(s)",
+        "  Elements 0 and 1 overlap (744.60 sq pts)",
+        "  Elements 2 and 3 overlap (1272.77 sq pts)",
+        "  Elements 3 and 4 overlap (770.66 sq pts)",
+        "  Elements 4 and 5 overlap (770.67 sq pts)",
+        "  Elements 5 and 6 overlap (914.55 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 55,
+      "collision_count": 28
+    },
+    "seite3_f8.yml": {
+      "file": "seite3_f8.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 28 collision(s)",
+        "  Elements 0 and 1 overlap (744.60 sq pts)",
+        "  Elements 2 and 3 overlap (1272.77 sq pts)",
+        "  Elements 3 and 4 overlap (770.66 sq pts)",
+        "  Elements 4 and 5 overlap (770.67 sq pts)",
+        "  Elements 5 and 6 overlap (914.55 sq pts)"
+      ],
+      "warnings": [],
+      "element_count": 55,
+      "collision_count": 28
+    },
+    "seite4_f1.yml": {
+      "file": "seite4_f1.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 6 and 51 overlap (121.38 sq pts)",
+        "  Elements 6 and 55 overlap (58.18 sq pts)",
+        "  Elements 8 and 9 overlap (112.03 sq pts)",
+        "  Elements 18 and 19 overlap (760.54 sq pts)",
+        "  Elements 20 and 21 overlap (855.44 sq pts)"
+      ],
+      "warnings": [
+        "Element 7 ('Position: (521.5273132324219, '): Very small width (0.96 pts)",
+        "Element 8 ('ohne j\u00e4hrlicher Stromtariferh\u00f6'): Very small width (4.03 pts)",
+        "Element 9 ('mit j\u00e4hrlicher Stromtariferh\u00f6h'): Very small width (4.15 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 30
+    },
+    "seite4_f2.yml": {
+      "file": "seite4_f2.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 6 and 51 overlap (121.38 sq pts)",
+        "  Elements 6 and 55 overlap (58.18 sq pts)",
+        "  Elements 8 and 9 overlap (112.03 sq pts)",
+        "  Elements 18 and 19 overlap (760.54 sq pts)",
+        "  Elements 20 and 21 overlap (855.44 sq pts)"
+      ],
+      "warnings": [
+        "Element 7 ('Position: (521.5273132324219, '): Very small width (0.96 pts)",
+        "Element 8 ('ohne j\u00e4hrlicher Stromtariferh\u00f6'): Very small width (4.03 pts)",
+        "Element 9 ('mit j\u00e4hrlicher Stromtariferh\u00f6h'): Very small width (4.15 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 30
+    },
+    "seite4_f3.yml": {
+      "file": "seite4_f3.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 6 and 51 overlap (121.38 sq pts)",
+        "  Elements 6 and 55 overlap (58.18 sq pts)",
+        "  Elements 8 and 9 overlap (112.03 sq pts)",
+        "  Elements 18 and 19 overlap (760.54 sq pts)",
+        "  Elements 20 and 21 overlap (855.44 sq pts)"
+      ],
+      "warnings": [
+        "Element 7 ('Position: (521.5273132324219, '): Very small width (0.96 pts)",
+        "Element 8 ('ohne j\u00e4hrlicher Stromtariferh\u00f6'): Very small width (4.03 pts)",
+        "Element 9 ('mit j\u00e4hrlicher Stromtariferh\u00f6h'): Very small width (4.15 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 30
+    },
+    "seite4_f4.yml": {
+      "file": "seite4_f4.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 6 and 51 overlap (121.38 sq pts)",
+        "  Elements 6 and 55 overlap (58.18 sq pts)",
+        "  Elements 8 and 9 overlap (112.03 sq pts)",
+        "  Elements 18 and 19 overlap (760.54 sq pts)",
+        "  Elements 20 and 21 overlap (855.44 sq pts)"
+      ],
+      "warnings": [
+        "Element 7 ('Position: (521.5273132324219, '): Very small width (0.96 pts)",
+        "Element 8 ('ohne j\u00e4hrlicher Stromtariferh\u00f6'): Very small width (4.03 pts)",
+        "Element 9 ('mit j\u00e4hrlicher Stromtariferh\u00f6h'): Very small width (4.15 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 30
+    },
+    "seite4_f5.yml": {
+      "file": "seite4_f5.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 6 and 51 overlap (121.38 sq pts)",
+        "  Elements 6 and 55 overlap (58.18 sq pts)",
+        "  Elements 8 and 9 overlap (112.03 sq pts)",
+        "  Elements 18 and 19 overlap (760.54 sq pts)",
+        "  Elements 20 and 21 overlap (855.44 sq pts)"
+      ],
+      "warnings": [
+        "Element 7 ('Position: (521.5273132324219, '): Very small width (0.96 pts)",
+        "Element 8 ('ohne j\u00e4hrlicher Stromtariferh\u00f6'): Very small width (4.03 pts)",
+        "Element 9 ('mit j\u00e4hrlicher Stromtariferh\u00f6h'): Very small width (4.15 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 30
+    },
+    "seite4_f6.yml": {
+      "file": "seite4_f6.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 6 and 51 overlap (121.38 sq pts)",
+        "  Elements 6 and 55 overlap (58.18 sq pts)",
+        "  Elements 8 and 9 overlap (112.03 sq pts)",
+        "  Elements 18 and 19 overlap (760.54 sq pts)",
+        "  Elements 20 and 21 overlap (855.44 sq pts)"
+      ],
+      "warnings": [
+        "Element 7 ('Position: (521.5273132324219, '): Very small width (0.96 pts)",
+        "Element 8 ('ohne j\u00e4hrlicher Stromtariferh\u00f6'): Very small width (4.03 pts)",
+        "Element 9 ('mit j\u00e4hrlicher Stromtariferh\u00f6h'): Very small width (4.15 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 30
+    },
+    "seite4_f7.yml": {
+      "file": "seite4_f7.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 6 and 51 overlap (121.38 sq pts)",
+        "  Elements 6 and 55 overlap (58.18 sq pts)",
+        "  Elements 8 and 9 overlap (112.03 sq pts)",
+        "  Elements 18 and 19 overlap (760.54 sq pts)",
+        "  Elements 20 and 21 overlap (855.44 sq pts)"
+      ],
+      "warnings": [
+        "Element 7 ('Position: (521.5273132324219, '): Very small width (0.96 pts)",
+        "Element 8 ('ohne j\u00e4hrlicher Stromtariferh\u00f6'): Very small width (4.03 pts)",
+        "Element 9 ('mit j\u00e4hrlicher Stromtariferh\u00f6h'): Very small width (4.15 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 30
+    },
+    "seite4_f8.yml": {
+      "file": "seite4_f8.yml",
+      "passed": false,
+      "tests": {
+        "bounds": true,
+        "overlaps": false,
+        "format_valid": true
+      },
+      "errors": [
+        "Found 30 collision(s)",
+        "  Elements 6 and 51 overlap (121.38 sq pts)",
+        "  Elements 6 and 55 overlap (58.18 sq pts)",
+        "  Elements 8 and 9 overlap (112.03 sq pts)",
+        "  Elements 18 and 19 overlap (760.54 sq pts)",
+        "  Elements 20 and 21 overlap (855.44 sq pts)"
+      ],
+      "warnings": [
+        "Element 7 ('Position: (521.5273132324219, '): Very small width (0.96 pts)",
+        "Element 8 ('ohne j\u00e4hrlicher Stromtariferh\u00f6'): Very small width (4.03 pts)",
+        "Element 9 ('mit j\u00e4hrlicher Stromtariferh\u00f6h'): Very small width (4.15 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 30
+    },
+    "seite5_f1.yml": {
+      "file": "seite5_f1.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 54 ('Logomodul'): x2 (730.66) exceeds page width (595)",
+        "Element 55 ('Logoricht'): x2 (730.66) exceeds page width (595)",
+        "Element 56 ('Logoakkus'): x2 (730.66) exceeds page width (595)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Found 141 collision(s)",
+        "  Elements 0 and 1 overlap (4985.38 sq pts)",
+        "  Elements 3 and 5 overlap (1151.35 sq pts)",
+        "  Elements 3 and 7 overlap (113.15 sq pts)",
+        "  Elements 4 and 6 overlap (2790.27 sq pts)",
+        "  Elements 4 and 7 overlap (34.28 sq pts)",
+        "Element 56: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 57: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 58: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 65: Invalid X coordinates (620.0, 680.0)",
+        "Element 66: Invalid X coordinates (620.0, 680.0)",
+        "Element 67: Invalid X coordinates (620.0, 680.0)"
+      ],
+      "warnings": [
+        "Element 54 ('Logomodul'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 55 ('Logoricht'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 56 ('Logoakkus'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)"
+      ],
+      "element_count": 66,
+      "collision_count": 141
+    },
+    "seite5_f2.yml": {
+      "file": "seite5_f2.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 54 ('Logomodul'): x2 (730.66) exceeds page width (595)",
+        "Element 55 ('Logoricht'): x2 (730.66) exceeds page width (595)",
+        "Element 56 ('Logoakkus'): x2 (730.66) exceeds page width (595)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Found 141 collision(s)",
+        "  Elements 0 and 1 overlap (4985.38 sq pts)",
+        "  Elements 3 and 5 overlap (1151.35 sq pts)",
+        "  Elements 3 and 7 overlap (113.15 sq pts)",
+        "  Elements 4 and 6 overlap (2790.27 sq pts)",
+        "  Elements 4 and 7 overlap (34.28 sq pts)",
+        "Element 56: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 57: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 58: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 65: Invalid X coordinates (620.0, 680.0)",
+        "Element 66: Invalid X coordinates (620.0, 680.0)",
+        "Element 67: Invalid X coordinates (620.0, 680.0)"
+      ],
+      "warnings": [
+        "Element 54 ('Logomodul'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 55 ('Logoricht'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 56 ('Logoakkus'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)"
+      ],
+      "element_count": 66,
+      "collision_count": 141
+    },
+    "seite5_f3.yml": {
+      "file": "seite5_f3.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 54 ('Logomodul'): x2 (730.66) exceeds page width (595)",
+        "Element 55 ('Logoricht'): x2 (730.66) exceeds page width (595)",
+        "Element 56 ('Logoakkus'): x2 (730.66) exceeds page width (595)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Found 141 collision(s)",
+        "  Elements 0 and 1 overlap (4985.38 sq pts)",
+        "  Elements 3 and 5 overlap (1151.35 sq pts)",
+        "  Elements 3 and 7 overlap (113.15 sq pts)",
+        "  Elements 4 and 6 overlap (2790.27 sq pts)",
+        "  Elements 4 and 7 overlap (34.28 sq pts)",
+        "Element 56: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 57: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 58: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 65: Invalid X coordinates (620.0, 680.0)",
+        "Element 66: Invalid X coordinates (620.0, 680.0)",
+        "Element 67: Invalid X coordinates (620.0, 680.0)"
+      ],
+      "warnings": [
+        "Element 54 ('Logomodul'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 55 ('Logoricht'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 56 ('Logoakkus'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)"
+      ],
+      "element_count": 66,
+      "collision_count": 141
+    },
+    "seite5_f4.yml": {
+      "file": "seite5_f4.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 54 ('Logomodul'): x2 (730.66) exceeds page width (595)",
+        "Element 55 ('Logoricht'): x2 (730.66) exceeds page width (595)",
+        "Element 56 ('Logoakkus'): x2 (730.66) exceeds page width (595)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Found 141 collision(s)",
+        "  Elements 0 and 1 overlap (4985.38 sq pts)",
+        "  Elements 3 and 5 overlap (1151.35 sq pts)",
+        "  Elements 3 and 7 overlap (113.15 sq pts)",
+        "  Elements 4 and 6 overlap (2790.27 sq pts)",
+        "  Elements 4 and 7 overlap (34.28 sq pts)",
+        "Element 56: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 57: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 58: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 65: Invalid X coordinates (620.0, 680.0)",
+        "Element 66: Invalid X coordinates (620.0, 680.0)",
+        "Element 67: Invalid X coordinates (620.0, 680.0)"
+      ],
+      "warnings": [
+        "Element 54 ('Logomodul'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 55 ('Logoricht'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 56 ('Logoakkus'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)"
+      ],
+      "element_count": 66,
+      "collision_count": 141
+    },
+    "seite5_f5.yml": {
+      "file": "seite5_f5.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 54 ('Logomodul'): x2 (730.66) exceeds page width (595)",
+        "Element 55 ('Logoricht'): x2 (730.66) exceeds page width (595)",
+        "Element 56 ('Logoakkus'): x2 (730.66) exceeds page width (595)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Found 141 collision(s)",
+        "  Elements 0 and 1 overlap (4985.38 sq pts)",
+        "  Elements 3 and 5 overlap (1151.35 sq pts)",
+        "  Elements 3 and 7 overlap (113.15 sq pts)",
+        "  Elements 4 and 6 overlap (2790.27 sq pts)",
+        "  Elements 4 and 7 overlap (34.28 sq pts)",
+        "Element 56: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 57: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 58: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 65: Invalid X coordinates (620.0, 680.0)",
+        "Element 66: Invalid X coordinates (620.0, 680.0)",
+        "Element 67: Invalid X coordinates (620.0, 680.0)"
+      ],
+      "warnings": [
+        "Element 54 ('Logomodul'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 55 ('Logoricht'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 56 ('Logoakkus'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)"
+      ],
+      "element_count": 66,
+      "collision_count": 141
+    },
+    "seite5_f6.yml": {
+      "file": "seite5_f6.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 54 ('Logomodul'): x2 (730.66) exceeds page width (595)",
+        "Element 55 ('Logoricht'): x2 (730.66) exceeds page width (595)",
+        "Element 56 ('Logoakkus'): x2 (730.66) exceeds page width (595)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Found 141 collision(s)",
+        "  Elements 0 and 1 overlap (4985.38 sq pts)",
+        "  Elements 3 and 5 overlap (1151.35 sq pts)",
+        "  Elements 3 and 7 overlap (113.15 sq pts)",
+        "  Elements 4 and 6 overlap (2790.27 sq pts)",
+        "  Elements 4 and 7 overlap (34.28 sq pts)",
+        "Element 56: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 57: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 58: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 65: Invalid X coordinates (620.0, 680.0)",
+        "Element 66: Invalid X coordinates (620.0, 680.0)",
+        "Element 67: Invalid X coordinates (620.0, 680.0)"
+      ],
+      "warnings": [
+        "Element 54 ('Logomodul'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 55 ('Logoricht'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 56 ('Logoakkus'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)"
+      ],
+      "element_count": 66,
+      "collision_count": 141
+    },
+    "seite5_f7.yml": {
+      "file": "seite5_f7.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 54 ('Logomodul'): x2 (730.66) exceeds page width (595)",
+        "Element 55 ('Logoricht'): x2 (730.66) exceeds page width (595)",
+        "Element 56 ('Logoakkus'): x2 (730.66) exceeds page width (595)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Found 141 collision(s)",
+        "  Elements 0 and 1 overlap (4985.38 sq pts)",
+        "  Elements 3 and 5 overlap (1151.35 sq pts)",
+        "  Elements 3 and 7 overlap (113.15 sq pts)",
+        "  Elements 4 and 6 overlap (2790.27 sq pts)",
+        "  Elements 4 and 7 overlap (34.28 sq pts)",
+        "Element 56: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 57: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 58: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 65: Invalid X coordinates (620.0, 680.0)",
+        "Element 66: Invalid X coordinates (620.0, 680.0)",
+        "Element 67: Invalid X coordinates (620.0, 680.0)"
+      ],
+      "warnings": [
+        "Element 54 ('Logomodul'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 55 ('Logoricht'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 56 ('Logoakkus'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)"
+      ],
+      "element_count": 66,
+      "collision_count": 141
+    },
+    "seite5_f8.yml": {
+      "file": "seite5_f8.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 54 ('Logomodul'): x2 (730.66) exceeds page width (595)",
+        "Element 55 ('Logoricht'): x2 (730.66) exceeds page width (595)",
+        "Element 56 ('Logoakkus'): x2 (730.66) exceeds page width (595)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) exceeds page width (595)",
+        "Found 141 collision(s)",
+        "  Elements 0 and 1 overlap (4985.38 sq pts)",
+        "  Elements 3 and 5 overlap (1151.35 sq pts)",
+        "  Elements 3 and 7 overlap (113.15 sq pts)",
+        "  Elements 4 and 6 overlap (2790.27 sq pts)",
+        "  Elements 4 and 7 overlap (34.28 sq pts)",
+        "Element 56: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 57: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 58: Invalid X coordinates (670.656005859375, 730.656005859375)",
+        "Element 65: Invalid X coordinates (620.0, 680.0)",
+        "Element 66: Invalid X coordinates (620.0, 680.0)",
+        "Element 67: Invalid X coordinates (620.0, 680.0)"
+      ],
+      "warnings": [
+        "Element 54 ('Logomodul'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 55 ('Logoricht'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 56 ('Logoakkus'): x2 (730.66) is too close to right edge (min margin: 10)",
+        "Element 63 ('Position: (620.0, 180.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 64 ('Position: (620.0, 370.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)",
+        "Element 65 ('Position: (620.0, 560.0, 680.0'): x2 (680.00) is too close to right edge (min margin: 10)"
+      ],
+      "element_count": 66,
+      "collision_count": 141
+    },
+    "seite6_f1.yml": {
+      "file": "seite6_f1.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) exceeds page width (595)",
+        "Found 97 collision(s)",
+        "  Elements 0 and 1 overlap (205.60 sq pts)",
+        "  Elements 0 and 2 overlap (160.90 sq pts)",
+        "  Elements 0 and 16 overlap (196.66 sq pts)",
+        "  Elements 0 and 17 overlap (267.37 sq pts)",
+        "  Elements 1 and 2 overlap (12.61 sq pts)",
+        "Element 33: Invalid X coordinates (415.64636993408203, 638.1812744140625)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 9 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 18 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) is too close to right edge (min margin: 10)",
+        "Element 39 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 43 ('_____'): Very small height (3.26 pts)",
+        "Element 44 ('___'): Very small height (3.26 pts)",
+        "Element 45 ('_'): Very small height (3.26 pts)",
+        "Element 47 ('Position: (428.97930908203125,'): Very small width (3.38 pts)",
+        "Element 52 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 55 ('Position: (294.0341491699219, '): Very small width (3.38 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 97
+    },
+    "seite6_f2.yml": {
+      "file": "seite6_f2.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) exceeds page width (595)",
+        "Found 97 collision(s)",
+        "  Elements 0 and 1 overlap (205.60 sq pts)",
+        "  Elements 0 and 2 overlap (160.90 sq pts)",
+        "  Elements 0 and 16 overlap (196.66 sq pts)",
+        "  Elements 0 and 17 overlap (267.37 sq pts)",
+        "  Elements 1 and 2 overlap (12.61 sq pts)",
+        "Element 33: Invalid X coordinates (415.64636993408203, 638.1812744140625)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 9 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 18 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) is too close to right edge (min margin: 10)",
+        "Element 39 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 43 ('_____'): Very small height (3.26 pts)",
+        "Element 44 ('___'): Very small height (3.26 pts)",
+        "Element 45 ('_'): Very small height (3.26 pts)",
+        "Element 47 ('Position: (428.97930908203125,'): Very small width (3.38 pts)",
+        "Element 52 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 55 ('Position: (294.0341491699219, '): Very small width (3.38 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 97
+    },
+    "seite6_f3.yml": {
+      "file": "seite6_f3.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) exceeds page width (595)",
+        "Found 97 collision(s)",
+        "  Elements 0 and 1 overlap (205.60 sq pts)",
+        "  Elements 0 and 2 overlap (160.90 sq pts)",
+        "  Elements 0 and 16 overlap (196.66 sq pts)",
+        "  Elements 0 and 17 overlap (267.37 sq pts)",
+        "  Elements 1 and 2 overlap (12.61 sq pts)",
+        "Element 33: Invalid X coordinates (415.64636993408203, 638.1812744140625)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 9 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 18 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) is too close to right edge (min margin: 10)",
+        "Element 39 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 43 ('_____'): Very small height (3.26 pts)",
+        "Element 44 ('___'): Very small height (3.26 pts)",
+        "Element 45 ('_'): Very small height (3.26 pts)",
+        "Element 47 ('Position: (428.97930908203125,'): Very small width (3.38 pts)",
+        "Element 52 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 55 ('Position: (294.0341491699219, '): Very small width (3.38 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 97
+    },
+    "seite6_f4.yml": {
+      "file": "seite6_f4.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) exceeds page width (595)",
+        "Found 97 collision(s)",
+        "  Elements 0 and 1 overlap (205.60 sq pts)",
+        "  Elements 0 and 2 overlap (160.90 sq pts)",
+        "  Elements 0 and 16 overlap (196.66 sq pts)",
+        "  Elements 0 and 17 overlap (267.37 sq pts)",
+        "  Elements 1 and 2 overlap (12.61 sq pts)",
+        "Element 33: Invalid X coordinates (415.64636993408203, 638.1812744140625)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 9 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 18 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) is too close to right edge (min margin: 10)",
+        "Element 39 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 43 ('_____'): Very small height (3.26 pts)",
+        "Element 44 ('___'): Very small height (3.26 pts)",
+        "Element 45 ('_'): Very small height (3.26 pts)",
+        "Element 47 ('Position: (428.97930908203125,'): Very small width (3.38 pts)",
+        "Element 52 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 55 ('Position: (294.0341491699219, '): Very small width (3.38 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 97
+    },
+    "seite6_f5.yml": {
+      "file": "seite6_f5.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) exceeds page width (595)",
+        "Found 97 collision(s)",
+        "  Elements 0 and 1 overlap (205.60 sq pts)",
+        "  Elements 0 and 2 overlap (160.90 sq pts)",
+        "  Elements 0 and 16 overlap (196.66 sq pts)",
+        "  Elements 0 and 17 overlap (267.37 sq pts)",
+        "  Elements 1 and 2 overlap (12.61 sq pts)",
+        "Element 33: Invalid X coordinates (415.64636993408203, 638.1812744140625)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 9 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 18 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) is too close to right edge (min margin: 10)",
+        "Element 39 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 43 ('_____'): Very small height (3.26 pts)",
+        "Element 44 ('___'): Very small height (3.26 pts)",
+        "Element 45 ('_'): Very small height (3.26 pts)",
+        "Element 47 ('Position: (428.97930908203125,'): Very small width (3.38 pts)",
+        "Element 52 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 55 ('Position: (294.0341491699219, '): Very small width (3.38 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 97
+    },
+    "seite6_f6.yml": {
+      "file": "seite6_f6.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) exceeds page width (595)",
+        "Found 97 collision(s)",
+        "  Elements 0 and 1 overlap (205.60 sq pts)",
+        "  Elements 0 and 2 overlap (160.90 sq pts)",
+        "  Elements 0 and 16 overlap (196.66 sq pts)",
+        "  Elements 0 and 17 overlap (267.37 sq pts)",
+        "  Elements 1 and 2 overlap (12.61 sq pts)",
+        "Element 33: Invalid X coordinates (415.64636993408203, 638.1812744140625)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 9 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 18 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) is too close to right edge (min margin: 10)",
+        "Element 39 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 43 ('_____'): Very small height (3.26 pts)",
+        "Element 44 ('___'): Very small height (3.26 pts)",
+        "Element 45 ('_'): Very small height (3.26 pts)",
+        "Element 47 ('Position: (428.97930908203125,'): Very small width (3.38 pts)",
+        "Element 52 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 55 ('Position: (294.0341491699219, '): Very small width (3.38 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 97
+    },
+    "seite6_f7.yml": {
+      "file": "seite6_f7.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) exceeds page width (595)",
+        "Found 97 collision(s)",
+        "  Elements 0 and 1 overlap (205.60 sq pts)",
+        "  Elements 0 and 2 overlap (160.90 sq pts)",
+        "  Elements 0 and 16 overlap (196.66 sq pts)",
+        "  Elements 0 and 17 overlap (267.37 sq pts)",
+        "  Elements 1 and 2 overlap (12.61 sq pts)",
+        "Element 33: Invalid X coordinates (415.64636993408203, 638.1812744140625)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 9 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 18 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) is too close to right edge (min margin: 10)",
+        "Element 39 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 43 ('_____'): Very small height (3.26 pts)",
+        "Element 44 ('___'): Very small height (3.26 pts)",
+        "Element 45 ('_'): Very small height (3.26 pts)",
+        "Element 47 ('Position: (428.97930908203125,'): Very small width (3.38 pts)",
+        "Element 52 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 55 ('Position: (294.0341491699219, '): Very small width (3.38 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 97
+    },
+    "seite6_f8.yml": {
+      "file": "seite6_f8.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) exceeds page width (595)",
+        "Found 97 collision(s)",
+        "  Elements 0 and 1 overlap (205.60 sq pts)",
+        "  Elements 0 and 2 overlap (160.90 sq pts)",
+        "  Elements 0 and 16 overlap (196.66 sq pts)",
+        "  Elements 0 and 17 overlap (267.37 sq pts)",
+        "  Elements 1 and 2 overlap (12.61 sq pts)",
+        "Element 33: Invalid X coordinates (415.64636993408203, 638.1812744140625)"
+      ],
+      "warnings": [
+        "Element 1 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 9 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 18 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 33 ('3.053,21 kg...'): x2 (638.18) is too close to right edge (min margin: 10)",
+        "Element 39 ('Position: (299.0689697265625, '): Very small width (1.99 pts)",
+        "Element 43 ('_____'): Very small height (3.26 pts)",
+        "Element 44 ('___'): Very small height (3.26 pts)",
+        "Element 45 ('_'): Very small height (3.26 pts)",
+        "Element 47 ('Position: (428.97930908203125,'): Very small width (3.38 pts)",
+        "Element 52 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 55 ('Position: (294.0341491699219, '): Very small width (3.38 pts)"
+      ],
+      "element_count": 59,
+      "collision_count": 97
+    },
+    "seite7_f1.yml": {
+      "file": "seite7_f1.yml",
+      "passed": true,
+      "tests": {
+        "bounds": true,
+        "overlaps": true,
+        "format_valid": true
+      },
+      "errors": [],
+      "warnings": [],
+      "element_count": 1,
+      "collision_count": 0
+    },
+    "seite7_f2.yml": {
+      "file": "seite7_f2.yml",
+      "passed": true,
+      "tests": {
+        "bounds": true,
+        "overlaps": true,
+        "format_valid": true
+      },
+      "errors": [],
+      "warnings": [],
+      "element_count": 1,
+      "collision_count": 0
+    },
+    "seite7_f3.yml": {
+      "file": "seite7_f3.yml",
+      "passed": true,
+      "tests": {
+        "bounds": true,
+        "overlaps": true,
+        "format_valid": true
+      },
+      "errors": [],
+      "warnings": [],
+      "element_count": 1,
+      "collision_count": 0
+    },
+    "seite7_f4.yml": {
+      "file": "seite7_f4.yml",
+      "passed": true,
+      "tests": {
+        "bounds": true,
+        "overlaps": true,
+        "format_valid": true
+      },
+      "errors": [],
+      "warnings": [],
+      "element_count": 1,
+      "collision_count": 0
+    },
+    "seite7_f5.yml": {
+      "file": "seite7_f5.yml",
+      "passed": true,
+      "tests": {
+        "bounds": true,
+        "overlaps": true,
+        "format_valid": true
+      },
+      "errors": [],
+      "warnings": [],
+      "element_count": 1,
+      "collision_count": 0
+    },
+    "seite7_f6.yml": {
+      "file": "seite7_f6.yml",
+      "passed": true,
+      "tests": {
+        "bounds": true,
+        "overlaps": true,
+        "format_valid": true
+      },
+      "errors": [],
+      "warnings": [],
+      "element_count": 1,
+      "collision_count": 0
+    },
+    "seite7_f7.yml": {
+      "file": "seite7_f7.yml",
+      "passed": true,
+      "tests": {
+        "bounds": true,
+        "overlaps": true,
+        "format_valid": true
+      },
+      "errors": [],
+      "warnings": [],
+      "element_count": 1,
+      "collision_count": 0
+    },
+    "seite7_f8.yml": {
+      "file": "seite7_f8.yml",
+      "passed": true,
+      "tests": {
+        "bounds": true,
+        "overlaps": true,
+        "format_valid": true
+      },
+      "errors": [],
+      "warnings": [],
+      "element_count": 1,
+      "collision_count": 0
+    },
+    "seite8_f1.yml": {
+      "file": "seite8_f1.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) exceeds page height (842)",
+        "Found 110 collision(s)",
+        "  Elements 0 and 1 overlap (128.29 sq pts)",
+        "  Elements 0 and 18 overlap (1222.52 sq pts)",
+        "  Elements 0 and 19 overlap (114.42 sq pts)",
+        "  Elements 1 and 18 overlap (1006.03 sq pts)",
+        "  Elements 1 and 19 overlap (677.26 sq pts)",
+        "Element 61: Invalid Y coordinates (900.0, 920.0)"
+      ],
+      "warnings": [
+        "Element 17 ('Position: (124.5945053100586, '): Very small height (4.35 pts)",
+        "Element 42 ('Anzahlung bei Auftragserteilun'): Very small width (3.38 pts)",
+        "Element 44 ('nach erfolgreicher Lieferung u'): Very small width (3.38 pts)",
+        "Element 45 ('PV Komponente und nach abgesch'): Very small width (3.38 pts)",
+        "Element 47 ('nach erfolgreicher AC Elektroi'): Very small width (2.38 pts)",
+        "Element 48 ('sowie die Inbetriebnahme der P'): Very small width (2.38 pts)",
+        "Element 50 ('Position: (284.76068115234375,'): Very small width (3.38 pts)",
+        "Element 51 ('Position: (425.95843505859375,'): Very small width (3.38 pts)",
+        "Element 53 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 56 ('Position: (294.0341491699219, '): Very small width (3.38 pts)",
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) is too close to top edge (min margin: 10)"
+      ],
+      "element_count": 61,
+      "collision_count": 110
+    },
+    "seite8_f2.yml": {
+      "file": "seite8_f2.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) exceeds page height (842)",
+        "Found 110 collision(s)",
+        "  Elements 0 and 1 overlap (128.29 sq pts)",
+        "  Elements 0 and 18 overlap (1222.52 sq pts)",
+        "  Elements 0 and 19 overlap (114.42 sq pts)",
+        "  Elements 1 and 18 overlap (1006.03 sq pts)",
+        "  Elements 1 and 19 overlap (677.26 sq pts)",
+        "Element 61: Invalid Y coordinates (900.0, 920.0)"
+      ],
+      "warnings": [
+        "Element 17 ('Position: (124.5945053100586, '): Very small height (4.35 pts)",
+        "Element 42 ('Anzahlung bei Auftragserteilun'): Very small width (3.38 pts)",
+        "Element 44 ('nach erfolgreicher Lieferung u'): Very small width (3.38 pts)",
+        "Element 45 ('PV Komponente und nach abgesch'): Very small width (3.38 pts)",
+        "Element 47 ('nach erfolgreicher AC Elektroi'): Very small width (2.38 pts)",
+        "Element 48 ('sowie die Inbetriebnahme der P'): Very small width (2.38 pts)",
+        "Element 50 ('Position: (284.76068115234375,'): Very small width (3.38 pts)",
+        "Element 51 ('Position: (425.95843505859375,'): Very small width (3.38 pts)",
+        "Element 53 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 56 ('Position: (294.0341491699219, '): Very small width (3.38 pts)",
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) is too close to top edge (min margin: 10)"
+      ],
+      "element_count": 61,
+      "collision_count": 110
+    },
+    "seite8_f3.yml": {
+      "file": "seite8_f3.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) exceeds page height (842)",
+        "Found 110 collision(s)",
+        "  Elements 0 and 1 overlap (128.29 sq pts)",
+        "  Elements 0 and 18 overlap (1222.52 sq pts)",
+        "  Elements 0 and 19 overlap (114.42 sq pts)",
+        "  Elements 1 and 18 overlap (1006.03 sq pts)",
+        "  Elements 1 and 19 overlap (677.26 sq pts)",
+        "Element 61: Invalid Y coordinates (900.0, 920.0)"
+      ],
+      "warnings": [
+        "Element 17 ('Position: (124.5945053100586, '): Very small height (4.35 pts)",
+        "Element 42 ('Anzahlung bei Auftragserteilun'): Very small width (3.38 pts)",
+        "Element 44 ('nach erfolgreicher Lieferung u'): Very small width (3.38 pts)",
+        "Element 45 ('PV Komponente und nach abgesch'): Very small width (3.38 pts)",
+        "Element 47 ('nach erfolgreicher AC Elektroi'): Very small width (2.38 pts)",
+        "Element 48 ('sowie die Inbetriebnahme der P'): Very small width (2.38 pts)",
+        "Element 50 ('Position: (284.76068115234375,'): Very small width (3.38 pts)",
+        "Element 51 ('Position: (425.95843505859375,'): Very small width (3.38 pts)",
+        "Element 53 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 56 ('Position: (294.0341491699219, '): Very small width (3.38 pts)",
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) is too close to top edge (min margin: 10)"
+      ],
+      "element_count": 61,
+      "collision_count": 110
+    },
+    "seite8_f4.yml": {
+      "file": "seite8_f4.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) exceeds page height (842)",
+        "Found 110 collision(s)",
+        "  Elements 0 and 1 overlap (128.29 sq pts)",
+        "  Elements 0 and 18 overlap (1222.52 sq pts)",
+        "  Elements 0 and 19 overlap (114.42 sq pts)",
+        "  Elements 1 and 18 overlap (1006.03 sq pts)",
+        "  Elements 1 and 19 overlap (677.26 sq pts)",
+        "Element 61: Invalid Y coordinates (900.0, 920.0)"
+      ],
+      "warnings": [
+        "Element 17 ('Position: (124.5945053100586, '): Very small height (4.35 pts)",
+        "Element 42 ('Anzahlung bei Auftragserteilun'): Very small width (3.38 pts)",
+        "Element 44 ('nach erfolgreicher Lieferung u'): Very small width (3.38 pts)",
+        "Element 45 ('PV Komponente und nach abgesch'): Very small width (3.38 pts)",
+        "Element 47 ('nach erfolgreicher AC Elektroi'): Very small width (2.38 pts)",
+        "Element 48 ('sowie die Inbetriebnahme der P'): Very small width (2.38 pts)",
+        "Element 50 ('Position: (284.76068115234375,'): Very small width (3.38 pts)",
+        "Element 51 ('Position: (425.95843505859375,'): Very small width (3.38 pts)",
+        "Element 53 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 56 ('Position: (294.0341491699219, '): Very small width (3.38 pts)",
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) is too close to top edge (min margin: 10)"
+      ],
+      "element_count": 61,
+      "collision_count": 110
+    },
+    "seite8_f5.yml": {
+      "file": "seite8_f5.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) exceeds page height (842)",
+        "Found 110 collision(s)",
+        "  Elements 0 and 1 overlap (128.29 sq pts)",
+        "  Elements 0 and 18 overlap (1222.52 sq pts)",
+        "  Elements 0 and 19 overlap (114.42 sq pts)",
+        "  Elements 1 and 18 overlap (1006.03 sq pts)",
+        "  Elements 1 and 19 overlap (677.26 sq pts)",
+        "Element 61: Invalid Y coordinates (900.0, 920.0)"
+      ],
+      "warnings": [
+        "Element 17 ('Position: (124.5945053100586, '): Very small height (4.35 pts)",
+        "Element 42 ('Anzahlung bei Auftragserteilun'): Very small width (3.38 pts)",
+        "Element 44 ('nach erfolgreicher Lieferung u'): Very small width (3.38 pts)",
+        "Element 45 ('PV Komponente und nach abgesch'): Very small width (3.38 pts)",
+        "Element 47 ('nach erfolgreicher AC Elektroi'): Very small width (2.38 pts)",
+        "Element 48 ('sowie die Inbetriebnahme der P'): Very small width (2.38 pts)",
+        "Element 50 ('Position: (284.76068115234375,'): Very small width (3.38 pts)",
+        "Element 51 ('Position: (425.95843505859375,'): Very small width (3.38 pts)",
+        "Element 53 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 56 ('Position: (294.0341491699219, '): Very small width (3.38 pts)",
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) is too close to top edge (min margin: 10)"
+      ],
+      "element_count": 61,
+      "collision_count": 110
+    },
+    "seite8_f6.yml": {
+      "file": "seite8_f6.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) exceeds page height (842)",
+        "Found 110 collision(s)",
+        "  Elements 0 and 1 overlap (128.29 sq pts)",
+        "  Elements 0 and 18 overlap (1222.52 sq pts)",
+        "  Elements 0 and 19 overlap (114.42 sq pts)",
+        "  Elements 1 and 18 overlap (1006.03 sq pts)",
+        "  Elements 1 and 19 overlap (677.26 sq pts)",
+        "Element 61: Invalid Y coordinates (900.0, 920.0)"
+      ],
+      "warnings": [
+        "Element 17 ('Position: (124.5945053100586, '): Very small height (4.35 pts)",
+        "Element 42 ('Anzahlung bei Auftragserteilun'): Very small width (3.38 pts)",
+        "Element 44 ('nach erfolgreicher Lieferung u'): Very small width (3.38 pts)",
+        "Element 45 ('PV Komponente und nach abgesch'): Very small width (3.38 pts)",
+        "Element 47 ('nach erfolgreicher AC Elektroi'): Very small width (2.38 pts)",
+        "Element 48 ('sowie die Inbetriebnahme der P'): Very small width (2.38 pts)",
+        "Element 50 ('Position: (284.76068115234375,'): Very small width (3.38 pts)",
+        "Element 51 ('Position: (425.95843505859375,'): Very small width (3.38 pts)",
+        "Element 53 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 56 ('Position: (294.0341491699219, '): Very small width (3.38 pts)",
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) is too close to top edge (min margin: 10)"
+      ],
+      "element_count": 61,
+      "collision_count": 110
+    },
+    "seite8_f7.yml": {
+      "file": "seite8_f7.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) exceeds page height (842)",
+        "Found 110 collision(s)",
+        "  Elements 0 and 1 overlap (128.29 sq pts)",
+        "  Elements 0 and 18 overlap (1222.52 sq pts)",
+        "  Elements 0 and 19 overlap (114.42 sq pts)",
+        "  Elements 1 and 18 overlap (1006.03 sq pts)",
+        "  Elements 1 and 19 overlap (677.26 sq pts)",
+        "Element 61: Invalid Y coordinates (900.0, 920.0)"
+      ],
+      "warnings": [
+        "Element 17 ('Position: (124.5945053100586, '): Very small height (4.35 pts)",
+        "Element 42 ('Anzahlung bei Auftragserteilun'): Very small width (3.38 pts)",
+        "Element 44 ('nach erfolgreicher Lieferung u'): Very small width (3.38 pts)",
+        "Element 45 ('PV Komponente und nach abgesch'): Very small width (3.38 pts)",
+        "Element 47 ('nach erfolgreicher AC Elektroi'): Very small width (2.38 pts)",
+        "Element 48 ('sowie die Inbetriebnahme der P'): Very small width (2.38 pts)",
+        "Element 50 ('Position: (284.76068115234375,'): Very small width (3.38 pts)",
+        "Element 51 ('Position: (425.95843505859375,'): Very small width (3.38 pts)",
+        "Element 53 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 56 ('Position: (294.0341491699219, '): Very small width (3.38 pts)",
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) is too close to top edge (min margin: 10)"
+      ],
+      "element_count": 61,
+      "collision_count": 110
+    },
+    "seite8_f8.yml": {
+      "file": "seite8_f8.yml",
+      "passed": false,
+      "tests": {
+        "bounds": false,
+        "overlaps": false,
+        "format_valid": false
+      },
+      "errors": [
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) exceeds page height (842)",
+        "Found 110 collision(s)",
+        "  Elements 0 and 1 overlap (128.29 sq pts)",
+        "  Elements 0 and 18 overlap (1222.52 sq pts)",
+        "  Elements 0 and 19 overlap (114.42 sq pts)",
+        "  Elements 1 and 18 overlap (1006.03 sq pts)",
+        "  Elements 1 and 19 overlap (677.26 sq pts)",
+        "Element 61: Invalid Y coordinates (900.0, 920.0)"
+      ],
+      "warnings": [
+        "Element 17 ('Position: (124.5945053100586, '): Very small height (4.35 pts)",
+        "Element 42 ('Anzahlung bei Auftragserteilun'): Very small width (3.38 pts)",
+        "Element 44 ('nach erfolgreicher Lieferung u'): Very small width (3.38 pts)",
+        "Element 45 ('PV Komponente und nach abgesch'): Very small width (3.38 pts)",
+        "Element 47 ('nach erfolgreicher AC Elektroi'): Very small width (2.38 pts)",
+        "Element 48 ('sowie die Inbetriebnahme der P'): Very small width (2.38 pts)",
+        "Element 50 ('Position: (284.76068115234375,'): Very small width (3.38 pts)",
+        "Element 51 ('Position: (425.95843505859375,'): Very small width (3.38 pts)",
+        "Element 53 ('Position: (149.2651824951172, '): Very small width (1.99 pts)",
+        "Element 56 ('Position: (294.0341491699219, '): Very small width (3.38 pts)",
+        "Element 60 ('Position: (200.0, 900.0, 250.0'): y2 (920.00) is too close to top edge (min margin: 10)"
+      ],
+      "element_count": 61,
+      "collision_count": 110
+    }
+  }
+}

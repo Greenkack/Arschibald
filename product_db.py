@@ -6,6 +6,36 @@ import sys  # KORREKTUR: sys-Modul importieren
 import traceback
 from datetime import datetime
 from typing import Any
+__all__ = [
+    'DB_AVAILABLE',
+    'add_product',
+    'calculate_enhanced_product_pricing',
+    'calculate_price_by_method',
+    'calculate_selling_price',
+    'calculate_system_pricing',
+    'clear_all_products',
+    'create_product_table',
+    'delete_product',
+    'generate_product_dynamic_keys',
+    'get_pricing_history',
+    'get_product_by_id',
+    'get_product_by_model_name',
+    'get_product_id_by_model_name',
+    'get_product_pricing_breakdown',
+    'get_product_with_dynamic_keys',
+    'get_products_by_calculate_per',
+    'get_products_with_dynamic_keys',
+    'list_product_categories',
+    'list_products',
+    'log_pricing_change',
+    'set_product_margin',
+    'update_product',
+    'update_product_image',
+    'update_product_pricing_fields',
+    'update_product_purchase_price',
+    'validate_calculate_per_integration',
+]
+
 
 # Datenbankverbindung und Verfügbarkeitsstatus
 DB_AVAILABLE = False

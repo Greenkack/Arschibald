@@ -1,0 +1,67 @@
+/* Hauptcontainer */
+div.hersteller-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+/* Zweispaltiges Layout */
+div.hersteller-container > div.two-column {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+}
+/* Logospalte */
+div.hersteller-container > div.two-column > div.logo-column {
+    flex: 1;
+    max-width: 200px;
+    align-self: flex-start;
+}
+/* Adressspalte */
+div.hersteller-container > div.two-column > div.address-column {
+    flex: 1;
+    padding-top: 40px;
+    text-align: center;
+}
+/* Logo-Container */
+div.hersteller-container div.logo-container {
+    position: relative;
+    overflow: hidden;
+    margin-top: 0;
+}
+/* Logo-Bild */
+div.hersteller-container div.logo-container img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    clip-path: inset(10px 0 50px 0);
+    display: block;
+}
+/* Media Query für mobile Ansicht */
+@media (max-width: 768px) {
+    div.hersteller-container > div.two-column {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    div.hersteller-container > div.two-column > div.logo-column,
+    div.hersteller-container > div.two-column > div.address-column {
+        width: 100%;
+        text-align: center;
+        max-width: none; /* Entfernt die max-width Beschränkung */
+    }
+    
+    div.hersteller-container > div.two-column > div.address-column {
+        padding-top: 0;
+    }
+
+    /* Überarbeitete Regeln für zentriertes Logo */
+    div.hersteller-container div.logo-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    div.hersteller-container div.logo-container img {
+        width: auto;  /* Setzt width zurück */
+        max-width: 200px;
+    }
+}

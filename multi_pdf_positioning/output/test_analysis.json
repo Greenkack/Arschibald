@@ -1,0 +1,224 @@
+{
+  "total_pdfs": 2,
+  "analyses": [
+    {
+      "firma": 1,
+      "seite": 1,
+      "page_size": {
+        "width": 595.32,
+        "height": 841.92
+      },
+      "design_regions": [
+        {
+          "type": "header",
+          "bounds": {
+            "x1": 0,
+            "y1": 673.5360000000001,
+            "x2": 595.32,
+            "y2": 841.92
+          },
+          "dominant_color": "#007BFF",
+          "suggested_text_color": "#FFFFFF"
+        },
+        {
+          "type": "content",
+          "bounds": {
+            "x1": 0,
+            "y1": 84.19200000000001,
+            "x2": 595.32,
+            "y2": 673.5360000000001
+          },
+          "dominant_color": "#FFFFFF",
+          "suggested_text_color": "#000000"
+        },
+        {
+          "type": "footer",
+          "bounds": {
+            "x1": 0,
+            "y1": 0,
+            "x2": 595.32,
+            "y2": 84.19200000000001
+          },
+          "dominant_color": "#F8F9FA",
+          "suggested_text_color": "#000000"
+        }
+      ],
+      "visual_elements": [
+        {
+          "type": "shape",
+          "position": [
+            0,
+            673.5360000000001,
+            595.32,
+            841.92
+          ],
+          "color": "#007BFF"
+        },
+        {
+          "type": "shape",
+          "position": [
+            0,
+            84.19200000000001,
+            595.32,
+            673.5360000000001
+          ],
+          "color": "#FFFFFF"
+        },
+        {
+          "type": "shape",
+          "position": [
+            0,
+            0,
+            595.32,
+            84.19200000000001
+          ],
+          "color": "#F8F9FA"
+        }
+      ],
+      "safe_zones": [
+        {
+          "x1": 50,
+          "y1": 683.5360000000001,
+          "x2": 545.32,
+          "y2": 791.92
+        },
+        {
+          "x1": 50,
+          "y1": 94.19200000000001,
+          "x2": 545.32,
+          "y2": 663.5360000000001
+        },
+        {
+          "x1": 50,
+          "y1": 50,
+          "x2": 545.32,
+          "y2": 74.19200000000001
+        }
+      ],
+      "color_palette": [
+        "#007BFF",
+        "#FFFFFF",
+        "#F8F9FA",
+        "#000000"
+      ]
+    },
+    {
+      "firma": 1,
+      "seite": 2,
+      "page_size": {
+        "width": 595.32,
+        "height": 841.92
+      },
+      "design_regions": [
+        {
+          "type": "header",
+          "bounds": {
+            "x1": 0,
+            "y1": 673.5360000000001,
+            "x2": 595.32,
+            "y2": 841.92
+          },
+          "dominant_color": "#007BFF",
+          "suggested_text_color": "#FFFFFF"
+        },
+        {
+          "type": "content",
+          "bounds": {
+            "x1": 0,
+            "y1": 84.19200000000001,
+            "x2": 595.32,
+            "y2": 673.5360000000001
+          },
+          "dominant_color": "#FFFFFF",
+          "suggested_text_color": "#000000"
+        },
+        {
+          "type": "footer",
+          "bounds": {
+            "x1": 0,
+            "y1": 0,
+            "x2": 595.32,
+            "y2": 84.19200000000001
+          },
+          "dominant_color": "#F8F9FA",
+          "suggested_text_color": "#000000"
+        }
+      ],
+      "visual_elements": [
+        {
+          "type": "shape",
+          "position": [
+            0,
+            673.5360000000001,
+            595.32,
+            841.92
+          ],
+          "color": "#007BFF"
+        },
+        {
+          "type": "shape",
+          "position": [
+            0,
+            84.19200000000001,
+            595.32,
+            673.5360000000001
+          ],
+          "color": "#FFFFFF"
+        },
+        {
+          "type": "shape",
+          "position": [
+            0,
+            0,
+            595.32,
+            84.19200000000001
+          ],
+          "color": "#F8F9FA"
+        }
+      ],
+      "safe_zones": [
+        {
+          "x1": 50,
+          "y1": 683.5360000000001,
+          "x2": 545.32,
+          "y2": 791.92
+        },
+        {
+          "x1": 50,
+          "y1": 94.19200000000001,
+          "x2": 545.32,
+          "y2": 663.5360000000001
+        },
+        {
+          "x1": 50,
+          "y1": 50,
+          "x2": 545.32,
+          "y2": 74.19200000000001
+        }
+      ],
+      "color_palette": [
+        "#007BFF",
+        "#FFFFFF",
+        "#F8F9FA",
+        "#000000"
+      ]
+    }
+  ],
+  "summary": {
+    "total_analyses": 2,
+    "firmen_analyzed": 1,
+    "firma_statistics": {
+      "1": {
+        "count": 2,
+        "color_palette": [
+          "#007BFF",
+          "#FFFFFF",
+          "#F8F9FA",
+          "#000000"
+        ],
+        "avg_safe_zone_area": 347675.01,
+        "design_regions": 3
+      }
+    }
+  }
+}

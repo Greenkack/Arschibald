@@ -46,7 +46,7 @@ for p in page_nums:
                 if L.startswith("Text:"):
                     d["text"] = L.split("Text:",1)[1].strip()
                 elif L.startswith("Position:"):
-                    d["bbox"] = ast.literal_eval(L.split("Position:",1)[1].strip())
+                    d["bbox"] = ast.literal_eval(L.split("Position:",1)[1].strip())  # noqa: S307 (eval ist hier berechtigt)
                 elif L.startswith("Schriftgröße:"):
                     d["size"] = float(L.split("Schriftgröße:",1)[1].strip())
                 elif L.startswith("Farbe:"):
@@ -71,7 +71,7 @@ for p in page_nums:
             m = re.match(r"Bild (\d+): Rect\(([^)]+)\)", L)
             if not m: continue
             idx, coords = m.group(1), m.group(2)
-            bbox = ast.literal_eval(f"({coords})")
+            bbox = ast.literal_eval(f"({coords})")  # noqa: S307 (eval ist hier berechtigt)
             for ext in ("png","jpg","jpeg","tif","tiff"):
                 fn = os.path.join(DATA_DIR, f"seite_{p}_bild_{idx}.{ext}")
                 if os.path.exists(fn):
@@ -108,7 +108,7 @@ for p in page_nums:
                 if L.startswith("Inhalt:"):
                     ad["content"] = L.split("Inhalt:",1)[1].strip()
                 elif L.startswith("Position:"):
-                    ad["rect"] = ast.literal_eval(L.split("Position:",1)[1].strip())
+                    ad["rect"] = ast.literal_eval(L.split("Position:",1)[1].strip())  # noqa: S307 (eval ist hier berechtigt)
             if ad.get("content") and ad.get("rect"):
                 page.add_text_annot(fitz.Rect(ad["rect"]), ad["content"])
 

@@ -7,6 +7,16 @@ Zeigt in Streamlit einen klaren Hinweis und verhält sich als No-Op.
 from __future__ import annotations
 
 from typing import Any
+__all__ = [
+    'PDF_PREVIEW_AVAILABLE',
+    'main',
+    'render',
+    'render_pdf_preview_interface',
+    'render_preview',
+    'run',
+    'show',
+]
+
 
 # Flag für die GUI, um zu prüfen, ob das vollständige Modul verfügbar ist
 PDF_PREVIEW_AVAILABLE = False

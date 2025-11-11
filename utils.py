@@ -1,3 +1,5 @@
+__all__ = ['format_euro', 'is_valid_email', 'kwh_to_car_km_equivalent', 'kwh_to_flights_equivalent', 'kwh_to_trees_equivalent']
+
 # utils.py
 # Enthält diverse Hilfsfunktionen
 
