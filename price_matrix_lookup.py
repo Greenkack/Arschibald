@@ -7,6 +7,7 @@ Diese Modul implementiert die INDEX-basierte Preisabfrage aus der Preismatrix:
 - Speichermodell-Suche mit "Kein Speicher" Fallback
 - Preis-Lookup an der Kreuzung von Zeile und Spalte
 - Umfassende Fehlerbehandlung und Validierung
+- Performance-Monitoring und Optimierung
 
 Struktur der Preismatrix:
 - Spalte A (Index 0): Modulanzahlen (numerisch, aufsteigend sortiert)
@@ -19,8 +20,42 @@ Beispiel:
     Zelle (20, "15kWh"): 18500.00
 """
 
-from typing import Any, Optional, Tuple
+from typing import Any, Optional, Tuple, List
+import time
 import price_matrix_store
+from price_matrix_error_handler import (
+    log_matrix_lookup_attempt,
+    log_matrix_lookup_success,
+    log_matrix_lookup_error,
+    create_user_friendly_error_message,
+    get_fallback_price,
+    validate_input_parameters,
+    handle_edge_cases,
+    create_detailed_error_report,
+    MatrixNotFoundError,
+    ModuleCountNotFoundError,
+    StorageModelNotFoundError,
+    PriceCellEmptyError,
+    InvalidPriceError,
+    logger
+)
+
+# Import comprehensive error handling (Task 8)
+from price_matrix_error_handling import (
+    handle_error_with_fallback,
+    classify_error,
+    ErrorCategory,
+    ErrorSeverity
+)
+
+# Performance-Monitoring importieren
+try:
+    from price_matrix_performance import get_global_monitor
+    PERFORMANCE_MONITORING_AVAILABLE = True
+except ImportError:
+    PERFORMANCE_MONITORING_AVAILABLE = False
+    def get_global_monitor():
+        return None
 
 
 def find_module_count_row(matrix_data: dict, module_count: int) -> Tuple[Optional[str], Optional[int]]:
@@ -220,22 +255,27 @@ def lookup_price_by_intersection(
 def calculate_price_from_matrix(
     module_count: int,
     storage_model: Optional[str],
-    matrix_id: Optional[int] = None
+    matrix_id: Optional[int] = None,
+    enable_fallback: bool = False
 ) -> dict[str, Any]:
     """
     Berechnet den Preis aus der Preismatrix basierend auf Modulanzahl und Speichermodell.
     
     Diese Funktion kombiniert alle Lookup-Schritte:
-    1. Lade Matrix-Daten (aktive Matrix oder spezifische Matrix-ID)
-    2. Finde Zeile für Modulanzahl (mit Floor-Logik)
-    3. Finde Spalte für Speichermodell
-    4. Hole Preis an der Kreuzung
-    5. Umfassende Fehlerbehandlung
+    1. Validiere Eingabeparameter
+    2. Lade Matrix-Daten (aktive Matrix oder spezifische Matrix-ID)
+    3. Behandle Edge Cases
+    4. Finde Zeile für Modulanzahl (mit Floor-Logik)
+    5. Finde Spalte für Speichermodell
+    6. Hole Preis an der Kreuzung
+    7. Umfassende Fehlerbehandlung mit Logging
+    8. Optional: Fallback-Strategien
     
     Args:
         module_count: Anzahl der Module
         storage_model: Speichermodell-Name oder None für "Kein Speicher"
         matrix_id: Optional Matrix-ID (None = aktive Matrix)
+        enable_fallback: Aktiviert Fallback-Strategien bei Fehlern
     
     Returns:
         Dictionary mit folgenden Feldern:
@@ -249,11 +289,17 @@ def calculate_price_from_matrix(
             'matrix_id': int | None,      # Verwendete Matrix-ID
             'matrix_name': str | None,    # Name der Matrix
             'error': str | None,          # Fehlermeldung bei Fehler
-            'error_type': str | None      # Fehlertyp für spezifische Behandlung
+            'error_type': str | None,     # Fehlertyp für spezifische Behandlung
+            'user_message': str | None,   # Benutzerfreundliche Fehlermeldung
+            'fallback_used': bool,        # True wenn Fallback verwendet wurde
+            'fallback_info': dict | None, # Details zum Fallback
+            'debug_info': dict | None     # Debug-Informationen
         }
         
     Fehlertypen:
+        - 'invalid_input': Ungültige Eingabeparameter
         - 'no_matrix': Keine aktive Matrix gefunden
+        - 'empty_matrix': Matrix ist leer
         - 'no_row': Modulanzahl nicht in Matrix gefunden
         - 'no_column': Speichermodell nicht in Matrix gefunden
         - 'no_price': Keine Preis-Zelle an Kreuzung
@@ -264,7 +310,14 @@ def calculate_price_from_matrix(
         >>> if result['success']:
         ...     print(f"Preis: {result['base_price']} EUR")
         ...     print(f"Zeile: {result['row_used']}, Spalte: {result['column_used']}")
+        >>> else:
+        ...     print(result['user_message'])
     """
+    start_time = time.time()
+    
+    # Performance-Monitoring
+    monitor = get_global_monitor() if PERFORMANCE_MONITORING_AVAILABLE else None
+    
     result = {
         'success': False,
         'base_price': None,
@@ -275,72 +328,422 @@ def calculate_price_from_matrix(
         'matrix_id': None,
         'matrix_name': None,
         'error': None,
-        'error_type': None
+        'error_type': None,
+        'user_message': None,
+        'fallback_used': False,
+        'fallback_info': None,
+        'debug_info': None
     }
     
-    # 1. Lade Matrix-Daten
-    if matrix_id is None:
-        matrix_id = price_matrix_store.get_active_matrix_id()
-        if matrix_id is None:
-            result['error'] = "Keine aktive Preismatrix gefunden. Bitte aktivieren Sie eine Matrix in den Admin-Einstellungen."
-            result['error_type'] = 'no_matrix'
+    try:
+        # Log lookup attempt
+        log_matrix_lookup_attempt(module_count, storage_model, matrix_id)
+        
+        # 1. Validiere Eingabeparameter
+        is_valid, validation_error = validate_input_parameters(module_count, storage_model)
+        if not is_valid:
+            result['error'] = validation_error
+            result['error_type'] = 'invalid_input'
+            result['user_message'] = f"❌ Ungültige Eingabe: {validation_error}"
+            logger.warning(f"Invalid input parameters: {validation_error}")
             return result
-    
-    matrix_data = price_matrix_store.get_matrix_full(matrix_id)
-    if not matrix_data:
-        result['error'] = f"Preismatrix mit ID {matrix_id} konnte nicht geladen werden."
-        result['error_type'] = 'no_matrix'
+        
+        # 2. Lade Matrix-Daten
+        if matrix_id is None:
+            matrix_id = price_matrix_store.get_active_matrix_id()
+            if matrix_id is None:
+                error = MatrixNotFoundError()
+                result['error'] = str(error)
+                result['error_type'] = error.error_type
+                result['user_message'] = create_user_friendly_error_message(error)
+                log_matrix_lookup_error(error, module_count, storage_model, matrix_id)
+                return result
+        
+        matrix_data = price_matrix_store.get_matrix_full(matrix_id)
+        if not matrix_data:
+            error = MatrixNotFoundError(matrix_id)
+            result['error'] = str(error)
+            result['error_type'] = error.error_type
+            result['user_message'] = create_user_friendly_error_message(error)
+            log_matrix_lookup_error(error, module_count, storage_model, matrix_id)
+            return result
+        
+        result['matrix_id'] = matrix_id
+        result['matrix_name'] = matrix_data.get('meta', {}).get('name', 'Unbekannt')
+        
+        # 3. Behandle Edge Cases
+        edge_case_result = handle_edge_cases(module_count, storage_model, matrix_data)
+        if edge_case_result:
+            result.update(edge_case_result)
+            result['user_message'] = f"❌ {edge_case_result['error']}"
+            logger.error(f"Edge case detected: {edge_case_result['error']}")
+            return result
+        
+        # 4. Finde Zeile für Modulanzahl
+        row_label, row_id = find_module_count_row(matrix_data, module_count)
+        if row_label is None or row_id is None:
+            # Sammle verfügbare Modulanzahlen für bessere Fehlermeldung
+            available_counts = _extract_available_module_counts(matrix_data)
+            error = ModuleCountNotFoundError(module_count, available_counts)
+            
+            # Versuche Fallback wenn aktiviert
+            if enable_fallback:
+                fallback_info = get_fallback_price(module_count, storage_model, error, matrix_data)
+                if fallback_info and fallback_info.get('fallback_type') == 'module_count_floor':
+                    # Rekursiver Aufruf mit Fallback-Modulanzahl
+                    fallback_count = fallback_info['fallback_module_count']
+                    fallback_result = calculate_price_from_matrix(
+                        fallback_count, storage_model, matrix_id, enable_fallback=False
+                    )
+                    if fallback_result['success']:
+                        fallback_result['fallback_used'] = True
+                        fallback_result['fallback_info'] = fallback_info
+                        fallback_result['user_message'] = fallback_info['message']
+                        logger.info(f"Fallback successful: {fallback_info['message']}")
+                        return fallback_result
+            
+            result['error'] = str(error)
+            result['error_type'] = error.error_type
+            result['user_message'] = create_user_friendly_error_message(error)
+            log_matrix_lookup_error(error, module_count, storage_model, matrix_id)
+            return result
+        
+        result['row_used'] = row_label
+        result['row_id'] = row_id
+        
+        # 5. Finde Spalte für Speichermodell
+        column_label, column_id = find_storage_column(matrix_data, storage_model)
+        if column_label is None or column_id is None:
+            # Sammle verfügbare Speichermodelle für bessere Fehlermeldung
+            available_models = _extract_available_storage_models(matrix_data)
+            error = StorageModelNotFoundError(storage_model or "Kein Speicher", available_models)
+            
+            # Versuche Fallback wenn aktiviert
+            if enable_fallback and storage_model is not None:
+                fallback_info = get_fallback_price(module_count, storage_model, error, matrix_data)
+                if fallback_info and fallback_info.get('fallback_type') == 'no_storage':
+                    # Rekursiver Aufruf mit "Kein Speicher"
+                    fallback_result = calculate_price_from_matrix(
+                        module_count, None, matrix_id, enable_fallback=False
+                    )
+                    if fallback_result['success']:
+                        fallback_result['fallback_used'] = True
+                        fallback_result['fallback_info'] = fallback_info
+                        fallback_result['user_message'] = fallback_info['message']
+                        logger.info(f"Fallback successful: {fallback_info['message']}")
+                        return fallback_result
+            
+            result['error'] = str(error)
+            result['error_type'] = error.error_type
+            result['user_message'] = create_user_friendly_error_message(error)
+            log_matrix_lookup_error(error, module_count, storage_model, matrix_id)
+            return result
+        
+        result['column_used'] = column_label
+        result['column_id'] = column_id
+        
+        # 6. Hole Preis an der Kreuzung
+        price = lookup_price_by_intersection(matrix_data, row_id, column_id)
+        
+        if price is None:
+            error = PriceCellEmptyError(row_label, column_label)
+            result['error'] = str(error)
+            result['error_type'] = error.error_type
+            result['user_message'] = create_user_friendly_error_message(error)
+            log_matrix_lookup_error(error, module_count, storage_model, matrix_id)
+            return result
+        
+        if not isinstance(price, (int, float)) or price < 0:
+            error = InvalidPriceError(row_label, column_label, price)
+            result['error'] = str(error)
+            result['error_type'] = error.error_type
+            result['user_message'] = create_user_friendly_error_message(error)
+            log_matrix_lookup_error(error, module_count, storage_model, matrix_id)
+            return result
+        
+        # Erfolg!
+        result['success'] = True
+        result['base_price'] = float(price)
+        
+        # Log success
+        execution_time_ms = (time.time() - start_time) * 1000
+        log_matrix_lookup_success(result, execution_time_ms)
+        
         return result
-    
-    result['matrix_id'] = matrix_id
-    result['matrix_name'] = matrix_data.get('meta', {}).get('name', 'Unbekannt')
-    
-    # 2. Finde Zeile für Modulanzahl
-    row_label, row_id = find_module_count_row(matrix_data, module_count)
-    if row_label is None or row_id is None:
-        result['error'] = f"Modulanzahl {module_count} nicht in Preismatrix gefunden. Bitte ergänzen Sie die Matrix oder wählen Sie eine andere Modulanzahl."
-        result['error_type'] = 'no_row'
+        
+    except Exception as e:
+        # Unerwarteter Fehler - erstelle detaillierten Bericht
+        logger.exception(f"Unexpected error in calculate_price_from_matrix: {e}")
+        
+        result['error'] = f"Unerwarteter Fehler: {str(e)}"
+        result['error_type'] = 'unexpected_error'
+        result['user_message'] = (
+            "❌ Ein unerwarteter Fehler ist aufgetreten.\n\n"
+            "Bitte kontaktieren Sie den Administrator und geben Sie folgende Informationen an:\n"
+            f"• Modulanzahl: {module_count}\n"
+            f"• Speichermodell: {storage_model}\n"
+            f"• Fehler: {str(e)}"
+        )
+        result['debug_info'] = create_detailed_error_report(
+            e, module_count, storage_model, matrix_id, matrix_data
+        )
+        
         return result
+
+
+def _extract_available_module_counts(matrix_data: dict) -> List[int]:
+    """Extrahiert alle verfügbaren Modulanzahlen aus der Matrix"""
+    counts = []
+    rows = matrix_data.get('rows', [])
     
-    result['row_used'] = row_label
-    result['row_id'] = row_id
+    for row in rows:
+        if row.get('position', 0) == 0:
+            continue  # Skip header
+        
+        label = row.get('label', '')
+        try:
+            count = int(float(str(label).replace(',', '.')))
+            counts.append(count)
+        except (ValueError, TypeError):
+            pass
     
-    # 3. Finde Spalte für Speichermodell
-    column_label, column_id = find_storage_column(matrix_data, storage_model)
-    if column_label is None or column_id is None:
-        if storage_model is None:
-            result['error'] = "Spalte 'Kein Speicher' nicht in Preismatrix gefunden. Bitte ergänzen Sie die Matrix."
+    return sorted(counts)
+
+
+def _extract_available_storage_models(matrix_data: dict) -> List[str]:
+    """Extrahiert alle verfügbaren Speichermodelle aus der Matrix"""
+    models = []
+    columns = matrix_data.get('columns', [])
+    
+    for column in columns:
+        if column.get('position', 0) == 0:
+            continue  # Skip module count column
+        
+        label = column.get('label', '')
+        if label:
+            models.append(label)
+    
+    return models
+
+
+def calculate_price_from_matrix_safe(
+    module_count: int,
+    storage_model: Optional[str],
+    matrix_id: Optional[int] = None,
+    enable_fallback: bool = True,
+    notify_admin: bool = True
+) -> dict[str, Any]:
+    """
+    Sichere Preisberechnung mit umfassender Fehlerbehandlung
+    
+    Diese Funktion ist ein Wrapper um calculate_price_from_matrix() mit:
+    - Automatischer Fehlerklassifizierung
+    - Fallback-Mechanismen
+    - Admin-Benachrichtigungen
+    - Benutzerfreundliche Fehlermeldungen
+    
+    Args:
+        module_count: Anzahl der Module
+        storage_model: Speichermodell-Name oder None für "Kein Speicher"
+        matrix_id: Optional Matrix-ID (None = aktive Matrix)
+        enable_fallback: Aktiviert Fallback-Strategien bei Fehlern
+        notify_admin: Admin bei kritischen Fehlern benachrichtigen
+    
+    Returns:
+        Dictionary mit erweiterten Feldern:
+        {
+            'success': bool,
+            'base_price': float | None,
+            'row_used': str | None,
+            'column_used': str | None,
+            'matrix_id': int | None,
+            'matrix_name': str | None,
+            'error': str | None,
+            'error_type': str | None,
+            'user_message': str | None,
+            'fallback_used': bool,
+            'fallback_info': dict | None,
+            'admin_notified': bool,
+            'error_info': dict | None,  # Strukturierte Fehlerinfo
+            'error_severity': str | None,
+            'error_category': str | None,
+            'suggestions': list | None
+        }
+        
+    Requirement 8.5
+    
+    Beispiel:
+        >>> result = calculate_price_from_matrix_safe(20, "15kWh", enable_fallback=True)
+        >>> if result['success']:
+        ...     print(f"Preis: {result['base_price']} EUR")
+        ...     if result['fallback_used']:
+        ...         print(f"Hinweis: {result['fallback_info']['message']}")
+        >>> else:
+        ...     print(result['user_message'])
+        ...     for suggestion in result.get('suggestions', []):
+        ...         print(f"  - {suggestion}")
+    """
+    try:
+        # Versuche normale Berechnung
+        result = calculate_price_from_matrix(
+            module_count,
+            storage_model,
+            matrix_id,
+            enable_fallback=enable_fallback
+        )
+        
+        # Wenn erfolgreich, erweitere Ergebnis
+        if result['success']:
+            result['error_severity'] = None
+            result['error_category'] = None
+            result['suggestions'] = []
+            result['admin_notified'] = False
+            return result
+        
+        # Bei Fehler: Verwende umfassende Fehlerbehandlung
+        # Erstelle Exception aus Fehlertyp
+        error_type = result.get('error_type')
+        error_msg = result.get('error', 'Unbekannter Fehler')
+        
+        if error_type == 'no_matrix':
+            error = MatrixNotFoundError(matrix_id)
+        elif error_type == 'no_row':
+            available = _extract_available_module_counts(
+                price_matrix_store.get_matrix_full(matrix_id) if matrix_id else {}
+            )
+            error = ModuleCountNotFoundError(module_count, available)
+        elif error_type == 'no_column':
+            error = StorageModelNotFoundError(storage_model or "Kein Speicher")
+        elif error_type == 'no_price':
+            error = PriceCellEmptyError(
+                result.get('row_used', '?'),
+                result.get('column_used', '?')
+            )
+        elif error_type == 'invalid_price':
+            error = InvalidPriceError(
+                result.get('row_used', '?'),
+                result.get('column_used', '?'),
+                '?'
+            )
         else:
-            result['error'] = f"Speichermodell '{storage_model}' nicht in Preismatrix gefunden. Bitte ergänzen Sie die Matrix oder wählen Sie ein anderes Modell."
-        result['error_type'] = 'no_column'
+            error = Exception(error_msg)
+        
+        # Lade Matrix-Daten für Fallback
+        matrix_data = None
+        if matrix_id:
+            matrix_data = price_matrix_store.get_matrix_full(matrix_id)
+        elif enable_fallback:
+            active_id = price_matrix_store.get_active_matrix_id()
+            if active_id:
+                matrix_data = price_matrix_store.get_matrix_full(active_id)
+        
+        # Verwende umfassende Fehlerbehandlung
+        error_result = handle_error_with_fallback(
+            error,
+            module_count,
+            storage_model,
+            matrix_data,
+            enable_fallback=enable_fallback,
+            notify_admin=notify_admin
+        )
+        
+        # Wenn Fallback erfolgreich war, versuche erneut
+        if error_result.get('fallback_used'):
+            fallback_data = error_result.get('fallback_result', {}).get('data', {})
+            
+            if fallback_data.get('fallback_type') == 'module_count_floor':
+                # Rekursiver Aufruf mit Fallback-Modulanzahl
+                fallback_count = fallback_data.get('fallback_module_count')
+                if fallback_count:
+                    fallback_result = calculate_price_from_matrix(
+                        fallback_count,
+                        storage_model,
+                        matrix_id,
+                        enable_fallback=False
+                    )
+                    if fallback_result['success']:
+                        fallback_result['fallback_used'] = True
+                        fallback_result['fallback_info'] = fallback_data
+                        fallback_result['user_message'] = error_result.get('user_message')
+                        fallback_result['admin_notified'] = error_result.get('admin_notified', False)
+                        return fallback_result
+            
+            elif fallback_data.get('fallback_type') == 'no_storage':
+                # Rekursiver Aufruf mit "Kein Speicher"
+                fallback_result = calculate_price_from_matrix(
+                    module_count,
+                    None,
+                    matrix_id,
+                    enable_fallback=False
+                )
+                if fallback_result['success']:
+                    fallback_result['fallback_used'] = True
+                    fallback_result['fallback_info'] = fallback_data
+                    fallback_result['user_message'] = error_result.get('user_message')
+                    fallback_result['admin_notified'] = error_result.get('admin_notified', False)
+                    return fallback_result
+            
+            elif fallback_data.get('fallback_to_standard'):
+                # Fallback auf Standardberechnung
+                result['fallback_used'] = True
+                result['fallback_info'] = {
+                    'fallback_type': 'standard_calculation',
+                    'message': 'Verwende Standardberechnung da keine Matrix verfügbar'
+                }
+                result['user_message'] = error_result.get('user_message')
+                result['admin_notified'] = error_result.get('admin_notified', False)
+                return result
+        
+        # Kein erfolgreicher Fallback - erweitere Fehlerinfo
+        error_info_dict = error_result.get('error_info', {})
+        result['error_info'] = error_info_dict
+        result['error_severity'] = error_info_dict.get('severity')
+        result['error_category'] = error_info_dict.get('category')
+        result['suggestions'] = error_info_dict.get('suggestions', [])
+        result['user_message'] = error_result.get('user_message')
+        result['admin_notified'] = error_result.get('admin_notified', False)
+        
         return result
-    
-    result['column_used'] = column_label
-    result['column_id'] = column_id
-    
-    # 4. Hole Preis an der Kreuzung
-    price = lookup_price_by_intersection(matrix_data, row_id, column_id)
-    
-    if price is None:
-        result['error'] = f"Kein Preis für Kombination {row_label} Module + {column_label} definiert. Bitte ergänzen Sie die Matrix."
-        result['error_type'] = 'no_price'
-        return result
-    
-    if not isinstance(price, (int, float)) or price < 0:
-        result['error'] = f"Ungültiger Preiswert in Zelle ({row_label}, {column_label}): {price}"
-        result['error_type'] = 'invalid_price'
-        return result
-    
-    # Erfolg!
-    result['success'] = True
-    result['base_price'] = float(price)
-    
-    return result
+        
+    except Exception as e:
+        # Unerwarteter Fehler
+        logger.exception(f"Unexpected error in calculate_price_from_matrix_safe: {e}")
+        
+        error_result = handle_error_with_fallback(
+            e,
+            module_count,
+            storage_model,
+            None,
+            enable_fallback=False,
+            notify_admin=notify_admin
+        )
+        
+        return {
+            'success': False,
+            'base_price': None,
+            'row_used': None,
+            'column_used': None,
+            'matrix_id': matrix_id,
+            'matrix_name': None,
+            'error': str(e),
+            'error_type': 'unexpected_error',
+            'user_message': error_result.get('user_message'),
+            'fallback_used': False,
+            'fallback_info': None,
+            'admin_notified': error_result.get('admin_notified', False),
+            'error_info': error_result.get('error_info'),
+            'error_severity': error_result.get('error_info', {}).get('severity'),
+            'error_category': error_result.get('error_info', {}).get('category'),
+            'suggestions': error_result.get('error_info', {}).get('suggestions', [])
+        }
 
 
 __all__ = [
     'find_module_count_row',
     'find_storage_column',
     'lookup_price_by_intersection',
-    'calculate_price_from_matrix'
+    'calculate_price_from_matrix',
+    'calculate_price_from_matrix_safe',
+    '_extract_available_module_counts',
+    '_extract_available_storage_models'
 ]

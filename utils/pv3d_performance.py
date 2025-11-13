@@ -451,27 +451,53 @@ def optimize_mesh_resolution(
 def should_render_module(
     module_index: int,
     total_modules: int,
-    camera_distance: float,
-    lod_threshold: int = 50
+    camera_distance: float = 50.0,
+    lod_threshold: int = 50,
+    enable_lod: bool = True
 ) -> bool:
     """
     Entscheidet ob Modul gerendert werden soll (Level of Detail).
     
+    TASK 9.1: Lazy Loading - Lade nur sichtbare Module
+    
+    Diese Funktion implementiert Level-of-Detail (LOD) Rendering:
+    - Bei wenigen Modulen (<= lod_threshold): Alle Module rendern
+    - Bei vielen Modulen (> lod_threshold): Nur jeden N-ten rendern
+    - LOD kann deaktiviert werden für volle Qualität
+    
     Args:
-        module_index: Index des Moduls
+        module_index: Index des Moduls (0-basiert)
         total_modules: Gesamtanzahl Module
-        camera_distance: Distanz zur Kamera
-        lod_threshold: Schwellwert für LOD
+        camera_distance: Distanz zur Kamera (aktuell nicht verwendet)
+        lod_threshold: Schwellwert für LOD (Standard: 50 Module)
+        enable_lod: Ob LOD aktiviert ist (Standard: True)
     
     Returns:
-        True wenn Modul gerendert werden soll
+        True wenn Modul gerendert werden soll, sonst False
+    
+    Requirements:
+        - 9.1.1: Lade nur sichtbare Module
+        - 9.1.2: Reduziere Mesh-Komplexität bei vielen Modulen
+    
+    Example:
+        >>> # Bei 100 Modulen und Threshold 50: Rendere jeden 2. Modul
+        >>> should_render_module(0, 100, lod_threshold=50)  # True
+        >>> should_render_module(1, 100, lod_threshold=50)  # False
+        >>> should_render_module(2, 100, lod_threshold=50)  # True
     """
+    # LOD deaktiviert - rendere alle Module
+    if not enable_lod:
+        return True
+    
     # Bei wenigen Modulen immer rendern
     if total_modules <= lod_threshold:
         return True
     
     # Bei vielen Modulen: Rendere nur jeden N-ten
+    # Skip-Faktor berechnen: Je mehr Module, desto mehr überspringen
     skip_factor = max(1, total_modules // lod_threshold)
+    
+    # Rendere Modul wenn Index durch skip_factor teilbar ist
     return module_index % skip_factor == 0
 
 
@@ -486,6 +512,8 @@ def calculate_module_positions_cached(
     """
     Gecachte Version der Modul-Positions-Berechnung.
     
+    TASK 9.2: Caching - Cache berechnete Positionen
+    
     Args:
         length: Dachlänge
         width: Dachbreite
@@ -495,36 +523,221 @@ def calculate_module_positions_cached(
     
     Returns:
         Liste von (x, y) Positionen
+    
+    Requirements:
+        - 9.2.1: Cache berechnete Positionen
     """
-    from utils.pv3d_plotly import calculate_grid_positions
-    return calculate_grid_positions(length, width, count, spacing_x, spacing_y)
+    try:
+        from utils.pv3d_grid_calculator import calculate_module_grid
+        return calculate_module_grid(
+            roof_length=length,
+            roof_width=width,
+            module_quantity=count,
+            spacing=spacing_x,
+            margin=0.3
+        )
+    except ImportError:
+        # Fallback wenn Grid-Calculator nicht verfügbar
+        return []
+
+
+@cached(ttl=300.0)
+def cache_module_mesh_geometry(
+    module_width: float = 1.05,
+    module_height: float = 1.76,
+    module_thickness: float = 0.04
+) -> dict:
+    """
+    Cached Modul-Mesh-Geometrie für Wiederverwendung.
+    
+    TASK 9.2: Caching - Cache Mesh-Geometrie
+    
+    Diese Funktion cached die Basis-Geometrie eines PV-Moduls (Vertices und Faces).
+    Da alle Module die gleichen Dimensionen haben, kann diese Geometrie
+    wiederverwendet und nur transformiert (rotiert/verschoben) werden.
+    
+    Args:
+        module_width: Breite des Moduls in Metern (Standard: 1.05m)
+        module_height: Höhe des Moduls in Metern (Standard: 1.76m)
+        module_thickness: Dicke des Moduls in Metern (Standard: 0.04m)
+    
+    Returns:
+        Dictionary mit:
+            - vertices: NumPy Array mit lokalen Vertex-Positionen (8x3)
+            - faces_i: Liste der i-Indizes für Dreiecke
+            - faces_j: Liste der j-Indizes für Dreiecke
+            - faces_k: Liste der k-Indizes für Dreiecke
+    
+    Requirements:
+        - 9.2.2: Cache Mesh-Geometrie
+    
+    Example:
+        >>> geom = cache_module_mesh_geometry()
+        >>> vertices = geom['vertices']  # 8 Ecken des Quaders
+        >>> # Transformiere Vertices für jedes Modul individuell
+    """
+    import numpy as np
+    
+    # Halbe Dimensionen für zentrierten Quader
+    hw = module_width / 2
+    hh = module_height / 2
+    ht = module_thickness / 2
+    
+    # 8 Ecken des Moduls (lokale Koordinaten, zentriert im Ursprung)
+    vertices = np.array([
+        [-hw, -hh, -ht],  # 0: links vorne unten
+        [hw, -hh, -ht],   # 1: rechts vorne unten
+        [hw, hh, -ht],    # 2: rechts hinten unten
+        [-hw, hh, -ht],   # 3: links hinten unten
+        [-hw, -hh, ht],   # 4: links vorne oben
+        [hw, -hh, ht],    # 5: rechts vorne oben
+        [hw, hh, ht],     # 6: rechts hinten oben
+        [-hw, hh, ht],    # 7: links hinten oben
+    ])
+    
+    # Dreiecks-Indizes für vollständigen Quader (6 Seiten × 2 Dreiecke = 12 Dreiecke)
+    faces_i = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 5, 5, 1, 1, 6, 6, 2, 2, 7, 7, 3, 3]
+    faces_j = [1, 3, 2, 5, 3, 6, 0, 7, 5, 7, 4, 1, 6, 4, 5, 0, 7, 5, 6, 1, 4, 6, 7, 2]
+    faces_k = [3, 2, 5, 6, 6, 7, 7, 4, 7, 6, 5, 4, 4, 5, 0, 4, 5, 6, 1, 2, 6, 7, 2, 3]
+    
+    return {
+        'vertices': vertices,
+        'faces_i': faces_i,
+        'faces_j': faces_j,
+        'faces_k': faces_k
+    }
 
 
 def batch_render_modules(
-    modules: list,
-    batch_size: int = 20
+    module_positions: list,
+    render_func: Callable,
+    batch_size: int = 20,
+    enable_lod: bool = True,
+    lod_threshold: int = 50,
+    **render_kwargs
 ) -> list:
     """
     Rendert Module in Batches für bessere Performance.
     
+    TASK 9.1: Lazy Loading - Batch-Rendering für Performance
+    
+    Diese Funktion rendert Module in Batches und wendet LOD an:
+    - Module werden in kleineren Gruppen verarbeitet
+    - LOD filtert Module basierend auf Gesamtanzahl
+    - Reduziert Memory-Spikes bei vielen Modulen
+    
     Args:
-        modules: Liste von Modul-Daten
-        batch_size: Anzahl Module pro Batch
+        module_positions: Liste von (x, y, z) Positionen
+        render_func: Funktion zum Rendern eines einzelnen Moduls
+                    Signatur: render_func(x, y, z, module_number, **kwargs) -> mesh
+        batch_size: Anzahl Module pro Batch (Standard: 20)
+        enable_lod: Ob Level-of-Detail aktiviert ist (Standard: True)
+        lod_threshold: Schwellwert für LOD (Standard: 50)
+        **render_kwargs: Zusätzliche Argumente für render_func
     
     Returns:
-        Liste von gerenderten Traces
+        Liste von gerenderten Mesh-Objekten
+    
+    Requirements:
+        - 9.1.1: Lade nur sichtbare Module
+        - 9.1.2: Reduziere Mesh-Komplexität
+    
+    Example:
+        >>> positions = [(0, 0, 3), (1, 0, 3), (2, 0, 3)]
+        >>> def render_module(x, y, z, module_number, **kwargs):
+        ...     return create_pv_module_3d(x, y, z, module_number=module_number)
+        >>> meshes = batch_render_modules(
+        ...     positions, render_module, batch_size=10,
+        ...     azimuth_deg=0, tilt_deg=30
+        ... )
     """
     traces = []
+    total_modules = len(module_positions)
     
-    for i in range(0, len(modules), batch_size):
-        batch = modules[i:i + batch_size]
+    # Iteriere über Batches
+    for batch_start in range(0, total_modules, batch_size):
+        batch_end = min(batch_start + batch_size, total_modules)
+        batch = module_positions[batch_start:batch_end]
         
-        # Rendere Batch
-        for module_data in batch:
-            # Hier würde das eigentliche Rendering stattfinden
-            pass
+        # Rendere Module im Batch mit LOD
+        for local_idx, (x, y, z) in enumerate(batch):
+            global_idx = batch_start + local_idx
+            
+            # LOD: Prüfe ob Modul gerendert werden soll
+            if should_render_module(
+                module_index=global_idx,
+                total_modules=total_modules,
+                lod_threshold=lod_threshold,
+                enable_lod=enable_lod
+            ):
+                try:
+                    # Rendere Modul
+                    mesh = render_func(
+                        x, y, z,
+                        module_number=global_idx + 1,  # 1-basiert für Anzeige
+                        **render_kwargs
+                    )
+                    
+                    # Füge zu Traces hinzu (kann Tuple oder einzelnes Objekt sein)
+                    if isinstance(mesh, tuple):
+                        traces.append(mesh[0])  # Nur Mesh, nicht Vertices
+                    else:
+                        traces.append(mesh)
+                        
+                except Exception as e:
+                    # Fehler beim Rendern - überspringe Modul
+                    print(f"⚠️ Fehler beim Rendern von Modul {global_idx + 1}: {e}")
+                    continue
     
     return traces
+
+
+def get_lod_info(total_modules: int, lod_threshold: int = 50) -> dict:
+    """
+    Gibt Informationen über Level-of-Detail zurück.
+    
+    TASK 9.1: Lazy Loading - LOD-Informationen
+    
+    Args:
+        total_modules: Gesamtanzahl Module
+        lod_threshold: Schwellwert für LOD
+    
+    Returns:
+        Dictionary mit LOD-Informationen:
+            - enabled: Ob LOD aktiv ist
+            - skip_factor: Wie viele Module übersprungen werden
+            - rendered_count: Wie viele Module gerendert werden
+            - skipped_count: Wie viele Module übersprungen werden
+            - reduction_percent: Prozentuale Reduktion
+    
+    Requirements:
+        - 9.1.1: Transparenz über Lazy Loading
+    
+    Example:
+        >>> info = get_lod_info(100, lod_threshold=50)
+        >>> print(f"Rendere {info['rendered_count']} von {total_modules} Modulen")
+    """
+    if total_modules <= lod_threshold:
+        return {
+            'enabled': False,
+            'skip_factor': 1,
+            'rendered_count': total_modules,
+            'skipped_count': 0,
+            'reduction_percent': 0.0
+        }
+    
+    skip_factor = max(1, total_modules // lod_threshold)
+    rendered_count = (total_modules + skip_factor - 1) // skip_factor  # Aufrunden
+    skipped_count = total_modules - rendered_count
+    reduction_percent = (skipped_count / total_modules) * 100.0
+    
+    return {
+        'enabled': True,
+        'skip_factor': skip_factor,
+        'rendered_count': rendered_count,
+        'skipped_count': skipped_count,
+        'reduction_percent': reduction_percent
+    }
 
 
 # ============================================================================
@@ -641,3 +854,241 @@ def get_performance_stats() -> Dict[str, Dict[str, float]]:
 def clear_performance_stats():
     """Löscht alle Performance-Statistiken."""
     _global_monitor.clear()
+
+
+# ============================================================================
+# TASK 9.2: ERWEITERTE CACHING-FUNKTIONEN
+# ============================================================================
+
+class TransformationCache:
+    """
+    Cache für Modul-Transformationen (Rotation + Translation).
+    
+    TASK 9.2: Caching - Cache Transformationsmatrizen
+    
+    Da viele Module die gleichen Transformationen verwenden (z.B. gleicher
+    Azimuth und Tilt), können wir die Rotationsmatrizen cachen und
+    wiederverwenden.
+    """
+    
+    def __init__(self, max_size: int = 50):
+        """
+        Initialisiert den Transformations-Cache.
+        
+        Args:
+            max_size: Maximale Anzahl gecachter Transformationen
+        """
+        self._cache: Dict[str, Any] = {}
+        self.max_size = max_size
+    
+    def _get_key(self, azimuth_deg: float, tilt_deg: float) -> str:
+        """Generiert Cache-Key aus Azimuth und Tilt."""
+        # Runde auf 1 Dezimalstelle für besseres Caching
+        az = round(azimuth_deg, 1)
+        tilt = round(tilt_deg, 1)
+        return f"az{az}_tilt{tilt}"
+    
+    def get_rotation_matrix(
+        self, azimuth_deg: float, tilt_deg: float
+    ) -> Optional[Any]:
+        """
+        Holt Rotationsmatrix aus Cache.
+        
+        Args:
+            azimuth_deg: Azimuth-Winkel in Grad
+            tilt_deg: Neigungs-Winkel in Grad
+        
+        Returns:
+            NumPy Rotationsmatrix oder None wenn nicht gecached
+        """
+        key = self._get_key(azimuth_deg, tilt_deg)
+        return self._cache.get(key)
+    
+    def set_rotation_matrix(
+        self, azimuth_deg: float, tilt_deg: float, matrix: Any
+    ):
+        """
+        Speichert Rotationsmatrix im Cache.
+        
+        Args:
+            azimuth_deg: Azimuth-Winkel in Grad
+            tilt_deg: Neigungs-Winkel in Grad
+            matrix: NumPy Rotationsmatrix
+        """
+        # Prüfe Cache-Größe
+        if len(self._cache) >= self.max_size:
+            # Entferne ältesten Eintrag (FIFO)
+            first_key = next(iter(self._cache))
+            del self._cache[first_key]
+        
+        key = self._get_key(azimuth_deg, tilt_deg)
+        self._cache[key] = matrix
+    
+    def clear(self):
+        """Leert den Cache."""
+        self._cache.clear()
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Gibt Cache-Statistiken zurück."""
+        return {
+            "size": len(self._cache),
+            "max_size": self.max_size,
+            "unique_transformations": len(self._cache)
+        }
+
+
+# Globaler Transformations-Cache
+_transformation_cache = TransformationCache(max_size=50)
+
+
+def get_cached_rotation_matrix(azimuth_deg: float, tilt_deg: float):
+    """
+    Holt oder berechnet Rotationsmatrix mit Caching.
+    
+    TASK 9.2: Caching - Cache Rotationsmatrizen
+    
+    Args:
+        azimuth_deg: Azimuth-Winkel in Grad
+        tilt_deg: Neigungs-Winkel in Grad
+    
+    Returns:
+        NumPy Rotationsmatrix (3x3)
+    
+    Requirements:
+        - 9.2.2: Cache Transformationsmatrizen
+    
+    Example:
+        >>> R = get_cached_rotation_matrix(0, 30)
+        >>> # Beim zweiten Aufruf mit gleichen Werten: Cache-Hit
+        >>> R2 = get_cached_rotation_matrix(0, 30)  # Aus Cache
+    """
+    import numpy as np
+    
+    # Prüfe Cache
+    cached_matrix = _transformation_cache.get_rotation_matrix(
+        azimuth_deg, tilt_deg
+    )
+    if cached_matrix is not None:
+        return cached_matrix
+    
+    # Berechne Rotationsmatrix
+    tilt_rad = np.deg2rad(tilt_deg)
+    az_rad = np.deg2rad(azimuth_deg)
+    
+    # Rotation um Y-Achse (Tilt)
+    Ry = np.array([
+        [np.cos(tilt_rad), 0, np.sin(tilt_rad)],
+        [0, 1, 0],
+        [-np.sin(tilt_rad), 0, np.cos(tilt_rad)]
+    ])
+    
+    # Rotation um Z-Achse (Azimuth)
+    Rz = np.array([
+        [np.cos(az_rad), -np.sin(az_rad), 0],
+        [np.sin(az_rad), np.cos(az_rad), 0],
+        [0, 0, 1]
+    ])
+    
+    # Kombinierte Rotation
+    R = Rz @ Ry
+    
+    # Speichere im Cache
+    _transformation_cache.set_rotation_matrix(azimuth_deg, tilt_deg, R)
+    
+    return R
+
+
+def clear_transformation_cache():
+    """Leert den Transformations-Cache."""
+    _transformation_cache.clear()
+
+
+def get_transformation_cache_stats() -> Dict[str, Any]:
+    """Gibt Transformations-Cache-Statistiken zurück."""
+    return _transformation_cache.get_stats()
+
+
+@cached(ttl=120.0)
+def calculate_roof_positions_cached(
+    roof_type: str,
+    roof_length: float,
+    roof_width: float,
+    roof_pitch: float,
+    module_quantity: int,
+    margin: float = 0.3
+) -> list:
+    """
+    Gecachte Berechnung von Modul-Positionen für spezifischen Dachtyp.
+    
+    TASK 9.2: Caching - Cache dachtyp-spezifische Positionen
+    
+    Args:
+        roof_type: Dachtyp (z.B. "Flachdach", "Satteldach")
+        roof_length: Dachlänge in Metern
+        roof_width: Dachbreite in Metern
+        roof_pitch: Dachneigung in Grad
+        module_quantity: Anzahl Module
+        margin: Randabstand in Metern
+    
+    Returns:
+        Liste von (x, y, z) Positionen
+    
+    Requirements:
+        - 9.2.1: Cache berechnete Positionen
+    """
+    try:
+        from utils.pv3d_roof_type_logic import get_roof_type_placement
+        
+        return get_roof_type_placement(
+            roof_type=roof_type,
+            roof_length=roof_length,
+            roof_width=roof_width,
+            roof_pitch=roof_pitch,
+            module_quantity=module_quantity,
+            module_width=1.05,
+            module_height=1.76,
+            margin=margin,
+            orientation="portrait"
+        )
+    except ImportError:
+        # Fallback wenn Roof-Type-Logic nicht verfügbar
+        return []
+
+
+def get_all_cache_stats() -> Dict[str, Any]:
+    """
+    Gibt alle Cache-Statistiken zurück.
+    
+    TASK 9.2: Caching - Übersicht über alle Caches
+    
+    Returns:
+        Dictionary mit Statistiken für alle Caches:
+            - global_cache: Allgemeiner Cache (Positionen, etc.)
+            - transformation_cache: Rotationsmatrizen-Cache
+            - performance_stats: Performance-Monitoring-Statistiken
+    
+    Requirements:
+        - 9.2.3: Transparenz über Cache-Nutzung
+    """
+    return {
+        "global_cache": get_cache_stats(),
+        "transformation_cache": get_transformation_cache_stats(),
+        "performance_stats": get_performance_stats()
+    }
+
+
+def clear_all_caches():
+    """
+    Leert alle Caches.
+    
+    TASK 9.2: Caching - Cache-Management
+    
+    Nützlich wenn:
+    - Speicher freigegeben werden soll
+    - Nach Änderungen an Gebäude-Dimensionen
+    - Bei Debugging/Testing
+    """
+    clear_cache()
+    clear_transformation_cache()
+    clear_performance_stats()
+    print("✓ Alle Caches geleert")

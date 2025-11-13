@@ -352,6 +352,9 @@ class PDFGenerator:
 
         if progress_bar:
             progress_bar.complete("PDF erfolgreich erstellt!")
+        
+        # Automatische PDF-Archivierung in Kundenakte
+        self._auto_archive_pdf()
 
     def _get_module_map(self):
         """Get mapping of module IDs to their drawing functions"""
@@ -365,6 +368,52 @@ class PDFGenerator:
             "3d_visualisierung": self._draw_3d_visualization,
             "benutzerdefiniert": self._draw_custom_content
         }
+    
+    def _auto_archive_pdf(self):
+        """
+        Automatische PDF-Archivierung in Kundenakte.
+        
+        Diese Methode wird nach erfolgreicher PDF-Erstellung aufgerufen und
+        speichert das PDF automatisch in der Kundenakte, falls ein Kunde
+        zugeordnet ist.
+        """
+        try:
+            from crm.integration.pdf_bridge import (
+                auto_save_pdf_to_customer_documents,
+                get_customer_id_from_session,
+                get_project_id_from_session
+            )
+            
+            # Versuche Kunden-ID aus Session State zu ermitteln
+            customer_id = get_customer_id_from_session()
+            
+            if not customer_id:
+                print("PDF Generator: Keine Kunden-ID gefunden - PDF wird nicht automatisch archiviert")
+                return
+            
+            # Projekt-ID ermitteln (optional)
+            project_id = get_project_id_from_session()
+            
+            # PDF in Kundenakte speichern
+            doc_id = auto_save_pdf_to_customer_documents(
+                pdf_path=self.filename,
+                customer_id=customer_id,
+                project_id=project_id,
+                offer_data=self.offer_data,
+                display_name=None  # Wird automatisch generiert
+            )
+            
+            if doc_id:
+                print(f"PDF Generator: PDF erfolgreich in Kundenakte archiviert (Dokument-ID: {doc_id})")
+            else:
+                print("PDF Generator: PDF konnte nicht in Kundenakte archiviert werden")
+                
+        except ImportError as e:
+            print(f"PDF Generator: CRM-Integration nicht verfügbar: {e}")
+        except Exception as e:
+            print(f"PDF Generator: Fehler bei automatischer PDF-Archivierung: {e}")
+            import traceback
+            traceback.print_exc()
 
     def _draw_cover_page(self):
         self.story.append(Spacer(1, 8 * cm))

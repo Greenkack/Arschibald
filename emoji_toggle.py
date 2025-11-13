@@ -49,6 +49,23 @@ def should_show_emojis() -> bool:
     return bool(st.session_state.get("show_emojis", True))
 
 
+def e(emoji_str: str) -> str:
+    """
+    Emoji-Helper: Gibt Emoji-String nur zurück, wenn Emojis aktiviert sind.
+    
+    Args:
+        emoji_str: Der Emoji-String (z.B. "📊" oder "🔧")
+    
+    Returns:
+        str: Emoji-String wenn aktiviert, sonst leerer String
+    
+    Usage:
+        st.write(f"{e('📊')} Dashboard")  # Zeigt "📊 Dashboard" oder " Dashboard"
+        st.button(f"{e('✅')} Speichern")  # Zeigt "✅ Speichern" oder " Speichern"
+    """
+    return emoji_str if should_show_emojis() else ""
+
+
 def _strip_emojis(text: str) -> str:
     """Entfernt Emojis sowie Variations-Selector und Joiner aus Texten."""
     cleaned = _EMOJI_PATTERN.sub("", text)

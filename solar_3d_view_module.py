@@ -649,7 +649,7 @@ def _render_3d_view_impl():
                     traceback.print_exc()
             
             # Handle Remove Selected Button (Task 10)
-            # Requirement 4.2: Remove selected button functionality
+            # Requirement 4.2.2: Remove selected button functionality
             if placement_actions.get("remove_selected_clicked", False):
                 selected_indices = st.session_state.get(
                     "selected_module_indices", []
@@ -667,6 +667,122 @@ def _render_3d_view_impl():
                     st.warning(
                         "⚠️ Keine Module ausgewählt. "
                         "Bitte wählen Sie Module in der 3D-Ansicht aus."
+                    )
+            
+            # TASK 4.2: Handle Move Selected Button
+            # Requirement 4.2.3: Move button functionality
+            if placement_actions.get("move_selected_clicked", False):
+                from utils.pv3d_placement_handler import handle_move_selected
+                
+                selected_indices = st.session_state.get(
+                    "selected_module_indices", []
+                )
+                
+                if selected_indices:
+                    offset_x = placement_actions.get("move_offset_x", 0.0)
+                    offset_y = placement_actions.get("move_offset_y", 0.0)
+                    
+                    roof_type_for_move = basis_settings.get("roof_type", roof_type)
+                    roof_pitch = basis_settings.get("roof_pitch", 30.0)
+                    
+                    result = handle_move_selected(
+                        selected_indices=selected_indices,
+                        offset_x=offset_x,
+                        offset_y=offset_y,
+                        roof_length=building_length,
+                        roof_width=building_width,
+                        roof_type=roof_type_for_move,
+                        roof_pitch=roof_pitch
+                    )
+                    
+                    if result["success"]:
+                        st.success(result["message"])
+                        st.rerun()
+                    else:
+                        st.error(result["message"])
+                else:
+                    st.warning(
+                        "⚠️ Keine Module ausgewählt. "
+                        "Bitte wählen Sie Module zum Verschieben aus."
+                    )
+            
+            # TASK 4.2: Handle Rotate Selected Button
+            # Requirement 4.2.4: Rotate button functionality
+            if placement_actions.get("rotate_selected_clicked", False):
+                from utils.pv3d_placement_handler import handle_rotate_selected
+                
+                selected_indices = st.session_state.get(
+                    "selected_module_indices", []
+                )
+                
+                if selected_indices:
+                    rotation_angle = placement_actions.get("rotation_angle", 0.0)
+                    
+                    result = handle_rotate_selected(
+                        selected_indices=selected_indices,
+                        rotation_degrees=rotation_angle
+                    )
+                    
+                    if result["success"]:
+                        st.success(result["message"])
+                        st.rerun()
+                    else:
+                        st.error(result["message"])
+                else:
+                    st.warning(
+                        "⚠️ Keine Module ausgewählt. "
+                        "Bitte wählen Sie Module zum Drehen aus."
+                    )
+            
+            # TASK 4.3: Handle Quick Move (Drag & Drop Alternative)
+            # Requirement 4.3.1: Ziehe Modul an neue Position (simuliert)
+            # Requirement 4.3.3: Snap-to-Grid Funktion
+            if placement_actions.get("quick_move_clicked", False):
+                from utils.pv3d_placement_handler import handle_move_selected
+                
+                selected_indices = st.session_state.get(
+                    "selected_module_indices", []
+                )
+                
+                if selected_indices:
+                    direction = placement_actions.get("quick_move_direction")
+                    step = placement_actions.get("quick_move_step", 0.5)
+                    
+                    # Convert direction to offset
+                    offset_x = 0.0
+                    offset_y = 0.0
+                    
+                    if direction == "left":
+                        offset_x = -step
+                    elif direction == "right":
+                        offset_x = step
+                    elif direction == "up":
+                        offset_y = step
+                    elif direction == "down":
+                        offset_y = -step
+                    
+                    roof_type_for_move = basis_settings.get("roof_type", roof_type)
+                    roof_pitch = basis_settings.get("roof_pitch", 30.0)
+                    
+                    result = handle_move_selected(
+                        selected_indices=selected_indices,
+                        offset_x=offset_x,
+                        offset_y=offset_y,
+                        roof_length=building_length,
+                        roof_width=building_width,
+                        roof_type=roof_type_for_move,
+                        roof_pitch=roof_pitch
+                    )
+                    
+                    if result["success"]:
+                        # Zeige Erfolg ohne Nachricht (für flüssige Bedienung)
+                        st.rerun()
+                    else:
+                        st.error(result["message"])
+                else:
+                    st.warning(
+                        "⚠️ Keine Module ausgewählt. "
+                        "Bitte wählen Sie Module zum Verschieben aus."
                     )
                 
         except ImportError as e:
@@ -690,8 +806,9 @@ def _render_3d_view_impl():
         # Erstelle Layout-Konfiguration
         layout_config = create_layout_config(module_settings, advanced_settings)
         
-        # Hole ausgewählte Module
-        selected_modules = advanced_settings.get("selected_modules", [])
+        # TASK 4.1: Hole ausgewählte Module aus Session State
+        # Requirement 4.1.3: Visuelle Hervorhebung ausgewählter Module
+        selected_modules = st.session_state.get("selected_module_indices", [])
         
         # BENUTZER-FEEDBACK: Zeige Metriken vor der Visualisierung
         col1, col2, col3, col4 = st.columns(4)

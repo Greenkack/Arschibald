@@ -414,7 +414,7 @@ def create_gabled_roof_with_dormer(length, width, height, base_z,
     return [main_roof, dormer_mesh, window_mesh]
 
 
-def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True, roof_type="Flachdach", invalid=False, module_number=None):
+def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True, roof_type="Flachdach", invalid=False, module_number=None, module_power_w=400):
     """
     Erstellt ein detailliertes PV-Modul mit Dicke und korrekter Rotation.
     Gibt Tuple zurück: (mesh, vertices) für Kanten-Rendering.
@@ -434,6 +434,11 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     - Korrekte Aufständerungs-Winkel für Flachdächer (30°)
     - Rotation um Y-Achse (Tilt) und Z-Achse (Azimuth)
     
+    TASK 8.2: Modul-Details anzeigen
+    - Zeige Modul-Nummer im Hover-Text
+    - Zeige Leistung (W) im Hover-Text
+    - Zeige Ausrichtung (Azimut) im Hover-Text
+    
     Args:
         x, y, z: Position des Moduls (absolute Koordinaten)
         azimuth_deg: Azimuth-Winkel (0° = Süd, 90° = West, 180° = Nord, 270° = Ost)
@@ -444,6 +449,7 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         roof_type: Dachform ("Flachdach", "Satteldach", "Walmdach", etc.)
         invalid: Ob Modul an ungültiger Position ist (rot Farbe #e74c3c)
         module_number: Optionale Modul-Nummer für Anzeige
+        module_power_w: Leistung des Moduls in Watt (Standard: 400W)
     
     Returns:
         Tuple (mesh, vertices):
@@ -457,6 +463,9 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         - 2.2.2: Berücksichtigung von Dachtyp
         - 2.3.1: Korrekte Rotation für Schrägdächer
         - 2.3.2: Korrekte Aufständerungs-Winkel für Flachdächer
+        - 8.2.1: Modul-Nummer im Hover-Text
+        - 8.2.2: Leistung (W) im Hover-Text
+        - 8.2.3: Ausrichtung (Azimut) im Hover-Text
     """
     # TASK 2.1: Modul-Geometrie korrigieren
     # Requirement 2.1.1: Korrekte Modul-Dimensionen verwenden
@@ -541,7 +550,53 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     if module_number is not None:
         module_name = f"{module_name} #{module_number}"
     
-    # Erstelle Mesh3d Objekt mit hoher Qualität
+    # TASK 8.2: Modul-Details für Hover-Text erstellen
+    # Requirement 8.2.1, 8.2.2, 8.2.3: Zeige Modul-Nummer, Leistung und Azimut
+    
+    # Konvertiere Azimuth zu Himmelsrichtung für bessere Lesbarkeit
+    def azimuth_to_direction(azimuth):
+        """Konvertiert Azimuth-Winkel zu Himmelsrichtung"""
+        # 0° = Süd, 90° = West, 180° = Nord, 270° = Ost
+        if azimuth < 22.5 or azimuth >= 337.5:
+            return "Süd"
+        elif 22.5 <= azimuth < 67.5:
+            return "Süd-West"
+        elif 67.5 <= azimuth < 112.5:
+            return "West"
+        elif 112.5 <= azimuth < 157.5:
+            return "Nord-West"
+        elif 157.5 <= azimuth < 202.5:
+            return "Nord"
+        elif 202.5 <= azimuth < 247.5:
+            return "Nord-Ost"
+        elif 247.5 <= azimuth < 292.5:
+            return "Ost"
+        else:  # 292.5 <= azimuth < 337.5
+            return "Süd-Ost"
+    
+    direction = azimuth_to_direction(azimuth_deg)
+    
+    # Erstelle Hover-Template mit Modul-Details
+    if module_number is not None:
+        hover_template = (
+            f"<b>Modul #{module_number}</b><br>"
+            f"Leistung: {module_power_w} W<br>"
+            f"Azimut: {azimuth_deg:.1f}° ({direction})<br>"
+            f"Neigung: {tilt_deg:.1f}°<br>"
+            f"Position: ({x:.2f}, {y:.2f}, {z:.2f}) m"
+            "<extra></extra>"
+        )
+    else:
+        hover_template = (
+            f"<b>PV Modul</b><br>"
+            f"Leistung: {module_power_w} W<br>"
+            f"Azimut: {azimuth_deg:.1f}° ({direction})<br>"
+            f"Neigung: {tilt_deg:.1f}°<br>"
+            f"Position: ({x:.2f}, {y:.2f}, {z:.2f}) m"
+            "<extra></extra>"
+        )
+    
+    # Erstelle Mesh3d Objekt mit hoher Qualität und Hover-Informationen
     mesh = go.Mesh3d(
         x=final_vertices[:, 0],
         y=final_vertices[:, 1],
@@ -558,7 +613,8 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
             roughness=0.2   # Rauheit
         ),
         lightposition=dict(x=100, y=100, z=100),
-        contour=dict(show=True, color='black', width=1)  # Schwarze Kanten
+        contour=dict(show=True, color='black', width=1),  # Schwarze Kanten
+        hovertemplate=hover_template  # TASK 8.2: Hover-Text mit Details
     )
     
     return mesh, final_vertices
@@ -632,21 +688,36 @@ def create_placement_grid(roof_length, roof_width, base_z, grid_spacing=1.0, col
     """
     Erstellt ein Raster-Overlay zur Orientierung auf der Dachfläche.
     
-    TASK 12: Raster-Overlay (optional)
+    TASK 8.3: Gitter-Overlay
+    
+    Dieses Raster hilft bei der Platzierung und Ausrichtung von PV-Modulen
+    auf der Dachfläche. Die Linien zeigen ein regelmäßiges Gitter an, das
+    als Orientierungshilfe dient.
     
     Args:
         roof_length: Länge des Dachs in Metern
         roof_width: Breite des Dachs in Metern
         base_z: Z-Position der Dachfläche
-        grid_spacing: Abstand zwischen Rasterlinien in Metern
-        color: Farbe der Rasterlinien (RGBA mit Transparenz)
-        line_width: Breite der Rasterlinien
+        grid_spacing: Abstand zwischen Rasterlinien in Metern (Standard: 1.0m)
+        color: Farbe der Rasterlinien als RGBA-String (Standard: halbtransparentes Grau)
+        line_width: Breite der Rasterlinien in Pixeln (Standard: 1)
     
     Returns:
         Plotly Scatter3d Objekt mit Rasterlinien
     
     Requirements:
-        - 8.5: Raster anzeigen (optional)
+        - 8.3.1: Zeige Platzierungs-Raster
+        - 8.3.2: Hilfslinien für Ausrichtung
+        - 8.3.3: Toggle Ein/Aus (wird über Session State gesteuert)
+    
+    Example:
+        >>> grid = create_placement_grid(
+        ...     roof_length=10.0,
+        ...     roof_width=8.0,
+        ...     base_z=3.0,
+        ...     grid_spacing=1.0,
+        ...     color='rgba(128, 128, 128, 0.3)'
+        ... )
     """
     half_l = roof_length / 2
     half_w = roof_width / 2
@@ -1357,6 +1428,25 @@ def build_plotly_scene(
     try:
         import streamlit as st
         
+        # TASK 8.2: Extract module power from project_data
+        # Try multiple possible keys for module power
+        module_power_w = 400  # Default value
+        if project_data:
+            # Try to get from project_details first
+            if "project_details" in project_data:
+                module_power_w = project_data["project_details"].get("selected_module_capacity_w", 400)
+            # Fallback to direct keys
+            if module_power_w == 400:  # Still default, try other keys
+                module_power_w = project_data.get("selected_module_capacity_w", 
+                                project_data.get("pv_module_power",
+                                project_data.get("module_power_wp", 400)))
+        
+        # Ensure it's a valid number
+        try:
+            module_power_w = float(module_power_w) if module_power_w else 400
+        except (ValueError, TypeError):
+            module_power_w = 400
+        
         # Requirement 10.1: Load positions from session state
         # Requirement 11.3: Try-Catch around rendering
         placed_positions = st.session_state.get("placed_module_positions", [])
@@ -1479,6 +1569,7 @@ def build_plotly_scene(
                     # Requirement 10.3, 11.3: Call create_pv_module_3d()
                     # with error handling
                     # TASK 12: Pass module_number and invalid flag
+                    # TASK 8.2: Pass module_power_w for hover information
                     try:
                         module_mesh, module_vertices = create_pv_module_3d(
                             x=x,
@@ -1491,7 +1582,8 @@ def build_plotly_scene(
                             show_mounting=True,
                             roof_type=roof_type,
                             invalid=is_invalid,  # TASK 12: Red if invalid
-                            module_number=(i + 1) if show_module_numbers else None
+                            module_number=(i + 1) if show_module_numbers else None,
+                            module_power_w=module_power_w  # TASK 8.2: Module power for hover
                         )
                     except Exception as mesh_error:
                         # Requirement 11.2, 11.4: Error handling
@@ -1592,7 +1684,9 @@ def build_plotly_scene(
                     tilt_deg=tilt,
                     color="#1a1a2e",
                     selected=is_selected,
-                    roof_type=roof_type
+                    roof_type=roof_type,
+                    module_number=i + 1,  # TASK 8.2: Add module number
+                    module_power_w=module_power_w  # TASK 8.2: Add module power
                 )
                 fig.add_trace(module)
                 
@@ -1646,7 +1740,9 @@ def build_plotly_scene(
                     tilt_deg=tilt,
                     color="#1a1a2e",
                     selected=is_selected,
-                    roof_type=roof_type
+                    roof_type=roof_type,
+                    module_number=i + 1,  # TASK 8.2: Add module number
+                    module_power_w=module_power_w  # TASK 8.2: Add module power
                 )
                 fig.add_trace(module)
                 
@@ -1695,26 +1791,35 @@ def build_plotly_scene(
             
             print(f"✓ Module number annotations added")
         
-        # TASK 12: Placement Grid Overlay (optional)
-        # Requirement 8.5: Show grid if enabled
+        # TASK 8.3: Placement Grid Overlay
+        # Requirement 8.3.1: Zeige Platzierungs-Raster
+        # Requirement 8.3.2: Hilfslinien für Ausrichtung
+        # Requirement 8.3.3: Toggle Ein/Aus
         show_placement_grid = st.session_state.get("show_placement_grid", False)
         
         if show_placement_grid:
             print("✓ Adding placement grid overlay...")
             
             try:
+                # Get customizable grid settings from session state
+                grid_spacing = st.session_state.get("grid_spacing", 1.0)
+                grid_opacity = st.session_state.get("grid_opacity", 0.3)
+                
+                # Create RGBA color with custom opacity
+                grid_color = f'rgba(128, 128, 128, {grid_opacity})'
+                
                 # Create grid at roof level
                 grid_overlay = create_placement_grid(
                     roof_length=dims.length_m,
                     roof_width=dims.width_m,
                     base_z=module_base_z - 0.05,  # Slightly below modules
-                    grid_spacing=1.0,  # 1m grid
-                    color='rgba(128, 128, 128, 0.3)',  # Semi-transparent gray
+                    grid_spacing=grid_spacing,  # Customizable spacing
+                    color=grid_color,  # Customizable transparency
                     line_width=1
                 )
                 fig.add_trace(grid_overlay)
                 
-                print("✓ Placement grid overlay added")
+                print(f"✓ Placement grid overlay added (spacing={grid_spacing}m, opacity={grid_opacity})")
             except Exception as grid_error:
                 print(f"⚠️ Error adding placement grid: {grid_error}")
         

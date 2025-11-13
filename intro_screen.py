@@ -159,7 +159,7 @@ def render_intro_screen():
         st.warning("Lade Intro-Bildschirm...")
         st.stop()
 
-    # Zentriertes Layout mit CSS - OHNE EMOJIS
+    # Zentriertes Layout mit CSS (Emoji-Filterung zentral über emoji_toggle.py)
     st.markdown("""
         <style>
         /* Dunkelgrauer Hintergrund für gesamte Seite */
@@ -542,7 +542,7 @@ def render_intro_screen():
         </div>
         """, unsafe_allow_html=True)
 
-        # Footer - OHNE EMOJIS - OHNE EMOJIS
+        # Footer (Emoji-Filterung zentral über emoji_toggle.py)
         st.markdown("""
         <div style="text-align: center; margin-top: 3rem; color: #ffffff; font-size: 1rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
             Ömers All in One DingsBums v2.0 | 2025 | Powered by Ömer
@@ -729,7 +729,7 @@ def render_registration_form(settings: dict):
 
 
 def show_user_info():
-    """Zeigt Benutzer-Info in der Sidebar - OHNE EMOJIS"""
+    """Zeigt Benutzer-Info in der Sidebar (Emoji-Filterung zentral über emoji_toggle.py)"""
     if st.session_state.get('intro_completed', False):
         username = st.session_state.get('username', 'Unbekannt')
         user_mode = st.session_state.get('user_mode', 'guest')

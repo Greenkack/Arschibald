@@ -43,6 +43,14 @@ except ImportError:
     PV_H = 1.76
     MAX_MODULES = 200
 
+# TASK 6: Import roof-type-specific logic
+try:
+    from utils.pv3d_roof_type_logic import get_roof_type_placement
+    ROOF_TYPE_LOGIC_AVAILABLE = True
+except ImportError:
+    ROOF_TYPE_LOGIC_AVAILABLE = False
+    print("⚠️ Roof-type-specific logic not available, using generic placement")
+
 
 # TASK 13: Position cache for performance
 # Caches calculated positions to avoid recalculation
@@ -358,6 +366,63 @@ def handle_auto_placement(
         # FIX: Unterscheide zwischen Flachdach und geneigten Dächern
         # Normalisiere roof_type (lowercase für case-insensitive Vergleich)
         roof_type_normalized = roof_type.strip().lower() if roof_type else "flachdach"
+        
+        # TASK 6: Use roof-type-specific logic if available
+        if ROOF_TYPE_LOGIC_AVAILABLE:
+            print(f"   Verwende dachtyp-spezifische Logik für '{roof_type}'")
+            try:
+                # Use roof-type-specific placement logic
+                positions_3d = get_roof_type_placement(
+                    roof_type=roof_type,
+                    roof_length=roof_length,
+                    roof_width=roof_width,
+                    roof_pitch=roof_pitch,
+                    module_quantity=module_quantity,
+                    module_width=PV_W,
+                    module_height=PV_H,
+                    margin=margin,
+                    orientation=orientation
+                )
+                
+                if not positions_3d:
+                    return {
+                        "success": False,
+                        "positions": [],
+                        "count": 0,
+                        "message": (
+                            "⚠️ Keine Module konnten platziert werden. "
+                            "Die Dachfläche ist zu klein oder die Ränder zu groß."
+                        )
+                    }
+                
+                # Requirement 9.1: Store positions in session state
+                st.session_state["placed_module_positions"] = positions_3d
+
+                # Requirement 9.2: Store count in session state
+                st.session_state["placed_module_count"] = len(positions_3d)
+
+                # Requirement 2.6: Return success with count
+                actual_count = len(positions_3d)
+                if actual_count < module_quantity:
+                    message = (
+                        f"✓ {actual_count} Module platziert "
+                        f"(gewünscht: {module_quantity}). "
+                        "Nicht genug Platz für alle Module."
+                    )
+                else:
+                    message = f"✓ {actual_count} Module erfolgreich platziert!"
+
+                return {
+                    "success": True,
+                    "positions": positions_3d,
+                    "count": actual_count,
+                    "message": message
+                }
+                
+            except Exception as roof_error:
+                print(f"⚠️ Fehler bei dachtyp-spezifischer Logik: {roof_error}")
+                print("   Fallback zu generischer Grid-Berechnung")
+                # Fall through to generic logic below
         
         # TASK 13: Check cache first for performance
         # Requirement 10.5: Caching von berechneten Positionen
@@ -936,6 +1001,304 @@ def initialize_session_state() -> None:
 
     if "show_module_numbers" not in st.session_state:
         st.session_state["show_module_numbers"] = False
+
+
+def handle_move_selected(
+    selected_indices: List[int],
+    offset_x: float,
+    offset_y: float,
+    roof_length: float,
+    roof_width: float,
+    roof_type: str,
+    roof_pitch: float = 0.0
+) -> Dict[str, Any]:
+    """
+    Move selected modules by specified offset.
+
+    TASK 4.2: Modul verschieben
+    This function moves selected modules by the specified X and Y offsets,
+    with collision detection to prevent overlaps and boundary violations.
+
+    Args:
+        selected_indices: List of indices of modules to move
+        offset_x: X-offset in meters (positive = right, negative = left)
+        offset_y: Y-offset in meters (positive = back, negative = front)
+        roof_length: Length of the roof in meters
+        roof_width: Width of the roof in meters
+        roof_type: Type of roof
+        roof_pitch: Roof pitch angle in degrees
+
+    Returns:
+        Dictionary with:
+            - success: bool - Whether move was successful
+            - count: int - Number of modules moved
+            - message: str - Status or error message
+
+    Requirements:
+        - 4.2.3: Move button functionality
+        - 7.1-7.4: Collision detection during move
+        - 9.1-9.2: Session state management
+        - 11.2: Error handling
+    """
+    try:
+        # Get current positions
+        if "placed_module_positions" not in st.session_state:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Keine Module zum Verschieben vorhanden"
+            }
+
+        positions = st.session_state["placed_module_positions"]
+
+        if not positions:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Keine Module zum Verschieben vorhanden"
+            }
+
+        if not selected_indices:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Keine Module ausgewählt"
+            }
+
+        # Validate offset values
+        if abs(offset_x) < 0.01 and abs(offset_y) < 0.01:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Offset zu klein (mindestens 0.01m erforderlich)"
+            }
+
+        # Calculate new positions for selected modules
+        new_positions = []
+        moved_count = 0
+        collision_detected = False
+
+        for index in selected_indices:
+            if 0 <= index < len(positions):
+                old_x, old_y, old_z = positions[index]
+                new_x = old_x + offset_x
+                new_y = old_y + offset_y
+
+                # Recalculate Z-position based on new X, Y and roof type
+                # For flat roofs, Z stays the same
+                # For pitched roofs, Z depends on position on roof surface
+                if roof_type.lower().strip() == "flachdach":
+                    new_z = old_z  # Z doesn't change for flat roofs
+                else:
+                    # For pitched roofs, recalculate Z based on new Y position
+                    import math
+                    base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
+                    
+                    if roof_pitch > 0:
+                        inclination_rad = math.radians(roof_pitch)
+                        dist_from_eave = new_y + roof_width / 2
+                        z_offset = dist_from_eave * math.tan(inclination_rad)
+                        new_z = base_z + z_offset
+                    else:
+                        new_z = base_z
+
+                new_position = (new_x, new_y, new_z)
+
+                # Check for collisions with other modules (excluding selected ones)
+                other_positions = [
+                    pos for i, pos in enumerate(positions)
+                    if i not in selected_indices
+                ]
+
+                collision_result = check_module_collision(
+                    new_position=new_position,
+                    existing_positions=other_positions,
+                    roof_length=roof_length,
+                    roof_width=roof_width,
+                    margin=DEFAULT_MARGIN,
+                    orientation="portrait"
+                )
+
+                if collision_result["collision"]:
+                    collision_detected = True
+                    return {
+                        "success": False,
+                        "count": 0,
+                        "message": (
+                            f"❌ Verschieben nicht möglich: "
+                            f"{collision_result['message']}"
+                        )
+                    }
+
+                new_positions.append((index, new_position))
+                moved_count += 1
+
+        # If no collisions, apply all moves
+        if not collision_detected:
+            for index, new_position in new_positions:
+                positions[index] = new_position
+
+            # Update session state
+            st.session_state["placed_module_positions"] = positions
+
+            return {
+                "success": True,
+                "count": moved_count,
+                "message": (
+                    f"✓ {moved_count} Module verschoben "
+                    f"(Δx={offset_x:+.2f}m, Δy={offset_y:+.2f}m)"
+                )
+            }
+
+    except Exception as e:
+        error_message = f"❌ Fehler beim Verschieben: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+
+        return {
+            "success": False,
+            "count": 0,
+            "message": error_message
+        }
+
+
+def handle_rotate_selected(
+    selected_indices: List[int],
+    rotation_degrees: float
+) -> Dict[str, Any]:
+    """
+    Rotate selected modules by specified angle.
+
+    TASK 4.2: Modul drehen
+    This function rotates selected modules around their center point by
+    the specified angle. Note: This is a simplified 2D rotation in the
+    XY plane. For full 3D rotation (tilt), use module transforms.
+
+    Args:
+        selected_indices: List of indices of modules to rotate
+        rotation_degrees: Rotation angle in degrees (positive = counterclockwise)
+
+    Returns:
+        Dictionary with:
+            - success: bool - Whether rotation was successful
+            - count: int - Number of modules rotated
+            - message: str - Status or error message
+
+    Requirements:
+        - 4.2.4: Rotate button functionality
+        - 9.1-9.2: Session state management
+        - 11.2: Error handling
+
+    Note:
+        This function currently rotates module positions around the roof center.
+        For individual module orientation (azimuth/tilt), use AdvancedLayoutConfig
+        with module_transforms.
+    """
+    try:
+        # Get current positions
+        if "placed_module_positions" not in st.session_state:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Keine Module zum Drehen vorhanden"
+            }
+
+        positions = st.session_state["placed_module_positions"]
+
+        if not positions:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Keine Module zum Drehen vorhanden"
+            }
+
+        if not selected_indices:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Keine Module ausgewählt"
+            }
+
+        # Validate rotation angle
+        if abs(rotation_degrees) < 1.0:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Rotationswinkel zu klein (mindestens 1° erforderlich)"
+            }
+
+        # Calculate center of selected modules
+        selected_positions = [
+            positions[i] for i in selected_indices
+            if 0 <= i < len(positions)
+        ]
+
+        if not selected_positions:
+            return {
+                "success": False,
+                "count": 0,
+                "message": "⚠️ Keine gültigen Module ausgewählt"
+            }
+
+        # Calculate centroid (center point) of selected modules
+        center_x = sum(pos[0] for pos in selected_positions) / len(selected_positions)
+        center_y = sum(pos[1] for pos in selected_positions) / len(selected_positions)
+
+        # Convert rotation angle to radians
+        import math
+        rotation_rad = math.radians(rotation_degrees)
+        cos_angle = math.cos(rotation_rad)
+        sin_angle = math.sin(rotation_rad)
+
+        # Rotate each selected module around the centroid
+        rotated_count = 0
+        for index in selected_indices:
+            if 0 <= index < len(positions):
+                old_x, old_y, old_z = positions[index]
+
+                # Translate to origin (relative to centroid)
+                rel_x = old_x - center_x
+                rel_y = old_y - center_y
+
+                # Apply 2D rotation matrix
+                new_rel_x = rel_x * cos_angle - rel_y * sin_angle
+                new_rel_y = rel_x * sin_angle + rel_y * cos_angle
+
+                # Translate back
+                new_x = new_rel_x + center_x
+                new_y = new_rel_y + center_y
+
+                # Z-position stays the same for 2D rotation
+                new_z = old_z
+
+                # Update position
+                positions[index] = (new_x, new_y, new_z)
+                rotated_count += 1
+
+        # Update session state
+        st.session_state["placed_module_positions"] = positions
+
+        return {
+            "success": True,
+            "count": rotated_count,
+            "message": (
+                f"✓ {rotated_count} Module gedreht "
+                f"({rotation_degrees:+.1f}° um Zentrum)"
+            )
+        }
+
+    except Exception as e:
+        error_message = f"❌ Fehler beim Drehen: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+
+        return {
+            "success": False,
+            "count": 0,
+            "message": error_message
+        }
 
 
 def get_placement_statistics() -> Dict[str, Any]:

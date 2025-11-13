@@ -2179,17 +2179,28 @@ class AdvancedCalculationsIntegrator:
                                             consumption_profile[i] - pv_generation_profile[i]))
 
         peak_load = max(consumption_profile)
-        simultaneity_factor = peak_load / \
-            (calc_results.get("anlage_kwp", 10) / 10)
-        load_coverage = (
-            sum(
-                min(pv_generation_profile[i], consumption_profile[i]) for i in range(24)
+        
+        # Berechne Simultaneitätsfaktor mit Schutz vor Division durch Null
+        anlage_kwp = calc_results.get("anlage_kwp", 10)
+        if anlage_kwp > 0:
+            simultaneity_factor = peak_load / (anlage_kwp / 10)
+        else:
+            simultaneity_factor = 0.0
+        
+        # Berechne Load Coverage mit Schutz vor Division durch Null
+        total_consumption = sum(consumption_profile)
+        if total_consumption > 0:
+            load_coverage = (
+                sum(
+                    min(pv_generation_profile[i], consumption_profile[i]) for i in range(24)
+                )
+                / total_consumption
+                * 100
             )
-            / sum(consumption_profile)
-            * 100
-        )
-        grid_relief = sum(pv_generation_profile) / \
-            sum(consumption_profile) * 100
+            grid_relief = sum(pv_generation_profile) / total_consumption * 100
+        else:
+            load_coverage = 0.0
+            grid_relief = 0.0
 
         return {
             "consumption_profile": consumption_profile,
@@ -4828,6 +4839,36 @@ def perform_calculations(
             if app_debug_mode_is_enabled:
                 print(
                     f"CALC: Berechnungsergebnisse in Session State gespeichert (Zeitstempel: {timestamp})")
+                
+                # Integration: Speichere Berechnung im CRM wenn Projekt-ID vorhanden
+                try:
+                    from crm.integration.calculation_bridge import save_calculation_to_project
+                    
+                    # Prüfe ob Projekt-ID und Kunden-ID vorhanden sind
+                    project_id = st.session_state.get('selected_project_id')
+                    customer_id = st.session_state.get('selected_customer_id')
+                    
+                    if project_id and customer_id:
+                        # Speichere Berechnung
+                        calc_id = save_calculation_to_project(
+                            project_id=project_id,
+                            customer_id=customer_id,
+                            calculation_data=results,
+                            calculation_type='pv',
+                            created_by=st.session_state.get('current_user', 'System'),
+                            notes=f"Automatisch gespeichert am {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+                        )
+                        
+                        if calc_id:
+                            print(f"CALC: Berechnung automatisch im CRM gespeichert (ID: {calc_id})")
+                            st.session_state['last_saved_calculation_id'] = calc_id
+                except ImportError:
+                    # CRM-Integration nicht verfügbar
+                    pass
+                except Exception as e:
+                    if app_debug_mode_is_enabled:
+                        print(f"CALC: Fehler beim Speichern der Berechnung im CRM: {e}")
+                
     except ImportError:
         # Streamlit nicht verfügbar (z.B. bei direkter Ausführung)
         pass

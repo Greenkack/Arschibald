@@ -68,10 +68,8 @@ class PDFSystemManager:
         text = re.sub(r'</b></b>', r'</b>', text)  # Doppelte closing tags
         text = re.sub(r'<b><b>', r'<b>', text)    # Doppelte opening tags
 
-        # Entferne problematische Emoji-Kombinationen die XML-Probleme verursachen
-        problematic_emojis = ['\U0001f527', '\u2699\ufe0f', '\U0001f4de']
-        for emoji in problematic_emojis:
-            text = text.replace(emoji, '•')
+        # Emoji-Filterung erfolgt jetzt zentral über emoji_toggle.py
+        # Keine manuelle Emoji-Entfernung mehr nötig
 
         return text
 

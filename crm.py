@@ -981,39 +981,102 @@ def render_crm(
             docs: list[dict[str, Any]] = []
             if callable(_list_customer_documents_db):
                 docs = _list_customer_documents_db(current_customer['id'])
+            
             if docs:
-                for d in docs:
-                    cols = st.columns([3, 2, 2, 2])
-                    cols[0].write(d.get("display_name") or d.get("file_name"))
-                    cols[1].write(d.get("doc_type", ""))
-                    cols[2].write(str(d.get("uploaded_at", "")))
+                # Sortiere Dokumente chronologisch (neueste zuerst)
+                docs_sorted = sorted(docs, key=lambda x: x.get('uploaded_at', ''), reverse=True)
+                
+                # Import PDF Bridge für Badges
+                try:
+                    from crm.integration.pdf_bridge import get_pdf_type_badge_color, get_pdf_type_label
+                    pdf_bridge_available = True
+                except ImportError:
+                    pdf_bridge_available = False
+                
+                for d in docs_sorted:
+                    cols = st.columns([4, 2, 2, 2])
+                    
+                    # Dateiname mit Badge
+                    doc_type = d.get("doc_type", "")
+                    display_name = d.get("display_name") or d.get("file_name")
+                    
+                    if pdf_bridge_available and doc_type:
+                        badge_color = get_pdf_type_badge_color(doc_type)
+                        type_label = get_pdf_type_label(doc_type)
+                        
+                        # Extrahiere Versionsnummer aus Dateinamen
+                        import re
+                        version_match = re.search(r'v(\d+)', display_name, re.IGNORECASE)
+                        version_text = f" v{version_match.group(1)}" if version_match else ""
+                        
+                        # Badge mit Typ und Version
+                        badge_html = f'<span style="background-color: {badge_color}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-right: 8px;">{type_label}{version_text}</span>'
+                        cols[0].markdown(f"{badge_html} {display_name}", unsafe_allow_html=True)
+                    else:
+                        cols[0].write(display_name)
+                    
+                    # Datum formatieren
+                    uploaded_at = d.get("uploaded_at", "")
+                    if uploaded_at:
+                        try:
+                            from datetime import datetime
+                            # Parse verschiedene Datumsformate
+                            if 'T' in uploaded_at:
+                                dt = datetime.fromisoformat(uploaded_at.replace('Z', '+00:00'))
+                            else:
+                                dt = datetime.strptime(uploaded_at, '%Y-%m-%d %H:%M:%S')
+                            formatted_date = dt.strftime('%d.%m.%Y %H:%M')
+                            cols[1].write(formatted_date)
+                        except Exception:
+                            cols[1].write(uploaded_at)
+                    else:
+                        cols[1].write("-")
+                    
+                    # Dateigröße anzeigen (falls verfügbar)
+                    if _get_customer_document_file_path:
+                        path = _get_customer_document_file_path(d.get("id"))
+                        if path and os.path.exists(path):
+                            try:
+                                file_size = os.path.getsize(path)
+                                if file_size < 1024:
+                                    size_str = f"{file_size} B"
+                                elif file_size < 1024 * 1024:
+                                    size_str = f"{file_size / 1024:.1f} KB"
+                                else:
+                                    size_str = f"{file_size / (1024 * 1024):.1f} MB"
+                                cols[2].write(size_str)
+                            except Exception:
+                                cols[2].write("-")
+                        else:
+                            cols[2].write("-")
+                    else:
+                        cols[2].write("-")
+                    
                     # Download & Löschen
                     with cols[3]:
-                        if _get_customer_document_file_path:
-                            path = _get_customer_document_file_path(
-                                d.get("id"))
-                            try:
-                                if path and os.path.exists(path):
-                                    with open(path, "rb") as fh:
-                                        st.download_button(" Download", data=fh.read(), file_name=d.get(
-                                            "file_name", "dokument.bin"), key=f"dl_doc_{d.get('id')}")
-                            except Exception:
-                                pass
-                        if st.button(" Löschen", key=f"del_doc_{d.get('id')}"):
-                            if callable(_delete_customer_document_db) and _delete_customer_document_db(
-                                    d.get("id")):
-                                st.success(
-                                    get_text_crm(
-                                        texts,
-                                        "crm_filevault_delete_success",
-                                        "Dokument gelöscht."))
-                                st.rerun()
+                        action_cols = st.columns(2)
+                        with action_cols[0]:
+                            if _get_customer_document_file_path:
+                                path = _get_customer_document_file_path(d.get("id"))
+                                try:
+                                    if path and os.path.exists(path):
+                                        with open(path, "rb") as fh:
+                                            st.download_button(
+                                                "📥",
+                                                data=fh.read(),
+                                                file_name=d.get("file_name", "dokument.bin"),
+                                                key=f"dl_doc_{d.get('id')}",
+                                                help="Herunterladen"
+                                            )
+                                except Exception:
+                                    pass
+                        with action_cols[1]:
+                            if st.button("🗑️", key=f"del_doc_{d.get('id')}", help="Löschen"):
+                                if callable(_delete_customer_document_db) and _delete_customer_document_db(d.get("id")):
+                                    st.success(get_text_crm(texts, "crm_filevault_delete_success", "Dokument gelöscht."))
+                                    st.rerun()
             else:
-                st.caption(
-                    get_text_crm(
-                        texts,
-                        "crm_filevault_empty",
-                        "Noch keine Dokumente hinterlegt."))
+                st.caption(get_text_crm(texts, "crm_filevault_empty", "Noch keine Dokumente hinterlegt."))
 
     elif view_mode == 'add_project' or view_mode == 'edit_project':
         project_to_edit = {}
@@ -1625,6 +1688,160 @@ def render_crm(
                         "Sicher? Klick nochmal zum Bestätigen."))
                 st.session_state[f"confirm_delete_project_view_{selected_project_id}"] = True
 
+        # Berechnungs-Historie anzeigen
+        st.markdown("---")
+        st.subheader("📊 Berechnungs-Historie")
+        
+        try:
+            from crm.integration.calculation_bridge import (
+                get_calculations_for_project,
+                set_main_offer,
+                compare_calculations,
+                delete_calculation
+            )
+            
+            calculations = get_calculations_for_project(selected_project_id)
+            
+            if calculations:
+                st.write(f"**{len(calculations)}** gespeicherte Berechnungen für dieses Projekt")
+                
+                # Vergleichs-Modus
+                if len(calculations) >= 2:
+                    with st.expander("🔍 Berechnungen vergleichen", expanded=False):
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            calc_ids = [c['id'] for c in calculations]
+                            calc_labels = [f"v{c['version']} ({c['created_at'][:10]})" for c in calculations]
+                            calc1_idx = st.selectbox(
+                                "Berechnung 1",
+                                range(len(calculations)),
+                                format_func=lambda i: calc_labels[i],
+                                key="compare_calc1"
+                            )
+                        with col2:
+                            calc2_idx = st.selectbox(
+                                "Berechnung 2",
+                                range(len(calculations)),
+                                format_func=lambda i: calc_labels[i],
+                                index=min(1, len(calculations)-1),
+                                key="compare_calc2"
+                            )
+                        with col3:
+                            if st.button("Vergleichen", key="compare_btn"):
+                                comparison = compare_calculations(
+                                    calc_ids[calc1_idx],
+                                    calc_ids[calc2_idx]
+                                )
+                                
+                                if 'error' not in comparison:
+                                    st.markdown("### Vergleichsergebnisse")
+                                    
+                                    # Erstelle Vergleichstabelle
+                                    import pandas as pd
+                                    
+                                    comp_data = []
+                                    for field, diff in comparison['differences'].items():
+                                        val1 = comparison['calc1']['values'].get(field, 0)
+                                        val2 = comparison['calc2']['values'].get(field, 0)
+                                        
+                                        comp_data.append({
+                                            'Kennzahl': field.replace('_', ' ').title(),
+                                            f"v{comparison['calc1']['version']}": f"{val1:,.2f}" if isinstance(val1, (int, float)) else str(val1),
+                                            f"v{comparison['calc2']['version']}": f"{val2:,.2f}" if isinstance(val2, (int, float)) else str(val2),
+                                            'Differenz': f"{diff['absolute']:,.2f}" if isinstance(diff['absolute'], (int, float)) else diff['absolute'],
+                                            'Differenz %': f"{diff['percent']:,.1f}%" if isinstance(diff['percent'], (int, float)) else diff['percent']
+                                        })
+                                    
+                                    df_comparison = pd.DataFrame(comp_data)
+                                    st.dataframe(df_comparison, use_container_width=True, hide_index=True)
+                                else:
+                                    st.error(comparison['error'])
+                
+                # Liste der Berechnungen
+                for calc in calculations:
+                    with st.expander(
+                        f"{'⭐ ' if calc['is_main_offer'] else ''}Version {calc['version']} - {calc['created_at'][:16].replace('T', ' ')}",
+                        expanded=calc['is_main_offer']
+                    ):
+                        col1, col2, col3 = st.columns([2, 1, 1])
+                        
+                        with col1:
+                            st.write(f"**Typ:** {calc['calculation_type']}")
+                            if calc['created_by']:
+                                st.write(f"**Erstellt von:** {calc['created_by']}")
+                            if calc['notes']:
+                                st.write(f"**Notizen:** {calc['notes']}")
+                        
+                        with col2:
+                            # Hauptangebot-Button
+                            if not calc['is_main_offer']:
+                                if st.button(
+                                    "⭐ Als Hauptangebot",
+                                    key=f"set_main_{calc['id']}",
+                                    help="Diese Berechnung als Hauptangebot markieren"
+                                ):
+                                    if set_main_offer(calc['id'], selected_project_id):
+                                        st.success("Als Hauptangebot markiert!")
+                                        st.rerun()
+                                    else:
+                                        st.error("Fehler beim Markieren")
+                            else:
+                                st.success("✓ Hauptangebot")
+                        
+                        with col3:
+                            # Löschen-Button
+                            if st.button(
+                                "🗑️ Löschen",
+                                key=f"delete_calc_{calc['id']}",
+                                help="Diese Berechnung löschen"
+                            ):
+                                if st.session_state.get(f"confirm_delete_calc_{calc['id']}", False):
+                                    if delete_calculation(calc['id']):
+                                        st.success("Berechnung gelöscht!")
+                                        del st.session_state[f"confirm_delete_calc_{calc['id']}"]
+                                        st.rerun()
+                                    else:
+                                        st.error("Fehler beim Löschen")
+                                else:
+                                    st.warning("Nochmal klicken zum Bestätigen!")
+                                    st.session_state[f"confirm_delete_calc_{calc['id']}"] = True
+                        
+                        # Wichtige Kennzahlen anzeigen
+                        st.markdown("**Wichtige Kennzahlen:**")
+                        data = calc['calculation_data']
+                        
+                        kpi_col1, kpi_col2, kpi_col3, kpi_col4 = st.columns(4)
+                        with kpi_col1:
+                            st.metric(
+                                "Investition (netto)",
+                                f"{data.get('total_investment_netto', 0):,.2f} €"
+                            )
+                        with kpi_col2:
+                            st.metric(
+                                "Jährl. Ertrag",
+                                f"{data.get('annual_pv_production_kwh', 0):,.0f} kWh"
+                            )
+                        with kpi_col3:
+                            st.metric(
+                                "Autarkiegrad",
+                                f"{data.get('self_supply_rate_percent', 0):.1f}%"
+                            )
+                        with kpi_col4:
+                            st.metric(
+                                "Amortisation",
+                                f"{data.get('payback_period_years', 0):.1f} Jahre"
+                            )
+            else:
+                st.info("Noch keine Berechnungen für dieses Projekt gespeichert.")
+                st.write("💡 **Tipp:** Führen Sie eine Berechnung im Solar Calculator durch, während dieses Projekt ausgewählt ist, um sie automatisch hier zu speichern.")
+        
+        except ImportError:
+            st.warning("Berechnungs-Historie nicht verfügbar (CRM-Integration fehlt)")
+        except Exception as e:
+            st.error(f"Fehler beim Laden der Berechnungs-Historie: {e}")
+        
+        st.markdown("---")
+        
         if st.button(
                 get_text_crm(
                     texts,

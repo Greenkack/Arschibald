@@ -29,6 +29,14 @@ except ImportError as e:
     st.error(f"Datenbankmodul nicht verfügbar: {e}")
     DATABASE_AVAILABLE = False
 
+# Import Task Management UI
+try:
+    from crm.features.task_ui import render_task_management_ui
+    TASK_MANAGEMENT_AVAILABLE = True
+except ImportError as e:
+    print(f"Task Management UI nicht verfügbar: {e}")
+    TASK_MANAGEMENT_AVAILABLE = False
+
 
 def render_crm_dashboard(
         texts: dict[str, str], module_name: str | None = None):
@@ -50,7 +58,8 @@ def render_crm_dashboard(
         " Kunden",
         " Projekte",
         " Umsatz",
-        " Statistiken"
+        " Statistiken",
+        "📋 Aufgaben"
     ])
 
     with tabs[0]:
@@ -67,6 +76,9 @@ def render_crm_dashboard(
 
     with tabs[4]:
         render_statistics_section(texts)
+    
+    with tabs[5]:
+        render_tasks_section(texts)
 
 
 def render_overview_section(texts: dict[str, str]):
@@ -588,6 +600,18 @@ def render_statistics_section(texts: dict[str, str]):
         use_container_width=True,
         hide_index=True
     )
+
+def render_tasks_section(texts: dict[str, str]):
+    """Aufgaben-Sektion des CRM Dashboards"""
+    
+    if not TASK_MANAGEMENT_AVAILABLE:
+        st.warning("📋 Aufgabenverwaltung ist nicht verfügbar.")
+        st.info("Das Task Management Modul konnte nicht geladen werden.")
+        return
+    
+    # Rendere die vollständige Task Management UI
+    render_task_management_ui(texts=texts)
+
 
 # Haupt-Export-Funktion
 

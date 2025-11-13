@@ -93,12 +93,64 @@ def _create_customer_documents_table(conn: sqlite3.Connection) -> None:
         print(f"DB Fehler _create_customer_documents_table: {e}")
 
 
+def _create_project_calculations_table(conn: sqlite3.Connection) -> None:
+    """Erstellt die Tabelle für Berechnungsergebnisse, die mit Projekten verknüpft sind."""
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS project_calculations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                project_id INTEGER NOT NULL,
+                customer_id INTEGER NOT NULL,
+                version INTEGER NOT NULL DEFAULT 1,
+                calculation_data TEXT NOT NULL, -- JSON mit allen Berechnungsergebnissen
+                calculation_type TEXT, -- 'pv', 'heatpump', 'combined'
+                is_main_offer INTEGER DEFAULT 0, -- 0 = nein, 1 = ja
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_by TEXT,
+                notes TEXT,
+                FOREIGN KEY(project_id) REFERENCES projects(id),
+                FOREIGN KEY(customer_id) REFERENCES customers(id)
+            )
+            """
+        )
+        # Index für schnellere Abfragen
+        cur.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_project_calculations_project_id 
+            ON project_calculations(project_id)
+            """
+        )
+        cur.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_project_calculations_customer_id 
+            ON project_calculations(customer_id)
+            """
+        )
+        conn.commit()
+        print("DB: Tabelle 'project_calculations' erfolgreich erstellt/überprüft.")
+    except Exception as e:
+        print(f"DB Fehler _create_project_calculations_table: {e}")
+
+
 def ensure_customer_documents_table() -> None:
     conn = get_db_connection()
     if not conn:
         return
     try:
         _create_customer_documents_table(conn)
+    finally:
+        conn.close()
+
+
+def ensure_project_calculations_table() -> None:
+    """Stellt sicher, dass die project_calculations Tabelle existiert."""
+    conn = get_db_connection()
+    if not conn:
+        return
+    try:
+        _create_project_calculations_table(conn)
     finally:
         conn.close()
 
