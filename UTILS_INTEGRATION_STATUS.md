@@ -11,6 +11,7 @@
 ### **Kern 3D-Visualisierung** (3 Module)
 
 #### ✅ **pv3d.py** - Core 3D-Engine
+
 - **Import in:** `solar_3d_view_module.py`, `pdf_generator.py`, `gui.py`
 - **Verwendete Klassen:**
   - `BuildingDims` - Gebäudedimensionen
@@ -19,6 +20,7 @@
 - **Status:** ✅ VOLL AKTIV - Basis für gesamte 3D-Visualisierung
 
 #### ✅ **pv3d_plotly.py** - Plotly Scene Builder
+
 - **Import in:** `solar_3d_view_module.py`, `pdf_generator.py`
 - **Verwendete Funktionen:**
   - `build_plotly_scene()` - 3D-Szene erstellen
@@ -27,6 +29,7 @@
 - **Status:** ✅ VOLL AKTIV - Erzeugt alle 3D-Grafiken
 
 #### ✅ **pv3d_ui_components.py** - UI-Komponenten
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `render_basis_settings()` - Basis-Einstellungen UI
@@ -41,6 +44,7 @@
 ### **Modul-Platzierung & Grid** (4 Module)
 
 #### ✅ **pv3d_grid_calculator.py** - Grid-Berechnung
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `calculate_module_grid()` - Automatische Grid-Berechnung
@@ -48,6 +52,7 @@
 - **Status:** ✅ VOLL AKTIV - Automatische Modul-Belegung
 
 #### ✅ **pv3d_placement_handler.py** - Placement-Logik
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `handle_auto_placement()` - Automatische Platzierung
@@ -59,12 +64,14 @@
 - **Status:** ✅ VOLL AKTIV - Kern der Platzierungs-Logik
 
 #### ✅ **pv3d_module_placement_ui.py** - Placement UI-Panel
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `render_module_placement_panel()` - Komplettes Placement-UI
 - **Status:** ✅ VOLL AKTIV - UI für Modul-Platzierung
 
 #### ✅ **pv3d_mounting_logic.py** - Montage-Logik
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `validate_mounting_selection()` - Montage-Validierung
@@ -77,6 +84,7 @@
 ### **Analyse & Optimierung** (2 Module)
 
 #### ✅ **pv3d_analysis.py** - Analyse-Funktionen
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `calculate_shading_analysis()` - Verschattungs-Analyse
@@ -84,6 +92,7 @@
 - **Status:** ✅ VOLL AKTIV - Erweiterte Analysen
 
 #### ✅ **pv3d_optimization.py** - Layout-Optimierung
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `optimize_layout()` - KI-basierte Layout-Optimierung
@@ -94,6 +103,7 @@
 ### **Export & Rendering** (3 Module)
 
 #### ✅ **pv3d_export.py** - Export-Funktionen
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `export_screenshot()` - Screenshot-Export
@@ -103,12 +113,14 @@
 - **Status:** ✅ VOLL AKTIV - Alle Export-Features
 
 #### ✅ **pv3d_export_buttons.py** - Export-Buttons UI
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `render_export_action_buttons()` - Export-Button-Leiste
 - **Status:** ✅ VOLL AKTIV - Export-UI
 
 #### ✅ **pdf_visual_inject.py** - PDF-Integration
+
 - **Import in:** `pdf_generator.py`
 - **Verwendete Funktionen:**
   - `make_pv3d_image_flowable()` - 3D-Bild in PDF einbetten
@@ -120,6 +132,7 @@
 ### **Erweiterte Features** (3 Module)
 
 #### ✅ **pv3d_wow_features.py** - WOW-Features
+
 - **Import in:** `solar_3d_view_module.py`
 - **Verwendete Funktionen:**
   - `render_sun_path_animation()` - Sonnenbahn-Animation
@@ -135,6 +148,7 @@
 - **Status:** ✅ VOLL AKTIV - Premium-Features implementiert
 
 #### ✅ **pv3d_performance.py** - Performance-Optimierung
+
 - **Import in:** Indirekt via andere pv3d-Module
 - **Verwendete Funktionen:**
   - `PerformanceMonitor` - Performance-Tracking
@@ -143,6 +157,7 @@
 - **Status:** ✅ VOLL AKTIV - Performance-Monitoring
 
 #### ✅ **pv3d_help.py** - Hilfe-System
+
 - **Import in:** Indirekt via pv3d_ui_components
 - **Verwendete Funktionen:**
   - `get_tooltip()` - Tooltips
@@ -154,6 +169,7 @@
 ### **Legacy Modul-Platzierung** (3 Module)
 
 #### ⚠️ **pv_module_placement_system.py** - Legacy Placement-System
+
 - **Import in:** `solar_3d_view_module.py` (als Fallback)
 - **Verwendete Klassen:**
   - `ModulePlacementManager` - Legacy Manager
@@ -161,10 +177,12 @@
 - **Status:** 🟡 TEILWEISE AKTIV - Wird durch neue pv3d_*-Module ersetzt
 
 #### ⚠️ **pv_module_placement_ui.py** - Legacy Placement-UI
+
 - **Import in:** Alte Versionen von solar_3d_view
 - **Status:** 🟡 DEPRECATED - Wird nicht mehr verwendet
 
 #### ⚠️ **pv_module_rendering_3d.py** - Legacy 3D-Rendering
+
 - **Import in:** Alte Backup-Dateien
 - **Verwendete Funktionen:**
   - `render_all_modules()` - Legacy Rendering
@@ -177,18 +195,21 @@
 ### **Farb-Systeme** (3 Module)
 
 #### ❌ **color_injection.py** - Farb-Injection
+
 - **Zweck:** Dynamische Farbanpassung in UI
 - **Status:** ❌ NICHT VERWENDET
 - **Grund:** Kein Import gefunden
 - **Empfehlung:** 🟢 OPTIONAL - Kann gelöscht werden, wenn nicht benötigt
 
 #### ❌ **dynamic_color_system.py** - Dynamisches Farb-System
+
 - **Zweck:** Runtime-Farbanpassung
 - **Status:** ❌ NICHT VERWENDET
 - **Grund:** Kein Import gefunden
 - **Empfehlung:** 🟢 OPTIONAL - Kann gelöscht werden
 
 #### ❌ **global_color_system.py** - Globales Farb-System
+
 - **Zweck:** Zentrale Farbverwaltung
 - **Status:** ❌ NICHT VERWENDET
 - **Grund:** Kein Import gefunden
@@ -199,12 +220,14 @@
 ### **Utilities** (2 Module)
 
 #### ❌ **export_coords.py** - Koordinaten-Export
+
 - **Zweck:** Export von 3D-Koordinaten
 - **Status:** ❌ NICHT VERWENDET
 - **Grund:** Funktionalität in pv3d_export.py integriert
 - **Empfehlung:** 🟢 KANN GELÖSCHT WERDEN - Redundant
 
 #### ❌ **remove_text.py** - Text-Bereinigung
+
 - **Zweck:** Text-Cleanup-Funktionen
 - **Status:** ❌ NICHT VERWENDET
 - **Grund:** Kein Import gefunden
@@ -215,6 +238,7 @@
 ### **Animationen** (1 Modul)
 
 #### ❌ **solar_animation.py** - Solar-Animationen
+
 - **Zweck:** Separate Animationsfunktionen
 - **Status:** ❌ NICHT VERWENDET
 - **Grund:** Funktionalität in pv3d_wow_features.py integriert
@@ -224,7 +248,8 @@
 
 ### **Init-Datei** (1 Modul)
 
-#### ✅ **__init__.py** - Package-Init
+#### ✅ ****init**.py** - Package-Init
+
 - **Zweck:** Utils als Python-Package definieren
 - **Status:** ✅ AKTIV - Essentiell für Imports
 - **Empfehlung:** ✅ BEHALTEN - Notwendig
@@ -360,6 +385,7 @@ STATUS: 🟢 HERVORRAGEND - Alle wichtigen Module aktiv!
 **JA, fast alle Utils-Module sind perfekt integriert!** 🎉
 
 ### **Was hervorragend funktioniert:**
+
 - ✅ 3D-Visualisierung komplett
 - ✅ Modul-Platzierung voll funktional
 - ✅ Export-Features alle aktiv
@@ -367,6 +393,7 @@ STATUS: 🟢 HERVORRAGEND - Alle wichtigen Module aktiv!
 - ✅ PDF-Integration funktioniert
 
 ### **Was aufgeräumt werden kann:**
+
 - 🧹 4 ungenutzte Module können gelöscht werden
 - 🧹 3 Legacy-Module können als deprecated markiert werden
 
