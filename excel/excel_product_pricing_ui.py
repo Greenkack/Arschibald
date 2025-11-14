@@ -50,7 +50,7 @@ def render_product_price_config_ui(
         }
     """
     
-    st.subheader("💰 Preisberechnung")
+    st.subheader("[MONEY] Preisberechnung")
     
     # Initialisiere Session State
     if 'product_pricing_mode' not in st.session_state:
@@ -64,7 +64,7 @@ def render_product_price_config_ui(
     pricing_mode = st.radio(
         "Preismodus",
         options=["einzelpreis", "matrix"],
-        format_func=lambda x: "📝 Einzelpreis" if x == "einzelpreis" else "📊 Matrix-Preis",
+        format_func=lambda x: "[NOTE] Einzelpreis" if x == "einzelpreis" else "[CHART] Matrix-Preis",
         horizontal=True,
         help="Einzelpreis: Manuell eingeben. Matrix-Preis: Aus Preismatrix berechnen",
         key="pricing_mode_radio"
@@ -97,7 +97,7 @@ def render_product_price_config_ui(
         result['price'] = price
         
         if price > 0:
-            st.success(f"✓ Preis: {price:,.2f} €")
+            st.success(f"[OK] Preis: {price:,.2f} €")
     
     else:
         # Matrix-Preis-Modus
@@ -107,7 +107,7 @@ def render_product_price_config_ui(
         matrices = list_matrices()
         
         if not matrices:
-            st.warning("⚠️ Keine Preismatrizen verfügbar. Bitte erstellen Sie zuerst eine Matrix im 'Preis Matrix' Tab.")
+            st.warning("[WARNING] Keine Preismatrizen verfügbar. Bitte erstellen Sie zuerst eine Matrix im 'Preis Matrix' Tab.")
             return result
         
         # Matrix-Dropdown
@@ -143,20 +143,20 @@ def render_product_price_config_ui(
             # Validierung
             validation = validate_matrix_for_product_pricing(selected_matrix_id)
             if not validation['valid']:
-                st.error("❌ Matrix ist nicht gültig für Produktpreise:")
+                st.error("[ERROR] Matrix ist nicht gültig für Produktpreise:")
                 for error in validation['errors']:
                     st.error(f"  • {error}")
                 return result
             
             if validation['warnings']:
-                with st.expander("⚠️ Warnungen", expanded=False):
+                with st.expander("[WARNING] Warnungen", expanded=False):
                     for warning in validation['warnings']:
                         st.warning(f"  • {warning}")
             
             st.markdown("---")
             
             # Zeilen- und Spalten-Auswahl für Beispiel-Berechnung
-            st.subheader("🔍 Preis-Vorschau")
+            st.subheader("[SEARCH] Preis-Vorschau")
             
             row_labels = [r['label'] for r in matrix_data['rows']]
             col_labels = [c['label'] for c in matrix_data['columns']]
@@ -194,7 +194,7 @@ def render_product_price_config_ui(
                 
                 if calc_result.is_valid():
                     # Erfolgreiche Berechnung
-                    st.success(f"✓ Berechneter Preis: **{calc_result.total_price:,.2f} €**")
+                    st.success(f"[OK] Berechneter Preis: **{calc_result.total_price:,.2f} €**")
                     
                     # Details anzeigen
                     with st.expander("📋 Berechnungs-Details", expanded=False):
@@ -208,7 +208,7 @@ def render_product_price_config_ui(
                             st.write(f"• Spalte verwendet: {calc_result.column_used}")
                             
                             if calc_result.row_floor_source:
-                                st.info(f"ℹ️ Floor-Matching: Zeile '{selected_row}' → '{calc_result.row_floor_source}'")
+                                st.info(f"[INFO] Floor-Matching: Zeile '{selected_row}' → '{calc_result.row_floor_source}'")
                         
                         with col2:
                             st.write("**Preis-Aufschlüsselung:**")
@@ -226,11 +226,11 @@ def render_product_price_config_ui(
                 
                 else:
                     # Fehler bei Berechnung
-                    st.error(f"❌ Fehler bei Preisberechnung: {calc_result.error}")
+                    st.error(f"[ERROR] Fehler bei Preisberechnung: {calc_result.error}")
             
             # Preis-Tabelle anzeigen
             st.markdown("---")
-            st.subheader("📊 Preis-Tabelle (Vorschau)")
+            st.subheader("[CHART] Preis-Tabelle (Vorschau)")
             
             preview = get_price_preview(
                 matrix_id=selected_matrix_id,
@@ -266,7 +266,7 @@ def render_product_price_config_ui(
                 st.dataframe(df, use_container_width=True)
                 
                 if preview['truncated']:
-                    st.info("ℹ️ Tabelle wurde gekürzt. Vollständige Matrix im 'Preis Matrix' Tab anzeigen.")
+                    st.info("[INFO] Tabelle wurde gekürzt. Vollständige Matrix im 'Preis Matrix' Tab anzeigen.")
             else:
                 st.info("Keine Preise in der Matrix vorhanden.")
     
@@ -275,7 +275,7 @@ def render_product_price_config_ui(
         st.markdown("---")
         if st.button("💾 Konfiguration speichern", type="primary", use_container_width=True):
             on_save_callback(result)
-            st.success("✓ Konfiguration gespeichert!")
+            st.success("[OK] Konfiguration gespeichert!")
     
     return result
 
@@ -306,7 +306,7 @@ def render_product_price_config_inline(
     pricing_mode = st.radio(
         "Preismodus",
         options=["einzelpreis", "matrix"],
-        format_func=lambda x: "📝 Einzelpreis" if x == "einzelpreis" else "📊 Matrix-Preis",
+        format_func=lambda x: "[NOTE] Einzelpreis" if x == "einzelpreis" else "[CHART] Matrix-Preis",
         horizontal=True,
         index=0 if current_pricing_mode == "einzelpreis" else 1,
         key=f"pricing_mode_{key_suffix}"
@@ -334,7 +334,7 @@ def render_product_price_config_inline(
         matrices = list_matrices()
         
         if not matrices:
-            st.warning("⚠️ Keine Preismatrizen verfügbar.")
+            st.warning("[WARNING] Keine Preismatrizen verfügbar.")
             product_data['pricing_mode'] = 'einzelpreis'
             return product_data
         
@@ -385,10 +385,10 @@ def render_product_price_config_inline(
                 )
                 
                 if calc_result.is_valid():
-                    st.success(f"✓ Berechneter Preis: **{calc_result.total_price:,.2f} €**")
+                    st.success(f"[OK] Berechneter Preis: **{calc_result.total_price:,.2f} €**")
                     product_data['preis_stück'] = calc_result.total_price
                 else:
-                    st.error(f"❌ {calc_result.error}")
+                    st.error(f"[ERROR] {calc_result.error}")
                     product_data['preis_stück'] = 0.0
     
     return product_data

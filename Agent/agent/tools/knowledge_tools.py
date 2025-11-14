@@ -142,14 +142,14 @@ def setup_knowledge_base(
                     f"Knowledge base loaded in {duration:.2f}s (cached)"
                 )
                 print(
-                    f"✅ Knowledge base loaded successfully! "
+                    f"[OK] Knowledge base loaded successfully! "
                     f"({duration:.2f}s)"
                 )
                 return vector_store
 
         except Exception as e:
             logger.warning(f"Error loading existing index: {e}")
-            print(f"⚠️ Error loading existing index: {e}")
+            print(f"[WARNING] Error loading existing index: {e}")
             print("🔄 Will rebuild index from PDFs...")
 
     # Find all PDF files in knowledge base directory
@@ -158,9 +158,9 @@ def setup_knowledge_base(
 
     if not pdf_files:
         logger.warning(f"No PDF files found in {path}/")
-        print(f"⚠️ No PDF files found in {path}/")
+        print(f"[WARNING] No PDF files found in {path}/")
         print(
-            "💡 Add PDF documents to the knowledge_base/ directory "
+            "[IDEA] Add PDF documents to the knowledge_base/ directory "
             "to enable knowledge search."
         )
 
@@ -187,7 +187,7 @@ The agent will automatically index them for search.
 
         return None
 
-    print(f"📄 Found {len(pdf_files)} PDF files in knowledge base")
+    print(f"[FILE] Found {len(pdf_files)} PDF files in knowledge base")
     print("🔄 Loading and processing documents...")
     logger.info("Loading and processing PDF documents")
 
@@ -205,23 +205,23 @@ The agent will automatically index them for search.
             logger.debug(f"Loaded {len(docs)} pages from {pdf_file.name}")
         except Exception as e:
             logger.error(f"Error loading {pdf_file.name}: {e}")
-            print(f"  ⚠️ Error loading {pdf_file.name}: {e}")
+            print(f"  [WARNING] Error loading {pdf_file.name}: {e}")
             failed_files.append(pdf_file.name)
             continue
 
     if not documents:
         logger.error("No documents could be loaded")
-        print("❌ No documents could be loaded")
+        print("[ERROR] No documents could be loaded")
         if failed_files:
             print(f"Failed files: {', '.join(failed_files)}")
         return None
 
     logger.info(f"Loaded {len(documents)} pages from {len(pdf_files)} PDFs")
-    print(f"✅ Loaded {len(documents)} pages from PDFs")
+    print(f"[OK] Loaded {len(documents)} pages from PDFs")
 
     if failed_files:
         logger.warning(f"Failed to load {len(failed_files)} files")
-        print(f"⚠️ Failed to load {len(failed_files)} files")
+        print(f"[WARNING] Failed to load {len(failed_files)} files")
 
     # Split documents into optimized chunks
     logger.info(
@@ -239,7 +239,7 @@ The agent will automatically index them for search.
     )
     chunks = text_splitter.split_documents(documents)
     logger.info(f"Created {len(chunks)} text chunks")
-    print(f"✅ Created {len(chunks)} text chunks")
+    print(f"[OK] Created {len(chunks)} text chunks")
 
     # Create embeddings and build FAISS index
     logger.info("Creating embeddings and building FAISS index")
@@ -288,7 +288,7 @@ The agent will automatically index them for search.
             vector_store.save_local(db_path)
         except Exception as e:
             logger.warning(f"Failed to save FAISS index: {e}")
-            print(f"⚠️ Warning: Could not save index to disk: {e}")
+            print(f"[WARNING] Warning: Could not save index to disk: {e}")
             # Continue anyway - we have the index in memory
 
         # Save metadata for change detection
@@ -317,23 +317,23 @@ The agent will automatically index them for search.
             f"Knowledge base created and saved in {duration:.2f}s"
         )
         print(
-            f"✅ Knowledge base created and saved successfully! "
+            f"[OK] Knowledge base created and saved successfully! "
             f"({duration:.2f}s)"
         )
         return vector_store
 
     except (APIError, KnowledgeBaseError) as e:
         logger.error(f"Error creating vector store: {e}")
-        print(f"❌ {e.__class__.__name__}: {e.message}")
+        print(f"[ERROR] {e.__class__.__name__}: {e.message}")
         if e.solution:
-            print(f"💡 Solution:\n{e.solution}")
+            print(f"[IDEA] Solution:\n{e.solution}")
         return None
     except Exception as e:
         logger.error(
             f"Unexpected error creating vector store: {e}",
             exc_info=True)
-        print(f"❌ Unexpected error creating vector store: {e}")
-        print("💡 Check logs for details")
+        print(f"[ERROR] Unexpected error creating vector store: {e}")
+        print("[IDEA] Check logs for details")
         return None
 
 
@@ -442,7 +442,7 @@ def knowledge_base_search(vector_store: Optional["FAISS"]) -> "Tool":
             logger.warning(
                 "Knowledge base not available - no PDF documents loaded")
             return (
-                "⚠️ Knowledge base is not available. "
+                "[WARNING] Knowledge base is not available. "
                 "No PDF documents were found in the knowledge_base/ directory. "
                 "Please add relevant PDF documents and restart the application.")
 

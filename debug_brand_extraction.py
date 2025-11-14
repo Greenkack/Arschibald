@@ -36,7 +36,7 @@ project_data = {
     }
 }
 
-print("🔍 DEBUG: extract_brands_from_project_data")
+print("[SEARCH] DEBUG: extract_brands_from_project_data")
 print("=" * 50)
 
 print("📥 Input project_data structure:")
@@ -52,7 +52,7 @@ print(
 result = extract_brands_from_project_data(project_data)
 print(f"\n📤 Result from extract_brands_from_project_data: {result}")
 
-print("\n🔧 Manual extraction für selected_products:")
+print("\n[TOOL] Manual extraction für selected_products:")
 selected_products = project_data.get('selected_products', {})
 manual_result = {}
 

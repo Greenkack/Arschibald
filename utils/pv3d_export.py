@@ -246,7 +246,7 @@ def export_multi_view(
                 png_bytes = fig.to_image(format="png", scale=1.0)
                 view_images[view_name] = png_bytes
                 
-                print(f"  ✓ {view_name} fertig ({len(png_bytes)} bytes)")
+                print(f"  [OK] {view_name} fertig ({len(png_bytes)} bytes)")
                 
             except Exception as e:
                 print(f"Fehler beim Rendern von {view_name}: {e}")
@@ -361,7 +361,10 @@ def export_360_animation(
         for i in range(frames):
             try:
                 # Berechne Rotationswinkel
-                angle_deg = (360.0 / frames) * i
+                if frames != 0:
+                    angle_deg = (360.0 / frames) * i
+                else:
+                    angle_deg = 0.0
                 angle_rad = math.radians(angle_deg)
                 
                 # Berechne Kamera-Position (Rotation um Z-Achse)
@@ -607,12 +610,12 @@ def export_all_formats(
             results[fmt] = success
             
             if success:
-                print(f"✓ {fmt.upper()} Export erfolgreich: {filepath}")
+                print(f"[OK] {fmt.upper()} Export erfolgreich: {filepath}")
             else:
-                print(f"✗ {fmt.upper()} Export fehlgeschlagen")
+                print(f"[ERROR] {fmt.upper()} Export fehlgeschlagen")
                 
         except Exception as e:
-            print(f"✗ {fmt.upper()} Export Fehler: {e}")
+            print(f"[ERROR] {fmt.upper()} Export Fehler: {e}")
             results[fmt] = False
     
     return results

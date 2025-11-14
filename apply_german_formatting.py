@@ -69,5 +69,5 @@ content = content.replace("'0 €'", "'0,00 €'")
 with open('heatpump_ui.py', 'w', encoding='utf-8') as f:
     f.write(content)
 
-print(f"\n✅ Erfolgreich {replacements} verschiedene Patterns ersetzt!")
+print(f"\n[OK] Erfolgreich {replacements} verschiedene Patterns ersetzt!")
 print("Die Datei heatpump_ui.py wurde aktualisiert.")

@@ -1,0 +1,17 @@
+# Geo-Mapping und Routenplanung - Abhängigkeiten
+
+# Geocoding
+geopy>=2.3.0
+
+# Kartenvisualisierung
+folium>=0.14.0
+
+# Streamlit-Integration
+streamlit-folium>=0.13.0
+
+# Optional: Erweiterte Routenoptimierung
+# ortools>=9.5.2237  # Google OR-Tools für TSP-Solver
+
+# Optional: Alternative Geocoding-Services
+# googlemaps>=4.10.0  # Google Maps API
+# here-location-services>=6.0.0  # HERE API

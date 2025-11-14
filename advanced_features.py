@@ -448,10 +448,10 @@ def subsidy_optimizer(
                 '5. Nach Bewilligung: Auftrag erteilen'
             ],
             'important_notes': [
-                '⚠️ Förderungen IMMER vor Vertragsschluss beantragen!',
-                '✅ Mehrere Förderungen sind oft kombinierbar',
+                '[WARNING] Förderungen IMMER vor Vertragsschluss beantragen!',
+                '[OK] Mehrere Förderungen sind oft kombinierbar',
                 '📅 Fristen und Budget beachten (teilweise begrenzt)',
-                '📄 Alle Nachweise und Belege aufbewahren'
+                '[FILE] Alle Nachweise und Belege aufbewahren'
             ],
             'has_battery': has_battery,
             'has_heat_pump': has_heat_pump,

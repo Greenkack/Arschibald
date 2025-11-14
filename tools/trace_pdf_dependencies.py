@@ -192,7 +192,10 @@ def run():
     args = ap.parse_args()
 
     root = Path(args.root).resolve()
-    out_dir = (root / args.out_dir).resolve()
+    if args != 0:
+        out_dir = (root / args.out_dir).resolve()
+    else:
+        out_dir = 0.0
     out_dir.mkdir(parents=True, exist_ok=True)
 
     trace_json = out_dir / "trace_used_paths.json"

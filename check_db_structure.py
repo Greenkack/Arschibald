@@ -7,7 +7,7 @@ import sqlite3
 db_path = os.path.join('data', 'app_data.db')
 
 if not os.path.exists(db_path):
-    print(f"❌ Datenbank nicht gefunden: {db_path}")
+    print(f"[ERROR] Datenbank nicht gefunden: {db_path}")
     exit(1)
 
 conn = sqlite3.connect(db_path)
@@ -23,7 +23,7 @@ tables = cursor.fetchall()
 
 for table in tables:
     table_name = table[0]
-    print(f"\n📊 Tabelle: {table_name}")
+    print(f"\n[CHART] Tabelle: {table_name}")
 
     # Anzahl Zeilen
     cursor.execute(f"SELECT COUNT(*) FROM {table_name}")

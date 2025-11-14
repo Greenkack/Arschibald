@@ -160,7 +160,7 @@ def render_help_menu():
     
     ---
     
-    ### 🎯 Häufige Fragen (FAQ):
+    ### [TARGET] Häufige Fragen (FAQ):
     
     #### **Q: Wie erstelle ich ein Angebot?**
     A: Gehen Sie zu "Dateneingabe", füllen Sie die Kundendaten aus, und klicken Sie auf "PDF erstellen".
@@ -169,7 +169,7 @@ def render_help_menu():
     A: Nutzen Sie den Quick Action Button "💾 Kunde ins CRM" im Drawer (unten rechts) oder gehen Sie ins CRM-Modul.
     
     #### **Q: Wie funktioniert der Blitz-Angebot Button?**
-    A: Der Button "⚡ Blitz-Angebot" erstellt sofort ein Standard-PDF mit den aktuellen Daten, ohne zusätzliche UI-Schritte.
+    A: Der Button "[POWER] Blitz-Angebot" erstellt sofort ein Standard-PDF mit den aktuellen Daten, ohne zusätzliche UI-Schritte.
     
     #### **Q: Was macht der Sprachbefehl-Button?**
     A: Der Button "🎤 Sprachbefehl" aktiviert die Sprachsteuerung für den KI-Agent.
@@ -185,7 +185,7 @@ def render_help_menu():
     
     ---
     
-    ### 💡 Tipps & Tricks:
+    ### [IDEA] Tipps & Tricks:
     
     - **Drawer**: Nutzen Sie das ☰ Symbol unten rechts für schnelle Aktionen
     - **Agent**: Der KI-Agent kann komplexe Berechnungen durchführen und Fragen beantworten
@@ -203,7 +203,7 @@ def render_help_menu():
     """)
     
     st.markdown("---")
-    st.info("💡 **Hinweis**: Die vollständige Build-Dokumentation finden Sie im Admin-Bereich unter 'Build Infos' (passwortgeschützt).")
+    st.info("[IDEA] **Hinweis**: Die vollständige Build-Dokumentation finden Sie im Admin-Bereich unter 'Build Infos' (passwortgeschützt).")
 
 
 def show_drawer_notifications():
@@ -212,7 +212,7 @@ def show_drawer_notifications():
     """
     # 3D Warnung
     if st.session_state.get('drawer_3d_warning'):
-        st.warning("⚠️ 3D-Visualisierung ist nur für PV-Berechnungen verfügbar, nicht für Wärmepumpen.")
+        st.warning("[WARNING] 3D-Visualisierung ist nur für PV-Berechnungen verfügbar, nicht für Wärmepumpen.")
         st.session_state['drawer_3d_warning'] = False
     
     # Kunden-Speicherung
@@ -226,7 +226,7 @@ def show_drawer_notifications():
     
     # PDF-Erstellung
     if st.session_state.get('drawer_pdf_success'):
-        st.success(f"✅ Blitz-Angebot erstellt: {st.session_state['drawer_pdf_success']}")
+        st.success(f"[OK] Blitz-Angebot erstellt: {st.session_state['drawer_pdf_success']}")
         
         # Download-Button
         if st.session_state.get('drawer_pdf_bytes'):

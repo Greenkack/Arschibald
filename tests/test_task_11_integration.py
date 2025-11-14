@@ -17,10 +17,10 @@ def test_function_exists():
 
     try:
         from admin_pdf_settings_ui import render_ui_theme_settings
-        print("✓ render_ui_theme_settings function exists")
+        print("[OK] render_ui_theme_settings function exists")
         return True
     except ImportError as e:
-        print(f"❌ Failed to import: {e}")
+        print(f"[ERROR] Failed to import: {e}")
         return False
 
 
@@ -39,11 +39,11 @@ def test_function_signature():
         assert 'load_setting' in params, "Missing 'load_setting' parameter"
         assert 'save_setting' in params, "Missing 'save_setting' parameter"
 
-        print(f"✓ Function has correct parameters: {params}")
+        print(f"[OK] Function has correct parameters: {params}")
         return True
 
     except Exception as e:
-        print(f"❌ Error checking signature: {e}")
+        print(f"[ERROR] Error checking signature: {e}")
         return False
 
 
@@ -61,7 +61,7 @@ def test_theme_definitions():
 
         for theme in required_themes:
             assert f"'{theme}'" in content, f"Theme '{theme}' not found in code"
-            print(f"✓ Theme '{theme}' found in code")
+            print(f"[OK] Theme '{theme}' found in code")
 
         # Check for required color properties
         required_colors = [
@@ -75,12 +75,12 @@ def test_theme_definitions():
         for color in required_colors:
             assert f"'{color}'" in content, f"Color property '{color}' not found"
 
-        print(f"✓ All {len(required_colors)} color properties found")
+        print(f"[OK] All {len(required_colors)} color properties found")
 
         return True
 
     except Exception as e:
-        print(f"❌ Error checking theme definitions: {e}")
+        print(f"[ERROR] Error checking theme definitions: {e}")
         return False
 
 
@@ -95,23 +95,23 @@ def test_ui_components():
         # Check for Task 11.1 components (Theme-Auswahl)
         assert 'st.selectbox' in content, "Missing selectbox for theme selection"
         assert 'Theme aktivieren' in content, "Missing 'Theme aktivieren' button"
-        print("✓ Task 11.1 components found (Theme-Auswahl)")
+        print("[OK] Task 11.1 components found (Theme-Auswahl)")
 
         # Check for Task 11.2 components (Theme-Vorschau)
         assert 'preview_html' in content, "Missing preview HTML generation"
         assert 'unsafe_allow_html=True' in content, "Missing HTML rendering"
-        print("✓ Task 11.2 components found (Theme-Vorschau)")
+        print("[OK] Task 11.2 components found (Theme-Vorschau)")
 
         # Check for Task 11.3 components (Theme-Editor)
         assert 'st.color_picker' in content, "Missing color picker"
         assert 'Theme speichern' in content, "Missing 'Theme speichern' button"
         assert 'custom_theme' in content, "Missing custom theme handling"
-        print("✓ Task 11.3 components found (Theme-Editor)")
+        print("[OK] Task 11.3 components found (Theme-Editor)")
 
         return True
 
     except Exception as e:
-        print(f"❌ Error checking UI components: {e}")
+        print(f"[ERROR] Error checking UI components: {e}")
         return False
 
 
@@ -132,19 +132,19 @@ def test_requirements_coverage():
                 found_requirements.append(req)
 
         print(
-            f"✓ Found {len(found_requirements)}/{len(requirements)} requirement references")
+            f"[OK] Found {len(found_requirements)}/{len(requirements)} requirement references")
 
         # Check for key functionality
         assert 'predefined_themes' in content, "Missing predefined themes"
         assert 'active_theme' in content, "Missing active theme handling"
         assert 'theme_config' in content, "Missing theme config"
 
-        print("✓ All key functionality present")
+        print("[OK] All key functionality present")
 
         return True
 
     except Exception as e:
-        print(f"❌ Error checking requirements: {e}")
+        print(f"[ERROR] Error checking requirements: {e}")
         return False
 
 
@@ -161,17 +161,17 @@ def test_database_integration():
         assert 'save_setting' in content, "Missing save_setting usage"
         assert "'ui_theme_settings'" in content, "Missing ui_theme_settings key"
 
-        print("✓ Database integration present")
+        print("[OK] Database integration present")
 
         # Check for proper error handling
         assert 'st.rerun()' in content, "Missing st.rerun() after save"
 
-        print("✓ Proper state management with st.rerun()")
+        print("[OK] Proper state management with st.rerun()")
 
         return True
 
     except Exception as e:
-        print(f"❌ Error checking database integration: {e}")
+        print(f"[ERROR] Error checking database integration: {e}")
         return False
 
 
@@ -196,7 +196,7 @@ def run_integration_tests():
             result = test()
             results.append(result)
         except Exception as e:
-            print(f"\n❌ Test failed with exception: {e}")
+            print(f"\n[ERROR] Test failed with exception: {e}")
             import traceback
             traceback.print_exc()
             results.append(False)
@@ -204,18 +204,18 @@ def run_integration_tests():
     print("\n" + "=" * 60)
 
     if all(results):
-        print("✅ ALL INTEGRATION TESTS PASSED!")
+        print("[OK] ALL INTEGRATION TESTS PASSED!")
         print("=" * 60)
         print("\nTask 11 ist vollständig implementiert und integriert:")
-        print("- ✓ Funktion existiert und ist aufrufbar")
-        print("- ✓ Korrekte Funktionssignatur")
-        print("- ✓ Alle Themes definiert")
-        print("- ✓ Alle UI-Komponenten vorhanden")
-        print("- ✓ Requirements abgedeckt")
-        print("- ✓ Datenbank-Integration korrekt")
+        print("- [OK] Funktion existiert und ist aufrufbar")
+        print("- [OK] Korrekte Funktionssignatur")
+        print("- [OK] Alle Themes definiert")
+        print("- [OK] Alle UI-Komponenten vorhanden")
+        print("- [OK] Requirements abgedeckt")
+        print("- [OK] Datenbank-Integration korrekt")
         return True
     else:
-        print("❌ SOME INTEGRATION TESTS FAILED")
+        print("[ERROR] SOME INTEGRATION TESTS FAILED")
         print("=" * 60)
         failed_count = len([r for r in results if not r])
         print(f"\n{failed_count}/{len(results)} tests failed")

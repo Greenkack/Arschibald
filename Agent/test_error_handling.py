@@ -75,7 +75,7 @@ def test_error_classes():
     )
     print(format_error_message(error))
 
-    print("\n✅ Error class tests passed!")
+    print("\n[OK] Error class tests passed!")
 
 
 def test_retry_logic():
@@ -103,7 +103,7 @@ def test_retry_logic():
     for name, error in errors:
         print(f"  {name}: {'Retry' if should_retry(error) else 'No retry'}")
 
-    print("\n✅ Retry logic tests passed!")
+    print("\n[OK] Retry logic tests passed!")
 
 
 def test_logging_system():
@@ -179,7 +179,7 @@ def test_logging_system():
     logger.info("Password: mySecretPassword123")
     logger.info("Phone: +1-555-123-4567")
 
-    print("\n✅ Logging system tests passed!")
+    print("\n[OK] Logging system tests passed!")
 
 
 def test_error_to_dict():
@@ -200,7 +200,7 @@ def test_error_to_dict():
     for key, value in error_dict.items():
         print(f"  {key}: {value}")
 
-    print("\n✅ Error serialization tests passed!")
+    print("\n[OK] Error serialization tests passed!")
 
 
 def main():
@@ -216,11 +216,11 @@ def main():
         test_error_to_dict()
 
         print("\n" + "=" * 60)
-        print("✅ ALL TESTS PASSED!")
+        print("[OK] ALL TESTS PASSED!")
         print("=" * 60 + "\n")
 
     except Exception as e:
-        print(f"\n❌ TEST FAILED: {e}")
+        print(f"\n[ERROR] TEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         return 1

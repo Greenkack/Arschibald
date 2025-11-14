@@ -312,9 +312,9 @@ if __name__ == "__main__":
         # Validate
         is_valid, errors = parser.validate_elements()
         if is_valid:
-            print(f"\n✓ All elements are valid")
+            print(f"\n[OK] All elements are valid")
         else:
-            print(f"\n✗ Validation errors:")
+            print(f"\n[ERROR] Validation errors:")
             for error in errors:
                 print(f"  - {error}")
                 

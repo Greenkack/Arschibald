@@ -797,7 +797,7 @@ def seed_extended_database():
         },
     ]
     
-    print(f"\n🔧 Starte erweiterte Datenbank-Befüllung mit {len(components)} Komponenten...\n")
+    print(f"\n[TOOL] Starte erweiterte Datenbank-Befüllung mit {len(components)} Komponenten...\n")
     
     success_count = 0
     error_count = 0
@@ -814,24 +814,24 @@ def seed_extended_database():
             # create_component expects a dict, not **kwargs
             component_id = create_component(comp)
             success_count += 1
-            print(f"✅ [{idx}/{len(components)}] {comp['manufacturer']} - {comp['product_name']}")
+            print(f"[OK] [{idx}/{len(components)}] {comp['manufacturer']} - {comp['product_name']}")
             
         except Exception as e:
             error_count += 1
-            print(f"❌ [{idx}/{len(components)}] FEHLER bei {comp.get('product_name', 'Unbekannt')}: {e}")
+            print(f"[ERROR] [{idx}/{len(components)}] FEHLER bei {comp.get('product_name', 'Unbekannt')}: {e}")
     
     print(f"\n{'='*60}")
-    print(f"📊 ZUSAMMENFASSUNG")
+    print(f"[CHART] ZUSAMMENFASSUNG")
     print(f"{'='*60}")
-    print(f"✅ Erfolgreich: {success_count}")
-    print(f"❌ Fehler:      {error_count}")
-    print(f"📦 Gesamt:      {len(components)}")
+    print(f"[OK] Erfolgreich: {success_count}")
+    print(f"[ERROR] Fehler:      {error_count}")
+    print(f"[PACKAGE] Gesamt:      {len(components)}")
     print(f"{'='*60}\n")
     
     # Statistiken abrufen
     try:
         stats = get_statistics()
-        print(f"📈 DATENBANK-STATISTIKEN:")
+        print(f"[STATS] DATENBANK-STATISTIKEN:")
         print(f"   Komponenten gesamt: {stats['total_components']}")
         print(f"   Hersteller:         {len(stats['by_manufacturer'])}")
         print(f"   Kategorien:         {len(stats['by_category'])}")
@@ -843,7 +843,7 @@ def seed_extended_database():
         for category, count in sorted(stats['by_category'].items(), key=lambda x: x[1], reverse=True):
             print(f"      {category:30s}: {count:3d}")
     except Exception as e:
-        print(f"⚠️ Konnte Statistiken nicht abrufen: {e}")
+        print(f"[WARNING] Konnte Statistiken nicht abrufen: {e}")
 
 
 if __name__ == "__main__":
@@ -853,4 +853,4 @@ if __name__ == "__main__":
     
     seed_extended_database()
     
-    print("\n✅ Erweiterte Datenbank-Befüllung abgeschlossen!\n")
+    print("\n[OK] Erweiterte Datenbank-Befüllung abgeschlossen!\n")

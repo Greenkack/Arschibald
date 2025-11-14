@@ -34,35 +34,35 @@ def demo_pauschal_pricing():
     )
     
     # Füge Zeilen hinzu (Modulanzahl)
-    print("\n📊 Erstelle Preismatrix...")
+    print("\n[CHART] Erstelle Preismatrix...")
     rows = {}
     for modules in [10, 15, 20, 25, 30]:
         rows[modules] = add_row(matrix_id, str(modules))
-        print(f"  ✓ Zeile hinzugefügt: {modules} Module")
+        print(f"  [OK] Zeile hinzugefügt: {modules} Module")
     
     # Füge Spalten hinzu (Speicher-Größen)
     cols = {}
     for storage in [5, 10, 15, 20]:
         cols[storage] = add_column(matrix_id, f"{storage}kWh")
-        print(f"  ✓ Spalte hinzugefügt: {storage}kWh Speicher")
+        print(f"  [OK] Spalte hinzugefügt: {storage}kWh Speicher")
     
     # Setze Preise (Basis: 500€ pro Modul + 1000€ pro kWh Speicher)
-    print("\n💰 Setze Preise...")
+    print("\n[MONEY] Setze Preise...")
     for modules, row_id in rows.items():
         for storage, col_id in cols.items():
             price = modules * 500 + storage * 1000
             set_cell_value(matrix_id, row_id, col_id, float(price))
-    print("  ✓ Alle Preise gesetzt")
+    print("  [OK] Alle Preise gesetzt")
     
     # Setze als aktiv
     set_active_matrix(matrix_id)
-    print("\n✓ Matrix als aktiv gesetzt")
+    print("\n[OK] Matrix als aktiv gesetzt")
     
     # Validiere Matrix
-    print("\n🔍 Validiere Matrix...")
+    print("\n[SEARCH] Validiere Matrix...")
     validation = validate_matrix_for_product_pricing()
     if validation['valid']:
-        print("  ✓ Matrix ist gültig")
+        print("  [OK] Matrix ist gültig")
         print(f"  - Zeilen: {validation['info']['row_count']}")
         print(f"  - Spalten: {validation['info']['column_count']}")
         print(f"  - Zellen: {validation['info']['cell_count']}")
@@ -95,7 +95,7 @@ def demo_pauschal_pricing():
     
     # Cleanup
     delete_matrix(matrix_id)
-    print("\n✓ Demo abgeschlossen")
+    print("\n[OK] Demo abgeschlossen")
 
 
 def demo_additiv_pricing():
@@ -117,7 +117,7 @@ def demo_additiv_pricing():
         include_misc=True
     )
     
-    print("\n📊 Erstelle Basis-Preismatrix (Additiv-Modus)...")
+    print("\n[CHART] Erstelle Basis-Preismatrix (Additiv-Modus)...")
     
     # Füge Daten hinzu
     rows = {}
@@ -135,7 +135,7 @@ def demo_additiv_pricing():
             set_cell_value(matrix_id, row_id, col_id, float(base_price))
     
     set_active_matrix(matrix_id)
-    print("  ✓ Basis-Preise gesetzt")
+    print("  [OK] Basis-Preise gesetzt")
     
     # Berechne mit verschiedenen Zubehör-Kombinationen
     print("\n💵 Berechne Preise mit Zubehör...")
@@ -182,7 +182,7 @@ def demo_additiv_pricing():
     
     # Cleanup
     delete_matrix(matrix_id)
-    print("\n✓ Demo abgeschlossen")
+    print("\n[OK] Demo abgeschlossen")
 
 
 def demo_price_preview():
@@ -194,7 +194,7 @@ def demo_price_preview():
     # Erstelle größere Matrix
     matrix_id = create_matrix("Große Preismatrix")
     
-    print("\n📊 Erstelle große Matrix (10x8)...")
+    print("\n[CHART] Erstelle große Matrix (10x8)...")
     
     # Füge viele Zeilen und Spalten hinzu
     rows = []
@@ -212,10 +212,10 @@ def demo_price_preview():
             set_cell_value(matrix_id, row_id, col_id, float(price))
     
     set_active_matrix(matrix_id)
-    print("  ✓ Matrix erstellt")
+    print("  [OK] Matrix erstellt")
     
     # Hole Vorschau
-    print("\n🔍 Hole Preis-Vorschau (erste 5x5)...")
+    print("\n[SEARCH] Hole Preis-Vorschau (erste 5x5)...")
     preview = get_price_preview(max_rows=5, max_cols=5)
     
     print(f"\n  Matrix: {preview['matrix_name']}")
@@ -248,7 +248,7 @@ def demo_price_preview():
     
     # Cleanup
     delete_matrix(matrix_id)
-    print("\n✓ Demo abgeschlossen")
+    print("\n[OK] Demo abgeschlossen")
 
 
 def demo_error_handling():
@@ -264,25 +264,25 @@ def demo_error_handling():
     set_cell_value(matrix_id, row_id, col_id, 1000.0)
     set_active_matrix(matrix_id)
     
-    print("\n🔍 Teste verschiedene Fehlerszenarien...")
+    print("\n[SEARCH] Teste verschiedene Fehlerszenarien...")
     
     # Fehler 1: Ungültige Spalte
     print("\n  1. Ungültige Spalte:")
     result = calculate_product_price_from_matrix("10", "999kWh")
     if not result.is_valid():
-        print(f"    ❌ {result.error}")
+        print(f"    [ERROR] {result.error}")
     
     # Fehler 2: Nicht-numerische Zeile ohne Übereinstimmung
     print("\n  2. Nicht-numerische Zeile ohne Übereinstimmung:")
     result = calculate_product_price_from_matrix("ABC", "5kWh")
     if not result.is_valid():
-        print(f"    ❌ {result.error}")
+        print(f"    [ERROR] {result.error}")
     
     # Erfolg: Gültige Anfrage
     print("\n  3. Gültige Anfrage:")
     result = calculate_product_price_from_matrix("10", "5kWh")
     if result.is_valid():
-        print(f"    ✓ Preis: {result.total_price}€")
+        print(f"    [OK] Preis: {result.total_price}€")
     
     # Cleanup
     delete_matrix(matrix_id)
@@ -291,9 +291,9 @@ def demo_error_handling():
     print("\n  4. Keine aktive Matrix:")
     result = calculate_product_price_from_matrix("10", "5kWh")
     if not result.is_valid():
-        print(f"    ❌ {result.error}")
+        print(f"    [ERROR] {result.error}")
     
-    print("\n✓ Demo abgeschlossen")
+    print("\n[OK] Demo abgeschlossen")
 
 
 def main():
@@ -309,11 +309,11 @@ def main():
         demo_error_handling()
         
         print("\n" + "="*60)
-        print("✓ Alle Demos erfolgreich abgeschlossen")
+        print("[OK] Alle Demos erfolgreich abgeschlossen")
         print("="*60 + "\n")
         
     except Exception as e:
-        print(f"\n❌ Fehler: {e}")
+        print(f"\n[ERROR] Fehler: {e}")
         import traceback
         traceback.print_exc()
 

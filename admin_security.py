@@ -95,19 +95,19 @@ def get_admin_protected_areas() -> dict[str, bool]:
         'company_management': True,  # Firmenverwaltung geschützt
         'product_management': True,  # Produktverwaltung geschützt
         'product_database': True,  # Produktdatenbank geschützt
-        'pv_mounting': True,  # ✅ PV-Unterkonstruktionen GESCHÜTZT
+        'pv_mounting': True,  # [OK] PV-Unterkonstruktionen GESCHÜTZT
         'services_management': True,  # Dienstleistungen geschützt
-        'price_matrix': True,  # ✅ Preis Matrix GESCHÜTZT
-        'economic_settings': True,  # ✅ Allgemeine Einstellungen GESCHÜTZT
-        'tariff_management': True,  # ✅ Einspeisevergütungen GESCHÜTZT
+        'price_matrix': True,  # [OK] Preis Matrix GESCHÜTZT
+        'economic_settings': True,  # [OK] Allgemeine Einstellungen GESCHÜTZT
+        'tariff_management': True,  # [OK] Einspeisevergütungen GESCHÜTZT
         'heatpump_settings': True,  # Wärmepumpen geschützt
         'ui_customization': True,  # UI-Anpassungen geschützt
         'logo_management': True,  # Logo-Verwaltung geschützt
         'intro_settings': True,  # Intro-Einstellungen geschützt
         'payment_terms': True,  # Zahlungsbedingungen geschützt
-        'visualization_settings': True,  # ✅ Anzeige & Designeinstellungen GESCHÜTZT
-        'pdf_settings': True,  # ✅ PDF Design & Vorlagen GESCHÜTZT
-        'advanced_settings': True,  # ✅ Erweiterte Einstellungen GESCHÜTZT
+        'visualization_settings': True,  # [OK] Anzeige & Designeinstellungen GESCHÜTZT
+        'pdf_settings': True,  # [OK] PDF Design & Vorlagen GESCHÜTZT
+        'advanced_settings': True,  # [OK] Erweiterte Einstellungen GESCHÜTZT
     }
     
     # Lade aus Session State oder Datenbank
@@ -241,12 +241,12 @@ def require_admin_auth(area_id: str, area_name: str = None) -> bool:
                 if verify_admin_password(username, password):
                     st.session_state[auth_key] = True
                     st.session_state[f'{auth_key}_user'] = username
-                    st.success(f"✅ Zugriff gewährt für {username}")
+                    st.success(f"[OK] Zugriff gewährt für {username}")
                     st.rerun()
                 else:
-                    st.error("❌ Ungültiger Benutzername oder Passwort!")
+                    st.error("[ERROR] Ungültiger Benutzername oder Passwort!")
             else:
-                st.warning("⚠️ Bitte Benutzername und Passwort eingeben!")
+                st.warning("[WARNING] Bitte Benutzername und Passwort eingeben!")
     
     with col_btn2:
         if st.button("🚪 Abbrechen", key=f"{area_id}_cancel"):
@@ -271,15 +271,15 @@ def render_admin_security_settings():
         'build_infos': '📋 Build Infos & Dokumentation',
         'user_management': '👥 Benutzerverwaltung',
         'company_management': '🏢 Firmenverwaltung',
-        'product_management': '📦 Produktverwaltung',
+        'product_management': '[PACKAGE] Produktverwaltung',
         'product_database': '�️ Produktdatenbank CRUD',
-        'pv_mounting': '🔧 PV-Unterkonstruktionen',
+        'pv_mounting': '[TOOL] PV-Unterkonstruktionen',
         'services_management': '🛠️ Dienstleistungsverwaltung',
-        'price_matrix': '📊 Preis Matrix',
-        'economic_settings': '💰 Wirtschaftlichkeitseinstellungen',
-        'tariff_management': '💡 Einspeisung Tarifverwaltung',
+        'price_matrix': '[CHART] Preis Matrix',
+        'economic_settings': '[MONEY] Wirtschaftlichkeitseinstellungen',
+        'tariff_management': '[IDEA] Einspeisung Tarifverwaltung',
         'heatpump_settings': '🔥 Wärmepumpen-Einstellungen',
-        'ui_customization': '🎨 UI-Anpassungen',
+        'ui_customization': '[DESIGN] UI-Anpassungen',
         'logo_management': '🖼️ Logo-Verwaltung',
         'intro_settings': '🎬 Intro-Einstellungen',
         'payment_terms': '💳 Zahlungsbedingungen',
@@ -318,10 +318,10 @@ def render_admin_security_settings():
     with col_save:
         if st.button("💾 Änderungen speichern", type="primary", use_container_width=True, disabled=not changed):
             if save_admin_protected_areas(new_areas):
-                st.success("✅ Sicherheitseinstellungen gespeichert!")
+                st.success("[OK] Sicherheitseinstellungen gespeichert!")
                 st.rerun()
             else:
-                st.error("❌ Fehler beim Speichern!")
+                st.error("[ERROR] Fehler beim Speichern!")
     
     with col_cancel:
         if st.button("↩️ Abbrechen", use_container_width=True, disabled=not changed):
@@ -343,7 +343,7 @@ def render_admin_security_settings():
             area_name = area_labels.get(area, area)
             col_info, col_logout = st.columns([3, 1])
             with col_info:
-                st.info(f"✅ {area_name} - Authentifiziert als: **{user}**")
+                st.info(f"[OK] {area_name} - Authentifiziert als: **{user}**")
             with col_logout:
                 if st.button("🚪 Abmelden", key=f"logout_{area}"):
                     del st.session_state[f'admin_auth_{area}']

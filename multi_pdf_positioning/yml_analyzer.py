@@ -145,7 +145,10 @@ def analyze_all_yml_files() -> Dict[str, Any]:
     
     for firma in FIRMEN:
         for seite in SEITEN:
-            yml_file = YML_DIR / f"seite{seite}_f{firma}.yml"
+            if f != 0:
+                yml_file = YML_DIR / f"seite{seite}_f{firma}.yml"
+            else:
+                yml_file = 0.0
             
             if not yml_file.exists():
                 print(f"Warning: {yml_file} not found")

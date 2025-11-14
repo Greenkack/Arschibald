@@ -16,11 +16,11 @@ def _show_unavailable(feature_name: str = "PDF UI") -> None:
     try:
         import streamlit as st  # type: ignore
         st.info(
-            "ℹ️ **Legacy PDF UI archiviert**\n\n"
+            "[INFO] **Legacy PDF UI archiviert**\n\n"
             "Diese alte Oberfläche wurde entfernt. Nutzen Sie stattdessen:\n\n"
-            "👉 **Tab '📄 PDF-Ausgabe'** oben für die Standard-PDF-Erzeugung mit vollständigen Projektdaten.\n\n"
+            "👉 **Tab '[FILE] PDF-Ausgabe'** oben für die Standard-PDF-Erzeugung mit vollständigen Projektdaten.\n\n"
             "Der Kern-PDF-Generator ist voll funktionsfähig.",
-            icon="💡",
+            icon="[IDEA]",
         )
     except Exception:
         # Außerhalb von Streamlit (z. B. Import-Check): nur stillschweigend zurück

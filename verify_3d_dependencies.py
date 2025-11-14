@@ -89,7 +89,7 @@ def main():
     
     all_passed = True
     for package, success, info in results:
-        status = "✓ PASS" if success else "✗ FAIL"
+        status = "[OK] PASS" if success else "[ERROR] FAIL"
         print(f"{status:8} | {package:15} | {info}")
         if not success:
             all_passed = False
@@ -98,11 +98,11 @@ def main():
     print("=" * 60)
     
     if all_passed:
-        print("✓ All dependencies are installed and working correctly!")
+        print("[OK] All dependencies are installed and working correctly!")
         print("=" * 60)
         return 0
     else:
-        print("✗ Some dependencies are missing or failed to import.")
+        print("[ERROR] Some dependencies are missing or failed to import.")
         print("  Run: pip install -r requirements.txt")
         print("=" * 60)
         return 1

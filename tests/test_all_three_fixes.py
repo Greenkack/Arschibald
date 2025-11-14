@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_all_fixes():
     """Testet alle drei Korrekturen zusammen"""
 
-    print("🔧 Test aller drei Korrekturen")
+    print("[TOOL] Test aller drei Korrekturen")
     print("=" * 40)
 
     # Test-Daten mit Solarfabrik und Dienstleistungen
@@ -68,12 +68,12 @@ def test_all_fixes():
 
     try:
         # Baue dynamische Daten (inkl. Services-Integration)
-        print("📊 Baue dynamische Daten mit Services-Integration...")
+        print("[CHART] Baue dynamische Daten mit Services-Integration...")
         dynamic_data = build_dynamic_data(
             project_data, analysis_results, result)
 
         # Zeige Service-Daten
-        print("\\n🔧 Dienstleistungen:")
+        print("\\n[TOOL] Dienstleistungen:")
         print(
             f"   - Liste: {dynamic_data.get('optional_services_list', 'NICHT GEFUNDEN')}")
         print(
@@ -96,7 +96,7 @@ def test_all_fixes():
             f"   - Version: {dynamic_data.get('module_version', 'NICHT GEFUNDEN')}")
 
         # Zeige Donut-Chart-Daten
-        print("\\n📊 Donut-Chart-Daten:")
+        print("\\n[CHART] Donut-Chart-Daten:")
         print(
             f"   - Tagesverbrauch: {
                 dynamic_data.get(
@@ -121,8 +121,8 @@ def test_all_fixes():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"\\n✅ Test-PDF erstellt: {output_file}")
-            print(f"📦 Dateigröße: {len(overlay_bytes):,} bytes")
+            print(f"\\n[OK] Test-PDF erstellt: {output_file}")
+            print(f"[PACKAGE] Dateigröße: {len(overlay_bytes):,} bytes")
             print("\\n📋 Überprüfen Sie:")
             print(
                 "   1. Seite 4: Solarfabrik sollte 'k.A.' statt spezifische Werte zeigen")
@@ -131,11 +131,11 @@ def test_all_fixes():
                 "   3. Seite 6: Donut-Charts sollten bei den Platzhaltern sichtbar sein")
 
             return True
-        print("\\n❌ PDF-Generierung fehlgeschlagen")
+        print("\\n[ERROR] PDF-Generierung fehlgeschlagen")
         return False
 
     except Exception as e:
-        print(f"\\n❌ Fehler beim Test: {e}")
+        print(f"\\n[ERROR] Fehler beim Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -144,7 +144,7 @@ def test_all_fixes():
 def test_services_only():
     """Testet nur die Dienstleistungen-Integration"""
 
-    print("\\n🔧 Test nur Dienstleistungen")
+    print("\\n[TOOL] Test nur Dienstleistungen")
     print("=" * 30)
 
     # Minimale Daten nur für Services
@@ -184,16 +184,16 @@ def test_services_only():
 
         if dynamic_data.get(
                 'optional_services_list') and 'Elektroinstallation' in dynamic_data['optional_services_list']:
-            print("✅ Services-Integration funktioniert")
+            print("[OK] Services-Integration funktioniert")
         else:
-            print("❌ Services-Integration fehlgeschlagen")
+            print("[ERROR] Services-Integration fehlgeschlagen")
 
     except Exception as e:
-        print(f"❌ Services-Test Fehler: {e}")
+        print(f"[ERROR] Services-Test Fehler: {e}")
 
 
 if __name__ == "__main__":
-    print("🚀 Test aller drei Korrekturen")
+    print("[LAUNCH] Test aller drei Korrekturen")
     print("=" * 50)
 
     # Test 1: Services-Integration isoliert
@@ -204,6 +204,6 @@ if __name__ == "__main__":
 
     print("\\n🎉 Tests abgeschlossen!")
     print("📋 Erwartete Korrekturen:")
-    print("   1. ✅ Solarfabrik: Zeigt 'k.A.' statt spezifische Fallback-Werte")
-    print("   2. ✅ Dienstleistungen: Werden auf Seite 6 angezeigt")
-    print("   3. ✅ Donut-Charts: An exakten Platzhalter-Positionen sichtbar")
+    print("   1. [OK] Solarfabrik: Zeigt 'k.A.' statt spezifische Fallback-Werte")
+    print("   2. [OK] Dienstleistungen: Werden auf Seite 6 angezeigt")
+    print("   3. [OK] Donut-Charts: An exakten Platzhalter-Positionen sichtbar")

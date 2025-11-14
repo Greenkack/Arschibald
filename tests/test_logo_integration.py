@@ -27,15 +27,15 @@ def test_logo_database():
         # Verbindung testen
         conn = get_db_connection()
         if conn:
-            print("✅ Datenbankverbindung erfolgreich")
+            print("[OK] Datenbankverbindung erfolgreich")
 
             # Tabelle erstellen
             create_brand_logos_table(conn)
-            print("✅ Logo-Tabelle erstellt/überprüft")
+            print("[OK] Logo-Tabelle erstellt/überprüft")
 
             conn.close()
         else:
-            print("❌ Keine Datenbankverbindung")
+            print("[ERROR] Keine Datenbankverbindung")
             return False
 
         # Beispiel-Logo hinzufügen (Base64-encoded 1x1 PNG)
@@ -43,35 +43,35 @@ def test_logo_database():
 
         success = add_brand_logo("TestHersteller", test_logo_b64, "PNG")
         if success:
-            print("✅ Test-Logo hinzugefügt")
+            print("[OK] Test-Logo hinzugefügt")
         else:
-            print("❌ Fehler beim Hinzufügen des Test-Logos")
+            print("[ERROR] Fehler beim Hinzufügen des Test-Logos")
             return False
 
         # Logo abrufen
         logo = get_brand_logo("TestHersteller")
         if logo:
-            print(f"✅ Logo abgerufen: {logo['brand_name']}")
+            print(f"[OK] Logo abgerufen: {logo['brand_name']}")
         else:
-            print("❌ Logo konnte nicht abgerufen werden")
+            print("[ERROR] Logo konnte nicht abgerufen werden")
             return False
 
         # Alle Logos auflisten
         logos = list_all_brand_logos()
-        print(f"✅ Gesamt {len(logos)} Logos in der Datenbank")
+        print(f"[OK] Gesamt {len(logos)} Logos in der Datenbank")
 
         # Logos für mehrere Hersteller abrufen
         logos_dict = get_logos_for_brands(["TestHersteller"])
         if "TestHersteller" in logos_dict:
-            print("✅ Bulk-Logo-Abruf funktioniert")
+            print("[OK] Bulk-Logo-Abruf funktioniert")
         else:
-            print("❌ Bulk-Logo-Abruf fehlgeschlagen")
+            print("[ERROR] Bulk-Logo-Abruf fehlgeschlagen")
             return False
 
         return True
 
     except Exception as e:
-        print(f"❌ Logo-Datenbank-Test fehlgeschlagen: {e}")
+        print(f"[ERROR] Logo-Datenbank-Test fehlgeschlagen: {e}")
         return False
 
 
@@ -101,13 +101,13 @@ def test_logo_integration():
         ok = True
         for k in keys:
             if k in data and data.get(k):
-                print(f"✅ {k} gesetzt (len={len(data.get(k))})")
+                print(f"[OK] {k} gesetzt (len={len(data.get(k))})")
             else:
-                print(f"❌ {k} fehlt")
+                print(f"[ERROR] {k} fehlt")
                 ok = False
         return ok
     except Exception as e:
-        print(f"❌ YAML-Logo-Integration Fehler: {e}")
+        print(f"[ERROR] YAML-Logo-Integration Fehler: {e}")
         return False
 
 
@@ -124,14 +124,14 @@ def test_placeholder_integration():
         for yaml_key, data_key in needed.items():
             mapped = PLACEHOLDER_MAPPING.get(yaml_key)
             if mapped == data_key:
-                print(f"✅ Mapping {yaml_key} -> {data_key}")
+                print(f"[OK] Mapping {yaml_key} -> {data_key}")
             else:
                 print(
-                    f"❌ Mapping für {yaml_key} falsch oder fehlt (gefunden: {mapped})")
+                    f"[ERROR] Mapping für {yaml_key} falsch oder fehlt (gefunden: {mapped})")
                 ok = False
         return ok
     except Exception as e:
-        print(f"❌ Platzhalter-Mapping-Test Fehler: {e}")
+        print(f"[ERROR] Platzhalter-Mapping-Test Fehler: {e}")
         return False
 
 
@@ -152,15 +152,15 @@ def test_coords_update():
             found = sum(1 for t in yaml_texts if t in content)
             if found == len(yaml_texts):
                 print(
-                    f"✅ Alle {found} Logo-Texte in coords/seite4.yml vorhanden")
+                    f"[OK] Alle {found} Logo-Texte in coords/seite4.yml vorhanden")
                 return True
-            print(f"⚠️ Nur {found}/{len(yaml_texts)} Logo-Texte gefunden")
+            print(f"[WARNING] Nur {found}/{len(yaml_texts)} Logo-Texte gefunden")
             return False
-        print("❌ coords/seite4.yml nicht gefunden")
+        print("[ERROR] coords/seite4.yml nicht gefunden")
         return False
 
     except Exception as e:
-        print(f"❌ Koordinaten-Test fehlgeschlagen: {e}")
+        print(f"[ERROR] Koordinaten-Test fehlgeschlagen: {e}")
         return False
 
 
@@ -183,18 +183,18 @@ def run_all_tests():
             result = test_func()
             results[test_name] = result
         except Exception as e:
-            print(f"❌ {test_name} - Kritischer Fehler: {e}")
+            print(f"[ERROR] {test_name} - Kritischer Fehler: {e}")
             results[test_name] = False
 
     print("\n" + "=" * 50)
-    print("📊 TEST-ZUSAMMENFASSUNG:")
+    print("[CHART] TEST-ZUSAMMENFASSUNG:")
     print("=" * 50)
 
     passed = 0
     total = len(results)
 
     for test_name, result in results.items():
-        status = "✅ BESTANDEN" if result else "❌ FEHLGESCHLAGEN"
+        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
         print(f"{test_name:<25} {status}")
         if result:
             passed += 1
@@ -204,7 +204,7 @@ def run_all_tests():
     if passed == total:
         print("🎉 ALLE TESTS BESTANDEN! Logo-Integration ist bereit.")
     else:
-        print("⚠️ EINIGE TESTS FEHLGESCHLAGEN. Überprüfung erforderlich.")
+        print("[WARNING] EINIGE TESTS FEHLGESCHLAGEN. Überprüfung erforderlich.")
 
     return passed == total
 

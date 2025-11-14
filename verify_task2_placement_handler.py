@@ -16,7 +16,7 @@ import inspect
 print("=== Task 2 Verification: Placement Handler ===\n")
 
 # Sub-task 1: Check file exists
-print("✓ Sub-task 1: File utils/pv3d_placement_handler.py exists")
+print("[OK] Sub-task 1: File utils/pv3d_placement_handler.py exists")
 assert os.path.exists("utils/pv3d_placement_handler.py"), "File not found"
 
 # Import the module
@@ -31,7 +31,7 @@ from utils.pv3d_placement_handler import (
 )
 
 # Sub-task 2: Check handle_auto_placement() exists and has correct signature
-print("✓ Sub-task 2: handle_auto_placement() implemented")
+print("[OK] Sub-task 2: handle_auto_placement() implemented")
 sig = inspect.signature(handle_auto_placement)
 params = list(sig.parameters.keys())
 assert "roof_length" in params, "Missing roof_length parameter"
@@ -41,12 +41,12 @@ assert "roof_type" in params, "Missing roof_type parameter"
 print(f"  - Parameters: {', '.join(params)}")
 
 # Sub-task 3: Check handle_reset_placement() exists
-print("✓ Sub-task 3: handle_reset_placement() implemented")
+print("[OK] Sub-task 3: handle_reset_placement() implemented")
 sig = inspect.signature(handle_reset_placement)
 print(f"  - Returns: Dict[str, Any]")
 
 # Sub-task 4: Check calculate_z_position() exists and works correctly
-print("✓ Sub-task 4: calculate_z_position() implemented")
+print("[OK] Sub-task 4: calculate_z_position() implemented")
 sig = inspect.signature(calculate_z_position)
 params = list(sig.parameters.keys())
 assert "roof_type" in params, "Missing roof_type parameter"
@@ -65,7 +65,7 @@ print(f"  - Satteldach: {z_gable}m (direkt auf Dach)")
 print(f"  - Pultdach: {z_shed}m (direkt auf Dach)")
 
 # Sub-task 5: Check Session State Management
-print("✓ Sub-task 5: Session State Management implemented")
+print("[OK] Sub-task 5: Session State Management implemented")
 assert callable(initialize_session_state), "initialize_session_state not callable"
 assert callable(get_placement_statistics), "get_placement_statistics not callable"
 print("  - initialize_session_state() available")
@@ -73,13 +73,13 @@ print("  - get_placement_statistics() available")
 print("  - Session state keys: placed_module_positions, placed_module_count")
 
 # Sub-task 6: Check error handling
-print("✓ Sub-task 6: Error handling implemented")
+print("[OK] Sub-task 6: Error handling implemented")
 
 # Check that functions have try-except blocks
 source = inspect.getsource(handle_auto_placement)
 assert "try:" in source, "handle_auto_placement missing try-except"
 assert "except" in source, "handle_auto_placement missing except"
-assert "❌" in source or "Fehler" in source, "Missing error messages"
+assert "[ERROR]" in source or "Fehler" in source, "Missing error messages"
 
 source = inspect.getsource(handle_reset_placement)
 assert "try:" in source, "handle_reset_placement missing try-except"
@@ -91,10 +91,10 @@ print("  - Validation for invalid inputs")
 
 # Additional checks
 print("\n=== Additional Functions ===")
-print("✓ handle_manual_add() - for manual module placement")
-print("✓ handle_remove_selected() - for removing selected modules")
-print("✓ initialize_session_state() - for session state initialization")
-print("✓ get_placement_statistics() - for retrieving statistics")
+print("[OK] handle_manual_add() - for manual module placement")
+print("[OK] handle_remove_selected() - for removing selected modules")
+print("[OK] initialize_session_state() - for session state initialization")
+print("[OK] get_placement_statistics() - for retrieving statistics")
 
 # Requirements coverage
 print("\n=== Requirements Coverage ===")
@@ -117,7 +117,7 @@ requirements = [
 ]
 
 for req in requirements:
-    print(f"  ✓ {req}")
+    print(f"  [OK] {req}")
 
 print("\n=== Task 2 Complete ===")
 print("All sub-tasks have been successfully implemented!")

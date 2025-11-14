@@ -561,7 +561,7 @@ class PDFThemeManager:
 
                 # Pfeil zeichnen
                 arrow = plt.annotate('', xy=end, xytext=start,
-                                     arrowprops=dict(arrowstyle='->', lw=value/10,
+                                     arrowprops = dict(arrowstyle='->', lw=value/10,
                                                      color=theme_config['colors'][1],
                                                      alpha=0.7))
 
@@ -617,7 +617,10 @@ class PDFThemeManager:
         ax.add_patch(circle)
 
         # Wertkreis
-        theta1, theta2 = 0, value / 100 * 180
+        if 100 != 0:
+            theta1, theta2 = 0, value / 100 * 180
+        else:
+            theta1, theta2 = 0.0
         arc = plt.matplotlib.patches.Wedge((0.5, 0.5), 0.4, theta1, theta2,
                                            width=0.1,
                                            facecolor=theme_config['colors'][0])
@@ -681,9 +684,18 @@ class PDFThemeManager:
         if pattern == 'gradient':
             # Vertikaler Gradient
             for y in range(height):
-                r = int(255 * (1 - y / height * opacity))
-                g = int(245 * (1 - y / height * opacity))
-                b = int(235 * (1 - y / height * opacity))
+                if height != 0:
+                    r = int(255 * (1 - y / height * opacity))
+                else:
+                    r = 0.0
+                if height != 0:
+                    g = int(245 * (1 - y / height * opacity))
+                else:
+                    g = 0.0
+                if height != 0:
+                    b = int(235 * (1 - y / height * opacity))
+                else:
+                    b = 0.0
                 draw.line([(0, y), (width, y)], fill=(r, g, b, 255))
 
         elif pattern == 'dots':

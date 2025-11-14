@@ -52,7 +52,7 @@ def test_basic_additional_costs_calculation():
     expected_final_netto = 16285.0
     expected_final_brutto = 19379.15
 
-    print("📊 Ergebnisse:")
+    print("[CHART] Ergebnisse:")
     print(
         f"   Subtotal (netto): {
             result['subtotal_netto']:.2f}€ (erwartet: {
@@ -84,7 +84,7 @@ def test_basic_additional_costs_calculation():
         result['final_price_brutto'] - expected_final_brutto) < 0.01, f"Final brutto falsch: {
         result['final_price_brutto']} != {expected_final_brutto}"
 
-    print("✅ Grundlegende Zusatzkosten-Berechnung erfolgreich!")
+    print("[OK] Grundlegende Zusatzkosten-Berechnung erfolgreich!")
     return True
 
 
@@ -148,9 +148,9 @@ def test_various_scenarios():
             result['final_price_netto']} != {
                 scenario['expected_netto']}"
 
-        print("      ✅ Bestanden")
+        print("      [OK] Bestanden")
 
-    print("\n✅ Alle Szenarien erfolgreich getestet!")
+    print("\n[OK] Alle Szenarien erfolgreich getestet!")
     return True
 
 
@@ -245,14 +245,14 @@ def test_formula_correctness():
             expected_combined:.2f}€)")
     assert abs(result_combined['final_price_netto'] - expected_combined) < 0.01
 
-    print("✅ Formel-Korrektheit bestätigt!")
+    print("[OK] Formel-Korrektheit bestätigt!")
     return True
 
 
 def main():
     """Hauptfunktion für alle Tests"""
 
-    print("🚀 Starte Tests für korrekte Zusatzkosten-Integration...")
+    print("[LAUNCH] Starte Tests für korrekte Zusatzkosten-Integration...")
     print("=" * 60)
 
     try:
@@ -267,7 +267,7 @@ def main():
 
         print("\n" + "=" * 60)
         print("🎉 ALLE TESTS BESTANDEN!")
-        print("✅ Die Zusatzkosten-Integration funktioniert korrekt:")
+        print("[OK] Die Zusatzkosten-Integration funktioniert korrekt:")
         print("   - Matrixpreis wird als Basis verwendet")
         print("   - Korrekte Formel: Matrixpreis + Zubehör - Rabatte")
         print("   - Verschiedene Szenarien werden korrekt berechnet")
@@ -276,7 +276,7 @@ def main():
         return True
 
     except Exception as e:
-        print(f"\n❌ TEST FEHLGESCHLAGEN: {str(e)}")
+        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {str(e)}")
         import traceback
         traceback.print_exc()
         return False

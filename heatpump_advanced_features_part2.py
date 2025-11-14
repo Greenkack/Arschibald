@@ -70,7 +70,10 @@ def optimize_heating_schedule(
     baseline_cost = 0
     for hour_profile in weekly_schedule:
         power_kw = heat_load_kw * 0.8  # 80% Durchschnittslast
-        electricity_kw = power_kw / cop
+        if cop != 0:
+            electricity_kw = power_kw / cop
+        else:
+            electricity_kw = 0.0
         hour_index = len([x for x in weekly_schedule[:weekly_schedule.index(hour_profile)]]) % 24
         cost = electricity_kw * tariff_by_hour[hour_index]
         baseline_cost += cost
@@ -99,7 +102,10 @@ def optimize_heating_schedule(
             power_kw = heat_load_kw * 0.3  # 30% Grundlast
             mode = "reduced"
         
-        electricity_kw = power_kw / cop
+        if cop != 0:
+            electricity_kw = power_kw / cop
+        else:
+            electricity_kw = 0.0
         cost = electricity_kw * current_tariff
         optimized_cost += cost
         
@@ -210,7 +216,10 @@ def simulate_climate_scenarios(
             current_cop = cop * cop_improvement * temp_improvement
             
             # Strombedarf
-            electricity_kwh = annual_heat_kwh / current_cop
+            if current_cop != 0:
+                electricity_kwh = annual_heat_kwh / current_cop
+            else:
+                electricity_kwh = 0.0
             
             # Strompreis
             price_factor = (1 + scenario["energy_price_increase"]) ** year_offset
@@ -359,7 +368,10 @@ def compare_heatpump_types(
         
         # Jährliche Betriebskosten
         annual_heat_kwh = heat_load_kw * 1800
-        electricity_kwh = annual_heat_kwh / cop
+        if cop != 0:
+            electricity_kwh = annual_heat_kwh / cop
+        else:
+            electricity_kwh = 0.0
         electricity_cost = electricity_kwh * 0.32
         maintenance_cost = data["maintenance_cost_annual"]
         total_annual_cost = electricity_cost + maintenance_cost
@@ -374,7 +386,10 @@ def compare_heatpump_types(
         
         # Vergleich zu Luft-Wasser als Basis
         if "air_water" in available_types and wp_type != "air_water":
-            base_annual_cost = available_types["air_water"]["installation_cost_per_kw"] * heat_load_kw * 0.30 / available_types["air_water"]["cop_avg"] * 0.32
+            if available_types != 0:
+                base_annual_cost = available_types["air_water"]["installation_cost_per_kw"] * heat_load_kw * 0.30 / available_types["air_water"]["cop_avg"] * 0.32
+            else:
+                base_annual_cost = 0.0
             savings_vs_base = base_annual_cost - electricity_cost
             payback_years = (net_installation - (available_types["air_water"]["installation_cost_per_kw"] * heat_load_kw * 0.65)) / savings_vs_base if savings_vs_base > 0 else 999
         else:
@@ -482,7 +497,10 @@ def simulate_annual_load_profile(
             
             # Stromverbrauch
             if heat_demand_kw > 0:
-                electricity_kw = heat_demand_kw / cop
+                if cop != 0:
+                    electricity_kw = heat_demand_kw / cop
+                else:
+                    electricity_kw = 0.0
             else:
                 electricity_kw = 0
             
@@ -499,7 +517,10 @@ def simulate_annual_load_profile(
     # Zusammenfassung
     total_heat_kwh = sum(h["heat_demand_kw"] for h in hourly_data)
     total_electricity_kwh = sum(h["electricity_kw"] for h in hourly_data)
-    avg_cop = total_heat_kwh / total_electricity_kwh if total_electricity_kwh > 0 else 0
+    if total_electricity_kwh != 0:
+        avg_cop = total_heat_kwh / total_electricity_kwh if total_electricity_kwh > 0 else 0
+    else:
+        avg_cop = 0.0
     
     # Monats-Zusammenfassung
     monthly_summary = []

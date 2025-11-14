@@ -37,7 +37,7 @@ class DeepAppAnalyzer:
             and '.venv' not in str(f)
         ]
         
-        print(f"   ✅ Gefunden: {len(self.all_py_files)} Dateien")
+        print(f"   [OK] Gefunden: {len(self.all_py_files)} Dateien")
         return self.all_py_files
     
     def check_syntax(self, file_path: Path) -> Tuple[bool, str]:
@@ -125,13 +125,13 @@ class DeepAppAnalyzer:
         files = self.scan_all_files()
         
         # Schritt 2: Alle Dateien analysieren
-        print(f"\n📊 ANALYSIERE {len(files)} DATEIEN...")
+        print(f"\n[CHART] ANALYSIERE {len(files)} DATEIEN...")
         for i, file_path in enumerate(files, 1):
             if i % 50 == 0:
                 print(f"   ⏳ {i}/{len(files)} Dateien...")
             self.analyze_file(file_path)
         
-        print(f"   ✅ Analyse abgeschlossen!")
+        print(f"   [OK] Analyse abgeschlossen!")
         
         # Berichte generieren
         self.print_results()
@@ -144,13 +144,13 @@ class DeepAppAnalyzer:
         print("=" * 80)
         if self.syntax_errors:
             for file_path, error in self.syntax_errors:
-                print(f"❌ {file_path.relative_to(self.root)}")
+                print(f"[ERROR] {file_path.relative_to(self.root)}")
                 print(f"   {error}\n")
         else:
-            print("✅ Keine Syntax-Fehler gefunden!")
+            print("[OK] Keine Syntax-Fehler gefunden!")
         
         print("\n" + "=" * 80)
-        print("📦 IMPORT-PROBLEME")
+        print("[PACKAGE] IMPORT-PROBLEME")
         print("=" * 80)
         if self.import_errors:
             # Gruppiere nach Typ
@@ -168,34 +168,34 @@ class DeepAppAnalyzer:
                     other_errors[module] = errors
             
             if in_utils:
-                print("\n📁 MODULE IN utils/ (müssen ins Root kopiert werden):")
+                print("\n[FOLDER] MODULE IN utils/ (müssen ins Root kopiert werden):")
                 print("-" * 80)
                 for module, errors in sorted(in_utils.items()):
                     files_using = [str(f.relative_to(self.root)) for f, _ in errors[:3]]
-                    print(f"  ⚠️  {module:30s} verwendet in: {', '.join(files_using)}")
+                    print(f"  [WARNING]  {module:30s} verwendet in: {', '.join(files_using)}")
                     if len(errors) > 3:
                         print(f"      {' '*30} (+{len(errors)-3} weitere Dateien)")
             
             if missing_modules:
-                print("\n❌ FEHLENDE MODULE (nicht gefunden):")
+                print("\n[ERROR] FEHLENDE MODULE (nicht gefunden):")
                 print("-" * 80)
                 for module, errors in sorted(missing_modules.items()):
                     files_using = [str(f.relative_to(self.root)) for f, _ in errors[:3]]
-                    print(f"  ❌ {module:30s} verwendet in: {', '.join(files_using)}")
+                    print(f"  [ERROR] {module:30s} verwendet in: {', '.join(files_using)}")
                     if len(errors) > 3:
                         print(f"      {' '*30} (+{len(errors)-3} weitere Dateien)")
             
             if other_errors:
-                print("\n⚠️  ANDERE IMPORT-FEHLER:")
+                print("\n[WARNING]  ANDERE IMPORT-FEHLER:")
                 print("-" * 80)
                 for module, errors in sorted(other_errors.items()):
-                    print(f"  ⚠️  {module}: {errors[0][1]}")
+                    print(f"  [WARNING]  {module}: {errors[0][1]}")
         else:
-            print("✅ Alle Imports sind verfügbar!")
+            print("[OK] Alle Imports sind verfügbar!")
         
         # Statistiken
         print("\n" + "=" * 80)
-        print("📊 STATISTIKEN")
+        print("[CHART] STATISTIKEN")
         print("=" * 80)
         
         total_files = len(self.all_py_files)
@@ -205,8 +205,8 @@ class DeepAppAnalyzer:
         
         print(f"📂 Python-Dateien:        {total_files}")
         print(f"🐛 Dateien mit Syntax-Fehlern: {files_with_errors}")
-        print(f"📦 Verschiedene Imports:  {total_imports}")
-        print(f"❌ Module mit Problemen:  {modules_with_import_errors}")
+        print(f"[PACKAGE] Verschiedene Imports:  {total_imports}")
+        print(f"[ERROR] Module mit Problemen:  {modules_with_import_errors}")
         
         health_score = ((total_files - files_with_errors) / total_files * 100) if total_files > 0 else 0
         import_health = ((total_imports - modules_with_import_errors) / total_imports * 100) if total_imports > 0 else 0
@@ -217,11 +217,11 @@ class DeepAppAnalyzer:
         
         # Empfehlungen
         print("\n" + "=" * 80)
-        print("💡 EMPFEHLUNGEN")
+        print("[IDEA] EMPFEHLUNGEN")
         print("=" * 80)
         
         if self.syntax_errors:
-            print("1. ❌ Behebe Syntax-Fehler zuerst!")
+            print("1. [ERROR] Behebe Syntax-Fehler zuerst!")
         
         if self.import_errors:
             # Zähle utils-Module
@@ -231,15 +231,15 @@ class DeepAppAnalyzer:
                               if "NOT_FOUND" in errors[0][1])
             
             if utils_count > 0:
-                print(f"2. 📁 Kopiere {utils_count} Module aus utils/ ins Root")
+                print(f"2. [FOLDER] Kopiere {utils_count} Module aus utils/ ins Root")
                 print(f"   Verwende: python fix_missing_modules.py")
             
             if missing_count > 0:
-                print(f"3. ❌ {missing_count} Module sind wirklich nicht vorhanden")
+                print(f"3. [ERROR] {missing_count} Module sind wirklich nicht vorhanden")
                 print(f"   → Prüfe ob deprecated oder umbenennen")
         
         if not self.syntax_errors and not self.import_errors:
-            print("✅ KEINE PROBLEME GEFUNDEN!")
+            print("[OK] KEINE PROBLEME GEFUNDEN!")
             print("🎉 App ist in perfektem Zustand!")
 
 def main():

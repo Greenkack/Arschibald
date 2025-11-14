@@ -43,7 +43,7 @@ class TestResult:
         self.details = {}
         
     def __str__(self):
-        status = "✓ PASS" if self.passed else "✗ FAIL"
+        status = "[OK] PASS" if self.passed else "[ERROR] FAIL"
         return f"{status}: {self.test_name}\n  {self.message}"
 
 
@@ -251,14 +251,14 @@ class PDFExtendedGenerationTester:
                 result.message = "PDF generation returned empty bytes"
                 return result
             
-            self.log(f"\n✓ PDF generated successfully: {len(pdf_bytes)} bytes")
+            self.log(f"\n[OK] PDF generated successfully: {len(pdf_bytes)} bytes")
             
             # Count pages if pypdf available
             if PYPDF_AVAILABLE:
                 try:
                     reader = PdfReader(io.BytesIO(pdf_bytes))
                     page_count = len(reader.pages)
-                    self.log(f"✓ PDF has {page_count} pages")
+                    self.log(f"[OK] PDF has {page_count} pages")
                     result.details['page_count'] = page_count
                     
                     # We expect at least 6 main pages
@@ -275,14 +275,14 @@ class PDFExtendedGenerationTester:
             
             with open(test_output_path, 'wb') as f:
                 f.write(pdf_bytes)
-            self.log(f"✓ Test PDF saved to: {test_output_path}")
+            self.log(f"[OK] Test PDF saved to: {test_output_path}")
             
             result.passed = True
             result.message = f"PDF generated successfully with {result.details.get('page_count', 'unknown')} pages"
             
         except Exception as e:
             result.message = f"Exception during test: {str(e)}"
-            self.log(f"✗ ERROR: {e}")
+            self.log(f"[ERROR] ERROR: {e}")
             import traceback
             traceback.print_exc()
             
@@ -432,14 +432,14 @@ class PDFExtendedGenerationTester:
                 result.message = "PDF generation returned empty bytes"
                 return result
             
-            self.log(f"✓ PDF generated: {len(pdf_bytes)} bytes")
+            self.log(f"[OK] PDF generated: {len(pdf_bytes)} bytes")
             
             # Count pages
             if PYPDF_AVAILABLE:
                 try:
                     reader = PdfReader(io.BytesIO(pdf_bytes))
                     page_count = len(reader.pages)
-                    self.log(f"✓ PDF has {page_count} pages")
+                    self.log(f"[OK] PDF has {page_count} pages")
                     result.details['page_count'] = page_count
                     result.details['company_docs_requested'] = len(doc_ids)
                     
@@ -464,16 +464,16 @@ class PDFExtendedGenerationTester:
             
             with open(test_output_path, 'wb') as f:
                 f.write(pdf_bytes)
-            self.log(f"✓ Test PDF saved to: {test_output_path}")
+            self.log(f"[OK] Test PDF saved to: {test_output_path}")
             
             # Verification checklist
             self.log("\n" + "-"*80)
             self.log("VERIFICATION CHECKLIST:")
             self.log("-"*80)
-            self.log("✓ PDF generated successfully")
-            self.log(f"✓ PDF has {result.details.get('page_count', '?')} pages")
-            self.log(f"✓ Requested {len(doc_ids)} company documents")
-            self.log("✓ Check terminal output above for debug information")
+            self.log("[OK] PDF generated successfully")
+            self.log(f"[OK] PDF has {result.details.get('page_count', '?')} pages")
+            self.log(f"[OK] Requested {len(doc_ids)} company documents")
+            self.log("[OK] Check terminal output above for debug information")
             self.log("  - Look for 'DEBUG: _append_datasheets_and_documents'")
             self.log("  - Check 'Firmendokumente gefunden' count")
             self.log("  - Verify paths are correct")
@@ -490,7 +490,7 @@ class PDFExtendedGenerationTester:
             
         except Exception as e:
             result.message = f"Exception during test: {str(e)}"
-            self.log(f"✗ ERROR: {e}")
+            self.log(f"[ERROR] ERROR: {e}")
             import traceback
             traceback.print_exc()
             

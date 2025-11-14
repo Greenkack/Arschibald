@@ -180,29 +180,29 @@ if __name__ == "__main__":
     df = create_test_matrix()
     matrix = PriceMatrix(df)
     print(
-        f"✓ Matrix initialized with {len(matrix.module_counts)} module counts")
+        f"[OK] Matrix initialized with {len(matrix.module_counts)} module counts")
 
     # Test 2: Exact match
     price, errors = matrix.get_price(10, 'Speicher A', True)
-    print(f"✓ Exact match test: {price} (expected: 15000.0)")
+    print(f"[OK] Exact match test: {price} (expected: 15000.0)")
 
     # Test 3: Case insensitive
     price, errors = matrix.get_price(15, 'speicher b', True)
-    print(f"✓ Case insensitive test: {price} (expected: 19000.0)")
+    print(f"[OK] Case insensitive test: {price} (expected: 19000.0)")
 
     # Test 4: No storage
     price, errors = matrix.get_price(20, None, False)
-    print(f"✓ No storage test: {price} (expected: 16000.0)")
+    print(f"[OK] No storage test: {price} (expected: 16000.0)")
 
     # Test 5: Fallback behavior
     price, errors = matrix.get_price(25, 'Unknown Model', True)
     print(
-        f"✓ Fallback test: {price} (expected: 18000.0, fallback to 'Ohne Speicher')")
+        f"[OK] Fallback test: {price} (expected: 18000.0, fallback to 'Ohne Speicher')")
 
     # Test 6: Matrix info
     info = matrix.get_matrix_info()
     print(
-        f"✓ Matrix info: {
+        f"[OK] Matrix info: {
             info['total_module_options']} module options, {
             info['total_storage_options']} storage options")
 

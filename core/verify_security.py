@@ -46,10 +46,10 @@ def verify_imports():
             require_permission,
             require_role,
         )
-        print("   ✓ All security components imported successfully")
+        print("   [OK] All security components imported successfully")
         return True
     except ImportError as e:
-        print(f"   ✗ Import failed: {e}")
+        print(f"   [ERROR] Import failed: {e}")
         return False
 
 
@@ -75,7 +75,7 @@ def verify_authentication():
             password="TestPass123!",
             full_name="Test User"
         )
-        print(f"   ✓ User registration: {user.email}")
+        print(f"   [OK] User registration: {user.email}")
 
         # Test authentication
         result = auth_manager.authenticate(
@@ -83,19 +83,19 @@ def verify_authentication():
             password="TestPass123!",
             ip_address="127.0.0.1"
         )
-        print(f"   ✓ Authentication: {result.status.value}")
+        print(f"   [OK] Authentication: {result.status.value}")
 
         # Test session validation
         validated_user = auth_manager.session_manager.validate_session(
             result.session_token)
-        print(f"   ✓ Session validation: {validated_user.email}")
+        print(f"   [OK] Session validation: {validated_user.email}")
 
         # Cleanup
         db_manager.drop_tables()
 
         return True
     except Exception as e:
-        print(f"   ✗ Authentication verification failed: {e}")
+        print(f"   [ERROR] Authentication verification failed: {e}")
         return False
 
 
@@ -130,27 +130,27 @@ def verify_authorization():
             resource="test",
             action="read"
         )
-        print(f"   ✓ Role created: {role.name}")
-        print(f"   ✓ Permission created: {permission.name}")
+        print(f"   [OK] Role created: {role.name}")
+        print(f"   [OK] Permission created: {permission.name}")
 
         # Assign permission to role
         authz_manager.assign_permission_to_role(role.id, permission.id)
-        print("   ✓ Permission assigned to role")
+        print("   [OK] Permission assigned to role")
 
         # Assign role to user
         authz_manager.assign_role_to_user(user.id, role.id)
-        print("   ✓ Role assigned to user")
+        print("   [OK] Role assigned to user")
 
         # Check permission
         has_perm = authz_manager.has_permission(user.id, "test:read")
-        print(f"   ✓ Permission check: {has_perm}")
+        print(f"   [OK] Permission check: {has_perm}")
 
         # Cleanup
         db_manager.drop_tables()
 
         return True
     except Exception as e:
-        print(f"   ✗ Authorization verification failed: {e}")
+        print(f"   [ERROR] Authorization verification failed: {e}")
         return False
 
 
@@ -166,12 +166,12 @@ def verify_data_protection():
         # Test email masking
         email = "john.doe@example.com"
         masked_email = data_protection.mask_email(email)
-        print(f"   ✓ Email masking: {email} -> {masked_email}")
+        print(f"   [OK] Email masking: {email} -> {masked_email}")
 
         # Test phone masking
         phone = "555-123-4567"
         masked_phone = data_protection.mask_phone(phone)
-        print(f"   ✓ Phone masking: {phone} -> {masked_phone}")
+        print(f"   [OK] Phone masking: {phone} -> {masked_phone}")
 
         # Test PII identification
         data = {
@@ -180,21 +180,21 @@ def verify_data_protection():
             "name": "John Doe"
         }
         pii_fields = data_protection.identify_pii_fields(data)
-        print(f"   ✓ PII identification: {len(pii_fields)} fields found")
+        print(f"   [OK] PII identification: {len(pii_fields)} fields found")
 
         # Test dictionary masking
         masked_data = data_protection.mask_dict(data)
-        print(f"   ✓ Dictionary masking: {len(masked_data)} fields masked")
+        print(f"   [OK] Dictionary masking: {len(masked_data)} fields masked")
 
         # Test encryption
         sensitive = "sensitive data"
         encrypted = data_protection.encrypt_data(sensitive)
         decrypted = data_protection.decrypt_data(encrypted)
-        print(f"   ✓ Encryption/Decryption: {sensitive == decrypted}")
+        print(f"   [OK] Encryption/Decryption: {sensitive == decrypted}")
 
         return True
     except Exception as e:
-        print(f"   ✗ Data protection verification failed: {e}")
+        print(f"   [ERROR] Data protection verification failed: {e}")
         return False
 
 
@@ -225,37 +225,37 @@ def verify_security_monitoring():
             description="Test security event",
             ip_address="127.0.0.1"
         )
-        print(f"   ✓ Security event logged: {event.event_type}")
+        print(f"   [OK] Security event logged: {event.event_type}")
 
         # Test SQL injection detection
         sql_injection = "SELECT * FROM users"
         is_sql = threat_detector.detect_sql_injection(sql_injection)
-        print(f"   ✓ SQL injection detection: {is_sql}")
+        print(f"   [OK] SQL injection detection: {is_sql}")
 
         # Test XSS detection
         xss_attempt = "<script>alert('XSS')</script>"
         is_xss = threat_detector.detect_xss(xss_attempt)
-        print(f"   ✓ XSS detection: {is_xss}")
+        print(f"   [OK] XSS detection: {is_xss}")
 
         # Test input validation
         safe_input = "Hello World"
         is_valid = security_monitor.validate_input(safe_input, "test")
-        print(f"   ✓ Input validation (safe): {is_valid}")
+        print(f"   [OK] Input validation (safe): {is_valid}")
 
         unsafe_input = "DROP TABLE users"
         is_valid = security_monitor.validate_input(unsafe_input, "test")
-        print(f"   ✓ Input validation (unsafe): {not is_valid}")
+        print(f"   [OK] Input validation (unsafe): {not is_valid}")
 
         # Test security statistics
         stats = security_monitor.get_security_stats(days=7)
-        print(f"   ✓ Security statistics: {stats['total_events']} events")
+        print(f"   [OK] Security statistics: {stats['total_events']} events")
 
         # Cleanup
         db_manager.drop_tables()
 
         return True
     except Exception as e:
-        print(f"   ✗ Security monitoring verification failed: {e}")
+        print(f"   [ERROR] Security monitoring verification failed: {e}")
         return False
 
 
@@ -272,7 +272,7 @@ def verify_integration():
             get_security_monitor,
         )
 
-        print("   ✓ All security components available from core module")
+        print("   [OK] All security components available from core module")
 
         # Test convenience functions
         auth_manager = get_authentication_manager()
@@ -280,11 +280,11 @@ def verify_integration():
         data_protection = get_data_protection_manager()
         security_monitor = get_security_monitor()
 
-        print("   ✓ All convenience functions working")
+        print("   [OK] All convenience functions working")
 
         return True
     except Exception as e:
-        print(f"   ✗ Integration verification failed: {e}")
+        print(f"   [ERROR] Integration verification failed: {e}")
         return False
 
 
@@ -305,21 +305,21 @@ def main():
     print("=" * 60)
 
     for name, result in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = "[OK] PASS" if result else "[ERROR] FAIL"
         print(f"{name:.<40} {status}")
 
     all_passed = all(result for _, result in results)
 
     print("=" * 60)
     if all_passed:
-        print("✓ ALL VERIFICATIONS PASSED")
+        print("[OK] ALL VERIFICATIONS PASSED")
         print("\nTask 9: Security & Access Control System is complete!")
         print("\nNext steps:")
         print("  1. Run tests: pytest core/test_security.py -v")
         print("  2. See examples: python core/example_security_usage.py")
         print("  3. Read docs: core/SECURITY_README.md")
         return 0
-    print("✗ SOME VERIFICATIONS FAILED")
+    print("[ERROR] SOME VERIFICATIONS FAILED")
     print("\nPlease check the errors above and fix any issues.")
     return 1
 

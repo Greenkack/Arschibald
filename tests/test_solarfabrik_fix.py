@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_solarfabrik_values():
     """Testet ob Solarfabrik die korrekten Werte bekommt"""
 
-    print("🔧 Test Solarfabrik Werte")
+    print("[TOOL] Test Solarfabrik Werte")
     print("=" * 40)
 
     # Test verschiedene Solarfabrik Module
@@ -26,7 +26,7 @@ def test_solarfabrik_values():
     ]
 
     for model in solarfabrik_models:
-        print(f"\n📦 Test Modell: {model}")
+        print(f"\n[PACKAGE] Test Modell: {model}")
 
         # Direkt aus Datenbank abrufen
         db_product = get_product_by_model_name(model)
@@ -45,7 +45,7 @@ def test_solarfabrik_values():
             print(f"     Zellentyp: {db_product.get('cell_type', 'N/A')}")
             print(f"     Version: {db_product.get('version', 'N/A')}")
         else:
-            print("   ❌ Nicht in Datenbank gefunden")
+            print("   [ERROR] Nicht in Datenbank gefunden")
 
         # Test mit PDF-Platzhalter-System
         project_data = {
@@ -76,18 +76,18 @@ def test_solarfabrik_values():
             pdf_tech = dynamic_data.get('module_cell_technology', '')
 
             if db_tech and pdf_tech == db_tech:
-                print("   ✅ Werte stimmen überein")
+                print("   [OK] Werte stimmen überein")
             elif pdf_tech == "k.A.":
-                print(f"   ❌ PDF zeigt k.A. statt DB-Wert: {db_tech}")
+                print(f"   [ERROR] PDF zeigt k.A. statt DB-Wert: {db_tech}")
             else:
                 print(
-                    f"   ⚠️  Unterschiedliche Werte - DB: {db_tech}, PDF: {pdf_tech}")
+                    f"   [WARNING]  Unterschiedliche Werte - DB: {db_tech}, PDF: {pdf_tech}")
 
 
 def test_comparison_with_other_brands():
     """Vergleicht Solarfabrik mit anderen Marken"""
 
-    print("\n🔍 Vergleich mit anderen Marken")
+    print("\n[SEARCH] Vergleich mit anderen Marken")
     print("=" * 40)
 
     test_models = [
@@ -97,7 +97,7 @@ def test_comparison_with_other_brands():
     ]
 
     for brand, model in test_models:
-        print(f"\n📦 {brand} - {model}")
+        print(f"\n[PACKAGE] {brand} - {model}")
 
         project_data = {
             "project_details": {
@@ -121,6 +121,6 @@ if __name__ == "__main__":
     test_solarfabrik_values()
     test_comparison_with_other_brands()
 
-    print("\n🎯 Erwartung:")
+    print("\n[TARGET] Erwartung:")
     print("   Solarfabrik sollte die gleichen Werte wie TrinaSolar/Viessmann haben")
     print("   NICHT 'k.A.' anzeigen")

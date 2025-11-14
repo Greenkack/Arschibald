@@ -228,7 +228,10 @@ class FinalValidator:
             FileValidationResult
         """
         yml_filename = f"seite{seite}_f{firma}.yml"
-        yml_path = self.output_dir / yml_filename
+        if yml_filename != 0:
+            yml_path = self.output_dir / yml_filename
+        else:
+            yml_path = 0.0
         
         result = FileValidationResult(
             firma=firma,
@@ -281,7 +284,10 @@ class FinalValidator:
                 result.warnings.append(warning.message)
             
             # Check if attributes are preserved (compare with original)
-            original_path = self.original_dir / yml_filename
+            if yml_filename != 0:
+                original_path = self.original_dir / yml_filename
+            else:
+                original_path = 0.0
             if original_path.exists():
                 result.attributes_preserved = self._check_attributes_preserved(
                     original_path,
@@ -372,8 +378,14 @@ class FinalValidator:
         for firma in firmen:
             for seite in seiten:
                 yml_filename = f"seite{seite}_f{firma}.yml"
-                original_path = self.original_dir / yml_filename
-                generated_path = self.output_dir / yml_filename
+                if yml_filename != 0:
+                    original_path = self.original_dir / yml_filename
+                else:
+                    original_path = 0.0
+                if yml_filename != 0:
+                    generated_path = self.output_dir / yml_filename
+                else:
+                    generated_path = 0.0
                 
                 comparison['total_files'] += 1
                 
@@ -431,7 +443,10 @@ class FinalValidator:
                 if (self.output_dir / f"seite{s}_f{f}.yml").exists()
             )
             if total_elements > 0:
-                comparison['avg_position_change'] = total_position_change / total_elements
+                if total_elements != 0:
+                    comparison['avg_position_change'] = total_position_change / total_elements
+                else:
+                    comparison['avg_position_change'] = 0.0
         
         return comparison
     
@@ -544,18 +559,18 @@ class FinalValidator:
             print(f"\nInvalid Files ({report.invalid_files}):")
             for result in report.file_results:
                 if not result.is_valid:
-                    print(f"\n  ✗ {result.filename}:")
+                    print(f"\n  [ERROR] {result.filename}:")
                     for error in result.errors[:3]:  # Show first 3 errors
                         print(f"      Error: {error}")
         
         # Summary
         print("\n" + "=" * 70)
         if report.invalid_files == 0 and report.total_errors == 0:
-            print("✓ ALL FILES VALID - SYSTEM READY FOR DEPLOYMENT")
+            print("[OK] ALL FILES VALID - SYSTEM READY FOR DEPLOYMENT")
         elif report.invalid_files == 0:
             print(f"⚠ ALL FILES VALID BUT {report.total_warnings} WARNINGS")
         else:
-            print(f"✗ {report.invalid_files} INVALID FILES - REVIEW REQUIRED")
+            print(f"[ERROR] {report.invalid_files} INVALID FILES - REVIEW REQUIRED")
         print("=" * 70)
     
     def save_report(self, report: FinalValidationReport, output_file: Path):
@@ -571,7 +586,7 @@ class FinalValidator:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(report.to_dict(), f, indent=2, ensure_ascii=False)
         
-        print(f"\n✓ Report saved to: {output_file}")
+        print(f"\n[OK] Report saved to: {output_file}")
 
 
 def validate_final_system(

@@ -25,11 +25,11 @@ def main():
     # Check if database exists
     db_path = os.path.join('data', 'app_data.db')
     if not os.path.exists(db_path):
-        print(f"❌ Database not found at {db_path}")
+        print(f"[ERROR] Database not found at {db_path}")
         print("Please ensure the application database exists before running optimization.")
         return False
 
-    print(f"✓ Database found: {db_path}")
+    print(f"[OK] Database found: {db_path}")
     print(f"  Size: {round(os.path.getsize(db_path) / (1024 * 1024), 2)} MB")
     print()
 
@@ -80,9 +80,9 @@ def main():
     index_success = optimizer.create_pricing_indexes()
 
     if index_success:
-        print("✓ Indexes created successfully")
+        print("[OK] Indexes created successfully")
     else:
-        print("❌ Some indexes could not be created")
+        print("[ERROR] Some indexes could not be created")
     print()
 
     # Run database maintenance
@@ -91,16 +91,16 @@ def main():
     print("  Running ANALYZE to update query planner statistics...")
     analyze_success = optimizer.analyze_database()
     if analyze_success:
-        print("  ✓ ANALYZE completed")
+        print("  [OK] ANALYZE completed")
     else:
-        print("  ❌ ANALYZE failed")
+        print("  [ERROR] ANALYZE failed")
 
     print("  Running VACUUM to optimize storage...")
     vacuum_success = optimizer.vacuum_database()
     if vacuum_success:
-        print("  ✓ VACUUM completed")
+        print("  [OK] VACUUM completed")
     else:
-        print("  ❌ VACUUM failed")
+        print("  [ERROR] VACUUM failed")
     print()
 
     # Get final statistics
@@ -125,7 +125,7 @@ def main():
 
     if final_indexes > initial_indexes:
         print(
-            f"✓ Added {
+            f"[OK] Added {
                 final_indexes -
                 initial_indexes} new indexes for better performance")
 
@@ -133,10 +133,10 @@ def main():
     print("Running performance benchmark...")
     try:
         results = run_performance_analysis()
-        print("✓ Performance benchmark completed")
+        print("[OK] Performance benchmark completed")
         print("  Check performance_results_*.json and performance_metrics_*.json for detailed results")
     except Exception as e:
-        print(f"❌ Performance benchmark failed: {e}")
+        print(f"[ERROR] Performance benchmark failed: {e}")
 
     print()
 
@@ -150,10 +150,10 @@ def main():
 
     # Summary
     print("\nSUMMARY:")
-    print(f"  Indexes created: {'✓' if index_success else '❌'}")
-    print(f"  Database analyzed: {'✓' if analyze_success else '❌'}")
-    print(f"  Database vacuumed: {'✓' if vacuum_success else '❌'}")
-    print(f"  Performance benchmark: {'✓' if 'results' in locals() else '❌'}")
+    print(f"  Indexes created: {'[OK]' if index_success else '[ERROR]'}")
+    print(f"  Database analyzed: {'[OK]' if analyze_success else '[ERROR]'}")
+    print(f"  Database vacuumed: {'[OK]' if vacuum_success else '[ERROR]'}")
+    print(f"  Performance benchmark: {'[OK]' if 'results' in locals() else '[ERROR]'}")
 
     print("\nRECOMMENDations:")
     print("  - Run this optimization script periodically (monthly)")

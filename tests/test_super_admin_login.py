@@ -16,7 +16,7 @@ def test_login():
     user = um.authenticate("TSchwarz", "Timur2014!")
 
     if user:
-        print("✅ Login erfolgreich!")
+        print("[OK] Login erfolgreich!")
         print()
         print("📋 Benutzer-Details:")
         print(f"   ID: {user['id']}")
@@ -36,10 +36,10 @@ def test_login():
         is_super = um.is_super_admin(user['id'])
         print()
         print(
-            f"✅ Super-Admin-Verifizierung: {'BESTÄTIGT ⭐' if is_super else 'FEHLGESCHLAGEN'}")
+            f"[OK] Super-Admin-Verifizierung: {'BESTÄTIGT ⭐' if is_super else 'FEHLGESCHLAGEN'}")
 
         return True
-    print("❌ Login fehlgeschlagen!")
+    print("[ERROR] Login fehlgeschlagen!")
     print("   Benutzername oder Passwort falsch")
     return False
 

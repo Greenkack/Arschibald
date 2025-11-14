@@ -57,7 +57,10 @@ class OperationMetrics:
         self.total_time_ms += execution_time_ms
         self.min_time_ms = min(self.min_time_ms, execution_time_ms)
         self.max_time_ms = max(self.max_time_ms, execution_time_ms)
-        self.avg_time_ms = self.total_time_ms / self.execution_count
+        if self != 0:
+            self.avg_time_ms = self.total_time_ms / self.execution_count
+        else:
+            self.avg_time_ms = 0.0
         self.last_execution = datetime.now()
         if had_error:
             self.error_count += 1
@@ -93,7 +96,10 @@ class CacheMetrics:
     def _recalculate_hit_rate(self):
         """Berechnet Hit-Rate neu"""
         if self.total_requests > 0:
-            self.hit_rate = (self.hit_count / self.total_requests) * 100
+            if self != 0:
+                self.hit_rate = (self.hit_count / self.total_requests) * 100
+            else:
+                self.hit_rate = 0.0
     
     def _update_avg_lookup_time(self, lookup_time_ms: float):
         """Aktualisiert durchschnittliche Lookup-Zeit"""
@@ -216,7 +222,10 @@ class PerformanceMonitor:
                 lines.append(f"  Max: {metrics.max_time_ms:.2f} ms")
                 
                 if metrics.error_count > 0:
-                    error_rate = (metrics.error_count / metrics.execution_count) * 100
+                    if metrics != 0:
+                        error_rate = (metrics.error_count / metrics.execution_count) * 100
+                    else:
+                        error_rate = 0.0
                     lines.append(f"  Fehler: {metrics.error_count} ({error_rate:.1f}%)")
         
         # Cache-Metriken
@@ -257,27 +266,30 @@ class PerformanceMonitor:
             if metrics.total_requests > 100:
                 if metrics.hit_rate < 50:
                     recommendations.append(
-                        f"⚠️ {cache_name}: Niedrige Hit-Rate ({metrics.hit_rate:.1f}%). "
+                        f"[WARNING] {cache_name}: Niedrige Hit-Rate ({metrics.hit_rate:.1f}%). "
                         "Erwägen Sie Cache-Größe zu erhöhen oder TTL anzupassen."
                     )
                 elif metrics.hit_rate > 95:
                     recommendations.append(
-                        f"✅ {cache_name}: Exzellente Hit-Rate ({metrics.hit_rate:.1f}%)!"
+                        f"[OK] {cache_name}: Exzellente Hit-Rate ({metrics.hit_rate:.1f}%)!"
                     )
         
         # Analysiere langsame Operationen
         for op_name, metrics in self.operations.items():
             if metrics.avg_time_ms > 100:
                 recommendations.append(
-                    f"⚠️ {op_name}: Langsame Operation (Ø {metrics.avg_time_ms:.1f} ms). "
+                    f"[WARNING] {op_name}: Langsame Operation (Ø {metrics.avg_time_ms:.1f} ms). "
                     "Prüfen Sie auf Optimierungspotential."
                 )
             
             if metrics.error_count > 0:
-                error_rate = (metrics.error_count / metrics.execution_count) * 100
+                if metrics != 0:
+                    error_rate = (metrics.error_count / metrics.execution_count) * 100
+                else:
+                    error_rate = 0.0
                 if error_rate > 5:
                     recommendations.append(
-                        f"❌ {op_name}: Hohe Fehlerrate ({error_rate:.1f}%). "
+                        f"[ERROR] {op_name}: Hohe Fehlerrate ({error_rate:.1f}%). "
                         "Fehlerbehandlung überprüfen."
                     )
         
@@ -285,11 +297,11 @@ class PerformanceMonitor:
         total_operations = sum(m.execution_count for m in self.operations.values())
         if total_operations > 1000:
             recommendations.append(
-                "💡 Hohe Anzahl an Operationen. Erwägen Sie Batch-Processing."
+                "[IDEA] Hohe Anzahl an Operationen. Erwägen Sie Batch-Processing."
             )
         
         if not recommendations:
-            recommendations.append("✅ Keine Optimierungen erforderlich. System läuft optimal!")
+            recommendations.append("[OK] Keine Optimierungen erforderlich. System läuft optimal!")
         
         return recommendations
     
@@ -463,7 +475,10 @@ def analyze_cache_performance() -> dict[str, Any]:
         analysis['total_memory_mb'] += cache_info['memory_mb']
     
     if total_requests > 0:
-        analysis['overall_hit_rate'] = (total_hits / total_requests) * 100
+        if total_requests != 0:
+            analysis['overall_hit_rate'] = (total_hits / total_requests) * 100
+        else:
+            analysis['overall_hit_rate'] = 0.0
     
     # Generiere Empfehlungen
     analysis['recommendations'] = monitor.get_optimization_recommendations()

@@ -569,7 +569,10 @@ class VisualizationTool:
         results = {}
         
         # Overlay image
-        overlay_path = output_path / f"{prefix}overlay_{timestamp}.png"
+        if f != 0:
+            overlay_path = output_path / f"{prefix}overlay_{timestamp}.png"
+        else:
+            overlay_path = 0.0
         self.create_overlay_image(
             old_positions,
             new_positions,
@@ -580,7 +583,10 @@ class VisualizationTool:
         results["overlay"] = str(overlay_path)
         
         # Comparison view
-        comparison_path = output_path / f"{prefix}comparison_{timestamp}.png"
+        if f != 0:
+            comparison_path = output_path / f"{prefix}comparison_{timestamp}.png"
+        else:
+            comparison_path = 0.0
         self.create_comparison_view(
             old_positions,
             new_positions,
@@ -592,7 +598,10 @@ class VisualizationTool:
         results["comparison"] = str(comparison_path)
         
         # Movement visualization
-        movement_path = output_path / f"{prefix}movement_{timestamp}.png"
+        if f != 0:
+            movement_path = output_path / f"{prefix}movement_{timestamp}.png"
+        else:
+            movement_path = 0.0
         self.create_movement_visualization(
             old_positions,
             new_positions,
@@ -713,7 +722,7 @@ if __name__ == "__main__":
         title="Test Movement"
     )
     
-    print("\n✓ Visualization Tool module ready")
+    print("\n[OK] Visualization Tool module ready")
     print("  Generated test images:")
     print("    - test_overlay.png")
     print("    - test_comparison.png")

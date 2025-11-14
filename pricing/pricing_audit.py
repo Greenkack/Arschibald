@@ -937,7 +937,7 @@ class PricingMonitor:
             # Deduct for high average duration
             avg_duration = stats.get("average_duration_ms", 0)
             if avg_duration > self.alert_thresholds["avg_duration_ms"]:
-                health_score -= min(30, (avg_duration / 1000) * 5)
+                health_score -= min(30, (avg_duration / 1000) * 5) if 1000 != 0 else 0.0
 
             # Deduct for recent calculation failures
             recent_failures = len([

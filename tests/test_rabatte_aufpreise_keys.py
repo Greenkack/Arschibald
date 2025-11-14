@@ -44,22 +44,22 @@ def test_create_discount_surcharge_keys():
         keys = key_manager.generate_keys(
             test_data, prefix='CALC_', category=KeyCategory.PRICING)
 
-        print("✅ RABATTE KEYS ERSTELLT:")
+        print("[OK] RABATTE KEYS ERSTELLT:")
         for key, value in keys.items():
             if 'DISCOUNT' in key:
                 print(f"  {key}: {value}")
 
-        print("\n✅ AUFPREISE KEYS ERSTELLT:")
+        print("\n[OK] AUFPREISE KEYS ERSTELLT:")
         for key, value in keys.items():
             if 'SURCHARGE' in key:
                 print(f"  {key}: {value}")
 
-        print("\n✅ ZWISCHENSUMME KEYS ERSTELLT:")
+        print("\n[OK] ZWISCHENSUMME KEYS ERSTELLT:")
         for key, value in keys.items():
             if 'ZWISCHENSUMME' in key:
                 print(f"  {key}: {value}")
 
-        print(f"\n✅ INSGESAMT {len(keys)} KEYS ERFOLGREICH ERSTELLT!")
+        print(f"\n[OK] INSGESAMT {len(keys)} KEYS ERFOLGREICH ERSTELLT!")
 
         # Keys in Session State Format für Solar Calculator
         session_state_keys = {
@@ -84,27 +84,27 @@ def test_create_discount_surcharge_keys():
             "zwischensumme_brutto_formatted": test_data["ZWISCHENSUMME_BRUTTO_FORMATTED"],
         }
 
-        print("\n✅ SESSION STATE KEYS FÜR SOLAR CALCULATOR:")
+        print("\n[OK] SESSION STATE KEYS FÜR SOLAR CALCULATOR:")
         for key, value in session_state_keys.items():
             print(f"  {key}: {value}")
 
         return keys, session_state_keys
 
     except ImportError as e:
-        print(f"❌ FEHLER: Kann Key Manager nicht importieren: {e}")
+        print(f"[ERROR] FEHLER: Kann Key Manager nicht importieren: {e}")
         return None, None
     except Exception as e:
-        print(f"❌ FEHLER: {e}")
+        print(f"[ERROR] FEHLER: {e}")
         return None, None
 
 
 if __name__ == "__main__":
-    print("🔧 ERSTELLE NUR KEYS FÜR RABATTE, AUFPREISE UND ZWISCHENSUMME")
+    print("[TOOL] ERSTELLE NUR KEYS FÜR RABATTE, AUFPREISE UND ZWISCHENSUMME")
     print("=" * 60)
 
     keys, session_keys = test_create_discount_surcharge_keys()
 
     if keys:
-        print("\n🎯 KEYS ERFOLGREICH ERSTELLT UND BEREIT FÜR INTEGRATION!")
+        print("\n[TARGET] KEYS ERFOLGREICH ERSTELLT UND BEREIT FÜR INTEGRATION!")
     else:
-        print("\n❌ KEYS KONNTEN NICHT ERSTELLT WERDEN!")
+        print("\n[ERROR] KEYS KONNTEN NICHT ERSTELLT WERDEN!")

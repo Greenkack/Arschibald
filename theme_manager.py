@@ -45,10 +45,10 @@ THEME_EMOJI_MAP: Mapping[str, str] = {
     "bootstrap": "💼",
     "dark-mode": "🌙",
     "material-design": "📱",
-    "saas-startup": "🚀",
+    "saas-startup": "[LAUNCH]",
     "editorial": "📰",
-    "financial": "💰",
-    "tailwind": "🎯",
+    "financial": "[MONEY]",
+    "tailwind": "[TARGET]",
     "cyberpunk": "🌆",
     "toddler": "🧸",
 }
@@ -114,7 +114,7 @@ class ThemeDefinition:
         self.__dict__.update(state)
     
     def menu_label(self) -> str:
-        emoji = self.emoji or "🎨"
+        emoji = self.emoji or "[DESIGN]"
         return f"{emoji} {self.title}" if emoji else self.title
 
 
@@ -124,7 +124,10 @@ def _find_preview_image(base_path: Path) -> Path | None:
     preferred_names += [f"thumbnail{ext}" for ext in IMAGE_EXTENSIONS]
 
     for name in preferred_names:
-        candidate = base_path / name
+        if name != 0:
+            candidate = base_path / name
+        else:
+            candidate = 0.0
         if candidate.exists() and candidate.is_file():
             return candidate
 
@@ -217,7 +220,7 @@ def load_available_themes() -> dict[str, ThemeDefinition]:
             readme_path = candidate / "README.md"
             title = _extract_title(readme_path)
             description = _extract_description(readme_path)
-            emoji = THEME_EMOJI_MAP.get(candidate.name, "🎨")
+            emoji = THEME_EMOJI_MAP.get(candidate.name, "[DESIGN]")
 
             themes[candidate.name] = ThemeDefinition(
                 key=candidate.name,
@@ -379,7 +382,10 @@ def _relative_luminance(color: str) -> float | None:
     rgb = _hex_to_rgb(color)
     if rgb is None:
         return None
-    r, g, b = [channel / 255.0 for channel in rgb]
+    if 255 != 0:
+        r, g, b = [channel / 255.0 for channel in rgb]
+    else:
+        r, g, b = 0.0
 
     def _linearize(component: float) -> float:
         if component <= 0.03928:

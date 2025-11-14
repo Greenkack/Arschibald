@@ -35,10 +35,10 @@ def test_page_numbering_footer():
         reader = PdfReader(io.BytesIO(final_pdf_bytes))
         page_count = len(reader.pages)
 
-        print(f"   ✓ PDF generated with {page_count} pages\n")
+        print(f"   [OK] PDF generated with {page_count} pages\n")
 
         if page_count != 8:
-            print(f"   ✗ ERROR: Expected 8 pages, got {page_count}")
+            print(f"   [ERROR] ERROR: Expected 8 pages, got {page_count}")
             return False
 
         # Check each page for correct numbering
@@ -62,10 +62,10 @@ def test_page_numbering_footer():
                     found_page_num = int(matches[0])
                     if found_page_num == page_num:
                         print(
-                            f"   ✓ Page {page_num}: Footer shows 'Seite {found_page_num}' ✓")
+                            f"   [OK] Page {page_num}: Footer shows 'Seite {found_page_num}' [OK]")
                     else:
                         print(
-                            f"   ✗ Page {page_num}: Footer shows 'Seite {found_page_num}' (WRONG!)")
+                            f"   [ERROR] Page {page_num}: Footer shows 'Seite {found_page_num}' (WRONG!)")
                         all_correct = False
                 else:
                     # Note: Some pages might not have extractable text if
@@ -77,7 +77,7 @@ def test_page_numbering_footer():
                 print(f"   ⚠ Page {page_num}: Could not extract text: {e}")
 
         print(f"\n3. Checking page sequence:")
-        print(f"   ✓ Pages are sequential from 1 to {page_count}")
+        print(f"   [OK] Pages are sequential from 1 to {page_count}")
 
         # Save test PDF
         output_path = Path("test_page_numbering_output.pdf")
@@ -88,7 +88,7 @@ def test_page_numbering_footer():
 
         if all_correct:
             print(f"{'=' * 50}")
-            print("✓ SUCCESS: Page numbering appears correct!")
+            print("[OK] SUCCESS: Page numbering appears correct!")
             print(f"{'=' * 50}\n")
         else:
             print(f"{'=' * 50}")
@@ -99,7 +99,7 @@ def test_page_numbering_footer():
         return True
 
     except Exception as e:
-        print(f"\n✗ ERROR: {e}")
+        print(f"\n[ERROR] ERROR: {e}")
         import traceback
         traceback.print_exc()
         return False

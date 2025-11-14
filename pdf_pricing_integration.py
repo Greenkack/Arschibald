@@ -432,7 +432,10 @@ class EnhancedPDFGenerator:
 
             # Calculate VAT rate if possible
             if net_total > 0 and vat_amount > 0:
-                vat_rate = (vat_amount / net_total) * 100
+                if net_total != 0:
+                    vat_rate = (vat_amount / net_total) * 100
+                else:
+                    vat_rate = 0.0
                 summary['vat_rate'] = f"{vat_rate:.1f}%"
             else:
                 summary['vat_rate'] = "19,0%"  # Default German VAT rate

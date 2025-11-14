@@ -41,11 +41,11 @@ def run_test_suite(test_file, suite_name):
         return result.returncode == 0
 
     except subprocess.TimeoutExpired:
-        print(f"❌ {suite_name} timed out after 60 seconds")
+        print(f"[ERROR] {suite_name} timed out after 60 seconds")
         return False
 
     except Exception as e:
-        print(f"❌ Error running {suite_name}: {e}")
+        print(f"[ERROR] Error running {suite_name}: {e}")
         return False
 
 
@@ -79,7 +79,7 @@ def main():
     passed_suites = sum(1 for v in results.values() if v)
 
     for suite_name, passed in results.items():
-        status = "✅ PASSED" if passed else "❌ FAILED"
+        status = "[OK] PASSED" if passed else "[ERROR] FAILED"
         print(f"  {suite_name:.<50} {status}")
 
     print("-" * 70)
@@ -94,12 +94,12 @@ def main():
         print("Bokuk2 application with proper isolation and dependency")
         print("management.")
         print()
-        print("✅ No database conflicts")
-        print("✅ State management separated")
-        print("✅ No interference with existing features")
-        print("✅ Error isolation validated")
-        print("✅ All dependencies properly managed")
-        print("✅ No version conflicts detected")
+        print("[OK] No database conflicts")
+        print("[OK] State management separated")
+        print("[OK] No interference with existing features")
+        print("[OK] Error isolation validated")
+        print("[OK] All dependencies properly managed")
+        print("[OK] No version conflicts detected")
         print()
         print("The agent is ready to use!")
         print()
@@ -110,7 +110,7 @@ def main():
 
         return 0
     else:
-        print("❌ SOME INTEGRATION TESTS FAILED")
+        print("[ERROR] SOME INTEGRATION TESTS FAILED")
         print()
         print("Please review the test output above and fix the issues.")
         print()
@@ -132,10 +132,10 @@ if __name__ == "__main__":
                 datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         sys.exit(exit_code)
     except KeyboardInterrupt:
-        print("\n\n❌ Test run interrupted by user")
+        print("\n\n[ERROR] Test run interrupted by user")
         sys.exit(1)
     except Exception as e:
-        print(f"\n\n❌ Unexpected error: {e}")
+        print(f"\n\n[ERROR] Unexpected error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

@@ -225,7 +225,10 @@ def calculate_shading_analysis(
                 continue
             
             # Normalisiere Vektor
-            vec_ij_norm = vec_ij / distance_ij
+            if distance_ij != 0:
+                vec_ij_norm = vec_ij / distance_ij
+            else:
+                vec_ij_norm = 0.0
             
             # Prüfe ob Modul j in Richtung der Sonne liegt
             # (d.h. ob der Vektor von i zu j ähnlich zur Sonnenrichtung ist)
@@ -324,7 +327,10 @@ def calculate_yield_heatmap(
         # Normalisiere auf Gebäudehöhe
         z_pos = pos[2]
         max_z = building_dims.wall_height_m + 5.0  # Geschätzte max. Höhe
-        height_factor = min(1.0, z_pos / max_z)
+        if max_z != 0:
+            height_factor = min(1.0, z_pos / max_z)
+        else:
+            height_factor = 0.0
         height_factor = 0.7 + 0.3 * height_factor  # Min 70%, Max 100%
         
         # Kombiniere Faktoren
@@ -556,7 +562,10 @@ def _evaluate_config(
     module_area = PV_W * PV_H
     
     # Basis-Modulanzahl (70% der Dachfläche)
-    base_modules = int((roof_area / module_area) * 0.7)
+    if module_area != 0:
+        base_modules = int((roof_area / module_area) * 0.7)
+    else:
+        base_modules = 0.0
     
     # Anpassungen basierend auf Konfiguration
     if config.use_garage:
@@ -596,7 +605,10 @@ def _evaluate_config(
         score = base_modules * total_yield_factor * 100.0
     else:  # balanced
         # Balance zwischen Anzahl und Ertrag
-        module_score = base_modules / target_modules if target_modules > 0 else 1.0
+        if target_modules != 0:
+            module_score = base_modules / target_modules if target_modules > 0 else 1.0
+        else:
+            module_score = 0.0
         yield_score = total_yield_factor
         score = (module_score * 0.5 + yield_score * 0.5) * 100.0
     

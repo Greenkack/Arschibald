@@ -731,4 +731,4 @@ if __name__ == "__main__":
     for seite, stats in seite_summaries.items():
         print(f"  Seite {seite}: {stats['valid_firmen']}/{stats['total_firmen']} valid")
     
-    print("\n✓ Validation Reporter module ready")
+    print("\n[OK] Validation Reporter module ready")

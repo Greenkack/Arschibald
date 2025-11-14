@@ -34,7 +34,7 @@ def main():
     
     # Parse YML
     elements = parse_yml(yml_file)
-    print(f"   ✓ Loaded {len(elements)} text elements")
+    print(f"   [OK] Loaded {len(elements)} text elements")
     
     # Show some elements
     print(f"\n   Sample elements:")
@@ -57,9 +57,9 @@ def main():
         color_palette=["#007BFF", "#FFFFFF"]
     )
     
-    print(f"   ✓ Page size: {pdf_analysis.page_size['width']} x "
+    print(f"   [OK] Page size: {pdf_analysis.page_size['width']} x "
           f"{pdf_analysis.page_size['height']} points")
-    print(f"   ✓ Safe zones: {len(pdf_analysis.safe_zones)}")
+    print(f"   [OK] Safe zones: {len(pdf_analysis.safe_zones)}")
     
     # Show positioning rules
     print(f"\n3️⃣  Positioning rules")
@@ -75,7 +75,7 @@ def main():
     print("-" * 70)
     
     new_positions = calculate_positions(elements, pdf_analysis)
-    print(f"   ✓ Calculated {len(new_positions)} positions")
+    print(f"   [OK] Calculated {len(new_positions)} positions")
     
     # Show position changes
     print(f"\n   Position changes (first 3):")
@@ -100,7 +100,7 @@ def main():
         pdf_analysis,
         strategy="grid"
     )
-    print(f"   ✓ Calculated {len(new_positions_2)} positions")
+    print(f"   [OK] Calculated {len(new_positions_2)} positions")
     
     # Validate positions
     print(f"\n6️⃣  Validating positions")
@@ -109,7 +109,7 @@ def main():
     is_valid, errors = calculator.validate_positions(new_positions_2)
     
     if is_valid:
-        print(f"   ✓ All positions are valid!")
+        print(f"   [OK] All positions are valid!")
     else:
         print(f"   ⚠ Found {len(errors)} validation issue(s)")
         for error in errors[:3]:
@@ -124,7 +124,7 @@ def main():
     collisions = calculator.check_collisions(new_positions_2)
     
     if len(collisions) == 0:
-        print(f"   ✓ No collisions detected!")
+        print(f"   [OK] No collisions detected!")
     else:
         print(f"   ⚠ Found {len(collisions)} collision(s)")
         print(f"   Note: Grid strategy may have collisions.")
@@ -154,21 +154,27 @@ def main():
     total_dy = sum(abs(new[1] - old.position[1])
                    for old, new in zip(elements, new_positions_2))
     
-    avg_dx = total_dx / len(elements)
-    avg_dy = total_dy / len(elements)
+    if len != 0:
+        avg_dx = total_dx / len(elements)
+    else:
+        avg_dx = 0.0
+    if len != 0:
+        avg_dy = total_dy / len(elements)
+    else:
+        avg_dy = 0.0
     
     print(f"   Average movement: Δx={avg_dx:.1f}, Δy={avg_dy:.1f} points")
     
     # Summary
     print(f"\n" + "=" * 70)
-    print("✅ DEMO COMPLETE")
+    print("[OK] DEMO COMPLETE")
     print("=" * 70)
     print(f"\nTask 4.2 successfully demonstrates:")
-    print(f"  ✓ calculate_positions() main function")
-    print(f"  ✓ Grid-based positioning as fallback")
-    print(f"  ✓ Testing with real YML file")
-    print(f"  ✓ Position validation")
-    print(f"  ✓ Collision detection")
+    print(f"  [OK] calculate_positions() main function")
+    print(f"  [OK] Grid-based positioning as fallback")
+    print(f"  [OK] Testing with real YML file")
+    print(f"  [OK] Position validation")
+    print(f"  [OK] Collision detection")
     print(f"\nNext: Task 5 - Implement specific positioning strategies")
     print("=" * 70 + "\n")
 

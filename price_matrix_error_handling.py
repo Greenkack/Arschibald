@@ -211,7 +211,7 @@ def classify_error(error: Exception) -> PriceMatrixErrorInfo:
             category=ErrorCategory.SYSTEM_ERROR,
             severity=ErrorSeverity.CRITICAL,
             message=str(error),
-            user_message=f"❌ Ein unerwarteter Fehler ist aufgetreten: {str(error)}",
+            user_message=f"[ERROR] Ein unerwarteter Fehler ist aufgetreten: {str(error)}",
             details={'error_type': type(error).__name__},
             suggestions=[
                 "Kontaktieren Sie den Administrator",
@@ -247,12 +247,12 @@ def format_error_message_for_ui(
     
     # Severity-Icon
     severity_icons = {
-        ErrorSeverity.INFO: "ℹ️",
-        ErrorSeverity.WARNING: "⚠️",
-        ErrorSeverity.ERROR: "❌",
+        ErrorSeverity.INFO: "[INFO]",
+        ErrorSeverity.WARNING: "[WARNING]",
+        ErrorSeverity.ERROR: "[ERROR]",
         ErrorSeverity.CRITICAL: "🚨"
     }
-    icon = severity_icons.get(error_info.severity, "❌")
+    icon = severity_icons.get(error_info.severity, "[ERROR]")
     
     # Hauptmeldung
     lines.append(f"{icon} {error_info.user_message}")
@@ -267,7 +267,7 @@ def format_error_message_for_ui(
     
     # Fallback-Hinweis
     if error_info.fallback_available:
-        lines.append("💡 **Hinweis:** Das System kann automatisch einen alternativen Wert verwenden.")
+        lines.append("[IDEA] **Hinweis:** Das System kann automatisch einen alternativen Wert verwenden.")
         lines.append("")
     
     # Technische Details (optional)
@@ -621,7 +621,7 @@ def handle_error_with_fallback(
             result['fallback_used'] = True
             result['fallback_result'] = fallback_result.to_dict()
             result['user_message'] = (
-                f"⚠️ {fallback_result.message}\n\n"
+                f"[WARNING] {fallback_result.message}\n\n"
                 f"{result['user_message']}"
             )
             logger.info(f"Fallback successful: {fallback_result.strategy.value}")
@@ -693,7 +693,7 @@ def validate_matrix_with_error_handling(matrix_id: int) -> Dict[str, Any]:
         return {
             'valid': True,
             'validation_result': validation_result,
-            'user_message': "✓ Matrix ist gültig für Preisberechnung"
+            'user_message': "[OK] Matrix ist gültig für Preisberechnung"
         }
         
     except Exception as e:

@@ -34,7 +34,7 @@ def test_roof_creation():
     # Test Flachdach
     print("\n1.1 Flachdach:")
     roof_flat = make_roof_flat(length=10.0, width=8.0, base_height=6.0)
-    print(f"  ✓ Flachdach erstellt")
+    print(f"  [OK] Flachdach erstellt")
     print(f"  - Anzahl Punkte: {roof_flat.n_points}")
     print(f"  - Anzahl Zellen: {roof_flat.n_cells}")
     print(f"  - Z-Bereich: {roof_flat.bounds[4]:.3f}m bis {roof_flat.bounds[5]:.3f}m")
@@ -44,7 +44,7 @@ def test_roof_creation():
     roof_gable = make_roof_gable(
         length=10.0, width=8.0, base_height=6.0, inclination_deg=35.0
     )
-    print(f"  ✓ Satteldach erstellt")
+    print(f"  [OK] Satteldach erstellt")
     print(f"  - Anzahl Punkte: {roof_gable.n_points}")
     print(f"  - Anzahl Zellen: {roof_gable.n_cells}")
     print(f"  - Z-Bereich: {roof_gable.bounds[4]:.3f}m bis {roof_gable.bounds[5]:.3f}m")
@@ -176,7 +176,7 @@ def test_full_scene_rendering():
             off_screen=True
         )
         
-        print(f"  ✓ Szene erstellt")
+        print(f"  [OK] Szene erstellt")
         print(f"  - Hauptdach-Module: {len(panels_dict['main'])}")
         print(f"  - Garage-Module: {len(panels_dict['garage'])}")
         print(f"  - Fassaden-Module: {len(panels_dict['facade'])}")
@@ -187,7 +187,7 @@ def test_full_scene_rendering():
         
         plotter.close()
     except Exception as e:
-        print(f"  ✗ Fehler: {e}")
+        print(f"  [ERROR] Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -204,7 +204,7 @@ def test_full_scene_rendering():
             off_screen=True
         )
         
-        print(f"  ✓ Szene erstellt")
+        print(f"  [OK] Szene erstellt")
         print(f"  - Hauptdach-Module: {len(panels_dict['main'])}")
         print(f"  - Garage-Module: {len(panels_dict['garage'])}")
         print(f"  - Fassaden-Module: {len(panels_dict['facade'])}")
@@ -215,7 +215,7 @@ def test_full_scene_rendering():
         
         plotter.close()
     except Exception as e:
-        print(f"  ✗ Fehler: {e}")
+        print(f"  [ERROR] Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -233,16 +233,16 @@ def test_module_visibility():
     print("\n5.1 Einzelnes Modul:")
     panel = make_panel(position=(0.0, 0.0, 7.0), yaw_deg=0.0, tilt_deg=30.0)
     
-    print(f"  ✓ Modul erstellt")
+    print(f"  [OK] Modul erstellt")
     print(f"  - Anzahl Punkte: {panel.n_points}")
     print(f"  - Anzahl Zellen: {panel.n_cells}")
     print(f"  - Bounds: {panel.bounds}")
     
     # Überprüfe, ob Modul Fläche hat
     if panel.n_cells > 0:
-        print(f"  ✓ Modul hat Geometrie")
+        print(f"  [OK] Modul hat Geometrie")
     else:
-        print(f"  ✗ Modul hat KEINE Geometrie!")
+        print(f"  [ERROR] Modul hat KEINE Geometrie!")
         return False
     
     return True
@@ -268,7 +268,7 @@ def main():
             result = test_func()
             results.append((name, result))
         except Exception as e:
-            print(f"\n✗ Test '{name}' fehlgeschlagen: {e}")
+            print(f"\n[ERROR] Test '{name}' fehlgeschlagen: {e}")
             import traceback
             traceback.print_exc()
             results.append((name, False))
@@ -279,7 +279,7 @@ def main():
     print("=" * 70)
     
     for name, result in results:
-        status = "✓ BESTANDEN" if result else "✗ FEHLGESCHLAGEN"
+        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
         print(f"{status}: {name}")
     
     passed = sum(1 for _, r in results if r)
@@ -287,9 +287,9 @@ def main():
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n✓ Alle Tests bestanden! Rendering funktioniert korrekt.")
+        print("\n[OK] Alle Tests bestanden! Rendering funktioniert korrekt.")
     else:
-        print("\n✗ Einige Tests fehlgeschlagen. Bitte Fehler überprüfen.")
+        print("\n[ERROR] Einige Tests fehlgeschlagen. Bitte Fehler überprüfen.")
 
 
 if __name__ == "__main__":

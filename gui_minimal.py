@@ -3,19 +3,19 @@ import traceback
 
 def main():
     st.set_page_config(page_title="Test App", layout="wide")
-    st.title("🚀 Minimale Test-App")
-    st.success("✅ Die App läuft erfolgreich!")
+    st.title("[LAUNCH] Minimale Test-App")
+    st.success("[OK] Die App läuft erfolgreich!")
     
     st.write("### Test-Bereiche:")
     col1, col2 = st.columns(2)
     
     with col1:
-        st.info("📊 Daten-Eingabe")
+        st.info("[CHART] Daten-Eingabe")
         if st.button("Test Button 1"):
             st.balloons()
     
     with col2:
-        st.info("📈 Analyse")
+        st.info("[STATS] Analyse")
         if st.button("Test Button 2"):
             st.snow()
     

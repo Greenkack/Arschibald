@@ -19,14 +19,14 @@ def cleanup_non_serializable_objects():
             try:
                 del st.session_state[key]
                 removed_count += 1
-                print(f"✅ Entfernt: {key}")
+                print(f"[OK] Entfernt: {key}")
             except Exception as e:
-                print(f"❌ Fehler beim Entfernen von {key}: {e}")
+                print(f"[ERROR] Fehler beim Entfernen von {key}: {e}")
     
     if removed_count > 0:
         print(f"\n🎉 {removed_count} nicht-serialisierbare Objekte entfernt!")
     else:
-        print("\n✅ Keine problematischen Objekte in Session State gefunden.")
+        print("\n[OK] Keine problematischen Objekte in Session State gefunden.")
     
     return removed_count
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     print("Es entfernt bekannte nicht-serialisierbare Objekte aus dem Session State.\n")
     
     # Hinweis: Dieses Script kann nur in einer laufenden Streamlit-App verwendet werden
-    print("⚠️  Dieses Script muss innerhalb einer Streamlit-App laufen!")
+    print("[WARNING]  Dieses Script muss innerhalb einer Streamlit-App laufen!")
     print("Fügen Sie am Anfang Ihrer gui.py folgende Zeile hinzu:")
     print("\nfrom cleanup_session_state import cleanup_non_serializable_objects")
     print("cleanup_non_serializable_objects()  # Am Anfang von main()")

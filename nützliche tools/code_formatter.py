@@ -12,8 +12,8 @@ def format_code():
 
     python_files = glob.glob("**/*.py", recursive=True)
 
-    print("🎨 CODE-FORMATIERUNG:")
-    print(f"📁 Gefundene Python-Dateien: {len(python_files)}")
+    print("[DESIGN] CODE-FORMATIERUNG:")
+    print(f"[FOLDER] Gefundene Python-Dateien: {len(python_files)}")
 
     # Installiere Formatter falls nötig
     formatters = ['black', 'isort', 'autopep8']
@@ -22,7 +22,7 @@ def format_code():
             subprocess.run([sys.executable, '-m', formatter, '--version'],
                            capture_output=True, check=True)
         except BaseException:
-            print(f"📦 Installiere {formatter}...")
+            print(f"[PACKAGE] Installiere {formatter}...")
             subprocess.run([sys.executable, '-m', 'pip', 'install', formatter])
 
     # Black Formatierung
@@ -46,7 +46,7 @@ def format_code():
         subprocess.run([sys.executable, '-m', 'autopep8',
                        '--in-place', '--aggressive', py_file])
 
-    print("✅ Code-Formatierung abgeschlossen!")
+    print("[OK] Code-Formatierung abgeschlossen!")
 
 
 def check_code_quality():
@@ -56,7 +56,7 @@ def check_code_quality():
         subprocess.run([sys.executable, '-m', 'pip', 'install', 'flake8'],
                        capture_output=True)
 
-        print("\n🔍 CODE-QUALITÄTS-CHECK:")
+        print("\n[SEARCH] CODE-QUALITÄTS-CHECK:")
         result = subprocess.run([sys.executable,
                                  '-m',
                                  'flake8',
@@ -66,12 +66,12 @@ def check_code_quality():
                                 text=True)
 
         if result.stdout:
-            print("⚠️ Code-Qualitäts-Probleme gefunden:")
+            print("[WARNING] Code-Qualitäts-Probleme gefunden:")
             print(result.stdout)
         else:
-            print("✅ Code-Qualität ist gut!")
+            print("[OK] Code-Qualität ist gut!")
     except BaseException:
-        print("❌ flake8 nicht verfügbar")
+        print("[ERROR] flake8 nicht verfügbar")
 
 
 if __name__ == "__main__":

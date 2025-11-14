@@ -341,7 +341,10 @@ class CombinedPricingEngine(PricingEngine):
         if pv_capacity and hp_capacity:
             combined_system_keys["COMBINED_PV_CAPACITY_KWP"] = pv_capacity
             combined_system_keys["COMBINED_HP_CAPACITY_KW"] = hp_capacity
-            combined_system_keys["COMBINED_CAPACITY_RATIO"] = pv_capacity / hp_capacity
+            if hp_capacity != 0:
+                combined_system_keys["COMBINED_CAPACITY_RATIO"] = pv_capacity / hp_capacity
+            else:
+                combined_system_keys["COMBINED_CAPACITY_RATIO"] = 0.0
 
             # Estimated energy balance
             # kWh per year (rough estimate)
@@ -404,7 +407,10 @@ class CombinedPricingEngine(PricingEngine):
             num_payments = loan_term_years * 12
 
             if monthly_rate == 0:
-                monthly_payment = financed_amount / num_payments
+                if num_payments != 0:
+                    monthly_payment = financed_amount / num_payments
+                else:
+                    monthly_payment = 0.0
             else:
                 monthly_payment = financed_amount * (
                     monthly_rate * (1 + monthly_rate) ** num_payments
@@ -613,7 +619,10 @@ class CombinedPricingEngine(PricingEngine):
         if pv_capacity > 0 and hp_demand > 0:
             # Rough estimate: 1 kWp PV can support ~0.25 kW heat pump
             # (considering COP and utilization)
-            optimal_ratio = pv_capacity / hp_demand
+            if hp_demand != 0:
+                optimal_ratio = pv_capacity / hp_demand
+            else:
+                optimal_ratio = 0.0
 
             if optimal_ratio < 0.5:
                 recommendations.append(

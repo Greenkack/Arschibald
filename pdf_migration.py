@@ -209,7 +209,10 @@ def show_migration_overview():
         st.metric("Original Dateien", original_count)
 
     with col3:
-        migration_percent = (migrated_count / len(pdf_files) * 100) if pdf_files else 0
+        if len != 0:
+            migration_percent = (migrated_count / len(pdf_files) * 100) if pdf_files else 0
+        else:
+            migration_percent = 0.0
         st.metric("Migration %", f"{migration_percent:.1f}%")
 
     if original_count > 0:

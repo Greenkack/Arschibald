@@ -10,30 +10,30 @@ import traceback
 # --- DEF BLOCK START: func test_imports ---
 def test_imports():
     """Teste alle kritischen Imports"""
-    print("📦 Teste Imports...")
+    print("[PACKAGE] Teste Imports...")
 
     try:
-        print("✅ analysis.py import erfolgreich")
+        print("[OK] analysis.py import erfolgreich")
     except Exception as e:
-        print(f"❌ analysis.py import fehlgeschlagen: {e}")
+        print(f"[ERROR] analysis.py import fehlgeschlagen: {e}")
         return False
 
     try:
-        print("✅ pdf_ui.py import erfolgreich")
+        print("[OK] pdf_ui.py import erfolgreich")
     except Exception as e:
-        print(f"❌ pdf_ui.py import fehlgeschlagen: {e}")
+        print(f"[ERROR] pdf_ui.py import fehlgeschlagen: {e}")
         return False
 
     try:
-        print("✅ pdf_generator.py import erfolgreich")
+        print("[OK] pdf_generator.py import erfolgreich")
     except Exception as e:
-        print(f"❌ pdf_generator.py import fehlgeschlagen: {e}")
+        print(f"[ERROR] pdf_generator.py import fehlgeschlagen: {e}")
         return False
 
     try:
-        print("✅ pdf_template_engine import erfolgreich")
+        print("[OK] pdf_template_engine import erfolgreich")
     except Exception as e:
-        print(f"❌ pdf_template_engine import fehlgeschlagen: {e}")
+        print(f"[ERROR] pdf_template_engine import fehlgeschlagen: {e}")
         return False
 
     return True
@@ -45,23 +45,23 @@ def test_imports():
 # --- DEF BLOCK START: func test_coords_wp_directory ---
 def test_coords_wp_directory():
     """Teste ob coords_wp Verzeichnis und Dateien existieren"""
-    print("\n📁 Teste coords_wp Verzeichnis...")
+    print("\n[FOLDER] Teste coords_wp Verzeichnis...")
 
     coords_wp_path = os.path.join(os.path.dirname(__file__), 'coords_wp')
 
     if not os.path.exists(coords_wp_path):
-        print(f"❌ coords_wp Verzeichnis nicht gefunden: {coords_wp_path}")
+        print(f"[ERROR] coords_wp Verzeichnis nicht gefunden: {coords_wp_path}")
         return False
 
-    print(f"✅ coords_wp Verzeichnis gefunden: {coords_wp_path}")
+    print(f"[OK] coords_wp Verzeichnis gefunden: {coords_wp_path}")
 
     # Teste WP-Seiten
     for i in range(1, 8):
         wp_file = os.path.join(coords_wp_path, f'wp_seite{i}.yml')
         if os.path.exists(wp_file):
-            print(f"✅ wp_seite{i}.yml vorhanden")
+            print(f"[OK] wp_seite{i}.yml vorhanden")
         else:
-            print(f"❌ wp_seite{i}.yml fehlt")
+            print(f"[ERROR] wp_seite{i}.yml fehlt")
             return False
 
     return True
@@ -73,7 +73,7 @@ def test_coords_wp_directory():
 # --- DEF BLOCK START: func test_placeholders ---
 def test_placeholders():
     """Teste ob HP-Placeholders verfügbar sind"""
-    print("\n🔧 Teste HP-Placeholders...")
+    print("\n[TOOL] Teste HP-Placeholders...")
 
     try:
         from pdf_template_engine.placeholders import build_dynamic_data
@@ -108,17 +108,17 @@ def test_placeholders():
         # Prüfe ob HP-Placeholders vorhanden sind
         hp_keys = [k for k in placeholders.keys() if k.startswith('hp_')]
         if hp_keys:
-            print(f"✅ {len(hp_keys)} HP-Placeholders gefunden:")
+            print(f"[OK] {len(hp_keys)} HP-Placeholders gefunden:")
             for key in sorted(hp_keys)[:5]:  # Zeige ersten 5
                 print(f"  - {key}: {str(placeholders[key])[:50]}...")
         else:
-            print("❌ Keine HP-Placeholders gefunden")
+            print("[ERROR] Keine HP-Placeholders gefunden")
             return False
 
         return True
 
     except Exception as e:
-        print(f"❌ Fehler beim Testen der Placeholders: {e}")
+        print(f"[ERROR] Fehler beim Testen der Placeholders: {e}")
         traceback.print_exc()
         return False
 # --- DEF BLOCK END ---
@@ -136,24 +136,24 @@ def test_analysis_functions():
 
         # Prüfe ob render_analysis verfügbar ist
         if hasattr(analysis, 'render_analysis'):
-            print("✅ render_analysis Funktion verfügbar")
+            print("[OK] render_analysis Funktion verfügbar")
         else:
-            print("❌ render_analysis Funktion nicht verfügbar")
+            print("[ERROR] render_analysis Funktion nicht verfügbar")
             return False
 
         # Prüfe andere wichtige Funktionen
         functions_to_check = ['get_text', '_get_visualization_settings']
         for func_name in functions_to_check:
             if hasattr(analysis, func_name):
-                print(f"✅ {func_name} verfügbar")
+                print(f"[OK] {func_name} verfügbar")
             else:
                 print(
-                    f"⚠️ {func_name} nicht verfügbar (möglicherweise nicht kritisch)")
+                    f"[WARNING] {func_name} nicht verfügbar (möglicherweise nicht kritisch)")
 
         return True
 
     except Exception as e:
-        print(f"❌ Fehler beim Testen der Analysis-Funktionen: {e}")
+        print(f"[ERROR] Fehler beim Testen der Analysis-Funktionen: {e}")
         return False
 # --- DEF BLOCK END ---
 
@@ -163,31 +163,31 @@ def test_analysis_functions():
 # --- DEF BLOCK START: func test_pdf_functions ---
 def test_pdf_functions():
     """Teste ob PDF-Funktionen verfügbar sind"""
-    print("\n📄 Teste PDF-Funktionen...")
+    print("\n[FILE] Teste PDF-Funktionen...")
 
     try:
         import pdf_ui
 
         # Prüfe ob render_pdf_ui verfügbar ist
         if hasattr(pdf_ui, 'render_pdf_ui'):
-            print("✅ render_pdf_ui Funktion verfügbar")
+            print("[OK] render_pdf_ui Funktion verfügbar")
         else:
-            print("❌ render_pdf_ui Funktion nicht verfügbar")
+            print("[ERROR] render_pdf_ui Funktion nicht verfügbar")
             return False
 
         # Prüfe PDF-Generator
         import pdf_generator
 
         if hasattr(pdf_generator, 'generate_main_template_pdf_bytes'):
-            print("✅ generate_main_template_pdf_bytes verfügbar")
+            print("[OK] generate_main_template_pdf_bytes verfügbar")
         else:
-            print("❌ generate_main_template_pdf_bytes nicht verfügbar")
+            print("[ERROR] generate_main_template_pdf_bytes nicht verfügbar")
             return False
 
         return True
 
     except Exception as e:
-        print(f"❌ Fehler beim Testen der PDF-Funktionen: {e}")
+        print(f"[ERROR] Fehler beim Testen der PDF-Funktionen: {e}")
         return False
 # --- DEF BLOCK END ---
 
@@ -216,18 +216,18 @@ def run_all_tests():
             if test_func():
                 passed += 1
             else:
-                print(f"❌ Test {test_func.__name__} fehlgeschlagen")
+                print(f"[ERROR] Test {test_func.__name__} fehlgeschlagen")
         except Exception as e:
             print(
-                f"❌ Test {
+                f"[ERROR] Test {
                     test_func.__name__} mit Ausnahme fehlgeschlagen: {e}")
 
     print("\n" + "=" * 50)
-    print(f"📊 Test-Ergebnis: {passed}/{total} Tests bestanden")
+    print(f"[CHART] Test-Ergebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
         print("🎉 Alle Tests erfolgreich! HP-Funktionen sind verfügbar.")
         return True
-    print("⚠️ Einige Tests fehlgeschlagen. Überprüfe die Implementierung.")
+    print("[WARNING] Einige Tests fehlgeschlagen. Überprüfe die Implementierung.")
     return False
 # --- DEF BLOCK END ---

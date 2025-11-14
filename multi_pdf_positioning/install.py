@@ -33,12 +33,12 @@ def print_header(message: str):
 
 def print_success(message: str):
     """Print a success message."""
-    print(f"{Colors.OKGREEN}✓ {message}{Colors.ENDC}")
+    print(f"{Colors.OKGREEN}[OK] {message}{Colors.ENDC}")
 
 
 def print_error(message: str):
     """Print an error message."""
-    print(f"{Colors.FAIL}✗ {message}{Colors.ENDC}")
+    print(f"{Colors.FAIL}[ERROR] {message}{Colors.ENDC}")
 
 
 def print_warning(message: str):

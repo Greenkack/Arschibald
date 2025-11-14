@@ -25549,13 +25549,14 @@ HEATPUMP_PRODUCTS = {
 def get_heatpump_models(manufacturer: str, heatpump_type: str) -> list[dict]:
     """
     Gibt alle Modelle einer bestimmten Marke und eines bestimmten Typs zurück
+    [OK] NUR PRODUKTE DIE IN DER ECHTEN PRODUKTDATENBANK EXISTIEREN!
     
     Args:
         manufacturer: Hersteller-Name ("Viessmann", "Buderus", "Vaillant")
         heatpump_type: Typ der Wärmepumpe
         
     Returns:
-        Liste von Modell-Dictionaries
+        Liste von Modell-Dictionaries (nur Produkte aus product_db.py)
     """
     if manufacturer not in HEATPUMP_PRODUCTS:
         return []
@@ -25563,7 +25564,25 @@ def get_heatpump_models(manufacturer: str, heatpump_type: str) -> list[dict]:
     if heatpump_type not in HEATPUMP_PRODUCTS[manufacturer]:
         return []
     
-    return HEATPUMP_PRODUCTS[manufacturer][heatpump_type]
+    # [OK] VALIDIERE GEGEN ECHTE PRODUKTDATENBANK
+    try:
+        from product_db import get_product_by_model_name
+        
+        validated_models = []
+        for model in HEATPUMP_PRODUCTS[manufacturer][heatpump_type]:
+            model_name = model.get("model", "")
+            # Prüfe ob Produkt in echter Datenbank existiert
+            db_product = get_product_by_model_name(model_name)
+            if db_product is not None:
+                # [OK] Produkt existiert in Datenbank
+                validated_models.append(model)
+            # [ERROR] Sonst: Überspringen (Fake-Produkt)
+        
+        return validated_models
+    except Exception as e:
+        # Fallback: Bei Fehler alle zurückgeben (aber mit Warnung)
+        print(f"[WARNING] WARNUNG: Konnte Produktdatenbank nicht validieren: {e}")
+        return HEATPUMP_PRODUCTS[manufacturer][heatpump_type]
 
 
 def get_all_manufacturers() -> list[str]:

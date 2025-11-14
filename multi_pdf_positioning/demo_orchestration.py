@@ -22,7 +22,7 @@ from multi_pdf_positioning.cli import parse_list_arg
 
 def demo_progress_tracker():
     """Demonstrate the progress tracker."""
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 70)" * 70)
     print("DEMO 1: Progress Tracker")
     print("=" * 70)
     
@@ -41,7 +41,7 @@ def demo_progress_tracker():
 
 def demo_parse_list_arg():
     """Demonstrate argument parsing."""
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 70)" * 70)
     print("DEMO 2: Argument Parsing")
     print("=" * 70)
     
@@ -60,7 +60,7 @@ def demo_parse_list_arg():
 
 def demo_workflow_structure():
     """Demonstrate workflow structure."""
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 70)" * 70)
     print("DEMO 3: Workflow Structure")
     print("=" * 70)
     
@@ -81,7 +81,7 @@ def demo_workflow_structure():
 
 def demo_batch_logger():
     """Demonstrate batch logger."""
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 70)" * 70)
     print("DEMO 4: Batch Logger")
     print("=" * 70)
     
@@ -102,7 +102,7 @@ def demo_batch_logger():
 
 def demo_cli_commands():
     """Demonstrate CLI commands."""
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 70)" * 70)
     print("DEMO 5: CLI Commands")
     print("=" * 70)
     
@@ -133,4 +133,4 @@ def demo_cli_commands():
 
 def demo_workflow_api():
     """Demonstrate workflow API."""
-    print("\n" + "="
+    print("\n" + "=" * 70)" * 70)

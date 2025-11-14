@@ -10,7 +10,7 @@ def test_complete_pdf_flow():
     """Simuliert den kompletten PDF-Generierungs-Flow"""
     
     print("=" * 100)
-    print("🔍 NOTFALL-DEBUG: PDF-GENERIERUNG FLOW-ANALYSE")
+    print("[SEARCH] NOTFALL-DEBUG: PDF-GENERIERUNG FLOW-ANALYSE")
     print("=" * 100)
     
     # ========================================================================
@@ -36,7 +36,7 @@ def test_complete_pdf_flow():
     if not pv_details_pdf:
         pv_details_pdf = mock_project_data.get("project_details", {})
     
-    print(f"✅ pv_details_pdf extrahiert:")
+    print(f"[OK] pv_details_pdf extrahiert:")
     print(f"   Module: {pv_details_pdf.get('selected_module_id')}")
     print(f"   Inverter: {pv_details_pdf.get('selected_inverter_id')}")
     print(f"   Storage: {pv_details_pdf.get('selected_storage_id')}")
@@ -71,11 +71,11 @@ def test_complete_pdf_flow():
             if val:
                 product_ids.append(val)
     
-    print(f"\n✅ Finale Produkt-IDs: {product_ids}")
+    print(f"\n[OK] Finale Produkt-IDs: {product_ids}")
     print(f"   Anzahl: {len(product_ids)}")
     
     if len(product_ids) < 3:
-        print(f"⚠️  WARNUNG: Nur {len(product_ids)} Produkte gefunden, erwartet 3+ (Modul, Inverter, Speicher)")
+        print(f"[WARNING]  WARNUNG: Nur {len(product_ids)} Produkte gefunden, erwartet 3+ (Modul, Inverter, Speicher)")
     
     # ========================================================================
     # TEST 3: Wird include_all_documents_opt korrekt gesetzt?
@@ -94,10 +94,10 @@ def test_complete_pdf_flow():
     print(f"   include_all_documents: {include_all_docs}")
     
     if not include_all_docs:
-        print("❌ FEHLER: include_all_documents ist FALSE - Funktion wird NICHT aufgerufen!")
+        print("[ERROR] FEHLER: include_all_documents ist FALSE - Funktion wird NICHT aufgerufen!")
         print("   LÖSUNG: Prüfen Sie, ob die Checkbox 'Alle Dokumente anhängen' aktiviert ist")
     else:
-        print("✅ include_all_documents ist TRUE - Funktion wird aufgerufen")
+        print("[OK] include_all_documents ist TRUE - Funktion wird aufgerufen")
     
     # ========================================================================
     # TEST 4: Charts - werden sie übergeben?
@@ -111,9 +111,9 @@ def test_complete_pdf_flow():
     print(f"   Anzahl: {len(selected_charts)}")
     
     if not selected_charts:
-        print("⚠️  WARNUNG: Keine Charts ausgewählt!")
+        print("[WARNING]  WARNUNG: Keine Charts ausgewählt!")
     else:
-        print("✅ Charts sind ausgewählt")
+        print("[OK] Charts sind ausgewählt")
     
     # Simuliere analysis_results
     mock_analysis_results = {
@@ -122,9 +122,9 @@ def test_complete_pdf_flow():
     }
     
     if not mock_analysis_results:
-        print("❌ FEHLER: analysis_results ist leer - Charts können NICHT generiert werden!")
+        print("[ERROR] FEHLER: analysis_results ist leer - Charts können NICHT generiert werden!")
     else:
-        print("✅ analysis_results verfügbar")
+        print("[OK] analysis_results verfügbar")
     
     # ========================================================================
     # TEST 5: CRITICAL - Wird die NEUE Funktion überhaupt aufgerufen?
@@ -141,41 +141,41 @@ def test_complete_pdf_flow():
     print(f"   Bedingung erfüllt: {include_all_docs and _PYPDF_AVAILABLE}")
     
     if not (include_all_docs and _PYPDF_AVAILABLE):
-        print("\n❌ KRITISCHER FEHLER: _append_datasheets_and_documents() wird NICHT aufgerufen!")
+        print("\n[ERROR] KRITISCHER FEHLER: _append_datasheets_and_documents() wird NICHT aufgerufen!")
         print("   GRUND: Bedingung 'if include_all_documents_opt and _PYPDF_AVAILABLE' ist FALSE")
     else:
-        print("\n✅ Bedingung erfüllt - Funktion wird aufgerufen")
+        print("\n[OK] Bedingung erfüllt - Funktion wird aufgerufen")
     
     # ========================================================================
     # ZUSAMMENFASSUNG & DIAGNOSE
     # ========================================================================
     print("\n" + "=" * 100)
-    print("📊 DIAGNOSE-ZUSAMMENFASSUNG")
+    print("[CHART] DIAGNOSE-ZUSAMMENFASSUNG")
     print("=" * 100)
     
     issues_found = []
     
     if len(product_ids) < 3:
-        issues_found.append("⚠️  Zu wenige Produkt-IDs extrahiert")
+        issues_found.append("[WARNING]  Zu wenige Produkt-IDs extrahiert")
     
     if not include_all_docs:
-        issues_found.append("❌ include_all_documents ist FALSE")
+        issues_found.append("[ERROR] include_all_documents ist FALSE")
     
     if not selected_charts:
-        issues_found.append("⚠️  Keine Charts ausgewählt")
+        issues_found.append("[WARNING]  Keine Charts ausgewählt")
     
     if issues_found:
         print("\n🚨 GEFUNDENE PROBLEME:")
         for issue in issues_found:
             print(f"   {issue}")
         
-        print("\n🔧 LÖSUNGSANSÄTZE:")
+        print("\n[TOOL] LÖSUNGSANSÄTZE:")
         print("   1. In pdf_ui.py: Prüfen Sie die Checkbox 'Alle Dokumente anhängen'")
         print("   2. In pdf_ui.py: Stellen Sie sicher, dass 'Zusätzliche Seiten' aktiviert ist")
         print("   3. In pdf_ui.py: Wählen Sie mindestens 1 Chart aus")
         print("   4. Prüfen Sie Console-Output nach 'Anhängen von Produktdatenblättern...'")
     else:
-        print("\n✅ KEINE KRITISCHEN PROBLEME GEFUNDEN")
+        print("\n[OK] KEINE KRITISCHEN PROBLEME GEFUNDEN")
         print("   Alle Bedingungen sind erfüllt!")
     
     # ========================================================================
@@ -186,19 +186,19 @@ def test_complete_pdf_flow():
     print("=" * 100)
     
     print("\n1️⃣  Console-Output beim PDF-Generieren:")
-    print("   ✅ 'Anhängen von Produktdatenblättern und Firmendokumenten...'")
-    print("   ✅ 'Using auto-selected main component datasheets: [101, 202, 303]'")
-    print("   ✅ 'Chart-Generierung gestartet: 2 Chart(s) ausgewählt'")
-    print("   ✅ '2 Chart-Seite(n) erfolgreich angehängt'")
-    print("   ✅ 'Finale PDF erstellt mit X Seiten'")
+    print("   [OK] 'Anhängen von Produktdatenblättern und Firmendokumenten...'")
+    print("   [OK] 'Using auto-selected main component datasheets: [101, 202, 303]'")
+    print("   [OK] 'Chart-Generierung gestartet: 2 Chart(s) ausgewählt'")
+    print("   [OK] '2 Chart-Seite(n) erfolgreich angehängt'")
+    print("   [OK] 'Finale PDF erstellt mit X Seiten'")
     
     print("\n2️⃣  PDF sollte enthalten:")
-    print("   ✅ PV-Modul Datenblatt")
-    print("   ✅ Wechselrichter Datenblatt")
-    print("   ✅ Speicher Datenblatt")
-    print("   ✅ Wallbox Datenblatt (wenn vorhanden)")
-    print("   ✅ Firmendokumente")
-    print("   ✅ Chart-Seiten (1-2 Charts pro Seite)")
+    print("   [OK] PV-Modul Datenblatt")
+    print("   [OK] Wechselrichter Datenblatt")
+    print("   [OK] Speicher Datenblatt")
+    print("   [OK] Wallbox Datenblatt (wenn vorhanden)")
+    print("   [OK] Firmendokumente")
+    print("   [OK] Chart-Seiten (1-2 Charts pro Seite)")
     
     print("\n3️⃣  UI-Checkboxen müssen AKTIV sein:")
     print("   ☑️  'Zusätzliche Seiten nach Hauptseiten anhängen'")
@@ -206,7 +206,7 @@ def test_complete_pdf_flow():
     print("   ☑️  Mindestens 1 Chart ausgewählt (außerhalb Formular)")
     
     print("\n" + "=" * 100)
-    print("✅ ANALYSE ABGESCHLOSSEN")
+    print("[OK] ANALYSE ABGESCHLOSSEN")
     print("=" * 100)
     print("\nNÄCHSTE SCHRITTE:")
     print("1. Prüfen Sie die UI-Checkboxen wie oben beschrieben")

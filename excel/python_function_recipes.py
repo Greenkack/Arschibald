@@ -1176,7 +1176,10 @@ def xl_DOLLAR(number, decimals=2):
     else:
         # Runde auf Vielfache von 10^(-decimals)
         factor = 10 ** (-dec)
-        rounded = round(num / factor) * factor
+        if factor != 0:
+            rounded = round(num / factor) * factor
+        else:
+            rounded = 0.0
         return f"${rounded:,.0f}"
 
 

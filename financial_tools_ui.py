@@ -28,7 +28,7 @@ def render_financial_tools_section(
         Dict mit allen Financial Tools Ergebnissen + Auswahl
     """
     st.markdown("---")
-    st.markdown("### 💰 Financial Tools - Alle Berechnungen")
+    st.markdown("### [MONEY] Financial Tools - Alle Berechnungen")
     st.markdown("Wählen Sie die Finanz-Berechnungen für die PDF-Ausgabe:")
 
     # Ergebnisse sammeln
@@ -184,7 +184,7 @@ def render_financial_tools_section(
                     st.error(f"Fehler: {e}")
 
         # === 3. ABSCHREIBUNG (AfA) ===
-        with st.expander("📉 Abschreibung (AfA)", expanded=False):
+        with st.expander("[DOWN] Abschreibung (AfA)", expanded=False):
             st.markdown(f"**Investitionssumme:** {total_investment:,.2f} €")
 
             col1, col2 = st.columns(2)
@@ -294,10 +294,10 @@ def render_financial_tools_section(
                         comparison['loan']['total_cost']
                     if diff > 0:
                         st.info(
-                            f"💡 **Kredit ist günstiger:** {diff:,.2f} € Ersparnis")
+                            f"[IDEA] **Kredit ist günstiger:** {diff:,.2f} € Ersparnis")
                     else:
                         st.info(
-                            f"💡 **Leasing ist günstiger:** {abs(diff):,.2f} € Ersparnis")
+                            f"[IDEA] **Leasing ist günstiger:** {abs(diff):,.2f} € Ersparnis")
 
                     if include_comparison:
                         financial_results['financing_comparison'] = comparison
@@ -305,7 +305,7 @@ def render_financial_tools_section(
                     st.error(f"Fehler: {e}")
 
         # === 5. KAPITALERTRAGSSTEUER ===
-        with st.expander("📊 Kapitalertragssteuer (auf Einspeisevergütung)", expanded=False):
+        with st.expander("[CHART] Kapitalertragssteuer (auf Einspeisevergütung)", expanded=False):
             st.markdown(
                 f"**Jährliche Einspeisevergütung:** {annual_feed_in:,.2f} €")
 
@@ -408,13 +408,13 @@ def render_financial_tools_section(
         if financial_results:
             st.markdown("---")
             st.success(
-                f"✅ **{len(financial_results)} Financial Tools** für PDF ausgewählt")
+                f"[OK] **{len(financial_results)} Financial Tools** für PDF ausgewählt")
 
         return financial_results
 
     except ImportError as e:
-        st.error(f"❌ financial_tools.py konnte nicht geladen werden: {e}")
+        st.error(f"[ERROR] financial_tools.py konnte nicht geladen werden: {e}")
         return {}
     except Exception as e:
-        st.error(f"❌ Fehler beim Laden der Financial Tools: {e}")
+        st.error(f"[ERROR] Fehler beim Laden der Financial Tools: {e}")
         return {}

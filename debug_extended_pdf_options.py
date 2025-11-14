@@ -69,20 +69,20 @@ try:
         {}
     )
     
-    print(f"   ✓ Merged PDF: {len(merged_pdf_bytes)} bytes")
+    print(f"   [OK] Merged PDF: {len(merged_pdf_bytes)} bytes")
     
     # Check page count
     merged_reader = PdfReader(io.BytesIO(merged_pdf_bytes))
     merged_page_count = len(merged_reader.pages)
-    print(f"   ✓ Merged PDF has {merged_page_count} pages")
+    print(f"   [OK] Merged PDF has {merged_page_count} pages")
     
     if merged_page_count > 8:
-        print(f"   ✓ SUCCESS: Extended pages were added! ({merged_page_count - 8} additional pages)")
+        print(f"   [OK] SUCCESS: Extended pages were added! ({merged_page_count - 8} additional pages)")
     else:
         print(f"   ⚠ WARNING: No extended pages added (still {merged_page_count} pages)")
         
 except Exception as e:
-    print(f"   ✗ Error: {e}")
+    print(f"   [ERROR] Error: {e}")
     import traceback
     traceback.print_exc()
 

@@ -66,16 +66,16 @@ def render_module_placement_ui(fig: go.Figure,
     manager = st.session_state.pv_placement_manager
     
     st.divider()
-    st.subheader("🔧 PV-Modul Platzierung")
+    st.subheader("[TOOL] PV-Modul Platzierung")
     
     # ========================================================================
     # TAB-LAYOUT
     # ========================================================================
     tabs = st.tabs([
         "⚙️ Automatisch",
-        "🎨 Manuell",
+        "[DESIGN] Manuell",
         "✏️ Bearbeiten",
-        "📊 Übersicht",
+        "[CHART] Übersicht",
         "💾 Speichern/Laden"
     ])
     
@@ -101,7 +101,7 @@ def render_module_placement_ui(fig: go.Figure,
                 default_count = 20
             
             # Info für User
-            st.info(f"💡 Empfohlene Modulanzahl: **{default_count}** Module")
+            st.info(f"[IDEA] Empfohlene Modulanzahl: **{default_count}** Module")
             
             max_modules = st.number_input(
                 "Maximale Anzahl Module",
@@ -181,7 +181,7 @@ def render_module_placement_ui(fig: go.Figure,
                     help="Süd: Klassische Aufständerung nach Süden. Ost-West: Module abwechselnd nach Osten und Westen für bessere Flächennutzung"
                 )
             else:
-                st.info(f"ℹ️ Aufständerung nur für Flachdächer verfügbar. Aktuell: **{roof_type}**")
+                st.info(f"[INFO] Aufständerung nur für Flachdächer verfügbar. Aktuell: **{roof_type}**")
             
             spacing = st.slider(
                 "Abstand zwischen Modulen (cm)",
@@ -211,7 +211,7 @@ def render_module_placement_ui(fig: go.Figure,
         
         with col_btn1:
             place_button = st.button(
-                "🚀 Automatisch platzieren",
+                "[LAUNCH] Automatisch platzieren",
                 type="primary",
                 use_container_width=True
             )
@@ -219,7 +219,7 @@ def render_module_placement_ui(fig: go.Figure,
         with col_btn2:
             # Warnung wenn max_modules = 0
             if max_modules == 0:
-                st.error("❌ Anzahl ist 0!")
+                st.error("[ERROR] Anzahl ist 0!")
         
         with col_btn3:
             if st.button("🔄 Alles löschen", use_container_width=True):
@@ -229,14 +229,14 @@ def render_module_placement_ui(fig: go.Figure,
                 # WICHTIG: Lösche auch den gecachten Input-Wert
                 if "pv_max_modules_input" in st.session_state:
                     del st.session_state["pv_max_modules_input"]
-                st.success("✓ Alle Module gelöscht!")
+                st.success("[OK] Alle Module gelöscht!")
                 st.rerun()
         
         # Platzierungs-Funktionalität
         if place_button:
             # Validierung: Prüfe ob max_modules > 0
             if max_modules <= 0:
-                st.error("❌ Anzahl Module muss mindestens 1 sein!")
+                st.error("[ERROR] Anzahl Module muss mindestens 1 sein!")
                 st.stop()
             
             with st.spinner("Platziere Module..."):
@@ -278,7 +278,7 @@ def render_module_placement_ui(fig: go.Figure,
                     )
                 
                 # Debug: Zeige Dachflächen-Info
-                st.write(f"🔍 DEBUG: Dachfläche erstellt")
+                st.write(f"[SEARCH] DEBUG: Dachfläche erstellt")
                 st.write(f"  - Typ: {roof_type}")
                 st.write(f"  - Vertices: {len(vertices)}")
                 st.write(f"  - Surface ID: {surface.id}")
@@ -292,7 +292,7 @@ def render_module_placement_ui(fig: go.Figure,
                     power_wp=module_power
                 )
                 
-                st.write(f"🔍 DEBUG: Starte Platzierung...")
+                st.write(f"[SEARCH] DEBUG: Starte Platzierung...")
                 st.write(f"  - Surface ID: {surface.id}")
                 st.write(f"  - Max Module: {max_modules}")
                 st.write(f"  - Modul-Typ: {module_type}")
@@ -312,10 +312,10 @@ def render_module_placement_ui(fig: go.Figure,
                     mounting_type=mounting_type
                 )
                 
-                st.write(f"🔍 DEBUG: Platzierung abgeschlossen - {placed_count} Module")
-                st.write(f"🔍 DEBUG: Manager.modules enthält jetzt {len(manager.modules)} Module")
+                st.write(f"[SEARCH] DEBUG: Platzierung abgeschlossen - {placed_count} Module")
+                st.write(f"[SEARCH] DEBUG: Manager.modules enthält jetzt {len(manager.modules)} Module")
                 
-                st.success(f"✓ {placed_count} Module erfolgreich platziert!")
+                st.success(f"[OK] {placed_count} Module erfolgreich platziert!")
                 
                 # DEBUG: Zeige Modul-Info
                 if len(manager.modules) > 0:
@@ -327,7 +327,7 @@ def render_module_placement_ui(fig: go.Figure,
                     st.info("🔄 Seite wird neu geladen um Module anzuzeigen...")
                     st.rerun()
                 else:
-                    st.warning("⚠️ Keine Module platziert - prüfe Dachfläche und Parameter")
+                    st.warning("[WARNING] Keine Module platziert - prüfe Dachfläche und Parameter")
                     import traceback
                     st.code(traceback.format_exc())
     
@@ -379,7 +379,7 @@ def render_module_placement_ui(fig: go.Figure,
                     module_type=new_module_type,
                     orientation=new_orientation
                 )
-                st.success(f"✓ Modul {module.id} hinzugefügt!")
+                st.success(f"[OK] Modul {module.id} hinzugefügt!")
                 if "trigger_3d_update" not in st.session_state:
                     st.session_state.trigger_3d_update = 0
                 st.session_state.trigger_3d_update += 1
@@ -395,15 +395,15 @@ def render_module_placement_ui(fig: go.Figure,
                     y = random.uniform(-dims.width_m/3, dims.width_m/3)
                     z = dims.wall_height_m + 0.5
                     manager.add_module(x=x, y=y, z=z)
-                st.success("✓ 5 Module zufällig platziert!")
+                st.success("[OK] 5 Module zufällig platziert!")
                 if "trigger_3d_update" not in st.session_state:
                     st.session_state.trigger_3d_update = 0
                 st.session_state.trigger_3d_update += 1
                 st.rerun()
             
-            if st.button("🗑️ Alle löschen", use_container_width=True):
+            if st.button("[DELETE] Alle löschen", use_container_width=True):
                 manager.modules.clear()
-                st.success("✓ Alle Module gelöscht!")
+                st.success("[OK] Alle Module gelöscht!")
                 if "trigger_3d_update" not in st.session_state:
                     st.session_state.trigger_3d_update = 0
                 st.session_state.trigger_3d_update += 1
@@ -430,7 +430,7 @@ def render_module_placement_ui(fig: go.Figure,
                 module = manager.modules[selected_id]
                 
                 # Bearbeitungs-Tabs
-                edit_tabs = st.tabs(["📍 Position", "🔄 Rotation", "🎨 Eigenschaften", "❌ Löschen"])
+                edit_tabs = st.tabs(["📍 Position", "🔄 Rotation", "[DESIGN] Eigenschaften", "[ERROR] Löschen"])
                 
                 # Position
                 with edit_tabs[0]:
@@ -448,7 +448,7 @@ def render_module_placement_ui(fig: go.Figure,
                         module.transform.x = edit_x
                         module.transform.y = edit_y
                         module.transform.z = edit_z
-                        st.success("✓ Position aktualisiert!")
+                        st.success("[OK] Position aktualisiert!")
                         st.rerun()
                     
                     st.divider()
@@ -487,7 +487,7 @@ def render_module_placement_ui(fig: go.Figure,
                         module.transform.rotation_x = edit_rot_x
                         module.transform.rotation_y = edit_rot_y
                         module.transform.rotation_z = edit_rot_z
-                        st.success("✓ Rotation aktualisiert!")
+                        st.success("[OK] Rotation aktualisiert!")
                         st.rerun()
                     
                     st.divider()
@@ -561,17 +561,17 @@ def render_module_placement_ui(fig: go.Figure,
                                             else ModuleOrientation.PORTRAIT)
                         module.name = new_name if new_name else None
                         module.notes = new_notes
-                        st.success("✓ Eigenschaften aktualisiert!")
+                        st.success("[OK] Eigenschaften aktualisiert!")
                         st.rerun()
                 
                 # Löschen
                 with edit_tabs[3]:
-                    st.warning(f"⚠️ Modul {selected_id} löschen?")
+                    st.warning(f"[WARNING] Modul {selected_id} löschen?")
                     st.markdown("Diese Aktion kann nicht rückgängig gemacht werden.")
                     
-                    if st.button("🗑️ Modul endgültig löschen", type="primary", key="delete_module"):
+                    if st.button("[DELETE] Modul endgültig löschen", type="primary", key="delete_module"):
                         manager.remove_module(selected_id)
-                        st.success(f"✓ Modul {selected_id} gelöscht!")
+                        st.success(f"[OK] Modul {selected_id} gelöscht!")
                         st.rerun()
     
     # ========================================================================
@@ -621,7 +621,7 @@ def render_module_placement_ui(fig: go.Figure,
                     with col2:
                         st.caption(f"🔄 Rotation: X={module.transform.rotation_x:.1f}°, Y={module.transform.rotation_y:.1f}°, Z={module.transform.rotation_z:.1f}°")
                     with col3:
-                        st.caption(f"⚡ Leistung: {module.dimensions.power_wp:.0f} Wp")
+                        st.caption(f"[POWER] Leistung: {module.dimensions.power_wp:.0f} Wp")
                     
                     if module.name or module.notes:
                         extra_col1, extra_col2 = st.columns(2)
@@ -630,7 +630,7 @@ def render_module_placement_ui(fig: go.Figure,
                                 st.caption(f"🏷️ Name: {module.name}")
                         if module.notes:
                             with extra_col2:
-                                st.caption(f"📝 Notizen: {module.notes}")
+                                st.caption(f"[NOTE] Notizen: {module.notes}")
                     
                     if i < len(manager.modules) - 1:
                         st.divider()
@@ -657,7 +657,7 @@ def render_module_placement_ui(fig: go.Figure,
                     mime="application/json",
                     use_container_width=True
                 )
-                st.success("✓ Export bereit!")
+                st.success("[OK] Export bereit!")
         
         with col2:
             st.markdown("**📂 Layout laden**")
@@ -673,12 +673,12 @@ def render_module_placement_ui(fig: go.Figure,
                     json_str = uploaded_file.read().decode("utf-8")
                     loaded_manager = ModulePlacementManager.from_json(json_str)
                     
-                    if st.button("✅ Layout übernehmen", type="primary", use_container_width=True):
+                    if st.button("[OK] Layout übernehmen", type="primary", use_container_width=True):
                         st.session_state.pv_placement_manager = loaded_manager
-                        st.success("✓ Layout erfolgreich geladen!")
+                        st.success("[OK] Layout erfolgreich geladen!")
                         st.rerun()
                 except Exception as e:
-                    st.error(f"❌ Fehler beim Laden: {e}")
+                    st.error(f"[ERROR] Fehler beim Laden: {e}")
     
     # ========================================================================
     # RENDERING DER MODULE IN DER 3D-SZENE
@@ -709,7 +709,7 @@ def render_module_placement_ui(fig: go.Figure,
     if manager.modules:
         stats_trace = render_placement_statistics(
             manager,
-            position=(dims.length_m/2 + 2, 0, dims.wall_height_m + 2)
+            position = (dims.length_m/2 + 2, 0, dims.wall_height_m + 2)
         )
         fig.add_trace(stats_trace)
     
@@ -724,7 +724,7 @@ def render_module_placement_ui(fig: go.Figure,
     # Optionen-Sidebar
     with st.sidebar:
         st.divider()
-        st.markdown("### 🔧 Ansichts-Optionen")
+        st.markdown("### [TOOL] Ansichts-Optionen")
         
         st.session_state.pv_show_grid = st.checkbox(
             "Grid anzeigen",

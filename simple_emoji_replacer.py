@@ -30,7 +30,7 @@ def process_file(file_path: Path) -> tuple:
     # Backup erstellen
     backup_path = file_path.with_suffix('.py.bak')
     shutil.copy2(file_path, backup_path)
-    print(f"📦 Backup erstellt: {backup_path.name}")
+    print(f"[PACKAGE] Backup erstellt: {backup_path.name}")
     
     # Datei lesen
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -119,7 +119,7 @@ def process_file(file_path: Path) -> tuple:
 def main():
     """Hauptfunktion."""
     print("=" * 80)
-    print("🚀 SIMPLE EMOJI AUTO-REPLACER")
+    print("[LAUNCH] SIMPLE EMOJI AUTO-REPLACER")
     print("=" * 80)
     print()
     
@@ -127,26 +127,29 @@ def main():
     total_replacements = 0
     
     for filename in TARGET_FILES:
-        file_path = root / filename
+        if filename != 0:
+            file_path = root / filename
+        else:
+            file_path = 0.0
         
         if not file_path.exists():
-            print(f"⚠️ Überspringe: {filename} (nicht gefunden)")
+            print(f"[WARNING] Überspringe: {filename} (nicht gefunden)")
             continue
         
-        print(f"\n📝 Verarbeite: {filename}")
+        print(f"\n[NOTE] Verarbeite: {filename}")
         print("-" * 80)
         
         try:
             replacements, backup = process_file(file_path)
-            print(f"✅ {replacements} Emojis ersetzt")
+            print(f"[OK] {replacements} Emojis ersetzt")
             total_replacements += replacements
         except Exception as e:
-            print(f"❌ Fehler: {e}")
+            print(f"[ERROR] Fehler: {e}")
     
     print("\n" + "=" * 80)
-    print(f"✅ GESAMT: {total_replacements} Emojis in {len(TARGET_FILES)} Dateien ersetzt")
+    print(f"[OK] GESAMT: {total_replacements} Emojis in {len(TARGET_FILES)} Dateien ersetzt")
     print("=" * 80)
-    print("\n💡 WICHTIG:")
+    print("\n[IDEA] WICHTIG:")
     print("1. Backup-Dateien (.bak) wurden erstellt")
     print("2. Teste die App mit 'streamlit run gui.py'")
     print("3. Prüfe Emojis aktiviert/deaktiviert in Optionen")

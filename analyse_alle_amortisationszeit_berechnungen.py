@@ -15,12 +15,12 @@ ORT: calculations.py, Zeile 3692-3698
 FORMEL: final_investment_amount / annual_financial_benefit_year1
 
 PREIS-LOGIK (Priorität):
-1. ✅ FINAL_END_PREIS aus st.session_state['final_pricing_data']
-2. ✅ final_end_preis aus st.session_state['project_data']['project_details']
-3. ❌ final_modified_price_net (ALT!)
-4. ❌ final_price_with_provision (ALT!)
-5. ❌ final_offer_price_net (ALT!)
-6. ❌ total_investment_netto (Fallback)
+1. [OK] FINAL_END_PREIS aus st.session_state['final_pricing_data']
+2. [OK] final_end_preis aus st.session_state['project_data']['project_details']
+3. [ERROR] final_modified_price_net (ALT!)
+4. [ERROR] final_price_with_provision (ALT!)
+5. [ERROR] final_offer_price_net (ALT!)
+6. [ERROR] total_investment_netto (Fallback)
 
 GESPEICHERT ALS:
 - results["amortization_time_years"]
@@ -35,7 +35,7 @@ print("-" * 120)
 print("""
 FUNKTION: _calculate_amortization_time()
 ORT: analysis.py, Zeile 403
-PROBLEM: ❌ FUNKTION EXISTIERT NICHT!
+PROBLEM: [ERROR] FUNKTION EXISTIERT NICHT!
 
 CODE:
     amortisation_years = _calculate_amortization_time(final_price, annual_savings)
@@ -161,15 +161,15 @@ print("ALLE VERWENDETEN KEYS")
 print("=" * 120)
 
 keys = [
-    ("amortization_time_years", "calculations.py → analysis_results", "✅ HAUPTKEY für PDF Seite 1"),
-    ("amortisationszeit_jahre", "Fallback in placeholders.py", "❌ Fallback (alt)"),
-    ("amortization_time", "PDF Placeholder", "✅ Für PDF-Template"),
-    ("payback_time", "Verschiedene Module", "⚠️ Mehrfachverwendung"),
-    ("payback_period", "Alte Berechnungen", "❌ Veraltet"),
-    ("payback_period_years", "calculations_heatpump.py", "⚠️ Nur für Wärmepumpe"),
-    ("co2_payback_years", "CO2-Amortisation", "⚠️ Nur für CO2"),
-    ("carbon_payback_time", "CO2-Amortisation", "⚠️ Nur für CO2"),
-    ("amortisation_years", "analysis.py (lokal)", "❌ Lokal, nicht gespeichert"),
+    ("amortization_time_years", "calculations.py → analysis_results", "[OK] HAUPTKEY für PDF Seite 1"),
+    ("amortisationszeit_jahre", "Fallback in placeholders.py", "[ERROR] Fallback (alt)"),
+    ("amortization_time", "PDF Placeholder", "[OK] Für PDF-Template"),
+    ("payback_time", "Verschiedene Module", "[WARNING] Mehrfachverwendung"),
+    ("payback_period", "Alte Berechnungen", "[ERROR] Veraltet"),
+    ("payback_period_years", "calculations_heatpump.py", "[WARNING] Nur für Wärmepumpe"),
+    ("co2_payback_years", "CO2-Amortisation", "[WARNING] Nur für CO2"),
+    ("carbon_payback_time", "CO2-Amortisation", "[WARNING] Nur für CO2"),
+    ("amortisation_years", "analysis.py (lokal)", "[ERROR] Lokal, nicht gespeichert"),
 ]
 
 for key, quelle, status in keys:
@@ -181,19 +181,19 @@ print("=" * 120)
 
 probleme = [{"problem": "analysis.py ruft _calculate_amortization_time() auf",
              "zeile": "403",
-             "fehler": "❌ FUNKTION EXISTIERT NICHT!",
+             "fehler": "[ERROR] FUNKTION EXISTIERT NICHT!",
              "auswirkung": "RuntimeError wenn analysis.py diese Zeile erreicht"},
             {"problem": "Alte Preis-Keys haben Fallback-Priorität",
              "zeile": "calculations.py 3671-3683",
-             "fehler": "⚠️ final_modified_price_net, final_price_with_provision",
+             "fehler": "[WARNING] final_modified_price_net, final_price_with_provision",
              "auswirkung": "Könnte falschen Preis verwenden wenn neue Keys fehlen"},
             {"problem": "Mehrere verschiedene Keys für gleiche Sache",
              "zeile": "Überall",
-             "fehler": "⚠️ amortization_time_years vs payback_time vs payback_period",
+             "fehler": "[WARNING] amortization_time_years vs payback_time vs payback_period",
              "auswirkung": "Verwirrung, Inkonsistenz"},
             {"problem": "PDF könnte alten Key verwenden",
              "zeile": "placeholders.py 892-899",
-             "fehler": "⚠️ Fallback auf amortisationszeit_jahre",
+             "fehler": "[WARNING] Fallback auf amortisationszeit_jahre",
              "auswirkung": "Wenn FINAL_END_PREIS nicht verwendet wird → falsche Amortisation"},
             ]
 
@@ -204,16 +204,16 @@ for i, p in enumerate(probleme, 1):
     print(f"   Auswirkung: {p['auswirkung']}")
 
 print("\n" + "=" * 120)
-print("💡 EMPFEHLUNG")
+print("[IDEA] EMPFEHLUNG")
 print("=" * 120)
 
 print("""
 1. SOFORT FIXEN:
-   ❌ analysis.py Zeile 403: _calculate_amortization_time() entfernen oder implementieren
+   [ERROR] analysis.py Zeile 403: _calculate_amortization_time() entfernen oder implementieren
 
 2. PREIS FÜR AMORTISATION PRÜFEN:
-   ✅ Sicherstellen dass calculations.py FINAL_END_PREIS verwendet
-   ❌ Alte Keys (final_modified_price_net, etc.) auskommentieren oder entfernen
+   [OK] Sicherstellen dass calculations.py FINAL_END_PREIS verwendet
+   [ERROR] Alte Keys (final_modified_price_net, etc.) auskommentieren oder entfernen
 
 3. KEYS VEREINHEITLICHEN:
    → Nur noch "amortization_time_years" verwenden

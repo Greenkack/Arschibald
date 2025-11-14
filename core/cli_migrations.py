@@ -23,9 +23,9 @@ def init_migrations():
     try:
         manager = get_migration_manager()
         manager.initialize_alembic()
-        console.print("[green]✓[/green] Migration environment initialized successfully")
+        console.print("[green][OK][/green] Migration environment initialized successfully")
     except Exception as e:
-        console.print(f"[red]✗[/red] Failed to initialize migrations: {e}")
+        console.print(f"[red][ERROR][/red] Failed to initialize migrations: {e}")
         raise typer.Exit(1)
 
 
@@ -38,10 +38,10 @@ def create_migration(
     try:
         manager = get_migration_manager()
         revision = manager.create_migration(message, autogenerate)
-        console.print(f"[green]✓[/green] Migration created: {revision}")
+        console.print(f"[green][OK][/green] Migration created: {revision}")
         console.print(f"[dim]Message: {message}[/dim]")
     except Exception as e:
-        console.print(f"[red]✗[/red] Failed to create migration: {e}")
+        console.print(f"[red][ERROR][/red] Failed to create migration: {e}")
         raise typer.Exit(1)
 
 
@@ -62,10 +62,10 @@ def upgrade_database(
         console.print(f"[cyan]Applying {len(pending)} migration(s)...[/cyan]")
 
         manager.run_migrations(revision)
-        console.print("[green]✓[/green] Migrations applied successfully")
+        console.print("[green][OK][/green] Migrations applied successfully")
 
     except Exception as e:
-        console.print(f"[red]✗[/red] Migration failed: {e}")
+        console.print(f"[red][ERROR][/red] Migration failed: {e}")
         raise typer.Exit(1)
 
 
@@ -89,10 +89,10 @@ def downgrade_database(
                 raise typer.Exit(0)
 
         manager.rollback_migration(revision)
-        console.print("[green]✓[/green] Rollback completed successfully")
+        console.print("[green][OK][/green] Rollback completed successfully")
 
     except Exception as e:
-        console.print(f"[red]✗[/red] Rollback failed: {e}")
+        console.print(f"[red][ERROR][/red] Rollback failed: {e}")
         raise typer.Exit(1)
 
 
@@ -109,7 +109,7 @@ def show_current():
             console.print("[yellow]No migrations applied yet[/yellow]")
 
     except Exception as e:
-        console.print(f"[red]✗[/red] Failed to get current revision: {e}")
+        console.print(f"[red][ERROR][/red] Failed to get current revision: {e}")
         raise typer.Exit(1)
 
 
@@ -131,7 +131,7 @@ def show_history():
         table.add_column("Status", style="green")
 
         for entry in history:
-            status = "✓ Current" if entry["is_current"] else ""
+            status = "[OK] Current" if entry["is_current"] else ""
             table.add_row(
                 entry["revision"][:8],
                 entry["down_revision"][:8] if entry["down_revision"] else "-",
@@ -142,7 +142,7 @@ def show_history():
         console.print(table)
 
     except Exception as e:
-        console.print(f"[red]✗[/red] Failed to get history: {e}")
+        console.print(f"[red][ERROR][/red] Failed to get history: {e}")
         raise typer.Exit(1)
 
 
@@ -154,7 +154,7 @@ def show_pending():
         pending = manager.get_pending_migrations()
 
         if not pending:
-            console.print("[green]✓[/green] No pending migrations")
+            console.print("[green][OK][/green] No pending migrations")
             return
 
         console.print(f"[yellow]⚠[/yellow]  {len(pending)} pending migration(s):")
@@ -162,7 +162,7 @@ def show_pending():
             console.print(f"  • {rev}")
 
     except Exception as e:
-        console.print(f"[red]✗[/red] Failed to get pending migrations: {e}")
+        console.print(f"[red][ERROR][/red] Failed to get pending migrations: {e}")
         raise typer.Exit(1)
 
 
@@ -189,10 +189,10 @@ def validate_migrations():
                 console.print(f"  • {warning}")
 
         if results["status"] == "success" and not results["warnings"]:
-            console.print("\n[green]✓[/green] All validations passed")
+            console.print("\n[green][OK][/green] All validations passed")
 
     except Exception as e:
-        console.print(f"[red]✗[/red] Validation failed: {e}")
+        console.print(f"[red][ERROR][/red] Validation failed: {e}")
         raise typer.Exit(1)
 
 
@@ -204,11 +204,11 @@ def create_template(
     try:
         manager = get_migration_manager()
         template_path = manager.create_migration_template(template_name)
-        console.print(f"[green]✓[/green] Template created: {template_path}")
+        console.print(f"[green][OK][/green] Template created: {template_path}")
         console.print("[dim]Copy and modify this template for your migration[/dim]")
 
     except ValueError as e:
-        console.print(f"[red]✗[/red] {e}")
+        console.print(f"[red][ERROR][/red] {e}")
         console.print("\n[cyan]Available templates:[/cyan]")
         console.print("  • add_column")
         console.print("  • add_index")
@@ -216,7 +216,7 @@ def create_template(
         console.print("  • add_foreign_key")
         raise typer.Exit(1)
     except Exception as e:
-        console.print(f"[red]✗[/red] Failed to create template: {e}")
+        console.print(f"[red][ERROR][/red] Failed to create template: {e}")
         raise typer.Exit(1)
 
 

@@ -451,7 +451,10 @@ class PDFAnalyzer:
                 current += 1
                 # Construct filename: multi_nt_01_f1.pdf
                 filename = f"multi_nt_{seite:02d}_f{firma}.pdf"
-                pdf_path = directory / filename
+                if filename != 0:
+                    pdf_path = directory / filename
+                else:
+                    pdf_path = 0.0
 
                 try:
                     analysis = self.analyze_pdf(str(pdf_path))

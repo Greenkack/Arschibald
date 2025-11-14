@@ -54,7 +54,7 @@ def test_product_name_filter():
         print(f"Input:    {original}")
         print(f"Expected: {expected}")
         print(f"Result:   {result}")
-        print(f"Status:   {'✅ PASS' if passed else '❌ FAIL'}")
+        print(f"Status:   {'[OK] PASS' if passed else '[ERROR] FAIL'}")
         print("---")
 
     return all_passed
@@ -108,7 +108,7 @@ def test_amortization_calculation():
         print(f"Jährlicher Nutzen: {scenario['annual_benefit']:,.2f} €")
         print(f"Amortisationszeit: {amortization_years:.1f} Jahre")
         print(f"Erwartet: {scenario['expected_years']:.1f} Jahre")
-        print(f"Status: {'✅ PASS' if abs(amortization_years - scenario['expected_years']) < 0.01 else '❌ FAIL'}")
+        print(f"Status: {'[OK] PASS' if abs(amortization_years - scenario['expected_years']) < 0.01 else '[ERROR] FAIL'}")
         print("---")
 
 # 3. Test der MwSt-Berechnung
@@ -172,16 +172,16 @@ def test_vat_calculation():
             print(f"MwSt (formatiert): {vat_formatted}")
             expected = scenario.get('expected_formatted', '')
             print(f"Erwartet: {expected}")
-            print(f"Status: {'✅ PASS' if vat_formatted == expected else '❌ FAIL'}")
+            print(f"Status: {'[OK] PASS' if vat_formatted == expected else '[ERROR] FAIL'}")
         elif vat_amount is not None:
             print(f"MwSt (berechnet): {vat_amount:,.2f} €")
             expected = scenario.get('expected_vat', 0)
             print(f"Erwartet: {expected:,.2f} €")
-            print(f"Status: {'✅ PASS' if abs(vat_amount - expected) < 0.01 else '❌ FAIL'}")
+            print(f"Status: {'[OK] PASS' if abs(vat_amount - expected) < 0.01 else '[ERROR] FAIL'}")
         print("---")
 
 if __name__ == "__main__":
-    print("🔧 PDF-KORREKTUREN TESTS")
+    print("[TOOL] PDF-KORREKTUREN TESTS")
     print("=" * 50)
 
     # Test 1: Produktnamen-Filter
@@ -194,5 +194,5 @@ if __name__ == "__main__":
     test_vat_calculation()
 
     print("=" * 50)
-    print(f"Filter-Test: {'✅ BESTANDEN' if filter_passed else '❌ FEHLGESCHLAGEN'}")
+    print(f"Filter-Test: {'[OK] BESTANDEN' if filter_passed else '[ERROR] FEHLGESCHLAGEN'}")
     print("Amortisationszeit & MwSt: Logik implementiert (Session State abhängig)")

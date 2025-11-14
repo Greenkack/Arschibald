@@ -11,10 +11,10 @@ sys.path.append('.')
 def test_solar_calculator_import():
     """Teste den Import des solar_calculator Moduls"""
     try:
-        print('✅ solar_calculator Modul erfolgreich importiert!')
+        print('[OK] solar_calculator Modul erfolgreich importiert!')
         return True
     except Exception as e:
-        print(f'❌ Import-Fehler: {e}')
+        print(f'[ERROR] Import-Fehler: {e}')
         return False
 
 
@@ -53,20 +53,20 @@ def test_ensure_project_data_dicts():
         result = solar_calculator._ensure_project_data_dicts()
 
         if result is None:
-            print('❌ _ensure_project_data_dicts gibt None zurück!')
+            print('[ERROR] _ensure_project_data_dicts gibt None zurück!')
             return False
 
         if not isinstance(result, dict):
             print(
-                f'❌ _ensure_project_data_dicts gibt {
+                f'[ERROR] _ensure_project_data_dicts gibt {
                     type(result)} zurück, erwartet dict!')
             return False
 
         if 'project_details' not in result:
-            print('❌ project_details nicht in result!')
+            print('[ERROR] project_details nicht in result!')
             return False
 
-        print('✅ _ensure_project_data_dicts funktioniert korrekt!')
+        print('[OK] _ensure_project_data_dicts funktioniert korrekt!')
         print(f'   - Rückgabe-Typ: {type(result)}')
         print(f'   - project_details vorhanden: {"project_details" in result}')
         print(f'   - Keys: {list(result.keys())}')
@@ -74,7 +74,7 @@ def test_ensure_project_data_dicts():
         return True
 
     except Exception as e:
-        print(f'❌ Fehler beim Testen von _ensure_project_data_dicts: {e}')
+        print(f'[ERROR] Fehler beim Testen von _ensure_project_data_dicts: {e}')
         return False
 
 
@@ -132,19 +132,19 @@ def test_render_solar_calculator_start():
         pd = solar_calculator._ensure_project_data_dicts()
         details = pd['project_details']
 
-        print('✅ render_solar_calculator Anfang funktioniert!')
+        print('[OK] render_solar_calculator Anfang funktioniert!')
         print(f'   - pd ist nicht None: {pd is not None}')
         print(f'   - details ist dict: {isinstance(details, dict)}')
 
         return True
 
     except Exception as e:
-        print(f'❌ Fehler beim Testen von render_solar_calculator: {e}')
+        print(f'[ERROR] Fehler beim Testen von render_solar_calculator: {e}')
         return False
 
 
 if __name__ == "__main__":
-    print("🔧 TESTE SOLAR CALCULATOR FIX")
+    print("[TOOL] TESTE SOLAR CALCULATOR FIX")
     print("=" * 50)
 
     success = True
@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 50)
     if success:
-        print("✅ ALLE TESTS ERFOLGREICH!")
-        print("✅ Der TypeError: 'NoneType' object is not subscriptable ist behoben!")
+        print("[OK] ALLE TESTS ERFOLGREICH!")
+        print("[OK] Der TypeError: 'NoneType' object is not subscriptable ist behoben!")
     else:
-        print("❌ EINIGE TESTS FEHLGESCHLAGEN!")
+        print("[ERROR] EINIGE TESTS FEHLGESCHLAGEN!")

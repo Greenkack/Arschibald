@@ -63,7 +63,7 @@ class TestAgentDependencies(unittest.TestCase):
         )
 
         print(
-            f"✓ All {len(self.required_agent_deps)} agent dependencies present")
+            f"[OK] All {len(self.required_agent_deps)} agent dependencies present")
 
     def test_dependencies_have_versions(self):
         """
@@ -88,7 +88,7 @@ class TestAgentDependencies(unittest.TestCase):
             f"Dependencies without version pins: {unversioned_deps}"
         )
 
-        print("✓ All agent dependencies have pinned versions")
+        print("[OK] All agent dependencies have pinned versions")
 
     def test_no_duplicate_dependencies(self):
         """
@@ -117,7 +117,7 @@ class TestAgentDependencies(unittest.TestCase):
             f"Duplicate dependencies found: {duplicates}"
         )
 
-        print("✓ No duplicate dependencies")
+        print("[OK] No duplicate dependencies")
 
     def test_agent_section_documented(self):
         """
@@ -142,7 +142,7 @@ class TestAgentDependencies(unittest.TestCase):
             "Agent dependencies section should come before the dependencies"
         )
 
-        print("✓ Agent dependencies are properly documented")
+        print("[OK] Agent dependencies are properly documented")
 
     def test_check_for_known_conflicts(self):
         """
@@ -188,7 +188,7 @@ class TestAgentDependencies(unittest.TestCase):
             f"Potential version conflicts detected: {conflicts}"
         )
 
-        print("✓ No known version conflicts detected")
+        print("[OK] No known version conflicts detected")
 
     def test_installation_guide_exists(self):
         """
@@ -214,7 +214,7 @@ class TestAgentDependencies(unittest.TestCase):
         self.assertIn("pip install", guide_content)
         self.assertIn("requirements.txt", guide_content)
 
-        print("✓ Installation guide exists and is complete")
+        print("[OK] Installation guide exists and is complete")
 
     def test_dependency_documentation_exists(self):
         """
@@ -244,7 +244,7 @@ class TestAgentDependencies(unittest.TestCase):
                 f"Dependency {dep} not documented in AGENT_DEPENDENCIES.md"
             )
 
-        print("✓ Dependency documentation exists and is complete")
+        print("[OK] Dependency documentation exists and is complete")
 
     def test_can_import_agent_dependencies(self):
         """
@@ -287,7 +287,7 @@ class TestAgentDependencies(unittest.TestCase):
 
         # Report results
         print(
-            f"✓ Successfully imported {successful}/{total} agent dependencies")
+            f"[OK] Successfully imported {successful}/{total} agent dependencies")
 
         if successful < total:
             failed = [k for k, v in import_results.items() if not v]
@@ -322,14 +322,14 @@ def run_dependency_tests():
     print(f"Skipped: {len(result.skipped)}")
 
     if result.wasSuccessful():
-        print("\n✅ ALL DEPENDENCY TESTS PASSED")
+        print("\n[OK] ALL DEPENDENCY TESTS PASSED")
         print("\nAgent dependencies are properly managed:")
         print("- All required dependencies are in requirements.txt")
         print("- No version conflicts detected")
         print("- Dependencies are documented")
         print("- Installation process is clear")
     else:
-        print("\n❌ SOME TESTS FAILED")
+        print("\n[ERROR] SOME TESTS FAILED")
         print("\nPlease review the failures above and fix dependency issues.")
 
     print("=" * 60 + "\n")

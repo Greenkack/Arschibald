@@ -191,7 +191,10 @@ class PVModule:
         w, h, t = self.get_actual_dimensions()
         
         # Basis-Vertices im lokalen Koordinatensystem (Zentrum bei 0,0,0)
-        half_w, half_h, half_t = w/2, h/2, t/2
+        if 2 != 0:
+            half_w, half_h, half_t = w/2, h/2, t/2
+        else:
+            half_w, half_h, half_t = 0.0
         local_vertices = np.array([
             [-half_w, -half_h, -half_t],  # 0: vorne links unten
             [+half_w, -half_h, -half_t],  # 1: vorne rechts unten
@@ -616,18 +619,18 @@ class ModulePlacementManager:
         Returns:
             Anzahl der platzierten Module
         """
-        print(f"🔍 auto_place_modules_on_surface aufgerufen:")
+        print(f"[SEARCH] auto_place_modules_on_surface aufgerufen:")
         print(f"  - surface_id: {surface_id}")
         print(f"  - max_count: {max_count}")
         print(f"  - mounting_type: {mounting_type}")
         print(f"  - roof_surfaces: {list(self.roof_surfaces.keys())}")
         
         if surface_id not in self.roof_surfaces:
-            print(f"❌ Surface {surface_id} nicht in roof_surfaces gefunden!")
+            print(f"[ERROR] Surface {surface_id} nicht in roof_surfaces gefunden!")
             return 0
         
         surface = self.roof_surfaces[surface_id]
-        print(f"✓ Surface gefunden: {surface.name}, Typ: {surface.roof_type}")
+        print(f"[OK] Surface gefunden: {surface.name}, Typ: {surface.roof_type}")
         
         # Berechne verfügbare Fläche und Grid
         # TODO: Implementierung für verschiedene Dachformen
@@ -655,7 +658,7 @@ class ModulePlacementManager:
                 orientation, spacing, margin, mounting_type
             )
         
-        print(f"✓ auto_place_modules_on_surface beendet: {placed_count} Module platziert")
+        print(f"[OK] auto_place_modules_on_surface beendet: {placed_count} Module platziert")
         return placed_count
     
     def _auto_place_flat_roof(self, surface: RoofSurface, max_count: int,
@@ -668,14 +671,14 @@ class ModulePlacementManager:
         Args:
             mounting_type: "south" (klassisch 15° Süd) oder "east_west" (Dreieck Ost-West)
         """
-        print(f"🔍 _auto_place_flat_roof gestartet (mounting_type={mounting_type})")
+        print(f"[SEARCH] _auto_place_flat_roof gestartet (mounting_type={mounting_type})")
         
         # Vereinfachte Implementierung - Annahme: rechteckige Fläche
         vertices = surface.vertices_3d
         print(f"  - Vertices: {len(vertices)} Punkte")
         
         if len(vertices) < 4:
-            print(f"❌ Zu wenige Vertices: {len(vertices)}")
+            print(f"[ERROR] Zu wenige Vertices: {len(vertices)}")
             return 0
         
         # Berechne Bounding Box

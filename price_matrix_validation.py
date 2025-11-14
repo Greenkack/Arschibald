@@ -451,9 +451,9 @@ def get_validation_summary(validation_result: Dict[str, Any]) -> str:
     lines = []
     
     if validation_result['valid']:
-        lines.append("✓ Matrix ist gültig für Preisberechnung")
+        lines.append("[OK] Matrix ist gültig für Preisberechnung")
     else:
-        lines.append("✗ Matrix ist NICHT gültig für Preisberechnung")
+        lines.append("[ERROR] Matrix ist NICHT gültig für Preisberechnung")
     
     lines.append("")
     

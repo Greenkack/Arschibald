@@ -459,13 +459,13 @@ if __name__ == "__main__":
                 engine.record_action(user, action, {'normal_activity': True})
 
     # Zeige Risikoprofile
-    print("\n📊 BENUTZER-RISIKOPROFILE:")
+    print("\n[CHART] BENUTZER-RISIKOPROFILE:")
     for user in test_users:
         profile = engine.get_user_risk_profile(user)
         print(f"\n👤 {user}:")
-        print(f"  🎯 Trust Score: {profile['trust_score']:.2f}")
-        print(f"  ⚠️ Anomalien: {profile['anomaly_count']}")
-        print(f"  📈 Aktive Alerts: {len(profile['active_anomalies'])}")
+        print(f"  [TARGET] Trust Score: {profile['trust_score']:.2f}")
+        print(f"  [WARNING] Anomalien: {profile['anomaly_count']}")
+        print(f"  [STATS] Aktive Alerts: {len(profile['active_anomalies'])}")
 
         for anomaly in profile['active_anomalies']:
             print(f"    🚨 {anomaly['severity']}: {anomaly['description']}")

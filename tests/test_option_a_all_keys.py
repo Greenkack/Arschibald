@@ -31,7 +31,7 @@ for key in fehlende_keys:
     alle_keys.append(key)
     alle_keys.append(f"{key}_FORMATTED")
 
-print("\n✅ TEST 1: Alle Keys im PLACEHOLDER_MAPPING?")
+print("\n[OK] TEST 1: Alle Keys im PLACEHOLDER_MAPPING?")
 print("-" * 100)
 
 erfolg = 0
@@ -39,10 +39,10 @@ fehler = 0
 
 for key in alle_keys:
     if key in PLACEHOLDER_MAPPING:
-        print(f"✅ {key:50} -> {PLACEHOLDER_MAPPING[key]}")
+        print(f"[OK] {key:50} -> {PLACEHOLDER_MAPPING[key]}")
         erfolg += 1
     else:
-        print(f"❌ {key:50} FEHLT!")
+        print(f"[ERROR] {key:50} FEHLT!")
         fehler += 1
 
 print("\n" + "=" * 100)
@@ -50,11 +50,11 @@ print(f"ERGEBNIS: {erfolg}/{len(alle_keys)} Keys vorhanden")
 if fehler == 0:
     print("🎉 ALLE KEYS ERFOLGREICH HINZUGEFÜGT!")
 else:
-    print(f"⚠️ ACHTUNG: {fehler} Keys fehlen noch!")
+    print(f"[WARNING] ACHTUNG: {fehler} Keys fehlen noch!")
 print("=" * 100)
 
 # Zusätzliche Prüfung: Alle PRICING-Keys
-print("\n✅ TEST 2: Vollständige PRICING-System Keys")
+print("\n[OK] TEST 2: Vollständige PRICING-System Keys")
 print("-" * 100)
 
 pricing_keys = [
@@ -73,15 +73,15 @@ pricing_keys = [
 pricing_erfolg = 0
 for key in pricing_keys:
     if key in PLACEHOLDER_MAPPING:
-        print(f"✅ {key}")
+        print(f"[OK] {key}")
         pricing_erfolg += 1
     else:
-        print(f"❌ {key} FEHLT!")
+        print(f"[ERROR] {key} FEHLT!")
 
 print(f"\nPRICING System: {pricing_erfolg}/{len(pricing_keys)} vollständig")
 
 # Test 3: Alle FINAL_* Duplikate
-print("\n✅ TEST 3: FINAL_* Duplikate hinzugefügt?")
+print("\n[OK] TEST 3: FINAL_* Duplikate hinzugefügt?")
 print("-" * 100)
 
 final_duplikate = [
@@ -96,10 +96,10 @@ final_duplikate = [
 final_erfolg = 0
 for key in final_duplikate:
     if key in PLACEHOLDER_MAPPING:
-        print(f"✅ {key}")
+        print(f"[OK] {key}")
         final_erfolg += 1
     else:
-        print(f"❌ {key} FEHLT!")
+        print(f"[ERROR] {key} FEHLT!")
 
 print(f"\nFINAL_* Duplikate: {final_erfolg}/{len(final_duplikate)} vorhanden")
 
@@ -115,4 +115,4 @@ if fehler == 0 and pricing_erfolg == len(
         pricing_keys) and final_erfolg == len(final_duplikate):
     print("🎊 PERFEKT! OPTION A VOLLSTÄNDIG IMPLEMENTIERT!")
 else:
-    print("⚠️ Es fehlen noch einige Keys!")
+    print("[WARNING] Es fehlen noch einige Keys!")

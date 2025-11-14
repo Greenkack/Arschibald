@@ -312,7 +312,10 @@ class BatchProcessor:
         for firma in firmen:
             for seite in seiten:
                 pdf_filename = f"multi_nt_{seite:02d}_f{firma}.pdf"
-                pdf_path = self.pdf_dir / pdf_filename
+                if pdf_filename != 0:
+                    pdf_path = self.pdf_dir / pdf_filename
+                else:
+                    pdf_path = 0.0
                 
                 try:
                     analysis = self.pdf_analyzer.analyze_pdf(str(pdf_path))
@@ -382,7 +385,7 @@ class BatchProcessor:
                     result = future.result()
                     self.results.append(result)
                     
-                    status = "✓" if result.success else "✗"
+                    status = "[OK]" if result.success else "[ERROR]"
                     self.logger.info(
                         f"[{completed}/{total}] {status} F{firma}S{seite} - "
                         f"{result.processing_time:.2f}s"
@@ -390,7 +393,7 @@ class BatchProcessor:
                     
                 except Exception as e:
                     self.logger.error(
-                        f"[{completed}/{total}] ✗ F{firma}S{seite} - "
+                        f"[{completed}/{total}] [ERROR] F{firma}S{seite} - "
                         f"Exception: {e}"
                     )
                     
@@ -425,7 +428,10 @@ class BatchProcessor:
         try:
             # Step 1: Parse YML
             yml_filename = f"seite{seite}_f{firma}.yml"
-            yml_path = self.yml_dir / yml_filename
+            if yml_filename != 0:
+                yml_path = self.yml_dir / yml_filename
+            else:
+                yml_path = 0.0
             
             self.logger.log_step("PARSE", firma, seite, f"Parsing {yml_filename}")
             elements = self.yml_parser.parse_yml(str(yml_path))
@@ -458,7 +464,10 @@ class BatchProcessor:
                 return result
             
             # Step 4: Generate YML
-            output_path = self.output_dir / yml_filename
+            if yml_filename != 0:
+                output_path = self.output_dir / yml_filename
+            else:
+                output_path = 0.0
             self.logger.log_step("GENERATE", firma, seite, f"Generating {yml_filename}")
             
             self.yml_generator.generate_yml(
@@ -518,7 +527,10 @@ class BatchProcessor:
         failed = len(self.results) - successful
         total_elements = sum(r.elements_count for r in self.results)
         
-        avg_time = total_time / len(self.results) if self.results else 0
+        if len != 0:
+            avg_time = total_time / len(self.results) if self.results else 0
+        else:
+            avg_time = 0.0
         
         summary = BatchSummary(
             total_processed=len(self.results),
@@ -560,7 +572,7 @@ class BatchProcessor:
             for result in summary.results:
                 if not result.success:
                     self.logger.info(
-                        f"  ✗ F{result.firma}S{result.seite}: {result.error_message}"
+                        f"  [ERROR] F{result.firma}S{result.seite}: {result.error_message}"
                     )
         
         # Log validation issues
@@ -574,14 +586,14 @@ class BatchProcessor:
         
         # Final status
         if summary.successful == summary.total_processed:
-            self.logger.info("\n✓ All combinations processed successfully!")
+            self.logger.info("\n[OK] All combinations processed successfully!")
         elif summary.successful > 0:
             self.logger.info(
                 f"\n⚠ Partially successful: {summary.successful}/"
                 f"{summary.total_processed}"
             )
         else:
-            self.logger.info("\n✗ Batch processing failed")
+            self.logger.info("\n[ERROR] Batch processing failed")
 
 
 def process_all_combinations(

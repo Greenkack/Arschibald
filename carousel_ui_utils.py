@@ -254,7 +254,7 @@ def render_vertical_carousel_with_confirmation(
             '<div class="carousel-confirm-button"></div>',
             unsafe_allow_html=True)
         preview_label = options[preview_index][1]
-        if st.button(f"✓ Wechseln zu: {preview_label}",
+        if st.button(f"[OK] Wechseln zu: {preview_label}",
                      key=f"{state_key}_confirm",
                      use_container_width=True,
                      type="primary"):

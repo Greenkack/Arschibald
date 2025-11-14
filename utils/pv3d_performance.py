@@ -444,7 +444,10 @@ def optimize_mesh_resolution(
         return 1.0
     
     # Berechne Skalierungsfaktor
-    scale = max_vertices / vertex_count
+    if vertex_count != 0:
+        scale = max_vertices / vertex_count
+    else:
+        scale = 0.0
     return max(0.3, min(1.0, scale))  # Min 30%, Max 100%
 
 
@@ -686,7 +689,7 @@ def batch_render_modules(
                         
                 except Exception as e:
                     # Fehler beim Rendern - überspringe Modul
-                    print(f"⚠️ Fehler beim Rendern von Modul {global_idx + 1}: {e}")
+                    print(f"[WARNING] Fehler beim Rendern von Modul {global_idx + 1}: {e}")
                     continue
     
     return traces
@@ -729,7 +732,10 @@ def get_lod_info(total_modules: int, lod_threshold: int = 50) -> dict:
     skip_factor = max(1, total_modules // lod_threshold)
     rendered_count = (total_modules + skip_factor - 1) // skip_factor  # Aufrunden
     skipped_count = total_modules - rendered_count
-    reduction_percent = (skipped_count / total_modules) * 100.0
+    if total_modules != 0:
+        reduction_percent = (skipped_count / total_modules) * 100.0
+    else:
+        reduction_percent = 0.0
     
     return {
         'enabled': True,
@@ -1091,4 +1097,4 @@ def clear_all_caches():
     clear_cache()
     clear_transformation_cache()
     clear_performance_stats()
-    print("✓ Alle Caches geleert")
+    print("[OK] Alle Caches geleert")

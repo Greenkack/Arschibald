@@ -52,7 +52,7 @@ class TestDockerIsolation:
         assert "root" not in last_user.lower() or "USER root" not in last_user, \
             "Dockerfile should not run as root user"
 
-        print("\n✓ Dockerfile uses unprivileged user")
+        print("\n[OK] Dockerfile uses unprivileged user")
         print(f"  User directives found: {user_lines}")
 
     def test_dockerfile_security_best_practices(self):
@@ -68,7 +68,7 @@ class TestDockerIsolation:
         expose_lines = [
             line for line in content.split('\n') if 'EXPOSE' in line]
         print(
-            f"\n✓ Exposed ports: {
+            f"\n[OK] Exposed ports: {
                 expose_lines if expose_lines else 'None (good)'}")
 
         # Should use specific base image version (not 'latest')
@@ -77,7 +77,7 @@ class TestDockerIsolation:
         assert 'latest' not in from_line.lower(), \
             "Should use specific image version, not 'latest'"
 
-        print(f"✓ Uses specific base image: {from_line}")
+        print(f"[OK] Uses specific base image: {from_line}")
 
     def test_docker_execution_isolation(self):
         """Test Docker containers run with proper isolation (Requirement 5.3)"""
@@ -96,7 +96,7 @@ print(f"Home: {os.path.expanduser('~')}")
             # Should not be running as root (uid 0)
             assert "User: 0" not in result, "Container should not run as root"
 
-            print("\n✓ Docker container runs as non-root user")
+            print("\n[OK] Docker container runs as non-root user")
 
         except Exception as e:
             pytest.skip(f"Docker not available: {e}")
@@ -122,7 +122,7 @@ except:
             assert "NETWORK_BLOCKED" in result or "error" in result.lower(), \
                 "Network should be disabled in sandbox"
 
-            print("\n✓ Docker network isolation working")
+            print("\n[OK] Docker network isolation working")
 
         except Exception as e:
             pytest.skip(f"Docker not available: {e}")
@@ -156,7 +156,7 @@ except:
                 "Containers not being cleaned up properly"
 
             print(
-                f"\n✓ Docker cleanup working (containers: {initial_count} -> {final_count})")
+                f"\n[OK] Docker cleanup working (containers: {initial_count} -> {final_count})")
 
         except Exception as e:
             pytest.skip(f"Docker not available: {e}")
@@ -195,7 +195,7 @@ class TestPathValidation:
                        ["nicht erlaubt", "not allowed", "invalid", "fehler", "error"]), \
                 f"Path traversal not blocked for: {path}"
 
-        print("\n✓ Directory traversal prevention working for write operations")
+        print("\n[OK] Directory traversal prevention working for write operations")
         print(f"  Tested {len(dangerous_paths)} dangerous paths")
 
     def test_directory_traversal_prevention_read(self):
@@ -217,7 +217,7 @@ class TestPathValidation:
                        ["nicht erlaubt", "not allowed", "fehler", "error", "nicht gefunden"]), \
                 f"Path traversal not blocked for: {path}"
 
-        print("\n✓ Directory traversal prevention working for read operations")
+        print("\n[OK] Directory traversal prevention working for read operations")
 
     def test_absolute_path_rejection(self):
         """Test absolute paths are rejected (Requirement 6.1)"""
@@ -238,7 +238,7 @@ class TestPathValidation:
                        ["nicht erlaubt", "not allowed", "invalid", "fehler", "error"]), \
                 f"Absolute path not blocked: {path}"
 
-        print("\n✓ Absolute path rejection working")
+        print("\n[OK] Absolute path rejection working")
 
     def test_symlink_prevention(self):
         """Test symbolic links cannot be used to escape workspace"""
@@ -256,7 +256,7 @@ class TestPathValidation:
             assert created_file.exists()
             assert workspace in created_file.parents or created_file.parent == workspace
 
-        print("\n✓ Files are created within workspace only")
+        print("\n[OK] Files are created within workspace only")
 
     def test_workspace_isolation(self):
         """Test all operations are restricted to workspace (Requirement 6.1)"""
@@ -277,7 +277,7 @@ class TestPathValidation:
 
         assert "test_isolation.txt" in files
 
-        print("\n✓ Workspace isolation working")
+        print("\n[OK] Workspace isolation working")
         print(f"  Workspace: {workspace}")
 
 
@@ -307,7 +307,7 @@ class TestAPIKeySecurity:
         assert "os.getenv" in content or "os.environ" in content, \
             "Should load keys from environment"
 
-        print("\n✓ API keys loaded from environment only")
+        print("\n[OK] API keys loaded from environment only")
 
     def test_api_keys_not_in_logs(self):
         """Test API keys are not exposed in logs (Requirement 12.2)"""
@@ -331,7 +331,7 @@ class TestAPIKeySecurity:
         assert not re.search(r'[A-Za-z0-9]{32,}', output), \
             "Long alphanumeric string (possible key) in output"
 
-        print("\n✓ API keys not exposed in logs")
+        print("\n[OK] API keys not exposed in logs")
 
     def test_env_file_in_gitignore(self):
         """Test .env file is in .gitignore (Requirement 12.3)"""
@@ -345,7 +345,7 @@ class TestAPIKeySecurity:
         # Should ignore .env file
         assert ".env" in content, ".env should be in .gitignore"
 
-        print("\n✓ .env file is in .gitignore")
+        print("\n[OK] .env file is in .gitignore")
 
     def test_env_example_has_no_real_keys(self):
         """Test .env.example doesn't contain real API keys"""
@@ -370,7 +370,7 @@ class TestAPIKeySecurity:
                                ['your', 'xxx', '...', 'key', 'here', 'placeholder']), \
                         f"Possible real API key in .env.example: {key}"
 
-        print("\n✓ .env.example contains only placeholders")
+        print("\n[OK] .env.example contains only placeholders")
 
     def test_api_key_validation_on_startup(self):
         """Test API keys are validated on startup (Requirement 12.3)"""
@@ -383,7 +383,7 @@ class TestAPIKeySecurity:
         assert "OPENAI_API_KEY" in content
         assert "TAVILY_API_KEY" in content
 
-        print("\n✓ API key validation present in config")
+        print("\n[OK] API key validation present in config")
 
 
 class TestInputSanitization:
@@ -416,7 +416,7 @@ class TestInputSanitization:
             # At minimum, should not execute commands
             assert isinstance(result, str), "Should return string result"
 
-        print("\n✓ File path sanitization working")
+        print("\n[OK] File path sanitization working")
 
     def test_code_execution_input_validation(self):
         """Test code execution validates input"""
@@ -435,7 +435,7 @@ class TestInputSanitization:
                 # Should handle all cases without crashing
                 assert isinstance(result, str)
 
-            print("\n✓ Code execution input validation working")
+            print("\n[OK] Code execution input validation working")
 
         except Exception as e:
             pytest.skip(f"Docker not available: {e}")
@@ -459,7 +459,7 @@ class TestInputSanitization:
             assert "root:" not in result  # /etc/passwd content
             assert "uid=" not in result  # whoami output
 
-        print("\n✓ Command injection prevention working")
+        print("\n[OK] Command injection prevention working")
 
 
 class TestSecurityConfiguration:
@@ -486,7 +486,7 @@ class TestSecurityConfiguration:
         # Should have timeout configuration
         assert "timeout" in content.lower(), "Should have timeout configuration"
 
-        print("\n✓ Docker resource limits configured")
+        print("\n[OK] Docker resource limits configured")
 
     def test_security_module_exists(self):
         """Test security module exists with validation functions"""
@@ -501,7 +501,7 @@ class TestSecurityConfiguration:
         assert "validate" in content.lower() or "sanitize" in content.lower(), \
             "Should have validation/sanitization functions"
 
-        print("\n✓ Security module exists with validation functions")
+        print("\n[OK] Security module exists with validation functions")
 
     def test_error_messages_dont_leak_info(self):
         """Test error messages don't leak sensitive information"""
@@ -517,7 +517,7 @@ class TestSecurityConfiguration:
         # Should not reveal internal structure
         assert "__pycache__" not in result
 
-        print("\n✓ Error messages don't leak sensitive information")
+        print("\n[OK] Error messages don't leak sensitive information")
 
 
 def run_security_audit():
@@ -539,14 +539,14 @@ def run_security_audit():
 
     print("\n" + "=" * 70)
     if result == 0:
-        print("✓ ALL SECURITY TESTS PASSED")
+        print("[OK] ALL SECURITY TESTS PASSED")
         print("\nSecurity Audit Summary:")
-        print("  ✓ Docker isolation verified")
-        print("  ✓ Path validation working")
-        print("  ✓ API key security confirmed")
-        print("  ✓ Input sanitization active")
+        print("  [OK] Docker isolation verified")
+        print("  [OK] Path validation working")
+        print("  [OK] API key security confirmed")
+        print("  [OK] Input sanitization active")
     else:
-        print("✗ SECURITY ISSUES FOUND - Review output above")
+        print("[ERROR] SECURITY ISSUES FOUND - Review output above")
     print("=" * 70)
 
     return result

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-🔧 VOLLSTÄNDIGE SYNTAX-REPARATUR
+[TOOL] VOLLSTÄNDIGE SYNTAX-REPARATUR
 Repariert alle verbleibenden Syntax-Fehler
 """
 
@@ -29,7 +29,7 @@ def backup_and_delete_broken_files():
     backup_dir = Path("_syntax_errors_backup")
     backup_dir.mkdir(exist_ok=True)
     
-    print("🔧 BEHANDLE DATEIEN MIT SYNTAX-FEHLERN...")
+    print("[TOOL] BEHANDLE DATEIEN MIT SYNTAX-FEHLERN...")
     print("-" * 80)
     
     deleted = 0
@@ -44,15 +44,15 @@ def backup_and_delete_broken_files():
                 shutil.copy2(p, backup_path)
                 backed_up += 1
             except Exception as e:
-                print(f"⚠️  Backup-Fehler {file_path}: {e}")
+                print(f"[WARNING]  Backup-Fehler {file_path}: {e}")
             
             # Original löschen
             try:
                 p.unlink()
-                print(f"✅ Gelöscht (Backup erstellt): {file_path}")
+                print(f"[OK] Gelöscht (Backup erstellt): {file_path}")
                 deleted += 1
             except Exception as e:
-                print(f"❌ Fehler beim Löschen {file_path}: {e}")
+                print(f"[ERROR] Fehler beim Löschen {file_path}: {e}")
     
     return deleted, backed_up
 
@@ -249,7 +249,7 @@ def create_carousel(items):
     
     created = 0
     
-    print("\n📦 ERSTELLE FEHLENDE MODULE...")
+    print("\n[PACKAGE] ERSTELLE FEHLENDE MODULE...")
     print("-" * 80)
     
     for filepath, content in modules_to_create.items():
@@ -260,14 +260,14 @@ def create_carousel(items):
         
         if not p.exists():
             p.write_text(content, encoding='utf-8')
-            print(f"✅ Erstellt: {filepath}")
+            print(f"[OK] Erstellt: {filepath}")
             created += 1
     
     return created
 
 def main():
     print("=" * 80)
-    print("🔧 VOLLSTÄNDIGE SYNTAX-REPARATUR + MODULE-ERSTELLUNG")
+    print("[TOOL] VOLLSTÄNDIGE SYNTAX-REPARATUR + MODULE-ERSTELLUNG")
     print("=" * 80)
     print()
     
@@ -279,17 +279,17 @@ def main():
     
     # Zusammenfassung
     print("\n" + "=" * 80)
-    print("📊 REPARATUR ABGESCHLOSSEN")
+    print("[CHART] REPARATUR ABGESCHLOSSEN")
     print("=" * 80)
-    print(f"🗑️  Gelöscht:        {deleted} Dateien (Backup in _syntax_errors_backup/)")
+    print(f"[DELETE]  Gelöscht:        {deleted} Dateien (Backup in _syntax_errors_backup/)")
     print(f"💾 Backup erstellt: {backed_up} Dateien")
-    print(f"📦 Erstellt:        {created} Dummy-Module")
+    print(f"[PACKAGE] Erstellt:        {created} Dummy-Module")
     
-    print("\n✅ ERWARTETE VERBESSERUNG:")
+    print("\n[OK] ERWARTETE VERBESSERUNG:")
     print(f"   Syntax-Gesundheit: 97.6% → ~99.5%")
     print(f"   Import-Gesundheit: 80.0% → ~95.0%")
     
-    print("\n💡 NÄCHSTER SCHRITT:")
+    print("\n[IDEA] NÄCHSTER SCHRITT:")
     print("   python ultra_deep_analysis.py  # Erneute Analyse")
     
     print("\n" + "=" * 80)

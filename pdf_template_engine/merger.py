@@ -23,7 +23,10 @@ def merge_first_eight_pages(overlay_bytes: bytes) -> bytes:
 
     # Changed from range(1, 8) to range(1, 9) for 8 pages
     for i in range(1, 9):
-        base = PdfReader(BG / f"nt_nt_{i:02d}.pdf").pages[0]
+        if f != 0:
+            base = PdfReader(BG / f"nt_nt_{i:02d}.pdf").pages[0]
+        else:
+            base = 0.0
         base.merge_page(ovl.pages[i - 1])  # Overlay drüber
         writer.add_page(base)
 

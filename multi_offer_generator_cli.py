@@ -52,7 +52,7 @@ def main():
 
         if args.debug:
             print(
-                f"🔧 Loaded multi-PDF config: {json.dumps(config, indent=2)}", file=sys.stderr)
+                f"[TOOL] Loaded multi-PDF config: {json.dumps(config, indent=2)}", file=sys.stderr)
 
         # Import multi-offer generator
         from multi_offer_generator import generate_multi_offer_pdf
@@ -70,7 +70,7 @@ def main():
 
         if args.debug:
             print(
-                f"🎯 Generating Multi-PDFs for {len(companies)} companies", file=sys.stderr)
+                f"[TARGET] Generating Multi-PDFs for {len(companies)} companies", file=sys.stderr)
             print(f"   Output Directory: {args.output_dir}", file=sys.stderr)
 
         # Initialize progress
@@ -123,7 +123,7 @@ def main():
             except Exception as e:
                 if args.debug:
                     print(
-                        f"❌ Error processing {
+                        f"[ERROR] Error processing {
                             company.get(
                                 'name',
                                 'Unknown')}: {e}",

@@ -64,7 +64,7 @@ def create_smart_backup():
                         zipf.write(file_path)
                         files_added += 1
 
-        print(f"✅ {files_added} Dateien ins Backup gepackt")
+        print(f"[OK] {files_added} Dateien ins Backup gepackt")
 
     # Backup-Info schreiben
     info_file = f"{backup_name}_info.txt"

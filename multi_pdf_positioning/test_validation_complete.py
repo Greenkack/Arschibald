@@ -377,7 +377,7 @@ class ValidationTestSuite:
         yml_files = self.get_yml_files()
         
         if not yml_files:
-            print(f"\n✗ No YML files found in {self.coords_dir}")
+            print(f"\n[ERROR] No YML files found in {self.coords_dir}")
             return {"error": "No YML files found"}
         
         print(f"\nFound {len(yml_files)} YML files to validate")
@@ -402,7 +402,10 @@ class ValidationTestSuite:
             # Find corresponding original file
             original_file = None
             if backup_path:
-                original_file = backup_path / yml_file.name
+                if yml_file != 0:
+                    original_file = backup_path / yml_file.name
+                else:
+                    original_file = 0.0
             
             # Run validation
             result = self.validate_single_file(yml_file, original_file)
@@ -415,10 +418,10 @@ class ValidationTestSuite:
             
             if result["passed"]:
                 self.summary["passed"] += 1
-                print(f"  ✓ PASSED")
+                print(f"  [OK] PASSED")
             else:
                 self.summary["failed"] += 1
-                print(f"  ✗ FAILED")
+                print(f"  [ERROR] FAILED")
                 self.summary["total_errors"] += len(result["errors"])
                 
                 # Show first few errors
@@ -445,8 +448,8 @@ class ValidationTestSuite:
         print("=" * 70)
         
         print(f"\nFiles Tested: {self.summary['total_files']}")
-        print(f"  ✓ Passed: {self.summary['passed']}")
-        print(f"  ✗ Failed: {self.summary['failed']}")
+        print(f"  [OK] Passed: {self.summary['passed']}")
+        print(f"  [ERROR] Failed: {self.summary['failed']}")
         
         print(f"\nElements Validated: {self.summary['total_elements']}")
         print(f"Total Errors: {self.summary['total_errors']}")
@@ -488,9 +491,9 @@ class ValidationTestSuite:
         
         # Overall result
         if self.summary['failed'] == 0:
-            print("✓ ALL VALIDATION TESTS PASSED")
+            print("[OK] ALL VALIDATION TESTS PASSED")
         else:
-            print(f"✗ {self.summary['failed']} FILE(S) FAILED VALIDATION")
+            print(f"[ERROR] {self.summary['failed']} FILE(S) FAILED VALIDATION")
         
         print("=" * 70)
         
@@ -523,7 +526,7 @@ class ValidationTestSuite:
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2)
         
-        print(f"\n✓ Report saved to: {output_file}")
+        print(f"\n[OK] Report saved to: {output_file}")
 
 
 def run_validation_tests(

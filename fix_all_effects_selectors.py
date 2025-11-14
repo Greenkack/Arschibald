@@ -40,10 +40,10 @@ OLD_SELECTORS = {
 }
 
 print("Modernisierung der Selektoren:")
-print(f"\n✅ Expander: {len(MODERN_SELECTORS['expander'])} Selektoren")
-print(f"✅ Dropdown: {len(MODERN_SELECTORS['dropdown'])} Selektoren")
-print(f"✅ Number Input: {len(MODERN_SELECTORS['number_input'])} Selektoren")
-print(f"✅ Checkbox: {len(MODERN_SELECTORS['checkbox'])} Selektoren")
+print(f"\n[OK] Expander: {len(MODERN_SELECTORS['expander'])} Selektoren")
+print(f"[OK] Dropdown: {len(MODERN_SELECTORS['dropdown'])} Selektoren")
+print(f"[OK] Number Input: {len(MODERN_SELECTORS['number_input'])} Selektoren")
+print(f"[OK] Checkbox: {len(MODERN_SELECTORS['checkbox'])} Selektoren")
 
 print("\n📋 Beispiel neuer Expander-Selektor-Block:")
 print(",\n        ".join(MODERN_SELECTORS['expander']) + ":hover {")

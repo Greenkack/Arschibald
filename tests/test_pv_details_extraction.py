@@ -35,7 +35,7 @@ def test_pv_details_structure():
     if not pv_details_new:
         pv_details_new = mock_project_data.get("project_details", {})
 
-    print("\n✅ Test 1: pv_details Extraktion")
+    print("\n[OK] Test 1: pv_details Extraktion")
     print(f"   Module ID: {pv_details_new.get('selected_module_id')}")
     print(f"   Inverter ID: {pv_details_new.get('selected_inverter_id')}")
     print(f"   Storage ID: {pv_details_new.get('selected_storage_id')}")
@@ -50,7 +50,7 @@ def test_pv_details_structure():
         pv_details_new.get("selected_storage_id") if pv_details_new.get("include_storage") else None
     ]))
 
-    print("\n✅ Test 2: Haupt-Komponenten-IDs")
+    print("\n[OK] Test 2: Haupt-Komponenten-IDs")
     print(f"   Gesamt: {len(product_ids)} Komponenten")
     print(f"   IDs: {product_ids}")
 
@@ -61,12 +61,12 @@ def test_pv_details_structure():
             if comp_id:
                 product_ids.append(comp_id)
 
-    print("\n✅ Test 3: Mit Zubehör")
+    print("\n[OK] Test 3: Mit Zubehör")
     print(f"   Gesamt: {len(product_ids)} Komponenten")
     print(f"   IDs: {product_ids}")
 
     # Test 4: Fallback zu project_details
-    print("\n✅ Test 4: Fallback-Mechanismus")
+    print("\n[OK] Test 4: Fallback-Mechanismus")
     mock_project_data_old = {
         "project_details": {
             "module_id": 111
@@ -78,7 +78,7 @@ def test_pv_details_structure():
     print(f"   Fallback Module ID: {pv_details_fallback.get('module_id')}")
 
     print("\n" + "=" * 80)
-    print("✅ ALLE TESTS BESTANDEN")
+    print("[OK] ALLE TESTS BESTANDEN")
     print("=" * 80)
 
 

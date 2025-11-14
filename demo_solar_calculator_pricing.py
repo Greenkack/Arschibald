@@ -438,13 +438,13 @@ def main():
 
     print("\n=== Demo Complete ===")
     print("\nKey Features Demonstrated:")
-    print("✓ Calculate_per support (Stück, Meter, pauschal, kWp)")
-    print("✓ Real-time pricing calculations")
-    print("✓ Profit margin integration")
-    print("✓ Dynamic key generation for PDF")
-    print("✓ Component-based pricing breakdown")
-    print("✓ German currency formatting")
-    print("✓ Integration with solar calculator")
+    print("[OK] Calculate_per support (Stück, Meter, pauschal, kWp)")
+    print("[OK] Real-time pricing calculations")
+    print("[OK] Profit margin integration")
+    print("[OK] Dynamic key generation for PDF")
+    print("[OK] Component-based pricing breakdown")
+    print("[OK] German currency formatting")
+    print("[OK] Integration with solar calculator")
 
 
 if __name__ == "__main__":

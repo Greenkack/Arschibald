@@ -14,7 +14,7 @@ def migrate_logo_database():
 
         conn = get_db_connection()
         if not conn:
-            print("❌ Keine Datenbankverbindung möglich")
+            print("[ERROR] Keine Datenbankverbindung möglich")
             return False
 
         cursor = conn.cursor()
@@ -41,27 +41,27 @@ def migrate_logo_database():
                 try:
                     cursor.execute(
                         f"ALTER TABLE brand_logos ADD COLUMN {column_name} {column_def}")
-                    print(f"✅ Spalte '{column_name}' hinzugefügt")
+                    print(f"[OK] Spalte '{column_name}' hinzugefügt")
                     added_columns += 1
                 except Exception as e:
                     print(
-                        f"❌ Fehler beim Hinzufügen der Spalte '{column_name}': {e}")
+                        f"[ERROR] Fehler beim Hinzufügen der Spalte '{column_name}': {e}")
             else:
-                print(f"⏭️ Spalte '{column_name}' bereits vorhanden")
+                print(f"[SKIP] Spalte '{column_name}' bereits vorhanden")
 
         conn.commit()
         conn.close()
 
         if added_columns > 0:
             print(
-                f"✅ Migration abgeschlossen: {added_columns} neue Spalten hinzugefügt")
+                f"[OK] Migration abgeschlossen: {added_columns} neue Spalten hinzugefügt")
         else:
-            print("✅ Migration nicht erforderlich: Alle Spalten bereits vorhanden")
+            print("[OK] Migration nicht erforderlich: Alle Spalten bereits vorhanden")
 
         return True
 
     except Exception as e:
-        print(f"❌ Migration fehlgeschlagen: {e}")
+        print(f"[ERROR] Migration fehlgeschlagen: {e}")
         return False
 
 
@@ -94,12 +94,12 @@ if __name__ == "__main__":
             )
 
             if result:
-                print("✅ Migration-Test erfolgreich!")
+                print("[OK] Migration-Test erfolgreich!")
             else:
-                print("❌ Migration-Test fehlgeschlagen!")
+                print("[ERROR] Migration-Test fehlgeschlagen!")
 
         except Exception as e:
-            print(f"❌ Migration-Test Fehler: {e}")
+            print(f"[ERROR] Migration-Test Fehler: {e}")
     else:
-        print("\n❌ Migration fehlgeschlagen!")
+        print("\n[ERROR] Migration fehlgeschlagen!")
         sys.exit(1)

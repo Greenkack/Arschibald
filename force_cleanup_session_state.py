@@ -21,15 +21,15 @@ def force_cleanup_all_non_serializable():
         except (TypeError, AttributeError, pickle.PicklingError) as e:
             # Objekt kann nicht serialisiert werden -> zur Löschliste
             keys_to_delete.append(key)
-            print(f"⚠️ Nicht-serialisierbares Objekt gefunden: {key} (Typ: {type(obj).__name__})")
+            print(f"[WARNING] Nicht-serialisierbares Objekt gefunden: {key} (Typ: {type(obj).__name__})")
     
     # Lösche alle nicht-serialisierbaren Objekte
     for key in keys_to_delete:
         try:
             del st.session_state[key]
-            print(f"✅ Gelöscht: {key}")
+            print(f"[OK] Gelöscht: {key}")
         except Exception as e:
-            print(f"❌ Fehler beim Löschen von {key}: {e}")
+            print(f"[ERROR] Fehler beim Löschen von {key}: {e}")
     
     if keys_to_delete:
         print(f"\n🧹 Cleanup abgeschlossen: {len(keys_to_delete)} nicht-serialisierbare Objekte entfernt")
@@ -37,6 +37,6 @@ def force_cleanup_all_non_serializable():
     return len(keys_to_delete)
 
 if __name__ == "__main__":
-    print("🚀 Starte FORCE CLEANUP...")
+    print("[LAUNCH] Starte FORCE CLEANUP...")
     removed_count = force_cleanup_all_non_serializable()
-    print(f"\n✅ Fertig! {removed_count} Objekte entfernt.")
+    print(f"\n[OK] Fertig! {removed_count} Objekte entfernt.")

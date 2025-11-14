@@ -401,7 +401,7 @@ Du bist KAI, ein autonomer KI-Branchenexperte auf Weltklasse-Niveau. Deine Exper
                     'success': False,
                     'output': "",
                     'intermediate_steps': [],
-                    'error': f"❌ Unexpected Error: {str(e)}",
+                    'error': f"[ERROR] Unexpected Error: {str(e)}",
                     'solution': (
                         "Check logs for details. Ensure all "
                         "dependencies are installed and configured "

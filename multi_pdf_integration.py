@@ -82,7 +82,7 @@ def render_multi_pdf_customer_input() -> bool:
     auto_customer_data = load_customer_data_from_project()
     
     if auto_customer_data and any(auto_customer_data.values()):
-        st.success("✅ Kundendaten aus Projekt/Bedarfsanalyse übernommen!")
+        st.success("[OK] Kundendaten aus Projekt/Bedarfsanalyse übernommen!")
         st.session_state.multi_offer_customer_data = auto_customer_data
         
         # Zeige übernommene Daten an
@@ -101,7 +101,7 @@ def render_multi_pdf_customer_input() -> bool:
         return True
     
     # Manuelle Eingabe
-    st.info("ℹ️ Keine Projektdaten gefunden - bitte manuell eingeben")
+    st.info("[INFO] Keine Projektdaten gefunden - bitte manuell eingeben")
     
     with st.form("multi_pdf_customer_form"):
         col1, col2 = st.columns(2)
@@ -120,7 +120,7 @@ def render_multi_pdf_customer_input() -> bool:
         
         if submitted:
             if not name.strip():
-                st.error("❌ Kundenname ist erforderlich!")
+                st.error("[ERROR] Kundenname ist erforderlich!")
                 return False
             
             st.session_state.multi_offer_customer_data = {
@@ -131,7 +131,7 @@ def render_multi_pdf_customer_input() -> bool:
                 "email": email.strip(),
                 "phone": phone.strip(),
             }
-            st.success("✅ Kundendaten gespeichert!")
+            st.success("[OK] Kundendaten gespeichert!")
             st.rerun()
     
     return bool(st.session_state.multi_offer_customer_data.get("name"))
@@ -150,19 +150,19 @@ def render_multi_pdf_company_selection(available_companies: List[Dict[str, Any]]
     st.subheader("🏢 Schritt 2: Firmenauswahl (2-20+ Firmen)")
     
     if not available_companies:
-        st.warning("⚠️ Keine Firmen verfügbar. Bitte erst Firmen im Admin-Panel anlegen.")
+        st.warning("[WARNING] Keine Firmen verfügbar. Bitte erst Firmen im Admin-Panel anlegen.")
         return []
     
-    st.info(f"📊 {len(available_companies)} Firmen verfügbar - wählen Sie beliebig viele aus")
+    st.info(f"[CHART] {len(available_companies)} Firmen verfügbar - wählen Sie beliebig viele aus")
     
     # Schnellauswahl-Buttons
     col_quick1, col_quick2, col_quick3 = st.columns([1, 1, 3])
     
-    if col_quick1.button("✅ Alle auswählen"):
+    if col_quick1.button("[OK] Alle auswählen"):
         st.session_state.multi_offer_selected_companies = [c["id"] for c in available_companies]
         st.rerun()
     
-    if col_quick2.button("❌ Alle abwählen"):
+    if col_quick2.button("[ERROR] Alle abwählen"):
         st.session_state.multi_offer_selected_companies = []
         st.rerun()
     
@@ -187,7 +187,7 @@ def render_multi_pdf_company_selection(available_companies: List[Dict[str, Any]]
         with col_extend:
             if is_selected:
                 extend_pdf = st.checkbox(
-                    "📄 Erweiterte PDF (ab Seite 7)",
+                    "[FILE] Erweiterte PDF (ab Seite 7)",
                     value=st.session_state.multi_offer_company_extended.get(company_id, False),
                     key=f"multi_company_extend_{company_id}",
                     help="Fügt detaillierte Seiten ab Seite 7 hinzu"
@@ -215,7 +215,7 @@ def render_multi_pdf_company_selection(available_companies: List[Dict[str, Any]]
     st.session_state.multi_offer_selected_companies = selected_ids
     
     if selected_ids:
-        st.success(f"✅ {len(selected_ids)} Firma(en) ausgewählt")
+        st.success(f"[OK] {len(selected_ids)} Firma(en) ausgewählt")
     
     return selected_ids
 
@@ -243,14 +243,14 @@ def render_multi_pdf_settings():
                 options=["linear", "random", "category_specific"],
                 index=["linear", "random", "category_specific"].index(settings.get("rotation_mode", "linear")),
                 format_func=lambda x: {
-                    "linear": "📊 Linear (der Reihe nach)",
+                    "linear": "[CHART] Linear (der Reihe nach)",
                     "random": "🎲 Zufällig",
-                    "category_specific": "📦 Kategorie-spezifisch"
+                    "category_specific": "[PACKAGE] Kategorie-spezifisch"
                 }.get(x, x)
             )
     
     with col2:
-        st.markdown("### 📈 Preisstaffelung")
+        st.markdown("### [STATS] Preisstaffelung")
         
         settings["price_increment_percent"] = st.slider(
             "Preissteigerung pro Firma (%)",
@@ -262,7 +262,7 @@ def render_multi_pdf_settings():
         )
         
         if settings["price_increment_percent"] > 0:
-            st.info(f"💡 Firma 1: 100% | Firma 2: {100 + settings['price_increment_percent']:.1f}% | Firma 3: {100 + 2*settings['price_increment_percent']:.1f}%")
+            st.info(f"[IDEA] Firma 1: 100% | Firma 2: {100 + settings['price_increment_percent']:.1f}% | Firma 3: {100 + 2*settings['price_increment_percent']:.1f}%")
     
     st.session_state.multi_offer_settings = settings
 
@@ -286,7 +286,7 @@ def render_heatpump_integration_toggle() -> bool:
     Rückgabewert:
         True wenn Wärmepumpe aktiviert
     """
-    st.markdown("### 🌡️ Wärmepumpen-Integration")
+    st.markdown("### [TEMP] Wärmepumpen-Integration")
     
     heatpump_enabled = st.checkbox(
         "Wärmepumpe in Angebote einbeziehen",
@@ -297,18 +297,18 @@ def render_heatpump_integration_toggle() -> bool:
     st.session_state.heatpump_enabled = heatpump_enabled
     
     if heatpump_enabled:
-        st.info("✅ Wärmepumpen-Daten werden aus der Bedarfsanalyse übernommen")
+        st.info("[OK] Wärmepumpen-Daten werden aus der Bedarfsanalyse übernommen")
         
         # Zeige Wärmepumpen-Status
         hp_offer = st.session_state.get("heatpump_offer", {})
         if hp_offer:
             selected_wp = hp_offer.get("selected_heatpump", {})
             if selected_wp:
-                st.success(f"🌡️ Ausgewählte Wärmepumpe: {selected_wp.get('model', 'N/A')} ({selected_wp.get('heating_power', 0):.1f} kW)")
+                st.success(f"[TEMP] Ausgewählte Wärmepumpe: {selected_wp.get('model', 'N/A')} ({selected_wp.get('heating_power', 0):.1f} kW)")
             else:
-                st.warning("⚠️ Keine Wärmepumpe ausgewählt - bitte in Bedarfsanalyse konfigurieren")
+                st.warning("[WARNING] Keine Wärmepumpe ausgewählt - bitte in Bedarfsanalyse konfigurieren")
         else:
-            st.info("ℹ️ Keine Wärmepumpen-Daten vorhanden - wird in Bedarfsanalyse konfiguriert")
+            st.info("[INFO] Keine Wärmepumpen-Daten vorhanden - wird in Bedarfsanalyse konfiguriert")
     
     return heatpump_enabled
 
@@ -394,7 +394,7 @@ def render_multi_pdf_generator():
     Haupt-UI für Multi-PDF-Generator
     Kompakte Integration der repair_pdf Logik
     """
-    st.title("📊 Multi-Firmen-Angebotsgenerator")
+    st.title("[CHART] Multi-Firmen-Angebotsgenerator")
     st.caption("Erstellen Sie mehrere individualisierte Angebote mit einem Klick")
     
     # Initialisierung
@@ -405,7 +405,7 @@ def render_multi_pdf_generator():
     try:
         from database import list_companies
     except ImportError:
-        st.error("❌ Datenbankfunktionen nicht verfügbar")
+        st.error("[ERROR] Datenbankfunktionen nicht verfügbar")
         return
     
     # Schritt 1: Kundendaten
@@ -438,19 +438,19 @@ def render_multi_pdf_generator():
     st.markdown("---")
     
     # Schritt 5: Generierung
-    st.subheader("🚀 Schritt 4: PDF-Generierung")
+    st.subheader("[LAUNCH] Schritt 4: PDF-Generierung")
     
     col_preview, col_generate = st.columns(2)
     
     with col_preview:
-        st.info(f"📊 **Zusammenfassung:**\n- {len(selected_company_ids)} Firma(en)\n- Kunde: {st.session_state.multi_offer_customer_data.get('name')}\n- Wärmepumpe: {'✅ Ja' if heatpump_enabled else '❌ Nein'}")
+        st.info(f"[CHART] **Zusammenfassung:**\n- {len(selected_company_ids)} Firma(en)\n- Kunde: {st.session_state.multi_offer_customer_data.get('name')}\n- Wärmepumpe: {'[OK] Ja' if heatpump_enabled else '[ERROR] Nein'}")
     
     with col_generate:
-        if st.button("🎯 Alle Angebote generieren", type="primary", use_container_width=True):
+        if st.button("[TARGET] Alle Angebote generieren", type="primary", use_container_width=True):
             with st.spinner("⏳ Generiere Angebote..."):
                 # TODO: Implementierung der PDF-Generierung
                 # Wird aus repair_pdf/multi_offer_generator.py extrahiert
-                st.success("✅ Angebote erfolgreich generiert!")
+                st.success("[OK] Angebote erfolgreich generiert!")
                 st.info("💾 Download wird vorbereitet...")
 
 

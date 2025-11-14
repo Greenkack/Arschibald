@@ -62,11 +62,11 @@ def find_similar_files(directory=".", threshold=0.8):
             if similarity > threshold:
                 similar_pairs.append((file1, file2, similarity))
 
-    print(f"\n📊 ÄHNLICHE DATEIEN (>{threshold * 100}% Ähnlichkeit):")
+    print(f"\n[CHART] ÄHNLICHE DATEIEN (>{threshold * 100}% Ähnlichkeit):")
     for file1, file2, sim in sorted(
             similar_pairs, key=lambda x: x[2], reverse=True):
         print(
-            f"🔍 {sim:.1%} - {os.path.basename(file1)} ↔️ {os.path.basename(file2)}")
+            f"[SEARCH] {sim:.1%} - {os.path.basename(file1)} ↔️ {os.path.basename(file2)}")
 
     return similar_pairs
 

@@ -78,7 +78,7 @@ def render_yield_heatmap_overlay(
     
     WOW-Faktor: Farbcodierte Module zeigen sofort wo der beste Ertrag ist!
     """
-    st.markdown("### 🌡️ Ertrags-Heatmap")
+    st.markdown("### [TEMP] Ertrags-Heatmap")
     
     col1, col2 = st.columns(2)
     
@@ -131,10 +131,10 @@ def render_module_inspector() -> Dict[str, Any]:
     
     WOW-Faktor: Interaktive Exploration jedes einzelnen Moduls!
     """
-    st.markdown("### 🔍 Modul-Inspektor")
+    st.markdown("### [SEARCH] Modul-Inspektor")
     
     st.info(
-        "💡 **Tipp**: Klicken Sie auf ein Modul in der 3D-Ansicht "
+        "[IDEA] **Tipp**: Klicken Sie auf ein Modul in der 3D-Ansicht "
         "um detaillierte Informationen zu sehen."
     )
     
@@ -162,7 +162,7 @@ def render_module_inspector() -> Dict[str, Any]:
         if st.button("🔄 Modul drehen", key="rotate_module"):
             st.success("Modul um 90° gedreht")
         
-        if st.button("❌ Modul entfernen", key="remove_module"):
+        if st.button("[ERROR] Modul entfernen", key="remove_module"):
             st.warning("Modul entfernt")
     
     return {"inspector_active": True}
@@ -178,7 +178,7 @@ def render_realtime_performance_sim() -> Dict[str, Any]:
     
     WOW-Faktor: Live-Simulation zeigt sofort Auswirkungen von Änderungen!
     """
-    st.markdown("### ⚡ Echtzeit-Performance")
+    st.markdown("### [POWER] Echtzeit-Performance")
     
     col1, col2 = st.columns(2)
     
@@ -194,7 +194,7 @@ def render_realtime_performance_sim() -> Dict[str, Any]:
     
     with col2:
         temperature = st.slider(
-            "🌡️ Temperatur",
+            "[TEMP] Temperatur",
             min_value=-10,
             max_value=50,
             value=25,
@@ -260,7 +260,7 @@ def render_ar_preview_mode() -> Dict[str, Any]:
     )
     
     if ar_enabled:
-        st.success("✅ AR-Modus aktiv!")
+        st.success("[OK] AR-Modus aktiv!")
         
         # AR-Optionen
         col1, col2 = st.columns(2)
@@ -284,13 +284,13 @@ def render_ar_preview_mode() -> Dict[str, Any]:
                 key="ar_arrows"
             )
             show_grid = st.checkbox(
-                "📐 Raster",
+                "[DESIGN] Raster",
                 value=False,
                 key="ar_grid"
             )
         
         st.info(
-            "💡 **AR-Tipp**: Verwenden Sie Ihr Smartphone um die "
+            "[IDEA] **AR-Tipp**: Verwenden Sie Ihr Smartphone um die "
             "3D-Ansicht in Ihrer realen Umgebung zu sehen!"
         )
     
@@ -347,7 +347,7 @@ def render_comparison_mode() -> Dict[str, Any]:
             st.metric("Module B", "40 Stück", "+5")
         
         # Vergleichs-Zusammenfassung
-        st.markdown("#### 📊 Vergleich")
+        st.markdown("#### [CHART] Vergleich")
         
         diff_yield = 700
         diff_modules = 5
@@ -406,7 +406,7 @@ def render_timelapse_simulation() -> Dict[str, Any]:
         progress = st.progress(0)
         for i in range(100):
             progress.progress(i + 1)
-        st.success("✅ Animation abgeschlossen!")
+        st.success("[OK] Animation abgeschlossen!")
     
     # Monats-Statistiken
     month_data = _get_month_statistics(month)
@@ -440,7 +440,7 @@ def render_ai_optimization_assistant() -> Dict[str, Any]:
     st.markdown("### 🤖 KI-Optimierungs-Assistent")
     
     if st.button(
-        "🔍 Layout analysieren",
+        "[SEARCH] Layout analysieren",
         key="ai_analyze",
         use_container_width=True,
         type="primary"
@@ -450,20 +450,20 @@ def render_ai_optimization_assistant() -> Dict[str, Any]:
             import time
             time.sleep(1)
         
-        st.success("✅ Analyse abgeschlossen!")
+        st.success("[OK] Analyse abgeschlossen!")
         
         # KI-Vorschläge
-        st.markdown("#### 💡 Verbesserungsvorschläge")
+        st.markdown("#### [IDEA] Verbesserungsvorschläge")
         
         suggestions = [
             {
-                "icon": "🎯",
+                "icon": "[TARGET]",
                 "title": "Modulausrichtung optimieren",
                 "description": "Durch Drehung um 5° nach Süd-West können Sie +3% Ertrag erzielen",
                 "impact": "+375 kWh/Jahr"
             },
             {
-                "icon": "📐",
+                "icon": "[DESIGN]",
                 "title": "Reihenabstand vergrößern",
                 "description": "Vergrößern Sie den Abstand um 20cm um Verschattung zu reduzieren",
                 "impact": "+2% Effizienz"
@@ -483,10 +483,10 @@ def render_ai_optimization_assistant() -> Dict[str, Any]:
                 
                 col_apply, col_ignore = st.columns(2)
                 with col_apply:
-                    if st.button("✅ Anwenden", key=f"apply_suggestion_{i}"):
+                    if st.button("[OK] Anwenden", key=f"apply_suggestion_{i}"):
                         st.success("Vorschlag angewendet!")
                 with col_ignore:
-                    if st.button("❌ Ignorieren", key=f"ignore_suggestion_{i}"):
+                    if st.button("[ERROR] Ignorieren", key=f"ignore_suggestion_{i}"):
                         st.info("Vorschlag ignoriert")
     
     return {"ai_active": True}
@@ -518,7 +518,7 @@ def render_weather_integration() -> Dict[str, Any]:
     
     with col1:
         st.metric(
-            "🌡️ Temperatur",
+            "[TEMP] Temperatur",
             f"{weather_data['temperature']}°C"
         )
         st.metric(
@@ -545,7 +545,7 @@ def render_weather_integration() -> Dict[str, Any]:
         # Aktuelle Leistung basierend auf Wetter
         current_power = 8.5 * (1 - weather_data['cloud_cover']/100)
         st.metric(
-            "⚡ Aktuelle Leistung",
+            "[POWER] Aktuelle Leistung",
             f"{current_power:.1f} kW"
         )
     
@@ -589,7 +589,7 @@ def render_presentation_mode() -> Dict[str, Any]:
     )
     
     if presentation_active:
-        st.success("✅ Präsentations-Modus aktiv!")
+        st.success("[OK] Präsentations-Modus aktiv!")
         
         # Präsentations-Optionen
         col1, col2 = st.columns(2)
@@ -619,7 +619,7 @@ def render_presentation_mode() -> Dict[str, Any]:
             )
         
         # Präsentations-Folien
-        st.markdown("#### 📊 Präsentations-Folien")
+        st.markdown("#### [CHART] Präsentations-Folien")
         
         slide = st.select_slider(
             "Folie",

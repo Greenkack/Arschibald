@@ -44,7 +44,7 @@ def demo_keyboard_shortcuts():
         for shortcut, description in shortcuts_dict.items():
             print(f"  {shortcut:20} - {description}")
     
-    print("\n✓ Alle Shortcuts dokumentiert und verfügbar")
+    print("\n[OK] Alle Shortcuts dokumentiert und verfügbar")
 
 
 def demo_function_tooltips():
@@ -73,7 +73,7 @@ def demo_function_tooltips():
     help_text = format_function_help("VLOOKUP")
     print(f"\n{help_text}")
     
-    print("\n✓ Tooltips für alle Funktionen verfügbar")
+    print("\n[OK] Tooltips für alle Funktionen verfügbar")
 
 
 def demo_error_tooltips():
@@ -89,7 +89,7 @@ def demo_error_tooltips():
         print(f"\n{help_text}")
         print("-" * 40)
     
-    print("\n✓ Hilfreiche Fehler-Tooltips mit Lösungsvorschlägen")
+    print("\n[OK] Hilfreiche Fehler-Tooltips mit Lösungsvorschlägen")
 
 
 def demo_example_matrices():
@@ -128,7 +128,7 @@ def demo_example_matrices():
             row_label = row + 1
             print(f"  {col_label}{row_label}: {cell_data['formula']}")
     
-    print("\n✓ Mehrere Beispiel-Matrizen zum Lernen verfügbar")
+    print("\n[OK] Mehrere Beispiel-Matrizen zum Lernen verfügbar")
 
 
 def demo_tutorial():
@@ -168,7 +168,7 @@ def demo_tutorial():
         progress.next_step()
         print(f"  Schritt {progress.current_step} - {progress.get_progress_percentage():.1f}% abgeschlossen")
     
-    print("\n✓ Interaktives Tutorial mit Fortschritts-Tracking")
+    print("\n[OK] Interaktives Tutorial mit Fortschritts-Tracking")
 
 
 def demo_documentation():
@@ -214,7 +214,7 @@ def demo_documentation():
         for item in doc['content']:
             print(f"  - {item}")
     
-    print("\n✓ Umfassende Dokumentation verfügbar")
+    print("\n[OK] Umfassende Dokumentation verfügbar")
 
 
 def demo_ui_integration():
@@ -227,20 +227,20 @@ def demo_ui_integration():
     print("-" * 40)
     
     features = [
-        "✓ Tooltips für alle Buttons und Eingabefelder",
-        "✓ Kontextuelle Hilfe in der Formelleiste",
-        "✓ Fehler-Details mit Lösungsvorschlägen",
-        "✓ Funktions-Hilfe beim Eingeben",
-        "✓ Tutorial-Dialog beim ersten Start",
-        "✓ Beispiel-Matrizen im Menü",
-        "✓ Tastatur-Shortcuts in Tooltips",
-        "✓ Hilfe-Button mit Dokumentation"
+        "[OK] Tooltips für alle Buttons und Eingabefelder",
+        "[OK] Kontextuelle Hilfe in der Formelleiste",
+        "[OK] Fehler-Details mit Lösungsvorschlägen",
+        "[OK] Funktions-Hilfe beim Eingeben",
+        "[OK] Tutorial-Dialog beim ersten Start",
+        "[OK] Beispiel-Matrizen im Menü",
+        "[OK] Tastatur-Shortcuts in Tooltips",
+        "[OK] Hilfe-Button mit Dokumentation"
     ]
     
     for feature in features:
         print(f"  {feature}")
     
-    print("\n✓ Nahtlose Integration in die Benutzeroberfläche")
+    print("\n[OK] Nahtlose Integration in die Benutzeroberfläche")
 
 
 def main():
@@ -277,16 +277,16 @@ def main():
         print("ZUSAMMENFASSUNG")
         print("=" * 80)
         
-        print("\n✅ Task 22 - Benutzerfreundlichkeit ABGESCHLOSSEN")
+        print("\n[OK] Task 22 - Benutzerfreundlichkeit ABGESCHLOSSEN")
         print("\nImplementierte Features:")
-        print("  1. ✓ Tastatur-Shortcuts dokumentiert")
-        print("  2. ✓ Hilfe-Tooltips für alle Funktionen")
-        print("  3. ✓ Beispiel-Matrizen erstellt")
-        print("  4. ✓ Interaktives Tutorial implementiert")
-        print("  5. ✓ Vollständige Dokumentation")
-        print("  6. ✓ Schnellreferenz")
-        print("  7. ✓ Fehler-Hilfe mit Lösungen")
-        print("  8. ✓ UI-Integration vorbereitet")
+        print("  1. [OK] Tastatur-Shortcuts dokumentiert")
+        print("  2. [OK] Hilfe-Tooltips für alle Funktionen")
+        print("  3. [OK] Beispiel-Matrizen erstellt")
+        print("  4. [OK] Interaktives Tutorial implementiert")
+        print("  5. [OK] Vollständige Dokumentation")
+        print("  6. [OK] Schnellreferenz")
+        print("  7. [OK] Fehler-Hilfe mit Lösungen")
+        print("  8. [OK] UI-Integration vorbereitet")
         
         print("\nDateien erstellt:")
         print("  - excel/excel_help.py")
@@ -308,7 +308,7 @@ def main():
         return 0
         
     except Exception as e:
-        print(f"\n❌ Fehler: {str(e)}")
+        print(f"\n[ERROR] Fehler: {str(e)}")
         import traceback
         traceback.print_exc()
         return 1

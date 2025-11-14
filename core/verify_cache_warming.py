@@ -41,7 +41,7 @@ def verify_warming_task():
     task.update_schedule(60)
     assert task.next_run is not None
 
-    print("   ✓ WarmingTask works correctly")
+    print("   [OK] WarmingTask works correctly")
 
 
 def verify_usage_tracker():
@@ -66,7 +66,7 @@ def verify_usage_tracker():
     frequency = tracker.get_access_frequency("key1", window_minutes=60)
     assert frequency >= 0
 
-    print("   ✓ UsagePatternTracker works correctly")
+    print("   [OK] UsagePatternTracker works correctly")
 
 
 def verify_basic_warming():
@@ -98,7 +98,7 @@ def verify_basic_warming():
     assert value is not None
     assert value["result"] == "computed"
 
-    print("   ✓ Basic cache warming works correctly")
+    print("   [OK] Basic cache warming works correctly")
 
 
 def verify_task_registration():
@@ -138,7 +138,7 @@ def verify_task_registration():
     assert stats["critical_keys"] == 1
     assert "key2" in engine._critical_data_keys
 
-    print("   ✓ Task registration works correctly")
+    print("   [OK] Task registration works correctly")
 
 
 def verify_critical_data_warming():
@@ -167,7 +167,7 @@ def verify_critical_data_warming():
     assert results["succeeded"] >= 1
     assert "total_duration_ms" in results
 
-    print("   ✓ Critical data warming works correctly")
+    print("   [OK] Critical data warming works correctly")
 
 
 def verify_user_data_warming():
@@ -196,7 +196,7 @@ def verify_user_data_warming():
     assert results3.get("skipped") != True
     assert results3["succeeded"] >= 0
 
-    print("   ✓ User data warming works correctly")
+    print("   [OK] User data warming works correctly")
 
 
 def verify_performance_tracking():
@@ -221,7 +221,7 @@ def verify_performance_tracking():
     assert perf["slowest_ms"] >= perf["fastest_ms"]
     assert "efficiency_score" in perf
 
-    print("   ✓ Performance tracking works correctly")
+    print("   [OK] Performance tracking works correctly")
 
 
 def verify_pattern_based_warming():
@@ -255,7 +255,7 @@ def verify_pattern_based_warming():
     assert "succeeded" in results
     assert "duration_ms" in results
 
-    print("   ✓ Pattern-based warming works correctly")
+    print("   [OK] Pattern-based warming works correctly")
 
 
 def verify_schedule_optimization():
@@ -293,7 +293,7 @@ def verify_schedule_optimization():
     assert "frequency" in adjustment
     assert "interval_minutes" in adjustment
 
-    print("   ✓ Schedule optimization works correctly")
+    print("   [OK] Schedule optimization works correctly")
 
 
 def verify_background_warming():
@@ -334,7 +334,7 @@ def verify_background_warming():
     stats = engine.get_stats()
     assert stats["running"] == False
 
-    print("   ✓ Background warming works correctly")
+    print("   [OK] Background warming works correctly")
 
 
 def verify_global_functions():
@@ -368,7 +368,7 @@ def verify_global_functions():
     perf = get_warming_performance()
     assert "total_warmings" in perf
 
-    print("   ✓ Global functions work correctly")
+    print("   [OK] Global functions work correctly")
 
 
 def verify_integration():
@@ -399,7 +399,7 @@ def verify_integration():
     # Should be fast (from cache)
     assert duration < 0.01
 
-    print("   ✓ Cache integration works correctly")
+    print("   [OK] Cache integration works correctly")
 
 
 def run_all_verifications():
@@ -423,16 +423,16 @@ def run_all_verifications():
         verify_integration()
 
         print("\n" + "=" * 60)
-        print("✓ All verifications passed!")
+        print("[OK] All verifications passed!")
         print("=" * 60)
 
         return True
 
     except AssertionError as e:
-        print(f"\n✗ Verification failed: {e}")
+        print(f"\n[ERROR] Verification failed: {e}")
         return False
     except Exception as e:
-        print(f"\n✗ Unexpected error: {e}")
+        print(f"\n[ERROR] Unexpected error: {e}")
         import traceback
         traceback.print_exc()
         return False

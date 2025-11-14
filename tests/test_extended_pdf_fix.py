@@ -48,7 +48,7 @@ def test_extended_options_building():
     assert extended_opts['charts'] == ['chart1', 'chart2', 'chart3']
     assert extended_opts['chart_layout'] == 'two_per_page'
     
-    print("✅ Extended options correctly built from UI selections")
+    print("[OK] Extended options correctly built from UI selections")
 
 
 def test_extended_options_not_created_when_disabled():
@@ -72,7 +72,7 @@ def test_extended_options_not_created_when_disabled():
     assert 'extended_options' not in pdf_inclusion_options, \
         "extended_options should NOT be created when extended_output_enabled=False"
     
-    print("✅ Extended options correctly not created when disabled")
+    print("[OK] Extended options correctly not created when disabled")
 
 
 def test_extended_pdf_generator_initialization():
@@ -100,7 +100,7 @@ def test_extended_pdf_generator_initialization():
     assert generator is not None
     assert hasattr(generator, 'generate_extended_pages')
     
-    print("✅ ExtendedPDFGenerator initialized successfully")
+    print("[OK] ExtendedPDFGenerator initialized successfully")
 
 
 def test_extended_pdf_generator_methods_exist():
@@ -124,7 +124,7 @@ def test_extended_pdf_generator_methods_exist():
         assert hasattr(ExtendedPDFGenerator, method_name), \
             f"ExtendedPDFGenerator should have method {method_name}"
     
-    print("✅ All required methods exist in ExtendedPDFGenerator")
+    print("[OK] All required methods exist in ExtendedPDFGenerator")
 
 
 def test_chart_page_generator_exists():
@@ -133,7 +133,7 @@ def test_chart_page_generator_exists():
     try:
         from extended_pdf_generator import ChartPageGenerator
         assert ChartPageGenerator is not None, "ChartPageGenerator should exist"
-        print("✅ ChartPageGenerator exists and can be imported")
+        print("[OK] ChartPageGenerator exists and can be imported")
     except ImportError as e:
         pytest.fail(f"ChartPageGenerator import failed: {e}")
 
@@ -144,7 +144,7 @@ def test_financing_page_generator_exists():
     try:
         from extended_pdf_generator import FinancingPageGenerator
         assert FinancingPageGenerator is not None, "FinancingPageGenerator should exist"
-        print("✅ FinancingPageGenerator exists and can be imported")
+        print("[OK] FinancingPageGenerator exists and can be imported")
     except ImportError as e:
         pytest.fail(f"FinancingPageGenerator import failed: {e}")
 
@@ -155,7 +155,7 @@ def test_product_datasheet_merger_exists():
     try:
         from extended_pdf_generator import ProductDatasheetMerger
         assert ProductDatasheetMerger is not None, "ProductDatasheetMerger should exist"
-        print("✅ ProductDatasheetMerger exists and can be imported")
+        print("[OK] ProductDatasheetMerger exists and can be imported")
     except ImportError as e:
         pytest.fail(f"ProductDatasheetMerger import failed: {e}")
 
@@ -166,7 +166,7 @@ def test_company_document_merger_exists():
     try:
         from extended_pdf_generator import CompanyDocumentMerger
         assert CompanyDocumentMerger is not None, "CompanyDocumentMerger should exist"
-        print("✅ CompanyDocumentMerger exists and can be imported")
+        print("[OK] CompanyDocumentMerger exists and can be imported")
     except ImportError as e:
         pytest.fail(f"CompanyDocumentMerger import failed: {e}")
 
@@ -198,11 +198,11 @@ def run_all_tests():
             test_func()
             passed += 1
         except AssertionError as e:
-            print(f"❌ FAILED: {test_name}")
+            print(f"[ERROR] FAILED: {test_name}")
             print(f"   Error: {e}")
             failed += 1
         except Exception as e:
-            print(f"❌ ERROR in {test_name}: {e}")
+            print(f"[ERROR] ERROR in {test_name}: {e}")
             failed += 1
     
     print("\n" + "="*60)

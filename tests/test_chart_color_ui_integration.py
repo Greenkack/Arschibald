@@ -19,10 +19,10 @@ def test_module_import():
         import admin_pdf_settings_ui
         # Verify module has expected attributes
         assert hasattr(admin_pdf_settings_ui, 'render_pdf_settings_ui')
-        print("✓ admin_pdf_settings_ui erfolgreich importiert")
+        print("[OK] admin_pdf_settings_ui erfolgreich importiert")
         return True
     except ImportError as e:
-        print(f"✗ Import fehlgeschlagen: {e}")
+        print(f"[ERROR] Import fehlgeschlagen: {e}")
         return False
 
 
@@ -44,14 +44,14 @@ def test_function_existence():
         all_exist = True
         for func_name in required_functions:
             if hasattr(admin_pdf_settings_ui, func_name):
-                print(f"✓ {func_name} vorhanden")
+                print(f"[OK] {func_name} vorhanden")
             else:
-                print(f"✗ {func_name} fehlt")
+                print(f"[ERROR] {func_name} fehlt")
                 all_exist = False
 
         return all_exist
     except ImportError as e:
-        print(f"✗ Import fehlgeschlagen: {e}")
+        print(f"[ERROR] Import fehlgeschlagen: {e}")
         return False
 
 
@@ -86,17 +86,17 @@ def test_mock_database_functions():
     # Save
     result = mock_save_setting('visualization_settings', test_settings)
     assert result is True
-    print("✓ Einstellungen gespeichert")
+    print("[OK] Einstellungen gespeichert")
 
     # Load
     loaded = mock_load_setting('visualization_settings', {})
     assert loaded == test_settings
-    print("✓ Einstellungen geladen")
+    print("[OK] Einstellungen geladen")
 
     # Verify structure
     assert 'global_chart_colors' in loaded
     assert 'individual_chart_colors' in loaded
-    print("✓ Struktur korrekt")
+    print("[OK] Struktur korrekt")
 
     return True
 
@@ -110,16 +110,16 @@ def test_requirements_compliance():
     global_colors = ['#1E3A8A', '#3B82F6', '#10B981',
                      '#F59E0B', '#EF4444', '#8B5CF6']
     assert len(global_colors) == 6
-    print("✓ 6 globale Farben konfigurierbar")
-    print("✓ Speicherung in visualization_settings.global_chart_colors")
+    print("[OK] 6 globale Farben konfigurierbar")
+    print("[OK] Speicherung in visualization_settings.global_chart_colors")
 
     # Requirement 27.1-27.3: Farbpaletten-Bibliothek
     print("\nRequirement 27 (Farbpaletten-Bibliothek):")
     palettes = ['Corporate', 'Eco', 'Energy', 'Accessible']
     assert len(palettes) == 4
-    print(f"✓ {len(palettes)} vordefinierte Paletten")
-    print("✓ 'Palette anwenden' Button vorhanden")
-    print("✓ Color Swatches für Vorschau")
+    print(f"[OK] {len(palettes)} vordefinierte Paletten")
+    print("[OK] 'Palette anwenden' Button vorhanden")
+    print("[OK] Color Swatches für Vorschau")
 
     # Requirement 26.1-26.5: Individuelle Konfiguration
     print("\nRequirement 26 (Individuelle Konfiguration):")
@@ -132,11 +132,11 @@ def test_requirements_compliance():
         'Vergleiche & Szenarien'
     ]
     assert len(categories) == 6
-    print(f"✓ {len(categories)} Kategorien für Diagramme")
-    print("✓ Diagramm-Auswahl innerhalb Kategorie")
-    print("✓ 'Globale Farben verwenden' Toggle")
-    print("✓ Custom-Farben für jedes Diagramm")
-    print("✓ 'Auf Global zurücksetzen' Button")
+    print(f"[OK] {len(categories)} Kategorien für Diagramme")
+    print("[OK] Diagramm-Auswahl innerhalb Kategorie")
+    print("[OK] 'Globale Farben verwenden' Toggle")
+    print("[OK] Custom-Farben für jedes Diagramm")
+    print("[OK] 'Auf Global zurücksetzen' Button")
 
     return True
 
@@ -171,7 +171,7 @@ def run_all_tests():
     total = len(results)
 
     for name, result, error in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = "[OK] PASS" if result else "[ERROR] FAIL"
         print(f"{status}: {name}")
         if error:
             print(f"  Error: {error}")
@@ -180,13 +180,13 @@ def run_all_tests():
 
     if passed == total:
         print("\n🎉 Alle Integration Tests erfolgreich!")
-        print("\n✅ Task 10 vollständig implementiert:")
+        print("\n[OK] Task 10 vollständig implementiert:")
         print("   - Task 10.1: Globale Farbeinstellungen")
         print("   - Task 10.2: Farbpaletten-Bibliothek")
         print("   - Task 10.3: Individuelle Diagramm-Konfiguration")
         return True
     else:
-        print("\n❌ Einige Tests fehlgeschlagen")
+        print("\n[ERROR] Einige Tests fehlgeschlagen")
         return False
 
 

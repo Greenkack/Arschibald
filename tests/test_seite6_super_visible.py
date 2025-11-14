@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_super_visible_donuts():
     """Testet die SUPER SICHTBAREN Donut-Charts auf Seite 6"""
 
-    print("🔧 Test der SUPER SICHTBAREN Seite 6 Donut-Charts")
+    print("[TOOL] Test der SUPER SICHTBAREN Seite 6 Donut-Charts")
     print("=" * 55)
 
     # Test-Daten mit hohen Werten für maximale Sichtbarkeit
@@ -38,14 +38,14 @@ def test_super_visible_donuts():
         # Generiere Overlay
         coords_dir = Path("coords")
 
-        print("📊 Test-Daten für maximale Sichtbarkeit:")
+        print("[CHART] Test-Daten für maximale Sichtbarkeit:")
         print(
             f"   - Speicher zu Tagesverbrauch: {dynamic_data['storage_consumption_ratio_percent']}%")
         print(
             f"   - Speicher zu PV-Produktion: {dynamic_data['storage_production_ratio_percent']}%")
         print("📍 Position: MITTE DER SEITE für maximale Sichtbarkeit")
         print("📏 Größe: SEHR GROß (Radius 50/30)")
-        print("🎨 Farben: REINES ROT und REINES BLAU")
+        print("[DESIGN] Farben: REINES ROT und REINES BLAU")
         print("🖼️ Extras: Schwarzer Rahmen und Titel")
 
         overlay_bytes = generate_overlay(
@@ -60,20 +60,20 @@ def test_super_visible_donuts():
                 f.write(overlay_bytes)
 
             print(
-                f"\n✅ PDF mit SUPER SICHTBAREN Donut-Charts erstellt: {output_file}")
-            print(f"📦 Dateigröße: {len(overlay_bytes):,} bytes")
+                f"\n[OK] PDF mit SUPER SICHTBAREN Donut-Charts erstellt: {output_file}")
+            print(f"[PACKAGE] Dateigröße: {len(overlay_bytes):,} bytes")
             print("📋 Die Charts sollten jetzt DEFINITIV sichtbar sein auf Seite 6:")
             print("   🔴 Linker Chart: Tagesverbrauch (85%) - REINES ROT")
             print("   🔵 Rechter Chart: PV-Produktion (75%) - REINES BLAU")
             print("   ⬛ Schwarzer Rahmen um beide Charts")
-            print("   📝 Titel: 'SPEICHER-RELATIONEN'")
+            print("   [NOTE] Titel: 'SPEICHER-RELATIONEN'")
 
             return True
-        print("\n❌ Overlay-Generierung fehlgeschlagen")
+        print("\n[ERROR] Overlay-Generierung fehlgeschlagen")
         return False
 
     except Exception as e:
-        print(f"\n❌ Fehler beim Test: {e}")
+        print(f"\n[ERROR] Fehler beim Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -82,7 +82,7 @@ def test_super_visible_donuts():
 def test_extreme_values():
     """Testet mit extremen Werten für maximale Sichtbarkeit"""
 
-    print("\n🔧 Test mit extremen Werten")
+    print("\n[TOOL] Test mit extremen Werten")
     print("=" * 30)
 
     extreme_data = {
@@ -101,7 +101,7 @@ def test_extreme_values():
     try:
         coords_dir = Path("coords")
 
-        print("📊 Extreme Test-Daten:")
+        print("[CHART] Extreme Test-Daten:")
         print(
             f"   - Tagesverbrauch: {extreme_data['storage_consumption_ratio_percent']}% (VOLL)")
         print(
@@ -118,17 +118,17 @@ def test_extreme_values():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"✅ Extreme-PDF erstellt: {output_file}")
+            print(f"[OK] Extreme-PDF erstellt: {output_file}")
             print("📋 Beide Charts sollten komplett gefüllt sein (100%)")
         else:
-            print("❌ Extreme-Test fehlgeschlagen")
+            print("[ERROR] Extreme-Test fehlgeschlagen")
 
     except Exception as e:
-        print(f"❌ Fehler beim Extreme-Test: {e}")
+        print(f"[ERROR] Fehler beim Extreme-Test: {e}")
 
 
 if __name__ == "__main__":
-    print("🚀 Test der SUPER SICHTBAREN Seite 6 Donut-Charts")
+    print("[LAUNCH] Test der SUPER SICHTBAREN Seite 6 Donut-Charts")
     print("=" * 60)
 
     # Test 1: Super sichtbare Charts
@@ -146,4 +146,4 @@ if __name__ == "__main__":
         print("   4. Sie sind SEHR GROß (Radius 50)")
         print("   5. Sie sind ROT und BLAU für maximale Sichtbarkeit")
     else:
-        print("\n❌ Test fehlgeschlagen")
+        print("\n[ERROR] Test fehlgeschlagen")

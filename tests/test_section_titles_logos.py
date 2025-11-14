@@ -12,7 +12,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def test_section_titles_and_logos():
     """Teste die erweiterten Überschriften und Logo-Integration"""
-    print("🔧 TESTE ERWEITERTE ÜBERSCHRIFTEN & LOGOS")
+    print("[TOOL] TESTE ERWEITERTE ÜBERSCHRIFTEN & LOGOS")
     print("=" * 60)
 
     # Test-Daten mit allen notwendigen Werten
@@ -55,11 +55,11 @@ def test_section_titles_and_logos():
         "name": "Solar GmbH"
     }
 
-    print("📊 Erstelle dynamic_data...")
+    print("[CHART] Erstelle dynamic_data...")
     dynamic_data = build_dynamic_data(
         project_data, analysis_results, company_info)
 
-    print("\n🎯 ERWEITERTE ÜBERSCHRIFTEN:")
+    print("\n[TARGET] ERWEITERTE ÜBERSCHRIFTEN:")
     section_titles = [
         ("module_section_title", "SOLARMODULE"),
         ("inverter_section_title", "WECHSELRICHTER"),
@@ -69,9 +69,9 @@ def test_section_titles_and_logos():
     for key, title in section_titles:
         if key in dynamic_data:
             value = dynamic_data[key]
-            print(f"  ✅ {title}: '{value}'")
+            print(f"  [OK] {title}: '{value}'")
         else:
-            print(f"  ❌ {title}: FEHLT")
+            print(f"  [ERROR] {title}: FEHLT")
 
     print("\n🖼️ LOGO-DATEN:")
     logo_keys = [
@@ -83,9 +83,9 @@ def test_section_titles_and_logos():
     for key, component in logo_keys:
         if key in dynamic_data and dynamic_data[key]:
             print(
-                f"  ✅ {component}: Logo vorhanden ({len(dynamic_data[key])} Zeichen)")
+                f"  [OK] {component}: Logo vorhanden ({len(dynamic_data[key])} Zeichen)")
         else:
-            print(f"  ❌ {component}: Kein Logo")
+            print(f"  [ERROR] {component}: Kein Logo")
 
     print("\n📋 ZUSÄTZLICHE WERTE:")
     extra_keys = [
@@ -96,12 +96,12 @@ def test_section_titles_and_logos():
 
     for key, label in extra_keys:
         if key in dynamic_data:
-            print(f"  ✅ {label}: {dynamic_data[key]}")
+            print(f"  [OK] {label}: {dynamic_data[key]}")
         else:
-            print(f"  ❌ {label}: FEHLT")
+            print(f"  [ERROR] {label}: FEHLT")
 
     print("\n" + "=" * 60)
-    print("📊 ZUSAMMENFASSUNG:")
+    print("[CHART] ZUSAMMENFASSUNG:")
 
     sections_ok = all(key in dynamic_data for key, _ in section_titles)
     logos_ok = all(
@@ -109,14 +109,14 @@ def test_section_titles_and_logos():
         _ in logo_keys)
 
     if sections_ok:
-        print("✅ Alle erweiterten Überschriften sind verfügbar")
+        print("[OK] Alle erweiterten Überschriften sind verfügbar")
     else:
-        print("❌ Einige Überschriften fehlen")
+        print("[ERROR] Einige Überschriften fehlen")
 
     if logos_ok:
-        print("✅ Alle Logos sind verfügbar")
+        print("[OK] Alle Logos sind verfügbar")
     else:
-        print("⚠️ Einige Logos fehlen (normal wenn nicht alle Hersteller Logos haben)")
+        print("[WARNING] Einige Logos fehlen (normal wenn nicht alle Hersteller Logos haben)")
 
     return sections_ok and logos_ok
 
@@ -126,6 +126,6 @@ if __name__ == "__main__":
     if success:
         print("\n🎉 TEST ERFOLGREICH!")
         print(
-            "💡 Die erweiterten Überschriften und Logos sollten jetzt in der PDF erscheinen!")
+            "[IDEA] Die erweiterten Überschriften und Logos sollten jetzt in der PDF erscheinen!")
     else:
-        print("\n⚠️ Test teilweise erfolgreich - prüfe die Details oben")
+        print("\n[WARNING] Test teilweise erfolgreich - prüfe die Details oben")

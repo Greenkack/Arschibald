@@ -23,7 +23,7 @@ MISSING_PACKAGES = [
 
 def install_packages():
     print("=" * 80)
-    print("📦 INSTALLATION FEHLENDER DEPENDENCIES")
+    print("[PACKAGE] INSTALLATION FEHLENDER DEPENDENCIES")
     print("=" * 80)
     print(f"\nInstalliere {len(MISSING_PACKAGES)} Packages...\n")
     
@@ -41,13 +41,13 @@ def install_packages():
             )
             
             if result.returncode == 0:
-                print(f"   ✅ {package} erfolgreich installiert")
+                print(f"   [OK] {package} erfolgreich installiert")
             else:
-                print(f"   ❌ {package} Installation fehlgeschlagen")
+                print(f"   [ERROR] {package} Installation fehlgeschlagen")
                 failed.append((package, result.stderr[:100]))
         
         except Exception as e:
-            print(f"   ❌ {package} Fehler: {str(e)[:50]}")
+            print(f"   [ERROR] {package} Fehler: {str(e)[:50]}")
             failed.append((package, str(e)))
     
     print("\n" + "=" * 80)
@@ -55,7 +55,7 @@ def install_packages():
     print("=" * 80)
     
     if failed:
-        print(f"\n⚠️  {len(failed)} Fehler:")
+        print(f"\n[WARNING]  {len(failed)} Fehler:")
         for pkg, err in failed:
             print(f"   • {pkg}: {err}")
     else:

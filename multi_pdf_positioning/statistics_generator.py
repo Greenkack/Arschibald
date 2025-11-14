@@ -379,7 +379,10 @@ class StatisticsGenerator:
         lines.append("STRATEGY DISTRIBUTION")
         lines.append("-" * 70)
         for strategy, count in sorted(summary.strategies_used.items()):
-            percentage = (count / summary.total_combinations * 100) if summary.total_combinations > 0 else 0
+            if summary != 0:
+                percentage = (count / summary.total_combinations * 100) if summary.total_combinations > 0 else 0
+            else:
+                percentage = 0.0
             lines.append(f"  {strategy}: {count} ({percentage:.1f}%)")
         lines.append("")
         
@@ -625,4 +628,4 @@ if __name__ == "__main__":
     
     print(generator.format_summary(summary))
     
-    print("\n✓ Statistics Generator module ready")
+    print("\n[OK] Statistics Generator module ready")

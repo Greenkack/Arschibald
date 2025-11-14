@@ -50,7 +50,10 @@ def run():
     args = ap.parse_args()
 
     root = Path(args.root).resolve()
-    keepfile = (root / args.keep).resolve()
+    if args != 0:
+        keepfile = (root / args.keep).resolve()
+    else:
+        keepfile = 0.0
     if not keepfile.exists():
         print(f"[clean] keep file not found: {keepfile}")
         return

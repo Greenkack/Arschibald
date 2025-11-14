@@ -128,7 +128,7 @@ def init_session_state():
 
 def render_statistics_section():
     """Rendert Statistik-Übersicht."""
-    st.header("📊 Statistiken")
+    st.header("[CHART] Statistiken")
     
     stats = get_statistics()
     
@@ -146,7 +146,7 @@ def render_statistics_section():
         st.metric("Kategorien", categories_count)
     
     # Detaillierte Statistiken in Expander
-    with st.expander("🔍 Detaillierte Statistiken", expanded=False):
+    with st.expander("[SEARCH] Detaillierte Statistiken", expanded=False):
         col_a, col_b, col_c = st.columns(3)
         
         with col_a:
@@ -167,7 +167,7 @@ def render_statistics_section():
         st.divider()
         
         # Preisstatistiken
-        st.subheader("💰 Preisstatistiken")
+        st.subheader("[MONEY] Preisstatistiken")
         price_stats = stats['price_statistics']
         
         col_x, col_y, col_z = st.columns(3)
@@ -195,7 +195,7 @@ def render_search_and_filter():
         st.session_state.search_query = search_query
     
     with col2:
-        if st.button("🔍 Suchen", use_container_width=True):
+        if st.button("[SEARCH] Suchen", use_container_width=True):
             st.rerun()
     
     col_a, col_b, col_c = st.columns(3)
@@ -328,7 +328,7 @@ def render_components_table():
             key="delete_component_id"
         )
         
-        if st.button("🗑️ Löschen", use_container_width=True, type="secondary"):
+        if st.button("[DELETE] Löschen", use_container_width=True, type="secondary"):
             if delete_component(delete_id, soft_delete=True):
                 st.success(f"Komponente #{delete_id} wurde gelöscht.")
                 st.rerun()
@@ -382,7 +382,7 @@ def render_create_form():
             notes = st.text_area("Notizen", placeholder="Zusätzliche Informationen...", key="new_notes")
         
         # Spezifikationen als JSON
-        st.subheader("🔧 Technische Spezifikationen (JSON)")
+        st.subheader("[TOOL] Technische Spezifikationen (JSON)")
         specifications_json = st.text_area(
             "Spezifikationen",
             placeholder='{"max_load": "5kN", "temp_range": "-40 bis +85°C"}',
@@ -404,7 +404,7 @@ def render_create_form():
             submitted = st.form_submit_button("💾 Speichern", use_container_width=True, type="primary")
         
         with col_cancel:
-            cancelled = st.form_submit_button("❌ Abbrechen", use_container_width=True)
+            cancelled = st.form_submit_button("[ERROR] Abbrechen", use_container_width=True)
         
         if cancelled:
             st.session_state.show_create_form = False
@@ -450,7 +450,7 @@ def render_create_form():
                 # In DB speichern
                 try:
                     component_id = create_component(component_data)
-                    st.success(f"✅ Komponente #{component_id} wurde erfolgreich erstellt!")
+                    st.success(f"[OK] Komponente #{component_id} wurde erfolgreich erstellt!")
                     st.session_state.show_create_form = False
                     st.rerun()
                 except Exception as e:
@@ -504,7 +504,7 @@ def render_edit_form():
             notes = st.text_area("Notizen", value=component.get('notes', '') or '')
         
         # Spezifikationen
-        st.subheader("🔧 Technische Spezifikationen (JSON)")
+        st.subheader("[TOOL] Technische Spezifikationen (JSON)")
         current_specs = component.get('specifications', {})
         specifications_json = st.text_area(
             "Spezifikationen",
@@ -543,7 +543,7 @@ def render_edit_form():
             submitted = st.form_submit_button("💾 Speichern", use_container_width=True, type="primary")
         
         with col_cancel:
-            cancelled = st.form_submit_button("❌ Abbrechen", use_container_width=True)
+            cancelled = st.form_submit_button("[ERROR] Abbrechen", use_container_width=True)
         
         if cancelled:
             st.session_state.show_edit_form = False
@@ -589,7 +589,7 @@ def render_edit_form():
             # Aktualisieren
             try:
                 if update_component(component_id, update_data):
-                    st.success(f"✅ Komponente #{component_id} wurde erfolgreich aktualisiert!")
+                    st.success(f"[OK] Komponente #{component_id} wurde erfolgreich aktualisiert!")
                     st.session_state.show_edit_form = False
                     st.session_state.selected_component_id = None
                     st.rerun()
@@ -618,7 +618,7 @@ def render_import_export_section():
         if uploaded_file:
             st.info(f"Datei: **{uploaded_file.name}** ({uploaded_file.size:,} Bytes)")
             
-            if st.button(f"🚀 {import_format} importieren", type="primary"):
+            if st.button(f"[LAUNCH] {import_format} importieren", type="primary"):
                 with st.spinner("Importiere Daten..."):
                     # Temporäre Datei speichern
                     temp_path = Path(f"temp_import.{import_format.lower()}")
@@ -639,7 +639,7 @@ def render_import_export_section():
                             if len(errors) > 10:
                                 st.info(f"... und {len(errors) - 10} weitere Fehler")
                         
-                        st.success(f"✅ {count} Komponenten erfolgreich importiert!")
+                        st.success(f"[OK] {count} Komponenten erfolgreich importiert!")
                         
                     except Exception as e:
                         st.error(f"Import-Fehler: {e}")
@@ -649,7 +649,7 @@ def render_import_export_section():
                         if temp_path.exists():
                             temp_path.unlink()
         
-        with st.expander("ℹ️ CSV/Excel Format-Anforderungen", expanded=False):
+        with st.expander("[INFO] CSV/Excel Format-Anforderungen", expanded=False):
             st.markdown("""
             **Pflichtfelder:**
             - `manufacturer`: Hersteller
@@ -710,7 +710,7 @@ def render_import_export_section():
                     success = export_to_excel(filename, filters=export_filters if export_filters else None)
                 
                 if success:
-                    st.success(f"✅ Export erfolgreich: **{filename}**")
+                    st.success(f"[OK] Export erfolgreich: **{filename}**")
                     
                     # Download-Button
                     with open(filename, 'rb') as f:
@@ -733,12 +733,12 @@ def main():
     """Hauptfunktion der Streamlit-App."""
     st.set_page_config(
         page_title="PV-Unterkonstruktions-Verwaltung",
-        page_icon="🔧",
+        page_icon="[TOOL]",
         layout="wide",
         initial_sidebar_state="expanded"
     )
     
-    st.title("🔧 PV-Unterkonstruktions-Verwaltung")
+    st.title("[TOOL] PV-Unterkonstruktions-Verwaltung")
     st.caption("Admin-Panel für PV-Montagekomponenten-Datenbank")
     
     # Session State initialisieren
@@ -751,7 +751,7 @@ def main():
         page = st.radio(
             "Bereich wählen",
             [
-                "📊 Dashboard",
+                "[CHART] Dashboard",
                 "📋 Komponenten verwalten",
                 "➕ Neue Komponente",
                 "📥 📤 Import/Export"
@@ -762,12 +762,12 @@ def main():
         st.divider()
         
         # Quick Actions
-        st.subheader("⚡ Quick Actions")
+        st.subheader("[POWER] Quick Actions")
         
         if st.button("🔄 Daten aktualisieren", use_container_width=True):
             st.rerun()
         
-        if st.button("🗑️ Filter zurücksetzen", use_container_width=True):
+        if st.button("[DELETE] Filter zurücksetzen", use_container_width=True):
             st.session_state.search_query = ""
             st.session_state.filter_manufacturer = "Alle"
             st.session_state.filter_roof_type = "Alle"
@@ -775,7 +775,7 @@ def main():
             st.rerun()
     
     # Hauptinhalt
-    if page == "📊 Dashboard":
+    if page == "[CHART] Dashboard":
         render_statistics_section()
         st.divider()
         st.subheader("📋 Alle Komponenten (Übersicht)")

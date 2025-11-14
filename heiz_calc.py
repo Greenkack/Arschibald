@@ -37,7 +37,10 @@ def radiator_required_flow_temp(required_heat_kw: float, room_temp_c: float = 20
                                 oversizing_factor: float = 1.15, exponent_n: float = 1.30) -> Dict[str, float]:
     t_mean_old = (design_flow_c + design_return_c)/2.0
     delta_old = max(1.0, t_mean_old - room_temp_c)
-    delta_new = delta_old * (1.0/oversizing_factor)**(1.0/exponent_n)
+    if oversizing_factor != 0:
+        delta_new = delta_old * (1.0/oversizing_factor)**(1.0/exponent_n)
+    else:
+        delta_new = 0.0
     t_mean_new = room_temp_c + delta_new
     return {"required_flow_c": round(t_mean_new+5,1), "required_return_c": round(t_mean_new-5,1), "delta_new": round(delta_new,1)}
 
@@ -56,17 +59,26 @@ def economics_heatpump(annual_heat_kwh: float, scop: float, electricity_price_eu
                        investment_cost_eur: float, subsidy_rate: float = 0.0,
                        carbon_price_eur_per_ton: float = 0.0) -> Dict[str, Any]:
     scop = max(1.0, scop)
-    wp_strom_kwh = annual_heat_kwh / scop
+    if scop != 0:
+        wp_strom_kwh = annual_heat_kwh / scop
+    else:
+        wp_strom_kwh = 0.0
     wp_kosten = wp_strom_kwh * electricity_price_eur_per_kwh
 
     eff = min(1.0, max(0.5, alt_system_efficiency))
-    alt_end_kwh = annual_heat_kwh / eff
+    if eff != 0:
+        alt_end_kwh = annual_heat_kwh / eff
+    else:
+        alt_end_kwh = 0.0
     alt_kosten = alt_end_kwh * alt_fuel_price_eur_per_kwh
 
     einsparung = alt_kosten - wp_kosten
     subsidy_rate = min(0.8, max(0.0, subsidy_rate))
     netto_invest = investment_cost_eur * (1.0 - subsidy_rate)
-    payback = round(netto_invest / einsparung, 1) if einsparung > 0 else None
+    if einsparung != 0:
+        payback = round(netto_invest / einsparung, 1) if einsparung > 0 else None
+    else:
+        payback = 0.0
 
     co2_alt_t = (alt_end_kwh * FUEL_CO2.get(alt_fuel,0.0))/1000.0
     co2_wp_t  = (wp_strom_kwh * FUEL_CO2["Strom"])/1000.0

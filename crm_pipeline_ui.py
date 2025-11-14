@@ -15,6 +15,20 @@ try:
 except ImportError:
     DATABASE_AVAILABLE = False
 
+# Lead Scoring Integration
+try:
+    from crm.features.lead_scoring import (
+        create_lead_scoring_tables,
+        initialize_default_scoring_rules,
+        update_lead_score,
+        get_high_score_leads,
+        check_high_score_notifications
+    )
+    from crm.features.lead_scoring_ui import render_lead_score_badge
+    LEAD_SCORING_AVAILABLE = True
+except ImportError:
+    LEAD_SCORING_AVAILABLE = False
+
 
 class CRMPipeline:
     """CRM Pipeline Management für Sales-Prozess"""
@@ -104,7 +118,7 @@ class CRMPipeline:
 
     def _render_pipeline_overview(self):
         """Rendert die Pipeline-Übersicht im Kanban-Stil"""
-        st.subheader("🎯 Pipeline-Übersicht")
+        st.subheader("[TARGET] Pipeline-Übersicht")
 
         # Pipeline-Statistiken mit modernen Cards
         stats = self._get_pipeline_statistics()
@@ -216,13 +230,13 @@ class CRMPipeline:
 
         # Geschlossene Deals (separate Sektion)
         st.markdown("---")
-        st.subheader("🏆 Geschlossene Deals (letzte 30 Tage)")
+        st.subheader("[WINNER] Geschlossene Deals (letzte 30 Tage)")
 
         col1, col2 = st.columns(2)
 
         with col1:
             won_leads = self._get_recent_closed_leads('won')
-            st.markdown("### ✅ Gewonnene Aufträge")
+            st.markdown("### [OK] Gewonnene Aufträge")
             if won_leads:
                 for lead in won_leads[:3]:
                     st.markdown(f"""
@@ -242,7 +256,7 @@ class CRMPipeline:
 
         with col2:
             lost_leads = self._get_recent_closed_leads('lost')
-            st.markdown("### ❌ Verlorene Aufträge")
+            st.markdown("### [ERROR] Verlorene Aufträge")
             if lost_leads:
                 for lead in lost_leads[:3]:
                     st.markdown(f"""
@@ -267,8 +281,23 @@ class CRMPipeline:
             datetime.fromisoformat(
                 lead['stage_changed_at'])).days
 
+        # Score Badge Farbe bestimmen
+        score = lead.get('score', 0)
+        if score >= 80:
+            score_color = "#10B981"
+            score_label = "🔥"
+        elif score >= 60:
+            score_color = "#F59E0B"
+            score_label = "[POWER]"
+        elif score >= 40:
+            score_color = "#3B82F6"
+            score_label = "[CHART]"
+        else:
+            score_color = "#6B7280"
+            score_label = "❄️"
+
         with st.container():
-            # Moderne Lead-Karte
+            # Moderne Lead-Karte mit Score
             st.markdown(f"""
                 <div style="
                     background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
@@ -279,8 +308,19 @@ class CRMPipeline:
                     margin: 8px 0;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
                     color: white;
+                    position: relative;
                 ">
-                    <h5 style="margin: 0 0 8px 0; font-size: 0.95em;">
+                    <div style="position: absolute; top: 8px; right: 8px;">
+                        <span style="
+                            background: {score_color};
+                            color: white;
+                            padding: 4px 8px;
+                            border-radius: 12px;
+                            font-weight: bold;
+                            font-size: 0.75em;
+                        ">{score_label} {score}</span>
+                    </div>
+                    <h5 style="margin: 0 0 8px 0; font-size: 0.95em; padding-right: 50px;">
                         🏢 {lead['company_name']}
                     </h5>
                     <div style="margin: 5px 0; font-size: 0.8em;">
@@ -290,7 +330,7 @@ class CRMPipeline:
                             padding: 3px 8px;
                             border-radius: 12px;
                             font-weight: bold;
-                        ">💰 {lead['estimated_value']:,.0f} €</span>
+                        ">[MONEY] {lead['estimated_value']:,.0f} €</span>
                     </div>
                     <p style="margin: 8px 0 0 0; font-size: 0.75em; opacity: 0.8;">
                         ⏱️ {days_in_stage} Tage in Stufe
@@ -424,18 +464,26 @@ class CRMPipeline:
             )
 
         with col3:
+            sort_options = [
+                'created_at',
+                'estimated_value',
+                'probability',
+                'expected_close_date'
+            ]
+            
+            # Füge Score-Sortierung hinzu wenn verfügbar
+            if LEAD_SCORING_AVAILABLE:
+                sort_options.insert(0, 'score')
+            
             sort_by = st.selectbox(
                 "Sortieren nach",
-                options=[
-                    'created_at',
-                    'estimated_value',
-                    'probability',
-                    'expected_close_date'],
+                options=sort_options,
                 format_func=lambda x: {
+                    'score': '[TARGET] Lead Score',
                     'created_at': 'Erstellungsdatum',
                     'estimated_value': 'Auftragswert',
                     'probability': 'Wahrscheinlichkeit',
-                    'expected_close_date': 'Erwartetes Datum'}[x])
+                    'expected_close_date': 'Erwartetes Datum'}.get(x, x))
 
         # Leads laden und anzeigen
         leads = self._get_filtered_leads(stage_filter, source_filter, sort_by)
@@ -857,6 +905,14 @@ class CRMPipeline:
             conn = get_db_connection()
             cursor = conn.cursor()
 
+            # Initialisiere Lead Scoring Tabellen falls nötig
+            if LEAD_SCORING_AVAILABLE:
+                try:
+                    create_lead_scoring_tables(conn)
+                    initialize_default_scoring_rules(conn)
+                except Exception as e:
+                    print(f"Lead Scoring Initialisierung: {e}")
+
             cursor.execute('''
                 INSERT INTO crm_leads
                 (company_name, contact_person, email, phone, address, lead_source,
@@ -876,7 +932,16 @@ class CRMPipeline:
                 lead_data['notes']
             ))
 
+            lead_id = cursor.lastrowid
             conn.commit()
+            
+            # Berechne initialen Score
+            if LEAD_SCORING_AVAILABLE and lead_id:
+                try:
+                    update_lead_score(conn, lead_id, "Lead created")
+                except Exception as e:
+                    print(f"Fehler beim Berechnen des Lead-Scores: {e}")
+            
             conn.close()
             return True
 
@@ -897,6 +962,14 @@ class CRMPipeline:
             ''', (new_stage, lead_id))
 
             conn.commit()
+            
+            # Aktualisiere Score nach Stage-Änderung
+            if LEAD_SCORING_AVAILABLE:
+                try:
+                    update_lead_score(conn, lead_id, f"Stage changed to {new_stage}")
+                except Exception as e:
+                    print(f"Fehler beim Aktualisieren des Lead-Scores: {e}")
+            
             conn.close()
             return True
 

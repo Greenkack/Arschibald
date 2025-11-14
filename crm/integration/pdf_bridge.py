@@ -163,7 +163,7 @@ def auto_save_pdf_to_customer_documents(
         Dokument-ID bei Erfolg, None bei Fehler
     """
     try:
-        from database import add_customer_document
+        from database import add_customer_document, get_db_connection
         
         # Prüfen ob Datei existiert
         if not os.path.exists(pdf_path):
@@ -220,6 +220,38 @@ def auto_save_pdf_to_customer_documents(
             print(f"  • Typ: {metadata['doc_type']}")
             print(f"  • Version: {version}")
             print(f"  • Größe: {metadata['file_size'] / 1024:.1f} KB")
+            
+            # Automatische Angebotsstatus-Aktualisierung bei Angebots-PDFs
+            if metadata['doc_type'] == 'offer_pdf' and project_id:
+                try:
+                    from crm.features.offer_tracker import update_offer_status
+                    
+                    conn = get_db_connection()
+                    if conn:
+                        # Ermittle Angebotswert aus offer_data falls vorhanden
+                        offer_value = None
+                        if offer_data:
+                            offer_value = offer_data.get('total_cost') or offer_data.get('offer_value')
+                        
+                        # Aktualisiere Status auf "sent" mit automatischem Follow-up
+                        success = update_offer_status(
+                            conn,
+                            project_id,
+                            'sent',
+                            offer_value=offer_value,
+                            offer_version=version
+                        )
+                        
+                        if success:
+                            print(f"PDF Bridge: Angebotsstatus automatisch auf 'sent' aktualisiert")
+                            print(f"  • Follow-up-Erinnerung in 7 Tagen erstellt")
+                        
+                        conn.close()
+                        
+                except ImportError:
+                    print("PDF Bridge: Offer Tracker nicht verfügbar, Status-Update übersprungen")
+                except Exception as e:
+                    print(f"PDF Bridge: Fehler bei automatischer Status-Aktualisierung: {e}")
         else:
             print(f"PDF Bridge: Fehler beim Speichern des PDFs")
         
@@ -354,7 +386,7 @@ def show_customer_assignment_dialog() -> Optional[int]:
         import streamlit as st
         from database import get_db_connection
         
-        st.warning("⚠️ Kein Kunde zugeordnet - PDF wird nicht automatisch archiviert")
+        st.warning("[WARNING] Kein Kunde zugeordnet - PDF wird nicht automatisch archiviert")
         
         with st.expander("📋 Kunde für PDF-Archivierung auswählen", expanded=False):
             st.info("Wählen Sie einen Kunden aus, um das PDF automatisch in der Kundenakte zu speichern.")
@@ -390,7 +422,7 @@ def show_customer_assignment_dialog() -> Optional[int]:
                     key="pdf_customer_assignment"
                 )
                 
-                if st.button("✅ Kunde zuordnen und PDF archivieren", key="assign_customer_pdf"):
+                if st.button("[OK] Kunde zuordnen und PDF archivieren", key="assign_customer_pdf"):
                     customer_id = customer_options[selected_customer]
                     st.success(f"Kunde zugeordnet: {selected_customer}")
                     return customer_id

@@ -607,7 +607,10 @@ def render_product_management(
             base_dir = Path("data")/"imports"/"mixed"/ts
             base_dir.mkdir(parents=True, exist_ok=True)
             for f in generic_files_pm:
-                out = base_dir / f.name
+                if f != 0:
+                    out = base_dir / f.name
+                else:
+                    out = 0.0
                 with open(out, 'wb') as w:
                     w.write(f.getbuffer())
             summary_any = import_any_from_path(str(base_dir), default_category=sel_category_any)

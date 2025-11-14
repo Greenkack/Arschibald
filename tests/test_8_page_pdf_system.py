@@ -50,7 +50,7 @@ def test_generate_8_page_pdf():
         # Verify overlay page count
         overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
         overlay_page_count = len(overlay_reader.pages)
-        print(f"   ✓ Overlay generated with {overlay_page_count} pages")
+        print(f"   [OK] Overlay generated with {overlay_page_count} pages")
         
         assert overlay_page_count == 8, f"Expected 8 pages in overlay, got {overlay_page_count}"
         
@@ -60,7 +60,7 @@ def test_generate_8_page_pdf():
         # Verify final page count
         final_reader = PdfReader(io.BytesIO(final_pdf_bytes))
         final_page_count = len(final_reader.pages)
-        print(f"   ✓ Final PDF generated with {final_page_count} pages")
+        print(f"   [OK] Final PDF generated with {final_page_count} pages")
         
         assert final_page_count == 8, f"Expected 8 pages in final PDF, got {final_page_count}"
         
@@ -71,13 +71,13 @@ def test_generate_8_page_pdf():
         print(f"\n3. Test PDF saved to: {output_path}")
         
         print(f"\n{'='*70}")
-        print("✓ TEST 9.1 PASSED: 8-page PDF generation works correctly!")
+        print("[OK] TEST 9.1 PASSED: 8-page PDF generation works correctly!")
         print(f"{'='*70}\n")
         
         return True
         
     except Exception as e:
-        print(f"\n✗ TEST 9.1 FAILED: {e}")
+        print(f"\n[ERROR] TEST 9.1 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -126,7 +126,7 @@ def test_page_content_placement():
         
         print(f"\n2. Verifying page count...")
         assert len(pdf_reader.pages) == 8, f"Expected 8 pages, got {len(pdf_reader.pages)}"
-        print(f"   ✓ PDF has exactly 8 pages")
+        print(f"   [OK] PDF has exactly 8 pages")
         
         # Extract text from each page
         print(f"\n3. Extracting text from pages...")
@@ -135,7 +135,7 @@ def test_page_content_placement():
             try:
                 text = page.extract_text()
                 page_texts.append(text)
-                print(f"   ✓ Page {i+1}: {len(text)} characters extracted")
+                print(f"   [OK] Page {i+1}: {len(text)} characters extracted")
             except Exception as e:
                 print(f"   ⚠ Page {i+1}: Could not extract text ({e})")
                 page_texts.append("")
@@ -144,30 +144,30 @@ def test_page_content_placement():
         print(f"\n4. Verifying page 1 (new page)...")
         page1_text = page_texts[0] if page_texts else ""
         # Page 1 should exist (even if empty/placeholder)
-        print(f"   ✓ Page 1 exists (new page)")
+        print(f"   [OK] Page 1 exists (new page)")
         
         # Verify page 2 (old page 1) - should have offer title
         print(f"\n5. Verifying page 2 (old page 1 content)...")
         page2_text = page_texts[1] if len(page_texts) > 1 else ""
         # Look for typical page 1 content markers
         # Note: Text extraction from PDF may not be perfect, so we check for existence
-        print(f"   ✓ Page 2 exists (old page 1 content)")
+        print(f"   [OK] Page 2 exists (old page 1 content)")
         if "ANGEBOT" in page2_text.upper() or "PERSÖNLICH" in page2_text.upper():
-            print(f"   ✓ Page 2 contains expected offer text")
+            print(f"   [OK] Page 2 contains expected offer text")
         else:
             print(f"   ⚠ Page 2 text extraction may be incomplete (this is common with PDF text extraction)")
         
         # Verify page 4 (old page 3) - should have waterfall chart
         print(f"\n6. Verifying page 4 (old page 3 - waterfall chart)...")
         page4_text = page_texts[3] if len(page_texts) > 3 else ""
-        print(f"   ✓ Page 4 exists (old page 3 content)")
+        print(f"   [OK] Page 4 exists (old page 3 content)")
         # Waterfall chart is drawn programmatically, so text extraction may not capture it
         # The important thing is that the page exists and the function was called
         
         # Verify page 7 (old page 6) - should have storage donuts
         print(f"\n7. Verifying page 7 (old page 6 - storage donuts)...")
         page7_text = page_texts[6] if len(page_texts) > 6 else ""
-        print(f"   ✓ Page 7 exists (old page 6 content)")
+        print(f"   [OK] Page 7 exists (old page 6 content)")
         # Storage donuts are drawn programmatically
         
         # Save test PDF for manual inspection
@@ -182,13 +182,13 @@ def test_page_content_placement():
         print(f"      - Page 7 shows storage donuts")
         
         print(f"\n{'='*70}")
-        print("✓ TEST 9.2 PASSED: Page content placement verified!")
+        print("[OK] TEST 9.2 PASSED: Page content placement verified!")
         print(f"{'='*70}\n")
         
         return True
         
     except Exception as e:
-        print(f"\n✗ TEST 9.2 FAILED: {e}")
+        print(f"\n[ERROR] TEST 9.2 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -216,12 +216,15 @@ def test_all_page_files_exist():
     print("\n1. Checking normal coordinate files (coords/seiteX.yml)...")
     coords_dir = Path("coords")
     for page_num in range(1, 9):
-        coords_file = coords_dir / f"seite{page_num}.yml"
+        if f != 0:
+            coords_file = coords_dir / f"seite{page_num}.yml"
+        else:
+            coords_file = 0.0
         if coords_file.exists():
             size = coords_file.stat().st_size
-            print(f"   ✓ {coords_file.name} exists ({size:,} bytes)")
+            print(f"   [OK] {coords_file.name} exists ({size:,} bytes)")
         else:
-            print(f"   ✗ {coords_file.name} MISSING")
+            print(f"   [ERROR] {coords_file.name} MISSING")
             all_files_exist = False
             missing_files.append(str(coords_file))
     
@@ -229,12 +232,15 @@ def test_all_page_files_exist():
     print("\n2. Checking heatpump coordinate files (coords_wp/wp_seiteX.yml)...")
     coords_wp_dir = Path("coords_wp")
     for page_num in range(1, 9):
-        coords_file = coords_wp_dir / f"wp_seite{page_num}.yml"
+        if f != 0:
+            coords_file = coords_wp_dir / f"wp_seite{page_num}.yml"
+        else:
+            coords_file = 0.0
         if coords_file.exists():
             size = coords_file.stat().st_size
-            print(f"   ✓ {coords_file.name} exists ({size:,} bytes)")
+            print(f"   [OK] {coords_file.name} exists ({size:,} bytes)")
         else:
-            print(f"   ✗ {coords_file.name} MISSING")
+            print(f"   [ERROR] {coords_file.name} MISSING")
             all_files_exist = False
             missing_files.append(str(coords_file))
     
@@ -242,35 +248,41 @@ def test_all_page_files_exist():
     print("\n3. Checking normal PDF templates (pdf_templates_static/notext/nt_nt_XX.pdf)...")
     template_dir = Path("pdf_templates_static/notext")
     for page_num in range(1, 9):
-        template_file = template_dir / f"nt_nt_{page_num:02d}.pdf"
+        if f != 0:
+            template_file = template_dir / f"nt_nt_{page_num:02d}.pdf"
+        else:
+            template_file = 0.0
         if template_file.exists():
             size = template_file.stat().st_size
-            print(f"   ✓ {template_file.name} exists ({size:,} bytes)")
+            print(f"   [OK] {template_file.name} exists ({size:,} bytes)")
         else:
-            print(f"   ✗ {template_file.name} MISSING")
+            print(f"   [ERROR] {template_file.name} MISSING")
             all_files_exist = False
             missing_files.append(str(template_file))
     
     # Check heatpump PDF templates (hp_nt_01.pdf - hp_nt_08.pdf)
     print("\n4. Checking heatpump PDF templates (pdf_templates_static/notext/hp_nt_XX.pdf)...")
     for page_num in range(1, 9):
-        template_file = template_dir / f"hp_nt_{page_num:02d}.pdf"
+        if f != 0:
+            template_file = template_dir / f"hp_nt_{page_num:02d}.pdf"
+        else:
+            template_file = 0.0
         if template_file.exists():
             size = template_file.stat().st_size
-            print(f"   ✓ {template_file.name} exists ({size:,} bytes)")
+            print(f"   [OK] {template_file.name} exists ({size:,} bytes)")
         else:
-            print(f"   ✗ {template_file.name} MISSING")
+            print(f"   [ERROR] {template_file.name} MISSING")
             all_files_exist = False
             missing_files.append(str(template_file))
     
     # Summary
     print(f"\n{'='*70}")
     if all_files_exist:
-        print("✓ TEST 9.3 PASSED: All required files exist!")
+        print("[OK] TEST 9.3 PASSED: All required files exist!")
         print(f"{'='*70}\n")
         return True
     else:
-        print(f"✗ TEST 9.3 FAILED: {len(missing_files)} files are missing:")
+        print(f"[ERROR] TEST 9.3 FAILED: {len(missing_files)} files are missing:")
         for missing_file in missing_files:
             print(f"   - {missing_file}")
         print(f"{'='*70}\n")
@@ -293,7 +305,7 @@ def test_renamed_functions_exist():
     try:
         print("\n1. Importing dynamic_overlay module...")
         from pdf_template_engine import dynamic_overlay
-        print("   ✓ Module imported successfully")
+        print("   [OK] Module imported successfully")
         
         # List of expected renamed functions
         expected_functions = {
@@ -322,13 +334,13 @@ def test_renamed_functions_exist():
             if hasattr(dynamic_overlay, func_name):
                 func = getattr(dynamic_overlay, func_name)
                 if callable(func):
-                    print(f"   ✓ {func_name} exists - {description}")
+                    print(f"   [OK] {func_name} exists - {description}")
                 else:
-                    print(f"   ✗ {func_name} exists but is not callable")
+                    print(f"   [ERROR] {func_name} exists but is not callable")
                     all_functions_exist = False
                     missing_functions.append(func_name)
             else:
-                print(f"   ✗ {func_name} MISSING - {description}")
+                print(f"   [ERROR] {func_name} MISSING - {description}")
                 all_functions_exist = False
                 missing_functions.append(func_name)
         
@@ -360,7 +372,7 @@ def test_renamed_functions_exist():
                 try:
                     func = getattr(dynamic_overlay, func_name)
                     func(c, test_data, page_width, page_height)
-                    print(f"   ✓ {func_name} can be called successfully")
+                    print(f"   [OK] {func_name} can be called successfully")
                 except Exception as e:
                     print(f"   ⚠ {func_name} raised exception: {e}")
                     # This is acceptable - the function exists and can be called,
@@ -369,18 +381,18 @@ def test_renamed_functions_exist():
         # Summary
         print(f"\n{'='*70}")
         if all_functions_exist:
-            print("✓ TEST 9.4 PASSED: All renamed functions exist and are callable!")
+            print("[OK] TEST 9.4 PASSED: All renamed functions exist and are callable!")
             print(f"{'='*70}\n")
             return True
         else:
-            print(f"✗ TEST 9.4 FAILED: {len(missing_functions)} functions are missing:")
+            print(f"[ERROR] TEST 9.4 FAILED: {len(missing_functions)} functions are missing:")
             for missing_func in missing_functions:
                 print(f"   - {missing_func}")
             print(f"{'='*70}\n")
             return False
         
     except Exception as e:
-        print(f"\n✗ TEST 9.4 FAILED: {e}")
+        print(f"\n[ERROR] TEST 9.4 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -415,7 +427,7 @@ def run_all_tests():
     total = len(results)
     
     for test_id, result in results.items():
-        status = "✓ PASSED" if result else "✗ FAILED"
+        status = "[OK] PASSED" if result else "[ERROR] FAILED"
         print(f"  Test {test_id}: {status}")
     
     print(f"\n{passed}/{total} tests passed")

@@ -264,7 +264,7 @@ def render_brand_logo_admin_ui():
 
     # Tabs für verschiedene Aktionen
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📋 Übersicht", "➕ Hinzufügen", "✏️ Bearbeiten", "🔧 Tools"])
+        ["📋 Übersicht", "➕ Hinzufügen", "✏️ Bearbeiten", "[TOOL] Tools"])
 
     with tab1:
         st.subheader("Logo-Übersicht")
@@ -310,7 +310,7 @@ def render_brand_logo_admin_ui():
                             st.rerun()
                     with col2:
                         if st.button(
-                                "🗑️",
+                                "[DELETE]",
                                 key=f"delete_{
                                     brand['id']}",
                                 help="Löschen"):

@@ -55,7 +55,7 @@ def run_test_suite(test_file, suite_name):
             "error": "Timeout after 5 minutes"
         }
     except Exception as e:
-        print(f"✗ Error running {suite_name}: {e}")
+        print(f"[ERROR] Error running {suite_name}: {e}")
         return {
             "suite": suite_name,
             "passed": False,
@@ -97,7 +97,7 @@ def print_summary(report):
     print("-" * 80)
 
     for result in report["results"]:
-        status = "✓ PASSED" if result["passed"] else "✗ FAILED"
+        status = "[OK] PASSED" if result["passed"] else "[ERROR] FAILED"
         print(f"{status:12} - {result['suite']}")
 
     print("-" * 80)
@@ -152,7 +152,7 @@ def main():
     with open(report_file, "w") as f:
         json.dump(report, f, indent=2)
 
-    print(f"\n✓ Detailed report saved to: {report_file}")
+    print(f"\n[OK] Detailed report saved to: {report_file}")
 
     # Print summary
     print_summary(report)
@@ -171,9 +171,9 @@ def main():
     print("Documentation Check:")
     for doc in docs_to_check:
         if doc.exists():
-            print(f"  ✓ {doc.name}")
+            print(f"  [OK] {doc.name}")
         else:
-            print(f"  ✗ {doc.name} - MISSING")
+            print(f"  [ERROR] {doc.name} - MISSING")
 
     # Check required directories
     required_dirs = [
@@ -187,9 +187,9 @@ def main():
     print("\nDirectory Structure Check:")
     for dir_path in required_dirs:
         if dir_path.exists():
-            print(f"  ✓ {dir_path.relative_to(agent_dir)}")
+            print(f"  [OK] {dir_path.relative_to(agent_dir)}")
         else:
-            print(f"  ✗ {dir_path.relative_to(agent_dir)} - MISSING")
+            print(f"  [ERROR] {dir_path.relative_to(agent_dir)} - MISSING")
 
     # Check key files
     key_files = [
@@ -202,15 +202,15 @@ def main():
     print("\nKey Files Check:")
     for file_path in key_files:
         if file_path.exists():
-            print(f"  ✓ {file_path.relative_to(agent_dir)}")
+            print(f"  [OK] {file_path.relative_to(agent_dir)}")
         else:
-            print(f"  ✗ {file_path.relative_to(agent_dir)} - MISSING")
+            print(f"  [ERROR] {file_path.relative_to(agent_dir)} - MISSING")
 
     # Final verdict
     print_header("FINAL VERDICT")
 
     if report["summary"]["overall_status"] == "PASSED":
-        print("✓✓✓ ALL VALIDATION TESTS PASSED ✓✓✓")
+        print("[OK][OK][OK] ALL VALIDATION TESTS PASSED [OK][OK][OK]")
         print("\nThe KAI Agent integration is ready for deployment!")
         print("\nNext Steps:")
         print("  1. Review the detailed report: final_validation_report.json")
@@ -219,7 +219,7 @@ def main():
         print("  4. Build Docker sandbox: python build_sandbox.py")
         print("  5. Set up knowledge base: python setup_knowledge_base.py")
         return 0
-    print("✗✗✗ VALIDATION FAILED ✗✗✗")
+    print("[ERROR][ERROR][ERROR] VALIDATION FAILED [ERROR][ERROR][ERROR]")
     print("\nSome tests did not pass. Please review the output above.")
     print("Check the detailed report: final_validation_report.json")
     return 1

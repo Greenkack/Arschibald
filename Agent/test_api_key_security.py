@@ -29,7 +29,7 @@ def test_env_file_security():
 
     is_secure, warnings = validate_env_file_security()
 
-    print(f"Security status: {'✅ SECURE' if is_secure else '⚠️  WARNINGS'}")
+    print(f"Security status: {'[OK] SECURE' if is_secure else '[WARNING]  WARNINGS'}")
     if warnings:
         print("Warnings:")
         for warning in warnings:
@@ -41,12 +41,12 @@ def test_env_file_security():
         with open(gitignore_path, encoding='utf-8') as f:
             content = f.read()
             if '.env' in content:
-                print("✅ .env is in .gitignore")
+                print("[OK] .env is in .gitignore")
                 return True
-            print("❌ .env is NOT in .gitignore")
+            print("[ERROR] .env is NOT in .gitignore")
             return False
     else:
-        print("⚠️  .gitignore not found")
+        print("[WARNING]  .gitignore not found")
         return False
 
 
@@ -74,10 +74,10 @@ def test_api_key_format_validation():
 
         if is_valid == should_pass:
             print(
-                f"✅ {key_name}: {key_value[:10]}... - {'Valid' if is_valid else 'Invalid'}")
+                f"[OK] {key_name}: {key_value[:10]}... - {'Valid' if is_valid else 'Invalid'}")
         else:
             print(
-                f"❌ {key_name}: {key_value[:10]}... - Expected {'valid' if should_pass else 'invalid'}, got {'valid' if is_valid else 'invalid'}")
+                f"[ERROR] {key_name}: {key_value[:10]}... - Expected {'valid' if should_pass else 'invalid'}, got {'valid' if is_valid else 'invalid'}")
             if error_msg:
                 print(f"   Error: {error_msg}")
             all_passed = False
@@ -106,15 +106,15 @@ def test_sensitive_data_masking():
         # Check if sensitive part is masked
         if "***" in masked or "[REDACTED" in masked or len(
                 masked) < len(original):
-            print(f"✅ Masked: {original[:30]}...")
+            print(f"[OK] Masked: {original[:30]}...")
             print(f"   Result: {masked[:50]}...")
         else:
-            print(f"❌ NOT masked: {original[:30]}...")
+            print(f"[ERROR] NOT masked: {original[:30]}...")
             print(f"   Result: {masked[:50]}...")
             all_passed = False
 
     # Phone masking is optional (not critical for API keys)
-    print("\nℹ️  Note: Phone number masking is optional and not critical for API key security")
+    print("\n[INFO]  Note: Phone number masking is optional and not critical for API key security")
 
     return all_passed
 
@@ -127,7 +127,7 @@ def test_no_key_logging():
 
     try:
         from Agent.agent.logging_config import SensitiveDataFilter
-        print("✅ SensitiveDataFilter class is available")
+        print("[OK] SensitiveDataFilter class is available")
 
         # Test the filter
         filter_obj = SensitiveDataFilter()
@@ -149,14 +149,14 @@ def test_no_key_logging():
 
         # Check if message was redacted
         if "[REDACTED" in record.msg or "sk-" not in record.msg:
-            print("✅ SensitiveDataFilter correctly redacts API keys")
+            print("[OK] SensitiveDataFilter correctly redacts API keys")
             return True
-        print("❌ SensitiveDataFilter did not redact API key")
+        print("[ERROR] SensitiveDataFilter did not redact API key")
         print(f"   Message: {record.msg}")
         return False
 
     except Exception as e:
-        print(f"❌ Error testing logging filter: {e}")
+        print(f"[ERROR] Error testing logging filter: {e}")
         return False
 
 
@@ -170,14 +170,14 @@ def test_startup_security_validation():
 
     print(
         f"Validation status: {
-            '✅ PASSED' if is_valid else '⚠️  ISSUES FOUND'}")
+            '[OK] PASSED' if is_valid else '[WARNING]  ISSUES FOUND'}")
 
     if issues:
         print("Issues:")
         for issue in issues:
             print(f"  {issue}")
     else:
-        print("✅ No security issues detected")
+        print("[OK] No security issues detected")
 
     # This test passes if validation runs without errors
     # (it may find issues, but that's expected if keys aren't configured)
@@ -193,14 +193,14 @@ def test_gitignore_entry():
     gitignore_path = Path(".gitignore")
 
     if not gitignore_path.exists():
-        print("❌ .gitignore file not found")
+        print("[ERROR] .gitignore file not found")
         return False
 
     with open(gitignore_path, encoding='utf-8') as f:
         content = f.read()
 
     if '.env' in content:
-        print("✅ .env is properly listed in .gitignore")
+        print("[OK] .env is properly listed in .gitignore")
 
         # Show the line
         for line in content.split('\n'):
@@ -208,7 +208,7 @@ def test_gitignore_entry():
                 print(f"   Line: {line}")
 
         return True
-    print("❌ .env is NOT in .gitignore")
+    print("[ERROR] .env is NOT in .gitignore")
     print("   ACTION REQUIRED: Add '.env' to .gitignore immediately!")
     return False
 
@@ -222,7 +222,7 @@ def test_env_example_exists():
     env_example_path = Path(".env.example")
 
     if not env_example_path.exists():
-        print("❌ .env.example file not found")
+        print("[ERROR] .env.example file not found")
         return False
 
     with open(env_example_path, encoding='utf-8') as f:
@@ -241,14 +241,14 @@ def test_env_example_exists():
     all_present = True
     for key in required_keys:
         if key in content:
-            print(f"✅ {key} is in .env.example")
+            print(f"[OK] {key} is in .env.example")
         else:
-            print(f"❌ {key} is NOT in .env.example")
+            print(f"[ERROR] {key} is NOT in .env.example")
             all_present = False
 
     # Check that no actual keys are in the example
     if 'sk-' in content and 'sk-...' not in content:
-        print("⚠️  WARNING: .env.example may contain actual API keys!")
+        print("[WARNING]  WARNING: .env.example may contain actual API keys!")
         all_present = False
 
     return all_present
@@ -279,7 +279,7 @@ def run_all_tests():
             passed = test_func()
             results[test_name] = passed
         except Exception as e:
-            print(f"\n❌ ERROR in {test_name}: {e}")
+            print(f"\n[ERROR] ERROR in {test_name}: {e}")
             results[test_name] = False
 
     # Summary
@@ -288,7 +288,7 @@ def run_all_tests():
     print("=" * 70)
 
     for test_name, passed in results.items():
-        status = "✅ PASS" if passed else "❌ FAIL"
+        status = "[OK] PASS" if passed else "[ERROR] FAIL"
         print(f"{status}: {test_name}")
 
     passed_count = sum(1 for p in results.values() if p)
@@ -299,10 +299,10 @@ def run_all_tests():
     print("=" * 70)
 
     if passed_count == total_count:
-        print("\n✅ ALL TESTS PASSED")
+        print("\n[OK] ALL TESTS PASSED")
         print("Task 12.3 implementation is complete and secure!")
     else:
-        print(f"\n⚠️  {total_count - passed_count} test(s) failed")
+        print(f"\n[WARNING]  {total_count - passed_count} test(s) failed")
         print("Please review the failures above.")
 
     return passed_count == total_count

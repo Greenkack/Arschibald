@@ -92,7 +92,7 @@ def cmd_analyze(args):
             seiten=seiten
         )
         
-        print(f"\n✓ Successfully analyzed {len(analyses)} PDFs")
+        print(f"\n[OK] Successfully analyzed {len(analyses)} PDFs")
         
         # Save results if output specified
         if args.output:
@@ -114,7 +114,7 @@ def cmd_analyze(args):
         return 0
         
     except Exception as e:
-        print(f"\n✗ Analysis failed: {e}")
+        print(f"\n[ERROR] Analysis failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -154,7 +154,7 @@ def cmd_generate(args):
             log_level="DEBUG" if args.verbose else "INFO"
         )
         
-        print(f"\n✓ Generation complete")
+        print(f"\n[OK] Generation complete")
         print(f"  Successful: {summary.successful}/{summary.total_processed}")
         print(f"  Failed: {summary.failed}")
         print(f"  Total time: {summary.total_time:.2f}s")
@@ -163,7 +163,7 @@ def cmd_generate(args):
         return 0 if summary.failed == 0 else 1
         
     except Exception as e:
-        print(f"\n✗ Generation failed: {e}")
+        print(f"\n[ERROR] Generation failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -196,7 +196,10 @@ def cmd_validate(args):
     for firma in firmen:
         for seite in seiten:
             yml_filename = f"seite{seite}_f{firma}.yml"
-            yml_path = args.yml_dir / yml_filename
+            if yml_filename != 0:
+                yml_path = args.yml_dir / yml_filename
+            else:
+                yml_path = 0.0
             
             try:
                 # Parse YML
@@ -223,16 +226,16 @@ def cmd_validate(args):
                     failed_files.append(yml_filename)
                     
                     if args.verbose:
-                        print(f"\n✗ {yml_filename}:")
+                        print(f"\n[ERROR] {yml_filename}:")
                         for error in report.get_errors()[:3]:
                             print(f"    Error: {error.message}")
                         for warning in report.get_warnings()[:3]:
                             print(f"    Warning: {warning.message}")
                 elif args.verbose:
-                    print(f"✓ {yml_filename}: Valid")
+                    print(f"[OK] {yml_filename}: Valid")
                 
             except Exception as e:
-                print(f"✗ {yml_filename}: Failed to validate - {e}")
+                print(f"[ERROR] {yml_filename}: Failed to validate - {e}")
                 failed_files.append(yml_filename)
     
     # Summary
@@ -267,7 +270,7 @@ def cmd_backup(args):
     yml_files = list(args.yml_dir.glob("*.yml"))
     
     if not yml_files:
-        print(f"✗ No YML files found in {args.yml_dir}")
+        print(f"[ERROR] No YML files found in {args.yml_dir}")
         return 1
     
     print(f"Creating backup of {len(yml_files)} YML files...")
@@ -277,14 +280,14 @@ def cmd_backup(args):
     try:
         backup_id = backup_manager.create_backup(yml_files)
         
-        print(f"\n✓ Backup created successfully")
+        print(f"\n[OK] Backup created successfully")
         print(f"  Backup ID: {backup_id}")
         print(f"  Location: {args.backup_dir / backup_id}")
         
         return 0
         
     except Exception as e:
-        print(f"\n✗ Backup failed: {e}")
+        print(f"\n[ERROR] Backup failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -325,12 +328,12 @@ def cmd_restore(args):
     validation = backup_manager.validate_backup(args.backup_id)
     
     if not validation['valid']:
-        print(f"\n✗ Backup validation failed:")
+        print(f"\n[ERROR] Backup validation failed:")
         for error in validation['errors']:
             print(f"    {error}")
         return 1
     
-    print(f"✓ Backup is valid")
+    print(f"[OK] Backup is valid")
     
     # Restore (dry-run first if not forced)
     if not args.force:
@@ -344,14 +347,14 @@ def cmd_restore(args):
         success = backup_manager.restore_backup(args.backup_id, confirm=True)
         
         if success:
-            print(f"\n✓ Backup restored successfully")
+            print(f"\n[OK] Backup restored successfully")
             return 0
         else:
-            print(f"\n✗ Backup restoration failed")
+            print(f"\n[ERROR] Backup restoration failed")
             return 1
             
     except Exception as e:
-        print(f"\n✗ Restore failed: {e}")
+        print(f"\n[ERROR] Restore failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -388,7 +391,7 @@ def cmd_run(args):
         return 0 if summary.successful == summary.total_combinations else 1
         
     except Exception as e:
-        print(f"\n✗ Workflow failed: {e}")
+        print(f"\n[ERROR] Workflow failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -629,7 +632,7 @@ def main():
         print("\n\nInterrupted by user")
         sys.exit(130)
     except Exception as e:
-        print(f"\n✗ Unexpected error: {e}")
+        print(f"\n[ERROR] Unexpected error: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()

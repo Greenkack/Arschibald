@@ -173,7 +173,10 @@ def calculate_dynamic_tariff_comparison(
     heat_load_kw = building_data.get("heat_load_kw", 10)
     cop = building_data.get("cop", 3.5)
     annual_heat_kwh = heat_load_kw * 1800
-    wp_electricity_kwh = annual_heat_kwh / cop
+    if cop != 0:
+        wp_electricity_kwh = annual_heat_kwh / cop
+    else:
+        wp_electricity_kwh = 0.0
     
     # Gesamt-Haushaltsverbrauch (WP + Rest)
     if heatpump_share_percent > 0:
@@ -206,7 +209,10 @@ def calculate_dynamic_tariff_comparison(
     
     # Einsparungen
     annual_savings = static_cost_total - dynamic_cost_total_with_fee
-    annual_savings_percent = (annual_savings / static_cost_total) * 100 if static_cost_total > 0 else 0
+    if static_cost_total != 0:
+        annual_savings_percent = (annual_savings / static_cost_total) * 100 if static_cost_total > 0 else 0
+    else:
+        annual_savings_percent = 0.0
     
     # Amortisation Smart-Meter
     payback_months = (smart_meter_cost_eur / (annual_savings / 12)) if annual_savings > 0 else 999
@@ -339,7 +345,10 @@ def calculate_stromcloud_economics(
     annual_savings = without_cloud_net_cost - with_cloud_net_cost
     
     # Autarkie-Grad
-    autarkie_without_cloud = (direct_consumption_kwh / annual_consumption_kwh) * 100
+    if annual_consumption_kwh != 0:
+        autarkie_without_cloud = (direct_consumption_kwh / annual_consumption_kwh) * 100
+    else:
+        autarkie_without_cloud = 0.0
     autarkie_with_cloud = ((direct_consumption_kwh + cloud_consumption_kwh) / annual_consumption_kwh) * 100
     
     return {
@@ -455,7 +464,10 @@ def simulate_energy_management_system(
     
     # OHNE EMS: Normale Steuerung
     without_ems_pv_usage = direct_consumption_kwh
-    without_ems_autarkie = (without_ems_pv_usage / total_consumption_kwh) * 100
+    if total_consumption_kwh != 0:
+        without_ems_autarkie = (without_ems_pv_usage / total_consumption_kwh) * 100
+    else:
+        without_ems_autarkie = 0.0
     without_ems_grid_consumption = total_consumption_kwh - without_ems_pv_usage
     
     # MIT EMS: Intelligente Steuerung
@@ -478,7 +490,10 @@ def simulate_energy_management_system(
         annual_pv_kwh
     )
     
-    with_ems_autarkie = (with_ems_pv_usage / total_consumption_kwh) * 100
+    if total_consumption_kwh != 0:
+        with_ems_autarkie = (with_ems_pv_usage / total_consumption_kwh) * 100
+    else:
+        with_ems_autarkie = 0.0
     with_ems_grid_consumption = total_consumption_kwh - with_ems_pv_usage
     
     # Kosten-Einsparung
@@ -488,7 +503,10 @@ def simulate_energy_management_system(
     
     # ROI
     total_investment = ems["price_eur"] + (battery_size_kwh * 1000)  # 1000 EUR/kWh Batterie
-    payback_years = total_investment / annual_savings_eur if annual_savings_eur > 0 else 999
+    if annual_savings_eur != 0:
+        payback_years = total_investment / annual_savings_eur if annual_savings_eur > 0 else 999
+    else:
+        payback_years = 0.0
     
     return {
         "ems_system": {
@@ -652,7 +670,10 @@ def calculate_smart_home_benefits(
     comfort_score_10 = avg_comfort * 10  # 0-10 Skala
     
     # ROI
-    payback_years = total_setup_cost / total_savings if total_savings > 0 else 999
+    if total_savings != 0:
+        payback_years = total_setup_cost / total_savings if total_savings > 0 else 999
+    else:
+        payback_years = 0.0
     
     # Zusätzliche Vorteile
     convenience_benefits = [
@@ -706,7 +727,7 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
     # Allgemeine Pros & Cons
     base_pros = [
         {
-            "title": "💰 Deutliche Kosteneinsparung möglich",
+            "title": "[MONEY] Deutliche Kosteneinsparung möglich",
             "description": "15-25% günstigere Stromkosten bei intelligentem Load-Shifting",
             "weight": 10,  # 1-10
             "applies_to": ["residential", "commercial", "multi_family"]
@@ -724,13 +745,13 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
             "applies_to": ["residential", "commercial"]
         },
         {
-            "title": "📊 Transparente Preise",
+            "title": "[CHART] Transparente Preise",
             "description": "Stündliche Börsenstrompreise 1:1 sichtbar (kein Anbieter-Aufschlag)",
             "weight": 7,
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "🎯 Netzstabilität unterstützen",
+            "title": "[TARGET] Netzstabilität unterstützen",
             "description": "Lastverschiebung entlastet Stromnetz in Spitzenzeiten",
             "weight": 6,
             "applies_to": ["commercial", "multi_family"]
@@ -745,7 +766,7 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
     
     base_cons = [
         {
-            "title": "⚠️ Preisschwankungen",
+            "title": "[WARNING] Preisschwankungen",
             "description": "Strompreis kann stark schwanken (Faktor 3-5 zwischen günstig/teuer)",
             "weight": 8,
             "applies_to": ["residential", "commercial", "multi_family"]
@@ -769,13 +790,13 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "⚡ Weniger Anbieter",
+            "title": "[POWER] Weniger Anbieter",
             "description": "Nur 3-4 Anbieter in Deutschland (Tibber, aWATTar, Ostrom, Rabot.Charge)",
             "weight": 5,
             "applies_to": ["residential", "commercial"]
         },
         {
-            "title": "📈 Risiko bei fossilen Krisen",
+            "title": "[STATS] Risiko bei fossilen Krisen",
             "description": "Bei Gas-Mangel können Börsenpreise explodieren (wie 2022)",
             "weight": 7,
             "applies_to": ["residential", "commercial", "multi_family"]
@@ -799,7 +820,7 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
     
     # Empfehlung generieren
     if total_score >= 15:
-        recommendation = "✅ Sehr empfehlenswert"
+        recommendation = "[OK] Sehr empfehlenswert"
         recommendation_detail = "Dynamischer Tarif passt hervorragend zu Ihrem Profil"
     elif total_score >= 5:
         recommendation = "👍 Empfehlenswert"
@@ -808,34 +829,34 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
         recommendation = "⚖️ Neutral"
         recommendation_detail = "Vorteile und Nachteile halten sich die Waage"
     elif total_score >= -15:
-        recommendation = "⚠️ Mit Vorsicht"
+        recommendation = "[WARNING] Mit Vorsicht"
         recommendation_detail = "Nachteile überwiegen leicht, gut abwägen"
     else:
-        recommendation = "❌ Nicht empfohlen"
+        recommendation = "[ERROR] Nicht empfohlen"
         recommendation_detail = "Zu viele Nachteile für Ihr Profil"
     
     # Idealer Nutzer
     ideal_user_profiles = {
         "residential": [
-            "✅ Wärmepumpen-Besitzer mit großem Pufferspeicher",
-            "✅ E-Auto-Fahrer mit Wallbox (flexibles Laden)",
-            "✅ PV-Anlage mit Batteriespeicher",
-            "✅ Smart-Home affin (Home Assistant, ioBroker, etc.)",
-            "✅ Hoher Stromverbrauch (>5.000 kWh/Jahr)",
-            "✅ Flexibler Tagesablauf"
+            "[OK] Wärmepumpen-Besitzer mit großem Pufferspeicher",
+            "[OK] E-Auto-Fahrer mit Wallbox (flexibles Laden)",
+            "[OK] PV-Anlage mit Batteriespeicher",
+            "[OK] Smart-Home affin (Home Assistant, ioBroker, etc.)",
+            "[OK] Hoher Stromverbrauch (>5.000 kWh/Jahr)",
+            "[OK] Flexibler Tagesablauf"
         ],
         "commercial": [
-            "✅ Flexible Produktionszeiten",
-            "✅ Eigene PV-Anlage",
-            "✅ Energiemanagement-System vorhanden",
-            "✅ Hoher Grundverbrauch (>50.000 kWh/Jahr)",
-            "✅ Kühl- oder Wärmespeicher verfügbar"
+            "[OK] Flexible Produktionszeiten",
+            "[OK] Eigene PV-Anlage",
+            "[OK] Energiemanagement-System vorhanden",
+            "[OK] Hoher Grundverbrauch (>50.000 kWh/Jahr)",
+            "[OK] Kühl- oder Wärmespeicher verfügbar"
         ],
         "multi_family": [
-            "✅ Zentrale Wärmepumpe mit großem Pufferspeicher",
-            "✅ PV-Anlage für Mieterstrommodell",
-            "✅ Energiemanagement für Gebäude",
-            "✅ >20 Wohneinheiten (Skaleneffekt)"
+            "[OK] Zentrale Wärmepumpe mit großem Pufferspeicher",
+            "[OK] PV-Anlage für Mieterstrommodell",
+            "[OK] Energiemanagement für Gebäude",
+            "[OK] >20 Wohneinheiten (Skaleneffekt)"
         ]
     }
     
@@ -889,7 +910,7 @@ def compare_tariff_providers(
             "markup_eur_kwh": 0.06,  # 6 ct/kWh Aufschlag
             "features": [
                 "🤖 Beste App & Smart-Home Integration",
-                "📊 Stündliche Prognose für nächsten Tag",
+                "[CHART] Stündliche Prognose für nächsten Tag",
                 "🔌 Pulse-Hardware für Echtzeit-Tracking (optional)",
                 "🚗 Spezial-Tarif für E-Autos",
                 "♻️ 100% Ökostrom"
@@ -906,8 +927,8 @@ def compare_tariff_providers(
             "base_fee_eur_month": 0,  # Keine Grundgebühr!
             "markup_eur_kwh": 0.05,
             "features": [
-                "💰 Keine Grundgebühr",
-                "📈 Transparent: Börsenpreis + 5 ct/kWh",
+                "[MONEY] Keine Grundgebühr",
+                "[STATS] Transparent: Börsenpreis + 5 ct/kWh",
                 "🤝 Viele Partnerschaften (Sonnen, E3DC, etc.)",
                 "🔌 HOURLY und YEARLY Tarif verfügbar",
                 "♻️ 100% Ökostrom"
@@ -945,7 +966,7 @@ def compare_tariff_providers(
                 "🚗 Spezialisiert auf E-Autos",
                 "🤖 KI-gesteuerte Lade-Optimierung",
                 "🔌 Eigene Wallbox-Hardware",
-                "📊 THG-Quote direkt abrechenbar",
+                "[CHART] THG-Quote direkt abrechenbar",
                 "♻️ 100% Ökostrom"
             ],
             "pros": ["Beste E-Auto Integration", "THG-Bonus", "KI-Optimierung"],
@@ -1137,7 +1158,10 @@ def simulate_annual_price_profile(
         
         # Verbrauch berechnen
         heating_factor = monthly_heating_factors[month]
-        wp_load_kw = heat_load_kw * heating_factor / cop if heating_factor > 0.05 else 0
+        if cop != 0:
+            wp_load_kw = heat_load_kw * heating_factor / cop if heating_factor > 0.05 else 0
+        else:
+            wp_load_kw = 0.0
         
         # Haushalt: tagsüber mehr, nachts weniger
         if 6 <= hour_of_day < 22:
@@ -1203,7 +1227,10 @@ def simulate_annual_price_profile(
     # Jahres-Summen
     total_annual_consumption = sum(h["total_load_kw"] for h in hourly_data)
     total_annual_cost = sum(h["cost_eur"] for h in hourly_data)
-    avg_price = total_annual_cost / total_annual_consumption if total_annual_consumption > 0 else 0
+    if total_annual_consumption != 0:
+        avg_price = total_annual_cost / total_annual_consumption if total_annual_consumption > 0 else 0
+    else:
+        avg_price = 0.0
     
     return {
         "hourly_data": hourly_data,  # Alle 8760 Stunden

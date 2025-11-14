@@ -258,7 +258,10 @@ class PDFGenerator:
 
         if content_type == "image":
             try:
-                self.story.append(Image(data, width=self.width - 4*cm, height=self.height/3, preserveAspectRatio=True))
+                if 3 != 0:
+                    self.story.append(Image(data, width=self.width - 4*cm, height=self.height/3, preserveAspectRatio=True))
+                else:
+                    self.story.append(Image(data, width = 0.0
             except Exception as e:
                 self.story.append(Paragraph(f"Fehler beim Laden des Bildes: {e}", self.styles['Body']))
     
@@ -983,9 +986,15 @@ def _get_image_flowable(image_data_input: Optional[Union[str, bytes]], desired_w
             img_reader = ImageReader(img_file_like)
             iw, ih = img_reader.getSize()
             if iw <= 0 or ih <= 0: raise ValueError(f"Ungültige Bilddimensionen: w={iw}, h={ih}")
-            aspect = ih / float(iw) if iw > 0 else 1.0
+            if float != 0:
+                aspect = ih / float(iw) if iw > 0 else 1.0
+            else:
+                aspect = 0.0
             img_h_calc = desired_width * aspect; img_w_final, img_h_final = desired_width, img_h_calc
-            if max_height and img_h_calc > max_height: img_h_final = max_height; img_w_final = img_h_final / aspect if aspect > 0 else desired_width
+            if aspect != 0:
+                if max_height and img_h_calc > max_height: img_h_final = max_height; img_w_final = img_h_final / aspect if aspect > 0 else desired_width
+            else:
+                if max_height and img_h_calc > max_height: img_h_final = 0.0
             
             # KORREKTUR: Stelle sicher, dass img_w_final und img_h_final positiv sind
             if img_w_final <=0 or img_h_final <=0:
@@ -1113,17 +1122,17 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
     """Gibt eine ausführliche, persönliche und ansprechende Beschreibung für das angegebene Diagramm zurück."""
     descriptions = {
         'monthly_prod_cons_chart_bytes': get_text(texts, "chart_desc_monthly_prod_cons", 
-            "📊 <b>Ihr persönlicher Jahresrhythmus:</b> Diese Darstellung zeigt Ihnen, wie Ihre PV-Anlage im Einklang mit den Jahreszeiten arbeitet. "
+            "[CHART] <b>Ihr persönlicher Jahresrhythmus:</b> Diese Darstellung zeigt Ihnen, wie Ihre PV-Anlage im Einklang mit den Jahreszeiten arbeitet. "
             "In den sonnenreichen Sommermonaten erzeugen Sie deutlich mehr Strom als Sie verbrauchen – perfekt für hohe Einspeisevergütungen! "
             "Im Winter gleicht sich Produktion und Verbrauch harmonisch aus. So planen Sie Ihren Energiehaushalt optimal."),
         
         'cost_projection_chart_bytes': get_text(texts, "chart_desc_cost_projection", 
-            "💰 <b>Ihre finanzielle Zukunft im Blick:</b> Hier sehen Sie schwarz auf weiß, wie sich Ihre Stromkosten mit und ohne PV-Anlage entwickeln. "
+            "[MONEY] <b>Ihre finanzielle Zukunft im Blick:</b> Hier sehen Sie schwarz auf weiß, wie sich Ihre Stromkosten mit und ohne PV-Anlage entwickeln. "
             "Während herkömmliche Stromkosten Jahr für Jahr steigen, bleiben Sie mit Ihrer eigenen Solaranlage unabhängig von Preiserhöhungen. "
             "Die Schere öffnet sich zu Ihren Gunsten – je länger die Laufzeit, desto größer Ihre Ersparnis!"),
         
         'cumulative_cashflow_chart_bytes': get_text(texts, "chart_desc_cumulative_cashflow", 
-            "📈 <b>Der Weg zu Ihrem persönlichen Gewinn:</b> Diese Kurve zeigt Ihren finanziellen Erfolgsweg. Anfangs investieren Sie, "
+            "[STATS] <b>Der Weg zu Ihrem persönlichen Gewinn:</b> Diese Kurve zeigt Ihren finanziellen Erfolgsweg. Anfangs investieren Sie, "
             "aber schon nach wenigen Jahren kehrt sich das Blatt: Ihre Anlage arbeitet für Sie und erwirtschaftet echte Gewinne. "
             "Der Break-Even-Punkt markiert den Beginn Ihrer 'kostenlosen' Stromzeit – ab dann ist jede kWh reiner Gewinn für Sie!"),
         
@@ -1133,7 +1142,7 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
             "Das bedeutet weniger Abhängigkeit von Strompreiserhöhungen und mehr Kontrolle über Ihre Energiekosten. Ihre persönliche Energiewende visualisiert!"),
         
         'pv_usage_pie_chart_bytes': get_text(texts, "chart_desc_pv_usage", 
-            "⚡ <b>Wohin fließt Ihr selbst erzeugter Strom:</b> Hier sehen Sie die clevere Aufteilung Ihres Solarstroms. "
+            "[POWER] <b>Wohin fließt Ihr selbst erzeugter Strom:</b> Hier sehen Sie die clevere Aufteilung Ihres Solarstroms. "
             "Der blaue Bereich zeigt, was Sie direkt selbst nutzen (= sofortige Ersparnis), der orange Teil wird ins Netz eingespeist (= garantierte Vergütung). "
             "Jede selbst verbrauchte kWh spart Ihnen ca. 30 Cent, jede eingespeiste kWh bringt Ihnen sichere Einnahmen!"),
         
@@ -1153,7 +1162,7 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
             "Diese natürlichen Schwankungen sind eingeplant und machen Ihre Jahresrechnung trotzdem sehr positiv!"),
         
         'project_roi_matrix_switcher_chart_bytes': get_text(texts, "chart_desc_project_roi", 
-            "📊 <b>Ihre Rendite-Sicherheit visualisiert:</b> Diese Matrix zeigt, wie robust Ihre Investition ist. "
+            "[CHART] <b>Ihre Rendite-Sicherheit visualisiert:</b> Diese Matrix zeigt, wie robust Ihre Investition ist. "
             "Selbst bei verschiedenen Strompreisentwicklungen bleibt Ihre Rendite attraktiv – das nennt man eine sichere Anlage! "
             "Vergleichen Sie das mal mit Ihrem Sparbuch: Hier sehen Sie reale Werte zwischen 3-8% Rendite pro Jahr. Ihre Anlage ist eine Geldanlage mit Garantie!"),
         
@@ -1168,7 +1177,7 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
             "Ihre Anlage ist so dimensioniert, dass Sie optimal zwischen Eigenverbrauch und Gewinnoptimierung navigieren!"),
         
         'co2_savings_chart_bytes': get_text(texts, "chart_desc_co2_savings", 
-            "🌱 <b>Ihr Beitrag für die nächste Generation:</b> Jede kWh Ihres Solarstroms ersetzt schmutzigen Kohlestrom! "
+            "[GREEN] <b>Ihr Beitrag für die nächste Generation:</b> Jede kWh Ihres Solarstroms ersetzt schmutzigen Kohlestrom! "
             "Diese Grafik zeigt nicht nur Zahlen, sondern Ihren echten Umweltbeitrag. Stolze [CO2-Menge] kg CO₂ weniger pro Jahr – "
             "das entspricht [Bäume-Anzahl] gepflanzten Bäumen! Sie investieren nicht nur in Ihre Finanzen, sondern in eine saubere Zukunft."),
         
@@ -1188,22 +1197,22 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
             "der orange Bereich bringt Ihnen die Einspeisevergütung. Die perfekte Mischung für maximalen finanziellen Vorteil!"),
         
         'cost_growth_switcher_chart_bytes': get_text(texts, "chart_desc_cost_growth", 
-            "📈 <b>Steigende Strompreise – Ihr Vorteil wächst:</b> Während andere über teure Stromrechnungen stöhnen, profitieren Sie! "
+            "[STATS] <b>Steigende Strompreise – Ihr Vorteil wächst:</b> Während andere über teure Stromrechnungen stöhnen, profitieren Sie! "
             "Je mehr die Strompreise steigen, desto wertvoller wird jede selbst erzeugte kWh. "
             "Diese Projektion zeigt: Ihre PV-Anlage wird mit jedem Jahr noch rentabler. Sie haben heute die richtige Entscheidung getroffen!"),
         
         'roi_comparison_switcher_chart_bytes': get_text(texts, "chart_desc_roi_comparison", 
-            "🏆 <b>Besser als jede Bank:</b> Hier sehen Sie Ihre PV-Rendite im Vergleich zu traditionellen Geldanlagen. "
+            "[WINNER] <b>Besser als jede Bank:</b> Hier sehen Sie Ihre PV-Rendite im Vergleich zu traditionellen Geldanlagen. "
             "Während Sparbücher kaum Zinsen bringen und die Inflation Ihr Geld entwertet, arbeitet Ihre Anlage mit 4-7% Rendite für Sie. "
             "Dazu kommt: Ihre Investition ist greifbar, auf Ihrem Dach und arbeitet 25+ Jahre zuverlässig!"),
         
         'break_even_chart_bytes': get_text(texts, "chart_desc_break_even", 
-            "🎯 <b>Ihr Zielsprint zur Gewinnschwelle:</b> Diese Kurve zeigt Ihren Weg zur 'schwarzen Null' und darüber hinaus! "
+            "[TARGET] <b>Ihr Zielsprint zur Gewinnschwelle:</b> Diese Kurve zeigt Ihren Weg zur 'schwarzen Null' und darüber hinaus! "
             "Der Break-Even-Punkt ist wie die Ziellinie beim Marathon – ab hier läuft alles für Sie! "
             "Meist nach 8-12 Jahren ist es soweit: Von da an sind Sie 15+ Jahre im Plus. Das ist finanzielle Freiheit!"),
         
         'amortisation_chart_bytes': get_text(texts, "chart_desc_amortisation", 
-            "💰 <b>Wie sich Ihre Investition zurückzahlt:</b> Diese Kurve ist Ihr persönlicher Finanzkompass! "
+            "[MONEY] <b>Wie sich Ihre Investition zurückzahlt:</b> Diese Kurve ist Ihr persönlicher Finanzkompass! "
             "Sie zeigt, wie sich Ihre Anfangsinvestition Stück für Stück durch Ersparnisse und Einnahmen zurückzahlt. "
             "Je steiler die Kurve, desto schneller haben Sie Ihr Geld wieder drin. Und danach? Jahrelange Gewinne sind garantiert!")
     }
@@ -2623,7 +2632,10 @@ def generate_offer_pdf(
                         
                         # Spaltenbreiten berechnen
                         num_cols = len(headers)
-                        col_width = available_width_content / num_cols
+                        if num_cols != 0:
+                            col_width = available_width_content / num_cols
+                        else:
+                            col_width = 0.0
                         col_widths = [col_width] * num_cols
                         
                         # Tabelle erstellen

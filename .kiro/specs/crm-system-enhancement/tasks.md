@@ -155,7 +155,7 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Teste Volltextsuche
   - _Requirements: 6.1, 6.2, 6.3_
 
-- [ ] 6. Angebotsverfolgung (Offer Tracking) implementieren
+- [x] 6. Angebotsverfolgung (Offer Tracking) implementieren
   - Erweitere `projects` Tabelle um Angebots-Felder
   - Erstelle `crm/features/offer_tracker.py` Modul
   - Implementiere Status-Workflow (Entwurf, Versendet, Angenommen, Abgelehnt)
@@ -167,7 +167,7 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
 
-- [ ] 6.1 Schreibe Tests für Angebotsverfolgung
+- [x] 6.1 Schreibe Tests für Angebotsverfolgung
 
   - Teste Status-Workflow
   - Teste automatische Erinnerungen
@@ -187,14 +187,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
 
-- [ ] 7.1 Schreibe Tests für Erinnerungssystem
+- [x] 7.1 Schreibe Tests für Erinnerungssystem
 
   - Teste Regel-Engine
   - Teste automatische Erinnerungs-Erstellung
   - Teste Snooze-Funktion
   - _Requirements: 8.1, 8.2, 8.3_
 
-- [ ] 8. Automatische Datensicherung implementieren
+- [x] 8. Automatische Datensicherung implementieren
   - Erstelle `crm/utils/backup_scheduler.py` Modul
   - Nutze bestehende `backup_database()` Funktion
   - Implementiere APScheduler für automatische Backups
@@ -208,14 +208,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 18.1, 18.2, 18.3, 18.4_
 
 
-- [ ] 8.1 Schreibe Tests für Backup-System
+- [x] 8.1 Schreibe Tests für Backup-System
 
   - Teste Backup-Erstellung
   - Teste Rotation
   - Teste Wiederherstellung
   - _Requirements: 18.1, 18.2, 18.3_
 
-- [ ] 9. E-Mail-Integration implementieren
+- [x] 9. E-Mail-Integration implementieren
   - Erstelle `crm/features/email_manager.py` Modul
   - Implementiere SMTP-Konfiguration im Admin-Panel
   - Erstelle neue Tabellen `email_templates` und `email_history`
@@ -229,14 +229,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
 
-- [ ] 9.1 Schreibe Tests für E-Mail-Integration
+- [x] 9.1 Schreibe Tests für E-Mail-Integration
 
   - Teste E-Mail-Versand (Mock)
   - Teste Platzhalter-Ersetzung
   - Teste Vorlagen-System
   - _Requirements: 4.1, 4.2, 4.3_
 
-- [ ] 10. Erweiterte Reporting-Funktionen implementieren
+- [x] 10. Erweiterte Reporting-Funktionen implementieren
   - Erstelle `crm/features/reporting_engine.py` Modul
   - Implementiere vordefinierte Reports (Verkaufsübersicht, Conversion-Funnel, Lead-Quellen)
   - Erstelle Report-Builder mit Filtern und Gruppierungen
@@ -249,14 +249,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
 
-- [ ] 10.1 Schreibe Tests für Reporting
+- [x] 10.1 Schreibe Tests für Reporting
 
   - Teste Report-Generierung
   - Teste Export-Funktionen
   - Teste Vorlagen-Speicherung
   - _Requirements: 9.1, 9.2, 9.3_
 
-- [ ] 11. Kunden-Segmentierung und Tags implementieren
+- [x] 11. Kunden-Segmentierung und Tags implementieren
   - Erstelle neue Tabellen `crm_tags` und `customer_tags`
   - Erstelle Tag-Verwaltung im Admin-Panel
   - Implementiere Tag-CRUD-Funktionen
@@ -267,14 +267,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Zeige Tag-Statistiken im Dashboard
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [ ] 11.1 Schreibe Tests für Tag-System
+- [x] 11.1 Schreibe Tests für Tag-System
 
   - Teste Tag-Erstellung
   - Teste Tag-Zuordnung
   - Teste Filterung
   - _Requirements: 10.1, 10.2, 10.3_
 
-- [ ] 12. Aktivitäts-Dashboard mit Echtzeit-Updates erweitern
+- [x] 12. Aktivitäts-Dashboard mit Echtzeit-Updates erweitern
   - Erweitere `crm_dashboard_ui.py`
   - Implementiere Widget-System für Dashboard
   - Erstelle Widget: Offene Aufgaben
@@ -286,14 +286,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Speichere Benutzer-Einstellungen
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
-- [ ] 12.1 Schreibe Tests für Dashboard-Widgets
+- [x] 12.1 Schreibe Tests für Dashboard-Widgets
 
   - Teste Widget-Rendering
   - Teste Auto-Refresh
   - Teste Konfiguration
   - _Requirements: 11.1, 11.2, 11.3_
 
-- [ ] 13. Kunden-Import/Export implementieren
+- [x] 13. Kunden-Import/Export implementieren
   - Erstelle `crm/utils/import_export_manager.py` Modul
   - Implementiere CSV-Import mit Mapping-UI
   - Implementiere Excel-Import mit Sheet-Auswahl
@@ -304,7 +304,7 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Erstelle Import/Export-UI im Admin-Panel
   - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
 
-- [ ] 13.1 Schreibe Tests für Import/Export
+- [x] 13.1 Schreibe Tests für Import/Export
 
   - Teste CSV-Import
   - Teste Excel-Import
@@ -312,7 +312,7 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Teste Export
   - _Requirements: 12.1, 12.2, 12.3_
 
-- [ ] 14. Dokument-Vorlagen-Management implementieren
+- [x] 14. Dokument-Vorlagen-Management implementieren
   - Erstelle neue Tabelle `document_templates`
   - Erstelle `crm/features/template_manager.py` Modul
   - Implementiere Template-CRUD-Funktionen
@@ -324,14 +324,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Füge Template-Verwaltung im Admin-Panel hinzu
   - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5_
 
-- [ ] 14.1 Schreibe Tests für Template-System
+- [x] 14.1 Schreibe Tests für Template-System
 
   - Teste Template-Erstellung
   - Teste Platzhalter-Ersetzung
   - Teste Versionierung
   - _Requirements: 14.1, 14.2, 14.3_
 
-- [ ] 15. Lead Scoring implementieren
+- [x] 15. Lead Scoring implementieren
   - Erweitere `crm_leads` Tabelle um `score` Feld
   - Erstelle Scoring-Engine mit konfigurierbaren Regeln
   - Implementiere Scoring-Faktoren (Projektgröße, Lead-Quelle, Reaktionszeit, Engagement)
@@ -343,14 +343,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 17.1, 17.2, 17.3, 17.4, 17.5_
 
 
-- [ ] 15.1 Schreibe Tests für Lead Scoring
+- [x] 15.1 Schreibe Tests für Lead Scoring
 
   - Teste Score-Berechnung
   - Teste Regel-Engine
   - Teste Benachrichtigungen
   - _Requirements: 17.1, 17.2, 17.3_
 
-- [ ] 16. Anruf-Protokollierung implementieren
+- [x] 16. Anruf-Protokollierung implementieren
   - Erweitere `crm_activities` Tabelle um Anruf-Felder
   - Erstelle Anruf-Dialog mit Timer
   - Implementiere Telefonnummer-Auswahl
@@ -361,14 +361,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5_
 
 
-- [ ] 16.1 Schreibe Tests für Anruf-Protokollierung
+- [x] 16.1 Schreibe Tests für Anruf-Protokollierung
 
   - Teste Anruf-Erstellung
   - Teste Timer-Funktion
   - Teste Timeline-Integration
   - _Requirements: 13.1, 13.2_
 
-- [ ] 17. Wissensdatenbank implementieren
+- [x] 17. Wissensdatenbank implementieren
   - Erstelle neue Tabellen `kb_articles`, `kb_categories`, `kb_ratings`
   - Erstelle `crm/features/knowledge_base.py` Modul
   - Implementiere Artikel-CRUD-Funktionen
@@ -381,14 +381,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 20.1, 20.2, 20.3, 20.4, 20.5_
 
 
-- [ ] 17.1 Schreibe Tests für Wissensdatenbank
+- [x] 17.1 Schreibe Tests für Wissensdatenbank
 
   - Teste Artikel-Erstellung
   - Teste Suche
   - Teste Bewertungssystem
   - _Requirements: 20.1, 20.2, 20.3_
 
-- [ ] 18. Verkaufsziele und Forecasting implementieren
+- [x] 18. Verkaufsziele und Forecasting implementieren
   - Erstelle neue Tabellen `sales_targets` und `sales_forecasts`
   - Erstelle `crm/features/forecasting_engine.py` Modul
   - Implementiere Ziel-Definition (pro Mitarbeiter, Team, Gesamt)
@@ -400,14 +400,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Füge Warnungen bei gefährdeten Zielen hinzu
   - _Requirements: 21.1, 21.2, 21.3, 21.4, 21.5_
 
-- [ ] 18.1 Schreibe Tests für Forecasting
+- [x] 18.1 Schreibe Tests für Forecasting
 
   - Teste Ziel-Definition
   - Teste Forecast-Berechnung
   - Teste Visualisierungen
   - _Requirements: 21.1, 21.2, 21.3_
 
-- [ ] 19. Kunden-Feedback und Zufriedenheitsumfragen implementieren
+- [x] 19. Kunden-Feedback und Zufriedenheitsumfragen implementieren
   - Erstelle neue Tabellen `feedback_surveys` und `feedback_responses`
   - Erstelle `crm/features/feedback_manager.py` Modul
   - Implementiere Umfrage-Builder mit verschiedenen Fragetypen
@@ -418,14 +418,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Füge Negativ-Feedback-Alerts hinzu
   - _Requirements: 22.1, 22.2, 22.3, 22.4, 22.5_
 
-- [ ] 19.1 Schreibe Tests für Feedback-System
+- [x] 19.1 Schreibe Tests für Feedback-System
 
   - Teste Umfrage-Erstellung
   - Teste automatischen Versand
   - Teste Auswertung
   - _Requirements: 22.1, 22.2, 22.3_
 
-- [ ] 20. Vertrags- und Garantieverwaltung implementieren
+- [x] 20. Vertrags- und Garantieverwaltung implementieren
   - Erstelle neue Tabellen `contracts` und `warranties`
   - Erstelle `crm/features/contract_manager.py` Modul
   - Implementiere Vertrags-CRUD-Funktionen
@@ -437,14 +437,14 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - _Requirements: 23.1, 23.2, 23.3, 23.4, 23.5_
 
 
-- [ ] 20.1 Schreibe Tests für Vertragsverwaltung
+- [x] 20.1 Schreibe Tests für Vertragsverwaltung
 
   - Teste Vertrags-Erstellung
   - Teste Ablauf-Erinnerungen
   - Teste Garantie-Tracking
   - _Requirements: 23.1, 23.2, 23.3_
 
-- [ ] 21. Geo-Mapping und Routenplanung implementieren
+- [x] 21. Geo-Mapping und Routenplanung implementieren
   - Integriere Folium oder Plotly Maps
   - Implementiere Geocoding für Kundenadressen
   - Erstelle Karten-Ansicht mit Kunden-Markern
@@ -455,7 +455,7 @@ Implementierungs-Tasks für das erweiterte CRM-System basierend auf 25 definiert
   - Erstelle Geo-Mapping-UI
   - _Requirements: 16.1, 16.2, 16.3, 16.4, 16.5_
 
-- [ ] 21.1 Schreibe Tests für Geo-Mapping
+- [x] 21.1 Schreibe Tests für Geo-Mapping
 
   - Teste Geocoding
   - Teste Marker-Erstellung

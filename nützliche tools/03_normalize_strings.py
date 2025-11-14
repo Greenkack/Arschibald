@@ -10,4 +10,4 @@ def normalize_strings(directory="."):
             content = unicodedata.normalize("NFKC", content)
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(content)
-    print("✅ Alle Strings unicode-normalisiert.")
+    print("[OK] Alle Strings unicode-normalisiert.")

@@ -30,7 +30,7 @@ Sie lernen:
     },
     {
         "step": 2,
-        "title": "Matrix erstellen 📊",
+        "title": "Matrix erstellen [CHART]",
         "content": """
 Eine Matrix ist eine Tabelle mit Zeilen und Spalten, ähnlich wie in Excel.
 
@@ -57,7 +57,7 @@ Jetzt können Sie Werte in die Zellen eingeben.
 1. Klicken Sie auf eine Zelle im Grid
 2. Die Zelle wird in der **Formelleiste** angezeigt
 3. Geben Sie einen Wert ein (z.B. "100")
-4. Klicken Sie auf **"✓ Übernehmen"** oder drücken Sie Enter
+4. Klicken Sie auf **"[OK] Übernehmen"** oder drücken Sie Enter
 
 **Tipp:** Sie können auch direkt in der Zelle tippen!
 
@@ -165,7 +165,7 @@ Kopieren Sie Zellwerte schnell und einfach.
 
 **Einfügen:**
 1. Wählen Sie die Zielzelle
-2. Klicken Sie auf **"📄 Einfügen"** oder drücken Sie **Strg+V**
+2. Klicken Sie auf **"[FILE] Einfügen"** oder drücken Sie **Strg+V**
 
 **Tipp:** Formeln werden beim Einfügen automatisch angepasst!
 
@@ -246,7 +246,7 @@ Wir haben mehrere Beispiel-Matrizen vorbereitet:
     },
     {
         "step": 12,
-        "title": "Hilfe und Support 💡",
+        "title": "Hilfe und Support [IDEA]",
         "content": """
 Brauchen Sie Hilfe?
 
@@ -274,22 +274,22 @@ Brauchen Sie Hilfe?
 Herzlichen Glückwunsch! Sie haben das Tutorial abgeschlossen.
 
 **Sie haben gelernt:**
-✓ Matrizen erstellen und verwalten
-✓ Zellen bearbeiten und Formeln verwenden
-✓ Zeilen und Spalten hinzufügen
-✓ Speichern, Laden, Undo/Redo
-✓ Kopieren und Einfügen
-✓ Import und Export
-✓ Tastatur-Shortcuts
-✓ Beispiel-Matrizen nutzen
-✓ Hilfe finden
+[OK] Matrizen erstellen und verwalten
+[OK] Zellen bearbeiten und Formeln verwenden
+[OK] Zeilen und Spalten hinzufügen
+[OK] Speichern, Laden, Undo/Redo
+[OK] Kopieren und Einfügen
+[OK] Import und Export
+[OK] Tastatur-Shortcuts
+[OK] Beispiel-Matrizen nutzen
+[OK] Hilfe finden
 
 **Nächste Schritte:**
 - Erstellen Sie Ihre erste eigene Matrix
 - Probieren Sie die Beispiel-Matrizen aus
 - Erkunden Sie alle verfügbaren Funktionen
 
-**Viel Erfolg! 🚀**
+**Viel Erfolg! [LAUNCH]**
         """,
         "action": "complete",
         "highlight": None

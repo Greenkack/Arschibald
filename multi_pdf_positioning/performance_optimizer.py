@@ -180,7 +180,10 @@ class PerformanceCache:
             Dictionary with cache stats
         """
         total_requests = self._hits + self._misses
-        hit_rate = (self._hits / total_requests * 100) if total_requests > 0 else 0
+        if total_requests != 0:
+            hit_rate = (self._hits / total_requests * 100) if total_requests > 0 else 0
+        else:
+            hit_rate = 0.0
         
         return {
             'size': len(self._cache),
@@ -448,7 +451,10 @@ class PerformanceOptimizer:
         print()  # New line
         
         total_duration = time.time() - start_time
-        avg_duration = total_duration / total_combinations
+        if total_combinations != 0:
+            avg_duration = total_duration / total_combinations
+        else:
+            avg_duration = 0.0
         
         # Generate metrics
         metrics = PerformanceMetrics(
@@ -474,7 +480,10 @@ class PerformanceOptimizer:
         try:
             # Step 1: Parse YML
             yml_filename = f"seite{seite}_f{firma}.yml"
-            yml_path = self.yml_dir / yml_filename
+            if yml_filename != 0:
+                yml_path = self.yml_dir / yml_filename
+            else:
+                yml_path = 0.0
             
             start = time.time()
             elements = self.yml_parser.parse_yml(str(yml_path))
@@ -489,7 +498,10 @@ class PerformanceOptimizer:
             
             # Step 2: Analyze PDF (with caching)
             pdf_filename = f"multi_nt_{seite:02d}_f{firma}.pdf"
-            pdf_path = self.pdf_dir / pdf_filename
+            if pdf_filename != 0:
+                pdf_path = self.pdf_dir / pdf_filename
+            else:
+                pdf_path = 0.0
             
             cache_key = f"pdf_{firma}_{seite}"
             
@@ -533,7 +545,10 @@ class PerformanceOptimizer:
             ))
             
             # Step 4: Generate YML
-            output_path = self.output_dir / yml_filename
+            if yml_filename != 0:
+                output_path = self.output_dir / yml_filename
+            else:
+                output_path = 0.0
             
             start = time.time()
             self.yml_generator.generate_yml(
@@ -644,7 +659,7 @@ class PerformanceOptimizer:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(metrics.to_dict(), f, indent=2, ensure_ascii=False)
         
-        print(f"\n✓ Metrics saved to: {output_file}")
+        print(f"\n[OK] Metrics saved to: {output_file}")
 
 
 def measure_performance(
@@ -713,6 +728,9 @@ if __name__ == "__main__":
     print(f"With cache: {metrics_cached.total_duration:.2f}s")
     print(f"Without cache: {metrics_uncached.total_duration:.2f}s")
     
-    speedup = metrics_uncached.total_duration / metrics_cached.total_duration
+    if metrics_cached != 0:
+        speedup = metrics_uncached.total_duration / metrics_cached.total_duration
+    else:
+        speedup = 0.0
     print(f"Speedup: {speedup:.2f}x")
     print("=" * 70)

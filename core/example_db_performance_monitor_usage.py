@@ -55,12 +55,12 @@ def example_basic_usage():
             connection_id="conn_1",
             user_id="user_123"
         )
-        print(f"  ✓ Recorded: {query[:50]}... ({duration}s)")
+        print(f"  [OK] Recorded: {query[:50]}... ({duration}s)")
         time.sleep(0.1)
 
     # Get statistics
     stats = monitor.get_stats()
-    print("\n📊 Performance Statistics:")
+    print("\n[CHART] Performance Statistics:")
     print(f"   Total Queries: {stats.total_queries}")
     print(f"   Slow Queries: {stats.slow_queries}")
     print(f"   Very Slow Queries: {stats.very_slow_queries}")
@@ -120,7 +120,7 @@ def example_custom_thresholds():
         )
 
     stats = monitor.get_stats()
-    print("\n📊 Statistics:")
+    print("\n[CHART] Statistics:")
     print(f"   Total Queries: {stats.total_queries}")
     print(f"   Failed Queries: {stats.failed_queries}")
     print(f"   Error Rate: {stats.error_rate:.1%}")
@@ -140,12 +140,12 @@ def example_connection_monitoring():
     # Create connections
     for i in range(5):
         monitor.record_connection_event("create", f"conn_{i}")
-        print(f"  ✓ Connection created: conn_{i}")
+        print(f"  [OK] Connection created: conn_{i}")
 
     # Checkout connections
     for i in range(4):
         monitor.record_connection_event("checkout", f"conn_{i}")
-        print(f"  ✓ Connection checked out: conn_{i}")
+        print(f"  [OK] Connection checked out: conn_{i}")
 
     # Update pool metrics
     monitor.update_pool_metrics(
@@ -156,7 +156,7 @@ def example_connection_monitoring():
     )
 
     stats = monitor.get_stats()
-    print("\n📊 Connection Statistics:")
+    print("\n[CHART] Connection Statistics:")
     print(f"   Total Connections: {stats.total_connections}")
     print(f"   Active Connections: {stats.active_connections}")
     print(f"   Idle Connections: {stats.idle_connections}")
@@ -165,7 +165,7 @@ def example_connection_monitoring():
     # Checkin connections
     for i in range(2):
         monitor.record_connection_event("checkin", f"conn_{i}")
-        print(f"  ✓ Connection checked in: conn_{i}")
+        print(f"  [OK] Connection checked in: conn_{i}")
 
     # Update pool metrics again
     monitor.update_pool_metrics(
@@ -176,7 +176,7 @@ def example_connection_monitoring():
     )
 
     stats = monitor.get_stats()
-    print("\n📊 Updated Connection Statistics:")
+    print("\n[CHART] Updated Connection Statistics:")
     print(f"   Active Connections: {stats.active_connections}")
     print(f"   Idle Connections: {stats.idle_connections}")
     print(f"   Pool Usage: {stats.connection_pool_usage:.1%}")
@@ -210,7 +210,7 @@ def example_query_analysis():
 
     # Get query stats by type
     stats_by_type = monitor.get_query_stats_by_type()
-    print("\n📊 Query Statistics by Type:")
+    print("\n[CHART] Query Statistics by Type:")
     for query_type, stats in stats_by_type.items():
         print(f"\n   {query_type}:")
         print(f"      Count: {stats['count']}")
@@ -220,7 +220,7 @@ def example_query_analysis():
 
     # Get query stats by table
     stats_by_table = monitor.get_query_stats_by_table(limit=10)
-    print("\n📊 Query Counts by Table:")
+    print("\n[CHART] Query Counts by Table:")
     for table, count in stats_by_table.items():
         print(f"   {table}: {count} queries")
 
@@ -269,7 +269,7 @@ def example_optimization_recommendations():
     # Get recommendations
     recommendations = monitor.get_recommendations(force_refresh=True)
 
-    print(f"\n💡 Optimization Recommendations ({len(recommendations)}):")
+    print(f"\n[IDEA] Optimization Recommendations ({len(recommendations)}):")
     for i, rec in enumerate(recommendations, 1):
         print(f"\n   {i}. [{rec.priority.upper()}] {rec.title}")
         print(f"      Category: {rec.category}")
@@ -314,7 +314,7 @@ def example_real_time_monitoring():
         monitor.record_query(query, duration, error=error)
         time.sleep(0.2)
 
-    print("\n📊 Final Statistics:")
+    print("\n[CHART] Final Statistics:")
     stats = monitor.get_stats()
     print(f"   Total Queries: {stats.total_queries}")
     print(f"   Slow Queries: {stats.slow_queries}")
@@ -337,11 +337,11 @@ def main():
         example_real_time_monitoring()
 
         print("\n" + "=" * 60)
-        print("✅ All examples completed successfully!")
+        print("[OK] All examples completed successfully!")
         print("=" * 60)
 
     except Exception as e:
-        print(f"\n❌ Error running examples: {e}")
+        print(f"\n[ERROR] Error running examples: {e}")
         import traceback
         traceback.print_exc()
 

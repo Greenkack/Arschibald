@@ -1709,7 +1709,10 @@ def build_dynamic_data(
 
             step = nice_step(max_val / 5.0)
             # Obergrenze auf Vielfaches von step*5 anheben
-            top = math.ceil(max_val / step / 5.0) * step * 5.0
+            if step != 0:
+                top = math.ceil(max_val / step / 5.0) * step * 5.0
+            else:
+                top = 0.0
             # 5 gleichmäßige Abstände
             vals = [top * i / 5.0 for i in range(5, 0, -1)] + [0.0]
             keys = [
@@ -4481,14 +4484,20 @@ def build_dynamic_data(
         tree_factor = analysis_results.get("co2_per_tree_kg_pa")
         if not isinstance(tree_factor, int | float) or tree_factor <= 0:
             tree_factor = DEFAULT_TREE_FACTOR
-        trees_equiv = annual_co2_kg / tree_factor if tree_factor > 0 else 0.0
+        if tree_factor != 0:
+            trees_equiv = annual_co2_kg / tree_factor if tree_factor > 0 else 0.0
+        else:
+            trees_equiv = 0.0
 
         # 3) Auto-Kilometer Äquivalent
         car_factor = analysis_results.get("co2_per_car_km_kg")
         if not isinstance(car_factor, int | float) or car_factor <= 0:
             # kg CO₂ pro km (Benziner: 142 g/km)
             car_factor = DEFAULT_CAR_FACTOR
-        car_km_equiv = annual_co2_kg / car_factor if car_factor > 0 else 0.0
+        if car_factor != 0:
+            car_km_equiv = annual_co2_kg / car_factor if car_factor > 0 else 0.0
+        else:
+            car_km_equiv = 0.0
 
         # 4) Prozentuale Reduktion (Anteil am Vergleichswert ohne PV)
         baseline_tons = _as_float(analysis_results.get("co2_baseline_per_capita_tons"))
@@ -4517,7 +4526,10 @@ def build_dynamic_data(
             )
         co2_reduction_pct = 0.0
         if baseline_kg > 0:
-            co2_reduction_pct = (annual_co2_kg / baseline_kg) * 100.0
+            if baseline_kg != 0:
+                co2_reduction_pct = (annual_co2_kg / baseline_kg) * 100.0
+            else:
+                co2_reduction_pct = 0.0
         # Bereits berechnete Werte ggf. bevorzugen
         for rk in ["co2_reduction_percent", "co2_footprint_reduction_percent"]:
             rv = analysis_results.get(rk)
@@ -4792,7 +4804,7 @@ def build_dynamic_data(
         if symbol_style == "dot":
             return "•"
         # default 'check'
-        return "✓"
+        return "[OK]"
 
     for k, label in standard_services.items():
         enabled = pdf_services_cfg.get(k, True)
@@ -6058,7 +6070,10 @@ def build_dynamic_data(
             and annual_savings_amount > 0
             and math.isfinite(annual_savings_amount)
         ):
-            calculated_amortization = final_investment_amount / annual_savings_amount
+            if annual_savings_amount != 0:
+                calculated_amortization = final_investment_amount / annual_savings_amount
+            else:
+                calculated_amortization = 0.0
             if (
                 calculated_amortization is None
                 or calculated_amortization <= 0

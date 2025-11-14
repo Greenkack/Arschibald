@@ -40,7 +40,7 @@ def simulate_solar_calculator_data_flow():
     modules_result = run_database_command('list_products', '--category=Modul')
     if modules_result and modules_result.get('success'):
         modules = modules_result['data']
-        print(f"   ✓ Loaded {len(modules)} solar modules")
+        print(f"   [OK] Loaded {len(modules)} solar modules")
 
         # Group by manufacturer (like SolarCalculator would do)
         manufacturers = {}
@@ -64,7 +64,7 @@ def simulate_solar_calculator_data_flow():
 
         print("\n   Available manufacturers and models:")
         for manufacturer, models in manufacturers.items():
-            print(f"   📦 {manufacturer}: {len(models)} models")
+            print(f"   [PACKAGE] {manufacturer}: {len(models)} models")
             for model in models[:2]:  # Show first 2 models
                 print(
                     f"     - {
@@ -82,7 +82,7 @@ def simulate_solar_calculator_data_flow():
         'list_products', '--category=Wechselrichter')
     if inverters_result and inverters_result.get('success'):
         inverters = inverters_result['data']
-        print(f"   ✓ Loaded {len(inverters)} inverters")
+        print(f"   [OK] Loaded {len(inverters)} inverters")
 
         # Show top inverters by power
         sorted_inverters = sorted(
@@ -107,7 +107,7 @@ def simulate_solar_calculator_data_flow():
         'list_products', '--category=Batteriespeicher')
     if batteries_result and batteries_result.get('success'):
         batteries = batteries_result['data']
-        print(f"   ✓ Loaded {len(batteries)} battery storage systems")
+        print(f"   [OK] Loaded {len(batteries)} battery storage systems")
 
         # Show top batteries by capacity
         sorted_batteries = sorted(
@@ -192,8 +192,8 @@ def simulate_solar_calculator_data_flow():
                     f"   - Total system cost (modules + inverter): €{total_system_cost:.2f}")
 
     print("\n=== SolarCalculator Simulation Complete ===")
-    print("✓ All product data is available and properly structured for the frontend!")
-    print("✓ SolarCalculator can now access real product database instead of mock data!")
+    print("[OK] All product data is available and properly structured for the frontend!")
+    print("[OK] SolarCalculator can now access real product database instead of mock data!")
 
 
 if __name__ == "__main__":

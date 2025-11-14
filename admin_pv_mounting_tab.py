@@ -5,12 +5,12 @@ KOMPLETT ÜBERARBEITETES Admin-Dashboard für PV-Unterkonstruktion
 ================================================================
 
 NEU in Version 2.0:
-- 📊 Verbessertes Dashboard mit erweiterten Statistiken
-- 🔍 Marken-Dropdown zur Filterung
+- [CHART] Verbessertes Dashboard mit erweiterten Statistiken
+- [SEARCH] Marken-Dropdown zur Filterung
 - ✏️ Vollständige CRUD-Funktionen (Create, Read, Update, Delete)
 - 🔎 Erweiterte Such- und Filterfunktionen
-- 📈 Visualisierungen mit Charts
-- 🎨 Moderne, übersichtliche UI
+- [STATS] Visualisierungen mit Charts
+- [DESIGN] Moderne, übersichtliche UI
 
 Integration:
   - Wird von admin_panel.py importiert
@@ -64,14 +64,14 @@ def render_pv_mounting_admin_tab_v2() -> None:
     """NEUE Hauptfunktion für überarbeitetes PV-Unterkonstruktions-Dashboard."""
     
     if not PV_MOUNTING_DB_AVAILABLE:
-        st.error("❌ **PV-Montage-Datenbank nicht verfügbar**")
+        st.error("[ERROR] **PV-Montage-Datenbank nicht verfügbar**")
         return
     
     # Initialize database
     try:
         initialize_database()
     except Exception as e:
-        st.error(f"❌ Fehler beim Initialisieren der Datenbank: {e}")
+        st.error(f"[ERROR] Fehler beim Initialisieren der Datenbank: {e}")
         return
     
     # Header mit Styling
@@ -102,11 +102,11 @@ def render_pv_mounting_admin_tab_v2() -> None:
         </style>
     """, unsafe_allow_html=True)
     
-    st.markdown('<p class="big-header">🔧 PV-Unterkonstruktions-Verwaltung 2.0</p>', unsafe_allow_html=True)
+    st.markdown('<p class="big-header">[TOOL] PV-Unterkonstruktions-Verwaltung 2.0</p>', unsafe_allow_html=True)
     
     # Navigation mit Icons
     sub_tabs = st.tabs([
-        "📊 Dashboard & Statistiken",
+        "[CHART] Dashboard & Statistiken",
         "📋 Komponenten verwalten",
         "➕ Neue Komponente",
         "🔎 Erweiterte Suche",
@@ -132,7 +132,7 @@ def render_pv_mounting_admin_tab_v2() -> None:
 def _render_enhanced_dashboard() -> None:
     """Verbessertes Dashboard mit Charts und erweiterten Statistiken."""
     
-    st.markdown('<p class="section-header">📊 Übersicht & Statistiken</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-header">[CHART] Übersicht & Statistiken</p>', unsafe_allow_html=True)
     
     try:
         stats = get_statistics()
@@ -143,7 +143,7 @@ def _render_enhanced_dashboard() -> None:
         
         with col1:
             st.metric(
-                "📦 Gesamt Komponenten",
+                "[PACKAGE] Gesamt Komponenten",
                 stats['total_components'],
                 delta=f"+{len(all_components) - 25}" if len(all_components) > 25 else None,
                 help="Anzahl aller aktiven Komponenten"
@@ -166,7 +166,7 @@ def _render_enhanced_dashboard() -> None:
         with col4:
             total_value = sum(c.get('price_netto', 0) for c in all_components)
             st.metric(
-                "💰 Gesamtwert",
+                "[MONEY] Gesamtwert",
                 format_german_currency(total_value),
                 help="Netto-Gesamtwert aller Komponenten"
             )
@@ -177,7 +177,7 @@ def _render_enhanced_dashboard() -> None:
         col_left, col_right = st.columns(2)
         
         with col_left:
-            st.markdown("#### 📊 Verteilung nach Hersteller")
+            st.markdown("#### [CHART] Verteilung nach Hersteller")
             if stats['by_manufacturer']:
                 df_manuf = pd.DataFrame(
                     list(stats['by_manufacturer'].items()),
@@ -201,7 +201,7 @@ def _render_enhanced_dashboard() -> None:
                 st.plotly_chart(fig, use_container_width=True)
         
         with col_right:
-            st.markdown("#### 📈 Top 10 Kategorien")
+            st.markdown("#### [STATS] Top 10 Kategorien")
             if stats['by_category']:
                 df_cat = pd.DataFrame(
                     list(stats['by_category'].items()),
@@ -251,7 +251,7 @@ def _render_enhanced_dashboard() -> None:
                 st.dataframe(price_stats, use_container_width=True, hide_index=True)
         
         with col3:
-            st.markdown("#### 📦 Nach Einheit")
+            st.markdown("#### [PACKAGE] Nach Einheit")
             units = {}
             for comp in all_components:
                 unit = comp.get('unit', 'Stk')
@@ -279,7 +279,7 @@ def _render_enhanced_dashboard() -> None:
             st.dataframe(recent_df, use_container_width=True, hide_index=True)
         
     except Exception as e:
-        st.error(f"❌ Fehler beim Laden der Statistiken: {e}")
+        st.error(f"[ERROR] Fehler beim Laden der Statistiken: {e}")
 
 
 def _render_enhanced_component_list() -> None:
@@ -291,11 +291,11 @@ def _render_enhanced_component_list() -> None:
         all_components = read_components()
         
         if not all_components:
-            st.info("ℹ️ Keine Komponenten vorhanden. Erstellen Sie die erste Komponente im Tab 'Neue Komponente'.")
+            st.info("[INFO] Keine Komponenten vorhanden. Erstellen Sie die erste Komponente im Tab 'Neue Komponente'.")
             return
         
         # === FILTER SECTION ===
-        st.markdown("#### 🔍 Filter & Suche")
+        st.markdown("#### [SEARCH] Filter & Suche")
         
         col1, col2, col3, col4 = st.columns(4)
         
@@ -353,7 +353,7 @@ def _render_enhanced_component_list() -> None:
                        search_lower in c.get('manufacturer', '').lower() or
                        search_lower in c.get('article_number', '').lower()]
         
-        st.info(f"📊 **{len(filtered)}** von **{len(all_components)}** Komponenten angezeigt")
+        st.info(f"[CHART] **{len(filtered)}** von **{len(all_components)}** Komponenten angezeigt")
         
         # === TABLE WITH ACTIONS ===
         if filtered:
@@ -408,7 +408,7 @@ def _render_enhanced_component_list() -> None:
                         st.rerun()
                 
                 with col_btn3:
-                    if st.button("🗑️ Löschen", type="primary", use_container_width=True):
+                    if st.button("[DELETE] Löschen", type="primary", use_container_width=True):
                         st.session_state['delete_component_id'] = selected_id
                         st.rerun()
             
@@ -421,7 +421,7 @@ def _render_enhanced_component_list() -> None:
                 _render_delete_confirmation(st.session_state['delete_component_id'])
         
     except Exception as e:
-        st.error(f"❌ Fehler beim Laden der Komponenten: {e}")
+        st.error(f"[ERROR] Fehler beim Laden der Komponenten: {e}")
         st.exception(e)
 
 
@@ -469,7 +469,7 @@ def _render_edit_component_modal(component_id: int) -> None:
                 submitted = st.form_submit_button("💾 Speichern", use_container_width=True, type="primary")
             
             with col_cancel:
-                cancelled = st.form_submit_button("❌ Abbrechen", use_container_width=True)
+                cancelled = st.form_submit_button("[ERROR] Abbrechen", use_container_width=True)
             
             if submitted:
                 updated_data = {
@@ -492,18 +492,18 @@ def _render_edit_component_modal(component_id: int) -> None:
                 }
                 
                 if update_component(updated_data):
-                    st.success("✅ Komponente erfolgreich aktualisiert!")
+                    st.success("[OK] Komponente erfolgreich aktualisiert!")
                     del st.session_state['edit_component_id']
                     st.rerun()
                 else:
-                    st.error("❌ Fehler beim Aktualisieren der Komponente")
+                    st.error("[ERROR] Fehler beim Aktualisieren der Komponente")
             
             if cancelled:
                 del st.session_state['edit_component_id']
                 st.rerun()
     
     except Exception as e:
-        st.error(f"❌ Fehler: {e}")
+        st.error(f"[ERROR] Fehler: {e}")
         del st.session_state['edit_component_id']
 
 
@@ -519,26 +519,26 @@ def _render_delete_confirmation(component_id: int) -> None:
             return
         
         st.markdown("---")
-        st.warning(f"⚠️ **Wirklich löschen?** {component.get('manufacturer', '')} - {component.get('product_name', '')}")
+        st.warning(f"[WARNING] **Wirklich löschen?** {component.get('manufacturer', '')} - {component.get('product_name', '')}")
         
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("✅ Ja, löschen", type="primary", use_container_width=True):
+            if st.button("[OK] Ja, löschen", type="primary", use_container_width=True):
                 if delete_component(component_id):
-                    st.success("✅ Komponente gelöscht!")
+                    st.success("[OK] Komponente gelöscht!")
                     del st.session_state['delete_component_id']
                     st.rerun()
                 else:
-                    st.error("❌ Fehler beim Löschen")
+                    st.error("[ERROR] Fehler beim Löschen")
         
         with col2:
-            if st.button("❌ Abbrechen", use_container_width=True):
+            if st.button("[ERROR] Abbrechen", use_container_width=True):
                 del st.session_state['delete_component_id']
                 st.rerun()
     
     except Exception as e:
-        st.error(f"❌ Fehler: {e}")
+        st.error(f"[ERROR] Fehler: {e}")
         del st.session_state['delete_component_id']
 
 
@@ -548,7 +548,7 @@ def _render_enhanced_create_component() -> None:
     st.markdown('<p class="section-header">➕ Neue Komponente erstellen</p>', unsafe_allow_html=True)
     
     # Quick-Add-Vorlagen
-    st.markdown("#### 🚀 Schnell-Vorlagen")
+    st.markdown("#### [LAUNCH] Schnell-Vorlagen")
     
     templates = {
         "Dachhaken": {
@@ -586,13 +586,13 @@ def _render_enhanced_create_component() -> None:
     template = st.session_state.get('component_template', {})
     
     with st.form("create_component_form", clear_on_submit=True):
-        st.markdown("#### 📝 Komponenten-Details")
+        st.markdown("#### [NOTE] Komponenten-Details")
         
         col1, col2 = st.columns(2)
         
         with col1:
             manufacturer = st.text_input("🏭 Hersteller *", value=template.get('manufacturer', ''))
-            product_name = st.text_input("📦 Produktname *", value=template.get('product_name', ''))
+            product_name = st.text_input("[PACKAGE] Produktname *", value=template.get('product_name', ''))
             article_number = st.text_input("🔢 Artikelnummer", value=template.get('article_number', ''))
             category = st.text_input("📂 Kategorie *", value=template.get('category', ''))
             roof_type = st.text_input("🏠 Dachtyp *", value=template.get('roof_type', 'Universal'))
@@ -602,19 +602,19 @@ def _render_enhanced_create_component() -> None:
             dimensions = st.text_input("📏 Abmessungen", value=template.get('dimensions', ''))
             weight_kg = st.number_input("⚖️ Gewicht (kg)", value=template.get('weight_kg', 0.0), format="%.3f")
             price_netto = st.number_input("💶 Preis netto (€)", value=template.get('price_netto', 0.0), format="%.2f")
-            unit = st.selectbox("📊 Einheit", ['Stk', 'm', 'kg', 'Set', 'Paar'], 
+            unit = st.selectbox("[CHART] Einheit", ['Stk', 'm', 'kg', 'Set', 'Paar'], 
                                index=['Stk', 'm', 'kg', 'Set', 'Paar'].index(template.get('unit', 'Stk')))
         
         quantity_per_module = st.number_input("🔢 Menge pro Modul", value=template.get('quantity_per_module', 0.0), format="%.2f")
         compatibility = st.text_area("🔗 Kompatibilität", value=template.get('compatibility', ''))
         warranty_years = st.number_input("🛡️ Garantie (Jahre)", value=template.get('warranty_years', 10))
-        notes = st.text_area("📝 Notizen", value=template.get('notes', ''))
+        notes = st.text_area("[NOTE] Notizen", value=template.get('notes', ''))
         
-        submitted = st.form_submit_button("✅ Komponente erstellen", use_container_width=True, type="primary")
+        submitted = st.form_submit_button("[OK] Komponente erstellen", use_container_width=True, type="primary")
         
         if submitted:
             if not all([manufacturer, product_name, category, roof_type]):
-                st.error("❌ Bitte füllen Sie alle Pflichtfelder aus!")
+                st.error("[ERROR] Bitte füllen Sie alle Pflichtfelder aus!")
             else:
                 new_component = {
                     'manufacturer': manufacturer,
@@ -636,7 +636,7 @@ def _render_enhanced_create_component() -> None:
                 
                 try:
                     component_id = create_component(new_component)
-                    st.success(f"✅ Komponente erfolgreich erstellt! (ID: {component_id})")
+                    st.success(f"[OK] Komponente erfolgreich erstellt! (ID: {component_id})")
                     
                     # Clear template
                     if 'component_template' in st.session_state:
@@ -644,7 +644,7 @@ def _render_enhanced_create_component() -> None:
                     
                     st.rerun()
                 except Exception as e:
-                    st.error(f"❌ Fehler beim Erstellen: {e}")
+                    st.error(f"[ERROR] Fehler beim Erstellen: {e}")
 
 
 def _render_advanced_search() -> None:
@@ -652,7 +652,7 @@ def _render_advanced_search() -> None:
     
     st.markdown('<p class="section-header">🔎 Erweiterte Suche</p>', unsafe_allow_html=True)
     
-    st.info("🔍 Suchen Sie Komponenten mit erweiterten Filtern")
+    st.info("[SEARCH] Suchen Sie Komponenten mit erweiterten Filtern")
     
     # Search form
     with st.form("advanced_search"):
@@ -668,7 +668,7 @@ def _render_advanced_search() -> None:
             price_max = st.number_input("Preis max (€)", value=1000.0, format="%.2f")
             weight_max = st.number_input("Max Gewicht (kg)", value=100.0, format="%.2f")
         
-        search_submitted = st.form_submit_button("🔍 Suchen", use_container_width=True, type="primary")
+        search_submitted = st.form_submit_button("[SEARCH] Suchen", use_container_width=True, type="primary")
     
     if search_submitted:
         try:
@@ -689,7 +689,7 @@ def _render_advanced_search() -> None:
             results = [c for c in results if price_min <= c.get('price_netto', 0) <= price_max]
             results = [c for c in results if c.get('weight_kg', 0) <= weight_max]
             
-            st.success(f"✅ **{len(results)}** Komponenten gefunden")
+            st.success(f"[OK] **{len(results)}** Komponenten gefunden")
             
             if results:
                 df_results = pd.DataFrame([{
@@ -704,7 +704,7 @@ def _render_advanced_search() -> None:
                 st.dataframe(df_results, use_container_width=True, hide_index=True)
         
         except Exception as e:
-            st.error(f"❌ Fehler bei der Suche: {e}")
+            st.error(f"[ERROR] Fehler bei der Suche: {e}")
 
 
 def _render_import_export() -> None:
@@ -725,7 +725,7 @@ def _render_import_export() -> None:
                 json_data = json.dumps(all_components, indent=2, ensure_ascii=False)
                 
                 st.download_button(
-                    label="📄 Als JSON exportieren",
+                    label="[FILE] Als JSON exportieren",
                     data=json_data,
                     file_name="pv_mounting_components.json",
                     mime="application/json",
@@ -750,23 +750,23 @@ def _render_import_export() -> None:
                 csv_data = df_export.to_csv(index=False, encoding='utf-8-sig', sep=';')
                 
                 st.download_button(
-                    label="📊 Als CSV exportieren",
+                    label="[CHART] Als CSV exportieren",
                     data=csv_data,
                     file_name="pv_mounting_components.csv",
                     mime="text/csv",
                     use_container_width=True
                 )
                 
-                st.success(f"✅ {len(all_components)} Komponenten bereit zum Export")
+                st.success(f"[OK] {len(all_components)} Komponenten bereit zum Export")
             else:
-                st.info("ℹ️ Keine Daten zum Exportieren vorhanden")
+                st.info("[INFO] Keine Daten zum Exportieren vorhanden")
         
         except Exception as e:
-            st.error(f"❌ Export-Fehler: {e}")
+            st.error(f"[ERROR] Export-Fehler: {e}")
     
     with col2:
         st.markdown("### 📤 Import")
-        st.info("ℹ️ Import-Funktion in Entwicklung")
+        st.info("[INFO] Import-Funktion in Entwicklung")
 
 
 # Alias für Kompatibilität

@@ -14,7 +14,7 @@ def fix_invalid_floats():
 
     input_dir = "input"
     if not os.path.exists(input_dir):
-        print(f"❌ Ordner '{input_dir}' nicht gefunden!")
+        print(f"[ERROR] Ordner '{input_dir}' nicht gefunden!")
         return None
 
     total_fixes = 0
@@ -47,7 +47,7 @@ def fix_invalid_floats():
             if invalid_float in content:
                 content = content.replace(invalid_float, valid_float)
                 file_fixes += 1
-                print(f"   🔧 {filename}: '{invalid_float}' → '{valid_float}'")
+                print(f"   [TOOL] {filename}: '{invalid_float}' → '{valid_float}'")
 
         # Weitere Muster reparieren (z.B. "2.21.72483825683594")
         # Spezielle Behandlung für doppelte Punkte
@@ -64,24 +64,24 @@ def fix_invalid_floats():
         if file_fixes > 0:
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print(f"✅ {filename}: {file_fixes} Float-Korrekturen gespeichert")
+            print(f"[OK] {filename}: {file_fixes} Float-Korrekturen gespeichert")
             total_fixes += file_fixes
         else:
-            print(f"ℹ️  {filename}: Keine Float-Korrekturen nötig")
+            print(f"[INFO]  {filename}: Keine Float-Korrekturen nötig")
 
     print(
-        f"\n🎯 Float-Reparatur abgeschlossen: {total_fixes} Korrekturen insgesamt")
+        f"\n[TARGET] Float-Reparatur abgeschlossen: {total_fixes} Korrekturen insgesamt")
     return total_fixes > 0
 
 
 if __name__ == "__main__":
-    print("🔧 Starte Float-Syntax-Reparatur...")
+    print("[TOOL] Starte Float-Syntax-Reparatur...")
     print("=" * 60)
 
     success = fix_invalid_floats()
 
     if success:
-        print("\n✅ Float-Syntax erfolgreich repariert!")
-        print("💡 Führe jetzt 'python debug_syntax_issues.py' zum Testen aus")
+        print("\n[OK] Float-Syntax erfolgreich repariert!")
+        print("[IDEA] Führe jetzt 'python debug_syntax_issues.py' zum Testen aus")
     else:
-        print("\n⚠️  Keine Float-Probleme gefunden")
+        print("\n[WARNING]  Keine Float-Probleme gefunden")

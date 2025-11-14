@@ -80,7 +80,7 @@ def demo_module_details():
         )
         fig.add_trace(module)
         
-        print(f"  ✓ Modul #{module_config['number']}: {module_config['description']}")
+        print(f"  [OK] Modul #{module_config['number']}: {module_config['description']}")
     
     # Layout konfigurieren
     fig.update_layout(
@@ -108,7 +108,7 @@ def demo_module_details():
     output_file = "demo_module_details_hover.html"
     fig.write_html(output_file)
     
-    print(f"\n✅ Demo-Visualisierung erstellt: {output_file}")
+    print(f"\n[OK] Demo-Visualisierung erstellt: {output_file}")
     print("\nÖffnen Sie die Datei im Browser und bewegen Sie die Maus über die Module.")
     print("Sie sehen dann folgende Informationen:")
     print("  • Modul-Nummer (z.B. 'Modul #1')")
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     try:
         demo_module_details()
     except Exception as e:
-        print(f"\n❌ FEHLER: {e}\n")
+        print(f"\n[ERROR] FEHLER: {e}\n")
         import traceback
         traceback.print_exc()
         sys.exit(1)

@@ -28,7 +28,7 @@ def render_export_action_buttons(
     """
     results = {}
     
-    st.markdown("### 🚀 Export starten")
+    st.markdown("### [LAUNCH] Export starten")
     st.caption("Klicken Sie auf einen Button um den Export zu starten")
     
     # Screenshot Export Button
@@ -73,7 +73,7 @@ def render_export_action_buttons(
     # 3D-Modell Export Button
     if export_options.get("export_3d_model", False):
         if st.button(
-            "🎨 3D-Modell exportieren",
+            "[DESIGN] 3D-Modell exportieren",
             key="btn_export_3d_model",
             use_container_width=True
         ):
@@ -85,7 +85,7 @@ def render_export_action_buttons(
     # CSV Export Button
     if export_options.get("export_csv", False):
         if st.button(
-            "📊 CSV exportieren",
+            "[CHART] CSV exportieren",
             key="btn_export_csv",
             use_container_width=True
         ):
@@ -117,7 +117,7 @@ def _export_screenshot_action(figure, format_type: str, resolution: tuple) -> Di
             )
             
             if result.get("success"):
-                st.success(f"✅ Screenshot erfolgreich erstellt!")
+                st.success(f"[OK] Screenshot erfolgreich erstellt!")
                 
                 # Download-Button anbieten
                 st.download_button(
@@ -130,11 +130,11 @@ def _export_screenshot_action(figure, format_type: str, resolution: tuple) -> Di
                 
                 return {"success": True, "message": "Screenshot erstellt"}
             else:
-                st.error(f"❌ Fehler: {result.get('error', 'Unbekannter Fehler')}")
+                st.error(f"[ERROR] Fehler: {result.get('error', 'Unbekannter Fehler')}")
                 return {"success": False, "error": result.get("error")}
                 
     except Exception as e:
-        st.error(f"❌ Export fehlgeschlagen: {e}")
+        st.error(f"[ERROR] Export fehlgeschlagen: {e}")
         return {"success": False, "error": str(e)}
 
 
@@ -150,7 +150,7 @@ def _export_multiview_action(scene_data, resolution: tuple) -> Dict:
             )
             
             if result.get("success"):
-                st.success(f"✅ {len(result.get('views', []))} Ansichten erstellt!")
+                st.success(f"[OK] {len(result.get('views', []))} Ansichten erstellt!")
                 
                 # ZIP-Download anbieten
                 if "zip_data" in result:
@@ -164,11 +164,11 @@ def _export_multiview_action(scene_data, resolution: tuple) -> Dict:
                 
                 return {"success": True, "message": "Multi-View erstellt"}
             else:
-                st.error(f"❌ Fehler: {result.get('error')}")
+                st.error(f"[ERROR] Fehler: {result.get('error')}")
                 return {"success": False, "error": result.get("error")}
                 
     except Exception as e:
-        st.error(f"❌ Export fehlgeschlagen: {e}")
+        st.error(f"[ERROR] Export fehlgeschlagen: {e}")
         return {"success": False, "error": str(e)}
 
 
@@ -190,7 +190,7 @@ def _export_360_action(scene_data, frames: int, resolution: tuple) -> Dict:
             progress_bar.empty()
             
             if result.get("success"):
-                st.success(f"✅ Animation mit {frames} Frames erstellt!")
+                st.success(f"[OK] Animation mit {frames} Frames erstellt!")
                 
                 # GIF-Download anbieten
                 if "gif_data" in result:
@@ -204,11 +204,11 @@ def _export_360_action(scene_data, frames: int, resolution: tuple) -> Dict:
                 
                 return {"success": True, "message": "Animation erstellt"}
             else:
-                st.error(f"❌ Fehler: {result.get('error')}")
+                st.error(f"[ERROR] Fehler: {result.get('error')}")
                 return {"success": False, "error": result.get("error")}
                 
     except Exception as e:
-        st.error(f"❌ Export fehlgeschlagen: {e}")
+        st.error(f"[ERROR] Export fehlgeschlagen: {e}")
         return {"success": False, "error": str(e)}
 
 
@@ -224,7 +224,7 @@ def _export_3d_model_action(scene_data, model_format: str) -> Dict:
             )
             
             if result.get("success"):
-                st.success(f"✅ 3D-Modell ({model_format}) erstellt!")
+                st.success(f"[OK] 3D-Modell ({model_format}) erstellt!")
                 
                 # Download anbieten
                 st.download_button(
@@ -237,11 +237,11 @@ def _export_3d_model_action(scene_data, model_format: str) -> Dict:
                 
                 return {"success": True, "message": "3D-Modell erstellt"}
             else:
-                st.error(f"❌ Fehler: {result.get('error')}")
+                st.error(f"[ERROR] Fehler: {result.get('error')}")
                 return {"success": False, "error": result.get("error")}
                 
     except Exception as e:
-        st.error(f"❌ Export fehlgeschlagen: {e}")
+        st.error(f"[ERROR] Export fehlgeschlagen: {e}")
         return {"success": False, "error": str(e)}
 
 
@@ -269,7 +269,7 @@ def _export_csv_action(scene_data) -> Dict:
                 df = pd.DataFrame(modules_data)
                 csv_data = df.to_csv(index=False).encode('utf-8')
                 
-                st.success(f"✅ CSV mit {len(modules_data)} Modulen erstellt!")
+                st.success(f"[OK] CSV mit {len(modules_data)} Modulen erstellt!")
                 
                 st.download_button(
                     label="⬇️ CSV herunterladen",
@@ -281,11 +281,11 @@ def _export_csv_action(scene_data) -> Dict:
                 
                 return {"success": True, "message": "CSV erstellt"}
             else:
-                st.warning("⚠️ Keine Modul-Daten zum Exportieren")
+                st.warning("[WARNING] Keine Modul-Daten zum Exportieren")
                 return {"success": False, "error": "Keine Daten"}
                 
     except Exception as e:
-        st.error(f"❌ Export fehlgeschlagen: {e}")
+        st.error(f"[ERROR] Export fehlgeschlagen: {e}")
         return {"success": False, "error": str(e)}
 
 
@@ -298,7 +298,7 @@ def _export_json_action(scene_data) -> Dict:
             if scene_data:
                 json_data = json.dumps(scene_data, indent=2).encode('utf-8')
                 
-                st.success("✅ JSON erstellt!")
+                st.success("[OK] JSON erstellt!")
                 
                 st.download_button(
                     label="⬇️ JSON herunterladen",
@@ -310,11 +310,11 @@ def _export_json_action(scene_data) -> Dict:
                 
                 return {"success": True, "message": "JSON erstellt"}
             else:
-                st.warning("⚠️ Keine Szenen-Daten zum Exportieren")
+                st.warning("[WARNING] Keine Szenen-Daten zum Exportieren")
                 return {"success": False, "error": "Keine Daten"}
                 
     except Exception as e:
-        st.error(f"❌ Export fehlgeschlagen: {e}")
+        st.error(f"[ERROR] Export fehlgeschlagen: {e}")
         return {"success": False, "error": str(e)}
 
 

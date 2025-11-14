@@ -157,8 +157,8 @@ def generate_test_summary(result: Dict[str, Any]) -> str:
         "TEST RESULTS SUMMARY",
         "=" * 60,
         f"Total Tests: {result['total_tests']}",
-        f"✓ Passed: {result['passed']}",
-        f"✗ Failed: {result['failed']}",
+        f"[OK] Passed: {result['passed']}",
+        f"[ERROR] Failed: {result['failed']}",
     ]
 
     if result['errors'] > 0:

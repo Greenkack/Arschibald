@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_fixed_donuts():
     """Testet die korrigierten Donut-Charts auf Seite 6"""
 
-    print("🔧 Test der korrigierten Seite 6 Donut-Charts")
+    print("[TOOL] Test der korrigierten Seite 6 Donut-Charts")
     print("=" * 50)
 
     # Test-Daten mit den korrekten Keys
@@ -41,7 +41,7 @@ def test_fixed_donuts():
         # Generiere Overlay
         coords_dir = Path("coords")
 
-        print("📊 Test-Daten:")
+        print("[CHART] Test-Daten:")
         print(
             f"   - Speicher zu Tagesverbrauch: {dynamic_data['storage_consumption_ratio_percent']}%")
         print(
@@ -59,8 +59,8 @@ def test_fixed_donuts():
                 f.write(overlay_bytes)
 
             print(
-                f"\n✅ PDF mit korrigierten Donut-Charts erstellt: {output_file}")
-            print(f"📦 Dateigröße: {len(overlay_bytes):,} bytes")
+                f"\n[OK] PDF mit korrigierten Donut-Charts erstellt: {output_file}")
+            print(f"[PACKAGE] Dateigröße: {len(overlay_bytes):,} bytes")
             print("📋 Überprüfen Sie Seite 6 für die Donut-Charts:")
             print("   - Oberer Chart: Speicher zu Tagesverbrauch (74%)")
             print("   - Unterer Chart: Speicher zu PV-Produktion (53%)")
@@ -68,11 +68,11 @@ def test_fixed_donuts():
                 "📍 Position: Links von den Platzhaltern bei X=280, Y basierend auf seite6.yml")
 
             return True
-        print("\n❌ Overlay-Generierung fehlgeschlagen")
+        print("\n[ERROR] Overlay-Generierung fehlgeschlagen")
         return False
 
     except Exception as e:
-        print(f"\n❌ Fehler beim Test: {e}")
+        print(f"\n[ERROR] Fehler beim Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -81,7 +81,7 @@ def test_fixed_donuts():
 def test_different_values():
     """Testet verschiedene Werte für die Donut-Charts"""
 
-    print("\n🔧 Test verschiedener Donut-Chart Werte")
+    print("\n[TOOL] Test verschiedener Donut-Chart Werte")
     print("=" * 40)
 
     test_scenarios = [
@@ -138,20 +138,20 @@ def test_different_values():
                 with open(output_file, "wb") as f:
                     f.write(overlay_bytes)
 
-                print(f"✅ PDF erstellt: {output_file}")
+                print(f"[OK] PDF erstellt: {output_file}")
                 print(
-                    f"📊 Werte: Consumption={
+                    f"[CHART] Werte: Consumption={
                         scenario['consumption']}%, Production={
                         scenario['production']}%")
             else:
-                print(f"❌ Szenario {i + 1} fehlgeschlagen")
+                print(f"[ERROR] Szenario {i + 1} fehlgeschlagen")
 
         except Exception as e:
-            print(f"❌ Fehler bei Szenario {i + 1}: {e}")
+            print(f"[ERROR] Fehler bei Szenario {i + 1}: {e}")
 
 
 if __name__ == "__main__":
-    print("🚀 Test der korrigierten Seite 6 Donut-Charts")
+    print("[LAUNCH] Test der korrigierten Seite 6 Donut-Charts")
     print("=" * 55)
 
     # Test 1: Basis-Funktionalität
@@ -163,9 +163,9 @@ if __name__ == "__main__":
 
         print("\n🎉 Alle Tests abgeschlossen!")
         print("📋 Die Donut-Charts sollten jetzt korrekt auf Seite 6 sichtbar sein:")
-        print("   ✅ Position: Links von den Platzhaltern (X=280)")
-        print("   ✅ Vertikal gestapelt basierend auf seite6.yml Koordinaten")
-        print("   ✅ Angemessene Größe (Radius 30/18)")
-        print("   ✅ Labels rechts von den Charts")
+        print("   [OK] Position: Links von den Platzhaltern (X=280)")
+        print("   [OK] Vertikal gestapelt basierend auf seite6.yml Koordinaten")
+        print("   [OK] Angemessene Größe (Radius 30/18)")
+        print("   [OK] Labels rechts von den Charts")
     else:
-        print("\n❌ Basis-Test fehlgeschlagen - weitere Tests übersprungen")
+        print("\n[ERROR] Basis-Test fehlgeschlagen - weitere Tests übersprungen")

@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def create_test_pdf():
     """Erstelle ein Test-PDF mit Seite 6 Charts"""
-    print("🎨 Erstelle Test-PDF mit Seite 6 Charts...")
+    print("[DESIGN] Erstelle Test-PDF mit Seite 6 Charts...")
 
     try:
         import io
@@ -68,7 +68,7 @@ def create_test_pdf():
             test_company_info)
 
         print(
-            f"📊 Speicher-Relationen: Verbrauch={
+            f"[CHART] Speicher-Relationen: Verbrauch={
                 dynamic_data.get('storage_consumption_ratio_percent')}%, Produktion={
                 dynamic_data.get('storage_production_ratio_percent')}%")
 
@@ -86,7 +86,10 @@ def create_test_pdf():
         overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
 
         for page_num in range(1, 8):  # Seiten 1-7
-            template_path = template_dir / f"nt_nt_{page_num:02d}.pdf"
+            if f != 0:
+                template_path = template_dir / f"nt_nt_{page_num:02d}.pdf"
+            else:
+                template_path = 0.0
 
             if template_path.exists():
                 # Template-Seite laden
@@ -105,12 +108,12 @@ def create_test_pdf():
                     merged_page.merge_page(overlay_page)
 
                     writer.add_page(merged_page)
-                    print(f"✅ Seite {page_num} mit Overlay hinzugefügt")
+                    print(f"[OK] Seite {page_num} mit Overlay hinzugefügt")
                 else:
                     writer.add_page(template_page)
-                    print(f"✅ Seite {page_num} ohne Overlay hinzugefügt")
+                    print(f"[OK] Seite {page_num} ohne Overlay hinzugefügt")
             else:
-                print(f"⚠️ Template nicht gefunden: {template_path}")
+                print(f"[WARNING] Template nicht gefunden: {template_path}")
 
         # PDF speichern
         output_path = "test_seite6_charts.pdf"
@@ -118,16 +121,16 @@ def create_test_pdf():
             writer.write(output_file)
 
         print(f"🎉 Test-PDF erstellt: {output_path}")
-        print(f"📄 Anzahl Seiten: {len(writer.pages)}")
+        print(f"[FILE] Anzahl Seiten: {len(writer.pages)}")
 
         # Dateigröße anzeigen
         file_size = os.path.getsize(output_path)
-        print(f"📦 Dateigröße: {file_size:,} bytes")
+        print(f"[PACKAGE] Dateigröße: {file_size:,} bytes")
 
         return True
 
     except Exception as e:
-        print(f"❌ Fehler beim Erstellen des Test-PDFs: {e}")
+        print(f"[ERROR] Fehler beim Erstellen des Test-PDFs: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -135,7 +138,7 @@ def create_test_pdf():
 
 def main():
     """Hauptfunktion"""
-    print("🚀 Seite 6 Charts Test startet...\n")
+    print("[LAUNCH] Seite 6 Charts Test startet...\n")
 
     # Prüfe ob benötigte Dateien existieren
     required_files = [
@@ -149,7 +152,7 @@ def main():
             missing_files.append(file_path)
 
     if missing_files:
-        print("❌ Fehlende Dateien:")
+        print("[ERROR] Fehlende Dateien:")
         for file_path in missing_files:
             print(f"  - {file_path}")
         return
@@ -158,13 +161,13 @@ def main():
     success = create_test_pdf()
 
     if success:
-        print("\n✅ Test erfolgreich abgeschlossen!")
+        print("\n[OK] Test erfolgreich abgeschlossen!")
         print("📋 Die Donut-Charts sollten jetzt auf Seite 6 sichtbar sein:")
         print("   - Oberer Chart: Speicher zu Tagesverbrauch (ca. 74%)")
         print("   - Unterer Chart: Speicher zu PV-Produktion (ca. 53%)")
         print("   - Beide Charts zeigen die Prozentwerte in der Mitte")
     else:
-        print("\n❌ Test fehlgeschlagen!")
+        print("\n[ERROR] Test fehlgeschlagen!")
 
 
 if __name__ == "__main__":

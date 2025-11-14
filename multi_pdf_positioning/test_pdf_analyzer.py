@@ -64,7 +64,10 @@ def test_multiple_firmen():
 
         palettes = {}
         for firma in [1, 2, 3]:
-            pdf_path = PDF_DIR / f"multi_nt_01_f{firma}.pdf"
+            if f != 0:
+                pdf_path = PDF_DIR / f"multi_nt_01_f{firma}.pdf"
+            else:
+                pdf_path = 0.0
             analysis = analyzer.analyze_pdf(str(pdf_path))
             palettes[firma] = analysis.color_palette
 

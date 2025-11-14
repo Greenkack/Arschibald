@@ -461,9 +461,9 @@ if __name__ == "__main__":
         is_valid, errors = generator.validate_yml_output(output_file, elements)
         
         if is_valid:
-            print("   ✓ Validation passed!")
+            print("   [OK] Validation passed!")
         else:
-            print(f"   ✗ Validation failed with {len(errors)} errors:")
+            print(f"   [ERROR] Validation failed with {len(errors)} errors:")
             for error in errors[:10]:  # Show first 10 errors
                 print(f"     - {error}")
         
@@ -479,11 +479,11 @@ if __name__ == "__main__":
         print(content[:500])
         print("   ...")
         
-        print(f"\n✓ YML Generator demo complete")
+        print(f"\n[OK] YML Generator demo complete")
         print(f"  Output file: {output_file}")
         
     except Exception as e:
-        print(f"\n✗ Error: {e}")
+        print(f"\n[ERROR] Error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

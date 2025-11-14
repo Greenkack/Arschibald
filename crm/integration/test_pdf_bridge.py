@@ -90,7 +90,7 @@ def test_extract_pdf_metadata():
         assert metadata['customer_name'] == 'Max Mustermann', f"Expected 'Max Mustermann', got {metadata['customer_name']}"
         assert metadata['file_size'] > 0, "File size should be > 0"
         
-        print("✅ Metadaten erfolgreich extrahiert:")
+        print("[OK] Metadaten erfolgreich extrahiert:")
         print(f"   - Typ: {metadata['doc_type']}")
         print(f"   - Angebots-ID: {metadata['offer_id']}")
         print(f"   - Kunde: {metadata['customer_name']}")
@@ -123,7 +123,7 @@ def test_extract_pdf_metadata_various_types():
             metadata = extract_pdf_metadata(tmp_path)
             assert metadata['doc_type'] == expected_type, \
                 f"Expected '{expected_type}' for {filename}, got {metadata['doc_type']}"
-            print(f"✅ {filename} → {metadata['doc_type']}")
+            print(f"[OK] {filename} → {metadata['doc_type']}")
         finally:
             os.unlink(tmp_path)
 
@@ -146,7 +146,7 @@ def test_extract_pdf_metadata_without_offer_data():
         assert 'date' in metadata, "date should be present"
         assert 'file_size' in metadata, "file_size should be present"
         
-        print("✅ Metadaten ohne offer_data erfolgreich extrahiert")
+        print("[OK] Metadaten ohne offer_data erfolgreich extrahiert")
         print(f"   - Typ: {metadata['doc_type']}")
         print(f"   - Datum: {metadata['date']}")
         
@@ -167,7 +167,7 @@ def test_get_next_version_number():
     )
     
     assert version == 1, f"Expected version 1 for new customer, got {version}"
-    print(f"✅ Erste Version korrekt: v{version}")
+    print(f"[OK] Erste Version korrekt: v{version}")
 
 
 def test_create_versioned_filename():
@@ -190,7 +190,7 @@ def test_create_versioned_filename():
     for original, version, expected in test_cases:
         result = create_versioned_filename(original, version, metadata)
         assert result == expected, f"Expected '{expected}', got '{result}'"
-        print(f"✅ {original} → {result}")
+        print(f"[OK] {original} → {result}")
 
 
 def test_pdf_type_helpers():
@@ -214,7 +214,7 @@ def test_pdf_type_helpers():
         assert label == expected_label, f"Expected label '{expected_label}', got '{label}'"
         assert color == expected_color, f"Expected color '{expected_color}', got '{color}'"
         
-        print(f"✅ {doc_type}: {label} ({color})")
+        print(f"[OK] {doc_type}: {label} ({color})")
 
 
 def test_format_document_list():
@@ -249,7 +249,7 @@ def test_format_document_list():
     assert doc1['version'] == 1, f"Expected version 1, got {doc1['version']}"
     assert doc1['formatted_date'] == '13.01.2025 10:30', f"Expected '13.01.2025 10:30', got {doc1['formatted_date']}"
     
-    print("✅ Dokumentenliste erfolgreich formatiert:")
+    print("[OK] Dokumentenliste erfolgreich formatiert:")
     for doc in formatted:
         print(f"   - {doc['display_name']}: {doc['type_label']} v{doc['version']} ({doc['formatted_date']})")
 
@@ -263,7 +263,7 @@ def test_auto_save_pdf_to_customer_documents():
     
     # Setup Test-Datenbank
     if not setup_test_database():
-        print("⚠️ Test übersprungen - Datenbank nicht verfügbar")
+        print("[WARNING] Test übersprungen - Datenbank nicht verfügbar")
         return
     
     # Erstelle Test-PDF
@@ -298,7 +298,7 @@ def test_auto_save_pdf_to_customer_documents():
         assert saved_doc['doc_type'] == 'offer_pdf', f"Expected 'offer_pdf', got {saved_doc['doc_type']}"
         assert 'v1' in saved_doc['display_name'], f"Version should be in filename: {saved_doc['display_name']}"
         
-        print(f"✅ PDF erfolgreich gespeichert - Dokument-ID: {doc_id}")
+        print(f"[OK] PDF erfolgreich gespeichert - Dokument-ID: {doc_id}")
         print(f"   - Typ: {saved_doc['doc_type']}")
         print(f"   - Name: {saved_doc['display_name']}")
         
@@ -316,7 +316,7 @@ def test_versioning_with_multiple_pdfs():
     
     # Setup Test-Datenbank
     if not setup_test_database():
-        print("⚠️ Test übersprungen - Datenbank nicht verfügbar")
+        print("[WARNING] Test übersprungen - Datenbank nicht verfügbar")
         return
     
     try:
@@ -336,7 +336,7 @@ def test_versioning_with_multiple_pdfs():
                 )
                 
                 assert doc_id is not None, f"Document {i} should be saved"
-                print(f"✅ PDF {i} gespeichert - ID: {doc_id}")
+                print(f"[OK] PDF {i} gespeichert - ID: {doc_id}")
                 
             finally:
                 os.unlink(tmp_path)
@@ -360,14 +360,14 @@ def test_versioning_with_multiple_pdfs():
         assert 2 in versions_found, "Version 2 not found"
         assert 3 in versions_found, "Version 3 not found"
         
-        print("✅ Versionierung erfolgreich:")
+        print("[OK] Versionierung erfolgreich:")
         for doc in docs:
             print(f"   - {doc['display_name']}")
         
         # Teste get_next_version_number
         next_version = get_next_version_number(99999, 'offer_pdf')
         assert next_version == 4, f"Expected next version 4, got {next_version}"
-        print(f"✅ Nächste Version korrekt ermittelt: v{next_version}")
+        print(f"[OK] Nächste Version korrekt ermittelt: v{next_version}")
         
     finally:
         cleanup_test_data()
@@ -382,7 +382,7 @@ def test_auto_save_with_project_id():
     
     # Setup Test-Datenbank
     if not setup_test_database():
-        print("⚠️ Test übersprungen - Datenbank nicht verfügbar")
+        print("[WARNING] Test übersprungen - Datenbank nicht verfügbar")
         return
     
     with tempfile.NamedTemporaryFile(suffix='_project_angebot.pdf', delete=False) as tmp:
@@ -404,7 +404,7 @@ def test_auto_save_with_project_id():
         docs = list_customer_documents(99999, project_id=12345)
         assert len(docs) > 0, "Should have documents for project"
         
-        print(f"✅ PDF mit Projekt-ID gespeichert - ID: {doc_id}")
+        print(f"[OK] PDF mit Projekt-ID gespeichert - ID: {doc_id}")
         
     finally:
         os.unlink(tmp_path)
@@ -425,7 +425,7 @@ def test_auto_save_nonexistent_file():
     )
     
     assert doc_id is None, "Should return None for nonexistent file"
-    print("✅ Nicht existierende Datei korrekt behandelt (None zurückgegeben)")
+    print("[OK] Nicht existierende Datei korrekt behandelt (None zurückgegeben)")
 
 
 def test_integration_workflow():
@@ -441,7 +441,7 @@ def test_integration_workflow():
     
     # Setup Test-Datenbank
     if not setup_test_database():
-        print("⚠️ Test übersprungen - Datenbank nicht verfügbar")
+        print("[WARNING] Test übersprungen - Datenbank nicht verfügbar")
         return
     
     # Erstelle Test-PDF
@@ -458,15 +458,15 @@ def test_integration_workflow():
         }
         
         metadata = extract_pdf_metadata(tmp_path, offer_data)
-        print(f"✅ Schritt 1: Metadaten extrahiert - Typ: {metadata['doc_type']}")
+        print(f"[OK] Schritt 1: Metadaten extrahiert - Typ: {metadata['doc_type']}")
         
         # Schritt 2: Versionsnummer ermitteln
         version = get_next_version_number(99999, metadata['doc_type'])
-        print(f"✅ Schritt 2: Versionsnummer ermittelt - v{version}")
+        print(f"[OK] Schritt 2: Versionsnummer ermittelt - v{version}")
         
         # Schritt 3: Dateinamen erstellen
         filename = create_versioned_filename('test_angebot.pdf', version, metadata)
-        print(f"✅ Schritt 3: Dateiname erstellt - {filename}")
+        print(f"[OK] Schritt 3: Dateiname erstellt - {filename}")
         
         # Schritt 4: Auto-Save mit echter Datenbank
         doc_id = auto_save_pdf_to_customer_documents(
@@ -476,9 +476,9 @@ def test_integration_workflow():
         )
         
         assert doc_id is not None, "Document should be saved"
-        print(f"✅ Schritt 4: PDF gespeichert - Dokument-ID: {doc_id}")
+        print(f"[OK] Schritt 4: PDF gespeichert - Dokument-ID: {doc_id}")
         
-        print("\n✅ Integration Workflow erfolgreich durchlaufen!")
+        print("\n[OK] Integration Workflow erfolgreich durchlaufen!")
         
     finally:
         os.unlink(tmp_path)
@@ -491,9 +491,9 @@ def run_all_tests():
     print("CRM PDF Bridge - Test Suite (Task 3.1)")
     print("=" * 70)
     print("\nTask 3.1 Tests:")
-    print("  ✓ Teste automatisches Speichern")
-    print("  ✓ Teste Metadaten-Extraktion")
-    print("  ✓ Teste Versionierung")
+    print("  [OK] Teste automatisches Speichern")
+    print("  [OK] Teste Metadaten-Extraktion")
+    print("  [OK] Teste Versionierung")
     print("=" * 70)
     
     tests = [
@@ -528,11 +528,11 @@ def run_all_tests():
             test()
             passed += 1
         except AssertionError as e:
-            print(f"\n❌ Test fehlgeschlagen: {test.__name__}")
+            print(f"\n[ERROR] Test fehlgeschlagen: {test.__name__}")
             print(f"   Fehler: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n❌ Test-Fehler: {test.__name__}")
+            print(f"\n[ERROR] Test-Fehler: {test.__name__}")
             print(f"   Exception: {e}")
             import traceback
             traceback.print_exc()
@@ -543,12 +543,12 @@ def run_all_tests():
     print("=" * 70)
     
     if failed == 0:
-        print("\n✅ Task 3.1 ERFOLGREICH ABGESCHLOSSEN")
+        print("\n[OK] Task 3.1 ERFOLGREICH ABGESCHLOSSEN")
         print("   • Automatisches Speichern getestet")
         print("   • Metadaten-Extraktion getestet")
         print("   • Versionierung getestet")
     else:
-        print(f"\n⚠️ {failed} Test(s) fehlgeschlagen")
+        print(f"\n[WARNING] {failed} Test(s) fehlgeschlagen")
     
     return failed == 0
 

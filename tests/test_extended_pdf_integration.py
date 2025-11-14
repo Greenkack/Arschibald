@@ -31,18 +31,18 @@ print("=" * 60)
 print("\n1. Testing module imports...")
 try:
     from extended_pdf_generator import ExtendedPDFGenerator, ExtendedPDFLogger
-    print("   ✓ Modules imported successfully")
+    print("   [OK] Modules imported successfully")
 except Exception as e:
-    print(f"   ✗ Import failed: {e}")
+    print(f"   [ERROR] Import failed: {e}")
     exit(1)
 
 # Test 2: Create logger
 print("\n2. Creating logger...")
 try:
     logger = ExtendedPDFLogger()
-    print("   ✓ Logger created")
+    print("   [OK] Logger created")
 except Exception as e:
-    print(f"   ✗ Logger creation failed: {e}")
+    print(f"   [ERROR] Logger creation failed: {e}")
     exit(1)
 
 # Test 3: Create generator
@@ -54,30 +54,30 @@ try:
         options=test_options,
         logger=logger
     )
-    print("   ✓ Generator created")
+    print("   [OK] Generator created")
 except Exception as e:
-    print(f"   ✗ Generator creation failed: {e}")
+    print(f"   [ERROR] Generator creation failed: {e}")
     exit(1)
 
 # Test 4: Generate extended pages
 print("\n4. Generating extended pages...")
 try:
     extended_bytes = generator.generate_extended_pages()
-    print(f"   ✓ Extended pages generated: {len(extended_bytes)} bytes")
+    print(f"   [OK] Extended pages generated: {len(extended_bytes)} bytes")
     
     if extended_bytes:
         # Check if it's a valid PDF
         try:
             reader = PdfReader(io.BytesIO(extended_bytes))
             page_count = len(reader.pages)
-            print(f"   ✓ Valid PDF with {page_count} pages")
+            print(f"   [OK] Valid PDF with {page_count} pages")
         except Exception as e:
-            print(f"   ✗ Invalid PDF: {e}")
+            print(f"   [ERROR] Invalid PDF: {e}")
     else:
         print("   ⚠ No extended pages generated (empty bytes)")
         
 except Exception as e:
-    print(f"   ✗ Generation failed: {e}")
+    print(f"   [ERROR] Generation failed: {e}")
     import traceback
     traceback.print_exc()
 
@@ -100,7 +100,7 @@ try:
             print(f"     - [{warning['component']}] {warning['message']}")
             
 except Exception as e:
-    print(f"   ✗ Logger check failed: {e}")
+    print(f"   [ERROR] Logger check failed: {e}")
 
 print("\n" + "=" * 60)
 print("Test completed")

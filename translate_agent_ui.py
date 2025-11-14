@@ -131,7 +131,7 @@ def translate_agent_ui():
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    print("✅ Übersetzung abgeschlossen!")
+    print("[OK] Übersetzung abgeschlossen!")
     print(f"Datei gespeichert: {file_path}")
 
 

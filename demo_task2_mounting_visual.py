@@ -55,7 +55,7 @@ def demo_mounting_height():
                 selected_modules=[]
             )
             
-            print(f"✓ Visualisierung erstellt für {roof_type}")
+            print(f"[OK] Visualisierung erstellt für {roof_type}")
             print(f"   Module: 20")
             print(f"   Neigung: 30.0°")
             print(f"   Mounting Height wird automatisch berechnet")
@@ -64,12 +64,12 @@ def demo_mounting_height():
             # fig.write_html(f"demo_{roof_type.lower().replace(' ', '_')}.html")
             
         except Exception as e:
-            print(f"✗ Fehler bei {roof_type}: {e}")
+            print(f"[ERROR] Fehler bei {roof_type}: {e}")
             import traceback
             traceback.print_exc()
     
     print(f"\n{'='*80}")
-    print("✓ DEMO ABGESCHLOSSEN")
+    print("[OK] DEMO ABGESCHLOSSEN")
     print("="*80)
     print("\nHinweis: Die Mounting Height wird automatisch basierend auf")
     print("Dachform und Neigung berechnet. Module sinken nicht mehr in")

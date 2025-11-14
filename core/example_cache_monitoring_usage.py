@@ -30,7 +30,7 @@ def example_basic_monitoring():
 
     # Start monitoring
     start_cache_monitoring(interval_seconds=5)
-    print("✓ Monitoring started with 5-second intervals")
+    print("[OK] Monitoring started with 5-second intervals")
 
     # Generate some cache activity
     cache = get_cache()
@@ -59,7 +59,7 @@ def example_basic_monitoring():
 
     # Stop monitoring
     stop_cache_monitoring()
-    print("\n✓ Monitoring stopped")
+    print("\n[OK] Monitoring stopped")
 
 
 def example_detailed_metrics():
@@ -155,11 +155,11 @@ def example_automatic_cleanup():
         print(f"  Custom cleanup executed (count: {cleanup_count[0]})")
 
     register_cleanup_callback(custom_cleanup)
-    print("✓ Custom cleanup callback registered")
+    print("[OK] Custom cleanup callback registered")
 
     # Enable automatic cleanup
     enable_automatic_cleanup(threshold=0.8)
-    print("✓ Automatic cleanup enabled (threshold: 80%)")
+    print("[OK] Automatic cleanup enabled (threshold: 80%)")
 
     # Fill cache
     cache = get_cache()
@@ -186,7 +186,7 @@ def example_automatic_cleanup():
 
     # Disable cleanup
     disable_automatic_cleanup()
-    print("\n✓ Automatic cleanup disabled")
+    print("\n[OK] Automatic cleanup disabled")
 
 
 def example_performance_alerts():
@@ -218,7 +218,7 @@ def example_performance_alerts():
         print(f"  Degradation: {degradation['degradation_percent']:.1f}%")
         print(f"  Threshold: {degradation['threshold_percent']:.1f}%")
     else:
-        print("\n✓ No significant degradation detected")
+        print("\n[OK] No significant degradation detected")
 
     # Check for all performance issues
     issues = detect_performance_issues()
@@ -278,7 +278,7 @@ def example_monitoring_dashboard():
         evictions = memory["evictions"]
 
         print(
-            f"\n📊 Hit Rate: {
+            f"\n[CHART] Hit Rate: {
                 hit_rate['hit_rate']:.2%} ({
                 hit_rate['status']})")
         print(f"   Trend: {hit_rate['trend']}")
@@ -302,13 +302,13 @@ def example_monitoring_dashboard():
 
     # Alerts
     if report["alerts"]:
-        print(f"\n⚠️  Active Alerts: {len(report['alerts'])}")
+        print(f"\n[WARNING]  Active Alerts: {len(report['alerts'])}")
         for alert in report["alerts"]:
             print(f"   [{alert['severity']}] {alert['message']}")
 
     # Recommendations
     if report["recommendations"]:
-        print("\n💡 Recommendations:")
+        print("\n[IDEA] Recommendations:")
         for rec in report["recommendations"]:
             print(f"   - {rec}")
 
@@ -316,7 +316,7 @@ def example_monitoring_dashboard():
     if "detailed_metrics" in report:
         detailed = report["detailed_metrics"]
         print(
-            f"\n📈 Detailed Metrics (last {
+            f"\n[STATS] Detailed Metrics (last {
                 detailed['window_minutes']} minutes):")
 
         for metric_type, stats in detailed["metrics"].items():
@@ -370,7 +370,7 @@ def example_custom_cleanup_logic():
     # Register custom cleanup callbacks
     register_cleanup_callback(cleanup_old_sessions)
     register_cleanup_callback(cleanup_expired_forms)
-    print("✓ Custom cleanup callbacks registered")
+    print("[OK] Custom cleanup callbacks registered")
 
     # Add test data
     cache = get_cache()
@@ -410,11 +410,11 @@ def main():
         example_custom_cleanup_logic()
 
         print("\n" + "=" * 60)
-        print("✓ All examples completed successfully")
+        print("[OK] All examples completed successfully")
         print("=" * 60)
 
     except Exception as e:
-        print(f"\n✗ Example failed: {e}")
+        print(f"\n[ERROR] Example failed: {e}")
         import traceback
         traceback.print_exc()
 

@@ -23,7 +23,7 @@ def verify_basic_recovery():
     assert manager.max_recovery_attempts == 3
     assert manager.validation_errors == {}
 
-    print("✓ Recovery manager created successfully")
+    print("[OK] Recovery manager created successfully")
     print(f"  - Max attempts: {manager.max_recovery_attempts}")
     print(f"  - Initial errors: {len(manager.validation_errors)}")
 
@@ -46,7 +46,7 @@ def verify_form_validation():
     errors = manager._validate_form_data(data, schema)
 
     assert 'email' in errors
-    print("✓ Required field validation works")
+    print("[OK] Required field validation works")
     print("  - Detected missing field: email")
 
     # Test type validation
@@ -55,7 +55,7 @@ def verify_form_validation():
     errors = manager._validate_form_data(data, schema)
 
     assert 'age' in errors
-    print("✓ Type validation works")
+    print("[OK] Type validation works")
     print("  - Detected type error: age must be number")
 
     # Test min/max validation
@@ -64,7 +64,7 @@ def verify_form_validation():
     errors = manager._validate_form_data(data, schema)
 
     assert 'age' in errors
-    print("✓ Min/max validation works")
+    print("[OK] Min/max validation works")
     print("  - Detected range error: age below minimum")
 
     # Test length validation
@@ -73,7 +73,7 @@ def verify_form_validation():
     errors = manager._validate_form_data(data, schema)
 
     assert 'username' in errors
-    print("✓ Length validation works")
+    print("[OK] Length validation works")
     print("  - Detected length error: username too short")
 
 
@@ -101,7 +101,7 @@ def verify_form_recovery():
     manager._recover_and_validate_forms(session)
 
     assert len(manager.validation_errors) == 0
-    print("✓ Valid form data recovered successfully")
+    print("[OK] Valid form data recovered successfully")
     print("  - Form ID: contact_form")
     print("  - Fields: name, email")
     print("  - Validation errors: 0")
@@ -122,7 +122,7 @@ def verify_form_recovery():
     manager._recover_and_validate_forms(session2)
 
     assert 'invalid_form' in manager.validation_errors
-    print("✓ Invalid form data detected correctly")
+    print("[OK] Invalid form data detected correctly")
     print("  - Form ID: invalid_form")
     print(
         f"  - Validation errors: {len(manager.validation_errors['invalid_form'])}")
@@ -156,7 +156,7 @@ def verify_navigation_recovery():
     # Recover navigation state
     manager._recover_navigation_state(session)
 
-    print("✓ Navigation state recovered successfully")
+    print("[OK] Navigation state recovered successfully")
     print(f"  - Current page: {session.current_page}")
     print(f"  - Page params: {session.page_params}")
     print(f"  - History entries: {len(session.navigation_history)}")
@@ -181,7 +181,7 @@ def verify_cache_recovery():
     # Recover cache keys
     manager._recover_cache_keys(session)
 
-    print("✓ Cache keys recovered successfully")
+    print("[OK] Cache keys recovered successfully")
     print(f"  - Cache keys: {len(session.cache_keys)}")
     print(f"  - Dependencies: {len(session.cache_dependencies)}")
     for key in list(session.cache_keys)[:3]:
@@ -200,7 +200,7 @@ def verify_recovery_status():
     # Get initial status
     status = get_recovery_status()
 
-    print("✓ Recovery status retrieved")
+    print("[OK] Recovery status retrieved")
     print(f"  - Recovery attempts: {status['recovery_attempts']}")
     print(f"  - Max attempts: {status['max_attempts']}")
     print(f"  - Has errors: {status['has_errors']}")
@@ -210,7 +210,7 @@ def verify_recovery_status():
 
     status = get_recovery_status()
     assert status['has_errors'] is True
-    print("✓ Validation errors tracked correctly")
+    print("[OK] Validation errors tracked correctly")
     print(f"  - Error count: {len(status['validation_errors'])}")
 
     # Clear errors
@@ -218,7 +218,7 @@ def verify_recovery_status():
 
     status = get_recovery_status()
     assert status['has_errors'] is False
-    print("✓ Validation errors cleared successfully")
+    print("[OK] Validation errors cleared successfully")
 
 
 def verify_global_manager():
@@ -231,7 +231,7 @@ def verify_global_manager():
     manager2 = get_recovery_manager()
 
     assert manager1 is manager2
-    print("✓ Global recovery manager is singleton")
+    print("[OK] Global recovery manager is singleton")
     print(f"  - Manager ID: {id(manager1)}")
 
 
@@ -251,17 +251,17 @@ def main():
         verify_global_manager()
 
         print("\n" + "=" * 60)
-        print("ALL VERIFICATION TESTS PASSED ✓")
+        print("ALL VERIFICATION TESTS PASSED [OK]")
         print("=" * 60)
         print("\nSession Recovery System is working correctly!")
         print("\nKey Features Verified:")
-        print("  ✓ Recovery manager creation")
-        print("  ✓ Form validation (required, type, min/max, length)")
-        print("  ✓ Form data recovery with validation")
-        print("  ✓ Navigation state restoration")
-        print("  ✓ Cache key restoration")
-        print("  ✓ Recovery status management")
-        print("  ✓ Global manager singleton")
+        print("  [OK] Recovery manager creation")
+        print("  [OK] Form validation (required, type, min/max, length)")
+        print("  [OK] Form data recovery with validation")
+        print("  [OK] Navigation state restoration")
+        print("  [OK] Cache key restoration")
+        print("  [OK] Recovery status management")
+        print("  [OK] Global manager singleton")
 
         print("\nNext Steps:")
         print("  1. Integrate with Streamlit application")
@@ -270,10 +270,10 @@ def main():
         print("  4. Monitor recovery metrics in production")
 
     except AssertionError as e:
-        print(f"\n✗ Verification failed: {e}")
+        print(f"\n[ERROR] Verification failed: {e}")
         return 1
     except Exception as e:
-        print(f"\n✗ Unexpected error: {e}")
+        print(f"\n[ERROR] Unexpected error: {e}")
         import traceback
         traceback.print_exc()
         return 1

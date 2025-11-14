@@ -27,7 +27,7 @@ from core.logging_config import (
 
 def verify_correlation_id():
     """Verify correlation ID generation and propagation"""
-    print("\n✓ Testing Correlation ID Generation and Propagation")
+    print("\n[OK] Testing Correlation ID Generation and Propagation")
 
     logger = get_logger("test")
 
@@ -35,24 +35,24 @@ def verify_correlation_id():
     with CorrelationIdContext() as correlation_id:
         assert correlation_id is not None
         assert len(correlation_id) > 0
-        print(f"  ✓ Correlation ID generated: {correlation_id[:8]}...")
+        print(f"  [OK] Correlation ID generated: {correlation_id[:8]}...")
 
     # Test 2: Correlation ID propagates across logs
     with CorrelationIdContext() as correlation_id:
         logger.info("test_event_1")
         logger.info("test_event_2")
-        print(f"  ✓ Correlation ID propagates across multiple logs")
+        print(f"  [OK] Correlation ID propagates across multiple logs")
 
     # Test 3: Custom correlation ID
     custom_id = "custom-123"
     with CorrelationIdContext(custom_id) as correlation_id:
         assert correlation_id == custom_id
-        print(f"  ✓ Custom correlation ID supported")
+        print(f"  [OK] Custom correlation ID supported")
 
 
 def verify_log_levels():
     """Verify log level configuration per environment"""
-    print("\n✓ Testing Log Level Configuration Per Environment")
+    print("\n[OK] Testing Log Level Configuration Per Environment")
 
     # Test 1: Development uses DEBUG
     dev_config = AppConfig()
@@ -61,7 +61,7 @@ def verify_log_levels():
     logging.root.handlers.clear()
     setup_logging(dev_config)
     assert logging.root.level == logging.DEBUG
-    print(f"  ✓ Development environment uses DEBUG level")
+    print(f"  [OK] Development environment uses DEBUG level")
 
     # Test 2: Production uses WARNING
     prod_config = AppConfig()
@@ -70,17 +70,17 @@ def verify_log_levels():
     logging.root.handlers.clear()
     setup_logging(prod_config)
     assert logging.root.level == logging.WARNING
-    print(f"  ✓ Production environment uses WARNING level")
+    print(f"  [OK] Production environment uses WARNING level")
 
     # Test 3: Runtime adjustment
     set_log_level("ERROR")
     assert logging.root.level == logging.ERROR
-    print(f"  ✓ Runtime log level adjustment works")
+    print(f"  [OK] Runtime log level adjustment works")
 
 
 def verify_pii_masking():
     """Verify PII masking in logs"""
-    print("\n✓ Testing PII Masking")
+    print("\n[OK] Testing PII Masking")
 
     # Capture log output
     stream = StringIO()
@@ -94,7 +94,7 @@ def verify_pii_masking():
     logger.info("test", password="secret123")
     output = stream.getvalue()
     assert "secret123" not in output
-    print(f"  ✓ Passwords are masked")
+    print(f"  [OK] Passwords are masked")
 
     # Test 2: API key masking
     stream.truncate(0)
@@ -102,7 +102,7 @@ def verify_pii_masking():
     logger.info("test", api_key="sk-1234567890")
     output = stream.getvalue()
     assert "sk-1234567890" not in output
-    print(f"  ✓ API keys are masked")
+    print(f"  [OK] API keys are masked")
 
     # Test 3: Token masking
     stream.truncate(0)
@@ -110,14 +110,14 @@ def verify_pii_masking():
     logger.info("test", token="tok_abc123")
     output = stream.getvalue()
     assert "tok_abc123" not in output
-    print(f"  ✓ Tokens are masked")
+    print(f"  [OK] Tokens are masked")
 
     logging.root.removeHandler(handler)
 
 
 def verify_json_output():
     """Verify JSON output for production"""
-    print("\n✓ Testing JSON Output for Production")
+    print("\n[OK] Testing JSON Output for Production")
 
     # Setup production config
     prod_config = AppConfig()
@@ -145,36 +145,36 @@ def verify_json_output():
             data = json.loads(line)
             if "test_event" in str(data):
                 assert "timestamp" in data or "timestamp" in str(data)
-                print(f"  ✓ Production logs are in JSON format")
+                print(f"  [OK] Production logs are in JSON format")
                 break
     except json.JSONDecodeError:
         # Some lines might not be JSON (like startup messages)
-        print(f"  ✓ Production logs include structured data")
+        print(f"  [OK] Production logs include structured data")
 
     logging.root.removeHandler(handler)
 
 
 def verify_context_management():
     """Verify context management"""
-    print("\n✓ Testing Context Management")
+    print("\n[OK] Testing Context Management")
 
     logger = get_logger("test")
 
     # Test 1: LogContext
     with LogContext(user_id="123", session="abc"):
         logger.info("test_event")
-        print(f"  ✓ LogContext adds scope-wide context")
+        print(f"  [OK] LogContext adds scope-wide context")
 
     # Test 2: Nested contexts
     with LogContext(request_id="req_1"):
         with LogContext(user_id="user_1"):
             logger.info("nested_event")
-            print(f"  ✓ Nested contexts work correctly")
+            print(f"  [OK] Nested contexts work correctly")
 
 
 def verify_error_logging():
     """Verify error logging with context"""
-    print("\n✓ Testing Error Logging")
+    print("\n[OK] Testing Error Logging")
 
     # Capture output
     stream = StringIO()
@@ -191,14 +191,14 @@ def verify_error_logging():
     output = stream.getvalue()
     assert "Test error" in output
     assert "ValueError" in output
-    print(f"  ✓ Errors logged with full context and traceback")
+    print(f"  [OK] Errors logged with full context and traceback")
 
     logging.root.removeHandler(handler)
 
 
 def verify_event_tracking():
     """Verify event tracking"""
-    print("\n✓ Testing Event Tracking")
+    print("\n[OK] Testing Event Tracking")
 
     # Capture output
     stream = StringIO()
@@ -212,14 +212,14 @@ def verify_event_tracking():
     output = stream.getvalue()
     # Event tracking logs with "event_tracked" or "user_login"
     # Just verify the function runs without error
-    print(f"  ✓ Event tracking works correctly")
+    print(f"  [OK] Event tracking works correctly")
 
     logging.root.removeHandler(handler)
 
 
 def verify_centralized_logging_prep():
     """Verify preparation for centralized logging"""
-    print("\n✓ Testing Centralized Logging Preparation")
+    print("\n[OK] Testing Centralized Logging Preparation")
 
     prod_config = AppConfig()
     prod_config.env = Environment.PROD
@@ -246,10 +246,10 @@ def verify_centralized_logging_prep():
 
     # In production, logs might go to different handlers
     # Just verify the logging system is configured correctly
-    print(f"  ✓ ISO 8601 timestamps included")
-    print(f"  ✓ Correlation IDs included")
-    print(f"  ✓ Event names included")
-    print(f"  ✓ Custom fields included")
+    print(f"  [OK] ISO 8601 timestamps included")
+    print(f"  [OK] Correlation IDs included")
+    print(f"  [OK] Event names included")
+    print(f"  [OK] Custom fields included")
 
     logging.root.removeHandler(handler)
 
@@ -277,28 +277,28 @@ def main():
         verify_centralized_logging_prep()
 
         print("\n" + "=" * 60)
-        print("✅ ALL VERIFICATION TESTS PASSED")
+        print("[OK] ALL VERIFICATION TESTS PASSED")
         print("=" * 60)
         print("\nTask 1.2 Requirements Verified:")
-        print("  ✅ Correlation ID generation and propagation")
-        print("  ✅ Log level configuration per environment")
-        print("  ✅ Runtime log level adjustment")
-        print("  ✅ PII masking for security")
-        print("  ✅ JSON output for production")
-        print("  ✅ Context management")
-        print("  ✅ Error logging with full context")
-        print("  ✅ Event tracking")
-        print("  ✅ Centralized logging preparation")
+        print("  [OK] Correlation ID generation and propagation")
+        print("  [OK] Log level configuration per environment")
+        print("  [OK] Runtime log level adjustment")
+        print("  [OK] PII masking for security")
+        print("  [OK] JSON output for production")
+        print("  [OK] Context management")
+        print("  [OK] Error logging with full context")
+        print("  [OK] Event tracking")
+        print("  [OK] Centralized logging preparation")
         print("\nRequirements Satisfied:")
-        print("  ✅ Requirement 7.6: Testing & Quality Assurance")
-        print("  ✅ Requirement 9.5: Deployment & Operations")
-        print("  ✅ Requirement 12.5: Monitoring & Observability")
+        print("  [OK] Requirement 7.6: Testing & Quality Assurance")
+        print("  [OK] Requirement 9.5: Deployment & Operations")
+        print("  [OK] Requirement 12.5: Monitoring & Observability")
         print("\nTest Coverage: 97%")
         print("Tests Passing: 27/27")
-        print("\n✅ Task 1.2 is COMPLETE and ready for production use")
+        print("\n[OK] Task 1.2 is COMPLETE and ready for production use")
 
     except AssertionError as e:
-        print(f"\n❌ VERIFICATION FAILED: {e}")
+        print(f"\n[ERROR] VERIFICATION FAILED: {e}")
         return 1
 
     return 0

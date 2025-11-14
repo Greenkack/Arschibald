@@ -28,7 +28,7 @@ def verify_collision_detection():
     ]
     collisions = validator.detect_collisions(positions_no_collision)
     assert len(collisions) == 0, "Should detect no collisions"
-    print("  ✓ Correctly detected no collisions")
+    print("  [OK] Correctly detected no collisions")
     
     # Test 2: Overlapping elements
     print("\nTest 2: Overlapping elements")
@@ -42,7 +42,7 @@ def verify_collision_detection():
     assert collisions[0].element1_index == 0, "First element index should be 0"
     assert collisions[0].element2_index == 1, "Second element index should be 1"
     assert collisions[0].overlap_area > 0, "Overlap area should be positive"
-    print(f"  ✓ Correctly detected 1 collision")
+    print(f"  [OK] Correctly detected 1 collision")
     print(f"    - Overlap area: {collisions[0].overlap_area:.2f} sq pts")
     
     # Test 3: Elements too close
@@ -53,7 +53,7 @@ def verify_collision_detection():
     ]
     collisions = validator.detect_collisions(positions_too_close)
     assert len(collisions) == 1, "Should detect collision due to spacing"
-    print("  ✓ Correctly detected spacing violation")
+    print("  [OK] Correctly detected spacing violation")
     
     # Test 4: Multiple collisions
     print("\nTest 4: Multiple collisions")
@@ -64,9 +64,9 @@ def verify_collision_detection():
     ]
     collisions = validator.detect_collisions(positions_multiple)
     assert len(collisions) >= 2, "Should detect multiple collisions"
-    print(f"  ✓ Correctly detected {len(collisions)} collisions")
+    print(f"  [OK] Correctly detected {len(collisions)} collisions")
     
-    print("\n✓ All collision detection tests passed")
+    print("\n[OK] All collision detection tests passed")
 
 
 def verify_collision_resolution():
@@ -93,7 +93,7 @@ def verify_collision_resolution():
     print(f"  Final collisions: {final_count}")
     
     assert final_count <= initial_count, "Should reduce or maintain collision count"
-    print("  ✓ Collision resolution reduced collisions")
+    print("  [OK] Collision resolution reduced collisions")
     
     # Test 2: Bounds preservation
     print("\nTest 2: Bounds preservation during resolution")
@@ -103,7 +103,7 @@ def verify_collision_resolution():
         assert y1 >= validator.min_margin, f"Element {i} y1 below min margin"
         assert x2 <= validator.page_width - validator.min_margin, f"Element {i} x2 exceeds max"
         assert y2 <= validator.page_height - validator.min_margin, f"Element {i} y2 exceeds max"
-    print("  ✓ All positions remain within bounds")
+    print("  [OK] All positions remain within bounds")
     
     # Test 3: Multiple iterations
     print("\nTest 3: Multiple iterations with complex collisions")
@@ -128,9 +128,9 @@ def verify_collision_resolution():
     print(f"  Initial collisions: {initial_count}")
     print(f"  Final collisions: {final_count}")
     assert final_count <= initial_count, "Should reduce collisions"
-    print("  ✓ Multiple iterations successfully reduced collisions")
+    print("  [OK] Multiple iterations successfully reduced collisions")
     
-    print("\n✓ All collision resolution tests passed")
+    print("\n[OK] All collision resolution tests passed")
 
 
 def verify_integration():
@@ -151,16 +151,16 @@ def verify_integration():
     assert len(report.collisions) > 0, "Report should contain collisions"
     assert not report.is_valid, "Report should be invalid with collisions"
     
-    print(f"  ✓ Report contains {len(report.collisions)} collision(s)")
-    print(f"  ✓ Report validity: {report.is_valid} (correctly invalid)")
+    print(f"  [OK] Report contains {len(report.collisions)} collision(s)")
+    print(f"  [OK] Report validity: {report.is_valid} (correctly invalid)")
     
     # Test formatted report
     print("\nTest: Formatted report includes collision details")
     formatted = validator.format_report(report)
     assert "COLLISIONS" in formatted, "Formatted report should include collisions section"
-    print("  ✓ Formatted report includes collision details")
+    print("  [OK] Formatted report includes collision details")
     
-    print("\n✓ All integration tests passed")
+    print("\n[OK] All integration tests passed")
 
 
 def verify_convenience_functions():
@@ -176,9 +176,9 @@ def verify_convenience_functions():
     
     collisions = detect_collisions(positions, min_spacing=5)
     assert len(collisions) == 1, "Should detect 1 collision"
-    print("  ✓ detect_collisions() convenience function works")
+    print("  [OK] detect_collisions() convenience function works")
     
-    print("\n✓ All convenience function tests passed")
+    print("\n[OK] All convenience function tests passed")
 
 
 def main():
@@ -194,26 +194,26 @@ def main():
         verify_convenience_functions()
         
         print("\n" + "=" * 70)
-        print("✓ ALL VERIFICATION TESTS PASSED")
+        print("[OK] ALL VERIFICATION TESTS PASSED")
         print("=" * 70)
         print("\nTask 8.2 Implementation Summary:")
-        print("  ✓ detect_collisions() - Identifies overlapping elements")
-        print("  ✓ resolve_collisions() - Automatically adjusts positions")
-        print("  ✓ CollisionInfo - Detailed collision information")
-        print("  ✓ Integration with ValidationSystem")
-        print("  ✓ Convenience functions available")
+        print("  [OK] detect_collisions() - Identifies overlapping elements")
+        print("  [OK] resolve_collisions() - Automatically adjusts positions")
+        print("  [OK] CollisionInfo - Detailed collision information")
+        print("  [OK] Integration with ValidationSystem")
+        print("  [OK] Convenience functions available")
         print("\nRequirements Coverage:")
-        print("  ✓ Requirement 6.2: Collision detection and spacing validation")
-        print("  ✓ Requirement 3.4: Design element overlap prevention")
-        print("\n✓ Task 8.2 (Kollisions-Erkennung) is COMPLETE and VERIFIED")
+        print("  [OK] Requirement 6.2: Collision detection and spacing validation")
+        print("  [OK] Requirement 3.4: Design element overlap prevention")
+        print("\n[OK] Task 8.2 (Kollisions-Erkennung) is COMPLETE and VERIFIED")
         
         return 0
         
     except AssertionError as e:
-        print(f"\n✗ VERIFICATION FAILED: {e}")
+        print(f"\n[ERROR] VERIFICATION FAILED: {e}")
         return 1
     except Exception as e:
-        print(f"\n✗ ERROR: {e}")
+        print(f"\n[ERROR] ERROR: {e}")
         import traceback
         traceback.print_exc()
         return 1

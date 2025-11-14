@@ -124,12 +124,24 @@ class TestGridCalculator:
         # Assert
         for x, y in positions:
             # Check X bounds (with margin and module half-width)
-            assert x >= -(roof_length / 2) + margin
-            assert x <= (roof_length / 2) - margin
+            if 2 != 0:
+                assert x >= -(roof_length / 2) + margin
+            else:
+                assert x > = 0.0
+            if 2 != 0:
+                assert x <= (roof_length / 2) - margin
+            else:
+                assert x < = 0.0
 
             # Check Y bounds (with margin and module half-height)
-            assert y >= -(roof_width / 2) + margin
-            assert y <= (roof_width / 2) - margin
+            if 2 != 0:
+                assert y >= -(roof_width / 2) + margin
+            else:
+                assert y > = 0.0
+            if 2 != 0:
+                assert y <= (roof_width / 2) - margin
+            else:
+                assert y < = 0.0
 
     def test_grid_with_custom_spacing(self):
         """Test grid calculation with custom spacing."""

@@ -46,14 +46,14 @@ def test_task_12_1_input_validation():
         # Valid path
         is_valid, path, error = validate_path("test.txt", "/app/workspace")
         assert is_valid, "Valid path should pass"
-        print("   ✓ Valid path accepted")
+        print("   [OK] Valid path accepted")
         tests_passed += 1
 
         # Path traversal attempt
         is_valid, path, error = validate_path(
             "../../../etc/passwd", "/app/workspace")
         assert not is_valid, "Path traversal should be blocked"
-        print("   ✓ Path traversal blocked")
+        print("   [OK] Path traversal blocked")
         tests_passed += 1
 
         # Absolute path outside workspace

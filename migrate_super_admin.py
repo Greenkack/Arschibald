@@ -11,7 +11,7 @@ def migrate_database():
     db_path = Path("data/users.db")
 
     if not db_path.exists():
-        print("❌ Datenbank nicht gefunden!")
+        print("[ERROR] Datenbank nicht gefunden!")
         return False
 
     conn = sqlite3.connect(db_path)
@@ -23,12 +23,12 @@ def migrate_database():
         columns = [col[1] for col in cursor.fetchall()]
 
         if 'is_super_admin' in columns:
-            print("✅ Spalte 'is_super_admin' existiert bereits")
+            print("[OK] Spalte 'is_super_admin' existiert bereits")
         else:
             # Füge Spalte hinzu
             cursor.execute(
                 'ALTER TABLE users ADD COLUMN is_super_admin INTEGER DEFAULT 0')
-            print("✅ Spalte 'is_super_admin' hinzugefügt")
+            print("[OK] Spalte 'is_super_admin' hinzugefügt")
 
         # Erstelle Super-Admin Transfer Tabelle
         cursor.execute('''
@@ -46,14 +46,14 @@ def migrate_database():
                 FOREIGN KEY (to_user_id) REFERENCES users(id)
             )
         ''')
-        print("✅ Tabelle 'super_admin_transfers' erstellt/geprüft")
+        print("[OK] Tabelle 'super_admin_transfers' erstellt/geprüft")
 
         conn.commit()
-        print("\n✅ Datenbank-Migration erfolgreich!")
+        print("\n[OK] Datenbank-Migration erfolgreich!")
         return True
 
     except Exception as e:
-        print(f"❌ Fehler bei Migration: {e}")
+        print(f"[ERROR] Fehler bei Migration: {e}")
         conn.rollback()
         return False
     finally:

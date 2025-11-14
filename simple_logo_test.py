@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def test_logo_data_preparation():
     """Testet die Vorbereitung der Logo-Daten"""
-    print("🔍 TESTE LOGO-DATEN-VORBEREITUNG")
+    print("[SEARCH] TESTE LOGO-DATEN-VORBEREITUNG")
     print("=" * 50)
 
     # Simuliere Projektdaten mit Produkten von Herstellern, die Logos haben
@@ -55,7 +55,7 @@ def test_logo_data_preparation():
     dynamic_data = build_dynamic_data(
         project_data, analysis_results, company_info)
 
-    print("📊 Dynamic Data Ergebnis:")
+    print("[CHART] Dynamic Data Ergebnis:")
     logo_keys = [k for k in dynamic_data.keys() if 'logo' in k.lower()]
     print(f"  Logo-bezogene Keys gefunden: {len(logo_keys)}")
 
@@ -70,13 +70,13 @@ def test_logo_data_preparation():
         "inverter_brand_logo_b64",
         "storage_brand_logo_b64"]
 
-    print("\n🎯 Spezifische Brand-Logo Checks:")
+    print("\n[TARGET] Spezifische Brand-Logo Checks:")
     for key in brand_logo_keys:
         if key in dynamic_data and dynamic_data[key]:
             print(
-                f"  ✅ {key}: LOGO VORHANDEN ({len(dynamic_data[key])} Zeichen)")
+                f"  [OK] {key}: LOGO VORHANDEN ({len(dynamic_data[key])} Zeichen)")
         else:
-            print(f"  ❌ {key}: LEER ODER FEHLT")
+            print(f"  [ERROR] {key}: LEER ODER FEHLT")
 
     return len([k for k in brand_logo_keys if dynamic_data.get(k)])
 
@@ -93,9 +93,9 @@ def test_direct_logo_fetch():
         if brand in logos:
             logo_data = logos[brand]
             b64_length = len(logo_data.get('logo_base64', ''))
-            print(f"  ✅ {brand}: Logo gefunden ({b64_length} Zeichen)")
+            print(f"  [OK] {brand}: Logo gefunden ({b64_length} Zeichen)")
         else:
-            print(f"  ❌ {brand}: Kein Logo gefunden")
+            print(f"  [ERROR] {brand}: Kein Logo gefunden")
 
     return len(logos)
 
@@ -112,16 +112,16 @@ if __name__ == "__main__":
         direct_count = test_direct_logo_fetch()
 
         print("\n" + "=" * 70)
-        print("📊 TESTERGEBNIS:")
+        print("[CHART] TESTERGEBNIS:")
         print(f"  Dynamic Data: {logo_count}/3 Logo-Keys mit Daten")
         print(f"  Direkter Abruf: {direct_count}/3 Logos gefunden")
 
         if logo_count == 3 and direct_count == 3:
             print("🎉 ALLE TESTS BESTANDEN! Logos sollten in der PDF erscheinen.")
         else:
-            print("⚠️  PROBLEM: Nicht alle Logos wurden gefunden.")
+            print("[WARNING]  PROBLEM: Nicht alle Logos wurden gefunden.")
 
     except Exception as e:
-        print(f"❌ FEHLER: {e}")
+        print(f"[ERROR] FEHLER: {e}")
         import traceback
         traceback.print_exc()

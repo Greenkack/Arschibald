@@ -33,7 +33,7 @@ except ImportError as e:
     def lazy_load_knowledge_base():
         """Fallback wenn langchain fehlt"""
         return None
-    st.warning(f"⚠️ Knowledge Tools nicht verfügbar: {e}")
+    st.warning(f"[WARNING] Knowledge Tools nicht verfügbar: {e}")
 
 try:
     from config import check_api_keys, get_missing_keys, get_setup_instructions
@@ -44,7 +44,7 @@ except ImportError as e:
         return []
     def get_setup_instructions(keys):
         return ""
-    st.warning(f"⚠️ Config nicht verfügbar: {e}")
+    st.warning(f"[WARNING] Config nicht verfügbar: {e}")
 
 try:
     from agent.security import InputValidationError, sanitize_user_input
@@ -53,7 +53,7 @@ except ImportError as e:
         pass
     def sanitize_user_input(text):
         return text
-    st.warning(f"⚠️ Security Module nicht verfügbar: {e}")
+    st.warning(f"[WARNING] Security Module nicht verfügbar: {e}")
 
 
 # Import error handling
@@ -158,18 +158,18 @@ def check_api_keys_ui() -> dict[str, bool]:
     missing = get_missing_keys()
 
     if not missing:
-        st.success("✅ All API keys are configured!")
+        st.success("[OK] All API keys are configured!")
         return keys_status
 
     # Display missing keys
-    st.error("⚠️ Missing API Keys")
+    st.error("[WARNING] Missing API Keys")
 
     st.markdown("### Required API Keys Not Found:")
     for key in missing:
-        st.markdown(f"- ❌ **{key}**")
+        st.markdown(f"- [ERROR] **{key}**")
 
     # Show setup instructions
-    with st.expander("📝 Setup Instructions", expanded=False):
+    with st.expander("[NOTE] Setup Instructions", expanded=False):
         st.code(get_setup_instructions(), language="text")
 
     return keys_status
@@ -240,7 +240,7 @@ def display_agent_status(
                         st.markdown(f"**Step {step_num}**")
                     with col2:
                         if hasattr(action, 'tool'):
-                            st.markdown(f"🔧 `{action.tool}`")
+                            st.markdown(f"[TOOL] `{action.tool}`")
 
                     # Display input/output in compact format
                     if hasattr(action, 'tool_input'):
@@ -319,7 +319,7 @@ def format_agent_output(
 
     # Check if successful
     if result.get('success', False):
-        st.success("✅ Task completed successfully!")
+        st.success("[OK] Task completed successfully!")
 
         # Display output
         output = result.get('output', '')
@@ -353,7 +353,7 @@ def format_agent_output(
 
         # Offer file downloads if files were created
         if 'agent_workspace' in output.lower() or 'file' in output.lower():
-            st.markdown("### 📁 Generated Files")
+            st.markdown("### [FOLDER] Generated Files")
             st.info(
                 "Files have been created in the `agent_workspace` directory. "
                 "You can access them from your file system."
@@ -361,7 +361,7 @@ def format_agent_output(
 
     else:
         # Display error
-        st.error("❌ Task failed")
+        st.error("[ERROR] Task failed")
 
         error_msg = result.get('error', 'Unknown error')
 
@@ -379,12 +379,12 @@ def format_agent_output(
 
         # Display solution if available
         if 'solution' in result:
-            st.markdown("### 💡 Suggested Solution:")
+            st.markdown("### [IDEA] Suggested Solution:")
             st.info(result['solution'])
 
         # Display intermediate steps for debugging (collapsed by default)
         if intermediate_steps:
-            with st.expander("🔍 Debug Information", expanded=False):
+            with st.expander("[SEARCH] Debug Information", expanded=False):
                 display_agent_status(
                     "Failed during execution",
                     intermediate_steps,
@@ -447,7 +447,7 @@ def render_agent_menu():
         st.markdown("""
         <div style="margin-top: 10px;">
             <span title="API keys are required for the agent to function. OpenAI key is mandatory, others are optional for additional features.">
-                ℹ️
+                [INFO]
             </span>
         </div>
         """, unsafe_allow_html=True)
@@ -457,10 +457,10 @@ def render_agent_menu():
     # Check if OpenAI key is available (optional warning, but don't block)
     if not keys_status.get('OPENAI_API_KEY', False):
         st.warning(
-            "⚠️ OPENAI_API_KEY nicht konfiguriert. "
+            "[WARNING] OPENAI_API_KEY nicht konfiguriert. "
             "Agent-Funktionalität ist eingeschränkt, aber Du kannst alle Bereiche erkunden."
         )
-        with st.expander("🔧 Wie API Keys konfigurieren (optional)", expanded=False):
+        with st.expander("[TOOL] Wie API Keys konfigurieren (optional)", expanded=False):
             st.markdown("""
             ### Quick Setup
 
@@ -492,7 +492,7 @@ def render_agent_menu():
         st.markdown("""
         <div style="margin-top: 10px;">
             <span title="The knowledge base contains domain-specific PDF documents that the agent can search for information.">
-                ℹ️
+                [INFO]
             </span>
         </div>
         """, unsafe_allow_html=True)
@@ -504,9 +504,9 @@ def render_agent_menu():
                 # Lazy load: defer actual loading until first search
                 st.session_state.vector_store = lazy_load_knowledge_base()
                 if st.session_state.vector_store is not None:
-                    st.success("✅ Knowledge base loaded successfully!")
+                    st.success("[OK] Knowledge base loaded successfully!")
                     st.caption(
-                        "💡 The agent can now search PDF documents for "
+                        "[IDEA] The agent can now search PDF documents for "
                         "domain-specific information about renewable energy systems.")
                 else:
                     st.info(
@@ -548,7 +548,7 @@ def render_agent_menu():
                 st.session_state.agent_core = AgentCore(
                     vector_store=st.session_state.vector_store
                 )
-                st.success("✅ Agent initialized successfully!")
+                st.success("[OK] Agent initialized successfully!")
             except Exception as e:
                 st.error(f"Failed to initialize agent: {e}")
                 # Helpful hint if a known optional dependency is missing
@@ -564,7 +564,7 @@ def render_agent_menu():
     st.markdown("---")
 
     # Task input interface
-    st.markdown("### 🎯 Task Input")
+    st.markdown("### [TARGET] Task Input")
     
     # Voice input option
     if st.session_state.get('voice_mode'):
@@ -581,7 +581,7 @@ def render_agent_menu():
                 st.session_state['voice_mode'] = False
                 st.rerun()
         except ImportError:
-            st.warning("⚠️ Sprachmodul nicht verfügbar.")
+            st.warning("[WARNING] Sprachmodul nicht verfügbar.")
             st.session_state['voice_mode'] = False
 
     # Help button and dialog (Task 13.2)
@@ -630,26 +630,26 @@ def render_agent_menu():
 
             ### Tips for Best Results
 
-            ✅ **Be Specific**: "Create a Python function to calculate solar panel ROI with parameters: investment, annual_savings, years"
+            [OK] **Be Specific**: "Create a Python function to calculate solar panel ROI with parameters: investment, annual_savings, years"
 
-            ✅ **Provide Context**: "I'm building a customer consultation tool. Create a function that..."
+            [OK] **Provide Context**: "I'm building a customer consultation tool. Create a function that..."
 
-            ✅ **Break Down Complex Tasks**: Instead of "Build a complete app", try:
+            [OK] **Break Down Complex Tasks**: Instead of "Build a complete app", try:
             1. "Create project structure"
             2. "Implement core calculations"
             3. "Add tests"
 
-            ✅ **Use Examples**: "Create a function similar to this: [paste example]"
+            [OK] **Use Examples**: "Create a function similar to this: [paste example]"
 
-            ❌ **Avoid Vague Requests**: "Do something with solar" → Too vague
+            [ERROR] **Avoid Vague Requests**: "Do something with solar" → Too vague
 
             ### Available Tools
 
             The agent has access to:
             - 📚 **Knowledge Base**: Domain-specific PDF documents
-            - 🔍 **Web Search**: Current information via Tavily API
+            - [SEARCH] **Web Search**: Current information via Tavily API
             - 🐳 **Code Execution**: Secure Docker sandbox
-            - 📁 **File Operations**: Read/write in workspace
+            - [FOLDER] **File Operations**: Read/write in workspace
             - 📞 **Telephony**: Simulated sales calls
             - 🧪 **Testing**: Automated pytest execution
 
@@ -691,7 +691,7 @@ def render_agent_menu():
             - `TROUBLESHOOTING.md` - Problem solving
             - `ADVANCED_FEATURES_GUIDE.md` - Advanced usage
 
-            🔧 **Validation**: Run `python Agent/validate_config.py` to check setup
+            [TOOL] **Validation**: Run `python Agent/validate_config.py` to check setup
 
             📖 **Installation**: See `AGENT_INSTALLATION_GUIDE.md` for setup help
             """)
@@ -701,7 +701,7 @@ def render_agent_menu():
                 st.rerun()
 
     # Example tasks with categories (Task 13.2)
-    with st.expander("💡 Example Task Suggestions", expanded=False):
+    with st.expander("[IDEA] Example Task Suggestions", expanded=False):
         tab1, tab2, tab3 = st.tabs([
             "🌞 Energy Consulting",
             "💻 Software Dev",
@@ -826,7 +826,7 @@ def render_agent_menu():
                 st.rerun()
 
     # Usage instructions (Task 13.2)
-    with st.expander("📝 Quick Usage Instructions", expanded=False):
+    with st.expander("[NOTE] Quick Usage Instructions", expanded=False):
         st.markdown("""
         ### Getting Started in 3 Steps
 
@@ -836,7 +836,7 @@ def render_agent_menu():
         - Include all necessary details
 
         **Step 2: Start the Agent**
-        - Click the "🚀 Start Agent" button
+        - Click the "[LAUNCH] Start Agent" button
         - The agent will begin processing your request
         - You'll see its thinking process in real-time
 
@@ -848,18 +848,18 @@ def render_agent_menu():
         ### Writing Effective Tasks
 
         **Good Task Examples:**
-        - ✅ "Create a Python function called calculate_roi that takes investment and annual_savings as parameters"
-        - ✅ "Search the knowledge base for information about heat pump efficiency (JAZ)"
-        - ✅ "Generate a Flask project structure with models, routes, and tests"
+        - [OK] "Create a Python function called calculate_roi that takes investment and annual_savings as parameters"
+        - [OK] "Search the knowledge base for information about heat pump efficiency (JAZ)"
+        - [OK] "Generate a Flask project structure with models, routes, and tests"
 
         **Tasks to Avoid:**
-        - ❌ "Do something" (too vague)
-        - ❌ "Help me" (no specific request)
-        - ❌ "Fix everything" (no context)
+        - [ERROR] "Do something" (too vague)
+        - [ERROR] "Help me" (no specific request)
+        - [ERROR] "Fix everything" (no context)
 
         ### Agent Capabilities
 
-        ✅ **Can Do:**
+        [OK] **Can Do:**
         - Search knowledge base
         - Generate Python code
         - Write and run tests
@@ -868,7 +868,7 @@ def render_agent_menu():
         - Simulate conversations
         - Search the web (if API key configured)
 
-        ❌ **Cannot Do:**
+        [ERROR] **Cannot Do:**
         - Access your local files outside workspace
         - Make real phone calls (only simulation)
         - Access databases directly
@@ -877,15 +877,15 @@ def render_agent_menu():
 
         ### Tips & Tricks
 
-        💡 **Use the knowledge base first**: The agent will search its knowledge base before using web search
+        [IDEA] **Use the knowledge base first**: The agent will search its knowledge base before using web search
 
-        💡 **Break down complex tasks**: Multi-step tasks work better when broken into phases
+        [IDEA] **Break down complex tasks**: Multi-step tasks work better when broken into phases
 
-        💡 **Provide examples**: Show the agent what you want with examples
+        [IDEA] **Provide examples**: Show the agent what you want with examples
 
-        💡 **Iterate**: Start simple, then refine based on results
+        [IDEA] **Iterate**: Start simple, then refine based on results
 
-        💡 **Check the reasoning**: Watch the agent's thinking process to understand its approach
+        [IDEA] **Check the reasoning**: Watch the agent's thinking process to understand its approach
         """)
 
     # ====================================================================
@@ -900,9 +900,9 @@ def render_agent_menu():
         phone_tab1, phone_tab2, phone_tab3, phone_tab4, phone_tab5 = st.tabs([
             "📞 Bria Softphone",
             "📇 Kontakte",
-            "📊 Analytics",
+            "[CHART] Analytics",
             "📚 Knowledge Base",
-            "🎯 Erweiterte Features"
+            "[TARGET] Erweiterte Features"
         ])
         
         # TAB 1: Bria Softphone
@@ -965,7 +965,7 @@ def render_agent_menu():
                         if target:
                             st.code(f"bria_transfer_call('{call_id_control}', '{target}')")
                 with col4:
-                    if st.button("❌ Auflegen", key="hangup_call"):
+                    if st.button("[ERROR] Auflegen", key="hangup_call"):
                         st.code(f"bria_hangup('{call_id_control}')")
         
         # TAB 2: Kontakte
@@ -996,7 +996,7 @@ def render_agent_menu():
                     else:
                         st.warning("Name und Telefonnummer sind Pflichtfelder")
             
-            with st.expander("🔍 Kontakte suchen", expanded=False):
+            with st.expander("[SEARCH] Kontakte suchen", expanded=False):
                 st.markdown("**Kontaktdatenbank durchsuchen**")
                 
                 search_query = st.text_input("Suche nach Name, Nummer oder Firma", key="contact_search")
@@ -1006,7 +1006,7 @@ def render_agent_menu():
                     else:
                         st.warning("Bitte Suchbegriff eingeben")
             
-            with st.expander("📁 Bulk Import (CSV/XLSX)", expanded=False):
+            with st.expander("[FOLDER] Bulk Import (CSV/XLSX)", expanded=False):
                 st.markdown("**Mehrere Kontakte auf einmal importieren**")
                 st.markdown("""
                 **Erforderliche Spalten:**
@@ -1027,7 +1027,7 @@ def render_agent_menu():
         
         # TAB 3: Analytics
         with phone_tab3:
-            with st.expander("📈 Anruf-Statistiken", expanded=False):
+            with st.expander("[STATS] Anruf-Statistiken", expanded=False):
                 st.markdown("**Auswertung der Anrufaktivitäten**")
                 
                 analytics_days = st.slider("Zeitraum (Tage)", min_value=1, max_value=90, value=30, key="analytics_days")
@@ -1045,7 +1045,7 @@ def render_agent_menu():
                 - Durchschnittliche Stimmung
                 """)
             
-            with st.expander("🔍 Anruf-Historie durchsuchen", expanded=False):
+            with st.expander("[SEARCH] Anruf-Historie durchsuchen", expanded=False):
                 st.markdown("**Vergangene Anrufe finden**")
                 
                 col1, col2 = st.columns(2)
@@ -1188,7 +1188,7 @@ def render_agent_menu():
                     else:
                         st.warning("Call ID und Aktion sind Pflichtfelder")
             
-            with st.expander("🚀 Auto-Dialer Kampagne", expanded=False):
+            with st.expander("[LAUNCH] Auto-Dialer Kampagne", expanded=False):
                 st.markdown("**Automatische Anrufkampagne für Kontakte mit Tag**")
                 
                 col1, col2 = st.columns(2)
@@ -1294,7 +1294,7 @@ def render_agent_menu():
 
     with col1:
         start_button = st.button(
-            "🚀 Start Agent",
+            "[LAUNCH] Start Agent",
             type="primary",
             use_container_width=True,
             help="Execute the task you entered above. The agent will use its tools to complete your request."
@@ -1309,7 +1309,7 @@ def render_agent_menu():
 
     with col3:
         show_status = st.button(
-            "📊 Show Status",
+            "[CHART] Show Status",
             use_container_width=True,
             help="Display the current agent status and configuration information.")
 
@@ -1336,14 +1336,14 @@ def render_agent_menu():
     if start_button and user_task:
         # Check if agent is initialized
         if st.session_state.agent_core is None:
-            st.error("❌ Agent nicht initialisiert. Bitte OpenAI API Key konfigurieren.")
+            st.error("[ERROR] Agent nicht initialisiert. Bitte OpenAI API Key konfigurieren.")
             st.stop()
         
         # Validate user input (Task 12.1)
         try:
             sanitize_user_input(user_task, max_length=10000)
         except InputValidationError as e:
-            st.error(f"❌ Input validation failed: {str(e)}")
+            st.error(f"[ERROR] Input validation failed: {str(e)}")
             st.stop()
 
         st.markdown("### 🤖 Agent Execution")

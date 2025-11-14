@@ -6,9 +6,46 @@ import sqlite3
 from collections.abc import Callable
 from datetime import datetime
 from typing import Any
+import time
 
 import pandas as pd
 import streamlit as st
+
+__all__ = [
+    'render_crm',
+    'save_customer',
+    'load_customer',
+    'load_all_customers',
+    'delete_customer',
+    'MONITORING_AVAILABLE',
+]
+
+# Monitoring integration
+try:
+    from app_tracing import app_tracer
+    from app_evaluation import track_success, track_error, evaluate_performance
+    MONITORING_AVAILABLE = True
+    
+    def trace_crm(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            op_name = f"crm.{func.__name__}"
+            try:
+                with app_tracer.create_span(op_name, {"function": func.__name__}) as span:
+                    result = func(*args, **kwargs)
+                    track_success(op_name)
+                    evaluate_performance(op_name, time.time() - start_time)
+                    return result
+            except Exception as e:
+                track_error(op_name, e)
+                raise
+        wrapper.__name__ = func.__name__
+        return wrapper
+except ImportError:
+    MONITORING_AVAILABLE = False
+    def trace_crm(func): return func
+    def track_success(op): pass
+    def track_error(op, err): pass
 
 try:
     from database import get_db_connection as real_get_db_connection
@@ -92,6 +129,13 @@ def create_tables_crm(conn: sqlite3.Connection):
         )
     """)
     conn.commit()  # Commit changes before attempting ALTER TABLE
+    
+    # Tag-System Tabellen erstellen
+    try:
+        from crm.features.tag_manager import create_tag_tables
+        create_tag_tables(conn)
+    except ImportError:
+        pass  # Tag-System optional
 
     # KORREKTUR: Migrationslogik für fehlende Spalten nach der initialen Erstellung
     # Dies ist eine gängige Methode, um das Schema zu aktualisieren, ohne Daten zu verlieren.
@@ -172,6 +216,7 @@ def create_tables_crm(conn: sqlite3.Connection):
     conn.commit()
 
 
+@trace_crm
 def save_customer(conn: sqlite3.Connection,
                   customer_data: dict[str, Any]) -> int | None:
     cursor = conn.cursor()
@@ -230,6 +275,7 @@ def save_customer(conn: sqlite3.Connection,
     return cursor.lastrowid
 
 
+@trace_crm
 def load_customer(conn: sqlite3.Connection,
                   customer_id: int) -> dict[str, Any] | None:
     cursor = conn.cursor()
@@ -317,6 +363,7 @@ def render_crm(
     get_db_connection_func: Callable[[], sqlite3.Connection | None],
     *,
     show_header: bool = True,
+    **kwargs
 ):
     if show_header:
         st.header(
@@ -369,13 +416,13 @@ def render_crm(
             # Suchfunktion und Filter
             with col_search:
                 search_query = st.text_input(
-                    "🔍 Suche nach Name, Stadt, E-Mail oder Telefon",
+                    "Suche nach Name, Stadt, E-Mail oder Telefon",
                     key="customer_search",
                     placeholder="Kunde suchen..."
                 )
             
             # Filteroptionen
-            col_filter1, col_filter2, col_filter3 = st.columns(3)
+            col_filter1, col_filter2, col_filter3, col_filter4 = st.columns(4)
             with col_filter1:
                 sort_by = st.selectbox(
                     "Sortieren nach",
@@ -389,6 +436,23 @@ def render_crm(
                     key="customer_city_filter"
                 )
             with col_filter3:
+                # Tag-Filter
+                try:
+                    from crm.features.tag_manager import get_all_tags, get_customers_by_tags
+                    all_tags = get_all_tags(conn, active_only=True)
+                    if all_tags:
+                        tag_options = {tag['id']: tag['name'] for tag in all_tags}
+                        selected_tag_ids = st.multiselect(
+                            "🏷️ Tags filtern",
+                            options=list(tag_options.keys()),
+                            format_func=lambda x: tag_options[x],
+                            key="customer_tag_filter"
+                        )
+                    else:
+                        selected_tag_ids = []
+                except ImportError:
+                    selected_tag_ids = []
+            with col_filter4:
                 view_style = st.radio(
                     "Ansicht",
                     ["Karten", "Tabelle"],
@@ -413,6 +477,15 @@ def render_crm(
             # Stadt-Filter
             if city_filter:
                 filtered_customers = [c for c in filtered_customers if c.get('city', '') in city_filter]
+            
+            # Tag-Filter
+            if selected_tag_ids:
+                try:
+                    from crm.features.tag_manager import get_customers_by_tags
+                    customer_ids_with_tags = get_customers_by_tags(conn, selected_tag_ids, match_all=False)
+                    filtered_customers = [c for c in filtered_customers if c.get('id') in customer_ids_with_tags]
+                except ImportError:
+                    pass
             
             # Sortierung
             if sort_by == "Name (A-Z)":
@@ -479,7 +552,7 @@ def render_crm(
                                             delete_button_key = f"del_customer_{customer['id']}"
                                             confirm_delete_key = f"confirm_delete_customer_{customer['id']}"
                                             
-                                            if st.button("🗑️", key=delete_button_key, help="Löschen", use_container_width=True):
+                                            if st.button("❌", key=delete_button_key, help="Löschen", use_container_width=True):
                                                 if st.session_state.get(confirm_delete_key, False):
                                                     if delete_customer(conn, customer['id']):
                                                         st.success("Kunde gelöscht.")
@@ -818,6 +891,31 @@ def render_crm(
                                    'Einkommenssteuersatz')}:** {current_customer.get('income_tax_rate_percent',
                                                                                      0.0)}%")
 
+        # Tag-Verwaltung für Kunden
+        st.markdown("---")
+        try:
+            from crm.features.tag_ui import render_customer_tag_selector
+            render_customer_tag_selector(selected_customer_id, texts, key_suffix="view")
+        except ImportError:
+            pass  # Tag-System nicht verfügbar
+
+        # E-Mail-Integration für Kunden
+        try:
+            from crm.features.email_crm_integration import render_customer_email_section
+            # Get load_admin_setting function from kwargs or create a dummy one
+            load_admin_setting_func = kwargs.get('load_admin_setting_func')
+            if load_admin_setting_func:
+                render_customer_email_section(
+                    conn,
+                    current_customer,
+                    load_admin_setting_func,
+                    texts
+                )
+        except ImportError:
+            pass  # E-Mail-System nicht verfügbar
+        except Exception as e:
+            st.warning(f"E-Mail-Integration konnte nicht geladen werden: {e}")
+
         st.markdown("---")
         st.subheader(
             get_text_crm(
@@ -1071,7 +1169,7 @@ def render_crm(
                                 except Exception:
                                     pass
                         with action_cols[1]:
-                            if st.button("🗑️", key=f"del_doc_{d.get('id')}", help="Löschen"):
+                            if st.button("❌", key=f"del_doc_{d.get('id')}", help="Löschen"):
                                 if callable(_delete_customer_document_db) and _delete_customer_document_db(d.get("id")):
                                     st.success(get_text_crm(texts, "crm_filevault_delete_success", "Dokument gelöscht."))
                                     st.rerun()
@@ -1737,8 +1835,6 @@ def render_crm(
                                     st.markdown("### Vergleichsergebnisse")
                                     
                                     # Erstelle Vergleichstabelle
-                                    import pandas as pd
-                                    
                                     comp_data = []
                                     for field, diff in comparison['differences'].items():
                                         val1 = comparison['calc1']['values'].get(field, 0)
@@ -1786,7 +1882,7 @@ def render_crm(
                                     else:
                                         st.error("Fehler beim Markieren")
                             else:
-                                st.success("✓ Hauptangebot")
+                                st.success("⭐ Hauptangebot")
                         
                         with col3:
                             # Löschen-Button
@@ -1833,7 +1929,7 @@ def render_crm(
                             )
             else:
                 st.info("Noch keine Berechnungen für dieses Projekt gespeichert.")
-                st.write("💡 **Tipp:** Führen Sie eine Berechnung im Solar Calculator durch, während dieses Projekt ausgewählt ist, um sie automatisch hier zu speichern.")
+                st.write("[IDEA] **Tipp:** Führen Sie eine Berechnung im Solar Calculator durch, während dieses Projekt ausgewählt ist, um sie automatisch hier zu speichern.")
         
         except ImportError:
             st.warning("Berechnungs-Historie nicht verfügbar (CRM-Integration fehlt)")

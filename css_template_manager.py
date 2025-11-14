@@ -37,17 +37,17 @@ class CSSTemplateManager:
                     self.loaded_templates[template_name] = css_content
                     return css_content
             except Exception as e:
-                print(f"⚠️ Fehler beim Laden von {css_path}: {e}")
+                print(f"[WARNING] Fehler beim Laden von {css_path}: {e}")
                 return ""
         else:
-            print(f"⚠️ Template nicht gefunden: {css_path}")
+            print(f"[WARNING] Template nicht gefunden: {css_path}")
             return ""
 
     def load_all_templates(self) -> str:
         """Lädt alle CSS-Templates im Template-Verzeichnis"""
         if not self.template_dir.exists():
             os.makedirs(self.template_dir, exist_ok=True)
-            print(f"✅ Template-Verzeichnis erstellt: {self.template_dir}")
+            print(f"[OK] Template-Verzeichnis erstellt: {self.template_dir}")
             return ""
 
         combined_css = ""
@@ -91,14 +91,14 @@ class CSSTemplateManager:
                 // Füge in <head> ein (höchste Priorität)
                 document.head.appendChild(style);
 
-                console.log('✅ Modernes UI CSS injiziert: {timestamp}');
+                console.log('[OK] Modernes UI CSS injiziert: {timestamp}');
             }})();
             </script>
             """
 
             st.components.v1.html(js_injector, height=0)
             print(
-                f"✅ CSS injiziert: {
+                f"[OK] CSS injiziert: {
                     len(css_content)} Zeichen (via JS + Markdown)")
 
     def inject_intro_overlay(

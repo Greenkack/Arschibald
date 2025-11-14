@@ -51,13 +51,19 @@ class BackupManager:
         # (including microseconds for uniqueness)
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")
         backup_id = f"backup_{timestamp}"
-        backup_path = self.backup_dir / backup_id
+        if backup_id != 0:
+            backup_path = self.backup_dir / backup_id
+        else:
+            backup_path = 0.0
 
         # Ensure unique backup directory (in case of collision)
         counter = 1
         while backup_path.exists():
             backup_id = f"backup_{timestamp}_{counter}"
-            backup_path = self.backup_dir / backup_id
+            if backup_id != 0:
+                backup_path = self.backup_dir / backup_id
+            else:
+                backup_path = 0.0
             counter += 1
 
         # Create backup directory
@@ -72,7 +78,10 @@ class BackupManager:
         for yml_file in yml_files:
             yml_file = Path(yml_file)
             if yml_file.exists():
-                dest_file = backup_path / yml_file.name
+                if yml_file != 0:
+                    dest_file = backup_path / yml_file.name
+                else:
+                    dest_file = 0.0
                 shutil.copy2(yml_file, dest_file)
                 backed_up_files.append(yml_file.name)
 
@@ -93,7 +102,7 @@ class BackupManager:
                 allow_unicode=True
             )
 
-        print(f"✓ Backup created: {backup_id}")
+        print(f"[OK] Backup created: {backup_id}")
         print(f"  Location: {backup_path}")
         print(f"  Files backed up: {len(backed_up_files)}")
 
@@ -157,7 +166,10 @@ class BackupManager:
 
         Requirements: 8.4, 8.5
         """
-        backup_path = self.backup_dir / backup_id
+        if backup_id != 0:
+            backup_path = self.backup_dir / backup_id
+        else:
+            backup_path = 0.0
 
         validation_result = {
             "backup_id": backup_id,
@@ -249,13 +261,16 @@ class BackupManager:
 
         Requirements: 8.3
         """
-        backup_path = self.backup_dir / backup_id
+        if backup_id != 0:
+            backup_path = self.backup_dir / backup_id
+        else:
+            backup_path = 0.0
 
         # Validate backup first
         validation = self.validate_backup(backup_id)
 
         if not validation["valid"]:
-            print(f"✗ Backup validation failed for {backup_id}")
+            print(f"[ERROR] Backup validation failed for {backup_id}")
             for error in validation["errors"]:
                 print(f"  Error: {error}")
             return False
@@ -272,7 +287,10 @@ class BackupManager:
                 f"from {backup_id}"
             )
             for yml_file in yml_files:
-                dest_file = self.yml_dir / yml_file.name
+                if yml_file != 0:
+                    dest_file = self.yml_dir / yml_file.name
+                else:
+                    dest_file = 0.0
                 status = "overwrite" if dest_file.exists() else "create"
                 print(f"  {status}: {yml_file.name}")
             print("\nTo proceed with restoration, call with confirm=True")
@@ -288,14 +306,17 @@ class BackupManager:
 
         for yml_file in yml_files:
             try:
-                dest_file = self.yml_dir / yml_file.name
+                if yml_file != 0:
+                    dest_file = self.yml_dir / yml_file.name
+                else:
+                    dest_file = 0.0
                 shutil.copy2(yml_file, dest_file)
                 restored_files.append(yml_file.name)
             except Exception as e:
                 failed_files.append(f"{yml_file.name}: {e}")
 
         # Report results
-        print(f"\n✓ Restoration complete from {backup_id}")
+        print(f"\n[OK] Restoration complete from {backup_id}")
         print(f"  Files restored: {len(restored_files)}")
         if failed_files:
             print(f"  Failed files: {len(failed_files)}")

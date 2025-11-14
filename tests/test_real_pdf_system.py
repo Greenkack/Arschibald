@@ -19,9 +19,9 @@ def test_real_pdf_generation():
     # Lade das echte PDF-System
     try:
         from pdf_generator import generate_offer_pdf
-        print("✅ PDF Generator erfolgreich geladen")
+        print("[OK] PDF Generator erfolgreich geladen")
     except ImportError as e:
-        print(f"❌ PDF Generator Import Fehler: {e}")
+        print(f"[ERROR] PDF Generator Import Fehler: {e}")
         return False
 
     # Test-Daten für PDF-Generierung
@@ -75,7 +75,7 @@ def test_real_pdf_generation():
         result = build_dynamic_data(test_project_data, test_analysis_results, test_company_info)
 
         # Prüfe die wichtigsten neuen Werte
-        print("\n✅ Neue Berechnungen:")
+        print("\n[OK] Neue Berechnungen:")
         print(f"  - Steuerliche Vorteile (platz1): {result.get('tax_benefits_eur', 'N/A')}")
         print(f"  - Gesamt ohne Speicher: {result.get('total_savings_eur', 'N/A')}")
         print(f"  - Wechselrichter in W: {result.get('inverter_total_power_w', 'N/A')}")
@@ -83,7 +83,7 @@ def test_real_pdf_generation():
         print(f"  - Einspeisung: {result.get('feed_in_eur', 'N/A')}")
 
         # Verifiziere die Platzhalter-Mappings
-        print("\n✅ Platzhalter-Mappings:")
+        print("\n[OK] Platzhalter-Mappings:")
         try:
             from pdf_template_engine.placeholders import (
                 PLACEHOLDER_TO_DATA_KEY_S1,
@@ -114,11 +114,11 @@ def test_real_pdf_generation():
             if 'inverter_total_power_w' in result:
                 print(f"  - inverter_total_power_w gefunden: {result['inverter_total_power_w']}")
 
-        print("\n✅ Test erfolgreich! Die neuen Berechnungen funktionieren.")
+        print("\n[OK] Test erfolgreich! Die neuen Berechnungen funktionieren.")
         return True
 
     except Exception as e:
-        print(f"❌ Fehler beim Test der dynamischen Daten: {e}")
+        print(f"[ERROR] Fehler beim Test der dynamischen Daten: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -129,5 +129,5 @@ if __name__ == "__main__":
         print("\n🎉 ALLE TESTS ERFOLGREICH!")
         print("Die neuen PDF-Berechnungen sind korrekt implementiert und sollten in der App funktionieren.")
     else:
-        print("\n❌ TESTS FEHLGESCHLAGEN!")
+        print("\n[ERROR] TESTS FEHLGESCHLAGEN!")
         print("Es gibt noch Probleme mit dem PDF-System.")

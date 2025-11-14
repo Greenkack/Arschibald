@@ -125,7 +125,10 @@ def calculate_annuity_loan(principal: float,
     r = annual_interest_rate_pct / 100.0 / 12.0
     n = years * 12
     if r == 0:
-        rate = principal / n
+        if n != 0:
+            rate = principal / n
+        else:
+            rate = 0.0
     else:
         rate = principal * (r * (1 + r) ** n) / ((1 + r) ** n - 1)
     remaining = principal

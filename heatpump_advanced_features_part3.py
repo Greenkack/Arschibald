@@ -244,12 +244,18 @@ def calculate_co2_footprint(
         # Zukünftiges System (Wärmepumpe)
         if future_system == "heatpump":
             cop = building_data.get("cop", 3.5)
-            electricity_kwh = annual_heat_kwh / cop
+            if cop != 0:
+                electricity_kwh = annual_heat_kwh / cop
+            else:
+                electricity_kwh = 0.0
             grid_factor = grid_emission_factor(year)
             future_co2_kg = electricity_kwh * grid_factor
         elif future_system == "heatpump_pv":
             cop = building_data.get("cop", 3.5)
-            electricity_kwh = annual_heat_kwh / cop
+            if cop != 0:
+                electricity_kwh = annual_heat_kwh / cop
+            else:
+                electricity_kwh = 0.0
             pv_coverage = 0.60  # 60% durch PV gedeckt
             grid_kwh = electricity_kwh * (1 - pv_coverage)
             pv_kwh = electricity_kwh * pv_coverage
@@ -376,7 +382,10 @@ def monte_carlo_roi_analysis(
         gas_cost_annual = annual_heat_kwh * gas_price
         
         # Mit Wärmepumpe
-        electricity_kwh = annual_heat_kwh / cop_real
+        if cop_real != 0:
+            electricity_kwh = annual_heat_kwh / cop_real
+        else:
+            electricity_kwh = 0.0
         wp_cost_annual = electricity_kwh * electricity_price + maintenance
         
         # Jährliche Einsparung
@@ -384,7 +393,10 @@ def monte_carlo_roi_analysis(
         
         # Amortisationszeit
         if annual_savings > 0:
-            payback_years = investment_eur / annual_savings
+            if annual_savings != 0:
+                payback_years = investment_eur / annual_savings
+            else:
+                payback_years = 0.0
         else:
             payback_years = 999
         
@@ -502,7 +514,10 @@ def benchmark_building(
     sorted_consumptions = sorted(all_consumptions)
     own_rank = sorted_consumptions.index(own_specific_consumption) + 1
     total_buildings = len(sorted_consumptions)
-    percentile_rank = (own_rank / total_buildings) * 100
+    if total_buildings != 0:
+        percentile_rank = (own_rank / total_buildings) * 100
+    else:
+        percentile_rank = 0.0
     
     # Best Performer identifizieren
     best_performer = min(similar_buildings, key=lambda x: x["consumption_kwh_m2"])

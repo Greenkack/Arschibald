@@ -57,8 +57,8 @@ def scan_for_secrets():
         f for f in scan_files if not any(
             ex in f for ex in exclude_patterns)]
 
-    print("🔍 SECRET-SCANNER:")
-    print(f"📁 Scanne {len(scan_files)} Dateien...")
+    print("[SEARCH] SECRET-SCANNER:")
+    print(f"[FOLDER] Scanne {len(scan_files)} Dateien...")
 
     findings = []
 
@@ -84,13 +84,13 @@ def scan_for_secrets():
     if findings:
         print(f"\n🚨 {len(findings)} VERDÄCHTIGE SECRETS GEFUNDEN:")
         for finding in findings:
-            print(f"  📄 {finding['file']}:{finding['line']}")
+            print(f"  [FILE] {finding['file']}:{finding['line']}")
             print(f"     🏷️ {finding['category']}: {finding['match']}")
             print()
 
-        print("⚠️ WARNUNG: Entfernen Sie diese Secrets vor dem Commit!")
+        print("[WARNING] WARNUNG: Entfernen Sie diese Secrets vor dem Commit!")
     else:
-        print("✅ Keine Secrets gefunden!")
+        print("[OK] Keine Secrets gefunden!")
 
     return findings
 

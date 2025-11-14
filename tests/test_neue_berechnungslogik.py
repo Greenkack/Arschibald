@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_neue_berechnungslogik():
     """Testet die neue Berechnungslogik"""
 
-    print("🔧 Test neue Berechnungslogik")
+    print("[TOOL] Test neue Berechnungslogik")
     print("=" * 50)
 
     # Simuliere Solar Calculator Berechnungsergebnisse
@@ -48,7 +48,7 @@ def test_neue_berechnungslogik():
         calculate_net_from_gross(zwischensumme))
     finale_investition = zwischensumme - finale_mwst_abzug  # Netto-Endbetrag
 
-    print("📊 Berechnungsbeispiel:")
+    print("[CHART] Berechnungsbeispiel:")
     print(f"   1. Komponenten (netto): {komponenten_netto:,.2f} €")
     print(f"   2. + Provision (versteckt): {provision_euro:,.2f} €")
     print(f"   3. = Netto mit Provision: {netto_mit_provision:,.2f} €")
@@ -98,16 +98,16 @@ def test_neue_berechnungslogik():
         for key in seite7_keys:
             value = dynamic_data.get(key, 'FEHLT')
             expected_not_zero = value != "0,00 €" and value != "FEHLT"
-            status = "✅" if expected_not_zero or key in [
-                'zubehor_preis_formatted'] else "❌"
+            status = "[OK]" if expected_not_zero or key in [
+                'zubehor_preis_formatted'] else "[ERROR]"
             print(f"   {key}: {value} {status}")
 
             if key != 'zubehor_preis_formatted' and not expected_not_zero:
                 all_correct = False
 
         if all_correct:
-            print("\\n✅ Neue Berechnungslogik funktioniert!")
-            print("\\n🎯 PDF Seite 7 wird jetzt anzeigen:")
+            print("\\n[OK] Neue Berechnungslogik funktioniert!")
+            print("\\n[TARGET] PDF Seite 7 wird jetzt anzeigen:")
             print(
                 f"   Gesamtsumme Brutto: {
                     dynamic_data.get('preis_mit_mwst_formatted')}")
@@ -125,11 +125,11 @@ def test_neue_berechnungslogik():
                 f"   = gesamte Investitionsumme: {
                     dynamic_data.get('final_end_preis_formatted')}")
             return True
-        print("\\n❌ Einige Werte sind noch nicht korrekt gesetzt")
+        print("\\n[ERROR] Einige Werte sind noch nicht korrekt gesetzt")
         return False
 
     except Exception as e:
-        print(f"\\n❌ Fehler beim Test: {e}")
+        print(f"\\n[ERROR] Fehler beim Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -138,7 +138,7 @@ def test_neue_berechnungslogik():
 def test_provision_versteckt():
     """Testet ob die Provision korrekt versteckt wird"""
 
-    print("\\n🔧 Test Provision versteckt")
+    print("\\n[TOOL] Test Provision versteckt")
     print("=" * 30)
 
     # Test-Szenario: 8.000€ Komponenten + 1.500€ Provision = 9.500€ netto
@@ -150,7 +150,7 @@ def test_provision_versteckt():
     mwst = calculate_vat_amount(netto_gesamt)  # 1.805€
     brutto_mit_provision = calculate_gross_from_net(netto_gesamt)  # 11.305€
 
-    print("📊 Provision-Test:")
+    print("[CHART] Provision-Test:")
     print(f"   Komponenten: {komponenten:,.2f} €")
     print(f"   + Provision (versteckt): {provision:,.2f} €")
     print(f"   = Netto gesamt: {netto_gesamt:,.2f} €")
@@ -171,18 +171,18 @@ def test_provision_versteckt():
         '.')
 
     if actual_calculation == expected_preis_mit_mwst:
-        print("\\n✅ Provision wird korrekt versteckt eingerechnet!")
+        print("\\n[OK] Provision wird korrekt versteckt eingerechnet!")
         print(f"   PDF zeigt: Gesamtsumme Brutto: {expected_preis_mit_mwst}")
         print("   (Provision von 1.500€ ist unsichtbar eingerechnet)")
         return True
-    print("\\n❌ Provision-Berechnung fehlerhaft")
+    print("\\n[ERROR] Provision-Berechnung fehlerhaft")
     print(f"   Erwartet: {expected_preis_mit_mwst}")
     print(f"   Erhalten: {actual_calculation}")
     return False
 
 
 if __name__ == "__main__":
-    print("🚀 Test neue Solar Calculator Berechnungslogik")
+    print("[LAUNCH] Test neue Solar Calculator Berechnungslogik")
     print("=" * 70)
 
     # Test 1: Neue Berechnungslogik
@@ -192,12 +192,12 @@ if __name__ == "__main__":
     test2_success = test_provision_versteckt()
 
     print("\\n🎉 Test-Zusammenfassung:")
-    print(f"   1. Neue Berechnungslogik: {'✅' if test1_success else '❌'}")
-    print(f"   2. Provision versteckt: {'✅' if test2_success else '❌'}")
+    print(f"   1. Neue Berechnungslogik: {'[OK]' if test1_success else '[ERROR]'}")
+    print(f"   2. Provision versteckt: {'[OK]' if test2_success else '[ERROR]'}")
 
     if test1_success and test2_success:
-        print("\\n🎯 ALLE TESTS ERFOLGREICH!")
-        print("\\n💰 Neue Berechnungsreihenfolge implementiert:")
+        print("\\n[TARGET] ALLE TESTS ERFOLGREICH!")
+        print("\\n[MONEY] Neue Berechnungsreihenfolge implementiert:")
         print("   1. Komponenten-Preis (netto)")
         print("   2. + Provision 1500€ (versteckt)")
         print("   3. + MwSt = Gesamtsumme Brutto")
@@ -205,6 +205,6 @@ if __name__ == "__main__":
         print("   5. = Zwischensumme")
         print("   6. - MwSt abziehen")
         print("   7. = Finale Investitionssumme (netto)")
-        print("\\n📄 PDF Seite 7 zeigt alle Berechnungsschritte dynamisch!")
+        print("\\n[FILE] PDF Seite 7 zeigt alle Berechnungsschritte dynamisch!")
     else:
-        print("\\n⚠️ Einige Tests sind fehlgeschlagen")
+        print("\\n[WARNING] Einige Tests sind fehlgeschlagen")

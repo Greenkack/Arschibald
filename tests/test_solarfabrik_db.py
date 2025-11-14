@@ -98,7 +98,7 @@ def test_solarfabrik_database():
 if __name__ == "__main__":
     test_solarfabrik_database()
     print()
-    print("🔍 NÄCHSTE SCHRITTE:")
+    print("[SEARCH] NÄCHSTE SCHRITTE:")
     print("1. Führe diesen Test aus, um zu sehen, was in der DB verfügbar ist")
     print("2. Schaue dir die Debug-Ausgaben in der PDF-Generierung an")
     print("3. Verwende die echten DB-Werte statt Hardcoded-Fallbacks")

@@ -29,7 +29,7 @@ for mod in critical_mods:
         pass
 
 print("="*60)
-print("🎯 SCHNELL-CHECK ERGEBNIS")
+print("[TARGET] SCHNELL-CHECK ERGEBNIS")
 print("="*60)
 print(f"SYNTAX:  {syntax_ok}/{len(py_files[:1000])} OK ({syntax_ok/len(py_files[:1000])*100:.1f}%)")
 print(f"IMPORTS: {imports_ok}/{len(critical_mods)} OK ({imports_ok/len(critical_mods)*100:.1f}%)")

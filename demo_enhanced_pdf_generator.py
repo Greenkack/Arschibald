@@ -15,9 +15,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     from pdf_generator import PDFGenerator
     from pricing.dynamic_key_manager import DynamicKeyManager, KeyCategory
-    print("✓ Successfully imported PDF generator and pricing system")
+    print("[OK] Successfully imported PDF generator and pricing system")
 except ImportError as e:
-    print(f"✗ Import error: {e}")
+    print(f"[ERROR] Import error: {e}")
     sys.exit(1)
 
 
@@ -135,13 +135,13 @@ def demo_basic_functionality():
         pricing_data=pricing_data
     )
 
-    print("✓ Created PDF generator with pricing data")
+    print("[OK] Created PDF generator with pricing data")
     print(f"  - Offer ID: {offer_data['offer_id']}")
     print(f"  - Customer: {offer_data['customer']['name']}")
     print(f"  - Total: {offer_data['grand_total']:.2f} €")
 
     # Test pricing key generation
-    print("\n📊 Pricing Key Generation:")
+    print("\n[CHART] Pricing Key Generation:")
     print(f"  - Generated {len(generator.pricing_keys)} dynamic keys")
 
     if generator.pricing_keys:
@@ -238,13 +238,13 @@ def demo_template_population():
     Ihr Solar-Team
     """
 
-    print("📄 Original Template:")
+    print("[FILE] Original Template:")
     print(template_content)
 
     # Populate template
     populated_content = generator.populate_template_placeholders(template_content)
 
-    print("\n📄 Populated Template:")
+    print("\n[FILE] Populated Template:")
     print(populated_content)
 
     return generator
@@ -272,7 +272,7 @@ def demo_pricing_summary():
     # Get pricing summary
     summary = generator.get_pricing_summary()
 
-    print("📊 Pricing Summary:")
+    print("[CHART] Pricing Summary:")
     print(f"  - Keys Generated: {summary['keys_generated']}")
 
     print(f"\n  Component Keys ({len(summary['components'])}):")
@@ -317,7 +317,7 @@ def demo_pdf_creation():
         pricing_data=pricing_data
     )
 
-    print("📄 Creating PDF with modules:")
+    print("[FILE] Creating PDF with modules:")
     for module in module_order:
         print(f"  - {module['id']}")
 
@@ -329,11 +329,11 @@ def demo_pdf_creation():
         print(f"  - Dynamic keys: {len(generator.get_all_dynamic_keys())}")
 
         # Note: We're not actually calling create_pdf() to avoid file creation in demo
-        print("✓ PDF generation setup complete")
+        print("[OK] PDF generation setup complete")
         print("  (PDF creation skipped in demo mode)")
 
     except Exception as e:
-        print(f"✗ Error during PDF creation: {e}")
+        print(f"[ERROR] Error during PDF creation: {e}")
 
     return generator
 
@@ -354,7 +354,7 @@ def main():
         demo_pdf_creation()
 
         print("\n" + "="*60)
-        print("✓ All demonstrations completed successfully!")
+        print("[OK] All demonstrations completed successfully!")
         print("="*60)
 
         print("\nKey Features Demonstrated:")
@@ -366,7 +366,7 @@ def main():
         print("• Error handling and fallback mechanisms")
 
     except Exception as e:
-        print(f"\n✗ Demo failed with error: {e}")
+        print(f"\n[ERROR] Demo failed with error: {e}")
         import traceback
         traceback.print_exc()
         return 1

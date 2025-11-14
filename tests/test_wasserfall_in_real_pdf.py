@@ -15,7 +15,7 @@ from pdf_generator import generate_main_template_pdf_bytes
 def test_real_pdf_with_waterfall():
     """Testet das Wasserfall-Diagramm in der echten PDF-Generierung"""
 
-    print("🔧 Test des Wasserfall-Diagramms in echter PDF")
+    print("[TOOL] Test des Wasserfall-Diagramms in echter PDF")
     print("=" * 50)
 
     # Test-Daten für die PDF-Generierung
@@ -63,7 +63,7 @@ def test_real_pdf_with_waterfall():
 
     try:
         # Generiere PDF mit Overlay
-        print("📄 Generiere PDF mit Wasserfall-Diagramm...")
+        print("[FILE] Generiere PDF mit Wasserfall-Diagramm...")
 
         # Erstelle project_data im erwarteten Format
         project_data = {
@@ -105,20 +105,20 @@ def test_real_pdf_with_waterfall():
             with open(output_file, "wb") as f:
                 f.write(pdf_bytes)
 
-            print(f"✅ PDF erfolgreich erstellt: {output_file}")
-            print(f"📦 Dateigröße: {len(pdf_bytes):,} bytes")
+            print(f"[OK] PDF erfolgreich erstellt: {output_file}")
+            print(f"[PACKAGE] Dateigröße: {len(pdf_bytes):,} bytes")
             print("📋 Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
             print("📍 Position: Zwischen 'Neigung des Daches' und 'Art' Spalten")
-            print(f"📊 Daten: Direktverbrauch={test_data['einsparung_direktverbrauch_eur']}€, "
+            print(f"[CHART] Daten: Direktverbrauch={test_data['einsparung_direktverbrauch_eur']}€, "
                   f"Einspeisung={test_data['einnahmen_einspeisung_eur']}€, "
                   f"Steuer={test_data['vorteile_steuerfrei_eur']}€")
 
             return True
-        print("❌ PDF-Generierung fehlgeschlagen - keine Bytes erhalten")
+        print("[ERROR] PDF-Generierung fehlgeschlagen - keine Bytes erhalten")
         return False
 
     except Exception as e:
-        print(f"❌ Fehler bei der PDF-Generierung: {e}")
+        print(f"[ERROR] Fehler bei der PDF-Generierung: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -126,7 +126,7 @@ def test_real_pdf_with_waterfall():
 def test_different_waterfall_values():
     """Testet verschiedene Werte für das Wasserfall-Diagramm"""
 
-    print("\n🔧 Test verschiedener Wasserfall-Werte")
+    print("\n[TOOL] Test verschiedener Wasserfall-Werte")
     print("=" * 40)
 
     test_scenarios = [
@@ -172,7 +172,7 @@ def test_different_waterfall_values():
     }
 
     for i, scenario in enumerate(test_scenarios):
-        print(f"\n📊 Szenario {i+1}: {scenario['name']}")
+        print(f"\n[CHART] Szenario {i+1}: {scenario['name']}")
 
         # Kombiniere Basis-Daten mit Szenario-Daten
         test_data = {**base_data, **scenario['data']}
@@ -217,20 +217,20 @@ def test_different_waterfall_values():
                 with open(output_file, "wb") as f:
                     f.write(pdf_bytes)
 
-                print(f"  ✅ PDF erstellt: {output_file}")
-                print(f"  📦 Größe: {len(pdf_bytes):,} bytes")
-                print(f"  💰 Werte: {scenario['data']['einsparung_direktverbrauch_eur']}€ + "
+                print(f"  [OK] PDF erstellt: {output_file}")
+                print(f"  [PACKAGE] Größe: {len(pdf_bytes):,} bytes")
+                print(f"  [MONEY] Werte: {scenario['data']['einsparung_direktverbrauch_eur']}€ + "
                       f"{scenario['data']['einnahmen_einspeisung_eur']}€ + "
                       f"{scenario['data']['vorteile_steuerfrei_eur']}€ = "
                       f"{scenario['data']['gesamt_ertraege_jahr_eur']}€")
             else:
-                print(f"  ❌ Fehler bei Szenario {i+1}")
+                print(f"  [ERROR] Fehler bei Szenario {i+1}")
 
         except Exception as e:
-            print(f"  ❌ Fehler bei Szenario {i+1}: {e}")
+            print(f"  [ERROR] Fehler bei Szenario {i+1}: {e}")
 
 if __name__ == "__main__":
-    print("🚀 Test des Wasserfall-Diagramms in echter PDF-Generierung")
+    print("[LAUNCH] Test des Wasserfall-Diagramms in echter PDF-Generierung")
     print("=" * 60)
 
     # Test 1: Grundlegende Funktionalität
@@ -246,4 +246,4 @@ if __name__ == "__main__":
         print("   - test_wasserfall_scenario_*.pdf (Verschiedene Szenarien)")
         print("📍 Das Wasserfall-Diagramm sollte auf Seite 3 zwischen den angegebenen Koordinaten sichtbar sein")
     else:
-        print("\n❌ Grundtest fehlgeschlagen - weitere Tests übersprungen")
+        print("\n[ERROR] Grundtest fehlgeschlagen - weitere Tests übersprungen")

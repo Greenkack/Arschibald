@@ -18,7 +18,7 @@ def run_python_tests():
         glob.glob("*_test.py") + glob.glob("tests/*.py")
 
     if not test_files:
-        print("❌ Keine Test-Dateien gefunden")
+        print("[ERROR] Keine Test-Dateien gefunden")
         return
 
     print(f"🧪 TESTE {len(test_files)} Test-Dateien:")
@@ -33,10 +33,10 @@ def run_python_tests():
                                     capture_output=True, text=True, timeout=30)
 
             if result.returncode == 0:
-                print("  ✅ BESTANDEN")
+                print("  [OK] BESTANDEN")
                 passed += 1
             else:
-                print("  ❌ FEHLGESCHLAGEN")
+                print("  [ERROR] FEHLGESCHLAGEN")
                 print(f"     {result.stderr[:200]}...")
                 failed += 1
 
@@ -44,13 +44,13 @@ def run_python_tests():
             print("  ⏱️ TIMEOUT")
             failed += 1
         except Exception as e:
-            print(f"  ❌ FEHLER: {e}")
+            print(f"  [ERROR] FEHLER: {e}")
             failed += 1
 
-    print("\n📊 TEST-ERGEBNISSE:")
-    print(f"✅ Bestanden: {passed}")
-    print(f"❌ Fehlgeschlagen: {failed}")
-    print(f"📈 Erfolgsrate: {passed / (passed + failed) * 100:.1f}%" if (
+    print("\n[CHART] TEST-ERGEBNISSE:")
+    print(f"[OK] Bestanden: {passed}")
+    print(f"[ERROR] Fehlgeschlagen: {failed}")
+    print(f"[STATS] Erfolgsrate: {passed / (passed + failed) * 100:.1f}%" if (
         passed + failed) > 0 else "Keine Tests")
 
 
@@ -79,17 +79,17 @@ def smoke_test_app():
     for test_name, test_func in tests:
         try:
             if test_func():
-                print(f"  ✅ {test_name}")
+                print(f"  [OK] {test_name}")
             else:
-                print(f"  ❌ {test_name}")
+                print(f"  [ERROR] {test_name}")
         except Exception as e:
-            print(f"  ❌ {test_name}: {e}")
+            print(f"  [ERROR] {test_name}: {e}")
 
 
 def benchmark_key_functions():
     """Benchmarkt wichtige App-Funktionen"""
 
-    print("\n⚡ PERFORMANCE-BENCHMARK:")
+    print("\n[POWER] PERFORMANCE-BENCHMARK:")
 
     # Importiere relevante Module
     try:
@@ -113,13 +113,13 @@ def benchmark_key_functions():
                     spec.loader.exec_module(module)
 
                     import_time = time.time() - start_time
-                    print(f"  📦 {module_file}: {import_time:.3f}s Import-Zeit")
+                    print(f"  [PACKAGE] {module_file}: {import_time:.3f}s Import-Zeit")
 
                 except Exception:
-                    print(f"  ❌ {module_file}: Import-Fehler")
+                    print(f"  [ERROR] {module_file}: Import-Fehler")
 
     except Exception as e:
-        print(f"  ❌ Benchmark-Fehler: {e}")
+        print(f"  [ERROR] Benchmark-Fehler: {e}")
 
 
 if __name__ == "__main__":

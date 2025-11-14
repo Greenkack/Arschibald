@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-🚀 AUTOMATISCHE REPARATUR ZU 100% GESUNDHEIT
+[LAUNCH] AUTOMATISCHE REPARATUR ZU 100% GESUNDHEIT
 """
 
 import os
@@ -40,7 +40,7 @@ def delete_deprecated_files():
     deleted = 0
     not_found = 0
     
-    print("🗑️  LÖSCHE DEPRECATED DATEIEN...")
+    print("[DELETE]  LÖSCHE DEPRECATED DATEIEN...")
     print("-" * 80)
     
     for file_path in files_to_delete:
@@ -48,10 +48,10 @@ def delete_deprecated_files():
         if full_path.exists():
             try:
                 full_path.unlink()
-                print(f"✅ Gelöscht: {file_path}")
+                print(f"[OK] Gelöscht: {file_path}")
                 deleted += 1
             except Exception as e:
-                print(f"❌ Fehler bei {file_path}: {e}")
+                print(f"[ERROR] Fehler bei {file_path}: {e}")
         else:
             not_found += 1
     
@@ -149,7 +149,7 @@ def get_progress_manager():
     
     created = 0
     
-    print("\n📦 ERSTELLE DUMMY-MODULE...")
+    print("\n[PACKAGE] ERSTELLE DUMMY-MODULE...")
     print("-" * 80)
     
     # Core Module erstellen
@@ -161,7 +161,7 @@ def get_progress_manager():
         file_path = core_dir / filename
         if not file_path.exists():
             file_path.write_text(content, encoding='utf-8')
-            print(f"✅ Erstellt: core/{filename}")
+            print(f"[OK] Erstellt: core/{filename}")
             created += 1
     
     # Pricing Module erstellen
@@ -173,7 +173,7 @@ def get_progress_manager():
         file_path = pricing_dir / filename
         if not file_path.exists():
             file_path.write_text(content, encoding='utf-8')
-            print(f"✅ Erstellt: pricing/{filename}")
+            print(f"[OK] Erstellt: pricing/{filename}")
             created += 1
     
     # Component Module erstellen
@@ -185,14 +185,14 @@ def get_progress_manager():
         file_path = comp_dir / filename
         if not file_path.exists():
             file_path.write_text(content, encoding='utf-8')
-            print(f"✅ Erstellt: components/{filename}")
+            print(f"[OK] Erstellt: components/{filename}")
             created += 1
     
     return created
 
 def main():
     print("=" * 80)
-    print("🚀 AUTOMATISCHE REPARATUR - 100% GESUNDHEIT")
+    print("[LAUNCH] AUTOMATISCHE REPARATUR - 100% GESUNDHEIT")
     print("=" * 80)
     print()
     
@@ -204,13 +204,13 @@ def main():
     
     # Zusammenfassung
     print("\n" + "=" * 80)
-    print("📊 REPARATUR ABGESCHLOSSEN")
+    print("[CHART] REPARATUR ABGESCHLOSSEN")
     print("=" * 80)
-    print(f"🗑️  Gelöscht:  {deleted} deprecated Dateien")
-    print(f"📦 Erstellt:  {created} Dummy-Module")
-    print(f"⚠️  Nicht gefunden: {not_found} Dateien")
+    print(f"[DELETE]  Gelöscht:  {deleted} deprecated Dateien")
+    print(f"[PACKAGE] Erstellt:  {created} Dummy-Module")
+    print(f"[WARNING]  Nicht gefunden: {not_found} Dateien")
     
-    print("\n💡 NÄCHSTE SCHRITTE:")
+    print("\n[IDEA] NÄCHSTE SCHRITTE:")
     print("  1. Führe erneut ultra_deep_analysis.py aus")
     print("  2. Prüfe neue Gesundheitswerte")
     print("  3. Repariere verbleibende Syntax-Fehler manuell")

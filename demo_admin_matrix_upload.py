@@ -31,7 +31,7 @@ def main():
     # Tabs für verschiedene Funktionen
     tab1, tab2, tab3 = st.tabs([
         "📤 Matrix hochladen",
-        "📊 Vorhandene Matrizen",
+        "[CHART] Vorhandene Matrizen",
         "🧪 Validierung testen"
     ])
     
@@ -72,20 +72,20 @@ def render_validation_test_ui():
     
     # Beispiel-Matrizen
     examples = {
-        "✓ Gültige Matrix": """Anzahl Module;10kWh;15kWh;Ohne Speicher
+        "[OK] Gültige Matrix": """Anzahl Module;10kWh;15kWh;Ohne Speicher
 10;15000.00;17500.00;12000.00
 15;18000.00;20500.00;15000.00
 20;21000.00;23500.00;18000.00""",
         
-        "✗ Fehlende 'Ohne Speicher' Spalte": """Anzahl Module;10kWh;15kWh
+        "[ERROR] Fehlende 'Ohne Speicher' Spalte": """Anzahl Module;10kWh;15kWh
 10;15000.00;17500.00
 15;18000.00;20500.00""",
         
-        "✗ Nicht-numerischer Index": """Anzahl Module;10kWh;Ohne Speicher
+        "[ERROR] Nicht-numerischer Index": """Anzahl Module;10kWh;Ohne Speicher
 ABC;15000.00;12000.00
 DEF;18000.00;15000.00""",
         
-        "✗ Nicht-numerische Preise": """Anzahl Module;10kWh;Ohne Speicher
+        "[ERROR] Nicht-numerische Preise": """Anzahl Module;10kWh;Ohne Speicher
 10;ABC;12000.00
 15;18000.00;XYZ""",
         
@@ -107,7 +107,7 @@ DEF;18000.00;15000.00""",
     st.code(csv_content, language='csv')
     
     # Validiere Button
-    if st.button("🔍 Validieren", type="primary"):
+    if st.button("[SEARCH] Validieren", type="primary"):
         with st.spinner("Validiere..."):
             # Konvertiere zu Bytes
             file_content = csv_content.encode('utf-8')
@@ -120,9 +120,9 @@ DEF;18000.00;15000.00""",
             st.markdown("### Validierungsergebnis")
             
             if result['valid']:
-                st.success("✓ Matrix ist gültig und kann importiert werden")
+                st.success("[OK] Matrix ist gültig und kann importiert werden")
             else:
-                st.error("✗ Matrix enthält Fehler und kann nicht importiert werden")
+                st.error("[ERROR] Matrix enthält Fehler und kann nicht importiert werden")
             
             # Fehler
             if result['errors']:
@@ -152,11 +152,11 @@ DEF;18000.00;15000.00""",
                     st.metric("Leere Zellen", info.get('empty_cells', 0))
                 
                 if 'no_storage_column' in info:
-                    st.success(f"✓ 'Ohne Speicher' Spalte: **{info['no_storage_column']}**")
+                    st.success(f"[OK] 'Ohne Speicher' Spalte: **{info['no_storage_column']}**")
                 
                 if 'module_counts' in info and info['module_counts']:
                     counts_str = ', '.join(str(int(c)) for c in info['module_counts'])
-                    st.info(f"📊 Modulanzahlen: {counts_str}")
+                    st.info(f"[CHART] Modulanzahlen: {counts_str}")
                 
                 if 'storage_models' in info and info['storage_models']:
                     models_str = ', '.join(str(m) for m in info['storage_models'])
@@ -172,7 +172,7 @@ DEF;18000.00;15000.00""",
 def render_help_section():
     """Rendert Hilfe-Sektion"""
     
-    with st.expander("ℹ️ Hilfe: Matrix-Struktur", expanded=False):
+    with st.expander("[INFO] Hilfe: Matrix-Struktur", expanded=False):
         st.markdown("""
         ### Erforderliche Matrix-Struktur
         

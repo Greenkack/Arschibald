@@ -19,11 +19,11 @@ for i in range(1, 9):
     c.showPage()
 c.save()
 base_pdf_bytes = buffer.getvalue()
-print(f"   ✓ Created base PDF: {len(base_pdf_bytes)} bytes")
+print(f"   [OK] Created base PDF: {len(base_pdf_bytes)} bytes")
 
 # Verify base PDF
 reader = PdfReader(io.BytesIO(base_pdf_bytes))
-print(f"   ✓ Base PDF has {len(reader.pages)} pages")
+print(f"   [OK] Base PDF has {len(reader.pages)} pages")
 
 # Step 2: Test _merge_extended_pdf_pages function
 print("\n2. Testing _merge_extended_pdf_pages...")
@@ -56,20 +56,20 @@ try:
         test_texts
     )
     
-    print(f"   ✓ Merged PDF: {len(merged_pdf_bytes)} bytes")
+    print(f"   [OK] Merged PDF: {len(merged_pdf_bytes)} bytes")
     
     # Check page count
     merged_reader = PdfReader(io.BytesIO(merged_pdf_bytes))
     merged_page_count = len(merged_reader.pages)
-    print(f"   ✓ Merged PDF has {merged_page_count} pages")
+    print(f"   [OK] Merged PDF has {merged_page_count} pages")
     
     if merged_page_count > 8:
-        print(f"   ✓ SUCCESS: Extended pages were added! ({merged_page_count - 8} additional pages)")
+        print(f"   [OK] SUCCESS: Extended pages were added! ({merged_page_count - 8} additional pages)")
     else:
         print(f"   ⚠ WARNING: No extended pages added (still {merged_page_count} pages)")
         
 except Exception as e:
-    print(f"   ✗ Error: {e}")
+    print(f"   [ERROR] Error: {e}")
     import traceback
     traceback.print_exc()
 
@@ -95,15 +95,15 @@ try:
     
     merged_reader_full = PdfReader(io.BytesIO(merged_pdf_bytes_full))
     merged_page_count_full = len(merged_reader_full.pages)
-    print(f"   ✓ Merged PDF has {merged_page_count_full} pages")
+    print(f"   [OK] Merged PDF has {merged_page_count_full} pages")
     
     if merged_page_count_full > 8:
-        print(f"   ✓ SUCCESS: Extended pages were added! ({merged_page_count_full - 8} additional pages)")
+        print(f"   [OK] SUCCESS: Extended pages were added! ({merged_page_count_full - 8} additional pages)")
     else:
         print(f"   ⚠ WARNING: No extended pages added (still {merged_page_count_full} pages)")
         
 except Exception as e:
-    print(f"   ✗ Error: {e}")
+    print(f"   [ERROR] Error: {e}")
     import traceback
     traceback.print_exc()
 

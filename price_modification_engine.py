@@ -115,7 +115,7 @@ def apply_modification(
             f"Firma {i + 1}: {previous_price:.2f}€ + {pct:.1f}% = {current_price:.2f}€"
         )
     
-    # ⚠️ ABSICHERUNG: Division by Zero vermeiden
+    # [WARNING] ABSICHERUNG: Division by Zero vermeiden
     if base_price > 0:
         total_increase = ((current_price - base_price) / base_price) * 100
         logger.info(
@@ -124,7 +124,7 @@ def apply_modification(
         )
     else:
         total_increase = 0
-        logger.warning(f"⚠️ base_price ist 0! Keine Prozent-Berechnung möglich.")
+        logger.warning(f"[WARNING] base_price ist 0! Keine Prozent-Berechnung möglich.")
     
     return current_price
 
@@ -154,7 +154,10 @@ def get_progressive_modifier(
         return base_modifier
     
     # Progression pro Firma
-    progression_per_firm = (base_modifier / firm_count) * progression_factor
+    if firm_count != 0:
+        progression_per_firm = (base_modifier / firm_count) * progression_factor
+    else:
+        progression_per_firm = 0.0
     
     total_modifier = base_modifier + (progression_per_firm * firm_index)
     
@@ -198,7 +201,7 @@ def calculate_price_with_products(
     # Basis-Preis: Entweder Override oder berechnen
     if base_price_override is not None and base_price_override > 0:
         base_price = base_price_override
-        logger.info(f"✅ Basis-Preis aus project_data: {base_price:.2f}€")
+        logger.info(f"[OK] Basis-Preis aus project_data: {base_price:.2f}€")
     else:
         # Fallback: Berechne aus Produkten
         labor_costs = 0

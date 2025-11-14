@@ -468,7 +468,10 @@ def calculate_annuity(principal: float,
     num_payments = duration * 12
 
     if monthly_rate == 0:  # Zinsfrei
-        monthly_payment = principal_val / num_payments
+        if num_payments != 0:
+            monthly_payment = principal_val / num_payments
+        else:
+            monthly_payment = 0.0
         total_interest = 0
     else:
         # Annuitätenformel

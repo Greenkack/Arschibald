@@ -27,37 +27,37 @@ def verify_session_state_initialization():
     module_file = Path("solar_3d_view_module.py")
     
     if not module_file.exists():
-        print("❌ ERROR: solar_3d_view_module.py not found!")
+        print("[ERROR] ERROR: solar_3d_view_module.py not found!")
         return False
     
     content = module_file.read_text(encoding="utf-8")
     
     # Check 1: Verify placed_module_positions initialization
-    print("✓ Sub-task 1: Initialisiere placed_module_positions als leere Liste")
+    print("[OK] Sub-task 1: Initialisiere placed_module_positions als leere Liste")
     if '"placed_module_positions"' in content and '= []' in content:
-        print("  ✅ placed_module_positions initialized as empty list")
+        print("  [OK] placed_module_positions initialized as empty list")
     else:
-        print("  ❌ placed_module_positions initialization not found!")
+        print("  [ERROR] placed_module_positions initialization not found!")
         return False
     
     # Check 2: Verify placed_module_count initialization
-    print("\n✓ Sub-task 2: Initialisiere placed_module_count als 0")
+    print("\n[OK] Sub-task 2: Initialisiere placed_module_count als 0")
     if '"placed_module_count"' in content and '= 0' in content:
-        print("  ✅ placed_module_count initialized as 0")
+        print("  [OK] placed_module_count initialized as 0")
     else:
-        print("  ❌ placed_module_count initialization not found!")
+        print("  [ERROR] placed_module_count initialization not found!")
         return False
     
     # Check 3: Verify trigger_auto_placement initialization
-    print("\n✓ Sub-task 3: Initialisiere trigger_auto_placement als False")
+    print("\n[OK] Sub-task 3: Initialisiere trigger_auto_placement als False")
     if '"trigger_auto_placement"' in content and '= False' in content:
-        print("  ✅ trigger_auto_placement initialized as False")
+        print("  [OK] trigger_auto_placement initialized as False")
     else:
-        print("  ❌ trigger_auto_placement initialization not found!")
+        print("  [ERROR] trigger_auto_placement initialization not found!")
         return False
     
     # Check 4: Verify initialization occurs before panel rendering
-    print("\n✓ Sub-task 4: Stelle sicher dass Initialisierung vor Panel-Rendering erfolgt")
+    print("\n[OK] Sub-task 4: Stelle sicher dass Initialisierung vor Panel-Rendering erfolgt")
     
     # Find the position of session state initialization
     init_pos = content.find('Session State Initialisierung für Modul-Platzierung (Task 7)')
@@ -66,22 +66,22 @@ def verify_session_state_initialization():
     panel_pos = content.find('render_module_placement_panel')
     
     if init_pos == -1:
-        print("  ❌ Session state initialization comment not found!")
+        print("  [ERROR] Session state initialization comment not found!")
         return False
     
     if panel_pos == -1:
-        print("  ⚠️  Panel rendering not found (may not be implemented yet)")
-        print("  ✅ Initialization is in place and ready for panel rendering")
+        print("  [WARNING]  Panel rendering not found (may not be implemented yet)")
+        print("  [OK] Initialization is in place and ready for panel rendering")
     elif init_pos < panel_pos:
-        print("  ✅ Initialization occurs BEFORE panel rendering")
+        print("  [OK] Initialization occurs BEFORE panel rendering")
         print(f"     - Initialization at position: {init_pos}")
         print(f"     - Panel rendering at position: {panel_pos}")
     else:
-        print("  ❌ Initialization occurs AFTER panel rendering!")
+        print("  [ERROR] Initialization occurs AFTER panel rendering!")
         return False
     
     # Check 5: Verify the initialization pattern
-    print("\n✓ Additional Check: Verify initialization pattern")
+    print("\n[OK] Additional Check: Verify initialization pattern")
     
     # Check for proper if-not-in pattern
     patterns = [
@@ -93,21 +93,21 @@ def verify_session_state_initialization():
     all_patterns_found = all(pattern in content for pattern in patterns)
     
     if all_patterns_found:
-        print("  ✅ All session state variables use proper if-not-in pattern")
+        print("  [OK] All session state variables use proper if-not-in pattern")
     else:
-        print("  ❌ Some session state variables missing proper if-not-in pattern!")
+        print("  [ERROR] Some session state variables missing proper if-not-in pattern!")
         return False
     
     # Check 6: Verify Requirements mapping
-    print("\n✓ Requirements Verification:")
-    print("  ✅ Requirement 9.1: placed_module_positions stored in session state")
-    print("  ✅ Requirement 9.2: placed_module_count stored in session state")
-    print("  ✅ Requirement 9.3: Session state restored on page reload")
-    print("  ✅ Requirement 9.4: Session state cleared on reset")
+    print("\n[OK] Requirements Verification:")
+    print("  [OK] Requirement 9.1: placed_module_positions stored in session state")
+    print("  [OK] Requirement 9.2: placed_module_count stored in session state")
+    print("  [OK] Requirement 9.3: Session state restored on page reload")
+    print("  [OK] Requirement 9.4: Session state cleared on reset")
     
     # Summary
     print("\n" + "=" * 80)
-    print("TASK 7 VERIFICATION: ✅ ALL CHECKS PASSED")
+    print("TASK 7 VERIFICATION: [OK] ALL CHECKS PASSED")
     print("=" * 80)
     print()
     print("Summary:")
@@ -149,22 +149,22 @@ def test_session_state_behavior():
         session_state["trigger_auto_placement"] = False
     
     # Verify
-    print("\n✓ Verification:")
+    print("\n[OK] Verification:")
     
     assert session_state["placed_module_positions"] == [], \
         "placed_module_positions should be empty list"
-    print("  ✅ placed_module_positions = []")
+    print("  [OK] placed_module_positions = []")
     
     assert session_state["placed_module_count"] == 0, \
         "placed_module_count should be 0"
-    print("  ✅ placed_module_count = 0")
+    print("  [OK] placed_module_count = 0")
     
     assert session_state["trigger_auto_placement"] is False, \
         "trigger_auto_placement should be False"
-    print("  ✅ trigger_auto_placement = False")
+    print("  [OK] trigger_auto_placement = False")
     
     # Test idempotency (running initialization again should not change values)
-    print("\n✓ Testing idempotency (running initialization again)...")
+    print("\n[OK] Testing idempotency (running initialization again)...")
     
     # Modify values
     session_state["placed_module_positions"] = [(1.0, 2.0, 3.0)]
@@ -184,17 +184,17 @@ def test_session_state_behavior():
     # Verify values are preserved
     assert session_state["placed_module_positions"] == [(1.0, 2.0, 3.0)], \
         "Values should be preserved on re-initialization"
-    print("  ✅ placed_module_positions preserved: [(1.0, 2.0, 3.0)]")
+    print("  [OK] placed_module_positions preserved: [(1.0, 2.0, 3.0)]")
     
     assert session_state["placed_module_count"] == 5, \
         "Values should be preserved on re-initialization"
-    print("  ✅ placed_module_count preserved: 5")
+    print("  [OK] placed_module_count preserved: 5")
     
     assert session_state["trigger_auto_placement"] is True, \
         "Values should be preserved on re-initialization"
-    print("  ✅ trigger_auto_placement preserved: True")
+    print("  [OK] trigger_auto_placement preserved: True")
     
-    print("\n✅ BEHAVIORAL TEST PASSED: Initialization is idempotent")
+    print("\n[OK] BEHAVIORAL TEST PASSED: Initialization is idempotent")
     print()
 
 
@@ -205,13 +205,13 @@ if __name__ == "__main__":
     success = verify_session_state_initialization()
     
     if not success:
-        print("\n❌ VERIFICATION FAILED")
+        print("\n[ERROR] VERIFICATION FAILED")
         sys.exit(1)
     
     # Run behavioral test
     test_session_state_behavior()
     
     print("=" * 80)
-    print("✅ ALL VERIFICATIONS PASSED - TASK 7 COMPLETE")
+    print("[OK] ALL VERIFICATIONS PASSED - TASK 7 COMPLETE")
     print("=" * 80)
     print()

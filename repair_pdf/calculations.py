@@ -706,7 +706,10 @@ class AdvancedCalculationsIntegrator:
         annual_cycles = daily_cycles * 365
         cycle_life = 6000  # Typische Zyklenlebensdauer
 
-        expected_lifetime_years = cycle_life / annual_cycles
+        if annual_cycles != 0:
+            expected_lifetime_years = cycle_life / annual_cycles
+        else:
+            expected_lifetime_years = 0.0
 
         # Degradation über Zeit
         years = list(range(int(expected_lifetime_years) + 1))
@@ -714,7 +717,10 @@ class AdvancedCalculationsIntegrator:
 
         for year in years:
             # 80% Kapazität nach Zyklenlebensdauer
-            remaining_capacity = 100 - (20 * year / expected_lifetime_years)
+            if expected_lifetime_years != 0:
+                remaining_capacity = 100 - (20 * year / expected_lifetime_years)
+            else:
+                remaining_capacity = 0.0
             capacity_over_time.append(max(80, remaining_capacity))
 
         return {
@@ -859,7 +865,10 @@ class AdvancedCalculationsIntegrator:
         net_annual_saving = annual_co2_saved - annual_co2_pv
 
         # Amortisation der Herstellungs-CO2
-        co2_payback_years = manufacturing_co2 / net_annual_saving
+        if net_annual_saving != 0:
+            co2_payback_years = manufacturing_co2 / net_annual_saving
+        else:
+            co2_payback_years = 0.0
 
         # 25-Jahres-Bilanz
         lifetime_co2_saved = net_annual_saving * 25 - manufacturing_co2
@@ -919,7 +928,10 @@ class AdvancedCalculationsIntegrator:
         shaved_load = []
         for load in base_load:
             if load > peak_threshold:
-                shaved = min(load - peak_threshold, battery_power_kw / peak_power_kw)
+                if peak_power_kw != 0:
+                    shaved = min(load - peak_threshold, battery_power_kw / peak_power_kw)
+                else:
+                    shaved = 0.0
                 shaved_load.append(load - shaved)
             else:
                 shaved_load.append(load)
@@ -1296,7 +1308,10 @@ class AdvancedCalculationsIntegrator:
 
         # Vergleich mit Netzstrom
         grid_price = 0.32  # EUR/kWh
-        grid_comparison = lcoe_discounted / grid_price if grid_price > 0 else 0
+        if grid_price != 0:
+            grid_comparison = lcoe_discounted / grid_price if grid_price > 0 else 0
+        else:
+            grid_comparison = 0.0
         savings_potential = grid_price - lcoe_discounted
 
         return {
@@ -1347,7 +1362,10 @@ class AdvancedCalculationsIntegrator:
         # MIRR (vereinfacht)
         finance_rate = 0.04
         reinvest_rate = 0.03
-        mirr = ((annual_benefit * lifetime / investment) ** (1 / lifetime)) - 1
+        if investment != 0:
+            mirr = ((annual_benefit * lifetime / investment) ** (1 / lifetime)) - 1
+        else:
+            mirr = 0.0
 
         # Profitability Index
         pi = (
@@ -1678,7 +1696,10 @@ class AdvancedCalculationsIntegrator:
         # Dimensionierung
         dc_power = calc_results.get("anlage_kwp", 10)
         ac_power = project_data.get("inverter_power_kw", dc_power * 0.9)
-        sizing_factor = (dc_power / ac_power * 100) if ac_power > 0 else 110
+        if ac_power != 0:
+            sizing_factor = (dc_power / ac_power * 100) if ac_power > 0 else 110
+        else:
+            sizing_factor = 0.0
 
         return {
             "efficiency_curve": efficiency_curve,
@@ -3142,7 +3163,10 @@ def perform_calculations(
     # errors_list.append((texts.get("warn_no_feed_in_tariffs_defined", "Keine Einspeisevergütungen für Typ '{feed_in_type}' definiert.") or "").format(feed_in_type=feed_in_type_str))
 
     results["einspeiseverguetung_ct_per_kwh"] = einspeiseverguetung_ct_per_kwh
-    results["einspeiseverguetung_eur_per_kwh"] = einspeiseverguetung_ct_per_kwh / 100.0
+    if 100 != 0:
+        results["einspeiseverguetung_eur_per_kwh"] = einspeiseverguetung_ct_per_kwh / 100.0
+    else:
+        results["einspeiseverguetung_eur_per_kwh"] = 0.0
     annual_feed_in_revenue_year1 = (
         netzeinspeisung_kwh * results["einspeiseverguetung_eur_per_kwh"]
     )
@@ -3150,8 +3174,14 @@ def perform_calculations(
 
     # Kennzahlen-Quoten
     if annual_pv_production_kwh > 0:
-        self_consumption_ratio = eigenverbrauch_pro_jahr_kwh / annual_pv_production_kwh
-        feed_in_ratio = netzeinspeisung_kwh / annual_pv_production_kwh
+        if annual_pv_production_kwh != 0:
+            self_consumption_ratio = eigenverbrauch_pro_jahr_kwh / annual_pv_production_kwh
+        else:
+            self_consumption_ratio = 0.0
+        if annual_pv_production_kwh != 0:
+            feed_in_ratio = netzeinspeisung_kwh / annual_pv_production_kwh
+        else:
+            feed_in_ratio = 0.0
     else:
         self_consumption_ratio = 0.0
         feed_in_ratio = 0.0
@@ -3463,7 +3493,10 @@ def perform_calculations(
         results.get("specific_annual_yield_kwh_per_kwp", 0.0) or 0.0
     )
     if current_specific_yield > 0 and ref_specific_yield_for_pr > 0:
-        pr_calculated = (current_specific_yield / ref_specific_yield_for_pr) * 100
+        if ref_specific_yield_for_pr != 0:
+            pr_calculated = (current_specific_yield / ref_specific_yield_for_pr) * 100
+        else:
+            pr_calculated = 0.0
         results["performance_ratio_percent"] = min(
             max(pr_calculated, 50.0), 95.0
         )  # Begrenzung auf plausiblen Bereich
@@ -3921,7 +3954,10 @@ class EnergyPriceComparison:
             ]
             total_cost = new_cost - feed_in_revenue
             savings = base_cost - total_cost
-            savings_percent = (savings / base_cost) * 100 if base_cost > 0 else 0
+            if base_cost != 0:
+                savings_percent = (savings / base_cost) * 100 if base_cost > 0 else 0
+            else:
+                savings_percent = 0.0
 
             comparisons.append(
                 {
@@ -3966,7 +4002,10 @@ class TechnicalDegradation:
         for year in range(years):
             # Guard gegen Division durch 0
             if self.initial_power and self.initial_power > 0:
-                efficiency = (current_power / self.initial_power) * 100
+                if self != 0:
+                    efficiency = (current_power / self.initial_power) * 100
+                else:
+                    efficiency = 0.0
             else:
                 efficiency = 0.0
             efficiency_by_year.append(efficiency)
@@ -4035,7 +4074,10 @@ class MaintenanceMonitoring:
                 )
 
             estimated_cost = component.get("maintenance_cost", 0)
-            total_annual_cost += estimated_cost * (12 / interval_months)
+            if interval_months != 0:
+                total_annual_cost += estimated_cost * (12 / interval_months)
+            else:
+                total_annual_cost = 0.0
 
             maintenance_schedule.append(
                 {

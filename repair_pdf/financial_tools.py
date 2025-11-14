@@ -30,7 +30,10 @@ def calculate_annuity(principal: float, annual_interest_rate: float, duration_ye
     num_payments = duration_years * 12
     
     if monthly_rate == 0:  # Zinsfrei
-        monthly_payment = principal / num_payments
+        if num_payments != 0:
+            monthly_payment = principal / num_payments
+        else:
+            monthly_payment = 0.0
         total_interest = 0
     else:
         # Annuitätenformel
@@ -126,7 +129,10 @@ def calculate_depreciation(initial_value: float, useful_life_years: int,
     abschreibungsplan = []
     
     if method == "linear":
-        annual_depreciation = initial_value / useful_life_years
+        if useful_life_years != 0:
+            annual_depreciation = initial_value / useful_life_years
+        else:
+            annual_depreciation = 0.0
         
         for year in range(1, useful_life_years + 1):
             book_value = initial_value - (annual_depreciation * year)

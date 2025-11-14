@@ -1078,7 +1078,7 @@ def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.2
     max_total = max_modules_x * max_modules_y
     
     # Logging: Zeige Berechnungsdetails
-    print(f"\n📐 Grid-Positionierung:")
+    print(f"\n[DESIGN] Grid-Positionierung:")
     print(f"   Dachgröße: {length:.1f}m x {width:.1f}m")
     print(f"   Verfügbare Fläche: {available_length:.1f}m x {available_width:.1f}m")
     print(f"   Max. Module: {max_modules_x} x {max_modules_y} = {max_total}")
@@ -1086,7 +1086,7 @@ def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.2
     
     # Warnung wenn nicht genug Platz
     if count > max_total:
-        print(f"   ⚠️ WARNUNG: Nur {max_total} von {count} Modulen passen!")
+        print(f"   [WARNING] WARNUNG: Nur {max_total} von {count} Modulen passen!")
         count = max_total
     
     # Berechne optimales Layout für 'count' Module
@@ -1096,7 +1096,10 @@ def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.2
     
     # Probiere verschiedene Spalten-Anzahlen
     for cols in range(1, max_modules_x + 1):
-        rows = math.ceil(count / cols)
+        if cols != 0:
+            rows = math.ceil(count / cols)
+        else:
+            rows = 0.0
         
         # Prüfe ob Layout passt
         if rows <= max_modules_y:
@@ -1110,7 +1113,10 @@ def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.2
     
     # Fallback wenn kein Layout gefunden
     if not best_layout:
-        best_layout = (max_modules_x, math.ceil(count / max_modules_x))
+        if max_modules_x != 0:
+            best_layout = (max_modules_x, math.ceil(count / max_modules_x))
+        else:
+            best_layout = 0.0
     
     modules_x, modules_y = best_layout
     
@@ -1138,10 +1144,10 @@ def calculate_grid_positions(length, width, count, spacing_x=0.25, spacing_y=0.2
         if len(positions) >= count:
             break
     
-    print(f"   ✓ Platzierte Module: {len(positions)}")
+    print(f"   [OK] Platzierte Module: {len(positions)}")
     
     if len(positions) < count:
-        print(f"   ⚠️ {count - len(positions)} Module konnten nicht platziert werden!")
+        print(f"   [WARNING] {count - len(positions)} Module konnten nicht platziert werden!")
     
     return positions
 
@@ -1180,10 +1186,10 @@ def build_plotly_scene(
     
     # ========== 1. GEBÄUDE (vollständig) ==========
     building = create_complete_box(
-        x_min=-dims.length_m/2,
-        x_max=dims.length_m/2,
-        y_min=-dims.width_m/2,
-        y_max=dims.width_m/2,
+        x_min = -dims.length_m/2,
+        x_max = dims.length_m/2,
+        y_min = -dims.width_m/2,
+        y_max = dims.width_m/2,
         z_min=0,
         z_max=dims.wall_height_m,
         color="#7a7a7a",  # Helleres Grau für bessere Sichtbarkeit
@@ -1193,10 +1199,10 @@ def build_plotly_scene(
     
     # GEBÄUDE-KANTEN hinzufügen
     building_edges = create_box_edges(
-        x_min=-dims.length_m/2,
-        x_max=dims.length_m/2,
-        y_min=-dims.width_m/2,
-        y_max=dims.width_m/2,
+        x_min = -dims.length_m/2,
+        x_max = dims.length_m/2,
+        y_min = -dims.width_m/2,
+        y_max = dims.width_m/2,
         z_min=0,
         z_max=dims.wall_height_m,
         color='black',
@@ -1217,10 +1223,10 @@ def build_plotly_scene(
     if roof_type == "Flachdach":
         # Flachdach als dünne Box
         roof = create_complete_box(
-            x_min=-dims.length_m/2,
-            x_max=dims.length_m/2,
-            y_min=-dims.width_m/2,
-            y_max=dims.width_m/2,
+            x_min = -dims.length_m/2,
+            x_max = dims.length_m/2,
+            y_min = -dims.width_m/2,
+            y_max = dims.width_m/2,
             z_min=roof_z,
             z_max=roof_z + 0.2,
             color=roof_color,
@@ -1229,10 +1235,10 @@ def build_plotly_scene(
         fig.add_trace(roof)
         # Flachdach-Kanten
         roof_edges = create_box_edges(
-            x_min=-dims.length_m/2,
-            x_max=dims.length_m/2,
-            y_min=-dims.width_m/2,
-            y_max=dims.width_m/2,
+            x_min = -dims.length_m/2,
+            x_max = dims.length_m/2,
+            y_min = -dims.width_m/2,
+            y_max = dims.width_m/2,
             z_min=roof_z,
             z_max=roof_z + 0.2,
             color='black',
@@ -1396,10 +1402,10 @@ def build_plotly_scene(
     else:
         # Fallback: Sonstiges als Flachdach
         roof = create_complete_box(
-            x_min=-dims.length_m/2,
-            x_max=dims.length_m/2,
-            y_min=-dims.width_m/2,
-            y_max=dims.width_m/2,
+            x_min = -dims.length_m/2,
+            x_max = dims.length_m/2,
+            y_min = -dims.width_m/2,
+            y_max = dims.width_m/2,
             z_min=roof_z,
             z_max=roof_z + 0.2,
             color=roof_color,
@@ -1408,10 +1414,10 @@ def build_plotly_scene(
         fig.add_trace(roof)
         # Fallback-Dach-Kanten
         roof_edges = create_box_edges(
-            x_min=-dims.length_m/2,
-            x_max=dims.length_m/2,
-            y_min=-dims.width_m/2,
-            y_max=dims.width_m/2,
+            x_min = -dims.length_m/2,
+            x_max = dims.length_m/2,
+            y_min = -dims.width_m/2,
+            y_max = dims.width_m/2,
             z_min=roof_z,
             z_max=roof_z + 0.2,
             color='black',
@@ -1454,7 +1460,7 @@ def build_plotly_scene(
         # Requirement 11.1: Validate positions data
         if not isinstance(placed_positions, list):
             print(
-                f"⚠️ Invalid placed_positions type: "
+                f"[WARNING] Invalid placed_positions type: "
                 f"{type(placed_positions).__name__}, expected list"
             )
             placed_positions = []
@@ -1463,12 +1469,12 @@ def build_plotly_scene(
             # TASK 13: Limit rendering for performance
             # Requirement 10.5: Begrenzung auf maximal 200 Module
             if len(placed_positions) > 200:
-                print(f"⚠️ Limiting rendering to 200 modules (total: {len(placed_positions)})")
+                print(f"[WARNING] Limiting rendering to 200 modules (total: {len(placed_positions)})")
                 placed_positions = placed_positions[:200]
             
             # Requirement 10.2: Loop over all placed positions
             print(
-                f"✓ Rendering {len(placed_positions)} PV modules "
+                f"[OK] Rendering {len(placed_positions)} PV modules "
                 "from session state..."
             )
             
@@ -1485,7 +1491,7 @@ def build_plotly_scene(
                     # Requirement 11.1: Validate position format
                     if not isinstance(position, (tuple, list)):
                         print(
-                            f"⚠️ Invalid position type at index {i}: "
+                            f"[WARNING] Invalid position type at index {i}: "
                             f"{type(position).__name__}"
                         )
                         failed_renders += 1
@@ -1499,7 +1505,7 @@ def build_plotly_scene(
                         if not all(isinstance(coord, (int, float))
                                    for coord in [x, y, z_relative]):
                             print(
-                                f"⚠️ Invalid coordinate types at index {i}: "
+                                f"[WARNING] Invalid coordinate types at index {i}: "
                                 f"{position}"
                             )
                             failed_renders += 1
@@ -1510,7 +1516,7 @@ def build_plotly_scene(
                         if any(math.isnan(coord) or math.isinf(coord)
                                for coord in [x, y, z_relative]):
                             print(
-                                f"⚠️ Invalid coordinate values (NaN/Inf) "
+                                f"[WARNING] Invalid coordinate values (NaN/Inf) "
                                 f"at index {i}: {position}"
                             )
                             failed_renders += 1
@@ -1522,7 +1528,7 @@ def build_plotly_scene(
                         z = dims.wall_height_m + z_relative
                     else:
                         print(
-                            f"⚠️ Invalid position format at index {i}: "
+                            f"[WARNING] Invalid position format at index {i}: "
                             f"{position} (expected 3 coordinates)"
                         )
                         failed_renders += 1
@@ -1546,7 +1552,7 @@ def build_plotly_scene(
                     except Exception as angle_error:
                         # Requirement 11.4: Meaningful error messages
                         print(
-                            f"⚠️ Error calculating angles for module {i}: "
+                            f"[WARNING] Error calculating angles for module {i}: "
                             f"{angle_error}, using defaults"
                         )
                         # Fallback: Flachdach-Werte
@@ -1588,7 +1594,7 @@ def build_plotly_scene(
                     except Exception as mesh_error:
                         # Requirement 11.2, 11.4: Error handling
                         print(
-                            f"⚠️ Error creating mesh for module {i}: "
+                            f"[WARNING] Error creating mesh for module {i}: "
                             f"{mesh_error}"
                         )
                         failed_renders += 1
@@ -1612,7 +1618,7 @@ def build_plotly_scene(
                     except Exception as add_error:
                         # Requirement 11.2, 11.4: Error handling
                         print(
-                            f"⚠️ Error adding module {i} to figure: "
+                            f"[WARNING] Error adding module {i} to figure: "
                             f"{add_error}"
                         )
                         failed_renders += 1
@@ -1622,7 +1628,7 @@ def build_plotly_scene(
                     # Requirement 10.5, 11.2: Error handling for
                     # individual modules
                     print(
-                        f"⚠️ Unexpected error rendering module {i}: "
+                        f"[WARNING] Unexpected error rendering module {i}: "
                         f"{module_error}"
                     )
                     failed_renders += 1
@@ -1633,29 +1639,29 @@ def build_plotly_scene(
             # TASK 13: Add all meshes to figure in batch
             # Requirement 10.5: Batch-Hinzufügen von Meshes zur Figure
             # This is much faster than adding one at a time
-            print(f"✓ Adding {len(module_meshes)} module meshes to figure (batch)...")
+            print(f"[OK] Adding {len(module_meshes)} module meshes to figure (batch)...")
             for mesh in module_meshes:
                 fig.add_trace(mesh)
             
-            print(f"✓ Adding {len(edge_meshes)} edge meshes to figure (batch)...")
+            print(f"[OK] Adding {len(edge_meshes)} edge meshes to figure (batch)...")
             for edges in edge_meshes:
                 fig.add_trace(edges)
             
             # Requirement 11.4: Meaningful status messages
             if successful_renders > 0:
                 print(
-                    f"✓ Successfully rendered {successful_renders} of "
+                    f"[OK] Successfully rendered {successful_renders} of "
                     f"{len(placed_positions)} modules"
                 )
             if failed_renders > 0:
                 print(
-                    f"⚠️ Failed to render {failed_renders} modules "
+                    f"[WARNING] Failed to render {failed_renders} modules "
                     "(see warnings above)"
                 )
             
         else:
             # No modules in session state - use fallback grid-based placement
-            print("ℹ️ No modules in session state, using fallback grid placement...")
+            print("[INFO] No modules in session state, using fallback grid placement...")
             
             # Fallback: Calculate grid positions
             positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
@@ -1698,19 +1704,19 @@ def build_plotly_scene(
                 )
                 fig.add_trace(module_edges)
             
-            print(f"✓ Fallback: {len(positions[:module_quantity])} modules rendered")
+            print(f"[OK] Fallback: {len(positions[:module_quantity])} modules rendered")
     
     except Exception as e:
         # Requirement 10.5, 11.2, 11.4: Error handling for rendering
         # with meaningful messages
-        print(f"❌ Kritischer Fehler beim Rendern der PV-Module: {e}")
+        print(f"[ERROR] Kritischer Fehler beim Rendern der PV-Module: {e}")
         print(f"   Fehlertyp: {type(e).__name__}")
         print(f"   Fehlerdetails: {str(e)}")
         traceback.print_exc()
         
         # Last resort fallback: Simple grid-based modules
         try:
-            print("⚠️ Attempting last resort fallback rendering...")
+            print("[WARNING] Attempting last resort fallback rendering...")
             positions = calculate_grid_positions(dims.length_m, dims.width_m, module_quantity)
             
             for i, (x, y) in enumerate(positions[:module_quantity]):
@@ -1754,12 +1760,12 @@ def build_plotly_scene(
                 )
                 fig.add_trace(module_edges)
             
-            print(f"✓ Last resort fallback: {len(positions[:module_quantity])} modules rendered")
+            print(f"[OK] Last resort fallback: {len(positions[:module_quantity])} modules rendered")
         
         except Exception as fallback_error:
             # Requirement 11.3: Fallback to previous state on error
-            print(f"❌ Complete failure rendering modules: {fallback_error}")
-            print("⚠️ No modules will be displayed")
+            print(f"[ERROR] Complete failure rendering modules: {fallback_error}")
+            print("[WARNING] No modules will be displayed")
     
     # ========== 4. TASK 12: VISUALISIERUNGS-VERBESSERUNGEN ==========
     try:
@@ -1768,7 +1774,7 @@ def build_plotly_scene(
         show_module_numbers = st.session_state.get("show_module_numbers", False)
         
         if show_module_numbers and placed_positions:
-            print(f"✓ Adding module number annotations for {len(placed_positions)} modules...")
+            print(f"[OK] Adding module number annotations for {len(placed_positions)} modules...")
             
             for i, position in enumerate(placed_positions):
                 try:
@@ -1786,10 +1792,10 @@ def build_plotly_scene(
                         )
                         fig.add_trace(number_annotation)
                 except Exception as annotation_error:
-                    print(f"⚠️ Error adding annotation for module {i}: {annotation_error}")
+                    print(f"[WARNING] Error adding annotation for module {i}: {annotation_error}")
                     continue
             
-            print(f"✓ Module number annotations added")
+            print(f"[OK] Module number annotations added")
         
         # TASK 8.3: Placement Grid Overlay
         # Requirement 8.3.1: Zeige Platzierungs-Raster
@@ -1798,7 +1804,7 @@ def build_plotly_scene(
         show_placement_grid = st.session_state.get("show_placement_grid", False)
         
         if show_placement_grid:
-            print("✓ Adding placement grid overlay...")
+            print("[OK] Adding placement grid overlay...")
             
             try:
                 # Get customizable grid settings from session state
@@ -1819,9 +1825,9 @@ def build_plotly_scene(
                 )
                 fig.add_trace(grid_overlay)
                 
-                print(f"✓ Placement grid overlay added (spacing={grid_spacing}m, opacity={grid_opacity})")
+                print(f"[OK] Placement grid overlay added (spacing={grid_spacing}m, opacity={grid_opacity})")
             except Exception as grid_error:
-                print(f"⚠️ Error adding placement grid: {grid_error}")
+                print(f"[WARNING] Error adding placement grid: {grid_error}")
         
         # TASK 12: Color Legend (always add for reference)
         # Requirement 1.2: Document color meanings
@@ -1829,12 +1835,12 @@ def build_plotly_scene(
             legend_items = create_color_legend()
             for legend_item in legend_items:
                 fig.add_trace(legend_item)
-            print("✓ Color legend added")
+            print("[OK] Color legend added")
         except Exception as legend_error:
-            print(f"⚠️ Error adding color legend: {legend_error}")
+            print(f"[WARNING] Error adding color legend: {legend_error}")
     
     except Exception as viz_error:
-        print(f"⚠️ Error adding visualization improvements: {viz_error}")
+        print(f"[WARNING] Error adding visualization improvements: {viz_error}")
         # Continue without visualization improvements
     
     # ========== 5. SONNE (optional) ==========

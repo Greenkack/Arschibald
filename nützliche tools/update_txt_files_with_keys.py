@@ -16,7 +16,7 @@ def update_txt_files_with_keys():
 
     input_dir = os.path.join(os.getcwd(), "input")
 
-    print("🔍 Analysiere TXT-Dateien für kontextspezifische Key-Zuordnung...")
+    print("[SEARCH] Analysiere TXT-Dateien für kontextspezifische Key-Zuordnung...")
 
     # INTELLIGENTE CONTEXT-AWARE REPLACEMENTS
     # Verschiedene Keys je nach Kontext und Position
@@ -118,7 +118,7 @@ def update_txt_files_with_keys():
     total_replacements = 0
 
     for txt_file in sorted(txt_files):
-        print(f"📄 Bearbeite: {os.path.basename(txt_file)}")
+        print(f"[FILE] Bearbeite: {os.path.basename(txt_file)}")
 
         # Datei lesen
         with open(txt_file, encoding='utf-8') as f:
@@ -133,7 +133,7 @@ def update_txt_files_with_keys():
                 content = content.replace(old_value, new_key)
                 file_replacements += content.count(new_key) - \
                     original_content.count(new_key)
-                print(f"  ✅ '{old_value}' -> '{new_key}'")
+                print(f"  [OK] '{old_value}' -> '{new_key}'")
 
         # Datei zurückschreiben wenn geändert
         if content != original_content:
@@ -143,13 +143,13 @@ def update_txt_files_with_keys():
             total_replacements += file_replacements
             print(f"  💾 {file_replacements} Ersetzungen gespeichert")
         else:
-            print("  ℹ️ Keine Änderungen nötig")
+            print("  [INFO] Keine Änderungen nötig")
 
     print(
         f"\n🎉 Fertig! {updated_files} Dateien aktualisiert, {total_replacements} Ersetzungen insgesamt")
 
     # Backup-Info
-    print("\n📝 WICHTIG: Originale sind in den Dateien überschrieben!")
+    print("\n[NOTE] WICHTIG: Originale sind in den Dateien überschrieben!")
     print("   Falls nötig, können Sie aus dem Git-Verlauf wiederherstellen.")
 
     return updated_files, total_replacements

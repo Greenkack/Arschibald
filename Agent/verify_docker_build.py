@@ -23,7 +23,7 @@ def print_header(text):
 
 def print_check(passed, message):
     """Print a check result."""
-    symbol = "✓" if passed else "✗"
+    symbol = "[OK]" if passed else "[ERROR]"
     color = "\033[92m" if passed else "\033[91m"
     reset = "\033[0m"
     print(f"{color}{symbol}{reset} {message}")
@@ -92,7 +92,7 @@ def verify_python_version(client):
         print_check(has_python_3, f"Python version: {version}")
 
         if "Python 3.11" in version:
-            print("  ✓ Python 3.11 detected (recommended)")
+            print("  [OK] Python 3.11 detected (recommended)")
 
         return has_python_3
     except Exception as e:
@@ -306,7 +306,7 @@ def main():
 
     if not docker_ok:
         print("\n" + "=" * 70)
-        print("✗ VERIFICATION FAILED - Docker not available")
+        print("[ERROR] VERIFICATION FAILED - Docker not available")
         print("=" * 70)
         return 1
 
@@ -316,7 +316,7 @@ def main():
 
     if not image_ok:
         print("\n" + "=" * 70)
-        print("✗ VERIFICATION FAILED - Image not built")
+        print("[ERROR] VERIFICATION FAILED - Image not built")
         print("=" * 70)
         return 1
 
@@ -337,7 +337,7 @@ def main():
     total = len(checks)
 
     for check_name, ok in checks:
-        symbol = "✓" if ok else "✗"
+        symbol = "[OK]" if ok else "[ERROR]"
         print(f"{symbol} {check_name}")
 
     print(f"\nPassed: {passed}/{total}")
@@ -345,19 +345,19 @@ def main():
 
     if passed == total:
         print("\n" + "=" * 70)
-        print("✓ ALL CHECKS PASSED - Task 14.1 Complete!")
+        print("[OK] ALL CHECKS PASSED - Task 14.1 Complete!")
         print("=" * 70)
         print("\nThe Docker sandbox image is properly built and configured.")
         print("\nRequirements verified:")
-        print("  ✓ 5.1 - Docker container with Python")
-        print("  ✓ 5.2 - Unprivileged user execution")
-        print("  ✓ 5.5 - Python environment setup")
+        print("  [OK] 5.1 - Docker container with Python")
+        print("  [OK] 5.2 - Unprivileged user execution")
+        print("  [OK] 5.5 - Python environment setup")
         print("\nNext steps:")
         print("  1. Run full tests: python Agent/test_sandbox_complete.py")
         print("  2. Or run: python Agent/test_execution_tools.py")
         return 0
     print("\n" + "=" * 70)
-    print("✗ VERIFICATION FAILED")
+    print("[ERROR] VERIFICATION FAILED")
     print("=" * 70)
     print("\nSome checks failed. Please review the output above.")
     print("\nTo rebuild the image:")
