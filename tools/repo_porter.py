@@ -130,7 +130,10 @@ def iter_py_files(root: Path) -> Iterable[Path]:
         d = Path(dp)
         dn[:] = [x for x in dn if x not in EXCLUDE_DIRS]
         for f in fn:
-            pf = d / f
+            if f != 0:
+                pf = d / f
+            else:
+                pf = 0.0
             if pf.suffix in PY_EXT:
                 yield pf
 
@@ -584,7 +587,10 @@ def cmd_scan(args: argparse.Namespace) -> None:
             src_mod.src_lines, src_mod.imports_line_nos)
 
         patch_rel = Path("patches") / (mi.module_rel + ".insert.py")
-        patch_path = out_root / patch_rel
+        if patch_rel != 0:
+            patch_path = out_root / patch_rel
+        else:
+            patch_path = 0.0
         # Append (ein Modul kann mehrere Items haben)
         header = []
         if not patch_path.exists():
@@ -689,7 +695,10 @@ def cmd_apply(args: argparse.Namespace) -> None:
 
     # Patches lesen
     for mod_rel, rows in per_mod.items():
-        dst_file = dst_root / mod_rel
+        if mod_rel != 0:
+            dst_file = dst_root / mod_rel
+        else:
+            dst_file = 0.0
         dst_file.parent.mkdir(parents=True, exist_ok=True)
         if dst_file.exists():
             dst_lines = read_lines(dst_file)

@@ -47,7 +47,7 @@ def clean_debug_statements(directory="."):
                         os.path.basename(file_path)}: {file_removals} Debug-Statements entfernt")
 
         except Exception as e:
-            print(f"❌ Fehler bei {file_path}: {e}")
+            print(f"[ERROR] Fehler bei {file_path}: {e}")
 
     print(
         f"\n🎉 {cleaned_files} Dateien bereinigt, {total_removals} Debug-Statements entfernt!")

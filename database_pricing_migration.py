@@ -307,7 +307,7 @@ def run_migration() -> bool:
                 print(f"Migration failed at step: {step_name}")
                 return False
 
-        print("\n✓ Enhanced pricing system database migration completed successfully!")
+        print("\n[OK] Enhanced pricing system database migration completed successfully!")
         return True
 
     except Exception as e:

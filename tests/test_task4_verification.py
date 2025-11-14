@@ -44,35 +44,35 @@ def test_task_41():
     print("\n=== Task 4.1: Diagramm-Styling ===")
 
     # Test Schriftgrößen
-    assert FONT_SIZE_TITLE >= 14, f"❌ Titel-Schriftgröße: {FONT_SIZE_TITLE} (sollte >= 14 sein)"
-    print(f"✓ Titel-Schriftgröße: {FONT_SIZE_TITLE}")
+    assert FONT_SIZE_TITLE >= 14, f"[ERROR] Titel-Schriftgröße: {FONT_SIZE_TITLE} (sollte >= 14 sein)"
+    print(f"[OK] Titel-Schriftgröße: {FONT_SIZE_TITLE}")
 
-    assert FONT_SIZE_AXIS_LABEL >= 12, f"❌ Achsenbeschriftungs-Schriftgröße: {FONT_SIZE_AXIS_LABEL} (sollte >= 12 sein)"
-    print(f"✓ Achsenbeschriftungs-Schriftgröße: {FONT_SIZE_AXIS_LABEL}")
+    assert FONT_SIZE_AXIS_LABEL >= 12, f"[ERROR] Achsenbeschriftungs-Schriftgröße: {FONT_SIZE_AXIS_LABEL} (sollte >= 12 sein)"
+    print(f"[OK] Achsenbeschriftungs-Schriftgröße: {FONT_SIZE_AXIS_LABEL}")
 
-    assert FONT_SIZE_LEGEND >= 10, f"❌ Legenden-Schriftgröße: {FONT_SIZE_LEGEND} (sollte >= 10 sein)"
-    print(f"✓ Legenden-Schriftgröße: {FONT_SIZE_LEGEND}")
+    assert FONT_SIZE_LEGEND >= 10, f"[ERROR] Legenden-Schriftgröße: {FONT_SIZE_LEGEND} (sollte >= 10 sein)"
+    print(f"[OK] Legenden-Schriftgröße: {FONT_SIZE_LEGEND}")
 
-    assert FONT_SIZE_TICK_LABEL >= 10, f"❌ Tick-Label-Schriftgröße: {FONT_SIZE_TICK_LABEL} (sollte >= 10 sein)"
-    print(f"✓ Tick-Label-Schriftgröße: {FONT_SIZE_TICK_LABEL}")
+    assert FONT_SIZE_TICK_LABEL >= 10, f"[ERROR] Tick-Label-Schriftgröße: {FONT_SIZE_TICK_LABEL} (sollte >= 10 sein)"
+    print(f"[OK] Tick-Label-Schriftgröße: {FONT_SIZE_TICK_LABEL}")
 
     # Test Balkenbreite
-    assert BAR_WIDTH >= 0.6, f"❌ Balkenbreite: {BAR_WIDTH} (sollte >= 0.6 sein)"
-    print(f"✓ Balkenbreite: {BAR_WIDTH}")
+    assert BAR_WIDTH >= 0.6, f"[ERROR] Balkenbreite: {BAR_WIDTH} (sollte >= 0.6 sein)"
+    print(f"[OK] Balkenbreite: {BAR_WIDTH}")
 
     # Test Linienbreite
-    assert LINE_WIDTH >= 2.5, f"❌ Linienbreite: {LINE_WIDTH} (sollte >= 2.5 sein)"
-    print(f"✓ Linienbreite: {LINE_WIDTH}")
+    assert LINE_WIDTH >= 2.5, f"[ERROR] Linienbreite: {LINE_WIDTH} (sollte >= 2.5 sein)"
+    print(f"[OK] Linienbreite: {LINE_WIDTH}")
 
     # Test Marker-Größe
-    assert MARKER_SIZE >= 100, f"❌ Marker-Größe: {MARKER_SIZE} (sollte >= 100 sein)"
-    print(f"✓ Marker-Größe: {MARKER_SIZE}")
+    assert MARKER_SIZE >= 100, f"[ERROR] Marker-Größe: {MARKER_SIZE} (sollte >= 100 sein)"
+    print(f"[OK] Marker-Größe: {MARKER_SIZE}")
 
     # Test Donut-Breite
-    assert DONUT_WIDTH == 0.4, f"❌ Donut-Breite: {DONUT_WIDTH} (sollte 0.4 sein)"
-    print(f"✓ Donut-Breite: {DONUT_WIDTH}")
+    assert DONUT_WIDTH == 0.4, f"[ERROR] Donut-Breite: {DONUT_WIDTH} (sollte 0.4 sein)"
+    print(f"[OK] Donut-Breite: {DONUT_WIDTH}")
 
-    print("✓ Task 4.1 erfolgreich!")
+    print("[OK] Task 4.1 erfolgreich!")
 
 
 def test_task_42():
@@ -80,8 +80,8 @@ def test_task_42():
     print("\n=== Task 4.2: Farben und Gitternetz ===")
 
     # Test Gitternetz-Alpha
-    assert GRID_ALPHA == 0.3, f"❌ Gitternetz-Alpha: {GRID_ALPHA} (sollte 0.3 sein)"
-    print(f"✓ Gitternetz-Alpha: {GRID_ALPHA}")
+    assert GRID_ALPHA == 0.3, f"[ERROR] Gitternetz-Alpha: {GRID_ALPHA} (sollte 0.3 sein)"
+    print(f"[OK] Gitternetz-Alpha: {GRID_ALPHA}")
 
     # Test Matplotlib-Gitternetz
     fig, ax = plt.subplots()
@@ -89,17 +89,17 @@ def test_task_42():
     # Prüfe dass Gitternetz-Funktion aufgerufen wurde (visuell sichtbar)
     # Die interne Implementierung kann variieren, wichtig ist dass grid(True)
     # aufgerufen wurde
-    print("✓ Matplotlib-Gitternetz korrekt")
+    print("[OK] Matplotlib-Gitternetz korrekt")
     plt.close(fig)
 
     # Test Plotly-Gitternetz
     fig = go.Figure()
     apply_improved_plotly_style(fig, show_grid=True)
-    assert fig.layout.xaxis.showgrid, "❌ Plotly X-Achsen-Gitternetz nicht aktiviert"
-    assert fig.layout.yaxis.showgrid, "❌ Plotly Y-Achsen-Gitternetz nicht aktiviert"
-    print("✓ Plotly-Gitternetz korrekt")
+    assert fig.layout.xaxis.showgrid, "[ERROR] Plotly X-Achsen-Gitternetz nicht aktiviert"
+    assert fig.layout.yaxis.showgrid, "[ERROR] Plotly Y-Achsen-Gitternetz nicht aktiviert"
+    print("[OK] Plotly-Gitternetz korrekt")
 
-    print("✓ Task 4.2 erfolgreich!")
+    print("[OK] Task 4.2 erfolgreich!")
 
 
 def test_task_43():
@@ -107,14 +107,14 @@ def test_task_43():
     print("\n=== Task 4.3: Hohe Auflösung und optimale Dimensionen ===")
 
     # Test DPI
-    assert DPI == 300, f"❌ DPI: {DPI} (sollte 300 sein)"
-    print(f"✓ DPI: {DPI}")
+    assert DPI == 300, f"[ERROR] DPI: {DPI} (sollte 300 sein)"
+    print(f"[OK] DPI: {DPI}")
 
     # Test optimale Größe
     width, height = get_optimal_figure_size()
-    assert 4 < width < 8, f"❌ Breite: {width} (sollte zwischen 4 und 8 Zoll sein)"
-    assert 3 < height < 6, f"❌ Höhe: {height} (sollte zwischen 3 und 6 Zoll sein)"
-    print(f"✓ Optimale Größe: {width:.2f} x {height:.2f} Zoll")
+    assert 4 < width < 8, f"[ERROR] Breite: {width} (sollte zwischen 4 und 8 Zoll sein)"
+    assert 3 < height < 6, f"[ERROR] Höhe: {height} (sollte zwischen 3 und 6 Zoll sein)"
+    print(f"[OK] Optimale Größe: {width:.2f} x {height:.2f} Zoll")
 
     # Test Matplotlib-Auflösung
     fig, ax = plt.subplots(figsize=get_optimal_figure_size())
@@ -122,9 +122,9 @@ def test_task_43():
     chart_bytes = save_matplotlib_chart_to_bytes(fig)
     img = Image.open(io.BytesIO(chart_bytes))
     img_width, img_height = img.size
-    assert img_width > 1000, f"❌ Matplotlib-Bildbreite: {img_width}px (sollte > 1000px sein)"
-    assert img_height > 500, f"❌ Matplotlib-Bildhöhe: {img_height}px (sollte > 500px sein)"
-    print(f"✓ Matplotlib-Auflösung: {img_width} x {img_height} px")
+    assert img_width > 1000, f"[ERROR] Matplotlib-Bildbreite: {img_width}px (sollte > 1000px sein)"
+    assert img_height > 500, f"[ERROR] Matplotlib-Bildhöhe: {img_height}px (sollte > 500px sein)"
+    print(f"[OK] Matplotlib-Auflösung: {img_width} x {img_height} px")
 
     # Test Plotly-Auflösung
     fig = go.Figure()
@@ -132,11 +132,11 @@ def test_task_43():
     chart_bytes = save_plotly_chart_to_bytes(fig)
     img = Image.open(io.BytesIO(chart_bytes))
     img_width, img_height = img.size
-    assert img_width > 800, f"❌ Plotly-Bildbreite: {img_width}px (sollte > 800px sein)"
-    assert img_height > 400, f"❌ Plotly-Bildhöhe: {img_height}px (sollte > 400px sein)"
-    print(f"✓ Plotly-Auflösung: {img_width} x {img_height} px")
+    assert img_width > 800, f"[ERROR] Plotly-Bildbreite: {img_width}px (sollte > 800px sein)"
+    assert img_height > 400, f"[ERROR] Plotly-Bildhöhe: {img_height}px (sollte > 400px sein)"
+    print(f"[OK] Plotly-Auflösung: {img_width} x {img_height} px")
 
-    print("✓ Task 4.3 erfolgreich!")
+    print("[OK] Task 4.3 erfolgreich!")
 
 
 def test_task_44():
@@ -149,11 +149,11 @@ def test_task_44():
         data={'values': [10, 20, 30], 'labels': ['A', 'B', 'C']},
         purpose="Test-Zweck"
     )
-    assert isinstance(description, str), "❌ Beschreibung ist kein String"
-    assert len(description) > 0, "❌ Beschreibung ist leer"
-    assert "Balkendiagramm" in description, "❌ Diagrammtyp fehlt in Beschreibung"
-    assert "Test-Zweck" in description, "❌ Zweck fehlt in Beschreibung"
-    print("✓ Basis-Beschreibung generiert")
+    assert isinstance(description, str), "[ERROR] Beschreibung ist kein String"
+    assert len(description) > 0, "[ERROR] Beschreibung ist leer"
+    assert "Balkendiagramm" in description, "[ERROR] Diagrammtyp fehlt in Beschreibung"
+    assert "Test-Zweck" in description, "[ERROR] Zweck fehlt in Beschreibung"
+    print("[OK] Basis-Beschreibung generiert")
 
     # Test Beschreibung mit Erkenntnissen
     description = generate_chart_description(
@@ -162,10 +162,10 @@ def test_task_44():
         purpose="Test",
         key_insights=["Erkenntnis 1", "Erkenntnis 2"]
     )
-    assert "Haupterkenntnisse" in description, "❌ Haupterkenntnisse fehlen"
-    assert "Erkenntnis 1" in description, "❌ Erkenntnis 1 fehlt"
-    assert "Erkenntnis 2" in description, "❌ Erkenntnis 2 fehlt"
-    print("✓ Beschreibung mit Erkenntnissen generiert")
+    assert "Haupterkenntnisse" in description, "[ERROR] Haupterkenntnisse fehlen"
+    assert "Erkenntnis 1" in description, "[ERROR] Erkenntnis 1 fehlt"
+    assert "Erkenntnis 2" in description, "[ERROR] Erkenntnis 2 fehlt"
+    print("[OK] Beschreibung mit Erkenntnissen generiert")
 
     # Test Beschreibung mit Werten
     description = generate_chart_description(
@@ -173,9 +173,9 @@ def test_task_44():
         data={'values': [100.5, 200.75], 'labels': ['Wert A', 'Wert B']},
         purpose="Test"
     )
-    assert "Werte:" in description, "❌ Werte-Abschnitt fehlt"
-    assert "Wert A" in description, "❌ Label fehlt"
-    print("✓ Beschreibung mit Werten generiert")
+    assert "Werte:" in description, "[ERROR] Werte-Abschnitt fehlt"
+    assert "Wert A" in description, "[ERROR] Label fehlt"
+    print("[OK] Beschreibung mit Werten generiert")
 
     # Test Struktur
     description = generate_chart_description(
@@ -184,13 +184,13 @@ def test_task_44():
         purpose="Zweck",
         key_insights=["Erkenntnis 1"]
     )
-    assert "Diagrammtyp:" in description, "❌ Diagrammtyp-Abschnitt fehlt"
-    assert "Zweck:" in description, "❌ Zweck-Abschnitt fehlt"
-    assert "Haupterkenntnisse:" in description, "❌ Haupterkenntnisse-Abschnitt fehlt"
-    assert "Werte:" in description, "❌ Werte-Abschnitt fehlt"
-    print("✓ Beschreibungsstruktur korrekt")
+    assert "Diagrammtyp:" in description, "[ERROR] Diagrammtyp-Abschnitt fehlt"
+    assert "Zweck:" in description, "[ERROR] Zweck-Abschnitt fehlt"
+    assert "Haupterkenntnisse:" in description, "[ERROR] Haupterkenntnisse-Abschnitt fehlt"
+    assert "Werte:" in description, "[ERROR] Werte-Abschnitt fehlt"
+    print("[OK] Beschreibungsstruktur korrekt")
 
-    print("✓ Task 4.4 erfolgreich!")
+    print("[OK] Task 4.4 erfolgreich!")
 
 
 def test_integration():
@@ -217,10 +217,10 @@ def test_integration():
         key_insights=["Höchster Wert: 30", "Niedrigster Wert: 10"]
     )
     assert chart_bytes is not None and len(
-        chart_bytes) > 0, "❌ Matplotlib-Workflow fehlgeschlagen"
+        chart_bytes) > 0, "[ERROR] Matplotlib-Workflow fehlgeschlagen"
     assert description is not None and len(
-        description) > 0, "❌ Matplotlib-Beschreibung fehlgeschlagen"
-    print("✓ Matplotlib-Workflow erfolgreich")
+        description) > 0, "[ERROR] Matplotlib-Beschreibung fehlgeschlagen"
+    print("[OK] Matplotlib-Workflow erfolgreich")
 
     # Kompletter Plotly-Workflow
     fig = go.Figure()
@@ -240,12 +240,12 @@ def test_integration():
         key_insights=["Trend steigend"]
     )
     assert chart_bytes is not None and len(
-        chart_bytes) > 0, "❌ Plotly-Workflow fehlgeschlagen"
+        chart_bytes) > 0, "[ERROR] Plotly-Workflow fehlgeschlagen"
     assert description is not None and len(
-        description) > 0, "❌ Plotly-Beschreibung fehlgeschlagen"
-    print("✓ Plotly-Workflow erfolgreich")
+        description) > 0, "[ERROR] Plotly-Beschreibung fehlgeschlagen"
+    print("[OK] Plotly-Workflow erfolgreich")
 
-    print("✓ Integration Test erfolgreich!")
+    print("[OK] Integration Test erfolgreich!")
 
 
 def main():
@@ -262,21 +262,21 @@ def main():
         test_integration()
 
         print("\n" + "=" * 60)
-        print("✓✓✓ ALLE TESTS ERFOLGREICH! ✓✓✓")
+        print("[OK][OK][OK] ALLE TESTS ERFOLGREICH! [OK][OK][OK]")
         print("=" * 60)
         print("\nTask 4 ist vollständig implementiert:")
-        print("  ✓ Task 4.1: Diagramm-Styling verbessert")
-        print("  ✓ Task 4.2: Farben und Gitternetz optimiert")
-        print("  ✓ Task 4.3: Hohe Auflösung und optimale Dimensionen")
-        print("  ✓ Task 4.4: Beschreibungen für Diagramme generiert")
+        print("  [OK] Task 4.1: Diagramm-Styling verbessert")
+        print("  [OK] Task 4.2: Farben und Gitternetz optimiert")
+        print("  [OK] Task 4.3: Hohe Auflösung und optimale Dimensionen")
+        print("  [OK] Task 4.4: Beschreibungen für Diagramme generiert")
         print("\nAlle Anforderungen erfüllt!")
         return 0
 
     except AssertionError as e:
-        print(f"\n❌ TEST FEHLGESCHLAGEN: {e}")
+        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
         return 1
     except Exception as e:
-        print(f"\n❌ FEHLER: {e}")
+        print(f"\n[ERROR] FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return 1

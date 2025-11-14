@@ -759,7 +759,10 @@ def _render_overview_section(results: Dict[str, Any], texts: Dict[str, str], viz
     
     # Berechne aktuellen Stromtarif
     if annual_consumption_total > 0 and annual_total_costs_without_pv > 0:
-        current_tariff_eur_per_kwh = annual_total_costs_without_pv / annual_consumption_total
+        if annual_consumption_total != 0:
+            current_tariff_eur_per_kwh = annual_total_costs_without_pv / annual_consumption_total
+        else:
+            current_tariff_eur_per_kwh = 0.0
     else:
         current_tariff_eur_per_kwh = 0.35
     
@@ -2320,7 +2323,10 @@ def render_daily_production_switcher(
         )
     elif chart_type in ("Kreis", "Donut"):
         total = sum(power) or 1.0
-        shares = [p / total for p in power]
+        if total != 0:
+            shares = [p / total for p in power]
+        else:
+            shares = 0.0
         hole = 0.4 if chart_type == "Donut" else 0
         fig = px.pie(
             names=[f"{h}h" for h in hours],
@@ -4203,8 +4209,14 @@ def render_selfuse_stack_switcher(
         and produktion_yr1_kwh_raw > 0
         else 1.0
     )
-    anteil_eigenverbrauch_yr1 = eigenverbrauch_yr1_kwh / produktion_yr1_kwh
-    anteil_einspeisung_yr1 = einspeisung_yr1_kwh / produktion_yr1_kwh
+    if produktion_yr1_kwh != 0:
+        anteil_eigenverbrauch_yr1 = eigenverbrauch_yr1_kwh / produktion_yr1_kwh
+    else:
+        anteil_eigenverbrauch_yr1 = 0.0
+    if produktion_yr1_kwh != 0:
+        anteil_einspeisung_yr1 = einspeisung_yr1_kwh / produktion_yr1_kwh
+    else:
+        anteil_einspeisung_yr1 = 0.0
 
     eigen_sim_kwh = [prod * anteil_eigenverbrauch_yr1 for prod in annual_prod_sim]
     einspeisung_sim_kwh = [prod * anteil_einspeisung_yr1 for prod in annual_prod_sim]
@@ -4393,7 +4405,10 @@ def render_selfuse_ratio_switcher(
         for ekwh, c_tot in zip(ev_monat_kwh, m_total_cons)
     ]
     max_ev_kwh = max(ev_monat_kwh) if any(ev_monat_kwh) else 1.0
-    bubble_sizes = [(v / max_ev_kwh * 30) + 10 for v in ev_monat_kwh]
+    if max_ev_kwh != 0:
+        bubble_sizes = [(v / max_ev_kwh * 30) + 10 for v in ev_monat_kwh]
+    else:
+        bubble_sizes = 0.0
     #  PROFESSIONELLES 2D SHADCN CHART FÜR EIGENVERBRAUCH 
     chart_data = {"x": month_labels, "y": ev_monat_grad}
 
@@ -7648,7 +7663,7 @@ def render_analysis(
         add_live_preview_to_section("PDF-Export")
     
     # Erweiterte Berechnungen für PDF-Export vorbereiten
-    st.subheader("📄 PDF-Export Vorbereitung")
+    st.subheader("[FILE] PDF-Export Vorbereitung")
     if st.button(" Erweiterte Berechnungen für PDF-Export vorbereiten"):
         with st.spinner("Bereite erweiterte Berechnungen für PDF-Export vor..."):
             pdf_data = prepare_advanced_calculations_for_pdf_export(
@@ -8546,7 +8561,10 @@ def render_financing_analysis(
             if option == "Barkauf":
                 initial_investment = total_investment
                 annual_cost = 0
-                roi_year_1 = (annual_pv_benefit / initial_investment) * 100
+                if initial_investment != 0:
+                    roi_year_1 = (annual_pv_benefit / initial_investment) * 100
+                else:
+                    roi_year_1 = 0.0
             elif option == "Bankkredit":
                 initial_investment = total_investment - financing_amount  # Eigenkapital
                 annual_cost = (
@@ -9013,7 +9031,10 @@ def render_advanced_financial_analysis(results: Dict[str, Any], texts: Dict[str,
         
         with col1:
             # ROI Berechnung
-            roi_20_years = (annual_savings * 20 / investment - 1) * 100
+            if investment != 0:
+                roi_20_years = (annual_savings * 20 / investment - 1) * 100
+            else:
+                roi_20_years = 0.0
             st.metric(" ROI (20 Jahre)", f"{roi_20_years:.2f}%")
         
         with col2:
@@ -9024,7 +9045,10 @@ def render_advanced_financial_analysis(results: Dict[str, Any], texts: Dict[str,
         
         with col3:
             # IRR Schätzung (vereinfacht)
-            irr_estimate = (annual_savings / investment) * 100
+            if investment != 0:
+                irr_estimate = (annual_savings / investment) * 100
+            else:
+                irr_estimate = 0.0
             st.metric(" IRR (geschätzt)", f"{irr_estimate:.2f}%")
         
         # Cashflow Chart
@@ -9103,13 +9127,19 @@ def render_advanced_energy_analysis(results: Dict[str, Any], texts: Dict[str, st
         
         with col1:
             # Deckungsgrad
-            coverage = min(100, (annual_production / annual_consumption) * 100)
+            if annual_consumption != 0:
+                coverage = min(100, (annual_production / annual_consumption) * 100)
+            else:
+                coverage = 0.0
             st.metric(" Deckungsgrad", f"{coverage:.2f}%")
         
         with col2:
             # Spezifischer Ertrag
             anlage_kwp = results.get('anlage_kwp', 1.0)
-            specific_yield = annual_production / anlage_kwp if anlage_kwp > 0 else 0
+            if anlage_kwp != 0:
+                specific_yield = annual_production / anlage_kwp if anlage_kwp > 0 else 0
+            else:
+                specific_yield = 0.0
             st.metric(" Spez. Ertrag", f"{specific_yield:.2f} kWh/kWp")
         
         with col3:
@@ -9349,7 +9379,10 @@ def render_advanced_comparison_analysis(results: Dict[str, Any], texts: Dict[str
         scenario_data = []
         for name, data in scenarios.items():
             savings_scenario = base_savings * data["faktor"]
-            payback_scenario = investment / savings_scenario if savings_scenario > 0 else 0
+            if savings_scenario != 0:
+                payback_scenario = investment / savings_scenario if savings_scenario > 0 else 0
+            else:
+                payback_scenario = 0.0
             
             scenario_data.append({
                 "Szenario": name,

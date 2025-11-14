@@ -37,9 +37,9 @@ def test_grid_calculation():
         # Prüfe ob alle Positionen unterschiedlich sind
         unique_positions = set(positions)
         if len(unique_positions) == len(positions):
-            print(f"\n  ✅ Alle {len(positions)} Positionen sind unterschiedlich")
+            print(f"\n  [OK] Alle {len(positions)} Positionen sind unterschiedlich")
         else:
-            print(f"\n  ❌ PROBLEM: Nur {len(unique_positions)} einzigartige Positionen von {len(positions)}")
+            print(f"\n  [ERROR] PROBLEM: Nur {len(unique_positions)} einzigartige Positionen von {len(positions)}")
             print(f"     Es gibt Duplikate!")
         
         # Prüfe Verteilung
@@ -57,7 +57,7 @@ def test_grid_calculation():
         print(f"    Spanne: {max(y_coords) - min(y_coords):.2f}m")
         
     else:
-        print("  ❌ FEHLER: Keine Positionen berechnet!")
+        print("  [ERROR] FEHLER: Keine Positionen berechnet!")
     
     return positions
 
@@ -72,7 +72,7 @@ def test_3d_conversion():
     positions_2d = test_grid_calculation()
     
     if not positions_2d:
-        print("\n❌ Keine 2D Positionen zum Konvertieren!")
+        print("\n[ERROR] Keine 2D Positionen zum Konvertieren!")
         return
     
     # Berechne Z-Position für Satteldach
@@ -97,18 +97,18 @@ def test_3d_conversion():
     # Prüfe ob alle Z-Werte gleich sind (sollten sie sein)
     z_coords = [z for x, y, z in positions_3d]
     if len(set(z_coords)) == 1:
-        print(f"\n  ✅ Alle Z-Koordinaten sind gleich ({z_coords[0]:.3f}m)")
+        print(f"\n  [OK] Alle Z-Koordinaten sind gleich ({z_coords[0]:.3f}m)")
     else:
-        print(f"\n  ⚠️ Z-Koordinaten variieren: {set(z_coords)}")
+        print(f"\n  [WARNING] Z-Koordinaten variieren: {set(z_coords)}")
     
     # Prüfe ob X und Y variieren
     x_coords = [x for x, y, z in positions_3d]
     y_coords = [y for x, y, z in positions_3d]
     
     if len(set(x_coords)) > 1 and len(set(y_coords)) > 1:
-        print(f"  ✅ X und Y Koordinaten variieren korrekt")
+        print(f"  [OK] X und Y Koordinaten variieren korrekt")
     else:
-        print(f"  ❌ PROBLEM: X oder Y Koordinaten variieren nicht!")
+        print(f"  [ERROR] PROBLEM: X oder Y Koordinaten variieren nicht!")
         print(f"     Einzigartige X-Werte: {len(set(x_coords))}")
         print(f"     Einzigartige Y-Werte: {len(set(y_coords))}")
 
@@ -126,6 +126,6 @@ if __name__ == "__main__":
         print("=" * 70)
         
     except Exception as e:
-        print(f"\n❌ FEHLER: {e}")
+        print(f"\n[ERROR] FEHLER: {e}")
         import traceback
         traceback.print_exc()

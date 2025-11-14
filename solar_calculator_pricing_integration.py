@@ -393,7 +393,10 @@ class SolarCalculatorPricingIntegration:
             # Calculate quantity based on desired capacity vs. unit capacity
             unit_capacity = float(product.get("storage_power_kw", 1.0))
             if unit_capacity > 0:
-                quantity = max(1, round(desired_capacity / unit_capacity))
+                if unit_capacity != 0:
+                    quantity = max(1, round(desired_capacity / unit_capacity))
+                else:
+                    quantity = 0.0
             else:
                 quantity = 1
 

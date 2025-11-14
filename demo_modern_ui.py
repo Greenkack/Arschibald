@@ -9,7 +9,7 @@ import streamlit as st
 from css_template_manager import get_css_manager
 
 # Page Config
-st.set_page_config(page_title="🎨 Modernes UI Demo", layout="wide")
+st.set_page_config(page_title="[DESIGN] Modernes UI Demo", layout="wide")
 
 # CSS laden
 css_manager = get_css_manager()
@@ -28,7 +28,7 @@ st.markdown("""
     text-align: center;
 ">
     <h1 style="color: #00E5FF; margin: 0; font-family: Nunito, sans-serif; font-size: 3rem;">
-        🎨 Modernes UI Design Demo
+        [DESIGN] Modernes UI Design Demo
     </h1>
     <p style="color: #E6F7FF; margin: 15px 0 0 0; font-size: 1.2rem;">
         Glasmorphism • Neumorphism • Cyan Accents • Dark Theme
@@ -38,7 +38,7 @@ st.markdown("""
 
 # Tabs
 tab1, tab2, tab3, tab4 = st.tabs(
-    ["🎨 Effekte", "🔘 Buttons", "📝 Inputs", "📊 Charts"])
+    ["[DESIGN] Effekte", "🔘 Buttons", "[NOTE] Inputs", "[CHART] Charts"])
 
 with tab1:
     st.header("UI-Effekte")
@@ -111,12 +111,12 @@ with tab3:
 
     with col2:
         st.selectbox(
-            "🎯 Kategorie", [
+            "[TARGET] Kategorie", [
                 "Option 1", "Option 2", "Option 3", "Option 4"])
         st.multiselect(
             "🏷️ Tags", [
                 "Python", "JavaScript", "CSS", "HTML", "SQL"])
-        st.slider("📊 Wert", 0, 100, 50)
+        st.slider("[CHART] Wert", 0, 100, 50)
         st.slider("📏 Bereich", 0, 100, (20, 80))
 
 with tab4:

@@ -110,7 +110,10 @@ class CalculationContext:
         if not self.system_capacity_kwp and self.power_kw:
             self.system_capacity_kwp = self.power_kw
         elif not self.system_capacity_kwp and self.capacity_w:
-            self.system_capacity_kwp = self.capacity_w / 1000.0
+            if 1000 != 0:
+                self.system_capacity_kwp = self.capacity_w / 1000.0
+            else:
+                self.system_capacity_kwp = 0.0
 
 
 @dataclass
@@ -391,7 +394,10 @@ class CalculatePerEngine:
             calculation_method=CalculationMethod.PER_SQUARE_METER,
             unit_price=unit_price,
             total_price=total_price,
-            calculation_factor=area_m2 / quantity if quantity > 0 else 1.0,
+            if quantity != 0:
+                calculation_factor=area_m2 / quantity if quantity > 0 else 1.0,
+            else:
+                calculation_factor = 0.0
             context_used=context
         )
 
@@ -418,7 +424,10 @@ class CalculatePerEngine:
             calculation_method=CalculationMethod.PER_HOUR,
             unit_price=unit_price,
             total_price=total_price,
-            calculation_factor=hours / quantity if quantity > 0 else 1.0,
+            if quantity != 0:
+                calculation_factor=hours / quantity if quantity > 0 else 1.0,
+            else:
+                calculation_factor = 0.0
             context_used=context
         )
 

@@ -50,7 +50,10 @@ def main():
                         area = (zone.x2 - zone.x1) * (zone.y2 - zone.y1)
                         total_area += area
 
-                avg_area = total_area / len(firma_analyses)
+                if len != 0:
+                    avg_area = total_area / len(firma_analyses)
+                else:
+                    avg_area = 0.0
                 print(f"  Avg safe zone area: {avg_area:.1f} sq points")
 
         # Save results

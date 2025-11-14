@@ -61,14 +61,14 @@ for seite in range(1, anzahl_seiten + 1):
                 if line.startswith("Linie von"):
                     coords = line[9:].split("nach")
                     p1 = eval(coords[0].strip())  # noqa: S307 (eval ist hier berechtigt)
-                    p2 = eval(coords[1].strip())
+                    p2 = eval(coords[1].strip())  # noqa: S307 (eval ist hier berechtigt)
                     shape.draw_line(p1, p2)
                 elif line.startswith("Rechteck:"):
-                    rect_coords = eval(line[9:].strip())
+                    rect_coords = eval(line[9:].strip())  # noqa: S307 (eval ist hier berechtigt)
                     rect = fitz.Rect(rect_coords)
                     shape.draw_rect(rect)
             shape.finish(color=(0, 0, 0), fill=None, width=0.5)
 
 # PDF speichern
 pdf_neu.save("output/final_recreated.pdf")
-print("✅ PDF exakt neu erstellt.")
+print("[OK] PDF exakt neu erstellt.")

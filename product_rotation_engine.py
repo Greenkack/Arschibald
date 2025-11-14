@@ -39,15 +39,15 @@ def load_all_products() -> Dict[str, List[dict]]:
     # 1. PRIMÄR: Lade aus Produktdatenbank-Modul
     try:
         import product_db  # ← RICHTIGER Modulname!
-        logger.info(f"✅ product_db Modul importiert")
+        logger.info(f"[OK] product_db Modul importiert")
         
         if hasattr(product_db, 'list_products'):
-            logger.info(f"✅ list_products() Funktion gefunden")
+            logger.info(f"[OK] list_products() Funktion gefunden")
             
             if callable(product_db.list_products):
-                logger.info(f"🔍 Rufe list_products() für alle Kategorien auf...")
+                logger.info(f"[SEARCH] Rufe list_products() für alle Kategorien auf...")
                 
-                # ⚠️ WICHTIG: Die Datenbank nutzt DEUTSCHE Kategorienamen!
+                # [WARNING] WICHTIG: Die Datenbank nutzt DEUTSCHE Kategorienamen!
                 # list_products(category) gibt Liste für EINE Kategorie zurück!
                 pv_modules_raw = product_db.list_products(category='Modul') or []
                 inverters_raw = product_db.list_products(category='Wechselrichter') or []
@@ -100,16 +100,16 @@ def load_all_products() -> Dict[str, List[dict]]:
                 
                 total = sum(len(p) for p in products.values())
                 if total > 0:
-                    logger.info(f"✅ Produkte aus Datenbank geladen: {total} gesamt (PV={len(products['pv_modules'])}, INV={len(products['inverters'])}, BAT={len(products['battery_storage'])})")
+                    logger.info(f"[OK] Produkte aus Datenbank geladen: {total} gesamt (PV={len(products['pv_modules'])}, INV={len(products['inverters'])}, BAT={len(products['battery_storage'])})")
                     return products
                 else:
-                    logger.warning("⚠️ Produktdatenbank ist LEER!")
+                    logger.warning("[WARNING] Produktdatenbank ist LEER!")
             else:
-                logger.warning("⚠️ list_products ist NICHT callable")
+                logger.warning("[WARNING] list_products ist NICHT callable")
         else:
-            logger.warning("⚠️ list_products() Funktion NICHT gefunden in product_db")
+            logger.warning("[WARNING] list_products() Funktion NICHT gefunden in product_db")
     except Exception as e:
-        logger.error(f"❌ Produktdatenbank konnte nicht geladen werden: {e}")
+        logger.error(f"[ERROR] Produktdatenbank konnte nicht geladen werden: {e}")
         import traceback
         logger.error(traceback.format_exc())
     
@@ -390,7 +390,7 @@ def rotate_products(
             
             if pv_product:
                 rotated['pv_modules'] = pv_product
-                logger.info(f"✓ PV Module: {pv_brand}")
+                logger.info(f"[OK] PV Module: {pv_brand}")
     
     # Schritt 3: Rotiere Wechselrichter
     if 'inverters' in specs:
@@ -415,7 +415,7 @@ def rotate_products(
             
             if inv_product:
                 rotated['inverters'] = inv_product
-                logger.info(f"✓ Wechselrichter: {inverter_brand}")
+                logger.info(f"[OK] Wechselrichter: {inverter_brand}")
     
     # Schritt 4: Rotiere Batteriespeicher
     if 'battery_storage' in specs:
@@ -453,7 +453,7 @@ def rotate_products(
             
             if bat_product:
                 rotated['battery_storage'] = bat_product
-                logger.info(f"✓ Batteriespeicher: {battery_brand}")
+                logger.info(f"[OK] Batteriespeicher: {battery_brand}")
     
     logger.info(f"=== Rotation abgeschlossen: {len(rotated)} Produkte ===")
     

@@ -196,7 +196,7 @@ class CallTranscript:
 
 📞 Call ID: {self.call_id}
 📱 Phone: {self.phone_number}
-🎯 Goal: {self.goal}
+[TARGET] Goal: {self.goal}
 ⏱️  Duration: {duration}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -212,7 +212,7 @@ class CallTranscript:
         if self.notes:
             summary += """
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📝 AGENT NOTES
+[NOTE] AGENT NOTES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
             for note in self.notes:
@@ -221,11 +221,11 @@ class CallTranscript:
         if self.outcome or self.next_steps:
             summary += """
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ OUTCOME & NEXT STEPS
+[OK] OUTCOME & NEXT STEPS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
             if self.outcome:
-                summary += f"\n🎯 Outcome: {self.outcome}\n"
+                summary += f"\n[TARGET] Outcome: {self.outcome}\n"
             if self.next_steps:
                 summary += f"\n📋 Next Steps: {self.next_steps}\n"
 
@@ -1900,7 +1900,7 @@ def start_interactive_call(
                 )
 
                 return f"""
-✅ Call started successfully!
+[OK] Call started successfully!
 
 Call ID: {call_id}
 Status: Active
@@ -1924,22 +1924,22 @@ TIP: Use 'get_call_protocol_guide' for guidance on call phases!
                     method="generate",
                     error=str(e)
                 )
-                print(f"⚠️  Voice synthesis failed: {e}")
+                print(f"[WARNING]  Voice synthesis failed: {e}")
                 print("Continuing with text-only simulation...\n")
         else:
             logger.warning("ELEVEN_LABS_API_KEY not configured")
-            print("⚠️  ELEVEN_LABS_API_KEY not configured")
+            print("[WARNING]  ELEVEN_LABS_API_KEY not configured")
             print("Continuing with text-only simulation...\n")
     else:
         logger.info("ElevenLabs not installed, using text-only mode")
-        print("⚠️  ElevenLabs not installed")
+        print("[WARNING]  ElevenLabs not installed")
         print("Continuing with text-only simulation...\n")
 
     # Text-only fallback
     print(f"🤖 KAI: {opening_statement}\n")
 
     return f"""
-✅ Call started successfully!
+[OK] Call started successfully!
 
 Call ID: {call_id}
 Status: Active
@@ -1983,7 +1983,7 @@ def continue_call_conversation(
     call = _get_current_call()
     if not call:
         return """
-❌ No active call found!
+[ERROR] No active call found!
 
 Please start a call first using 'start_interactive_call'.
 """
@@ -2014,7 +2014,7 @@ Please start a call first using 'start_interactive_call'.
                 # Silently fall back to text-only
 
     return f"""
-✅ Conversation continued
+[OK] Conversation continued
 
 Messages added to call transcript: {call.call_id}
 
@@ -2044,7 +2044,7 @@ def update_call_summary(new_information: str) -> str:
     call = _get_current_call()
     if not call:
         return """
-❌ No active call found!
+[ERROR] No active call found!
 
 Please start a call first using 'start_interactive_call'.
 """
@@ -2052,7 +2052,7 @@ Please start a call first using 'start_interactive_call'.
     call.add_note(new_information)
 
     return f"""
-✅ Call summary updated
+[OK] Call summary updated
 
 Note added to call {call.call_id}:
 "{new_information}"
@@ -2084,7 +2084,7 @@ def end_call(outcome: str, next_steps: str) -> str:
     call = _get_current_call()
     if not call:
         return """
-❌ No active call found!
+[ERROR] No active call found!
 
 Please start a call first using 'start_interactive_call'.
 """
@@ -2106,7 +2106,7 @@ Please start a call first using 'start_interactive_call'.
     _set_current_call(None)
 
     return f"""
-✅ Call ended successfully!
+[OK] Call ended successfully!
 
 {summary}
 

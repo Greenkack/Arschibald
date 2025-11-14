@@ -740,7 +740,10 @@ class ProfitabilityReportingEngine:
         y_pred = slope * x + intercept
         ss_res = np.sum((prices - y_pred) ** 2)
         ss_tot = np.sum((prices - np.mean(prices)) ** 2)
-        r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
+        if ss_tot != 0:
+            r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
+        else:
+            r_squared = 0.0
 
         # Calculate relative slope (slope as percentage of mean price)
         mean_price = np.mean(prices)

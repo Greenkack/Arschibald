@@ -13,7 +13,7 @@ def debug_price_flow():
     """Debuggt den kompletten Preis-Flow"""
     
     print("\n" + "="*80)
-    print("🔍 DEBUG: Multi-PDF Preis-Flow")
+    print("[SEARCH] DEBUG: Multi-PDF Preis-Flow")
     print("="*80)
     
     generator = MultiCompanyOfferGenerator()
@@ -34,7 +34,7 @@ def debug_price_flow():
         'amortization_time_years': 10.0,
     }
     
-    print(f"\n📊 Basis-Berechnungsergebnisse:")
+    print(f"\n[CHART] Basis-Berechnungsergebnisse:")
     print(f"   total_investment_netto: {base_calc_results['total_investment_netto']:,.2f} €")
     print(f"   final_price_net: {base_calc_results.get('final_price_net', 'N/A')}")
     
@@ -77,19 +77,22 @@ def debug_price_flow():
         print(f"   total_investment_netto: {scaled_results.get('total_investment_netto', 'FEHLT'):,.2f} €")
         
         # 5. Zeige den Unterschied
-        price_increase = ((net_price / base_calc_results['total_investment_netto']) - 1) * 100
-        print(f"\n✅ RESULTAT:")
+        if base_calc_results != 0:
+            price_increase = ((net_price / base_calc_results['total_investment_netto']) - 1) * 100
+        else:
+            price_increase = 0.0
+        print(f"\n[OK] RESULTAT:")
         print(f"   Basis: {base_calc_results['total_investment_netto']:,.2f} €")
         print(f"   Skaliert: {net_price:,.2f} € (+{price_increase:.1f}%)")
     
     print(f"\n{'='*80}")
-    print("🔍 ANALYSE")
+    print("[SEARCH] ANALYSE")
     print(f"{'='*80}")
     print("""
 Das Problem könnte sein:
 
-1. ✅ apply_price_scaling() funktioniert → scaled_results hat richtige Preise
-2. ✅ project_details wird korrekt gesetzt → hat skalierte Preise
+1. [OK] apply_price_scaling() funktioniert → scaled_results hat richtige Preise
+2. [OK] project_details wird korrekt gesetzt → hat skalierte Preise
 3. ❓ placeholders.py: Nutzt es project_details oder analysis_results?
 
 Wenn placeholders.py analysis_results nutzt statt project_details:

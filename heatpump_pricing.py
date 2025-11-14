@@ -627,7 +627,10 @@ class HeatPumpPricingEngine(PricingEngine):
         total_power_kw = system_specs.get("heating_capacity_kw", 0.0)
         if total_power_kw > 0:
             # Price per kW heating capacity
-            price_per_kw = base_result.base_price / total_power_kw
+            if total_power_kw != 0:
+                price_per_kw = base_result.base_price / total_power_kw
+            else:
+                price_per_kw = 0.0
             hp_keys["HP_PRICE_PER_KW"] = round(price_per_kw, 2)
 
         # System efficiency indicators
@@ -832,7 +835,10 @@ def calculate_annuity_loan(principal: float,
     r = annual_interest_rate_pct / 100.0 / 12.0
     n = years * 12
     if r == 0:
-        rate = principal / n
+        if n != 0:
+            rate = principal / n
+        else:
+            rate = 0.0
     else:
         rate = principal * (r * (1 + r) ** n) / ((1 + r) ** n - 1)
     remaining = principal

@@ -30,7 +30,7 @@ def test_agent_initialization():
         print("Initializing AgentCore...")
         agent = AgentCore(vector_store)
 
-        print("✅ Agent initialized successfully")
+        print("[OK] Agent initialized successfully")
         print(f"   - Model: {agent.llm.model_name}")
         print(f"   - Tools registered: {len(agent.tools)}")
         print(f"   - Tool names: {', '.join(agent.get_tool_names())}")
@@ -38,11 +38,11 @@ def test_agent_initialization():
         return True
 
     except ConfigurationError as e:
-        print(f"❌ Configuration error: {e}")
+        print(f"[ERROR] Configuration error: {e}")
         print("\nPlease ensure OPENAI_API_KEY is set in your .env file")
         return False
     except Exception as e:
-        print(f"❌ Initialization failed: {e}")
+        print(f"[ERROR] Initialization failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -69,11 +69,11 @@ def test_agent_status():
             else:
                 print(f"  - {key}: {value}")
 
-        print("✅ Status retrieved successfully")
+        print("[OK] Status retrieved successfully")
         return True
 
     except Exception as e:
-        print(f"❌ Status test failed: {e}")
+        print(f"[ERROR] Status test failed: {e}")
         return False
 
 
@@ -94,17 +94,17 @@ def test_simple_task():
         result = agent.run(task)
 
         if result['success']:
-            print("\n✅ Task completed successfully")
+            print("\n[OK] Task completed successfully")
             print(f"   - Execution time: {result['execution_time']:.2f}s")
             print(f"   - Output preview: {result['output'][:200]}...")
             return True
-        print(f"\n❌ Task failed: {result.get('error', 'Unknown error')}")
+        print(f"\n[ERROR] Task failed: {result.get('error', 'Unknown error')}")
         if 'solution' in result:
             print(f"   Solution: {result['solution']}")
         return False
 
     except Exception as e:
-        print(f"❌ Task execution test failed: {e}")
+        print(f"[ERROR] Task execution test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -132,11 +132,11 @@ def test_memory_management():
             f"Memory messages after clear: {
                 status_after['memory_messages']}")
 
-        print("✅ Memory management working correctly")
+        print("[OK] Memory management working correctly")
         return True
 
     except Exception as e:
-        print(f"❌ Memory test failed: {e}")
+        print(f"[ERROR] Memory test failed: {e}")
         return False
 
 
@@ -159,10 +159,10 @@ def main():
             result = test()
             results.append(result)
         except KeyboardInterrupt:
-            print("\n\n⚠️  Tests interrupted by user")
+            print("\n\n[WARNING]  Tests interrupted by user")
             break
         except Exception as e:
-            print(f"\n❌ Test crashed: {e}")
+            print(f"\n[ERROR] Test crashed: {e}")
             results.append(False)
 
     # Summary
@@ -174,9 +174,9 @@ def main():
     print(f"Passed: {passed}/{total}")
 
     if passed == total:
-        print("✅ All tests passed!")
+        print("[OK] All tests passed!")
     else:
-        print(f"❌ {total - passed} test(s) failed")
+        print(f"[ERROR] {total - passed} test(s) failed")
 
     return passed == total
 

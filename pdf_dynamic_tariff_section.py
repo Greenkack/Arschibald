@@ -45,7 +45,7 @@ def add_dynamic_tariff_section_to_pdf(
     
     # Titel
     pdf.setFont("Helvetica-Bold", 18)
-    pdf.drawString(50, y_position, "⚡ Dynamischer Stromtarif & Stromcloud")
+    pdf.drawString(50, y_position, "[POWER] Dynamischer Stromtarif & Stromcloud")
     y_position -= 30
     
     # Untertitel
@@ -276,7 +276,7 @@ def add_dynamic_tariff_section_to_pdf(
     y_position = page_height - 50
     
     pdf.setFont("Helvetica-Bold", 16)
-    pdf.drawString(50, y_position, "✅ Zusammenfassung & Empfehlung")
+    pdf.drawString(50, y_position, "[OK] Zusammenfassung & Empfehlung")
     y_position -= 30
     
     # Gesamt-Einsparung berechnen
@@ -306,10 +306,10 @@ def add_dynamic_tariff_section_to_pdf(
     
     pdf.setFont("Helvetica", 11)
     recommendations = [
-        "✅ Dynamischer Stromtarif lohnt sich bei Ihrem Profil deutlich",
-        "✅ Smart-Home-Automatisierung maximiert Einspar-Potenzial",
-        "✅ Kombination mit PV + Batteriespeicher optimal",
-        "✅ Amortisation typischerweise innerhalb von 3-5 Jahren",
+        "[OK] Dynamischer Stromtarif lohnt sich bei Ihrem Profil deutlich",
+        "[OK] Smart-Home-Automatisierung maximiert Einspar-Potenzial",
+        "[OK] Kombination mit PV + Batteriespeicher optimal",
+        "[OK] Amortisation typischerweise innerhalb von 3-5 Jahren",
     ]
     
     for rec in recommendations:

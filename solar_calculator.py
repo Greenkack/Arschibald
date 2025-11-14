@@ -12,9 +12,36 @@ Enhanced with real-time pricing calculations and calculate_per support.
 from __future__ import annotations
 
 import contextlib
+import time
 from typing import Any
 
 import streamlit as st
+
+# Monitoring Infrastructure
+try:
+    from app_tracing import app_tracer
+    from app_evaluation import track_success, track_error, evaluate_performance
+    MONITORING_AVAILABLE = True
+    
+    def trace_solar(func):
+        """Decorator for solar calculator operations tracing."""
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            operation_name = f"solar.{func.__name__}"
+            try:
+                with app_tracer.create_span(operation_name, {"function": func.__name__}):
+                    result = func(*args, **kwargs)
+                    track_success(operation_name)
+                    evaluate_performance(operation_name, time.time() - start_time)
+                    return result
+            except Exception as e:
+                track_error(operation_name, e)
+                raise
+        return wrapper
+except ImportError:
+    MONITORING_AVAILABLE = False
+    def trace_solar(func):
+        return func
 try:
     # Für Session-Liveness-Prüfung (None außerhalb von streamlit run)
     from streamlit.runtime.scriptrunner import get_script_run_ctx  # type: ignore
@@ -429,7 +456,7 @@ def _display_matrix_pricing(details: dict[str, Any], texts: dict[str, str]) -> N
         
         # Validate inputs
         if module_count <= 0:
-            st.warning("⚠️ Bitte wählen Sie die Anzahl der Module aus.")
+            st.warning("[WARNING] Bitte wählen Sie die Anzahl der Module aus.")
             return
         
         # Calculate total price using matrix mode
@@ -437,25 +464,25 @@ def _display_matrix_pricing(details: dict[str, Any], texts: dict[str, str]) -> N
         
         if not pricing_result['success']:
             # Display error with helpful message
-            st.error(f"❌ **Preismatrix-Fehler:** {pricing_result['error']}")
+            st.error(f"[ERROR] **Preismatrix-Fehler:** {pricing_result['error']}")
             
             # Provide specific guidance based on error type
             matrix_info = pricing_result.get('matrix_info', {})
             error_type = matrix_info.get('error_type')
             
             if error_type == 'no_matrix':
-                st.info("💡 **Lösung:** Aktivieren Sie eine Preismatrix in den Admin-Einstellungen.")
+                st.info("[IDEA] **Lösung:** Aktivieren Sie eine Preismatrix in den Admin-Einstellungen.")
             elif error_type == 'no_row':
-                st.info(f"💡 **Lösung:** Fügen Sie die Modulanzahl {module_count} zur Preismatrix hinzu oder wählen Sie eine andere Anzahl.")
+                st.info(f"[IDEA] **Lösung:** Fügen Sie die Modulanzahl {module_count} zur Preismatrix hinzu oder wählen Sie eine andere Anzahl.")
             elif error_type == 'no_column':
                 if storage_model:
-                    st.info(f"💡 **Lösung:** Fügen Sie das Speichermodell '{storage_model}' zur Preismatrix hinzu oder wählen Sie ein anderes Modell.")
+                    st.info(f"[IDEA] **Lösung:** Fügen Sie das Speichermodell '{storage_model}' zur Preismatrix hinzu oder wählen Sie ein anderes Modell.")
                 else:
-                    st.info("💡 **Lösung:** Fügen Sie eine 'Kein Speicher' Spalte zur Preismatrix hinzu.")
+                    st.info("[IDEA] **Lösung:** Fügen Sie eine 'Kein Speicher' Spalte zur Preismatrix hinzu.")
             elif error_type == 'no_price':
                 row_used = matrix_info.get('row_used', '?')
                 col_used = matrix_info.get('column_used', '?')
-                st.info(f"💡 **Lösung:** Tragen Sie einen Preis für die Kombination {row_used} Module + {col_used} in die Preismatrix ein.")
+                st.info(f"[IDEA] **Lösung:** Tragen Sie einen Preis für die Kombination {row_used} Module + {col_used} in die Preismatrix ein.")
             
             return
         
@@ -468,10 +495,10 @@ def _display_matrix_pricing(details: dict[str, Any], texts: dict[str, str]) -> N
         matrix_info = pricing_result['matrix_info']
         breakdown = pricing_result['breakdown']
         
-        st.markdown("### 💰 Preisübersicht (Preismatrix-Modus)")
+        st.markdown("### [MONEY] Preisübersicht (Preismatrix-Modus)")
         
         # Show matrix lookup information
-        with st.expander("📊 Matrix-Lookup-Details", expanded=False):
+        with st.expander("[CHART] Matrix-Lookup-Details", expanded=False):
             st.markdown(f"""
             **Verwendete Matrix:** {matrix_info.get('matrix_name', 'Unbekannt')}
             
@@ -501,7 +528,7 @@ def _display_matrix_pricing(details: dict[str, Any], texts: dict[str, str]) -> N
             
             # Show detailed breakdown in expander
             if breakdown.get('special_products') or breakdown.get('services') or breakdown.get('extras'):
-                with st.expander("🔍 Extras-Details", expanded=False):
+                with st.expander("[SEARCH] Extras-Details", expanded=False):
                     # Sonderprodukte
                     if breakdown.get('special_products'):
                         st.markdown("**Sonderprodukte:**")
@@ -564,7 +591,7 @@ def _display_matrix_pricing(details: dict[str, Any], texts: dict[str, str]) -> N
         st.markdown("---")
         
         with col_label:
-            st.markdown("### **🎯 Brutto-Gesamtpreis:**")
+            st.markdown("### **[TARGET] Brutto-Gesamtpreis:**")
         with col_value:
             st.markdown(f"### **{_format_german_currency(gross_total)}**")
         
@@ -604,15 +631,15 @@ def _display_matrix_pricing(details: dict[str, Any], texts: dict[str, str]) -> N
         
         # Important note about disabled standard markups
         st.info("""
-        ℹ️ **Hinweis:** Im Preismatrix-Modus sind Standard-Aufschläge (Montage, Installation, etc.) 
+        [INFO] **Hinweis:** Im Preismatrix-Modus sind Standard-Aufschläge (Montage, Installation, etc.) 
         deaktiviert. Der Basispreis aus der Matrix ist ein schlüsselfertiger Preis. 
         Nur explizit ausgewählte Extras und Sonderprodukte werden hinzugefügt.
         """)
         
     except ImportError as e:
-        st.error(f"❌ Preismatrix-Modul nicht verfügbar: {e}")
+        st.error(f"[ERROR] Preismatrix-Modul nicht verfügbar: {e}")
     except Exception as e:
-        st.error(f"❌ Fehler bei der Preisberechnung: {e}")
+        st.error(f"[ERROR] Fehler bei der Preisberechnung: {e}")
         import traceback
         st.code(traceback.format_exc())
 
@@ -833,9 +860,9 @@ def _display_pricing_information(
         
         # Display mode indicator
         if pricing_mode == "matrix":
-            st.info("ℹ️ **Preisberechnungsmodus:** Preismatrix (Schlüsselfertige Preise)")
+            st.info("[INFO] **Preisberechnungsmodus:** Preismatrix (Schlüsselfertige Preise)")
         else:
-            st.info("ℹ️ **Preisberechnungsmodus:** Standardberechnung (Einzelprodukte)")
+            st.info("[INFO] **Preisberechnungsmodus:** Standardberechnung (Einzelprodukte)")
         
         # Branch based on pricing mode
         if pricing_mode == "matrix":
@@ -858,7 +885,7 @@ def _display_pricing_information(
             # Header with switch for additional optional services
             col1, col2 = st.columns([3, 1])
             with col1:
-                st.markdown("### 💰 Preisübersicht")
+                st.markdown("### [MONEY] Preisübersicht")
             with col2:
                 # Switch for optional services only (standard services are
                 # always included)
@@ -1214,7 +1241,7 @@ def _display_pricing_information(
 
                         col_final_label, col_final_value = st.columns([3, 1])
                         with col_final_label:
-                            st.markdown("### **🎯 Endpreis mit Provision:**")
+                            st.markdown("### **[TARGET] Endpreis mit Provision:**")
                         with col_final_value:
                             st.markdown(f"### **{formatted_final_endpreis}**")
                     except Exception as _ui_err:
@@ -1445,7 +1472,7 @@ def _display_pricing_information(
                     st.markdown("---")
                     col_final_label, col_final_value = st.columns([3, 1])
                     with col_final_label:
-                        st.markdown("### **💰 Endpreis (brutto):**")
+                        st.markdown("### **[MONEY] Endpreis (brutto):**")
                     with col_final_value:
                         st.markdown(f"### **{formatted_preis_mit_mwst}**")
 
@@ -1632,7 +1659,7 @@ def _display_pricing_information(
                 st.session_state.project_data["final_pricing_data"] = final_pricing_data
 
                 st.info(
-                    "💡 **Hinweis:** Amortisationszeit-Berechnungen sind jetzt im Bereich 'Ergebnisse & Dashboard' verfügbar.")
+                    "[IDEA] **Hinweis:** Amortisationszeit-Berechnungen sind jetzt im Bereich 'Ergebnisse & Dashboard' verfügbar.")
                 # Ende der einfachen Berechnung
 
                 # Display by category if available - only show active
@@ -1731,6 +1758,7 @@ def _product_names_by_category(
         return []
 
 
+@trace_solar
 def render_solar_calculator(
         texts: dict[str, str], module_name: str | None = None) -> None:
     """Erweiterter Solar Calculator mit 2-Schritt Wizard.
@@ -2272,7 +2300,7 @@ def render_solar_calculator(
                     _trigger_pricing_update(details)
             except Exception as e_mount:
                 debug_log("solar_calculator.pv_mounting", "Fehler beim Rendern der Unterkonstruktion", error=str(e_mount))
-                st.warning(f"⚠️ PV-Unterkonstruktion konnte nicht geladen werden: {e_mount}")
+                st.warning(f"[WARNING] PV-Unterkonstruktion konnte nicht geladen werden: {e_mount}")
 
         # Display pricing information for step 1 components
         st.markdown('---')
@@ -2420,12 +2448,12 @@ def render_solar_calculator(
                             )
 
                             st.caption(
-                                f"💰 {
+                                f"[MONEY] {
                                     unit_price:.2f} € ({calculate_per})")
                             if quantity > 1:
                                 st.caption(f"Gesamt: {total_price:.2f} €")
                         except Exception:
-                            st.caption("⚠️ Preis nicht verfügbar")
+                            st.caption("[WARNING] Preis nicht verfügbar")
             elif details.get(name_key) and not col3:
                 product = get_product_by_model_name_safe(details[name_key])
                 if product:
@@ -2440,9 +2468,9 @@ def render_solar_calculator(
                             unit_price = float(product.get("price_euro", 0.0))
 
                         calculate_per = product.get("calculate_per", "Stück")
-                        st.caption(f"💰 {unit_price:.2f} € ({calculate_per})")
+                        st.caption(f"[MONEY] {unit_price:.2f} € ({calculate_per})")
                     except Exception:
-                        st.caption("⚠️ Preis nicht verfügbar")
+                        st.caption("[WARNING] Preis nicht verfügbar")
 
         if details['include_additional_components']:
             st.markdown("#### 🔌 Ladeinfrastruktur")
@@ -2455,7 +2483,7 @@ def render_solar_calculator(
                 'selected_wallbox_quantity',
             )
 
-            st.markdown("#### ⚡ Energiemanagement")
+            st.markdown("#### [POWER] Energiemanagement")
             _component_selector_with_pricing(
                 'ems_model_label',
                 ems,
@@ -2568,7 +2596,7 @@ def render_solar_calculator(
                         'Technik-Auswahl übernommen.'))
                 
                 # Link zur 3D-Visualisierung anzeigen
-                st.info("💡 **Tipp:** Sehen Sie sich Ihre PV-Anlage in 3D an!")
+                st.info("[IDEA] **Tipp:** Sehen Sie sich Ihre PV-Anlage in 3D an!")
                 col_3d_link, col_analysis_link = st.columns(2)
                 with col_3d_link:
                     if st.button("🏠 Zur 3D-Visualisierung", key='btn_goto_3d_view', use_container_width=True):
@@ -2577,7 +2605,7 @@ def render_solar_calculator(
                         st.session_state['solar_calc_step'] = 1
                         st.rerun()
                 with col_analysis_link:
-                    if st.button("📊 Zur Analyse", key='btn_goto_analysis', use_container_width=True):
+                    if st.button("[CHART] Zur Analyse", key='btn_goto_analysis', use_container_width=True):
                         with contextlib.suppress(Exception):
                             st.session_state['selected_page_key'] = 'analysis'
                         st.session_state['solar_calc_step'] = 1

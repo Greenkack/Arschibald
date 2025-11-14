@@ -166,7 +166,7 @@ def test_strategy(
         is_valid, errors = validate_positions(positions, len(elements))
         
         if is_valid:
-            print(f"✓ {strategy_name}: All positions valid")
+            print(f"[OK] {strategy_name}: All positions valid")
             
             # Show sample positions
             print(f"  Sample positions:")
@@ -176,13 +176,13 @@ def test_strategy(
             
             return True
         else:
-            print(f"✗ {strategy_name}: Validation failed")
+            print(f"[ERROR] {strategy_name}: Validation failed")
             for error in errors[:5]:
                 print(f"    - {error}")
             return False
     
     except Exception as e:
-        print(f"✗ {strategy_name}: Exception occurred: {e}")
+        print(f"[ERROR] {strategy_name}: Exception occurred: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -212,7 +212,7 @@ def test_all_strategies():
     total = len(results)
     
     for name, result in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = "[OK] PASS" if result else "[ERROR] FAIL"
         print(f"  {status}: {name}")
     
     print(f"\nTotal: {passed}/{total} strategies passed")
@@ -240,22 +240,22 @@ def test_strategy_selection():
             is_valid, _ = validate_positions(positions, len(elements))
             
             if not is_valid:
-                print(f"    ✗ Invalid positions for firma {firma}")
+                print(f"    [ERROR] Invalid positions for firma {firma}")
                 return False
         
         # Test invalid firma
         try:
             select_strategy(7, 1, pdf_analysis)
-            print("  ✗ Should have raised ValueError for invalid firma")
+            print("  [ERROR] Should have raised ValueError for invalid firma")
             return False
         except ValueError:
-            print("  ✓ Correctly raises ValueError for invalid firma")
+            print("  [OK] Correctly raises ValueError for invalid firma")
         
-        print("\n✓ Strategy selection tests passed")
+        print("\n[OK] Strategy selection tests passed")
         return True
     
     except Exception as e:
-        print(f"\n✗ Strategy selection test failed: {e}")
+        print(f"\n[ERROR] Strategy selection test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -310,10 +310,10 @@ def test_with_real_files():
             )
             
             if is_valid:
-                print(f"    ✓ Generated {len(positions)} valid positions")
+                print(f"    [OK] Generated {len(positions)} valid positions")
                 return True
             else:
-                print(f"    ✗ Validation failed:")
+                print(f"    [ERROR] Validation failed:")
                 for error in errors[:5]:
                     print(f"      - {error}")
                 return False
@@ -322,7 +322,7 @@ def test_with_real_files():
             return True
     
     except Exception as e:
-        print(f"  ✗ Real file test failed: {e}")
+        print(f"  [ERROR] Real file test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -347,10 +347,10 @@ def main():
     all_passed = test1 and test2 and test3
     
     if all_passed:
-        print("\n✓ ALL TESTS PASSED")
+        print("\n[OK] ALL TESTS PASSED")
         return 0
     else:
-        print("\n✗ SOME TESTS FAILED")
+        print("\n[ERROR] SOME TESTS FAILED")
         return 1
 
 

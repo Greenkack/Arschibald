@@ -42,17 +42,17 @@ pdf_bytes = renderer.build_pdf()
 if pdf_bytes:
     with open('tom90_dynamisch_test.pdf', 'wb') as f:
         f.write(pdf_bytes)
-    print(f'✅ DYNAMISCHE 20-Seiten PDF erstellt: {len(pdf_bytes):,} bytes')
-    print('🎯 ALLE neuen Werte sollten jetzt dynamisch sein!')
+    print(f'[OK] DYNAMISCHE 20-Seiten PDF erstellt: {len(pdf_bytes):,} bytes')
+    print('[TARGET] ALLE neuen Werte sollten jetzt dynamisch sein!')
     print('   👤 Kunde:', project_data['customer_name'])
     print('   🏢 Firma:', company_info['name'])
-    print('   ⚡ Anlage:', analysis_results['anlage_kwp'], 'kWp')
+    print('   [POWER] Anlage:', analysis_results['anlage_kwp'], 'kWp')
     print(
         '   🔋 Batterie:',
         project_data['battery_details']['capacity_kwh'],
         'kWh')
     print(
-        '   💰 Ersparnis:', f"{
+        '   [MONEY] Ersparnis:', f"{
             analysis_results['total_savings_with_storage_eur']:,}", 'EUR')
 else:
-    print('❌ PDF-Erstellung fehlgeschlagen')
+    print('[ERROR] PDF-Erstellung fehlgeschlagen')

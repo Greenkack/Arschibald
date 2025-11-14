@@ -97,4 +97,4 @@ def test_provision_calculation():
 if __name__ == "__main__":
     success = test_provision_calculation()
     print('\n=== ERGEBNIS ===')
-    print(f'Test erfolgreich: {"✅ JA" if success else "❌ NEIN"}')
+    print(f'Test erfolgreich: {"[OK] JA" if success else "[ERROR] NEIN"}')

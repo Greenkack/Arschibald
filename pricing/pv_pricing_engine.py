@@ -606,7 +606,10 @@ class PVPricingEngine(PricingEngine):
             pv_keys["PV_ESTIMATED_ANNUAL_YIELD_KWH"] = annual_yield_kwh
 
             # Price per kWp
-            price_per_kwp = base_result.base_price / total_capacity_kwp
+            if total_capacity_kwp != 0:
+                price_per_kwp = base_result.base_price / total_capacity_kwp
+            else:
+                price_per_kwp = 0.0
             pv_keys["PV_PRICE_PER_KWP"] = round(price_per_kwp, 2)
 
         # System quality indicators
@@ -696,7 +699,10 @@ class PVPricingEngine(PricingEngine):
                     quantity * 1000
 
         if total_module_capacity > 0 and total_inverter_capacity > 0:
-            ratio = total_module_capacity / total_inverter_capacity
+            if total_inverter_capacity != 0:
+                ratio = total_module_capacity / total_inverter_capacity
+            else:
+                ratio = 0.0
             if ratio > 1.3 or ratio < 0.8:
                 self.logger.warning(
                     f"PV capacity mismatch: modules {total_module_capacity}W, "

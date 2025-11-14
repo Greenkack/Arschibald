@@ -59,15 +59,15 @@ class TestResult:
         print("TEST SUMMARY")
         print("=" * 70)
         print(f"Total tests: {total}")
-        print(f"Passed: {self.passed} ✓")
-        print(f"Failed: {self.failed} ✗")
+        print(f"Passed: {self.passed} [OK]")
+        print(f"Failed: {self.failed} [ERROR]")
         print(
             f"Success rate: {(self.passed / total * 100) if total > 0 else 0:.1f}%")
 
         if self.errors:
             print("\nFailed tests:")
             for test_name, error in self.errors:
-                print(f"  ✗ {test_name}: {error}")
+                print(f"  [ERROR] {test_name}: {error}")
 
         print("=" * 70)
         return self.failed == 0
@@ -83,13 +83,13 @@ def run_test(test_func, result):
         print(f"TEST: {test_name}")
         print('=' * 70)
         test_func()
-        print("✓ PASSED")
+        print("[OK] PASSED")
         result.add_pass()
     except AssertionError as e:
-        print(f"✗ FAILED: {e}")
+        print(f"[ERROR] FAILED: {e}")
         result.add_fail(test_name, str(e))
     except Exception as e:
-        print(f"✗ ERROR: {e}")
+        print(f"[ERROR] ERROR: {e}")
         import traceback
         traceback.print_exc()
         result.add_fail(test_name, f"Exception: {e}")
@@ -453,16 +453,16 @@ def main():
     success = result.print_summary()
 
     if success:
-        print("\n✓ ALL TESTS PASSED - Task 14 complete!")
+        print("\n[OK] ALL TESTS PASSED - Task 14 complete!")
         print("\nThe Docker sandbox is fully functional and secure.")
         print("\nRequirements verified:")
-        print("  ✓ 5.1 - Code execution in Docker container")
-        print("  ✓ 5.2 - Unprivileged user execution")
-        print("  ✓ 5.3 - Network isolation")
-        print("  ✓ 5.4 - Automatic cleanup and timeouts")
-        print("  ✓ 5.5 - Python environment setup")
+        print("  [OK] 5.1 - Code execution in Docker container")
+        print("  [OK] 5.2 - Unprivileged user execution")
+        print("  [OK] 5.3 - Network isolation")
+        print("  [OK] 5.4 - Automatic cleanup and timeouts")
+        print("  [OK] 5.5 - Python environment setup")
     else:
-        print("\n✗ SOME TESTS FAILED")
+        print("\n[ERROR] SOME TESTS FAILED")
         print("\nPlease review the failures above and fix any issues.")
 
     return 0 if success else 1

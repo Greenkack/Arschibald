@@ -1,15 +1,17 @@
 """
-🎨 VISUALISIERUNGS-MODUL FÜR ERWEITERTE WÄRMEPUMPEN-FEATURES
+[DESIGN] VISUALISIERUNGS-MODUL FÜR ERWEITERTE WÄRMEPUMPEN-FEATURES
 
-Dieses Modul erstellt professionelle Visualisierungen für die erweiterten
-Features aus heatpump_advanced_calculations.py.
+Dieses Modul erstellt professionelle Visualisierungen mit Shadcn UI Design
+für die erweiterten Features aus heatpump_advanced_calculations.py.
 
 Features:
 - 9.1: 3D-Systemvisualisierung (erweitert)
 - 9.2: KPI-Dashboard
 - Zusätzliche Charts für alle Berechnungen
+- Vollständiges Shadcn UI Design-System
 
 Autor: AI-Assistent
+Version: 2.0 - Shadcn UI
 Datum: 2024
 """
 
@@ -20,6 +22,45 @@ import pandas as pd
 import numpy as np
 from typing import Dict, Any, List
 import streamlit as st
+
+
+# ============================================================================
+# SHADCN UI DESIGN-SYSTEM FÜR CHARTS
+# ============================================================================
+
+SHADCN_COLORS = {
+    # Primäre Shadcn UI Farben
+    "primary": "#38bdf8",        # Sky Blue
+    "primary_dark": "#0ea5e9",   # Sky 500
+    "success": "#34d399",        # Emerald 400
+    "success_dark": "#10b981",   # Emerald 500
+    "warning": "#fbbf24",        # Amber 400
+    "warning_dark": "#f59e0b",   # Amber 500
+    "danger": "#f87171",         # Red 400
+    "danger_dark": "#ef4444",    # Red 500
+    "info": "#a78bfa",           # Violet 400
+    "info_dark": "#8b5cf6",      # Violet 500
+    
+    # Erweiterte Palette für Multi-Chart Visualisierungen
+    "emerald": "#10b981",
+    "teal": "#14b8a6",
+    "cyan": "#06b6d4",
+    "sky": "#0ea5e9",
+    "blue": "#3b82f6",
+    "indigo": "#6366f1",
+    "violet": "#8b5cf6",
+    "purple": "#a855f7",
+    "fuchsia": "#d946ef",
+    "pink": "#ec4899",
+    "rose": "#f43f5e",
+    "orange": "#f97316",
+    
+    # Gradient-Farben (für Fill)
+    "primary_gradient": "rgba(56, 189, 248, 0.15)",
+    "success_gradient": "rgba(52, 211, 153, 0.15)",
+    "warning_gradient": "rgba(251, 191, 36, 0.15)",
+    "danger_gradient": "rgba(248, 113, 113, 0.15)",
+}
 
 
 # ============================================================================
@@ -77,7 +118,7 @@ def create_system_3d_visualization(
     
     fig.add_trace(go.Mesh3d(
         x=[wp_x, wp_x + wp_width, wp_x + wp_width, wp_x, wp_x, wp_x + wp_width, wp_x + wp_width, wp_x],
-        y=[wp_y - wp_depth/2, wp_y - wp_depth/2, wp_y + wp_depth/2, wp_y + wp_depth/2, 
+        y = [wp_y - wp_depth/2, wp_y - wp_depth/2, wp_y + wp_depth/2, wp_y + wp_depth/2,
            wp_y - wp_depth/2, wp_y - wp_depth/2, wp_y + wp_depth/2, wp_y + wp_depth/2],
         z=[wp_z, wp_z, wp_z, wp_z, wp_z + wp_height, wp_z + wp_height, wp_z + wp_height, wp_z + wp_height],
         i=[7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
@@ -156,7 +197,7 @@ def create_system_3d_visualization(
         fig.add_trace(go.Scatter3d(
             x=[wp_x + wp_width, buffer_x],
             y=[wp_y, buffer_y],
-            z=[wp_z + wp_height/2, buffer_z + buffer_height/2],
+            z = [wp_z + wp_height/2, buffer_z + buffer_height/2],
             mode='lines',
             line=dict(color='red', width=8, dash='dash'),
             name='Heizleitung',
@@ -166,7 +207,7 @@ def create_system_3d_visualization(
         fig.add_trace(go.Scatter3d(
             x=[wp_x + wp_width, buffer_x],
             y=[wp_y, buffer_y],
-            z=[wp_z + wp_height/3, buffer_z + buffer_height/3],
+            z = [wp_z + wp_height/3, buffer_z + buffer_height/3],
             mode='lines',
             line=dict(color='blue', width=8, dash='dash'),
             name='Rücklauf',
@@ -306,7 +347,10 @@ def create_kpi_dashboard(
     
     # KPI 4: Amortisationszeit (Gauge)
     investment = economics_data.get('installation_cost', 20000)
-    payback_years = investment / savings if savings > 0 else 99
+    if savings != 0:
+        payback_years = investment / savings if savings > 0 else 99
+    else:
+        payback_years = 0.0
     
     fig.add_trace(go.Indicator(
         mode="gauge+number",
@@ -401,7 +445,7 @@ def create_kpi_dashboard(
     # Layout
     fig.update_layout(
         title=dict(
-            text=f"<b>📊 KPI-Dashboard: {heatpump_data.get('manufacturer', 'N/A')} {heatpump_data.get('model', 'N/A')}</b>",
+            text=f"<b>[CHART] KPI-Dashboard: {heatpump_data.get('manufacturer', 'N/A')} {heatpump_data.get('model', 'N/A')}</b>",
             x=0.5,
             xanchor='center',
             font=dict(size=20)
@@ -449,7 +493,7 @@ def create_jaz_comparison_chart(jaz_data: Dict[str, Any]) -> go.Figure:
         showlegend=False,
         paper_bgcolor='white',
         plot_bgcolor='rgba(240,240,240,0.9)',
-        # ✅ FIX: separatethousands gehört in yaxis dict, nicht in layout
+        # [OK] FIX: separatethousands gehört in yaxis dict, nicht in layout
         yaxis=dict(separatethousands=True)
     )
     
@@ -507,7 +551,7 @@ def create_annual_profile_chart(load_profile: Dict[str, Any]) -> go.Figure:
     )
     
     fig.update_xaxes(title_text="Monat")
-    fig.update_yaxes(title_text="Energie [kWh]", secondary_y=False, separatethousands=True)  # ✅ FIX
+    fig.update_yaxes(title_text="Energie [kWh]", secondary_y=False, separatethousands=True)  # [OK] FIX
     fig.update_yaxes(title_text="Temperatur [°C]", secondary_y=True)
     
     fig.update_layout(
@@ -598,7 +642,7 @@ def create_noise_map(noise_data: Dict[str, Any], building_data: Dict[str, Any]) 
 
 def create_lifecycle_chart(co2_data: Dict[str, Any]) -> go.Figure:
     """
-    Lebenszyklus-CO2-Bilanz (Sankey oder gestapelte Balken)
+    Lebenszyklus-CO2-Bilanz mit Shadcn UI Design
     """
     
     wp_data = co2_data.get('wärmepumpe', {})
@@ -620,36 +664,53 @@ def create_lifecycle_chart(co2_data: Dict[str, Any]) -> go.Figure:
     
     fig = go.Figure()
     
+    # Wärmepumpe - Shadcn Success Color
     fig.add_trace(go.Bar(
         name='Wärmepumpe',
         x=categories,
         y=wp_values,
-        marker_color='green',
+        marker=dict(
+            color=SHADCN_COLORS['success'],
+            line=dict(width=0),
+            opacity=0.9
+        ),
         text=[f"{v/1000:.1f} t" for v in wp_values],
         textposition='inside',
-        hovertemplate='%{x}<br>WP: %{y:,.0f} kg CO2<extra></extra>'
+        textfont=dict(color='white', weight=600),
+        hovertemplate='<b>%{x}</b><br>WP: %{y:,.0f} kg CO2<extra></extra>',
+        width=0.7
     ))
     
+    # Alte Heizung - Shadcn Danger Color
     fig.add_trace(go.Bar(
         name=old_data.get('system', 'Alte Heizung'),
         x=categories,
         y=old_values,
-        marker_color='red',
+        marker=dict(
+            color=SHADCN_COLORS['danger'],
+            line=dict(width=0),
+            opacity=0.9
+        ),
         text=[f"{v/1000:.1f} t" for v in old_values],
         textposition='inside',
-        hovertemplate='%{x}<br>Alt: %{y:,.0f} kg CO2<extra></extra>'
+        textfont=dict(color='white', weight=600),
+        hovertemplate='<b>%{x}</b><br>Alt: %{y:,.0f} kg CO2<extra></extra>',
+        width=0.7
     ))
     
     fig.update_layout(
-        title="<b>Lebenszyklus-CO2-Bilanz (20 Jahre)</b>",
+        title=dict(
+            text="<b>Lebenszyklus-CO2-Bilanz (20 Jahre)</b>",
+            font=dict(size=20, weight=600)
+        ),
         xaxis_title="Phase",
         yaxis_title="CO2-Emissionen [kg]",
         barmode='group',
         height=550,
-        paper_bgcolor='white',
-        plot_bgcolor='rgba(240,240,240,0.9)',
-        yaxis=dict(separatethousands=True),  # ✅ FIX
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        yaxis=dict(separatethousands=True),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        bargap=0.3,
+        bargroupgap=0.1
     )
     
     return fig
@@ -675,7 +736,7 @@ def create_price_scenario_chart(price_scenarios: Dict[str, Any]) -> go.Figure:
         
         if yearly_data:
             years = [d.get('year', 0) for d in yearly_data]
-            # ✅ FIX: Verwende .get() mit Fallback statt direktem Key-Zugriff
+            # [OK] FIX: Verwende .get() mit Fallback statt direktem Key-Zugriff
             costs_wp = [d.get('cost_wp', d.get('costs_wp', 0)) for d in yearly_data]
             costs_old = [d.get('cost_old', d.get('costs_old', 0)) for d in yearly_data]
             
@@ -707,7 +768,7 @@ def create_price_scenario_chart(price_scenarios: Dict[str, Any]) -> go.Figure:
         paper_bgcolor='white',
         plot_bgcolor='rgba(240,240,240,0.9)',
         hovermode='x unified',
-        yaxis=dict(separatethousands=True),  # ✅ FIX: Korrekter Property-Name
+        yaxis=dict(separatethousands=True),  # [OK] FIX: Korrekter Property-Name
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
     
@@ -716,7 +777,7 @@ def create_price_scenario_chart(price_scenarios: Dict[str, Any]) -> go.Figure:
 
 def create_maintenance_timeline(maintenance_schedule: Dict[str, Any]) -> go.Figure:
     """
-    Wartungsplan-Timeline (Gantt-ähnlich)
+    Wartungsplan-Timeline mit Shadcn UI Design
     """
     
     schedule = maintenance_schedule.get('schedule_20_years', [])
@@ -737,18 +798,18 @@ def create_maintenance_timeline(maintenance_schedule: Dict[str, Any]) -> go.Figu
             })
     
     if not timeline_data:
-        # Fallback: Leeres Chart
+        # Fallback: Leeres Chart mit Shadcn Styling
         fig = go.Figure()
         fig.add_annotation(
             text="Keine Wartungsdaten verfügbar",
             showarrow=False,
-            font=dict(size=20)
+            font=dict(size=20, color=SHADCN_COLORS['text_muted'] if 'text_muted' in SHADCN_COLORS else '#64748b')
         )
         return fig
     
     df = pd.DataFrame(timeline_data)
     
-    # Scatter Plot mit Größe = Kosten
+    # Scatter Plot mit Shadcn Farbpalette
     fig = px.scatter(
         df,
         x='Year',
@@ -756,17 +817,22 @@ def create_maintenance_timeline(maintenance_schedule: Dict[str, Any]) -> go.Figu
         size='Cost',
         color='Cost',
         hover_data=['Description', 'Cost'],
-        color_continuous_scale='Reds',
+        color_continuous_scale=[[0, SHADCN_COLORS['success']], [0.5, SHADCN_COLORS['warning']], [1, SHADCN_COLORS['danger']]],
         title='<b>Wartungsplan (20 Jahre)</b><br><sub>Größe = Kosten</sub>'
     )
     
     fig.update_layout(
         height=600,
-        paper_bgcolor='white',
-        plot_bgcolor='rgba(240,240,240,0.9)',
         xaxis=dict(title='Jahr', tickmode='linear', tick0=1, dtick=1),
         yaxis=dict(title='Wartungsposten'),
         coloraxis_colorbar=dict(title='Kosten [€]')
+    )
+    
+    fig.update_traces(
+        marker=dict(
+            line=dict(width=1, color='white'),
+            opacity=0.9
+        )
     )
     
     return fig
@@ -875,7 +941,7 @@ def create_comparison_radar_chart(comparison_data: Dict[str, Any]) -> go.Figure:
 
 def create_comparison_bar_chart(comparison_data: Dict[str, Any]) -> go.Figure:
     """
-    Horizontales Balkendiagramm mit Gesamtpunktzahl
+    Horizontales Balkendiagramm mit Gesamtpunktzahl - Shadcn UI
     """
     
     ranking = comparison_data.get('ranking', [])
@@ -885,7 +951,7 @@ def create_comparison_bar_chart(comparison_data: Dict[str, Any]) -> go.Figure:
         fig.add_annotation(
             text="Keine Vergleichsdaten verfügbar",
             showarrow=False,
-            font=dict(size=16)
+            font=dict(size=16, color=SHADCN_COLORS.get('text_muted', '#64748b'))
         )
         return fig
     
@@ -894,15 +960,15 @@ def create_comparison_bar_chart(comparison_data: Dict[str, Any]) -> go.Figure:
     scores = [r['total_score'] for r in ranking]
     ratings = [r['rating'] for r in ranking]
     
-    # Farben nach Rating
+    # Shadcn UI Farben nach Rating
     color_map = {
-        'TESTSIEGER': 'rgb(255, 215, 0)',     # Gold
-        'SEHR GUT': 'rgb(192, 192, 192)',     # Silber
-        'GUT': 'rgb(205, 127, 50)',           # Bronze
-        'SOLIDE': 'rgb(100, 149, 237)'        # Blau
+        'TESTSIEGER': SHADCN_COLORS['warning'],      # Amber/Gold
+        'SEHR GUT': SHADCN_COLORS['primary'],        # Sky Blue
+        'GUT': SHADCN_COLORS['success'],             # Emerald
+        'SOLIDE': SHADCN_COLORS['info']              # Violet
     }
     
-    colors_list = [color_map.get(r, 'rgb(100, 149, 237)') for r in ratings]
+    colors_list = [color_map.get(r, SHADCN_COLORS['primary']) for r in ratings]
     
     fig = go.Figure()
     
@@ -912,12 +978,14 @@ def create_comparison_bar_chart(comparison_data: Dict[str, Any]) -> go.Figure:
         orientation='h',
         marker=dict(
             color=colors_list,
-            line=dict(color='rgba(0,0,0,0.3)', width=1)
+            line=dict(width=0),
+            opacity=0.9
         ),
         text=[f"{s:.1f}" for s in scores],
         textposition='outside',
-        textfont=dict(size=14, color='black'),
-        hovertemplate='<b>%{y}</b><br>Gesamtpunktzahl: %{x:.1f}<extra></extra>'
+        textfont=dict(size=14, weight=600),
+        hovertemplate='<b>%{y}</b><br>Gesamtpunktzahl: %{x:.1f}<extra></extra>',
+        width=0.7
     ))
     
     fig.update_layout(
@@ -1074,7 +1142,7 @@ def create_comparison_cost_chart(comparison_data: Dict[str, Any]) -> go.Figure:
             xanchor='center'
         ),
         xaxis=dict(title=''),
-        yaxis=dict(title='Kosten [€]', separatethousands=True),  # ✅ FIX
+        yaxis=dict(title='Kosten [€]', separatethousands=True),  # [OK] FIX
         barmode='group',
         height=500,
         paper_bgcolor='white',

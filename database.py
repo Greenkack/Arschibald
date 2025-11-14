@@ -5,6 +5,50 @@ import sqlite3
 import traceback
 from datetime import datetime
 from typing import Any
+import time
+
+__all__ = [
+    'get_db_connection',
+    'create_customers_table',
+    'save_customer',
+    'load_all_customers',
+    'load_customer',
+    'delete_customer',
+    'DB_SCHEMA_VERSION',
+    'MONITORING_AVAILABLE',
+]
+
+# Monitoring integration
+try:
+    from app_tracing import app_tracer
+    from app_evaluation import track_success, track_error, evaluate_performance
+    MONITORING_AVAILABLE = True
+except ImportError:
+    MONITORING_AVAILABLE = False
+    def track_success(op): pass
+    def track_error(op, err): pass
+    def evaluate_performance(op, t): pass
+    
+    # Fallback decorator
+    def trace_database(func):
+        return func
+else:
+    # Real decorator
+    def trace_database(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            op_name = f"database.{func.__name__}"
+            try:
+                with app_tracer.create_span(op_name, {"function": func.__name__}) as span:
+                    result = func(*args, **kwargs)
+                    track_success(op_name)
+                    evaluate_performance(op_name, time.time() - start_time)
+                    return result
+            except Exception as e:
+                track_error(op_name, e)
+                raise
+        wrapper.__name__ = func.__name__
+        return wrapper
 
 DB_SCHEMA_VERSION = 14
 # print(
@@ -34,6 +78,7 @@ if not os.path.exists(CUSTOMER_DOCS_BASE_DIR):
 # --- Minimale DB-Helfer (Kompatibilität) ---
 
 
+@trace_database
 def get_db_connection() -> sqlite3.Connection | None:
     """Stellt eine SQLite-Verbindung zur Hauptdatenbank her (Row-Factory aktiviert).
 
@@ -153,6 +198,21 @@ def ensure_project_calculations_table() -> None:
         _create_project_calculations_table(conn)
     finally:
         conn.close()
+
+
+def ensure_offer_tracking_tables() -> None:
+    """Stellt sicher, dass die Angebotsverfolgung-Felder in der projects Tabelle existieren."""
+    try:
+        from crm.features.offer_tracker import create_offer_tracking_tables
+        conn = get_db_connection()
+        if not conn:
+            return
+        try:
+            create_offer_tracking_tables(conn)
+        finally:
+            conn.close()
+    except ImportError:
+        print("DB: offer_tracker Modul nicht verfügbar, überspringe Initialisierung.")
 
 
 def add_customer_document(
@@ -2674,7 +2734,93 @@ def create_crm_enhancement_tables(conn: sqlite3.Connection) -> None:
         """)
         print("DB: Tabelle 'crm_reminders' erstellt/überprüft.")
         
-        # 5. Erweitere projects Tabelle um Angebots-Felder
+        # 5. Tabelle: crm_tags (Tag-Definitionen für Kunden-Segmentierung)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS crm_tags (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL UNIQUE,
+                color TEXT DEFAULT '#808080',
+                category TEXT,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_by TEXT,
+                is_active BOOLEAN DEFAULT 1
+            )
+        """)
+        print("DB: Tabelle 'crm_tags' erstellt/überprüft.")
+        
+        # 6. Tabelle: customer_tags (Many-to-Many Beziehung Kunden-Tags)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS customer_tags (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                customer_id INTEGER NOT NULL,
+                tag_id INTEGER NOT NULL,
+                assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                assigned_by TEXT,
+                FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
+                FOREIGN KEY (tag_id) REFERENCES crm_tags(id) ON DELETE CASCADE,
+                UNIQUE(customer_id, tag_id)
+            )
+        """)
+        print("DB: Tabelle 'customer_tags' erstellt/überprüft.")
+        
+        # 7. Tabelle: user_dashboard_settings (Dashboard Widget-Konfiguration)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS user_dashboard_settings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT NOT NULL UNIQUE,
+                widget_config TEXT,
+                auto_refresh_enabled BOOLEAN DEFAULT 0,
+                refresh_interval INTEGER DEFAULT 60,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        print("DB: Tabelle 'user_dashboard_settings' erstellt/überprüft.")
+        
+        # 8. Tabelle: sales_targets (Verkaufsziele für Forecasting - Task 18)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sales_targets (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                target_name TEXT NOT NULL,
+                target_type TEXT NOT NULL,
+                assigned_to TEXT,
+                period_type TEXT NOT NULL,
+                period_start DATE NOT NULL,
+                period_end DATE NOT NULL,
+                target_value REAL NOT NULL,
+                target_unit TEXT DEFAULT 'EUR',
+                current_value REAL DEFAULT 0,
+                status TEXT DEFAULT 'active',
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_by TEXT
+            )
+        """)
+        print("DB: Tabelle 'sales_targets' erstellt/überprüft.")
+        
+        # 9. Tabelle: sales_forecasts (Sales Forecasts - Task 18)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sales_forecasts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                target_id INTEGER,
+                forecast_period TEXT NOT NULL,
+                period_start DATE NOT NULL,
+                period_end DATE NOT NULL,
+                forecast_value REAL NOT NULL,
+                confidence_level REAL,
+                forecast_method TEXT,
+                pipeline_data TEXT,
+                calculation_details TEXT,
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_by TEXT,
+                FOREIGN KEY(target_id) REFERENCES sales_targets(id) ON DELETE SET NULL
+            )
+        """)
+        print("DB: Tabelle 'sales_forecasts' erstellt/überprüft.")
+        
+        # 10. Erweitere projects Tabelle um Angebots-Felder
         projects_new_columns = {
             'offer_status': 'TEXT DEFAULT "draft"',
             'offer_sent_date': 'DATE',
@@ -2700,7 +2846,7 @@ def create_crm_enhancement_tables(conn: sqlite3.Connection) -> None:
                     else:
                         print(f"DB WARNUNG: Konnte Spalte '{col_name}' nicht hinzufügen: {e}")
         
-        # 6. Erstelle Indizes für Performance
+        # 11. Erstelle Indizes für Performance
         indices = [
             ("idx_project_calculations_project_id", "project_calculations", "project_id"),
             ("idx_project_calculations_version", "project_calculations", "version"),
@@ -2714,6 +2860,157 @@ def create_crm_enhancement_tables(conn: sqlite3.Connection) -> None:
             ("idx_crm_reminders_due_date", "crm_reminders", "due_date"),
             ("idx_crm_reminders_status", "crm_reminders", "status"),
             ("idx_projects_offer_status", "projects", "offer_status"),
+            ("idx_crm_tags_name", "crm_tags", "name"),
+            ("idx_crm_tags_category", "crm_tags", "category"),
+            ("idx_customer_tags_customer_id", "customer_tags", "customer_id"),
+            ("idx_customer_tags_tag_id", "customer_tags", "tag_id"),
+            ("idx_sales_targets_period", "sales_targets", "period_start"),
+            ("idx_sales_targets_assigned", "sales_targets", "assigned_to"),
+            ("idx_sales_targets_status", "sales_targets", "status"),
+            ("idx_sales_forecasts_period", "sales_forecasts", "period_start"),
+            ("idx_sales_forecasts_target", "sales_forecasts", "target_id"),
+        ]
+        
+        for index_name, table_name, column_name in indices:
+            try:
+                cursor.execute(f"CREATE INDEX IF NOT EXISTS {index_name} ON {table_name}({column_name})")
+                print(f"DB: Index '{index_name}' erstellt/überprüft.")
+            except sqlite3.OperationalError as e:
+                print(f"DB WARNUNG: Index '{index_name}' konnte nicht erstellt werden: {e}")
+        
+        # 12. E-Mail-Integration Tabellen (Task 9)
+        try:
+            from crm.features.email_manager import create_email_tables
+            create_email_tables(conn)
+            print("DB: E-Mail-Integrationstabellen erstellt/überprüft.")
+        except ImportError:
+            print("DB WARNUNG: E-Mail-Manager-Modul nicht verfügbar, überspringe E-Mail-Tabellen.")
+        except Exception as e:
+            print(f"DB WARNUNG: Fehler beim Erstellen der E-Mail-Tabellen: {e}")
+        
+        conn.commit()
+        print("DB: CRM-Erweiterungstabellen erfolgreich erstellt/aktualisiert.")
+        
+    except Exception as e:
+        print(f"DB FEHLER beim Erstellen der CRM-Erweiterungstabellen: {e}")
+        traceback.print_exc()
+        conn.rollback()
+        raise
+
+
+def create_knowledge_base_tables(conn: sqlite3.Connection) -> None:
+    """Erstellt alle Tabellen für die Wissensdatenbank (Task 17).
+    
+    Erstellt folgende Tabellen:
+    - kb_articles: Wissensdatenbank-Artikel
+    - kb_categories: Kategorien-Hierarchie
+    - kb_ratings: Artikel-Bewertungen
+    - kb_articles_fts: Volltextsuche-Index
+    
+    Args:
+        conn: SQLite Datenbankverbindung
+    """
+    cursor = conn.cursor()
+    
+    try:
+        # 1. Tabelle: kb_categories (Kategorien-Hierarchie)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS kb_categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                parent_id INTEGER,
+                description TEXT,
+                icon TEXT,
+                sort_order INTEGER DEFAULT 0,
+                is_active BOOLEAN DEFAULT 1,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_by TEXT,
+                FOREIGN KEY (parent_id) REFERENCES kb_categories(id) ON DELETE CASCADE
+            )
+        """)
+        print("DB: Tabelle 'kb_categories' erstellt/überprüft.")
+        
+        # 2. Tabelle: kb_articles (Wissensdatenbank-Artikel)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS kb_articles (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                content TEXT NOT NULL,
+                category_id INTEGER,
+                tags TEXT,
+                author TEXT,
+                is_published BOOLEAN DEFAULT 0,
+                is_featured BOOLEAN DEFAULT 0,
+                view_count INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                published_at TIMESTAMP,
+                FOREIGN KEY (category_id) REFERENCES kb_categories(id) ON DELETE SET NULL
+            )
+        """)
+        print("DB: Tabelle 'kb_articles' erstellt/überprüft.")
+        
+        # 3. Tabelle: kb_ratings (Artikel-Bewertungen)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS kb_ratings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                article_id INTEGER NOT NULL,
+                user_id TEXT,
+                rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
+                comment TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (article_id) REFERENCES kb_articles(id) ON DELETE CASCADE,
+                UNIQUE(article_id, user_id)
+            )
+        """)
+        print("DB: Tabelle 'kb_ratings' erstellt/überprüft.")
+        
+        # 4. Volltextsuche-Index (SQLite FTS5)
+        cursor.execute("""
+            CREATE VIRTUAL TABLE IF NOT EXISTS kb_articles_fts USING fts5(
+                title,
+                content,
+                tags,
+                content='kb_articles',
+                content_rowid='id'
+            )
+        """)
+        print("DB: FTS5-Index 'kb_articles_fts' erstellt/überprüft.")
+        
+        # 5. Trigger für automatische FTS-Aktualisierung bei INSERT
+        cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS kb_articles_ai AFTER INSERT ON kb_articles BEGIN
+                INSERT INTO kb_articles_fts(rowid, title, content, tags)
+                VALUES (new.id, new.title, new.content, new.tags);
+            END
+        """)
+        print("DB: Trigger 'kb_articles_ai' erstellt/überprüft.")
+        
+        # 6. Trigger für automatische FTS-Aktualisierung bei UPDATE
+        cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS kb_articles_au AFTER UPDATE ON kb_articles BEGIN
+                UPDATE kb_articles_fts SET title = new.title, content = new.content, tags = new.tags
+                WHERE rowid = new.id;
+            END
+        """)
+        print("DB: Trigger 'kb_articles_au' erstellt/überprüft.")
+        
+        # 7. Trigger für automatische FTS-Aktualisierung bei DELETE
+        cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS kb_articles_ad AFTER DELETE ON kb_articles BEGIN
+                DELETE FROM kb_articles_fts WHERE rowid = old.id;
+            END
+        """)
+        print("DB: Trigger 'kb_articles_ad' erstellt/überprüft.")
+        
+        # 8. Erstelle Indizes für Performance
+        indices = [
+            ("idx_kb_articles_category_id", "kb_articles", "category_id"),
+            ("idx_kb_articles_is_published", "kb_articles", "is_published"),
+            ("idx_kb_articles_created_at", "kb_articles", "created_at"),
+            ("idx_kb_categories_parent_id", "kb_categories", "parent_id"),
+            ("idx_kb_categories_sort_order", "kb_categories", "sort_order"),
+            ("idx_kb_ratings_article_id", "kb_ratings", "article_id"),
         ]
         
         for index_name, table_name, column_name in indices:
@@ -2724,10 +3021,10 @@ def create_crm_enhancement_tables(conn: sqlite3.Connection) -> None:
                 print(f"DB WARNUNG: Index '{index_name}' konnte nicht erstellt werden: {e}")
         
         conn.commit()
-        print("DB: CRM-Erweiterungstabellen erfolgreich erstellt/aktualisiert.")
+        print("DB: Wissensdatenbank-Tabellen erfolgreich erstellt/aktualisiert.")
         
     except Exception as e:
-        print(f"DB FEHLER beim Erstellen der CRM-Erweiterungstabellen: {e}")
+        print(f"DB FEHLER beim Erstellen der Wissensdatenbank-Tabellen: {e}")
         traceback.print_exc()
         conn.rollback()
         raise
@@ -2786,6 +3083,9 @@ def migrate_crm_enhancements() -> bool:
         try:
             # 3. CRM-Erweiterungstabellen erstellen
             create_crm_enhancement_tables(conn)
+            
+            # 3b. Wissensdatenbank-Tabellen erstellen
+            create_knowledge_base_tables(conn)
             
             # 4. Schema-Version aktualisieren
             cursor = conn.cursor()

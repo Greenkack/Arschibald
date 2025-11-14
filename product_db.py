@@ -3,9 +3,36 @@
 import os
 import sqlite3
 import sys  # KORREKTUR: sys-Modul importieren
+import time
 import traceback
 from datetime import datetime
 from typing import Any
+
+# Monitoring Infrastructure
+try:
+    from app_tracing import app_tracer
+    from app_evaluation import track_success, track_error, evaluate_performance
+    MONITORING_AVAILABLE = True
+    
+    def trace_product_db(func):
+        """Decorator for product database operations tracing."""
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            operation_name = f"product_db.{func.__name__}"
+            try:
+                with app_tracer.create_span(operation_name, {"function": func.__name__}):
+                    result = func(*args, **kwargs)
+                    track_success(operation_name)
+                    evaluate_performance(operation_name, time.time() - start_time)
+                    return result
+            except Exception as e:
+                track_error(operation_name, e)
+                raise
+        return wrapper
+except ImportError:
+    MONITORING_AVAILABLE = False
+    def trace_product_db(func):
+        return func
 __all__ = [
     'DB_AVAILABLE',
     'add_product',
@@ -458,7 +485,7 @@ def get_product_by_id(product_id: int | float) -> dict[str, Any] | None:
     finally:
         conn.close()
 
-
+@trace_product_db
 def get_product_by_model_name(model_name: str) -> dict[str, Any] | None:
     if not model_name or not model_name.strip():
         print("product_db.get_product_by_model_name: Modellname darf nicht leer sein.")
@@ -742,8 +769,10 @@ def calculate_selling_price(product_id: int | float) -> dict[str, Any] | None:
     elif margin_type == 'fixed':
         margin_amount = margin_value
         selling_price = purchase_price + margin_amount
-        margin_percentage = (margin_amount / purchase_price *
-                             100.0) if purchase_price > 0 else 0.0
+        if purchase_price != 0:
+            margin_percentage = (margin_amount / purchase_price * 100.0) if purchase_price > 0 else 0.0
+        else:
+            margin_percentage = 0.0
     else:
         # Invalid margin type, return purchase price
         return {

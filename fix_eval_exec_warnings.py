@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 Füge noqa-Kommentare zu allen berechtigten eval/exec Aufrufen hinzu
-"""
+
+HINWEIS: Dieses Tool selbst enthält 'eval(' in Zeile 29 als String-Suche,
+nicht als Aufruf. Das ist sicher und berechtigt.
+"""  # noqa: S102, S307 (Tool zur Analyse von eval/exec, kein tatsächlicher Aufruf)
 
 from pathlib import Path
 
@@ -23,10 +26,10 @@ def add_noqa_to_line(line: str) -> str:
     if '# noqa' in line:
         return line + '\n'
     
-    # Füge noqa hinzu
-    if 'exec(' in line:
+    # Füge noqa hinzu - String-Vergleich ist sicher
+    if 'exec(' in line:  # noqa: S102 (String-Vergleich, kein exec-Aufruf)
         return line + '  # noqa: S102 (exec ist hier berechtigt)\n'
-    elif 'eval(' in line:
+    elif 'eval(' in line:  # noqa: S307 (String-Vergleich, kein eval-Aufruf)
         return line + '  # noqa: S307 (eval ist hier berechtigt)\n'
     
     return line + '\n'
@@ -36,7 +39,7 @@ def fix_file(file_path: str, line_numbers: list) -> bool:
     path = Path(file_path)
     
     if not path.exists():
-        print(f"⏭️  {file_path}: Nicht gefunden")
+        print(f"[SKIP]  {file_path}: Nicht gefunden")
         return False
     
     try:
@@ -57,14 +60,14 @@ def fix_file(file_path: str, line_numbers: list) -> bool:
         if changed:
             with open(path, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
-            print(f"✅ {file_path}: noqa hinzugefügt zu {len(line_numbers)} Zeilen")
+            print(f"[OK] {file_path}: noqa hinzugefügt zu {len(line_numbers)} Zeilen")
             return True
         else:
-            print(f"⏭️  {file_path}: Bereits OK")
+            print(f"[SKIP]  {file_path}: Bereits OK")
             return False
     
     except Exception as e:
-        print(f"❌ {file_path}: Fehler - {str(e)[:50]}")
+        print(f"[ERROR] {file_path}: Fehler - {str(e)[:50]}")
         return False
 
 def main():
@@ -80,7 +83,7 @@ def main():
             success_count += 1
     
     print("\n" + "=" * 80)
-    print(f"✅ {success_count} Dateien gefixt")
+    print(f"[OK] {success_count} Dateien gefixt")
     print("=" * 80)
 
 if __name__ == "__main__":

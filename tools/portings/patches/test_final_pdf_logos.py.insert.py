@@ -11,7 +11,7 @@ from pdf_generator import generate_offer_pdf_with_main_templates
 # --- DEF BLOCK START: func create_test_pdf_with_logos ---
 def create_test_pdf_with_logos():
     """Erstelle Test-PDF mit Logos"""
-    print("🔧 ERSTELLE TEST-PDF MIT LOGOS")
+    print("[TOOL] ERSTELLE TEST-PDF MIT LOGOS")
     print("=" * 50)
 
     # Test-Daten mit bekannten Logo-Herstellern
@@ -69,7 +69,7 @@ def create_test_pdf_with_logos():
         with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp_file:
             temp_pdf_path = tmp_file.name
 
-        print(f"📄 Erstelle PDF: {temp_pdf_path}")
+        print(f"[FILE] Erstelle PDF: {temp_pdf_path}")
 
         # PDF generieren (nur Template-Version)
         pdf_bytes = generate_offer_pdf_with_main_templates(
@@ -85,16 +85,16 @@ def create_test_pdf_with_logos():
                 f.write(pdf_bytes)
 
             file_size = len(pdf_bytes)
-            print("✅ PDF erfolgreich erstellt!")
+            print("[OK] PDF erfolgreich erstellt!")
             print(f"   Datei: {temp_pdf_path}")
             print(f"   Größe: {file_size:,} Bytes")
-            print("\n💡 Öffne die PDF-Datei und prüfe Seite 4 auf die Logos!")
+            print("\n[IDEA] Öffne die PDF-Datei und prüfe Seite 4 auf die Logos!")
             return temp_pdf_path
-        print("❌ PDF-Generierung fehlgeschlagen")
+        print("[ERROR] PDF-Generierung fehlgeschlagen")
         return None
 
     except Exception as e:
-        print(f"❌ Fehler bei PDF-Generierung: {e}")
+        print(f"[ERROR] Fehler bei PDF-Generierung: {e}")
         import traceback
         traceback.print_exc()
         return None

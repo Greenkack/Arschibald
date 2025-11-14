@@ -71,9 +71,9 @@ def update_products_with_png():
             success = update_product_image(product_id, png_b64)
             if success:
                 updated += 1
-                print("  ✓ PNG-Bild gesetzt")
+                print("  [OK] PNG-Bild gesetzt")
             else:
-                print("  ✗ Fehler")
+                print("  [ERROR] Fehler")
 
         print(f"\nErgebnis: {updated} Produkte mit PNG-Bildern aktualisiert")
 

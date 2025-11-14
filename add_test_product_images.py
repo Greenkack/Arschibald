@@ -52,9 +52,9 @@ def add_test_images_to_products():
                 success = update_product_image(product_id, test_image_b64)
                 if success:
                     updated_count += 1
-                    print("  ✓ Bild hinzugefügt")
+                    print("  [OK] Bild hinzugefügt")
                 else:
-                    print("  ✗ Fehler beim Hinzufügen")
+                    print("  [ERROR] Fehler beim Hinzufügen")
             else:
                 print(f"Überspringe {model_name} (hat bereits Bild: {len(current_image)} Zeichen)")
 
@@ -80,10 +80,10 @@ def verify_images():
             image_data = product.get('image_base64', '')
 
             if image_data and len(image_data) > 50:
-                status = f"✓ {len(image_data)} Zeichen"
+                status = f"[OK] {len(image_data)} Zeichen"
                 with_images += 1
             else:
-                status = f"✗ {len(image_data) if image_data else 0} Zeichen"
+                status = f"[ERROR] {len(image_data) if image_data else 0} Zeichen"
                 without_images += 1
 
             print(f"{model_name} ({brand}): {status}")

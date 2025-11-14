@@ -49,7 +49,7 @@ try:
     ROOF_TYPE_LOGIC_AVAILABLE = True
 except ImportError:
     ROOF_TYPE_LOGIC_AVAILABLE = False
-    print("⚠️ Roof-type-specific logic not available, using generic placement")
+    print("[WARNING] Roof-type-specific logic not available, using generic placement")
 
 
 # TASK 13: Position cache for performance
@@ -138,7 +138,7 @@ def check_module_collision(
             "collision": True,
             "type": "boundary",
             "message": (
-                f"⚠️ Modul überschreitet linke Dachkante "
+                f"[WARNING] Modul überschreitet linke Dachkante "
                 f"(Modul-Kante: {module_left:.2f}m < Dachkante: {roof_left:.2f}m)"
             ),
             "colliding_index": None
@@ -149,7 +149,7 @@ def check_module_collision(
             "collision": True,
             "type": "boundary",
             "message": (
-                f"⚠️ Modul überschreitet rechte Dachkante "
+                f"[WARNING] Modul überschreitet rechte Dachkante "
                 f"(Modul-Kante: {module_right:.2f}m > Dachkante: {roof_right:.2f}m)"
             ),
             "colliding_index": None
@@ -160,7 +160,7 @@ def check_module_collision(
             "collision": True,
             "type": "boundary",
             "message": (
-                f"⚠️ Modul überschreitet untere Dachkante "
+                f"[WARNING] Modul überschreitet untere Dachkante "
                 f"(Modul-Kante: {module_bottom:.2f}m < Dachkante: {roof_bottom:.2f}m)"
             ),
             "colliding_index": None
@@ -171,7 +171,7 @@ def check_module_collision(
             "collision": True,
             "type": "boundary",
             "message": (
-                f"⚠️ Modul überschreitet obere Dachkante "
+                f"[WARNING] Modul überschreitet obere Dachkante "
                 f"(Modul-Kante: {module_top:.2f}m > Dachkante: {roof_top:.2f}m)"
             ),
             "colliding_index": None
@@ -194,7 +194,7 @@ def check_module_collision(
                 "collision": True,
                 "type": "module",
                 "message": (
-                    f"⚠️ Modul überlappt mit bestehendem Modul #{idx + 1} "
+                    f"[WARNING] Modul überlappt mit bestehendem Modul #{idx + 1} "
                     f"(Abstand: X={dx:.2f}m, Y={dy:.2f}m)"
                 ),
                 "colliding_index": idx
@@ -204,7 +204,7 @@ def check_module_collision(
     return {
         "collision": False,
         "type": "none",
-        "message": "✓ Keine Kollision erkannt",
+        "message": "[OK] Keine Kollision erkannt",
         "colliding_index": None
     }
 
@@ -303,7 +303,7 @@ def handle_auto_placement(
         # TASK 13: Limit module quantity for performance
         # Requirement 10.5: Begrenzung auf maximal 200 Module
         if module_quantity > MAX_MODULES:
-            print(f"⚠️ Module quantity limited to {MAX_MODULES} for performance")
+            print(f"[WARNING] Module quantity limited to {MAX_MODULES} for performance")
             module_quantity = MAX_MODULES
         # Requirement 11.1: Validate roof dimensions (> 0)
         if roof_length <= 0:
@@ -312,7 +312,7 @@ def handle_auto_placement(
                 "positions": [],
                 "count": 0,
                 "message": (
-                    "❌ Fehler: Dachlänge muss größer als 0 sein "
+                    "[ERROR] Fehler: Dachlänge muss größer als 0 sein "
                     f"(aktuell: {roof_length:.2f}m)"
                 )
             }
@@ -323,7 +323,7 @@ def handle_auto_placement(
                 "positions": [],
                 "count": 0,
                 "message": (
-                    "❌ Fehler: Dachbreite muss größer als 0 sein "
+                    "[ERROR] Fehler: Dachbreite muss größer als 0 sein "
                     f"(aktuell: {roof_width:.2f}m)"
                 )
             }
@@ -335,7 +335,7 @@ def handle_auto_placement(
                 "positions": [],
                 "count": 0,
                 "message": (
-                    "❌ Fehler: Modulanzahl muss größer als 0 sein "
+                    "[ERROR] Fehler: Modulanzahl muss größer als 0 sein "
                     f"(aktuell: {module_quantity})"
                 )
             }
@@ -347,7 +347,7 @@ def handle_auto_placement(
                 "positions": [],
                 "count": 0,
                 "message": (
-                    "❌ Fehler: Dach-Dimensionen unrealistisch groß "
+                    "[ERROR] Fehler: Dach-Dimensionen unrealistisch groß "
                     f"(Länge: {roof_length:.2f}m, Breite: {roof_width:.2f}m)"
                 )
             }
@@ -358,7 +358,7 @@ def handle_auto_placement(
                 "positions": [],
                 "count": 0,
                 "message": (
-                    "❌ Fehler: Modulanzahl zu groß "
+                    "[ERROR] Fehler: Modulanzahl zu groß "
                     f"(aktuell: {module_quantity}, Maximum: 1000)"
                 )
             }
@@ -390,7 +390,7 @@ def handle_auto_placement(
                         "positions": [],
                         "count": 0,
                         "message": (
-                            "⚠️ Keine Module konnten platziert werden. "
+                            "[WARNING] Keine Module konnten platziert werden. "
                             "Die Dachfläche ist zu klein oder die Ränder zu groß."
                         )
                     }
@@ -405,12 +405,12 @@ def handle_auto_placement(
                 actual_count = len(positions_3d)
                 if actual_count < module_quantity:
                     message = (
-                        f"✓ {actual_count} Module platziert "
+                        f"[OK] {actual_count} Module platziert "
                         f"(gewünscht: {module_quantity}). "
                         "Nicht genug Platz für alle Module."
                     )
                 else:
-                    message = f"✓ {actual_count} Module erfolgreich platziert!"
+                    message = f"[OK] {actual_count} Module erfolgreich platziert!"
 
                 return {
                     "success": True,
@@ -420,7 +420,7 @@ def handle_auto_placement(
                 }
                 
             except Exception as roof_error:
-                print(f"⚠️ Fehler bei dachtyp-spezifischer Logik: {roof_error}")
+                print(f"[WARNING] Fehler bei dachtyp-spezifischer Logik: {roof_error}")
                 print("   Fallback zu generischer Grid-Berechnung")
                 # Fall through to generic logic below
         
@@ -432,7 +432,7 @@ def handle_auto_placement(
         )
         
         if cache_key in _position_cache:
-            print(f"✓ Using cached positions for {module_quantity} modules")
+            print(f"[OK] Using cached positions for {module_quantity} modules")
             grid_positions_2d = _position_cache[cache_key]
         else:
             # Requirement 11.3: Try-Catch around grid calculation
@@ -449,7 +449,7 @@ def handle_auto_placement(
                 # TASK 13: Cache the result for future use
                 # Requirement 10.5: Caching von berechneten Positionen
                 _position_cache[cache_key] = grid_positions_2d
-                print(f"✓ Cached positions for {module_quantity} modules")
+                print(f"[OK] Cached positions for {module_quantity} modules")
                 
             except Exception as grid_error:
                 # Requirement 11.4: Meaningful error messages
@@ -458,7 +458,7 @@ def handle_auto_placement(
                     "positions": [],
                     "count": 0,
                     "message": (
-                        f"❌ Fehler bei der Grid-Berechnung: {str(grid_error)}"
+                        f"[ERROR] Fehler bei der Grid-Berechnung: {str(grid_error)}"
                     )
                 }
 
@@ -468,7 +468,7 @@ def handle_auto_placement(
                 "positions": [],
                 "count": 0,
                 "message": (
-                    "⚠️ Keine Module konnten platziert werden. "
+                    "[WARNING] Keine Module konnten platziert werden. "
                     "Die Dachfläche ist zu klein oder die Ränder zu groß."
                 )
             }
@@ -603,7 +603,7 @@ def handle_auto_placement(
                 "positions": [],
                 "count": 0,
                 "message": (
-                    f"❌ Fehler bei der Positions-Berechnung: "
+                    f"[ERROR] Fehler bei der Positions-Berechnung: "
                     f"{str(conv_error)}"
                 )
             }
@@ -618,12 +618,12 @@ def handle_auto_placement(
         actual_count = len(positions_3d)
         if actual_count < module_quantity:
             message = (
-                f"✓ {actual_count} Module platziert "
+                f"[OK] {actual_count} Module platziert "
                 f"(gewünscht: {module_quantity}). "
                 "Nicht genug Platz für alle Module."
             )
         else:
-            message = f"✓ {actual_count} Module erfolgreich platziert!"
+            message = f"[OK] {actual_count} Module erfolgreich platziert!"
 
         return {
             "success": True,
@@ -639,7 +639,7 @@ def handle_auto_placement(
         st.session_state["placed_module_count"] = previous_count
         
         error_message = (
-            f"❌ Unerwarteter Fehler bei der automatischen Platzierung: "
+            f"[ERROR] Unerwarteter Fehler bei der automatischen Platzierung: "
             f"{str(e)}. Vorheriger Zustand wiederhergestellt."
         )
         print(error_message)
@@ -681,12 +681,12 @@ def handle_reset_placement() -> Dict[str, Any]:
 
         return {
             "success": True,
-            "message": "✓ Alle Module wurden zurückgesetzt"
+            "message": "[OK] Alle Module wurden zurückgesetzt"
         }
 
     except Exception as e:
         # Requirement 11.2: Error handling
-        error_message = f"❌ Fehler beim Zurücksetzen: {str(e)}"
+        error_message = f"[ERROR] Fehler beim Zurücksetzen: {str(e)}"
         print(error_message)
 
         return {
@@ -868,14 +868,14 @@ def handle_manual_add(
         return {
             "success": True,
             "message": (
-                f"✓ Modul hinzugefügt an Position "
+                f"[OK] Modul hinzugefügt an Position "
                 f"({x:.2f}, {y:.2f}, {z:.2f})"
             )
         }
 
     except Exception as e:
         # Requirement 11.2, 11.4: Error handling
-        error_message = f"❌ Fehler beim Hinzufügen: {str(e)}"
+        error_message = f"[ERROR] Fehler beim Hinzufügen: {str(e)}"
         print(error_message)
 
         return {
@@ -913,7 +913,7 @@ def handle_remove_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module zum Entfernen vorhanden"
+                "message": "[WARNING] Keine Module zum Entfernen vorhanden"
             }
 
         positions = st.session_state["placed_module_positions"]
@@ -922,14 +922,14 @@ def handle_remove_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module zum Entfernen vorhanden"
+                "message": "[WARNING] Keine Module zum Entfernen vorhanden"
             }
 
         if not selected_indices:
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module ausgewählt"
+                "message": "[WARNING] Keine Module ausgewählt"
             }
 
         # Remove modules at selected indices (in reverse order to maintain
@@ -951,12 +951,12 @@ def handle_remove_selected(
         return {
             "success": True,
             "count": removed_count,
-            "message": f"✓ {removed_count} Module entfernt"
+            "message": f"[OK] {removed_count} Module entfernt"
         }
 
     except Exception as e:
         # Requirement 11.2, 11.4: Error handling
-        error_message = f"❌ Fehler beim Entfernen: {str(e)}"
+        error_message = f"[ERROR] Fehler beim Entfernen: {str(e)}"
         print(error_message)
 
         return {
@@ -1046,7 +1046,7 @@ def handle_move_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module zum Verschieben vorhanden"
+                "message": "[WARNING] Keine Module zum Verschieben vorhanden"
             }
 
         positions = st.session_state["placed_module_positions"]
@@ -1055,14 +1055,14 @@ def handle_move_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module zum Verschieben vorhanden"
+                "message": "[WARNING] Keine Module zum Verschieben vorhanden"
             }
 
         if not selected_indices:
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module ausgewählt"
+                "message": "[WARNING] Keine Module ausgewählt"
             }
 
         # Validate offset values
@@ -1070,7 +1070,7 @@ def handle_move_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Offset zu klein (mindestens 0.01m erforderlich)"
+                "message": "[WARNING] Offset zu klein (mindestens 0.01m erforderlich)"
             }
 
         # Calculate new positions for selected modules
@@ -1125,7 +1125,7 @@ def handle_move_selected(
                         "success": False,
                         "count": 0,
                         "message": (
-                            f"❌ Verschieben nicht möglich: "
+                            f"[ERROR] Verschieben nicht möglich: "
                             f"{collision_result['message']}"
                         )
                     }
@@ -1145,13 +1145,13 @@ def handle_move_selected(
                 "success": True,
                 "count": moved_count,
                 "message": (
-                    f"✓ {moved_count} Module verschoben "
+                    f"[OK] {moved_count} Module verschoben "
                     f"(Δx={offset_x:+.2f}m, Δy={offset_y:+.2f}m)"
                 )
             }
 
     except Exception as e:
-        error_message = f"❌ Fehler beim Verschieben: {str(e)}"
+        error_message = f"[ERROR] Fehler beim Verschieben: {str(e)}"
         print(error_message)
         import traceback
         traceback.print_exc()
@@ -1201,7 +1201,7 @@ def handle_rotate_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module zum Drehen vorhanden"
+                "message": "[WARNING] Keine Module zum Drehen vorhanden"
             }
 
         positions = st.session_state["placed_module_positions"]
@@ -1210,14 +1210,14 @@ def handle_rotate_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module zum Drehen vorhanden"
+                "message": "[WARNING] Keine Module zum Drehen vorhanden"
             }
 
         if not selected_indices:
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine Module ausgewählt"
+                "message": "[WARNING] Keine Module ausgewählt"
             }
 
         # Validate rotation angle
@@ -1225,7 +1225,7 @@ def handle_rotate_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Rotationswinkel zu klein (mindestens 1° erforderlich)"
+                "message": "[WARNING] Rotationswinkel zu klein (mindestens 1° erforderlich)"
             }
 
         # Calculate center of selected modules
@@ -1238,7 +1238,7 @@ def handle_rotate_selected(
             return {
                 "success": False,
                 "count": 0,
-                "message": "⚠️ Keine gültigen Module ausgewählt"
+                "message": "[WARNING] Keine gültigen Module ausgewählt"
             }
 
         # Calculate centroid (center point) of selected modules
@@ -1283,13 +1283,13 @@ def handle_rotate_selected(
             "success": True,
             "count": rotated_count,
             "message": (
-                f"✓ {rotated_count} Module gedreht "
+                f"[OK] {rotated_count} Module gedreht "
                 f"({rotation_degrees:+.1f}° um Zentrum)"
             )
         }
 
     except Exception as e:
-        error_message = f"❌ Fehler beim Drehen: {str(e)}"
+        error_message = f"[ERROR] Fehler beim Drehen: {str(e)}"
         print(error_message)
         import traceback
         traceback.print_exc()

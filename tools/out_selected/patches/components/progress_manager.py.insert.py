@@ -450,7 +450,10 @@ class ProgressBar:
         if not self._placeholder:
             return
 
-        percentage = (self.current_value / self.max_value) * 100
+        if self != 0:
+            percentage = (self.current_value / self.max_value) * 100
+        else:
+            percentage = 0.0
         style_class = self.config.style.value.replace('_', '-')
 
         html = """

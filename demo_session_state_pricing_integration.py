@@ -66,7 +66,7 @@ sys.modules['streamlit'] = mock_st
 def demonstrate_session_state_integration():
     """Demonstrate the enhanced pricing system session state integration"""
 
-    print("🔧 Enhanced Pricing System - Session State Integration Demo")
+    print("[TOOL] Enhanced Pricing System - Session State Integration Demo")
     print("=" * 60)
 
     # 1. Setup session state with pricing modifications
@@ -183,14 +183,14 @@ def demonstrate_session_state_integration():
         f"   Different data produces different key: {
             cache_key != cache_key3}")
 
-    print("\n✅ Session State Integration Demo Complete!")
+    print("\n[OK] Session State Integration Demo Complete!")
     print("\nKey Features Demonstrated:")
-    print("- ✓ Pricing modifications collection from session state")
-    print("- ✓ Enhanced pricing calculation with session state storage")
-    print("- ✓ Cache management and invalidation")
-    print("- ✓ Real-time pricing updates on component changes")
-    print("- ✓ Cache key generation and consistency")
-    print("- ✓ Backward compatibility with legacy pricing fields")
+    print("- [OK] Pricing modifications collection from session state")
+    print("- [OK] Enhanced pricing calculation with session state storage")
+    print("- [OK] Cache management and invalidation")
+    print("- [OK] Real-time pricing updates on component changes")
+    print("- [OK] Cache key generation and consistency")
+    print("- [OK] Backward compatibility with legacy pricing fields")
 
 
 def demonstrate_real_time_updates():
@@ -238,7 +238,7 @@ def demonstrate_real_time_updates():
                 f"     - Dynamic keys: {details.get('dynamic_keys_count', 0)}")
             print(f"     - Cache key: {details.get('cache_key', 'N/A')}")
 
-    print("\n✅ Real-time Updates Demo Complete!")
+    print("\n[OK] Real-time Updates Demo Complete!")
 
 
 if __name__ == "__main__":
@@ -252,6 +252,6 @@ if __name__ == "__main__":
         print("and provides real-time pricing updates with intelligent caching.")
 
     except Exception as e:
-        print(f"\n❌ Demo failed with error: {e}")
+        print(f"\n[ERROR] Demo failed with error: {e}")
         import traceback
         traceback.print_exc()

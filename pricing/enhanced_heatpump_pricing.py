@@ -787,7 +787,10 @@ class EnhancedHeatPumpPricingEngine(PricingEngine):
         total_heating_capacity = system_specs.get("heating_demand_kw", 0.0)
         if total_heating_capacity > 0:
             # Price per kW heating capacity
-            price_per_kw = base_result.base_price / total_heating_capacity
+            if total_heating_capacity != 0:
+                price_per_kw = base_result.base_price / total_heating_capacity
+            else:
+                price_per_kw = 0.0
             hp_keys["HP_PRICE_PER_KW_HEATING"] = round(price_per_kw, 2)
 
             # Estimated annual energy consumption (rough calculation)
@@ -885,7 +888,10 @@ class EnhancedHeatPumpPricingEngine(PricingEngine):
                 total_capacity += product["power_kw"] * quantity
 
         if total_capacity > 0:
-            ratio = total_capacity / heating_demand
+            if heating_demand != 0:
+                ratio = total_capacity / heating_demand
+            else:
+                ratio = 0.0
             if ratio < 0.8 or ratio > 1.5:
                 self.logger.warning(
                     f"Heat pump capacity mismatch: demand {heating_demand}kW, "

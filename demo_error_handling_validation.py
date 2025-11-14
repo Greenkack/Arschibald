@@ -43,13 +43,13 @@ def demo_validation():
         result = validator.validate_cell_input(value)
         
         if result.valid:
-            print(f"✓ Gültig - Typ: {result.type}")
+            print(f"[OK] Gültig - Typ: {result.type}")
             if result.warning:
-                print(f"⚠️  Warnung: {result.warning}")
+                print(f"[WARNING]  Warnung: {result.warning}")
             if result.parsed_value is not None:
                 print(f"   Wert: {result.parsed_value}")
         else:
-            print(f"✗ Ungültig - {result.error_code}")
+            print(f"[ERROR] Ungültig - {result.error_code}")
             print(f"   Fehler: {result.error}")
             if result.suggestions:
                 print("   Vorschläge:")
@@ -89,10 +89,10 @@ def demo_circular_reference_detection():
     print("-" * 70)
     circular_path = detector.detect_circular_reference((0, 0), "=A1")
     if circular_path:
-        print("✗ Zirkelbezug erkannt!")
+        print("[ERROR] Zirkelbezug erkannt!")
         print(f"   Pfad: {circular_path}")
     else:
-        print("✓ Kein Zirkelbezug")
+        print("[OK] Kein Zirkelbezug")
     
     # Test 2: Indirekter Zirkelbezug
     print("\nTest 2: Indirekter Zirkelbezug (A1→B1→C1→A1)")
@@ -109,12 +109,12 @@ def demo_circular_reference_detection():
     circular_path = detector.detect_circular_reference((0, 0), "=B1")
     
     if circular_path:
-        print("✗ Zirkelbezug erkannt!")
+        print("[ERROR] Zirkelbezug erkannt!")
         from excel.excel_utils import cell_to_a1
         path_str = " → ".join([cell_to_a1(r, c) for r, c in circular_path])
         print(f"   Pfad: {path_str}")
     else:
-        print("✓ Kein Zirkelbezug")
+        print("[OK] Kein Zirkelbezug")
     
     # Test 3: Kein Zirkelbezug
     print("\nTest 3: Kein Zirkelbezug (A1→B1→C1)")
@@ -130,9 +130,9 @@ def demo_circular_reference_detection():
     circular_path = detector.detect_circular_reference((0, 0), "=B1")
     
     if circular_path:
-        print("✗ Zirkelbezug erkannt!")
+        print("[ERROR] Zirkelbezug erkannt!")
     else:
-        print("✓ Kein Zirkelbezug")
+        print("[OK] Kein Zirkelbezug")
 
 
 def demo_formula_validation_details():
@@ -162,15 +162,15 @@ def demo_formula_validation_details():
         result = validator.validate_formula(formula)
         
         if result.valid:
-            print("✓ Gültig")
+            print("[OK] Gültig")
             if result.warning:
-                print(f"⚠️  Warnung: {result.warning}")
+                print(f"[WARNING]  Warnung: {result.warning}")
                 if result.suggestions:
                     print("   Vorschläge:")
                     for suggestion in result.suggestions[:2]:
                         print(f"   • {suggestion}")
         else:
-            print(f"✗ Ungültig - {result.error_code}")
+            print(f"[ERROR] Ungültig - {result.error_code}")
             print(f"   {result.error}")
             if result.suggestions:
                 print("   Vorschläge:")
@@ -207,7 +207,7 @@ def demo_integration_with_manager():
     
     cell = manager.get_cell(1, 1)
     if cell.is_error():
-        print(f"✗ Fehler erkannt: {cell.error}")
+        print(f"[ERROR] Fehler erkannt: {cell.error}")
         tooltip = get_error_tooltip(cell.error)
         print(f"   {tooltip['description']}")
     
@@ -219,7 +219,7 @@ def demo_integration_with_manager():
     
     cell = manager.get_cell(2, 0)
     if cell.is_error():
-        print(f"✗ Fehler erkannt: {cell.error}")
+        print(f"[ERROR] Fehler erkannt: {cell.error}")
         tooltip = get_error_tooltip(cell.error)
         print(f"   {tooltip['description']}")
 
@@ -243,12 +243,12 @@ def main():
     print("ZUSAMMENFASSUNG")
     print("=" * 70)
     print("\nImplementierte Features:")
-    print("✓ Alle Fehlertypen (#ERROR!, #REF!, #DIV/0!, #CIRCULAR!, etc.)")
-    print("✓ Tooltip-Hilfe mit Titel, Beschreibung und Lösungsvorschlägen")
-    print("✓ Input-Validierung für Formeln, Zahlen, Text, Datum, Boolean")
-    print("✓ Zirkelbezug-Erkennung (direkt und indirekt)")
-    print("✓ Integration mit ExcelManager")
-    print("✓ Umfassende UI-Integration")
+    print("[OK] Alle Fehlertypen (#ERROR!, #REF!, #DIV/0!, #CIRCULAR!, etc.)")
+    print("[OK] Tooltip-Hilfe mit Titel, Beschreibung und Lösungsvorschlägen")
+    print("[OK] Input-Validierung für Formeln, Zahlen, Text, Datum, Boolean")
+    print("[OK] Zirkelbezug-Erkennung (direkt und indirekt)")
+    print("[OK] Integration mit ExcelManager")
+    print("[OK] Umfassende UI-Integration")
     print("\nAlle Requirements 10.1-10.5 erfüllt!")
     print("=" * 70)
 

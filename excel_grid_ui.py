@@ -319,7 +319,7 @@ def _render_toolbar():
     with col2:
         paste_disabled = manager is None or active_cell is None or st.session_state.excel_grid_clipboard is None
         if st.button(
-            "📄 Einfügen",
+            "[FILE] Einfügen",
             help="Fügt kopierten Inhalt ein (Strg+V)",
             disabled=paste_disabled,
             use_container_width=True
@@ -414,7 +414,7 @@ def _render_toolbar():
     with col4:
         # Matrix-Validierung (Task 4.2)
         if st.button(
-            "✓ Validieren",
+            "[OK] Validieren",
             help="Validiert die Matrix-Struktur für Preisberechnung",
             disabled=export_disabled,
             use_container_width=True
@@ -438,7 +438,7 @@ def _render_toolbar():
     
     with col1:
         if st.button(
-            "📊 Kleine Anlage",
+            "[CHART] Kleine Anlage",
             help="Erstellt Beispiel-Matrix für 10-25 Module",
             use_container_width=True
         ):
@@ -446,7 +446,7 @@ def _render_toolbar():
     
     with col2:
         if st.button(
-            "📊 Mittlere Anlage",
+            "[CHART] Mittlere Anlage",
             help="Erstellt Beispiel-Matrix für 30-50 Module",
             use_container_width=True
         ):
@@ -454,7 +454,7 @@ def _render_toolbar():
     
     with col3:
         if st.button(
-            "📊 Große Anlage",
+            "[CHART] Große Anlage",
             help="Erstellt Beispiel-Matrix für 60-100 Module",
             use_container_width=True
         ):
@@ -512,7 +512,7 @@ def _render_formula_bar():
     manager = st.session_state.excel_grid_manager
     
     if manager is None:
-        st.info("💡 Wählen Sie eine Matrix aus, um die Formelleiste zu nutzen")
+        st.info("[IDEA] Wählen Sie eine Matrix aus, um die Formelleiste zu nutzen")
         st.text_input(
             "Formelleiste",
             value="",
@@ -541,13 +541,13 @@ def _render_formula_bar():
             if cell.is_formula():
                 st.markdown("🔢 **Formel**")
             elif cell.is_error():
-                st.markdown("⚠️ **Fehler**")
+                st.markdown("[WARNING] **Fehler**")
             elif cell.data_type == "number":
                 st.markdown("🔢 **Zahl**")
             elif cell.data_type == "text":
-                st.markdown("📝 **Text**")
+                st.markdown("[NOTE] **Text**")
             else:
-                st.markdown("📄 **Wert**")
+                st.markdown("[FILE] **Wert**")
         
         with col2:
             # Zeige Fehler falls vorhanden mit vollständigem Tooltip
@@ -557,11 +557,11 @@ def _render_formula_bar():
                 # Zeige vollständigen Tooltip mit Lösungen
                 error_tooltip = _get_error_tooltip_full(cell.error)
                 
-                with st.expander("🔍 Fehlerdetails & Lösungen", expanded=True):
+                with st.expander("[SEARCH] Fehlerdetails & Lösungen", expanded=True):
                     st.markdown(f"**{error_tooltip['title']}**")
                     st.caption(error_tooltip['description'])
                     
-                    st.markdown("**💡 Lösungsvorschläge:**")
+                    st.markdown("**[IDEA] Lösungsvorschläge:**")
                     for i, solution in enumerate(error_tooltip['solutions'], 1):
                         st.caption(f"{i}. {solution}")
         
@@ -599,14 +599,14 @@ def _render_formula_bar():
         
         # Zeige aktuelle Formel/Wert prominent in einem Info-Container (Task 3.3: mit Typ-Kennzeichnung)
         if cell.is_formula():
-            st.info(f"📝 **Aktuelle Formel:** `{formula_value}`")
+            st.info(f"[NOTE] **Aktuelle Formel:** `{formula_value}`")
         elif formula_value:
             if cell.data_type == "text":
-                st.info(f"📝 **Aktueller Text:** `{formula_value}`")
+                st.info(f"[NOTE] **Aktueller Text:** `{formula_value}`")
             elif cell.data_type == "number":
                 st.info(f"🔢 **Aktuelle Zahl:** `{formula_value}`")
             else:
-                st.info(f"📝 **Aktueller Wert:** `{formula_value}`")
+                st.info(f"[NOTE] **Aktueller Wert:** `{formula_value}`")
         
         # Eingabefeld für Formel/Wert mit Validierung
         col1, col2 = st.columns([5, 1])
@@ -622,7 +622,7 @@ def _render_formula_bar():
         
         with col2:
             # Button zum Übernehmen der Änderung
-            if st.button("✓ Übernehmen", key=f"apply_{cell_ref}", use_container_width=True):
+            if st.button("[OK] Übernehmen", key=f"apply_{cell_ref}", use_container_width=True):
                 if new_value != formula_value:
                     # Validiere und aktualisiere Zelle mit umfassender Fehlerbehandlung
                     validation_result = _validate_cell_input(new_value)
@@ -632,7 +632,7 @@ def _render_formula_bar():
                         if validation_result['type'] == 'formula':
                             circular_check = _check_circular_reference(manager, row, col, new_value)
                             if circular_check['has_circular']:
-                                st.error(f"⚠️ Zirkelbezug erkannt: {circular_check['message']}")
+                                st.error(f"[WARNING] Zirkelbezug erkannt: {circular_check['message']}")
                                 
                                 # Zeige Zirkel-Pfad
                                 if circular_check['path']:
@@ -642,7 +642,7 @@ def _render_formula_bar():
                                 
                                 # Zeige Lösungsvorschläge
                                 error_tooltip = _get_error_tooltip_full('#CIRCULAR!')
-                                with st.expander("💡 Lösungsvorschläge"):
+                                with st.expander("[IDEA] Lösungsvorschläge"):
                                     for solution in error_tooltip['solutions']:
                                         st.caption(f"• {solution}")
                                 return
@@ -653,20 +653,20 @@ def _render_formula_bar():
                         # WICHTIG: Speichere IMMER in Datenbank, damit Änderungen beim Neuladen erhalten bleiben
                         _save_matrix_to_database(manager)
                         
-                        st.success(f"✓ Zelle {cell_ref} aktualisiert und gespeichert")
+                        st.success(f"[OK] Zelle {cell_ref} aktualisiert und gespeichert")
                         
                         # Zeige Warnung falls vorhanden
                         if validation_result.get('warning'):
-                            st.warning(f"⚠️ {validation_result['warning']}")
+                            st.warning(f"[WARNING] {validation_result['warning']}")
                             if validation_result.get('suggestions'):
-                                with st.expander("💡 Vorschläge"):
+                                with st.expander("[IDEA] Vorschläge"):
                                     for suggestion in validation_result['suggestions']:
                                         st.caption(f"• {suggestion}")
                         
                         _safe_rerun()
                     else:
                         # Zeige Validierungsfehler mit Details
-                        st.error(f"⚠️ Validierungsfehler: {validation_result['error']}")
+                        st.error(f"[WARNING] Validierungsfehler: {validation_result['error']}")
                         
                         # Zeige Fehlercode falls vorhanden
                         if validation_result.get('error_code'):
@@ -674,7 +674,7 @@ def _render_formula_bar():
                         
                         # Zeige Vorschläge
                         if validation_result.get('suggestions'):
-                            with st.expander("💡 Verbesserungsvorschläge", expanded=True):
+                            with st.expander("[IDEA] Verbesserungsvorschläge", expanded=True):
                                 for i, suggestion in enumerate(validation_result['suggestions'], 1):
                                     st.caption(f"{i}. {suggestion}")
         
@@ -688,7 +688,7 @@ def _render_formula_bar():
                 _show_formula_details(manager, cell, cell_ref)
     
     else:
-        st.info("💡 Klicken Sie auf eine Zelle im Grid, um sie zu bearbeiten")
+        st.info("[IDEA] Klicken Sie auf eine Zelle im Grid, um sie zu bearbeiten")
         st.text_input(
             "Formelleiste",
             value="",
@@ -751,7 +751,7 @@ def _render_grid():
         )
         if st.button("➕ Zeile hinzufügen", use_container_width=True, help="Fügt eine neue Zeile an der angegebenen Position ein"):
             manager.add_row(position=row_position - 1)  # 0-basiert
-            st.success(f"✓ Zeile an Position {row_position} hinzugefügt")
+            st.success(f"[OK] Zeile an Position {row_position} hinzugefügt")
             _safe_rerun()
     
     with col2:
@@ -768,7 +768,7 @@ def _render_grid():
         )
         if st.button("➕ Spalte hinzufügen", use_container_width=True, help="Fügt eine neue Spalte an der angegebenen Position ein"):
             manager.add_column(position=col_position - 1)  # 0-basiert
-            st.success(f"✓ Spalte an Position {col_position} hinzugefügt")
+            st.success(f"[OK] Spalte an Position {col_position} hinzugefügt")
             _safe_rerun()
     
     with col3:
@@ -783,10 +783,10 @@ def _render_grid():
             key="delete_row_input",
             help="Zeilennummer, die gelöscht werden soll"
         )
-        if st.button("🗑️ Zeile löschen", use_container_width=True, help="Löscht die angegebene Zeile und passt Formeln an"):
+        if st.button("[DELETE] Zeile löschen", use_container_width=True, help="Löscht die angegebene Zeile und passt Formeln an"):
             if info['rows'] > 1:
                 manager.delete_row(row_to_delete - 1)  # 0-basiert
-                st.success(f"✓ Zeile {row_to_delete} gelöscht")
+                st.success(f"[OK] Zeile {row_to_delete} gelöscht")
                 _safe_rerun()
             else:
                 st.error("Mindestens eine Zeile muss vorhanden sein")
@@ -800,11 +800,11 @@ def _render_grid():
             key="delete_col_input",
             help="Spalte, die gelöscht werden soll"
         )
-        if st.button("🗑️ Spalte löschen", use_container_width=True, help="Löscht die angegebene Spalte und passt Formeln an"):
+        if st.button("[DELETE] Spalte löschen", use_container_width=True, help="Löscht die angegebene Spalte und passt Formeln an"):
             if info['columns'] > 1:
                 col_idx = ord(col_to_delete[0]) - 65  # A=0, B=1, ...
                 manager.delete_column(col_idx)
-                st.success(f"✓ Spalte {col_to_delete} gelöscht")
+                st.success(f"[OK] Spalte {col_to_delete} gelöscht")
                 _safe_rerun()
             else:
                 st.error("Mindestens eine Spalte muss vorhanden sein")
@@ -831,7 +831,7 @@ def _render_grid():
                 row, col = a1_to_cell(cell_ref_input)
                 if row < info['rows'] and col < info['columns']:
                     st.session_state.excel_grid_active_cell = (row, col)
-                    st.success(f"✓ Zelle {cell_ref_input} ausgewählt")
+                    st.success(f"[OK] Zelle {cell_ref_input} ausgewählt")
                     _safe_rerun()
                 else:
                     st.error(f"Zelle {cell_ref_input} existiert nicht in dieser Matrix")
@@ -847,11 +847,11 @@ def _render_grid():
             cell_format = st.session_state.excel_grid_cell_format.get((row, col), "auto")
             
             if cell.is_error():
-                st.error(f"📍 {active_ref} - ⚠️ {cell.error}")
+                st.error(f"📍 {active_ref} - [WARNING] {cell.error}")
             elif cell.is_formula():
                 st.info(f"📍 {active_ref} - 🔢 Formel ({cell_format})")
             else:
-                st.success(f"📍 {active_ref} - 📄 {cell_format}")
+                st.success(f"📍 {active_ref} - [FILE] {cell_format}")
     
     # Tastaturnavigation (Task 10)
     if st.session_state.excel_grid_keyboard_nav_enabled:
@@ -975,7 +975,7 @@ def _render_grid():
     error_cells = _get_error_cells(manager)
     if error_cells:
         st.markdown("---")
-        st.warning(f"⚠️ {len(error_cells)} Zelle(n) mit Fehlern")
+        st.warning(f"[WARNING] {len(error_cells)} Zelle(n) mit Fehlern")
         
         with st.expander("Fehler anzeigen"):
             for row, col, error in error_cells:
@@ -986,7 +986,7 @@ def _render_grid():
                     st.caption(f"Formel: `{cell.formula}`")
                 error_help = _get_error_help(error)
                 if error_help:
-                    st.caption(f"💡 {error_help}")
+                    st.caption(f"[IDEA] {error_help}")
 
 
 def _validate_cell_input(value: str, expected_type: Optional[str] = None) -> Dict[str, Any]:
@@ -1328,7 +1328,7 @@ def _copy_cell(manager: ExcelManager, cell_pos: Tuple[int, int]):
     }
     
     cell_ref = cell_to_a1(row, col)
-    st.success(f"✓ Zelle {cell_ref} kopiert")
+    st.success(f"[OK] Zelle {cell_ref} kopiert")
 
 
 def _paste_cell(manager: ExcelManager, cell_pos: Tuple[int, int]):
@@ -1358,7 +1358,7 @@ def _paste_cell(manager: ExcelManager, cell_pos: Tuple[int, int]):
         st.session_state.excel_grid_cell_format[(row, col)] = clipboard['format']
     
     cell_ref = cell_to_a1(row, col)
-    st.success(f"✓ Inhalt in Zelle {cell_ref} eingefügt")
+    st.success(f"[OK] Inhalt in Zelle {cell_ref} eingefügt")
 
 
 def _apply_cell_format(manager: ExcelManager, row: int, col: int, format_type: str):
@@ -1419,7 +1419,7 @@ def _apply_cell_format(manager: ExcelManager, row: int, col: int, format_type: s
                 cell.formatted_value = None
             
             cell_ref = cell_to_a1(row, col)
-            st.success(f"✓ Format '{format_type}' auf Zelle {cell_ref} angewendet")
+            st.success(f"[OK] Format '{format_type}' auf Zelle {cell_ref} angewendet")
             
         except Exception as e:
             st.error(f"Fehler beim Formatieren: {str(e)}")
@@ -1473,7 +1473,7 @@ def _save_matrix_to_database(manager: ExcelManager, show_success: bool = True) -
         if success:
             if show_success:
                 matrix = manager.get_matrix()
-                st.success(f"✓ Matrix '{matrix.name}' erfolgreich gespeichert!")
+                st.success(f"[OK] Matrix '{matrix.name}' erfolgreich gespeichert!")
             return True
         else:
             st.error("Fehler beim Speichern der Matrix")
@@ -1533,7 +1533,7 @@ def _get_unsaved_changes_indicator(manager: ExcelManager) -> str:
     if manager.has_unsaved_changes:
         return "● "  # Roter Punkt für ungespeicherte Änderungen
     else:
-        return "✓ "  # Häkchen für gespeichert
+        return "[OK] "  # Häkchen für gespeichert
 
 
 def _render_new_matrix_dialog():
@@ -1705,7 +1705,7 @@ def _render_matrix_management_dialog():
             with action_col4:
                 # Löschen
                 if st.button(
-                    "🗑️ Löschen",
+                    "[DELETE] Löschen",
                     key=f"delete_{matrix['id']}",
                     use_container_width=True,
                     help="Matrix unwiderruflich löschen",
@@ -1887,7 +1887,7 @@ def _render_delete_confirm_dialog():
             return
         
         with st.form("delete_matrix_form"):
-            st.subheader("⚠️ Matrix löschen")
+            st.subheader("[WARNING] Matrix löschen")
             
             st.warning(
                 f"**Achtung:** Sie sind dabei, die Matrix '{matrix_data['meta']['name']}' "
@@ -1910,7 +1910,7 @@ def _render_delete_confirm_dialog():
             col1, col2 = st.columns(2)
             with col1:
                 submitted = st.form_submit_button(
-                    "🗑️ Endgültig löschen",
+                    "[DELETE] Endgültig löschen",
                     use_container_width=True,
                     type="primary"
                 )
@@ -1978,7 +1978,7 @@ def _render_csv_import_dialog():
             
             # Zeige Validierungsergebnis
             if validation['valid']:
-                st.success("✓ CSV-Datei ist gültig")
+                st.success("[OK] CSV-Datei ist gültig")
                 
                 # Zeige erkannte Parameter
                 col1, col2, col3, col4 = st.columns(4)
@@ -1992,7 +1992,7 @@ def _render_csv_import_dialog():
                     st.metric("Spalten", validation['num_cols'])
                 
                 if validation['has_formulas']:
-                    st.info("ℹ️ Die Datei enthält Formeln (beginnen mit =)")
+                    st.info("[INFO] Die Datei enthält Formeln (beginnen mit =)")
                 
                 # Zeige Vorschau
                 st.markdown("### Vorschau")
@@ -2112,7 +2112,7 @@ def _render_csv_import_dialog():
                                     
                                     # Speichere Zellwerte
                                     if manager.save_to_database():
-                                        st.success(f"✓ CSV-Datei erfolgreich importiert als '{matrix_name}'!")
+                                        st.success(f"[OK] CSV-Datei erfolgreich importiert als '{matrix_name}'!")
                                         st.session_state.excel_grid_show_import_dialog = False
                                         st.session_state.excel_grid_selected_matrix_id = matrix_id
                                         st.session_state.excel_grid_manager = manager
@@ -2135,7 +2135,7 @@ def _render_csv_import_dialog():
             
             else:
                 # Zeige Validierungsfehler
-                st.error("⚠️ CSV-Datei ist ungültig")
+                st.error("[WARNING] CSV-Datei ist ungültig")
                 for error in validation['errors']:
                     st.error(f"- {error}")
                 
@@ -2152,7 +2152,7 @@ def _render_csv_import_dialog():
         st.info("Wählen Sie eine CSV-Datei aus, um fortzufahren")
         
         # Hilfe-Text
-        with st.expander("ℹ️ Hilfe zum CSV-Import"):
+        with st.expander("[INFO] Hilfe zum CSV-Import"):
             st.markdown("""
             **Unterstützte Formate:**
             - CSV-Dateien mit verschiedenen Delimitern (`;`, `,`, Tab, `|`)
@@ -2202,19 +2202,19 @@ def render_excel_grid_ui():
     _reset_rerun_flag()
     
     # Titel
-    st.title("📊 Excel Preis Matrix")
+    st.title("[CHART] Excel Preis Matrix")
     
     # Beschreibung in Expander
-    with st.expander("ℹ️ Was ist die Excel Preis Matrix?", expanded=False):
+    with st.expander("[INFO] Was ist die Excel Preis Matrix?", expanded=False):
         st.markdown("""
         Erstellen und bearbeiten Sie Excel-ähnliche Preismatrizen mit Formelunterstützung.
         
         **Features:**
-        - 📊 Excel-ähnliche Grid-Darstellung
+        - [CHART] Excel-ähnliche Grid-Darstellung
         - 🔢 Formelunterstützung (SUM, AVERAGE, IF, etc.)
         - 💾 Auto-Save Funktion
         - 📥 CSV/Excel Import & Export
-        - 🎨 Zellformatierung (Währung, Prozent, Datum)
+        - [DESIGN] Zellformatierung (Währung, Prozent, Datum)
         - ⌨️ Tastaturnavigation
         """)
     
@@ -2224,7 +2224,7 @@ def render_excel_grid_ui():
         
         with col1:
             st.markdown("""
-            ### 🎯 Schnellstart
+            ### [TARGET] Schnellstart
             
             **1. Matrix erstellen:**
             - Klicken Sie auf "➕ Neue Matrix"
@@ -2236,7 +2236,7 @@ def render_excel_grid_ui():
             - Geben Sie einen Wert oder eine Formel ein
             - Formeln beginnen mit `=`
             
-            **📝 Text vs. 🔢 Zahlen (Neu!):**
+            **[NOTE] Text vs. 🔢 Zahlen (Neu!):**
             - **Text:** Wird ohne Formatierung gespeichert
               - Beispiel: "10kWh Speicher", "Kein Speicher"
             - **Zahlen:** Automatisch erkannt für Berechnungen
@@ -2279,7 +2279,7 @@ def render_excel_grid_ui():
             - **CSV Import**: Laden Sie bestehende Daten
             - **CSV/Excel Export**: Speichern Sie Ihre Matrix
             
-            💡 **Tipp**: Detaillierte Hilfe finden Sie ganz unten unter "ℹ️ Hilfe & Tastenkombinationen"
+            [IDEA] **Tipp**: Detaillierte Hilfe finden Sie ganz unten unter "[INFO] Hilfe & Tastenkombinationen"
             """)
     
     # Zeige Dialoge
@@ -2329,8 +2329,8 @@ def render_excel_grid_ui():
     _render_delete_confirm_dialog()
     
     # Erweiterte Hilfe-Sektion (Task 10)
-    with st.expander("ℹ️ Hilfe & Tastenkombinationen", expanded=False):
-        tab1, tab2, tab3, tab4 = st.tabs(["📊 Excel-Funktionen", "⌨️ Tastenkombinationen", "🎨 Formatierung", "❓ Fehler & Tipps"])
+    with st.expander("[INFO] Hilfe & Tastenkombinationen", expanded=False):
+        tab1, tab2, tab3, tab4 = st.tabs(["[CHART] Excel-Funktionen", "⌨️ Tastenkombinationen", "[DESIGN] Formatierung", "❓ Fehler & Tipps"])
         
         with tab1:
             st.markdown("""
@@ -2558,7 +2558,7 @@ def _render_csv_export_dialog():
         # Zeige geschätzten Dateinamen
         from excel.excel_export import generate_filename
         filename = generate_filename(matrix.name, 'csv', include_timestamp)
-        st.info(f"📄 Dateiname: `{filename}`")
+        st.info(f"[FILE] Dateiname: `{filename}`")
         
         col1, col2 = st.columns(2)
         with col1:
@@ -2594,8 +2594,8 @@ def _render_csv_export_dialog():
                     use_container_width=True
                 )
                 
-                st.success(f"✓ CSV-Datei erfolgreich erstellt!")
-                st.info(f"📊 Größe: {len(csv_data)} Bytes")
+                st.success(f"[OK] CSV-Datei erfolgreich erstellt!")
+                st.info(f"[CHART] Größe: {len(csv_data)} Bytes")
                 
             except Exception as e:
                 st.error(f"Fehler beim Export: {str(e)}")
@@ -2629,7 +2629,7 @@ def _render_excel_export_dialog():
     
     if not openpyxl_available:
         st.error(
-            "⚠️ openpyxl ist nicht installiert. "
+            "[WARNING] openpyxl ist nicht installiert. "
             "Bitte installieren Sie es mit: `pip install openpyxl`"
         )
         if st.button("Schließen", use_container_width=True):
@@ -2652,7 +2652,7 @@ def _render_excel_export_dialog():
         st.metric("Zellen", info['cell_count'])
     
     if info['formula_count'] > 0:
-        st.info(f"ℹ️ Die Matrix enthält {info['formula_count']} Formel(n)")
+        st.info(f"[INFO] Die Matrix enthält {info['formula_count']} Formel(n)")
     
     st.markdown("---")
     
@@ -2681,7 +2681,7 @@ def _render_excel_export_dialog():
         # Zeige geschätzten Dateinamen
         from excel.excel_export import generate_filename
         filename = generate_filename(matrix.name, 'xlsx', include_timestamp)
-        st.info(f"📄 Dateiname: `{filename}`")
+        st.info(f"[FILE] Dateiname: `{filename}`")
         
         col1, col2 = st.columns(2)
         with col1:
@@ -2716,8 +2716,8 @@ def _render_excel_export_dialog():
                     use_container_width=True
                 )
                 
-                st.success(f"✓ Excel-Datei erfolgreich erstellt!")
-                st.info(f"📊 Größe: {len(excel_data)} Bytes")
+                st.success(f"[OK] Excel-Datei erfolgreich erstellt!")
+                st.info(f"[CHART] Größe: {len(excel_data)} Bytes")
                 
             except Exception as e:
                 st.error(f"Fehler beim Export: {str(e)}")
@@ -2762,9 +2762,9 @@ def _render_export_info_dialog():
         
         # Zeige Fehler-Status
         if export_info['has_errors']:
-            st.warning(f"⚠️ {export_info['error_count']} Zelle(n) enthalten Fehler")
+            st.warning(f"[WARNING] {export_info['error_count']} Zelle(n) enthalten Fehler")
         else:
-            st.success("✓ Keine Fehler in der Matrix")
+            st.success("[OK] Keine Fehler in der Matrix")
         
         st.markdown("---")
         
@@ -2802,17 +2802,17 @@ def _render_export_info_dialog():
         validation = validate_export(manager)
         
         if validation['warnings']:
-            st.markdown("### ⚠️ Warnungen")
+            st.markdown("### [WARNING] Warnungen")
             for warning in validation['warnings']:
                 st.warning(warning)
         
         if validation['errors']:
-            st.markdown("### ❌ Fehler")
+            st.markdown("### [ERROR] Fehler")
             for error in validation['errors']:
                 st.error(error)
         
         if not validation['warnings'] and not validation['errors']:
-            st.success("✓ Export kann ohne Probleme durchgeführt werden")
+            st.success("[OK] Export kann ohne Probleme durchgeführt werden")
         
         st.markdown("---")
         
@@ -2906,7 +2906,7 @@ def _render_validation_dialog():
         return
     
     st.markdown("---")
-    st.subheader("✓ Matrix-Validierung")
+    st.subheader("[OK] Matrix-Validierung")
     
     try:
         from price_matrix_validation import validate_matrix_for_pricing, get_validation_summary
@@ -2926,9 +2926,9 @@ def _render_validation_dialog():
         
         # Zeige Ergebnis
         if validation_result['valid']:
-            st.success("✓ Matrix ist gültig für Preisberechnung!")
+            st.success("[OK] Matrix ist gültig für Preisberechnung!")
         else:
-            st.error("✗ Matrix ist NICHT gültig für Preisberechnung")
+            st.error("[ERROR] Matrix ist NICHT gültig für Preisberechnung")
         
         # Zeige Zusammenfassung
         summary = get_validation_summary(validation_result)
@@ -2939,19 +2939,19 @@ def _render_validation_dialog():
             st.markdown("### Details")
             
             if validation_result['errors']:
-                with st.expander("❌ Fehler", expanded=True):
+                with st.expander("[ERROR] Fehler", expanded=True):
                     for idx, error in enumerate(validation_result['errors'], 1):
                         st.error(f"{idx}. {error}")
             
             if validation_result['warnings']:
-                with st.expander("⚠️ Warnungen", expanded=False):
+                with st.expander("[WARNING] Warnungen", expanded=False):
                     for idx, warning in enumerate(validation_result['warnings'], 1):
                         st.warning(f"{idx}. {warning}")
         
         # Zeige Informationen
         info = validation_result.get('info', {})
         if info:
-            with st.expander("ℹ️ Matrix-Informationen", expanded=False):
+            with st.expander("[INFO] Matrix-Informationen", expanded=False):
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
@@ -3034,7 +3034,7 @@ def _handle_example_matrix_creation():
                 return
         
         if matrix_id:
-            st.success(f"✓ Beispiel-Matrix '{name}' erfolgreich erstellt!")
+            st.success(f"[OK] Beispiel-Matrix '{name}' erfolgreich erstellt!")
             
             # Lade die neue Matrix
             st.session_state.excel_grid_selected_matrix_id = matrix_id
@@ -3045,7 +3045,7 @@ def _handle_example_matrix_creation():
             
             # Zeige Info
             st.info(
-                "💡 Die Beispiel-Matrix enthält Dummy-Daten. "
+                "[IDEA] Die Beispiel-Matrix enthält Dummy-Daten. "
                 "Sie können diese als Vorlage verwenden und anpassen."
             )
             

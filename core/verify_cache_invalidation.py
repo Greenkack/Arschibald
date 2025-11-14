@@ -31,20 +31,20 @@ def verify_basic_invalidation():
             "active": True}, tags={
             "session", "user:123"})
 
-    print("✓ Cached user profile and session")
+    print("[OK] Cached user profile and session")
     assert cache.get("user:123:profile") is not None
     assert cache.get("user:123:session") is not None
 
     # Invalidate on write
     count = invalidate_by_write("user", "123", "update")
-    print(f"✓ Invalidated {count} entries on user update")
+    print(f"[OK] Invalidated {count} entries on user update")
 
     # Verify invalidation
     assert cache.get("user:123:profile") is None
     assert cache.get("user:123:session") is None
-    print("✓ All user caches invalidated")
+    print("[OK] All user caches invalidated")
 
-    print("\n✅ TEST 1 PASSED")
+    print("\n[OK] TEST 1 PASSED")
 
 
 def verify_data_relationships():
@@ -65,7 +65,7 @@ def verify_data_relationships():
     )
 
     register_data_relationship(relationship)
-    print("✓ Registered product relationship")
+    print("[OK] Registered product relationship")
 
     # Create rule
     rule = InvalidationRule(
@@ -78,24 +78,24 @@ def verify_data_relationships():
     )
 
     register_invalidation_rule(rule)
-    print("✓ Registered cascade rule")
+    print("[OK] Registered cascade rule")
 
     # Cache related data
     cache.set("pricing:prod1", {"price": 99.99}, tags={"pricing"})
     cache.set("inventory:prod1", {"stock": 100}, tags={"inventory"})
     cache.set("calculations:prod1", {"total": 119.99}, tags={"calculations"})
 
-    print("✓ Cached product-related data")
+    print("[OK] Cached product-related data")
 
     # Trigger cascade invalidation
     count = invalidate_by_write("product", "prod1", "update")
-    print(f"✓ Cascade invalidated {count} entries")
+    print(f"[OK] Cascade invalidated {count} entries")
 
     # Verify cascade
     assert cache.get("pricing:prod1") is None
-    print("✓ Related caches invalidated via cascade")
+    print("[OK] Related caches invalidated via cascade")
 
-    print("\n✅ TEST 2 PASSED")
+    print("\n[OK] TEST 2 PASSED")
 
 
 def verify_batched_invalidation():
@@ -109,7 +109,7 @@ def verify_batched_invalidation():
 
     # Set batch delay
     set_batch_delay(50)
-    print("✓ Set batch delay to 50ms")
+    print("[OK] Set batch delay to 50ms")
 
     # Create batched rule
     rule = InvalidationRule(
@@ -121,28 +121,28 @@ def verify_batched_invalidation():
     )
 
     register_invalidation_rule(rule)
-    print("✓ Registered batched rule")
+    print("[OK] Registered batched rule")
 
     # Cache form data
     for i in range(5):
         cache.set(f"form_state:{i}", f"data_{i}", tags={"form_state"})
 
-    print("✓ Cached 5 form states")
+    print("[OK] Cached 5 form states")
 
     # Trigger batched invalidation
     for i in range(3):
         invalidate_by_write("form", f"form{i}", "update")
 
-    print("✓ Triggered 3 batched invalidations")
+    print("[OK] Triggered 3 batched invalidations")
 
     # Wait for batch
     time.sleep(0.1)
 
     # Verify invalidation
     assert cache.get("form_state:0") is None
-    print("✓ Batched invalidation executed")
+    print("[OK] Batched invalidation executed")
 
-    print("\n✅ TEST 3 PASSED")
+    print("\n[OK] TEST 3 PASSED")
 
 
 def verify_priority_ordering():
@@ -170,7 +170,7 @@ def verify_priority_ordering():
 
     register_invalidation_rule(high)
     register_invalidation_rule(low)
-    print("✓ Registered high and low priority rules")
+    print("[OK] Registered high and low priority rules")
 
     # Get stats
     stats = get_invalidation_stats()
@@ -181,9 +181,9 @@ def verify_priority_ordering():
     low_idx = rule_names.index("low_priority")
 
     assert high_idx < low_idx, "High priority should come before low priority"
-    print("✓ Rules ordered by priority (high first)")
+    print("[OK] Rules ordered by priority (high first)")
 
-    print("\n✅ TEST 4 PASSED")
+    print("\n[OK] TEST 4 PASSED")
 
 
 def verify_conditional_rules():
@@ -208,7 +208,7 @@ def verify_conditional_rules():
     )
 
     register_invalidation_rule(rule)
-    print("✓ Registered conditional rule (delete only)")
+    print("[OK] Registered conditional rule (delete only)")
 
     # Cache data
     cache.set("cache:1", "data", tags={"cache"})
@@ -216,14 +216,14 @@ def verify_conditional_rules():
     # Update should NOT invalidate
     invalidate_by_write("resource", "res1", "update")
     assert cache.get("cache:1") is not None
-    print("✓ Update operation did not invalidate (condition not met)")
+    print("[OK] Update operation did not invalidate (condition not met)")
 
     # Delete SHOULD invalidate
     invalidate_by_write("resource", "res1", "delete")
     assert cache.get("cache:1") is None
-    print("✓ Delete operation invalidated (condition met)")
+    print("[OK] Delete operation invalidated (condition met)")
 
-    print("\n✅ TEST 5 PASSED")
+    print("\n[OK] TEST 5 PASSED")
 
 
 def verify_statistics():
@@ -234,19 +234,19 @@ def verify_statistics():
 
     stats = get_invalidation_stats()
 
-    print(f"✓ Total rules: {stats['rules']}")
-    print(f"✓ Total relationships: {len(stats['relationships'])}")
-    print(f"✓ Batch delay: {stats['batch_delay_ms']}ms")
-    print(f"✓ Total invalidations: {stats['total_invalidations']}")
-    print(f"✓ Immediate: {stats['immediate_invalidations']}")
-    print(f"✓ Batched: {stats['batched_invalidations']}")
-    print(f"✓ Cascade: {stats['cascade_invalidations']}")
+    print(f"[OK] Total rules: {stats['rules']}")
+    print(f"[OK] Total relationships: {len(stats['relationships'])}")
+    print(f"[OK] Batch delay: {stats['batch_delay_ms']}ms")
+    print(f"[OK] Total invalidations: {stats['total_invalidations']}")
+    print(f"[OK] Immediate: {stats['immediate_invalidations']}")
+    print(f"[OK] Batched: {stats['batched_invalidations']}")
+    print(f"[OK] Cascade: {stats['cascade_invalidations']}")
 
     assert stats['rules'] > 0, "Should have registered rules"
     assert len(stats['relationships']
                ) > 0, "Should have registered relationships"
 
-    print("\n✅ TEST 6 PASSED")
+    print("\n[OK] TEST 6 PASSED")
 
 
 def main():
@@ -264,27 +264,27 @@ def main():
         verify_statistics()
 
         print("\n" + "=" * 60)
-        print("✅ ALL VERIFICATION TESTS PASSED")
+        print("[OK] ALL VERIFICATION TESTS PASSED")
         print("=" * 60)
         print("\nTagged Cache Invalidation System is working correctly!")
         print("\nFeatures verified:")
-        print("  ✓ Basic invalidation on database writes")
-        print("  ✓ Smart invalidation with data relationships")
-        print("  ✓ Batched invalidation for performance")
-        print("  ✓ Priority-based rule execution")
-        print("  ✓ Conditional rule execution")
-        print("  ✓ Statistics and monitoring")
+        print("  [OK] Basic invalidation on database writes")
+        print("  [OK] Smart invalidation with data relationships")
+        print("  [OK] Batched invalidation for performance")
+        print("  [OK] Priority-based rule execution")
+        print("  [OK] Conditional rule execution")
+        print("  [OK] Statistics and monitoring")
         print("\nRequirements satisfied:")
-        print("  ✓ Requirement 4.3: Related cache entries invalidated immediately")
-        print("  ✓ Requirement 4.7: Namespaced keys prevent collisions")
+        print("  [OK] Requirement 4.3: Related cache entries invalidated immediately")
+        print("  [OK] Requirement 4.7: Namespaced keys prevent collisions")
 
         return True
 
     except AssertionError as e:
-        print(f"\n❌ VERIFICATION FAILED: {e}")
+        print(f"\n[ERROR] VERIFICATION FAILED: {e}")
         return False
     except Exception as e:
-        print(f"\n❌ ERROR: {e}")
+        print(f"\n[ERROR] ERROR: {e}")
         import traceback
         traceback.print_exc()
         return False

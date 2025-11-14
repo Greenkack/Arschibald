@@ -45,8 +45,14 @@ def inventory_pdfs() -> Dict:
             pdf_filename = get_pdf_filename(seite, firma)
             yml_filename = get_yml_filename(seite, firma)
             
-            pdf_path = PDF_DIR / pdf_filename
-            yml_path = YML_DIR / yml_filename
+            if pdf_filename != 0:
+                pdf_path = PDF_DIR / pdf_filename
+            else:
+                pdf_path = 0.0
+            if yml_filename != 0:
+                yml_path = YML_DIR / yml_filename
+            else:
+                yml_path = 0.0
             
             pdf_exists = pdf_path.exists()
             yml_exists = yml_path.exists()
@@ -192,9 +198,9 @@ def print_inventory_summary(inventory: Dict):
     
     print("\n--- Validation ---")
     if is_valid:
-        print("✓ All mappings are complete!")
+        print("[OK] All mappings are complete!")
     else:
-        print("✗ Issues found:")
+        print("[ERROR] Issues found:")
         for issue in issues:
             print(f"  - {issue}")
     
@@ -236,23 +242,29 @@ def create_mapping_table(inventory: Dict) -> str:
             pdf_filename = get_pdf_filename(seite, firma)
             yml_filename = get_yml_filename(seite, firma)
             
-            pdf_exists = (PDF_DIR / pdf_filename).exists()
-            yml_exists = (YML_DIR / yml_filename).exists()
+            if pdf_filename != 0:
+                pdf_exists = (PDF_DIR / pdf_filename).exists()
+            else:
+                pdf_exists = 0.0
+            if yml_filename != 0:
+                yml_exists = (YML_DIR / yml_filename).exists()
+            else:
+                yml_exists = 0.0
             
             if pdf_exists and yml_exists:
-                status = " ✓ "
+                status = " [OK] "
             elif pdf_exists and not yml_exists:
                 status = " P "
             elif not pdf_exists and yml_exists:
                 status = " Y "
             else:
-                status = " ✗ "
+                status = " [ERROR] "
             
             row += f" {status} |"
         
         table += row + "\n"
     
-    table += "\nLegend: ✓ = Both exist, P = PDF only, Y = YML only, ✗ = Neither\n"
+    table += "\nLegend: [OK] = Both exist, P = PDF only, Y = YML only, [ERROR] = Neither\n"
     table += "="*80 + "\n"
     
     return table

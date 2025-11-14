@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def test_seite6_data_generation():
     """Teste die Datengenerierung für Seite 6"""
-    print("🔍 Teste Seite 6 Datengenerierung...")
+    print("[SEARCH] Teste Seite 6 Datengenerierung...")
 
     try:
         # Import der benötigten Module
@@ -63,7 +63,7 @@ def test_seite6_data_generation():
             "email": "mail@tommatech.de"
         }
 
-        print("📊 Generiere dynamische Daten...")
+        print("[CHART] Generiere dynamische Daten...")
         dynamic_data = build_dynamic_data(
             test_project_data,
             test_analysis_results,
@@ -84,7 +84,7 @@ def test_seite6_data_generation():
             print(f"  {key}: {value}")
 
         # Teste Speicher-Relationen direkt
-        print("\n🔧 Teste Speicher-Relationen direkt:")
+        print("\n[TOOL] Teste Speicher-Relationen direkt:")
         storage_kwh = 12.09
         daily_consumption = 6000 / 365  # ~16.44 kWh/Tag
         daily_production = 8251.92 / 365  # ~22.61 kWh/Tag
@@ -103,7 +103,7 @@ def test_seite6_data_generation():
         return True
 
     except Exception as e:
-        print(f"❌ Fehler bei Datengenerierung: {e}")
+        print(f"[ERROR] Fehler bei Datengenerierung: {e}")
         traceback.print_exc()
         return False
 
@@ -115,7 +115,7 @@ def test_seite6_coords():
     try:
         coords_file = Path("coords/seite7.yml")
         if not coords_file.exists():
-            print(f"❌ Koordinatendatei nicht gefunden: {coords_file}")
+            print(f"[ERROR] Koordinatendatei nicht gefunden: {coords_file}")
             return False
 
         # Lade und parse Koordinaten
@@ -139,17 +139,17 @@ def test_seite6_coords():
             if text in seite6_placeholders:
                 found_placeholders.append(text)
                 print(
-                    f"  ✅ Gefunden: {text} an Position {
+                    f"  [OK] Gefunden: {text} an Position {
                         element.get('position')}")
 
         missing = set(seite6_placeholders) - set(found_placeholders)
         if missing:
-            print(f"  ❌ Fehlende Platzhalter: {missing}")
+            print(f"  [ERROR] Fehlende Platzhalter: {missing}")
 
         return len(found_placeholders) > 0
 
     except Exception as e:
-        print(f"❌ Fehler bei Koordinaten-Test: {e}")
+        print(f"[ERROR] Fehler bei Koordinaten-Test: {e}")
         traceback.print_exc()
         return False
 
@@ -168,37 +168,37 @@ def test_placeholder_mapping():
             'relation_tagverbrauch_prozent': 'storage_consumption_ratio_percent',
             'relation_pvproduktion_prozent': 'storage_production_ratio_percent'}
 
-        print("🔍 Prüfe Mappings:")
+        print("[SEARCH] Prüfe Mappings:")
         all_good = True
         for placeholder, expected_key in seite6_mappings.items():
             actual_key = PLACEHOLDER_MAPPING.get(placeholder)
             if actual_key == expected_key:
-                print(f"  ✅ {placeholder} -> {actual_key}")
+                print(f"  [OK] {placeholder} -> {actual_key}")
             else:
                 print(
-                    f"  ❌ {placeholder} -> {actual_key} (erwartet: {expected_key})")
+                    f"  [ERROR] {placeholder} -> {actual_key} (erwartet: {expected_key})")
                 all_good = False
 
         return all_good
 
     except Exception as e:
-        print(f"❌ Fehler bei Mapping-Test: {e}")
+        print(f"[ERROR] Fehler bei Mapping-Test: {e}")
         traceback.print_exc()
         return False
 
 
 def test_pdf_generation():
     """Teste die PDF-Generierung für Seite 6"""
-    print("\n📄 Teste PDF-Generierung...")
+    print("\n[FILE] Teste PDF-Generierung...")
 
     try:
         # Prüfe ob Template-PDFs existieren (OLD: page 6 -> NEW: page 7)
         template_path = Path("pdf_templates_static/notext/nt_nt_07.pdf")
         if not template_path.exists():
-            print(f"❌ Template-PDF nicht gefunden: {template_path}")
+            print(f"[ERROR] Template-PDF nicht gefunden: {template_path}")
             return False
 
-        print(f"✅ Template-PDF gefunden: {template_path}")
+        print(f"[OK] Template-PDF gefunden: {template_path}")
 
         # Teste Overlay-Generierung
         from pdf_template_engine.dynamic_overlay import generate_overlay
@@ -221,25 +221,25 @@ def test_pdf_generation():
         dynamic_data = build_dynamic_data(
             test_project_data, test_analysis_results, {})
 
-        print("🎨 Generiere Overlay...")
+        print("[DESIGN] Generiere Overlay...")
         overlay_bytes = generate_overlay(
             coords_dir, dynamic_data, total_pages=6)
 
         if overlay_bytes and len(overlay_bytes) > 0:
-            print(f"✅ Overlay generiert: {len(overlay_bytes)} bytes")
+            print(f"[OK] Overlay generiert: {len(overlay_bytes)} bytes")
             return True
-        print("❌ Overlay-Generierung fehlgeschlagen")
+        print("[ERROR] Overlay-Generierung fehlgeschlagen")
         return False
 
     except Exception as e:
-        print(f"❌ Fehler bei PDF-Generierung: {e}")
+        print(f"[ERROR] Fehler bei PDF-Generierung: {e}")
         traceback.print_exc()
         return False
 
 
 def main():
     """Hauptfunktion für Debug-Tests"""
-    print("🚀 Seite 6 Debug-Analyse startet...\n")
+    print("[LAUNCH] Seite 6 Debug-Analyse startet...\n")
 
     tests = [
         ("Platzhalter-Mapping", test_placeholder_mapping),
@@ -258,7 +258,7 @@ def main():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"❌ Test '{test_name}' fehlgeschlagen: {e}")
+            print(f"[ERROR] Test '{test_name}' fehlgeschlagen: {e}")
             results.append((test_name, False))
 
     # Zusammenfassung
@@ -268,7 +268,7 @@ def main():
 
     passed = 0
     for test_name, result in results:
-        status = "✅ BESTANDEN" if result else "❌ FEHLGESCHLAGEN"
+        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
         print(f"{test_name}: {status}")
         if result:
             passed += 1
@@ -276,7 +276,7 @@ def main():
     print(f"\nErgebnis: {passed}/{len(results)} Tests bestanden")
 
     if passed < len(results):
-        print("\n🔧 EMPFOHLENE MASSNAHMEN:")
+        print("\n[TOOL] EMPFOHLENE MASSNAHMEN:")
         print("1. Prüfe ob alle benötigten Dateien existieren")
         print("2. Überprüfe die Platzhalter-Mappings in placeholders.py")
         print("3. Stelle sicher dass die Berechnungsfunktionen korrekt arbeiten")

@@ -4,9 +4,36 @@ Finanzberechnungsmodul für PV-Anlagen mit Leasing, Annuitätenkrediten,
 Abschreibungen und Wirtschaftlichkeitsanalysen.
 """
 
+import time
 from typing import Any
 
+# Monitoring Infrastructure
+try:
+    from app_tracing import app_tracer
+    from app_evaluation import track_success, track_error, evaluate_performance
+    MONITORING_AVAILABLE = True
+    
+    def trace_financial(func):
+        """Decorator for financial operations tracing."""
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            operation_name = f"financial.{func.__name__}"
+            try:
+                with app_tracer.create_span(operation_name, {"function": func.__name__}):
+                    result = func(*args, **kwargs)
+                    track_success(operation_name)
+                    evaluate_performance(operation_name, time.time() - start_time)
+                    return result
+            except Exception as e:
+                track_error(operation_name, e)
+                raise
+        return wrapper
+except ImportError:
+    MONITORING_AVAILABLE = False
+    def trace_financial(func):
+        return func
 
+@trace_financial
 def calculate_annuity(principal: float,
                       annual_interest_rate: float,
                       duration_years: int) -> dict[str,
@@ -29,7 +56,10 @@ def calculate_annuity(principal: float,
     num_payments = duration_years * 12
 
     if monthly_rate == 0:  # Zinsfrei
-        monthly_payment = principal / num_payments
+        if num_payments != 0:
+            monthly_payment = principal / num_payments
+        else:
+            monthly_payment = 0.0
         total_interest = 0
     else:
         # Annuitätenformel
@@ -131,7 +161,10 @@ def calculate_depreciation(initial_value: float, useful_life_years: int,
     abschreibungsplan = []
 
     if method == "linear":
-        annual_depreciation = initial_value / useful_life_years
+        if useful_life_years != 0:
+            annual_depreciation = initial_value / useful_life_years
+        else:
+            annual_depreciation = 0.0
 
         for year in range(1, useful_life_years + 1):
             book_value = initial_value - (annual_depreciation * year)

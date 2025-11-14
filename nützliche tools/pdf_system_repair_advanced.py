@@ -16,7 +16,7 @@ def force_repair_all_pdf_systems():
     success_count = 0
     total_systems = 5  # Erhöht auf 5 (inkl. PV-Daten)
 
-    st.info("🔧 Starte umfassende PDF-System-Reparatur...")
+    st.info("[TOOL] Starte umfassende PDF-System-Reparatur...")
 
     # 1. TOM-90 System reparieren
     try:
@@ -31,10 +31,10 @@ def force_repair_all_pdf_systems():
         # Import testen
         st.session_state.pdf_tom90_available = True
         success_count += 1
-        st.success("✅ TOM-90 System repariert!")
+        st.success("[OK] TOM-90 System repariert!")
 
     except Exception as e:
-        st.error(f"❌ TOM-90 System: {e}")
+        st.error(f"[ERROR] TOM-90 System: {e}")
         # Fallback aktivieren
         st.session_state.pdf_tom90_available = False
 
@@ -51,10 +51,10 @@ def force_repair_all_pdf_systems():
         # Import testen
         st.session_state.pdf_mega_hybrid_available = True
         success_count += 1
-        st.success("✅ Mega Hybrid System repariert!")
+        st.success("[OK] Mega Hybrid System repariert!")
 
     except Exception as e:
-        st.error(f"❌ Mega Hybrid System: {e}")
+        st.error(f"[ERROR] Mega Hybrid System: {e}")
         st.session_state.pdf_mega_hybrid_available = False
 
     # 3. Standard PDF System reparieren
@@ -70,10 +70,10 @@ def force_repair_all_pdf_systems():
         # Import testen
         st.session_state.pdf_standard_available = True
         success_count += 1
-        st.success("✅ Standard PDF System repariert!")
+        st.success("[OK] Standard PDF System repariert!")
 
     except Exception as e:
-        st.error(f"❌ Standard PDF System: {e}")
+        st.error(f"[ERROR] Standard PDF System: {e}")
         st.session_state.pdf_standard_available = False
 
     # 4. Preview System reparieren
@@ -87,15 +87,15 @@ def force_repair_all_pdf_systems():
             from pdf_preview import show_pdf_preview_interface
             st.session_state.pdf_preview_available = True
             success_count += 1
-            st.success("✅ Preview System repariert!")
+            st.success("[OK] Preview System repariert!")
         except ImportError:
             # Fallback: Als verfügbar markieren auch ohne spezielles Modul
             st.session_state.pdf_preview_available = True
             success_count += 1
-            st.success("✅ Preview System aktiviert (Fallback)!")
+            st.success("[OK] Preview System aktiviert (Fallback)!")
 
     except Exception as e:
-        st.error(f"❌ Preview System: {e}")
+        st.error(f"[ERROR] Preview System: {e}")
         st.session_state.pdf_preview_available = False
 
     # Central PDF System aktualisieren
@@ -105,14 +105,14 @@ def force_repair_all_pdf_systems():
 
         from central_pdf_system import PDF_MANAGER
         PDF_MANAGER._initialize_systems()  # Systeme neu initialisieren
-        st.success("✅ Central PDF System aktualisiert!")
+        st.success("[OK] Central PDF System aktualisiert!")
 
     except Exception as e:
-        st.error(f"❌ Central PDF System Update: {e}")
+        st.error(f"[ERROR] Central PDF System Update: {e}")
 
     # 5. PV-Daten konsolidieren
     try:
-        st.info("🔧 Repariere PV-Daten...")
+        st.info("[TOOL] Repariere PV-Daten...")
 
         # Direkte PV-Daten-Reparatur ohne externe Module
         # Stelle sicher, dass project_data existiert
@@ -164,16 +164,16 @@ def force_repair_all_pdf_systems():
         st.session_state.selected_inverter_name = 'Standard-Wechselrichter 8kW'
         st.session_state.selected_inverter_power_kw = 8.0
 
-        st.success("✅ PV-Daten direkt repariert!")
+        st.success("[OK] PV-Daten direkt repariert!")
         success_count += 1
 
     except Exception as e:
-        st.error(f"❌ PV-Daten Reparatur: {e}")
+        st.error(f"[ERROR] PV-Daten Reparatur: {e}")
         # Minimal-Fallback
         try:
             if 'project_data' not in st.session_state:
                 st.session_state.project_data = {'project_details': {}, 'pv_details': {}}
-            st.info("ℹ️ Basis-Struktur erstellt")
+            st.info("[INFO] Basis-Struktur erstellt")
         except:
             pass
 
@@ -182,14 +182,14 @@ def force_repair_all_pdf_systems():
     if success_count == total_systems:
         st.success(f"🎉 Alle {total_systems} PDF-Systeme erfolgreich repariert!")
     else:
-        st.warning(f"⚠️ {success_count}/{total_systems} PDF-Systeme repariert")
+        st.warning(f"[WARNING] {success_count}/{total_systems} PDF-Systeme repariert")
 
     return success_count == total_systems
 
 def diagnose_pdf_system_issues():
     """Diagnostiziert PDF-System-Probleme"""
 
-    st.subheader("🔍 PDF-System-Diagnose")
+    st.subheader("[SEARCH] PDF-System-Diagnose")
 
     issues = []
     solutions = []
@@ -206,9 +206,9 @@ def diagnose_pdf_system_issues():
     for module_name, display_name in modules_to_check:
         try:
             __import__(module_name)
-            st.success(f"✅ {display_name}: Verfügbar")
+            st.success(f"[OK] {display_name}: Verfügbar")
         except ImportError as e:
-            st.error(f"❌ {display_name}: {e}")
+            st.error(f"[ERROR] {display_name}: {e}")
             issues.append(f"{display_name} nicht importierbar")
             solutions.append(f"Überprüfen Sie {module_name}.py")
 
@@ -223,24 +223,24 @@ def diagnose_pdf_system_issues():
             # Spezielle Behandlung für bestimmte Keys
             if key in ['central_pdf_custom_images', 'central_pdf_custom_text_blocks']:
                 # Leere Listen sind normal/OK
-                icon = "✅" if isinstance(value, list) else "❌"
+                icon = "[OK]" if isinstance(value, list) else "[ERROR]"
                 display_value = f"[{len(value)} items]" if isinstance(value, list) else str(value)
             elif key == 'central_pdf_generating_lock':
                 # False ist normal/OK für generating_lock
-                icon = "✅" if value is False else "⚠️"
+                icon = "[OK]" if value is False else "[WARNING]"
                 display_value = "Nicht gesperrt" if value is False else "Gesperrt"
             elif key == 'central_pdf_inclusion_options':
                 # Dict ist normal/OK
-                icon = "✅" if isinstance(value, dict) else "❌"
+                icon = "[OK]" if isinstance(value, dict) else "[ERROR]"
                 display_value = f"{{dict mit {len(value)} keys}}" if isinstance(value, dict) else str(value)
             else:
                 # Standard-Behandlung für andere Keys
-                icon = "✅" if value else "❌"
+                icon = "[OK]" if value else "[ERROR]"
                 display_value = str(value)
 
             st.write(f"{icon} {key}: {display_value}")
     else:
-        st.warning("⚠️ Keine PDF-bezogenen Session State Variablen gefunden")
+        st.warning("[WARNING] Keine PDF-bezogenen Session State Variablen gefunden")
         issues.append("Session State nicht initialisiert")
         solutions.append("PDF-Systeme neu initialisieren")
 
@@ -256,9 +256,9 @@ def diagnose_pdf_system_issues():
 
     for filename in files_to_check:
         if os.path.exists(filename):
-            st.success(f"✅ {filename}: Vorhanden")
+            st.success(f"[OK] {filename}: Vorhanden")
         else:
-            st.error(f"❌ {filename}: Fehlt")
+            st.error(f"[ERROR] {filename}: Fehlt")
             issues.append(f"{filename} nicht gefunden")
             solutions.append(f"Erstellen Sie {filename}")
 
@@ -268,7 +268,7 @@ def diagnose_pdf_system_issues():
         for i, issue in enumerate(issues):
             st.error(f"{i+1}. {issue}")
 
-        st.markdown("**💡 Lösungsvorschläge:**")
+        st.markdown("**[IDEA] Lösungsvorschläge:**")
         for i, solution in enumerate(solutions):
             st.info(f"{i+1}. {solution}")
     else:
@@ -288,13 +288,13 @@ def diagnose_pdf_system_issues():
 
         if (pv_details and pv_details.get('selected_modules')) or (project_details and project_details.get('module_quantity', 0) > 0):
             modules_ok = True
-            st.success("✅ PV-Module: Verfügbar")
+            st.success("[OK] PV-Module: Verfügbar")
         else:
-            st.error("❌ PV-Module: Fehlen")
+            st.error("[ERROR] PV-Module: Fehlen")
             issues.append("PV-Module fehlen")
             solutions.append("PV-Daten reparieren mit Reparatur-Button")
     else:
-        st.error("❌ project_data: Fehlt oder ungültig")
+        st.error("[ERROR] project_data: Fehlt oder ungültig")
         issues.append("project_data fehlt")
         solutions.append("PV-Daten reparieren")
 
@@ -304,9 +304,9 @@ def diagnose_pdf_system_issues():
         project_details = project_data.get('project_details', {})
         if project_details and (project_details.get('selected_inverter_name') or project_details.get('selected_inverter_id')):
             inverters_ok = True
-            st.success("✅ Wechselrichter: Verfügbar")
+            st.success("[OK] Wechselrichter: Verfügbar")
         else:
-            st.error("❌ Wechselrichter: Fehlen")
+            st.error("[ERROR] Wechselrichter: Fehlen")
             issues.append("Wechselrichter fehlen")
             solutions.append("PV-Daten reparieren mit Reparatur-Button")
 
@@ -315,35 +315,35 @@ def diagnose_pdf_system_issues():
     st.markdown("**Direkte PV Session State Variablen:**")
     for var in pv_session_vars:
         if var in st.session_state and st.session_state[var]:
-            st.success(f"✅ {var}: {st.session_state[var]}")
+            st.success(f"[OK] {var}: {st.session_state[var]}")
         else:
-            st.error(f"❌ {var}: Fehlt")
+            st.error(f"[ERROR] {var}: Fehlt")
 
     # Gesamtstatus
     if modules_ok and inverters_ok:
         st.success("🎉 **PV-Daten vollständig verfügbar!**")
     else:
-        st.warning("⚠️ **PV-Daten unvollständig - Reparatur erforderlich**")
+        st.warning("[WARNING] **PV-Daten unvollständig - Reparatur erforderlich**")
 
 def show_pdf_repair_interface():
     """Zeigt die PDF-Reparatur-Oberfläche"""
 
-    st.title("🔧 PDF-System Reparatur-Tool")
+    st.title("[TOOL] PDF-System Reparatur-Tool")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("🔧 Alle Systeme reparieren", type="primary"):
+        if st.button("[TOOL] Alle Systeme reparieren", type="primary"):
             force_repair_all_pdf_systems()
 
     with col2:
-        if st.button("🔍 System diagnostizieren"):
+        if st.button("[SEARCH] System diagnostizieren"):
             diagnose_pdf_system_issues()
 
     st.markdown("---")
 
     # Aktuelle Status anzeigen
-    st.subheader("📊 Aktueller System-Status")
+    st.subheader("[CHART] Aktueller System-Status")
 
     systems = {
         'Standard PDF': st.session_state.get('pdf_standard_available', False),
@@ -356,7 +356,7 @@ def show_pdf_repair_interface():
 
     for i, (system_name, available) in enumerate(systems.items()):
         with [col1, col2, col3, col4][i]:
-            icon = "✅" if available else "❌"
+            icon = "[OK]" if available else "[ERROR]"
             color = "green" if available else "red"
             st.markdown(f"**{icon} {system_name}**")
 
@@ -368,7 +368,7 @@ def show_pdf_repair_interface():
         keys_to_remove = [k for k in st.session_state.keys() if 'pdf_' in k.lower()]
         for key in keys_to_remove:
             del st.session_state[key]
-        st.success(f"✅ {len(keys_to_remove)} Session State Variablen entfernt")
+        st.success(f"[OK] {len(keys_to_remove)} Session State Variablen entfernt")
         st.rerun()
 
 if __name__ == "__main__":

@@ -18,4 +18,4 @@ def create_requirements(directory="."):
     with open("requirements_auto.txt", "w") as f:
         for i in sorted(imports):
             f.write(i + "\n")
-    print("✅ requirements_auto.txt erstellt!")
+    print("[OK] requirements_auto.txt erstellt!")

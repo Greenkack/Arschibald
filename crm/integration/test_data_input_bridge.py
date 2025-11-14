@@ -80,7 +80,7 @@ def test_extract_customer_data_complete():
     assert customer_data['type'] == 'Gewerbe'
     assert 'creation_date' in customer_data
     assert 'last_updated' in customer_data
-    print("✓ Test extract_customer_data_complete bestanden")
+    print("[OK] Test extract_customer_data_complete bestanden")
 
 
 def test_extract_customer_data_minimal():
@@ -102,7 +102,7 @@ def test_extract_customer_data_minimal():
     assert customer_data['email'] == ''
     assert customer_data['num_persons'] == 1  # Default
     assert customer_data['type'] == 'Privat'  # Default
-    print("✓ Test extract_customer_data_minimal bestanden")
+    print("[OK] Test extract_customer_data_minimal bestanden")
 
 
 def test_extract_customer_data_whitespace_trimming():
@@ -125,7 +125,7 @@ def test_extract_customer_data_whitespace_trimming():
     assert customer_data['last_name'] == 'Mustermann'
     assert customer_data['email'] == 'max@example.com'
     assert customer_data['city'] == 'Berlin'
-    print("✓ Test extract_customer_data_whitespace_trimming bestanden")
+    print("[OK] Test extract_customer_data_whitespace_trimming bestanden")
 
 
 def test_extract_customer_data_missing_names_fallback():
@@ -143,7 +143,7 @@ def test_extract_customer_data_missing_names_fallback():
     # Assert - Firmenname als Fallback
     assert customer_data['first_name'] == 'Musterfirma GmbH'
     assert customer_data['last_name'] == 'Musterfirma GmbH'
-    print("✓ Test extract_customer_data_missing_names_fallback bestanden")
+    print("[OK] Test extract_customer_data_missing_names_fallback bestanden")
 
 
 def test_extract_customer_data_empty_session():
@@ -158,7 +158,7 @@ def test_extract_customer_data_empty_session():
     assert customer_data['first_name'] == 'Interessent'
     assert customer_data['last_name'] == 'Unbekannt'
     assert customer_data['num_persons'] == 1
-    print("✓ Test extract_customer_data_empty_session bestanden")
+    print("[OK] Test extract_customer_data_empty_session bestanden")
 
 
 def test_extract_project_data_complete():
@@ -230,7 +230,7 @@ def test_extract_project_data_complete():
     assert project_data['longitude'] == 13.4050
     assert 'creation_date' in project_data
     assert 'last_updated' in project_data
-    print("✓ Test extract_project_data_complete bestanden")
+    print("[OK] Test extract_project_data_complete bestanden")
 
 
 def test_extract_project_data_consumption_fallback():
@@ -257,7 +257,7 @@ def test_extract_project_data_consumption_fallback():
     assert project_data['costs_household_euro_mo'] == 150.0
     assert project_data['annual_heating_kwh'] == 9000.0
     assert project_data['costs_heating_euro_mo'] == 250.0
-    print("✓ Test extract_project_data_consumption_fallback bestanden")
+    print("[OK] Test extract_project_data_consumption_fallback bestanden")
 
 
 def test_extract_project_data_auto_name_generation():
@@ -273,7 +273,7 @@ def test_extract_project_data_auto_name_generation():
     # Assert - Name wurde generiert
     assert 'Projekt' in project_data['project_name']
     assert len(project_data['project_name']) > 10  # Enthält Datum/Zeit
-    print("✓ Test extract_project_data_auto_name_generation bestanden")
+    print("[OK] Test extract_project_data_auto_name_generation bestanden")
 
 
 def test_extract_project_data_empty_session():
@@ -289,7 +289,7 @@ def test_extract_project_data_empty_session():
     assert project_data['project_status'] == 'Angebot'
     assert project_data['anlage_type'] == 'Neuanlage'
     assert project_data['feed_in_type'] == 'Teileinspeisung'
-    print("✓ Test extract_project_data_empty_session bestanden")
+    print("[OK] Test extract_project_data_empty_session bestanden")
 
 
 def test_validate_required_fields_valid():
@@ -304,7 +304,7 @@ def test_validate_required_fields_valid():
     
     assert is_valid is True
     assert len(missing) == 0
-    print("✓ Test validate_required_fields_valid bestanden")
+    print("[OK] Test validate_required_fields_valid bestanden")
 
 
 def test_validate_required_fields_missing_first_name():
@@ -319,7 +319,7 @@ def test_validate_required_fields_missing_first_name():
     assert is_valid is False
     assert len(missing) == 1
     assert 'Vorname' in missing
-    print("✓ Test validate_required_fields_missing_first_name bestanden")
+    print("[OK] Test validate_required_fields_missing_first_name bestanden")
 
 
 def test_validate_required_fields_missing_last_name():
@@ -334,7 +334,7 @@ def test_validate_required_fields_missing_last_name():
     assert is_valid is False
     assert len(missing) == 1
     assert 'Nachname' in missing
-    print("✓ Test validate_required_fields_missing_last_name bestanden")
+    print("[OK] Test validate_required_fields_missing_last_name bestanden")
 
 
 def test_validate_required_fields_missing_both():
@@ -350,7 +350,7 @@ def test_validate_required_fields_missing_both():
     assert len(missing) == 2
     assert 'Vorname' in missing
     assert 'Nachname' in missing
-    print("✓ Test validate_required_fields_missing_both bestanden")
+    print("[OK] Test validate_required_fields_missing_both bestanden")
 
 
 def test_validate_required_fields_whitespace_only():
@@ -364,7 +364,7 @@ def test_validate_required_fields_whitespace_only():
     
     assert is_valid is False
     assert len(missing) == 2
-    print("✓ Test validate_required_fields_whitespace_only bestanden")
+    print("[OK] Test validate_required_fields_whitespace_only bestanden")
 
 
 def test_validate_required_fields_none_values():
@@ -378,7 +378,7 @@ def test_validate_required_fields_none_values():
     
     assert is_valid is False
     assert len(missing) == 2
-    print("✓ Test validate_required_fields_none_values bestanden")
+    print("[OK] Test validate_required_fields_none_values bestanden")
 
 
 def test_check_duplicate_customer_exists():
@@ -413,7 +413,7 @@ def test_check_duplicate_customer_exists():
     assert existing['last_name'] == 'Mustermann'
     
     conn.close()
-    print("✓ Test check_duplicate_customer_exists bestanden")
+    print("[OK] Test check_duplicate_customer_exists bestanden")
 
 
 def test_check_duplicate_customer_not_exists():
@@ -438,7 +438,7 @@ def test_check_duplicate_customer_not_exists():
     assert not_existing is None
     
     conn.close()
-    print("✓ Test check_duplicate_customer_not_exists bestanden")
+    print("[OK] Test check_duplicate_customer_not_exists bestanden")
 
 
 def test_check_duplicate_customer_case_insensitive():
@@ -471,7 +471,7 @@ def test_check_duplicate_customer_case_insensitive():
     assert existing_mixed is not None
     
     conn.close()
-    print("✓ Test check_duplicate_customer_case_insensitive bestanden")
+    print("[OK] Test check_duplicate_customer_case_insensitive bestanden")
 
 
 def test_check_duplicate_customer_empty_email():
@@ -504,7 +504,7 @@ def test_check_duplicate_customer_empty_email():
     assert result is None
     
     conn.close()
-    print("✓ Test check_duplicate_customer_empty_email bestanden")
+    print("[OK] Test check_duplicate_customer_empty_email bestanden")
 
 
 def test_check_duplicate_customer_whitespace_trimming():
@@ -535,7 +535,7 @@ def test_check_duplicate_customer_whitespace_trimming():
     assert existing['email'] == 'max@example.com'
     
     conn.close()
-    print("✓ Test check_duplicate_customer_whitespace_trimming bestanden")
+    print("[OK] Test check_duplicate_customer_whitespace_trimming bestanden")
 
 
 def test_check_duplicate_customer_error_handling():
@@ -548,7 +548,7 @@ def test_check_duplicate_customer_error_handling():
     result = check_duplicate_customer(conn, 'test@example.com')
     assert result is None
     
-    print("✓ Test check_duplicate_customer_error_handling bestanden")
+    print("[OK] Test check_duplicate_customer_error_handling bestanden")
 
 
 def test_get_data_preview_summary():
@@ -608,7 +608,7 @@ def test_get_data_preview_summary():
     assert summary['counts']['customer_fields'] > 0
     assert summary['counts']['project_fields'] > 0
     
-    print("✓ Test get_data_preview_summary bestanden")
+    print("[OK] Test get_data_preview_summary bestanden")
 
 
 def test_get_data_preview_summary_minimal():
@@ -632,7 +632,7 @@ def test_get_data_preview_summary_minimal():
     assert summary['counts']['customer_fields'] >= 2
     assert summary['counts']['project_fields'] >= 1
     
-    print("✓ Test get_data_preview_summary_minimal bestanden")
+    print("[OK] Test get_data_preview_summary_minimal bestanden")
 
 
 def test_integration_full_workflow():
@@ -690,7 +690,7 @@ def test_integration_full_workflow():
     assert summary['project']['name'] == 'Integration Test Projekt'
     
     conn.close()
-    print("✓ Test integration_full_workflow bestanden")
+    print("[OK] Test integration_full_workflow bestanden")
 
 
 if __name__ == '__main__':
@@ -746,14 +746,14 @@ if __name__ == '__main__':
             test_func()
             passed_count += 1
         except AssertionError as e:
-            print(f"\n❌ FEHLGESCHLAGEN: {e}\n")
+            print(f"\n[ERROR] FEHLGESCHLAGEN: {e}\n")
         except Exception as e:
-            print(f"\n❌ FEHLER: {e}\n")
+            print(f"\n[ERROR] FEHLER: {e}\n")
     
     print("\n" + "="*70)
     print(f"  Ergebnis: {passed_count}/{test_count} Tests bestanden")
     if passed_count == test_count:
-        print("  ✅ ALLE TESTS ERFOLGREICH!")
+        print("  [OK] ALLE TESTS ERFOLGREICH!")
     else:
-        print(f"  ⚠️  {test_count - passed_count} Test(s) fehlgeschlagen")
+        print(f"  [WARNING]  {test_count - passed_count} Test(s) fehlgeschlagen")
     print("="*70 + "\n")

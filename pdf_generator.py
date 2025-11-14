@@ -10,6 +10,7 @@ import base64
 import io
 import logging
 import math
+import time
 
 # pdf_generator.py
 import os
@@ -18,6 +19,40 @@ from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+__all__ = [
+    'generate_offer_pdf',
+    'create_offer_pdf',
+    'generate_main_template_pdf_bytes',
+    'MONITORING_AVAILABLE',
+]
+
+# Monitoring integration
+try:
+    from app_tracing import app_tracer
+    from app_evaluation import track_success, track_error, evaluate_performance
+    MONITORING_AVAILABLE = True
+    
+    def trace_pdf(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            op_name = f"pdf.{func.__name__}"
+            try:
+                with app_tracer.create_span(op_name, {"function": func.__name__}) as span:
+                    result = func(*args, **kwargs)
+                    track_success(op_name)
+                    evaluate_performance(op_name, time.time() - start_time)
+                    return result
+            except Exception as e:
+                track_error(op_name, e)
+                raise
+        wrapper.__name__ = func.__name__
+        return wrapper
+except ImportError:
+    MONITORING_AVAILABLE = False
+    def trace_pdf(func): return func
+    def track_success(op): pass
+    def track_error(op, err): pass
 
 from calculations_extended import run_all_extended_analyses
 from theming.pdf_styles import get_theme
@@ -793,7 +828,7 @@ class PDFGenerator:
         self.story.append(Spacer(1, 1 * cm))
 
         # FIX 2024: Prüfe zuerst ob Screenshot in Session State vorhanden ist
-        print(f"\n📄 PDF 3D-Integration:")
+        print(f"\n[FILE] PDF 3D-Integration:")
         print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
         try:
@@ -801,7 +836,7 @@ class PDFGenerator:
             
             # Prüfe ob Session State verfügbar ist
             if not hasattr(st, 'session_state'):
-                print(f"   ⚠️  Session State nicht verfügbar")
+                print(f"   [WARNING]  Session State nicht verfügbar")
                 raise AttributeError("Session State nicht verfügbar")
             
             png_bytes = st.session_state.get("pdf_3d_screenshot")
@@ -814,11 +849,11 @@ class PDFGenerator:
                 
                 # Validiere PNG-Bytes
                 if not isinstance(png_bytes, bytes):
-                    print(f"     ❌ Ungültiger Typ: {type(png_bytes)}")
+                    print(f"     [ERROR] Ungültiger Typ: {type(png_bytes)}")
                     raise TypeError(f"png_bytes ist kein bytes-Objekt: {type(png_bytes)}")
                 
                 if len(png_bytes) < 100:
-                    print(f"     ❌ Datei zu klein (möglicherweise korrupt)")
+                    print(f"     [ERROR] Datei zu klein (möglicherweise korrupt)")
                     raise ValueError(f"PNG-Bytes zu klein: {len(png_bytes)} bytes")
                 
                 # Screenshot aus Session State verwenden
@@ -846,18 +881,18 @@ class PDFGenerator:
                     self.styles["Body"]
                 ))
                 
-                print(f"   ✅ 3D-Screenshot erfolgreich in PDF eingefügt!")
+                print(f"   [OK] 3D-Screenshot erfolgreich in PDF eingefügt!")
                 print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
                 return
             else:
                 print(f"     • Kein Screenshot vorhanden")
                 
         except AttributeError as e:
-            print(f"   ❌ Session State Fehler: {e}")
+            print(f"   [ERROR] Session State Fehler: {e}")
             print(f"   Traceback:")
             traceback.print_exc()
         except Exception as e:
-            print(f"   ❌ Fehler beim Laden des Screenshots:")
+            print(f"   [ERROR] Fehler beim Laden des Screenshots:")
             print(f"     • Fehler: {str(e)}")
             print(f"     • Typ: {type(e).__name__}")
             print(f"   Traceback:")
@@ -868,7 +903,7 @@ class PDFGenerator:
         
         # Check if 3D visualization is available
         if not _PV3D_AVAILABLE or make_pv3d_image_flowable is None:
-            print(f"     ⚠️  3D-Modul nicht verfügbar")
+            print(f"     [WARNING]  3D-Modul nicht verfügbar")
             print(f"     • _PV3D_AVAILABLE: {_PV3D_AVAILABLE}")
             print(f"     • make_pv3d_image_flowable: {make_pv3d_image_flowable is not None}")
             print(f"   Fallback: Platzhalter-Text wird eingefügt")
@@ -1673,7 +1708,7 @@ class PDFGenerator:
                     Image(
                         data,
                         width=self.width - 4 * cm,
-                        height=self.height / 3,
+                        height = self.height / 3,
                         preserveAspectRatio=True))
             except Exception as e:
                 self.story.append(
@@ -1947,6 +1982,7 @@ class PDFGenerator:
 
 
 # =============== NEUE TEMPLATE-HAUPTAUSGABE (7 Seiten) API ==================
+@trace_pdf
 def generate_main_template_pdf_bytes(
     project_data: dict[str, Any],
     analysis_results: dict[str, Any] | None,
@@ -3391,12 +3427,18 @@ def _get_image_flowable(image_data_input: str | bytes | None,
             iw, ih = img_reader.getSize()
             if iw <= 0 or ih <= 0:
                 raise ValueError(f"Ungültige Bilddimensionen: w={iw}, h={ih}")
-            aspect = ih / float(iw) if iw > 0 else 1.0
+            if float != 0:
+                aspect = ih / float(iw) if iw > 0 else 1.0
+            else:
+                aspect = 0.0
             img_h_calc = desired_width * aspect
             img_w_final, img_h_final = desired_width, img_h_calc
             if max_height and img_h_calc > max_height:
                 img_h_final = max_height
-                img_w_final = img_h_final / aspect if aspect > 0 else desired_width
+                if aspect != 0:
+                    img_w_final = img_h_final / aspect if aspect > 0 else desired_width
+                else:
+                    img_w_final = 0.0
 
             # KORREKTUR: Stelle sicher, dass img_w_final und img_h_final
             # positiv sind
@@ -3515,6 +3557,7 @@ MODULE_MAP = {
 }
 
 
+@trace_pdf
 def create_offer_pdf(
     offer_data: dict[str, Any],
     output_filename: str,
@@ -3597,19 +3640,19 @@ def _get_chart_description(chart_key: str,
         'monthly_prod_cons_chart_bytes': get_text(
             texts,
             "chart_desc_monthly_prod_cons",
-            "📊 <b>Ihr persönlicher Jahresrhythmus:</b> Diese Darstellung zeigt Ihnen, wie Ihre PV-Anlage im Einklang mit den Jahreszeiten arbeitet. "
+            "[CHART] <b>Ihr persönlicher Jahresrhythmus:</b> Diese Darstellung zeigt Ihnen, wie Ihre PV-Anlage im Einklang mit den Jahreszeiten arbeitet. "
             "In den sonnenreichen Sommermonaten erzeugen Sie deutlich mehr Strom als Sie verbrauchen – perfekt für hohe Einspeisevergütungen! "
             "Im Winter gleicht sich Produktion und Verbrauch harmonisch aus. So planen Sie Ihren Energiehaushalt optimal."),
         'cost_projection_chart_bytes': get_text(
             texts,
             "chart_desc_cost_projection",
-            "💰 <b>Ihre finanzielle Zukunft im Blick:</b> Hier sehen Sie schwarz auf weiß, wie sich Ihre Stromkosten mit und ohne PV-Anlage entwickeln. "
+            "[MONEY] <b>Ihre finanzielle Zukunft im Blick:</b> Hier sehen Sie schwarz auf weiß, wie sich Ihre Stromkosten mit und ohne PV-Anlage entwickeln. "
             "Während herkömmliche Stromkosten Jahr für Jahr steigen, bleiben Sie mit Ihrer eigenen Solaranlage unabhängig von Preiserhöhungen. "
             "Die Schere öffnet sich zu Ihren Gunsten – je länger die Laufzeit, desto größer Ihre Ersparnis!"),
         'cumulative_cashflow_chart_bytes': get_text(
             texts,
             "chart_desc_cumulative_cashflow",
-            "📈 <b>Der Weg zu Ihrem persönlichen Gewinn:</b> Diese Kurve zeigt Ihren finanziellen Erfolgsweg. Anfangs investieren Sie, "
+            "[STATS] <b>Der Weg zu Ihrem persönlichen Gewinn:</b> Diese Kurve zeigt Ihren finanziellen Erfolgsweg. Anfangs investieren Sie, "
             "aber schon nach wenigen Jahren kehrt sich das Blatt: Ihre Anlage arbeitet für Sie und erwirtschaftet echte Gewinne. "
             "Der Break-Even-Punkt markiert den Beginn Ihrer 'kostenlosen' Stromzeit – ab dann ist jede kWh reiner Gewinn für Sie!"),
         'consumption_coverage_pie_chart_bytes': get_text(
@@ -3621,7 +3664,7 @@ def _get_chart_description(chart_key: str,
         'pv_usage_pie_chart_bytes': get_text(
             texts,
             "chart_desc_pv_usage",
-            "⚡ <b>Wohin fließt Ihr selbst erzeugter Strom:</b> Hier sehen Sie die clevere Aufteilung Ihres Solarstroms. "
+            "[POWER] <b>Wohin fließt Ihr selbst erzeugter Strom:</b> Hier sehen Sie die clevere Aufteilung Ihres Solarstroms. "
             "Der blaue Bereich zeigt, was Sie direkt selbst nutzen (= sofortige Ersparnis), der orange Teil wird ins Netz eingespeist (= garantierte Vergütung). "
             "Jede selbst verbrauchte kWh spart Ihnen ca. 30 Cent, jede eingespeiste kWh bringt Ihnen sichere Einnahmen!"),
         'daily_production_switcher_chart_bytes': get_text(
@@ -3645,7 +3688,7 @@ def _get_chart_description(chart_key: str,
         'project_roi_matrix_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_project_roi",
-            "📊 <b>Ihre Rendite-Sicherheit visualisiert:</b> Diese Matrix zeigt, wie robust Ihre Investition ist. "
+            "[CHART] <b>Ihre Rendite-Sicherheit visualisiert:</b> Diese Matrix zeigt, wie robust Ihre Investition ist. "
             "Selbst bei verschiedenen Strompreisentwicklungen bleibt Ihre Rendite attraktiv – das nennt man eine sichere Anlage! "
             "Vergleichen Sie das mal mit Ihrem Sparbuch: Hier sehen Sie reale Werte zwischen 3-8% Rendite pro Jahr. Ihre Anlage ist eine Geldanlage mit Garantie!"),
         'feed_in_revenue_switcher_chart_bytes': get_text(
@@ -3663,7 +3706,7 @@ def _get_chart_description(chart_key: str,
         'co2_savings_chart_bytes': get_text(
             texts,
             "chart_desc_co2_savings",
-            "🌱 <b>Ihr Beitrag für die nächste Generation:</b> Jede kWh Ihres Solarstroms ersetzt schmutzigen Kohlestrom! "
+            "[GREEN] <b>Ihr Beitrag für die nächste Generation:</b> Jede kWh Ihres Solarstroms ersetzt schmutzigen Kohlestrom! "
             "Diese Grafik zeigt nicht nur Zahlen, sondern Ihren echten Umweltbeitrag. Stolze [CO2-Menge] kg CO₂ weniger pro Jahr – "
             "das entspricht [Bäume-Anzahl] gepflanzten Bäumen! Sie investieren nicht nur in Ihre Finanzen, sondern in eine saubere Zukunft."),
         'investment_value_switcher_chart_bytes': get_text(
@@ -3687,25 +3730,25 @@ def _get_chart_description(chart_key: str,
         'cost_growth_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_cost_growth",
-            "📈 <b>Steigende Strompreise – Ihr Vorteil wächst:</b> Während andere über teure Stromrechnungen stöhnen, profitieren Sie! "
+            "[STATS] <b>Steigende Strompreise – Ihr Vorteil wächst:</b> Während andere über teure Stromrechnungen stöhnen, profitieren Sie! "
             "Je mehr die Strompreise steigen, desto wertvoller wird jede selbst erzeugte kWh. "
             "Diese Projektion zeigt: Ihre PV-Anlage wird mit jedem Jahr noch rentabler. Sie haben heute die richtige Entscheidung getroffen!"),
         'roi_comparison_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_roi_comparison",
-            "🏆 <b>Besser als jede Bank:</b> Hier sehen Sie Ihre PV-Rendite im Vergleich zu traditionellen Geldanlagen. "
+            "[WINNER] <b>Besser als jede Bank:</b> Hier sehen Sie Ihre PV-Rendite im Vergleich zu traditionellen Geldanlagen. "
             "Während Sparbücher kaum Zinsen bringen und die Inflation Ihr Geld entwertet, arbeitet Ihre Anlage mit 4-7% Rendite für Sie. "
             "Dazu kommt: Ihre Investition ist greifbar, auf Ihrem Dach und arbeitet 25+ Jahre zuverlässig!"),
         'break_even_chart_bytes': get_text(
             texts,
             "chart_desc_break_even",
-            "🎯 <b>Ihr Zielsprint zur Gewinnschwelle:</b> Diese Kurve zeigt Ihren Weg zur 'schwarzen Null' und darüber hinaus! "
+            "[TARGET] <b>Ihr Zielsprint zur Gewinnschwelle:</b> Diese Kurve zeigt Ihren Weg zur 'schwarzen Null' und darüber hinaus! "
             "Der Break-Even-Punkt ist wie die Ziellinie beim Marathon – ab hier läuft alles für Sie! "
             "Meist nach 8-12 Jahren ist es soweit: Von da an sind Sie 15+ Jahre im Plus. Das ist finanzielle Freiheit!"),
         'amortisation_chart_bytes': get_text(
             texts,
             "chart_desc_amortisation",
-            "💰 <b>Wie sich Ihre Investition zurückzahlt:</b> Diese Kurve ist Ihr persönlicher Finanzkompass! "
+            "[MONEY] <b>Wie sich Ihre Investition zurückzahlt:</b> Diese Kurve ist Ihr persönlicher Finanzkompass! "
             "Sie zeigt, wie sich Ihre Anfangsinvestition Stück für Stück durch Ersparnisse und Einnahmen zurückzahlt. "
             "Je steiler die Kurve, desto schneller haben Sie Ihr Geld wieder drin. Und danach? Jahrelange Gewinne sind garantiert!")}
 
@@ -4487,7 +4530,7 @@ def _merge_two_pdfs(pdf1_bytes: bytes, pdf2_bytes: bytes) -> bytes:
         print(f"ERROR in _merge_two_pdfs: {e}")
         return pdf1_bytes
 
-
+@trace_pdf
 def generate_offer_pdf(
     project_data: dict[str, Any],
     analysis_results: dict[str, Any] | None,
@@ -4753,7 +4796,7 @@ def generate_offer_pdf(
                     selected_title_image_b64,
                     doc.width,
                     texts,
-                    max_height=doc.height / 1.8,
+                    max_height = doc.height / 1.8,
                     align='CENTER')
                 if img_flowables_title:
                     story.extend(img_flowables_title)
@@ -6261,7 +6304,10 @@ def generate_offer_pdf(
 
                         # Spaltenbreiten berechnen
                         num_cols = len(headers)
-                        col_width = available_width_content / num_cols
+                        if num_cols != 0:
+                            col_width = available_width_content / num_cols
+                        else:
+                            col_width = 0.0
                         col_widths = [col_width] * num_cols
 
                         # Tabelle erstellen
@@ -6779,7 +6825,7 @@ def _append_datasheets_and_documents(
                         pdf_writer.add_page(page)
 
                     logging.info(
-                        f"✅ {chart_page_count} Chart-Seite(n) erfolgreich angehängt")
+                        f"[OK] {chart_page_count} Chart-Seite(n) erfolgreich angehängt")
                 except Exception as e_append_charts:
                     logging.error(
                         f"Fehler beim Anhängen der Chart-Seiten: {e_append_charts}")
@@ -6885,7 +6931,7 @@ def _append_datasheets_and_documents(
                         pdf_writer.add_page(page)
 
                     logging.info(
-                        f"✅ {len(financing_reader.pages)} Finanzierungs-Seite(n) erfolgreich angehängt")
+                        f"[OK] {len(financing_reader.pages)} Finanzierungs-Seite(n) erfolgreich angehängt")
 
                 except Exception as e_render:
                     logging.error(
@@ -7451,7 +7497,7 @@ def generate_heatpump_offer_pdf(
         
         # Status-Icon
         if 'Optimal' in status:
-            icon = "✓"
+            icon = "[OK]"
             color_hex = '#2E7D32'
         elif 'Grenz' in status:
             icon = "○"

@@ -21,10 +21,10 @@ def test_imports():
             format_agent_output,
             render_agent_menu,
         )
-        print("✅ All UI functions imported successfully")
+        print("[OK] All UI functions imported successfully")
         return True
     except ImportError as e:
-        print(f"❌ Import failed: {e}")
+        print(f"[ERROR] Import failed: {e}")
         return False
 
 
@@ -40,7 +40,7 @@ def test_format_agent_output_structure():
     params = list(sig.parameters.keys())
 
     assert 'result' in params, "format_agent_output should have 'result' param"
-    print("✅ format_agent_output has correct signature")
+    print("[OK] format_agent_output has correct signature")
     return True
 
 
@@ -57,7 +57,7 @@ def test_display_agent_status_structure():
     assert 'intermediate_steps' in params, (
         "display_agent_status should have 'intermediate_steps' param"
     )
-    print("✅ display_agent_status has correct signature")
+    print("[OK] display_agent_status has correct signature")
     return True
 
 
@@ -70,7 +70,7 @@ def test_check_api_keys_ui_structure():
     sig = inspect.signature(check_api_keys_ui)
 
     # Should return Dict[str, bool]
-    print("✅ check_api_keys_ui has correct signature")
+    print("[OK] check_api_keys_ui has correct signature")
     return True
 
 
@@ -83,7 +83,7 @@ def test_render_agent_menu_structure():
     sig = inspect.signature(render_agent_menu)
 
     # Should have no required parameters
-    print("✅ render_agent_menu has correct signature")
+    print("[OK] render_agent_menu has correct signature")
     return True
 
 
@@ -111,7 +111,7 @@ if __name__ == "__main__":
             else:
                 failed += 1
         except Exception as e:
-            print(f"❌ Test failed with exception: {e}")
+            print(f"[ERROR] Test failed with exception: {e}")
             failed += 1
         print()
 

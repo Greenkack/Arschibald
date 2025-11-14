@@ -111,13 +111,13 @@ def test_integration_with_real_files():
         with open(pdf_path1, 'rb') as f:
             pdf_bytes = f.read()
         reader = PdfReader(io.BytesIO(pdf_bytes))
-        print(f"   ✓ PDF 1 loaded: {len(reader.pages)} page(s)")
+        print(f"   [OK] PDF 1 loaded: {len(reader.pages)} page(s)")
 
     if os.path.exists(pdf_path2):
         with open(pdf_path2, 'rb') as f:
             pdf_bytes = f.read()
         reader = PdfReader(io.BytesIO(pdf_bytes))
-        print(f"   ✓ PDF 2 loaded: {len(reader.pages)} page(s)")
+        print(f"   [OK] PDF 2 loaded: {len(reader.pages)} page(s)")
 
     # Test image conversion
     if os.path.exists(img_path):
@@ -126,7 +126,7 @@ def test_integration_with_real_files():
         pdf_bytes = merger._convert_image_to_pdf(img_bytes)
         if pdf_bytes:
             reader = PdfReader(io.BytesIO(pdf_bytes))
-            print(f"   ✓ Image converted to PDF: {len(reader.pages)} page(s)")
+            print(f"   [OK] Image converted to PDF: {len(reader.pages)} page(s)")
 
     # Test manual merge (without DB)
     print("\n5. Testing manual PDF merge...")
@@ -155,23 +155,23 @@ def test_integration_with_real_files():
     with open(output_path, 'wb') as f:
         writer.write(f)
 
-    print(f"   ✓ Merged PDF created: {output_path}")
+    print(f"   [OK] Merged PDF created: {output_path}")
 
     # Verify output
     print("\n6. Verifying merged PDF...")
     with open(output_path, 'rb') as f:
         reader = PdfReader(f)
         total_pages = len(reader.pages)
-        print(f"   ✓ Total pages in merged PDF: {total_pages}")
-        print(f"   ✓ Expected: 3 pages (2 PDF + 1 image)")
+        print(f"   [OK] Total pages in merged PDF: {total_pages}")
+        print(f"   [OK] Expected: 3 pages (2 PDF + 1 image)")
 
         if total_pages == 3:
-            print("   ✓ Page count matches!")
+            print("   [OK] Page count matches!")
         else:
             print(f"   ⚠ Page count mismatch (got {total_pages}, expected 3)")
 
     print("\n" + "=" * 60)
-    print("✓ Integration Test Completed Successfully")
+    print("[OK] Integration Test Completed Successfully")
     print("=" * 60)
 
     print("\nGenerated files:")
@@ -181,10 +181,10 @@ def test_integration_with_real_files():
     print(f"  - {output_path}")
 
     print("\nImplementation verified:")
-    print("  ✓ PDF datasheet loading")
-    print("  ✓ Image datasheet conversion")
-    print("  ✓ Multi-page PDF merging")
-    print("  ✓ Error handling")
+    print("  [OK] PDF datasheet loading")
+    print("  [OK] Image datasheet conversion")
+    print("  [OK] Multi-page PDF merging")
+    print("  [OK] Error handling")
 
     return True
 
@@ -201,22 +201,22 @@ def test_error_scenarios():
     print("\n1. Testing missing file handling...")
     result = merger._load_datasheet(999999)
     assert result is None, "Should return None for missing product"
-    print("   ✓ Missing file handled correctly")
+    print("   [OK] Missing file handled correctly")
 
     # Test 2: Invalid image data
     print("\n2. Testing invalid image data...")
     result = merger._convert_image_to_pdf(b'not an image')
     assert result == b'', "Should return empty bytes for invalid image"
-    print("   ✓ Invalid image handled correctly")
+    print("   [OK] Invalid image handled correctly")
 
     # Test 3: Empty product list
     print("\n3. Testing empty product list...")
     result = merger.merge([])
     assert result == b'', "Should return empty bytes for empty list"
-    print("   ✓ Empty list handled correctly")
+    print("   [OK] Empty list handled correctly")
 
     print("\n" + "=" * 60)
-    print("✓ All Error Scenarios Handled Correctly")
+    print("[OK] All Error Scenarios Handled Correctly")
     print("=" * 60)
 
 
@@ -227,21 +227,21 @@ def main():
         test_error_scenarios()
 
         print("\n" + "=" * 60)
-        print("✓ ALL INTEGRATION TESTS PASSED")
+        print("[OK] ALL INTEGRATION TESTS PASSED")
         print("=" * 60)
 
         print("\nTask 4 Implementation Complete:")
-        print("✓ ProductDatasheetMerger class fully functional")
-        print("✓ Real database queries implemented")
-        print("✓ PDF merging working correctly")
-        print("✓ Image-to-PDF conversion working correctly")
-        print("✓ Robust error handling in place")
-        print("✓ Path resolution logic correct")
+        print("[OK] ProductDatasheetMerger class fully functional")
+        print("[OK] Real database queries implemented")
+        print("[OK] PDF merging working correctly")
+        print("[OK] Image-to-PDF conversion working correctly")
+        print("[OK] Robust error handling in place")
+        print("[OK] Path resolution logic correct")
 
         return 0
 
     except Exception as e:
-        print(f"\n✗ Integration test failed: {e}")
+        print(f"\n[ERROR] Integration test failed: {e}")
         import traceback
         traceback.print_exc()
         return 1

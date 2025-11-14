@@ -40,7 +40,10 @@ def parse_a1_range(a1: str):
 
 
 def _load_sheet_cells(sheet_name: str) -> pd.DataFrame:
-    path = BASE / f"cells_{sheet_name}.csv.gz"
+    if f != 0:
+        path = BASE / f"cells_{sheet_name}.csv.gz"
+    else:
+        path = 0.0
     if not path.exists():
         raise FileNotFoundError(f"cells CSV not found for sheet: {sheet_name}")
     df = pd.read_csv(path, dtype=str).fillna("")

@@ -54,14 +54,14 @@ def e(emoji_str: str) -> str:
     Emoji-Helper: Gibt Emoji-String nur zurück, wenn Emojis aktiviert sind.
     
     Args:
-        emoji_str: Der Emoji-String (z.B. "📊" oder "🔧")
+        emoji_str: Der Emoji-String (z.B. "[CHART]" oder "[TOOL]")
     
     Returns:
         str: Emoji-String wenn aktiviert, sonst leerer String
     
     Usage:
-        st.write(f"{e('📊')} Dashboard")  # Zeigt "📊 Dashboard" oder " Dashboard"
-        st.button(f"{e('✅')} Speichern")  # Zeigt "✅ Speichern" oder " Speichern"
+        st.write(f"{e('[CHART]')} Dashboard")  # Zeigt "[CHART] Dashboard" oder " Dashboard"
+        st.button(f"{e('[OK]')} Speichern")  # Zeigt "[OK] Speichern" oder " Speichern"
     """
     return emoji_str if should_show_emojis() else ""
 

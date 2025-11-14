@@ -8,12 +8,44 @@ Datum: 2025-06-04 (Überarbeitet für Syntaxkonsistenz)
 import base64
 import json
 import os
+import time
 import traceback
 from collections.abc import Callable
 from datetime import datetime
 from typing import Any, Tuple
 
 import streamlit as st
+
+__all__ = [
+    'render_admin_panel',
+    'MONITORING_AVAILABLE',
+]
+
+# Monitoring Infrastructure
+try:
+    from app_tracing import app_tracer
+    from app_evaluation import track_success, track_error, evaluate_performance
+    MONITORING_AVAILABLE = True
+    
+    def trace_admin(func):
+        """Decorator for admin panel operations tracing."""
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            operation_name = f"admin.{func.__name__}"
+            try:
+                with app_tracer.create_span(operation_name, {"function": func.__name__}):
+                    result = func(*args, **kwargs)
+                    track_success(operation_name)
+                    evaluate_performance(operation_name, time.time() - start_time)
+                    return result
+            except Exception as e:
+                track_error(operation_name, e)
+                raise
+        return wrapper
+except ImportError:
+    MONITORING_AVAILABLE = False
+    def trace_admin(func):
+        return func
 
 from admin_intro_settings_ui import render_intro_settings_tab
 from admin_payment_terms_ui import (
@@ -40,6 +72,42 @@ except ImportError:
     EXCEL_GRID_AVAILABLE = False
     def render_price_matrix_tab():
         st.warning("Excel-Integration ist nicht verfügbar. Bitte prüfen Sie die Installation der Excel-Module.")
+
+# Tag-Verwaltung für CRM
+try:
+    from crm.features.tag_ui import render_tag_management_ui
+    TAG_MANAGEMENT_AVAILABLE = True
+except ImportError:
+    TAG_MANAGEMENT_AVAILABLE = False
+    def render_tag_management_ui(texts):
+        st.warning("Tag-Verwaltung ist nicht verfügbar. Bitte prüfen Sie die Installation der CRM-Module.")
+
+# Dokument-Vorlagen-Management für CRM
+try:
+    from crm.features.template_ui import render_template_management
+    TEMPLATE_MANAGEMENT_AVAILABLE = True
+except ImportError:
+    TEMPLATE_MANAGEMENT_AVAILABLE = False
+    def render_template_management():
+        st.warning("Dokument-Vorlagen-Management ist nicht verfügbar. Bitte prüfen Sie die Installation der CRM-Module.")
+
+# Lead Scoring für CRM
+try:
+    from crm.features.lead_scoring_ui import render_lead_scoring_admin
+    LEAD_SCORING_AVAILABLE = True
+except ImportError:
+    LEAD_SCORING_AVAILABLE = False
+    def render_lead_scoring_admin(texts):
+        st.warning("Lead Scoring ist nicht verfügbar. Bitte prüfen Sie die Installation der CRM-Module.")
+
+# Backup-Verwaltung für CRM
+try:
+    from crm.utils.backup_ui import render_admin_backup_tab
+    BACKUP_MANAGEMENT_AVAILABLE = True
+except ImportError:
+    BACKUP_MANAGEMENT_AVAILABLE = False
+    def render_admin_backup_tab():
+        st.warning("Backup-Verwaltung ist nicht verfügbar. Bitte prüfen Sie die Installation der CRM-Module.")
 
 from ui_state_manager import (
     commit_widget_value,
@@ -195,6 +263,10 @@ ADMIN_TAB_KEYS_DEFINITION_GLOBAL = [
     "admin_tab_pv_mounting",  # NEU: PV-Unterkonstruktions-Verwaltung
     "admin_tab_services_management",
     "admin_tab_price_matrix",  # NEU: Excel-Integration für Preismatrizen
+    "admin_tab_tag_management",  # NEU: Tag-Verwaltung für CRM
+    "admin_tab_template_management",  # NEU: Dokument-Vorlagen-Management
+    "admin_tab_lead_scoring",  # NEU: Lead Scoring Konfiguration
+    "admin_tab_backup_management",  # NEU: Backup-Verwaltung
     "admin_tab_general_settings",
     "admin_tab_intro_settings",
     "admin_tab_tariff_management",
@@ -208,25 +280,29 @@ ADMIN_TAB_KEYS_DEFINITION_GLOBAL = [
 
 # Icon-Mapping für Admin-Menü-Kategorien (Deutsche Emojis)
 ADMIN_TAB_ICONS = {
-    "admin_tab_company_management_new": "🏢",
-    "admin_tab_user_management": "👥",
-    "admin_tab_product_management": "📦",
-    "admin_tab_logo_management": "🖼️",
-    "admin_tab_product_database_crud": "🗄️",
-    "admin_tab_pv_mounting": "🔧",  # NEU: PV-Unterkonstruktions-Verwaltung
-    "admin_tab_services_management": "🛠️",
-    "admin_tab_price_matrix": "📊",  # NEU: Excel-Integration für Preismatrizen
-    "admin_tab_general_settings": "⚙️",
-    "admin_tab_intro_settings": "🎬",
-    "admin_tab_tariff_management": "💡",
-    "admin_tab_heatpump_settings": "🔥",  # NEU: Wärmepumpen-Einstellungen
-    "admin_tab_pdf_design": "📝",
-    "admin_tab_payment_terms": "💳",
-    "admin_tab_visualization_settings": "📊",
-    "admin_tab_ui_effects": "✨",
-    "admin_tab_build_infos": "📋",  # NEU
-    "admin_tab_security_settings": "🔐",  # NEU
-    "admin_tab_advanced": "🧠"
+    "admin_tab_company_management_new": "",
+    "admin_tab_user_management": "",
+    "admin_tab_product_management": "",
+    "admin_tab_logo_management": "",
+    "admin_tab_product_database_crud": "",
+    "admin_tab_pv_mounting": "",  # NEU: PV-Unterkonstruktions-Verwaltung
+    "admin_tab_services_management": "",
+    "admin_tab_price_matrix": "",  # NEU: Excel-Integration für Preismatrizen
+    "admin_tab_tag_management": "",  # NEU: Tag-Verwaltung für CRM
+    "admin_tab_template_management": "",  # NEU: Dokument-Vorlagen-Management
+    "admin_tab_lead_scoring": "",  # NEU: Lead Scoring Konfiguration
+    "admin_tab_backup_management": "",  # NEU: Backup-Verwaltung
+    "admin_tab_general_settings": "",
+    "admin_tab_intro_settings": "",
+    "admin_tab_tariff_management": "",
+    "admin_tab_heatpump_settings": "",  # NEU: Wärmepumpen-Einstellungen
+    "admin_tab_pdf_design": "",
+    "admin_tab_payment_terms": "",
+    "admin_tab_visualization_settings": "",
+    "admin_tab_ui_effects": "",
+    "admin_tab_build_infos": "",  # NEU
+    "admin_tab_security_settings": "",  # NEU
+    "admin_tab_advanced": ""
 }
 
 ADMIN_TAB_DESCRIPTIONS = {
@@ -238,6 +314,8 @@ ADMIN_TAB_DESCRIPTIONS = {
     "admin_tab_pv_mounting": "PV-Unterkonstruktions-Komponenten verwalten (Dachhaken, Schienen, Klemmen)",  # NEU
     "admin_tab_services_management": "Dienstleistungen strukturieren und bündeln",
     "admin_tab_price_matrix": "Excel-ähnliche Preismatrizen erstellen und verwalten",  # NEU
+    "admin_tab_tag_management": "Tags für Kundensegmentierung erstellen und verwalten",  # NEU
+    "admin_tab_template_management": "Dokument-Vorlagen mit Platzhaltern erstellen und verwalten",  # NEU
     "admin_tab_general_settings": "Globale Parameter, Einheiten und Defaults",
     "admin_tab_intro_settings": "Intro-Inhalte und Onboarding-Story anpassen",
     "admin_tab_tariff_management": "Einspeisevergütungen & Tarife konfigurieren",
@@ -259,6 +337,10 @@ ADMIN_TAB_LABELS_DE = {
     "admin_tab_pv_mounting": "PV-Unterkonstruktionen",  # NEU: PV Mounting Components
     "admin_tab_services_management": "Dienstleistungen Management",
     "admin_tab_price_matrix": "Preis Matrix",  # NEU: Excel-Integration
+    "admin_tab_tag_management": "Tag-Verwaltung",  # NEU: CRM Tag Management
+    "admin_tab_template_management": "Dokument-Vorlagen",  # NEU: Document Template Management
+    "admin_tab_lead_scoring": "Lead Scoring",  # NEU: Lead Scoring Configuration
+    "admin_tab_backup_management": "Backup-Verwaltung",  # NEU: Backup Management
     "admin_tab_general_settings": "Allgemeine Einstellungen",
     "admin_tab_intro_settings": "Intro-Einstellungen",
     "admin_tab_tariff_management": "Einspeisung Tarifverwaltung",
@@ -1248,7 +1330,7 @@ def render_product_management(
                     st.warning("Aktuelles Bild konnte nicht angezeigt werden.")
             elif not current_product_image_b64_form and st.session_state.product_to_edit_id_manual:
                 st.info(
-                    "ℹ️ Kein Produktbild vorhanden. Laden Sie ein neues Bild hoch.")
+                    "[INFO] Kein Produktbild vorhanden. Laden Sie ein neues Bild hoch.")
 
             # Zeige Upload-Vorschau
             if uploaded_product_image_manual_file_form:
@@ -1283,7 +1365,7 @@ def render_product_management(
                             'Aktuelles Datenblatt')}: `{current_datasheet_link}`")
             elif st.session_state.product_to_edit_id_manual:
                 st.info(
-                    "ℹ️ Kein Datenblatt vorhanden. Laden Sie ein PDF-Datenblatt hoch.")
+                    "[INFO] Kein Datenblatt vorhanden. Laden Sie ein PDF-Datenblatt hoch.")
 
             # Zeige Upload-Vorschau
             if uploaded_datasheet_pdf_file_form:
@@ -2378,7 +2460,7 @@ def render_visualization_settings(
 
             if not themes:
                 st.warning(
-                    "⚠️ Keine Themes gefunden. Bitte Theme-Ordner prüfen.")
+                    "[WARNING] Keine Themes gefunden. Bitte Theme-Ordner prüfen.")
             else:
                 # Theme-Auswahl
                 theme_entries = [
@@ -2416,7 +2498,7 @@ def render_visualization_settings(
                         theme_manager.clear_theme_cache()
                         theme_manager.set_theme_overrides(overrides)
                         st.success(
-                            f"✅ Theme '{
+                            f"[OK] Theme '{
                                 themes[selected_key].title}' aktiviert.")
                         st.rerun()
 
@@ -2493,7 +2575,7 @@ def render_visualization_settings(
                                 'app_theme_overrides', json.dumps(overrides)):
                             theme_manager.set_theme_overrides(overrides)
                             theme_manager.clear_theme_cache()
-                            st.success("✅ Theme-Akzente gespeichert.")
+                            st.success("[OK] Theme-Akzente gespeichert.")
                             st.rerun()
 
                 with action_cols[1]:
@@ -2507,7 +2589,7 @@ def render_visualization_settings(
                                 theme_manager.set_theme_overrides(overrides)
                                 theme_manager.clear_theme_cache()
                                 st.success(
-                                    "✅ Akzente auf Standard zurückgesetzt.")
+                                    "[OK] Akzente auf Standard zurückgesetzt.")
                                 st.rerun()
 
         except ImportError as e:
@@ -2560,7 +2642,7 @@ def render_visualization_settings(
             )
 
             if not enabled:
-                st.warning("⚠️ UI-Effekte sind derzeit deaktiviert.")
+                st.warning("[WARNING] UI-Effekte sind derzeit deaktiviert.")
 
             st.markdown("---")
 
@@ -2605,7 +2687,7 @@ def render_visualization_settings(
                         json.dump(
                             new_settings, f, indent=2, ensure_ascii=False)
                     st.success(
-                        f"✅ UI-Effekt '{effect_info.get('name')}' gespeichert!")
+                        f"[OK] UI-Effekt '{effect_info.get('name')}' gespeichert!")
                     st.rerun()
                 except Exception as e:
                     st.error(f"Fehler beim Speichern: {e}")
@@ -2730,7 +2812,7 @@ def render_visualization_settings(
             if save_admin_setting_func(
                 'global_constants',
                     current_global_constants):
-                st.success("✅ Visualisierungs-Einstellungen gespeichert.")
+                st.success("[OK] Visualisierungs-Einstellungen gespeichert.")
                 st.rerun()
             else:
                 st.error(
@@ -3353,7 +3435,7 @@ def render_pricing_mode_settings(
     - Standardberechnung (Einzelprodukte)
     - Preismatrix (Schlüsselfertige Preise)
     """
-    st.subheader("💰 Preisberechnungsmodus")
+    st.subheader("[MONEY] Preisberechnungsmodus")
     
     # Lade aktuellen Modus
     try:
@@ -3387,7 +3469,7 @@ def render_pricing_mode_settings(
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("#### 📊 Standardberechnung")
+        st.markdown("#### [CHART] Standardberechnung")
         st.caption(
             "**Einzelprodukt-Kalkulation**\n\n"
             "• Preise basieren auf einzelnen Produkten\n"
@@ -3397,7 +3479,7 @@ def render_pricing_mode_settings(
         )
     
     with col2:
-        st.markdown("#### 📈 Preismatrix")
+        st.markdown("#### [STATS] Preismatrix")
         st.caption(
             "**Schlüsselfertige Paketpreise**\n\n"
             "• Preise aus vordefinierter Matrix\n"
@@ -3410,8 +3492,8 @@ def render_pricing_mode_settings(
     
     # Radio-Button-Auswahl
     mode_options = {
-        "standard": "📊 Standardberechnung (Einzelprodukte)",
-        "matrix": "📈 Preismatrix (Schlüsselfertige Preise)"
+        "standard": "[CHART] Standardberechnung (Einzelprodukte)",
+        "matrix": "[STATS] Preismatrix (Schlüsselfertige Preise)"
     }
     
     selected_mode = st.radio(
@@ -3426,7 +3508,7 @@ def render_pricing_mode_settings(
     # Warnung bei Matrix-Modus
     if selected_mode == "matrix":
         st.warning(
-            "⚠️ **Wichtig bei Preismatrix-Modus:**\n\n"
+            "[WARNING] **Wichtig bei Preismatrix-Modus:**\n\n"
             "• Stellen Sie sicher, dass eine aktive Preismatrix konfiguriert ist\n"
             "• Die Matrix muss Modulanzahlen in Spalte A enthalten\n"
             "• Die Matrix muss Speichermodelle in Zeile 1 enthalten\n"
@@ -3443,14 +3525,14 @@ def render_pricing_mode_settings(
                 matrix_data = get_matrix_full(active_matrix_id)
                 if matrix_data:
                     st.success(
-                        f"✓ Aktive Preismatrix gefunden: **{matrix_data['meta']['name']}** "
+                        f"[OK] Aktive Preismatrix gefunden: **{matrix_data['meta']['name']}** "
                         f"({len(matrix_data['rows'])} Zeilen, {len(matrix_data['columns'])} Spalten)"
                     )
                 else:
-                    st.error("✗ Aktive Preismatrix konnte nicht geladen werden")
+                    st.error("[ERROR] Aktive Preismatrix konnte nicht geladen werden")
             else:
                 st.error(
-                    "✗ Keine aktive Preismatrix gefunden. "
+                    "[ERROR] Keine aktive Preismatrix gefunden. "
                     "Bitte konfigurieren Sie eine Preismatrix, bevor Sie diesen Modus aktivieren."
                 )
         except ImportError:
@@ -3483,14 +3565,14 @@ def render_pricing_mode_settings(
                 if success:
                     mode_name = "Preismatrix" if selected_mode == "matrix" else "Standardberechnung"
                     st.success(
-                        f"✓ Preisberechnungsmodus erfolgreich auf **{mode_name}** umgestellt!\n\n"
+                        f"[OK] Preisberechnungsmodus erfolgreich auf **{mode_name}** umgestellt!\n\n"
                         "Die Änderung ist sofort aktiv."
                     )
                     
                     # Hinweis auf Auswirkungen
                     if selected_mode == "matrix":
                         st.info(
-                            "ℹ️ **Auswirkungen:**\n\n"
+                            "[INFO] **Auswirkungen:**\n\n"
                             "• Solarcalculator verwendet jetzt Preise aus der Preismatrix\n"
                             "• Einzelprodukt-Preise werden ignoriert\n"
                             "• Keine automatischen Aufschläge für Montage/Installation\n"
@@ -3498,7 +3580,7 @@ def render_pricing_mode_settings(
                         )
                     else:
                         st.info(
-                            "ℹ️ **Auswirkungen:**\n\n"
+                            "[INFO] **Auswirkungen:**\n\n"
                             "• Solarcalculator verwendet wieder Einzelprodukt-Preise\n"
                             "• Automatische Aufschläge sind aktiv\n"
                             "• Flexible Preisanpassung pro Komponente möglich"
@@ -3510,11 +3592,11 @@ def render_pricing_mode_settings(
                     st.rerun()
                 else:
                     st.error(
-                        "✗ Fehler beim Speichern des Preisberechnungsmodus. "
+                        "[ERROR] Fehler beim Speichern des Preisberechnungsmodus. "
                         "Bitte prüfen Sie die Logs."
                     )
             except Exception as e:
-                st.error(f"✗ Fehler beim Speichern: {e}")
+                st.error(f"[ERROR] Fehler beim Speichern: {e}")
 
 
 def render_api_key_settings(
@@ -3673,7 +3755,7 @@ def create_protected_tab_renderer(area_id: str, area_label: str, render_function
                 st.session_state[session_key] = False
             
             if not st.session_state[session_key]:
-                # ✅ FIX: Tab-Menü verstecken während Passwort-Eingabe (NICHT Sidebar!)
+                # [OK] FIX: Tab-Menü verstecken während Passwort-Eingabe (NICHT Sidebar!)
                 st.markdown("""
                 <style>
                     /* Verstecke ALLE Tab-Buttons im Admin-Bereich */
@@ -3701,19 +3783,19 @@ def create_protected_tab_renderer(area_id: str, area_label: str, render_function
                 with col_btn1:
                     if st.button("🔓 Entsperren", key=f"unlock_{area_id}", type="primary"):
                         if not username or not password:
-                            st.error("❌ Bitte Benutzername und Passwort eingeben!")
+                            st.error("[ERROR] Bitte Benutzername und Passwort eingeben!")
                         else:
                             from admin_security import verify_admin_password
                             if verify_admin_password(username, password):
                                 st.session_state[session_key] = True
                                 st.session_state[f"{session_key}_user"] = username
-                                st.success(f"✅ Willkommen, {username}!")
+                                st.success(f"[OK] Willkommen, {username}!")
                                 st.rerun()
                             else:
-                                st.error("❌ Ungültige Anmeldedaten!")
+                                st.error("[ERROR] Ungültige Anmeldedaten!")
                 
                 with col_btn2:
-                    st.info("💡 Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
+                    st.info("[IDEA] Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
                 
                 return
             
@@ -3737,7 +3819,7 @@ def create_protected_tab_renderer(area_id: str, area_label: str, render_function
     
     return protected_renderer
 
-
+@trace_admin
 def render_admin_panel(
     texts: dict[str, str] | tuple,
     get_db_connection_func: Callable[[], Any | None],
@@ -3897,6 +3979,26 @@ def render_admin_panel(
             "Preis Matrix",
             lambda: render_price_matrix_tab()
         ),
+        "admin_tab_tag_management": create_protected_tab_renderer(
+            "tag_management",
+            "Tag-Verwaltung",
+            lambda: render_tag_management_tab()
+        ),
+        "admin_tab_template_management": create_protected_tab_renderer(
+            "template_management",
+            "Dokument-Vorlagen",
+            lambda: render_template_management()
+        ),
+        "admin_tab_lead_scoring": create_protected_tab_renderer(
+            "lead_scoring",
+            "Lead Scoring",
+            lambda: render_lead_scoring_admin(actual_texts_dict_for_session)
+        ),
+        "admin_tab_backup_management": create_protected_tab_renderer(
+            "backup_management",
+            "Backup-Verwaltung",
+            lambda: render_admin_backup_tab()
+        ),
         "admin_tab_general_settings": create_protected_tab_renderer(
             "economic_settings",
             "Allgemeine Einstellungen",
@@ -3989,6 +4091,9 @@ def render_admin_panel(
         "admin_tab_logo_management": "logo_management",
         "admin_tab_product_database_crud": "product_database",
         "admin_tab_price_matrix": "price_matrix",
+        "admin_tab_tag_management": "tag_management",
+        "admin_tab_template_management": "template_management",
+        "admin_tab_backup_management": "backup_management",
         "admin_tab_general_settings": "economic_settings",
         "admin_tab_intro_settings": "intro_settings",
         "admin_tab_tariff_management": "economic_settings",
@@ -4315,6 +4420,19 @@ def render_company_image_templates_tab(company_id: int):
 
 # === NEUE FUNKTIONEN FÜR PASSWORTSCHUTZ UND BUILD INFOS ===
 
+def render_tag_management_tab():
+    """Rendert den Tag-Verwaltung Tab"""
+    try:
+        texts = st.session_state.get('_admin_panel_texts', {})
+        render_tag_management_ui(texts)
+    except ImportError as e:
+        st.error(f"Tag-Verwaltung UI konnte nicht geladen werden: {e}")
+        st.info("Stellen Sie sicher, dass crm/features/tag_ui.py verfügbar ist.")
+    except Exception as e:
+        st.error(f"Fehler beim Rendern der Tag-Verwaltung: {e}")
+        st.text(traceback.format_exc())
+
+
 def render_build_infos_tab():
     """Rendert den Build Infos Tab mit Passwortschutz"""
     try:
@@ -4350,18 +4468,18 @@ def render_security_settings_tab():
             with col_btn1:
                 if st.button("🔓 Entsperren", key="unlock_security_settings", type="primary"):
                     if not username or not password:
-                        st.error("❌ Bitte Benutzername und Passwort eingeben!")
+                        st.error("[ERROR] Bitte Benutzername und Passwort eingeben!")
                     else:
                         from admin_security import verify_admin_password
                         if verify_admin_password(username, password):
                             st.session_state.security_settings_unlocked = True
-                            st.success(f"✅ Willkommen, {username}!")
+                            st.success(f"[OK] Willkommen, {username}!")
                             st.rerun()
                         else:
-                            st.error("❌ Ungültige Anmeldedaten!")
+                            st.error("[ERROR] Ungültige Anmeldedaten!")
             
             with col_btn2:
-                st.info("💡 Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
+                st.info("[IDEA] Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
             
             return
         
@@ -4404,18 +4522,18 @@ def render_heatpump_settings_tab():
             with col_btn1:
                 if st.button("🔓 Entsperren", key="unlock_heatpump_settings", type="primary"):
                     if not username or not password:
-                        st.error("❌ Bitte Benutzername und Passwort eingeben!")
+                        st.error("[ERROR] Bitte Benutzername und Passwort eingeben!")
                     else:
                         from admin_security import verify_admin_password
                         if verify_admin_password(username, password):
                             st.session_state.heatpump_settings_unlocked = True
-                            st.success(f"✅ Willkommen, {username}!")
+                            st.success(f"[OK] Willkommen, {username}!")
                             st.rerun()
                         else:
-                            st.error("❌ Ungültige Anmeldedaten!")
+                            st.error("[ERROR] Ungültige Anmeldedaten!")
             
             with col_btn2:
-                st.info("💡 Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
+                st.info("[IDEA] Nur Benutzer mit Admin-Rechten haben Zugriff auf diesen Bereich.")
             
             return
         

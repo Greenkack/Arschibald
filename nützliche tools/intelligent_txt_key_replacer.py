@@ -134,7 +134,7 @@ class TXTKeyReplacer:
         candidates = {}
 
         if not os.path.exists(self.input_dir):
-            print(f"❌ Input-Ordner nicht gefunden: {self.input_dir}")
+            print(f"[ERROR] Input-Ordner nicht gefunden: {self.input_dir}")
             return candidates
 
         for filename in os.listdir(self.input_dir):
@@ -180,7 +180,7 @@ class TXTKeyReplacer:
                                             break
 
                 except Exception as e:
-                    print(f"⚠️ Fehler beim Analysieren von {filename}: {e}")
+                    print(f"[WARNING] Fehler beim Analysieren von {filename}: {e}")
 
                 if file_candidates:
                     candidates[filename] = file_candidates
@@ -214,7 +214,7 @@ class TXTKeyReplacer:
                 for original_text, suggested_replacement in file_candidates:
                     if not auto_apply:
                         # Interaktive Bestätigung
-                        print(f"\n📄 {filename}")
+                        print(f"\n[FILE] {filename}")
                         print(f"Original: {original_text}")
                         print(f"Vorschlag: {suggested_replacement}")
 
@@ -230,7 +230,7 @@ class TXTKeyReplacer:
                             f"Text: {original_text}", f"Text: {suggested_replacement}")
                         file_replacements += 1
                         print(
-                            f"✅ Ersetzt: {original_text} → {suggested_replacement}")
+                            f"[OK] Ersetzt: {original_text} → {suggested_replacement}")
 
                 # Schreibe Datei zurück wenn Änderungen gemacht wurden
                 if file_replacements > 0:
@@ -241,7 +241,7 @@ class TXTKeyReplacer:
                     total_replacements += file_replacements
 
             except Exception as e:
-                print(f"❌ Fehler beim Bearbeiten von {filename}: {e}")
+                print(f"[ERROR] Fehler beim Bearbeiten von {filename}: {e}")
 
         return total_replacements
 
@@ -260,10 +260,10 @@ class TXTKeyReplacer:
 
         try:
             shutil.copytree(self.input_dir, backup_dir)
-            print(f"✅ Backup erstellt: {backup_dir}")
+            print(f"[OK] Backup erstellt: {backup_dir}")
             return backup_dir
         except Exception as e:
-            print(f"❌ Fehler beim Erstellen des Backups: {e}")
+            print(f"[ERROR] Fehler beim Erstellen des Backups: {e}")
             return ""
 
     def generate_key_reference(self) -> None:
@@ -316,38 +316,38 @@ class TXTKeyReplacer:
         with open('key_reference.json', 'w', encoding='utf-8') as f:
             json.dump(reference, f, indent=2, ensure_ascii=False)
 
-        print("✅ Key-Referenz erstellt: key_reference.json")
+        print("[OK] Key-Referenz erstellt: key_reference.json")
 
 
 def main():
     """Hauptfunktion für interaktive Nutzung."""
     replacer = TXTKeyReplacer()
 
-    print("🔍 TXT-Dateien Key-Replacer")
+    print("[SEARCH] TXT-Dateien Key-Replacer")
     print("=" * 40)
 
     # Backup erstellen
     print("1. Erstelle Backup...")
     backup_path = replacer.create_backup()
     if not backup_path:
-        print("⚠️ Warnung: Kein Backup erstellt!")
+        print("[WARNING] Warnung: Kein Backup erstellt!")
 
     # Analysiere Dateien
     print("\n2. Analysiere TXT-Dateien...")
     candidates = replacer.analyze_txt_files()
 
     if not candidates:
-        print("✅ Keine statischen Werte gefunden - alle Dateien bereits dynamisch!")
+        print("[OK] Keine statischen Werte gefunden - alle Dateien bereits dynamisch!")
         return
 
     total_candidates = sum(len(cands) for cands in candidates.values())
     print(
-        f"📊 {total_candidates} Ersetzungskandidaten in {
+        f"[CHART] {total_candidates} Ersetzungskandidaten in {
             len(candidates)} Dateien gefunden")
 
     # Zeige Zusammenfassung
     for filename, file_candidates in candidates.items():
-        print(f"  📄 {filename}: {len(file_candidates)} Kandidaten")
+        print(f"  [FILE] {filename}: {len(file_candidates)} Kandidaten")
 
     # Frage nach automatischer Anwendung
     print("\n3. Ersetzungen anwenden...")
@@ -357,14 +357,14 @@ def main():
     # Führe Ersetzungen durch
     total_replacements = replacer.apply_replacements(candidates, auto_apply)
 
-    print(f"\n🎯 Fertig! {total_replacements} Ersetzungen durchgeführt")
+    print(f"\n[TARGET] Fertig! {total_replacements} Ersetzungen durchgeführt")
 
     # Erstelle Key-Referenz
     print("\n4. Erstelle Key-Referenz...")
     replacer.generate_key_reference()
 
-    print("\n✅ Alle TXT-Dateien wurden aktualisiert!")
-    print("💡 Tipp: Prüfen Sie die Dateien und verwenden Sie 'python txt_to_pdf_integration.py' zum Testen")
+    print("\n[OK] Alle TXT-Dateien wurden aktualisiert!")
+    print("[IDEA] Tipp: Prüfen Sie die Dateien und verwenden Sie 'python txt_to_pdf_integration.py' zum Testen")
 
 
 if __name__ == "__main__":

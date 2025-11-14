@@ -32,20 +32,20 @@ def test_product_update():
     # Produkt hinzufügen
     new_id = add_product(test_product)
     if new_id:
-        print(f"✓ Neues Produkt erstellt mit ID: {new_id}")
+        print(f"[OK] Neues Produkt erstellt mit ID: {new_id}")
 
         # Produkt abrufen und prüfen
         retrieved = get_product_by_id(new_id)
         if retrieved:
             image_data = retrieved.get('image_base64', '')
-            print(f"✓ Produkt abgerufen: {retrieved.get('model_name')}")
-            print(f"✓ Bild-Daten: {len(image_data)} Zeichen")
+            print(f"[OK] Produkt abgerufen: {retrieved.get('model_name')}")
+            print(f"[OK] Bild-Daten: {len(image_data)} Zeichen")
             if image_data and len(image_data) > 50:
-                print("✓ Bild erfolgreich gespeichert")
+                print("[OK] Bild erfolgreich gespeichert")
             else:
-                print("✗ Bild nicht gespeichert oder zu kurz")
+                print("[ERROR] Bild nicht gespeichert oder zu kurz")
         else:
-            print("✗ Produkt konnte nicht abgerufen werden")
+            print("[ERROR] Produkt konnte nicht abgerufen werden")
 
         print("\n=== Test: Produkt-Bild aktualisieren ===")
 
@@ -61,7 +61,7 @@ def test_product_update():
 
         success = update_product(new_id, update_data)
         if success:
-            print("✓ Produkt-Update erfolgreich")
+            print("[OK] Produkt-Update erfolgreich")
 
             # Erneut abrufen
             updated = get_product_by_id(new_id)
@@ -69,20 +69,20 @@ def test_product_update():
                 new_image_data = updated.get('image_base64', '')
                 new_desc = updated.get('description', '')
                 print(
-                    f"✓ Aktualisierte Bild-Daten: {len(new_image_data)} Zeichen")
-                print(f"✓ Aktualisierte Beschreibung: {new_desc}")
+                    f"[OK] Aktualisierte Bild-Daten: {len(new_image_data)} Zeichen")
+                print(f"[OK] Aktualisierte Beschreibung: {new_desc}")
 
                 if len(new_image_data) > len(image_data):
-                    print("✓ Bild wurde erfolgreich aktualisiert")
+                    print("[OK] Bild wurde erfolgreich aktualisiert")
                 else:
-                    print("✗ Bild-Update fehlgeschlagen")
+                    print("[ERROR] Bild-Update fehlgeschlagen")
             else:
-                print("✗ Aktualisiertes Produkt konnte nicht abgerufen werden")
+                print("[ERROR] Aktualisiertes Produkt konnte nicht abgerufen werden")
         else:
-            print("✗ Produkt-Update fehlgeschlagen")
+            print("[ERROR] Produkt-Update fehlgeschlagen")
 
     else:
-        print("✗ Produkt konnte nicht erstellt werden")
+        print("[ERROR] Produkt konnte nicht erstellt werden")
 
 
 def test_admin_functions():
@@ -91,18 +91,18 @@ def test_admin_functions():
 
     try:
         from admin_panel import render_product_management
-        print("✓ Admin-Panel Modul importiert")
+        print("[OK] Admin-Panel Modul importiert")
 
         # Teste, ob die Funktion callable ist
         if callable(render_product_management):
-            print("✓ render_product_management ist aufrufbar")
+            print("[OK] render_product_management ist aufrufbar")
         else:
-            print("✗ render_product_management ist nicht aufrufbar")
+            print("[ERROR] render_product_management ist nicht aufrufbar")
 
     except ImportError as e:
-        print(f"✗ Admin-Panel Import-Fehler: {e}")
+        print(f"[ERROR] Admin-Panel Import-Fehler: {e}")
     except Exception as e:
-        print(f"✗ Allgemeiner Fehler: {e}")
+        print(f"[ERROR] Allgemeiner Fehler: {e}")
 
 
 if __name__ == "__main__":

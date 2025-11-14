@@ -3,7 +3,7 @@
 from product_db import list_products
 
 modules = list_products('module')
-print(f"✅ Gefunden: {len(modules)} Module")
+print(f"[OK] Gefunden: {len(modules)} Module")
 
 for m in modules[:5]:
     print(
@@ -19,7 +19,7 @@ for m in modules[:5]:
                 0)} W)")
 
 inverters = list_products('inverter')
-print(f"\n✅ Gefunden: {len(inverters)} Wechselrichter")
+print(f"\n[OK] Gefunden: {len(inverters)} Wechselrichter")
 
 storage = list_products('storage')
-print(f"✅ Gefunden: {len(storage)} Speicher")
+print(f"[OK] Gefunden: {len(storage)} Speicher")

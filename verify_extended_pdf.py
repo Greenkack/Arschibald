@@ -1,5 +1,5 @@
 """
-🔍 Erweiterte PDF-Ausgabe - Verifikations-Skript
+[SEARCH] Erweiterte PDF-Ausgabe - Verifikations-Skript
 ==============================================
 
 Dieses Skript überprüft, ob alle PDF-Optionen korrekt in der UI definiert sind
@@ -15,7 +15,7 @@ PDF_GENERATOR = Path("pdf_generator.py")
 DYNAMIC_OVERLAY = Path("pdf_template_engine/dynamic_overlay.py")
 
 print("=" * 80)
-print("🔍 ERWEITERTE PDF-AUSGABE - VERIFIZIERUNG")
+print("[SEARCH] ERWEITERTE PDF-AUSGABE - VERIFIZIERUNG")
 print("=" * 80)
 print()
 
@@ -48,14 +48,14 @@ if DOC_OUTPUT.exists():
         found_options[option] = len(matches)
         
         if len(matches) > 0:
-            print(f"  ✅ {option}: {len(matches)} Vorkommen")
+            print(f"  [OK] {option}: {len(matches)} Vorkommen")
         else:
-            print(f"  ❌ {option}: NICHT GEFUNDEN!")
+            print(f"  [ERROR] {option}: NICHT GEFUNDEN!")
     
     print()
     print(f"  Gesamt: {sum(1 for v in found_options.values() if v > 0)}/{len(ui_options_expected)} Optionen gefunden")
 else:
-    print(f"  ❌ FEHLER: {DOC_OUTPUT} nicht gefunden!")
+    print(f"  [ERROR] FEHLER: {DOC_OUTPUT} nicht gefunden!")
 
 print()
 
@@ -109,11 +109,11 @@ for check_name, check_info in backend_checks.items():
         matches = re.findall(pattern, content)
         
         if len(matches) > 0:
-            print(f"  ✅ {description}: {len(matches)} Vorkommen in {file_path.name}")
+            print(f"  [OK] {description}: {len(matches)} Vorkommen in {file_path.name}")
         else:
-            print(f"  ❌ {description}: NICHT GEFUNDEN in {file_path.name}!")
+            print(f"  [ERROR] {description}: NICHT GEFUNDEN in {file_path.name}!")
     else:
-        print(f"  ❌ {file_path.name}: Datei nicht gefunden!")
+        print(f"  [ERROR] {file_path.name}: Datei nicht gefunden!")
 
 print()
 
@@ -121,7 +121,7 @@ print()
 # 3. KRITISCHE FUNKTIONEN PRÜFEN
 # ============================================================================
 
-print("🔧 3. KRITISCHE FUNKTIONEN PRÜFEN")
+print("[TOOL] 3. KRITISCHE FUNKTIONEN PRÜFEN")
 print("-" * 80)
 
 critical_functions = [
@@ -140,11 +140,11 @@ for func_name, file_path in critical_functions:
         matches = re.findall(pattern, content)
         
         if len(matches) > 0:
-            print(f"  ✅ {func_name}() in {file_path.name}")
+            print(f"  [OK] {func_name}() in {file_path.name}")
         else:
-            print(f"  ❌ {func_name}() FEHLT in {file_path.name}!")
+            print(f"  [ERROR] {func_name}() FEHLT in {file_path.name}!")
     else:
-        print(f"  ❌ {file_path.name}: Datei nicht gefunden!")
+        print(f"  [ERROR] {file_path.name}: Datei nicht gefunden!")
 
 print()
 
@@ -161,18 +161,18 @@ if PDF_GENERATOR.exists():
     # Prüfe ob disable_main_template_combiner existiert
     combiner_check = re.findall(r"disable_main_template_combiner", content)
     if len(combiner_check) > 0:
-        print(f"  ✅ disable_main_template_combiner: {len(combiner_check)} Vorkommen")
+        print(f"  [OK] disable_main_template_combiner: {len(combiner_check)} Vorkommen")
     else:
-        print(f"  ❌ disable_main_template_combiner: NICHT GEFUNDEN!")
+        print(f"  [ERROR] disable_main_template_combiner: NICHT GEFUNDEN!")
     
     # Prüfe ob es im kwargs geprüft wird
     kwargs_check = re.findall(r"kwargs\.get\('disable_main_template_combiner'\)", content)
     if len(kwargs_check) > 0:
-        print(f"  ✅ Rekursionsschutz-Check in kwargs: {len(kwargs_check)} Vorkommen")
+        print(f"  [OK] Rekursionsschutz-Check in kwargs: {len(kwargs_check)} Vorkommen")
     else:
-        print(f"  ❌ Rekursionsschutz-Check: NICHT GEFUNDEN!")
+        print(f"  [ERROR] Rekursionsschutz-Check: NICHT GEFUNDEN!")
 else:
-    print(f"  ❌ {PDF_GENERATOR}: Datei nicht gefunden!")
+    print(f"  [ERROR] {PDF_GENERATOR}: Datei nicht gefunden!")
 
 print()
 
@@ -183,9 +183,9 @@ if DOC_OUTPUT.exists():
     # Prüfe ob disable_main_template_combiner=True beim Aufruf gesetzt wird
     call_check = re.findall(r"disable_main_template_combiner=True", content)
     if len(call_check) > 0:
-        print(f"  ✅ disable_main_template_combiner=True beim Aufruf: {len(call_check)} Vorkommen")
+        print(f"  [OK] disable_main_template_combiner=True beim Aufruf: {len(call_check)} Vorkommen")
     else:
-        print(f"  ❌ disable_main_template_combiner=True: NICHT GEFUNDEN beim Aufruf!")
+        print(f"  [ERROR] disable_main_template_combiner=True: NICHT GEFUNDEN beim Aufruf!")
 
 print()
 
@@ -193,7 +193,7 @@ print()
 # 5. PDF-BYTES PRÜFUNG
 # ============================================================================
 
-print("📦 5. PDF-BYTES VERARBEITUNG PRÜFEN")
+print("[PACKAGE] 5. PDF-BYTES VERARBEITUNG PRÜFEN")
 print("-" * 80)
 
 bytes_checks = [
@@ -210,11 +210,11 @@ for pattern, file_path, description in bytes_checks:
         matches = re.findall(pattern, content)
         
         if len(matches) > 0:
-            print(f"  ✅ {description}: {len(matches)} Vorkommen")
+            print(f"  [OK] {description}: {len(matches)} Vorkommen")
         else:
-            print(f"  ⚠️  {description}: Nicht gefunden (könnte OK sein)")
+            print(f"  [WARNING]  {description}: Nicht gefunden (könnte OK sein)")
     else:
-        print(f"  ❌ {file_path.name}: Datei nicht gefunden!")
+        print(f"  [ERROR] {file_path.name}: Datei nicht gefunden!")
 
 print()
 
@@ -223,18 +223,18 @@ print()
 # ============================================================================
 
 print("=" * 80)
-print("📊 ZUSAMMENFASSUNG")
+print("[CHART] ZUSAMMENFASSUNG")
 print("=" * 80)
 print()
-print("✅ ALLE ERWEITERTE PDF-FEATURES SIND IMPLEMENTIERT!")
+print("[OK] ALLE ERWEITERTE PDF-FEATURES SIND IMPLEMENTIERT!")
 print()
 print("Details:")
 print(f"  • UI-Optionen: {len(ui_options_expected)} definiert")
 print(f"  • Backend-Checks: {len(backend_checks)} Komponenten")
 print(f"  • Kritische Funktionen: {len(critical_functions)} implementiert")
-print(f"  • Rekursionsschutz: ✅ Vorhanden")
-print(f"  • PDF-Bytes Verarbeitung: ✅ Implementiert")
+print(f"  • Rekursionsschutz: [OK] Vorhanden")
+print(f"  • PDF-Bytes Verarbeitung: [OK] Implementiert")
 print()
-print("📝 Siehe ERWEITERTE_PDF_ANALYSE.md für vollständige Dokumentation")
+print("[NOTE] Siehe ERWEITERTE_PDF_ANALYSE.md für vollständige Dokumentation")
 print()
 print("=" * 80)

@@ -35,9 +35,9 @@ def demo_env_file_security():
     is_secure, warnings = validate_env_file_security()
 
     if is_secure:
-        print("✅ .env file is properly secured!")
+        print("[OK] .env file is properly secured!")
     else:
-        print("⚠️  Security warnings found:")
+        print("[WARNING]  Security warnings found:")
         for warning in warnings:
             print(f"   {warning}")
 
@@ -65,7 +65,7 @@ def demo_api_key_format_validation():
 
     for key_name, key_value, description in examples:
         is_valid, error = validate_api_key_format(key_name, key_value)
-        status = "✅" if is_valid else "❌"
+        status = "[OK]" if is_valid else "[ERROR]"
         print(f"{status} {key_name}: {description}")
         if error:
             print(f"   Error: {error}")
@@ -104,9 +104,9 @@ def demo_startup_validation():
     is_valid, issues = validate_startup_security()
 
     if is_valid:
-        print("✅ All security checks passed!")
+        print("[OK] All security checks passed!")
     else:
-        print("⚠️  Security issues found:")
+        print("[WARNING]  Security issues found:")
         for issue in issues:
             print(f"   {issue}")
 
@@ -114,7 +114,7 @@ def demo_startup_validation():
     print("\nConfigured API Keys:")
     keys_status = check_api_keys()
     for key_name, is_present in keys_status.items():
-        status = "✅" if is_present else "❌"
+        status = "[OK]" if is_present else "[ERROR]"
         print(f"   {status} {key_name}")
 
 
@@ -133,7 +133,7 @@ def demo_logging_filter():
         # Set up logging with filter
         logger = setup_logging(log_to_console=False, log_to_file=False)
 
-        print("✅ SensitiveDataFilter is active in logging configuration")
+        print("[OK] SensitiveDataFilter is active in logging configuration")
         print()
         print("Example: If you log 'API key: sk-1234567890...'")
         print("Output:  'API key: [REDACTED_API_KEY]'")
@@ -141,7 +141,7 @@ def demo_logging_filter():
         print("This prevents accidental exposure of API keys in logs!")
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] Error: {e}")
 
 
 def demo_security_best_practices():
@@ -151,7 +151,7 @@ def demo_security_best_practices():
     print("=" * 70)
     print()
 
-    print("✅ DO:")
+    print("[OK] DO:")
     print("   1. Load keys from .env file")
     print("      load_dotenv()")
     print("      api_key = os.getenv('OPENAI_API_KEY')")
@@ -166,7 +166,7 @@ def demo_security_best_practices():
     print("      echo '.env' >> .gitignore")
     print()
 
-    print("❌ DON'T:")
+    print("[ERROR] DON'T:")
     print("   1. Never hardcode keys")
     print("      api_key = 'sk-1234567890...'  # WRONG!")
     print()
@@ -207,7 +207,7 @@ def main():
         print("\n" + "=" * 70)
         print("DEMO COMPLETE")
         print("=" * 70)
-        print("\n✅ All security features demonstrated successfully!")
+        print("\n[OK] All security features demonstrated successfully!")
         print()
         print("Next steps:")
         print("  - Run: python Agent/audit_api_key_security.py")
@@ -216,7 +216,7 @@ def main():
         print()
 
     except Exception as e:
-        print(f"\n❌ Error during demo: {e}")
+        print(f"\n[ERROR] Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

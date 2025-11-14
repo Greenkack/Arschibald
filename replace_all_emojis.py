@@ -78,7 +78,7 @@ def replace_emoji_in_string(line: str) -> Tuple[str, int]:
     new_line = line
     
     # Finde alle String-Literale (einfache und doppelte Anführungszeichen)
-    # Pattern: "text 📊 more" oder 'text 📊 more' oder f"text {var} 📊"
+    # Pattern: "text [CHART] more" oder 'text [CHART] more' oder f"text {var} [CHART]"
     string_patterns = [
         r'"([^"]*?")',  # Double quotes
         r"'([^']*?')",  # Single quotes
@@ -143,7 +143,7 @@ def process_file(file_path: Path) -> Tuple[int, int]:
         with open(file_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
     except Exception as e:
-        print(f"❌ Fehler beim Lesen von {file_path}: {e}")
+        print(f"[ERROR] Fehler beim Lesen von {file_path}: {e}")
         return 0, 0
     
     new_lines = []
@@ -193,9 +193,9 @@ def process_file(file_path: Path) -> Tuple[int, int]:
         try:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.writelines(new_lines)
-            print(f"✅ {file_path.name}: {total_replacements} Emojis in {lines_changed} Zeilen ersetzt")
+            print(f"[OK] {file_path.name}: {total_replacements} Emojis in {lines_changed} Zeilen ersetzt")
         except Exception as e:
-            print(f"❌ Fehler beim Schreiben von {file_path}: {e}")
+            print(f"[ERROR] Fehler beim Schreiben von {file_path}: {e}")
             return 0, 0
     
     return lines_changed, total_replacements
@@ -203,11 +203,11 @@ def process_file(file_path: Path) -> Tuple[int, int]:
 
 def main():
     """Hauptfunktion - scannt und ersetzt alle Emojis."""
-    print("🔍 Suche Python-Dateien...")
+    print("[SEARCH] Suche Python-Dateien...")
     root_dir = Path(__file__).parent
     python_files = find_python_files(root_dir)
     
-    print(f"📁 Gefunden: {len(python_files)} Python-Dateien\n")
+    print(f"[FOLDER] Gefunden: {len(python_files)} Python-Dateien\n")
     
     total_files = 0
     total_lines = 0
@@ -222,15 +222,15 @@ def main():
             total_emojis += emojis_replaced
     
     print(f"\n{'='*60}")
-    print(f"✅ FERTIG!")
+    print(f"[OK] FERTIG!")
     print(f"{'='*60}")
-    print(f"📁 Dateien geändert: {total_files}")
-    print(f"📝 Zeilen geändert: {total_lines}")
+    print(f"[FOLDER] Dateien geändert: {total_files}")
+    print(f"[NOTE] Zeilen geändert: {total_lines}")
     print(f"😀 Emojis ersetzt: {total_emojis}")
     print(f"{'='*60}\n")
     
     if total_emojis > 0:
-        print("⚠️ WICHTIG:")
+        print("[WARNING] WICHTIG:")
         print("1. Überprüfe die Änderungen mit 'git diff'")
         print("2. Teste die App mit Emojis aktiviert")
         print("3. Teste die App mit Emojis deaktiviert")

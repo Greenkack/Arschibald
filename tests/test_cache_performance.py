@@ -58,8 +58,14 @@ class TestCachePerformance:
         assert hits == num_operations, f"Cache hit rate too low: {hits}/{num_operations}"
 
         # Calculate operations per second
-        put_ops_per_sec = num_operations / put_time
-        get_ops_per_sec = num_operations / get_time
+        if put_time != 0:
+            put_ops_per_sec = num_operations / put_time
+        else:
+            put_ops_per_sec = 0.0
+        if get_time != 0:
+            get_ops_per_sec = num_operations / get_time
+        else:
+            get_ops_per_sec = 0.0
 
         print(f"Put operations: {put_ops_per_sec:.0f} ops/sec")
         print(f"Get operations: {get_ops_per_sec:.0f} ops/sec")
@@ -110,7 +116,10 @@ class TestCachePerformance:
         # Analyze results
         total_operations = sum(r["operations"] for r in results)
         avg_thread_duration = statistics.mean([r["duration"] for r in results])
-        overall_ops_per_sec = total_operations / total_time
+        if total_time != 0:
+            overall_ops_per_sec = total_operations / total_time
+        else:
+            overall_ops_per_sec = 0.0
 
         print(f"Total operations: {total_operations}")
         print(f"Total time: {total_time:.3f}s")
@@ -150,7 +159,10 @@ class TestCachePerformance:
                     hits += 1
 
             retrieval_time = time.time() - start_time
-            hit_rate = hits / cache_size
+            if cache_size != 0:
+                hit_rate = hits / cache_size
+            else:
+                hit_rate = 0.0
 
             results[cache_size] = {
                 "fill_time": fill_time,
@@ -321,7 +333,10 @@ class TestBenchmarkSuite:
         # Calculate coefficient of variation
         mean_ops = statistics.mean(results)
         std_ops = statistics.stdev(results) if len(results) > 1 else 0
-        cv = (std_ops / mean_ops) if mean_ops > 0 else 0
+        if mean_ops != 0:
+            cv = (std_ops / mean_ops) if mean_ops > 0 else 0
+        else:
+            cv = 0.0
 
         print(f"Operations per second across runs: {results}")
         print(f"Mean: {mean_ops:.0f}, Std: {std_ops:.0f}, CV: {cv:.2%}")
@@ -552,7 +567,10 @@ class TestPerformanceRegression:
             cache.get(f"key_{i}", CacheLevel.COMPONENT)
 
         total_time = time.time() - start_time
-        ops_per_second = num_ops / total_time
+        if total_time != 0:
+            ops_per_second = num_ops / total_time
+        else:
+            ops_per_second = 0.0
 
         print(f"Baseline performance: {ops_per_second:.0f} ops/sec")
 

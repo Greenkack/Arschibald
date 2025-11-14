@@ -47,7 +47,7 @@ def test_financing_page_generator_initialization():
     assert generator.width > 0, "Width should be set"
     assert generator.height > 0, "Height should be set"
 
-    print("✓ FinancingPageGenerator initialized successfully")
+    print("[OK] FinancingPageGenerator initialized successfully")
     print(f"  - Offer total: {offer_data['grand_total']:,.2f} €")
     print(f"  - Theme primary color: {theme['colors']['primary']}")
     print(f"  - Page size: {generator.width} x {generator.height}")
@@ -87,7 +87,7 @@ def test_monthly_rate_calculation_standard():
     total_payment = monthly_rate * months
     total_interest = total_payment - amount
 
-    print("✓ Standard financing calculation correct")
+    print("[OK] Standard financing calculation correct")
     print(f"  - Principal: {amount:,.2f} €")
     print(f"  - Interest rate: {annual_rate}% p.a.")
     print(f"  - Duration: {months} months ({months // 12} years)")
@@ -155,13 +155,13 @@ def test_monthly_rate_calculation_various_terms():
         passed = abs(monthly - test['expected']) <= tolerance
 
         if passed:
-            print(f"✓ {test['description']}")
+            print(f"[OK] {test['description']}")
             print(
                 f"  Expected: ~{
                     test['expected']:.2f}€, Calculated: {
                     monthly:.2f}€")
         else:
-            print(f"✗ {test['description']}")
+            print(f"[ERROR] {test['description']}")
             print(
                 f"  Expected: ~{
                     test['expected']:.2f}€, Calculated: {
@@ -170,7 +170,7 @@ def test_monthly_rate_calculation_various_terms():
 
     assert all_passed, "All financing calculations should be within tolerance"
 
-    print("✓ All various term calculations passed")
+    print("[OK] All various term calculations passed")
     return True
 
 
@@ -193,34 +193,34 @@ def test_monthly_rate_edge_cases():
     assert abs(monthly_zero_interest - expected_zero) < 0.01, \
         "Zero interest should result in simple division"
     print(
-        f"✓ Zero interest: {
+        f"[OK] Zero interest: {
             monthly_zero_interest:.2f}€ (expected: {
             expected_zero:.2f}€)")
 
     # Edge case 2: Zero months (should handle gracefully)
     monthly_zero_months = generator._calculate_monthly_rate(30000, 4.5, 0)
     assert monthly_zero_months >= 0, "Zero months should not cause negative result"
-    print(f"✓ Zero months: {monthly_zero_months:.2f}€ (handled gracefully)")
+    print(f"[OK] Zero months: {monthly_zero_months:.2f}€ (handled gracefully)")
 
     # Edge case 3: Very high interest rate
     monthly_high_interest = generator._calculate_monthly_rate(30000, 15.0, 60)
     assert monthly_high_interest > 30000 / \
         60, "High interest should increase monthly payment"
-    print(f"✓ High interest (15%): {monthly_high_interest:.2f}€")
+    print(f"[OK] High interest (15%): {monthly_high_interest:.2f}€")
 
     # Edge case 4: Very low interest rate
     monthly_low_interest = generator._calculate_monthly_rate(30000, 0.5, 60)
     expected_low = 30000 / 60
     assert monthly_low_interest > expected_low, "Even low interest should add to payment"
-    print(f"✓ Low interest (0.5%): {monthly_low_interest:.2f}€")
+    print(f"[OK] Low interest (0.5%): {monthly_low_interest:.2f}€")
 
     # Edge case 5: Very long term
     monthly_long_term = generator._calculate_monthly_rate(
         30000, 4.0, 240)  # 20 years
     assert monthly_long_term < 30000 / 60, "Long term should reduce monthly payment"
-    print(f"✓ Long term (20 years): {monthly_long_term:.2f}€")
+    print(f"[OK] Long term (20 years): {monthly_long_term:.2f}€")
 
-    print("✓ All edge cases handled correctly")
+    print("[OK] All edge cases handled correctly")
     return True
 
 
@@ -240,7 +240,7 @@ def test_financing_options_loading():
     # Load financing options
     financing_options = generator._get_financing_options()
 
-    print(f"✓ Loaded {len(financing_options)} financing options")
+    print(f"[OK] Loaded {len(financing_options)} financing options")
 
     if financing_options:
         for idx, option in enumerate(financing_options):
@@ -276,7 +276,7 @@ def test_financing_options_loading():
     else:
         print("  ℹ No financing options configured (this is OK for testing)")
 
-    print("✓ Financing options loading test complete")
+    print("[OK] Financing options loading test complete")
     return True
 
 
@@ -309,7 +309,7 @@ def test_pdf_generation_with_financing_data():
     pdf_bytes = generator.generate()
 
     if pdf_bytes:
-        print(f"✓ PDF generated: {len(pdf_bytes)} bytes")
+        print(f"[OK] PDF generated: {len(pdf_bytes)} bytes")
 
         # Verify PDF structure
         reader = PdfReader(io.BytesIO(pdf_bytes))
@@ -329,7 +329,7 @@ def test_pdf_generation_with_financing_data():
         print("  ℹ No PDF generated (no financing options configured)")
         print("  This is expected if no financing options are set up in admin settings")
 
-    print("✓ PDF generation test complete")
+    print("[OK] PDF generation test complete")
     return True
 
 
@@ -355,7 +355,10 @@ def test_financing_calculation_accuracy():
     monthly = generator._calculate_monthly_rate(amount, rate, months)
     total_payment = monthly * months
     total_interest = total_payment - amount
-    interest_percentage = (total_interest / amount) * 100
+    if amount != 0:
+        interest_percentage = (total_interest / amount) * 100
+    else:
+        interest_percentage = 0.0
 
     # Verify calculations are logical
     assert monthly > 0, "Monthly payment should be positive"
@@ -363,7 +366,7 @@ def test_financing_calculation_accuracy():
     assert total_interest > 0, "Interest should be positive"
     assert total_interest < amount, "Interest should be less than principal for reasonable rates"
 
-    print("✓ Financing calculation accuracy verified")
+    print("[OK] Financing calculation accuracy verified")
     print(f"  - Principal: {amount:,.2f} €")
     print(f"  - Interest rate: {rate}% p.a.")
     print(f"  - Duration: {months} months")
@@ -374,7 +377,10 @@ def test_financing_calculation_accuracy():
 
     # Verify interest is reasonable (should be between 10% and 50% of
     # principal for typical terms)
-    assert 0.10 <= interest_percentage / 100 <= 0.50, \
+    if 100 != 0:
+        assert 0.10 <= interest_percentage / 100 <= 0.50, \
+    else:
+        assert 0.10 < = 0.0
         "Interest percentage should be reasonable for typical financing"
 
     return True
@@ -444,7 +450,7 @@ def test_multiple_financing_scenarios():
         assert total > scenario['amount']
         assert interest >= 0
 
-    print("\n✓ All financing scenarios calculated correctly")
+    print("\n[OK] All financing scenarios calculated correctly")
     return True
 
 
@@ -477,11 +483,11 @@ def run_all_tests():
             else:
                 failed += 1
         except AssertionError as e:
-            print(f"\n✗ Test failed: {test_func.__name__}")
+            print(f"\n[ERROR] Test failed: {test_func.__name__}")
             print(f"  Error: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n✗ Test error: {test_func.__name__}")
+            print(f"\n[ERROR] Test error: {test_func.__name__}")
             print(f"  Error: {e}")
             import traceback
             traceback.print_exc()
@@ -496,9 +502,9 @@ def run_all_tests():
     print("=" * 70)
 
     if passed == len(test_functions):
-        print("✓ ALL TESTS PASSED - Task 18.2 Complete")
+        print("[OK] ALL TESTS PASSED - Task 18.2 Complete")
     else:
-        print("✗ SOME TESTS FAILED - Task 18.2 Needs Work")
+        print("[ERROR] SOME TESTS FAILED - Task 18.2 Needs Work")
 
     return failed == 0
 

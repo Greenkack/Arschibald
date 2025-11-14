@@ -63,7 +63,7 @@ def create_test_logo_png(
 # --- DEF BLOCK START: func test_logo_system ---
 def test_logo_system():
     """Testet das Brand-Logo-System"""
-    print("🔧 Teste Brand-Logo-System...")
+    print("[TOOL] Teste Brand-Logo-System...")
 
     # Test-Marken
     test_brands = [
@@ -83,11 +83,11 @@ def test_logo_system():
             logo_b64 = create_test_logo_png(brand)
             success = add_brand_logo(brand, logo_b64, "PNG")
             if success:
-                print(f"✓ Logo für '{brand}' hinzugefügt")
+                print(f"[OK] Logo für '{brand}' hinzugefügt")
             else:
-                print(f"✗ Fehler beim Hinzufügen von '{brand}'")
+                print(f"[ERROR] Fehler beim Hinzufügen von '{brand}'")
         except Exception as e:
-            print(f"✗ Fehler bei '{brand}': {e}")
+            print(f"[ERROR] Fehler bei '{brand}': {e}")
 
     print("\n2. Liste alle Logos auf...")
     logos = list_all_brand_logos()
@@ -100,10 +100,10 @@ def test_logo_system():
         logo_data = get_brand_logo(brand)
         if logo_data:
             print(
-                f"✓ Logo für '{brand}' gefunden (Format: {
+                f"[OK] Logo für '{brand}' gefunden (Format: {
                     logo_data['logo_format']})")
         else:
-            print(f"✗ Kein Logo für '{brand}' gefunden")
+            print(f"[ERROR] Kein Logo für '{brand}' gefunden")
 
-    print("\n✅ Test abgeschlossen!")
+    print("\n[OK] Test abgeschlossen!")
 # --- DEF BLOCK END ---

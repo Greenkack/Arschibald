@@ -35,7 +35,7 @@ def test_missing_product_datasheet():
     pdf_bytes = merger.merge(non_existent_ids)
 
     # Should return empty bytes or handle gracefully
-    print(f"✓ Missing product datasheets handled gracefully")
+    print(f"[OK] Missing product datasheets handled gracefully")
     print(f"  - Requested IDs: {non_existent_ids}")
     print(f"  - Result: {len(pdf_bytes)} bytes")
     print(f"  - No crash or exception")
@@ -55,7 +55,7 @@ def test_missing_company_document():
     pdf_bytes = merger.merge(non_existent_ids)
 
     # Should return empty bytes or handle gracefully
-    print(f"✓ Missing company documents handled gracefully")
+    print(f"[OK] Missing company documents handled gracefully")
     print(f"  - Requested IDs: {non_existent_ids}")
     print(f"  - Result: {len(pdf_bytes)} bytes")
     print(f"  - No crash or exception")
@@ -73,7 +73,7 @@ def test_empty_product_datasheet_list():
 
     assert pdf_bytes == b'', "Empty list should return empty bytes"
 
-    print(f"✓ Empty product datasheet list handled correctly")
+    print(f"[OK] Empty product datasheet list handled correctly")
     print(f"  - Input: []")
     print(f"  - Output: empty bytes")
 
@@ -90,7 +90,7 @@ def test_empty_company_document_list():
 
     assert pdf_bytes == b'', "Empty list should return empty bytes"
 
-    print(f"✓ Empty company document list handled correctly")
+    print(f"[OK] Empty company document list handled correctly")
     print(f"  - Input: []")
     print(f"  - Output: empty bytes")
 
@@ -114,7 +114,7 @@ def test_missing_financing_data():
     pdf_bytes = generator.generate()
 
     # Should return empty bytes when no financing options available
-    print(f"✓ Missing financing data handled gracefully")
+    print(f"[OK] Missing financing data handled gracefully")
     print(
         f"  - Financing options available: {len(generator._get_financing_options())}")
     print(f"  - Result: {len(pdf_bytes)} bytes")
@@ -149,7 +149,7 @@ def test_invalid_chart_data():
         pdf_bytes = generator.generate(chart_keys)
 
         # Should handle invalid data gracefully
-        print(f"✓ Invalid chart data handled gracefully")
+        print(f"[OK] Invalid chart data handled gracefully")
         print(f"  - Requested charts: {len(chart_keys)}")
         print(f"  - Result: {len(pdf_bytes)} bytes")
         print(f"  - No crash despite invalid data")
@@ -192,7 +192,7 @@ def test_extended_pdf_generator_with_all_errors():
     pdf_bytes = generator.generate_extended_pages()
 
     # Should return some bytes (even if empty) without crashing
-    print(f"✓ Extended PDF generator handled all errors gracefully")
+    print(f"[OK] Extended PDF generator handled all errors gracefully")
     print(f"  - Financing: No options available")
     print(f"  - Datasheets: Non-existent IDs")
     print(f"  - Documents: Non-existent IDs")
@@ -244,7 +244,7 @@ def test_partial_success_scenario():
     pdf_bytes = generator.generate_extended_pages()
 
     # Should generate PDF with successful components only
-    print(f"✓ Partial success scenario handled correctly")
+    print(f"[OK] Partial success scenario handled correctly")
     print(f"  - Financing: Failed (no options)")
     print(f"  - Datasheets: Failed (non-existent)")
     print(f"  - Documents: Skipped (empty)")
@@ -273,7 +273,7 @@ def test_corrupted_pdf_merge():
         valid_ids = [id for id in invalid_ids if id is not None]
         pdf_bytes = merger.merge(valid_ids)
 
-        print(f"✓ Corrupted PDF merge handled gracefully")
+        print(f"[OK] Corrupted PDF merge handled gracefully")
         print(f"  - Invalid IDs: {invalid_ids}")
         print(f"  - Result: {len(pdf_bytes)} bytes")
         print(f"  - No crash")
@@ -305,7 +305,7 @@ def test_zero_interest_financing():
     assert abs(
         monthly - expected) < 0.01, "Zero interest should result in simple division"
 
-    print(f"✓ Zero interest financing handled correctly")
+    print(f"[OK] Zero interest financing handled correctly")
     print(f"  - Amount: 25,000€")
     print(f"  - Interest: 0%")
     print(f"  - Months: 60")
@@ -333,7 +333,7 @@ def test_zero_months_financing():
     # Should return a reasonable value (not crash)
     assert monthly >= 0, "Should return non-negative value"
 
-    print(f"✓ Zero months financing handled gracefully")
+    print(f"[OK] Zero months financing handled gracefully")
     print(f"  - Amount: 25,000€")
     print(f"  - Interest: 4.5%")
     print(f"  - Months: 0")
@@ -363,7 +363,7 @@ def test_very_large_financing_amount():
     assert monthly > 0, "Should calculate positive monthly payment"
     assert monthly < 1000000, "Monthly should be less than total"
 
-    print(f"✓ Very large financing amount handled correctly")
+    print(f"[OK] Very large financing amount handled correctly")
     print(f"  - Amount: 1,000,000€")
     print(f"  - Interest: 4.0%")
     print(f"  - Months: 120")
@@ -380,7 +380,7 @@ def test_fallback_to_base_pdf():
     # When extended PDF generation fails, the system should fall back
     # to generating just the base 8-page PDF
 
-    print(f"✓ Fallback mechanism documented")
+    print(f"[OK] Fallback mechanism documented")
     print(f"  - Expected behavior:")
     print(f"    1. Extended PDF generation encounters error")
     print(f"    2. Error is logged (not raised)")
@@ -397,7 +397,7 @@ def test_logging_of_errors():
 
     # This test documents the expected logging behavior
 
-    print(f"✓ Error logging requirements documented")
+    print(f"[OK] Error logging requirements documented")
     print(f"  - Expected logging:")
     print(f"    1. Missing files: WARNING level")
     print(f"    2. Invalid data: WARNING level")
@@ -456,7 +456,7 @@ def test_graceful_degradation():
     reader = PdfReader(io.BytesIO(pdf_bytes))
     num_pages = len(reader.pages)
 
-    print(f"✓ Graceful degradation working correctly")
+    print(f"[OK] Graceful degradation working correctly")
     print(f"  - Financing: Disabled")
     print(f"  - Datasheets: Empty")
     print(f"  - Documents: Empty")
@@ -503,11 +503,11 @@ def run_all_tests():
             else:
                 failed += 1
         except AssertionError as e:
-            print(f"\n✗ Test failed: {test_func.__name__}")
+            print(f"\n[ERROR] Test failed: {test_func.__name__}")
             print(f"  Error: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n✗ Test error: {test_func.__name__}")
+            print(f"\n[ERROR] Test error: {test_func.__name__}")
             print(f"  Error: {e}")
             import traceback
             traceback.print_exc()
@@ -522,9 +522,9 @@ def run_all_tests():
     print("=" * 70)
 
     if passed == len(test_functions):
-        print("✓ ALL TESTS PASSED - Task 18.4 Complete")
+        print("[OK] ALL TESTS PASSED - Task 18.4 Complete")
     else:
-        print("✗ SOME TESTS FAILED - Task 18.4 Needs Work")
+        print("[ERROR] SOME TESTS FAILED - Task 18.4 Needs Work")
 
     return failed == 0
 

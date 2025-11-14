@@ -36,7 +36,7 @@ except ImportError:
 
 def verify_imports():
     """Verify all required modules can be imported"""
-    console.print(Panel.fit("✅ Step 1: Verify Imports", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 1: Verify Imports", style="bold cyan"))
 
     try:
         from core.migrations import (
@@ -47,17 +47,17 @@ def verify_imports():
             rollback,
         )
 
-        console.print("[green]✓[/green] All migration modules imported successfully")
+        console.print("[green][OK][/green] All migration modules imported successfully")
         return True
     except Exception as e:
-        console.print(f"[red]✗[/red] Import failed: {e}")
+        console.print(f"[red][ERROR][/red] Import failed: {e}")
         return False
 
 
 def verify_migration_manager():
     """Verify MigrationManager can be instantiated"""
     console.print("\n")
-    console.print(Panel.fit("✅ Step 2: Verify MigrationManager", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 2: Verify MigrationManager", style="bold cyan"))
 
     try:
         # Set SQLite for testing
@@ -69,7 +69,7 @@ def verify_migration_manager():
 
         reset_config()
         manager = get_migration_manager()
-        console.print("[green]✓[/green] MigrationManager instantiated successfully")
+        console.print("[green][OK][/green] MigrationManager instantiated successfully")
 
         # Check attributes
         assert hasattr(manager, "alembic_config"), "Missing alembic_config"
@@ -78,17 +78,17 @@ def verify_migration_manager():
         assert hasattr(manager, "create_migration"), "Missing create_migration method"
         assert hasattr(manager, "rollback_migration"), "Missing rollback_migration method"
 
-        console.print("[green]✓[/green] All required attributes present")
+        console.print("[green][OK][/green] All required attributes present")
         return True
     except Exception as e:
-        console.print(f"[red]✗[/red] MigrationManager verification failed: {e}")
+        console.print(f"[red][ERROR][/red] MigrationManager verification failed: {e}")
         return False
 
 
 def verify_initialization():
     """Verify Alembic environment can be initialized"""
     console.print("\n")
-    console.print(Panel.fit("✅ Step 3: Verify Initialization", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 3: Verify Initialization", style="bold cyan"))
 
     try:
         from core.migrations import get_migration_manager
@@ -107,21 +107,21 @@ def verify_initialization():
         all_exist = True
         for file_path in required_files:
             if file_path.exists():
-                console.print(f"[green]✓[/green] {file_path.name} exists")
+                console.print(f"[green][OK][/green] {file_path.name} exists")
             else:
-                console.print(f"[red]✗[/red] {file_path.name} missing")
+                console.print(f"[red][ERROR][/red] {file_path.name} missing")
                 all_exist = False
 
         return all_exist
     except Exception as e:
-        console.print(f"[red]✗[/red] Initialization failed: {e}")
+        console.print(f"[red][ERROR][/red] Initialization failed: {e}")
         return False
 
 
 def verify_methods():
     """Verify all required methods work"""
     console.print("\n")
-    console.print(Panel.fit("✅ Step 4: Verify Methods", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 4: Verify Methods", style="bold cyan"))
 
     try:
         from core.migrations import get_migration_manager
@@ -131,41 +131,41 @@ def verify_methods():
         # Test get_current_revision
         try:
             current = manager.get_current_revision()
-            console.print(f"[green]✓[/green] get_current_revision() works: {current or 'None'}")
+            console.print(f"[green][OK][/green] get_current_revision() works: {current or 'None'}")
         except Exception as e:
             console.print(f"[yellow]⚠[/yellow] get_current_revision() error: {e}")
 
         # Test get_pending_migrations
         try:
             pending = manager.get_pending_migrations()
-            console.print(f"[green]✓[/green] get_pending_migrations() works: {len(pending)} pending")
+            console.print(f"[green][OK][/green] get_pending_migrations() works: {len(pending)} pending")
         except Exception as e:
             console.print(f"[yellow]⚠[/yellow] get_pending_migrations() error: {e}")
 
         # Test validate_migrations
         try:
             results = manager.validate_migrations()
-            console.print(f"[green]✓[/green] validate_migrations() works: {results['status']}")
+            console.print(f"[green][OK][/green] validate_migrations() works: {results['status']}")
         except Exception as e:
             console.print(f"[yellow]⚠[/yellow] validate_migrations() error: {e}")
 
         # Test get_migration_history
         try:
             history = manager.get_migration_history()
-            console.print(f"[green]✓[/green] get_migration_history() works: {len(history)} migrations")
+            console.print(f"[green][OK][/green] get_migration_history() works: {len(history)} migrations")
         except Exception as e:
             console.print(f"[yellow]⚠[/yellow] get_migration_history() error: {e}")
 
         return True
     except Exception as e:
-        console.print(f"[red]✗[/red] Methods verification failed: {e}")
+        console.print(f"[red][ERROR][/red] Methods verification failed: {e}")
         return False
 
 
 def verify_templates():
     """Verify migration templates can be created"""
     console.print("\n")
-    console.print(Panel.fit("✅ Step 5: Verify Templates", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 5: Verify Templates", style="bold cyan"))
 
     try:
         from core.migrations import get_migration_manager
@@ -179,69 +179,69 @@ def verify_templates():
             try:
                 template_path = manager.create_migration_template(template_name)
                 if template_path.exists():
-                    console.print(f"[green]✓[/green] Template '{template_name}' created")
+                    console.print(f"[green][OK][/green] Template '{template_name}' created")
                 else:
-                    console.print(f"[red]✗[/red] Template '{template_name}' not found")
+                    console.print(f"[red][ERROR][/red] Template '{template_name}' not found")
                     all_created = False
             except Exception as e:
-                console.print(f"[red]✗[/red] Template '{template_name}' failed: {e}")
+                console.print(f"[red][ERROR][/red] Template '{template_name}' failed: {e}")
                 all_created = False
 
         return all_created
     except Exception as e:
-        console.print(f"[red]✗[/red] Templates verification failed: {e}")
+        console.print(f"[red][ERROR][/red] Templates verification failed: {e}")
         return False
 
 
 def verify_cli():
     """Verify CLI module exists"""
     console.print("\n")
-    console.print(Panel.fit("✅ Step 6: Verify CLI", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 6: Verify CLI", style="bold cyan"))
 
     try:
         from core.cli_migrations import app
 
-        console.print("[green]✓[/green] CLI module imported successfully")
+        console.print("[green][OK][/green] CLI module imported successfully")
 
         # Check if typer app is configured
         assert hasattr(app, "registered_commands"), "CLI app not properly configured"
-        console.print("[green]✓[/green] CLI app configured")
+        console.print("[green][OK][/green] CLI app configured")
 
         return True
     except Exception as e:
-        console.print(f"[red]✗[/red] CLI verification failed: {e}")
+        console.print(f"[red][ERROR][/red] CLI verification failed: {e}")
         return False
 
 
 def verify_integration():
     """Verify integration with database module"""
     console.print("\n")
-    console.print(Panel.fit("✅ Step 7: Verify Integration", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 7: Verify Integration", style="bold cyan"))
 
     try:
         from core.database import init_database
 
-        console.print("[green]✓[/green] Database module integration verified")
+        console.print("[green][OK][/green] Database module integration verified")
 
         # Check that init_database includes migration call
         import inspect
 
         source = inspect.getsource(init_database)
         if "migrate" in source:
-            console.print("[green]✓[/green] init_database() calls migrate()")
+            console.print("[green][OK][/green] init_database() calls migrate()")
         else:
             console.print("[yellow]⚠[/yellow] init_database() may not call migrate()")
 
         return True
     except Exception as e:
-        console.print(f"[red]✗[/red] Integration verification failed: {e}")
+        console.print(f"[red][ERROR][/red] Integration verification failed: {e}")
         return False
 
 
 def verify_documentation():
     """Verify documentation exists"""
     console.print("\n")
-    console.print(Panel.fit("✅ Step 8: Verify Documentation", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 8: Verify Documentation", style="bold cyan"))
 
     docs = [
         Path(__file__).parent / "core" / "MIGRATIONS_QUICK_REFERENCE.md",
@@ -251,9 +251,9 @@ def verify_documentation():
     all_exist = True
     for doc_path in docs:
         if doc_path.exists():
-            console.print(f"[green]✓[/green] {doc_path.name} exists")
+            console.print(f"[green][OK][/green] {doc_path.name} exists")
         else:
-            console.print(f"[red]✗[/red] {doc_path.name} missing")
+            console.print(f"[red][ERROR][/red] {doc_path.name} missing")
             all_exist = False
 
     return all_exist
@@ -262,7 +262,7 @@ def verify_documentation():
 def verify_requirements():
     """Verify requirements are documented"""
     console.print("\n")
-    console.print(Panel.fit("✅ Step 9: Verify Requirements", style="bold cyan"))
+    console.print(Panel.fit("[OK] Step 9: Verify Requirements", style="bold cyan"))
 
     requirements_met = {
         "5.1": "Automatic migration execution on startup",
@@ -272,7 +272,7 @@ def verify_requirements():
 
     console.print("[cyan]Requirements Coverage:[/cyan]")
     for req_id, description in requirements_met.items():
-        console.print(f"  [green]✓[/green] Requirement {req_id}: {description}")
+        console.print(f"  [green][OK][/green] Requirement {req_id}: {description}")
 
     return True
 
@@ -302,14 +302,14 @@ def main():
 
     # Summary
     console.print("\n")
-    console.print(Panel.fit("📊 Verification Summary", style="bold cyan"))
+    console.print(Panel.fit("[CHART] Verification Summary", style="bold cyan"))
 
     table = Table(title="Verification Results")
     table.add_column("Component", style="cyan")
     table.add_column("Status", style="white")
 
     for component, passed in results.items():
-        status = "[green]✓ PASS[/green]" if passed else "[red]✗ FAIL[/red]"
+        status = "[green][OK] PASS[/green]" if passed else "[red][ERROR] FAIL[/red]"
         table.add_row(component, status)
 
     console.print(table)
@@ -318,12 +318,12 @@ def main():
     all_passed = all(results.values())
     if all_passed:
         console.print("\n")
-        console.print(Panel.fit("✅ All Verifications Passed!", style="bold green"))
+        console.print(Panel.fit("[OK] All Verifications Passed!", style="bold green"))
         console.print("\n[green]Task 1.3 implementation is complete and verified.[/green]")
         return 0
     else:
         console.print("\n")
-        console.print(Panel.fit("⚠️  Some Verifications Failed", style="bold yellow"))
+        console.print(Panel.fit("[WARNING]  Some Verifications Failed", style="bold yellow"))
         failed = [k for k, v in results.items() if not v]
         console.print(f"\n[yellow]Failed components: {', '.join(failed)}[/yellow]")
         return 1

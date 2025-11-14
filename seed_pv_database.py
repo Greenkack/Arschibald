@@ -531,8 +531,8 @@ def seed_database():
         }
     ]
     
-    print("🌱 Seeding PV-Komponenten-Datenbank...")
-    print(f"📦 {len(components)} Komponenten werden eingefügt...\n")
+    print("[GREEN] Seeding PV-Komponenten-Datenbank...")
+    print(f"[PACKAGE] {len(components)} Komponenten werden eingefügt...\n")
     
     success_count = 0
     error_count = 0
@@ -540,18 +540,18 @@ def seed_database():
     for comp in components:
         try:
             comp_id = create_component(comp)
-            print(f"✅ #{comp_id}: {comp['manufacturer']} - {comp['product_name']}")
+            print(f"[OK] #{comp_id}: {comp['manufacturer']} - {comp['product_name']}")
             success_count += 1
         except Exception as e:
-            print(f"❌ Fehler: {comp['manufacturer']} - {comp['product_name']}: {e}")
+            print(f"[ERROR] Fehler: {comp['manufacturer']} - {comp['product_name']}: {e}")
             error_count += 1
     
     print(f"\n🎉 Seeding abgeschlossen!")
-    print(f"✅ Erfolgreich: {success_count}")
-    print(f"❌ Fehler: {error_count}")
+    print(f"[OK] Erfolgreich: {success_count}")
+    print(f"[ERROR] Fehler: {error_count}")
     
     # Statistiken anzeigen
-    print("\n📊 Datenbank-Statistiken:")
+    print("\n[CHART] Datenbank-Statistiken:")
     stats = get_statistics()
     print(f"Gesamt Komponenten: {stats['total_components']}")
     print(f"\nNach Hersteller:")

@@ -396,9 +396,9 @@ def run_all_tests():
 
     print("\n" + "=" * 70)
     if result == 0:
-        print("✓ ALL END-TO-END TESTS PASSED")
+        print("[OK] ALL END-TO-END TESTS PASSED")
     else:
-        print("✗ SOME TESTS FAILED - Review output above")
+        print("[ERROR] SOME TESTS FAILED - Review output above")
     print("=" * 70)
 
     return result

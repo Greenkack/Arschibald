@@ -48,7 +48,7 @@ def test_search_with_context():
         })
         print(result)
 
-        return "SUCHERGEBNISSE" in result or "not installed" in result or "not configured" in result or "❌" in result
+        return "SUCHERGEBNISSE" in result or "not installed" in result or "not configured" in result or "[ERROR]" in result
     except Exception as e:
         print(f"Exception: {e}")
         # If tavily is not installed, this is expected
@@ -94,19 +94,19 @@ def test_api_key_validation():
     api_key = os.getenv("TAVILY_API_KEY")
 
     if not api_key:
-        print("⚠️  TAVILY_API_KEY not configured in .env")
+        print("[WARNING]  TAVILY_API_KEY not configured in .env")
         print("   This is expected if you haven't set up Tavily yet.")
         print("   The tool should provide clear setup instructions.")
 
         # Test that the tool provides helpful error message
         result = tavily_search.invoke({"query": "test query"})
         if "TAVILY_API_KEY not configured" in result or "not installed" in result:
-            print("✅ Tool provides clear configuration/installation instructions")
+            print("[OK] Tool provides clear configuration/installation instructions")
             return True
-        print("❌ Tool should provide configuration instructions")
+        print("[ERROR] Tool should provide configuration instructions")
         print(f"   Got: {result[:100]}...")
         return False
-    print(f"✅ TAVILY_API_KEY configured: {api_key[:4]}***")
+    print(f"[OK] TAVILY_API_KEY configured: {api_key[:4]}***")
     return True
 
 
@@ -131,7 +131,7 @@ def main():
             success = test_func()
             results.append((test_name, success))
         except Exception as e:
-            print(f"\n❌ Test '{test_name}' failed with exception: {e}")
+            print(f"\n[ERROR] Test '{test_name}' failed with exception: {e}")
             results.append((test_name, False))
 
     # Print summary
@@ -143,7 +143,7 @@ def main():
     total = len(results)
 
     for test_name, success in results:
-        status = "✅ PASS" if success else "❌ FAIL"
+        status = "[OK] PASS" if success else "[ERROR] FAIL"
         print(f"{status} - {test_name}")
 
     print(f"\n{'=' * 70}")
@@ -153,7 +153,7 @@ def main():
     if passed == total:
         print("🎉 All tests passed!")
     else:
-        print("⚠️  Some tests failed. Review the output above.")
+        print("[WARNING]  Some tests failed. Review the output above.")
 
     return passed == total
 

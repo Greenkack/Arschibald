@@ -7,14 +7,14 @@ print("=" * 78)
 print("✨ ADMIN-KARTENMENÜ AKTIV (KEIN KARUSSELL MEHR)")
 print("=" * 78)
 
-print("\n🎨 DESIGN-HIGHLIGHTS")
+print("\n[DESIGN] DESIGN-HIGHLIGHTS")
 print("-" * 78)
-print("✅ Dreispaltiges Card-Grid (responsive)")
-print("✅ Icons + Kurzbeschreibung + Status-Badge")
-print("✅ Soft-Glow & Gradient-Hover für moderne Anmutung")
-print("✅ Primärer Button-Style für aktiven Bereich")
-print("✅ Keine Carousel-Buttons, keine Dots, kein Wrap-Around")
-print("✅ Fokus auf Direktnavigation per Karte")
+print("[OK] Dreispaltiges Card-Grid (responsive)")
+print("[OK] Icons + Kurzbeschreibung + Status-Badge")
+print("[OK] Soft-Glow & Gradient-Hover für moderne Anmutung")
+print("[OK] Primärer Button-Style für aktiven Bereich")
+print("[OK] Keine Carousel-Buttons, keine Dots, kein Wrap-Around")
+print("[OK] Fokus auf Direktnavigation per Karte")
 
 print("\n📋 ADMIN-BEREICHE (ICON | TITEL | BESCHREIBUNG)")
 print("-" * 78)
@@ -29,7 +29,7 @@ admin_cards = {
         "Benutzerverwaltung",
         "Teams, Rechte & Rollen"),
     "admin_tab_product_management": (
-        "📦",
+        "[PACKAGE]",
         "Produktverwaltung",
         "Produkte, Varianten & Kalkulation"),
     "admin_tab_logo_management": (
@@ -65,7 +65,7 @@ admin_cards = {
         "Zahlungsbedingungen",
         "Varianten & Zahlungsziele"),
     "admin_tab_visualization_settings": (
-        "📊",
+        "[CHART]",
         "Visualisierung",
         "Diagrammfarben & Fonts"),
     "admin_tab_ui_effects": (
@@ -103,7 +103,7 @@ print("5. Mehrfach navigieren & sicherstellen, dass aktive Karte oben bleibt")
 print("6. Theme-Wechsel testen (UI-Effekte) → Karten reagieren mit neuem Stil")
 
 print("\n" + "=" * 78)
-print("🔧 TECHNISCHE ÄNDERUNGEN")
+print("[TOOL] TECHNISCHE ÄNDERUNGEN")
 print("=" * 78)
 print("• admin_panel.py → _render_horizontal_menu_selector() auf Kartenlayout umgebaut")
 print("• ADMIN_TAB_ICONS ausgebaut + ADMIN_TAB_DESCRIPTIONS ergänzt")
@@ -111,8 +111,8 @@ print("• test_carousel_admin.py → in Kartenversion umbenannt (dieses Skript)
 print("• Dokumentation zum Karussell kann archiviert werden")
 
 print("\n" + "=" * 78)
-print("✅ ERGEBNIS")
+print("[OK] ERGEBNIS")
 print("=" * 78)
 print("🎉 Admin-Navigation nutzt jetzt ein modernes Kartenmenü. Kein Karussell mehr nötig.")
-print("🚀 Feedback willkommen – Fokus auf Barrierefreiheit & Klarheit!")
+print("[LAUNCH] Feedback willkommen – Fokus auf Barrierefreiheit & Klarheit!")
 print()

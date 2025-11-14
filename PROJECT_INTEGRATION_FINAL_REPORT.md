@@ -12,6 +12,7 @@
 ## 🟢 **VOLLSTÄNDIG AKTIV & INTEGRIERT** (80 Module)
 
 ### 📌 Core-System (6 Module)
+
 - ✅ `core_integration.py` - System-Integration
 - ✅ `database.py` - Datenbank-Core  
 - ✅ `product_db.py` - Produkt-DB
@@ -42,6 +43,7 @@
 | **`options.py`** | 3051 | render_options (Z. 2916) |
 
 ### 🧮 Berechnungen (9 Module)
+
 - ✅ `calculations.py` - Haupt-Berechnungen
 - ✅ `calculations_extended.py` - Erweiterte Berechnungen (pdf_generator.py)
 - ✅ `calculations_heatpump.py` - WP-Berechnungen (heatpump_ui.py)
@@ -53,6 +55,7 @@
 - ✅ `heatpump_dynamic_tariff.py` - WP-Tarife (heatpump_ui.py)
 
 ### 📄 PDF-System (12 Module)
+
 - ✅ `pdf_generator.py` - Haupt-Generator
 - ✅ `pdf_templates.py` - Templates
 - ✅ `pdf_styles.py` - Styles
@@ -67,6 +70,7 @@
 - ✅ `pdf_ui.py` - UI-Komponenten
 
 ### 💰 Pricing-System (6 Module)
+
 - ✅ `dynamic_pricing_engine.py` - Dynamisches Pricing
 - ✅ `price_matrix_lookup.py` - Matrix-Lookup
 - ✅ `price_matrix_store.py` - Matrix-Storage
@@ -75,6 +79,7 @@
 - ✅ `solar_calculator_pricing_integration.py` - Integration
 
 ### 🎨 UI & Charts (8 Module)
+
 - ✅ `ui_state_manager.py` - State-Management
 - ✅ `ui_chart_helpers.py` - Chart-Helpers
 - ✅ `ui_effects_library.py` - Effekte
@@ -85,6 +90,7 @@
 - ✅ `heatpump_advanced_charts.py` - WP-Charts
 
 ### 🏢 Admin-Module (23 Module - alle in admin_panel.py)
+
 - ✅ `admin_panel.py` - Haupt-Panel
 - ✅ `admin_security.py` - Sicherheit
 - ✅ `admin_brand_logo_management_ui.py` 
@@ -116,6 +122,7 @@
 ## ⚠️ **TEILWEISE INTEGRIERT** (40 Module)
 
 ### Bridge-Module (nicht vollständig aktiv)
+
 - ⚠️ `calculation_bridge.py` - Bridge-Modul
 - ⚠️ `database_bridge.py` - DB-Bridge
 - ⚠️ `pdf_generation_bridge.py` - PDF-Bridge
@@ -123,12 +130,14 @@
 - ⚠️ `pv_mounting_db_bridge.py` - PV-DB-Bridge
 
 ### Alternative Versionen (Duplikate)
+
 - ⚠️ `admin_intro_settings_ui_NEW.py` vs. `admin_intro_settings_ui.py`
 - ⚠️ `admin_pv_mounting_tab_v2.py` vs. `admin_pv_mounting_tab.py`
 - ⚠️ `carousel_ui_utils_native.py` vs. `carousel_ui_utils.py`
 - ⚠️ `multi_offer_generator_new.py` vs. `multi_offer_generator.py` vs. `multi_offer_generator_old.py`
 
 ### Erweiterte Features (partiell aktiv)
+
 - ⚠️ `heatpump_advanced_features.py` - Teilweise genutzt
 - ⚠️ `heatpump_advanced_features_part2.py` - Teilweise genutzt
 - ⚠️ `heatpump_advanced_features_part3.py` - Teilweise genutzt
@@ -137,6 +146,7 @@
 - ⚠️ `advanced_features.py` - Erweiterte Features
 
 ### PDF-Erweiterungen (optional)
+
 - ⚠️ `pdf_atomizer.py` - PDF-Atomisierung
 - ⚠️ `pdf_chart_generator_protected.py` - Protected Charts
 - ⚠️ `pdf_dynamic_tariff_section.py` - Dynamische Tarife
@@ -146,6 +156,7 @@
 - ⚠️ `financing_page_generator_enhanced.py` - Enhanced Financing
 
 ### Pricing-Erweiterungen
+
 - ⚠️ `matrix_extras_calculator.py` - Extras-Calc
 - ⚠️ `matrix_loader.py` - Matrix-Loader
 - ⚠️ `price_matrix_examples.py` - Beispiele
@@ -155,11 +166,13 @@
 ## 🔧 **TOOLS & UTILITIES** (nicht für Integration gedacht)
 
 ### CLI-Tools
+
 - 🔧 `pdf_generator_cli.py` - PDF-Generator CLI
 - 🔧 `multi_offer_generator_cli.py` - Multi-Offer CLI
 - 🔧 `calculations_cli.py` - Berechnungs-CLI
 
 ### Setup & Migration
+
 - 🔧 `setup.py` - Setup-Datei
 - 🔧 `init_database.py` - DB-Init
 - 🔧 `seed_pv_database.py` - PV-DB-Seed
@@ -168,12 +181,14 @@
 - 🔧 `create_super_admin.py` - Admin erstellen
 
 ### Debug & Cleanup
+
 - 🔧 `clean_*.py` - Cleanup-Tools
 - 🔧 `clear_python_cache.py` - Cache-Clear
 - 🔧 `cleanup_session_state.py` - Session-Cleanup
 - 🔧 `force_cleanup_session_state.py` - Force-Cleanup
 
 ### Analyse-Tools
+
 - 🔧 `analyse_*.py` - Analyse-Skripte
 - 🔧 `analyze_*.py` - Analyse-Skripte
 - 🔧 `check_*.py` - Check-Skripte
@@ -181,11 +196,13 @@
 - 🔧 `simulate_*.py` - Simulations-Tools
 
 ### Recovery & Backup
+
 - 🔧 `pdf_recover.py` - PDF-Recovery
 - 🔧 `database_backup.py` - DB-Backup
 - 🔧 `restore_*.py` - Restore-Tools
 
 ### Konvertierungs-Tools
+
 - 🔧 `pdf_zu_markdown.py` - PDF→Markdown
 - 🔧 `pdf_zu_png.py` - PDF→PNG
 
@@ -203,14 +220,17 @@
 ## ✅ **SPEZIELLE INTEGRATIONEN**
 
 ### Voice Command
+
 - ✅ `voice_command.py` - In gui.py Z. 1509 als Drawer-Action
 - ✅ `drawer_actions.py` - Drawer-Handler (importiert voice_command)
 
 ### User Management
+
 - ✅ `user_menu.py` - render_profile_editor in gui.py Z. 2099
 - ✅ `user_management.py` - UserManagement-Klasse (von user_menu.py genutzt)
 
 ### Utils-Ordner (100% aktiv - bereits committed)
+
 - ✅ 22/22 Module aktiv (siehe UTILS_INTEGRATION_STATUS.md)
 - ✅ 3 Module gelöscht (color_*.py)
 - ✅ Alle refactored & integriert
@@ -251,14 +271,17 @@ map_integration.py      # Nur Platzhalter - keine echte Funktion
 ```
 
 ### 3️⃣ PRIORITÄT MITTEL - Bridge-Module prüfen
+
 - Alle `*_bridge.py` Module analysieren
 - Entweder vollständig nutzen ODER entfernen
 
 ### 4️⃣ PRIORITÄT MITTEL - Versionen konsolidieren
+
 - `heatpump_advanced_features_part*.py` → In ein Modul zusammenführen
 - Alle `*_enhanced.py` → Entweder zu Hauptmodul ODER löschen
 
 ### 5️⃣ PRIORITÄT NIEDRIG - Tools dokumentieren
+
 - Alle Tools in `/tools` Ordner verschieben
 - README für Tools erstellen
 
@@ -271,6 +294,7 @@ map_integration.py      # Nur Platzhalter - keine echte Funktion
 **Das entspricht 70-75% vollständiger Integration der Kern-Funktionalität!**
 
 ### Verbleibende Arbeit:
+
 1. ❌ **2 Placeholder löschen** (scenario_manager, map_integration)
 2. ❌ **6 Duplikate entfernen** (alte Versionen)
 3. ⚠️ **40 Module zu 100% aktivieren** (Bridge-Module, Enhanced-Features)

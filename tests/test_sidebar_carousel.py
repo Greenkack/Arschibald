@@ -58,7 +58,7 @@ def test_carousel_structure():
 
         # Nur 5 Items um preview herum zeigen
         if preview_index - 2 <= i <= preview_index + 2:
-            visible = "✓"
+            visible = "[OK]"
         else:
             visible = " "
 
@@ -69,7 +69,7 @@ def test_carousel_structure():
     print("-" * 60)
     print("  [↑ Hoch]  → Preview Index -1")
     print("  [↓ Runter] → Preview Index +1")
-    print("  [✓ Wechseln zu: Wärmepumpe] → Navigate zu Preview")
+    print("  [[OK] Wechseln zu: Wärmepumpe] → Navigate zu Preview")
     print()
 
 
@@ -91,7 +91,7 @@ def test_two_step_navigation():
     print("SCHRITT 2: Bestätigen (Navigate)")
     print("-" * 60)
     print("  Condition: preview_index ≠ confirmed_index")
-    print("  Button erscheint: '✓ Wechseln zu: [Name]'")
+    print("  Button erscheint: '[OK] Wechseln zu: [Name]'")
     print("  User-Action: Klick auf Button")
     print("  Result:")
     print("    - confirmed_index = preview_index")
@@ -227,9 +227,9 @@ def test_fallback_mechanism():
 
     print("VORTEILE:")
     print("-" * 60)
-    print("  ✓ Keine Breaking Changes")
-    print("  ✓ Graceful Degradation")
-    print("  ✓ Einfaches Rollback möglich")
+    print("  [OK] Keine Breaking Changes")
+    print("  [OK] Graceful Degradation")
+    print("  [OK] Einfaches Rollback möglich")
     print()
 
 
@@ -259,7 +259,7 @@ def main():
     print("  3. Navigation durchklicken")
     print("  4. Performance beobachten")
     print()
-    print("✓ Implementierung ist READY FOR TESTING")
+    print("[OK] Implementierung ist READY FOR TESTING")
     print()
 
 

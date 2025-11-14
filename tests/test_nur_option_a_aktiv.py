@@ -59,26 +59,26 @@ neue_keys_uppercase = [
     "PRICING_VAT_AMOUNT_FORMATTED",
 ]
 
-print("\n❌ TEST 1: Alte lowercase Keys MÜSSEN WEG sein!")
+print("\n[ERROR] TEST 1: Alte lowercase Keys MÜSSEN WEG sein!")
 print("-" * 100)
 
 fehler_alte = 0
 for key in alte_keys_lowercase:
     if key in PLACEHOLDER_MAPPING:
-        print(f"❌ FEHLER: {key:40} NOCH VORHANDEN! (muss auskommentiert sein)")
+        print(f"[ERROR] FEHLER: {key:40} NOCH VORHANDEN! (muss auskommentiert sein)")
         fehler_alte += 1
     else:
-        print(f"✅ OK: {key:40} korrekt auskommentiert")
+        print(f"[OK] OK: {key:40} korrekt auskommentiert")
 
-print("\n✅ TEST 2: Neue UPPERCASE Keys MÜSSEN DA sein!")
+print("\n[OK] TEST 2: Neue UPPERCASE Keys MÜSSEN DA sein!")
 print("-" * 100)
 
 fehler_neue = 0
 for key in neue_keys_uppercase:
     if key in PLACEHOLDER_MAPPING:
-        print(f"✅ {key:50} -> {PLACEHOLDER_MAPPING[key]}")
+        print(f"[OK] {key:50} -> {PLACEHOLDER_MAPPING[key]}")
     else:
-        print(f"❌ FEHLER: {key:50} FEHLT!")
+        print(f"[ERROR] FEHLER: {key:50} FEHLT!")
         fehler_neue += 1
 
 print("\n" + "=" * 100)
@@ -87,29 +87,29 @@ print("=" * 100)
 
 if fehler_alte == 0:
     print(
-        f"✅ Alle {
+        f"[OK] Alle {
             len(alte_keys_lowercase)} alten lowercase Keys korrekt auskommentiert")
 else:
-    print(f"❌ {fehler_alte} alte Keys noch vorhanden!")
+    print(f"[ERROR] {fehler_alte} alte Keys noch vorhanden!")
 
 if fehler_neue == 0:
-    print(f"✅ Alle {len(neue_keys_uppercase)} neuen UPPERCASE Keys vorhanden")
+    print(f"[OK] Alle {len(neue_keys_uppercase)} neuen UPPERCASE Keys vorhanden")
 else:
-    print(f"❌ {fehler_neue} neue Keys fehlen!")
+    print(f"[ERROR] {fehler_neue} neue Keys fehlen!")
 
 print()
 
 if fehler_alte == 0 and fehler_neue == 0:
     print("🎊 PERFEKT! NUR OPTION A KEYS AKTIV!")
-    print("   ✅ Alle alten lowercase Keys auskommentiert")
-    print("   ✅ Alle neuen UPPERCASE Keys aktiv")
-    print("   ✅ Keine Duplikate mehr!")
+    print("   [OK] Alle alten lowercase Keys auskommentiert")
+    print("   [OK] Alle neuen UPPERCASE Keys aktiv")
+    print("   [OK] Keine Duplikate mehr!")
 else:
-    print("⚠️ ES GIBT NOCH PROBLEME!")
+    print("[WARNING] ES GIBT NOCH PROBLEME!")
     if fehler_alte > 0:
         print(
-            f"   ❌ {fehler_alte} alte Keys müssen noch auskommentiert werden")
+            f"   [ERROR] {fehler_alte} alte Keys müssen noch auskommentiert werden")
     if fehler_neue > 0:
-        print(f"   ❌ {fehler_neue} neue Keys fehlen noch")
+        print(f"   [ERROR] {fehler_neue} neue Keys fehlen noch")
 
 print("=" * 100)

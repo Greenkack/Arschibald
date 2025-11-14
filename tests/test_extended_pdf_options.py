@@ -42,7 +42,7 @@ def test_default_options():
     assert final_options['selected_charts'] == [], "Default 'selected_charts' should be empty list"
     assert final_options['chart_layout'] == 'one_per_page', "Default 'chart_layout' should be 'one_per_page'"
     
-    print("✓ All default options are correctly set")
+    print("[OK] All default options are correctly set")
     print(f"  - enabled: {final_options['enabled']}")
     print(f"  - financing_details: {final_options['financing_details']}")
     print(f"  - product_datasheets: {final_options['product_datasheets']}")
@@ -75,12 +75,12 @@ def test_enabled_option():
         
         # Check if value matches expected
         if actual == expected:
-            print(f"✓ {description}: {actual}")
+            print(f"[OK] {description}: {actual}")
         else:
-            print(f"✗ {description}: expected {expected}, got {actual}")
+            print(f"[ERROR] {description}: expected {expected}, got {actual}")
             return False
     
-    print("✓ All 'enabled' option tests passed")
+    print("[OK] All 'enabled' option tests passed")
     return True
 
 
@@ -101,9 +101,9 @@ def test_financing_details_option():
         actual = final_options.get('financing_details', False)
         
         assert actual == expected, f"Expected {expected}, got {actual}"
-        print(f"✓ financing_details={options.get('financing_details', 'default')} → {actual}")
+        print(f"[OK] financing_details={options.get('financing_details', 'default')} → {actual}")
     
-    print("✓ All 'financing_details' option tests passed")
+    print("[OK] All 'financing_details' option tests passed")
     return True
 
 
@@ -125,9 +125,9 @@ def test_product_datasheets_option():
         actual = final_options.get('product_datasheets', [])
         
         assert actual == expected, f"{description}: Expected {expected}, got {actual}"
-        print(f"✓ {description}: {actual}")
+        print(f"[OK] {description}: {actual}")
     
-    print("✓ All 'product_datasheets' option tests passed")
+    print("[OK] All 'product_datasheets' option tests passed")
     return True
 
 
@@ -149,9 +149,9 @@ def test_company_documents_option():
         actual = final_options.get('company_documents', [])
         
         assert actual == expected, f"{description}: Expected {expected}, got {actual}"
-        print(f"✓ {description}: {actual}")
+        print(f"[OK] {description}: {actual}")
     
-    print("✓ All 'company_documents' option tests passed")
+    print("[OK] All 'company_documents' option tests passed")
     return True
 
 
@@ -195,9 +195,9 @@ def test_selected_charts_option():
         actual = final_options.get('selected_charts', [])
         
         assert actual == expected, f"{description}: Expected {expected}, got {actual}"
-        print(f"✓ {description}: {len(actual)} charts")
+        print(f"[OK] {description}: {len(actual)} charts")
     
-    print("✓ All 'selected_charts' option tests passed")
+    print("[OK] All 'selected_charts' option tests passed")
     return True
 
 
@@ -219,9 +219,9 @@ def test_chart_layout_option():
         actual = final_options.get('chart_layout', 'one_per_page')
         
         assert actual == expected, f"{description}: Expected {expected}, got {actual}"
-        print(f"✓ {description}: {actual}")
+        print(f"[OK] {description}: {actual}")
     
-    print("✓ All 'chart_layout' option tests passed")
+    print("[OK] All 'chart_layout' option tests passed")
     return True
 
 
@@ -249,7 +249,7 @@ def test_complete_options_dictionary():
     assert len(complete_options['selected_charts']) == 2
     assert complete_options['chart_layout'] == 'two_per_page'
     
-    print("✓ Complete options dictionary validated")
+    print("[OK] Complete options dictionary validated")
     print(f"  - enabled: {complete_options['enabled']}")
     print(f"  - financing_details: {complete_options['financing_details']}")
     print(f"  - product_datasheets: {len(complete_options['product_datasheets'])} items")
@@ -290,7 +290,7 @@ def test_partial_options_with_defaults():
     assert len(final_options['selected_charts']) == 1, "User option should override default"
     assert final_options['chart_layout'] == 'one_per_page', "Should use default"
     
-    print("✓ Partial options correctly merged with defaults")
+    print("[OK] Partial options correctly merged with defaults")
     print(f"  - User provided: {list(user_options.keys())}")
     print(f"  - Defaults used: {[k for k in default_options.keys() if k not in user_options]}")
     
@@ -323,7 +323,7 @@ def test_invalid_option_types():
         print(f"⚠ {description}")
         print(f"  Invalid value: {invalid_options}")
     
-    print("✓ Invalid option types documented")
+    print("[OK] Invalid option types documented")
     return True
 
 
@@ -359,7 +359,7 @@ def test_options_immutability():
     assert final_options['enabled'] is True
     assert final_options['product_datasheets'] == [1, 2, 3]
     
-    print("✓ Default options remain immutable after merge")
+    print("[OK] Default options remain immutable after merge")
     print(f"  - Defaults unchanged: {default_options == original_defaults}")
     print(f"  - Final options have user values: {final_options['enabled']}")
     
@@ -398,11 +398,11 @@ def run_all_tests():
             else:
                 failed += 1
         except AssertionError as e:
-            print(f"\n✗ Test failed: {test_func.__name__}")
+            print(f"\n[ERROR] Test failed: {test_func.__name__}")
             print(f"  Error: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n✗ Test error: {test_func.__name__}")
+            print(f"\n[ERROR] Test error: {test_func.__name__}")
             print(f"  Error: {e}")
             import traceback
             traceback.print_exc()
@@ -417,9 +417,9 @@ def run_all_tests():
     print("=" * 70)
     
     if passed == len(test_functions):
-        print("✓ ALL TESTS PASSED - Task 18.1 Complete")
+        print("[OK] ALL TESTS PASSED - Task 18.1 Complete")
     else:
-        print("✗ SOME TESTS FAILED - Task 18.1 Needs Work")
+        print("[ERROR] SOME TESTS FAILED - Task 18.1 Needs Work")
     
     return failed == 0
 

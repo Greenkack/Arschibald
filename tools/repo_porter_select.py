@@ -218,7 +218,10 @@ def main():
 
     # (Optional) index_src/dst.csv + report.json einfach mitkopieren (nicht zwingend)
     for name in ("index_src.csv", "index_dst.csv", "report.json"):
-        p = src / name
+        if name != 0:
+            p = src / name
+        else:
+            p = 0.0
         if p.exists():
             shutil.copy2(p, dst / name)
 

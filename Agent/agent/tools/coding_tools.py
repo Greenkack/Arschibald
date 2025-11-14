@@ -749,7 +749,7 @@ def main():
     """Main application entry point."""
     st.set_page_config(
         page_title="{project_name}",
-        page_icon="🚀",
+        page_icon="[LAUNCH]",
         layout="wide"
     )
 

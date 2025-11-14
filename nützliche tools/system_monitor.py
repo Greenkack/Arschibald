@@ -12,7 +12,7 @@ import psutil
 def monitor_system(duration=60):
     """Überwacht System-Performance"""
 
-    print(f"📊 SYSTEM-MONITORING für {duration} Sekunden...")
+    print(f"[CHART] SYSTEM-MONITORING für {duration} Sekunden...")
 
     stats = {
         'timestamp': [],
@@ -71,7 +71,7 @@ def monitor_system(duration=60):
     avg_memory = sum(stats['memory_percent']) / len(stats['memory_percent'])
     max_memory_mb = max(stats['memory_used_mb'])
 
-    print("📊 MONITORING-ERGEBNISSE:")
+    print("[CHART] MONITORING-ERGEBNISSE:")
     print(f"🖥️ Durchschnittliche CPU: {avg_cpu:.1f}%")
     print(f"💾 Durchschnittlicher RAM: {avg_memory:.1f}%")
     print(f"💾 Max RAM-Verbrauch: {max_memory_mb:.1f} MB")
@@ -82,9 +82,9 @@ def monitor_system(duration=60):
 
     # Warnungen
     if avg_cpu > 80:
-        print("⚠️ WARNUNG: Hohe CPU-Auslastung!")
+        print("[WARNING] WARNUNG: Hohe CPU-Auslastung!")
     if avg_memory > 85:
-        print("⚠️ WARNUNG: Hoher Speicherverbrauch!")
+        print("[WARNING] WARNUNG: Hoher Speicherverbrauch!")
 
     # Stats speichern
     with open(f'system_monitor_{int(time.time())}.json', 'w') as f:
@@ -108,7 +108,7 @@ def check_streamlit_process():
             continue
 
     if streamlit_processes:
-        print(f"🚀 STREAMLIT-PROZESSE ({len(streamlit_processes)}):")
+        print(f"[LAUNCH] STREAMLIT-PROZESSE ({len(streamlit_processes)}):")
         for proc in streamlit_processes:
             memory_mb = proc['memory_info'].rss / 1024 / 1024
             print(
@@ -117,7 +117,7 @@ def check_streamlit_process():
                     memory_mb:.1f} MB RAM, {
                     proc['cpu_percent']:.1f}% CPU")
     else:
-        print("❌ Keine Streamlit-Prozesse gefunden")
+        print("[ERROR] Keine Streamlit-Prozesse gefunden")
 
 
 if __name__ == "__main__":

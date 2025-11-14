@@ -376,18 +376,18 @@ def run_additional_costs_integration_tests():
         try:
             test_suite.setup_method()
             test_func()
-            print(f"✅ {test_name}")
+            print(f"[OK] {test_name}")
             passed += 1
         except Exception as e:
-            print(f"❌ {test_name}: {str(e)}")
+            print(f"[ERROR] {test_name}: {str(e)}")
             failed += 1
 
-    print(f"\n📊 Test-Ergebnisse: {passed} bestanden, {failed} fehlgeschlagen")
+    print(f"\n[CHART] Test-Ergebnisse: {passed} bestanden, {failed} fehlgeschlagen")
 
     if failed == 0:
         print("🎉 Alle Tests für die Zusatzkosten-Integration bestanden!")
         return True
-    print("⚠️  Einige Tests sind fehlgeschlagen. Bitte überprüfen Sie die Implementierung.")
+    print("[WARNING]  Einige Tests sind fehlgeschlagen. Bitte überprüfen Sie die Implementierung.")
     return False
 
 

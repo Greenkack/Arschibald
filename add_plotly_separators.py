@@ -71,5 +71,5 @@ for i, line in enumerate(lines):
 with open('heatpump_ui.py', 'w', encoding='utf-8') as f:
     f.write('\n'.join(result_lines))
 
-print("✅ Separators zu allen Plotly-Charts hinzugefügt!")
+print("[OK] Separators zu allen Plotly-Charts hinzugefügt!")
 print(f"   Verarbeitete Zeilen: {len(result_lines)}")

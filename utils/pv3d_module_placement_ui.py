@@ -62,7 +62,7 @@ def render_module_placement_panel(
         # Validate module_quantity
         if not isinstance(module_quantity, (int, float)):
             st.error(
-                f"❌ Fehler: Ungültiger Typ für Modulanzahl "
+                f"[ERROR] Fehler: Ungültiger Typ für Modulanzahl "
                 f"(erwartet: Zahl, erhalten: {type(module_quantity).__name__})"
             )
             return actions
@@ -70,7 +70,7 @@ def render_module_placement_panel(
         module_quantity = int(module_quantity)
         if module_quantity < 0:
             st.warning(
-                f"⚠️ Warnung: Negative Modulanzahl ({module_quantity}) "
+                f"[WARNING] Warnung: Negative Modulanzahl ({module_quantity}) "
                 "wird auf 0 gesetzt"
             )
             module_quantity = 0
@@ -78,14 +78,14 @@ def render_module_placement_panel(
         # Validate roof_area
         if not isinstance(roof_area, (int, float)):
             st.error(
-                f"❌ Fehler: Ungültiger Typ für Dachfläche "
+                f"[ERROR] Fehler: Ungültiger Typ für Dachfläche "
                 f"(erwartet: Zahl, erhalten: {type(roof_area).__name__})"
             )
             return actions
         
         if roof_area < 0:
             st.warning(
-                f"⚠️ Warnung: Negative Dachfläche ({roof_area:.2f}m²) "
+                f"[WARNING] Warnung: Negative Dachfläche ({roof_area:.2f}m²) "
                 "wird auf 0 gesetzt"
             )
             roof_area = 0
@@ -93,7 +93,7 @@ def render_module_placement_panel(
         # Validate current_placed
         if not isinstance(current_placed, (int, float)):
             st.warning(
-                "⚠️ Warnung: Ungültiger Typ für platzierte Module, "
+                "[WARNING] Warnung: Ungültiger Typ für platzierte Module, "
                 "wird auf 0 gesetzt"
             )
             current_placed = 0
@@ -105,7 +105,7 @@ def render_module_placement_panel(
     except Exception as validation_error:
         # Requirement 11.2, 11.4: Error handling with meaningful messages
         st.error(
-            f"❌ Fehler bei der Eingabe-Validierung: "
+            f"[ERROR] Fehler bei der Eingabe-Validierung: "
             f"{str(validation_error)}"
         )
         return actions
@@ -117,7 +117,10 @@ def render_module_placement_panel(
 
             # Berechne Statistiken
             if module_quantity > 0:
-                coverage_percent = (current_placed / module_quantity * 100)
+                if module_quantity != 0:
+                    coverage_percent = (current_placed / module_quantity * 100)
+                else:
+                    coverage_percent = 0.0
             else:
                 coverage_percent = 0
             coverage_percent = min(coverage_percent, 100)  # Maximal 100%
@@ -155,7 +158,10 @@ def render_module_placement_panel(
             f"Belegungsfortschritt: {current_placed} von "
             f"{module_quantity} Modulen"
         )
-        st.progress(coverage_percent / 100, text=progress_text)
+        if 100 != 0:
+            st.progress(coverage_percent / 100, text=progress_text)
+        else:
+            st.progress(coverage_percent / 100, text = 0.0
 
         st.divider()
 
@@ -166,7 +172,7 @@ def render_module_placement_panel(
             # Primary Button: Automatisch belegen
             auto_help = "Platziert Module automatisch auf der Dachfläche"
             if st.button(
-                "🎯 Automatisch belegen",
+                "[TARGET] Automatisch belegen",
                 type="primary",
                 use_container_width=True,
                 help=auto_help
@@ -369,13 +375,13 @@ def render_module_placement_panel(
             # Info über Snap-to-Grid
             if snap_to_grid:
                 st.info(
-                    f"ℹ️ **Snap-to-Grid aktiv:** Module werden in "
+                    f"[INFO] **Snap-to-Grid aktiv:** Module werden in "
                     f"{step_size:.2f}m Schritten verschoben und automatisch "
                     "am Raster ausgerichtet."
                 )
             else:
                 st.info(
-                    f"ℹ️ **Freie Bewegung:** Module werden in "
+                    f"[INFO] **Freie Bewegung:** Module werden in "
                     f"{step_size:.2f}m Schritten verschoben ohne Raster-Ausrichtung."
                 )
 
@@ -395,13 +401,13 @@ def render_module_placement_panel(
             
             if selected_indices:
                 st.info(
-                    f"✓ **{len(selected_indices)} Module ausgewählt:** "
+                    f"[OK] **{len(selected_indices)} Module ausgewählt:** "
                     f"Indizes {', '.join(map(str, selected_indices[:5]))}"
                     f"{'...' if len(selected_indices) > 5 else ''}"
                 )
             else:
                 st.info(
-                    "ℹ️ Keine Module ausgewählt. Verwenden Sie die "
+                    "[INFO] Keine Module ausgewählt. Verwenden Sie die "
                     "Auswahl-Optionen unten."
                 )
             
@@ -521,7 +527,7 @@ def render_module_placement_panel(
                     st.rerun()
                 else:
                     st.warning(
-                        "⚠️ Start-Modul muss kleiner oder gleich End-Modul sein"
+                        "[WARNING] Start-Modul muss kleiner oder gleich End-Modul sein"
                     )
         
         st.divider()
@@ -598,7 +604,7 @@ def render_module_placement_panel(
             
             # Info über Raster-Funktion
             st.caption(
-                "💡 Das Raster hilft bei der Orientierung und Ausrichtung "
+                "[IDEA] Das Raster hilft bei der Orientierung und Ausrichtung "
                 "der Module auf der Dachfläche. Die Linien zeigen die "
                 "Platzierungs-Positionen an."
             )
@@ -606,7 +612,7 @@ def render_module_placement_panel(
         # Info-Box mit zusätzlichen Informationen
         if current_placed > 0:
             info_text = (
-                f"ℹ️ **Platzierungs-Info:**\n\n"
+                f"[INFO] **Platzierungs-Info:**\n\n"
                 f"- Dachfläche: {roof_area:.2f} m²\n"
                 f"- Module platziert: {current_placed}\n"
                 f"- Belegungsgrad: {coverage_percent:.1f}%"
@@ -614,7 +620,7 @@ def render_module_placement_panel(
             st.info(info_text)
         else:
             tip_text = (
-                "💡 **Tipp:** Klicken Sie auf 'Automatisch belegen' "
+                "[IDEA] **Tipp:** Klicken Sie auf 'Automatisch belegen' "
                 "um Module optimal auf der Dachfläche zu platzieren."
             )
             st.info(tip_text)
@@ -622,7 +628,7 @@ def render_module_placement_panel(
     except Exception as render_error:
         # Requirement 11.2, 11.4: Error handling with meaningful messages
         st.error(
-            f"❌ Fehler beim Rendern des Modul-Belegungs-Panels: "
+            f"[ERROR] Fehler beim Rendern des Modul-Belegungs-Panels: "
             f"{str(render_error)}"
         )
         print(f"UI Rendering Error: {render_error}")

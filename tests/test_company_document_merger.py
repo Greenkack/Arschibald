@@ -24,7 +24,7 @@ def test_company_document_merger_empty_list():
     result = merger.merge([])
 
     assert result == b'', "Empty list should return empty bytes"
-    print("✓ Empty list returns empty bytes")
+    print("[OK] Empty list returns empty bytes")
 
 
 def test_company_document_merger_invalid_id():
@@ -34,7 +34,7 @@ def test_company_document_merger_invalid_id():
     result = merger.merge([99999])  # Non-existent ID
 
     assert result == b'', "Invalid ID should return empty bytes"
-    print("✓ Invalid ID handled gracefully")
+    print("[OK] Invalid ID handled gracefully")
 
 
 def test_company_document_merger_with_real_documents():
@@ -71,7 +71,7 @@ def test_company_document_merger_with_real_documents():
             reader = PdfReader(BytesIO(result))
             num_pages = len(reader.pages)
             print(
-                f"✓ Successfully merged {
+                f"[OK] Successfully merged {
                     len(document_ids)} documents into {num_pages} pages")
         else:
             print("⚠ No documents could be merged (files may not exist on disk)")
@@ -114,7 +114,7 @@ def test_company_document_merger_mixed_valid_invalid():
             reader = PdfReader(BytesIO(result))
             num_pages = len(reader.pages)
             print(
-                f"✓ Successfully merged valid documents, skipped invalid ones ({num_pages} pages)")
+                f"[OK] Successfully merged valid documents, skipped invalid ones ({num_pages} pages)")
         else:
             print("⚠ No documents could be merged (file may not exist on disk)")
 
@@ -131,7 +131,7 @@ def test_company_document_merger_load_document_method():
     # Test with invalid ID
     result = merger._load_document(99999)
     assert result is None, "Invalid ID should return None"
-    print("✓ _load_document returns None for invalid ID")
+    print("[OK] _load_document returns None for invalid ID")
 
     # Test with valid ID if available
     try:
@@ -150,7 +150,7 @@ def test_company_document_merger_load_document_method():
 
                 if result:
                     print(
-                        f"✓ _load_document successfully loaded document {valid_id}")
+                        f"[OK] _load_document successfully loaded document {valid_id}")
                 else:
                     print(
                         f"⚠ _load_document returned None for valid ID {valid_id} (file may not exist)")
@@ -176,7 +176,7 @@ def main():
         print("=" * 60)
 
     except Exception as e:
-        print(f"\n❌ Test failed with error: {e}")
+        print(f"\n[ERROR] Test failed with error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

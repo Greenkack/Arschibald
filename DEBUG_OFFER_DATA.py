@@ -53,8 +53,8 @@ result2 = _alias_value(
 print(f"Firma 2 (analysis_results): {result2}")
 
 print("\n=== ERGEBNIS ===")
-print("✅ Wenn analysis_results UNTERSCHIEDLICH sind → Preise UNTERSCHIEDLICH")
-print("❌ Wenn analysis_results GLEICH sind → Preise GLEICH")
+print("[OK] Wenn analysis_results UNTERSCHIEDLICH sind → Preise UNTERSCHIEDLICH")
+print("[ERROR] Wenn analysis_results GLEICH sind → Preise GLEICH")
 
 # Das bedeutet: Das Problem ist wahrscheinlich NICHT in placeholders.py
 # sondern in der Neuberechnung oder Datenübergabe!

@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_correct_dynamic_keys():
     """Testet das Wasserfall-Diagramm mit den korrekten dynamischen Keys aus dem System"""
 
-    print("🔧 Test mit korrekten dynamischen Keys")
+    print("[TOOL] Test mit korrekten dynamischen Keys")
     print("=" * 40)
 
     # Test-Szenarien mit den ECHTEN Keys aus dem System
@@ -99,11 +99,11 @@ def test_correct_dynamic_keys():
                 with open(output_file, "wb") as f:
                     f.write(overlay_bytes)
 
-                print(f"✅ PDF erstellt: {output_file}")
-                print(f"📦 Größe: {len(overlay_bytes):,} bytes")
+                print(f"[OK] PDF erstellt: {output_file}")
+                print(f"[PACKAGE] Größe: {len(overlay_bytes):,} bytes")
 
                 # Zeige verwendete Werte
-                print("📊 Wasserfall-Werte:")
+                print("[CHART] Wasserfall-Werte:")
                 print(
                     f"   - Direktverbrauch: {scenario['data']['self_consumption_without_battery_eur']}")
                 print(
@@ -118,16 +118,16 @@ def test_correct_dynamic_keys():
                     reader = PdfReader(io.BytesIO(overlay_bytes))
                     if len(reader.pages) >= 3:
                         print(
-                            "📄 Seite 3 verfügbar - Wasserfall-Diagramm sollte sichtbar sein")
+                            "[FILE] Seite 3 verfügbar - Wasserfall-Diagramm sollte sichtbar sein")
                 except Exception as e:
-                    print(f"⚠️ PDF-Struktur-Prüfung fehlgeschlagen: {e}")
+                    print(f"[WARNING] PDF-Struktur-Prüfung fehlgeschlagen: {e}")
 
             else:
                 print(
-                    f"❌ Overlay-Generierung fehlgeschlagen für Szenario {i + 1}")
+                    f"[ERROR] Overlay-Generierung fehlgeschlagen für Szenario {i + 1}")
 
         except Exception as e:
-            print(f"❌ Fehler bei Szenario {i + 1}: {e}")
+            print(f"[ERROR] Fehler bei Szenario {i + 1}: {e}")
             import traceback
             traceback.print_exc()
 
@@ -135,7 +135,7 @@ def test_correct_dynamic_keys():
 def test_position_verification():
     """Verifiziert die 20-Punkte-Verschiebung nach oben"""
 
-    print("\n🔍 Verifikation der Position (20 Punkte höher)")
+    print("\n[SEARCH] Verifikation der Position (20 Punkte höher)")
     print("=" * 45)
 
     # Test-Daten
@@ -160,23 +160,23 @@ def test_position_verification():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"✅ Position-Test-PDF erstellt: {output_file}")
+            print(f"[OK] Position-Test-PDF erstellt: {output_file}")
             print(
                 "📍 Das Diagramm sollte 20 Punkte höher als in der ursprünglichen Version sein")
-            print("📊 Alle 4 Balken sollten sichtbar sein:")
+            print("[CHART] Alle 4 Balken sollten sichtbar sein:")
             print("   1. Direktverbrauch: 1.200,00 €")
             print("   2. Einspeisevergütung: 800,00 €")
             print("   3. Steuervorteile: 336,00 €")
             print("   4. Gesamt: 2.336,00 €")
         else:
-            print("❌ Position-Test fehlgeschlagen")
+            print("[ERROR] Position-Test fehlgeschlagen")
 
     except Exception as e:
-        print(f"❌ Fehler beim Position-Test: {e}")
+        print(f"[ERROR] Fehler beim Position-Test: {e}")
 
 
 if __name__ == "__main__":
-    print("🚀 Test des Wasserfall-Diagramms mit korrekten dynamischen Keys")
+    print("[LAUNCH] Test des Wasserfall-Diagramms mit korrekten dynamischen Keys")
     print("=" * 65)
 
     # Test 1: Verschiedene Werte-Szenarien
@@ -187,9 +187,9 @@ if __name__ == "__main__":
 
     print("\n🎉 Alle Tests abgeschlossen!")
     print("📋 Überprüfen Sie die generierten PDF-Dateien:")
-    print("   ✅ Alle 4 Balken sollten sichtbar sein (inklusive Direktverbrauch)")
-    print("   ✅ Das Diagramm sollte 20 Punkte höher positioniert sein")
-    print("   ✅ Echte dynamische Werte aus dem System werden verwendet")
+    print("   [OK] Alle 4 Balken sollten sichtbar sein (inklusive Direktverbrauch)")
+    print("   [OK] Das Diagramm sollte 20 Punkte höher positioniert sein")
+    print("   [OK] Echte dynamische Werte aus dem System werden verwendet")
     print("📍 Keys verwendet:")
     print("   - self_consumption_without_battery_eur (Direktverbrauch)")
     print("   - annual_feed_in_revenue_eur (Einspeisevergütung)")

@@ -269,7 +269,7 @@ Die Preismatrix definiert schlüsselfertige Preise basierend auf:
 • Modulanzahl (Zeilen)
 • Speichermodell (Spalten)
 
-📐 AUFBAU:
+[DESIGN] AUFBAU:
 
 Spalte A (Position 0):
   → Modulanzahl (numerisch)
@@ -283,14 +283,14 @@ Preis-Zellen (ab B2):
   → Schlüsselfertige Preise (numerisch)
   → Beispiel: 15000.00, 17500.00
 
-✓ REGELN:
+[OK] REGELN:
 
 1. Spalte A: Nur Zahlen (Modulanzahl)
 2. Zeile 1: Nur Text (Speichermodell-Namen)
 3. Mindestens eine "Kein Speicher" Spalte
 4. Preis-Zellen: Nur Zahlen oder leer
 
-📊 BEISPIEL:
+[CHART] BEISPIEL:
 
          A          B        C        D
     Modulanzahl  10kWh    15kWh    Kein Speicher
@@ -299,7 +299,7 @@ Preis-Zellen (ab B2):
 3   15           18000    20500    15000
 4   20           21000    23500    18000
 
-💡 TIPPS:
+[IDEA] TIPPS:
 
 • Verwenden Sie die Beispiel-Matrizen als Vorlage
 • Füllen Sie alle Preis-Zellen aus
@@ -324,22 +324,22 @@ def get_quick_help_tooltips() -> Dict[str, str]:
             "Spalte A: Modulanzahl\n\n"
             "Hier tragen Sie die Anzahl der PV-Module ein.\n"
             "Verwenden Sie nur numerische Werte (z.B. 10, 15, 20).\n\n"
-            "✓ Gültig: 10, 15, 20.5\n"
-            "✗ Ungültig: 'zehn', '10-15', leer"
+            "[OK] Gültig: 10, 15, 20.5\n"
+            "[ERROR] Ungültig: 'zehn', '10-15', leer"
         ),
         'row_1': (
             "Zeile 1: Speichermodelle\n\n"
             "Hier tragen Sie die Namen der Batteriespeicher-Modelle ein.\n"
             "Verwenden Sie Text-Werte (z.B. '10kWh', 'BYD HVS 10.2').\n\n"
-            "✓ Gültig: '10kWh', 'BYD HVS 10.2', 'Kein Speicher'\n"
-            "✗ Ungültig: leer, nur Zahlen"
+            "[OK] Gültig: '10kWh', 'BYD HVS 10.2', 'Kein Speicher'\n"
+            "[ERROR] Ungültig: leer, nur Zahlen"
         ),
         'price_cells': (
             "Preis-Zellen\n\n"
             "Hier tragen Sie die schlüsselfertigen Preise ein.\n"
             "Verwenden Sie nur numerische Werte (z.B. 15000, 15000.50).\n\n"
-            "✓ Gültig: 15000, 15000.50, 15.000,50\n"
-            "✗ Ungültig: '15000 EUR', 'ca. 15000', Formeln"
+            "[OK] Gültig: 15000, 15000.50, 15.000,50\n"
+            "[ERROR] Ungültig: '15000 EUR', 'ca. 15000', Formeln"
         ),
         'no_storage': (
             "'Kein Speicher' Spalte\n\n"

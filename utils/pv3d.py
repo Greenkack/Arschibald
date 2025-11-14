@@ -1228,12 +1228,30 @@ def detect_collisions(
             min_x, min_y, min_z, max_x, max_y, max_z = bbox
 
             # Berechne Grid-Zellen-Bereiche
-            grid_min_x = int(math.floor(min_x / grid_cell_size))
-            grid_max_x = int(math.floor(max_x / grid_cell_size))
-            grid_min_y = int(math.floor(min_y / grid_cell_size))
-            grid_max_y = int(math.floor(max_y / grid_cell_size))
-            grid_min_z = int(math.floor(min_z / grid_cell_size))
-            grid_max_z = int(math.floor(max_z / grid_cell_size))
+            if grid_cell_size != 0:
+                grid_min_x = int(math.floor(min_x / grid_cell_size))
+            else:
+                grid_min_x = 0.0
+            if grid_cell_size != 0:
+                grid_max_x = int(math.floor(max_x / grid_cell_size))
+            else:
+                grid_max_x = 0.0
+            if grid_cell_size != 0:
+                grid_min_y = int(math.floor(min_y / grid_cell_size))
+            else:
+                grid_min_y = 0.0
+            if grid_cell_size != 0:
+                grid_max_y = int(math.floor(max_y / grid_cell_size))
+            else:
+                grid_max_y = 0.0
+            if grid_cell_size != 0:
+                grid_min_z = int(math.floor(min_z / grid_cell_size))
+            else:
+                grid_min_z = 0.0
+            if grid_cell_size != 0:
+                grid_max_z = int(math.floor(max_z / grid_cell_size))
+            else:
+                grid_max_z = 0.0
 
             # Füge Modul zu allen überlappenden Grid-Zellen hinzu
             for gx in range(grid_min_x, grid_max_x + 1):
@@ -1551,7 +1569,10 @@ def calculate_shading_for_module(
     ])
     
     # Normalisiere Richtungsvektor
-    ray_direction = ray_direction / np.linalg.norm(ray_direction)
+    if np != 0:
+        ray_direction = ray_direction / np.linalg.norm(ray_direction)
+    else:
+        ray_direction = 0.0
     
     # ========================================================================
     # SCHRITT 3: PRÜFE INTERSECTION MIT ANDEREN MODULEN
@@ -3289,19 +3310,28 @@ def evaluate_config(
         capacity_factor = 0.9
     
     # Berechne geschätzte Kapazität
-    estimated_capacity = int((roof_area / module_area) * capacity_factor)
+    if module_area != 0:
+        estimated_capacity = int((roof_area / module_area) * capacity_factor)
+    else:
+        estimated_capacity = 0.0
     
     # Füge Garage-Kapazität hinzu wenn aktiviert
     if config.use_garage:
         garage_length, garage_width, _ = config.garage_dims
         garage_area = garage_length * garage_width
-        garage_capacity = int((garage_area / module_area) * 0.9)
+        if module_area != 0:
+            garage_capacity = int((garage_area / module_area) * 0.9)
+        else:
+            garage_capacity = 0.0
         estimated_capacity += garage_capacity
     
     # Füge Fassaden-Kapazität hinzu wenn aktiviert
     if config.use_facade:
         facade_area = building_dims.length_m * building_dims.wall_height_m
-        facade_capacity = int((facade_area / module_area) * 0.7)  # Weniger effizient
+        if module_area != 0:
+            facade_capacity = int((facade_area / module_area) * 0.7)  # Weniger effizient
+        else:
+            facade_capacity = 0.0
         estimated_capacity += facade_capacity
     
     # Berechne Modulanzahl-Score
@@ -3309,7 +3339,10 @@ def evaluate_config(
     if estimated_capacity >= target_modules:
         module_count_score = 100.0
     else:
-        module_count_score = (estimated_capacity / target_modules) * 100.0
+        if target_modules != 0:
+            module_count_score = (estimated_capacity / target_modules) * 100.0
+        else:
+            module_count_score = 0.0
     
     # ========================================================================
     # KRITERIUM 2: VERSCHATTUNG (GESCHÄTZT)
@@ -4048,7 +4081,10 @@ def export_360_animation(
         for i in range(frames):
             try:
                 # Berechne Rotationswinkel (0° bis 360°)
-                angle_deg = (360.0 / frames) * i
+                if frames != 0:
+                    angle_deg = (360.0 / frames) * i
+                else:
+                    angle_deg = 0.0
                 angle_rad = _deg_to_rad(angle_deg)
 
                 # Berechne Kamera-Position (kreist um Zentrum)
@@ -4158,19 +4194,19 @@ def optimize_layout(
     try:
         # Validiere Eingabeparameter
         if not isinstance(building_dims, BuildingDims):
-            print(f"❌ FEHLER: Ungültige BuildingDims: {type(building_dims)}")
+            print(f"[ERROR] FEHLER: Ungültige BuildingDims: {type(building_dims)}")
             return []
         
         if target_modules <= 0:
-            print(f"❌ FEHLER: Ungültige Modulanzahl: {target_modules}")
+            print(f"[ERROR] FEHLER: Ungültige Modulanzahl: {target_modules}")
             return []
         
         if optimization_goal not in ["max_modules", "max_yield", "balanced"]:
-            print(f"⚠️  WARNUNG: Unbekanntes Optimierungsziel '{optimization_goal}', verwende 'balanced'")
+            print(f"[WARNING]  WARNUNG: Unbekanntes Optimierungsziel '{optimization_goal}', verwende 'balanced'")
             optimization_goal = "balanced"
         
         # DETAILLIERTES LOGGING: Zeige Optimierungsparameter
-        print(f"\n🚀 Optimierung gestartet:")
+        print(f"\n[LAUNCH] Optimierung gestartet:")
         print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print(f"   Eingabeparameter:")
         print(f"     • Optimierungsziel: {optimization_goal}")
@@ -4199,9 +4235,9 @@ def optimize_layout(
             )
             score1 = evaluate_config(config1, building_dims, target_modules, optimization_goal)
             configurations.append((config1, score1))
-            print(f"     ✓ 1. Süd-Aufständerung: Score {score1:.1f}")
+            print(f"     [OK] 1. Süd-Aufständerung: Score {score1:.1f}")
         except Exception as e:
-            print(f"     ❌ 1. Süd-Aufständerung fehlgeschlagen: {e}")
+            print(f"     [ERROR] 1. Süd-Aufständerung fehlgeschlagen: {e}")
         
         # Strategie 2: Ost-West-Aufständerung (mehr Module, weniger Ertrag pro Modul)
         try:
@@ -4215,9 +4251,9 @@ def optimize_layout(
             )
             score2 = evaluate_config(config2, building_dims, target_modules, optimization_goal)
             configurations.append((config2, score2))
-            print(f"     ✓ 2. Ost-West-Aufständerung: Score {score2:.1f}")
+            print(f"     [OK] 2. Ost-West-Aufständerung: Score {score2:.1f}")
         except Exception as e:
-            print(f"     ❌ 2. Ost-West-Aufständerung fehlgeschlagen: {e}")
+            print(f"     [ERROR] 2. Ost-West-Aufständerung fehlgeschlagen: {e}")
         
         # Strategie 3: Süd-Ost (Kompromiss)
         try:
@@ -4231,9 +4267,9 @@ def optimize_layout(
             )
             score3 = evaluate_config(config3, building_dims, target_modules, optimization_goal)
             configurations.append((config3, score3))
-            print(f"     ✓ 3. Süd-Ost-Aufständerung: Score {score3:.1f}")
+            print(f"     [OK] 3. Süd-Ost-Aufständerung: Score {score3:.1f}")
         except Exception as e:
-            print(f"     ❌ 3. Süd-Ost-Aufständerung fehlgeschlagen: {e}")
+            print(f"     [ERROR] 3. Süd-Ost-Aufständerung fehlgeschlagen: {e}")
         
         # Strategie 4: Gemischt (mit Garage und Fassade für maximale Modulanzahl)
         try:
@@ -4247,13 +4283,13 @@ def optimize_layout(
             )
             score4 = evaluate_config(config4, building_dims, target_modules, optimization_goal)
             configurations.append((config4, score4))
-            print(f"     ✓ 4. Gemischt (Garage + Fassade): Score {score4:.1f}")
+            print(f"     [OK] 4. Gemischt (Garage + Fassade): Score {score4:.1f}")
         except Exception as e:
-            print(f"     ❌ 4. Gemischt fehlgeschlagen: {e}")
+            print(f"     [ERROR] 4. Gemischt fehlgeschlagen: {e}")
         
         # Prüfe ob Konfigurationen generiert wurden
         if not configurations:
-            print(f"   ❌ FEHLER: Keine Konfigurationen konnten generiert werden!")
+            print(f"   [ERROR] FEHLER: Keine Konfigurationen konnten generiert werden!")
             return []
         
         print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -4261,7 +4297,7 @@ def optimize_layout(
         # Sortiere nach Score (höchster zuerst)
         configurations.sort(key=lambda x: x[1], reverse=True)
         
-        print(f"   ✅ Optimierung abgeschlossen!")
+        print(f"   [OK] Optimierung abgeschlossen!")
         print(f"   Top 3 Konfigurationen:")
         for i, (config, score) in enumerate(configurations[:3], 1):
             mode_name = config.mounting_mode
@@ -4280,7 +4316,7 @@ def optimize_layout(
         
     except Exception as e:
         # FEHLERBEHANDLUNG: Logge Fehler mit Traceback
-        print(f"\n❌ KRITISCHER FEHLER in optimize_layout():")
+        print(f"\n[ERROR] KRITISCHER FEHLER in optimize_layout():")
         print(f"   Fehler: {str(e)}")
         print(f"   Parameter: target_modules={target_modules}, goal={optimization_goal}")
         print(f"   Traceback:")
@@ -4315,11 +4351,11 @@ def evaluate_config(
     try:
         # Validiere Eingabeparameter
         if not isinstance(config, AdvancedLayoutConfig):
-            print(f"❌ FEHLER in evaluate_config: Ungültige Konfiguration")
+            print(f"[ERROR] FEHLER in evaluate_config: Ungültige Konfiguration")
             return 0.0
         
         if target_modules <= 0:
-            print(f"❌ FEHLER in evaluate_config: Ungültige Modulanzahl: {target_modules}")
+            print(f"[ERROR] FEHLER in evaluate_config: Ungültige Modulanzahl: {target_modules}")
             return 0.0
         
         score = 0.0
@@ -4344,7 +4380,10 @@ def evaluate_config(
         if config.use_facade:
             efficiency += 0.10
         
-        estimated_modules = int((roof_area / module_area) * efficiency)
+        if module_area != 0:
+            estimated_modules = int((roof_area / module_area) * efficiency)
+        else:
+            estimated_modules = 0.0
         
         # Bewertung basierend auf Ziel
         if goal == "max_modules":
@@ -4353,12 +4392,18 @@ def evaluate_config(
             if estimated_modules >= target_modules:
                 score = 100.0
             else:
-                score = (estimated_modules / target_modules) * 100
+                if target_modules != 0:
+                    score = (estimated_modules / target_modules) * 100
+                else:
+                    score = 0.0
             
         elif goal == "max_yield":
             # Maximiere Ertrag (Süd-Ausrichtung bevorzugt)
             # 70% Modulanzahl, 30% Ausrichtung
-            module_score = min(100, (estimated_modules / target_modules) * 70)
+            if target_modules != 0:
+                module_score = min(100, (estimated_modules / target_modules) * 70)
+            else:
+                module_score = 0.0
             
             # Ausrichtungs-Bonus
             orientation_bonus = 0
@@ -4375,7 +4420,10 @@ def evaluate_config(
             
         elif goal == "balanced":
             # Ausgewogen: 60% Modulanzahl, 25% Ausrichtung, 15% Einfachheit
-            module_score = min(100, (estimated_modules / target_modules) * 60)
+            if target_modules != 0:
+                module_score = min(100, (estimated_modules / target_modules) * 60)
+            else:
+                module_score = 0.0
             
             # Ausrichtungs-Bonus
             orientation_bonus = 0
@@ -4402,13 +4450,13 @@ def evaluate_config(
         
         # Logging für Debugging
         if final_score < 0 or final_score > 100:
-            print(f"⚠️  WARNUNG: Score außerhalb des Bereichs vor Clipping: {score}")
+            print(f"[WARNING]  WARNUNG: Score außerhalb des Bereichs vor Clipping: {score}")
         
         return final_score
         
     except Exception as e:
         # FEHLERBEHANDLUNG: Logge Fehler und gebe 0 zurück
-        print(f"❌ FEHLER in evaluate_config():")
+        print(f"[ERROR] FEHLER in evaluate_config():")
         print(f"   Fehler: {str(e)}")
         print(f"   Traceback:")
         traceback.print_exc()

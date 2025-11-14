@@ -4,7 +4,7 @@ Test-Script für Admin-Menü Fix
 """
 
 print("=" * 60)
-print("✅ ADMIN-MENÜ FIX DURCHGEFÜHRT")
+print("[OK] ADMIN-MENÜ FIX DURCHGEFÜHRT")
 print("=" * 60)
 
 print("\n📋 Was wurde geändert:")
@@ -32,7 +32,7 @@ print()
 print("3. Zum Admin-Bereich navigieren (Menü: Administration)")
 print()
 print("4. Admin-Untermenü testen:")
-print("   ✅ Sollte jetzt funktionieren:")
+print("   [OK] Sollte jetzt funktionieren:")
 print("   - Unternehmensverwaltung")
 print("   - Benutzerverwaltung")
 print("   - Produktverwaltung")
@@ -50,7 +50,7 @@ print("5. Zwischen Tabs wechseln → sollte sofort reagieren")
 print()
 
 print("=" * 60)
-print("🔍 TECHNISCHE DETAILS")
+print("[SEARCH] TECHNISCHE DETAILS")
 print("=" * 60)
 print()
 print("Problem-Ursache:")
@@ -72,5 +72,5 @@ print("  Bei weiteren Reruns bleibt der vom User gewählte Wert erhalten.")
 print()
 
 print("=" * 60)
-print("✅ FIX ABGESCHLOSSEN - BITTE TESTEN!")
+print("[OK] FIX ABGESCHLOSSEN - BITTE TESTEN!")
 print("=" * 60)

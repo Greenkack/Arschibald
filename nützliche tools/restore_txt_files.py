@@ -49,7 +49,7 @@ def restore_numeric_corruptions():
 
     input_dir = "input"
     if not os.path.exists(input_dir):
-        print(f"❌ Ordner '{input_dir}' nicht gefunden!")
+        print(f"[ERROR] Ordner '{input_dir}' nicht gefunden!")
         return None
 
     total_fixes = 0
@@ -60,7 +60,7 @@ def restore_numeric_corruptions():
         filepath = os.path.join(input_dir, filename)
 
         if not os.path.exists(filepath):
-            print(f"⚠️  Datei {filename} nicht gefunden, überspringe...")
+            print(f"[WARNING]  Datei {filename} nicht gefunden, überspringe...")
             continue
 
         # Datei einlesen
@@ -68,7 +68,7 @@ def restore_numeric_corruptions():
             with open(filepath, encoding='utf-8') as f:
                 content = f.read()
         except Exception as e:
-            print(f"❌ Fehler beim Lesen von {filename}: {e}")
+            print(f"[ERROR] Fehler beim Lesen von {filename}: {e}")
             continue
 
         original_content = content
@@ -80,7 +80,7 @@ def restore_numeric_corruptions():
                 content = content.replace(corrupted, fixed)
                 count = original_content.count(corrupted)
                 file_fixes += count
-                print(f"   🔧 {filename}: '{corrupted}' → '{fixed}' ({count}x)")
+                print(f"   [TOOL] {filename}: '{corrupted}' → '{fixed}' ({count}x)")
 
         # Weitere allgemeine Muster-Reparaturen
         # RGB-Farben mit Key-Korruption reparieren
@@ -91,7 +91,7 @@ def restore_numeric_corruptions():
             fixed_rgb = f"{match[0]}21{match[1]}"
             content = content.replace(corrupted_rgb, fixed_rgb)
             file_fixes += 1
-            print(f"   🔧 {filename}: RGB '{corrupted_rgb}' → '{fixed_rgb}'")
+            print(f"   [TOOL] {filename}: RGB '{corrupted_rgb}' → '{fixed_rgb}'")
 
         roof_angle_pattern = r'(\d+){roof_angle}(\d+)'
         matches = re.findall(roof_angle_pattern, content)
@@ -101,22 +101,22 @@ def restore_numeric_corruptions():
             content = content.replace(corrupted_angle, fixed_angle)
             file_fixes += 1
             print(
-                f"   🔧 {filename}: Winkel '{corrupted_angle}' → '{fixed_angle}'")
+                f"   [TOOL] {filename}: Winkel '{corrupted_angle}' → '{fixed_angle}'")
 
         # Datei zurückschreiben wenn Änderungen gemacht wurden
         if file_fixes > 0:
             try:
                 with open(filepath, 'w', encoding='utf-8') as f:
                     f.write(content)
-                print(f"✅ {filename}: {file_fixes} Korrekturen gespeichert")
+                print(f"[OK] {filename}: {file_fixes} Korrekturen gespeichert")
                 total_fixes += file_fixes
             except Exception as e:
-                print(f"❌ Fehler beim Schreiben von {filename}: {e}")
+                print(f"[ERROR] Fehler beim Schreiben von {filename}: {e}")
         else:
-            print(f"ℹ️  {filename}: Keine Korrekturen nötig")
+            print(f"[INFO]  {filename}: Keine Korrekturen nötig")
 
     print(
-        f"\n🎯 Wiederherstellung abgeschlossen: {total_fixes} Korrekturen insgesamt")
+        f"\n[TARGET] Wiederherstellung abgeschlossen: {total_fixes} Korrekturen insgesamt")
 
     return total_fixes > 0
 
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     success = restore_numeric_corruptions()
 
     if success:
-        print("\n✅ Wiederherstellung erfolgreich!")
-        print("💡 Tipp: Führe jetzt 'python test_dynamic_keys.py' aus zum Testen")
+        print("\n[OK] Wiederherstellung erfolgreich!")
+        print("[IDEA] Tipp: Führe jetzt 'python test_dynamic_keys.py' aus zum Testen")
     else:
-        print("\n⚠️  Keine Korruptionen gefunden oder repariert")
+        print("\n[WARNING]  Keine Korruptionen gefunden oder repariert")

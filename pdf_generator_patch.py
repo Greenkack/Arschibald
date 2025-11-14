@@ -52,11 +52,11 @@ def patch_pdf_generator(
             analysis_results=analysis_results
         )
         
-        logging.info("✅ PDF-Generator gepatcht - Alle Charts verfügbar")
+        logging.info("[OK] PDF-Generator gepatcht - Alle Charts verfügbar")
         return complete_results
         
     except Exception as e:
-        logging.error(f"❌ Fehler beim Patchen des PDF-Generators: {e}")
+        logging.error(f"[ERROR] Fehler beim Patchen des PDF-Generators: {e}")
         # Fallback: Gib zumindest analysis_results zurück
         return analysis_results
 
@@ -86,11 +86,11 @@ def add_charts_to_pdf_fpdf(
             analysis_results=analysis_results
         )
         
-        logging.info(f"✅ {stats.get('charts_added', 0)} Charts ins PDF eingefügt")
+        logging.info(f"[OK] {stats.get('charts_added', 0)} Charts ins PDF eingefügt")
         return stats
         
     except Exception as e:
-        logging.error(f"❌ Fehler beim Hinzufügen der Charts: {e}")
+        logging.error(f"[ERROR] Fehler beim Hinzufügen der Charts: {e}")
         return {'error': str(e)}
 
 
@@ -160,10 +160,10 @@ def auto_patch_session_state():
         # Statistik
         available, missing = ensure_all_charts_available(patched_results)
         
-        logging.info(f"🔧 Auto-Patch: {available} Charts verfügbar, {missing} fehlen noch")
+        logging.info(f"[TOOL] Auto-Patch: {available} Charts verfügbar, {missing} fehlen noch")
         
     except Exception as e:
-        logging.error(f"❌ Fehler beim Auto-Patch: {e}")
+        logging.error(f"[ERROR] Fehler beim Auto-Patch: {e}")
 
 
 # ============================================================================
@@ -269,7 +269,7 @@ def log_chart_availability():
         
         for chart_key, friendly_name in CHART_KEY_TO_FRIENDLY_NAME_MAP.items():
             is_available = chart_key in analysis_results and analysis_results[chart_key] is not None
-            status = "✓" if is_available else "✗"
+            status = "[OK]" if is_available else "[ERROR]"
             print(f"{status} {friendly_name}")
         
         available, missing = ensure_all_charts_available(analysis_results)

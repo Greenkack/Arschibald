@@ -273,13 +273,13 @@ if __name__ == "__main__":
     print()
     
     if not PV_MOUNTING_DB_AVAILABLE:
-        print("❌ Database not available!")
+        print("[ERROR] Database not available!")
     else:
-        print("✅ Database available")
+        print("[OK] Database available")
         print()
         
         # Test categories
-        print("📦 Available Categories:")
+        print("[PACKAGE] Available Categories:")
         categories = get_pv_mounting_categories()
         for cat in categories:
             print(f"  - {cat}")
@@ -293,7 +293,7 @@ if __name__ == "__main__":
         print()
         
         # Test roof hooks
-        print("🔨 Roof Hooks by K2 Systems:")
+        print("[BUILD] Roof Hooks by K2 Systems:")
         hooks = get_roof_hooks(manufacturer="K2 Systems")
         for hook in hooks:
             # Handle both dict and Row objects
@@ -305,10 +305,10 @@ if __name__ == "__main__":
         # Test component lookup
         if hooks:
             test_name = hooks[0]['name']
-            print(f"🔍 Component lookup: '{test_name}'")
+            print(f"[SEARCH] Component lookup: '{test_name}'")
             component = get_pv_mounting_component_by_name(test_name)
             if component:
-                print(f"  ✅ Found:")
+                print(f"  [OK] Found:")
                 print(f"     Price: {component['price_netto']:.2f} EUR")
                 print(f"     Unit: {component.get('unit', 'N/A')}")
                 print(f"     Roof Type: {component.get('roof_type', 'N/A')}")

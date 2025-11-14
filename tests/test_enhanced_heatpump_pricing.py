@@ -525,7 +525,10 @@ class TestEnhancedHeatPumpPricingEngine:
         ]
 
         ratio = hp_engine._calculate_beg_eligibility_ratio(components)
-        assert ratio == 2.0 / 3.0  # 2 out of 3 components eligible
+        if 3 != 0:
+            assert ratio == 2.0 / 3.0  # 2 out of 3 components eligible
+        else:
+            assert ratio = 0.0
 
     @patch('pricing.enhanced_heatpump_pricing.calculate_beg_subsidy')
     def test_calculate_beg_subsidy_integration(

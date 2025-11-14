@@ -27,7 +27,7 @@ for root, dirs, files in os.walk('c:/Users/win10/Desktop/Bokuk2'):
         if file.endswith('.py'):
             dateien.append(os.path.join(root, file))
 
-print(f"\n📁 Analysiere {len(dateien)} Python-Dateien...")
+print(f"\n[FOLDER] Analysiere {len(dateien)} Python-Dateien...")
 
 # Suche nach verschiedenen Berechnungsmustern
 berechnungsmuster = {
@@ -121,7 +121,7 @@ for kategorie in sorted(berechnungsmuster.keys()):
     anzahl = len(funde[kategorie])
     if anzahl > 1:  # Nur wenn es Duplikate gibt
         gesamt_duplikate += anzahl
-        print(f"\n🔍 {kategorie.upper()}: {anzahl} Berechnungen gefunden")
+        print(f"\n[SEARCH] {kategorie.upper()}: {anzahl} Berechnungen gefunden")
         print("-" * 120)
 
         # Gruppiere nach Datei
@@ -130,7 +130,7 @@ for kategorie in sorted(berechnungsmuster.keys()):
             nach_datei[fund['datei']].append(fund)
 
         for datei, fund_liste in sorted(nach_datei.items()):
-            print(f"\n📄 {datei}:")
+            print(f"\n[FILE] {datei}:")
             for fund in fund_liste[:5]:  # Max 5 pro Datei
                 print(f"   Zeile {fund['zeile']:5}: {fund['code']}")
             if len(fund_liste) > 5:
@@ -168,13 +168,13 @@ for datei in dateien:
     except BaseException:
         pass
 
-print(f"\n📊 Gefundene Session State Keys: {len(session_state_keys)}")
+print(f"\n[CHART] Gefundene Session State Keys: {len(session_state_keys)}")
 
 # Keys die mehrfach gesetzt werden
 mehrfach_keys = {k: v for k, v in session_state_keys.items() if len(v) > 3}
 
 if mehrfach_keys:
-    print("\n⚠️ Keys die in >3 Dateien gesetzt werden (potenzielle Konflikte):")
+    print("\n[WARNING] Keys die in >3 Dateien gesetzt werden (potenzielle Konflikte):")
     print("-" * 120)
     for key, locations in sorted(
         mehrfach_keys.items(), key=lambda x: len(
@@ -244,7 +244,7 @@ for typ, formel_liste in sorted(nach_typ.items()):
             nach_datei[formel['datei']].append(formel)
 
         for datei, form_liste in sorted(nach_datei.items())[:10]:
-            print(f"\n📄 {datei}: {len(form_liste)} Vorkommen")
+            print(f"\n[FILE] {datei}: {len(form_liste)} Vorkommen")
             for form in form_liste[:3]:
                 print(f"   Zeile {form['zeile']:5}: {form['code']}")
             if len(form_liste) > 3:
@@ -257,22 +257,22 @@ print("\n" + "=" * 120)
 print("ZUSAMMENFASSUNG")
 print("=" * 120)
 
-print("\n📊 Statistik:")
+print("\n[CHART] Statistik:")
 print(f"   • Analysierte Dateien: {len(dateien)}")
 print(f"   • Gefundene Berechnungs-Kategorien: {len(berechnungsmuster)}")
 print(f"   • Gesamt potenzielle Duplikate: {gesamt_duplikate}")
 print(f"   • Session State Keys: {len(session_state_keys)}")
 print(f"   • Mehrfach gesetzte Keys (>3 Dateien): {len(mehrfach_keys)}")
 
-print("\n💡 EMPFEHLUNG:")
+print("\n[IDEA] EMPFEHLUNG:")
 if gesamt_duplikate > 50:
-    print("   ⚠️ VIELE DUPLIKATE GEFUNDEN!")
+    print("   [WARNING] VIELE DUPLIKATE GEFUNDEN!")
     print("   → Konsolidierung empfohlen")
 elif gesamt_duplikate > 20:
-    print("   ⚠️ Einige Duplikate vorhanden")
+    print("   [WARNING] Einige Duplikate vorhanden")
     print("   → Review empfohlen")
 else:
-    print("   ✅ Wenige Duplikate - akzeptabel")
+    print("   [OK] Wenige Duplikate - akzeptabel")
 
 print("\n" + "=" * 120)
 print("ANALYSE ABGESCHLOSSEN")

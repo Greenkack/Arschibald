@@ -24,10 +24,10 @@ def fix_placeholders_for_multi_pdf():
     )
     
     if not os.path.exists(placeholders_file):
-        print(f"❌ Datei nicht gefunden: {placeholders_file}")
+        print(f"[ERROR] Datei nicht gefunden: {placeholders_file}")
         return False
     
-    print(f"📝 Lese {placeholders_file}...")
+    print(f"[NOTE] Lese {placeholders_file}...")
     with open(placeholders_file, 'r', encoding='utf-8') as f:
         content = f.read()
     
@@ -113,25 +113,25 @@ def fix_placeholders_for_multi_pdf():
         # Fallback: Verwende analysis_results"""
     
     if old_code not in content:
-        print("⚠️  Alter Code nicht gefunden - suche nach alternativer Stelle...")
+        print("[WARNING]  Alter Code nicht gefunden - suche nach alternativer Stelle...")
         # Versuche eine kürzere Version zu finden
         search_marker = "if hasattr(st, 'session_state') and 'project_data' in st.session_state:"
         if search_marker in content:
-            print("✅ Marker gefunden - manuelle Anpassung erforderlich")
+            print("[OK] Marker gefunden - manuelle Anpassung erforderlich")
             print(f"\n📍 Suche nach: {search_marker}")
-            print("💡 Diese Stelle muss manuell angepasst werden:")
+            print("[IDEA] Diese Stelle muss manuell angepasst werden:")
             print("   1. Zuerst übergebene project_details prüfen")
             print("   2. Dann erst session_state als Fallback")
             return False
         else:
-            print("❌ Relevante Stelle nicht gefunden")
+            print("[ERROR] Relevante Stelle nicht gefunden")
             return False
     
     # Ersetze den Code
     new_content = content.replace(old_code, new_code)
     
     if new_content == content:
-        print("⚠️  Keine Änderung vorgenommen")
+        print("[WARNING]  Keine Änderung vorgenommen")
         return False
     
     # Speichere die geänderte Datei
@@ -139,19 +139,19 @@ def fix_placeholders_for_multi_pdf():
     with open(placeholders_file, 'w', encoding='utf-8') as f:
         f.write(new_content)
     
-    print("✅ Fix erfolgreich angewendet!")
+    print("[OK] Fix erfolgreich angewendet!")
     return True
 
 
 def create_documentation():
     """Erstellt Dokumentation für den Fix"""
     
-    doc_content = """# 🔧 Multi-PDF Preis-Fix
+    doc_content = """# [TOOL] Multi-PDF Preis-Fix
 
 ## Problem
 Bei der Multi-PDF-Generierung wurden **alle Firmen mit dem gleichen Preis** erstellt, obwohl:
-- ✅ Produktrotation funktionierte (verschiedene Produkte pro Firma)
-- ✅ Preisstaffelung berechnet wurde (verschiedene Preise in calc_results)
+- [OK] Produktrotation funktionierte (verschiedene Produkte pro Firma)
+- [OK] Preisstaffelung berechnet wurde (verschiedene Preise in calc_results)
 
 **Ursache:** `placeholders.py` holte Preise IMMER aus `st.session_state` statt aus den übergebenen `project_details`.
 
@@ -185,11 +185,11 @@ if vat_amount is None:
 
 ## Betroffene PDFs
 
-### ✅ Jetzt mit firmenspezifischen Preisen:
+### [OK] Jetzt mit firmenspezifischen Preisen:
 1. **Multi-PDF-Ausgabe** (verschiedene Firmen)
 2. **Erweiterte PDF-Ausgabe** (Seite 7+)
 
-### ✅ Unverändert (wie vorher):
+### [OK] Unverändert (wie vorher):
 1. **Normale 8-Seiten-PDF** (Seite 1-6)
    - Nutzt weiterhin session_state
    - Keine Änderung am Verhalten
@@ -203,19 +203,19 @@ Firma 1:
   1. apply_price_scaling(0) → 15.000 €
   2. Schreibt in project_details['final_price_with_provision'] = 15.000 €
   3. placeholders.py nutzt project_details (übergebene Daten)
-  4. PDF zeigt: 15.000 € ✅
+  4. PDF zeigt: 15.000 € [OK]
 
 Firma 2:
   1. apply_price_scaling(1) → 15.450 € (+3%)
   2. Schreibt in project_details['final_price_with_provision'] = 15.450 €
   3. placeholders.py nutzt project_details (übergebene Daten)
-  4. PDF zeigt: 15.450 € ✅
+  4. PDF zeigt: 15.450 € [OK]
 
 Firma 3:
   1. apply_price_scaling(2) → 15.900 € (+6%)
   2. Schreibt in project_details['final_price_with_provision'] = 15.900 €
   3. placeholders.py nutzt project_details (übergebene Daten)
-  4. PDF zeigt: 15.900 € ✅
+  4. PDF zeigt: 15.900 € [OK]
 ```
 
 ## Test
@@ -225,9 +225,9 @@ python test_multi_pdf_variations.py
 ```
 
 **Erwartetes Ergebnis:**
-- ✅ Firma 1: 15.000 € (Basis)
-- ✅ Firma 2: 15.450 € (+3%)
-- ✅ Firma 3: 15.900 € (+6%)
+- [OK] Firma 1: 15.000 € (Basis)
+- [OK] Firma 2: 15.450 € (+3%)
+- [OK] Firma 3: 15.900 € (+6%)
 
 ## Technische Details
 
@@ -240,8 +240,8 @@ multi_offer_generator.py:
   → project_details['final_price_with_provision'] = calc_results['total_investment_netto']
   → generate_offer_pdf(project_data={...}, analysis_results=calc_results, ...)
     → placeholders.py: build_dynamic_data(project_data, analysis_results, ...)
-      → JETZT: Nutzt project_data['project_details'] (übergebene Daten) ✅
-      → VORHER: Nutzte st.session_state.project_data (immer gleich) ❌
+      → JETZT: Nutzt project_data['project_details'] (übergebene Daten) [OK]
+      → VORHER: Nutzte st.session_state.project_data (immer gleich) [ERROR]
 ```
 
 ### Priorität der Datenquellen (NEU)
@@ -252,24 +252,24 @@ multi_offer_generator.py:
 
 ## Status
 
-✅ **FIX ERFOLGREICH**
+[OK] **FIX ERFOLGREICH**
 
-- Multi-PDF: Verschiedene Produkte ✅
-- Multi-PDF: Verschiedene Preise ✅
-- Normale PDF: Unverändert ✅
-- Erweiterte PDF: Mit skalierten Preisen ✅
+- Multi-PDF: Verschiedene Produkte [OK]
+- Multi-PDF: Verschiedene Preise [OK]
+- Normale PDF: Unverändert [OK]
+- Erweiterte PDF: Mit skalierten Preisen [OK]
 """
     
     doc_file = "MULTI_PDF_PREIS_FIX.md"
     with open(doc_file, 'w', encoding='utf-8') as f:
         f.write(doc_content)
     
-    print(f"📄 Dokumentation erstellt: {doc_file}")
+    print(f"[FILE] Dokumentation erstellt: {doc_file}")
 
 
 if __name__ == "__main__":
     print("\n" + "="*80)
-    print("🔧 MULTI-PDF PREIS-FIX")
+    print("[TOOL] MULTI-PDF PREIS-FIX")
     print("="*80)
     print("\nZiel: Multi-PDF soll verschiedene Preise pro Firma zeigen")
     print("Methode: placeholders.py nutzt übergebene project_details statt session_state")
@@ -282,22 +282,22 @@ if __name__ == "__main__":
     if success:
         create_documentation()
         print("\n" + "="*80)
-        print("✅ FIX ERFOLGREICH ANGEWENDET!")
+        print("[OK] FIX ERFOLGREICH ANGEWENDET!")
         print("="*80)
         print("\n📋 Nächste Schritte:")
         print("1. python test_multi_pdf_variations.py # Teste Preisstaffelung")
         print("2. streamlit run gui.py # Teste in der App")
         print("3. Multi-PDF für 3 Firmen generieren")
         print("4. Prüfe dass jede Firma verschiedene Preise hat")
-        print("\n💡 Erwartetes Ergebnis:")
+        print("\n[IDEA] Erwartetes Ergebnis:")
         print("   Firma 1: 15.000 € (Basis)")
         print("   Firma 2: 15.450 € (+3%)")
         print("   Firma 3: 15.900 € (+6%)")
     else:
         print("\n" + "="*80)
-        print("❌ FIX KONNTE NICHT AUTOMATISCH ANGEWENDET WERDEN")
+        print("[ERROR] FIX KONNTE NICHT AUTOMATISCH ANGEWENDET WERDEN")
         print("="*80)
-        print("\n📝 MANUELLE ANPASSUNG ERFORDERLICH:")
+        print("\n[NOTE] MANUELLE ANPASSUNG ERFORDERLICH:")
         print("\nDatei: pdf_template_engine/placeholders.py")
         print("Suche nach: 'if hasattr(st, 'session_state') and 'project_data' in st.session_state:'")
         print("\nÄndere die Reihenfolge:")

@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_seite1_donuts():
     """Testet die Donut-Charts auf Seite 1 für maximale Sichtbarkeit"""
 
-    print("🔧 Test der Donut-Charts auf Seite 1 (Sichtbarkeitstest)")
+    print("[TOOL] Test der Donut-Charts auf Seite 1 (Sichtbarkeitstest)")
     print("=" * 60)
 
     # Test-Daten mit sehr sichtbaren Werten
@@ -41,14 +41,14 @@ def test_seite1_donuts():
         # Generiere Overlay
         coords_dir = Path("coords")
 
-        print("📊 Test-Daten für maximale Sichtbarkeit:")
+        print("[CHART] Test-Daten für maximale Sichtbarkeit:")
         print(
             f"   - Speicher zu Tagesverbrauch: {dynamic_data['storage_consumption_ratio_percent']}%")
         print(
             f"   - Speicher zu PV-Produktion: {dynamic_data['storage_production_ratio_percent']}%")
         print("📍 Position: Seite 1, links unten, unterhalb 'TECHNISCHE SPEZIFIKATIONEN'")
         print(
-            "🎨 Design: Große Charts (Radius 40/25), rote und blaue Farben, schwarze Labels")
+            "[DESIGN] Design: Große Charts (Radius 40/25), rote und blaue Farben, schwarze Labels")
 
         overlay_bytes = generate_overlay(
             coords_dir=coords_dir,
@@ -62,8 +62,8 @@ def test_seite1_donuts():
                 f.write(overlay_bytes)
 
             print(
-                f"\n✅ PDF mit Seite 1 Test-Donut-Charts erstellt: {output_file}")
-            print(f"📦 Dateigröße: {len(overlay_bytes):,} bytes")
+                f"\n[OK] PDF mit Seite 1 Test-Donut-Charts erstellt: {output_file}")
+            print(f"[PACKAGE] Dateigröße: {len(overlay_bytes):,} bytes")
             print("📋 Überprüfen Sie Seite 1 für die Test-Donut-Charts:")
             print("   - Oberer Chart (ROT): Speicher zu Tagesverbrauch (85%)")
             print("   - Unterer Chart (BLAU): Speicher zu PV-Produktion (65%)")
@@ -71,11 +71,11 @@ def test_seite1_donuts():
             print("   - Labels: 'Test: Tagesverbrauch' und 'Test: PV-Produktion'")
 
             return True
-        print("\n❌ Overlay-Generierung fehlgeschlagen")
+        print("\n[ERROR] Overlay-Generierung fehlgeschlagen")
         return False
 
     except Exception as e:
-        print(f"\n❌ Fehler beim Test: {e}")
+        print(f"\n[ERROR] Fehler beim Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -84,7 +84,7 @@ def test_seite1_donuts():
 def test_verschiedene_werte():
     """Testet verschiedene Werte auf Seite 1"""
 
-    print("\n🔧 Test verschiedener Werte auf Seite 1")
+    print("\n[TOOL] Test verschiedener Werte auf Seite 1")
     print("=" * 40)
 
     test_scenarios = [
@@ -141,20 +141,20 @@ def test_verschiedene_werte():
                 with open(output_file, "wb") as f:
                     f.write(overlay_bytes)
 
-                print(f"✅ PDF erstellt: {output_file}")
+                print(f"[OK] PDF erstellt: {output_file}")
                 print(
-                    f"📊 Werte: Consumption={
+                    f"[CHART] Werte: Consumption={
                         scenario['consumption']}%, Production={
                         scenario['production']}%")
             else:
-                print(f"❌ Szenario {i + 1} fehlgeschlagen")
+                print(f"[ERROR] Szenario {i + 1} fehlgeschlagen")
 
         except Exception as e:
-            print(f"❌ Fehler bei Szenario {i + 1}: {e}")
+            print(f"[ERROR] Fehler bei Szenario {i + 1}: {e}")
 
 
 if __name__ == "__main__":
-    print("🚀 Test der Donut-Charts auf Seite 1 (Sichtbarkeitstest)")
+    print("[LAUNCH] Test der Donut-Charts auf Seite 1 (Sichtbarkeitstest)")
     print("=" * 65)
 
     # Test 1: Basis-Sichtbarkeitstest
@@ -166,11 +166,11 @@ if __name__ == "__main__":
 
         print("\n🎉 Alle Tests abgeschlossen!")
         print("📋 Die Donut-Charts sollten jetzt auf Seite 1 sichtbar sein:")
-        print("   ✅ Position: Links unten, unterhalb 'TECHNISCHE SPEZIFIKATIONEN'")
-        print("   ✅ Große Größe (Radius 40/25) für maximale Sichtbarkeit")
-        print("   ✅ Rote und blaue Farben für hohen Kontrast")
-        print("   ✅ Schwarze Labels für beste Lesbarkeit")
+        print("   [OK] Position: Links unten, unterhalb 'TECHNISCHE SPEZIFIKATIONEN'")
+        print("   [OK] Große Größe (Radius 40/25) für maximale Sichtbarkeit")
+        print("   [OK] Rote und blaue Farben für hohen Kontrast")
+        print("   [OK] Schwarze Labels für beste Lesbarkeit")
         print("📍 Falls sichtbar: Problem war die Position auf Seite 6")
         print("📍 Falls nicht sichtbar: Problem liegt an der Donut-Zeichnung selbst")
     else:
-        print("\n❌ Basis-Test fehlgeschlagen - weitere Tests übersprungen")
+        print("\n[ERROR] Basis-Test fehlgeschlagen - weitere Tests übersprungen")

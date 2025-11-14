@@ -18,7 +18,7 @@ def fix_solarfabrik_values():
         p for p in products if p.get('manufacturer') and 'trina' in p.get(
             'manufacturer', '').lower()]
     if not trina_products:
-        print("❌ Keine TrinaSolar-Produkte gefunden!")
+        print("[ERROR] Keine TrinaSolar-Produkte gefunden!")
         return False
 
     # Verwende die Werte vom ersten TrinaSolar-Produkt als Referenz
@@ -40,7 +40,7 @@ def fix_solarfabrik_values():
         'manufacturer') and 'solarfabrik' in p.get('manufacturer', '').lower()]
 
     print(
-        f"\\n🔧 Aktualisiere {
+        f"\\n[TOOL] Aktualisiere {
             len(solarfabrik_products)} Solarfabrik-Produkte...")
 
     success_count = 0
@@ -48,7 +48,7 @@ def fix_solarfabrik_values():
         product_id = product.get('id')
         product_name = product.get('model_name')
 
-        print(f"\\n📦 Aktualisiere: {product_name} (ID: {product_id})")
+        print(f"\\n[PACKAGE] Aktualisiere: {product_name} (ID: {product_id})")
 
         # Zeige alte Werte
         print("   Alte Werte:")
@@ -62,13 +62,13 @@ def fix_solarfabrik_values():
             success = update_product(product_id, reference_values)
 
             if success:
-                print("   ✅ Erfolgreich aktualisiert!")
+                print("   [OK] Erfolgreich aktualisiert!")
                 success_count += 1
             else:
-                print("   ❌ Aktualisierung fehlgeschlagen!")
+                print("   [ERROR] Aktualisierung fehlgeschlagen!")
 
         except Exception as e:
-            print(f"   ❌ Fehler: {e}")
+            print(f"   [ERROR] Fehler: {e}")
 
     print(
         f"\\n🎉 {success_count}/{
@@ -80,7 +80,7 @@ def fix_solarfabrik_values():
 def verify_solarfabrik_values():
     """Überprüft ob Solarfabrik jetzt die gleichen Werte wie TrinaSolar hat"""
 
-    print("\\n🔍 VERIFIKATION: Solarfabrik-Werte nach Update")
+    print("\\n[SEARCH] VERIFIKATION: Solarfabrik-Werte nach Update")
     print("=" * 50)
 
     products = get_products_with_dynamic_keys()
@@ -92,7 +92,7 @@ def verify_solarfabrik_values():
     reference_product = trina_products[0] if trina_products else None
 
     if not reference_product:
-        print("❌ Keine TrinaSolar-Referenz gefunden!")
+        print("[ERROR] Keine TrinaSolar-Referenz gefunden!")
         return False
 
     # Hole Solarfabrik-Produkte
@@ -107,7 +107,7 @@ def verify_solarfabrik_values():
 
     all_match = True
     for product in solarfabrik_products:
-        print(f"\\n📦 Solarfabrik: {product.get('model_name')}")
+        print(f"\\n[PACKAGE] Solarfabrik: {product.get('model_name')}")
 
         matches = {
             'cell_technology': product.get('cell_technology') == reference_product.get('cell_technology'),
@@ -116,7 +116,7 @@ def verify_solarfabrik_values():
             'version': product.get('version') == reference_product.get('version')}
 
         for key, matches_ref in matches.items():
-            status = "✅" if matches_ref else "❌"
+            status = "[OK]" if matches_ref else "[ERROR]"
             print(f"   {key}: {product.get(key)} {status}")
             if not matches_ref:
                 all_match = False
@@ -125,13 +125,13 @@ def verify_solarfabrik_values():
         print(
             "\\n🎉 Alle Solarfabrik-Produkte haben jetzt die gleichen Werte wie TrinaSolar!")
     else:
-        print("\\n❌ Einige Solarfabrik-Produkte haben noch abweichende Werte!")
+        print("\\n[ERROR] Einige Solarfabrik-Produkte haben noch abweichende Werte!")
 
     return all_match
 
 
 if __name__ == "__main__":
-    print("🚀 Solarfabrik-Werte an TrinaSolar anpassen")
+    print("[LAUNCH] Solarfabrik-Werte an TrinaSolar anpassen")
     print("=" * 60)
 
     # Schritt 1: Aktualisiere Solarfabrik-Werte
@@ -141,6 +141,6 @@ if __name__ == "__main__":
         # Schritt 2: Verifikation
         verify_solarfabrik_values()
     else:
-        print("❌ Aktualisierung fehlgeschlagen!")
+        print("[ERROR] Aktualisierung fehlgeschlagen!")
 
-    print("\\n✅ Jetzt sollte Solarfabrik in der PDF die gleichen Werte wie TrinaSolar anzeigen!")
+    print("\\n[OK] Jetzt sollte Solarfabrik in der PDF die gleichen Werte wie TrinaSolar anzeigen!")

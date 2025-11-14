@@ -22,22 +22,22 @@ def verify_basic_caching():
     cache.set("test_key", "test_value", ttl=60)
     value = cache.get("test_key")
     assert value == "test_value", "Basic get/set failed"
-    print("✓ Basic get/set works")
+    print("[OK] Basic get/set works")
 
     # Test CacheKeys
     key = CacheKeys.user_session("user123")
     cache.set(key, {"session": "data"})
     assert cache.get(key) == {"session": "data"}
-    print("✓ CacheKeys namespace works")
+    print("[OK] CacheKeys namespace works")
 
     # Test TTL
     cache.set("ttl_key", "value", ttl=1)
     assert cache.get("ttl_key") == "value"
     time.sleep(1.1)
     assert cache.get("ttl_key") is None
-    print("✓ TTL expiration works")
+    print("[OK] TTL expiration works")
 
-    print("✓ Basic caching verified")
+    print("[OK] Basic caching verified")
 
 
 def verify_get_or_compute():
@@ -55,15 +55,15 @@ def verify_get_or_compute():
     result1 = get_or_compute("compute_key", expensive_fn, ttl=60)
     assert result1 == "result_1"
     assert call_count == 1
-    print("✓ First call computed value")
+    print("[OK] First call computed value")
 
     # Second call should use cache
     result2 = get_or_compute("compute_key", expensive_fn, ttl=60)
     assert result2 == "result_1"
     assert call_count == 1  # Not called again
-    print("✓ Second call used cache")
+    print("[OK] Second call used cache")
 
-    print("✓ Get or compute verified")
+    print("[OK] Get or compute verified")
 
 
 def verify_tagged_invalidation():
@@ -81,19 +81,19 @@ def verify_tagged_invalidation():
     assert cache.get("user1") == "data1"
     assert cache.get("user2") == "data2"
     assert cache.get("product1") == "data3"
-    print("✓ Tagged entries created")
+    print("[OK] Tagged entries created")
 
     # Invalidate user:1
     from .cache import invalidate_cache
     count = invalidate_cache(tags={"user:1"})
     assert count >= 1
-    print(f"✓ Invalidated {count} entries with tag 'user:1'")
+    print(f"[OK] Invalidated {count} entries with tag 'user:1'")
 
     # Verify user1 is gone, others remain
     assert cache.get("user1") is None
     assert cache.get("user2") == "data2"
     assert cache.get("product1") == "data3"
-    print("✓ Tagged invalidation verified")
+    print("[OK] Tagged invalidation verified")
 
 
 def verify_invalidation_rules():
@@ -109,7 +109,7 @@ def verify_invalidation_rules():
         invalidate_tags={"test_invalidate"}
     )
     engine.register_rule(rule)
-    print("✓ Invalidation rule registered")
+    print("[OK] Invalidation rule registered")
 
     # Set up cache
     cache = get_cache()
@@ -118,9 +118,9 @@ def verify_invalidation_rules():
     # Trigger invalidation
     count = invalidate_by_write("test_trigger")
     assert count >= 0
-    print(f"✓ Rule executed, invalidated {count} entries")
+    print(f"[OK] Rule executed, invalidated {count} entries")
 
-    print("✓ Invalidation rules verified")
+    print("[OK] Invalidation rules verified")
 
 
 def verify_cache_monitoring():
@@ -141,14 +141,14 @@ def verify_cache_monitoring():
     report = monitor.get_report()
     assert "timestamp" in report
     assert "layers" in report
-    print("✓ Performance report generated")
+    print("[OK] Performance report generated")
 
     # Check stats
     stats = get_cache_stats()
     assert "memory" in stats
-    print("✓ Cache statistics available")
+    print("[OK] Cache statistics available")
 
-    print("✓ Cache monitoring verified")
+    print("[OK] Cache monitoring verified")
 
 
 def verify_cache_warming():
@@ -170,18 +170,18 @@ def verify_cache_warming():
     )
 
     engine.register_task(task)
-    print("✓ Warming task registered")
+    print("[OK] Warming task registered")
 
     # Warm cache
     results = engine.warm_critical_data()
     assert results["total"] >= 1
-    print(f"✓ Warmed {results['succeeded']} cache entries")
+    print(f"[OK] Warmed {results['succeeded']} cache entries")
 
     # Verify it's cached
     cache = get_cache()
     value = cache.get("config_key")
     assert value == {"setting": "value"}
-    print("✓ Cache warming verified")
+    print("[OK] Cache warming verified")
 
 
 def verify_multi_layer_cache():
@@ -193,14 +193,14 @@ def verify_multi_layer_cache():
     # Set in memory layer
     cache.set("multi_key", "multi_value", layers={"memory"})
     assert cache.get("multi_key") == "multi_value"
-    print("✓ Memory layer works")
+    print("[OK] Memory layer works")
 
     # Get stats from all layers
     stats = cache.get_stats()
     assert "memory" in stats
-    print("✓ Multi-layer stats available")
+    print("[OK] Multi-layer stats available")
 
-    print("✓ Multi-layer cache verified")
+    print("[OK] Multi-layer cache verified")
 
 
 def verify_performance():
@@ -231,7 +231,7 @@ def verify_performance():
     print(f"  Speedup: {first_time / cached_time:.1f}x faster")
 
     assert cached_time < first_time, "Cache should be faster"
-    print("✓ Cache performance verified")
+    print("[OK] Cache performance verified")
 
 
 def run_all_verifications():
@@ -251,26 +251,26 @@ def run_all_verifications():
         verify_performance()
 
         print("\n" + "=" * 60)
-        print("✓ ALL VERIFICATIONS PASSED")
+        print("[OK] ALL VERIFICATIONS PASSED")
         print("=" * 60)
         print("\nThe intelligent caching system is working correctly!")
         print("\nKey Features Verified:")
-        print("  ✓ Multi-layer caching (memory + database)")
-        print("  ✓ LRU eviction and TTL expiration")
-        print("  ✓ Tagged cache invalidation")
-        print("  ✓ Smart invalidation rules")
-        print("  ✓ Cache performance monitoring")
-        print("  ✓ Proactive cache warming")
-        print("  ✓ get_or_compute pattern")
-        print("  ✓ Performance optimization")
+        print("  [OK] Multi-layer caching (memory + database)")
+        print("  [OK] LRU eviction and TTL expiration")
+        print("  [OK] Tagged cache invalidation")
+        print("  [OK] Smart invalidation rules")
+        print("  [OK] Cache performance monitoring")
+        print("  [OK] Proactive cache warming")
+        print("  [OK] get_or_compute pattern")
+        print("  [OK] Performance optimization")
 
         return True
 
     except AssertionError as e:
-        print(f"\n✗ VERIFICATION FAILED: {e}")
+        print(f"\n[ERROR] VERIFICATION FAILED: {e}")
         return False
     except Exception as e:
-        print(f"\n✗ ERROR: {e}")
+        print(f"\n[ERROR] ERROR: {e}")
         import traceback
         traceback.print_exc()
         return False

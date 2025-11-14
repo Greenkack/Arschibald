@@ -59,7 +59,7 @@ def generate_requirements():
     with open('requirements.txt', 'w') as f:
         f.write('\n'.join(requirements))
 
-    print(f"📦 Requirements.txt erstellt mit {len(requirements)} Paketen:")
+    print(f"[PACKAGE] Requirements.txt erstellt mit {len(requirements)} Paketen:")
     for req in requirements:
         print(f"  - {req}")
 

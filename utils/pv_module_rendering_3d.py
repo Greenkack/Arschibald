@@ -144,14 +144,14 @@ def render_all_modules(manager: ModulePlacementManager,
     """
     traces = []
     
-    print(f"🔍 render_all_modules: Rendere {len(manager.modules)} Module...")
+    print(f"[SEARCH] render_all_modules: Rendere {len(manager.modules)} Module...")
     
     for module in manager.get_all_modules():
         # Modul-Mesh
         mesh = render_pv_module_3d(module, show_selection=show_selection)
         traces.append(mesh)
         
-        print(f"  ✓ Modul {module.id} gerendert bei ({module.transform.x:.2f}, {module.transform.y:.2f}, {module.transform.z:.2f})")
+        print(f"  [OK] Modul {module.id} gerendert bei ({module.transform.x:.2f}, {module.transform.y:.2f}, {module.transform.z:.2f})")
         
         # Kanten
         if show_edges:

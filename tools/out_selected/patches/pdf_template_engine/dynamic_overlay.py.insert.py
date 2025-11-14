@@ -183,7 +183,10 @@ def _draw_page3_right_chart_and_separator(c: canvas.Canvas,
             c.setFont("Helvetica", 6)
         for i_tick in range(5, -1, -1):
             tv = top * i_tick / 5.0
-            py = y0 + (y1 - y0) * (tv / top if top > 0 else 0.0)
+            if top != 0:
+                py = y0 + (y1 - y0) * (tv / top if top > 0 else 0.0)
+            else:
+                py = 0.0
             c.setLineWidth(0.6)
             # Tick an der Y-Achse
             c.line(y_axis_x - 3.0, py, y_axis_x, py)

@@ -405,9 +405,9 @@ def example_complex_workflow():
     print("4. Validating form...")
     result = validate_form("invoice", "session_123")
     if result.is_valid:
-        print("   ✓ Validation passed")
+        print("   [OK] Validation passed")
     else:
-        print("   ✗ Validation failed:", result.errors)
+        print("   [ERROR] Validation failed:", result.errors)
 
     # Create checkpoint before finalizing
     print("5. Creating checkpoint before finalizing...")
@@ -424,7 +424,7 @@ def example_complex_workflow():
     # Save
     print("7. Saving invoice...")
     if manager.save("invoice", "session_123", immediate=True):
-        print("   ✓ Saved successfully")
+        print("   [OK] Saved successfully")
 
     # Show final state
     form_state = manager.get_form("invoice", "session_123")

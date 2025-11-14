@@ -73,9 +73,15 @@ def calculate_insulation_upgrade(
     living_area = building_data.get("living_area_m2", 150)
     floors = building_data.get("floors", 2)
     
-    roof_area = living_area / floors
+    if floors != 0:
+        roof_area = living_area / floors
+    else:
+        roof_area = 0.0
     facade_area = living_area * 0.8  # Vereinfacht: 80% der Wohnfläche
-    basement_area = living_area / floors
+    if floors != 0:
+        basement_area = living_area / floors
+    else:
+        basement_area = 0.0
     window_area = living_area * 0.15  # 15% Fensteranteil
     
     areas = {
@@ -118,7 +124,10 @@ def calculate_insulation_upgrade(
             investment = area * costs_per_m2[component].get(target, 100)
         
         # Amortisation
-        payback_years = investment / annual_savings_eur if annual_savings_eur > 0 else 999
+        if annual_savings_eur != 0:
+            payback_years = investment / annual_savings_eur if annual_savings_eur > 0 else 999
+        else:
+            payback_years = 0.0
         
         results[component] = {
             "area_m2": round(area, 1),
@@ -232,7 +241,10 @@ def compare_heating_systems(
         # Jährliche Betriebskosten
         heat_load_kw = building_data.get("heat_load_kw", 10)
         annual_heat_kwh = heat_load_kw * 1800
-        electricity_kwh = annual_heat_kwh / cop
+        if cop != 0:
+            electricity_kwh = annual_heat_kwh / cop
+        else:
+            electricity_kwh = 0.0
         electricity_cost_eur = electricity_kwh * 0.32
         
         results[system] = {
@@ -250,7 +262,10 @@ def compare_heating_systems(
     
     savings_per_year = radiators["annual_cost_eur"] - underfloor["annual_cost_eur"]
     additional_investment = underfloor["installation_cost_eur"] - radiators["installation_cost_eur"]
-    payback_years = additional_investment / savings_per_year if savings_per_year > 0 else 999
+    if savings_per_year != 0:
+        payback_years = additional_investment / savings_per_year if savings_per_year > 0 else 999
+    else:
+        payback_years = 0.0
     
     return {
         "systems": results,
@@ -365,7 +380,10 @@ def calculate_window_upgrade(
     subsidy = investment * 0.15
     net_investment = investment - subsidy
     
-    payback_years = net_investment / net_savings_eur if net_savings_eur > 0 else 999
+    if net_savings_eur != 0:
+        payback_years = net_investment / net_savings_eur if net_savings_eur > 0 else 999
+    else:
+        payback_years = 0.0
     
     return {
         "window_area_m2": round(window_area, 1),

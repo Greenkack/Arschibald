@@ -23,7 +23,7 @@ def check_outdated_packages():
         outdated = json.loads(result.stdout)
 
         if outdated:
-            print(f"📦 VERALTETE PAKETE ({len(outdated)}):")
+            print(f"[PACKAGE] VERALTETE PAKETE ({len(outdated)}):")
             for package in outdated:
                 print(
                     f"  📌 {
@@ -37,11 +37,11 @@ def check_outdated_packages():
                     print(f"⬆️ Aktualisiere {package['name']}...")
                     subprocess.run([sys.executable, '-m', 'pip',
                                    'install', '--upgrade', package['name']])
-                print("✅ Alle Pakete aktualisiert!")
+                print("[OK] Alle Pakete aktualisiert!")
         else:
-            print("✅ Alle Pakete sind aktuell!")
+            print("[OK] Alle Pakete sind aktuell!")
     else:
-        print("❌ Fehler beim Prüfen der Pakete")
+        print("[ERROR] Fehler beim Prüfen der Pakete")
 
 
 def check_security_vulnerabilities():
@@ -59,12 +59,12 @@ def check_security_vulnerabilities():
                                 capture_output=True, text=True)
 
         if "No known security vulnerabilities found" in result.stdout:
-            print("✅ Keine Sicherheitslücken gefunden!")
+            print("[OK] Keine Sicherheitslücken gefunden!")
         else:
-            print("⚠️ SICHERHEITSLÜCKEN GEFUNDEN:")
+            print("[WARNING] SICHERHEITSLÜCKEN GEFUNDEN:")
             print(result.stdout)
     except BaseException:
-        print("❌ Safety-Check nicht verfügbar")
+        print("[ERROR] Safety-Check nicht verfügbar")
 
 
 if __name__ == "__main__":

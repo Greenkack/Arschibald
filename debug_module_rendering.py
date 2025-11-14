@@ -49,11 +49,11 @@ def test_module_placement_for_roof_types():
         
         # Test 1: Z-Position berechnen
         z_pos = calculate_z_position(roof_type, roof_pitch)
-        print(f"✓ Z-Position: {z_pos:.3f}m")
+        print(f"[OK] Z-Position: {z_pos:.3f}m")
         
         # Test 2: Tilt-Winkel berechnen
         tilt = calculate_tilt_angle(roof_type, roof_pitch)
-        print(f"✓ Tilt-Winkel: {tilt:.1f}°")
+        print(f"[OK] Tilt-Winkel: {tilt:.1f}°")
         
         # Test 3: Module platzieren
         result = handle_auto_placement(
@@ -65,20 +65,20 @@ def test_module_placement_for_roof_types():
         )
         
         if result["success"]:
-            print(f"✅ Platzierung erfolgreich!")
+            print(f"[OK] Platzierung erfolgreich!")
             print(f"   - Platzierte Module: {result['count']}")
             print(f"   - Positionen: {len(result['positions'])}")
             if result['positions']:
                 first_pos = result['positions'][0]
                 print(f"   - Erste Position: ({first_pos[0]:.2f}, {first_pos[1]:.2f}, {first_pos[2]:.2f})")
         else:
-            print(f"❌ Platzierung fehlgeschlagen!")
+            print(f"[ERROR] Platzierung fehlgeschlagen!")
             print(f"   - Fehler: {result['message']}")
         
         # Test 4: Session State prüfen
         placed_positions = st.session_state.get("placed_module_positions", [])
         placed_count = st.session_state.get("placed_module_count", 0)
-        print(f"✓ Session State:")
+        print(f"[OK] Session State:")
         print(f"   - placed_module_count: {placed_count}")
         print(f"   - placed_module_positions: {len(placed_positions)} Positionen")
 
@@ -116,7 +116,7 @@ def test_module_rendering_in_scene():
     import streamlit as st
     st.session_state = MockSessionState()
     
-    print(f"\n✓ Session State vorbereitet:")
+    print(f"\n[OK] Session State vorbereitet:")
     print(f"   - placed_module_count: {st.session_state['placed_module_count']}")
     print(f"   - placed_module_positions: {len(st.session_state['placed_module_positions'])} Positionen")
     
@@ -124,13 +124,13 @@ def test_module_rendering_in_scene():
     placed_positions = st.session_state.get("placed_module_positions", [])
     
     if placed_positions:
-        print(f"\n✅ Module in Session State gefunden!")
+        print(f"\n[OK] Module in Session State gefunden!")
         print(f"   Diese sollten in build_plotly_scene() gerendert werden.")
         print(f"\n   Positionen:")
         for i, pos in enumerate(placed_positions):
             print(f"   - Modul {i+1}: ({pos[0]:.2f}, {pos[1]:.2f}, {pos[2]:.2f})")
     else:
-        print(f"\n❌ KEINE Module in Session State!")
+        print(f"\n[ERROR] KEINE Module in Session State!")
         print(f"   Das ist das Problem - Module werden nicht platziert.")
 
 
@@ -164,13 +164,13 @@ def test_create_pv_module_3d():
                 roof_type=roof_type
             )
             
-            print(f"   ✅ Modul erstellt")
+            print(f"   [OK] Modul erstellt")
             print(f"   - Vertices: {len(vertices)}")
             print(f"   - Farbe: {module.color}")
             print(f"   - Name: {module.name}")
             
         except Exception as e:
-            print(f"   ❌ Fehler: {e}")
+            print(f"   [ERROR] Fehler: {e}")
             import traceback
             traceback.print_exc()
 
@@ -200,6 +200,6 @@ if __name__ == "__main__":
         print("3. Module werden erstellt aber nicht zur Figure hinzugefügt")
         
     except Exception as e:
-        print(f"\n❌ KRITISCHER FEHLER: {e}")
+        print(f"\n[ERROR] KRITISCHER FEHLER: {e}")
         import traceback
         traceback.print_exc()

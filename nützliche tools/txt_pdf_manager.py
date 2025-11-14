@@ -92,15 +92,15 @@ def show_txt_system_overview():
     """
     Zeigt eine Übersicht über das TXT-System in Streamlit
     """
-    st.header("📄 TXT-PDF System Übersicht")
+    st.header("[FILE] TXT-PDF System Übersicht")
 
     pages = list_available_pages()
 
     if not pages:
-        st.error("❌ Keine Seiten im input-Ordner gefunden!")
+        st.error("[ERROR] Keine Seiten im input-Ordner gefunden!")
         return
 
-    st.success(f"✅ {len(pages)} Seiten gefunden: {', '.join(map(str, pages))}")
+    st.success(f"[OK] {len(pages)} Seiten gefunden: {', '.join(map(str, pages))}")
 
     # Seiten-Details
     with st.expander("📋 Seiten-Details", expanded=False):
@@ -115,7 +115,7 @@ def show_txt_system_overview():
                 st.write("**TXT-Dateien:**")
                 txt_files = {k: v for k, v in files.items() if not k.startswith("bild_")}
                 for file_type, file_path in txt_files.items():
-                    st.text(f"✅ {file_type}.txt")
+                    st.text(f"[OK] {file_type}.txt")
 
             with col2:
                 st.write("**Bilder:**")
@@ -141,13 +141,13 @@ def create_missing_pages_template(target_pages: int = 20):
 
     if not os.path.exists(input_dir):
         os.makedirs(input_dir)
-        print(f"✅ Erstellt: {input_dir}")
+        print(f"[OK] Erstellt: {input_dir}")
 
     existing_pages = list_available_pages()
     missing_pages = [i for i in range(1, target_pages + 1) if i not in existing_pages]
 
     if not missing_pages:
-        print(f"✅ Alle {target_pages} Seiten bereits vorhanden!")
+        print(f"[OK] Alle {target_pages} Seiten bereits vorhanden!")
         return None
 
     # Template-Inhalte
@@ -191,7 +191,7 @@ Farbe: 0
 
             created_files.append(file_path)
 
-    print(f"✅ {len(created_files)} Template-Dateien erstellt für Seiten: {', '.join(map(str, missing_pages))}")
+    print(f"[OK] {len(created_files)} Template-Dateien erstellt für Seiten: {', '.join(map(str, missing_pages))}")
     return created_files
 
 def validate_page_structure(page_num: int) -> dict[str, bool]:
@@ -233,16 +233,16 @@ if __name__ == "__main__":
     print(f"Verfügbare Seiten: {pages}")
 
     if len(pages) < 20:
-        print(f"⚠️ Nur {len(pages)} von 20 Seiten vorhanden")
+        print(f"[WARNING] Nur {len(pages)} von 20 Seiten vorhanden")
 
         # Erstelle fehlende Seiten
         create_missing_pages_template(20)
-        print("✅ Template-Seiten erstellt")
+        print("[OK] Template-Seiten erstellt")
 
     # Validiere erste 5 Seiten
     print("\n📋 Struktur-Validierung (erste 5 Seiten):")
     for page_num in pages[:5]:
         validation = validate_page_structure(page_num)
         all_valid = all(validation.values())
-        status = "✅" if all_valid else "⚠️"
+        status = "[OK]" if all_valid else "[WARNING]"
         print(f"{status} Seite {page_num}: {sum(validation.values())}/{len(validation)} Checks")

@@ -34,7 +34,10 @@ def create_sun_path_animation(
     
     for i in range(num_frames):
         # Winkel für aktuelle Tageszeit (0-360°)
-        angle = (i / num_frames) * 360
+        if num_frames != 0:
+            angle = (i / num_frames) * 360
+        else:
+            angle = 0.0
         angle_rad = np.radians(angle)
         
         # Sonnenposition berechnen
@@ -142,7 +145,10 @@ def create_360_rotation_animation(
     frames = []
     
     for i in range(num_frames):
-        angle = (i / num_frames) * 360
+        if num_frames != 0:
+            angle = (i / num_frames) * 360
+        else:
+            angle = 0.0
         angle_rad = np.radians(angle)
         
         # Kamera-Position berechnen
@@ -305,7 +311,10 @@ def create_energy_yield_timelapse(
     
     for hour in range(hours):
         # Ertrags-Faktor basierend auf Tageszeit (Peak um Mittag)
-        yield_factor = np.sin((hour / hours) * np.pi)
+        if hours != 0:
+            yield_factor = np.sin((hour / hours) * np.pi)
+        else:
+            yield_factor = 0.0
         
         # Module mit Farbe basierend auf aktuellem Ertrag
         module_traces = []

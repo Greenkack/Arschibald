@@ -69,7 +69,7 @@ def main():
     
     # Gruppiere nach Standard Library, Third-Party, und Local
     print("\n" + "=" * 80)
-    print("📦 IMPORT-KATEGORIEN")
+    print("[PACKAGE] IMPORT-KATEGORIEN")
     print("=" * 80)
     
     std_lib = set()
@@ -105,7 +105,7 @@ def main():
         files_using = ', '.join(all_imports[mod][:3])
         if len(all_imports[mod]) > 3:
             files_using += f" (+{len(all_imports[mod])-3} mehr)"
-        print(f"  ✅ {mod:30s} verwendet in: {files_using}")
+        print(f"  [OK] {mod:30s} verwendet in: {files_using}")
     
     print(f"\n📚 THIRD-PARTY PACKAGES ({len(third_party)} Pakete)")
     print("-" * 80)
@@ -113,7 +113,7 @@ def main():
         files_using = ', '.join(all_imports[mod][:3])
         if len(all_imports[mod]) > 3:
             files_using += f" (+{len(all_imports[mod])-3} mehr)"
-        print(f"  ✅ {mod:30s} verwendet in: {files_using}")
+        print(f"  [OK] {mod:30s} verwendet in: {files_using}")
     
     print(f"\n🏠 LOKALE MODULE ({len(local_modules)} Module)")
     print("-" * 80)
@@ -121,32 +121,32 @@ def main():
         files_using = ', '.join(all_imports[mod][:3])
         if len(all_imports[mod]) > 3:
             files_using += f" (+{len(all_imports[mod])-3} mehr)"
-        print(f"  ✅ {mod:30s} verwendet in: {files_using}")
+        print(f"  [OK] {mod:30s} verwendet in: {files_using}")
     
     if missing:
-        print(f"\n❌ FEHLENDE MODULE ({len(missing)} Module)")
+        print(f"\n[ERROR] FEHLENDE MODULE ({len(missing)} Module)")
         print("-" * 80)
         for mod in sorted(missing):
             files_using = ', '.join(all_imports[mod][:3])
             if len(all_imports[mod]) > 3:
                 files_using += f" (+{len(all_imports[mod])-3} mehr)"
-            print(f"  ⚠️  {mod:30s} FEHLT! Verwendet in: {files_using}")
+            print(f"  [WARNING]  {mod:30s} FEHLT! Verwendet in: {files_using}")
     
     # Zusammenfassung
     print("\n" + "=" * 80)
-    print("📊 IMPORT-ZUSAMMENFASSUNG")
+    print("[CHART] IMPORT-ZUSAMMENFASSUNG")
     print("=" * 80)
     total = len(std_lib) + len(third_party) + len(local_modules) + len(missing)
     available = len(std_lib) + len(third_party) + len(local_modules)
     
-    print(f"✅ Verfügbar:      {available}/{total} Module ({available/total*100:.1f}%)")
+    print(f"[OK] Verfügbar:      {available}/{total} Module ({available/total*100:.1f}%)")
     print(f"🐍 Standard Lib:   {len(std_lib)} Module")
     print(f"📚 Third-Party:    {len(third_party)} Pakete")
     print(f"🏠 Lokal:          {len(local_modules)} Module")
-    print(f"❌ Fehlend:        {len(missing)} Module")
+    print(f"[ERROR] Fehlend:        {len(missing)} Module")
     
     if missing:
-        print("\n⚠️  KRITISCHE FEHLER: Fehlende Module müssen installiert werden!")
+        print("\n[WARNING]  KRITISCHE FEHLER: Fehlende Module müssen installiert werden!")
         print(f"   pip install {' '.join(sorted(missing))}")
     else:
         print("\n🎉 ALLE IMPORTS SIND VERFÜGBAR!")

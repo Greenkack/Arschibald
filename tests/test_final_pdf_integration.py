@@ -10,7 +10,7 @@ sys.path.append('.')
 def test_final_pdf_integration():
     """Teste die finale PDF Integration"""
 
-    print("🎯 FINALER PDF INTEGRATION TEST")
+    print("[TARGET] FINALER PDF INTEGRATION TEST")
     print("=" * 60)
 
     try:
@@ -84,15 +84,15 @@ def test_final_pdf_integration():
         # Teste build_dynamic_data
         result = build_dynamic_data(test_project_data, test_analysis_results, test_company_info)
 
-        print("✅ build_dynamic_data erfolgreich ausgeführt!")
+        print("[OK] build_dynamic_data erfolgreich ausgeführt!")
 
         # SEITE 1 TESTS
-        print("\n📄 SEITE 1 - ERSPARTE MEHRWERTSTEUER & AMORTISATION:")
+        print("\n[FILE] SEITE 1 - ERSPARTE MEHRWERTSTEUER & AMORTISATION:")
         print(f"  Solaranlage (MwSt): {result.get('vat_amount_eur_formatted', 'FEHLT')}")
         print(f"  Amortisationszeit: {result.get('amortization_time_formatted', 'FEHLT')}")
 
         # SEITE 7 TESTS
-        print("\n📄 SEITE 7 - PREISBERECHNUNG:")
+        print("\n[FILE] SEITE 7 - PREISBERECHNUNG:")
         seite7_tests = [
             ("Gesamtsumme Brutto", "endergebnis_brutto_formatted"),
             ("Zubehör / Extras", "zubehor_preis_formatted"),
@@ -105,7 +105,7 @@ def test_final_pdf_integration():
 
         for label, key in seite7_tests:
             value = result.get(key, "FEHLT")
-            status = "✅" if value != "0,00 €" and value != "FEHLT" else "❌"
+            status = "[OK]" if value != "0,00 €" and value != "FEHLT" else "[ERROR]"
             print(f"  {status} {label}: {value}")
 
         # MAPPING TESTS
@@ -124,13 +124,13 @@ def test_final_pdf_integration():
         mapping_ok = True
         for placeholder, expected_key in important_mappings:
             actual_key = PLACEHOLDER_MAPPING.get(placeholder, "NICHT GEMAPPT")
-            status = "✅" if actual_key == expected_key else "❌"
+            status = "[OK]" if actual_key == expected_key else "[ERROR]"
             if actual_key != expected_key:
                 mapping_ok = False
             print(f"  {status} '{placeholder}' -> {actual_key}")
 
         # FINALE VALIDIERUNG
-        print("\n🎯 FINALE VALIDIERUNG:")
+        print("\n[TARGET] FINALE VALIDIERUNG:")
 
         # Seite 1
         seite1_mwst_ok = result.get("vat_amount_eur_formatted", "0,00 €") != "0,00 €"
@@ -143,25 +143,25 @@ def test_final_pdf_integration():
             if key != "zubehor_preis_formatted"  # Zubehör kann 0 sein
         )
 
-        print(f"  Seite 1 MwSt: {'✅' if seite1_mwst_ok else '❌'} ({result.get('vat_amount_eur_formatted', 'FEHLT')})")
-        print(f"  Seite 1 Amortisation: {'✅' if seite1_amort_ok else '❌'} ({result.get('amortization_time_formatted', 'FEHLT')})")
-        print(f"  Seite 7 Werte: {'✅' if seite7_values_ok else '❌'}")
-        print(f"  Placeholder Mapping: {'✅' if mapping_ok else '❌'}")
+        print(f"  Seite 1 MwSt: {'[OK]' if seite1_mwst_ok else '[ERROR]'} ({result.get('vat_amount_eur_formatted', 'FEHLT')})")
+        print(f"  Seite 1 Amortisation: {'[OK]' if seite1_amort_ok else '[ERROR]'} ({result.get('amortization_time_formatted', 'FEHLT')})")
+        print(f"  Seite 7 Werte: {'[OK]' if seite7_values_ok else '[ERROR]'}")
+        print(f"  Placeholder Mapping: {'[OK]' if mapping_ok else '[ERROR]'}")
 
         # GESAMTERGEBNIS
         all_ok = seite1_mwst_ok and seite1_amort_ok and seite7_values_ok and mapping_ok
 
         if all_ok:
             print("\n🎉 ALLE PDF FIXES ERFOLGREICH!")
-            print("✅ Seite 1: Ersparte Mehrwertsteuer und Amortisationszeit funktionieren")
-            print("✅ Seite 7: Alle Preisberechnungen funktionieren")
-            print("✅ Solar Calculator Integration funktioniert")
+            print("[OK] Seite 1: Ersparte Mehrwertsteuer und Amortisationszeit funktionieren")
+            print("[OK] Seite 7: Alle Preisberechnungen funktionieren")
+            print("[OK] Solar Calculator Integration funktioniert")
             return True
-        print("\n❌ EINIGE PROBLEME BESTEHEN NOCH!")
+        print("\n[ERROR] EINIGE PROBLEME BESTEHEN NOCH!")
         return False
 
     except Exception as e:
-        print(f"❌ FEHLER: {e}")
+        print(f"[ERROR] FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -170,10 +170,10 @@ if __name__ == "__main__":
     success = test_final_pdf_integration()
 
     if success:
-        print("\n🚀 PDF INTEGRATION BEREIT FÜR PRODUCTION!")
+        print("\n[LAUNCH] PDF INTEGRATION BEREIT FÜR PRODUCTION!")
         print("\nNÄCHSTE SCHRITTE:")
         print("1. Solar Calculator verwenden und Werte eingeben")
         print("2. PDF generieren")
         print("3. Seite 1 und Seite 7 prüfen")
     else:
-        print("\n🔧 WEITERE FIXES ERFORDERLICH!")
+        print("\n[TOOL] WEITERE FIXES ERFORDERLICH!")

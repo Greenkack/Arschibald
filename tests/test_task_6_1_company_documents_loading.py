@@ -96,9 +96,9 @@ class TestTask61CompanyDocumentsLoading(unittest.TestCase):
         # Verify the function was called with the correct company_id
         self.mock_list_company_docs.assert_called_once_with(
             self.test_company_id, None)
-        print("✓ active_company_id wurde korrekt verwendet")
+        print("[OK] active_company_id wurde korrekt verwendet")
         print(
-            f"✓ db_list_company_documents_func wurde mit company_id={
+            f"[OK] db_list_company_documents_func wurde mit company_id={
                 self.test_company_id} aufgerufen")
 
     def test_requirement_6_2_no_company_id_no_loading(self):
@@ -124,8 +124,8 @@ class TestTask61CompanyDocumentsLoading(unittest.TestCase):
 
         # Verify the function was NOT called
         self.mock_list_company_docs.assert_not_called()
-        print("✓ db_list_company_documents_func wurde NICHT aufgerufen")
-        print("✓ Keine Firmendokumente geladen wenn active_company_id=None")
+        print("[OK] db_list_company_documents_func wurde NICHT aufgerufen")
+        print("[OK] Keine Firmendokumente geladen wenn active_company_id=None")
 
     def test_requirement_6_3_empty_doc_ids_no_loading(self):
         """
@@ -150,8 +150,8 @@ class TestTask61CompanyDocumentsLoading(unittest.TestCase):
 
         # Verify the function was NOT called
         self.mock_list_company_docs.assert_not_called()
-        print("✓ db_list_company_documents_func wurde NICHT aufgerufen")
-        print("✓ Keine Firmendokumente geladen wenn company_document_ids_to_include leer")
+        print("[OK] db_list_company_documents_func wurde NICHT aufgerufen")
+        print("[OK] Keine Firmendokumente geladen wenn company_document_ids_to_include leer")
 
         # Test with None
         self.mock_list_company_docs.reset_mock()
@@ -167,7 +167,7 @@ class TestTask61CompanyDocumentsLoading(unittest.TestCase):
 
         # Verify the function was NOT called
         self.mock_list_company_docs.assert_not_called()
-        print("✓ Keine Firmendokumente geladen wenn company_document_ids_to_include=None")
+        print("[OK] Keine Firmendokumente geladen wenn company_document_ids_to_include=None")
 
     def test_requirement_6_4_db_function_called_correctly(self):
         """
@@ -203,11 +203,11 @@ class TestTask61CompanyDocumentsLoading(unittest.TestCase):
 
         # Check first argument is company_id
         self.assertEqual(call_args[0][0], self.test_company_id)
-        print(f"✓ Erster Parameter: active_company_id={self.test_company_id}")
+        print(f"[OK] Erster Parameter: active_company_id={self.test_company_id}")
 
         # Check second argument is None (for all document types)
         self.assertIsNone(call_args[0][1])
-        print("✓ Zweiter Parameter: doc_type=None (alle Dokumenttypen)")
+        print("[OK] Zweiter Parameter: doc_type=None (alle Dokumenttypen)")
 
     def test_requirement_6_5_filter_by_ids(self):
         """
@@ -259,12 +259,12 @@ class TestTask61CompanyDocumentsLoading(unittest.TestCase):
                 doc3_processed = any(
                     'Doc 3' in str(call) or 'doc3.pdf' in str(call) for call in warning_calls)
 
-                print(f"✓ Dokumente in DB: {len(all_docs)}")
-                print(f"✓ Dokumente zum Einschließen: {include_ids}")
-                print(f"✓ Doc 1 (ID=1) wurde verarbeitet: {doc1_processed}")
-                print(f"✓ Doc 3 (ID=3) wurde verarbeitet: {doc3_processed}")
+                print(f"[OK] Dokumente in DB: {len(all_docs)}")
+                print(f"[OK] Dokumente zum Einschließen: {include_ids}")
+                print(f"[OK] Doc 1 (ID=1) wurde verarbeitet: {doc1_processed}")
+                print(f"[OK] Doc 3 (ID=3) wurde verarbeitet: {doc3_processed}")
                 print(
-                    "✓ Nur Dokumente mit IDs in company_document_ids_to_include wurden verarbeitet")
+                    "[OK] Nur Dokumente mit IDs in company_document_ids_to_include wurden verarbeitet")
 
     def test_requirement_6_14_no_callable_function(self):
         """
@@ -289,8 +289,8 @@ class TestTask61CompanyDocumentsLoading(unittest.TestCase):
 
         # Should return the original PDF without errors
         self.assertIsNotNone(result)
-        print("✓ Funktion gibt PDF zurück ohne Fehler")
-        print("✓ Keine Firmendokumente geladen wenn db_list_company_documents_func nicht callable")
+        print("[OK] Funktion gibt PDF zurück ohne Fehler")
+        print("[OK] Keine Firmendokumente geladen wenn db_list_company_documents_func nicht callable")
 
     def test_integration_all_conditions_met(self):
         """
@@ -331,11 +331,11 @@ class TestTask61CompanyDocumentsLoading(unittest.TestCase):
                 self.assertIsNotNone(result)
                 self.assertIsInstance(result, bytes)
 
-                print("✓ active_company_id wurde verwendet")
-                print("✓ db_list_company_documents_func wurde aufgerufen")
-                print("✓ company_document_ids_to_include wurde verwendet")
-                print("✓ Alle 3 Dokumente wurden verarbeitet")
-                print("✓ Gültige PDF wurde zurückgegeben")
+                print("[OK] active_company_id wurde verwendet")
+                print("[OK] db_list_company_documents_func wurde aufgerufen")
+                print("[OK] company_document_ids_to_include wurde verwendet")
+                print("[OK] Alle 3 Dokumente wurden verarbeitet")
+                print("[OK] Gültige PDF wurde zurückgegeben")
 
 
 def run_tests():
@@ -373,11 +373,11 @@ def run_tests():
     print(f"Fehler: {len(result.errors)}")
 
     if result.wasSuccessful():
-        print("\n✓ ALLE TESTS BESTANDEN!")
-        print("✓ Task 6.1 ist vollständig implementiert und funktioniert korrekt")
+        print("\n[OK] ALLE TESTS BESTANDEN!")
+        print("[OK] Task 6.1 ist vollständig implementiert und funktioniert korrekt")
     else:
-        print("\n✗ EINIGE TESTS FEHLGESCHLAGEN")
-        print("✗ Bitte überprüfen Sie die Implementierung")
+        print("\n[ERROR] EINIGE TESTS FEHLGESCHLAGEN")
+        print("[ERROR] Bitte überprüfen Sie die Implementierung")
 
     print("=" * 80)
 

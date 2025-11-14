@@ -99,13 +99,13 @@ def demo_project_generation():
     print("\n2. Listing generated project structure...")
     project_path = os.path.join(AGENT_WORKSPACE, "demoflaskapi")
     if os.path.exists(project_path):
-        print(f"   ✓ Project created at: {project_path}")
-        print(f"   ✓ Contains {len(os.listdir(project_path))} items")
+        print(f"   [OK] Project created at: {project_path}")
+        print(f"   [OK] Contains {len(os.listdir(project_path))} items")
 
         # Show some key files
         readme_path = os.path.join(project_path, "README.md")
         if os.path.exists(readme_path):
-            print("   ✓ README.md exists")
+            print("   [OK] README.md exists")
             with open(readme_path, encoding='utf-8') as f:
                 first_line = f.readline().strip()
                 print(f"     First line: {first_line}")
@@ -133,9 +133,9 @@ def demo_all_project_types():
         })
 
         if "erfolgreich" in result:
-            print(f"   ✓ Successfully generated {project_type}")
+            print(f"   [OK] Successfully generated {project_type}")
         else:
-            print(f"   ✗ Failed to generate {project_type}")
+            print(f"   [ERROR] Failed to generate {project_type}")
 
 
 def show_workspace_summary():
@@ -184,14 +184,14 @@ def main():
         print("DEMONSTRATION COMPLETE")
         print("=" * 60)
         print("\nAll file system tools are working correctly!")
-        print("✓ Secure file operations")
-        print("✓ Directory traversal prevention")
-        print("✓ Project structure generation")
-        print("✓ Multiple project templates")
-        print("✓ SOLID principles compliance")
+        print("[OK] Secure file operations")
+        print("[OK] Directory traversal prevention")
+        print("[OK] Project structure generation")
+        print("[OK] Multiple project templates")
+        print("[OK] SOLID principles compliance")
 
     except Exception as e:
-        print(f"\n✗ Error during demonstration: {e}")
+        print(f"\n[ERROR] Error during demonstration: {e}")
         import traceback
         traceback.print_exc()
 
@@ -204,9 +204,9 @@ def main():
         if response.lower() == 'y':
             if os.path.exists(AGENT_WORKSPACE):
                 shutil.rmtree(AGENT_WORKSPACE)
-                print("✓ Workspace deleted")
+                print("[OK] Workspace deleted")
         else:
-            print(f"✓ Workspace preserved at: {AGENT_WORKSPACE}")
+            print(f"[OK] Workspace preserved at: {AGENT_WORKSPACE}")
 
 
 if __name__ == "__main__":

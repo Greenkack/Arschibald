@@ -17,6 +17,13 @@ from .pricing_errors import CalculationError, ValidationError
 
 logger = logging.getLogger(__name__)
 
+__all__ = [
+    'VATCategory',
+    'VATRate',
+    'VATManager',
+    'TaxExemption',
+]
+
 
 class VATCategory(Enum):
     """VAT categories for different product types"""
@@ -504,7 +511,10 @@ class VATManager:
 
             # Calculate net amount: net = gross / (1 + vat_rate/100)
             vat_multiplier = 1 + (vat_rate_percent / 100.0)
-            net_amount = gross_amount / vat_multiplier
+            if vat_multiplier != 0:
+                net_amount = gross_amount / vat_multiplier
+            else:
+                net_amount = 0.0
             vat_amount = gross_amount - net_amount
 
             return {

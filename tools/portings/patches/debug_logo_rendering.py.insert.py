@@ -9,7 +9,7 @@ from pdf_template_engine.placeholders import build_dynamic_data
 # --- DEF BLOCK START: func test_logo_debug ---
 def test_logo_debug():
     """Debuggt das Logo-Rendering im Detail"""
-    print("🔍 LOGO DEBUG TEST")
+    print("[SEARCH] LOGO DEBUG TEST")
     print("=" * 60)
 
     # 1. Test-Daten vorbereiten
@@ -29,7 +29,7 @@ def test_logo_debug():
     company_info = {"name": "Test GmbH"}
 
     # 2. Dynamic Data erstellen
-    print("\n📊 Erstelle Dynamic Data...")
+    print("\n[CHART] Erstelle Dynamic Data...")
     dynamic_data = build_dynamic_data(
         project_data, analysis_results, company_info)
 
@@ -41,12 +41,12 @@ def test_logo_debug():
     print("Logo-Daten verfügbar:")
     for key in logo_keys:
         if key in dynamic_data and dynamic_data[key]:
-            print(f"  ✅ {key}: {len(dynamic_data[key])} Zeichen")
+            print(f"  [OK] {key}: {len(dynamic_data[key])} Zeichen")
         else:
-            print(f"  ❌ {key}: FEHLT")
+            print(f"  [ERROR] {key}: FEHLT")
 
     # 3. Koordinaten aus seite4.yml laden
-    print("\n📐 Lade Koordinaten...")
+    print("\n[DESIGN] Lade Koordinaten...")
     try:
         with open("coords/seite4.yml", encoding="utf-8") as f:
             coords_content = f.read()
@@ -73,7 +73,7 @@ def test_logo_debug():
         return False
 
     # 4. Teste Logo-Rendering-Logik simuliert
-    print("\n🎨 Simuliere Logo-Rendering...")
+    print("\n[DESIGN] Simuliere Logo-Rendering...")
     for logo_name, coords in logo_coords.items():
         x0, y0, x1, y1 = coords
         width_from_coords = abs(x1 - x0)
@@ -87,9 +87,9 @@ def test_logo_debug():
                 height_from_coords:.1f}")
 
         if width_from_coords < 1 or height_from_coords < 1:
-            print("  ⚠️  PROBLEM: Zu kleine Dimensionen für Logo!")
+            print("  [WARNING]  PROBLEM: Zu kleine Dimensionen für Logo!")
         else:
-            print("  ✅ Dimensionen OK")
+            print("  [OK] Dimensionen OK")
 
         # Passender Logo-Key
         logo_key_map = {
@@ -100,9 +100,9 @@ def test_logo_debug():
 
         logo_key = logo_key_map.get(logo_name)
         if logo_key and logo_key in dynamic_data and dynamic_data[logo_key]:
-            print(f"  ✅ Logo-Daten für {logo_key} verfügbar")
+            print(f"  [OK] Logo-Daten für {logo_key} verfügbar")
         else:
-            print(f"  ❌ Logo-Daten für {logo_key} FEHLEN")
+            print(f"  [ERROR] Logo-Daten für {logo_key} FEHLEN")
 
     return True
 # --- DEF BLOCK END ---

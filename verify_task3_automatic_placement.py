@@ -34,7 +34,7 @@ def test_grid_calculation():
             PV_H
         )
         
-        print("✓ Grid calculator module imported successfully")
+        print("[OK] Grid calculator module imported successfully")
         
         # Test 1: Standard roof (10m x 8m, 20 modules)
         print("\n📋 Test 1: Standard roof (10m x 8m, 20 modules)")
@@ -42,9 +42,9 @@ def test_grid_calculation():
         
         assert len(positions) > 0, "Should return positions"
         assert len(positions) <= 20, "Should not exceed requested quantity"
-        print(f"  ✓ Placed {len(positions)} modules")
-        print(f"  ✓ First module: ({positions[0][0]:.2f}, {positions[0][1]:.2f})")
-        print(f"  ✓ Last module: ({positions[-1][0]:.2f}, {positions[-1][1]:.2f})")
+        print(f"  [OK] Placed {len(positions)} modules")
+        print(f"  [OK] First module: ({positions[0][0]:.2f}, {positions[0][1]:.2f})")
+        print(f"  [OK] Last module: ({positions[-1][0]:.2f}, {positions[-1][1]:.2f})")
         
         # Test 2: Verify spacing between modules
         print("\n📋 Test 2: Verify spacing between modules")
@@ -63,12 +63,12 @@ def test_grid_calculation():
             if dy < 0.01:  # Same row (Y is same)
                 assert abs(dx - expected_spacing) < 0.01, \
                     f"X spacing should be {expected_spacing}m, got {dx}m"
-                print(f"  ✓ X spacing correct: {dx:.2f}m")
+                print(f"  [OK] X spacing correct: {dx:.2f}m")
             elif dx < 0.01:  # Same column (X is same)
                 expected_y_spacing = PV_H + DEFAULT_SPACING  # 1.76 + 0.05 = 1.81m
                 assert abs(dy - expected_y_spacing) < 0.01, \
                     f"Y spacing should be {expected_y_spacing}m, got {dy}m"
-                print(f"  ✓ Y spacing correct: {dy:.2f}m")
+                print(f"  [OK] Y spacing correct: {dy:.2f}m")
         
         # Test 3: Verify margins are respected
         print("\n📋 Test 3: Verify margins are respected")
@@ -88,19 +88,19 @@ def test_grid_calculation():
             assert min_y <= y <= max_y, \
                 f"Module {i} Y position {y:.2f}m exceeds bounds [{min_y:.2f}, {max_y:.2f}]"
         
-        print(f"  ✓ All {len(positions)} modules within roof bounds")
-        print(f"  ✓ Margins respected: {DEFAULT_MARGIN}m from edges")
+        print(f"  [OK] All {len(positions)} modules within roof bounds")
+        print(f"  [OK] Margins respected: {DEFAULT_MARGIN}m from edges")
         
         # Test 4: Maximum capacity calculation
         print("\n📋 Test 4: Maximum capacity calculation")
         max_modules = calculate_max_modules(15.0, 12.0)
-        print(f"  ✓ Maximum modules for 15m x 12m roof: {max_modules}")
+        print(f"  [OK] Maximum modules for 15m x 12m roof: {max_modules}")
         
         # Verify we can actually place that many
         positions_max = calculate_module_grid(15.0, 12.0, max_modules)
         assert len(positions_max) == max_modules, \
             f"Should place {max_modules} modules, got {len(positions_max)}"
-        print(f"  ✓ Successfully placed all {len(positions_max)} modules")
+        print(f"  [OK] Successfully placed all {len(positions_max)} modules")
         
         # Test 5: Overlapping prevention
         print("\n📋 Test 5: Overlapping prevention")
@@ -127,13 +127,13 @@ def test_grid_calculation():
                     assert dy >= min_distance_y, \
                         f"Modules {i} and {j} overlap in Y direction"
         
-        print(f"  ✓ No overlapping modules detected")
+        print(f"  [OK] No overlapping modules detected")
         
-        print("\n✅ TEST 3.1 PASSED: Grid-Berechnung funktioniert korrekt")
+        print("\n[OK] TEST 3.1 PASSED: Grid-Berechnung funktioniert korrekt")
         return True
         
     except Exception as e:
-        print(f"\n❌ TEST 3.1 FAILED: {e}")
+        print(f"\n[ERROR] TEST 3.1 FAILED: {e}")
         traceback.print_exc()
         return False
 
@@ -156,7 +156,7 @@ def test_placement_algorithm():
         roof_width = 10.0
         
         max_modules = calculate_max_modules(roof_length, roof_width)
-        print(f"  ✓ Maximum modules: {max_modules}")
+        print(f"  [OK] Maximum modules: {max_modules}")
         
         # Request more than maximum
         requested = max_modules + 10
@@ -164,7 +164,7 @@ def test_placement_algorithm():
         
         assert len(positions) == max_modules, \
             f"Should limit to {max_modules}, got {len(positions)}"
-        print(f"  ✓ Correctly limited to maximum: {len(positions)} modules")
+        print(f"  [OK] Correctly limited to maximum: {len(positions)} modules")
         
         # Test 2: Edge spacing consideration
         print("\n📋 Test 2: Edge spacing consideration")
@@ -178,17 +178,23 @@ def test_placement_algorithm():
             small_roof_length, small_roof_width, 10
         )
         
-        print(f"  ✓ Placed {len(positions_small)} modules on small roof")
-        print(f"  ✓ Margins: {DEFAULT_MARGIN}m from edges")
+        print(f"  [OK] Placed {len(positions_small)} modules on small roof")
+        print(f"  [OK] Margins: {DEFAULT_MARGIN}m from edges")
         
         # Verify all modules respect margins
         for x, y in positions_small:
-            assert abs(x) <= (small_roof_length / 2 - DEFAULT_MARGIN), \
+            if 2 != 0:
+                assert abs(x) <= (small_roof_length / 2 - DEFAULT_MARGIN), \
+            else:
+                assert abs(x) < = 0.0
                 "Module exceeds X margin"
-            assert abs(y) <= (small_roof_width / 2 - DEFAULT_MARGIN), \
+            if 2 != 0:
+                assert abs(y) <= (small_roof_width / 2 - DEFAULT_MARGIN), \
+            else:
+                assert abs(y) < = 0.0
                 "Module exceeds Y margin"
         
-        print(f"  ✓ All modules respect edge margins")
+        print(f"  [OK] All modules respect edge margins")
         
         # Test 3: Centering optimization
         print("\n📋 Test 3: Centering optimization")
@@ -207,13 +213,13 @@ def test_placement_algorithm():
             assert abs(center_y) < 1.0, \
                 f"Grid not centered in Y: {center_y:.2f}m (offset > 1m)"
             
-            print(f"  ✓ Grid reasonably centered at ({center_x:.2f}, {center_y:.2f})")
+            print(f"  [OK] Grid reasonably centered at ({center_x:.2f}, {center_y:.2f})")
         
-        print("\n✅ TEST 3.2 PASSED: Platzierungs-Algorithmus optimiert")
+        print("\n[OK] TEST 3.2 PASSED: Platzierungs-Algorithmus optimiert")
         return True
         
     except Exception as e:
-        print(f"\n❌ TEST 3.2 FAILED: {e}")
+        print(f"\n[ERROR] TEST 3.2 FAILED: {e}")
         traceback.print_exc()
         return False
 
@@ -228,7 +234,7 @@ def test_button_integration():
         # Test 1: Import UI module
         print("\n📋 Test 1: Import UI module")
         from utils.pv3d_module_placement_ui import render_module_placement_panel
-        print("  ✓ UI module imported successfully")
+        print("  [OK] UI module imported successfully")
         
         # Test 2: Import placement handler
         print("\n📋 Test 2: Import placement handler")
@@ -236,7 +242,7 @@ def test_button_integration():
             handle_auto_placement,
             initialize_session_state
         )
-        print("  ✓ Placement handler imported successfully")
+        print("  [OK] Placement handler imported successfully")
         
         # Test 3: Check integration in main UI
         print("\n📋 Test 3: Check integration in main UI")
@@ -255,7 +261,7 @@ def test_button_integration():
         
         for check_name, check_str in checks:
             assert check_str in content, f"Missing: {check_name}"
-            print(f"  ✓ {check_name}")
+            print(f"  [OK] {check_name}")
         
         # Test 4: Verify button creates trigger
         print("\n📋 Test 4: Verify button creates trigger")
@@ -274,25 +280,25 @@ def test_button_integration():
             trigger_found = any(pattern in ui_content for pattern in trigger_patterns)
         
         assert trigger_found, "Button should set trigger_auto_placement"
-        print("  ✓ Button sets trigger in session state")
+        print("  [OK] Button sets trigger in session state")
         
         # Test 5: Verify trigger is handled
         print("\n📋 Test 5: Verify trigger is handled")
         assert 'st.session_state["trigger_auto_placement"] = False' in content, \
             "Trigger should be reset after handling"
-        print("  ✓ Trigger is reset after handling")
+        print("  [OK] Trigger is reset after handling")
         
         # Test 6: Verify result display
         print("\n📋 Test 6: Verify result display")
         assert "st.rerun()" in content, \
             "Should rerun after placement"
-        print("  ✓ Page reruns after placement")
+        print("  [OK] Page reruns after placement")
         
-        print("\n✅ TEST 3.3 PASSED: Button-Integration vollständig")
+        print("\n[OK] TEST 3.3 PASSED: Button-Integration vollständig")
         return True
         
     except Exception as e:
-        print(f"\n❌ TEST 3.3 FAILED: {e}")
+        print(f"\n[ERROR] TEST 3.3 FAILED: {e}")
         traceback.print_exc()
         return False
 
@@ -308,26 +314,26 @@ def test_session_state_management():
         
         print("\n📋 Test: Initialize session state")
         # Note: This requires Streamlit context, so we just verify the function exists
-        print("  ✓ initialize_session_state function exists")
+        print("  [OK] initialize_session_state function exists")
         
         # Verify function signature
         import inspect
         sig = inspect.signature(initialize_session_state)
         assert len(sig.parameters) == 0, "Should take no parameters"
-        print("  ✓ Function signature correct")
+        print("  [OK] Function signature correct")
         
         # Check function docstring mentions required keys
         doc = initialize_session_state.__doc__
         assert "placed_module_positions" in doc, "Should document positions key"
         assert "placed_module_count" in doc, "Should document count key"
         assert "trigger_auto_placement" in doc, "Should document trigger key"
-        print("  ✓ Function documentation complete")
+        print("  [OK] Function documentation complete")
         
-        print("\n✅ ADDITIONAL TEST PASSED: Session state management")
+        print("\n[OK] ADDITIONAL TEST PASSED: Session state management")
         return True
         
     except Exception as e:
-        print(f"\n❌ ADDITIONAL TEST FAILED: {e}")
+        print(f"\n[ERROR] ADDITIONAL TEST FAILED: {e}")
         traceback.print_exc()
         return False
 
@@ -356,7 +362,7 @@ def main():
     print("="*70)
     
     for test_name, passed in results:
-        status = "✅ PASSED" if passed else "❌ FAILED"
+        status = "[OK] PASSED" if passed else "[ERROR] FAILED"
         print(f"{status}: {test_name}")
     
     all_passed = all(passed for _, passed in results)
@@ -366,16 +372,16 @@ def main():
         print("🎉 ALL TESTS PASSED!")
         print("="*70)
         print("\nTask 3 'Automatische Belegung reparieren' is COMPLETE:")
-        print("  ✓ Grid calculation works correctly")
-        print("  ✓ Placement algorithm optimizes module count")
-        print("  ✓ Button integration is complete")
-        print("  ✓ Session state management works")
-        print("  ✓ Error handling is robust")
+        print("  [OK] Grid calculation works correctly")
+        print("  [OK] Placement algorithm optimizes module count")
+        print("  [OK] Button integration is complete")
+        print("  [OK] Session state management works")
+        print("  [OK] Error handling is robust")
         print("\nThe automatic placement feature is fully functional!")
         return 0
     else:
         print("\n" + "="*70)
-        print("❌ SOME TESTS FAILED")
+        print("[ERROR] SOME TESTS FAILED")
         print("="*70)
         print("\nPlease review the failed tests above.")
         return 1

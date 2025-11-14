@@ -244,7 +244,7 @@ def _get_jaz_recommendations(
     
     if temp_factor < 1.0:
         recommendations.append(
-            "🔧 Vorlauftemperatur senken: Größere Heizkörper oder Fußbodenheizung installieren (JAZ-Gewinn: +10-20%)"
+            "[TOOL] Vorlauftemperatur senken: Größere Heizkörper oder Fußbodenheizung installieren (JAZ-Gewinn: +10-20%)"
         )
     
     if insulation_factor < 1.0:
@@ -258,7 +258,7 @@ def _get_jaz_recommendations(
         )
     
     if not recommendations:
-        recommendations.append("✅ System bereits optimal ausgelegt - keine weiteren Maßnahmen erforderlich")
+        recommendations.append("[OK] System bereits optimal ausgelegt - keine weiteren Maßnahmen erforderlich")
     
     return recommendations
 
@@ -463,7 +463,10 @@ def calculate_price_scenarios(
         
         # Gesamtersparnis nach 20 Jahren
         total_savings = cumulative_savings
-        roi_percent = (total_savings / net_investment) * 100 if net_investment > 0 else 0
+        if net_investment != 0:
+            roi_percent = (total_savings / net_investment) * 100 if net_investment > 0 else 0
+        else:
+            roi_percent = 0.0
         
         scenarios[scenario_name] = {
             'config': config,
@@ -507,11 +510,11 @@ def _get_scenario_recommendation(scenarios: Dict) -> str:
     realistic_savings = scenarios['realistisch']['total_savings_20y']
     
     if isinstance(realistic_payback, int) and realistic_payback <= 10:
-        return f"✅ Sehr empfehlenswert: Amortisation in {realistic_payback} Jahren, Ersparnis nach 20J: {realistic_savings:,.2f}€"
+        return f"[OK] Sehr empfehlenswert: Amortisation in {realistic_payback} Jahren, Ersparnis nach 20J: {realistic_savings:,.2f}€"
     elif isinstance(realistic_payback, int) and realistic_payback <= 15:
         return f"👍 Empfehlenswert: Amortisation in {realistic_payback} Jahren, langfristig rentabel"
     else:
-        return "⚠️ Langfristige Investition: Amortisation >15 Jahre, andere Faktoren (Komfort, CO₂) berücksichtigen"
+        return "[WARNING] Langfristige Investition: Amortisation >15 Jahre, andere Faktoren (Komfort, CO₂) berücksichtigen"
 
 
 # ============================================================================
@@ -537,7 +540,7 @@ def calculate_tax_benefits(
     installation_price = heatpump_data.get('installation_price', 3000)
     total_investment = device_price + installation_price
     
-    # ✅ FIX: Parse building_year (kann String wie "Nach 2020", "Vor 1995" sein)
+    # [OK] FIX: Parse building_year (kann String wie "Nach 2020", "Vor 1995" sein)
     building_year_raw = building_data.get('year', 2000)
     
     # Konvertiere verschiedene Formate
@@ -582,10 +585,10 @@ def calculate_tax_benefits(
         'labor_cost': labor_cost,
         'deductible_amount': max_deductible_labor,
         'tax_benefit': handwerker_benefit,
-        'max_benefit_per_year': handwerker_benefit,  # ✅ FIX: Key für UI
-        'total_benefit': handwerker_benefit,  # ✅ FIX: Key für UI
-        'labor_cost_estimate': labor_cost,  # ✅ FIX: Key für UI
-        'years': 1,  # ✅ FIX: Key für UI
+        'max_benefit_per_year': handwerker_benefit,  # [OK] FIX: Key für UI
+        'total_benefit': handwerker_benefit,  # [OK] FIX: Key für UI
+        'labor_cost_estimate': labor_cost,  # [OK] FIX: Key für UI
+        'years': 1,  # [OK] FIX: Key für UI
         'description': 'Jährlich absetzbar für Arbeitskosten',
         'paragraph': '§35a EStG',
         'requirements': [
@@ -608,14 +611,14 @@ def calculate_tax_benefits(
         total_sanierung_benefit = year1_benefit + year2_benefit + year3_benefit
         
         tax_benefits['energetische_sanierung'] = {
-            'eligible': True,  # ✅ FIX: Key für UI
+            'eligible': True,  # [OK] FIX: Key für UI
             'eligible_amount': eligible_amount,
             'year1_benefit': year1_benefit,
             'year2_benefit': year2_benefit,
             'year3_benefit': year3_benefit,
-            'year_1_2': year1_benefit,  # ✅ FIX: Key für UI (Jahr 1 und 2 gleich)
-            'year_3': year3_benefit,  # ✅ FIX: Key für UI
-            'total_benefit': total_sanierung_benefit,  # ✅ FIX: Key für UI
+            'year_1_2': year1_benefit,  # [OK] FIX: Key für UI (Jahr 1 und 2 gleich)
+            'year_3': year3_benefit,  # [OK] FIX: Key für UI
+            'total_benefit': total_sanierung_benefit,  # [OK] FIX: Key für UI
             'total_benefit_3years': total_sanierung_benefit,
             'description': 'Steuerermäßigung für energetische Sanierung',
             'paragraph': '§35c EStG',
@@ -635,7 +638,7 @@ def calculate_tax_benefits(
         # Kombination mit Handwerkerleistung
         # Wichtig: Keine Doppelförderung! Entweder/Oder
         tax_benefits['combination_note'] = (
-            "⚠️ WICHTIG: §35c (energetische Sanierung) schließt §35a (Handwerkerleistungen) aus! "
+            "[WARNING] WICHTIG: §35c (energetische Sanierung) schließt §35a (Handwerkerleistungen) aus! "
             "Wählen Sie die für Sie günstigere Option."
         )
         
@@ -658,9 +661,9 @@ def calculate_tax_benefits(
         # Nur Handwerkerleistungen möglich
         tax_benefits['energetische_sanierung'] = {
             'eligible': False,
-            'total_benefit': 0,  # ✅ FIX: Key für UI
-            'year_1_2': 0,  # ✅ FIX: Key für UI
-            'year_3': 0,  # ✅ FIX: Key für UI
+            'total_benefit': 0,  # [OK] FIX: Key für UI
+            'year_1_2': 0,  # [OK] FIX: Key für UI
+            'year_3': 0,  # [OK] FIX: Key für UI
             'reason': f'Gebäude von {building_year} ist noch keine 10 Jahre alt',
             'alternative': 'Nur Handwerkerleistungen (§35a) absetzbar'
         }
@@ -677,8 +680,8 @@ def calculate_tax_benefits(
     
     # Kombination mit BEG-Förderung
     tax_benefits['important_notes'] = [
-        "💰 Steuervorteile kommen ZUSÄTZLICH zur BEG-Förderung",
-        "📄 Fachunternehmererklärung erforderlich",
+        "[MONEY] Steuervorteile kommen ZUSÄTZLICH zur BEG-Förderung",
+        "[FILE] Fachunternehmererklärung erforderlich",
         "⏰ Antrag nach Fertigstellung stellen",
         "🏦 Nur bei Eigennutzung (nicht Vermietung)"
     ]
@@ -735,7 +738,10 @@ def calculate_noise_analysis(
     reference_distance = 1.0  # m
     
     # Punktschallquelle: -6 dB pro Abstandsverdopplung
-    distance_attenuation = 20 * math.log10(neighbor_distance_m / reference_distance)
+    if reference_distance != 0:
+        distance_attenuation = 20 * math.log10(neighbor_distance_m / reference_distance)
+    else:
+        distance_attenuation = 0.0
     
     # Bodendämpfung (ca. 1-3 dB bei größeren Entfernungen)
     if neighbor_distance_m > 10:
@@ -863,11 +869,11 @@ def _determine_optimal_location(noise_level: float, distance: float, limit: floa
     
     if distance < min_distance:
         recommendations.append(
-            f"⚠️ Aktueller Abstand ({distance}m) zu gering - mind. {min_distance:.1f}m empfohlen"
+            f"[WARNING] Aktueller Abstand ({distance}m) zu gering - mind. {min_distance:.1f}m empfohlen"
         )
     else:
         recommendations.append(
-            f"✅ Aktueller Abstand ({distance}m) ist ausreichend (mind. {min_distance:.1f}m)"
+            f"[OK] Aktueller Abstand ({distance}m) ist ausreichend (mind. {min_distance:.1f}m)"
         )
     
     recommendations.extend([
@@ -888,13 +894,13 @@ def _determine_optimal_location(noise_level: float, distance: float, limit: floa
 def _assess_noise_situation(compliant: bool, margin: float) -> str:
     """Bewertet Lärmsituation"""
     if not compliant:
-        return "❌ KRITISCH - Grenzwerte überschritten, Maßnahmen erforderlich"
+        return "[ERROR] KRITISCH - Grenzwerte überschritten, Maßnahmen erforderlich"
     elif margin >= 5:
-        return "✅ UNKRITISCH - Deutlich unter Grenzwerten"
+        return "[OK] UNKRITISCH - Deutlich unter Grenzwerten"
     elif margin >= 2:
-        return "⚠️ GRENZWERTIG - Knapp unter Grenzwerten, Maßnahmen empfohlen"
+        return "[WARNING] GRENZWERTIG - Knapp unter Grenzwerten, Maßnahmen empfohlen"
     else:
-        return "⚠️ KRITISCH - Sehr knapp an Grenzwerten, Maßnahmen dringend empfohlen"
+        return "[WARNING] KRITISCH - Sehr knapp an Grenzwerten, Maßnahmen dringend empfohlen"
 
 
 # ============================================================================
@@ -968,7 +974,10 @@ def generate_annual_load_profile(
             
             wp_runtime_hours = daily_runtime * heating_days_month
             heat_demand_kwh = current_heat_load * wp_runtime_hours
-            electricity_kwh = heat_demand_kwh / jaz
+            if jaz != 0:
+                electricity_kwh = heat_demand_kwh / jaz
+            else:
+                electricity_kwh = 0.0
         
         total_heat_kwh += heat_demand_kwh
         total_electricity_kwh += electricity_kwh
@@ -1003,7 +1012,7 @@ def generate_annual_load_profile(
             month_data['electricity_consumption_kwh'] + month_data['hot_water_electricity_kwh'], 0
         )
     
-    total_electricity_kwh += annual_hw_kwh / 3.0
+    total_electricity_kwh += annual_hw_kwh / 3.0 if 3 != 0 else 0.0
     
     return {
         'monthly_profile': monthly_profile,
@@ -1148,10 +1157,10 @@ def _get_smart_grid_recommendations(pv_data: Dict, scenarios: Dict) -> List[str]
     recs = []
     
     if pv_data:
-        recs.append("✅ PV-Anlage vorhanden - Smart-Grid-Ready sehr sinnvoll für Eigenverbrauchsoptimierung")
-        recs.append("💡 PV-Überschuss-Steuerung installieren (ca. 300-800€)")
+        recs.append("[OK] PV-Anlage vorhanden - Smart-Grid-Ready sehr sinnvoll für Eigenverbrauchsoptimierung")
+        recs.append("[IDEA] PV-Überschuss-Steuerung installieren (ca. 300-800€)")
     else:
-        recs.append("⚠️ Ohne PV-Anlage ist Nutzen begrenzt - dynamischer Tarif empfohlen")
+        recs.append("[WARNING] Ohne PV-Anlage ist Nutzen begrenzt - dynamischer Tarif empfohlen")
     
     recs.extend([
         "🔌 Dynamischen Stromtarif wählen (z.B. Tibber, aWATTar)",
@@ -1309,7 +1318,10 @@ def compare_hybrid_heating(
     
     # Szenario 1: Reine Wärmepumpe (monovalent)
     wp_size_monovalent = heat_load_kw * 1.1  # 10% Reserve
-    wp_price_monovalent = heatpump_data.get('price', 15000) * (wp_size_monovalent / wp_power_kw)
+    if wp_power_kw != 0:
+        wp_price_monovalent = heatpump_data.get('price', 15000) * (wp_size_monovalent / wp_power_kw)
+    else:
+        wp_price_monovalent = 0.0
     
     electricity_kwh_monovalent = load_profile['annual_summary']['total_electricity_kwh']
     electricity_price = 0.32  # €/kWh
@@ -1318,7 +1330,10 @@ def compare_hybrid_heating(
     # Szenario 2: Hybrid (bivalent-parallel)
     # WP kleiner dimensioniert (für 60-70% der Heizlast)
     wp_size_hybrid = heat_load_kw * 0.65
-    wp_price_hybrid = heatpump_data.get('price', 15000) * (wp_size_hybrid / wp_power_kw)
+    if wp_power_kw != 0:
+        wp_price_hybrid = heatpump_data.get('price', 15000) * (wp_size_hybrid / wp_power_kw)
+    else:
+        wp_price_hybrid = 0.0
     
     # Backup-System Kosten
     backup_costs = {
@@ -1343,10 +1358,16 @@ def compare_hybrid_heating(
     jaz_data = calculate_jaz_prognosis(building_data, heatpump_data)
     jaz = jaz_data['jaz_realistic']
     
-    electricity_kwh_hybrid = heat_by_wp_hybrid / jaz
+    if jaz != 0:
+        electricity_kwh_hybrid = heat_by_wp_hybrid / jaz
+    else:
+        electricity_kwh_hybrid = 0.0
     
     # Backup-Brennstoffverbrauch
-    fuel_kwh_backup = heat_by_backup / backup_data['efficiency']
+    if backup_data != 0:
+        fuel_kwh_backup = heat_by_backup / backup_data['efficiency']
+    else:
+        fuel_kwh_backup = 0.0
     fuel_cost_backup = fuel_kwh_backup * backup_data['fuel_price_kwh']
     
     # Betriebskosten Hybrid
@@ -1361,7 +1382,10 @@ def compare_hybrid_heating(
     additional_investment_hybrid = investment_hybrid - investment_monovalent
     
     if annual_savings_hybrid > 0:
-        payback_years_hybrid = additional_investment_hybrid / annual_savings_hybrid
+        if annual_savings_hybrid != 0:
+            payback_years_hybrid = additional_investment_hybrid / annual_savings_hybrid
+        else:
+            payback_years_hybrid = 0.0
     else:
         payback_years_hybrid = float('inf')
     
@@ -1417,13 +1441,13 @@ def compare_hybrid_heating(
 def _get_hybrid_recommendation(payback_years: float, additional_invest: float, backup: str) -> str:
     """Empfehlung für Hybrid-System"""
     if payback_years < 10 and 'Gas' in backup:
-        return f"✅ SINNVOLL - Amortisation in {payback_years:.1f} Jahren, bestehender Gasanschluss kann genutzt werden"
+        return f"[OK] SINNVOLL - Amortisation in {payback_years:.1f} Jahren, bestehender Gasanschluss kann genutzt werden"
     elif payback_years < 15:
-        return f"⚠️ GRENZWERTIG - Amortisation {payback_years:.1f} Jahre, nur bei bestehendem {backup} sinnvoll"
+        return f"[WARNING] GRENZWERTIG - Amortisation {payback_years:.1f} Jahre, nur bei bestehendem {backup} sinnvoll"
     elif additional_invest < 3000:
-        return "⚠️ ÜBERDENKEN - Geringe Mehrkosten, aber Wartungsaufwand für zweites System"
+        return "[WARNING] ÜBERDENKEN - Geringe Mehrkosten, aber Wartungsaufwand für zweites System"
     else:
-        return f"❌ NICHT EMPFOHLEN - Zu lange Amortisation, monovalente WP wirtschaftlicher"
+        return f"[ERROR] NICHT EMPFOHLEN - Zu lange Amortisation, monovalente WP wirtschaftlicher"
 
 
 # ============================================================================
@@ -1469,7 +1493,10 @@ def calculate_lifecycle_co2(
     jaz_data = calculate_jaz_prognosis(building_data, heatpump_data)
     jaz = jaz_data['jaz_realistic']
     
-    annual_electricity_kwh_wp = annual_heat_demand_kwh / jaz
+    if jaz != 0:
+        annual_electricity_kwh_wp = annual_heat_demand_kwh / jaz
+    else:
+        annual_electricity_kwh_wp = 0.0
     
     # CO2-Faktor Strom sinkt über die Jahre (Energiewende)
     # Annahme: -3% pro Jahr
@@ -1493,7 +1520,10 @@ def calculate_lifecycle_co2(
         'Nachtspeicher': electricity_co2_factor
     }.get(old_system, 0.201)
     
-    annual_fuel_kwh_old = annual_heat_demand_kwh / old_system_efficiency
+    if old_system_efficiency != 0:
+        annual_fuel_kwh_old = annual_heat_demand_kwh / old_system_efficiency
+    else:
+        annual_fuel_kwh_old = 0.0
     co2_operation_old_20y = annual_fuel_kwh_old * old_system_co2_factor * 20
     
     # Phase 3: Entsorgung
@@ -1560,15 +1590,15 @@ def calculate_lifecycle_co2(
 def _interpret_co2_savings(savings_kg: float, break_even_year: int) -> str:
     """Interpretiert CO2-Einsparungen"""
     if break_even_year is None or break_even_year > 20:
-        return "❌ WP hat höhere Lebenszyklus-Emissionen - Strom-CO2-Faktor zu hoch"
+        return "[ERROR] WP hat höhere Lebenszyklus-Emissionen - Strom-CO2-Faktor zu hoch"
     elif break_even_year <= 2:
-        return f"✅ HERVORRAGEND - Break-Even nach {break_even_year} Jahren, massive CO2-Einsparung ({savings_kg/1000:.1f} t)"
+        return f"[OK] HERVORRAGEND - Break-Even nach {break_even_year} Jahren, massive CO2-Einsparung ({savings_kg/1000:.1f} t)"
     elif break_even_year <= 5:
-        return f"✅ SEHR GUT - Break-Even nach {break_even_year} Jahren, deutliche CO2-Reduktion ({savings_kg/1000:.1f} t)"
+        return f"[OK] SEHR GUT - Break-Even nach {break_even_year} Jahren, deutliche CO2-Reduktion ({savings_kg/1000:.1f} t)"
     elif break_even_year <= 10:
-        return f"⚠️ AKZEPTABEL - Break-Even nach {break_even_year} Jahren, moderate Einsparung ({savings_kg/1000:.1f} t)"
+        return f"[WARNING] AKZEPTABEL - Break-Even nach {break_even_year} Jahren, moderate Einsparung ({savings_kg/1000:.1f} t)"
     else:
-        return f"⚠️ GRENZWERTIG - Break-Even erst nach {break_even_year} Jahren"
+        return f"[WARNING] GRENZWERTIG - Break-Even erst nach {break_even_year} Jahren"
 
 
 # ============================================================================
@@ -1752,15 +1782,15 @@ def compare_refrigerants(
 def _assess_refrigerant(data: Dict, years_left: int) -> str:
     """Bewertet aktuelles Kältemittel"""
     if data['gwp'] < 10:
-        return f"✅ HERVORRAGEND - Natürliches Kältemittel mit minimalem GWP ({data['gwp']})"
+        return f"[OK] HERVORRAGEND - Natürliches Kältemittel mit minimalem GWP ({data['gwp']})"
     elif data['gwp'] < 150:
-        return f"✅ SEHR GUT - F-Gas-konform, niedriges GWP ({data['gwp']})"
+        return f"[OK] SEHR GUT - F-Gas-konform, niedriges GWP ({data['gwp']})"
     elif data['gwp'] < 700 and years_left > 5:
-        return f"⚠️ AKZEPTABEL - Mittleres GWP ({data['gwp']}), noch {years_left} Jahre compliant"
+        return f"[WARNING] AKZEPTABEL - Mittleres GWP ({data['gwp']}), noch {years_left} Jahre compliant"
     elif data['gwp'] < 700:
-        return f"⚠️ GRENZWERTIG - Mittleres GWP ({data['gwp']}), nur noch {years_left} Jahre compliant"
+        return f"[WARNING] GRENZWERTIG - Mittleres GWP ({data['gwp']}), nur noch {years_left} Jahre compliant"
     else:
-        return f"❌ PROBLEMATISCH - Hohes GWP ({data['gwp']}), Auslaufmodell (bis {data['f_gas_compliant_until']})"
+        return f"[ERROR] PROBLEMATISCH - Hohes GWP ({data['gwp']}), Auslaufmodell (bis {data['f_gas_compliant_until']})"
 
 
 # ============================================================================
@@ -1976,7 +2006,10 @@ def _simulate_cold_wave(
     wp_power_at_extreme = wp_power_kw * 0.75  # 25% Leistungsverlust
     
     # Deckungsgrad
-    coverage = wp_power_at_extreme / heat_load_extreme_kw
+    if heat_load_extreme_kw != 0:
+        coverage = wp_power_at_extreme / heat_load_extreme_kw
+    else:
+        coverage = 0.0
     
     # Pufferspeicher
     buffer_data = calculate_buffer_tank_size(heatpump_data, building_data)
@@ -1991,14 +2024,17 @@ def _simulate_cold_wave(
         electricity_7_days_kwh = electricity_per_day_kwh * 7
         cost_7_days = electricity_7_days_kwh * 0.32
         
-        assessment = "✅ WP AUSREICHEND - Kann Extremkälte bewältigen"
+        assessment = "[OK] WP AUSREICHEND - Kann Extremkälte bewältigen"
         recommendation = ["WP ist ausreichend dimensioniert", "Pufferspeicher hilft bei Spitzenlast"]
     else:
         # WP zu klein
         deficit_kw = heat_load_extreme_kw - wp_power_at_extreme
         
         # Wie lange reicht Pufferspeicher?
-        buffer_runtime_hours = buffer_energy_kwh / deficit_kw if deficit_kw > 0 else 24
+        if deficit_kw != 0:
+            buffer_runtime_hours = buffer_energy_kwh / deficit_kw if deficit_kw > 0 else 24
+        else:
+            buffer_runtime_hours = 0.0
         
         # Notheizung erforderlich
         emergency_heating_kwh_per_day = deficit_kw * (24 - min(buffer_runtime_hours, 24))
@@ -2008,7 +2044,7 @@ def _simulate_cold_wave(
         electricity_7_days_kwh = electricity_per_day_kwh * 7
         cost_7_days = electricity_7_days_kwh * 0.32
         
-        assessment = f"⚠️ WP UNTERDIMENSIONIERT - {round((1 - coverage) * 100, 0)}% Leistungsdefizit"
+        assessment = f"[WARNING] WP UNTERDIMENSIONIERT - {round((1 - coverage) * 100, 0)}% Leistungsdefizit"
         recommendation = [
             f"Zusatzheizung erforderlich: {round(deficit_kw, 1)} kW",
             "Elektroheizstab oder Gaskessel als Backup empfohlen",
@@ -2076,11 +2112,11 @@ def _simulate_blackout(building_data: Dict, heatpump_data: Dict, heat_load_kw: f
     
     # Bewertung
     if final_temp > 16:
-        assessment = "✅ UNKRITISCH - Temperatur bleibt bewohnbar"
+        assessment = "[OK] UNKRITISCH - Temperatur bleibt bewohnbar"
     elif final_temp > 12:
-        assessment = "⚠️ UNBEQUEM - Temperatur sinkt deutlich, aber kein Frostschutz nötig"
+        assessment = "[WARNING] UNBEQUEM - Temperatur sinkt deutlich, aber kein Frostschutz nötig"
     else:
-        assessment = "❌ KRITISCH - Frostgefahr für Leitungen möglich"
+        assessment = "[ERROR] KRITISCH - Frostgefahr für Leitungen möglich"
     
     return {
         'scenario': 'Stromausfall (24 Stunden)',
@@ -2125,7 +2161,7 @@ def _simulate_heat_wave(building_data: Dict, heatpump_data: Dict) -> Dict[str, A
     if not reversible:
         return {
             'scenario': 'Hitzewelle +38°C',
-            'assessment': '❌ KEINE KÜHLFUNKTION - WP nicht reversibel',
+            'assessment': '[ERROR] KEINE KÜHLFUNKTION - WP nicht reversibel',
             'recommendations': [
                 'Bei Neukauf reversible WP wählen (Mehrkosten: 1.000-2.000€)',
                 'Alternativ: Split-Klimaanlage nachrüsten',
@@ -2167,7 +2203,7 @@ def _simulate_heat_wave(building_data: Dict, heatpump_data: Dict) -> Dict[str, A
             'kosten_mit_pv_70_prozent_eur': round(actual_grid_cost, 2),
             'eer': eer
         },
-        'assessment': '✅ KÜHLFUNKTION VERFÜGBAR - Reversible WP kann kühlen',
+        'assessment': '[OK] KÜHLFUNKTION VERFÜGBAR - Reversible WP kann kühlen',
         'recommendations': [
             f'PV-Anlage optimal: {round(cooling_electricity_kwh / 60 * 0.3, 1)} kWp Zusatzleistung für Kühlung',
             'Fußbodenheizung als Flächenkühlung nutzen',
@@ -2441,17 +2477,17 @@ def compare_multiple_heatpumps(
     # Allgemeine Ratschläge
     if winner['jaz_realistic'] < 3.5:
         recommendation['general_advice'].append(
-            '⚠️ JAZ unter 3,5: Gebäudedämmung prüfen oder Vorlauftemperatur senken'
+            '[WARNING] JAZ unter 3,5: Gebäudedämmung prüfen oder Vorlauftemperatur senken'
         )
     
     if winner['payback_years'] > 15:
         recommendation['general_advice'].append(
-            '⚠️ Lange Amortisation: Förderung beantragen (BEG: bis zu 40%)'
+            '[WARNING] Lange Amortisation: Förderung beantragen (BEG: bis zu 40%)'
         )
     
     if not winner['noise_compliant']:
         recommendation['general_advice'].append(
-            '⚠️ Lautstärke kritisch: Schallschutzmaßnahmen einplanen'
+            '[WARNING] Lautstärke kritisch: Schallschutzmaßnahmen einplanen'
         )
     
     # ========================================

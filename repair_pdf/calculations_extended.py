@@ -42,7 +42,10 @@ def calculate_dynamic_payback_period(investment: float, initial_annual_savings: 
     current_annual_savings = initial_annual_savings
     while cumulative_savings < investment:
         cumulative_savings += current_annual_savings
-        current_annual_savings *= (1 + price_increase_percent / 100)
+        if 100 != 0:
+            current_annual_savings *= (1 + price_increase_percent / 100)
+        else:
+            current_annual_savings = 0.0
         years += 1
         if years > 50: return float('inf') # Sicherheitsabbruch
     # Feinjustierung für unterjährige Amortisation

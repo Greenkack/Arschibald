@@ -227,7 +227,7 @@ def test_generate_financing_pages():
         reader = PdfReader(io.BytesIO(pdf_bytes))
         page_count = len(reader.pages)
         assert page_count > 0, f"PDF should have at least 1 page, got {page_count}"
-        print(f"✓ Generated {page_count} financing pages")
+        print(f"[OK] Generated {page_count} financing pages")
     except Exception as e:
         pytest.fail(f"Generated PDF is invalid: {e}")
 
@@ -269,28 +269,28 @@ if __name__ == '__main__':
 
     # Run tests
     test_financing_page_generator_imports()
-    print("✓ Module imports successful")
+    print("[OK] Module imports successful")
 
     test_get_final_price()
-    print("✓ Final price extraction works")
+    print("[OK] Final price extraction works")
 
     test_format_currency()
-    print("✓ Currency formatting works")
+    print("[OK] Currency formatting works")
 
     test_credit_financing_calculation()
-    print("✓ Credit financing calculation works")
+    print("[OK] Credit financing calculation works")
 
     test_leasing_financing_calculation()
-    print("✓ Leasing financing calculation works")
+    print("[OK] Leasing financing calculation works")
 
     test_financing_comparison()
-    print("✓ Financing comparison works")
+    print("[OK] Financing comparison works")
 
     test_generate_financing_pages()
-    print("✓ Complete financing page generation works")
+    print("[OK] Complete financing page generation works")
 
     test_generate_without_final_price()
-    print("✓ Graceful failure without price works")
+    print("[OK] Graceful failure without price works")
 
     print("=" * 60)
-    print("All tests passed! ✓")
+    print("All tests passed! [OK]")

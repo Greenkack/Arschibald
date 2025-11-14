@@ -54,7 +54,7 @@ class DashboardPage(Page):
         self.permissions = {'dashboard.read'}
 
     def render(self):
-        st.title("📊 Dashboard")
+        st.title("[CHART] Dashboard")
         st.write("This is the dashboard page.")
 
         # Show navigation controls
@@ -142,7 +142,7 @@ def setup_router():
         'dashboard',
         DashboardPage,
         title='Dashboard',
-        icon='📊'
+        icon='[CHART]'
     )
 
     router.register_route(
@@ -216,7 +216,7 @@ def main():
         if st.button("🏠 Home", use_container_width=True):
             router.navigate('home')
 
-        if st.button("📊 Dashboard", use_container_width=True):
+        if st.button("[CHART] Dashboard", use_container_width=True):
             router.navigate('dashboard')
 
         if st.button("⚙️ Settings", use_container_width=True):
@@ -271,7 +271,7 @@ def main():
     )
 
     # Show navigation analytics in expander
-    with st.expander("📊 Navigation Analytics"):
+    with st.expander("[CHART] Navigation Analytics"):
         if 'nav_events' in st.session_state:
             st.write(f"Total navigations: {len(st.session_state.nav_events)}")
 

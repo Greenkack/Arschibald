@@ -21,7 +21,7 @@ def verify_connection_pooling():
         )
 
         # Test 1: Create connection manager with custom pool configuration
-        print("\n✓ ConnectionPoolConfig class exists")
+        print("\n[OK] ConnectionPoolConfig class exists")
 
         config = ConnectionPoolConfig(
             pool_size=10,
@@ -31,7 +31,7 @@ def verify_connection_pooling():
             pool_pre_ping=True
         )
         print(
-            f"✓ Created ConnectionPoolConfig: pool_size={
+            f"[OK] Created ConnectionPoolConfig: pool_size={
                 config.pool_size}, max_overflow={
                 config.max_overflow}")
 
@@ -41,23 +41,23 @@ def verify_connection_pooling():
             pool_size=5,
             max_overflow=10
         )
-        print("✓ Created EnhancedConnectionManager with custom pool configuration")
+        print("[OK] Created EnhancedConnectionManager with custom pool configuration")
 
         # Test 3: Get pool metrics
         metrics = manager.get_pool_metrics()
-        print(f"✓ Pool metrics: {metrics.to_dict()}")
+        print(f"[OK] Pool metrics: {metrics.to_dict()}")
 
         # Test 4: Get session
         session = manager.get_session()
-        print("✓ Successfully obtained database session from pool")
+        print("[OK] Successfully obtained database session from pool")
         session.close()
 
         manager.dispose()
-        print("\n✅ Connection Pooling: PASSED")
+        print("\n[OK] Connection Pooling: PASSED")
         return True
 
     except Exception as e:
-        print(f"\n❌ Connection Pooling: FAILED - {e}")
+        print(f"\n[ERROR] Connection Pooling: FAILED - {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -79,41 +79,41 @@ def verify_health_monitoring():
             database_url="sqlite:///test_task_8_3.db",
             health_monitoring=True
         )
-        print("✓ Created connection manager with health monitoring enabled")
+        print("[OK] Created connection manager with health monitoring enabled")
 
         # Test 2: Verify health monitor exists
         assert manager.health_monitor is not None
-        print("✓ ConnectionHealthMonitor initialized")
+        print("[OK] ConnectionHealthMonitor initialized")
 
         # Test 3: Perform health check
         result = manager.health_monitor.check_health()
         print(
-            f"✓ Health check performed: healthy={
+            f"[OK] Health check performed: healthy={
                 result.healthy}, response_time={
                 result.response_time:.3f}s")
 
         # Test 4: Get health stats
         stats = manager.health_monitor.get_health_stats()
-        print(f"✓ Health stats: {stats}")
+        print(f"[OK] Health stats: {stats}")
 
         # Test 5: Get comprehensive health status
         status = manager.get_health_status()
         assert 'healthy' in status
         assert 'health_check' in status
         assert 'health_stats' in status
-        print(f"✓ Comprehensive health status: healthy={status['healthy']}")
+        print(f"[OK] Comprehensive health status: healthy={status['healthy']}")
 
         # Test 6: Verify automatic monitoring
         time.sleep(2)  # Let monitoring run
         history = manager.health_monitor.get_health_history(limit=5)
-        print(f"✓ Health check history: {len(history)} checks recorded")
+        print(f"[OK] Health check history: {len(history)} checks recorded")
 
         manager.dispose()
-        print("\n✅ Health Monitoring: PASSED")
+        print("\n[OK] Health Monitoring: PASSED")
         return True
 
     except Exception as e:
-        print(f"\n❌ Health Monitoring: FAILED - {e}")
+        print(f"\n[ERROR] Health Monitoring: FAILED - {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -135,45 +135,45 @@ def verify_leak_detection():
             database_url="sqlite:///test_task_8_3.db",
             leak_detection=True
         )
-        print("✓ Created connection manager with leak detection enabled")
+        print("[OK] Created connection manager with leak detection enabled")
 
         # Test 2: Verify leak detector exists
         assert manager.leak_detector is not None
-        print("✓ ConnectionLeakDetector initialized")
+        print("[OK] ConnectionLeakDetector initialized")
 
         # Test 3: Get session (checkout connection)
         session = manager.get_session()
-        print("✓ Connection checked out")
+        print("[OK] Connection checked out")
 
         # Test 4: Check active connections
         active_count = len(manager.leak_detector.active_connections)
-        print(f"✓ Active connections tracked: {active_count}")
+        print(f"[OK] Active connections tracked: {active_count}")
 
         # Test 5: Return connection (checkin)
         session.close()
-        print("✓ Connection checked in")
+        print("[OK] Connection checked in")
 
         # Test 6: Verify connection removed from tracking
         time.sleep(0.1)
         active_after = len(manager.leak_detector.active_connections)
-        print(f"✓ Active connections after checkin: {active_after}")
+        print(f"[OK] Active connections after checkin: {active_after}")
 
         # Test 7: Get leak detection status
         status = manager.get_health_status()
         leak_info = status['leak_detection']
         assert leak_info['enabled']
-        print(f"✓ Leak detection status: {leak_info}")
+        print(f"[OK] Leak detection status: {leak_info}")
 
         # Test 8: Verify leak threshold configuration
         assert manager.leak_detector.threshold_seconds > 0
-        print(f"✓ Leak threshold: {manager.leak_detector.threshold_seconds}s")
+        print(f"[OK] Leak threshold: {manager.leak_detector.threshold_seconds}s")
 
         manager.dispose()
-        print("\n✅ Leak Detection: PASSED")
+        print("\n[OK] Leak Detection: PASSED")
         return True
 
     except Exception as e:
-        print(f"\n❌ Leak Detection: FAILED - {e}")
+        print(f"\n[ERROR] Leak Detection: FAILED - {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -200,39 +200,39 @@ def verify_failover_support():
             database_url="sqlite:///test_primary.db",
             failover_urls=failover_urls
         )
-        print("✓ Created connection manager with failover configuration")
+        print("[OK] Created connection manager with failover configuration")
 
         # Test 2: Verify failover manager exists
         assert manager.failover_manager is not None
-        print("✓ DatabaseFailoverManager initialized")
+        print("[OK] DatabaseFailoverManager initialized")
 
         # Test 3: Get current URL
         current_url = manager.failover_manager.get_current_url()
-        print(f"✓ Current database URL: {current_url[:50]}")
+        print(f"[OK] Current database URL: {current_url[:50]}")
 
         # Test 4: Get failover stats
         stats = manager.failover_manager.get_failover_stats()
         assert 'current_url' in stats
         assert 'is_primary' in stats
         assert 'failover_count' in stats
-        print(f"✓ Failover stats: {stats}")
+        print(f"[OK] Failover stats: {stats}")
 
         # Test 5: Verify failover URLs configured
         assert len(manager.failover_manager.failover_urls) == 2
         print(
-            f"✓ Failover URLs configured: {len(manager.failover_manager.failover_urls)}")
+            f"[OK] Failover URLs configured: {len(manager.failover_manager.failover_urls)}")
 
         # Test 6: Get comprehensive status with failover info
         status = manager.get_health_status()
         assert 'failover_stats' in status
-        print(f"✓ Failover status in health check: {status['failover_stats']}")
+        print(f"[OK] Failover status in health check: {status['failover_stats']}")
 
         manager.dispose()
-        print("\n✅ Failover Support: PASSED")
+        print("\n[OK] Failover Support: PASSED")
         return True
 
     except Exception as e:
-        print(f"\n❌ Failover Support: FAILED - {e}")
+        print(f"\n[ERROR] Failover Support: FAILED - {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -254,36 +254,36 @@ def verify_integration():
 
         # Test 1: Create DatabaseManager with enhanced connection manager
         db_manager = DatabaseManager(use_enhanced_connection_manager=True)
-        print("✓ DatabaseManager created with enhanced connection manager")
+        print("[OK] DatabaseManager created with enhanced connection manager")
 
         # Test 2: Verify connection manager exists
         assert db_manager.connection_manager is not None
-        print("✓ EnhancedConnectionManager integrated")
+        print("[OK] EnhancedConnectionManager integrated")
 
         # Test 3: Get session through DatabaseManager
         session = db_manager.get_session()
-        print("✓ Session obtained through DatabaseManager")
+        print("[OK] Session obtained through DatabaseManager")
         session.close()
 
         # Test 4: Get health status
         health = db_manager.health_check()
         assert 'healthy' in health
-        print(f"✓ Health check through DatabaseManager: {health['healthy']}")
+        print(f"[OK] Health check through DatabaseManager: {health['healthy']}")
 
         # Test 5: Get pool metrics
         metrics = db_manager.get_connection_pool_metrics()
-        print(f"✓ Pool metrics through DatabaseManager: {metrics}")
+        print(f"[OK] Pool metrics through DatabaseManager: {metrics}")
 
         # Test 6: Detect connection leaks
         leaks = db_manager.detect_connection_leaks()
-        print(f"✓ Leak detection through DatabaseManager: {len(leaks)} leaks")
+        print(f"[OK] Leak detection through DatabaseManager: {len(leaks)} leaks")
 
         db_manager.dispose_connections()
-        print("\n✅ Integration: PASSED")
+        print("\n[OK] Integration: PASSED")
         return True
 
     except Exception as e:
-        print(f"\n❌ Integration: FAILED - {e}")
+        print(f"\n[ERROR] Integration: FAILED - {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -310,7 +310,7 @@ def main():
     print("=" * 80)
 
     for name, passed in results:
-        status = "✅ PASSED" if passed else "❌ FAILED"
+        status = "[OK] PASSED" if passed else "[ERROR] FAILED"
         print(f"{name:.<50} {status}")
 
     all_passed = all(result[1] for result in results)
@@ -319,7 +319,7 @@ def main():
     if all_passed:
         print("🎉 ALL TESTS PASSED - Task 8.3 is complete!")
     else:
-        print("⚠️  SOME TESTS FAILED - Please review the errors above")
+        print("[WARNING]  SOME TESTS FAILED - Please review the errors above")
     print("=" * 80 + "\n")
 
     return 0 if all_passed else 1

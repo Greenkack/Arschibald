@@ -315,7 +315,7 @@ def example_complete_workflow():
         password="AdminPass123!",
         full_name="Admin User"
     )
-    print(f"   ✓ User registered: {user.email}")
+    print(f"   [OK] User registered: {user.email}")
 
     # 2. Assign admin role
     print("\n2. Role Assignment")
@@ -329,7 +329,7 @@ def example_complete_workflow():
                 Role.name == "admin").first()
             if admin_role:
                 authz_manager.assign_role_to_user(user.id, admin_role.id)
-                print("   ✓ Admin role assigned")
+                print("   [OK] Admin role assigned")
 
     # 3. Authenticate
     print("\n3. Authentication")
@@ -338,14 +338,14 @@ def example_complete_workflow():
         password="AdminPass123!",
         ip_address="192.168.1.100"
     )
-    print(f"   ✓ Authentication: {result.status.value}")
+    print(f"   [OK] Authentication: {result.status.value}")
 
     # 4. Check permissions
     print("\n4. Authorization Check")
     permissions = authz_manager.get_user_permissions(user.id)
-    print(f"   ✓ User has {len(permissions)} permissions")
+    print(f"   [OK] User has {len(permissions)} permissions")
     print(
-        f"   ✓ Can delete users: {
+        f"   [OK] Can delete users: {
             authz_manager.has_permission(
                 user.id,
                 'users:delete')}")
@@ -358,16 +358,16 @@ def example_complete_workflow():
         "role": "admin"
     }
     masked_data = data_protection.mask_dict(sensitive_data)
-    print(f"   ✓ Original: {sensitive_data}")
-    print(f"   ✓ Masked: {masked_data}")
+    print(f"   [OK] Original: {sensitive_data}")
+    print(f"   [OK] Masked: {masked_data}")
 
     # 6. Monitor security
     print("\n6. Security Monitoring")
     stats = security_monitor.get_security_stats(days=1)
-    print(f"   ✓ Security events today: {stats['total_events']}")
-    print(f"   ✓ Failed logins: {stats['failed_logins']}")
+    print(f"   [OK] Security events today: {stats['total_events']}")
+    print(f"   [OK] Failed logins: {stats['failed_logins']}")
 
-    print("\n✓ Complete workflow executed successfully!")
+    print("\n[OK] Complete workflow executed successfully!")
 
 
 if __name__ == "__main__":

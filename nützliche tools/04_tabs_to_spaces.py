@@ -9,4 +9,4 @@ def tabs_to_spaces(directory="."):
             content = content.replace("\t", "    ")
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(content)
-    print("✅ Alle Tabs in 4 Spaces konvertiert!")
+    print("[OK] Alle Tabs in 4 Spaces konvertiert!")

@@ -22,6 +22,11 @@ import streamlit as st
 from debug_tools import debug_enabled, debug_log, debug_timer, log_payload
 from ui_state_manager import request_rerun
 
+__all__ = [
+    'PDFSystemManager',
+    'render_pdf_output_ui',
+]
+
 # =============================================================================
 # ZENTRALE IMPORT-VERWALTUNG - ALLE PDF-SYSTEME AN EINEM ORT
 # =============================================================================

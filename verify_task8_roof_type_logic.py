@@ -48,7 +48,7 @@ def verify_flat_roof():
     assert z_pos == 0.3, "Flat roof Z-position should be 0.3m"
     assert tilt == 30.0, "Flat roof tilt should be 30°"
     
-    print("  ✓ PASSED: Flat roof with 0.3m elevation and 30° tilt")
+    print("  [OK] PASSED: Flat roof with 0.3m elevation and 30° tilt")
 
 
 def verify_gable_roof():
@@ -69,7 +69,7 @@ def verify_gable_roof():
     assert z_pos == 0.05, "Gable roof Z-position should be 0.05m"
     assert tilt == roof_pitch, "Gable roof tilt should match roof pitch"
     
-    print("  ✓ PASSED: Gable roof with 0.05m clearance and roof pitch tilt")
+    print("  [OK] PASSED: Gable roof with 0.05m clearance and roof pitch tilt")
 
 
 def verify_shed_roof():
@@ -90,7 +90,7 @@ def verify_shed_roof():
     assert z_pos == 0.05, "Shed roof Z-position should be 0.05m"
     assert tilt == roof_pitch, "Shed roof tilt should match roof pitch"
     
-    print("  ✓ PASSED: Shed roof with 0.05m clearance and roof pitch tilt")
+    print("  [OK] PASSED: Shed roof with 0.05m clearance and roof pitch tilt")
 
 
 def verify_z_position_calculation():
@@ -108,11 +108,11 @@ def verify_z_position_calculation():
     
     for roof_type, pitch, expected_z in roof_types:
         z_pos = calculate_z_position(roof_type, pitch)
-        status = "✓" if z_pos == expected_z else "✗"
+        status = "[OK]" if z_pos == expected_z else "[ERROR]"
         print(f"  {status} {roof_type:20s} → Z={z_pos}m (Expected: {expected_z}m)")
         assert z_pos == expected_z, f"Z-position mismatch for {roof_type}"
     
-    print("  ✓ PASSED: Z-position varies correctly by roof type")
+    print("  [OK] PASSED: Z-position varies correctly by roof type")
 
 
 def verify_tilt_angle_calculation():
@@ -130,11 +130,11 @@ def verify_tilt_angle_calculation():
     
     for roof_type, pitch, expected_tilt in roof_types:
         tilt = calculate_tilt_angle(roof_type, pitch)
-        status = "✓" if tilt == expected_tilt else "✗"
+        status = "[OK]" if tilt == expected_tilt else "[ERROR]"
         print(f"  {status} {roof_type:20s} (pitch={pitch:4.1f}°) → tilt={tilt}°")
         assert tilt == expected_tilt, f"Tilt angle mismatch for {roof_type}"
     
-    print("  ✓ PASSED: Tilt angle varies correctly by roof type")
+    print("  [OK] PASSED: Tilt angle varies correctly by roof type")
 
 
 def demonstrate_visual_comparison():
@@ -175,26 +175,26 @@ def main():
         verify_tilt_angle_calculation()
         demonstrate_visual_comparison()
         
-        print_header("✓ ALL VERIFICATIONS PASSED!")
+        print_header("[OK] ALL VERIFICATIONS PASSED!")
         
         print("\nSummary:")
-        print("  ✓ Requirement 6.1: Flat roof logic (0.3m, 30°)")
-        print("  ✓ Requirement 6.2: Gable roof logic (0.05m, roof pitch)")
-        print("  ✓ Requirement 6.3: Shed roof logic (0.05m, roof pitch)")
-        print("  ✓ Requirement 6.4: Z-position calculation")
-        print("  ✓ Requirement 6.5: Tilt angle calculation")
+        print("  [OK] Requirement 6.1: Flat roof logic (0.3m, 30°)")
+        print("  [OK] Requirement 6.2: Gable roof logic (0.05m, roof pitch)")
+        print("  [OK] Requirement 6.3: Shed roof logic (0.05m, roof pitch)")
+        print("  [OK] Requirement 6.4: Z-position calculation")
+        print("  [OK] Requirement 6.5: Tilt angle calculation")
         print("\n  Task 8 is fully implemented and verified!")
         print()
         
         return True
         
     except AssertionError as e:
-        print_header("✗ VERIFICATION FAILED!")
+        print_header("[ERROR] VERIFICATION FAILED!")
         print(f"\nError: {e}\n")
         return False
     
     except Exception as e:
-        print_header("✗ UNEXPECTED ERROR!")
+        print_header("[ERROR] UNEXPECTED ERROR!")
         print(f"\nError: {e}\n")
         import traceback
         traceback.print_exc()

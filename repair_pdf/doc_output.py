@@ -291,7 +291,7 @@ def render_pdf_ui(
             animate_charts = st.checkbox(" Animierte Diagramme", value=False, key="pdf_animate_charts")
             
             # Erweiterte Chart-Optionen
-            st.markdown("**📊 Erweiterte Chart-Einstellungen**")
+            st.markdown("**[CHART] Erweiterte Chart-Einstellungen**")
             with st.container():
                 chart_resolution = st.selectbox(" Auflösung", ["Standard", "Hoch", "Ultra"], key="pdf_chart_resolution")
                 chart_style = st.selectbox(" Stil", ["Modern", "Classic", "Minimal", "Bold"], key="pdf_chart_style_detailed")

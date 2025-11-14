@@ -1,4 +1,5 @@
 # ❌ NICHT IMPLEMENTIERTE MODULE
+
 **Stand: 10. November 2025 | Nach Cleanup**
 
 ---
@@ -164,6 +165,7 @@ Diese Module existieren, werden aber nicht aktiv in `gui.py` geladen:
 ## 🎯 **KONKRETE NÄCHSTE SCHRITTE**
 
 ### 1. SOFORT zu prüfen (10 Module):
+
 ```python
 # Diese Module importieren checken:
 payment_terms.py
@@ -179,6 +181,7 @@ enhanced_product_management_ui.py
 ```
 
 ### 2. ZU INTEGRIEREN (5 Module):
+
 ```python
 # Diese sollten in Haupt-Module integriert werden:
 matrix_extras_calculator.py → in solar_calculator.py
@@ -189,6 +192,7 @@ solar_3d_view_enhanced.py → in solar_3d_view_module.py
 ```
 
 ### 3. ZU LÖSCHEN (8 Module):
+
 ```python
 # Vermutlich veraltet:
 pdf_erstellen_komplett.py
@@ -201,6 +205,7 @@ multi_pdf_integration_complete.py (prüfen)
 ```
 
 ### 4. BRIDGE-MODULE UNTERSUCHEN (5 Module):
+
 ```bash
 # Grep-Suche ob diese importiert werden:
 grep -r "calculation_bridge" *.py

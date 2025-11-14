@@ -26,13 +26,13 @@ def _show_unavailable(feature_name: str = "PDF-Vorschau") -> None:
     try:
         import streamlit as st  # type: ignore
         st.info(
-            "ℹ️ **PDF-Vorschau benötigt vollständige Projektdaten**\n\n"
+            "[INFO] **PDF-Vorschau benötigt vollständige Projektdaten**\n\n"
             "Um die Live-Vorschau zu nutzen:\n\n"
             "1️⃣ Gehen Sie zu **'Dateneingabe'** → **'Analysestufe'**\n"
             "2️⃣ Füllen Sie alle erforderlichen Projektinformationen aus\n"
             "3️⃣ Kehren Sie zum Tab **'👁️ PDF-Vorschau'** zurück\n\n"
-            "Alternativ: Nutzen Sie **'📄 PDF-Ausgabe'** für direkte PDF-Erzeugung.",
-            icon="💡",
+            "Alternativ: Nutzen Sie **'[FILE] PDF-Ausgabe'** für direkte PDF-Erzeugung.",
+            icon="[IDEA]",
         )
     except Exception:
         pass

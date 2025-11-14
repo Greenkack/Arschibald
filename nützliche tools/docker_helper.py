@@ -85,17 +85,17 @@ services:
 def build_and_run():
     """Baut und startet Docker-Container"""
 
-    print("🔨 Baue Docker-Image...")
+    print("[BUILD] Baue Docker-Image...")
     build_result = subprocess.run(['docker', 'build', '-t', 'solar-app', '.'],
                                   capture_output=True, text=True)
 
     if build_result.returncode == 0:
-        print("✅ Docker-Image erfolgreich gebaut!")
+        print("[OK] Docker-Image erfolgreich gebaut!")
 
-        print("🚀 Starte Container...")
+        print("[LAUNCH] Starte Container...")
         subprocess.run(['docker', 'run', '-p', '8501:8501', 'solar-app'])
     else:
-        print(f"❌ Build-Fehler: {build_result.stderr}")
+        print(f"[ERROR] Build-Fehler: {build_result.stderr}")
 
 
 if __name__ == "__main__":

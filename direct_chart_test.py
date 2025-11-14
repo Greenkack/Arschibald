@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def create_direct_chart_pdf():
     """Erstelle ein PDF direkt mit ReportLab - ohne Template-System"""
-    print("🎯 Erstelle PDF DIREKT mit ReportLab...")
+    print("[TARGET] Erstelle PDF DIREKT mit ReportLab...")
 
     try:
         from reportlab.lib.pagesizes import A4
@@ -23,7 +23,7 @@ def create_direct_chart_pdf():
         c = canvas.Canvas("direct_charts.pdf", pagesize=A4)
         page_width, page_height = A4
 
-        print(f"📐 Seitengröße: {page_width} x {page_height}")
+        print(f"[DESIGN] Seitengröße: {page_width} x {page_height}")
 
         # Zeichne Hintergrund
         c.setFillColorRGB(0.95, 0.95, 0.95)
@@ -42,7 +42,7 @@ def create_direct_chart_pdf():
         inner_r = 30.0
 
         print(
-            f"🎨 Zeichne Charts bei ({left_cx}, {chart_cy}) und ({right_cx}, {chart_cy})")
+            f"[DESIGN] Zeichne Charts bei ({left_cx}, {chart_cy}) und ({right_cx}, {chart_cy})")
 
         # Linker Chart - Blau
         print("🔵 Zeichne blauen Chart...")
@@ -121,16 +121,16 @@ def create_direct_chart_pdf():
         c.showPage()
         c.save()
 
-        print("✅ Direktes PDF erstellt: direct_charts.pdf")
+        print("[OK] Direktes PDF erstellt: direct_charts.pdf")
 
         # Dateigröße prüfen
         file_size = os.path.getsize("direct_charts.pdf")
-        print(f"📦 Dateigröße: {file_size:,} bytes")
+        print(f"[PACKAGE] Dateigröße: {file_size:,} bytes")
 
         return True
 
     except Exception as e:
-        print(f"❌ Fehler beim direkten PDF: {e}")
+        print(f"[ERROR] Fehler beim direkten PDF: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -138,19 +138,19 @@ def create_direct_chart_pdf():
 
 def test_template_pdf_content():
     """Teste ob das Template-PDF überhaupt Inhalt hat"""
-    print("\n🔍 Teste Template-PDF Inhalt...")
+    print("\n[SEARCH] Teste Template-PDF Inhalt...")
 
     try:
         # OLD: page 6 -> NEW: page 7
         template_path = Path("pdf_templates_static/notext/nt_nt_07.pdf")
         if not template_path.exists():
-            print(f"❌ Template nicht gefunden: {template_path}")
+            print(f"[ERROR] Template nicht gefunden: {template_path}")
             return False
 
         from pypdf import PdfReader
         reader = PdfReader(template_path)
 
-        print(f"📄 Template hat {len(reader.pages)} Seiten")
+        print(f"[FILE] Template hat {len(reader.pages)} Seiten")
 
         if len(reader.pages) > 0:
             page = reader.pages[0]
@@ -159,13 +159,13 @@ def test_template_pdf_content():
             try:
                 text = page.extract_text()
                 print(
-                    f"📝 Template-Text: '{text[:100]}...' ({len(text)} Zeichen)")
+                    f"[NOTE] Template-Text: '{text[:100]}...' ({len(text)} Zeichen)")
             except BaseException:
-                print("⚠️ Kein Text im Template extrahierbar")
+                print("[WARNING] Kein Text im Template extrahierbar")
 
             # Überprüfe MediaBox
             if hasattr(page, 'mediabox'):
-                print(f"📐 Template-Größe: {page.mediabox}")
+                print(f"[DESIGN] Template-Größe: {page.mediabox}")
 
             # Überprüfe Contents
             if hasattr(page, 'get_contents'):
@@ -173,18 +173,18 @@ def test_template_pdf_content():
                 if contents:
                     print(f"📋 Template hat Inhalt: {type(contents)}")
                 else:
-                    print("❌ Template hat keinen Inhalt!")
+                    print("[ERROR] Template hat keinen Inhalt!")
 
         return True
 
     except Exception as e:
-        print(f"❌ Fehler beim Template-Test: {e}")
+        print(f"[ERROR] Fehler beim Template-Test: {e}")
         return False
 
 
 def test_overlay_only():
     """Teste das Overlay alleine ohne Template"""
-    print("\n🎨 Teste Overlay alleine...")
+    print("\n[DESIGN] Teste Overlay alleine...")
 
     try:
         from pdf_template_engine.dynamic_overlay import generate_overlay
@@ -209,7 +209,7 @@ def test_overlay_only():
             test_project_data, test_analysis_results, {})
 
         print(
-            f"📊 Daten: Verbrauch={
+            f"[CHART] Daten: Verbrauch={
                 dynamic_data.get('storage_consumption_ratio_percent')}%, Produktion={
                 dynamic_data.get('storage_production_ratio_percent')}%")
 
@@ -223,7 +223,7 @@ def test_overlay_only():
             f.write(overlay_bytes)
 
         print(
-            f"✅ Overlay-PDF erstellt: overlay_only.pdf ({len(overlay_bytes)} bytes)")
+            f"[OK] Overlay-PDF erstellt: overlay_only.pdf ({len(overlay_bytes)} bytes)")
 
         # Analysiere Seite 6 des Overlays
         from pypdf import PdfReader
@@ -234,21 +234,21 @@ def test_overlay_only():
 
             try:
                 text = page6.extract_text()
-                print(f"📝 Overlay Seite 6 Text: '{text}'")
+                print(f"[NOTE] Overlay Seite 6 Text: '{text}'")
 
                 # Suche nach Chart-Indikatoren
                 if "74%" in text and "53%" in text:
-                    print("✅ Chart-Werte im Overlay gefunden!")
+                    print("[OK] Chart-Werte im Overlay gefunden!")
                 else:
-                    print("❌ Chart-Werte NICHT im Overlay gefunden!")
+                    print("[ERROR] Chart-Werte NICHT im Overlay gefunden!")
 
             except Exception as e:
-                print(f"⚠️ Text-Extraktion fehlgeschlagen: {e}")
+                print(f"[WARNING] Text-Extraktion fehlgeschlagen: {e}")
 
         return True
 
     except Exception as e:
-        print(f"❌ Fehler beim Overlay-Test: {e}")
+        print(f"[ERROR] Fehler beim Overlay-Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -256,7 +256,7 @@ def test_overlay_only():
 
 def main():
     """Hauptfunktion"""
-    print("🚀 DIREKTER CHART TEST")
+    print("[LAUNCH] DIREKTER CHART TEST")
     print("=" * 50)
 
     tests = [
@@ -272,10 +272,10 @@ def main():
 
         try:
             result = test_func()
-            status = "✅ BESTANDEN" if result else "❌ FEHLGESCHLAGEN"
+            status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
             print(f"\n{test_name}: {status}")
         except Exception as e:
-            print(f"\n❌ {test_name} FEHLER: {e}")
+            print(f"\n[ERROR] {test_name} FEHLER: {e}")
 
     print(f"\n{'=' * 50}")
     print("ANWEISUNGEN")

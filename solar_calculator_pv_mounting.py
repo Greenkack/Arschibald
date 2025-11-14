@@ -55,11 +55,11 @@ def render_pv_mounting_selection(
     """
     
     if not PV_MOUNTING_DB_AVAILABLE:
-        st.warning("⚠️ PV-Unterkonstruktions-Datenbank nicht verfügbar. Bitte Admin kontaktieren.")
+        st.warning("[WARNING] PV-Unterkonstruktions-Datenbank nicht verfügbar. Bitte Admin kontaktieren.")
         return
     
     st.markdown("---")
-    st.markdown("### 🔧 PV-Unterkonstruktion")
+    st.markdown("### [TOOL] PV-Unterkonstruktion")
     
     # Checkbox to include mounting components
     details['include_pv_mounting'] = st.checkbox(
@@ -77,13 +77,13 @@ def render_pv_mounting_selection(
     # Get roof types from database
     roof_types = get_pv_mounting_roof_types()
     if not roof_types:
-        st.info("📦 Keine Dachtypen in Datenbank gefunden. Bitte zuerst Komponenten im Admin-Bereich hinzufügen.")
+        st.info("[PACKAGE] Keine Dachtypen in Datenbank gefunden. Bitte zuerst Komponenten im Admin-Bereich hinzufügen.")
         return
     
     # === ROOF TYPE SELECTION ===
     st.markdown("#### Dachtyp")
     
-    # ✅ FIX: Auto-fill from Bedarfsanalyse (data_input.py)
+    # [OK] FIX: Auto-fill from Bedarfsanalyse (data_input.py)
     # Prüfe ob Dachtyp bereits in Bedarfsanalyse gewählt wurde
     from_bedarfsanalyse = details.get('roof_type')  # Aus data_input.py
     
@@ -92,7 +92,7 @@ def render_pv_mounting_selection(
         # Nur übernehmen wenn noch nicht gesetzt
         if not details.get('pv_mounting_roof_type'):
             details['pv_mounting_roof_type'] = from_bedarfsanalyse
-            st.success(f"✅ Dachtyp aus Bedarfsanalyse übernommen: **{from_bedarfsanalyse}**")
+            st.success(f"[OK] Dachtyp aus Bedarfsanalyse übernommen: **{from_bedarfsanalyse}**")
     
     current_roof_type = details.get('pv_mounting_roof_type', please_select_text)
     roof_type_options = [please_select_text] + roof_types
@@ -126,7 +126,7 @@ def render_pv_mounting_selection(
             
         with col_calc2:
             if st.button("🔄 Berechnen", key='calc_mounting_quantities'):
-                # ✅ FIX: Prüfe beide mögliche Keys für Modulanzahl
+                # [OK] FIX: Prüfe beide mögliche Keys für Modulanzahl
                 module_count = (
                     details.get('module_count', 0) or 
                     details.get('module_quantity', 0) or 
@@ -139,12 +139,12 @@ def render_pv_mounting_selection(
                         calc_result = calculate_mounting_requirements_from_details(details)
                         if calc_result:
                             update_mounting_quantities_in_details(details, calc_result)
-                            st.success(f"✅ Berechnung für {module_count} Module abgeschlossen!")
+                            st.success(f"[OK] Berechnung für {module_count} Module abgeschlossen!")
                             st.rerun()
                         else:
-                            st.error("❌ Berechnung fehlgeschlagen. Bitte Eingaben prüfen.")
+                            st.error("[ERROR] Berechnung fehlgeschlagen. Bitte Eingaben prüfen.")
                 else:
-                    st.warning("⚠️ Bitte zuerst Modulanzahl in Step 1 angeben.")
+                    st.warning("[WARNING] Bitte zuerst Modulanzahl in Step 1 angeben.")
         
         # Show calculation summary if available
         if details.get('mounting_quantities_calculated'):
@@ -158,7 +158,7 @@ def render_pv_mounting_selection(
             'key': 'roof_hook',
             'category': 'Dachhaken',
             'label': 'Dachhaken',
-            'icon': '🔨',
+            'icon': '[BUILD]',
             'required': True
         },
         {
@@ -193,7 +193,7 @@ def render_pv_mounting_selection(
             'key': 'cable',
             'category': 'Kabel',
             'label': 'Solar-Kabel',
-            'icon': '⚡',
+            'icon': '[POWER]',
             'required': False
         },
     ]
@@ -262,7 +262,7 @@ def _render_component_selector(
                 )
                 
                 if not product_names:
-                    st.warning(f"⚠️ Keine Produkte für '{details[f'pv_mounting_{key}_manufacturer']}' verfügbar.")
+                    st.warning(f"[WARNING] Keine Produkte für '{details[f'pv_mounting_{key}_manufacturer']}' verfügbar.")
                     details[f'pv_mounting_{key}_name'] = None
                 else:
                     current_prod = details.get(f'pv_mounting_{key}_name', please_select_text)
@@ -294,13 +294,13 @@ def _render_component_selector(
                             # Display component info
                             col_info1, col_info2 = st.columns(2)
                             with col_info1:
-                                st.caption(f"💰 Preis: {component['price_netto']:.2f} € / {component.get('unit', 'Stk')}")
+                                st.caption(f"[MONEY] Preis: {component['price_netto']:.2f} € / {component.get('unit', 'Stk')}")
                             with col_info2:
                                 if component.get('pdf_bytes'):
-                                    st.caption("📄 Datenblatt verfügbar")
+                                    st.caption("[FILE] Datenblatt verfügbar")
                             
                             if component.get('article_number'):
-                                st.caption(f"📦 Art.-Nr: {component['article_number']}")
+                                st.caption(f"[PACKAGE] Art.-Nr: {component['article_number']}")
             else:
                 st.info("👈 Bitte zuerst Hersteller wählen")
                 details[f'pv_mounting_{key}_name'] = None

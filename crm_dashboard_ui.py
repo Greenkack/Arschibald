@@ -55,6 +55,7 @@ def render_crm_dashboard(
     # Tabs für verschiedene Dashboard-Bereiche
     tabs = st.tabs([
         " Übersicht",
+        "[CHART] Widgets",
         " Kunden",
         " Projekte",
         " Umsatz",
@@ -66,25 +67,28 @@ def render_crm_dashboard(
         render_overview_section(texts)
 
     with tabs[1]:
-        render_customers_section(texts)
+        render_widgets_section(texts)
 
     with tabs[2]:
-        render_projects_section(texts)
+        render_customers_section(texts)
 
     with tabs[3]:
-        render_revenue_section(texts)
+        render_projects_section(texts)
 
     with tabs[4]:
+        render_revenue_section(texts)
+
+    with tabs[5]:
         render_statistics_section(texts)
     
-    with tabs[5]:
+    with tabs[6]:
         render_tasks_section(texts)
 
 
 def render_overview_section(texts: dict[str, str]):
     """Übersichts-Sektion des CRM Dashboards"""
 
-    st.subheader("📊 Geschäftsübersicht")
+    st.subheader("[CHART] Geschäftsübersicht")
 
     # KPIs in modernen Cards
     col1, col2, col3, col4 = st.columns(4)
@@ -119,7 +123,7 @@ def render_overview_section(texts: dict[str, str]):
                     color: white;
                     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
                 ">
-                    <h3 style="margin: 0; font-size: 1.2em;">🚀 Laufende Projekte</h3>
+                    <h3 style="margin: 0; font-size: 1.2em;">[LAUNCH] Laufende Projekte</h3>
                     <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
                     <p style="margin: 0; opacity: 0.9;">+2 diese Woche ↗️</p>
                 </div>
@@ -155,7 +159,7 @@ def render_overview_section(texts: dict[str, str]):
                     color: white;
                     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
                 ">
-                    <h3 style="margin: 0; font-size: 1.2em;">💰 Gesamtumsatz</h3>
+                    <h3 style="margin: 0; font-size: 1.2em;">[MONEY] Gesamtumsatz</h3>
                     <h1 style="margin: 10px 0; font-size: 2.5em;">{:,.0f}€</h1>
                     <p style="margin: 0; opacity: 0.9;">+12% vs Vormonat ↗️</p>
                 </div>
@@ -311,7 +315,7 @@ def render_customer_details(customer: dict[str, Any], texts: dict[str, str]):
 def render_projects_section(texts: dict[str, str]):
     """Projekte-Sektion des CRM Dashboards"""
 
-    st.subheader("📁 Projektübersicht")
+    st.subheader("[FOLDER] Projektübersicht")
 
     # Projekt-Status Übersicht mit modernen Cards
     col1, col2, col3 = st.columns(3)
@@ -394,7 +398,7 @@ def render_projects_section(texts: dict[str, str]):
 def render_revenue_section(texts: dict[str, str]):
     """Umsatz-Sektion des CRM Dashboards"""
 
-    st.subheader("💰 Umsatzanalyse")
+    st.subheader("[MONEY] Umsatzanalyse")
 
     # Umsatz-KPIs mit modernen Cards
     col1, col2, col3, col4 = st.columns(4)
@@ -540,6 +544,45 @@ def render_statistics_section(texts: dict[str, str]):
 
     st.subheader(" Geschäftsstatistiken")
 
+    # Tag-Statistiken anzeigen
+    try:
+        from crm.features.tag_manager import get_tag_statistics
+        conn = get_db_connection()
+        if conn:
+            tag_stats = get_tag_statistics(conn)
+            conn.close()
+            
+            if tag_stats:
+                st.markdown("#### 🏷️ Tag-Nutzung")
+                
+                # Top 5 Tags
+                top_tags = tag_stats[:5]
+                cols = st.columns(len(top_tags))
+                for idx, tag_stat in enumerate(top_tags):
+                    with cols[idx]:
+                        color = tag_stat.get('color', '#808080')
+                        name = tag_stat.get('name', 'Unbekannt')
+                        count = tag_stat.get('customer_count', 0)
+                        
+                        st.markdown(f"""
+                            <div style="
+                                background: linear-gradient(145deg, {color} 0%, {color}cc 100%);
+                                padding: 15px;
+                                border-radius: 10px;
+                                text-align: center;
+                                color: white;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                            ">
+                                <h4 style="margin: 0; font-size: 0.9em;">{name}</h4>
+                                <h2 style="margin: 5px 0; font-size: 1.8em;">{count}</h2>
+                                <p style="margin: 0; font-size: 0.8em; opacity: 0.9;">Kunden</p>
+                            </div>
+                        """, unsafe_allow_html=True)
+                
+                st.markdown("---")
+    except ImportError:
+        pass  # Tag-System nicht verfügbar
+
     # Statistiken in zwei Spalten
     col1, col2 = st.columns(2)
 
@@ -600,6 +643,37 @@ def render_statistics_section(texts: dict[str, str]):
         use_container_width=True,
         hide_index=True
     )
+
+def render_widgets_section(texts: dict[str, str]):
+    """Widget-Sektion des CRM Dashboards mit konfigurierbaren Widgets"""
+    
+    try:
+        from crm.features.dashboard_widgets import (
+            render_dashboard_with_widgets
+        )
+        
+        # Auto-Refresh Einstellungen aus Session State
+        auto_refresh = st.session_state.get('dashboard_auto_refresh', False)
+        refresh_interval = st.session_state.get(
+            'dashboard_refresh_interval', 60)
+        
+        # Rendere Dashboard mit Widgets
+        render_dashboard_with_widgets(
+            texts=texts,
+            user_id="default",
+            auto_refresh=auto_refresh,
+            refresh_interval=refresh_interval
+        )
+        
+    except ImportError as e:
+        st.error("[ERROR] Dashboard Widget System nicht verfügbar")
+        st.info(
+            "Das Dashboard Widget Modul konnte nicht geladen werden. "
+            "Bitte stellen Sie sicher, dass alle Abhängigkeiten "
+            "installiert sind."
+        )
+        st.code(str(e))
+
 
 def render_tasks_section(texts: dict[str, str]):
     """Aufgaben-Sektion des CRM Dashboards"""

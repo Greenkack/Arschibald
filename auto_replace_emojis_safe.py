@@ -30,9 +30,9 @@ def replace_emoji_in_string(text: str) -> Tuple[str, int]:
     Ersetzt Emojis in einem String mit e() Wrapper.
     
     Beispiele:
-        "📊 Dashboard" -> f"{e('📊')} Dashboard"
-        f"✅ Saved {count}" -> f"{e('✅')} Saved {count}"
-        '❌ Error' -> f"{e('❌')} Error"
+        "[CHART] Dashboard" -> f"{e('[CHART]')} Dashboard"
+        f"[OK] Saved {count}" -> f"{e('[OK]')} Saved {count}"
+        '[ERROR] Error' -> f"{e('[ERROR]')} Error"
     
     Returns:
         (neuer_text, anzahl_ersetzungen)
@@ -123,7 +123,7 @@ def process_file(file_path: Path, dry_run: bool = True) -> Tuple[int, int]:
         with open(file_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
     except Exception as e:
-        print(f"❌ Fehler beim Lesen: {e}")
+        print(f"[ERROR] Fehler beim Lesen: {e}")
         return 0, 0
     
     new_lines = []
@@ -182,9 +182,9 @@ def process_file(file_path: Path, dry_run: bool = True) -> Tuple[int, int]:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.writelines(new_lines)
             
-            print(f"✅ {file_path.name}: {total_replacements} Emojis ersetzt, Backup: {backup_path.name}")
+            print(f"[OK] {file_path.name}: {total_replacements} Emojis ersetzt, Backup: {backup_path.name}")
         except Exception as e:
-            print(f"❌ Fehler beim Schreiben: {e}")
+            print(f"[ERROR] Fehler beim Schreiben: {e}")
             return 0, 0
     
     return lines_changed, total_replacements
@@ -193,7 +193,7 @@ def process_file(file_path: Path, dry_run: bool = True) -> Tuple[int, int]:
 def main():
     """Hauptfunktion."""
     print("=" * 80)
-    print("🔧 AUTOMATISCHES EMOJI-REPLACEMENT (SICHER)")
+    print("[TOOL] AUTOMATISCHES EMOJI-REPLACEMENT (SICHER)")
     print("=" * 80)
     print()
     
@@ -211,19 +211,19 @@ def main():
         
         # Frage Benutzer
         print("\n" + "=" * 80)
-        response = input("\n✅ Test-Datei WIRKLICH ändern? (ja/nein): ").strip().lower()
+        response = input("\n[OK] Test-Datei WIRKLICH ändern? (ja/nein): ").strip().lower()
         
         if response == 'ja':
             print("\n🔄 SCHREIBE ÄNDERUNGEN...")
             lines_changed, emojis_replaced = process_file(test_file, dry_run=False)
-            print(f"\n✅ FERTIG: {lines_changed} Zeilen geändert, {emojis_replaced} Emojis ersetzt")
+            print(f"\n[OK] FERTIG: {lines_changed} Zeilen geändert, {emojis_replaced} Emojis ersetzt")
         else:
-            print("\n❌ ABGEBROCHEN - Keine Änderungen vorgenommen")
+            print("\n[ERROR] ABGEBROCHEN - Keine Änderungen vorgenommen")
     else:
-        print(f"❌ Test-Datei nicht gefunden: {test_file}")
+        print(f"[ERROR] Test-Datei nicht gefunden: {test_file}")
     
     print("\n" + "=" * 80)
-    print("💡 HINWEIS:")
+    print("[IDEA] HINWEIS:")
     print("Wenn der Test erfolgreich war, können Sie das Skript für alle Dateien ausführen.")
     print("=" * 80)
 

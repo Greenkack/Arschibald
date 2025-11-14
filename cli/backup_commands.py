@@ -11,14 +11,14 @@ backup_commands = typer.Typer()
 def create_backup():
     """Create database backup"""
     console.print("[bold blue]Creating backup...[/bold blue]")
-    console.print("[green]✓ Backup created successfully[/green]")
+    console.print("[green][OK] Backup created successfully[/green]")
 
 
 @backup_commands.command("restore")
 def restore_backup():
     """Restore database backup"""
     console.print("[bold blue]Restoring backup...[/bold blue]")
-    console.print("[green]✓ Backup restored successfully[/green]")
+    console.print("[green][OK] Backup restored successfully[/green]")
 
 
 @backup_commands.command("list")

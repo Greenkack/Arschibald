@@ -65,7 +65,7 @@ def verify_hit_rate_tracking():
     else:
         print("No metrics collected yet")
 
-    print("\n✓ Hit rate tracking verified")
+    print("\n[OK] Hit rate tracking verified")
 
 
 def verify_trend_analysis():
@@ -101,7 +101,7 @@ def verify_trend_analysis():
         print(f"  Trend: {hit_rate_data.get('trend', 'unknown')}")
         print(f"  Status: {hit_rate_data.get('status', 'unknown')}")
 
-    print("\n✓ Trend analysis verified")
+    print("\n[OK] Trend analysis verified")
 
 
 def verify_automatic_cleanup():
@@ -150,9 +150,9 @@ def verify_automatic_cleanup():
     print(f"  Callbacks Executed: {results['callbacks_executed']}")
 
     if cleanup_executed:
-        print("\n✓ Custom cleanup callback was executed")
+        print("\n[OK] Custom cleanup callback was executed")
 
-    print("\n✓ Automatic cleanup verified")
+    print("\n[OK] Automatic cleanup verified")
 
 
 def verify_performance_alerts():
@@ -201,7 +201,7 @@ def verify_performance_alerts():
         for rec in issues["recommendations"]:
             print(f"    - {rec}")
 
-    print("\n✓ Performance alerts verified")
+    print("\n[OK] Performance alerts verified")
 
 
 def verify_monitoring_integration():
@@ -262,7 +262,7 @@ def verify_monitoring_integration():
     stop_cache_monitoring()
     print(f"Monitoring stopped: {not monitor._running}")
 
-    print("\n✓ Monitoring integration verified")
+    print("\n[OK] Monitoring integration verified")
 
 
 def main():
@@ -279,16 +279,16 @@ def main():
         verify_monitoring_integration()
 
         print_section("Verification Complete")
-        print("✓ All cache performance monitoring features verified")
+        print("[OK] All cache performance monitoring features verified")
         print("\nTask 6.3 Implementation Summary:")
-        print("  ✓ Cache hit rate tracking with detailed metrics")
-        print("  ✓ Performance analytics with trend analysis")
-        print("  ✓ Cache size monitoring with automatic cleanup")
-        print("  ✓ Performance degradation detection and alerts")
-        print("  ✓ Complete monitoring integration")
+        print("  [OK] Cache hit rate tracking with detailed metrics")
+        print("  [OK] Performance analytics with trend analysis")
+        print("  [OK] Cache size monitoring with automatic cleanup")
+        print("  [OK] Performance degradation detection and alerts")
+        print("  [OK] Complete monitoring integration")
 
     except Exception as e:
-        print(f"\n✗ Verification failed: {e}")
+        print(f"\n[ERROR] Verification failed: {e}")
         import traceback
         traceback.print_exc()
         return 1

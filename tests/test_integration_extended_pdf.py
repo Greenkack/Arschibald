@@ -382,7 +382,10 @@ def test_performance():
     print("-" * 70)
     
     total_time = sum(r['time'] for r in results)
-    avg_time = total_time / len(results)
+    if len != 0:
+        avg_time = total_time / len(results)
+    else:
+        avg_time = 0.0
     max_time = max(r['time'] for r in results)
     
     print(f"Total test time: {total_time:.2f}s")

@@ -49,7 +49,7 @@ def demo_basic_validation():
     
     print("\nErrors:")
     for error in report.get_errors():
-        print(f"  ✗ {error.message}")
+        print(f"  [ERROR] {error.message}")
     
     print("\nWarnings:")
     for warning in report.get_warnings():
@@ -208,7 +208,7 @@ def demo_batch_validation():
     print("-" * 70)
     
     for firma, seite, report in results:
-        status = "✓ VALID" if report.is_valid else "✗ INVALID"
+        status = "[OK] VALID" if report.is_valid else "[ERROR] INVALID"
         print(f"\nFirma {firma}, Seite {seite}: {status}")
         print(f"  Elements: {report.total_elements}")
         print(f"  Errors: {len(report.get_errors())}")
@@ -257,7 +257,7 @@ def main():
     demo_convenience_functions()
     
     print("\n" + "=" * 70)
-    print("✓ All demos completed successfully")
+    print("[OK] All demos completed successfully")
     print("=" * 70)
 
 

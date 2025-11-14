@@ -32,7 +32,7 @@ def test_performance_measurement():
     assert metrics.total_duration > 0, "Should have positive duration"
     assert len(metrics.component_timings) > 0, "Should have component timings"
     
-    print("\n✓ Performance measurement test passed")
+    print("\n[OK] Performance measurement test passed")
     
     return metrics
 
@@ -63,9 +63,12 @@ def test_cache_effectiveness():
     print(f"Without cache: {metrics_uncached.total_duration:.3f}s")
     
     if metrics_cached.total_duration < metrics_uncached.total_duration:
-        speedup = metrics_uncached.total_duration / metrics_cached.total_duration
+        if metrics_cached != 0:
+            speedup = metrics_uncached.total_duration / metrics_cached.total_duration
+        else:
+            speedup = 0.0
         print(f"Speedup: {speedup:.2f}x")
-        print("✓ Cache is effective")
+        print("[OK] Cache is effective")
     else:
         print("⚠ Cache did not improve performance (may be due to small dataset)")
     
@@ -98,7 +101,7 @@ def test_metrics_export():
     assert 'total_duration' in data, "Should have total_duration"
     assert 'component_timings' in data, "Should have component_timings"
     
-    print(f"✓ Metrics exported to: {output_file}")
+    print(f"[OK] Metrics exported to: {output_file}")
     
     return output_file
 
@@ -126,7 +129,7 @@ def main():
         return 0
         
     except Exception as e:
-        print(f"\n✗ Test failed: {e}")
+        print(f"\n[ERROR] Test failed: {e}")
         import traceback
         traceback.print_exc()
         return 1

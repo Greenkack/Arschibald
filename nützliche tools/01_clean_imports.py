@@ -23,4 +23,4 @@ def clean_imports(directory="."):
                     new_lines.append(line)
             with open(filename, "w", encoding="utf-8") as f:
                 f.writelines(new_lines)
-    print("✅ Unnötige doppelte Imports entfernt!")
+    print("[OK] Unnötige doppelte Imports entfernt!")

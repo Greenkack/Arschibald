@@ -48,7 +48,7 @@ def test_basic_logging():
     logger.error("This is an ERROR message")
     logger.critical("This is a CRITICAL message")
 
-    print("✅ Basic logging test completed")
+    print("[OK] Basic logging test completed")
 
 
 def test_sensitive_data_filtering():
@@ -80,7 +80,7 @@ def test_sensitive_data_filtering():
     logger.info("Account SID: AC1234567890abcdefghijklmnopqrstuvwx")
     logger.info("Auth token: auth_token=abcdef1234567890abcdef1234567890")
 
-    print("✅ Sensitive data filtering test completed")
+    print("[OK] Sensitive data filtering test completed")
     print("   Check logs to verify all sensitive data was redacted")
 
 
@@ -120,7 +120,7 @@ def test_api_call_logging():
         error="Connection timeout"
     )
 
-    print("✅ API call logging test completed")
+    print("[OK] API call logging test completed")
 
 
 def test_docker_operation_logging():
@@ -170,7 +170,7 @@ def test_docker_operation_logging():
         error="Image not found"
     )
 
-    print("✅ Docker operation logging test completed")
+    print("[OK] Docker operation logging test completed")
 
 
 def test_tool_execution_logging():
@@ -209,7 +209,7 @@ def test_tool_execution_logging():
         duration=0.8
     )
 
-    print("✅ Tool execution logging test completed")
+    print("[OK] Tool execution logging test completed")
 
 
 def test_agent_reasoning_logging():
@@ -242,7 +242,7 @@ def test_agent_reasoning_logging():
         thought="I have completed the task successfully"
     )
 
-    print("✅ Agent reasoning logging test completed")
+    print("[OK] Agent reasoning logging test completed")
 
 
 def test_error_logging():
@@ -266,7 +266,7 @@ def test_error_logging():
     # Test warning
     logger.warning("This is a warning about potential issues")
 
-    print("✅ Error logging test completed")
+    print("[OK] Error logging test completed")
 
 
 def test_module_loggers():
@@ -284,7 +284,7 @@ def test_module_loggers():
     tools_logger.info("Coding tools module log message")
     execution_logger.info("Execution tools module log message")
 
-    print("✅ Module-specific loggers test completed")
+    print("[OK] Module-specific loggers test completed")
 
 
 def test_log_file_creation():
@@ -301,9 +301,9 @@ def test_log_file_creation():
         for log_file in log_files:
             size = log_file.stat().st_size
             print(f"  - {log_file.name} ({size} bytes)")
-        print("✅ Log files created successfully")
+        print("[OK] Log files created successfully")
     else:
-        print("⚠️  Logs directory not found")
+        print("[WARNING]  Logs directory not found")
 
 
 def main():
@@ -327,24 +327,24 @@ def main():
         test_log_file_creation()
 
         print("\n" + "=" * 70)
-        print("ALL TESTS COMPLETED SUCCESSFULLY! ✅")
+        print("ALL TESTS COMPLETED SUCCESSFULLY! [OK]")
         print("=" * 70)
         print("\nLogging system features verified:")
-        print("  ✅ Logging levels configuration (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
-        print("  ✅ Agent reasoning logs")
-        print("  ✅ API call logging (without sensitive data)")
-        print("  ✅ Docker operation logging")
-        print("  ✅ Tool execution logging")
-        print("  ✅ Error logging with stack traces")
-        print("  ✅ Sensitive data filtering")
-        print("  ✅ Module-specific loggers")
-        print("  ✅ Log file creation and rotation")
+        print("  [OK] Logging levels configuration (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+        print("  [OK] Agent reasoning logs")
+        print("  [OK] API call logging (without sensitive data)")
+        print("  [OK] Docker operation logging")
+        print("  [OK] Tool execution logging")
+        print("  [OK] Error logging with stack traces")
+        print("  [OK] Sensitive data filtering")
+        print("  [OK] Module-specific loggers")
+        print("  [OK] Log file creation and rotation")
 
         print("\nLog files location: Agent/logs/")
         print("Check the log files to verify all logging features work correctly.")
 
     except Exception as e:
-        print(f"\n❌ Test failed with error: {e}")
+        print(f"\n[ERROR] Test failed with error: {e}")
         import traceback
         traceback.print_exc()
         return 1

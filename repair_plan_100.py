@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-🎯 100% GESUNDHEIT - REPARATUR-PLAN
+[TARGET] 100% GESUNDHEIT - REPARATUR-PLAN
 Identifiziert alle Probleme und erstellt Reparatur-Strategie
 """
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 def main():
     print("=" * 80)
-    print("🎯 ZIEL: 100% SYNTAX + 100% IMPORTS")
+    print("[TARGET] ZIEL: 100% SYNTAX + 100% IMPORTS")
     print("=" * 80)
     
     # SYNTAX-FEHLER (28 Dateien)
@@ -64,17 +64,17 @@ def main():
     to_delete = [f for f, t, a in syntax_errors if a == "LÖSCHEN"]
     to_repair = [f for f, t, a in syntax_errors if a.startswith("REPARIEREN")]
     
-    print(f"\n🗑️  ZU LÖSCHEN ({len(to_delete)} Dateien):")
+    print(f"\n[DELETE]  ZU LÖSCHEN ({len(to_delete)} Dateien):")
     for file in to_delete:
         print(f"   • {file}")
     
-    print(f"\n🔧 ZU REPARIEREN ({len(to_repair)} Dateien):")
+    print(f"\n[TOOL] ZU REPARIEREN ({len(to_repair)} Dateien):")
     for file in to_repair:
         print(f"   • {file}")
     
     # FEHLENDE MODULE (64 nach Installation der 4 Pakete)
     print("\n" + "=" * 80)
-    print("📦 FEHLENDE MODULE - KATEGORIEN")
+    print("[PACKAGE] FEHLENDE MODULE - KATEGORIEN")
     print("=" * 80)
     
     categories = {
@@ -171,7 +171,7 @@ def main():
             print(f"   ... +{len(modules)-5} weitere")
     
     print("\n" + "=" * 80)
-    print("🎯 STRATEGIE FÜR 100% GESUNDHEIT")
+    print("[TARGET] STRATEGIE FÜR 100% GESUNDHEIT")
     print("=" * 80)
     
     print("\nPHASE 1: SYNTAX-FEHLER BEHEBEN")

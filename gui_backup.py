@@ -934,7 +934,7 @@ def main():
 
         # DEAKTIVIERT: Toast und visueller Test (verursacht Probleme)
         # if modern_theme_active:
-        #     st.toast(f"✨ Modernes UI aktiviert ({template_count} Templates)", icon="🎨")
+        #     st.toast(f"✨ Modernes UI aktiviert ({template_count} Templates)", icon="[DESIGN]")
 
     except Exception as e_css_template:
         # Bei Fehler: Log in Console und verliere nicht das Legacy-Theme
@@ -942,7 +942,7 @@ def main():
         st.session_state["modern_ui_active"] = False
         st.session_state["modern_ui_template_count"] = 0
         import traceback
-        print(f"⚠️ CSS-Templates Fehler: {e_css_template}")
+        print(f"[WARNING] CSS-Templates Fehler: {e_css_template}")
         print(traceback.format_exc())
 
     # Legacy-Theme nur anwenden, wenn modernes Theme nicht aktiv ist
@@ -1401,11 +1401,11 @@ def main():
         drawer.innerHTML = `
             <button class="drawer-close">×</button>
             <div class="drawer-title">Quick Actions</div>
-            <button class="drawer-btn" data-action="action1">📊 Button 1</button>
-            <button class="drawer-btn" data-action="action2">🔧 Button 2</button>
+            <button class="drawer-btn" data-action="action1">[CHART] Button 1</button>
+            <button class="drawer-btn" data-action="action2">[TOOL] Button 2</button>
             <button class="drawer-btn" data-action="action3">⚙️ Button 3</button>
-            <button class="drawer-btn" data-action="action4">📈 Button 4</button>
-            <button class="drawer-btn" data-action="action5">🎯 Button 5</button>
+            <button class="drawer-btn" data-action="action4">[STATS] Button 4</button>
+            <button class="drawer-btn" data-action="action5">[TARGET] Button 5</button>
             <button class="drawer-btn" data-action="logout" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);">🚪 Abmelden</button>
         `;
         parentDoc.body.appendChild(drawer);
@@ -1481,7 +1481,7 @@ def main():
      unsafe_allow_html=True)
 
         main_menu = [
-            {"icon": "📊", "label": get_text_gui(
+            {"icon": "[CHART]", "label": get_text_gui(
                 "menu_item_input"), "key": "input"},
             {"icon": "☀️",
     "label": TEXTS.get("menu_item_solar_calculator",
@@ -1489,7 +1489,7 @@ def main():
      "key": "solar_calculator"},
             {"icon": "🔥", "label": get_text_gui(
                 "menu_item_heatpump"), "key": "heatpump"},
-            {"icon": "💰", "label": get_text_gui(
+            {"icon": "[MONEY]", "label": get_text_gui(
                 "menu_item_analysis"), "key": "analysis"},
         ]
 
@@ -1517,7 +1517,7 @@ def main():
         business_menu = [
             {"icon": "👥", "label": get_text_gui(
                 "menu_item_crm"), "key": "crm"},
-            {"icon": "📄", "label": get_text_gui(
+            {"icon": "[FILE]", "label": get_text_gui(
                 "menu_item_doc_output"), "key": "doc_output"},
             {"icon": "⚙️", "label": get_text_gui(
                 "menu_item_admin"), "key": "admin"},
@@ -1544,11 +1544,11 @@ def main():
      unsafe_allow_html=True)
 
         tools_menu = [
-            {"icon": "⚡", "label": get_text_gui(
+            {"icon": "[POWER]", "label": get_text_gui(
                 "menu_item_quick_calc"), "key": "quick_calc"},
-            {"icon": "🔧", "label": get_text_gui(
+            {"icon": "[TOOL]", "label": get_text_gui(
                 "menu_item_options"), "key": "options"},
-            {"icon": "ℹ️", "label": get_text_gui(
+            {"icon": "[INFO]", "label": get_text_gui(
                 "menu_item_info_platform"), "key": "info_platform"},
         ]
 

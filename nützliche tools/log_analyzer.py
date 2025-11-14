@@ -48,7 +48,7 @@ def analyze_logs():
             with open(log_file, encoding='utf-8', errors='ignore') as f:
                 content = f.read()
 
-            print(f"\n📄 {os.path.basename(log_file)}:")
+            print(f"\n[FILE] {os.path.basename(log_file)}:")
             file_stats = {}
 
             for error_type, pattern in error_patterns.items():
@@ -69,10 +69,10 @@ def analyze_logs():
                     break
 
         except Exception as e:
-            print(f"❌ Fehler beim Lesen von {log_file}: {e}")
+            print(f"[ERROR] Fehler beim Lesen von {log_file}: {e}")
 
     # Gesamtstatistik
-    print("\n📊 GESAMTSTATISTIK:")
+    print("\n[CHART] GESAMTSTATISTIK:")
     for error_type, count in stats.items():
         if count > 0:
             print(f"  {error_type}: {count}")
@@ -81,7 +81,7 @@ def analyze_logs():
     if recent_errors:
         print("\n🚨 LETZTE FEHLER:")
         for log_file, error_line in recent_errors[-5:]:
-            print(f"  📄 {os.path.basename(log_file)}: {error_line[:100]}...")
+            print(f"  [FILE] {os.path.basename(log_file)}: {error_line[:100]}...")
 
 
 def clean_old_logs(days_to_keep=7):
@@ -97,11 +97,11 @@ def clean_old_logs(days_to_keep=7):
             if os.path.getmtime(log_file) < cutoff_time:
                 os.remove(log_file)
                 deleted_count += 1
-                print(f"🗑️ Gelöscht: {log_file}")
+                print(f"[DELETE] Gelöscht: {log_file}")
         except BaseException:
             pass
 
-    print(f"✅ {deleted_count} alte Log-Dateien gelöscht")
+    print(f"[OK] {deleted_count} alte Log-Dateien gelöscht")
 
 
 if __name__ == "__main__":

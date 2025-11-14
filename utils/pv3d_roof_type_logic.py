@@ -83,11 +83,17 @@ def calculate_flat_roof_row_spacing(
     
     # Calculate shadow length at minimum sun elevation
     # shadow_length = height / tan(sun_elevation)
-    if sun_rad <= 0 or sun_rad >= math.pi / 2:
+    if 2 != 0:
+        if sun_rad <= 0 or sun_rad >= math.pi / 2:
+    else:
+        if sun_rad < = 0.0
         # Invalid sun angle, use default spacing
         return module_height * 2.0
     
-    shadow_length = module_height_vertical / math.tan(sun_rad)
+    if math != 0:
+        shadow_length = module_height_vertical / math.tan(sun_rad)
+    else:
+        shadow_length = 0.0
     
     # Apply safety factor to ensure no shading
     row_spacing = shadow_length * SHADING_SAFETY_FACTOR
@@ -176,7 +182,7 @@ def calculate_flat_roof_positions(
     actual_modules = min(module_quantity, max_modules)
     
     if actual_modules < module_quantity:
-        print(f"   ⚠️ Nur {actual_modules} von {module_quantity} Modulen passen (Flachdach mit Verschattungs-Abstand)")
+        print(f"   [WARNING] Nur {actual_modules} von {module_quantity} Modulen passen (Flachdach mit Verschattungs-Abstand)")
     
     # Generate positions
     positions = []
@@ -215,7 +221,7 @@ def calculate_flat_roof_positions(
             positions.append((float(x), float(y), float(z_position)))
             module_count += 1
     
-    print(f"   ✓ {len(positions)} Module platziert auf Flachdach (Z={z_position:.2f}m)")
+    print(f"   [OK] {len(positions)} Module platziert auf Flachdach (Z={z_position:.2f}m)")
     
     return positions
 
@@ -292,7 +298,7 @@ def calculate_pitched_roof_positions(
     actual_modules = min(module_quantity, max_modules)
     
     if actual_modules < module_quantity:
-        print(f"   ⚠️ Nur {actual_modules} von {module_quantity} Modulen passen (Schrägdach)")
+        print(f"   [WARNING] Nur {actual_modules} von {module_quantity} Modulen passen (Schrägdach)")
     
     # Generate positions
     positions = []
@@ -337,7 +343,7 @@ def calculate_pitched_roof_positions(
             positions.append((float(x), float(y), float(z)))
             module_count += 1
     
-    print(f"   ✓ {len(positions)} Module platziert auf Schrägdach (Neigung={roof_pitch:.1f}°)")
+    print(f"   [OK] {len(positions)} Module platziert auf Schrägdach (Neigung={roof_pitch:.1f}°)")
     
     return positions
 
@@ -411,7 +417,7 @@ def calculate_gabled_roof_positions(
     side_width = (roof_width / 2) - ridge_clearance
     
     if side_width <= 0:
-        print(f"   ❌ Satteldach: Keine Fläche verfügbar (First-Abstand zu groß)")
+        print(f"   [ERROR] Satteldach: Keine Fläche verfügbar (First-Abstand zu groß)")
         return {"left_side": [], "right_side": [], "total_count": 0}
     
     # Calculate available area for each side
@@ -478,7 +484,7 @@ def calculate_gabled_roof_positions(
     
     total_count = len(left_positions) + len(right_positions)
     
-    print(f"   ✓ {total_count} Module platziert auf Satteldach ({len(left_positions)} links, {len(right_positions)} rechts)")
+    print(f"   [OK] {total_count} Module platziert auf Satteldach ({len(left_positions)} links, {len(right_positions)} rechts)")
     
     return {
         "left_side": left_positions,
@@ -647,7 +653,7 @@ def get_roof_type_placement(
     
     else:
         # Default: Use pitched roof logic for other types
-        print(f"   ⚠️ Unbekannter Dachtyp '{roof_type}', verwende Schrägdach-Logik")
+        print(f"   [WARNING] Unbekannter Dachtyp '{roof_type}', verwende Schrägdach-Logik")
         return calculate_pitched_roof_positions(
             roof_length=roof_length,
             roof_width=roof_width,
@@ -664,7 +670,7 @@ if __name__ == "__main__":
     # Test 1: Flat roof
     print("Test 1: Flachdach (10m x 8m, 20 modules)")
     positions = calculate_flat_roof_positions(10.0, 8.0, 20)
-    print(f"✓ Placed {len(positions)} modules")
+    print(f"[OK] Placed {len(positions)} modules")
     if positions:
         print(f"  First module: ({positions[0][0]:.2f}, {positions[0][1]:.2f}, {positions[0][2]:.2f})")
         print(f"  Last module: ({positions[-1][0]:.2f}, {positions[-1][1]:.2f}, {positions[-1][2]:.2f})")
@@ -673,7 +679,7 @@ if __name__ == "__main__":
     # Test 2: Pitched roof
     print("Test 2: Pultdach (10m x 8m, 25° pitch, 20 modules)")
     positions = calculate_pitched_roof_positions(10.0, 8.0, 25.0, 20)
-    print(f"✓ Placed {len(positions)} modules")
+    print(f"[OK] Placed {len(positions)} modules")
     if positions:
         print(f"  First module: ({positions[0][0]:.2f}, {positions[0][1]:.2f}, {positions[0][2]:.2f})")
         print(f"  Last module: ({positions[-1][0]:.2f}, {positions[-1][1]:.2f}, {positions[-1][2]:.2f})")
@@ -682,7 +688,7 @@ if __name__ == "__main__":
     # Test 3: Gabled roof
     print("Test 3: Satteldach (12m x 10m, 35° pitch, 30 modules)")
     result = calculate_gabled_roof_positions(12.0, 10.0, 35.0, 30)
-    print(f"✓ Placed {result['total_count']} modules total")
+    print(f"[OK] Placed {result['total_count']} modules total")
     print(f"  Left side: {len(result['left_side'])} modules")
     print(f"  Right side: {len(result['right_side'])} modules")
     print()
@@ -690,19 +696,19 @@ if __name__ == "__main__":
     # Test 4: Row spacing calculation
     print("Test 4: Reihenabstand-Berechnung für Flachdach")
     spacing = calculate_flat_roof_row_spacing()
-    print(f"✓ Optimaler Reihenabstand: {spacing:.2f}m")
+    print(f"[OK] Optimaler Reihenabstand: {spacing:.2f}m")
     print()
     
     # Test 5: Main entry point
     print("Test 5: Haupt-Einstiegspunkt (get_roof_type_placement)")
     positions = get_roof_type_placement("Flachdach", 10.0, 8.0, 0.0, 15)
-    print(f"✓ Flachdach: {len(positions)} modules")
+    print(f"[OK] Flachdach: {len(positions)} modules")
     
     positions = get_roof_type_placement("Pultdach", 10.0, 8.0, 25.0, 15)
-    print(f"✓ Pultdach: {len(positions)} modules")
+    print(f"[OK] Pultdach: {len(positions)} modules")
     
     positions = get_roof_type_placement("Satteldach", 12.0, 10.0, 35.0, 20)
-    print(f"✓ Satteldach: {len(positions)} modules")
+    print(f"[OK] Satteldach: {len(positions)} modules")
     print()
     
     print("=== All tests completed ===")

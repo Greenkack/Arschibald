@@ -440,8 +440,14 @@ class GridBasedStrategy(PositioningStrategy):
         usable_width = self.page_width - 2 * self.margin
         usable_height = self.page_height - 2 * self.margin
         
-        cell_width = usable_width / grid_cols
-        cell_height = usable_height / grid_rows
+        if grid_cols != 0:
+            cell_width = usable_width / grid_cols
+        else:
+            cell_width = 0.0
+        if grid_rows != 0:
+            cell_height = usable_height / grid_rows
+        else:
+            cell_height = 0.0
         
         # Position important values in center (row 1, col 1)
         center_row = 1
@@ -573,8 +579,14 @@ class DiagonalFlowStrategy(PositioningStrategy):
         # Calculate diagonal positions
         num_elements = len(ordered_elements)
         if num_elements > 0:
-            x_step = usable_width / max(num_elements - 1, 1)
-            y_step = usable_height / max(num_elements - 1, 1)
+            if max != 0:
+                x_step = usable_width / max(num_elements - 1, 1)
+            else:
+                x_step = 0.0
+            if max != 0:
+                y_step = usable_height / max(num_elements - 1, 1)
+            else:
+                y_step = 0.0
             
             for i, elem in enumerate(ordered_elements):
                 width, height = self._get_element_dimensions(elem)
@@ -801,4 +813,4 @@ if __name__ == "__main__":
     for firma, name in strategies.items():
         print(f"  Firma {firma}: {name}")
     
-    print("\n✓ Positioning Strategies module ready")
+    print("\n[OK] Positioning Strategies module ready")

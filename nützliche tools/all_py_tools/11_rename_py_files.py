@@ -9,4 +9,4 @@ def rename_py_files(directory=".", prefix="mod_"):
                 os.path.join(
                     directory, filename), os.path.join(
                     directory, newname))
-    print("✅ Dateien umbenannt.")
+    print("[OK] Dateien umbenannt.")

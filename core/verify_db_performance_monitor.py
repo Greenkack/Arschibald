@@ -23,7 +23,7 @@ def verify_basic_functionality():
     assert stats.insert_queries == 1, "INSERT count mismatch"
     assert stats.update_queries == 1, "UPDATE count mismatch"
 
-    print("✅ Basic query recording works")
+    print("[OK] Basic query recording works")
     print(f"   Total Queries: {stats.total_queries}")
     print(f"   Average Query Time: {stats.avg_query_time:.3f}s")
 
@@ -52,7 +52,7 @@ def verify_slow_query_detection():
     assert stats.slow_queries == 3, "Slow query count mismatch"
     assert len(slow_queries) == 3, "Slow query list mismatch"
 
-    print("✅ Slow query detection works")
+    print("[OK] Slow query detection works")
     print(f"   Total Queries: {stats.total_queries}")
     print(f"   Slow Queries: {stats.slow_queries}")
     print(
@@ -89,7 +89,7 @@ def verify_error_tracking():
     assert stats.failed_queries == 3, "Failed query count mismatch"
     assert abs(stats.error_rate - 0.3) < 0.01, "Error rate mismatch"
 
-    print("✅ Error tracking works")
+    print("[OK] Error tracking works")
     print(f"   Total Queries: {stats.total_queries}")
     print(f"   Failed Queries: {stats.failed_queries}")
     print(f"   Error Rate: {stats.error_rate:.1%}")
@@ -128,7 +128,7 @@ def verify_connection_monitoring():
     assert stats.idle_connections == 2, "Idle connection count mismatch"
     assert abs(stats.connection_pool_usage - 0.6) < 0.01, "Pool usage mismatch"
 
-    print("✅ Connection monitoring works")
+    print("[OK] Connection monitoring works")
     print(f"   Total Connections: {stats.total_connections}")
     print(f"   Active: {stats.active_connections}")
     print(f"   Idle: {stats.idle_connections}")
@@ -163,7 +163,7 @@ def verify_alert_system():
     assert len(alerts) > 0, "No alerts generated"
     assert alert_count['count'] > 0, "Callback not called"
 
-    print("✅ Alert system works")
+    print("[OK] Alert system works")
     print(f"   Total Alerts: {len(alerts)}")
     print(f"   Callback Invocations: {alert_count['count']}")
 
@@ -208,7 +208,7 @@ def verify_query_analysis():
     assert 'users' in stats_by_table, "users table stats missing"
     assert 'orders' in stats_by_table, "orders table stats missing"
 
-    print("✅ Query analysis works")
+    print("[OK] Query analysis works")
     print("\n   Query Stats by Type:")
     for query_type, stats in stats_by_type.items():
         print(f"      {query_type}: {stats['count']} queries, "
@@ -259,7 +259,7 @@ def verify_recommendations():
 
     assert len(recommendations) > 0, "No recommendations generated"
 
-    print("✅ Optimization recommendations work")
+    print("[OK] Optimization recommendations work")
     print(f"   Total Recommendations: {len(recommendations)}")
 
     for i, rec in enumerate(recommendations[:3], 1):
@@ -292,7 +292,7 @@ def verify_stats_reset():
     assert stats_after.total_queries == 0, "Stats not reset"
     assert stats_after.total_query_time == 0.0, "Query time not reset"
 
-    print("✅ Statistics reset works")
+    print("[OK] Statistics reset works")
     print(f"   Queries Before Reset: {stats_before.total_queries}")
     print(f"   Queries After Reset: {stats_after.total_queries}")
 
@@ -325,7 +325,7 @@ def verify_thread_safety():
 
     assert stats.total_queries == 100, "Thread-safe query count mismatch"
 
-    print("✅ Thread safety works")
+    print("[OK] Thread safety works")
     print(f"   Queries from 5 threads: {stats.total_queries}")
 
     return True
@@ -357,7 +357,7 @@ def run_all_verifications():
             results.append((test_name, result, None))
         except Exception as e:
             results.append((test_name, False, str(e)))
-            print(f"❌ {test_name} failed: {e}")
+            print(f"[ERROR] {test_name} failed: {e}")
 
     # Summary
     print("\n" + "=" * 70)
@@ -368,7 +368,7 @@ def run_all_verifications():
     total = len(results)
 
     for test_name, result, error in results:
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[OK] PASS" if result else "[ERROR] FAIL"
         print(f"{status}: {test_name}")
         if error:
             print(f"       Error: {error}")
@@ -380,7 +380,7 @@ def run_all_verifications():
         print("🎉 All verifications passed!")
         print("=" * 70)
         return True
-    print("⚠️  Some verifications failed")
+    print("[WARNING]  Some verifications failed")
     print("=" * 70)
     return False
 

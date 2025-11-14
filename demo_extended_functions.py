@@ -65,7 +65,7 @@ def demo_statistical_functions():
     manager.set_cell_value(14, 1, None, "=SMALL(A1:A8, 2)")
     print(f"SMALL(2) = {manager.get_cell_value(14, 1)}")
     
-    print("\n✓ Alle statistischen Funktionen funktionieren")
+    print("\n[OK] Alle statistischen Funktionen funktionieren")
 
 
 def demo_if_functions():
@@ -99,7 +99,7 @@ def demo_if_functions():
     manager.set_cell_value(6, 1, None, "=CHOOSE(A7, \"Rot\", \"Grün\", \"Blau\")")
     print(f"CHOOSE(2) = {manager.get_cell_value(6, 1)}")
     
-    print("\n✓ Alle erweiterten IF-Funktionen funktionieren")
+    print("\n[OK] Alle erweiterten IF-Funktionen funktionieren")
 
 
 def demo_aggregation_functions():
@@ -144,7 +144,7 @@ def demo_aggregation_functions():
     manager.set_cell_value(13, 0, None, "=COUNTBLANK(D1:D6)")
     print(f"COUNTBLANK(Leere Zellen in D) = {manager.get_cell_value(13, 0)}")
     
-    print("\n✓ Alle erweiterten Aggregationsfunktionen funktionieren")
+    print("\n[OK] Alle erweiterten Aggregationsfunktionen funktionieren")
 
 
 def demo_text_functions():
@@ -210,7 +210,7 @@ def demo_text_functions():
     manager.set_cell_value(14, 0, None, "=EXACT(\"Hallo\", \"hallo\")")
     print(f"EXACT('Hallo', 'hallo') = {manager.get_cell_value(14, 0)}")
     
-    print("\n✓ Alle Textfunktionen funktionieren")
+    print("\n[OK] Alle Textfunktionen funktionieren")
 
 
 def demo_math_functions():
@@ -266,7 +266,7 @@ def demo_math_functions():
     manager.set_cell_value(10, 0, None, "=RANDBETWEEN(1, 100)")
     print(f"RANDBETWEEN(1, 100) = {manager.get_cell_value(10, 0)}")
     
-    print("\n✓ Alle mathematischen Funktionen funktionieren")
+    print("\n[OK] Alle mathematischen Funktionen funktionieren")
 
 
 def demo_check_functions():
@@ -300,7 +300,7 @@ def demo_check_functions():
     manager.set_cell_value(4, 1, None, "=ISTEXT(B1)")
     print(f"ISTEXT(123) = {manager.get_cell_value(4, 1)}")
     
-    print("\n✓ Alle Prüffunktionen funktionieren")
+    print("\n[OK] Alle Prüffunktionen funktionieren")
 
 
 def demo_date_functions():
@@ -333,7 +333,7 @@ def demo_date_functions():
     manager.set_cell_value(4, 0, None, "=EOMONTH(TODAY(), 0)")
     print(f"EOMONTH(TODAY(), 0) = {manager.get_cell_value(4, 0)}")
     
-    print("\n✓ Alle Datumsfunktionen funktionieren")
+    print("\n[OK] Alle Datumsfunktionen funktionieren")
 
 
 def demo_complex_example():
@@ -407,7 +407,7 @@ def demo_complex_example():
     print(f"Minimum: {manager.get_cell_value(10, 1):.2f} €")
     print(f"Summe: {manager.get_cell_value(11, 1):.2f} €")
     
-    print("\n✓ Komplexes Beispiel erfolgreich")
+    print("\n[OK] Komplexes Beispiel erfolgreich")
 
 
 def main():
@@ -447,16 +447,16 @@ def main():
         print("ZUSAMMENFASSUNG")
         print("=" * 80)
         
-        print("\n✅ ALLE 30+ NEUEN FUNKTIONEN ERFOLGREICH GETESTET")
+        print("\n[OK] ALLE 30+ NEUEN FUNKTIONEN ERFOLGREICH GETESTET")
         
         print("\nImplementierte Funktionskategorien:")
-        print("  1. ✓ Statistische Funktionen (9): MEDIAN, MODE, STDEV, VAR, PERCENTILE, QUARTILE, RANK, LARGE, SMALL")
-        print("  2. ✓ Erweiterte IF-Funktionen (3): IFS, SWITCH, CHOOSE")
-        print("  3. ✓ Erweiterte Aggregation (6): AVERAGEIF, AVERAGEIFS, MAXIFS, MINIFS, COUNTIFS, COUNTBLANK")
-        print("  4. ✓ Textfunktionen (14): LEFT, RIGHT, MID, LEN, LOWER, UPPER, PROPER, TRIM, FIND, SEARCH, SUBSTITUTE, REPLACE, TEXTJOIN, EXACT")
-        print("  5. ✓ Mathematische Funktionen (11): ABS, POWER, SQRT, MOD, PI, CEILING, FLOOR, INT, SIGN, RAND, RANDBETWEEN")
-        print("  6. ✓ Prüffunktionen (4): ISBLANK, ISNUMBER, ISTEXT, ISERROR")
-        print("  7. ✓ Datumsfunktionen (5): NOW, WEEKDAY, DATEDIF, EDATE, EOMONTH, NETWORKDAYS")
+        print("  1. [OK] Statistische Funktionen (9): MEDIAN, MODE, STDEV, VAR, PERCENTILE, QUARTILE, RANK, LARGE, SMALL")
+        print("  2. [OK] Erweiterte IF-Funktionen (3): IFS, SWITCH, CHOOSE")
+        print("  3. [OK] Erweiterte Aggregation (6): AVERAGEIF, AVERAGEIFS, MAXIFS, MINIFS, COUNTIFS, COUNTBLANK")
+        print("  4. [OK] Textfunktionen (14): LEFT, RIGHT, MID, LEN, LOWER, UPPER, PROPER, TRIM, FIND, SEARCH, SUBSTITUTE, REPLACE, TEXTJOIN, EXACT")
+        print("  5. [OK] Mathematische Funktionen (11): ABS, POWER, SQRT, MOD, PI, CEILING, FLOOR, INT, SIGN, RAND, RANDBETWEEN")
+        print("  6. [OK] Prüffunktionen (4): ISBLANK, ISNUMBER, ISTEXT, ISERROR")
+        print("  7. [OK] Datumsfunktionen (5): NOW, WEEKDAY, DATEDIF, EDATE, EOMONTH, NETWORKDAYS")
         
         print("\nGesamt: 52+ Excel-Funktionen verfügbar!")
         print("Die Excel-Integration ist jetzt fast 1:1 mit Excel kompatibel!")
@@ -468,7 +468,7 @@ def main():
         return 0
         
     except Exception as e:
-        print(f"\n❌ Fehler: {str(e)}")
+        print(f"\n[ERROR] Fehler: {str(e)}")
         import traceback
         traceback.print_exc()
         return 1

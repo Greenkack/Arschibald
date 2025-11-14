@@ -13,13 +13,13 @@ original_build_dynamic_data = None
 def debug_build_dynamic_data(project_data, analysis_results, company_info=None):
     """Wrapper um zu sehen was übergeben wird"""
     print(f"\n{'='*80}")
-    print(f"🔍 build_dynamic_data() AUFGERUFEN")
+    print(f"[SEARCH] build_dynamic_data() AUFGERUFEN")
     print(f"{'='*80}")
     
     # Prüfe project_data
     if project_data and isinstance(project_data, dict):
         project_details = project_data.get('project_details', {})
-        print(f"\n📦 project_data['project_details']:")
+        print(f"\n[PACKAGE] project_data['project_details']:")
         
         price_keys = [
             'final_offer_price_net',
@@ -32,15 +32,15 @@ def debug_build_dynamic_data(project_data, analysis_results, company_info=None):
         for key in price_keys:
             value = project_details.get(key)
             if value:
-                print(f"   ✅ {key}: {value}")
+                print(f"   [OK] {key}: {value}")
             else:
-                print(f"   ❌ {key}: FEHLT")
+                print(f"   [ERROR] {key}: FEHLT")
     else:
-        print(f"\n❌ project_data ist leer oder kein Dict!")
+        print(f"\n[ERROR] project_data ist leer oder kein Dict!")
     
     # Prüfe analysis_results
     if analysis_results and isinstance(analysis_results, dict):
-        print(f"\n📊 analysis_results:")
+        print(f"\n[CHART] analysis_results:")
         
         price_keys = [
             'total_investment_netto',
@@ -52,11 +52,11 @@ def debug_build_dynamic_data(project_data, analysis_results, company_info=None):
         for key in price_keys:
             value = analysis_results.get(key)
             if value:
-                print(f"   ✅ {key}: {value}")
+                print(f"   [OK] {key}: {value}")
             else:
-                print(f"   ❌ {key}: FEHLT")
+                print(f"   [ERROR] {key}: FEHLT")
     else:
-        print(f"\n❌ analysis_results ist leer oder kein Dict!")
+        print(f"\n[ERROR] analysis_results ist leer oder kein Dict!")
     
     print(f"\n{'='*80}")
     
@@ -126,7 +126,7 @@ company = {
 }
 
 print("\n" + "="*80)
-print("🚀 SIMULIERE MULTI-PDF GENERIERUNG")
+print("[LAUNCH] SIMULIERE MULTI-PDF GENERIERUNG")
 print("="*80)
 
 # Basis calc_results
@@ -137,7 +137,7 @@ base_calc_results = {
     'annual_savings': 1500.0,
 }
 
-print(f"\n📊 Basis calc_results:")
+print(f"\n[CHART] Basis calc_results:")
 print(f"   total_investment_netto: {base_calc_results['total_investment_netto']:,.2f} €")
 
 # Teste Firma 2 (sollte +5% haben)
@@ -149,8 +149,8 @@ print(f"{'='*80}")
 # 1. Preisstaffelung anwenden
 print(f"\n1️⃣  Wende Preisstaffelung an...")
 scaled_calc_results = generator.apply_price_scaling(company_index, base_settings, base_calc_results.copy())
-print(f"   ✅ total_investment_netto: {scaled_calc_results.get('total_investment_netto'):,.2f} €")
-print(f"   ✅ final_price_net: {scaled_calc_results.get('final_price_net')}")
+print(f"   [OK] total_investment_netto: {scaled_calc_results.get('total_investment_netto'):,.2f} €")
+print(f"   [OK] final_price_net: {scaled_calc_results.get('final_price_net')}")
 
 # 2. Prepare offer_data (wie in multi_offer_generator.py)
 print(f"\n2️⃣  Bereite offer_data vor...")
@@ -179,9 +179,9 @@ project_details["final_price_netto"] = net_price
 project_details["final_end_preis"] = net_price
 project_details["final_price_brutto"] = gross_price
 
-print(f"   ✅ final_offer_price_net: {net_price:,.2f} €")
-print(f"   ✅ final_price_with_provision: {net_price:,.2f} €")
-print(f"   ✅ final_price_brutto: {gross_price:,.2f} €")
+print(f"   [OK] final_offer_price_net: {net_price:,.2f} €")
+print(f"   [OK] final_price_with_provision: {net_price:,.2f} €")
+print(f"   [OK] final_price_brutto: {gross_price:,.2f} €")
 
 offer_data["project_details"] = project_details
 offer_data["calculation_results"] = scaled_calc_results
@@ -194,8 +194,8 @@ pdf_project_data = {
     "calculation_results": scaled_calc_results
 }
 
-print(f"   ✅ pdf_project_data erstellt")
-print(f"   ✅ pdf_project_data['project_details']['final_offer_price_net']: {pdf_project_data['project_details'].get('final_offer_price_net'):,.2f} €")
+print(f"   [OK] pdf_project_data erstellt")
+print(f"   [OK] pdf_project_data['project_details']['final_offer_price_net']: {pdf_project_data['project_details'].get('final_offer_price_net'):,.2f} €")
 
 # 5. Rufe build_dynamic_data auf
 print(f"\n5️⃣  Rufe build_dynamic_data auf...")
@@ -220,12 +220,12 @@ try:
     for key in price_result_keys:
         value = result.get(key)
         if value:
-            print(f"   ✅ {key}: {value}")
+            print(f"   [OK] {key}: {value}")
         else:
-            print(f"   ❌ {key}: FEHLT")
+            print(f"   [ERROR] {key}: FEHLT")
     
     print(f"\n{'='*80}")
-    print(f"🎯 FAZIT")
+    print(f"[TARGET] FAZIT")
     print(f"{'='*80}")
     
     final_price = result.get('final_end_preis_formatted', 'FEHLT')
@@ -233,10 +233,10 @@ try:
     print(f"Tatsächlicher Preis: {final_price}")
     
     if '21' in str(final_price) or '21000' in str(final_price):
-        print(f"\n✅ SUCCESS! Der Preis ist skaliert!")
+        print(f"\n[OK] SUCCESS! Der Preis ist skaliert!")
     else:
-        print(f"\n❌ FEHLER! Der Preis ist NICHT skaliert!")
-        print(f"\n🔍 ANALYSE:")
+        print(f"\n[ERROR] FEHLER! Der Preis ist NICHT skaliert!")
+        print(f"\n[SEARCH] ANALYSE:")
         print(f"   1. Preisstaffelung funktioniert: {scaled_calc_results.get('total_investment_netto')} €")
         print(f"   2. project_details gesetzt: {project_details.get('final_offer_price_net')} €")
         print(f"   3. pdf_project_data übergeben: {pdf_project_data['project_details'].get('final_offer_price_net')} €")
@@ -245,6 +245,6 @@ try:
         print(f"   → ODER: Die Werte werden später überschrieben!")
 
 except Exception as e:
-    print(f"\n❌ FEHLER: {e}")
+    print(f"\n[ERROR] FEHLER: {e}")
     import traceback
     traceback.print_exc()

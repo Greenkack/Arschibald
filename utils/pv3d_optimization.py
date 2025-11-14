@@ -174,7 +174,10 @@ def evaluate_configuration(
     target_modules = constraints.get("target_modules", estimated_modules)
     
     if target_modules > 0:
-        module_count_score = min(100.0, (estimated_modules / target_modules) * 100.0)
+        if target_modules != 0:
+            module_count_score = min(100.0, (estimated_modules / target_modules) * 100.0)
+        else:
+            module_count_score = 0.0
     else:
         module_count_score = 100.0
     
@@ -489,7 +492,10 @@ def _estimate_module_count(
         coverage_factor = 0.75  # Steil: weniger Abstand nötig
     
     # Basis-Modulanzahl
-    base_modules = int((roof_area / module_area) * coverage_factor)
+    if module_area != 0:
+        base_modules = int((roof_area / module_area) * coverage_factor)
+    else:
+        base_modules = 0.0
     
     # Anpassungen basierend auf Zusatzflächen
     if config.use_garage:
@@ -600,7 +606,10 @@ def _calculate_space_efficiency(
     
     # Berechne Nutzungsgrad
     if roof_area > 0:
-        efficiency = (used_area / roof_area) * 100.0
+        if roof_area != 0:
+            efficiency = (used_area / roof_area) * 100.0
+        else:
+            efficiency = 0.0
     else:
         efficiency = 0.0
     

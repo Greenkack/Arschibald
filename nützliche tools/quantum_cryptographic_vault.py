@@ -139,7 +139,7 @@ class QuantumVault:
         # Integritäts-Check
         if hashlib.sha3_512(encrypted_layer3).hexdigest(
         ) != vault_data['integrity_hash']:
-            raise ValueError("❌ Datenintegrität verletzt! Möglicher Angriff!")
+            raise ValueError("[ERROR] Datenintegrität verletzt! Möglicher Angriff!")
 
         # Layer 3 entschlüsseln (Custom Stream)
         salt3 = base64.b64decode(vault_data['layers']['layer3']['salt'])
@@ -200,7 +200,7 @@ class QuantumVault:
         with open(self.metadata_file, 'w') as f:
             json.dump(metadata, f)
 
-        print("✅ Geheimnis sicher gespeichert (Triple-Layer Quantum Encryption)")
+        print("[OK] Geheimnis sicher gespeichert (Triple-Layer Quantum Encryption)")
 
     def retrieve_secret(self, secret_name: str, password: str) -> str:
         """Lädt Geheimnisse aus dem Quantum Vault"""
@@ -209,15 +209,15 @@ class QuantumVault:
         vault = self.load_vault()
 
         if secret_name not in vault:
-            raise ValueError(f"❌ Geheimnis '{secret_name}' nicht gefunden!")
+            raise ValueError(f"[ERROR] Geheimnis '{secret_name}' nicht gefunden!")
 
         # Entschlüssele
         try:
             decrypted_data = self.quantum_decrypt(vault[secret_name], password)
-            print("✅ Geheimnis erfolgreich entschlüsselt")
+            print("[OK] Geheimnis erfolgreich entschlüsselt")
             return decrypted_data
         except Exception as e:
-            print(f"❌ Entschlüsselung fehlgeschlagen: {e}")
+            print(f"[ERROR] Entschlüsselung fehlgeschlagen: {e}")
             raise ValueError("Falsches Passwort oder korrupte Daten!")
 
     def load_vault(self) -> dict:

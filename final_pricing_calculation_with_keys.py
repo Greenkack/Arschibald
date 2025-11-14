@@ -139,7 +139,7 @@ def create_final_pricing_calculation():
             ensure_ascii=False,
             indent=2).encode('utf-8')
 
-        print(f"\n📄 PDF BYTES ERSTELLT: {len(pdf_bytes)} bytes")
+        print(f"\n[FILE] PDF BYTES ERSTELLT: {len(pdf_bytes)} bytes")
 
         # SESSION STATE FORMAT FÜR SOLAR CALCULATOR
         session_state_data = {
@@ -166,7 +166,7 @@ def create_final_pricing_calculation():
         return generated_keys, pdf_bytes, session_state_data
 
     except Exception as e:
-        print(f"❌ FEHLER: {e}")
+        print(f"[ERROR] FEHLER: {e}")
         return None, None, None
 
 
@@ -194,25 +194,25 @@ def create_pdf_placeholder_mapping():
 
 
 if __name__ == "__main__":
-    print("🎯 FINALE PREISBERECHNUNG MIT ALLEN KEYS")
+    print("[TARGET] FINALE PREISBERECHNUNG MIT ALLEN KEYS")
     print("=" * 60)
 
     # Berechnung erstellen
     keys, pdf_bytes, session_data = create_final_pricing_calculation()
 
     if keys:
-        print("\n✅ BERECHNUNG ERFOLGREICH ERSTELLT!")
+        print("\n[OK] BERECHNUNG ERFOLGREICH ERSTELLT!")
 
         # PDF Platzhalter Mapping
         mapping = create_pdf_placeholder_mapping()
 
-        print("\n📊 SESSION STATE DATA FÜR SOLAR CALCULATOR:")
+        print("\n[CHART] SESSION STATE DATA FÜR SOLAR CALCULATOR:")
         print("=" * 50)
         if session_data:
             for key, value in session_data.items():
                 if key != "formatted":
                     print(f"{key}: {value}")
 
-        print("\n🎯 BEREIT FÜR PDF INTEGRATION!")
+        print("\n[TARGET] BEREIT FÜR PDF INTEGRATION!")
     else:
-        print("\n❌ FEHLER BEI DER ERSTELLUNG!")
+        print("\n[ERROR] FEHLER BEI DER ERSTELLUNG!")

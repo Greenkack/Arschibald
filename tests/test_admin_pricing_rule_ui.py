@@ -184,7 +184,7 @@ class TestAdminPricingRuleUI:
         render_discount_rules_tab(self.mock_pricing_engine)
 
         # Verify UI elements
-        mock_st.subheader.assert_called_with("💰 Rabatt-Regeln")
+        mock_st.subheader.assert_called_with("[MONEY] Rabatt-Regeln")
         mock_st.form.assert_called()
 
         # Verify pricing engine was called
@@ -220,7 +220,7 @@ class TestAdminPricingRuleUI:
         render_surcharge_rules_tab(self.mock_pricing_engine)
 
         # Verify UI elements
-        mock_st.subheader.assert_called_with("📈 Zuschlag-Regeln")
+        mock_st.subheader.assert_called_with("[STATS] Zuschlag-Regeln")
         mock_st.form.assert_called()
 
         # Verify pricing engine was called
@@ -256,7 +256,7 @@ class TestAdminPricingRuleUI:
         render_accessory_rules_tab(self.mock_pricing_engine)
 
         # Verify UI elements
-        mock_st.subheader.assert_called_with("🔧 Zubehör-Regeln")
+        mock_st.subheader.assert_called_with("[TOOL] Zubehör-Regeln")
         mock_st.form.assert_called()
 
         # Verify pricing engine was called

@@ -205,7 +205,7 @@ def clear_cache():
     if 'performance_settings' in st.session_state:
         del st.session_state['performance_settings']
     
-    st.success("✅ Cache erfolgreich geleert!")
+    st.success("[OK] Cache erfolgreich geleert!")
 
 
 def get_cache_stats() -> dict:

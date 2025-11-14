@@ -12,7 +12,7 @@ from intro_screen import load_intro_settings, save_intro_settings
 def render_intro_settings_tab():
     """Rendert den Admin-Tab für Intro-Einstellungen"""
 
-    st.markdown("### 🎨 Intro-Bildschirm Einstellungen")
+    st.markdown("### [DESIGN] Intro-Bildschirm Einstellungen")
     st.markdown(
         "Konfigurieren Sie den Willkommensbildschirm, der beim Start der Anwendung angezeigt wird.")
 
@@ -203,7 +203,7 @@ def render_intro_settings_tab():
 
                         image_left_path = str(left_image_path_obj)
                         st.success(
-                            f"✅ Linkes Bild hochgeladen: {left_image_filename}")
+                            f"[OK] Linkes Bild hochgeladen: {left_image_filename}")
 
                 # Vorschau linkes Bild
                 if Path(image_left_path).exists():
@@ -213,7 +213,7 @@ def render_intro_settings_tab():
                         width=150)
                 else:
                     st.info(
-                        f"ℹ️ Linkes Bild nicht gefunden: {image_left_path}")
+                        f"[INFO] Linkes Bild nicht gefunden: {image_left_path}")
 
                 st.markdown("---")
 
@@ -253,7 +253,7 @@ def render_intro_settings_tab():
 
                         image_right_path = str(right_image_path_obj)
                         st.success(
-                            f"✅ Rechtes Bild hochgeladen: {right_image_filename}")
+                            f"[OK] Rechtes Bild hochgeladen: {right_image_filename}")
 
                 # Vorschau rechtes Bild
                 if Path(image_right_path).exists():
@@ -263,7 +263,7 @@ def render_intro_settings_tab():
                         width=150)
                 else:
                     st.info(
-                        f"ℹ️ Rechtes Bild nicht gefunden: {image_right_path}")
+                        f"[INFO] Rechtes Bild nicht gefunden: {image_right_path}")
 
                 st.markdown("---")
                 st.markdown("##### 👁️ Layout-Vorschau (3-Bilder-Ansicht)")
@@ -300,7 +300,7 @@ def render_intro_settings_tab():
                         st.info("Rechtes Bild\n(150px)")
 
                 st.caption(
-                    "💡 So werden die Bilder im Intro-Bildschirm angezeigt (mit Float-Animation)")
+                    "[IDEA] So werden die Bilder im Intro-Bildschirm angezeigt (mit Float-Animation)")
             else:
                 # Standardwerte wenn Seitenbilder deaktiviert
                 image_left_path = settings.get(
@@ -395,8 +395,8 @@ def render_intro_settings_tab():
                 'description': description}
 
             if save_intro_settings(new_settings):
-                st.success("✅ Einstellungen erfolgreich gespeichert!")
-                st.info("ℹ️ Die Änderungen werden beim nächsten App-Start wirksam.")
+                st.success("[OK] Einstellungen erfolgreich gespeichert!")
+                st.info("[INFO] Die Änderungen werden beim nächsten App-Start wirksam.")
 
                 # Zeige gespeicherte Bildpfade an
                 if media_type == 'image':
@@ -406,7 +406,7 @@ def render_intro_settings_tab():
                         st.code(f"Linkes Bild: {image_left_path}")
                         st.code(f"Rechtes Bild: {image_right_path}")
             else:
-                st.error("❌ Fehler beim Speichern der Einstellungen")
+                st.error("[ERROR] Fehler beim Speichern der Einstellungen")
 
         if reset_button:
             st.session_state['intro_completed'] = False

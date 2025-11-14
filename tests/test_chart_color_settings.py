@@ -38,8 +38,8 @@ def test_global_chart_colors():
         for color in visualization_settings['global_chart_colors']
     )
 
-    print("✓ Globale Farbeinstellungen Struktur korrekt")
-    print(f"✓ 6 Farben konfiguriert: "
+    print("[OK] Globale Farbeinstellungen Struktur korrekt")
+    print(f"[OK] 6 Farben konfiguriert: "
           f"{visualization_settings['global_chart_colors']}")
 
     return True
@@ -76,9 +76,9 @@ def test_color_palette_library():
             c.startswith('#') for c in colors
         ), f"All colors in {name} should be hex codes"
 
-    print(f"✓ {len(palettes)} Farbpaletten definiert")
-    print(f"✓ Paletten: {', '.join(palettes.keys())}")
-    print("✓ Alle Paletten haben 6 Farben")
+    print(f"[OK] {len(palettes)} Farbpaletten definiert")
+    print(f"[OK] Paletten: {', '.join(palettes.keys())}")
+    print("[OK] Alle Paletten haben 6 Farben")
 
     return True
 
@@ -131,8 +131,8 @@ def test_individual_chart_config():
     assert len(chart_categories) == 6, "Should have 6 categories"
 
     total_charts = sum(len(charts) for charts in chart_categories.values())
-    print(f"✓ {len(chart_categories)} Kategorien definiert")
-    print(f"✓ {total_charts} Diagramme insgesamt")
+    print(f"[OK] {len(chart_categories)} Kategorien definiert")
+    print(f"[OK] {total_charts} Diagramme insgesamt")
 
     # Test individual chart configuration structure
     individual_charts = {
@@ -152,8 +152,8 @@ def test_individual_chart_config():
             assert 'custom_colors' in config
             assert len(config['custom_colors']) >= 3
 
-    print("✓ Individuelle Konfiguration Struktur korrekt")
-    print(f"✓ {len(individual_charts)} Diagramme konfiguriert (Beispiel)")
+    print("[OK] Individuelle Konfiguration Struktur korrekt")
+    print(f"[OK] {len(individual_charts)} Diagramme konfiguriert (Beispiel)")
 
     return True
 
@@ -182,8 +182,8 @@ def test_visualization_settings_structure():
     assert 'global_chart_colors' in visualization_settings
     assert 'individual_chart_colors' in visualization_settings
 
-    print("✓ visualization_settings Struktur vollständig")
-    print("✓ Kann in admin_settings gespeichert werden")
+    print("[OK] visualization_settings Struktur vollständig")
+    print("[OK] Kann in admin_settings gespeichert werden")
 
     return True
 
@@ -218,7 +218,7 @@ def run_all_tests():
     total = len(results)
 
     for name, result, error in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = "[OK] PASS" if result else "[ERROR] FAIL"
         print(f"{status}: {name}")
         if error:
             print(f"  Error: {error}")
@@ -229,7 +229,7 @@ def run_all_tests():
         print("\n🎉 Alle Tests erfolgreich!")
         return True
     else:
-        print("\n❌ Einige Tests fehlgeschlagen")
+        print("\n[ERROR] Einige Tests fehlgeschlagen")
         return False
 
 

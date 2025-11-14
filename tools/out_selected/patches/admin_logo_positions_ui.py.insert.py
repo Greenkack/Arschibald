@@ -26,7 +26,7 @@ def render_logo_position_settings(
         current_positions = DEFAULT_POSITIONS.copy()
 
     # Info-Box
-    with st.expander("ℹ️ Hilfe zu Logo-Positionen"):
+    with st.expander("[INFO] Hilfe zu Logo-Positionen"):
         st.markdown("""
         **Koordinatensystem:**
         - **X**: Horizontale Position (0 = links, 595 = rechts für A4)
@@ -50,7 +50,7 @@ def render_logo_position_settings(
     for category, default_pos in DEFAULT_POSITIONS.items():
         current_pos = current_positions.get(category, default_pos.copy())
 
-        st.subheader(f"🔧 {default_pos['label']}")
+        st.subheader(f"[TOOL] {default_pos['label']}")
 
         col1, col2, col3, col4 = st.columns(4)
 
@@ -105,7 +105,7 @@ def render_logo_position_settings(
 
         # Vorschau der Koordinaten
         st.caption(
-            f"📐 Bereich: ({
+            f"[DESIGN] Bereich: ({
                 x:.0f}, {
                 y:.0f}) bis ({
                 x +
@@ -124,12 +124,12 @@ def render_logo_position_settings(
                 success = save_admin_setting_func(
                     "pdf_logo_positions", edited_positions)
                 if success:
-                    st.success("✅ Logo-Positionen erfolgreich gespeichert!")
+                    st.success("[OK] Logo-Positionen erfolgreich gespeichert!")
                     st.rerun()
                 else:
-                    st.error("❌ Fehler beim Speichern der Positionen!")
+                    st.error("[ERROR] Fehler beim Speichern der Positionen!")
             except Exception as e:
-                st.error(f"❌ Speicher-Fehler: {e}")
+                st.error(f"[ERROR] Speicher-Fehler: {e}")
 
     with col_reset:
         if st.button("🔄 Auf Standard zurücksetzen"):
@@ -137,12 +137,12 @@ def render_logo_position_settings(
                 success = save_admin_setting_func(
                     "pdf_logo_positions", DEFAULT_POSITIONS.copy())
                 if success:
-                    st.success("✅ Positionen auf Standard zurückgesetzt!")
+                    st.success("[OK] Positionen auf Standard zurückgesetzt!")
                     st.rerun()
                 else:
-                    st.error("❌ Fehler beim Zurücksetzen!")
+                    st.error("[ERROR] Fehler beim Zurücksetzen!")
             except Exception as e:
-                st.error(f"❌ Reset-Fehler: {e}")
+                st.error(f"[ERROR] Reset-Fehler: {e}")
 
     with col_preview:
         if st.button("👁️ Koordinaten-Übersicht"):
@@ -150,7 +150,7 @@ def render_logo_position_settings(
 
     # Koordinaten-Übersicht
     if st.session_state.get('show_logo_coords_preview', False):
-        st.subheader("📊 Koordinaten-Übersicht")
+        st.subheader("[CHART] Koordinaten-Übersicht")
 
         # Tabelle mit allen Positionen
         import pandas as pd
@@ -171,10 +171,10 @@ def render_logo_position_settings(
         st.dataframe(df, use_container_width=True)
 
         # JSON-Export
-        with st.expander("📄 JSON-Export"):
+        with st.expander("[FILE] JSON-Export"):
             st.code(json.dumps(edited_positions, indent=2))
 
-        if st.button("❌ Übersicht schließen"):
+        if st.button("[ERROR] Übersicht schließen"):
             st.session_state['show_logo_coords_preview'] = False
             st.rerun()
 # --- DEF BLOCK END ---

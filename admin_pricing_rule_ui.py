@@ -169,7 +169,7 @@ def render_pricing_rule_management_ui():
     st.markdown("Verwalten Sie Rabatte, Zuschläge und Zubehör-Preisregeln.")
 
     if not PRICING_AVAILABLE:
-        st.warning("⚠️ Pricing-Module nicht verfügbar. UI läuft im Test-Modus.")
+        st.warning("[WARNING] Pricing-Module nicht verfügbar. UI läuft im Test-Modus.")
 
     # Initialize pricing modification engine
     try:
@@ -181,9 +181,9 @@ def render_pricing_rule_management_ui():
 
     # Create tabs for different rule management areas
     tab1, tab2, tab3, tab4 = st.tabs([
-        "💰 Rabatt-Regeln",
-        "📈 Zuschlag-Regeln",
-        "🔧 Zubehör-Regeln",
+        "[MONEY] Rabatt-Regeln",
+        "[STATS] Zuschlag-Regeln",
+        "[TOOL] Zubehör-Regeln",
         "🧪 Regel-Test"
     ])
 
@@ -203,7 +203,7 @@ def render_pricing_rule_management_ui():
 def render_discount_rules_tab(pricing_engine: PricingModificationEngine):
     """Render the discount rules configuration tab"""
 
-    st.subheader("💰 Rabatt-Regeln")
+    st.subheader("[MONEY] Rabatt-Regeln")
     st.markdown(
         "Konfigurieren Sie Rabattregeln mit Bedingungen und Prioritäten.")
 
@@ -212,7 +212,7 @@ def render_discount_rules_tab(pricing_engine: PricingModificationEngine):
         st.markdown("**Aktuelle Rabatt-Regeln:**")
 
         for i, discount in enumerate(pricing_engine.discounts):
-            with st.expander(f"💰 {discount.description or f'Rabatt {i + 1}'}", expanded=False):
+            with st.expander(f"[MONEY] {discount.description or f'Rabatt {i + 1}'}", expanded=False):
                 col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 1, 1])
 
                 col1.metric(
@@ -223,7 +223,7 @@ def render_discount_rules_tab(pricing_engine: PricingModificationEngine):
                         discount.discount_value:.2f}{
                         '%' if discount.discount_type == 'percentage' else '€'}")
                 col3.metric("Priorität", discount.priority)
-                col4.metric("Aktiv", "✅" if discount.is_active else "❌")
+                col4.metric("Aktiv", "[OK]" if discount.is_active else "[ERROR]")
 
                 # Show conditions if any
                 if discount.conditions:
@@ -239,13 +239,13 @@ def render_discount_rules_tab(pricing_engine: PricingModificationEngine):
                     st.info(f"Max. Rabatt: {discount.maximum_discount:.2f}€")
 
                 if col5.button(
-                    "🗑️",
+                    "[DELETE]",
                     key=f"delete_discount_{i}",
                         help="Rabatt löschen"):
                     pricing_engine.discounts.pop(i)
                     st.rerun()
     else:
-        st.info("ℹ️ Keine Rabatt-Regeln konfiguriert.")
+        st.info("[INFO] Keine Rabatt-Regeln konfiguriert.")
 
     st.markdown("---")
 
@@ -348,19 +348,19 @@ def render_discount_rules_tab(pricing_engine: PricingModificationEngine):
 
                 pricing_engine.add_discount(config)
                 st.success(
-                    f"✅ Rabatt-Regel '{discount_description}' erfolgreich hinzugefügt!")
+                    f"[OK] Rabatt-Regel '{discount_description}' erfolgreich hinzugefügt!")
                 st.rerun()
 
             except json.JSONDecodeError:
-                st.error("❌ Ungültiges JSON-Format in den Bedingungen")
+                st.error("[ERROR] Ungültiges JSON-Format in den Bedingungen")
             except Exception as e:
-                st.error(f"❌ Fehler: {e}")
+                st.error(f"[ERROR] Fehler: {e}")
 
 
 def render_surcharge_rules_tab(pricing_engine: PricingModificationEngine):
     """Render the surcharge rules configuration tab"""
 
-    st.subheader("📈 Zuschlag-Regeln")
+    st.subheader("[STATS] Zuschlag-Regeln")
     st.markdown(
         "Konfigurieren Sie Zuschlagsregeln mit Bedingungen und Prioritäten.")
 
@@ -369,7 +369,7 @@ def render_surcharge_rules_tab(pricing_engine: PricingModificationEngine):
         st.markdown("**Aktuelle Zuschlag-Regeln:**")
 
         for i, surcharge in enumerate(pricing_engine.surcharges):
-            with st.expander(f"📈 {surcharge.description or f'Zuschlag {i + 1}'}", expanded=False):
+            with st.expander(f"[STATS] {surcharge.description or f'Zuschlag {i + 1}'}", expanded=False):
                 col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 1, 1])
 
                 col1.metric(
@@ -380,7 +380,7 @@ def render_surcharge_rules_tab(pricing_engine: PricingModificationEngine):
                         surcharge.surcharge_value:.2f}{
                         '%' if surcharge.surcharge_type == 'percentage' else '€'}")
                 col3.metric("Priorität", surcharge.priority)
-                col4.metric("Aktiv", "✅" if surcharge.is_active else "❌")
+                col4.metric("Aktiv", "[OK]" if surcharge.is_active else "[ERROR]")
 
                 # Show conditions if any
                 if surcharge.conditions:
@@ -398,13 +398,13 @@ def render_surcharge_rules_tab(pricing_engine: PricingModificationEngine):
                             surcharge.maximum_surcharge:.2f}€")
 
                 if col5.button(
-                    "🗑️",
+                    "[DELETE]",
                     key=f"delete_surcharge_{i}",
                         help="Zuschlag löschen"):
                     pricing_engine.surcharges.pop(i)
                     st.rerun()
     else:
-        st.info("ℹ️ Keine Zuschlag-Regeln konfiguriert.")
+        st.info("[INFO] Keine Zuschlag-Regeln konfiguriert.")
 
     st.markdown("---")
 
@@ -513,19 +513,19 @@ def render_surcharge_rules_tab(pricing_engine: PricingModificationEngine):
 
                 pricing_engine.add_surcharge(config)
                 st.success(
-                    f"✅ Zuschlag-Regel '{surcharge_description}' erfolgreich hinzugefügt!")
+                    f"[OK] Zuschlag-Regel '{surcharge_description}' erfolgreich hinzugefügt!")
                 st.rerun()
 
             except json.JSONDecodeError:
-                st.error("❌ Ungültiges JSON-Format in den Bedingungen")
+                st.error("[ERROR] Ungültiges JSON-Format in den Bedingungen")
             except Exception as e:
-                st.error(f"❌ Fehler: {e}")
+                st.error(f"[ERROR] Fehler: {e}")
 
 
 def render_accessory_rules_tab(pricing_engine: PricingModificationEngine):
     """Render the accessory rules configuration tab"""
 
-    st.subheader("🔧 Zubehör-Regeln")
+    st.subheader("[TOOL] Zubehör-Regeln")
     st.markdown("Verwalten Sie Zubehör-Artikel und deren Preise.")
 
     # Display current accessories
@@ -533,25 +533,25 @@ def render_accessory_rules_tab(pricing_engine: PricingModificationEngine):
         st.markdown("**Verfügbare Zubehör-Artikel:**")
 
         for i, accessory in enumerate(pricing_engine.accessories):
-            with st.expander(f"🔧 {accessory.name}", expanded=False):
+            with st.expander(f"[TOOL] {accessory.name}", expanded=False):
                 col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 1, 1])
 
                 col1.metric("Preis", f"{accessory.price:.2f}€")
                 col2.metric("Menge", accessory.quantity)
                 col3.metric("Kategorie", accessory.category)
-                col4.metric("Optional", "✅" if accessory.is_optional else "❌")
+                col4.metric("Optional", "[OK]" if accessory.is_optional else "[ERROR]")
 
                 if accessory.description:
                     st.markdown(f"**Beschreibung:** {accessory.description}")
 
                 if col5.button(
-                    "🗑️",
+                    "[DELETE]",
                     key=f"delete_accessory_{i}",
                         help="Zubehör löschen"):
                     pricing_engine.accessories.pop(i)
                     st.rerun()
     else:
-        st.info("ℹ️ Keine Zubehör-Artikel konfiguriert.")
+        st.info("[INFO] Keine Zubehör-Artikel konfiguriert.")
 
     st.markdown("---")
 
@@ -633,11 +633,11 @@ def render_accessory_rules_tab(pricing_engine: PricingModificationEngine):
 
                 pricing_engine.add_accessory(config)
                 st.success(
-                    f"✅ Zubehör '{accessory_name}' erfolgreich hinzugefügt!")
+                    f"[OK] Zubehör '{accessory_name}' erfolgreich hinzugefügt!")
                 st.rerun()
 
             except Exception as e:
-                st.error(f"❌ Fehler: {e}")
+                st.error(f"[ERROR] Fehler: {e}")
 
 
 def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
@@ -701,7 +701,7 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
             )
 
             # Display results
-            st.markdown("**📊 Test-Ergebnisse:**")
+            st.markdown("**[CHART] Test-Ergebnisse:**")
 
             # Summary metrics
             col1, col2, col3, col4 = st.columns(4)
@@ -723,7 +723,7 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
                         context=context
                     )
 
-                    st.markdown("**🔍 Detaillierte Aufschlüsselung:**")
+                    st.markdown("**[SEARCH] Detaillierte Aufschlüsselung:**")
 
                     with st.expander("Berechnungsschritte anzeigen", expanded=False):
                         steps = [
@@ -742,11 +742,11 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
                         validation = breakdown.get('validation_checks', {})
                         if validation.get('prevented_negative'):
                             st.warning(
-                                "⚠️ Negativer Preis wurde auf 0€ korrigiert")
+                                "[WARNING] Negativer Preis wurde auf 0€ korrigiert")
 
                         if validation.get('final_amount_valid'):
                             st.success(
-                                "✅ Preisberechnung erfolgreich validiert")
+                                "[OK] Preisberechnung erfolgreich validiert")
 
                 except Exception as e:
                     st.warning(
@@ -772,7 +772,7 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
                     df_modifications = pd.DataFrame(modifications_data)
                     st.dataframe(df_modifications, use_container_width=True)
             else:
-                st.info("ℹ️ Keine Regeln angewendet")
+                st.info("[INFO] Keine Regeln angewendet")
 
             # Dynamic keys
             if 'dynamic_keys' in result and result['dynamic_keys']:
@@ -781,14 +781,14 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
                         st.text(f"{key}: {value}")
 
         except json.JSONDecodeError:
-            st.error("❌ Ungültiges JSON-Format im Kontext")
+            st.error("[ERROR] Ungültiges JSON-Format im Kontext")
         except Exception as e:
-            st.error(f"❌ Fehler beim Testen: {e}")
+            st.error(f"[ERROR] Fehler beim Testen: {e}")
             st.error(f"Details: {traceback.format_exc()}")
 
     # Rule priority preview
     st.markdown("---")
-    st.markdown("**📊 Regel-Prioritäten:**")
+    st.markdown("**[CHART] Regel-Prioritäten:**")
 
     # Show discount priorities
     if hasattr(pricing_engine, 'discounts') and pricing_engine.discounts:
@@ -806,7 +806,7 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
                     "Wert": f"{
                         discount.discount_value:.2f}{
                         '%' if discount.discount_type == 'percentage' else '€'}",
-                    "Aktiv": "✅" if discount.is_active else "❌"})
+                    "Aktiv": "[OK]" if discount.is_active else "[ERROR]"})
 
         if discount_data:
             df_discounts = pd.DataFrame(discount_data)
@@ -828,7 +828,7 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
                     "Wert": f"{
                         surcharge.surcharge_value:.2f}{
                         '%' if surcharge.surcharge_type == 'percentage' else '€'}",
-                    "Aktiv": "✅" if surcharge.is_active else "❌"})
+                    "Aktiv": "[OK]" if surcharge.is_active else "[ERROR]"})
 
         if surcharge_data:
             df_surcharges = pd.DataFrame(surcharge_data)

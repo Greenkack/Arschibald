@@ -15,7 +15,7 @@ def test_monitor_directly():
         print("\n[1/5] Testing module import...")
         sys.path.insert(0, '.')
         from db_performance_monitor import create_performance_monitor
-        print("✅ Module imported successfully")
+        print("[OK] Module imported successfully")
 
         # Test 2: Create monitor
         print("\n[2/5] Creating performance monitor...")
@@ -23,7 +23,7 @@ def test_monitor_directly():
             slow_query_threshold=0.5,
             enable_recommendations=True
         )
-        print("✅ Monitor created successfully")
+        print("[OK] Monitor created successfully")
 
         # Test 3: Record queries
         print("\n[3/5] Recording test queries...")
@@ -37,7 +37,7 @@ def test_monitor_directly():
         for query, duration in test_queries:
             monitor.record_query(query, duration)
 
-        print(f"✅ Recorded {len(test_queries)} queries")
+        print(f"[OK] Recorded {len(test_queries)} queries")
 
         # Test 4: Get statistics
         print("\n[4/5] Getting statistics...")
@@ -50,7 +50,7 @@ def test_monitor_directly():
 
         assert stats.total_queries == 4, "Query count mismatch"
         assert stats.slow_queries == 1, "Slow query count mismatch"
-        print("✅ Statistics correct")
+        print("[OK] Statistics correct")
 
         # Test 5: Get slow queries
         print("\n[5/5] Getting slow queries...")
@@ -63,7 +63,7 @@ def test_monitor_directly():
             print(f"   Duration: {sq.duration:.2f}s")
 
         assert len(slow_queries) == 1, "Slow query list mismatch"
-        print("✅ Slow query detection works")
+        print("[OK] Slow query detection works")
 
         # Success
         print("\n" + "=" * 60)
@@ -72,7 +72,7 @@ def test_monitor_directly():
         return True
 
     except Exception as e:
-        print(f"\n❌ TEST FAILED: {e}")
+        print(f"\n[ERROR] TEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -86,7 +86,7 @@ def test_basic_functionality():
 
     try:
         # Simple inline test
-        print("\n✓ Testing dataclass creation...")
+        print("\n[OK] Testing dataclass creation...")
         from datetime import datetime
 
         # Test that we can create basic objects
@@ -98,20 +98,20 @@ def test_basic_functionality():
 
         print(f"   Query: {test_data['query']}")
         print(f"   Duration: {test_data['duration']}s")
-        print("✅ Basic data structures work")
+        print("[OK] Basic data structures work")
 
         # Test threshold logic
-        print("\n✓ Testing threshold logic...")
+        print("\n[OK] Testing threshold logic...")
         slow_threshold = 1.0
         is_slow = test_data['duration'] > slow_threshold
         print(
             f"   Duration {
                 test_data['duration']}s vs threshold {slow_threshold}s")
         print(f"   Is slow: {is_slow}")
-        print("✅ Threshold logic works")
+        print("[OK] Threshold logic works")
 
         # Test statistics calculation
-        print("\n✓ Testing statistics calculation...")
+        print("\n[OK] Testing statistics calculation...")
         query_times = [0.1, 0.2, 0.3, 0.4, 0.5]
         avg_time = sum(query_times) / len(query_times)
         min_time = min(query_times)
@@ -120,15 +120,15 @@ def test_basic_functionality():
         print(f"   Average: {avg_time:.3f}s")
         print(f"   Min: {min_time:.3f}s")
         print(f"   Max: {max_time:.3f}s")
-        print("✅ Statistics calculation works")
+        print("[OK] Statistics calculation works")
 
         print("\n" + "=" * 60)
-        print("✅ BASIC FUNCTIONALITY TEST PASSED")
+        print("[OK] BASIC FUNCTIONALITY TEST PASSED")
         print("=" * 60)
         return True
 
     except Exception as e:
-        print(f"\n❌ BASIC TEST FAILED: {e}")
+        print(f"\n[ERROR] BASIC TEST FAILED: {e}")
         return False
 
 
@@ -157,15 +157,15 @@ def test_file_exists():
     all_exist = True
     for filename in files_to_check:
         exists = os.path.exists(filename)
-        status = "✅" if exists else "❌"
+        status = "[OK]" if exists else "[ERROR]"
         print(f"{status} {filename}")
         if not exists:
             all_exist = False
 
     if all_exist:
-        print("\n✅ ALL FILES EXIST")
+        print("\n[OK] ALL FILES EXIST")
     else:
-        print("\n⚠️  SOME FILES MISSING")
+        print("\n[WARNING]  SOME FILES MISSING")
 
     return all_exist
 
@@ -199,7 +199,7 @@ def main():
     total = len(results)
 
     for test_name, result in results:
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[OK] PASS" if result else "[ERROR] FAIL"
         print(f"{status}: {test_name}")
 
     print("\n" + "=" * 70)
@@ -209,7 +209,7 @@ def main():
         print("🎉 ALL TESTS PASSED!")
         print("=" * 70)
         return 0
-    print("⚠️  SOME TESTS FAILED")
+    print("[WARNING]  SOME TESTS FAILED")
     print("=" * 70)
     return 1
 

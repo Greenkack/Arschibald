@@ -53,7 +53,7 @@ def setup_demo_matrix():
         # Setze als aktiv
         set_active_matrix(matrix_id)
         
-        st.success("✓ Demo-Matrix erstellt!")
+        st.success("[OK] Demo-Matrix erstellt!")
         return matrix_id
     
     return matrices[0]['id']
@@ -161,7 +161,7 @@ def demo_inline_ui():
         submitted = st.form_submit_button("Speichern", type="primary")
         
         if submitted:
-            st.success("✓ Produkt gespeichert!")
+            st.success("[OK] Produkt gespeichert!")
             st.json(product_data)
 
 
@@ -204,7 +204,7 @@ def demo_matrix_comparison():
                 price = modules * 400 + storage * 800  # Niedrigere Basis-Preise
                 set_cell_value(matrix2_id, row_id, col_id, float(price))
         
-        st.success("✓ Demo-Matrizen erstellt!")
+        st.success("[OK] Demo-Matrizen erstellt!")
         st.rerun()
     
     # Zeige Vergleich
@@ -213,7 +213,7 @@ def demo_matrix_comparison():
     st.write(f"**{len(matrices)} Matrizen verfügbar:**")
     
     for matrix in matrices:
-        with st.expander(f"📊 {matrix['name']}", expanded=False):
+        with st.expander(f"[CHART] {matrix['name']}", expanded=False):
             col1, col2, col3 = st.columns(3)
             
             with col1:
@@ -221,11 +221,11 @@ def demo_matrix_comparison():
                 st.write(f"**Modus:** {matrix['pricing_mode']}")
             
             with col2:
-                st.write(f"**Aktiv:** {'✓' if matrix['is_active'] else '✗'}")
-                st.write(f"**Zubehör:** {'✓' if matrix['include_accessories'] else '✗'}")
+                st.write(f"**Aktiv:** {'[OK]' if matrix['is_active'] else '[ERROR]'}")
+                st.write(f"**Zubehör:** {'[OK]' if matrix['include_accessories'] else '[ERROR]'}")
             
             with col3:
-                st.write(f"**Sonstiges:** {'✓' if matrix['include_misc'] else '✗'}")
+                st.write(f"**Sonstiges:** {'[OK]' if matrix['include_misc'] else '[ERROR]'}")
             
             # Beispiel-Berechnung
             from excel.excel_product_pricing import calculate_product_price_from_matrix
@@ -260,7 +260,7 @@ def demo_cleanup():
             with col2:
                 if st.button("Löschen", key=f"delete_{matrix['id']}"):
                     if delete_matrix(matrix['id']):
-                        st.success(f"✓ Matrix {matrix['id']} gelöscht")
+                        st.success(f"[OK] Matrix {matrix['id']} gelöscht")
                         st.rerun()
     else:
         st.info("Keine Demo-Matrizen vorhanden.")
@@ -270,11 +270,11 @@ def main():
     """Hauptfunktion"""
     st.set_page_config(
         page_title="Product Pricing UI Demo",
-        page_icon="💰",
+        page_icon="[MONEY]",
         layout="wide"
     )
     
-    st.title("💰 Product Pricing UI - Demo")
+    st.title("[MONEY] Product Pricing UI - Demo")
     st.markdown("Demonstriert die Verwendung der Produktpreis-Konfigurations-UI")
     
     # Sidebar Navigation

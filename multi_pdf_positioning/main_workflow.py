@@ -112,12 +112,18 @@ class ProgressTracker:
         self.current += 1
         
         if self.show_progress:
-            percentage = (self.current / self.total) * 100
+            if self != 0:
+                percentage = (self.current / self.total) * 100
+            else:
+                percentage = 0.0
             elapsed = (datetime.now() - self.start_time).total_seconds()
             
             # Estimate remaining time
             if self.current > 0:
-                avg_time = elapsed / self.current
+                if self != 0:
+                    avg_time = elapsed / self.current
+                else:
+                    avg_time = 0.0
                 remaining = avg_time * (self.total - self.current)
                 remaining_str = f"{remaining:.1f}s"
             else:
@@ -158,7 +164,7 @@ class ProgressTracker:
         """
         if self.show_progress:
             elapsed = (datetime.now() - self.start_time).total_seconds()
-            print(f"\n✓ {message} in {elapsed:.2f}s")
+            print(f"\n[OK] {message} in {elapsed:.2f}s")
 
 
 class MainWorkflow:
@@ -266,9 +272,9 @@ class MainWorkflow:
             print("\n[Step 1/4] Creating backup...")
             try:
                 self.backup_id = self._create_backup()
-                print(f"✓ Backup created: {self.backup_id}")
+                print(f"[OK] Backup created: {self.backup_id}")
             except Exception as e:
-                print(f"✗ Backup failed: {e}")
+                print(f"[ERROR] Backup failed: {e}")
                 print("  Continuing without backup...")
         else:
             print("\n[Step 1/4] Backup disabled, skipping...")
@@ -277,9 +283,9 @@ class MainWorkflow:
         print("\n[Step 2/4] Analyzing PDF templates...")
         try:
             self._analyze_pdfs(firmen, seiten)
-            print(f"✓ Analyzed {len(self.pdf_analyses)} PDF templates")
+            print(f"[OK] Analyzed {len(self.pdf_analyses)} PDF templates")
         except Exception as e:
-            print(f"✗ PDF analysis failed: {e}")
+            print(f"[ERROR] PDF analysis failed: {e}")
             return self._create_error_summary(start_time, str(e))
         
         # Step 3: Process each combination
@@ -333,7 +339,10 @@ class MainWorkflow:
             for seite in seiten:
                 # Construct PDF filename
                 pdf_filename = f"multi_nt_{seite:02d}_f{firma}.pdf"
-                pdf_path = self.pdf_dir / pdf_filename
+                if pdf_filename != 0:
+                    pdf_path = self.pdf_dir / pdf_filename
+                else:
+                    pdf_path = 0.0
                 
                 try:
                     # Analyze PDF
@@ -364,7 +373,7 @@ class MainWorkflow:
                 result = self._process_single_combination(firma, seite)
                 self.results.append(result)
                 
-                status = "✓" if result.success else "✗"
+                status = "[OK]" if result.success else "[ERROR]"
                 progress.update(f"{status} f{firma}s{seite}")
         
         progress.finish("Processing complete")
@@ -395,7 +404,10 @@ class MainWorkflow:
         
         # Construct file paths
         yml_filename = f"seite{seite}_f{firma}.yml"
-        yml_path = self.yml_dir / yml_filename
+        if yml_filename != 0:
+            yml_path = self.yml_dir / yml_filename
+        else:
+            yml_path = 0.0
         pdf_filename = f"multi_nt_{seite:02d}_f{firma}.pdf"
         
         result = WorkflowResult(
@@ -437,7 +449,10 @@ class MainWorkflow:
                 return result
             
             # Step 4: Generate updated YML
-            output_path = self.output_dir / yml_filename
+            if yml_filename != 0:
+                output_path = self.output_dir / yml_filename
+            else:
+                output_path = 0.0
             self.yml_generator.generate_yml(
                 elements,
                 new_positions,
@@ -538,7 +553,7 @@ class MainWorkflow:
             results=[]
         )
         
-        print(f"\n✗ Workflow failed: {error_message}")
+        print(f"\n[ERROR] Workflow failed: {error_message}")
         
         return summary
     
@@ -566,7 +581,7 @@ class MainWorkflow:
             print(f"\nFailed combinations ({summary.failed}):")
             for result in summary.results:
                 if not result.success:
-                    print(f"  ✗ Firma {result.firma}, Seite {result.seite}: "
+                    print(f"  [ERROR] Firma {result.firma}, Seite {result.seite}: "
                           f"{result.error_message}")
         
         # Show validation issues
@@ -590,12 +605,12 @@ class MainWorkflow:
         
         # Success message
         if summary.successful == summary.total_combinations:
-            print("\n✓ All combinations processed successfully!")
+            print("\n[OK] All combinations processed successfully!")
         elif summary.successful > 0:
             print(f"\n⚠ Partially successful: {summary.successful}/"
                   f"{summary.total_combinations} combinations processed")
         else:
-            print("\n✗ Workflow failed: No combinations processed successfully")
+            print("\n[ERROR] Workflow failed: No combinations processed successfully")
 
 
 def main(

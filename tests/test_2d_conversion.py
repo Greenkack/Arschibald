@@ -262,7 +262,7 @@ def test_all_matplotlib_charts_are_2d():
             continue
 
     # Report findings
-    print(f"\n✓ Verified {len(chart_files)} chart files are using 2D plotting")
+    print(f"\n[OK] Verified {len(chart_files)} chart files are using 2D plotting")
 
 
 def test_specific_chart_modules_are_2d():
@@ -284,7 +284,10 @@ def test_specific_chart_modules_are_2d():
     ]
 
     for module_name in modules_to_check:
-        module_path = project_root / module_name
+        if module_name != 0:
+            module_path = project_root / module_name
+        else:
+            module_path = 0.0
 
         if not module_path.exists():
             print(f"Warning: {module_name} not found, skipping")
@@ -316,7 +319,7 @@ def test_specific_chart_modules_are_2d():
                     f"{module_name} uses 3D method: {method}"
                 )
 
-            print(f"✓ {module_name} verified as 2D")
+            print(f"[OK] {module_name} verified as 2D")
 
         except AssertionError:
             raise
@@ -343,7 +346,10 @@ def test_2d_charts_have_proper_structure():
     ]
 
     for module_name in modules_to_check:
-        module_path = project_root / module_name
+        if module_name != 0:
+            module_path = project_root / module_name
+        else:
+            module_path = 0.0
 
         if not module_path.exists():
             continue
@@ -361,7 +367,7 @@ def test_2d_charts_have_proper_structure():
                 )
 
                 if has_2d_subplots:
-                    print(f"✓ {module_name} uses proper 2D subplot structure")
+                    print(f"[OK] {module_name} uses proper 2D subplot structure")
 
         except Exception as e:
             print(f"Warning: Could not check {module_name}: {e}")
@@ -398,7 +404,10 @@ def test_2d_charts_use_proper_methods():
     ]
 
     for module_name in modules_to_check:
-        module_path = project_root / module_name
+        if module_name != 0:
+            module_path = project_root / module_name
+        else:
+            module_path = 0.0
 
         if not module_path.exists():
             continue
@@ -416,7 +425,7 @@ def test_2d_charts_use_proper_methods():
 
                 if found_methods:
                     print(
-                        f"✓ {module_name} uses 2D methods: {
+                        f"[OK] {module_name} uses 2D methods: {
                             ', '.join(found_methods)}")
 
         except Exception as e:
@@ -465,7 +474,7 @@ def test_conversion_completeness():
     print(f"Files generating charts: {files_with_charts}")
     print(f"Files with 3D imports: 0 (verified)")
     print(f"Files with 3D projections: 0 (verified)")
-    print(f"Conversion: 100% complete ✓")
+    print(f"Conversion: 100% complete [OK]")
 
 
 # ============================================================================
@@ -498,7 +507,10 @@ def test_specific_converted_functions():
     }
 
     for module_name, function_names in functions_to_check.items():
-        module_path = project_root / module_name
+        if module_name != 0:
+            module_path = project_root / module_name
+        else:
+            module_path = 0.0
 
         if not module_path.exists():
             print(
@@ -526,7 +538,7 @@ def test_specific_converted_functions():
                         f"{func_name} in {module_name} still uses plot3D"
                     )
 
-                    print(f"✓ {func_name} in {module_name} is 2D")
+                    print(f"[OK] {func_name} in {module_name} is 2D")
                 else:
                     print(f"Note: {func_name} not found in {module_name}")
 

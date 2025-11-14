@@ -30,13 +30,13 @@ def test_template_management_functions_exist():
             render_add_new_template
         )
         
-        print("✅ render_pdf_template_management() existiert")
-        print("✅ render_template_selection() existiert")
-        print("✅ render_add_new_template() existiert")
+        print("[OK] render_pdf_template_management() existiert")
+        print("[OK] render_template_selection() existiert")
+        print("[OK] render_add_new_template() existiert")
         
         return True
     except ImportError as e:
-        print(f"❌ Import-Fehler: {e}")
+        print(f"[ERROR] Import-Fehler: {e}")
         return False
 
 
@@ -84,9 +84,9 @@ def test_template_data_structure():
     # Check top-level keys
     for key in required_keys:
         if key in template_structure:
-            print(f"✅ Top-level key '{key}' vorhanden")
+            print(f"[OK] Top-level key '{key}' vorhanden")
         else:
-            print(f"❌ Top-level key '{key}' fehlt")
+            print(f"[ERROR] Top-level key '{key}' fehlt")
             return False
     
     # Check template keys
@@ -94,26 +94,26 @@ def test_template_data_structure():
         template = template_structure['templates'][0]
         for key in template_required_keys:
             if key in template:
-                print(f"✅ Template key '{key}' vorhanden")
+                print(f"[OK] Template key '{key}' vorhanden")
             else:
-                print(f"❌ Template key '{key}' fehlt")
+                print(f"[ERROR] Template key '{key}' fehlt")
                 return False
         
         # Check page background keys
         for i in range(1, 9):
             key = f'page_{i}_background'
             if key in template:
-                print(f"✅ Template key '{key}' vorhanden")
+                print(f"[OK] Template key '{key}' vorhanden")
             else:
-                print(f"⚠️  Template key '{key}' fehlt (optional)")
+                print(f"[WARNING]  Template key '{key}' fehlt (optional)")
         
         # Check page coord keys
         for i in range(1, 9):
             key = f'page_{i}_coords'
             if key in template:
-                print(f"✅ Template key '{key}' vorhanden")
+                print(f"[OK] Template key '{key}' vorhanden")
             else:
-                print(f"⚠️  Template key '{key}' fehlt (optional)")
+                print(f"[WARNING]  Template key '{key}' fehlt (optional)")
     
     return True
 
@@ -184,11 +184,11 @@ def test_template_validation():
         is_valid = len(errors) == 0
         
         if is_valid == expected_valid:
-            print(f"✅ Test '{reason}': Erwartetes Ergebnis")
+            print(f"[OK] Test '{reason}': Erwartetes Ergebnis")
             if errors:
                 print(f"   Fehler: {', '.join(errors)}")
         else:
-            print(f"❌ Test '{reason}': Unerwartetes Ergebnis")
+            print(f"[ERROR] Test '{reason}': Unerwartetes Ergebnis")
             print(f"   Erwartet: {'gültig' if expected_valid else 'ungültig'}")
             print(f"   Erhalten: {'gültig' if is_valid else 'ungültig'}")
             if errors:
@@ -208,12 +208,12 @@ def test_database_integration():
         # Try to import database functions
         from database import load_admin_setting, save_admin_setting
         
-        print("✅ load_admin_setting() importiert")
-        print("✅ save_admin_setting() importiert")
+        print("[OK] load_admin_setting() importiert")
+        print("[OK] save_admin_setting() importiert")
         
         # Test loading (should return default if not exists)
         pdf_templates = load_admin_setting('pdf_templates', {})
-        print(f"✅ load_admin_setting('pdf_templates') erfolgreich")
+        print(f"[OK] load_admin_setting('pdf_templates') erfolgreich")
         print(f"   Typ: {type(pdf_templates)}")
         
         # Ensure structure
@@ -222,25 +222,25 @@ def test_database_integration():
                 'templates': [],
                 'active_template_id': None
             }
-            print("✅ Standard-Struktur erstellt")
+            print("[OK] Standard-Struktur erstellt")
         
         if 'templates' in pdf_templates:
-            print(f"✅ 'templates' key vorhanden ({len(pdf_templates['templates'])} Templates)")
+            print(f"[OK] 'templates' key vorhanden ({len(pdf_templates['templates'])} Templates)")
         else:
-            print("⚠️  'templates' key fehlt")
+            print("[WARNING]  'templates' key fehlt")
         
         if 'active_template_id' in pdf_templates:
-            print(f"✅ 'active_template_id' key vorhanden: {pdf_templates['active_template_id']}")
+            print(f"[OK] 'active_template_id' key vorhanden: {pdf_templates['active_template_id']}")
         else:
-            print("⚠️  'active_template_id' key fehlt")
+            print("[WARNING]  'active_template_id' key fehlt")
         
         return True
         
     except ImportError as e:
-        print(f"❌ Import-Fehler: {e}")
+        print(f"[ERROR] Import-Fehler: {e}")
         return False
     except Exception as e:
-        print(f"❌ Fehler: {e}")
+        print(f"[ERROR] Fehler: {e}")
         return False
 
 
@@ -262,9 +262,9 @@ def test_file_path_validation():
         exists = os.path.exists(path)
         
         if exists:
-            print(f"✅ Datei existiert: {path}")
+            print(f"[OK] Datei existiert: {path}")
         else:
-            print(f"⚠️  Datei existiert nicht: {path} (wird für Template benötigt)")
+            print(f"[WARNING]  Datei existiert nicht: {path} (wird für Template benötigt)")
     
     return True
 
@@ -285,12 +285,12 @@ def test_requirements_coverage():
     
     print("Requirements aus Design-Dokument:")
     for req_id, req_desc in requirements.items():
-        print(f"  ✅ Requirement {req_id}: {req_desc}")
+        print(f"  [OK] Requirement {req_id}: {req_desc}")
     
     print("\nImplementierte Features:")
-    print("  ✅ Task 12.1: Template-Auswahl (Dropdown, Aktivieren-Button)")
-    print("  ✅ Task 12.2: Template-Details-Anzeige (Name, Beschreibung, Dateipfade)")
-    print("  ✅ Task 12.3: Neues Template hinzufügen (Formular, Validierung)")
+    print("  [OK] Task 12.1: Template-Auswahl (Dropdown, Aktivieren-Button)")
+    print("  [OK] Task 12.2: Template-Details-Anzeige (Name, Beschreibung, Dateipfade)")
+    print("  [OK] Task 12.3: Neues Template hinzufügen (Formular, Validierung)")
     
     return True
 
@@ -317,7 +317,7 @@ def run_all_tests():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n❌ Test '{test_name}' fehlgeschlagen mit Fehler: {e}")
+            print(f"\n[ERROR] Test '{test_name}' fehlgeschlagen mit Fehler: {e}")
             results.append((test_name, False))
     
     # Summary
@@ -329,7 +329,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results:
-        status = "✅ BESTANDEN" if result else "❌ FEHLGESCHLAGEN"
+        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
         print(f"{status}: {test_name}")
     
     print(f"\n{passed}/{total} Tests bestanden")
@@ -337,11 +337,11 @@ def run_all_tests():
     if passed == total:
         print("\n🎉 ALLE TESTS BESTANDEN!")
         print("\nTask 12 ist vollständig implementiert:")
-        print("  ✅ Task 12.1: Template-Auswahl")
-        print("  ✅ Task 12.2: Template-Details-Anzeige")
-        print("  ✅ Task 12.3: Neues Template hinzufügen")
+        print("  [OK] Task 12.1: Template-Auswahl")
+        print("  [OK] Task 12.2: Template-Details-Anzeige")
+        print("  [OK] Task 12.3: Neues Template hinzufügen")
     else:
-        print(f"\n⚠️  {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n[WARNING]  {total - passed} Test(s) fehlgeschlagen")
     
     return passed == total
 

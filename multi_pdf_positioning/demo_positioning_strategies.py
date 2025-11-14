@@ -48,23 +48,23 @@ def demo_strategy_for_firma(firma: int, seite: int = 1):
         # Parse YML
         print(f"\n1. Parsing YML file...")
         elements = parse_yml(str(yml_file))
-        print(f"   ✓ Parsed {len(elements)} elements")
+        print(f"   [OK] Parsed {len(elements)} elements")
         
         # Analyze PDF
         print(f"\n2. Analyzing PDF template...")
         pdf_analysis = analyze_pdf(str(pdf_file))
-        print(f"   ✓ Analyzed PDF: {pdf_analysis.page_size['width']}x{pdf_analysis.page_size['height']} points")
-        print(f"   ✓ Color palette: {', '.join(pdf_analysis.color_palette[:3])}")
+        print(f"   [OK] Analyzed PDF: {pdf_analysis.page_size['width']}x{pdf_analysis.page_size['height']} points")
+        print(f"   [OK] Color palette: {', '.join(pdf_analysis.color_palette[:3])}")
         
         # Select strategy
         print(f"\n3. Selecting positioning strategy...")
         strategy = select_strategy(firma, seite, pdf_analysis)
-        print(f"   ✓ Strategy: {strategy.__class__.__name__}")
+        print(f"   [OK] Strategy: {strategy.__class__.__name__}")
         
         # Apply strategy
         print(f"\n4. Applying strategy to elements...")
         positions = apply_strategy(firma, seite, elements, pdf_analysis)
-        print(f"   ✓ Generated {len(positions)} positions")
+        print(f"   [OK] Generated {len(positions)} positions")
         
         # Validate positions
         print(f"\n5. Validating positions...")
@@ -72,9 +72,9 @@ def demo_strategy_for_firma(firma: int, seite: int = 1):
         is_valid, errors = calculator.validate_positions(positions)
         
         if is_valid:
-            print(f"   ✓ All positions valid")
+            print(f"   [OK] All positions valid")
         else:
-            print(f"   ✗ Validation errors:")
+            print(f"   [ERROR] Validation errors:")
             for error in errors[:5]:
                 print(f"     - {error}")
         
@@ -97,7 +97,10 @@ def demo_strategy_for_firma(firma: int, seite: int = 1):
                        (new_center_y - old_center_y) ** 2) ** 0.5
             total_distance += distance
         
-        avg_distance = total_distance / len(elements) if elements else 0
+        if len != 0:
+            avg_distance = total_distance / len(elements) if elements else 0
+        else:
+            avg_distance = 0.0
         print(f"   Average position change: {avg_distance:.1f} points")
         
         # Show sample positions
@@ -112,11 +115,11 @@ def demo_strategy_for_firma(firma: int, seite: int = 1):
             print(f"     New: ({new_pos[0]:.1f}, {new_pos[1]:.1f}) to ({new_pos[2]:.1f}, {new_pos[3]:.1f})")
         
         print(f"\n{'=' * 60}")
-        print(f"✓ Demo completed successfully for Firma {firma}")
+        print(f"[OK] Demo completed successfully for Firma {firma}")
         print(f"{'=' * 60}\n")
         
     except Exception as e:
-        print(f"\n✗ Error: {e}")
+        print(f"\n[ERROR] Error: {e}")
         import traceback
         traceback.print_exc()
 

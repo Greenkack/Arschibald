@@ -15,7 +15,7 @@ from .progress_manager import (
 def render_progress_settings():
     """Rendert die Einstellungen für Ladebalken im Optionen-Menü"""
 
-    st.subheader("🎨 Ladebalken-Design")
+    st.subheader("[DESIGN] Ladebalken-Design")
 
     # Style-Auswahl
     col1, col2 = st.columns(2)
@@ -211,7 +211,7 @@ PRESET_THEMES = {
 
 def render_quick_themes():
     """Rendert Quick-Theme-Buttons"""
-    st.subheader("🎨 Schnell-Designs")
+    st.subheader("[DESIGN] Schnell-Designs")
 
     cols = st.columns(len(PRESET_THEMES))
 
