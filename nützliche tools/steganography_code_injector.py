@@ -72,7 +72,7 @@ class SteganographyInjector:
                 hidden_binary += zero_width_chars[char]
 
         if len(hidden_binary) % 8 != 0:
-            print("[ERROR] Kein versteckter Code gefunden")
+            print("Kein versteckter Code gefunden")
             return None
 
         # Konvertiere Binär zurück zu Text

@@ -30,7 +30,7 @@ def test_product_rotation():
         "selected_storage_id": 1,
     }
     
-    print(f"\n[PACKAGE] Verfügbare Produkte:")
+    print(f"\nVerfügbare Produkte:")
     print(f"  Module: {len(generator.products.get('module', []))} verfügbar")
     print(f"  Wechselrichter: {len(generator.products.get('inverter', []))} verfügbar")
     print(f"  Speicher: {len(generator.products.get('storage', []))} verfügbar")
@@ -43,7 +43,7 @@ def test_product_rotation():
         print(f"  Inverter ID: {rotated.get('selected_inverter_id', 'N/A')}")
         print(f"  Speicher ID: {rotated.get('selected_storage_id', 'N/A')}")
     
-    print("\n[OK] Produktrotation-Test abgeschlossen!")
+    print("\nProduktrotation-Test abgeschlossen!")
 
 
 def test_price_scaling():
@@ -69,8 +69,8 @@ def test_price_scaling():
         "price_calculation_mode": "linear"
     }
     
-    print(f"\n[MONEY] Basis-Preis: {base_calc_results['total_investment_netto']:.2f} € (netto)")
-    print(f"[STATS] Preissteigerung: {price_settings['price_increment_percent']}% pro Firma")
+    print(f"\nBasis-Preis: {base_calc_results['total_investment_netto']:.2f} € (netto)")
+    print(f"Preissteigerung: {price_settings['price_increment_percent']}% pro Firma")
     print(f"🧮 Modus: {price_settings['price_calculation_mode']}")
     
     print(f"\n💵 Preisstaffelung für 5 Firmen:")
@@ -88,7 +88,7 @@ def test_price_scaling():
         print(f"  Amortisation: {scaled.get('amortization_time_years', 0):.1f} Jahre")
         print(f"  ROI (Jahr 10): {scaled.get('roi_percent_year10', 0):.1f}%")
     
-    print("\n[OK] Preisstaffelungs-Test abgeschlossen!")
+    print("\nPreisstaffelungs-Test abgeschlossen!")
 
 
 def test_exponential_price_scaling():
@@ -110,8 +110,8 @@ def test_exponential_price_scaling():
         "price_exponent": 1.03  # 3% exponentiell
     }
     
-    print(f"\n[MONEY] Basis-Preis: {base_calc_results['total_investment_netto']:.2f} € (netto)")
-    print(f"[STATS] Exponent: {price_settings['price_exponent']}")
+    print(f"\nBasis-Preis: {base_calc_results['total_investment_netto']:.2f} € (netto)")
+    print(f"Exponent: {price_settings['price_exponent']}")
     
     print(f"\n💵 Exponentielle Preisstaffelung:")
     for i in range(5):
@@ -124,7 +124,7 @@ def test_exponential_price_scaling():
         
         print(f"  Firma {i+1}: {price:,.2f} € (Faktor: {factor:.4f})")
     
-    print("\n[OK] Exponentieller Test abgeschlossen!")
+    print("\nExponentieller Test abgeschlossen!")
 
 
 def test_combined_rotation_and_pricing():
@@ -157,7 +157,7 @@ def test_combined_rotation_and_pricing():
         
         # 1. Produktrotation
         rotated_settings = generator.get_rotated_products_for_company(i, base_settings, {})
-        print(f"  [PACKAGE] Produkte:")
+        print(f"  Produkte:")
         print(f"     Module ID: {rotated_settings.get('selected_module_id', 'N/A')}")
         print(f"     Inverter ID: {rotated_settings.get('selected_inverter_id', 'N/A')}")
         
@@ -169,10 +169,10 @@ def test_combined_rotation_and_pricing():
         else:
             increase_pct = 0.0
         
-        print(f"  [MONEY] Preis:")
+        print(f"  Preis:")
         print(f"     {price:,.2f} € (+{increase_pct:.1f}%)")
     
-    print("\n[OK] Kombinierter Test abgeschlossen!")
+    print("\nKombinierter Test abgeschlossen!")
 
 
 if __name__ == "__main__":
@@ -189,33 +189,32 @@ if __name__ == "__main__":
         print("\n" + "="*80)
         print("🎉 ALLE TESTS ERFOLGREICH!")
         print("="*80)
-        print("\n[OK] Produktrotation: FUNKTIONIERT")
-        print("[OK] Preisstaffelung (linear): FUNKTIONIERT")
-        print("[OK] Preisstaffelung (exponentiell): FUNKTIONIERT")
-        print("[OK] Kombiniert: FUNKTIONIERT")
+        print("\nProduktrotation: FUNKTIONIERT")
+        print("Preisstaffelung (linear): FUNKTIONIERT")
+        print("Preisstaffelung (exponentiell): FUNKTIONIERT")
+        print("Kombiniert: FUNKTIONIERT")
         
         print("\n" + "="*80)
         print("📋 ZUSAMMENFASSUNG")
         print("="*80)
         print("""
 Das Multi-PDF-System KANN BEREITS:
-[OK] Verschiedene Produkte für jede Firma (Rotation durch Datenbank)
-[OK] Verschiedene Preise für jede Firma (Staffelung mit Algorithmus)
-[OK] Kombinierte Produkt- + Preisvariationen
-[OK] Lineare, exponentielle und custom Preisstaffelung
-[OK] Kategorie-spezifische oder globale Produktrotation
+Verschiedene Produkte für jede Firma (Rotation durch Datenbank)
+Verschiedene Preise für jede Firma (Staffelung mit Algorithmus)
+Kombinierte Produkt- + Preisvariationen
+Lineare, exponentielle und custom Preisstaffelung
+Kategorie-spezifische oder globale Produktrotation
 
-[NOTE] Um es zu nutzen:
+Um es zu nutzen:
 1. Multi-PDF-Generator in der App öffnen
-2. "Automatische Produktrotation aktivieren" [OK] (Standard: AN)
+2. "Automatische Produktrotation aktivieren" (Standard: AN)
 3. "Preisstaffelung pro Firma (%)" einstellen (Standard: 3%)
 4. Mehrere Firmen auswählen
 5. "Angebote für alle Firmen erstellen" klicken
-6. Jede Firma bekommt: ANDERES PRODUKT + ANDEREN PREIS! [TARGET]
-        """)
+6. Jede Firma bekommt: ANDERES PRODUKT + ANDEREN PREIS! """)
         
     except Exception as e:
-        print(f"\n[ERROR] FEHLER: {e}")
+        print(f"\nFEHLER: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

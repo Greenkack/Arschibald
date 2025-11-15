@@ -19,7 +19,7 @@ def import_heatpumps():
     
     conn = get_db_connection()
     if not conn:
-        print("[ERROR] Fehler: Konnte Datenbankverbindung nicht herstellen")
+        print("Fehler: Konnte Datenbankverbindung nicht herstellen")
         return
     
     cursor = conn.cursor()

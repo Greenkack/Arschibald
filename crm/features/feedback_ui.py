@@ -21,11 +21,11 @@ def render_feedback_management(conn: sqlite3.Connection):
     Args:
         conn: Datenbankverbindung
     """
-    st.header("[CHART] Kunden-Feedback & Zufriedenheitsumfragen")
+    st.header("Kunden-Feedback & Zufriedenheitsumfragen")
     
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3, tab4 = st.tabs([
-        "[NOTE] Umfragen", "[STATS] Auswertungen", "🔔 Alerts", "⚙️ Trigger"
+        "Umfragen", "Auswertungen", "🔔 Alerts", "⚙️ Trigger"
     ])
     
     with tab1:
@@ -64,7 +64,7 @@ def render_surveys_tab(conn: sqlite3.Connection):
         return
     
     for survey in surveys:
-        with st.expander(f"📋 {survey['name']}" + (" [OK]" if survey['is_active'] else " ⏸️")):
+        with st.expander(f"📋 {survey['name']}" + (" " if survey['is_active'] else " ⏸️")):
             col1, col2, col3 = st.columns([2, 2, 1])
             
             with col1:
@@ -81,7 +81,7 @@ def render_surveys_tab(conn: sqlite3.Connection):
                 st.metric("Antworten", stats.get('total_responses', 0))
             
             with col3:
-                if st.button("[CHART] Auswerten", key=f"analyze_{survey['id']}"):
+                if st.button("Auswerten", key=f"analyze_{survey['id']}"):
                     st.session_state['analyze_survey_id'] = survey['id']
                     st.rerun()
                 
@@ -89,7 +89,7 @@ def render_surveys_tab(conn: sqlite3.Connection):
                     st.session_state['edit_survey_id'] = survey['id']
                     st.rerun()
                 
-                if st.button("[DELETE] Löschen", key=f"delete_{survey['id']}"):
+                if st.button("Löschen", key=f"delete_{survey['id']}"):
                     if feedback_manager.delete_survey(conn, survey['id']):
                         st.success("Umfrage gelöscht!")
                         st.rerun()
@@ -97,7 +97,7 @@ def render_surveys_tab(conn: sqlite3.Connection):
 
 def render_survey_builder(conn: sqlite3.Connection):
     """Umfrage-Builder UI."""
-    st.subheader("[BUILD] Umfrage erstellen")
+    st.subheader("Umfrage erstellen")
     
     with st.form("survey_builder"):
         # Basis-Informationen
@@ -176,7 +176,7 @@ def render_survey_builder(conn: sqlite3.Connection):
                 with col1:
                     st.write(f"{i+1}. [{q['type']}] {q['text']}")
                 with col2:
-                    if st.form_submit_button(f"[DELETE]", key=f"remove_q_{i}"):
+                    if st.form_submit_button(f"", key=f"remove_q_{i}"):
                         st.session_state['survey_questions'].pop(i)
                         st.rerun()
         
@@ -185,7 +185,7 @@ def render_survey_builder(conn: sqlite3.Connection):
         with col1:
             submit = st.form_submit_button("💾 Umfrage speichern", use_container_width=True)
         with col2:
-            cancel = st.form_submit_button("[ERROR] Abbrechen", use_container_width=True)
+            cancel = st.form_submit_button("Abbrechen", use_container_width=True)
         
         if submit:
             if not name:
@@ -206,7 +206,7 @@ def render_survey_builder(conn: sqlite3.Connection):
                 )
                 
                 if survey_id:
-                    st.success(f"[OK] Umfrage '{name}' erfolgreich erstellt!")
+                    st.success(f"Umfrage '{name}' erfolgreich erstellt!")
                     st.session_state['survey_questions'] = []
                     st.session_state['show_survey_builder'] = False
                     st.rerun()
@@ -221,7 +221,7 @@ def render_survey_builder(conn: sqlite3.Connection):
 
 def render_analytics_tab(conn: sqlite3.Connection):
     """Tab für Auswertungen."""
-    st.subheader("[STATS] Auswertungen")
+    st.subheader("Auswertungen")
     
     # Umfrage auswählen
     surveys = feedback_manager.get_all_surveys(conn)
@@ -357,14 +357,14 @@ def render_alerts_tab(conn: sqlite3.Connection):
     alerts = feedback_manager.get_negative_feedback_alerts(conn, days=days)
     
     if not alerts:
-        st.success("[OK] Kein negatives Feedback in diesem Zeitraum!")
+        st.success("Kein negatives Feedback in diesem Zeitraum!")
         return
     
-    st.warning(f"[WARNING] {len(alerts)} negative(s) Feedback gefunden!")
+    st.warning(f"{len(alerts)} negative(s) Feedback gefunden!")
     
     for alert in alerts:
         with st.expander(
-            f"[WARNING] {alert.get('first_name', '')} {alert.get('last_name', '')} - "
+            f"{alert.get('first_name', '')} {alert.get('last_name', '')} - "
             f"{alert['submitted_at'][:10]} - ⭐{alert.get('overall_rating', 0)}"
         ):
             col1, col2 = st.columns(2)
@@ -389,7 +389,7 @@ def render_alerts_tab(conn: sqlite3.Connection):
                     st.info("E-Mail-Funktion wird geöffnet...")
             
             with col2:
-                if st.button("[OK] Als bearbeitet markieren", key=f"mark_{alert['id']}"):
+                if st.button("Als bearbeitet markieren", key=f"mark_{alert['id']}"):
                     st.success("Als bearbeitet markiert!")
 
 
@@ -440,7 +440,7 @@ def render_triggers_tab(conn: sqlite3.Connection):
             customer_id = st.number_input("Kunden-ID", min_value=1, value=1)
             scheduled_date = st.date_input("Versanddatum", value=datetime.now())
             
-            if st.form_submit_button("[OK] Trigger erstellen"):
+            if st.form_submit_button("Trigger erstellen"):
                 trigger_id = feedback_manager.create_trigger(
                     conn,
                     survey_id=survey_options[selected_survey],

@@ -30,47 +30,47 @@ except ImportError:
 def render_core_status_dashboard():
     """Rendere Core-Integration Status Dashboard"""
     
-    st.markdown("## [TOOL] Core System Status")
+    st.markdown("## Core System Status")
     
     if not CORE_AVAILABLE:
-        st.error("[ERROR] Core-Integration nicht verfügbar")
-        st.info("[IDEA] Core-Module sind nicht installiert oder konnten nicht geladen werden.")
+        st.error("Core-Integration nicht verfügbar")
+        st.info("Core-Module sind nicht installiert oder konnten nicht geladen werden.")
         return
     
     # Feature Status
-    st.markdown("### [CHART] Feature Status")
+    st.markdown("### Feature Status")
     
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
         config_enabled = is_feature_enabled('config')
         if config_enabled:
-            st.success("[OK] **Config**")
+            st.success("**Config**")
             config = get_app_config()
             if config:
                 st.caption(f"Environment: `{config.env}`")
                 st.caption(f"Mode: `{config.mode}`")
                 st.caption(f"Debug: `{config.debug}`")
         else:
-            st.warning("[WARNING] **Config**")
+            st.warning("**Config**")
             st.caption("Deaktiviert")
     
     with col2:
         logging_enabled = is_feature_enabled('logging')
         if logging_enabled:
-            st.success("[OK] **Logging**")
+            st.success("**Logging**")
             logger = get_app_logger()
             if logger:
                 st.caption("Strukturiertes Logging")
                 st.caption("Mit Rotation & Metrics")
         else:
-            st.warning("[WARNING] **Logging**")
+            st.warning("**Logging**")
             st.caption("Deaktiviert")
     
     with col3:
         cache_enabled = is_feature_enabled('cache')
         if cache_enabled:
-            st.success("[OK] **Cache**")
+            st.success("**Cache**")
             cache = get_app_cache()
             if cache:
                 try:
@@ -80,13 +80,13 @@ def render_core_status_dashboard():
                 except:
                     st.caption("Cache aktiv")
         else:
-            st.info("[INFO] **Cache**")
+            st.info("**Cache**")
             st.caption("Deaktiviert (optional)")
     
     with col4:
         session_enabled = is_feature_enabled('session')
         if session_enabled:
-            st.success("[OK] **Session**")
+            st.success("**Session**")
             session = get_current_session()
             if session:
                 st.caption(f"ID: `{session.session_id[:8]}...`")
@@ -94,13 +94,13 @@ def render_core_status_dashboard():
             else:
                 st.caption("Kein aktive Session")
         else:
-            st.info("[INFO] **Session**")
+            st.info("**Session**")
             st.caption("Deaktiviert (optional)")
     
     with col5:
         database_enabled = is_feature_enabled('database')
         if database_enabled:
-            st.success("[OK] **Database**")
+            st.success("**Database**")
             db_manager = get_database_manager()
             if db_manager:
                 try:
@@ -110,13 +110,13 @@ def render_core_status_dashboard():
                         st.caption(f"Util: {metrics.get('utilization', '0%')}")
                         leaked = metrics.get('leaked_connections', 0)
                         if leaked > 0:
-                            st.caption(f"[WARNING] Leaks: {leaked}")
+                            st.caption(f"Leaks: {leaked}")
                     else:
                         st.caption("Pool aktiv")
                 except:
                     st.caption("Pooling aktiv")
         else:
-            st.info("[INFO] **Database**")
+            st.info("**Database**")
             st.caption("Standard Mode (optional)")
     
     st.markdown("---")
@@ -174,17 +174,17 @@ Max Memory: {config.performance.max_memory_mb}MB
                 # Cache Efficiency
                 if hit_rate > 0:
                     if hit_rate >= 80:
-                        st.success(f"[TARGET] Excellent Cache Efficiency: {hit_rate:.1f}%")
+                        st.success(f"Excellent Cache Efficiency: {hit_rate:.1f}%")
                     elif hit_rate >= 50:
-                        st.info(f"[OK] Good Cache Efficiency: {hit_rate:.1f}%")
+                        st.info(f"Good Cache Efficiency: {hit_rate:.1f}%")
                     else:
-                        st.warning(f"[WARNING] Low Cache Efficiency: {hit_rate:.1f}%")
+                        st.warning(f"Low Cache Efficiency: {hit_rate:.1f}%")
                 
             except Exception as e:
                 st.error(f"Cache Stats Error: {e}")
     
     if logging_enabled:
-        st.markdown("### [NOTE] Logging Status")
+        st.markdown("### Logging Status")
         
         config = get_app_config()
         if config:
@@ -207,7 +207,7 @@ Debug Mode: {config.debug}
                     if log_files:
                         for log_file in sorted(log_files)[-5:]:  # Last 5 files
                             size_mb = log_file.stat().st_size / 1024 / 1024
-                            st.caption(f"[FILE] {log_file.name} ({size_mb:.2f} MB)")
+                            st.caption(f"{log_file.name} ({size_mb:.2f} MB)")
                     else:
                         st.caption("Keine Log-Dateien gefunden")
                 else:
@@ -239,17 +239,17 @@ Debug Mode: {config.debug}
                         st.metric("Avg Checkout Time", f"{metrics.get('avg_checkout_time', 0):.2f}s")
                         leaked = metrics.get('leaked_connections', 0)
                         if leaked > 0:
-                            st.metric("[WARNING] Leaked Connections", leaked, delta=-leaked, delta_color="inverse")
+                            st.metric("Leaked Connections", leaked, delta=-leaked, delta_color="inverse")
                         else:
-                            st.metric("[OK] Leaked Connections", 0)
+                            st.metric("Leaked Connections", 0)
                 
                 with col3:
                     st.markdown("**Health Check:**")
                     if health:
                         if health.healthy:
-                            st.success(f"[OK] Healthy ({health.response_time:.2f}ms)")
+                            st.success(f"Healthy ({health.response_time:.2f}ms)")
                         else:
-                            st.error(f"[ERROR] Unhealthy: {health.error}")
+                            st.error(f"Unhealthy: {health.error}")
                         st.caption(f"Last Check: {health.timestamp.strftime('%H:%M:%S')}")
                     else:
                         st.info("Health check not available")
@@ -264,7 +264,7 @@ Debug Mode: {config.debug}
     
     # Feature Activation Guide
     st.markdown("---")
-    st.markdown("### [LAUNCH] Feature Aktivierung")
+    st.markdown("### Feature Aktivierung")
     
     st.info("""
     **So aktivieren Sie Features:**
@@ -291,7 +291,7 @@ Debug Mode: {config.debug}
     
     feature_data = []
     for feature_name, enabled in FEATURES.items():
-        status = "[OK] Aktiv" if enabled else "[WARNING] Inaktiv"
+        status = "Aktiv" if enabled else "Inaktiv"
         feature_data.append({
             "Feature": feature_name.title(),
             "Status": status,
@@ -302,5 +302,5 @@ Debug Mode: {config.debug}
 
 
 if __name__ == "__main__":
-    st.set_page_config(page_title="Core Status", page_icon="[TOOL]", layout="wide")
+    st.set_page_config(page_title="Core Status", page_icon="", layout="wide")
     render_core_status_dashboard()

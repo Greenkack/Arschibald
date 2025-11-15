@@ -266,19 +266,19 @@ class PerformanceMonitor:
             if metrics.total_requests > 100:
                 if metrics.hit_rate < 50:
                     recommendations.append(
-                        f"[WARNING] {cache_name}: Niedrige Hit-Rate ({metrics.hit_rate:.1f}%). "
+                        f"{cache_name}: Niedrige Hit-Rate ({metrics.hit_rate:.1f}%). "
                         "Erwägen Sie Cache-Größe zu erhöhen oder TTL anzupassen."
                     )
                 elif metrics.hit_rate > 95:
                     recommendations.append(
-                        f"[OK] {cache_name}: Exzellente Hit-Rate ({metrics.hit_rate:.1f}%)!"
+                        f"{cache_name}: Exzellente Hit-Rate ({metrics.hit_rate:.1f}%)!"
                     )
         
         # Analysiere langsame Operationen
         for op_name, metrics in self.operations.items():
             if metrics.avg_time_ms > 100:
                 recommendations.append(
-                    f"[WARNING] {op_name}: Langsame Operation (Ø {metrics.avg_time_ms:.1f} ms). "
+                    f"{op_name}: Langsame Operation (Ø {metrics.avg_time_ms:.1f} ms). "
                     "Prüfen Sie auf Optimierungspotential."
                 )
             
@@ -289,7 +289,7 @@ class PerformanceMonitor:
                     error_rate = 0.0
                 if error_rate > 5:
                     recommendations.append(
-                        f"[ERROR] {op_name}: Hohe Fehlerrate ({error_rate:.1f}%). "
+                        f"{op_name}: Hohe Fehlerrate ({error_rate:.1f}%). "
                         "Fehlerbehandlung überprüfen."
                     )
         
@@ -297,11 +297,11 @@ class PerformanceMonitor:
         total_operations = sum(m.execution_count for m in self.operations.values())
         if total_operations > 1000:
             recommendations.append(
-                "[IDEA] Hohe Anzahl an Operationen. Erwägen Sie Batch-Processing."
+                "Hohe Anzahl an Operationen. Erwägen Sie Batch-Processing."
             )
         
         if not recommendations:
-            recommendations.append("[OK] Keine Optimierungen erforderlich. System läuft optimal!")
+            recommendations.append("Keine Optimierungen erforderlich. System läuft optimal!")
         
         return recommendations
     

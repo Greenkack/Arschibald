@@ -39,7 +39,7 @@ def calculate_mounting_requirements_from_details(
         MountingCalculationResult oder None bei Fehler
     """
     try:
-        # [OK] FIX: Modul-Konfiguration aus project_details
+        # FIX: Modul-Konfiguration aus project_details
         # Prüfe mehrere mögliche Keys für Modulanzahl (Kompatibilität mit verschiedenen Modulen)
         module_count = (
             project_details.get('module_count', 0) or 
@@ -71,7 +71,7 @@ def calculate_mounting_requirements_from_details(
         )
         
         # Dach-Konfiguration
-        # [OK] FIX: Prüfe beide mögliche Keys für Dachtyp
+        # FIX: Prüfe beide mögliche Keys für Dachtyp
         roof_type = (
             project_details.get('pv_mounting_roof_type') or  # Spezifisches Feld
             project_details.get('roof_type') or              # Aus Bedarfsanalyse
@@ -296,12 +296,12 @@ def render_mounting_calculation_summary(project_details: Dict[str, Any]) -> None
         project_details: Solar Calculator project_details
     """
     if not project_details.get('mounting_quantities_calculated'):
-        st.info("[INFO] Noch keine automatische Berechnung durchgeführt.")
+        st.info("Noch keine automatische Berechnung durchgeführt.")
         return
     
     calc_result = project_details.get('mounting_calculation_result', {})
     
-    st.markdown("### [CHART] Berechnete Unterkonstruktion")
+    st.markdown("### Berechnete Unterkonstruktion")
     
     col1, col2, col3 = st.columns(3)
     
@@ -328,7 +328,7 @@ def render_mounting_calculation_summary(project_details: Dict[str, Any]) -> None
     # Warnings
     warnings = calc_result.get('warnings', [])
     if warnings:
-        st.warning("[WARNING] **Hinweise:**\n\n" + "\n".join(f"- {w}" for w in warnings))
+        st.warning("**Hinweise:**\n\n" + "\n".join(f"- {w}" for w in warnings))
     
     # Komponenten-Tabelle
     with st.expander("📋 Komponenten-Details"):

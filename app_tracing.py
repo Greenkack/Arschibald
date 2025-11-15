@@ -85,11 +85,11 @@ class AppTracer:
             self._instrument_libraries()
             
             self._initialized = True
-            logger.info(f"[OK] Tracing initialized: {self.service_name} -> {self.otlp_endpoint}")
+            logger.info(f"Tracing initialized: {self.service_name} -> {self.otlp_endpoint}")
             return True
             
         except Exception as e:
-            logger.error(f"[ERROR] Failed to initialize tracing: {e}")
+            logger.error(f"Failed to initialize tracing: {e}")
             logger.error(traceback.format_exc())
             return False
     
@@ -102,9 +102,9 @@ class AppTracer:
             # Instrument SQLite database
             SQLite3Instrumentor().instrument()
             
-            logger.info("[OK] Libraries instrumented: requests, sqlite3")
+            logger.info("Libraries instrumented: requests, sqlite3")
         except Exception as e:
-            logger.warning(f"[WARNING] Library instrumentation partial: {e}")
+            logger.warning(f"Library instrumentation partial: {e}")
     
     def trace_function(self, operation_name: Optional[str] = None, attributes: Optional[Dict[str, Any]] = None):
         """
@@ -213,7 +213,7 @@ class AppTracer:
         """Shutdown tracing gracefully."""
         if self.tracer_provider:
             self.tracer_provider.shutdown()
-            logger.info("[OK] Tracing shutdown complete")
+            logger.info("Tracing shutdown complete")
 
 
 # Global tracer instance

@@ -32,10 +32,10 @@ def test_8_page_generation():
         # Check overlay page count
         overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
         overlay_page_count = len(overlay_reader.pages)
-        print(f"   [OK] Overlay generated with {overlay_page_count} pages")
+        print(f"   Overlay generated with {overlay_page_count} pages")
 
         if overlay_page_count != 8:
-            print(f"   [ERROR] ERROR: Expected 8 pages, got {overlay_page_count}")
+            print(f"   ERROR: Expected 8 pages, got {overlay_page_count}")
             return False
 
         # Merge with backgrounds
@@ -45,10 +45,10 @@ def test_8_page_generation():
         # Check final page count
         final_reader = PdfReader(io.BytesIO(final_pdf_bytes))
         final_page_count = len(final_reader.pages)
-        print(f"   [OK] Final PDF generated with {final_page_count} pages")
+        print(f"   Final PDF generated with {final_page_count} pages")
 
         if final_page_count != 8:
-            print(f"   [ERROR] ERROR: Expected 8 pages, got {final_page_count}")
+            print(f"   ERROR: Expected 8 pages, got {final_page_count}")
             return False
 
         # Save test PDF
@@ -58,13 +58,13 @@ def test_8_page_generation():
         print(f"\n3. Test PDF saved to: {output_path}")
 
         print(f"\n{'=' * 50}")
-        print("[OK] SUCCESS: 8-page PDF generation works correctly!")
+        print("SUCCESS: 8-page PDF generation works correctly!")
         print(f"{'=' * 50}\n")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] ERROR: {e}")
+        print(f"\nERROR: {e}")
         import traceback
         traceback.print_exc()
         return False

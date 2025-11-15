@@ -177,7 +177,7 @@ def render_logo_upload_section():
                     st.image(image, width=150)
 
                 # Datei-Info
-                st.caption(f"[FOLDER] {uploaded_file.name}")
+                st.caption(f"{uploaded_file.name}")
                 st.caption(f"📏 {uploaded_file.size / 1024:.1f} KB")
 
             except Exception as e:
@@ -209,10 +209,10 @@ def render_logo_upload_section():
         # Speichern
         success = add_brand_logo(brand_name, logo_base64, logo_format)
         if success:
-            st.success(f"[OK] Logo für '{brand_name}' erfolgreich gespeichert!")
+            st.success(f"Logo für '{brand_name}' erfolgreich gespeichert!")
             st.rerun()
         else:
-            st.error("[ERROR] Fehler beim Speichern des Logos!")
+            st.error("Fehler beim Speichern des Logos!")
 # --- DEF BLOCK END ---
 
 
@@ -250,7 +250,7 @@ def render_logo_management_section():
     st.dataframe(df, use_container_width=True)
 
     # Logo-Details und Aktionen
-    st.subheader("[SEARCH] Logo-Details")
+    st.subheader("Logo-Details")
 
     selected_logo_id = st.selectbox(
         "Logo auswählen:",
@@ -295,7 +295,7 @@ def render_logo_management_section():
 
                     with col_delete:
                         if st.button(
-                            "[DELETE] Löschen",
+                            "Löschen",
                             key=f"delete_logo_{logo_id}",
                                 type="secondary"):
                             if st.session_state.get(
@@ -304,15 +304,15 @@ def render_logo_management_section():
                                     selected_logo['brand_name'])
                                 if success:
                                     st.success(
-                                        f"[OK] Logo für '{
+                                        f"Logo für '{
                                             selected_logo['brand_name']}' gelöscht!")
                                     st.rerun()
                                 else:
-                                    st.error("[ERROR] Fehler beim Löschen!")
+                                    st.error("Fehler beim Löschen!")
                             else:
                                 st.session_state[f'confirm_delete_{logo_id}'] = True
                                 st.warning(
-                                    "[WARNING] Klicken Sie erneut zum Bestätigen!")
+                                    "Klicken Sie erneut zum Bestätigen!")
 # --- DEF BLOCK END ---
 
 
@@ -347,12 +347,12 @@ def render_logo_edit_section(logo_id: int, logo_data: dict[str, Any]):
             key=f"save_edit_{logo_id}",
                 type="primary"):
             # TODO: Implementierung der Bearbeitung
-            st.success("[OK] Änderungen gespeichert!")
+            st.success("Änderungen gespeichert!")
             del st.session_state[f'edit_mode_{logo_id}']
             st.rerun()
 
     with col2:
-        if st.button("[ERROR] Abbrechen", key=f"cancel_edit_{logo_id}"):
+        if st.button("Abbrechen", key=f"cancel_edit_{logo_id}"):
             del st.session_state[f'edit_mode_{logo_id}']
             st.rerun()
 # --- DEF BLOCK END ---
@@ -364,12 +364,12 @@ def render_logo_edit_section(logo_id: int, logo_data: dict[str, Any]):
 # --- DEF BLOCK START: func render_logo_management_ui ---
 def render_logo_management_ui():
     """Hauptfunktion für die Logo-Management UI"""
-    st.title("[DESIGN] Logo-Management")
+    st.title("Logo-Management")
     st.markdown("---")
 
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📤 Upload", "🗂️ Verwaltung", "� Positionen", "�[CHART] Statistiken"])
+        ["📤 Upload", "🗂️ Verwaltung", "� Positionen", "�Statistiken"])
 
     with tab1:
         render_logo_upload_section()
@@ -412,7 +412,7 @@ def render_logo_positions_tab():
 # --- DEF BLOCK START: func render_logo_statistics_section ---
 def render_logo_statistics_section():
     """Rendert Statistiken über die Logos"""
-    st.subheader("[CHART] Logo-Statistiken")
+    st.subheader("Logo-Statistiken")
 
     if not LOGO_DB_AVAILABLE:
         st.error("Logo-Datenbank nicht verfügbar!")

@@ -33,7 +33,7 @@ def validate_env_file() -> tuple[bool, str]:
     is_secure, warnings = validate_env_file_security()
 
     if not is_secure:
-        message = "\n[ERROR] .env file security issues detected:\n\n"
+        message = "\n.env file security issues detected:\n\n"
         for warning in warnings:
             message += f"{warning}\n"
 
@@ -48,7 +48,7 @@ To set up your configuration:
 
         return False, message
 
-    return True, "[OK] .env file found and properly configured"
+    return True, ".env file found and properly configured"
 
 
 def validate_api_keys() -> tuple[bool, str]:
@@ -64,7 +64,7 @@ def validate_api_keys() -> tuple[bool, str]:
     is_valid, issues = validate_startup_security()
 
     if not is_valid:
-        message = "\n[ERROR] API key validation failed:\n\n"
+        message = "\nAPI key validation failed:\n\n"
         for issue in issues:
             message += f"{issue}\n"
 
@@ -87,14 +87,14 @@ Add them to your .env file and run this script again.
     optional_missing = [k for k in missing_keys if k != "OPENAI_API_KEY"]
 
     if optional_missing:
-        message = "[OK] Required API keys configured\n\n"
-        message += "[INFO]  Optional keys not configured:\n"
+        message = "Required API keys configured\n\n"
+        message += "Optional keys not configured:\n"
         for key in optional_missing:
             message += f"   - {key}\n"
         message += "\nThese keys enable additional features but are not required.\n"
         return True, message
 
-    return True, "[OK] All API keys configured and validated!"
+    return True, "All API keys configured and validated!"
 
 
 def validate_docker() -> tuple[bool, str]:
@@ -108,10 +108,10 @@ def validate_docker() -> tuple[bool, str]:
         import docker
         client = docker.from_env()
         client.ping()
-        return True, "[OK] Docker is installed and running"
+        return True, "Docker is installed and running"
     except ImportError:
         return False, """
-[ERROR] Docker Python library not installed!
+Docker Python library not installed!
 
 Install it with:
 pip install docker
@@ -119,7 +119,7 @@ pip install docker
 """
     except Exception as e:
         return False, f"""
-[ERROR] Docker is not running or not accessible!
+Docker is not running or not accessible!
 
 Error: {str(e)}
 
@@ -143,10 +143,10 @@ def validate_docker_image() -> tuple[bool, str]:
 
         try:
             client.images.get("kai_agent_sandbox")
-            return True, "[OK] Docker sandbox image found"
+            return True, "Docker sandbox image found"
         except docker.errors.ImageNotFound:
             return False, """
-[WARNING]  Docker sandbox image not found!
+Docker sandbox image not found!
 
 Build the image with:
 cd Agent/sandbox
@@ -157,7 +157,7 @@ docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox
 
 """
     except Exception as e:
-        return False, f"[WARNING]  Could not check Docker image: {str(e)}"
+        return False, f"Could not check Docker image: {str(e)}"
 
 
 def validate_permissions() -> tuple[bool, str]:
@@ -172,11 +172,11 @@ def validate_permissions() -> tuple[bool, str]:
     env_path = Path(".env")
 
     if not env_path.exists():
-        return True, "[INFO]  No .env file to check permissions"
+        return True, "No .env file to check permissions"
 
     # Only check permissions on Unix-like systems
     if platform.system() == 'Windows':
-        return True, "[OK] .env file exists (Windows - permissions not checked)"
+        return True, ".env file exists (Windows - permissions not checked)"
 
     # Check if file is readable by others (security risk)
     try:
@@ -187,7 +187,7 @@ def validate_permissions() -> tuple[bool, str]:
         # Check if file is world-readable (on Unix systems)
         if mode & stat.S_IROTH:
             return False, """
-[WARNING]  WARNING: .env file is readable by others!
+WARNING: .env file is readable by others!
 
 Secure your .env file:
 chmod 600 .env
@@ -195,9 +195,9 @@ chmod 600 .env
 This prevents other users from reading your API keys.
 """
 
-        return True, "[OK] .env file permissions are secure"
+        return True, ".env file permissions are secure"
     except Exception as e:
-        return True, f"[INFO]  Could not check permissions: {str(e)}"
+        return True, f"Could not check permissions: {str(e)}"
 
 
 def run_validation(verbose: bool = True) -> bool:
@@ -245,7 +245,7 @@ def run_validation(verbose: bool = True) -> bool:
                     critical_failed = True
         except Exception as e:
             if verbose:
-                print(f"[ERROR] Error during {check_name} check: {str(e)}")
+                print(f"Error during {check_name} check: {str(e)}")
                 print()
             all_passed = False
             if is_critical:
@@ -255,13 +255,13 @@ def run_validation(verbose: bool = True) -> bool:
     if verbose:
         print("=" * 70)
         if critical_failed:
-            print("[ERROR] VALIDATION FAILED - Critical issues found")
+            print("VALIDATION FAILED - Critical issues found")
             print("Please fix the issues above before running the agent.")
         elif not all_passed:
-            print("[WARNING]  VALIDATION PASSED WITH WARNINGS")
+            print("VALIDATION PASSED WITH WARNINGS")
             print("Agent can run, but some features may be limited.")
         else:
-            print("[OK] VALIDATION PASSED - All checks successful!")
+            print("VALIDATION PASSED - All checks successful!")
             print("Agent is ready to run.")
         print("=" * 70)
 

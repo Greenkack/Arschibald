@@ -65,7 +65,7 @@ def test_create_sales_target():
     print("\n=== Test: Verkaufsziel erstellen ===")
     
     if not FORECASTING_AVAILABLE:
-        print("[ERROR] Forecasting nicht verfügbar")
+        print("Forecasting nicht verfügbar")
         return False
     
     conn = create_test_db()
@@ -86,22 +86,22 @@ def test_create_sales_target():
         )
         
         if target_id:
-            print(f"[OK] Verkaufsziel erstellt mit ID: {target_id}")
+            print(f"Verkaufsziel erstellt mit ID: {target_id}")
             
             # Verifiziere
             targets = get_sales_targets(conn=conn)
             if len(targets) == 1 and targets[0]['target_name'] == "Q1 2025 Umsatzziel":
-                print("[OK] Ziel korrekt gespeichert")
+                print("Ziel korrekt gespeichert")
                 return True
             else:
-                print("[ERROR] Ziel nicht korrekt gespeichert")
+                print("Ziel nicht korrekt gespeichert")
                 return False
         else:
-            print("[ERROR] Fehler beim Erstellen des Ziels")
+            print("Fehler beim Erstellen des Ziels")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
     finally:
         conn.close()
@@ -112,7 +112,7 @@ def test_get_sales_targets_with_filters():
     print("\n=== Test: Verkaufsziele mit Filtern laden ===")
     
     if not FORECASTING_AVAILABLE:
-        print("[ERROR] Forecasting nicht verfügbar")
+        print("Forecasting nicht verfügbar")
         return False
     
     conn = create_test_db()
@@ -153,30 +153,30 @@ def test_get_sales_targets_with_filters():
         # Test Filter nach Typ
         company_targets = get_sales_targets(target_type="company", conn=conn)
         if len(company_targets) == 1:
-            print("[OK] Filter nach target_type funktioniert")
+            print("Filter nach target_type funktioniert")
         else:
-            print(f"[ERROR] Filter nach target_type fehlgeschlagen: {len(company_targets)} statt 1")
+            print(f"Filter nach target_type fehlgeschlagen: {len(company_targets)} statt 1")
             return False
         
         # Test Filter nach assigned_to
         individual_targets = get_sales_targets(assigned_to="John Doe", conn=conn)
         if len(individual_targets) == 1:
-            print("[OK] Filter nach assigned_to funktioniert")
+            print("Filter nach assigned_to funktioniert")
         else:
-            print(f"[ERROR] Filter nach assigned_to fehlgeschlagen")
+            print(f"Filter nach assigned_to fehlgeschlagen")
             return False
         
         # Test alle Ziele
         all_targets = get_sales_targets(conn=conn)
         if len(all_targets) == 3:
-            print("[OK] Alle Ziele korrekt geladen")
+            print("Alle Ziele korrekt geladen")
             return True
         else:
-            print(f"[ERROR] Falsche Anzahl Ziele: {len(all_targets)} statt 3")
+            print(f"Falsche Anzahl Ziele: {len(all_targets)} statt 3")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
     finally:
         conn.close()
@@ -187,7 +187,7 @@ def test_update_target_progress():
     print("\n=== Test: Zielfortschritt aktualisieren ===")
     
     if not FORECASTING_AVAILABLE:
-        print("[ERROR] Forecasting nicht verfügbar")
+        print("Forecasting nicht verfügbar")
         return False
     
     conn = create_test_db()
@@ -208,22 +208,22 @@ def test_update_target_progress():
         success = update_target_progress(target_id, 25000.0, conn)
         
         if success:
-            print("[OK] Fortschritt aktualisiert")
+            print("Fortschritt aktualisiert")
             
             # Verifiziere
             targets = get_sales_targets(conn=conn)
             if targets[0]['current_value'] == 25000.0:
-                print("[OK] Fortschritt korrekt gespeichert")
+                print("Fortschritt korrekt gespeichert")
                 return True
             else:
-                print(f"[ERROR] Fortschritt falsch: {targets[0]['current_value']}")
+                print(f"Fortschritt falsch: {targets[0]['current_value']}")
                 return False
         else:
-            print("[ERROR] Fehler beim Aktualisieren")
+            print("Fehler beim Aktualisieren")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
     finally:
         conn.close()
@@ -234,7 +234,7 @@ def test_calculate_pipeline_forecast():
     print("\n=== Test: Pipeline-basierter Forecast ===")
     
     if not FORECASTING_AVAILABLE:
-        print("[ERROR] Forecasting nicht verfügbar")
+        print("Forecasting nicht verfügbar")
         return False
     
     conn = create_test_db()
@@ -267,7 +267,7 @@ def test_calculate_pipeline_forecast():
         )
         
         if forecast:
-            print(f"[OK] Forecast berechnet: {forecast['forecast_value']:.2f} €")
+            print(f"Forecast berechnet: {forecast['forecast_value']:.2f} €")
             print(f"   Konfidenz: {forecast['confidence_level']:.2%}")
             print(f"   Leads: {forecast['details']['total_leads']}")
             
@@ -276,17 +276,17 @@ def test_calculate_pipeline_forecast():
             expected = 101000.0
             
             if abs(forecast['forecast_value'] - expected) < 1:
-                print(f"[OK] Forecast-Wert korrekt (erwartet: {expected})")
+                print(f"Forecast-Wert korrekt (erwartet: {expected})")
                 return True
             else:
-                print(f"[ERROR] Forecast-Wert falsch: {forecast['forecast_value']} statt {expected}")
+                print(f"Forecast-Wert falsch: {forecast['forecast_value']} statt {expected}")
                 return False
         else:
-            print("[ERROR] Forecast-Berechnung fehlgeschlagen")
+            print("Forecast-Berechnung fehlgeschlagen")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -299,7 +299,7 @@ def test_get_target_achievement_status():
     print("\n=== Test: Zielerreichungsstatus berechnen ===")
     
     if not FORECASTING_AVAILABLE:
-        print("[ERROR] Forecasting nicht verfügbar")
+        print("Forecasting nicht verfügbar")
         return False
     
     conn = create_test_db()
@@ -323,23 +323,23 @@ def test_get_target_achievement_status():
         status = get_target_achievement_status(target_id, conn)
         
         if status:
-            print(f"[OK] Status berechnet:")
+            print(f"Status berechnet:")
             print(f"   Zielerreichung: {status['achievement_percentage']:.1f}%")
             print(f"   Health: {status['health']}")
             print(f"   Status: {status['status']}")
             
             if status['achievement_percentage'] == 50.0:
-                print("[OK] Zielerreichung korrekt berechnet")
+                print("Zielerreichung korrekt berechnet")
                 return True
             else:
-                print(f"[ERROR] Zielerreichung falsch: {status['achievement_percentage']}")
+                print(f"Zielerreichung falsch: {status['achievement_percentage']}")
                 return False
         else:
-            print("[ERROR] Status-Berechnung fehlgeschlagen")
+            print("Status-Berechnung fehlgeschlagen")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
     finally:
         conn.close()
@@ -350,7 +350,7 @@ def test_check_at_risk_targets():
     print("\n=== Test: Gefährdete Ziele finden ===")
     
     if not FORECASTING_AVAILABLE:
-        print("[ERROR] Forecasting nicht verfügbar")
+        print("Forecasting nicht verfügbar")
         return False
     
     conn = create_test_db()
@@ -378,21 +378,21 @@ def test_check_at_risk_targets():
         at_risk = check_at_risk_targets(conn)
         
         if at_risk:
-            print(f"[OK] {len(at_risk)} gefährdete(s) Ziel(e) gefunden")
+            print(f"{len(at_risk)} gefährdete(s) Ziel(e) gefunden")
             print(f"   Health: {at_risk[0]['health']}")
             
             if at_risk[0]['health'] in ['warning', 'critical']:
-                print("[OK] Ziel korrekt als gefährdet erkannt")
+                print("Ziel korrekt als gefährdet erkannt")
                 return True
             else:
-                print(f"[ERROR] Ziel nicht als gefährdet erkannt: {at_risk[0]['health']}")
+                print(f"Ziel nicht als gefährdet erkannt: {at_risk[0]['health']}")
                 return False
         else:
-            print("[WARNING] Keine gefährdeten Ziele gefunden (kann je nach Zeitpunkt variieren)")
+            print("Keine gefährdeten Ziele gefunden (kann je nach Zeitpunkt variieren)")
             return True  # Nicht unbedingt ein Fehler
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -405,7 +405,7 @@ def test_create_and_get_forecast():
     print("\n=== Test: Forecast erstellen und laden ===")
     
     if not FORECASTING_AVAILABLE:
-        print("[ERROR] Forecasting nicht verfügbar")
+        print("Forecasting nicht verfügbar")
         return False
     
     conn = create_test_db()
@@ -427,33 +427,33 @@ def test_create_and_get_forecast():
         )
         
         if forecast_id:
-            print(f"[OK] Forecast erstellt mit ID: {forecast_id}")
+            print(f"Forecast erstellt mit ID: {forecast_id}")
             
             # Lade Forecast
             forecasts = get_forecasts(conn=conn)
             
             if len(forecasts) == 1:
                 forecast = forecasts[0]
-                print(f"[OK] Forecast geladen:")
+                print(f"Forecast geladen:")
                 print(f"   Wert: {forecast['forecast_value']:.2f} €")
                 print(f"   Konfidenz: {forecast['confidence_level']:.2%}")
                 print(f"   Methode: {forecast['forecast_method']}")
                 
                 if forecast['forecast_value'] == 150000.0:
-                    print("[OK] Forecast-Daten korrekt")
+                    print("Forecast-Daten korrekt")
                     return True
                 else:
-                    print("[ERROR] Forecast-Daten inkorrekt")
+                    print("Forecast-Daten inkorrekt")
                     return False
             else:
-                print(f"[ERROR] Falsche Anzahl Forecasts: {len(forecasts)}")
+                print(f"Falsche Anzahl Forecasts: {len(forecasts)}")
                 return False
         else:
-            print("[ERROR] Fehler beim Erstellen des Forecasts")
+            print("Fehler beim Erstellen des Forecasts")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
     finally:
         conn.close()
@@ -466,7 +466,7 @@ def run_all_tests():
     print("=" * 60)
     
     if not FORECASTING_AVAILABLE:
-        print("\n[ERROR] Forecasting-Modul nicht verfügbar!")
+        print("\nForecasting-Modul nicht verfügbar!")
         print("Bitte stellen Sie sicher, dass alle Abhängigkeiten installiert sind.")
         return
     
@@ -487,7 +487,7 @@ def run_all_tests():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n[ERROR] Test '{test_name}' abgestürzt: {e}")
+            print(f"\nTest '{test_name}' abgestürzt: {e}")
             import traceback
             traceback.print_exc()
             results.append((test_name, False))
@@ -501,7 +501,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {test_name}")
     
     print(f"\n{passed}/{total} Tests bestanden ({passed/total*100:.1f}%)")
@@ -509,7 +509,7 @@ def run_all_tests():
     if passed == total:
         print("\n🎉 Alle Tests erfolgreich!")
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
 
 
 if __name__ == "__main__":

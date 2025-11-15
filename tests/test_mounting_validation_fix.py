@@ -25,7 +25,7 @@ def test_mounting_validation():
         "Aufdach-Montage sollte für Satteldach VALID sein"
     assert validation["error"] is None, \
         "Es sollte KEINE Fehlermeldung geben"
-    print("  [OK] Aufdach-Montage ist für Satteldach VALID")
+    print("  Aufdach-Montage ist für Satteldach VALID")
     
     # Test 2: Satteldach mit Aufständerung sollte INVALID sein
     print("\n📋 Test 2: Satteldach + Aufständerung Süd")
@@ -36,7 +36,7 @@ def test_mounting_validation():
         "Aufständerung sollte für Satteldach INVALID sein"
     assert "Aufständerungen sind nur für Flachdächer erlaubt" in validation["error"], \
         "Fehlermeldung sollte klar sein"
-    print("  [OK] Aufständerung wird für Satteldach korrekt abgelehnt")
+    print("  Aufständerung wird für Satteldach korrekt abgelehnt")
     
     # Test 3: Flachdach mit Aufständerung sollte VALID sein
     print("\n📋 Test 3: Flachdach + Aufständerung Süd")
@@ -50,7 +50,7 @@ def test_mounting_validation():
         "Aufständerung sollte für Flachdach VALID sein"
     assert validation["error"] is None, \
         "Es sollte KEINE Fehlermeldung geben"
-    print("  [OK] Aufständerung ist für Flachdach VALID")
+    print("  Aufständerung ist für Flachdach VALID")
     
     # Test 4: Flachdach mit Aufdach-Montage sollte VALID sein (aber nicht optimal)
     print("\n📋 Test 4: Flachdach + Aufdach-Montage")
@@ -62,11 +62,11 @@ def test_mounting_validation():
     if "Aufdach-Montage" not in allowed:
         assert validation["valid"] == False, \
             "Aufdach-Montage sollte für Flachdach nicht optimal sein"
-        print("  [OK] Aufdach-Montage wird für Flachdach als nicht optimal markiert")
+        print("  Aufdach-Montage wird für Flachdach als nicht optimal markiert")
     else:
-        print("  [INFO] Aufdach-Montage ist für Flachdach erlaubt")
+        print("  Aufdach-Montage ist für Flachdach erlaubt")
     
-    print("\n[OK] Alle Tests bestanden!")
+    print("\nAlle Tests bestanden!")
 
 
 if __name__ == "__main__":
@@ -82,6 +82,6 @@ if __name__ == "__main__":
         print("=" * 70)
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()

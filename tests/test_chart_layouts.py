@@ -64,9 +64,9 @@ def test_one_chart_per_page_layout():
         assert actual_pages == expected_pages, \
             f"{description}: Expected {expected_pages} pages, got {actual_pages}"
 
-        print(f"[OK] {description}: {num_charts} charts → {actual_pages} pages")
+        print(f"{description}: {num_charts} charts → {actual_pages} pages")
 
-    print("[OK] One chart per page layout tests passed")
+    print("One chart per page layout tests passed")
     return True
 
 
@@ -112,9 +112,9 @@ def test_two_charts_per_page_layout():
         assert actual_pages == expected_pages, \
             f"{description}: Expected {expected_pages} pages, got {actual_pages}"
 
-        print(f"[OK] {description}: {num_charts} charts → {actual_pages} pages")
+        print(f"{description}: {num_charts} charts → {actual_pages} pages")
 
-    print("[OK] Two charts per page layout tests passed")
+    print("Two charts per page layout tests passed")
     return True
 
 
@@ -162,9 +162,9 @@ def test_four_charts_per_page_layout():
         assert actual_pages == expected_pages, \
             f"{description}: Expected {expected_pages} pages, got {actual_pages}"
 
-        print(f"[OK] {description}: {num_charts} charts → {actual_pages} pages")
+        print(f"{description}: {num_charts} charts → {actual_pages} pages")
 
-    print("[OK] Four charts per page layout tests passed")
+    print("Four charts per page layout tests passed")
     return True
 
 
@@ -215,9 +215,9 @@ def test_page_count_calculation_formula():
                 f"{layout_name} with {num_charts} charts: " \
                 f"Expected {expected_pages} pages, got {actual_pages}"
 
-            print(f"    {num_charts} charts → {actual_pages} pages [OK]")
+            print(f"    {num_charts} charts → {actual_pages} pages ")
 
-    print("\n[OK] Page count calculation formula verified for all layouts")
+    print("\nPage count calculation formula verified for all layouts")
     return True
 
 
@@ -263,7 +263,7 @@ def test_layout_comparison():
     assert results[0][1] > results[1][1] > results[2][1], \
         "More charts per page should result in fewer total pages"
 
-    print(f"\n[OK] Layout comparison verified: {num_charts} charts")
+    print(f"\nLayout comparison verified: {num_charts} charts")
     print(f"  - one_per_page: {results[0][1]} pages")
     print(f"  - two_per_page: {results[1][1]} pages")
     print(f"  - four_per_page: {results[2][1]} pages")
@@ -288,9 +288,9 @@ def test_empty_chart_list():
         pdf_bytes = generator.generate([])
 
         assert pdf_bytes == b'', f"{layout}: Empty list should return empty bytes"
-        print(f"  [OK] {layout}: Empty list handled correctly")
+        print(f"  {layout}: Empty list handled correctly")
 
-    print("[OK] Empty chart list tests passed")
+    print("Empty chart list tests passed")
     return True
 
 
@@ -329,7 +329,7 @@ def test_missing_charts_in_analysis_results():
     # Should only generate pages for the 2 available charts
     assert actual_pages == 2, f"Expected 2 pages (only available charts), got {actual_pages}"
 
-    print(f"[OK] Missing charts handled gracefully")
+    print(f"Missing charts handled gracefully")
     print(f"  - Requested: {len(chart_keys)} charts")
     print(f"  - Available: 2 charts")
     print(f"  - Generated: {actual_pages} pages")
@@ -373,7 +373,7 @@ def test_large_chart_count():
     assert actual_pages == expected_pages, \
         f"Expected {expected_pages} pages, got {actual_pages}"
 
-    print(f"[OK] Large chart count handled successfully")
+    print(f"Large chart count handled successfully")
     print(f"  - Charts: {num_charts}")
     print(f"  - Layout: four_per_page")
     print(f"  - Pages: {actual_pages}")
@@ -412,10 +412,10 @@ def test_layout_with_different_chart_sizes():
         actual_pages = len(reader.pages)
 
         print(
-            f"  [OK] {layout}: {
+            f"  {layout}: {
                 len(chart_keys)} charts (various sizes) → {actual_pages} pages")
 
-    print("[OK] Different chart sizes handled correctly")
+    print("Different chart sizes handled correctly")
     return True
 
 
@@ -453,7 +453,7 @@ def test_invalid_layout_fallback():
     assert actual_pages == num_charts, \
         f"Should fall back to one_per_page: Expected {num_charts} pages, got {actual_pages}"
 
-    print(f"[OK] Invalid layout handled with fallback")
+    print(f"Invalid layout handled with fallback")
     print(f"  - Requested layout: 'invalid_layout'")
     print(f"  - Fallback layout: 'one_per_page'")
     print(f"  - Charts: {num_charts}")
@@ -488,7 +488,7 @@ def test_page_count_edge_cases():
             )
             pdf_bytes = generator.generate([])
             assert pdf_bytes == b'', f"{description}: Should return empty bytes"
-            print(f"  [OK] {description}: empty bytes")
+            print(f"  {description}: empty bytes")
         else:
             # Create mock data
             analysis_results = {}
@@ -511,9 +511,9 @@ def test_page_count_edge_cases():
             assert actual_pages == expected_pages, \
                 f"{description}: Expected {expected_pages} pages, got {actual_pages}"
 
-            print(f"  [OK] {description}: {actual_pages} pages")
+            print(f"  {description}: {actual_pages} pages")
 
-    print("[OK] All edge cases handled correctly")
+    print("All edge cases handled correctly")
     return True
 
 
@@ -549,11 +549,11 @@ def run_all_tests():
             else:
                 failed += 1
         except AssertionError as e:
-            print(f"\n[ERROR] Test failed: {test_func.__name__}")
+            print(f"\nTest failed: {test_func.__name__}")
             print(f"  Error: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n[ERROR] Test error: {test_func.__name__}")
+            print(f"\nTest error: {test_func.__name__}")
             print(f"  Error: {e}")
             import traceback
             traceback.print_exc()
@@ -568,9 +568,9 @@ def run_all_tests():
     print("=" * 70)
 
     if passed == len(test_functions):
-        print("[OK] ALL TESTS PASSED - Task 18.3 Complete")
+        print("ALL TESTS PASSED - Task 18.3 Complete")
     else:
-        print("[ERROR] SOME TESTS FAILED - Task 18.3 Needs Work")
+        print("SOME TESTS FAILED - Task 18.3 Needs Work")
 
     return failed == 0
 

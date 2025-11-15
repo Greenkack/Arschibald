@@ -47,18 +47,18 @@ print("-" * 100)
 for key in alte_keys:
     if key in PLACEHOLDER_MAPPING:
         mapped_to = PLACEHOLDER_MAPPING[key]
-        print(f"[OK] {key:30} -> {mapped_to}")
+        print(f"{key:30} -> {mapped_to}")
     else:
-        print(f"[ERROR] {key:30} NICHT GEFUNDEN!")
+        print(f"{key:30} NICHT GEFUNDEN!")
 
 print("\n2. NEUE KEYS (UPPERCASE) im PLACEHOLDER_MAPPING:")
 print("-" * 100)
 for key in neue_keys:
     if key in PLACEHOLDER_MAPPING:
         mapped_to = PLACEHOLDER_MAPPING[key]
-        print(f"[OK] {key:40} -> {mapped_to}")
+        print(f"{key:40} -> {mapped_to}")
     else:
-        print(f"[ERROR] {key:40} NICHT GEFUNDEN!")
+        print(f"{key:40} NICHT GEFUNDEN!")
 
 # 3. Suche in Code-Dateien nach Verwendung
 print("\n" + "=" * 100)
@@ -94,7 +94,7 @@ def search_in_file(filepath, search_terms):
 
 
 # Suche nach alten Keys
-print("\n[FOLDER] Suche nach ALTEN KEYS (lowercase) in Code:")
+print("\nSuche nach ALTEN KEYS (lowercase) in Code:")
 print("-" * 100)
 for filepath in files_to_check:
     full_path = f'c:/Users/win10/Desktop/Bokuk2/{filepath}'
@@ -103,7 +103,7 @@ for filepath in files_to_check:
 
     results = search_in_file(full_path, alte_keys)
     if results:
-        print(f"\n[SEARCH] {filepath}:")
+        print(f"\n{filepath}:")
         for term, matches in results.items():
             print(f"  {term}: {len(matches)} Verwendungen")
             if len(matches) <= 3:
@@ -111,7 +111,7 @@ for filepath in files_to_check:
                     print(f"    Zeile {line_num}: {line_text}")
 
 # Suche nach neuen Keys
-print("\n[FOLDER] Suche nach NEUEN KEYS (UPPERCASE) in Code:")
+print("\nSuche nach NEUEN KEYS (UPPERCASE) in Code:")
 print("-" * 100)
 for filepath in files_to_check:
     full_path = f'c:/Users/win10/Desktop/Bokuk2/{filepath}'
@@ -120,7 +120,7 @@ for filepath in files_to_check:
 
     results = search_in_file(full_path, neue_keys)
     if results:
-        print(f"\n[SEARCH] {filepath}:")
+        print(f"\n{filepath}:")
         for term, matches in results.items():
             print(f"  {term}: {len(matches)} Verwendungen")
             if len(matches) <= 3:
@@ -147,10 +147,10 @@ for alt, neu, beschreibung in ueberschneidungen:
     alt_exists = alt in PLACEHOLDER_MAPPING
     neu_exists = neu in PLACEHOLDER_MAPPING
 
-    status = "[WARNING] BEIDE VORHANDEN" if alt_exists and neu_exists else "[OK] Kein Konflikt"
+    status = "BEIDE VORHANDEN" if alt_exists and neu_exists else "Kein Konflikt"
     print(f"{status}: {beschreibung}")
-    print(f"  Alt: {alt:30} {'[OK]' if alt_exists else '[ERROR]'}")
-    print(f"  Neu: {neu:40} {'[OK]' if neu_exists else '[ERROR]'}")
+    print(f"  Alt: {alt:30} {'' if alt_exists else ''}")
+    print(f"  Neu: {neu:40} {'' if neu_exists else ''}")
     print()
 
 # 5. EMPFEHLUNG
@@ -161,20 +161,20 @@ print("=" * 100)
 alte_in_use = sum(1 for key in alte_keys if key in PLACEHOLDER_MAPPING)
 neue_in_use = sum(1 for key in neue_keys if key in PLACEHOLDER_MAPPING)
 
-print("\n[CHART] Statistik:")
+print("\nStatistik:")
 print(f"  Alte Keys (lowercase): {alte_in_use}/{len(alte_keys)} vorhanden")
 print(f"  Neue Keys (UPPERCASE): {neue_in_use}/{len(neue_keys)} vorhanden")
 
 if alte_in_use > 0 and neue_in_use > 0:
-    print("\n[WARNING] PROBLEM: Beide Key-Systeme sind aktiv!")
+    print("\nPROBLEM: Beide Key-Systeme sind aktiv!")
     print(f"   → {alte_in_use} alte Keys im PLACEHOLDER_MAPPING")
     print(f"   → {neue_in_use} neue Keys im PLACEHOLDER_MAPPING")
-    print("\n[IDEA] EMPFEHLUNG:")
+    print("\nEMPFEHLUNG:")
     print("   Option 1: Alte Keys zu neuen mappen (Aliases)")
     print("   Option 2: Nur neue Keys verwenden, alte entfernen")
     print("   Option 3: Klare Trennung: alte für alte Logik, neue für neue")
 else:
-    print("\n[OK] Nur ein Key-System aktiv - kein Konflikt")
+    print("\nNur ein Key-System aktiv - kein Konflikt")
 
 print("\n" + "=" * 100)
 print("ANALYSE ABGESCHLOSSEN")

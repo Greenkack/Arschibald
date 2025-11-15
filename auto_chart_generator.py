@@ -37,7 +37,7 @@ def generate_placeholder_chart(
         title = chart_key.replace('_chart_bytes', '').replace('_', ' ').title()
 
         # Text in der Mitte
-        ax.text(0.5, 0.5, f"[CHART] {title}\n\nChart wird nach Berechnung generiert",
+        ax.text(0.5, 0.5, f"{title}\n\nChart wird nach Berechnung generiert",
                 horizontalalignment='center',
                 verticalalignment='center',
                 fontsize=16,
@@ -84,7 +84,7 @@ def create_simple_placeholder_png(chart_key: str) -> bytes:
 
         # Text
         title = chart_key.replace('_chart_bytes', '').replace('_', ' ').title()
-        text = f"[CHART] {title}\n\nChart wird nach Berechnung generiert"
+        text = f"{title}\n\nChart wird nach Berechnung generiert"
 
         # Zentriert
         draw.text((400, 300), text, fill='#666666', anchor='mm')
@@ -137,7 +137,7 @@ def auto_generate_missing_charts(
             logging.error(f"Fehler beim Generieren von {chart_key}: {e}")
 
     if generated_count > 0:
-        logging.info(f"[OK] {generated_count} Platzhalter-Charts generiert")
+        logging.info(f"{generated_count} Platzhalter-Charts generiert")
 
     return analysis_results
 
@@ -245,7 +245,7 @@ def auto_fix_session_state_charts(force_all: bool = True):
             if key.endswith('_chart_bytes') and value is not None
         )
 
-        logging.info(f"[TOOL] Auto-Fix: {chart_count} Charts in Session State")
+        logging.info(f"Auto-Fix: {chart_count} Charts in Session State")
 
     except Exception as e:
         logging.error(f"Fehler beim Auto-Fix von Session State: {e}")

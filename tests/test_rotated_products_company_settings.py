@@ -36,7 +36,7 @@ base_settings = {
     "include_storage": True,
 }
 
-print(f"\n[OK] Basis-Settings:")
+print(f"\nBasis-Settings:")
 print(f"  - Modul ID:       {base_settings['selected_module_id']}")
 print(f"  - Wechselrichter: {base_settings['selected_inverter_id']}")
 print(f"  - Speicher:       {base_settings['selected_storage_id']}")
@@ -100,32 +100,32 @@ for i, company in enumerate(companies):
     if "selected_module" in offer_data:
         selected_module = offer_data["selected_module"]
         print(
-            f"  [OK] Modul geladen: {
+            f"  Modul geladen: {
                 selected_module.get('model_name')} (ID: {
                 selected_module.get('id')})")
     else:
-        print(f"  [ERROR] FEHLER: selected_module nicht in offer_data!")
+        print(f"  FEHLER: selected_module nicht in offer_data!")
 
     if "selected_inverter" in offer_data:
         selected_inverter = offer_data["selected_inverter"]
         print(
-            f"  [OK] WR geladen:    {
+            f"  WR geladen:    {
                 selected_inverter.get('model_name')} (ID: {
                 selected_inverter.get('id')})")
     else:
-        print(f"  [ERROR] FEHLER: selected_inverter nicht in offer_data!")
+        print(f"  FEHLER: selected_inverter nicht in offer_data!")
 
     if "selected_storage" in offer_data:
         selected_storage = offer_data["selected_storage"]
         print(
-            f"  [OK] Speicher:      {
+            f"  Speicher:      {
                 selected_storage.get('model_name')} (ID: {
                 selected_storage.get('id')})")
     else:
-        print(f"  [ERROR] FEHLER: selected_storage nicht in offer_data!")
+        print(f"  FEHLER: selected_storage nicht in offer_data!")
 
 print("\n" + "=" * 100)
-print("[OK] TEST ABGESCHLOSSEN")
+print("TEST ABGESCHLOSSEN")
 print("=" * 100)
 print("\nWenn oben unterschiedliche Produkte pro Firma angezeigt werden,")
-print("dann funktioniert die company_settings Übergabe korrekt! [OK]")
+print("dann funktioniert die company_settings Übergabe korrekt! ")

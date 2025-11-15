@@ -135,7 +135,7 @@ def example_data_encryption():
 
     # Verify
     assert decrypted == sensitive_data
-    print("\n[OK] Encryption/decryption successful")
+    print("\nEncryption/decryption successful")
 
 
 def example_data_access_logging():
@@ -292,7 +292,7 @@ def example_complete_workflow():
     print("\nStep 6: Decrypted SSN when needed")
     print(f"  Decrypted: {decrypted_ssn}")
 
-    print("\n[OK] Complete workflow executed successfully")
+    print("\nComplete workflow executed successfully")
 
 
 def example_logging_best_practices():
@@ -310,17 +310,17 @@ def example_logging_best_practices():
     }
 
     # BAD: Logging raw PII
-    print("[ERROR] BAD: Logging raw PII")
+    print("BAD: Logging raw PII")
     print(f"  User {user_data['email']} logged in from {user_data['phone']}")
 
     # GOOD: Mask PII before logging
-    print("\n[OK] GOOD: Mask PII before logging")
+    print("\nGOOD: Mask PII before logging")
     masked_email = manager.mask_email(user_data["email"])
     masked_phone = manager.mask_phone(user_data["phone"])
     print(f"  User {masked_email} logged in from {masked_phone}")
 
     # BETTER: Use structured logging with automatic masking
-    print("\n[OK] BETTER: Structured logging with masking")
+    print("\nBETTER: Structured logging with masking")
     pii_fields = manager.identify_pii_fields(user_data)
     masked_data = manager.mask_dict(user_data, pii_fields)
     print(f"  Event: {masked_data}")
@@ -347,7 +347,7 @@ def main():
         print("=" * 60)
 
     except Exception as e:
-        print(f"\n[ERROR] Error: {e}")
+        print(f"\nError: {e}")
         import traceback
         traceback.print_exc()
 

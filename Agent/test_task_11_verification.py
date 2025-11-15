@@ -37,7 +37,7 @@ def test_error_classes():
     assert error.message == "Test error"
     assert error.solution == "Test solution"
     assert 'key' in error.details
-    print("[OK] AgentError works")
+    print("AgentError works")
 
     # Test ConfigurationError
     config_error = ConfigurationError(
@@ -46,7 +46,7 @@ def test_error_classes():
     )
     assert "OPENAI_API_KEY" in config_error.details['missing_keys']
     assert config_error.solution is not None
-    print("[OK] ConfigurationError works")
+    print("ConfigurationError works")
 
     # Test ExecutionError
     exec_error = ExecutionError(
@@ -56,7 +56,7 @@ def test_error_classes():
         stderr="Error message"
     )
     assert exec_error.details['exit_code'] == 1
-    print("[OK] ExecutionError works")
+    print("ExecutionError works")
 
     # Test APIError
     api_error = APIError(
@@ -66,7 +66,7 @@ def test_error_classes():
     )
     assert api_error.details['status_code'] == 429
     assert "rate limit" in api_error.solution.lower()
-    print("[OK] APIError works")
+    print("APIError works")
 
     # Test DockerError
     docker_error = DockerError(
@@ -74,7 +74,7 @@ def test_error_classes():
         image_name="test_image"
     )
     assert "test_image" in docker_error.details['image_name']
-    print("[OK] DockerError works")
+    print("DockerError works")
 
     # Test KnowledgeBaseError
     kb_error = KnowledgeBaseError(
@@ -82,7 +82,7 @@ def test_error_classes():
         path="knowledge_base/"
     )
     assert kb_error.details['path'] == "knowledge_base/"
-    print("[OK] KnowledgeBaseError works")
+    print("KnowledgeBaseError works")
 
     # Test ToolError
     tool_error = ToolError(
@@ -91,9 +91,9 @@ def test_error_classes():
         tool_input={'arg': 'value'}
     )
     assert tool_error.details['tool_name'] == "test_tool"
-    print("[OK] ToolError works")
+    print("ToolError works")
 
-    print("\n[OK] All error classes working correctly!\n")
+    print("\nAll error classes working correctly!\n")
 
 
 def test_error_utilities():
@@ -106,20 +106,20 @@ def test_error_utilities():
         solution="Test solution"
     )
     formatted = format_error_message(error)
-    assert "[ERROR]" in formatted
-    assert "[IDEA]" in formatted
+    assert "" in formatted
+    assert "" in formatted
     assert "Test error" in formatted
     assert "Test solution" in formatted
-    print("[OK] format_error_message works")
+    print("format_error_message works")
 
     # Test should_retry
     api_error_429 = APIError("Rate limit", status_code=429)
     assert should_retry(api_error_429)
-    print("[OK] should_retry works for retryable errors")
+    print("should_retry works for retryable errors")
 
     config_error = ConfigurationError("Missing key")
     assert should_retry(config_error) == False
-    print("[OK] should_retry works for non-retryable errors")
+    print("should_retry works for non-retryable errors")
 
     # Test get_retry_delay
     delay_0 = get_retry_delay(0)
@@ -128,9 +128,9 @@ def test_error_utilities():
     assert delay_0 == 1
     assert delay_1 == 2
     assert delay_2 == 4
-    print("[OK] get_retry_delay works with exponential backoff")
+    print("get_retry_delay works with exponential backoff")
 
-    print("\n[OK] All error utilities working correctly!\n")
+    print("\nAll error utilities working correctly!\n")
 
 
 def test_error_to_dict():
@@ -150,8 +150,8 @@ def test_error_to_dict():
     assert error_dict['solution'] == "Retry later"
     assert 'timestamp' in error_dict
 
-    print("[OK] Error serialization works")
-    print("\n[OK] Error to_dict() working correctly!\n")
+    print("Error serialization works")
+    print("\nError to_dict() working correctly!\n")
 
 
 def test_logging_imports():
@@ -166,16 +166,16 @@ def test_logging_imports():
             log_docker_operation,
             log_tool_execution,
         )
-        print("[OK] All logging functions imported successfully")
+        print("All logging functions imported successfully")
 
         # Test logger creation
         logger = get_logger(__name__)
         assert logger is not None
-        print("[OK] Logger creation works")
+        print("Logger creation works")
 
-        print("\n[OK] Logging system working correctly!\n")
+        print("\nLogging system working correctly!\n")
     except ImportError as e:
-        print(f"[ERROR] Failed to import logging: {e}")
+        print(f"Failed to import logging: {e}")
         return False
 
     return True
@@ -195,14 +195,14 @@ def main():
         test_logging_imports()
 
         print("=" * 60)
-        print("[OK] ALL TESTS PASSED - TASK 11 COMPLETE!")
+        print("ALL TESTS PASSED - TASK 11 COMPLETE!")
         print("=" * 60)
         print()
         print("Summary:")
-        print("  [OK] Error classes defined and working")
-        print("  [OK] Error utilities functioning correctly")
-        print("  [OK] Error serialization working")
-        print("  [OK] Logging system operational")
+        print("  Error classes defined and working")
+        print("  Error utilities functioning correctly")
+        print("  Error serialization working")
+        print("  Logging system operational")
         print()
         print("Task 11 'Implement error handling and logging' is COMPLETE!")
 
@@ -210,7 +210,7 @@ def main():
 
     except Exception as e:
         print("=" * 60)
-        print(f"[ERROR] TEST FAILED: {e}")
+        print(f"TEST FAILED: {e}")
         print("=" * 60)
         import traceback
         traceback.print_exc()

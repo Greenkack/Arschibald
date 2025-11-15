@@ -85,7 +85,7 @@ def calculate_module_grid(
     )
     
     if not validation_result["valid"]:
-        print(f"[ERROR] Grid calculation validation failed: {validation_result['message']}")
+        print(f"Grid calculation validation failed: {validation_result['message']}")
         return []
     
     # Handle zero or negative module quantity
@@ -95,7 +95,7 @@ def calculate_module_grid(
     # TASK 13: Limit to maximum modules for performance
     # Requirement 10.5: Begrenzung auf maximal 200 Module
     if module_quantity > MAX_MODULES:
-        print(f"[WARNING] Module quantity limited to {MAX_MODULES} for performance (requested: {module_quantity})")
+        print(f"Module quantity limited to {MAX_MODULES} for performance (requested: {module_quantity})")
         module_quantity = MAX_MODULES
     
     # Determine module dimensions based on orientation
@@ -112,7 +112,7 @@ def calculate_module_grid(
     
     # Check if even one module fits
     if available_length < module_width or available_width < module_height:
-        print(f"[WARNING] Insufficient space: Available area ({available_length:.2f}m x {available_width:.2f}m) "
+        print(f"Insufficient space: Available area ({available_length:.2f}m x {available_width:.2f}m) "
               f"is smaller than module size ({module_width:.2f}m x {module_height:.2f}m)")
         return []
     
@@ -132,7 +132,7 @@ def calculate_module_grid(
     actual_modules = min(module_quantity, max_modules)
     
     if actual_modules < module_quantity:
-        print(f"[INFO] Requested {module_quantity} modules, but only {actual_modules} fit on roof")
+        print(f"Requested {module_quantity} modules, but only {actual_modules} fit on roof")
     
     # Generate grid positions
     positions = _generate_grid_positions(
@@ -394,7 +394,7 @@ if __name__ == "__main__":
     # Test case 1: Standard roof
     print("Test 1: Standard roof (10m x 8m, 20 modules)")
     positions = calculate_module_grid(10.0, 8.0, 20)
-    print(f"[OK] Placed {len(positions)} modules")
+    print(f"Placed {len(positions)} modules")
     if positions:
         print(f"  First module: ({positions[0][0]:.2f}, {positions[0][1]:.2f})")
         print(f"  Last module: ({positions[-1][0]:.2f}, {positions[-1][1]:.2f})")
@@ -403,27 +403,27 @@ if __name__ == "__main__":
     # Test case 2: Small roof
     print("Test 2: Small roof (5m x 4m, 10 modules)")
     positions = calculate_module_grid(5.0, 4.0, 10)
-    print(f"[OK] Placed {len(positions)} modules")
+    print(f"Placed {len(positions)} modules")
     print()
     
     # Test case 3: Maximum capacity
     print("Test 3: Maximum capacity (15m x 12m)")
     max_modules = calculate_max_modules(15.0, 12.0)
-    print(f"[OK] Maximum modules: {max_modules}")
+    print(f"Maximum modules: {max_modules}")
     positions = calculate_module_grid(15.0, 12.0, max_modules)
-    print(f"[OK] Placed {len(positions)} modules")
+    print(f"Placed {len(positions)} modules")
     print()
     
     # Test case 4: Invalid inputs
     print("Test 4: Invalid inputs (negative dimensions)")
     positions = calculate_module_grid(-10.0, 8.0, 20)
-    print(f"[OK] Handled invalid input: {len(positions)} modules (expected 0)")
+    print(f"Handled invalid input: {len(positions)} modules (expected 0)")
     print()
     
     # Test case 5: Landscape orientation
     print("Test 5: Landscape orientation (10m x 8m, 20 modules)")
     positions = calculate_module_grid(10.0, 8.0, 20, orientation="landscape")
-    print(f"[OK] Placed {len(positions)} modules in landscape")
+    print(f"Placed {len(positions)} modules in landscape")
     print()
     
     print("=== All tests completed ===")

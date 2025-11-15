@@ -26,7 +26,7 @@ def demo_basic_generation():
     # Check if YML file exists
     yml_file = "coords_multi/seite1_f1.yml"
     if not Path(yml_file).exists():
-        print(f"[ERROR] YML file not found: {yml_file}")
+        print(f"YML file not found: {yml_file}")
         print("   Please ensure the coords_multi directory exists with YML files.")
         return False
     
@@ -34,7 +34,7 @@ def demo_basic_generation():
     print(f"\n1. Parsing original YML: {yml_file}")
     parser = YMLParser()
     elements = parser.parse_yml(yml_file)
-    print(f"   [OK] Found {len(elements)} elements")
+    print(f"   Found {len(elements)} elements")
     
     # Show first few elements
     print(f"\n   First 3 elements:")
@@ -48,22 +48,22 @@ def demo_basic_generation():
         x1, y1, x2, y2 = elem.position
         new_pos = (x1 + 10, y1 + 10, x2 + 10, y2 + 10)
         new_positions.append(new_pos)
-    print(f"   [OK] Calculated {len(new_positions)} new positions")
+    print(f"   Calculated {len(new_positions)} new positions")
     
     # Step 3: Generate new YML
     output_file = "multi_pdf_positioning/demo_output.yml"
     print(f"\n3. Generating new YML: {output_file}")
     generator = YMLGenerator()
     content = generator.generate_yml(elements, new_positions, output_file, yml_file)
-    print(f"   [OK] Generated {len(content)} characters")
-    print(f"   [OK] File written to: {output_file}")
+    print(f"   Generated {len(content)} characters")
+    print(f"   File written to: {output_file}")
     
     # Step 4: Validate output
     print(f"\n4. Validating generated YML")
     is_valid, errors = generator.validate_yml_output(output_file, elements)
     
     if is_valid:
-        print("   [OK] Validation passed!")
+        print("   Validation passed!")
     else:
         print(f"   ⚠ Validation found {len(errors)} issues:")
         for error in errors[:5]:  # Show first 5
@@ -90,9 +90,9 @@ def demo_basic_generation():
     gen_elements = parser2.parse_yml(output_file)
     gen_elem = gen_elements[0]
     print(f"   Generated:")
-    print(f"     Text: '{gen_elem.text}' (unchanged [OK])")
-    print(f"     Position: {gen_elem.position} (changed [OK])")
-    print(f"     Font: {gen_elem.font} ({gen_elem.font_size}pt) (unchanged [OK])")
+    print(f"     Text: '{gen_elem.text}' (unchanged )")
+    print(f"     Position: {gen_elem.position} (changed )")
+    print(f"     Font: {gen_elem.font} ({gen_elem.font_size}pt) (unchanged )")
     
     return True
 
@@ -105,7 +105,7 @@ def demo_format_preservation():
     
     yml_file = "coords_multi/seite1_f1.yml"
     if not Path(yml_file).exists():
-        print(f"[ERROR] YML file not found: {yml_file}")
+        print(f"YML file not found: {yml_file}")
         return False
     
     # Parse original
@@ -136,7 +136,7 @@ def demo_format_preservation():
     gen_sep_count = generated_content.count("----------------------------------------")
     print(f"   Separator count: {orig_sep_count} (original) vs {gen_sep_count} (generated)")
     if orig_sep_count == gen_sep_count:
-        print("   [OK] Separator count preserved")
+        print("   Separator count preserved")
     else:
         print("   ⚠ Separator count differs")
     
@@ -146,7 +146,7 @@ def demo_format_preservation():
     print(f"   Line count: {orig_lines} (original) vs {gen_lines} (generated)")
     line_diff = abs(orig_lines - gen_lines)
     if line_diff <= 5:
-        print(f"   [OK] Line count similar (diff: {line_diff})")
+        print(f"   Line count similar (diff: {line_diff})")
     else:
         print(f"   ⚠ Line count differs significantly (diff: {line_diff})")
     
@@ -155,7 +155,7 @@ def demo_format_preservation():
     gen_elements = parser2.parse_yml(output_file)
     print(f"   Element count: {len(elements)} (original) vs {len(gen_elements)} (generated)")
     if len(elements) == len(gen_elements):
-        print("   [OK] Element count preserved")
+        print("   Element count preserved")
     else:
         print("   ⚠ Element count differs")
     
@@ -170,7 +170,7 @@ def demo_validation():
     
     yml_file = "coords_multi/seite1_f1.yml"
     if not Path(yml_file).exists():
-        print(f"[ERROR] YML file not found: {yml_file}")
+        print(f"YML file not found: {yml_file}")
         return False
     
     # Parse and generate
@@ -197,29 +197,29 @@ def demo_validation():
     parser2 = YMLParser()
     gen_elements = parser2.parse_yml(output_file)
     if len(gen_elements) == len(elements):
-        print(f"   [OK] All {len(elements)} elements present")
+        print(f"   All {len(elements)} elements present")
     else:
-        print(f"   [ERROR] Element count mismatch: {len(gen_elements)} vs {len(elements)}")
+        print(f"   Element count mismatch: {len(gen_elements)} vs {len(elements)}")
     
     # Check 2: Attributes preserved (except position)
     print(f"\n   Check 2: Non-position attributes preserved")
     mismatches = 0
     for i, (orig, gen) in enumerate(zip(elements, gen_elements)):
         if orig.text != gen.text:
-            print(f"   [ERROR] Element {i}: Text mismatch")
+            print(f"   Element {i}: Text mismatch")
             mismatches += 1
         if orig.font != gen.font:
-            print(f"   [ERROR] Element {i}: Font mismatch")
+            print(f"   Element {i}: Font mismatch")
             mismatches += 1
         if orig.font_size != gen.font_size:
-            print(f"   [ERROR] Element {i}: Font size mismatch")
+            print(f"   Element {i}: Font size mismatch")
             mismatches += 1
         if orig.color != gen.color:
-            print(f"   [ERROR] Element {i}: Color mismatch")
+            print(f"   Element {i}: Color mismatch")
             mismatches += 1
     
     if mismatches == 0:
-        print(f"   [OK] All attributes preserved correctly")
+        print(f"   All attributes preserved correctly")
     else:
         print(f"   ⚠ Found {mismatches} attribute mismatches")
     
@@ -230,7 +230,7 @@ def demo_validation():
         if orig.position != gen.position:
             position_changes += 1
     
-    print(f"   [OK] {position_changes} out of {len(elements)} positions changed")
+    print(f"   {position_changes} out of {len(elements)} positions changed")
     
     # Check 4: Positions within bounds
     print(f"\n   Check 4: Positions within bounds")
@@ -245,7 +245,7 @@ def demo_validation():
             out_of_bounds += 1
     
     if out_of_bounds == 0:
-        print(f"   [OK] All positions within bounds")
+        print(f"   All positions within bounds")
     else:
         print(f"   ⚠ {out_of_bounds} positions out of bounds")
     
@@ -254,7 +254,7 @@ def demo_validation():
     is_valid, errors = generator.validate_yml_output(output_file, elements)
     
     if is_valid:
-        print("   [OK] Full validation passed!")
+        print("   Full validation passed!")
     else:
         print(f"   ⚠ Validation found {len(errors)} issues")
         print(f"   First 3 errors:")
@@ -273,12 +273,12 @@ def demo_batch_processing():
     # Find all YML files
     yml_dir = Path("coords_multi")
     if not yml_dir.exists():
-        print(f"[ERROR] Directory not found: {yml_dir}")
+        print(f"Directory not found: {yml_dir}")
         return False
     
     yml_files = list(yml_dir.glob("seite1_f*.yml"))
     if not yml_files:
-        print(f"[ERROR] No YML files found in {yml_dir}")
+        print(f"No YML files found in {yml_dir}")
         return False
     
     print(f"\n1. Found {len(yml_files)} YML files to process")
@@ -317,7 +317,7 @@ def demo_batch_processing():
     print(f"   Failed: {len(results) - success_count}/{len(results)}")
     
     for file, success in results.items():
-        status = "[OK]" if success else "[ERROR]"
+        status = "" if success else ""
         print(f"   {status} {Path(file).name}")
     
     return True
@@ -348,7 +348,7 @@ def main():
             success = demo_func()
             results[name] = success
         except Exception as e:
-            print(f"\n[ERROR] Error in {name}: {e}")
+            print(f"\nError in {name}: {e}")
             import traceback
             traceback.print_exc()
             results[name] = False
@@ -359,14 +359,14 @@ def main():
     print("="*70)
     
     for name, success in results.items():
-        status = "[OK] PASSED" if success else "[ERROR] FAILED"
+        status = "PASSED" if success else "FAILED"
         print(f"  {status}: {name}")
     
     success_count = sum(1 for v in results.values() if v)
     print(f"\nTotal: {success_count}/{len(results)} demos passed")
     
     if success_count == len(results):
-        print("\n[OK] All demos completed successfully!")
+        print("\nAll demos completed successfully!")
         print("\nThe YML Generator module is ready for use.")
         print("\nKey features demonstrated:")
         print("  • Generate YML files with updated positions")

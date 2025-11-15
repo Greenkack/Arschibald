@@ -139,7 +139,7 @@ def safe_render_component(render_func, component_name: str, *args, **kwargs) -> 
     try:
         return render_func(*args, **kwargs)
     except Exception as e:
-        st.error(f"[ERROR] Fehler beim Laden von {component_name}: {e}")
+        st.error(f"Fehler beim Laden von {component_name}: {e}")
         print(f"Fehler in {component_name}:")
         traceback.print_exc()
         return {}
@@ -154,7 +154,7 @@ def get_project_data() -> Dict[str, Any]:
     """
     project_data = st.session_state.get("project_data", {})
     if not project_data:
-        st.warning("[WARNING] Keine Projektdaten gefunden. Bitte führen Sie zuerst die Bedarfsanalyse durch.")
+        st.warning("Keine Projektdaten gefunden. Bitte führen Sie zuerst die Bedarfsanalyse durch.")
     return project_data
 
 
@@ -211,9 +211,9 @@ def _initialize_placement_manager(
             )
             manager.add_module(module)
         
-        print(f"[OK] {len(manager.modules)} Module im PlacementManager initialisiert!")
+        print(f"{len(manager.modules)} Module im PlacementManager initialisiert!")
     except Exception as e:
-        print(f"[WARNING] Fehler beim Initialisieren des PlacementManagers: {e}")
+        print(f"Fehler beim Initialisieren des PlacementManagers: {e}")
         traceback.print_exc()
 
 
@@ -257,10 +257,10 @@ def extract_module_quantity(
         if module_qty is not None:
             try:
                 qty = int(module_qty)
-                print(f"[OK] Modulanzahl aus analysis_results: {qty}")
+                print(f"Modulanzahl aus analysis_results: {qty}")
                 return qty
             except (ValueError, TypeError):
-                print(f"[WARNING] Ungültige Modulanzahl in analysis_results: {module_qty}")
+                print(f"Ungültige Modulanzahl in analysis_results: {module_qty}")
     
     # Fallback: project_data
     if project_data:
@@ -268,13 +268,13 @@ def extract_module_quantity(
         if module_qty is not None:
             try:
                 qty = int(module_qty)
-                print(f"[OK] Modulanzahl aus project_data: {qty}")
+                print(f"Modulanzahl aus project_data: {qty}")
                 return qty
             except (ValueError, TypeError):
-                print(f"[WARNING] Ungültige Modulanzahl in project_data: {module_qty}")
+                print(f"Ungültige Modulanzahl in project_data: {module_qty}")
     
     # Letzter Fallback: 20 Module
-    print("[WARNING] Keine Modulanzahl gefunden, verwende Default: 20")
+    print("Keine Modulanzahl gefunden, verwende Default: 20")
     return 20
 
 
@@ -389,12 +389,12 @@ def render_3d_view():
     try:
         _render_3d_view_impl()
     except Exception as e:
-        st.error(f"[ERROR] Kritischer Fehler in der 3D-Visualisierung: {e}")
+        st.error(f"Kritischer Fehler in der 3D-Visualisierung: {e}")
         print("Kritischer Fehler:")
         traceback.print_exc()
         
         # Zeige Debug-Informationen
-        with st.expander("[SEARCH] Debug-Informationen"):
+        with st.expander("Debug-Informationen"):
             st.code(traceback.format_exc())
 
 
@@ -415,7 +415,7 @@ def _render_3d_view_impl():
     
     # Prüfe 3D-Verfügbarkeit
     if not PV3D_AVAILABLE:
-        st.error("[ERROR] 3D-Visualisierung nicht verfügbar. Bitte installieren Sie die erforderlichen Pakete:")
+        st.error("3D-Visualisierung nicht verfügbar. Bitte installieren Sie die erforderlichen Pakete:")
         st.code("pip install pyvista vtk stpyvista numpy trimesh pillow plotly", language="bash")
         st.stop()
     
@@ -488,7 +488,7 @@ def _render_3d_view_impl():
             selected_roof_type  # Verwende die ausgewählte Dachform
         )
         
-        # [OK] FIX: render_advanced_controls braucht building_length und building_width
+        # FIX: render_advanced_controls braucht building_length und building_width
         building_length = basis_settings.get("building_length", 10.0)
         building_width = basis_settings.get("building_width", 8.0)
         advanced_settings = safe_render_component(
@@ -499,14 +499,14 @@ def _render_3d_view_impl():
         )
         
         if ANALYSIS_AVAILABLE:
-            # [OK] FIX: render_analysis_panel braucht keine Parameter
+            # FIX: render_analysis_panel braucht keine Parameter
             analysis_settings = safe_render_component(
                 render_analysis_panel,
                 "Analyse"
             )
         
         if EXPORT_AVAILABLE:
-            # [OK] FIX: render_export_options braucht keine Parameter
+            # FIX: render_export_options braucht keine Parameter
             export_settings = safe_render_component(
                 render_export_options,
                 "Export-Optionen"
@@ -638,12 +638,12 @@ def _render_3d_view_impl():
                             st.error(result["message"])
                     else:
                         st.warning(
-                            "[WARNING] Kein Platz für weitere Module. "
+                            "Kein Platz für weitere Module. "
                             "Die Dachfläche ist vollständig belegt."
                         )
                 except Exception as add_error:
                     st.error(
-                        f"[ERROR] Fehler beim Hinzufügen des Moduls: {add_error}"
+                        f"Fehler beim Hinzufügen des Moduls: {add_error}"
                     )
                     print(f"Fehler beim manuellen Hinzufügen: {add_error}")
                     traceback.print_exc()
@@ -665,7 +665,7 @@ def _render_3d_view_impl():
                         st.error(result["message"])
                 else:
                     st.warning(
-                        "[WARNING] Keine Module ausgewählt. "
+                        "Keine Module ausgewählt. "
                         "Bitte wählen Sie Module in der 3D-Ansicht aus."
                     )
             
@@ -702,7 +702,7 @@ def _render_3d_view_impl():
                         st.error(result["message"])
                 else:
                     st.warning(
-                        "[WARNING] Keine Module ausgewählt. "
+                        "Keine Module ausgewählt. "
                         "Bitte wählen Sie Module zum Verschieben aus."
                     )
             
@@ -730,7 +730,7 @@ def _render_3d_view_impl():
                         st.error(result["message"])
                 else:
                     st.warning(
-                        "[WARNING] Keine Module ausgewählt. "
+                        "Keine Module ausgewählt. "
                         "Bitte wählen Sie Module zum Drehen aus."
                     )
             
@@ -781,18 +781,18 @@ def _render_3d_view_impl():
                         st.error(result["message"])
                 else:
                     st.warning(
-                        "[WARNING] Keine Module ausgewählt. "
+                        "Keine Module ausgewählt. "
                         "Bitte wählen Sie Module zum Verschieben aus."
                     )
                 
         except ImportError as e:
-            st.sidebar.warning(f"[WARNING] Modul-Belegungs-Panel nicht verfügbar: {e}")
+            st.sidebar.warning(f"Modul-Belegungs-Panel nicht verfügbar: {e}")
         except Exception as e:
-            st.sidebar.error(f"[ERROR] Fehler im Modul-Belegungs-Panel: {e}")
+            st.sidebar.error(f"Fehler im Modul-Belegungs-Panel: {e}")
             print(f"Fehler im Modul-Belegungs-Panel: {e}")
             traceback.print_exc()
     else:
-        st.sidebar.error("[ERROR] UI-Komponenten nicht verfügbar")
+        st.sidebar.error("UI-Komponenten nicht verfügbar")
         return
     
     # ============================================================================
@@ -815,7 +815,7 @@ def _render_3d_view_impl():
         
         with col1:
             st.metric(
-                "[TARGET] Gewünschte Module",
+                "Gewünschte Module",
                 module_quantity,
                 help="Anzahl der Module die platziert werden sollen"
             )
@@ -829,7 +829,7 @@ def _render_3d_view_impl():
             max_modules = int(available_area / (module_area * 1.3))  # Mit Spacing
             
             st.metric(
-                "[PACKAGE] Max. Kapazität",
+                "Max. Kapazität",
                 max_modules,
                 help="Maximale Anzahl Module die auf das Dach passen"
             )
@@ -864,7 +864,7 @@ def _render_3d_view_impl():
             # WARNUNG: Nicht alle Module passen
             with placed_placeholder:
                 st.metric(
-                    "[OK] Platzierte Module",
+                    "Platzierte Module",
                     placed_modules,
                     delta=f"-{module_quantity - placed_modules}",
                     delta_color="inverse",
@@ -873,13 +873,13 @@ def _render_3d_view_impl():
             
             with status_placeholder:
                 st.metric(
-                    "[WARNING] Status",
+                    "Status",
                     "Begrenzt",
                     help="Nicht alle Module konnten platziert werden"
                 )
             
             st.warning(
-                f"[WARNING] **Platzbeschränkung:** Nur {placed_modules} von "
+                f"**Platzbeschränkung:** Nur {placed_modules} von "
                 f"{module_quantity} Modulen konnten platziert werden.\n\n"
                 f"**Details:**\n"
                 f"- Dachfläche: {roof_area:.1f} m²\n"
@@ -892,20 +892,20 @@ def _render_3d_view_impl():
             # ERFOLG: Alle Module platziert
             with placed_placeholder:
                 st.metric(
-                    "[OK] Platzierte Module",
+                    "Platzierte Module",
                     placed_modules,
                     help="Tatsächlich platzierte Module"
                 )
             
             with status_placeholder:
                 st.metric(
-                    "[OK] Status",
+                    "Status",
                     "Vollständig",
                     help="Alle Module erfolgreich platziert"
                 )
             
             st.success(
-                f"[OK] **Modul-Platzierung erfolgreich!** "
+                f"**Modul-Platzierung erfolgreich!** "
                 f"Alle {module_quantity} Module wurden optimal platziert."
             )
         
@@ -916,7 +916,7 @@ def _render_3d_view_impl():
         selected_modules = advanced_settings.get("selected_modules", [])
         if selected_modules:
             st.info(
-                f"[TARGET] **{len(selected_modules)} Module ausgewählt:** "
+                f"**{len(selected_modules)} Module ausgewählt:** "
                 f"Ausgewählte Module werden in der 3D-Ansicht hervorgehoben "
                 f"(hellere Farbe). Indizes: {', '.join(map(str, selected_modules[:10]))}"
                 f"{'...' if len(selected_modules) > 10 else ''}"
@@ -924,14 +924,14 @@ def _render_3d_view_impl():
         
         # BENUTZER-FEEDBACK: Info über Interaktivität
         st.info(
-            "[IDEA] **Interaktive 3D-Ansicht:** Nutzen Sie die Maus zum Drehen, "
+            "**Interaktive 3D-Ansicht:** Nutzen Sie die Maus zum Drehen, "
             "Zoomen und Schwenken. Doppelklicken Sie auf Module um sie "
             "auszuwählen. Die Ansicht aktualisiert sich in Echtzeit bei "
             "Änderungen der Einstellungen."
         )
         
     except Exception as e:
-        st.error(f"[ERROR] Fehler beim Erstellen der 3D-Szene: {e}")
+        st.error(f"Fehler beim Erstellen der 3D-Szene: {e}")
         print("Fehler beim Erstellen der 3D-Szene:")
         traceback.print_exc()
         return
@@ -969,19 +969,19 @@ def _render_3d_view_impl():
                 progress_bar.progress(70)
                 
                 if optimized_configs:
-                    status_text.text("[OK] Optimierung abgeschlossen!")
+                    status_text.text("Optimierung abgeschlossen!")
                     progress_bar.progress(100)
                     
                     # BENUTZER-FEEDBACK: Erfolgreiche Optimierung
                     st.success(
-                        f"[OK] **Optimierung erfolgreich abgeschlossen!**\n\n"
+                        f"**Optimierung erfolgreich abgeschlossen!**\n\n"
                         f"- Gefundene Konfigurationen: {len(optimized_configs)}\n"
                         f"- Optimierungsziel: {optimization_goal}\n"
                         f"- Beste Konfiguration wird angewendet"
                     )
                     
                     # Zeige Details der Top-Konfigurationen
-                    with st.expander("[CHART] Top-Konfigurationen", expanded=True):
+                    with st.expander("Top-Konfigurationen", expanded=True):
                         for i, config in enumerate(optimized_configs[:3], 1):
                             col1, col2 = st.columns([3, 1])
                             with col1:
@@ -992,7 +992,7 @@ def _render_3d_view_impl():
                             with col2:
                                 if st.button(f"Übernehmen", key=f"apply_config_{i}"):
                                     st.session_state["pv3d_layout_json"] = config.to_json()
-                                    st.success(f"[OK] Konfiguration {i} übernommen!")
+                                    st.success(f"Konfiguration {i} übernommen!")
                                     st.rerun()
                     
                     # Zeige beste Konfiguration
@@ -1007,10 +1007,10 @@ def _render_3d_view_impl():
                 else:
                     progress_bar.empty()
                     status_text.empty()
-                    st.warning("[WARNING] Keine optimalen Konfigurationen gefunden.")
+                    st.warning("Keine optimalen Konfigurationen gefunden.")
                     
             except Exception as e:
-                st.error(f"[ERROR] Fehler bei der Optimierung: {e}")
+                st.error(f"Fehler bei der Optimierung: {e}")
                 print("Fehler bei der Optimierung:")
                 traceback.print_exc()
         
@@ -1044,11 +1044,11 @@ def _render_3d_view_impl():
                 )
                 
                 progress_bar.progress(100)
-                status_text.text("[OK] Verschattungs-Analyse abgeschlossen!")
+                status_text.text("Verschattungs-Analyse abgeschlossen!")
                 
                 # BENUTZER-FEEDBACK: Erfolgreiche Analyse
                 st.success(
-                    f"[OK] **Verschattungs-Analyse abgeschlossen!**\n\n"
+                    f"**Verschattungs-Analyse abgeschlossen!**\n\n"
                     f"- Tageszeit: {time_of_day:.1f} Uhr\n"
                     f"- Tag im Jahr: {day_of_year}\n"
                     f"- Analysierte Module: {len(module_positions)}"
@@ -1060,7 +1060,7 @@ def _render_3d_view_impl():
                 
                 # TODO: Visualisiere Verschattung in 3D-Szene
             except Exception as e:
-                st.error(f"[ERROR] Fehler bei der Verschattungs-Analyse: {e}")
+                st.error(f"Fehler bei der Verschattungs-Analyse: {e}")
                 print("Fehler bei der Verschattungs-Analyse:")
                 traceback.print_exc()
         
@@ -1089,11 +1089,11 @@ def _render_3d_view_impl():
                 )
                 
                 progress_bar.progress(100)
-                status_text.text("[OK] Ertrags-Heatmap abgeschlossen!")
+                status_text.text("Ertrags-Heatmap abgeschlossen!")
                 
                 # BENUTZER-FEEDBACK: Erfolgreiche Analyse
                 st.success(
-                    f"[OK] **Ertrags-Heatmap abgeschlossen!**\n\n"
+                    f"**Ertrags-Heatmap abgeschlossen!**\n\n"
                     f"- Analysierte Module: {len(module_positions)}\n"
                     f"- Wirkungsgrad: 20.0%\n"
                     f"- Standort: Deutschland (51°N)"
@@ -1105,7 +1105,7 @@ def _render_3d_view_impl():
                 
                 # TODO: Visualisiere Heatmap in 3D-Szene
             except Exception as e:
-                st.error(f"[ERROR] Fehler bei der Ertrags-Heatmap: {e}")
+                st.error(f"Fehler bei der Ertrags-Heatmap: {e}")
                 print("Fehler bei der Ertrags-Heatmap:")
                 traceback.print_exc()
     
@@ -1176,23 +1176,23 @@ def _render_3d_view_impl():
                     
                     # Speichere in Session State für PDF-Integration
                     st.session_state["pdf_3d_screenshot"] = screenshot_bytes
-                    print(f"   [OK] Screenshot in Session State gespeichert")
+                    print(f"   Screenshot in Session State gespeichert")
                     
                     progress_bar.progress(100)
-                    status_text.text("[OK] Screenshot erfolgreich erstellt!")
+                    status_text.text("Screenshot erfolgreich erstellt!")
                     
                     # BENUTZER-FEEDBACK: Erfolgreiche Screenshot-Erstellung
                     st.success(
-                        f"[OK] **Screenshot erfolgreich erstellt!**\n\n"
+                        f"**Screenshot erfolgreich erstellt!**\n\n"
                         f"- Format: {format.upper()}\n"
                         f"- Auflösung: {width}x{height}px\n"
                         f"- Größe: {len(screenshot_bytes)/1024:.1f} KB\n"
-                        f"- Status: Für PDF vorbereitet [OK]"
+                        f"- Status: Für PDF vorbereitet "
                     )
                     
                     # BENUTZER-FEEDBACK: Info über PDF-Integration
                     st.info(
-                        "[IDEA] **Automatische PDF-Integration aktiviert**\n\n"
+                        "**Automatische PDF-Integration aktiviert**\n\n"
                         "Der Screenshot wird automatisch in Ihre PDF-Angebote "
                         "eingefügt. Sie finden ihn auf Seite 6 im Abschnitt "
                         "'3D-Visualisierung'.\n\n"
@@ -1214,16 +1214,16 @@ def _render_3d_view_impl():
                 else:
                     progress_bar.empty()
                     status_text.empty()
-                    print(f"   [ERROR] Screenshot-Erstellung fehlgeschlagen (keine Bytes)")
+                    print(f"   Screenshot-Erstellung fehlgeschlagen (keine Bytes)")
                     st.error(
-                        "[ERROR] **Screenshot-Erstellung fehlgeschlagen**\n\n"
+                        "**Screenshot-Erstellung fehlgeschlagen**\n\n"
                         "Bitte versuchen Sie es erneut oder wählen Sie ein "
                         "anderes Format."
                     )
                         
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim Screenshot-Export: {e}")
-                print(f"\n[ERROR] Fehler beim Screenshot-Export:")
+                st.error(f"Fehler beim Screenshot-Export: {e}")
+                print(f"\nFehler beim Screenshot-Export:")
                 print(f"   Fehler: {str(e)}")
                 print(f"   Traceback:")
                 traceback.print_exc()
@@ -1260,11 +1260,11 @@ def _render_3d_view_impl():
                 # FIX: Prüfe ob zip_bytes tatsächlich Bytes sind
                 if zip_bytes and isinstance(zip_bytes, bytes):
                     progress_bar.progress(100)
-                    status_text.text("[OK] Multi-View Export abgeschlossen!")
+                    status_text.text("Multi-View Export abgeschlossen!")
                     
                     # BENUTZER-FEEDBACK: Erfolgreicher Export
                     st.success(
-                        f"[OK] **Multi-View Export erfolgreich!**\n\n"
+                        f"**Multi-View Export erfolgreich!**\n\n"
                         f"- Anzahl Ansichten: {len(views)}\n"
                         f"- Auflösung: {resolution[0]}x{resolution[1]}px\n"
                         f"- Dateigröße: {len(zip_bytes)/1024:.1f} KB\n"
@@ -1282,7 +1282,7 @@ def _render_3d_view_impl():
                     # FIX: Wenn zip_bytes kein bytes ist, zeige Fehler
                     progress_bar.empty()
                     status_text.empty()
-                    st.error(f"[ERROR] Multi-View Export fehlgeschlagen: Ungültiges Datenformat (erwartet: bytes, erhalten: {type(zip_bytes).__name__})")
+                    st.error(f"Multi-View Export fehlgeschlagen: Ungültiges Datenformat (erwartet: bytes, erhalten: {type(zip_bytes).__name__})")
                     
                     # Cleanup progress indicators
                     progress_bar.empty()
@@ -1290,10 +1290,10 @@ def _render_3d_view_impl():
                 else:
                     progress_bar.empty()
                     status_text.empty()
-                    st.error("[ERROR] Multi-View Export fehlgeschlagen")
+                    st.error("Multi-View Export fehlgeschlagen")
                     
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim Multi-View Export: {e}")
+                st.error(f"Fehler beim Multi-View Export: {e}")
                 print("Fehler beim Multi-View Export:")
                 traceback.print_exc()
         
@@ -1326,7 +1326,7 @@ def _render_3d_view_impl():
                     layout_config=layout_config,
                     frames=frames,
                     resolution=resolution,
-                    return_bytes=True  # [OK] FIX: GIF-Bytes zurückgeben statt Datei schreiben
+                    return_bytes=True  # FIX: GIF-Bytes zurückgeben statt Datei schreiben
                 )
                 
                 progress_bar.progress(90)
@@ -1334,11 +1334,11 @@ def _render_3d_view_impl():
                 
                 if gif_bytes:
                     progress_bar.progress(100)
-                    status_text.text("[OK] 360° Animation abgeschlossen!")
+                    status_text.text("360° Animation abgeschlossen!")
                     
                     # BENUTZER-FEEDBACK: Erfolgreicher Export
                     st.success(
-                        f"[OK] **360° Animation erfolgreich erstellt!**\n\n"
+                        f"**360° Animation erfolgreich erstellt!**\n\n"
                         f"- Anzahl Frames: {frames}\n"
                         f"- Auflösung: {resolution[0]}x{resolution[1]}px\n"
                         f"- Dateigröße: {len(gif_bytes)/1024:.1f} KB\n"
@@ -1359,10 +1359,10 @@ def _render_3d_view_impl():
                 else:
                     progress_bar.empty()
                     status_text.empty()
-                    st.error("[ERROR] 360° Animation Export fehlgeschlagen")
+                    st.error("360° Animation Export fehlgeschlagen")
                     
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim 360° Animation Export: {e}")
+                st.error(f"Fehler beim 360° Animation Export: {e}")
                 print("Fehler beim 360° Animation Export:")
                 traceback.print_exc()
         
@@ -1386,7 +1386,7 @@ def _render_3d_view_impl():
                     )
                     
                     if model_bytes:
-                        st.success(f"[OK] 3D-Modell ({format.upper()}) erfolgreich erstellt!")
+                        st.success(f"3D-Modell ({format.upper()}) erfolgreich erstellt!")
                         st.download_button(
                             label=f"📥 3D-Modell herunterladen ({format.upper()})",
                             data=model_bytes,
@@ -1395,7 +1395,7 @@ def _render_3d_view_impl():
                             key="download_3d_model"
                         )
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim 3D-Modell Export: {e}")
+                st.error(f"Fehler beim 3D-Modell Export: {e}")
                 print("Fehler beim 3D-Modell Export:")
                 traceback.print_exc()
         
@@ -1422,7 +1422,7 @@ def _render_3d_view_impl():
                     df = pd.DataFrame(modules_data)
                     csv_data = df.to_csv(index=False).encode('utf-8')
                     
-                    st.success(f"[OK] CSV mit {len(modules_data)} Modulen erstellt!")
+                    st.success(f"CSV mit {len(modules_data)} Modulen erstellt!")
                     st.download_button(
                         label="📥 CSV herunterladen",
                         data=csv_data,
@@ -1431,7 +1431,7 @@ def _render_3d_view_impl():
                         key="download_csv"
                     )
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim CSV Export: {e}")
+                st.error(f"Fehler beim CSV Export: {e}")
                 print("Fehler beim CSV Export:")
                 traceback.print_exc()
         
@@ -1467,7 +1467,7 @@ def _render_3d_view_impl():
                     
                     json_data = json.dumps(scene_data, indent=2).encode('utf-8')
                     
-                    st.success("[OK] JSON erfolgreich erstellt!")
+                    st.success("JSON erfolgreich erstellt!")
                     st.download_button(
                         label="📥 JSON herunterladen",
                         data=json_data,
@@ -1476,7 +1476,7 @@ def _render_3d_view_impl():
                         key="download_json"
                     )
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim JSON Export: {e}")
+                st.error(f"Fehler beim JSON Export: {e}")
                 print("Fehler beim JSON Export:")
                 traceback.print_exc()
     
@@ -1491,7 +1491,7 @@ def _render_3d_view_impl():
     )
     
     # Zeige erweiterte Statistiken
-    with st.expander("[CHART] Detaillierte Statistiken", expanded=False):
+    with st.expander("Detaillierte Statistiken", expanded=False):
         st.markdown("### Modul-Statistiken")
         
         col1, col2, col3, col4 = st.columns(4)
@@ -1570,8 +1570,8 @@ def _render_3d_view_impl():
         
         with col2:
             st.write(f"**Aufständerung:** {module_settings.get('mounting_type', 'Süd')}")
-            garage_status = "[OK] Ja" if module_settings.get('use_garage', False) else "[ERROR] Nein"
-            facade_status = "[OK] Ja" if module_settings.get('use_facade', False) else "[ERROR] Nein"
+            garage_status = "Ja" if module_settings.get('use_garage', False) else "Nein"
+            facade_status = "Ja" if module_settings.get('use_facade', False) else "Nein"
             st.write(f"**Garage:** {garage_status}")
             st.write(f"**Fassade:** {facade_status}")
         
@@ -1631,7 +1631,7 @@ def _render_3d_view_impl():
             from utils.pv3d_export_buttons import render_export_action_buttons
             
             st.sidebar.markdown("---")
-            st.sidebar.markdown("### [LAUNCH] Export starten")
+            st.sidebar.markdown("### Export starten")
             
             # Sammle Szenen-Daten für Export
             scene_data = {
@@ -1656,12 +1656,12 @@ def _render_3d_view_impl():
             if export_results:
                 for export_type, result in export_results.items():
                     if result.get("success"):
-                        st.sidebar.success(f"[OK] {export_type} erfolgreich!")
+                        st.sidebar.success(f"{export_type} erfolgreich!")
                     else:
-                        st.sidebar.error(f"[ERROR] {export_type} fehlgeschlagen")
+                        st.sidebar.error(f"{export_type} fehlgeschlagen")
         
         except ImportError:
-            st.sidebar.warning("[WARNING] Export-Buttons nicht verfügbar")
+            st.sidebar.warning("Export-Buttons nicht verfügbar")
     
     # ============================================================================
     # NEU: AUFSTÄNDERUNGS-LOGIK KORREKTUR
@@ -1677,7 +1677,7 @@ def _render_3d_view_impl():
         if not validation["valid"]:
             st.warning(validation["error"])
             if validation["suggestion"]:
-                st.info(f"[IDEA] Empfehlung: {validation['suggestion']}")
+                st.info(f"Empfehlung: {validation['suggestion']}")
     
     except ImportError:
         pass  # Modul nicht verfügbar
@@ -1702,11 +1702,11 @@ def _render_3d_view_impl():
         
         # Erweiterte Features in Sidebar
         with st.sidebar.expander("✨ Erweiterte Features", expanded=False):
-            st.markdown("### [TARGET] WOW-Funktionen")
+            st.markdown("### WOW-Funktionen")
             st.caption("Beeindruckende neue Features für professionelle Präsentationen")
             
             feature_tabs = st.tabs([
-                "☀️", "[TEMP]", "[SEARCH]", "[POWER]", "📱", 
+                "☀️", "", "", "", "📱", 
                 "⚖️", "🎞️", "🤖", "🌤️", "🎤"
             ])
             
@@ -1769,8 +1769,8 @@ def _render_3d_view_impl():
     
     # Legacy Placement-System UI
     if PLACEMENT_UI_AVAILABLE and PLACEMENT_SYSTEM_AVAILABLE:
-        with st.expander("[TOOL] Legacy-Modul-Platzierungs-System", expanded=False):
-            st.markdown("### [DESIGN] Vollständiges Platzierungs-System")
+        with st.expander("Legacy-Modul-Platzierungs-System", expanded=False):
+            st.markdown("### Vollständiges Platzierungs-System")
             st.caption("Erweiterte manuelle Platzierung mit Gruppen-Verwaltung")
             
             try:
@@ -1786,9 +1786,9 @@ def _render_3d_view_impl():
                     module_quantity=module_quantity
                 )
                 
-                st.success("[OK] Legacy-Platzierungs-System aktiv!")
+                st.success("Legacy-Platzierungs-System aktiv!")
             except Exception as e:
-                st.error(f"[ERROR] Fehler im Legacy-System: {e}")
+                st.error(f"Fehler im Legacy-System: {e}")
     
     # Animation-Features
     if ANIMATION_AVAILABLE:
@@ -1807,7 +1807,7 @@ def _render_3d_view_impl():
                 "☀️ Sonnenbahn",
                 "🔄 360° Rotation",
                 "🌓 Jahreszeiten",
-                "[POWER] Ertrags-Zeitraffer"
+                "Ertrags-Zeitraffer"
             ])
             
             with animation_tabs[0]:
@@ -1833,9 +1833,9 @@ def _render_3d_view_impl():
                                 num_frames=params.get('num_frames', 24)
                             )
                             st.plotly_chart(animated_fig, use_container_width=True)
-                            st.success("[OK] Sonnenbahn-Animation erstellt!")
+                            st.success("Sonnenbahn-Animation erstellt!")
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler bei Animation: {e}")
+                        st.error(f"Fehler bei Animation: {e}")
             
             with animation_tabs[1]:
                 st.markdown("**360°-Rotation**")
@@ -1860,9 +1860,9 @@ def _render_3d_view_impl():
                                 distance=params.get('distance', 100.0)
                             )
                             st.plotly_chart(animated_fig, use_container_width=True)
-                            st.success("[OK] 360°-Animation erstellt!")
+                            st.success("360°-Animation erstellt!")
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler bei Rotation: {e}")
+                        st.error(f"Fehler bei Rotation: {e}")
             
             with animation_tabs[2]:
                 st.markdown("**Jahreszeiten-Verschattung**")
@@ -1875,13 +1875,13 @@ def _render_3d_view_impl():
                                 num_seasons=4
                             )
                             st.plotly_chart(animated_fig, use_container_width=True)
-                            st.success("[OK] Jahreszeiten-Animation erstellt!")
+                            st.success("Jahreszeiten-Animation erstellt!")
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler bei Jahreszeiten-Simulation: {e}")
+                        st.error(f"Fehler bei Jahreszeiten-Simulation: {e}")
             
             with animation_tabs[3]:
                 st.markdown("**Ertrags-Zeitraffer**")
-                if st.button("[POWER] Zeitraffer erstellen", key="yield_anim"):
+                if st.button("Zeitraffer erstellen", key="yield_anim"):
                     try:
                         params = render_animation_controls("yield")
                         
@@ -1903,17 +1903,17 @@ def _render_3d_view_impl():
                                 hours=params.get('hours', 12)
                             )
                             st.plotly_chart(animated_fig, use_container_width=True)
-                            st.success("[OK] Ertrags-Zeitraffer erstellt!")
+                            st.success("Ertrags-Zeitraffer erstellt!")
                         else:
-                            st.warning("[WARNING] Bitte platzieren Sie zuerst Module!")
+                            st.warning("Bitte platzieren Sie zuerst Module!")
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler bei Zeitraffer: {e}")
+                        st.error(f"Fehler bei Zeitraffer: {e}")
             
-            st.info("[IDEA] **Tipp:** Alle Animationen können über die Buttons gesteuert werden!")
+            st.info("**Tipp:** Alle Animationen können über die Buttons gesteuert werden!")
     
     # 3D-Rendering-Features
     if RENDERING_3D_AVAILABLE:
-        with st.expander("[DESIGN] 3D-Rendering-Optionen", expanded=False):
+        with st.expander("3D-Rendering-Optionen", expanded=False):
             st.markdown("### 🔥 Erweiterte Rendering-Features")
             st.caption("Hochwertige 3D-Visualisierung mit Legacy-Rendering-Engine")
             
@@ -1945,8 +1945,8 @@ def _render_3d_view_impl():
                     help="Dicke der Modul-Kanten"
                 )
             
-            st.success("[OK] 3D-Rendering-Engine aktiv!")
-            st.info("[IDEA] Diese Features werden auf die 3D-Visualisierung angewendet!")
+            st.success("3D-Rendering-Engine aktiv!")
+            st.info("Diese Features werden auf die 3D-Visualisierung angewendet!")
 
 
 # ============================================================================

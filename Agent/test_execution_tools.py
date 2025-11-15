@@ -47,7 +47,7 @@ def test_simple_python():
     result = execute_python_code_in_sandbox.invoke({"code": code})
     print(f"Result:\n{result}")
     assert "Hello from Docker sandbox!" in result, "Expected output not found"
-    print("[OK] Test passed")
+    print("Test passed")
     print()
 
 
@@ -67,7 +67,7 @@ print(f'Product: {x * y}')
     print(f"Result:\n{result}")
     assert "Sum: 30" in result, "Expected sum not found"
     assert "Product: 200" in result, "Expected product not found"
-    print("[OK] Test passed")
+    print("Test passed")
     print()
 
 
@@ -82,7 +82,7 @@ def test_terminal_command():
     print(f"Result:\n{result}")
     assert "Hello from terminal" in result, "Expected echo output not found"
     assert "Python 3.11" in result or "Python 3." in result, "Python version not found"
-    print("[OK] Test passed")
+    print("Test passed")
     print()
 
 
@@ -96,7 +96,7 @@ def test_error_handling():
     result = execute_python_code_in_sandbox.invoke({"code": code})
     print(f"Result:\n{result}")
     assert "NameError" in result or "undefined_variable" in result, "Expected error not found"
-    print("[OK] Test passed - Error correctly captured")
+    print("Test passed - Error correctly captured")
     print()
 
 
@@ -111,7 +111,7 @@ def test_installed_packages():
     print(f"Result:\n{result}")
     assert "pytest" in result, "pytest not found in sandbox"
     assert "requests" in result, "requests not found in sandbox"
-    print("[OK] Test passed - Required packages installed")
+    print("Test passed - Required packages installed")
     print()
 
 
@@ -133,7 +133,7 @@ except Exception as e:
     print(f"Result:\n{result}")
     # Network should be blocked for Python execution
     assert "Network blocked" in result or "error" in result.lower(), "Network should be blocked"
-    print("[OK] Test passed - Network correctly isolated")
+    print("Test passed - Network correctly isolated")
     print()
 
 
@@ -158,7 +158,7 @@ print('This should not print')
     assert "timeout" in result.lower(
     ) or "terminated" in result.lower(), "Timeout not handled"
     assert elapsed < 35, "Timeout did not trigger in time"
-    print("[OK] Test passed - Timeout correctly enforced")
+    print("Test passed - Timeout correctly enforced")
     print()
 
 
@@ -187,7 +187,7 @@ def test_automatic_cleanup():
             print(f"  - {container.name}")
 
     assert len(containers) == 0, "Containers not cleaned up properly"
-    print("[OK] Test passed - Containers automatically cleaned up")
+    print("Test passed - Containers automatically cleaned up")
     print()
 
 
@@ -205,7 +205,7 @@ print('Resource limits are enforced by Docker')
     result = execute_python_code_in_sandbox.invoke({"code": code})
     print(f"Result:\n{result}")
     assert "Python version" in result, "Expected output not found"
-    print("[OK] Test passed - Resource limits configured")
+    print("Test passed - Resource limits configured")
     print()
 
 
@@ -253,10 +253,10 @@ def main():
             test_func()
             tests_passed += 1
         except AssertionError as e:
-            print(f"[ERROR] Test failed: {e}")
+            print(f"Test failed: {e}")
             tests_failed += 1
         except Exception as e:
-            print(f"[ERROR] Test error: {e}")
+            print(f"Test error: {e}")
             import traceback
             traceback.print_exc()
             tests_failed += 1
@@ -269,9 +269,9 @@ def main():
     print("=" * 60)
 
     if tests_failed == 0:
-        print("[OK] All tests passed!")
+        print("All tests passed!")
     else:
-        print("[ERROR] Some tests failed")
+        print("Some tests failed")
 
 
 if __name__ == "__main__":

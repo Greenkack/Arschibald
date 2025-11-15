@@ -17,7 +17,7 @@ def test_export_buttons_in_ui_components():
             ("btn_export_3d_model_inline", "3D-Modell Button"),
             ("btn_export_csv_inline", "CSV Button"),
             ("btn_export_json_inline", "JSON Button"),
-            ("[LAUNCH] Export starten", "Export-Überschrift"),
+            ("Export starten", "Export-Überschrift"),
             ("trigger_screenshot_export", "Screenshot Trigger"),
             ("trigger_multiview_export", "Multi-View Trigger"),
             ("trigger_360_export", "360° Trigger"),
@@ -29,14 +29,14 @@ def test_export_buttons_in_ui_components():
         all_found = True
         for check_str, description in checks:
             if check_str in content:
-                print(f"[OK] {description} gefunden")
+                print(f"{description} gefunden")
             else:
-                print(f"[ERROR] {description} NICHT gefunden")
+                print(f"{description} NICHT gefunden")
                 all_found = False
         
         return all_found
     except Exception as e:
-        print(f"[ERROR] Test fehlgeschlagen: {e}")
+        print(f"Test fehlgeschlagen: {e}")
         return False
 
 
@@ -59,14 +59,14 @@ def test_trigger_logic_in_main():
         all_found = True
         for check_str, description in checks:
             if check_str in content:
-                print(f"[OK] {description} gefunden")
+                print(f"{description} gefunden")
             else:
-                print(f"[ERROR] {description} NICHT gefunden")
+                print(f"{description} NICHT gefunden")
                 all_found = False
         
         return all_found
     except Exception as e:
-        print(f"[ERROR] Test fehlgeschlagen: {e}")
+        print(f"Test fehlgeschlagen: {e}")
         return False
 
 
@@ -89,18 +89,18 @@ def run_tests():
     print("="*60)
     if result1 and result2:
         print("🎉 Alle Tests bestanden!")
-        print("\n[OK] Export-Buttons sind jetzt SICHTBAR!")
+        print("\nExport-Buttons sind jetzt SICHTBAR!")
         print("\nSo testen Sie in der App:")
         print("1. Starten Sie: streamlit run gui.py")
         print("2. Gehen Sie zu: 3D-Visualisierung")
         print("3. Sidebar → Export-Optionen")
         print("4. Aktivieren Sie eine Checkbox (z.B. Screenshot)")
-        print("5. [OK] Button sollte SOFORT erscheinen!")
+        print("5. Button sollte SOFORT erscheinen!")
         print("6. Klicken Sie den Button")
-        print("7. [OK] Download-Button sollte erscheinen!")
+        print("7. Download-Button sollte erscheinen!")
         return 0
     else:
-        print("[WARNING] Einige Tests fehlgeschlagen")
+        print("Einige Tests fehlgeschlagen")
         return 1
 
 

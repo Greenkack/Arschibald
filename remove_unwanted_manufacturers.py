@@ -49,7 +49,7 @@ def main():
     deleted = cursor.rowcount
     conn.commit()
     
-    print(f"\n[OK] GELÖSCHT: {deleted} Produkte")
+    print(f"\nGELÖSCHT: {deleted} Produkte")
     
     # Zeige was übrig bleibt
     print("\n" + "=" * 80)
@@ -71,7 +71,7 @@ def main():
         total_after += count
     
     print(f"\nGESAMT: {total_after} Wärmepumpen")
-    print(f"\n[OK] NUR NOCH Viessmann, Buderus, Vaillant!")
+    print(f"\nNUR NOCH Viessmann, Buderus, Vaillant!")
     
     conn.close()
 

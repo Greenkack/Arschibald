@@ -135,7 +135,7 @@ class TestGeoMapper(unittest.TestCase):
         self.assertGreater(lon, 13.0, "Längengrad sollte > 13 sein (Berlin)")
         self.assertLess(lon, 14.0, "Längengrad sollte < 14 sein (Berlin)")
         
-        print(f"[OK] Geocoding erfolgreich: {coords}")
+        print(f"Geocoding erfolgreich: {coords}")
     
     def test_geocode_invalid_address(self):
         """
@@ -156,7 +156,7 @@ class TestGeoMapper(unittest.TestCase):
         # Sollte None zurückgeben
         self.assertIsNone(coords, "Ungültige Adresse sollte None zurückgeben")
         
-        print("[OK] Ungültige Adresse korrekt behandelt")
+        print("Ungültige Adresse korrekt behandelt")
     
     # Test 2: Kunden mit Koordinaten abrufen
     def test_get_customers_with_coordinates(self):
@@ -176,7 +176,7 @@ class TestGeoMapper(unittest.TestCase):
         self.assertIsNotNone(customer['latitude'])
         self.assertIsNotNone(customer['longitude'])
         
-        print(f"[OK] {len(customers)} Kunde(n) mit Koordinaten gefunden")
+        print(f"{len(customers)} Kunde(n) mit Koordinaten gefunden")
     
     def test_get_customers_with_filter(self):
         """
@@ -191,7 +191,7 @@ class TestGeoMapper(unittest.TestCase):
         self.assertEqual(len(customers), 1, "1 Kunde in Köln sollte gefunden werden")
         self.assertEqual(customers[0]['city'], 'Köln')
         
-        print("[OK] Filter funktioniert korrekt")
+        print("Filter funktioniert korrekt")
     
     # Test 3: Karten-Erstellung
     def test_create_map(self):
@@ -219,7 +219,7 @@ class TestGeoMapper(unittest.TestCase):
         import folium
         self.assertIsInstance(map_obj, folium.Map, "Sollte ein Folium-Map-Objekt sein")
         
-        print("[OK] Karte erfolgreich erstellt")
+        print("Karte erfolgreich erstellt")
     
     def test_create_map_empty(self):
         """
@@ -236,7 +236,7 @@ class TestGeoMapper(unittest.TestCase):
         # Sollte None zurückgeben
         self.assertIsNone(map_obj, "Leere Kundenliste sollte None zurückgeben")
         
-        print("[OK] Leere Kundenliste korrekt behandelt")
+        print("Leere Kundenliste korrekt behandelt")
     
     # Test 4: Entfernungsberechnung
     def test_calculate_distance(self):
@@ -255,7 +255,7 @@ class TestGeoMapper(unittest.TestCase):
         self.assertGreater(distance, 500, "Entfernung sollte > 500 km sein")
         self.assertLess(distance, 650, "Entfernung sollte < 650 km sein")
         
-        print(f"[OK] Entfernung Berlin-München: {distance:.2f} km")
+        print(f"Entfernung Berlin-München: {distance:.2f} km")
     
     def test_calculate_distance_same_point(self):
         """
@@ -270,7 +270,7 @@ class TestGeoMapper(unittest.TestCase):
         # Sollte 0 oder sehr klein sein
         self.assertLess(distance, 0.01, "Entfernung sollte nahe 0 sein")
         
-        print(f"[OK] Entfernung zum gleichen Punkt: {distance:.6f} km")
+        print(f"Entfernung zum gleichen Punkt: {distance:.6f} km")
     
     # Test 5: Routenoptimierung
     def test_optimize_route(self):
@@ -316,7 +316,7 @@ class TestGeoMapper(unittest.TestCase):
             if i > 0:
                 self.assertGreater(stop['distance_km'], 0, "Entfernung sollte > 0 sein")
         
-        print(f"[OK] Route optimiert: {len(route)} Stopps, {route[-1]['cumulative_distance_km']:.2f} km")
+        print(f"Route optimiert: {len(route)} Stopps, {route[-1]['cumulative_distance_km']:.2f} km")
     
     def test_optimize_route_empty(self):
         """
@@ -329,7 +329,7 @@ class TestGeoMapper(unittest.TestCase):
         # Sollte leere Liste zurückgeben
         self.assertEqual(len(route), 0, "Leere Eingabe sollte leere Route zurückgeben")
         
-        print("[OK] Leere Kundenliste korrekt behandelt")
+        print("Leere Kundenliste korrekt behandelt")
     
     # Test 6: Kalender-Export
     def test_export_route_to_calendar(self):
@@ -390,7 +390,7 @@ class TestGeoMapper(unittest.TestCase):
         start2 = datetime.fromisoformat(apt2['start_time'])
         self.assertGreater(start2, start_date, "Zweiter Termin sollte später sein")
         
-        print(f"[OK] {len(appointments)} Termine erfolgreich generiert")
+        print(f"{len(appointments)} Termine erfolgreich generiert")
     
     def test_save_appointments_to_db(self):
         """
@@ -435,7 +435,7 @@ class TestGeoMapper(unittest.TestCase):
         
         self.assertEqual(count, 2, "2 Termine sollten in DB sein")
         
-        print(f"[OK] {saved_count} Termine erfolgreich gespeichert")
+        print(f"{saved_count} Termine erfolgreich gespeichert")
 
 
 class TestGeoHelpers(unittest.TestCase):
@@ -499,7 +499,7 @@ class TestGeoHelpers(unittest.TestCase):
             self.assertIn('longitude', columns, "longitude-Spalte sollte existieren")
             self.assertIn('geocoded_at', columns, "geocoded_at-Spalte sollte existieren")
             
-            print("[OK] Geo-Spalten erfolgreich hinzugefügt")
+            print("Geo-Spalten erfolgreich hinzugefügt")
             
         finally:
             os.close(db_fd)
@@ -531,9 +531,9 @@ def run_tests():
     print(f"Übersprungen: {len(result.skipped)}")
     
     if result.wasSuccessful():
-        print("\n[OK] ALLE TESTS ERFOLGREICH!")
+        print("\nALLE TESTS ERFOLGREICH!")
     else:
-        print("\n[ERROR] EINIGE TESTS FEHLGESCHLAGEN")
+        print("\nEINIGE TESTS FEHLGESCHLAGEN")
     
     return result.wasSuccessful()
 

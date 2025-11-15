@@ -262,11 +262,11 @@ def _display_widget_errors(state: WidgetState) -> None:
 
     if state.errors:
         for error in state.errors:
-            st.error(f"[ERROR] {error}", icon="🚨")
+            st.error(f"{error}", icon="🚨")
 
     if state.warnings:
         for warning in state.warnings:
-            st.warning(f"[WARNING] {warning}", icon="[WARNING]")
+            st.warning(f"{warning}", icon="")
 
 
 def s_text(

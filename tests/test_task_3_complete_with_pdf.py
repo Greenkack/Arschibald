@@ -146,9 +146,9 @@ def test_complete_financing_generator():
             with open(output_path, 'wb') as f:
                 f.write(pdf_bytes)
             
-            print(f"   [OK] PDF generated successfully!")
-            print(f"   [OK] Size: {len(pdf_bytes):,} bytes")
-            print(f"   [OK] Saved to: {output_path}")
+            print(f"   PDF generated successfully!")
+            print(f"   Size: {len(pdf_bytes):,} bytes")
+            print(f"   Saved to: {output_path}")
             
             # Verify PDF structure
             from pypdf import PdfReader
@@ -157,21 +157,21 @@ def test_complete_financing_generator():
             reader = PdfReader(io.BytesIO(pdf_bytes))
             num_pages = len(reader.pages)
             
-            print(f"   [OK] Number of pages: {num_pages}")
-            print(f"   [OK] Expected: 2 pages (Overview + Details)")
+            print(f"   Number of pages: {num_pages}")
+            print(f"   Expected: 2 pages (Overview + Details)")
             
             if num_pages == 2:
-                print("\n   [OK] PDF structure is correct!")
+                print("\n   PDF structure is correct!")
             else:
                 print(f"\n   ⚠ Warning: Expected 2 pages, got {num_pages}")
             
             return True
         else:
-            print("   [ERROR] No PDF generated")
+            print("   No PDF generated")
             return False
             
     except Exception as e:
-        print(f"   [ERROR] Error generating PDF: {e}")
+        print(f"   Error generating PDF: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -209,7 +209,7 @@ def verify_task_requirements():
     
     for req in requirements:
         passed = req['check']()
-        status = "[OK] PASS" if passed else "[ERROR] FAIL"
+        status = "PASS" if passed else "FAIL"
         print(f"\n{status} Task {req['id']}: {req['description']}")
         
         if not passed:
@@ -235,17 +235,17 @@ def main():
     print("FINAL SUMMARY")
     print("=" * 70)
     
-    print(f"\n{'[OK]' if requirements_met else '[ERROR]'} All requirements implemented")
-    print(f"{'[OK]' if generation_success else '[ERROR]'} PDF generation successful")
+    print(f"\n{'' if requirements_met else ''} All requirements implemented")
+    print(f"{'' if generation_success else ''} PDF generation successful")
     
     if requirements_met and generation_success:
         print("\n" + "=" * 70)
-        print("[OK] TASK 3 COMPLETE - ALL SUBTASKS IMPLEMENTED")
+        print("TASK 3 COMPLETE - ALL SUBTASKS IMPLEMENTED")
         print("=" * 70)
         print("\nImplemented features:")
-        print("  [OK] Task 3.1: FinancingPageGenerator class with generate() method")
-        print("  [OK] Task 3.2: Financing overview page with boxes")
-        print("  [OK] Task 3.3: Detailed financing calculation with annuity formula")
+        print("  Task 3.1: FinancingPageGenerator class with generate() method")
+        print("  Task 3.2: Financing overview page with boxes")
+        print("  Task 3.3: Detailed financing calculation with annuity formula")
         print("\nKey features:")
         print("  • Annuity formula for monthly rate calculation")
         print("  • Comprehensive calculation table")
@@ -254,7 +254,7 @@ def main():
         print("  • Professional PDF layout with theme support")
         return True
     else:
-        print("\n[ERROR] Some tests failed")
+        print("\nSome tests failed")
         return False
 
 

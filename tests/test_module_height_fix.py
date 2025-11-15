@@ -29,16 +29,16 @@ def test_z_position_calculation():
     z_flat = calculate_z_position("Flachdach", 0.0)
     print(f"  Flachdach z_relative: {z_flat}m")
     assert z_flat == 0.3, f"Expected 0.3m, got {z_flat}m"
-    print("  [OK] Correct: 0.3m elevation for Aufständerung")
+    print("  Correct: 0.3m elevation for Aufständerung")
     
     # Test 1.2: Satteldach (Gable roof on surface)
     print("\nTest 1.2: Satteldach Z-Position")
     z_gable = calculate_z_position("Satteldach", 35.0)
     print(f"  Satteldach z_relative: {z_gable}m")
     assert z_gable == 0.05, f"Expected 0.05m, got {z_gable}m"
-    print("  [OK] Correct: 0.05m clearance above roof surface")
+    print("  Correct: 0.05m clearance above roof surface")
     
-    print("\n[OK] Z-position calculation tests passed!")
+    print("\nZ-position calculation tests passed!")
 
 
 def test_module_placement_height():
@@ -83,7 +83,7 @@ def test_module_placement_height():
     assert z_relative == 0.3, (
         f"Expected z_relative=0.3m for Flachdach, got {z_relative}m"
     )
-    print("  [OK] Correct: z_relative = 0.3m (Aufständerung)")
+    print("  Correct: z_relative = 0.3m (Aufständerung)")
     
     # Note: The absolute z-position will be calculated during rendering
     # by adding dims.wall_height_m to z_relative
@@ -113,9 +113,9 @@ def test_module_placement_height():
     assert z_relative == 0.05, (
         f"Expected z_relative=0.05m for Satteldach, got {z_relative}m"
     )
-    print("  [OK] Correct: z_relative = 0.05m (clearance)")
+    print("  Correct: z_relative = 0.05m (clearance)")
     
-    print("\n[OK] Module placement height tests passed!")
+    print("\nModule placement height tests passed!")
 
 
 def test_rendering_height_calculation():
@@ -145,8 +145,8 @@ def test_rendering_height_calculation():
     assert z_absolute_flat == 3.3, "Flachdach calculation incorrect"
     assert z_absolute_pitched == 3.05, "Satteldach calculation incorrect"
     
-    print("\n  [OK] Height calculation logic is correct!")
-    print("\n[OK] Rendering height calculation tests passed!")
+    print("\n  Height calculation logic is correct!")
+    print("\nRendering height calculation tests passed!")
 
 
 def run_all_tests():
@@ -164,24 +164,24 @@ def run_all_tests():
         test_rendering_height_calculation()
         
         print("\n" + "=" * 70)
-        print("[OK] ALL TESTS PASSED!")
+        print("ALL TESTS PASSED!")
         print("=" * 70)
         print("\nFix Summary:")
-        print("  [OK] Z-position calculation returns relative height")
-        print("  [OK] Placement handler stores relative positions")
-        print("  [OK] Rendering adds building height to get absolute position")
+        print("  Z-position calculation returns relative height")
+        print("  Placement handler stores relative positions")
+        print("  Rendering adds building height to get absolute position")
         print("\nResult:")
-        print("  [OK] Modules are now placed on the ROOF, not on the GROUND!")
+        print("  Modules are now placed on the ROOF, not on the GROUND!")
         
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n[ERROR] UNEXPECTED ERROR: {e}")
+        print(f"\nUNEXPECTED ERROR: {e}")
         import traceback
         traceback.print_exc()
         return False

@@ -281,7 +281,10 @@ def load_customer(conn: sqlite3.Connection,
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM customers WHERE id=?", (customer_id,))
     row = cursor.fetchone()
-    return dict(row) if row else None
+    if row:
+        columns = [desc[0] for desc in cursor.description]
+        return dict(zip(columns, row))
+    return None
 
 
 def delete_customer(conn: sqlite3.Connection, customer_id: int) -> bool:
@@ -296,7 +299,10 @@ def load_all_customers(conn: sqlite3.Connection) -> list[dict[str, Any]]:
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM customers")
     rows = cursor.fetchall()
-    return [dict(row) for row in rows]
+    if not rows:
+        return []
+    columns = [desc[0] for desc in cursor.description]
+    return [dict(zip(columns, row)) for row in rows]
 
 
 def save_project(conn: sqlite3.Connection,
@@ -384,6 +390,28 @@ def render_crm(
     # Erstellt die Tabellen (inkl. neuer Spalten) oder fügt Spalten hinzu
     create_tables_crm(conn)
 
+    # CRM Tab-Navigation
+    crm_tabs = st.tabs([
+        "👥 Kundenverwaltung",
+        "📊 Lead Scoring", 
+        "💾 Backup & Daten"
+    ])
+    
+    # Tab 1: Kundenverwaltung (bestehende Funktionalität)
+    with crm_tabs[0]:
+        render_customer_management(texts, conn)
+    
+    # Tab 2: Lead Scoring
+    with crm_tabs[1]:
+        render_lead_scoring_tab(texts, conn)
+    
+    # Tab 3: Backup & Daten
+    with crm_tabs[2]:
+        render_backup_tab(conn)
+
+
+def render_customer_management(texts: dict[str, str], conn):
+    """Rendert die Kundenverwaltung (bisherige Hauptfunktionalität)"""
     view_mode = st.session_state.get('crm_view_mode', 'customer_list')
     selected_customer_id = st.session_state.get('selected_customer_id', None)
     selected_project_id = st.session_state.get('selected_project_id', None)
@@ -1929,7 +1957,7 @@ def render_crm(
                             )
             else:
                 st.info("Noch keine Berechnungen für dieses Projekt gespeichert.")
-                st.write("[IDEA] **Tipp:** Führen Sie eine Berechnung im Solar Calculator durch, während dieses Projekt ausgewählt ist, um sie automatisch hier zu speichern.")
+                st.write("**Tipp:** Führen Sie eine Berechnung im Solar Calculator durch, während dieses Projekt ausgewählt ist, um sie automatisch hier zu speichern.")
         
         except ImportError:
             st.warning("Berechnungs-Historie nicht verfügbar (CRM-Integration fehlt)")
@@ -2149,3 +2177,158 @@ if __name__ == "__main__":
         print("\nFEHLER: Keine Datenbankverbindung für Test verfügbar.")
 
     print("\n--- Testlauf beendet ---")
+
+
+def render_lead_scoring_tab(texts: dict[str, str], conn):
+    """Lead Scoring Tab - Bewertung und Priorisierung von Leads"""
+    st.subheader("📊 Lead Scoring & Priorisierung")
+    
+    try:
+        from crm.features.lead_scoring_ui import render_lead_scoring_admin
+        render_lead_scoring_admin(texts)
+    except ImportError:
+        st.info("""
+        ### Lead Scoring Modul
+        
+        Das Lead Scoring Modul ist optional und kann bei Bedarf installiert werden.
+        
+        **Funktionen:**
+        - Automatische Bewertung von Leads
+        - Priorisierung nach Abschlusswahrscheinlichkeit
+        - Scorekarten und Bewertungskriterien
+        - ROI-Prognosen
+        
+        **Installation:**
+        ```bash
+        pip install crm-lead-scoring
+        ```
+        """)
+        
+        # Einfache Fallback-Funktion
+        st.markdown("---")
+        st.markdown("### 📝 Kunden nach Potenzial sortieren")
+        
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT id, first_name, last_name, company, email, phone, city
+            FROM customers 
+            ORDER BY created_at DESC 
+            LIMIT 50
+        """)
+        customers = cursor.fetchall()
+        
+        if customers:
+            st.write(f"**{len(customers)} neueste Kunden**")
+            for cust in customers:
+                with st.expander(f"{cust[1]} {cust[2]} - {cust[3] or 'Privatkunde'}"):
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.write(f"📧 {cust[4]}")
+                        st.write(f"📱 {cust[5]}")
+                    with col2:
+                        st.write(f"📍 {cust[6]}")
+                        score = st.slider("Lead Score", 0, 100, 50, key=f"score_{cust[0]}")
+                        st.caption(f"Bewertung: {'🔥 Heiß' if score > 75 else '⚡ Warm' if score > 50 else '❄️ Kalt'}")
+        else:
+            st.info("Keine Kunden vorhanden. Erstellen Sie zuerst Kunden in der Kundenverwaltung.")
+
+
+def render_backup_tab(conn):
+    """Backup & Daten Tab - Datensicherung und Export"""
+    st.subheader("💾 Backup & Datenverwaltung")
+    
+    try:
+        from crm.utils.backup_ui import render_admin_backup_tab
+        render_admin_backup_tab()
+    except ImportError:
+        st.info("""
+        ### Backup-Verwaltung Modul
+        
+        Das Backup-Modul ist optional und kann bei Bedarf installiert werden.
+        
+        **Funktionen:**
+        - Automatische Backups
+        - Manuelle Datensicherung
+        - Datenwiederherstellung
+        - Export-Funktionen
+        
+        **Installation:**
+        ```bash
+        pip install crm-backup-manager
+        ```
+        """)
+        
+        # Einfache Fallback-Funktion
+        st.markdown("---")
+        st.markdown("### 📦 Daten exportieren")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("#### Kunden exportieren")
+            if st.button("📥 Kunden als CSV exportieren", use_container_width=True):
+                try:
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT * FROM customers")
+                    customers = cursor.fetchall()
+                    
+                    if customers:
+                        import csv
+                        import io
+                        
+                        output = io.StringIO()
+                        writer = csv.writer(output)
+                        
+                        # Header
+                        writer.writerow([desc[0] for desc in cursor.description])
+                        
+                        # Daten
+                        for row in customers:
+                            writer.writerow(row)
+                        
+                        csv_data = output.getvalue()
+                        st.download_button(
+                            label="💾 CSV herunterladen",
+                            data=csv_data,
+                            file_name=f"kunden_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                            mime="text/csv"
+                        )
+                        st.success(f"✅ {len(customers)} Kunden bereit zum Download")
+                    else:
+                        st.warning("Keine Kunden zum Exportieren vorhanden")
+                except Exception as e:
+                    st.error(f"Fehler beim Export: {e}")
+        
+        with col2:
+            st.markdown("#### Datenbank-Info")
+            try:
+                cursor = conn.cursor()
+                
+                # Anzahl Kunden
+                cursor.execute("SELECT COUNT(*) FROM customers")
+                customer_count = cursor.fetchone()[0]
+                
+                # Anzahl Projekte
+                try:
+                    cursor.execute("SELECT COUNT(*) FROM projects")
+                    project_count = cursor.fetchone()[0]
+                except:
+                    project_count = 0
+                
+                # Anzahl Tags
+                try:
+                    cursor.execute("SELECT COUNT(*) FROM crm_tags")
+                    tag_count = cursor.fetchone()[0]
+                except:
+                    tag_count = 0
+                
+                st.metric("👥 Kunden", customer_count)
+                st.metric("📁 Projekte", project_count)
+                st.metric("🏷️ Tags", tag_count)
+                
+            except Exception as e:
+                st.error(f"Fehler beim Laden der Statistiken: {e}")
+        
+        st.markdown("---")
+        st.caption("💡 Tipp: Installieren Sie das vollständige Backup-Modul für automatische Backups und erweiterte Funktionen.")
+

@@ -62,10 +62,10 @@ def test_scene_creation_time():
         assert plotter is not None, f"Scene creation failed for {qty} modules"
         assert elapsed < 1.0, f"Scene creation too slow for {qty} modules: {elapsed:.3f}s (should be < 1.0s)"
         
-        print(f"[OK] {qty} modules: {elapsed:.3f}s (target: < 1.0s)")
+        print(f"{qty} modules: {elapsed:.3f}s (target: < 1.0s)")
         plotter.close()
     
-    print("\n[OK] Scene creation time tests passed")
+    print("\nScene creation time tests passed")
     return True
 
 
@@ -103,9 +103,9 @@ def test_screenshot_time():
         assert len(png_bytes) > 0, f"Screenshot empty for {qty} modules"
         assert elapsed < 2.0, f"Screenshot too slow for {qty} modules: {elapsed:.3f}s (should be < 2.0s)"
         
-        print(f"[OK] {qty} modules: {elapsed:.3f}s, {len(png_bytes):,} bytes (target: < 2.0s)")
+        print(f"{qty} modules: {elapsed:.3f}s, {len(png_bytes):,} bytes (target: < 2.0s)")
     
-    print("\n[OK] Screenshot time tests passed")
+    print("\nScreenshot time tests passed")
     return True
 
 
@@ -162,7 +162,7 @@ def test_performance_scaling():
             'total_time': scene_time + screenshot_time
         })
         
-        print(f"[OK] {qty} modules requested ({total_placed} placed):")
+        print(f"{qty} modules requested ({total_placed} placed):")
         print(f"    Scene: {scene_time:.3f}s, Screenshot: {screenshot_time:.3f}s, Total: {scene_time + screenshot_time:.3f}s")
     
     # Check that performance doesn't degrade too much with more modules
@@ -176,9 +176,9 @@ def test_performance_scaling():
         
         print(f"\n  Performance ratio (100 vs 10 modules): {ratio:.2f}x")
         assert ratio < 5.0, f"Performance degrades too much: {ratio:.2f}x (should be < 5x)"
-        print(f"  [OK] Performance scaling is acceptable (< 5x)")
+        print(f"  Performance scaling is acceptable (< 5x)")
     
-    print("\n[OK] Performance scaling tests passed")
+    print("\nPerformance scaling tests passed")
     return True
 
 
@@ -219,12 +219,12 @@ def test_complex_scene_performance():
     assert elapsed < 1.5, f"Complex scene too slow: {elapsed:.3f}s (should be < 1.5s)"
     
     total_placed = len(panels['main']) + len(panels.get('garage', [])) + len(panels.get('facade', []))
-    print(f"[OK] Complex scene (Walmdach + manual + garage + facade): {elapsed:.3f}s")
+    print(f"Complex scene (Walmdach + manual + garage + facade): {elapsed:.3f}s")
     print(f"    {total_placed} modules placed (main: {len(panels['main'])}, garage: {len(panels.get('garage', []))}, facade: {len(panels.get('facade', []))})")
     
     plotter.close()
     
-    print("\n[OK] Complex scene performance tests passed")
+    print("\nComplex scene performance tests passed")
     return True
 
 
@@ -265,13 +265,13 @@ def test_memory_efficiency():
     else:
         avg_time = 0.0
     
-    print(f"[OK] Created and closed {iterations} scenes")
+    print(f"Created and closed {iterations} scenes")
     print(f"    Total time: {elapsed:.3f}s, Average: {avg_time:.3f}s per scene")
     print(f"    Memory management appears stable (no crashes)")
     
     assert avg_time < 1.0, f"Average scene time too slow: {avg_time:.3f}s (should be < 1.0s)"
     
-    print("\n[OK] Memory efficiency tests passed")
+    print("\nMemory efficiency tests passed")
     return True
 
 
@@ -301,10 +301,10 @@ if __name__ == "__main__":
             if test():
                 passed += 1
         except AssertionError as e:
-            print(f"\n[ERROR] {test.__name__} failed: {e}")
+            print(f"\n{test.__name__} failed: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n[ERROR] {test.__name__} error: {e}")
+            print(f"\n{test.__name__} error: {e}")
             import traceback
             traceback.print_exc()
             failed += 1
@@ -314,13 +314,13 @@ if __name__ == "__main__":
     print("=" * 60)
     
     if failed == 0:
-        print("\n[OK] ALL PERFORMANCE TESTS PASSED!")
+        print("\nALL PERFORMANCE TESTS PASSED!")
         print("\nThe system meets all performance targets:")
-        print("  [OK] Fast scene creation (< 1s)")
-        print("  [OK] Fast screenshot generation (< 2s)")
-        print("  [OK] Good performance scaling")
-        print("  [OK] Efficient memory management")
+        print("  Fast scene creation (< 1s)")
+        print("  Fast screenshot generation (< 2s)")
+        print("  Good performance scaling")
+        print("  Efficient memory management")
         exit(0)
     else:
-        print(f"\n[ERROR] {failed} TEST(S) FAILED")
+        print(f"\n{failed} TEST(S) FAILED")
         exit(1)

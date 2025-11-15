@@ -26,7 +26,7 @@ def test_requirement_3_1():
     assert all(isinstance(pos[0], float) and isinstance(pos[1], float) for pos in positions), \
         "Coordinates should be floats"
     
-    print("[OK] Requirement 3.1 satisfied: (x, y) coordinates calculated")
+    print("Requirement 3.1 satisfied: (x, y) coordinates calculated")
 
 
 def test_requirement_3_2():
@@ -53,7 +53,7 @@ def test_requirement_3_2():
         else:
             assert -12.0/2 < = 0.0
     
-    print("[OK] Requirement 3.2 satisfied: Roof dimensions considered")
+    print("Requirement 3.2 satisfied: Roof dimensions considered")
 
 
 def test_requirement_3_3():
@@ -76,7 +76,7 @@ def test_requirement_3_3():
     width, height, _ = get_module_dimensions("landscape")
     assert width == PV_H and height == PV_W, "Landscape should swap dimensions"
     
-    print("[OK] Requirement 3.3 satisfied: Module dimensions (1.05m x 1.76m) considered")
+    print("Requirement 3.3 satisfied: Module dimensions (1.05m x 1.76m) considered")
 
 
 def test_requirement_3_4():
@@ -105,7 +105,7 @@ def test_requirement_3_4():
         assert abs(actual_distance - expected_distance) < 0.01, \
             f"Spacing not maintained: expected {expected_distance}, got {actual_distance}"
     
-    print("[OK] Requirement 3.4 satisfied: Spacing between modules considered")
+    print("Requirement 3.4 satisfied: Spacing between modules considered")
 
 
 def test_requirement_3_5():
@@ -139,7 +139,7 @@ def test_requirement_3_5():
     assert len(positions_large_margin) < len(positions), \
         "Larger margin should reduce module count"
     
-    print("[OK] Requirement 3.5 satisfied: Margin distances considered")
+    print("Requirement 3.5 satisfied: Margin distances considered")
 
 
 def test_requirement_3_6():
@@ -169,7 +169,7 @@ def test_requirement_3_6():
     assert len(positions_small) == requested_small, \
         "Should return requested amount when within capacity"
     
-    print(f"[OK] Requirement 3.6 satisfied: Returns max possible ({max_capacity}) when requested exceeds capacity")
+    print(f"Requirement 3.6 satisfied: Returns max possible ({max_capacity}) when requested exceeds capacity")
 
 
 def test_input_validation():
@@ -196,7 +196,7 @@ def test_input_validation():
     assert calculate_module_grid(2.0, 2.0, 10, margin=1.5) == [], \
         "Should return empty list when margins exceed roof dimensions"
     
-    print("[OK] Input validation working correctly")
+    print("Input validation working correctly")
 
 
 def test_optimization():
@@ -220,7 +220,7 @@ def test_optimization():
     assert len(positions_more) == max_modules, \
         "Should not exceed maximum capacity"
     
-    print(f"[OK] Optimization working: Maximum {max_modules} modules calculated and placed")
+    print(f"Optimization working: Maximum {max_modules} modules calculated and placed")
 
 
 def run_all_tests():
@@ -240,23 +240,23 @@ def run_all_tests():
         test_optimization()
         
         print("\n" + "=" * 60)
-        print("[OK] ALL REQUIREMENTS VERIFIED SUCCESSFULLY")
+        print("ALL REQUIREMENTS VERIFIED SUCCESSFULLY")
         print("=" * 60)
         print("\nRequirements 3.1 through 3.6 are fully satisfied:")
-        print("  [OK] 3.1: (x, y) coordinates calculated")
-        print("  [OK] 3.2: Roof dimensions considered")
-        print("  [OK] 3.3: Module dimensions (1.05m x 1.76m) considered")
-        print("  [OK] 3.4: Spacing between modules considered")
-        print("  [OK] 3.5: Margin distances considered")
-        print("  [OK] 3.6: Maximum possible count returned when requested exceeds capacity")
+        print("  3.1: (x, y) coordinates calculated")
+        print("  3.2: Roof dimensions considered")
+        print("  3.3: Module dimensions (1.05m x 1.76m) considered")
+        print("  3.4: Spacing between modules considered")
+        print("  3.5: Margin distances considered")
+        print("  3.6: Maximum possible count returned when requested exceeds capacity")
         
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] ERROR: {e}")
+        print(f"\nERROR: {e}")
         return False
 
 

@@ -47,7 +47,7 @@ all_passed = True
 for value, decimals, expected in test_cases:
     result = format_german_number(value, decimals)
     passed = result == expected
-    status = "[OK]" if passed else "[ERROR]"
+    status = "" if passed else ""
     
     if not passed:
         all_passed = False
@@ -56,12 +56,12 @@ for value, decimals, expected in test_cases:
 
 print("=" * 70)
 if all_passed:
-    print("\n[OK] Alle Tests bestanden! Die Formatierung funktioniert korrekt.")
+    print("\nAlle Tests bestanden! Die Formatierung funktioniert korrekt.")
 else:
-    print("\n[ERROR] Einige Tests sind fehlgeschlagen.")
+    print("\nEinige Tests sind fehlgeschlagen.")
 
 # Zeige Beispiele für typische Anwendungsfälle
-print("\n\n[CHART] Beispiele für typische Anwendungsfälle:\n")
+print("\n\nBeispiele für typische Anwendungsfälle:\n")
 print(f"Investitionskosten:     {format_german_number(25000, 2)} €")
 print(f"Jährliche Einsparung:   {format_german_number(1850.50, 2)} €")
 print(f"Leistung:               {format_german_number(12, 0)} kW")

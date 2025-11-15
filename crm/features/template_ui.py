@@ -82,7 +82,7 @@ AVAILABLE_PLACEHOLDERS = {
 
 def render_template_list() -> None:
     """Rendert die Template-Übersicht."""
-    st.subheader("[FILE] Dokument-Vorlagen")
+    st.subheader("Dokument-Vorlagen")
     
     conn = get_db_connection()
     if not conn:
@@ -129,7 +129,7 @@ def render_template_list() -> None:
         # Template-Liste
         for template in templates:
             with st.expander(
-                f"{'[OK]' if template['is_active'] else '[ERROR]'} {template['name']} ({template['category']})",
+                f"{'' if template['is_active'] else ''} {template['name']} ({template['category']})",
                 expanded=False
             ):
                 col1, col2 = st.columns([3, 1])
@@ -165,7 +165,7 @@ def render_template_list() -> None:
                         st.session_state['template_id'] = template['id']
                         st.rerun()
                     
-                    if st.button("[DELETE] Löschen", key=f"delete_template_{template['id']}", use_container_width=True):
+                    if st.button("Löschen", key=f"delete_template_{template['id']}", use_container_width=True):
                         if st.session_state.get(f'confirm_delete_{template["id"]}'):
                             if delete_template(conn, template['id']):
                                 st.success("Vorlage gelöscht!")
@@ -255,10 +255,10 @@ def render_template_editor(template_id: int | None = None) -> None:
                 validation = validate_placeholders(content, list(AVAILABLE_PLACEHOLDERS.keys()))
                 
                 if validation['invalid']:
-                    st.warning(f"[WARNING] Unbekannte Platzhalter: {', '.join(validation['invalid'])}")
+                    st.warning(f"Unbekannte Platzhalter: {', '.join(validation['invalid'])}")
                 
                 if validation['valid']:
-                    st.success(f"[OK] Verwendete Platzhalter: {', '.join(validation['valid'])}")
+                    st.success(f"Verwendete Platzhalter: {', '.join(validation['valid'])}")
             
             if is_edit:
                 change_note = st.text_input(
@@ -298,7 +298,7 @@ def render_template_editor(template_id: int | None = None) -> None:
                             change_note=change_note if 'change_note' in locals() else None
                         )
                         if success:
-                            st.success("[OK] Vorlage aktualisiert!")
+                            st.success("Vorlage aktualisiert!")
                             st.session_state.pop('template_action', None)
                             st.session_state.pop('template_id', None)
                             st.rerun()
@@ -314,7 +314,7 @@ def render_template_editor(template_id: int | None = None) -> None:
                             created_by=user
                         )
                         if new_id:
-                            st.success("[OK] Vorlage erstellt!")
+                            st.success("Vorlage erstellt!")
                             st.session_state.pop('template_action', None)
                             st.rerun()
                         else:
@@ -465,7 +465,7 @@ def render_template_duplicate(template_id: int) -> None:
                     new_id = duplicate_template(conn, template_id, new_name, user)
                     
                     if new_id:
-                        st.success(f"[OK] Vorlage dupliziert! (ID: {new_id})")
+                        st.success(f"Vorlage dupliziert! (ID: {new_id})")
                         st.session_state.pop('template_action', None)
                         st.session_state.pop('template_id', None)
                         st.rerun()

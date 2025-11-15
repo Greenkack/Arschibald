@@ -187,7 +187,7 @@ def test_all_accessories_pdf_generation():
             if product:
                 datasheet_path = product.get("datasheet_link_db_path", "N/A")
                 print(
-                    f"[OK] {component_name} (ID {product_id}): {
+                    f"{component_name} (ID {product_id}): {
                         product.get(
                             'model',
                             'Unknown')}")
@@ -199,13 +199,13 @@ def test_all_accessories_pdf_generation():
                     f"[MISSING] {component_name} (ID {product_id}): NOT FOUND in database")
                 missing_products.append((component_name, product_id))
         except Exception as e:
-            print(f"[ERROR] {component_name} (ID {product_id}): ERROR - {e}")
+            print(f"{component_name} (ID {product_id}): ERROR - {e}")
             missing_products.append((component_name, product_id))
 
     print("-" * 80 + "\n")
 
     if missing_products:
-        print("[WARNING] Some products are not available in the database.")
+        print("Some products are not available in the database.")
         print("The test will continue, but datasheets for missing products won't be appended.\n")
 
     # Generate PDF
@@ -252,16 +252,16 @@ def test_all_accessories_pdf_generation():
             print("\n" + "=" * 80)
             print("TEST RESULTS")
             print("=" * 80)
-            print(f"[SUCCESS] PDF generated successfully!")
-            print(f"[SUCCESS] Output file: {output_filename}")
-            print(f"[SUCCESS] File size: {pdf_size_kb:.2f} KB")
+            print(f"PDF generated successfully!")
+            print(f"Output file: {output_filename}")
+            print(f"File size: {pdf_size_kb:.2f} KB")
             print(
                 f"\nProducts Available: {len(available_products)}/{len(all_product_ids)}")
             print(
                 f"Products Missing: {len(missing_products)}/{len(all_product_ids)}")
 
             if available_products:
-                print(f"\n[OK] Available Products with Datasheets:")
+                print(f"\nAvailable Products with Datasheets:")
                 for component_name, product_id, product in available_products:
                     datasheet = product.get("datasheet_link_db_path", "N/A")
                     print(
@@ -285,11 +285,11 @@ def test_all_accessories_pdf_generation():
 
             return True
         else:
-            print("\n[ERROR] PDF generation returned None")
+            print("\nPDF generation returned None")
             return False
 
     except Exception as e:
-        print(f"\n[ERROR] during PDF generation: {e}")
+        print(f"\nduring PDF generation: {e}")
         import traceback
         traceback.print_exc()
         return False

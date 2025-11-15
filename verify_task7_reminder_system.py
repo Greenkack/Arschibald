@@ -32,21 +32,21 @@ def verify_imports():
             get_reminder_statistics,
             REMINDER_RULES
         )
-        print("[OK] notification_manager.py erfolgreich importiert")
+        print("notification_manager.py erfolgreich importiert")
         
         from crm.utils.reminder_ui import (
             render_reminders_widget,
             render_reminders_management_ui
         )
-        print("[OK] reminder_ui.py erfolgreich importiert")
+        print("reminder_ui.py erfolgreich importiert")
         
         from database import get_db_connection, create_crm_enhancement_tables
-        print("[OK] database.py erfolgreich importiert")
+        print("database.py erfolgreich importiert")
         
         return True
         
     except ImportError as e:
-        print(f"[ERROR] Import-Fehler: {e}")
+        print(f"Import-Fehler: {e}")
         return False
 
 
@@ -61,7 +61,7 @@ def verify_database():
         
         conn = get_db_connection()
         if not conn:
-            print("[ERROR] Keine Datenbankverbindung")
+            print("Keine Datenbankverbindung")
             return False
         
         # Erstelle Tabellen falls nicht vorhanden
@@ -75,9 +75,9 @@ def verify_database():
         """)
         
         if cursor.fetchone():
-            print("[OK] Tabelle 'crm_reminders' existiert")
+            print("Tabelle 'crm_reminders' existiert")
         else:
-            print("[ERROR] Tabelle 'crm_reminders' nicht gefunden")
+            print("Tabelle 'crm_reminders' nicht gefunden")
             conn.close()
             return False
         
@@ -92,9 +92,9 @@ def verify_database():
         
         for col in required_columns:
             if col in columns:
-                print(f"[OK] Spalte '{col}' vorhanden")
+                print(f"Spalte '{col}' vorhanden")
             else:
-                print(f"[ERROR] Spalte '{col}' fehlt")
+                print(f"Spalte '{col}' fehlt")
                 conn.close()
                 return False
         
@@ -106,20 +106,20 @@ def verify_database():
         indices = [row[0] for row in cursor.fetchall()]
         
         if 'idx_crm_reminders_due_date' in indices:
-            print("[OK] Index 'idx_crm_reminders_due_date' vorhanden")
+            print("Index 'idx_crm_reminders_due_date' vorhanden")
         else:
-            print("[WARNING] Index 'idx_crm_reminders_due_date' fehlt (optional)")
+            print("Index 'idx_crm_reminders_due_date' fehlt (optional)")
         
         if 'idx_crm_reminders_status' in indices:
-            print("[OK] Index 'idx_crm_reminders_status' vorhanden")
+            print("Index 'idx_crm_reminders_status' vorhanden")
         else:
-            print("[WARNING] Index 'idx_crm_reminders_status' fehlt (optional)")
+            print("Index 'idx_crm_reminders_status' fehlt (optional)")
         
         conn.close()
         return True
         
     except Exception as e:
-        print(f"[ERROR] Datenbank-Fehler: {e}")
+        print(f"Datenbank-Fehler: {e}")
         return False
 
 
@@ -142,18 +142,18 @@ def verify_rules():
             if rule_name in REMINDER_RULES:
                 actual_days = REMINDER_RULES[rule_name]['days_offset']
                 if actual_days == expected_days:
-                    print(f"[OK] Regel '{rule_name}': {actual_days} Tage (korrekt)")
+                    print(f"Regel '{rule_name}': {actual_days} Tage (korrekt)")
                 else:
-                    print(f"[ERROR] Regel '{rule_name}': {actual_days} Tage (erwartet: {expected_days})")
+                    print(f"Regel '{rule_name}': {actual_days} Tage (erwartet: {expected_days})")
                     return False
             else:
-                print(f"[ERROR] Regel '{rule_name}' fehlt")
+                print(f"Regel '{rule_name}' fehlt")
                 return False
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Regel-Engine-Fehler: {e}")
+        print(f"Regel-Engine-Fehler: {e}")
         return False
 
 
@@ -184,44 +184,44 @@ def verify_functionality():
         )
         
         if reminder_id:
-            print(f"[OK] Erinnerung erstellen: ID {reminder_id}")
+            print(f"Erinnerung erstellen: ID {reminder_id}")
         else:
-            print("[ERROR] Erinnerung erstellen fehlgeschlagen")
+            print("Erinnerung erstellen fehlgeschlagen")
             return False
         
         # Test 2: Erinnerung laden
         reminder = get_reminder(reminder_id)
         if reminder and reminder['message'] == 'Verification Test':
-            print("[OK] Erinnerung laden funktioniert")
+            print("Erinnerung laden funktioniert")
         else:
-            print("[ERROR] Erinnerung laden fehlgeschlagen")
+            print("Erinnerung laden fehlgeschlagen")
             return False
         
         # Test 3: Snooze
         if snooze_reminder(reminder_id, days=2):
-            print("[OK] Snooze-Funktion funktioniert")
+            print("Snooze-Funktion funktioniert")
         else:
-            print("[ERROR] Snooze-Funktion fehlgeschlagen")
+            print("Snooze-Funktion fehlgeschlagen")
             return False
         
         # Test 4: Status-Update
         if update_reminder_status(reminder_id, 'completed'):
-            print("[OK] Status-Update funktioniert")
+            print("Status-Update funktioniert")
         else:
-            print("[ERROR] Status-Update fehlgeschlagen")
+            print("Status-Update fehlgeschlagen")
             return False
         
         # Test 5: Löschen
         if delete_reminder(reminder_id):
-            print("[OK] Löschen funktioniert")
+            print("Löschen funktioniert")
         else:
-            print("[ERROR] Löschen fehlgeschlagen")
+            print("Löschen fehlgeschlagen")
             return False
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Funktionalitäts-Fehler: {e}")
+        print(f"Funktionalitäts-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -239,27 +239,27 @@ def verify_ui_integration():
             dashboard_content = f.read()
         
         if 'from crm.utils.reminder_ui import render_reminders_widget' in dashboard_content:
-            print("[OK] Reminder UI Import im Dashboard vorhanden")
+            print("Reminder UI Import im Dashboard vorhanden")
         else:
-            print("[ERROR] Reminder UI Import im Dashboard fehlt")
+            print("Reminder UI Import im Dashboard fehlt")
             return False
         
         if 'render_reminders_widget' in dashboard_content:
-            print("[OK] render_reminders_widget wird aufgerufen")
+            print("render_reminders_widget wird aufgerufen")
         else:
-            print("[ERROR] render_reminders_widget wird nicht aufgerufen")
+            print("render_reminders_widget wird nicht aufgerufen")
             return False
         
         if '🔔 Erinnerungen' in dashboard_content:
-            print("[OK] Erinnerungs-Tab im Dashboard vorhanden")
+            print("Erinnerungs-Tab im Dashboard vorhanden")
         else:
-            print("[ERROR] Erinnerungs-Tab im Dashboard fehlt")
+            print("Erinnerungs-Tab im Dashboard fehlt")
             return False
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] UI-Integration-Fehler: {e}")
+        print(f"UI-Integration-Fehler: {e}")
         return False
 
 
@@ -274,27 +274,27 @@ def verify_documentation():
         
         # Prüfe Quick Reference
         if os.path.exists('docs/REMINDER_SYSTEM_QUICK_REFERENCE.md'):
-            print("[OK] Quick Reference Dokumentation vorhanden")
+            print("Quick Reference Dokumentation vorhanden")
         else:
-            print("[WARNING] Quick Reference Dokumentation fehlt")
+            print("Quick Reference Dokumentation fehlt")
         
         # Prüfe Summary
         if os.path.exists('TASK_7_REMINDER_SYSTEM_COMPLETE.md'):
-            print("[OK] Task Summary Dokumentation vorhanden")
+            print("Task Summary Dokumentation vorhanden")
         else:
-            print("[WARNING] Task Summary Dokumentation fehlt")
+            print("Task Summary Dokumentation fehlt")
         
         # Prüfe Tests
         if os.path.exists('crm/utils/test_notification_manager.py'):
-            print("[OK] Test-Datei vorhanden")
+            print("Test-Datei vorhanden")
         else:
-            print("[ERROR] Test-Datei fehlt")
+            print("Test-Datei fehlt")
             return False
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Dokumentations-Fehler: {e}")
+        print(f"Dokumentations-Fehler: {e}")
         return False
 
 
@@ -322,7 +322,7 @@ def main():
     total = len(results)
     
     for check_name, result in results.items():
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{check_name}: {status}")
     
     print("\n" + "="*60)
@@ -332,14 +332,14 @@ def main():
     if passed == total:
         print("\n🎉 TASK 7 VOLLSTÄNDIG IMPLEMENTIERT UND VERIFIZIERT! 🎉")
         print("\nDas Erinnerungssystem ist:")
-        print("  [OK] Vollständig implementiert")
-        print("  [OK] Getestet und funktionsfähig")
-        print("  [OK] In Dashboard integriert")
-        print("  [OK] Dokumentiert")
+        print("  Vollständig implementiert")
+        print("  Getestet und funktionsfähig")
+        print("  In Dashboard integriert")
+        print("  Dokumentiert")
         print("\nDas System ist production-ready und kann verwendet werden.")
         return 0
     else:
-        print(f"\n[WARNING] {total - passed} Check(s) fehlgeschlagen")
+        print(f"\n{total - passed} Check(s) fehlgeschlagen")
         print("Bitte überprüfen Sie die Fehlerausgaben oben.")
         return 1
 

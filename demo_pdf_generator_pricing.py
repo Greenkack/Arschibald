@@ -220,7 +220,7 @@ def demo_basic_pdf_generator():
     # Generate PDF
     try:
         generator.create_pdf()
-        print("\n[OK] PDF generated successfully: demo_basic_pricing.pdf")
+        print("\nPDF generated successfully: demo_basic_pricing.pdf")
 
         # Check file size
         if os.path.exists("demo_basic_pricing.pdf"):
@@ -228,7 +228,7 @@ def demo_basic_pdf_generator():
             print(f"  File size: {file_size:,} bytes")
 
     except Exception as e:
-        print(f"[ERROR] Error generating PDF: {e}")
+        print(f"Error generating PDF: {e}")
 
 
 def demo_enhanced_pdf_generator():
@@ -267,13 +267,13 @@ def demo_enhanced_pdf_generator():
         )
 
         if pdf_bytes:
-            print("[OK] Enhanced PDF generated successfully: demo_enhanced_pricing.pdf")
+            print("Enhanced PDF generated successfully: demo_enhanced_pricing.pdf")
             print(f"  PDF size: {len(pdf_bytes):,} bytes")
         else:
-            print("[ERROR] Enhanced PDF generation returned no data")
+            print("Enhanced PDF generation returned no data")
 
     except Exception as e:
-        print(f"[ERROR] Error generating enhanced PDF: {e}")
+        print(f"Error generating enhanced PDF: {e}")
 
 
 def demo_pricing_templates():
@@ -390,14 +390,14 @@ def demo_integration_function():
         )
 
         if pdf_bytes:
-            print("[OK] Integration function generated PDF successfully")
+            print("Integration function generated PDF successfully")
             print(f"  PDF size: {len(pdf_bytes):,} bytes")
             print("  Saved as: demo_integration.pdf")
         else:
-            print("[ERROR] Integration function returned no data")
+            print("Integration function returned no data")
 
     except Exception as e:
-        print(f"[ERROR] Error with integration function: {e}")
+        print(f"Error with integration function: {e}")
 
 
 def main():
@@ -427,9 +427,9 @@ def main():
         for filename in generated_files:
             if os.path.exists(filename):
                 file_size = os.path.getsize(filename)
-                print(f"  [OK] {filename} ({file_size:,} bytes)")
+                print(f"  {filename} ({file_size:,} bytes)")
             else:
-                print(f"  [ERROR] {filename} (not found)")
+                print(f"  {filename} (not found)")
 
     except Exception as e:
         print(f"\nDemo failed with error: {e}")

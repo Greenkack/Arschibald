@@ -186,7 +186,7 @@ def list_files(path: str = ".") -> str:
                 # Get file size
                 size = os.path.getsize(item_path)
                 size_str = _format_file_size(size)
-                items.append(f"[FILE] {item} ({size_str})")
+                items.append(f"{item} ({size_str})")
 
         if not items:
             return f"Das Verzeichnis '{path}' ist leer."
@@ -478,7 +478,7 @@ def _create_directory_structure(
 
             with open(item_path, 'w', encoding='utf-8') as f:
                 f.write(file_content)
-            created_items.append(f"[FILE] {name}")
+            created_items.append(f"{name}")
 
     return created_items
 
@@ -605,7 +605,7 @@ def main():
     """Main application entry point."""
     st.set_page_config(
         page_title="{project_name}",
-        page_icon="[LAUNCH]",
+        page_icon="",
         layout="wide"
     )
 
@@ -783,7 +783,7 @@ def generate_project_structure(
         readme_path = os.path.join(project_path, "README.md")
         with open(readme_path, 'w', encoding='utf-8') as f:
             f.write(_generate_readme(project_name))
-        created_items.append("[FILE] README.md")
+        created_items.append("README.md")
 
         # Build summary
         summary = f"""Projekt '{project_name}' erfolgreich erstellt!

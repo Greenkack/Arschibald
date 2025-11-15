@@ -14,11 +14,11 @@ sys.path.append('.')
 def fix_pdf_placeholder_problems():
     """Behebt alle 3 PDF-Platzhalter Probleme"""
 
-    print("[TOOL] BEHEBE PDF PLATZHALTER PROBLEME")
+    print("BEHEBE PDF PLATZHALTER PROBLEME")
     print("=" * 60)
 
     # 1. SEITE 1 PROBLEME ANALYSIEREN
-    print("\n1. [FILE] SEITE 1 PROBLEME:")
+    print("\n1. SEITE 1 PROBLEME:")
     print("   - Ersparte Mehrwertsteuer: falscher Key")
     print("   - Amortisationszeit: falscher Key")
 
@@ -26,11 +26,11 @@ def fix_pdf_placeholder_problems():
     # "ersparte Mehrwertsteuer" Position: (394.12188720703125, 648.8770751953125, 437.10577392578125, 664.68994140625)
     # "29.150,00 EUR*" Position: (458.7808532714844, 393.9034423828125, 533.526123046875, 409.9840087890625) - Das ist die Amortisationszeit
 
-    print("   [OK] Identifiziert: 'ersparte Mehrwertsteuer' braucht MwSt-Key")
-    print("   [OK] Identifiziert: '29.150,00 EUR*' braucht Amortisationszeit-Key")
+    print("   Identifiziert: 'ersparte Mehrwertsteuer' braucht MwSt-Key")
+    print("   Identifiziert: '29.150,00 EUR*' braucht Amortisationszeit-Key")
 
     # 2. SEITE 7 PROBLEME ANALYSIEREN
-    print("\n2. [FILE] SEITE 7 PROBLEME:")
+    print("\n2. SEITE 7 PROBLEME:")
     print("   - Alle Beträge zeigen 0,00 €")
     print("   - Keys nicht mit Solar Calculator verknüpft")
 
@@ -45,7 +45,7 @@ def fix_pdf_placeholder_problems():
         "final_end_preis": "gesamte Investitionssumme"
     }
 
-    print("   [OK] Identifiziert: 7 Platzhalter brauchen Solar Calculator Keys")
+    print("   Identifiziert: 7 Platzhalter brauchen Solar Calculator Keys")
     for key, label in seite7_placeholders.items():
         print(f"      - {key} -> {label}")
 
@@ -64,7 +64,7 @@ def fix_pdf_placeholder_problems():
         "PDF__FINAL_END_PREIS_FORMATTED": "17.226,89 €"
     }
 
-    print("   [OK] Verfügbare Solar Calculator Keys:")
+    print("   Verfügbare Solar Calculator Keys:")
     for key, value in solar_calc_keys.items():
         print(f"      - {key}: {value}")
 
@@ -88,16 +88,16 @@ def fix_pdf_placeholder_problems():
         "final_end_preis": "PDF__FINAL_END_PREIS_FORMATTED"
     }
 
-    print("   [OK] SEITE 1 MAPPING:")
+    print("   SEITE 1 MAPPING:")
     for placeholder, key in seite1_mapping.items():
         print(f"      - '{placeholder}' -> {key}")
 
-    print("   [OK] SEITE 7 MAPPING:")
+    print("   SEITE 7 MAPPING:")
     for placeholder, key in seite7_mapping.items():
         print(f"      - '{placeholder}' -> {key}")
 
     # 5. PLACEHOLDERS.PY UPDATE VORBEREITEN
-    print("\n5. [NOTE] PLACEHOLDERS.PY UPDATE:")
+    print("\n5. PLACEHOLDERS.PY UPDATE:")
 
     placeholder_updates = {
         # Seite 1 Updates
@@ -114,7 +114,7 @@ def fix_pdf_placeholder_problems():
         "final_end_preis": "final_end_preis_formatted"
     }
 
-    print("   [OK] Placeholder Updates bereit:")
+    print("   Placeholder Updates bereit:")
     for placeholder, key in placeholder_updates.items():
         print(f"      - PLACEHOLDER_MAPPING['{placeholder}'] = '{key}'")
 
@@ -136,13 +136,13 @@ def fix_pdf_placeholder_problems():
         "final_end_preis_formatted": "session_state.get('simple_pricing_data', {}).get('formatted', {}).get('final_end_preis', '0,00 €')"
     }
 
-    print("   [OK] Dynamic Data Updates bereit:")
+    print("   Dynamic Data Updates bereit:")
     for key, source in dynamic_data_updates.items():
         print(f"      - result['{key}'] = {source}")
 
     print("\n" + "=" * 60)
-    print("[OK] ALLE PROBLEME ANALYSIERT UND LÖSUNGEN VORBEREITET!")
-    print("[OK] Bereit für Implementation in placeholders.py")
+    print("ALLE PROBLEME ANALYSIERT UND LÖSUNGEN VORBEREITET!")
+    print("Bereit für Implementation in placeholders.py")
 
     return {
         "seite1_mapping": seite1_mapping,
@@ -154,7 +154,7 @@ def fix_pdf_placeholder_problems():
 def create_placeholder_fix_code():
     """Erstellt den Code für placeholders.py Fix"""
 
-    print("\n[TOOL] ERSTELLE PLACEHOLDER FIX CODE:")
+    print("\nERSTELLE PLACEHOLDER FIX CODE:")
     print("=" * 50)
 
     # PLACEHOLDER_MAPPING Updates
@@ -202,10 +202,10 @@ PLACEHOLDER_MAPPING.update({
     result["final_end_preis_formatted"] = formatted_pricing.get("final_end_preis", "0,00 €")
 '''
 
-    print("[OK] PLACEHOLDER_MAPPING UPDATE:")
+    print("PLACEHOLDER_MAPPING UPDATE:")
     print(mapping_code)
 
-    print("[OK] build_dynamic_data UPDATE:")
+    print("build_dynamic_data UPDATE:")
     print(dynamic_code)
 
     return {
@@ -220,7 +220,7 @@ if __name__ == "__main__":
     # Erstelle Fix Code
     fix_code = create_placeholder_fix_code()
 
-    print("\n[TARGET] NÄCHSTE SCHRITTE:")
+    print("\nNÄCHSTE SCHRITTE:")
     print("1. placeholders.py öffnen")
     print("2. PLACEHOLDER_MAPPING Update hinzufügen")
     print("3. build_dynamic_data Update hinzufügen")

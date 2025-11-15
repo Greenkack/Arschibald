@@ -42,7 +42,7 @@ def fix_all_placement(file_path: Path) -> bool:
         return True
     
     except Exception as e:
-        print(f"[ERROR] {file_path.name}: {str(e)[:50]}")
+        print(f"{file_path.name}: {str(e)[:50]}")
         return False
 
 # Files mit __all__ Problemen
@@ -57,13 +57,13 @@ PROBLEMATIC_FILES = [
     'admin_heatpump_settings_ui.py',
 ]
 
-print("[TOOL] Fixe __all__ Platzierung...")
+print("Fixe __all__ Platzierung...")
 for file_name in PROBLEMATIC_FILES:
     file_path = Path(file_name)
     if file_path.exists():
         if fix_all_placement(file_path):
-            print(f"[OK] {file_name}")
+            print(f"{file_name}")
         else:
-            print(f"[SKIP]  {file_name}: Kein __all__ gefunden")
+            print(f"{file_name}: Kein __all__ gefunden")
     else:
-        print(f"[SKIP]  {file_name}: Nicht gefunden")
+        print(f"{file_name}: Nicht gefunden")

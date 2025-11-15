@@ -48,7 +48,7 @@ def test_pdf_3d_screenshot_integration():
             filename="test_output.pdf"
         )
         
-        print("\n[OK] PDFGenerator erstellt")
+        print("\nPDFGenerator erstellt")
         
         # Test _draw_3d_visualization method
         print("\n1. Teste _draw_3d_visualization() mit Screenshot in Session State...")
@@ -58,11 +58,11 @@ def test_pdf_3d_screenshot_integration():
         
         # Verify session state was accessed
         mock_st.session_state.get.assert_called_with("pdf_3d_screenshot")
-        print("   [OK] Session State wurde abgefragt")
+        print("   Session State wurde abgefragt")
         
         # Check that story has content
         if len(generator.story) > 0:
-            print(f"   [OK] Story hat {len(generator.story)} Elemente")
+            print(f"   Story hat {len(generator.story)} Elemente")
             
             # Check for Image element
             from reportlab.platypus import Image, Paragraph, Spacer
@@ -75,12 +75,12 @@ def test_pdf_3d_screenshot_integration():
             )
             
             if has_image:
-                print("   [OK] Image-Element gefunden")
+                print("   Image-Element gefunden")
             else:
                 print("   ⚠ Kein Image-Element gefunden")
             
             if has_caption:
-                print("   [OK] Bildunterschrift gefunden")
+                print("   Bildunterschrift gefunden")
             else:
                 print("   ⚠ Keine Bildunterschrift gefunden")
         else:
@@ -108,29 +108,29 @@ def test_pdf_3d_screenshot_integration():
         )
         
         if has_placeholder:
-            print("   [OK] Platzhalter-Text gefunden")
+            print("   Platzhalter-Text gefunden")
         else:
             print("   ⚠ Kein Platzhalter-Text gefunden")
         
         print("\n" + "="*60)
-        print("ERGEBNIS: Task 4.2 ist korrekt implementiert! [OK]")
+        print("ERGEBNIS: Task 4.2 ist korrekt implementiert! ")
         print("="*60)
         
         print("\nImplementierte Features:")
-        print("  [OK] Liest PNG-Bytes aus st.session_state['pdf_3d_screenshot']")
-        print("  [OK] Prüft ob Screenshot vorhanden ist")
-        print("  [OK] Konvertiert zu BytesIO")
-        print("  [OK] Erstellt ReportLab Image mit 17cm x 10.625cm")
-        print("  [OK] Fügt Image zu Story hinzu")
-        print("  [OK] Fügt Bildunterschrift hinzu")
-        print("  [OK] Zeigt Platzhalter wenn nicht vorhanden")
-        print("  [OK] Fehlerbehandlung implementiert")
-        print("  [OK] Logging implementiert")
+        print("  Liest PNG-Bytes aus st.session_state['pdf_3d_screenshot']")
+        print("  Prüft ob Screenshot vorhanden ist")
+        print("  Konvertiert zu BytesIO")
+        print("  Erstellt ReportLab Image mit 17cm x 10.625cm")
+        print("  Fügt Image zu Story hinzu")
+        print("  Fügt Bildunterschrift hinzu")
+        print("  Zeigt Platzhalter wenn nicht vorhanden")
+        print("  Fehlerbehandlung implementiert")
+        print("  Logging implementiert")
         
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] FEHLER: {e}")
+        print(f"\nFEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False

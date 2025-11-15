@@ -7,25 +7,25 @@ Master-Tool: Führt alle Optimierungen in einem Rutsch durch
 def run_all_optimizations():
     """Führt alle Optimierungstools aus"""
 
-    print("[LAUNCH] MASTER-OPTIMIERUNG GESTARTET")
+    print("MASTER-OPTIMIERUNG GESTARTET")
     print("=" * 50)
 
     optimizations = [
         ("🧹 Emoji-Bereinigung", "remove_emojis_from_files()"),
-        ("[TOOL] Streamlit-Fixes", "fix_streamlit_deprecations()"),
-        ("[CHART] Code-Statistiken", "analyze_code_stats()"),
+        ("Streamlit-Fixes", "fix_streamlit_deprecations()"),
+        ("Code-Statistiken", "analyze_code_stats()"),
         ("🗄️ Datenbank-Bereinigung", "clean_database()"),
         ("🧹 Debug-Bereinigung", "clean_debug_statements()"),
-        ("[SEARCH] Duplikat-Suche", "find_duplicate_files()"),
+        ("Duplikat-Suche", "find_duplicate_files()"),
     ]
 
     for name, func_call in optimizations:
         print(f"\n{name}...")
         try:
             exec(func_call)
-            print(f"[OK] {name} abgeschlossen")
+            print(f"{name} abgeschlossen")
         except Exception as e:
-            print(f"[ERROR] Fehler bei {name}: {e}")
+            print(f"Fehler bei {name}: {e}")
 
     print("\n🎉 MASTER-OPTIMIERUNG ABGESCHLOSSEN!")
     print("📋 Empfohlene nächste Schritte:")

@@ -18,7 +18,7 @@ from utils.pv3d_plotly import create_pv_module_3d, PV_W, PV_H, PV_T
 
 def verify_module_dimensions():
     """Verify that module dimensions are correct."""
-    print("\n[OK] Checking module dimensions...")
+    print("\nChecking module dimensions...")
     
     expected_w = 1.05
     expected_h = 1.76
@@ -28,14 +28,14 @@ def verify_module_dimensions():
     assert PV_H == expected_h, f"PV_H should be {expected_h}, got {PV_H}"
     assert PV_T == expected_t, f"PV_T should be {expected_t}, got {PV_T}"
     
-    print(f"  [OK] PV_W = {PV_W}m (expected: {expected_w}m)")
-    print(f"  [OK] PV_H = {PV_H}m (expected: {expected_h}m)")
-    print(f"  [OK] PV_T = {PV_T}m (expected: {expected_t}m)")
+    print(f"  PV_W = {PV_W}m (expected: {expected_w}m)")
+    print(f"  PV_H = {PV_H}m (expected: {expected_h}m)")
+    print(f"  PV_T = {PV_T}m (expected: {expected_t}m)")
     return True
 
 def verify_color_parameter():
     """Verify that color parameter is correctly set."""
-    print("\n[OK] Checking color parameter...")
+    print("\nChecking color parameter...")
     
     # Get function signature
     sig = inspect.signature(create_pv_module_3d)
@@ -44,12 +44,12 @@ def verify_color_parameter():
     expected_color = "#1a1a2e"
     assert color_default == expected_color, f"Default color should be {expected_color}, got {color_default}"
     
-    print(f"  [OK] Default color = {color_default} (dark blue)")
+    print(f"  Default color = {color_default} (dark blue)")
     return True
 
 def verify_opacity():
     """Verify that opacity is set to 0.9."""
-    print("\n[OK] Checking opacity...")
+    print("\nChecking opacity...")
     
     # Create a test module
     mesh, vertices = create_pv_module_3d(
@@ -67,12 +67,12 @@ def verify_opacity():
     
     assert actual_opacity == expected_opacity, f"Opacity should be {expected_opacity}, got {actual_opacity}"
     
-    print(f"  [OK] Opacity = {actual_opacity} (expected: {expected_opacity})")
+    print(f"  Opacity = {actual_opacity} (expected: {expected_opacity})")
     return True
 
 def verify_rotation():
     """Verify that rotation is correctly applied."""
-    print("\n[OK] Checking rotation...")
+    print("\nChecking rotation...")
     
     # Create module with tilt
     mesh1, vertices1 = create_pv_module_3d(
@@ -95,7 +95,7 @@ def verify_rotation():
     # Vertices should be different when tilt is applied
     assert not np.allclose(vertices1, vertices2), "Rotation should change vertex positions"
     
-    print(f"  [OK] Tilt rotation is applied correctly")
+    print(f"  Tilt rotation is applied correctly")
     
     # Create module with azimuth
     mesh3, vertices3 = create_pv_module_3d(
@@ -109,12 +109,12 @@ def verify_rotation():
     # Vertices should be different when azimuth is applied
     assert not np.allclose(vertices2, vertices3), "Azimuth rotation should change vertex positions"
     
-    print(f"  [OK] Azimuth rotation is applied correctly")
+    print(f"  Azimuth rotation is applied correctly")
     return True
 
 def verify_translation():
     """Verify that translation is correctly applied."""
-    print("\n[OK] Checking translation...")
+    print("\nChecking translation...")
     
     # Create module at origin
     mesh1, vertices1 = create_pv_module_3d(
@@ -146,14 +146,14 @@ def verify_translation():
     assert np.allclose(translation, expected_translation, atol=0.01), \
         f"Translation should be {expected_translation}, got {translation}"
     
-    print(f"  [OK] Translation is applied correctly")
+    print(f"  Translation is applied correctly")
     print(f"    Expected: ({test_x}, {test_y}, {test_z})")
     print(f"    Actual center: ({center2[0]:.2f}, {center2[1]:.2f}, {center2[2]:.2f})")
     return True
 
 def verify_mesh_structure():
     """Verify that mesh has correct structure."""
-    print("\n[OK] Checking mesh structure...")
+    print("\nChecking mesh structure...")
     
     mesh, vertices = create_pv_module_3d(
         x=0, y=0, z=0,
@@ -177,10 +177,10 @@ def verify_mesh_structure():
     assert hasattr(mesh, 'color'), "Mesh should have color"
     assert hasattr(mesh, 'opacity'), "Mesh should have opacity"
     
-    print(f"  [OK] Mesh has 8 vertices")
-    print(f"  [OK] Mesh has all required attributes")
-    print(f"  [OK] Mesh color: {mesh.color}")
-    print(f"  [OK] Mesh opacity: {mesh.opacity}")
+    print(f"  Mesh has 8 vertices")
+    print(f"  Mesh has all required attributes")
+    print(f"  Mesh color: {mesh.color}")
+    print(f"  Mesh opacity: {mesh.opacity}")
     return True
 
 def main():
@@ -198,22 +198,22 @@ def main():
         verify_mesh_structure()
         
         print("\n" + "=" * 60)
-        print("[OK] ALL CHECKS PASSED!")
+        print("ALL CHECKS PASSED!")
         print("=" * 60)
         print("\nTask 5 Requirements Verified:")
-        print("  [OK] Module dimensions are correct (1.05m x 1.76m x 0.04m)")
-        print("  [OK] Color is visible (dark blue #1a1a2e)")
-        print("  [OK] Rotation is correctly applied (tilt and azimut)")
-        print("  [OK] Translation is correctly applied (x, y, z)")
-        print("  [OK] Opacity is 0.9 for better visibility")
+        print("  Module dimensions are correct (1.05m x 1.76m x 0.04m)")
+        print("  Color is visible (dark blue #1a1a2e)")
+        print("  Rotation is correctly applied (tilt and azimut)")
+        print("  Translation is correctly applied (x, y, z)")
+        print("  Opacity is 0.9 for better visibility")
         print("\n")
         return 0
         
     except AssertionError as e:
-        print(f"\n[ERROR] VERIFICATION FAILED: {e}")
+        print(f"\nVERIFICATION FAILED: {e}")
         return 1
     except Exception as e:
-        print(f"\n[ERROR] ERROR: {e}")
+        print(f"\nERROR: {e}")
         import traceback
         traceback.print_exc()
         return 1

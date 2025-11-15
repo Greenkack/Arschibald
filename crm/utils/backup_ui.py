@@ -37,7 +37,7 @@ def render_backup_management_ui() -> None:
     """Rendert die Backup-Verwaltungs-UI im Admin-Panel."""
     
     if not BACKUP_MODULE_AVAILABLE:
-        st.error("[ERROR] Backup-Modul nicht verfügbar. Bitte prüfen Sie die Installation.")
+        st.error("Backup-Modul nicht verfügbar. Bitte prüfen Sie die Installation.")
         return
     
     st.title("🗄️ Backup-Verwaltung")
@@ -45,10 +45,10 @@ def render_backup_management_ui() -> None:
     
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3, tab4 = st.tabs([
-        "[CHART] Übersicht",
+        "Übersicht",
         "💾 Backups verwalten",
         "⚙️ Automatische Backups",
-        "[STATS] Statistiken"
+        "Statistiken"
     ])
     
     # Tab 1: Übersicht
@@ -71,7 +71,7 @@ def render_backup_management_ui() -> None:
 def render_backup_overview() -> None:
     """Rendert die Backup-Übersicht."""
     
-    st.subheader("[CHART] Backup-Übersicht")
+    st.subheader("Backup-Übersicht")
     
     # Hole Statistiken
     stats = get_backup_statistics()
@@ -114,13 +114,13 @@ def render_backup_overview() -> None:
         st.write(f"Letztes: {weekly_stats['latest']}")
     
     with col2:
-        st.markdown("**[CHART] Monatliche Backups**")
+        st.markdown("**Monatliche Backups**")
         monthly_stats = stats["by_type"]["monthly"]
         st.write(f"Anzahl: {monthly_stats['count']} (max. 12)")
         st.write(f"Größe: {monthly_stats['size_mb']} MB")
         st.write(f"Letztes: {monthly_stats['latest']}")
         
-        st.markdown("**[TOOL] Manuelle Backups**")
+        st.markdown("**Manuelle Backups**")
         manual_stats = stats["by_type"]["manual"]
         st.write(f"Anzahl: {manual_stats['count']} (max. 10)")
         st.write(f"Größe: {manual_stats['size_mb']} MB")
@@ -128,7 +128,7 @@ def render_backup_overview() -> None:
     
     # Schnellaktionen
     st.markdown("---")
-    st.subheader("[POWER] Schnellaktionen")
+    st.subheader("Schnellaktionen")
     
     col1, col2, col3 = st.columns(3)
     
@@ -176,7 +176,7 @@ def render_backup_management() -> None:
     col1, col2 = st.columns([3, 1])
     
     with col1:
-        st.info("[IDEA] Erstellen Sie ein manuelles Backup der Datenbank. Dieses wird im 'manual' Ordner gespeichert.")
+        st.info("Erstellen Sie ein manuelles Backup der Datenbank. Dieses wird im 'manual' Ordner gespeichert.")
     
     with col2:
         if st.button("💾 Backup erstellen", use_container_width=True, type="primary"):
@@ -217,14 +217,14 @@ def render_backup_management() -> None:
     backups = list_backups(filter_type)
     
     if not backups:
-        st.info("[INFO] Keine Backups gefunden.")
+        st.info("Keine Backups gefunden.")
         return
     
     st.write(f"**{len(backups)} Backup(s) gefunden**")
     
     # Backup-Liste
     for backup in backups:
-        with st.expander(f"[PACKAGE] {backup['filename']} ({backup['size_mb']} MB)"):
+        with st.expander(f"{backup['filename']} ({backup['size_mb']} MB)"):
             col1, col2 = st.columns([2, 1])
             
             with col1:
@@ -243,12 +243,12 @@ def render_backup_management() -> None:
                 
                 # Bestätigungs-Dialog
                 if st.session_state.get(f"confirm_restore_{backup['filename']}", False):
-                    st.warning("[WARNING] **ACHTUNG:** Die aktuelle Datenbank wird überschrieben!")
+                    st.warning("**ACHTUNG:** Die aktuelle Datenbank wird überschrieben!")
                     
                     col_yes, col_no = st.columns(2)
                     
                     with col_yes:
-                        if st.button("[OK] Ja", key=f"yes_{restore_key}", use_container_width=True):
+                        if st.button("Ja", key=f"yes_{restore_key}", use_container_width=True):
                             with st.spinner("Stelle Backup wieder her..."):
                                 success, message = restore_backup(backup['path'])
                                 if success:
@@ -259,22 +259,22 @@ def render_backup_management() -> None:
                                     st.error(message)
                     
                     with col_no:
-                        if st.button("[ERROR] Nein", key=f"no_{restore_key}", use_container_width=True):
+                        if st.button("Nein", key=f"no_{restore_key}", use_container_width=True):
                             st.session_state[f"confirm_restore_{backup['filename']}"] = False
                             st.rerun()
                 
                 # Lösch-Button
-                if st.button("[DELETE] Löschen", key=delete_key, use_container_width=True):
+                if st.button("Löschen", key=delete_key, use_container_width=True):
                     st.session_state[f"confirm_delete_{backup['filename']}"] = True
                 
                 # Lösch-Bestätigung
                 if st.session_state.get(f"confirm_delete_{backup['filename']}", False):
-                    st.warning("[WARNING] Backup wirklich löschen?")
+                    st.warning("Backup wirklich löschen?")
                     
                     col_yes, col_no = st.columns(2)
                     
                     with col_yes:
-                        if st.button("[OK] Ja", key=f"yes_{delete_key}", use_container_width=True):
+                        if st.button("Ja", key=f"yes_{delete_key}", use_container_width=True):
                             success, message = delete_backup(backup['path'])
                             if success:
                                 st.success(message)
@@ -284,7 +284,7 @@ def render_backup_management() -> None:
                                 st.error(message)
                     
                     with col_no:
-                        if st.button("[ERROR] Nein", key=f"no_{delete_key}", use_container_width=True):
+                        if st.button("Nein", key=f"no_{delete_key}", use_container_width=True):
                             st.session_state[f"confirm_delete_{backup['filename']}"] = False
                             st.rerun()
 
@@ -296,8 +296,8 @@ def render_scheduler_control() -> None:
     
     # Prüfe APScheduler-Verfügbarkeit
     if not APSCHEDULER_AVAILABLE:
-        st.error("[ERROR] APScheduler ist nicht installiert.")
-        st.info("[IDEA] Installieren Sie APScheduler mit: `pip install apscheduler`")
+        st.error("APScheduler ist nicht installiert.")
+        st.info("Installieren Sie APScheduler mit: `pip install apscheduler`")
         return
     
     # Hole Scheduler-Status
@@ -305,9 +305,9 @@ def render_scheduler_control() -> None:
     
     # Status-Anzeige
     if status["running"]:
-        st.success("[OK] Automatische Backups sind **AKTIV**")
+        st.success("Automatische Backups sind **AKTIV**")
     else:
-        st.warning("[WARNING] Automatische Backups sind **INAKTIV**")
+        st.warning("Automatische Backups sind **INAKTIV**")
     
     st.markdown("---")
     
@@ -364,20 +364,20 @@ def render_scheduler_control() -> None:
     
     - 📅 **Täglich:** Jeden Tag um 2:00 Uhr (max. 7 Backups)
     - 📆 **Wöchentlich:** Jeden Sonntag um 3:00 Uhr (max. 4 Backups)
-    - [CHART] **Monatlich:** Am 1. jeden Monats um 4:00 Uhr (max. 12 Backups)
+    - **Monatlich:** Am 1. jeden Monats um 4:00 Uhr (max. 12 Backups)
     
     **Backup-Rotation:**
     - Alte Backups werden automatisch gelöscht, wenn die maximale Anzahl erreicht ist
     - Die neuesten Backups werden immer behalten
     """)
     
-    st.info("[IDEA] **Tipp:** Starten Sie den Scheduler beim Anwendungsstart, um automatische Backups zu aktivieren.")
+    st.info("**Tipp:** Starten Sie den Scheduler beim Anwendungsstart, um automatische Backups zu aktivieren.")
 
 
 def render_backup_statistics() -> None:
     """Rendert Backup-Statistiken und Analysen."""
     
-    st.subheader("[STATS] Backup-Statistiken")
+    st.subheader("Backup-Statistiken")
     
     # Hole Statistiken
     stats = get_backup_statistics()
@@ -407,7 +407,7 @@ def render_backup_statistics() -> None:
                               ("monthly", "Monatlich"), ("manual", "Manuell")]:
         type_stats = stats["by_type"][btype]
         
-        with st.expander(f"[CHART] {type_name}"):
+        with st.expander(f"{type_name}"):
             col1, col2, col3 = st.columns(3)
             
             with col1:
@@ -443,7 +443,7 @@ def render_backup_statistics() -> None:
             with col4:
                 st.write(backup['created_str'])
     else:
-        st.info("[INFO] Keine Backups vorhanden.")
+        st.info("Keine Backups vorhanden.")
 
 
 # Hauptfunktion für Integration in Admin-Panel

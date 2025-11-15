@@ -1,6 +1,6 @@
 # MASTER_FIX.py
 """
-[LAUNCH] MASTER-FIX: Löst ALLE Chart-Probleme auf einmal!
+MASTER-FIX: Löst ALLE Chart-Probleme auf einmal!
 
 VERWENDUNG:
     1. In admin_panel.py oder gui.py importieren:
@@ -19,14 +19,9 @@ import logging
 
 def apply_master_fix(force_all_charts: bool = True, verbose: bool = True):
     """
-    [LAUNCH] MASTER-FIX: Aktiviert ALLE Funktionen
+    MASTER-FIX: Aktiviert ALLE Funktionen
 
-    - Macht ALLE 55 Charts verfügbar [OK]
-    - Generiert fehlende Charts automatisch [OK]
-    - Patcht analysis_results [OK]
-    - Bereitet PDF-Export vor [OK]
-
-    Args:
+    - Macht ALLE 55 Charts verfügbar - Generiert fehlende Charts automatisch - Patcht analysis_results - Bereitet PDF-Export vor Args:
         force_all_charts: Wenn True, werden ALLE 55 Charts erzwungen
         verbose: Wenn True, werden Statistiken ausgegeben
     """
@@ -34,7 +29,7 @@ def apply_master_fix(force_all_charts: bool = True, verbose: bool = True):
         import streamlit as st
 
         if verbose:
-            st.info("[TOOL] MASTER-FIX wird angewendet...")
+            st.info("MASTER-FIX wird angewendet...")
 
         # 1. PDF-Generator patchen - ENTFERNT (Modul existiert nicht mehr)
         # from pdf_generator_patch import auto_patch_session_state
@@ -73,19 +68,19 @@ def apply_master_fix(force_all_charts: bool = True, verbose: bool = True):
 
                 if report['available'] >= 50:
                     st.success(
-                        "[OK] **MASTER-FIX erfolgreich!** Alle Charts verfügbar!")
+                        "**MASTER-FIX erfolgreich!** Alle Charts verfügbar!")
                 elif report['available'] >= 30:
                     st.warning(
-                        f"[WARNING] {
+                        f"{
                             report['available']} Charts verfügbar, {
                             report['missing']} fehlen noch")
                 else:
-                    st.error(f"[ERROR] Nur {report['available']} Charts verfügbar")
+                    st.error(f"Nur {report['available']} Charts verfügbar")
 
-        logging.info("[OK] MASTER-FIX erfolgreich angewendet")
+        logging.info("MASTER-FIX erfolgreich angewendet")
 
     except Exception as e:
-        logging.error(f"[ERROR] Fehler beim MASTER-FIX: {e}")
+        logging.error(f"Fehler beim MASTER-FIX: {e}")
         if verbose:
             try:
                 import streamlit as st
@@ -118,10 +113,10 @@ def force_all_charts_available():
             st.session_state.analysis_results
         )
 
-        logging.info("[OK] FORCE MODE: Alle 55 Charts erzwungen")
+        logging.info("FORCE MODE: Alle 55 Charts erzwungen")
 
     except Exception as e:
-        logging.error(f"[ERROR] Fehler im FORCE MODE: {e}")
+        logging.error(f"Fehler im FORCE MODE: {e}")
 
 
 def debug_chart_availability():
@@ -141,30 +136,30 @@ def debug_chart_availability():
             st.error(f"Fehler: {report['error']}")
             return
 
-        st.markdown("## [CHART] Chart-Verfügbarkeits-Report")
+        st.markdown("## Chart-Verfügbarkeits-Report")
 
         # Übersicht
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("[OK] Verfügbar", report['available'])
+            st.metric("Verfügbar", report['available'])
         with col2:
-            st.metric("[ERROR] Fehlend", report['missing'])
+            st.metric("Fehlend", report['missing'])
         with col3:
-            st.metric("[NOTE] Platzhalter", report['placeholder'])
+            st.metric("Platzhalter", report['placeholder'])
 
         # Details
-        with st.expander("[OK] Verfügbare Charts", expanded=False):
+        with st.expander("Verfügbare Charts", expanded=False):
             for chart_key in report['available_list']:
                 name = CHART_KEY_TO_FRIENDLY_NAME_MAP.get(chart_key, chart_key)
-                st.success(f"[OK] {name}")
+                st.success(f"{name}")
 
-        with st.expander("[ERROR] Fehlende Charts", expanded=report['missing'] > 0):
+        with st.expander("Fehlende Charts", expanded=report['missing'] > 0):
             for chart_key in report['missing_list']:
                 name = CHART_KEY_TO_FRIENDLY_NAME_MAP.get(chart_key, chart_key)
-                st.error(f"[ERROR] {name}")
+                st.error(f"{name}")
 
         if report['placeholder']:
-            with st.expander("[NOTE] Platzhalter-Charts", expanded=False):
+            with st.expander("Platzhalter-Charts", expanded=False):
                 for chart_key in report['placeholder_list']:
                     name = CHART_KEY_TO_FRIENDLY_NAME_MAP.get(
                         chart_key, chart_key)
@@ -224,7 +219,7 @@ __all__ = [
 # ============================================================================
 
 if __name__ == "__main__":
-    print("[LAUNCH] MASTER-FIX - Chart-Problem-Löser")
+    print("MASTER-FIX - Chart-Problem-Löser")
     print("=" * 60)
 
     import sys
@@ -246,4 +241,4 @@ if __name__ == "__main__":
         apply_master_fix()
 
     print("=" * 60)
-    print("[OK] Fertig!")
+    print("Fertig!")

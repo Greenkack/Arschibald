@@ -116,9 +116,9 @@ def test_waterfall_chart():
         try:
             _draw_page3_waterfall_chart(
                 c, dataset['data'], page_width, page_height)
-            print("[OK] Wasserfall-Diagramm erfolgreich gezeichnet")
+            print("Wasserfall-Diagramm erfolgreich gezeichnet")
         except Exception as e:
-            print(f"[ERROR] Fehler beim Zeichnen: {e}")
+            print(f"Fehler beim Zeichnen: {e}")
             import traceback
             traceback.print_exc()
 
@@ -145,7 +145,7 @@ def test_waterfall_chart():
     with open(output_file, "wb") as f:
         f.write(buffer.getvalue())
 
-    print(f"\n[OK] Test-PDF erstellt: {output_file}")
+    print(f"\nTest-PDF erstellt: {output_file}")
     print("Öffnen Sie die Datei, um die verschiedenen Wasserfall-Diagramme zu überprüfen.")
 
 
@@ -157,10 +157,10 @@ def test_coordinate_extraction():
     # Lade seite3.yml und extrahiere relevante Koordinaten
     coords_file = Path("coords/seite3.yml")
     if not coords_file.exists():
-        print(f"[ERROR] Koordinaten-Datei nicht gefunden: {coords_file}")
+        print(f"Koordinaten-Datei nicht gefunden: {coords_file}")
         return
 
-    print(f"[OK] Koordinaten-Datei gefunden: {coords_file}")
+    print(f"Koordinaten-Datei gefunden: {coords_file}")
 
     # Suche nach relevanten Platzhaltern
     relevant_placeholders = [
@@ -185,7 +185,7 @@ def test_coordinate_extraction():
                         for j in range(i + 1, min(i + 5, len(lines))):
                             if lines[j].startswith("Position:"):
                                 pos_line = lines[j]
-                                print(f"[OK] {placeholder}: {pos_line}")
+                                print(f"{placeholder}: {pos_line}")
                                 found_coords[placeholder] = pos_line
                                 break
                         break
@@ -241,7 +241,7 @@ def test_coordinate_extraction():
 
 
 if __name__ == "__main__":
-    print("[TOOL] Test des verbesserten Wasserfall-Diagramms")
+    print("Test des verbesserten Wasserfall-Diagramms")
     print("=" * 50)
 
     # Teste Koordinaten-Extraktion
@@ -250,4 +250,4 @@ if __name__ == "__main__":
     # Teste Wasserfall-Diagramm
     test_waterfall_chart()
 
-    print("\n[OK] Alle Tests abgeschlossen!")
+    print("\nAlle Tests abgeschlossen!")

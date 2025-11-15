@@ -16,9 +16,9 @@ try:
     from product_db import get_product_by_id as real_get_product_by_id
     from product_db import list_products as real_list_products
     PRODUCT_DB_AVAILABLE = True
-    print("[OK] Real product database available")
+    print("Real product database available")
 except ImportError:
-    print("[WARNING]  Product database not available, using mock data")
+    print("Product database not available, using mock data")
     PRODUCT_DB_AVAILABLE = False
 
     # Mock product database for demonstration
@@ -60,7 +60,7 @@ def demonstrate_storage_resolution():
 
     # Get available storage products
     storage_products = real_list_products(category="Batteriespeicher")
-    print("\n[PACKAGE] Available storage products in database:")
+    print("\nAvailable storage products in database:")
     for product in storage_products:
         print(
             f"   ID {
@@ -70,7 +70,7 @@ def demonstrate_storage_resolution():
                     'storage_power_kw',
                     'N/A')} kWh)")
 
-    print("\n[SEARCH] Testing storage resolution scenarios:")
+    print("\nTesting storage resolution scenarios:")
     print("-" * 40)
 
     # Test scenarios with real IDs from the database
@@ -96,12 +96,12 @@ def demonstrate_storage_resolution():
                 include_storage,
                 real_get_product_by_id
             )
-            print(f"   [OK] Result: '{result}'")
+            print(f"   Result: '{result}'")
         except Exception as e:
-            print(f"   [ERROR] Error: {e}")
+            print(f"   Error: {e}")
 
     # Test normalization
-    print("\n[TOOL] Testing storage name normalization:")
+    print("\nTesting storage name normalization:")
     print("-" * 40)
 
     normalization_tests = [
@@ -120,7 +120,7 @@ def demonstrate_storage_resolution():
         print(f"   '{test_name}' → '{normalized}'")
 
     # Test matrix validation
-    print("\n[TARGET] Testing matrix validation:")
+    print("\nTesting matrix validation:")
     print("-" * 40)
 
     # Simulate available storage models in price matrix
@@ -214,7 +214,7 @@ if __name__ == "__main__":
         demonstrate_storage_resolution()
         demonstrate_integration_with_price_matrix()
 
-        print("\n[OK] Demo completed successfully!")
+        print("\nDemo completed successfully!")
         print("\nKey features demonstrated:")
         print("  • Storage ID to model name resolution")
         print("  • Fallback to 'Ohne Speicher' for invalid/missing data")
@@ -224,7 +224,7 @@ if __name__ == "__main__":
         print("  • Integration with price matrix workflow")
 
     except Exception as e:
-        print(f"\n[ERROR] Demo failed with error: {e}")
+        print(f"\nDemo failed with error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

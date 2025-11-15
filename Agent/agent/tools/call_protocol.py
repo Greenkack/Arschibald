@@ -292,14 +292,14 @@ class CallProtocolManager:
         """
         protocol = self.get_protocol(phase)
         if not protocol:
-            return f"[ERROR] Unknown phase: {phase}"
+            return f"Unknown phase: {phase}"
 
         guide = f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║  CALL PROTOCOL: {protocol.phase.upper():^44} ║
 ╚══════════════════════════════════════════════════════════════╝
 
-[TARGET] OBJECTIVE:
+OBJECTIVE:
    {protocol.objective}
 
 📋 STRATEGIES:
@@ -307,7 +307,7 @@ class CallProtocolManager:
         for i, strategy in enumerate(protocol.strategies, 1):
             guide += f"   {i}. {strategy}\n"
 
-        guide += "\n[IDEA] KEY POINTS:\n"
+        guide += "\nKEY POINTS:\n"
         for point in protocol.key_points:
             guide += f"   • {point}\n"
 
@@ -315,7 +315,7 @@ class CallProtocolManager:
             guide += "\n🛡️  COMMON OBJECTIONS & RESPONSES:\n"
             for obj in protocol.common_objections:
                 guide += f"\n   ❓ \"{obj['objection']}\"\n"
-                guide += f"   [OK] {obj['response']}\n"
+                guide += f"   {obj['response']}\n"
 
         guide += "\n╚══════════════════════════════════════════════════════════════╝"
         return guide
@@ -367,9 +367,9 @@ class CallProtocolManager:
             Structured argument string
         """
         argument = f"""
-[TARGET] ADDRESSING CUSTOMER NEED: {customer_need}
+ADDRESSING CUSTOMER NEED: {customer_need}
 
-[CHART] DATA-DRIVEN ARGUMENT STRUCTURE:
+DATA-DRIVEN ARGUMENT STRUCTURE:
 
 1. VALIDATE THE NEED:
    "Ich verstehe, dass {customer_need} für Sie wichtig ist."
@@ -468,10 +468,10 @@ def handle_objection(objection: str) -> str:
         return f"""
 🛡️  OBJECTION DETECTED: "{objection}"
 
-[OK] SUGGESTED RESPONSE:
+SUGGESTED RESPONSE:
 {response}
 
-[IDEA] REMEMBER THE 4-STEP PROCESS:
+REMEMBER THE 4-STEP PROCESS:
 1. VALIDATE: Acknowledge the concern
 2. CLARIFY: Ask questions to understand
 3. RESPOND: Provide data-driven counter-argument
@@ -498,7 +498,7 @@ No pre-defined response found. Follow the 4-STEP PROCESS:
 4. CONFIRM:
    "Konnte ich Ihre Bedenken damit ausräumen?"
 
-[IDEA] TIP: Use the knowledge_base_search tool to find relevant facts!
+TIP: Use the knowledge_base_search tool to find relevant facts!
 """
 
 

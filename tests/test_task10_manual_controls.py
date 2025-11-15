@@ -74,7 +74,7 @@ def test_manual_add_handler():
         assert pos[1] == 0.0, "Y-Position sollte 0.0 sein"
         assert pos[2] == 0.3, "Z-Position sollte 0.3 sein (Flachdach)"
         
-        print("[OK] Test 1.1: Modul auf Flachdach hinzugefügt")
+        print("Test 1.1: Modul auf Flachdach hinzugefügt")
         
         # Test 2: Füge Modul auf Satteldach hinzu
         result = handle_manual_add(
@@ -94,7 +94,7 @@ def test_manual_add_handler():
         assert pos[1] == 1.0, "Y-Position sollte 1.0 sein"
         assert pos[2] == 0.05, "Z-Position sollte 0.05 sein (Satteldach)"
         
-        print("[OK] Test 1.2: Modul auf Satteldach hinzugefügt")
+        print("Test 1.2: Modul auf Satteldach hinzugefügt")
         
         # Test 3: Füge mehrere Module hinzu
         for i in range(3):
@@ -109,9 +109,9 @@ def test_manual_add_handler():
         assert st.session_state["placed_module_count"] == 5, \
             "Fünf Module sollten vorhanden sein"
         
-        print("[OK] Test 1.3: Mehrere Module hinzugefügt")
+        print("Test 1.3: Mehrere Module hinzugefügt")
         
-        print("[OK] Test 1: Manual Add Handler - BESTANDEN")
+        print("Test 1: Manual Add Handler - BESTANDEN")
         return True
         
     finally:
@@ -173,7 +173,7 @@ def test_remove_selected_handler():
         assert st.session_state["placed_module_count"] == 4, \
             "Module count sollte 4 sein"
         
-        print("[OK] Test 2.1: Ein Modul entfernt")
+        print("Test 2.1: Ein Modul entfernt")
         
         # Test 2: Entferne mehrere Module
         result = handle_remove_selected([0, 2])
@@ -183,7 +183,7 @@ def test_remove_selected_handler():
         assert len(st.session_state["placed_module_positions"]) == 2, \
             "Zwei Module sollten übrig sein"
         
-        print("[OK] Test 2.2: Mehrere Module entfernt")
+        print("Test 2.2: Mehrere Module entfernt")
         
         # Test 3: Entferne mit leerer Liste
         result = handle_remove_selected([])
@@ -191,7 +191,7 @@ def test_remove_selected_handler():
         assert not result["success"], "Remove sollte fehlschlagen"
         assert result["count"] == 0, "Keine Module sollten entfernt worden sein"
         
-        print("[OK] Test 2.3: Leere Auswahl behandelt")
+        print("Test 2.3: Leere Auswahl behandelt")
         
         # Test 4: Entferne mit ungültigen Indizes
         result = handle_remove_selected([10, 20])
@@ -199,9 +199,9 @@ def test_remove_selected_handler():
         assert result["success"], "Remove sollte erfolgreich sein (ignoriert ungültige)"
         assert result["count"] == 0, "Keine Module sollten entfernt worden sein"
         
-        print("[OK] Test 2.4: Ungültige Indizes behandelt")
+        print("Test 2.4: Ungültige Indizes behandelt")
         
-        print("[OK] Test 2: Remove Selected Handler - BESTANDEN")
+        print("Test 2: Remove Selected Handler - BESTANDEN")
         return True
         
     finally:
@@ -263,7 +263,7 @@ def test_session_state_management():
         assert st.session_state["selected_module_indices"] == [], \
             "selected_module_indices sollte leer sein"
         
-        print("[OK] Test 3.1: Session State initialisiert")
+        print("Test 3.1: Session State initialisiert")
         
         # Test 2: Füge Daten hinzu
         st.session_state["placed_module_positions"] = [
@@ -279,7 +279,7 @@ def test_session_state_management():
         assert len(stats["positions"]) == 2, "Zwei Positionen sollten vorhanden sein"
         assert stats["has_modules"], "has_modules sollte True sein"
         
-        print("[OK] Test 3.2: Statistiken korrekt")
+        print("Test 3.2: Statistiken korrekt")
         
         # Test 3: Leere Session State
         st.session_state["placed_module_positions"] = []
@@ -291,9 +291,9 @@ def test_session_state_management():
         assert stats["placed_count"] == 0, "Placed count sollte 0 sein"
         assert not stats["has_modules"], "has_modules sollte False sein"
         
-        print("[OK] Test 3.3: Leere Statistiken korrekt")
+        print("Test 3.3: Leere Statistiken korrekt")
         
-        print("[OK] Test 3: Session State Management - BESTANDEN")
+        print("Test 3: Session State Management - BESTANDEN")
         return True
         
     finally:
@@ -313,7 +313,7 @@ def test_ui_component_buttons():
     # Dieser Test prüft nur die Logik, nicht das tatsächliche Rendering
     # (da Streamlit-UI-Tests schwierig sind)
     
-    print("[INFO] UI-Komponenten-Tests erfordern manuelles Testen in Streamlit")
+    print("UI-Komponenten-Tests erfordern manuelles Testen in Streamlit")
     print("   Bitte führen Sie folgende manuelle Tests durch:")
     print("   1. Starten Sie die Anwendung: streamlit run gui.py")
     print("   2. Navigieren Sie zur 3D-Visualisierung")
@@ -325,7 +325,7 @@ def test_ui_component_buttons():
     print("      - Wählen Sie Module aus")
     print("      - Klicken Sie auf 'Ausgewählte entfernen'")
     
-    print("[OK] Test 4: UI Component Buttons - MANUELL TESTEN")
+    print("Test 4: UI Component Buttons - MANUELL TESTEN")
     return True
 
 
@@ -343,17 +343,17 @@ def test_integration():
             handle_manual_add,
             handle_remove_selected
         )
-        print("[OK] Test 5.1: Handler-Funktionen importierbar")
+        print("Test 5.1: Handler-Funktionen importierbar")
     except ImportError as e:
-        print(f"[ERROR] Test 5.1: Import-Fehler: {e}")
+        print(f"Test 5.1: Import-Fehler: {e}")
         return False
     
     # Prüfe dass die UI-Komponente die Buttons rendert
     try:
         from utils.pv3d_module_placement_ui import render_module_placement_panel
-        print("[OK] Test 5.2: UI-Komponente importierbar")
+        print("Test 5.2: UI-Komponente importierbar")
     except ImportError as e:
-        print(f"[ERROR] Test 5.2: Import-Fehler: {e}")
+        print(f"Test 5.2: Import-Fehler: {e}")
         return False
     
     # Prüfe dass solar_3d_view_module.py die Handler verwendet
@@ -371,9 +371,9 @@ def test_integration():
         assert "selected_module_indices" in content, \
             "selected_module_indices sollte verwendet werden"
     
-    print("[OK] Test 5.3: Integration in solar_3d_view_module.py vorhanden")
+    print("Test 5.3: Integration in solar_3d_view_module.py vorhanden")
     
-    print("[OK] Test 5: Integration - BESTANDEN")
+    print("Test 5: Integration - BESTANDEN")
     return True
 
 
@@ -400,7 +400,7 @@ def run_all_tests():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n[ERROR] Test '{test_name}' fehlgeschlagen mit Fehler: {e}")
+            print(f"\nTest '{test_name}' fehlgeschlagen mit Fehler: {e}")
             import traceback
             traceback.print_exc()
             results.append((test_name, False))
@@ -414,7 +414,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{test_name:.<50} {status}")
     
     print("=" * 70)
@@ -425,7 +425,7 @@ def run_all_tests():
         print("\n🎉 ALLE TESTS BESTANDEN! Task 10 ist vollständig implementiert.")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen. Bitte beheben Sie die Fehler.")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen. Bitte beheben Sie die Fehler.")
         return False
 
 

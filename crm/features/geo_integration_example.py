@@ -30,7 +30,7 @@ def example_1_geocode_customers():
     print("\n1. Geocodiere alle Kunden ohne Koordinaten...")
     stats = mapper.geocode_all_customers(force_update=False)
     
-    print(f"\n[OK] Geocoding abgeschlossen:")
+    print(f"\nGeocoding abgeschlossen:")
     print(f"   - Erfolgreich: {stats['success']}")
     print(f"   - Fehlgeschlagen: {stats['failed']}")
     print(f"   - Übersprungen: {stats['skipped']}")
@@ -40,9 +40,9 @@ def example_1_geocode_customers():
     success = mapper.update_customer_coordinates(customer_id=1)
     
     if success:
-        print("   [OK] Kunde 1 erfolgreich geocodiert")
+        print("   Kunde 1 erfolgreich geocodiert")
     else:
-        print("   [ERROR] Geocoding fehlgeschlagen")
+        print("   Geocoding fehlgeschlagen")
 
 
 def example_2_show_customers_on_map():
@@ -61,7 +61,7 @@ def example_2_show_customers_on_map():
     print("\n1. Kunden mit Koordinaten abrufen...")
     customers = mapper.get_customers_with_coordinates()
     
-    print(f"   [OK] {len(customers)} Kunden gefunden")
+    print(f"   {len(customers)} Kunden gefunden")
     
     if customers:
         # Erste 3 Kunden anzeigen
@@ -78,13 +78,13 @@ def example_2_show_customers_on_map():
             # Karte speichern
             map_file = 'kunden_karte.html'
             customer_map.save(map_file)
-            print(f"   [OK] Karte gespeichert: {map_file}")
-            print(f"   [IDEA] Öffnen Sie die Datei im Browser")
+            print(f"   Karte gespeichert: {map_file}")
+            print(f"   Öffnen Sie die Datei im Browser")
         else:
-            print("   [ERROR] Karte konnte nicht erstellt werden")
+            print("   Karte konnte nicht erstellt werden")
     else:
-        print("   [INFO] Keine Kunden mit Koordinaten gefunden")
-        print("   [IDEA] Führen Sie zuerst Beispiel 1 aus")
+        print("   Keine Kunden mit Koordinaten gefunden")
+        print("   Führen Sie zuerst Beispiel 1 aus")
 
 
 def example_3_filter_customers():
@@ -104,7 +104,7 @@ def example_3_filter_customers():
     print(f"\n1. Kunden in {city} suchen...")
     customers = mapper.get_customers_with_coordinates({'city': city})
     
-    print(f"   [OK] {len(customers)} Kunden in {city} gefunden")
+    print(f"   {len(customers)} Kunden in {city} gefunden")
     
     if customers:
         for i, customer in enumerate(customers, 1):
@@ -118,7 +118,7 @@ def example_3_filter_customers():
         if city_map:
             map_file = f'kunden_{city.lower()}.html'
             city_map.save(map_file)
-            print(f"   [OK] Karte gespeichert: {map_file}")
+            print(f"   Karte gespeichert: {map_file}")
 
 
 def example_4_calculate_distances():
@@ -168,8 +168,8 @@ def example_5_optimize_route():
     customers = mapper.get_customers_with_coordinates()
     
     if len(customers) < 2:
-        print("   [INFO] Mindestens 2 Kunden mit Koordinaten erforderlich")
-        print("   [IDEA] Führen Sie zuerst Beispiel 1 aus")
+        print("   Mindestens 2 Kunden mit Koordinaten erforderlich")
+        print("   Führen Sie zuerst Beispiel 1 aus")
         return
     
     # Erste 5 Kunden für Route auswählen
@@ -182,7 +182,7 @@ def example_5_optimize_route():
     route = mapper.optimize_route(customer_ids)
     
     if route:
-        print(f"\n   [OK] Route optimiert!")
+        print(f"\n   Route optimiert!")
         print(f"   📏 Gesamtstrecke: {route[-1]['cumulative_distance_km']:.2f} km")
         
         print("\n2. Routendetails:")
@@ -200,9 +200,9 @@ def example_5_optimize_route():
         if route_map:
             map_file = 'optimierte_route.html'
             route_map.save(map_file)
-            print(f"   [OK] Routenkarte gespeichert: {map_file}")
+            print(f"   Routenkarte gespeichert: {map_file}")
     else:
-        print("   [ERROR] Route konnte nicht optimiert werden")
+        print("   Route konnte nicht optimiert werden")
 
 
 def example_6_export_to_calendar():
@@ -221,7 +221,7 @@ def example_6_export_to_calendar():
     customers = mapper.get_customers_with_coordinates()
     
     if len(customers) < 2:
-        print("   [INFO] Mindestens 2 Kunden mit Koordinaten erforderlich")
+        print("   Mindestens 2 Kunden mit Koordinaten erforderlich")
         return
     
     # Route optimieren
@@ -229,7 +229,7 @@ def example_6_export_to_calendar():
     route = mapper.optimize_route(customer_ids)
     
     if not route:
-        print("   [ERROR] Route konnte nicht optimiert werden")
+        print("   Route konnte nicht optimiert werden")
         return
     
     print(f"\n1. Route mit {len(route)} Stopps erstellt")
@@ -253,7 +253,7 @@ def example_6_export_to_calendar():
         duration_per_stop_minutes=60
     )
     
-    print(f"   [OK] {len(appointments)} Termine erstellt")
+    print(f"   {len(appointments)} Termine erstellt")
     
     # Termine anzeigen
     print("\n3. Termine-Übersicht:")
@@ -271,10 +271,10 @@ def example_6_export_to_calendar():
     saved_count = mapper.save_appointments_to_db(appointments)
     
     if saved_count > 0:
-        print(f"   [OK] {saved_count} Termine erfolgreich gespeichert")
-        print("   [IDEA] Die Termine sind jetzt im CRM-Kalender sichtbar")
+        print(f"   {saved_count} Termine erfolgreich gespeichert")
+        print("   Die Termine sind jetzt im CRM-Kalender sichtbar")
     else:
-        print("   [ERROR] Fehler beim Speichern der Termine")
+        print("   Fehler beim Speichern der Termine")
 
 
 def example_7_complete_workflow():
@@ -294,12 +294,12 @@ def example_7_complete_workflow():
     # Schritt 1: Geo-Spalten sicherstellen
     print("\n📋 Schritt 1: Datenbank vorbereiten")
     ensure_geo_columns()
-    print("   [OK] Geo-Spalten vorhanden")
+    print("   Geo-Spalten vorhanden")
     
     # Schritt 2: Kunden geocodieren
     print("\n📍 Schritt 2: Kunden geocodieren")
     stats = mapper.geocode_all_customers()
-    print(f"   [OK] {stats['success']} Kunden geocodiert")
+    print(f"   {stats['success']} Kunden geocodiert")
     
     # Schritt 3: Kunden auf Karte anzeigen
     print("\n🗺️ Schritt 3: Kundenkarte erstellen")
@@ -309,7 +309,7 @@ def example_7_complete_workflow():
         customer_map = mapper.create_map(customers)
         if customer_map:
             customer_map.save('workflow_kunden.html')
-            print(f"   [OK] Karte mit {len(customers)} Kunden erstellt")
+            print(f"   Karte mit {len(customers)} Kunden erstellt")
     
     # Schritt 4: Route planen
     print("\n🚗 Schritt 4: Route planen")
@@ -319,13 +319,13 @@ def example_7_complete_workflow():
         route = mapper.optimize_route(customer_ids)
         
         if route:
-            print(f"   [OK] Route optimiert: {route[-1]['cumulative_distance_km']:.2f} km")
+            print(f"   Route optimiert: {route[-1]['cumulative_distance_km']:.2f} km")
             
             # Routenkarte
             route_map = mapper.create_route_map(route)
             if route_map:
                 route_map.save('workflow_route.html')
-                print("   [OK] Routenkarte erstellt")
+                print("   Routenkarte erstellt")
             
             # Schritt 5: Kalender-Export
             print("\n📅 Schritt 5: Termine erstellen")
@@ -336,19 +336,19 @@ def example_7_complete_workflow():
             appointments = mapper.export_route_to_calendar(route, start_date, 60)
             saved_count = mapper.save_appointments_to_db(appointments)
             
-            print(f"   [OK] {saved_count} Termine im Kalender gespeichert")
+            print(f"   {saved_count} Termine im Kalender gespeichert")
             
             print("\n" + "="*70)
-            print("[OK] WORKFLOW ERFOLGREICH ABGESCHLOSSEN")
+            print("WORKFLOW ERFOLGREICH ABGESCHLOSSEN")
             print("="*70)
             print("\nErstellt:")
             print("  - workflow_kunden.html (Kundenkarte)")
             print("  - workflow_route.html (Routenkarte)")
             print(f"  - {saved_count} Termine im CRM-Kalender")
         else:
-            print("   [ERROR] Route konnte nicht optimiert werden")
+            print("   Route konnte nicht optimiert werden")
     else:
-        print("   [INFO] Mindestens 3 Kunden mit Koordinaten erforderlich")
+        print("   Mindestens 3 Kunden mit Koordinaten erforderlich")
 
 
 def run_all_examples():
@@ -370,11 +370,11 @@ def run_all_examples():
         example_7_complete_workflow()
         
         print("\n" + "="*70)
-        print("[OK] ALLE BEISPIELE ERFOLGREICH AUSGEFÜHRT")
+        print("ALLE BEISPIELE ERFOLGREICH AUSGEFÜHRT")
         print("="*70)
         
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         import traceback
         traceback.print_exc()
 

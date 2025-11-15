@@ -43,7 +43,7 @@ def test_yml_parser():
             
             # Get statistics
             stats = parser.get_statistics()
-            print(f"\n[CHART] Statistics:")
+            print(f"\nStatistics:")
             print(f"   Total elements: {stats['total_elements']}")
             print(f"   Non-empty elements: {stats['non_empty_elements']}")
             print(f"   Empty elements: {stats['empty_elements']}")
@@ -51,7 +51,7 @@ def test_yml_parser():
             print(f"   Unique colors: {stats['unique_colors']}")
             
             # Show some sample elements
-            print(f"\n[NOTE] Sample Elements (first 3):")
+            print(f"\nSample Elements (first 3):")
             for elem in elements[:3]:
                 print(f"\n   Element {elem.index}:")
                 print(f"      Text: '{elem.text}'")
@@ -62,15 +62,15 @@ def test_yml_parser():
             # Validate
             is_valid, errors = parser.validate_elements()
             if is_valid:
-                print(f"\n[OK] All elements validated successfully")
+                print(f"\nAll elements validated successfully")
             else:
-                print(f"\n[ERROR] Validation errors found:")
+                print(f"\nValidation errors found:")
                 for error in errors[:5]:  # Show first 5 errors
                     print(f"   - {error}")
             
             # Test specific queries
             non_empty = parser.get_non_empty_elements()
-            print(f"\n[SEARCH] Query Results:")
+            print(f"\nQuery Results:")
             print(f"   Non-empty text elements: {len(non_empty)}")
             
             # Find specific elements
@@ -83,7 +83,7 @@ def test_yml_parser():
                 print(f"   Found 'ANGEBOT' at position {angebot.position}")
             
         except Exception as e:
-            print(f"\n[ERROR] Error: {e}")
+            print(f"\nError: {e}")
             import traceback
             traceback.print_exc()
 
@@ -132,7 +132,7 @@ def test_format_preserver():
             # Validate preservation
             is_valid, differences = preserver.validate_preservation(yml_file, reconstructed)
             if is_valid:
-                print(f"\n[OK] Format preservation validated successfully")
+                print(f"\nFormat preservation validated successfully")
             else:
                 print(f"\n⚠ Format preservation differences:")
                 for diff in differences:
@@ -153,12 +153,12 @@ def test_format_preserver():
                             if line.strip() and not line.startswith('Position:')]
             
             if original_lines == modified_lines:
-                print(f"   [OK] All non-position attributes preserved")
+                print(f"   All non-position attributes preserved")
             else:
-                print(f"   [ERROR] Some non-position attributes changed")
+                print(f"   Some non-position attributes changed")
             
         except Exception as e:
-            print(f"\n[ERROR] Error: {e}")
+            print(f"\nError: {e}")
             import traceback
             traceback.print_exc()
 
@@ -180,7 +180,7 @@ def test_integration():
     try:
         # Parse
         elements = parse_yml(yml_file)
-        print(f"\n[OK] Parsed {len(elements)} elements")
+        print(f"\nParsed {len(elements)} elements")
         
         # Create new positions (example: move everything to center)
         new_positions = []
@@ -195,7 +195,7 @@ def test_integration():
         
         # Preserve format with new positions
         new_content = preserve_yml_format(yml_file, elements, new_positions)
-        print(f"[OK] Generated new YML content ({len(new_content)} characters)")
+        print(f"Generated new YML content ({len(new_content)} characters)")
         
         # Validate
         preserver = YMLFormatPreserver()
@@ -203,16 +203,16 @@ def test_integration():
         is_valid, differences = preserver.validate_preservation(yml_file, new_content)
         
         if is_valid:
-            print(f"[OK] Format preservation validated")
+            print(f"Format preservation validated")
         else:
             print(f"⚠ Format differences: {len(differences)}")
         
         # Show sample of new content
-        print(f"\n[FILE] Sample of new content (first 500 chars):")
+        print(f"\nSample of new content (first 500 chars):")
         print(new_content[:500])
         
     except Exception as e:
-        print(f"\n[ERROR] Error: {e}")
+        print(f"\nError: {e}")
         import traceback
         traceback.print_exc()
 
@@ -225,5 +225,5 @@ if __name__ == "__main__":
     test_integration()
     
     print("\n\n" + "=" * 60)
-    print("[OK] Test Suite Complete")
+    print("Test Suite Complete")
     print("=" * 60)

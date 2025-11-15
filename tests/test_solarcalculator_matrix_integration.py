@@ -35,16 +35,16 @@ def test_get_total_price_with_matrix_mode():
     assert 'breakdown' in result
     assert 'matrix_info' in result
     
-    print("[OK] get_total_price_with_matrix_mode() gibt korrektes Dictionary zurück")
+    print("get_total_price_with_matrix_mode() gibt korrektes Dictionary zurück")
     
     # Wenn erfolgreich, prüfe Preisberechnung
     if result['success']:
         assert result['base_price'] > 0, "Basispreis sollte größer als 0 sein"
         assert result['net_total'] >= result['base_price'], "Netto-Total sollte >= Basispreis sein"
         assert result['gross_total'] > result['net_total'], "Brutto-Total sollte > Netto-Total sein"
-        print(f"[OK] Preisberechnung erfolgreich: Basispreis={result['base_price']}, Netto={result['net_total']}, Brutto={result['gross_total']}")
+        print(f"Preisberechnung erfolgreich: Basispreis={result['base_price']}, Netto={result['net_total']}, Brutto={result['gross_total']}")
     else:
-        print(f"[INFO] Preisberechnung nicht erfolgreich (erwartet wenn keine Matrix aktiv): {result.get('error')}")
+        print(f"Preisberechnung nicht erfolgreich (erwartet wenn keine Matrix aktiv): {result.get('error')}")
 
 
 def test_calculate_matrix_extras():
@@ -58,7 +58,7 @@ def test_calculate_matrix_extras():
     assert isinstance(extras, float), "Extras sollten als float zurückgegeben werden"
     assert extras >= 0, "Extras sollten nicht negativ sein"
     
-    print(f"[OK] _calculate_matrix_extras() funktioniert: {extras}")
+    print(f"_calculate_matrix_extras() funktioniert: {extras}")
 
 
 def test_calculate_matrix_extras_detailed():
@@ -80,7 +80,7 @@ def test_calculate_matrix_extras_detailed():
     assert isinstance(breakdown['services'], list)
     assert isinstance(breakdown['extras'], list)
     
-    print(f"[OK] _calculate_matrix_extras_detailed() gibt korrektes Dictionary zurück")
+    print(f"_calculate_matrix_extras_detailed() gibt korrektes Dictionary zurück")
 
 
 def test_pricing_mode_check():
@@ -91,7 +91,7 @@ def test_pricing_mode_check():
     
     assert mode in ['standard', 'matrix'], f"Modus sollte 'standard' oder 'matrix' sein, ist aber: {mode}"
     
-    print(f"[OK] Preisberechnungsmodus: {mode}")
+    print(f"Preisberechnungsmodus: {mode}")
 
 
 def test_invalid_module_count():
@@ -109,7 +109,7 @@ def test_invalid_module_count():
     assert not result['success'], "Sollte fehlschlagen bei Modulanzahl 0"
     assert result['error'] is not None, "Sollte Fehlermeldung enthalten"
     
-    print(f"[OK] Fehlerbehandlung für ungültige Modulanzahl funktioniert: {result['error']}")
+    print(f"Fehlerbehandlung für ungültige Modulanzahl funktioniert: {result['error']}")
 
 
 def test_placeholder_storage_model():
@@ -125,7 +125,7 @@ def test_placeholder_storage_model():
     result = get_total_price_with_matrix_mode(details)
     
     # Sollte Placeholder als None behandeln
-    print(f"[OK] Placeholder-Behandlung: success={result['success']}")
+    print(f"Placeholder-Behandlung: success={result['success']}")
 
 
 def run_all_tests():
@@ -152,10 +152,10 @@ def run_all_tests():
         try:
             test_func()
             passed += 1
-            print(f"[OK] PASSED\n")
+            print(f"PASSED\n")
         except Exception as e:
             failed += 1
-            print(f"[ERROR] FAILED: {e}\n")
+            print(f"FAILED: {e}\n")
             import traceback
             traceback.print_exc()
     

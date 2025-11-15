@@ -55,7 +55,7 @@ def setup_test_database():
         create_crm_enhancement_tables(conn)
         conn.close()
         
-        print("[OK] Test-Datenbank initialisiert")
+        print("Test-Datenbank initialisiert")
         return True
     except Exception as e:
         print(f"FEHLER beim Setup: {e}")
@@ -69,7 +69,7 @@ def test_reminder_rules():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("[ERROR] ÜBERSPRUNGEN: Imports fehlgeschlagen")
+        print("ÜBERSPRUNGEN: Imports fehlgeschlagen")
         return False
     
     try:
@@ -84,7 +84,7 @@ def test_reminder_rules():
             assert 'message_template' in rule, f"Regel '{rule_name}' hat kein 'message_template'"
             assert 'description' in rule, f"Regel '{rule_name}' hat keine 'description'"
             
-            print(f"[OK] Regel '{rule_name}': {rule['description']}")
+            print(f"Regel '{rule_name}': {rule['description']}")
             print(f"   → Follow-up nach {rule['days_offset']} Tagen")
         
         # Prüfe spezifische Werte
@@ -92,14 +92,14 @@ def test_reminder_rules():
         assert REMINDER_RULES['offer_sent']['days_offset'] == 7, "Angebots Follow-up sollte nach 7 Tagen sein"
         assert REMINDER_RULES['appointment_completed']['days_offset'] == 1, "Termin Follow-up sollte nach 1 Tag sein"
         
-        print("\n[OK] TEST 1 BESTANDEN: Alle Regeln korrekt definiert")
+        print("\nTEST 1 BESTANDEN: Alle Regeln korrekt definiert")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST 1 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 1 FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] TEST 1 FEHLER: {e}")
+        print(f"\nTEST 1 FEHLER: {e}")
         return False
 
 
@@ -110,7 +110,7 @@ def test_create_reminder():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("[ERROR] ÜBERSPRUNGEN: Imports fehlgeschlagen")
+        print("ÜBERSPRUNGEN: Imports fehlgeschlagen")
         return False
     
     try:
@@ -128,7 +128,7 @@ def test_create_reminder():
         assert reminder_id is not None, "Erinnerung konnte nicht erstellt werden"
         assert isinstance(reminder_id, int), "Reminder-ID sollte Integer sein"
         
-        print(f"[OK] Erinnerung #{reminder_id} erstellt")
+        print(f"Erinnerung #{reminder_id} erstellt")
         
         # Test: Erinnerung laden
         reminder = get_reminder(reminder_id)
@@ -140,19 +140,19 @@ def test_create_reminder():
         assert reminder['message'] == 'Test-Erinnerung', "Falsche Nachricht"
         assert reminder['status'] == 'pending', "Falscher Status"
         
-        print(f"[OK] Erinnerung korrekt geladen: {reminder['message']}")
+        print(f"Erinnerung korrekt geladen: {reminder['message']}")
         
         # Cleanup
         delete_reminder(reminder_id)
         
-        print("\n[OK] TEST 2 BESTANDEN: Erinnerung erstellen und laden funktioniert")
+        print("\nTEST 2 BESTANDEN: Erinnerung erstellen und laden funktioniert")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST 2 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 2 FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] TEST 2 FEHLER: {e}")
+        print(f"\nTEST 2 FEHLER: {e}")
         return False
 
 
@@ -163,7 +163,7 @@ def test_automatic_reminder_creation():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("[ERROR] ÜBERSPRUNGEN: Imports fehlgeschlagen")
+        print("ÜBERSPRUNGEN: Imports fehlgeschlagen")
         return False
     
     try:
@@ -179,7 +179,7 @@ def test_automatic_reminder_creation():
         assert lead_reminder['due_date'] == expected_date, f"Falsches Datum: {lead_reminder['due_date']} != {expected_date}"
         assert lead_reminder['reminder_type'] == 'lead_created', "Falscher Typ"
         
-        print(f"[OK] Lead Follow-up erstellt: Fällig am {lead_reminder['due_date']}")
+        print(f"Lead Follow-up erstellt: Fällig am {lead_reminder['due_date']}")
         
         # Test: Angebots Follow-up (7 Tage)
         offer_id = create_reminder_for_offer(project_id=1, project_name="Test Projekt")
@@ -193,7 +193,7 @@ def test_automatic_reminder_creation():
         assert offer_reminder['due_date'] == expected_date, f"Falsches Datum: {offer_reminder['due_date']} != {expected_date}"
         assert offer_reminder['reminder_type'] == 'offer_sent', "Falscher Typ"
         
-        print(f"[OK] Angebots Follow-up erstellt: Fällig am {offer_reminder['due_date']}")
+        print(f"Angebots Follow-up erstellt: Fällig am {offer_reminder['due_date']}")
         
         # Test: Termin Follow-up (1 Tag)
         appointment_id = create_reminder_for_appointment(appointment_id=1, appointment_title="Test Termin")
@@ -207,21 +207,21 @@ def test_automatic_reminder_creation():
         assert appointment_reminder['due_date'] == expected_date, f"Falsches Datum: {appointment_reminder['due_date']} != {expected_date}"
         assert appointment_reminder['reminder_type'] == 'appointment_completed', "Falscher Typ"
         
-        print(f"[OK] Termin Follow-up erstellt: Fällig am {appointment_reminder['due_date']}")
+        print(f"Termin Follow-up erstellt: Fällig am {appointment_reminder['due_date']}")
         
         # Cleanup
         delete_reminder(lead_id)
         delete_reminder(offer_id)
         delete_reminder(appointment_id)
         
-        print("\n[OK] TEST 3 BESTANDEN: Automatische Erinnerungs-Erstellung funktioniert")
+        print("\nTEST 3 BESTANDEN: Automatische Erinnerungs-Erstellung funktioniert")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST 3 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 3 FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] TEST 3 FEHLER: {e}")
+        print(f"\nTEST 3 FEHLER: {e}")
         return False
 
 
@@ -232,7 +232,7 @@ def test_snooze_function():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("[ERROR] ÜBERSPRUNGEN: Imports fehlgeschlagen")
+        print("ÜBERSPRUNGEN: Imports fehlgeschlagen")
         return False
     
     try:
@@ -254,7 +254,7 @@ def test_snooze_function():
         assert original_reminder['due_date'] == original_date.isoformat(), "Falsches Original-Datum"
         assert original_reminder['repeat_count'] == 0, "Repeat-Count sollte 0 sein"
         
-        print(f"[OK] Original-Erinnerung: Fällig am {original_reminder['due_date']}")
+        print(f"Original-Erinnerung: Fällig am {original_reminder['due_date']}")
         
         # Snooze um 2 Tage
         success = snooze_reminder(reminder_id, days=2)
@@ -268,7 +268,7 @@ def test_snooze_function():
         assert snoozed_reminder['status'] == 'snoozed', "Status sollte 'snoozed' sein"
         assert snoozed_reminder['repeat_count'] == 1, "Repeat-Count sollte 1 sein"
         
-        print(f"[OK] Nach Snooze: Fällig am {snoozed_reminder['due_date']}, Repeat-Count: {snoozed_reminder['repeat_count']}")
+        print(f"Nach Snooze: Fällig am {snoozed_reminder['due_date']}, Repeat-Count: {snoozed_reminder['repeat_count']}")
         
         # Snooze nochmal um 3 Tage
         success = snooze_reminder(reminder_id, days=3)
@@ -281,19 +281,19 @@ def test_snooze_function():
         assert snoozed_again['due_date'] == expected_date, f"Falsches zweites Snooze-Datum"
         assert snoozed_again['repeat_count'] == 2, "Repeat-Count sollte 2 sein"
         
-        print(f"[OK] Nach zweitem Snooze: Fällig am {snoozed_again['due_date']}, Repeat-Count: {snoozed_again['repeat_count']}")
+        print(f"Nach zweitem Snooze: Fällig am {snoozed_again['due_date']}, Repeat-Count: {snoozed_again['repeat_count']}")
         
         # Cleanup
         delete_reminder(reminder_id)
         
-        print("\n[OK] TEST 4 BESTANDEN: Snooze-Funktion funktioniert korrekt")
+        print("\nTEST 4 BESTANDEN: Snooze-Funktion funktioniert korrekt")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST 4 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 4 FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] TEST 4 FEHLER: {e}")
+        print(f"\nTEST 4 FEHLER: {e}")
         return False
 
 
@@ -304,7 +304,7 @@ def test_status_updates():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("[ERROR] ÜBERSPRUNGEN: Imports fehlgeschlagen")
+        print("ÜBERSPRUNGEN: Imports fehlgeschlagen")
         return False
     
     try:
@@ -326,7 +326,7 @@ def test_status_updates():
         
         reminder = get_reminder(reminder_id)
         assert reminder['status'] == 'completed', "Status sollte 'completed' sein"
-        print("[OK] Status auf 'completed' gesetzt")
+        print("Status auf 'completed' gesetzt")
         
         # Test: Status auf 'dismissed' setzen
         success = update_reminder_status(reminder_id, 'dismissed')
@@ -334,24 +334,24 @@ def test_status_updates():
         
         reminder = get_reminder(reminder_id)
         assert reminder['status'] == 'dismissed', "Status sollte 'dismissed' sein"
-        print("[OK] Status auf 'dismissed' gesetzt")
+        print("Status auf 'dismissed' gesetzt")
         
         # Test: Ungültiger Status
         success = update_reminder_status(reminder_id, 'invalid_status')
         assert not success, "Ungültiger Status sollte abgelehnt werden"
-        print("[OK] Ungültiger Status korrekt abgelehnt")
+        print("Ungültiger Status korrekt abgelehnt")
         
         # Cleanup
         delete_reminder(reminder_id)
         
-        print("\n[OK] TEST 5 BESTANDEN: Status-Updates funktionieren")
+        print("\nTEST 5 BESTANDEN: Status-Updates funktionieren")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST 5 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 5 FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] TEST 5 FEHLER: {e}")
+        print(f"\nTEST 5 FEHLER: {e}")
         return False
 
 
@@ -362,7 +362,7 @@ def test_due_reminders():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("[ERROR] ÜBERSPRUNGEN: Imports fehlgeschlagen")
+        print("ÜBERSPRUNGEN: Imports fehlgeschlagen")
         return False
     
     try:
@@ -419,9 +419,9 @@ def test_due_reminders():
         assert tomorrow_id not in due_ids, "Morgen fällige Erinnerung sollte NICHT in due_reminders sein"
         assert completed_id not in due_ids, "Erledigte Erinnerung sollte NICHT in due_reminders sein"
         
-        print(f"[OK] {len(due_reminders)} fällige Erinnerungen gefunden")
-        print(f"   → Überfällig: [OK]")
-        print(f"   → Heute: [OK]")
+        print(f"{len(due_reminders)} fällige Erinnerungen gefunden")
+        print(f"   → Überfällig: ")
+        print(f"   → Heute: ")
         print(f"   → Morgen: korrekt ausgeschlossen")
         print(f"   → Erledigt: korrekt ausgeschlossen")
         
@@ -431,14 +431,14 @@ def test_due_reminders():
         delete_reminder(tomorrow_id)
         delete_reminder(completed_id)
         
-        print("\n[OK] TEST 6 BESTANDEN: Fällige Erinnerungen werden korrekt gefiltert")
+        print("\nTEST 6 BESTANDEN: Fällige Erinnerungen werden korrekt gefiltert")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST 6 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 6 FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] TEST 6 FEHLER: {e}")
+        print(f"\nTEST 6 FEHLER: {e}")
         return False
 
 
@@ -449,7 +449,7 @@ def test_statistics():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("[ERROR] ÜBERSPRUNGEN: Imports fehlgeschlagen")
+        print("ÜBERSPRUNGEN: Imports fehlgeschlagen")
         return False
     
     try:
@@ -477,7 +477,7 @@ def test_statistics():
         assert 'by_status' in stats, "Statistiken sollten 'by_status' enthalten"
         assert 'due' in stats, "Statistiken sollten 'due' enthalten"
         
-        print(f"[OK] Statistiken geladen:")
+        print(f"Statistiken geladen:")
         print(f"   → Gesamt: {stats['total']}")
         print(f"   → Nach Status: {stats['by_status']}")
         print(f"   → Fällig: {stats['due']}")
@@ -487,14 +487,14 @@ def test_statistics():
             if reminder_id:
                 delete_reminder(reminder_id)
         
-        print("\n[OK] TEST 7 BESTANDEN: Statistiken funktionieren")
+        print("\nTEST 7 BESTANDEN: Statistiken funktionieren")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST 7 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 7 FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] TEST 7 FEHLER: {e}")
+        print(f"\nTEST 7 FEHLER: {e}")
         return False
 
 
@@ -505,7 +505,7 @@ def test_display_formatting():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("[ERROR] ÜBERSPRUNGEN: Imports fehlgeschlagen")
+        print("ÜBERSPRUNGEN: Imports fehlgeschlagen")
         return False
     
     try:
@@ -529,7 +529,7 @@ def test_display_formatting():
         assert 'type_label' in display_reminder, "Sollte 'type_label' enthalten"
         assert 'due_date_label' in display_reminder, "Sollte 'due_date_label' enthalten"
         
-        print(f"[OK] Display-Formatierung:")
+        print(f"Display-Formatierung:")
         print(f"   → Status: {display_reminder['status_label']}")
         print(f"   → Typ: {display_reminder['type_label']}")
         print(f"   → Fälligkeit: {display_reminder['due_date_label']}")
@@ -539,14 +539,14 @@ def test_display_formatting():
         # Cleanup
         delete_reminder(reminder_id)
         
-        print("\n[OK] TEST 8 BESTANDEN: Display-Formatierung funktioniert")
+        print("\nTEST 8 BESTANDEN: Display-Formatierung funktioniert")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST 8 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 8 FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] TEST 8 FEHLER: {e}")
+        print(f"\nTEST 8 FEHLER: {e}")
         return False
 
 
@@ -557,13 +557,13 @@ def run_all_tests():
     print("="*60)
     
     if not IMPORTS_SUCCESSFUL:
-        print("\n[ERROR] KRITISCHER FEHLER: Module konnten nicht importiert werden")
+        print("\nKRITISCHER FEHLER: Module konnten nicht importiert werden")
         print("Bitte stellen Sie sicher, dass alle Abhängigkeiten installiert sind.")
         return
     
     # Setup
     if not setup_test_database():
-        print("\n[ERROR] KRITISCHER FEHLER: Datenbank-Setup fehlgeschlagen")
+        print("\nKRITISCHER FEHLER: Datenbank-Setup fehlgeschlagen")
         return
     
     # Führe Tests aus
@@ -587,7 +587,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results.items():
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{test_name}: {status}")
     
     print("\n" + "="*60)
@@ -598,7 +598,7 @@ def run_all_tests():
         print("\n🎉 ALLE TESTS BESTANDEN! 🎉")
         print("Das Notification Manager Modul funktioniert korrekt.")
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         print("Bitte überprüfen Sie die Fehlerausgaben oben.")
 
 

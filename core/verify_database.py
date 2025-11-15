@@ -36,29 +36,29 @@ def verify_database_manager():
     try:
         db_manager = get_db_manager()
         assert db_manager is not None, "Failed to get database manager"
-        print("[OK] Database manager initialized")
+        print("Database manager initialized")
 
         # Test session creation
         session = db_manager.get_session()
         assert session is not None, "Failed to create session"
         session.close()
-        print("[OK] Session creation works")
+        print("Session creation works")
 
         # Test health check
         health = db_manager.health_check()
         assert health['healthy'] is True, "Database health check failed"
         assert health['connection_test'] is True, "Connection test failed"
-        print("[OK] Health check passed")
+        print("Health check passed")
 
         # Test metrics
         metrics = db_manager.get_metrics()
         assert 'query_count' in metrics, "Metrics missing query_count"
-        print("[OK] Metrics collection works")
+        print("Metrics collection works")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] DatabaseManager verification failed: {e}")
+        print(f"DatabaseManager verification failed: {e}")
         return False
 
 
@@ -76,18 +76,18 @@ def verify_repository():
         # Test create
         entity = repo.create(name="Test", value=100)
         assert entity.id is not None, "Create failed"
-        print("[OK] Create works")
+        print("Create works")
 
         # Test get_by_id
         retrieved = repo.get_by_id(entity.id)
         assert retrieved is not None, "Get by ID failed"
         assert retrieved.name == "Test", "Retrieved wrong entity"
-        print("[OK] Get by ID works")
+        print("Get by ID works")
 
         # Test update
         updated = repo.update(entity.id, value=200)
         assert updated.value == 200, "Update failed"
-        print("[OK] Update works")
+        print("Update works")
 
         # Test soft delete
         result = repo.delete(entity.id, soft=True)
@@ -95,55 +95,55 @@ def verify_repository():
 
         retrieved = repo.get_by_id(entity.id)
         assert retrieved is None, "Soft deleted entity still visible"
-        print("[OK] Soft delete works")
+        print("Soft delete works")
 
         # Test restore
         restored = repo.restore(entity.id)
         assert restored is not None, "Restore failed"
         assert restored.deleted_at is None, "Entity not properly restored"
-        print("[OK] Restore works")
+        print("Restore works")
 
         # Test bulk operations
         data = [{"name": f"Bulk {i}", "value": i} for i in range(5)]
         entities = repo.bulk_create(data)
         assert len(entities) == 5, "Bulk create failed"
-        print("[OK] Bulk create works")
+        print("Bulk create works")
 
         updates = [{"id": e.id, "value": e.value * 2} for e in entities[:3]]
         count = repo.bulk_update(updates)
         assert count == 3, "Bulk update failed"
-        print("[OK] Bulk update works")
+        print("Bulk update works")
 
         ids = [e.id for e in entities[3:]]
         count = repo.bulk_delete(ids, soft=True)
         assert count == 2, "Bulk delete failed"
-        print("[OK] Bulk delete works")
+        print("Bulk delete works")
 
         # Test pagination
         page = repo.paginate(page=1, page_size=10)
         assert 'items' in page, "Pagination failed"
         assert 'total' in page, "Pagination missing total"
-        print("[OK] Pagination works")
+        print("Pagination works")
 
         # Test find_by
         results = repo.find_by(name="Test")
         assert len(results) > 0, "Find by failed"
-        print("[OK] Find by works")
+        print("Find by works")
 
         # Test count
         count = repo.count()
         assert count > 0, "Count failed"
-        print("[OK] Count works")
+        print("Count works")
 
         # Test exists
         exists = repo.exists(entity.id)
         assert exists is True, "Exists failed"
-        print("[OK] Exists works")
+        print("Exists works")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Repository verification failed: {e}")
+        print(f"Repository verification failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -161,7 +161,7 @@ def verify_unit_of_work():
             repo = uow.get_repository(TestEntity, enable_audit=True)
             entity = repo.create(name="UoW Test", value=300)
             assert entity.id is not None, "UoW create failed"
-        print("[OK] Basic transaction works")
+        print("Basic transaction works")
 
         # Test rollback
         try:
@@ -178,7 +178,7 @@ def verify_unit_of_work():
                 TestEntity.name == "Will Rollback"
             ).count()
             assert count == 0, "Rollback failed"
-        print("[OK] Rollback works")
+        print("Rollback works")
 
         # Test run_tx helper
         def create_entity(uow):
@@ -187,12 +187,12 @@ def verify_unit_of_work():
 
         entity = run_tx(create_entity, user_id="test_user")
         assert entity.id is not None, "run_tx failed"
-        print("[OK] run_tx helper works")
+        print("run_tx helper works")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] UnitOfWork verification failed: {e}")
+        print(f"UnitOfWork verification failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -220,7 +220,7 @@ def verify_audit_logging():
         assert len(logs) > 0, "No audit logs found"
         assert logs[0].user_id == "audit_user", "Wrong user in audit log"
         assert logs[0].action == "CREATE", "Wrong action in audit log"
-        print("[OK] Audit logging works")
+        print("Audit logging works")
 
         # Update entity
         repo.update(entity.id, value=700)
@@ -233,12 +233,12 @@ def verify_audit_logging():
         )
 
         assert len(logs) > 0, "No update audit logs found"
-        print("[OK] Update audit logging works")
+        print("Update audit logging works")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Audit logging verification failed: {e}")
+        print(f"Audit logging verification failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -270,11 +270,11 @@ def verify_caching():
         entity3 = repo.get_by_id(entity.id)
         assert entity3.value == 900, "Cache invalidation failed"
 
-        print("[OK] Caching works")
+        print("Caching works")
         return True
 
     except Exception as e:
-        print(f"[ERROR] Caching verification failed: {e}")
+        print(f"Caching verification failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -299,11 +299,11 @@ def verify_performance_monitoring():
         assert metrics['query_count'] > 0, "Query count not tracked"
         assert 'avg_query_time' in metrics, "Missing avg_query_time"
 
-        print("[OK] Performance monitoring works")
+        print("Performance monitoring works")
         return True
 
     except Exception as e:
-        print(f"[ERROR] Performance monitoring verification failed: {e}")
+        print(f"Performance monitoring verification failed: {e}")
         return False
 
 
@@ -316,9 +316,9 @@ def main():
     # Initialize database
     try:
         init_database(auto_migrate=False)
-        print("[OK] Database initialized")
+        print("Database initialized")
     except Exception as e:
-        print(f"[ERROR] Database initialization failed: {e}")
+        print(f"Database initialization failed: {e}")
         return False
 
     # Run verifications
@@ -336,16 +336,16 @@ def main():
     print("=" * 60)
 
     for name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{name:.<40} {status}")
 
     all_passed = all(result for _, result in results)
 
     print("=" * 60)
     if all_passed:
-        print("[OK] All verifications passed!")
+        print("All verifications passed!")
         return True
-    print("[ERROR] Some verifications failed")
+    print("Some verifications failed")
     return False
 
 

@@ -42,10 +42,10 @@ def test_missing_project_data():
             layout_config=layout
         )
         assert plotter is not None, "Plotter should be created even with empty project_data"
-        print("[OK] Empty project_data handled gracefully")
+        print("Empty project_data handled gracefully")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] Empty project_data failed: {e}")
+        print(f"Empty project_data failed: {e}")
         raise
     
     # Test with None values
@@ -58,13 +58,13 @@ def test_missing_project_data():
             layout_config=layout
         )
         assert plotter is not None, "Plotter should be created with None project_details"
-        print("[OK] None project_details handled gracefully")
+        print("None project_details handled gracefully")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] None project_details failed: {e}")
+        print(f"None project_details failed: {e}")
         raise
     
-    print("\n[OK] Missing project_data tests passed")
+    print("\nMissing project_data tests passed")
     return True
 
 
@@ -86,7 +86,7 @@ def test_safe_get_functions():
     for project_data, expected in test_cases_orientation:
         result = _safe_get_orientation(project_data)
         assert result == expected, f"Orientation mismatch: got {result}, expected {expected}"
-    print("[OK] _safe_get_orientation handles all cases correctly")
+    print("_safe_get_orientation handles all cases correctly")
     
     # Test _safe_get_roof_inclination_deg
     test_cases_inclination = [
@@ -100,7 +100,7 @@ def test_safe_get_functions():
     for project_data, expected in test_cases_inclination:
         result = _safe_get_roof_inclination_deg(project_data)
         assert result == expected, f"Inclination mismatch: got {result}, expected {expected}"
-    print("[OK] _safe_get_roof_inclination_deg handles all cases correctly")
+    print("_safe_get_roof_inclination_deg handles all cases correctly")
     
     # Test _safe_get_roof_covering
     test_cases_covering = [
@@ -113,9 +113,9 @@ def test_safe_get_functions():
     for project_data, expected in test_cases_covering:
         result = _safe_get_roof_covering(project_data)
         assert result == expected, f"Covering mismatch: got {result}, expected {expected}"
-    print("[OK] _safe_get_roof_covering handles all cases correctly")
+    print("_safe_get_roof_covering handles all cases correctly")
     
-    print("\n[OK] Safe get function tests passed")
+    print("\nSafe get function tests passed")
     return True
 
 
@@ -146,10 +146,10 @@ def test_invalid_dimensions():
             layout_config=layout
         )
         assert plotter is not None, "Should handle very small dimensions"
-        print(f"[OK] Very small dimensions (1x1x1m): {len(panels['main'])} panels placed")
+        print(f"Very small dimensions (1x1x1m): {len(panels['main'])} panels placed")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] Very small dimensions failed: {e}")
+        print(f"Very small dimensions failed: {e}")
         raise
     
     # Test with zero module quantity
@@ -164,10 +164,10 @@ def test_invalid_dimensions():
         )
         assert plotter is not None, "Should handle zero modules"
         assert len(panels['main']) == 0, "Should have no panels with quantity 0"
-        print("[OK] Zero module quantity handled correctly")
+        print("Zero module quantity handled correctly")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] Zero module quantity failed: {e}")
+        print(f"Zero module quantity failed: {e}")
         raise
     
     # Test with negative module quantity (should be handled gracefully)
@@ -181,13 +181,13 @@ def test_invalid_dimensions():
         )
         assert plotter is not None, "Should handle negative module quantity"
         assert len(panels['main']) == 0, "Should have no panels with negative quantity"
-        print("[OK] Negative module quantity handled correctly")
+        print("Negative module quantity handled correctly")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] Negative module quantity failed: {e}")
+        print(f"Negative module quantity failed: {e}")
         raise
     
-    print("\n[OK] Invalid dimension tests passed")
+    print("\nInvalid dimension tests passed")
     return True
 
 
@@ -218,10 +218,10 @@ def test_extreme_values():
             layout_config=layout
         )
         assert plotter is not None, "Should handle very large building"
-        print(f"[OK] Very large building (50x30x15m): {len(panels['main'])} panels placed")
+        print(f"Very large building (50x30x15m): {len(panels['main'])} panels placed")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] Very large building failed: {e}")
+        print(f"Very large building failed: {e}")
         raise
     
     # Test with extreme roof inclination
@@ -243,10 +243,10 @@ def test_extreme_values():
             layout_config=layout
         )
         assert plotter is not None, "Should handle extreme roof inclination"
-        print(f"[OK] Extreme roof inclination (85°): {len(panels['main'])} panels placed")
+        print(f"Extreme roof inclination (85°): {len(panels['main'])} panels placed")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] Extreme roof inclination failed: {e}")
+        print(f"Extreme roof inclination failed: {e}")
         raise
     
     # Test with very many modules requested
@@ -261,13 +261,13 @@ def test_extreme_values():
         assert plotter is not None, "Should handle excessive module quantity"
         total = len(panels['main']) + len(panels.get('garage', [])) + len(panels.get('facade', []))
         assert total < 1000, "Should not place more modules than physically possible"
-        print(f"[OK] Excessive module quantity (1000 requested): {total} panels placed")
+        print(f"Excessive module quantity (1000 requested): {total} panels placed")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] Excessive module quantity failed: {e}")
+        print(f"Excessive module quantity failed: {e}")
         raise
     
-    print("\n[OK] Extreme value tests passed")
+    print("\nExtreme value tests passed")
     return True
 
 
@@ -292,9 +292,9 @@ def test_render_error_handling():
         
         assert png_bytes is not None, "render_image_bytes should not return None"
         assert len(png_bytes) > 0, "render_image_bytes should return valid PNG"
-        print(f"[OK] render_image_bytes with minimal data: {len(png_bytes)} bytes")
+        print(f"render_image_bytes with minimal data: {len(png_bytes)} bytes")
     except Exception as e:
-        print(f"[ERROR] render_image_bytes failed: {e}")
+        print(f"render_image_bytes failed: {e}")
         raise
     
     # Test with invalid roof type (should use fallback)
@@ -307,13 +307,13 @@ def test_render_error_handling():
             layout_config=layout
         )
         assert plotter is not None, "Should handle invalid roof type with fallback"
-        print("[OK] Invalid roof type handled with fallback")
+        print("Invalid roof type handled with fallback")
         plotter.close()
     except Exception as e:
-        print(f"[ERROR] Invalid roof type failed: {e}")
+        print(f"Invalid roof type failed: {e}")
         raise
     
-    print("\n[OK] Render error handling tests passed")
+    print("\nRender error handling tests passed")
     return True
 
 
@@ -338,10 +338,10 @@ if __name__ == "__main__":
             if test():
                 passed += 1
         except AssertionError as e:
-            print(f"\n[ERROR] {test.__name__} failed: {e}")
+            print(f"\n{test.__name__} failed: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n[ERROR] {test.__name__} error: {e}")
+            print(f"\n{test.__name__} error: {e}")
             import traceback
             traceback.print_exc()
             failed += 1
@@ -351,7 +351,7 @@ if __name__ == "__main__":
     print("=" * 60)
     
     if failed == 0:
-        print("\n[OK] ALL ERROR HANDLING TESTS PASSED!")
+        print("\nALL ERROR HANDLING TESTS PASSED!")
         print("\nThe system is robust and handles:")
         print("  - Missing or invalid project data")
         print("  - Invalid dimensions and extreme values")
@@ -359,5 +359,5 @@ if __name__ == "__main__":
         print("  - Graceful fallbacks for all error scenarios")
         exit(0)
     else:
-        print(f"\n[ERROR] {failed} TEST(S) FAILED")
+        print(f"\n{failed} TEST(S) FAILED")
         exit(1)

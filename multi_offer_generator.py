@@ -13,13 +13,13 @@ def _show_unavailable(feature_name: str = "Multi-Angebots-Generator") -> None:
     try:
         import streamlit as st  # type: ignore
         st.info(
-            "[INFO] **Multi-Firmen-Angebote: Voraussetzungen**\n\n"
+            "**Multi-Firmen-Angebote: Voraussetzungen**\n\n"
             "Für die Generierung von Angeboten für mehrere Firmen benötigen Sie:\n\n"
             "1️⃣ **Mehrere Firmen konfiguriert** im Admin-Panel → Firmenverwaltung\n"
             "2️⃣ **Vollständige Projektanalyse** durchgeführt\n"
             "3️⃣ **Preiskalkulationen** für alle Firmen abgeschlossen\n\n"
-            "👉 Für **Einzel-Firmen-PDFs** nutzen Sie den Tab **'[FILE] PDF-Ausgabe'** oben.",
-            icon="[IDEA]",
+            "👉 Für **Einzel-Firmen-PDFs** nutzen Sie den Tab **'PDF-Ausgabe'** oben.",
+            icon="",
         )
     except Exception:
         pass

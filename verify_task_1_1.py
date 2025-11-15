@@ -31,10 +31,10 @@ def verify_imports():
             reset_config,
             validate_config,
         )
-        print("[OK] All imports successful")
+        print("All imports successful")
         return True
     except ImportError as e:
-        print(f"[ERROR] Import failed: {e}")
+        print(f"Import failed: {e}")
         return False
 
 
@@ -66,10 +66,10 @@ def verify_appconfig_fields():
             missing_fields.append(field)
 
     if missing_fields:
-        print(f"[ERROR] Missing fields: {missing_fields}")
+        print(f"Missing fields: {missing_fields}")
         return False
 
-    print("[OK] All required fields present")
+    print("All required fields present")
     return True
 
 
@@ -88,10 +88,10 @@ def verify_enums():
     for enum_class, expected_values in checks:
         for value in expected_values:
             if not hasattr(enum_class, value):
-                print(f"[ERROR] {enum_class.__name__} missing {value}")
+                print(f"{enum_class.__name__} missing {value}")
                 return False
 
-    print("[OK] All enums defined correctly")
+    print("All enums defined correctly")
     return True
 
 
@@ -107,13 +107,13 @@ def verify_environment_loading():
             os.environ.pop("DATABASE_URL", None)
             config = load_config_for_environment(env)
             if config.env != env:
-                print(f"[ERROR] Environment loading failed for {env}")
+                print(f"Environment loading failed for {env}")
                 return False
 
-        print("[OK] Environment-specific loading works")
+        print("Environment-specific loading works")
         return True
     except Exception as e:
-        print(f"[ERROR] Environment loading failed: {e}")
+        print(f"Environment loading failed: {e}")
         return False
 
 
@@ -126,18 +126,18 @@ def verify_pydantic_validation():
     # Test valid config
     try:
         db_config = DatabaseConfig(url="duckdb:///test.db", pool_size=5)
-        print("[OK] Valid configuration accepted")
+        print("Valid configuration accepted")
     except ValidationError:
-        print("[ERROR] Valid configuration rejected")
+        print("Valid configuration rejected")
         return False
 
     # Test invalid config (pool_size out of range)
     try:
         db_config = DatabaseConfig(url="duckdb:///test.db", pool_size=200)
-        print("[ERROR] Invalid configuration accepted (should have failed)")
+        print("Invalid configuration accepted (should have failed)")
         return False
     except ValidationError:
-        print("[OK] Invalid configuration rejected")
+        print("Invalid configuration rejected")
 
     return True
 
@@ -163,10 +163,10 @@ def verify_mode_theme_compute():
         config = load_config()
         actual = getattr(config, env_var.lower())
         if actual != expected:
-            print(f"[ERROR] {env_var}={value} failed: got {actual}, expected {expected}")
+            print(f"{env_var}={value} failed: got {actual}, expected {expected}")
             return False
 
-    print("[OK] Mode, theme, and compute options work")
+    print("Mode, theme, and compute options work")
     return True
 
 
@@ -180,15 +180,15 @@ def verify_hot_reload():
     config = load_config()
 
     if not hasattr(config, "reload"):
-        print("[ERROR] reload() method not found")
+        print("reload() method not found")
         return False
 
     # Test that reload method exists and is callable
     if not callable(config.reload):
-        print("[ERROR] reload() is not callable")
+        print("reload() is not callable")
         return False
 
-    print("[OK] Hot-reload capability implemented")
+    print("Hot-reload capability implemented")
     return True
 
 
@@ -201,14 +201,14 @@ def verify_validation_function():
     is_valid, errors = validate_config(config)
 
     if not isinstance(is_valid, bool):
-        print("[ERROR] validate_config should return bool")
+        print("validate_config should return bool")
         return False
 
     if not isinstance(errors, list):
-        print("[ERROR] validate_config should return list of errors")
+        print("validate_config should return list of errors")
         return False
 
-    print("[OK] validate_config function works")
+    print("validate_config function works")
     return True
 
 
@@ -221,20 +221,20 @@ def verify_file_operations():
 
     # Test save_to_file
     if not hasattr(config, "save_to_file"):
-        print("[ERROR] save_to_file method not found")
+        print("save_to_file method not found")
         return False
 
     # Test to_dict
     if not hasattr(config, "to_dict"):
-        print("[ERROR] to_dict method not found")
+        print("to_dict method not found")
         return False
 
     config_dict = config.to_dict()
     if not isinstance(config_dict, dict):
-        print("[ERROR] to_dict should return dictionary")
+        print("to_dict should return dictionary")
         return False
 
-    print("[OK] File operations implemented")
+    print("File operations implemented")
     return True
 
 
@@ -254,10 +254,10 @@ def verify_documentation():
             missing_docs.append(doc)
 
     if missing_docs:
-        print(f"[ERROR] Missing documentation: {missing_docs}")
+        print(f"Missing documentation: {missing_docs}")
         return False
 
-    print("[OK] All documentation files present")
+    print("All documentation files present")
     return True
 
 
@@ -286,7 +286,7 @@ def main():
             result = check()
             results.append(result)
         except Exception as e:
-            print(f"[ERROR] Check failed with exception: {e}")
+            print(f"Check failed with exception: {e}")
             import traceback
 
             traceback.print_exc()
@@ -298,11 +298,11 @@ def main():
     print(f"Results: {passed}/{total} checks passed")
 
     if passed == total:
-        print("[OK] Task 1.1 implementation verified successfully!")
+        print("Task 1.1 implementation verified successfully!")
         print("=" * 70)
         return 0
     else:
-        print("[ERROR] Some checks failed")
+        print("Some checks failed")
         print("=" * 70)
         return 1
 

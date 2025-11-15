@@ -16,7 +16,7 @@ def main():
     
     hp_db = get_heatpump_database()
     
-    print(f"\n[OK] Gefundene Wärmepumpen: {len(hp_db)}")
+    print(f"\nGefundene Wärmepumpen: {len(hp_db)}")
     
     # Gruppiere nach Hersteller
     manufacturers = {}
@@ -35,9 +35,9 @@ def main():
     bad_ones = [mfr for mfr in manufacturers.keys() if mfr in forbidden]
     
     if bad_ones:
-        print(f"\n[ERROR] FEHLER: Unerwünschte Hersteller gefunden: {bad_ones}")
+        print(f"\nFEHLER: Unerwünschte Hersteller gefunden: {bad_ones}")
     else:
-        print("\n[OK] OK: Keine unerwünschten Hersteller!")
+        print("\nOK: Keine unerwünschten Hersteller!")
     
     # Zeige Beispiele
     print("\nBeispiel-Modelle:")

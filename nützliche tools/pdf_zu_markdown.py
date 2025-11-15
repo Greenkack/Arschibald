@@ -99,4 +99,4 @@ for page_num, page in enumerate(doc, start=1):
         pf.write(f"Nummer: {page.number+1}\n")
         pf.write(f"{'-'*40}\n")
 
-print("[OK] Markdown-Datei und vollständige PDF-Auswertung 100% exakt abgeschlossen!")
+print("Markdown-Datei und vollständige PDF-Auswertung 100% exakt abgeschlossen!")

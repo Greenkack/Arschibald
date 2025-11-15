@@ -11,12 +11,12 @@ try:
         generate_overlay,
         merge_with_background,
     )
-    print("[OK] SUCCESS: pdf_template_engine import erfolgreich")
+    print("SUCCESS: pdf_template_engine import erfolgreich")
     print(f"  build_dynamic_data: {build_dynamic_data}")
     print(f"  generate_overlay: {generate_overlay}")
     print(f"  merge_with_background: {merge_with_background}")
 except Exception as e:
-    print(f"[ERROR] FEHLER: pdf_template_engine import fehlgeschlagen: {e}")
+    print(f"FEHLER: pdf_template_engine import fehlgeschlagen: {e}")
     import traceback
     traceback.print_exc()
 
@@ -24,17 +24,17 @@ print("\nTesting individual module imports...")
 
 try:
     from pdf_template_engine.placeholders import build_dynamic_data
-    print("[OK] placeholders.build_dynamic_data importiert")
+    print("placeholders.build_dynamic_data importiert")
 except Exception as e:
-    print(f"[ERROR] placeholders.build_dynamic_data fehlgeschlagen: {e}")
+    print(f"placeholders.build_dynamic_data fehlgeschlagen: {e}")
 
 try:
     from pdf_template_engine.dynamic_overlay import (
         generate_overlay,
         merge_with_background,
     )
-    print("[OK] dynamic_overlay Funktionen importiert")
+    print("dynamic_overlay Funktionen importiert")
 except Exception as e:
-    print(f"[ERROR] dynamic_overlay Funktionen fehlgeschlagen: {e}")
+    print(f"dynamic_overlay Funktionen fehlgeschlagen: {e}")
 
 print("\nTemplate engine test abgeschlossen.")

@@ -813,4 +813,4 @@ if __name__ == "__main__":
     for firma, name in strategies.items():
         print(f"  Firma {firma}: {name}")
     
-    print("\n[OK] Positioning Strategies module ready")
+    print("\nPositioning Strategies module ready")

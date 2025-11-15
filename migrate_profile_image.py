@@ -8,7 +8,7 @@ import sqlite3
 db_path = 'data/users.db'
 
 if not os.path.exists(db_path):
-    print("[ERROR] Datenbank nicht gefunden!")
+    print("Datenbank nicht gefunden!")
     exit(1)
 
 try:
@@ -20,14 +20,14 @@ try:
     columns = [column[1] for column in cursor.fetchall()]
 
     if 'profile_image' in columns:
-        print("[OK] Spalte 'profile_image' existiert bereits!")
+        print("Spalte 'profile_image' existiert bereits!")
     else:
         # Füge Spalte hinzu
         cursor.execute("ALTER TABLE users ADD COLUMN profile_image TEXT")
         conn.commit()
-        print("[OK] Spalte 'profile_image' erfolgreich hinzugefügt!")
+        print("Spalte 'profile_image' erfolgreich hinzugefügt!")
 
     conn.close()
 
 except Exception as e:
-    print(f"[ERROR] Fehler: {str(e)}")
+    print(f"Fehler: {str(e)}")

@@ -51,7 +51,7 @@ def test_chart_page_generator_initialization():
     assert generator.layout == 'one_per_page'
     assert generator.theme == theme
 
-    print("[OK] ChartPageGenerator initialized successfully")
+    print("ChartPageGenerator initialized successfully")
     print(f"  - Analysis results: {len(analysis_results)} charts")
     print(f"  - Layout: {generator.layout}")
     print(f"  - Theme colors: {theme['colors']}")
@@ -87,7 +87,7 @@ def test_generate_one_per_page():
 
     assert num_pages == 3, f"Expected 3 pages, got {num_pages}"
 
-    print("[OK] One chart per page layout generated successfully")
+    print("One chart per page layout generated successfully")
     print(f"  - Input charts: {len(chart_keys)}")
     print(f"  - Output pages: {num_pages}")
     print(f"  - Chart keys: {chart_keys}")
@@ -127,7 +127,7 @@ def test_generate_two_per_page():
     expected_pages = 3
     assert num_pages == expected_pages, f"Expected {expected_pages} pages, got {num_pages}"
 
-    print("[OK] Two charts per page layout generated successfully")
+    print("Two charts per page layout generated successfully")
     print(f"  - Input charts: {len(chart_keys)}")
     print(f"  - Output pages: {num_pages}")
     print(f"  - Layout: 2 charts per page (2+2+1)")
@@ -175,7 +175,7 @@ def test_generate_four_per_page():
     expected_pages = 3
     assert num_pages == expected_pages, f"Expected {expected_pages} pages, got {num_pages}"
 
-    print("[OK] Four charts per page layout generated successfully")
+    print("Four charts per page layout generated successfully")
     print(f"  - Input charts: {len(chart_keys)}")
     print(f"  - Output pages: {num_pages}")
     print(f"  - Layout: 4 charts per page (4+4+1)")
@@ -227,7 +227,7 @@ def test_chart_name_mapping():
         'selfuse_ratio_switcher_chart_bytes'
     ]
 
-    print("[OK] Testing chart name mapping for all real keys:")
+    print("Testing chart name mapping for all real keys:")
     mapped_count = 0
 
     for chart_key in real_chart_keys:
@@ -240,7 +240,7 @@ def test_chart_name_mapping():
         print(f"  - {chart_key[:40]:<40} → {chart_name}")
 
     print(
-        f"\n[OK] Successfully mapped {mapped_count}/{len(real_chart_keys)} chart keys")
+        f"\nSuccessfully mapped {mapped_count}/{len(real_chart_keys)} chart keys")
     assert mapped_count == len(
         real_chart_keys), "All chart keys should have friendly names"
 
@@ -262,7 +262,7 @@ def test_empty_chart_list():
 
     assert pdf_bytes == b'', "Empty chart list should return empty bytes"
 
-    print("[OK] Empty chart list handled correctly")
+    print("Empty chart list handled correctly")
     print("  - Input: []")
     print("  - Output: empty bytes")
 
@@ -299,7 +299,7 @@ def test_missing_chart_bytes():
 
     assert num_pages == 1, f"Expected 1 page (only valid chart), got {num_pages}"
 
-    print("[OK] Missing chart bytes handled gracefully")
+    print("Missing chart bytes handled gracefully")
     print(f"  - Requested charts: {len(chart_keys)}")
     print(f"  - Available charts: 1")
     print(f"  - Output pages: {num_pages}")
@@ -338,7 +338,7 @@ def test_layout_options():
             f"Layout '{layout}': expected {expected_pages} pages, got {num_pages}"
 
         print(
-            f"[OK] Layout '{layout}': {
+            f"Layout '{layout}': {
                 len(chart_keys)} charts → {num_pages} pages")
 
 
@@ -371,7 +371,7 @@ def test_default_layout_fallback():
 
     assert num_pages == 2, f"Expected 2 pages (default layout), got {num_pages}"
 
-    print("[OK] Invalid layout handled with fallback to default")
+    print("Invalid layout handled with fallback to default")
     print(f"  - Requested layout: 'invalid_layout'")
     print(f"  - Fallback layout: 'one_per_page'")
     print(f"  - Output pages: {num_pages}")
@@ -425,7 +425,7 @@ def test_real_chart_keys_from_requirements():
         theme=theme
     )
 
-    print("[OK] Verifying all required chart keys have friendly names:")
+    print("Verifying all required chart keys have friendly names:")
     print(f"\n  2D Charts ({len(required_2d_charts)}):")
     for key in required_2d_charts:
         name = generator._get_chart_name(key)
@@ -442,7 +442,7 @@ def test_real_chart_keys_from_requirements():
         print(f"    - {name}")
 
     print(
-        f"\n[OK] All {
+        f"\nAll {
             len(all_required_charts)} required chart keys are supported")
 
 
@@ -473,11 +473,11 @@ def run_all_tests():
             test_func()
             passed += 1
         except AssertionError as e:
-            print(f"\n[ERROR] Test failed: {test_func.__name__}")
+            print(f"\nTest failed: {test_func.__name__}")
             print(f"  Error: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n[ERROR] Test error: {test_func.__name__}")
+            print(f"\nTest error: {test_func.__name__}")
             print(f"  Error: {e}")
             import traceback
             traceback.print_exc()

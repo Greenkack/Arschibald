@@ -41,7 +41,7 @@ try:
         print(
             f'Update für ID {
                 product["id"]}: {
-                "[OK] Erfolg" if result else "[ERROR] Fehler"}')
+                "Erfolg" if result else "Fehler"}')
         print()
 
 except Exception as e:

@@ -77,10 +77,10 @@ def run_test():
             all_keys_found = False
 
     if all_keys_found:
-        print("\n[SUCCESS] Alle erwarteten Platzhalter für Seite 3 wurden berechnet.")
+        print("\nAlle erwarteten Platzhalter für Seite 3 wurden berechnet.")
     else:
         print(
-            "\n[FEHLER] Nicht alle Platzhalter wurden im Ergebnis gefunden. Bitte `placeholders.py` prüfen.")
+            "\nNicht alle Platzhalter wurden im Ergebnis gefunden. Bitte `placeholders.py` prüfen.")
 
     print("--- Test beendet ---")
 

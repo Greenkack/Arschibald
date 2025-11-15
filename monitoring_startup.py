@@ -32,41 +32,41 @@ def verify_monitoring_setup() -> dict:
     try:
         from app_tracing import app_tracer, initialize_tracing
         status["tracing"] = True
-        logger.info("[OK] Tracing module available")
+        logger.info("Tracing module available")
     except ImportError as e:
-        logger.warning(f"[WARNING] Tracing not available: {e}")
+        logger.warning(f"Tracing not available: {e}")
     
     # Check evaluation
     try:
         from app_evaluation import evaluation_system
         status["evaluation"] = True
-        logger.info("[OK] Evaluation module available")
+        logger.info("Evaluation module available")
     except ImportError as e:
-        logger.warning(f"[WARNING] Evaluation not available: {e}")
+        logger.warning(f"Evaluation not available: {e}")
     
     # Check diagnostics
     try:
         from app_diagnostics import ApplicationScanner
         status["diagnostics"] = True
-        logger.info("[OK] Diagnostics module available")
+        logger.info("Diagnostics module available")
     except ImportError as e:
-        logger.warning(f"[WARNING] Diagnostics not available: {e}")
+        logger.warning(f"Diagnostics not available: {e}")
     
     # Check health monitor
     try:
         from app_health_monitor import health_monitor
         status["health_monitor"] = True
-        logger.info("[OK] Health monitor available")
+        logger.info("Health monitor available")
     except ImportError as e:
-        logger.warning(f"[WARNING] Health monitor not available: {e}")
+        logger.warning(f"Health monitor not available: {e}")
     
     # Check dashboard
     try:
         from monitoring_dashboard import render_monitoring_dashboard
         status["dashboard"] = True
-        logger.info("[OK] Monitoring dashboard available")
+        logger.info("Monitoring dashboard available")
     except ImportError as e:
-        logger.warning(f"[WARNING] Dashboard not available: {e}")
+        logger.warning(f"Dashboard not available: {e}")
     
     # Overall status
     status["overall"] = all([
@@ -92,7 +92,7 @@ def initialize_monitoring(auto_start: bool = False):
     status = verify_monitoring_setup()
     
     if not status["overall"]:
-        logger.error("[ERROR] Monitoring system incomplete - check installation")
+        logger.error("Monitoring system incomplete - check installation")
         logger.info("\nTo install missing components:")
         logger.info("  pip install opentelemetry-api opentelemetry-sdk")
         logger.info("  pip install opentelemetry-exporter-otlp-proto-http")
@@ -110,24 +110,24 @@ def initialize_monitoring(auto_start: bool = False):
             
             initialize_tracing()
             atexit.register(shutdown_tracing)
-            logger.info("[OK] Tracing initialized")
+            logger.info("Tracing initialized")
         except Exception as e:
-            logger.error(f"[ERROR] Failed to initialize tracing: {e}")
+            logger.error(f"Failed to initialize tracing: {e}")
     
     # Start health monitoring if requested
     if auto_start and status["health_monitor"]:
         try:
             from app_health_monitor import start_health_monitoring
             start_health_monitoring(interval=60)
-            logger.info("[OK] Health monitoring started (60s interval)")
+            logger.info("Health monitoring started (60s interval)")
         except Exception as e:
-            logger.error(f"[ERROR] Failed to start health monitoring: {e}")
+            logger.error(f"Failed to start health monitoring: {e}")
     
     logger.info("="*80)
     logger.info("MONITORING READY")
     logger.info("="*80)
     logger.info("\nAccess dashboard:")
-    logger.info("  Streamlit: Sidebar → [CHART] Monitoring")
+    logger.info("  Streamlit: Sidebar → Monitoring")
     logger.info("\nManual commands:")
     logger.info("  Code Analysis: python app_diagnostics.py")
     logger.info("  Health Report: python app_health_monitor.py --report")
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     
     if args.verify_only:
         status = verify_monitoring_setup()
-        print(f"\nMonitoring Status: {'[OK] READY' if status['overall'] else '[ERROR] INCOMPLETE'}")
+        print(f"\nMonitoring Status: {'READY' if status['overall'] else 'INCOMPLETE'}")
         sys.exit(0 if status['overall'] else 1)
     else:
         status = initialize_monitoring(auto_start=args.auto_start)

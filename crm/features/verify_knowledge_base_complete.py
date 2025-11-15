@@ -2,15 +2,15 @@
 Verification Script for Knowledge Base Implementation (Task 17)
 
 Überprüft, dass alle Anforderungen erfüllt sind:
-1. [OK] Datenbank-Tabellen (kb_articles, kb_categories, kb_ratings)
-2. [OK] KnowledgeBaseManager Modul
-3. [OK] Artikel-CRUD-Funktionen
-4. [OK] Markdown-Unterstützung
-5. [OK] Kategorien-Hierarchie
-6. [OK] Volltextsuche (SQLite FTS5)
-7. [OK] Bewertungssystem
-8. [OK] E-Mail-Share-Funktion
-9. [OK] Wissensdatenbank-UI
+1. Datenbank-Tabellen (kb_articles, kb_categories, kb_ratings)
+2. KnowledgeBaseManager Modul
+3. Artikel-CRUD-Funktionen
+4. Markdown-Unterstützung
+5. Kategorien-Hierarchie
+6. Volltextsuche (SQLite FTS5)
+7. Bewertungssystem
+8. E-Mail-Share-Funktion
+9. Wissensdatenbank-UI
 
 Author: CRM System Enhancement
 Date: 2024
@@ -34,7 +34,7 @@ def verify_database_tables():
     
     conn = get_db_connection()
     if not conn:
-        print("[ERROR] Keine Datenbankverbindung möglich")
+        print("Keine Datenbankverbindung möglich")
         return False
     
     cursor = conn.cursor()
@@ -45,9 +45,9 @@ def verify_database_tables():
     for table in tables:
         cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table,))
         if cursor.fetchone():
-            print(f"[OK] Tabelle '{table}' existiert")
+            print(f"Tabelle '{table}' existiert")
         else:
-            print(f"[ERROR] Tabelle '{table}' fehlt")
+            print(f"Tabelle '{table}' fehlt")
             conn.close()
             return False
     
@@ -56,9 +56,9 @@ def verify_database_tables():
     for trigger in triggers:
         cursor.execute(f"SELECT name FROM sqlite_master WHERE type='trigger' AND name=?", (trigger,))
         if cursor.fetchone():
-            print(f"[OK] Trigger '{trigger}' existiert")
+            print(f"Trigger '{trigger}' existiert")
         else:
-            print(f"[ERROR] Trigger '{trigger}' fehlt")
+            print(f"Trigger '{trigger}' fehlt")
     
     conn.close()
     return True
@@ -72,27 +72,27 @@ def verify_knowledge_base_manager():
     
     conn = get_db_connection()
     if not conn:
-        print("[ERROR] Keine Datenbankverbindung möglich")
+        print("Keine Datenbankverbindung möglich")
         return False
     
     kb_manager = KnowledgeBaseManager(conn)
     
     # Test Kategorien-CRUD
-    print("\n[FOLDER] Kategorien-CRUD:")
+    print("\nKategorien-CRUD:")
     cat_id = kb_manager.create_category(name="Test-Kategorie", icon="📚")
-    print(f"  [OK] Kategorie erstellt (ID: {cat_id})")
+    print(f"  Kategorie erstellt (ID: {cat_id})")
     
     category = kb_manager.get_category(cat_id)
     assert category['name'] == "Test-Kategorie"
-    print(f"  [OK] Kategorie geladen")
+    print(f"  Kategorie geladen")
     
     kb_manager.update_category(cat_id, name="Aktualisierte Kategorie")
     category = kb_manager.get_category(cat_id)
     assert category['name'] == "Aktualisierte Kategorie"
-    print(f"  [OK] Kategorie aktualisiert")
+    print(f"  Kategorie aktualisiert")
     
     # Test Artikel-CRUD
-    print("\n[NOTE] Artikel-CRUD:")
+    print("\nArtikel-CRUD:")
     article_id = kb_manager.create_article(
         title="Test-Artikel",
         content="# Überschrift\n\nDies ist ein **Markdown** Test.",
@@ -100,30 +100,30 @@ def verify_knowledge_base_manager():
         tags="test, markdown",
         is_published=True
     )
-    print(f"  [OK] Artikel erstellt (ID: {article_id})")
+    print(f"  Artikel erstellt (ID: {article_id})")
     
     article = kb_manager.get_article(article_id)
     assert article['title'] == "Test-Artikel"
     assert "Markdown" in article['content']
-    print(f"  [OK] Artikel geladen (mit Markdown-Inhalt)")
+    print(f"  Artikel geladen (mit Markdown-Inhalt)")
     
     kb_manager.update_article(article_id, title="Aktualisierter Artikel")
     article = kb_manager.get_article(article_id)
     assert article['title'] == "Aktualisierter Artikel"
-    print(f"  [OK] Artikel aktualisiert")
+    print(f"  Artikel aktualisiert")
     
     # Test Kategorien-Hierarchie
     print("\n🌳 Kategorien-Hierarchie:")
     child_id = kb_manager.create_category(name="Unterkategorie", parent_id=cat_id)
     tree = kb_manager.get_category_tree()
     assert len(tree) > 0
-    print(f"  [OK] Kategorien-Baum erstellt und geladen")
+    print(f"  Kategorien-Baum erstellt und geladen")
     
     # Test Volltextsuche
-    print("\n[SEARCH] Volltextsuche (SQLite FTS5):")
+    print("\nVolltextsuche (SQLite FTS5):")
     results = kb_manager.search_articles("Markdown")
     assert len(results) > 0
-    print(f"  [OK] Volltextsuche funktioniert ({len(results)} Ergebnisse)")
+    print(f"  Volltextsuche funktioniert ({len(results)} Ergebnisse)")
     
     # Test Bewertungssystem
     print("\n⭐ Bewertungssystem:")
@@ -132,17 +132,17 @@ def verify_knowledge_base_manager():
     
     ratings = kb_manager.get_article_ratings(article_id)
     assert len(ratings) == 2
-    print(f"  [OK] Bewertungen erstellt ({len(ratings)} Bewertungen)")
+    print(f"  Bewertungen erstellt ({len(ratings)} Bewertungen)")
     
     stats = kb_manager.get_article_rating_stats(article_id)
     assert stats['count'] == 2
     assert stats['avg_rating'] == 4.5
-    print(f"  [OK] Bewertungs-Statistiken: Ø {stats['avg_rating']} ({stats['count']} Bewertungen)")
+    print(f"  Bewertungs-Statistiken: Ø {stats['avg_rating']} ({stats['count']} Bewertungen)")
     
     # Test Statistiken
-    print("\n[CHART] Statistiken:")
+    print("\nStatistiken:")
     overall_stats = kb_manager.get_statistics()
-    print(f"  [OK] Gesamt-Statistiken:")
+    print(f"  Gesamt-Statistiken:")
     print(f"     - Artikel: {overall_stats['total_articles']}")
     print(f"     - Kategorien: {overall_stats['total_categories']}")
     print(f"     - Bewertungen: {overall_stats['total_ratings']}")
@@ -151,7 +151,7 @@ def verify_knowledge_base_manager():
     kb_manager.delete_article(article_id)
     kb_manager.delete_category(child_id)
     kb_manager.delete_category(cat_id)
-    print("\n  [OK] Cleanup erfolgreich")
+    print("\n  Cleanup erfolgreich")
     
     conn.close()
     return True
@@ -172,8 +172,8 @@ def verify_ui_module():
             render_statistics_tab,
             send_article_email
         )
-        print("[OK] UI-Modul erfolgreich importiert")
-        print("[OK] Alle UI-Funktionen verfügbar:")
+        print("UI-Modul erfolgreich importiert")
+        print("Alle UI-Funktionen verfügbar:")
         print("   - render_knowledge_base_ui()")
         print("   - render_search_tab()")
         print("   - render_articles_tab()")
@@ -182,7 +182,7 @@ def verify_ui_module():
         print("   - send_article_email() (E-Mail-Share-Funktion)")
         return True
     except ImportError as e:
-        print(f"[ERROR] UI-Modul konnte nicht importiert werden: {e}")
+        print(f"UI-Modul konnte nicht importiert werden: {e}")
         return False
 
 
@@ -194,13 +194,13 @@ def verify_email_share_function():
     
     try:
         from crm.features.knowledge_base_ui import send_article_email
-        print("[OK] E-Mail-Share-Funktion 'send_article_email()' verfügbar")
+        print("E-Mail-Share-Funktion 'send_article_email()' verfügbar")
         print("   - Unterstützt SMTP-Konfiguration")
         print("   - Sendet Artikel per E-Mail")
         print("   - HTML und Text-Format")
         return True
     except ImportError as e:
-        print(f"[ERROR] E-Mail-Share-Funktion nicht verfügbar: {e}")
+        print(f"E-Mail-Share-Funktion nicht verfügbar: {e}")
         return False
 
 
@@ -212,7 +212,7 @@ def verify_markdown_support():
     
     conn = get_db_connection()
     if not conn:
-        print("[ERROR] Keine Datenbankverbindung möglich")
+        print("Keine Datenbankverbindung möglich")
         return False
     
     kb_manager = KnowledgeBaseManager(conn)
@@ -254,8 +254,8 @@ def hello():
     assert "```python" in article['content']
     assert "[Google]" in article['content']
     
-    print("[OK] Markdown-Inhalt wird korrekt gespeichert")
-    print("[OK] UI rendert Markdown mit st.markdown()")
+    print("Markdown-Inhalt wird korrekt gespeichert")
+    print("UI rendert Markdown mit st.markdown()")
     
     kb_manager.delete_article(article_id)
     conn.close()
@@ -293,7 +293,7 @@ def main():
     
     all_passed = True
     for name, passed in results:
-        status = "[OK] BESTANDEN" if passed else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if passed else "FEHLGESCHLAGEN"
         print(f"{status}: {name}")
         if not passed:
             all_passed = False
@@ -303,20 +303,20 @@ def main():
         print("🎉 ALLE ANFORDERUNGEN ERFÜLLT!")
         print("=" * 70)
         print("\nTask 17 ist vollständig implementiert:")
-        print("  [OK] Datenbank-Tabellen (kb_articles, kb_categories, kb_ratings)")
-        print("  [OK] KnowledgeBaseManager Modul")
-        print("  [OK] Artikel-CRUD-Funktionen")
-        print("  [OK] Markdown-Unterstützung")
-        print("  [OK] Kategorien-Hierarchie")
-        print("  [OK] Volltextsuche (SQLite FTS5)")
-        print("  [OK] Bewertungssystem")
-        print("  [OK] E-Mail-Share-Funktion")
-        print("  [OK] Wissensdatenbank-UI")
-        print("  [OK] Umfassende Tests (22 Tests)")
+        print("  Datenbank-Tabellen (kb_articles, kb_categories, kb_ratings)")
+        print("  KnowledgeBaseManager Modul")
+        print("  Artikel-CRUD-Funktionen")
+        print("  Markdown-Unterstützung")
+        print("  Kategorien-Hierarchie")
+        print("  Volltextsuche (SQLite FTS5)")
+        print("  Bewertungssystem")
+        print("  E-Mail-Share-Funktion")
+        print("  Wissensdatenbank-UI")
+        print("  Umfassende Tests (22 Tests)")
         print("\n" + "=" * 70)
         return 0
     else:
-        print("[ERROR] EINIGE ANFORDERUNGEN NICHT ERFÜLLT")
+        print("EINIGE ANFORDERUNGEN NICHT ERFÜLLT")
         print("=" * 70)
         return 1
 

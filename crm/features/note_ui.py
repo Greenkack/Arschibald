@@ -76,7 +76,7 @@ def render_activity_timeline(customer_id: int, show_filters: bool = True):
         
         with col1:
             search_term = st.text_input(
-                "[SEARCH] Suche",
+                "Suche",
                 placeholder="Suche in Titel und Inhalt...",
                 key=f"activity_search_{customer_id}"
             )
@@ -139,15 +139,15 @@ def render_activity_card(activity: Dict[str, Any], customer_id: int):
     
     # Icon basierend auf Typ
     type_icons = {
-        "note": "[NOTE]",
+        "note": "",
         "email": "📧",
         "call": "📞",
         "appointment": "📅",
         "meeting": "👥",
-        "task": "[OK]",
-        "other": "[FILE]"
+        "task": "",
+        "other": ""
     }
-    icon = type_icons.get(activity["activity_type"], "[FILE]")
+    icon = type_icons.get(activity["activity_type"], "")
     
     # Container für Aktivität
     with st.container():
@@ -251,12 +251,12 @@ def render_edit_activity_dialog(activity: Dict[str, Any], customer_id: int):
                     st.error("Fehler beim Aktualisieren!")
         
         with col2:
-            if st.form_submit_button("[ERROR] Abbrechen", use_container_width=True):
+            if st.form_submit_button("Abbrechen", use_container_width=True):
                 st.session_state[f"edit_activity_{activity_id}"] = False
                 st.rerun()
         
         with col3:
-            if st.form_submit_button("[DELETE] Löschen", use_container_width=True):
+            if st.form_submit_button("Löschen", use_container_width=True):
                 if delete_activity(activity_id):
                     st.success("Aktivität gelöscht!")
                     st.session_state[f"edit_activity_{activity_id}"] = False
@@ -315,7 +315,7 @@ def render_add_activity_form(customer_id: int):
                 )
                 
                 if activity_id:
-                    st.success(f"[OK] Aktivität erstellt! (ID: {activity_id})")
+                    st.success(f"Aktivität erstellt! (ID: {activity_id})")
                     st.rerun()
                 else:
                     st.error("Fehler beim Erstellen der Aktivität!")
@@ -333,7 +333,7 @@ def render_quick_add_buttons(customer_id: int):
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        if st.button("[NOTE] Notiz", key=f"quick_note_{customer_id}", use_container_width=True):
+        if st.button("Notiz", key=f"quick_note_{customer_id}", use_container_width=True):
             st.session_state[f"quick_add_type_{customer_id}"] = "note"
     
     with col2:
@@ -387,14 +387,14 @@ def render_quick_add_form(customer_id: int, activity_type: str):
                     )
                     
                     if activity_id:
-                        st.success("[OK] Gespeichert!")
+                        st.success("Gespeichert!")
                         st.session_state[f"quick_add_type_{customer_id}"] = None
                         st.rerun()
                     else:
                         st.error("Fehler beim Speichern!")
         
         with col2:
-            if st.form_submit_button("[ERROR] Abbrechen", use_container_width=True):
+            if st.form_submit_button("Abbrechen", use_container_width=True):
                 st.session_state[f"quick_add_type_{customer_id}"] = None
                 st.rerun()
 
@@ -418,11 +418,11 @@ def render_activity_summary(customer_id: int):
     st.write("**Letzte Aktivitäten:**")
     for activity in recent:
         icon = {
-            "note": "[NOTE]",
+            "note": "",
             "email": "📧",
             "call": "📞",
             "appointment": "📅"
-        }.get(activity["activity_type"], "[FILE]")
+        }.get(activity["activity_type"], "")
         
         try:
             created_date = datetime.strptime(activity["created_at"], "%Y-%m-%d %H:%M:%S")

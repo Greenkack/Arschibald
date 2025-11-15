@@ -176,7 +176,7 @@ def create_user_friendly_error_message(error: PriceMatrixError) -> str:
     """
     if error.error_type == 'no_matrix':
         return (
-            "[ERROR] Keine Preismatrix gefunden.\n\n"
+            "Keine Preismatrix gefunden.\n\n"
             "Lösungsvorschläge:\n"
             "• Aktivieren Sie eine Preismatrix im Admin-Bereich\n"
             "• Laden Sie eine neue Preismatrix hoch\n"
@@ -188,7 +188,7 @@ def create_user_friendly_error_message(error: PriceMatrixError) -> str:
         module_count = details.get('module_count')
         available = details.get('available_counts', [])
         
-        msg = f"[ERROR] Modulanzahl {module_count} nicht in Preismatrix gefunden.\n\n"
+        msg = f"Modulanzahl {module_count} nicht in Preismatrix gefunden.\n\n"
         
         if available:
             # Finde nächste verfügbare Modulanzahl
@@ -217,7 +217,7 @@ def create_user_friendly_error_message(error: PriceMatrixError) -> str:
         storage_model = details.get('storage_model')
         available = details.get('available_models', [])
         
-        msg = f"[ERROR] Speichermodell '{storage_model}' nicht in Preismatrix gefunden.\n\n"
+        msg = f"Speichermodell '{storage_model}' nicht in Preismatrix gefunden.\n\n"
         
         if available:
             msg += "Verfügbare Speichermodelle:\n"
@@ -243,7 +243,7 @@ def create_user_friendly_error_message(error: PriceMatrixError) -> str:
         col = details.get('column_label')
         
         return (
-            f"[ERROR] Kein Preis für Kombination {row} Module + {col} definiert.\n\n"
+            f"Kein Preis für Kombination {row} Module + {col} definiert.\n\n"
             "Lösungsvorschläge:\n"
             "• Ergänzen Sie den fehlenden Preis in der Matrix\n"
             "• Wählen Sie eine andere Kombination\n"
@@ -257,7 +257,7 @@ def create_user_friendly_error_message(error: PriceMatrixError) -> str:
         value = details.get('invalid_value')
         
         return (
-            f"[ERROR] Ungültiger Preiswert in Zelle ({row}, {col}): {value}\n\n"
+            f"Ungültiger Preiswert in Zelle ({row}, {col}): {value}\n\n"
             "Lösungsvorschläge:\n"
             "• Korrigieren Sie den Preiswert in der Matrix\n"
             "• Preiswerte müssen numerisch und positiv sein\n"
@@ -265,7 +265,7 @@ def create_user_friendly_error_message(error: PriceMatrixError) -> str:
         )
     
     else:
-        return f"[ERROR] Fehler bei der Preisberechnung: {str(error)}"
+        return f"Fehler bei der Preisberechnung: {str(error)}"
 
 
 def get_fallback_price(

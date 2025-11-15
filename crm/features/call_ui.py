@@ -152,7 +152,7 @@ def render_call_dialog(customer_id: int, customer_name: str, phone_numbers: list
             )
             
             if call_id:
-                st.success(f"[OK] Anruf erfolgreich protokolliert! (Dauer: {format_duration(duration)})")
+                st.success(f"Anruf erfolgreich protokolliert! (Dauer: {format_duration(duration)})")
                 # Reset Timer
                 st.session_state.call_timer_running = False
                 st.session_state.call_timer_start = None
@@ -160,10 +160,10 @@ def render_call_dialog(customer_id: int, customer_name: str, phone_numbers: list
                 time.sleep(1)
                 st.rerun()
             else:
-                st.error("[ERROR] Fehler beim Speichern des Anrufs.")
+                st.error("Fehler beim Speichern des Anrufs.")
     
     with col_cancel:
-        if st.button("[ERROR] Abbrechen", use_container_width=True):
+        if st.button("Abbrechen", use_container_width=True):
             # Reset Timer
             st.session_state.call_timer_running = False
             st.session_state.call_timer_start = None
@@ -239,7 +239,7 @@ def render_call_list(customer_id: int, limit: int = 20):
             # Aktionen
             action_col1, action_col2 = st.columns([1, 1])
             with action_col1:
-                if st.button("[DELETE] Löschen", key=f"delete_call_{call['id']}"):
+                if st.button("Löschen", key=f"delete_call_{call['id']}"):
                     if delete_call(call['id']):
                         st.success("Anruf gelöscht!")
                         st.rerun()
@@ -260,7 +260,7 @@ def render_call_statistics(customer_id: int):
         st.info("Noch keine Anruf-Statistiken verfügbar.")
         return
     
-    st.subheader("[CHART] Anruf-Statistiken")
+    st.subheader("Anruf-Statistiken")
     
     col1, col2, col3, col4 = st.columns(4)
     

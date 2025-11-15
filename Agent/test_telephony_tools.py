@@ -53,7 +53,7 @@ def test_call_transcript():
     assert "Customer seems interested" in summary
     assert "Consultation scheduled" in summary
 
-    print("[OK] CallTranscript test passed")
+    print("CallTranscript test passed")
 
 
 def test_call_protocol_manager():
@@ -74,7 +74,7 @@ def test_call_protocol_manager():
     assert len(protocol.strategies) > 0
     assert len(protocol.key_points) > 0
 
-    print("[OK] CallProtocolManager test passed")
+    print("CallProtocolManager test passed")
 
 
 def test_protocol_functions():
@@ -96,7 +96,7 @@ def test_protocol_functions():
     assert 'OBJECTION DETECTED' in response
     assert 'VALIDATE' in response
 
-    print("[OK] Protocol functions test passed")
+    print("Protocol functions test passed")
 
 
 def test_telephony_tools_list():
@@ -116,7 +116,7 @@ def test_telephony_tools_list():
     assert 'get_call_protocol_guide' in tool_names
     assert 'handle_customer_objection' in tool_names
 
-    print(f"[OK] Telephony tools test passed ({len(tools)} tools available)")
+    print(f"Telephony tools test passed ({len(tools)} tools available)")
 
 
 def test_objection_handling():
@@ -134,9 +134,9 @@ def test_objection_handling():
         response = manager.get_objection_response(objection)
         if response:
             assert len(response) > 0
-            print(f"  [OK] Found response for: {objection}")
+            print(f"  Found response for: {objection}")
 
-    print("[OK] Objection handling test passed")
+    print("Objection handling test passed")
 
 
 def test_argument_structure():
@@ -156,7 +156,7 @@ def test_argument_structure():
     assert "DATA-DRIVEN ARGUMENT" in argument
     assert facts[0] in argument
 
-    print("[OK] Argument structure test passed")
+    print("Argument structure test passed")
 
 
 def test_closing_statement():
@@ -172,7 +172,7 @@ def test_closing_statement():
     assert next_step in closing
     assert "Vielen Dank" in closing
 
-    print("[OK] Closing statement test passed")
+    print("Closing statement test passed")
 
 
 def run_all_tests():
@@ -191,13 +191,13 @@ def run_all_tests():
         test_closing_statement()
 
         print("\n" + "=" * 60)
-        print("[OK] ALL TESTS PASSED")
+        print("ALL TESTS PASSED")
         print("=" * 60 + "\n")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False

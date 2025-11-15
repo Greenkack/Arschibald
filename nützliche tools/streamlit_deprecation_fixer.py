@@ -42,17 +42,17 @@ def fix_streamlit_deprecations(directory="."):
                     content = re.sub(old_pattern, new_replacement, content)
                     file_fixes += matches
                     print(
-                        f"  [OK] {matches}x '{old_pattern}' -> '{new_replacement}'")
+                        f"  {matches}x '{old_pattern}' -> '{new_replacement}'")
 
             if content != original_content:
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
                 fixed_files += 1
                 total_fixes += file_fixes
-                print(f"[TOOL] {os.path.basename(file_path)}: {file_fixes} Fixes")
+                print(f"{os.path.basename(file_path)}: {file_fixes} Fixes")
 
         except Exception as e:
-            print(f"[ERROR] Fehler bei {file_path}: {e}")
+            print(f"Fehler bei {file_path}: {e}")
 
     print(f"\n🎉 {fixed_files} Dateien repariert, {total_fixes} Fixes insgesamt!")
 

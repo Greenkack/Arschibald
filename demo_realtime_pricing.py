@@ -43,7 +43,7 @@ def simulate_realtime_pricing_updates():
     # Basis-Matrixpreis abrufen
     matrix_price, errors = price_matrix.get_price(
         module_count, storage_model, True)
-    print("[CHART] Basis-Setup:")
+    print("Basis-Setup:")
     print(f"   Module: {module_count} Stück")
     print(f"   Speicher: {storage_model}")
     print(f"   Matrixpreis: {matrix_price:,.2f}€")
@@ -100,8 +100,8 @@ def simulate_realtime_pricing_updates():
         current_price_netto = result['final_price_netto']
         current_price_brutto = result['final_price_brutto']
 
-        print(f"   [MONEY] Preis (netto): {current_price_netto:,.2f}€")
-        print(f"   [MONEY] Preis (brutto): {current_price_brutto:,.2f}€")
+        print(f"   Preis (netto): {current_price_netto:,.2f}€")
+        print(f"   Preis (brutto): {current_price_brutto:,.2f}€")
 
         if previous_price is not None:
             change = current_price_netto - previous_price
@@ -112,7 +112,7 @@ def simulate_realtime_pricing_updates():
 
             if change > 0:
                 print(
-                    f"   [STATS] Änderung: +{change:,.2f}€ (+{change_percent:.1f}%)")
+                    f"   Änderung: +{change:,.2f}€ (+{change_percent:.1f}%)")
             elif change < 0:
                 print(f"   [DOWN] Änderung: {change:,.2f}€ ({change_percent:.1f}%)")
             else:
@@ -136,7 +136,7 @@ def simulate_realtime_pricing_updates():
         previous_price = current_price_netto
 
     print("\n" + "=" * 60)
-    print("[OK] Echtzeit-Preisberechnung erfolgreich demonstriert!")
+    print("Echtzeit-Preisberechnung erfolgreich demonstriert!")
     print("   - Jede Änderung wird sofort berechnet")
     print("   - Korrekte Formel: Matrixpreis + Zubehör - Rabatte")
     print("   - Transparente Preisänderungen")
@@ -194,13 +194,13 @@ def demonstrate_different_matrix_scenarios():
               f"{(matrix_price + additional_costs) * 0.97:8,.0f}€ | "
               f"{result['final_price_netto']:8,.0f}€")
 
-    print("\n[OK] Verschiedene Matrix-Szenarien erfolgreich getestet!")
+    print("\nVerschiedene Matrix-Szenarien erfolgreich getestet!")
 
 
 def main():
     """Hauptfunktion für die Demonstration"""
 
-    print("[LAUNCH] DEMONSTRATION: Korrekte Zusatzkosten-Integration")
+    print("DEMONSTRATION: Korrekte Zusatzkosten-Integration")
     print("Task 8: Integriere Zusatzkosten-Berechnung korrekt")
     print("=" * 80)
 
@@ -214,21 +214,21 @@ def main():
         print("\n" + "=" * 80)
         print("🎉 DEMONSTRATION ERFOLGREICH ABGESCHLOSSEN!")
         print("\n📋 Implementierte Anforderungen (Task 8):")
-        print("   [OK] Matrixpreis wird als Basis verwendet")
-        print("   [OK] Korrekte Formel: Matrixpreis + Zubehör - Rabatte")
-        print("   [OK] Echtzeit-Aktualisierung bei Änderungen")
-        print("   [OK] Endpreis-Berechnung mit verschiedenen Szenarien")
-        print("\n[CHART] Erfüllte Requirements:")
-        print("   [OK] 5.1: Zubehör wird zum Matrixpreis hinzugefügt")
-        print("   [OK] 5.2: Rabatte werden vom Matrixpreis abgezogen")
-        print("   [OK] 5.3: Korrekte Formel implementiert")
-        print("   [OK] 5.4: Endpreis zeigt alle Optionen")
-        print("   [OK] 5.5: Echtzeit-Aktualisierung funktioniert")
+        print("   Matrixpreis wird als Basis verwendet")
+        print("   Korrekte Formel: Matrixpreis + Zubehör - Rabatte")
+        print("   Echtzeit-Aktualisierung bei Änderungen")
+        print("   Endpreis-Berechnung mit verschiedenen Szenarien")
+        print("\nErfüllte Requirements:")
+        print("   5.1: Zubehör wird zum Matrixpreis hinzugefügt")
+        print("   5.2: Rabatte werden vom Matrixpreis abgezogen")
+        print("   5.3: Korrekte Formel implementiert")
+        print("   5.4: Endpreis zeigt alle Optionen")
+        print("   5.5: Echtzeit-Aktualisierung funktioniert")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] DEMONSTRATION FEHLGESCHLAGEN: {str(e)}")
+        print(f"\nDEMONSTRATION FEHLGESCHLAGEN: {str(e)}")
         import traceback
         traceback.print_exc()
         return False

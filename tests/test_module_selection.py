@@ -28,10 +28,10 @@ def test_module_selection_imports():
             ModuleGroup,
             build_scene
         )
-        print("[OK] Alle erforderlichen Klassen importiert")
+        print("Alle erforderlichen Klassen importiert")
         return True
     except ImportError as e:
-        print(f"[ERROR] Import-Fehler: {e}")
+        print(f"Import-Fehler: {e}")
         return False
 
 
@@ -54,7 +54,7 @@ def test_module_transform_creation():
             offset_z=0.1
         )
         
-        print(f"[OK] ModuleTransform erstellt: Index={transform1.index}, "
+        print(f"ModuleTransform erstellt: Index={transform1.index}, "
               f"Azimuth={transform1.azimuth_deg}°, Tilt={transform1.tilt_deg}°")
         
         # Teste to_dict und from_dict
@@ -65,7 +65,7 @@ def test_module_transform_creation():
         assert transform2.azimuth_deg == transform1.azimuth_deg
         assert transform2.tilt_deg == transform1.tilt_deg
         
-        print("[OK] to_dict() und from_dict() funktionieren korrekt")
+        print("to_dict() und from_dict() funktionieren korrekt")
         
         # Teste Validierung
         try:
@@ -74,15 +74,15 @@ def test_module_transform_creation():
                 azimuth_deg=400.0,  # Ungültig: > 360°
                 tilt_deg=25.0
             )
-            print("[ERROR] Validierung fehlgeschlagen: Ungültiger Azimuth wurde akzeptiert")
+            print("Validierung fehlgeschlagen: Ungültiger Azimuth wurde akzeptiert")
             return False
         except ValueError:
-            print("[OK] Validierung funktioniert: Ungültige Werte werden abgelehnt")
+            print("Validierung funktioniert: Ungültige Werte werden abgelehnt")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -106,23 +106,23 @@ def test_module_group_creation():
             color="#000000"
         )
         
-        print(f"[OK] ModuleGroup erstellt: Name='{group.name}', "
+        print(f"ModuleGroup erstellt: Name='{group.name}', "
               f"Module={len(group.module_indices)}")
         
         # Teste add_module
         group.add_module(5)
         assert 5 in group.module_indices
-        print("[OK] add_module() funktioniert")
+        print("add_module() funktioniert")
         
         # Teste remove_module
         group.remove_module(5)
         assert 5 not in group.module_indices
-        print("[OK] remove_module() funktioniert")
+        print("remove_module() funktioniert")
         
         # Teste has_module
         assert group.has_module(0) == True
         assert group.has_module(99) == False
-        print("[OK] has_module() funktioniert")
+        print("has_module() funktioniert")
         
         # Teste to_dict und from_dict
         group_dict = group.to_dict()
@@ -130,12 +130,12 @@ def test_module_group_creation():
         
         assert group2.name == group.name
         assert group2.module_indices == group.module_indices
-        print("[OK] to_dict() und from_dict() funktionieren korrekt")
+        print("to_dict() und from_dict() funktionieren korrekt")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -159,7 +159,7 @@ def test_advanced_layout_config():
             enable_shading_analysis=False
         )
         
-        print("[OK] AdvancedLayoutConfig erstellt")
+        print("AdvancedLayoutConfig erstellt")
         
         # Füge ModuleTransform hinzu
         transform = ModuleTransform(
@@ -172,7 +172,7 @@ def test_advanced_layout_config():
         )
         config.module_transforms[0] = transform
         
-        print(f"[OK] ModuleTransform hinzugefügt: {len(config.module_transforms)} Transform(s)")
+        print(f"ModuleTransform hinzugefügt: {len(config.module_transforms)} Transform(s)")
         
         # Füge ModuleGroup hinzu
         group = ModuleGroup(
@@ -183,7 +183,7 @@ def test_advanced_layout_config():
         )
         config.module_groups["Testgruppe"] = group
         
-        print(f"[OK] ModuleGroup hinzugefügt: {len(config.module_groups)} Gruppe(n)")
+        print(f"ModuleGroup hinzugefügt: {len(config.module_groups)} Gruppe(n)")
         
         # Teste JSON-Serialisierung
         json_str = config.to_json()
@@ -193,12 +193,12 @@ def test_advanced_layout_config():
         assert len(config2.module_groups) == len(config.module_groups)
         assert config2.enable_collision_detection == config.enable_collision_detection
         
-        print("[OK] JSON-Serialisierung funktioniert korrekt")
+        print("JSON-Serialisierung funktioniert korrekt")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -236,7 +236,7 @@ def test_build_scene_with_selected_modules():
             selected_modules=[]
         )
         
-        print(f"[OK] Szene erstellt: {len(panels1.get('main', []))} Hauptdach-Module")
+        print(f"Szene erstellt: {len(panels1.get('main', []))} Hauptdach-Module")
         plotter1.close()
         
         # Teste mit ausgewählten Modulen
@@ -251,14 +251,14 @@ def test_build_scene_with_selected_modules():
             selected_modules=[0, 1, 2]
         )
         
-        print(f"[OK] Szene mit Hervorhebung erstellt: {len(panels2.get('main', []))} Module")
-        print("[OK] Module 0, 1, 2 sollten orange/gelb hervorgehoben sein")
+        print(f"Szene mit Hervorhebung erstellt: {len(panels2.get('main', []))} Module")
+        print("Module 0, 1, 2 sollten orange/gelb hervorgehoben sein")
         plotter2.close()
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -287,7 +287,7 @@ def test_apply_module_transform():
         base_position = (5.0, 3.0, 6.0)
         panel = apply_module_transform(base_position, transform)
         
-        print(f"[OK] Modul-Transform angewendet")
+        print(f"Modul-Transform angewendet")
         print(f"  Basis-Position: {base_position}")
         print(f"  Azimuth: {transform.azimuth_deg}°")
         print(f"  Neigung: {transform.tilt_deg}°")
@@ -298,12 +298,12 @@ def test_apply_module_transform():
         assert panel is not None
         assert panel.n_points > 0
         
-        print("[OK] apply_module_transform funktioniert korrekt")
+        print("apply_module_transform funktioniert korrekt")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -338,7 +338,7 @@ def run_all_tests():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{name}: {status}")
     
     print("\n" + "=" * 70)
@@ -349,7 +349,7 @@ def run_all_tests():
         print("\n🎉 Alle Tests erfolgreich! Task 14 ist vollständig implementiert.")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen. Bitte überprüfen Sie die Implementierung.")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen. Bitte überprüfen Sie die Implementierung.")
         return False
 
 

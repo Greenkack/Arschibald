@@ -38,14 +38,14 @@ def test_imports():
             render_analysis_panel,
             render_export_options
         )
-        print("[OK] UI Components importiert")
+        print("UI Components importiert")
         
         from utils.pv3d_analysis import (
             run_optimization_assistant,
             calculate_shading_analysis,
             calculate_yield_heatmap
         )
-        print("[OK] Analysis Module importiert")
+        print("Analysis Module importiert")
         
         from utils.pv3d_export import (
             export_screenshot,
@@ -53,32 +53,32 @@ def test_imports():
             export_360_animation,
             export_3d_model
         )
-        print("[OK] Export Module importiert")
+        print("Export Module importiert")
         
         from utils.pv3d_optimization import (
             optimize_layout,
             evaluate_configuration
         )
-        print("[OK] Optimization Module importiert")
+        print("Optimization Module importiert")
         
         from utils.pv3d_plotly import (
             BuildingDims,
             AdvancedLayoutConfig,
             build_plotly_scene
         )
-        print("[OK] Plotly Module importiert")
+        print("Plotly Module importiert")
         
         from utils.pv3d_performance import PerformanceMonitor
-        print("[OK] Performance Module importiert")
+        print("Performance Module importiert")
         
         from utils.pv3d_help import get_tooltip
-        print("[OK] Help Module importiert")
+        print("Help Module importiert")
         
-        print("\n[OK] Alle Module erfolgreich importiert")
+        print("\nAlle Module erfolgreich importiert")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Import-Fehler: {e}")
+        print(f"\nImport-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -105,7 +105,7 @@ def test_workflow_complete():
         )
         roof_type = "gable"
         roof_pitch = 35.0
-        print(f"   [OK] Gebäude: {dims.length_m}m x {dims.width_m}m, Dach: {roof_type}")
+        print(f"   Gebäude: {dims.length_m}m x {dims.width_m}m, Dach: {roof_type}")
         
         # Schritt 2: Layout optimieren
         print("\n2. Optimiere Layout...")
@@ -117,7 +117,7 @@ def test_workflow_complete():
             latitude=51.0
         )
         layout_config = layout_configs[0] if layout_configs else AdvancedLayoutConfig()
-        print(f"   [OK] Layout optimiert: {len(layout_configs)} Varianten generiert")
+        print(f"   Layout optimiert: {len(layout_configs)} Varianten generiert")
         
         # Schritt 3: 3D-Szene erstellen
         print("\n3. Erstelle 3D-Szene...")
@@ -137,7 +137,7 @@ def test_workflow_complete():
             module_quantity=module_count,
             layout_config=layout_config
         )
-        print(f"   [OK] 3D-Szene erstellt mit {len(fig.data)} Objekten")
+        print(f"   3D-Szene erstellt mit {len(fig.data)} Objekten")
         
         # Schritt 4: Analyse durchführen
         print("\n4. Führe Analyse durch...")
@@ -155,18 +155,18 @@ def test_workflow_complete():
             module_transforms={},
             latitude=51.0
         )
-        print(f"   [OK] Heatmap berechnet für {len(heatmap)} Module")
+        print(f"   Heatmap berechnet für {len(heatmap)} Module")
         
         # Schritt 5: Export
         print("\n5. Exportiere Screenshot...")
         screenshot_data = export_screenshot(fig, format="png")
-        print(f"   [OK] Screenshot exportiert: {len(screenshot_data)} bytes")
+        print(f"   Screenshot exportiert: {len(screenshot_data)} bytes")
         
-        print("\n[OK] Vollständiger Workflow erfolgreich")
+        print("\nVollständiger Workflow erfolgreich")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Workflow-Fehler: {e}")
+        print(f"\nWorkflow-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -215,13 +215,13 @@ def test_different_roof_types():
                 layout_config=layout_config
             )
             
-            print(f"   [OK] {roof_type}: {len(fig.data)} Objekte erstellt")
+            print(f"   {roof_type}: {len(fig.data)} Objekte erstellt")
         
-        print("\n[OK] Alle Dachformen erfolgreich getestet")
+        print("\nAlle Dachformen erfolgreich getestet")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Dachform-Test-Fehler: {e}")
+        print(f"\nDachform-Test-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -278,16 +278,16 @@ def test_different_module_counts():
             
             elapsed = time.time() - start_time
             
-            print(f"   [OK] {count} Module: {len(fig.data)} Objekte in {elapsed:.2f}s")
+            print(f"   {count} Module: {len(fig.data)} Objekte in {elapsed:.2f}s")
             
             if elapsed > 10.0:
-                print(f"   [WARNING]  Warnung: Rendering dauerte {elapsed:.2f}s (> 10s)")
+                print(f"   Warnung: Rendering dauerte {elapsed:.2f}s (> 10s)")
         
-        print("\n[OK] Alle Modulanzahlen erfolgreich getestet")
+        print("\nAlle Modulanzahlen erfolgreich getestet")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Modulanzahl-Test-Fehler: {e}")
+        print(f"\nModulanzahl-Test-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -336,7 +336,7 @@ def test_backwards_compatibility():
             module_quantity=old_project_data["pv_module_count"],
             layout_config=layout_config
         )
-        print(f"   [OK] Alte Struktur funktioniert: {len(fig.data)} Objekte")
+        print(f"   Alte Struktur funktioniert: {len(fig.data)} Objekte")
         
         # Test 2: Minimale project_data
         print("\n2. Teste minimale project_data...")
@@ -366,7 +366,7 @@ def test_backwards_compatibility():
             module_quantity=20,
             layout_config=layout_config
         )
-        print(f"   [OK] Minimale Daten funktionieren: {len(fig.data)} Objekte")
+        print(f"   Minimale Daten funktionieren: {len(fig.data)} Objekte")
         
         # Test 3: Fehlende optionale Felder
         print("\n3. Teste fehlende optionale Felder...")
@@ -386,13 +386,13 @@ def test_backwards_compatibility():
             module_quantity=25,
             layout_config=layout_config
         )
-        print(f"   [OK] Fehlende Felder werden behandelt: {len(fig.data)} Objekte")
+        print(f"   Fehlende Felder werden behandelt: {len(fig.data)} Objekte")
         
-        print("\n[OK] Backwards Compatibility erfolgreich")
+        print("\nBackwards Compatibility erfolgreich")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Compatibility-Test-Fehler: {e}")
+        print(f"\nCompatibility-Test-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -409,9 +409,9 @@ def test_pdf_generator_integration():
         print("\n1. Teste PDF-Generator Import...")
         try:
             from pdf_generator import PDFGenerator
-            print("   [OK] PDFGenerator importiert")
+            print("   PDFGenerator importiert")
         except ImportError:
-            print("   [WARNING]  PDFGenerator nicht verfügbar (optional)")
+            print("   PDFGenerator nicht verfügbar (optional)")
             return True
         
         # Test 2: 3D-Visualisierung kann in PDF integriert werden
@@ -451,13 +451,13 @@ def test_pdf_generator_integration():
         
         # Exportiere für PDF
         screenshot_data = export_screenshot(fig, format="png")
-        print(f"   [OK] Screenshot für PDF exportiert: {len(screenshot_data)} bytes")
+        print(f"   Screenshot für PDF exportiert: {len(screenshot_data)} bytes")
         
         # Test 3: Prüfe ob pdf_visual_inject existiert
         print("\n3. Teste PDF Visual Inject...")
         try:
             from utils.pdf_visual_inject import inject_3d_visualization
-            print("   [OK] PDF Visual Inject verfügbar")
+            print("   PDF Visual Inject verfügbar")
             
             # Teste Funktion
             test_pdf_data = {
@@ -471,18 +471,18 @@ def test_pdf_generator_integration():
             
             result = inject_3d_visualization(test_pdf_data)
             if result:
-                print(f"   [OK] 3D-Visualisierung kann in PDF injiziert werden")
+                print(f"   3D-Visualisierung kann in PDF injiziert werden")
             else:
-                print(f"   [WARNING]  Injection gibt None zurück (möglicherweise OK)")
+                print(f"   Injection gibt None zurück (möglicherweise OK)")
                 
         except ImportError:
-            print("   [WARNING]  PDF Visual Inject nicht verfügbar (optional)")
+            print("   PDF Visual Inject nicht verfügbar (optional)")
         
-        print("\n[OK] PDF-Generator Integration erfolgreich")
+        print("\nPDF-Generator Integration erfolgreich")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] PDF-Integration-Test-Fehler: {e}")
+        print(f"\nPDF-Integration-Test-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -534,9 +534,9 @@ def test_performance_requirements():
         print(f"   Ladezeit: {load_time:.2f}s")
         
         if load_time < 3.0:
-            print(f"   [OK] Ladezeit OK (< 3s)")
+            print(f"   Ladezeit OK (< 3s)")
         else:
-            print(f"   [WARNING]  Warnung: Ladezeit {load_time:.2f}s > 3s")
+            print(f"   Warnung: Ladezeit {load_time:.2f}s > 3s")
         
         # Requirement 3.2: Aktualisierung sollte innerhalb von 5 Sekunden erfolgen
         print("\n2. Teste Aktualisierungszeit (< 5s)...")
@@ -559,15 +559,15 @@ def test_performance_requirements():
         print(f"   Aktualisierungszeit: {update_time:.2f}s")
         
         if update_time < 5.0:
-            print(f"   [OK] Aktualisierungszeit OK (< 5s)")
+            print(f"   Aktualisierungszeit OK (< 5s)")
         else:
-            print(f"   [WARNING]  Warnung: Aktualisierungszeit {update_time:.2f}s > 5s")
+            print(f"   Warnung: Aktualisierungszeit {update_time:.2f}s > 5s")
         
-        print("\n[OK] Performance-Anforderungen getestet")
+        print("\nPerformance-Anforderungen getestet")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Performance-Test-Fehler: {e}")
+        print(f"\nPerformance-Test-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -590,9 +590,9 @@ def test_error_handling():
                 width_m=8.0,
                 wall_height_m=5.0
             )
-            print("   [WARNING]  Negative Dimensionen wurden akzeptiert")
+            print("   Negative Dimensionen wurden akzeptiert")
         except (ValueError, AssertionError) as e:
-            print(f"   [OK] Negative Dimensionen abgelehnt: {e}")
+            print(f"   Negative Dimensionen abgelehnt: {e}")
         
         # Test 2: Ungültiger Dachtyp
         print("\n2. Teste ungültigen Dachtyp...")
@@ -607,9 +607,9 @@ def test_error_handling():
             roof_pitch = 30.0
             
             # Sollte trotzdem funktionieren mit Fallback
-            print("   [OK] Ungültiger Dachtyp wird behandelt (Fallback)")
+            print("   Ungültiger Dachtyp wird behandelt (Fallback)")
         except Exception as e:
-            print(f"   [OK] Ungültiger Dachtyp abgelehnt: {e}")
+            print(f"   Ungültiger Dachtyp abgelehnt: {e}")
         
         # Test 3: Fehlende Daten
         print("\n3. Teste fehlende Daten...")
@@ -638,15 +638,15 @@ def test_error_handling():
                 module_quantity=30,
                 layout_config=layout_config
             )
-            print("   [OK] Fehlende Daten werden behandelt")
+            print("   Fehlende Daten werden behandelt")
         except Exception as e:
-            print(f"   [WARNING]  Fehler bei fehlenden Daten: {e}")
+            print(f"   Fehler bei fehlenden Daten: {e}")
         
-        print("\n[OK] Fehlerbehandlung getestet")
+        print("\nFehlerbehandlung getestet")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Fehlerbehandlungs-Test-Fehler: {e}")
+        print(f"\nFehlerbehandlungs-Test-Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -683,7 +683,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results.items():
-        status = "[OK] PASSED" if result else "[ERROR] FAILED"
+        status = "PASSED" if result else "FAILED"
         print(f"{status}: {test_name}")
     
     print(f"\n{passed}/{total} Tests bestanden")
@@ -691,17 +691,17 @@ def run_all_tests():
     if passed == total:
         print("\n🎉 ALLE INTEGRATION TESTS ERFOLGREICH!")
         print("\nDie 3D-Visualisierung ist vollständig funktionsfähig:")
-        print("[OK] Alle Module können importiert werden")
-        print("[OK] Vollständiger Workflow funktioniert")
-        print("[OK] Alle Dachformen werden unterstützt")
-        print("[OK] Verschiedene Modulanzahlen funktionieren")
-        print("[OK] Backwards Compatibility gewährleistet")
-        print("[OK] PDF-Generator Integration funktioniert")
-        print("[OK] Performance-Anforderungen erfüllt")
-        print("[OK] Fehlerbehandlung implementiert")
+        print("Alle Module können importiert werden")
+        print("Vollständiger Workflow funktioniert")
+        print("Alle Dachformen werden unterstützt")
+        print("Verschiedene Modulanzahlen funktionieren")
+        print("Backwards Compatibility gewährleistet")
+        print("PDF-Generator Integration funktioniert")
+        print("Performance-Anforderungen erfüllt")
+        print("Fehlerbehandlung implementiert")
         return True
     else:
-        print(f"\n[WARNING]  {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return False
 
 

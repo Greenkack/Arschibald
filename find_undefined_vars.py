@@ -51,7 +51,7 @@ def check_file(file_path):
 
 def main():
     print("=" * 80)
-    print("[SEARCH] SUCHE NACH UNDEFINIERTEN SINGLE-LETTER VARIABLEN")
+    print("SUCHE NACH UNDEFINIERTEN SINGLE-LETTER VARIABLEN")
     print("=" * 80)
     print()
     
@@ -72,15 +72,15 @@ def main():
             all_problems.extend(problems)
     
     if all_problems:
-        print(f"[ERROR] GEFUNDEN: {len(all_problems)} undefinierte Variablen\n")
+        print(f"GEFUNDEN: {len(all_problems)} undefinierte Variablen\n")
         
         for p in all_problems:
-            print(f"[FILE] {p['file']}")
+            print(f"{p['file']}")
             print(f"   Zeile {p['line']}: Variable '{p['var']}' undefiniert")
             print(f"   Code: {p['context']}")
             print()
     else:
-        print("[OK] Keine undefinierten Single-Letter Variablen gefunden!")
+        print("Keine undefinierten Single-Letter Variablen gefunden!")
     
     print("=" * 80)
     return len(all_problems)

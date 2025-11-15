@@ -390,7 +390,7 @@ def run_tests():
     test_validator.test_validate_boolean()
     test_validator.test_validate_date()
     test_validator.test_validate_date_invalid()
-    print("[OK] ExcelValidator Tests erfolgreich")
+    print("ExcelValidator Tests erfolgreich")
     
     # Test Formel-Validierung
     print("\n2. Formel-Validierung Tests...")
@@ -404,7 +404,7 @@ def run_tests():
     test_formula.test_validate_formula_division_by_zero_warning()
     test_formula.test_validate_formula_valid_simple()
     test_formula.test_validate_formula_valid_nested()
-    print("[OK] Formel-Validierung Tests erfolgreich")
+    print("Formel-Validierung Tests erfolgreich")
     
     # Test Zirkelbezug-Erkennung
     print("\n3. Zirkelbezug-Erkennung Tests...")
@@ -413,14 +413,14 @@ def run_tests():
     test_circular.test_detect_indirect_circular_reference()
     test_circular.test_no_circular_reference()
     test_circular.test_detect_all_circular_references()
-    print("[OK] Zirkelbezug-Erkennung Tests erfolgreich")
+    print("Zirkelbezug-Erkennung Tests erfolgreich")
     
     # Test Fehler-Tooltips
     print("\n4. Fehler-Tooltips Tests...")
     test_tooltips = TestErrorTooltips()
     test_tooltips.test_get_error_tooltip_all_types()
     test_tooltips.test_get_error_tooltip_unknown()
-    print("[OK] Fehler-Tooltips Tests erfolgreich")
+    print("Fehler-Tooltips Tests erfolgreich")
     
     # Test Integration
     print("\n5. Integrationstests...")
@@ -428,20 +428,20 @@ def run_tests():
     test_integration.test_validate_and_set_cell_value()
     test_integration.test_circular_reference_prevention()
     test_integration.test_formula_error_handling()
-    print("[OK] Integrationstests erfolgreich")
+    print("Integrationstests erfolgreich")
     
     print("\n" + "=" * 60)
-    print("[OK] Alle Tests erfolgreich!")
+    print("Alle Tests erfolgreich!")
     print("=" * 60)
     
     # Zeige Zusammenfassung
     print("\nImplementierte Features (Task 21):")
-    print("[OK] Alle Fehlertypen implementiert (#ERROR!, #REF!, #DIV/0!, etc.)")
-    print("[OK] Tooltip-Hilfe für Fehler mit Lösungsvorschlägen")
-    print("[OK] Input-Validierung für alle Felder (Formeln, Zahlen, Text, Datum, Boolean)")
-    print("[OK] Zirkelbezug-Erkennung (direkt und indirekt)")
-    print("[OK] Umfassende Fehlerbehandlung in UI")
-    print("[OK] Validierung mit Vorschlägen und Warnungen")
+    print("Alle Fehlertypen implementiert (#ERROR!, #REF!, #DIV/0!, etc.)")
+    print("Tooltip-Hilfe für Fehler mit Lösungsvorschlägen")
+    print("Input-Validierung für alle Felder (Formeln, Zahlen, Text, Datum, Boolean)")
+    print("Zirkelbezug-Erkennung (direkt und indirekt)")
+    print("Umfassende Fehlerbehandlung in UI")
+    print("Validierung mit Vorschlägen und Warnungen")
 
 
 if __name__ == "__main__":

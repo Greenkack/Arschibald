@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_pdf_ui_base_cost_fix():
     """Testet ob die PDF UI base_cost korrekt aus Solar Calculator holt"""
 
-    print("[TOOL] Test PDF UI base_cost Fix")
+    print("Test PDF UI base_cost Fix")
     print("=" * 40)
 
     # Simuliere Session State mit Solar Calculator Daten
@@ -81,7 +81,7 @@ def test_pdf_ui_base_cost_fix():
                         if key in project_details and project_details[key] > 0:
                             base_cost = float(project_details[key])
                             print(
-                                f"[OK] Verwende Solar Calculator {key} als base_cost: {
+                                f"Verwende Solar Calculator {key} als base_cost: {
                                     base_cost:,.2f} €")
                             return base_cost
 
@@ -91,13 +91,13 @@ def test_pdf_ui_base_cost_fix():
                             project_details['final_price_with_provision'])
                         base_cost = brutto_price / 1.19  # Netto-Preis
                         print(
-                            f"[OK] Berechne base_cost aus final_price_with_provision: {
+                            f"Berechne base_cost aus final_price_with_provision: {
                                 brutto_price:,.2f} € → {
                                 base_cost:,.2f} € (netto)")
                         return base_cost
 
             except (ValueError, TypeError, KeyError) as e:
-                print(f"[ERROR] Fehler: {e}")
+                print(f"Fehler: {e}")
 
         return base_cost
 
@@ -105,17 +105,17 @@ def test_pdf_ui_base_cost_fix():
 
     if result_base_cost > 0:
         print(
-            f"[OK] PDF UI base_cost Fix funktioniert: {
+            f"PDF UI base_cost Fix funktioniert: {
                 result_base_cost:,.2f} €")
         return True
-    print(f"[ERROR] PDF UI base_cost Fix fehlgeschlagen: {result_base_cost:,.2f} €")
+    print(f"PDF UI base_cost Fix fehlgeschlagen: {result_base_cost:,.2f} €")
     return False
 
 
 def test_seite7_final_end_preis():
     """Testet ob Seite 7 final_end_preis korrekt gesetzt wird"""
 
-    print("\\n[TOOL] Test Seite 7 final_end_preis")
+    print("\\nTest Seite 7 final_end_preis")
     print("=" * 40)
 
     # Test-Daten mit Solar Calculator Preis
@@ -137,22 +137,22 @@ def test_seite7_final_end_preis():
         final_end_preis = dynamic_data.get(
             'final_end_preis_formatted', 'NICHT GEFUNDEN')
 
-        print("[CHART] Ergebnis:")
+        print("Ergebnis:")
         print(f"   - final_end_preis_formatted: {final_end_preis}")
 
         if final_end_preis == '32.500,75 €':
-            print("[OK] Seite 7 final_end_preis Fix funktioniert!")
+            print("Seite 7 final_end_preis Fix funktioniert!")
             return True
         if final_end_preis != 'NICHT GEFUNDEN' and final_end_preis != '0,00 €':
             print(
-                f"[WARNING] Seite 7 final_end_preis funktioniert, aber anderer Wert: {final_end_preis}")
+                f"Seite 7 final_end_preis funktioniert, aber anderer Wert: {final_end_preis}")
             return True
         print(
-            f"[ERROR] Seite 7 final_end_preis Fix fehlgeschlagen: {final_end_preis}")
+            f"Seite 7 final_end_preis Fix fehlgeschlagen: {final_end_preis}")
         return False
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Test: {e}")
+        print(f"Fehler beim Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -161,7 +161,7 @@ def test_seite7_final_end_preis():
 def test_complete_integration():
     """Testet die komplette Integration beider Fixes"""
 
-    print("\\n[TOOL] Test komplette Integration")
+    print("\\nTest komplette Integration")
     print("=" * 40)
 
     # Simuliere kompletten Solar Calculator Workflow
@@ -177,7 +177,7 @@ def test_complete_integration():
         }
     }
 
-    print("[CHART] Test-Szenario:")
+    print("Test-Szenario:")
     print("   - Netto-Betrag: 24.160,00 €")
     print("   - Provision: 19%")
     print("   - Brutto mit Provision: 28.750,50 €")
@@ -223,15 +223,15 @@ def test_complete_integration():
     success = final_end_preis == '28.750,50 €'
 
     if success:
-        print("\\n[OK] Komplette Integration erfolgreich!")
+        print("\\nKomplette Integration erfolgreich!")
     else:
-        print("\\n[ERROR] Integration hat Probleme")
+        print("\\nIntegration hat Probleme")
 
     return success
 
 
 if __name__ == "__main__":
-    print("[LAUNCH] Test Final Price Fixes")
+    print("Test Final Price Fixes")
     print("=" * 60)
 
     # Test 1: PDF UI base_cost Fix
@@ -244,21 +244,21 @@ if __name__ == "__main__":
     test3_success = test_complete_integration()
 
     print("\\n🎉 Test-Zusammenfassung:")
-    print(f"   1. PDF UI base_cost Fix: {'[OK]' if test1_success else '[ERROR]'}")
+    print(f"   1. PDF UI base_cost Fix: {'' if test1_success else ''}")
     print(
         f"   2. Seite 7 final_end_preis Fix: {
-            '[OK]' if test2_success else '[ERROR]'}")
-    print(f"   3. Komplette Integration: {'[OK]' if test3_success else '[ERROR]'}")
+            '' if test2_success else ''}")
+    print(f"   3. Komplette Integration: {'' if test3_success else ''}")
 
     if test1_success and test2_success and test3_success:
-        print("\\n[TARGET] ALLE TESTS ERFOLGREICH!")
-        print("\\n[MONEY] Beide Probleme sind behoben:")
+        print("\\nALLE TESTS ERFOLGREICH!")
+        print("\\nBeide Probleme sind behoben:")
         print("   - PDF UI zeigt echten Preis statt 0,00 €")
         print("   - Seite 7 zeigt echten Endpreis aus Solar Calculator")
     else:
-        print("\\n[WARNING] Einige Tests sind fehlgeschlagen")
+        print("\\nEinige Tests sind fehlgeschlagen")
 
-    print("\\n[TOOL] Implementierte Fixes:")
+    print("\\nImplementierte Fixes:")
     print("   1. PDF UI base_cost verwendet Solar Calculator Netto-Preis")
     print("   2. Seite 7 final_end_preis_formatted aus formatted_final_with_provision")
     print("   3. Robuste Fallback-Mechanismen für beide Fixes")

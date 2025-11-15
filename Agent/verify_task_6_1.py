@@ -26,66 +26,66 @@ def verify_implementation():
     checks = []
 
     # Check 1: Tool can be imported
-    print("[OK] Check 1: Tool Import")
+    print("Check 1: Tool Import")
     try:
         from agent.tools.search_tools import tavily_search
-        print("  [OK] tavily_search tool imported successfully")
+        print("  tavily_search tool imported successfully")
         checks.append(True)
     except ImportError as e:
-        print(f"  [ERROR] Failed to import tavily_search: {e}")
+        print(f"  Failed to import tavily_search: {e}")
         checks.append(False)
         return False
 
     # Check 2: Tool is exported from tools package
-    print("\n[OK] Check 2: Tool Export")
+    print("\nCheck 2: Tool Export")
     try:
         from agent.tools import tavily_search as exported_tool
-        print("  [OK] tavily_search exported from agent.tools")
+        print("  tavily_search exported from agent.tools")
         checks.append(True)
     except ImportError as e:
-        print(f"  [ERROR] tavily_search not exported: {e}")
+        print(f"  tavily_search not exported: {e}")
         checks.append(False)
 
     # Check 3: Tool is integrated in agent core
-    print("\n[OK] Check 3: Agent Core Integration")
+    print("\nCheck 3: Agent Core Integration")
     try:
         with open('Agent/agent/agent_core.py', encoding='utf-8') as f:
             content = f.read()
             if 'from agent.tools.search_tools import tavily_search' in content:
-                print("  [OK] tavily_search imported in agent_core.py")
+                print("  tavily_search imported in agent_core.py")
                 if 'tavily_search,' in content:
-                    print("  [OK] tavily_search registered in tools list")
+                    print("  tavily_search registered in tools list")
                     checks.append(True)
                 else:
-                    print("  [ERROR] tavily_search not registered in tools list")
+                    print("  tavily_search not registered in tools list")
                     checks.append(False)
             else:
-                print("  [ERROR] tavily_search not imported in agent_core.py")
+                print("  tavily_search not imported in agent_core.py")
                 checks.append(False)
     except Exception as e:
-        print(f"  [ERROR] Error checking agent_core.py: {e}")
+        print(f"  Error checking agent_core.py: {e}")
         checks.append(False)
 
     # Check 4: Tool has proper documentation
-    print("\n[OK] Check 4: Documentation")
+    print("\nCheck 4: Documentation")
     try:
         from agent.tools.search_tools import tavily_search
         if tavily_search.__doc__:
-            print("  [OK] Tool has docstring")
+            print("  Tool has docstring")
             if "Tavily" in tavily_search.__doc__:
-                print("  [OK] Docstring mentions Tavily")
+                print("  Docstring mentions Tavily")
             if "advanced" in tavily_search.__doc__:
-                print("  [OK] Docstring mentions advanced search depth")
+                print("  Docstring mentions advanced search depth")
             checks.append(True)
         else:
-            print("  [ERROR] Tool missing docstring")
+            print("  Tool missing docstring")
             checks.append(False)
     except Exception as e:
-        print(f"  [ERROR] Error checking documentation: {e}")
+        print(f"  Error checking documentation: {e}")
         checks.append(False)
 
     # Check 5: Error handling implementation
-    print("\n[OK] Check 5: Error Handling")
+    print("\nCheck 5: Error Handling")
     try:
         with open('Agent/agent/tools/search_tools.py', encoding='utf-8') as f:
             content = f.read()
@@ -100,61 +100,61 @@ def verify_implementation():
             all_present = True
             for check_str, description in error_checks:
                 if check_str in content:
-                    print(f"  [OK] {description}")
+                    print(f"  {description}")
                 else:
-                    print(f"  [ERROR] Missing {description}")
+                    print(f"  Missing {description}")
                     all_present = False
 
             checks.append(all_present)
     except Exception as e:
-        print(f"  [ERROR] Error checking error handling: {e}")
+        print(f"  Error checking error handling: {e}")
         checks.append(False)
 
     # Check 6: Advanced search depth configuration
-    print("\n[OK] Check 6: Advanced Search Depth")
+    print("\nCheck 6: Advanced Search Depth")
     try:
         with open('Agent/agent/tools/search_tools.py', encoding='utf-8') as f:
             content = f.read()
             if 'search_depth="advanced"' in content:
-                print('  [OK] Uses search_depth="advanced"')
+                print('  Uses search_depth="advanced"')
                 checks.append(True)
             else:
-                print('  [ERROR] Does not use advanced search depth')
+                print('  Does not use advanced search depth')
                 checks.append(False)
     except Exception as e:
-        print(f"  [ERROR] Error checking search depth: {e}")
+        print(f"  Error checking search depth: {e}")
         checks.append(False)
 
     # Check 7: Result formatting
-    print("\n[OK] Check 7: Result Formatting")
+    print("\nCheck 7: Result Formatting")
     try:
         with open('Agent/agent/tools/search_tools.py', encoding='utf-8') as f:
             content = f.read()
             if '"url"' in content and '"content"' in content:
-                print('  [OK] Formats results with URL and content')
+                print('  Formats results with URL and content')
                 checks.append(True)
             else:
-                print('  [ERROR] Result formatting incomplete')
+                print('  Result formatting incomplete')
                 checks.append(False)
     except Exception as e:
-        print(f"  [ERROR] Error checking result formatting: {e}")
+        print(f"  Error checking result formatting: {e}")
         checks.append(False)
 
     # Check 8: Functional test
-    print("\n[OK] Check 8: Functional Test")
+    print("\nCheck 8: Functional Test")
     try:
         from agent.tools.search_tools import tavily_search
         result = tavily_search.invoke({"query": "test query"})
 
         # Should either work or provide clear error message
         if "ConfigurationError" in result or "url" in result.lower():
-            print("  [OK] Tool executes and handles missing API key gracefully")
+            print("  Tool executes and handles missing API key gracefully")
             checks.append(True)
         else:
-            print(f"  [WARNING]  Unexpected result format: {result[:100]}")
+            print(f"  Unexpected result format: {result[:100]}")
             checks.append(True)  # Still pass if it runs
     except Exception as e:
-        print(f"  [ERROR] Tool execution failed: {e}")
+        print(f"  Tool execution failed: {e}")
         checks.append(False)
 
     # Summary
@@ -168,7 +168,7 @@ def verify_implementation():
     print(f"\nChecks passed: {passed}/{total}")
 
     if passed == total:
-        print("\n[OK] Task 6.1 COMPLETE: All requirements verified!")
+        print("\nTask 6.1 COMPLETE: All requirements verified!")
         print("\nImplemented features:")
         print("  • tavily_search() tool with @tool decorator")
         print("  • Advanced search depth configuration")
@@ -182,7 +182,7 @@ def verify_implementation():
         print("  • Integration with agent core")
         print("  • Proper documentation")
         return True
-    print(f"\n[WARNING]  {total - passed} check(s) failed")
+    print(f"\n{total - passed} check(s) failed")
     return False
 
 

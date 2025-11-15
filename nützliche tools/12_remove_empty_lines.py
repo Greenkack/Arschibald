@@ -9,4 +9,4 @@ def remove_empty_lines(directory="."):
             lines = [line for line in lines if line.strip()]
             with open(filename, "w", encoding="utf-8") as f:
                 f.writelines(lines)
-    print("[OK] Leere Zeilen entfernt.")
+    print("Leere Zeilen entfernt.")

@@ -22,20 +22,20 @@ def test_simple_merge():
         # Lade Template
         template_path = Path("pdf_templates_static/notext/nt_nt_06.pdf")
         if not template_path.exists():
-            print(f"[ERROR] Template nicht gefunden: {template_path}")
+            print(f"Template nicht gefunden: {template_path}")
             return False
 
         # Lade Overlay
         overlay_path = Path("overlay_only.pdf")
         if not overlay_path.exists():
-            print(f"[ERROR] Overlay nicht gefunden: {overlay_path}")
+            print(f"Overlay nicht gefunden: {overlay_path}")
             return False
 
         template_reader = PdfReader(template_path)
         overlay_reader = PdfReader(overlay_path)
 
-        print(f"[FILE] Template: {len(template_reader.pages)} Seiten")
-        print(f"[DESIGN] Overlay: {len(overlay_reader.pages)} Seiten")
+        print(f"Template: {len(template_reader.pages)} Seiten")
+        print(f"Overlay: {len(overlay_reader.pages)} Seiten")
 
         # Hole Seiten
         template_page = template_reader.pages[0]
@@ -57,7 +57,7 @@ def test_simple_merge():
         with open("simple_merge_test.pdf", "wb") as f:
             writer.write(f)
 
-        print("[OK] Einfacher Merge erstellt: simple_merge_test.pdf")
+        print("Einfacher Merge erstellt: simple_merge_test.pdf")
 
         # Teste das Ergebnis
         test_reader = PdfReader("simple_merge_test.pdf")
@@ -65,20 +65,20 @@ def test_simple_merge():
 
         try:
             text = test_page.extract_text()
-            print(f"[NOTE] Merge-Ergebnis Text: {len(text)} Zeichen")
+            print(f"Merge-Ergebnis Text: {len(text)} Zeichen")
 
             if "74%" in text and "53%" in text:
-                print("[OK] Charts im Merge-Ergebnis gefunden!")
+                print("Charts im Merge-Ergebnis gefunden!")
                 return True
-            print("[ERROR] Charts NICHT im Merge-Ergebnis!")
+            print("Charts NICHT im Merge-Ergebnis!")
             return False
 
         except Exception as e:
-            print(f"[WARNING] Text-Extraktion fehlgeschlagen: {e}")
+            print(f"Text-Extraktion fehlgeschlagen: {e}")
             return False
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Merge-Test: {e}")
+        print(f"Fehler beim Merge-Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -86,7 +86,7 @@ def test_simple_merge():
 
 def create_working_seite6():
     """Erstelle eine funktionierende Seite 6 mit Template + Overlay"""
-    print("\n[TARGET] Erstelle funktionierende Seite 6...")
+    print("\nErstelle funktionierende Seite 6...")
 
     try:
         from pypdf import PdfReader, PdfWriter
@@ -113,7 +113,7 @@ def create_working_seite6():
             test_project_data, test_analysis_results, {})
 
         print(
-            f"[CHART] Daten: Verbrauch={
+            f"Daten: Verbrauch={
                 dynamic_data.get('storage_consumption_ratio_percent')}%, Produktion={
                 dynamic_data.get('storage_production_ratio_percent')}%")
 
@@ -149,7 +149,7 @@ def create_working_seite6():
         with open("working_seite6.pdf", "wb") as f:
             writer.write(f)
 
-        print("[OK] Funktionierende Seite 6 erstellt: working_seite6.pdf")
+        print("Funktionierende Seite 6 erstellt: working_seite6.pdf")
 
         # Verifikation
         verify_reader = PdfReader("working_seite6.pdf")
@@ -157,7 +157,7 @@ def create_working_seite6():
 
         try:
             text = verify_page.extract_text()
-            print(f"[NOTE] Verifikation: {len(text)} Zeichen")
+            print(f"Verifikation: {len(text)} Zeichen")
 
             chart_indicators = [
                 "74%",
@@ -167,17 +167,17 @@ def create_working_seite6():
             found = [ind for ind in chart_indicators if ind in text]
 
             if len(found) >= 3:
-                print(f"[OK] Charts erfolgreich: {found}")
+                print(f"Charts erfolgreich: {found}")
                 return True
-            print(f"[ERROR] Charts fehlen: nur {found} gefunden")
+            print(f"Charts fehlen: nur {found} gefunden")
             return False
 
         except Exception as e:
-            print(f"[WARNING] Verifikation fehlgeschlagen: {e}")
+            print(f"Verifikation fehlgeschlagen: {e}")
             return False
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei Seite 6 Erstellung: {e}")
+        print(f"Fehler bei Seite 6 Erstellung: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -185,7 +185,7 @@ def create_working_seite6():
 
 def create_complete_pdf_with_charts():
     """Erstelle ein komplettes 7-Seiten PDF mit funktionierenden Charts"""
-    print("\n[TARGET] Erstelle komplettes PDF mit Charts...")
+    print("\nErstelle komplettes PDF mit Charts...")
 
     try:
         from pypdf import PdfReader, PdfWriter
@@ -245,18 +245,18 @@ def create_complete_pdf_with_charts():
                     merged_page.merge_page(overlay_page)
 
                     writer.add_page(merged_page)
-                    print(f"[OK] Seite {page_num} mit Overlay hinzugefügt")
+                    print(f"Seite {page_num} mit Overlay hinzugefügt")
                 else:
                     writer.add_page(template_page)
-                    print(f"[OK] Seite {page_num} ohne Overlay hinzugefügt")
+                    print(f"Seite {page_num} ohne Overlay hinzugefügt")
             else:
-                print(f"[WARNING] Template für Seite {page_num} nicht gefunden")
+                print(f"Template für Seite {page_num} nicht gefunden")
 
         # Speichere komplettes PDF
         with open("complete_pdf_with_charts.pdf", "wb") as f:
             writer.write(f)
 
-        print("[OK] Komplettes PDF erstellt: complete_pdf_with_charts.pdf")
+        print("Komplettes PDF erstellt: complete_pdf_with_charts.pdf")
 
         # Verifikation von Seite 6
         complete_reader = PdfReader("complete_pdf_with_charts.pdf")
@@ -269,22 +269,22 @@ def create_complete_pdf_with_charts():
                     "74%", "53%", "Tagesverbrauch", "PV-Produktion"]
                 found = [ind for ind in chart_indicators if ind in text]
 
-                print(f"[CHART] Seite 6 Verifikation: {found}")
+                print(f"Seite 6 Verifikation: {found}")
 
                 if len(found) >= 3:
-                    print("[OK] Charts in komplettem PDF erfolgreich!")
+                    print("Charts in komplettem PDF erfolgreich!")
                     return True
-                print("[ERROR] Charts in komplettem PDF fehlen!")
+                print("Charts in komplettem PDF fehlen!")
                 return False
 
             except Exception as e:
-                print(f"[WARNING] Seite 6 Verifikation fehlgeschlagen: {e}")
+                print(f"Seite 6 Verifikation fehlgeschlagen: {e}")
                 return False
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei komplettem PDF: {e}")
+        print(f"Fehler bei komplettem PDF: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -292,7 +292,7 @@ def create_complete_pdf_with_charts():
 
 def main():
     """Hauptfunktion"""
-    print("[TOOL] MERGE-PROBLEM BEHEBUNG")
+    print("MERGE-PROBLEM BEHEBUNG")
     print("=" * 50)
 
     tests = [
@@ -308,20 +308,20 @@ def main():
 
         try:
             result = test_func()
-            status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+            status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
             print(f"\n{test_name}: {status}")
         except Exception as e:
-            print(f"\n[ERROR] {test_name} FEHLER: {e}")
+            print(f"\n{test_name} FEHLER: {e}")
 
     print(f"\n{'=' * 50}")
     print("ERGEBNISSE")
     print('=' * 50)
-    print("[FILE] direct_charts.pdf - Reine ReportLab Charts")
-    print("[FILE] overlay_only.pdf - Nur das Overlay (Seite 6 hat Charts)")
-    print("[FILE] simple_merge_test.pdf - Einfacher Template+Overlay Merge")
-    print("[FILE] working_seite6.pdf - Nur Seite 6 mit Charts")
-    print("[FILE] complete_pdf_with_charts.pdf - Komplettes 7-Seiten PDF")
-    print("\n[TARGET] Öffne 'complete_pdf_with_charts.pdf' und gehe zu Seite 6!")
+    print("direct_charts.pdf - Reine ReportLab Charts")
+    print("overlay_only.pdf - Nur das Overlay (Seite 6 hat Charts)")
+    print("simple_merge_test.pdf - Einfacher Template+Overlay Merge")
+    print("working_seite6.pdf - Nur Seite 6 mit Charts")
+    print("complete_pdf_with_charts.pdf - Komplettes 7-Seiten PDF")
+    print("\nÖffne 'complete_pdf_with_charts.pdf' und gehe zu Seite 6!")
 
 
 if __name__ == "__main__":

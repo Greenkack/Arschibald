@@ -651,9 +651,9 @@ def format_reminder_for_display(reminder: dict[str, Any]) -> dict[str, Any]:
     # Status-Labels
     status_labels = {
         'pending': '⏳ Ausstehend',
-        'completed': '[OK] Erledigt',
+        'completed': 'Erledigt',
         'snoozed': '💤 Verschoben',
-        'dismissed': '[ERROR] Verworfen'
+        'dismissed': 'Verworfen'
     }
     display_reminder['status_label'] = status_labels.get(reminder.get('status', 'pending'), 'Unbekannt')
     
@@ -679,7 +679,7 @@ def format_reminder_for_display(reminder: dict[str, Any]) -> dict[str, Any]:
                 display_reminder['due_date_label'] = '📅 Morgen'
             elif due_date < today:
                 days_overdue = (today - due_date).days
-                display_reminder['due_date_label'] = f'[WARNING] {days_overdue} Tag(e) überfällig'
+                display_reminder['due_date_label'] = f'{days_overdue} Tag(e) überfällig'
             else:
                 days_until = (due_date - today).days
                 display_reminder['due_date_label'] = f'📅 In {days_until} Tag(en)'

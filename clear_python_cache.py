@@ -18,9 +18,9 @@ def clear_cache(root_dir: str) -> tuple:
             try:
                 shutil.rmtree(pycache_path)
                 deleted_dirs += 1
-                print(f"[OK] Gelöscht: {pycache_path}")
+                print(f"Gelöscht: {pycache_path}")
             except Exception as e:
-                print(f"[ERROR] Fehler: {pycache_path} - {e}")
+                print(f"Fehler: {pycache_path} - {e}")
         
         # Lösche .pyc Dateien
         for filename in filenames:
@@ -29,9 +29,9 @@ def clear_cache(root_dir: str) -> tuple:
                 try:
                     os.remove(pyc_path)
                     deleted_files += 1
-                    print(f"[OK] Gelöscht: {pyc_path}")
+                    print(f"Gelöscht: {pyc_path}")
                 except Exception as e:
-                    print(f"[ERROR] Fehler: {pyc_path} - {e}")
+                    print(f"Fehler: {pyc_path} - {e}")
     
     return deleted_dirs, deleted_files
 
@@ -42,18 +42,18 @@ def main():
     print("=" * 80)
     
     root_dir = os.path.dirname(os.path.abspath(__file__))
-    print(f"\n[FOLDER] Arbeitsverzeichnis: {root_dir}")
+    print(f"\nArbeitsverzeichnis: {root_dir}")
     print("\n⏳ Lösche Cache-Dateien...\n")
     
     dirs, files = clear_cache(root_dir)
     
     print("\n" + "=" * 80)
-    print(f"[OK] Fertig!")
-    print(f"[CHART] Statistik:")
+    print(f"Fertig!")
+    print(f"Statistik:")
     print(f"   - Gelöschte __pycache__ Verzeichnisse: {dirs}")
     print(f"   - Gelöschte .pyc Dateien: {files}")
     print("=" * 80)
-    print("\n[WARNING]  Bitte Streamlit-App neu starten!")
+    print("\nBitte Streamlit-App neu starten!")
 
 
 if __name__ == "__main__":

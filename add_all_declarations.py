@@ -68,7 +68,7 @@ def extract_public_names(file_path: Path) -> Set[str]:
         return public_names
     
     except Exception as e:
-        print(f"   [ERROR] Fehler beim Parsen von {file_path.name}: {str(e)[:50]}")
+        print(f"   Fehler beim Parsen von {file_path.name}: {str(e)[:50]}")
         return set()
 
 def has_all_declaration(file_path: Path) -> bool:
@@ -138,12 +138,12 @@ def add_all_declaration(file_path: Path, public_names: Set[str]) -> bool:
         return True
     
     except Exception as e:
-        print(f"   [ERROR] Fehler beim Schreiben: {str(e)[:50]}")
+        print(f"   Fehler beim Schreiben: {str(e)[:50]}")
         return False
 
 def main():
     print("=" * 80)
-    print("[NOTE] __all__ DEKLARATIONEN HINZUFÜGEN")
+    print("__all__ DEKLARATIONEN HINZUFÜGEN")
     print("=" * 80)
     print(f"\nBearbeite {len(MODULES_NEEDING_ALL)} Module...\n")
     
@@ -155,28 +155,28 @@ def main():
         file_path = Path(module_name)
         
         if not file_path.exists():
-            print(f"[SKIP]  {module_name}: Nicht gefunden")
+            print(f"{module_name}: Nicht gefunden")
             skip_count += 1
             continue
         
         if has_all_declaration(file_path):
-            print(f"[OK] {module_name}: Hat bereits __all__")
+            print(f"{module_name}: Hat bereits __all__")
             skip_count += 1
             continue
         
-        print(f"[BUILD] {module_name}: Analysiere...")
+        print(f"{module_name}: Analysiere...")
         
         public_names = extract_public_names(file_path)
         
         if not public_names:
-            print(f"   [WARNING]  Keine öffentlichen Namen gefunden, skip")
+            print(f"   Keine öffentlichen Namen gefunden, skip")
             skip_count += 1
             continue
         
-        print(f"   [PACKAGE] {len(public_names)} öffentliche Namen gefunden")
+        print(f"   {len(public_names)} öffentliche Namen gefunden")
         
         if add_all_declaration(file_path, public_names):
-            print(f"   [OK] __all__ hinzugefügt")
+            print(f"   __all__ hinzugefügt")
             success_count += 1
         else:
             error_count += 1
@@ -184,9 +184,9 @@ def main():
     print("\n" + "=" * 80)
     print("FERTIG")
     print("=" * 80)
-    print(f"[OK] Erfolgreich: {success_count}")
-    print(f"[SKIP]  Übersprungen: {skip_count}")
-    print(f"[ERROR] Fehler: {error_count}")
+    print(f"Erfolgreich: {success_count}")
+    print(f"Übersprungen: {skip_count}")
+    print(f"Fehler: {error_count}")
 
 if __name__ == "__main__":
     main()

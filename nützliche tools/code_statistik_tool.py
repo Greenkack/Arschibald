@@ -56,7 +56,7 @@ def analyze_code_stats(directory="."):
                 stats['files_with_errors'] += 1
 
         except Exception as e:
-            print(f"[ERROR] Fehler bei {file_path}: {e}")
+            print(f"Fehler bei {file_path}: {e}")
 
     # Sortiere größte Dateien
     stats['largest_files'] = sorted(
@@ -66,19 +66,19 @@ def analyze_code_stats(directory="."):
         :10]
 
     # Ausgabe
-    print("[CHART] CODE-STATISTIKEN:")
-    print(f"[FOLDER] Dateien: {stats['total_files']}")
-    print(f"[FILE] Zeilen: {stats['total_lines']:,}")
-    print(f"[TOOL] Funktionen: {stats['total_functions']}")
+    print("CODE-STATISTIKEN:")
+    print(f"Dateien: {stats['total_files']}")
+    print(f"Zeilen: {stats['total_lines']:,}")
+    print(f"Funktionen: {stats['total_functions']}")
     print(f"🏗️ Klassen: {stats['total_classes']}")
-    print(f"[ERROR] Dateien mit Fehlern: {stats['files_with_errors']}")
+    print(f"Dateien mit Fehlern: {stats['files_with_errors']}")
 
     print("\n📏 GRÖßTE DATEIEN:")
     for file_path, line_count in stats['largest_files']:
         print(f"  {line_count:4d} Zeilen - {os.path.basename(file_path)}")
 
     if stats['complexity_warnings']:
-        print("\n[WARNING] KOMPLEXITÄTS-WARNUNGEN:")
+        print("\nKOMPLEXITÄTS-WARNUNGEN:")
         for warning in stats['complexity_warnings']:
             print(f"  {warning}")
 

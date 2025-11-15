@@ -1544,13 +1544,13 @@ def generate_overlay(
         if not is_valid:
             missing_files_summary.extend(missing_files)
             missing_pages.add(page_num)
-            print(f"[WARNING]  Warning: Missing files for page {page_num}:")
+            print(f"⚠️  Warning: Missing files for page {page_num}:")
             for missing_file in missing_files:
                 print(f"    - {missing_file}")
 
     # Graceful degradation: If page 8 files are missing, fall back to 7 pages
     if 8 in missing_pages and total_pages == 8:
-        print("\n[WARNING]  Page 8 files are missing. Falling back to 7-page generation.")
+        print("\n⚠️  Page 8 files are missing. Falling back to 7-page generation.")
         print(
             "    This is expected if you haven't yet created the new page 8 templates."
         )
@@ -1569,7 +1569,7 @@ def generate_overlay(
 
     # If any files are still missing after fallback, provide a clear summary
     if missing_files_summary:
-        print(f"\n[WARNING]  Total missing files: {len(missing_files_summary)}")
+        print(f"\n⚠️  Total missing files: {len(missing_files_summary)}")
         print(
             "    PDF generation will continue but may fail if these files are accessed."
         )
@@ -3137,10 +3137,10 @@ def generate_multi_offer_pdfs(
             )
             
             if not rotated_products or len(rotated_products) == 0:
-                print(f"[WARNING] Produkt-Rotation fehlgeschlagen - nutze STANDARD-PRODUKTE als Fallback")
+                print(f"⚠️ Produkt-Rotation fehlgeschlagen - nutze STANDARD-PRODUKTE als Fallback")
                 rotated_products = standard_products.copy()
             
-            print(f"[OK] {len(rotated_products)} Produkte für Firma {firm_index + 1}")
+            print(f"✓ {len(rotated_products)} Produkte für Firma {firm_index + 1}")
             
             # Debug: Zeige rotierte Produkte
             if rotated_products.get('pv_modules'):
@@ -3156,11 +3156,11 @@ def generate_multi_offer_pdfs(
             # 2. Berechne Preis mit Modifikation
             print(f"\n[2/4] Preisberechnung...")
             
-            # [OK] Basis-Preis aus project_data holen (nicht neu berechnen!)
+            # ✅ Basis-Preis aus project_data holen (nicht neu berechnen!)
             base_price_from_project = project_data.get('project_details', {}).get('final_offer_price_net', 0)
             
             if base_price_from_project == 0:
-                print(f"[WARNING] WARNUNG: Basis-Preis ist 0! Prüfe project_data!")
+                print(f"⚠️ WARNUNG: Basis-Preis ist 0! Prüfe project_data!")
                 print(f"   Verfügbare Keys: {list(project_data.get('project_details', {}).keys())}")
             
             price_result = calculate_price_with_products(
@@ -3273,8 +3273,8 @@ def generate_multi_offer_pdfs(
             # Firmen-Info kopieren und erweitern
             multi_company_info = firm.copy()
             
-            print(f"[OK] Modifizierter Preis in analysis_results: {modified_price:.2f}€")
-            print(f"[OK] Formatierter Preis: {formatted_price}")
+            print(f"✓ Modifizierter Preis in analysis_results: {modified_price:.2f}€")
+            print(f"✓ Formatierter Preis: {formatted_price}")
             
             # Baue Dynamic Data mit modifizierten Daten
             try:
@@ -3286,7 +3286,7 @@ def generate_multi_offer_pdfs(
                     company_info=multi_company_info
                 )
                 
-                print(f"[OK] Dynamic Data: {len(multi_dynamic_data)} Einträge")
+                print(f"✓ Dynamic Data: {len(multi_dynamic_data)} Einträge")
                 
                 # ═══════════════════════════════════════════════════════════════════════
                 # KRITISCH: Überschreibe ALLE ABHÄNGIGEN WERTE nach Preis-Änderung!
@@ -3301,7 +3301,7 @@ def generate_multi_offer_pdfs(
                 formatted_mwst = f"{mwst_betrag:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
                 
                 # 3. AMORTISATIONSZEIT (Investment / Jahresersparnis)
-                # [WARNING] WICHTIG: yearly_savings wird weiter unten neu berechnet!
+                # ⚠️ WICHTIG: yearly_savings wird weiter unten neu berechnet!
                 # Nutze erstmal den Wert aus analysis_results als Fallback
                 yearly_savings_fallback = analysis_results.get('yearly_savings', 0) or analysis_results.get('savings_year_1', 0)
                 
@@ -3520,16 +3520,16 @@ def generate_multi_offer_pdfs(
                 print(f"{'='*70}")
                 print(f"ÜBERSCHRIEBENE WERTE FÜR {firm_name.upper()}:")
                 print(f"{'='*70}")
-                print(f"[OK] Brutto-Preis:    {formatted_price}")
-                print(f"[OK] Netto-Preis:     {formatted_netto}")
-                print(f"[OK] Mehrwertsteuer:  {formatted_mwst}")
-                print(f"[OK] Amortisation:    {formatted_amortisation} Jahre")
+                print(f"✓ Brutto-Preis:    {formatted_price}")
+                print(f"✓ Netto-Preis:     {formatted_netto}")
+                print(f"✓ Mehrwertsteuer:  {formatted_mwst}")
+                print(f"✓ Amortisation:    {formatted_amortisation} Jahre")
                 if pv_module:
-                    print(f"[OK] PV-Modul:        {pv_module.get('model_name', pv_module.get('name', ''))}")
+                    print(f"✓ PV-Modul:        {pv_module.get('model_name', pv_module.get('name', ''))}")
                 if inverter:
-                    print(f"[OK] Wechselrichter:  {inverter.get('model_name', inverter.get('name', ''))}")
+                    print(f"✓ Wechselrichter:  {inverter.get('model_name', inverter.get('name', ''))}")
                 if battery:
-                    print(f"[OK] Speicher:        {battery.get('model_name', battery.get('name', ''))}")
+                    print(f"✓ Speicher:        {battery.get('model_name', battery.get('name', ''))}")
                 print(f"{'='*70}")
                 print(f"")
                 
@@ -3602,13 +3602,13 @@ def generate_multi_offer_pdfs(
                     print(f"ERROR: PDF-Generierung fehlgeschlagen für {firm_name}")
                     continue
                 
-                print(f"[OK] PDF generiert: {len(pdf_bytes)} bytes mit {firm_suffix if firm_suffix else 'Standard'}-Design")
+                print(f"✓ PDF generiert: {len(pdf_bytes)} bytes mit {firm_suffix if firm_suffix else 'Standard'}-Design")
                 
                 # ZEIGE FINALEN PREIS DER IN PDF IST
                 final_price_in_pdf = multi_dynamic_data.get('FINAL_END_PREIS_FORMATTED')
                 print(f"")
                 print(f"{'*'*60}")
-                print(f"[OK] PREIS IN PDF VON {firm_name.upper()}: {final_price_in_pdf}")
+                print(f"✅ PREIS IN PDF VON {firm_name.upper()}: {final_price_in_pdf}")
                 print(f"{'*'*60}")
                 print(f"")
                 
@@ -3629,11 +3629,11 @@ def generate_multi_offer_pdfs(
                     used_models[category] = set()
                 used_models[category].update(models)
             
-            print(f"\n[OK] Firma {firm_name} abgeschlossen")
+            print(f"\n✓ Firma {firm_name} abgeschlossen")
             
         except Exception as e:
             print(f"\n{'!'*80}")
-            print(f"[ERROR] FEHLER BEI FIRMA {firm_name.upper()}")
+            print(f"❌ FEHLER BEI FIRMA {firm_name.upper()}")
             print(f"{'!'*80}")
             print(f"Fehler-Typ: {type(e).__name__}")
             print(f"Fehler-Nachricht: {str(e)}")
@@ -3649,7 +3649,7 @@ def generate_multi_offer_pdfs(
     print(f"{'='*80}")
     
     if results:
-        print(f"\n[CHART] PREIS-ÜBERSICHT (KASKADIERUNG):")
+        print(f"\n📊 PREIS-ÜBERSICHT (KASKADIERUNG):")
         print(f"{'-'*80}")
         for idx, (firm_name, pdf_bytes) in enumerate(results):
             print(f"  {idx+1}. {firm_name}: [PDF generiert - {len(pdf_bytes)} bytes]")
@@ -3696,7 +3696,7 @@ def generate_multi_firm_pdf(
                 total_pages = 8 + additional_page_count
                 print(f"   → Zusätzliche Seiten: {additional_page_count}")
             except Exception as e:
-                print(f"   [WARNING] Zusatz-PDF konnte nicht gelesen werden: {e}")
+                print(f"   ⚠️ Zusatz-PDF konnte nicht gelesen werden: {e}")
         
         print(f"   → Gesamt-Seiten: {total_pages}\n")
         
@@ -3715,7 +3715,7 @@ def generate_multi_firm_pdf(
                 yml_file = 0.0
             
             if not yml_file.exists():
-                print(f"   [WARNING] WARNUNG: {yml_file.name} nicht gefunden")
+                print(f"   ⚠️ WARNUNG: {yml_file.name} nicht gefunden")
                 print(f"      → Überspringe Text-Overlays für Seite {page_num}")
                 c.showPage()
                 continue
@@ -3802,7 +3802,7 @@ def generate_multi_firm_pdf(
                 c.drawString(x, y, str(value))
             
             c.showPage()
-            print(f"   [OK] Seite {page_num} abgeschlossen")
+            print(f"   ✓ Seite {page_num} abgeschlossen")
         
         c.save()
         overlay_bytes = overlay_buffer.getvalue()
@@ -3811,7 +3811,7 @@ def generate_multi_firm_pdf(
             print("ERROR: Overlay-Generierung fehlgeschlagen")
             return None
         
-        print(f"\n[OK] Overlay generiert: {len(overlay_bytes)} bytes\n")
+        print(f"\n✓ Overlay generiert: {len(overlay_bytes)} bytes\n")
         
         # Merge mit firma-spezifischen Backgrounds
         print(f"[MERGE] Overlay + Backgrounds...")
@@ -3826,7 +3826,7 @@ def generate_multi_firm_pdf(
                 bg_file = 0.0
             
             if not bg_file.exists():
-                print(f"   [WARNING] WARNUNG: {bg_file.name} nicht gefunden")
+                print(f"   ⚠️ WARNUNG: {bg_file.name} nicht gefunden")
                 print(f"      → Verwende nur Overlay für Seite {page_num+1}")
                 # Verwende nur Overlay
                 writer.add_page(overlay_reader.pages[page_num])
@@ -3840,7 +3840,7 @@ def generate_multi_firm_pdf(
                 
                 bg_page.merge_page(overlay_page)
                 writer.add_page(bg_page)
-                print(f"   [OK] Seite {page_num+1}: {bg_file.name} + Overlay")
+                print(f"   ✓ Seite {page_num+1}: {bg_file.name} + Overlay")
             except Exception as e:
                 print(f"   ERROR: Merge fehlgeschlagen für Seite {page_num+1}: {e}")
                 # Fallback: nur Overlay
@@ -3853,9 +3853,9 @@ def generate_multi_firm_pdf(
                 add_reader = PdfReader(io.BytesIO(additional_pdf))
                 for idx, page in enumerate(add_reader.pages):
                     writer.add_page(page)
-                    print(f"   [OK] Zusatzseite {idx+1}")
+                    print(f"   ✓ Zusatzseite {idx+1}")
             except Exception as e:
-                print(f"   [WARNING] WARNING: Zusatz-PDF konnte nicht angehängt werden: {e}")
+                print(f"   ⚠️ WARNING: Zusatz-PDF konnte nicht angehängt werden: {e}")
         
         # Schreibe finales PDF
         print(f"\n[FINALISIERUNG] Schreibe PDF...")
@@ -3864,7 +3864,7 @@ def generate_multi_firm_pdf(
         final_bytes = final_buffer.getvalue()
         
         print(f"\n{'='*70}")
-        print(f"[OK] ERFOLG: PDF für {firm_suffix.upper()} generiert!")
+        print(f"✅ ERFOLG: PDF für {firm_suffix.upper()} generiert!")
         print(f"{'='*70}")
         print(f"Größe: {len(final_bytes):,} bytes")
         print(f"Seiten: {len(writer.pages)}")
@@ -3874,7 +3874,7 @@ def generate_multi_firm_pdf(
         
     except Exception as e:
         print(f"\n{'!'*70}")
-        print(f"[ERROR] ERROR: PDF-Generierung für {firm_suffix} fehlgeschlagen!")
+        print(f"❌ ERROR: PDF-Generierung für {firm_suffix} fehlgeschlagen!")
         print(f"{'!'*70}")
         print(f"Fehler-Typ: {type(e).__name__}")
         print(f"Fehler-Nachricht: {str(e)}")

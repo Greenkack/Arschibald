@@ -19,13 +19,13 @@ def test_module_import(module_name, description):
     """Test if module can be imported"""
     try:
         exec(f"from core.{module_name} import *")  # noqa: S102 (exec ist hier berechtigt)
-        results['passed'].append(f"[OK] {module_name} - {description}")
+        results['passed'].append(f"{module_name} - {description}")
         return True
     except ImportError as e:
-        results['failed'].append(f"[ERROR] {module_name} - Import Error: {e}")
+        results['failed'].append(f"{module_name} - Import Error: {e}")
         return False
     except Exception as e:
-        results['failed'].append(f"[WARNING] {module_name} - Error: {e}")
+        results['failed'].append(f"{module_name} - Error: {e}")
         return False
 
 
@@ -55,10 +55,10 @@ def test_core_integration():
             get_db_performance_monitor,
             get_di_container,
         )
-        results['passed'].append("[OK] core_integration.py - All imports successful")
+        results['passed'].append("core_integration.py - All imports successful")
         return True
     except ImportError as e:
-        results['failed'].append(f"[ERROR] core_integration.py - Import failed: {e}")
+        results['failed'].append(f"core_integration.py - Import failed: {e}")
         return False
 
 
@@ -68,7 +68,7 @@ print("=" * 70)
 print()
 
 # Test 1: Phase 1-4 (Basic Integration)
-print("[PACKAGE] Testing Phase 1-4: Basic Integration")
+print("Testing Phase 1-4: Basic Integration")
 print("-" * 70)
 
 test_module_import("config", "Configuration Management")
@@ -94,7 +94,7 @@ test_module_import("router", "URL Routing, Guards")
 print()
 
 # Test 3: Phase 6 (Forms & Widgets)
-print("[NOTE] Testing Phase 6: Forms & Widgets")
+print("Testing Phase 6: Forms & Widgets")
 print("-" * 70)
 
 test_module_import("form_manager", "Multi-Step Forms")
@@ -135,7 +135,7 @@ test_module_import("cli_migrations", "CLI Interface")
 print()
 
 # Test 7: Phase 10 (Cache Extensions)
-print("[LAUNCH] Testing Phase 10: Cache Extensions")
+print("Testing Phase 10: Cache Extensions")
 print("-" * 70)
 
 test_module_import("cache_invalidation", "Smart Invalidation")
@@ -154,7 +154,7 @@ test_module_import("session_repository", "Session DB Ops")
 print()
 
 # Test 9: Phase 12 (DI Container)
-print("[TOOL] Testing Phase 12: Dependency Injection")
+print("Testing Phase 12: Dependency Injection")
 print("-" * 70)
 
 test_module_import("containers", "DI Container")
@@ -171,26 +171,26 @@ print()
 
 # Summary
 print("=" * 70)
-print("[CHART] TEST SUMMARY")
+print("TEST SUMMARY")
 print("=" * 70)
 print()
 
-print(f"[OK] Passed: {len(results['passed'])}")
-print(f"[ERROR] Failed: {len(results['failed'])}")
-print(f"[SKIP] Skipped: {len(results['skipped'])}")
+print(f"Passed: {len(results['passed'])}")
+print(f"Failed: {len(results['failed'])}")
+print(f"Skipped: {len(results['skipped'])}")
 
 total = len(results['passed']) + len(results['failed']) + len(results['skipped'])
 success_rate = (len(results['passed']) / total * 100) if total > 0 else 0
 
-print(f"\n[STATS] Success Rate: {success_rate:.1f}%")
+print(f"\nSuccess Rate: {success_rate:.1f}%")
 
 if results['failed']:
-    print("\n[ERROR] FAILED TESTS:")
+    print("\nFAILED TESTS:")
     for fail in results['failed']:
         print(f"   {fail}")
 
 if results['skipped']:
-    print("\n[SKIP] SKIPPED TESTS:")
+    print("\nSKIPPED TESTS:")
     for skip in results['skipped']:
         print(f"   {skip}")
 

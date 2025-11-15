@@ -93,7 +93,7 @@ def test_create_offer_tracking_tables():
     for col in required_columns:
         assert col in columns, f"Spalte '{col}' fehlt in projects Tabelle"
     
-    print("[OK] Alle erforderlichen Spalten wurden hinzugefügt")
+    print("Alle erforderlichen Spalten wurden hinzugefügt")
     conn.close()
 
 
@@ -124,7 +124,7 @@ def test_update_offer_status():
     assert offer['offer_sent_date'] is not None, "offer_sent_date sollte gesetzt sein"
     assert offer['follow_up_date'] is not None, "follow_up_date sollte automatisch gesetzt sein"
     assert offer['offer_value'] == 25000.0, f"offer_value sollte 25000.0 sein, ist aber {offer['offer_value']}"
-    print("[OK] Status 'sent' erfolgreich gesetzt mit automatischem Follow-up")
+    print("Status 'sent' erfolgreich gesetzt mit automatischem Follow-up")
     
     # Test 2: Status auf "accepted" setzen
     print("\n2. Status auf 'accepted' setzen...")
@@ -134,7 +134,7 @@ def test_update_offer_status():
     offer = get_offer_status(conn, project_id)
     assert offer['offer_status'] == 'accepted', f"Status sollte 'accepted' sein"
     assert offer['offer_accepted_date'] is not None, "offer_accepted_date sollte gesetzt sein"
-    print("[OK] Status 'accepted' erfolgreich gesetzt")
+    print("Status 'accepted' erfolgreich gesetzt")
     
     # Test 3: Neues Projekt mit "rejected" Status
     conn.execute("INSERT INTO projects (customer_id, project_name) VALUES (?, ?)",
@@ -154,7 +154,7 @@ def test_update_offer_status():
     assert offer['offer_status'] == 'rejected', "Status sollte 'rejected' sein"
     assert offer['rejection_reason'] == 'Preis zu hoch', "Ablehnungsgrund sollte gesetzt sein"
     assert offer['rejection_notes'] is not None, "Ablehnungsnotizen sollten gesetzt sein"
-    print("[OK] Status 'rejected' erfolgreich gesetzt mit Ablehnungsgrund")
+    print("Status 'rejected' erfolgreich gesetzt mit Ablehnungsgrund")
     
     conn.close()
 
@@ -188,21 +188,21 @@ def test_get_all_offers():
     print("\n1. Alle Angebote laden...")
     all_offers = get_all_offers(conn)
     assert len(all_offers) == 4, f"Sollte 4 Angebote haben, hat aber {len(all_offers)}"
-    print(f"[OK] {len(all_offers)} Angebote geladen")
+    print(f"{len(all_offers)} Angebote geladen")
     
     # Test 2: Filter nach Status "sent"
     print("\n2. Filter nach Status 'sent'...")
     sent_offers = get_all_offers(conn, status_filter='sent')
     assert len(sent_offers) == 1, f"Sollte 1 'sent' Angebot haben, hat aber {len(sent_offers)}"
     assert sent_offers[0]['offer_status'] == 'sent', "Gefiltertes Angebot sollte Status 'sent' haben"
-    print("[OK] Filter funktioniert korrekt")
+    print("Filter funktioniert korrekt")
     
     # Test 3: Mit Kundeninformationen
     print("\n3. Mit Kundeninformationen laden...")
     offers_with_customer = get_all_offers(conn, include_customer_info=True)
     assert 'customer_first_name' in offers_with_customer[0], "Kundeninformationen fehlen"
     assert offers_with_customer[0]['customer_company_name'] == 'Test GmbH', "Firmenname sollte geladen sein"
-    print("[OK] Kundeninformationen werden korrekt geladen")
+    print("Kundeninformationen werden korrekt geladen")
     
     conn.close()
 
@@ -247,7 +247,7 @@ def test_follow_up_reminders():
     pending = get_pending_follow_ups(conn)
     assert len(pending) == 1, f"Sollte 1 ausstehendes Follow-up haben, hat aber {len(pending)}"
     assert pending[0]['project_name'] == "Projekt mit fälligem Follow-up", "Falsches Projekt geladen"
-    print(f"[OK] {len(pending)} ausstehendes Follow-up gefunden")
+    print(f"{len(pending)} ausstehendes Follow-up gefunden")
     
     # Test 2: Follow-up als erledigt markieren
     print("\n2. Follow-up als erledigt markieren...")
@@ -256,7 +256,7 @@ def test_follow_up_reminders():
     
     pending_after = get_pending_follow_ups(conn)
     assert len(pending_after) == 0, f"Sollte 0 ausstehende Follow-ups haben, hat aber {len(pending_after)}"
-    print("[OK] Follow-up erfolgreich als erledigt markiert")
+    print("Follow-up erfolgreich als erledigt markiert")
     
     conn.close()
 
@@ -295,7 +295,7 @@ def test_lead_status_update():
     cursor.execute("SELECT stage FROM crm_leads WHERE id = ?", (lead_id,))
     lead_stage = cursor.fetchone()[0]
     assert lead_stage == 'won', f"Lead-Status sollte 'won' sein, ist aber '{lead_stage}'"
-    print("[OK] Lead-Status erfolgreich auf 'won' aktualisiert")
+    print("Lead-Status erfolgreich auf 'won' aktualisiert")
     
     # Test 2: Neues Projekt/Lead für "rejected" Test
     conn.execute("INSERT INTO projects (customer_id, project_name) VALUES (?, ?)",
@@ -317,7 +317,7 @@ def test_lead_status_update():
     cursor.execute("SELECT stage FROM crm_leads WHERE id = ?", (lead_id_2,))
     lead_stage = cursor.fetchone()[0]
     assert lead_stage == 'lost', f"Lead-Status sollte 'lost' sein, ist aber '{lead_stage}'"
-    print("[OK] Lead-Status erfolgreich auf 'lost' aktualisiert")
+    print("Lead-Status erfolgreich auf 'lost' aktualisiert")
     
     conn.close()
 
@@ -382,7 +382,7 @@ def test_offer_statistics():
     assert stats['pending_follow_ups'] == 1, \
         f"Sollte 1 ausstehendes Follow-up haben, hat aber {stats['pending_follow_ups']}"
     
-    print("[OK] Alle Statistiken korrekt berechnet:")
+    print("Alle Statistiken korrekt berechnet:")
     print(f"   - Total: {stats['total_offers']}")
     print(f"   - Draft: {stats['draft']}, Sent: {stats['sent']}, Accepted: {stats['accepted']}, Rejected: {stats['rejected']}")
     print(f"   - Conversion Rate: {stats['conversion_rate']:.1f}%")
@@ -407,17 +407,17 @@ def run_all_tests():
         test_offer_statistics()
         
         print("\n" + "=" * 60)
-        print("[OK] ALLE TESTS ERFOLGREICH BESTANDEN!")
+        print("ALLE TESTS ERFOLGREICH BESTANDEN!")
         print("=" * 60)
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n[ERROR] UNERWARTETER FEHLER: {e}")
+        print(f"\nUNERWARTETER FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False

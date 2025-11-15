@@ -132,13 +132,13 @@ def example_validation():
 
     try:
         config = load_config()
-        print("[OK] Valid configuration loaded successfully")
+        print("Valid configuration loaded successfully")
         print(f"  - Environment: {config.env}")
         print(f"  - Mode: {config.mode}")
         print(f"  - Theme: {config.theme}")
         print(f"  - Compute: {config.compute}")
     except ValueError as e:
-        print(f"[ERROR] Validation failed: {e}")
+        print(f"Validation failed: {e}")
 
     # Invalid configuration
     print("\nTrying invalid configuration...")
@@ -146,9 +146,9 @@ def example_validation():
 
     try:
         config = load_config()
-        print("[ERROR] Should have failed validation")
+        print("Should have failed validation")
     except ValueError as e:
-        print(f"[OK] Validation correctly failed: {e}")
+        print(f"Validation correctly failed: {e}")
     print()
 
 
@@ -170,7 +170,7 @@ def example_hot_reload():
     # Reload configuration
     reloaded_config = reload_config()
     print(f"Reloaded Mode: {reloaded_config.mode}")
-    print("[OK] Configuration hot-reloaded successfully")
+    print("Configuration hot-reloaded successfully")
     print()
 
 

@@ -24,11 +24,11 @@ def simulate_multi_offer_generation():
     storage = list_products('storage')
 
     if not modules or not inverters or not storage:
-        print("[ERROR] FEHLER: Keine Produkte gefunden!")
+        print("FEHLER: Keine Produkte gefunden!")
         return
 
     print(
-        f"\n[OK] Produkte geladen: {
+        f"\nProdukte geladen: {
             len(modules)} Module, {
             len(inverters)} Wechselrichter, {
                 len(storage)} Speicher")
@@ -90,7 +90,7 @@ def simulate_multi_offer_generation():
         inverter = get_product_by_id(firm['inverter_id'])
         storage_unit = get_product_by_id(firm['storage_id'])
 
-        print("[PACKAGE] Produkte:")
+        print("Produkte:")
         print(
             f"   Modul:         {
                 module.get('model_name') if module else 'N/A'} ({
@@ -127,7 +127,7 @@ def simulate_multi_offer_generation():
             total_netto = recalculated_results.get('total_investment_netto', 0)
             base_price = recalculated_results.get('base_matrix_price_netto', 0)
 
-            print("\n[MONEY] BERECHNUNGSERGEBNISSE:")
+            print("\nBERECHNUNGSERGEBNISSE:")
             print(f"   Basis-Preis:        {base_price:>12.2f} €")
             print(f"   Gesamt Netto:       {total_netto:>12.2f} €")
 
@@ -146,7 +146,7 @@ def simulate_multi_offer_generation():
                 'module': module.get('model_name') if module else 'N/A'
             })
         else:
-            print("\n[ERROR] Berechnung fehlgeschlagen!")
+            print("\nBerechnung fehlgeschlagen!")
             if calculation_errors:
                 print(f"   Fehler: {calculation_errors[:3]}")
 
@@ -171,10 +171,10 @@ def simulate_multi_offer_generation():
 
     if len(unique_base) == 1:
         print(
-            f"[ERROR] PROBLEM: Alle Basis-Preise sind GLEICH: {base_prices[0]:.2f} €")
+            f"PROBLEM: Alle Basis-Preise sind GLEICH: {base_prices[0]:.2f} €")
         print("   → Produktpreise werden NICHT berücksichtigt!")
     else:
-        print(f"[OK] ERFOLG: {len(unique_base)} verschiedene Basis-Preise")
+        print(f"ERFOLG: {len(unique_base)} verschiedene Basis-Preise")
         print(
             f"   → Spanne: {
                 min(base_prices):.2f} € bis {
@@ -184,9 +184,9 @@ def simulate_multi_offer_generation():
 
     if len(unique_total) == 1:
         print(
-            f"[ERROR] PROBLEM: Alle Gesamt-Preise sind GLEICH: {total_prices[0]:.2f} €")
+            f"PROBLEM: Alle Gesamt-Preise sind GLEICH: {total_prices[0]:.2f} €")
     else:
-        print(f"[OK] ERFOLG: {len(unique_total)} verschiedene Gesamt-Preise")
+        print(f"ERFOLG: {len(unique_total)} verschiedene Gesamt-Preise")
         print(
             f"   → Spanne: {
                 min(total_prices):.2f} € bis {

@@ -9,7 +9,7 @@ def main():
     """Main application entry point."""
     st.set_page_config(
         page_title="DemoStreamlitApp",
-        page_icon="[LAUNCH]",
+        page_icon="",
         layout="wide"
     )
 

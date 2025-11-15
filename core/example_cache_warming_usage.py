@@ -241,7 +241,7 @@ def example_complete_workflow():
     print("\n7. Stopping background warming...")
     stop_cache_warming()
 
-    print("\n[OK] Complete workflow finished")
+    print("\nComplete workflow finished")
 
 
 if __name__ == "__main__":

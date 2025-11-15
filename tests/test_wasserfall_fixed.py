@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_fixed_waterfall():
     """Testet das korrigierte Wasserfall-Diagramm"""
 
-    print("[TOOL] Test des korrigierten Wasserfall-Diagramms")
+    print("Test des korrigierten Wasserfall-Diagramms")
     print("=" * 50)
 
     # Test-Szenarien mit verschiedenen Daten-Kombinationen
@@ -92,11 +92,11 @@ def test_fixed_waterfall():
                 with open(output_file, "wb") as f:
                     f.write(overlay_bytes)
 
-                print(f"[OK] PDF erstellt: {output_file}")
-                print(f"[PACKAGE] Größe: {len(overlay_bytes):,} bytes")
+                print(f"PDF erstellt: {output_file}")
+                print(f"Größe: {len(overlay_bytes):,} bytes")
 
                 # Zeige Daten-Details
-                print("[CHART] Daten:")
+                print("Daten:")
                 for key, value in scenario['data'].items():
                     if 'eur' in key.lower():
                         print(f"   - {key}: {value}€")
@@ -105,16 +105,16 @@ def test_fixed_waterfall():
                 try:
                     reader = PdfReader(io.BytesIO(overlay_bytes))
                     if len(reader.pages) >= 3:
-                        print("[FILE] Seite 3 verfügbar für Wasserfall-Diagramm")
+                        print("Seite 3 verfügbar für Wasserfall-Diagramm")
                 except Exception as e:
-                    print(f"[WARNING] PDF-Struktur-Prüfung fehlgeschlagen: {e}")
+                    print(f"PDF-Struktur-Prüfung fehlgeschlagen: {e}")
 
             else:
                 print(
-                    f"[ERROR] Overlay-Generierung fehlgeschlagen für Szenario {i + 1}")
+                    f"Overlay-Generierung fehlgeschlagen für Szenario {i + 1}")
 
         except Exception as e:
-            print(f"[ERROR] Fehler bei Szenario {i + 1}: {e}")
+            print(f"Fehler bei Szenario {i + 1}: {e}")
             import traceback
             traceback.print_exc()
 
@@ -122,7 +122,7 @@ def test_fixed_waterfall():
 def test_position_shift():
     """Testet die 20-Punkte-Verschiebung nach oben"""
 
-    print("\n[TOOL] Test der Position-Verschiebung")
+    print("\nTest der Position-Verschiebung")
     print("=" * 35)
 
     # Berechne die neuen Koordinaten
@@ -173,17 +173,17 @@ def test_position_shift():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"[OK] Test-PDF mit neuer Position erstellt: {output_file}")
+            print(f"Test-PDF mit neuer Position erstellt: {output_file}")
             print("📋 Das Diagramm sollte 20 Punkte höher als vorher positioniert sein")
         else:
-            print("[ERROR] Position-Test fehlgeschlagen")
+            print("Position-Test fehlgeschlagen")
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Position-Test: {e}")
+        print(f"Fehler beim Position-Test: {e}")
 
 
 if __name__ == "__main__":
-    print("[LAUNCH] Test der korrigierten Wasserfall-Diagramm Implementation")
+    print("Test der korrigierten Wasserfall-Diagramm Implementation")
     print("=" * 65)
 
     # Test 1: Verschiedene Daten-Szenarien

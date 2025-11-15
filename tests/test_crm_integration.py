@@ -37,13 +37,13 @@ class CRMIntegrationTest:
         for module_name, description in modules_to_test:
             try:
                 module = importlib.import_module(module_name)
-                print(f"[OK] {module_name:20s} - {description}")
+                print(f"{module_name:20s} - {description}")
                 self.results['passed'].append(f"Import: {module_name}")
             except ImportError as e:
-                print(f"[ERROR] {module_name:20s} - FEHLER: {e}")
+                print(f"{module_name:20s} - FEHLER: {e}")
                 self.results['failed'].append(f"Import: {module_name} - {e}")
             except Exception as e:
-                print(f"[WARNING]  {module_name:20s} - WARNUNG: {e}")
+                print(f"{module_name:20s} - WARNUNG: {e}")
                 self.results['warnings'].append(f"Import: {module_name} - {e}")
     
     def test_render_functions(self):
@@ -65,16 +65,16 @@ class CRMIntegrationTest:
                 if hasattr(module, func_name):
                     func = getattr(module, func_name)
                     if callable(func):
-                        print(f"[OK] {module_name}.{func_name:25s} - {description}")
+                        print(f"{module_name}.{func_name:25s} - {description}")
                         self.results['passed'].append(f"Funktion: {module_name}.{func_name}")
                     else:
-                        print(f"[ERROR] {module_name}.{func_name:25s} - NICHT CALLABLE")
+                        print(f"{module_name}.{func_name:25s} - NICHT CALLABLE")
                         self.results['failed'].append(f"Funktion: {module_name}.{func_name} nicht callable")
                 else:
-                    print(f"[ERROR] {module_name}.{func_name:25s} - NICHT GEFUNDEN")
+                    print(f"{module_name}.{func_name:25s} - NICHT GEFUNDEN")
                     self.results['failed'].append(f"Funktion: {module_name}.{func_name} fehlt")
             except Exception as e:
-                print(f"[WARNING]  {module_name}.{func_name:25s} - FEHLER: {e}")
+                print(f"{module_name}.{func_name:25s} - FEHLER: {e}")
                 self.results['warnings'].append(f"Funktion: {module_name}.{func_name} - {e}")
     
     def test_gui_integration(self):
@@ -108,14 +108,14 @@ class CRMIntegrationTest:
             
             for search_string, description in checks:
                 if search_string in gui_content:
-                    print(f"[OK] {description}")
+                    print(f"{description}")
                     self.results['passed'].append(f"GUI: {description}")
                 else:
-                    print(f"[ERROR] {description} - NICHT GEFUNDEN")
+                    print(f"{description} - NICHT GEFUNDEN")
                     self.results['failed'].append(f"GUI: {description} fehlt")
         
         except Exception as e:
-            print(f"[ERROR] Fehler beim Lesen von gui.py: {e}")
+            print(f"Fehler beim Lesen von gui.py: {e}")
             self.results['failed'].append(f"GUI-Datei: {e}")
     
     def test_tab_structure(self):
@@ -139,22 +139,22 @@ class CRMIntegrationTest:
             
             for tab_var, description in tabs:
                 if f'{tab_var}' in gui_content:
-                    print(f"[OK] {description} definiert")
+                    print(f"{description} definiert")
                     self.results['passed'].append(f"Tab: {description}")
                 else:
-                    print(f"[ERROR] {description} - FEHLT")
+                    print(f"{description} - FEHLT")
                     self.results['failed'].append(f"Tab: {description} fehlt")
             
             # Prüfe ob st.tabs() mit 4 Tabs aufgerufen wird
             if 'tab_customers, tab_dashboard, tab_pipeline, tab_calendar = st.tabs(' in gui_content:
-                print(f"[OK] 4 Tabs werden korrekt erstellt")
+                print(f"4 Tabs werden korrekt erstellt")
                 self.results['passed'].append("Tab-Erstellung: 4 Tabs")
             else:
-                print(f"[ERROR] Tab-Erstellung inkorrekt")
+                print(f"Tab-Erstellung inkorrekt")
                 self.results['failed'].append("Tab-Erstellung: Falsche Anzahl oder Struktur")
         
         except Exception as e:
-            print(f"[ERROR] Fehler beim Tab-Test: {e}")
+            print(f"Fehler beim Tab-Test: {e}")
             self.results['failed'].append(f"Tab-Test: {e}")
     
     def test_text_keys(self):
@@ -181,14 +181,14 @@ class CRMIntegrationTest:
             
             for key, description in text_keys:
                 if f'"{key}"' in gui_content:
-                    print(f"[OK] Text-Key: {key:30s} - {description}")
+                    print(f"Text-Key: {key:30s} - {description}")
                     self.results['passed'].append(f"Text-Key: {key}")
                 else:
-                    print(f"[ERROR] Text-Key: {key:30s} - FEHLT")
+                    print(f"Text-Key: {key:30s} - FEHLT")
                     self.results['failed'].append(f"Text-Key: {key} fehlt")
         
         except Exception as e:
-            print(f"[ERROR] Fehler beim Text-Key-Test: {e}")
+            print(f"Fehler beim Text-Key-Test: {e}")
             self.results['failed'].append(f"Text-Keys: {e}")
     
     def test_menu_icon(self):
@@ -204,14 +204,14 @@ class CRMIntegrationTest:
             
             # Suche nach CRM-Menüeintrag mit Icon
             if '"icon": "👥"' in gui_content and '"key": "crm"' in gui_content:
-                print(f"[OK] CRM-Menüpunkt mit Icon 👥 gefunden")
+                print(f"CRM-Menüpunkt mit Icon 👥 gefunden")
                 self.results['passed'].append("Menü: CRM-Icon vorhanden")
             else:
-                print(f"[WARNING]  CRM-Menüpunkt oder Icon nicht gefunden")
+                print(f"CRM-Menüpunkt oder Icon nicht gefunden")
                 self.results['warnings'].append("Menü: Icon möglicherweise fehlend")
         
         except Exception as e:
-            print(f"[ERROR] Fehler beim Menü-Test: {e}")
+            print(f"Fehler beim Menü-Test: {e}")
             self.results['failed'].append(f"Menü-Test: {e}")
     
     def print_summary(self):
@@ -225,17 +225,17 @@ class CRMIntegrationTest:
         failed = len(self.results['failed'])
         warnings = len(self.results['warnings'])
         
-        print(f"\n[OK] Erfolgreich: {passed}/{total}")
-        print(f"[ERROR] Fehlgeschlagen: {failed}/{total}")
-        print(f"[WARNING]  Warnungen: {warnings}/{total}")
+        print(f"\nErfolgreich: {passed}/{total}")
+        print(f"Fehlgeschlagen: {failed}/{total}")
+        print(f"Warnungen: {warnings}/{total}")
         
         if failed > 0:
-            print("\n[ERROR] FEHLGESCHLAGENE TESTS:")
+            print("\nFEHLGESCHLAGENE TESTS:")
             for fail in self.results['failed']:
                 print(f"   • {fail}")
         
         if warnings > 0:
-            print("\n[WARNING]  WARNUNGEN:")
+            print("\nWARNUNGEN:")
             for warn in self.results['warnings']:
                 print(f"   • {warn}")
         
@@ -244,9 +244,9 @@ class CRMIntegrationTest:
         if failed == 0 and warnings == 0:
             print("🎉 ALLE TESTS BESTANDEN - CRM VOLLSTÄNDIG INTEGRIERT!")
         elif failed == 0:
-            print("[OK] TESTS BESTANDEN - Mit Warnungen")
+            print("TESTS BESTANDEN - Mit Warnungen")
         else:
-            print("[ERROR] TESTS FEHLGESCHLAGEN - Bitte Fehler beheben")
+            print("TESTS FEHLGESCHLAGEN - Bitte Fehler beheben")
         print("="*60)
         
         return failed == 0

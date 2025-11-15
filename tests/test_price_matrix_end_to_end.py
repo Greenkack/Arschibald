@@ -693,7 +693,7 @@ def test_complete_workflow_summary():
         print("="*60)
         for result in results:
             print(f"\n{result['scenario']}:")
-            print(f"  [OK] Success")
+            print(f"  Success")
             print(f"  Price: {result['price']:.2f} EUR")
             print(f"  Row: {result['row_used']}, Column: {result['column_used']}")
         print("\n" + "="*60)

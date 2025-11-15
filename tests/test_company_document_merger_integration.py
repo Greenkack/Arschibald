@@ -131,7 +131,7 @@ def test_merge_multiple_documents():
         assert num_pages == expected_pages, f"Expected {expected_pages} pages, got {num_pages}"
 
         print(
-            f"[OK] Successfully merged {
+            f"Successfully merged {
                 len(doc_ids)} documents into {num_pages} pages")
 
         # Verify page content
@@ -139,13 +139,13 @@ def test_merge_multiple_documents():
             text = page.extract_text()
             print(f"  Page {i + 1}: {text[:50]}...")
 
-        print("[OK] All pages contain expected content")
+        print("All pages contain expected content")
 
     finally:
         # Cleanup
         if doc_ids and test_files:
             cleanup_test_documents(doc_ids, test_files)
-            print("[OK] Cleaned up test documents")
+            print("Cleaned up test documents")
 
 
 def test_merge_with_missing_file():
@@ -178,14 +178,14 @@ def test_merge_with_missing_file():
         expected_pages = 5
         assert num_pages == expected_pages, f"Expected {expected_pages} pages, got {num_pages}"
 
-        print(f"[OK] Successfully merged remaining documents ({num_pages} pages)")
-        print("[OK] Missing file was handled gracefully")
+        print(f"Successfully merged remaining documents ({num_pages} pages)")
+        print("Missing file was handled gracefully")
 
     finally:
         # Cleanup
         if doc_ids and test_files:
             cleanup_test_documents(doc_ids, test_files)
-            print("[OK] Cleaned up test documents")
+            print("Cleaned up test documents")
 
 
 def test_merge_single_document():
@@ -212,13 +212,13 @@ def test_merge_single_document():
         expected_pages = 2
         assert num_pages == expected_pages, f"Expected {expected_pages} pages, got {num_pages}"
 
-        print(f"[OK] Successfully merged single document ({num_pages} pages)")
+        print(f"Successfully merged single document ({num_pages} pages)")
 
     finally:
         # Cleanup
         if doc_ids and test_files:
             cleanup_test_documents(doc_ids, test_files)
-            print("[OK] Cleaned up test documents")
+            print("Cleaned up test documents")
 
 
 def main():
@@ -237,7 +237,7 @@ def main():
         print("=" * 60)
 
     except Exception as e:
-        print(f"\n[ERROR] Test failed with error: {e}")
+        print(f"\nTest failed with error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

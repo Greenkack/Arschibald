@@ -59,13 +59,13 @@ class ComprehensiveIssueFixer:
         for filepath, issues in sorted(file_issues.items()):
             # Skip backup directories
             if any(skip in filepath for skip in ['_backup', '__pycache__', '.git', 'venv']):
-                logger.info(f"[SKIP]  Skipping backup/cache: {filepath}")
+                logger.info(f"Skipping backup/cache: {filepath}")
                 self.skipped_count += len(issues)
                 continue
             
             # Skip if file doesn't exist
             if not Path(filepath).exists():
-                logger.info(f"[SKIP]  File not found: {filepath}")
+                logger.info(f"File not found: {filepath}")
                 self.skipped_count += len(issues)
                 continue
             
@@ -75,13 +75,13 @@ class ComprehensiveIssueFixer:
         logger.info(f"\n{'=' * 80}")
         logger.info(f"SUMMARY")
         logger.info(f"{'=' * 80}")
-        logger.info(f"[OK] Fixed: {self.fixed_count} issues in {len(self.fixed_files)} files")
-        logger.info(f"[SKIP]  Skipped: {self.skipped_count} issues")
-        logger.info(f"[ERROR] Errors: {self.error_count} issues")
+        logger.info(f"Fixed: {self.fixed_count} issues in {len(self.fixed_files)} files")
+        logger.info(f"Skipped: {self.skipped_count} issues")
+        logger.info(f"Errors: {self.error_count} issues")
         logger.info(f"{'=' * 80}\n")
         
         if dry_run:
-            logger.info("[WARNING]  DRY RUN - No files were modified")
+            logger.info("DRY RUN - No files were modified")
             logger.info("Run with --live to apply fixes")
     
     def _fix_file(self, filepath: str, issues: List[Dict], dry_run: bool):
@@ -112,18 +112,18 @@ class ComprehensiveIssueFixer:
                 if not dry_run:
                     with open(filepath, 'w', encoding='utf-8') as f:
                         f.write(new_content)
-                    logger.info(f"[OK] {filepath}: Fixed {fixed_in_file} issues")
+                    logger.info(f"{filepath}: Fixed {fixed_in_file} issues")
                     self.fixed_files.add(filepath)
                 else:
-                    logger.info(f"[SEARCH] {filepath}: Would fix {fixed_in_file} issues")
+                    logger.info(f"{filepath}: Would fix {fixed_in_file} issues")
                 
                 self.fixed_count += fixed_in_file
             else:
-                logger.info(f"[SKIP]  {filepath}: No auto-fixable issues ({len(issues)} total)")
+                logger.info(f"{filepath}: No auto-fixable issues ({len(issues)} total)")
                 self.skipped_count += len(issues)
         
         except Exception as e:
-            logger.error(f"[ERROR] {filepath}: Error - {e}")
+            logger.error(f"{filepath}: Error - {e}")
             self.error_count += len(issues)
     
     def _fix_division_by_zero(self, lines: List[str], issue: Dict) -> bool:

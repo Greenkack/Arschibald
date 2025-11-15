@@ -34,7 +34,7 @@ def test_knowledge_preparation_step():
     assert 'Search knowledge base' in protocol.strategies[0]
     assert len(protocol.key_points) >= 3
 
-    print("   [OK] Knowledge preparation protocol implemented")
+    print("   Knowledge preparation protocol implemented")
     print(f"   - Strategies: {len(protocol.strategies)}")
     print(f"   - Key points: {len(protocol.key_points)}")
 
@@ -58,7 +58,7 @@ def test_argument_structure_building():
     assert "VALIDATE THE NEED" in argument
     assert "PRESENT SOLUTION" in argument
 
-    print("   [OK] Argument structure building implemented")
+    print("   Argument structure building implemented")
     print(f"   - Customer need addressed: '{customer_need}'")
     print(f"   - Facts integrated: {len(facts)}")
 
@@ -86,7 +86,7 @@ def test_objection_handling_logic():
         assert "CONFIRM" in response
         handled_count += 1
 
-    print("   [OK] Objection handling logic implemented")
+    print("   Objection handling logic implemented")
     print(f"   - Objections handled: {handled_count}")
     print("   - 4-step process: VALIDATE → CLARIFY → RESPOND → CONFIRM")
 
@@ -104,7 +104,7 @@ def test_closing_and_next_steps():
     assert next_step in closing
     assert "Vielen Dank" in closing or "zusammenfassen" in closing
 
-    print("   [OK] Closing statement generation implemented")
+    print("   Closing statement generation implemented")
     print("   - Summary included: Yes")
     print("   - Next steps included: Yes")
 
@@ -132,7 +132,7 @@ def test_all_call_phases():
         assert len(protocol.strategies) > 0
         assert len(protocol.key_points) > 0
 
-    print("   [OK] All call phases implemented")
+    print("   All call phases implemented")
     print(f"   - Total phases: {len(phases)}")
     for phase in phases:
         protocol = manager.get_protocol(phase)
@@ -153,7 +153,7 @@ def test_objection_handling_protocol():
         assert 'response' in obj
         assert len(obj['response']) > 50  # Substantial response
 
-    print("   [OK] Objection handling protocol comprehensive")
+    print("   Objection handling protocol comprehensive")
     print(f"   - Common objections: {len(protocol.common_objections)}")
 
 
@@ -172,19 +172,19 @@ def run_all_tests():
         test_objection_handling_protocol()
 
         print("\n" + "=" * 60)
-        print("[OK] ALL TASK 5.2 REQUIREMENTS VERIFIED")
+        print("ALL TASK 5.2 REQUIREMENTS VERIFIED")
         print("=" * 60)
         print("\nImplemented:")
-        print("  [OK] Knowledge preparation step")
-        print("  [OK] Argument structure building")
-        print("  [OK] Objection handling logic")
-        print("  [OK] Closing and next-step generation")
+        print("  Knowledge preparation step")
+        print("  Argument structure building")
+        print("  Objection handling logic")
+        print("  Closing and next-step generation")
         print("\n" + "=" * 60 + "\n")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False

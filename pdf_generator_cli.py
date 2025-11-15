@@ -30,7 +30,7 @@ def main():
             config = json.load(f)
 
         if args.debug:
-            print(f"[TOOL] Loaded config: {json.dumps(config, indent=2)}", file=sys.stderr)
+            print(f"Loaded config: {json.dumps(config, indent=2)}", file=sys.stderr)
 
         # Import and use pdf_generator
         from pdf_generator import generate_offer_pdf_with_main_templates
@@ -49,7 +49,7 @@ def main():
 
         # Generate PDF
         if args.debug:
-            print("[TARGET] Generating PDF with template engine", file=sys.stderr)
+            print("Generating PDF with template engine", file=sys.stderr)
             print(f"   Project Data: {project_data.get('customer_name', 'Unknown')}", file=sys.stderr)
             print(f"   Output: {args.output}", file=sys.stderr)
 

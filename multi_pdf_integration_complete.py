@@ -94,7 +94,7 @@ def render_multi_pdf_customer_input() -> bool:
     auto_customer_data = load_customer_data_from_project()
     
     if auto_customer_data and any(auto_customer_data.values()):
-        st.success("[OK] Kundendaten aus Projekt/Bedarfsanalyse übernommen!")
+        st.success("Kundendaten aus Projekt/Bedarfsanalyse übernommen!")
         st.session_state.multi_offer_customer_data = auto_customer_data
         
         # Zeige übernommene Daten an
@@ -173,10 +173,10 @@ def render_multi_pdf_company_selection(companies: List[Dict]) -> List[int]:
         )
     
     with col_buttons:
-        if st.button("[OK] Alle wählen"):
+        if st.button("Alle wählen"):
             st.session_state.multi_offer_selected_companies = list(company_options.values())
             st.rerun()
-        if st.button("[ERROR] Alle abwählen"):
+        if st.button("Alle abwählen"):
             st.session_state.multi_offer_selected_companies = []
             st.rerun()
     
@@ -194,9 +194,9 @@ def render_multi_pdf_company_selection(companies: List[Dict]) -> List[int]:
     # Erweiterte PDF-Einstellungen
     if selected_ids:
         num = len(selected_ids)
-        st.success(f"[OK] **{num} Firma(en) ausgewählt**")
+        st.success(f"**{num} Firma(en) ausgewählt**")
         
-        with st.expander("[FILE] Erweiterte PDF-Ausgabe (Seite 7+) je Firma"):
+        with st.expander("Erweiterte PDF-Ausgabe (Seite 7+) je Firma"):
             col_master, col_individual = st.columns([1, 3])
             
             with col_master:
@@ -215,7 +215,7 @@ def render_multi_pdf_company_selection(companies: List[Dict]) -> List[int]:
                 for cid in selected_ids:
                     company_name = next((c["name"] for c in companies if c["id"] == cid), f"Firma {cid}")
                     st.session_state.multi_offer_company_extended[cid] = st.checkbox(
-                        f"[FILE] {company_name}",
+                        f"{company_name}",
                         value=st.session_state.multi_offer_company_extended.get(cid, False),
                         key=f"ext_{cid}"
                     )
@@ -252,7 +252,7 @@ def render_multi_pdf_settings():
     
     with col3:
         settings["price_increment_percent"] = st.slider(
-            "[MONEY] Preisstaffelung (%)",
+            "Preisstaffelung (%)",
             0.0, 20.0,
             settings.get("price_increment_percent", 3.0),
             step=0.5,
@@ -260,7 +260,7 @@ def render_multi_pdf_settings():
         )
     
     # Erweiterte Einstellungen
-    with st.expander("[TOOL] Erweiterte Rotation & Preiseinstellungen"):
+    with st.expander("Erweiterte Rotation & Preiseinstellungen"):
         col_mode, col_steps = st.columns(2)
         
         with col_mode:
@@ -309,9 +309,9 @@ def render_heatpump_integration_toggle() -> bool:
     if enabled:
         # Prüfe ob Wärmepumpen-Daten verfügbar sind
         if st.session_state.get("heatpump_calculation_data"):
-            st.success("[OK] Wärmepumpen-Daten aus Bedarfsanalyse übernommen")
+            st.success("Wärmepumpen-Daten aus Bedarfsanalyse übernommen")
         else:
-            st.info("[INFO] Keine Wärmepumpen-Daten verfügbar. Bitte erst Bedarfsanalyse durchführen.")
+            st.info("Keine Wärmepumpen-Daten verfügbar. Bitte erst Bedarfsanalyse durchführen.")
             return False
     
     return enabled
@@ -496,7 +496,7 @@ def batch_generate_offers():
     """
     Generiert PDFs für alle ausgewählten Firmen mit vollständiger Pipeline
     """
-    st.subheader("[LAUNCH] Schritt 4: PDF-Angebote generieren")
+    st.subheader("Schritt 4: PDF-Angebote generieren")
     
     customer_data = st.session_state.multi_offer_customer_data
     selected_companies = st.session_state.multi_offer_selected_companies
@@ -504,10 +504,10 @@ def batch_generate_offers():
     project_data = st.session_state.get("multi_offer_project_data", {})
     
     if not customer_data or not selected_companies:
-        st.error("[ERROR] Kundendaten oder Firmenauswahl fehlt!")
+        st.error("Kundendaten oder Firmenauswahl fehlt!")
         return
     
-    if st.button("[TARGET] Angebote für alle Firmen erstellen", type="primary", use_container_width=True):
+    if st.button("Angebote für alle Firmen erstellen", type="primary", use_container_width=True):
         
         try:
             from database import get_company
@@ -544,15 +544,15 @@ def batch_generate_offers():
                             "filename": filename,
                             "bytes": pdf_content,  # Für CRM-Speicherung
                         })
-                        st.success(f"[OK] PDF für {company_name} erstellt")
+                        st.success(f"PDF für {company_name} erstellt")
                     else:
-                        st.error(f"[ERROR] PDF für {company_name} konnte nicht erstellt werden")
+                        st.error(f"PDF für {company_name} konnte nicht erstellt werden")
                     
                     # Fortschritt aktualisieren
                     progress_bar.progress((i + 1) / total_companies)
                     
                 except Exception as e:
-                    st.error(f"[ERROR] Fehler bei {company_name}: {str(e)}")
+                    st.error(f"Fehler bei {company_name}: {str(e)}")
                     logging.error(f"Fehler bei PDF-Generierung für {company_name}: {e}")
                     continue
             
@@ -564,7 +564,7 @@ def batch_generate_offers():
                 
                 # Download-Button
                 st.download_button(
-                    label="[PACKAGE] Alle Angebote als ZIP herunterladen",
+                    label="Alle Angebote als ZIP herunterladen",
                     data=zip_content,
                     file_name=f"Multi_Angebote_{customer_data.get('last_name', 'Kunde')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
                     mime="application/zip",
@@ -575,12 +575,12 @@ def batch_generate_offers():
                 render_crm_integration(customer_data, generated_pdfs, project_data)
             
             else:
-                st.error("[ERROR] Keine PDFs konnten erstellt werden!")
+                st.error("Keine PDFs konnten erstellt werden!")
             
-            status_text.text("[OK] Fertig!")
+            status_text.text("Fertig!")
             
         except Exception as e:
-            st.error(f"[ERROR] Fehler bei der PDF-Generierung: {str(e)}")
+            st.error(f"Fehler bei der PDF-Generierung: {str(e)}")
             logging.error(f"Fehler in batch_generate_offers: {e}")
 
 
@@ -596,7 +596,7 @@ def render_crm_integration(customer_data: dict, generated_pdfs: List[Dict], proj
             
             conn = get_db_connection()
             if conn is None:
-                st.error("[ERROR] Keine DB-Verbindung für CRM")
+                st.error("Keine DB-Verbindung für CRM")
                 return
             
             conn.row_factory = sqlite3.Row
@@ -616,7 +616,7 @@ def render_crm_integration(customer_data: dict, generated_pdfs: List[Dict], proj
             
             if row:
                 crm_customer_id = int(row[0])
-                st.info(f"[INFO] Kunde bereits vorhanden (ID: {crm_customer_id})")
+                st.info(f"Kunde bereits vorhanden (ID: {crm_customer_id})")
             else:
                 cust_payload = {
                     'first_name': first_name or 'Interessent',
@@ -629,7 +629,7 @@ def render_crm_integration(customer_data: dict, generated_pdfs: List[Dict], proj
                     'creation_date': datetime.now().isoformat(),
                 }
                 crm_customer_id = save_customer(conn, cust_payload)
-                st.success(f"[OK] Neuer Kunde erstellt (ID: {crm_customer_id})")
+                st.success(f"Neuer Kunde erstellt (ID: {crm_customer_id})")
             
             # Projekt anlegen
             if crm_customer_id:
@@ -658,9 +658,9 @@ def render_crm_integration(customer_data: dict, generated_pdfs: List[Dict], proj
                             )
                             saved_docs += 1
                     except Exception as e_item:
-                        st.warning(f"[WARNING] Konnte PDF nicht speichern: {e_item}")
+                        st.warning(f"Konnte PDF nicht speichern: {e_item}")
                 
-                st.success(f"[OK] {saved_docs} PDF(s) in Kundenakte abgelegt!")
+                st.success(f"{saved_docs} PDF(s) in Kundenakte abgelegt!")
                 
                 # Navigation zu CRM
                 if st.button("👤 Zur CRM Kundenverwaltung"):
@@ -670,7 +670,7 @@ def render_crm_integration(customer_data: dict, generated_pdfs: List[Dict], proj
                     st.rerun()
         
         except Exception as e:
-            st.error(f"[ERROR] CRM-Speichern fehlgeschlagen: {e}")
+            st.error(f"CRM-Speichern fehlgeschlagen: {e}")
             logging.error(f"CRM-Integration Fehler: {e}")
 
 
@@ -683,7 +683,7 @@ def render_multi_pdf_generator():
     Haupt-UI für Multi-PDF-Generator
     Vollständige Integration mit PDF-Generierungs-Pipeline
     """
-    st.title("[CHART] Multi-Firmen-Angebotsgenerator")
+    st.title("Multi-Firmen-Angebotsgenerator")
     st.caption("Erstellen Sie mehrere individualisierte Angebote mit einem Klick")
     
     # Initialisierung
@@ -694,7 +694,7 @@ def render_multi_pdf_generator():
     try:
         from database import list_companies
     except ImportError:
-        st.error("[ERROR] Datenbankfunktionen nicht verfügbar")
+        st.error("Datenbankfunktionen nicht verfügbar")
         return
     
     # Schritt 1: Kundendaten
@@ -728,12 +728,12 @@ def render_multi_pdf_generator():
     
     # Schritt 5: Zusammenfassung & Generierung
     st.info(f"""
-    [CHART] **Zusammenfassung:**
+    **Zusammenfassung:**
     - 👥 {len(selected_company_ids)} Firma(en) ausgewählt
     - 🧑 Kunde: {st.session_state.multi_offer_customer_data.get('first_name')} {st.session_state.multi_offer_customer_data.get('last_name')}
-    - 🔄 Produktrotation: {'[OK] Aktiv' if st.session_state.multi_offer_settings.get('enable_product_rotation') else '[ERROR] Deaktiviert'}
-    - [MONEY] Preisstaffelung: {st.session_state.multi_offer_settings.get('price_increment_percent', 0)}%
-    - 🔥 Wärmepumpe: {'[OK] Ja' if heatpump_enabled else '[ERROR] Nein'}
+    - 🔄 Produktrotation: {'Aktiv' if st.session_state.multi_offer_settings.get('enable_product_rotation') else 'Deaktiviert'}
+    - Preisstaffelung: {st.session_state.multi_offer_settings.get('price_increment_percent', 0)}%
+    - 🔥 Wärmepumpe: {'Ja' if heatpump_enabled else 'Nein'}
     """)
     
     # PDF-Generierung

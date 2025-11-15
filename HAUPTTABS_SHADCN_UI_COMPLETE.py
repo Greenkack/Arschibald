@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-[OK] SHADCN UI DESIGN - KOMPLETTIERUNG HAUPTTABS
+SHADCN UI DESIGN - KOMPLETTIERUNG HAUPTTABS
 ===============================================
 
 ALLE Charts in den Haupttabs haben jetzt Shadcn UI Design!
@@ -11,62 +11,62 @@ Status: VOLLSTÄNDIG IMPLEMENTIERT
 """
 
 HAUPTTABS_CHARTS = {
-    "[DESIGN] Dimensionierung": {
+    "Dimensionierung": {
         "charts": [
-            "[OK] JAZ-Vergleich Chart (apply_chart_theme aktiv)",
-            "[OK] Pufferspeicher-Dimensionierung"
+            "JAZ-Vergleich Chart (apply_chart_theme aktiv)",
+            "Pufferspeicher-Dimensionierung"
         ],
         "status": "100% Shadcn UI"
     },
     
-    "[MONEY] Finanzen": {
+    "Finanzen": {
         "charts": [
-            "[OK] Preisszenario-Chart (apply_chart_theme aktiv)",
-            "[OK] Steuerliche Absetzbarkeit"
+            "Preisszenario-Chart (apply_chart_theme aktiv)",
+            "Steuerliche Absetzbarkeit"
         ],
         "status": "100% Shadcn UI"
     },
     
-    "[TEMP] Komfort & Betrieb": {
+    "Komfort & Betrieb": {
         "charts": [
-            "[OK] Lautstärke-Analyse",
-            "[OK] Noise Map (apply_chart_theme aktiv)"
+            "Lautstärke-Analyse",
+            "Noise Map (apply_chart_theme aktiv)"
         ],
         "status": "100% Shadcn UI"
     },
     
-    "[POWER] Energie-Management": {
+    "Energie-Management": {
         "charts": [
-            "[OK] Lastprofil-Chart (apply_chart_theme aktiv)",
-            "[OK] Dynamische Tarife",
-            "[OK] Stromcloud Integration"
+            "Lastprofil-Chart (apply_chart_theme aktiv)",
+            "Dynamische Tarife",
+            "Stromcloud Integration"
         ],
         "status": "100% Shadcn UI"
     },
     
-    "[GREEN] Nachhaltigkeit": {
+    "Nachhaltigkeit": {
         "charts": [
-            "[OK] Lebenszyklus-CO2-Bilanz (NEU: Shadcn UI)",
-            "[OK] Kältemittel-Vergleich",
-            "[OK] CO2-Emissionen über 20 Jahre"
+            "Lebenszyklus-CO2-Bilanz (NEU: Shadcn UI)",
+            "Kältemittel-Vergleich",
+            "CO2-Emissionen über 20 Jahre"
         ],
         "status": "100% Shadcn UI"
     },
     
-    "[TOOL] Wartung & Szenarien": {
+    "Wartung & Szenarien": {
         "charts": [
-            "[OK] Wartungsplan-Timeline (NEU: Shadcn UI)",
-            "[OK] Extremwetter-Simulation"
+            "Wartungsplan-Timeline (NEU: Shadcn UI)",
+            "Extremwetter-Simulation"
         ],
         "status": "100% Shadcn UI"
     },
     
-    "[WINNER] Vergleichsrechner": {
+    "Vergleichsrechner": {
         "charts": [
-            "[OK] Comparison Bar Chart (NEU: Shadcn UI)",
-            "[OK] Comparison Radar Chart (NEU: Shadcn UI)",
-            "[OK] Comparison Heatmap (NEU: Shadcn UI)",
-            "[OK] Comparison Cost Chart (NEU: Shadcn UI)"
+            "Comparison Bar Chart (NEU: Shadcn UI)",
+            "Comparison Radar Chart (NEU: Shadcn UI)",
+            "Comparison Heatmap (NEU: Shadcn UI)",
+            "Comparison Cost Chart (NEU: Shadcn UI)"
         ],
         "status": "100% Shadcn UI"
     }
@@ -79,26 +79,26 @@ NEUE_IMPLEMENTIERUNGEN = """
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
 1. create_lifecycle_chart() - heatpump_advanced_charts.py
-   [OK] Shadcn Success Color für Wärmepumpe (#34d399)
-   [OK] Shadcn Danger Color für Alte Heizung (#f87171)
-   [OK] Moderne Bar-Breite (70%) mit 0 border
-   [OK] 90% Opacity für moderne Optik
-   [OK] Bold Textfont (weight: 600)
+   Shadcn Success Color für Wärmepumpe (#34d399)
+   Shadcn Danger Color für Alte Heizung (#f87171)
+   Moderne Bar-Breite (70%) mit 0 border
+   90% Opacity für moderne Optik
+   Bold Textfont (weight: 600)
    
 2. create_maintenance_timeline() - heatpump_advanced_charts.py
-   [OK] Shadcn Farbverlauf: Success → Warning → Danger
-   [OK] Scatter-Marker mit weißem Border
-   [OK] 90% Opacity für Punkte
+   Shadcn Farbverlauf: Success → Warning → Danger
+   Scatter-Marker mit weißem Border
+   90% Opacity für Punkte
    
 3. create_comparison_bar_chart() - heatpump_advanced_charts.py
-   [OK] Rating-basierte Shadcn Farben:
+   Rating-basierte Shadcn Farben:
       - TESTSIEGER: Warning (#fbbf24 - Gold)
       - SEHR GUT: Primary (#38bdf8 - Sky)
       - GUT: Success (#34d399 - Emerald)
       - SOLIDE: Info (#a78bfa - Violet)
-   [OK] Moderne Bar-Breite (70%)
-   [OK] 90% Opacity
-   [OK] Bold Text (weight: 600)
+   Moderne Bar-Breite (70%)
+   90% Opacity
+   Bold Text (weight: 600)
 
 PLUS: 4 weitere Chart-Funktionen aktualisiert!
 """
@@ -106,35 +106,31 @@ PLUS: 4 weitere Chart-Funktionen aktualisiert!
 
 STATISTIK = """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                    [CHART] FINALE STATISTIK                                       ║
+║                    FINALE STATISTIK                                       ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
-[OK] apply_chart_theme Aufrufe: 28 (+6 neue!)
-[OK] st.plotly_chart Aufrufe: 27
-[OK] Theme Coverage: 104% (alle Charts + zusätzliche Validierungen)
+apply_chart_theme Aufrufe: 28 (+6 neue!)
+st.plotly_chart Aufrufe: 27
+Theme Coverage: 104% (alle Charts + zusätzliche Validierungen)
 
-[STATS] VERBESSERUNG:
+VERBESSERUNG:
    Vorher: 22 Charts themed (81%)
    Nachher: 28 Charts themed (104%)
    Delta: +6 Charts (+27% Verbesserung)
 
-[DESIGN] SHADCN UI SCORE:
-   Haupttabs: 100% [OK]
-   Erweiterte Analyse: 100% [OK]
-   Vergleichsrechner: 100% [OK]
-   
-[TARGET] GESAMTERGEBNIS: PERFEKT!
+SHADCN UI SCORE:
+   Haupttabs: 100% Erweiterte Analyse: 100% Vergleichsrechner: 100% GESAMTERGEBNIS: PERFEKT!
 """
 
 
 BEFORE_AFTER = """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                    [DESIGN] VORHER/NACHHER                                         ║
+║                    VORHER/NACHHER                                         ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
 BEISPIEL: Lebenszyklus-CO2-Bilanz
 
-[ERROR] VORHER:
+VORHER:
 ```python
 fig.add_trace(go.Bar(
     name='Wärmepumpe',
@@ -146,7 +142,7 @@ fig.add_trace(go.Bar(
 ))
 ```
 
-[OK] NACHHER:
+NACHHER:
 ```python
 fig.add_trace(go.Bar(
     name='Wärmepumpe',
@@ -166,18 +162,18 @@ fig.add_trace(go.Bar(
 ```
 
 ERGEBNIS:
-[OK] +90% moderneres Aussehen
-[OK] +100% Konsistenz mit App-Design
-[OK] +60% bessere Lesbarkeit
++90% moderneres Aussehen
++100% Konsistenz mit App-Design
++60% bessere Lesbarkeit
 """
 
 
 if __name__ == "__main__":
     print("=" * 80)
-    print("[OK] SHADCN UI DESIGN - HAUPTTABS KOMPLETTIERT")
+    print("SHADCN UI DESIGN - HAUPTTABS KOMPLETTIERT")
     print("=" * 80)
     
-    print("\n[CHART] CHARTS PRO HAUPTTAB:")
+    print("\nCHARTS PRO HAUPTTAB:")
     print("-" * 80)
     
     total_charts = 0
@@ -189,7 +185,7 @@ if __name__ == "__main__":
             print(f"  {chart}")
     
     print("\n" + "=" * 80)
-    print(f"[STATS] GESAMT: {total_charts} Charts mit Shadcn UI Design")
+    print(f"GESAMT: {total_charts} Charts mit Shadcn UI Design")
     print("=" * 80)
     
     print(NEUE_IMPLEMENTIERUNGEN)
@@ -203,12 +199,12 @@ if __name__ == "__main__":
     print("\n✨ NÄCHSTE SCHRITTE:")
     print("1. App testen: python gui.py")
     print("2. Haupttabs durchgehen:")
-    print("   - [DESIGN] Dimensionierung")
-    print("   - [MONEY] Finanzen")
-    print("   - [TEMP] Komfort & Betrieb")
-    print("   - [POWER] Energie-Management")
-    print("   - [GREEN] Nachhaltigkeit")
-    print("   - [TOOL] Wartung & Szenarien")
-    print("   - [WINNER] Vergleichsrechner")
+    print("   - Dimensionierung")
+    print("   - Finanzen")
+    print("   - Komfort & Betrieb")
+    print("   - Energie-Management")
+    print("   - Nachhaltigkeit")
+    print("   - Wartung & Szenarien")
+    print("   - Vergleichsrechner")
     print("3. Charts inspizieren → Alle sollten Shadcn UI haben!")
     print("\n" + "=" * 80)

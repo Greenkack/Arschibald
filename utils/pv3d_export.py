@@ -246,7 +246,7 @@ def export_multi_view(
                 png_bytes = fig.to_image(format="png", scale=1.0)
                 view_images[view_name] = png_bytes
                 
-                print(f"  [OK] {view_name} fertig ({len(png_bytes)} bytes)")
+                print(f"  {view_name} fertig ({len(png_bytes)} bytes)")
                 
             except Exception as e:
                 print(f"Fehler beim Rendern von {view_name}: {e}")
@@ -610,12 +610,12 @@ def export_all_formats(
             results[fmt] = success
             
             if success:
-                print(f"[OK] {fmt.upper()} Export erfolgreich: {filepath}")
+                print(f"{fmt.upper()} Export erfolgreich: {filepath}")
             else:
-                print(f"[ERROR] {fmt.upper()} Export fehlgeschlagen")
+                print(f"{fmt.upper()} Export fehlgeschlagen")
                 
         except Exception as e:
-            print(f"[ERROR] {fmt.upper()} Export Fehler: {e}")
+            print(f"{fmt.upper()} Export Fehler: {e}")
             results[fmt] = False
     
     return results

@@ -1,0 +1,2328 @@
+2025-11-15 18:50:11,968 - shadcn_error_handler - ERROR - ValueError: Test error | Context: {'test': 'value'}
+NoneType: None
+2025-11-15 18:50:11,968 - shadcn_error_handler - ERROR - ValueError: Test error | Context: {'test': 'value'}
+NoneType: None
+2025-11-15 18:50:11,972 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:50:11,972 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:50:11,972 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:50:11,976 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:50:11,976 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:50:11,976 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:50:11,976 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:50:11,977 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:50:11,977 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:50:11,977 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:50:11,977 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:50:11,977 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:50:11,977 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:50:11,977 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:50:11,977 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:50:11,978 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:50:11,979 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:50:11,983 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:11,983 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:11,983 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:11,983 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:11,983 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:12,211 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:12,211 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:12,211 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:12,211 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:12,211 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:12,215 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:12,215 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:12,215 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:12,215 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:12,215 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:12,215 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:12,215 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:12,215 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:12,215 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:12,215 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:12,215 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:12,215 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:12,219 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:12,219 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:12,219 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:12,219 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:12,219 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:12,219 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:12,219 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:12,220 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:12,220 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:12,220 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:12,220 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:12,220 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:12,220 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:12,220 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:12,224 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,224 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,224 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,224 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,224 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,224 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,224 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,224 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,415 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,416 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,420 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,424 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,425 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,438 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,440 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-7\test_export_error_report0\test_report.json
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,450 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,451 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,454 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,455 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,456 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,478 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:12.478203'}
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,483 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,487 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 428, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,492 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 446, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:12,494 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,755 - shadcn_error_handler - ERROR - ValueError: Test error | Context: {'test': 'value'}
+NoneType: None
+2025-11-15 18:50:40,755 - shadcn_error_handler - ERROR - ValueError: Test error | Context: {'test': 'value'}
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:50:40,759 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:50:40,768 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:40,768 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:40,768 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:40,768 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:40,768 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:40,881 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:50:40,897 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:40,897 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:40,897 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:40,897 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:40,897 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:40,897 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:40,897 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:50:40,901 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,901 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,901 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,901 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,901 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,901 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,901 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,901 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,905 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,906 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,909 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,913 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,914 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,917 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-8\test_export_error_report0\test_report.json
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,933 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,942 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,943 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,944 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,963 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:50:40.963452'}
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,972 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,976 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:50:40,978 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:54:21,321 - shadcn_error_handler - ERROR - ValueError: Test error
+NoneType: None
+2025-11-15 18:54:21,321 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Failed to load theme 'test': reason (original_error=ThemeLoadError) | Context: {'theme_name': 'test'}
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - INFO - Attempting recovery for theme_load_test (attempt 1)
+2025-11-15 18:54:21,458 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:54:21,458 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:54:21,458 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:14,964 - shadcn_error_handler - ERROR - ValueError: Test error | Context: {'test': 'value'}
+NoneType: None
+2025-11-15 18:55:14,964 - shadcn_error_handler - ERROR - ValueError: Test error | Context: {'test': 'value'}
+NoneType: None
+2025-11-15 18:55:14,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:55:14,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:55:14,968 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'test': Test reason (extra=info)
+NoneType: None
+2025-11-15 18:55:14,971 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:55:14,971 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:55:14,971 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:55:14,971 - shadcn_error_handler - ERROR - ValueError: Error 0
+NoneType: None
+2025-11-15 18:55:14,971 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:55:14,971 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:55:14,971 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:55:14,971 - shadcn_error_handler - ERROR - ValueError: Error 1
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 2
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 3
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 4
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:55:14,973 - shadcn_error_handler - ERROR - ValueError: Error 5
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 6
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 7
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 8
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:55:14,974 - shadcn_error_handler - ERROR - ValueError: Error 9
+NoneType: None
+2025-11-15 18:55:14,977 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:55:14,977 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:55:14,977 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:55:14,977 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:55:14,977 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom': Failed to load theme 'custom': Not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom'}
+NoneType: None
+2025-11-15 18:55:15,087 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:55:15,087 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:55:15,087 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:55:15,087 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:55:15,087 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom (attempt 1)
+2025-11-15 18:55:15,090 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:55:15,090 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:55:15,090 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:55:15,090 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:55:15,090 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:55:15,090 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 'theme': CSS generation failed for theme 'theme': Invalid (original_error=CSSGenerationError) | Context: {'theme_name': 'theme'}
+NoneType: None
+2025-11-15 18:55:15,091 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:55:15,091 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:55:15,091 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:55:15,091 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:55:15,091 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:55:15,091 - shadcn_error_handler - INFO - Attempting recovery for css_generation_theme (attempt 1)
+2025-11-15 18:55:15,094 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:55:15,094 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:55:15,094 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:55:15,094 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:55:15,094 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:55:15,094 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:55:15,094 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'Card' failed to render: Component 'Card' failed to render: Missing props (original_error=ComponentRenderError) | Context: {'component_name': 'Card'}
+NoneType: None
+2025-11-15 18:55:15,094 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:55:15,094 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:55:15,094 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:55:15,094 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:55:15,094 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:55:15,094 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:55:15,094 - shadcn_error_handler - INFO - Attempting recovery for component_Card (attempt 1)
+2025-11-15 18:55:15,099 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,099 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,099 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,099 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,099 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,099 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,099 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,099 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 2)
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Recovery attempt failed for test_op: Still failing
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,102 - shadcn_error_handler - ERROR - Max recovery attempts (2) exceeded for operation: test_op
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,105 - shadcn_error_handler - INFO - Attempting recovery for test_op (attempt 1)
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't1': r1
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't2': r2
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,107 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't3': r3
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,119 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,121 - shadcn_error_handler - INFO - Error report exported to C:\Users\win10\AppData\Local\Temp\pytest-of-T Schwarz67\pytest-9\test_export_error_report0\test_report.json
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,133 - shadcn_error_handler - ERROR - ValueError: Test
+NoneType: None
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,134 - shadcn_error_handler - INFO - Attempting recovery for test (attempt 1)
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,135 - shadcn_error_handler - INFO - Error history cleared
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - CSSGenerationError: CSS generation failed for theme 't': r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,137 - shadcn_error_handler - ERROR - ComponentRenderError: Component 'c' failed to render: r
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,153 - shadcn_error_handler - ERROR - ValueError: Test | Context: {'operation': 'theme_load', 'user_id': 'user123', 'timestamp': '2025-11-15T18:55:15.153989'}
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,167 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'theme': reason (path=/test/path, size=1024)
+NoneType: None
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,171 - shadcn_error_handler - ERROR - ValueError: Test error
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 429, in test_stack_trace_captured
+    raise ValueError("Test error")
+ValueError: Test error
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,172 - shadcn_error_handler - ERROR - ThemeLoadError: Failed to load theme 'custom-theme': Failed to load theme 'custom-theme': Theme custom-theme not found (original_error=ThemeLoadError) | Context: {'theme_name': 'custom-theme'}
+Traceback (most recent call last):
+  File "C:\Users\win10\Desktop\Bokuk2 - Kopie\tests\test_error_handling.py", line 447, in load_theme_with_fallback
+    raise FileNotFoundError(f"Theme {theme_name} not found")
+FileNotFoundError: Theme custom-theme not found
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)
+2025-11-15 18:55:15,177 - shadcn_error_handler - INFO - Attempting recovery for theme_load_custom-theme (attempt 1)

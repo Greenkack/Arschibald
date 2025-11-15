@@ -150,26 +150,26 @@ def generate_test_pdf_normal_variant(output_dir: Path):
     try:
         print("\n1. Preparing realistic test data...")
         test_data = get_realistic_test_data()
-        print(f"   [OK] Test data prepared with {len(test_data)} fields")
+        print(f"   Test data prepared with {len(test_data)} fields")
 
         print("\n2. Generating 8-page overlay...")
         coords_dir = Path("coords")
         overlay_bytes = generate_overlay(coords_dir, test_data, total_pages=8)
 
         overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
-        print(f"   [OK] Overlay generated: {len(overlay_reader.pages)} pages")
+        print(f"   Overlay generated: {len(overlay_reader.pages)} pages")
 
         print("\n3. Merging with background templates...")
         final_pdf_bytes = merge_first_eight_pages(overlay_bytes)
 
         final_reader = PdfReader(io.BytesIO(final_pdf_bytes))
-        print(f"   [OK] Final PDF merged: {len(final_reader.pages)} pages")
+        print(f"   Final PDF merged: {len(final_reader.pages)} pages")
 
         print("\n4. Saving test PDF...")
         output_path = output_dir / "manual_test_8_page_normal.pdf"
         with open(output_path, "wb") as f:
             f.write(final_pdf_bytes)
-        print(f"   [OK] PDF saved to: {output_path}")
+        print(f"   PDF saved to: {output_path}")
 
         # Extract page info for verification
         print("\n5. PDF Page Information:")
@@ -179,13 +179,13 @@ def generate_test_pdf_normal_variant(output_dir: Path):
             print(f"   Page {i}: {width} x {height} pts")
 
         print(f"\n{'=' * 70}")
-        print("[OK] TASK 10.1 COMPLETED: Test PDF generated successfully!")
+        print("TASK 10.1 COMPLETED: Test PDF generated successfully!")
         print(f"{'=' * 70}\n")
 
         return output_path, final_pdf_bytes
 
     except Exception as e:
-        print(f"\n[ERROR] TASK 10.1 FAILED: {e}")
+        print(f"\nTASK 10.1 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return None, None
@@ -212,15 +212,15 @@ def generate_test_pdf_heatpump_variant(output_dir: Path):
             "heating_demand_kwh": "12.000",
             "heatpump_electricity_consumption_kwh": "2.667",
         })
-        print(f"   [OK] Heatpump test data prepared with {len(test_data)} fields")
+        print(f"   Heatpump test data prepared with {len(test_data)} fields")
 
         print("\n2. Generating 8-page overlay with heatpump coordinates...")
         coords_dir = Path("coords_wp")  # Heatpump coordinates
         overlay_bytes = generate_overlay(coords_dir, test_data, total_pages=8)
 
         overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
-        print(f"   [OK] Overlay generated: {len(overlay_reader.pages)} pages")
-        print(f"   [OK] Using heatpump coordinates from: {coords_dir}")
+        print(f"   Overlay generated: {len(overlay_reader.pages)} pages")
+        print(f"   Using heatpump coordinates from: {coords_dir}")
 
         print("\n3. Merging with heatpump background templates...")
         # Note: merge_first_eight_pages uses normal templates by default
@@ -229,7 +229,7 @@ def generate_test_pdf_heatpump_variant(output_dir: Path):
         final_pdf_bytes = merge_first_eight_pages(overlay_bytes)
 
         final_reader = PdfReader(io.BytesIO(final_pdf_bytes))
-        print(f"   [OK] Final PDF merged: {len(final_reader.pages)} pages")
+        print(f"   Final PDF merged: {len(final_reader.pages)} pages")
         print(
             f"   ⚠ Note: Using normal templates (hp_nt_XX.pdf support requires merger update)")
 
@@ -237,7 +237,7 @@ def generate_test_pdf_heatpump_variant(output_dir: Path):
         output_path = output_dir / "manual_test_8_page_heatpump.pdf"
         with open(output_path, "wb") as f:
             f.write(final_pdf_bytes)
-        print(f"   [OK] PDF saved to: {output_path}")
+        print(f"   PDF saved to: {output_path}")
 
         # Verify heatpump files exist
         print("\n5. Verifying heatpump files exist...")
@@ -253,8 +253,8 @@ def generate_test_pdf_heatpump_variant(output_dir: Path):
             coords_exists = coords_file.exists()
             template_exists = template_file.exists()
 
-            status_coords = "[OK]" if coords_exists else "[ERROR]"
-            status_template = "[OK]" if template_exists else "[ERROR]"
+            status_coords = "" if coords_exists else ""
+            status_template = "" if template_exists else ""
 
             print(
                 f"   {status_coords} wp_seite{page_num}.yml | {status_template} hp_nt_{
@@ -264,18 +264,18 @@ def generate_test_pdf_heatpump_variant(output_dir: Path):
                 all_exist = False
 
         if all_exist:
-            print(f"   [OK] All heatpump files exist")
+            print(f"   All heatpump files exist")
         else:
             print(f"   ⚠ Some heatpump files are missing")
 
         print(f"\n{'=' * 70}")
-        print("[OK] TASK 10.5 COMPLETED: Heatpump variant PDF generated!")
+        print("TASK 10.5 COMPLETED: Heatpump variant PDF generated!")
         print(f"{'=' * 70}\n")
 
         return output_path, final_pdf_bytes
 
     except Exception as e:
-        print(f"\n[ERROR] TASK 10.5 FAILED: {e}")
+        print(f"\nTASK 10.5 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return None, None
@@ -374,7 +374,7 @@ def text_alignment_verification(pdf_bytes: bytes):
     try:
         print("\n1. Parsing PDF...")
         pdf_reader = PdfReader(io.BytesIO(pdf_bytes))
-        print(f"   [OK] PDF parsed: {len(pdf_reader.pages)} pages")
+        print(f"   PDF parsed: {len(pdf_reader.pages)} pages")
 
         print("\n2. Extracting text from each page...")
         for i, page in enumerate(pdf_reader.pages, 1):
@@ -394,10 +394,10 @@ def text_alignment_verification(pdf_bytes: bytes):
                 elif text_length < 50:
                     print(f"      ⚠ Warning: Very little text extracted")
                 else:
-                    print(f"      [OK] Text extraction successful")
+                    print(f"      Text extraction successful")
 
             except Exception as e:
-                print(f"   Page {i}: [ERROR] Error extracting text: {e}")
+                print(f"   Page {i}: Error extracting text: {e}")
 
         print("\n3. Coordinate file verification...")
         coords_dir = Path("coords")
@@ -408,9 +408,9 @@ def text_alignment_verification(pdf_bytes: bytes):
                 coords_file = 0.0
             if coords_file.exists():
                 size = coords_file.stat().st_size
-                print(f"   [OK] seite{page_num}.yml exists ({size:,} bytes)")
+                print(f"   seite{page_num}.yml exists ({size:,} bytes)")
             else:
-                print(f"   [ERROR] seite{page_num}.yml MISSING")
+                print(f"   seite{page_num}.yml MISSING")
 
         print("\n4. Manual verification required:")
         print("   Please visually inspect the PDF to verify:")
@@ -421,14 +421,14 @@ def text_alignment_verification(pdf_bytes: bytes):
         print("   - Text is readable and properly positioned")
 
         print(f"\n{'=' * 70}")
-        print("[OK] TASK 10.3 COMPLETED: Text alignment verification done!")
+        print("TASK 10.3 COMPLETED: Text alignment verification done!")
         print("  (Manual visual inspection still required)")
         print(f"{'=' * 70}\n")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] TASK 10.3 FAILED: {e}")
+        print(f"\nTASK 10.3 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -447,7 +447,7 @@ def charts_and_graphics_verification(pdf_bytes: bytes):
     try:
         print("\n1. Parsing PDF...")
         pdf_reader = PdfReader(io.BytesIO(pdf_bytes))
-        print(f"   [OK] PDF parsed: {len(pdf_reader.pages)} pages")
+        print(f"   PDF parsed: {len(pdf_reader.pages)} pages")
 
         print("\n2. Checking page-specific graphics...")
 
@@ -492,14 +492,14 @@ def charts_and_graphics_verification(pdf_bytes: bytes):
         print("   - No graphics are cut off or overlapping")
 
         print(f"\n{'=' * 70}")
-        print("[OK] TASK 10.4 COMPLETED: Charts and graphics verification done!")
+        print("TASK 10.4 COMPLETED: Charts and graphics verification done!")
         print("  (Manual visual inspection still required)")
         print(f"{'=' * 70}\n")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] TASK 10.4 FAILED: {e}")
+        print(f"\nTASK 10.4 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -565,15 +565,15 @@ def run_manual_validation():
     total = len(results)
 
     for task_id, result in results.items():
-        status = "[OK] COMPLETED" if result else "[ERROR] FAILED"
+        status = "COMPLETED" if result else "FAILED"
         print(f"  Task {task_id}: {status}")
 
     print(f"\n{passed}/{total} tasks completed successfully")
 
     if pdf_path:
-        print(f"\n[FILE] Normal variant PDF: {pdf_path}")
+        print(f"\nNormal variant PDF: {pdf_path}")
     if hp_pdf_path:
-        print(f"[FILE] Heatpump variant PDF: {hp_pdf_path}")
+        print(f"Heatpump variant PDF: {hp_pdf_path}")
 
     print("\n" + "=" * 70)
     print("NEXT STEPS:")

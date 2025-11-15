@@ -24,9 +24,9 @@ ST_METHODS = [
     'metric', 'columns'
 ]
 
-# Pattern für st.method("text [CHART]") oder st.method(f"text {var} [CHART]")
+# Pattern für st.method("text ") oder st.method(f"text {var} ")
 ST_CALL_PATTERN = re.compile(
-    r'st\.(' + '|'.join(ST_METHODS) + r')\s*\([^)]*?([\'"][^\'"]*?[[CHART][TOOL][MONEY][STATS][POWER]🏠🌍📋[OK][ERROR][WARNING][IDEA][SEARCH][FILE]🖼️[DESIGN]📱💻🔐📞📧🗓️👤👥🏢💳🔔🎁📌📎🔗🔄♻️📥📤💾🗂️🔎🔝⬆️⬇️➡️⬅️[OK]️✖️➕➖🆕🆓🆙🔴🟢🟡🔵⚪⚫🟣🟤🟠[TEMP]☀️🎞️[TARGET]💻🏗️🔌[CHART][MONEY][STATS]🎛️🎬🔮🌤️💎🎪🎢🎡📶📡🔬🔭🎓🎖️[WINNER]🏅🎗️🎟️🎫🎬🎭🎪[DESIGN]🎬🎤🎧🎼🎹🎷🎺🎸🎻🎬🎭🎪[DESIGN]🎬🎤🎧🎼🎹🎷🎺🎸🎻🎬🎭🎪[DESIGN]🎬🎤🎧🎼🎹🎷🎺🎸🎻][^\'"]*?[\'"])',
+    r'st\.(' + '|'.join(ST_METHODS) + r')\s*\([^)]*?([\'"][^\'"]*?[🏠🌍📋🖼️📱💻🔐📞📧🗓️👤👥🏢💳🔔🎁📌📎🔗🔄♻️📥📤💾🗂️🔎🔝⬆️⬇️➡️⬅️️✖️➕➖🆕🆓🆙🔴🟢🟡🔵⚪⚫🟣🟤🟠☀️🎞️💻🏗️🔌🎛️🎬🔮🌤️💎🎪🎢🎡📶📡🔬🔭🎓🎖️🏅🎗️🎟️🎫🎬🎭🎪🎬🎤🎧🎼🎹🎷🎺🎸🎻🎬🎭🎪🎬🎤🎧🎼🎹🎷🎺🎸🎻🎬🎭🎪🎬🎤🎧🎼🎹🎷🎺🎸🎻][^\'"]*?[\'"])',
     re.DOTALL
 )
 
@@ -71,7 +71,7 @@ def find_emojis_in_file(file_path: Path) -> List[Tuple[int, str, List[str]]]:
         with open(file_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
     except Exception as e:
-        print(f"[ERROR] Fehler beim Lesen von {file_path}: {e}")
+        print(f"Fehler beim Lesen von {file_path}: {e}")
         return []
     
     results = []
@@ -98,14 +98,14 @@ def find_emojis_in_file(file_path: Path) -> List[Tuple[int, str, List[str]]]:
 def main():
     """Hauptfunktion - scannt und listet alle Emojis auf."""
     print("=" * 80)
-    print("[SEARCH] EMOJI SCANNER - Findet alle Emojis in Streamlit-Aufrufen")
+    print("EMOJI SCANNER - Findet alle Emojis in Streamlit-Aufrufen")
     print("=" * 80)
     print()
     
     root_dir = Path(__file__).parent
     python_files = find_python_files(root_dir)
     
-    print(f"[FOLDER] Scanne {len(python_files)} Python-Dateien...\n")
+    print(f"Scanne {len(python_files)} Python-Dateien...\n")
     
     all_findings: Dict[str, List[Tuple[int, str, List[str]]]] = {}
     total_emojis = 0
@@ -118,12 +118,12 @@ def main():
     
     # Ausgabe der Ergebnisse
     print("=" * 80)
-    print(f"[CHART] ERGEBNISSE: {len(all_findings)} Dateien mit Emojis")
+    print(f"ERGEBNISSE: {len(all_findings)} Dateien mit Emojis")
     print("=" * 80)
     print()
     
     for filename, findings in sorted(all_findings.items()):
-        print(f"\n[FILE] {filename}")
+        print(f"\n{filename}")
         print("-" * 80)
         for line_num, line_text, emojis in findings:
             emoji_str = ', '.join(emojis)
@@ -133,12 +133,12 @@ def main():
     
     print()
     print("=" * 80)
-    print(f"[OK] GESAMT: {total_emojis} Emojis in {sum(len(f) for f in all_findings.values())} Zeilen")
+    print(f"GESAMT: {total_emojis} Emojis in {sum(len(f) for f in all_findings.values())} Zeilen")
     print("=" * 80)
     print()
-    print("[IDEA] NÄCHSTE SCHRITTE:")
+    print("NÄCHSTE SCHRITTE:")
     print("1. Nutze 'from emoji_toggle import e' in jeder Datei")
-    print("2. Ersetze 'st.write(\"[CHART] Text\")' mit 'st.write(f\"{e('[CHART]')} Text\")'")
+    print("2. Ersetze 'st.write(\"Text\")' mit 'st.write(f\"{e('')} Text\")'")
     print("3. Teste mit Emojis aktiviert/deaktiviert")
     print()
 

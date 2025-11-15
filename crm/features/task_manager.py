@@ -658,7 +658,7 @@ def format_task_for_display(task: dict[str, Any]) -> dict[str, Any]:
     status_labels = {
         'open': '📋 Offen',
         'in_progress': '🔄 In Arbeit',
-        'completed': '[OK] Erledigt'
+        'completed': 'Erledigt'
     }
     display_task['status_label'] = status_labels.get(task.get('status', 'open'), 'Unbekannt')
     
@@ -683,7 +683,7 @@ def format_task_for_display(task: dict[str, Any]) -> dict[str, Any]:
                 display_task['due_date_label'] = '📅 Morgen'
             elif due_date < today:
                 days_overdue = (today - due_date).days
-                display_task['due_date_label'] = f'[WARNING] {days_overdue} Tag(e) überfällig'
+                display_task['due_date_label'] = f'{days_overdue} Tag(e) überfällig'
             else:
                 days_until = (due_date - today).days
                 display_task['due_date_label'] = f'📅 In {days_until} Tag(en)'

@@ -267,7 +267,7 @@ def _normalize_record(raw: dict[str, Any]) -> dict[str, Any]:
             if isinstance(v, str):
                 v = v.strip()
             target = cmap[low]
-            orig_mapped[target] = v
+            orig_mapped= v
             # Spezialfall: Garantie mit zwei Zahlen (z. B. "25 / 30")
             if target == "product_warranty_years" and isinstance(v, str):
                 import re
@@ -280,7 +280,7 @@ def _normalize_record(raw: dict[str, Any]) -> dict[str, Any]:
                 else:
                     out["product_warranty_years"] = v
             else:
-                out[target] = v
+                out= v
         else:
             # keep original too (raw attr)
             out.setdefault("__raw__", {})[str(k)] = (

@@ -25,11 +25,11 @@ def verify_connection_manager():
         try:
             print(f"\n Testing: {name}...")
             func()
-            print(f"[OK] PASSED: {name}")
+            print(f"PASSED: {name}")
             results['passed'] += 1
             results['tests'].append((name, True, None))
         except Exception as e:
-            print(f"[ERROR] FAILED: {name}")
+            print(f"FAILED: {name}")
             print(f"  Error: {str(e)}")
             results['failed'] += 1
             results['tests'].append((name, False, str(e)))
@@ -378,16 +378,16 @@ def verify_connection_manager():
         print("\nFailed Tests:")
         for name, passed, error in results['tests']:
             if not passed:
-                print(f"  [ERROR] {name}")
+                print(f"  {name}")
                 if error:
                     print(f"    {error}")
 
     print("\n" + "=" * 70)
 
     if results['failed'] == 0:
-        print("[OK] All tests passed! Connection manager is working correctly.")
+        print("All tests passed! Connection manager is working correctly.")
         return 0
-    print("[ERROR] Some tests failed. Please review the errors above.")
+    print("Some tests failed. Please review the errors above.")
     return 1
 
 

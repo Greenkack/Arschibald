@@ -44,15 +44,15 @@ def show_geo_mapping_ui(db_path: str):
     
     # Prüfen, ob erforderliche Bibliotheken installiert sind
     if not GEOCODING_AVAILABLE:
-        st.error("[WARNING] Geocoding nicht verfügbar. Bitte installieren Sie: `pip install geopy`")
+        st.error("Geocoding nicht verfügbar. Bitte installieren Sie: `pip install geopy`")
         return
     
     if not FOLIUM_AVAILABLE:
-        st.error("[WARNING] Kartenvisualisierung nicht verfügbar. Bitte installieren Sie: `pip install folium`")
+        st.error("Kartenvisualisierung nicht verfügbar. Bitte installieren Sie: `pip install folium`")
         return
     
     if not STREAMLIT_FOLIUM_AVAILABLE:
-        st.warning("[WARNING] Streamlit-Folium nicht installiert. Karten können nicht angezeigt werden.")
+        st.warning("Streamlit-Folium nicht installiert. Karten können nicht angezeigt werden.")
         st.info("Installieren Sie mit: `pip install streamlit-folium`")
     
     # Geo-Spalten sicherstellen
@@ -66,7 +66,7 @@ def show_geo_mapping_ui(db_path: str):
         "📍 Kunden-Karte",
         "🔄 Geocoding",
         "🚗 Routenplanung",
-        "[CHART] Statistiken"
+        "Statistiken"
     ])
     
     with tab1:
@@ -110,10 +110,10 @@ def show_customer_map_tab(mapper: GeoMapper):
     customers = mapper.get_customers_with_coordinates(filter_params)
     
     if not customers:
-        st.info("[INFO] Keine Kunden mit Koordinaten gefunden. Führen Sie zuerst das Geocoding durch.")
+        st.info("Keine Kunden mit Koordinaten gefunden. Führen Sie zuerst das Geocoding durch.")
         return
     
-    st.success(f"[OK] {len(customers)} Kunden mit Koordinaten gefunden")
+    st.success(f"{len(customers)} Kunden mit Koordinaten gefunden")
     
     # Karte erstellen
     customer_map = mapper.create_map(customers)
@@ -205,7 +205,7 @@ def show_geocoding_tab(mapper: GeoMapper):
                 stats = mapper.geocode_all_customers(force_update=False)
                 
                 st.success(f"""
-                [OK] Geocoding abgeschlossen!
+                Geocoding abgeschlossen!
                 
                 - Erfolgreich: {stats['success']}
                 - Fehlgeschlagen: {stats['failed']}
@@ -219,7 +219,7 @@ def show_geocoding_tab(mapper: GeoMapper):
                     stats = mapper.geocode_all_customers(force_update=True)
                     
                     st.success(f"""
-                    [OK] Geocoding abgeschlossen!
+                    Geocoding abgeschlossen!
                     
                     - Erfolgreich: {stats['success']}
                     - Fehlgeschlagen: {stats['failed']}
@@ -243,7 +243,7 @@ def show_geocoding_tab(mapper: GeoMapper):
         
         customers = []
         for row in cursor.fetchall():
-            status = "[OK]" if row['latitude'] and row['longitude'] else "[ERROR]"
+            status = "" if row['latitude'] and row['longitude'] else ""
             customers.append({
                 'id': row['id'],
                 'label': f"{status} {row['first_name']} {row['last_name']} ({row['city']})",
@@ -265,10 +265,10 @@ def show_geocoding_tab(mapper: GeoMapper):
                 success = mapper.update_customer_coordinates(selected_customer['id'])
                 
                 if success:
-                    st.success("[OK] Kunde erfolgreich geocodiert!")
+                    st.success("Kunde erfolgreich geocodiert!")
                     st.rerun()
                 else:
-                    st.error("[ERROR] Geocoding fehlgeschlagen. Prüfen Sie die Adresse.")
+                    st.error("Geocoding fehlgeschlagen. Prüfen Sie die Adresse.")
 
 
 def show_route_planning_tab(mapper: GeoMapper):
@@ -290,7 +290,7 @@ def show_route_planning_tab(mapper: GeoMapper):
     customers = mapper.get_customers_with_coordinates()
     
     if not customers:
-        st.warning("[WARNING] Keine Kunden mit Koordinaten gefunden. Führen Sie zuerst das Geocoding durch.")
+        st.warning("Keine Kunden mit Koordinaten gefunden. Führen Sie zuerst das Geocoding durch.")
         return
     
     # Kunden-Auswahl
@@ -311,10 +311,10 @@ def show_route_planning_tab(mapper: GeoMapper):
     selected_customer_ids = [customer_options[name] for name in selected_customer_names]
     
     if len(selected_customer_ids) < 2:
-        st.info("[INFO] Wählen Sie mindestens 2 Kunden für eine Route aus.")
+        st.info("Wählen Sie mindestens 2 Kunden für eine Route aus.")
         return
     
-    st.success(f"[OK] {len(selected_customer_ids)} Kunden ausgewählt")
+    st.success(f"{len(selected_customer_ids)} Kunden ausgewählt")
     
     # Route berechnen
     if st.button("🚗 Route optimieren", type="primary"):
@@ -322,13 +322,13 @@ def show_route_planning_tab(mapper: GeoMapper):
             route = mapper.optimize_route(selected_customer_ids)
             
             if not route:
-                st.error("[ERROR] Routenberechnung fehlgeschlagen")
+                st.error("Routenberechnung fehlgeschlagen")
                 return
             
             # Route in Session State speichern
             st.session_state['current_route'] = route
             
-            st.success(f"[OK] Route optimiert! Gesamtstrecke: {route[-1]['cumulative_distance_km']} km")
+            st.success(f"Route optimiert! Gesamtstrecke: {route[-1]['cumulative_distance_km']} km")
     
     # Route anzeigen, falls vorhanden
     if 'current_route' in st.session_state:
@@ -419,13 +419,13 @@ def show_route_planning_tab(mapper: GeoMapper):
             saved_count = mapper.save_appointments_to_db(appointments)
             
             if saved_count > 0:
-                st.success(f"[OK] {saved_count} Termine erfolgreich im Kalender gespeichert!")
+                st.success(f"{saved_count} Termine erfolgreich im Kalender gespeichert!")
                 st.balloons()
                 
                 # Route aus Session State entfernen
                 del st.session_state['current_route']
             else:
-                st.error("[ERROR] Fehler beim Speichern der Termine")
+                st.error("Fehler beim Speichern der Termine")
 
 
 def show_statistics_tab(mapper: GeoMapper):
@@ -526,7 +526,7 @@ def show_statistics_tab(mapper: GeoMapper):
                 except:
                     time_str = geocoded_at
                 
-                st.write(f"[OK] **{name}** ({city}) - {time_str}")
+                st.write(f"**{name}** ({city}) - {time_str}")
         else:
             st.info("Noch keine Geocoding-Aktivitäten")
     
@@ -587,10 +587,10 @@ def show_customer_location_widget(customer_id: int, db_path: str):
                     success = mapper.update_customer_coordinates(customer_id)
                     
                     if success:
-                        st.success("[OK] Erfolgreich geocodiert!")
+                        st.success("Erfolgreich geocodiert!")
                         st.rerun()
                     else:
-                        st.error("[ERROR] Geocoding fehlgeschlagen")
+                        st.error("Geocoding fehlgeschlagen")
     
     finally:
         conn.close()

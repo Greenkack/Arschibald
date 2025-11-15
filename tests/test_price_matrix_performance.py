@@ -44,7 +44,7 @@ def test_operation_metrics():
     metrics.update(5.0, had_error=True)
     assert metrics.error_count == 1
     
-    print("[OK] OperationMetrics funktioniert korrekt")
+    print("OperationMetrics funktioniert korrekt")
 
 
 def test_cache_metrics():
@@ -71,7 +71,7 @@ def test_cache_metrics():
     assert metrics.total_requests == 4
     assert metrics.hit_rate == 75.0
     
-    print("[OK] CacheMetrics funktioniert korrekt")
+    print("CacheMetrics funktioniert korrekt")
 
 
 def test_performance_monitor():
@@ -104,7 +104,7 @@ def test_performance_monitor():
     assert monitor.caches['test_cache'].miss_count == 1
     assert monitor.caches['test_cache'].hit_rate == pytest.approx(66.67, rel=0.1)
     
-    print("[OK] PerformanceMonitor funktioniert korrekt")
+    print("PerformanceMonitor funktioniert korrekt")
 
 
 def test_performance_report():
@@ -134,7 +134,7 @@ def test_performance_report():
     assert 'Hit-Rate' in report
     
     print("\n" + report)
-    print("[OK] Bericht-Generierung funktioniert")
+    print("Bericht-Generierung funktioniert")
 
 
 def test_optimization_recommendations():
@@ -163,7 +163,7 @@ def test_optimization_recommendations():
     for rec in recommendations:
         print(f"  {rec}")
     
-    print("[OK] Optimierungsempfehlungen funktionieren")
+    print("Optimierungsempfehlungen funktionieren")
 
 
 def test_performance_decorator():
@@ -186,7 +186,7 @@ def test_performance_decorator():
     assert 'decorated_function' in monitor.operations
     assert monitor.operations['decorated_function'].execution_count == 1
     
-    print("[OK] Performance Decorator funktioniert")
+    print("Performance Decorator funktioniert")
 
 
 def test_benchmark_matrix_lookup():
@@ -243,12 +243,12 @@ def test_benchmark_matrix_lookup():
             # Cleanup
             price_matrix_store.delete_matrix(matrix_id)
             
-            print("[OK] Benchmark funktioniert")
+            print("Benchmark funktioniert")
         else:
-            print("[WARNING] Konnte Test-Matrix nicht erstellen, überspringe Benchmark")
+            print("Konnte Test-Matrix nicht erstellen, überspringe Benchmark")
     
     except ImportError:
-        print("[WARNING] price_matrix_store nicht verfügbar, überspringe Benchmark")
+        print("price_matrix_store nicht verfügbar, überspringe Benchmark")
 
 
 def test_cache_performance_analysis():
@@ -284,7 +284,7 @@ def test_cache_performance_analysis():
     assert analysis['overall_hit_rate'] > 0
     assert 'matrix_cache' in analysis['caches']
     
-    print("[OK] Cache-Analyse funktioniert")
+    print("Cache-Analyse funktioniert")
 
 
 def test_memory_usage():
@@ -300,7 +300,7 @@ def test_memory_usage():
     
     assert memory['total_objects'] > 0
     
-    print("[OK] Speicherverbrauch-Analyse funktioniert")
+    print("Speicherverbrauch-Analyse funktioniert")
 
 
 def run_all_tests():
@@ -321,14 +321,14 @@ def run_all_tests():
         test_memory_usage()
         
         print("\n" + "=" * 70)
-        print("[OK] ALLE TESTS ERFOLGREICH")
+        print("ALLE TESTS ERFOLGREICH")
         print("=" * 70)
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         raise
     except Exception as e:
-        print(f"\n[ERROR] UNERWARTETER FEHLER: {e}")
+        print(f"\nUNERWARTETER FEHLER: {e}")
         raise
 
 

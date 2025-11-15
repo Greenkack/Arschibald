@@ -28,23 +28,23 @@ def test_default_dimensions():
         # Test Einfamilienhaus
         length, width, height = _get_default_dimensions("Einfamilienhaus")
         assert height == 3.0, f"Einfamilienhaus Traufhöhe sollte 3m sein, ist aber {height}m"
-        print(f"[OK] Einfamilienhaus: {length}m x {width}m x {height}m (Traufhöhe korrekt)")
+        print(f"Einfamilienhaus: {length}m x {width}m x {height}m (Traufhöhe korrekt)")
         
         # Test Mehrfamilienhaus
         length, width, height = _get_default_dimensions("Mehrfamilienhaus")
         assert height == 6.0, f"Mehrfamilienhaus Traufhöhe sollte 6m sein, ist aber {height}m"
-        print(f"[OK] Mehrfamilienhaus: {length}m x {width}m x {height}m (Traufhöhe korrekt)")
+        print(f"Mehrfamilienhaus: {length}m x {width}m x {height}m (Traufhöhe korrekt)")
         
         # Test Wohnblock
         length, width, height = _get_default_dimensions("Wohnblock")
         assert height == 9.0, f"Wohnblock Traufhöhe sollte 9m sein, ist aber {height}m"
-        print(f"[OK] Wohnblock: {length}m x {width}m x {height}m (Traufhöhe korrekt)")
+        print(f"Wohnblock: {length}m x {width}m x {height}m (Traufhöhe korrekt)")
         
-        print("\n[OK] TEST 1 BESTANDEN: Alle Traufhöhen korrekt!")
+        print("\nTEST 1 BESTANDEN: Alle Traufhöhen korrekt!")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 1 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 1 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -77,7 +77,7 @@ def test_grid_positions():
             # Zentrum sollte nahe (0, 0) sein
             assert abs(x_center) < 0.5, f"X-Zentrum sollte nahe 0 sein, ist aber {x_center:.2f}"
             assert abs(y_center) < 0.5, f"Y-Zentrum sollte nahe 0 sein, ist aber {y_center:.2f}"
-            print(f"  [OK] Grid ist korrekt zentriert!")
+            print(f"  Grid ist korrekt zentriert!")
         
         # Test 2: Großes Dach (20m x 12m)
         positions_large = calculate_grid_positions(20.0, 12.0, 50)
@@ -88,13 +88,13 @@ def test_grid_positions():
         print(f"\nTest mit zu vielen Modulen (100 auf 10m x 6m):")
         positions_overflow = calculate_grid_positions(10.0, 6.0, 100)
         print(f"  Berechnete Positionen: {len(positions_overflow)}")
-        print(f"  [WARNING] Warnung sollte erschienen sein!")
+        print(f"  Warnung sollte erschienen sein!")
         
-        print("\n[OK] TEST 2 BESTANDEN: Modul-Platzierung funktioniert!")
+        print("\nTEST 2 BESTANDEN: Modul-Platzierung funktioniert!")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 2 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 2 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -119,11 +119,11 @@ def test_module_constants():
         assert 1.6 <= PV_H <= 2.0, f"PV_H sollte zwischen 1.6 und 2.0m sein"
         assert 0.03 <= PV_T <= 0.05, f"PV_T sollte zwischen 0.03 und 0.05m sein"
         
-        print(f"\n[OK] TEST 3 BESTANDEN: Modul-Konstanten sind korrekt!")
+        print(f"\nTEST 3 BESTANDEN: Modul-Konstanten sind korrekt!")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 3 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 3 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -154,11 +154,11 @@ def test_building_dims():
         
         assert dims_custom.wall_height_m == 3.0, "Custom Traufhöhe sollte 3m sein"
         
-        print(f"\n[OK] TEST 4 BESTANDEN: BuildingDims funktioniert!")
+        print(f"\nTEST 4 BESTANDEN: BuildingDims funktioniert!")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 4 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 4 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -193,7 +193,7 @@ def run_all_tests():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{name:.<40} {status}")
     
     print(f"\n{passed}/{total} Tests bestanden")
@@ -202,7 +202,7 @@ def run_all_tests():
         print("\n🎉 ALLE TESTS BESTANDEN! 🎉")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen!")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen!")
         return False
 
 

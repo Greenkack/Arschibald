@@ -7,7 +7,7 @@ from css_template_manager import get_css_manager
 
 st.set_page_config(page_title="CSS Test", layout="wide")
 
-st.title("[DESIGN] CSS Template Test")
+st.title("CSS Template Test")
 
 # CSS laden
 css_manager = get_css_manager()
@@ -17,7 +17,7 @@ template_count = css_manager.inject_into_streamlit(
     app_name="Test App"
 )
 
-st.success(f"[OK] {template_count} CSS-Templates geladen")
+st.success(f"{template_count} CSS-Templates geladen")
 
 # Test-Komponenten
 st.write("## Test-Komponenten")
@@ -76,7 +76,7 @@ st.write("---")
 
 # Tabs
 st.write("## Tabs")
-tab1, tab2, tab3 = st.tabs(["🏠 Tab 1", "[CHART] Tab 2", "⚙️ Tab 3"])
+tab1, tab2, tab3 = st.tabs(["🏠 Tab 1", "Tab 2", "⚙️ Tab 3"])
 
 with tab1:
     st.write("Inhalt von Tab 1")

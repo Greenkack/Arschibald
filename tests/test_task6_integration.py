@@ -17,27 +17,27 @@ def test_imports():
     try:
         # Test Import der neuen Module
         from utils.pv3d_module_placement_ui import render_module_placement_panel
-        print("[OK] pv3d_module_placement_ui importiert")
+        print("pv3d_module_placement_ui importiert")
         
         from utils.pv3d_placement_handler import (
             handle_auto_placement,
             handle_reset_placement
         )
-        print("[OK] pv3d_placement_handler importiert")
+        print("pv3d_placement_handler importiert")
         
         # Test Import des Haupt-Moduls
         import solar_3d_view_module
-        print("[OK] solar_3d_view_module importiert")
+        print("solar_3d_view_module importiert")
         
-        print("\n[OK] Alle Imports erfolgreich!")
+        print("\nAlle Imports erfolgreich!")
         return True
         
     except ImportError as e:
-        print(f"\n[ERROR] Import-Fehler: {e}")
+        print(f"\nImport-Fehler: {e}")
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n[ERROR] Unerwarteter Fehler: {e}")
+        print(f"\nUnerwarteter Fehler: {e}")
         traceback.print_exc()
         return False
 
@@ -76,18 +76,18 @@ def test_session_state_initialization():
         assert session_state["trigger_auto_placement"] is False, \
             "trigger_auto_placement sollte False sein"
         
-        print("[OK] placed_module_positions initialisiert: []")
-        print("[OK] placed_module_count initialisiert: 0")
-        print("[OK] trigger_auto_placement initialisiert: False")
+        print("placed_module_positions initialisiert: []")
+        print("placed_module_count initialisiert: 0")
+        print("trigger_auto_placement initialisiert: False")
         
-        print("\n[OK] Session State korrekt initialisiert!")
+        print("\nSession State korrekt initialisiert!")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] Assertion-Fehler: {e}")
+        print(f"\nAssertion-Fehler: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] Unerwarteter Fehler: {e}")
+        print(f"\nUnerwarteter Fehler: {e}")
         traceback.print_exc()
         return False
 
@@ -109,7 +109,7 @@ def test_handler_functions():
         assert isinstance(result, dict), "Ergebnis sollte Dictionary sein"
         assert "success" in result, "Ergebnis sollte 'success' enthalten"
         assert "message" in result, "Ergebnis sollte 'message' enthalten"
-        print(f"[OK] handle_reset_placement: {result}")
+        print(f"handle_reset_placement: {result}")
         
         # Test handle_auto_placement mit Beispiel-Parametern
         result = handle_auto_placement(
@@ -122,17 +122,17 @@ def test_handler_functions():
         assert isinstance(result, dict), "Ergebnis sollte Dictionary sein"
         assert "success" in result, "Ergebnis sollte 'success' enthalten"
         assert "message" in result, "Ergebnis sollte 'message' enthalten"
-        print(f"[OK] handle_auto_placement: success={result['success']}, "
+        print(f"handle_auto_placement: success={result['success']}, "
               f"count={result.get('count', 0)}")
         
-        print("\n[OK] Handler-Funktionen funktionieren korrekt!")
+        print("\nHandler-Funktionen funktionieren korrekt!")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] Assertion-Fehler: {e}")
+        print(f"\nAssertion-Fehler: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] Fehler beim Testen der Handler: {e}")
+        print(f"\nFehler beim Testen der Handler: {e}")
         traceback.print_exc()
         return False
 
@@ -155,16 +155,16 @@ def test_ui_panel_function():
         expected_params = ["module_quantity", "roof_area", "current_placed"]
         for param in expected_params:
             assert param in params, f"Parameter '{param}' fehlt"
-            print(f"[OK] Parameter '{param}' vorhanden")
+            print(f"Parameter '{param}' vorhanden")
         
-        print("\n[OK] UI-Panel-Funktion hat korrekte Signatur!")
+        print("\nUI-Panel-Funktion hat korrekte Signatur!")
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] Assertion-Fehler: {e}")
+        print(f"\nAssertion-Fehler: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] Fehler beim Testen der UI-Funktion: {e}")
+        print(f"\nFehler beim Testen der UI-Funktion: {e}")
         traceback.print_exc()
         return False
 
@@ -197,20 +197,20 @@ def test_integration_code_structure():
         all_passed = True
         for name, check in checks:
             if check:
-                print(f"[OK] {name} vorhanden")
+                print(f"{name} vorhanden")
             else:
-                print(f"[ERROR] {name} fehlt")
+                print(f"{name} fehlt")
                 all_passed = False
         
         if all_passed:
-            print("\n[OK] Integrations-Code hat korrekte Struktur!")
+            print("\nIntegrations-Code hat korrekte Struktur!")
             return True
         else:
-            print("\n[ERROR] Einige Teile des Integrations-Codes fehlen!")
+            print("\nEinige Teile des Integrations-Codes fehlen!")
             return False
         
     except Exception as e:
-        print(f"\n[ERROR] Fehler beim Prüfen der Code-Struktur: {e}")
+        print(f"\nFehler beim Prüfen der Code-Struktur: {e}")
         traceback.print_exc()
         return False
 
@@ -235,7 +235,7 @@ def run_all_tests():
             result = test_func()
             results.append((name, result))
         except Exception as e:
-            print(f"\n[ERROR] Test '{name}' ist abgestürzt: {e}")
+            print(f"\nTest '{name}' ist abgestürzt: {e}")
             traceback.print_exc()
             results.append((name, False))
     
@@ -248,7 +248,7 @@ def run_all_tests():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {name}")
     
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
@@ -257,7 +257,7 @@ def run_all_tests():
         print("\n🎉 ALLE TESTS BESTANDEN! Task 6 ist erfolgreich implementiert.")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen. Bitte überprüfen.")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen. Bitte überprüfen.")
         return False
 
 

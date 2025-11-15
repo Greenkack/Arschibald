@@ -310,9 +310,9 @@ def __neural_decrypt__(encrypted_bytes, key):
             try:
                 mutated_code = technique(mutated_code)
                 applied_mutations.append(technique.__name__)
-                print(f"  [OK] {technique.__name__} angewendet")
+                print(f"  {technique.__name__} angewendet")
             except Exception as e:
-                print(f"  [ERROR] {technique.__name__} fehlgeschlagen: {e}")
+                print(f"  {technique.__name__} fehlgeschlagen: {e}")
 
         # Signatur-Hash vor und nach Mutation
         original_hash = hashlib.md5(original_code.encode()).hexdigest()[:8]
@@ -321,11 +321,11 @@ def __neural_decrypt__(encrypted_bytes, key):
         with open(output_file, 'w') as f:
             f.write(mutated_code)
 
-        print("\n[TARGET] MUTATION COMPLETE:")
-        print(f"  [CHART] Techniken angewendet: {len(applied_mutations)}")
+        print("\nMUTATION COMPLETE:")
+        print(f"  Techniken angewendet: {len(applied_mutations)}")
         print(f"  🔐 Original Hash: {original_hash}")
         print(f"  🔐 Mutiert Hash: {mutated_hash}")
-        print(f"  [NOTE] Output: {output_file}")
+        print(f"  Output: {output_file}")
 
         return output_file, applied_mutations
 

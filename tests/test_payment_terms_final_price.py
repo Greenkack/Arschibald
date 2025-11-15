@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_payment_terms_final_price():
     """Testet ob Zahlungsmodalitäten den korrekten finalen Preis verwenden"""
 
-    print("[TOOL] Test Zahlungsmodalitäten mit finalem Preis aus Solar Calculator")
+    print("Test Zahlungsmodalitäten mit finalem Preis aus Solar Calculator")
     print("=" * 70)
 
     # Simuliere Solar Calculator Session State mit finalem Preis
@@ -41,7 +41,7 @@ def test_payment_terms_final_price():
         }
     }
 
-    print("[CHART] Test-Daten:")
+    print("Test-Daten:")
     print(
         f"   - Solar Calculator final_price_with_provision: {test_final_price:,.2f} €")
     print(
@@ -65,7 +65,7 @@ def test_payment_terms_final_price():
                 project_total = float(
                     session_state['project_data']['project_details']['final_price_with_provision'])
                 print(
-                    f"[OK] Zahlungsmodalitäten verwenden final_price_with_provision aus Solar Calculator: {
+                    f"Zahlungsmodalitäten verwenden final_price_with_provision aus Solar Calculator: {
                         project_total:,.2f} €")
                 return project_total, "Solar Calculator"
 
@@ -75,7 +75,7 @@ def test_payment_terms_final_price():
                 if isinstance(live_calc, dict) and 'final_price' in live_calc:
                     project_total = float(live_calc['final_price'])
                     print(
-                        f"[WARNING] Zahlungsmodalitäten verwenden final_price aus live_pricing_calculations: {
+                        f"Zahlungsmodalitäten verwenden final_price aus live_pricing_calculations: {
                             project_total:,.2f} €")
                     return project_total, "Live Pricing"
 
@@ -90,17 +90,17 @@ def test_payment_terms_final_price():
                         if key in analysis:
                             project_total = float(analysis[key])
                             print(
-                                f"[WARNING] Zahlungsmodalitäten verwenden {key} aus analysis_results: {
+                                f"Zahlungsmodalitäten verwenden {key} aus analysis_results: {
                                     project_total:,.2f} €")
                             return project_total, "Analysis Results"
 
             else:
                 print(
-                    f"[ERROR] Zahlungsmodalitäten verwenden Default-Wert: {project_total:,.2f} €")
+                    f"Zahlungsmodalitäten verwenden Default-Wert: {project_total:,.2f} €")
                 return project_total, "Default"
 
         except (ValueError, TypeError) as e:
-            print(f"[ERROR] Fehler beim Bestimmen des Projektbetrags: {e}")
+            print(f"Fehler beim Bestimmen des Projektbetrags: {e}")
             return project_total, "Error"
 
     # Test 1: Mit Solar Calculator Daten
@@ -109,10 +109,10 @@ def test_payment_terms_final_price():
         mock_session_state)
 
     if result_price == test_final_price and source == "Solar Calculator":
-        print("[OK] ERFOLG: Zahlungsmodalitäten verwenden korrekten Solar Calculator Preis!")
+        print("ERFOLG: Zahlungsmodalitäten verwenden korrekten Solar Calculator Preis!")
     else:
         print(
-            f"[ERROR] FEHLER: Erwarteter Preis {
+            f"FEHLER: Erwarteter Preis {
                 test_final_price:,.2f} €, erhalten {
                 result_price:,.2f} € aus {source}")
 
@@ -131,9 +131,9 @@ def test_payment_terms_final_price():
         mock_session_state_fallback)
 
     if result_price_fallback == 22000.00 and source_fallback == "Live Pricing":
-        print("[OK] ERFOLG: Fallback auf Live Pricing funktioniert!")
+        print("ERFOLG: Fallback auf Live Pricing funktioniert!")
     else:
-        print("[ERROR] FEHLER: Fallback funktioniert nicht korrekt")
+        print("FEHLER: Fallback funktioniert nicht korrekt")
 
     # Test 3: Komplett ohne Daten (Default-Test)
     print("\\n🧪 Test 3: Komplett ohne Daten (Default-Test)")
@@ -143,23 +143,23 @@ def test_payment_terms_final_price():
         mock_session_state_empty)
 
     if result_price_empty == 15000.0 and source_empty == "Default":
-        print("[OK] ERFOLG: Default-Wert wird korrekt verwendet!")
+        print("ERFOLG: Default-Wert wird korrekt verwendet!")
     else:
-        print("[ERROR] FEHLER: Default-Wert funktioniert nicht korrekt")
+        print("FEHLER: Default-Wert funktioniert nicht korrekt")
 
     print("\\n🎉 Test abgeschlossen!")
     print("\\n📋 Zusammenfassung:")
-    print("   1. [OK] Solar Calculator Preis hat höchste Priorität")
-    print("   2. [OK] Fallback-Mechanismus funktioniert")
-    print("   3. [OK] Default-Wert wird als letzter Ausweg verwendet")
-    print("\\n[IDEA] Die Zahlungsmodalitäten verwenden jetzt den echten finalen Preis")
+    print("   1. Solar Calculator Preis hat höchste Priorität")
+    print("   2. Fallback-Mechanismus funktioniert")
+    print("   3. Default-Wert wird als letzter Ausweg verwendet")
+    print("\\nDie Zahlungsmodalitäten verwenden jetzt den echten finalen Preis")
     print("   aus dem Solar Calculator (inkl. Provision, Rabatte, Aufschläge)")
 
 
 def test_real_integration():
     """Testet die echte Integration mit importierten Modulen"""
 
-    print("\\n[TOOL] Test echte Integration")
+    print("\\nTest echte Integration")
     print("=" * 30)
 
     try:
@@ -200,15 +200,15 @@ def test_real_integration():
             }
         }
 
-        print("[OK] Session State erfolgreich mit Test-Daten gefüllt")
+        print("Session State erfolgreich mit Test-Daten gefüllt")
         print("   - final_price_with_provision: 32.500,75 €")
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei der Integration: {e}")
+        print(f"Fehler bei der Integration: {e}")
 
 
 if __name__ == "__main__":
-    print("[LAUNCH] Test Zahlungsmodalitäten mit finalem Preis")
+    print("Test Zahlungsmodalitäten mit finalem Preis")
     print("=" * 60)
 
     # Test 1: Logik-Simulation
@@ -217,7 +217,7 @@ if __name__ == "__main__":
     # Test 2: Echte Integration
     test_real_integration()
 
-    print("\\n[TARGET] FAZIT:")
+    print("\\nFAZIT:")
     print("Die Zahlungsmodalitäten verwenden jetzt den korrekten finalen Preis")
     print("aus dem Solar Calculator, der alle Rabatte, Aufschläge und")
     print("Provisionen beinhaltet, anstatt eines statischen Wertes!")

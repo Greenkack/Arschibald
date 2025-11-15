@@ -40,9 +40,9 @@ def test_simple_reference():
     
     # Prüfe Ergebnis
     if a1_cell.value == 100:
-        print("\n[OK] TEST BESTANDEN: Formel =B2 wurde korrekt berechnet!")
+        print("\nTEST BESTANDEN: Formel =B2 wurde korrekt berechnet!")
     else:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: Erwartet 100, erhalten {a1_cell.value}")
+        print(f"\nTEST FEHLGESCHLAGEN: Erwartet 100, erhalten {a1_cell.value}")
         if a1_cell.error:
             print(f"   Fehler: {a1_cell.error}")
 
@@ -77,9 +77,9 @@ def test_sum_formula():
     
     # Prüfe Ergebnis
     if a4_cell.value == 60:
-        print("\n[OK] TEST BESTANDEN: Formel =SUM(A1:A3) wurde korrekt berechnet!")
+        print("\nTEST BESTANDEN: Formel =SUM(A1:A3) wurde korrekt berechnet!")
     else:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: Erwartet 60, erhalten {a4_cell.value}")
+        print(f"\nTEST FEHLGESCHLAGEN: Erwartet 60, erhalten {a4_cell.value}")
         if a4_cell.error:
             print(f"   Fehler: {a4_cell.error}")
 
@@ -112,9 +112,9 @@ def test_arithmetic_formula():
     
     # Prüfe Ergebnis
     if b1_cell.value == 100:
-        print("\n[OK] TEST BESTANDEN: Formel =A1*2 wurde korrekt berechnet!")
+        print("\nTEST BESTANDEN: Formel =A1*2 wurde korrekt berechnet!")
     else:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: Erwartet 100, erhalten {b1_cell.value}")
+        print(f"\nTEST FEHLGESCHLAGEN: Erwartet 100, erhalten {b1_cell.value}")
         if b1_cell.error:
             print(f"   Fehler: {b1_cell.error}")
 
@@ -140,7 +140,7 @@ def main():
         print("=" * 80)
         
     except Exception as e:
-        print(f"\n[ERROR] FEHLER: {str(e)}")
+        print(f"\nFEHLER: {str(e)}")
         import traceback
         traceback.print_exc()
 

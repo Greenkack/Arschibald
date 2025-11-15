@@ -38,7 +38,7 @@ def test_write_file_basic():
         })
         assert "erfolgreich" in result
         assert os.path.exists(os.path.join(AGENT_WORKSPACE, "test.txt"))
-        print("[OK] test_write_file_basic passed")
+        print("test_write_file_basic passed")
     finally:
         teardown_workspace()
 
@@ -53,7 +53,7 @@ def test_write_file_directory_traversal():
         })
         assert "Fehler" in result
         assert "nicht erlaubt" in result.lower()
-        print("[OK] test_write_file_directory_traversal passed")
+        print("test_write_file_directory_traversal passed")
     finally:
         teardown_workspace()
 
@@ -71,7 +71,7 @@ def test_read_file_basic():
         # Read it back
         result = coding_tools.read_file.invoke({"path": "test.txt"})
         assert result == "Hello World"
-        print("[OK] test_read_file_basic passed")
+        print("test_read_file_basic passed")
     finally:
         teardown_workspace()
 
@@ -83,7 +83,7 @@ def test_read_file_not_found():
         result = coding_tools.read_file.invoke({"path": "nonexistent.txt"})
         assert "Fehler" in result
         assert "nicht gefunden" in result
-        print("[OK] test_read_file_not_found passed")
+        print("test_read_file_not_found passed")
     finally:
         teardown_workspace()
 
@@ -94,7 +94,7 @@ def test_list_files_empty():
     try:
         result = coding_tools.list_files.invoke({"path": "."})
         assert "leer" in result.lower()
-        print("[OK] test_list_files_empty passed")
+        print("test_list_files_empty passed")
     finally:
         teardown_workspace()
 
@@ -116,11 +116,11 @@ def test_list_files_with_content():
 
         # List files
         result = coding_tools.list_files.invoke({"path": "."})
-        assert "[FILE]" in result
+        assert "" in result
         assert "[DIR]" in result
         assert "file1.txt" in result
         assert "file2.txt" in result
-        print("[OK] test_list_files_with_content passed")
+        print("test_list_files_with_content passed")
     finally:
         teardown_workspace()
 
@@ -144,7 +144,7 @@ def test_generate_flask_api_project():
         assert os.path.exists(os.path.join(project_path, "tests"))
         assert os.path.exists(os.path.join(project_path, "requirements.txt"))
         assert os.path.exists(os.path.join(project_path, "README.md"))
-        print("[OK] test_generate_flask_api_project passed")
+        print("test_generate_flask_api_project passed")
     finally:
         teardown_workspace()
 
@@ -165,7 +165,7 @@ def test_generate_streamlit_app_project():
         assert os.path.exists(project_path)
         assert os.path.exists(os.path.join(project_path, "app.py"))
         assert os.path.exists(os.path.join(project_path, "pages"))
-        print("[OK] test_generate_streamlit_app_project passed")
+        print("test_generate_streamlit_app_project passed")
     finally:
         teardown_workspace()
 
@@ -181,7 +181,7 @@ def test_generate_project_invalid_type():
 
         assert "Fehler" in result
         assert "Unbekannter Projekttyp" in result
-        print("[OK] test_generate_project_invalid_type passed")
+        print("test_generate_project_invalid_type passed")
     finally:
         teardown_workspace()
 
@@ -212,10 +212,10 @@ def run_all_tests():
             test()
             passed += 1
         except AssertionError as e:
-            print(f"[ERROR] {test.__name__} failed: {e}")
+            print(f"{test.__name__} failed: {e}")
             failed += 1
         except Exception as e:
-            print(f"[ERROR] {test.__name__} error: {e}")
+            print(f"{test.__name__} error: {e}")
             failed += 1
 
     print("\n" + "=" * 60)

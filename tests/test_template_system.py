@@ -37,17 +37,17 @@ def test_pdf_templates():
 
         if pv_file.exists():
             size = pv_file.stat().st_size
-            pv_templates.append(f"[OK] {pv_file.name} ({size:,} bytes)")
+            pv_templates.append(f"{pv_file.name} ({size:,} bytes)")
         else:
-            pv_templates.append(f"[ERROR] {pv_file.name} (fehlt)")
+            pv_templates.append(f"{pv_file.name} (fehlt)")
 
         if hp_file.exists():
             size = hp_file.stat().st_size
-            hp_templates.append(f"[OK] {hp_file.name} ({size:,} bytes)")
+            hp_templates.append(f"{hp_file.name} ({size:,} bytes)")
         else:
-            hp_templates.append(f"[ERROR] {hp_file.name} (fehlt)")
+            hp_templates.append(f"{hp_file.name} (fehlt)")
 
-    print("\n[FILE] Photovoltaik-Templates (nt_nt_XX.pdf):")
+    print("\nPhotovoltaik-Templates (nt_nt_XX.pdf):")
     for template in pv_templates:
         print(f"  {template}")
 
@@ -64,21 +64,21 @@ def test_pdf_templates():
             yaml_file = 0.0
         if yaml_file.exists():
             size = yaml_file.stat().st_size
-            yaml_files.append(f"[OK] {yaml_file.name} ({size:,} bytes)")
+            yaml_files.append(f"{yaml_file.name} ({size:,} bytes)")
         else:
-            yaml_files.append(f"[ERROR] {yaml_file.name} (fehlt)")
+            yaml_files.append(f"{yaml_file.name} (fehlt)")
 
-    print("\n[DESIGN] YAML-Koordinaten:")
+    print("\nYAML-Koordinaten:")
     for yaml_file in yaml_files:
         print(f"  {yaml_file}")
 
     # Teste Template-Engine Import
-    print("\n[TOOL] Template-Engine Test:")
+    print("\nTemplate-Engine Test:")
     try:
         from pdf_template_engine import (
             merge_with_background,
         )
-        print("  [OK] pdf_template_engine erfolgreich importiert")
+        print("  pdf_template_engine erfolgreich importiert")
 
         # Teste ob merge_with_background die Templates findet
         import io
@@ -107,27 +107,27 @@ def test_pdf_templates():
         overlay_buffer.seek(0)
         overlay_bytes = overlay_buffer.getvalue()
 
-        print(f"  [OK] Dummy-Overlay erstellt ({len(overlay_bytes):,} bytes)")
+        print(f"  Dummy-Overlay erstellt ({len(overlay_bytes):,} bytes)")
 
         # Teste merge_with_background
         result_bytes = merge_with_background(overlay_bytes, template_dir)
 
         if result_bytes and len(result_bytes) > 0:
             print(
-                f"  [OK] Template-Merge erfolgreich ({len(result_bytes):,} bytes)")
+                f"  Template-Merge erfolgreich ({len(result_bytes):,} bytes)")
 
             # Speichere Test-PDF
             test_output = Path(base_dir) / "test_template_merge.pdf"
             with open(test_output, 'wb') as f:
                 f.write(result_bytes)
-            print(f"  [FOLDER] Test-PDF gespeichert: {test_output}")
+            print(f"  Test-PDF gespeichert: {test_output}")
 
             return True
-        print("  [ERROR] Template-Merge fehlgeschlagen (keine Ausgabe)")
+        print("  Template-Merge fehlgeschlagen (keine Ausgabe)")
         return False
 
     except Exception as e:
-        print(f"  [ERROR] Template-Engine Fehler: {e}")
+        print(f"  Template-Engine Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -139,5 +139,5 @@ if __name__ == "__main__":
         print("\n🎉 TEMPLATE-SYSTEM FUNKTIONIERT!")
         print("Die PDF-Templates werden korrekt geladen und gemergt.")
     else:
-        print("\n[ERROR] TEMPLATE-SYSTEM DEFEKT!")
+        print("\nTEMPLATE-SYSTEM DEFEKT!")
         print("Es gibt Probleme beim Laden der Templates.")

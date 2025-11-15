@@ -78,14 +78,14 @@ def test_collect_all_design_settings():
         assert 'pdf_templates' in config_data, "Should contain pdf_templates"
         assert 'pdf_layout_options' in config_data, "Should contain pdf_layout_options"
 
-        print("[OK] Alle Design-Einstellungen erfolgreich gesammelt")
+        print("Alle Design-Einstellungen erfolgreich gesammelt")
         print(f"   - Anzahl Einstellungsbereiche: {len(config_data)}")
         print(f"   - Keys: {', '.join(config_data.keys())}")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Sammeln der Einstellungen: {e}")
+        print(f"Fehler beim Sammeln der Einstellungen: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -131,7 +131,7 @@ def test_export_with_metadata():
         assert 'export_date' in parsed['_metadata'], "Should contain export_date"
         assert 'version' in parsed['_metadata'], "Should contain version"
 
-        print("[OK] Export mit Metadaten erfolgreich")
+        print("Export mit Metadaten erfolgreich")
         print(f"   - Export-Datum: {parsed['_metadata']['export_date']}")
         print(f"   - Version: {parsed['_metadata']['version']}")
         print(f"   - JSON-Größe: {len(json_str)} Bytes")
@@ -139,7 +139,7 @@ def test_export_with_metadata():
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Export: {e}")
+        print(f"Fehler beim Export: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -171,7 +171,7 @@ def test_validate_imported_config():
         assert is_valid, f"Valid config should pass validation. Errors: {errors}"
         assert len(errors) == 0, "Valid config should have no errors"
 
-        print("[OK] Test 1: Gültige Konfiguration erfolgreich validiert")
+        print("Test 1: Gültige Konfiguration erfolgreich validiert")
 
         # Test 2: Invalid configuration (not a dict)
         invalid_config_1 = "not a dict"
@@ -179,7 +179,7 @@ def test_validate_imported_config():
         assert not is_valid, "Invalid config should fail validation"
         assert len(errors) > 0, "Invalid config should have errors"
 
-        print("[OK] Test 2: Ungültige Konfiguration (kein Dict) korrekt abgelehnt")
+        print("Test 2: Ungültige Konfiguration (kein Dict) korrekt abgelehnt")
 
         # Test 3: Empty configuration
         empty_config = {}
@@ -187,7 +187,7 @@ def test_validate_imported_config():
         assert not is_valid, "Empty config should fail validation"
         assert len(errors) > 0, "Empty config should have errors"
 
-        print("[OK] Test 3: Leere Konfiguration korrekt abgelehnt")
+        print("Test 3: Leere Konfiguration korrekt abgelehnt")
 
         # Test 4: Invalid color format
         invalid_colors = {
@@ -198,12 +198,12 @@ def test_validate_imported_config():
         is_valid, errors = _validate_imported_config(invalid_colors)
         assert not is_valid, "Invalid colors should fail validation"
 
-        print("[OK] Test 4: Ungültiges Farbformat korrekt abgelehnt")
+        print("Test 4: Ungültiges Farbformat korrekt abgelehnt")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei der Validierung: {e}")
+        print(f"Fehler bei der Validierung: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -254,14 +254,14 @@ def test_import_design_settings():
         assert saved_settings['visualization_settings']['global_chart_colors'][0] == '#FF0000'
         assert saved_settings['ui_theme_settings']['active_theme'] == 'dark'
 
-        print("[OK] Import erfolgreich")
+        print("Import erfolgreich")
         print(f"   - Gespeicherte Einstellungen: {len(saved_settings)}")
         print(f"   - Keys: {', '.join(saved_settings.keys())}")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Import: {e}")
+        print(f"Fehler beim Import: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -298,13 +298,13 @@ def test_get_setting_friendly_name():
         friendly_name = _get_setting_friendly_name(unknown_key)
         assert friendly_name == unknown_key, "Unknown key should return itself"
 
-        print("[OK] Alle benutzerfreundlichen Namen korrekt")
+        print("Alle benutzerfreundlichen Namen korrekt")
         print(f"   - Getestete Keys: {len(test_cases)}")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei benutzerfreundlichen Namen: {e}")
+        print(f"Fehler bei benutzerfreundlichen Namen: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -376,17 +376,17 @@ def test_full_export_import_cycle():
         assert saved_settings['visualization_settings']['global_chart_colors'] == \
             original_settings['visualization_settings']['global_chart_colors']
 
-        print("[OK] Vollständiger Export-Import-Zyklus erfolgreich")
-        print("   - Export [OK]")
-        print("   - JSON-Serialisierung [OK]")
-        print("   - Validierung [OK]")
-        print("   - Import [OK]")
-        print("   - Datenintegrität [OK]")
+        print("Vollständiger Export-Import-Zyklus erfolgreich")
+        print("   - Export ")
+        print("   - JSON-Serialisierung ")
+        print("   - Validierung ")
+        print("   - Import ")
+        print("   - Datenintegrität ")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler im Export-Import-Zyklus: {e}")
+        print(f"Fehler im Export-Import-Zyklus: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -414,7 +414,7 @@ def main():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n[ERROR] Test '{test_name}' fehlgeschlagen: {e}")
+            print(f"\nTest '{test_name}' fehlgeschlagen: {e}")
             results.append((test_name, False))
 
     # Summary
@@ -426,7 +426,7 @@ def main():
     total = len(results)
 
     for test_name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {test_name}")
 
     print("\n" + "=" * 70)
@@ -437,7 +437,7 @@ def main():
         print("\n🎉 Alle Tests erfolgreich! Task 14 ist vollständig implementiert.")
         return 0
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen.")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen.")
         return 1
 
 

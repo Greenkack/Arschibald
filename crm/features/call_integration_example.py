@@ -183,10 +183,10 @@ def example_4_call_timeline_integration():
         icon = {
             "call": "📞",
             "email": "📧",
-            "note": "[NOTE]",
+            "note": "",
             "appointment": "📅",
             "meeting": "👥"
-        }.get(activity["activity_type"], "[FILE]")
+        }.get(activity["activity_type"], "")
         
         with st.expander(f"{icon} {activity['title']} - {activity['created_at']}"):
             # Zeige spezielle Anruf-Informationen
@@ -231,10 +231,10 @@ def example_5_automated_call_logging():
         )
         
         if call_id:
-            st.success(f"[OK] Anruf automatisch protokolliert (ID: {call_id})")
+            st.success(f"Anruf automatisch protokolliert (ID: {call_id})")
             st.info("In echter Integration würde jetzt ein Popup erscheinen mit Kundeninformationen.")
         else:
-            st.error("[ERROR] Fehler beim Protokollieren")
+            st.error("Fehler beim Protokollieren")
     
     # Zeige letzte automatisch protokollierte Anrufe
     st.subheader("Letzte automatische Anrufe")

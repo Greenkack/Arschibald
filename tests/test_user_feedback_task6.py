@@ -32,15 +32,15 @@ def test_feedback_features():
         placed_modules = module_quantity
         
         if module_quantity <= max_modules:
-            print(f"[OK] SUCCESS: All {module_quantity} modules placed successfully")
+            print(f"SUCCESS: All {module_quantity} modules placed successfully")
             results["passed"].append("Module placement success message")
         else:
-            print(f"[WARNING]  WARNING: Only {max_modules} of {module_quantity} modules fit")
+            print(f"WARNING: Only {max_modules} of {module_quantity} modules fit")
             results["passed"].append("Module placement warning message")
         
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Module placement feedback")
         print()
     
@@ -53,7 +53,7 @@ def test_feedback_features():
         placed_modules = 25
         roof_area = 120.0
         
-        print(f"[CHART] Metrics:")
+        print(f"Metrics:")
         print(f"   • Gewünschte Module: {module_quantity}")
         print(f"   • Max. Kapazität: {max_modules}")
         print(f"   • Platzierte Module: {placed_modules}")
@@ -63,7 +63,7 @@ def test_feedback_features():
         results["passed"].append("Metrics display")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Metrics display")
         print()
     
@@ -84,7 +84,7 @@ def test_feedback_features():
         results["passed"].append("Progress bar feedback")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Progress bar feedback")
         print()
     
@@ -95,7 +95,7 @@ def test_feedback_features():
         num_configs = 3
         optimization_goal = "balanced"
         
-        print(f"[OK] Optimierung erfolgreich abgeschlossen!")
+        print(f"Optimierung erfolgreich abgeschlossen!")
         print(f"   • Gefundene Konfigurationen: {num_configs}")
         print(f"   • Optimierungsziel: {optimization_goal}")
         print(f"   • Beste Konfiguration wird angewendet")
@@ -103,7 +103,7 @@ def test_feedback_features():
         results["passed"].append("Optimization success message")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Optimization success message")
         print()
     
@@ -116,16 +116,16 @@ def test_feedback_features():
         height = 1000
         size_kb = 245.3
         
-        print(f"[OK] Screenshot erfolgreich erstellt!")
+        print(f"Screenshot erfolgreich erstellt!")
         print(f"   • Format: {format}")
         print(f"   • Auflösung: {width}x{height}px")
         print(f"   • Größe: {size_kb:.1f} KB")
-        print(f"   • Status: Für PDF vorbereitet [OK]")
+        print(f"   • Status: Für PDF vorbereitet ")
         
         results["passed"].append("Screenshot success message")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Screenshot success message")
         print()
     
@@ -133,7 +133,7 @@ def test_feedback_features():
     print("Test 6: PDF Integration Info Message")
     print("-" * 80)
     try:
-        print("[IDEA] Automatische PDF-Integration aktiviert")
+        print("Automatische PDF-Integration aktiviert")
         print()
         print("   Der Screenshot wird automatisch in Ihre PDF-Angebote")
         print("   eingefügt. Sie finden ihn auf Seite 6 im Abschnitt")
@@ -145,7 +145,7 @@ def test_feedback_features():
         results["passed"].append("PDF integration info message")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("PDF integration info message")
         print()
     
@@ -164,14 +164,14 @@ def test_feedback_features():
             "module_index": "Index des Moduls (0-basiert)"
         }
         
-        print("[NOTE] Verfügbare Tooltips:")
+        print("Verfügbare Tooltips:")
         for field, tooltip in tooltips.items():
             print(f"   • {field}: {tooltip[:50]}...")
         
         results["passed"].append("Tooltips for input fields")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Tooltips for input fields")
         print()
     
@@ -182,7 +182,7 @@ def test_feedback_features():
         selected_modules = [0, 5, 10, 15, 20]
         
         if selected_modules:
-            print(f"[TARGET] {len(selected_modules)} Module ausgewählt")
+            print(f"{len(selected_modules)} Module ausgewählt")
             print(f"   Ausgewählte Module werden in der 3D-Ansicht hervorgehoben")
             print(f"   (hellere Farbe)")
             print(f"   Indizes: {', '.join(map(str, selected_modules))}")
@@ -192,7 +192,7 @@ def test_feedback_features():
         results["passed"].append("Visual indicators for selected modules")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Visual indicators for selected modules")
         print()
     
@@ -207,7 +207,7 @@ def test_feedback_features():
         results["passed"].append("Real-time update indicator")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Real-time update indicator")
         print()
     
@@ -225,14 +225,14 @@ def test_feedback_features():
             "Traufhöhe": "3.0 m"
         }
         
-        print("[CHART] Detaillierte Statistiken:")
+        print("Detaillierte Statistiken:")
         for key, value in stats.items():
             print(f"   • {key}: {value}")
         
         results["passed"].append("Detailed statistics display")
         print()
     except Exception as e:
-        print(f"[ERROR] FAILED: {e}")
+        print(f"FAILED: {e}")
         results["failed"].append("Detailed statistics display")
         print()
     
@@ -242,19 +242,19 @@ def test_feedback_features():
     print("=" * 80)
     print()
     
-    print(f"[OK] PASSED: {len(results['passed'])} tests")
+    print(f"PASSED: {len(results['passed'])} tests")
     for test in results["passed"]:
         print(f"   • {test}")
     print()
     
     if results["failed"]:
-        print(f"[ERROR] FAILED: {len(results['failed'])} tests")
+        print(f"FAILED: {len(results['failed'])} tests")
         for test in results["failed"]:
             print(f"   • {test}")
         print()
     
     if results["warnings"]:
-        print(f"[WARNING]  WARNINGS: {len(results['warnings'])} tests")
+        print(f"WARNINGS: {len(results['warnings'])} tests")
         for test in results["warnings"]:
             print(f"   • {test}")
         print()
@@ -273,6 +273,6 @@ if __name__ == "__main__":
         success = test_feedback_features()
         sys.exit(0 if success else 1)
     except Exception as e:
-        print(f"\n[ERROR] CRITICAL ERROR: {e}")
+        print(f"\nCRITICAL ERROR: {e}")
         traceback.print_exc()
         sys.exit(1)

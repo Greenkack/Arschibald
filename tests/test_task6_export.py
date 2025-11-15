@@ -21,9 +21,9 @@ try:
         export_stl,
         export_gltf
     )
-    print("[OK] Import von pv3d erfolgreich")
+    print("Import von pv3d erfolgreich")
 except ImportError as e:
-    print(f"[ERROR] Import-Fehler: {e}")
+    print(f"Import-Fehler: {e}")
     sys.exit(1)
 
 
@@ -64,22 +64,22 @@ def test_render_image_bytes():
         )
         
         if len(png_bytes) > 0:
-            print(f"  [OK] Screenshot erstellt: {len(png_bytes)} Bytes")
+            print(f"  Screenshot erstellt: {len(png_bytes)} Bytes")
             
             # Speichere zu Testzwecken
             with open("test_screenshot_flat.png", "wb") as f:
                 f.write(png_bytes)
-            print("  [OK] Screenshot gespeichert: test_screenshot_flat.png")
+            print("  Screenshot gespeichert: test_screenshot_flat.png")
             
             # Prüfe PNG-Header
             if png_bytes[:8] == b'\x89PNG\r\n\x1a\n':
-                print("  [OK] Gültiger PNG-Header")
+                print("  Gültiger PNG-Header")
             else:
-                print("  [ERROR] Ungültiger PNG-Header")
+                print("  Ungültiger PNG-Header")
         else:
-            print("  [ERROR] Leere Bytes zurückgegeben")
+            print("  Leere Bytes zurückgegeben")
     except Exception as e:
-        print(f"  [ERROR] Fehler: {e}")
+        print(f"  Fehler: {e}")
     
     # Test 2: Satteldach
     print("\nTest 2: Satteldach mit 15 Modulen")
@@ -95,15 +95,15 @@ def test_render_image_bytes():
         )
         
         if len(png_bytes) > 0:
-            print(f"  [OK] Screenshot erstellt: {len(png_bytes)} Bytes")
+            print(f"  Screenshot erstellt: {len(png_bytes)} Bytes")
             
             with open("test_screenshot_gable.png", "wb") as f:
                 f.write(png_bytes)
-            print("  [OK] Screenshot gespeichert: test_screenshot_gable.png")
+            print("  Screenshot gespeichert: test_screenshot_gable.png")
         else:
-            print("  [ERROR] Leere Bytes zurückgegeben")
+            print("  Leere Bytes zurückgegeben")
     except Exception as e:
-        print(f"  [ERROR] Fehler: {e}")
+        print(f"  Fehler: {e}")
     
     # Test 3: Verschiedene Auflösungen
     print("\nTest 3: Verschiedene Auflösungen")
@@ -121,11 +121,11 @@ def test_render_image_bytes():
             )
             
             if len(png_bytes) > 0:
-                print(f"  [OK] {width}x{height}: {len(png_bytes)} Bytes")
+                print(f"  {width}x{height}: {len(png_bytes)} Bytes")
             else:
-                print(f"  [ERROR] {width}x{height}: Leere Bytes")
+                print(f"  {width}x{height}: Leere Bytes")
         except Exception as e:
-            print(f"  [ERROR] {width}x{height}: Fehler - {e}")
+            print(f"  {width}x{height}: Fehler - {e}")
     
     # Test 4: Fehlerbehandlung (ungültige Daten)
     print("\nTest 4: Fehlerbehandlung")
@@ -139,11 +139,11 @@ def test_render_image_bytes():
         )
         
         if len(png_bytes) == 0:
-            print("  [OK] Fehlerbehandlung funktioniert (leere Bytes bei Fehler)")
+            print("  Fehlerbehandlung funktioniert (leere Bytes bei Fehler)")
         else:
-            print("  [OK] Rendering trotz ungültiger Daten erfolgreich")
+            print("  Rendering trotz ungültiger Daten erfolgreich")
     except Exception as e:
-        print(f"  [ERROR] Exception nicht abgefangen: {e}")
+        print(f"  Exception nicht abgefangen: {e}")
 
 
 def test_export_stl():
@@ -183,26 +183,26 @@ def test_export_stl():
         )
         
         if success:
-            print(f"  [OK] STL-Export erfolgreich")
+            print(f"  STL-Export erfolgreich")
             
             # Prüfe ob Datei existiert
             if os.path.exists(filepath):
                 file_size = os.path.getsize(filepath)
-                print(f"  [OK] Datei erstellt: {filepath} ({file_size} Bytes)")
+                print(f"  Datei erstellt: {filepath} ({file_size} Bytes)")
                 
                 # Prüfe STL-Header (binär)
                 with open(filepath, "rb") as f:
                     header = f.read(80)
                     if len(header) == 80:
-                        print("  [OK] Gültiger STL-Header (80 Bytes)")
+                        print("  Gültiger STL-Header (80 Bytes)")
                     else:
-                        print("  [ERROR] Ungültiger STL-Header")
+                        print("  Ungültiger STL-Header")
             else:
-                print(f"  [ERROR] Datei nicht gefunden: {filepath}")
+                print(f"  Datei nicht gefunden: {filepath}")
         else:
-            print("  [ERROR] STL-Export fehlgeschlagen")
+            print("  STL-Export fehlgeschlagen")
     except Exception as e:
-        print(f"  [ERROR] Fehler: {e}")
+        print(f"  Fehler: {e}")
     
     # Test 2: Satteldach STL-Export
     print("\nTest 2: Satteldach STL-Export")
@@ -219,11 +219,11 @@ def test_export_stl():
         
         if success and os.path.exists(filepath):
             file_size = os.path.getsize(filepath)
-            print(f"  [OK] STL-Export erfolgreich: {filepath} ({file_size} Bytes)")
+            print(f"  STL-Export erfolgreich: {filepath} ({file_size} Bytes)")
         else:
-            print("  [ERROR] STL-Export fehlgeschlagen")
+            print("  STL-Export fehlgeschlagen")
     except Exception as e:
-        print(f"  [ERROR] Fehler: {e}")
+        print(f"  Fehler: {e}")
     
     # Test 3: Walmdach STL-Export
     print("\nTest 3: Walmdach STL-Export")
@@ -240,11 +240,11 @@ def test_export_stl():
         
         if success and os.path.exists(filepath):
             file_size = os.path.getsize(filepath)
-            print(f"  [OK] STL-Export erfolgreich: {filepath} ({file_size} Bytes)")
+            print(f"  STL-Export erfolgreich: {filepath} ({file_size} Bytes)")
         else:
-            print("  [ERROR] STL-Export fehlgeschlagen")
+            print("  STL-Export fehlgeschlagen")
     except Exception as e:
-        print(f"  [ERROR] Fehler: {e}")
+        print(f"  Fehler: {e}")
 
 
 def test_export_gltf():
@@ -284,26 +284,26 @@ def test_export_gltf():
         )
         
         if success:
-            print(f"  [OK] glTF-Export erfolgreich")
+            print(f"  glTF-Export erfolgreich")
             
             # Prüfe ob Datei existiert
             if os.path.exists(filepath):
                 file_size = os.path.getsize(filepath)
-                print(f"  [OK] Datei erstellt: {filepath} ({file_size} Bytes)")
+                print(f"  Datei erstellt: {filepath} ({file_size} Bytes)")
                 
                 # Prüfe glTF-Format (JSON)
                 with open(filepath, "r") as f:
                     content = f.read(100)
                     if "asset" in content or "scene" in content:
-                        print("  [OK] Gültiges glTF-Format")
+                        print("  Gültiges glTF-Format")
                     else:
-                        print("  [ERROR] Ungültiges glTF-Format")
+                        print("  Ungültiges glTF-Format")
             else:
-                print(f"  [ERROR] Datei nicht gefunden: {filepath}")
+                print(f"  Datei nicht gefunden: {filepath}")
         else:
-            print("  [ERROR] glTF-Export fehlgeschlagen")
+            print("  glTF-Export fehlgeschlagen")
     except Exception as e:
-        print(f"  [ERROR] Fehler: {e}")
+        print(f"  Fehler: {e}")
     
     # Test 2: glb-Export (Binär-Format)
     print("\nTest 2: glb-Export (Binär-Format)")
@@ -320,19 +320,19 @@ def test_export_gltf():
         
         if success and os.path.exists(filepath):
             file_size = os.path.getsize(filepath)
-            print(f"  [OK] glb-Export erfolgreich: {filepath} ({file_size} Bytes)")
+            print(f"  glb-Export erfolgreich: {filepath} ({file_size} Bytes)")
             
             # Prüfe glb-Header (binär)
             with open(filepath, "rb") as f:
                 header = f.read(4)
                 if header == b'glTF':
-                    print("  [OK] Gültiger glb-Header")
+                    print("  Gültiger glb-Header")
                 else:
-                    print("  [ERROR] Ungültiger glb-Header")
+                    print("  Ungültiger glb-Header")
         else:
-            print("  [ERROR] glb-Export fehlgeschlagen")
+            print("  glb-Export fehlgeschlagen")
     except Exception as e:
-        print(f"  [ERROR] Fehler: {e}")
+        print(f"  Fehler: {e}")
     
     # Test 3: Export mit Garage und Fassade
     print("\nTest 3: Export mit Garage und Fassade")
@@ -354,11 +354,11 @@ def test_export_gltf():
         
         if success and os.path.exists(filepath):
             file_size = os.path.getsize(filepath)
-            print(f"  [OK] Export mit Garage/Fassade: {filepath} ({file_size} Bytes)")
+            print(f"  Export mit Garage/Fassade: {filepath} ({file_size} Bytes)")
         else:
-            print("  [ERROR] Export fehlgeschlagen")
+            print("  Export fehlgeschlagen")
     except Exception as e:
-        print(f"  [ERROR] Fehler: {e}")
+        print(f"  Fehler: {e}")
 
 
 def main():
@@ -397,17 +397,17 @@ def main():
     for filename in test_files:
         if os.path.exists(filename):
             size = os.path.getsize(filename)
-            print(f"  [OK] {filename} ({size} Bytes)")
+            print(f"  {filename} ({size} Bytes)")
         else:
-            print(f"  [ERROR] {filename} (nicht gefunden)")
+            print(f"  {filename} (nicht gefunden)")
     
     print("\n" + "="*70)
     print("TASK 6 ABGESCHLOSSEN")
     print("="*70)
     print("\nAlle drei Export-Funktionen wurden implementiert:")
-    print("  [OK] 6.1: render_image_bytes() - Off-Screen Screenshot (PNG)")
-    print("  [OK] 6.2: export_stl() - STL-Export")
-    print("  [OK] 6.3: export_gltf() - glTF/glb-Export")
+    print("  6.1: render_image_bytes() - Off-Screen Screenshot (PNG)")
+    print("  6.2: export_stl() - STL-Export")
+    print("  6.3: export_gltf() - glTF/glb-Export")
     print("\nDie Funktionen sind bereit für die Integration in:")
     print("  - Streamlit UI (Screenshot-Download)")
     print("  - PDF-Generator (render_image_bytes)")

@@ -29,7 +29,7 @@ def test_ersparte_mehrwertsteuer():
         f"Berechnung: {
             final_end_preis:,.2f} € × 0.19 = {
             ersparte_mwst:,.2f} €")
-    print(f"\n[OK] Ersparte Mehrwertsteuer: {ersparte_mwst:,.2f} €")
+    print(f"\nErsparte Mehrwertsteuer: {ersparte_mwst:,.2f} €")
 
     # Check: Mit MwSt zurück
     brutto_mit_mwst = calculate_gross_from_net(final_end_preis)
@@ -74,10 +74,10 @@ def test_amortisationszeit():
     amortisationszeit_mit_cheat = amortisationszeit * \
         (1 - cheat_prozent / 100.0)
 
-    print(f"\n[CHART] Ohne Cheat: {amortisationszeit:.2f} Jahre")
+    print(f"\nOhne Cheat: {amortisationszeit:.2f} Jahre")
     print(
-        f"[CHART] Mit Cheat (-{cheat_prozent}%): {amortisationszeit_mit_cheat:.2f} Jahre")
-    print("\n[OK] Amortisationszeit korrekt berechnet!")
+        f"Mit Cheat (-{cheat_prozent}%): {amortisationszeit_mit_cheat:.2f} Jahre")
+    print("\nAmortisationszeit korrekt berechnet!")
 
     return True
 
@@ -107,20 +107,20 @@ def test_placeholder_mapping():
         for key in required_keys:
             if key in PLACEHOLDER_MAPPING:
                 mapped_to = PLACEHOLDER_MAPPING[key]
-                print(f"  [OK] {key} → {mapped_to}")
+                print(f"  {key} → {mapped_to}")
             else:
-                print(f"  [ERROR] {key} NICHT GEFUNDEN!")
+                print(f"  {key} NICHT GEFUNDEN!")
                 all_found = False
 
         if all_found:
-            print(f"\n[OK] Alle {len(required_keys)} Keys gefunden!")
+            print(f"\nAlle {len(required_keys)} Keys gefunden!")
         else:
-            print("\n[ERROR] Einige Keys fehlen!")
+            print("\nEinige Keys fehlen!")
 
         return all_found
 
     except ImportError as e:
-        print(f"[ERROR] Konnte placeholders.py nicht importieren: {e}")
+        print(f"Konnte placeholders.py nicht importieren: {e}")
         return False
 
 
@@ -161,7 +161,7 @@ def test_session_state_keys():
             print("    }")
     print("}")
 
-    print("\n[OK] Session State Struktur definiert!")
+    print("\nSession State Struktur definiert!")
     return True
 
 
@@ -210,7 +210,7 @@ def test_calculation_logic():
         default_zero=False,
     )
 
-    print("\n[CHART] BERECHNUNGSSCHRITTE:")
+    print("\nBERECHNUNGSSCHRITTE:")
     print(f"1. Komponenten: {komponenten_summe:,.2f} €")
     print(f"2. + Provision: {provision:,.2f} €")
     print(f"3. = Netto mit Provision: {netto_mit_provision:,.2f} €")
@@ -238,7 +238,7 @@ def test_calculation_logic():
             final_end_preis:,.2f} ÷ {
                 jahrliche_einnahmen:,.2f})")
 
-    print("\n[OK] Komplette Berechnungslogik verifiziert!")
+    print("\nKomplette Berechnungslogik verifiziert!")
     return True
 
 
@@ -269,7 +269,7 @@ if __name__ == "__main__":
             result = test_func()
             results.append((name, result))
         except Exception as e:
-            print(f"\n[ERROR] Test '{name}' fehlgeschlagen: {e}")
+            print(f"\nTest '{name}' fehlgeschlagen: {e}")
             results.append((name, False))
 
     # Zusammenfassung
@@ -281,32 +281,32 @@ if __name__ == "__main__":
     total = len(results)
 
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {name}")
 
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
         print("\n" + "╔" + "=" * 78 + "╗")
-        print("║" + " " * 25 + "[OK] ALLE TESTS BESTANDEN!" + " " * 27 + "║")
+        print("║" + " " * 25 + "ALLE TESTS BESTANDEN!" + " " * 27 + "║")
         print("╚" + "=" * 78 + "╝")
     else:
-        print("\n[ERROR] Einige Tests fehlgeschlagen!")
+        print("\nEinige Tests fehlgeschlagen!")
 
-    print("\n[NOTE] ZUSAMMENFASSUNG DER FIXES:")
+    print("\nZUSAMMENFASSUNG DER FIXES:")
     print("-" * 80)
-    print("1. [OK] Ersparte Mehrwertsteuer:")
+    print("1. Ersparte Mehrwertsteuer:")
     print("   - Formel: FINAL_END_PREIS × 0.19")
     print("   - Keys: ERSPARTE_MEHRWERTSTEUER, ERSPARTE_MEHRWERTSTEUER_FORMATTED")
     print("   - Im solar_calculator.py und placeholders.py implementiert")
     print("")
-    print("2. [OK] Amortisationszeit:")
+    print("2. Amortisationszeit:")
     print("   - Formel: FINAL_END_PREIS ÷ Jährliche Einnahmen")
     print("   - Verwendet jetzt den FINAL_END_PREIS aus session_state")
     print("   - Berücksichtigt Amortisation Cheat aus Admin-Settings")
     print("   - In calculations.py korrigiert")
     print("")
-    print("3. [OK] PDF-Integration:")
+    print("3. PDF-Integration:")
     print("   - Alle Keys im PLACEHOLDER_MAPPING verfügbar")
     print("   - Session State korrekt strukturiert")
     print("   - Fallback zu project_details implementiert")

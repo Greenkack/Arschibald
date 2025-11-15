@@ -11,39 +11,39 @@ print("=" * 60)
 print("\n1. PDF-Vorschau Import Test:")
 try:
     from pdf_preview import PDF_PREVIEW_AVAILABLE, render_pdf_preview_interface
-    print(f"   [OK] Import erfolgreich")
-    print(f"   [CHART] PDF_PREVIEW_AVAILABLE = {PDF_PREVIEW_AVAILABLE}")
+    print(f"   Import erfolgreich")
+    print(f"   PDF_PREVIEW_AVAILABLE = {PDF_PREVIEW_AVAILABLE}")
     
     # Simuliere GUI-Logik
     if not PDF_PREVIEW_AVAILABLE:
-        print("   [NOTE] GUI würde jetzt render_pdf_preview_interface() aufrufen")
-        print("   [NOTE] (Zeigt hilfreiche Shim-Meldung)")
+        print("   GUI würde jetzt render_pdf_preview_interface() aufrufen")
+        print("   (Zeigt hilfreiche Shim-Meldung)")
     else:
-        print("   [OK] Volle Vorschau verfügbar")
+        print("   Volle Vorschau verfügbar")
 except ImportError as e:
-    print(f"   [ERROR] Import-Fehler: {e}")
+    print(f"   Import-Fehler: {e}")
 
 # Test 2: Multi-Offer Import
 print("\n2. Multi-Firmen-Angebote Import Test:")
 try:
     from multi_offer_generator import render_multi_offer_generator, render_product_selection
-    print(f"   [OK] Import erfolgreich")
-    print("   [NOTE] GUI würde render_multi_offer_generator() aufrufen")
-    print("   [NOTE] (Zeigt hilfreiche Voraussetzungen-Meldung)")
+    print(f"   Import erfolgreich")
+    print("   GUI würde render_multi_offer_generator() aufrufen")
+    print("   (Zeigt hilfreiche Voraussetzungen-Meldung)")
 except ImportError as e:
-    print(f"   [ERROR] Import-Fehler: {e}")
+    print(f"   Import-Fehler: {e}")
 
 # Test 3: PDF UI Import
 print("\n3. PDF-UI Import Test:")
 try:
     from pdf_ui import render, show
-    print(f"   [OK] Import erfolgreich")
-    print("   [NOTE] Shim-Modul zeigt Hinweis auf '[FILE] PDF-Ausgabe' Tab")
+    print(f"   Import erfolgreich")
+    print("   Shim-Modul zeigt Hinweis auf 'PDF-Ausgabe' Tab")
 except ImportError as e:
-    print(f"   [ERROR] Import-Fehler: {e}")
+    print(f"   Import-Fehler: {e}")
 
 print("\n" + "=" * 60)
-print("[OK] ALLE TESTS ERFOLGREICH")
+print("ALLE TESTS ERFOLGREICH")
 print("=" * 60)
 print("\nErgebnis:")
 print("- Keine ImportError mehr")

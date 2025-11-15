@@ -57,7 +57,7 @@ def render_ui_effects_admin():
     """
     Rendert die Admin-Oberfläche für UI-Effekte-Einstellungen
     """
-    st.subheader("[DESIGN] Globale UI-Effekte")
+    st.subheader("Globale UI-Effekte")
     st.info("Wählen Sie einen Effekt-Stil aus, der auf alle Buttons, Slider, Dropdowns und Expander in der gesamten Anwendung angewendet wird.")
 
     # Lade aktuelle Einstellungen
@@ -78,7 +78,7 @@ def render_ui_effects_admin():
 
     if not enabled:
         st.warning(
-            "[WARNING] UI-Effekte sind derzeit deaktiviert. Aktivieren Sie sie, um einen Effekt auszuwählen.")
+            "UI-Effekte sind derzeit deaktiviert. Aktivieren Sie sie, um einen Effekt auszuwählen.")
 
     st.markdown("---")
     st.markdown("#### 🎭 Effekt-Auswahl")
@@ -117,7 +117,7 @@ def render_ui_effects_admin():
             "description", "Keine Beschreibung verfügbar")
 
         st.markdown("---")
-        st.markdown("#### [NOTE] Effekt-Details")
+        st.markdown("#### Effekt-Details")
 
         # Styled Info Box
         st.markdown(f"""
@@ -177,16 +177,16 @@ def render_ui_effects_admin():
 
             if save_ui_effects_settings(new_settings):
                 st.success(
-                    f"[OK] UI-Effekt '{effect_info.get('name')}' wurde erfolgreich gespeichert!")
+                    f"UI-Effekt '{effect_info.get('name')}' wurde erfolgreich gespeichert!")
                 st.info(
-                    "[IDEA] Die Änderungen werden beim nächsten Laden der Seite aktiv. Bitte laden Sie die Seite neu (F5).")
+                    "Die Änderungen werden beim nächsten Laden der Seite aktiv. Bitte laden Sie die Seite neu (F5).")
 
                 # Optional: Auto-Rerun nach kurzer Verzögerung
                 import time
                 time.sleep(1)
                 st.rerun()
             else:
-                st.error("[ERROR] Fehler beim Speichern der Einstellungen!")
+                st.error("Fehler beim Speichern der Einstellungen!")
 
     with col_reset:
         if st.button("🔄 Zurücksetzen", help="Auf Standard zurücksetzen"):
@@ -195,12 +195,12 @@ def render_ui_effects_admin():
                 "enabled": True
             }
             if save_ui_effects_settings(default_settings):
-                st.success("[OK] Auf Standard zurückgesetzt!")
+                st.success("Auf Standard zurückgesetzt!")
                 st.rerun()
 
     # Hinweise und Dokumentation
     st.markdown("---")
-    st.markdown("#### [INFO] Hinweise")
+    st.markdown("#### Hinweise")
 
     with st.expander("📚 Effekt-Übersicht", expanded=False):
         st.markdown("""
@@ -246,7 +246,7 @@ def render_ui_effects_admin():
 
     # Aktueller Status
     st.markdown("---")
-    st.markdown("#### [CHART] Aktueller Status")
+    st.markdown("#### Aktueller Status")
 
     status_col1, status_col2 = st.columns(2)
 

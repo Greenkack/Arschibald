@@ -44,10 +44,10 @@ def render_knowledge_base_ui():
     
     # Tab-Navigation
     tabs = st.tabs([
-        "[SEARCH] Suchen & Durchsuchen",
-        "[NOTE] Artikel verwalten",
-        "[FOLDER] Kategorien verwalten",
-        "[CHART] Statistiken"
+        "Suchen & Durchsuchen",
+        "Artikel verwalten",
+        "Kategorien verwalten",
+        "Statistiken"
     ])
     
     with tabs[0]:
@@ -73,7 +73,7 @@ def render_search_tab(kb_manager: KnowledgeBaseManager):
     col1, col2 = st.columns([3, 1])
     with col1:
         search_query = st.text_input(
-            "[SEARCH] Suche",
+            "Suche",
             placeholder="Suchbegriff eingeben...",
             key="kb_search"
         )
@@ -81,7 +81,7 @@ def render_search_tab(kb_manager: KnowledgeBaseManager):
         search_button = st.button("Suchen", type="primary", use_container_width=True)
     
     # Filter
-    with st.expander("[TOOL] Filter"):
+    with st.expander("Filter"):
         col1, col2 = st.columns(2)
         with col1:
             categories = kb_manager.get_all_categories()
@@ -98,7 +98,7 @@ def render_search_tab(kb_manager: KnowledgeBaseManager):
     # Artikel laden
     if search_query and search_button:
         articles = kb_manager.search_articles(search_query, published_only=True)
-        st.info(f"[SEARCH] {len(articles)} Artikel gefunden für '{search_query}'")
+        st.info(f"{len(articles)} Artikel gefunden für '{search_query}'")
     else:
         category_id = category_options.get(selected_category)
         articles = kb_manager.get_all_articles(
@@ -130,7 +130,7 @@ def render_article_card(kb_manager: KnowledgeBaseManager, article: dict):
             # Metadaten
             meta_parts = []
             if article.get('category_name'):
-                meta_parts.append(f"[FOLDER] {article['category_name']}")
+                meta_parts.append(f"{article['category_name']}")
             if article.get('author'):
                 meta_parts.append(f"✍️ {article['author']}")
             if article.get('view_count'):
@@ -179,7 +179,7 @@ def render_article_view(kb_manager: KnowledgeBaseManager, article_id: int):
         # Metadaten
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.caption(f"[FOLDER] Kategorie: {article.get('category_name', 'Keine')}")
+            st.caption(f"Kategorie: {article.get('category_name', 'Keine')}")
         with col2:
             st.caption(f"✍️ Autor: {article.get('author', 'Unbekannt')}")
         with col3:
@@ -247,7 +247,7 @@ def render_rating_section(kb_manager: KnowledgeBaseManager, article_id: int):
             user_id = st.session_state.get('user_email', 'anonymous')
             try:
                 kb_manager.rate_article(article_id, user_id, rating, comment)
-                st.success("[OK] Bewertung gespeichert!")
+                st.success("Bewertung gespeichert!")
                 st.rerun()
             except Exception as e:
                 st.error(f"Fehler beim Speichern: {e}")
@@ -289,11 +289,11 @@ def render_email_share_dialog(kb_manager: KnowledgeBaseManager, article: dict):
                 if recipient_email:
                     success = send_article_email(recipient_email, article, message)
                     if success:
-                        st.success("[OK] E-Mail erfolgreich versendet!")
+                        st.success("E-Mail erfolgreich versendet!")
                         if 'kb_share_article_id' in st.session_state:
                             del st.session_state['kb_share_article_id']
                     else:
-                        st.error("[ERROR] E-Mail konnte nicht versendet werden. Bitte E-Mail-Konfiguration prüfen.")
+                        st.error("E-Mail konnte nicht versendet werden. Bitte E-Mail-Konfiguration prüfen.")
                 else:
                     st.warning("Bitte E-Mail-Adresse eingeben.")
         
@@ -386,7 +386,7 @@ def render_articles_tab(kb_manager: KnowledgeBaseManager):
                 col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
                 
                 with col1:
-                    status = "[OK] Veröffentlicht" if article['is_published'] else "[NOTE] Entwurf"
+                    status = "Veröffentlicht" if article['is_published'] else "Entwurf"
                     featured = "⭐" if article['is_featured'] else ""
                     st.markdown(f"**{featured} {article['title']}** ({status})")
                     st.caption(f"Kategorie: {article.get('category_name', 'Keine')} | Aufrufe: {article['view_count']}")
@@ -402,7 +402,7 @@ def render_articles_tab(kb_manager: KnowledgeBaseManager):
                         st.rerun()
                 
                 with col4:
-                    if st.button("[DELETE]", key=f"delete_article_{article['id']}", help="Löschen"):
+                    if st.button("", key=f"delete_article_{article['id']}", help="Löschen"):
                         if kb_manager.delete_article(article['id']):
                             st.success("Artikel gelöscht!")
                             st.rerun()
@@ -501,7 +501,7 @@ def render_article_editor(kb_manager: KnowledgeBaseManager):
                             is_published=is_published,
                             is_featured=is_featured
                         )
-                        st.success("[OK] Artikel aktualisiert!")
+                        st.success("Artikel aktualisiert!")
                     else:
                         # Create
                         kb_manager.create_article(
@@ -513,7 +513,7 @@ def render_article_editor(kb_manager: KnowledgeBaseManager):
                             is_published=is_published,
                             is_featured=is_featured
                         )
-                        st.success("[OK] Artikel erstellt!")
+                        st.success("Artikel erstellt!")
                     
                     # Cleanup
                     if 'kb_create_article' in st.session_state:
@@ -544,7 +544,7 @@ def render_categories_tab(kb_manager: KnowledgeBaseManager):
             
             col1, col2 = st.columns(2)
             with col1:
-                icon = st.text_input("Icon (Emoji)", value="[FOLDER]")
+                icon = st.text_input("Icon (Emoji)", value="")
             with col2:
                 sort_order = st.number_input("Sortierung", value=0, step=1)
             
@@ -565,7 +565,7 @@ def render_categories_tab(kb_manager: KnowledgeBaseManager):
                         sort_order=sort_order,
                         created_by=st.session_state.get('user_name', 'System')
                     )
-                    st.success("[OK] Kategorie erstellt!")
+                    st.success("Kategorie erstellt!")
                     st.rerun()
                 else:
                     st.error("Name ist ein Pflichtfeld!")
@@ -582,7 +582,7 @@ def render_category_tree(kb_manager: KnowledgeBaseManager, categories: list, lev
     """Rendert den Kategorien-Baum rekursiv."""
     for category in categories:
         indent = "　" * level
-        icon = category.get('icon', '[FOLDER]')
+        icon = category.get('icon', '')
         article_count = category.get('article_count', 0)
         
         col1, col2, col3 = st.columns([4, 1, 1])
@@ -597,7 +597,7 @@ def render_category_tree(kb_manager: KnowledgeBaseManager, categories: list, lev
                 st.session_state['kb_edit_category_id'] = category['id']
         
         with col3:
-            if st.button("[DELETE]", key=f"delete_cat_{category['id']}", help="Löschen"):
+            if st.button("", key=f"delete_cat_{category['id']}", help="Löschen"):
                 try:
                     kb_manager.delete_category(category['id'])
                     st.success("Kategorie gelöscht!")
@@ -612,7 +612,7 @@ def render_category_tree(kb_manager: KnowledgeBaseManager, categories: list, lev
 
 def render_statistics_tab(kb_manager: KnowledgeBaseManager):
     """Rendert den Statistik-Tab."""
-    st.subheader("[CHART] Wissensdatenbank-Statistiken")
+    st.subheader("Wissensdatenbank-Statistiken")
     
     stats = kb_manager.get_statistics()
     
@@ -655,7 +655,7 @@ def render_statistics_tab(kb_manager: KnowledgeBaseManager):
     recent = kb_manager.get_recent_articles(limit=5)
     for article in recent:
         st.markdown(f"**{article['title']}**")
-        st.caption(f"📅 {article.get('created_at', '')[:10]} | [FOLDER] {article.get('category_name', 'Keine')}")
+        st.caption(f"📅 {article.get('created_at', '')[:10]} | {article.get('category_name', 'Keine')}")
         st.divider()
 
 

@@ -22,7 +22,7 @@ def test_module_transform_creation():
     assert transform.offset_z == 0.0
     assert transform.group_id is None
     
-    print("[OK] ModuleTransform mit Standardwerten erfolgreich erstellt")
+    print("ModuleTransform mit Standardwerten erfolgreich erstellt")
 
 
 def test_module_transform_custom_values():
@@ -47,7 +47,7 @@ def test_module_transform_custom_values():
     assert transform.offset_z == 0.2
     assert transform.group_id == "south_roof"
     
-    print("[OK] ModuleTransform mit benutzerdefinierten Werten erfolgreich erstellt")
+    print("ModuleTransform mit benutzerdefinierten Werten erfolgreich erstellt")
 
 
 def test_azimuth_validation():
@@ -70,16 +70,16 @@ def test_azimuth_validation():
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
         assert "Azimuth" in str(e)
-        print(f"  [OK] Ungültiger Azimuth -10° korrekt abgelehnt: {e}")
+        print(f"  Ungültiger Azimuth -10° korrekt abgelehnt: {e}")
     
     try:
         ModuleTransform(index=4, azimuth_deg=370.0)
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
         assert "Azimuth" in str(e)
-        print(f"  [OK] Ungültiger Azimuth 370° korrekt abgelehnt: {e}")
+        print(f"  Ungültiger Azimuth 370° korrekt abgelehnt: {e}")
     
-    print("[OK] Azimuth-Validierung funktioniert korrekt")
+    print("Azimuth-Validierung funktioniert korrekt")
 
 
 def test_tilt_validation():
@@ -102,16 +102,16 @@ def test_tilt_validation():
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
         assert "Neigung" in str(e)
-        print(f"  [OK] Ungültige Neigung -5° korrekt abgelehnt: {e}")
+        print(f"  Ungültige Neigung -5° korrekt abgelehnt: {e}")
     
     try:
         ModuleTransform(index=4, tilt_deg=95.0)
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
         assert "Neigung" in str(e)
-        print(f"  [OK] Ungültige Neigung 95° korrekt abgelehnt: {e}")
+        print(f"  Ungültige Neigung 95° korrekt abgelehnt: {e}")
     
-    print("[OK] Neigungs-Validierung funktioniert korrekt")
+    print("Neigungs-Validierung funktioniert korrekt")
 
 
 def test_to_dict():
@@ -139,7 +139,7 @@ def test_to_dict():
     assert data["group_id"] == "west_roof"
     
     print(f"  Dictionary: {data}")
-    print("[OK] to_dict() funktioniert korrekt")
+    print("to_dict() funktioniert korrekt")
 
 
 def test_from_dict():
@@ -166,7 +166,7 @@ def test_from_dict():
     assert transform.offset_z == 0.1
     assert transform.group_id == "east_roof"
     
-    print("[OK] from_dict() funktioniert korrekt")
+    print("from_dict() funktioniert korrekt")
 
 
 def test_from_dict_with_defaults():
@@ -186,7 +186,7 @@ def test_from_dict_with_defaults():
     assert transform.offset_z == 0.0     # Standardwert
     assert transform.group_id is None    # Standardwert
     
-    print("[OK] from_dict() mit Standardwerten funktioniert korrekt")
+    print("from_dict() mit Standardwerten funktioniert korrekt")
 
 
 def test_from_dict_invalid():
@@ -198,16 +198,16 @@ def test_from_dict_invalid():
         ModuleTransform.from_dict({"azimuth_deg": 45.0})
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
-        print(f"  [OK] Fehlendes index-Feld korrekt abgelehnt: {e}")
+        print(f"  Fehlendes index-Feld korrekt abgelehnt: {e}")
     
     # Ungültiger Azimuth
     try:
         ModuleTransform.from_dict({"index": 0, "azimuth_deg": 400.0})
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
-        print(f"  [OK] Ungültiger Azimuth korrekt abgelehnt: {e}")
+        print(f"  Ungültiger Azimuth korrekt abgelehnt: {e}")
     
-    print("[OK] from_dict() Fehlerbehandlung funktioniert korrekt")
+    print("from_dict() Fehlerbehandlung funktioniert korrekt")
 
 
 def test_roundtrip():
@@ -237,7 +237,7 @@ def test_roundtrip():
     assert restored.offset_z == original.offset_z
     assert restored.group_id == original.group_id
     
-    print("[OK] Roundtrip funktioniert korrekt")
+    print("Roundtrip funktioniert korrekt")
 
 
 def main():
@@ -258,17 +258,17 @@ def main():
         test_roundtrip()
         
         print("\n" + "=" * 70)
-        print("[OK] ALLE TESTS ERFOLGREICH")
+        print("ALLE TESTS ERFOLGREICH")
         print("=" * 70)
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n[ERROR] UNERWARTETER FEHLER: {e}")
+        print(f"\nUNERWARTETER FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False

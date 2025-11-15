@@ -57,7 +57,7 @@ def render_export_ui():
     
     conn = get_db_connection()
     if not conn:
-        st.error("[ERROR] Keine Datenbankverbindung")
+        st.error("Keine Datenbankverbindung")
         return
     
     try:
@@ -144,24 +144,24 @@ def render_export_ui():
             customer_ids = [customer_options[c] for c in selected_customers]
             
             if not customer_ids:
-                st.warning("[WARNING] Bitte wählen Sie mindestens einen Kunden aus")
+                st.warning("Bitte wählen Sie mindestens einen Kunden aus")
         
         st.divider()
         
         # Export-Button
         if not selected_fields:
-            st.warning("[WARNING] Bitte wählen Sie mindestens ein Feld aus")
+            st.warning("Bitte wählen Sie mindestens ein Feld aus")
         elif export_scope == "Auswahl" and not customer_ids:
             pass  # Warnung bereits oben angezeigt
         else:
-            if st.button("[LAUNCH] Export starten", type="primary", use_container_width=True):
+            if st.button("Export starten", type="primary", use_container_width=True):
                 with st.spinner("Exportiere Daten..."):
                     if export_format == "CSV":
                         # CSV Export
                         csv_data = export_customers_to_csv(conn, selected_fields, customer_ids)
                         
                         if csv_data:
-                            st.success("[OK] Export erfolgreich!")
+                            st.success("Export erfolgreich!")
                             
                             # Download-Button
                             st.download_button(
@@ -172,7 +172,7 @@ def render_export_ui():
                                 use_container_width=True
                             )
                         else:
-                            st.error("[ERROR] Export fehlgeschlagen")
+                            st.error("Export fehlgeschlagen")
                     
                     else:  # Excel
                         # Temporäre Datei erstellen
@@ -182,7 +182,7 @@ def render_export_ui():
                         success = export_customers_to_excel(conn, tmp_path, selected_fields, customer_ids)
                         
                         if success:
-                            st.success("[OK] Export erfolgreich!")
+                            st.success("Export erfolgreich!")
                             
                             # Datei lesen und Download-Button anzeigen
                             with open(tmp_path, 'rb') as f:
@@ -202,7 +202,7 @@ def render_export_ui():
                             except:
                                 pass
                         else:
-                            st.error("[ERROR] Export fehlgeschlagen")
+                            st.error("Export fehlgeschlagen")
     
     finally:
         conn.close()
@@ -218,7 +218,7 @@ def render_import_ui():
     st.header("Kunden importieren")
     
     # Anleitung
-    with st.expander("[INFO] Anleitung", expanded=False):
+    with st.expander("Anleitung", expanded=False):
         st.markdown("""
         ### Import-Anleitung
         
@@ -308,14 +308,14 @@ def render_import_ui():
     
     if errors:
         for error in errors:
-            st.error(f"[ERROR] {error}")
+            st.error(f"{error}")
         return
     
     if not header or not rows:
-        st.error("[ERROR] Keine Daten gefunden")
+        st.error("Keine Daten gefunden")
         return
     
-    st.success(f"[OK] {len(rows)} Zeilen gefunden")
+    st.success(f"{len(rows)} Zeilen gefunden")
     
     # Feld-Mapping
     st.divider()
@@ -324,10 +324,10 @@ def render_import_ui():
     # Automatisches Mapping
     auto_mapping = map_import_fields(header)
     
-    st.info(f"[INFO] {len(auto_mapping)} von {len(header)} Feldern automatisch zugeordnet")
+    st.info(f"{len(auto_mapping)} von {len(header)} Feldern automatisch zugeordnet")
     
     # Manuelle Anpassung
-    with st.expander("[TOOL] Feld-Zuordnung anpassen", expanded=True):
+    with st.expander("Feld-Zuordnung anpassen", expanded=True):
         db_fields = get_available_db_fields()
         required_fields = get_required_fields()
         
@@ -368,7 +368,7 @@ def render_import_ui():
         missing_required = [f for f in required_fields if f not in mapped_db_fields]
         
         if missing_required:
-            st.warning(f"[WARNING] Pflichtfelder fehlen: {', '.join([db_fields[f] for f in missing_required])}")
+            st.warning(f"Pflichtfelder fehlen: {', '.join([db_fields[f] for f in missing_required])}")
     
     # Vorschau
     st.divider()
@@ -380,7 +380,7 @@ def render_import_ui():
         st.dataframe(preview_data, use_container_width=True)
         st.caption(f"Zeige erste {len(preview_data)} von {len(rows)} Zeilen")
     else:
-        st.warning("[WARNING] Keine Daten für Vorschau verfügbar")
+        st.warning("Keine Daten für Vorschau verfügbar")
     
     # Duplikat-Behandlung
     st.divider()
@@ -402,31 +402,31 @@ def render_import_ui():
     
     conn = get_db_connection()
     if not conn:
-        st.error("[ERROR] Keine Datenbankverbindung")
+        st.error("Keine Datenbankverbindung")
         return
     
     try:
         if missing_required:
-            st.error("[ERROR] Import nicht möglich: Pflichtfelder fehlen")
+            st.error("Import nicht möglich: Pflichtfelder fehlen")
         else:
-            if st.button("[LAUNCH] Import starten", type="primary", use_container_width=True):
+            if st.button("Import starten", type="primary", use_container_width=True):
                 with st.spinner("Importiere Daten..."):
                     stats = import_customers_batch(conn, rows, field_mapping, duplicate_action)
                 
                 # Ergebnis anzeigen
                 if stats['errors'] == 0:
-                    st.success("[OK] Import erfolgreich abgeschlossen!")
+                    st.success("Import erfolgreich abgeschlossen!")
                 elif stats['success'] > 0 or stats['updated'] > 0:
-                    st.warning("[WARNING] Import mit Fehlern abgeschlossen")
+                    st.warning("Import mit Fehlern abgeschlossen")
                 else:
-                    st.error("[ERROR] Import fehlgeschlagen")
+                    st.error("Import fehlgeschlagen")
                 
                 # Statistiken
                 st.code(format_import_statistics(stats))
                 
                 # Fehlerdetails
                 if stats['error_details']:
-                    with st.expander("[SEARCH] Fehlerdetails anzeigen", expanded=False):
+                    with st.expander("Fehlerdetails anzeigen", expanded=False):
                         for error in stats['error_details']:
                             st.text(error)
     

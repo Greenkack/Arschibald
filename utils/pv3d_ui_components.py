@@ -185,7 +185,7 @@ def render_module_placement(project_data: Dict[str, Any], selected_roof_type: st
         - use_facade: bool
         - removed_indices: List[int]
     """
-    with st.sidebar.expander("[POWER] Modul-Belegung", expanded=True):
+    with st.sidebar.expander("Modul-Belegung", expanded=True):
         # Zeige kontextbezogene Hilfe
         show_contextual_help("module_placement")
         
@@ -219,12 +219,12 @@ def render_module_placement(project_data: Dict[str, Any], selected_roof_type: st
             # Info-Box über Dachtyp
             if is_flat_roof(selected_roof_type):
                 st.info(
-                    f"[INFO] **Flachdach erkannt**: Aufständerungen verfügbar. "
+                    f"**Flachdach erkannt**: Aufständerungen verfügbar. "
                     f"Module werden mit optimaler Neigung montiert."
                 )
             else:
                 st.info(
-                    f"[INFO] **Schrägdach erkannt** ({selected_roof_type}): Module werden "
+                    f"**Schrägdach erkannt** ({selected_roof_type}): Module werden "
                     f"direkt auf der Dachfläche montiert. Aufständerungen nicht verfügbar."
                 )
             
@@ -249,7 +249,7 @@ def render_module_placement(project_data: Dict[str, Any], selected_roof_type: st
                 if mounting_type not in allowed_types:
                     st.warning(validation["error"])
                     if validation["suggestion"]:
-                        st.info(f"[IDEA] Empfehlung: {validation['suggestion']}")
+                        st.info(f"Empfehlung: {validation['suggestion']}")
             
             # Custom-Parameter nur bei bestimmten Typen
             if "Individuell" in mounting_type or "Optimal" in mounting_type:
@@ -353,9 +353,9 @@ def render_module_placement(project_data: Dict[str, Any], selected_roof_type: st
                         for idx in indices_input.split(",")
                         if idx.strip()
                     ]
-                    st.success(f"[OK] {len(removed_indices)} Module werden entfernt")
+                    st.success(f"{len(removed_indices)} Module werden entfernt")
                 except ValueError:
-                    st.error("[ERROR] Ungültige Eingabe. Bitte nur Zahlen und Kommas verwenden.")
+                    st.error("Ungültige Eingabe. Bitte nur Zahlen und Kommas verwenden.")
                     removed_indices = []
     
     return {
@@ -445,7 +445,7 @@ def render_advanced_controls(
                     if single_index not in selected_modules:
                         selected_modules.append(single_index)
                         st.session_state["pv3d_selected_modules"] = selected_modules
-                        st.success(f"[OK] Modul {single_index} ausgewählt")
+                        st.success(f"Modul {single_index} ausgewählt")
                         st.rerun()
                     else:
                         st.info(f"Modul {single_index} ist bereits ausgewählt")
@@ -455,7 +455,7 @@ def render_advanced_controls(
                     if single_index in selected_modules:
                         selected_modules.remove(single_index)
                         st.session_state["pv3d_selected_modules"] = selected_modules
-                        st.success(f"[OK] Modul {single_index} entfernt")
+                        st.success(f"Modul {single_index} entfernt")
                         st.rerun()
                     else:
                         st.info(f"Modul {single_index} ist nicht ausgewählt")
@@ -505,7 +505,7 @@ def render_advanced_controls(
                 
                 # Setze Auswahl
                 st.session_state["pv3d_selected_modules"] = group_indices
-                st.success(f"[OK] Gruppe '{selected_group}' ausgewählt ({len(group_indices)} Module)")
+                st.success(f"Gruppe '{selected_group}' ausgewählt ({len(group_indices)} Module)")
                 st.rerun()
         
         elif selection_mode == "Bereich":
@@ -539,10 +539,10 @@ def render_advanced_controls(
                 if start_index <= end_index:
                     range_indices = list(range(start_index, end_index + 1))
                     st.session_state["pv3d_selected_modules"] = range_indices
-                    st.success(f"[OK] Bereich {start_index}-{end_index} ausgewählt ({len(range_indices)} Module)")
+                    st.success(f"Bereich {start_index}-{end_index} ausgewählt ({len(range_indices)} Module)")
                     st.rerun()
                 else:
-                    st.error("[ERROR] Start-Index muss kleiner oder gleich End-Index sein")
+                    st.error("Start-Index muss kleiner oder gleich End-Index sein")
         
         st.divider()
         
@@ -557,7 +557,7 @@ def render_advanced_controls(
             # Button zum Aufheben der Auswahl
             if st.button("🔄 Auswahl aufheben", use_container_width=True):
                 st.session_state["pv3d_selected_modules"] = []
-                st.success("[OK] Auswahl aufgehoben")
+                st.success("Auswahl aufgehoben")
                 st.rerun()
         else:
             st.caption("Keine Module ausgewählt")
@@ -591,12 +591,12 @@ def render_analysis_panel() -> Dict[str, Any]:
         - electricity_price: float
         - module_efficiency: int
     """
-    with st.sidebar.expander("[CHART] Analyse", expanded=False):
+    with st.sidebar.expander("Analyse", expanded=False):
         # Zeige kontextbezogene Hilfe
         show_contextual_help("analysis")
         
         # Optimierungs-Assistent
-        st.markdown("**[TARGET] Optimierungs-Assistent**")
+        st.markdown("**Optimierungs-Assistent**")
         st.caption("Lassen Sie das System automatisch die beste Konfiguration für Ihre Anforderungen finden.")
         
         # Optimierungs-Ziel auswählen
@@ -614,7 +614,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         
         # Button: Optimierung starten
         run_optimization = st.button(
-            "[LAUNCH] Optimierung starten",
+            "Optimierung starten",
             use_container_width=True,
             help="Generiert und bewertet verschiedene Konfigurationen"
         )
@@ -670,7 +670,7 @@ def render_analysis_panel() -> Dict[str, Any]:
             )
             
             st.caption(
-                f"[IDEA] Sonnenstand wird für {selected_season} um {hour_of_day:.1f} Uhr "
+                f"Sonnenstand wird für {selected_season} um {hour_of_day:.1f} Uhr "
                 f"am Breitengrad {latitude:.1f}° berechnet."
             )
         else:
@@ -740,7 +740,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         )
         
         if enable_yield_heatmap:
-            st.info("[CHART] Heatmap wird nach dem Rendern angezeigt")
+            st.info("Heatmap wird nach dem Rendern angezeigt")
             
             # Heatmap-Einstellungen
             heatmap_metric = st.selectbox(
@@ -755,7 +755,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         st.divider()
         
         # Live-Ertragsprognose
-        st.markdown("**[POWER] Live-Ertragsprognose**")
+        st.markdown("**Live-Ertragsprognose**")
         st.caption("Berechne den erwarteten Jahresertrag für die aktuelle Konfiguration.")
         
         enable_yield_forecast = st.checkbox(
@@ -766,7 +766,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         )
         
         if enable_yield_forecast:
-            st.info("[IDEA] Prognose wird nach dem Rendern berechnet")
+            st.info("Prognose wird nach dem Rendern berechnet")
             
             # Prognose-Einstellungen
             electricity_price = st.number_input(
@@ -829,7 +829,7 @@ def render_export_options() -> Dict[str, Any]:
         - export_csv: bool
         - export_json: bool
     """
-    with st.sidebar.expander("[PACKAGE] Export-Optionen", expanded=False):
+    with st.sidebar.expander("Export-Optionen", expanded=False):
         # Zeige kontextbezogene Hilfe
         show_contextual_help("export")
         
@@ -950,7 +950,7 @@ def render_export_options() -> Dict[str, Any]:
         st.divider()
         
         # 3D-Modell Export
-        st.markdown("**[DESIGN] 3D-Modell**")
+        st.markdown("**3D-Modell**")
         export_3d_model = st.checkbox(
             "3D-Modell exportieren",
             value=False,
@@ -971,7 +971,7 @@ def render_export_options() -> Dict[str, Any]:
         st.divider()
         
         # Daten-Export
-        st.markdown("**[CHART] Daten-Export**")
+        st.markdown("**Daten-Export**")
         
         col_csv, col_json = st.columns(2)
         
@@ -993,7 +993,7 @@ def render_export_options() -> Dict[str, Any]:
         
         # NEU: Export-Buttons direkt hier anzeigen
         st.divider()
-        st.markdown("### [LAUNCH] Export starten")
+        st.markdown("### Export starten")
         st.caption("Klicken Sie auf einen Button um den Export zu starten")
         
         # Screenshot Button
@@ -1005,7 +1005,7 @@ def render_export_options() -> Dict[str, Any]:
                 type="primary"
             ):
                 st.session_state["trigger_screenshot_export"] = True
-                st.success("[OK] Screenshot wird erstellt...")
+                st.success("Screenshot wird erstellt...")
         
         # Multi-View Button
         if export_multiview:
@@ -1015,7 +1015,7 @@ def render_export_options() -> Dict[str, Any]:
                 use_container_width=True
             ):
                 st.session_state["trigger_multiview_export"] = True
-                st.success("[OK] Multi-View wird erstellt...")
+                st.success("Multi-View wird erstellt...")
         
         # 360° Animation Button - VERBESSERT
         if export_360:
@@ -1033,27 +1033,27 @@ def render_export_options() -> Dict[str, Any]:
         # 3D-Modell Button - VERBESSERT
         if export_3d_model:
             if st.button(
-                f"[DESIGN] 3D-Modell exportieren ({model_format})",
+                f"3D-Modell exportieren ({model_format})",
                 key="btn_export_3d_model_inline",
                 use_container_width=True,
                 type="secondary"
             ):
                 st.session_state["trigger_3d_model_export"] = True
                 st.session_state["force_3d_model_export"] = True  # Zusätzlicher Flag
-                st.info(f"[DESIGN] 3D-Modell ({model_format}) wird erstellt... Bitte warten Sie.")
+                st.info(f"3D-Modell ({model_format}) wird erstellt... Bitte warten Sie.")
                 st.rerun()  # Sofort neu laden um Export zu triggern
         
         # CSV Button - VERBESSERT
         if export_csv:
             if st.button(
-                "[CHART] CSV exportieren",
+                "CSV exportieren",
                 key="btn_export_csv_inline",
                 use_container_width=True,
                 type="secondary"
             ):
                 st.session_state["trigger_csv_export"] = True
                 st.session_state["force_csv_export"] = True  # Zusätzlicher Flag
-                st.info("[CHART] CSV wird erstellt... Bitte warten Sie.")
+                st.info("CSV wird erstellt... Bitte warten Sie.")
                 st.rerun()  # Sofort neu laden um Export zu triggern
         
         # JSON Button - VERBESSERT

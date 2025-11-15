@@ -134,10 +134,10 @@ def create_chart_overview_page(
         
         if is_available:
             pdf.set_text_color(0, 100, 0)
-            status = "[OK]"
+            status = ""
         else:
             pdf.set_text_color(200, 0, 0)
-            status = "[ERROR]"
+            status = ""
         
         pdf.cell(10, 6, status)
         pdf.set_text_color(0, 0, 0)

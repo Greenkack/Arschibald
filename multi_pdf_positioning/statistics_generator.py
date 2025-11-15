@@ -628,4 +628,4 @@ if __name__ == "__main__":
     
     print(generator.format_summary(summary))
     
-    print("\n[OK] Statistics Generator module ready")
+    print("\nStatistics Generator module ready")

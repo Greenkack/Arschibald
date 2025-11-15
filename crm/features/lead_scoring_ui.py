@@ -34,7 +34,7 @@ def render_lead_scoring_admin(texts: dict[str, str]) -> None:
         st.error("Lead Scoring Modul nicht verfügbar")
         return
     
-    st.subheader("[TARGET] Lead Scoring Konfiguration")
+    st.subheader("Lead Scoring Konfiguration")
     
     conn = get_db_connection()
     if not conn:
@@ -48,7 +48,7 @@ def render_lead_scoring_admin(texts: dict[str, str]) -> None:
         
         # Tabs für verschiedene Bereiche
         tab1, tab2, tab3 = st.tabs([
-            "[CHART] Übersicht",
+            "Übersicht",
             "⚙️ Regeln verwalten",
             "🔄 Scores aktualisieren"
         ])
@@ -68,7 +68,7 @@ def render_lead_scoring_admin(texts: dict[str, str]) -> None:
 
 def _render_scoring_overview(conn) -> None:
     """Rendert Übersicht über Lead Scoring"""
-    st.markdown("### [CHART] Lead Scoring Übersicht")
+    st.markdown("### Lead Scoring Übersicht")
     
     # Score-Verteilung
     distribution = get_score_distribution(conn)
@@ -118,14 +118,14 @@ def _render_scoring_overview(conn) -> None:
                 st.caption(f"👤 {lead['contact_person']}")
             
             with col2:
-                st.markdown(f"**[MONEY] {lead['estimated_value']:,.0f} €**")
-                st.caption(f"[CHART] Wahrscheinlichkeit: {lead['probability']}%")
+                st.markdown(f"**{lead['estimated_value']:,.0f} €**")
+                st.caption(f"Wahrscheinlichkeit: {lead['probability']}%")
             
             with col3:
                 stage_icons = {
                     'lead': '🆕',
-                    'qualified': '[OK]',
-                    'proposal': '[FILE]',
+                    'qualified': '',
+                    'proposal': '',
                     'negotiation': '🤝'
                 }
                 stage_icon = stage_icons.get(lead['stage'], '❓')
@@ -199,11 +199,11 @@ def _render_rules_management(conn) -> None:
             rule_types[rule_type].append(rule)
         
         type_names = {
-            'project_size': '[MONEY] Projektgröße',
+            'project_size': 'Projektgröße',
             'lead_source': '📍 Lead-Quelle',
             'response_time': '⏱️ Reaktionszeit',
-            'engagement': '[STATS] Engagement',
-            'stage': '[TARGET] Pipeline-Stufe'
+            'engagement': 'Engagement',
+            'stage': 'Pipeline-Stufe'
         }
         
         for rule_type, type_rules in rule_types.items():
@@ -230,7 +230,7 @@ def _render_rules_management(conn) -> None:
                                 st.rerun()
                     
                     with col4:
-                        if st.button("[DELETE]", key=f"delete_rule_{rule['id']}", help="Regel löschen"):
+                        if st.button("", key=f"delete_rule_{rule['id']}", help="Regel löschen"):
                             if delete_scoring_rule(conn, rule['id']):
                                 st.success("Regel gelöscht")
                                 st.rerun()
@@ -252,12 +252,12 @@ def _render_rules_management(conn) -> None:
                 "Regel-Typ *",
                 options=['project_size', 'lead_source', 'response_time', 'engagement', 'stage', 'custom'],
                 format_func=lambda x: {
-                    'project_size': '[MONEY] Projektgröße',
+                    'project_size': 'Projektgröße',
                     'lead_source': '📍 Lead-Quelle',
                     'response_time': '⏱️ Reaktionszeit',
-                    'engagement': '[STATS] Engagement',
-                    'stage': '[TARGET] Pipeline-Stufe',
-                    'custom': '[TOOL] Benutzerdefiniert'
+                    'engagement': 'Engagement',
+                    'stage': 'Pipeline-Stufe',
+                    'custom': 'Benutzerdefiniert'
                 }[x]
             )
             
@@ -318,10 +318,10 @@ def _render_rules_management(conn) -> None:
                 )
                 
                 if rule_id:
-                    st.success(f"[OK] Regel '{rule_name}' erfolgreich hinzugefügt!")
+                    st.success(f"Regel '{rule_name}' erfolgreich hinzugefügt!")
                     st.rerun()
                 else:
-                    st.error("[ERROR] Fehler beim Hinzufügen der Regel")
+                    st.error("Fehler beim Hinzufügen der Regel")
             else:
                 st.error("Bitte füllen Sie alle Pflichtfelder aus")
 
@@ -345,15 +345,15 @@ def _render_score_update(conn) -> None:
         if st.button("🔄 Alle Scores neu berechnen", type="primary", use_container_width=True):
             with st.spinner("Berechne Scores..."):
                 updated_count = update_all_lead_scores(conn)
-                st.success(f"[OK] {updated_count} Lead-Scores wurden aktualisiert!")
+                st.success(f"{updated_count} Lead-Scores wurden aktualisiert!")
     
     with col2:
-        if st.button("[CHART] Score-Statistiken anzeigen", use_container_width=True):
+        if st.button("Score-Statistiken anzeigen", use_container_width=True):
             st.session_state['show_score_stats'] = True
     
     if st.session_state.get('show_score_stats', False):
         st.markdown("---")
-        st.markdown("#### [CHART] Score-Statistiken")
+        st.markdown("#### Score-Statistiken")
         
         cursor = conn.cursor()
         
@@ -417,14 +417,14 @@ def render_lead_score_badge(score: int, size: str = "medium") -> None:
             font-size: {font_size};
             display: inline-block;
         ">
-            [TARGET] {score} - {label}
+            {score} - {label}
         </div>
     """, unsafe_allow_html=True)
 
 
 def render_lead_score_history(conn, lead_id: int) -> None:
     """Rendert Score-Historie für einen Lead"""
-    st.markdown("#### [STATS] Score-Historie")
+    st.markdown("#### Score-Historie")
     
     history = get_lead_score_history(conn, lead_id)
     

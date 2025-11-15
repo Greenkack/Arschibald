@@ -81,10 +81,10 @@ def init_core_integration(enable_logging=True):
             from core.config import get_config
             _config = get_config(reload_if_needed=False)
             status['config'] = True
-            print("[OK] Core Config initialized")
+            print("Core Config initialized")
         except Exception as e:
             status['errors'].append(f"Config init failed: {e}")
-            print(f"[WARNING] Core Config disabled: {e}")
+            print(f"Core Config disabled: {e}")
     
     # 2. LOGGING - Nur wenn Config erfolgreich
     if FEATURES['logging'] and enable_logging:
@@ -106,10 +106,10 @@ def init_core_integration(enable_logging=True):
             _logger = get_logger('bokuk2')
             _logger.info("core_integration_initialized", features=FEATURES)
             status['logging'] = True
-            print("[OK] Core Logging initialized")
+            print("Core Logging initialized")
         except Exception as e:
             status['errors'].append(f"Logging init failed: {e}")
-            print(f"[WARNING] Core Logging disabled: {e}")
+            print(f"Core Logging disabled: {e}")
     
     # 3. CACHE - Optional, nur wenn explizit aktiviert
     if FEATURES['cache']:
@@ -117,12 +117,12 @@ def init_core_integration(enable_logging=True):
             from core.cache import get_cache
             _cache = get_cache()
             status['cache'] = True
-            print("[OK] Core Cache initialized")
+            print("Core Cache initialized")
             if _logger:
                 _logger.info("cache_initialized")
         except Exception as e:
             status['errors'].append(f"Cache init failed: {e}")
-            print(f"[WARNING] Core Cache disabled: {e}")
+            print(f"Core Cache disabled: {e}")
     
     # 4. SESSION MANAGER - Optional, für Browser-Refresh-Recovery
     if FEATURES['session']:
@@ -130,12 +130,12 @@ def init_core_integration(enable_logging=True):
             from core.session_manager import SessionManager
             _session_manager = SessionManager()
             status['session'] = True
-            print("[OK] Core Session Manager initialized")
+            print("Core Session Manager initialized")
             if _logger:
                 _logger.info("session_manager_initialized")
         except Exception as e:
             status['errors'].append(f"Session Manager init failed: {e}")
-            print(f"[WARNING] Core Session Manager disabled: {e}")
+            print(f"Core Session Manager disabled: {e}")
     
     # 5. DATABASE POOLING - Optional, erweiterte DB-Features
     if FEATURES['database']:
@@ -143,14 +143,14 @@ def init_core_integration(enable_logging=True):
             from core.database import DatabaseManager
             _database_manager = DatabaseManager(use_enhanced_connection_manager=True)
             status['database'] = True
-            print("[OK] Core Database Manager initialized (Pooling, Leak Detection, Health Monitoring)")
+            print("Core Database Manager initialized (Pooling, Leak Detection, Health Monitoring)")
             if _logger:
                 _logger.info("database_manager_initialized", 
                             pool_size=_database_manager._connection_pool_size,
                             enhanced=True)
         except Exception as e:
             status['errors'].append(f"Database Manager init failed: {e}")
-            print(f"[WARNING] Core Database Manager disabled: {e}")
+            print(f"Core Database Manager disabled: {e}")
     
     # Initialize advanced modules (Phase 5-12)
     _init_advanced_modules(status)
@@ -171,12 +171,12 @@ def _init_advanced_modules(status: dict):
             from core.security import SecurityMonitor
             _security_manager = SecurityMonitor()
             status['security'] = True
-            print("[OK] Security Manager initialized (Auth, RBAC, Token Management)")
+            print("Security Manager initialized (Auth, RBAC, Token Management)")
             if _logger:
                 _logger.info("security_manager_initialized")
         except Exception as e:
             status['errors'].append(f"Security Manager init failed: {e}")
-            print(f"[WARNING] Security Manager disabled: {e}")
+            print(f"Security Manager disabled: {e}")
             status['security'] = False
     
     if FEATURES['router']:
@@ -184,12 +184,12 @@ def _init_advanced_modules(status: dict):
             from core.router import Router
             _router = Router()
             status['router'] = True
-            print("[OK] Router initialized (Navigation, Guards, Middleware)")
+            print("Router initialized (Navigation, Guards, Middleware)")
             if _logger:
                 _logger.info("router_initialized")
         except Exception as e:
             status['errors'].append(f"Router init failed: {e}")
-            print(f"[WARNING] Router disabled: {e}")
+            print(f"Router disabled: {e}")
             status['router'] = False
     
     # PHASE 6: FORMS & WIDGETS
@@ -198,12 +198,12 @@ def _init_advanced_modules(status: dict):
             from core.form_manager import FormManager
             _form_manager = FormManager()
             status['forms'] = True
-            print("[OK] Form Manager initialized (Multi-Step Forms, Validation)")
+            print("Form Manager initialized (Multi-Step Forms, Validation)")
             if _logger:
                 _logger.info("form_manager_initialized")
         except Exception as e:
             status['errors'].append(f"Form Manager init failed: {e}")
-            print(f"[WARNING] Form Manager disabled: {e}")
+            print(f"Form Manager disabled: {e}")
             status['forms'] = False
     
     if FEATURES['widgets']:
@@ -211,12 +211,12 @@ def _init_advanced_modules(status: dict):
             from core.widgets import WidgetRegistry
             _widget_manager = WidgetRegistry()
             status['widgets'] = True
-            print("[OK] Widget Manager initialized (Custom Widgets, Persistence)")
+            print("Widget Manager initialized (Custom Widgets, Persistence)")
             if _logger:
                 _logger.info("widget_manager_initialized")
         except Exception as e:
             status['errors'].append(f"Widget Manager init failed: {e}")
-            print(f"[WARNING] Widget Manager disabled: {e}")
+            print(f"Widget Manager disabled: {e}")
             status['widgets'] = False
     
     # PHASE 7: NAVIGATION
@@ -225,12 +225,12 @@ def _init_advanced_modules(status: dict):
             from core.navigation_history import NavigationHistory
             _navigation_history = NavigationHistory()
             status['navigation'] = True
-            print("[OK] Navigation History initialized (Tracking, Breadcrumbs)")
+            print("Navigation History initialized (Tracking, Breadcrumbs)")
             if _logger:
                 _logger.info("navigation_history_initialized")
         except Exception as e:
             status['errors'].append(f"Navigation History init failed: {e}")
-            print(f"[WARNING] Navigation History disabled: {e}")
+            print(f"Navigation History disabled: {e}")
             status['navigation'] = False
     
     # PHASE 8: JOBS & BACKGROUND TASKS
@@ -239,12 +239,12 @@ def _init_advanced_modules(status: dict):
             from core.jobs import JobManager
             _job_manager = JobManager()
             status['jobs'] = True
-            print("[OK] Job Manager initialized (Background Tasks, Scheduling, Notifications)")
+            print("Job Manager initialized (Background Tasks, Scheduling, Notifications)")
             if _logger:
                 _logger.info("job_manager_initialized")
         except Exception as e:
             status['errors'].append(f"Job Manager init failed: {e}")
-            print(f"[WARNING] Job Manager disabled: {e}")
+            print(f"Job Manager disabled: {e}")
             status['jobs'] = False
     
     # PHASE 9: DATABASE MIGRATIONS
@@ -253,12 +253,12 @@ def _init_advanced_modules(status: dict):
             from core.migration_manager import MigrationManager
             _migration_manager = MigrationManager()
             status['migrations'] = True
-            print("[OK] Migration Manager initialized (Schema Migrations, Rollback)")
+            print("Migration Manager initialized (Schema Migrations, Rollback)")
             if _logger:
                 _logger.info("migration_manager_initialized")
         except Exception as e:
             status['errors'].append(f"Migration Manager init failed: {e}")
-            print(f"[WARNING] Migration Manager disabled: {e}")
+            print(f"Migration Manager disabled: {e}")
             status['migrations'] = False
     
     # PHASE 10: CACHE EXTENSIONS
@@ -266,26 +266,26 @@ def _init_advanced_modules(status: dict):
         try:
             from core.cache_invalidation import CacheDependencyTracker
             from core.cache_monitoring import CacheMonitor
-            from core.cache_warming import CacheWarmingEngine  # [OK] Korrekter Name
+            from core.cache_warming import CacheWarmingEngine  # Korrekter Name
             
             _cache_invalidator = CacheDependencyTracker()
             _cache_monitor = CacheMonitor()
-            _cache_warmer = CacheWarmingEngine()  # [OK] Ohne Parameter
+            _cache_warmer = CacheWarmingEngine()  # Ohne Parameter
             
             status['cache_extensions'] = True
-            print("[OK] Cache Extensions initialized (Invalidation, Monitoring, Warming)")
+            print("Cache Extensions initialized (Invalidation, Monitoring, Warming)")
             if _logger:
                 _logger.info("cache_extensions_initialized")
         except ImportError as e:
             status['errors'].append(f"Cache Extensions import failed: {e}")
-            print(f"[WARNING] Cache Extensions disabled (import error): {e}")
+            print(f"Cache Extensions disabled (import error): {e}")
             status['cache_extensions'] = False
             _cache_invalidator = None
             _cache_monitor = None
             _cache_warmer = None
         except Exception as e:
             status['errors'].append(f"Cache Extensions init failed: {e}")
-            print(f"[WARNING] Cache Extensions disabled: {e}")
+            print(f"Cache Extensions disabled: {e}")
             status['cache_extensions'] = False
             _cache_invalidator = None
             _cache_monitor = None
@@ -297,12 +297,12 @@ def _init_advanced_modules(status: dict):
             from core.db_performance_monitor import DBPerformanceMonitor
             _db_performance_monitor = DBPerformanceMonitor(_database_manager)
             status['db_extensions'] = True
-            print("[OK] DB Performance Monitor initialized (Query Tracking, Optimization)")
+            print("DB Performance Monitor initialized (Query Tracking, Optimization)")
             if _logger:
                 _logger.info("db_performance_monitor_initialized")
         except Exception as e:
             status['errors'].append(f"DB Performance Monitor init failed: {e}")
-            print(f"[WARNING] DB Performance Monitor disabled: {e}")
+            print(f"DB Performance Monitor disabled: {e}")
             status['db_extensions'] = False
     
     # PHASE 12: DEPENDENCY INJECTION (DISABLED - containers.py is for UI, not DI)

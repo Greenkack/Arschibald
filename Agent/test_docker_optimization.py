@@ -62,10 +62,10 @@ def test_container_reuse():
     # Second execution should be faster (container reuse)
     if time1 > 1.0:  # Only check if first execution was slow enough
         speedup = time1 / time2
-        print(f"\n[OK] Container reuse is {speedup:.1f}x faster")
+        print(f"\nContainer reuse is {speedup:.1f}x faster")
         assert speedup > 1.2, "Reuse should be faster"
 
-    print("\n[OK] Container reuse test passed")
+    print("\nContainer reuse test passed")
 
 
 def test_parallel_execution():
@@ -102,18 +102,18 @@ def test_parallel_execution():
 
     # Check results
     assert len(results) == 3, "All tasks should complete"
-    print(f"[OK] All {len(results)} tasks completed")
+    print(f"All {len(results)} tasks completed")
 
     # Parallel should be faster than sequential
     # (3 tasks * 0.5s = 1.5s sequential, but parallel should be ~0.5-1.0s)
     assert parallel_time < 2.0, "Parallel execution should be efficient"
-    print(f"[OK] Parallel execution completed in {parallel_time:.2f}s")
+    print(f"Parallel execution completed in {parallel_time:.2f}s")
 
     # Check pool
     stats = get_container_stats()
     print(f"\nPool size after parallel execution: {stats['pool_size']}")
 
-    print("\n[OK] Parallel execution test passed")
+    print("\nParallel execution test passed")
 
 
 def test_efficient_cleanup():
@@ -141,9 +141,9 @@ def test_efficient_cleanup():
     print(f"Final pool size: {final_count}")
 
     assert final_count == 0, "Pool should be empty after cleanup"
-    print("[OK] Cleanup removed all containers")
+    print("Cleanup removed all containers")
 
-    print("\n[OK] Efficient cleanup test passed")
+    print("\nEfficient cleanup test passed")
 
 
 def test_resource_monitoring():
@@ -174,9 +174,9 @@ def test_resource_monitoring():
 
     assert 'pool_size' in stats, "Stats should include pool size"
     assert 'containers' in stats, "Stats should include container list"
-    print("\n[OK] Statistics available")
+    print("\nStatistics available")
 
-    print("\n[OK] Resource monitoring test passed")
+    print("\nResource monitoring test passed")
 
 
 def test_startup_optimization():
@@ -205,14 +205,14 @@ def test_startup_optimization():
     # Warm start should be faster
     if cold_time > 0.5:
         speedup = cold_time / warm_time
-        print(f"\n[OK] Warm start is {speedup:.1f}x faster")
+        print(f"\nWarm start is {speedup:.1f}x faster")
 
     # Both should complete successfully
     assert "Cold start" in result1 or "STDOUT" in result1
     assert "Warm start" in result2 or "STDOUT" in result2
-    print("[OK] Both executions successful")
+    print("Both executions successful")
 
-    print("\n[OK] Startup optimization test passed")
+    print("\nStartup optimization test passed")
 
 
 def test_different_container_types():
@@ -238,14 +238,14 @@ def test_different_container_types():
 
     # Should have 2 containers (one for each type)
     assert stats['pool_size'] >= 1, "Should have at least one container"
-    print(f"[OK] Managing {stats['pool_size']} container(s)")
+    print(f"Managing {stats['pool_size']} container(s)")
 
     # Both should work
     assert "Python" in result1 or "STDOUT" in result1
     assert "Terminal" in result2 or "STDOUT" in result2
-    print("[OK] Both container types work correctly")
+    print("Both container types work correctly")
 
-    print("\n[OK] Different container types test passed")
+    print("\nDifferent container types test passed")
 
 
 def run_all_tests():
@@ -263,17 +263,17 @@ def run_all_tests():
         test_different_container_types()
 
         print("\n" + "=" * 70)
-        print("[OK] ALL TESTS PASSED")
+        print("ALL TESTS PASSED")
         print("=" * 70)
 
         # Final cleanup
         clear_container_pool()
 
     except AssertionError as e:
-        print(f"\n[ERROR] Test failed: {e}")
+        print(f"\nTest failed: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] Unexpected error: {e}")
+        print(f"\nUnexpected error: {e}")
         import traceback
         traceback.print_exc()
         return False

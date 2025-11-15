@@ -103,7 +103,7 @@ print(f"      Investment: {comparison['fossil_heating']['investment']} €")
 print(f"      Jährliche Betriebskosten: {comparison['fossil_heating']['annual_operating_cost']} €")
 print(f"      Gesamtkosten 20 Jahre: {comparison['fossil_heating']['total_cost_20years']} €")
 
-print(f"\n   [CHART] VERGLEICH:")
+print(f"\n   VERGLEICH:")
 print(f"      Einsparung über 20 Jahre: {comparison['comparison']['savings_eur_20years']} €")
 print(f"      Jährliche Einsparung: {comparison['comparison']['annual_savings_eur']} €")
 print(f"      Amortisationszeit: {comparison['comparison']['payback_years']} Jahre")
@@ -111,5 +111,5 @@ print(f"      CO2-Einsparung: {comparison['comparison']['co2_savings_tons_20year
 print(f"      Bewertung: {comparison['comparison']['recommendation']}")
 
 print("\n" + "=" * 80)
-print("[OK] ALLE TESTS ERFOLGREICH!")
+print("ALLE TESTS ERFOLGREICH!")
 print("=" * 80)

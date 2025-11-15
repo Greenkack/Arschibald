@@ -103,15 +103,15 @@ def test_create_task_basic():
         assert task['status'] == "open", "Status stimmt nicht"
         assert task['priority'] == "high", "Priorität stimmt nicht"
         
-        print("   [OK] Task erfolgreich erstellt")
-        print(f"   [OK] Task-ID: {task_id}")
-        print(f"   [OK] Alle Felder korrekt gespeichert")
+        print("   Task erfolgreich erstellt")
+        print(f"   Task-ID: {task_id}")
+        print(f"   Alle Felder korrekt gespeichert")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     except Exception as e:
-        print(f"   [ERROR] Fehler: {e}")
+        print(f"   Fehler: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -142,10 +142,10 @@ def test_create_task_with_associations():
         assert task['lead_id'] == 789, "Lead-ID stimmt nicht"
         assert task['assigned_to'] == "Max Mustermann", "Zugewiesener stimmt nicht"
         
-        print("   [OK] Task mit allen Zuordnungen erstellt")
+        print("   Task mit allen Zuordnungen erstellt")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -166,9 +166,9 @@ def test_create_task_validation():
                 INSERT INTO crm_tasks (title) VALUES (?)
             """, ("",))
             conn.commit()
-            print("   [WARNING]  Leerer Titel wurde akzeptiert (sollte validiert werden)")
+            print("   Leerer Titel wurde akzeptiert (sollte validiert werden)")
         except sqlite3.IntegrityError:
-            print("   [OK] Leerer Titel korrekt abgelehnt")
+            print("   Leerer Titel korrekt abgelehnt")
         
         # Test 2: Ungültiger Status
         cursor.execute("""
@@ -181,12 +181,12 @@ def test_create_task_validation():
         status = cursor.fetchone()['status']
         
         # In der Anwendung würde dies auf 'open' korrigiert
-        print(f"   [INFO]  Ungültiger Status gespeichert: '{status}' (App sollte validieren)")
+        print(f"   Ungültiger Status gespeichert: '{status}' (App sollte validieren)")
         
-        print("   [OK] Validierungs-Tests abgeschlossen")
+        print("   Validierungs-Tests abgeschlossen")
         
     except Exception as e:
-        print(f"   [ERROR] Fehler: {e}")
+        print(f"   Fehler: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -224,10 +224,10 @@ def test_status_workflow_open_to_in_progress():
         
         assert status == "in_progress", f"Status sollte 'in_progress' sein, ist aber '{status}'"
         
-        print("   [OK] Status erfolgreich von 'open' zu 'in_progress' geändert")
+        print("   Status erfolgreich von 'open' zu 'in_progress' geändert")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -264,11 +264,11 @@ def test_status_workflow_to_completed():
         assert row['completed_at'] is not None, "completed_at sollte gesetzt sein"
         assert row['completed_at'] == completed_at, "completed_at Timestamp stimmt nicht"
         
-        print("   [OK] Status erfolgreich auf 'completed' gesetzt")
-        print(f"   [OK] completed_at Timestamp gesetzt: {row['completed_at']}")
+        print("   Status erfolgreich auf 'completed' gesetzt")
+        print(f"   completed_at Timestamp gesetzt: {row['completed_at']}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -304,11 +304,11 @@ def test_status_workflow_reopen():
         assert row['status'] == "open", "Status sollte 'open' sein"
         assert row['completed_at'] is None, "completed_at sollte NULL sein"
         
-        print("   [OK] Task erfolgreich wieder geöffnet")
-        print("   [OK] completed_at auf NULL zurückgesetzt")
+        print("   Task erfolgreich wieder geöffnet")
+        print("   completed_at auf NULL zurückgesetzt")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -335,7 +335,7 @@ def test_status_workflow_all_transitions():
         conn.commit()
         cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id,))
         assert cursor.fetchone()['status'] == "in_progress"
-        print("   [OK] Transition 1: open → in_progress")
+        print("   Transition 1: open → in_progress")
         
         # Transition 2: in_progress → completed
         cursor.execute("""
@@ -344,7 +344,7 @@ def test_status_workflow_all_transitions():
         conn.commit()
         cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id,))
         assert cursor.fetchone()['status'] == "completed"
-        print("   [OK] Transition 2: in_progress → completed")
+        print("   Transition 2: in_progress → completed")
         
         # Transition 3: completed → open (reopen)
         cursor.execute("""
@@ -353,12 +353,12 @@ def test_status_workflow_all_transitions():
         conn.commit()
         cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id,))
         assert cursor.fetchone()['status'] == "open"
-        print("   [OK] Transition 3: completed → open (reopen)")
+        print("   Transition 3: completed → open (reopen)")
         
-        print("   [OK] Alle Status-Übergänge erfolgreich")
+        print("   Alle Status-Übergänge erfolgreich")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -398,11 +398,11 @@ def test_notifications_overdue_tasks():
         assert len(overdue_tasks) == 1, f"Sollte 1 überfälligen Task finden, fand {len(overdue_tasks)}"
         assert overdue_tasks[0]['title'] == "Überfälliger Task"
         
-        print("   [OK] Überfällige Tasks korrekt identifiziert")
-        print(f"   [OK] Gefunden: {len(overdue_tasks)} überfälliger Task")
+        print("   Überfällige Tasks korrekt identifiziert")
+        print(f"   Gefunden: {len(overdue_tasks)} überfälliger Task")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -438,11 +438,11 @@ def test_notifications_due_today():
         assert due_today[0]['title'] == "Heute fällig"
         assert due_today[0]['priority'] == "high"
         
-        print("   [OK] Heute fällige Tasks korrekt identifiziert")
-        print(f"   [OK] Gefunden: {len(due_today)} heute fälliger Task")
+        print("   Heute fällige Tasks korrekt identifiziert")
+        print(f"   Gefunden: {len(due_today)} heute fälliger Task")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -486,11 +486,11 @@ def test_notifications_due_soon():
         assert len(due_soon) == 1, f"Sollte 1 Task in nächsten 7 Tagen finden, fand {len(due_soon)}"
         assert due_soon[0]['title'] == "In 3 Tagen fällig"
         
-        print("   [OK] Bald fällige Tasks korrekt identifiziert")
-        print(f"   [OK] Gefunden: {len(due_soon)} Task in nächsten 7 Tagen")
+        print("   Bald fällige Tasks korrekt identifiziert")
+        print(f"   Gefunden: {len(due_soon)} Task in nächsten 7 Tagen")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -535,11 +535,11 @@ def test_notifications_priority_levels():
         assert tasks[1]['priority'] == 'medium', "Zweiter Task sollte 'medium' Priorität haben"
         assert tasks[2]['priority'] == 'low', "Dritter Task sollte 'low' Priorität haben"
         
-        print("   [OK] Tasks korrekt nach Priorität sortiert")
-        print(f"   [OK] Reihenfolge: high → medium → low")
+        print("   Tasks korrekt nach Priorität sortiert")
+        print(f"   Reihenfolge: high → medium → low")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -581,11 +581,11 @@ def test_notifications_exclude_completed():
         assert len(overdue) == 1, f"Sollte nur 1 offenen überfälligen Task finden, fand {len(overdue)}"
         assert overdue[0]['title'] == "Überfällig offen"
         
-        print("   [OK] Erledigte Tasks korrekt ausgeschlossen")
-        print(f"   [OK] Nur offene überfällige Tasks in Benachrichtigungen")
+        print("   Erledigte Tasks korrekt ausgeschlossen")
+        print(f"   Nur offene überfällige Tasks in Benachrichtigungen")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -623,10 +623,10 @@ def test_filter_by_status():
         in_progress_tasks = cursor.fetchall()
         assert len(in_progress_tasks) == 1
         
-        print("   [OK] Filterung nach Status funktioniert")
+        print("   Filterung nach Status funktioniert")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -662,11 +662,11 @@ def test_filter_by_customer():
         
         assert len(customer_1_tasks) == 2, f"Sollte 2 Tasks für Kunde 1 finden"
         
-        print("   [OK] Filterung nach Kunde funktioniert")
-        print(f"   [OK] Gefunden: {len(customer_1_tasks)} Tasks für Kunde 1")
+        print("   Filterung nach Kunde funktioniert")
+        print(f"   Gefunden: {len(customer_1_tasks)} Tasks für Kunde 1")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -705,11 +705,11 @@ def test_statistics_count_by_status():
         assert stats.get('in_progress', 0) == 1, "Sollte 1 Task in Arbeit haben"
         assert stats.get('completed', 0) == 1, "Sollte 1 erledigten Task haben"
         
-        print("   [OK] Statistiken nach Status korrekt")
-        print(f"   [OK] Open: {stats.get('open', 0)}, In Progress: {stats.get('in_progress', 0)}, Completed: {stats.get('completed', 0)}")
+        print("   Statistiken nach Status korrekt")
+        print(f"   Open: {stats.get('open', 0)}, In Progress: {stats.get('in_progress', 0)}, Completed: {stats.get('completed', 0)}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -761,25 +761,25 @@ def run_all_tests():
             passed += 1
         except Exception as e:
             failed += 1
-            print(f"\n[ERROR] Test '{test_name}' fehlgeschlagen: {e}")
+            print(f"\nTest '{test_name}' fehlgeschlagen: {e}")
     
     # Zusammenfassung
     print("\n" + "=" * 70)
     print("Test-Zusammenfassung")
     print("=" * 70)
-    print(f"[OK] Bestanden: {passed}/{len(tests)}")
-    print(f"[ERROR] Fehlgeschlagen: {failed}/{len(tests)}")
+    print(f"Bestanden: {passed}/{len(tests)}")
+    print(f"Fehlgeschlagen: {failed}/{len(tests)}")
     
     if failed == 0:
         print("\n🎉 Alle Tests erfolgreich!")
         print("\nGetestete Funktionalität:")
-        print("  [OK] Task-Erstellung mit allen Feldern (Requirement 5.1)")
-        print("  [OK] Status-Workflow (open → in_progress → completed) (Requirement 5.2)")
-        print("  [OK] Benachrichtigungen für fällige Tasks (Requirement 5.2)")
-        print("  [OK] Filterung nach Status, Kunde, Projekt")
-        print("  [OK] Statistiken und Reporting")
+        print("  Task-Erstellung mit allen Feldern (Requirement 5.1)")
+        print("  Status-Workflow (open → in_progress → completed) (Requirement 5.2)")
+        print("  Benachrichtigungen für fällige Tasks (Requirement 5.2)")
+        print("  Filterung nach Status, Kunde, Projekt")
+        print("  Statistiken und Reporting")
     else:
-        print(f"\n[WARNING]  {failed} Test(s) fehlgeschlagen - bitte überprüfen!")
+        print(f"\n{failed} Test(s) fehlgeschlagen - bitte überprüfen!")
     
     print("=" * 70)
     

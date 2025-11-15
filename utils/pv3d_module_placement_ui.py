@@ -62,7 +62,7 @@ def render_module_placement_panel(
         # Validate module_quantity
         if not isinstance(module_quantity, (int, float)):
             st.error(
-                f"[ERROR] Fehler: Ungültiger Typ für Modulanzahl "
+                f"Fehler: Ungültiger Typ für Modulanzahl "
                 f"(erwartet: Zahl, erhalten: {type(module_quantity).__name__})"
             )
             return actions
@@ -70,7 +70,7 @@ def render_module_placement_panel(
         module_quantity = int(module_quantity)
         if module_quantity < 0:
             st.warning(
-                f"[WARNING] Warnung: Negative Modulanzahl ({module_quantity}) "
+                f"Warnung: Negative Modulanzahl ({module_quantity}) "
                 "wird auf 0 gesetzt"
             )
             module_quantity = 0
@@ -78,14 +78,14 @@ def render_module_placement_panel(
         # Validate roof_area
         if not isinstance(roof_area, (int, float)):
             st.error(
-                f"[ERROR] Fehler: Ungültiger Typ für Dachfläche "
+                f"Fehler: Ungültiger Typ für Dachfläche "
                 f"(erwartet: Zahl, erhalten: {type(roof_area).__name__})"
             )
             return actions
         
         if roof_area < 0:
             st.warning(
-                f"[WARNING] Warnung: Negative Dachfläche ({roof_area:.2f}m²) "
+                f"Warnung: Negative Dachfläche ({roof_area:.2f}m²) "
                 "wird auf 0 gesetzt"
             )
             roof_area = 0
@@ -93,7 +93,7 @@ def render_module_placement_panel(
         # Validate current_placed
         if not isinstance(current_placed, (int, float)):
             st.warning(
-                "[WARNING] Warnung: Ungültiger Typ für platzierte Module, "
+                "Warnung: Ungültiger Typ für platzierte Module, "
                 "wird auf 0 gesetzt"
             )
             current_placed = 0
@@ -105,7 +105,7 @@ def render_module_placement_panel(
     except Exception as validation_error:
         # Requirement 11.2, 11.4: Error handling with meaningful messages
         st.error(
-            f"[ERROR] Fehler bei der Eingabe-Validierung: "
+            f"Fehler bei der Eingabe-Validierung: "
             f"{str(validation_error)}"
         )
         return actions
@@ -172,7 +172,7 @@ def render_module_placement_panel(
             # Primary Button: Automatisch belegen
             auto_help = "Platziert Module automatisch auf der Dachfläche"
             if st.button(
-                "[TARGET] Automatisch belegen",
+                "Automatisch belegen",
                 type="primary",
                 use_container_width=True,
                 help=auto_help
@@ -375,13 +375,13 @@ def render_module_placement_panel(
             # Info über Snap-to-Grid
             if snap_to_grid:
                 st.info(
-                    f"[INFO] **Snap-to-Grid aktiv:** Module werden in "
+                    f"**Snap-to-Grid aktiv:** Module werden in "
                     f"{step_size:.2f}m Schritten verschoben und automatisch "
                     "am Raster ausgerichtet."
                 )
             else:
                 st.info(
-                    f"[INFO] **Freie Bewegung:** Module werden in "
+                    f"**Freie Bewegung:** Module werden in "
                     f"{step_size:.2f}m Schritten verschoben ohne Raster-Ausrichtung."
                 )
 
@@ -401,13 +401,13 @@ def render_module_placement_panel(
             
             if selected_indices:
                 st.info(
-                    f"[OK] **{len(selected_indices)} Module ausgewählt:** "
+                    f"**{len(selected_indices)} Module ausgewählt:** "
                     f"Indizes {', '.join(map(str, selected_indices[:5]))}"
                     f"{'...' if len(selected_indices) > 5 else ''}"
                 )
             else:
                 st.info(
-                    "[INFO] Keine Module ausgewählt. Verwenden Sie die "
+                    "Keine Module ausgewählt. Verwenden Sie die "
                     "Auswahl-Optionen unten."
                 )
             
@@ -527,7 +527,7 @@ def render_module_placement_panel(
                     st.rerun()
                 else:
                     st.warning(
-                        "[WARNING] Start-Modul muss kleiner oder gleich End-Modul sein"
+                        "Start-Modul muss kleiner oder gleich End-Modul sein"
                     )
         
         st.divider()
@@ -604,7 +604,7 @@ def render_module_placement_panel(
             
             # Info über Raster-Funktion
             st.caption(
-                "[IDEA] Das Raster hilft bei der Orientierung und Ausrichtung "
+                "Das Raster hilft bei der Orientierung und Ausrichtung "
                 "der Module auf der Dachfläche. Die Linien zeigen die "
                 "Platzierungs-Positionen an."
             )
@@ -612,7 +612,7 @@ def render_module_placement_panel(
         # Info-Box mit zusätzlichen Informationen
         if current_placed > 0:
             info_text = (
-                f"[INFO] **Platzierungs-Info:**\n\n"
+                f"**Platzierungs-Info:**\n\n"
                 f"- Dachfläche: {roof_area:.2f} m²\n"
                 f"- Module platziert: {current_placed}\n"
                 f"- Belegungsgrad: {coverage_percent:.1f}%"
@@ -620,7 +620,7 @@ def render_module_placement_panel(
             st.info(info_text)
         else:
             tip_text = (
-                "[IDEA] **Tipp:** Klicken Sie auf 'Automatisch belegen' "
+                "**Tipp:** Klicken Sie auf 'Automatisch belegen' "
                 "um Module optimal auf der Dachfläche zu platzieren."
             )
             st.info(tip_text)
@@ -628,7 +628,7 @@ def render_module_placement_panel(
     except Exception as render_error:
         # Requirement 11.2, 11.4: Error handling with meaningful messages
         st.error(
-            f"[ERROR] Fehler beim Rendern des Modul-Belegungs-Panels: "
+            f"Fehler beim Rendern des Modul-Belegungs-Panels: "
             f"{str(render_error)}"
         )
         print(f"UI Rendering Error: {render_error}")

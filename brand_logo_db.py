@@ -465,12 +465,12 @@ if __name__ == "__main__":
         if conn:
             create_brand_logos_table(conn)
             conn.close()
-            print("[OK] Tabelle erstellt")
+            print("Tabelle erstellt")
 
         # Test: Alle Logos auflisten
         logos = list_all_brand_logos()
-        print(f"[OK] Anzahl verfügbare Logos: {len(logos)}")
+        print(f"Anzahl verfügbare Logos: {len(logos)}")
         for logo in logos:
             print(f"  - {logo['brand_name']} ({logo['logo_format']})")
     else:
-        print("[ERROR] Database nicht verfügbar für Tests")
+        print("Database nicht verfügbar für Tests")

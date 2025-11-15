@@ -13,7 +13,7 @@ from monitoring_startup import initialize_monitoring
 
 def test_calculations():
     """Test calculation module tracing."""
-    print("\n[CHART] Testing Calculations Module...")
+    print("\nTesting Calculations Module...")
     try:
         from calculations import calculate_enhanced_pricing
         from app_evaluation import track_success, track_error
@@ -29,12 +29,12 @@ def test_calculations():
         )
         
         execution_time = time.time() - start_time
-        print(f"  [OK] Calculation completed in {execution_time:.3f}s")
-        print(f"  [MONEY] Total price: {result.get('total_price', 0):.2f}€")
+        print(f"  Calculation completed in {execution_time:.3f}s")
+        print(f"  Total price: {result.get('total_price', 0):.2f}€")
         
         return True
     except Exception as e:
-        print(f"  [ERROR] Error: {e}")
+        print(f"  Error: {e}")
         return False
 
 
@@ -49,14 +49,14 @@ def test_database():
         execution_time = time.time() - start_time
         
         if conn:
-            print(f"  [OK] Database connection established in {execution_time:.3f}s")
+            print(f"  Database connection established in {execution_time:.3f}s")
             conn.close()
             return True
         else:
-            print("  [WARNING]  Database connection returned None")
+            print("  Database connection returned None")
             return False
     except Exception as e:
-        print(f"  [ERROR] Error: {e}")
+        print(f"  Error: {e}")
         return False
 
 
@@ -69,7 +69,7 @@ def test_crm():
         
         conn = get_db_connection()
         if not conn:
-            print("  [WARNING]  No database connection")
+            print("  No database connection")
             return False
         
         # Test load customers
@@ -77,17 +77,17 @@ def test_crm():
         customers = load_all_customers(conn)
         execution_time = time.time() - start_time
         
-        print(f"  [OK] Loaded {len(customers)} customers in {execution_time:.3f}s")
+        print(f"  Loaded {len(customers)} customers in {execution_time:.3f}s")
         conn.close()
         return True
     except Exception as e:
-        print(f"  [ERROR] Error: {e}")
+        print(f"  Error: {e}")
         return False
 
 
 def test_evaluation_system():
     """Test evaluation system."""
-    print("\n[STATS] Testing Evaluation System...")
+    print("\nTesting Evaluation System...")
     try:
         from app_evaluation import evaluation_system, evaluate_performance
         
@@ -99,7 +99,7 @@ def test_evaluation_system():
         # Generate report
         report = evaluation_system.generate_report()
         
-        print(f"  [OK] Report generated:")
+        print(f"  Report generated:")
         print(f"     Session: {report['session_id']}")
         print(f"     Total operations: {report['summary']['errors']['total_operations']}")
         print(f"     Success rate: {report['summary']['errors']['success_rate']:.2%}")
@@ -110,13 +110,13 @@ def test_evaluation_system():
         
         return True
     except Exception as e:
-        print(f"  [ERROR] Error: {e}")
+        print(f"  Error: {e}")
         return False
 
 
 def test_tracing_export():
     """Test tracing data export to AI Toolkit."""
-    print("\n[SEARCH] Testing Tracing Export...")
+    print("\nTesting Tracing Export...")
     try:
         from app_tracing import app_tracer
         
@@ -125,13 +125,13 @@ def test_tracing_export():
             time.sleep(0.1)  # Simulate work
             span.set_attribute("test_result", "success")
         
-        print("  [OK] Test span created and exported")
+        print("  Test span created and exported")
         print("  📡 Check AI Toolkit at: http://localhost:4318/v1/traces")
-        print("  [IDEA] In VSCode: Ctrl+Shift+P → 'AI Toolkit: Open Tracing'")
+        print("  In VSCode: Ctrl+Shift+P → 'AI Toolkit: Open Tracing'")
         
         return True
     except Exception as e:
-        print(f"  [ERROR] Error: {e}")
+        print(f"  Error: {e}")
         return False
 
 
@@ -142,11 +142,11 @@ def main():
     print("="*80)
     
     # Initialize monitoring
-    print("\n[LAUNCH] Initializing monitoring system...")
+    print("\nInitializing monitoring system...")
     status = initialize_monitoring(auto_start=False)
     
     if not status["overall"]:
-        print("\n[ERROR] Monitoring system not ready - aborting tests")
+        print("\nMonitoring system not ready - aborting tests")
         return 1
     
     # Run tests
@@ -163,7 +163,7 @@ def main():
         try:
             results[name] = test_func()
         except Exception as e:
-            print(f"\n[ERROR] Test '{name}' crashed: {e}")
+            print(f"\nTest '{name}' crashed: {e}")
             results[name] = False
     
     # Summary
@@ -175,21 +175,21 @@ def main():
     total = len(results)
     
     for name, result in results.items():
-        status_icon = "[OK]" if result else "[ERROR]"
+        status_icon = "" if result else ""
         print(f"{status_icon} {name}")
     
     print(f"\nPassed: {passed}/{total}")
     
     if passed == total:
         print("\n🎉 All tests passed!")
-        print("\n[CHART] Next steps:")
+        print("\nNext steps:")
         print("  1. Open AI Toolkit in VSCode: Ctrl+Shift+P → 'AI Toolkit: Open Tracing'")
         print("  2. Run Streamlit app: streamlit run gui.py")
         print("  3. Check monitoring dashboard in app sidebar")
         print("  4. Generate evaluation report: evaluation_system.generate_report()")
         return 0
     else:
-        print(f"\n[WARNING]  {total - passed} test(s) failed")
+        print(f"\n{total - passed} test(s) failed")
         return 1
 
 

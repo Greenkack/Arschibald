@@ -151,7 +151,7 @@ def main():
     ui_files = ['pdf_ui.py', 'admin_panel.py', 'app.py']
 
     print("=" * 100)
-    print("[SEARCH] UMFASSENDE FEATURE-ANALYSE")
+    print("UMFASSENDE FEATURE-ANALYSE")
     print("=" * 100)
     print()
 
@@ -163,7 +163,7 @@ def main():
     # Analyse aller Dateien
     for filename in files_to_analyze:
         if os.path.exists(filename):
-            print(f"[FILE] Analysiere {filename}...")
+            print(f"Analysiere {filename}...")
             result = analyze_file(filename)
             all_results[filename] = result
 
@@ -177,7 +177,7 @@ def main():
 
     print()
     print("=" * 100)
-    print("[CHART] ZUSAMMENFASSUNG")
+    print("ZUSAMMENFASSUNG")
     print("=" * 100)
     print()
 
@@ -187,7 +187,7 @@ def main():
     for filename, result in all_results.items():
         calcs = result.get('calculations', [])
         if calcs:
-            print(f"\n  [FOLDER] {filename} ({len(calcs)} Berechnungen):")
+            print(f"\n  {filename} ({len(calcs)} Berechnungen):")
             for calc in calcs[:10]:  # Top 10
                 doc = calc.get('docstring', '')[:60] if calc.get(
                     'docstring') else 'Keine Beschreibung'
@@ -198,12 +198,12 @@ def main():
     print("=" * 100)
 
     # Chart-Features
-    print(f"[STATS] CHART/DIAGRAMM-FEATURES ({len(all_chart_funcs)} gefunden):")
+    print(f"CHART/DIAGRAMM-FEATURES ({len(all_chart_funcs)} gefunden):")
     print("-" * 100)
     for filename, result in all_results.items():
         charts = result.get('charts', [])
         if charts:
-            print(f"\n  [FOLDER] {filename} ({len(charts)} Charts):")
+            print(f"\n  {filename} ({len(charts)} Charts):")
             for chart in charts:
                 doc = chart.get('docstring', '')[:60] if chart.get(
                     'docstring') else 'Keine Beschreibung'
@@ -214,12 +214,12 @@ def main():
     print("=" * 100)
 
     # Finanzierungs-Features
-    print(f"[MONEY] FINANZIERUNGS-FEATURES ({len(all_financial_funcs)} gefunden):")
+    print(f"FINANZIERUNGS-FEATURES ({len(all_financial_funcs)} gefunden):")
     print("-" * 100)
     for filename, result in all_results.items():
         fin_features = result.get('financial_features', [])
         if fin_features:
-            print(f"\n  [FOLDER] {filename} ({len(fin_features)} Features):")
+            print(f"\n  {filename} ({len(fin_features)} Features):")
             for feat in fin_features:
                 doc = feat.get('docstring', '')[:60] if feat.get(
                     'docstring') else 'Keine Beschreibung'
@@ -228,24 +228,24 @@ def main():
 
     print()
     print("=" * 100)
-    print("[SEARCH] UI-INTEGRATION-CHECK")
+    print("UI-INTEGRATION-CHECK")
     print("=" * 100)
 
     # Prüfe UI-Integration
     for ui_file in ui_files:
         if os.path.exists(ui_file):
-            print(f"\n[FILE] Prüfe {ui_file}...")
+            print(f"\nPrüfe {ui_file}...")
 
             calc_refs = find_ui_references(ui_file, all_calculation_funcs)
             chart_refs = find_ui_references(ui_file, all_chart_funcs)
             fin_refs = find_ui_references(ui_file, all_financial_funcs)
 
             print(
-                f"  [OK] Berechnungen gefunden: {len(calc_refs)}/{len(all_calculation_funcs)}")
+                f"  Berechnungen gefunden: {len(calc_refs)}/{len(all_calculation_funcs)}")
             print(
-                f"  [OK] Charts gefunden: {len(chart_refs)}/{len(all_chart_funcs)}")
+                f"  Charts gefunden: {len(chart_refs)}/{len(all_chart_funcs)}")
             print(
-                f"  [OK] Finanzierung gefunden: {len(fin_refs)}/{len(all_financial_funcs)}")
+                f"  Finanzierung gefunden: {len(fin_refs)}/{len(all_financial_funcs)}")
 
             # Fehlende Features
             missing_calcs = all_calculation_funcs - set(calc_refs)
@@ -253,24 +253,24 @@ def main():
             missing_fin = all_financial_funcs - set(fin_refs)
 
             if missing_calcs:
-                print(f"\n  [WARNING]  FEHLENDE BERECHNUNGEN ({len(missing_calcs)}):")
+                print(f"\n  FEHLENDE BERECHNUNGEN ({len(missing_calcs)}):")
                 for func in list(missing_calcs)[:10]:
                     print(f"      • {func}()")
 
             if missing_charts:
-                print(f"\n  [WARNING]  FEHLENDE CHARTS ({len(missing_charts)}):")
+                print(f"\n  FEHLENDE CHARTS ({len(missing_charts)}):")
                 for func in list(missing_charts)[:10]:
                     print(f"      • {func}()")
 
             if missing_fin:
                 print(
-                    f"\n  [WARNING]  FEHLENDE FINANZIERUNGS-FEATURES ({len(missing_fin)}):")
+                    f"\n  FEHLENDE FINANZIERUNGS-FEATURES ({len(missing_fin)}):")
                 for func in list(missing_fin)[:10]:
                     print(f"      • {func}()")
 
     print()
     print("=" * 100)
-    print("[OK] ANALYSE ABGESCHLOSSEN")
+    print("ANALYSE ABGESCHLOSSEN")
     print("=" * 100)
 
     # Exportiere Ergebnisse als JSON
@@ -282,7 +282,7 @@ def main():
             'detailed_results': all_results
         }, f, indent=2, ensure_ascii=False)
 
-    print("\n[NOTE] Detaillierte Ergebnisse gespeichert in: feature_analysis_results.json")
+    print("\nDetaillierte Ergebnisse gespeichert in: feature_analysis_results.json")
 
 
 if __name__ == '__main__':

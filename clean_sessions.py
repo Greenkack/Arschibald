@@ -32,11 +32,11 @@ def clean_session_files():
     for loc in possible_locations:
         if loc.exists():
             session_dirs.append(loc)
-            print(f"[OK] Gefunden: {loc}")
+            print(f"Gefunden: {loc}")
     
     if not session_dirs:
-        print("\n[WARNING] Keine Session-Verzeichnisse gefunden")
-        print("\n[INFO] LÖSUNG: Session wird beim nächsten App-Start automatisch bereinigt!")
+        print("\nKeine Session-Verzeichnisse gefunden")
+        print("\nLÖSUNG: Session wird beim nächsten App-Start automatisch bereinigt!")
         print("   Die Validierung in heatpump_ui.py filtert ungültige Hersteller.")
         return
     
@@ -61,26 +61,26 @@ def clean_session_files():
                                 hp = data['heatpump_data'].get('selected_heatpump', {})
                                 mfr = hp.get('manufacturer', '')
                                 if mfr in forbidden:
-                                    print(f"  [ERROR] UNGÜLTIG: {mfr} in {file.name}")
+                                    print(f"  UNGÜLTIG: {mfr} in {file.name}")
                                     needs_cleaning = True
                         
                         if needs_cleaning:
                             # Lösche die Datei
                             file.unlink()
                             cleaned_count += 1
-                            print(f"  [DELETE]  GELÖSCHT: {file.name}")
+                            print(f"  GELÖSCHT: {file.name}")
                 
                 except Exception as e:
                     # Ignoriere Fehler beim Lesen
                     pass
     
     print("\n" + "=" * 80)
-    print(f"[OK] BEREINIGT: {cleaned_count} Session-Dateien gelöscht")
+    print(f"BEREINIGT: {cleaned_count} Session-Dateien gelöscht")
     print("=" * 80)
     
     if cleaned_count == 0:
-        print("\n[OK] Keine ungültigen Session-Daten gefunden!")
-        print("\n[INFO] Falls Daikin noch angezeigt wird:")
+        print("\nKeine ungültigen Session-Daten gefunden!")
+        print("\nFalls Daikin noch angezeigt wird:")
         print("   1. App neu starten (Strg+C, dann neu starten)")
         print("   2. Browser-Cache leeren (Strg+Shift+R)")
         print("   3. Session-State wird automatisch validiert!")

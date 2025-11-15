@@ -21,9 +21,9 @@ def render_admin_panel():
     
     # Bestehende Tabs + neuer Backup-Tab
     tabs = st.tabs([
-        "[PACKAGE] Produkte",
-        "[MONEY] Preise",
-        "[FILE] PDF-Einstellungen",
+        "Produkte",
+        "Preise",
+        "PDF-Einstellungen",
         "👥 Benutzerverwaltung",
         "🗄️ Backup-Verwaltung"  # NEUER TAB
     ])
@@ -63,11 +63,11 @@ from crm.utils.backup_scheduler import start_scheduler, get_scheduler_status
 if 'backup_scheduler_initialized' not in st.session_state:
     success, message = start_scheduler()
     if success:
-        st.success(f"[OK] {message}", icon="🗄️")
+        st.success(f"{message}", icon="🗄️")
     else:
         # APScheduler nicht installiert oder bereits gestartet
         if "bereits" not in message.lower():
-            st.warning(f"[WARNING] {message}", icon="🗄️")
+            st.warning(f"{message}", icon="🗄️")
     
     st.session_state.backup_scheduler_initialized = True
 """
@@ -87,20 +87,20 @@ def perform_database_migration():
     success, message = create_backup("manual")
     
     if not success:
-        st.error(f"[ERROR] Backup fehlgeschlagen: {message}")
+        st.error(f"Backup fehlgeschlagen: {message}")
         st.error("Migration wird abgebrochen!")
         return False
     
-    st.success(f"[OK] {message}")
+    st.success(f"{message}")
     
     # Führe Migration durch
     try:
         # ... Migration Code ...
-        st.success("[OK] Migration erfolgreich!")
+        st.success("Migration erfolgreich!")
         return True
     except Exception as e:
-        st.error(f"[ERROR] Migration fehlgeschlagen: {e}")
-        st.warning("[IDEA] Sie können das Backup wiederherstellen im Admin-Panel → Backup-Verwaltung")
+        st.error(f"Migration fehlgeschlagen: {e}")
+        st.warning("Sie können das Backup wiederherstellen im Admin-Panel → Backup-Verwaltung")
         return False
 """
 
@@ -114,7 +114,7 @@ def perform_database_migration():
 from crm.utils.backup_scheduler import get_backup_statistics, get_scheduler_status
 
 def render_crm_dashboard():
-    st.title("[CHART] CRM Dashboard")
+    st.title("CRM Dashboard")
     
     # Backup-Status Widget
     with st.expander("🗄️ Backup-Status", expanded=False):
@@ -146,10 +146,10 @@ def render_crm_dashboard():
         
         # Warnung wenn keine Backups
         if stats["total_backups"] == 0:
-            st.warning("[WARNING] Keine Backups vorhanden! Erstellen Sie ein Backup im Admin-Panel.")
+            st.warning("Keine Backups vorhanden! Erstellen Sie ein Backup im Admin-Panel.")
         
         # Link zum Admin-Panel
-        st.info("[IDEA] Verwalten Sie Backups im Admin-Panel → Backup-Verwaltung")
+        st.info("Verwalten Sie Backups im Admin-Panel → Backup-Verwaltung")
 """
 
 # ============================================================================
@@ -171,7 +171,7 @@ def check_backup_health():
     # Warnung: Keine Backups
     if stats["total_backups"] == 0:
         st.warning(
-            "[WARNING] **Keine Backups vorhanden!**\\n\\n"
+            "**Keine Backups vorhanden!**\\n\\n"
             "Erstellen Sie ein Backup im Admin-Panel → Backup-Verwaltung",
             icon="🗄️"
         )
@@ -186,7 +186,7 @@ def check_backup_health():
             
             if days_old > 7:
                 st.warning(
-                    f"[WARNING] **Letztes Backup ist {days_old} Tage alt!**\\n\\n"
+                    f"**Letztes Backup ist {days_old} Tage alt!**\\n\\n"
                     "Erstellen Sie ein neues Backup oder aktivieren Sie den Scheduler.",
                     icon="🗄️"
                 )
@@ -196,7 +196,7 @@ def check_backup_health():
     # Info: Backup-Größe wird groß
     if stats["total_size_mb"] > 1000:  # > 1 GB
         st.info(
-            f"[IDEA] **Backup-Verzeichnis wird groß:** {stats['total_size_mb']} MB\\n\\n"
+            f"**Backup-Verzeichnis wird groß:** {stats['total_size_mb']} MB\\n\\n"
             "Erwägen Sie, alte Backups zu löschen.",
             icon="🗄️"
         )
@@ -223,7 +223,7 @@ def with_backup(func):
         # Erstelle Backup
         success, message = create_backup("manual")
         if not success:
-            print(f"[WARNING] Backup fehlgeschlagen: {message}")
+            print(f"Backup fehlgeschlagen: {message}")
             # Optional: Operation trotzdem durchführen oder abbrechen
         
         # Führe Original-Funktion aus
@@ -263,7 +263,7 @@ def render_backup_download_section():
     backups = list_backups()
     
     if not backups:
-        st.info("[INFO] Keine Backups zum Herunterladen verfügbar.")
+        st.info("Keine Backups zum Herunterladen verfügbar.")
         return
     
     for backup in backups[:5]:  # Zeige nur die 5 neuesten
@@ -286,7 +286,7 @@ def render_backup_download_section():
         
         with col3:
             # Info-Button
-            if st.button("[INFO]", key=f"info_{backup['filename']}"):
+            if st.button("", key=f"info_{backup['filename']}"):
                 st.info(
                     f"**Typ:** {backup['type']}\\n"
                     f"**Größe:** {backup['size_mb']} MB\\n"
@@ -318,12 +318,12 @@ def render_backup_upload_section():
     )
     
     if uploaded_file is not None:
-        st.info(f"[FOLDER] Datei: {uploaded_file.name} ({uploaded_file.size / 1024 / 1024:.2f} MB)")
+        st.info(f"Datei: {uploaded_file.name} ({uploaded_file.size / 1024 / 1024:.2f} MB)")
         
         if st.button("🔄 Backup wiederherstellen", type="primary"):
             # Warnung anzeigen
             st.warning(
-                "[WARNING] **ACHTUNG:** Die aktuelle Datenbank wird überschrieben!\\n\\n"
+                "**ACHTUNG:** Die aktuelle Datenbank wird überschrieben!\\n\\n"
                 "Ein Sicherheits-Backup wird automatisch erstellt."
             )
             
@@ -340,10 +340,10 @@ def render_backup_upload_section():
                         success, message = restore_backup(tmp_path)
                     
                     if success:
-                        st.success(f"[OK] {message}")
-                        st.info("[IDEA] Bitte starten Sie die Anwendung neu.")
+                        st.success(f"{message}")
+                        st.info("Bitte starten Sie die Anwendung neu.")
                     else:
-                        st.error(f"[ERROR] {message}")
+                        st.error(f"{message}")
                 finally:
                     # Lösche temporäre Datei
                     if os.path.exists(tmp_path):
@@ -373,9 +373,9 @@ def render_admin_panel():
         
         status = get_scheduler_status()
         if status["running"]:
-            st.success("[OK] Scheduler aktiv")
+            st.success("Scheduler aktiv")
         else:
-            st.warning("[WARNING] Scheduler inaktiv")
+            st.warning("Scheduler inaktiv")
             if st.button("▶️ Scheduler starten"):
                 success, message = start_scheduler()
                 if success:
@@ -386,9 +386,9 @@ def render_admin_panel():
     
     # Tabs
     tabs = st.tabs([
-        "[PACKAGE] Produkte",
-        "[MONEY] Preise",
-        "[FILE] PDF-Einstellungen",
+        "Produkte",
+        "Preise",
+        "PDF-Einstellungen",
         "👥 Benutzer",
         "🗄️ Backup"
     ])

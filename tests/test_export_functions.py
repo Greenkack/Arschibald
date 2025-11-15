@@ -28,10 +28,10 @@ try:
     from utils.pv3d import BuildingDims, LayoutConfig
     from utils.pv3d_plotly import build_plotly_scene
     
-    print("[OK] Alle Imports erfolgreich")
+    print("Alle Imports erfolgreich")
     
 except ImportError as e:
-    print(f"[ERROR] Import-Fehler: {e}")
+    print(f"Import-Fehler: {e}")
     sys.exit(1)
 
 
@@ -60,15 +60,15 @@ def test_screenshot_png():
             with open("test_screenshot_png.png", "wb") as f:
                 f.write(png_bytes)
             
-            print(f"[OK] PNG Screenshot erstellt ({len(png_bytes)} bytes)")
-            print("[OK] Datei gespeichert: test_screenshot_png.png")
+            print(f"PNG Screenshot erstellt ({len(png_bytes)} bytes)")
+            print("Datei gespeichert: test_screenshot_png.png")
             return True
         else:
-            print("[ERROR] PNG Screenshot ist leer")
+            print("PNG Screenshot ist leer")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
 
 
@@ -97,15 +97,15 @@ def test_screenshot_jpeg():
             with open("test_screenshot_jpeg.jpg", "wb") as f:
                 f.write(jpeg_bytes)
             
-            print(f"[OK] JPEG Screenshot erstellt ({len(jpeg_bytes)} bytes)")
-            print("[OK] Datei gespeichert: test_screenshot_jpeg.jpg")
+            print(f"JPEG Screenshot erstellt ({len(jpeg_bytes)} bytes)")
+            print("Datei gespeichert: test_screenshot_jpeg.jpg")
             return True
         else:
-            print("[ERROR] JPEG Screenshot ist leer")
+            print("JPEG Screenshot ist leer")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
 
 
@@ -131,20 +131,20 @@ def test_multi_view_zip():
         )
         
         if not views_dict or len(views_dict) == 0:
-            print("[ERROR] Keine Views erstellt")
+            print("Keine Views erstellt")
             return False
         
         # Prüfe einzelne Views
         view_count = len([k for k in views_dict.keys() if k != "_zip"])
-        print(f"[OK] {view_count} Views erstellt")
+        print(f"{view_count} Views erstellt")
         
         # Prüfe ZIP-Datei
         if "_zip" not in views_dict:
-            print("[ERROR] Keine ZIP-Datei erstellt")
+            print("Keine ZIP-Datei erstellt")
             return False
         
         zip_bytes = views_dict["_zip"]
-        print(f"[OK] ZIP-Datei erstellt ({len(zip_bytes)} bytes)")
+        print(f"ZIP-Datei erstellt ({len(zip_bytes)} bytes)")
         
         # Speichere und validiere ZIP
         zip_path = "test_multi_view_export.zip"
@@ -154,16 +154,16 @@ def test_multi_view_zip():
         # Prüfe ZIP-Inhalt
         with zipfile.ZipFile(zip_path, 'r') as zipf:
             files = zipf.namelist()
-            print(f"[OK] ZIP enthält {len(files)} Dateien:")
+            print(f"ZIP enthält {len(files)} Dateien:")
             for filename in files:
                 file_info = zipf.getinfo(filename)
                 print(f"  - {filename} ({file_info.file_size} bytes)")
         
-        print(f"[OK] ZIP gespeichert: {zip_path}")
+        print(f"ZIP gespeichert: {zip_path}")
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -194,23 +194,23 @@ def test_360_animation_gif():
         )
         
         if not gif_bytes or len(gif_bytes) == 0:
-            print("[ERROR] GIF Animation ist leer")
+            print("GIF Animation ist leer")
             return False
         
-        print(f"[OK] GIF Animation erstellt ({len(gif_bytes)} bytes)")
+        print(f"GIF Animation erstellt ({len(gif_bytes)} bytes)")
         
         # Prüfe ob Datei existiert
         if not os.path.exists(gif_path):
-            print("[ERROR] GIF-Datei wurde nicht gespeichert")
+            print("GIF-Datei wurde nicht gespeichert")
             return False
         
         file_size = os.path.getsize(gif_path)
-        print(f"[OK] GIF gespeichert: {gif_path} ({file_size} bytes)")
+        print(f"GIF gespeichert: {gif_path} ({file_size} bytes)")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -239,21 +239,21 @@ def test_3d_model_stl():
         )
         
         if not success:
-            print("[ERROR] STL Export fehlgeschlagen")
+            print("STL Export fehlgeschlagen")
             return False
         
         # Prüfe Datei
         if not os.path.exists(stl_path):
-            print("[ERROR] STL-Datei wurde nicht erstellt")
+            print("STL-Datei wurde nicht erstellt")
             return False
         
         file_size = os.path.getsize(stl_path)
-        print(f"[OK] STL Export erfolgreich: {stl_path} ({file_size} bytes)")
+        print(f"STL Export erfolgreich: {stl_path} ({file_size} bytes)")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -282,21 +282,21 @@ def test_3d_model_gltf():
         )
         
         if not success:
-            print("[ERROR] GLB Export fehlgeschlagen")
+            print("GLB Export fehlgeschlagen")
             return False
         
         # Prüfe Datei
         if not os.path.exists(glb_path):
-            print("[ERROR] GLB-Datei wurde nicht erstellt")
+            print("GLB-Datei wurde nicht erstellt")
             return False
         
         file_size = os.path.getsize(glb_path)
-        print(f"[OK] GLB Export erfolgreich: {glb_path} ({file_size} bytes)")
+        print(f"GLB Export erfolgreich: {glb_path} ({file_size} bytes)")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -325,21 +325,21 @@ def test_3d_model_obj():
         )
         
         if not success:
-            print("[ERROR] OBJ Export fehlgeschlagen")
+            print("OBJ Export fehlgeschlagen")
             return False
         
         # Prüfe Datei
         if not os.path.exists(obj_path):
-            print("[ERROR] OBJ-Datei wurde nicht erstellt")
+            print("OBJ-Datei wurde nicht erstellt")
             return False
         
         file_size = os.path.getsize(obj_path)
-        print(f"[OK] OBJ Export erfolgreich: {obj_path} ({file_size} bytes)")
+        print(f"OBJ Export erfolgreich: {obj_path} ({file_size} bytes)")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -367,14 +367,14 @@ def test_all_formats_export():
         )
         
         if not results:
-            print("[ERROR] Keine Formate exportiert")
+            print("Keine Formate exportiert")
             return False
         
-        print(f"[OK] {len(results)} Formate exportiert:")
+        print(f"{len(results)} Formate exportiert:")
         
         all_success = True
         for fmt, success in results.items():
-            status = "[OK]" if success else "[ERROR]"
+            status = "" if success else ""
             print(f"  {status} {fmt.upper()}: {'Erfolgreich' if success else 'Fehlgeschlagen'}")
             
             if success:
@@ -388,7 +388,7 @@ def test_all_formats_export():
         return all_success
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -401,7 +401,7 @@ def main():
     print("="*60)
     
     if not PV3D_AVAILABLE:
-        print("\n[WARNING]  PV3D nicht verfügbar - Tests können nicht ausgeführt werden")
+        print("\nPV3D nicht verfügbar - Tests können nicht ausgeführt werden")
         return 1
     
     results = []
@@ -439,28 +439,28 @@ def main():
     total = len(results)
     
     print("\nTask 9 Sub-Tasks:")
-    print("  [OK] Teste Screenshot-Export in verschiedenen Formaten")
-    print("  [OK] Teste Multi-View Export als ZIP")
-    print("  [OK] Teste 360° Animation Export als GIF")
-    print("  [OK] Teste 3D-Modell Export (STL, GLTF, OBJ)")
+    print("  Teste Screenshot-Export in verschiedenen Formaten")
+    print("  Teste Multi-View Export als ZIP")
+    print("  Teste 360° Animation Export als GIF")
+    print("  Teste 3D-Modell Export (STL, GLTF, OBJ)")
     
     print("\nTest Ergebnisse:")
     for test_name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{status}: {test_name}")
     
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
     
     if passed == total:
         print("\n🎉 ALLE EXPORT-TESTS BESTANDEN!")
-        print("\n[OK] Task 9 erfolgreich abgeschlossen:")
+        print("\nTask 9 erfolgreich abgeschlossen:")
         print("   - Screenshot-Export in PNG und JPEG funktioniert")
         print("   - Multi-View Export als ZIP funktioniert")
         print("   - 360° Animation Export als GIF funktioniert")
         print("   - 3D-Modell Export in STL, GLTF und OBJ funktioniert")
         return 0
     else:
-        print(f"\n[WARNING]  {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return 1
 
 

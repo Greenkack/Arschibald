@@ -18,4 +18,4 @@ for i in range(1, 8):
         png_out = 0.0
     img = convert_from_path(pdf_in, dpi=300)[0]
     img.save(png_out)
-    print("[OK] exportiert", png_out)
+    print("exportiert", png_out)

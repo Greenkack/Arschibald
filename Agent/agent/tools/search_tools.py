@@ -168,9 +168,9 @@ def tavily_search(query: str) -> str:
             error=str(e)
         )
         # Return user-friendly error message
-        return f"[ERROR] {
+        return f"{
             e.__class__.__name__}: {
-            e.message}\n\n[IDEA] Solution:\n{
+            e.message}\n\nSolution:\n{
             e.solution}"
 
     except Exception as e:
@@ -187,7 +187,7 @@ def tavily_search(query: str) -> str:
         )
 
         return (
-            f"[ERROR] Unexpected error during web search: {str(e)}\n\n"
-            f"[IDEA] Solution:\n"
+            f"Unexpected error during web search: {str(e)}\n\n"
+            f"Solution:\n"
             f"Check logs for details and ensure Tavily API is configured correctly."
         )

@@ -32,7 +32,7 @@ def test_extended_pdf_integration_disabled():
 
     # Should return base PDF unchanged when no extended options
     assert result == base_pdf
-    print("[OK] Test passed: Standard PDF returned when extended output disabled")
+    print("Test passed: Standard PDF returned when extended output disabled")
 
 
 def test_extended_pdf_integration_with_module_not_available():
@@ -65,7 +65,7 @@ def test_extended_pdf_integration_with_module_not_available():
 
     # Should return base PDF on import error
     assert result == base_pdf
-    print("[OK] Test passed: Fallback to base PDF when module not available")
+    print("Test passed: Fallback to base PDF when module not available")
 
 
 def test_merge_two_pdfs():
@@ -82,7 +82,7 @@ def test_merge_two_pdfs():
     # Should return bytes
     assert isinstance(result, bytes)
     assert len(result) > 0
-    print("[OK] Test passed: PDF merging returns valid bytes")
+    print("Test passed: PDF merging returns valid bytes")
 
 
 def test_store_extended_pdf_warning():
@@ -93,7 +93,7 @@ def test_store_extended_pdf_warning():
     try:
         _store_extended_pdf_warning("Test warning message")
         # If no exception is raised, the test passes
-        print("[OK] Test passed: Warning storage works correctly (no errors)")
+        print("Test passed: Warning storage works correctly (no errors)")
     except Exception as e:
         raise AssertionError(f"Warning storage raised unexpected error: {e}")
 
@@ -124,7 +124,7 @@ def test_extended_pdf_integration_with_empty_result():
 
     # Should return base PDF when extended pages are empty
     assert result == base_pdf
-    print("[OK] Test passed: Base PDF returned when extended pages are empty")
+    print("Test passed: Base PDF returned when extended pages are empty")
 
 
 def test_extended_pdf_integration_error_handling():
@@ -154,7 +154,7 @@ def test_extended_pdf_integration_error_handling():
 
     # Should return base PDF on error (graceful degradation)
     assert result == base_pdf
-    print("[OK] Test passed: Graceful degradation on generation error")
+    print("Test passed: Graceful degradation on generation error")
 
 
 if __name__ == '__main__':
@@ -171,12 +171,12 @@ if __name__ == '__main__':
         test_extended_pdf_integration_error_handling()
 
         print("\n" + "=" * 60)
-        print("[OK] All tests passed successfully!")
+        print("All tests passed successfully!")
         print("=" * 60 + "\n")
 
     except AssertionError as e:
-        print(f"\n[ERROR] Test failed: {e}\n")
+        print(f"\nTest failed: {e}\n")
         raise
     except Exception as e:
-        print(f"\n[ERROR] Unexpected error: {e}\n")
+        print(f"\nUnexpected error: {e}\n")
         raise

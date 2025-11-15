@@ -14,16 +14,16 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 def test_admin_panel_import():
     """Test ob admin_panel.py importiert werden kann"""
     try:
-        print("[OK] admin_panel.py erfolgreich importiert")
+        print("admin_panel.py erfolgreich importiert")
         return True
     except Exception as e:
-        print(f"[ERROR] Fehler beim Import von admin_panel.py: {e}")
+        print(f"Fehler beim Import von admin_panel.py: {e}")
         return False
 
 
 def test_defensive_strip():
     """Test der defensiven .strip() Logik"""
-    print("\n[TOOL] Test der defensiven .strip() Logik:")
+    print("\nTest der defensiven .strip() Logik:")
 
     test_cases = [
         (None, ""),
@@ -35,7 +35,7 @@ def test_defensive_strip():
 
     for input_val, expected in test_cases:
         result = (input_val or "").strip()
-        status = "[OK]" if result == expected else "[ERROR]"
+        status = "" if result == expected else ""
         print(
             f"{status} Input: {
                 repr(input_val)} -> Output: {
@@ -45,7 +45,7 @@ def test_defensive_strip():
 
 def test_product_data_creation():
     """Test der Produkt-Dictionary Erstellung"""
-    print("\n[PACKAGE] Test der Produkt-Dictionary Erstellung:")
+    print("\nTest der Produkt-Dictionary Erstellung:")
 
     # Simuliere Form-Werte die None sein könnten
     test_form_values = {
@@ -74,14 +74,14 @@ def test_product_data_creation():
             "datasheet_link_db_path": test_form_values["current_datasheet_link"]
         }
 
-        print("[OK] Produkt-Dictionary erfolgreich erstellt:")
+        print("Produkt-Dictionary erfolgreich erstellt:")
         for key, value in product_data_to_save_db.items():
             print(f"   {key}: {repr(value)}")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei Produkt-Dictionary Erstellung: {e}")
+        print(f"Fehler bei Produkt-Dictionary Erstellung: {e}")
         return False
 
 
@@ -95,4 +95,4 @@ if __name__ == "__main__":
 
     print(
         f"\n{
-            '🎉 Alle Tests erfolgreich!' if success else '[ERROR] Einige Tests sind fehlgeschlagen.'}")
+            '🎉 Alle Tests erfolgreich!' if success else 'Einige Tests sind fehlgeschlagen.'}")

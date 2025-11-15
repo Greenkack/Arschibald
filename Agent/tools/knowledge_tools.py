@@ -67,18 +67,18 @@ def setup_knowledge_base(
                 embeddings,
                 allow_dangerous_deserialization=True
             )
-            print(f"[OK] Knowledge base loaded successfully!")
+            print(f"Knowledge base loaded successfully!")
             return vector_store
         except Exception as e:
-            print(f"[WARNING] Error loading existing index: {e}")
+            print(f"Error loading existing index: {e}")
             print("🔄 Will rebuild index from PDFs...")
 
     # Find all PDF files in knowledge base directory
     pdf_files = list(kb_dir.glob("*.pdf"))
 
     if not pdf_files:
-        print(f"[WARNING] No PDF files found in {path}/")
-        print("[IDEA] Add PDF documents to the knowledge_base/ directory to enable knowledge search.")
+        print(f"No PDF files found in {path}/")
+        print("Add PDF documents to the knowledge_base/ directory to enable knowledge search.")
 
         # Create a placeholder file with instructions
         placeholder_path = kb_dir / "README.txt"
@@ -103,7 +103,7 @@ The agent will automatically index them for search.
 
         return None
 
-    print(f"[FILE] Found {len(pdf_files)} PDF files in knowledge base")
+    print(f"Found {len(pdf_files)} PDF files in knowledge base")
     print("🔄 Loading and processing documents...")
 
     # Load all PDF documents
@@ -115,14 +115,14 @@ The agent will automatically index them for search.
             docs = loader.load()
             documents.extend(docs)
         except Exception as e:
-            print(f"  [WARNING] Error loading {pdf_file.name}: {e}")
+            print(f"  Error loading {pdf_file.name}: {e}")
             continue
 
     if not documents:
-        print("[ERROR] No documents could be loaded")
+        print("No documents could be loaded")
         return None
 
-    print(f"[OK] Loaded {len(documents)} pages from PDFs")
+    print(f"Loaded {len(documents)} pages from PDFs")
 
     # Split documents into chunks
     print("✂️ Splitting documents into chunks...")
@@ -132,7 +132,7 @@ The agent will automatically index them for search.
         length_function=len,
     )
     chunks = text_splitter.split_documents(documents)
-    print(f"[OK] Created {len(chunks)} text chunks")
+    print(f"Created {len(chunks)} text chunks")
 
     # Create embeddings and build FAISS index
     print("🧠 Creating embeddings and building FAISS index...")
@@ -146,11 +146,11 @@ The agent will automatically index them for search.
         print(f"💾 Saving FAISS index to {db_path}...")
         vector_store.save_local(db_path)
 
-        print("[OK] Knowledge base created and saved successfully!")
+        print("Knowledge base created and saved successfully!")
         return vector_store
 
     except Exception as e:
-        print(f"[ERROR] Error creating vector store: {e}")
+        print(f"Error creating vector store: {e}")
         return None
 
 
@@ -184,7 +184,7 @@ def knowledge_base_search(vector_store: Optional[FAISS]) -> Tool:
         """
         if vector_store is None:
             return (
-                "[WARNING] Knowledge base is not available. "
+                "Knowledge base is not available. "
                 "No PDF documents were found in the knowledge_base/ directory. "
                 "Please add relevant PDF documents and restart the application.")
 

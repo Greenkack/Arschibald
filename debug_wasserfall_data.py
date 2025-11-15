@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def debug_dynamic_data():
     """Analysiert welche Keys tatsächlich in dynamic_data verfügbar sind"""
 
-    print("[SEARCH] Debug: Analyse der verfügbaren dynamic_data Keys")
+    print("Debug: Analyse der verfügbaren dynamic_data Keys")
     print("=" * 55)
 
     # Erstelle Test-Daten um zu sehen welche Keys das System generiert
@@ -44,12 +44,12 @@ def debug_dynamic_data():
         # Generiere Overlay und schaue welche Keys verwendet werden
         coords_dir = Path("coords")
 
-        print("[CHART] Test-Daten die wir senden:")
+        print("Test-Daten die wir senden:")
         for key, value in test_data.items():
             if 'eur' in key.lower() or 'test' in key.lower():
                 print(f"   {key}: {value}")
 
-        print("\n[TOOL] Generiere Overlay um zu sehen welche Keys erkannt werden...")
+        print("\nGeneriere Overlay um zu sehen welche Keys erkannt werden...")
 
         overlay_bytes = generate_overlay(
             coords_dir=coords_dir,
@@ -62,16 +62,16 @@ def debug_dynamic_data():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"[OK] Debug-PDF erstellt: {output_file}")
+            print(f"Debug-PDF erstellt: {output_file}")
             print(
                 "📋 Schauen Sie in die Konsolen-Ausgabe nach 'DEBUG: Verfügbare dynamic_data Keys'")
             print(
                 "📋 Schauen Sie auch nach 'DEBUG: Wasserfall-Werte' um zu sehen welche Werte erkannt wurden")
         else:
-            print("[ERROR] Debug-Overlay-Generierung fehlgeschlagen")
+            print("Debug-Overlay-Generierung fehlgeschlagen")
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Debug: {e}")
+        print(f"Fehler beim Debug: {e}")
         import traceback
         traceback.print_exc()
 
@@ -79,7 +79,7 @@ def debug_dynamic_data():
 def test_real_calculation_keys():
     """Testet mit Keys die direkt aus calculations.py kommen"""
 
-    print("\n[SEARCH] Test mit echten Berechnungs-Keys")
+    print("\nTest mit echten Berechnungs-Keys")
     print("=" * 40)
 
     # Keys die laut calculations.py tatsächlich gesetzt werden
@@ -105,7 +105,7 @@ def test_real_calculation_keys():
     try:
         coords_dir = Path("coords")
 
-        print("[CHART] Echte Berechnungs-Daten:")
+        print("Echte Berechnungs-Daten:")
         for key, value in real_calc_data.items():
             if 'eur' in key.lower() or 'kwh' in key.lower():
                 print(f"   {key}: {value}")
@@ -121,16 +121,16 @@ def test_real_calculation_keys():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"[OK] Real-Calc-PDF erstellt: {output_file}")
+            print(f"Real-Calc-PDF erstellt: {output_file}")
         else:
-            print("[ERROR] Real-Calc-Test fehlgeschlagen")
+            print("Real-Calc-Test fehlgeschlagen")
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Real-Calc-Test: {e}")
+        print(f"Fehler beim Real-Calc-Test: {e}")
 
 
 if __name__ == "__main__":
-    print("[LAUNCH] Debug der Wasserfall-Diagramm Datenquellen")
+    print("Debug der Wasserfall-Diagramm Datenquellen")
     print("=" * 50)
 
     # Test 1: Allgemeine Debug-Analyse

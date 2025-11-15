@@ -25,9 +25,9 @@ def test_knowledge_base():
     )
 
     if vector_store is None:
-        print("[OK] Empty knowledge base handled correctly")
+        print("Empty knowledge base handled correctly")
     else:
-        print("[OK] Knowledge base loaded successfully")
+        print("Knowledge base loaded successfully")
 
     # Test 2: Create search tool
     print("\n2. Testing knowledge_base_search()...")
@@ -35,7 +35,7 @@ def test_knowledge_base():
 
     print(f"   Tool name: {search_tool.name}")
     print(f"   Tool description: {search_tool.description[:100]}...")
-    print("[OK] Search tool created successfully")
+    print("Search tool created successfully")
 
     # Test 3: Test search with empty knowledge base
     print("\n3. Testing search with empty/no knowledge base...")
@@ -43,9 +43,9 @@ def test_knowledge_base():
     print(f"   Result: {result[:200]}...")
 
     if "not available" in result.lower() or "no pdf" in result.lower():
-        print("[OK] Empty knowledge base handled gracefully")
+        print("Empty knowledge base handled gracefully")
     else:
-        print("[OK] Search returned results")
+        print("Search returned results")
 
     print("\n" + "=" * 60)
     print("All tests completed!")
@@ -55,8 +55,8 @@ def test_knowledge_base():
 if __name__ == "__main__":
     # Check if OPENAI_API_KEY is set
     if not os.getenv("OPENAI_API_KEY"):
-        print("[WARNING] OPENAI_API_KEY not found in environment")
-        print("[IDEA] Set it in .env file to test with actual embeddings")
+        print("OPENAI_API_KEY not found in environment")
+        print("Set it in .env file to test with actual embeddings")
         print("\nTesting basic functionality without API calls...")
 
     test_knowledge_base()

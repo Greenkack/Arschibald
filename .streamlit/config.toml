@@ -19,7 +19,9 @@ maxMessageSize = 500                # Max WebSocket Message Size in MB
 [browser]
 serverAddress = "localhost"
 serverPort = 8501
-gatherUsageStats = true            # Keine Telemetrie an Streamlit senden (Performance)
+gatherUsageStats = true           # Keine Telemetrie an Streamlit senden
+# Browser automatisch öffnen beim Start
+gatherUsageStats = true
 
 # ---------- CLIENT ----------
 [client]

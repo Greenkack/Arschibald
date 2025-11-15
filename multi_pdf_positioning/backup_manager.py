@@ -102,7 +102,7 @@ class BackupManager:
                 allow_unicode=True
             )
 
-        print(f"[OK] Backup created: {backup_id}")
+        print(f"Backup created: {backup_id}")
         print(f"  Location: {backup_path}")
         print(f"  Files backed up: {len(backed_up_files)}")
 
@@ -270,7 +270,7 @@ class BackupManager:
         validation = self.validate_backup(backup_id)
 
         if not validation["valid"]:
-            print(f"[ERROR] Backup validation failed for {backup_id}")
+            print(f"Backup validation failed for {backup_id}")
             for error in validation["errors"]:
                 print(f"  Error: {error}")
             return False
@@ -316,7 +316,7 @@ class BackupManager:
                 failed_files.append(f"{yml_file.name}: {e}")
 
         # Report results
-        print(f"\n[OK] Restoration complete from {backup_id}")
+        print(f"\nRestoration complete from {backup_id}")
         print(f"  Files restored: {len(restored_files)}")
         if failed_files:
             print(f"  Failed files: {len(failed_files)}")

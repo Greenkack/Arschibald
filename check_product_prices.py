@@ -36,15 +36,15 @@ def check_module_prices():
     unique_prices = set(prices)
     if len(unique_prices) == 1:
         print(
-            f"\n[WARNING]  PROBLEM: Alle Module haben den GLEICHEN Preis: {
+            f"\nPROBLEM: Alle Module haben den GLEICHEN Preis: {
                 list(unique_prices)[0]:.2f} €")
     elif len(unique_prices) < 5:
         print(
-            f"\n[WARNING]  WARNUNG: Nur {
+            f"\nWARNUNG: Nur {
                 len(unique_prices)} verschiedene Preise gefunden!")
         print(f"   Preise: {sorted(unique_prices)}")
     else:
-        print(f"\n[OK] {len(unique_prices)} verschiedene Preise gefunden (gut!)")
+        print(f"\n{len(unique_prices)} verschiedene Preise gefunden (gut!)")
 
 
 if __name__ == "__main__":

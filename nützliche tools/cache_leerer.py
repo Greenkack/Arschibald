@@ -21,16 +21,16 @@ def clear_python_cache():
             cache_dirs.append(cache_dir)
 
     print("🐍 PYTHON CACHE BEREINIGUNG:")
-    print(f"[FOLDER] Gefundene __pycache__ Ordner: {len(cache_dirs)}")
+    print(f"Gefundene __pycache__ Ordner: {len(cache_dirs)}")
 
     deleted_count = 0
     for cache_dir in cache_dirs:
         try:
             shutil.rmtree(cache_dir)
-            print(f"  [OK] Gelöscht: {cache_dir}")
+            print(f"  Gelöscht: {cache_dir}")
             deleted_count += 1
         except Exception as e:
-            print(f"  [ERROR] Fehler bei {cache_dir}: {e}")
+            print(f"  Fehler bei {cache_dir}: {e}")
 
     # Lösche .pyc Dateien
     pyc_files = glob.glob("**/*.pyc", recursive=True)
@@ -41,7 +41,7 @@ def clear_python_cache():
         except BaseException:
             pass
 
-    print(f"[OK] {deleted_count} Python-Cache-Einträge gelöscht")
+    print(f"{deleted_count} Python-Cache-Einträge gelöscht")
     return deleted_count
 
 
@@ -54,7 +54,7 @@ def clear_streamlit_cache():
         "streamlit_cache",
     ]
 
-    print("\n[LAUNCH] STREAMLIT CACHE BEREINIGUNG:")
+    print("\nSTREAMLIT CACHE BEREINIGUNG:")
 
     deleted_count = 0
     for streamlit_dir in streamlit_dirs:
@@ -63,10 +63,10 @@ def clear_streamlit_cache():
             if os.path.exists(cache_subdir):
                 try:
                     shutil.rmtree(cache_subdir)
-                    print(f"  [OK] Gelöscht: {cache_subdir}")
+                    print(f"  Gelöscht: {cache_subdir}")
                     deleted_count += 1
                 except Exception as e:
-                    print(f"  [ERROR] Fehler bei {cache_subdir}: {e}")
+                    print(f"  Fehler bei {cache_subdir}: {e}")
 
     # Lösche temporäre Streamlit Dateien
     temp_patterns = [
@@ -86,7 +86,7 @@ def clear_streamlit_cache():
             except BaseException:
                 pass
 
-    print(f"[OK] {deleted_count} Streamlit-Cache-Einträge gelöscht")
+    print(f"{deleted_count} Streamlit-Cache-Einträge gelöscht")
     return deleted_count
 
 
@@ -102,7 +102,7 @@ def clear_all_caches():
     total_deleted = python_deleted + streamlit_deleted
 
     print("\n🎉 CACHE-BEREINIGUNG ABGESCHLOSSEN!")
-    print(f"[CHART] Insgesamt {total_deleted} Cache-Einträge gelöscht")
+    print(f"Insgesamt {total_deleted} Cache-Einträge gelöscht")
     print("💾 Freier Speicherplatz gewonnen!")
 
     return total_deleted

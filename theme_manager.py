@@ -45,10 +45,10 @@ THEME_EMOJI_MAP: Mapping[str, str] = {
     "bootstrap": "💼",
     "dark-mode": "🌙",
     "material-design": "📱",
-    "saas-startup": "[LAUNCH]",
+    "saas-startup": "",
     "editorial": "📰",
-    "financial": "[MONEY]",
-    "tailwind": "[TARGET]",
+    "financial": "",
+    "tailwind": "",
     "cyberpunk": "🌆",
     "toddler": "🧸",
 }
@@ -114,7 +114,7 @@ class ThemeDefinition:
         self.__dict__.update(state)
     
     def menu_label(self) -> str:
-        emoji = self.emoji or "[DESIGN]"
+        emoji = self.emoji or ""
         return f"{emoji} {self.title}" if emoji else self.title
 
 
@@ -220,7 +220,7 @@ def load_available_themes() -> dict[str, ThemeDefinition]:
             readme_path = candidate / "README.md"
             title = _extract_title(readme_path)
             description = _extract_description(readme_path)
-            emoji = THEME_EMOJI_MAP.get(candidate.name, "[DESIGN]")
+            emoji = THEME_EMOJI_MAP.get(candidate.name, "")
 
             themes[candidate.name] = ThemeDefinition(
                 key=candidate.name,

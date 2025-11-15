@@ -18,7 +18,7 @@ def test_solar_calculator_has_3d_link():
     assert 'btn_goto_3d_view' in content, "3D view button key not found"
     assert "selected_page_key'] = '3d_view'" in content, "3D view page key not set"
     
-    print("[OK] Solar Calculator has 3D view navigation link")
+    print("Solar Calculator has 3D view navigation link")
     return True
 
 
@@ -32,7 +32,7 @@ def test_gui_has_3d_menu_item():
     assert '"key": "3d_view"' in content, "3d_view key not found in menu"
     assert 'selected_page_key == "3d_view"' in content, "3d_view page handler not found"
     
-    print("[OK] GUI has 3D view menu item and page handler")
+    print("GUI has 3D view menu item and page handler")
     return True
 
 
@@ -41,7 +41,7 @@ def test_3d_view_page_exists():
     page_path = os.path.join('pages', 'solar_3d_view.py')
     assert os.path.exists(page_path), f"3D view page not found at {page_path}"
     
-    print("[OK] 3D view page file exists")
+    print("3D view page file exists")
     return True
 
 
@@ -56,7 +56,7 @@ def test_3d_view_imports():
     assert 'LayoutConfig' in content, "LayoutConfig not imported"
     assert 'build_scene' in content, "build_scene not imported"
     
-    print("[OK] 3D view page has correct imports")
+    print("3D view page has correct imports")
     return True
 
 
@@ -80,10 +80,10 @@ if __name__ == "__main__":
             if test():
                 passed += 1
         except AssertionError as e:
-            print(f"[ERROR] {test.__name__} failed: {e}")
+            print(f"{test.__name__} failed: {e}")
             failed += 1
         except Exception as e:
-            print(f"[ERROR] {test.__name__} error: {e}")
+            print(f"{test.__name__} error: {e}")
             failed += 1
     
     print("=" * 60)
@@ -91,8 +91,8 @@ if __name__ == "__main__":
     print("=" * 60)
     
     if failed == 0:
-        print("\n[OK] All navigation integration tests passed!")
+        print("\nAll navigation integration tests passed!")
         exit(0)
     else:
-        print(f"\n[ERROR] {failed} test(s) failed")
+        print(f"\n{failed} test(s) failed")
         exit(1)

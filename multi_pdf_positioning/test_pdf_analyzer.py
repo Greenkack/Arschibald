@@ -38,7 +38,7 @@ def test_single_pdf_analysis():
         assert len(analysis.safe_zones) > 0, "Should have safe zones"
         assert len(analysis.color_palette) > 0, "Should have color palette"
 
-        print("[OK] Single PDF analysis successful")
+        print("Single PDF analysis successful")
         print(f"  Firma: {analysis.firma}")
         print(f"  Seite: {analysis.seite}")
         print(f"  Page size: {analysis.page_size}")
@@ -245,7 +245,7 @@ def main():
     print(f"Passed: {passed}/{total}")
 
     if passed == total:
-        print("\n[OK] All tests passed!")
+        print("\nAll tests passed!")
         return 0
     else:
         print(f"\n[FAIL] {total - passed} test(s) failed")

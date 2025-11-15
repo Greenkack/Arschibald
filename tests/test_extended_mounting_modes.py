@@ -21,7 +21,7 @@ try:
     import numpy as np
     PV3D_AVAILABLE = True
 except ImportError as e:
-    print(f"[ERROR] Import-Fehler: {e}")
+    print(f"Import-Fehler: {e}")
     PV3D_AVAILABLE = False
 
 
@@ -32,7 +32,7 @@ def test_south_east_mounting():
     print("="*60)
     
     if not PV3D_AVAILABLE:
-        print("[WARNING]  PyVista nicht verfügbar - Test übersprungen")
+        print("PyVista nicht verfügbar - Test übersprungen")
         return False
     
     try:
@@ -52,14 +52,14 @@ def test_south_east_mounting():
         assert all(isinstance(p, pv.PolyData) for p in panels), \
             "Module sind nicht vom Typ pv.PolyData"
         
-        print(f"[OK] {len(panels)} Module mit Süd-Ost Aufständerung erstellt")
+        print(f"{len(panels)} Module mit Süd-Ost Aufständerung erstellt")
         print(f"  - Azimuth: 45° (Süd-Ost)")
         print(f"  - Neigung: 15°")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -72,7 +72,7 @@ def test_south_west_mounting():
     print("="*60)
     
     if not PV3D_AVAILABLE:
-        print("[WARNING]  PyVista nicht verfügbar - Test übersprungen")
+        print("PyVista nicht verfügbar - Test übersprungen")
         return False
     
     try:
@@ -92,14 +92,14 @@ def test_south_west_mounting():
         assert all(isinstance(p, pv.PolyData) for p in panels), \
             "Module sind nicht vom Typ pv.PolyData"
         
-        print(f"[OK] {len(panels)} Module mit Süd-West Aufständerung erstellt")
+        print(f"{len(panels)} Module mit Süd-West Aufständerung erstellt")
         print(f"  - Azimuth: 315° (Süd-West)")
         print(f"  - Neigung: 15°")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -112,7 +112,7 @@ def test_custom_mounting():
     print("="*60)
     
     if not PV3D_AVAILABLE:
-        print("[WARNING]  PyVista nicht verfügbar - Test übersprungen")
+        print("PyVista nicht verfügbar - Test übersprungen")
         return False
     
     try:
@@ -141,12 +141,12 @@ def test_custom_mounting():
             assert all(isinstance(p, pv.PolyData) for p in panels), \
                 f"Module sind nicht vom Typ pv.PolyData für {description}"
             
-            print(f"[OK] {len(panels)} Module mit {description} erstellt")
+            print(f"{len(panels)} Module mit {description} erstellt")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -159,7 +159,7 @@ def test_advanced_layout_config():
     print("="*60)
     
     if not PV3D_AVAILABLE:
-        print("[WARNING]  PyVista nicht verfügbar - Test übersprungen")
+        print("PyVista nicht verfügbar - Test übersprungen")
         return False
     
     try:
@@ -170,7 +170,7 @@ def test_advanced_layout_config():
         )
         assert config1.mounting_mode == "south-east", \
             "Mounting mode nicht korrekt gesetzt"
-        print("[OK] AdvancedLayoutConfig mit south-east erstellt")
+        print("AdvancedLayoutConfig mit south-east erstellt")
         
         # Test 2: Custom Modus
         config2 = AdvancedLayoutConfig(
@@ -185,7 +185,7 @@ def test_advanced_layout_config():
             "Custom azimuth nicht korrekt gesetzt"
         assert config2.custom_tilt == 20.0, \
             "Custom tilt nicht korrekt gesetzt"
-        print("[OK] AdvancedLayoutConfig mit custom erstellt")
+        print("AdvancedLayoutConfig mit custom erstellt")
         
         # Test 3: JSON Serialisierung
         json_str = config2.to_json()
@@ -196,12 +196,12 @@ def test_advanced_layout_config():
             "Custom azimuth nach JSON-Roundtrip nicht identisch"
         assert config3.custom_tilt == config2.custom_tilt, \
             "Custom tilt nach JSON-Roundtrip nicht identisch"
-        print("[OK] JSON Serialisierung/Deserialisierung funktioniert")
+        print("JSON Serialisierung/Deserialisierung funktioniert")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -214,7 +214,7 @@ def test_build_scene_integration():
     print("="*60)
     
     if not PV3D_AVAILABLE:
-        print("[WARNING]  PyVista nicht verfügbar - Test übersprungen")
+        print("PyVista nicht verfügbar - Test übersprungen")
         return False
     
     try:
@@ -242,7 +242,7 @@ def test_build_scene_integration():
         assert "main" in panels, "Keine main-Module im Ergebnis"
         assert len(panels["main"]) > 0, "Keine main-Module erstellt"
         
-        print(f"[OK] build_scene() mit south-east erfolgreich")
+        print(f"build_scene() mit south-east erfolgreich")
         print(f"  - {len(panels['main'])} Module auf Hauptdach")
         
         # Cleanup
@@ -251,7 +251,7 @@ def test_build_scene_integration():
         return True
         
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -264,7 +264,7 @@ def run_all_tests():
     print("="*60)
     
     if not PV3D_AVAILABLE:
-        print("\n[ERROR] PyVista nicht verfügbar - Tests können nicht ausgeführt werden")
+        print("\nPyVista nicht verfügbar - Tests können nicht ausgeführt werden")
         print("   Installiere mit: pip install pyvista vtk numpy")
         return
     
@@ -286,7 +286,7 @@ def run_all_tests():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {name}")
     
     print(f"\n{passed}/{total} Tests bestanden")
@@ -295,7 +295,7 @@ def run_all_tests():
         print("\n🎉 Alle Tests erfolgreich!")
         return True
     else:
-        print(f"\n[WARNING]  {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return False
 
 

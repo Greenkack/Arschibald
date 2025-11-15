@@ -48,15 +48,15 @@ def display_error_message(
     if error_info.severity == ErrorSeverity.CRITICAL:
         container.error(error_info.user_message, icon="🚨")
     elif error_info.severity == ErrorSeverity.ERROR:
-        container.error(error_info.user_message, icon="[ERROR]")
+        container.error(error_info.user_message, icon="")
     elif error_info.severity == ErrorSeverity.WARNING:
-        container.warning(error_info.user_message, icon="[WARNING]")
+        container.warning(error_info.user_message, icon="")
     else:
-        container.info(error_info.user_message, icon="[INFO]")
+        container.info(error_info.user_message, icon="")
     
     # Lösungsvorschläge
     if show_suggestions and error_info.suggestions:
-        with container.expander("[IDEA] Lösungsvorschläge", expanded=True):
+        with container.expander("Lösungsvorschläge", expanded=True):
             for i, suggestion in enumerate(error_info.suggestions, 1):
                 st.markdown(f"{i}. {suggestion}")
     
@@ -98,7 +98,7 @@ def display_error_with_fallback(
     if error_result.get('fallback_used'):
         fallback_result = error_result.get('fallback_result', {})
         container.warning(
-            f"[WARNING] **Automatischer Fallback aktiviert**\n\n"
+            f"**Automatischer Fallback aktiviert**\n\n"
             f"{fallback_result.get('message', 'Fallback wurde verwendet')}\n\n"
             f"Strategie: {fallback_result.get('strategy', 'unbekannt')}",
             icon="🔄"
@@ -111,7 +111,7 @@ def display_error_with_fallback(
     if error_result.get('admin_notified'):
         container.info(
             "📧 Der Administrator wurde über diesen Fehler benachrichtigt.",
-            icon="[INFO]"
+            icon=""
         )
 
 
@@ -132,18 +132,18 @@ def show_error_help_dialog(category: ErrorCategory) -> None:
         
         # Zusätzliche Aktionen basierend auf Fehlertyp
         if category == ErrorCategory.MATRIX_NOT_FOUND:
-            if st.button("[TOOL] Zum Admin-Bereich", key="goto_admin_matrix"):
+            if st.button("Zum Admin-Bereich", key="goto_admin_matrix"):
                 st.session_state['navigate_to'] = 'admin_matrix'
                 st.rerun()
         
         elif category in [ErrorCategory.MODULE_COUNT_MISSING, ErrorCategory.STORAGE_MODEL_MISSING]:
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("[CHART] Matrix anzeigen", key="show_matrix"):
+                if st.button("Matrix anzeigen", key="show_matrix"):
                     st.session_state['show_matrix_details'] = True
                     st.rerun()
             with col2:
-                if st.button("[TOOL] Matrix bearbeiten", key="edit_matrix"):
+                if st.button("Matrix bearbeiten", key="edit_matrix"):
                     st.session_state['navigate_to'] = 'admin_matrix'
                     st.rerun()
 
@@ -166,14 +166,14 @@ def display_validation_results(
     
     if validation_result.get('valid'):
         container.success(
-            "[OK] Matrix ist gültig für Preisberechnung",
-            icon="[OK]"
+            "Matrix ist gültig für Preisberechnung",
+            icon=""
         )
         
         # Zeige Informationen
         info = validation_result.get('validation_result', {}).get('info', {})
         if info:
-            with container.expander("[INFO] Matrix-Informationen"):
+            with container.expander("Matrix-Informationen"):
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric("Zeilen", info.get('total_rows', 0))
@@ -191,8 +191,8 @@ def display_validation_results(
                     st.write(", ".join(info['storage_models']))
     else:
         container.error(
-            "[ERROR] Matrix-Validierung fehlgeschlagen",
-            icon="[ERROR]"
+            "Matrix-Validierung fehlgeschlagen",
+            icon=""
         )
         
         # Zeige Fehler
@@ -206,14 +206,14 @@ def display_validation_results(
                     st.markdown(f"• {error}")
         
         if warnings:
-            with container.expander("[WARNING] Warnungen"):
+            with container.expander("Warnungen"):
                 for warning in warnings:
                     st.markdown(f"• {warning}")
         
         # Aktions-Buttons
         col1, col2 = container.columns(2)
         with col1:
-            if st.button("[TOOL] Matrix korrigieren", key="fix_matrix"):
+            if st.button("Matrix korrigieren", key="fix_matrix"):
                 st.session_state['navigate_to'] = 'admin_matrix'
                 st.rerun()
         with col2:
@@ -300,7 +300,7 @@ def display_price_lookup_error(
     display_error_message(error_info, container=container)
     
     # Zeige Kontext
-    with container.expander("[SEARCH] Lookup-Details"):
+    with container.expander("Lookup-Details"):
         st.write(f"**Gesuchte Modulanzahl:** {module_count}")
         st.write(f"**Gesuchtes Speichermodell:** {storage_model or 'Kein Speicher'}")
         
@@ -318,17 +318,17 @@ def display_price_lookup_error(
     use_fallback = False
     if show_fallback_option and error_info.fallback_available:
         container.info(
-            "[IDEA] **Automatischer Fallback verfügbar**\n\n"
+            "**Automatischer Fallback verfügbar**\n\n"
             "Das System kann automatisch einen alternativen Wert verwenden.",
             icon="🔄"
         )
         
         col1, col2 = container.columns(2)
         with col1:
-            if st.button("[OK] Fallback verwenden", key="use_fallback", type="primary"):
+            if st.button("Fallback verwenden", key="use_fallback", type="primary"):
                 use_fallback = True
         with col2:
-            if st.button("[ERROR] Abbrechen", key="cancel_fallback"):
+            if st.button("Abbrechen", key="cancel_fallback"):
                 use_fallback = False
     
     return use_fallback
@@ -371,9 +371,9 @@ def display_admin_notification_banner(
     
     # Zeige Fehler
     if errors:
-        with container.expander(f"[ERROR] {len(errors)} Fehler"):
+        with container.expander(f"{len(errors)} Fehler"):
             for notif in errors:
-                st.error(notif.get('message', ''), icon="[ERROR]")
+                st.error(notif.get('message', ''), icon="")
                 if notif.get('recommended_actions'):
                     st.write("**Empfohlene Aktionen:**")
                     for action in notif['recommended_actions']:
@@ -382,9 +382,9 @@ def display_admin_notification_banner(
     
     # Zeige Warnungen
     if warnings:
-        with container.expander(f"[WARNING] {len(warnings)} Warnungen"):
+        with container.expander(f"{len(warnings)} Warnungen"):
             for notif in warnings:
-                st.warning(notif.get('message', ''), icon="[WARNING]")
+                st.warning(notif.get('message', ''), icon="")
                 st.divider()
 
 

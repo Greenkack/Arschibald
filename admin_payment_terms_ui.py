@@ -227,7 +227,7 @@ def get_comprehensive_default_payment_terms() -> dict[str, Any]:
                                  "description": "100% Zahlung bei Vertragsabschluss",
                                  "discount_percent": 3.0,
                                  "enabled": True,
-                                 "icon": "[MONEY]",
+                                 "icon": "",
                                  "payment_type": "immediate",
                                  "conditions": {"payment_due_days": 0,
                                                 "early_payment_bonus": True}},
@@ -243,7 +243,7 @@ def get_comprehensive_default_payment_terms() -> dict[str, Any]:
                                  "description": "Zahlung in 2 gleichen Raten",
                                  "discount_percent": 1.0,
                                  "enabled": True,
-                                 "icon": "[CHART]",
+                                 "icon": "",
                                  "payment_type": "installments",
                                  "installment_schedule": [{"percentage": 50.0,
                                                            "due_days": 0,
@@ -258,7 +258,7 @@ def get_comprehensive_default_payment_terms() -> dict[str, Any]:
                                  "description": "Zahlung in 3 gleichen Raten",
                                  "discount_percent": 0.0,
                                  "enabled": True,
-                                 "icon": "[CHART]",
+                                 "icon": "",
                                  "payment_type": "installments",
                                  "installment_schedule": [{"percentage": 40.0,
                                                            "due_days": 0,
@@ -396,7 +396,7 @@ def render_payment_options_management(
                 "description": "Sofortige Zahlung",
                 "discount_percent": 2.0,
                 "enabled": True,
-                "icon": "[MONEY]",
+                "icon": "",
                 "payment_type": "immediate"}
             payment_options.append(new_option)
             st.rerun()
@@ -409,7 +409,7 @@ def render_payment_options_management(
                 "description": "Zahlung in Raten",
                 "discount_percent": 0.0,
                 "enabled": True,
-                "icon": "[CHART]",
+                "icon": "",
                 "payment_type": "installments",
                 "installment_schedule": [
                     {"percentage": 50.0, "due_days": 0, "description": "Anzahlung", "label": "Anzahlung"},
@@ -473,25 +473,25 @@ def render_payment_options_management(
                 option['icon'] = st.selectbox(
                     "Icon",
                     options=[
-                        "[MONEY]",
+                        "",
                         "🚚",
-                        "[CHART]",
+                        "",
                         "🏦",
                         "📋",
                         "⚙️",
                         "💳",
-                        "[TARGET]",
+                        "",
                         "⭐",
                         "🔥"],
                     index=[
-                        "[MONEY]",
+                        "",
                         "🚚",
-                        "[CHART]",
+                        "",
                         "🏦",
                         "📋",
                         "⚙️",
                         "💳",
-                        "[TARGET]",
+                        "",
                         "⭐",
                         "🔥"].index(
                         option.get(
@@ -499,14 +499,14 @@ def render_payment_options_management(
                             '💳')) if option.get(
                         'icon',
                         '💳') in [
-                            "[MONEY]",
+                            "",
                             "🚚",
-                            "[CHART]",
+                            "",
                             "🏦",
                             "📋",
                             "⚙️",
                             "💳",
-                            "[TARGET]",
+                            "",
                             "⭐",
                             "🔥"] else 0,
                     key=f"option_icon_{option_id}_{widget_suffix}")
@@ -567,7 +567,7 @@ def render_payment_options_management(
             payment_type = option.get('payment_type', 'immediate')
 
             if payment_type == "installments":
-                st.markdown("**[CHART] Ratenzahlungsplan konfigurieren:**")
+                st.markdown("**Ratenzahlungsplan konfigurieren:**")
                 schedule = option.get('installment_schedule', [])
 
                 # Button zum Hinzufügen einer neuen Rate
@@ -611,7 +611,7 @@ def render_payment_options_management(
                             'label', ''), key=f"installment_label_{option_id}_{j}_{widget_suffix}")
 
                     if col_inst4.button(
-                        "[DELETE]",
+                        "",
                         key=f"del_installment_{option_id}_{j}_{widget_suffix}",
                             help="Rate löschen"):
                         continue  # Rate wird nicht zu updated_schedule hinzugefügt
@@ -631,7 +631,7 @@ def render_payment_options_management(
                                        for inst in updated_schedule)
                 if total_percentage != 100.0:
                     st.warning(
-                        f"[WARNING] Summe der Raten: {total_percentage}% (sollte 100% sein)")
+                        f"Summe der Raten: {total_percentage}% (sollte 100% sein)")
 
             elif payment_type == "financing":
                 st.markdown("**🏦 Finanzierungsoptionen konfigurieren:**")
@@ -682,7 +682,7 @@ def render_payment_options_management(
                     )
 
                     if col_fin4.button(
-                        "[DELETE]",
+                        "",
                         key=f"del_financing_{option_id}_{k}_{widget_suffix}",
                             help="Finanzierungsoption löschen"):
                         continue  # Option wird nicht zu updated_financing hinzugefügt
@@ -779,7 +779,7 @@ def render_payment_options_management(
             # Option löschen
             st.markdown("---")
             if st.button(
-                f"[DELETE] Zahlungsoption '{
+                f"Zahlungsoption '{
                     option.get(
                         'name',
                         'Unbenannt')}' löschen",
@@ -909,7 +909,7 @@ def render_general_terms_management(
         )
 
     # Anzahlungsregelungen
-    st.markdown("**[MONEY] Anzahlungsregelungen:**")
+    st.markdown("**Anzahlungsregelungen:**")
     col_deposit1, col_deposit2, col_deposit3 = st.columns(3)
 
     with col_deposit1:
@@ -948,12 +948,12 @@ def render_general_terms_management(
 def render_discount_rules_management(
         discount_rules: dict[str, Any], widget_suffix: str) -> dict[str, Any]:
     """UI für die Verwaltung von Rabattregeln."""
-    st.subheader("[TARGET] Rabatt- und Bonusregelungen")
+    st.subheader("Rabatt- und Bonusregelungen")
     st.markdown(
         "Konfigurieren Sie automatische Rabatte basierend auf verschiedenen Kriterien.")
 
     # Mengenrabatte
-    st.markdown("**[CHART] Mengenrabatte (nach kWp):**")
+    st.markdown("**Mengenrabatte (nach kWp):**")
     volume_discounts = discount_rules.get('volume_discounts', [])
 
     if st.button("➕ Mengenstaffel hinzufügen",
@@ -984,7 +984,7 @@ def render_discount_rules_management(
         )
 
         if col_vd3.button(
-            "[DELETE]",
+            "",
             key=f"del_volume_{i}_{widget_suffix}",
                 help="Mengenstaffel löschen"):
             continue  # Nicht zu updated_volume_discounts hinzufügen
@@ -1095,7 +1095,7 @@ def render_legal_texts_management(
         "🚚 Lieferung",
         "↩️ Widerruf",
         "🔒 Datenschutz",
-        "[FILE] AGB"
+        "AGB"
     ])
 
     with text_tabs[0]:
@@ -1224,7 +1224,7 @@ def render_calculation_settings(
 def render_display_settings(
         display_settings: dict[str, Any], widget_suffix: str) -> dict[str, Any]:
     """UI für Darstellungseinstellungen."""
-    st.subheader("[DESIGN] Darstellungseinstellungen")
+    st.subheader("Darstellungseinstellungen")
     st.markdown(
         "Konfigurieren Sie das Aussehen der Zahlungsmodalitäten in Angeboten.")
 
@@ -1268,7 +1268,7 @@ def render_display_settings(
                 help="ID der Zahlungsoption, die als empfohlen markiert werden soll")
 
     # Farbschema
-    st.markdown("**[DESIGN] Farbschema:**")
+    st.markdown("**Farbschema:**")
     color_scheme = display_settings.get('color_scheme', {})
 
     col_color1, col_color2, col_color3, col_color4 = st.columns(4)
@@ -1330,7 +1330,7 @@ def render_payment_preview_detailed(
     ]
 
     if not active_options:
-        st.warning("[WARNING] Keine aktiven Zahlungsoptionen konfiguriert!")
+        st.warning("Keine aktiven Zahlungsoptionen konfiguriert!")
         return
 
     # Rabattregeln anwenden
@@ -1362,7 +1362,7 @@ def render_payment_preview_detailed(
 
     if volume_discount > 0:
         st.info(
-            f"[CHART] Mengenrabatt: {volume_discount}% (ab {
+            f"Mengenrabatt: {volume_discount}% (ab {
                 volume_discounts[0].get(
                     'min_kwp', 0)} kWp)")
 
@@ -1408,7 +1408,7 @@ def render_payment_preview_detailed(
                     discount_amount = example_price * total_discount / 100
                     final_price = example_price - discount_amount
                     st.success(
-                        f"[MONEY] Gesamtrabatt: {total_discount:.1f}% (-{discount_amount:,.2f} €)")
+                        f"Gesamtrabatt: {total_discount:.1f}% (-{discount_amount:,.2f} €)")
                     st.markdown(f"**Endpreis: {final_price:,.2f} €**")
                 else:
                     final_price = example_price
@@ -1418,7 +1418,7 @@ def render_payment_preview_detailed(
                 payment_type = option.get('payment_type', 'immediate')
 
                 if payment_type == "installments":
-                    st.markdown("**[CHART] Zahlungsplan:**")
+                    st.markdown("**Zahlungsplan:**")
                     schedule = option.get('installment_schedule', [])
 
                     for j, installment in enumerate(schedule):
@@ -1491,7 +1491,7 @@ def render_payment_preview_detailed(
 
                 elif payment_type in ["immediate", "on_delivery"]:
                     if payment_type == "immediate":
-                        st.markdown("**[MONEY] Sofortige Vollzahlung**")
+                        st.markdown("**Sofortige Vollzahlung**")
                         st.markdown("- Zahlung bei Vertragsabschluss")
                     else:
                         st.markdown("**🚚 Zahlung bei Lieferung**")
@@ -1532,7 +1532,7 @@ def render_payment_preview_detailed(
 
 def render_import_export_tools(widget_suffix: str) -> dict[str, Any] | None:
     """Tools für Import und Export von Zahlungskonfigurationen."""
-    st.subheader("[FOLDER] Import/Export")
+    st.subheader("Import/Export")
     st.markdown(
         "Exportieren Sie Ihre Konfiguration oder importieren Sie vorhandene Einstellungen.")
 
@@ -1551,7 +1551,7 @@ def render_import_export_tools(widget_suffix: str) -> dict[str, Any] | None:
 
             # Download-Button anbieten
             st.download_button(
-                label="[FOLDER] Konfiguration herunterladen",
+                label="Konfiguration herunterladen",
                 data=config_json,
                 file_name=f"payment_terms_config_{
                     datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
@@ -1570,7 +1570,7 @@ def render_import_export_tools(widget_suffix: str) -> dict[str, Any] | None:
         if uploaded_file is not None:
             try:
                 config_data = json.loads(uploaded_file.getvalue().decode())
-                st.success("[OK] Konfiguration erfolgreich geladen!")
+                st.success("Konfiguration erfolgreich geladen!")
 
                 if st.button(
                     "📥 Konfiguration übernehmen",
@@ -1582,9 +1582,9 @@ def render_import_export_tools(widget_suffix: str) -> dict[str, Any] | None:
                     st.json(config_data)
 
             except json.JSONDecodeError:
-                st.error("[ERROR] Ungültige JSON-Datei!")
+                st.error("Ungültige JSON-Datei!")
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim Laden der Datei: {str(e)}")
+                st.error(f"Fehler beim Laden der Datei: {str(e)}")
 
     return None
 
@@ -1634,17 +1634,17 @@ def render_comprehensive_admin_payment_terms_ui(
     imported_config = render_import_export_tools(widget_key_suffix)
     if imported_config:
         current_payment_terms = imported_config
-        st.success("[OK] Importierte Konfiguration wurde geladen!")
+        st.success("Importierte Konfiguration wurde geladen!")
         st.rerun()
 
     # Hauptnavigation
     main_tabs = st.tabs([
         "💳 Zahlungsoptionen",
         "⚖️ Geschäftsbedingungen",
-        "[TARGET] Rabatte & Boni",
+        "Rabatte & Boni",
         "📋 Rechtliche Texte",
         "🧮 Berechnungen",
-        "[DESIGN] Darstellung",
+        "Darstellung",
         "👁️ Vorschau"
     ])
 
@@ -1709,7 +1709,7 @@ def render_comprehensive_admin_payment_terms_ui(
                     current_payment_terms)
 
                 if validation_errors:
-                    st.error("[ERROR] Validierungsfehler gefunden:")
+                    st.error("Validierungsfehler gefunden:")
                     for error in validation_errors:
                         st.error(f"• {error}")
                 else:
@@ -1725,14 +1725,14 @@ def render_comprehensive_admin_payment_terms_ui(
 
                     if success1 and success2:
                         st.success(
-                            "[OK] Zahlungsmodalitäten erfolgreich gespeichert!")
+                            "Zahlungsmodalitäten erfolgreich gespeichert!")
 
                     else:
                         st.error(
-                            "[ERROR] Fehler beim Speichern der Zahlungsmodalitäten.")
+                            "Fehler beim Speichern der Zahlungsmodalitäten.")
 
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim Speichern: {str(e)}")
+                st.error(f"Fehler beim Speichern: {str(e)}")
 
     with col_save2:
         if st.button("🔄 Auf Standard zurücksetzen",
@@ -1742,14 +1742,14 @@ def render_comprehensive_admin_payment_terms_ui(
                 default_config = get_comprehensive_default_payment_terms()
                 if save_admin_setting_func(
                         'comprehensive_payment_terms', default_config):
-                    st.success("[OK] Auf Standardwerte zurückgesetzt!")
+                    st.success("Auf Standardwerte zurückgesetzt!")
                     st.session_state[f"confirm_reset{widget_key_suffix}"] = False
                     st.rerun()
                 else:
-                    st.error("[ERROR] Fehler beim Zurücksetzen.")
+                    st.error("Fehler beim Zurücksetzen.")
             else:
                 st.session_state[f"confirm_reset{widget_key_suffix}"] = True
-                st.warning("[WARNING] Klicken Sie erneut zum Bestätigen.")
+                st.warning("Klicken Sie erneut zum Bestätigen.")
 
 
 def render_dynamic_payment_variants_ui(
@@ -1766,10 +1766,10 @@ def render_dynamic_payment_variants_ui(
     st.markdown("---")
     st.markdown("""
     **Konfigurieren Sie bis zu 5 verschiedene Zahlungsvarianten mit:**
-    - [OK] Konfigurierbaren Prozentsätzen und optionalen festen Beträgen
-    - [OK] Anpassbaren Textbausteinen mit Platzhaltern ({p1}, {p2}, {p3}, {b1}, {b2}, {b3})
-    - [OK] Automatischer Validierung (Summe muss 100% ergeben)
-    - [OK] Vorschau mit Beispielbeträgen
+    - Konfigurierbaren Prozentsätzen und optionalen festen Beträgen
+    - Anpassbaren Textbausteinen mit Platzhaltern ({p1}, {p2}, {p3}, {b1}, {b2}, {b3})
+    - Automatischer Validierung (Summe muss 100% ergeben)
+    - Vorschau mit Beispielbeträgen
     """)
 
     # Lade aktuelle Konfiguration und ergänze fehlende Varianten mit Defaults
@@ -1783,7 +1783,7 @@ def render_dynamic_payment_variants_ui(
             current_variants.setdefault(key, value)
 
     # Globale Einstellungen
-    st.subheader("[TOOL] Globale Einstellungen")
+    st.subheader("Globale Einstellungen")
     col_global1, col_global2 = st.columns(2)
 
     with col_global1:
@@ -1808,9 +1808,9 @@ def render_dynamic_payment_variants_ui(
     # Tab-Layout für die Varianten
     variant_tabs = st.tabs([
         "🚫 Variante 0 (Keine Vorkasse)",
-        "[TARGET] Variante 1 (Anzahlung)",
+        "Variante 1 (Anzahlung)",
         "💯 Variante 2 (100% Fertigstellung)",
-        "[CHART] Variante 3 (2 Raten)",
+        "Variante 3 (2 Raten)",
         "⚙️ Variante 4 (Individuell)"
     ])
 
@@ -1828,7 +1828,7 @@ def render_dynamic_payment_variants_ui(
             variant_data = current_variants.get(
                 variant_key, get_default_payment_variants()[variant_key])
 
-            st.subheader(f"[NOTE] {variant_data['name']}")
+            st.subheader(f"{variant_data['name']}")
             st.caption(variant_data['description'])
 
             # Grundeinstellungen
@@ -1874,7 +1874,7 @@ def render_dynamic_payment_variants_ui(
             # Spezielle Behandlung für Variante 4 (vollständig anpassbar)
             if is_fully_customizable:
                 st.info(
-                    "[IDEA] Diese Variante ist vollständig anpassbar - Sie können sowohl Bezeichnungen als auch Prozentsätze frei konfigurieren.")
+                    "Diese Variante ist vollständig anpassbar - Sie können sowohl Bezeichnungen als auch Prozentsätze frei konfigurieren.")
 
                 for i in range(3):
                     col_label, col_percent = st.columns([1, 1])
@@ -1900,7 +1900,7 @@ def render_dynamic_payment_variants_ui(
 
             elif is_static:
                 st.info(
-                    "[IDEA] Diese Variante hat feste Prozentsätze und kann nicht geändert werden.")
+                    "Diese Variante hat feste Prozentsätze und kann nicht geändert werden.")
                 new_percents = [percents[i] if i < len(
                     percents) else 0.0 for i in range(3)]
                 static_cols = st.columns(3)
@@ -1935,12 +1935,12 @@ def render_dynamic_payment_variants_ui(
                 variant_data_temp)
 
             if is_valid:
-                st.success(f"[OK] {validation_msg}")
+                st.success(f"{validation_msg}")
             else:
-                st.error(f"[ERROR] {validation_msg}")
+                st.error(f"{validation_msg}")
 
             # Optionale feste Beträge
-            with st.expander("[MONEY] Feste Beträge (optional)", expanded=False):
+            with st.expander("Feste Beträge (optional)", expanded=False):
                 st.caption(
                     "Lassen Sie die Felder bei 0, um automatisch aus Prozentsätzen zu berechnen.")
 
@@ -1967,7 +1967,7 @@ def render_dynamic_payment_variants_ui(
                         new_amounts.append(0.0)
 
             # Textbaustein konfigurieren
-            st.markdown("**[NOTE] Textbaustein für PDF:**")
+            st.markdown("**Textbaustein für PDF:**")
             st.caption(
                 "Verfügbare Platzhalter: {p1}, {p2}, {p3} (Prozente), {b1}, {b2}, {b3} (Beträge)")
             if is_fully_customizable:
@@ -1995,7 +1995,7 @@ def render_dynamic_payment_variants_ui(
                 )
 
                 if show_amounts_in_text:
-                    st.info(f"[FILE] **Vorschau-Text:** {preview_text}")
+                    st.info(f"**Vorschau-Text:** {preview_text}")
                 else:
                     # Text ohne Beträge anzeigen
                     preview_no_amounts = format_payment_text_with_placeholders(
@@ -2011,10 +2011,10 @@ def render_dynamic_payment_variants_ui(
                         example_total,
                         new_custom_labels if is_fully_customizable else None
                     )
-                    st.info(f"[FILE] **Vorschau-Text:** {preview_no_amounts}")
+                    st.info(f"**Vorschau-Text:** {preview_no_amounts}")
 
             except Exception as e:
-                st.error(f"[ERROR] Fehler in Textvorlage: {str(e)}")
+                st.error(f"Fehler in Textvorlage: {str(e)}")
 
             # Aktualisierte Variante speichern
             updated_variant = variant_data.copy()
@@ -2058,21 +2058,21 @@ def render_dynamic_payment_variants_ui(
                                 f"{variant_data['name']}: {validation_msg}")
 
                 if not all_valid:
-                    st.error("[ERROR] Validierungsfehler gefunden:")
+                    st.error("Validierungsfehler gefunden:")
                     for error in validation_errors:
                         st.error(f"• {error}")
                 else:
                     if save_admin_setting_func(
                             'dynamic_payment_variants', updated_variants):
                         st.success(
-                            "[OK] Zahlungsvarianten erfolgreich gespeichert!")
+                            "Zahlungsvarianten erfolgreich gespeichert!")
                         st.balloons()
                     else:
                         st.error(
-                            "[ERROR] Fehler beim Speichern der Zahlungsvarianten.")
+                            "Fehler beim Speichern der Zahlungsvarianten.")
 
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim Speichern: {str(e)}")
+                st.error(f"Fehler beim Speichern: {str(e)}")
 
     with col_save2:
         if st.button(
@@ -2083,17 +2083,17 @@ def render_dynamic_payment_variants_ui(
                 default_variants = get_default_payment_variants()
                 if save_admin_setting_func(
                         'dynamic_payment_variants', default_variants):
-                    st.success("[OK] Auf Standardwerte zurückgesetzt!")
+                    st.success("Auf Standardwerte zurückgesetzt!")
                     st.session_state[f"confirm_reset_variants{widget_key_suffix}"] = False
                     st.rerun()
                 else:
-                    st.error("[ERROR] Fehler beim Zurücksetzen.")
+                    st.error("Fehler beim Zurücksetzen.")
             else:
                 st.session_state[f"confirm_reset_variants{widget_key_suffix}"] = True
-                st.warning("[WARNING] Klicken Sie erneut zum Bestätigen.")
+                st.warning("Klicken Sie erneut zum Bestätigen.")
 
     with col_save3:
-        if st.button("[CHART] Alle Varianten testen",
+        if st.button("Alle Varianten testen",
                      key=f"test_variants{widget_key_suffix}"):
             st.markdown("### 🧪 Test aller Zahlungsvarianten")
             for variant_key, variant_data in updated_variants.items():
@@ -2107,11 +2107,11 @@ def render_dynamic_payment_variants_ui(
                             example_total,
                             variant_data.get('custom_labels')
                         )
-                        st.success(f"[OK] {test_text}")
+                        st.success(f"{test_text}")
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler: {str(e)}")
+                        st.error(f"Fehler: {str(e)}")
                 else:
-                    st.info(f"[INFO] {variant_data['name']}: Deaktiviert")
+                    st.info(f"{variant_data['name']}: Deaktiviert")
 
 
 # Hauptfunktion, die beide Systeme kombiniert
@@ -2130,7 +2130,7 @@ def render_comprehensive_admin_payment_terms_ui_with_variants(
     # Haupttabs
     main_tab1, main_tab2 = st.tabs([
         "💼 Umfassende Zahlungsoptionen",
-        "[TARGET] Dynamische Zahlungsvarianten"
+        "Dynamische Zahlungsvarianten"
     ])
 
     with main_tab1:
@@ -2187,7 +2187,7 @@ def render_payment_variant_selector_for_pdf(
 
     if not active_variants:
         st.warning(
-            "[WARNING] Keine Zahlungsvarianten konfiguriert. Bitte konfigurieren Sie zuerst die Zahlungsmodalitäten im Admin-Bereich.")
+            "Keine Zahlungsvarianten konfiguriert. Bitte konfigurieren Sie zuerst die Zahlungsmodalitäten im Admin-Bereich.")
         return None
 
     st.markdown("### 💳 Zahlungsmodalitäten für PDF")
@@ -2218,14 +2218,14 @@ def render_payment_variant_selector_for_pdf(
 
         # Zusätzliche Optionen
         show_detailed_breakdown = st.checkbox(
-            "[CHART] Detaillierte Aufschlüsselung im PDF anzeigen",
+            "Detaillierte Aufschlüsselung im PDF anzeigen",
             value=True,
             key=f"payment_detailed_breakdown{widget_key_suffix}",
             help="Zeigt eine tabellarische Aufschlüsselung der Zahlungsraten"
         )
 
         include_amounts_in_text = st.checkbox(
-            "[MONEY] Beträge im Zahlungstext anzeigen",
+            "Beträge im Zahlungstext anzeigen",
             value=True,
             key=f"payment_include_amounts{widget_key_suffix}",
             help="Fügt die berechneten Euro-Beträge neben den Prozentsätzen hinzu")
@@ -2259,10 +2259,10 @@ def render_payment_variant_selector_for_pdf(
                     selected_variant.get('custom_labels')
                 )
 
-            st.info(f"[NOTE] {preview_text}")
+            st.info(f"{preview_text}")
 
         except Exception as e:
-            st.error(f"[ERROR] Fehler in Vorschau: {str(e)}")
+            st.error(f"Fehler in Vorschau: {str(e)}")
 
         # Prozentuale Aufschlüsselung anzeigen
         percents = selected_variant.get('percents', [])
@@ -2270,7 +2270,7 @@ def render_payment_variant_selector_for_pdf(
         custom_labels = selected_variant.get(
             'custom_labels', ['Rate 1', 'Rate 2', 'Rate 3'])
 
-        st.markdown("**[CHART] Aufschlüsselung:**")
+        st.markdown("**Aufschlüsselung:**")
         for i, percent in enumerate(percents):
             if percent > 0:
                 if amounts and len(amounts) > i and amounts[i] > 0:
@@ -2333,7 +2333,7 @@ def render_payment_variant_compact_selector(
     }
 
     if not active_variants:
-        st.info("[INFO] Keine Zahlungsvarianten konfiguriert.")
+        st.info("Keine Zahlungsvarianten konfiguriert.")
         return None
 
     # Varianten als Liste für Selectbox vorbereiten
@@ -2397,7 +2397,7 @@ def render_payment_variant_compact_selector(
                     preview_variant.get('custom_labels')
                 )
 
-                st.info(f"[NOTE] **Beispiel-Text:** {preview_text}")
+                st.info(f"**Beispiel-Text:** {preview_text}")
 
                 # Kurze Übersicht der Raten
                 percents = preview_variant.get('percents', [])
@@ -2414,10 +2414,10 @@ def render_payment_variant_compact_selector(
                                 f"{label}: {
                                     format_percent_de(percent)}")
 
-                    st.caption(f"[IDEA] Aufteilung: {' | '.join(rate_info)}")
+                    st.caption(f"Aufteilung: {' | '.join(rate_info)}")
 
             except Exception as e:
-                st.error(f"[ERROR] Fehler in Vorschau: {str(e)}")
+                st.error(f"Fehler in Vorschau: {str(e)}")
 
     return selected_key
 

@@ -47,7 +47,7 @@ def migrate_file(file_path: Path, dry_run=True):
     """Migriere Widgets in einer Datei"""
     
     if not file_path.exists():
-        print(f"[ERROR] Datei nicht gefunden: {file_path}")
+        print(f"Datei nicht gefunden: {file_path}")
         return
     
     content = file_path.read_text(encoding='utf-8')
@@ -67,22 +67,22 @@ def migrate_file(file_path: Path, dry_run=True):
     total_replacements = sum(replacements.values())
     
     if total_replacements == 0:
-        print(f"[OK] {file_path.name}: Keine Widgets zum Migrieren gefunden")
+        print(f"{file_path.name}: Keine Widgets zum Migrieren gefunden")
         return
     
-    print(f"\n[NOTE] {file_path.name}:")
+    print(f"\n{file_path.name}:")
     for pattern, count in replacements.items():
         widget_type = pattern.replace(r"st\.", "").replace(r"\(", "")
         print(f"   - {widget_type}: {count} Ersetzungen")
     
-    print(f"   [CHART] Gesamt: {total_replacements} Widgets migriert")
+    print(f"   Gesamt: {total_replacements} Widgets migriert")
     
     if not dry_run:
         # Write back
         file_path.write_text(content, encoding='utf-8')
-        print(f"   [OK] Datei gespeichert")
+        print(f"   Datei gespeichert")
     else:
-        print(f"   [INFO] DRY RUN - Keine Änderungen geschrieben")
+        print(f"   DRY RUN - Keine Änderungen geschrieben")
     
     return total_replacements
 
@@ -99,14 +99,14 @@ def main():
     # Check if session_widgets.py exists
     session_widgets_path = base_path / 'session_widgets.py'
     if not session_widgets_path.exists():
-        print("[ERROR] session_widgets.py nicht gefunden!")
+        print("session_widgets.py nicht gefunden!")
         print("   Bitte erst Phase 3 implementieren.")
         return
     
-    print("[OK] session_widgets.py gefunden\n")
+    print("session_widgets.py gefunden\n")
     
     # Dry run first
-    print("[SEARCH] DRY RUN - Analysiere Dateien...\n")
+    print("DRY RUN - Analysiere Dateien...\n")
     
     total_all = 0
     for file_name in FILES_TO_MIGRATE:
@@ -119,18 +119,18 @@ def main():
             total_all += count
     
     print(f"\n{'=' * 60}")
-    print(f"[CHART] GESAMT: {total_all} Widgets würden migriert")
+    print(f"GESAMT: {total_all} Widgets würden migriert")
     print(f"{'=' * 60}")
     
     # Ask for confirmation
-    print("\n[WARNING] HINWEIS: Dies migriert nur die Widget-Funktionen.")
+    print("\nHINWEIS: Dies migriert nur die Widget-Funktionen.")
     print("   Parameter wie 'form_id' müssen manuell hinzugefügt werden.")
     print("\n❓ Migration durchführen? (j/n): ", end="")
     
     response = input().strip().lower()
     
     if response in ['j', 'ja', 'y', 'yes']:
-        print("\n[LAUNCH] Starte Migration...\n")
+        print("\nStarte Migration...\n")
         
         for file_name in FILES_TO_MIGRATE:
             if file_name != 0:
@@ -140,15 +140,15 @@ def main():
             migrate_file(file_path, dry_run=False)
         
         print(f"\n{'=' * 60}")
-        print("[OK] Migration abgeschlossen!")
+        print("Migration abgeschlossen!")
         print(f"{'=' * 60}")
-        print("\n[NOTE] NÄCHSTE SCHRITTE:")
+        print("\nNÄCHSTE SCHRITTE:")
         print("1. Code-Review durchführen")
         print("2. form_id Parameter zu wichtigen Widgets hinzufügen")
         print("3. App testen: streamlit run gui.py")
         print("4. Bei Problemen: Git diff prüfen")
     else:
-        print("\n[ERROR] Migration abgebrochen.")
+        print("\nMigration abgebrochen.")
 
 
 if __name__ == '__main__':

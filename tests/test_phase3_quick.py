@@ -17,9 +17,9 @@ try:
         get_current_session,
         is_feature_enabled
     )
-    print("[OK] core_integration imports OK")
+    print("core_integration imports OK")
 except Exception as e:
-    print(f"[ERROR] core_integration import failed: {e}")
+    print(f"core_integration import failed: {e}")
     sys.exit(1)
 
 try:
@@ -28,18 +28,18 @@ try:
         session_number_input,
         persist_calculation_result
     )
-    print("[OK] session_widgets imports OK")
+    print("session_widgets imports OK")
 except Exception as e:
-    print(f"[ERROR] session_widgets import failed: {e}")
+    print(f"session_widgets import failed: {e}")
     sys.exit(1)
 
 # Test 2: Feature Flag
 print("\n🧪 Test 2: Feature Flag")
 session_enabled = is_feature_enabled('session')
 if session_enabled:
-    print(f"[OK] Session Persistence: ENABLED")
+    print(f"Session Persistence: ENABLED")
 else:
-    print(f"[WARNING] Session Persistence: DISABLED")
+    print(f"Session Persistence: DISABLED")
     print("   Set FEATURE_SESSION_PERSISTENCE=true in .env to enable")
 
 # Test 3: Session Manager
@@ -47,9 +47,9 @@ print("\n🧪 Test 3: Session Manager")
 try:
     from core.session_manager import SessionManager
     sm = SessionManager()
-    print("[OK] SessionManager instantiated")
+    print("SessionManager instantiated")
 except Exception as e:
-    print(f"[ERROR] SessionManager failed: {e}")
+    print(f"SessionManager failed: {e}")
     sys.exit(1)
 
 # Test 4: Database
@@ -57,9 +57,9 @@ print("\n🧪 Test 4: Database Connection")
 try:
     from core.session_persistence import get_persistence_engine
     engine = get_persistence_engine()
-    print(f"[OK] Persistence Engine: {type(engine).__name__}")
+    print(f"Persistence Engine: {type(engine).__name__}")
 except Exception as e:
-    print(f"[ERROR] Persistence Engine failed: {e}")
+    print(f"Persistence Engine failed: {e}")
     sys.exit(1)
 
 # Test 5: Session Bootstrap (without Streamlit)
@@ -67,21 +67,21 @@ print("\n🧪 Test 5: Session Bootstrap")
 try:
     from core.session import UserSession
     test_session = UserSession(user_id="test_user")
-    print(f"[OK] Session created: {test_session.session_id}")
+    print(f"Session created: {test_session.session_id}")
     print(f"   User ID: {test_session.user_id}")
     print(f"   Created: {test_session.created_at}")
 except Exception as e:
-    print(f"[ERROR] Session bootstrap failed: {e}")
+    print(f"Session bootstrap failed: {e}")
     sys.exit(1)
 
 # Test 6: Form Data Storage
 print("\n🧪 Test 6: Form Data Storage")
 try:
     test_session.update_form_data("test_form", "test_key", "test_value")
-    print("[OK] Form data stored")
+    print("Form data stored")
     print(f"   Forms: {list(test_session.form_states.keys())}")
 except Exception as e:
-    print(f"[ERROR] Form data storage failed: {e}")
+    print(f"Form data storage failed: {e}")
     sys.exit(1)
 
 # Test 7: Session Persistence
@@ -89,9 +89,9 @@ print("\n🧪 Test 7: Session Persistence")
 try:
     from core.session_persistence import persist_session
     persist_session(test_session, immediate=True)
-    print(f"[OK] Session persisted to database")
+    print(f"Session persisted to database")
 except Exception as e:
-    print(f"[ERROR] Session persistence failed: {e}")
+    print(f"Session persistence failed: {e}")
     sys.exit(1)
 
 # Test 8: Session Recovery
@@ -100,12 +100,12 @@ try:
     from core.session_persistence import recover_session
     recovered = recover_session(test_session.session_id)
     if recovered:
-        print(f"[OK] Session recovered: {recovered.session_id}")
+        print(f"Session recovered: {recovered.session_id}")
         print(f"   Form data preserved: {len(recovered.form_states)} forms")
     else:
-        print(f"[ERROR] Session recovery failed: None returned")
+        print(f"Session recovery failed: None returned")
 except Exception as e:
-    print(f"[ERROR] Session recovery failed: {e}")
+    print(f"Session recovery failed: {e}")
     sys.exit(1)
 
 # Test 9: File Structure
@@ -123,9 +123,9 @@ required_files = [
 for file in required_files:
     path = Path(file)
     if path.exists():
-        print(f"[OK] {file}")
+        print(f"{file}")
     else:
-        print(f"[ERROR] {file} - MISSING")
+        print(f"{file} - MISSING")
 
 # Test 10: Environment Variables
 print("\n🧪 Test 10: Environment Variables")
@@ -137,18 +137,18 @@ env_vars = {
 }
 
 for var, value in env_vars.items():
-    status = "[OK]" if value != 'not set' else "[WARNING]"
+    status = "" if value != 'not set' else ""
     print(f"{status} {var}: {value}")
 
 # Summary
 print("\n" + "="*60)
-print("[CHART] TEST SUMMARY")
+print("TEST SUMMARY")
 print("="*60)
-print("[OK] All core tests passed!")
-print("\n[NOTE] Next Steps:")
+print("All core tests passed!")
+print("\nNext Steps:")
 print("1. Run the demo: streamlit run PHASE_3_USAGE_EXAMPLE.py")
 print("2. Test browser refresh in main app: streamlit run gui.py")
 print("3. Check admin dashboard for session status")
-print("\n[IDEA] To enable Session Persistence:")
+print("\nTo enable Session Persistence:")
 print("   Set FEATURE_SESSION_PERSISTENCE=true in .env")
 print("="*60)

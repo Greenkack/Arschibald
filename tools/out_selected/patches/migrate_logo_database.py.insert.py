@@ -11,7 +11,7 @@ def migrate_logo_database():
 
         conn = get_db_connection()
         if not conn:
-            print("[ERROR] Keine Datenbankverbindung möglich")
+            print("Keine Datenbankverbindung möglich")
             return False
 
         cursor = conn.cursor()
@@ -38,26 +38,26 @@ def migrate_logo_database():
                 try:
                     cursor.execute(
                         f"ALTER TABLE brand_logos ADD COLUMN {column_name} {column_def}")
-                    print(f"[OK] Spalte '{column_name}' hinzugefügt")
+                    print(f"Spalte '{column_name}' hinzugefügt")
                     added_columns += 1
                 except Exception as e:
                     print(
-                        f"[ERROR] Fehler beim Hinzufügen der Spalte '{column_name}': {e}")
+                        f"Fehler beim Hinzufügen der Spalte '{column_name}': {e}")
             else:
-                print(f"[SKIP] Spalte '{column_name}' bereits vorhanden")
+                print(f"Spalte '{column_name}' bereits vorhanden")
 
         conn.commit()
         conn.close()
 
         if added_columns > 0:
             print(
-                f"[OK] Migration abgeschlossen: {added_columns} neue Spalten hinzugefügt")
+                f"Migration abgeschlossen: {added_columns} neue Spalten hinzugefügt")
         else:
-            print("[OK] Migration nicht erforderlich: Alle Spalten bereits vorhanden")
+            print("Migration nicht erforderlich: Alle Spalten bereits vorhanden")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Migration fehlgeschlagen: {e}")
+        print(f"Migration fehlgeschlagen: {e}")
         return False
 # --- DEF BLOCK END ---

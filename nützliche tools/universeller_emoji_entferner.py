@@ -37,12 +37,12 @@ def remove_emojis_from_files(directory=".", file_pattern="*.py"):
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
                 cleaned_files += 1
-                print(f"[OK] {os.path.basename(file_path)} bereinigt")
+                print(f"{os.path.basename(file_path)} bereinigt")
             else:
-                print(f"[INFO] {os.path.basename(file_path)} bereits sauber")
+                print(f"{os.path.basename(file_path)} bereits sauber")
 
         except Exception as e:
-            print(f"[ERROR] Fehler bei {file_path}: {e}")
+            print(f"Fehler bei {file_path}: {e}")
 
     print(f"\n🎉 {cleaned_files} Dateien bereinigt!")
 

@@ -40,7 +40,7 @@ def comment_out_functions(file_path, functions_to_comment):
     with open(file_path, 'w', encoding='utf-8') as f:
         f.writelines(new_lines)
 
-    print(f"[OK] Funktionen {functions_to_comment} in {file_path} auskommentiert")
+    print(f"Funktionen {functions_to_comment} in {file_path} auskommentiert")
 
 
 # Verwendung:

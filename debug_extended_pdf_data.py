@@ -83,10 +83,10 @@ def debug_project_data(project_data, analysis_results):
             source = "project_data['grand_total']"
     
     if final_price:
-        print(f"  [OK] Found price: {final_price:,.2f} € from {source}")
+        print(f"  Found price: {final_price:,.2f} € from {source}")
         print(f"  This value should be used for financing calculations")
     else:
-        print(f"  [ERROR] No valid price found!")
+        print(f"  No valid price found!")
         print(f"  Check your data structure")
     
     print("\n" + "=" * 80)

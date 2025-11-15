@@ -39,7 +39,7 @@ def test_grid_positions():
     x, y = positions[0]
     print(f"  Erste Position: ({x:.2f}, {y:.2f})")
     
-    print("  [OK] grid_positions() funktioniert\n")
+    print("  grid_positions() funktioniert\n")
 
 
 def test_place_panels_auto():
@@ -83,7 +83,7 @@ def test_place_panels_auto():
     print(f"  1000 Module gewünscht: {len(panels)} platziert (Kapazität)")
     assert len(panels) < 1000, "Sollte auf Kapazität begrenzen"
     
-    print("  [OK] place_panels_auto() funktioniert\n")
+    print("  place_panels_auto() funktioniert\n")
 
 
 def test_place_panels_manual():
@@ -129,7 +129,7 @@ def test_place_panels_manual():
     print(f"  10 Module, ungültige Indizes: {len(panels)} platziert")
     assert len(panels) > 0, "Sollte ungültige Indizes ignorieren"
     
-    print("  [OK] place_panels_manual() funktioniert\n")
+    print("  place_panels_manual() funktioniert\n")
 
 
 def test_place_panels_flat_roof():
@@ -172,7 +172,7 @@ def test_place_panels_flat_roof():
     print(f"  Süd, 15 Module, 3 entfernt: {len(panels)} platziert")
     assert len(panels) > 0, "Sollte Module platzieren"
     
-    print("  [OK] place_panels_flat_roof() funktioniert\n")
+    print("  place_panels_flat_roof() funktioniert\n")
 
 
 def main():
@@ -188,14 +188,14 @@ def main():
         test_place_panels_flat_roof()
         
         print("=" * 50)
-        print("[OK] Alle Tests erfolgreich!")
+        print("Alle Tests erfolgreich!")
         print("=" * 50)
         return 0
     except AssertionError as e:
-        print(f"\n[ERROR] Test fehlgeschlagen: {e}")
+        print(f"\nTest fehlgeschlagen: {e}")
         return 1
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         import traceback
         traceback.print_exc()
         return 1

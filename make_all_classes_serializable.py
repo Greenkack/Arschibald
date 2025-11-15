@@ -141,7 +141,7 @@ def add_serialization_to_file(filepath: str) -> bool:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
     except Exception as e:
-        print(f"  [ERROR] Fehler beim Lesen: {e}")
+        print(f"  Fehler beim Lesen: {e}")
         return False
     
     # Finde alle Klassen
@@ -150,7 +150,7 @@ def add_serialization_to_file(filepath: str) -> bool:
     if not classes:
         return False
     
-    print(f"\n[FILE] {filepath}")
+    print(f"\n{filepath}")
     print(f"  Gefundene Klassen: {len(classes)}")
     
     # Sortiere Klassen von hinten nach vorne (um Zeilennummern nicht zu verschieben)
@@ -175,7 +175,7 @@ def add_serialization_to_file(filepath: str) -> bool:
         # Füge Methoden nach Klassendefinition ein
         lines[insert_pos:insert_pos] = serialization_lines
         modified = True
-        print(f"  [OK] Serialisierung hinzugefügt: {class_name}")
+        print(f"  Serialisierung hinzugefügt: {class_name}")
     
     if modified:
         # Schreibe modifizierte Datei
@@ -185,7 +185,7 @@ def add_serialization_to_file(filepath: str) -> bool:
                 f.write(new_content)
             return True
         except Exception as e:
-            print(f"  [ERROR] Fehler beim Schreiben: {e}")
+            print(f"  Fehler beim Schreiben: {e}")
             return False
     
     return False
@@ -228,24 +228,24 @@ def process_directory(root_dir: str) -> tuple:
 def main():
     """Hauptfunktion."""
     print("=" * 80)
-    print("[TOOL] Automatische Serialisierung aller Klassen")
+    print("Automatische Serialisierung aller Klassen")
     print("=" * 80)
     
     root_dir = os.path.dirname(os.path.abspath(__file__))
-    print(f"\n[FOLDER] Arbeitsverzeichnis: {root_dir}")
+    print(f"\nArbeitsverzeichnis: {root_dir}")
     print(f"\n⏳ Verarbeite alle Python-Dateien...\n")
     
     modified, total = process_directory(root_dir)
     
     print("\n" + "=" * 80)
-    print(f"[OK] Fertig!")
-    print(f"[CHART] Statistik:")
+    print(f"Fertig!")
+    print(f"Statistik:")
     print(f"   - Verarbeitete Dateien: {total}")
     print(f"   - Modifizierte Dateien: {modified}")
     print("=" * 80)
     
     if modified > 0:
-        print("\n[WARNING]  Bitte App neu starten, damit Änderungen wirksam werden!")
+        print("\nBitte App neu starten, damit Änderungen wirksam werden!")
 
 
 if __name__ == "__main__":

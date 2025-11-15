@@ -198,9 +198,9 @@ def print_inventory_summary(inventory: Dict):
     
     print("\n--- Validation ---")
     if is_valid:
-        print("[OK] All mappings are complete!")
+        print("All mappings are complete!")
     else:
-        print("[ERROR] Issues found:")
+        print("Issues found:")
         for issue in issues:
             print(f"  - {issue}")
     
@@ -252,19 +252,19 @@ def create_mapping_table(inventory: Dict) -> str:
                 yml_exists = 0.0
             
             if pdf_exists and yml_exists:
-                status = " [OK] "
+                status = " "
             elif pdf_exists and not yml_exists:
                 status = " P "
             elif not pdf_exists and yml_exists:
                 status = " Y "
             else:
-                status = " [ERROR] "
+                status = " "
             
             row += f" {status} |"
         
         table += row + "\n"
     
-    table += "\nLegend: [OK] = Both exist, P = PDF only, Y = YML only, [ERROR] = Neither\n"
+    table += "\nLegend: = Both exist, P = PDF only, Y = YML only, = Neither\n"
     table += "="*80 + "\n"
     
     return table

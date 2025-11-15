@@ -435,11 +435,11 @@ def format_error_message(error: Exception) -> str:
         Formatted error message with solution if available
     """
     if isinstance(error, AgentError):
-        msg = f"[ERROR] {error.__class__.__name__}: {error.message}"
+        msg = f"{error.__class__.__name__}: {error.message}"
         if error.solution:
-            msg += f"\n\n[IDEA] Solution:\n{error.solution}"
+            msg += f"\n\nSolution:\n{error.solution}"
         return msg
-    return f"[ERROR] Unexpected Error: {str(error)}"
+    return f"Unexpected Error: {str(error)}"
 
 
 def get_error_details(error: Exception) -> dict[str, Any]:

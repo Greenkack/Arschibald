@@ -101,7 +101,7 @@ def export_pdf_coordinates(
         with output_file.open("w", encoding="utf-8") as fp:
             yaml.dump(all_pages, fp, allow_unicode=True)
         
-        logging.info(f"[OK] Koordinaten gespeichert in: {output_file}")
+        logging.info(f"Koordinaten gespeichert in: {output_file}")
         return True
         
     except Exception as e:
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     
     print("=" * 50)
     if success:
-        print(f"[OK] Erfolgreich! Koordinaten in {OUT}")
+        print(f"Erfolgreich! Koordinaten in {OUT}")
     else:
-        print("[ERROR] Fehler beim Export!")
+        print("Fehler beim Export!")
 

@@ -41,7 +41,7 @@ def test_generate_layout_variants():
         constraints=constraints
     )
     
-    print(f"\n[OK] Generierte {len(variants)} Varianten")
+    print(f"\nGenerierte {len(variants)} Varianten")
     print(f"  Erwartet: >= 6 Varianten")
     
     # Prüfe dass mindestens 6 Varianten generiert wurden
@@ -62,7 +62,7 @@ def test_generate_layout_variants():
         print(f"    - Garage: {variant.use_garage}")
         print(f"    - Fassade: {variant.use_facade}")
     
-    print("\n[OK] TEST 1 BESTANDEN")
+    print("\nTEST 1 BESTANDEN")
     return True
 
 
@@ -95,7 +95,7 @@ def test_evaluate_configuration():
         latitude=51.0
     )
     
-    print(f"\n[OK] Konfiguration bewertet")
+    print(f"\nKonfiguration bewertet")
     print(f"\n  Scores:")
     print(f"    - Gesamt-Score: {score.total_score:.2f}/100")
     print(f"    - Modulanzahl-Score: {score.module_count_score:.2f}/100")
@@ -128,7 +128,7 @@ def test_evaluate_configuration():
     assert "target_modules" in score.metrics
     assert score.metrics["estimated_modules"] > 0
     
-    print("\n[OK] TEST 2 BESTANDEN")
+    print("\nTEST 2 BESTANDEN")
     return True
 
 
@@ -188,7 +188,7 @@ def test_select_best_configuration():
         top_n=2
     )
     
-    print(f"\n[OK] {len(best_configs)} beste Konfigurationen ausgewählt")
+    print(f"\n{len(best_configs)} beste Konfigurationen ausgewählt")
     
     # Prüfe dass 2 Konfigurationen zurückgegeben wurden
     assert len(best_configs) == 2, f"Falsche Anzahl: {len(best_configs)}"
@@ -208,7 +208,7 @@ def test_select_best_configuration():
     print(f"    - Mounting Mode: {best_configs[1].mounting_mode}")
     print(f"    - Score: 80.0/100")
     
-    print("\n[OK] TEST 3 BESTANDEN")
+    print("\nTEST 3 BESTANDEN")
     return True
 
 
@@ -233,7 +233,7 @@ def test_optimize_layout_max_modules():
         latitude=51.0
     )
     
-    print(f"\n[OK] Optimierung abgeschlossen")
+    print(f"\nOptimierung abgeschlossen")
     print(f"  Gefunden: {len(best_configs)} beste Konfigurationen")
     
     # Prüfe dass 3 Konfigurationen zurückgegeben wurden
@@ -249,7 +249,7 @@ def test_optimize_layout_max_modules():
         print(f"    - Garage: {config.use_garage}")
         print(f"    - Fassade: {config.use_facade}")
     
-    print("\n[OK] TEST 4 BESTANDEN")
+    print("\nTEST 4 BESTANDEN")
     return True
 
 
@@ -274,7 +274,7 @@ def test_optimize_layout_max_yield():
         latitude=51.0
     )
     
-    print(f"\n[OK] Optimierung abgeschlossen")
+    print(f"\nOptimierung abgeschlossen")
     print(f"  Gefunden: {len(best_configs)} beste Konfigurationen")
     
     # Prüfe dass 3 Konfigurationen zurückgegeben wurden
@@ -292,7 +292,7 @@ def test_optimize_layout_max_yield():
     assert best_config.custom_azimuth == 0.0 or best_config.mounting_mode == "south", \
         f"Beste Konfiguration sollte Süd-Ausrichtung haben, ist aber: {best_config.mounting_mode}"
     
-    print("\n[OK] TEST 5 BESTANDEN")
+    print("\nTEST 5 BESTANDEN")
     return True
 
 
@@ -315,7 +315,7 @@ def test_optimize_layout_balanced():
         latitude=51.0
     )
     
-    print(f"\n[OK] Optimierung abgeschlossen")
+    print(f"\nOptimierung abgeschlossen")
     print(f"  Gefunden: {len(best_configs)} beste Konfigurationen")
     
     # Prüfe dass 3 Konfigurationen zurückgegeben wurden
@@ -329,7 +329,7 @@ def test_optimize_layout_balanced():
         print(f"    - Azimuth: {config.custom_azimuth}°")
         print(f"    - Tilt: {config.custom_tilt}°")
     
-    print("\n[OK] TEST 6 BESTANDEN")
+    print("\nTEST 6 BESTANDEN")
     return True
 
 
@@ -356,7 +356,7 @@ def run_all_tests():
             test_func()
             passed += 1
         except Exception as e:
-            print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {test_name}")
+            print(f"\nTEST FEHLGESCHLAGEN: {test_name}")
             print(f"   Fehler: {e}")
             import traceback
             traceback.print_exc()
@@ -367,14 +367,14 @@ def run_all_tests():
     print("TEST-ZUSAMMENFASSUNG")
     print("="*80)
     print(f"\n  Gesamt: {len(tests)} Tests")
-    print(f"  [OK] Bestanden: {passed}")
-    print(f"  [ERROR] Fehlgeschlagen: {failed}")
+    print(f"  Bestanden: {passed}")
+    print(f"  Fehlgeschlagen: {failed}")
     
     if failed == 0:
         print("\n🎉 ALLE TESTS BESTANDEN!")
         return True
     else:
-        print(f"\n[WARNING]  {failed} TEST(S) FEHLGESCHLAGEN")
+        print(f"\n{failed} TEST(S) FEHLGESCHLAGEN")
         return False
 
 

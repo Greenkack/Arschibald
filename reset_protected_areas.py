@@ -20,19 +20,19 @@ try:
         'company_management': True,
         'product_management': True,
         'product_database': True,
-        'pv_mounting': True,  # [OK] NEU GESCHÜTZT
+        'pv_mounting': True,  # NEU GESCHÜTZT
         'services_management': True,
-        'price_matrix': True,  # [OK] NEU GESCHÜTZT
-        'economic_settings': True,  # [OK] NEU GESCHÜTZT
-        'tariff_management': True,  # [OK] NEU GESCHÜTZT
+        'price_matrix': True,  # NEU GESCHÜTZT
+        'economic_settings': True,  # NEU GESCHÜTZT
+        'tariff_management': True,  # NEU GESCHÜTZT
         'heatpump_settings': True,
-        'ui_customization': True,  # [OK] NEU GESCHÜTZT
+        'ui_customization': True,  # NEU GESCHÜTZT
         'logo_management': True,
         'intro_settings': True,
         'payment_terms': True,
-        'visualization_settings': True,  # [OK] NEU GESCHÜTZT
-        'pdf_settings': True,  # [OK] NEU GESCHÜTZT
-        'advanced_settings': True,  # [OK] NEU GESCHÜTZT
+        'visualization_settings': True,  # NEU GESCHÜTZT
+        'pdf_settings': True,  # NEU GESCHÜTZT
+        'advanced_settings': True,  # NEU GESCHÜTZT
     }
     
     print('🔄 Aktualisiere Datenbank...')
@@ -40,7 +40,7 @@ try:
     
     conn = get_db_connection()
     if not conn:
-        print('[ERROR] Keine Datenbankverbindung möglich!')
+        print('Keine Datenbankverbindung möglich!')
         sys.exit(1)
     
     cursor = conn.cursor()
@@ -57,9 +57,9 @@ try:
     conn.commit()
     conn.close()
     
-    print('[OK] Datenbank erfolgreich aktualisiert!')
+    print('Datenbank erfolgreich aktualisiert!')
     print()
-    print('[CHART] Neue Konfiguration:')
+    print('Neue Konfiguration:')
     print('-' * 80)
     
     protected_count = sum(1 for v in new_protected_areas.values() if v)
@@ -74,14 +74,14 @@ try:
     
     print()
     print('=' * 80)
-    print('[OK] ERFOLG: Alle gewünschten Bereiche sind jetzt geschützt!')
+    print('ERFOLG: Alle gewünschten Bereiche sind jetzt geschützt!')
     print('=' * 80)
     print()
-    print('[WARNING]  WICHTIG: Starte die Streamlit-App neu, damit die Änderungen wirksam werden!')
+    print('WICHTIG: Starte die Streamlit-App neu, damit die Änderungen wirksam werden!')
     print('   (Session State wird beim Neustart zurückgesetzt)')
     
 except Exception as e:
-    print(f'[ERROR] Fehler: {e}')
+    print(f'Fehler: {e}')
     import traceback
     traceback.print_exc()
     sys.exit(1)

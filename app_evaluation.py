@@ -218,7 +218,7 @@ class AppEvaluationSystem:
         self.session_start = datetime.now()
         self.session_id = self.session_start.strftime("%Y%m%d_%H%M%S")
         
-        logger.info(f"[OK] Evaluation system initialized: {self.session_id}")
+        logger.info(f"Evaluation system initialized: {self.session_id}")
     
     def evaluate_operation(self, operation_type: str, **metrics) -> Dict[str, Any]:
         """
@@ -353,7 +353,7 @@ class AppEvaluationSystem:
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
         
-        logger.info(f"[OK] Evaluation report saved: {filepath}")
+        logger.info(f"Evaluation report saved: {filepath}")
         return filepath
     
     def get_health_status(self) -> Dict[str, Any]:

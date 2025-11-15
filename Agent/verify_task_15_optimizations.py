@@ -26,23 +26,23 @@ try:
         get_cache_info,
     )
 
-    print("[OK] All knowledge base functions imported successfully")
+    print("All knowledge base functions imported successfully")
 
     # Test cache info
     cache_info = get_cache_info()
-    print(f"[OK] Cache info available: {cache_info}")
+    print(f"Cache info available: {cache_info}")
 
     # Test clear cache
     clear_knowledge_base_cache()
-    print("[OK] Cache clear function works")
+    print("Cache clear function works")
 
     # Test lazy load (won't actually load without PDFs)
-    print("[OK] Lazy load function available")
+    print("Lazy load function available")
 
-    print("\n[OK] Knowledge Base Optimizations: VERIFIED")
+    print("\nKnowledge Base Optimizations: VERIFIED")
 
 except Exception as e:
-    print("\n[ERROR] Knowledge Base Optimizations: FAILED")
+    print("\nKnowledge Base Optimizations: FAILED")
     print(f"Error: {e}")
     import traceback
     traceback.print_exc()
@@ -61,35 +61,35 @@ try:
         reset_docker_metrics,
     )
 
-    print("[OK] All Docker optimization functions imported successfully")
+    print("All Docker optimization functions imported successfully")
 
     # Test metrics
     metrics = get_docker_metrics()
-    print(f"[OK] Docker metrics available: {metrics}")
+    print(f"Docker metrics available: {metrics}")
 
     # Test reset
     reset_docker_metrics()
-    print("[OK] Metrics reset function works")
+    print("Metrics reset function works")
 
     # Test container stats
     stats = get_container_stats()
-    print(f"[OK] Container stats available: {stats}")
+    print(f"Container stats available: {stats}")
 
     # Test clear pool
     clear_container_pool()
-    print("[OK] Container pool clear function works")
+    print("Container pool clear function works")
 
     # Test resource monitoring (may fail if Docker not running)
     try:
         resources = monitor_docker_resources()
-        print(f"[OK] Resource monitoring works: {resources}")
+        print(f"Resource monitoring works: {resources}")
     except Exception as e:
-        print(f"[WARNING]  Resource monitoring requires Docker running: {e}")
+        print(f"Resource monitoring requires Docker running: {e}")
 
-    print("\n[OK] Docker Operations Optimizations: VERIFIED")
+    print("\nDocker Operations Optimizations: VERIFIED")
 
 except Exception as e:
-    print("\n[ERROR] Docker Operations Optimizations: FAILED")
+    print("\nDocker Operations Optimizations: FAILED")
     print(f"Error: {e}")
     import traceback
     traceback.print_exc()
@@ -102,32 +102,32 @@ print("=" * 70)
 try:
     from agent_ui import AsyncExecutionState
 
-    print("[OK] AsyncExecutionState imported successfully")
+    print("AsyncExecutionState imported successfully")
 
     # Test async state
     state = AsyncExecutionState()
-    print("[OK] AsyncExecutionState can be instantiated")
+    print("AsyncExecutionState can be instantiated")
 
     # Test state methods
     assert not state.is_running(), "Initial state should not be running"
-    print("[OK] is_running() works")
+    print("is_running() works")
 
     assert state.get_result() is None, "Initial result should be None"
-    print("[OK] get_result() works")
+    print("get_result() works")
 
     assert state.get_error() is None, "Initial error should be None"
-    print("[OK] get_error() works")
+    print("get_error() works")
 
     elapsed = state.get_elapsed_time()
-    print(f"[OK] get_elapsed_time() works: {elapsed}s")
+    print(f"get_elapsed_time() works: {elapsed}s")
 
     progress = state.get_progress()
-    print(f"[OK] get_progress() works: {progress}%")
+    print(f"get_progress() works: {progress}%")
 
-    print("\n[OK] UI Responsiveness Optimizations: VERIFIED")
+    print("\nUI Responsiveness Optimizations: VERIFIED")
 
 except Exception as e:
-    print("\n[ERROR] UI Responsiveness Optimizations: FAILED")
+    print("\nUI Responsiveness Optimizations: FAILED")
     print(f"Error: {e}")
     import traceback
     traceback.print_exc()
@@ -136,7 +136,7 @@ except Exception as e:
 print("\n" + "=" * 70)
 print("VERIFICATION SUMMARY")
 print("=" * 70)
-print("\n[OK] All Task 15 optimizations have been successfully implemented!")
+print("\nAll Task 15 optimizations have been successfully implemented!")
 print("\nOptimizations verified:")
 print("  • Knowledge Base: Caching, lazy loading, optimized chunking")
 print("  • Docker Operations: Metrics, monitoring, efficient cleanup")

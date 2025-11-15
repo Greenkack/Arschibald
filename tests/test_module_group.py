@@ -20,7 +20,7 @@ def test_module_group_creation():
     assert group.tilt_deg == 15.0
     assert group.color == "#000000"
     
-    print("[OK] ModuleGroup mit Standardwerten erfolgreich erstellt")
+    print("ModuleGroup mit Standardwerten erfolgreich erstellt")
 
 
 def test_module_group_custom_values():
@@ -41,7 +41,7 @@ def test_module_group_custom_values():
     assert group.tilt_deg == 30.0
     assert group.color == "#ff0000"
     
-    print("[OK] ModuleGroup mit benutzerdefinierten Werten erfolgreich erstellt")
+    print("ModuleGroup mit benutzerdefinierten Werten erfolgreich erstellt")
 
 
 def test_add_module():
@@ -68,9 +68,9 @@ def test_add_module():
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
         assert "bereits in Gruppe" in str(e)
-        print(f"  [OK] Doppeltes Modul korrekt abgelehnt: {e}")
+        print(f"  Doppeltes Modul korrekt abgelehnt: {e}")
     
-    print("[OK] add_module() funktioniert korrekt")
+    print("add_module() funktioniert korrekt")
 
 
 def test_remove_module():
@@ -97,9 +97,9 @@ def test_remove_module():
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
         assert "nicht in Gruppe" in str(e)
-        print(f"  [OK] Nicht-existierendes Modul korrekt abgelehnt: {e}")
+        print(f"  Nicht-existierendes Modul korrekt abgelehnt: {e}")
     
-    print("[OK] remove_module() funktioniert korrekt")
+    print("remove_module() funktioniert korrekt")
 
 
 def test_has_module():
@@ -121,7 +121,7 @@ def test_has_module():
     assert group.has_module(2) is False
     assert group.has_module(10) is False
     
-    print("[OK] has_module() funktioniert korrekt")
+    print("has_module() funktioniert korrekt")
 
 
 def test_get_module_count():
@@ -143,7 +143,7 @@ def test_get_module_count():
     )
     assert group3.get_module_count() == 20
     
-    print("[OK] get_module_count() funktioniert korrekt")
+    print("get_module_count() funktioniert korrekt")
 
 
 def test_to_dict():
@@ -171,7 +171,7 @@ def test_to_dict():
     assert 999 not in group.module_indices
     
     print(f"  Dictionary: {data}")
-    print("[OK] to_dict() funktioniert korrekt")
+    print("to_dict() funktioniert korrekt")
 
 
 def test_from_dict():
@@ -194,7 +194,7 @@ def test_from_dict():
     assert group.tilt_deg == 35.0
     assert group.color == "#0000ff"
     
-    print("[OK] from_dict() funktioniert korrekt")
+    print("from_dict() funktioniert korrekt")
 
 
 def test_from_dict_with_defaults():
@@ -212,7 +212,7 @@ def test_from_dict_with_defaults():
     assert group.tilt_deg == 15.0          # Standardwert
     assert group.color == "#000000"        # Standardwert
     
-    print("[OK] from_dict() mit Standardwerten funktioniert korrekt")
+    print("from_dict() mit Standardwerten funktioniert korrekt")
 
 
 def test_from_dict_invalid():
@@ -224,9 +224,9 @@ def test_from_dict_invalid():
         ModuleGroup.from_dict({"azimuth_deg": 45.0})
         assert False, "Sollte ValueError werfen"
     except ValueError as e:
-        print(f"  [OK] Fehlendes name-Feld korrekt abgelehnt: {e}")
+        print(f"  Fehlendes name-Feld korrekt abgelehnt: {e}")
     
-    print("[OK] from_dict() Fehlerbehandlung funktioniert korrekt")
+    print("from_dict() Fehlerbehandlung funktioniert korrekt")
 
 
 def test_roundtrip():
@@ -252,7 +252,7 @@ def test_roundtrip():
     assert restored.tilt_deg == original.tilt_deg
     assert restored.color == original.color
     
-    print("[OK] Roundtrip funktioniert korrekt")
+    print("Roundtrip funktioniert korrekt")
 
 
 def test_module_operations_workflow():
@@ -285,7 +285,7 @@ def test_module_operations_workflow():
     assert group.module_indices == [0, 2, 4, 10, 20]
     
     print(f"  Finale Module: {group.module_indices}")
-    print("[OK] Kompletter Workflow funktioniert korrekt")
+    print("Kompletter Workflow funktioniert korrekt")
 
 
 def main():
@@ -309,17 +309,17 @@ def main():
         test_module_operations_workflow()
         
         print("\n" + "=" * 70)
-        print("[OK] ALLE TESTS ERFOLGREICH")
+        print("ALLE TESTS ERFOLGREICH")
         print("=" * 70)
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n[ERROR] UNERWARTETER FEHLER: {e}")
+        print(f"\nUNERWARTETER FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False

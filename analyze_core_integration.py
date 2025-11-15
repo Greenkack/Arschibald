@@ -75,20 +75,20 @@ print("=" * 70)
 print("CORE-MODULE INTEGRATIONS-ANALYSE")
 print("=" * 70)
 
-print(f"\n[PACKAGE] GEFUNDENE MODULE: {len(all_modules)}")
-print(f"[OK] INTEGRIERT: {len(INTEGRATED_MODULES)}")
-print(f"[ERROR] NICHT INTEGRIERT: {len(NOT_INTEGRATED)}")
+print(f"\nGEFUNDENE MODULE: {len(all_modules)}")
+print(f"INTEGRIERT: {len(INTEGRATED_MODULES)}")
+print(f"NICHT INTEGRIERT: {len(NOT_INTEGRATED)}")
 
 print("\n" + "=" * 70)
-print("[OK] INTEGRIERTE MODULE (Phasen 1-4)")
+print("INTEGRIERTE MODULE (Phasen 1-4)")
 print("=" * 70)
 
 for module, description in sorted(INTEGRATED_MODULES.items()):
-    status = "[OK]" if module in all_modules else "[WARNING]"
+    status = "" if module in all_modules else ""
     print(f"{status} {module:30} - {description}")
 
 print("\n" + "=" * 70)
-print("[ERROR] NICHT INTEGRIERTE MODULE")
+print("NICHT INTEGRIERTE MODULE")
 print("=" * 70)
 
 # Group by category
@@ -107,11 +107,11 @@ for category, modules in categories.items():
     print(f"\n📂 {category}:")
     for module in modules:
         if module in NOT_INTEGRATED:
-            exists = "[OK]" if module in all_modules else "[ERROR]"
+            exists = "" if module in all_modules else ""
             print(f"  {exists} {module:30} - {NOT_INTEGRATED[module]}")
 
 print("\n" + "=" * 70)
-print("[CHART] ZUSAMMENFASSUNG")
+print("ZUSAMMENFASSUNG")
 print("=" * 70)
 
 coverage = (len(INTEGRATED_MODULES) / (len(INTEGRATED_MODULES) + len(NOT_INTEGRATED))) * 100
@@ -127,12 +127,12 @@ STATUS: {'🟢 BASIC INTEGRATION COMPLETE' if coverage > 30 else '🟡 PARTIAL I
 """)
 
 print("=" * 70)
-print("[IDEA] EMPFEHLUNG")
+print("EMPFEHLUNG")
 print("=" * 70)
 
 print("""
 Die WICHTIGSTEN Core-Module sind bereits integriert:
-[OK] Config, Logging, Cache, Session, Database
+Config, Logging, Cache, Session, Database
 
 OPTIONALE ERWEITERUNGEN (nach Bedarf):
 1. Security - Wenn User-Login benötigt wird

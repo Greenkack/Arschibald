@@ -201,34 +201,34 @@ if __name__ == '__main__':
     
     print("\n1. Test: Leere Matrix")
     test_validate_empty_matrix()
-    print("[OK] Bestanden")
+    print("Bestanden")
     
     print("\n2. Test: Beispiel-Matrix")
     test_validate_example_matrix()
-    print("[OK] Bestanden")
+    print("Bestanden")
     
     print("\n3. Test: Fehlende 'Kein Speicher' Spalte")
     test_validate_missing_no_storage_column()
-    print("[OK] Bestanden")
+    print("Bestanden")
     
     print("\n4. Test: Text in Spalte A")
     test_validate_non_numeric_column_a()
-    print("[OK] Bestanden")
+    print("Bestanden")
     
     print("\n5. Test: Validierungs-Zusammenfassung")
     test_validation_summary()
-    print("[OK] Bestanden")
+    print("Bestanden")
     
     print("\n6. Test: Beispiel-Matrix-Struktur")
     test_example_matrix_structure()
-    print("[OK] Bestanden")
+    print("Bestanden")
     
     print("\n7. Test: Matrix-Struktur-Hilfe")
     test_matrix_structure_help()
-    print("[OK] Bestanden")
+    print("Bestanden")
     
     print("\n8. Test: Quick-Help-Tooltips")
     test_quick_help_tooltips()
-    print("[OK] Bestanden")
+    print("Bestanden")
     
-    print("\n[OK] Alle Tests bestanden!")
+    print("\nAlle Tests bestanden!")

@@ -10,7 +10,7 @@ sys.path.append('.')
 def test_pdf_fixes():
     """Teste die PDF Platzhalter Fixes"""
 
-    print("[TOOL] TESTE PDF PLATZHALTER FIXES")
+    print("TESTE PDF PLATZHALTER FIXES")
     print("=" * 50)
 
     try:
@@ -56,17 +56,17 @@ def test_pdf_fixes():
         # Teste build_dynamic_data
         result = build_dynamic_data(test_project_data, test_analysis_results, test_company_info)
 
-        print("[OK] build_dynamic_data erfolgreich ausgeführt!")
+        print("build_dynamic_data erfolgreich ausgeführt!")
 
         # Teste Seite 1 Fixes
-        print("\n[FILE] SEITE 1 FIXES:")
+        print("\nSEITE 1 FIXES:")
         seite1_keys = ["vat_amount_eur_formatted", "amortization_time_formatted"]
         for key in seite1_keys:
             value = result.get(key, "FEHLT")
             print(f"  {key}: {value}")
 
         # Teste Seite 7 Fixes
-        print("\n[FILE] SEITE 7 FIXES:")
+        print("\nSEITE 7 FIXES:")
         seite7_keys = [
             "endergebnis_brutto_formatted",
             "zubehor_preis_formatted",
@@ -99,30 +99,30 @@ def test_pdf_fixes():
             print(f"  '{placeholder}' -> {mapped_key}")
 
         # Validierung
-        print("\n[OK] VALIDIERUNG:")
+        print("\nVALIDIERUNG:")
 
         # Seite 1 Validierung
         vat_ok = result.get("vat_amount_eur_formatted") != "0,00 €"
         amort_ok = "Jahre" in result.get("amortization_time_formatted", "")
-        print(f"  Seite 1 MwSt: {'[OK]' if vat_ok else '[ERROR]'}")
-        print(f"  Seite 1 Amortisation: {'[OK]' if amort_ok else '[ERROR]'}")
+        print(f"  Seite 1 MwSt: {'' if vat_ok else ''}")
+        print(f"  Seite 1 Amortisation: {'' if amort_ok else ''}")
 
         # Seite 7 Validierung
         seite7_ok = all(result.get(key, "0,00 €") != "0,00 €" for key in seite7_keys)
-        print(f"  Seite 7 Werte: {'[OK]' if seite7_ok else '[ERROR]'}")
+        print(f"  Seite 7 Werte: {'' if seite7_ok else ''}")
 
         # Mapping Validierung
         mapping_ok = all(PLACEHOLDER_MAPPING.get(p) for p in test_placeholders)
-        print(f"  Placeholder Mapping: {'[OK]' if mapping_ok else '[ERROR]'}")
+        print(f"  Placeholder Mapping: {'' if mapping_ok else ''}")
 
         if vat_ok and amort_ok and seite7_ok and mapping_ok:
             print("\n🎉 ALLE TESTS ERFOLGREICH!")
             return True
-        print("\n[ERROR] EINIGE TESTS FEHLGESCHLAGEN!")
+        print("\nEINIGE TESTS FEHLGESCHLAGEN!")
         return False
 
     except Exception as e:
-        print(f"[ERROR] FEHLER: {e}")
+        print(f"FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -130,6 +130,6 @@ def test_pdf_fixes():
 if __name__ == "__main__":
     success = test_pdf_fixes()
     if success:
-        print("\n[OK] PDF FIXES BEREIT FÜR PRODUCTION!")
+        print("\nPDF FIXES BEREIT FÜR PRODUCTION!")
     else:
-        print("\n[ERROR] PDF FIXES BENÖTIGEN WEITERE ARBEIT!")
+        print("\nPDF FIXES BENÖTIGEN WEITERE ARBEIT!")

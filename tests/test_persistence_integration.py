@@ -48,10 +48,10 @@ def test_create_save_load_cycle():
         matrix_id = create_matrix(matrix_name, "Test-Matrix für Persistenz-Tests")
         
         if not matrix_id:
-            print("   [ERROR] Fehler beim Erstellen der Matrix")
+            print("   Fehler beim Erstellen der Matrix")
             return False
         
-        print(f"   [OK] Matrix erstellt mit ID: {matrix_id}")
+        print(f"   Matrix erstellt mit ID: {matrix_id}")
         
         # 2. Füge Zeilen und Spalten hinzu
         print("\n2️⃣ Füge Zeilen und Spalten hinzu...")
@@ -61,17 +61,17 @@ def test_create_save_load_cycle():
         for i in range(5):
             add_column(matrix_id, chr(65 + i))  # A, B, C, D, E
         
-        print("   [OK] 10 Zeilen und 5 Spalten hinzugefügt")
+        print("   10 Zeilen und 5 Spalten hinzugefügt")
         
         # 3. Lade Matrix in ExcelManager
         print("\n3️⃣ Lade Matrix in ExcelManager...")
         manager = ExcelManager.load_from_database(matrix_id)
         
         if not manager:
-            print("   [ERROR] Fehler beim Laden der Matrix")
+            print("   Fehler beim Laden der Matrix")
             return False
         
-        print(f"   [OK] Matrix geladen: {manager.get_matrix().name}")
+        print(f"   Matrix geladen: {manager.get_matrix().name}")
         
         # 4. Füge Daten und Formeln hinzu
         print("\n4️⃣ Füge Daten und Formeln hinzu...")
@@ -89,7 +89,7 @@ def test_create_save_load_cycle():
         # Füge IF-Formel in D1 ein
         manager.set_cell_value(0, 3, None, raw_input="=IF(B1>10, 'Groß', 'Klein')")
         
-        print("   [OK] Daten und Formeln hinzugefügt")
+        print("   Daten und Formeln hinzugefügt")
         print(f"      - A1:A5 = 1, 2, 3, 4, 5")
         print(f"      - B1 = =SUM(A1:A5) → {manager.get_cell_value(0, 1)}")
         print(f"      - C1 = =AVERAGE(A1:A5) → {manager.get_cell_value(0, 2)}")
@@ -99,15 +99,15 @@ def test_create_save_load_cycle():
         print("\n5️⃣ Speichere Matrix in Datenbank...")
         
         if not manager.has_unsaved_changes:
-            print("   [WARNING] Keine ungespeicherten Änderungen erkannt")
+            print("   Keine ungespeicherten Änderungen erkannt")
         
         success = manager.save_to_database()
         
         if not success:
-            print("   [ERROR] Fehler beim Speichern")
+            print("   Fehler beim Speichern")
             return False
         
-        print("   [OK] Matrix gespeichert")
+        print("   Matrix gespeichert")
         print(f"      - has_unsaved_changes: {manager.has_unsaved_changes}")
         print(f"      - last_save_time: {manager.last_save_time}")
         
@@ -116,10 +116,10 @@ def test_create_save_load_cycle():
         manager2 = ExcelManager.load_from_database(matrix_id)
         
         if not manager2:
-            print("   [ERROR] Fehler beim erneuten Laden")
+            print("   Fehler beim erneuten Laden")
             return False
         
-        print("   [OK] Matrix erneut geladen")
+        print("   Matrix erneut geladen")
         
         # 7. Vergleiche Daten
         print("\n7️⃣ Vergleiche Daten...")
@@ -130,10 +130,10 @@ def test_create_save_load_cycle():
             loaded_value = manager2.get_cell_value(row, 0)
             
             if original_value != loaded_value:
-                print(f"   [ERROR] Wert in A{row+1} stimmt nicht überein: {original_value} != {loaded_value}")
+                print(f"   Wert in A{row+1} stimmt nicht überein: {original_value} != {loaded_value}")
                 return False
         
-        print("   [OK] Werte in Spalte A stimmen überein")
+        print("   Werte in Spalte A stimmen überein")
         
         # Prüfe Formeln
         formulas_to_check = [
@@ -146,11 +146,11 @@ def test_create_save_load_cycle():
             cell = manager2.get_cell(row, col)
             
             if not cell.is_formula():
-                print(f"   [ERROR] Zelle {chr(65+col)}{row+1} ist keine Formel")
+                print(f"   Zelle {chr(65+col)}{row+1} ist keine Formel")
                 return False
             
             if cell.formula != expected_formula:
-                print(f"   [ERROR] Formel in {chr(65+col)}{row+1} stimmt nicht überein:")
+                print(f"   Formel in {chr(65+col)}{row+1} stimmt nicht überein:")
                 print(f"      Erwartet: {expected_formula}")
                 print(f"      Erhalten: {cell.formula}")
                 return False
@@ -160,25 +160,25 @@ def test_create_save_load_cycle():
             loaded_value = manager2.get_cell_value(row, col)
             
             if original_value != loaded_value:
-                print(f"   [ERROR] Berechneter Wert in {chr(65+col)}{row+1} stimmt nicht überein:")
+                print(f"   Berechneter Wert in {chr(65+col)}{row+1} stimmt nicht überein:")
                 print(f"      Original: {original_value}")
                 print(f"      Geladen: {loaded_value}")
                 return False
         
-        print("   [OK] Formeln und berechnete Werte stimmen überein")
+        print("   Formeln und berechnete Werte stimmen überein")
         
         # 8. Cleanup
         print("\n8️⃣ Cleanup...")
         delete_matrix(matrix_id)
-        print("   [OK] Test-Matrix gelöscht")
+        print("   Test-Matrix gelöscht")
         
         print("\n" + "="*80)
-        print("[OK] TEST 1 ERFOLGREICH")
+        print("TEST 1 ERFOLGREICH")
         print("="*80)
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 1 FEHLGESCHLAGEN: {str(e)}")
+        print(f"\nTEST 1 FEHLGESCHLAGEN: {str(e)}")
         import traceback
         traceback.print_exc()
         return False
@@ -217,7 +217,7 @@ def test_formulas_persist():
         for i in range(10):
             add_column(matrix_id, chr(65 + i))
         
-        print(f"   [OK] Matrix erstellt mit ID: {matrix_id}")
+        print(f"   Matrix erstellt mit ID: {matrix_id}")
         
         # 2. Lade und füge komplexe Formeln hinzu
         print("\n2️⃣ Füge komplexe Formeln hinzu...")
@@ -245,22 +245,22 @@ def test_formulas_persist():
             manager.set_cell_value(row, col, None, raw_input=formula)
             print(f"   - {chr(65+col)}{row+1}: {formula} → {manager.get_cell_value(row, col)}")
         
-        print(f"   [OK] {len(test_formulas)} Formeln hinzugefügt")
+        print(f"   {len(test_formulas)} Formeln hinzugefügt")
         
         # 3. Speichere
         print("\n3️⃣ Speichere Matrix...")
         success = manager.save_to_database()
         
         if not success:
-            print("   [ERROR] Fehler beim Speichern")
+            print("   Fehler beim Speichern")
             return False
         
-        print("   [OK] Matrix gespeichert")
+        print("   Matrix gespeichert")
         
         # 4. Lade erneut
         print("\n4️⃣ Lade Matrix erneut...")
         manager2 = ExcelManager.load_from_database(matrix_id)
-        print("   [OK] Matrix geladen")
+        print("   Matrix geladen")
         
         # 5. Vergleiche Formeln
         print("\n5️⃣ Vergleiche Formeln...")
@@ -270,12 +270,12 @@ def test_formulas_persist():
             cell = manager2.get_cell(row, col)
             
             if not cell.is_formula():
-                print(f"   [ERROR] {chr(65+col)}{row+1} ist keine Formel")
+                print(f"   {chr(65+col)}{row+1} ist keine Formel")
                 all_match = False
                 continue
             
             if cell.formula != expected_formula:
-                print(f"   [ERROR] {chr(65+col)}{row+1} Formel stimmt nicht überein:")
+                print(f"   {chr(65+col)}{row+1} Formel stimmt nicht überein:")
                 print(f"      Erwartet: {expected_formula}")
                 print(f"      Erhalten: {cell.formula}")
                 all_match = False
@@ -286,32 +286,32 @@ def test_formulas_persist():
             loaded_value = manager2.get_cell_value(row, col)
             
             if original_value != loaded_value:
-                print(f"   [ERROR] {chr(65+col)}{row+1} Wert stimmt nicht überein:")
+                print(f"   {chr(65+col)}{row+1} Wert stimmt nicht überein:")
                 print(f"      Original: {original_value}")
                 print(f"      Geladen: {loaded_value}")
                 all_match = False
                 continue
             
-            print(f"   [OK] {chr(65+col)}{row+1}: {expected_formula} → {loaded_value}")
+            print(f"   {chr(65+col)}{row+1}: {expected_formula} → {loaded_value}")
         
         # 6. Cleanup
         print("\n6️⃣ Cleanup...")
         delete_matrix(matrix_id)
-        print("   [OK] Test-Matrix gelöscht")
+        print("   Test-Matrix gelöscht")
         
         if all_match:
             print("\n" + "="*80)
-            print("[OK] TEST 2 ERFOLGREICH")
+            print("TEST 2 ERFOLGREICH")
             print("="*80)
             return True
         else:
             print("\n" + "="*80)
-            print("[ERROR] TEST 2 FEHLGESCHLAGEN - Nicht alle Formeln stimmen überein")
+            print("TEST 2 FEHLGESCHLAGEN - Nicht alle Formeln stimmen überein")
             print("="*80)
             return False
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 2 FEHLGESCHLAGEN: {str(e)}")
+        print(f"\nTEST 2 FEHLGESCHLAGEN: {str(e)}")
         import traceback
         traceback.print_exc()
         return False
@@ -362,7 +362,7 @@ def test_large_matrix():
             add_column(matrix_id, col_label)
         
         create_time = time.time() - start_time
-        print(f"   [OK] Matrix erstellt in {create_time:.2f} Sekunden")
+        print(f"   Matrix erstellt in {create_time:.2f} Sekunden")
         
         # 2. Lade Matrix
         print("\n2️⃣ Lade Matrix...")
@@ -370,7 +370,7 @@ def test_large_matrix():
         manager = ExcelManager.load_from_database(matrix_id)
         load_time = time.time() - start_time
         
-        print(f"   [OK] Matrix geladen in {load_time:.2f} Sekunden")
+        print(f"   Matrix geladen in {load_time:.2f} Sekunden")
         print(f"      - Zeilen: {manager.get_matrix().rows}")
         print(f"      - Spalten: {manager.get_matrix().columns}")
         
@@ -389,7 +389,7 @@ def test_large_matrix():
         manager.set_cell_value(2, 10, None, raw_input="=MAX(A3:J3)", save_undo=False)
         
         data_time = time.time() - start_time
-        print(f"   [OK] Daten hinzugefügt in {data_time:.2f} Sekunden")
+        print(f"   Daten hinzugefügt in {data_time:.2f} Sekunden")
         
         # 4. Speichere Matrix
         print("\n4️⃣ Speichere Matrix...")
@@ -398,10 +398,10 @@ def test_large_matrix():
         save_time = time.time() - start_time
         
         if not success:
-            print("   [ERROR] Fehler beim Speichern")
+            print("   Fehler beim Speichern")
             return False
         
-        print(f"   [OK] Matrix gespeichert in {save_time:.2f} Sekunden")
+        print(f"   Matrix gespeichert in {save_time:.2f} Sekunden")
         
         # 5. Lade erneut
         print("\n5️⃣ Lade Matrix erneut...")
@@ -409,7 +409,7 @@ def test_large_matrix():
         manager2 = ExcelManager.load_from_database(matrix_id)
         reload_time = time.time() - start_time
         
-        print(f"   [OK] Matrix erneut geladen in {reload_time:.2f} Sekunden")
+        print(f"   Matrix erneut geladen in {reload_time:.2f} Sekunden")
         
         # 6. Vergleiche Stichproben
         print("\n6️⃣ Vergleiche Stichproben...")
@@ -426,20 +426,20 @@ def test_large_matrix():
             loaded = manager2.get_cell_value(row, col)
             
             if original != loaded:
-                print(f"   [ERROR] Wert in {chr(65+col)}{row+1} stimmt nicht überein: {original} != {loaded}")
+                print(f"   Wert in {chr(65+col)}{row+1} stimmt nicht überein: {original} != {loaded}")
                 all_match = False
             else:
-                print(f"   [OK] {chr(65+col)}{row+1}: {original}")
+                print(f"   {chr(65+col)}{row+1}: {original}")
         
         # Prüfe Formeln
         formula_cells = [(0, 10), (1, 10), (2, 10)]
         for row, col in formula_cells:
             cell = manager2.get_cell(row, col)
             if not cell.is_formula():
-                print(f"   [ERROR] {chr(65+col)}{row+1} ist keine Formel")
+                print(f"   {chr(65+col)}{row+1} ist keine Formel")
                 all_match = False
             else:
-                print(f"   [OK] {chr(65+col)}{row+1}: {cell.formula} → {cell.value}")
+                print(f"   {chr(65+col)}{row+1}: {cell.formula} → {cell.value}")
         
         # 7. Performance-Zusammenfassung
         print("\n7️⃣ Performance-Zusammenfassung:")
@@ -452,26 +452,26 @@ def test_large_matrix():
         
         # Performance-Anforderung: Neuberechnung unter 2 Sekunden
         if reload_time > 2.0:
-            print(f"   [WARNING] Warnung: Ladezeit ({reload_time:.2f}s) überschreitet 2 Sekunden")
+            print(f"   Warnung: Ladezeit ({reload_time:.2f}s) überschreitet 2 Sekunden")
         
         # 8. Cleanup
         print("\n8️⃣ Cleanup...")
         delete_matrix(matrix_id)
-        print("   [OK] Test-Matrix gelöscht")
+        print("   Test-Matrix gelöscht")
         
         if all_match:
             print("\n" + "="*80)
-            print("[OK] TEST 3 ERFOLGREICH")
+            print("TEST 3 ERFOLGREICH")
             print("="*80)
             return True
         else:
             print("\n" + "="*80)
-            print("[ERROR] TEST 3 FEHLGESCHLAGEN - Nicht alle Werte stimmen überein")
+            print("TEST 3 FEHLGESCHLAGEN - Nicht alle Werte stimmen überein")
             print("="*80)
             return False
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 3 FEHLGESCHLAGEN: {str(e)}")
+        print(f"\nTEST 3 FEHLGESCHLAGEN: {str(e)}")
         import traceback
         traceback.print_exc()
         return False
@@ -508,22 +508,22 @@ def test_change_tracking():
             add_row(matrix_id, f"Row {i+1}")
             add_column(matrix_id, chr(65 + i))
         
-        print(f"   [OK] Matrix erstellt mit ID: {matrix_id}")
+        print(f"   Matrix erstellt mit ID: {matrix_id}")
         
         # 2. Lade Matrix
         print("\n2️⃣ Lade Matrix...")
         manager = ExcelManager.load_from_database(matrix_id)
         
-        print(f"   [OK] Matrix geladen")
+        print(f"   Matrix geladen")
         print(f"      - has_unsaved_changes: {manager.has_unsaved_changes}")
         print(f"      - last_save_time: {manager.last_save_time}")
         
         # Nach dem Laden sollten keine ungespeicherten Änderungen vorhanden sein
         if manager.has_unsaved_changes:
-            print("   [ERROR] Nach dem Laden sollten keine ungespeicherten Änderungen vorhanden sein")
+            print("   Nach dem Laden sollten keine ungespeicherten Änderungen vorhanden sein")
             return False
         
-        print("   [OK] Keine ungespeicherten Änderungen nach dem Laden")
+        print("   Keine ungespeicherten Änderungen nach dem Laden")
         
         # 3. Mache Änderungen
         print("\n3️⃣ Mache Änderungen...")
@@ -533,10 +533,10 @@ def test_change_tracking():
         print(f"   - has_unsaved_changes: {manager.has_unsaved_changes}")
         
         if not manager.has_unsaved_changes:
-            print("   [ERROR] Nach Änderung sollten ungespeicherte Änderungen vorhanden sein")
+            print("   Nach Änderung sollten ungespeicherte Änderungen vorhanden sein")
             return False
         
-        print("   [OK] Ungespeicherte Änderungen erkannt")
+        print("   Ungespeicherte Änderungen erkannt")
         
         # 4. Speichere
         print("\n4️⃣ Speichere Matrix...")
@@ -544,24 +544,24 @@ def test_change_tracking():
         success = manager.save_to_database()
         
         if not success:
-            print("   [ERROR] Fehler beim Speichern")
+            print("   Fehler beim Speichern")
             return False
         
-        print(f"   [OK] Matrix gespeichert")
+        print(f"   Matrix gespeichert")
         print(f"      - has_unsaved_changes: {manager.has_unsaved_changes}")
         print(f"      - last_save_time: {manager.last_save_time}")
         
         # Nach dem Speichern sollten keine ungespeicherten Änderungen vorhanden sein
         if manager.has_unsaved_changes:
-            print("   [ERROR] Nach dem Speichern sollten keine ungespeicherten Änderungen vorhanden sein")
+            print("   Nach dem Speichern sollten keine ungespeicherten Änderungen vorhanden sein")
             return False
         
         # last_save_time sollte aktualisiert worden sein
         if manager.last_save_time == old_save_time:
-            print("   [ERROR] last_save_time wurde nicht aktualisiert")
+            print("   last_save_time wurde nicht aktualisiert")
             return False
         
-        print("   [OK] Änderungs-Tracking funktioniert korrekt")
+        print("   Änderungs-Tracking funktioniert korrekt")
         
         # 5. Weitere Änderungen
         print("\n5️⃣ Weitere Änderungen...")
@@ -573,23 +573,23 @@ def test_change_tracking():
         print(f"   - has_unsaved_changes: {manager.has_unsaved_changes}")
         
         if not manager.has_unsaved_changes:
-            print("   [ERROR] Nach weiteren Änderungen sollten ungespeicherte Änderungen vorhanden sein")
+            print("   Nach weiteren Änderungen sollten ungespeicherte Änderungen vorhanden sein")
             return False
         
-        print("   [OK] Änderungen werden getrackt")
+        print("   Änderungen werden getrackt")
         
         # 6. Cleanup
         print("\n6️⃣ Cleanup...")
         delete_matrix(matrix_id)
-        print("   [OK] Test-Matrix gelöscht")
+        print("   Test-Matrix gelöscht")
         
         print("\n" + "="*80)
-        print("[OK] TEST 4 ERFOLGREICH")
+        print("TEST 4 ERFOLGREICH")
         print("="*80)
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 4 FEHLGESCHLAGEN: {str(e)}")
+        print(f"\nTEST 4 FEHLGESCHLAGEN: {str(e)}")
         import traceback
         traceback.print_exc()
         return False
@@ -616,7 +616,7 @@ def run_all_tests():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n[ERROR] Test '{test_name}' ist abgestürzt: {str(e)}")
+            print(f"\nTest '{test_name}' ist abgestürzt: {str(e)}")
             import traceback
             traceback.print_exc()
             results.append((test_name, False))
@@ -630,7 +630,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {test_name}")
     
     print("\n" + "="*80)

@@ -38,7 +38,7 @@ def test_sun_position():
     print(f"  Azimuth: {azimuth:.1f}°")
     print(f"  Elevation: {elevation:.1f}°")
     
-    print("\n[OK] Sonnenverlauf-Berechnung funktioniert\n")
+    print("\nSonnenverlauf-Berechnung funktioniert\n")
 
 
 def test_shading_analysis():
@@ -80,7 +80,7 @@ def test_shading_analysis():
     for i, shade in shading_night.items():
         print(f"  Modul {i}: {shade:.1f}% verschattet (erwartet: 100%)")
     
-    print("\n[OK] Verschattungs-Analyse funktioniert\n")
+    print("\nVerschattungs-Analyse funktioniert\n")
 
 
 def test_yield_heatmap():
@@ -117,7 +117,7 @@ def test_yield_heatmap():
     assert yield_map[0] > yield_map[1], "Süd sollte besser sein als Ost"
     assert yield_map[0] > yield_map[2], "Süd sollte besser sein als Nord"
     
-    print("\n[OK] Ertrags-Heatmap funktioniert\n")
+    print("\nErtrags-Heatmap funktioniert\n")
 
 
 def test_optimization_assistant():
@@ -160,7 +160,7 @@ def test_optimization_assistant():
         print(f"   Score: {result.score:.1f}")
         print(f"   Geschätzte Module: {result.metrics['estimated_modules']}")
     
-    print("\n[OK] Optimierungs-Assistent funktioniert\n")
+    print("\nOptimierungs-Assistent funktioniert\n")
 
 
 def main():
@@ -176,12 +176,12 @@ def main():
         test_optimization_assistant()
         
         print("=" * 60)
-        print("[OK] ALLE TESTS ERFOLGREICH")
+        print("ALLE TESTS ERFOLGREICH")
         print("=" * 60)
         return 0
         
     except Exception as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return 1

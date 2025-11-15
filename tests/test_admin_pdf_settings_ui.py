@@ -15,10 +15,10 @@ def test_imports():
     """Test that the module can be imported"""
     try:
         import admin_pdf_settings_ui
-        print("[OK] Module import successful")
+        print("Module import successful")
         return True
     except Exception as e:
-        print(f"[ERROR] Module import failed: {e}")
+        print(f"Module import failed: {e}")
         return False
 
 
@@ -30,10 +30,10 @@ def test_function_exists():
             render_pdf_design_settings,
             get_db_functions
         )
-        print("[OK] All required functions exist")
+        print("All required functions exist")
         return True
     except ImportError as e:
-        print(f"[ERROR] Function import failed: {e}")
+        print(f"Function import failed: {e}")
         return False
 
 
@@ -64,11 +64,11 @@ def test_default_settings():
             'watermark_opacity': 0.1
         }
         
-        print("[OK] Default settings structure is valid")
+        print("Default settings structure is valid")
         print(f"   - {len(defaults)} settings defined")
         return True
     except Exception as e:
-        print(f"[ERROR] Default settings test failed: {e}")
+        print(f"Default settings test failed: {e}")
         return False
 
 
@@ -81,10 +81,10 @@ def test_color_validation():
             assert color.startswith('#'), f"Invalid color format: {color}"
             assert len(color) == 7, f"Invalid color length: {color}"
         
-        print("[OK] Color validation passed")
+        print("Color validation passed")
         return True
     except Exception as e:
-        print(f"[ERROR] Color validation failed: {e}")
+        print(f"Color validation failed: {e}")
         return False
 
 
@@ -99,12 +99,12 @@ def test_font_settings():
             'small': (6, 10)
         }
         
-        print("[OK] Font settings structure is valid")
+        print("Font settings structure is valid")
         print(f"   - {len(valid_fonts)} fonts available")
         print(f"   - {len(font_sizes)} size categories defined")
         return True
     except Exception as e:
-        print(f"[ERROR] Font settings test failed: {e}")
+        print(f"Font settings test failed: {e}")
         return False
 
 
@@ -114,12 +114,12 @@ def test_layout_options():
         logo_positions = ['left', 'center', 'right']
         footer_formats = ['with_page_number', 'without_page_number', 'custom']
         
-        print("[OK] Layout options are valid")
+        print("Layout options are valid")
         print(f"   - {len(logo_positions)} logo positions")
         print(f"   - {len(footer_formats)} footer formats")
         return True
     except Exception as e:
-        print(f"[ERROR] Layout options test failed: {e}")
+        print(f"Layout options test failed: {e}")
         return False
 
 
@@ -133,11 +133,11 @@ def test_watermark_settings():
         
         assert 0.0 <= default_opacity <= 1.0, "Invalid default opacity"
         
-        print("[OK] Watermark settings are valid")
+        print("Watermark settings are valid")
         print(f"   - Opacity range: {min_opacity} - {max_opacity}")
         return True
     except Exception as e:
-        print(f"[ERROR] Watermark settings test failed: {e}")
+        print(f"Watermark settings test failed: {e}")
         return False
 
 
@@ -173,7 +173,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results:
-        status = "[OK] PASSED" if result else "[ERROR] FAILED"
+        status = "PASSED" if result else "FAILED"
         print(f"{status}: {test_name}")
     
     print(f"\nTotal: {passed}/{total} tests passed")
@@ -182,7 +182,7 @@ def run_all_tests():
         print("\n🎉 All tests passed!")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} test(s) failed")
+        print(f"\n{total - passed} test(s) failed")
         return False
 
 

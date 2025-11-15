@@ -659,7 +659,7 @@ class PerformanceOptimizer:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(metrics.to_dict(), f, indent=2, ensure_ascii=False)
         
-        print(f"\n[OK] Metrics saved to: {output_file}")
+        print(f"\nMetrics saved to: {output_file}")
 
 
 def measure_performance(

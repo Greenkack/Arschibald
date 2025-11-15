@@ -33,7 +33,7 @@ def test_default_mode():
     print(f"Default-Modus: {mode}")
     
     assert mode == 'standard', f"Erwartet 'standard', erhalten '{mode}'"
-    print("[OK] Default-Modus ist 'standard'")
+    print("Default-Modus ist 'standard'")
 
 
 def test_set_standard_mode():
@@ -49,7 +49,7 @@ def test_set_standard_mode():
     print(f"Geladener Modus: {mode}")
     
     assert mode == 'standard', f"Erwartet 'standard', erhalten '{mode}'"
-    print("[OK] Standard-Modus erfolgreich gesetzt und geladen")
+    print("Standard-Modus erfolgreich gesetzt und geladen")
 
 
 def test_set_matrix_mode():
@@ -65,7 +65,7 @@ def test_set_matrix_mode():
     print(f"Geladener Modus: {mode}")
     
     assert mode == 'matrix', f"Erwartet 'matrix', erhalten '{mode}'"
-    print("[OK] Matrix-Modus erfolgreich gesetzt und geladen")
+    print("Matrix-Modus erfolgreich gesetzt und geladen")
 
 
 def test_invalid_mode():
@@ -86,7 +86,7 @@ def test_invalid_mode():
     print(f"Modus nach ungültigem Versuch: {mode}")
     
     assert mode == 'standard', f"Modus sollte unverändert 'standard' sein, ist aber '{mode}'"
-    print("[OK] Ungültiger Modus wurde korrekt abgelehnt")
+    print("Ungültiger Modus wurde korrekt abgelehnt")
 
 
 def test_mode_persistence():
@@ -103,7 +103,7 @@ def test_mode_persistence():
     print(f"Modus nach erneutem Laden: {mode2}")
     
     assert mode1 == mode2 == 'matrix', "Modus sollte persistent sein"
-    print("[OK] Modus bleibt persistent")
+    print("Modus bleibt persistent")
     
     # Zurück auf Standard
     set_pricing_calculation_mode('standard')
@@ -111,7 +111,7 @@ def test_mode_persistence():
     print(f"Modus nach Zurücksetzen: {mode3}")
     
     assert mode3 == 'standard', "Modus sollte auf 'standard' zurückgesetzt sein"
-    print("[OK] Modus kann erfolgreich geändert werden")
+    print("Modus kann erfolgreich geändert werden")
 
 
 def test_corrupted_value_handling():
@@ -126,7 +126,7 @@ def test_corrupted_value_handling():
     print(f"Modus bei korruptem Wert: {mode}")
     
     assert mode == 'standard', f"Sollte auf 'standard' zurückfallen, ist aber '{mode}'"
-    print("[OK] Korrupte Werte werden korrekt behandelt")
+    print("Korrupte Werte werden korrekt behandelt")
     
     # Aufräumen
     set_pricing_calculation_mode('standard')
@@ -155,10 +155,10 @@ def run_all_tests():
             test()
             passed += 1
         except AssertionError as e:
-            print(f"[ERROR] Test fehlgeschlagen: {e}")
+            print(f"Test fehlgeschlagen: {e}")
             failed += 1
         except Exception as e:
-            print(f"[ERROR] Test-Fehler: {e}")
+            print(f"Test-Fehler: {e}")
             failed += 1
     
     print("\n" + "=" * 60)

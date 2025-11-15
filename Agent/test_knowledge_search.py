@@ -29,11 +29,11 @@ def test_tool_creation_with_none():
     assert tool.name == "knowledge_base_search", "Tool should have correct name"
     assert "knowledge base" in tool.description.lower(), "Tool should have description"
 
-    print("[OK] Tool created successfully")
-    print(f"[OK] Tool name: {tool.name}")
-    print(f"[OK] Tool description: {tool.description[:80]}...")
+    print("Tool created successfully")
+    print(f"Tool name: {tool.name}")
+    print(f"Tool description: {tool.description[:80]}...")
 
-    print("\n[OK] Test passed")
+    print("\nTest passed")
 
 
 def test_empty_knowledge_base_handling():
@@ -50,10 +50,10 @@ def test_empty_knowledge_base_handling():
     assert "not available" in result.lower() or "no pdf" in result.lower(), \
         "Should indicate knowledge base is not available"
 
-    print("[OK] Empty knowledge base handled gracefully")
-    print(f"[OK] Result: {result[:100]}...")
+    print("Empty knowledge base handled gracefully")
+    print(f"Result: {result[:100]}...")
 
-    print("\n[OK] Test passed")
+    print("\nTest passed")
 
 
 def test_tool_with_real_knowledge_base():
@@ -67,19 +67,19 @@ def test_tool_with_real_knowledge_base():
     vector_store = setup_knowledge_base()
 
     if vector_store is None:
-        print("[WARNING]  No knowledge base available (no PDFs found)")
+        print("No knowledge base available (no PDFs found)")
         print("   This is expected if knowledge_base/ is empty")
         print("   Add PDF files to test search functionality")
-        print("\n[OK] Test passed (graceful handling)")
+        print("\nTest passed (graceful handling)")
         return
 
-    print("[OK] Knowledge base loaded")
+    print("Knowledge base loaded")
 
     # Create search tool
     tool = knowledge_base_search(vector_store)
 
     assert tool is not None, "Tool should be created"
-    print("[OK] Search tool created")
+    print("Search tool created")
 
     # Test search with a generic query
     test_queries = [
@@ -97,22 +97,22 @@ def test_tool_with_real_knowledge_base():
 
         # Check if results are formatted correctly
         if "No relevant information" not in result:
-            print("[OK] Found results")
+            print("Found results")
 
             # Verify k=3 results (should have up to 3 results)
             result_count = result.count("Result ")
-            print(f"[OK] Number of results: {result_count}")
+            print(f"Number of results: {result_count}")
             assert result_count <= 3, "Should return at most 3 results (k=3)"
 
             # Check for proper formatting
             if "Source:" in result:
-                print("[OK] Results include source information")
+                print("Results include source information")
             if "Content:" in result:
-                print("[OK] Results include content")
+                print("Results include content")
         else:
-            print("[WARNING]  No relevant information found for this query")
+            print("No relevant information found for this query")
 
-    print("\n[OK] Test passed")
+    print("\nTest passed")
 
 
 def test_search_result_formatting():
@@ -124,9 +124,9 @@ def test_search_result_formatting():
     vector_store = setup_knowledge_base()
 
     if vector_store is None:
-        print("[WARNING]  No knowledge base available")
+        print("No knowledge base available")
         print("   Skipping formatting test")
-        print("\n[OK] Test passed (skipped)")
+        print("\nTest passed (skipped)")
         return
 
     tool = knowledge_base_search(vector_store)
@@ -135,9 +135,9 @@ def test_search_result_formatting():
     result = tool.func("test")
 
     if "No relevant information" in result:
-        print("[WARNING]  No results found for test query")
+        print("No results found for test query")
         print("   This is acceptable if knowledge base has no matching content")
-        print("\n[OK] Test passed")
+        print("\nTest passed")
         return
 
     # Check formatting
@@ -146,25 +146,25 @@ def test_search_result_formatting():
     # Should have numbered results
     has_numbering = "Result 1:" in result or "Result " in result
     assert has_numbering, "Results should be numbered"
-    print("[OK] Results are numbered")
+    print("Results are numbered")
 
     # Should have source information
     has_source = "Source:" in result
     assert has_source, "Results should include source"
-    print("[OK] Results include source")
+    print("Results include source")
 
     # Should have content
     has_content = "Content:" in result
     assert has_content, "Results should include content"
-    print("[OK] Results include content")
+    print("Results include content")
 
     # Should have separators between results
     if result.count("Result ") > 1:
         has_separator = "---" in result
         assert has_separator, "Multiple results should be separated"
-        print("[OK] Results are separated")
+        print("Results are separated")
 
-    print("\n[OK] Test passed")
+    print("\nTest passed")
 
 
 def run_all_tests():
@@ -180,19 +180,19 @@ def run_all_tests():
         test_search_result_formatting()
 
         print("\n" + "=" * 70)
-        print("[OK] ALL TESTS PASSED")
+        print("ALL TESTS PASSED")
         print("=" * 70)
         print("\nTask 2.2 Implementation Verified:")
-        print("[OK] knowledge_base_search() tool factory created")
-        print("[OK] Similarity search with k=3 results implemented")
-        print("[OK] Search results formatted for agent consumption")
-        print("[OK] Empty knowledge base handled gracefully")
+        print("knowledge_base_search() tool factory created")
+        print("Similarity search with k=3 results implemented")
+        print("Search results formatted for agent consumption")
+        print("Empty knowledge base handled gracefully")
 
     except AssertionError as e:
-        print(f"\n[ERROR] Test failed: {e}")
+        print(f"\nTest failed: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] Unexpected error: {e}")
+        print(f"\nUnexpected error: {e}")
         import traceback
         traceback.print_exc()
         return False

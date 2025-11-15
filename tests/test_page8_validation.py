@@ -19,7 +19,7 @@ def test_validation():
     for page_num in range(1, 9):
         is_valid, missing_files = validate_page_files(
             page_num, coords_dir, template_dir)
-        status = "[OK] OK" if is_valid else "[ERROR] MISSING"
+        status = "OK" if is_valid else "MISSING"
         print(f"Page {page_num}: {status}")
         if not is_valid:
             all_valid = False
@@ -28,10 +28,10 @@ def test_validation():
 
     print(f"\n{'=' * 50}")
     if all_valid:
-        print("[OK] All 8 pages have required files!")
+        print("All 8 pages have required files!")
         print("  The system should generate 8 pages by default.")
     else:
-        print("[ERROR] Some files are missing!")
+        print("Some files are missing!")
         print("  The system will fall back to 7 pages.")
     print(f"{'=' * 50}\n")
 

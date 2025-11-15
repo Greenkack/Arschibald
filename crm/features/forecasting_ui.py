@@ -39,20 +39,20 @@ def render_forecasting_dashboard(texts: Optional[dict] = None):
         texts: Optionales Übersetzungs-Dictionary
     """
     if not FORECASTING_AVAILABLE:
-        st.error("[ERROR] Forecasting-Modul nicht verfügbar")
+        st.error("Forecasting-Modul nicht verfügbar")
         return
     
     # Stelle sicher, dass Tabellen existieren
     ensure_forecasting_tables()
     
-    st.header("[CHART] Verkaufsziele & Forecasting")
+    st.header("Verkaufsziele & Forecasting")
     
     # Tab-Navigation
     tab1, tab2, tab3, tab4 = st.tabs([
-        "[STATS] Übersicht",
-        "[TARGET] Ziele verwalten",
+        "Übersicht",
+        "Ziele verwalten",
         "🔮 Forecasts",
-        "[WARNING] Warnungen"
+        "Warnungen"
     ])
     
     with tab1:
@@ -70,13 +70,13 @@ def render_forecasting_dashboard(texts: Optional[dict] = None):
 
 def render_overview_tab():
     """Rendert die Übersichts-Seite mit KPIs und Visualisierungen."""
-    st.subheader("[CHART] Aktuelle Übersicht")
+    st.subheader("Aktuelle Übersicht")
     
     # Lade aktive Ziele
     active_targets = get_sales_targets(status='active')
     
     if not active_targets:
-        st.info("[INFO] Keine aktiven Verkaufsziele vorhanden. Erstellen Sie ein neues Ziel im Tab 'Ziele verwalten'.")
+        st.info("Keine aktiven Verkaufsziele vorhanden. Erstellen Sie ein neues Ziel im Tab 'Ziele verwalten'.")
         return
     
     # KPI-Metriken
@@ -103,7 +103,7 @@ def render_overview_tab():
     st.divider()
     
     # Visualisierung: Ziel vs. Ist
-    st.subheader("[TARGET] Ziele im Überblick")
+    st.subheader("Ziele im Überblick")
     
     for target in active_targets[:5]:  # Zeige Top 5
         status = get_target_achievement_status(target['id'])
@@ -167,7 +167,7 @@ def render_overview_tab():
 
 def render_targets_management_tab():
     """Rendert die Ziel-Verwaltungs-Seite."""
-    st.subheader("[TARGET] Verkaufsziele verwalten")
+    st.subheader("Verkaufsziele verwalten")
     
     # Neues Ziel erstellen
     with st.expander("➕ Neues Ziel erstellen", expanded=False):
@@ -197,13 +197,13 @@ def render_targets_management_tab():
             
             description = st.text_area("Beschreibung", placeholder="Optional: Zusätzliche Informationen")
             
-            submitted = st.form_submit_button("[OK] Ziel erstellen")
+            submitted = st.form_submit_button("Ziel erstellen")
             
             if submitted:
                 if not target_name or not target_value or not period_start or not period_end:
-                    st.error("[ERROR] Bitte füllen Sie alle Pflichtfelder aus")
+                    st.error("Bitte füllen Sie alle Pflichtfelder aus")
                 elif period_end <= period_start:
-                    st.error("[ERROR] End-Datum muss nach Start-Datum liegen")
+                    st.error("End-Datum muss nach Start-Datum liegen")
                 else:
                     target_id = create_sales_target(
                         target_name=target_name,
@@ -219,10 +219,10 @@ def render_targets_management_tab():
                     )
                     
                     if target_id:
-                        st.success(f"[OK] Ziel '{target_name}' erfolgreich erstellt!")
+                        st.success(f"Ziel '{target_name}' erfolgreich erstellt!")
                         st.rerun()
                     else:
-                        st.error("[ERROR] Fehler beim Erstellen des Ziels")
+                        st.error("Fehler beim Erstellen des Ziels")
     
     st.divider()
     
@@ -255,10 +255,10 @@ def render_targets_management_tab():
             targets = [t for t in targets if t['period_start'] > now]
     
     if not targets:
-        st.info("[INFO] Keine Ziele gefunden")
+        st.info("Keine Ziele gefunden")
     else:
         for target in targets:
-            with st.expander(f"[TARGET] {target['target_name']} ({target['status']})"):
+            with st.expander(f"{target['target_name']} ({target['status']})"):
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
@@ -289,10 +289,10 @@ def render_targets_management_tab():
                 with col1:
                     if st.button(f"🔄 Fortschritt aktualisieren", key=f"update_{target['id']}"):
                         if auto_update_target_progress_from_pipeline(target['id']):
-                            st.success("[OK] Fortschritt aktualisiert")
+                            st.success("Fortschritt aktualisiert")
                             st.rerun()
                         else:
-                            st.error("[ERROR] Fehler beim Aktualisieren")
+                            st.error("Fehler beim Aktualisieren")
                 
                 with col2:
                     new_status = st.selectbox(
@@ -304,7 +304,7 @@ def render_targets_management_tab():
                     if new_status != target['status']:
                         if st.button(f"💾 Status speichern", key=f"save_status_{target['id']}"):
                             if update_target_status(target['id'], new_status):
-                                st.success("[OK] Status aktualisiert")
+                                st.success("Status aktualisiert")
                                 st.rerun()
 
 
@@ -336,7 +336,7 @@ def render_forecasts_tab():
             )
             
             if forecast_data:
-                st.success("[OK] Forecast erfolgreich berechnet!")
+                st.success("Forecast erfolgreich berechnet!")
                 
                 col1, col2, col3 = st.columns(3)
                 with col1:
@@ -390,18 +390,18 @@ def render_forecasts_tab():
                     )
                     
                     if forecast_id:
-                        st.success("[OK] Forecast gespeichert!")
+                        st.success("Forecast gespeichert!")
                         st.rerun()
     
     st.divider()
     
     # Gespeicherte Forecasts anzeigen
-    st.subheader("[CHART] Gespeicherte Forecasts")
+    st.subheader("Gespeicherte Forecasts")
     
     forecasts = get_forecasts()
     
     if not forecasts:
-        st.info("[INFO] Keine Forecasts vorhanden")
+        st.info("Keine Forecasts vorhanden")
     else:
         for forecast in forecasts:
             with st.expander(f"🔮 Forecast {forecast['period_start']} - {forecast['period_end']}"):
@@ -423,15 +423,15 @@ def render_forecasts_tab():
 
 def render_warnings_tab():
     """Rendert die Warnungen-Seite für gefährdete Ziele."""
-    st.subheader("[WARNING] Gefährdete Ziele")
+    st.subheader("Gefährdete Ziele")
     
     at_risk = check_at_risk_targets()
     
     if not at_risk:
-        st.success("[OK] Alle Ziele sind auf Kurs! Keine Warnungen.")
+        st.success("Alle Ziele sind auf Kurs! Keine Warnungen.")
         return
     
-    st.warning(f"[WARNING] {len(at_risk)} Ziel(e) benötigen Aufmerksamkeit")
+    st.warning(f"{len(at_risk)} Ziel(e) benötigen Aufmerksamkeit")
     
     for status in at_risk:
         # Lade Ziel-Details

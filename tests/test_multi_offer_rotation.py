@@ -26,7 +26,7 @@ def test_product_rotation():
     # Produkte laden
     products = generator.load_all_products()
 
-    print(f"[PACKAGE] Verfügbare Produkte in Datenbank:")
+    print(f"Verfügbare Produkte in Datenbank:")
     print(f"  • Module: {len(products.get('module', []))} Stück")
     print(f"  • Wechselrichter: {len(products.get('inverter', []))} Stück")
     print(f"  • Speicher: {len(products.get('storage', []))} Stück")
@@ -83,7 +83,7 @@ def test_product_rotation():
             company_idx, base_settings)
 
         # Produktdetails anzeigen
-        print("\n[PACKAGE] Ausgewählte Produkte:")
+        print("\nAusgewählte Produkte:")
 
         for category, id_key in [
             ("module", "selected_module_id"),
@@ -126,16 +126,16 @@ def test_product_rotation():
                             category:15} → FEHLER: Produkt ID {product_id} nicht gefunden!")
 
     print("\n" + "=" * 80)
-    print("[OK] Test abgeschlossen")
+    print("Test abgeschlossen")
     print("=" * 80 + "\n")
 
     # Rotationsstatus anzeigen
-    print("\n[CHART] Rotationsstatus (verwendet IDs):")
+    print("\nRotationsstatus (verwendet IDs):")
     for category, state in generator.rotation_state.items():
         used_ids = state.get('used_ids', [])
         print(f"  • {category}: {len(used_ids)} Produkt(e) verwendet")
 
-    print("\n[IDEA] HINWEIS:")
+    print("\nHINWEIS:")
     print("  - Jede Firma sollte UNTERSCHIEDLICHE Produkte haben")
     print("  - Wenn keine neuen Produkte verfügbar, wird das letzte wiederholt")
     print("  - Preise werden zusätzlich um 5% pro Firma gesteigert\n")

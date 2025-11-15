@@ -19,7 +19,7 @@ def test_price_calculation_with_different_products():
     storage = list_products('storage')
 
     if not modules or not inverters or not storage:
-        print("[ERROR] Fehler: Keine Produkte gefunden!")
+        print("Fehler: Keine Produkte gefunden!")
         return
 
     print("=" * 100)
@@ -99,7 +99,7 @@ def test_price_calculation_with_different_products():
             total_brutto = calc_results.get('total_investment_brutto', 0)
             base_price = calc_results.get('base_matrix_price_netto', 0)
 
-            print(f"\n[CHART] BERECHNUNGSERGEBNISSE:")
+            print(f"\nBERECHNUNGSERGEBNISSE:")
             print(f"   Basis-Preis:        {base_price:>12.2f} €")
             print(f"   Gesamt Netto:       {total_netto:>12.2f} €")
             print(f"   Gesamt Brutto:      {total_brutto:>12.2f} €")
@@ -119,7 +119,7 @@ def test_price_calculation_with_different_products():
                 for log in product_price_logs:
                     print(f"      {log}")
         else:
-            print(f"\n[ERROR] Berechnung fehlgeschlagen!")
+            print(f"\nBerechnung fehlgeschlagen!")
             if errors:
                 print(f"   Fehler: {errors[:3]}")
 
@@ -138,11 +138,11 @@ def test_price_calculation_with_different_products():
 
     print(f"\n{'=' * 100}")
     if len(unique_prices) == 1:
-        print("[ERROR] PROBLEM: Alle Konfigurationen haben den GLEICHEN Preis!")
+        print("PROBLEM: Alle Konfigurationen haben den GLEICHEN Preis!")
         print(f"   → Preis: {prices[0]:.2f} €")
         print("   → Produktpreise werden NICHT berücksichtigt!")
     elif len(unique_prices) == len(prices):
-        print("[OK] ERFOLG: Jede Konfiguration hat einen UNTERSCHIEDLICHEN Preis!")
+        print("ERFOLG: Jede Konfiguration hat einen UNTERSCHIEDLICHEN Preis!")
         diff_min_max = max(prices) - min(prices)
         print(
             f"   → Preisspanne: {
@@ -151,7 +151,7 @@ def test_price_calculation_with_different_products():
                 diff_min_max:.2f} €)")
     else:
         print(
-            f"[WARNING]  TEILERFOLG: {
+            f"TEILERFOLG: {
                 len(unique_prices)} verschiedene Preise bei {
                 len(prices)} Konfigurationen")
 

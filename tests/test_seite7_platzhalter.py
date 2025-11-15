@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_seite7_platzhalter():
     """Testet die Seite 7 Platzhalter"""
 
-    print("[TOOL] Test Seite 7 Platzhalter")
+    print("Test Seite 7 Platzhalter")
     print("=" * 40)
 
     # Test-Daten mit neuer Struktur
@@ -46,20 +46,20 @@ def test_seite7_platzhalter():
         all_found = True
         for key, description in seite7_mapping.items():
             value = dynamic_data.get(key, 'FEHLT')
-            status = "[OK]" if value != 'FEHLT' and value != '0,00 €' else "[ERROR]"
+            status = "" if value != 'FEHLT' and value != '0,00 €' else ""
             print(f"   {status} {description}: {value}")
             if value == 'FEHLT':
                 all_found = False
 
         if all_found:
-            print("\\n[OK] Alle Seite 7 Platzhalter sind verfügbar!")
+            print("\\nAlle Seite 7 Platzhalter sind verfügbar!")
         else:
-            print("\\n[ERROR] Einige Seite 7 Platzhalter fehlen!")
+            print("\\nEinige Seite 7 Platzhalter fehlen!")
 
         return all_found
 
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
 
 
@@ -67,11 +67,11 @@ if __name__ == "__main__":
     success = test_seite7_platzhalter()
 
     print(
-        f"\\n[TARGET] Ergebnis: {
-            '[OK] ERFOLGREICH' if success else '[ERROR] FEHLGESCHLAGEN'}")
+        f"\\nErgebnis: {
+            'ERFOLGREICH' if success else 'FEHLGESCHLAGEN'}")
 
     if success:
-        print("\\n[MONEY] Die neue Berechnungslogik ist implementiert:")
+        print("\\nDie neue Berechnungslogik ist implementiert:")
         print("   - Provision: Standard 1500€ (einstellbar)")
         print("   - MwSt: Wird am Ende abgezogen")
         print("   - Seite 7: Alle Platzhalter dynamisch verknüpft")

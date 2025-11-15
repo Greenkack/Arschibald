@@ -45,17 +45,17 @@ def test_ui_components_visibility():
 
         for name, func in components.items():
             assert callable(func), f"{name} ist nicht aufrufbar"
-            print(f"[OK] {name} Komponente verfügbar")
+            print(f"{name} Komponente verfügbar")
 
-        print("\n[OK] Alle UI-Komponenten sind verfügbar!\n")
+        print("\nAlle UI-Komponenten sind verfügbar!\n")
         return True
 
     except ImportError as e:
-        print(f"\n[ERROR] Import-Fehler: {e}")
+        print(f"\nImport-Fehler: {e}")
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -84,7 +84,7 @@ def test_building_dimensions_change():
         assert dims.length_m == 10.0, "Länge nicht korrekt"
         assert dims.width_m == 6.0, "Breite nicht korrekt"
         assert dims.wall_height_m == 3.0, "Höhe nicht korrekt"
-        print("[OK] Standard-Dimensionen korrekt gesetzt")
+        print("Standard-Dimensionen korrekt gesetzt")
 
         # Test 2: Geänderte Dimensionen
         settings = {
@@ -97,7 +97,7 @@ def test_building_dimensions_change():
         assert dims.length_m == 15.0, "Geänderte Länge nicht korrekt"
         assert dims.width_m == 9.0, "Geänderte Breite nicht korrekt"
         assert dims.wall_height_m == 5.0, "Geänderte Höhe nicht korrekt"
-        print("[OK] Geänderte Dimensionen korrekt gesetzt")
+        print("Geänderte Dimensionen korrekt gesetzt")
 
         # Test 3: Kleine Dimensionen
         settings = {
@@ -110,7 +110,7 @@ def test_building_dimensions_change():
         assert dims.length_m == 5.0, "Kleine Länge nicht korrekt"
         assert dims.width_m == 4.0, "Kleine Breite nicht korrekt"
         assert dims.wall_height_m == 2.5, "Kleine Höhe nicht korrekt"
-        print("[OK] Kleine Dimensionen korrekt gesetzt")
+        print("Kleine Dimensionen korrekt gesetzt")
 
         # Test 4: Große Dimensionen
         settings = {
@@ -123,20 +123,20 @@ def test_building_dimensions_change():
         assert dims.length_m == 25.0, "Große Länge nicht korrekt"
         assert dims.width_m == 15.0, "Große Breite nicht korrekt"
         assert dims.wall_height_m == 8.0, "Große Höhe nicht korrekt"
-        print("[OK] Große Dimensionen korrekt gesetzt")
+        print("Große Dimensionen korrekt gesetzt")
 
         # Test 5: Fallback auf Defaults
         dims = svm.create_building_dims({})
         assert dims.length_m == 10.0, "Default Länge nicht korrekt"
         assert dims.width_m == 6.0, "Default Breite nicht korrekt"
         assert dims.wall_height_m == 3.0, "Default Höhe nicht korrekt"
-        print("[OK] Default-Dimensionen korrekt gesetzt")
+        print("Default-Dimensionen korrekt gesetzt")
 
-        print("\n[OK] Gebäudedimensionen können korrekt geändert werden!\n")
+        print("\nGebäudedimensionen können korrekt geändert werden!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -157,25 +157,25 @@ def test_roof_type_selection():
         project_data = {"roof_type": "Flachdach"}
         roof_type = svm.extract_roof_type(project_data)
         assert roof_type == "Flachdach", "Flachdach nicht korrekt"
-        print("[OK] Flachdach korrekt erkannt")
+        print("Flachdach korrekt erkannt")
 
         # Test 2: Satteldach
         project_data = {"roof_type": "Satteldach"}
         roof_type = svm.extract_roof_type(project_data)
         assert roof_type == "Satteldach", "Satteldach nicht korrekt"
-        print("[OK] Satteldach korrekt erkannt")
+        print("Satteldach korrekt erkannt")
 
         # Test 3: Walmdach
         project_data = {"roof_type": "Walmdach"}
         roof_type = svm.extract_roof_type(project_data)
         assert roof_type == "Walmdach", "Walmdach nicht korrekt"
-        print("[OK] Walmdach korrekt erkannt")
+        print("Walmdach korrekt erkannt")
 
         # Test 4: Pultdach
         project_data = {"roof_type": "Pultdach"}
         roof_type = svm.extract_roof_type(project_data)
         assert roof_type == "Pultdach", "Pultdach nicht korrekt"
-        print("[OK] Pultdach korrekt erkannt")
+        print("Pultdach korrekt erkannt")
 
         # Test 5: Nested in project_details
         project_data = {
@@ -185,19 +185,19 @@ def test_roof_type_selection():
         }
         roof_type = svm.extract_roof_type(project_data)
         assert roof_type == "Satteldach", "Nested Dachtyp nicht korrekt"
-        print("[OK] Nested Dachtyp korrekt erkannt")
+        print("Nested Dachtyp korrekt erkannt")
 
         # Test 6: Fallback auf Default
         project_data = {}
         roof_type = svm.extract_roof_type(project_data)
         assert roof_type == "Flachdach", "Default Dachtyp nicht korrekt"
-        print("[OK] Default Dachtyp (Flachdach) korrekt gesetzt")
+        print("Default Dachtyp (Flachdach) korrekt gesetzt")
 
-        print("\n[OK] Dachform-Auswahl funktioniert korrekt!\n")
+        print("\nDachform-Auswahl funktioniert korrekt!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -219,48 +219,48 @@ def test_module_placement():
         analysis_results = {"module_quantity": 30}
         qty = svm.extract_module_quantity(project_data, analysis_results)
         assert qty == 30, "Modulanzahl aus analysis_results nicht korrekt"
-        print("[OK] Modulanzahl aus analysis_results korrekt")
+        print("Modulanzahl aus analysis_results korrekt")
 
         # Test 2: Modulanzahl aus project_data
         project_data = {"module_quantity": 25}
         analysis_results = {}
         qty = svm.extract_module_quantity(project_data, analysis_results)
         assert qty == 25, "Modulanzahl aus project_data nicht korrekt"
-        print("[OK] Modulanzahl aus project_data korrekt")
+        print("Modulanzahl aus project_data korrekt")
 
         # Test 3: Priorität analysis_results > project_data
         project_data = {"module_quantity": 25}
         analysis_results = {"module_quantity": 35}
         qty = svm.extract_module_quantity(project_data, analysis_results)
         assert qty == 35, "Priorität nicht korrekt"
-        print("[OK] Priorität analysis_results > project_data korrekt")
+        print("Priorität analysis_results > project_data korrekt")
 
         # Test 4: Fallback auf Default
         project_data = {}
         analysis_results = {}
         qty = svm.extract_module_quantity(project_data, analysis_results)
         assert qty == 20, "Default Modulanzahl nicht korrekt"
-        print("[OK] Default Modulanzahl (20) korrekt")
+        print("Default Modulanzahl (20) korrekt")
 
         # Test 5: Kleine Modulanzahl
         project_data = {"module_quantity": 5}
         analysis_results = {}
         qty = svm.extract_module_quantity(project_data, analysis_results)
         assert qty == 5, "Kleine Modulanzahl nicht korrekt"
-        print("[OK] Kleine Modulanzahl korrekt")
+        print("Kleine Modulanzahl korrekt")
 
         # Test 6: Große Modulanzahl
         project_data = {"module_quantity": 100}
         analysis_results = {}
         qty = svm.extract_module_quantity(project_data, analysis_results)
         assert qty == 100, "Große Modulanzahl nicht korrekt"
-        print("[OK] Große Modulanzahl korrekt")
+        print("Große Modulanzahl korrekt")
 
-        print("\n[OK] Modul-Belegung funktioniert korrekt!\n")
+        print("\nModul-Belegung funktioniert korrekt!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -302,7 +302,7 @@ def test_3d_scene_rendering():
         assert fig is not None, "Figure ist None"
         assert hasattr(fig, 'data'), "Figure hat keine data"
         assert len(fig.data) > 0, "Figure hat keine Daten"
-        print("[OK] Flachdach-Szene erfolgreich gerendert")
+        print("Flachdach-Szene erfolgreich gerendert")
 
         # Test 2: Szene mit Satteldach
         fig = build_plotly_scene(
@@ -316,7 +316,7 @@ def test_3d_scene_rendering():
 
         assert fig is not None, "Satteldach Figure ist None"
         assert len(fig.data) > 0, "Satteldach Figure hat keine Daten"
-        print("[OK] Satteldach-Szene erfolgreich gerendert")
+        print("Satteldach-Szene erfolgreich gerendert")
 
         # Test 3: Szene mit Layout-Konfiguration
         layout_config = AdvancedLayoutConfig()
@@ -335,7 +335,7 @@ def test_3d_scene_rendering():
 
         assert fig is not None, "Figure mit Layout-Config ist None"
         assert len(fig.data) > 0, "Figure mit Layout-Config hat keine Daten"
-        print("[OK] Szene mit Layout-Konfiguration erfolgreich gerendert")
+        print("Szene mit Layout-Konfiguration erfolgreich gerendert")
 
         # Test 4: Szene mit ausgewählten Modulen
         fig = build_plotly_scene(
@@ -349,7 +349,7 @@ def test_3d_scene_rendering():
 
         assert fig is not None, "Figure mit Auswahl ist None"
         assert len(fig.data) > 0, "Figure mit Auswahl hat keine Daten"
-        print("[OK] Szene mit ausgewählten Modulen erfolgreich gerendert")
+        print("Szene mit ausgewählten Modulen erfolgreich gerendert")
 
         # Test 5: Szene mit verschiedenen Dimensionen
         dims_large = BuildingDims(
@@ -369,13 +369,13 @@ def test_3d_scene_rendering():
 
         assert fig is not None, "Figure mit großen Dimensionen ist None"
         assert len(fig.data) > 0, "Figure mit großen Dimensionen hat keine Daten"
-        print("[OK] Szene mit großen Dimensionen erfolgreich gerendert")
+        print("Szene mit großen Dimensionen erfolgreich gerendert")
 
-        print("\n[OK] 3D-Szene wird korrekt gerendert!\n")
+        print("\n3D-Szene wird korrekt gerendert!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -406,7 +406,7 @@ def test_layout_config_creation():
         assert config.mounting_type == "Aufgeständert", "Mounting type nicht korrekt"
         assert config.custom_azimuth == 180.0, "Azimuth nicht korrekt"
         assert config.custom_tilt == 30.0, "Tilt nicht korrekt"
-        print("[OK] Basis-Konfiguration korrekt erstellt")
+        print("Basis-Konfiguration korrekt erstellt")
 
         # Test 2: Konfiguration mit Garage und Fassade
         module_settings = {
@@ -419,7 +419,7 @@ def test_layout_config_creation():
         assert config is not None, "Config mit Garage ist None"
         assert config.use_garage is True, "use_garage nicht korrekt"
         assert config.use_facade is True, "use_facade nicht korrekt"
-        print("[OK] Konfiguration mit Garage und Fassade korrekt erstellt")
+        print("Konfiguration mit Garage und Fassade korrekt erstellt")
 
         # Test 3: Konfiguration mit entfernten Modulen
         module_settings = {
@@ -430,7 +430,7 @@ def test_layout_config_creation():
         config = svm.create_layout_config(module_settings, advanced_settings)
         assert config is not None, "Config mit removed_indices ist None"
         assert config.removed_indices == [0, 5, 10, 15], "removed_indices nicht korrekt"
-        print("[OK] Konfiguration mit entfernten Modulen korrekt erstellt")
+        print("Konfiguration mit entfernten Modulen korrekt erstellt")
 
         # Test 4: Leere Konfiguration
         module_settings = {}
@@ -438,13 +438,13 @@ def test_layout_config_creation():
 
         config = svm.create_layout_config(module_settings, advanced_settings)
         assert config is not None, "Leere Config ist None"
-        print("[OK] Leere Konfiguration korrekt erstellt")
+        print("Leere Konfiguration korrekt erstellt")
 
-        print("\n[OK] Layout-Konfiguration kann korrekt erstellt werden!\n")
+        print("\nLayout-Konfiguration kann korrekt erstellt werden!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -483,7 +483,7 @@ def test_integration():
         assert roof_type == "Satteldach", "Roof type nicht korrekt"
         assert module_quantity == 35, "Module quantity nicht korrekt"
         assert building_type == "Einfamilienhaus", "Building type nicht korrekt"
-        print("[OK] Informationen korrekt extrahiert")
+        print("Informationen korrekt extrahiert")
 
         # 3. Erstelle Gebäudedimensionen
         print("3. Erstelle Gebäudedimensionen...")
@@ -494,7 +494,7 @@ def test_integration():
         }
         dims = svm.create_building_dims(basis_settings)
         assert dims.length_m == 12.0, "Dims length nicht korrekt"
-        print("[OK] Gebäudedimensionen erstellt")
+        print("Gebäudedimensionen erstellt")
 
         # 4. Erstelle Layout-Konfiguration
         print("4. Erstelle Layout-Konfiguration...")
@@ -508,7 +508,7 @@ def test_integration():
         advanced_settings = {}
         layout_config = svm.create_layout_config(module_settings, advanced_settings)
         assert layout_config is not None, "Layout config ist None"
-        print("[OK] Layout-Konfiguration erstellt")
+        print("Layout-Konfiguration erstellt")
 
         # 5. Erstelle 3D-Szene
         print("5. Erstelle 3D-Szene...")
@@ -522,13 +522,13 @@ def test_integration():
         )
         assert fig is not None, "Figure ist None"
         assert len(fig.data) > 0, "Figure hat keine Daten"
-        print("[OK] 3D-Szene erstellt")
+        print("3D-Szene erstellt")
 
-        print("\n[OK] Vollständiger Workflow erfolgreich durchlaufen!\n")
+        print("\nVollständiger Workflow erfolgreich durchlaufen!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -559,22 +559,22 @@ def main():
     total = len(results)
 
     for test_name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{status}: {test_name}")
 
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
         print("\n🎉 Alle Tests erfolgreich!")
-        print("\n[OK] Alle UI-Komponenten sind sichtbar")
-        print("[OK] Gebäudedimensionen können geändert werden")
-        print("[OK] Dachform-Auswahl funktioniert")
-        print("[OK] Modul-Belegung funktioniert")
-        print("[OK] 3D-Szene wird korrekt gerendert")
-        print("\n[OK] Task 7 - Basis-Funktionalität: ABGESCHLOSSEN")
+        print("\nAlle UI-Komponenten sind sichtbar")
+        print("Gebäudedimensionen können geändert werden")
+        print("Dachform-Auswahl funktioniert")
+        print("Modul-Belegung funktioniert")
+        print("3D-Szene wird korrekt gerendert")
+        print("\nTask 7 - Basis-Funktionalität: ABGESCHLOSSEN")
         return 0
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return 1
 
 

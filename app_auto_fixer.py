@@ -67,10 +67,10 @@ class IssueFixer:
                     if auto_fix:
                         with open(filepath, 'w', encoding='utf-8') as f:
                             f.write(content)
-                        logger.info(f"[OK] Fixed {filepath}")
+                        logger.info(f"Fixed {filepath}")
                         self.fixed_count += 1
                     else:
-                        logger.info(f"[WARNING] Would fix {filepath} (use --auto-fix)")
+                        logger.info(f"Would fix {filepath} (use --auto-fix)")
                         self.skipped_count += 1
             
             except Exception as e:
@@ -158,7 +158,7 @@ def apply_critical_fixes():
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(fixed_content)
             
-            logger.info(f"[OK] Fixed critical issue in {filepath}")
+            logger.info(f"Fixed critical issue in {filepath}")
         
         except Exception as e:
             logger.error(f"Failed to fix {filepath}: {e}")

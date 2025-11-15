@@ -41,18 +41,18 @@ def test_module_details_hover():
     )
     
     # Prüfe ob hovertemplate vorhanden ist
-    assert hasattr(module_1, 'hovertemplate'), "[ERROR] Modul hat kein hovertemplate"
+    assert hasattr(module_1, 'hovertemplate'), "Modul hat kein hovertemplate"
     hover_text = module_1.hovertemplate
     
     # Prüfe ob alle Details enthalten sind
-    assert "Modul #1" in hover_text, "[ERROR] Modul-Nummer fehlt im Hover-Text"
-    assert "400 W" in hover_text, "[ERROR] Leistung fehlt im Hover-Text"
-    assert "0.0°" in hover_text or "0.0° (Süd)" in hover_text, "[ERROR] Azimut fehlt im Hover-Text"
-    assert "Süd" in hover_text, "[ERROR] Himmelsrichtung fehlt im Hover-Text"
-    assert "30.0°" in hover_text, "[ERROR] Neigung fehlt im Hover-Text"
-    assert "(0.00, 0.00, 5.00)" in hover_text, "[ERROR] Position fehlt im Hover-Text"
+    assert "Modul #1" in hover_text, "Modul-Nummer fehlt im Hover-Text"
+    assert "400 W" in hover_text, "Leistung fehlt im Hover-Text"
+    assert "0.0°" in hover_text or "0.0° (Süd)" in hover_text, "Azimut fehlt im Hover-Text"
+    assert "Süd" in hover_text, "Himmelsrichtung fehlt im Hover-Text"
+    assert "30.0°" in hover_text, "Neigung fehlt im Hover-Text"
+    assert "(0.00, 0.00, 5.00)" in hover_text, "Position fehlt im Hover-Text"
     
-    print(f"[OK] Hover-Text enthält alle Details:")
+    print(f"Hover-Text enthält alle Details:")
     print(f"   {hover_text}")
     
     # Test 2: Modul mit höherer Leistung (450W) und West-Ausrichtung
@@ -69,13 +69,13 @@ def test_module_details_hover():
     
     hover_text_2 = module_2.hovertemplate
     
-    assert "Modul #15" in hover_text_2, "[ERROR] Modul-Nummer #15 fehlt"
-    assert "450 W" in hover_text_2, "[ERROR] Leistung 450W fehlt"
-    assert "90.0°" in hover_text_2, "[ERROR] Azimut 90° fehlt"
-    assert "West" in hover_text_2, "[ERROR] Himmelsrichtung West fehlt"
-    assert "25.0°" in hover_text_2, "[ERROR] Neigung 25° fehlt"
+    assert "Modul #15" in hover_text_2, "Modul-Nummer #15 fehlt"
+    assert "450 W" in hover_text_2, "Leistung 450W fehlt"
+    assert "90.0°" in hover_text_2, "Azimut 90° fehlt"
+    assert "West" in hover_text_2, "Himmelsrichtung West fehlt"
+    assert "25.0°" in hover_text_2, "Neigung 25° fehlt"
     
-    print(f"[OK] Hover-Text für Modul #15 (450W, West):")
+    print(f"Hover-Text für Modul #15 (450W, West):")
     print(f"   {hover_text_2}")
     
     # Test 3: Modul ohne Nummer
@@ -92,13 +92,13 @@ def test_module_details_hover():
     
     hover_text_3 = module_3.hovertemplate
     
-    assert "PV Modul" in hover_text_3, "[ERROR] Generischer Name fehlt"
-    assert "Modul #" not in hover_text_3, "[ERROR] Modul-Nummer sollte nicht vorhanden sein"
-    assert "400 W" in hover_text_3, "[ERROR] Leistung fehlt"
-    assert "180.0°" in hover_text_3, "[ERROR] Azimut fehlt"
-    assert "Nord" in hover_text_3, "[ERROR] Himmelsrichtung Nord fehlt"
+    assert "PV Modul" in hover_text_3, "Generischer Name fehlt"
+    assert "Modul #" not in hover_text_3, "Modul-Nummer sollte nicht vorhanden sein"
+    assert "400 W" in hover_text_3, "Leistung fehlt"
+    assert "180.0°" in hover_text_3, "Azimut fehlt"
+    assert "Nord" in hover_text_3, "Himmelsrichtung Nord fehlt"
     
-    print(f"[OK] Hover-Text ohne Modul-Nummer:")
+    print(f"Hover-Text ohne Modul-Nummer:")
     print(f"   {hover_text_3}")
     
     # Test 4: Verschiedene Himmelsrichtungen
@@ -127,19 +127,19 @@ def test_module_details_hover():
         
         hover_text = module.hovertemplate
         assert expected_direction in hover_text, \
-            f"[ERROR] Himmelsrichtung '{expected_direction}' fehlt für Azimut {azimuth}°"
-        print(f"   [OK] {azimuth:3d}° → {expected_direction}")
+            f"Himmelsrichtung '{expected_direction}' fehlt für Azimut {azimuth}°"
+        print(f"   {azimuth:3d}° → {expected_direction}")
     
     print("\n" + "=" * 70)
-    print("[OK] ALLE TESTS ERFOLGREICH!")
+    print("ALLE TESTS ERFOLGREICH!")
     print("=" * 70)
     print("\nTask 8.2 ist vollständig implementiert:")
-    print("  [OK] Modul-Nummer wird im Hover-Text angezeigt")
-    print("  [OK] Leistung (W) wird im Hover-Text angezeigt")
-    print("  [OK] Azimut (Grad und Himmelsrichtung) wird angezeigt")
-    print("  [OK] Neigung wird angezeigt")
-    print("  [OK] Position wird angezeigt")
-    print("  [OK] Himmelsrichtungen werden korrekt konvertiert")
+    print("  Modul-Nummer wird im Hover-Text angezeigt")
+    print("  Leistung (W) wird im Hover-Text angezeigt")
+    print("  Azimut (Grad und Himmelsrichtung) wird angezeigt")
+    print("  Neigung wird angezeigt")
+    print("  Position wird angezeigt")
+    print("  Himmelsrichtungen werden korrekt konvertiert")
     print("\n")
 
 
@@ -147,10 +147,10 @@ if __name__ == "__main__":
     try:
         test_module_details_hover()
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}\n")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}\n")
         sys.exit(1)
     except Exception as e:
-        print(f"\n[ERROR] UNERWARTETER FEHLER: {e}\n")
+        print(f"\nUNERWARTETER FEHLER: {e}\n")
         import traceback
         traceback.print_exc()
         sys.exit(1)

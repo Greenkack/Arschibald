@@ -10,10 +10,10 @@ def test_export_buttons():
     """Test Export-Buttons Modul"""
     try:
         from utils.pv3d_export_buttons import render_export_action_buttons
-        print("[OK] Export-Buttons Modul erfolgreich importiert")
+        print("Export-Buttons Modul erfolgreich importiert")
         return True
     except ImportError as e:
-        print(f"[ERROR] Export-Buttons Modul fehlt: {e}")
+        print(f"Export-Buttons Modul fehlt: {e}")
         return False
 
 
@@ -49,13 +49,13 @@ def test_mounting_logic():
         result = validate_mounting_selection("Flachdach", "Aufständerung Süd")
         assert result["valid"] == True
         
-        print("[OK] Aufständerungs-Logik Modul erfolgreich getestet")
+        print("Aufständerungs-Logik Modul erfolgreich getestet")
         return True
     except ImportError as e:
-        print(f"[ERROR] Aufständerungs-Logik Modul fehlt: {e}")
+        print(f"Aufständerungs-Logik Modul fehlt: {e}")
         return False
     except AssertionError as e:
-        print(f"[ERROR] Aufständerungs-Logik Test fehlgeschlagen: {e}")
+        print(f"Aufständerungs-Logik Test fehlgeschlagen: {e}")
         return False
 
 
@@ -74,10 +74,10 @@ def test_wow_features():
             render_weather_integration,
             render_presentation_mode
         )
-        print("[OK] WOW-Features Modul erfolgreich importiert (10 Funktionen)")
+        print("WOW-Features Modul erfolgreich importiert (10 Funktionen)")
         return True
     except ImportError as e:
-        print(f"[ERROR] WOW-Features Modul fehlt: {e}")
+        print(f"WOW-Features Modul fehlt: {e}")
         return False
 
 
@@ -100,14 +100,14 @@ def test_integration():
         all_found = True
         for check_str, description in checks:
             if check_str in content:
-                print(f"[OK] {description} gefunden")
+                print(f"{description} gefunden")
             else:
-                print(f"[ERROR] {description} NICHT gefunden")
+                print(f"{description} NICHT gefunden")
                 all_found = False
         
         return all_found
     except Exception as e:
-        print(f"[ERROR] Integration-Test fehlgeschlagen: {e}")
+        print(f"Integration-Test fehlgeschlagen: {e}")
         return False
 
 
@@ -149,7 +149,7 @@ def run_all_tests():
         print("🎉 Alle Tests bestanden! Die Integration ist vollständig.")
         return 0
     else:
-        print("[WARNING] Einige Tests fehlgeschlagen. Bitte prüfen Sie die Fehler oben.")
+        print("Einige Tests fehlgeschlagen. Bitte prüfen Sie die Fehler oben.")
         return 1
 
 

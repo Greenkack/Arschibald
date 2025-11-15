@@ -214,7 +214,7 @@ def main():
             parts.append("# --- DEF BLOCK END ---\n")
 
         out_patch.write_text("\n".join(parts) + "\n", encoding="utf-8")
-        print(f"[OK] Patch gebaut: {out_patch}")
+        print(f"Patch gebaut: {out_patch}")
 
     # (Optional) index_src/dst.csv + report.json einfach mitkopieren (nicht zwingend)
     for name in ("index_src.csv", "index_dst.csv", "report.json"):
@@ -225,7 +225,7 @@ def main():
         if p.exists():
             shutil.copy2(p, dst / name)
 
-    print(f"[OK] Auswahl vorbereitet: {dst}")
+    print(f"Auswahl vorbereitet: {dst}")
 
 
 if __name__ == "__main__":

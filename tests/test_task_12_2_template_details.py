@@ -44,7 +44,7 @@ def test_template_details_structure():
     assert 'page_1_background' in template
     assert 'page_1_coords' in template
 
-    print("[OK] Template structure validation passed")
+    print("Template structure validation passed")
 
 
 def test_template_details_display_logic():
@@ -83,7 +83,7 @@ def test_template_details_display_logic():
     assert status_color == "🟢"
     assert status_text == "Aktiv"
 
-    print("[OK] Template details display logic passed")
+    print("Template details display logic passed")
 
 
 def test_file_validation_logic():
@@ -129,7 +129,7 @@ def test_file_validation_logic():
             page_2_coord) if page_2_coord else False
         assert page_2_coord_exists is False
 
-    print("[OK] File validation logic passed")
+    print("File validation logic passed")
 
 
 def test_file_statistics_calculation():
@@ -187,7 +187,7 @@ def test_file_statistics_calculation():
 
         assert status == "incomplete"
 
-    print("[OK] File statistics calculation passed")
+    print("File statistics calculation passed")
 
 
 def test_preview_image_handling():
@@ -228,7 +228,7 @@ def test_preview_image_handling():
     has_preview = bool(preview_path)
     assert has_preview is False
 
-    print("[OK] Preview image handling passed")
+    print("Preview image handling passed")
 
 
 def test_metadata_display():
@@ -269,7 +269,7 @@ def test_metadata_display():
     pages_display = f"{configured_pages}/8"
     assert pages_display == "5/8"
 
-    print("[OK] Metadata display passed")
+    print("Metadata display passed")
 
 
 def test_requirement_23_2_information_capture():
@@ -323,7 +323,7 @@ def test_requirement_23_2_information_capture():
     for i in range(1, 9):
         assert f'page_{i}_coords' in new_template, f"Coords for page {i} missing"
 
-    print("[OK] Requirement 23.2 verification passed")
+    print("Requirement 23.2 verification passed")
 
 
 def test_requirement_23_3_template_selection():
@@ -353,7 +353,7 @@ def test_requirement_23_3_template_selection():
     assert selected_template['id'] == 'template2'
     assert selected_template['name'] == 'Template 2'
 
-    print("[OK] Requirement 23.3 verification passed")
+    print("Requirement 23.3 verification passed")
 
 
 def run_all_tests():
@@ -383,11 +383,11 @@ def run_all_tests():
             test_func()
             passed += 1
         except AssertionError as e:
-            print(f"[ERROR] FAILED: {test_name}")
+            print(f"FAILED: {test_name}")
             print(f"   Error: {e}")
             failed += 1
         except Exception as e:
-            print(f"[ERROR] ERROR in {test_name}: {e}")
+            print(f"ERROR in {test_name}: {e}")
             failed += 1
 
     print("\n" + "=" * 60)

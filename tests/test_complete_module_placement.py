@@ -53,7 +53,7 @@ def test_complete_z_position_chain():
     assert abs(z_final - expected_z) < 0.01, \
         f"Finale Z-Position falsch: {z_final}, erwartet: {expected_z}"
     
-    print(f"  [OK] PASS - Module bei {z_final:.2f}m (auf dem Dach!)")
+    print(f"  PASS - Module bei {z_final:.2f}m (auf dem Dach!)")
     print()
     
     # Test 2: Flachdach
@@ -84,7 +84,7 @@ def test_complete_z_position_chain():
     assert abs(z_final - expected_z) < 0.01, \
         f"Finale Z-Position falsch: {z_final}, erwartet: {expected_z}"
     
-    print(f"  [OK] PASS - Module bei {z_final:.2f}m (auf Aufständerung!)")
+    print(f"  PASS - Module bei {z_final:.2f}m (auf Aufständerung!)")
     print()
     
     # Test 3: Verschiedene Wandhöhen
@@ -115,11 +115,11 @@ def test_complete_z_position_chain():
         assert z_final < wall_height + 1.0, \
             f"Module zu hoch! {z_final} >= {wall_height + 1.0}"
     
-    print(f"  [OK] PASS - Alle Wandhöhen korrekt!")
+    print(f"  PASS - Alle Wandhöhen korrekt!")
     print()
     
     print("=" * 70)
-    print("[OK] ALLE TESTS BESTANDEN!")
+    print("ALLE TESTS BESTANDEN!")
     print("=" * 70)
     print()
     print("ZUSAMMENFASSUNG:")
@@ -129,8 +129,8 @@ def test_complete_z_position_chain():
     print("  4. Module erscheinen korrekt AUF dem Dach!")
     print()
     print("KRITISCHER FIX:")
-    print("  [ERROR] VORHER: Z-Position wurde mehrfach modifiziert")
-    print("  [OK] JETZT: Z-Position wird nur einmal korrekt berechnet")
+    print("  VORHER: Z-Position wurde mehrfach modifiziert")
+    print("  JETZT: Z-Position wird nur einmal korrekt berechnet")
     print()
 
 

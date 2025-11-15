@@ -62,19 +62,19 @@ TOOLTIPS = {
 # Hilfe-Texte für komplexe Funktionen
 HELP_TEXTS = {
     "optimization_assistant": {
-        "title": "[TARGET] Optimierungs-Assistent",
+        "title": "Optimierungs-Assistent",
         "description": "Der Optimierungs-Assistent findet automatisch die beste Konfiguration für Ihre Anforderungen.",
         "steps": [
             "1. Wählen Sie ein Optimierungs-Ziel (Maximale Modulanzahl, Maximaler Ertrag, oder Ausgewogen)",
-            "2. Klicken Sie auf '[LAUNCH] Optimierung starten'",
+            "2. Klicken Sie auf 'Optimierung starten'",
             "3. Das System generiert und bewertet verschiedene Konfigurationen",
             "4. Die beste Konfiguration wird automatisch angewendet",
             "5. Prüfen Sie das Ergebnis und passen Sie bei Bedarf an"
         ],
         "tips": [
-            "[IDEA] 'Maximaler Ertrag' ist für die meisten Fälle die beste Wahl",
-            "[IDEA] 'Ausgewogen' bietet einen guten Kompromiss zwischen Anzahl und Ertrag",
-            "[IDEA] Die Optimierung berücksichtigt Verschattung und Ausrichtung"
+            "'Maximaler Ertrag' ist für die meisten Fälle die beste Wahl",
+            "'Ausgewogen' bietet einen guten Kompromiss zwischen Anzahl und Ertrag",
+            "Die Optimierung berücksichtigt Verschattung und Ausrichtung"
         ]
     },
     
@@ -95,9 +95,9 @@ HELP_TEXTS = {
             "🔴 Rot: Starke Verschattung (60-100%) - Problematisch"
         ],
         "tips": [
-            "[IDEA] Testen Sie verschiedene Tageszeiten (Morgen, Mittag, Abend)",
-            "[IDEA] Vergleichen Sie Sommer und Winter",
-            "[IDEA] Entfernen Sie stark verschattete Module (rot) für besseren Ertrag"
+            "Testen Sie verschiedene Tageszeiten (Morgen, Mittag, Abend)",
+            "Vergleichen Sie Sommer und Winter",
+            "Entfernen Sie stark verschattete Module (rot) für besseren Ertrag"
         ]
     },
     
@@ -119,9 +119,9 @@ HELP_TEXTS = {
             "🔴 Rot: Sehr niedriger Ertrag (<30%) - Entfernen"
         ],
         "tips": [
-            "[IDEA] Entfernen Sie Module mit <50% Ertrag für bessere Wirtschaftlichkeit",
-            "[IDEA] Priorisieren Sie grüne Bereiche bei der Planung",
-            "[IDEA] Kombinieren Sie mit Verschattungs-Analyse für beste Ergebnisse"
+            "Entfernen Sie Module mit <50% Ertrag für bessere Wirtschaftlichkeit",
+            "Priorisieren Sie grüne Bereiche bei der Planung",
+            "Kombinieren Sie mit Verschattungs-Analyse für beste Ergebnisse"
         ]
     },
     
@@ -150,14 +150,14 @@ HELP_TEXTS = {
             ]
         },
         "tips": [
-            "[IDEA] Verwenden Sie 'Gruppe' für schnelle Auswahl vieler Module",
-            "[IDEA] Verwenden Sie 'Bereich' für zusammenhängende Module",
-            "[IDEA] Verwenden Sie 'Einzeln' für präzise Kontrolle"
+            "Verwenden Sie 'Gruppe' für schnelle Auswahl vieler Module",
+            "Verwenden Sie 'Bereich' für zusammenhängende Module",
+            "Verwenden Sie 'Einzeln' für präzise Kontrolle"
         ]
     },
     
     "export_options": {
-        "title": "[PACKAGE] Export-Optionen",
+        "title": "Export-Optionen",
         "description": "Exportieren Sie die 3D-Visualisierung in verschiedenen Formaten.",
         "formats": {
             "Screenshot": {
@@ -268,14 +268,14 @@ def show_help_dialog(topic: str):
                 st.markdown(step)
         
         if "modes" in help_data:
-            st.markdown("### [TARGET] Modi")
+            st.markdown("### Modi")
             for mode, steps in help_data["modes"].items():
                 with st.expander(f"**{mode}**"):
                     for step in steps:
                         st.markdown(step)
         
         if "formats" in help_data:
-            st.markdown("### [FOLDER] Formate")
+            st.markdown("### Formate")
             for format_name, format_data in help_data["formats"].items():
                 with st.expander(f"**{format_name}**"):
                     st.markdown(f"*{format_data['description']}*")
@@ -297,12 +297,12 @@ def show_help_dialog(topic: str):
                             st.markdown(f"- {use_case}")
         
         if "interpretation" in help_data:
-            st.markdown("### [CHART] Interpretation")
+            st.markdown("### Interpretation")
             for interp in help_data["interpretation"]:
                 st.markdown(interp)
         
         if "tips" in help_data:
-            st.markdown("### [IDEA] Tipps")
+            st.markdown("### Tipps")
             for tip in help_data["tips"]:
                 st.markdown(tip)
 
@@ -346,11 +346,11 @@ def render_help_sidebar():
         st.markdown("### 📚 Verfügbare Hilfe-Themen")
         
         help_topics = {
-            "optimization_assistant": "[TARGET] Optimierungs-Assistent",
+            "optimization_assistant": "Optimierungs-Assistent",
             "shading_analysis": "☀️ Verschattungs-Analyse",
             "yield_heatmap": "🔥 Ertrags-Heatmap",
             "module_selection": "🎛️ Modul-Auswahl",
-            "export_options": "[PACKAGE] Export-Optionen"
+            "export_options": "Export-Optionen"
         }
         
         selected_topic = st.selectbox(
@@ -379,7 +379,7 @@ def render_help_sidebar():
         
         st.divider()
         
-        st.markdown("### [FILE] Dokumentation")
+        st.markdown("### Dokumentation")
         st.markdown("Vollständige Dokumentation:")
         st.markdown("- [Benutzerhandbuch](docs/3D_VISUALIZATION_USER_GUIDE.md)")
         st.markdown("- [Schnellreferenz](docs/3D_VISUALIZATION_QUICK_REFERENCE.md)")
@@ -396,41 +396,41 @@ def show_contextual_help(context: str):
         "basis_settings": {
             "title": "🏠 Basis-Einstellungen",
             "tips": [
-                "[IDEA] Messen Sie Ihr Gebäude präzise für beste Ergebnisse",
-                "[IDEA] Die Traufhöhe ist die Höhe der Außenwände, nicht die Firsthöhe",
-                "[IDEA] Wählen Sie die Dachform, die Ihrem Gebäude am nächsten kommt"
+                "Messen Sie Ihr Gebäude präzise für beste Ergebnisse",
+                "Die Traufhöhe ist die Höhe der Außenwände, nicht die Firsthöhe",
+                "Wählen Sie die Dachform, die Ihrem Gebäude am nächsten kommt"
             ]
         },
         "module_placement": {
-            "title": "[POWER] Modul-Belegung",
+            "title": "Modul-Belegung",
             "tips": [
-                "[IDEA] Starten Sie mit 'Automatisch' für eine erste Planung",
-                "[IDEA] Süd-Ausrichtung liefert den höchsten Ertrag",
-                "[IDEA] Ost-West-Ausrichtung optimiert den Eigenverbrauch"
+                "Starten Sie mit 'Automatisch' für eine erste Planung",
+                "Süd-Ausrichtung liefert den höchsten Ertrag",
+                "Ost-West-Ausrichtung optimiert den Eigenverbrauch"
             ]
         },
         "advanced_controls": {
             "title": "🎛️ Erweiterte Kontrolle",
             "tips": [
-                "[IDEA] Kollisionserkennung hilft unrealistische Konfigurationen zu vermeiden",
-                "[IDEA] Verwenden Sie Gruppen-Auswahl für schnelle Anpassungen",
-                "[IDEA] Bereich-Auswahl ist ideal für zusammenhängende Module"
+                "Kollisionserkennung hilft unrealistische Konfigurationen zu vermeiden",
+                "Verwenden Sie Gruppen-Auswahl für schnelle Anpassungen",
+                "Bereich-Auswahl ist ideal für zusammenhängende Module"
             ]
         },
         "analysis": {
-            "title": "[CHART] Analyse",
+            "title": "Analyse",
             "tips": [
-                "[IDEA] Nutzen Sie den Optimierungs-Assistenten für beste Ergebnisse",
-                "[IDEA] Verschattungs-Analyse zeigt problematische Bereiche",
-                "[IDEA] Ertrags-Heatmap hilft schwache Module zu identifizieren"
+                "Nutzen Sie den Optimierungs-Assistenten für beste Ergebnisse",
+                "Verschattungs-Analyse zeigt problematische Bereiche",
+                "Ertrags-Heatmap hilft schwache Module zu identifizieren"
             ]
         },
         "export": {
-            "title": "[PACKAGE] Export",
+            "title": "Export",
             "tips": [
-                "[IDEA] Multi-View Export liefert vollständige Dokumentation",
-                "[IDEA] JSON-Export ermöglicht Backup Ihrer Konfiguration",
-                "[IDEA] CSV-Export ist ideal für Excel-Analysen"
+                "Multi-View Export liefert vollständige Dokumentation",
+                "JSON-Export ermöglicht Backup Ihrer Konfiguration",
+                "CSV-Export ist ideal für Excel-Analysen"
             ]
         }
     }
@@ -448,21 +448,21 @@ def show_success_message(action: str):
         action: Durchgeführte Aktion
     """
     messages = {
-        "optimization": "[OK] Optimierung erfolgreich abgeschlossen! Die beste Konfiguration wurde angewendet.",
-        "export_screenshot": "[OK] Screenshot erfolgreich exportiert!",
-        "export_multiview": "[OK] Multi-View Screenshots erfolgreich exportiert! ZIP-Datei wurde heruntergeladen.",
-        "export_360": "[OK] 360° Animation erfolgreich erstellt! GIF wurde heruntergeladen.",
-        "export_3d": "[OK] 3D-Modell erfolgreich exportiert!",
-        "export_csv": "[OK] CSV-Datei erfolgreich exportiert!",
-        "export_json": "[OK] JSON-Konfiguration erfolgreich exportiert!",
-        "module_selected": "[OK] Modul(e) erfolgreich ausgewählt!",
-        "module_deselected": "[OK] Auswahl erfolgreich aufgehoben!",
+        "optimization": "Optimierung erfolgreich abgeschlossen! Die beste Konfiguration wurde angewendet.",
+        "export_screenshot": "Screenshot erfolgreich exportiert!",
+        "export_multiview": "Multi-View Screenshots erfolgreich exportiert! ZIP-Datei wurde heruntergeladen.",
+        "export_360": "360° Animation erfolgreich erstellt! GIF wurde heruntergeladen.",
+        "export_3d": "3D-Modell erfolgreich exportiert!",
+        "export_csv": "CSV-Datei erfolgreich exportiert!",
+        "export_json": "JSON-Konfiguration erfolgreich exportiert!",
+        "module_selected": "Modul(e) erfolgreich ausgewählt!",
+        "module_deselected": "Auswahl erfolgreich aufgehoben!",
     }
     
     if action in messages:
         st.success(messages[action])
     else:
-        st.success(f"[OK] {action} erfolgreich abgeschlossen!")
+        st.success(f"{action} erfolgreich abgeschlossen!")
 
 
 def show_warning_message(warning_type: str, details: Optional[str] = None):
@@ -474,14 +474,14 @@ def show_warning_message(warning_type: str, details: Optional[str] = None):
         details: Optionale Details zur Warnung
     """
     warnings = {
-        "collision": "[WARNING] Kollision erkannt! Module überschneiden sich. Bitte passen Sie die Konfiguration an.",
-        "no_modules": "[WARNING] Keine Module platziert! Vergrößern Sie das Gebäude oder aktivieren Sie zusätzliche Flächen.",
-        "low_yield": "[WARNING] Einige Module haben sehr niedrigen Ertrag (<30%). Erwägen Sie deren Entfernung.",
-        "high_shading": "[WARNING] Starke Verschattung erkannt! Prüfen Sie die Verschattungs-Analyse.",
-        "export_failed": "[WARNING] Export fehlgeschlagen! Versuchen Sie eine niedrigere Auflösung oder ein anderes Format.",
+        "collision": "Kollision erkannt! Module überschneiden sich. Bitte passen Sie die Konfiguration an.",
+        "no_modules": "Keine Module platziert! Vergrößern Sie das Gebäude oder aktivieren Sie zusätzliche Flächen.",
+        "low_yield": "Einige Module haben sehr niedrigen Ertrag (<30%). Erwägen Sie deren Entfernung.",
+        "high_shading": "Starke Verschattung erkannt! Prüfen Sie die Verschattungs-Analyse.",
+        "export_failed": "Export fehlgeschlagen! Versuchen Sie eine niedrigere Auflösung oder ein anderes Format.",
     }
     
-    message = warnings.get(warning_type, f"[WARNING] Warnung: {warning_type}")
+    message = warnings.get(warning_type, f"Warnung: {warning_type}")
     if details:
         message += f"\n\n{details}"
     

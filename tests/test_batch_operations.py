@@ -447,27 +447,27 @@ def run_performance_suite():
     
     try:
         test.test_performance_1000x50_cells()
-        print("[OK] Test 1000x50 Zellen: BESTANDEN")
+        print("Test 1000x50 Zellen: BESTANDEN")
     except AssertionError as e:
-        print(f"[ERROR] Test 1000x50 Zellen: FEHLGESCHLAGEN - {e}")
+        print(f"Test 1000x50 Zellen: FEHLGESCHLAGEN - {e}")
     
     try:
         test.test_performance_100_formulas_with_dependencies()
-        print("[OK] Test 100 Formeln mit Abhängigkeiten: BESTANDEN")
+        print("Test 100 Formeln mit Abhängigkeiten: BESTANDEN")
     except AssertionError as e:
-        print(f"[ERROR] Test 100 Formeln: FEHLGESCHLAGEN - {e}")
+        print(f"Test 100 Formeln: FEHLGESCHLAGEN - {e}")
     
     try:
         test.test_performance_recalculation_under_2_seconds()
-        print("[OK] Test Neuberechnung < 2s: BESTANDEN")
+        print("Test Neuberechnung < 2s: BESTANDEN")
     except AssertionError as e:
-        print(f"[ERROR] Test Neuberechnung: FEHLGESCHLAGEN - {e}")
+        print(f"Test Neuberechnung: FEHLGESCHLAGEN - {e}")
     
     try:
         test.test_performance_batch_vs_individual()
-        print("[OK] Test Batch vs. Individual: BESTANDEN")
+        print("Test Batch vs. Individual: BESTANDEN")
     except AssertionError as e:
-        print(f"[ERROR] Test Batch vs. Individual: FEHLGESCHLAGEN - {e}")
+        print(f"Test Batch vs. Individual: FEHLGESCHLAGEN - {e}")
     
     print("\n" + "="*60)
     print("TEST SUITE ABGESCHLOSSEN")

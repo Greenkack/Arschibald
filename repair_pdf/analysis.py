@@ -7663,7 +7663,7 @@ def render_analysis(
         add_live_preview_to_section("PDF-Export")
     
     # Erweiterte Berechnungen für PDF-Export vorbereiten
-    st.subheader("[FILE] PDF-Export Vorbereitung")
+    st.subheader("PDF-Export Vorbereitung")
     if st.button(" Erweiterte Berechnungen für PDF-Export vorbereiten"):
         with st.spinner("Bereite erweiterte Berechnungen für PDF-Export vor..."):
             pdf_data = prepare_advanced_calculations_for_pdf_export(

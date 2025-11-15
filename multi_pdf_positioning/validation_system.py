@@ -639,7 +639,7 @@ class ValidationSystem:
             lines.append(f"Firma: {report.firma}, Seite: {report.seite}")
         
         lines.append(f"Timestamp: {report.timestamp}")
-        lines.append(f"Status: {'[OK] VALID' if report.is_valid else '[ERROR] INVALID'}")
+        lines.append(f"Status: {'VALID' if report.is_valid else 'INVALID'}")
         lines.append("")
         
         # Summary
@@ -655,7 +655,7 @@ class ValidationSystem:
             lines.append(f"ERRORS ({len(errors)})")
             lines.append("-" * 70)
             for msg in errors:
-                lines.append(f"  [ERROR] {msg.message}")
+                lines.append(f"  {msg.message}")
                 if msg.details:
                     lines.append(f"    Details: {msg.details}")
             lines.append("")
@@ -810,4 +810,4 @@ if __name__ == "__main__":
         print(f"  Errors: {len(new_report.get_errors())}")
         print(f"  Warnings: {len(new_report.get_warnings())}")
     
-    print("\n[OK] Validation System module ready")
+    print("\nValidation System module ready")

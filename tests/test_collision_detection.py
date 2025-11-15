@@ -20,7 +20,7 @@ try:
     import numpy as np
     PV3D_AVAILABLE = True
 except ImportError as e:
-    print(f"[ERROR] Import-Fehler: {e}")
+    print(f"Import-Fehler: {e}")
     PV3D_AVAILABLE = False
     sys.exit(1)
 
@@ -44,7 +44,7 @@ def test_bounding_box_calculation():
     assert abs(max_x - min_x - 1.05) < 0.01, "Breite sollte ~1.05m sein"
     assert abs(max_y - min_y - 1.76) < 0.01, "Höhe sollte ~1.76m sein"
     assert abs(max_z - min_z - 0.04) < 0.01, "Dicke sollte ~0.04m sein"
-    print("   [OK] Dimensionen korrekt")
+    print("   Dimensionen korrekt")
     
     # Test 2: Modul mit Position-Offset
     print("\n2. Modul mit Position-Offset (5.0, 3.0, 6.0)")
@@ -62,7 +62,7 @@ def test_bounding_box_calculation():
     assert abs(center_x - 5.0) < 0.01, "X-Zentrum sollte bei 5.0 liegen"
     assert abs(center_y - 3.0) < 0.01, "Y-Zentrum sollte bei 3.0 liegen"
     assert abs(center_z - 6.0) < 0.01, "Z-Zentrum sollte bei 6.0 liegen"
-    print("   [OK] Position korrekt")
+    print("   Position korrekt")
     
     # Test 3: Modul mit Rotation (Azimuth)
     print("\n3. Modul mit 45° Azimuth-Rotation")
@@ -77,7 +77,7 @@ def test_bounding_box_calculation():
     diagonal = np.sqrt(1.05**2 + 1.76**2)
     assert (max_x - min_x) > 1.05, "Rotierte Box sollte breiter sein"
     assert (max_y - min_y) > 1.76, "Rotierte Box sollte höher sein"
-    print("   [OK] Rotation berücksichtigt")
+    print("   Rotation berücksichtigt")
     
     # Test 4: Modul mit Neigung (Tilt)
     print("\n4. Modul mit 30° Neigung")
@@ -90,9 +90,9 @@ def test_bounding_box_calculation():
     
     # Bei Neigung sollte Z-Ausdehnung größer sein
     assert (max_z - min_z) > 0.04, "Geneigte Box sollte höher sein"
-    print("   [OK] Neigung berücksichtigt")
+    print("   Neigung berücksichtigt")
     
-    print("\n[OK] Test 12.1 erfolgreich abgeschlossen")
+    print("\nTest 12.1 erfolgreich abgeschlossen")
     return True
 
 
@@ -111,7 +111,7 @@ def test_bounding_box_intersection():
     print(f"   Box 2: {bbox2}")
     print(f"   Überschneidung: {result}")
     assert result == True, "Boxen sollten sich überschneiden"
-    print("   [OK] Korrekt erkannt")
+    print("   Korrekt erkannt")
     
     # Test 2: Nicht überlappende Boxen
     print("\n2. Nicht überlappende Boxen")
@@ -122,7 +122,7 @@ def test_bounding_box_intersection():
     print(f"   Box 2: {bbox4}")
     print(f"   Überschneidung: {result}")
     assert result == False, "Boxen sollten sich nicht überschneiden"
-    print("   [OK] Korrekt erkannt")
+    print("   Korrekt erkannt")
     
     # Test 3: Berührende Boxen (Kante an Kante)
     print("\n3. Berührende Boxen (Kante an Kante)")
@@ -134,10 +134,10 @@ def test_bounding_box_intersection():
     print(f"   Überschneidung: {result}")
     # Berührende Boxen werden als Kollision betrachtet (konservativ)
     # Dies ist korrekt für Kollisionserkennung
-    print(f"   [INFO]  Berührende Boxen werden als Kollision betrachtet (konservativ)")
-    print("   [OK] Korrekt erkannt")
+    print(f"   Berührende Boxen werden als Kollision betrachtet (konservativ)")
+    print("   Korrekt erkannt")
     
-    print("\n[OK] Bounding-Box Intersection Test erfolgreich")
+    print("\nBounding-Box Intersection Test erfolgreich")
     return True
 
 
@@ -158,7 +158,7 @@ def test_collision_detection():
     print(f"   Anzahl Module: {len(panels1)}")
     print(f"   Gefundene Kollisionen: {len(collisions1)}")
     assert len(collisions1) == 0, "Keine Kollisionen erwartet"
-    print("   [OK] Keine Kollisionen erkannt")
+    print("   Keine Kollisionen erkannt")
     
     # Test 2: Eine Kollision (überlappende Module)
     print("\n2. Eine Kollision - Zwei überlappende Module")
@@ -173,7 +173,7 @@ def test_collision_detection():
     print(f"   Kollisions-Paare: {collisions2}")
     assert len(collisions2) == 1, "Eine Kollision erwartet"
     assert collisions2[0] == (0, 1), "Kollision zwischen Modul 0 und 1 erwartet"
-    print("   [OK] Kollision korrekt erkannt")
+    print("   Kollision korrekt erkannt")
     
     # Test 3: Mehrere Kollisionen
     print("\n3. Mehrere Kollisionen - Drei überlappende Module")
@@ -188,7 +188,7 @@ def test_collision_detection():
     print(f"   Gefundene Kollisionen: {len(collisions3)}")
     print(f"   Kollisions-Paare: {collisions3}")
     assert len(collisions3) >= 2, "Mindestens 2 Kollisionen erwartet"
-    print("   [OK] Mehrere Kollisionen erkannt")
+    print("   Mehrere Kollisionen erkannt")
     
     # Test 4: Spatial-Hashing mit vielen Modulen
     print("\n4. Spatial-Hashing - Performance-Test mit vielen Modulen")
@@ -204,7 +204,7 @@ def test_collision_detection():
     print(f"   Anzahl Module: {len(panels4)}")
     print(f"   Gefundene Kollisionen: {len(collisions4)}")
     assert len(collisions4) == 0, "Keine Kollisionen bei 2m Abstand erwartet"
-    print("   [OK] Spatial-Hashing funktioniert korrekt")
+    print("   Spatial-Hashing funktioniert korrekt")
     
     # Test 5: Brute-Force vs Spatial-Hashing Vergleich
     print("\n5. Vergleich: Brute-Force vs Spatial-Hashing")
@@ -228,9 +228,9 @@ def test_collision_detection():
         "Beide Methoden sollten gleiche Anzahl Kollisionen finden"
     assert set(collisions_brute) == set(collisions_spatial), \
         "Beide Methoden sollten gleiche Kollisionen finden"
-    print("   [OK] Beide Methoden liefern identische Ergebnisse")
+    print("   Beide Methoden liefern identische Ergebnisse")
     
-    print("\n[OK] Test 12.2 erfolgreich abgeschlossen")
+    print("\nTest 12.2 erfolgreich abgeschlossen")
     return True
 
 
@@ -244,14 +244,14 @@ def test_edge_cases():
     print("\n1. Leere Modul-Liste")
     collisions = detect_collisions([])
     assert len(collisions) == 0, "Keine Kollisionen bei leerer Liste"
-    print("   [OK] Leere Liste korrekt behandelt")
+    print("   Leere Liste korrekt behandelt")
     
     # Test 2: Einzelnes Modul
     print("\n2. Einzelnes Modul")
     panels = [make_panel(position=(0.0, 0.0, 0.0))]
     collisions = detect_collisions(panels)
     assert len(collisions) == 0, "Keine Kollisionen bei einem Modul"
-    print("   [OK] Einzelnes Modul korrekt behandelt")
+    print("   Einzelnes Modul korrekt behandelt")
     
     # Test 3: Zwei identische Module (perfekte Überlappung)
     print("\n3. Zwei identische Module (perfekte Überlappung)")
@@ -261,9 +261,9 @@ def test_edge_cases():
     ]
     collisions = detect_collisions(panels)
     assert len(collisions) == 1, "Eine Kollision bei identischen Modulen"
-    print("   [OK] Perfekte Überlappung erkannt")
+    print("   Perfekte Überlappung erkannt")
     
-    print("\n[OK] Edge-Cases Test erfolgreich")
+    print("\nEdge-Cases Test erfolgreich")
     return True
 
 
@@ -274,7 +274,7 @@ def main():
     print("="*70)
     
     if not PV3D_AVAILABLE:
-        print("[ERROR] PyVista nicht verfügbar. Tests können nicht ausgeführt werden.")
+        print("PyVista nicht verfügbar. Tests können nicht ausgeführt werden.")
         return False
     
     try:
@@ -289,20 +289,20 @@ def main():
         # Zusammenfassung
         print("\n" + "="*70)
         if success:
-            print("[OK] ALLE TESTS ERFOLGREICH ABGESCHLOSSEN")
+            print("ALLE TESTS ERFOLGREICH ABGESCHLOSSEN")
             print("="*70)
             print("\nTask 12 Implementierung:")
-            print("  [OK] 12.1 Bounding-Box Berechnung")
-            print("  [OK] 12.2 Kollisionserkennung mit Spatial-Hashing")
-            print("  [OK] 12.3 UI-Integration (siehe pages/solar_3d_view.py)")
+            print("  12.1 Bounding-Box Berechnung")
+            print("  12.2 Kollisionserkennung mit Spatial-Hashing")
+            print("  12.3 UI-Integration (siehe pages/solar_3d_view.py)")
             return True
         else:
-            print("[ERROR] EINIGE TESTS FEHLGESCHLAGEN")
+            print("EINIGE TESTS FEHLGESCHLAGEN")
             print("="*70)
             return False
             
     except Exception as e:
-        print(f"\n[ERROR] Fehler beim Ausführen der Tests: {e}")
+        print(f"\nFehler beim Ausführen der Tests: {e}")
         import traceback
         traceback.print_exc()
         return False

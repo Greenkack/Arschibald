@@ -386,7 +386,7 @@ def show_customer_assignment_dialog() -> Optional[int]:
         import streamlit as st
         from database import get_db_connection
         
-        st.warning("[WARNING] Kein Kunde zugeordnet - PDF wird nicht automatisch archiviert")
+        st.warning("Kein Kunde zugeordnet - PDF wird nicht automatisch archiviert")
         
         with st.expander("📋 Kunde für PDF-Archivierung auswählen", expanded=False):
             st.info("Wählen Sie einen Kunden aus, um das PDF automatisch in der Kundenakte zu speichern.")
@@ -422,7 +422,7 @@ def show_customer_assignment_dialog() -> Optional[int]:
                     key="pdf_customer_assignment"
                 )
                 
-                if st.button("[OK] Kunde zuordnen und PDF archivieren", key="assign_customer_pdf"):
+                if st.button("Kunde zuordnen und PDF archivieren", key="assign_customer_pdf"):
                     customer_id = customer_options[selected_customer]
                     st.success(f"Kunde zugeordnet: {selected_customer}")
                     return customer_id

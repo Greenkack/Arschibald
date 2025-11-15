@@ -62,16 +62,16 @@ def fix_heatpump_ui():
         f.write(content)
     
     changes = len(content) - len(original_content)
-    print(f"[OK] {filepath} repariert")
+    print(f"{filepath} repariert")
     print(f"   Größenänderung: {changes:+d} Zeichen")
     
     # Teste Import
     try:
         import heatpump_ui
-        print("[OK] Import-Test erfolgreich")
+        print("Import-Test erfolgreich")
         return True
     except SyntaxError as e:
-        print(f"[ERROR] Syntax-Fehler bleibt: {e}")
+        print(f"Syntax-Fehler bleibt: {e}")
         return False
 
 if __name__ == "__main__":

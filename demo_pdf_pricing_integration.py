@@ -363,12 +363,12 @@ def main():
         print("\n" + "=" * 50)
         print("Demo completed successfully!")
         print("\nKey Features Demonstrated:")
-        print("[OK] Dynamic pricing key generation")
-        print("[OK] PDF template creation for PV, heat pump, and combined systems")
-        print("[OK] Template rendering with actual pricing data")
-        print("[OK] Enhanced PDF generator with pricing integration")
-        print("[OK] Pricing breakdown section creation")
-        print("[OK] German number formatting for currency values")
+        print("Dynamic pricing key generation")
+        print("PDF template creation for PV, heat pump, and combined systems")
+        print("Template rendering with actual pricing data")
+        print("Enhanced PDF generator with pricing integration")
+        print("Pricing breakdown section creation")
+        print("German number formatting for currency values")
 
     except Exception as e:
         print(f"\nDemo error: {e}")

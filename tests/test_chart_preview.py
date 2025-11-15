@@ -45,7 +45,7 @@ def test_generate_chart_thumbnail():
     assert thumbnail_image.width <= 200
     assert thumbnail_image.height <= 150
 
-    print("[OK] Thumbnail generation test passed")
+    print("Thumbnail generation test passed")
 
 
 def test_generate_chart_thumbnail_with_none():
@@ -58,7 +58,7 @@ def test_generate_chart_thumbnail_with_none():
     # Should return None
     assert thumbnail_bytes is None
 
-    print("[OK] Thumbnail generation with None test passed")
+    print("Thumbnail generation with None test passed")
 
 
 def test_generate_chart_thumbnail_with_invalid_data():
@@ -72,7 +72,7 @@ def test_generate_chart_thumbnail_with_invalid_data():
     # Should return None on error
     assert thumbnail_bytes is None
 
-    print("[OK] Thumbnail generation with invalid data test passed")
+    print("Thumbnail generation with invalid data test passed")
 
 
 def test_create_placeholder_thumbnail():
@@ -95,7 +95,7 @@ def test_create_placeholder_thumbnail():
     assert placeholder_image.width == 200
     assert placeholder_image.height == 150
 
-    print("[OK] Placeholder thumbnail creation test passed")
+    print("Placeholder thumbnail creation test passed")
 
 
 def test_create_placeholder_thumbnail_default_params():
@@ -113,7 +113,7 @@ def test_create_placeholder_thumbnail_default_params():
     placeholder_image = Image.open(io.BytesIO(placeholder_bytes))
     assert placeholder_image.format == 'PNG'
 
-    print("[OK] Placeholder thumbnail with default params test passed")
+    print("Placeholder thumbnail with default params test passed")
 
 
 def test_thumbnail_aspect_ratio_preservation():
@@ -144,7 +144,7 @@ def test_thumbnail_aspect_ratio_preservation():
     # Allow 1% tolerance for rounding
     assert abs(original_ratio - thumbnail_ratio) < 0.01
 
-    print("[OK] Thumbnail aspect ratio preservation test passed")
+    print("Thumbnail aspect ratio preservation test passed")
 
 
 def test_thumbnail_size_constraints():
@@ -169,7 +169,7 @@ def test_thumbnail_size_constraints():
     assert thumbnail_image.width <= 100
     assert thumbnail_image.height <= 100
 
-    print("[OK] Thumbnail size constraints test passed")
+    print("Thumbnail size constraints test passed")
 
 
 def test_chart_availability_check_integration():
@@ -214,7 +214,7 @@ def test_chart_availability_check_integration():
         'battery_usage_chart_bytes', project_data, analysis_results)
     assert is_available == False, f"Battery chart should not be available without storage, got {is_available}"
 
-    print("[OK] Chart availability check integration test passed")
+    print("Chart availability check integration test passed")
 
 
 def test_chart_categories_mapping():
@@ -234,7 +234,7 @@ def test_chart_categories_mapping():
             assert chart_key in CHART_KEY_TO_FRIENDLY_NAME_MAP, \
                 f"Chart {chart_key} in category {category} missing friendly name"
 
-    print("[OK] Chart categories mapping test passed")
+    print("Chart categories mapping test passed")
 
 
 def test_preview_with_empty_selection():
@@ -251,7 +251,7 @@ def test_preview_with_empty_selection():
 
         # The function should handle empty selection gracefully
         # (In actual Streamlit context, it would show an info message)
-        print("[OK] Preview with empty selection test passed (no crash)")
+        print("Preview with empty selection test passed (no crash)")
     except Exception as e:
         pytest.fail(f"Preview with empty selection raised exception: {e}")
 
@@ -277,7 +277,7 @@ def test_thumbnail_optimization():
     assert thumbnail_size < original_size * 0.5  # At least 50% smaller
 
     print(
-        f"[OK] Thumbnail optimization test passed (Original: {original_size} bytes, Thumbnail: {thumbnail_size} bytes)")
+        f"Thumbnail optimization test passed (Original: {original_size} bytes, Thumbnail: {thumbnail_size} bytes)")
 
 
 if __name__ == "__main__":
@@ -295,4 +295,4 @@ if __name__ == "__main__":
     test_preview_with_empty_selection()
     test_thumbnail_optimization()
 
-    print("\n[OK] All chart preview tests passed!")
+    print("\nAll chart preview tests passed!")

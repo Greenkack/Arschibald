@@ -53,11 +53,11 @@ def test_animation_none_type_fix():
             print(f"  Frame {i}: x={camera_x:.2f}, y={camera_y:.2f}, z={camera_z:.2f}")
         
         print()
-        print("[OK] PASS - Keine NoneType-Fehler!")
+        print("PASS - Keine NoneType-Fehler!")
         print()
         
     except TypeError as e:
-        print(f"[ERROR] FAIL - NoneType-Fehler: {e}")
+        print(f"FAIL - NoneType-Fehler: {e}")
         return False
     
     return True
@@ -114,7 +114,7 @@ def test_collision_detection_fix():
         )
         
         if result["collision"]:
-            print(f"  [ERROR] Modul {i}: {result['message']}")
+            print(f"  Modul {i}: {result['message']}")
             print(f"     Position: ({x:.2f}, {y:.2f})")
             false_warnings += 1
         else:
@@ -127,11 +127,11 @@ def test_collision_detection_fix():
     print()
     
     if false_warnings == 0:
-        print("[OK] PASS - Keine falschen Kollisions-Warnungen!")
+        print("PASS - Keine falschen Kollisions-Warnungen!")
         print()
         return True
     else:
-        print(f"[ERROR] FAIL - {false_warnings} falsche Warnungen!")
+        print(f"FAIL - {false_warnings} falsche Warnungen!")
         print()
         return False
 
@@ -190,17 +190,17 @@ def test_boundary_calculation():
     old_check = (example_x - half_width) < old_min_x
     print(f"  Alte Prüfung: {example_x - half_width:.2f}m < {old_min_x:.2f}m = {old_check}")
     if old_check:
-        print(f"    [ERROR] Falsche Warnung!")
+        print(f"    Falsche Warnung!")
     print()
     
     # Neue Prüfung
     new_check = example_x < new_min_x
     print(f"  Neue Prüfung: {example_x:.2f}m < {new_min_x:.2f}m = {new_check}")
     if not new_check:
-        print(f"    [OK] Korrekt - Keine Warnung!")
+        print(f"    Korrekt - Keine Warnung!")
     print()
     
-    print("[OK] PASS - Grenzen-Berechnung korrigiert!")
+    print("PASS - Grenzen-Berechnung korrigiert!")
     print()
     
     return True
@@ -231,17 +231,17 @@ if __name__ == "__main__":
     print()
     
     if all(results):
-        print("[OK] ALLE TESTS BESTANDEN!")
+        print("ALLE TESTS BESTANDEN!")
         print()
         print("Fixes erfolgreich:")
-        print("  1. [OK] Animation funktioniert ohne NoneType-Fehler")
-        print("  2. [OK] Kollisionserkennung gibt keine falschen Warnungen")
-        print("  3. [OK] Grenzen-Berechnung korrekt")
+        print("  1. Animation funktioniert ohne NoneType-Fehler")
+        print("  2. Kollisionserkennung gibt keine falschen Warnungen")
+        print("  3. Grenzen-Berechnung korrekt")
     else:
-        print("[ERROR] EINIGE TESTS FEHLGESCHLAGEN!")
+        print("EINIGE TESTS FEHLGESCHLAGEN!")
         print()
         for i, result in enumerate(results, 1):
-            status = "[OK] PASS" if result else "[ERROR] FAIL"
+            status = "PASS" if result else "FAIL"
             print(f"  Test {i}: {status}")
     
     print()

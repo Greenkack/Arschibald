@@ -559,18 +559,18 @@ class FinalValidator:
             print(f"\nInvalid Files ({report.invalid_files}):")
             for result in report.file_results:
                 if not result.is_valid:
-                    print(f"\n  [ERROR] {result.filename}:")
+                    print(f"\n  {result.filename}:")
                     for error in result.errors[:3]:  # Show first 3 errors
                         print(f"      Error: {error}")
         
         # Summary
         print("\n" + "=" * 70)
         if report.invalid_files == 0 and report.total_errors == 0:
-            print("[OK] ALL FILES VALID - SYSTEM READY FOR DEPLOYMENT")
+            print("ALL FILES VALID - SYSTEM READY FOR DEPLOYMENT")
         elif report.invalid_files == 0:
             print(f"⚠ ALL FILES VALID BUT {report.total_warnings} WARNINGS")
         else:
-            print(f"[ERROR] {report.invalid_files} INVALID FILES - REVIEW REQUIRED")
+            print(f"{report.invalid_files} INVALID FILES - REVIEW REQUIRED")
         print("=" * 70)
     
     def save_report(self, report: FinalValidationReport, output_file: Path):
@@ -586,7 +586,7 @@ class FinalValidator:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(report.to_dict(), f, indent=2, ensure_ascii=False)
         
-        print(f"\n[OK] Report saved to: {output_file}")
+        print(f"\nReport saved to: {output_file}")
 
 
 def validate_final_system(

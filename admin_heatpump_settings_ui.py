@@ -204,8 +204,8 @@ def save_heatpump_prices(prices: Dict[str, Any]) -> bool:
 def get_heatpump_price(manufacturer: str, hp_type: str, model: str, power_kw: float) -> Dict[str, float]:
     """
     Gibt den Preis für eine spezifische Wärmepumpe zurück
-    [OK] ZUERST: Suche in product_db.py (echte Produktdatenbank)
-    [WARNING] FALLBACK: Suche in statischer Konfiguration
+    ZUERST: Suche in product_db.py (echte Produktdatenbank)
+    FALLBACK: Suche in statischer Konfiguration
     
     Args:
         manufacturer: Hersteller (z.B. "Viessmann")
@@ -217,7 +217,7 @@ def get_heatpump_price(manufacturer: str, hp_type: str, model: str, power_kw: fl
         Dict mit base_price_eur, installation_price_eur, total_price_eur
     """
     
-    # [OK] SCHRITT 1: SUCHE IN ECHTER PRODUKTDATENBANK (product_db.py)
+    # SCHRITT 1: SUCHE IN ECHTER PRODUKTDATENBANK (product_db.py)
     try:
         from product_db import get_product_by_model_name
         
@@ -236,7 +236,7 @@ def get_heatpump_price(manufacturer: str, hp_type: str, model: str, power_kw: fl
     except Exception:
         pass  # Fallback zu statischer Konfiguration
     
-    # [WARNING] SCHRITT 2: FALLBACK AUF STATISCHE KONFIGURATION
+    # SCHRITT 2: FALLBACK AUF STATISCHE KONFIGURATION
     prices = load_heatpump_prices()
     
     try:
@@ -308,7 +308,7 @@ def get_heatpump_price(manufacturer: str, hp_type: str, model: str, power_kw: fl
     except (KeyError, ValueError) as e:
         # Fallback auf Standardberechnung
         import streamlit as st
-        st.warning(f"[WARNING] Preis nicht in Konfiguration gefunden: {manufacturer} {model} {power_kw}kW. Nutze Standardberechnung.")
+        st.warning(f"Preis nicht in Konfiguration gefunden: {manufacturer} {model} {power_kw}kW. Nutze Standardberechnung.")
         base_price = 800 + (power_kw * 200)
         return {
             "base_price_eur": round(base_price, 2),
@@ -329,10 +329,10 @@ def render_admin_heatpump_settings_ui():
     
     # Tab-Navigation
     tabs = st.tabs([
-        "[MONEY] Wärmepumpen-Preise",
-        "[TEMP] Heizkosten-Konfiguration",
-        "� Bulk-Upload",  # [OK] NEU: Bulk-Upload Tab
-        "�[CHART] Übersicht & Export",
+        "Wärmepumpen-Preise",
+        "Heizkosten-Konfiguration",
+        "� Bulk-Upload",  # NEU: Bulk-Upload Tab
+        "�Übersicht & Export",
         "🔗 Integration & Tests"
     ])
     
@@ -364,7 +364,7 @@ def render_admin_heatpump_settings_ui():
 def render_heatpump_prices_tab():
     """Tab für Wärmepumpen-Preise"""
     
-    st.subheader("[MONEY] Wärmepumpen-Preise verwalten")
+    st.subheader("Wärmepumpen-Preise verwalten")
     st.caption("Preise für alle Hersteller, Typen, Modelle und Leistungsstufen")
     
     # Lade aktuelle Preise
@@ -372,7 +372,7 @@ def render_heatpump_prices_tab():
     
     # Hersteller-Auswahl
     if not HEATPUMP_PRODUCTS:
-        st.error("[ERROR] Produktdatenbank konnte nicht geladen werden!")
+        st.error("Produktdatenbank konnte nicht geladen werden!")
         return
     
     manufacturers = list(HEATPUMP_PRODUCTS.keys())
@@ -402,7 +402,7 @@ def render_heatpump_prices_tab():
                 heating_powers = model_data.get("heating_power_kw", [])
                 scop = model_data.get("scop", 0)
                 
-                with st.expander(f"[TOOL] {model_name} (SCOP: {scop})"):
+                with st.expander(f"{model_name} (SCOP: {scop})"):
                     st.caption(f"Verfügbare Leistungen: {', '.join([str(p) + ' kW' for p in heating_powers])}")
                     
                     # Preise für jede Leistungsstufe
@@ -443,7 +443,7 @@ def render_heatpump_prices_tab():
                                 key=f"base_price_{selected_manufacturer}_{selected_type}_{model_name}_{power}_{idx}"
                             )
                             prices[selected_manufacturer][selected_type][model_name][str(power)]["base_price_eur"] = base_price
-                            st.caption(f"[MONEY] {format_german_number(base_price, 2)}")
+                            st.caption(f"{format_german_number(base_price, 2)}")
                         
                         with col3:
                             installation_price = st.number_input(
@@ -455,7 +455,7 @@ def render_heatpump_prices_tab():
                                 key=f"install_price_{selected_manufacturer}_{selected_type}_{model_name}_{power}_{idx}"
                             )
                             prices[selected_manufacturer][selected_type][model_name][str(power)]["installation_price_eur"] = installation_price
-                            st.caption(f"[TOOL] {format_german_number(installation_price, 2)}")
+                            st.caption(f"{format_german_number(installation_price, 2)}")
                         
                         with col4:
                             total = base_price + installation_price
@@ -469,15 +469,15 @@ def render_heatpump_prices_tab():
     with col1:
         if st.button("💾 Preise speichern", type="primary", use_container_width=True):
             if save_heatpump_prices(prices):
-                st.success("[OK] Preise erfolgreich gespeichert!")
+                st.success("Preise erfolgreich gespeichert!")
             else:
-                st.error("[ERROR] Fehler beim Speichern!")
+                st.error("Fehler beim Speichern!")
     
     with col2:
         if st.button("🔄 Standardpreise wiederherstellen", use_container_width=True):
             prices = DEFAULT_HEATPUMP_PRICES.copy()
             if save_heatpump_prices(prices):
-                st.success("[OK] Standardpreise wiederhergestellt!")
+                st.success("Standardpreise wiederhergestellt!")
                 st.rerun()
     
     with col3:
@@ -503,7 +503,7 @@ def render_heating_costs_tab():
 def render_overview_tab():
     """Übersicht über alle Einstellungen"""
     
-    st.subheader("[CHART] Konfigurationsübersicht")
+    st.subheader("Konfigurationsübersicht")
     
     # Wärmepumpen-Preise Statistik
     prices = load_heatpump_prices()
@@ -538,7 +538,7 @@ def render_overview_tab():
         # Export Wärmepumpen-Preise
         prices_json = json.dumps(prices, indent=2, ensure_ascii=False)
         st.download_button(
-            label="[PACKAGE] Wärmepumpen-Preise exportieren",
+            label="Wärmepumpen-Preise exportieren",
             data=prices_json,
             file_name="heatpump_prices_config.json",
             mime="application/json",
@@ -550,7 +550,7 @@ def render_overview_tab():
         heating_config = load_heating_config()
         heating_json = json.dumps(heating_config, indent=2, ensure_ascii=False)
         st.download_button(
-            label="[PACKAGE] Heizkosten-Konfiguration exportieren",
+            label="Heizkosten-Konfiguration exportieren",
             data=heating_json,
             file_name="heating_costs_config.json",
             mime="application/json",
@@ -602,7 +602,7 @@ def render_integration_tab():
         if st.button("🧪 Preis abrufen", type="primary"):
             price_data = get_heatpump_price(test_manufacturer, test_type, test_model, test_power)
             
-            st.success("[OK] Preisabfrage erfolgreich!")
+            st.success("Preisabfrage erfolgreich!")
             
             col1, col2, col3 = st.columns(3)
             with col1:
@@ -617,16 +617,16 @@ def render_integration_tab():
     st.markdown("### 📋 Integrationspunkte")
     
     integration_points = [
-        {"Module": "heatpump_ui.py", "Funktion": "render_heatpump_analysis()", "Status": "[OK] Aktiv"},
-        {"Module": "calculations_heatpump.py", "Funktion": "calculate_heatpump_economics()", "Status": "[OK] Aktiv"},
-        {"Module": "pdf_generation", "Funktion": "generate_heatpump_pdf()", "Status": "[OK] Aktiv"},
-        {"Module": "heatpump_products_database.py", "Funktion": "get_heatpump_models()", "Status": "[OK] Aktiv"},
+        {"Module": "heatpump_ui.py", "Funktion": "render_heatpump_analysis()", "Status": "Aktiv"},
+        {"Module": "calculations_heatpump.py", "Funktion": "calculate_heatpump_economics()", "Status": "Aktiv"},
+        {"Module": "pdf_generation", "Funktion": "generate_heatpump_pdf()", "Status": "Aktiv"},
+        {"Module": "heatpump_products_database.py", "Funktion": "get_heatpump_models()", "Status": "Aktiv"},
     ]
     
     df = pd.DataFrame(integration_points)
     st.dataframe(df, use_container_width=True, hide_index=True)
     
-    st.info("[IDEA] Die Preise werden automatisch in allen Wärmepumpen-Berechnungen und PDF-Generierungen verwendet.")
+    st.info("Die Preise werden automatisch in allen Wärmepumpen-Berechnungen und PDF-Generierungen verwendet.")
 
 
 # ============================================================================
@@ -794,7 +794,7 @@ def render_bulk_upload_tab():
     st.caption("Importieren Sie mehrere Wärmepumpen gleichzeitig via CSV, Excel oder JSON")
     
     # Info-Box mit Formatbeschreibung
-    with st.expander("[INFO] Format-Informationen & Beispiele", expanded=False):
+    with st.expander("Format-Informationen & Beispiele", expanded=False):
         st.markdown("""
         ### 📋 Erforderliche Spalten/Felder:
         
@@ -812,7 +812,7 @@ def render_bulk_upload_tab():
         | `rating` | Bewertung (optional) | 4.5, 4.8, 5.0 |
         | `awards` | Auszeichnungen (optional, pipe-separiert) | Testsieger 2024&#124;Öko-Test SEHR GUT |
         
-        ### [FOLDER] CSV-Format Beispiel:
+        ### CSV-Format Beispiel:
         ```csv
         manufacturer,heatpump_type,model,heating_power_kw,scop,max_flow_temp,price_range,features,refrigerant,rating,awards
         Viessmann,Luft-Wasser-Wärmepumpe,Vitocal 250-A,"6.0,8.0,10.0,12.0",4.6,70,€€€,Smart Grid Ready|Active Cooling,R290 (Propan),4.8,Testsieger 2024
@@ -820,12 +820,12 @@ def render_bulk_upload_tab():
         Buderus,Sole-Wasser-Wärmepumpe,Logatherm WSW196i,"8.0,11.0,15.0",5.1,70,€€€,Erdwärmesonden|Smart Grid,R290 (Propan),4.7,
         ```
         
-        ### [CHART] Excel-Format:
+        ### Excel-Format:
         - Erste Zeile: Spaltenüberschriften (wie oben)
         - Ab Zeile 2: Daten
         - Bei mehreren Leistungswerten: Kommasepariert in einer Zelle
         
-        ### [TOOL] JSON-Format Beispiel:
+        ### JSON-Format Beispiel:
         ```json
         [
             {
@@ -846,7 +846,7 @@ def render_bulk_upload_tab():
         """)
     
     # Upload-Bereich
-    st.markdown("### [FOLDER] Datei hochladen")
+    st.markdown("### Datei hochladen")
     
     upload_format = st.radio(
         "Format wählen:",
@@ -888,12 +888,12 @@ def render_bulk_upload_tab():
             if upload_format == "CSV":
                 # CSV einlesen (Auto-detect Delimiter)
                 df = pd.read_csv(uploaded_file, sep=None, engine='python')
-                st.success(f"[OK] CSV-Datei eingelesen: {len(df)} Zeilen")
+                st.success(f"CSV-Datei eingelesen: {len(df)} Zeilen")
                 
             elif upload_format == "Excel (XLSX)":
                 # Excel einlesen
                 df = pd.read_excel(uploaded_file)
-                st.success(f"[OK] Excel-Datei eingelesen: {len(df)} Zeilen")
+                st.success(f"Excel-Datei eingelesen: {len(df)} Zeilen")
                 
             else:  # JSON
                 # JSON einlesen
@@ -903,7 +903,7 @@ def render_bulk_upload_tab():
                 # Prüfen ob es verschachtelte HEATPUMP_PRODUCTS-Struktur ist
                 if isinstance(data, dict) and any(isinstance(v, dict) for v in data.values()):
                     # Verschachtelte Struktur: {Hersteller: {Typ: [Modelle]}}
-                    st.info("[PACKAGE] Verschachtelte Datenbank-Struktur erkannt, wird in Tabelle konvertiert...")
+                    st.info("Verschachtelte Datenbank-Struktur erkannt, wird in Tabelle konvertiert...")
                     flat_data = []
                     for manufacturer, types in data.items():
                         if isinstance(types, dict):
@@ -917,19 +917,19 @@ def render_bulk_upload_tab():
                     data = flat_data
                 
                 df = pd.DataFrame(data)
-                st.success(f"[OK] JSON-Datei eingelesen: {len(df)} Zeilen")
+                st.success(f"JSON-Datei eingelesen: {len(df)} Zeilen")
             
             # Datenvalidierung
             required_columns = ['manufacturer', 'heatpump_type', 'model', 'heating_power_kw', 'scop', 'max_flow_temp', 'price_range']
             
             # Debug: Zeige vorhandene Spalten
-            st.info(f"[SEARCH] Gefundene Spalten: {', '.join(df.columns.tolist())}")
+            st.info(f"Gefundene Spalten: {', '.join(df.columns.tolist())}")
             
             missing_columns = [col for col in required_columns if col not in df.columns]
             
             if missing_columns:
                 # Versuche Spalten-Mapping
-                st.warning("[TOOL] Versuche automatisches Spalten-Mapping...")
+                st.warning("Versuche automatisches Spalten-Mapping...")
                 
                 column_mapping = {}
                 # Mögliche alternative Spaltennamen
@@ -948,7 +948,7 @@ def render_bulk_upload_tab():
                         for alt in alts:
                             if alt in df.columns:
                                 column_mapping[alt] = required
-                                st.success(f"[OK] '{alt}' → '{required}'")
+                                st.success(f"'{alt}' → '{required}'")
                                 break
                 
                 if column_mapping:
@@ -957,7 +957,7 @@ def render_bulk_upload_tab():
                 
                 # Wenn price_range fehlt aber price_eur vorhanden ist, berechne Preisklasse
                 if 'price_range' not in df.columns and 'price_eur' in df.columns:
-                    st.info("[MONEY] Berechne Preisklassen aus Preisen...")
+                    st.info("Berechne Preisklassen aus Preisen...")
                     def calculate_price_range(price):
                         if pd.isna(price):
                             return '€€'
@@ -972,26 +972,26 @@ def render_bulk_upload_tab():
                             return '€€€€'
                     
                     df['price_range'] = df['price_eur'].apply(calculate_price_range)
-                    st.success("[OK] Preisklassen berechnet")
+                    st.success("Preisklassen berechnet")
                     missing_columns = [col for col in required_columns if col not in df.columns]
                 
                 # Nochmal prüfen nach allen Mappings
                 if missing_columns:
-                    st.error(f"[ERROR] Immer noch fehlende Felder: {', '.join(missing_columns)}")
+                    st.error(f"Immer noch fehlende Felder: {', '.join(missing_columns)}")
                     
                     # Zeige erste Zeile als Beispiel
-                    st.markdown("### [SEARCH] Erste Zeile der Daten:")
+                    st.markdown("### Erste Zeile der Daten:")
                     st.json(df.head(1).to_dict(orient='records')[0] if len(df) > 0 else {})
                     
-                    st.info("[IDEA] Bitte stellen Sie sicher, dass Ihre JSON-Datei die korrekten Feldnamen hat.")
+                    st.info("Bitte stellen Sie sicher, dass Ihre JSON-Datei die korrekten Feldnamen hat.")
                     return
                 else:
-                    st.success("[OK] Alle Pflichtfelder gefunden oder erfolgreich gemappt!")
+                    st.success("Alle Pflichtfelder gefunden oder erfolgreich gemappt!")
             
             # JETZT Datenbereinigung durchführen (NACH dem Mapping!)
             st.info("🧹 Bereinige Daten...")
             df = clean_heatpump_data(df)
-            st.success(f"[OK] Datenbereinigung abgeschlossen - {len(df)} Zeilen übrig")
+            st.success(f"Datenbereinigung abgeschlossen - {len(df)} Zeilen übrig")
             
             # Datenvorschau
             st.markdown("### 👀 Datenvorschau")
@@ -1031,7 +1031,7 @@ def render_bulk_upload_tab():
             col_btn1, col_btn2, col_btn3 = st.columns([2, 1, 1])
             
             with col_btn1:
-                if st.button("[LAUNCH] Import starten", type="primary", use_container_width=True):
+                if st.button("Import starten", type="primary", use_container_width=True):
                     import_heatpump_bulk_data(df, overwrite_existing, validate_data)
             
             with col_btn2:
@@ -1039,11 +1039,11 @@ def render_bulk_upload_tab():
                     validate_bulk_data(df, validate_data)
             
             with col_btn3:
-                if st.button("[ERROR] Abbrechen", use_container_width=True):
+                if st.button("Abbrechen", use_container_width=True):
                     st.rerun()
                     
         except Exception as e:
-            st.error(f"[ERROR] Fehler beim Einlesen der Datei: {e}")
+            st.error(f"Fehler beim Einlesen der Datei: {e}")
             import traceback
             st.code(traceback.format_exc())
     
@@ -1062,7 +1062,7 @@ Vaillant,Luft-Wasser-Wärmepumpe,aroTHERM plus,8.5,4.5,65,€€,Smart Grid Read
 Buderus,Sole-Wasser-Wärmepumpe,Logatherm WSW196i,"8.0,11.0,15.0",5.1,70,€€€,Erdwärmesonden|Smart Grid,R290 (Propan),4.7,"""
         
         st.download_button(
-            label="[FILE] CSV-Vorlage",
+            label="CSV-Vorlage",
             data=csv_template,
             file_name="wärmepumpen_vorlage.csv",
             mime="text/csv",
@@ -1095,7 +1095,7 @@ Buderus,Sole-Wasser-Wärmepumpe,Logatherm WSW196i,"8.0,11.0,15.0",5.1,70,€€�
         excel_buffer.seek(0)
         
         st.download_button(
-            label="[CHART] Excel-Vorlage",
+            label="Excel-Vorlage",
             data=excel_buffer,
             file_name="wärmepumpen_vorlage.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -1136,7 +1136,7 @@ Buderus,Sole-Wasser-Wärmepumpe,Logatherm WSW196i,"8.0,11.0,15.0",5.1,70,€€�
         ]
         
         st.download_button(
-            label="[TOOL] JSON-Vorlage",
+            label="JSON-Vorlage",
             data=json.dumps(json_template, indent=2, ensure_ascii=False),
             file_name="wärmepumpen_vorlage.json",
             mime="application/json",
@@ -1147,7 +1147,7 @@ Buderus,Sole-Wasser-Wärmepumpe,Logatherm WSW196i,"8.0,11.0,15.0",5.1,70,€€�
 def validate_bulk_data(df: pd.DataFrame, validate_data: bool = True):
     """Validiert die Bulk-Daten vor dem Import"""
     
-    st.markdown("### [SEARCH] Validierungs-Ergebnisse")
+    st.markdown("### Validierungs-Ergebnisse")
     
     errors = []
     warnings = []
@@ -1157,36 +1157,36 @@ def validate_bulk_data(df: pd.DataFrame, validate_data: bool = True):
     for field in required_fields:
         null_count = df[field].isnull().sum()
         if null_count > 0:
-            errors.append(f"[ERROR] {field}: {null_count} leere Werte gefunden")
+            errors.append(f"{field}: {null_count} leere Werte gefunden")
     
     # Daten validieren
     if validate_data:
         # SCOP-Werte
         invalid_scop = df[(df['scop'] < 2.0) | (df['scop'] > 6.0)]
         if len(invalid_scop) > 0:
-            warnings.append(f"[WARNING] {len(invalid_scop)} SCOP-Werte außerhalb 2.0-6.0")
+            warnings.append(f"{len(invalid_scop)} SCOP-Werte außerhalb 2.0-6.0")
         
         # Vorlauftemperatur
         invalid_temp = df[(df['max_flow_temp'] < 45) | (df['max_flow_temp'] > 80)]
         if len(invalid_temp) > 0:
-            warnings.append(f"[WARNING] {len(invalid_temp)} Vorlauftemperaturen außerhalb 45-80 °C")
+            warnings.append(f"{len(invalid_temp)} Vorlauftemperaturen außerhalb 45-80 °C")
         
         # Preisklassen
         valid_price_ranges = ['€', '€€', '€€€', '€€€€']
         invalid_price_range = df[~df['price_range'].isin(valid_price_ranges)]
         if len(invalid_price_range) > 0:
-            warnings.append(f"[WARNING] {len(invalid_price_range)} ungültige Preisklassen (erlaubt: {', '.join(valid_price_ranges)})")
+            warnings.append(f"{len(invalid_price_range)} ungültige Preisklassen (erlaubt: {', '.join(valid_price_ranges)})")
     
     # Duplikate prüfen
     duplicates = df.duplicated(subset=['manufacturer', 'heatpump_type', 'model'], keep=False)
     if duplicates.sum() > 0:
-        warnings.append(f"[WARNING] {duplicates.sum()} Duplikate gefunden (gleiche Hersteller/Typ/Modell)")
+        warnings.append(f"{duplicates.sum()} Duplikate gefunden (gleiche Hersteller/Typ/Modell)")
     
     # Hersteller prüfen
     known_manufacturers = ['Viessmann', 'Buderus', 'Vaillant']
     unknown_manufacturers = df[~df['manufacturer'].isin(known_manufacturers)]['manufacturer'].unique()
     if len(unknown_manufacturers) > 0:
-        warnings.append(f"[WARNING] Unbekannte Hersteller: {', '.join(unknown_manufacturers)}")
+        warnings.append(f"Unbekannte Hersteller: {', '.join(unknown_manufacturers)}")
     
     # Ergebnisse anzeigen
     if errors:
@@ -1198,11 +1198,11 @@ def validate_bulk_data(df: pd.DataFrame, validate_data: bool = True):
             st.warning(warning)
     
     if not errors and not warnings:
-        st.success("[OK] Alle Validierungen bestanden! Daten können importiert werden.")
+        st.success("Alle Validierungen bestanden! Daten können importiert werden.")
     elif not errors:
-        st.info("[INFO] Validierung erfolgreich mit Warnungen. Import möglich.")
+        st.info("Validierung erfolgreich mit Warnungen. Import möglich.")
     else:
-        st.error("[ERROR] Validierung fehlgeschlagen. Bitte Fehler korrigieren.")
+        st.error("Validierung fehlgeschlagen. Bitte Fehler korrigieren.")
 
 
 def import_heatpump_bulk_data(df: pd.DataFrame, overwrite: bool = False, validate: bool = True):
@@ -1339,7 +1339,7 @@ def import_heatpump_bulk_data(df: pd.DataFrame, overwrite: bool = False, validat
                         
             except Exception as e:
                 error_count += 1
-                st.warning(f"[WARNING] Zeile {idx + 1}: {e}")
+                st.warning(f"Zeile {idx + 1}: {e}")
         
         # Datenbank-Datei aktualisieren
         try:
@@ -1383,10 +1383,10 @@ def import_heatpump_bulk_data(df: pd.DataFrame, overwrite: bool = False, validat
             with open(db_file_path, 'w', encoding='utf-8') as f:
                 f.write(new_content)
             
-            st.success(f"[OK] {success_count} Wärmepumpen in heatpump_products_database.py gespeichert!")
+            st.success(f"{success_count} Wärmepumpen in heatpump_products_database.py gespeichert!")
             
         except Exception as e:
-            st.error(f"[ERROR] Fehler beim Speichern: {e}")
+            st.error(f"Fehler beim Speichern: {e}")
             import traceback
             st.code(traceback.format_exc())
         
@@ -1397,27 +1397,27 @@ def import_heatpump_bulk_data(df: pd.DataFrame, overwrite: bool = False, validat
         
         # Ergebnis anzeigen
         st.markdown("---")
-        st.markdown("### [CHART] Import-Ergebnis")
+        st.markdown("### Import-Ergebnis")
         
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("[OK] Erfolgreich", success_count)
+            st.metric("Erfolgreich", success_count)
         with col2:
-            st.metric("[WARNING] Übersprungen", skipped_count)
+            st.metric("Übersprungen", skipped_count)
         with col3:
-            st.metric("[ERROR] Fehler", error_count)
+            st.metric("Fehler", error_count)
         
         if success_count > 0:
-            st.success(f"[OK] {success_count} Wärmepumpen erfolgreich importiert!")
+            st.success(f"{success_count} Wärmepumpen erfolgreich importiert!")
         
         if skipped_count > 0:
-            st.info(f"[INFO] {skipped_count} Einträge übersprungen (bereits vorhanden). Aktivieren Sie 'Bestehende Einträge überschreiben' um diese zu aktualisieren.")
+            st.info(f"{skipped_count} Einträge übersprungen (bereits vorhanden). Aktivieren Sie 'Bestehende Einträge überschreiben' um diese zu aktualisieren.")
         
         if error_count > 0:
-            st.error(f"[ERROR] {error_count} Fehler beim Import aufgetreten.")
+            st.error(f"{error_count} Fehler beim Import aufgetreten.")
             
     except Exception as e:
-        st.error(f"[ERROR] Kritischer Fehler beim Import: {e}")
+        st.error(f"Kritischer Fehler beim Import: {e}")
         import traceback
 
 __all__ = [

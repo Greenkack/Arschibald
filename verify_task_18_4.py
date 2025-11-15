@@ -18,9 +18,9 @@ print("="*70)
 print("\n1. Prüfe ob export_360_animation() Funktion existiert...")
 try:
     from pv3d import export_360_animation
-    print("   [OK] Funktion export_360_animation() gefunden")
+    print("   Funktion export_360_animation() gefunden")
 except ImportError as e:
-    print(f"   [ERROR] Funktion nicht gefunden: {e}")
+    print(f"   Funktion nicht gefunden: {e}")
     sys.exit(1)
 
 # Prüfe 2: Funktion hat korrekte Signatur
@@ -33,14 +33,14 @@ optional_params = ['filepath', 'frames', 'resolution', 'duration_ms']
 
 for param in required_params:
     if param in params:
-        print(f"   [OK] Parameter '{param}' vorhanden")
+        print(f"   Parameter '{param}' vorhanden")
     else:
-        print(f"   [ERROR] Parameter '{param}' fehlt")
+        print(f"   Parameter '{param}' fehlt")
         sys.exit(1)
 
 for param in optional_params:
     if param in params:
-        print(f"   [OK] Optionaler Parameter '{param}' vorhanden")
+        print(f"   Optionaler Parameter '{param}' vorhanden")
 
 # Prüfe 3: Funktion kann aufgerufen werden
 print("\n3. Prüfe ob Funktion ausführbar ist...")
@@ -76,20 +76,20 @@ try:
     )
     
     if gif_bytes and len(gif_bytes) > 0:
-        print("   [OK] Funktion gibt GIF-Bytes zurück")
+        print("   Funktion gibt GIF-Bytes zurück")
     else:
-        print("   [ERROR] Funktion gibt keine GIF-Bytes zurück")
+        print("   Funktion gibt keine GIF-Bytes zurück")
         sys.exit(1)
     
     if os.path.exists(tmp_filepath):
-        print("   [OK] GIF-Datei wurde erstellt")
+        print("   GIF-Datei wurde erstellt")
         os.unlink(tmp_filepath)
     else:
-        print("   [ERROR] GIF-Datei wurde nicht erstellt")
+        print("   GIF-Datei wurde nicht erstellt")
         sys.exit(1)
         
 except Exception as e:
-    print(f"   [ERROR] Fehler beim Ausführen: {e}")
+    print(f"   Fehler beim Ausführen: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
@@ -101,49 +101,49 @@ try:
         ui_content = f.read()
     
     if 'export_360_animation' in ui_content:
-        print("   [OK] export_360_animation wird in UI importiert")
+        print("   export_360_animation wird in UI importiert")
     else:
-        print("   [ERROR] export_360_animation wird nicht in UI importiert")
+        print("   export_360_animation wird nicht in UI importiert")
         sys.exit(1)
     
     if '360° Animation' in ui_content or '360.*Animation' in ui_content:
-        print("   [OK] UI-Sektion für 360° Animation vorhanden")
+        print("   UI-Sektion für 360° Animation vorhanden")
     else:
-        print("   [ERROR] UI-Sektion für 360° Animation fehlt")
+        print("   UI-Sektion für 360° Animation fehlt")
         sys.exit(1)
     
     if 'anim_frames' in ui_content:
-        print("   [OK] Frame-Anzahl Slider vorhanden")
+        print("   Frame-Anzahl Slider vorhanden")
     else:
-        print("   [ERROR] Frame-Anzahl Slider fehlt")
+        print("   Frame-Anzahl Slider fehlt")
         sys.exit(1)
     
     if 'anim_duration' in ui_content:
-        print("   [OK] Frame-Dauer Slider vorhanden")
+        print("   Frame-Dauer Slider vorhanden")
     else:
-        print("   [ERROR] Frame-Dauer Slider fehlt")
+        print("   Frame-Dauer Slider fehlt")
         sys.exit(1)
     
     if 'Animation erstellen' in ui_content:
-        print("   [OK] Animation-Erstellen Button vorhanden")
+        print("   Animation-Erstellen Button vorhanden")
     else:
-        print("   [ERROR] Animation-Erstellen Button fehlt")
+        print("   Animation-Erstellen Button fehlt")
         sys.exit(1)
     
     if 'st.spinner' in ui_content and 'Animation' in ui_content:
-        print("   [OK] Fortschrittsanzeige (Spinner) vorhanden")
+        print("   Fortschrittsanzeige (Spinner) vorhanden")
     else:
-        print("   [ERROR] Fortschrittsanzeige fehlt")
+        print("   Fortschrittsanzeige fehlt")
         sys.exit(1)
     
     if 'st.download_button' in ui_content and 'gif' in ui_content.lower():
-        print("   [OK] Download-Button für GIF vorhanden")
+        print("   Download-Button für GIF vorhanden")
     else:
-        print("   [ERROR] Download-Button für GIF fehlt")
+        print("   Download-Button für GIF fehlt")
         sys.exit(1)
         
 except Exception as e:
-    print(f"   [ERROR] Fehler beim Prüfen der UI: {e}")
+    print(f"   Fehler beim Prüfen der UI: {e}")
     sys.exit(1)
 
 # Prüfe 5: Anforderungen
@@ -157,20 +157,20 @@ requirements = [
 
 for req_name, req_met in requirements:
     if req_met:
-        print(f"   [OK] {req_name}")
+        print(f"   {req_name}")
     else:
-        print(f"   [ERROR] {req_name}")
+        print(f"   {req_name}")
         sys.exit(1)
 
 # Zusammenfassung
 print("\n" + "="*70)
-print("[OK] TASK 18.4 VOLLSTÄNDIG IMPLEMENTIERT")
+print("TASK 18.4 VOLLSTÄNDIG IMPLEMENTIERT")
 print("="*70)
 print("\nAlle Sub-Tasks erfüllt:")
-print("  [OK] export_360_animation() Funktion geschrieben")
-print("  [OK] 36 Frames (10° Rotation pro Frame) werden gerendert")
-print("  [OK] GIF wird mit PIL erstellt")
-print("  [OK] Fortschrittsanzeige während Rendering implementiert")
-print("  [OK] Download-Button für GIF erstellt")
-print("\nRequirement 30.7 erfüllt [OK]")
+print("  export_360_animation() Funktion geschrieben")
+print("  36 Frames (10° Rotation pro Frame) werden gerendert")
+print("  GIF wird mit PIL erstellt")
+print("  Fortschrittsanzeige während Rendering implementiert")
+print("  Download-Button für GIF erstellt")
+print("\nRequirement 30.7 erfüllt ")
 print("="*70 + "\n")

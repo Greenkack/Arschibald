@@ -128,7 +128,7 @@ def apply_safe_replacements() -> int:
     replacements = get_safe_replacements()
 
     if not replacements:
-        print("[WARNING] Keine sicheren Ersetzungen definiert!")
+        print("Keine sicheren Ersetzungen definiert!")
         return 0
 
     input_dir = os.path.join(os.getcwd(), "input")
@@ -155,7 +155,7 @@ def apply_safe_replacements() -> int:
                     content = content.replace(
                         f"Text: {old_value}", f"Text: {new_key}")
                     file_replacements += 1
-                    print(f"[OK] {filename}: '{old_value}' → '{new_key}'")
+                    print(f"{filename}: '{old_value}' → '{new_key}'")
 
             # Datei zurückschreiben wenn geändert
             if content != original_content:
@@ -166,29 +166,29 @@ def apply_safe_replacements() -> int:
                 total_replacements += file_replacements
 
         except Exception as e:
-            print(f"[ERROR] Fehler bei {filename}: {e}")
+            print(f"Fehler bei {filename}: {e}")
 
     return total_replacements
 
 
 def main():
     """Hauptfunktion mit sicherer Vorgehensweise."""
-    print("[SEARCH] SICHERER TXT-Dateien Key-Replacer")
+    print("SICHERER TXT-Dateien Key-Replacer")
     print("=" * 50)
 
     # 1. ANALYSE - KEINE ÄNDERUNGEN
-    print("\n1. [CHART] ANALYSIERE statische Werte (keine Änderungen)...")
+    print("\n1. ANALYSIERE statische Werte (keine Änderungen)...")
     findings = analyze_txt_files()
 
     if not findings:
-        print("[OK] Alle TXT-Dateien sind bereits vollständig dynamisch!")
+        print("Alle TXT-Dateien sind bereits vollständig dynamisch!")
         return
 
     print(
         f"\n📋 Gefundene potentielle statische Werte in {
             len(findings)} Dateien:")
     for filename, static_values in findings.items():
-        print(f"\n[FILE] {filename}:")
+        print(f"\n{filename}:")
         for value in static_values[:5]:  # Zeige max. 5 pro Datei
             print(f"  • {value}")
         if len(static_values) > 5:
@@ -204,19 +204,19 @@ def main():
             print(f"  • '{old}' → '{new}'")
 
         confirm = input(
-            f"\n[IDEA] {
+            f"\n{
                 len(safe_replacements)} sichere Ersetzungen anwenden? (j/n): ")
         if confirm.lower() == 'j':
             total = apply_safe_replacements()
-            print(f"\n[TARGET] {total} sichere Ersetzungen durchgeführt!")
+            print(f"\n{total} sichere Ersetzungen durchgeführt!")
         else:
-            print("[ERROR] Abgebrochen - keine Änderungen gemacht")
+            print("Abgebrochen - keine Änderungen gemacht")
     else:
-        print("[INFO] Keine sicheren Ersetzungen definiert.")
-        print("[IDEA] Definieren Sie sichere Ersetzungen in get_safe_replacements()")
+        print("Keine sicheren Ersetzungen definiert.")
+        print("Definieren Sie sichere Ersetzungen in get_safe_replacements()")
 
     # 3. EMPFEHLUNGEN
-    print("\n3. [IDEA] EMPFEHLUNGEN für weitere Optimierung:")
+    print("\n3. EMPFEHLUNGEN für weitere Optimierung:")
     print("• Prüfen Sie die gefundenen statischen Werte manuell")
     print("• Fügen Sie nur eindeutige Werte zu get_safe_replacements() hinzu")
     print("• Testen Sie jede Änderung einzeln")

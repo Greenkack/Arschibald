@@ -23,10 +23,10 @@ def fix_status_indentation():
             break
     
     if start_idx is None or end_idx is None:
-        print(f"[ERROR] Konnte Grenzen nicht finden: start={start_idx}, end={end_idx}")
+        print(f"Konnte Grenzen nicht finden: start={start_idx}, end={end_idx}")
         return
     
-    print(f"[OK] Gefunden: Zeilen {start_idx+1} bis {end_idx}")
+    print(f"Gefunden: Zeilen {start_idx+1} bis {end_idx}")
     
     # Rücke alle Zeilen zwischen start und end um 4 Spaces ein
     fixed_lines = []
@@ -44,8 +44,8 @@ def fix_status_indentation():
     with open(file_path, 'w', encoding='utf-8') as f:
         f.writelines(fixed_lines)
     
-    print(f"[OK] Datei aktualisiert: {len(fixed_lines)} Zeilen")
-    print(f"[OK] Eingerückt: Zeilen {start_idx+1} bis {end_idx}")
+    print(f"Datei aktualisiert: {len(fixed_lines)} Zeilen")
+    print(f"Eingerückt: Zeilen {start_idx+1} bis {end_idx}")
 
 if __name__ == "__main__":
     fix_indentation_status()

@@ -201,7 +201,7 @@ def create_photovoltaics_pdf():
 
     # Build PDF
     doc.build(elements)
-    print(f"[OK] Created: {filename}")
+    print(f"Created: {filename}")
 
 
 def create_heatpump_pdf():
@@ -422,7 +422,7 @@ def create_heatpump_pdf():
 
     # Build PDF
     doc.build(elements)
-    print(f"[OK] Created: {filename}")
+    print(f"Created: {filename}")
 
 
 def main():
@@ -434,19 +434,19 @@ def main():
         create_photovoltaics_pdf()
         create_heatpump_pdf()
         print("-" * 50)
-        print("[OK] Successfully created all sample documents!")
+        print("Successfully created all sample documents!")
         print("\nDocuments created:")
         print("  - knowledge_base/photovoltaics_guide.pdf")
         print("  - knowledge_base/heatpump_guide.pdf")
         print("\nThese documents contain:")
-        print("  [OK] Technical specifications")
-        print("  [OK] Economic data and calculations")
-        print("  [OK] System components")
-        print("  [OK] Benefits and advantages")
-        print("  [OK] Installation requirements")
-        print("  [OK] ROI calculations")
+        print("  Technical specifications")
+        print("  Economic data and calculations")
+        print("  System components")
+        print("  Benefits and advantages")
+        print("  Installation requirements")
+        print("  ROI calculations")
     except Exception as e:
-        print(f"[ERROR] Error creating documents: {e}")
+        print(f"Error creating documents: {e}")
         raise
 
 

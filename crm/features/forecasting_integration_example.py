@@ -35,18 +35,18 @@ def integrate_forecasting_into_crm():
     """
     
     if not FORECASTING_AVAILABLE:
-        st.error("[ERROR] Forecasting-System nicht verfügbar")
+        st.error("Forecasting-System nicht verfügbar")
         return
     
     # 1. Stelle sicher, dass Tabellen existieren
     ensure_forecasting_tables()
     
     # 2. Zeige Forecasting-Dashboard
-    st.header("[CHART] Verkaufsziele & Forecasting")
+    st.header("Verkaufsziele & Forecasting")
     
     # Quick Stats in Sidebar
     with st.sidebar:
-        st.subheader("[TARGET] Ziel-Übersicht")
+        st.subheader("Ziel-Übersicht")
         
         # Lade aktive Ziele
         active_targets = get_sales_targets(status='active')
@@ -57,9 +57,9 @@ def integrate_forecasting_into_crm():
             # Prüfe gefährdete Ziele
             at_risk = check_at_risk_targets()
             if at_risk:
-                st.warning(f"[WARNING] {len(at_risk)} Ziel(e) gefährdet")
+                st.warning(f"{len(at_risk)} Ziel(e) gefährdet")
             else:
-                st.success("[OK] Alle Ziele auf Kurs")
+                st.success("Alle Ziele auf Kurs")
         else:
             st.info("Keine aktiven Ziele")
     
@@ -106,7 +106,7 @@ def auto_create_quarterly_targets():
     )
     
     if target_id:
-        print(f"[OK] Quartalsziel erstellt: ID {target_id}")
+        print(f"Quartalsziel erstellt: ID {target_id}")
         
         # Erstelle initialen Forecast
         forecast_data = calculate_pipeline_forecast(
@@ -129,9 +129,9 @@ def auto_create_quarterly_targets():
             )
             
             if forecast_id:
-                print(f"[OK] Initialer Forecast erstellt: {forecast_data['forecast_value']:,.2f} €")
+                print(f"Initialer Forecast erstellt: {forecast_data['forecast_value']:,.2f} €")
     else:
-        print("[ERROR] Fehler beim Erstellen des Quartalsziels")
+        print("Fehler beim Erstellen des Quartalsziels")
 
 
 def daily_target_monitoring():
@@ -152,10 +152,10 @@ def daily_target_monitoring():
     # 1. Aktualisiere alle aktiven Ziele
     active_targets = get_sales_targets(status='active')
     
-    print(f"\n[CHART] {len(active_targets)} aktive Ziele gefunden")
+    print(f"\n{len(active_targets)} aktive Ziele gefunden")
     
     for target in active_targets:
-        print(f"\n[TARGET] {target['target_name']}")
+        print(f"\n{target['target_name']}")
         
         # Aktualisiere Fortschritt aus Pipeline
         success = auto_update_target_progress_from_pipeline(target['id'])
@@ -182,7 +182,7 @@ def daily_target_monitoring():
     at_risk = check_at_risk_targets()
     
     if at_risk:
-        print(f"\n[WARNING] {len(at_risk)} gefährdete Ziele:")
+        print(f"\n{len(at_risk)} gefährdete Ziele:")
         
         for target_status in at_risk:
             targets = get_sales_targets()
@@ -194,7 +194,7 @@ def daily_target_monitoring():
                 # Hier könnte eine Benachrichtigung versendet werden
                 # send_notification(target, target_status)
     else:
-        print("\n[OK] Alle Ziele auf Kurs!")
+        print("\nAlle Ziele auf Kurs!")
     
     print("\n=== Überwachung abgeschlossen ===")
 
@@ -218,7 +218,7 @@ def weekly_forecast_update():
     active_targets = get_sales_targets(status='active')
     
     for target in active_targets:
-        print(f"\n[TARGET] {target['target_name']}")
+        print(f"\n{target['target_name']}")
         
         # Berechne neuen Forecast
         forecast_data = calculate_pipeline_forecast(
@@ -246,16 +246,16 @@ def weekly_forecast_update():
             )
             
             if forecast_id:
-                print(f"   [OK] Forecast gespeichert (ID: {forecast_id})")
+                print(f"   Forecast gespeichert (ID: {forecast_id})")
             
             # Vergleiche mit Ziel
             gap = target['target_value'] - forecast_data['forecast_value']
             gap_percentage = (gap / target['target_value'] * 100) if target['target_value'] > 0 else 0
             
             if gap > 0:
-                print(f"   [WARNING] Gap zum Ziel: {gap:,.2f} € ({gap_percentage:.1f}%)")
+                print(f"   Gap zum Ziel: {gap:,.2f} € ({gap_percentage:.1f}%)")
             else:
-                print(f"   [OK] Forecast übertrifft Ziel um {abs(gap):,.2f} €")
+                print(f"   Forecast übertrifft Ziel um {abs(gap):,.2f} €")
     
     print("\n=== Forecast-Update abgeschlossen ===")
 
@@ -270,7 +270,7 @@ def render_forecasting_widget_for_dashboard():
     if not FORECASTING_AVAILABLE:
         return
     
-    st.subheader("[TARGET] Verkaufsziele")
+    st.subheader("Verkaufsziele")
     
     # Lade aktive Ziele
     active_targets = get_sales_targets(status='active')
@@ -307,7 +307,7 @@ def render_forecasting_widget_for_dashboard():
             st.progress(progress)
     
     # Link zum vollständigen Dashboard
-    if st.button("[CHART] Alle Ziele anzeigen"):
+    if st.button("Alle Ziele anzeigen"):
         st.session_state['show_forecasting'] = True
 
 

@@ -116,26 +116,26 @@ def test_full_extended_pdf_generation():
     pdf_bytes = generator.generate_extended_pages()
     generation_time = time.time() - start_time
     
-    print(f"   [OK] Generation completed in {generation_time:.2f} seconds")
+    print(f"   Generation completed in {generation_time:.2f} seconds")
     
     # Verify PDF was generated
     assert pdf_bytes, "PDF bytes should not be empty"
     assert len(pdf_bytes) > 0, "PDF should have content"
-    print(f"   [OK] PDF generated: {len(pdf_bytes):,} bytes")
+    print(f"   PDF generated: {len(pdf_bytes):,} bytes")
     
     # Verify PDF structure
     print("\n3. Verifying PDF structure...")
     reader = PdfReader(io.BytesIO(pdf_bytes))
     num_pages = len(reader.pages)
     
-    print(f"   [OK] Total pages: {num_pages}")
+    print(f"   Total pages: {num_pages}")
     
     # Expected pages:
     # - Financing: 2 pages (overview + details)
     # - Charts: 2 pages (3 charts with 2 per page = 2 pages)
     # Total: ~4 pages (may vary based on actual data)
     assert num_pages >= 2, f"Should have at least 2 pages, got {num_pages}"
-    print(f"   [OK] Page count is reasonable (>= 2)")
+    print(f"   Page count is reasonable (>= 2)")
     
     # Check logger summary
     print("\n4. Checking generation log...")
@@ -154,10 +154,10 @@ def test_full_extended_pdf_generation():
     os.makedirs("tests", exist_ok=True)
     with open(output_path, 'wb') as f:
         f.write(pdf_bytes)
-    print(f"\n   [OK] Saved to: {output_path}")
+    print(f"\n   Saved to: {output_path}")
     
     print("\n" + "=" * 70)
-    print("[OK] TEST 19.1 PASSED: Full Extended PDF Generation")
+    print("TEST 19.1 PASSED: Full Extended PDF Generation")
     print("=" * 70)
     
     return True
@@ -203,7 +203,7 @@ def test_standard_pdf_unchanged():
     pdf_bytes_disabled = generator.generate_extended_pages()
     
     # When disabled, should return empty bytes (no extended pages)
-    print(f"   [OK] PDF bytes length: {len(pdf_bytes_disabled)}")
+    print(f"   PDF bytes length: {len(pdf_bytes_disabled)}")
     
     # Verify no extended pages were generated
     if pdf_bytes_disabled:
@@ -211,7 +211,7 @@ def test_standard_pdf_unchanged():
         num_pages = len(reader.pages)
         print(f"   [WARN] Generated {num_pages} pages (expected 0)")
     else:
-        print("   [OK] No extended pages generated (as expected)")
+        print("   No extended pages generated (as expected)")
     
     # Check that no errors occurred
     summary = logger.get_summary()
@@ -240,22 +240,22 @@ def test_standard_pdf_unchanged():
     )
     
     pdf_bytes_empty = generator2.generate_extended_pages()
-    print(f"   [OK] PDF bytes length: {len(pdf_bytes_empty)}")
+    print(f"   PDF bytes length: {len(pdf_bytes_empty)}")
     
     if pdf_bytes_empty:
         reader2 = PdfReader(io.BytesIO(pdf_bytes_empty))
         num_pages2 = len(reader2.pages)
-        print(f"   [INFO] Generated {num_pages2} pages with empty options")
+        print(f"   Generated {num_pages2} pages with empty options")
     else:
-        print("   [OK] No pages generated with empty options (as expected)")
+        print("   No pages generated with empty options (as expected)")
     
     print("\n5. Verification complete")
-    print("   [OK] Extended output respects enabled flag")
-    print("   [OK] No pages generated when disabled or empty")
-    print("   [OK] Standard PDF generation unaffected")
+    print("   Extended output respects enabled flag")
+    print("   No pages generated when disabled or empty")
+    print("   Standard PDF generation unaffected")
     
     print("\n" + "=" * 70)
-    print("[OK] TEST 19.2 PASSED: Standard PDF Unchanged")
+    print("TEST 19.2 PASSED: Standard PDF Unchanged")
     print("=" * 70)
     
     return True
@@ -366,12 +366,12 @@ def test_performance():
         
         # Check performance
         passed = generation_time < scenario['expected_max_time']
-        status = "[OK]" if passed else "[FAIL]"
+        status = "" if passed else "[FAIL]"
         
         print(f"  {status} Generation time: {generation_time:.2f}s "
               f"(max: {scenario['expected_max_time']}s)")
-        print(f"  [OK] Pages generated: {page_count}")
-        print(f"  [OK] Size: {len(pdf_bytes):,} bytes")
+        print(f"  Pages generated: {page_count}")
+        print(f"  Size: {len(pdf_bytes):,} bytes")
         
         if not passed:
             print(f"  [WARN] WARNING: Generation took longer than expected!")
@@ -396,7 +396,7 @@ def test_performance():
     all_passed = all(r['time'] < r['max_time'] for r in results)
     
     if all_passed:
-        print("\n[OK] All performance tests passed!")
+        print("\nAll performance tests passed!")
     else:
         print("\n[WARN] Some performance tests exceeded expected time")
         failed = [r for r in results if r['time'] >= r['max_time']]
@@ -414,7 +414,7 @@ def test_performance():
               f"{r['pages']:<8} {size_kb:<12.1f}")
     
     print("\n" + "=" * 70)
-    print("[OK] TEST 19.3 PASSED: Performance Testing Complete")
+    print("TEST 19.3 PASSED: Performance Testing Complete")
     print("=" * 70)
     
     return True
@@ -465,9 +465,9 @@ def test_error_handling_and_graceful_degradation():
     if pdf_bytes:
         reader = PdfReader(io.BytesIO(pdf_bytes))
         num_pages = len(reader.pages)
-        print(f"   [OK] Generated {num_pages} page(s) despite invalid keys")
+        print(f"   Generated {num_pages} page(s) despite invalid keys")
     else:
-        print("   [INFO] No pages generated (acceptable)")
+        print("   No pages generated (acceptable)")
     
     # Check logger for warnings/errors
     summary = logger.get_summary()
@@ -496,7 +496,7 @@ def test_error_handling_and_graceful_degradation():
     
     pdf_bytes2 = generator2.generate_extended_pages()
     
-    print(f"   [OK] Generation completed without crash")
+    print(f"   Generation completed without crash")
     print(f"   - PDF bytes: {len(pdf_bytes2)}")
     
     summary2 = logger2.get_summary()
@@ -504,12 +504,12 @@ def test_error_handling_and_graceful_degradation():
     print(f"   - Warnings: {summary2['warning_count']}")
     
     print("\n3. Verification complete")
-    print("   [OK] System handles invalid data gracefully")
-    print("   [OK] No crashes or exceptions")
-    print("   [OK] Appropriate errors/warnings logged")
+    print("   System handles invalid data gracefully")
+    print("   No crashes or exceptions")
+    print("   Appropriate errors/warnings logged")
     
     print("\n" + "=" * 70)
-    print("[OK] BONUS TEST PASSED: Error Handling")
+    print("BONUS TEST PASSED: Error Handling")
     print("=" * 70)
     
     return True
@@ -559,12 +559,12 @@ def run_all_integration_tests():
     print("=" * 70)
     
     if passed == len(test_functions):
-        print("[OK] ALL INTEGRATION TESTS PASSED - Task 19 Complete")
+        print("ALL INTEGRATION TESTS PASSED - Task 19 Complete")
         print("\nKey Achievements:")
-        print("  [OK] Full extended PDF generation works correctly")
-        print("  [OK] Standard PDF remains unchanged when disabled")
-        print("  [OK] Performance meets requirements (< 30s)")
-        print("  [OK] Error handling is robust and graceful")
+        print("  Full extended PDF generation works correctly")
+        print("  Standard PDF remains unchanged when disabled")
+        print("  Performance meets requirements (< 30s)")
+        print("  Error handling is robust and graceful")
     else:
         print("[FAIL] SOME INTEGRATION TESTS FAILED - Task 19 Needs Work")
     

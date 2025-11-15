@@ -326,24 +326,24 @@ if __name__ == "__main__":
     test_instance.setup_method()
 
     # Test basic functionality
-    print("[OK] Testing basic resolution...")
+    print("Testing basic resolution...")
     test_instance.test_resolve_storage_name_valid_product()
 
-    print("[OK] Testing fallback scenarios...")
+    print("Testing fallback scenarios...")
     test_instance.test_resolve_storage_name_include_storage_false()
     test_instance.test_resolve_storage_name_no_storage_id()
 
-    print("[OK] Testing error handling...")
+    print("Testing error handling...")
     test_instance.test_resolve_storage_name_invalid_id_format()
     test_instance.test_resolve_storage_name_product_not_found()
 
-    print("[OK] Testing normalization...")
+    print("Testing normalization...")
     test_instance.test_normalize_storage_name()
 
-    print("[OK] Testing validation...")
+    print("Testing validation...")
     test_instance.test_validate_storage_name_in_matrix()
 
-    print("[OK] Testing caching...")
+    print("Testing caching...")
     test_instance.test_resolve_storage_name_caching()
 
-    print("\nAll tests passed! [OK]")
+    print("\nAll tests passed! ")

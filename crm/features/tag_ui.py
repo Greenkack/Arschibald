@@ -46,7 +46,7 @@ def render_tag_management_ui(texts: dict[str, str]):
     tabs = st.tabs([
         "📋 Alle Tags",
         "➕ Neuer Tag",
-        "[CHART] Statistiken"
+        "Statistiken"
     ])
     
     with tabs[0]:
@@ -124,7 +124,7 @@ def render_tag_card(tag: dict[str, Any], conn, texts: dict[str, str]):
     is_active = tag.get('is_active', 1)
     
     # Status-Badge
-    status_badge = "[OK] Aktiv" if is_active else "[ERROR] Inaktiv"
+    status_badge = "Aktiv" if is_active else "Inaktiv"
     
     st.markdown(f"""
         <div style="
@@ -147,7 +147,7 @@ def render_tag_card(tag: dict[str, Any], conn, texts: dict[str, str]):
                 <h4 style="margin: 0; color: white;">{name}</h4>
             </div>
             <p style="margin: 5px 0; font-size: 0.85em; color: #e0e0e0;">
-                [FOLDER] {category}
+                {category}
             </p>
             <p style="margin: 5px 0; font-size: 0.8em; color: #d0d0d0;">
                 {status_badge}
@@ -156,7 +156,7 @@ def render_tag_card(tag: dict[str, Any], conn, texts: dict[str, str]):
     """, unsafe_allow_html=True)
     
     if description:
-        with st.expander("[INFO] Beschreibung"):
+        with st.expander("Beschreibung"):
             st.write(description)
     
     # Aktionen
@@ -170,14 +170,14 @@ def render_tag_card(tag: dict[str, Any], conn, texts: dict[str, str]):
     with col2:
         # Toggle Aktiv/Inaktiv
         new_status = not is_active
-        status_icon = "[OK]" if new_status else "[ERROR]"
+        status_icon = "" if new_status else ""
         if st.button(status_icon, key=f"toggle_tag_{tag['id']}", help="Status ändern", use_container_width=True):
             if update_tag(conn, tag['id'], is_active=new_status):
                 st.success(f"Tag {'aktiviert' if new_status else 'deaktiviert'}")
                 st.rerun()
     
     with col3:
-        if st.button("[DELETE]", key=f"delete_tag_{tag['id']}", help="Löschen", use_container_width=True):
+        if st.button("", key=f"delete_tag_{tag['id']}", help="Löschen", use_container_width=True):
             confirm_key = f"confirm_delete_tag_{tag['id']}"
             if st.session_state.get(confirm_key, False):
                 if delete_tag(conn, tag['id']):
@@ -216,7 +216,7 @@ def render_tag_card(tag: dict[str, Any], conn, texts: dict[str, str]):
                         st.error("Fehler beim Aktualisieren")
             
             with col_cancel:
-                if st.form_submit_button("[ERROR] Abbrechen", use_container_width=True):
+                if st.form_submit_button("Abbrechen", use_container_width=True):
                     del st.session_state[f'edit_tag_{tag["id"]}']
                     st.rerun()
 
@@ -288,10 +288,10 @@ def render_create_tag_section(texts: dict[str, str]):
                     )
                     
                     if tag_id:
-                        st.success(f"[OK] Tag '{name}' erfolgreich erstellt!")
+                        st.success(f"Tag '{name}' erfolgreich erstellt!")
                         st.rerun()
                     else:
-                        st.error("[ERROR] Fehler beim Erstellen des Tags (Name bereits vergeben?)")
+                        st.error("Fehler beim Erstellen des Tags (Name bereits vergeben?)")
     
     finally:
         conn.close()
@@ -306,7 +306,7 @@ def render_tag_statistics_section(texts: dict[str, str]):
         return
     
     try:
-        st.markdown("### [CHART] Tag-Statistiken")
+        st.markdown("### Tag-Statistiken")
         
         stats = get_tag_statistics(conn)
         
@@ -333,7 +333,7 @@ def render_tag_statistics_section(texts: dict[str, str]):
         st.markdown("---")
         
         # Top Tags
-        st.markdown("#### [WINNER] Meistgenutzte Tags")
+        st.markdown("#### Meistgenutzte Tags")
         
         for stat in stats[:10]:  # Top 10
             color = stat.get('color', '#808080')
@@ -356,7 +356,7 @@ def render_tag_statistics_section(texts: dict[str, str]):
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <strong style="font-size: 1.1em;">{name}</strong><br>
-                            <span style="font-size: 0.85em; opacity: 0.8;">[FOLDER] {category}</span>
+                            <span style="font-size: 0.85em; opacity: 0.8;">{category}</span>
                         </div>
                         <div style="text-align: right;">
                             <strong style="font-size: 1.3em; color: {color};">{count}</strong><br>
@@ -514,7 +514,7 @@ def render_bulk_tag_assignment(customer_ids: list[int], texts: dict[str, str]):
             if st.button("➕ Tags hinzufügen", use_container_width=True):
                 if selected_tag_ids:
                     stats = assign_tags_to_customers(conn, customer_ids, selected_tag_ids)
-                    st.success(f"[OK] {stats['success']} Tags zugewiesen, {stats['skipped']} übersprungen")
+                    st.success(f"{stats['success']} Tags zugewiesen, {stats['skipped']} übersprungen")
                     st.rerun()
                 else:
                     st.warning("Bitte wählen Sie mindestens einen Tag aus")
@@ -523,7 +523,7 @@ def render_bulk_tag_assignment(customer_ids: list[int], texts: dict[str, str]):
             if st.button("➖ Tags entfernen", use_container_width=True):
                 if selected_tag_ids:
                     removed = remove_tags_from_customers(conn, customer_ids, selected_tag_ids)
-                    st.success(f"[OK] {removed} Tag-Zuordnungen entfernt")
+                    st.success(f"{removed} Tag-Zuordnungen entfernt")
                     st.rerun()
                 else:
                     st.warning("Bitte wählen Sie mindestens einen Tag aus")

@@ -9,7 +9,7 @@ from product_db import get_db_connection, get_product_by_model_name
 from heatpump_products_database import HEATPUMP_PRODUCTS
 
 def render_price_editor():
-    st.title("[MONEY] Wärmepumpen-Preise bearbeiten")
+    st.title("Wärmepumpen-Preise bearbeiten")
     st.caption("Bearbeite Preise direkt in der Produktdatenbank (product_db.py)")
     st.markdown("---")
     
@@ -30,14 +30,14 @@ def render_price_editor():
     db_product = get_product_by_model_name(selected_model_name)
     
     if db_product is None:
-        st.error(f"[ERROR] Produkt '{selected_model_name}' nicht in Datenbank gefunden!")
-        st.warning("[WARNING] Führe zuerst 'python import_heatpumps_to_db.py' aus!")
+        st.error(f"Produkt '{selected_model_name}' nicht in Datenbank gefunden!")
+        st.warning("Führe zuerst 'python import_heatpumps_to_db.py' aus!")
         return
     
-    st.success(f"[OK] Produkt gefunden: {selected_model_name}")
+    st.success(f"Produkt gefunden: {selected_model_name}")
     
     # Zeige aktuelle Daten
-    st.markdown("### [CHART] Aktuelle Daten")
+    st.markdown("### Aktuelle Daten")
     col1, col2 = st.columns(2)
     
     with col1:
@@ -97,12 +97,12 @@ def render_price_editor():
             conn.commit()
             conn.close()
             
-            st.success(f"[OK] Preis für '{selected_model_name}' erfolgreich aktualisiert!")
+            st.success(f"Preis für '{selected_model_name}' erfolgreich aktualisiert!")
             st.balloons()
             st.rerun()
             
         except Exception as e:
-            st.error(f"[ERROR] Fehler beim Speichern: {e}")
+            st.error(f"Fehler beim Speichern: {e}")
 
 if __name__ == "__main__":
     render_price_editor()

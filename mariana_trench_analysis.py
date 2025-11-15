@@ -38,7 +38,7 @@ class MarianaTrenchAnalyzer:
     
     def check_syntax_deep(self):
         """Tiefe Syntax-Prüfung mit AST-Analyse"""
-        self.banner("[SEARCH] LEVEL 1: SYNTAX-TIEFENPRÜFUNG", '=')
+        self.banner("LEVEL 1: SYNTAX-TIEFENPRÜFUNG", '=')
         
         py_files = list(self.root.rglob('*.py'))
         py_files = [f for f in py_files 
@@ -89,7 +89,7 @@ class MarianaTrenchAnalyzer:
     
     def check_imports_deep(self):
         """Tiefe Import-Prüfung mit Dependency-Analyse"""
-        self.banner("[SEARCH] LEVEL 2: IMPORT-TIEFENPRÜFUNG", '=')
+        self.banner("LEVEL 2: IMPORT-TIEFENPRÜFUNG", '=')
         
         critical_modules = [
             # Core App
@@ -124,7 +124,7 @@ class MarianaTrenchAnalyzer:
             'components.progress_manager',
         ]
         
-        print(f"[PACKAGE] Teste {len(critical_modules)} kritische Module...")
+        print(f"Teste {len(critical_modules)} kritische Module...")
         
         for module_name in critical_modules:
             try:
@@ -152,7 +152,7 @@ class MarianaTrenchAnalyzer:
     
     def check_runtime_deep(self):
         """Runtime-Prüfung: Teste ob Funktionen tatsächlich ausführbar sind"""
-        self.banner("[SEARCH] LEVEL 3: RUNTIME-TIEFENPRÜFUNG", '=')
+        self.banner("LEVEL 3: RUNTIME-TIEFENPRÜFUNG", '=')
         
         runtime_tests = [
             ("Database Connection", self._test_database_connection),
@@ -230,7 +230,7 @@ class MarianaTrenchAnalyzer:
     
     def check_database_integrity(self):
         """Prüfe Datenbank-Integrität"""
-        self.banner("[SEARCH] LEVEL 4: DATENBANK-INTEGRITÄTSPRÜFUNG", '=')
+        self.banner("LEVEL 4: DATENBANK-INTEGRITÄTSPRÜFUNG", '=')
         
         db_files = list(self.root.rglob('*.db'))
         print(f"💾 Gefundene Datenbanken: {len(db_files)}")
@@ -244,7 +244,7 @@ class MarianaTrenchAnalyzer:
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
                 tables = cursor.fetchall()
                 
-                print(f"\n   [CHART] {db_path.name}: {len(tables)} Tabellen")
+                print(f"\n   {db_path.name}: {len(tables)} Tabellen")
                 
                 # Prüfe jede Tabelle
                 for (table_name,) in tables:
@@ -263,7 +263,7 @@ class MarianaTrenchAnalyzer:
     
     def check_config_files(self):
         """Prüfe alle Config-Dateien"""
-        self.banner("[SEARCH] LEVEL 5: KONFIGURATIONSPRÜFUNG", '=')
+        self.banner("LEVEL 5: KONFIGURATIONSPRÜFUNG", '=')
         
         config_patterns = ['*.json', '*.yaml', '*.yml', '*.toml', '*.ini', '.env']
         
@@ -292,7 +292,7 @@ class MarianaTrenchAnalyzer:
     
     def check_dependencies(self):
         """Prüfe Python-Dependencies"""
-        self.banner("[SEARCH] LEVEL 6: DEPENDENCY-PRÜFUNG", '=')
+        self.banner("LEVEL 6: DEPENDENCY-PRÜFUNG", '=')
         
         if not Path('requirements.txt').exists():
             self.results['dependencies']['errors'].append(('requirements.txt', 'File not found'))
@@ -315,7 +315,7 @@ class MarianaTrenchAnalyzer:
     
     def check_security(self):
         """Sicherheitsprüfung"""
-        self.banner("[SEARCH] LEVEL 7: SICHERHEITSPRÜFUNG", '=')
+        self.banner("LEVEL 7: SICHERHEITSPRÜFUNG", '=')
         
         security_checks = [
             ("Hardcoded Passwords", self._check_hardcoded_passwords),
@@ -386,7 +386,7 @@ class MarianaTrenchAnalyzer:
     
     def check_performance(self):
         """Performance-Prüfung"""
-        self.banner("[SEARCH] LEVEL 8: PERFORMANCE-PRÜFUNG", '=')
+        self.banner("LEVEL 8: PERFORMANCE-PRÜFUNG", '=')
         
         # Prüfe Dateigrößen
         large_files = []
@@ -403,7 +403,7 @@ class MarianaTrenchAnalyzer:
     
     def check_file_structure(self):
         """Prüfe Datei-Struktur"""
-        self.banner("[SEARCH] LEVEL 9: DATEISTRUKTUR-PRÜFUNG", '=')
+        self.banner("LEVEL 9: DATEISTRUKTUR-PRÜFUNG", '=')
         
         required_files = [
             'requirements.txt',
@@ -420,7 +420,7 @@ class MarianaTrenchAnalyzer:
     
     def generate_report(self):
         """Generiere finalen Bericht"""
-        self.banner("[CHART] MARIANA-GRABEN ANALYSE - FINALER BERICHT", '=')
+        self.banner("MARIANA-GRABEN ANALYSE - FINALER BERICHT", '=')
         
         categories = [
             ('SYNTAX', 'syntax'),
@@ -443,13 +443,13 @@ class MarianaTrenchAnalyzer:
             total_ok += ok_count
             total_errors += err_count
             
-            status = "[OK]" if err_count == 0 else "[WARNING]"
+            status = "" if err_count == 0 else ""
             print(f"{status} {cat_name:15s} | OK: {ok_count:4d} | Errors: {err_count:4d}")
             
             # Zeige erste 3 Fehler
             if err_count > 0:
                 for i, (item, error) in enumerate(self.results[cat_key]['errors'][:3]):
-                    print(f"      [ERROR] {item}: {error}")
+                    print(f"      {item}: {error}")
                 if err_count > 3:
                     print(f"      ... +{err_count-3} weitere Fehler")
         
@@ -461,18 +461,18 @@ class MarianaTrenchAnalyzer:
             health = 0.0
         
         print(f"GESAMT-GESUNDHEIT: {health:.1f}%")
-        print(f"[OK] OK:     {total_ok}")
-        print(f"[ERROR] Errors: {total_errors}")
+        print(f"OK:     {total_ok}")
+        print(f"Errors: {total_errors}")
         print("=" * 80)
         
         if health >= 95:
             print("\n🎉 EXZELLENT: App ist in hervorragendem Zustand!")
         elif health >= 85:
-            print("\n[OK] GUT: App ist einsatzbereit mit kleineren Optimierungen")
+            print("\nGUT: App ist einsatzbereit mit kleineren Optimierungen")
         elif health >= 70:
-            print("\n[WARNING]  AKZEPTABEL: Einige Probleme sollten behoben werden")
+            print("\nAKZEPTABEL: Einige Probleme sollten behoben werden")
         else:
-            print("\n[ERROR] KRITISCH: Mehrere Probleme müssen behoben werden")
+            print("\nKRITISCH: Mehrere Probleme müssen behoben werden")
     
     def run(self):
         """Führe vollständige Analyse durch"""

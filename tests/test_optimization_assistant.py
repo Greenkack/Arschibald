@@ -41,7 +41,7 @@ def test_generate_south_config():
     assert config.use_garage == False
     assert config.use_facade == False
     
-    print("[OK] Süd-Konfiguration erfolgreich generiert")
+    print("Süd-Konfiguration erfolgreich generiert")
     print(f"  - Mounting Mode: {config.mounting_mode}")
     print(f"  - Custom Tilt: {config.custom_tilt}°")
 
@@ -57,7 +57,7 @@ def test_generate_east_west_config():
     assert config.mounting_mode == "east-west"
     assert config.custom_tilt == 10.0
     
-    print("[OK] Ost-West-Konfiguration erfolgreich generiert")
+    print("Ost-West-Konfiguration erfolgreich generiert")
     print(f"  - Mounting Mode: {config.mounting_mode}")
     print(f"  - Custom Tilt: {config.custom_tilt}°")
 
@@ -74,7 +74,7 @@ def test_generate_south_east_config():
     assert config.custom_azimuth == 45.0
     assert config.custom_tilt == 15.0
     
-    print("[OK] Süd-Ost-Konfiguration erfolgreich generiert")
+    print("Süd-Ost-Konfiguration erfolgreich generiert")
     print(f"  - Mounting Mode: {config.mounting_mode}")
     print(f"  - Custom Azimuth: {config.custom_azimuth}°")
     print(f"  - Custom Tilt: {config.custom_tilt}°")
@@ -91,7 +91,7 @@ def test_generate_mixed_config():
     assert config.use_garage == True
     assert config.use_facade == True
     
-    print("[OK] Gemischte Konfiguration erfolgreich generiert")
+    print("Gemischte Konfiguration erfolgreich generiert")
     print(f"  - Garage: {config.use_garage}")
     print(f"  - Fassade: {config.use_facade}")
 
@@ -134,7 +134,7 @@ def test_evaluate_config():
         assert 0.0 <= score <= 100.0
         print(f"  - {name}: {score:.1f}/100")
     
-    print("\n[OK] Konfigurations-Bewertung erfolgreich")
+    print("\nKonfigurations-Bewertung erfolgreich")
 
 
 def test_optimize_layout():
@@ -167,7 +167,7 @@ def test_optimize_layout():
         for i, (config, score) in enumerate(top_configs, 1):
             print(f"  {i}. {config.mounting_mode}: {score:.1f}/100")
         
-        print(f"[OK] Optimierung mit Ziel '{goal}' erfolgreich")
+        print(f"Optimierung mit Ziel '{goal}' erfolgreich")
 
 
 def main():
@@ -185,14 +185,14 @@ def main():
         test_optimize_layout()
         
         print("\n" + "=" * 60)
-        print("[OK] ALLE TESTS ERFOLGREICH")
+        print("ALLE TESTS ERFOLGREICH")
         print("=" * 60)
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"\n[ERROR] FEHLER: {e}")
+        print(f"\nFEHLER: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)
