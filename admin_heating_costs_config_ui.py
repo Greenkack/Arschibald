@@ -157,7 +157,7 @@ def render_admin_heating_costs_ui():
         
         # Berechnungsbeispiel
         st.markdown("---")
-        st.markdown("### [CHART] Berechnungsbeispiel")
+        st.markdown("### Berechnungsbeispiel")
         example_kwh = st.number_input("Jahreswärmebedarf (kWh)", value=15000, step=1000)
         
         example_col1, example_col2, example_col3 = st.columns(3)
@@ -196,7 +196,7 @@ def render_admin_heating_costs_ui():
             - Strom: {wp_electricity_kwh:,.0f} kWh
             - CO₂: {wp_co2_kg:,.0f} kg/Jahr
             - CO₂-Steuer: {wp_co2_cost:,.2f} €/Jahr
-            - [OK] Einsparung: {gas_co2_kg - wp_co2_kg:,.0f} kg/Jahr
+            - Einsparung: {gas_co2_kg - wp_co2_kg:,.0f} kg/Jahr
             """)
     
     # Tab 2: Brennstoffpreise
@@ -373,7 +373,7 @@ def render_admin_heating_costs_ui():
             )
         
         st.markdown("---")
-        st.markdown("#### [POWER] Stromverbrauch Heizungsanlage (Pumpen, Regelung)")
+        st.markdown("#### Stromverbrauch Heizungsanlage (Pumpen, Regelung)")
         pump_col1, pump_col2, pump_col3 = st.columns(3)
         
         with pump_col1:
@@ -457,15 +457,15 @@ def render_admin_heating_costs_ui():
         with col_action1:
             if st.button("💾 Konfiguration speichern", use_container_width=True, type="primary"):
                 if save_heating_config(config):
-                    st.success("[OK] Konfiguration erfolgreich gespeichert!")
+                    st.success("Konfiguration erfolgreich gespeichert!")
                 else:
-                    st.error("[ERROR] Fehler beim Speichern der Konfiguration")
+                    st.error("Fehler beim Speichern der Konfiguration")
         
         with col_action2:
             if st.button("🔄 Standardwerte wiederherstellen", use_container_width=True):
                 config = DEFAULT_HEATING_CONFIG.copy()
                 if save_heating_config(config):
-                    st.success("[OK] Standardwerte wiederhergestellt!")
+                    st.success("Standardwerte wiederhergestellt!")
                     st.rerun()
         
         with col_action3:

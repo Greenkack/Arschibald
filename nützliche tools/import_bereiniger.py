@@ -15,7 +15,7 @@ def clean_unused_imports(file_path):
     try:
         tree = ast.parse(content)
     except BaseException:
-        print(f"[ERROR] Syntax-Fehler in {file_path}")
+        print(f"Syntax-Fehler in {file_path}")
         return
 
     # Sammle alle Imports
@@ -38,7 +38,7 @@ def clean_unused_imports(file_path):
         print(f"🧹 Ungenutzte Imports in {file_path}: {unused_imports}")
         # Hier könnte man sie automatisch entfernen
     else:
-        print(f"[OK] {file_path} hat keine ungenutzten Imports")
+        print(f"{file_path} hat keine ungenutzten Imports")
 
 
 # Alle Python-Dateien prüfen

@@ -4,7 +4,7 @@ ASCII-Art Vorschau des neuen Karussell-Designs
 """
 
 print("\n" + "=" * 80)
-print(" " * 20 + "[DESIGN] ADMIN-KARUSSELL DESIGN PREVIEW")
+print(" " * 20 + "ADMIN-KARUSSELL DESIGN PREVIEW")
 print("=" * 80 + "\n")
 
 # Gradient Background
@@ -14,7 +14,7 @@ print("╠" + "═" * 78 + "╣")
 
 # Navigation Header
 print("║" + " " * 78 + "║")
-print("║" + " " * 20 + "[TARGET] ADMINBEREICH NAVIGATION" + " " * 31 + "║")
+print("║" + " " * 20 + "ADMINBEREICH NAVIGATION" + " " * 31 + "║")
 print(
     "║" +
     " " *
@@ -120,7 +120,7 @@ print(
     "║" +
     " " *
     3 +
-    "│       🏢       │  │       👥       │  │       [PACKAGE]       │" +
+    "│       🏢       │  │       👥       │  │       │" +
     " " *
     3 +
     "║")
@@ -202,7 +202,7 @@ print("║" + " " * 78 + "║")
 print("╚" + "═" * 78 + "╝")
 
 print("\n" + "-" * 80)
-print("[DESIGN] VISUELLE EFFEKTE:")
+print("VISUELLE EFFEKTE:")
 print("-" * 80)
 print()
 print("  Inactive Card:              Active Card:")
@@ -229,24 +229,24 @@ print("  [Card]      → Direkt zu diesem Tab springen")
 print("  [Dot]       → (Optional) Direkt zu Position")
 
 print("\n" + "-" * 80)
-print("[CHART] ALLE 13 ADMIN-BEREICHE:")
+print("ALLE 13 ADMIN-BEREICHE:")
 print("-" * 80)
 print()
 
 areas = [
     ("🏢", "Unternehmensverwaltung", "Position 1"),
     ("👥", "Benutzerverwaltung", "Position 2 ⭐ AKTIV"),
-    ("[PACKAGE]", "Produktverwaltung", "Position 3"),
-    ("[DESIGN]", "Logo-Management", "Position 4"),
+    ("", "Produktverwaltung", "Position 3"),
+    ("", "Logo-Management", "Position 4"),
     ("🗄️", "Produktdatenbank", "Position 5"),
     ("🛠️", "Services-Management", "Position 6"),
     ("⚙️", "Allgemeine Einstellungen", "Position 7"),
     ("🖼️", "Intro-Einstellungen", "Position 8"),
-    ("[MONEY]", "Tarifverwaltung", "Position 9"),
-    ("[FILE]", "PDF-Design", "Position 10"),
+    ("", "Tarifverwaltung", "Position 9"),
+    ("", "PDF-Design", "Position 10"),
     ("💳", "Zahlungsmodalitäten", "Position 11"),
-    ("[CHART]", "Visualisierung", "Position 12"),
-    ("[TOOL]", "Erweitert", "Position 13"),
+    ("", "Visualisierung", "Position 12"),
+    ("", "Erweitert", "Position 13"),
 ]
 
 for icon, name, pos in areas:

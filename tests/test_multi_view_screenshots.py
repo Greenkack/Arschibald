@@ -69,27 +69,27 @@ def test_multi_view_screenshots():
             assert views is not None, "Views Dictionary ist None"
             assert isinstance(views, dict), "Views ist kein Dictionary"
             
-            print(f"  [OK] Views Dictionary erstellt: {len(views)} Ansichten")
+            print(f"  Views Dictionary erstellt: {len(views)} Ansichten")
             
             # Prüfe ob alle 4 Views vorhanden sind
             expected_views = ["isometric", "top", "south", "east"]
             for view_name in expected_views:
                 assert view_name in views, f"View '{view_name}' fehlt"
                 assert isinstance(views[view_name], bytes), f"View '{view_name}' ist nicht bytes"
-                print(f"  [OK] View '{view_name}': {len(views[view_name])} bytes")
+                print(f"  View '{view_name}': {len(views[view_name])} bytes")
             
             # Prüfe ob ZIP-Datei erstellt wurde
             zip_filepath = os.path.join(tmp_dir, "test_view_multi_view.zip")
             assert os.path.exists(zip_filepath), "ZIP-Datei wurde nicht erstellt"
             
             zip_size = os.path.getsize(zip_filepath)
-            print(f"  [OK] ZIP-Datei erstellt: {zip_size} bytes")
+            print(f"  ZIP-Datei erstellt: {zip_size} bytes")
             
             # Prüfe ZIP-Inhalt
             import zipfile
             with zipfile.ZipFile(zip_filepath, 'r') as zipf:
                 zip_contents = zipf.namelist()
-                print(f"  [OK] ZIP enthält {len(zip_contents)} Dateien:")
+                print(f"  ZIP enthält {len(zip_contents)} Dateien:")
                 for filename in zip_contents:
                     print(f"    - {filename}")
                 
@@ -98,11 +98,11 @@ def test_multi_view_screenshots():
                     expected_filename = f"test_view_{view_name}.png"
                     assert expected_filename in zip_contents, f"Datei '{expected_filename}' fehlt in ZIP"
         
-        print("\n[OK] Multi-View Screenshots Test BESTANDEN")
+        print("\nMulti-View Screenshots Test BESTANDEN")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Multi-View Screenshots Test FEHLGESCHLAGEN: {e}")
+        print(f"\nMulti-View Screenshots Test FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -154,13 +154,13 @@ def test_multi_view_with_different_roof_types():
                 )
                 
                 assert len(views) == 4, f"Erwartete 4 Views, erhalten: {len(views)}"
-                print(f"  [OK] {roof_type}: {len(views)} Views erstellt")
+                print(f"  {roof_type}: {len(views)} Views erstellt")
         
-        print("\n[OK] Multi-View mit verschiedenen Dachtypen Test BESTANDEN")
+        print("\nMulti-View mit verschiedenen Dachtypen Test BESTANDEN")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Multi-View mit verschiedenen Dachtypen Test FEHLGESCHLAGEN: {e}")
+        print(f"\nMulti-View mit verschiedenen Dachtypen Test FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -189,22 +189,22 @@ def main():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{name:40s} {status}")
     
     print("-" * 70)
     print(f"Gesamt: {passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n[OK] ALLE TESTS BESTANDEN!")
+        print("\nALLE TESTS BESTANDEN!")
         print("\nTask 18.3 ist vollständig implementiert:")
-        print("  [OK] export_multi_view_screenshots() Funktion")
-        print("  [OK] Screenshots aus 4 Perspektiven (Isometrisch, Top, Süd, Ost)")
-        print("  [OK] ZIP-Datei mit allen Screenshots")
-        print("  [OK] Download-Button in UI (pages/solar_3d_view.py)")
+        print("  export_multi_view_screenshots() Funktion")
+        print("  Screenshots aus 4 Perspektiven (Isometrisch, Top, Süd, Ost)")
+        print("  ZIP-Datei mit allen Screenshots")
+        print("  Download-Button in UI (pages/solar_3d_view.py)")
         return 0
     else:
-        print(f"\n[ERROR] {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return 1
 
 

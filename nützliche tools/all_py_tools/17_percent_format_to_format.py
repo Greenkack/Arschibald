@@ -17,4 +17,4 @@ def convert_percent_format(directory="."):
                 new_lines.append(line)
             with open(filename, "w", encoding="utf-8") as f:
                 f.writelines(new_lines)
-    print("[OK] Prozent-Formatierung umgestellt.")
+    print("Prozent-Formatierung umgestellt.")

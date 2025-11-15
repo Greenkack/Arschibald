@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def create_waterfall_test():
     """Erstelle ein Test-PDF nur mit dem Wasserfall-Diagramm"""
-    print("[CHART] Erstelle Wasserfall-Diagramm Test...")
+    print("Erstelle Wasserfall-Diagramm Test...")
 
     try:
         from reportlab.lib.colors import Color
@@ -24,7 +24,7 @@ def create_waterfall_test():
         c = canvas.Canvas("waterfall_test.pdf", pagesize=A4)
         page_width, page_height = A4
 
-        print(f"[DESIGN] Seitengröße: {page_width} x {page_height}")
+        print(f"Seitengröße: {page_width} x {page_height}")
 
         # Zeichne Hintergrund
         c.setFillColorRGB(0.98, 0.98, 0.98)
@@ -60,7 +60,7 @@ def create_waterfall_test():
         chart_height = chart_top - chart_bottom
 
         print(
-            f"[CHART] Chart-Bereich: Links={chart_left}, Rechts={chart_right}, Oben={chart_top}, Unten={chart_bottom}")
+            f"Chart-Bereich: Links={chart_left}, Rechts={chart_right}, Oben={chart_top}, Unten={chart_bottom}")
         print(f"📏 Chart-Größe: Breite={chart_width}, Höhe={chart_height}")
 
         # Zeichne Chart-Rahmen zur Orientierung
@@ -105,7 +105,7 @@ def create_waterfall_test():
             bar_y = chart_bottom + (chart_height - bar_height) / 2
 
             print(
-                f"[CHART] Balken {bar_index} ({label}): X={
+                f"Balken {bar_index} ({label}): X={
                     bar_x:.1f}, Y={
                     bar_y:.1f}, Breite={
                     bar_width:.1f}, Höhe={
@@ -159,11 +159,11 @@ def create_waterfall_test():
         c.showPage()
         c.save()
 
-        print("[OK] Wasserfall-Test PDF erstellt: waterfall_test.pdf")
+        print("Wasserfall-Test PDF erstellt: waterfall_test.pdf")
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Wasserfall-Test: {e}")
+        print(f"Fehler beim Wasserfall-Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -171,7 +171,7 @@ def create_waterfall_test():
 
 def test_with_real_system():
     """Teste mit dem echten System"""
-    print("\n[TARGET] Teste mit echtem System...")
+    print("\nTeste mit echtem System...")
 
     try:
         import io
@@ -210,7 +210,7 @@ def test_with_real_system():
             test_company_info)
 
         # Prüfe die Wasserfall-Werte
-        print("[CHART] Wasserfall-Werte:")
+        print("Wasserfall-Werte:")
         print(
             f"  Direktverbrauch: {
                 dynamic_data.get(
@@ -259,7 +259,7 @@ def test_with_real_system():
                 with open("seite3_waterfall_test.pdf", "wb") as f:
                     writer.write(f)
 
-                print("[OK] Seite 3 Wasserfall-Test erstellt: seite3_waterfall_test.pdf")
+                print("Seite 3 Wasserfall-Test erstellt: seite3_waterfall_test.pdf")
 
                 # Analysiere das Ergebnis
                 test_reader = PdfReader("seite3_waterfall_test.pdf")
@@ -271,26 +271,26 @@ def test_with_real_system():
                         "561", "236", "797", "Direktverbrauch", "Einspeisevergütung"]
                     found = [
                         ind for ind in waterfall_indicators if ind in text]
-                    print(f"[SEARCH] Gefundene Wasserfall-Indikatoren: {found}")
+                    print(f"Gefundene Wasserfall-Indikatoren: {found}")
 
                     if len(found) >= 3:
-                        print("[OK] Wasserfall-Diagramm im PDF gefunden!")
+                        print("Wasserfall-Diagramm im PDF gefunden!")
                         return True
-                    print("[ERROR] Wasserfall-Diagramm nicht im PDF gefunden!")
+                    print("Wasserfall-Diagramm nicht im PDF gefunden!")
                     return False
 
                 except Exception as e:
-                    print(f"[WARNING] Text-Extraktion fehlgeschlagen: {e}")
+                    print(f"Text-Extraktion fehlgeschlagen: {e}")
                     return False
             else:
-                print(f"[ERROR] Template nicht gefunden: {template_path}")
+                print(f"Template nicht gefunden: {template_path}")
                 return False
         else:
-            print("[ERROR] Nicht genügend Overlay-Seiten")
+            print("Nicht genügend Overlay-Seiten")
             return False
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim System-Test: {e}")
+        print(f"Fehler beim System-Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -298,7 +298,7 @@ def test_with_real_system():
 
 def main():
     """Hauptfunktion"""
-    print("[LAUNCH] WASSERFALL-DIAGRAMM TEST")
+    print("WASSERFALL-DIAGRAMM TEST")
     print("=" * 50)
 
     tests = [
@@ -313,17 +313,17 @@ def main():
 
         try:
             result = test_func()
-            status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+            status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
             print(f"\n{test_name}: {status}")
         except Exception as e:
-            print(f"\n[ERROR] {test_name} FEHLER: {e}")
+            print(f"\n{test_name} FEHLER: {e}")
 
     print(f"\n{'=' * 50}")
     print("ERGEBNISSE")
     print('=' * 50)
-    print("[FILE] waterfall_test.pdf - Direktes Wasserfall-Diagramm")
-    print("[FILE] seite3_waterfall_test.pdf - Seite 3 mit Wasserfall-Diagramm")
-    print("\n[TARGET] Öffne beide PDFs um die Diagramme zu sehen!")
+    print("waterfall_test.pdf - Direktes Wasserfall-Diagramm")
+    print("seite3_waterfall_test.pdf - Seite 3 mit Wasserfall-Diagramm")
+    print("\nÖffne beide PDFs um die Diagramme zu sehen!")
 
 
 if __name__ == "__main__":

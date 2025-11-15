@@ -38,19 +38,19 @@ def generate_pdf_from_txt_files(
 
         # Prüfen ob das Script existiert
         if not os.path.exists(pdf_script):
-            print(f"[ERROR] PDF-Script nicht gefunden: {pdf_script}")
+            print(f"PDF-Script nicht gefunden: {pdf_script}")
             return None
 
         # Prüfen ob input-Ordner existiert
         input_dir = os.path.join(base_dir, "input")
         if not os.path.exists(input_dir):
-            print(f"[ERROR] Input-Ordner nicht gefunden: {input_dir}")
+            print(f"Input-Ordner nicht gefunden: {input_dir}")
             return None
 
         # Dynamische Platzhalter in den TXT-Dateien ersetzen
         update_txt_files_from_project_data(project_data or {}, analysis_results or {})
 
-        print("[FILE] Starte TXT-zu-PDF Generierung...")
+        print("Starte TXT-zu-PDF Generierung...")
 
         # PDF-Script ausführen
         result = subprocess.run(
@@ -62,26 +62,26 @@ def generate_pdf_from_txt_files(
         )
 
         if result.returncode != 0:
-            print(f"[ERROR] PDF-Script Fehler: {result.stderr}")
+            print(f"PDF-Script Fehler: {result.stderr}")
             return None
 
         # Prüfen ob PDF erstellt wurde
         if not os.path.exists(output_pdf):
-            print(f"[ERROR] PDF-Datei nicht erstellt: {output_pdf}")
+            print(f"PDF-Datei nicht erstellt: {output_pdf}")
             return None
 
         # PDF-Bytes lesen
         with open(output_pdf, 'rb') as f:
             pdf_bytes = f.read()
 
-        print("[OK] PDF erfolgreich aus TXT-Dateien erstellt!")
+        print("PDF erfolgreich aus TXT-Dateien erstellt!")
         return pdf_bytes
 
     except subprocess.TimeoutExpired:
-        print("[ERROR] PDF-Generierung Timeout nach 30 Sekunden")
+        print("PDF-Generierung Timeout nach 30 Sekunden")
         return None
     except Exception as e:
-        print(f"[ERROR] Fehler bei TXT-zu-PDF Generierung: {e}")
+        print(f"Fehler bei TXT-zu-PDF Generierung: {e}")
         print(traceback.format_exc())
         return None
 
@@ -103,7 +103,7 @@ def update_txt_files_from_project_data(
         base_dir = os.getcwd()
         input_dir = os.path.join(base_dir, "input")
         if not os.path.exists(input_dir):
-            print(f"[ERROR] Input-Ordner nicht gefunden: {input_dir}")
+            print(f"Input-Ordner nicht gefunden: {input_dir}")
             return False
 
         def _get_value(key: str) -> str | None:
@@ -288,7 +288,7 @@ def update_txt_files_from_project_data(
                 return str((analysis_results or {}).get("loan_details") or "15 Jahre, 3,5% Zinsen")
 
             # Fallback: Key nicht gefunden
-            print(f"[WARNING] Unbekannter Key: {key}")
+            print(f"Unbekannter Key: {key}")
             return f"{{{key}}}"  # Gib den Key unverändert zurück
 
         # alle TXT-Dateien bearbeiten
@@ -307,12 +307,12 @@ def update_txt_files_from_project_data(
                         with open(path, "w", encoding="utf-8") as f:
                             f.write(new_content)
                 except Exception as e:
-                    print(f"[WARNING] Fehler beim Aktualisieren von {filename}: {e}")
+                    print(f"Fehler beim Aktualisieren von {filename}: {e}")
         print("🔄 TXT-Dateien wurden mit dynamischen Werten aktualisiert")
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Aktualisieren der TXT-Dateien: {e}")
+        print(f"Fehler beim Aktualisieren der TXT-Dateien: {e}")
         return False
 
 def check_txt_system_requirements() -> dict[str, bool]:
@@ -362,24 +362,24 @@ def get_system_status() -> str:
     status_parts = []
 
     if requirements['pdf_script_exists']:
-        status_parts.append("[OK] PDF-Script verfügbar")
+        status_parts.append("PDF-Script verfügbar")
     else:
-        status_parts.append("[ERROR] PDF-Script fehlt")
+        status_parts.append("PDF-Script fehlt")
 
     if requirements['input_dir_exists']:
-        status_parts.append("[OK] Input-Ordner gefunden")
+        status_parts.append("Input-Ordner gefunden")
     else:
-        status_parts.append("[ERROR] Input-Ordner fehlt")
+        status_parts.append("Input-Ordner fehlt")
 
     if requirements['txt_files_found']:
-        status_parts.append("[OK] TXT-Dateien gefunden")
+        status_parts.append("TXT-Dateien gefunden")
     else:
-        status_parts.append("[ERROR] Keine TXT-Dateien")
+        status_parts.append("Keine TXT-Dateien")
 
     if requirements['all_pages_available']:
-        status_parts.append("[OK] 20+ Seiten verfügbar")
+        status_parts.append("20+ Seiten verfügbar")
     else:
-        status_parts.append("[WARNING] Weniger als 20 Seiten")
+        status_parts.append("Weniger als 20 Seiten")
 
     return " | ".join(status_parts)
 
@@ -399,6 +399,6 @@ if __name__ == "__main__":
     # Test-PDF generieren
     pdf_bytes = generate_pdf_from_txt_files()
     if pdf_bytes:
-        print(f"[OK] Test erfolgreich! PDF-Größe: {len(pdf_bytes)} bytes")
+        print(f"Test erfolgreich! PDF-Größe: {len(pdf_bytes)} bytes")
     else:
-        print("[ERROR] Test fehlgeschlagen!")
+        print("Test fehlgeschlagen!")

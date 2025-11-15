@@ -54,14 +54,14 @@ def test_csv_export():
         assert "0,0.00,0.00,6.00,0.0,15.0,Süddach,0.0" in csv_string, "Modul 0 Daten fehlen"
         assert "1,2.00,0.00,6.00,90.0,20.0,Westdach,25.5" in csv_string, "Modul 1 Daten fehlen"
         
-        print("[OK] CSV-Export funktioniert korrekt")
+        print("CSV-Export funktioniert korrekt")
         print(f"  - CSV-Länge: {len(csv_string)} Zeichen")
         print(f"  - Anzahl Zeilen: {len(csv_string.splitlines())}")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] CSV-Export fehlgeschlagen: {e}")
+        print(f"CSV-Export fehlgeschlagen: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -117,7 +117,7 @@ def test_json_export_import():
         assert "mounting_mode" in json_string, "mounting_mode fehlt in JSON"
         assert "south-east" in json_string, "mounting_mode Wert fehlt"
         
-        print("[OK] JSON-Export funktioniert korrekt")
+        print("JSON-Export funktioniert korrekt")
         print(f"  - JSON-Länge: {len(json_string)} Zeichen")
         
         # Importiere JSON
@@ -130,7 +130,7 @@ def test_json_export_import():
         assert 0 in imported_config.module_transforms, "module_transforms nicht importiert"
         assert "test_group" in imported_config.module_groups, "module_groups nicht importiert"
         
-        print("[OK] JSON-Import funktioniert korrekt")
+        print("JSON-Import funktioniert korrekt")
         print(f"  - Mode: {imported_config.mode}")
         print(f"  - Mounting Mode: {imported_config.mounting_mode}")
         print(f"  - Module Transforms: {len(imported_config.module_transforms)}")
@@ -139,7 +139,7 @@ def test_json_export_import():
         return True
         
     except Exception as e:
-        print(f"[ERROR] JSON-Export/Import fehlgeschlagen: {e}")
+        print(f"JSON-Export/Import fehlgeschlagen: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -165,7 +165,7 @@ def test_function_signatures():
         assert callable(export_multi_view_screenshots), "export_multi_view_screenshots nicht callable"
         assert callable(export_360_animation), "export_360_animation nicht callable"
         
-        print("[OK] Alle Export-Funktionen existieren")
+        print("Alle Export-Funktionen existieren")
         print("  - export_module_details_csv")
         print("  - export_layout_json")
         print("  - import_layout_json")
@@ -175,7 +175,7 @@ def test_function_signatures():
         return True
         
     except Exception as e:
-        print(f"[ERROR] Funktions-Signaturen Test fehlgeschlagen: {e}")
+        print(f"Funktions-Signaturen Test fehlgeschlagen: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -207,17 +207,17 @@ def main():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{name:30s} {status}")
     
     print("-" * 60)
     print(f"Gesamt: {passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n[OK] ALLE TESTS BESTANDEN!")
+        print("\nALLE TESTS BESTANDEN!")
         return 0
     else:
-        print(f"\n[ERROR] {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return 1
 
 

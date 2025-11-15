@@ -469,17 +469,17 @@ def render_heatpump_analysis(
     # Tabs für verschiedene Analyse-Bereiche
     tabs = st.tabs([
         "🏠 Gebäudeanalyse",
-        "[TOOL] Wärmepumpen-Auswahl",
-        "[TEMP] Radiator-Check",
-        "[MONEY] Wirtschaftlichkeit",
-        "[POWER] PV-Integration",
+        "Wärmepumpen-Auswahl",
+        "Radiator-Check",
+        "Wirtschaftlichkeit",
+        "PV-Integration",
         "� Erweiterte Analyse",  # NEU: Features 1.1-8.2
         "🏗️ Renovierungs-Planer",
         "⚙️ Optimierung",
         "💵 Förderung & CO2",
-        "[STATS] ROI & Benchmarking",
-        "[POWER] Dynamischer Stromtarif",
-        "[CHART] Ergebnisse"
+        "ROI & Benchmarking",
+        "Dynamischer Stromtarif",
+        "Ergebnisse"
     ])
 
     with tabs[0]:
@@ -533,7 +533,7 @@ def render_heatpump_analysis(
             else:
                 if demand_mode == 'pv_wp_combined':
                     st.warning(
-                        "[POWER] **PV + Wärmepumpe-Modus:** Bitte führen Sie zuerst die PV-Analyse durch.")
+                        "**PV + Wärmepumpe-Modus:** Bitte führen Sie zuerst die PV-Analyse durch.")
                 else:
                     st.info(
                         "PV-Daten optional. Für PV+WP-Integration bitte zuerst PV-Analyse durchführen.")
@@ -543,7 +543,7 @@ def render_heatpump_analysis(
         if 'building_data' in st.session_state and 'heatpump_data' in st.session_state:
             render_advanced_analysis(texts, st.session_state.building_data, st.session_state.heatpump_data)
         else:
-            st.info("[TARGET] Bitte führen Sie zuerst die Gebäude- und Wärmepumpen-Analyse durch.")
+            st.info("Bitte führen Sie zuerst die Gebäude- und Wärmepumpen-Analyse durch.")
 
     with tabs[6]:  # Renovierungs-Planer
         if 'building_data' in st.session_state:
@@ -703,7 +703,7 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
         fuel_prices = heating_config.get("fuel_prices", {})
 
         # Heizkosten-Eingabefelder
-        st.markdown("**[MONEY] Jährliche Heizkosten**")
+        st.markdown("**Jährliche Heizkosten**")
         st.caption("Geben Sie die Kosten für Ihre aktuelle(n) Heizart(en) ein")
 
         cost_col1, cost_col2, cost_col3 = st.columns(3)
@@ -719,7 +719,7 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
             )
             gas_annual_cost = gas_monthly_cost * 12
             if gas_monthly_cost > 0:
-                st.info(f"[CHART] Jährlich: {format_german_number(gas_annual_cost, 2)} €")
+                st.info(f"Jährlich: {format_german_number(gas_annual_cost, 2)} €")
         
         with cost_col2:
             st.markdown("**Ölheizung**")
@@ -739,7 +739,7 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
             oil_tons = oil_l / 1190.0 if oil_l > 0 else 0
             oil_annual_cost = oil_tons * oil_price_per_ton
             if oil_price_per_ton > 0 and oil_l > 0:
-                st.info(f"[CHART] Jährlich: {format_german_number(oil_annual_cost, 2)} €")
+                st.info(f"Jährlich: {format_german_number(oil_annual_cost, 2)} €")
         
         with cost_col3:
             st.markdown("**Holzheizung**")
@@ -753,7 +753,7 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
             )
             wood_annual_cost = wood_ster * wood_price_per_ster
             if wood_price_per_ster > 0 and wood_ster > 0:
-                st.info(f"[CHART] Jährlich: {format_german_number(wood_annual_cost, 2)} €")
+                st.info(f"Jährlich: {format_german_number(wood_annual_cost, 2)} €")
         
         # Gesamtkosten berechnen und anzeigen
         total_annual_heating_cost = gas_annual_cost + oil_annual_cost + wood_annual_cost
@@ -998,7 +998,7 @@ def render_heatpump_selection(
             available_types = get_available_types_for_manufacturer(selected_manufacturer)
             if available_types:
                 selected_type = st.selectbox(
-                    "[TOOL] Wärmepumpentyp",
+                    "Wärmepumpentyp",
                     options=available_types,
                     index=0
                 )
@@ -1008,7 +1008,7 @@ def render_heatpump_selection(
                 if models:
                     model_names = [m["model"] for m in models]
                     selected_model_name = st.selectbox(
-                        "[PACKAGE] Produktmodell",
+                        "Produktmodell",
                         options=model_names,
                         index=0
                     )
@@ -1023,7 +1023,7 @@ def render_heatpump_selection(
                         # Leistungsvariante auswählen
                         power_variants = selected_product["heating_power_kw"]
                         selected_power = st.selectbox(
-                            "[POWER] Heizleistung (kW)",
+                            "Heizleistung (kW)",
                             options=power_variants,
                             index=0
                         )
@@ -1058,7 +1058,7 @@ def render_heatpump_selection(
                         
                         awards_text = ""
                         if awards:
-                            awards_text = "\n        - **Auszeichnungen:** " + ", ".join([f"[WINNER] {a}" for a in awards])
+                            awards_text = "\n        - **Auszeichnungen:** " + ", ".join([f"{a}" for a in awards])
                         
                         # Produktdetails anzeigen
                         st.info(f"""
@@ -1114,10 +1114,10 @@ def render_heatpump_selection(
 
     # Button-Text abhängig vom Modus
     if selection_mode == "📋 Manuelle Produktauswahl":
-        button_text = "[OK] Ausgewählte Wärmepumpe übernehmen"
+        button_text = "Ausgewählte Wärmepumpe übernehmen"
         button_help = "Übernimmt die manuell ausgewählte Wärmepumpe direkt"
     else:
-        button_text = "[SEARCH] Empfehlungen anzeigen"
+        button_text = "Empfehlungen anzeigen"
         button_help = "Zeigt Top 5 Empfehlungen basierend auf Ihren Anforderungen"
 
     if st.button(button_text, use_container_width=True, type="primary", help=button_help):
@@ -1129,16 +1129,16 @@ def render_heatpump_selection(
             # ============================================================
             if selection_mode == "📋 Manuelle Produktauswahl":
                 if not selected_product or not selected_power:
-                    st.error("[WARNING] Bitte wählen Sie zuerst einen Hersteller, Typ, Modell und Leistung aus!")
+                    st.error("Bitte wählen Sie zuerst einen Hersteller, Typ, Modell und Leistung aus!")
                     st.stop()
                 
-                # [OK] LADE PRODUKT AUS ECHTER DATENBANK
+                # LADE PRODUKT AUS ECHTER DATENBANK
                 from product_db import get_product_by_model_name
                 
                 db_product = get_product_by_model_name(selected_model_name)
                 if db_product is None:
-                    st.error(f"[ERROR] FEHLER: Produkt '{selected_model_name}' nicht in Datenbank gefunden!")
-                    st.warning("[WARNING] Dieses Produkt kann dem Kunden nicht angeboten werden!")
+                    st.error(f"FEHLER: Produkt '{selected_model_name}' nicht in Datenbank gefunden!")
+                    st.warning("Dieses Produkt kann dem Kunden nicht angeboten werden!")
                     st.stop()
                 
                 # Lade Preisinformationen (get_heatpump_price sucht jetzt ZUERST in product_db.py)
@@ -1152,7 +1152,7 @@ def render_heatpump_selection(
                         selected_power
                     )
                 except Exception as e:
-                    st.warning(f"[WARNING] Konnte Preis nicht laden: {e}")
+                    st.warning(f"Konnte Preis nicht laden: {e}")
                     # Verwende Preis aus product_db als Fallback
                     if db_product.get('price_euro', 0) > 0:
                         base_price = float(db_product['price_euro'])
@@ -1204,7 +1204,7 @@ def render_heatpump_selection(
                 }
                 
                 st.session_state.heatpump_data = heatpump_data
-                st.success(f"[OK] {selected_manufacturer} {selected_model_name} ({selected_power} kW) erfolgreich übernommen!")
+                st.success(f"{selected_manufacturer} {selected_model_name} ({selected_power} kW) erfolgreich übernommen!")
                 st.balloons()
                 st.rerun()
             
@@ -1212,7 +1212,7 @@ def render_heatpump_selection(
             # AUTOMATISCHE EMPFEHLUNG - ZEIGE TOP 5
             # ============================================================
             else:
-                # [OK] VALIDIERE GEGEN ECHTE PRODUKTDATENBANK
+                # VALIDIERE GEGEN ECHTE PRODUKTDATENBANK
                 from product_db import get_product_by_model_name
                 from heatpump_products_database import HEATPUMP_PRODUCTS
                 
@@ -1229,10 +1229,10 @@ def render_heatpump_selection(
                         for model in models:
                             model_name = model.get("model", "Unknown")
                             
-                            # [OK] KRITISCH: PRÜFE OB PRODUKT IN ECHTER DATENBANK EXISTIERT
+                            # KRITISCH: PRÜFE OB PRODUKT IN ECHTER DATENBANK EXISTIERT
                             db_product = get_product_by_model_name(model_name)
                             if db_product is None:
-                                # [ERROR] Produkt nicht in Datenbank -> ÜBERSPRINGEN
+                                # Produkt nicht in Datenbank -> ÜBERSPRINGEN
                                 continue
                             
                             heating_powers = model.get("heating_power_kw", [])
@@ -1288,7 +1288,7 @@ def render_heatpump_selection(
                 recommendations = recommendations[:5]
             
             if recommendations:
-                st.success(f"[OK] Top 5 Testsieger & beste Wärmepumpen aus der Datenbank!")
+                st.success(f"Top 5 Testsieger & beste Wärmepumpen aus der Datenbank!")
                 
                 # Speichere Empfehlungen im Session State
                 st.session_state.heatpump_recommendations = recommendations
@@ -1323,7 +1323,7 @@ def render_heatpump_selection(
                         
                         # Auszeichnungen
                         if rec['awards']:
-                            awards_text = " | ".join([f"[WINNER] {award}" for award in rec['awards']])
+                            awards_text = " | ".join([f"{award}" for award in rec['awards']])
                             st.markdown(f"_{awards_text}_")
                         
                         # Lade konfigurierten Preis aus Admin-Einstellungen
@@ -1363,13 +1363,13 @@ def render_heatpump_selection(
                             # AUSWAHL-BUTTON FÜR JEDE EMPFEHLUNG
                             button_type = "primary" if idx == 1 else "secondary"
                             if st.button(
-                                f"[OK] Wählen" if idx == 1 else "Auswählen",
+                                f"Wählen" if idx == 1 else "Auswählen",
                                 key=f"select_hp_{idx}_{rec['manufacturer']}_{rec['model']}_{rec['power_kw']}",
                                 type=button_type,
                                 use_container_width=True
                             ):
-                                # [OK] DEBUG: Zeige was WIRKLICH in rec steht
-                                st.info(f"[SEARCH] DEBUG: Button geklickt für {rec['manufacturer']} {rec['model']}")
+                                # DEBUG: Zeige was WIRKLICH in rec steht
+                                st.info(f"DEBUG: Button geklickt für {rec['manufacturer']} {rec['model']}")
                                 
                                 # Speichere ausgewählte Wärmepumpe
                                 # Füge heating_power zu rec hinzu für Konsistenz
@@ -1404,24 +1404,24 @@ def render_heatpump_selection(
                                 }
                                 
                                 st.session_state.heatpump_data = heatpump_data
-                                st.success(f"[OK] {rec['manufacturer']} {rec['model']} ({rec['power_kw']} kW) ausgewählt!")
+                                st.success(f"{rec['manufacturer']} {rec['model']} ({rec['power_kw']} kW) ausgewählt!")
                                 st.balloons()
                                 st.rerun()
                         
                         # Features und Preis-Details anzeigen
                         if rec['features']:
-                            st.caption(f"[TOOL] Features: {', '.join(rec['features'][:4])}")
+                            st.caption(f"Features: {', '.join(rec['features'][:4])}")
                         
                         # Preis-Breakdown anzeigen
                         if price_info and price_info.get('total_price_eur', 0) > 0:
-                            st.caption(f"[MONEY] Gerätepreis: {format_german_number(price_info.get('base_price_eur', 0), 0)} € | Installation: {format_german_number(price_info.get('installation_price_eur', 0), 0)} € | **Gesamt: {format_german_number(price_info.get('total_price_eur', 0), 0)} €**")
+                            st.caption(f"Gerätepreis: {format_german_number(price_info.get('base_price_eur', 0), 0)} € | Installation: {format_german_number(price_info.get('installation_price_eur', 0), 0)} € | **Gesamt: {format_german_number(price_info.get('total_price_eur', 0), 0)} €**")
                         
                         st.markdown("---")
                     
                     return st.session_state.get('heatpump_data')
                 
                 else:
-                    st.warning("[WARNING] Keine passenden Wärmepumpen in der Datenbank gefunden. Bitte Parameter anpassen.")
+                    st.warning("Keine passenden Wärmepumpen in der Datenbank gefunden. Bitte Parameter anpassen.")
 
         except Exception as e:
             st.error(f"Fehler bei der Wärmepumpen-Auswahl: {e}")
@@ -1432,25 +1432,25 @@ def render_heatpump_selection(
     if 'heatpump_data' in st.session_state and st.session_state.heatpump_data:
         selected = st.session_state.heatpump_data.get('selected_heatpump', {})
         
-        # [OK] VALIDIERUNG: Nur erlaubte Hersteller
+        # VALIDIERUNG: Nur erlaubte Hersteller
         allowed_manufacturers = ['Viessmann', 'Buderus', 'Vaillant']
         manufacturer = selected.get('manufacturer', '')
         
         if manufacturer not in allowed_manufacturers:
-            # [ERROR] UNGÜLTIGER HERSTELLER -> SESSION LÖSCHEN
-            st.warning(f"[WARNING] Ungültiger Hersteller '{manufacturer}' erkannt! Session wird zurückgesetzt...")
+            # UNGÜLTIGER HERSTELLER -> SESSION LÖSCHEN
+            st.warning(f"Ungültiger Hersteller '{manufacturer}' erkannt! Session wird zurückgesetzt...")
             del st.session_state.heatpump_data
             st.rerun()
         
-        st.success("[OK] Wärmepumpe ausgewählt!")
+        st.success("Wärmepumpe ausgewählt!")
         if selected:
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.info(f"**{manufacturer} {selected.get('model')}**")
             with col2:
-                st.info(f"[POWER] {selected.get('power_kw')} kW")
+                st.info(f"{selected.get('power_kw')} kW")
             with col3:
-                st.info(f"[CHART] SCOP: {selected.get('scop')}")
+                st.info(f"SCOP: {selected.get('scop')}")
         
         return st.session_state.heatpump_data
 
@@ -1466,7 +1466,7 @@ def render_radiator_check(
         check_radiator_compatibility
     )
 
-    st.subheader("[TEMP] Radiator-Kompatibilitätsprüfung")
+    st.subheader("Radiator-Kompatibilitätsprüfung")
 
     heat_load_kw = building_data.get('heat_load_kw', 0)
 
@@ -1474,7 +1474,7 @@ def render_radiator_check(
         st.error("Keine gültige Heizlast verfügbar. Bitte Gebäudeanalyse wiederholen.")
         return None
 
-    st.info(f"[CHART] Heizlast: {heat_load_kw:.1f} kW")
+    st.info(f"Heizlast: {heat_load_kw:.1f} kW")
 
     with st.form("radiator_check_form"):
         st.markdown("### Radiator-Daten eingeben")
@@ -1521,7 +1521,7 @@ def render_radiator_check(
                 help="Typ der installierten Heizkörper"
             )
 
-        submitted = st.form_submit_button("[SEARCH] Kompatibilität prüfen", use_container_width=True)
+        submitted = st.form_submit_button("Kompatibilität prüfen", use_container_width=True)
 
         if submitted:
             try:
@@ -1552,7 +1552,7 @@ def render_radiator_check(
 
                 # Visualisierung der Ergebnisse
                 st.markdown("---")
-                st.markdown("### [CHART] Prüfungsergebnis")
+                st.markdown("### Prüfungsergebnis")
 
                 # Status-Badge mit Farbe
                 compatibility = compatibility_result['compatibility']
@@ -1605,12 +1605,12 @@ def render_radiator_check(
                         )
 
                 # Empfehlungen
-                st.markdown("### [IDEA] Empfehlungen")
+                st.markdown("### Empfehlungen")
                 recommendation = compatibility_result.get('recommendation', '')
                 st.info(recommendation)
 
                 # Technische Details in Expander
-                with st.expander("[TOOL] Technische Details"):
+                with st.expander("Technische Details"):
                     st.json(flow_temp_result)
 
                 return radiator_data
@@ -1870,13 +1870,13 @@ def render_economics_analysis(
 
             cost_breakdown = pd.DataFrame({
                 'Position': [
-                    '[PACKAGE] Wärmepumpe',
-                    '[TOOL] Installation',
-                    '[MONEY] Förderung BEG',
+                    'Wärmepumpe',
+                    'Installation',
+                    'Förderung BEG',
                     '💵 Netto-Investition',
                     '',
-                    '[POWER] Jährlicher Stromverbrauch WP',
-                    '[IDEA] Jährliche Stromkosten WP',
+                    'Jährlicher Stromverbrauch WP',
+                    'Jährliche Stromkosten WP',
                     '🛠️ Jährliche Wartungskosten',
                     '🔩 Jährliche Reparaturkosten',
                     '🏭 Stromverbrauch Heizung',
@@ -1892,8 +1892,8 @@ def render_economics_analysis(
                     '🌍 CO₂-Steuer alte Heizung',
                     '💸 Gesamte jährliche Kosten alt',
                     '',
-                    '[OK] Jährliche Ersparnis',
-                    '[CHART] CO₂-Einsparung (kg/Jahr)'
+                    'Jährliche Ersparnis',
+                    'CO₂-Einsparung (kg/Jahr)'
                 ],
                 'Betrag': [
                     f"{format_german_number(heatpump_price, 0)} €",
@@ -1929,7 +1929,7 @@ def render_economics_analysis(
                 hide_index=True)
             
             # Zusätzliche Metriken für CO₂
-            st.markdown("### [GREEN] Umweltbilanz")
+            st.markdown("### Umweltbilanz")
             co2_col1, co2_col2, co2_col3 = st.columns(3)
             
             with co2_col1:
@@ -1994,7 +1994,7 @@ def render_economics_analysis(
                 separators=',.'  # Deutsche Trennzeichen für Achsen,
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig_cashflow)
 
             st.plotly_chart(fig_cashflow, use_container_width=True)
@@ -2046,19 +2046,19 @@ def render_economics_analysis(
                 with col_co2_1:
                     st.metric(
                         f"CO2-Kosten {fuel_type} (Jahr 1)",
-                        f"{format_german_number(co2_cost_result.get('annual_co2_cost_euros', co2_cost_result.get('annual_co2_cost_eur', 0)), 0)} €",  # [OK] FIX: Beide Keys prüfen
+                        f"{format_german_number(co2_cost_result.get('annual_co2_cost_euros', co2_cost_result.get('annual_co2_cost_eur', 0)), 0)} €",  # FIX: Beide Keys prüfen
                         help="CO2-Preis × Emissionen pro Jahr"
                     )
 
                 with col_co2_2:
                     st.metric(
                         "CO2-Einsparung (20 Jahre)",
-                        f"{comparison_result['comparison'].get('co2_savings_tons_20years', comparison_result.get('co2_savings_tons_20y', 0)):,.1f} t",  # [OK] FIX: Beide Keys prüfen
+                        f"{comparison_result['comparison'].get('co2_savings_tons_20years', comparison_result.get('co2_savings_tons_20y', 0)):,.1f} t",  # FIX: Beide Keys prüfen
                         help="Eingesparte CO2-Emissionen über 20 Jahre"
                     )
 
                 with col_co2_3:
-                    # [OK] FIX: Berechne monetäre CO2-Ersparnis wenn nicht vorhanden
+                    # FIX: Berechne monetäre CO2-Ersparnis wenn nicht vorhanden
                     co2_savings_tons = comparison_result['comparison'].get('co2_savings_tons_20years', 0)
                     co2_price = 55  # €/Tonne
                     monetary_savings = comparison_result.get('co2_savings_monetary_20y', co2_savings_tons * co2_price)
@@ -2070,10 +2070,10 @@ def render_economics_analysis(
                     )
 
                 # 20-Jahres-Kostenvergleich (NPV)
-                st.markdown("### [MONEY] 20-Jahres-Kostenvergleich (NPV)")
+                st.markdown("### 20-Jahres-Kostenvergleich (NPV)")
 
                 years_npv = list(range(1, 21))
-                # [OK] FIX: Hole Werte aus korrekter Struktur
+                # FIX: Hole Werte aus korrekter Struktur
                 wp_net_inv = comparison_result.get('wp_net_investment', comparison_result.get('heatpump', {}).get('investment_net_eur', 20000))
                 fossil_inv = comparison_result.get('fossil_investment', comparison_result.get('fossil_heating', {}).get('investment', 12800))
                 
@@ -2095,7 +2095,7 @@ def render_economics_analysis(
 
                     # Fossil
                     fossil_fuel_price = gas_price / 100 if fuel_type == "Erdgas" else oil_price / 100
-                    # [OK] FIX: Beide Keys prüfen
+                    # FIX: Beide Keys prüfen
                     co2_cost_year1 = co2_cost_result.get('annual_co2_cost_euros', co2_cost_result.get('annual_co2_cost_eur', 0))
                     fossil_annual_cost = (
                         heat_demand_kwh *
@@ -2154,13 +2154,13 @@ def render_economics_analysis(
                     separators=',.'  # Deutsche Trennzeichen,
                 )
                 
-                # [OK] SHADCN UI THEME ANWENDEN
+                # SHADCN UI THEME ANWENDEN
                 apply_chart_theme(fig_20y)
 
                 st.plotly_chart(fig_20y, use_container_width=True)
 
                 # Zusammenfassung 20-Jahres-Vergleich
-                st.markdown("### [CHART] Ergebnis 20-Jahres-Vergleich")
+                st.markdown("### Ergebnis 20-Jahres-Vergleich")
 
                 col_res1, col_res2, col_res3, col_res4 = st.columns(4)
 
@@ -2197,9 +2197,9 @@ def render_economics_analysis(
                     )
 
                 # CO2-Emissionen visualisieren
-                st.markdown("### [GREEN] CO2-Emissionen im Vergleich")
+                st.markdown("### CO2-Emissionen im Vergleich")
 
-                # [OK] FIX: Korrekter Key ist 'annual_co2_tons'
+                # FIX: Korrekter Key ist 'annual_co2_tons'
                 annual_co2_tons = co2_cost_result.get('annual_co2_tons', co2_cost_result.get('annual_emissions_tons_co2', 5.0))
 
                 fig_co2 = go.Figure(data=[
@@ -2231,7 +2231,7 @@ def render_economics_analysis(
                     separators=',.'  # Deutsche Trennzeichen
                 )
                 
-                # [OK] SHADCN UI THEME ANWENDEN
+                # SHADCN UI THEME ANWENDEN
                 apply_chart_theme(fig_co2)
 
                 st.plotly_chart(fig_co2, use_container_width=True)
@@ -2476,7 +2476,7 @@ def render_pv_integration(
         separators=',.'  # Deutsche Trennzeichen
     )
     
-    # [OK] SHADCN UI THEME ANWENDEN
+    # SHADCN UI THEME ANWENDEN
     apply_chart_theme(fig_profile)
 
     st.plotly_chart(fig_profile, use_container_width=True)
@@ -2502,7 +2502,7 @@ def render_pv_integration(
                 line=dict(color="black", width=0.5),
                 label=[
                     "☀️ PV-Anlage",           # 0
-                    "[POWER] Stromnetz",            # 1
+                    "Stromnetz",            # 1
                     "🔌 Wärmepumpe",          # 2
                     "🏠 Wärme (Heizung)",     # 3
                     "💾 Einspeisung"          # 4
@@ -2546,13 +2546,13 @@ def render_pv_integration(
             separators=',.'  # Deutsche Trennzeichen
         )
         
-        # [OK] SHADCN UI THEME ANWENDEN
+        # SHADCN UI THEME ANWENDEN
         apply_chart_theme(fig_sankey)
 
         st.plotly_chart(fig_sankey, use_container_width=True)
 
         # Energiebilanz-Tabelle
-        with st.expander("[CHART] Detaillierte Energiebilanz"):
+        with st.expander("Detaillierte Energiebilanz"):
             energy_balance = pd.DataFrame({
                 'Energiestrom': [
                     'PV-Erzeugung gesamt',
@@ -2638,13 +2638,13 @@ def render_results_summary(texts: dict[str, str]):
                     top = candidates[0] if candidates else None
 
                 if top:
-                    # [OK] VALIDIERUNG: Nur erlaubte Hersteller
+                    # VALIDIERUNG: Nur erlaubte Hersteller
                     allowed_manufacturers = ['Viessmann', 'Buderus', 'Vaillant']
                     if top.get('manufacturer') not in allowed_manufacturers:
-                        # [ERROR] Ungültiger Hersteller -> ÜBERSPRINGEN
-                        st.warning(f"[WARNING] Auto-Fallback: Ungültiger Hersteller '{top.get('manufacturer')}' übersprungen!")
+                        # Ungültiger Hersteller -> ÜBERSPRINGEN
+                        st.warning(f"Auto-Fallback: Ungültiger Hersteller '{top.get('manufacturer')}' übersprungen!")
                     else:
-                        # [OK] OK: Speichere nur valide Produkte
+                        # OK: Speichere nur valide Produkte
                         st.session_state.heatpump_data = {
                             'selected_heatpump': top,
                             'alternatives': [],
@@ -2897,7 +2897,7 @@ def render_results_summary(texts: dict[str, str]):
                         file_name=filename,
                         mime="application/pdf"
                     )
-                    st.success("[OK] PDF erfolgreich erstellt!")
+                    st.success("PDF erfolgreich erstellt!")
                 else:
                     st.error("PDF-Erstellung fehlgeschlagen.")
             except ImportError as e:
@@ -3126,7 +3126,7 @@ def render_3d_building_animation(building_data: dict[str, Any], heatpump_data: d
             frames=frames
         )
         
-        # [OK] SHADCN UI THEME ANWENDEN
+        # SHADCN UI THEME ANWENDEN
         apply_chart_theme(fig)
 
         st.plotly_chart(fig, use_container_width=True)
@@ -3153,13 +3153,13 @@ def render_3d_building_animation(building_data: dict[str, Any], heatpump_data: d
 
             with col3:
                 st.metric(
-                    "[POWER] JAZ",
+                    "JAZ",
                     f"{hp.get('scop', 0):.1f}",
                     help="Jahresarbeitszahl (Effizienz)"
                 )
 
         st.info(
-            "[IDEA] **Interaktiv**: Klicken Sie auf '▶️ 360° Animation' für automatische Rotation. "
+            "**Interaktiv**: Klicken Sie auf '▶️ 360° Animation' für automatische Rotation. "
             "Sie können das Modell auch manuell mit der Maus drehen."
         )
 
@@ -3170,7 +3170,7 @@ def render_3d_building_animation(building_data: dict[str, Any], heatpump_data: d
 
 def get_heatpump_database() -> list[dict[str, Any]]:
     """
-    [OK] ECHTE Wärmepumpen aus Produktdatenbank
+    ECHTE Wärmepumpen aus Produktdatenbank
     NUR: Viessmann, Buderus, Vaillant
     """
     from product_db import get_db_connection
@@ -3179,7 +3179,7 @@ def get_heatpump_database() -> list[dict[str, Any]]:
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # [OK] NUR Viessmann, Buderus, Vaillant
+        # NUR Viessmann, Buderus, Vaillant
         cursor.execute("""
             SELECT manufacturer, model_name, category, description, price_euro
             FROM products 
@@ -3223,7 +3223,7 @@ def get_heatpump_database() -> list[dict[str, Any]]:
         return result if result else []
         
     except Exception as e:
-        st.warning(f"[WARNING] Produktdatenbank konnte nicht geladen werden: {e}")
+        st.warning(f"Produktdatenbank konnte nicht geladen werden: {e}")
         return []
 
 
@@ -3273,12 +3273,12 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
             
             result = calculate_insulation_upgrade(building_data, current_state, target_state)
             
-            st.success(f"[MONEY] **Gesamt-Investition:** {format_german_number(result['total_investment_eur'], 2)} €")
+            st.success(f"**Gesamt-Investition:** {format_german_number(result['total_investment_eur'], 2)} €")
             st.success(f"💵 **Jährliche Einsparung:** {format_german_number(result['total_annual_savings_eur'], 2)} €/Jahr")
             st.success(f"⏱️ **Amortisation:** {result['total_payback_years']:.1f} Jahre")
-            st.success(f"[STATS] **Gewinn nach 20 Jahren:** {format_german_number(result['savings_20_years_eur'], 2)} €")
+            st.success(f"**Gewinn nach 20 Jahren:** {format_german_number(result['savings_20_years_eur'], 2)} €")
             
-            st.markdown("### [CHART] Optimale Reihenfolge (nach ROI)")
+            st.markdown("### Optimale Reihenfolge (nach ROI)")
             for i, measure in enumerate(result['optimal_order'], 1):
                 data = result['measures'][measure]
                 st.write(f"**{i}. {measure.upper()}**")
@@ -3310,13 +3310,13 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
                 separators=',.'  # Deutsche Trennzeichen
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig)
             
             st.plotly_chart(fig, use_container_width=True)
     
     # Feature 2: Heizkörper vs. Fußbodenheizung
-    with st.expander("[TEMP] Heizkörper vs. Fußbodenheizung Optimizer"):
+    with st.expander("Heizkörper vs. Fußbodenheizung Optimizer"):
         st.markdown("### Welches System ist optimal?")
         
         current_system = st.radio("Aktuelles System", ["radiators", "underfloor"], format_func=lambda x: "Heizkörper" if x == "radiators" else "Fußbodenheizung")
@@ -3343,7 +3343,7 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
                 st.metric("Jahreskosten Strom", f"{format_german_number(uf['annual_cost_eur'], 0)} €")
             
             comp = result['comparison']
-            st.markdown("### [TARGET] Empfehlung")
+            st.markdown("### Empfehlung")
             st.success(f"**{comp['recommendation']}**")
             st.info(f"Jährliche Einsparung: {format_german_number(comp['annual_savings_eur'], 2)} €/Jahr")
             st.info(f"Amortisation: {comp['payback_years']:.1f} Jahre")
@@ -3381,7 +3381,7 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
                 st.metric("Förderung (15%)", f"{format_german_number(result['subsidy_eur'], 0)} €")
                 st.metric("Netto-Investition", f"{format_german_number(result['net_investment_eur'], 0)} €")
             
-            st.success(f"[STATS] **Gewinn nach 20 Jahren:** {format_german_number(result['savings_20_years_eur'], 2)} €")
+            st.success(f"**Gewinn nach 20 Jahren:** {format_german_number(result['savings_20_years_eur'], 2)} €")
             st.info(f"⏱️ **Amortisation:** {result['payback_years']:.1f} Jahre")
     
     # Feature 4: Gesamt-Renovierungs-Planer
@@ -3407,7 +3407,7 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
             
             result = create_renovation_roadmap(building_data, budget_total, current_states)
             
-            st.markdown("### [CHART] Sanierungsfahrplan")
+            st.markdown("### Sanierungsfahrplan")
             for step in result['roadmap']:
                 with st.container():
                     st.markdown(f"### Schritt {step['step']}: {step['measure'].replace('_', ' ').title()}")
@@ -3419,14 +3419,14 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
                     st.write(f"Kumulative Investition: {format_german_number(step['cumulative_investment'], 0)} € von {format_german_number(budget_total, 0)} €")
             
             summary = result['summary']
-            st.markdown("### [MONEY] Zusammenfassung")
+            st.markdown("### Zusammenfassung")
             col1, col2, col3, col4 = st.columns(4)
             col1.metric("Maßnahmen", summary['total_measures'])
             col2.metric("Investition", f"{format_german_number(summary['net_investment_eur'], 0)} €")
             col3.metric("Förderung", f"{format_german_number(summary['total_subsidy_eur'], 0)} €")
             col4.metric("Einsparung/Jahr", f"{format_german_number(summary['total_annual_savings_eur'], 0)} €")
             
-            st.success(f"[STATS] **Gewinn nach 20 Jahren:** {format_german_number(summary['savings_20_years_eur'], 2)} €")
+            st.success(f"**Gewinn nach 20 Jahren:** {format_german_number(summary['savings_20_years_eur'], 2)} €")
             st.info(f"⏱️ **Gesamt-Amortisation:** {summary['overall_payback_years']:.1f} Jahre")
 
 
@@ -3437,7 +3437,7 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
     st.markdown("Intelligente Analyse und Optimierung")
     
     # Feature 5: Verbrauchsoptimierer Turbo
-    with st.expander("[POWER] Verbrauchsoptimierer Turbo", expanded=True):
+    with st.expander("Verbrauchsoptimierer Turbo", expanded=True):
         st.markdown("### Heizplan-Optimierung mit Stromtarifen")
         
         st.markdown("**Anwesenheitsprofil (Wochentag):**")
@@ -3473,7 +3473,7 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
         if st.button("Heizplan optimieren", key="optimize_schedule"):
             result = optimize_heating_schedule(building_data, occupancy_profile, electricity_tariff)
             
-            st.markdown("### [MONEY] Einsparung durch Optimierung")
+            st.markdown("### Einsparung durch Optimierung")
             col1, col2 = st.columns(2)
             
             with col1:
@@ -3509,7 +3509,7 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
                 separators=',.'  # Deutsche Trennzeichen
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig)
             
             st.plotly_chart(fig, use_container_width=True)
@@ -3521,7 +3521,7 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
         if st.button("Szenarien berechnen", key="climate_scenarios"):
             result = simulate_climate_scenarios(building_data)
             
-            st.markdown("### [CHART] Vergleich der Szenarien")
+            st.markdown("### Vergleich der Szenarien")
             
             # Tabelle
             summary_data = []
@@ -3563,13 +3563,13 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
                 separators=',.'  # Deutsche Trennzeichen
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig)
             
             st.plotly_chart(fig, use_container_width=True)
     
     # Feature 7: Wärmepumpen-Auswahl-Matrix
-    with st.expander("[TOOL] Wärmepumpen-Auswahl-Matrix"):
+    with st.expander("Wärmepumpen-Auswahl-Matrix"):
         st.markdown("### Vergleichen Sie alle WP-Typen")
         
         col1, col2 = st.columns(2)
@@ -3579,11 +3579,11 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
         if st.button("WP-Typen vergleichen", key="compare_heatpumps"):
             result = compare_heatpump_types(building_data, plot_size, groundwater)
             
-            st.markdown("### [WINNER] Ranking nach Lebenszykluskosten")
+            st.markdown("### Ranking nach Lebenszykluskosten")
             for rank_data in result['ranking']:
                 st.write(f"**{rank_data['rank']}. {rank_data['name']}**")
             
-            st.success(f"[TARGET] **Empfehlung:** {result['comparison'][result['recommendation']]['name']}")
+            st.success(f"**Empfehlung:** {result['comparison'][result['recommendation']]['name']}")
             
             # Vergleichs-Tabelle
             comparison_data = []
@@ -3602,14 +3602,14 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
             st.dataframe(pd.DataFrame(comparison_data))
     
     # Feature 8: 8760h-Lastgang-Analyse
-    with st.expander("[STATS] 8760h-Lastgang-Analyse"):
+    with st.expander("8760h-Lastgang-Analyse"):
         st.markdown("### Stündliche Simulation über ganzes Jahr")
         
         if st.button("Jahres-Simulation starten", key="simulate_annual"):
             with st.spinner("Simuliere 8760 Stunden..."):
                 result = simulate_annual_load_profile(building_data)
             
-            st.markdown("### [CHART] Jahres-Zusammenfassung")
+            st.markdown("### Jahres-Zusammenfassung")
             col1, col2, col3, col4 = st.columns(4)
             summary = result['annual_summary']
             col1.metric("Wärmebedarf", f"{format_german_number(summary['total_heat_kwh'], 0)} kWh")
@@ -3617,7 +3617,7 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
             col3.metric("Ø COP", f"{format_german_number(summary['annual_average_cop'], 2)}")
             col4.metric("Betriebsstunden", f"{format_german_number(summary['operating_hours'], 0)} h")
             
-            st.success(f"[MONEY] **Jahreskosten:** {format_german_number(summary['annual_cost_eur'], 2)} €")
+            st.success(f"**Jahreskosten:** {format_german_number(summary['annual_cost_eur'], 2)} €")
             
             # Monats-Übersicht
             st.markdown("### 📅 Monats-Übersicht")
@@ -3653,7 +3653,7 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
                 separators=',.'  # Deutsche Trennzeichen
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig)
             
             st.plotly_chart(fig, use_container_width=True)
@@ -3685,7 +3685,7 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
         if st.button("Förderungen berechnen", key="calc_subsidies"):
             result = calculate_subsidies(building_data, measures, building_age)
             
-            st.markdown("### [MONEY] Finanzierung")
+            st.markdown("### Finanzierung")
             col1, col2, col3 = st.columns(3)
             col1.metric("Gesamt-Investition", f"{format_german_number(result['total_investment_eur'], 0)} €")
             col2.metric("Förderung", f"{format_german_number(result['total_subsidy_eur'], 0)} € ({result['subsidy_rate']:.1f}%)")
@@ -3710,12 +3710,12 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
                 col3.metric("Monatliche Rate", f"{format_german_number(loan['monthly_rate_eur'], 2)} €")
                 st.info(f"Laufzeit: {loan['duration_years']} Jahre, Zinssatz: {loan['interest_rate']*100:.1f}%")
             
-            st.markdown("### [OK] Antrags-Checkliste")
+            st.markdown("### Antrags-Checkliste")
             for item in result['application_checklist']:
                 st.checkbox(item, key=f"checklist_{item}")
     
     # Feature 10: CO2-Dashboard Live
-    with st.expander("[GREEN] CO2-Dashboard Live"):
+    with st.expander("CO2-Dashboard Live"):
         st.markdown("### Langfristige CO2-Bilanz (20 Jahre)")
         
         col1, col2 = st.columns(2)
@@ -3773,7 +3773,7 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
                 separators=',.'  # Deutsche Trennzeichen
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig)
             
             st.plotly_chart(fig, use_container_width=True)
@@ -3797,7 +3797,7 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
                 separators=',.'  # Deutsche Trennzeichen
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig2)
             
             st.plotly_chart(fig2, use_container_width=True)
@@ -3806,7 +3806,7 @@ def render_subsidy_co2(texts: dict[str, str], building_data: dict[str, Any]):
 def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]):
     """ROI & Benchmarking Tab (Features 11-12)"""
     
-    st.subheader("[STATS] ROI-Analyse & Benchmarking")
+    st.subheader("ROI-Analyse & Benchmarking")
     
     # Feature 11: Monte-Carlo ROI-Calculator
     with st.expander("🎲 ROI-Calculator Monte-Carlo", expanded=True):
@@ -3820,7 +3820,7 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
             with st.spinner(f"Führe {simulations:,} Simulationen durch..."):
                 result = monte_carlo_roi_analysis(building_data, investment, simulations)
             
-            st.markdown("### [CHART] Amortisations-Statistik")
+            st.markdown("### Amortisations-Statistik")
             col1, col2, col3, col4 = st.columns(4)
             payback = result['payback_statistics']
             col1.metric("Ø Amortisation", f"{payback['mean_years']:.1f} Jahre")
@@ -3828,16 +3828,16 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
             col3.metric("Best Case (10%)", f"{payback['p10_years']:.1f} Jahre")
             col4.metric("Worst Case (90%)", f"{payback['p90_years']:.1f} Jahre")
             
-            st.success(f"[OK] **Wahrscheinlichkeit für Amortisation <15 Jahre:** {payback['probability_under_15_years']:.1f}%")
+            st.success(f"**Wahrscheinlichkeit für Amortisation <15 Jahre:** {payback['probability_under_15_years']:.1f}%")
             
-            st.markdown("### [MONEY] Nettobarwert (NPV)")
+            st.markdown("### Nettobarwert (NPV)")
             col1, col2, col3 = st.columns(3)
             npv = result['npv_statistics']
             col1.metric("Ø NPV", f"{format_german_number(npv['mean_eur'], 0)} €")
             col2.metric("Median NPV", f"{format_german_number(npv['median_eur'], 0)} €")
             col3.metric("Wahrscheinlichkeit NPV>0", f"{npv['probability_positive']:.1f}%")
             
-            st.markdown("### [STATS] ROI-Statistik")
+            st.markdown("### ROI-Statistik")
             col1, col2, col3 = st.columns(3)
             roi = result['roi_statistics']
             col1.metric("Ø ROI", f"{roi['mean_percent']:.1f}%")
@@ -3868,13 +3868,13 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
                 separators=',.'  # Deutsche Trennzeichen
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig)
             
             st.plotly_chart(fig, use_container_width=True)
     
     # Feature 12: Benchmarking-Tool
-    with st.expander("[WINNER] Benchmarking-Tool"):
+    with st.expander("Benchmarking-Tool"):
         st.markdown("### Vergleich mit ähnlichen Gebäuden")
         
         region = st.selectbox("Region", ["Germany", "Bayern", "NRW", "Baden-Württemberg"], index=0)
@@ -3886,13 +3886,13 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
             ranking = result['ranking']
             comparison = result['comparison']
             
-            st.markdown("### [CHART] Ihr Gebäude")
+            st.markdown("### Ihr Gebäude")
             col1, col2, col3 = st.columns(3)
             col1.metric("Verbrauch", f"{own['specific_consumption_kwh_m2']:.1f} kWh/m²/Jahr")
             col2.metric("Wohnfläche", f"{format_german_number(own['living_area_m2'], 0)} m²")
             col3.metric("Baujahr", own['year_built'])
             
-            st.markdown("### [TARGET] Ranking")
+            st.markdown("### Ranking")
             rank_color = "green" if ranking['percentile'] <= 25 else "orange" if ranking['percentile'] <= 50 else "red"
             st.markdown(f"**Platz {ranking['rank']} von {ranking['total_buildings']}** ({ranking['percentile']:.1f}. Perzentil)")
             st.markdown(f"**Bewertung:** :{rank_color}[{ranking['interpretation']}]")
@@ -3905,7 +3905,7 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
                         delta=f"{comparison['difference_to_best_kwh_m2']:.1f}", delta_color="inverse")
             col3.metric("Schlechtestes", f"{comparison['worst_consumption_kwh_m2']:.1f} kWh/m²")
             
-            st.success(f"[MONEY] **Einsparpotenzial:** {format_german_number(result['potential_annual_savings_eur'], 2)} €/Jahr")
+            st.success(f"**Einsparpotenzial:** {format_german_number(result['potential_annual_savings_eur'], 2)} €/Jahr")
             
             # Best Performer
             best = result['best_performer']
@@ -3914,7 +3914,7 @@ def render_roi_benchmarking(texts: dict[str, str], building_data: dict[str, Any]
             
             # Empfehlungen
             if result['recommendations']:
-                st.markdown("### [IDEA] Empfehlungen")
+                st.markdown("### Empfehlungen")
                 for rec in result['recommendations']:
                     priority_color = "red" if rec['priority'] == "high" else "orange"
                     st.markdown(f":{priority_color}[**{rec['priority'].upper()}**] {rec['measure']}")
@@ -3962,7 +3962,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
     Todos 8-14: Komplette UI mit 6 Expandern
     """
     
-    st.subheader("[POWER] Dynamischer Stromtarif & Stromcloud")
+    st.subheader("Dynamischer Stromtarif & Stromcloud")
     st.markdown("""
     Sparen Sie **15-25%** Stromkosten durch dynamische Tarife mit stundengenauer Abrechnung.
     Optimal für Wärmepumpen, E-Autos und Smart-Home-Systeme.
@@ -3972,7 +3972,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
     # EXPANDER 1: Dynamischer vs Statischer Tarif (Todo 9)
     # ========================================================================
     
-    with st.expander("[CHART] Dynamischer vs Statischer Tarif", expanded=True):
+    with st.expander("Dynamischer vs Statischer Tarif", expanded=True):
         st.markdown("""
         Vergleichen Sie statischen Festpreis-Tarif mit dynamischem Börsenpreis-Tarif.
         **Dynamische Tarife** passen sich stündlich an Stromangebot an.
@@ -4012,7 +4012,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
             cop = building_data.get("cop", 3.5)
             st.metric("JAZ (Jahresarbeitszahl)", f"{cop:.1f}")
         
-        if st.button("[SEARCH] Tarife vergleichen", type="primary"):
+        if st.button("Tarife vergleichen", type="primary"):
             with st.spinner("Berechne Einsparpotenzial..."):
                 # Berechnung
                 comparison = calculate_dynamic_tariff_comparison(
@@ -4023,7 +4023,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 
                 # Ergebnisse
                 st.markdown("---")
-                st.markdown("### [MONEY] Ergebnisse")
+                st.markdown("### Ergebnisse")
                 
                 col1, col2, col3 = st.columns(3)
                 
@@ -4073,7 +4073,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 
                 # VISUALISIERUNG 1: Stündliche Preiskurve (Todo 15)
                 st.markdown("---")
-                st.markdown("### [CHART] Visualisierung: 24h-Preisverlauf")
+                st.markdown("### Visualisierung: 24h-Preisverlauf")
                 
                 # Generiere stündliche Daten für Chart
                 from heatpump_dynamic_tariff import calculate_hourly_electricity_costs
@@ -4085,7 +4085,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 # Extrahiere hourly_data Liste aus dem Ergebnis-Dictionary
                 hourly_chart = create_hourly_price_chart(hourly_result['hourly_data'])
                 
-                # [OK] SHADCN UI THEME ANWENDEN
+                # SHADCN UI THEME ANWENDEN
                 apply_chart_theme(hourly_chart)
                 
                 st.plotly_chart(hourly_chart, use_container_width=True)
@@ -4151,7 +4151,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 )
                 
                 st.markdown("---")
-                st.markdown("### [CHART] Stromcloud Vergleich")
+                st.markdown("### Stromcloud Vergleich")
                 
                 # Vor Cloud
                 col1, col2 = st.columns(2)
@@ -4219,11 +4219,11 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 
                 # VISUALISIERUNG 3: Stromcloud Waterfall (Todo 17)
                 st.markdown("---")
-                st.markdown("### [CHART] Visualisierung: Kosten-Wasserfall")
+                st.markdown("### Visualisierung: Kosten-Wasserfall")
                 
                 waterfall_chart = create_stromcloud_waterfall(cloud_result)
                 
-                # [OK] SHADCN UI THEME ANWENDEN
+                # SHADCN UI THEME ANWENDEN
                 apply_chart_theme(waterfall_chart)
                 
                 st.plotly_chart(waterfall_chart, use_container_width=True)
@@ -4279,7 +4279,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 )
                 
                 st.markdown("---")
-                st.markdown(f"### [POWER] {ems_type} Simulation")
+                st.markdown(f"### {ems_type} Simulation")
                 
                 # System-Info
                 col1, col2, col3 = st.columns(3)
@@ -4299,13 +4299,13 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.markdown("#### [CHART] Ohne EMS")
+                    st.markdown("#### Ohne EMS")
                     st.metric("PV-Eigenverbrauch", f"{format_german_number(ems_result['without_ems']['pv_usage_kwh'], 0)} kWh")
                     st.metric("Autarkie", f"{ems_result['without_ems']['autarkie_percent']:.1f}%")
                     st.metric("Stromkosten", f"{format_german_number(ems_result['without_ems']['annual_cost_eur'], 0)} €/Jahr")
                 
                 with col2:
-                    st.markdown("#### [LAUNCH] Mit EMS")
+                    st.markdown("#### Mit EMS")
                     st.metric("PV-Eigenverbrauch", f"{format_german_number(ems_result['with_ems']['pv_usage_kwh'], 0)} kWh")
                     st.metric("Autarkie", f"{ems_result['with_ems']['autarkie_percent']:.1f}%")
                     st.metric("Stromkosten", f"{format_german_number(ems_result['with_ems']['annual_cost_eur'], 0)} €/Jahr")
@@ -4337,7 +4337,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 
                 # Investment
                 st.markdown("---")
-                st.markdown("### [MONEY] Investment & ROI")
+                st.markdown("### Investment & ROI")
                 
                 col1, col2, col3, col4 = st.columns(4)
                 
@@ -4354,9 +4354,9 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                     st.metric("Amortisation", f"{ems_result['investment']['payback_years']:.1f} Jahre")
                 
                 if ems_result['investment']['worth_it']:
-                    st.success("[OK] Investment lohnt sich - Amortisation unter 10 Jahren!")
+                    st.success("Investment lohnt sich - Amortisation unter 10 Jahren!")
                 else:
-                    st.warning("[WARNING] Amortisation über 10 Jahre - gut abwägen!")
+                    st.warning("Amortisation über 10 Jahre - gut abwägen!")
     
     
     # ========================================================================
@@ -4376,7 +4376,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
         devices = {}
         
         with col1:
-            devices['heatpump'] = st.checkbox("[POWER] Wärmepumpe", value=True)
+            devices['heatpump'] = st.checkbox("Wärmepumpe", value=True)
             devices['battery'] = st.checkbox("🔋 Batteriespeicher", value=False)
             devices['wallbox'] = st.checkbox("🚗 E-Auto Wallbox", value=False)
         
@@ -4439,7 +4439,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 
                 # Zusammenfassung
                 st.markdown("---")
-                st.markdown("### [MONEY] Gesamt-Bilanz")
+                st.markdown("### Gesamt-Bilanz")
                 
                 col1, col2, col3, col4 = st.columns(4)
                 
@@ -4528,7 +4528,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("### [OK] Vorteile")
+            st.markdown("### Vorteile")
             for pro in pros_cons['pros']:
                 weight_stars = "⭐" * pro['weight']
                 st.success(f"""
@@ -4540,9 +4540,9 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 """)
         
         with col2:
-            st.markdown("### [ERROR] Nachteile")
+            st.markdown("### Nachteile")
             for con in pros_cons['cons']:
-                weight_stars = "[WARNING]" * min(con['weight'], 5)  # Max 5 Warnungen
+                weight_stars = "" * min(con['weight'], 5)  # Max 5 Warnungen
                 st.warning(f"""
                 **{con['title']}**
                 
@@ -4553,7 +4553,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
         
         # Idealer Nutzer
         st.markdown("---")
-        st.markdown("### [TARGET] Ideal für:")
+        st.markdown("### Ideal für:")
         for profile in pros_cons['ideal_user']:
             st.info(profile)
     
@@ -4562,7 +4562,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
     # EXPANDER 6: Anbieter-Vergleich (Todo 14)
     # ========================================================================
     
-    with st.expander("[WINNER] Anbieter im Vergleich"):
+    with st.expander("Anbieter im Vergleich"):
         st.markdown("""
         Alle dynamischen Tarif-Anbieter in Deutschland im direkten Vergleich.
         Finden Sie den besten Tarif für Ihr Profil.
@@ -4584,7 +4584,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
             has_ev_comp = st.checkbox("E-Auto vorhanden", value=False)
             has_wp_comp = st.checkbox("Wärmepumpe vorhanden", value=True)
         
-        if st.button("[WINNER] Anbieter vergleichen", type="primary"):
+        if st.button("Anbieter vergleichen", type="primary"):
             with st.spinner("Vergleiche alle Anbieter..."):
                 provider_result = compare_tariff_providers(
                     comp_consumption,
@@ -4609,7 +4609,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 
                 # Ranking
                 st.markdown("---")
-                st.markdown("### [CHART] Kosten-Ranking")
+                st.markdown("### Kosten-Ranking")
                 
                 ranking_data = []
                 for rank_entry in provider_result['ranking']:
@@ -4638,14 +4638,14 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 
                 # Detaillierter Vergleich
                 st.markdown("---")
-                st.markdown("### [SEARCH] Detaillierter Vergleich")
+                st.markdown("### Detaillierter Vergleich")
                 
                 for provider_name, provider_info in provider_result['providers'].items():
                     with st.expander(f"{provider_name} - {provider_info['rating']:.1f}⭐"):
                         col1, col2 = st.columns(2)
                         
                         with col1:
-                            st.markdown("#### [MONEY] Kosten")
+                            st.markdown("#### Kosten")
                             st.metric("Grundgebühr", f"{format_german_number(provider_info['costs']['base_fee_eur_month'], 2)} €/Monat")
                             st.metric("kWh-Aufschlag", f"{provider_info['costs']['markup_eur_kwh']*100:.1f} ct/kWh")
                             st.metric("Effektiv-Preis", f"{provider_info['costs']['effective_price_eur_kwh']:.3f} €/kWh")
@@ -4662,12 +4662,12 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                         with col1:
                             st.markdown("**Vorteile:**")
                             for pro in provider_info['pros']:
-                                st.write(f"[OK] {pro}")
+                                st.write(f"{pro}")
                         
                         with col2:
                             st.markdown("**Nachteile:**")
                             for con in provider_info['cons']:
-                                st.write(f"[ERROR] {con}")
+                                st.write(f"{con}")
                         
                         # Boni
                         if has_ev_comp or has_wp_comp:
@@ -4684,12 +4684,12 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
     # ========================================================================
     
     st.markdown("---")
-    st.markdown("## [CHART] Erweiterte Analysen")
+    st.markdown("## Erweiterte Analysen")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        simulate_annual = st.checkbox("[STATS] Jahres-Simulation anzeigen", value=False)
+        simulate_annual = st.checkbox("Jahres-Simulation anzeigen", value=False)
     
     with col2:
         simulate_heatmap = st.checkbox("🔥 Load-Shifting Heatmap anzeigen", value=False)
@@ -4698,7 +4698,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
     if simulate_annual:
         with st.spinner("Simuliere 8760 Stunden..."):
             st.markdown("---")
-            st.markdown("### [STATS] Jahres-Simulation (8760h)")
+            st.markdown("### Jahres-Simulation (8760h)")
             
             annual_simulation = simulate_annual_price_profile(
                 building_data,
@@ -4733,13 +4733,13 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
                 )
             
             # Chart
-            st.markdown("### [CHART] Kumulative Kostenentwicklung")
+            st.markdown("### Kumulative Kostenentwicklung")
             annual_chart = create_annual_cost_chart(
                 annual_simulation['monthly_summaries'],
                 static_price=0.32
             )
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(annual_chart)
             
             st.plotly_chart(annual_chart, use_container_width=True)
@@ -4793,20 +4793,20 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
             
             heatmap = create_load_shifting_heatmap(annual_simulation['hourly_data'])
             
-            # [OK] SHADCN UI THEME ANWENDEN
+            # SHADCN UI THEME ANWENDEN
             apply_chart_theme(heatmap)
             
             st.plotly_chart(heatmap, use_container_width=True)
             
             # Empfehlungen
             st.markdown("---")
-            st.markdown("### [IDEA] Load-Shifting Empfehlungen")
+            st.markdown("### Load-Shifting Empfehlungen")
             
             col1, col2 = st.columns(2)
             
             with col1:
                 st.success("""
-                **[OK] Beste Zeiten (Grün):**
+                **Beste Zeiten (Grün):**
                 - Nachts 22:00 - 06:00 Uhr
                 - Mittags 11:00 - 15:00 Uhr (Solar-Peak)
                 - Sonntags ganztägig günstiger
@@ -4814,7 +4814,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
             
             with col2:
                 st.error("""
-                **[ERROR] Meiden (Rot):**
+                **Meiden (Rot):**
                 - Morgens 06:00 - 09:00 Uhr
                 - Abends 17:00 - 21:00 Uhr
                 - Montag/Dienstag (höchste Nachfrage)
@@ -4827,7 +4827,7 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
 
 def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any], heatpump_data: dict[str, Any]):
     """
-    Neue Tab: [TARGET] Erweiterte Analyse
+    Neue Tab: Erweiterte Analyse
     
     Zeigt alle erweiterten Features:
     - JAZ-Prognose (1.1)
@@ -4845,28 +4845,28 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
     - Extremwetter-Simulation (8.2)
     """
     
-    st.header("[TARGET] Erweiterte Analyse")
+    st.header("Erweiterte Analyse")
     st.markdown("**Professionelle Detailanalysen für optimale Planung**")
     
     # Sub-Tabs für verschiedene Analysebereiche
     sub_tabs = st.tabs([
-        "[DESIGN] Dimensionierung",
-        "[MONEY] Finanzen",
-        "[TEMP] Komfort & Betrieb",
-        "[POWER] Energie-Management",
-        "[GREEN] Nachhaltigkeit",
-        "[TOOL] Wartung & Szenarien",
-        "[WINNER] Vergleichsrechner"
+        "Dimensionierung",
+        "Finanzen",
+        "Komfort & Betrieb",
+        "Energie-Management",
+        "Nachhaltigkeit",
+        "Wartung & Szenarien",
+        "Vergleichsrechner"
     ])
     
     # ========================================================================
     # TAB 1: DIMENSIONIERUNG (Features 1.1, 1.2)
     # ========================================================================
     with sub_tabs[0]:
-        st.subheader("[DESIGN] Präzise Dimensionierung")
+        st.subheader("Präzise Dimensionierung")
         
         # Feature 1.1: JAZ-Prognose
-        st.markdown("### [CHART] Realistische JAZ-Prognose")
+        st.markdown("### Realistische JAZ-Prognose")
         st.info("Berücksichtigt 7 Einflussfaktoren für präzise Effizienz-Vorhersage")
         
         jaz_data = calculate_jaz_prognosis(building_data, heatpump_data)
@@ -4889,7 +4889,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         st.plotly_chart(jaz_chart, use_container_width=True)
         
         # Empfehlungen
-        with st.expander("[IDEA] Optimierungs-Empfehlungen anzeigen"):
+        with st.expander("Optimierungs-Empfehlungen anzeigen"):
             for rec in jaz_data['recommendations']:
                 st.markdown(f"- {rec}")
         
@@ -4929,10 +4929,10 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
     # TAB 2: FINANZEN (Features 2.2, 2.3)
     # ========================================================================
     with sub_tabs[1]:
-        st.subheader("[MONEY] Finanzielle Analyse")
+        st.subheader("Finanzielle Analyse")
         
         # Feature 2.2: Preisszenario-Analyse
-        st.markdown("### [STATS] Preisentwicklungs-Szenarien (20 Jahre)")
+        st.markdown("### Preisentwicklungs-Szenarien (20 Jahre)")
         
         economics_data = st.session_state.get('economics_data', {})
         price_scenarios = calculate_price_scenarios(building_data, heatpump_data, economics_data)
@@ -4960,13 +4960,13 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         col1, col2 = st.columns(2)
         with col1:
             st.success(f"""
-            **[OK] Best Case (Konservativ):**
+            **Best Case (Konservativ):**
             - Einsparung: {format_german_number(price_scenarios['scenarios']['konservativ']['total_savings_20y'], 0)} €
             - Amortisation: {price_scenarios['scenarios']['konservativ']['payback_year']} Jahre
             """)
         with col2:
             st.warning(f"""
-            **[WARNING] Worst Case (Pessimistisch):**
+            **Worst Case (Pessimistisch):**
             - Einsparung: {format_german_number(price_scenarios['scenarios']['pessimistisch']['total_savings_20y'], 0)} €
             - Amortisation: {price_scenarios['scenarios']['pessimistisch']['payback_year']} Jahre
             """)
@@ -4976,7 +4976,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         # Feature 2.3: Steuerliche Vorteile
         st.markdown("### 🧾 Steuerliche Absetzbarkeit")
         
-        # [OK] FIX: Hole installation_cost aus economics_data für Prozentberechnung
+        # FIX: Hole installation_cost aus economics_data für Prozentberechnung
         installation_cost = economics_data.get('installation_cost', 20000)
         tax_benefits = calculate_tax_benefits(heatpump_data, building_data)
         
@@ -5003,7 +5003,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         with col1:
             hw = tax_benefits['handwerkerleistungen']
             st.info(f"""
-            **[TOOL] Handwerkerleistungen (§35a EStG)**
+            **Handwerkerleistungen (§35a EStG)**
             - Max. pro Jahr: {format_german_number(hw['max_benefit_per_year'], 2)} €
             - Über {hw['years']} Jahre: {format_german_number(hw['total_benefit'], 2)} €
             - Anteilige Arbeitskosten: {format_german_number(hw['labor_cost_estimate'], 2)} €
@@ -5019,7 +5019,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
                 """)
             else:
                 st.warning(f"""
-                **[WARNING] Energetische Sanierung nicht möglich**
+                **Energetische Sanierung nicht möglich**
                 Grund: {es.get('reason', 'Gebäude zu neu')}
                 """)
         
@@ -5029,7 +5029,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
     # TAB 3: KOMFORT & BETRIEB (Features 3.2, 3.3)
     # ========================================================================
     with sub_tabs[2]:
-        st.subheader("[TEMP] Komfort & Betriebsverhalten")
+        st.subheader("Komfort & Betriebsverhalten")
         
         # Feature 3.2: Lautstärke-Analyse
         st.markdown("### 🔊 Lautstärke & Aufstellort (TA Lärm)")
@@ -5060,7 +5060,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
             compliant = noise_data['compliance']['night_compliant']
             st.metric(
                 "TA Lärm Konform",
-                "[OK] Ja" if compliant else "[ERROR] Nein"
+                "Ja" if compliant else "Nein"
             )
         
         # Beurteilung
@@ -5127,7 +5127,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         st.plotly_chart(load_profile_chart, use_container_width=True)
         
         # Monats-Tabelle
-        with st.expander("[CHART] Monatliche Details anzeigen"):
+        with st.expander("Monatliche Details anzeigen"):
             monthly_df = pd.DataFrame(load_profile['monthly_profile'])
             monthly_df['Heizenergie (kWh)'] = monthly_df['heat_demand_kwh'].apply(lambda x: format_german_number(x, 0))
             monthly_df['Strom WP (kWh)'] = monthly_df['total_electricity_kwh'].apply(lambda x: format_german_number(x, 0))
@@ -5144,7 +5144,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
     # TAB 4: ENERGIE-MANAGEMENT (Features 4.1, 4.2, 4.3)
     # ========================================================================
     with sub_tabs[3]:
-        st.subheader("[POWER] Energie-Management & Flexibilität")
+        st.subheader("Energie-Management & Flexibilität")
         
         # Feature 4.1: Smart-Grid-Ready
         st.markdown("### 🔌 Smart-Grid-Ready Integration")
@@ -5169,7 +5169,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         # Best Scenario
         best = sg_benefits['best_scenario']
         st.success(f"""
-        **[OK] Bestes Szenario: {best['name'].replace('_', ' ').title()}**
+        **Bestes Szenario: {best['name'].replace('_', ' ').title()}**
         - Jährliche Einsparung: {format_german_number(best['annual_savings'], 2)} €
         - Gesamtkosten: {format_german_number(best['annual_cost'], 2)} €/Jahr
         """)
@@ -5180,7 +5180,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
                 st.markdown(f"- {req}")
         
         # Empfehlungen
-        with st.expander("[IDEA] Empfehlungen"):
+        with st.expander("Empfehlungen"):
             for rec in sg_benefits['recommendations']:
                 st.markdown(f"- {rec}")
         
@@ -5221,7 +5221,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
             """)
         
         # Anmeldeprozess
-        with st.expander("[NOTE] Anmeldeprozess beim Netzbetreiber"):
+        with st.expander("Anmeldeprozess beim Netzbetreiber"):
             for step in grid_bonus['application_process']:
                 st.markdown(f"- {step}")
         
@@ -5265,11 +5265,11 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         # Vor-/Nachteile
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown("**[OK] Vorteile Hybrid:**")
+            st.markdown("**Vorteile Hybrid:**")
             for adv in hybrid_comparison['advantages_hybrid']:
                 st.markdown(f"- {adv}")
         with col2:
-            st.markdown("**[ERROR] Nachteile Hybrid:**")
+            st.markdown("**Nachteile Hybrid:**")
             for dis in hybrid_comparison['disadvantages_hybrid']:
                 st.markdown(f"- {dis}")
     
@@ -5277,7 +5277,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
     # TAB 5: NACHHALTIGKEIT (Features 6.1, 6.2)
     # ========================================================================
     with sub_tabs[4]:
-        st.subheader("[GREEN] Nachhaltigkeit & Umwelt")
+        st.subheader("Nachhaltigkeit & Umwelt")
         
         # Feature 6.1: Lebenszyklus-CO2
         st.markdown("### ♻️ Vollständige Ökobilanz (20 Jahre)")
@@ -5315,7 +5315,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         st.plotly_chart(lifecycle_chart, use_container_width=True)
         
         # Details
-        with st.expander("[CHART] Detaillierte CO2-Bilanz"):
+        with st.expander("Detaillierte CO2-Bilanz"):
             col1, col2 = st.columns(2)
             with col1:
                 wp_data = co2_data['wärmepumpe']
@@ -5390,7 +5390,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         # Empfehlung
         future_proofing = refrigerant_data['future_proofing']
         st.info(f"""
-        **[IDEA] Empfehlung für nächsten Kauf:**
+        **Empfehlung für nächsten Kauf:**
         {future_proofing['recommendation']} - {future_proofing['reason']}
         """)
     
@@ -5398,7 +5398,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
     # TAB 6: WARTUNG & SZENARIEN (Features 8.1, 8.2)
     # ========================================================================
     with sub_tabs[5]:
-        st.subheader("[TOOL] Wartung & Extrem-Szenarien")
+        st.subheader("Wartung & Extrem-Szenarien")
         
         # Feature 8.1: Wartungsplan
         st.markdown("### 📅 20-Jahres-Wartungsplan")
@@ -5430,7 +5430,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         st.plotly_chart(maintenance_chart, use_container_width=True)
         
         # Große Wartungen
-        with st.expander("[TOOL] Wichtige Wartungs-Meilensteine"):
+        with st.expander("Wichtige Wartungs-Meilensteine"):
             for service in summary['major_services']:
                 st.markdown(f"- {service}")
         
@@ -5449,7 +5449,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         st.markdown("---")
         
         # Feature 8.2: Extremwetter-Simulation
-        st.markdown("### [TEMP] Extremwetter-Szenarien")
+        st.markdown("### Extremwetter-Szenarien")
         
         scenario = st.selectbox(
             "Szenario auswählen",
@@ -5475,7 +5475,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         
         # Auswirkungen
         if 'impact' in extreme_weather:
-            st.markdown("**[CHART] Auswirkungen:**")
+            st.markdown("**Auswirkungen:**")
             impact_df = pd.DataFrame([
                 {'Kennzahl': k.replace('_', ' ').title(), 'Wert': str(v)}
                 for k, v in extreme_weather['impact'].items()
@@ -5484,7 +5484,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         
         # Empfehlungen
         if 'recommendations' in extreme_weather:
-            with st.expander("[IDEA] Empfehlungen & Maßnahmen"):
+            with st.expander("Empfehlungen & Maßnahmen"):
                 for rec in extreme_weather['recommendations']:
                     st.markdown(f"- {rec}")
     
@@ -5492,7 +5492,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
     # TAB 7: VERGLEICHSRECHNER (Feature 7.1)
     # ========================================================================
     with sub_tabs[6]:
-        st.subheader("[WINNER] Wärmepumpen-Vergleichsrechner")
+        st.subheader("Wärmepumpen-Vergleichsrechner")
         st.info("Vergleichen Sie bis zu 6 Wärmepumpen-Modelle nach 10 Kriterien mit gewichteter Bewertung")
         
         st.markdown("### ⚙️ Wärmepumpen auswählen")
@@ -5524,7 +5524,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         
         # Editierbare Parameter für jede WP
         st.markdown("---")
-        st.markdown("**[NOTE] Wärmepumpen-Daten bearbeiten:**")
+        st.markdown("**Wärmepumpen-Daten bearbeiten:**")
         
         hp_cols = st.columns(min(num_heatpumps, 3))  # Max. 3 Spalten
         
@@ -5591,7 +5591,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
         st.markdown("---")
         
         # Button zum Vergleich starten
-        if st.button("[SEARCH] Vergleich durchführen", type="primary", use_container_width=True):
+        if st.button("Vergleich durchführen", type="primary", use_container_width=True):
             with st.spinner("Umfassende Analyse läuft... (10 Kriterien werden bewertet)"):
                 comparison_result = compare_multiple_heatpumps(
                     building_data,
@@ -5601,7 +5601,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
                 if 'error' in comparison_result:
                     st.error(comparison_result['error'])
                 else:
-                    st.success(f"[OK] Vergleich abgeschlossen: {comparison_result['count']} Wärmepumpen analysiert")
+                    st.success(f"Vergleich abgeschlossen: {comparison_result['count']} Wärmepumpen analysiert")
                     
                     # ===== RANKING =====
                     st.markdown("### 🥇 Ranking")
@@ -5623,7 +5623,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
                     st.plotly_chart(bar_fig, use_container_width=True)
                     
                     # ===== EMPFEHLUNG =====
-                    st.markdown("### [IDEA] Unsere Empfehlung")
+                    st.markdown("### Unsere Empfehlung")
                     
                     rec = comparison_result['recommendation']
                     winner = rec['winner']
@@ -5650,16 +5650,16 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
                     if winner['strengths']:
                         st.success("**Besondere Stärken:**")
                         for strength in winner['strengths']:
-                            st.markdown(f"- [OK] {strength}")
+                            st.markdown(f"- {strength}")
                     
                     # Allgemeine Ratschläge
                     if rec['general_advice']:
-                        with st.expander("[WARNING] Allgemeine Hinweise"):
+                        with st.expander("Allgemeine Hinweise"):
                             for advice in rec['general_advice']:
                                 st.warning(advice)
                     
                     # ===== DETAILLIERTER VERGLEICH =====
-                    st.markdown("### [CHART] Detaillierter Vergleich")
+                    st.markdown("### Detaillierter Vergleich")
                     
                     # Radar Chart (Multi-Kriterien)
                     radar_fig = create_comparison_radar_chart(comparison_result)
@@ -5719,7 +5719,7 @@ def render_advanced_analysis(texts: dict[str, str], building_data: dict[str, Any
                         )
                     
                     # ===== SCORING-METHODIK =====
-                    with st.expander("[INFO] Bewertungs-Methodik (Gewichtung)"):
+                    with st.expander("Bewertungs-Methodik (Gewichtung)"):
                         st.markdown("""
                         **Gewichtete 10-Kriterien-Bewertung:**
                         

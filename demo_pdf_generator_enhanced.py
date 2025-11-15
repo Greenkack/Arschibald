@@ -131,7 +131,7 @@ def demo_basic_pdf_generation():
     print(f"Template: {template}")
     print(f"Populated: {populated}")
 
-    print("[OK] Basic PDF generation demo completed\n")
+    print("Basic PDF generation demo completed\n")
 
 
 def demo_enhanced_pdf_generation():
@@ -197,7 +197,7 @@ def demo_enhanced_pdf_generation():
         if line.strip():
             print(f"  {line.strip()}")
 
-    print("[OK] Enhanced PDF generation demo completed\n")
+    print("Enhanced PDF generation demo completed\n")
 
 
 def demo_currency_formatting():
@@ -218,7 +218,7 @@ def demo_currency_formatting():
         formatted = generator._format_currency_value(value)
         print(f"  {value} -> {formatted}")
 
-    print("[OK] Currency formatting demo completed\n")
+    print("Currency formatting demo completed\n")
 
 
 def demo_component_grouping():
@@ -250,7 +250,7 @@ def demo_component_grouping():
         for key, value in group_data.items():
             print(f"    {key}: {value}")
 
-    print("[OK] Component grouping demo completed\n")
+    print("Component grouping demo completed\n")
 
 
 def main():
@@ -267,15 +267,15 @@ def main():
 
         print("🎉 All demos completed successfully!")
         print("\nKey Features Demonstrated:")
-        print("[OK] Dynamic key generation from pricing data")
-        print("[OK] Template placeholder population")
-        print("[OK] Currency formatting (German locale)")
-        print("[OK] Component key grouping and organization")
-        print("[OK] Pricing breakdown section creation")
-        print("[OK] Integration with existing PDF generation system")
+        print("Dynamic key generation from pricing data")
+        print("Template placeholder population")
+        print("Currency formatting (German locale)")
+        print("Component key grouping and organization")
+        print("Pricing breakdown section creation")
+        print("Integration with existing PDF generation system")
 
     except Exception as e:
-        print(f"[ERROR] Demo failed with error: {e}")
+        print(f"Demo failed with error: {e}")
         import traceback
         traceback.print_exc()
 

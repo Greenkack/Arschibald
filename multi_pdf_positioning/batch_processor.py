@@ -179,12 +179,12 @@ class BatchLogger:
         
         if result.error_message:
             self.logger.error(
-                f"[ERROR] F{result.firma}S{result.seite}: {result.error_message}"
+                f"F{result.firma}S{result.seite}: {result.error_message}"
             )
         
         for warning in result.warnings:
             self.logger.warning(
-                f"[WARNING] F{result.firma}S{result.seite}: {warning}"
+                f"F{result.firma}S{result.seite}: {warning}"
             )
 
 
@@ -385,7 +385,7 @@ class BatchProcessor:
                     result = future.result()
                     self.results.append(result)
                     
-                    status = "[OK]" if result.success else "[ERROR]"
+                    status = "" if result.success else ""
                     self.logger.info(
                         f"[{completed}/{total}] {status} F{firma}S{seite} - "
                         f"{result.processing_time:.2f}s"
@@ -393,7 +393,7 @@ class BatchProcessor:
                     
                 except Exception as e:
                     self.logger.error(
-                        f"[{completed}/{total}] [ERROR] F{firma}S{seite} - "
+                        f"[{completed}/{total}] F{firma}S{seite} - "
                         f"Exception: {e}"
                     )
                     
@@ -572,7 +572,7 @@ class BatchProcessor:
             for result in summary.results:
                 if not result.success:
                     self.logger.info(
-                        f"  [ERROR] F{result.firma}S{result.seite}: {result.error_message}"
+                        f"  F{result.firma}S{result.seite}: {result.error_message}"
                     )
         
         # Log validation issues
@@ -586,14 +586,14 @@ class BatchProcessor:
         
         # Final status
         if summary.successful == summary.total_processed:
-            self.logger.info("\n[OK] All combinations processed successfully!")
+            self.logger.info("\nAll combinations processed successfully!")
         elif summary.successful > 0:
             self.logger.info(
                 f"\n⚠ Partially successful: {summary.successful}/"
                 f"{summary.total_processed}"
             )
         else:
-            self.logger.info("\n[ERROR] Batch processing failed")
+            self.logger.info("\nBatch processing failed")
 
 
 def process_all_combinations(

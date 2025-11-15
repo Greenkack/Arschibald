@@ -1079,7 +1079,7 @@ def _calculate_final_price_with_correct_formula(
 
     # Debug-Ausgaben
     if debug_mode:
-        print("\n[SEARCH] FINAL PRICE CALCULATION (CORRECTED FORMULA):")
+        print("\nFINAL PRICE CALCULATION (CORRECTED FORMULA):")
         print(f"   Base matrix price: {base_matrix_price:.2f} €")
         print(f"   Additional costs (accessories): {additional_costs:.2f} €")
         print(f"   Subtotal before modifications: {subtotal_netto:.2f} €")
@@ -4064,34 +4064,34 @@ def perform_calculations(
                 final_investment_amount = float(
                     project_details['final_modified_price_net'])
                 print(
-                    f"[OK] Amortisation verwendet final_modified_price_net: {final_investment_amount:.2f}€")
+                    f"Amortisation verwendet final_modified_price_net: {final_investment_amount:.2f}€")
             elif project_details.get('final_price_with_provision'):
                 final_investment_amount = float(
                     project_details['final_price_with_provision'])
                 print(
-                    f"[OK] Amortisation verwendet final_price_with_provision: {final_investment_amount:.2f}€")
+                    f"Amortisation verwendet final_price_with_provision: {final_investment_amount:.2f}€")
             elif project_details.get('final_offer_price_net'):
                 final_investment_amount = float(
                     project_details['final_offer_price_net'])
                 print(
-                    f"[OK] Amortisation verwendet final_offer_price_net: {final_investment_amount:.2f}€")
+                    f"Amortisation verwendet final_offer_price_net: {final_investment_amount:.2f}€")
             else:
                 print(
-                    f"[WARNING] Amortisation verwendet Fallback total_investment_netto: {final_investment_amount:.2f}€")
+                    f"Amortisation verwendet Fallback total_investment_netto: {final_investment_amount:.2f}€")
                 if final_investment_amount < 5000:
                     print(
-                        f"   [WARNING] WARNUNG: Investitionsbetrag sehr niedrig! Prüfen Sie:")
+                        f"   WARNUNG: Investitionsbetrag sehr niedrig! Prüfen Sie:")
                     print(f"      - base_matrix_price_netto: {results.get('base_matrix_price_netto', 0):.2f}€")
                     print(f"      - total_additional_costs_netto: {total_additional_costs_netto:.2f}€")
                     print(f"      - subtotal_netto: {subtotal_netto:.2f}€")
                     print(f"      - one_time_bonus_eur: {one_time_bonus_eur:.2f}€")
         else:
             print(
-                f"[WARNING] Amortisation - keine project_details gefunden, verwende Fallback: {final_investment_amount:.2f}€")
+                f"Amortisation - keine project_details gefunden, verwende Fallback: {final_investment_amount:.2f}€")
 
     except Exception as e:
         # Fallback auf ursprüngliche Berechnung
-        print(f"[ERROR] Amortisation Exception: {e}")
+        print(f"Amortisation Exception: {e}")
 
     amortization_time_calc = (
         final_investment_amount / annual_financial_benefit_year1

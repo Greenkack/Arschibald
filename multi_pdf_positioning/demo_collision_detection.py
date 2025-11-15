@@ -27,7 +27,7 @@ def demo_collision_detection():
     collisions = validator.detect_collisions(positions_no_collision)
     print(f"Positions: {len(positions_no_collision)}")
     print(f"Collisions detected: {len(collisions)}")
-    print("[OK] No collisions (as expected)")
+    print("No collisions (as expected)")
     
     # Test Case 2: Overlapping elements
     print("\n--- Test Case 2: Overlapping Elements ---")
@@ -61,7 +61,7 @@ def demo_collision_detection():
     print(f"Min spacing: {validator.min_spacing} pts")
     print(f"Actual spacing: 3 pts")
     print(f"Collisions detected: {len(collisions)}")
-    print("[OK] Collision detected due to insufficient spacing")
+    print("Collision detected due to insufficient spacing")
     
     # Test Case 4: Multiple collisions
     print("\n--- Test Case 4: Multiple Collisions ---")
@@ -123,7 +123,7 @@ def demo_collision_resolution():
     print(f"Collisions after resolution: {len(new_collisions)}")
     
     if len(new_collisions) < len(collisions):
-        print(f"[OK] Successfully reduced collisions from {len(collisions)} to {len(new_collisions)}")
+        print(f"Successfully reduced collisions from {len(collisions)} to {len(new_collisions)}")
     
     # Check bounds
     print("\n--- Bounds Check ---")
@@ -141,7 +141,7 @@ def demo_collision_resolution():
             all_in_bounds = False
     
     if all_in_bounds:
-        print("[OK] All positions are within page bounds")
+        print("All positions are within page bounds")
 
 
 def demo_validation_with_collision_detection():
@@ -252,7 +252,7 @@ def demo_real_world_scenario():
         new_report = validator.validate_positions(adjusted)
         print(f"\nAfter resolution:")
         print(f"  Collisions: {len(new_report.collisions)}")
-        print(f"  Status: {'[OK] VALID' if new_report.is_valid else '[ERROR] INVALID'}")
+        print(f"  Status: {'VALID' if new_report.is_valid else 'INVALID'}")
 
 
 if __name__ == "__main__":
@@ -271,10 +271,10 @@ if __name__ == "__main__":
     print("DEMO COMPLETE")
     print("=" * 70)
     print("\nKey Features Demonstrated:")
-    print("  [OK] Collision detection between overlapping elements")
-    print("  [OK] Detection of elements too close (< min_spacing)")
-    print("  [OK] Automatic collision resolution")
-    print("  [OK] Boundary-aware adjustments")
-    print("  [OK] Integration with validation system")
-    print("  [OK] Real-world scenario handling")
-    print("\n[OK] Task 8.2 (Kollisions-Erkennung) is complete and functional")
+    print("  Collision detection between overlapping elements")
+    print("  Detection of elements too close (< min_spacing)")
+    print("  Automatic collision resolution")
+    print("  Boundary-aware adjustments")
+    print("  Integration with validation system")
+    print("  Real-world scenario handling")
+    print("\nTask 8.2 (Kollisions-Erkennung) is complete and functional")

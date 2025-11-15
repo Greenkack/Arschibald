@@ -25,7 +25,7 @@ def demo_basic_usage():
     kb_manager = KnowledgeBaseManager(conn)
     
     # Beispiel-Daten erstellen
-    if st.button("[PACKAGE] Beispiel-Daten erstellen"):
+    if st.button("Beispiel-Daten erstellen"):
         with st.spinner("Erstelle Beispiel-Daten..."):
             # Kategorien
             solar_cat = kb_manager.create_category(
@@ -39,14 +39,14 @@ def demo_basic_usage():
                 name="PV-Module",
                 parent_id=solar_cat,
                 description="Informationen zu Photovoltaik-Modulen",
-                icon="[PACKAGE]",
+                icon="",
                 sort_order=1
             )
             
             wp_cat = kb_manager.create_category(
                 name="Wärmepumpen",
                 description="Alles über Wärmepumpen",
-                icon="[TEMP]",
+                icon="",
                 sort_order=2
             )
             
@@ -114,7 +114,7 @@ bei großen Flächen können polykristalline Module wirtschaftlicher sein.
 
 ## Wichtig
 
-[WARNING] Installation nur durch Fachbetrieb!
+Installation nur durch Fachbetrieb!
 """,
                 category_id=wp_cat,
                 tags="wärmepumpe, installation, anleitung",
@@ -131,10 +131,10 @@ bei großen Flächen können polykristalline Module wirtschaftlicher sein.
             kb_manager.rate_article(article2, "kunde1", 5, "Perfekte Anleitung")
             kb_manager.rate_article(article2, "kunde2", 4, "Hilfreich")
             
-            st.success("[OK] Beispiel-Daten erfolgreich erstellt!")
+            st.success("Beispiel-Daten erfolgreich erstellt!")
     
     # Statistiken anzeigen
-    st.subheader("[CHART] Statistiken")
+    st.subheader("Statistiken")
     stats = kb_manager.get_statistics()
     
     col1, col2, col3, col4 = st.columns(4)
@@ -152,7 +152,7 @@ bei großen Flächen können polykristalline Module wirtschaftlicher sein.
 
 def demo_search():
     """Zeigt Suchfunktionalität."""
-    st.header("[SEARCH] Suche in der Wissensdatenbank")
+    st.header("Suche in der Wissensdatenbank")
     
     conn = get_db_connection()
     if not conn:
@@ -166,10 +166,10 @@ def demo_search():
     if search_query:
         results = kb_manager.search_articles(search_query, published_only=True)
         
-        st.info(f"[SEARCH] {len(results)} Artikel gefunden")
+        st.info(f"{len(results)} Artikel gefunden")
         
         for article in results:
-            with st.expander(f"[FILE] {article['title']}"):
+            with st.expander(f"{article['title']}"):
                 st.markdown(article['content'][:300] + "...")
                 st.caption(f"Kategorie: {article.get('category_name', 'Keine')} | "
                           f"Aufrufe: {article['view_count']} | "
@@ -247,7 +247,7 @@ def demo_integration_in_crm():
     ```python
     # Bei Kundengesprächen relevante Artikel anzeigen
     if st.session_state.get('current_customer_topic') == 'pv':
-        st.info("[IDEA] Hilfreiche Artikel:")
+        st.info("Hilfreiche Artikel:")
         results = kb_manager.search_articles("Photovoltaik")
         for article in results[:3]:
             st.markdown(f"- [{article['title']}](#)")

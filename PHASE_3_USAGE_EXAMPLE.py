@@ -78,7 +78,7 @@ def example_customer_form():
     
     # Zeige Session-Status
     if st.session_state.get('user_session_recovered'):
-        st.success("[OK] Daten automatisch wiederhergestellt")
+        st.success("Daten automatisch wiederhergestellt")
     
     return {
         'first_name': first_name,
@@ -142,7 +142,7 @@ def example_calculation_with_persistence():
     if 'last_calc_result' in st.session_state:
         result = st.session_state.last_calc_result
         
-        st.markdown("#### [CHART] Ergebnis:")
+        st.markdown("#### Ergebnis:")
         col1, col2 = st.columns(2)
         
         with col1:
@@ -157,7 +157,7 @@ def example_calculation_with_persistence():
                 f"{result['total_savings_20y']:,.0f} €"
             )
         
-        st.info("[IDEA] Diese Daten bleiben nach Browser-Refresh erhalten!")
+        st.info("Diese Daten bleiben nach Browser-Refresh erhalten!")
 
 
 def example_migration_pattern():
@@ -180,11 +180,11 @@ age = session_number_input("Alter", key="age", form_id="user_profile", min_value
 city = session_selectbox("Stadt", ["Berlin", "Hamburg", "München"], key="city", form_id="user_profile")
 
 # VORTEILE:
-# [OK] Bei Browser-Refresh bleiben alle Werte erhalten
-# [OK] Multi-Tab-Unterstützung (gleiche Session)
-# [OK] Automatische Gruppierung nach form_id
-# [OK] Keine manuelle Persistierung notwendig
-# [OK] Zero Breaking Changes - drop-in replacement
+# Bei Browser-Refresh bleiben alle Werte erhalten
+# Multi-Tab-Unterstützung (gleiche Session)
+# Automatische Gruppierung nach form_id
+# Keine manuelle Persistierung notwendig
+# Zero Breaking Changes - drop-in replacement
     """, language="python")
 
 
@@ -203,7 +203,7 @@ persist_session_input(
     key="critical_data",
     value=important_value,
     form_id="critical_form",
-    immediate=True  # [POWER] Sofort persistieren
+    immediate=True  # Sofort persistieren
 )
     """, language="python")
     
@@ -267,7 +267,7 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown("""
-    **[IDEA] Tipp:** Drücke F5 um Browser zu refreshen - alle Daten bleiben erhalten!
+    **Tipp:** Drücke F5 um Browser zu refreshen - alle Daten bleiben erhalten!
     
     **Konfiguration:**
     - `.env`: `FEATURE_SESSION_PERSISTENCE=true`

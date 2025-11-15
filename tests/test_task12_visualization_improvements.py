@@ -42,7 +42,7 @@ def test_color_differentiation():
             f"Normale Modul-Farbe sollte #1a1a2e sein, ist aber {module_normal.color}"
         assert "PV Module" in module_normal.name, \
             f"Modul-Name sollte 'PV Module' enthalten, ist aber {module_normal.name}"
-        print("[OK] Normales Modul hat korrekte Farbe (dunkelblau)")
+        print("Normales Modul hat korrekte Farbe (dunkelblau)")
         
         # Test 1.2: Ausgewähltes Modul (hellblau)
         print("\n📋 Test 1.2: Ausgewähltes Modul (hellblau #4a90e2)")
@@ -59,7 +59,7 @@ def test_color_differentiation():
             f"Ausgewählte Modul-Farbe sollte #4a90e2 sein, ist aber {module_selected.color}"
         assert "Ausgewählt" in module_selected.name, \
             f"Modul-Name sollte 'Ausgewählt' enthalten, ist aber {module_selected.name}"
-        print("[OK] Ausgewähltes Modul hat korrekte Farbe (hellblau)")
+        print("Ausgewähltes Modul hat korrekte Farbe (hellblau)")
         
         # Test 1.3: Ungültiges Modul (rot)
         print("\n📋 Test 1.3: Ungültiges Modul (rot #e74c3c)")
@@ -76,7 +76,7 @@ def test_color_differentiation():
             f"Ungültige Modul-Farbe sollte #e74c3c sein, ist aber {module_invalid.color}"
         assert "Ungültig" in module_invalid.name, \
             f"Modul-Name sollte 'Ungültig' enthalten, ist aber {module_invalid.name}"
-        print("[OK] Ungültiges Modul hat korrekte Farbe (rot)")
+        print("Ungültiges Modul hat korrekte Farbe (rot)")
         
         # Test 1.4: Priorität - Invalid überschreibt Selected
         print("\n📋 Test 1.4: Priorität - Invalid überschreibt Selected")
@@ -91,13 +91,13 @@ def test_color_differentiation():
         
         assert module_both.color == "#e74c3c", \
             f"Ungültig sollte Priorität haben, Farbe sollte #e74c3c sein, ist aber {module_both.color}"
-        print("[OK] Invalid-Status hat Priorität über Selected-Status")
+        print("Invalid-Status hat Priorität über Selected-Status")
         
-        print("\n[OK] Test 1: Farb-Unterscheidung erfolgreich")
+        print("\nTest 1: Farb-Unterscheidung erfolgreich")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Test 1 fehlgeschlagen: {e}")
+        print(f"\nTest 1 fehlgeschlagen: {e}")
         traceback.print_exc()
         return False
 
@@ -128,7 +128,7 @@ def test_module_numbers():
         
         assert "#" not in module_no_number.name, \
             f"Modul ohne Nummer sollte keine # im Namen haben, ist aber {module_no_number.name}"
-        print("[OK] Modul ohne Nummer hat keinen Nummern-Suffix")
+        print("Modul ohne Nummer hat keinen Nummern-Suffix")
         
         # Test 2.2: Modul mit Nummer
         print("\n📋 Test 2.2: Modul mit Nummer")
@@ -144,7 +144,7 @@ def test_module_numbers():
         
         assert "#42" in module_with_number.name, \
             f"Modul mit Nummer sollte '#42' im Namen haben, ist aber {module_with_number.name}"
-        print("[OK] Modul mit Nummer hat korrekten Nummern-Suffix")
+        print("Modul mit Nummer hat korrekten Nummern-Suffix")
         
         # Test 2.3: Modul-Nummern Annotation
         print("\n📋 Test 2.3: Modul-Nummern Annotation")
@@ -165,13 +165,13 @@ def test_module_numbers():
             f"Annotation Y sollte [0.0] sein, ist aber {annotation.y}"
         assert (annotation.z == [5.3] or annotation.z == (5.3,)), \
             f"Annotation Z sollte [5.3] sein (5.0 + 0.3), ist aber {annotation.z}"
-        print("[OK] Modul-Nummern Annotation korrekt erstellt")
+        print("Modul-Nummern Annotation korrekt erstellt")
         
-        print("\n[OK] Test 2: Modul-Nummern Anzeige erfolgreich")
+        print("\nTest 2: Modul-Nummern Anzeige erfolgreich")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Test 2 fehlgeschlagen: {e}")
+        print(f"\nTest 2 fehlgeschlagen: {e}")
         traceback.print_exc()
         return False
 
@@ -207,7 +207,7 @@ def test_grid_overlay():
             "Raster sollte Y-Koordinaten haben"
         assert len(grid.z) > 0, \
             "Raster sollte Z-Koordinaten haben"
-        print(f"[OK] Raster erstellt mit {len(grid.x)} Punkten")
+        print(f"Raster erstellt mit {len(grid.x)} Punkten")
         
         # Test 3.2: Raster-Dimensionen
         print("\n📋 Test 3.2: Raster-Dimensionen")
@@ -223,7 +223,7 @@ def test_grid_overlay():
             f"Raster Y-Min sollte >= -4.0 sein, ist aber {min(y_coords)}"
         assert max(y_coords) <= 4.0, \
             f"Raster Y-Max sollte <= 4.0 sein, ist aber {max(y_coords)}"
-        print("[OK] Raster-Dimensionen korrekt")
+        print("Raster-Dimensionen korrekt")
         
         # Test 3.3: Raster-Spacing
         print("\n📋 Test 3.3: Raster-Spacing")
@@ -236,13 +236,13 @@ def test_grid_overlay():
         # Toleranz für Rundungsfehler
         assert abs(actual_points - expected_points) < 10, \
             f"Raster sollte ~{expected_points} Punkte haben, hat aber {actual_points}"
-        print("[OK] Raster-Spacing korrekt")
+        print("Raster-Spacing korrekt")
         
-        print("\n[OK] Test 3: Raster-Overlay erfolgreich")
+        print("\nTest 3: Raster-Overlay erfolgreich")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Test 3 fehlgeschlagen: {e}")
+        print(f"\nTest 3 fehlgeschlagen: {e}")
         traceback.print_exc()
         return False
 
@@ -267,7 +267,7 @@ def test_color_legend():
             f"Legende sollte Liste sein, ist aber {type(legend_items)}"
         assert len(legend_items) == 3, \
             f"Legende sollte 3 Einträge haben (Normal, Ausgewählt, Ungültig), hat aber {len(legend_items)}"
-        print(f"[OK] Legende erstellt mit {len(legend_items)} Einträgen")
+        print(f"Legende erstellt mit {len(legend_items)} Einträgen")
         
         # Test 4.2: Legende-Einträge prüfen
         print("\n📋 Test 4.2: Legende-Einträge prüfen")
@@ -288,20 +288,20 @@ def test_color_legend():
         assert "#e74c3c" in colors, \
             f"Legende sollte rot (#e74c3c) enthalten, hat aber {colors}"
         
-        print("[OK] Alle Legende-Einträge korrekt")
+        print("Alle Legende-Einträge korrekt")
         
         # Test 4.3: Legende ist unsichtbar (nur für Legende)
         print("\n📋 Test 4.3: Legende ist unsichtbar")
         for item in legend_items:
             assert item.visible == 'legendonly', \
                 f"Legende-Eintrag sollte 'legendonly' sein, ist aber {item.visible}"
-        print("[OK] Legende-Einträge sind unsichtbar (nur in Legende)")
+        print("Legende-Einträge sind unsichtbar (nur in Legende)")
         
-        print("\n[OK] Test 4: Farb-Legende erfolgreich")
+        print("\nTest 4: Farb-Legende erfolgreich")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Test 4 fehlgeschlagen: {e}")
+        print(f"\nTest 4 fehlgeschlagen: {e}")
         traceback.print_exc()
         return False
 
@@ -333,14 +333,14 @@ def test_ui_options():
         assert 'TASK 12' in source, \
             "UI sollte TASK 12 Kommentare enthalten"
         
-        print("[OK] UI-Optionen sind aktiviert (disabled=False)")
-        print("[OK] TASK 12 Kommentare vorhanden")
+        print("UI-Optionen sind aktiviert (disabled=False)")
+        print("TASK 12 Kommentare vorhanden")
         
-        print("\n[OK] Test 5: UI-Optionen aktiviert erfolgreich")
+        print("\nTest 5: UI-Optionen aktiviert erfolgreich")
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] Test 5 fehlgeschlagen: {e}")
+        print(f"\nTest 5 fehlgeschlagen: {e}")
         traceback.print_exc()
         return False
 
@@ -365,7 +365,7 @@ def run_all_tests():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n[ERROR] Kritischer Fehler in Test '{test_name}': {e}")
+            print(f"\nKritischer Fehler in Test '{test_name}': {e}")
             traceback.print_exc()
             results.append((test_name, False))
     
@@ -378,7 +378,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {test_name}")
     
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
@@ -387,7 +387,7 @@ def run_all_tests():
         print("\n🎉 Alle Tests erfolgreich! Task 12 ist vollständig implementiert.")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen. Bitte Fehler beheben.")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen. Bitte Fehler beheben.")
         return False
 
 

@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_solarfabrik_real_values():
     """Testet Solarfabrik mit echten DB-Werten"""
 
-    print("[TOOL] Test Solarfabrik mit echten DB-Werten")
+    print("Test Solarfabrik mit echten DB-Werten")
     print("=" * 50)
 
     # Verwende einen echten Solarfabrik-Namen aus der DB
@@ -70,7 +70,7 @@ def test_solarfabrik_real_values():
 
     try:
         # Baue dynamische Daten
-        print("[CHART] Baue dynamische Daten...")
+        print("Baue dynamische Daten...")
         dynamic_data = build_dynamic_data(
             project_data, analysis_results, result)
 
@@ -89,7 +89,7 @@ def test_solarfabrik_real_values():
             f"   - Version: {dynamic_data.get('module_version', 'NICHT GEFUNDEN')}")
 
         # Zeige Service-Daten
-        print("\\n[TOOL] Dienstleistungen:")
+        print("\\nDienstleistungen:")
         print(
             f"   - Liste: {dynamic_data.get('optional_services_list', 'NICHT GEFUNDEN')}")
         print(
@@ -98,7 +98,7 @@ def test_solarfabrik_real_values():
             f"   - Anzahl: {dynamic_data.get('optional_services_count', 'NICHT GEFUNDEN')}")
 
         # Zeige Donut-Chart-Daten
-        print("\\n[CHART] Donut-Chart-Daten:")
+        print("\\nDonut-Chart-Daten:")
         print(
             f"   - Tagesverbrauch: {
                 dynamic_data.get(
@@ -127,9 +127,9 @@ def test_solarfabrik_real_values():
                 ''])
 
         if solarfabrik_has_real_values:
-            print("\\n[OK] Solarfabrik hat echte Werte aus der Datenbank!")
+            print("\\nSolarfabrik hat echte Werte aus der Datenbank!")
         else:
-            print("\\n[ERROR] Solarfabrik zeigt noch Fallback-Werte!")
+            print("\\nSolarfabrik zeigt noch Fallback-Werte!")
 
         # Prüfe Services
         services_working = (
@@ -138,9 +138,9 @@ def test_solarfabrik_real_values():
         )
 
         if services_working:
-            print("[OK] Dienstleistungen werden korrekt integriert!")
+            print("Dienstleistungen werden korrekt integriert!")
         else:
-            print("[ERROR] Dienstleistungen fehlen!")
+            print("Dienstleistungen fehlen!")
 
         # Prüfe Donut-Charts
         donuts_working = (
@@ -149,9 +149,9 @@ def test_solarfabrik_real_values():
         )
 
         if donuts_working:
-            print("[OK] Donut-Chart-Daten sind verfügbar!")
+            print("Donut-Chart-Daten sind verfügbar!")
         else:
-            print("[ERROR] Donut-Chart-Daten fehlen!")
+            print("Donut-Chart-Daten fehlen!")
 
         # Generiere PDF
         coords_dir = Path("coords")
@@ -166,8 +166,8 @@ def test_solarfabrik_real_values():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"\\n[OK] Test-PDF erstellt: {output_file}")
-            print(f"[PACKAGE] Dateigröße: {len(overlay_bytes):,} bytes")
+            print(f"\\nTest-PDF erstellt: {output_file}")
+            print(f"Dateigröße: {len(overlay_bytes):,} bytes")
 
             print("\\n📋 Überprüfen Sie:")
             print(
@@ -177,11 +177,11 @@ def test_solarfabrik_real_values():
                 "   3. Seite 6: Donut-Charts sollten bei den Platzhaltern sichtbar sein")
 
             return True
-        print("\\n[ERROR] PDF-Generierung fehlgeschlagen")
+        print("\\nPDF-Generierung fehlgeschlagen")
         return False
 
     except Exception as e:
-        print(f"\\n[ERROR] Fehler beim Test: {e}")
+        print(f"\\nFehler beim Test: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -190,7 +190,7 @@ def test_solarfabrik_real_values():
 def test_with_different_solarfabrik_names():
     """Testet verschiedene Solarfabrik-Namen"""
 
-    print("\\n[SEARCH] Test verschiedene Solarfabrik-Namen")
+    print("\\nTest verschiedene Solarfabrik-Namen")
     print("=" * 40)
 
     # Hole alle Solarfabrik-Produkte aus der DB
@@ -204,7 +204,7 @@ def test_with_different_solarfabrik_names():
         print(f"Gefundene Solarfabrik-Produkte: {len(solarfabrik_products)}")
 
         for product in solarfabrik_products:
-            print(f"\\n[PACKAGE] Produkt: {product.get('model_name')}")
+            print(f"\\nProdukt: {product.get('model_name')}")
             print(f"   - ID: {product.get('id')}")
             print(
                 f"   - Zellentechnologie: {product.get('cell_technology', 'LEER')}")
@@ -218,7 +218,7 @@ def test_with_different_solarfabrik_names():
 
 
 if __name__ == "__main__":
-    print("[LAUNCH] Test Solarfabrik Fix Complete")
+    print("Test Solarfabrik Fix Complete")
     print("=" * 60)
 
     # Test 1: Verschiedene Solarfabrik-Namen anzeigen
@@ -229,9 +229,9 @@ if __name__ == "__main__":
 
     print("\\n🎉 Test abgeschlossen!")
     if success:
-        print("[OK] Alle drei Probleme sollten behoben sein:")
+        print("Alle drei Probleme sollten behoben sein:")
         print("   1. Solarfabrik zeigt echte DB-Werte")
         print("   2. Dienstleistungen werden auf Seite 6 angezeigt")
         print("   3. Donut-Charts sind an korrekten Positionen sichtbar")
     else:
-        print("[ERROR] Es gab Probleme bei der PDF-Generierung")
+        print("Es gab Probleme bei der PDF-Generierung")

@@ -15,7 +15,7 @@ from pdf_generator import generate_offer_pdf_with_main_templates
 
 def create_test_pdf_with_logos():
     """Erstelle Test-PDF mit Logos"""
-    print("[TOOL] ERSTELLE TEST-PDF MIT LOGOS")
+    print("ERSTELLE TEST-PDF MIT LOGOS")
     print("=" * 50)
 
     # Test-Daten mit bekannten Logo-Herstellern
@@ -73,7 +73,7 @@ def create_test_pdf_with_logos():
         with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp_file:
             temp_pdf_path = tmp_file.name
 
-        print(f"[FILE] Erstelle PDF: {temp_pdf_path}")
+        print(f"Erstelle PDF: {temp_pdf_path}")
 
         # PDF generieren (nur Template-Version)
         pdf_bytes = generate_offer_pdf_with_main_templates(
@@ -89,16 +89,16 @@ def create_test_pdf_with_logos():
                 f.write(pdf_bytes)
 
             file_size = len(pdf_bytes)
-            print("[OK] PDF erfolgreich erstellt!")
+            print("PDF erfolgreich erstellt!")
             print(f"   Datei: {temp_pdf_path}")
             print(f"   Größe: {file_size:,} Bytes")
-            print("\n[IDEA] Öffne die PDF-Datei und prüfe Seite 4 auf die Logos!")
+            print("\nÖffne die PDF-Datei und prüfe Seite 4 auf die Logos!")
             return temp_pdf_path
-        print("[ERROR] PDF-Generierung fehlgeschlagen")
+        print("PDF-Generierung fehlgeschlagen")
         return None
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei PDF-Generierung: {e}")
+        print(f"Fehler bei PDF-Generierung: {e}")
         import traceback
         traceback.print_exc()
         return None
@@ -106,8 +106,8 @@ def create_test_pdf_with_logos():
 if __name__ == "__main__":
     pdf_path = create_test_pdf_with_logos()
     if pdf_path:
-        print(f"\n[TARGET] PDF erstellt: {pdf_path}")
+        print(f"\nPDF erstellt: {pdf_path}")
         print("   Bitte öffne die Datei und prüfe Seite 4 auf die Hersteller-Logos!")
         print("   Die Logos sollten bei den Positionen 'Logomodul', 'Logoricht', 'Logoakkus' erscheinen.")
     else:
-        print("\n[ERROR] PDF-Test fehlgeschlagen")
+        print("\nPDF-Test fehlgeschlagen")

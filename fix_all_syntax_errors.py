@@ -55,7 +55,7 @@ def fix_broken_auto_fixes():
                 with open(py_file, 'w', encoding='utf-8') as f:
                     f.write(content)
                 fixed_files.append(str(py_file))
-                print(f"[OK] Fixed: {py_file}")
+                print(f"Fixed: {py_file}")
         
         except Exception as e:
             errors.append((str(py_file), str(e)))
@@ -72,13 +72,13 @@ if __name__ == "__main__":
     fixed, errors = fix_broken_auto_fixes()
     
     print(f"\n{'='*80}")
-    print(f"[OK] {len(fixed)} Dateien repariert")
+    print(f"{len(fixed)} Dateien repariert")
     if fixed:
         for f in fixed:
             print(f"   - {f}")
     
     if errors:
-        print(f"\n[ERROR] {len(errors)} Fehler:")
+        print(f"\n{len(errors)} Fehler:")
         for f, e in errors:
             print(f"   - {f}: {e}")
     
@@ -92,11 +92,11 @@ if __name__ == "__main__":
     for module in test_modules:
         try:
             __import__(module)
-            print(f"[OK] {module}")
+            print(f"{module}")
             success += 1
         except SyntaxError as e:
-            print(f"[ERROR] {module}: {e}")
+            print(f"{module}: {e}")
         except Exception as e:
-            print(f"[WARNING]  {module}: {e}")
+            print(f"{module}: {e}")
     
     print(f"\n{success}/{len(test_modules)} Module erfolgreich importiert")

@@ -27,7 +27,7 @@ results = []
 for key in test_keys:
     is_available = check_chart_availability(key, {}, test_results)
     results.append((key, is_available))
-    status = "[OK] VERFÜGBAR" if is_available else "[ERROR] NICHT VERFÜGBAR"
+    status = "VERFÜGBAR" if is_available else "NICHT VERFÜGBAR"
     print(f"{status:20} | {key}")
 
 print("=" * 60)
@@ -37,4 +37,4 @@ print(f"Gesamt: {available_count}/{len(results)} verfügbar ({available_count*10
 if available_count == len(results):
     print("\n🎉 PERFEKT! Alle getesteten Charts sind verfügbar!")
 else:
-    print(f"\n[WARNING] {len(results) - available_count} Charts noch nicht verfügbar")
+    print(f"\n{len(results) - available_count} Charts noch nicht verfügbar")

@@ -55,7 +55,7 @@ def test_optimization_returns_3_configs():
         # Prüfe: Genau 3 Konfigurationen
         assert len(results) == 3, \
             f"Erwarte 3 Konfigurationen, erhalten: {len(results)}"
-        print(f"  [OK] Genau 3 Konfigurationen erhalten")
+        print(f"  Genau 3 Konfigurationen erhalten")
         
         # Prüfe: Alle Konfigurationen sind gültig
         for i, (config, score) in enumerate(results, 1):
@@ -81,9 +81,9 @@ def test_optimization_returns_3_configs():
         scores = [score for _, score in results]
         assert scores == sorted(scores, reverse=True), \
             "Scores sind nicht absteigend sortiert"
-        print(f"  [OK] Scores sind korrekt sortiert (höchster zuerst)")
+        print(f"  Scores sind korrekt sortiert (höchster zuerst)")
     
-    print("\n[OK] TEST 1 BESTANDEN")
+    print("\nTEST 1 BESTANDEN")
     return True
 
 
@@ -153,11 +153,11 @@ def test_max_modules_goal():
         f"Garage+Fassade Score ({garage_facade_score:.1f}) sollte mindestens " \
         f"zweithöchster sein, ist aber niedriger als {results[1][1]:.1f}"
     
-    print(f"\n[OK] Garage+Fassade hat Score {garage_facade_score:.1f} " \
+    print(f"\nGarage+Fassade hat Score {garage_facade_score:.1f} " \
           f"(Rang: {results.index((garage_facade_config, garage_facade_score)) + 1})")
-    print(f"[OK] Bei max_modules wird Modulanzahl korrekt priorisiert")
+    print(f"Bei max_modules wird Modulanzahl korrekt priorisiert")
     
-    print("\n[OK] TEST 2 BESTANDEN")
+    print("\nTEST 2 BESTANDEN")
     return True
 
 
@@ -225,10 +225,10 @@ def test_max_yield_goal():
         f"Süd-Aufständerung sollte höchsten Score haben, " \
         f"hat aber {south_score:.1f} statt {best_score:.1f}"
     
-    print(f"\n[OK] Süd-Aufständerung hat höchsten Score: {south_score:.1f}")
-    print(f"[OK] Bei max_yield wird Ausrichtung korrekt priorisiert")
+    print(f"\nSüd-Aufständerung hat höchsten Score: {south_score:.1f}")
+    print(f"Bei max_yield wird Ausrichtung korrekt priorisiert")
     
-    print("\n[OK] TEST 3 BESTANDEN")
+    print("\nTEST 3 BESTANDEN")
     return True
 
 
@@ -290,9 +290,9 @@ def test_balanced_goal():
     assert score_range < 40.0, \
         f"Score-Bereich zu groß für 'balanced': {score_range:.1f} Punkte"
     
-    print(f"[OK] Scores sind ausgewogen (Bereich < 40 Punkte)")
+    print(f"Scores sind ausgewogen (Bereich < 40 Punkte)")
     
-    print("\n[OK] TEST 4 BESTANDEN")
+    print("\nTEST 4 BESTANDEN")
     return True
 
 
@@ -333,7 +333,7 @@ def test_ui_integration_apply_config():
         for config, score in top_configs
     ]
     session_state = {"optimization_results": serializable_results}
-    print(f"   [OK] Gespeichert: {len(serializable_results)} Konfigurationen")
+    print(f"   Gespeichert: {len(serializable_results)} Konfigurationen")
     
     # 3. Zeige Top 3 Konfigurationen (simuliert)
     print("\n3. Zeige Top 3 Konfigurationen:")
@@ -386,19 +386,19 @@ def test_ui_integration_apply_config():
         assert ui_state["mounting_mode"] in ["south", "east-west", "south-east", "south-west", "custom"], \
             f"Ungültiger mounting_mode: {ui_state['mounting_mode']}"
         
-        print(f"   [OK] UI-Werte aktualisiert:")
+        print(f"   UI-Werte aktualisiert:")
         for key, value in ui_state.items():
             print(f"       {key}: {value}")
         
         # Simuliere Erfolgsmeldung (Requirement 3.10)
-        success_message = f"[OK] Konfiguration {i} erfolgreich übernommen!"
+        success_message = f"Konfiguration {i} erfolgreich übernommen!"
         print(f"   {success_message}")
     
-    print("\n[OK] Alle Konfigurationen können korrekt übernommen werden")
-    print("[OK] UI-Werte werden korrekt aktualisiert")
-    print("[OK] Erfolgsmeldungen werden angezeigt")
+    print("\nAlle Konfigurationen können korrekt übernommen werden")
+    print("UI-Werte werden korrekt aktualisiert")
+    print("Erfolgsmeldungen werden angezeigt")
     
-    print("\n[OK] TEST 5 BESTANDEN")
+    print("\nTEST 5 BESTANDEN")
     return True
 
 
@@ -433,11 +433,11 @@ def test_config_serialization():
     
     # Serialisiere zu JSON
     json_str = original_config.to_json()
-    print(f"\n[OK] Serialisiert zu JSON ({len(json_str)} Zeichen)")
+    print(f"\nSerialisiert zu JSON ({len(json_str)} Zeichen)")
     
     # Deserialisiere von JSON
     restored_config = AdvancedLayoutConfig.from_json(json_str)
-    print(f"[OK] Deserialisiert von JSON")
+    print(f"Deserialisiert von JSON")
     
     # Prüfe: Alle Werte sind identisch
     assert restored_config.mode == original_config.mode
@@ -455,9 +455,9 @@ def test_config_serialization():
     print(f"  Azimuth: {restored_config.custom_azimuth}°")
     print(f"  Tilt: {restored_config.custom_tilt}°")
     
-    print("\n[OK] Alle Werte sind identisch")
+    print("\nAlle Werte sind identisch")
     
-    print("\n[OK] TEST 6 BESTANDEN")
+    print("\nTEST 6 BESTANDEN")
     return True
 
 
@@ -491,7 +491,7 @@ def test_logging_output():
     assert len(results) == 3, "Keine Ergebnisse erhalten"
     
     # Zeige detaillierte Logging-Informationen
-    print(f"\n[OK] Optimierung abgeschlossen")
+    print(f"\nOptimierung abgeschlossen")
     print(f"  Generierte Konfigurationen: {len(results)}")
     print(f"  Gebäudedimensionen: {dims.length_m}m x {dims.width_m}m")
     print(f"  Ziel-Module: {target_modules}")
@@ -514,9 +514,9 @@ def test_logging_output():
         print(f"       Garage: {config.use_garage}")
         print(f"       Fassade: {config.use_facade}")
     
-    print("\n[OK] Logging-Ausgaben sind vollständig und aussagekräftig")
+    print("\nLogging-Ausgaben sind vollständig und aussagekräftig")
     
-    print("\n[OK] TEST 7 BESTANDEN")
+    print("\nTEST 7 BESTANDEN")
     return True
 
 
@@ -547,7 +547,7 @@ def main():
             test_func()
             passed += 1
         except Exception as e:
-            print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {test_name}")
+            print(f"\nTEST FEHLGESCHLAGEN: {test_name}")
             print(f"   Fehler: {e}")
             import traceback
             traceback.print_exc()
@@ -561,19 +561,19 @@ def main():
     print(f"Tests fehlgeschlagen: {failed}/{len(tests)}")
     
     if failed == 0:
-        print("\n[OK] ALLE TESTS BESTANDEN!")
+        print("\nALLE TESTS BESTANDEN!")
         print("\nTask 7.3 ist vollständig implementiert:")
-        print("  [OK] Optimierung liefert 3 Konfigurationen")
-        print("  [OK] goal='max_modules' funktioniert korrekt")
-        print("  [OK] goal='max_yield' funktioniert korrekt")
-        print("  [OK] goal='balanced' funktioniert korrekt")
-        print("  [OK] 'Übernehmen' Button aktualisiert UI")
-        print("  [OK] Konfigurationen werden korrekt angewendet")
-        print("  [OK] Logging-Ausgaben sind vollständig")
+        print("  Optimierung liefert 3 Konfigurationen")
+        print("  goal='max_modules' funktioniert korrekt")
+        print("  goal='max_yield' funktioniert korrekt")
+        print("  goal='balanced' funktioniert korrekt")
+        print("  'Übernehmen' Button aktualisiert UI")
+        print("  Konfigurationen werden korrekt angewendet")
+        print("  Logging-Ausgaben sind vollständig")
         print("\nDer Optimierungs-Assistent ist vollständig getestet und einsatzbereit!")
         return 0
     else:
-        print("\n[ERROR] EINIGE TESTS SIND FEHLGESCHLAGEN")
+        print("\nEINIGE TESTS SIND FEHLGESCHLAGEN")
         print("Bitte beheben Sie die Fehler und führen Sie die Tests erneut aus.")
         return 1
 

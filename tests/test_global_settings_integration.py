@@ -20,27 +20,27 @@ def test_global_settings_integration():
     print("\n1. Teste Database Import...")
     try:
         from database import load_admin_setting, save_admin_setting
-        print("   [OK] database.py erfolgreich importiert")
+        print("   database.py erfolgreich importiert")
     except ImportError as e:
-        print(f"   [ERROR] Fehler beim Import von database.py: {e}")
+        print(f"   Fehler beim Import von database.py: {e}")
         return False
     
     # 2. Calculations Import testen
     print("\n2. Teste Calculations Import...")
     try:
         from calculations import perform_calculations
-        print("   [OK] calculations.py erfolgreich importiert")
+        print("   calculations.py erfolgreich importiert")
     except ImportError as e:
-        print(f"   [ERROR] Fehler beim Import von calculations.py: {e}")
+        print(f"   Fehler beim Import von calculations.py: {e}")
         return False
     
     # 3. Admin Panel Import testen
     print("\n3. Teste Admin Panel Import...")
     try:
         from admin_panel import render_general_settings_extended, _DEFAULT_GLOBAL_CONSTANTS_FALLBACK
-        print("   [OK] admin_panel.py erfolgreich importiert")
+        print("   admin_panel.py erfolgreich importiert")
     except ImportError as e:
-        print(f"   [ERROR] Fehler beim Import von admin_panel.py: {e}")
+        print(f"   Fehler beim Import von admin_panel.py: {e}")
         return False
     
     # 4. Aktuelle global_constants laden
@@ -48,10 +48,10 @@ def test_global_settings_integration():
     try:
         current_settings = load_admin_setting('global_constants', {})
         if not current_settings:
-            print("   [WARNING]  Keine Einstellungen gefunden, verwende Defaults")
+            print("   Keine Einstellungen gefunden, verwende Defaults")
             current_settings = _DEFAULT_GLOBAL_CONSTANTS_FALLBACK.copy()
         else:
-            print(f"   [OK] Einstellungen geladen: {len(current_settings)} Keys")
+            print(f"   Einstellungen geladen: {len(current_settings)} Keys")
         
         # Zeige wichtige Parameter
         print("\n   Aktuelle Werte:")
@@ -62,7 +62,7 @@ def test_global_settings_integration():
         print(f"   - Simulationsdauer: {current_settings.get('simulation_period_years', 'N/A')} Jahre")
         
     except Exception as e:
-        print(f"   [ERROR] Fehler beim Laden: {e}")
+        print(f"   Fehler beim Laden: {e}")
         return False
     
     # 5. Test-Einstellung speichern und laden
@@ -73,25 +73,25 @@ def test_global_settings_integration():
         
         # Speichern
         if save_admin_setting('global_constants', test_settings):
-            print("   [OK] Speichern erfolgreich")
+            print("   Speichern erfolgreich")
         else:
-            print("   [ERROR] Speichern fehlgeschlagen")
+            print("   Speichern fehlgeschlagen")
             return False
         
         # Laden und prüfen
         loaded_settings = load_admin_setting('global_constants', {})
         if loaded_settings.get('test_value') == 42.0:
-            print("   [OK] Laden und Verifikation erfolgreich")
+            print("   Laden und Verifikation erfolgreich")
             
             # Test-Wert wieder entfernen
             del loaded_settings['test_value']
             save_admin_setting('global_constants', loaded_settings)
         else:
-            print("   [ERROR] Geladener Wert stimmt nicht überein")
+            print("   Geladener Wert stimmt nicht überein")
             return False
             
     except Exception as e:
-        print(f"   [ERROR] Fehler beim Speichern/Laden: {e}")
+        print(f"   Fehler beim Speichern/Laden: {e}")
         return False
     
     # 6. Teste Verwendung in calculations.py
@@ -129,19 +129,19 @@ def test_global_settings_integration():
         
         # Prüfe ob Fehler aufgetreten sind
         if errors:
-            print(f"   [WARNING]  Berechnungen mit Warnungen: {errors}")
+            print(f"   Berechnungen mit Warnungen: {errors}")
         else:
-            print("   [OK] Berechnungen ohne Fehler ausgeführt")
+            print("   Berechnungen ohne Fehler ausgeführt")
         
         # Prüfe ob bestimmte Werte berechnet wurden
         if 'simulation_period_years_effective' in results:
-            print(f"   [OK] Simulationsdauer verwendet: {results['simulation_period_years_effective']} Jahre")
+            print(f"   Simulationsdauer verwendet: {results['simulation_period_years_effective']} Jahre")
         
         if 'vat_rate_percent' in current_settings:
-            print(f"   [OK] MwSt-Satz verfügbar: {current_settings['vat_rate_percent']}%")
+            print(f"   MwSt-Satz verfügbar: {current_settings['vat_rate_percent']}%")
             
     except Exception as e:
-        print(f"   [ERROR] Fehler bei Berechnungen: {e}")
+        print(f"   Fehler bei Berechnungen: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -151,42 +151,42 @@ def test_global_settings_integration():
     try:
         yields_map = current_settings.get('specific_yields_by_orientation_tilt', {})
         if yields_map:
-            print(f"   [OK] Ertragswerte geladen: {len(yields_map)} Ausrichtungen")
+            print(f"   Ertragswerte geladen: {len(yields_map)} Ausrichtungen")
             
             # Zeige Beispiel
             if 'Süd' in yields_map:
                 south_yields = yields_map['Süd']
-                print(f"   [CHART] Süd-Ausrichtung: {south_yields}")
+                print(f"   Süd-Ausrichtung: {south_yields}")
         else:
-            print("   [WARNING]  Keine Ertragswerte gefunden")
+            print("   Keine Ertragswerte gefunden")
             
     except Exception as e:
-        print(f"   [ERROR] Fehler beim Laden der Ertragswerte: {e}")
+        print(f"   Fehler beim Laden der Ertragswerte: {e}")
     
     # 8. Teste Amortization Cheat Settings
     print("\n8. Teste Amortisations-Cheat Einstellungen...")
     try:
         cheat_settings = load_admin_setting('amortization_cheat_settings', {})
         if cheat_settings:
-            print(f"   [OK] Cheat-Einstellungen geladen")
+            print(f"   Cheat-Einstellungen geladen")
             print(f"   - Aktiviert: {cheat_settings.get('enabled', False)}")
             print(f"   - Modus: {cheat_settings.get('mode', 'fixed')}")
         else:
-            print("   [INFO]  Keine Cheat-Einstellungen konfiguriert (Standard)")
+            print("   Keine Cheat-Einstellungen konfiguriert (Standard)")
             
     except Exception as e:
-        print(f"   [ERROR] Fehler beim Laden der Cheat-Einstellungen: {e}")
+        print(f"   Fehler beim Laden der Cheat-Einstellungen: {e}")
     
     print("\n" + "="*80)
-    print("[OK] ALLE TESTS ERFOLGREICH!")
+    print("ALLE TESTS ERFOLGREICH!")
     print("="*80)
     print("\n📋 ZUSAMMENFASSUNG:")
-    print("   - Database-Funktionen: [OK] OK")
-    print("   - Calculations Integration: [OK] OK")
-    print("   - Admin Panel: [OK] OK")
-    print("   - Speichern/Laden: [OK] OK")
-    print("   - Verwendung in Berechnungen: [OK] OK")
-    print("\n[IDEA] Die globalen Einstellungen sind korrekt eingebunden!")
+    print("   - Database-Funktionen: OK")
+    print("   - Calculations Integration: OK")
+    print("   - Admin Panel: OK")
+    print("   - Speichern/Laden: OK")
+    print("   - Verwendung in Berechnungen: OK")
+    print("\nDie globalen Einstellungen sind korrekt eingebunden!")
     print("   Sie können im Admin-Bereich -> Allgemeine Einstellungen")
     print("   bearbeitet werden und wirken sich sofort auf alle Berechnungen aus.")
     
@@ -197,7 +197,7 @@ if __name__ == "__main__":
         success = test_global_settings_integration()
         sys.exit(0 if success else 1)
     except Exception as e:
-        print(f"\n[ERROR] UNERWARTETER FEHLER: {e}")
+        print(f"\nUNERWARTETER FEHLER: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

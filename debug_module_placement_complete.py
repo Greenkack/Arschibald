@@ -46,7 +46,7 @@ def debug_complete_flow():
     current_placed = session_state.get("placed_module_count", 0)
     
     if current_placed == 0 and module_quantity > 0:
-        print("  [OK] Bedingung erfüllt: Keine Module platziert, starte Auto-Placement")
+        print("  Bedingung erfüllt: Keine Module platziert, starte Auto-Placement")
         
         from utils.pv3d_placement_handler import handle_auto_placement
         
@@ -70,13 +70,13 @@ def debug_complete_flow():
             session_state["placed_module_count"] = result["count"]
             current_placed = result["count"]
             
-            print(f"  [OK] Session State aktualisiert:")
+            print(f"  Session State aktualisiert:")
             print(f"    placed_module_count: {session_state['placed_module_count']}")
             print(f"    placed_module_positions: {len(session_state['placed_module_positions'])} Module")
         else:
-            print(f"  [ERROR] Platzierung fehlgeschlagen!")
+            print(f"  Platzierung fehlgeschlagen!")
     else:
-        print(f"  [WARNING] Bedingung NICHT erfüllt:")
+        print(f"  Bedingung NICHT erfüllt:")
         print(f"    current_placed = {current_placed}")
         print(f"    module_quantity = {module_quantity}")
     
@@ -92,7 +92,7 @@ def debug_complete_flow():
     print(f"    placed_positions: {len(placed_positions)} Module")
     
     if placed_positions:
-        print(f"  [OK] Module gefunden, rendere...")
+        print(f"  Module gefunden, rendere...")
         
         # Zeige erste 3 Positionen
         for i, pos in enumerate(placed_positions[:3]):
@@ -104,9 +104,9 @@ def debug_complete_flow():
         if len(placed_positions) > 3:
             print(f"    ... und {len(placed_positions) - 3} weitere Module")
         
-        print(f"  [OK] Module sollten in 3D-Szene sichtbar sein!")
+        print(f"  Module sollten in 3D-Szene sichtbar sein!")
     else:
-        print(f"  [ERROR] KEINE Module gefunden!")
+        print(f"  KEINE Module gefunden!")
         print(f"  Problem: Session State ist leer oder wurde nicht aktualisiert")
     
     print()
@@ -118,12 +118,12 @@ def debug_complete_flow():
     print()
     
     if session_state["placed_module_count"] > 0:
-        print(f"[OK] SUCCESS: {session_state['placed_module_count']} Module platziert!")
+        print(f"SUCCESS: {session_state['placed_module_count']} Module platziert!")
         print()
         print("Module sollten sichtbar sein wenn:")
-        print("  1. [OK] Session State korrekt aktualisiert")
-        print("  2. [OK] build_plotly_scene liest Session State")
-        print("  3. [OK] create_pv_module_3d rendert Module")
+        print("  1. Session State korrekt aktualisiert")
+        print("  2. build_plotly_scene liest Session State")
+        print("  3. create_pv_module_3d rendert Module")
         print()
         
         # Prüfe Z-Positionen
@@ -137,11 +137,11 @@ def debug_complete_flow():
             print(f"  Absolute Z: {z_abs:.2f}m")
             
             if z_abs > wall_height:
-                print(f"  [OK] Module sind ÜBER der Wandhöhe (auf dem Dach)")
+                print(f"  Module sind ÜBER der Wandhöhe (auf dem Dach)")
             else:
-                print(f"  [ERROR] Module sind UNTER der Wandhöhe (Problem!)")
+                print(f"  Module sind UNTER der Wandhöhe (Problem!)")
     else:
-        print(f"[ERROR] FEHLER: Keine Module platziert!")
+        print(f"FEHLER: Keine Module platziert!")
         print()
         print("Mögliche Ursachen:")
         print("  1. handle_auto_placement gibt success=False zurück")

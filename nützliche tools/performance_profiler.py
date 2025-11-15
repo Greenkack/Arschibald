@@ -41,10 +41,10 @@ def profile_function(func, *args, **kwargs):
     stats.sort_stats('cumulative')
     stats.print_stats(10)  # Top 10
 
-    print("[POWER] PERFORMANCE-ANALYSE:")
+    print("PERFORMANCE-ANALYSE:")
     print(f"⏱️ Ausführungszeit: {execution_time:.4f} Sekunden")
     print(f"💾 Memory-Verbrauch: {memory_diff:.2f} MB")
-    print("[CHART] Top-10 langsamste Funktionen:")
+    print("Top-10 langsamste Funktionen:")
     print(stats_stream.getvalue())
 
     return result

@@ -154,7 +154,7 @@ class TestAdminProfitMarginUI:
         render_profit_margin_management_ui()
 
         # Verify UI elements were created
-        mock_st.header.assert_called_with("[TARGET] Gewinnspannen-Verwaltung")
+        mock_st.header.assert_called_with("Gewinnspannen-Verwaltung")
         mock_st.markdown.assert_called()
         mock_st.tabs.assert_called_once()
 
@@ -270,7 +270,7 @@ class TestAdminProfitMarginUI:
 
         # Verify UI elements
         mock_st.subheader.assert_called_with(
-            "[PACKAGE] Produkt-spezifische Gewinnspannen")
+            "Produkt-spezifische Gewinnspannen")
 
         # Verify products were loaded
         mock_list_products.assert_called()

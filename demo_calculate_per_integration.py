@@ -63,9 +63,9 @@ def demo_basic_calculations():
             print(f"  Result: {result}€")
             print(f"  Expected: {test['expected']}€")
             print(
-                "  [OK] Correct" if abs(
+                "  Correct" if abs(
                     result -
-                    test['expected']) < 0.01 else "  [ERROR] Error")
+                    test['expected']) < 0.01 else "  Error")
 
     except Exception as e:
         print(f"Error in basic calculations: {e}")
@@ -332,15 +332,15 @@ def demo_validation():
         result = validate_calculate_per_integration()
 
         if result['success']:
-            print("[OK] Enhanced pricing engine available")
+            print("Enhanced pricing engine available")
             print(
-                f"[OK] Supported calculation methods: {
+                f"Supported calculation methods: {
                     ', '.join(
                         result['supported_methods'])}")
 
             print("\nValidation Tests:")
             for test in result['test_results']:
-                status = "[OK]" if test.get('passed', False) else "[ERROR]"
+                status = "" if test.get('passed', False) else ""
                 print(f"  {status} {test['test']}")
                 if 'expected' in test and 'actual' in test:
                     print(
@@ -358,7 +358,7 @@ def demo_validation():
             print(f"  Success Rate: {summary['success_rate']:.1f}%")
 
         else:
-            print(f"[ERROR] Validation failed: {result['error']}")
+            print(f"Validation failed: {result['error']}")
             if result.get('fallback_available'):
                 print("  Fallback calculation available")
 

@@ -68,16 +68,16 @@ def verify_task_8_1():
     
     print("\nErrors detected:")
     for error in report_1.get_errors():
-        print(f"  [ERROR] {error.message}")
+        print(f"  {error.message}")
     
     # Verify requirement
     errors_1 = report_1.get_errors()
     bounds_errors = [e for e in errors_1 if 'negative' in e.message or 'exceeds' in e.message]
     
     if len(bounds_errors) >= 4:
-        print("\n[OK] REQUIREMENT 6.1 VERIFIED: Detects positions outside PDF bounds")
+        print("\nREQUIREMENT 6.1 VERIFIED: Detects positions outside PDF bounds")
     else:
-        print("\n[ERROR] REQUIREMENT 6.1 FAILED: Not all bounds violations detected")
+        print("\nREQUIREMENT 6.1 FAILED: Not all bounds violations detected")
     
     # Test 2: Check minimum margin from edges (10 points)
     print("\n" + "=" * 70)
@@ -111,9 +111,9 @@ def verify_task_8_1():
     margin_warnings = [w for w in warnings_2 if 'too close' in w.message and 'edge' in w.message]
     
     if len(margin_warnings) >= 4:
-        print("\n[OK] REQUIREMENT 6.3 VERIFIED: Detects margin violations (< 10 pts)")
+        print("\nREQUIREMENT 6.3 VERIFIED: Detects margin violations (< 10 pts)")
     else:
-        print("\n[ERROR] REQUIREMENT 6.3 FAILED: Not all margin violations detected")
+        print("\nREQUIREMENT 6.3 FAILED: Not all margin violations detected")
     
     # Test 3: Detect collisions and insufficient spacing (5 points)
     print("\n" + "=" * 70)
@@ -140,15 +140,15 @@ def verify_task_8_1():
     
     print("\nCollisions detected:")
     for collision in report_3.collisions:
-        print(f"  [ERROR] Elements {collision.element1_index} and {collision.element2_index}")
+        print(f"  Elements {collision.element1_index} and {collision.element2_index}")
         print(f"    Overlap area: {collision.overlap_area:.2f} sq pts")
         print(f"    Overlap rect: {collision.overlap_rect}")
     
     # Verify requirement
     if len(report_3.collisions) >= 2:
-        print("\n[OK] REQUIREMENT 6.2 VERIFIED: Detects collisions and insufficient spacing")
+        print("\nREQUIREMENT 6.2 VERIFIED: Detects collisions and insufficient spacing")
     else:
-        print("\n[ERROR] REQUIREMENT 6.2 FAILED: Not all collisions detected")
+        print("\nREQUIREMENT 6.2 FAILED: Not all collisions detected")
     
     # Test 4: Complete validation workflow
     print("\n" + "=" * 70)
@@ -183,30 +183,30 @@ def verify_task_8_1():
     
     # Check Requirement 6.1
     if len(bounds_errors) >= 4:
-        print("[OK] Requirement 6.1: PDF bounds validation (0-595, 0-842)")
+        print("Requirement 6.1: PDF bounds validation (0-595, 0-842)")
     else:
-        print("[ERROR] Requirement 6.1: PDF bounds validation FAILED")
+        print("Requirement 6.1: PDF bounds validation FAILED")
         all_verified = False
     
     # Check Requirement 6.3
     if len(margin_warnings) >= 4:
-        print("[OK] Requirement 6.3: Minimum margin validation (10 points)")
+        print("Requirement 6.3: Minimum margin validation (10 points)")
     else:
-        print("[ERROR] Requirement 6.3: Minimum margin validation FAILED")
+        print("Requirement 6.3: Minimum margin validation FAILED")
         all_verified = False
     
     # Check Requirement 6.2
     if len(report_3.collisions) >= 2:
-        print("[OK] Requirement 6.2: Collision detection (5 points spacing)")
+        print("Requirement 6.2: Collision detection (5 points spacing)")
     else:
-        print("[ERROR] Requirement 6.2: Collision detection FAILED")
+        print("Requirement 6.2: Collision detection FAILED")
         all_verified = False
     
     print()
     
     if all_verified:
         print("=" * 70)
-        print("[OK][OK][OK] TASK 8.1 FULLY VERIFIED [OK][OK][OK]")
+        print("TASK 8.1 FULLY VERIFIED ")
         print("=" * 70)
         print("\nAll requirements have been successfully implemented:")
         print("  • validate_positions() function is working correctly")
@@ -216,7 +216,7 @@ def verify_task_8_1():
         print("\nThe validation system is ready for production use.")
     else:
         print("=" * 70)
-        print("[ERROR][ERROR][ERROR] TASK 8.1 VERIFICATION FAILED [ERROR][ERROR][ERROR]")
+        print("TASK 8.1 VERIFICATION FAILED ")
         print("=" * 70)
         print("\nSome requirements were not met. Please review the implementation.")
     

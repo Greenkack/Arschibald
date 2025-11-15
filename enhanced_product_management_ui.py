@@ -37,7 +37,7 @@ def show_enhanced_product_management():
             "Produktdatenbank-Modul nicht verfügbar. Bitte überprüfen Sie die Installation.")
         return
 
-    st.title("[TOOL] Erweiterte Produktverwaltung")
+    st.title("Erweiterte Produktverwaltung")
     st.markdown("---")
 
     # Sidebar für Navigation
@@ -160,10 +160,10 @@ def show_product_list():
         with col2:
             action_col1, action_col2 = st.columns(2)
             with action_col1:
-                if st.button("[SEARCH] Details anzeigen"):
+                if st.button("Details anzeigen"):
                     show_product_details(selected_id)
             with action_col2:
-                if st.button("[DELETE] Löschen", type="secondary"):
+                if st.button("Löschen", type="secondary"):
                     if st.session_state.get('confirm_delete') != selected_id:
                         st.session_state.confirm_delete = selected_id
                         st.warning(
@@ -190,7 +190,7 @@ def show_product_details(product_id: int):
             st.error(f"Produkt mit ID {product_id} nicht gefunden!")
             return
 
-        st.subheader(f"[FILE] Produktdetails: {product.get('model_name', 'N/A')}")
+        st.subheader(f"Produktdetails: {product.get('model_name', 'N/A')}")
 
         # Grundinformationen
         col1, col2 = st.columns(2)
@@ -838,7 +838,7 @@ def show_dynamic_keys():
                 st.write("Keine dynamischen Keys verfügbar")
 
         # Beispiel für PDF-Verwendung
-        st.subheader("[IDEA] Verwendung in PDF-Vorlagen")
+        st.subheader("Verwendung in PDF-Vorlagen")
         st.info("""
         **Beispiel für die Verwendung in PDF-Vorlagen:**
 
@@ -858,10 +858,10 @@ def show_database_management():
     st.header("🗄️ Datenbank-Verwaltung")
 
     st.warning(
-        "[WARNING] **Achtung:** Die Aktionen in diesem Bereich können nicht rückgängig gemacht werden!")
+        "**Achtung:** Die Aktionen in diesem Bereich können nicht rückgängig gemacht werden!")
 
     # Statistiken anzeigen
-    st.subheader("[CHART] Datenbankstatistiken")
+    st.subheader("Datenbankstatistiken")
 
     try:
         products = list_products()
@@ -881,7 +881,7 @@ def show_database_management():
 
         # Kategorieverteilung
         if categories:
-            st.subheader("[STATS] Kategorieverteilung")
+            st.subheader("Kategorieverteilung")
             category_counts = {}
             for product in products:
                 cat = product.get('category', 'Unbekannt')
@@ -901,7 +901,7 @@ def show_database_management():
     st.markdown("---")
 
     # Produktdatenbank löschen
-    st.subheader("[DELETE] Produktdatenbank zurücksetzen")
+    st.subheader("Produktdatenbank zurücksetzen")
 
     st.error("""
     **WARNUNG: Produktdatenbank komplett löschen**
@@ -930,7 +930,7 @@ def show_database_management():
 
     # Reset-Button
     if st.button(
-            "[DELETE] PRODUKTDATENBANK KOMPLETT LÖSCHEN",
+            "PRODUKTDATENBANK KOMPLETT LÖSCHEN",
             type="secondary",
             disabled=not (
                 confirm_text == "ALLE PRODUKTE LÖSCHEN" and final_confirm),
@@ -944,7 +944,7 @@ def show_database_management():
                 # Produktdatenbank löschen
                 if clear_all_products():
                     st.success(
-                        f"[OK] Produktdatenbank erfolgreich zurückgesetzt! {count_before} Produkte wurden gelöscht.")
+                        f"Produktdatenbank erfolgreich zurückgesetzt! {count_before} Produkte wurden gelöscht.")
 
                     # Session State zurücksetzen
                     if 'confirm_delete' in st.session_state:
@@ -953,10 +953,10 @@ def show_database_management():
                     # Seite neu laden
                     st.rerun()
                 else:
-                    st.error("[ERROR] Fehler beim Zurücksetzen der Produktdatenbank!")
+                    st.error("Fehler beim Zurücksetzen der Produktdatenbank!")
 
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim Zurücksetzen der Datenbank: {e}")
+                st.error(f"Fehler beim Zurücksetzen der Datenbank: {e}")
                 st.exception(e)
         else:
             st.error("Bestätigung nicht korrekt eingegeben!")

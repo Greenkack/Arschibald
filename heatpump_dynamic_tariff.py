@@ -727,7 +727,7 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
     # Allgemeine Pros & Cons
     base_pros = [
         {
-            "title": "[MONEY] Deutliche Kosteneinsparung möglich",
+            "title": "Deutliche Kosteneinsparung möglich",
             "description": "15-25% günstigere Stromkosten bei intelligentem Load-Shifting",
             "weight": 10,  # 1-10
             "applies_to": ["residential", "commercial", "multi_family"]
@@ -745,13 +745,13 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
             "applies_to": ["residential", "commercial"]
         },
         {
-            "title": "[CHART] Transparente Preise",
+            "title": "Transparente Preise",
             "description": "Stündliche Börsenstrompreise 1:1 sichtbar (kein Anbieter-Aufschlag)",
             "weight": 7,
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "[TARGET] Netzstabilität unterstützen",
+            "title": "Netzstabilität unterstützen",
             "description": "Lastverschiebung entlastet Stromnetz in Spitzenzeiten",
             "weight": 6,
             "applies_to": ["commercial", "multi_family"]
@@ -766,7 +766,7 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
     
     base_cons = [
         {
-            "title": "[WARNING] Preisschwankungen",
+            "title": "Preisschwankungen",
             "description": "Strompreis kann stark schwanken (Faktor 3-5 zwischen günstig/teuer)",
             "weight": 8,
             "applies_to": ["residential", "commercial", "multi_family"]
@@ -790,13 +790,13 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "[POWER] Weniger Anbieter",
+            "title": "Weniger Anbieter",
             "description": "Nur 3-4 Anbieter in Deutschland (Tibber, aWATTar, Ostrom, Rabot.Charge)",
             "weight": 5,
             "applies_to": ["residential", "commercial"]
         },
         {
-            "title": "[STATS] Risiko bei fossilen Krisen",
+            "title": "Risiko bei fossilen Krisen",
             "description": "Bei Gas-Mangel können Börsenpreise explodieren (wie 2022)",
             "weight": 7,
             "applies_to": ["residential", "commercial", "multi_family"]
@@ -820,7 +820,7 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
     
     # Empfehlung generieren
     if total_score >= 15:
-        recommendation = "[OK] Sehr empfehlenswert"
+        recommendation = "Sehr empfehlenswert"
         recommendation_detail = "Dynamischer Tarif passt hervorragend zu Ihrem Profil"
     elif total_score >= 5:
         recommendation = "👍 Empfehlenswert"
@@ -829,34 +829,34 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
         recommendation = "⚖️ Neutral"
         recommendation_detail = "Vorteile und Nachteile halten sich die Waage"
     elif total_score >= -15:
-        recommendation = "[WARNING] Mit Vorsicht"
+        recommendation = "Mit Vorsicht"
         recommendation_detail = "Nachteile überwiegen leicht, gut abwägen"
     else:
-        recommendation = "[ERROR] Nicht empfohlen"
+        recommendation = "Nicht empfohlen"
         recommendation_detail = "Zu viele Nachteile für Ihr Profil"
     
     # Idealer Nutzer
     ideal_user_profiles = {
         "residential": [
-            "[OK] Wärmepumpen-Besitzer mit großem Pufferspeicher",
-            "[OK] E-Auto-Fahrer mit Wallbox (flexibles Laden)",
-            "[OK] PV-Anlage mit Batteriespeicher",
-            "[OK] Smart-Home affin (Home Assistant, ioBroker, etc.)",
-            "[OK] Hoher Stromverbrauch (>5.000 kWh/Jahr)",
-            "[OK] Flexibler Tagesablauf"
+            "Wärmepumpen-Besitzer mit großem Pufferspeicher",
+            "E-Auto-Fahrer mit Wallbox (flexibles Laden)",
+            "PV-Anlage mit Batteriespeicher",
+            "Smart-Home affin (Home Assistant, ioBroker, etc.)",
+            "Hoher Stromverbrauch (>5.000 kWh/Jahr)",
+            "Flexibler Tagesablauf"
         ],
         "commercial": [
-            "[OK] Flexible Produktionszeiten",
-            "[OK] Eigene PV-Anlage",
-            "[OK] Energiemanagement-System vorhanden",
-            "[OK] Hoher Grundverbrauch (>50.000 kWh/Jahr)",
-            "[OK] Kühl- oder Wärmespeicher verfügbar"
+            "Flexible Produktionszeiten",
+            "Eigene PV-Anlage",
+            "Energiemanagement-System vorhanden",
+            "Hoher Grundverbrauch (>50.000 kWh/Jahr)",
+            "Kühl- oder Wärmespeicher verfügbar"
         ],
         "multi_family": [
-            "[OK] Zentrale Wärmepumpe mit großem Pufferspeicher",
-            "[OK] PV-Anlage für Mieterstrommodell",
-            "[OK] Energiemanagement für Gebäude",
-            "[OK] >20 Wohneinheiten (Skaleneffekt)"
+            "Zentrale Wärmepumpe mit großem Pufferspeicher",
+            "PV-Anlage für Mieterstrommodell",
+            "Energiemanagement für Gebäude",
+            ">20 Wohneinheiten (Skaleneffekt)"
         ]
     }
     
@@ -910,7 +910,7 @@ def compare_tariff_providers(
             "markup_eur_kwh": 0.06,  # 6 ct/kWh Aufschlag
             "features": [
                 "🤖 Beste App & Smart-Home Integration",
-                "[CHART] Stündliche Prognose für nächsten Tag",
+                "Stündliche Prognose für nächsten Tag",
                 "🔌 Pulse-Hardware für Echtzeit-Tracking (optional)",
                 "🚗 Spezial-Tarif für E-Autos",
                 "♻️ 100% Ökostrom"
@@ -927,8 +927,8 @@ def compare_tariff_providers(
             "base_fee_eur_month": 0,  # Keine Grundgebühr!
             "markup_eur_kwh": 0.05,
             "features": [
-                "[MONEY] Keine Grundgebühr",
-                "[STATS] Transparent: Börsenpreis + 5 ct/kWh",
+                "Keine Grundgebühr",
+                "Transparent: Börsenpreis + 5 ct/kWh",
                 "🤝 Viele Partnerschaften (Sonnen, E3DC, etc.)",
                 "🔌 HOURLY und YEARLY Tarif verfügbar",
                 "♻️ 100% Ökostrom"
@@ -966,7 +966,7 @@ def compare_tariff_providers(
                 "🚗 Spezialisiert auf E-Autos",
                 "🤖 KI-gesteuerte Lade-Optimierung",
                 "🔌 Eigene Wallbox-Hardware",
-                "[CHART] THG-Quote direkt abrechenbar",
+                "THG-Quote direkt abrechenbar",
                 "♻️ 100% Ökostrom"
             ],
             "pros": ["Beste E-Auto Integration", "THG-Bonus", "KI-Optimierung"],

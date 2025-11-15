@@ -71,7 +71,7 @@ def render_options(texts: dict[str, str], **kwargs):
     # Warnung anzeigen, wenn Datenbank nicht verfügbar ist
     if not options_dependencies_available:
         st.warning("""
-        [WARNING] **Eingeschränkter Modus**
+        **Eingeschränkter Modus**
         
         Die Datenbank-Verbindung konnte nicht hergestellt werden.
         Einstellungen können angezeigt, aber nicht dauerhaft gespeichert werden.
@@ -138,7 +138,7 @@ def render_options(texts: dict[str, str], **kwargs):
                 help="Wenn aktiviert, werden Ertragsdaten von PV-Gis abgerufen. API-Zugriff auf EU-Server erforderlich!"
             )
             
-            # [OK] Session State wird automatisch durch key= Parameter aktualisiert
+            # Session State wird automatisch durch key= Parameter aktualisiert
             # NICHT MEHR NÖTIG: st.session_state[session_key] = pvgis_enabled
 
             # System Loss Einstellung
@@ -183,7 +183,7 @@ def render_options(texts: dict[str, str], **kwargs):
             success_count = 0
             total_count = 4
 
-            # [OK] Session State wird automatisch durch key= Parameter aktualisiert
+            # Session State wird automatisch durch key= Parameter aktualisiert
             # Der aktuelle Wert ist bereits in st.session_state[session_key] gespeichert
 
             # Speichere als Boolean direkt (kein String mehr!)
@@ -201,7 +201,7 @@ def render_options(texts: dict[str, str], **kwargs):
                 success_count += 1
 
             if success_count == total_count:
-                st.success("[OK] PV-Gis Einstellungen erfolgreich gespeichert!")
+                st.success("PV-Gis Einstellungen erfolgreich gespeichert!")
                 st.session_state['pvgis_settings_saved'] = True
                 # Setze Flag damit Berechnungen die neuen Werte verwenden
                 st.session_state['settings_updated'] = True
@@ -210,18 +210,18 @@ def render_options(texts: dict[str, str], **kwargs):
                 time.sleep(0.5)
                 st.rerun()
             else:
-                st.error(f"[ERROR] Fehler beim Speichern ({success_count}/{total_count} erfolgreich)")
+                st.error(f"Fehler beim Speichern ({success_count}/{total_count} erfolgreich)")
 
         # Status-Information
         col_status1, col_status2 = st.columns(2)
 
         with col_status1:
             if pvgis_enabled:
-                st.success("[OK] PV-Gis Integration ist **AKTIVIERT**")
-                st.info("[CHART] Präzise Ertragsdaten werden von EU-Servern abgerufen")
+                st.success("PV-Gis Integration ist **AKTIVIERT**")
+                st.info("Präzise Ertragsdaten werden von EU-Servern abgerufen")
             else:
-                st.warning("[WARNING] PV-Gis Integration ist **DEAKTIVIERT**")
-                st.info("[NOTE] Manuell eingetragene Werte werden für Berechnungen verwendet")
+                st.warning("PV-Gis Integration ist **DEAKTIVIERT**")
+                st.info("Manuell eingetragene Werte werden für Berechnungen verwendet")
 
         with col_status2:
             # Debug-Informationen nur im Debug-Modus anzeigen
@@ -240,22 +240,22 @@ Typ Session: {type(pvgis_session).__name__}
                 # Kompakte Status-Anzeige
                 st.markdown("**System-Status:**")
                 if pvgis_enabled:
-                    st.success("[OK] API-Verbindung aktiv")
+                    st.success("API-Verbindung aktiv")
                     st.info(f"⏱️ Timeout: {api_timeout}s")
                 else:
-                    st.warning("[WARNING] API-Verbindung deaktiviert")
-                    st.info(f"[CHART] Fallback: {fallback_yield} kWh/kWp/a")
+                    st.warning("API-Verbindung deaktiviert")
+                    st.info(f"Fallback: {fallback_yield} kWh/kWp/a")
 
         # Automatische Anzeige bei Änderungen
         if 'pvgis_settings_saved' in st.session_state and st.session_state['pvgis_settings_saved']:
-            st.info("[INFO] Einstellungen wurden gespeichert. Die Änderungen sind ab sofort aktiv!")
+            st.info("Einstellungen wurden gespeichert. Die Änderungen sind ab sofort aktiv!")
             # Flag zurücksetzen
             del st.session_state['pvgis_settings_saved']
 
     st.markdown("---")
 
     # === 2. PDF DESIGN & LAYOUT (WICHTIG) ===
-    st.markdown("### [FILE] PDF Design & Layout")
+    st.markdown("### PDF Design & Layout")
     
     # NEU: Auswahl des PDF-Themes
     theme_names = list(AVAILABLE_THEMES.keys())
@@ -277,7 +277,7 @@ Typ Session: {type(pvgis_session).__name__}
     # Speichere die Auswahl im Session State für den PDF-Generator
     if selected_theme:
         st.session_state["pdf_theme_name"] = selected_theme
-        st.success(f"[OK] PDF-Theme '{selected_theme}' ausgewählt")
+        st.success(f"PDF-Theme '{selected_theme}' ausgewählt")
 
     st.markdown("---")
 
@@ -313,8 +313,8 @@ Typ Session: {type(pvgis_session).__name__}
     st.markdown("---")
 
     # === ERWEITERTE EINSTELLUNGEN IN EXPANDERN ===
-    st.markdown("### [TOOL] Erweiterte Einstellungen")
-    st.info("[IDEA] Klicken Sie auf die Bereiche, um weitere Optionen anzuzeigen")
+    st.markdown("### Erweiterte Einstellungen")
+    st.info("Klicken Sie auf die Bereiche, um weitere Optionen anzuzeigen")
 
     # === PV-Gis INTEGRATION EINSTELLUNGEN ===
     with st.expander("🌍 Erweiterte PV-Gis Einstellungen", expanded=False):
@@ -325,7 +325,7 @@ Typ Session: {type(pvgis_session).__name__}
         st.markdown("*Weitere Optionen folgen in zukünftigen Updates*")
 
     # === LADEBALKEN DESIGN ===
-    with st.expander("[DESIGN] Ladebalken Design", expanded=False):
+    with st.expander("Ladebalken Design", expanded=False):
         try:
             from components.progress_settings import (
                 render_progress_settings,
@@ -338,7 +338,7 @@ Typ Session: {type(pvgis_session).__name__}
             st.error(f"Progress Settings konnten nicht geladen werden: {e}")
 
     # ===  UI/UX EXPERIENCE EINSTELLUNGEN ===
-    with st.expander("[DESIGN] UI/UX EXPERIENCE", expanded=False):
+    with st.expander("UI/UX EXPERIENCE", expanded=False):
         st.markdown("**Personalisierung der Benutzeroberfläche**")
 
         col1, col2 = st.columns(2)
@@ -811,21 +811,21 @@ Typ Session: {type(pvgis_session).__name__}
     
     # Info-Box mit Hinweis
     st.info("""
-    **[IDEA] Hinweis:** Dieser Button speichert ALLE erweiterten Einstellungen auf einmal und wendet sie sofort an!
+    **Hinweis:** Dieser Button speichert ALLE erweiterten Einstellungen auf einmal und wendet sie sofort an!
     
-    [OK] UI/UX Einstellungen  
-    [OK] Performance-Optimierungen  
-    [OK] Sicherheitseinstellungen  
-    [OK] AI & ML Features  
-    [OK] Berechnungsoptionen  
-    [OK] Gamification & Motivation  
-    [OK] Nachhaltigkeit & Umwelt  
-    [OK] Mobile & Responsive  
-    [OK] Audio & Multimedia  
+    UI/UX Einstellungen  
+    Performance-Optimierungen  
+    Sicherheitseinstellungen  
+    AI & ML Features  
+    Berechnungsoptionen  
+    Gamification & Motivation  
+    Nachhaltigkeit & Umwelt  
+    Mobile & Responsive  
+    Audio & Multimedia  
     """)
     
     if st.button(
-        "[LAUNCH] **ALLE ERWEITERTEN EINSTELLUNGEN SPEICHERN**",
+        "**ALLE ERWEITERTEN EINSTELLUNGEN SPEICHERN**",
         type="primary",
             use_container_width=True):
         with st.spinner("💫 Speichere alle Einstellungen..."):
@@ -907,7 +907,7 @@ Typ Session: {type(pvgis_session).__name__}
             # Erfolgsmeldung mit Statistik
             if success_count == total_settings:
                 st.success(f"""
-                [OK] **ALLE EINSTELLUNGEN ERFOLGREICH GESPEICHERT!**
+                **ALLE EINSTELLUNGEN ERFOLGREICH GESPEICHERT!**
 
                  **{success_count}/{total_settings}** Einstellungen wurden gespeichert
 
@@ -926,7 +926,7 @@ Typ Session: {type(pvgis_session).__name__}
                 except ImportError:
                     pass  # Modul optional
                 except Exception as e:
-                    st.warning(f"[WARNING] UI-Settings konnten nicht angewendet werden: {e}")
+                    st.warning(f"UI-Settings konnten nicht angewendet werden: {e}")
 
                 # Performance-Settings neu laden
                 try:
@@ -935,7 +935,7 @@ Typ Session: {type(pvgis_session).__name__}
                 except ImportError:
                     pass  # Modul optional
                 except Exception as e:
-                    st.warning(f"[WARNING] Performance-Settings konnten nicht geladen werden: {e}")
+                    st.warning(f"Performance-Settings konnten nicht geladen werden: {e}")
 
                 # Auto-Reload nach 2 Sekunden
                 import time
@@ -945,25 +945,25 @@ Typ Session: {type(pvgis_session).__name__}
             elif success_count > 0:
                 # Teilweise erfolgreich
                 st.warning(f"""
-                [WARNING] **TEILWEISE ERFOLGREICH**
+                **TEILWEISE ERFOLGREICH**
                 
-                [OK] {success_count}/{total_settings} Einstellungen gespeichert  
-                [ERROR] {total_settings - success_count} Einstellungen fehlgeschlagen
+                {success_count}/{total_settings} Einstellungen gespeichert  
+                {total_settings - success_count} Einstellungen fehlgeschlagen
                 """)
                 
                 if failed_settings:
-                    with st.expander("[SEARCH] Details zu fehlgeschlagenen Einstellungen", expanded=False):
+                    with st.expander("Details zu fehlgeschlagenen Einstellungen", expanded=False):
                         st.markdown("**Folgende Einstellungen konnten nicht gespeichert werden:**")
                         for i, failed in enumerate(failed_settings[:15], 1):  # Max 15
                             st.markdown(f"{i}. {failed}")
                         if len(failed_settings) > 15:
                             st.markdown(f"\n*... und {len(failed_settings) - 15} weitere*")
                         
-                        st.info("[IDEA] **Tipp:** Prüfen Sie die Datenbankverbindung oder kontaktieren Sie den Administrator.")
+                        st.info("**Tipp:** Prüfen Sie die Datenbankverbindung oder kontaktieren Sie den Administrator.")
             else:
                 # Vollständig fehlgeschlagen
                 st.error(f"""
-                [ERROR] **SPEICHERN FEHLGESCHLAGEN**
+                **SPEICHERN FEHLGESCHLAGEN**
                 
                 Keine Einstellungen konnten gespeichert werden!
                 
@@ -974,7 +974,7 @@ Typ Session: {type(pvgis_session).__name__}
                 """)
                 
                 if failed_settings:
-                    with st.expander("[SEARCH] Fehlerdetails anzeigen"):
+                    with st.expander("Fehlerdetails anzeigen"):
                         for failed in failed_settings:
                             st.code(failed)
 

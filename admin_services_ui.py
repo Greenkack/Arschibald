@@ -241,7 +241,7 @@ def render_services_admin_ui():
 
     # Tabs for different functions
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📋 Übersicht", "➕ Hinzufügen", "📤 Import/Export", "[FILE] PDF-Reihenfolge"])
+        ["📋 Übersicht", "➕ Hinzufügen", "📤 Import/Export", "PDF-Reihenfolge"])
 
     with tab1:
         render_services_overview()
@@ -306,9 +306,9 @@ def render_services_overview():
                     st.write(f"**PDF-Reihenfolge:** {service['pdf_order']}")
                     if service['is_standard']:
                         st.success(
-                            "[OK] Standard-Service (automatisch in Berechnung)")
+                            "Standard-Service (automatisch in Berechnung)")
                     else:
-                        st.info("[INFO] Optional (manuell hinzufügbar)")
+                        st.info("Optional (manuell hinzufügbar)")
 
                 with col2:
                     if st.button(
@@ -320,7 +320,7 @@ def render_services_overview():
 
                 with col3:
                     if st.button(
-                        "[DELETE] Löschen", key=f"delete_service_{
+                        "Löschen", key=f"delete_service_{
                             service['id']}"):
                         if delete_service(service['id']):
                             st.success("Service gelöscht!")
@@ -395,7 +395,7 @@ def render_edit_service_form(service_id: int):
                     st.rerun()
 
         with col2:
-            if st.form_submit_button("[ERROR] Abbrechen"):
+            if st.form_submit_button("Abbrechen"):
                 del st.session_state[f"edit_service_data_{service_id}"]
                 st.rerun()
 
@@ -593,7 +593,7 @@ def update_service_pdf_order(service_id: int, pdf_order: int) -> bool:
 
 def render_pdf_order_management():
     """Render PDF order management interface"""
-    st.subheader("[FILE] PDF-Reihenfolge verwalten")
+    st.subheader("PDF-Reihenfolge verwalten")
 
     st.info("""
     Hier können Sie die Reihenfolge der Dienstleistungen in der PDF-Ausgabe individuell bestimmen.
@@ -644,7 +644,7 @@ def render_pdf_order_management():
                 updated_orders[service['id']] = new_order
 
             with col2:
-                status_icon = "⭐" if service['is_standard'] else "[TOOL]"
+                status_icon = "⭐" if service['is_standard'] else ""
                 st.write(f"{status_icon} **{service['name']}**")
                 if service['description']:
                     st.caption(service['description'])
@@ -677,13 +677,13 @@ def render_pdf_order_management():
                         error_count += 1
 
                 if success_count > 0:
-                    st.success(f"[OK] {success_count} Services aktualisiert!")
+                    st.success(f"{success_count} Services aktualisiert!")
                     if error_count == 0:
                         st.rerun()
 
                 if error_count > 0:
                     st.error(
-                        f"[ERROR] {error_count} Services konnten nicht aktualisiert werden.")
+                        f"{error_count} Services konnten nicht aktualisiert werden.")
 
         with col2:
             if st.form_submit_button("🔄 Automatisch sortieren"):
@@ -692,7 +692,7 @@ def render_pdf_order_management():
                     update_service_pdf_order(
                         service['id'], i * 10)  # Use increments of 10
 
-                st.success("[OK] Automatische Sortierung angewendet!")
+                st.success("Automatische Sortierung angewendet!")
                 st.rerun()
 
         with col3:
@@ -701,7 +701,7 @@ def render_pdf_order_management():
                 for service in services:
                     update_service_pdf_order(service['id'], 0)
 
-                st.success("[OK] Alle Reihenfolgen zurückgesetzt!")
+                st.success("Alle Reihenfolgen zurückgesetzt!")
                 st.rerun()
 
     # Preview section
@@ -716,7 +716,7 @@ def render_pdf_order_management():
     st.markdown("**So würden die Services in der PDF erscheinen:**")
 
     for i, service in enumerate(services_pdf_order, 1):
-        status_icon = "⭐" if service['is_standard'] else "[TOOL]"
+        status_icon = "⭐" if service['is_standard'] else ""
         col1, col2 = st.columns([1, 4])
 
         with col1:
@@ -733,12 +733,12 @@ def render_pdf_order_management():
 
     # Quick actions
     st.markdown("---")
-    st.markdown("### [POWER] Schnellaktionen")
+    st.markdown("### Schnellaktionen")
 
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        if st.button("[STATS] Standard-Services nach oben"):
+        if st.button("Standard-Services nach oben"):
             # Move standard services to top
             standard_services = [s for s in services if s['is_standard']]
             optional_services = [s for s in services if not s['is_standard']]
@@ -751,7 +751,7 @@ def render_pdf_order_management():
                 update_service_pdf_order(
                     service['id'], (len(standard_services) + i) * 10)
 
-            st.success("[OK] Standard-Services nach oben verschoben!")
+            st.success("Standard-Services nach oben verschoben!")
             st.rerun()
 
     with col2:
@@ -764,16 +764,16 @@ def render_pdf_order_management():
             for i, service in enumerate(services_by_category):
                 update_service_pdf_order(service['id'], i * 10)
 
-            st.success("[OK] Nach Kategorie sortiert!")
+            st.success("Nach Kategorie sortiert!")
             st.rerun()
 
     with col3:
-        if st.button("[MONEY] Nach Preis sortieren"):
+        if st.button("Nach Preis sortieren"):
             # Sort by price (ascending)
             services_by_price = sorted(services, key=lambda x: x['price'])
 
             for i, service in enumerate(services_by_price):
                 update_service_pdf_order(service['id'], i * 10)
 
-            st.success("[OK] Nach Preis sortiert!")
+            st.success("Nach Preis sortiert!")
             st.rerun()

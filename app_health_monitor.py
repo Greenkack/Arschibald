@@ -78,19 +78,19 @@ class ApplicationHealthMonitor:
         # Initialize components
         if TRACING_AVAILABLE:
             initialize_tracing()
-            logger.info("[OK] Tracing initialized")
+            logger.info("Tracing initialized")
         else:
-            logger.warning("[WARNING] Tracing not available")
+            logger.warning("Tracing not available")
         
         if EVALUATION_AVAILABLE:
-            logger.info("[OK] Evaluation system available")
+            logger.info("Evaluation system available")
         else:
-            logger.warning("[WARNING] Evaluation system not available")
+            logger.warning("Evaluation system not available")
         
         if DIAGNOSTICS_AVAILABLE:
-            logger.info("[OK] Diagnostics available")
+            logger.info("Diagnostics available")
         else:
-            logger.warning("[WARNING] Diagnostics not available")
+            logger.warning("Diagnostics not available")
     
     def start_monitoring(self, interval_seconds: int = 60):
         """
@@ -110,7 +110,7 @@ class ApplicationHealthMonitor:
             daemon=True
         )
         self._monitor_thread.start()
-        logger.info(f"[LAUNCH] Health monitoring started (interval: {interval_seconds}s)")
+        logger.info(f"Health monitoring started (interval: {interval_seconds}s)")
     
     def stop_monitoring(self):
         """Stop continuous monitoring."""
@@ -259,7 +259,7 @@ class ApplicationHealthMonitor:
     
     def _attempt_auto_fix(self):
         """Attempt to automatically fix issues."""
-        logger.info("[TOOL] Attempting auto-fix...")
+        logger.info("Attempting auto-fix...")
         
         try:
             # Run diagnostics
@@ -330,7 +330,7 @@ class ApplicationHealthMonitor:
         with open(output_file, 'w') as f:
             json.dump(report, f, indent=2)
         
-        logger.info(f"[OK] Health report saved: {output_file}")
+        logger.info(f"Health report saved: {output_file}")
         
         return report
     
@@ -365,7 +365,7 @@ class ApplicationHealthMonitor:
         # Generate final report
         self.generate_health_report("health_report_final.json")
         
-        logger.info("[OK] Health monitor shutdown complete")
+        logger.info("Health monitor shutdown complete")
 
 
 # Global instance

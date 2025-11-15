@@ -27,7 +27,7 @@ def example_1_initialize_with_migrations():
     # Initialize database and run pending migrations
     init_database(auto_migrate=True)
 
-    print("[OK] Database initialized with migrations")
+    print("Database initialized with migrations")
 
 
 def example_2_check_migration_status():
@@ -50,9 +50,9 @@ def example_3_run_migrations():
     success = migrate(auto_run=True)
 
     if success:
-        print("[OK] Migrations completed successfully")
+        print("Migrations completed successfully")
     else:
-        print("[ERROR] Migrations failed")
+        print("Migrations failed")
 
 
 def example_4_create_migration():
@@ -65,7 +65,7 @@ def example_4_create_migration():
             message="Add user profile fields",
             autogenerate=True,
         )
-        print(f"[OK] Migration created: {revision}")
+        print(f"Migration created: {revision}")
     except Exception as e:
         print(f"Note: {e}")
         print("(This is expected if no model changes detected)")
@@ -271,7 +271,7 @@ def example_10_migration_verification():
         for issue in results["issues"]:
             print(f"  - {issue}")
     else:
-        print("\n[OK] No issues found")
+        print("\nNo issues found")
 
 
 def run_all_examples():
@@ -293,11 +293,11 @@ def run_all_examples():
         example_10_migration_verification()
 
         print("\n" + "=" * 70)
-        print("[OK] All examples completed successfully!")
+        print("All examples completed successfully!")
         print("=" * 70)
 
     except Exception as e:
-        print(f"\n[ERROR] Error running examples: {e}")
+        print(f"\nError running examples: {e}")
         import traceback
 
         traceback.print_exc()

@@ -50,14 +50,14 @@ print("\n" + "=" * 70 + "\n")
 print("VERBESSERUNGEN:")
 print("-" * 70)
 improvements = [
-    ("[OK] Einheitliche Höhe", "Alle Buttons exakt 75px", "+5px"),
-    ("[OK] Zweizeiliges Layout", "Icon oben, Text unten", "Neu!"),
-    ("[OK] Größere Icons", "17px statt 16px, Bold 700", "+1px"),
-    ("[OK] Mehr Padding", "18px vertikal statt 16px", "+2px"),
-    ("[OK] Breitere Sidebar", "340px statt 320px", "+20px"),
-    ("[OK] Abgerundeter", "Border-Radius 10px statt 8px", "+2px"),
-    ("[OK] Bessere Lesbarkeit", "Line-Height 1.5", "+0.1"),
-    ("[OK] Flex Layout", "Vertikale Zentrierung", "Neu!"),
+    ("Einheitliche Höhe", "Alle Buttons exakt 75px", "+5px"),
+    ("Zweizeiliges Layout", "Icon oben, Text unten", "Neu!"),
+    ("Größere Icons", "17px statt 16px, Bold 700", "+1px"),
+    ("Mehr Padding", "18px vertikal statt 16px", "+2px"),
+    ("Breitere Sidebar", "340px statt 320px", "+20px"),
+    ("Abgerundeter", "Border-Radius 10px statt 8px", "+2px"),
+    ("Bessere Lesbarkeit", "Line-Height 1.5", "+0.1"),
+    ("Flex Layout", "Vertikale Zentrierung", "Neu!"),
 ]
 
 for feature, description, diff in improvements:
@@ -88,7 +88,7 @@ print("\n" + "=" * 70 + "\n")
 print("BUTTON-STATES:")
 print("-" * 70)
 states = [
-    ("AKTIV (Grün)", "[OK]", "st.success()", "Bold Text, 75px, Green Border"),
+    ("AKTIV (Grün)", "", "st.success()", "Bold Text, 75px, Green Border"),
     ("PREVIEW (Blau)", "→", "st.info()", "Normal Text, 75px, Blue Border"),
     ("INAKTIV", " ", "st.button()", "Normal Text, 75px, Gray"),
 ]
@@ -114,7 +114,7 @@ print("CONFIRM-BUTTON:")
 print("-" * 70)
 print("""
 ┌───────────────────────────────────┐
-│ [OK] **Wechseln zu:**                │  ← 75px, Primary (Blau)
+│ **Wechseln zu:**                │  ← 75px, Primary (Blau)
 │   **[HEAT]** Wärmepumpe           │  ← Zweizeilig mit Icon
 └───────────────────────────────────┘
 """)
@@ -141,14 +141,14 @@ print("\n" + "=" * 70 + "\n")
 
 print("ZUSAMMENFASSUNG:")
 print("-" * 70)
-print("[OK] Alle Buttons einheitlich groß (75px)")
-print("[OK] Zweizeiliges Layout für bessere Lesbarkeit")
-print("[OK] Icons prominent hervorgehoben (Bold 700, 17px)")
-print("[OK] Sidebar breiter (340px statt 320px)")
-print("[OK] Professionellerer Look (größerer Border-Radius)")
-print("[OK] Bessere User Experience (mehr Padding, flex layout)")
-print("[OK] Native Streamlit-Komponenten (kein HTML)")
+print("Alle Buttons einheitlich groß (75px)")
+print("Zweizeiliges Layout für bessere Lesbarkeit")
+print("Icons prominent hervorgehoben (Bold 700, 17px)")
+print("Sidebar breiter (340px statt 320px)")
+print("Professionellerer Look (größerer Border-Radius)")
+print("Bessere User Experience (mehr Padding, flex layout)")
+print("Native Streamlit-Komponenten (kein HTML)")
 print()
-print("[TARGET] Resultat: Sidebar sieht professioneller und einheitlicher aus!")
+print("Resultat: Sidebar sieht professioneller und einheitlicher aus!")
 print()
 print("=" * 70 + "\n")

@@ -218,7 +218,7 @@ for i, company in enumerate(companies):
                     {}).get('model_name')}")
 
     except Exception as e:
-        print(f"  [ERROR] Fehler bei Berechnung: {e}")
+        print(f"  Fehler bei Berechnung: {e}")
 
 print("\n" + "=" * 100)
 print("ERGEBNISSE: PREIS-VERGLEICH PRO FIRMA")
@@ -242,15 +242,15 @@ if len(sorted_prices) > 1:
     difference = max_price - min_price
 
     if difference > 0:
-        print(f"[OK] PREISE UNTERSCHEIDEN SICH!")
+        print(f"PREISE UNTERSCHEIDEN SICH!")
         print(f"   Min: {min_price:,.2f}€")
         print(f"   Max: {max_price:,.2f}€")
         print(
             f"   Differenz: {difference:,.2f}€ ({(difference / min_price) * 100:.1f}%)")
     else:
-        print(f"[ERROR] FEHLER: Alle Preise sind GLEICH!")
+        print(f"FEHLER: Alle Preise sind GLEICH!")
 else:
-    print(f"[WARNING]  Zu wenig Firmen für Vergleich")
+    print(f"Zu wenig Firmen für Vergleich")
 
 print("\n" + "=" * 100)
 print("INTEGRATIONS-TEST ABGESCHLOSSEN")

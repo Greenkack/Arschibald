@@ -22,7 +22,7 @@ for line in lines:
 with open('heatpump_ui.py', 'w', encoding='utf-8') as f:
     f.writelines(result_lines)
 
-print(f"[OK] Doppelte separators entfernt!")
+print(f"Doppelte separators entfernt!")
 print(f"   Vorher: {len(lines)} Zeilen")
 print(f"   Nachher: {len(result_lines)} Zeilen")
 print(f"   Entfernt: {len(lines) - len(result_lines)} doppelte Zeilen")

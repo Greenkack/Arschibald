@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-[DESIGN] TEST: SHADCN UI CHART DESIGN
+TEST: SHADCN UI CHART DESIGN
 Verifiziert vollständige Shadcn UI Implementation in allen Charts
 """
 
@@ -13,7 +13,7 @@ def test_shadcn_implementation():
     """Prüft Shadcn UI Features in Chart-Modulen"""
     
     print("=" * 80)
-    print("[DESIGN] SHADCN UI CHART DESIGN - VERIFICATION")
+    print("SHADCN UI CHART DESIGN - VERIFICATION")
     print("=" * 80)
     
     files_to_check = [
@@ -53,21 +53,21 @@ def test_shadcn_implementation():
         }
     
     # Ausgabe
-    print("\n[CHART] ERGEBNISSE PRO DATEI:")
+    print("\nERGEBNISSE PRO DATEI:")
     print("-" * 80)
     
     for filename, data in results.items():
         if not data.get("exists"):
-            print(f"\n[ERROR] {filename}: NICHT GEFUNDEN")
+            print(f"\n{filename}: NICHT GEFUNDEN")
             continue
         
         score = data.get("score", 0)
-        icon = "[OK]" if score >= 70 else "[WARNING]" if score >= 40 else "[ERROR]"
+        icon = "" if score >= 70 else "" if score >= 40 else ""
         
         print(f"\n{icon} {filename}: {score:.0f}% Shadcn UI Features")
         
         for feature, implemented in data["features"].items():
-            status = "[OK]" if implemented else "[ERROR]"
+            status = "" if implemented else ""
             print(f"   {status} {feature}")
     
     # Gesamt-Score
@@ -75,19 +75,19 @@ def test_shadcn_implementation():
                   sum(1 for d in results.values() if d.get("exists"))
     
     print("\n" + "=" * 80)
-    print(f"[STATS] GESAMT-SCORE: {total_score:.0f}%")
+    print(f"GESAMT-SCORE: {total_score:.0f}%")
     
     if total_score >= 80:
-        print("[OK] HERVORRAGEND - Vollständiges Shadcn UI Design implementiert!")
+        print("HERVORRAGEND - Vollständiges Shadcn UI Design implementiert!")
     elif total_score >= 60:
-        print("[WARNING]  GUT - Die meisten Shadcn UI Features sind implementiert")
+        print("GUT - Die meisten Shadcn UI Features sind implementiert")
     else:
-        print("[ERROR] VERBESSERUNGSBEDARF - Mehr Shadcn UI Features erforderlich")
+        print("VERBESSERUNGSBEDARF - Mehr Shadcn UI Features erforderlich")
     
     print("=" * 80)
     
     # Details zu fehlenden Features
-    print("\n[SEARCH] FEATURE-ANALYSE:")
+    print("\nFEATURE-ANALYSE:")
     print("-" * 80)
     
     all_features = {}
@@ -103,7 +103,7 @@ def test_shadcn_implementation():
         implemented = sum(1 for _, impl in implementations if impl)
         percentage = implemented / total * 100
         
-        status = "[OK]" if percentage == 100 else "[WARNING]" if percentage >= 50 else "[ERROR]"
+        status = "" if percentage == 100 else "" if percentage >= 50 else ""
         print(f"{status} {feature}: {implemented}/{total} Dateien ({percentage:.0f}%)")
         
         # Zeige fehlende Implementierungen
@@ -117,12 +117,12 @@ def test_shadcn_implementation():
 def check_apply_chart_theme_calls():
     """Zählt apply_chart_theme() Aufrufe"""
     
-    print("\n[TARGET] CHART THEME APPLICATION:")
+    print("\nCHART THEME APPLICATION:")
     print("-" * 80)
     
     filepath = Path("heatpump_ui.py")
     if not filepath.exists():
-        print("[ERROR] heatpump_ui.py nicht gefunden")
+        print("heatpump_ui.py nicht gefunden")
         return
     
     content = filepath.read_text(encoding='utf-8')
@@ -135,16 +135,16 @@ def check_apply_chart_theme_calls():
     
     coverage = theme_calls / plotly_calls * 100 if plotly_calls > 0 else 0
     
-    print(f"[CHART] apply_chart_theme Aufrufe: {theme_calls}")
-    print(f"[CHART] st.plotly_chart Aufrufe: {plotly_calls}")
-    print(f"[STATS] Theme Coverage: {coverage:.0f}%")
+    print(f"apply_chart_theme Aufrufe: {theme_calls}")
+    print(f"st.plotly_chart Aufrufe: {plotly_calls}")
+    print(f"Theme Coverage: {coverage:.0f}%")
     
     if coverage >= 80:
-        print("[OK] AUSGEZEICHNET - Fast alle Charts verwenden Shadcn UI Theme")
+        print("AUSGEZEICHNET - Fast alle Charts verwenden Shadcn UI Theme")
     elif coverage >= 60:
-        print("[WARNING]  GUT - Die meisten Charts verwenden Theme")
+        print("GUT - Die meisten Charts verwenden Theme")
     else:
-        print("[ERROR] VERBESSERUNGSBEDARF - Viele Charts ohne Theme")
+        print("VERBESSERUNGSBEDARF - Viele Charts ohne Theme")
 
 
 if __name__ == "__main__":
@@ -153,13 +153,13 @@ if __name__ == "__main__":
     
     print("\n✨ SHADCN UI FEATURES:")
     print("-" * 80)
-    print("[OK] Moderne Farbpalette (Shadcn UI Farben)")
-    print("[OK] Gradient-Fills für Scatter/Area Charts")
-    print("[OK] Glatte Spline-Kurven")
-    print("[OK] Moderne Linienbreite (3px)")
-    print("[OK] Inter Font Family")
-    print("[OK] Großzügige Margins")
-    print("[OK] Unified Hover Mode")
-    print("[OK] Responsive Layout")
-    print("[OK] Dark/Light Mode Support")
+    print("Moderne Farbpalette (Shadcn UI Farben)")
+    print("Gradient-Fills für Scatter/Area Charts")
+    print("Glatte Spline-Kurven")
+    print("Moderne Linienbreite (3px)")
+    print("Inter Font Family")
+    print("Großzügige Margins")
+    print("Unified Hover Mode")
+    print("Responsive Layout")
+    print("Dark/Light Mode Support")
     print("=" * 80)

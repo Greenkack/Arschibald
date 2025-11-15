@@ -12,10 +12,10 @@ def run_command(cmd, description):
     try:
         result = subprocess.run(
             cmd, shell=True, check=True, capture_output=True, text=True)
-        print(f"[OK] {description} completed successfully")
+        print(f"{description} completed successfully")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"[ERROR] {description} failed: {e.stderr}")
+        print(f"{description} failed: {e.stderr}")
         return False
 
 
@@ -23,10 +23,10 @@ def check_python_version():
     """Check if Python version is compatible"""
     version = sys.version_info
     if version.major < 3 or (version.major == 3 and version.minor < 8):
-        print(f"[ERROR] Python 3.8+ required, found {version.major}.{version.minor}")
+        print(f"Python 3.8+ required, found {version.major}.{version.minor}")
         return False
     print(
-        f"[OK] Python {
+        f"Python {
             version.major}.{
             version.minor}.{
                 version.micro} is compatible")
@@ -35,7 +35,7 @@ def check_python_version():
 
 def install_dependencies():
     """Install required dependencies"""
-    print("[PACKAGE] Installing dependencies...")
+    print("Installing dependencies...")
 
     # Core dependencies that are absolutely required
     core_deps = [
@@ -62,16 +62,16 @@ def install_dependencies():
             f"pip install {dep}",
             f"Installing {
                 dep.split('>=')[0]}"):
-            print(f"[WARNING]  Failed to install {dep}, but continuing...")
+            print(f"Failed to install {dep}, but continuing...")
 
     # Try to install optional dependencies
-    print("\n[PACKAGE] Installing optional dependencies...")
+    print("\nInstalling optional dependencies...")
     for dep in optional_deps:
         if not run_command(
             f"pip install {dep}",
             f"Installing {
                 dep.split('>=')[0]}"):
-            print(f"[WARNING]  Optional dependency {dep} failed, skipping...")
+            print(f"Optional dependency {dep} failed, skipping...")
 
     return True
 
@@ -80,10 +80,10 @@ def create_env_file():
     """Create .env file if it doesn't exist"""
     env_file = Path(".env")
     if env_file.exists():
-        print("[OK] .env file already exists")
+        print(".env file already exists")
         return True
 
-    print("[NOTE] Creating .env file...")
+    print("Creating .env file...")
     env_content = """# Environment Configuration
 ENV=dev
 DEBUG=true
@@ -108,10 +108,10 @@ LOG_LEVEL=INFO
 
     try:
         env_file.write_text(env_content)
-        print("[OK] .env file created successfully")
+        print(".env file created successfully")
         return True
     except Exception as e:
-        print(f"[ERROR] Failed to create .env file: {e}")
+        print(f"Failed to create .env file: {e}")
         return False
 
 
@@ -124,11 +124,11 @@ def create_directories():
         if not dir_path.exists():
             try:
                 dir_path.mkdir(parents=True, exist_ok=True)
-                print(f"[OK] Created directory: {dir_name}")
+                print(f"Created directory: {dir_name}")
             except Exception as e:
-                print(f"[ERROR] Failed to create directory {dir_name}: {e}")
+                print(f"Failed to create directory {dir_name}: {e}")
         else:
-            print(f"[OK] Directory {dir_name} already exists")
+            print(f"Directory {dir_name} already exists")
 
 
 def test_installation():
@@ -146,23 +146,23 @@ def test_installation():
     for module, name in test_imports:
         try:
             __import__(module)
-            print(f"[OK] {name} import successful")
+            print(f"{name} import successful")
         except ImportError:
-            print(f"[ERROR] {name} import failed")
+            print(f"{name} import failed")
 
     # Test simple app
-    print("\n[LAUNCH] Testing simple app...")
+    print("\nTesting simple app...")
     if run_command(
         "python -c \"import simple_app; print('Simple app loads successfully')\"",
             "Loading simple app"):
-        print("[OK] Simple app test passed")
+        print("Simple app test passed")
     else:
-        print("[ERROR] Simple app test failed")
+        print("Simple app test failed")
 
 
 def main():
     """Main installation process"""
-    print("[LAUNCH] Robust Streamlit App Installation")
+    print("Robust Streamlit App Installation")
     print("=" * 40)
 
     # Check Python version

@@ -26,7 +26,7 @@ def simulate_multi_offer_workflow():
 
     # 2. Produkte laden
     products = generator.load_all_products()
-    print(f"[OK] Produkte geladen:")
+    print(f"Produkte geladen:")
     print(f"  • Module: {len(products.get('module', []))}")
     print(f"  • Wechselrichter: {len(products.get('inverter', []))}")
     print(f"  • Speicher: {len(products.get('storage', []))}")
@@ -49,7 +49,7 @@ def simulate_multi_offer_workflow():
     if products.get('module'):
         base_settings['selected_module_id'] = products['module'][0].get('id')
         print(
-            f"\n[OK] Basis-Modul: {
+            f"\nBasis-Modul: {
                 products['module'][0].get('model_name')} (ID: {
                 base_settings['selected_module_id']})")
 
@@ -57,14 +57,14 @@ def simulate_multi_offer_workflow():
         base_settings['selected_inverter_id'] = products['inverter'][0].get(
             'id')
         print(
-            f"[OK] Basis-Wechselrichter: {
+            f"Basis-Wechselrichter: {
                 products['inverter'][0].get('model_name')} (ID: {
                 base_settings['selected_inverter_id']})")
 
     if products.get('storage'):
         base_settings['selected_storage_id'] = products['storage'][0].get('id')
         print(
-            f"[OK] Basis-Speicher: {
+            f"Basis-Speicher: {
                 products['storage'][0].get('model_name')} (ID: {
                 base_settings['selected_storage_id']})")
 
@@ -82,7 +82,7 @@ def simulate_multi_offer_workflow():
         company_settings = generator.get_rotated_products_for_company(
             i, base_settings)
 
-        print(f"\n[PACKAGE] Rotierte Produkt-IDs:")
+        print(f"\nRotierte Produkt-IDs:")
         print(f"  • Modul-ID: {company_settings.get('selected_module_id')}")
         print(
             f"  • Wechselrichter-ID: {company_settings.get('selected_inverter_id')}")
@@ -90,7 +90,7 @@ def simulate_multi_offer_workflow():
             f"  • Speicher-ID: {company_settings.get('selected_storage_id')}")
 
         # Produkte laden um zu sehen, was ausgewählt wurde
-        print(f"\n[PACKAGE] Ausgewählte Produkte:")
+        print(f"\nAusgewählte Produkte:")
 
         from product_db import get_product_by_id
 
@@ -122,7 +122,7 @@ def simulate_multi_offer_workflow():
                     storage.get('model_name')} ({cap}kWh)")
 
         # Preisstaffelung simulieren
-        print(f"\n[MONEY] Preisstaffelung:")
+        print(f"\nPreisstaffelung:")
 
         # Mock-Berechnungsergebnisse
         mock_calc_results = {
@@ -154,11 +154,11 @@ def simulate_multi_offer_workflow():
             print(f"  Differenz: +{diff:.2f} € (+{diff_percent:.1f}%)")
 
     print("\n" + "=" * 80)
-    print("[OK] WORKFLOW TEST ABGESCHLOSSEN")
+    print("WORKFLOW TEST ABGESCHLOSSEN")
     print("=" * 80)
 
     # Zusammenfassung
-    print("\n[CHART] ZUSAMMENFASSUNG:")
+    print("\nZUSAMMENFASSUNG:")
     print(f"  • Rotationsstatus:")
     for category, state in generator.rotation_state.items():
         used_count = len(state.get('used_ids', []))
@@ -166,7 +166,7 @@ def simulate_multi_offer_workflow():
         print(
             f"    - {category}: {used_count} Produkt(e), {used_brands} Marke(n)")
 
-    print("\n[IDEA] ERWARTETES VERHALTEN:")
+    print("\nERWARTETES VERHALTEN:")
     print("  1. Jede Firma sollte VERSCHIEDENE Produkte haben")
     print("  2. Bevorzugt VERSCHIEDENE Marken")
     print("  3. Preise sollten steigen: 0%, +5%, +10%, +15%, +20%")

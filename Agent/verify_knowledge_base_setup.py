@@ -84,22 +84,22 @@ def main():
     # Check if knowledge_base directory exists
     print("\n1. Checking knowledge_base directory...")
     if not os.path.exists(kb_path):
-        print(f"[ERROR] FAILED: Directory not found: {kb_path}")
+        print(f"FAILED: Directory not found: {kb_path}")
         print("  Run: python create_sample_knowledge_base.py")
         return False
 
-    print(f"[OK] Directory exists: {kb_path}")
+    print(f"Directory exists: {kb_path}")
 
     # Check for PDF files
     print("\n2. Checking for PDF documents...")
     pdf_files = [f for f in os.listdir(kb_path) if f.endswith('.pdf')]
 
     if len(pdf_files) < 2:
-        print(f"[ERROR] FAILED: Expected at least 2 PDFs, found {len(pdf_files)}")
+        print(f"FAILED: Expected at least 2 PDFs, found {len(pdf_files)}")
         print("  Run: python create_sample_knowledge_base.py")
         return False
 
-    print(f"[OK] Found {len(pdf_files)} PDF documents:")
+    print(f"Found {len(pdf_files)} PDF documents:")
     for pdf in pdf_files:
         print(f"  - {pdf}")
 
@@ -108,15 +108,15 @@ def main():
     pv_pdf = os.path.join(kb_path, "photovoltaics_guide.pdf")
 
     if not os.path.exists(pv_pdf):
-        print("[ERROR] FAILED: photovoltaics_guide.pdf not found")
+        print("FAILED: photovoltaics_guide.pdf not found")
         return False
 
     valid, message = verify_pdf_exists(pv_pdf)
     if not valid:
-        print(f"[ERROR] FAILED: {message}")
+        print(f"FAILED: {message}")
         return False
 
-    print(f"[OK] {message}")
+    print(f"{message}")
 
     # Check content
     pv_keywords = [
@@ -129,14 +129,14 @@ def main():
     ]
 
     found, missing, total_chars = verify_pdf_content(pv_pdf, pv_keywords)
-    print(f"[OK] Total content: {total_chars} characters")
-    print(f"[OK] Found keywords: {', '.join(found)}")
+    print(f"Total content: {total_chars} characters")
+    print(f"Found keywords: {', '.join(found)}")
 
     if missing:
         print(f"⚠ Missing keywords: {', '.join(missing)}")
 
     if len(found) < len(pv_keywords) * 0.7:  # At least 70% of keywords
-        print("[ERROR] FAILED: Insufficient relevant content in photovoltaics PDF")
+        print("FAILED: Insufficient relevant content in photovoltaics PDF")
         return False
 
     # Verify heat pump PDF
@@ -144,15 +144,15 @@ def main():
     hp_pdf = os.path.join(kb_path, "heatpump_guide.pdf")
 
     if not os.path.exists(hp_pdf):
-        print("[ERROR] FAILED: heatpump_guide.pdf not found")
+        print("FAILED: heatpump_guide.pdf not found")
         return False
 
     valid, message = verify_pdf_exists(hp_pdf)
     if not valid:
-        print(f"[ERROR] FAILED: {message}")
+        print(f"FAILED: {message}")
         return False
 
-    print(f"[OK] {message}")
+    print(f"{message}")
 
     # Check content
     hp_keywords = [
@@ -165,14 +165,14 @@ def main():
     ]
 
     found, missing, total_chars = verify_pdf_content(hp_pdf, hp_keywords)
-    print(f"[OK] Total content: {total_chars} characters")
-    print(f"[OK] Found keywords: {', '.join(found)}")
+    print(f"Total content: {total_chars} characters")
+    print(f"Found keywords: {', '.join(found)}")
 
     if missing:
         print(f"⚠ Missing keywords: {', '.join(missing)}")
 
     if len(found) < len(hp_keywords) * 0.7:  # At least 70% of keywords
-        print("[ERROR] FAILED: Insufficient relevant content in heat pump PDF")
+        print("FAILED: Insufficient relevant content in heat pump PDF")
         return False
 
     # Check for technical specifications
@@ -198,12 +198,12 @@ def main():
             "Amortisation"])
 
     if has_tech_specs:
-        print("[OK] Photovoltaics PDF contains technical specifications")
+        print("Photovoltaics PDF contains technical specifications")
     else:
         print("⚠ WARNING: Technical specifications may be incomplete")
 
     if has_economic_data:
-        print("[OK] Photovoltaics PDF contains economic data")
+        print("Photovoltaics PDF contains economic data")
     else:
         print("⚠ WARNING: Economic data may be incomplete")
 
@@ -227,21 +227,21 @@ def main():
             "Betriebskosten"])
 
     if has_tech_specs:
-        print("[OK] Heat pump PDF contains technical specifications")
+        print("Heat pump PDF contains technical specifications")
     else:
         print("⚠ WARNING: Technical specifications may be incomplete")
 
     if has_economic_data:
-        print("[OK] Heat pump PDF contains economic data")
+        print("Heat pump PDF contains economic data")
     else:
         print("⚠ WARNING: Economic data may be incomplete")
 
     # Knowledge base functionality note
     print("\n6. Knowledge base functionality notes...")
-    print("[OK] Sample documents created successfully")
-    print("[OK] Documents contain technical specifications")
-    print("[OK] Documents contain economic data")
-    print("\n[NOTE] Note: Full knowledge base testing requires OPENAI_API_KEY")
+    print("Sample documents created successfully")
+    print("Documents contain technical specifications")
+    print("Documents contain economic data")
+    print("\nNote: Full knowledge base testing requires OPENAI_API_KEY")
     print("   The knowledge base system will:")
     print("   - Load PDFs from knowledge_base/ directory")
     print("   - Create vector embeddings using OpenAI")
@@ -253,20 +253,20 @@ def main():
     print("\n" + "=" * 70)
     print("VERIFICATION SUMMARY")
     print("=" * 70)
-    print("[OK] Task 16.1: Sample documents prepared")
-    print("  [OK] photovoltaics_guide.pdf created with technical specs")
-    print("  [OK] heatpump_guide.pdf created with technical specs")
-    print("  [OK] Both documents contain economic data")
-    print("  [OK] Documents are valid and readable")
-    print("\n[OK] Task 16.2: Knowledge base functionality validated")
-    print("  [OK] Documents ready for loading")
-    print("  [OK] Content verified for relevance")
-    print("  [OK] System handles empty knowledge base gracefully")
-    print("  [OK] Index caching mechanism in place")
+    print("Task 16.1: Sample documents prepared")
+    print("  photovoltaics_guide.pdf created with technical specs")
+    print("  heatpump_guide.pdf created with technical specs")
+    print("  Both documents contain economic data")
+    print("  Documents are valid and readable")
+    print("\nTask 16.2: Knowledge base functionality validated")
+    print("  Documents ready for loading")
+    print("  Content verified for relevance")
+    print("  System handles empty knowledge base gracefully")
+    print("  Index caching mechanism in place")
     print("\n📋 Requirements validated:")
-    print("  [OK] 3.1: PDF documents in knowledge_base directory")
-    print("  [OK] 3.5: Technical specifications included")
-    print("  [OK] 3.5: Economic data included")
+    print("  3.1: PDF documents in knowledge_base directory")
+    print("  3.5: Technical specifications included")
+    print("  3.5: Economic data included")
     print("\n⚠ Note: Full search testing requires OPENAI_API_KEY to be set")
     print("  Once API key is configured, the knowledge base will:")
     print("  - Create embeddings automatically")

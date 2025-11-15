@@ -11,7 +11,7 @@ print('=' * 80)
 print()
 
 # Test 1: Import-Test
-print('[PACKAGE] TEST 1: IMPORT-TEST')
+print('TEST 1: IMPORT-TEST')
 print('-' * 80)
 
 try:
@@ -21,13 +21,13 @@ try:
         save_admin_protected_areas,
         verify_admin_password
     )
-    print('[OK] Alle Funktionen erfolgreich importiert:')
+    print('Alle Funktionen erfolgreich importiert:')
     print('   - is_area_protected()')
     print('   - get_admin_protected_areas()')
     print('   - save_admin_protected_areas()')
     print('   - verify_admin_password()')
 except ImportError as e:
-    print(f'[ERROR] Import fehlgeschlagen: {e}')
+    print(f'Import fehlgeschlagen: {e}')
     sys.exit(1)
 
 # Test 2: get_admin_protected_areas()
@@ -37,8 +37,8 @@ print('-' * 80)
 
 try:
     areas = get_admin_protected_areas()
-    print(f'[OK] Funktion ausgeführt')
-    print(f'[OK] Anzahl Bereiche: {len(areas)}')
+    print(f'Funktion ausgeführt')
+    print(f'Anzahl Bereiche: {len(areas)}')
     print()
     print('Bereiche im Detail:')
     
@@ -53,13 +53,13 @@ try:
     print(f'Statistik: {protected_count}/{len(areas)} Bereiche standardmäßig geschützt')
     
 except Exception as e:
-    print(f'[ERROR] Fehler: {e}')
+    print(f'Fehler: {e}')
     import traceback
     traceback.print_exc()
 
 # Test 3: is_area_protected()
 print()
-print('[SEARCH] TEST 3: IS_AREA_PROTECTED()')
+print('TEST 3: IS_AREA_PROTECTED()')
 print('-' * 80)
 
 test_areas = [
@@ -78,29 +78,29 @@ try:
         print(f'  {area_name:30s} ({area_id:20s}) → {status}')
     
     print()
-    print('[OK] is_area_protected() funktioniert korrekt')
+    print('is_area_protected() funktioniert korrekt')
     
 except Exception as e:
-    print(f'[ERROR] Fehler: {e}')
+    print(f'Fehler: {e}')
 
 # Test 4: Nicht existierender Bereich
 print()
-print('[WARNING]  TEST 4: NICHT EXISTIERENDER BEREICH')
+print('TEST 4: NICHT EXISTIERENDER BEREICH')
 print('-' * 80)
 
 try:
     result = is_area_protected('nicht_existent')
-    print(f'[OK] Funktion gibt {result} zurück (sollte False sein)')
+    print(f'Funktion gibt {result} zurück (sollte False sein)')
     if result == False:
-        print('[OK] Korrekt: Unbekannte Bereiche sind standardmäßig NICHT geschützt')
+        print('Korrekt: Unbekannte Bereiche sind standardmäßig NICHT geschützt')
     else:
-        print('[WARNING] Warnung: Unbekannte Bereiche sollten False zurückgeben')
+        print('Warnung: Unbekannte Bereiche sollten False zurückgeben')
 except Exception as e:
-    print(f'[ERROR] Fehler: {e}')
+    print(f'Fehler: {e}')
 
 # Test 5: admin_panel.py Integration
 print()
-print('[TOOL] TEST 5: ADMIN_PANEL.PY INTEGRATION')
+print('TEST 5: ADMIN_PANEL.PY INTEGRATION')
 print('-' * 80)
 
 try:
@@ -109,24 +109,24 @@ try:
     
     # Prüfe auf create_protected_tab_renderer
     if 'def create_protected_tab_renderer' in content:
-        print('[OK] create_protected_tab_renderer() Funktion gefunden')
+        print('create_protected_tab_renderer() Funktion gefunden')
         
         # Zähle Verwendungen
         usage_count = content.count('create_protected_tab_renderer(')
-        print(f'[OK] Verwendungen: {usage_count}x')
+        print(f'Verwendungen: {usage_count}x')
         
         # Prüfe Import
         if 'from admin_security import is_area_protected' in content:
-            print('[OK] is_area_protected wird importiert')
+            print('is_area_protected wird importiert')
         elif 'is_area_protected' in content:
-            print('[OK] is_area_protected wird verwendet (Runtime-Import)')
+            print('is_area_protected wird verwendet (Runtime-Import)')
         else:
-            print('[WARNING] Warnung: is_area_protected Import nicht gefunden')
+            print('Warnung: is_area_protected Import nicht gefunden')
     else:
-        print('[ERROR] create_protected_tab_renderer() nicht gefunden')
+        print('create_protected_tab_renderer() nicht gefunden')
         
 except Exception as e:
-    print(f'[ERROR] Fehler beim Lesen von admin_panel.py: {e}')
+    print(f'Fehler beim Lesen von admin_panel.py: {e}')
 
 # Zusammenfassung
 print()
@@ -134,11 +134,11 @@ print('=' * 80)
 print('ZUSAMMENFASSUNG')
 print('=' * 80)
 print()
-print('[OK] Import-Test: Erfolgreich')
-print('[OK] get_admin_protected_areas(): Erfolgreich')
-print('[OK] is_area_protected(): Erfolgreich')
-print('[OK] Fallback für unbekannte Bereiche: Erfolgreich')
-print('[OK] admin_panel.py Integration: Verifiziert')
+print('Import-Test: Erfolgreich')
+print('get_admin_protected_areas(): Erfolgreich')
+print('is_area_protected(): Erfolgreich')
+print('Fallback für unbekannte Bereiche: Erfolgreich')
+print('admin_panel.py Integration: Verifiziert')
 print()
 print('🎉 ALLE TESTS BESTANDEN!')
 print('=' * 80)

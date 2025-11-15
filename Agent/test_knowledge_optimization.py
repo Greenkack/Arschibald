@@ -36,7 +36,7 @@ def create_test_pdf(path: Path, content: str):
         c.save()
         return True
     except ImportError:
-        print("[WARNING]  reportlab not installed, skipping PDF creation test")
+        print("reportlab not installed, skipping PDF creation test")
         return False
 
 
@@ -50,7 +50,7 @@ def test_lazy_loading():
     clear_knowledge_base_cache()
     cache_info = get_cache_info()
     assert not cache_info['cached'], "Cache should be empty initially"
-    print("[OK] Cache cleared")
+    print("Cache cleared")
 
     # First load (should build/load from disk)
     print("\nFirst load (should load from disk or build)...")
@@ -63,7 +63,7 @@ def test_lazy_loading():
     cache_info = get_cache_info()
     if vs1 is not None:
         assert cache_info['cached'], "Cache should be populated after first load"
-        print("[OK] Cache populated")
+        print("Cache populated")
 
     # Second load (should use lazy loading)
     print("\nSecond load (should use lazy loading)...")
@@ -75,9 +75,9 @@ def test_lazy_loading():
     if vs1 is not None and vs2 is not None:
         assert vs1 is vs2, "Should return same cached instance"
         assert time2 < time1 / 10, "Lazy loading should be much faster"
-        print(f"[OK] Lazy loading is {time1 / time2:.1f}x faster")
+        print(f"Lazy loading is {time1 / time2:.1f}x faster")
 
-    print("\n[OK] Lazy loading test passed")
+    print("\nLazy loading test passed")
 
 
 def test_index_caching():
@@ -92,7 +92,7 @@ def test_index_caching():
     # Check if index exists
     index_path = Path("faiss_index")
     if index_path.exists():
-        print("[OK] FAISS index exists on disk")
+        print("FAISS index exists on disk")
 
         # Load from disk
         print("\nLoading from cached index...")
@@ -102,13 +102,13 @@ def test_index_caching():
         print(f"Time: {load_time:.2f}s")
 
         if vs is not None:
-            print("[OK] Successfully loaded from cache")
+            print("Successfully loaded from cache")
         else:
-            print("[WARNING]  No documents in knowledge base")
+            print("No documents in knowledge base")
     else:
-        print("[WARNING]  No cached index found (expected on first run)")
+        print("No cached index found (expected on first run)")
 
-    print("\n[OK] Index caching test passed")
+    print("\nIndex caching test passed")
 
 
 def test_optimized_chunk_size():
@@ -125,7 +125,7 @@ def test_optimized_chunk_size():
     vs = setup_knowledge_base(chunk_size=800, chunk_overlap=200)
 
     if vs is not None:
-        print("[OK] Vector store created with optimized chunk size")
+        print("Vector store created with optimized chunk size")
 
         # Verify metadata
         cache_info = get_cache_info()
@@ -133,12 +133,12 @@ def test_optimized_chunk_size():
             metadata = cache_info['metadata']
             assert metadata['chunk_size'] == 800
             assert metadata['chunk_overlap'] == 200
-            print(f"[OK] Chunk size: {metadata['chunk_size']}")
-            print(f"[OK] Chunk overlap: {metadata['chunk_overlap']}")
+            print(f"Chunk size: {metadata['chunk_size']}")
+            print(f"Chunk overlap: {metadata['chunk_overlap']}")
     else:
-        print("[WARNING]  No documents in knowledge base")
+        print("No documents in knowledge base")
 
-    print("\n[OK] Optimized chunk size test passed")
+    print("\nOptimized chunk size test passed")
 
 
 def test_search_performance():
@@ -150,7 +150,7 @@ def test_search_performance():
     vs = setup_knowledge_base()
 
     if vs is None:
-        print("[WARNING]  No documents in knowledge base, skipping search test")
+        print("No documents in knowledge base, skipping search test")
         print("   Add PDF files to knowledge_base/ directory to test search")
         return
 
@@ -174,16 +174,16 @@ def test_search_performance():
         print(f"Time: {search_time:.3f}s")
 
         if "No relevant information" not in result:
-            print("[OK] Found results")
+            print("Found results")
             # Check for relevance scores
             if "Relevance:" in result:
-                print("[OK] Relevance scores included")
+                print("Relevance scores included")
         else:
-            print("[WARNING]  No results found")
+            print("No results found")
 
         assert search_time < 1.0, "Search should complete in under 1 second"
 
-    print("\n[OK] Search performance test passed")
+    print("\nSearch performance test passed")
 
 
 def test_cache_invalidation():
@@ -200,7 +200,7 @@ def test_cache_invalidation():
 
         # Create test PDF
         if not create_test_pdf(kb_path / "test1.pdf", "Test content 1"):
-            print("[WARNING]  Skipping cache invalidation test (reportlab required)")
+            print("Skipping cache invalidation test (reportlab required)")
             return
 
         # First build
@@ -212,10 +212,10 @@ def test_cache_invalidation():
         )
 
         if vs1 is None:
-            print("[WARNING]  Failed to create vector store")
+            print("Failed to create vector store")
             return
 
-        print("[OK] Initial index built")
+        print("Initial index built")
 
         # Add another PDF
         time.sleep(0.1)  # Ensure different timestamp
@@ -230,9 +230,9 @@ def test_cache_invalidation():
         )
 
         if vs2 is not None:
-            print("[OK] Index rebuilt after file change")
+            print("Index rebuilt after file change")
 
-    print("\n[OK] Cache invalidation test passed")
+    print("\nCache invalidation test passed")
 
 
 def run_all_tests():
@@ -249,14 +249,14 @@ def run_all_tests():
         test_cache_invalidation()
 
         print("\n" + "=" * 70)
-        print("[OK] ALL TESTS PASSED")
+        print("ALL TESTS PASSED")
         print("=" * 70)
 
     except AssertionError as e:
-        print(f"\n[ERROR] Test failed: {e}")
+        print(f"\nTest failed: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] Unexpected error: {e}")
+        print(f"\nUnexpected error: {e}")
         import traceback
         traceback.print_exc()
         return False

@@ -45,7 +45,7 @@ def benchmark_function(func_name: str, func, *args, **kwargs) -> dict[str, Any]:
     try:
         result = func(*args, **kwargs)
         elapsed = time.perf_counter() - start
-        status = "[OK]" if elapsed < 1.0 else "[SLOW]" if elapsed < 5.0 else "[FAIL]"
+        status = "" if elapsed < 1.0 else "[SLOW]" if elapsed < 5.0 else "[FAIL]"
         return {
             'name': func_name,
             'time_ms': round(elapsed * 1000, 2),
@@ -57,7 +57,7 @@ def benchmark_function(func_name: str, func, *args, **kwargs) -> dict[str, Any]:
         return {
             'name': func_name,
             'time_ms': round(elapsed * 1000, 2),
-            'status': '[ERROR]',
+            'status': '',
             'error': str(e)
         }
 
@@ -235,12 +235,12 @@ def run_performance_tests():
     max_time = max(results, key=lambda x: x['time_ms'])
     min_time = min(results, key=lambda x: x['time_ms'])
 
-    ok_count = sum(1 for r in results if '[OK]' in r['status'])
+    ok_count = sum(1 for r in results if '' in r['status'])
     slow_count = sum(1 for r in results if '[SLOW]' in r['status'])
-    fail_count = sum(1 for r in results if '[FAIL]' in r['status'] or '[ERROR]' in r['status'])
+    fail_count = sum(1 for r in results if '[FAIL]' in r['status'] or '' in r['status'])
 
     print(f"Funktionen getestet: {len(results)}")
-    print(f"  [OK] Schnell (<1s): {ok_count}")
+    print(f"  Schnell (<1s): {ok_count}")
     print(f"  [SLOW] Langsam (1-5s): {slow_count}")
     print(f"  [FAIL] Zu langsam (>5s) / Fehler: {fail_count}")
     print()
@@ -254,11 +254,11 @@ def run_performance_tests():
     if fail_count == 0 and slow_count == 0:
         print("[PASSED] ALLE TESTS BESTANDEN - Exzellente Performance!")
     elif fail_count == 0:
-        print("[WARNING] ALLE TESTS UNTER 5s - Performance akzeptabel")
+        print("ALLE TESTS UNTER 5s - Performance akzeptabel")
     else:
         print(f"[FAILED] {fail_count} Tests fehlgeschlagen - Details:")
         for r in results:
-            if '[FAIL]' in r['status'] or '[ERROR]' in r['status']:
+            if '[FAIL]' in r['status'] or '' in r['status']:
                 error_msg = r.get('error', 'Unknown error')
                 print(f"  - {r['name']}: {error_msg}")
 

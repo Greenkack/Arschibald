@@ -27,7 +27,7 @@ def verify_implementation():
     print("=" * 70)
     
     # Test 1: Session State Integration
-    print("\n[OK] Sub-task 1: Load positions from session state")
+    print("\nSub-task 1: Load positions from session state")
     st.session_state = {
         "placed_module_positions": [
             (0.0, 0.0, 0.3),
@@ -39,19 +39,19 @@ def verify_implementation():
     print("  - Session state configured with 3 module positions")
     
     # Test 2: Loop over positions
-    print("\n[OK] Sub-task 2: Loop over all placed positions")
+    print("\nSub-task 2: Loop over all placed positions")
     print(f"  - Will iterate over {len(st.session_state['placed_module_positions'])} positions")
     
     # Test 3: Call create_pv_module_3d()
-    print("\n[OK] Sub-task 3: Call create_pv_module_3d() for each module")
+    print("\nSub-task 3: Call create_pv_module_3d() for each module")
     print("  - Function will be called for each position")
     
     # Test 4: Add meshes to figure
-    print("\n[OK] Sub-task 4: Add meshes to Plotly figure")
+    print("\nSub-task 4: Add meshes to Plotly figure")
     print("  - Each module mesh will be added to fig.add_trace()")
     
     # Test 5: Error handling
-    print("\n[OK] Sub-task 5: Error handling implemented")
+    print("\nSub-task 5: Error handling implemented")
     print("  - Individual module errors caught and logged")
     print("  - Fallback to grid placement if session state empty")
     print("  - Last resort fallback for complete failures")
@@ -82,17 +82,17 @@ def verify_implementation():
             selected_modules=[]
         )
         
-        print(f"\n[OK] Scene created successfully!")
+        print(f"\nScene created successfully!")
         print(f"  - Figure has {len(fig.data)} traces")
         print(f"  - Expected: building + edges + roof + edges + 3 modules + 3 edges = 10")
         
         if len(fig.data) >= 10:
-            print(f"  [OK] Correct number of traces!")
+            print(f"  Correct number of traces!")
         else:
-            print(f"  [WARNING] Unexpected number of traces")
+            print(f"  Unexpected number of traces")
         
     except Exception as e:
-        print(f"\n[ERROR] Error creating scene: {e}")
+        print(f"\nError creating scene: {e}")
         return False
     
     # Test different roof types
@@ -112,9 +112,9 @@ def verify_implementation():
                 layout_config=None,
                 selected_modules=[]
             )
-            print(f"  [OK] {roof_type}: {len(fig.data)} traces")
+            print(f"  {roof_type}: {len(fig.data)} traces")
         except Exception as e:
-            print(f"  [ERROR] {roof_type}: Failed - {e}")
+            print(f"  {roof_type}: Failed - {e}")
             return False
     
     # Test error handling
@@ -141,10 +141,10 @@ def verify_implementation():
             layout_config=None,
             selected_modules=[]
         )
-        print("  [OK] Invalid positions handled gracefully")
+        print("  Invalid positions handled gracefully")
         print(f"  - Scene still created with {len(fig.data)} traces")
     except Exception as e:
-        print(f"  [ERROR] Error handling failed: {e}")
+        print(f"  Error handling failed: {e}")
         return False
     
     # Test empty session state
@@ -166,10 +166,10 @@ def verify_implementation():
             layout_config=None,
             selected_modules=[]
         )
-        print("  [OK] Fallback grid placement works")
+        print("  Fallback grid placement works")
         print(f"  - Scene created with {len(fig.data)} traces")
     except Exception as e:
-        print(f"  [ERROR] Fallback failed: {e}")
+        print(f"  Fallback failed: {e}")
         return False
     
     # Summary
@@ -177,20 +177,20 @@ def verify_implementation():
     print("Verification Summary")
     print("=" * 70)
     
-    print("\n[OK] All sub-tasks verified:")
-    print("  1. [OK] Load positions from session state")
-    print("  2. [OK] Loop over all placed positions")
-    print("  3. [OK] Call create_pv_module_3d() for each module")
-    print("  4. [OK] Add meshes to Plotly figure")
-    print("  5. [OK] Error handling implemented")
+    print("\nAll sub-tasks verified:")
+    print("  1. Load positions from session state")
+    print("  2. Loop over all placed positions")
+    print("  3. Call create_pv_module_3d() for each module")
+    print("  4. Add meshes to Plotly figure")
+    print("  5. Error handling implemented")
     
-    print("\n[OK] Requirements verified:")
-    print("  - Requirement 1.1-1.5: Module visibility [OK]")
-    print("  - Requirement 6.1-6.3: Roof type support [OK]")
-    print("  - Requirement 10.1-10.5: 3D rendering integration [OK]")
-    print("  - Requirement 11.2-11.3: Error handling [OK]")
+    print("\nRequirements verified:")
+    print("  - Requirement 1.1-1.5: Module visibility ")
+    print("  - Requirement 6.1-6.3: Roof type support ")
+    print("  - Requirement 10.1-10.5: 3D rendering integration ")
+    print("  - Requirement 11.2-11.3: Error handling ")
     
-    print("\n[OK] Task 4 implementation is COMPLETE and VERIFIED!")
+    print("\nTask 4 implementation is COMPLETE and VERIFIED!")
     
     return True
 

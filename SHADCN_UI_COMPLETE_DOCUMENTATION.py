@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-[DESIGN] SHADCN UI CHART DESIGN - VOLLSTÄNDIGE DOKUMENTATION
+SHADCN UI CHART DESIGN - VOLLSTÄNDIGE DOKUMENTATION
 ======================================================
 
 Was wurde implementiert:
@@ -17,7 +17,7 @@ Date: 2025-01-14
 
 
 # ============================================================================
-# [DESIGN] SHADCN UI DESIGN-SYSTEM
+# SHADCN UI DESIGN-SYSTEM
 # ============================================================================
 
 SHADCN_UI_FEATURES = {
@@ -56,54 +56,54 @@ SHADCN_UI_FEATURES = {
 
 
 # ============================================================================
-# [CHART] GETHEMTE CHARTS (22 Charts)
+# GETHEMTE CHARTS (22 Charts)
 # ============================================================================
 
 THEMED_CHARTS = {
     "Finanzielle Analyse": [
-        "[OK] Cashflow-Entwicklung über 20 Jahre",
-        "[OK] 20-Jahres Kostenvergleich (WP vs Fossil)",
-        "[OK] Monte-Carlo ROI-Verteilung (Histogram)"
+        "Cashflow-Entwicklung über 20 Jahre",
+        "20-Jahres Kostenvergleich (WP vs Fossil)",
+        "Monte-Carlo ROI-Verteilung (Histogram)"
     ],
     
     "Energie-Analyse": [
-        "[OK] Tages-Lastprofil (PV + Wärmepumpe)",
-        "[OK] Sankey Energiefluss-Diagramm",
-        "[OK] Jahres-Lastgang (8760h Monatlich)",
-        "[OK] Stündliche Preiskurve (24h)",
-        "[OK] Jährliche Kosten-Chart",
-        "[OK] Load-Shifting Heatmap"
+        "Tages-Lastprofil (PV + Wärmepumpe)",
+        "Sankey Energiefluss-Diagramm",
+        "Jahres-Lastgang (8760h Monatlich)",
+        "Stündliche Preiskurve (24h)",
+        "Jährliche Kosten-Chart",
+        "Load-Shifting Heatmap"
     ],
     
     "Umwelt & Nachhaltigkeit": [
-        "[OK] CO2-Emissionen Vergleich (Bar Chart)",
-        "[OK] CO2-Emissionen über 20 Jahre",
-        "[OK] CO2-Preis-Entwicklung"
+        "CO2-Emissionen Vergleich (Bar Chart)",
+        "CO2-Emissionen über 20 Jahre",
+        "CO2-Preis-Entwicklung"
     ],
     
     "System-Optimierung": [
-        "[OK] Dämmungs-Upgrade Amortisation",
-        "[OK] Heizplan-Optimierung",
-        "[OK] Klimawandel-Szenarien (2025-2050)",
-        "[OK] JAZ-Vergleich Chart",
-        "[OK] Preis-Szenarien"
+        "Dämmungs-Upgrade Amortisation",
+        "Heizplan-Optimierung",
+        "Klimawandel-Szenarien (2025-2050)",
+        "JAZ-Vergleich Chart",
+        "Preis-Szenarien"
     ],
     
     "3D & Erweiterte Features": [
-        "[OK] 3D-Gebäude-Visualisierung",
-        "[OK] Noise-Map (Schallausbreitung)",
-        "[OK] Jahres-Profil Chart"
+        "3D-Gebäude-Visualisierung",
+        "Noise-Map (Schallausbreitung)",
+        "Jahres-Profil Chart"
     ],
     
     "Tarife & Cloud": [
-        "[OK] Stromcloud Waterfall-Chart",
-        "[OK] Annual Cost Chart"
+        "Stromcloud Waterfall-Chart",
+        "Annual Cost Chart"
     ]
 }
 
 
 # ============================================================================
-# [TOOL] WIE FUNKTIONIERT DAS SHADCN UI THEME?
+# WIE FUNKTIONIERT DAS SHADCN UI THEME?
 # ============================================================================
 
 def shadcn_ui_workflow():
@@ -132,7 +132,7 @@ def shadcn_ui_workflow():
 
 
 # ============================================================================
-# [NOTE] VERWENDUNG
+# VERWENDUNG
 # ============================================================================
 
 USAGE_EXAMPLE = """
@@ -155,18 +155,18 @@ st.plotly_chart(fig, use_container_width=True)
 
 # DAS WAR'S! 🎉
 # Der Chart hat jetzt:
-# [OK] Automatische Dark/Light Mode Erkennung
-# [OK] Shadcn UI Farben
-# [OK] Moderne Typografie (Inter Font)
-# [OK] Gradient-Fill
-# [OK] Glatte Spline-Kurven
-# [OK] Großzügige Margins
-# [OK] Unified Hover Mode
+# Automatische Dark/Light Mode Erkennung
+# Shadcn UI Farben
+# Moderne Typografie (Inter Font)
+# Gradient-Fill
+# Glatte Spline-Kurven
+# Großzügige Margins
+# Unified Hover Mode
 """
 
 
 # ============================================================================
-# [TARGET] SHADCN UI vs STANDARD PLOTLY
+# SHADCN UI vs STANDARD PLOTLY
 # ============================================================================
 
 COMPARISON = """
@@ -190,7 +190,7 @@ COMPARISON = """
 
 
 # ============================================================================
-# [CHART] STATISTIKEN
+# STATISTIKEN
 # ============================================================================
 
 STATISTICS = {
@@ -208,29 +208,29 @@ STATISTICS = {
 
 
 # ============================================================================
-# [LAUNCH] VORTEILE
+# VORTEILE
 # ============================================================================
 
 BENEFITS = """
-[OK] KONSISTENTES DESIGN
+KONSISTENTES DESIGN
    └─> Alle Charts folgen demselben Shadcn UI Design-System
 
-[OK] AUTOMATISCHE THEME-ANPASSUNG
+AUTOMATISCHE THEME-ANPASSUNG
    └─> Charts passen sich automatisch an Dark/Light Mode an
 
-[OK] MODERNE ÄSTHETIK
+MODERNE ÄSTHETIK
    └─> Glatte Kurven, Gradients, moderne Typografie
 
-[OK] BESSERE LESBARKEIT
+BESSERE LESBARKEIT
    └─> Großzügige Margins, optimierte Farbkontraste
 
-[OK] PROFESSIONELLES AUSSEHEN
+PROFESSIONELLES AUSSEHEN
    └─> Wie moderne SaaS-Dashboards (Vercel, Stripe, Linear)
 
-[OK] EINFACHE WARTUNG
+EINFACHE WARTUNG
    └─> Zentrale Theme-Funktion für alle Charts
 
-[OK] RESPONSIVE
+RESPONSIVE
    └─> Charts skalieren perfekt auf allen Bildschirmgrößen
 """
 
@@ -243,52 +243,52 @@ MODULES = {
     "heatpump_ui.py": {
         "Score": "90%",
         "Features": [
-            "[OK] get_chart_theme() - Theme Detection & Config",
-            "[OK] apply_chart_theme() - Automatische Chart-Optimierung",
-            "[OK] _hex_to_rgb() - Farbkonvertierung für Gradients",
-            "[OK] 22 Charts mit Theme versehen",
-            "[OK] Vollständige Shadcn UI Implementierung"
+            "get_chart_theme() - Theme Detection & Config",
+            "apply_chart_theme() - Automatische Chart-Optimierung",
+            "_hex_to_rgb() - Farbkonvertierung für Gradients",
+            "22 Charts mit Theme versehen",
+            "Vollständige Shadcn UI Implementierung"
         ]
     },
     
     "heatpump_dynamic_tariff_charts.py": {
         "Score": "80%",
         "Features": [
-            "[OK] SHADCN_COLORS Konstante",
-            "[OK] create_hourly_price_chart() mit Gradients",
-            "[OK] Spline-Kurven für glatte Linien",
-            "[OK] Shadcn UI Farben für Tarif-Zonen"
+            "SHADCN_COLORS Konstante",
+            "create_hourly_price_chart() mit Gradients",
+            "Spline-Kurven für glatte Linien",
+            "Shadcn UI Farben für Tarif-Zonen"
         ]
     },
     
     "heatpump_advanced_charts.py": {
         "Score": "60%",
         "Features": [
-            "[OK] SHADCN_COLORS Design-System",
-            "[OK] Erweiterte Farbpalette (20+ Farben)",
-            "[WARNING]  Charts benötigen noch Gradient-Updates"
+            "SHADCN_COLORS Design-System",
+            "Erweiterte Farbpalette (20+ Farben)",
+            "Charts benötigen noch Gradient-Updates"
         ]
     }
 }
 
 
 # ============================================================================
-# [DESIGN] HAUPTFUNKTIONEN
+# HAUPTFUNKTIONEN
 # ============================================================================
 
 if __name__ == "__main__":
     print("=" * 80)
-    print("[DESIGN] SHADCN UI CHART DESIGN - DOKUMENTATION")
+    print("SHADCN UI CHART DESIGN - DOKUMENTATION")
     print("=" * 80)
     
-    print("\n[CHART] IMPLEMENTIERTE FEATURES:")
+    print("\nIMPLEMENTIERTE FEATURES:")
     for category, features in SHADCN_UI_FEATURES.items():
         print(f"\n{category}:")
         for key, value in features.items():
             print(f"  • {key}: {value}")
     
     print("\n" + "=" * 80)
-    print("[STATS] GETHEMTE CHARTS (22 Charts):")
+    print("GETHEMTE CHARTS (22 Charts):")
     print("=" * 80)
     
     total_charts = 0
@@ -299,21 +299,21 @@ if __name__ == "__main__":
             total_charts += 1
     
     print("\n" + "=" * 80)
-    print("[CHART] STATISTIKEN:")
+    print("STATISTIKEN:")
     print("=" * 80)
     for key, value in STATISTICS.items():
         print(f"  {key}: {value}")
     
     print("\n" + "=" * 80)
-    print("[LAUNCH] VORTEILE:")
+    print("VORTEILE:")
     print(BENEFITS)
     
     print("\n" + "=" * 80)
-    print("[TARGET] VERGLEICH:")
+    print("VERGLEICH:")
     print(COMPARISON)
     
     print("\n" + "=" * 80)
-    print("[NOTE] VERWENDUNG:")
+    print("VERWENDUNG:")
     print(USAGE_EXAMPLE)
     
     print("\n" + "=" * 80)

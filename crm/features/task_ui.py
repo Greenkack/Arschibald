@@ -72,10 +72,10 @@ def render_task_management_ui(
     
     # Tabs für verschiedene Ansichten
     tabs = st.tabs([
-        "[CHART] Übersicht",
-        "[NOTE] Alle Aufgaben",
+        "Übersicht",
+        "Alle Aufgaben",
         "➕ Neue Aufgabe",
-        "[WARNING] Benachrichtigungen"
+        "Benachrichtigungen"
     ])
     
     with tabs[0]:
@@ -97,7 +97,7 @@ def render_task_management_ui(
 
 def render_task_overview():
     """Zeigt Task-Statistiken und KPIs."""
-    st.subheader("[CHART] Aufgaben-Übersicht")
+    st.subheader("Aufgaben-Übersicht")
     
     # Lade Statistiken
     stats = get_task_statistics()
@@ -155,7 +155,7 @@ def render_task_overview():
             ">
                 <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">Überfällig</h3>
                 <h1 style="margin: 10px 0; font-size: 2.5em;">{overdue}</h1>
-                <p style="margin: 0; opacity: 0.8;">[WARNING] Dringend</p>
+                <p style="margin: 0; opacity: 0.8;">Dringend</p>
             </div>
         """, unsafe_allow_html=True)
     
@@ -172,14 +172,14 @@ def render_task_overview():
             ">
                 <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">Erledigt</h3>
                 <h1 style="margin: 10px 0; font-size: 2.5em;">{completed}</h1>
-                <p style="margin: 0; opacity: 0.8;">[OK] Abgeschlossen</p>
+                <p style="margin: 0; opacity: 0.8;">Abgeschlossen</p>
             </div>
         """, unsafe_allow_html=True)
     
     st.markdown("---")
     
     # Prioritäten-Übersicht
-    st.subheader("[TARGET] Nach Priorität (Aktive Aufgaben)")
+    st.subheader("Nach Priorität (Aktive Aufgaben)")
     
     col1, col2, col3 = st.columns(3)
     
@@ -211,7 +211,7 @@ def render_task_overview():
         st.metric("📅 Diese Woche", due_week)
     
     with col3:
-        st.metric("[WARNING] Überfällig", overdue)
+        st.metric("Überfällig", overdue)
 
 
 # ============================================================================
@@ -224,7 +224,7 @@ def render_task_list(
     lead_id: Optional[int] = None
 ):
     """Zeigt gefilterte Task-Liste."""
-    st.subheader("[NOTE] Aufgabenliste")
+    st.subheader("Aufgabenliste")
     
     # Filter-Optionen
     col_filter1, col_filter2, col_filter3, col_filter4 = st.columns(4)
@@ -359,7 +359,7 @@ def render_task_card(task: dict):
         
         with col2:
             if task.get('status') != 'completed':
-                if st.button("[OK] Erledigt", key=f"complete_{task_id}", use_container_width=True):
+                if st.button("Erledigt", key=f"complete_{task_id}", use_container_width=True):
                     if mark_task_completed(task_id):
                         st.success("Aufgabe erledigt!")
                         st.rerun()
@@ -377,7 +377,7 @@ def render_task_card(task: dict):
                 st.rerun()
         
         with col5:
-            if st.button("[DELETE] Löschen", key=f"delete_{task_id}", use_container_width=True):
+            if st.button("Löschen", key=f"delete_{task_id}", use_container_width=True):
                 if st.session_state.get(f'confirm_delete_{task_id}', False):
                     if delete_task(task_id):
                         st.success("Aufgabe gelöscht!")
@@ -469,7 +469,7 @@ def render_create_task_form(
             )
             lead_id = lead_id_input if lead_id_input > 0 else None
         
-        submitted = st.form_submit_button("[OK] Aufgabe erstellen", use_container_width=True)
+        submitted = st.form_submit_button("Aufgabe erstellen", use_container_width=True)
         
         if submitted:
             if not title or not title.strip():
@@ -492,7 +492,7 @@ def render_create_task_form(
                 )
                 
                 if task_id:
-                    st.success(f"[OK] Aufgabe #{task_id} erfolgreich erstellt!")
+                    st.success(f"Aufgabe #{task_id} erfolgreich erstellt!")
                     st.balloons()
                 else:
                     st.error("Fehler beim Erstellen der Aufgabe.")
@@ -551,7 +551,7 @@ def render_edit_task_form(task: dict):
             save_button = st.form_submit_button("💾 Speichern", use_container_width=True)
         
         with col_cancel:
-            cancel_button = st.form_submit_button("[ERROR] Abbrechen", use_container_width=True)
+            cancel_button = st.form_submit_button("Abbrechen", use_container_width=True)
         
         if save_button:
             priority_map_reverse = {"Niedrig": "low", "Mittel": "medium", "Hoch": "high"}
@@ -583,7 +583,7 @@ def render_edit_task_form(task: dict):
 
 def render_task_notifications():
     """Zeigt Benachrichtigungen für fällige und überfällige Tasks."""
-    st.subheader("[WARNING] Benachrichtigungen")
+    st.subheader("Benachrichtigungen")
     
     notifications = get_tasks_needing_notification()
     

@@ -43,14 +43,14 @@ def test_inverter_model_logic():
         print(f'  Expected: "{case["expected"]}"')
         print(
             f'  Status: {
-                "[OK] PASS" if result_inverter_model == case["expected"] else "[ERROR] FAIL"}')
+                "PASS" if result_inverter_model == case["expected"] else "FAIL"}')
         print('---')
 
 
 if __name__ == "__main__":
     test_inverter_model_logic()
     print()
-    print("[OK] WECHSELRICHTER-MODELL KORRIGIERT:")
+    print("WECHSELRICHTER-MODELL KORRIGIERT:")
     print("- Kaputte Encoding-Zeile repariert")
     print("- result['inverter_model'] wird jetzt korrekt gesetzt")
     print("- Logik für Einzel- und Mehrfach-Wechselrichter funktioniert")

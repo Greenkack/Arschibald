@@ -36,7 +36,7 @@ def verify_single_report():
     assert report.total_elements == 2
     assert report.is_valid is True
     
-    print("[OK] Single report generation works")
+    print("Single report generation works")
     print(f"  - Firma: {report.firma}")
     print(f"  - Seite: {report.seite}")
     print(f"  - Elements: {report.total_elements}")
@@ -66,7 +66,7 @@ def verify_batch_report():
     assert len(summary.reports_by_firma) == 2
     assert len(summary.reports_by_seite) == 2
     
-    print("[OK] Batch report generation works")
+    print("Batch report generation works")
     print(f"  - Total combinations: {summary.total_combinations}")
     print(f"  - Valid combinations: {summary.valid_combinations}")
     print(f"  - Invalid combinations: {summary.invalid_combinations}")
@@ -92,7 +92,7 @@ def verify_text_format():
     assert "Firma: 1, Seite: 1" in text
     assert "SUMMARY" in text
     
-    print("[OK] Text format output works")
+    print("Text format output works")
     print("  - Contains header")
     print("  - Contains firma/seite info")
     print("  - Contains summary section")
@@ -121,7 +121,7 @@ def verify_json_format():
     assert "collisions" in data
     assert "summary" in data
     
-    print("[OK] JSON format output works")
+    print("JSON format output works")
     print("  - Contains all required fields")
     print("  - Data is serializable")
     print()
@@ -152,7 +152,7 @@ def verify_error_warning_lists():
     assert all("firma" in e for e in errors)
     assert all("seite" in e for e in errors)
     
-    print("[OK] Error and warning lists work")
+    print("Error and warning lists work")
     print(f"  - Errors found: {len(errors)}")
     print(f"  - Warnings found: {len(warnings)}")
     print()
@@ -183,7 +183,7 @@ def verify_summaries():
     assert all("total_seiten" in s for s in firma_summaries.values())
     assert all("total_firmen" in s for s in seite_summaries.values())
     
-    print("[OK] Summaries work")
+    print("Summaries work")
     print(f"  - Firma summaries: {len(firma_summaries)}")
     print(f"  - Seite summaries: {len(seite_summaries)}")
     print()
@@ -214,7 +214,7 @@ def verify_file_export():
     assert text_path.exists()
     assert json_path.exists()
     
-    print("[OK] File export works")
+    print("File export works")
     print(f"  - Text file created: {text_path}")
     print(f"  - JSON file created: {json_path}")
     print()
@@ -245,7 +245,7 @@ def verify_convenience_functions():
     
     assert summary.total_combinations == 1
     
-    print("[OK] Convenience functions work")
+    print("Convenience functions work")
     print("  - generate_validation_report() works")
     print("  - generate_batch_report() works")
     print()
@@ -258,17 +258,17 @@ def verify_requirements():
     print("=" * 80)
     
     print("Requirement 6.4: Validation Reporting")
-    print("  [OK] Generate comprehensive validation reports")
-    print("  [OK] Document all validation checks")
-    print("  [OK] List warnings and errors")
-    print("  [OK] Create summary per firma and seite")
+    print("  Generate comprehensive validation reports")
+    print("  Document all validation checks")
+    print("  List warnings and errors")
+    print("  Create summary per firma and seite")
     print()
     
     print("Requirement 6.5: Warning and Error Documentation")
-    print("  [OK] List all warnings across reports")
-    print("  [OK] List all errors across reports")
-    print("  [OK] Include detailed information (firma, seite, message)")
-    print("  [OK] Group by firma and seite")
+    print("  List all warnings across reports")
+    print("  List all errors across reports")
+    print("  Include detailed information (firma, seite, message)")
+    print("  Group by firma and seite")
     print()
 
 
@@ -293,24 +293,24 @@ def main():
         verify_requirements()
         
         print("=" * 80)
-        print("[OK] ALL VERIFICATIONS PASSED")
+        print("ALL VERIFICATIONS PASSED")
         print("=" * 80)
         print()
         print("Task 8.3 is complete and all requirements are satisfied:")
-        print("  - Single validation reports [OK]")
-        print("  - Batch validation reports [OK]")
-        print("  - Text format output [OK]")
-        print("  - JSON format output [OK]")
-        print("  - Error and warning lists [OK]")
-        print("  - Summaries by firma and seite [OK]")
-        print("  - File export functionality [OK]")
-        print("  - Convenience functions [OK]")
-        print("  - Requirements 6.4 and 6.5 [OK]")
+        print("  - Single validation reports ")
+        print("  - Batch validation reports ")
+        print("  - Text format output ")
+        print("  - JSON format output ")
+        print("  - Error and warning lists ")
+        print("  - Summaries by firma and seite ")
+        print("  - File export functionality ")
+        print("  - Convenience functions ")
+        print("  - Requirements 6.4 and 6.5 ")
         print()
         
     except AssertionError as e:
         print("=" * 80)
-        print("[ERROR] VERIFICATION FAILED")
+        print("VERIFICATION FAILED")
         print("=" * 80)
         print(f"Error: {e}")
         raise

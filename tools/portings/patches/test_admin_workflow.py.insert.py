@@ -72,21 +72,21 @@ def simulate_admin_panel_workflow():
 
     new_product_id = add_product(product_data_to_save_db)
     if new_product_id:
-        print(f"[OK] Neues Produkt erstellt mit ID: {new_product_id}")
+        print(f"Neues Produkt erstellt mit ID: {new_product_id}")
 
         # 7. Überprüfe das gespeicherte Produkt
         saved_product = get_product_by_id(new_product_id)
         if saved_product:
             saved_image = saved_product.get('image_base64', '')
-            print(f"[OK] Gespeichertes Bild: {len(saved_image)} Zeichen")
+            print(f"Gespeichertes Bild: {len(saved_image)} Zeichen")
             if len(saved_image) > 50:
-                print("[OK] Bild wurde erfolgreich gespeichert!")
+                print("Bild wurde erfolgreich gespeichert!")
             else:
-                print("[ERROR] Bild wurde nicht gespeichert")
+                print("Bild wurde nicht gespeichert")
         else:
-            print("[ERROR] Produkt konnte nicht abgerufen werden")
+            print("Produkt konnte nicht abgerufen werden")
     else:
-        print("[ERROR] Produkt konnte nicht erstellt werden")
+        print("Produkt konnte nicht erstellt werden")
 # --- DEF BLOCK END ---
 
 
@@ -108,10 +108,10 @@ def test_existing_product_update():
 
     product_id = add_product(initial_product)
     if not product_id:
-        print("[ERROR] Konnte kein Test-Produkt erstellen")
+        print("Konnte kein Test-Produkt erstellen")
         return
 
-    print(f"[OK] Test-Produkt erstellt mit ID: {product_id}")
+    print(f"Test-Produkt erstellt mit ID: {product_id}")
 
     # Simuliere Admin-Panel Update-Workflow
     product_data_for_manual_form = get_product_by_id(product_id)
@@ -143,22 +143,22 @@ def test_existing_product_update():
     # Update ausführen
     success = update_product(product_id, product_data_to_save_db)
     if success:
-        print("[OK] Produkt-Update erfolgreich")
+        print("Produkt-Update erfolgreich")
 
         # Überprüfung
         updated_product = get_product_by_id(product_id)
         if updated_product:
             updated_image = updated_product.get('image_base64', '')
             updated_desc = updated_product.get('description', '')
-            print(f"[OK] Aktualisiertes Bild: {len(updated_image)} Zeichen")
-            print(f"[OK] Aktualisierte Beschreibung: {updated_desc}")
+            print(f"Aktualisiertes Bild: {len(updated_image)} Zeichen")
+            print(f"Aktualisierte Beschreibung: {updated_desc}")
 
             if len(updated_image) > 50 and "AKTUALISIERT" in updated_desc:
-                print("[OK] Update war vollständig erfolgreich!")
+                print("Update war vollständig erfolgreich!")
             else:
-                print("[ERROR] Update unvollständig")
+                print("Update unvollständig")
         else:
-            print("[ERROR] Aktualisiertes Produkt konnte nicht abgerufen werden")
+            print("Aktualisiertes Produkt konnte nicht abgerufen werden")
     else:
-        print("[ERROR] Produkt-Update fehlgeschlagen")
+        print("Produkt-Update fehlgeschlagen")
 # --- DEF BLOCK END ---

@@ -27,9 +27,9 @@ def test_version_management_functions():
             _load_version,
             _get_setting_friendly_name
         )
-        print("[OK] Funktionen erfolgreich importiert")
+        print("Funktionen erfolgreich importiert")
     except ImportError as e:
-        print(f"[ERROR] Fehler beim Importieren: {e}")
+        print(f"Fehler beim Importieren: {e}")
         return False
 
     # Test _create_settings_snapshot
@@ -54,7 +54,7 @@ def test_version_management_functions():
     snapshot = _create_settings_snapshot(mock_load_setting)
 
     if isinstance(snapshot, dict):
-        print(f"[OK] Snapshot erstellt: {len(snapshot)} Einstellungen")
+        print(f"Snapshot erstellt: {len(snapshot)} Einstellungen")
         print(f"  Enthaltene Keys: {list(snapshot.keys())}")
 
         # Check if expected keys are present
@@ -64,11 +64,11 @@ def test_version_management_functions():
             'ui_theme_settings']
         for key in expected_keys:
             if key in snapshot:
-                print(f"  [OK] {key} vorhanden")
+                print(f"  {key} vorhanden")
             else:
-                print(f"  [ERROR] {key} fehlt")
+                print(f"  {key} fehlt")
     else:
-        print("[ERROR] Snapshot ist kein Dictionary")
+        print("Snapshot ist kein Dictionary")
         return False
 
     # Test _load_version
@@ -104,12 +104,12 @@ def test_version_management_functions():
         mock_save_setting)
 
     if result:
-        print("[OK] Version erfolgreich geladen")
+        print("Version erfolgreich geladen")
         print(f"  Gespeicherte Einstellungen: {len(saved_settings)}")
         for key in saved_settings:
-            print(f"  [OK] {key} wiederhergestellt")
+            print(f"  {key} wiederhergestellt")
     else:
-        print("[ERROR] Fehler beim Laden der Version")
+        print("Fehler beim Laden der Version")
         return False
 
     # Test _get_setting_friendly_name
@@ -128,12 +128,12 @@ def test_version_management_functions():
         friendly_name = _get_setting_friendly_name(key)
         print(f"  {key} -> {friendly_name}")
         if friendly_name and friendly_name != key:
-            print(f"    [OK] Benutzerfreundlicher Name vorhanden")
+            print(f"    Benutzerfreundlicher Name vorhanden")
         else:
             print(f"    ⚠ Kein benutzerfreundlicher Name definiert")
 
     print("\n" + "=" * 80)
-    print("[OK] Alle Tests erfolgreich abgeschlossen!")
+    print("Alle Tests erfolgreich abgeschlossen!")
     print("=" * 80)
 
     return True
@@ -148,9 +148,9 @@ def test_ui_structure():
     # Import render function
     try:
         from admin_pdf_settings_ui import render_version_management
-        print("[OK] render_version_management erfolgreich importiert")
+        print("render_version_management erfolgreich importiert")
     except ImportError as e:
-        print(f"[ERROR] Fehler beim Importieren: {e}")
+        print(f"Fehler beim Importieren: {e}")
         return False
 
     # Check function signature
@@ -162,21 +162,21 @@ def test_ui_structure():
 
     expected_params = ['load_setting', 'save_setting']
     if params == expected_params:
-        print("[OK] Korrekte Funktionsparameter")
+        print("Korrekte Funktionsparameter")
     else:
-        print(f"[ERROR] Erwartete Parameter: {expected_params}")
+        print(f"Erwartete Parameter: {expected_params}")
         print(f"  Gefundene Parameter: {params}")
         return False
 
     # Check docstring
     if render_version_management.__doc__:
-        print("[OK] Docstring vorhanden")
+        print("Docstring vorhanden")
         print(f"  {render_version_management.__doc__.strip()[:100]}...")
     else:
         print("⚠ Keine Docstring vorhanden")
 
     print("\n" + "=" * 80)
-    print("[OK] UI-Struktur-Test erfolgreich!")
+    print("UI-Struktur-Test erfolgreich!")
     print("=" * 80)
 
     return True
@@ -211,10 +211,10 @@ def test_requirements_coverage():
     }
 
     for req_id, feature in features.items():
-        print(f"  [OK] {req_id}: {feature}")
+        print(f"  {req_id}: {feature}")
 
     print("\n" + "=" * 80)
-    print("[OK] Alle Requirements abgedeckt!")
+    print("Alle Requirements abgedeckt!")
     print("=" * 80)
 
     return True
@@ -234,27 +234,27 @@ def test_integration_points():
         source = inspect.getsource(render_pdf_settings_ui)
 
         # Check for version management tab
-        if '"[PACKAGE] Versionierung"' in source:
-            print("[OK] Versionierungs-Tab in Hauptnavigation vorhanden")
+        if '"Versionierung"' in source:
+            print("Versionierungs-Tab in Hauptnavigation vorhanden")
         else:
-            print("[ERROR] Versionierungs-Tab fehlt in Hauptnavigation")
+            print("Versionierungs-Tab fehlt in Hauptnavigation")
             return False
 
         # Check for render_version_management call
         if 'render_version_management' in source:
-            print("[OK] render_version_management wird aufgerufen")
+            print("render_version_management wird aufgerufen")
         else:
-            print("[ERROR] render_version_management wird nicht aufgerufen")
+            print("render_version_management wird nicht aufgerufen")
             return False
 
-        print("\n[OK] Integration erfolgreich!")
+        print("\nIntegration erfolgreich!")
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Prüfen der Integration: {e}")
+        print(f"Fehler beim Prüfen der Integration: {e}")
         return False
 
     print("\n" + "=" * 80)
-    print("[OK] Integrationspunkte-Test erfolgreich!")
+    print("Integrationspunkte-Test erfolgreich!")
     print("=" * 80)
 
     return True
@@ -281,7 +281,7 @@ def main():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n[ERROR] Fehler in Test '{test_name}': {e}")
+            print(f"\nFehler in Test '{test_name}': {e}")
             import traceback
             traceback.print_exc()
             results.append((test_name, False))
@@ -292,20 +292,20 @@ def main():
     print("=" * 80)
 
     for test_name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {test_name}")
 
     all_passed = all(result for _, result in results)
 
     print("\n" + "=" * 80)
     if all_passed:
-        print("[OK] ALLE TESTS BESTANDEN!")
+        print("ALLE TESTS BESTANDEN!")
         print("\nTask 15 ist vollständig implementiert:")
-        print("  [OK] Task 15.1: Version-Speichern")
-        print("  [OK] Task 15.2: Version-Laden")
-        print("  [OK] Task 15.3: Version-Löschen")
+        print("  Task 15.1: Version-Speichern")
+        print("  Task 15.2: Version-Laden")
+        print("  Task 15.3: Version-Löschen")
     else:
-        print("[ERROR] EINIGE TESTS FEHLGESCHLAGEN")
+        print("EINIGE TESTS FEHLGESCHLAGEN")
         print("Bitte überprüfen Sie die Fehler oben.")
     print("=" * 80)
 

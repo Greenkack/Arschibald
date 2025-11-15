@@ -31,7 +31,7 @@ def test_module_geometry():
     print("="*70)
     
     # Test module dimensions
-    print("\n[OK] Module dimensions:")
+    print("\nModule dimensions:")
     print(f"  - Width (PV_W): {PV_W}m (expected: 1.05m)")
     print(f"  - Height (PV_H): {PV_H}m (expected: 1.76m)")
     print(f"  - Thickness (PV_T): {PV_T}m (expected: 0.04m)")
@@ -40,7 +40,7 @@ def test_module_geometry():
     assert PV_H == 1.76, f"PV_H should be 1.76m, got {PV_H}m"
     assert PV_T == 0.04, f"PV_T should be 0.04m, got {PV_T}m"
     
-    print("\n[OK] Module colors:")
+    print("\nModule colors:")
     print("  - Normal: #1a1a2e (dunkelblau)")
     print("  - Selected: #4a90e2 (hellblau)")
     print("  - Invalid: #e74c3c (rot)")
@@ -71,12 +71,12 @@ def test_module_positioning():
         ("Zeltdach", 30.0, 0.15),
     ]
     
-    print("\n[OK] Testing Z-position calculation for all roof types:")
+    print("\nTesting Z-position calculation for all roof types:")
     
     all_passed = True
     for roof_type, roof_pitch, expected_z in roof_types:
         z_pos = calculate_z_position(roof_type, roof_pitch, 10.0)
-        status = "[OK]" if abs(z_pos - expected_z) < 0.01 else "[FAIL]"
+        status = "" if abs(z_pos - expected_z) < 0.01 else "[FAIL]"
         print(f"  {status} {roof_type:20s} (pitch: {roof_pitch:5.1f}deg): z = {z_pos:.2f}m (expected: {expected_z:.2f}m)")
         
         if abs(z_pos - expected_z) >= 0.01:
@@ -112,12 +112,12 @@ def test_module_rotation():
         ("Zeltdach", 30.0, 30.0),
     ]
     
-    print("\n[OK] Testing tilt angle calculation for all roof types:")
+    print("\nTesting tilt angle calculation for all roof types:")
     
     all_passed = True
     for roof_type, roof_pitch, expected_tilt in roof_types:
         tilt_angle = calculate_tilt_angle(roof_type, roof_pitch)
-        status = "[OK]" if abs(tilt_angle - expected_tilt) < 0.01 else "[FAIL]"
+        status = "" if abs(tilt_angle - expected_tilt) < 0.01 else "[FAIL]"
         print(f"  {status} {roof_type:20s} (pitch: {roof_pitch:5.1f}deg): tilt = {tilt_angle:.1f}deg (expected: {expected_tilt:.1f}deg)")
         
         if abs(tilt_angle - expected_tilt) >= 0.01:
@@ -158,7 +158,7 @@ def test_auto_placement_integration():
         ("Pultdach", 20.0),
     ]
     
-    print("\n[OK] Testing auto placement for different roof types:")
+    print("\nTesting auto placement for different roof types:")
     
     all_passed = True
     for roof_type, roof_pitch in roof_types:
@@ -173,7 +173,7 @@ def test_auto_placement_integration():
         if result["success"]:
             positions = result["positions"]
             count = result["count"]
-            print(f"\n  [OK] {roof_type} (pitch: {roof_pitch:.1f}deg):")
+            print(f"\n  {roof_type} (pitch: {roof_pitch:.1f}deg):")
             print(f"    - Placed {count} modules")
             print(f"    - First module position: ({positions[0][0]:.2f}, {positions[0][1]:.2f}, {positions[0][2]:.2f})")
             if count > 1:
@@ -255,12 +255,12 @@ def main():
     
     if all_passed:
         print("\n" + "="*70)
-        print("[SUCCESS] ALL TESTS PASSED! Task 2 is complete.")
+        print("ALL TESTS PASSED! Task 2 is complete.")
         print("="*70)
         return 0
     else:
         print("\n" + "="*70)
-        print("[WARNING] SOME TESTS FAILED. Please review the errors above.")
+        print("SOME TESTS FAILED. Please review the errors above.")
         print("="*70)
         return 1
 

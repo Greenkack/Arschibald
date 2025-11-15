@@ -48,9 +48,9 @@ print(f"GID: {os.getgid()}")
     print(f"Result:\n{result}")
 
     if "sandboxuser" in result and "UID: 1000" in result:
-        print("[OK] PASS: Python code runs as unprivileged user 'sandboxuser'")
+        print("PASS: Python code runs as unprivileged user 'sandboxuser'")
     else:
-        print("[ERROR] FAIL: Python code not running as sandboxuser")
+        print("FAIL: Python code not running as sandboxuser")
         return False
 
     # Test 1b: Check user in terminal execution
@@ -61,9 +61,9 @@ print(f"GID: {os.getgid()}")
     print(f"Result:\n{result}")
 
     if "sandboxuser" in result and "uid=1000" in result:
-        print("[OK] PASS: Terminal commands run as unprivileged user")
+        print("PASS: Terminal commands run as unprivileged user")
     else:
-        print("[ERROR] FAIL: Terminal commands not running as sandboxuser")
+        print("FAIL: Terminal commands not running as sandboxuser")
         return False
 
     # Test 1c: Verify cannot access root-only files
@@ -74,9 +74,9 @@ print(f"GID: {os.getgid()}")
     print(f"Result:\n{result}")
 
     if "Permission denied" in result or "cannot open" in result:
-        print("[OK] PASS: Cannot access root-only files")
+        print("PASS: Cannot access root-only files")
     else:
-        print("[ERROR] FAIL: Should not be able to access /etc/shadow")
+        print("FAIL: Should not be able to access /etc/shadow")
         return False
 
     return True
@@ -108,9 +108,9 @@ except Exception as e:
     print(f"Result:\n{result}")
 
     if "NETWORK_DISABLED" in result:
-        print("[OK] PASS: Network is disabled for Python execution")
+        print("PASS: Network is disabled for Python execution")
     else:
-        print("[ERROR] FAIL: Network should be disabled for Python execution")
+        print("FAIL: Network should be disabled for Python execution")
         return False
 
     # Test 2b: Terminal execution should have network enabled
@@ -122,9 +122,9 @@ except Exception as e:
 
     # Network should be enabled for terminal (needed for pip install)
     if "PING_FAILED" not in result or "1 received" in result:
-        print("[OK] PASS: Network is enabled for terminal execution")
+        print("PASS: Network is enabled for terminal execution")
     else:
-        print("[WARNING]  WARNING: Network may be disabled for terminal")
+        print("WARNING: Network may be disabled for terminal")
         print("   (This is acceptable if intentional)")
 
     return True
@@ -170,9 +170,9 @@ except FileNotFoundError:
     print(f"Result:\n{result}")
 
     if "512 MB" in result or "Memory limit" in result:
-        print("[OK] PASS: Memory limit is configured")
+        print("PASS: Memory limit is configured")
     else:
-        print("[WARNING]  WARNING: Could not verify memory limit")
+        print("WARNING: Could not verify memory limit")
 
     # Test 3b: Verify CPU limit exists
     print("\n[3b] Testing CPU limit...")
@@ -196,9 +196,9 @@ except FileNotFoundError:
     print(f"Result:\n{result}")
 
     if "CPU quota" in result or "CPU limit" in result:
-        print("[OK] PASS: CPU limit is configured")
+        print("PASS: CPU limit is configured")
     else:
-        print("[WARNING]  WARNING: Could not verify CPU limit")
+        print("WARNING: Could not verify CPU limit")
 
     # Test 3c: Test that memory limit is enforced
     print("\n[3c] Testing memory limit enforcement...")
@@ -217,11 +217,11 @@ except Exception as e:
     print(f"Result:\n{result}")
 
     if "MEMORY_ERROR" in result or "MemoryError" in result:
-        print("[OK] PASS: Memory limit is enforced")
+        print("PASS: Memory limit is enforced")
     elif "ALLOCATED_1GB" in result:
-        print("[WARNING]  WARNING: Memory limit may not be enforced")
+        print("WARNING: Memory limit may not be enforced")
     else:
-        print("[WARNING]  INFO: Memory limit test inconclusive")
+        print("INFO: Memory limit test inconclusive")
 
     return True
 
@@ -239,7 +239,7 @@ def test_automatic_cleanup():
     try:
         client = docker.from_env()
     except Exception as e:
-        print(f"[ERROR] FAIL: Cannot connect to Docker: {e}")
+        print(f"FAIL: Cannot connect to Docker: {e}")
         return False
 
     # Test 4a: Count containers before execution
@@ -271,9 +271,9 @@ def test_automatic_cleanup():
     print(f"Containers after: {count_after}")
 
     if count_after == count_before:
-        print("[OK] PASS: Container was automatically cleaned up")
+        print("PASS: Container was automatically cleaned up")
     else:
-        print("[ERROR] FAIL: Container not cleaned up")
+        print("FAIL: Container not cleaned up")
         print(f"   Before: {count_before}, After: {count_after}")
         # List remaining containers
         for container in containers_after:
@@ -300,9 +300,9 @@ def test_automatic_cleanup():
     ])
 
     if containers_after == containers_before:
-        print("[OK] PASS: Container cleaned up even on error")
+        print("PASS: Container cleaned up even on error")
     else:
-        print("[ERROR] FAIL: Container not cleaned up on error")
+        print("FAIL: Container not cleaned up on error")
         return False
 
     return True
@@ -338,9 +338,9 @@ while True:
     print(f"Duration: {duration:.1f} seconds")
 
     if "timed out" in result.lower() and duration < 35:
-        print("[OK] PASS: Python timeout enforced (~30 seconds)")
+        print("PASS: Python timeout enforced (~30 seconds)")
     else:
-        print("[WARNING]  WARNING: Timeout may not be working correctly")
+        print("WARNING: Timeout may not be working correctly")
         print(f"   Expected: ~30s, Got: {duration:.1f}s")
 
     return True
@@ -365,9 +365,9 @@ def test_security_features():
     print(f"Result:\n{result}")
 
     if "CapEff" in result:
-        print("[OK] PASS: Capability information available")
+        print("PASS: Capability information available")
     else:
-        print("[WARNING]  INFO: Could not read capabilities")
+        print("INFO: Could not read capabilities")
 
     # Test 6b: Verify cannot use privileged operations
     print("\n[6b] Testing privileged operation prevention...")
@@ -377,9 +377,9 @@ def test_security_features():
     print(f"Result:\n{result}")
 
     if "Permission denied" in result or "not permitted" in result:
-        print("[OK] PASS: Privileged operations are blocked")
+        print("PASS: Privileged operations are blocked")
     else:
-        print("[WARNING]  WARNING: Privileged operations may not be blocked")
+        print("WARNING: Privileged operations may not be blocked")
 
     return True
 
@@ -401,9 +401,9 @@ def main():
     try:
         client = docker.from_env()
         client.ping()
-        print("\n[OK] Docker is available and running")
+        print("\nDocker is available and running")
     except Exception as e:
-        print(f"\n[ERROR] ERROR: Docker is not available: {e}")
+        print(f"\nERROR: Docker is not available: {e}")
         print("\nPlease ensure Docker is installed and running:")
         print("  - Windows/Mac: Start Docker Desktop")
         print("  - Linux: sudo systemctl start docker")
@@ -412,9 +412,9 @@ def main():
     # Check if Docker image exists
     try:
         client.images.get(DOCKER_IMAGE)
-        print(f"[OK] Docker image '{DOCKER_IMAGE}' found")
+        print(f"Docker image '{DOCKER_IMAGE}' found")
     except docker.errors.ImageNotFound:
-        print(f"\n[ERROR] ERROR: Docker image '{DOCKER_IMAGE}' not found")
+        print(f"\nERROR: Docker image '{DOCKER_IMAGE}' not found")
         print("\nPlease build the image first:")
         print("  cd Agent/sandbox")
         print(f"  docker build -t {DOCKER_IMAGE} .")
@@ -433,10 +433,10 @@ def main():
         results.append(("Timeout Enforcement", test_timeout_enforcement()))
         results.append(("Security Features", test_security_features()))
     except KeyboardInterrupt:
-        print("\n\n[WARNING]  Tests interrupted by user")
+        print("\n\nTests interrupted by user")
         return False
     except Exception as e:
-        print(f"\n\n[ERROR] ERROR: Unexpected error during testing: {e}")
+        print(f"\n\nERROR: Unexpected error during testing: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -450,7 +450,7 @@ def main():
     total = len(results)
 
     for test_name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{status}: {test_name}")
 
     print(f"\nTotal: {passed}/{total} tests passed")
@@ -458,12 +458,12 @@ def main():
     if passed == total:
         print("\n🎉 All Docker security requirements verified!")
         print("\nTask 12.2 is COMPLETE:")
-        print("  [OK] Unprivileged user execution")
-        print("  [OK] Network disabled by default")
-        print("  [OK] Resource limits configured")
-        print("  [OK] Automatic cleanup implemented")
+        print("  Unprivileged user execution")
+        print("  Network disabled by default")
+        print("  Resource limits configured")
+        print("  Automatic cleanup implemented")
         return True
-    print("\n[WARNING]  Some tests failed. Please review the results above.")
+    print("\nSome tests failed. Please review the results above.")
     return False
 
 

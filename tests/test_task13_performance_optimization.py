@@ -50,7 +50,7 @@ class TestPerformanceOptimizations:
         assert len(positions) <= MAX_MODULES, \
             f"Module count should be limited to {MAX_MODULES}, got {len(positions)}"
         
-        print(f"[OK] Module limit enforced: {len(positions)} <= {MAX_MODULES}")
+        print(f"Module limit enforced: {len(positions)} <= {MAX_MODULES}")
     
     def test_numpy_array_usage(self):
         """
@@ -76,7 +76,7 @@ class TestPerformanceOptimizations:
             assert all(isinstance(coord, (int, float)) for coord in pos), \
                 "Coordinates should be numeric"
         
-        print(f"[OK] Numpy arrays used for {len(positions)} positions")
+        print(f"Numpy arrays used for {len(positions)} positions")
     
     def test_position_caching(self):
         """
@@ -120,7 +120,7 @@ class TestPerformanceOptimizations:
         assert positions1 == positions2, "Cached positions should be identical"
         
         # Cache access should be faster (though this is a simple check)
-        print(f"[OK] Position caching works:")
+        print(f"Position caching works:")
         print(f"  First call: {first_call_time*1000:.2f}ms")
         print(f"  Cache access: {second_call_time*1000:.2f}ms")
         print(f"  Speedup: {first_call_time/max(second_call_time, 0.0001):.1f}x")
@@ -144,7 +144,7 @@ class TestPerformanceOptimizations:
         key4 = _get_cache_key(10.0, 8.0, 20, 0.05, 0.30, "landscape")
         assert key1 != key4, "Different orientation should generate different cache key"
         
-        print("[OK] Cache key generation works correctly")
+        print("Cache key generation works correctly")
     
     def test_performance_50_modules(self):
         """
@@ -167,7 +167,7 @@ class TestPerformanceOptimizations:
         assert elapsed_time < 1.0, \
             f"50 modules should be calculated in < 1s, took {elapsed_time:.3f}s"
         
-        print(f"[OK] 50 modules calculated in {elapsed_time*1000:.2f}ms")
+        print(f"50 modules calculated in {elapsed_time*1000:.2f}ms")
     
     def test_performance_100_modules(self):
         """
@@ -190,7 +190,7 @@ class TestPerformanceOptimizations:
         assert elapsed_time < 1.0, \
             f"100 modules should be calculated in < 1s, took {elapsed_time:.3f}s"
         
-        print(f"[OK] 100 modules calculated in {elapsed_time*1000:.2f}ms")
+        print(f"100 modules calculated in {elapsed_time*1000:.2f}ms")
     
     def test_performance_200_modules(self):
         """
@@ -213,7 +213,7 @@ class TestPerformanceOptimizations:
         assert elapsed_time < 2.0, \
             f"200 modules should be calculated in < 2s, took {elapsed_time:.3f}s"
         
-        print(f"[OK] 200 modules calculated in {elapsed_time*1000:.2f}ms")
+        print(f"200 modules calculated in {elapsed_time*1000:.2f}ms")
     
     def test_numpy_performance_comparison(self):
         """
@@ -237,7 +237,7 @@ class TestPerformanceOptimizations:
         # Verify results
         assert len(positions_numpy) <= module_count
         
-        print(f"[OK] Numpy-based generation: {numpy_time*1000:.2f}ms for {len(positions_numpy)} modules")
+        print(f"Numpy-based generation: {numpy_time*1000:.2f}ms for {len(positions_numpy)} modules")
         print(f"  Average: {(numpy_time/len(positions_numpy))*1000:.3f}ms per module")
     
     def test_batch_rendering_concept(self):
@@ -278,7 +278,7 @@ class TestPerformanceOptimizations:
         assert total_time < 0.1, \
             f"Batch operations should be fast, took {total_time*1000:.2f}ms"
         
-        print(f"[OK] Batch rendering concept validated:")
+        print(f"Batch rendering concept validated:")
         print(f"  Collection: {collection_time*1000:.2f}ms")
         print(f"  Batch add: {batch_time*1000:.2f}ms")
         print(f"  Total: {total_time*1000:.2f}ms")
@@ -306,7 +306,7 @@ class TestPerformanceOptimizations:
         list_size = sys.getsizeof(positions_list)
         array_size = positions_array.nbytes
         
-        print(f"[OK] Memory efficiency:")
+        print(f"Memory efficiency:")
         print(f"  List: {list_size} bytes")
         print(f"  Numpy array: {array_size} bytes")
         print(f"  Savings: {((list_size - array_size) / list_size * 100):.1f}%")
@@ -332,7 +332,7 @@ class TestPerformanceRegression:
             assert -5.0 <= x <= 5.0, f"X position {x} out of bounds"
             assert -4.0 <= y <= 4.0, f"Y position {y} out of bounds"
         
-        print(f"[OK] Grid calculation accuracy maintained for {len(positions)} modules")
+        print(f"Grid calculation accuracy maintained for {len(positions)} modules")
     
     def test_position_uniqueness(self):
         """Verify that all positions are unique (no overlaps)."""
@@ -347,7 +347,7 @@ class TestPerformanceRegression:
         assert len(unique_positions) == len(positions), \
             "All positions should be unique"
         
-        print(f"[OK] All {len(positions)} positions are unique")
+        print(f"All {len(positions)} positions are unique")
     
     def test_edge_cases(self):
         """Test edge cases with performance optimizations."""
@@ -364,7 +364,7 @@ class TestPerformanceRegression:
         assert len(positions) <= MAX_MODULES, \
             f"Should not exceed {MAX_MODULES} modules"
         
-        print("[OK] Edge cases handled correctly")
+        print("Edge cases handled correctly")
 
 
 def run_performance_benchmark():
@@ -408,10 +408,10 @@ def run_performance_benchmark():
         cached_positions = _position_cache.get(cache_key, [])
         second_run_time = time.time() - start_time
         
-        print(f"  [OK] Placed: {len(positions)} modules")
-        print(f"  [OK] First run: {first_run_time*1000:.2f}ms")
-        print(f"  [OK] Cached run: {second_run_time*1000:.2f}ms")
-        print(f"  [OK] Speedup: {first_run_time/max(second_run_time, 0.0001):.1f}x")
+        print(f"  Placed: {len(positions)} modules")
+        print(f"  First run: {first_run_time*1000:.2f}ms")
+        print(f"  Cached run: {second_run_time*1000:.2f}ms")
+        print(f"  Speedup: {first_run_time/max(second_run_time, 0.0001):.1f}x")
         
         results.append({
             "description": description,
@@ -432,7 +432,7 @@ def run_performance_benchmark():
         print(f"  Speedup: {result['speedup']:.1f}x")
     
     print("\n" + "="*60)
-    print("[OK] All performance benchmarks completed successfully!")
+    print("All performance benchmarks completed successfully!")
     print("="*60)
 
 
@@ -492,5 +492,5 @@ if __name__ == "__main__":
     run_performance_benchmark()
     
     print("\n" + "="*60)
-    print("[OK] ALL TESTS PASSED!")
+    print("ALL TESTS PASSED!")
     print("="*60)

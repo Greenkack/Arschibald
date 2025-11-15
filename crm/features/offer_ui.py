@@ -37,8 +37,8 @@ def render_offer_tracking_ui(conn: sqlite3.Connection, texts: dict[str, str]) ->
     
     # Tabs für verschiedene Ansichten
     tab1, tab2, tab3 = st.tabs([
-        "[CHART] Übersicht",
-        "[NOTE] Alle Angebote",
+        "Übersicht",
+        "Alle Angebote",
         "⏰ Follow-ups"
     ])
     
@@ -54,7 +54,7 @@ def render_offer_tracking_ui(conn: sqlite3.Connection, texts: dict[str, str]) ->
 
 def render_offer_overview(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
     """Rendert die Übersichtsseite mit Statistiken."""
-    st.subheader("[CHART] Angebots-Übersicht")
+    st.subheader("Angebots-Übersicht")
     
     # Lade Statistiken
     stats = get_offer_statistics(conn)
@@ -140,13 +140,13 @@ def render_offer_overview(conn: sqlite3.Connection, texts: dict[str, str]) -> No
         )
     
     # Status-Verteilung
-    st.markdown("### [STATS] Status-Verteilung")
+    st.markdown("### Status-Verteilung")
     
     status_labels = {
-        'draft': '[NOTE] Entwurf',
+        'draft': 'Entwurf',
         'sent': '📤 Versendet',
-        'accepted': '[OK] Angenommen',
-        'rejected': '[ERROR] Abgelehnt'
+        'accepted': 'Angenommen',
+        'rejected': 'Abgelehnt'
     }
     
     for status, label in status_labels.items():
@@ -181,7 +181,7 @@ def render_offer_overview(conn: sqlite3.Connection, texts: dict[str, str]) -> No
 
 def render_all_offers(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
     """Rendert die Liste aller Angebote mit Filtermöglichkeiten."""
-    st.subheader("[NOTE] Alle Angebote")
+    st.subheader("Alle Angebote")
     
     # Filter
     col1, col2, col3 = st.columns(3)
@@ -192,10 +192,10 @@ def render_all_offers(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
             options=['all', 'draft', 'sent', 'accepted', 'rejected'],
             format_func=lambda x: {
                 'all': 'Alle Status',
-                'draft': '[NOTE] Entwurf',
+                'draft': 'Entwurf',
                 'sent': '📤 Versendet',
-                'accepted': '[OK] Angenommen',
-                'rejected': '[ERROR] Abgelehnt'
+                'accepted': 'Angenommen',
+                'rejected': 'Abgelehnt'
             }[x]
         )
     
@@ -213,7 +213,7 @@ def render_all_offers(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
     
     with col3:
         search_query = st.text_input(
-            "[SEARCH] Suche",
+            "Suche",
             placeholder="Projektname oder Kunde..."
         )
     
@@ -262,10 +262,10 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
     }
     
     status_icons = {
-        'draft': '[NOTE]',
+        'draft': '',
         'sent': '📤',
-        'accepted': '[OK]',
-        'rejected': '[ERROR]'
+        'accepted': '',
+        'rejected': ''
     }
     
     status_labels = {
@@ -298,7 +298,7 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
             st.markdown("**Angebots-Info:**")
             st.markdown(f"Status: <span style='color: {color}; font-weight: bold;'>{icon} {label}</span>", unsafe_allow_html=True)
             if offer.get('offer_value'):
-                st.text(f"[MONEY] Wert: {offer['offer_value']:,.2f} €")
+                st.text(f"Wert: {offer['offer_value']:,.2f} €")
             st.text(f"Version: {offer.get('offer_version', 1)}")
             
             if offer.get('offer_sent_date'):
@@ -319,14 +319,14 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
             elif status == 'sent':
                 col_a, col_b = st.columns(2)
                 with col_a:
-                    if st.button("[OK] Angenommen", key=f"accept_{offer['id']}"):
+                    if st.button("Angenommen", key=f"accept_{offer['id']}"):
                         if update_offer_status(conn, offer['id'], 'accepted'):
                             update_lead_status_from_offer(conn, offer['id'], 'accepted')
                             st.success("Angebot angenommen!")
                             st.rerun()
                 
                 with col_b:
-                    if st.button("[ERROR] Abgelehnt", key=f"reject_{offer['id']}"):
+                    if st.button("Abgelehnt", key=f"reject_{offer['id']}"):
                         st.session_state[f'show_rejection_form_{offer["id"]}'] = True
                         st.rerun()
         
@@ -368,7 +368,7 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
                         st.rerun()
             
             with col_b:
-                if st.button("[ERROR] Abbrechen", key=f"cancel_rejection_{offer['id']}"):
+                if st.button("Abbrechen", key=f"cancel_rejection_{offer['id']}"):
                     del st.session_state[f'show_rejection_form_{offer["id"]}']
                     st.rerun()
         
@@ -391,7 +391,7 @@ def render_follow_ups(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
         st.success("🎉 Keine ausstehenden Follow-ups! Alle Angebote sind aktuell.")
         return
     
-    st.warning(f"[WARNING] **{len(follow_ups)}** Angebote benötigen ein Follow-up!")
+    st.warning(f"**{len(follow_ups)}** Angebote benötigen ein Follow-up!")
     st.markdown("---")
     
     for follow_up in follow_ups:
@@ -438,7 +438,7 @@ def render_follow_ups(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
             col1, col2, col3 = st.columns(3)
             
             with col1:
-                if st.button("[OK] Follow-up erledigt", key=f"complete_followup_{follow_up['id']}"):
+                if st.button("Follow-up erledigt", key=f"complete_followup_{follow_up['id']}"):
                     if mark_follow_up_completed(conn, follow_up['id']):
                         st.success("Follow-up als erledigt markiert!")
                         st.rerun()

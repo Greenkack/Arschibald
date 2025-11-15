@@ -462,9 +462,9 @@ def test_scheduler_availability():
     
     # Dieser Test dokumentiert nur die Verfügbarkeit
     if APSCHEDULER_AVAILABLE:
-        print("[OK] APScheduler ist verfügbar")
+        print("APScheduler ist verfügbar")
     else:
-        print("[WARNING] APScheduler ist nicht verfügbar - Scheduler-Tests werden übersprungen")
+        print("APScheduler ist nicht verfügbar - Scheduler-Tests werden übersprungen")
 
 
 def test_get_scheduler_status():
@@ -554,7 +554,7 @@ if __name__ == "__main__":
     print("=" * 70)
     
     if not BACKUP_MODULE_AVAILABLE:
-        print("[ERROR] Backup-Modul nicht verfügbar")
+        print("Backup-Modul nicht verfügbar")
         exit(1)
     
     # Führe Tests mit pytest aus

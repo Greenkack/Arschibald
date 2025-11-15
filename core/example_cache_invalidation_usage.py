@@ -384,16 +384,16 @@ def example_real_world_scenario():
     # User logs in
     cache.set("session:user123", {"active": True}, tags={"session"})
     cache.set("preferences:user123", {"theme": "dark"}, tags={"preferences"})
-    print("[OK] User logged in, session cached")
+    print("User logged in, session cached")
 
     # User fills form
     cache.set("form_state:form1", {"field1": "value"}, tags={"form_state"})
-    print("[OK] Form state cached")
+    print("Form state cached")
 
     # Product data loaded
     cache.set("pricing:prod1", {"price": 99.99}, tags={"pricing"})
     cache.set("calculations:prod1", {"total": 119.99}, tags={"calculations"})
-    print("[OK] Product data cached")
+    print("Product data cached")
 
     # User updates profile (immediate invalidation)
     print("\n→ User updates profile...")

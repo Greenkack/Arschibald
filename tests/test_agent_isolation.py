@@ -64,7 +64,7 @@ class TestAgentIsolation(unittest.TestCase):
         self.assertNotIn("import crm", agent_ui_source)
         self.assertNotIn("from crm", agent_ui_source)
 
-        print("[OK] No database conflicts detected")
+        print("No database conflicts detected")
 
     def test_state_management_separation(self):
         """
@@ -103,7 +103,7 @@ class TestAgentIsolation(unittest.TestCase):
             self.assertNotIn(key, agent_ui_source,
                              f"Agent uses potentially conflicting key: {key}")
 
-        print("[OK] State management properly separated")
+        print("State management properly separated")
 
     def test_no_interference_with_existing_features(self):
         """
@@ -140,7 +140,7 @@ class TestAgentIsolation(unittest.TestCase):
         # Verify agent doesn't modify customer data
         self.assertNotIn("customer_data", agent_ui_source)
 
-        print("[OK] No interference with existing features")
+        print("No interference with existing features")
 
     def test_error_isolation(self):
         """
@@ -189,7 +189,7 @@ class TestAgentIsolation(unittest.TestCase):
         self.assertGreaterEqual(except_count, try_count,
                                 "All try blocks should have except handlers")
 
-        print("[OK] Error isolation properly implemented")
+        print("Error isolation properly implemented")
 
     def test_module_independence(self):
         """
@@ -205,7 +205,7 @@ class TestAgentIsolation(unittest.TestCase):
             self.assertTrue(hasattr(agent_ui, 'render_agent_menu'))
             self.assertTrue(callable(agent_ui.render_agent_menu))
 
-            print("[OK] Agent module is independent")
+            print("Agent module is independent")
         except ImportError as e:
             # Check if the import error is due to missing optional dependencies
             # (which is acceptable) or due to hard dependencies on main app
@@ -229,7 +229,7 @@ class TestAgentIsolation(unittest.TestCase):
                     f"Agent module has unacceptable dependency: {error_msg}")
             else:
                 print(
-                    f"[OK] Agent module independent (missing optional dep: {error_msg})")
+                    f"Agent module independent (missing optional dep: {error_msg})")
 
     def test_gui_integration_safety(self):
         """
@@ -268,7 +268,7 @@ class TestAgentIsolation(unittest.TestCase):
             has_fallback,
             "Agent menu should have fallback mechanism")
 
-        print("[OK] GUI integration is safe with proper fallbacks")
+        print("GUI integration is safe with proper fallbacks")
 
 
 def run_isolation_tests():
@@ -296,11 +296,11 @@ def run_isolation_tests():
     print(f"Errors: {len(result.errors)}")
 
     if result.wasSuccessful():
-        print("\n[OK] ALL ISOLATION TESTS PASSED")
+        print("\nALL ISOLATION TESTS PASSED")
         print("\nThe agent system is properly isolated from the main application.")
         print("No database conflicts, state interference, or error propagation detected.")
     else:
-        print("\n[ERROR] SOME TESTS FAILED")
+        print("\nSOME TESTS FAILED")
         print("\nPlease review the failures above and fix isolation issues.")
 
     print("=" * 60 + "\n")

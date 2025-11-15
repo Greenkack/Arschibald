@@ -15,10 +15,10 @@ def test_screenshot_function_exists():
     """Teste ob render_plotly_image_bytes() Funktion existiert."""
     try:
         from solar_3d_view_module import render_plotly_image_bytes
-        print("[OK] render_plotly_image_bytes() Funktion gefunden")
+        print("render_plotly_image_bytes() Funktion gefunden")
         return True
     except ImportError as e:
-        print(f"[ERROR] Fehler beim Import: {e}")
+        print(f"Fehler beim Import: {e}")
         return False
 
 
@@ -46,7 +46,7 @@ def test_screenshot_implementation():
         
         all_passed = True
         for check_name, result in checks.items():
-            status = "[OK]" if result else "[ERROR]"
+            status = "" if result else ""
             print(f"{status} {check_name}: {'Vorhanden' if result else 'FEHLT'}")
             if not result:
                 all_passed = False
@@ -54,7 +54,7 @@ def test_screenshot_implementation():
         print("\n" + "="*50)
         
         if all_passed:
-            print("\n[OK] Alle Anforderungen erfüllt!")
+            print("\nAlle Anforderungen erfüllt!")
             print("\nTask 4.1 Details:")
             print("  - Button Handler gefunden")
             print("  - render_plotly_image_bytes() wird aufgerufen")
@@ -66,11 +66,11 @@ def test_screenshot_implementation():
             print("  - Detailliertes Logging ist vorhanden")
             return True
         else:
-            print("\n[ERROR] Einige Anforderungen fehlen noch!")
+            print("\nEinige Anforderungen fehlen noch!")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler beim Testen: {e}")
+        print(f"Fehler beim Testen: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -97,20 +97,20 @@ def main():
     print("="*50)
     
     if test1 and test2:
-        print("\n[OK][OK][OK] Task 4.1 ERFOLGREICH IMPLEMENTIERT [OK][OK][OK]")
+        print("\nTask 4.1 ERFOLGREICH IMPLEMENTIERT ")
         print("\nAlle Anforderungen erfüllt:")
-        print("  [OK] Button Handler vorhanden")
-        print("  [OK] render_plotly_image_bytes() wird aufgerufen")
-        print("  [OK] Session State Speicherung implementiert")
-        print("  [OK] Download-Button vorhanden")
-        print("  [OK] Erfolgsmeldung vorhanden")
-        print("  [OK] Info-Meldung vorhanden")
-        print("  [OK] Fehlerbehandlung implementiert")
-        print("  [OK] Detailliertes Logging vorhanden")
+        print("  Button Handler vorhanden")
+        print("  render_plotly_image_bytes() wird aufgerufen")
+        print("  Session State Speicherung implementiert")
+        print("  Download-Button vorhanden")
+        print("  Erfolgsmeldung vorhanden")
+        print("  Info-Meldung vorhanden")
+        print("  Fehlerbehandlung implementiert")
+        print("  Detailliertes Logging vorhanden")
         print("\nRequirements 4.1, 4.2, 4.3 erfüllt!")
         return 0
     else:
-        print("\n[ERROR] Task 4.1 noch nicht vollständig")
+        print("\nTask 4.1 noch nicht vollständig")
         return 1
 
 

@@ -361,7 +361,7 @@ def render_pricing_modifications_ui():
 
         # Rabatte & Aufpreise wurden in den Solar Calculator verschoben
         st.info(
-            "[IDEA] **Hinweis:** Rabatte und Aufpreise können jetzt direkt im Solar Calculator eingestellt werden.")
+            "**Hinweis:** Rabatte und Aufpreise können jetzt direkt im Solar Calculator eingestellt werden.")
 
 # ERSTE render_analysis FUNKTION ENTFERNT - WAR DUPLIKAT
 # Die aktive Version befindet sich weiter unten (Zeile ~7202)
@@ -2681,14 +2681,14 @@ def render_project_roi_matrix_switcher(
         not isinstance(annual_financial_benefit_year1_val, (int, float))
         or annual_financial_benefit_year1_val <= 0
     ):
-        print(f"[WARNING] ROI-Analyse: annual_financial_benefit_year1 ungültig ({annual_financial_benefit_year1_val}), verwende Fallback 700€/Jahr")
+        print(f"ROI-Analyse: annual_financial_benefit_year1 ungültig ({annual_financial_benefit_year1_val}), verwende Fallback 700€/Jahr")
         print(f"   → Überprüfen Sie die Berechnungsgrundlagen:")
         print(f"      - Eigenverbrauch und Strompreise korrekt?")
         print(f"      - Einspeisevergütung aktiviert?")
         print(f"      - Bedarfsanalyse vollständig?")
         annual_financial_benefit_year1_val = 700.0
     else:
-        print(f"[OK] ROI-Analyse: Jährlicher Benefit = {annual_financial_benefit_year1_val:.2f}€")
+        print(f"ROI-Analyse: Jährlicher Benefit = {annual_financial_benefit_year1_val:.2f}€")
 
     # ROI für verschiedene Szenarien berechnen
     scenarios = ["Konservativ", "Realistisch", "Optimistisch"]
@@ -3539,7 +3539,7 @@ def render_extended_calculations_dashboard(
 
         # Info-Box mit Gesamtverbrauch
         st.info(f"""
-        [CHART] **Berechnungsgrundlagen:**
+        **Berechnungsgrundlagen:**
         • Jährlicher Gesamtverbrauch: {opt_results.get('total_annual_consumption', 0):,.2f} kWh
         • Basis-Eigenverbrauchsquote: {opt_results.get('base_self_consumption_ratio', 0):.1f}%
         • Strompreis: {system_data.get('electricity_price_per_kwh', 0.32):.3f} €/kWh
@@ -5424,7 +5424,7 @@ def _render_consumption_coverage_pie(
         if self_supply_val_raw is None:
             missing_values.append("self_supply_rate_percent")
         
-        print(f"[WARNING] Verbrauchsdeckungs-Diagramm: Fehlende Werte: {', '.join(missing_values)}")
+        print(f"Verbrauchsdeckungs-Diagramm: Fehlende Werte: {', '.join(missing_values)}")
         print(f"   → Prüfen Sie:")
         print(f"      - Jährlicher Verbrauch eingegeben?")
         print(f"      - Bedarfsanalyse durchgeführt?")
@@ -5500,7 +5500,7 @@ def _render_consumption_coverage_pie(
         dynamic_color_list = [default_color_1, default_color_2]
 
     if total_cons > 0:
-        print(f"[OK] Verbrauchsdeckungs-Diagramm: Gesamtverbrauch = {total_cons:,.2f} kWh")
+        print(f"Verbrauchsdeckungs-Diagramm: Gesamtverbrauch = {total_cons:,.2f} kWh")
         print(f"  - Eigenversorgung: {self_supply_float:.2f}%")
         print(f"  - Netzbezug: {grid_cons_float:.2f}%")
         
@@ -5593,7 +5593,7 @@ def _render_pv_usage_pie(
         missing_values.append("annual_pv_production_kwh")
     
     if missing_values:
-        print(f"[WARNING] PV-Nutzungs-Diagramm: Fehlende Werte: {', '.join(missing_values)}")
+        print(f"PV-Nutzungs-Diagramm: Fehlende Werte: {', '.join(missing_values)}")
         print(f"   Verfügbare Keys: {list(analysis_results_local.keys())[:10]}...")  # Erste 10 Keys
         st.info(
             get_text(
@@ -5681,7 +5681,7 @@ def _render_pv_usage_pie(
             direct_cons_float -
             storage_cons_float)
         
-        print(f"[OK] PV-Nutzungs-Diagramm: PV-Produktion = {annual_pv_prod_kwh_val:,.2f} kWh")
+        print(f"PV-Nutzungs-Diagramm: PV-Produktion = {annual_pv_prod_kwh_val:,.2f} kWh")
         print(f"  - Direktverbrauch: {direct_cons_float:.2f}%")
         print(f"  - Speichernutzung: {storage_cons_float:.2f}%")
         print(f"  - Einspeisung: {feed_in_prod_perc:.2f}%")
@@ -5726,7 +5726,7 @@ def _render_pv_usage_pie(
         analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = _export_plotly_fig_to_bytes(
             fig, texts_local)
     else:
-        print(f"[WARNING] PV-Nutzungs-Diagramm: Keine PV-Produktion (annual_pv_production_kwh = {annual_pv_prod_kwh_val_raw})")
+        print(f"PV-Nutzungs-Diagramm: Keine PV-Produktion (annual_pv_production_kwh = {annual_pv_prod_kwh_val_raw})")
         print(f"   → Prüfen Sie die Berechnungsgrundlagen:")
         print(f"      - System-Größe (kWp) korrekt?")
         print(f"      - Module ausgewählt?")
@@ -5978,8 +5978,8 @@ def render_advanced_economics(
         try:
             lcoe_result = integrator.calculate_lcoe_advanced(lcoe_params)
         except Exception as e:
-            st.error(f"[ERROR] Fehler bei LCOE-Berechnung: {str(e)}")
-            st.warning("[WARNING] Bitte prüfen Sie die Berechnungsgrundlagen (Investition, Jahresertrag)")
+            st.error(f"Fehler bei LCOE-Berechnung: {str(e)}")
+            st.warning("Bitte prüfen Sie die Berechnungsgrundlagen (Investition, Jahresertrag)")
             lcoe_result = {
                 "lcoe_simple": 0,
                 "lcoe_discounted": 0,
@@ -7857,7 +7857,7 @@ def render_analysis(
     )
 
     st.markdown("---")
-    st.info("[IDEA] **Hinweis:** Preisänderungen (Rabatte, Zuschläge, Sondervereinbarungen) können jetzt direkt im Solar Calculator eingestellt werden.")
+    st.info("**Hinweis:** Preisänderungen (Rabatte, Zuschläge, Sondervereinbarungen) können jetzt direkt im Solar Calculator eingestellt werden.")
     st.markdown("---")
 
     # Amortisationszeit-Berechnungen (aus Solar Calculator verschoben)
@@ -8095,14 +8095,14 @@ def render_analysis(
             if amortization_years_b <= comparison_years_analysis:
                 savings_after_period = total_electricity_costs - final_investment_analysis
                 st.success(
-                    f"[OK] Die Anlage amortisiert sich in {
+                    f"Die Anlage amortisiert sich in {
                         amortization_years_b:.1f} Jahren")
                 st.write(
-                    f"[MONEY] Ersparnis nach {comparison_years_analysis} Jahren: {
+                    f"Ersparnis nach {comparison_years_analysis} Jahren: {
                         _format_german_currency(savings_after_period)}")
             else:
                 st.warning(
-                    f"[WARNING] Amortisation dauert länger als {comparison_years_analysis} Jahre")
+                    f"Amortisation dauert länger als {comparison_years_analysis} Jahre")
 
             # Speichere Ergebnis
             if 'project_data' not in st.session_state:
@@ -8642,11 +8642,11 @@ def render_analysis(
         results_for_display.update(advanced_charts)
 
         # 1. Stromtarif-Optimierung
-        with st.expander("[POWER] Stromtarif-Optimierung", expanded=False):
+        with st.expander("Stromtarif-Optimierung", expanded=False):
             tariff_opt = advanced_features.get('grid_tariff_optimization', {})
             if 'error' not in tariff_opt:
                 st.success(
-                    f"[OK] Empfohlener Tarif: **{tariff_opt.get('recommended_tariff')}**")
+                    f"Empfohlener Tarif: **{tariff_opt.get('recommended_tariff')}**")
                 st.metric(
                     "Einsparpotenzial", f"{
                         tariff_opt.get(
@@ -8660,7 +8660,7 @@ def render_analysis(
                     st.dataframe(tariff_df, use_container_width=True)
 
         # 2. Steuervorteile
-        with st.expander("[MONEY] Steuervorteile & AfA", expanded=False):
+        with st.expander("Steuervorteile & AfA", expanded=False):
             tax_benefits = advanced_features.get('tax_benefits', {})
             if 'error' not in tax_benefits:
                 col1, col2, col3 = st.columns(3)
@@ -8679,14 +8679,14 @@ def render_analysis(
                             total_benefit.get(
                                 'total_20y_linear', 0):,.2f} €")
 
-                st.info(f"[INFO] {tax_benefits.get('vat_note', '')}")
+                st.info(f"{tax_benefits.get('vat_note', '')}")
 
         # 3. Förderungen
         with st.expander("🎁 Verfügbare Förderungen", expanded=False):
             subsidies = advanced_features.get('subsidy_optimization', {})
             if 'error' not in subsidies:
                 st.success(
-                    f"[OK] Gesamte Zuschüsse: **{subsidies.get('total_grants', 0):,.2f} €**")
+                    f"Gesamte Zuschüsse: **{subsidies.get('total_grants', 0):,.2f} €**")
                 st.metric("Förderquote",
                           f"{subsidies.get('grant_rate_percent', 0):.1f}%")
                 st.metric("Netto-Investition",
@@ -8705,7 +8705,7 @@ def render_analysis(
             with st.expander("🔋 Batterie-Optimierung", expanded=False):
                 battery_opt = advanced_features.get('battery_optimization', {})
                 if 'error' not in battery_opt:
-                    st.info(f"[INFO] {battery_opt.get('recommendation', '')}")
+                    st.info(f"{battery_opt.get('recommendation', '')}")
 
                     col1, col2 = st.columns(2)
                     with col1:
@@ -8731,7 +8731,7 @@ def render_analysis(
         with st.expander("💳 Finanzierungs-Szenarien", expanded=False):
             financing = advanced_features.get('financing_scenarios', {})
             if 'error' not in financing:
-                st.success(f"[OK] {financing.get('recommendation', '')}")
+                st.success(f"{financing.get('recommendation', '')}")
 
                 # Szenarien-Tabelle
                 import pandas as pd
@@ -8754,7 +8754,7 @@ def render_analysis(
 
         # 6 & 7: Neue Charts anzeigen
         if 'break_even_detailed_chart_bytes' in results_for_display:
-            with st.expander("[CHART] Break-Even Detailliert", expanded=False):
+            with st.expander("Break-Even Detailliert", expanded=False):
                 try:
                     from advanced_charts import create_break_even_detailed_chart
                     fig_be = create_break_even_detailed_chart(
@@ -8767,7 +8767,7 @@ def render_analysis(
                     st.error(f"Fehler beim Laden des Charts: {e}")
 
         if 'lifecycle_cost_chart_bytes' in results_for_display:
-            with st.expander("[CHART] Lebenszykluskosten (TCO)", expanded=False):
+            with st.expander("Lebenszykluskosten (TCO)", expanded=False):
                 try:
                     from advanced_charts import create_lifecycle_cost_chart
                     fig_lc = create_lifecycle_cost_chart(
@@ -8779,7 +8779,7 @@ def render_analysis(
                 except Exception as e:
                     st.error(f"Fehler beim Laden des Charts: {e}")
 
-        st.success("[OK] Alle 8 erweiterten Features sind jetzt aktiv!")
+        st.success("Alle 8 erweiterten Features sind jetzt aktiv!")
 
     except ImportError as e:
         st.warning(f"Erweiterte Features nicht verfügbar: {e}")
@@ -8872,7 +8872,7 @@ def render_analysis(
         add_live_preview_to_section("PDF-Export")
 
     # Erweiterte Berechnungen für PDF-Export vorbereiten
-    st.subheader("[FILE] PDF-Export Vorbereitung")
+    st.subheader("PDF-Export Vorbereitung")
     if st.button(" Erweiterte Berechnungen für PDF-Export vorbereiten"):
         with st.spinner("Bereite erweiterte Berechnungen für PDF-Export vor..."):
             pdf_data = prepare_advanced_calculations_for_pdf_export(
@@ -9036,7 +9036,7 @@ def render_analysis(
         st.session_state.project_data["analysis_results"] = results_for_display.copy(
         )
 
-        # === [LAUNCH] MASTER-FIX: Alle Charts verfügbar machen ===
+        # === MASTER-FIX: Alle Charts verfügbar machen ===
         try:
             from MASTER_FIX import apply_master_fix
             apply_master_fix(force_all_charts=True, verbose=False)

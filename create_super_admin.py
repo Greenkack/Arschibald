@@ -25,7 +25,7 @@ def create_super_admin_account():
     )
 
     if user_id:
-        print("[OK] Super-Admin 'TSchwarz' erfolgreich erstellt!")
+        print("Super-Admin 'TSchwarz' erfolgreich erstellt!")
         print(f"   User-ID: {user_id}")
         print("   Rang: Geschäftsführer")
         print("   Rolle: admin")
@@ -36,7 +36,7 @@ def create_super_admin_account():
         print("   - Kann Super-Admin-Rechte übertragen")
         print("   - Niemand kann diese Rechte entziehen")
         return True
-    print("[ERROR] Fehler: Benutzername bereits vergeben")
+    print("Fehler: Benutzername bereits vergeben")
     return False
 
 

@@ -28,39 +28,39 @@ def test_grid_calculation():
         from utils.pv3d_grid_calculator import calculate_module_grid
         
         # Test 1: Standard roof
-        print("\n[OK] Test 1: Standard roof (10m x 8m, 20 modules)")
+        print("\nTest 1: Standard roof (10m x 8m, 20 modules)")
         positions = calculate_module_grid(10.0, 8.0, 20)
         assert len(positions) == 20, f"Expected 20 modules, got {len(positions)}"
         assert all(isinstance(p, tuple) and len(p) == 2 for p in positions), \
             "All positions should be (x, y) tuples"
-        print(f"  [OK] Placed {len(positions)} modules")
-        print(f"  [OK] First position: ({positions[0][0]:.2f}, {positions[0][1]:.2f})")
-        print(f"  [OK] Last position: ({positions[-1][0]:.2f}, {positions[-1][1]:.2f})")
+        print(f"  Placed {len(positions)} modules")
+        print(f"  First position: ({positions[0][0]:.2f}, {positions[0][1]:.2f})")
+        print(f"  Last position: ({positions[-1][0]:.2f}, {positions[-1][1]:.2f})")
         
         # Test 2: Small roof
-        print("\n[OK] Test 2: Small roof (5m x 4m, 10 modules)")
+        print("\nTest 2: Small roof (5m x 4m, 10 modules)")
         positions = calculate_module_grid(5.0, 4.0, 10)
-        print(f"  [OK] Placed {len(positions)} modules (may be less than requested)")
+        print(f"  Placed {len(positions)} modules (may be less than requested)")
         
         # Test 3: Invalid inputs
-        print("\n[OK] Test 3: Invalid inputs (negative dimensions)")
+        print("\nTest 3: Invalid inputs (negative dimensions)")
         positions = calculate_module_grid(-10.0, 8.0, 20)
         assert len(positions) == 0, "Should return empty list for invalid inputs"
-        print(f"  [OK] Correctly handled invalid input: {len(positions)} modules")
+        print(f"  Correctly handled invalid input: {len(positions)} modules")
         
         # Test 4: Zero modules
-        print("\n[OK] Test 4: Zero modules requested")
+        print("\nTest 4: Zero modules requested")
         positions = calculate_module_grid(10.0, 8.0, 0)
         assert len(positions) == 0, "Should return empty list for zero modules"
-        print(f"  [OK] Correctly handled zero modules: {len(positions)} modules")
+        print(f"  Correctly handled zero modules: {len(positions)} modules")
         
         print("\n" + "="*70)
-        print("[OK] TEST 3.1 PASSED: Grid calculation works correctly")
+        print("TEST 3.1 PASSED: Grid calculation works correctly")
         print("="*70)
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 3.1 FAILED: {e}")
+        print(f"\nTEST 3.1 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -79,43 +79,43 @@ def test_placement_optimization():
         )
         
         # Test 1: Maximum capacity calculation
-        print("\n[OK] Test 1: Maximum capacity (15m x 12m roof)")
+        print("\nTest 1: Maximum capacity (15m x 12m roof)")
         max_modules = calculate_max_modules(15.0, 12.0)
-        print(f"  [OK] Maximum modules: {max_modules}")
+        print(f"  Maximum modules: {max_modules}")
         assert max_modules > 0, "Should calculate positive maximum"
         
         # Test 2: Verify all modules fit
-        print("\n[OK] Test 2: Verify all modules fit")
+        print("\nTest 2: Verify all modules fit")
         positions = calculate_module_grid(15.0, 12.0, max_modules)
         assert len(positions) == max_modules, \
             f"Should place all {max_modules} modules, got {len(positions)}"
-        print(f"  [OK] Placed {len(positions)} modules (all fit)")
+        print(f"  Placed {len(positions)} modules (all fit)")
         
         # Test 3: Request more than maximum
-        print("\n[OK] Test 3: Request more than maximum")
+        print("\nTest 3: Request more than maximum")
         positions = calculate_module_grid(15.0, 12.0, max_modules + 10)
         assert len(positions) == max_modules, \
             f"Should limit to {max_modules} modules, got {len(positions)}"
-        print(f"  [OK] Correctly limited to {len(positions)} modules")
+        print(f"  Correctly limited to {len(positions)} modules")
         
         # Test 4: Spacing and margins
-        print("\n[OK] Test 4: Spacing and margins respected")
+        print("\nTest 4: Spacing and margins respected")
         positions = calculate_module_grid(10.0, 8.0, 20, spacing=0.1, margin=0.5)
-        print(f"  [OK] Placed {len(positions)} modules with custom spacing/margin")
+        print(f"  Placed {len(positions)} modules with custom spacing/margin")
         
         # Verify no overlaps (simple check: all positions unique)
         unique_positions = set(positions)
         assert len(unique_positions) == len(positions), \
             "All positions should be unique (no overlaps)"
-        print(f"  [OK] All {len(positions)} positions are unique (no overlaps)")
+        print(f"  All {len(positions)} positions are unique (no overlaps)")
         
         print("\n" + "="*70)
-        print("[OK] TEST 3.2 PASSED: Placement optimization works correctly")
+        print("TEST 3.2 PASSED: Placement optimization works correctly")
         print("="*70)
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 3.2 FAILED: {e}")
+        print(f"\nTEST 3.2 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -129,22 +129,22 @@ def test_button_integration():
     
     try:
         # Test 1: Import placement handler
-        print("\n[OK] Test 1: Import placement handler")
+        print("\nTest 1: Import placement handler")
         from utils.pv3d_placement_handler import (
             handle_auto_placement,
             initialize_session_state,
             calculate_z_position,
             calculate_tilt_angle
         )
-        print("  [OK] Placement handler imported successfully")
+        print("  Placement handler imported successfully")
         
         # Test 2: Import UI panel
-        print("\n[OK] Test 2: Import UI panel")
+        print("\nTest 2: Import UI panel")
         from utils.pv3d_module_placement_ui import render_module_placement_panel
-        print("  [OK] UI panel imported successfully")
+        print("  UI panel imported successfully")
         
         # Test 3: Check integration in solar_3d_view_module.py
-        print("\n[OK] Test 3: Check integration in solar_3d_view_module.py")
+        print("\nTest 3: Check integration in solar_3d_view_module.py")
         with open("solar_3d_view_module.py", "r", encoding="utf-8") as f:
             content = f.read()
         
@@ -161,15 +161,15 @@ def test_button_integration():
         all_present = True
         for check_name, check_string in checks:
             if check_string in content:
-                print(f"  [OK] {check_name}: Found")
+                print(f"  {check_name}: Found")
             else:
-                print(f"  [ERROR] {check_name}: NOT FOUND")
+                print(f"  {check_name}: NOT FOUND")
                 all_present = False
         
         assert all_present, "Not all integration points found in solar_3d_view_module.py"
         
         # Test 4: Test handle_auto_placement function (without Streamlit)
-        print("\n[OK] Test 4: Test handle_auto_placement logic")
+        print("\nTest 4: Test handle_auto_placement logic")
         
         # Create a mock session state
         class MockSessionState(dict):
@@ -198,34 +198,34 @@ def test_button_integration():
         assert result["count"] > 0, "Should place at least one module"
         assert len(result["positions"]) == result["count"], \
             "Position count should match reported count"
-        print(f"  [OK] Auto placement successful: {result['count']} modules placed")
-        print(f"  [OK] Message: {result['message']}")
+        print(f"  Auto placement successful: {result['count']} modules placed")
+        print(f"  Message: {result['message']}")
         
         # Test 5: Verify Z-position calculation
-        print("\n[OK] Test 5: Z-position calculation")
+        print("\nTest 5: Z-position calculation")
         z_flat = calculate_z_position("Flachdach", 0.0, 10.0)
         z_gable = calculate_z_position("Satteldach", 35.0, 10.0)
-        print(f"  [OK] Flachdach Z-position: {z_flat}m (should be 0.30m for Aufständerung)")
-        print(f"  [OK] Satteldach Z-position: {z_gable}m (should be 0.15m for roof surface)")
+        print(f"  Flachdach Z-position: {z_flat}m (should be 0.30m for Aufständerung)")
+        print(f"  Satteldach Z-position: {z_gable}m (should be 0.15m for roof surface)")
         assert z_flat == 0.30, "Flat roof should have 0.30m elevation"
         assert z_gable == 0.15, "Gable roof should have 0.15m elevation"
         
         # Test 6: Verify tilt angle calculation
-        print("\n[OK] Test 6: Tilt angle calculation")
+        print("\nTest 6: Tilt angle calculation")
         tilt_flat = calculate_tilt_angle("Flachdach", 0.0)
         tilt_gable = calculate_tilt_angle("Satteldach", 35.0)
-        print(f"  [OK] Flachdach tilt: {tilt_flat}° (should be 30° for Aufständerung)")
-        print(f"  [OK] Satteldach tilt: {tilt_gable}° (should match roof pitch 35°)")
+        print(f"  Flachdach tilt: {tilt_flat}° (should be 30° for Aufständerung)")
+        print(f"  Satteldach tilt: {tilt_gable}° (should match roof pitch 35°)")
         assert tilt_flat == 30.0, "Flat roof should have 30° tilt"
         assert tilt_gable == 35.0, "Gable roof should match roof pitch"
         
         print("\n" + "="*70)
-        print("[OK] TEST 3.3 PASSED: Button integration works correctly")
+        print("TEST 3.3 PASSED: Button integration works correctly")
         print("="*70)
         return True
         
     except Exception as e:
-        print(f"\n[ERROR] TEST 3.3 FAILED: {e}")
+        print(f"\nTEST 3.3 FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -250,7 +250,7 @@ def main():
     print("="*70)
     
     for test_name, passed in results:
-        status = "[OK] PASSED" if passed else "[ERROR] FAILED"
+        status = "PASSED" if passed else "FAILED"
         print(f"{status}: {test_name}")
     
     all_passed = all(passed for _, passed in results)
@@ -260,17 +260,17 @@ def main():
         print("🎉 ALL TESTS PASSED - TASK 3 COMPLETE!")
         print("="*70)
         print("\nAutomatische Belegung funktioniert:")
-        print("  [OK] Grid-Berechnung berechnet korrekte Positionen")
-        print("  [OK] Platzierungs-Algorithmus optimiert Modulanzahl")
-        print("  [OK] Button 'Automatisch belegen' ist integriert")
-        print("  [OK] Event-Handler verarbeiten Button-Klicks")
-        print("  [OK] Session State wird korrekt aktualisiert")
-        print("  [OK] Fortschritt wird angezeigt")
-        print("  [OK] Ergebnis (Anzahl platzierter Module) wird angezeigt")
+        print("  Grid-Berechnung berechnet korrekte Positionen")
+        print("  Platzierungs-Algorithmus optimiert Modulanzahl")
+        print("  Button 'Automatisch belegen' ist integriert")
+        print("  Event-Handler verarbeiten Button-Klicks")
+        print("  Session State wird korrekt aktualisiert")
+        print("  Fortschritt wird angezeigt")
+        print("  Ergebnis (Anzahl platzierter Module) wird angezeigt")
         return 0
     else:
         print("\n" + "="*70)
-        print("[ERROR] SOME TESTS FAILED - TASK 3 INCOMPLETE")
+        print("SOME TESTS FAILED - TASK 3 INCOMPLETE")
         print("="*70)
         return 1
 

@@ -26,10 +26,10 @@ def test_imports():
             _safe_get_roof_inclination_deg,
             _safe_get_roof_covering
         )
-        print("[OK] utils.pv3d Module erfolgreich importiert")
+        print("utils.pv3d Module erfolgreich importiert")
         return True
     except ImportError as e:
-        print(f"[ERROR] Import-Fehler: {e}")
+        print(f"Import-Fehler: {e}")
         return False
 
 
@@ -43,18 +43,18 @@ def test_building_dims():
         assert dims.length_m == 10.0
         assert dims.width_m == 6.0
         assert dims.wall_height_m == 6.0
-        print("[OK] BuildingDims Default-Werte korrekt")
+        print("BuildingDims Default-Werte korrekt")
         
         # Teste Custom-Werte
         dims = BuildingDims(length_m=15.0, width_m=8.0, wall_height_m=7.0)
         assert dims.length_m == 15.0
         assert dims.width_m == 8.0
         assert dims.wall_height_m == 7.0
-        print("[OK] BuildingDims Custom-Werte korrekt")
+        print("BuildingDims Custom-Werte korrekt")
         
         return True
     except Exception as e:
-        print(f"[ERROR] BuildingDims Test fehlgeschlagen: {e}")
+        print(f"BuildingDims Test fehlgeschlagen: {e}")
         return False
 
 
@@ -69,23 +69,23 @@ def test_layout_config():
         assert config.use_garage is False
         assert config.use_facade is False
         assert config.removed_indices == []
-        print("[OK] LayoutConfig Default-Werte korrekt")
+        print("LayoutConfig Default-Werte korrekt")
         
         # Teste JSON-Serialisierung
         json_str = config.to_json()
         assert isinstance(json_str, str)
         assert "auto" in json_str
-        print("[OK] LayoutConfig to_json() funktioniert")
+        print("LayoutConfig to_json() funktioniert")
         
         # Teste JSON-Deserialisierung
         config2 = LayoutConfig.from_json(json_str)
         assert config2.mode == config.mode
         assert config2.use_garage == config.use_garage
-        print("[OK] LayoutConfig from_json() funktioniert")
+        print("LayoutConfig from_json() funktioniert")
         
         return True
     except Exception as e:
-        print(f"[ERROR] LayoutConfig Test fehlgeschlagen: {e}")
+        print(f"LayoutConfig Test fehlgeschlagen: {e}")
         return False
 
 
@@ -101,7 +101,7 @@ def test_data_extraction():
         # Teste mit leeren Daten
         orientation = _safe_get_orientation({})
         assert orientation == "Süd"  # Fallback
-        print("[OK] _safe_get_orientation Fallback funktioniert")
+        print("_safe_get_orientation Fallback funktioniert")
         
         # Teste mit vollständigen Daten
         project_data = {
@@ -114,19 +114,19 @@ def test_data_extraction():
         
         orientation = _safe_get_orientation(project_data)
         assert orientation == "Ost"
-        print("[OK] _safe_get_orientation mit Daten funktioniert")
+        print("_safe_get_orientation mit Daten funktioniert")
         
         inclination = _safe_get_roof_inclination_deg(project_data)
         assert inclination == 35.0
-        print("[OK] _safe_get_roof_inclination_deg funktioniert")
+        print("_safe_get_roof_inclination_deg funktioniert")
         
         covering = _safe_get_roof_covering(project_data)
         assert covering == "Ziegel"
-        print("[OK] _safe_get_roof_covering funktioniert")
+        print("_safe_get_roof_covering funktioniert")
         
         return True
     except Exception as e:
-        print(f"[ERROR] Datenextraktions-Test fehlgeschlagen: {e}")
+        print(f"Datenextraktions-Test fehlgeschlagen: {e}")
         return False
 
 
@@ -134,7 +134,7 @@ def test_ui_file_exists():
     """Teste ob die UI-Datei existiert."""
     ui_file = "pages/solar_3d_view.py"
     if os.path.exists(ui_file):
-        print(f"[OK] UI-Datei existiert: {ui_file}")
+        print(f"UI-Datei existiert: {ui_file}")
         
         # Prüfe Dateigröße
         size = os.path.getsize(ui_file)
@@ -142,13 +142,13 @@ def test_ui_file_exists():
         
         # Prüfe ob Datei nicht leer ist
         if size > 1000:
-            print("[OK] UI-Datei hat sinnvolle Größe")
+            print("UI-Datei hat sinnvolle Größe")
             return True
         else:
-            print("[ERROR] UI-Datei ist zu klein")
+            print("UI-Datei ist zu klein")
             return False
     else:
-        print(f"[ERROR] UI-Datei nicht gefunden: {ui_file}")
+        print(f"UI-Datei nicht gefunden: {ui_file}")
         return False
 
 
@@ -175,7 +175,7 @@ def main():
             result = test_func()
             results.append((name, result))
         except Exception as e:
-            print(f"[ERROR] Unerwarteter Fehler: {e}")
+            print(f"Unerwarteter Fehler: {e}")
             results.append((name, False))
     
     # Zusammenfassung
@@ -187,7 +187,7 @@ def main():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{name}: {status}")
     
     print()
@@ -197,7 +197,7 @@ def main():
         print("\n🎉 Alle Tests erfolgreich!")
         return 0
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return 1
 
 

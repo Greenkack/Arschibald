@@ -29,18 +29,18 @@ def test_with_real_yml():
     yml_path = Path("coords_multi/seite1_f1.yml")
     
     if not yml_path.exists():
-        print(f"\n[ERROR] YML file not found: {yml_path}")
+        print(f"\nYML file not found: {yml_path}")
         print("Please ensure coords_multi directory contains YML files.")
         return False
     
-    print(f"\n[FILE] Loading YML file: {yml_path}")
+    print(f"\nLoading YML file: {yml_path}")
     
     # Parse YML file
     try:
         elements = parse_yml(str(yml_path))
-        print(f"[OK] Parsed {len(elements)} elements from YML file")
+        print(f"Parsed {len(elements)} elements from YML file")
     except Exception as e:
-        print(f"[ERROR] Error parsing YML: {e}")
+        print(f"Error parsing YML: {e}")
         return False
     
     # Show original elements
@@ -66,7 +66,7 @@ def test_with_real_yml():
         color_palette=["#007BFF", "#FFFFFF"]
     )
     
-    print(f"\n[CHART] PDF Analysis:")
+    print(f"\nPDF Analysis:")
     print(f"   Page size: {pdf_analysis.page_size}")
     print(f"   Safe zones: {len(pdf_analysis.safe_zones)}")
     
@@ -80,7 +80,7 @@ def test_with_real_yml():
         strategy="grid"
     )
     
-    print(f"[OK] Calculated {len(new_positions)} new positions")
+    print(f"Calculated {len(new_positions)} new positions")
     
     # Show new positions
     print(f"\n--- New Positions (first 5) ---")
@@ -99,11 +99,11 @@ def test_with_real_yml():
         print(f"   ... and {len(new_positions) - 5} more positions")
     
     # Validate positions
-    print(f"\n[OK] Validating new positions...")
+    print(f"\nValidating new positions...")
     is_valid, errors = calculator.validate_positions(new_positions)
     
     if is_valid:
-        print("[OK] All positions are valid!")
+        print("All positions are valid!")
     else:
         print(f"⚠ Validation found {len(errors)} issue(s):")
         for error in errors[:10]:  # Show first 10 errors
@@ -113,9 +113,9 @@ def test_with_real_yml():
     
     # Check collisions
     collisions = calculator.check_collisions(new_positions)
-    print(f"\n[SEARCH] Collision Detection:")
+    print(f"\nCollision Detection:")
     if len(collisions) == 0:
-        print("[OK] No collisions detected!")
+        print("No collisions detected!")
     else:
         print(f"⚠ Found {len(collisions)} collision(s):")
         for collision in collisions[:5]:  # Show first 5
@@ -128,7 +128,7 @@ def test_with_real_yml():
             print(f"   ... and {len(collisions) - 5} more collisions")
     
     # Statistics
-    print(f"\n[STATS] Statistics:")
+    print(f"\nStatistics:")
     print(f"   Total elements: {len(elements)}")
     print(f"   Positions calculated: {len(new_positions)}")
     print(f"   Valid positions: {is_valid}")
@@ -154,7 +154,7 @@ def test_with_real_yml():
     print(f"   Average movement: dx={avg_dx:.1f}, dy={avg_dy:.1f}")
     
     print("\n" + "=" * 70)
-    print("[OK] Test completed successfully!")
+    print("Test completed successfully!")
     print("=" * 70)
     
     return True
@@ -169,14 +169,14 @@ def test_convenience_function():
     yml_path = Path("coords_multi/seite1_f1.yml")
     
     if not yml_path.exists():
-        print(f"\n[ERROR] YML file not found: {yml_path}")
+        print(f"\nYML file not found: {yml_path}")
         return False
     
-    print(f"\n[FILE] Loading YML file: {yml_path}")
+    print(f"\nLoading YML file: {yml_path}")
     
     # Parse YML
     elements = parse_yml(str(yml_path))
-    print(f"[OK] Parsed {len(elements)} elements")
+    print(f"Parsed {len(elements)} elements")
     
     # Create analysis
     pdf_analysis = PDFAnalysis(
@@ -193,10 +193,10 @@ def test_convenience_function():
     print(f"\n🔄 Using convenience function...")
     positions = calculate_positions(elements, pdf_analysis)
     
-    print(f"[OK] Calculated {len(positions)} positions")
+    print(f"Calculated {len(positions)} positions")
     print(f"   First position: {positions[0]}")
     
-    print("\n[OK] Convenience function works correctly!")
+    print("\nConvenience function works correctly!")
     
     return True
 
@@ -210,7 +210,7 @@ def test_grid_distribution():
     yml_path = Path("coords_multi/seite1_f1.yml")
     
     if not yml_path.exists():
-        print(f"\n[ERROR] YML file not found: {yml_path}")
+        print(f"\nYML file not found: {yml_path}")
         return False
     
     # Parse YML
@@ -235,7 +235,7 @@ def test_grid_distribution():
         strategy="grid"
     )
     
-    print(f"\n[CHART] Grid Distribution Analysis:")
+    print(f"\nGrid Distribution Analysis:")
     print(f"   Total elements: {len(elements)}")
     print(f"   Grid: 3x3 (9 cells)")
     
@@ -263,7 +263,7 @@ def test_grid_distribution():
             break
     
     if all_in_bounds:
-        print(f"\n[OK] All positions are within page bounds!")
+        print(f"\nAll positions are within page bounds!")
     else:
         print(f"\n⚠ Some positions are outside bounds")
     
@@ -290,13 +290,13 @@ if __name__ == "__main__":
     # Summary
     print("\n" + "=" * 70)
     if success:
-        print("[OK] ALL TESTS PASSED")
+        print("ALL TESTS PASSED")
         print("\nTask 4.2 Requirements Met:")
-        print("  [OK] calculate_positions() main function implemented")
-        print("  [OK] Grid-based positioning as fallback implemented")
-        print("  [OK] Tested with example YML file (seite1_f1.yml)")
+        print("  calculate_positions() main function implemented")
+        print("  Grid-based positioning as fallback implemented")
+        print("  Tested with example YML file (seite1_f1.yml)")
     else:
-        print("[ERROR] SOME TESTS FAILED")
+        print("SOME TESTS FAILED")
     print("=" * 70 + "\n")
     
     sys.exit(0 if success else 1)

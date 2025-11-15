@@ -20,20 +20,20 @@ def main():
 
     st.set_page_config(
         page_title="Enhanced Product Management Demo",
-        page_icon="[TOOL]",
+        page_icon="",
         layout="wide",
         initial_sidebar_state="expanded"
     )
 
-    st.title("[TOOL] Enhanced Product Management Demo")
+    st.title("Enhanced Product Management Demo")
     st.markdown("---")
 
     st.markdown("""
-    ## [TARGET] Neue Funktionen der erweiterten Produktverwaltung
+    ## Neue Funktionen der erweiterten Produktverwaltung
 
     Diese Demo zeigt die vollständig implementierten Erweiterungen der Produktdatenbank:
 
-    ### [CHART] **1. Erweiterte Produktfelder**
+    ### **1. Erweiterte Produktfelder**
     - **technology** - Technologie-Spezifikation
     - **feature** - Besondere Features
     - **design** - Design-Eigenschaften
@@ -64,7 +64,7 @@ def main():
     - feature, upgrade, max_kwh_capacity, weight_kg
     - origin_country, description
 
-    ### [DELETE] **3. Produktdatenbank-Reset**
+    ### **3. Produktdatenbank-Reset**
     - Komplette Löschung aller Produkte
     - Doppelte Sicherheitsabfrage
     - Statistiken und Backup-Hinweise
@@ -73,7 +73,7 @@ def main():
     st.markdown("---")
 
     # Navigation
-    st.subheader("[LAUNCH] Demo starten")
+    st.subheader("Demo starten")
 
     col1, col2, col3 = st.columns(3)
 
@@ -116,7 +116,7 @@ def show_documentation():
     st.header("📖 Ausführliche Dokumentation")
 
     # Implementierungsdetails
-    with st.expander("[TOOL] Implementierungsdetails", expanded=True):
+    with st.expander("Implementierungsdetails", expanded=True):
         st.markdown("""
         ### Datenbankschema-Erweiterungen
 
@@ -152,7 +152,7 @@ def show_documentation():
         """)
 
     # Verwendungsbeispiele
-    with st.expander("[IDEA] Verwendungsbeispiele"):
+    with st.expander("Verwendungsbeispiele"):
         st.markdown("""
         ### Produkt mit neuen Feldern hinzufügen
 
@@ -233,7 +233,7 @@ def show_documentation():
 
         **Rückgabe:** bool - True bei Erfolg, False bei Fehler
 
-        **[WARNING] WARNUNG:** Löscht ALLE Produkte unwiderruflich!
+        **WARNUNG:** Löscht ALLE Produkte unwiderruflich!
         """)
 
     # Kategorie-spezifische Felder
@@ -261,7 +261,7 @@ def show_documentation():
 
         with col2:
             st.markdown("""
-            ### [POWER] Wechselrichter
+            ### Wechselrichter
             **Spezifische Felder:**
             - `power_kw` - Leistung in kW
             - `outdoor_opt` - Outdoor-Option (Boolean)
@@ -298,7 +298,7 @@ def show_documentation():
         st.markdown("""
         ### Produktdatenbank-Reset
 
-        [WARNING] **WICHTIGE SICHERHEITSHINWEISE:**
+        **WICHTIGE SICHERHEITSHINWEISE:**
 
         1. **Backup erstellen:** Erstellen Sie immer ein Backup vor dem Reset
         2. **Doppelte Bestätigung:** Der Reset erfordert explizite Textbestätigung

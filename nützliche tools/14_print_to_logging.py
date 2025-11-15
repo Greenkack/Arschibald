@@ -12,4 +12,4 @@ def convert_print_to_logging(directory="."):
                 content = "import logging\n" + content
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(content)
-    print("[OK] Alle print() zu logging.info() konvertiert.")
+    print("Alle print() zu logging.info() konvertiert.")

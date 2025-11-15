@@ -55,13 +55,13 @@ try:
     calc_result = calculate_mounting_requirements_from_details(project_details)
     
     if calc_result:
-        print("\n[OK] Berechnung erfolgreich!")
-        print(f"\n[CHART] Ergebnis:")
+        print("\nBerechnung erfolgreich!")
+        print(f"\nErgebnis:")
         print(f"  Komponenten: {calc_result.total_components_count}")
         print(f"  Gesamtpreis: {calc_result.total_price_netto:.2f} EUR")
         print(f"  Gewicht: {calc_result.total_weight_kg:.1f} kg")
         
-        print(f"\n[TOOL] Komponenten-Details:")
+        print(f"\nKomponenten-Details:")
         for comp in calc_result.components:
             print(f"  - {comp.product_name} ({comp.manufacturer})")
             print(f"    Kategorie: {comp.category}")
@@ -73,16 +73,16 @@ try:
         
         # Update project_details
         update_mounting_quantities_in_details(project_details, calc_result)
-        print("[OK] project_details aktualisiert")
+        print("project_details aktualisiert")
     else:
-        print("[ERROR] Berechnung fehlgeschlagen")
+        print("Berechnung fehlgeschlagen")
         sys.exit(1)
         
 except ImportError as e:
-    print(f"[ERROR] Import-Fehler: {e}")
+    print(f"Import-Fehler: {e}")
     sys.exit(1)
 except Exception as e:
-    print(f"[ERROR] Fehler bei Berechnung: {e}")
+    print(f"Fehler bei Berechnung: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
@@ -95,7 +95,7 @@ print("=" * 80)
 
 try:
     total_price = get_mounting_total_price(project_details)
-    print(f"\n[MONEY] Gesamtpreis Unterkonstruktion: {total_price:.2f} EUR")
+    print(f"\nGesamtpreis Unterkonstruktion: {total_price:.2f} EUR")
     
     # Simuliere manuelle Auswahl + automatische Menge
     project_details['mounting_roof_hook_selected_name'] = 'SingleHook 4S Dachhaken'
@@ -110,10 +110,10 @@ try:
         print(f"  - {comp['product_name']}{manual_flag}{auto_flag}")
         print(f"    Menge: {comp['quantity']} {comp['unit']} × {comp['price_netto']:.2f} EUR = {comp['total_price']:.2f} EUR")
     
-    print("\n[OK] Pricing-Integration erfolgreich")
+    print("\nPricing-Integration erfolgreich")
     
 except Exception as e:
-    print(f"[ERROR] Fehler bei Pricing: {e}")
+    print(f"Fehler bei Pricing: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
@@ -129,7 +129,7 @@ try:
     
     pdf_components = get_mounting_components_for_pdf(project_details)
     
-    print(f"\n[FILE] PDF-Komponenten ({len(pdf_components)} Einträge):")
+    print(f"\nPDF-Komponenten ({len(pdf_components)} Einträge):")
     for i, comp in enumerate(pdf_components, 1):
         print(f"\n{i}. {comp['product_name']} ({comp['manufacturer']})")
         print(f"   Kategorie: {comp['category']}")
@@ -137,10 +137,10 @@ try:
         print(f"   Preis/Einheit: {comp.get('price_netto', 0):.2f} EUR")
         print(f"   Gesamt: {comp.get('total_price', 0):.2f} EUR")
     
-    print("\n[OK] PDF-Daten erfolgreich vorbereitet")
+    print("\nPDF-Daten erfolgreich vorbereitet")
     
 except Exception as e:
-    print(f"[ERROR] Fehler bei PDF-Vorbereitung: {e}")
+    print(f"Fehler bei PDF-Vorbereitung: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
@@ -179,7 +179,7 @@ try:
         cost_pv_mounting_netto  # NEW
     ])
     
-    print(f"\n[CHART] Kostenaufstellung:")
+    print(f"\nKostenaufstellung:")
     print(f"  Module Aufpreis: {cost_modules_aufpreis_netto:.2f} EUR")
     print(f"  Inverter Aufpreis: {cost_inverter_aufpreis_netto:.2f} EUR")
     print(f"  Zubehör: {cost_accessories_aufpreis_netto:.2f} EUR")
@@ -188,10 +188,10 @@ try:
     print(f"  " + "-" * 60)
     print(f"  Gesamt Zusatzkosten: {total_additional_costs_netto:.2f} EUR")
     
-    print("\n[OK] Calculations Integration OK")
+    print("\nCalculations Integration OK")
     
 except Exception as e:
-    print(f"[ERROR] Fehler bei Calculations: {e}")
+    print(f"Fehler bei Calculations: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
@@ -201,8 +201,8 @@ except Exception as e:
 print("\n" + "=" * 80)
 print("🎉 ALLE TESTS ERFOLGREICH!")
 print("=" * 80)
-print("\n[OK] Mengenberechnung funktioniert")
-print("[OK] Pricing-Integration funktioniert")
-print("[OK] PDF-Daten-Vorbereitung funktioniert")
-print("[OK] Calculations Integration funktioniert")
-print("\n[LAUNCH] Ready for Production!")
+print("\nMengenberechnung funktioniert")
+print("Pricing-Integration funktioniert")
+print("PDF-Daten-Vorbereitung funktioniert")
+print("Calculations Integration funktioniert")
+print("\nReady for Production!")

@@ -71,7 +71,7 @@ def test_task_3_3_annuity_formula():
         tolerance = test['expected_monthly'] * 0.02
         passed = abs(monthly - test['expected_monthly']) <= tolerance
 
-        status = "[OK] PASS" if passed else "[ERROR] FAIL"
+        status = "PASS" if passed else "FAIL"
         print(f"\n{status} {test['description']}")
         print(f"  Expected: ~{test['expected_monthly']:.2f}€")
         print(f"  Calculated: {monthly:.2f}€")
@@ -87,13 +87,13 @@ def test_task_3_3_annuity_formula():
     monthly_zero = generator._calculate_monthly_rate(30000, 0, 60)
     expected_zero = 30000 / 60
     print(
-        f"\n[OK] Zero interest: {
+        f"\nZero interest: {
             monthly_zero:.2f}€ (expected: {
             expected_zero:.2f}€)")
 
     # Zero months
     monthly_zero_months = generator._calculate_monthly_rate(30000, 4.5, 0)
-    print(f"[OK] Zero months: {monthly_zero_months:.2f}€ (returns full amount)")
+    print(f"Zero months: {monthly_zero_months:.2f}€ (returns full amount)")
 
     return all_passed
 
@@ -162,11 +162,11 @@ def test_task_3_3_calculation_table():
             test_fin_opt,
             A4[1] - 5 * cm
         )
-        print("\n[OK] PASS: _draw_financing_calculation_table() method exists and executes")
+        print("\nPASS: _draw_financing_calculation_table() method exists and executes")
         return True
     except Exception as e:
         print(
-            f"\n[ERROR] FAIL: Error calling _draw_financing_calculation_table(): {e}")
+            f"\nFAIL: Error calling _draw_financing_calculation_table(): {e}")
         return False
 
 
@@ -230,7 +230,7 @@ def test_task_3_3_total_costs_and_interest():
             assert abs(
                 total_interest) < 0.01, "Zero interest should result in zero interest costs"
 
-    print("\n[OK] PASS: All total costs and interest calculations are correct")
+    print("\nPASS: All total costs and interest calculations are correct")
     return True
 
 
@@ -260,16 +260,16 @@ def main():
 
     all_passed = True
     for test_name, passed in results:
-        status = "[OK] PASS" if passed else "[ERROR] FAIL"
+        status = "PASS" if passed else "FAIL"
         print(f"{status} {test_name}")
         if not passed:
             all_passed = False
 
     print("\n" + "=" * 60)
     if all_passed:
-        print("[OK] ALL TESTS PASSED - TASK 3.3 IS COMPLETE")
+        print("ALL TESTS PASSED - TASK 3.3 IS COMPLETE")
     else:
-        print("[ERROR] SOME TESTS FAILED - TASK 3.3 NEEDS WORK")
+        print("SOME TESTS FAILED - TASK 3.3 NEEDS WORK")
     print("=" * 60)
 
     return all_passed

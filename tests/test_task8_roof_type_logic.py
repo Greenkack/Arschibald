@@ -31,17 +31,17 @@ def test_z_position_flat_roof():
     z_pos = calculate_z_position("Flachdach", 0.0)
     
     assert z_pos == 0.3, f"Expected 0.3m, got {z_pos}m"
-    print(f"  [OK] Flachdach Z-position: {z_pos}m (0.3m Aufständerung)")
+    print(f"  Flachdach Z-position: {z_pos}m (0.3m Aufständerung)")
     
     # Test case-insensitive
     z_pos_upper = calculate_z_position("FLACHDACH", 0.0)
     assert z_pos_upper == 0.3, f"Expected 0.3m, got {z_pos_upper}m"
-    print(f"  [OK] Case-insensitive: {z_pos_upper}m")
+    print(f"  Case-insensitive: {z_pos_upper}m")
     
     # Test with whitespace
     z_pos_space = calculate_z_position(" Flachdach ", 0.0)
     assert z_pos_space == 0.3, f"Expected 0.3m, got {z_pos_space}m"
-    print(f"  [OK] With whitespace: {z_pos_space}m")
+    print(f"  With whitespace: {z_pos_space}m")
     
     print()
 
@@ -53,16 +53,16 @@ def test_z_position_gable_roof():
     z_pos = calculate_z_position("Satteldach", 35.0)
     
     assert z_pos == 0.05, f"Expected 0.05m, got {z_pos}m"
-    print(f"  [OK] Satteldach Z-position: {z_pos}m (direkt auf Dach)")
+    print(f"  Satteldach Z-position: {z_pos}m (direkt auf Dach)")
     
     # Test with different pitches (should not affect Z-position)
     z_pos_25 = calculate_z_position("Satteldach", 25.0)
     assert z_pos_25 == 0.05, f"Expected 0.05m, got {z_pos_25}m"
-    print(f"  [OK] With 25° pitch: {z_pos_25}m")
+    print(f"  With 25° pitch: {z_pos_25}m")
     
     z_pos_45 = calculate_z_position("Satteldach", 45.0)
     assert z_pos_45 == 0.05, f"Expected 0.05m, got {z_pos_45}m"
-    print(f"  [OK] With 45° pitch: {z_pos_45}m")
+    print(f"  With 45° pitch: {z_pos_45}m")
     
     print()
 
@@ -74,7 +74,7 @@ def test_z_position_shed_roof():
     z_pos = calculate_z_position("Pultdach", 25.0)
     
     assert z_pos == 0.05, f"Expected 0.05m, got {z_pos}m"
-    print(f"  [OK] Pultdach Z-position: {z_pos}m (direkt auf Dach)")
+    print(f"  Pultdach Z-position: {z_pos}m (direkt auf Dach)")
     
     print()
 
@@ -88,7 +88,7 @@ def test_z_position_other_roofs():
     for roof_type in roof_types:
         z_pos = calculate_z_position(roof_type, 35.0)
         assert z_pos == 0.05, f"Expected 0.05m for {roof_type}, got {z_pos}m"
-        print(f"  [OK] {roof_type}: {z_pos}m")
+        print(f"  {roof_type}: {z_pos}m")
     
     print()
 
@@ -100,12 +100,12 @@ def test_tilt_angle_flat_roof():
     tilt = calculate_tilt_angle("Flachdach", 0.0)
     
     assert tilt == 30.0, f"Expected 30.0°, got {tilt}°"
-    print(f"  [OK] Flachdach tilt angle: {tilt}° (Aufständerung)")
+    print(f"  Flachdach tilt angle: {tilt}° (Aufständerung)")
     
     # Test that roof pitch is ignored for flat roofs
     tilt_with_pitch = calculate_tilt_angle("Flachdach", 15.0)
     assert tilt_with_pitch == 30.0, f"Expected 30.0°, got {tilt_with_pitch}°"
-    print(f"  [OK] Ignores roof pitch parameter: {tilt_with_pitch}°")
+    print(f"  Ignores roof pitch parameter: {tilt_with_pitch}°")
     
     print()
 
@@ -127,7 +127,7 @@ def test_tilt_angle_pitched_roofs():
         assert tilt == expected_tilt, (
             f"Expected {expected_tilt}° for {roof_type}, got {tilt}°"
         )
-        print(f"  [OK] {roof_type} (pitch={pitch}°): tilt={tilt}°")
+        print(f"  {roof_type} (pitch={pitch}°): tilt={tilt}°")
     
     print()
 
@@ -139,7 +139,7 @@ def test_tilt_angle_zero_pitch():
     tilt = calculate_tilt_angle("Satteldach", 0.0)
     
     assert tilt == 0.0, f"Expected 0.0°, got {tilt}°"
-    print(f"  [OK] Satteldach with 0° pitch: {tilt}°")
+    print(f"  Satteldach with 0° pitch: {tilt}°")
     
     print()
 
@@ -166,7 +166,7 @@ def test_combined_logic():
             f"Expected tilt={expected_tilt}° for {roof_type}, got {tilt}°"
         )
         
-        print(f"  [OK] {roof_type} (pitch={pitch}°):")
+        print(f"  {roof_type} (pitch={pitch}°):")
         print(f"    Z-position: {z_pos}m, Tilt: {tilt}°")
     
     print()
@@ -180,17 +180,17 @@ def test_requirements_coverage():
     z_flat = calculate_z_position("Flachdach", 0.0)
     tilt_flat = calculate_tilt_angle("Flachdach", 0.0)
     assert z_flat == 0.3 and tilt_flat == 30.0
-    print("  [OK] Requirement 6.1: Flat roof (0.3m, 30°)")
+    print("  Requirement 6.1: Flat roof (0.3m, 30°)")
     
     # Requirement 6.2: Gable roof with 0.05m clearance
     z_gable = calculate_z_position("Satteldach", 35.0)
     assert z_gable == 0.05
-    print("  [OK] Requirement 6.2: Gable roof (0.05m)")
+    print("  Requirement 6.2: Gable roof (0.05m)")
     
     # Requirement 6.3: Shed roof with 0.05m clearance
     z_shed = calculate_z_position("Pultdach", 25.0)
     assert z_shed == 0.05
-    print("  [OK] Requirement 6.3: Shed roof (0.05m)")
+    print("  Requirement 6.3: Shed roof (0.05m)")
     
     # Requirement 6.4: Z-position based on roof type
     z_types = [
@@ -199,13 +199,13 @@ def test_requirements_coverage():
         calculate_z_position("Walmdach", 40.0)
     ]
     assert len(set(z_types)) == 2  # Should have 2 different values
-    print("  [OK] Requirement 6.4: Z-position varies by roof type")
+    print("  Requirement 6.4: Z-position varies by roof type")
     
     # Requirement 6.5: Tilt angle based on roof type and pitch
     tilt_flat = calculate_tilt_angle("Flachdach", 0.0)
     tilt_pitched = calculate_tilt_angle("Satteldach", 35.0)
     assert tilt_flat == 30.0 and tilt_pitched == 35.0
-    print("  [OK] Requirement 6.5: Tilt angle varies by roof type")
+    print("  Requirement 6.5: Tilt angle varies by roof type")
     
     print()
 
@@ -229,15 +229,15 @@ def run_all_tests():
         test_requirements_coverage()
         
         print("=" * 70)
-        print("[OK] ALL TESTS PASSED!")
+        print("ALL TESTS PASSED!")
         print("=" * 70)
         print()
         print("Summary:")
-        print("  - Z-position calculation: [OK] Working")
-        print("  - Tilt angle calculation: [OK] Working")
-        print("  - Flat roof logic (0.3m, 30°): [OK] Correct")
-        print("  - Pitched roof logic (0.05m, roof pitch): [OK] Correct")
-        print("  - All requirements (6.1-6.5): [OK] Covered")
+        print("  - Z-position calculation: Working")
+        print("  - Tilt angle calculation: Working")
+        print("  - Flat roof logic (0.3m, 30°): Correct")
+        print("  - Pitched roof logic (0.05m, roof pitch): Correct")
+        print("  - All requirements (6.1-6.5): Covered")
         print()
         
         return True
@@ -245,7 +245,7 @@ def run_all_tests():
     except AssertionError as e:
         print()
         print("=" * 70)
-        print("[ERROR] TEST FAILED!")
+        print("TEST FAILED!")
         print("=" * 70)
         print(f"Error: {e}")
         print()
@@ -254,7 +254,7 @@ def run_all_tests():
     except Exception as e:
         print()
         print("=" * 70)
-        print("[ERROR] UNEXPECTED ERROR!")
+        print("UNEXPECTED ERROR!")
         print("=" * 70)
         print(f"Error: {e}")
         import traceback

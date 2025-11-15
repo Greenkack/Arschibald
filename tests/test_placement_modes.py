@@ -49,11 +49,11 @@ def test_automatic_placement():
         
         assert plotter is not None, f"Plotter creation failed for {qty} modules"
         total_placed = len(panels["main"]) + len(panels.get("garage", [])) + len(panels.get("facade", []))
-        print(f"[OK] {qty} modules requested: {total_placed} placed (main: {len(panels['main'])}, garage: {len(panels.get('garage', []))}, facade: {len(panels.get('facade', []))})")
+        print(f"{qty} modules requested: {total_placed} placed (main: {len(panels['main'])}, garage: {len(panels.get('garage', []))}, facade: {len(panels.get('facade', []))})")
         
         plotter.close()
     
-    print("\n[OK] Automatic placement tests passed")
+    print("\nAutomatic placement tests passed")
     return True
 
 
@@ -83,7 +83,7 @@ def test_manual_removal():
         layout_config=layout_auto
     )
     auto_count = len(panels_auto["main"])
-    print(f"[OK] Automatic placement: {auto_count} modules")
+    print(f"Automatic placement: {auto_count} modules")
     plotter_auto.close()
     
     # Test manual removal
@@ -112,10 +112,10 @@ def test_manual_removal():
         assert abs(manual_count - expected_count) <= 2, \
             f"Manual count mismatch for {description}: got {manual_count}, expected ~{expected_count}"
         
-        print(f"[OK] {description}: {manual_count} modules (removed {len(removed_indices)} indices)")
+        print(f"{description}: {manual_count} modules (removed {len(removed_indices)} indices)")
         plotter.close()
     
-    print("\n[OK] Manual removal tests passed")
+    print("\nManual removal tests passed")
     return True
 
 
@@ -146,7 +146,7 @@ def test_garage_addition():
     )
     
     main_only = len(panels_no_garage["main"])
-    print(f"[OK] Without garage: {main_only} modules on main roof (requested 50)")
+    print(f"Without garage: {main_only} modules on main roof (requested 50)")
     plotter_no_garage.close()
     
     # Test with garage
@@ -163,13 +163,13 @@ def test_garage_addition():
     garage_count = len(panels_with_garage.get("garage", []))
     total_count = main_count + garage_count
     
-    print(f"[OK] With garage: {total_count} modules total (main: {main_count}, garage: {garage_count})")
+    print(f"With garage: {total_count} modules total (main: {main_count}, garage: {garage_count})")
     assert garage_count > 0, "Garage should have modules when enabled"
     assert total_count > main_only, "Total with garage should be more than main only"
     
     plotter_with_garage.close()
     
-    print("\n[OK] Garage addition tests passed")
+    print("\nGarage addition tests passed")
     return True
 
 
@@ -200,7 +200,7 @@ def test_facade_placement():
     )
     
     total_no_facade = len(panels_no_facade["main"]) + len(panels_no_facade.get("garage", []))
-    print(f"[OK] Without facade: {total_no_facade} modules (main + garage, requested 100)")
+    print(f"Without facade: {total_no_facade} modules (main + garage, requested 100)")
     plotter_no_facade.close()
     
     # Test with facade
@@ -218,13 +218,13 @@ def test_facade_placement():
     facade_count = len(panels_with_facade.get("facade", []))
     total_count = main_count + garage_count + facade_count
     
-    print(f"[OK] With facade: {total_count} modules total (main: {main_count}, garage: {garage_count}, facade: {facade_count})")
+    print(f"With facade: {total_count} modules total (main: {main_count}, garage: {garage_count}, facade: {facade_count})")
     assert facade_count > 0, "Facade should have modules when enabled"
     assert total_count > total_no_facade, "Total with facade should be more than without"
     
     plotter_with_facade.close()
     
-    print("\n[OK] Facade placement tests passed")
+    print("\nFacade placement tests passed")
     return True
 
 
@@ -260,7 +260,7 @@ def test_combined_scenarios():
     )
     
     total1 = len(panels1["main"]) + len(panels1.get("garage", [])) + len(panels1.get("facade", []))
-    print(f"[OK] Scenario 1 (manual + garage + facade): {total1} modules placed")
+    print(f"Scenario 1 (manual + garage + facade): {total1} modules placed")
     plotter1.close()
     
     # Scenario 2: Auto mode with only garage
@@ -278,10 +278,10 @@ def test_combined_scenarios():
     )
     
     total2 = len(panels2["main"]) + len(panels2.get("garage", []))
-    print(f"[OK] Scenario 2 (auto + garage only): {total2} modules placed")
+    print(f"Scenario 2 (auto + garage only): {total2} modules placed")
     plotter2.close()
     
-    print("\n[OK] Combined scenario tests passed")
+    print("\nCombined scenario tests passed")
     return True
 
 
@@ -306,10 +306,10 @@ if __name__ == "__main__":
             if test():
                 passed += 1
         except AssertionError as e:
-            print(f"\n[ERROR] {test.__name__} failed: {e}")
+            print(f"\n{test.__name__} failed: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n[ERROR] {test.__name__} error: {e}")
+            print(f"\n{test.__name__} error: {e}")
             import traceback
             traceback.print_exc()
             failed += 1
@@ -319,8 +319,8 @@ if __name__ == "__main__":
     print("=" * 60)
     
     if failed == 0:
-        print("\n[OK] ALL PLACEMENT MODE TESTS PASSED!")
+        print("\nALL PLACEMENT MODE TESTS PASSED!")
         exit(0)
     else:
-        print(f"\n[ERROR] {failed} TEST(S) FAILED")
+        print(f"\n{failed} TEST(S) FAILED")
         exit(1)

@@ -19,10 +19,10 @@ def render_contract_management_ui():
     
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3, tab4 = st.tabs([
-        "[FILE] Verträge",
+        "Verträge",
         "🛡️ Garantien",
         "⏰ Erinnerungen",
-        "[CHART] Übersicht"
+        "Übersicht"
     ])
     
     with tab1:
@@ -211,7 +211,7 @@ def render_contract_form(contract_id: int | None = None):
         with col1:
             submitted = st.form_submit_button("💾 Speichern", use_container_width=True)
         with col2:
-            if st.form_submit_button("[ERROR] Abbrechen", use_container_width=True):
+            if st.form_submit_button("Abbrechen", use_container_width=True):
                 st.session_state['show_contract_form'] = False
                 st.rerun()
         
@@ -241,7 +241,7 @@ def render_contract_form(contract_id: int | None = None):
                                 updated_by="System"
                             )
                             if success:
-                                st.success("[OK] Vertrag erfolgreich aktualisiert!")
+                                st.success("Vertrag erfolgreich aktualisiert!")
                                 st.session_state['show_contract_form'] = False
                                 st.rerun()
                             else:
@@ -265,7 +265,7 @@ def render_contract_form(contract_id: int | None = None):
                                 created_by="System"
                             )
                             if new_id:
-                                st.success(f"[OK] Vertrag erfolgreich erstellt! (ID: {new_id})")
+                                st.success(f"Vertrag erfolgreich erstellt! (ID: {new_id})")
                                 st.session_state['show_contract_form'] = False
                                 st.rerun()
                             else:
@@ -279,7 +279,7 @@ def render_contract_form(contract_id: int | None = None):
 
 def render_contract_card(contract: dict):
     """Rendert eine Vertragskarte."""
-    with st.expander(f"[FILE] {contract['title']} - {contract['contract_type']}", expanded=False):
+    with st.expander(f"{contract['title']} - {contract['contract_type']}", expanded=False):
         col1, col2, col3 = st.columns([2, 2, 1])
         
         with col1:
@@ -298,7 +298,7 @@ def render_contract_card(contract: dict):
                 st.session_state[f'edit_contract_{contract["id"]}'] = True
                 st.rerun()
             
-            if st.button("[DELETE] Löschen", key=f"delete_contract_{contract['id']}", use_container_width=True):
+            if st.button("Löschen", key=f"delete_contract_{contract['id']}", use_container_width=True):
                 conn = get_db_connection()
                 if conn:
                     if contract_manager.delete_contract(conn, contract['id']):
@@ -476,7 +476,7 @@ def render_warranty_form(warranty_id: int | None = None):
         with col1:
             submitted = st.form_submit_button("💾 Speichern", use_container_width=True)
         with col2:
-            if st.form_submit_button("[ERROR] Abbrechen", use_container_width=True):
+            if st.form_submit_button("Abbrechen", use_container_width=True):
                 st.session_state['show_warranty_form'] = False
                 st.rerun()
         
@@ -506,7 +506,7 @@ def render_warranty_form(warranty_id: int | None = None):
                                 updated_by="System"
                             )
                             if success:
-                                st.success("[OK] Garantie erfolgreich aktualisiert!")
+                                st.success("Garantie erfolgreich aktualisiert!")
                                 st.session_state['show_warranty_form'] = False
                                 st.rerun()
                             else:
@@ -530,7 +530,7 @@ def render_warranty_form(warranty_id: int | None = None):
                                 created_by="System"
                             )
                             if new_id:
-                                st.success(f"[OK] Garantie erfolgreich erstellt! (ID: {new_id})")
+                                st.success(f"Garantie erfolgreich erstellt! (ID: {new_id})")
                                 st.session_state['show_warranty_form'] = False
                                 st.rerun()
                             else:
@@ -564,7 +564,7 @@ def render_warranty_card(warranty: dict):
                 st.session_state[f'edit_warranty_{warranty["id"]}'] = True
                 st.rerun()
             
-            if st.button("[DELETE] Löschen", key=f"delete_warranty_{warranty['id']}", use_container_width=True):
+            if st.button("Löschen", key=f"delete_warranty_{warranty['id']}", use_container_width=True):
                 conn = get_db_connection()
                 if conn:
                     if contract_manager.delete_warranty(conn, warranty['id']):
@@ -622,7 +622,7 @@ def render_reminders_tab():
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown(f"### [FILE] Ablaufende Verträge ({len(expiring_contracts)})")
+            st.markdown(f"### Ablaufende Verträge ({len(expiring_contracts)})")
             if expiring_contracts:
                 for contract in expiring_contracts:
                     days_until = (datetime.strptime(contract['end_date'], '%Y-%m-%d') - datetime.now()).days
@@ -660,7 +660,7 @@ def render_reminders_tab():
 
 def render_overview_tab():
     """Rendert den Übersichts-Tab."""
-    st.subheader("[CHART] Übersicht")
+    st.subheader("Übersicht")
     
     conn = get_db_connection()
     if conn:
@@ -670,7 +670,7 @@ def render_overview_tab():
         conn.close()
         
         # Vertrags-Statistiken
-        st.markdown("### [FILE] Verträge")
+        st.markdown("### Verträge")
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
@@ -739,7 +739,7 @@ def show_customer_contracts_warranties(customer_id: int):
             st.markdown(f"**Verträge ({len(contracts)})**")
             if contracts:
                 for contract in contracts:
-                    status_icon = "[OK]" if contract['status'] == 'active' else "[ERROR]"
+                    status_icon = "" if contract['status'] == 'active' else ""
                     st.markdown(f"{status_icon} {contract['title']} ({contract['contract_type']})")
             else:
                 st.info("Keine Verträge vorhanden.")
@@ -748,7 +748,7 @@ def show_customer_contracts_warranties(customer_id: int):
             st.markdown(f"**Garantien ({len(warranties)})**")
             if warranties:
                 for warranty in warranties:
-                    status_icon = "[OK]" if warranty['status'] == 'active' else "[ERROR]"
+                    status_icon = "" if warranty['status'] == 'active' else ""
                     st.markdown(f"{status_icon} {warranty['title']} ({warranty['warranty_type']})")
             else:
                 st.info("Keine Garantien vorhanden.")

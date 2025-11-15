@@ -92,7 +92,7 @@ def cmd_analyze(args):
             seiten=seiten
         )
         
-        print(f"\n[OK] Successfully analyzed {len(analyses)} PDFs")
+        print(f"\nSuccessfully analyzed {len(analyses)} PDFs")
         
         # Save results if output specified
         if args.output:
@@ -114,7 +114,7 @@ def cmd_analyze(args):
         return 0
         
     except Exception as e:
-        print(f"\n[ERROR] Analysis failed: {e}")
+        print(f"\nAnalysis failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -154,7 +154,7 @@ def cmd_generate(args):
             log_level="DEBUG" if args.verbose else "INFO"
         )
         
-        print(f"\n[OK] Generation complete")
+        print(f"\nGeneration complete")
         print(f"  Successful: {summary.successful}/{summary.total_processed}")
         print(f"  Failed: {summary.failed}")
         print(f"  Total time: {summary.total_time:.2f}s")
@@ -163,7 +163,7 @@ def cmd_generate(args):
         return 0 if summary.failed == 0 else 1
         
     except Exception as e:
-        print(f"\n[ERROR] Generation failed: {e}")
+        print(f"\nGeneration failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -226,16 +226,16 @@ def cmd_validate(args):
                     failed_files.append(yml_filename)
                     
                     if args.verbose:
-                        print(f"\n[ERROR] {yml_filename}:")
+                        print(f"\n{yml_filename}:")
                         for error in report.get_errors()[:3]:
                             print(f"    Error: {error.message}")
                         for warning in report.get_warnings()[:3]:
                             print(f"    Warning: {warning.message}")
                 elif args.verbose:
-                    print(f"[OK] {yml_filename}: Valid")
+                    print(f"{yml_filename}: Valid")
                 
             except Exception as e:
-                print(f"[ERROR] {yml_filename}: Failed to validate - {e}")
+                print(f"{yml_filename}: Failed to validate - {e}")
                 failed_files.append(yml_filename)
     
     # Summary
@@ -270,7 +270,7 @@ def cmd_backup(args):
     yml_files = list(args.yml_dir.glob("*.yml"))
     
     if not yml_files:
-        print(f"[ERROR] No YML files found in {args.yml_dir}")
+        print(f"No YML files found in {args.yml_dir}")
         return 1
     
     print(f"Creating backup of {len(yml_files)} YML files...")
@@ -280,14 +280,14 @@ def cmd_backup(args):
     try:
         backup_id = backup_manager.create_backup(yml_files)
         
-        print(f"\n[OK] Backup created successfully")
+        print(f"\nBackup created successfully")
         print(f"  Backup ID: {backup_id}")
         print(f"  Location: {args.backup_dir / backup_id}")
         
         return 0
         
     except Exception as e:
-        print(f"\n[ERROR] Backup failed: {e}")
+        print(f"\nBackup failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -328,12 +328,12 @@ def cmd_restore(args):
     validation = backup_manager.validate_backup(args.backup_id)
     
     if not validation['valid']:
-        print(f"\n[ERROR] Backup validation failed:")
+        print(f"\nBackup validation failed:")
         for error in validation['errors']:
             print(f"    {error}")
         return 1
     
-    print(f"[OK] Backup is valid")
+    print(f"Backup is valid")
     
     # Restore (dry-run first if not forced)
     if not args.force:
@@ -347,14 +347,14 @@ def cmd_restore(args):
         success = backup_manager.restore_backup(args.backup_id, confirm=True)
         
         if success:
-            print(f"\n[OK] Backup restored successfully")
+            print(f"\nBackup restored successfully")
             return 0
         else:
-            print(f"\n[ERROR] Backup restoration failed")
+            print(f"\nBackup restoration failed")
             return 1
             
     except Exception as e:
-        print(f"\n[ERROR] Restore failed: {e}")
+        print(f"\nRestore failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -391,7 +391,7 @@ def cmd_run(args):
         return 0 if summary.successful == summary.total_combinations else 1
         
     except Exception as e:
-        print(f"\n[ERROR] Workflow failed: {e}")
+        print(f"\nWorkflow failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -632,7 +632,7 @@ def main():
         print("\n\nInterrupted by user")
         sys.exit(130)
     except Exception as e:
-        print(f"\n[ERROR] Unexpected error: {e}")
+        print(f"\nUnexpected error: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()

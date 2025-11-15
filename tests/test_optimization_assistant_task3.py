@@ -51,7 +51,7 @@ def test_optimize_layout_exists():
         assert scores == sorted(scores, reverse=True), \
             "Scores sind nicht absteigend sortiert"
     
-    print("\n[OK] Test 3.1 bestanden: optimize_layout() funktioniert korrekt")
+    print("\nTest 3.1 bestanden: optimize_layout() funktioniert korrekt")
 
 
 def test_evaluate_config_exists():
@@ -92,7 +92,7 @@ def test_evaluate_config_exists():
             
             print(f"  {desc}: Score {score:.1f}")
     
-    print("\n[OK] Test 3.2 bestanden: evaluate_config() funktioniert korrekt")
+    print("\nTest 3.2 bestanden: evaluate_config() funktioniert korrekt")
 
 
 def test_ui_integration():
@@ -163,9 +163,9 @@ def test_ui_integration():
     for key, value in ui_state.items():
         print(f"     {key}: {value}")
     
-    print("\n   [OK] Konfiguration 1 übernommen!")
+    print("\n   Konfiguration 1 übernommen!")
     
-    print("\n[OK] Test 3.3 bestanden: UI-Integration funktioniert korrekt")
+    print("\nTest 3.3 bestanden: UI-Integration funktioniert korrekt")
 
 
 def main():
@@ -185,16 +185,16 @@ def main():
         test_ui_integration()
         
         print("\n" + "=" * 70)
-        print("[OK] ALLE TESTS BESTANDEN!")
+        print("ALLE TESTS BESTANDEN!")
         print("=" * 70)
         print("\nTask 3 ist vollständig implementiert:")
-        print("  [OK] 3.1 optimize_layout() Funktion")
-        print("  [OK] 3.2 evaluate_config() Funktion")
-        print("  [OK] 3.3 UI-Integration")
+        print("  3.1 optimize_layout() Funktion")
+        print("  3.2 evaluate_config() Funktion")
+        print("  3.3 UI-Integration")
         print("\nDer Optimierungs-Assistent ist einsatzbereit!")
         
     except Exception as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return 1

@@ -15,7 +15,7 @@ def test_imports():
             render_export_options
         )
         
-        print("[OK] Alle UI-Komponenten-Funktionen erfolgreich importiert")
+        print("Alle UI-Komponenten-Funktionen erfolgreich importiert")
         print(f"  - render_basis_settings: {render_basis_settings.__name__}")
         print(f"  - render_module_placement: {render_module_placement.__name__}")
         print(f"  - render_advanced_controls: {render_advanced_controls.__name__}")
@@ -25,10 +25,10 @@ def test_imports():
         return True
         
     except ImportError as e:
-        print(f"[ERROR] Import-Fehler: {e}")
+        print(f"Import-Fehler: {e}")
         return False
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
 
 
@@ -66,14 +66,14 @@ def test_function_signatures():
         sig = inspect.signature(render_export_options)
         assert len(sig.parameters) == 0, "render_export_options sollte keine Parameter haben"
         
-        print("[OK] Alle Funktions-Signaturen sind korrekt")
+        print("Alle Funktions-Signaturen sind korrekt")
         return True
         
     except AssertionError as e:
-        print(f"[ERROR] Signatur-Fehler: {e}")
+        print(f"Signatur-Fehler: {e}")
         return False
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         return False
 
 
@@ -98,13 +98,13 @@ if __name__ == "__main__":
     # Zusammenfassung
     print("=" * 60)
     print("Zusammenfassung:")
-    print(f"  Test 1 (Imports): {'[OK] BESTANDEN' if test1_passed else '[ERROR] FEHLGESCHLAGEN'}")
-    print(f"  Test 2 (Signaturen): {'[OK] BESTANDEN' if test2_passed else '[ERROR] FEHLGESCHLAGEN'}")
+    print(f"  Test 1 (Imports): {'BESTANDEN' if test1_passed else 'FEHLGESCHLAGEN'}")
+    print(f"  Test 2 (Signaturen): {'BESTANDEN' if test2_passed else 'FEHLGESCHLAGEN'}")
     print()
     
     if test1_passed and test2_passed:
-        print("[OK] ALLE TESTS BESTANDEN")
+        print("ALLE TESTS BESTANDEN")
         exit(0)
     else:
-        print("[ERROR] EINIGE TESTS FEHLGESCHLAGEN")
+        print("EINIGE TESTS FEHLGESCHLAGEN")
         exit(1)

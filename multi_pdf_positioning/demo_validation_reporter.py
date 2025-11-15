@@ -284,7 +284,7 @@ def demo_save_reports():
     reporter.save_report_text(report, output_dir / "report_f1_s1.txt")
     reporter.save_report_json(report, output_dir / "report_f1_s1.json")
     
-    print(f"[OK] Saved single report to:")
+    print(f"Saved single report to:")
     print(f"  - {output_dir / 'report_f1_s1.txt'}")
     print(f"  - {output_dir / 'report_f1_s1.json'}")
     print()
@@ -303,7 +303,7 @@ def demo_save_reports():
     reporter.save_batch_summary_text(summary, output_dir / "batch_summary.txt")
     reporter.save_batch_summary_json(summary, output_dir / "batch_summary.json")
     
-    print(f"[OK] Saved batch summary to:")
+    print(f"Saved batch summary to:")
     print(f"  - {output_dir / 'batch_summary.txt'}")
     print(f"  - {output_dir / 'batch_summary.json'}")
     print()
@@ -389,7 +389,7 @@ def main():
     demo_with_yml_elements()
     
     print("=" * 80)
-    print("[OK] All demos completed successfully!")
+    print("All demos completed successfully!")
     print("=" * 80)
     print()
 

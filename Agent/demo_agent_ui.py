@@ -23,9 +23,9 @@ def demo_ui_structure():
     print("1. Importing agent_ui module...")
     try:
         import agent_ui
-        print("   [OK] Module imported successfully\n")
+        print("   Module imported successfully\n")
     except ImportError as e:
-        print(f"   [ERROR] Failed to import: {e}\n")
+        print(f"   Failed to import: {e}\n")
         return False
 
     # Check main functions
@@ -39,9 +39,9 @@ def demo_ui_structure():
 
     for func_name in functions:
         if hasattr(agent_ui, func_name):
-            print(f"   [OK] {func_name}")
+            print(f"   {func_name}")
         else:
-            print(f"   [ERROR] {func_name} not found")
+            print(f"   {func_name} not found")
 
     print("\n3. Function Signatures:")
 
@@ -63,30 +63,30 @@ def demo_ui_structure():
     print(f"   format_agent_output{sig}")
 
     print("\n4. Integration Points:")
-    print("   [OK] Uses config.check_api_keys()")
-    print("   [OK] Uses config.get_missing_keys()")
-    print("   [OK] Uses config.get_setup_instructions()")
-    print("   [OK] Uses agent.agent_core.AgentCore")
-    print("   [OK] Uses agent.tools.knowledge_tools.setup_knowledge_base()")
+    print("   Uses config.check_api_keys()")
+    print("   Uses config.get_missing_keys()")
+    print("   Uses config.get_setup_instructions()")
+    print("   Uses agent.agent_core.AgentCore")
+    print("   Uses agent.tools.knowledge_tools.setup_knowledge_base()")
 
     print("\n5. UI Components:")
-    print("   [OK] Page configuration")
-    print("   [OK] API key validation")
-    print("   [OK] Knowledge base initialization")
-    print("   [OK] Agent core initialization")
-    print("   [OK] Task input interface")
-    print("   [OK] Example tasks")
-    print("   [OK] Control buttons (Start, Clear, Status)")
-    print("   [OK] Real-time status display")
-    print("   [OK] Results visualization")
+    print("   Page configuration")
+    print("   API key validation")
+    print("   Knowledge base initialization")
+    print("   Agent core initialization")
+    print("   Task input interface")
+    print("   Example tasks")
+    print("   Control buttons (Start, Clear, Status)")
+    print("   Real-time status display")
+    print("   Results visualization")
 
     print("\n6. Session State Management:")
-    print("   [OK] vector_store")
-    print("   [OK] agent_core")
-    print("   [OK] agent_task_input")
+    print("   vector_store")
+    print("   agent_core")
+    print("   agent_task_input")
 
     print("\n" + "=" * 70)
-    print("[OK] Agent UI Module is properly structured and ready for use!")
+    print("Agent UI Module is properly structured and ready for use!")
     print("=" * 70 + "\n")
 
     print("Usage Example:")

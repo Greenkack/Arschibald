@@ -30,16 +30,16 @@ available_count = sum([1 for k, v in results if v])
 total_count = len(results)
 percentage = (available_count * 100) // total_count
 
-print(f"[OK] Verfügbar:     {available_count}/{total_count} Charts ({percentage}%)")
-print(f"[ERROR] Nicht verfügbar: {len(unavailable_charts)}/{total_count} Charts")
+print(f"Verfügbar:     {available_count}/{total_count} Charts ({percentage}%)")
+print(f"Nicht verfügbar: {len(unavailable_charts)}/{total_count} Charts")
 print("=" * 80)
 
 if unavailable_charts:
-    print("\n[WARNING] Noch nicht verfügbare Charts:")
+    print("\nNoch nicht verfügbare Charts:")
     for chart_key in unavailable_charts:
         chart_name = CHART_KEY_TO_FRIENDLY_NAME_MAP.get(chart_key, chart_key)
-        print(f"  [ERROR] {chart_key}")
+        print(f"  {chart_key}")
         print(f"     → {chart_name}")
 else:
     print("\n🎉 PERFEKT! ALLE 55 Charts sind verfügbar!")
-    print("[OK] 100% Chart-Verfügbarkeit erreicht!")
+    print("100% Chart-Verfügbarkeit erreicht!")

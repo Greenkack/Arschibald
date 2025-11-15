@@ -79,7 +79,7 @@ def test_collision_detection_prevents_overlap():
     assert len(st.session_state["placed_module_positions"]) == 1, \
         "Should not add overlapping module"
     
-    print("[OK] Test passed: Overlapping placement prevented with warning")
+    print("Test passed: Overlapping placement prevented with warning")
     return True
 
 
@@ -123,7 +123,7 @@ def test_collision_detection_allows_valid_placement():
     assert len(st.session_state["placed_module_positions"]) == 2, \
         "Should add module when no collision"
     
-    print("[OK] Test passed: Valid placement allowed")
+    print("Test passed: Valid placement allowed")
     return True
 
 
@@ -166,7 +166,7 @@ def test_boundary_collision_prevents_placement():
     assert len(st.session_state["placed_module_positions"]) == 0, \
         "Should not add out-of-bounds module"
     
-    print("[OK] Test passed: Out-of-bounds placement prevented with warning")
+    print("Test passed: Out-of-bounds placement prevented with warning")
     return True
 
 
@@ -217,7 +217,7 @@ def test_move_collision_detection():
     assert st.session_state["placed_module_positions"][1] == (3.0, 0.0, 0.3), \
         "Module should not move when collision detected"
     
-    print("[OK] Test passed: Overlapping move prevented with warning")
+    print("Test passed: Overlapping move prevented with warning")
     
     # Now try to move module 1 to a valid position (should succeed)
     result = handle_move_selected(
@@ -242,7 +242,7 @@ def test_move_collision_detection():
     assert st.session_state["placed_module_positions"][1][0] == 4.0, \
         "Module should move when no collision"
     
-    print("[OK] Test passed: Valid move allowed")
+    print("Test passed: Valid move allowed")
     return True
 
 
@@ -270,7 +270,7 @@ def test_collision_warning_messages():
     assert "überlappt" in result["message"].lower(), "Should mention overlap"
     assert "#" in result["message"], "Should show module number"
     
-    print("[OK] Module collision message is informative")
+    print("Module collision message is informative")
     
     # Test boundary collision message
     result = check_module_collision(
@@ -287,7 +287,7 @@ def test_collision_warning_messages():
     assert "überschreitet" in result["message"].lower(), "Should mention exceeding"
     assert "m" in result["message"], "Should show measurements"
     
-    print("[OK] Boundary collision message is informative")
+    print("Boundary collision message is informative")
     
     return True
 
@@ -327,7 +327,7 @@ def test_collision_detection_with_different_orientations():
     assert result_landscape["collision"] is True, \
         "Should detect collision in landscape"
     
-    print("[OK] Test passed: Collision detection works with both orientations")
+    print("Test passed: Collision detection works with both orientations")
     return True
 
 
@@ -356,12 +356,12 @@ def run_all_tests():
             print('=' * 70)
             test_func()
             passed += 1
-            print(f"\n[OK] {test_name} PASSED")
+            print(f"\n{test_name} PASSED")
         except AssertionError as e:
-            print(f"\n[ERROR] {test_name} FAILED: {e}")
+            print(f"\n{test_name} FAILED: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n[ERROR] {test_name} ERROR: {e}")
+            print(f"\n{test_name} ERROR: {e}")
             import traceback
             traceback.print_exc()
             failed += 1
@@ -371,12 +371,12 @@ def run_all_tests():
     print("=" * 70)
     
     if failed == 0:
-        print("\n[OK] ALL TESTS PASSED - Task 7 Complete!")
+        print("\nALL TESTS PASSED - Task 7 Complete!")
         print("\nCollision Detection Summary:")
-        print("  [OK] 7.1: Module-to-module overlap detection working")
-        print("  [OK] 7.2: Roof boundary violation detection working")
-        print("  [OK] 7.3: Meaningful warning messages displayed")
-        print("  [OK] 7.4: Invalid placements prevented")
+        print("  7.1: Module-to-module overlap detection working")
+        print("  7.2: Roof boundary violation detection working")
+        print("  7.3: Meaningful warning messages displayed")
+        print("  7.4: Invalid placements prevented")
     
     return failed == 0
 

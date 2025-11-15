@@ -134,7 +134,7 @@ def render_user_menu():
         box-shadow: 0 0 25px rgba(102, 126, 234, 0.6) !important;
     }
     .profile-avatar-container:hover::before {
-        content: '[SEARCH] Klicken zum Vergrößern';
+        content: 'Klicken zum Vergrößern';
         position: absolute;
         bottom: -25px;
         left: 50%;
@@ -407,7 +407,7 @@ def render_info_tab(user_data: dict):
             st.metric("Rang-Level", rank_level if rank_level > 0 else "∞")
     with col2:
         status = user_data.get('status', 'unknown')
-        status_emoji = "aktiv" if status == 'active' else "[ERROR]"
+        status_emoji = "aktiv" if status == 'active' else ""
         st.metric("Status", status_emoji)
 
     # Berechtigungen
@@ -418,7 +418,7 @@ def render_info_tab(user_data: dict):
     permissions = user_data.get('permissions', {})
 
     if is_super or permissions.get('all') or permissions.get('super_admin'):
-        st.success("[OK] Alle Berechtigungen (General Admin)")
+        st.success("Alle Berechtigungen (General Admin)")
 
         # Untergruppen mit Expander
         with st.expander("**Hauptfunktionen**", expanded=False):
@@ -427,11 +427,11 @@ def render_info_tab(user_data: dict):
                 "Solar Kalkulation",
                 "Wärmepumpe",
                     "Wirtschaftlichkeit"]:
-                st.markdown(f"[OK] {perm}")
+                st.markdown(f"{perm}")
 
         with st.expander("**Business**", expanded=False):
             for perm in ["CRM", "PDF Generator"]:
-                st.markdown(f"[OK] {perm}")
+                st.markdown(f"{perm}")
 
         with st.expander("**Administration**", expanded=False):
             for perm in [
@@ -440,7 +440,7 @@ def render_info_tab(user_data: dict):
                 "Rangverwaltung",
                 "Berechtigungsverwaltung",
                     "Provisionsverwaltung"]:
-                st.markdown(f"[OK] {perm}")
+                st.markdown(f"{perm}")
 
         with st.expander("**System**", expanded=False):
             for perm in [
@@ -448,12 +448,12 @@ def render_info_tab(user_data: dict):
                 "Datenbankzugriff",
                 "Einstellungen",
                     "Systemkonfiguration"]:
-                st.markdown(f"[OK] {perm}")
+                st.markdown(f"{perm}")
     else:
         perm_list = [k for k, v in permissions.items() if v]
         if perm_list:
             for perm in perm_list:
-                st.markdown(f"[OK] {perm}")
+                st.markdown(f"{perm}")
         else:
             st.info("Keine speziellen Berechtigungen")
 
@@ -611,15 +611,15 @@ def render_profile_editor():
                         user_status=user_status,
                         about_me=about_me
                     ):
-                        st.success("[OK] Profil aktualisiert!")
+                        st.success("Profil aktualisiert!")
                         st.session_state['show_profile_editor'] = False
                         st.rerun()
                     else:
-                        st.error("[ERROR] Fehler beim Speichern")
+                        st.error("Fehler beim Speichern")
 
             with col_cancel:
                 if st.form_submit_button(
-                        "[ERROR] Abbrechen", use_container_width=True):
+                        "Abbrechen", use_container_width=True):
                     st.session_state['show_profile_editor'] = False
                     st.rerun()
 
@@ -647,21 +647,21 @@ def render_profile_editor():
                 use_container_width=True,
                     type="primary"):
                 if not current_pw or not new_pw:
-                    st.error("[ERROR] Bitte alle Felder ausfüllen")
+                    st.error("Bitte alle Felder ausfüllen")
                 elif new_pw != confirm_pw:
-                    st.error("[ERROR] Passwörter stimmen nicht überein")
+                    st.error("Passwörter stimmen nicht überein")
                 elif len(new_pw) < 6:
-                    st.error("[ERROR] Passwort muss mindestens 6 Zeichen lang sein")
+                    st.error("Passwort muss mindestens 6 Zeichen lang sein")
                 else:
                     # Aktuelles Passwort verifizieren
                     auth = um.authenticate(user_data['username'], current_pw)
                     if auth:
                         if um.change_password(user_data['id'], new_pw):
-                            st.success("[OK] Passwort erfolgreich geändert!")
+                            st.success("Passwort erfolgreich geändert!")
                         else:
-                            st.error("[ERROR] Fehler beim Ändern des Passworts")
+                            st.error("Fehler beim Ändern des Passworts")
                     else:
-                        st.error("[ERROR] Aktuelles Passwort falsch")
+                        st.error("Aktuelles Passwort falsch")
 
     # Tab 3: Profilbild hochladen (Punkt 2)
     with tab3:
@@ -705,16 +705,16 @@ def render_profile_editor():
 
                         # Update user mit Profilbild
                         if um.update_user(user_id, profile_image=base64_image):
-                            st.success("[OK] Profilbild erfolgreich hochgeladen!")
+                            st.success("Profilbild erfolgreich hochgeladen!")
                             st.rerun()
                         else:
-                            st.error("[ERROR] Fehler beim Hochladen")
+                            st.error("Fehler beim Hochladen")
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler: {str(e)}")
+                        st.error(f"Fehler: {str(e)}")
 
             st.markdown("---")
             st.info(
-                "[IDEA] Tipp: Verwenden Sie ein quadratisches Bild für beste Ergebnisse")
+                "Tipp: Verwenden Sie ein quadratisches Bild für beste Ergebnisse")
 
     # Zurück-Button unten
     st.markdown("---")

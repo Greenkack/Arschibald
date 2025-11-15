@@ -21,13 +21,13 @@ def test_basis_settings_includes_roof_pitch():
     assert '"roof_pitch"' in source or "'roof_pitch'" in source, \
         "render_basis_settings sollte roof_pitch zurückgeben"
     
-    print("[OK] render_basis_settings gibt roof_pitch zurück")
+    print("render_basis_settings gibt roof_pitch zurück")
     
     # Prüfe ob roof_pitch Input-Feld vorhanden ist
     assert "roof_pitch_input" in source, \
         "render_basis_settings sollte roof_pitch Input-Feld haben"
     
-    print("[OK] roof_pitch Input-Feld vorhanden")
+    print("roof_pitch Input-Feld vorhanden")
     
     return True
 
@@ -51,13 +51,13 @@ def test_validation_does_not_override_selection():
             if problematic_line in line and not line.strip().startswith('#'):
                 assert False, "Validierung sollte current_selection NICHT überschreiben (Zeile nicht kommentiert)"
     
-    print("[OK] Validierung überschreibt current_selection nicht")
+    print("Validierung überschreibt current_selection nicht")
     
     # Prüfe dass Empfehlung trotzdem angezeigt wird
-    assert '[IDEA] Empfehlung' in source, \
+    assert 'Empfehlung' in source, \
         "Empfehlung sollte trotzdem angezeigt werden"
     
-    print("[OK] Empfehlung wird angezeigt")
+    print("Empfehlung wird angezeigt")
     
     return True
 
@@ -107,9 +107,9 @@ def test_module_placement_for_all_roof_types():
         )
         
         if result["success"] and result["count"] > 0:
-            print(f"[OK] {roof_type}: {result['count']} Module platziert")
+            print(f"{roof_type}: {result['count']} Module platziert")
         else:
-            print(f"[ERROR] {roof_type}: Platzierung fehlgeschlagen - {result['message']}")
+            print(f"{roof_type}: Platzierung fehlgeschlagen - {result['message']}")
             all_passed = False
     
     assert all_passed, "Alle Dachtypen sollten Module platzieren können"
@@ -126,19 +126,19 @@ def test_mounting_type_validation():
     # Test 1: Aufständerung bei Flachdach sollte erlaubt sein
     result = validate_mounting_selection("Flachdach", "Aufständerung Süd")
     assert result["valid"] == True, "Aufständerung sollte bei Flachdach erlaubt sein"
-    print("[OK] Aufständerung bei Flachdach: erlaubt")
+    print("Aufständerung bei Flachdach: erlaubt")
     
     # Test 2: Aufständerung bei Satteldach sollte NICHT erlaubt sein
     result = validate_mounting_selection("Satteldach", "Aufständerung Süd")
     assert result["valid"] == False, "Aufständerung sollte bei Satteldach NICHT erlaubt sein"
     assert result["suggestion"] == "Aufdach-Montage", "Empfehlung sollte Aufdach-Montage sein"
-    print("[OK] Aufständerung bei Satteldach: nicht erlaubt")
+    print("Aufständerung bei Satteldach: nicht erlaubt")
     print(f"  Empfehlung: {result['suggestion']}")
     
     # Test 3: Aufdach-Montage bei Satteldach sollte erlaubt sein
     result = validate_mounting_selection("Satteldach", "Aufdach-Montage")
     assert result["valid"] == True, "Aufdach-Montage sollte bei Satteldach erlaubt sein"
-    print("[OK] Aufdach-Montage bei Satteldach: erlaubt")
+    print("Aufdach-Montage bei Satteldach: erlaubt")
     
     return True
 
@@ -161,11 +161,11 @@ if __name__ == "__main__":
         try:
             test_func()
         except AssertionError as e:
-            print(f"\n[ERROR] Test fehlgeschlagen: {test_name}")
+            print(f"\nTest fehlgeschlagen: {test_name}")
             print(f"   Fehler: {e}")
             all_passed = False
         except Exception as e:
-            print(f"\n[ERROR] Unerwarteter Fehler in Test: {test_name}")
+            print(f"\nUnerwarteter Fehler in Test: {test_name}")
             print(f"   Fehler: {e}")
             import traceback
             traceback.print_exc()
@@ -173,15 +173,15 @@ if __name__ == "__main__":
     
     print("\n" + "=" * 70)
     if all_passed:
-        print("[OK] ALLE TESTS BESTANDEN!")
+        print("ALLE TESTS BESTANDEN!")
         print("=" * 70)
         print("\nDer Fix ist vollständig:")
-        print("1. [OK] roof_pitch wird in basis_settings zurückgegeben")
-        print("2. [OK] Validierung überschreibt Auswahl nicht")
-        print("3. [OK] Module können für alle Dachtypen platziert werden")
-        print("4. [OK] Montagetyp-Validierung funktioniert korrekt")
+        print("1. roof_pitch wird in basis_settings zurückgegeben")
+        print("2. Validierung überschreibt Auswahl nicht")
+        print("3. Module können für alle Dachtypen platziert werden")
+        print("4. Montagetyp-Validierung funktioniert korrekt")
         print("\nModule sollten jetzt bei allen Dachtypen gerendert werden!")
     else:
-        print("[ERROR] EINIGE TESTS FEHLGESCHLAGEN")
+        print("EINIGE TESTS FEHLGESCHLAGEN")
         print("=" * 70)
         print("\nBitte Fehler beheben und erneut testen.")

@@ -45,7 +45,7 @@ def test_no_collision():
 
     assert result["collision"] is False, "Should not detect collision"
     assert result["type"] == "none", "Type should be 'none'"
-    print("[OK] Test passed: No collision detected for well-separated modules")
+    print("Test passed: No collision detected for well-separated modules")
 
 
 def test_module_overlap():
@@ -78,7 +78,7 @@ def test_module_overlap():
     assert result["collision"] is True, "Should detect collision"
     assert result["type"] == "module", "Type should be 'module'"
     assert result["colliding_index"] == 0, "Should identify colliding module"
-    print("[OK] Test passed: Module overlap detected")
+    print("Test passed: Module overlap detected")
 
 
 def test_exact_overlap():
@@ -108,7 +108,7 @@ def test_exact_overlap():
 
     assert result["collision"] is True, "Should detect collision"
     assert result["type"] == "module", "Type should be 'module'"
-    print("[OK] Test passed: Exact overlap detected")
+    print("Test passed: Exact overlap detected")
 
 
 def test_boundary_violation_left():
@@ -142,7 +142,7 @@ def test_boundary_violation_left():
 
     assert result["collision"] is True, "Should detect boundary violation"
     assert result["type"] == "boundary", "Type should be 'boundary'"
-    print("[OK] Test passed: Left boundary violation detected")
+    print("Test passed: Left boundary violation detected")
 
 
 def test_boundary_violation_right():
@@ -173,7 +173,7 @@ def test_boundary_violation_right():
 
     assert result["collision"] is True, "Should detect boundary violation"
     assert result["type"] == "boundary", "Type should be 'boundary'"
-    print("[OK] Test passed: Right boundary violation detected")
+    print("Test passed: Right boundary violation detected")
 
 
 def test_boundary_violation_top():
@@ -204,7 +204,7 @@ def test_boundary_violation_top():
 
     assert result["collision"] is True, "Should detect boundary violation"
     assert result["type"] == "boundary", "Type should be 'boundary'"
-    print("[OK] Test passed: Top boundary violation detected")
+    print("Test passed: Top boundary violation detected")
 
 
 def test_boundary_violation_bottom():
@@ -235,7 +235,7 @@ def test_boundary_violation_bottom():
 
     assert result["collision"] is True, "Should detect boundary violation"
     assert result["type"] == "boundary", "Type should be 'boundary'"
-    print("[OK] Test passed: Bottom boundary violation detected")
+    print("Test passed: Bottom boundary violation detected")
 
 
 def test_multiple_existing_modules():
@@ -269,7 +269,7 @@ def test_multiple_existing_modules():
 
     # Should not collide with any of them
     assert result["collision"] is False, "Should not detect collision"
-    print("[OK] Test passed: No collision with multiple modules")
+    print("Test passed: No collision with multiple modules")
 
 
 def test_landscape_orientation():
@@ -303,7 +303,7 @@ def test_landscape_orientation():
 
     assert result["collision"] is True, "Should detect collision in landscape"
     assert result["type"] == "module", "Type should be 'module'"
-    print("[OK] Test passed: Landscape orientation collision detected")
+    print("Test passed: Landscape orientation collision detected")
 
 
 def test_edge_case_just_touching():
@@ -333,7 +333,7 @@ def test_edge_case_just_touching():
     print(f"Result: {result}")
 
     assert result["collision"] is False, "Should not detect collision"
-    print("[OK] Test passed: Just-touching modules handled correctly")
+    print("Test passed: Just-touching modules handled correctly")
 
 
 def run_all_tests():
@@ -363,10 +363,10 @@ def run_all_tests():
             test()
             passed += 1
         except AssertionError as e:
-            print(f"[ERROR] Test failed: {e}")
+            print(f"Test failed: {e}")
             failed += 1
         except Exception as e:
-            print(f"[ERROR] Test error: {e}")
+            print(f"Test error: {e}")
             import traceback
             traceback.print_exc()
             failed += 1

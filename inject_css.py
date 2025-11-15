@@ -205,7 +205,7 @@ for i, line in enumerate(lines):
         break
 
 if insert_index is None:
-    print("[ERROR] Fehler: Konnte die Einfügestelle nicht finden!")
+    print("Fehler: Konnte die Einfügestelle nicht finden!")
     exit(1)
 
 # CSS vor der INTRO-BILDSCHIRM-Zeile einfügen
@@ -215,5 +215,5 @@ lines.insert(insert_index, CSS_INSERT)
 with open('gui.py', 'w', encoding='utf-8') as f:
     f.writelines(lines)
 
-print("[OK] Erfolgreich! Slider- und Checkbox-Effekte wurden in gui.py eingefügt.")
+print("Erfolgreich! Slider- und Checkbox-Effekte wurden in gui.py eingefügt.")
 print(f"📍 Eingefügt vor Zeile {insert_index + 1}")

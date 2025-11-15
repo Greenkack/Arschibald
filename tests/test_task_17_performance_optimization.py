@@ -38,29 +38,29 @@ def test_chart_cache():
     # Test cache miss
     result = cache.get(chart_key, chart_data)
     assert result is None, "Expected cache miss on first access"
-    print("[OK] Cache miss works correctly")
+    print("Cache miss works correctly")
 
     # Store in cache
     cache.put(chart_key, chart_data, chart_bytes)
-    print("[OK] Chart stored in cache")
+    print("Chart stored in cache")
 
     # Test cache hit
     result = cache.get(chart_key, chart_data)
     assert result == chart_bytes, "Expected cache hit"
-    print("[OK] Cache hit works correctly")
+    print("Cache hit works correctly")
 
     # Test cache stats
     stats = cache.get_stats()
     assert stats['hit_count'] == 1, "Expected 1 hit"
     assert stats['miss_count'] == 1, "Expected 1 miss"
     assert stats['size'] == 1, "Expected 1 item in cache"
-    print(f"[OK] Cache stats: {stats['hit_rate_percent']}% hit rate")
+    print(f"Cache stats: {stats['hit_rate_percent']}% hit rate")
 
     # Test cache invalidation
     cache.invalidate(chart_key, chart_data)
     result = cache.get(chart_key, chart_data)
     assert result is None, "Expected cache miss after invalidation"
-    print("[OK] Cache invalidation works correctly")
+    print("Cache invalidation works correctly")
 
     # Test LRU eviction
     cache.clear()
@@ -70,9 +70,9 @@ def test_chart_cache():
     stats = cache.get_stats()
     assert stats['size'] <= 10, f"Cache size should be <= 10, got {
         stats['size']}"
-    print(f"[OK] LRU eviction works (cache size: {stats['size']})")
+    print(f"LRU eviction works (cache size: {stats['size']})")
 
-    print("\n[OK] All chart caching tests passed!")
+    print("\nAll chart caching tests passed!")
 
 
 def test_chart_page_generator_with_cache():
@@ -105,22 +105,22 @@ def test_chart_page_generator_with_cache():
     # First access - should be cache miss
     chart_bytes_1 = generator._get_chart_bytes('monthly_prod_cons_chart_bytes')
     assert chart_bytes_1 is not None, "Expected chart bytes"
-    print("[OK] First chart access (cache miss)")
+    print("First chart access (cache miss)")
 
     # Second access - should be cache hit
     chart_bytes_2 = generator._get_chart_bytes('monthly_prod_cons_chart_bytes')
     assert chart_bytes_2 == chart_bytes_1, "Expected same bytes from cache"
-    print("[OK] Second chart access (cache hit)")
+    print("Second chart access (cache hit)")
 
     # Check cache stats
     stats = ChartPageGenerator.get_cache_stats()
     print(
-        f"[OK] Cache stats: {
+        f"Cache stats: {
             stats['hit_count']} hits, {
             stats['miss_count']} misses")
     assert stats['hit_count'] >= 1, "Expected at least 1 cache hit"
 
-    print("\n[OK] ChartPageGenerator caching tests passed!")
+    print("\nChartPageGenerator caching tests passed!")
 
 
 def test_efficient_pdf_merging():
@@ -159,7 +159,7 @@ def test_efficient_pdf_merging():
     # Test that the efficient method exists
     assert hasattr(
         generator, '_add_pages_to_writer_efficient'), "Expected efficient merge method"
-    print("[OK] Efficient merge method exists")
+    print("Efficient merge method exists")
 
     # Test that it returns page count
     from pypdf import PdfWriter
@@ -178,9 +178,9 @@ def test_efficient_pdf_merging():
     page_count = generator._add_pages_to_writer_efficient(
         writer, test_pdf_bytes)
     assert page_count == 1, f"Expected 1 page, got {page_count}"
-    print("[OK] Efficient merge returns correct page count")
+    print("Efficient merge returns correct page count")
 
-    print("\n[OK] Efficient PDF merging tests passed!")
+    print("\nEfficient PDF merging tests passed!")
 
 
 def test_product_datasheet_efficient_merge():
@@ -195,14 +195,14 @@ def test_product_datasheet_efficient_merge():
     # Test with empty list
     result = merger.merge([])
     assert result == b'', "Expected empty bytes for empty list"
-    print("[OK] Empty list handled correctly")
+    print("Empty list handled correctly")
 
     # Test with non-existent IDs (should handle gracefully)
     result = merger.merge([99999, 99998])
     # Should return empty bytes since products don't exist
-    print("[OK] Non-existent products handled gracefully")
+    print("Non-existent products handled gracefully")
 
-    print("\n[OK] ProductDatasheetMerger efficient merge tests passed!")
+    print("\nProductDatasheetMerger efficient merge tests passed!")
 
 
 def test_image_scaling():
@@ -220,7 +220,7 @@ def test_image_scaling():
     large_image_bytes = buffer.getvalue()
 
     print(
-        f"[OK] Created test image: 3000x2000 pixels ({
+        f"Created test image: 3000x2000 pixels ({
             len(large_image_bytes)} bytes)")
 
     logger = ExtendedPDFLogger()
@@ -231,7 +231,7 @@ def test_image_scaling():
 
     assert pdf_bytes != b'', "Expected non-empty PDF bytes"
     assert len(pdf_bytes) > 0, "Expected valid PDF output"
-    print(f"[OK] Image converted to PDF ({len(pdf_bytes)} bytes)")
+    print(f"Image converted to PDF ({len(pdf_bytes)} bytes)")
 
     # Check that optimization was logged
     summary = logger.get_summary()
@@ -241,11 +241,11 @@ def test_image_scaling():
     scaling_logged = any(
         'Scaling image' in msg or 'Optimized image' in msg for msg in info_messages)
     if scaling_logged:
-        print("[OK] Image scaling was performed and logged")
+        print("Image scaling was performed and logged")
     else:
-        print("[OK] Image was already optimal size")
+        print("Image was already optimal size")
 
-    print("\n[OK] Image scaling tests passed!")
+    print("\nImage scaling tests passed!")
 
 
 def test_chart_image_optimization():
@@ -263,7 +263,7 @@ def test_chart_image_optimization():
     large_chart_bytes = buffer.getvalue()
 
     print(
-        f"[OK] Created test chart: 2400x1800 pixels ({
+        f"Created test chart: 2400x1800 pixels ({
             len(large_chart_bytes)} bytes)")
 
     logger = ExtendedPDFLogger()
@@ -283,16 +283,16 @@ def test_chart_image_optimization():
         large_chart_bytes, target_width, target_height)
 
     assert optimized_bytes != b'', "Expected non-empty optimized bytes"
-    print(f"[OK] Chart optimized ({len(optimized_bytes)} bytes)")
+    print(f"Chart optimized ({len(optimized_bytes)} bytes)")
 
     # Optimized should typically be smaller (unless already optimal)
     if len(optimized_bytes) < len(large_chart_bytes):
         reduction = (1 - len(optimized_bytes) / len(large_chart_bytes)) * 100
-        print(f"[OK] Size reduced by {reduction:.1f}%")
+        print(f"Size reduced by {reduction:.1f}%")
     else:
-        print("[OK] Image was already optimal size")
+        print("Image was already optimal size")
 
-    print("\n[OK] Chart image optimization tests passed!")
+    print("\nChart image optimization tests passed!")
 
 
 def test_performance_comparison():
@@ -313,7 +313,7 @@ def test_performance_comparison():
         img.save(buffer, format='PNG')
         analysis_results[f'test_chart_{i}_bytes'] = buffer.getvalue()
 
-    print(f"[OK] Created {chart_count} test charts")
+    print(f"Created {chart_count} test charts")
 
     logger = ExtendedPDFLogger()
 
@@ -335,7 +335,7 @@ def test_performance_comparison():
     cached_time = time.time() - start_time
 
     stats = ChartPageGenerator.get_cache_stats()
-    print(f"[OK] With cache: {cached_time:.4f}s, {stats['hit_count']} cache hits")
+    print(f"With cache: {cached_time:.4f}s, {stats['hit_count']} cache hits")
 
     # Test without caching
     generator_uncached = ChartPageGenerator(
@@ -352,12 +352,12 @@ def test_performance_comparison():
         generator_uncached._get_chart_bytes(key)
     uncached_time = time.time() - start_time
 
-    print(f"[OK] Without cache: {uncached_time:.4f}s")
+    print(f"Without cache: {uncached_time:.4f}s")
 
     if stats['hit_count'] > 0:
-        print(f"[OK] Cache provided performance benefit")
+        print(f"Cache provided performance benefit")
 
-    print("\n[OK] Performance comparison completed!")
+    print("\nPerformance comparison completed!")
 
 
 def run_all_tests():
@@ -376,12 +376,12 @@ def run_all_tests():
         test_performance_comparison()
 
         print("\n" + "=" * 70)
-        print("[OK] ALL PERFORMANCE OPTIMIZATION TESTS PASSED!")
+        print("ALL PERFORMANCE OPTIMIZATION TESTS PASSED!")
         print("=" * 70)
         print("\nImplemented features:")
-        print("  [OK] 17.1 Chart caching with LRU eviction")
-        print("  [OK] 17.2 Efficient single-pass PDF merging")
-        print("  [OK] 17.3 Image scaling and optimization (300 DPI)")
+        print("  17.1 Chart caching with LRU eviction")
+        print("  17.2 Efficient single-pass PDF merging")
+        print("  17.3 Image scaling and optimization (300 DPI)")
         print("\nPerformance improvements:")
         print("  • Chart caching reduces redundant rendering")
         print("  • Single-pass merging reduces memory usage")
@@ -389,10 +389,10 @@ def run_all_tests():
         print("  • 300 DPI ensures print quality")
 
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         raise
     except Exception as e:
-        print(f"\n[ERROR] ERROR: {e}")
+        print(f"\nERROR: {e}")
         import traceback
         traceback.print_exc()
         raise

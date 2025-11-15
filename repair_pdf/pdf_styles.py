@@ -549,7 +549,7 @@ class PDFThemeManager:
         for source, target, value in flows:
             if value > 0:
                 start = components[source]['pos']
-                end = components[target]['pos']
+                end = components['pos']
                 
                 # Pfeil zeichnen
                 arrow = plt.annotate('', xy=end, xytext=start,

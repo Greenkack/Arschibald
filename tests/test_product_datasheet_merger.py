@@ -23,14 +23,14 @@ def test_product_datasheet_merger_basic():
     # Test with empty list
     result = merger.merge([])
     assert result == b'', "Empty list should return empty bytes"
-    print("[OK] Empty list handling works")
+    print("Empty list handling works")
 
     # Test with non-existent product ID
     result = merger.merge([999999])
     assert result == b'', "Non-existent product should return empty bytes"
-    print("[OK] Non-existent product handling works")
+    print("Non-existent product handling works")
 
-    print("[OK] Basic tests passed")
+    print("Basic tests passed")
 
 
 def test_load_datasheet_with_real_db():
@@ -52,16 +52,16 @@ def test_load_datasheet_with_real_db():
             result = merger._load_datasheet(product_id)
             if result:
                 print(
-                    f"[OK] Successfully loaded datasheet for product {product_id}")
+                    f"Successfully loaded datasheet for product {product_id}")
                 print(f"  Datasheet size: {len(result)} bytes")
             else:
-                print(f"[OK] Product {product_id} has no datasheet (expected)")
+                print(f"Product {product_id} has no datasheet (expected)")
         else:
-            print("[OK] No products in database (test skipped)")
+            print("No products in database (test skipped)")
     except Exception as e:
-        print(f"[OK] Database query test completed with expected behavior: {e}")
+        print(f"Database query test completed with expected behavior: {e}")
 
-    print("[OK] Real DB query test passed")
+    print("Real DB query test passed")
 
 
 def test_image_to_pdf_conversion():
@@ -87,15 +87,15 @@ def test_image_to_pdf_conversion():
         try:
             reader = PdfReader(io.BytesIO(result))
             assert len(reader.pages) == 1, "Should have exactly 1 page"
-            print(f"[OK] Image converted to PDF successfully")
+            print(f"Image converted to PDF successfully")
             print(f"  PDF size: {len(result)} bytes")
             print(f"  Pages: {len(reader.pages)}")
         except Exception as e:
-            print(f"[ERROR] PDF validation failed: {e}")
+            print(f"PDF validation failed: {e}")
     else:
-        print("[OK] Image conversion returned empty (expected for invalid image)")
+        print("Image conversion returned empty (expected for invalid image)")
 
-    print("[OK] Image conversion test passed")
+    print("Image conversion test passed")
 
 
 def test_merge_multiple_datasheets():
@@ -107,7 +107,7 @@ def test_merge_multiple_datasheets():
     # Test with multiple non-existent IDs (should handle gracefully)
     result = merger.merge([999991, 999992, 999993])
     assert result == b'', "Non-existent products should return empty bytes"
-    print("[OK] Multiple non-existent products handled correctly")
+    print("Multiple non-existent products handled correctly")
 
     # Try with real products if available
     try:
@@ -122,15 +122,15 @@ def test_merge_multiple_datasheets():
             if result:
                 reader = PdfReader(io.BytesIO(result))
                 print(
-                    f"[OK] Merged {len(reader.pages)} page(s) from {len(product_ids)} products")
+                    f"Merged {len(reader.pages)} page(s) from {len(product_ids)} products")
             else:
-                print("[OK] Products have no datasheets (expected)")
+                print("Products have no datasheets (expected)")
         else:
-            print("[OK] Not enough products for multi-merge test (skipped)")
+            print("Not enough products for multi-merge test (skipped)")
     except Exception as e:
-        print(f"[OK] Multi-merge test completed: {e}")
+        print(f"Multi-merge test completed: {e}")
 
-    print("[OK] Multiple datasheet merge test passed")
+    print("Multiple datasheet merge test passed")
 
 
 def test_error_handling():
@@ -142,21 +142,21 @@ def test_error_handling():
     # Test with invalid product ID types (should handle gracefully)
     try:
         result = merger.merge([None])  # type: ignore
-        print("[OK] Handled None in product list")
+        print("Handled None in product list")
     except Exception as e:
-        print(f"[OK] Expected error for None: {type(e).__name__}")
+        print(f"Expected error for None: {type(e).__name__}")
 
     # Test with negative product ID
     result = merger.merge([-1])
     assert result == b'', "Negative ID should return empty bytes"
-    print("[OK] Negative product ID handled correctly")
+    print("Negative product ID handled correctly")
 
     # Test _convert_image_to_pdf with invalid data
     result = merger._convert_image_to_pdf(b'invalid image data')
     assert result == b'', "Invalid image should return empty bytes"
-    print("[OK] Invalid image data handled correctly")
+    print("Invalid image data handled correctly")
 
-    print("[OK] Error handling tests passed")
+    print("Error handling tests passed")
 
 
 def test_datasheet_path_resolution():
@@ -169,7 +169,7 @@ def test_datasheet_path_resolution():
     merger = ProductDatasheetMerger()
 
     # Test that the method uses correct field name
-    print("[OK] Verifying use of 'datasheet_link_db_path' field")
+    print("Verifying use of 'datasheet_link_db_path' field")
 
     # The implementation should:
     # 1. Use product_db.get_product_by_id() - VERIFIED
@@ -177,8 +177,8 @@ def test_datasheet_path_resolution():
     # 3. Handle relative paths by prepending 'data/product_datasheets/' - VERIFIED
     # 4. Check file existence before loading - VERIFIED
 
-    print("[OK] Path resolution logic verified in code")
-    print("[OK] Datasheet path resolution test passed")
+    print("Path resolution logic verified in code")
+    print("Datasheet path resolution test passed")
 
 
 def main():
@@ -196,12 +196,12 @@ def main():
         test_datasheet_path_resolution()
 
         print("\n" + "=" * 60)
-        print("[OK] ALL TESTS PASSED")
+        print("ALL TESTS PASSED")
         print("=" * 60)
         print("\nTask 4 Implementation Summary:")
-        print("[OK] 4.1 ProductDatasheetMerger class created")
-        print("[OK] 4.2 PDF merge for datasheets implemented")
-        print("[OK] 4.3 Image-to-PDF conversion implemented")
+        print("4.1 ProductDatasheetMerger class created")
+        print("4.2 PDF merge for datasheets implemented")
+        print("4.3 Image-to-PDF conversion implemented")
         print("\nKey Features:")
         print("- Uses real DB queries (product_db.get_product_by_id)")
         print("- Correct field name (datasheet_link_db_path)")
@@ -210,7 +210,7 @@ def main():
         print("- Proper PDF merging with page iteration")
 
     except Exception as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         return 1

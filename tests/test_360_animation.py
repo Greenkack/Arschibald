@@ -72,22 +72,22 @@ def test_360_animation_basic():
         
         # Prüfe Dateigröße
         file_size = os.path.getsize(tmp_filepath)
-        print(f"[OK] GIF erstellt: {file_size} Bytes")
+        print(f"GIF erstellt: {file_size} Bytes")
         assert file_size > 1000, "GIF-Datei sollte mindestens 1KB groß sein"
         
         # Prüfe GIF-Header (GIF89a oder GIF87a)
         with open(tmp_filepath, 'rb') as f:
             header = f.read(6)
             assert header.startswith(b'GIF'), "Datei sollte ein gültiges GIF sein"
-            print(f"[OK] GIF-Header: {header.decode('ascii', errors='ignore')}")
+            print(f"GIF-Header: {header.decode('ascii', errors='ignore')}")
         
-        print("\n[OK] Test erfolgreich: 360° Animation wurde erstellt")
+        print("\nTest erfolgreich: 360° Animation wurde erstellt")
         
     finally:
         # Lösche temporäre Datei
         if os.path.exists(tmp_filepath):
             os.unlink(tmp_filepath)
-            print(f"[OK] Temporäre Datei gelöscht")
+            print(f"Temporäre Datei gelöscht")
 
 
 def test_360_animation_different_frames():
@@ -127,9 +127,9 @@ def test_360_animation_different_frames():
         
         assert gif_bytes and len(gif_bytes) > 0, "GIF sollte erstellt werden"
         file_size = os.path.getsize(tmp_filepath)
-        print(f"[OK] GIF mit 18 Frames erstellt: {file_size} Bytes")
+        print(f"GIF mit 18 Frames erstellt: {file_size} Bytes")
         
-        print("\n[OK] Test erfolgreich: Verschiedene Frame-Anzahlen funktionieren")
+        print("\nTest erfolgreich: Verschiedene Frame-Anzahlen funktionieren")
         
     finally:
         if os.path.exists(tmp_filepath):
@@ -172,9 +172,9 @@ def test_360_animation_with_modules():
         
         assert gif_bytes and len(gif_bytes) > 0, "GIF mit Modulen sollte erstellt werden"
         file_size = os.path.getsize(tmp_filepath)
-        print(f"[OK] GIF mit PV-Modulen erstellt: {file_size} Bytes")
+        print(f"GIF mit PV-Modulen erstellt: {file_size} Bytes")
         
-        print("\n[OK] Test erfolgreich: Animation mit PV-Modulen funktioniert")
+        print("\nTest erfolgreich: Animation mit PV-Modulen funktioniert")
         
     finally:
         if os.path.exists(tmp_filepath):
@@ -197,11 +197,11 @@ if __name__ == "__main__":
         test_360_animation_with_modules()
         
         print("\n" + "="*70)
-        print("[OK] ALLE TESTS ERFOLGREICH")
+        print("ALLE TESTS ERFOLGREICH")
         print("="*70)
         
     except Exception as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

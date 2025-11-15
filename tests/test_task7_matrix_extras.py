@@ -20,7 +20,7 @@ def test_special_products_module_import():
         assert hasattr(special_products, 'is_special_product')
         assert hasattr(special_products, 'get_special_products')
         assert hasattr(special_products, 'mark_product_as_special')
-        print("[OK] special_products Modul erfolgreich importiert")
+        print("special_products Modul erfolgreich importiert")
     except ImportError as e:
         pytest.fail(f"Konnte special_products nicht importieren: {e}")
 
@@ -33,7 +33,7 @@ def test_matrix_extras_calculator_import():
         assert hasattr(matrix_extras_calculator, 'calculate_services_cost')
         assert hasattr(matrix_extras_calculator, 'calculate_extras_cost')
         assert hasattr(matrix_extras_calculator, 'calculate_all_extras')
-        print("[OK] matrix_extras_calculator Modul erfolgreich importiert")
+        print("matrix_extras_calculator Modul erfolgreich importiert")
     except ImportError as e:
         pytest.fail(f"Konnte matrix_extras_calculator nicht importieren: {e}")
 
@@ -68,7 +68,7 @@ def test_calculate_extras_cost():
     assert result['count'] == 2, f"Count sollte 2 sein, ist aber {result['count']}"
     assert len(result['items']) == 2, f"Items sollte 2 Einträge haben, hat aber {len(result['items'])}"
     
-    print("[OK] calculate_extras_cost funktioniert korrekt")
+    print("calculate_extras_cost funktioniert korrekt")
 
 
 def test_calculate_all_extras_structure():
@@ -102,7 +102,7 @@ def test_calculate_all_extras_structure():
     assert result['extras']['total'] == 100.0
     assert len(result['extras']['items']) == 1
     
-    print("[OK] calculate_all_extras Struktur ist korrekt")
+    print("calculate_all_extras Struktur ist korrekt")
 
 
 def test_apply_discounts_and_surcharges():
@@ -138,7 +138,7 @@ def test_apply_discounts_and_surcharges():
     assert result['surcharge_amount'] == 45.0  # 5% von 900
     assert result['final_amount'] == 945.0
     
-    print("[OK] apply_discounts_and_surcharges funktioniert korrekt")
+    print("apply_discounts_and_surcharges funktioniert korrekt")
 
 
 def test_standard_product_categories():
@@ -158,7 +158,7 @@ def test_standard_product_categories():
     assert is_standard_product_category('Wechselrichter') == True
     assert is_standard_product_category('Sonderkomponente') == False
     
-    print("[OK] Standard-Produkt-Kategorien korrekt definiert")
+    print("Standard-Produkt-Kategorien korrekt definiert")
 
 
 def test_product_db_has_is_special_product_field():
@@ -180,7 +180,7 @@ def test_product_db_has_is_special_product_field():
         assert 'is_special_product' in column_names, \
             "products Tabelle sollte is_special_product Feld haben"
         
-        print("[OK] products Tabelle hat is_special_product Feld")
+        print("products Tabelle hat is_special_product Feld")
         
     except Exception as e:
         pytest.skip(f"Konnte Datenbank nicht prüfen: {e}")
@@ -216,7 +216,7 @@ def run_all_tests():
             print(f"⊘ Test übersprungen: {e}")
             skipped += 1
         except Exception as e:
-            print(f"[ERROR] Test fehlgeschlagen: {e}")
+            print(f"Test fehlgeschlagen: {e}")
             import traceback
             traceback.print_exc()
             failed += 1

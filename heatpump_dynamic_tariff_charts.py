@@ -152,7 +152,7 @@ def create_hourly_price_chart(hourly_data: list[dict[str, Any]]) -> go.Figure:
     # Layout
     fig.update_layout(
         title={
-            'text': "[POWER] Stündliche Strompreise - Dynamisch vs. Statisch",
+            'text': "Stündliche Strompreise - Dynamisch vs. Statisch",
             'x': 0.5,
             'xanchor': 'center',
             'font': {'size': 18, 'color': '#2C3E50'}
@@ -269,7 +269,7 @@ def create_annual_cost_chart(monthly_summaries: dict[int, Any], static_price: fl
     # Layout
     fig.update_layout(
         title={
-            'text': "[STATS] Jährliche Kostenentwicklung - Kumulativ",
+            'text': "Jährliche Kostenentwicklung - Kumulativ",
             'x': 0.5,
             'xanchor': 'center',
             'font': {'size': 18, 'color': '#2C3E50'}
@@ -511,7 +511,7 @@ def create_load_shifting_heatmap(hourly_data: list[dict[str, Any]]) -> go.Figure
     # Annotations für beste Zeiten (optional - wird zu voll bei 7×6=42 Punkten)
     # Daher nur Zusammenfassung als Text
     fig.add_annotation(
-        text="<b>[IDEA] Grün = Günstigste Zeiten</b><br>Optimal für WP, E-Auto, Waschmaschine",
+        text="<b>Grün = Günstigste Zeiten</b><br>Optimal für WP, E-Auto, Waschmaschine",
         xref="paper",
         yref="paper",
         x=0.5,

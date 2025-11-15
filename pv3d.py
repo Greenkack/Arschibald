@@ -4275,19 +4275,19 @@ def optimize_layout(
     try:
         # Validiere Eingabeparameter
         if not isinstance(building_dims, BuildingDims):
-            print(f"[ERROR] FEHLER: Ungültige BuildingDims: {type(building_dims)}")
+            print(f"FEHLER: Ungültige BuildingDims: {type(building_dims)}")
             return []
         
         if target_modules <= 0:
-            print(f"[ERROR] FEHLER: Ungültige Modulanzahl: {target_modules}")
+            print(f"FEHLER: Ungültige Modulanzahl: {target_modules}")
             return []
         
         if optimization_goal not in ["max_modules", "max_yield", "balanced"]:
-            print(f"[WARNING]  WARNUNG: Unbekanntes Optimierungsziel '{optimization_goal}', verwende 'balanced'")
+            print(f"WARNUNG: Unbekanntes Optimierungsziel '{optimization_goal}', verwende 'balanced'")
             optimization_goal = "balanced"
         
         # DETAILLIERTES LOGGING: Zeige Optimierungsparameter
-        print(f"\n[LAUNCH] Optimierung gestartet:")
+        print(f"\nOptimierung gestartet:")
         print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print(f"   Eingabeparameter:")
         print(f"     • Optimierungsziel: {optimization_goal}")
@@ -4316,9 +4316,9 @@ def optimize_layout(
             )
             score1 = evaluate_config(config1, building_dims, target_modules, optimization_goal)
             configurations.append((config1, score1))
-            print(f"     [OK] 1. Süd-Aufständerung: Score {score1:.1f}")
+            print(f"     1. Süd-Aufständerung: Score {score1:.1f}")
         except Exception as e:
-            print(f"     [ERROR] 1. Süd-Aufständerung fehlgeschlagen: {e}")
+            print(f"     1. Süd-Aufständerung fehlgeschlagen: {e}")
         
         # Strategie 2: Ost-West-Aufständerung (mehr Module, weniger Ertrag pro Modul)
         try:
@@ -4332,9 +4332,9 @@ def optimize_layout(
             )
             score2 = evaluate_config(config2, building_dims, target_modules, optimization_goal)
             configurations.append((config2, score2))
-            print(f"     [OK] 2. Ost-West-Aufständerung: Score {score2:.1f}")
+            print(f"     2. Ost-West-Aufständerung: Score {score2:.1f}")
         except Exception as e:
-            print(f"     [ERROR] 2. Ost-West-Aufständerung fehlgeschlagen: {e}")
+            print(f"     2. Ost-West-Aufständerung fehlgeschlagen: {e}")
         
         # Strategie 3: Süd-Ost (Kompromiss)
         try:
@@ -4348,9 +4348,9 @@ def optimize_layout(
             )
             score3 = evaluate_config(config3, building_dims, target_modules, optimization_goal)
             configurations.append((config3, score3))
-            print(f"     [OK] 3. Süd-Ost-Aufständerung: Score {score3:.1f}")
+            print(f"     3. Süd-Ost-Aufständerung: Score {score3:.1f}")
         except Exception as e:
-            print(f"     [ERROR] 3. Süd-Ost-Aufständerung fehlgeschlagen: {e}")
+            print(f"     3. Süd-Ost-Aufständerung fehlgeschlagen: {e}")
         
         # Strategie 4: Gemischt (mit Garage und Fassade für maximale Modulanzahl)
         try:
@@ -4364,13 +4364,13 @@ def optimize_layout(
             )
             score4 = evaluate_config(config4, building_dims, target_modules, optimization_goal)
             configurations.append((config4, score4))
-            print(f"     [OK] 4. Gemischt (Garage + Fassade): Score {score4:.1f}")
+            print(f"     4. Gemischt (Garage + Fassade): Score {score4:.1f}")
         except Exception as e:
-            print(f"     [ERROR] 4. Gemischt fehlgeschlagen: {e}")
+            print(f"     4. Gemischt fehlgeschlagen: {e}")
         
         # Prüfe ob Konfigurationen generiert wurden
         if not configurations:
-            print(f"   [ERROR] FEHLER: Keine Konfigurationen konnten generiert werden!")
+            print(f"   FEHLER: Keine Konfigurationen konnten generiert werden!")
             return []
         
         print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -4378,7 +4378,7 @@ def optimize_layout(
         # Sortiere nach Score (höchster zuerst)
         configurations.sort(key=lambda x: x[1], reverse=True)
         
-        print(f"   [OK] Optimierung abgeschlossen!")
+        print(f"   Optimierung abgeschlossen!")
         print(f"   Top 3 Konfigurationen:")
         for i, (config, score) in enumerate(configurations[:3], 1):
             mode_name = config.mounting_mode
@@ -4397,7 +4397,7 @@ def optimize_layout(
         
     except Exception as e:
         # FEHLERBEHANDLUNG: Logge Fehler mit Traceback
-        print(f"\n[ERROR] KRITISCHER FEHLER in optimize_layout():")
+        print(f"\nKRITISCHER FEHLER in optimize_layout():")
         print(f"   Fehler: {str(e)}")
         print(f"   Parameter: target_modules={target_modules}, goal={optimization_goal}")
         print(f"   Traceback:")
@@ -4432,11 +4432,11 @@ def evaluate_config(
     try:
         # Validiere Eingabeparameter
         if not isinstance(config, AdvancedLayoutConfig):
-            print(f"[ERROR] FEHLER in evaluate_config: Ungültige Konfiguration")
+            print(f"FEHLER in evaluate_config: Ungültige Konfiguration")
             return 0.0
         
         if target_modules <= 0:
-            print(f"[ERROR] FEHLER in evaluate_config: Ungültige Modulanzahl: {target_modules}")
+            print(f"FEHLER in evaluate_config: Ungültige Modulanzahl: {target_modules}")
             return 0.0
         
         score = 0.0
@@ -4531,13 +4531,13 @@ def evaluate_config(
         
         # Logging für Debugging
         if final_score < 0 or final_score > 100:
-            print(f"[WARNING]  WARNUNG: Score außerhalb des Bereichs vor Clipping: {score}")
+            print(f"WARNUNG: Score außerhalb des Bereichs vor Clipping: {score}")
         
         return final_score
         
     except Exception as e:
         # FEHLERBEHANDLUNG: Logge Fehler und gebe 0 zurück
-        print(f"[ERROR] FEHLER in evaluate_config():")
+        print(f"FEHLER in evaluate_config():")
         print(f"   Fehler: {str(e)}")
         print(f"   Traceback:")
         traceback.print_exc()

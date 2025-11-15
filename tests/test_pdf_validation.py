@@ -39,9 +39,9 @@ try:
     print(f'Test 3 (vollständig): is_valid={result3["is_valid"]}, critical_errors={len(result3["critical_errors"])}')
 
     print()
-    print('[OK] PDF-VALIDIERUNG FUNKTIONIERT!')
+    print('PDF-VALIDIERUNG FUNKTIONIERT!')
 
 except Exception as e:
-    print(f'[ERROR] Fehler: {e}')
+    print(f'Fehler: {e}')
     import traceback
     traceback.print_exc()

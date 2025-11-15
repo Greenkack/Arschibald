@@ -28,9 +28,9 @@ try:
         JobStatus,
         ProgressCallback,
     )
-    print("[OK] All imports successful")
+    print("All imports successful")
 except Exception as e:
-    print(f"[ERROR] Import failed: {e}")
+    print(f"Import failed: {e}")
     exit(1)
 
 # Test 2: Create Job
@@ -58,9 +58,9 @@ try:
     job2 = Job.from_dict(job_dict)
     assert job2.name == job.name
 
-    print("[OK] Job creation and serialization working")
+    print("Job creation and serialization working")
 except Exception as e:
-    print(f"[ERROR] Job creation failed: {e}")
+    print(f"Job creation failed: {e}")
     exit(1)
 
 # Test 3: JobResult
@@ -83,9 +83,9 @@ try:
     result2 = JobResult.from_dict(result_dict)
     assert result2.job_id == result.job_id
 
-    print("[OK] JobResult working correctly")
+    print("JobResult working correctly")
 except Exception as e:
-    print(f"[ERROR] JobResult failed: {e}")
+    print(f"JobResult failed: {e}")
     exit(1)
 
 # Test 4: ProgressCallback
@@ -106,9 +106,9 @@ try:
     assert len(updates) == 3
     assert result.progress == 0.75
 
-    print("[OK] ProgressCallback working correctly")
+    print("ProgressCallback working correctly")
 except Exception as e:
-    print(f"[ERROR] ProgressCallback failed: {e}")
+    print(f"ProgressCallback failed: {e}")
     exit(1)
 
 # Test 5: JobQueue
@@ -141,9 +141,9 @@ try:
 
     assert queue.size() == 0
 
-    print("[OK] JobQueue priority ordering working")
+    print("JobQueue priority ordering working")
 except Exception as e:
-    print(f"[ERROR] JobQueue failed: {e}")
+    print(f"JobQueue failed: {e}")
     exit(1)
 
 # Test 6: JobManager
@@ -182,9 +182,9 @@ try:
 
     manager.stop(graceful=True, timeout=5)
 
-    print("[OK] JobManager execution working")
+    print("JobManager execution working")
 except Exception as e:
-    print(f"[ERROR] JobManager failed: {e}")
+    print(f"JobManager failed: {e}")
     exit(1)
 
 # Test 7: Error Categorization
@@ -200,9 +200,9 @@ try:
     assert manager._categorize_error(ValueError()) == ErrorType.PERMANENT
     assert manager._categorize_error(TypeError()) == ErrorType.PERMANENT
 
-    print("[OK] Error categorization working")
+    print("Error categorization working")
 except Exception as e:
-    print(f"[ERROR] Error categorization failed: {e}")
+    print(f"Error categorization failed: {e}")
     exit(1)
 
 # Test 8: Notification System
@@ -225,16 +225,16 @@ try:
 
     notification_manager.notify_failure(job, result)
 
-    print("[OK] Notification system working")
+    print("Notification system working")
 except Exception as e:
-    print(f"[ERROR] Notification system failed: {e}")
+    print(f"Notification system failed: {e}")
     exit(1)
 
 # Summary
 print("\n" + "=" * 70)
 print("VERIFICATION COMPLETE")
 print("=" * 70)
-print("\n[OK] All tests passed!")
+print("\nAll tests passed!")
 print("\nBackground Job Processing System is ready to use.")
 print("\nKey Features Verified:")
 print("  • Job creation and serialization")

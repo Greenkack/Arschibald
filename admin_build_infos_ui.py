@@ -58,7 +58,7 @@ def render_documentation_tab(docs: list[dict], tab_name: str):
     
     # Suchfeld
     search_query = st.text_input(
-        "[SEARCH] Dokumentation durchsuchen",
+        "Dokumentation durchsuchen",
         placeholder="Suchbegriff eingeben...",
         key=f"search_{tab_name}"
     )
@@ -81,7 +81,7 @@ def render_documentation_tab(docs: list[dict], tab_name: str):
     
     # Zeige Dokumente in Expander
     for doc in filtered_docs:
-        with st.expander(f"[FILE] {doc['display_name']} ({doc['size_kb']:.1f} KB)"):
+        with st.expander(f"{doc['display_name']} ({doc['size_kb']:.1f} KB)"):
             try:
                 content = doc['path'].read_text(encoding='utf-8')
                 
@@ -103,7 +103,7 @@ def render_documentation_tab(docs: list[dict], tab_name: str):
 
 def render_build_info_statistics():
     """Zeigt Build-Statistiken und Metadaten"""
-    st.write("### [CHART] Build-Informationen")
+    st.write("### Build-Informationen")
     
     try:
         root_dir = Path(__file__).parent
@@ -158,7 +158,7 @@ def render_build_infos_tab():
     st.divider()
     
     # Build-Statistiken
-    with st.expander("[CHART] Build-Statistiken", expanded=True):
+    with st.expander("Build-Statistiken", expanded=True):
         render_build_info_statistics()
     
     st.divider()

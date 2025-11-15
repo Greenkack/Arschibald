@@ -98,10 +98,10 @@ def test_new_calculations():
         print(f"   'Gesamt' -> {result.get('total_annual_savings_eur', 'N/A')}")
         print(f"   'Warmwasser' -> {result.get('inverter_total_power_w', 'N/A')}")
 
-        print("\n[OK] Test erfolgreich abgeschlossen!")
+        print("\nTest erfolgreich abgeschlossen!")
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Test: {e}")
+        print(f"Fehler beim Test: {e}")
         import traceback
         traceback.print_exc()
 

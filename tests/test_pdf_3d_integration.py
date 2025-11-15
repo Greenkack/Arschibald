@@ -10,10 +10,10 @@ def test_imports():
             get_pv3d_png_bytes_for_pdf
         )
         from utils.pv3d import BuildingDims, LayoutConfig
-        print("[OK] All imports successful")
+        print("All imports successful")
         return True
     except ImportError as e:
-        print(f"[ERROR] Import error: {e}")
+        print(f"Import error: {e}")
         return False
 
 
@@ -25,7 +25,7 @@ def test_pdf_generator_integration():
         
         # Check if the class exists
         if not hasattr(pdf_generator, 'PDFGenerator'):
-            print("[ERROR] PDFGenerator class not found")
+            print("PDFGenerator class not found")
             return False
         
         # Create a dummy instance to check methods
@@ -49,27 +49,27 @@ def test_pdf_generator_integration():
             
             # Check if the new method exists
             if hasattr(generator, '_draw_3d_visualization'):
-                print("[OK] _draw_3d_visualization method exists")
+                print("_draw_3d_visualization method exists")
             else:
-                print("[ERROR] _draw_3d_visualization method not found")
+                print("_draw_3d_visualization method not found")
                 return False
             
             # Check if it's in the module map
             module_map = generator._get_module_map()
             if '3d_visualisierung' in module_map:
-                print("[OK] 3d_visualisierung registered in module map")
+                print("3d_visualisierung registered in module map")
             else:
-                print("[ERROR] 3d_visualisierung not in module map")
+                print("3d_visualisierung not in module map")
                 return False
             
             return True
             
         except Exception as e:
-            print(f"[ERROR] Error creating PDFGenerator instance: {e}")
+            print(f"Error creating PDFGenerator instance: {e}")
             return False
             
     except ImportError as e:
-        print(f"[ERROR] Import error: {e}")
+        print(f"Import error: {e}")
         return False
 
 
@@ -83,20 +83,20 @@ def test_basic_functionality():
         layout = LayoutConfig(mode="auto")
         project_data = {}
         
-        print("[OK] BuildingDims and LayoutConfig created successfully")
+        print("BuildingDims and LayoutConfig created successfully")
         
         # Note: We won't actually render because it requires PyVista
         # Just check that the function exists
         if callable(render_image_bytes):
-            print("[OK] render_image_bytes function is callable")
+            print("render_image_bytes function is callable")
         else:
-            print("[ERROR] render_image_bytes is not callable")
+            print("render_image_bytes is not callable")
             return False
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Error in basic functionality test: {e}")
+        print(f"Error in basic functionality test: {e}")
         return False
 
 
@@ -131,14 +131,14 @@ if __name__ == "__main__":
     ]
     
     for name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{name}: {status}")
     
     all_passed = all(r for _, r in results)
     print()
     if all_passed:
-        print("[OK] All tests passed!")
+        print("All tests passed!")
     else:
-        print("[ERROR] Some tests failed")
+        print("Some tests failed")
     
     print("=" * 60)

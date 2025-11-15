@@ -427,7 +427,7 @@ def render_matrix_upload_ui():
     st.subheader("📤 Preismatrix hochladen")
     
     # Hilfetext
-    with st.expander("[INFO] Hilfe: Matrix-Struktur", expanded=False):
+    with st.expander("Hilfe: Matrix-Struktur", expanded=False):
         st.markdown(EXAMPLE_MATRIX_STRUCTURE)
     
     # Datei-Upload
@@ -452,9 +452,9 @@ def render_matrix_upload_ui():
         
         # Zeige Validierungsergebnis
         if validation_result['valid']:
-            st.success("[OK] Datei ist gültig und kann importiert werden")
+            st.success("Datei ist gültig und kann importiert werden")
         else:
-            st.error("[ERROR] Datei enthält Fehler und kann nicht importiert werden")
+            st.error("Datei enthält Fehler und kann nicht importiert werden")
         
         # Zeige Fehler
         if validation_result['errors']:
@@ -484,13 +484,13 @@ def render_matrix_upload_ui():
                 st.metric("Leere Zellen", info.get('empty_cells', 0))
             
             if 'no_storage_column' in info:
-                st.success(f"[OK] 'Ohne Speicher' Spalte gefunden: **{info['no_storage_column']}**")
+                st.success(f"'Ohne Speicher' Spalte gefunden: **{info['no_storage_column']}**")
             
             if 'module_counts' in info and info['module_counts']:
                 counts_str = ', '.join(str(int(c)) for c in info['module_counts'][:10])
                 if len(info['module_counts']) > 10:
                     counts_str += f" ... ({len(info['module_counts'])} gesamt)"
-                st.info(f"[CHART] Modulanzahlen: {counts_str}")
+                st.info(f"Modulanzahlen: {counts_str}")
             
             if 'storage_models' in info and info['storage_models']:
                 models_str = ', '.join(str(m) for m in info['storage_models'][:5])
@@ -566,12 +566,12 @@ def render_matrix_upload_ui():
                             )
                             
                             if matrix_id:
-                                st.success(f"[OK] Matrix '{matrix_name}' erfolgreich importiert (ID: {matrix_id})")
+                                st.success(f"Matrix '{matrix_name}' erfolgreich importiert (ID: {matrix_id})")
                                 
                                 # Setze als aktiv wenn gewünscht
                                 if set_as_active:
                                     if set_active_matrix(matrix_id):
-                                        st.success("[OK] Matrix als aktiv gesetzt")
+                                        st.success("Matrix als aktiv gesetzt")
                                     else:
                                         st.warning("⚠ Matrix konnte nicht als aktiv gesetzt werden")
                                 
@@ -580,7 +580,7 @@ def render_matrix_upload_ui():
                                 validation = validate_matrix_for_pricing(matrix_id)
                                 
                                 if validation['valid']:
-                                    st.success("[OK] Importierte Matrix ist gültig für Preisberechnung")
+                                    st.success("Importierte Matrix ist gültig für Preisberechnung")
                                 else:
                                     st.warning("⚠ Importierte Matrix hat Validierungsprobleme:")
                                     for error in validation['errors']:
@@ -594,10 +594,10 @@ def render_matrix_upload_ui():
                                 # Rerun um Upload-Widget zurückzusetzen
                                 st.rerun()
                             else:
-                                st.error("[ERROR] Fehler beim Importieren der Matrix")
+                                st.error("Fehler beim Importieren der Matrix")
                     
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler beim Importieren: {str(e)}")
+                        st.error(f"Fehler beim Importieren: {str(e)}")
                         st.exception(e)
 
 
@@ -607,7 +607,7 @@ def render_matrix_list_ui():
     
     Requirements: 2.4
     """
-    st.subheader("[CHART] Vorhandene Matrizen")
+    st.subheader("Vorhandene Matrizen")
     
     matrices = list_matrices()
     
@@ -630,17 +630,17 @@ def render_matrix_list_ui():
                 st.metric("Modus", matrix.get('pricing_mode', 'pauschal'))
             
             if matrix.get('description'):
-                st.info(f"[NOTE] {matrix['description']}")
+                st.info(f"{matrix['description']}")
             
             # Validierung
-            if st.button(f"[SEARCH] Validieren", key=f"validate_{matrix['id']}"):
+            if st.button(f"Validieren", key=f"validate_{matrix['id']}"):
                 with st.spinner("Validiere Matrix..."):
                     validation = validate_matrix_for_pricing(matrix['id'])
                 
                 if validation['valid']:
-                    st.success("[OK] Matrix ist gültig")
+                    st.success("Matrix ist gültig")
                 else:
-                    st.error("[ERROR] Matrix hat Validierungsprobleme")
+                    st.error("Matrix hat Validierungsprobleme")
                 
                 st.code(get_validation_summary(validation))
             
@@ -648,7 +648,7 @@ def render_matrix_list_ui():
             col1, col2 = st.columns(2)
             with col1:
                 if not matrix['is_active']:
-                    if st.button(f"[OK] Aktivieren", key=f"activate_{matrix['id']}"):
+                    if st.button(f"Aktivieren", key=f"activate_{matrix['id']}"):
                         if set_active_matrix(matrix['id']):
                             st.success("Matrix aktiviert")
                             st.rerun()

@@ -167,7 +167,7 @@ def ensure_all_charts_in_analysis_results(
                 charts_added += 1
     
     if charts_added > 0:
-        logging.info(f"[OK] {charts_added} Charts von calculation_results nach analysis_results kopiert")
+        logging.info(f"{charts_added} Charts von calculation_results nach analysis_results kopiert")
     
     return analysis_results
 
@@ -199,7 +199,7 @@ def create_charts_from_advanced_features(
         # Füge hinzu
         if advanced_charts:
             analysis_results.update(advanced_charts)
-            logging.info(f"[OK] {len(advanced_charts)} Advanced Charts erstellt")
+            logging.info(f"{len(advanced_charts)} Advanced Charts erstellt")
         
         return analysis_results
         
@@ -250,6 +250,6 @@ def prepare_complete_analysis_results(
         if key.endswith('_chart_bytes') and value is not None
     )
     
-    logging.info(f"[OK] Vollständige analysis_results vorbereitet: {chart_count} Charts verfügbar")
+    logging.info(f"Vollständige analysis_results vorbereitet: {chart_count} Charts verfügbar")
     
     return complete_results

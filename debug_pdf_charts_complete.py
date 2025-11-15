@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def test_donut_drawing_function():
     """Teste die _draw_donut Funktion direkt"""
-    print("[TARGET] Teste _draw_donut Funktion direkt...")
+    print("Teste _draw_donut Funktion direkt...")
 
     try:
         from reportlab.lib.colors import Color
@@ -27,7 +27,7 @@ def test_donut_drawing_function():
         c = canvas.Canvas(buffer, pagesize=A4)
         page_width, page_height = A4
 
-        print(f"[DESIGN] Seitengröße: {page_width} x {page_height}")
+        print(f"Seitengröße: {page_width} x {page_height}")
 
         # Zeichne einen Test-Donut in der Mitte der Seite
         cx = page_width / 2
@@ -38,7 +38,7 @@ def test_donut_drawing_function():
         bg = Color(0.85, 0.88, 0.90)
         fg = Color(0.07, 0.34, 0.60)
 
-        print(f"[DESIGN] Zeichne Test-Donut bei ({cx}, {cy})")
+        print(f"Zeichne Test-Donut bei ({cx}, {cy})")
 
         # Zeichne Hintergrund-Rechteck zum Testen
         c.setFillColorRGB(1, 0, 0)  # Rot
@@ -64,18 +64,18 @@ def test_donut_drawing_function():
         with open("test_donut_only.pdf", "wb") as f:
             f.write(test_bytes)
 
-        print(f"[OK] Test-Donut PDF erstellt: test_donut_only.pdf ({len(test_bytes)} bytes)")
+        print(f"Test-Donut PDF erstellt: test_donut_only.pdf ({len(test_bytes)} bytes)")
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Donut-Test: {e}")
+        print(f"Fehler beim Donut-Test: {e}")
         import traceback
         traceback.print_exc()
         return False
 
 def test_page6_function_directly():
     """Teste die _draw_page7_storage_donuts Funktion direkt (OLD: page 6 -> NEW: page 7)"""
-    print("\n[TARGET] Teste _draw_page7_storage_donuts direkt (old page 6)...")
+    print("\nTeste _draw_page7_storage_donuts direkt (old page 6)...")
 
     try:
         from reportlab.lib.pagesizes import A4
@@ -94,7 +94,7 @@ def test_page6_function_directly():
         c = canvas.Canvas(buffer, pagesize=A4)
         page_width, page_height = A4
 
-        print(f"[CHART] Test-Daten: {dynamic_data}")
+        print(f"Test-Daten: {dynamic_data}")
 
         # Zeichne Hintergrund-Markierungen
         c.setFillColorRGB(0.9, 0.9, 0.9)
@@ -109,7 +109,7 @@ def test_page6_function_directly():
             c.line(0, y, page_width, y)
 
         # Zeichne die Seite 7 Charts (OLD: page 6 -> NEW: page 7)
-        print("[DESIGN] Rufe _draw_page7_storage_donuts auf...")
+        print("Rufe _draw_page7_storage_donuts auf...")
         _draw_page7_storage_donuts(c, dynamic_data, page_width, page_height)
 
         # Zeichne zusätzliche Markierungen
@@ -126,18 +126,18 @@ def test_page6_function_directly():
         with open("test_page6_function.pdf", "wb") as f:
             f.write(test_bytes)
 
-        print(f"[OK] Page6-Funktion PDF erstellt: test_page6_function.pdf ({len(test_bytes)} bytes)")
+        print(f"Page6-Funktion PDF erstellt: test_page6_function.pdf ({len(test_bytes)} bytes)")
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Page6-Test: {e}")
+        print(f"Fehler beim Page6-Test: {e}")
         import traceback
         traceback.print_exc()
         return False
 
 def test_overlay_generation():
     """Teste die komplette Overlay-Generierung"""
-    print("\n[TARGET] Teste komplette Overlay-Generierung...")
+    print("\nTeste komplette Overlay-Generierung...")
 
     try:
         from pdf_template_engine.dynamic_overlay import generate_overlay
@@ -160,21 +160,21 @@ def test_overlay_generation():
         coords_dir = Path("coords")
         dynamic_data = build_dynamic_data(test_project_data, test_analysis_results, {})
 
-        print("[CHART] Generierte Daten:")
+        print("Generierte Daten:")
         print(f"  storage_consumption_ratio_percent: {dynamic_data.get('storage_consumption_ratio_percent')}")
         print(f"  storage_production_ratio_percent: {dynamic_data.get('storage_production_ratio_percent')}")
 
         # Generiere Overlay
-        print("[DESIGN] Generiere Overlay...")
+        print("Generiere Overlay...")
         overlay_bytes = generate_overlay(coords_dir, dynamic_data, total_pages=8)  # MIGRATION: Changed from 7 to 8
 
-        print(f"[OK] Overlay generiert: {len(overlay_bytes)} bytes")
+        print(f"Overlay generiert: {len(overlay_bytes)} bytes")
 
         # Speichere Overlay als separates PDF
         with open("test_overlay_only.pdf", "wb") as f:
             f.write(overlay_bytes)
 
-        print("[OK] Overlay-PDF gespeichert: test_overlay_only.pdf")
+        print("Overlay-PDF gespeichert: test_overlay_only.pdf")
 
         # Analysiere Seite 6 des Overlays
         from pypdf import PdfReader
@@ -186,9 +186,9 @@ def test_overlay_generation():
             # Versuche Text zu extrahieren
             try:
                 text = page6_overlay.extract_text()
-                print(f"[NOTE] Overlay Seite 6 Text: '{text}'")
+                print(f"Overlay Seite 6 Text: '{text}'")
             except:
-                print("[WARNING] Kein Text im Overlay extrahierbar")
+                print("Kein Text im Overlay extrahierbar")
 
             # Überprüfe Seiteninhalt
             if hasattr(page6_overlay, 'get_contents'):
@@ -196,19 +196,19 @@ def test_overlay_generation():
                 if contents:
                     print(f"📋 Overlay Seite 6 hat Inhalt: {type(contents)}")
                 else:
-                    print("[ERROR] Overlay Seite 6 hat keinen Inhalt!")
+                    print("Overlay Seite 6 hat keinen Inhalt!")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei Overlay-Test: {e}")
+        print(f"Fehler bei Overlay-Test: {e}")
         import traceback
         traceback.print_exc()
         return False
 
 def test_template_merge():
     """Teste das Zusammenführen von Template und Overlay"""
-    print("\n[TARGET] Teste Template + Overlay Merge...")
+    print("\nTeste Template + Overlay Merge...")
 
     try:
         from pypdf import PdfReader, PdfWriter
@@ -216,20 +216,20 @@ def test_template_merge():
         # Lade Template (OLD: page 6 -> NEW: page 7)
         template_path = Path("pdf_templates_static/notext/nt_nt_07.pdf")
         if not template_path.exists():
-            print(f"[ERROR] Template nicht gefunden: {template_path}")
+            print(f"Template nicht gefunden: {template_path}")
             return False
 
         template_reader = PdfReader(template_path)
-        print(f"[FILE] Template geladen: {len(template_reader.pages)} Seiten")
+        print(f"Template geladen: {len(template_reader.pages)} Seiten")
 
         # Lade Overlay
         overlay_path = Path("test_overlay_only.pdf")
         if not overlay_path.exists():
-            print(f"[ERROR] Overlay nicht gefunden: {overlay_path}")
+            print(f"Overlay nicht gefunden: {overlay_path}")
             return False
 
         overlay_reader = PdfReader(overlay_path)
-        print(f"[DESIGN] Overlay geladen: {len(overlay_reader.pages)} Seiten")
+        print(f"Overlay geladen: {len(overlay_reader.pages)} Seiten")
 
         # Merge Seite 6
         if len(template_reader.pages) > 0 and len(overlay_reader.pages) >= 6:
@@ -251,7 +251,7 @@ def test_template_merge():
             with open("test_merged_page6.pdf", "wb") as f:
                 writer.write(f)
 
-            print("[OK] Merged PDF erstellt: test_merged_page6.pdf")
+            print("Merged PDF erstellt: test_merged_page6.pdf")
 
             # Analysiere das Ergebnis
             merged_reader = PdfReader("test_merged_page6.pdf")
@@ -259,29 +259,29 @@ def test_template_merge():
 
             try:
                 merged_text = merged_page_content.extract_text()
-                print(f"[NOTE] Merged Text: {len(merged_text)} Zeichen")
+                print(f"Merged Text: {len(merged_text)} Zeichen")
 
                 # Suche nach Chart-Indikatoren
                 chart_indicators = ["74%", "53%", "Tagesverbrauch", "PV-Produktion"]
                 found = [ind for ind in chart_indicators if ind in merged_text]
-                print(f"[SEARCH] Gefundene Chart-Indikatoren: {found}")
+                print(f"Gefundene Chart-Indikatoren: {found}")
 
             except Exception as e:
-                print(f"[WARNING] Text-Extraktion fehlgeschlagen: {e}")
+                print(f"Text-Extraktion fehlgeschlagen: {e}")
 
             return True
-        print("[ERROR] Nicht genügend Seiten für Merge")
+        print("Nicht genügend Seiten für Merge")
         return False
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Merge-Test: {e}")
+        print(f"Fehler beim Merge-Test: {e}")
         import traceback
         traceback.print_exc()
         return False
 
 def main():
     """Hauptfunktion für vollständige Diagnose"""
-    print("[SEARCH] VOLLSTÄNDIGE PDF CHARTS DIAGNOSE")
+    print("VOLLSTÄNDIGE PDF CHARTS DIAGNOSE")
     print("=" * 60)
 
     tests = [
@@ -300,10 +300,10 @@ def main():
         try:
             result = test_func()
             results.append((test_name, result))
-            status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+            status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
             print(f"\n{test_name}: {status}")
         except Exception as e:
-            print(f"\n[ERROR] {test_name} FEHLER: {e}")
+            print(f"\n{test_name} FEHLER: {e}")
             results.append((test_name, False))
 
     # Zusammenfassung
@@ -312,14 +312,14 @@ def main():
     print('='*60)
 
     for test_name, result in results:
-        status = "[OK]" if result else "[ERROR]"
+        status = "" if result else ""
         print(f"{status} {test_name}")
 
     passed = sum(1 for _, result in results if result)
     print(f"\nErgebnis: {passed}/{len(results)} Tests bestanden")
 
     if passed < len(results):
-        print("\n[TOOL] NÄCHSTE SCHRITTE:")
+        print("\nNÄCHSTE SCHRITTE:")
         print("1. Überprüfe die erstellten Test-PDFs")
         print("2. Identifiziere wo der Fehler auftritt")
         print("3. Behebe das spezifische Problem")

@@ -182,33 +182,33 @@ def test_scenario_1_various_charts_selected():
         page_count = count_pdf_pages(pdf_bytes)
         pdf_text = extract_pdf_text(pdf_bytes)
 
-        print("\n[OK] PDF generated successfully")
-        print(f"[OK] Total pages: {page_count}")
+        print("\nPDF generated successfully")
+        print(f"Total pages: {page_count}")
 
         # Verify charts section exists
         if "Visualisierungen" in pdf_text or "Visualizations" in pdf_text:
-            print("[OK] Visualizations section found in PDF")
+            print("Visualizations section found in PDF")
         else:
             print("[WARN] Visualizations section not found in PDF text")
 
         # Check for fallback messages (should NOT appear)
         if "Keine Diagramme" in pdf_text or "No charts" in pdf_text:
             print(
-                "[ERROR] Fallback message found (should not appear with charts selected)")
+                "Fallback message found (should not appear with charts selected)")
             return False
-        print("[OK] No fallback message (correct - charts were selected)")
+        print("No fallback message (correct - charts were selected)")
 
         # Save PDF for manual inspection
         output_path = "test_output_various_charts.pdf"
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        print(f"\n[OK] PDF saved to: {output_path}")
+        print(f"\nPDF saved to: {output_path}")
         print("  -> Please manually verify that only the 6 selected charts appear")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] {e}")
+        print(f"\n{e}")
         import traceback
         traceback.print_exc()
         return False
@@ -290,20 +290,20 @@ def test_scenario_2_subset_of_charts():
         page_count = count_pdf_pages(pdf_bytes)
         pdf_text = extract_pdf_text(pdf_bytes)
 
-        print("\n[OK] PDF generated successfully")
-        print(f"[OK] Total pages: {page_count}")
+        print("\nPDF generated successfully")
+        print(f"Total pages: {page_count}")
 
         # Save PDF for manual inspection
         output_path = "test_output_subset_charts.pdf"
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        print(f"\n[OK] PDF saved to: {output_path}")
+        print(f"\nPDF saved to: {output_path}")
         print("  -> Please manually verify that only 2 charts appear")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] {e}")
+        print(f"\n{e}")
         import traceback
         traceback.print_exc()
         return False
@@ -380,12 +380,12 @@ def test_scenario_3_no_charts_selected():
         page_count = count_pdf_pages(pdf_bytes)
         pdf_text = extract_pdf_text(pdf_bytes)
 
-        print("\n[OK] PDF generated successfully")
-        print(f"[OK] Total pages: {page_count}")
+        print("\nPDF generated successfully")
+        print(f"Total pages: {page_count}")
 
         # Check for fallback message (SHOULD appear)
         if "Keine Diagramme" in pdf_text or "No charts" in pdf_text or "nicht ausgewählt" in pdf_text:
-            print("[OK] Fallback message found (correct - no charts selected)")
+            print("Fallback message found (correct - no charts selected)")
         else:
             print("[WARN] Fallback message not found in PDF text")
             print("  Searching for: 'Keine Diagramme', 'No charts', 'nicht ausgewählt'")
@@ -394,14 +394,14 @@ def test_scenario_3_no_charts_selected():
         output_path = "test_output_no_charts.pdf"
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        print(f"\n[OK] PDF saved to: {output_path}")
+        print(f"\nPDF saved to: {output_path}")
         print(
             "  -> Please manually verify fallback message appears in Visualizations section")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] {e}")
+        print(f"\n{e}")
         import traceback
         traceback.print_exc()
         return False
@@ -495,22 +495,22 @@ def test_scenario_4_all_chart_types():
 
         page_count = count_pdf_pages(pdf_bytes)
 
-        print("\n[OK] PDF generated successfully")
-        print(f"[OK] Total pages: {page_count}")
+        print("\nPDF generated successfully")
+        print(f"Total pages: {page_count}")
         print("  (Should be significantly more pages due to all charts)")
 
         # Save PDF for manual inspection
         output_path = "test_output_all_charts.pdf"
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        print(f"\n[OK] PDF saved to: {output_path}")
+        print(f"\nPDF saved to: {output_path}")
         print(
             f"  -> Please manually verify all {len(all_charts)} charts appear")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] {e}")
+        print(f"\n{e}")
         import traceback
         traceback.print_exc()
         return False
@@ -542,7 +542,7 @@ def main():
 
     print("\n" + "=" * 80)
     if all_passed:
-        print("[OK] ALL TESTS PASSED")
+        print("ALL TESTS PASSED")
         print("\nManual Verification Required:")
         print("1. Open test_output_various_charts.pdf - verify 6 charts appear")
         print("2. Open test_output_subset_charts.pdf - verify only 2 charts appear")

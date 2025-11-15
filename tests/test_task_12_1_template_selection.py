@@ -22,7 +22,7 @@ def test_template_selection_function_exists():
     assert callable(render_template_selection), \
         "render_template_selection should be a callable function"
 
-    print("[OK] render_template_selection function exists")
+    print("render_template_selection function exists")
 
 
 def test_template_structure():
@@ -66,7 +66,7 @@ def test_template_structure():
         key = f'page_{i}_coords'
         assert key in template, f"Template must have '{key}' field"
 
-    print("[OK] Template structure is valid")
+    print("Template structure is valid")
 
 
 def test_pdf_templates_structure():
@@ -134,7 +134,7 @@ def test_pdf_templates_structure():
     template_ids = [t['id'] for t in pdf_templates['templates']]
     assert active_id in template_ids, "Active template ID must exist in templates list"
 
-    print("[OK] pdf_templates structure is valid")
+    print("pdf_templates structure is valid")
 
 
 def test_template_dropdown_logic():
@@ -162,7 +162,7 @@ def test_template_dropdown_logic():
 
     assert default_index == 1, "Default index should be 1 for template2"
 
-    print("[OK] Template dropdown logic works correctly")
+    print("Template dropdown logic works correctly")
 
 
 def test_template_activation_logic():
@@ -191,7 +191,7 @@ def test_template_activation_logic():
     is_active = selected_template_id == pdf_templates['active_template_id']
     assert is_active, "template2 should be active after activation"
 
-    print("[OK] Template activation logic works correctly")
+    print("Template activation logic works correctly")
 
 
 def test_template_details_display():
@@ -216,7 +216,7 @@ def test_template_details_display():
     assert template_id == 'test_template', "Should extract correct ID"
     assert created_at == '2025-01-09 12:00:00', "Should extract correct creation date"
 
-    print("[OK] Template details display logic works correctly")
+    print("Template details display logic works correctly")
 
 
 def test_requirement_23_1():
@@ -240,7 +240,7 @@ def test_requirement_23_1():
         assert 'id' in template, "Each template must have an ID"
         assert 'name' in template, "Each template must have a name"
 
-    print("[OK] Requirement 23.1: All templates are listed")
+    print("Requirement 23.1: All templates are listed")
 
 
 def test_requirement_23_2():
@@ -283,7 +283,7 @@ def test_requirement_23_2():
     for field in required_fields:
         assert field in template, f"Template must capture '{field}'"
 
-    print("[OK] Requirement 23.2: Template information is captured")
+    print("Requirement 23.2: Template information is captured")
 
 
 def test_requirement_23_4():
@@ -311,7 +311,7 @@ def test_requirement_23_4():
     assert len(template_options) == len(templates), \
         "All templates should be available in dropdown"
 
-    print("[OK] Requirement 23.4: Multiple templates available for selection")
+    print("Requirement 23.4: Multiple templates available for selection")
 
 
 def run_all_tests():
@@ -343,10 +343,10 @@ def run_all_tests():
             test_func()
             passed += 1
         except AssertionError as e:
-            print(f"[ERROR] FAILED: {e}")
+            print(f"FAILED: {e}")
             failed += 1
         except Exception as e:
-            print(f"[ERROR] ERROR: {e}")
+            print(f"ERROR: {e}")
             failed += 1
 
     print()

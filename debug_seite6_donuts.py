@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def debug_seite6_donuts():
     """Debuggt die Seite 6 Donut-Charts"""
 
-    print("[SEARCH] Debug der Seite 6 Donut-Charts")
+    print("Debug der Seite 6 Donut-Charts")
     print("=" * 40)
 
     # Test-Daten mit verschiedenen Werten
@@ -91,8 +91,8 @@ def debug_seite6_donuts():
                 with open(output_file, "wb") as f:
                     f.write(overlay_bytes)
 
-                print(f"[OK] PDF erstellt: {output_file}")
-                print("[CHART] Input-Werte:")
+                print(f"PDF erstellt: {output_file}")
+                print("Input-Werte:")
                 print(
                     f"   - Consumption: {scenario['data']['storage_consumption_ratio_percent']}")
                 print(
@@ -100,10 +100,10 @@ def debug_seite6_donuts():
 
             else:
                 print(
-                    f"[ERROR] Overlay-Generierung fehlgeschlagen für Szenario {i + 1}")
+                    f"Overlay-Generierung fehlgeschlagen für Szenario {i + 1}")
 
         except Exception as e:
-            print(f"[ERROR] Fehler bei Szenario {i + 1}: {e}")
+            print(f"Fehler bei Szenario {i + 1}: {e}")
             import traceback
             traceback.print_exc()
 
@@ -111,7 +111,7 @@ def debug_seite6_donuts():
 def test_with_real_calculation_data():
     """Testet mit echten Berechnungsdaten"""
 
-    print("\n[SEARCH] Test mit echten Berechnungsdaten")
+    print("\nTest mit echten Berechnungsdaten")
     print("=" * 35)
 
     # Simuliere echte Berechnungsdaten wie sie aus placeholders.py kommen
@@ -145,7 +145,7 @@ def test_with_real_calculation_data():
     try:
         coords_dir = Path("coords")
 
-        print("[CHART] Echte Berechnungsdaten:")
+        print("Echte Berechnungsdaten:")
         for key, value in real_data.items():
             if 'storage' in key or 'ratio' in key:
                 print(f"   {key}: {value}")
@@ -161,18 +161,18 @@ def test_with_real_calculation_data():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"[OK] Real-Data-PDF erstellt: {output_file}")
+            print(f"Real-Data-PDF erstellt: {output_file}")
             print(
                 "📋 Diese PDF sollte sowohl Wasserfall-Diagramm (Seite 3) als auch Donut-Charts (Seite 6) zeigen")
         else:
-            print("[ERROR] Real-Data-Test fehlgeschlagen")
+            print("Real-Data-Test fehlgeschlagen")
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Real-Data-Test: {e}")
+        print(f"Fehler beim Real-Data-Test: {e}")
 
 
 if __name__ == "__main__":
-    print("[LAUNCH] Debug der Seite 6 Donut-Charts")
+    print("Debug der Seite 6 Donut-Charts")
     print("=" * 40)
 
     # Test 1: Verschiedene Werte-Formate

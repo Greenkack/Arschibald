@@ -25,9 +25,9 @@ def build_sandbox_image():
     # Check if Docker is available
     try:
         client = docker.from_env()
-        print("[OK] Docker is running")
+        print("Docker is running")
     except docker.errors.DockerException as e:
-        print("[ERROR] Docker is not available")
+        print("Docker is not available")
         print(f"  Error: {e}")
         print()
         print("Please install Docker and make sure it's running:")
@@ -40,10 +40,10 @@ def build_sandbox_image():
     sandbox_dir = os.path.join(script_dir, "sandbox")
 
     if not os.path.exists(sandbox_dir):
-        print(f"[ERROR] Sandbox directory not found: {sandbox_dir}")
+        print(f"Sandbox directory not found: {sandbox_dir}")
         return False
 
-    print(f"[OK] Sandbox directory found: {sandbox_dir}")
+    print(f"Sandbox directory found: {sandbox_dir}")
     print()
 
     # Build the image
@@ -70,7 +70,7 @@ def build_sandbox_image():
 
         print()
         print("=" * 60)
-        print(f"[OK] Successfully built image '{image_name}'")
+        print(f"Successfully built image '{image_name}'")
         print("=" * 60)
         print()
         print("You can now use the agent's code execution features!")
@@ -88,7 +88,7 @@ def build_sandbox_image():
     except docker.errors.BuildError as e:
         print()
         print("=" * 60)
-        print("[ERROR] Build failed")
+        print("Build failed")
         print("=" * 60)
         print(f"Error: {e}")
         print()
@@ -103,7 +103,7 @@ def build_sandbox_image():
     except Exception as e:
         print()
         print("=" * 60)
-        print("[ERROR] Unexpected error")
+        print("Unexpected error")
         print("=" * 60)
         print(f"Error: {e}")
         return False

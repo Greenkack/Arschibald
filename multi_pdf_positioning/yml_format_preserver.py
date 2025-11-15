@@ -336,9 +336,9 @@ if __name__ == "__main__":
         print(f"\n=== Validation ===")
         is_valid, differences = preserver.validate_preservation(yml_file, reconstructed)
         if is_valid:
-            print("[OK] Format preservation validated successfully")
+            print("Format preservation validated successfully")
         else:
-            print("[ERROR] Format preservation issues:")
+            print("Format preservation issues:")
             for diff in differences:
                 print(f"  - {diff}")
         

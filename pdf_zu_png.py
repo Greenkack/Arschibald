@@ -26,7 +26,7 @@ def pdfs_zu_bildern(input_path, output_path):
             bild_pfad = os.path.join(output_path, bild_name)
             bild.save(bild_pfad)
 
-            print(f"[OK] Seite {seite_nummer + 1} von {datei} gespeichert als Bild.")
+            print(f"Seite {seite_nummer + 1} von {datei} gespeichert als Bild.")
 
         doc.close()
 

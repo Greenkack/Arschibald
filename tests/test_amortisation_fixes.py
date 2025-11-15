@@ -7,7 +7,7 @@ print("=" * 100)
 print("TEST: AMORTISATIONS-FIXES")
 print("=" * 100)
 
-print("\n[OK] FIX 1: Alte Preis-Keys in calculations.py auskommentiert")
+print("\nFIX 1: Alte Preis-Keys in calculations.py auskommentiert")
 print("-" * 100)
 print("Überprüfe calculations.py Zeile 3669-3691...")
 
@@ -18,21 +18,21 @@ with open('c:/Users/win10/Desktop/Bokuk2/calculations.py', encoding='utf-8') as 
 alte_keys_auskommentiert = True
 for i, line in enumerate(lines[3668:3692], start=3669):
     if 'final_modified_price_net' in line and not line.strip().startswith('#'):
-        print(f"[ERROR] Zeile {i}: final_modified_price_net NICHT auskommentiert!")
+        print(f"Zeile {i}: final_modified_price_net NICHT auskommentiert!")
         alte_keys_auskommentiert = False
     if 'final_price_with_provision' in line and not line.strip().startswith('#'):
-        print(f"[ERROR] Zeile {i}: final_price_with_provision NICHT auskommentiert!")
+        print(f"Zeile {i}: final_price_with_provision NICHT auskommentiert!")
         alte_keys_auskommentiert = False
     if 'final_offer_price_net' in line and not line.strip().startswith('#'):
-        print(f"[ERROR] Zeile {i}: final_offer_price_net NICHT auskommentiert!")
+        print(f"Zeile {i}: final_offer_price_net NICHT auskommentiert!")
         alte_keys_auskommentiert = False
 
 if alte_keys_auskommentiert:
-    print("[OK] Alle alten Preis-Keys korrekt auskommentiert!")
+    print("Alle alten Preis-Keys korrekt auskommentiert!")
 else:
-    print("[ERROR] Einige alte Keys noch aktiv!")
+    print("Einige alte Keys noch aktiv!")
 
-print("\n[OK] FIX 2: Fallback auf 'amortisationszeit_jahre' entfernt")
+print("\nFIX 2: Fallback auf 'amortisationszeit_jahre' entfernt")
 print("-" * 100)
 print("Überprüfe placeholders.py Zeile 892-900...")
 
@@ -42,15 +42,15 @@ with open('c:/Users/win10/Desktop/Bokuk2/pdf_template_engine/placeholders.py', e
 fallback_entfernt = True
 for i, line in enumerate(lines[891:902], start=892):
     if 'amortisationszeit_jahre' in line and not line.strip().startswith('#'):
-        print(f"[ERROR] Zeile {i}: amortisationszeit_jahre NOCH AKTIV!")
+        print(f"Zeile {i}: amortisationszeit_jahre NOCH AKTIV!")
         fallback_entfernt = False
 
 if fallback_entfernt:
-    print("[OK] Fallback auf alten Key korrekt entfernt!")
+    print("Fallback auf alten Key korrekt entfernt!")
 else:
-    print("[ERROR] Fallback noch aktiv!")
+    print("Fallback noch aktiv!")
 
-print("\n[OK] FIX 3: _calculate_amortization_time() Funktion ersetzt")
+print("\nFIX 3: _calculate_amortization_time() Funktion ersetzt")
 print("-" * 100)
 print("Überprüfe analysis.py Zeile 403...")
 
@@ -61,20 +61,20 @@ funktion_gefixt = False
 for i, line in enumerate(lines[400:410], start=401):
     if '_calculate_amortization_time' in line:
         if line.strip().startswith('#'):
-            print(f"[OK] Zeile {i}: Alte Funktion korrekt auskommentiert")
+            print(f"Zeile {i}: Alte Funktion korrekt auskommentiert")
             funktion_gefixt = True
         else:
-            print(f"[ERROR] Zeile {i}: Alte Funktion NOCH AKTIV!")
+            print(f"Zeile {i}: Alte Funktion NOCH AKTIV!")
             funktion_gefixt = False
             break
     if 'final_price / annual_savings' in line:
-        print(f"[OK] Zeile {i}: Neue Direktberechnung gefunden!")
+        print(f"Zeile {i}: Neue Direktberechnung gefunden!")
         funktion_gefixt = True
 
 if funktion_gefixt:
-    print("[OK] Funktion korrekt durch Direktberechnung ersetzt!")
+    print("Funktion korrekt durch Direktberechnung ersetzt!")
 else:
-    print("[ERROR] Funktion noch aktiv oder Direktberechnung fehlt!")
+    print("Funktion noch aktiv oder Direktberechnung fehlt!")
 
 print("\n" + "=" * 100)
 print("GESAMT-ERGEBNIS:")
@@ -84,20 +84,20 @@ alle_fixes_ok = alte_keys_auskommentiert and fallback_entfernt and funktion_gefi
 
 if alle_fixes_ok:
     print("\n🎊 ALLE 3 FIXES ERFOLGREICH!")
-    print("\n[OK] Fix 1: Alte Preis-Keys auskommentiert")
-    print("[OK] Fix 2: Fallback auf alten Key entfernt")
-    print("[OK] Fix 3: Nicht-existierende Funktion ersetzt")
-    print("\n[CHART] JETZT SOLLTE AMORTISATIONSZEIT KORREKT SEIN:")
+    print("\nFix 1: Alte Preis-Keys auskommentiert")
+    print("Fix 2: Fallback auf alten Key entfernt")
+    print("Fix 3: Nicht-existierende Funktion ersetzt")
+    print("\nJETZT SOLLTE AMORTISATIONSZEIT KORREKT SEIN:")
     print("   → Verwendet nur noch FINAL_END_PREIS")
     print("   → Keine alten Keys mehr als Fallback")
     print("   → Keine nicht-existierende Funktion mehr")
 else:
-    print("\n[WARNING] EINIGE FIXES FEHLEN NOCH!")
+    print("\nEINIGE FIXES FEHLEN NOCH!")
     if not alte_keys_auskommentiert:
-        print("   [ERROR] Fix 1 unvollständig")
+        print("   Fix 1 unvollständig")
     if not fallback_entfernt:
-        print("   [ERROR] Fix 2 unvollständig")
+        print("   Fix 2 unvollständig")
     if not funktion_gefixt:
-        print("   [ERROR] Fix 3 unvollständig")
+        print("   Fix 3 unvollständig")
 
 print("\n" + "=" * 100)

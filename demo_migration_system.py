@@ -31,13 +31,13 @@ except ImportError:
 
 def demo_initialization():
     """Demo: Initialize migration environment"""
-    console.print(Panel.fit("[TOOL] Demo 1: Initialize Migration Environment", style="bold cyan"))
+    console.print(Panel.fit("Demo 1: Initialize Migration Environment", style="bold cyan"))
 
     try:
         manager = get_migration_manager()
         manager.initialize_alembic()
 
-        console.print("[green][OK][/green] Migration environment initialized")
+        console.print("[/green] Migration environment initialized")
         console.print(f"[dim]Location: {Path(__file__).parent / 'core' / 'alembic'}[/dim]")
 
         # Show created files
@@ -49,14 +49,14 @@ def demo_initialization():
                     console.print(f"  • {file.relative_to(alembic_dir)}")
 
     except Exception as e:
-        console.print(f"[red][ERROR][/red] Error: {e}")
+        console.print(f"[red][/red] Error: {e}")
 
     console.print()
 
 
 def demo_current_state():
     """Demo: Show current migration state"""
-    console.print(Panel.fit("[CHART] Demo 2: Current Migration State", style="bold cyan"))
+    console.print(Panel.fit("Demo 2: Current Migration State", style="bold cyan"))
 
     try:
         manager = get_migration_manager()
@@ -74,14 +74,14 @@ def demo_current_state():
                 console.print(f"  • {rev}")
 
     except Exception as e:
-        console.print(f"[red][ERROR][/red] Error: {e}")
+        console.print(f"[red][/red] Error: {e}")
 
     console.print()
 
 
 def demo_validation():
     """Demo: Validate migration state"""
-    console.print(Panel.fit("[OK] Demo 3: Validate Migration State", style="bold cyan"))
+    console.print(Panel.fit("Demo 3: Validate Migration State", style="bold cyan"))
 
     try:
         manager = get_migration_manager()
@@ -111,14 +111,14 @@ def demo_validation():
                 console.print(f"  • {warning}")
 
     except Exception as e:
-        console.print(f"[red][ERROR][/red] Error: {e}")
+        console.print(f"[red][/red] Error: {e}")
 
     console.print()
 
 
 def demo_templates():
     """Demo: Create migration templates"""
-    console.print(Panel.fit("[NOTE] Demo 4: Migration Templates", style="bold cyan"))
+    console.print(Panel.fit("Demo 4: Migration Templates", style="bold cyan"))
 
     templates = ["add_column", "add_index", "add_table", "add_foreign_key"]
 
@@ -127,7 +127,7 @@ def demo_templates():
 
         for template_name in templates:
             template_path = manager.create_migration_template(template_name)
-            console.print(f"[green][OK][/green] Created template: [cyan]{template_name}[/cyan]")
+            console.print(f"[/green] Created template: [cyan]{template_name}[/cyan]")
 
             # Show template content
             if template_path.exists():
@@ -139,7 +139,7 @@ def demo_templates():
                 console.print("[dim]...[/dim]\n")
 
     except Exception as e:
-        console.print(f"[red][ERROR][/red] Error: {e}")
+        console.print(f"[red][/red] Error: {e}")
 
     console.print()
 
@@ -162,7 +162,7 @@ def demo_migration_history():
             table.add_column("Status", style="green")
 
             for entry in history:
-                status = "[OK] Current" if entry["is_current"] else ""
+                status = "Current" if entry["is_current"] else ""
                 table.add_row(
                     entry["revision"][:8],
                     entry["down_revision"][:8] if entry["down_revision"] else "-",
@@ -173,14 +173,14 @@ def demo_migration_history():
             console.print(table)
 
     except Exception as e:
-        console.print(f"[red][ERROR][/red] Error: {e}")
+        console.print(f"[red][/red] Error: {e}")
 
     console.print()
 
 
 def demo_usage_examples():
     """Demo: Show usage examples"""
-    console.print(Panel.fit("[IDEA] Demo 6: Usage Examples", style="bold cyan"))
+    console.print(Panel.fit("Demo 6: Usage Examples", style="bold cyan"))
 
     examples = [
         ("Initialize migrations", "from core.migrations import get_migration_manager\nmanager = get_migration_manager()\nmanager.initialize_alembic()"),
@@ -239,7 +239,7 @@ def demo_safety_features():
     ]
 
     for feature, description in features:
-        console.print(f"[green][OK][/green] [cyan]{feature}:[/cyan] {description}")
+        console.print(f"[/green] [cyan]{feature}:[/cyan] {description}")
 
     console.print()
 

@@ -32,7 +32,7 @@ def test_advanced_layout_config_creation():
     assert config.enable_collision_detection is True
     assert config.enable_shading_analysis is False
     
-    print("[OK] AdvancedLayoutConfig mit Standardwerten erfolgreich erstellt")
+    print("AdvancedLayoutConfig mit Standardwerten erfolgreich erstellt")
 
 
 def test_advanced_layout_config_with_transforms():
@@ -57,7 +57,7 @@ def test_advanced_layout_config_with_transforms():
     assert config.module_transforms[5].azimuth_deg == 180.0
     assert config.module_transforms[10].azimuth_deg == 270.0
     
-    print("[OK] AdvancedLayoutConfig mit ModuleTransforms erfolgreich erstellt")
+    print("AdvancedLayoutConfig mit ModuleTransforms erfolgreich erstellt")
 
 
 def test_advanced_layout_config_with_groups():
@@ -89,7 +89,7 @@ def test_advanced_layout_config_with_groups():
     assert config.module_groups["south_roof"].get_module_count() == 4
     assert config.module_groups["east_roof"].get_module_count() == 3
     
-    print("[OK] AdvancedLayoutConfig mit ModuleGroups erfolgreich erstellt")
+    print("AdvancedLayoutConfig mit ModuleGroups erfolgreich erstellt")
 
 
 def test_mounting_modes():
@@ -122,7 +122,7 @@ def test_mounting_modes():
     assert config5.custom_azimuth == 135.0
     assert config5.custom_tilt == 20.0
     
-    print("[OK] Alle Aufständerungs-Modi funktionieren korrekt")
+    print("Alle Aufständerungs-Modi funktionieren korrekt")
 
 
 def test_feature_flags():
@@ -142,7 +142,7 @@ def test_feature_flags():
     assert config2.enable_collision_detection is False
     assert config2.enable_shading_analysis is True
     
-    print("[OK] Feature-Flags funktionieren korrekt")
+    print("Feature-Flags funktionieren korrekt")
 
 
 def test_to_json():
@@ -188,7 +188,7 @@ def test_to_json():
     assert '"custom_azimuth"' in json_str
     
     print(f"  JSON-Länge: {len(json_str)} Zeichen")
-    print("[OK] to_json() funktioniert korrekt")
+    print("to_json() funktioniert korrekt")
 
 
 def test_from_json():
@@ -257,7 +257,7 @@ def test_from_json():
     assert config.enable_collision_detection is False
     assert config.enable_shading_analysis is True
     
-    print("[OK] from_json() funktioniert korrekt")
+    print("from_json() funktioniert korrekt")
 
 
 def test_from_json_with_defaults():
@@ -277,7 +277,7 @@ def test_from_json_with_defaults():
     assert config.mounting_mode == "south"
     assert config.enable_collision_detection is True
     
-    print("[OK] from_json() mit Standardwerten funktioniert korrekt")
+    print("from_json() mit Standardwerten funktioniert korrekt")
 
 
 def test_roundtrip():
@@ -357,7 +357,7 @@ def test_roundtrip():
     assert restored.enable_collision_detection == original.enable_collision_detection
     assert restored.enable_shading_analysis == original.enable_shading_analysis
     
-    print("[OK] Roundtrip funktioniert korrekt")
+    print("Roundtrip funktioniert korrekt")
 
 
 def test_inheritance():
@@ -376,7 +376,7 @@ def test_inheritance():
     assert hasattr(config, 'to_json')
     assert hasattr(config, 'from_json')
     
-    print("[OK] Vererbung funktioniert korrekt")
+    print("Vererbung funktioniert korrekt")
 
 
 def main():
@@ -398,17 +398,17 @@ def main():
         test_inheritance()
         
         print("\n" + "=" * 70)
-        print("[OK] ALLE TESTS ERFOLGREICH")
+        print("ALLE TESTS ERFOLGREICH")
         print("=" * 70)
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n[ERROR] UNERWARTETER FEHLER: {e}")
+        print(f"\nUNERWARTETER FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False

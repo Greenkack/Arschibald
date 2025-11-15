@@ -13,7 +13,7 @@ from pdf_template_engine.placeholders import build_dynamic_data
 # --- DEF BLOCK START: func test_logo_rendering_debug ---
 def test_logo_rendering_debug():
     """Teste Logo-Rendering mit Debug-Output"""
-    print("[SEARCH] DEBUG: Logo-Rendering in PDF")
+    print("DEBUG: Logo-Rendering in PDF")
     print("=" * 50)
 
     # Test-Daten mit bekannten Logo-Herstellern
@@ -52,7 +52,7 @@ def test_logo_rendering_debug():
         "name": "Solar GmbH"
     }
 
-    print("[CHART] Erstelle dynamic_data...")
+    print("Erstelle dynamic_data...")
     dynamic_data = build_dynamic_data(
         project_data, analysis_results, company_info)
 
@@ -61,27 +61,27 @@ def test_logo_rendering_debug():
         "module_brand_logo_b64",
         "inverter_brand_logo_b64",
         "storage_brand_logo_b64"]
-    print("\n[TARGET] Logo-Daten Check:")
+    print("\nLogo-Daten Check:")
     for key in logo_keys:
         if key in dynamic_data and dynamic_data[key]:
-            print(f"  [OK] {key}: VORHANDEN ({len(dynamic_data[key])} Zeichen)")
+            print(f"  {key}: VORHANDEN ({len(dynamic_data[key])} Zeichen)")
         else:
-            print(f"  [ERROR] {key}: FEHLT")
+            print(f"  {key}: FEHLT")
 
     # Teste nur die Overlay-Funktion (ohne vollständige PDF-Generierung)
-    print("\n[TOOL] Teste apply_dynamic_overlay_to_pdf...")
+    print("\nTeste apply_dynamic_overlay_to_pdf...")
 
     try:
         # Verwende eine der vorhandenen Template-PDFs als Test
         template_path = "pdf_templates_static/notext/nt_nt_04.pdf"
 
         if os.path.exists(template_path):
-            print(f"[FILE] Verwende Template: {template_path}")
+            print(f"Verwende Template: {template_path}")
 
             with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp_file:
                 temp_output = tmp_file.name
 
-            print(f"[TARGET] Erstelle Test-PDF: {temp_output}")
+            print(f"Erstelle Test-PDF: {temp_output}")
 
             # Overlay anwenden
             success = apply_dynamic_overlay_to_pdf(
@@ -94,15 +94,15 @@ def test_logo_rendering_debug():
             if success and os.path.exists(temp_output):
                 file_size = os.path.getsize(temp_output)
                 print(
-                    f"[OK] Test-PDF erstellt: {temp_output} ({file_size:,} Bytes)")
-                print("[IDEA] Bitte öffne die PDF und prüfe Seite 4!")
+                    f"Test-PDF erstellt: {temp_output} ({file_size:,} Bytes)")
+                print("Bitte öffne die PDF und prüfe Seite 4!")
                 return temp_output
-            print("[ERROR] Test-PDF-Erstellung fehlgeschlagen")
+            print("Test-PDF-Erstellung fehlgeschlagen")
         else:
-            print(f"[ERROR] Template nicht gefunden: {template_path}")
+            print(f"Template nicht gefunden: {template_path}")
 
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
 

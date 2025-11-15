@@ -258,11 +258,11 @@ if __name__ == "__main__":
         print("\n" + "=" * 50)
         print("Demo completed successfully!")
         print("\nKey Features Demonstrated:")
-        print("[OK] PriceComponent with all calculate_per methods")
-        print("[OK] Dynamic key generation and PDF formatting")
-        print("[OK] Complex pricing formula calculations")
-        print("[OK] Input validation and error handling")
-        print("[OK] Support for comprehensive product data")
+        print("PriceComponent with all calculate_per methods")
+        print("Dynamic key generation and PDF formatting")
+        print("Complex pricing formula calculations")
+        print("Input validation and error handling")
+        print("Support for comprehensive product data")
 
     except Exception as e:
         print(f"\nDemo failed with error: {e}")

@@ -17,12 +17,12 @@ from components.progress_manager import (
 
 
 def main():
-    st.title("[TARGET] Progress Manager Demo")
+    st.title("Progress Manager Demo")
     st.markdown(
         "Demo aller Ladebalken-Features mit verschiedenen Design-Optionen")
 
     # Demo 1: Einfacher Progress Bar
-    st.header("1. [CHART] Einfacher Progress Bar")
+    st.header("1. Einfacher Progress Bar")
     if st.button("Starte einfache Demo", key="demo1"):
         progress_bar = create_progress_bar("Lade Daten...", st.container())
 
@@ -44,7 +44,7 @@ def main():
                 time.sleep(0.3)
 
     # Demo 3: Decorator
-    st.header("3. [POWER] Progress Decorator")
+    st.header("3. Progress Decorator")
 
     @progress_decorator("Berechne komplexe Simulation...")
     def complex_calculation():
@@ -58,7 +58,7 @@ def main():
         st.success(f"Ergebnis: {result}")
 
     # Demo 4: Verschiedene Styles
-    st.header("4. [DESIGN] Verschiedene Design-Styles")
+    st.header("4. Verschiedene Design-Styles")
 
     style_options = {
         "Modern (Standard)": ProgressStyle.SHADCN_DEFAULT,
@@ -91,7 +91,7 @@ def main():
                 time.sleep(1)
 
     # Demo 5: Error Handling
-    st.header("5. [ERROR] Error Handling")
+    st.header("5. Error Handling")
     if st.button("Simuliere Fehler", key="demo5"):
         progress_bar = create_progress_bar(
             "Verarbeite Daten...", st.container())

@@ -39,7 +39,7 @@ def fix_file(file_path: str, line_numbers: list) -> bool:
     path = Path(file_path)
     
     if not path.exists():
-        print(f"[SKIP]  {file_path}: Nicht gefunden")
+        print(f"{file_path}: Nicht gefunden")
         return False
     
     try:
@@ -60,14 +60,14 @@ def fix_file(file_path: str, line_numbers: list) -> bool:
         if changed:
             with open(path, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
-            print(f"[OK] {file_path}: noqa hinzugefügt zu {len(line_numbers)} Zeilen")
+            print(f"{file_path}: noqa hinzugefügt zu {len(line_numbers)} Zeilen")
             return True
         else:
-            print(f"[SKIP]  {file_path}: Bereits OK")
+            print(f"{file_path}: Bereits OK")
             return False
     
     except Exception as e:
-        print(f"[ERROR] {file_path}: Fehler - {str(e)[:50]}")
+        print(f"{file_path}: Fehler - {str(e)[:50]}")
         return False
 
 def main():
@@ -83,7 +83,7 @@ def main():
             success_count += 1
     
     print("\n" + "=" * 80)
-    print(f"[OK] {success_count} Dateien gefixt")
+    print(f"{success_count} Dateien gefixt")
     print("=" * 80)
 
 if __name__ == "__main__":

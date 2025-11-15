@@ -214,7 +214,7 @@ def render_services_selection(show_standard: bool = True):
 
     # Show standard services (always included) - only if requested
     if show_standard and services_data['standard']:
-        st.markdown("#### [OK] Standard-Services (automatisch enthalten)")
+        st.markdown("#### Standard-Services (automatisch enthalten)")
         for service in services_data['standard']:
             st.write(
                 f"• **{service['name']}** - {service['price']:.2f} € pro {service['calculate_per']}")
@@ -224,9 +224,9 @@ def render_services_selection(show_standard: bool = True):
     # Show optional services for selection
     if services_data['optional']:
         if show_standard:
-            st.markdown("#### [TOOL] Zusätzliche Services (optional)")
+            st.markdown("#### Zusätzliche Services (optional)")
         else:
-            st.markdown("#### [TOOL] Optionale Services auswählen")
+            st.markdown("#### Optionale Services auswählen")
 
         for service in services_data['optional']:
             col1, col2 = st.columns([3, 1])

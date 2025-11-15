@@ -15,14 +15,14 @@ def verify_pdf_content():
     pdf_path = "test_seite6_charts.pdf"
 
     if not Path(pdf_path).exists():
-        print(f"[ERROR] PDF nicht gefunden: {pdf_path}")
+        print(f"PDF nicht gefunden: {pdf_path}")
         return False
 
     try:
         from pypdf import PdfReader
 
         reader = PdfReader(pdf_path)
-        print(f"[FILE] PDF geladen: {len(reader.pages)} Seiten")
+        print(f"PDF geladen: {len(reader.pages)} Seiten")
 
         # Seite 6 (Index 5) analysieren
         if len(reader.pages) >= 6:
@@ -31,7 +31,7 @@ def verify_pdf_content():
             # Extrahiere Text von Seite 6
             try:
                 text_content = page6.extract_text()
-                print(f"[NOTE] Text auf Seite 6 gefunden: {len(text_content)} Zeichen")
+                print(f"Text auf Seite 6 gefunden: {len(text_content)} Zeichen")
 
                 # Suche nach Speicher-bezogenen Begriffen
                 storage_terms = ["Speicher", "Tagesverbrauch", "PV-Produktion", "74%", "53%"]
@@ -41,12 +41,12 @@ def verify_pdf_content():
                         found_terms.append(term)
 
                 if found_terms:
-                    print(f"[OK] Gefundene Begriffe: {found_terms}")
+                    print(f"Gefundene Begriffe: {found_terms}")
                 else:
-                    print("[WARNING] Keine Speicher-Begriffe im Text gefunden")
+                    print("Keine Speicher-Begriffe im Text gefunden")
 
             except Exception as e:
-                print(f"[WARNING] Text-Extraktion fehlgeschlagen: {e}")
+                print(f"Text-Extraktion fehlgeschlagen: {e}")
 
             # Überprüfe Seiteninhalt (Annotations, etc.)
             if hasattr(page6, 'annotations') and page6.annotations:
@@ -54,19 +54,19 @@ def verify_pdf_content():
 
             # Überprüfe MediaBox/CropBox
             if hasattr(page6, 'mediabox'):
-                print(f"[DESIGN] Seitengröße: {page6.mediabox}")
+                print(f"Seitengröße: {page6.mediabox}")
 
             return True
-        print(f"[ERROR] PDF hat nur {len(reader.pages)} Seiten, Seite 6 nicht verfügbar")
+        print(f"PDF hat nur {len(reader.pages)} Seiten, Seite 6 nicht verfügbar")
         return False
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim PDF-Lesen: {e}")
+        print(f"Fehler beim PDF-Lesen: {e}")
         return False
 
 def create_simple_test():
     """Erstelle einen einfachen Test nur für Seite 6"""
-    print("[TARGET] Erstelle vereinfachten Seite 6 Test...")
+    print("Erstelle vereinfachten Seite 6 Test...")
 
     try:
         import io
@@ -91,12 +91,12 @@ def create_simple_test():
         # Generiere nur die dynamischen Daten
         dynamic_data = build_dynamic_data(test_project_data, test_analysis_results, {})
 
-        print("[SEARCH] Speicher-Werte:")
+        print("Speicher-Werte:")
         print(f"  storage_consumption_ratio_percent: {dynamic_data.get('storage_consumption_ratio_percent')}")
         print(f"  storage_production_ratio_percent: {dynamic_data.get('storage_production_ratio_percent')}")
 
         # Generiere nur Seite 6 Overlay
-        print("[DESIGN] Generiere Overlay nur für Seite 6...")
+        print("Generiere Overlay nur für Seite 6...")
 
         # Erstelle ein Mini-Overlay nur für Seite 6
         from reportlab.lib.pagesizes import A4
@@ -121,12 +121,12 @@ def create_simple_test():
         c.save()
 
         overlay_bytes = buffer.getvalue()
-        print(f"[OK] Overlay erstellt: {len(overlay_bytes)} bytes")
+        print(f"Overlay erstellt: {len(overlay_bytes)} bytes")
 
         # Lade Template für Seite 7 (OLD: page 6 -> NEW: page 7)
         template_path = Path("pdf_templates_static/notext/nt_nt_07.pdf")
         if not template_path.exists():
-            print(f"[ERROR] Template nicht gefunden: {template_path}")
+            print(f"Template nicht gefunden: {template_path}")
             return False
 
         # Kombiniere Template + Overlay
@@ -151,14 +151,14 @@ def create_simple_test():
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler beim Seite 6 Test: {e}")
+        print(f"Fehler beim Seite 6 Test: {e}")
         import traceback
         traceback.print_exc()
         return False
 
 def main():
     """Hauptfunktion"""
-    print("[SEARCH] PDF Charts Verifikation startet...\n")
+    print("PDF Charts Verifikation startet...\n")
 
     # Überprüfe existierendes PDF
     print("=" * 50)

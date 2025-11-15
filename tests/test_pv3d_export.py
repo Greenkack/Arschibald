@@ -23,10 +23,10 @@ try:
     from utils.pv3d import BuildingDims, LayoutConfig
     from utils.pv3d_plotly import build_plotly_scene
     
-    print("[OK] Alle Imports erfolgreich")
+    print("Alle Imports erfolgreich")
     
 except ImportError as e:
-    print(f"[ERROR] Import-Fehler: {e}")
+    print(f"Import-Fehler: {e}")
     sys.exit(1)
 
 
@@ -37,10 +37,10 @@ def test_module_availability():
     print("="*60)
     
     if PV3D_AVAILABLE:
-        print("[OK] PV3D ist verfügbar")
+        print("PV3D ist verfügbar")
         return True
     else:
-        print("[ERROR] PV3D ist nicht verfügbar")
+        print("PV3D ist nicht verfügbar")
         return False
 
 
@@ -69,20 +69,20 @@ def test_screenshot_export():
         png_bytes = export_screenshot(fig, format="png", width=800, height=600)
         
         if png_bytes and len(png_bytes) > 0:
-            print(f"[OK] Screenshot erstellt ({len(png_bytes)} bytes)")
+            print(f"Screenshot erstellt ({len(png_bytes)} bytes)")
             
             # Speichere zu Testzwecken
             with open("test_screenshot_export.png", "wb") as f:
                 f.write(png_bytes)
-            print("[OK] Screenshot gespeichert: test_screenshot_export.png")
+            print("Screenshot gespeichert: test_screenshot_export.png")
             
             return True
         else:
-            print("[ERROR] Screenshot ist leer")
+            print("Screenshot ist leer")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -109,14 +109,14 @@ def test_screenshot_from_scene():
         )
         
         if png_bytes and len(png_bytes) > 0:
-            print(f"[OK] Screenshot erstellt ({len(png_bytes)} bytes)")
+            print(f"Screenshot erstellt ({len(png_bytes)} bytes)")
             return True
         else:
-            print("[ERROR] Screenshot ist leer")
+            print("Screenshot ist leer")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -144,25 +144,25 @@ def test_multi_view_export():
         )
         
         if views_dict and len(views_dict) > 0:
-            print(f"[OK] Multi-View erstellt ({len(views_dict)} Ansichten)")
+            print(f"Multi-View erstellt ({len(views_dict)} Ansichten)")
             
             # Prüfe ob ZIP-Bytes vorhanden sind
             if "_zip" in views_dict:
                 zip_bytes = views_dict["_zip"]
-                print(f"[OK] ZIP erstellt ({len(zip_bytes)} bytes)")
+                print(f"ZIP erstellt ({len(zip_bytes)} bytes)")
                 
                 # Speichere ZIP zu Testzwecken
                 with open("test_multi_view.zip", "wb") as f:
                     f.write(zip_bytes)
-                print("[OK] ZIP gespeichert: test_multi_view.zip")
+                print("ZIP gespeichert: test_multi_view.zip")
             
             return True
         else:
-            print("[ERROR] Keine Views erstellt")
+            print("Keine Views erstellt")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -191,15 +191,15 @@ def test_360_animation():
         )
         
         if gif_bytes and len(gif_bytes) > 0:
-            print(f"[OK] Animation erstellt ({len(gif_bytes)} bytes)")
-            print("[OK] Animation gespeichert: test_animation_360.gif")
+            print(f"Animation erstellt ({len(gif_bytes)} bytes)")
+            print("Animation gespeichert: test_animation_360.gif")
             return True
         else:
-            print("[ERROR] Animation ist leer")
+            print("Animation ist leer")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -227,22 +227,22 @@ def test_3d_model_export():
         )
         
         if success:
-            print("[OK] STL Export erfolgreich")
+            print("STL Export erfolgreich")
             
             # Prüfe ob Datei existiert
             if os.path.exists("test_export_module.stl"):
                 file_size = os.path.getsize("test_export_module.stl")
-                print(f"[OK] Datei erstellt: test_export_module.stl ({file_size} bytes)")
+                print(f"Datei erstellt: test_export_module.stl ({file_size} bytes)")
                 return True
             else:
-                print("[ERROR] Datei wurde nicht erstellt")
+                print("Datei wurde nicht erstellt")
                 return False
         else:
-            print("[ERROR] STL Export fehlgeschlagen")
+            print("STL Export fehlgeschlagen")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -260,7 +260,7 @@ def main():
     results.append(("Module Verfügbarkeit", test_module_availability()))
     
     if not PV3D_AVAILABLE:
-        print("\n[WARNING]  PV3D nicht verfügbar - überspringe weitere Tests")
+        print("\nPV3D nicht verfügbar - überspringe weitere Tests")
         return
     
     # Test 2: Screenshot Export
@@ -287,7 +287,7 @@ def main():
     total = len(results)
     
     for test_name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{status}: {test_name}")
     
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
@@ -296,7 +296,7 @@ def main():
         print("\n🎉 ALLE TESTS BESTANDEN!")
         return 0
     else:
-        print(f"\n[WARNING]  {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return 1
 
 

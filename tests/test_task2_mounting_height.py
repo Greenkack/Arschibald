@@ -72,12 +72,12 @@ def test_mounting_height_calculation():
             z_diff = abs(avg_z - expected_z)
             
             if z_diff <= tolerance:
-                print(f"[OK] PASS: Mounting Height korrekt")
+                print(f"PASS: Mounting Height korrekt")
                 print(f"   Erwartete Z-Position: {expected_z:.3f}m")
                 print(f"   Tatsächliche Z-Position: {avg_z:.3f}m")
                 print(f"   Mounting Height: {expected_mounting:.3f}m")
             else:
-                print(f"[ERROR] FAIL: Mounting Height inkorrekt")
+                print(f"FAIL: Mounting Height inkorrekt")
                 print(f"   Erwartete Z-Position: {expected_z:.3f}m")
                 print(f"   Tatsächliche Z-Position: {avg_z:.3f}m")
                 print(f"   Differenz: {z_diff:.3f}m (Toleranz: {tolerance}m)")
@@ -94,26 +94,26 @@ def test_mounting_height_calculation():
             expected_min_z = original_z + expected_mounting - module_half_length * np.sin(np.deg2rad(tilt_deg))
             
             if min_z >= expected_min_z - 0.1:  # Toleranz
-                print(f"[OK] Module sinken NICHT in Dachfläche ein")
+                print(f"Module sinken NICHT in Dachfläche ein")
                 print(f"   Min Z: {min_z:.3f}m (erwartet: ≥{expected_min_z:.3f}m)")
             else:
-                print(f"[ERROR] WARNUNG: Module könnten in Dachfläche einsinken")
+                print(f"WARNUNG: Module könnten in Dachfläche einsinken")
                 print(f"   Min Z: {min_z:.3f}m (erwartet: ≥{expected_min_z:.3f}m)")
                 all_passed = False
                 
         except Exception as e:
-            print(f"[ERROR] FEHLER: {e}")
+            print(f"FEHLER: {e}")
             import traceback
             traceback.print_exc()
             all_passed = False
     
     print(f"\n{'='*80}")
     if all_passed:
-        print("[OK] ALLE TESTS BESTANDEN")
+        print("ALLE TESTS BESTANDEN")
         print("="*80)
         return 0
     else:
-        print("[ERROR] EINIGE TESTS FEHLGESCHLAGEN")
+        print("EINIGE TESTS FEHLGESCHLAGEN")
         print("="*80)
         return 1
 

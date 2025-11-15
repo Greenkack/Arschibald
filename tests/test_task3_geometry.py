@@ -24,19 +24,19 @@ def test_make_box():
     box1 = make_box(10.0, 6.0, 3.0)
     assert box1 is not None
     assert box1.n_points > 0
-    print("  [OK] Basic box created")
+    print("  Basic box created")
     
     # Test 2: Box with custom center
     box2 = make_box(5.0, 5.0, 5.0, center=(10.0, 10.0, 0.0))
     assert box2 is not None
-    print("  [OK] Box with custom center created")
+    print("  Box with custom center created")
     
     # Test 3: Box with origin at center
     box3 = make_box(8.0, 4.0, 2.0, origin_at_bottom=False)
     assert box3 is not None
-    print("  [OK] Box with centered origin created")
+    print("  Box with centered origin created")
     
-    print("[OK] make_box() tests passed\n")
+    print("make_box() tests passed\n")
 
 
 def test_roof_shapes():
@@ -52,33 +52,33 @@ def test_roof_shapes():
     roof_flat = make_roof_flat(length, width, base_height)
     assert roof_flat is not None
     assert roof_flat.n_points > 0
-    print("  [OK] Flat roof created")
+    print("  Flat roof created")
     
     # Test gable roof
     roof_gable = make_roof_gable(length, width, base_height, inclination)
     assert roof_gable is not None
     assert roof_gable.n_points >= 6  # Should have at least 6 points
-    print("  [OK] Gable roof created")
+    print("  Gable roof created")
     
     # Test hip roof
     roof_hip = make_roof_hip(length, width, base_height, inclination)
     assert roof_hip is not None
     assert roof_hip.n_points >= 4
-    print("  [OK] Hip roof created")
+    print("  Hip roof created")
     
     # Test pent roof
     roof_pent = make_roof_pent(length, width, base_height, inclination)
     assert roof_pent is not None
     assert roof_pent.n_points == 4
-    print("  [OK] Pent roof created")
+    print("  Pent roof created")
     
     # Test pyramid roof
     roof_pyramid = make_roof_pyramid(length, width, base_height, inclination)
     assert roof_pyramid is not None
     assert roof_pyramid.n_points == 5  # 4 corners + 1 peak
-    print("  [OK] Pyramid roof created")
+    print("  Pyramid roof created")
     
-    print("[OK] All roof shape tests passed\n")
+    print("All roof shape tests passed\n")
 
 
 def test_make_panel():
@@ -89,29 +89,29 @@ def test_make_panel():
     panel1 = make_panel((0.0, 0.0, 0.0), yaw_deg=0.0, tilt_deg=0.0)
     assert panel1 is not None
     assert panel1.n_points > 0
-    print("  [OK] Horizontal panel created")
+    print("  Horizontal panel created")
     
     # Test 2: Panel with tilt (15° south-facing)
     panel2 = make_panel((5.0, 5.0, 1.0), yaw_deg=0.0, tilt_deg=15.0)
     assert panel2 is not None
-    print("  [OK] Tilted panel (15°) created")
+    print("  Tilted panel (15°) created")
     
     # Test 3: Panel with yaw rotation (90° west-facing)
     panel3 = make_panel((0.0, 0.0, 2.0), yaw_deg=90.0, tilt_deg=0.0)
     assert panel3 is not None
-    print("  [OK] Rotated panel (90° yaw) created")
+    print("  Rotated panel (90° yaw) created")
     
     # Test 4: Panel with both tilt and yaw
     panel4 = make_panel((10.0, 10.0, 3.0), yaw_deg=45.0, tilt_deg=30.0)
     assert panel4 is not None
-    print("  [OK] Panel with tilt and yaw created")
+    print("  Panel with tilt and yaw created")
     
     # Test 5: Vertical panel (facade)
     panel5 = make_panel((0.0, 0.0, 5.0), yaw_deg=0.0, tilt_deg=90.0)
     assert panel5 is not None
-    print("  [OK] Vertical panel (90° tilt) created")
+    print("  Vertical panel (90° tilt) created")
     
-    print("[OK] make_panel() tests passed\n")
+    print("make_panel() tests passed\n")
 
 
 def main():
@@ -127,7 +127,7 @@ def main():
         test_make_panel()
         
         print("=" * 60)
-        print("[OK] ALL TESTS PASSED!")
+        print("ALL TESTS PASSED!")
         print("=" * 60)
         print()
         print("Summary:")
@@ -137,7 +137,7 @@ def main():
         print()
         
     except Exception as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

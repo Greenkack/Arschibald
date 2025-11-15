@@ -71,4 +71,4 @@ for seite in range(1, anzahl_seiten + 1):
 
 # PDF speichern
 pdf_neu.save("output/final_recreated.pdf")
-print("[OK] PDF exakt neu erstellt.")
+print("PDF exakt neu erstellt.")

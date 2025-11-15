@@ -258,7 +258,7 @@ def render_product_admin_ui():
 
     # Tabs für verschiedene Aktionen
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📋 Übersicht", "➕ Hinzufügen", "📤 Import/Export", "[TOOL] Tools"])
+        ["📋 Übersicht", "➕ Hinzufügen", "📤 Import/Export", "Tools"])
 
     with tab1:
         st.subheader("Produktübersicht")

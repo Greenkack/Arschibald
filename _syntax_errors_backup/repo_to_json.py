@@ -335,14 +335,14 @@ def cmd_dump(args: argparse.Namespace) -> None:
 
     write_streaming_json(out, generate_records(), args.gzip, meta_header)
 
-    print(f"[OK] JSON geschrieben: {out}")
+    print(f"JSON geschrieben: {out}")
     print(f"[STAT] Dateien gescannt: {file_count}")
     print(f"[STAT] Gesamt-Bytes (original): {total_bytes:,}")
     print(
         f"[STAT] Gespeicherte Bytes (Summen der Ausschnitte): {
             kept_bytes:,    }")
     if args.gzip:
-        print("[INFO] GZip aktiv – Upload ist kleiner.")
+        print("GZip aktiv – Upload ist kleiner.")
 
 
 def build_parser() -> argparse.ArgumentParser:

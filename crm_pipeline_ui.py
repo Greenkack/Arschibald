@@ -118,7 +118,7 @@ class CRMPipeline:
 
     def _render_pipeline_overview(self):
         """Rendert die Pipeline-Übersicht im Kanban-Stil"""
-        st.subheader("[TARGET] Pipeline-Übersicht")
+        st.subheader("Pipeline-Übersicht")
 
         # Pipeline-Statistiken mit modernen Cards
         stats = self._get_pipeline_statistics()
@@ -230,13 +230,13 @@ class CRMPipeline:
 
         # Geschlossene Deals (separate Sektion)
         st.markdown("---")
-        st.subheader("[WINNER] Geschlossene Deals (letzte 30 Tage)")
+        st.subheader("Geschlossene Deals (letzte 30 Tage)")
 
         col1, col2 = st.columns(2)
 
         with col1:
             won_leads = self._get_recent_closed_leads('won')
-            st.markdown("### [OK] Gewonnene Aufträge")
+            st.markdown("### Gewonnene Aufträge")
             if won_leads:
                 for lead in won_leads[:3]:
                     st.markdown(f"""
@@ -256,7 +256,7 @@ class CRMPipeline:
 
         with col2:
             lost_leads = self._get_recent_closed_leads('lost')
-            st.markdown("### [ERROR] Verlorene Aufträge")
+            st.markdown("### Verlorene Aufträge")
             if lost_leads:
                 for lead in lost_leads[:3]:
                     st.markdown(f"""
@@ -288,10 +288,10 @@ class CRMPipeline:
             score_label = "🔥"
         elif score >= 60:
             score_color = "#F59E0B"
-            score_label = "[POWER]"
+            score_label = ""
         elif score >= 40:
             score_color = "#3B82F6"
-            score_label = "[CHART]"
+            score_label = ""
         else:
             score_color = "#6B7280"
             score_label = "❄️"
@@ -330,7 +330,7 @@ class CRMPipeline:
                             padding: 3px 8px;
                             border-radius: 12px;
                             font-weight: bold;
-                        ">[MONEY] {lead['estimated_value']:,.0f} €</span>
+                        ">{lead['estimated_value']:,.0f} €</span>
                     </div>
                     <p style="margin: 8px 0 0 0; font-size: 0.75em; opacity: 0.8;">
                         ⏱️ {days_in_stage} Tage in Stufe
@@ -479,7 +479,7 @@ class CRMPipeline:
                 "Sortieren nach",
                 options=sort_options,
                 format_func=lambda x: {
-                    'score': '[TARGET] Lead Score',
+                    'score': 'Lead Score',
                     'created_at': 'Erstellungsdatum',
                     'estimated_value': 'Auftragswert',
                     'probability': 'Wahrscheinlichkeit',

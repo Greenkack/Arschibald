@@ -304,7 +304,7 @@ def scan_and_report(output_file: str = "code_analysis_report.json"):
     for item in report['top_problematic_files'][:5]:
         print(f"  {item['file']}: {item['issue_count']} issues")
     
-    print(f"\n[OK] Report saved: {output_file}")
+    print(f"\nReport saved: {output_file}")
     print("="*80 + "\n")
     
     # Show critical issues

@@ -11,7 +11,7 @@ print("=" * 100)
 
 # Import aus HAUPT-Dateien (nicht repair_pdf!)
 
-print("\n[OK] Imports erfolgreich aus Haupt-Dateien\n")
+print("\nImports erfolgreich aus Haupt-Dateien\n")
 
 # 1. TEST: Kategorie-Mapping
 print("TEST 1: Kategorie-Mapping in product_db.py")
@@ -21,14 +21,14 @@ modules = list_products('module')
 inverters = list_products('inverter')
 storage = list_products('storage')
 
-print(f"[OK] list_products('module'):    {len(modules)} gefunden")
-print(f"[OK] list_products('inverter'):  {len(inverters)} gefunden")
-print(f"[OK] list_products('storage'):   {len(storage)} gefunden")
+print(f"list_products('module'):    {len(modules)} gefunden")
+print(f"list_products('inverter'):  {len(inverters)} gefunden")
+print(f"list_products('storage'):   {len(storage)} gefunden")
 
 if len(modules) > 0 and len(inverters) > 0 and len(storage) > 0:
-    print("\n[OK] KATEGORIE-MAPPING FUNKTIONIERT!")
+    print("\nKATEGORIE-MAPPING FUNKTIONIERT!")
 else:
-    print("\n[ERROR] KATEGORIE-MAPPING FEHLER!")
+    print("\nKATEGORIE-MAPPING FEHLER!")
     exit(1)
 
 # 2. TEST: Produktpreis-Berechnung
@@ -98,13 +98,13 @@ for idx, config in enumerate(test_configs):
         product_logs = [
             e for e in errors if 'Preis aus DB' in e or 'Produktdatenbank' in e]
         if product_logs:
-            print("  [OK] Produktpreise verwendet:")
+            print("  Produktpreise verwendet:")
             for log in product_logs[:2]:
                 print(f"     {log[:80]}")
 
         results.append(total)
     else:
-        print("  [ERROR] Berechnung fehlgeschlagen")
+        print("  Berechnung fehlgeschlagen")
         results.append(0)
 
 # 3. ANALYSE
@@ -120,17 +120,17 @@ unique_prices = len(set(results))
 
 if unique_prices == len(results) and all(p > 0 for p in results):
     print(
-        f"\n[OK][OK][OK] PERFEKT! Alle {
+        f"\nPERFEKT! Alle {
             len(results)} Konfigurationen haben UNTERSCHIEDLICHE Preise!")
     print(f"    Spanne: {min(results):.2f} € bis {max(results):.2f} €")
     print(f"    Differenz: {max(results) - min(results):.2f} €")
     print("\n🎉 DIE APP SOLLTE JETZT FUNKTIONIEREN! 🎉")
 elif unique_prices == 1:
-    print(f"\n[ERROR] PROBLEM: Alle Preise sind GLEICH: {results[0]:.2f} €")
+    print(f"\nPROBLEM: Alle Preise sind GLEICH: {results[0]:.2f} €")
     print("   Die Produktpreise werden NICHT verwendet!")
 else:
     print(
-        f"\n[WARNING]  {unique_prices} verschiedene Preise bei {
+        f"\n{unique_prices} verschiedene Preise bei {
             len(results)} Konfigurationen")
 
 print("\n" + "=" * 100)

@@ -32,7 +32,7 @@ for roof_type in roof_types:
     print(f"  - {roof_type:15s}: {tilt:.1f} degrees")
 
 print("\n" + "="*70)
-print("[SUCCESS] Task 2 is complete and verified!")
+print("Task 2 is complete and verified!")
 print("="*70)
 print("\nAll module rendering functions are working correctly.")
 print("Next: Task 3 - Automatische Belegung reparieren")

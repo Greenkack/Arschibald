@@ -30,7 +30,7 @@ try:
         get_lod_info
     )
     
-    print("\n[OK] Performance-Module erfolgreich importiert")
+    print("\nPerformance-Module erfolgreich importiert")
     
     # Test 9.1.1: LOD-Funktion
     print("\n--- Test 9.1.1: Level-of-Detail (LOD) ---")
@@ -42,7 +42,7 @@ try:
         1 for i in range(total_modules_small)
         if should_render_module(i, total_modules_small, lod_threshold=lod_threshold)
     )
-    print(f"[OK] Bei {total_modules_small} Modulen (< {lod_threshold}): {rendered_count} gerendert")
+    print(f"Bei {total_modules_small} Modulen (< {lod_threshold}): {rendered_count} gerendert")
     assert rendered_count == total_modules_small, "Alle Module sollten gerendert werden"
     
     # Test mit vielen Modulen (LOD aktiv)
@@ -51,18 +51,18 @@ try:
         1 for i in range(total_modules_large)
         if should_render_module(i, total_modules_large, lod_threshold=lod_threshold)
     )
-    print(f"[OK] Bei {total_modules_large} Modulen (> {lod_threshold}): {rendered_count_lod} gerendert")
+    print(f"Bei {total_modules_large} Modulen (> {lod_threshold}): {rendered_count_lod} gerendert")
     assert rendered_count_lod < total_modules_large, "LOD sollte Module reduzieren"
     assert rendered_count_lod >= lod_threshold * 0.8, "Mindestens 80% des Thresholds sollten gerendert werden"
     
     # Test LOD-Info
     print("\n--- Test 9.1.2: LOD-Informationen ---")
     lod_info = get_lod_info(100, lod_threshold=50)
-    print(f"[OK] LOD aktiviert: {lod_info['enabled']}")
-    print(f"[OK] Skip-Faktor: {lod_info['skip_factor']}")
-    print(f"[OK] Gerendert: {lod_info['rendered_count']} von {100}")
-    print(f"[OK] Übersprungen: {lod_info['skipped_count']}")
-    print(f"[OK] Reduktion: {lod_info['reduction_percent']:.1f}%")
+    print(f"LOD aktiviert: {lod_info['enabled']}")
+    print(f"Skip-Faktor: {lod_info['skip_factor']}")
+    print(f"Gerendert: {lod_info['rendered_count']} von {100}")
+    print(f"Übersprungen: {lod_info['skipped_count']}")
+    print(f"Reduktion: {lod_info['reduction_percent']:.1f}%")
     
     assert lod_info['enabled'] == True, "LOD sollte aktiviert sein"
     assert lod_info['rendered_count'] < 100, "Nicht alle Module sollten gerendert werden"
@@ -89,22 +89,22 @@ try:
         lod_threshold=50
     )
     
-    print(f"[OK] Batch-Rendering: {render_count} Module gerendert (von {len(test_positions)})")
-    print(f"[OK] Batch-Größe: 10 Module pro Batch")
-    print(f"[OK] LOD-Reduktion: {((len(test_positions) - render_count) / len(test_positions) * 100):.1f}%")
+    print(f"Batch-Rendering: {render_count} Module gerendert (von {len(test_positions)})")
+    print(f"Batch-Größe: 10 Module pro Batch")
+    print(f"LOD-Reduktion: {((len(test_positions) - render_count) / len(test_positions) * 100):.1f}%")
     assert render_count < len(test_positions), "LOD sollte Module reduzieren"
     assert len(meshes) == render_count, "Anzahl Meshes sollte Render-Count entsprechen"
     
-    print("\n[OK] Task 9.1 (Lazy Loading) - ALLE TESTS BESTANDEN")
+    print("\nTask 9.1 (Lazy Loading) - ALLE TESTS BESTANDEN")
     
 except ImportError as e:
-    print(f"\n[ERROR] Import-Fehler: {e}")
+    print(f"\nImport-Fehler: {e}")
     sys.exit(1)
 except AssertionError as e:
-    print(f"\n[ERROR] Test fehlgeschlagen: {e}")
+    print(f"\nTest fehlgeschlagen: {e}")
     sys.exit(1)
 except Exception as e:
-    print(f"\n[ERROR] Unerwarteter Fehler: {e}")
+    print(f"\nUnerwarteter Fehler: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
@@ -127,7 +127,7 @@ try:
         clear_all_caches
     )
     
-    print("\n[OK] Caching-Funktionen erfolgreich importiert")
+    print("\nCaching-Funktionen erfolgreich importiert")
     
     # Test 9.2.1: Mesh-Geometrie-Caching
     print("\n--- Test 9.2.1: Mesh-Geometrie-Caching ---")
@@ -142,12 +142,12 @@ try:
     geom2 = cache_module_mesh_geometry()
     time2 = time.time() - start_time
     
-    print(f"[OK] Erster Aufruf (Cache-Miss): {time1*1000:.2f}ms")
-    print(f"[OK] Zweiter Aufruf (Cache-Hit): {time2*1000:.2f}ms")
+    print(f"Erster Aufruf (Cache-Miss): {time1*1000:.2f}ms")
+    print(f"Zweiter Aufruf (Cache-Hit): {time2*1000:.2f}ms")
     if time2 > 0:
-        print(f"[OK] Speedup: {time1/time2:.1f}x schneller")
+        print(f"Speedup: {time1/time2:.1f}x schneller")
     else:
-        print(f"[OK] Speedup: >1000x schneller (Cache-Hit zu schnell zum Messen)")
+        print(f"Speedup: >1000x schneller (Cache-Hit zu schnell zum Messen)")
     
     # Prüfe Geometrie
     assert 'vertices' in geom1, "Geometrie sollte Vertices enthalten"
@@ -155,7 +155,7 @@ try:
     assert len(geom1['vertices']) == 8, "Quader sollte 8 Vertices haben"
     assert np.array_equal(geom1['vertices'], geom2['vertices']), "Gecachte Geometrie sollte identisch sein"
     
-    print(f"[OK] Geometrie: {len(geom1['vertices'])} Vertices, {len(geom1['faces_i'])} Face-Indizes")
+    print(f"Geometrie: {len(geom1['vertices'])} Vertices, {len(geom1['faces_i'])} Face-Indizes")
     
     # Test 9.2.2: Rotationsmatrizen-Caching
     print("\n--- Test 9.2.2: Rotationsmatrizen-Caching ---")
@@ -170,12 +170,12 @@ try:
     R2 = get_cached_rotation_matrix(0, 30)
     time2 = time.time() - start_time
     
-    print(f"[OK] Erster Aufruf (Cache-Miss): {time1*1000:.2f}ms")
-    print(f"[OK] Zweiter Aufruf (Cache-Hit): {time2*1000:.2f}ms")
+    print(f"Erster Aufruf (Cache-Miss): {time1*1000:.2f}ms")
+    print(f"Zweiter Aufruf (Cache-Hit): {time2*1000:.2f}ms")
     if time2 > 0:
-        print(f"[OK] Speedup: {time1/time2:.1f}x schneller")
+        print(f"Speedup: {time1/time2:.1f}x schneller")
     else:
-        print(f"[OK] Speedup: >1000x schneller (Cache-Hit zu schnell zum Messen)")
+        print(f"Speedup: >1000x schneller (Cache-Hit zu schnell zum Messen)")
     
     assert R1.shape == (3, 3), "Rotationsmatrix sollte 3x3 sein"
     assert np.array_equal(R1, R2), "Gecachte Matrix sollte identisch sein"
@@ -185,15 +185,15 @@ try:
     R_west = get_cached_rotation_matrix(90, 30)    # West, 30°
     R_flat = get_cached_rotation_matrix(0, 0)      # Flach
     
-    print(f"[OK] Verschiedene Transformationen gecacht: Süd, West, Flach")
+    print(f"Verschiedene Transformationen gecacht: Süd, West, Flach")
     
     # Test 9.2.3: Cache-Statistiken
     print("\n--- Test 9.2.3: Cache-Statistiken ---")
     
     stats = get_all_cache_stats()
-    print(f"[OK] Global Cache: {stats['global_cache']['size']} Einträge")
-    print(f"[OK] Transformation Cache: {stats['transformation_cache']['size']} Einträge")
-    print(f"[OK] Unique Transformationen: {stats['transformation_cache']['unique_transformations']}")
+    print(f"Global Cache: {stats['global_cache']['size']} Einträge")
+    print(f"Transformation Cache: {stats['transformation_cache']['size']} Einträge")
+    print(f"Unique Transformationen: {stats['transformation_cache']['unique_transformations']}")
     
     assert 'global_cache' in stats, "Statistiken sollten Global Cache enthalten"
     assert 'transformation_cache' in stats, "Statistiken sollten Transformation Cache enthalten"
@@ -204,23 +204,23 @@ try:
     clear_all_caches()
     stats_after = get_all_cache_stats()
     
-    print(f"[OK] Caches geleert")
-    print(f"[OK] Global Cache nach Clear: {stats_after['global_cache']['size']} Einträge")
-    print(f"[OK] Transformation Cache nach Clear: {stats_after['transformation_cache']['size']} Einträge")
+    print(f"Caches geleert")
+    print(f"Global Cache nach Clear: {stats_after['global_cache']['size']} Einträge")
+    print(f"Transformation Cache nach Clear: {stats_after['transformation_cache']['size']} Einträge")
     
     assert stats_after['global_cache']['size'] == 0, "Global Cache sollte leer sein"
     assert stats_after['transformation_cache']['size'] == 0, "Transformation Cache sollte leer sein"
     
-    print("\n[OK] Task 9.2 (Caching) - ALLE TESTS BESTANDEN")
+    print("\nTask 9.2 (Caching) - ALLE TESTS BESTANDEN")
     
 except ImportError as e:
-    print(f"\n[ERROR] Import-Fehler: {e}")
+    print(f"\nImport-Fehler: {e}")
     sys.exit(1)
 except AssertionError as e:
-    print(f"\n[ERROR] Test fehlgeschlagen: {e}")
+    print(f"\nTest fehlgeschlagen: {e}")
     sys.exit(1)
 except Exception as e:
-    print(f"\n[ERROR] Unerwarteter Fehler: {e}")
+    print(f"\nUnerwarteter Fehler: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
@@ -279,10 +279,10 @@ try:
         print(f"  Speedup: {speedup:.2f}x")
         print(f"  Reduktion: {reduction:.1f}%")
     
-    print("\n[OK] Performance-Vergleich abgeschlossen")
+    print("\nPerformance-Vergleich abgeschlossen")
     
 except Exception as e:
-    print(f"\n[WARNING] Performance-Vergleich fehlgeschlagen: {e}")
+    print(f"\nPerformance-Vergleich fehlgeschlagen: {e}")
 
 
 # ============================================================================
@@ -293,17 +293,17 @@ print("\n" + "=" * 70)
 print("ZUSAMMENFASSUNG")
 print("=" * 70)
 
-print("\n[OK] Task 9.1: Lazy Loading")
+print("\nTask 9.1: Lazy Loading")
 print("   - LOD-Funktion implementiert und getestet")
 print("   - Batch-Rendering implementiert und getestet")
 print("   - LOD-Informationen verfügbar")
 
-print("\n[OK] Task 9.2: Caching")
+print("\nTask 9.2: Caching")
 print("   - Mesh-Geometrie-Caching implementiert")
 print("   - Rotationsmatrizen-Caching implementiert")
 print("   - Cache-Statistiken verfügbar")
 print("   - Cache-Management (Clear) funktioniert")
 
 print("\n" + "=" * 70)
-print("[OK] ALLE TESTS ERFOLGREICH")
+print("ALLE TESTS ERFOLGREICH")
 print("=" * 70)

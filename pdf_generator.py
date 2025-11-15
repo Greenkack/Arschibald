@@ -828,7 +828,7 @@ class PDFGenerator:
         self.story.append(Spacer(1, 1 * cm))
 
         # FIX 2024: Prüfe zuerst ob Screenshot in Session State vorhanden ist
-        print(f"\n[FILE] PDF 3D-Integration:")
+        print(f"\nPDF 3D-Integration:")
         print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
         try:
@@ -836,7 +836,7 @@ class PDFGenerator:
             
             # Prüfe ob Session State verfügbar ist
             if not hasattr(st, 'session_state'):
-                print(f"   [WARNING]  Session State nicht verfügbar")
+                print(f"   Session State nicht verfügbar")
                 raise AttributeError("Session State nicht verfügbar")
             
             png_bytes = st.session_state.get("pdf_3d_screenshot")
@@ -849,11 +849,11 @@ class PDFGenerator:
                 
                 # Validiere PNG-Bytes
                 if not isinstance(png_bytes, bytes):
-                    print(f"     [ERROR] Ungültiger Typ: {type(png_bytes)}")
+                    print(f"     Ungültiger Typ: {type(png_bytes)}")
                     raise TypeError(f"png_bytes ist kein bytes-Objekt: {type(png_bytes)}")
                 
                 if len(png_bytes) < 100:
-                    print(f"     [ERROR] Datei zu klein (möglicherweise korrupt)")
+                    print(f"     Datei zu klein (möglicherweise korrupt)")
                     raise ValueError(f"PNG-Bytes zu klein: {len(png_bytes)} bytes")
                 
                 # Screenshot aus Session State verwenden
@@ -881,18 +881,18 @@ class PDFGenerator:
                     self.styles["Body"]
                 ))
                 
-                print(f"   [OK] 3D-Screenshot erfolgreich in PDF eingefügt!")
+                print(f"   3D-Screenshot erfolgreich in PDF eingefügt!")
                 print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
                 return
             else:
                 print(f"     • Kein Screenshot vorhanden")
                 
         except AttributeError as e:
-            print(f"   [ERROR] Session State Fehler: {e}")
+            print(f"   Session State Fehler: {e}")
             print(f"   Traceback:")
             traceback.print_exc()
         except Exception as e:
-            print(f"   [ERROR] Fehler beim Laden des Screenshots:")
+            print(f"   Fehler beim Laden des Screenshots:")
             print(f"     • Fehler: {str(e)}")
             print(f"     • Typ: {type(e).__name__}")
             print(f"   Traceback:")
@@ -903,7 +903,7 @@ class PDFGenerator:
         
         # Check if 3D visualization is available
         if not _PV3D_AVAILABLE or make_pv3d_image_flowable is None:
-            print(f"     [WARNING]  3D-Modul nicht verfügbar")
+            print(f"     3D-Modul nicht verfügbar")
             print(f"     • _PV3D_AVAILABLE: {_PV3D_AVAILABLE}")
             print(f"     • make_pv3d_image_flowable: {make_pv3d_image_flowable is not None}")
             print(f"   Fallback: Platzhalter-Text wird eingefügt")
@@ -2012,7 +2012,7 @@ def generate_main_template_pdf_bytes(
     debug_templates = os.environ.get("DING_TEMPLATE_DEBUG", "0").lower() in {
         "1", "true", "yes", "on"}
     if debug_templates:
-        print("[TEMPLATE] build_dynamic_data start")
+        print("build_dynamic_data start")
     dyn_data = build_dynamic_data(project_data, analysis_results, company_info)
 
     # Dynamische Reihenfolge Photovoltaik / Wärmepumpe: segment_order aus inclusion_options (liegt nicht direkt vor),
@@ -2039,7 +2039,7 @@ def generate_main_template_pdf_bytes(
     wp_coords_available = coords_dir_wp.exists() and any(
         coords_dir_wp.glob('wp_seite*.yml'))
     if debug_templates:
-        print(f"[TEMPLATE] build_dynamic_data done keys={len(dyn_data)}")
+        print(f"build_dynamic_data done keys={len(dyn_data)}")
     # Haupt-PDF mit korrekter "Seite x von XX"-Nummerierung, aber ohne
     # Zusatzseiten anhängen
     try:
@@ -2061,7 +2061,7 @@ def generate_main_template_pdf_bytes(
 
         if debug_templates:
             print(
-                f"[TEMPLATE] generate_overlay call total_pages={total_pages}")
+                f"generate_overlay call total_pages={total_pages}")
         # Overlay für PV Standard
         overlay_parts: list[bytes] = []
         if 'Photovoltaik' in segment_order:
@@ -2100,20 +2100,20 @@ def generate_main_template_pdf_bytes(
                 # Fallback: nimm ersten
                 overlay_bytes = overlay_parts[0] if overlay_parts else b""
         if debug_templates:
-            print(f"[TEMPLATE] overlay size={len(overlay_bytes)} bytes")
+            print(f"overlay size={len(overlay_bytes)} bytes")
         fused = merge_with_background(overlay_bytes, bg_dir)
         if debug_templates:
             # MIGRATION: Changed from main7 to main8
-            print(f"[TEMPLATE] fused main8 size={len(fused)} bytes")
+            print(f"fused main8 size={len(fused)} bytes")
         return fused
     except Exception as e_gen:
         import traceback
         # MIGRATION: Changed from 7 to 8
-        print(f"[TEMPLATE] Fehler bei Overlay/Merge der 8-Seiten-PDF: {e_gen}")
+        print(f"Fehler bei Overlay/Merge der 8-Seiten-PDF: {e_gen}")
         try:
             traceback.print_exc()
         except Exception:
-            print("[TEMPLATE] (Traceback konnte nicht ausgegeben werden)")
+            print("(Traceback konnte nicht ausgegeben werden)")
         return None
 
 
@@ -2148,7 +2148,7 @@ def generate_offer_pdf_with_main_templates(
     # Debug-Ausgabe für Segment-Reihenfolge Photovoltaik/Wärmepumpe
     if segment_order:
         try:
-            print(f"[PDF] Segment Order (runtime): {segment_order}")
+            print(f"Segment Order (runtime): {segment_order}")
         except Exception:
             pass
     additional_pdf = None
@@ -2575,7 +2575,7 @@ def generate_offer_pdf_with_main_templates(
                                 'path': full_datasheet_path
                             })
                             print(
-                                f"[PDF] Adding product datasheet: {product_info.get('model_name')} from {full_datasheet_path}")
+                                f"Adding product datasheet: {product_info.get('model_name')} from {full_datasheet_path}")
                         else:
                             datasheets_missing.append({
                                 'id': prod_id,
@@ -2590,7 +2590,7 @@ def generate_offer_pdf_with_main_templates(
                         })
                 except Exception as e:
                     print(
-                        f"[PDF] Error loading datasheet for product {prod_id}: {e}")
+                        f"Error loading datasheet for product {prod_id}: {e}")
                     datasheets_missing.append({
                         'id': prod_id,
                         'reason': f'Error: {e}'
@@ -2602,14 +2602,14 @@ def generate_offer_pdf_with_main_templates(
             print(f"{'='*80}")
             print(f"Datasheets found: {len(datasheets_found)}")
             for item in datasheets_found:
-                print(f"  [OK] ID {item['id']}: {item['model']} -> {item['path']}")
+                print(f"  ID {item['id']}: {item['model']} -> {item['path']}")
             print(f"Datasheets missing: {len(datasheets_missing)}")
             for item in datasheets_missing:
                 print(f"  [MISSING] ID {item['id']}: {item.get('model', 'Unknown')} -> {item['reason']}")
             print(f"{'='*80}\n")
 
     except Exception as e:
-        print(f"[PDF] Error loading product datasheets: {e}")
+        print(f"Error loading product datasheets: {e}")
 
     # Company Documents
     # NOTE: Alte Implementierung deaktiviert - Firmendokumente werden jetzt in
@@ -2627,9 +2627,9 @@ def generate_offer_pdf_with_main_templates(
     #                     if os.path.exists(full_doc_path):
     #                         paths_to_append.append(full_doc_path)
     #                         print(
-    #                             f"[PDF] Adding company document: {doc_info.get('display_name')} from {full_doc_path}")
+    #                             f"Adding company document: {doc_info.get('display_name')} from {full_doc_path}")
     #     except Exception as e:
-    #         print(f"[PDF] Error loading company documents: {e}")
+    #         print(f"Error loading company documents: {e}")
 
     # Generate chart pages if charts are selected
     if selected_charts_for_pdf_opt and analysis_results:
@@ -2658,17 +2658,17 @@ def generate_offer_pdf_with_main_templates(
 
             if chart_pages_to_add:
                 print(
-                    f"[PDF] Generated chart pages: {len(chart_pages_to_add)} bytes")
+                    f"Generated chart pages: {len(chart_pages_to_add)} bytes")
             else:
-                print(f"[PDF] No chart pages generated")
+                print(f"No chart pages generated")
 
         except Exception as e:
-            print(f"[PDF] Error generating chart pages: {e}")
+            print(f"Error generating chart pages: {e}")
             chart_pages_to_add = None
 
     # Append the files and chart pages to the PDF
     if paths_to_append or chart_pages_to_add:
-        print(f"[PDF] Appending {len(paths_to_append)} files to PDF")
+        print(f"Appending {len(paths_to_append)} files to PDF")
         try:
             from pypdf import PdfReader, PdfWriter
             pdf_writer = PdfWriter()
@@ -2687,7 +2687,7 @@ def generate_offer_pdf_with_main_templates(
                         pdf_writer.add_page(page)
                     successfully_appended += 1
                 except Exception as e:
-                    print(f"[PDF] Error appending {pdf_path}: {e}")
+                    print(f"Error appending {pdf_path}: {e}")
 
             # Add chart pages
             if chart_pages_to_add:
@@ -2697,9 +2697,9 @@ def generate_offer_pdf_with_main_templates(
                     for page in chart_reader.pages:
                         pdf_writer.add_page(page)
                     print(
-                        f"[PDF] Successfully appended {chart_page_count} chart pages")
+                        f"Successfully appended {chart_page_count} chart pages")
                 except Exception as e:
-                    print(f"[PDF] Error appending chart pages: {e}")
+                    print(f"Error appending chart pages: {e}")
 
             # Write final PDF
             final_buffer = io.BytesIO()
@@ -2707,9 +2707,9 @@ def generate_offer_pdf_with_main_templates(
             main_pdf_bytes = final_buffer.getvalue()
 
             print(
-                f"[PDF] Successfully appended {successfully_appended}/{len(paths_to_append)} datasheet/document files")
+                f"Successfully appended {successfully_appended}/{len(paths_to_append)} datasheet/document files")
         except Exception as e:
-            print(f"[PDF] Error in append process: {e}")
+            print(f"Error in append process: {e}")
             # Continue with main_pdf_bytes unchanged
 
     ENDE DER ALTEN IMPLEMENTIERUNG
@@ -3640,19 +3640,19 @@ def _get_chart_description(chart_key: str,
         'monthly_prod_cons_chart_bytes': get_text(
             texts,
             "chart_desc_monthly_prod_cons",
-            "[CHART] <b>Ihr persönlicher Jahresrhythmus:</b> Diese Darstellung zeigt Ihnen, wie Ihre PV-Anlage im Einklang mit den Jahreszeiten arbeitet. "
+            "<b>Ihr persönlicher Jahresrhythmus:</b> Diese Darstellung zeigt Ihnen, wie Ihre PV-Anlage im Einklang mit den Jahreszeiten arbeitet. "
             "In den sonnenreichen Sommermonaten erzeugen Sie deutlich mehr Strom als Sie verbrauchen – perfekt für hohe Einspeisevergütungen! "
             "Im Winter gleicht sich Produktion und Verbrauch harmonisch aus. So planen Sie Ihren Energiehaushalt optimal."),
         'cost_projection_chart_bytes': get_text(
             texts,
             "chart_desc_cost_projection",
-            "[MONEY] <b>Ihre finanzielle Zukunft im Blick:</b> Hier sehen Sie schwarz auf weiß, wie sich Ihre Stromkosten mit und ohne PV-Anlage entwickeln. "
+            "<b>Ihre finanzielle Zukunft im Blick:</b> Hier sehen Sie schwarz auf weiß, wie sich Ihre Stromkosten mit und ohne PV-Anlage entwickeln. "
             "Während herkömmliche Stromkosten Jahr für Jahr steigen, bleiben Sie mit Ihrer eigenen Solaranlage unabhängig von Preiserhöhungen. "
             "Die Schere öffnet sich zu Ihren Gunsten – je länger die Laufzeit, desto größer Ihre Ersparnis!"),
         'cumulative_cashflow_chart_bytes': get_text(
             texts,
             "chart_desc_cumulative_cashflow",
-            "[STATS] <b>Der Weg zu Ihrem persönlichen Gewinn:</b> Diese Kurve zeigt Ihren finanziellen Erfolgsweg. Anfangs investieren Sie, "
+            "<b>Der Weg zu Ihrem persönlichen Gewinn:</b> Diese Kurve zeigt Ihren finanziellen Erfolgsweg. Anfangs investieren Sie, "
             "aber schon nach wenigen Jahren kehrt sich das Blatt: Ihre Anlage arbeitet für Sie und erwirtschaftet echte Gewinne. "
             "Der Break-Even-Punkt markiert den Beginn Ihrer 'kostenlosen' Stromzeit – ab dann ist jede kWh reiner Gewinn für Sie!"),
         'consumption_coverage_pie_chart_bytes': get_text(
@@ -3664,7 +3664,7 @@ def _get_chart_description(chart_key: str,
         'pv_usage_pie_chart_bytes': get_text(
             texts,
             "chart_desc_pv_usage",
-            "[POWER] <b>Wohin fließt Ihr selbst erzeugter Strom:</b> Hier sehen Sie die clevere Aufteilung Ihres Solarstroms. "
+            "<b>Wohin fließt Ihr selbst erzeugter Strom:</b> Hier sehen Sie die clevere Aufteilung Ihres Solarstroms. "
             "Der blaue Bereich zeigt, was Sie direkt selbst nutzen (= sofortige Ersparnis), der orange Teil wird ins Netz eingespeist (= garantierte Vergütung). "
             "Jede selbst verbrauchte kWh spart Ihnen ca. 30 Cent, jede eingespeiste kWh bringt Ihnen sichere Einnahmen!"),
         'daily_production_switcher_chart_bytes': get_text(
@@ -3688,7 +3688,7 @@ def _get_chart_description(chart_key: str,
         'project_roi_matrix_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_project_roi",
-            "[CHART] <b>Ihre Rendite-Sicherheit visualisiert:</b> Diese Matrix zeigt, wie robust Ihre Investition ist. "
+            "<b>Ihre Rendite-Sicherheit visualisiert:</b> Diese Matrix zeigt, wie robust Ihre Investition ist. "
             "Selbst bei verschiedenen Strompreisentwicklungen bleibt Ihre Rendite attraktiv – das nennt man eine sichere Anlage! "
             "Vergleichen Sie das mal mit Ihrem Sparbuch: Hier sehen Sie reale Werte zwischen 3-8% Rendite pro Jahr. Ihre Anlage ist eine Geldanlage mit Garantie!"),
         'feed_in_revenue_switcher_chart_bytes': get_text(
@@ -3706,7 +3706,7 @@ def _get_chart_description(chart_key: str,
         'co2_savings_chart_bytes': get_text(
             texts,
             "chart_desc_co2_savings",
-            "[GREEN] <b>Ihr Beitrag für die nächste Generation:</b> Jede kWh Ihres Solarstroms ersetzt schmutzigen Kohlestrom! "
+            "<b>Ihr Beitrag für die nächste Generation:</b> Jede kWh Ihres Solarstroms ersetzt schmutzigen Kohlestrom! "
             "Diese Grafik zeigt nicht nur Zahlen, sondern Ihren echten Umweltbeitrag. Stolze [CO2-Menge] kg CO₂ weniger pro Jahr – "
             "das entspricht [Bäume-Anzahl] gepflanzten Bäumen! Sie investieren nicht nur in Ihre Finanzen, sondern in eine saubere Zukunft."),
         'investment_value_switcher_chart_bytes': get_text(
@@ -3730,25 +3730,25 @@ def _get_chart_description(chart_key: str,
         'cost_growth_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_cost_growth",
-            "[STATS] <b>Steigende Strompreise – Ihr Vorteil wächst:</b> Während andere über teure Stromrechnungen stöhnen, profitieren Sie! "
+            "<b>Steigende Strompreise – Ihr Vorteil wächst:</b> Während andere über teure Stromrechnungen stöhnen, profitieren Sie! "
             "Je mehr die Strompreise steigen, desto wertvoller wird jede selbst erzeugte kWh. "
             "Diese Projektion zeigt: Ihre PV-Anlage wird mit jedem Jahr noch rentabler. Sie haben heute die richtige Entscheidung getroffen!"),
         'roi_comparison_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_roi_comparison",
-            "[WINNER] <b>Besser als jede Bank:</b> Hier sehen Sie Ihre PV-Rendite im Vergleich zu traditionellen Geldanlagen. "
+            "<b>Besser als jede Bank:</b> Hier sehen Sie Ihre PV-Rendite im Vergleich zu traditionellen Geldanlagen. "
             "Während Sparbücher kaum Zinsen bringen und die Inflation Ihr Geld entwertet, arbeitet Ihre Anlage mit 4-7% Rendite für Sie. "
             "Dazu kommt: Ihre Investition ist greifbar, auf Ihrem Dach und arbeitet 25+ Jahre zuverlässig!"),
         'break_even_chart_bytes': get_text(
             texts,
             "chart_desc_break_even",
-            "[TARGET] <b>Ihr Zielsprint zur Gewinnschwelle:</b> Diese Kurve zeigt Ihren Weg zur 'schwarzen Null' und darüber hinaus! "
+            "<b>Ihr Zielsprint zur Gewinnschwelle:</b> Diese Kurve zeigt Ihren Weg zur 'schwarzen Null' und darüber hinaus! "
             "Der Break-Even-Punkt ist wie die Ziellinie beim Marathon – ab hier läuft alles für Sie! "
             "Meist nach 8-12 Jahren ist es soweit: Von da an sind Sie 15+ Jahre im Plus. Das ist finanzielle Freiheit!"),
         'amortisation_chart_bytes': get_text(
             texts,
             "chart_desc_amortisation",
-            "[MONEY] <b>Wie sich Ihre Investition zurückzahlt:</b> Diese Kurve ist Ihr persönlicher Finanzkompass! "
+            "<b>Wie sich Ihre Investition zurückzahlt:</b> Diese Kurve ist Ihr persönlicher Finanzkompass! "
             "Sie zeigt, wie sich Ihre Anfangsinvestition Stück für Stück durch Ersparnisse und Einnahmen zurückzahlt. "
             "Je steiler die Kurve, desto schneller haben Sie Ihr Geld wieder drin. Und danach? Jahrelange Gewinne sind garantiert!")}
 
@@ -6825,7 +6825,7 @@ def _append_datasheets_and_documents(
                         pdf_writer.add_page(page)
 
                     logging.info(
-                        f"[OK] {chart_page_count} Chart-Seite(n) erfolgreich angehängt")
+                        f"{chart_page_count} Chart-Seite(n) erfolgreich angehängt")
                 except Exception as e_append_charts:
                     logging.error(
                         f"Fehler beim Anhängen der Chart-Seiten: {e_append_charts}")
@@ -6931,7 +6931,7 @@ def _append_datasheets_and_documents(
                         pdf_writer.add_page(page)
 
                     logging.info(
-                        f"[OK] {len(financing_reader.pages)} Finanzierungs-Seite(n) erfolgreich angehängt")
+                        f"{len(financing_reader.pages)} Finanzierungs-Seite(n) erfolgreich angehängt")
 
                 except Exception as e_render:
                     logging.error(
@@ -7497,7 +7497,7 @@ def generate_heatpump_offer_pdf(
         
         # Status-Icon
         if 'Optimal' in status:
-            icon = "[OK]"
+            icon = ""
             color_hex = '#2E7D32'
         elif 'Grenz' in status:
             icon = "○"

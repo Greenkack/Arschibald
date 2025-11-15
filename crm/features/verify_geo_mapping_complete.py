@@ -12,10 +12,10 @@ from pathlib import Path
 def check_file_exists(filepath, description):
     """Prüft, ob eine Datei existiert"""
     if os.path.exists(filepath):
-        print(f"[OK] {description}: {filepath}")
+        print(f"{description}: {filepath}")
         return True
     else:
-        print(f"[ERROR] {description} fehlt: {filepath}")
+        print(f"{description} fehlt: {filepath}")
         return False
 
 
@@ -30,17 +30,17 @@ def check_imports():
     # Hauptmodul
     try:
         from crm.features.geo_mapper import GeoMapper, ensure_geo_columns
-        print("[OK] geo_mapper.py kann importiert werden")
+        print("geo_mapper.py kann importiert werden")
     except ImportError as e:
-        print(f"[ERROR] geo_mapper.py Import-Fehler: {e}")
+        print(f"geo_mapper.py Import-Fehler: {e}")
         all_ok = False
     
     # UI-Modul
     try:
         from crm.features.geo_ui import show_geo_mapping_ui
-        print("[OK] geo_ui.py kann importiert werden")
+        print("geo_ui.py kann importiert werden")
     except ImportError as e:
-        print(f"[ERROR] geo_ui.py Import-Fehler: {e}")
+        print(f"geo_ui.py Import-Fehler: {e}")
         all_ok = False
     
     return all_ok
@@ -63,9 +63,9 @@ def check_dependencies():
     for package, description in dependencies.items():
         try:
             __import__(package)
-            print(f"[OK] {package} installiert ({description})")
+            print(f"{package} installiert ({description})")
         except ImportError:
-            print(f"[WARNING] {package} nicht installiert ({description})")
+            print(f"{package} nicht installiert ({description})")
             print(f"   Installieren Sie mit: pip install {package.replace('_', '-')}")
             all_ok = False
     
@@ -99,15 +99,15 @@ def check_functions():
         
         for method in required_methods:
             if hasattr(GeoMapper, method):
-                print(f"[OK] GeoMapper.{method}() vorhanden")
+                print(f"GeoMapper.{method}() vorhanden")
             else:
-                print(f"[ERROR] GeoMapper.{method}() fehlt")
+                print(f"GeoMapper.{method}() fehlt")
                 all_ok = False
         
         return all_ok
         
     except Exception as e:
-        print(f"[ERROR] Fehler beim Prüfen der Funktionen: {e}")
+        print(f"Fehler beim Prüfen der Funktionen: {e}")
         return False
 
 
@@ -120,10 +120,10 @@ def check_tests():
     test_file = "crm/features/test_geo_mapper.py"
     
     if not os.path.exists(test_file):
-        print(f"[ERROR] Test-Datei fehlt: {test_file}")
+        print(f"Test-Datei fehlt: {test_file}")
         return False
     
-    print(f"[OK] Test-Datei vorhanden: {test_file}")
+    print(f"Test-Datei vorhanden: {test_file}")
     
     # Tests ausführen
     print("\nTests ausführen...")
@@ -138,19 +138,19 @@ def check_tests():
         )
         
         if result.returncode == 0:
-            print("[OK] Alle Tests bestanden")
+            print("Alle Tests bestanden")
             return True
         else:
-            print("[ERROR] Einige Tests fehlgeschlagen")
+            print("Einige Tests fehlgeschlagen")
             print(result.stdout)
             print(result.stderr)
             return False
             
     except subprocess.TimeoutExpired:
-        print("[WARNING] Tests dauern zu lange (Timeout)")
+        print("Tests dauern zu lange (Timeout)")
         return False
     except Exception as e:
-        print(f"[ERROR] Fehler beim Ausführen der Tests: {e}")
+        print(f"Fehler beim Ausführen der Tests: {e}")
         return False
 
 
@@ -195,14 +195,14 @@ def check_database_schema():
         result = ensure_geo_columns()
         
         if result:
-            print("[OK] Geo-Spalten vorhanden oder erfolgreich hinzugefügt")
+            print("Geo-Spalten vorhanden oder erfolgreich hinzugefügt")
             return True
         else:
-            print("[ERROR] Fehler beim Hinzufügen der Geo-Spalten")
+            print("Fehler beim Hinzufügen der Geo-Spalten")
             return False
             
     except Exception as e:
-        print(f"[ERROR] Fehler beim Prüfen des Schemas: {e}")
+        print(f"Fehler beim Prüfen des Schemas: {e}")
         return False
 
 
@@ -228,16 +228,16 @@ def run_verification():
     print("="*70)
     
     for check, result in results.items():
-        status = "[OK] OK" if result else "[ERROR] FEHLER"
+        status = "OK" if result else "FEHLER"
         print(f"{check}: {status}")
     
     all_ok = all(results.values())
     
     print("\n" + "="*70)
     if all_ok:
-        print("[OK] ALLE CHECKS ERFOLGREICH - IMPLEMENTATION VOLLSTÄNDIG")
+        print("ALLE CHECKS ERFOLGREICH - IMPLEMENTATION VOLLSTÄNDIG")
     else:
-        print("[ERROR] EINIGE CHECKS FEHLGESCHLAGEN - BITTE PRÜFEN")
+        print("EINIGE CHECKS FEHLGESCHLAGEN - BITTE PRÜFEN")
     print("="*70)
     
     return all_ok

@@ -83,7 +83,7 @@ def test_caching():
     
     assert call_count[0] == 2, "Funktion sollte zweimal aufgerufen werden"
     
-    print("\n[OK] Caching-Test erfolgreich!")
+    print("\nCaching-Test erfolgreich!")
 
 
 def test_debouncing():
@@ -123,7 +123,7 @@ def test_debouncing():
     
     assert should_update == True, "Aufruf nach Debounce-Zeit sollte Update auslösen"
     
-    print("\n[OK] Debouncing-Test erfolgreich!")
+    print("\nDebouncing-Test erfolgreich!")
 
 
 def test_performance_monitoring():
@@ -163,13 +163,13 @@ def test_performance_monitoring():
         assert 0.09 < op_stats['min'] < 0.11, "Min sollte ~0.1s sein"
         assert 0.19 < op_stats['max'] < 0.21, "Max sollte ~0.2s sein"
     else:
-        print("   [WARNING] Keine Statistiken gefunden")
+        print("   Keine Statistiken gefunden")
     
     # Statistiken leeren
     clear_performance_stats()
     print("\n3. Statistiken geleert")
     
-    print("\n[OK] Performance-Monitoring-Test erfolgreich!")
+    print("\nPerformance-Monitoring-Test erfolgreich!")
 
 
 def test_mesh_optimization():
@@ -209,7 +209,7 @@ def test_mesh_optimization():
     assert rendered < total_modules, "Nicht alle Module sollten gerendert werden"
     assert rendered >= 50, "Mindestens 50 Module sollten gerendert werden"
     
-    print("\n[OK] Mesh-Optimierung-Test erfolgreich!")
+    print("\nMesh-Optimierung-Test erfolgreich!")
 
 
 def test_cache_ttl():
@@ -241,7 +241,7 @@ def test_cache_ttl():
     print(f"   Wert: {value}")
     assert value is None, "Wert sollte abgelaufen sein"
     
-    print("\n[OK] Cache TTL-Test erfolgreich!")
+    print("\nCache TTL-Test erfolgreich!")
 
 
 def test_cache_lru():
@@ -282,7 +282,7 @@ def test_cache_lru():
     print(f"   Cache-Größe: {stats['size']}")
     assert stats['size'] == 3, "Cache sollte immer noch 3 Einträge haben"
     
-    print("\n[OK] Cache LRU-Test erfolgreich!")
+    print("\nCache LRU-Test erfolgreich!")
 
 
 def run_all_tests():
@@ -300,7 +300,7 @@ def run_all_tests():
         test_cache_lru()
         
         print("\n" + "="*60)
-        print("[SUCCESS] ALLE TESTS ERFOLGREICH!")
+        print("ALLE TESTS ERFOLGREICH!")
         print("="*60)
 
         return True
@@ -309,7 +309,7 @@ def run_all_tests():
         print(f"\n[FAIL] TEST FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] FEHLER: {e}")
+        print(f"\nFEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False

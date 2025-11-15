@@ -45,20 +45,20 @@ def audit_gitignore() -> tuple[bool, list[str]]:
     gitignore_path = Path(".gitignore")
 
     if not gitignore_path.exists():
-        issues.append("[ERROR] .gitignore file not found")
-        print("[ERROR] FAILED: .gitignore file not found")
+        issues.append(".gitignore file not found")
+        print("FAILED: .gitignore file not found")
         return False, issues
 
     with open(gitignore_path, encoding='utf-8') as f:
         content = f.read()
 
     if '.env' not in content:
-        issues.append("[ERROR] .env is not in .gitignore")
-        print("[ERROR] FAILED: .env is not in .gitignore")
+        issues.append(".env is not in .gitignore")
+        print("FAILED: .env is not in .gitignore")
         print("   ACTION REQUIRED: Add '.env' to .gitignore immediately!")
         return False, issues
 
-    print("[OK] PASSED: .env is properly listed in .gitignore")
+    print("PASSED: .env is properly listed in .gitignore")
     return True, []
 
 
@@ -76,12 +76,12 @@ def audit_env_file() -> tuple[bool, list[str]]:
     is_secure, warnings = validate_env_file_security()
 
     if not is_secure:
-        print("[ERROR] FAILED: .env file security issues detected")
+        print("FAILED: .env file security issues detected")
         for warning in warnings:
             print(f"   {warning}")
         return False, warnings
 
-    print("[OK] PASSED: .env file is properly secured")
+    print("PASSED: .env file is properly secured")
     return True, []
 
 
@@ -123,17 +123,17 @@ def audit_hardcoded_keys() -> tuple[bool, list[str]]:
             for pattern, key_type in patterns:
                 matches = re.findall(pattern, content)
                 if matches:
-                    issues.append(f"[WARNING]  Possible {key_type} in {py_file}")
+                    issues.append(f"Possible {key_type} in {py_file}")
                     print(
-                        f"[WARNING]  WARNING: Possible {key_type} found in {py_file}")
+                        f"WARNING: Possible {key_type} found in {py_file}")
                     found_issues = True
         except Exception as e:
-            print(f"[WARNING]  Could not scan {py_file}: {e}")
+            print(f"Could not scan {py_file}: {e}")
 
     if not found_issues:
-        print("[OK] PASSED: No hardcoded API keys detected")
+        print("PASSED: No hardcoded API keys detected")
         return True, []
-    print("[ERROR] FAILED: Potential hardcoded keys found (review warnings above)")
+    print("FAILED: Potential hardcoded keys found (review warnings above)")
     return False, issues
 
 
@@ -208,18 +208,18 @@ def audit_key_logging() -> tuple[bool, list[str]]:
                             continue
 
                         issues.append(
-                            f"[WARNING]  {description} in {py_file}:{line_num}")
+                            f"{description} in {py_file}:{line_num}")
                         print(
-                            f"[WARNING]  WARNING: {description} at {py_file}:{line_num}")
+                            f"WARNING: {description} at {py_file}:{line_num}")
                         print(f"   Line: {line.strip()[:80]}")
                         found_issues = True
         except Exception as e:
-            print(f"[WARNING]  Could not scan {py_file}: {e}")
+            print(f"Could not scan {py_file}: {e}")
 
     if not found_issues:
-        print("[OK] PASSED: No API key logging/display detected")
+        print("PASSED: No API key logging/display detected")
         return True, []
-    print("[ERROR] FAILED: Potential key logging found (review warnings above)")
+    print("FAILED: Potential key logging found (review warnings above)")
     return False, issues
 
 
@@ -240,7 +240,7 @@ def audit_api_key_formats() -> tuple[bool, list[str]]:
     is_valid, issues = validate_startup_security()
 
     if not is_valid:
-        print("[ERROR] FAILED: API key validation issues")
+        print("FAILED: API key validation issues")
         for issue in issues:
             print(f"   {issue}")
         return False, issues
@@ -249,14 +249,14 @@ def audit_api_key_formats() -> tuple[bool, list[str]]:
     keys_status = check_api_keys()
     print("\nConfigured API Keys:")
     for key_name, is_present in keys_status.items():
-        status = "[OK]" if is_present else "[ERROR]"
+        status = "" if is_present else ""
         print(f"   {status} {key_name}")
 
     missing = get_missing_keys()
     if missing:
-        print(f"\n[INFO]  Note: {len(missing)} optional key(s) not configured")
+        print(f"\nNote: {len(missing)} optional key(s) not configured")
 
-    print("\n[OK] PASSED: All configured keys have valid formats")
+    print("\nPASSED: All configured keys have valid formats")
     return True, []
 
 
@@ -274,7 +274,7 @@ def audit_sensitive_data_filter() -> tuple[bool, list[str]]:
     try:
 
         # Check if SensitiveDataFilter class exists and is importable
-        print("[OK] PASSED: SensitiveDataFilter class is available")
+        print("PASSED: SensitiveDataFilter class is available")
 
         # Test the masking function
         print("\nTesting sensitive data masking:")
@@ -286,9 +286,9 @@ def audit_sensitive_data_filter() -> tuple[bool, list[str]]:
         # Check if key is masked (either completely or partially)
         if "***" in masked or "[REDACTED" in masked or len(
                 masked) < len(test_data):
-            print("[OK] Masking function working correctly")
+            print("Masking function working correctly")
         else:
-            print("[WARNING]  Masking function may not be working properly")
+            print("Masking function may not be working properly")
 
         print("\nNote: The SensitiveDataFilter is automatically applied when")
         print("      setup_logging() is called in the agent application.")
@@ -296,7 +296,7 @@ def audit_sensitive_data_filter() -> tuple[bool, list[str]]:
         return True, []
 
     except Exception as e:
-        print(f"[ERROR] FAILED: Could not verify logging filter: {e}")
+        print(f"FAILED: Could not verify logging filter: {e}")
         return False, [str(e)]
 
 
@@ -341,7 +341,7 @@ def run_full_audit() -> bool:
             if not passed:
                 all_passed = False
         except Exception as e:
-            print(f"\n[ERROR] ERROR in {audit_name}: {e}")
+            print(f"\nERROR in {audit_name}: {e}")
             results[audit_name] = False
             all_passed = False
 
@@ -351,17 +351,17 @@ def run_full_audit() -> bool:
     print("=" * 70)
 
     for audit_name, passed in results.items():
-        status = "[OK] PASS" if passed else "[ERROR] FAIL"
+        status = "PASS" if passed else "FAIL"
         print(f"{status}: {audit_name}")
 
     print("\n" + "=" * 70)
     if all_passed:
-        print("[OK] ALL AUDITS PASSED")
+        print("ALL AUDITS PASSED")
         print("=" * 70)
         print("\nYour API key security configuration is excellent!")
         print("All keys are properly secured and no security issues detected.")
     else:
-        print("[ERROR] SOME AUDITS FAILED")
+        print("SOME AUDITS FAILED")
         print("=" * 70)
         print(f"\nFound {len(all_issues)} security issue(s).")
         print("Please review the warnings above and fix the issues.")

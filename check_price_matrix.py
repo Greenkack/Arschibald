@@ -30,9 +30,9 @@ matrix_cols = cursor.fetchone()[0]
 print(f"Preismatrix-Spalten: {matrix_cols}")
 
 if active_matrices == 0 and matrix_cells == 0:
-    print("\n[WARNING]  KEINE PREISMATRIZEN VORHANDEN!")
+    print("\nKEINE PREISMATRIZEN VORHANDEN!")
     print("   → Berechnungen MÜSSEN Produktpreise aus DB verwenden!")
 else:
-    print(f"\n[OK] Preismatrizen vorhanden: {active_matrices} aktive Sets")
+    print(f"\nPreismatrizen vorhanden: {active_matrices} aktive Sets")
 
 conn.close()

@@ -137,7 +137,7 @@ def validate_mounting_selection(
     if is_pitched_roof(roof_type) and "Aufständerung" in selected_mounting:
         result["valid"] = False
         result["error"] = (
-            f"[ERROR] Aufständerungen sind nur für Flachdächer erlaubt! "
+            f"Aufständerungen sind nur für Flachdächer erlaubt! "
             f"'{roof_type}' ist ein Schrägdach."
         )
         result["suggestion"] = "Aufdach-Montage"
@@ -147,7 +147,7 @@ def validate_mounting_selection(
     if selected_mounting not in allowed_types:
         result["valid"] = False
         result["error"] = (
-            f"[WARNING] '{selected_mounting}' ist für '{roof_type}' nicht optimal."
+            f"'{selected_mounting}' ist für '{roof_type}' nicht optimal."
         )
         result["suggestion"] = allowed_types[0] if allowed_types else "Aufdach-Montage"
     
@@ -174,12 +174,12 @@ def render_mounting_selection_with_validation(
     # Info-Box über Dachtyp
     if is_flat_roof(roof_type):
         st.info(
-            f"[INFO] **Flachdach erkannt**: Aufständerungen sind verfügbar. "
+            f"**Flachdach erkannt**: Aufständerungen sind verfügbar. "
             f"Module werden mit optimaler Neigung montiert."
         )
     elif is_pitched_roof(roof_type):
         st.info(
-            f"[INFO] **Schrägdach erkannt** ({roof_type}): Module werden direkt "
+            f"**Schrägdach erkannt** ({roof_type}): Module werden direkt "
             f"auf der Dachfläche montiert. Aufständerungen sind nicht verfügbar."
         )
     
@@ -192,7 +192,7 @@ def render_mounting_selection_with_validation(
             if validation["suggestion"]:
                 # FIX: Zeige Empfehlung, aber überschreibe Auswahl NICHT automatisch
                 # Der Benutzer soll selbst entscheiden
-                st.info(f"[IDEA] Empfehlung: {validation['suggestion']}")
+                st.info(f"Empfehlung: {validation['suggestion']}")
                 # ENTFERNT: current_selection = validation["suggestion"]
     
     # Setze Default wenn keine Auswahl ODER wenn aktuelle Auswahl ungültig ist

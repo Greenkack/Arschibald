@@ -55,7 +55,7 @@ def render_crm_dashboard(
     # Tabs für verschiedene Dashboard-Bereiche
     tabs = st.tabs([
         " Übersicht",
-        "[CHART] Widgets",
+        "Widgets",
         " Kunden",
         " Projekte",
         " Umsatz",
@@ -88,7 +88,7 @@ def render_crm_dashboard(
 def render_overview_section(texts: dict[str, str]):
     """Übersichts-Sektion des CRM Dashboards"""
 
-    st.subheader("[CHART] Geschäftsübersicht")
+    st.subheader("Geschäftsübersicht")
 
     # KPIs in modernen Cards
     col1, col2, col3, col4 = st.columns(4)
@@ -123,7 +123,7 @@ def render_overview_section(texts: dict[str, str]):
                     color: white;
                     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
                 ">
-                    <h3 style="margin: 0; font-size: 1.2em;">[LAUNCH] Laufende Projekte</h3>
+                    <h3 style="margin: 0; font-size: 1.2em;">Laufende Projekte</h3>
                     <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
                     <p style="margin: 0; opacity: 0.9;">+2 diese Woche ↗️</p>
                 </div>
@@ -159,7 +159,7 @@ def render_overview_section(texts: dict[str, str]):
                     color: white;
                     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
                 ">
-                    <h3 style="margin: 0; font-size: 1.2em;">[MONEY] Gesamtumsatz</h3>
+                    <h3 style="margin: 0; font-size: 1.2em;">Gesamtumsatz</h3>
                     <h1 style="margin: 10px 0; font-size: 2.5em;">{:,.0f}€</h1>
                     <p style="margin: 0; opacity: 0.9;">+12% vs Vormonat ↗️</p>
                 </div>
@@ -315,7 +315,7 @@ def render_customer_details(customer: dict[str, Any], texts: dict[str, str]):
 def render_projects_section(texts: dict[str, str]):
     """Projekte-Sektion des CRM Dashboards"""
 
-    st.subheader("[FOLDER] Projektübersicht")
+    st.subheader("Projektübersicht")
 
     # Projekt-Status Übersicht mit modernen Cards
     col1, col2, col3 = st.columns(3)
@@ -398,7 +398,7 @@ def render_projects_section(texts: dict[str, str]):
 def render_revenue_section(texts: dict[str, str]):
     """Umsatz-Sektion des CRM Dashboards"""
 
-    st.subheader("[MONEY] Umsatzanalyse")
+    st.subheader("Umsatzanalyse")
 
     # Umsatz-KPIs mit modernen Cards
     col1, col2, col3, col4 = st.columns(4)
@@ -666,7 +666,7 @@ def render_widgets_section(texts: dict[str, str]):
         )
         
     except ImportError as e:
-        st.error("[ERROR] Dashboard Widget System nicht verfügbar")
+        st.error("Dashboard Widget System nicht verfügbar")
         st.info(
             "Das Dashboard Widget Modul konnte nicht geladen werden. "
             "Bitte stellen Sie sicher, dass alle Abhängigkeiten "

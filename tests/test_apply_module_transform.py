@@ -49,7 +49,7 @@ def test_apply_module_transform_basic():
     assert abs(center[2] - base_position[2]) < 0.1
     
     print(f"  Panel-Zentrum: ({center[0]:.2f}, {center[1]:.2f}, {center[2]:.2f})")
-    print("[OK] Grundlegende Transformation funktioniert")
+    print("Grundlegende Transformation funktioniert")
 
 
 def test_apply_module_transform_with_offsets():
@@ -86,7 +86,7 @@ def test_apply_module_transform_with_offsets():
     print(f"  Basis-Position: {base_position}")
     print(f"  Offsets: ({transform.offset_x}, {transform.offset_y}, {transform.offset_z})")
     print(f"  Finale Position: ({center[0]:.2f}, {center[1]:.2f}, {center[2]:.2f})")
-    print("[OK] Transformation mit Offsets funktioniert")
+    print("Transformation mit Offsets funktioniert")
 
 
 def test_apply_module_transform_with_azimuth():
@@ -117,7 +117,7 @@ def test_apply_module_transform_with_azimuth():
         
         print(f"  Azimuth {azimuth}°: Panel erstellt mit {len(panel.points)} Punkten")
     
-    print("[OK] Azimuth-Rotation funktioniert für alle Richtungen")
+    print("Azimuth-Rotation funktioniert für alle Richtungen")
 
 
 def test_apply_module_transform_with_tilt():
@@ -148,7 +148,7 @@ def test_apply_module_transform_with_tilt():
         
         print(f"  Neigung {tilt}°: Panel erstellt mit {len(panel.points)} Punkten")
     
-    print("[OK] Neigungs-Rotation funktioniert für alle Winkel")
+    print("Neigungs-Rotation funktioniert für alle Winkel")
 
 
 def test_apply_module_transform_combined():
@@ -191,7 +191,7 @@ def test_apply_module_transform_combined():
     print(f"  Neigung: {transform.tilt_deg}°")
     print(f"  Offsets: ({transform.offset_x}, {transform.offset_y}, {transform.offset_z})")
     print(f"  Panel-Zentrum: ({center[0]:.2f}, {center[1]:.2f}, {center[2]:.2f})")
-    print("[OK] Kombinierte Transformation funktioniert")
+    print("Kombinierte Transformation funktioniert")
 
 
 def test_apply_module_transform_vs_make_panel():
@@ -230,7 +230,7 @@ def test_apply_module_transform_vs_make_panel():
     
     print(f"  make_panel() Zentrum: ({center1[0]:.2f}, {center1[1]:.2f}, {center1[2]:.2f})")
     print(f"  apply_module_transform() Zentrum: ({center2[0]:.2f}, {center2[1]:.2f}, {center2[2]:.2f})")
-    print("[OK] Beide Methoden erzeugen identische Ergebnisse (ohne Offsets)")
+    print("Beide Methoden erzeugen identische Ergebnisse (ohne Offsets)")
 
 
 def test_apply_module_transform_multiple_modules():
@@ -268,7 +268,7 @@ def test_apply_module_transform_multiple_modules():
         assert len(panel.points) > 0
     
     print(f"  {len(panels)} Module erfolgreich erstellt")
-    print("[OK] Mehrere Module mit verschiedenen Transformationen funktionieren")
+    print("Mehrere Module mit verschiedenen Transformationen funktionieren")
 
 
 def test_apply_module_transform_with_group_id():
@@ -297,7 +297,7 @@ def test_apply_module_transform_with_group_id():
     assert transform.group_id == "south_roof"
     
     print(f"  Modul mit Gruppen-ID '{transform.group_id}' erstellt")
-    print("[OK] Transformation mit Gruppen-ID funktioniert")
+    print("Transformation mit Gruppen-ID funktioniert")
 
 
 def main():
@@ -323,17 +323,17 @@ def main():
         test_apply_module_transform_with_group_id()
         
         print("\n" + "=" * 70)
-        print("[OK] ALLE TESTS ERFOLGREICH")
+        print("ALLE TESTS ERFOLGREICH")
         print("=" * 70)
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n[ERROR] UNERWARTETER FEHLER: {e}")
+        print(f"\nUNERWARTETER FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False

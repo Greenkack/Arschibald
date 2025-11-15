@@ -164,7 +164,7 @@ class ProgressTracker:
         """
         if self.show_progress:
             elapsed = (datetime.now() - self.start_time).total_seconds()
-            print(f"\n[OK] {message} in {elapsed:.2f}s")
+            print(f"\n{message} in {elapsed:.2f}s")
 
 
 class MainWorkflow:
@@ -272,9 +272,9 @@ class MainWorkflow:
             print("\n[Step 1/4] Creating backup...")
             try:
                 self.backup_id = self._create_backup()
-                print(f"[OK] Backup created: {self.backup_id}")
+                print(f"Backup created: {self.backup_id}")
             except Exception as e:
-                print(f"[ERROR] Backup failed: {e}")
+                print(f"Backup failed: {e}")
                 print("  Continuing without backup...")
         else:
             print("\n[Step 1/4] Backup disabled, skipping...")
@@ -283,9 +283,9 @@ class MainWorkflow:
         print("\n[Step 2/4] Analyzing PDF templates...")
         try:
             self._analyze_pdfs(firmen, seiten)
-            print(f"[OK] Analyzed {len(self.pdf_analyses)} PDF templates")
+            print(f"Analyzed {len(self.pdf_analyses)} PDF templates")
         except Exception as e:
-            print(f"[ERROR] PDF analysis failed: {e}")
+            print(f"PDF analysis failed: {e}")
             return self._create_error_summary(start_time, str(e))
         
         # Step 3: Process each combination
@@ -373,7 +373,7 @@ class MainWorkflow:
                 result = self._process_single_combination(firma, seite)
                 self.results.append(result)
                 
-                status = "[OK]" if result.success else "[ERROR]"
+                status = "" if result.success else ""
                 progress.update(f"{status} f{firma}s{seite}")
         
         progress.finish("Processing complete")
@@ -553,7 +553,7 @@ class MainWorkflow:
             results=[]
         )
         
-        print(f"\n[ERROR] Workflow failed: {error_message}")
+        print(f"\nWorkflow failed: {error_message}")
         
         return summary
     
@@ -581,7 +581,7 @@ class MainWorkflow:
             print(f"\nFailed combinations ({summary.failed}):")
             for result in summary.results:
                 if not result.success:
-                    print(f"  [ERROR] Firma {result.firma}, Seite {result.seite}: "
+                    print(f"  Firma {result.firma}, Seite {result.seite}: "
                           f"{result.error_message}")
         
         # Show validation issues
@@ -605,12 +605,12 @@ class MainWorkflow:
         
         # Success message
         if summary.successful == summary.total_combinations:
-            print("\n[OK] All combinations processed successfully!")
+            print("\nAll combinations processed successfully!")
         elif summary.successful > 0:
             print(f"\n⚠ Partially successful: {summary.successful}/"
                   f"{summary.total_combinations} combinations processed")
         else:
-            print("\n[ERROR] Workflow failed: No combinations processed successfully")
+            print("\nWorkflow failed: No combinations processed successfully")
 
 
 def main(

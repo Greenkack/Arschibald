@@ -4804,7 +4804,7 @@ def build_dynamic_data(
         if symbol_style == "dot":
             return "•"
         # default 'check'
-        return "[OK]"
+        return ""
 
     for k, label in standard_services.items():
         enabled = pdf_services_cfg.get(k, True)
@@ -5787,6 +5787,8 @@ def build_dynamic_data(
                     live_pricing_calculations.get("final_price_brutto"),
                 )
                 result["minus_mwst_formatted"] = _alias_value(
+                    result.get("ersparte_mehrwertsteuer_formatted"),
+                    result.get("vat_savings_formatted"),
                     result.get("final_mwst_in_zwischensumme_formatted"),
                     result.get("mwst_in_zwischensumme_formatted"),
                     result.get("simple_mwst_formatted"),

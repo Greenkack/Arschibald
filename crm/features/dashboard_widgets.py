@@ -29,7 +29,7 @@ class DashboardWidget:
             self,
             widget_id: str,
             title: str,
-            icon: str = "[CHART]",
+            icon: str = "",
             default_visible: bool = True):
         self.widget_id = widget_id
         self.title = title
@@ -103,7 +103,7 @@ class OpenTasksWidget(DashboardWidget):
         tasks = self.get_data()
 
         if not tasks:
-            st.info("[OK] Keine offenen Aufgaben")
+            st.info("Keine offenen Aufgaben")
             return
 
         # Zähle überfällige Aufgaben
@@ -127,7 +127,7 @@ class OpenTasksWidget(DashboardWidget):
             if overdue_count > 0:
                 st.markdown(
                     f"<span style='color: red; font-weight: bold;'>"
-                    f"[WARNING] {overdue_count} überfällig</span>",
+                    f"{overdue_count} überfällig</span>",
                     unsafe_allow_html=True
                 )
 
@@ -154,7 +154,7 @@ class OpenTasksWidget(DashboardWidget):
                         task['due_date'], '%Y-%m-%d').date()
                     if due_date < today:
                         is_overdue = True
-                        due_text = f"[WARNING] Überfällig seit {
+                        due_text = f"Überfällig seit {
                             (today - due_date).days} Tagen"
                     elif due_date == today:
                         due_text = "📅 Heute fällig"
@@ -297,7 +297,7 @@ class PipelineOverviewWidget(DashboardWidget):
         super().__init__(
             widget_id="pipeline_overview",
             title="Pipeline-Übersicht",
-            icon="[TARGET]"
+            icon=""
         )
 
     def get_data(self):
@@ -336,7 +336,7 @@ class PipelineOverviewWidget(DashboardWidget):
         data = self.get_data()
 
         if not data:
-            st.info("[TARGET] Keine Pipeline-Daten verfügbar")
+            st.info("Keine Pipeline-Daten verfügbar")
             return
 
         st.markdown(f"### {self.icon} {self.title}")
@@ -397,7 +397,7 @@ class RevenueTrackingWidget(DashboardWidget):
         super().__init__(
             widget_id="revenue_tracking",
             title="Umsatz-Tracking",
-            icon="[MONEY]"
+            icon=""
         )
 
     def get_data(self):
@@ -473,7 +473,7 @@ class RevenueTrackingWidget(DashboardWidget):
         data = self.get_data()
 
         if not data:
-            st.info("[MONEY] Keine Umsatz-Daten verfügbar")
+            st.info("Keine Umsatz-Daten verfügbar")
             return
 
         st.markdown(f"### {self.icon} {self.title}")
@@ -681,10 +681,10 @@ class WidgetManager:
 
         if st.button("💾 Einstellungen speichern", type="primary"):
             if self.save_widget_config(user_id, updated_config):
-                st.success("[OK] Einstellungen gespeichert!")
+                st.success("Einstellungen gespeichert!")
                 st.rerun()
             else:
-                st.error("[ERROR] Fehler beim Speichern der Einstellungen")
+                st.error("Fehler beim Speichern der Einstellungen")
 
 
 def render_dashboard_with_widgets(
@@ -701,7 +701,7 @@ def render_dashboard_with_widgets(
         auto_refresh: Aktiviert automatisches Refresh
         refresh_interval: Refresh-Intervall in Sekunden
     """
-    st.header("[CHART] CRM Dashboard")
+    st.header("CRM Dashboard")
 
     # Auto-Refresh Konfiguration
     if auto_refresh:
@@ -728,7 +728,7 @@ def render_dashboard_with_widgets(
             st.rerun()
 
     # Tabs für Dashboard und Einstellungen
-    tab1, tab2 = st.tabs(["[CHART] Dashboard", "⚙️ Einstellungen"])
+    tab1, tab2 = st.tabs(["Dashboard", "⚙️ Einstellungen"])
 
     with tab1:
         # Rendere Widgets

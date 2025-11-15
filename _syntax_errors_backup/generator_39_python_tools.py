@@ -28,7 +28,7 @@ def clean_imports(directory="."):
                     new_lines.append(line)
             with open(filename, "w", encoding="utf-8") as f:
                 f.writelines(new_lines)
-    print("[OK] Unnötige doppelte Imports entfernt!")
+    print("Unnötige doppelte Imports entfernt!")
 '''),
     ("02_todo_list.py", '''
 import os
@@ -57,7 +57,7 @@ def normalize_strings(directory="."):
             content = unicodedata.normalize("NFKC", content)
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(content)
-    print("[OK] Alle Strings unicode-normalisiert.")
+    print("Alle Strings unicode-normalisiert.")
 '''),
     ("04_tabs_to_spaces.py", '''
 import os
@@ -70,14 +70,14 @@ def tabs_to_spaces(directory="."):
             content = content.replace("\\t", "    ")
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(content)
-    print("[OK] Alle Tabs in 4 Spaces konvertiert!")
+    print("Alle Tabs in 4 Spaces konvertiert!")
 '''),
     ("05_run_black.py", '''
 import os
 
 def run_black(directory="."):
     os.system(f"black {directory}")
-    print("[OK] Black-Formatierung abgeschlossen.")
+    print("Black-Formatierung abgeschlossen.")
 '''),
     ("06_find_bad_words.py", '''
 import os
@@ -153,7 +153,7 @@ def create_requirements(directory="."):
     with open("requirements_auto.txt", "w") as f:
         for i in sorted(imports):
             f.write(i + "\\n")
-    print("[OK] requirements_auto.txt erstellt!")
+    print("requirements_auto.txt erstellt!")
 '''),
     ("11_rename_py_files.py", '''
 import os
@@ -166,7 +166,7 @@ def rename_py_files(directory=".", prefix="mod_"):
     os.path.join(
         directory, filename), os.path.join(
             directory, newname))
-    print("[OK] Dateien umbenannt.")
+    print("Dateien umbenannt.")
 '''),
     ("12_remove_empty_lines.py", '''
 import os
@@ -179,7 +179,7 @@ def remove_empty_lines(directory="."):
             lines = [line for line in lines if line.strip()]
             with open(filename, "w", encoding="utf-8") as f:
                 f.writelines(lines)
-    print("[OK] Leere Zeilen entfernt.")
+    print("Leere Zeilen entfernt.")
 '''),
     ("13_check_func_args.py", '''
 import ast, os
@@ -206,7 +206,7 @@ def convert_print_to_logging(directory="."):
                 content = "import logging\\n" + content
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(content)
-    print("[OK] Alle print() zu logging.info() konvertiert.")
+    print("Alle print() zu logging.info() konvertiert.")
 '''),
     ("15_find_fixme.py", '''
 import os
@@ -225,7 +225,7 @@ import os
 def find_unused_imports(filename):
     # Nutzt isort und autoflake (pip install isort autoflake)
     os.system(f"autoflake --remove-all-unused-imports --in-place {filename}")
-    print("[OK] Unbenutzte Imports entfernt.")
+    print("Unbenutzte Imports entfernt.")
 '''),
     ("17_percent_format_to_format.py", '''
 import os, re
@@ -245,7 +245,7 @@ def convert_percent_format(directory="."):
                 new_lines.append(line)
             with open(filename, "w", encoding="utf-8") as f:
                 f.writelines(new_lines)
-    print("[OK] Prozent-Formatierung umgestellt.")
+    print("Prozent-Formatierung umgestellt.")
 '''),
     ("18_find_globals.py", '''
 import ast, os
@@ -274,7 +274,7 @@ import sys
 
 def set_recursion_limit(limit=10000):
     sys.setrecursionlimit(limit)
-    print(f"[OK] Recursion Limit auf {limit} gesetzt!")
+    print(f"Recursion Limit auf {limit} gesetzt!")
 '''),
 ]
 

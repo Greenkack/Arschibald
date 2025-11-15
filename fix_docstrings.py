@@ -36,7 +36,7 @@ for py_file in core_path.glob('*.py'):
 
 print(f'\nFixed {len(fixed_files)} files:')
 for f in fixed_files:
-    print(f'  [OK] {f}')
+    print(f'  {f}')
 
 if not fixed_files:
     print('No files needed fixing!')

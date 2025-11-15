@@ -11,7 +11,7 @@ import shutil
 
 def main():
     print("=" * 80)
-    print("[TOOL] BEHEBUNG FEHLENDER MODULE")
+    print("BEHEBUNG FEHLENDER MODULE")
     print("=" * 80)
     
     root = Path('.')
@@ -24,7 +24,7 @@ def main():
         'pdf_visual_inject': utils / 'pdf_visual_inject.py',
     }
     
-    print("\n[PACKAGE] ÜBERPRÜFE UTILS-MODULE")
+    print("\nÜBERPRÜFE UTILS-MODULE")
     print("-" * 80)
     
     fixed = 0
@@ -38,13 +38,13 @@ def main():
         
         if source_path.exists():
             if not target_path.exists():
-                print(f"  [OK] Kopiere {module_name}.py von utils/")
+                print(f"  Kopiere {module_name}.py von utils/")
                 shutil.copy2(source_path, target_path)
                 fixed += 1
             else:
-                print(f"  [INFO]  {module_name}.py bereits vorhanden")
+                print(f"  {module_name}.py bereits vorhanden")
         else:
-            print(f"  [ERROR] {module_name}.py NICHT in utils/ gefunden")
+            print(f"  {module_name}.py NICHT in utils/ gefunden")
             not_found += 1
     
     # Prüfe ob andere fehlende Module alte/deprecated Dateien sind
@@ -71,21 +71,21 @@ def main():
         'universal_chart_modernizer',  # Deprecated
     ]
     
-    print("\n[DELETE]  DEPRECATED/OPTIONALE MODULE")
+    print("\nDEPRECATED/OPTIONALE MODULE")
     print("-" * 80)
     print("Die folgenden Module sind veraltet oder optional:")
     for mod in deprecated_modules:
-        print(f"  [WARNING]  {mod}")
+        print(f"  {mod}")
     
     print("\n" + "=" * 80)
-    print("[CHART] ZUSAMMENFASSUNG")
+    print("ZUSAMMENFASSUNG")
     print("=" * 80)
-    print(f"[OK] Behoben:     {fixed} Module")
-    print(f"[INFO]  Vorhanden:   {len([m for m in utils_modules if (root / f'{m}.py').exists()]) - fixed} Module")
-    print(f"[ERROR] Nicht gefunden: {not_found} Module")
-    print(f"[WARNING]  Deprecated:  {len(deprecated_modules)} Module (können ignoriert werden)")
+    print(f"Behoben:     {fixed} Module")
+    print(f"Vorhanden:   {len([m for m in utils_modules if (root / f'{m}.py').exists()]) - fixed} Module")
+    print(f"Nicht gefunden: {not_found} Module")
+    print(f"Deprecated:  {len(deprecated_modules)} Module (können ignoriert werden)")
     
-    print("\n[IDEA] NÄCHSTE SCHRITTE:")
+    print("\nNÄCHSTE SCHRITTE:")
     print("1. App neu starten: streamlit run admin_panel.py")
     print("2. Test-Dateien die deprecated Module importieren, können ignoriert werden")
     print("3. Für Produktiv-Code sind alle kritischen Module verfügbar")

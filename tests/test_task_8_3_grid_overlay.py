@@ -46,7 +46,7 @@ def test_grid_overlay_function():
         assert len(grid.y) > 0, "Grid should have y coordinates"
         assert len(grid.z) > 0, "Grid should have z coordinates"
         
-        print("[OK] create_placement_grid Funktion existiert und funktioniert")
+        print("create_placement_grid Funktion existiert und funktioniert")
         print(f"  - Grid hat {len(grid.x)} Punkte")
         print(f"  - Grid-Farbe: {grid.line.color}")
         print(f"  - Grid-Linienbreite: {grid.line.width}")
@@ -54,10 +54,10 @@ def test_grid_overlay_function():
         return True
         
     except ImportError as e:
-        print(f"[ERROR] FEHLER: Konnte create_placement_grid nicht importieren: {e}")
+        print(f"FEHLER: Konnte create_placement_grid nicht importieren: {e}")
         return False
     except Exception as e:
-        print(f"[ERROR] FEHLER: {e}")
+        print(f"FEHLER: {e}")
         traceback.print_exc()
         return False
 
@@ -97,13 +97,13 @@ def test_grid_customization():
             assert grid is not None, f"Grid {i+1} should not be None"
             assert len(grid.x) > 0, f"Grid {i+1} should have coordinates"
             
-            print(f"[OK] Test Case {i+1}: spacing={spacing}m, opacity={opacity}")
+            print(f"Test Case {i+1}: spacing={spacing}m, opacity={opacity}")
         
-        print("[OK] Grid-Parameter sind anpassbar")
+        print("Grid-Parameter sind anpassbar")
         return True
         
     except Exception as e:
-        print(f"[ERROR] FEHLER: {e}")
+        print(f"FEHLER: {e}")
         traceback.print_exc()
         return False
 
@@ -123,10 +123,10 @@ def test_ui_toggle():
         assert callable(render_module_placement_panel), \
             "render_module_placement_panel should be callable"
         
-        print("[OK] render_module_placement_panel Funktion existiert")
+        print("render_module_placement_panel Funktion existiert")
         
         # Hinweis: Vollständiger UI-Test würde Streamlit-Session-State benötigen
-        print("  [INFO] UI-Toggle wird über Session State gesteuert:")
+        print("  UI-Toggle wird über Session State gesteuert:")
         print("     - show_placement_grid: bool")
         print("     - grid_spacing: float (0.5-2.0m)")
         print("     - grid_opacity: float (0.1-1.0)")
@@ -134,10 +134,10 @@ def test_ui_toggle():
         return True
         
     except ImportError as e:
-        print(f"[ERROR] FEHLER: Konnte UI-Modul nicht importieren: {e}")
+        print(f"FEHLER: Konnte UI-Modul nicht importieren: {e}")
         return False
     except Exception as e:
-        print(f"[ERROR] FEHLER: {e}")
+        print(f"FEHLER: {e}")
         traceback.print_exc()
         return False
 
@@ -167,7 +167,7 @@ def test_integration():
         assert "grid_opacity" in source, \
             "build_plotly_scene should use grid_opacity"
         
-        print("[OK] Grid-Overlay ist in build_plotly_scene integriert")
+        print("Grid-Overlay ist in build_plotly_scene integriert")
         print("  - Prüft show_placement_grid Session State")
         print("  - Verwendet anpassbare grid_spacing")
         print("  - Verwendet anpassbare grid_opacity")
@@ -175,7 +175,7 @@ def test_integration():
         return True
         
     except Exception as e:
-        print(f"[ERROR] FEHLER: {e}")
+        print(f"FEHLER: {e}")
         traceback.print_exc()
         return False
 
@@ -237,7 +237,7 @@ def test_grid_alignment():
         assert len(unique_z) == 1, \
             "All Z coordinates should be the same (flat grid)"
         
-        print("[OK] Grid ist korrekt ausgerichtet")
+        print("Grid ist korrekt ausgerichtet")
         print(f"  - X-Bereich: [{min(x_coords):.2f}, {max(x_coords):.2f}]")
         print(f"  - Y-Bereich: [{min(y_coords):.2f}, {max(y_coords):.2f}]")
         print(f"  - Z-Position: {list(unique_z)[0]:.2f}")
@@ -245,7 +245,7 @@ def test_grid_alignment():
         return True
         
     except Exception as e:
-        print(f"[ERROR] FEHLER: {e}")
+        print(f"FEHLER: {e}")
         traceback.print_exc()
         return False
 
@@ -270,7 +270,7 @@ def run_all_tests():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n[ERROR] KRITISCHER FEHLER in {test_name}: {e}")
+            print(f"\nKRITISCHER FEHLER in {test_name}: {e}")
             traceback.print_exc()
             results.append((test_name, False))
     
@@ -283,7 +283,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {test_name}")
     
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
@@ -291,12 +291,12 @@ def run_all_tests():
     if passed == total:
         print("\n🎉 ALLE TESTS BESTANDEN!")
         print("\nTask 8.3 ist vollständig implementiert:")
-        print("  [OK] 8.3.1: Zeige Platzierungs-Raster")
-        print("  [OK] 8.3.2: Hilfslinien für Ausrichtung")
-        print("  [OK] 8.3.3: Toggle Ein/Aus")
+        print("  8.3.1: Zeige Platzierungs-Raster")
+        print("  8.3.2: Hilfslinien für Ausrichtung")
+        print("  8.3.3: Toggle Ein/Aus")
         return 0
     else:
-        print("\n[WARNING] EINIGE TESTS FEHLGESCHLAGEN")
+        print("\nEINIGE TESTS FEHLGESCHLAGEN")
         return 1
 
 

@@ -77,7 +77,7 @@ def remove_text_from_pdf(
         doc.save(output_path)
         doc.close()
         
-        logging.info(f"[OK] Textfreie PDF gespeichert: {output_path.name}")
+        logging.info(f"Textfreie PDF gespeichert: {output_path.name}")
         return True
         
     except Exception as e:
@@ -124,7 +124,7 @@ def remove_text_from_all_templates(
         if remove_text_from_pdf(pdf_file, output_path):
             success_count += 1
     
-    logging.info(f"[OK] {success_count} PDF-Templates verarbeitet")
+    logging.info(f"{success_count} PDF-Templates verarbeitet")
     return success_count
 
 
@@ -135,11 +135,11 @@ if __name__ == "__main__":
         format='%(levelname)s: %(message)s'
     )
     
-    print("[TOOL] PDF-Text-Entferner")
+    print("PDF-Text-Entferner")
     print("=" * 50)
     
     count = remove_text_from_all_templates()
     
     print("=" * 50)
-    print(f"[OK] Fertig! {count} PDFs verarbeitet.")
+    print(f"Fertig! {count} PDFs verarbeitet.")
 

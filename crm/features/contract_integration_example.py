@@ -34,7 +34,7 @@ def example_1_create_contract_with_warranty():
             description="Kauf und Installation einer 10 kWp PV-Anlage",
             created_by="System"
         )
-        print(f"[OK] Kaufvertrag erstellt (ID: {contract_id})")
+        print(f"Kaufvertrag erstellt (ID: {contract_id})")
         
         # 2. Produktgarantie hinzufügen (25 Jahre)
         warranty_id = contract_manager.create_warranty(
@@ -49,7 +49,7 @@ def example_1_create_contract_with_warranty():
             terms="Garantie auf Materialfehler und Verarbeitung",
             created_by="System"
         )
-        print(f"[OK] Produktgarantie erstellt (ID: {warranty_id})")
+        print(f"Produktgarantie erstellt (ID: {warranty_id})")
         
         # 3. Leistungsgarantie hinzufügen (25 Jahre)
         warranty_id2 = contract_manager.create_warranty(
@@ -65,7 +65,7 @@ def example_1_create_contract_with_warranty():
             coverage_details="Jahr 1-10: 90%, Jahr 11-25: 80%",
             created_by="System"
         )
-        print(f"[OK] Leistungsgarantie erstellt (ID: {warranty_id2})")
+        print(f"Leistungsgarantie erstellt (ID: {warranty_id2})")
         
     finally:
         conn.close()
@@ -98,7 +98,7 @@ def example_2_create_maintenance_contract():
             description="Jährliche Inspektion und Wartung der PV-Anlage",
             created_by="System"
         )
-        print(f"[OK] Wartungsvertrag erstellt (ID: {contract_id})")
+        print(f"Wartungsvertrag erstellt (ID: {contract_id})")
         print(f"   Läuft ab am: {end_date.strftime('%Y-%m-%d')}")
         print(f"   Erinnerung wird erstellt für: {(end_date - timedelta(days=30)).strftime('%Y-%m-%d')}")
         
@@ -117,7 +117,7 @@ def example_3_check_expiring_contracts():
     try:
         # Verträge die in 30 Tagen ablaufen
         expiring_contracts = contract_manager.get_expiring_contracts(conn, days_ahead=30)
-        print(f"\n[FILE] Ablaufende Verträge (30 Tage): {len(expiring_contracts)}")
+        print(f"\nAblaufende Verträge (30 Tage): {len(expiring_contracts)}")
         for contract in expiring_contracts:
             days_left = (datetime.strptime(contract['end_date'], '%Y-%m-%d') - datetime.now()).days
             print(f"   - {contract['title']}: {days_left} Tage")
@@ -152,9 +152,9 @@ def example_4_customer_contracts_overview():
         
         # Alle Verträge des Kunden
         contracts = contract_manager.get_contracts_by_customer(conn, customer_id)
-        print(f"\n[FILE] Verträge von Kunde {customer_id}: {len(contracts)}")
+        print(f"\nVerträge von Kunde {customer_id}: {len(contracts)}")
         for contract in contracts:
-            status_icon = "[OK]" if contract['status'] == 'active' else "[ERROR]"
+            status_icon = "" if contract['status'] == 'active' else ""
             print(f"   {status_icon} {contract['title']} ({contract['contract_type']})")
             if contract.get('value'):
                 print(f"      Wert: {contract['value']:.2f} EUR")
@@ -163,7 +163,7 @@ def example_4_customer_contracts_overview():
         warranties = contract_manager.get_warranties_by_customer(conn, customer_id)
         print(f"\n🛡️ Garantien von Kunde {customer_id}: {len(warranties)}")
         for warranty in warranties:
-            status_icon = "[OK]" if warranty['status'] == 'active' else "[ERROR]"
+            status_icon = "" if warranty['status'] == 'active' else ""
             print(f"   {status_icon} {warranty['title']} ({warranty['warranty_type']})")
             print(f"      Läuft bis: {warranty['end_date']}")
         
@@ -182,7 +182,7 @@ def example_5_statistics_dashboard():
     try:
         # Vertrags-Statistiken
         contract_stats = contract_manager.get_contract_statistics(conn)
-        print("\n[CHART] Vertrags-Statistiken:")
+        print("\nVertrags-Statistiken:")
         print(f"   Gesamt: {contract_stats['total']}")
         print(f"   Aktiv: {contract_stats['by_status'].get('active', 0)}")
         print(f"   Abgelaufen: {contract_stats['expired']}")
@@ -245,10 +245,10 @@ def example_6_extend_contract():
             )
             
             if success:
-                print(f"[OK] Vertrag verlängert bis: {new_end.strftime('%Y-%m-%d')}")
+                print(f"Vertrag verlängert bis: {new_end.strftime('%Y-%m-%d')}")
                 print(f"   Neue Erinnerung wird erstellt für: {(new_end - timedelta(days=30)).strftime('%Y-%m-%d')}")
             else:
-                print("[ERROR] Fehler beim Verlängern")
+                print("Fehler beim Verlängern")
         
     finally:
         conn.close()
@@ -277,9 +277,9 @@ def example_7_archive_expired_contracts():
                 )
                 if success:
                     archived_count += 1
-                    print(f"[OK] Archiviert: {contract['title']}")
+                    print(f"Archiviert: {contract['title']}")
         
-        print(f"\n[PACKAGE] {archived_count} Verträge archiviert")
+        print(f"\n{archived_count} Verträge archiviert")
         
     finally:
         conn.close()
@@ -309,7 +309,7 @@ from crm.features import contract_manager
 conn = get_db_connection()
 reminders = contract_manager.get_pending_reminders(conn, days_ahead=7)
 if reminders:
-    st.warning(f"[WARNING] {len(reminders)} Erinnerungen fällig!")
+    st.warning(f"{len(reminders)} Erinnerungen fällig!")
     for reminder in reminders:
         st.write(f"- {reminder['message']}")
 conn.close()
@@ -332,7 +332,7 @@ def run_all_examples():
         example_7_archive_expired_contracts()
         example_8_streamlit_integration()
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         import traceback
         traceback.print_exc()
     

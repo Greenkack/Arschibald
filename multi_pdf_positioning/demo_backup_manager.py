@@ -26,7 +26,7 @@ def demo_create_backup():
     print("\n1. Creating backup of all YML files...")
     backup_id = manager.create_backup()
     
-    print(f"\n[OK] Backup created successfully!")
+    print(f"\nBackup created successfully!")
     print(f"  Backup ID: {backup_id}")
     
     return backup_id
@@ -85,9 +85,9 @@ def demo_validate_backup(backup_id: str):
             print(f"    - {warning}")
     
     if validation['valid']:
-        print("\n[OK] Backup is valid and can be restored")
+        print("\nBackup is valid and can be restored")
     else:
-        print("\n[ERROR] Backup validation failed")
+        print("\nBackup validation failed")
 
 
 def demo_restore_backup_dry_run(backup_id: str):
@@ -104,9 +104,9 @@ def demo_restore_backup_dry_run(backup_id: str):
     result = manager.restore_backup(backup_id, confirm=False)
     
     if result:
-        print("\n[OK] Dry run successful")
+        print("\nDry run successful")
     else:
-        print("\n[OK] Dry run complete (see above for what would be restored)")
+        print("\nDry run complete (see above for what would be restored)")
 
 
 def demo_convenience_functions():
@@ -152,7 +152,7 @@ def demo_backup_specific_files():
         print(f"  - {yml_file.name}")
     
     backup_id = manager.create_backup(yml_files)
-    print(f"\n[OK] Backup created: {backup_id}")
+    print(f"\nBackup created: {backup_id}")
 
 
 def main():
@@ -166,13 +166,13 @@ def main():
     
     # Check if YML directory exists and has files
     if not YML_DIR.exists():
-        print(f"\n[ERROR] YML directory not found: {YML_DIR}")
+        print(f"\nYML directory not found: {YML_DIR}")
         print("Please ensure the YML directory exists with YML files.")
         return
     
     yml_files = list(YML_DIR.glob("*.yml"))
     if not yml_files:
-        print(f"\n[ERROR] No YML files found in: {YML_DIR}")
+        print(f"\nNo YML files found in: {YML_DIR}")
         print("Please ensure there are YML files to backup.")
         return
     
@@ -203,7 +203,7 @@ def main():
         print("=" * 60)
         
     except Exception as e:
-        print(f"\n[ERROR] Error during demo: {e}")
+        print(f"\nError during demo: {e}")
         import traceback
         traceback.print_exc()
 

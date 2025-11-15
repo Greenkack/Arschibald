@@ -29,7 +29,7 @@ def verify_imports():
             save_form,
         )
 
-        print("[OK] All core session imports successful")
+        print("All core session imports successful")
 
         from core.session_persistence import (
             DebouncedWriter,
@@ -40,15 +40,15 @@ def verify_imports():
             recover_session,
         )
 
-        print("[OK] All persistence imports successful")
+        print("All persistence imports successful")
 
         from core.session_manager import SessionManager
 
-        print("[OK] SessionManager import successful")
+        print("SessionManager import successful")
 
         return True
     except ImportError as e:
-        print(f"[ERROR] Import failed: {e}")
+        print(f"Import failed: {e}")
         return False
 
 
@@ -63,45 +63,45 @@ def verify_user_session():
     try:
         # Create session
         session = UserSession(user_id="test_user")
-        print(f"[OK] Created session: {session.session_id}")
+        print(f"Created session: {session.session_id}")
 
         # Navigation
         session.navigate_to("profile", {"id": "123"})
         assert session.current_page == "profile"
-        print("[OK] Navigation works")
+        print("Navigation works")
 
         # Form management
         session.update_form_data("form1", "field1", "value1")
         form_state = session.get_form_state("form1")
         assert form_state.data["field1"] == "value1"
-        print("[OK] Form management works")
+        print("Form management works")
 
         # Snapshots
         snapshot = session.create_form_snapshot("form1", "Test")
         assert len(session.form_snapshots["form1"]) == 1
-        print("[OK] Form snapshots work")
+        print("Form snapshots work")
 
         # Permissions
         session.add_role("admin")
         session.add_permission("write")
         assert session.has_role("admin")
         assert session.has_permission("write")
-        print("[OK] Permissions work")
+        print("Permissions work")
 
         # Cache tracking
         session.add_cache_key("cache1")
         assert "cache1" in session.cache_keys
-        print("[OK] Cache tracking works")
+        print("Cache tracking works")
 
         # Serialization
         json_str = session.to_json()
         restored = UserSession.from_json(json_str)
         assert restored.session_id == session.session_id
-        print("[OK] Serialization works")
+        print("Serialization works")
 
         return True
     except Exception as e:
-        print(f"[ERROR] UserSession verification failed: {e}")
+        print(f"UserSession verification failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -131,18 +131,18 @@ def verify_debounced_writer():
 
         assert len(results) == 1
         assert results[0] == "value2"
-        print("[OK] Debouncing works")
+        print("Debouncing works")
 
         # Test flush
         results.clear()
         writer.schedule_write("key2", write_fn, "value3")
         writer.flush("key2")
         assert len(results) == 1
-        print("[OK] Flush works")
+        print("Flush works")
 
         return True
     except Exception as e:
-        print(f"[ERROR] DebouncedWriter verification failed: {e}")
+        print(f"DebouncedWriter verification failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -160,27 +160,27 @@ def verify_session_manager():
     try:
         # Bootstrap session
         session = bootstrap_session(user_id="verify_user")
-        print(f"[OK] Bootstrapped session: {session.session_id}")
+        print(f"Bootstrapped session: {session.session_id}")
 
         # Get manager
         manager = get_session_manager()
-        print("[OK] Got session manager")
+        print("Got session manager")
 
         # Test navigation (without Streamlit)
         manager.get_current_session = lambda: session
         manager.navigate_to("test_page", {"param": "value"})
         assert session.current_page == "test_page"
-        print("[OK] Navigation via manager works")
+        print("Navigation via manager works")
 
         # Test form save
         manager.save_form("test_form", {"field": "value"})
         form_state = session.get_form_state("test_form")
         assert form_state.data["field"] == "value"
-        print("[OK] Form save via manager works")
+        print("Form save via manager works")
 
         return True
     except Exception as e:
-        print(f"[ERROR] SessionManager verification failed: {e}")
+        print(f"SessionManager verification failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -203,18 +203,18 @@ def verify_api_functions():
 
         # Test bootstrap_session
         session = bootstrap_session(user_id="api_test")
-        print(f"[OK] bootstrap_session() works: {session.session_id}")
+        print(f"bootstrap_session() works: {session.session_id}")
 
         # Test get_current_session (returns None without Streamlit)
         current = get_current_session()
-        print(f"[OK] get_current_session() works: {current}")
+        print(f"get_current_session() works: {current}")
 
         # Note: persist_input and save_form require Streamlit
-        print("[OK] persist_input() and save_form() available")
+        print("persist_input() and save_form() available")
 
         return True
     except Exception as e:
-        print(f"[ERROR] API functions verification failed: {e}")
+        print(f"API functions verification failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -238,9 +238,9 @@ def verify_documentation():
     all_exist = True
     for doc in docs:
         if os.path.exists(doc):
-            print(f"[OK] {doc} exists")
+            print(f"{doc} exists")
         else:
-            print(f"[ERROR] {doc} missing")
+            print(f"{doc} missing")
             all_exist = False
 
     return all_exist
@@ -263,9 +263,9 @@ def verify_tests():
     all_exist = True
     for test in tests:
         if os.path.exists(test):
-            print(f"[OK] {test} exists")
+            print(f"{test} exists")
         else:
-            print(f"[ERROR] {test} missing")
+            print(f"{test} missing")
             all_exist = False
 
     return all_exist
@@ -293,7 +293,7 @@ def run_verification():
             result = check_fn()
             results.append((name, result))
         except Exception as e:
-            print(f"\n[ERROR] {name} check failed with exception: {e}")
+            print(f"\n{name} check failed with exception: {e}")
             results.append((name, False))
 
     # Summary
@@ -305,7 +305,7 @@ def run_verification():
     total = len(results)
 
     for name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{status}: {name}")
 
     print("\n" + "=" * 60)
@@ -316,7 +316,7 @@ def run_verification():
         print("\n🎉 All verifications passed! Task 2 is complete.")
         return 0
     else:
-        print(f"\n[WARNING]  {total - passed} verification(s) failed.")
+        print(f"\n{total - passed} verification(s) failed.")
         return 1
 
 

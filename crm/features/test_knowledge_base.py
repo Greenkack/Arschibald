@@ -545,7 +545,7 @@ def test_full_workflow(kb_manager):
     assert len(top) >= 1
     assert top[0]['id'] == article_id
     
-    print("[OK] Vollständiger Workflow erfolgreich getestet!")
+    print("Vollständiger Workflow erfolgreich getestet!")
 
 
 # ============================================================================

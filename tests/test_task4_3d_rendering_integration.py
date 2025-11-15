@@ -76,14 +76,14 @@ def test_module_rendering_from_session_state():
             f"Expected at least 10 traces, got {len(fig.data)}"
         )
         
-        print("[OK] Figure created successfully")
-        print(f"[OK] Figure has {len(fig.data)} traces")
-        print("[OK] Modules rendered from session state")
+        print("Figure created successfully")
+        print(f"Figure has {len(fig.data)} traces")
+        print("Modules rendered from session state")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Test failed: {e}")
+        print(f"Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -135,14 +135,14 @@ def test_empty_session_state_fallback():
             f"Expected at least 4 traces (building + roof), got {len(fig.data)}"
         )
         
-        print("[OK] Figure created successfully with fallback")
-        print(f"[OK] Figure has {len(fig.data)} traces")
-        print("[OK] Fallback grid placement works")
+        print("Figure created successfully with fallback")
+        print(f"Figure has {len(fig.data)} traces")
+        print("Fallback grid placement works")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Test failed: {e}")
+        print(f"Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -195,14 +195,14 @@ def test_invalid_position_handling():
         assert fig is not None, "Figure should not be None"
         
         # Should have building + roof + 2 valid modules + edges
-        print("[OK] Figure created successfully despite invalid positions")
-        print(f"[OK] Figure has {len(fig.data)} traces")
-        print("[OK] Invalid positions were skipped gracefully")
+        print("Figure created successfully despite invalid positions")
+        print(f"Figure has {len(fig.data)} traces")
+        print("Invalid positions were skipped gracefully")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Test failed: {e}")
+        print(f"Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -240,14 +240,14 @@ def test_create_pv_module_3d():
         # Verify vertices are numpy array
         assert isinstance(vertices, np.ndarray), "Vertices should be numpy array"
         
-        print("[OK] Module mesh created successfully")
-        print(f"[OK] Mesh has {len(vertices)} vertices")
-        print("[OK] create_pv_module_3d works correctly")
+        print("Module mesh created successfully")
+        print(f"Mesh has {len(vertices)} vertices")
+        print("create_pv_module_3d works correctly")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Test failed: {e}")
+        print(f"Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -299,13 +299,13 @@ def test_different_roof_types():
             )
             
             assert fig is not None, f"Figure should not be None for {roof_type}"
-            print(f"  [OK] {roof_type} rendered successfully")
+            print(f"  {roof_type} rendered successfully")
             
         except Exception as e:
-            print(f"  [ERROR] {roof_type} failed: {e}")
+            print(f"  {roof_type} failed: {e}")
             return False
     
-    print("\n[OK] All roof types rendered successfully")
+    print("\nAll roof types rendered successfully")
     return True
 
 
@@ -329,7 +329,7 @@ def run_all_tests():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"\n[ERROR] Test '{test_name}' crashed: {e}")
+            print(f"\nTest '{test_name}' crashed: {e}")
             results.append((test_name, False))
     
     # Summary
@@ -341,7 +341,7 @@ def run_all_tests():
     total = len(results)
     
     for test_name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{status}: {test_name}")
     
     print(f"\nTotal: {passed}/{total} tests passed")
@@ -350,7 +350,7 @@ def run_all_tests():
         print("\n🎉 All tests passed!")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} test(s) failed")
+        print(f"\n{total - passed} test(s) failed")
         return False
 
 

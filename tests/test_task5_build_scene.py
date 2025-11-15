@@ -59,14 +59,14 @@ def test_build_scene_basic():
     assert len(panels["main"]) > 0, "Es sollten Module auf dem Hauptdach sein"
     assert len(panels["main"]) <= 20, "Nicht mehr als 20 Module"
     
-    print(f"[OK] Plotter erstellt: {plotter}")
-    print(f"[OK] Module auf Hauptdach: {len(panels['main'])}")
-    print(f"[OK] Module auf Garage: {len(panels['garage'])}")
-    print(f"[OK] Module an Fassade: {len(panels['facade'])}")
+    print(f"Plotter erstellt: {plotter}")
+    print(f"Module auf Hauptdach: {len(panels['main'])}")
+    print(f"Module auf Garage: {len(panels['garage'])}")
+    print(f"Module an Fassade: {len(panels['facade'])}")
     
     # Cleanup
     plotter.close()
-    print("[OK] Test erfolgreich!")
+    print("Test erfolgreich!")
 
 
 def test_build_scene_with_garage():
@@ -97,17 +97,17 @@ def test_build_scene_with_garage():
     
     # Verifiziere Garage wurde hinzugefügt
     total_placed = len(panels["main"]) + len(panels["garage"])
-    print(f"[OK] Module auf Hauptdach: {len(panels['main'])}")
-    print(f"[OK] Module auf Garage: {len(panels['garage'])}")
-    print(f"[OK] Gesamt platziert: {total_placed}")
+    print(f"Module auf Hauptdach: {len(panels['main'])}")
+    print(f"Module auf Garage: {len(panels['garage'])}")
+    print(f"Gesamt platziert: {total_placed}")
     
     # Garage sollte Module haben wenn Hauptdach voll ist
     if len(panels["main"]) < 50:
         assert len(panels["garage"]) > 0, "Garage sollte Module haben"
-        print("[OK] Garage wurde korrekt hinzugefügt!")
+        print("Garage wurde korrekt hinzugefügt!")
     
     plotter.close()
-    print("[OK] Test erfolgreich!")
+    print("Test erfolgreich!")
 
 
 def test_build_scene_with_facade():
@@ -141,18 +141,18 @@ def test_build_scene_with_facade():
                    len(panels["garage"]) + 
                    len(panels["facade"]))
     
-    print(f"[OK] Module auf Hauptdach: {len(panels['main'])}")
-    print(f"[OK] Module auf Garage: {len(panels['garage'])}")
-    print(f"[OK] Module an Fassade: {len(panels['facade'])}")
-    print(f"[OK] Gesamt platziert: {total_placed}")
+    print(f"Module auf Hauptdach: {len(panels['main'])}")
+    print(f"Module auf Garage: {len(panels['garage'])}")
+    print(f"Module an Fassade: {len(panels['facade'])}")
+    print(f"Gesamt platziert: {total_placed}")
     
     # Fassade sollte Module haben wenn Dach und Garage voll sind
     if total_placed > len(panels["main"]) + len(panels["garage"]):
         assert len(panels["facade"]) > 0, "Fassade sollte Module haben"
-        print("[OK] Fassade wurde korrekt genutzt!")
+        print("Fassade wurde korrekt genutzt!")
     
     plotter.close()
-    print("[OK] Test erfolgreich!")
+    print("Test erfolgreich!")
 
 
 def test_build_scene_manual_mode():
@@ -185,11 +185,11 @@ def test_build_scene_manual_mode():
     assert len(panels["main"]) < 20, "Weniger Module durch removed_indices"
     assert len(panels["main"]) >= 17, "Mindestens 17 Module (20 - 3)"
     
-    print(f"[OK] Module platziert: {len(panels['main'])} (erwartet: 17)")
-    print("[OK] Manuelle Modul-Entfernung funktioniert!")
+    print(f"Module platziert: {len(panels['main'])} (erwartet: 17)")
+    print("Manuelle Modul-Entfernung funktioniert!")
     
     plotter.close()
-    print("[OK] Test erfolgreich!")
+    print("Test erfolgreich!")
 
 
 def test_build_scene_different_roof_types():
@@ -231,11 +231,11 @@ def test_build_scene_different_roof_types():
         assert plotter is not None, f"{roof_type}: Plotter sollte nicht None sein"
         assert len(panels["main"]) > 0, f"{roof_type}: Module sollten platziert sein"
         
-        print(f"  [OK] {roof_type}: {len(panels['main'])} Module platziert")
+        print(f"  {roof_type}: {len(panels['main'])} Module platziert")
         
         plotter.close()
     
-    print("\n[OK] Alle Dachformen erfolgreich getestet!")
+    print("\nAlle Dachformen erfolgreich getestet!")
 
 
 def test_build_scene_different_orientations():
@@ -269,11 +269,11 @@ def test_build_scene_different_orientations():
         )
         
         assert plotter is not None, f"{orientation}: Plotter sollte nicht None sein"
-        print(f"  [OK] {orientation}: Szene erstellt")
+        print(f"  {orientation}: Szene erstellt")
         
         plotter.close()
     
-    print("\n[OK] Alle Ausrichtungen erfolgreich getestet!")
+    print("\nAlle Ausrichtungen erfolgreich getestet!")
 
 
 if __name__ == "__main__":
@@ -291,19 +291,19 @@ if __name__ == "__main__":
         test_build_scene_different_orientations()
         
         print("\n" + "=" * 70)
-        print("[OK] ALLE TESTS ERFOLGREICH!")
+        print("ALLE TESTS ERFOLGREICH!")
         print("=" * 70)
         print("\nTask 5 ist vollständig implementiert:")
-        print("  [OK] 5.1: Szenen-Initialisierung")
-        print("  [OK] 5.2: Dach-Generierung und Rotation")
-        print("  [OK] 5.3: Kompass-Platzierung")
-        print("  [OK] 5.4: PV-Modul-Platzierung auf Hauptdach")
-        print("  [OK] 5.5: Garage-Hinzufügung")
-        print("  [OK] 5.6: Fassaden-Belegung")
-        print("  [OK] 5.7: Return-Struktur")
+        print("  5.1: Szenen-Initialisierung")
+        print("  5.2: Dach-Generierung und Rotation")
+        print("  5.3: Kompass-Platzierung")
+        print("  5.4: PV-Modul-Platzierung auf Hauptdach")
+        print("  5.5: Garage-Hinzufügung")
+        print("  5.6: Fassaden-Belegung")
+        print("  5.7: Return-Struktur")
         
     except Exception as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

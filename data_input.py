@@ -634,10 +634,10 @@ def render_data_input(texts: dict[str, str]) -> None:
                 parsed_data = parse_full_address_string(
                     full_address_input_val, texts)
                 
-                # [SEARCH] DEBUG: Zeige geparste Daten
+                # 🔍 DEBUG: Zeige geparste Daten
                 st.info(f"📍 Geparst: Straße={parsed_data.get('street')} | Nr={parsed_data.get('house_number')} | PLZ={parsed_data.get('zip_code')} | Stadt={parsed_data.get('city')}")
                 
-                # [OK] FIX: Direkt in session_state UND inputs schreiben
+                # ✅ FIX: Direkt in session_state UND inputs schreiben
                 # Update session_state DIREKT (damit Widgets die Werte sofort sehen)
                 if 'project_data' not in st.session_state:
                     st.session_state.project_data = {}
@@ -655,7 +655,7 @@ def render_data_input(texts: dict[str, str]) -> None:
                 inputs['customer_data']['zip_code'] = parsed_data.get("zip_code", "")
                 inputs['customer_data']['city'] = parsed_data.get("city", "")
                 
-                # [OK] KRITISCH: Widget-Keys DIREKT setzen damit Streamlit die Werte beim Rerun verwendet
+                # ✅ KRITISCH: Widget-Keys DIREKT setzen damit Streamlit die Werte beim Rerun verwendet
                 st.session_state['address_di_manual_v6_exp_stable'] = parsed_data.get("street", "")
                 st.session_state['house_number_di_manual_v6_exp_stable'] = parsed_data.get("house_number", "")
                 st.session_state['zip_code_di_manual_v6_exp_stable'] = parsed_data.get("zip_code", "")
@@ -674,7 +674,7 @@ def render_data_input(texts: dict[str, str]) -> None:
                             "parse_address_partial_success",
                             "Adresse teilweise geparst. Bitte fehlende Felder ergänzen."))
                 st.session_state.satellite_image_url_di = None
-                # [OK] FIX: Rerun erzwingen um geparste Werte in Feldern anzuzeigen
+                # ✅ FIX: Rerun erzwingen um geparste Werte in Feldern anzuzeigen
                 st.rerun()
             else:
                 st.warning(

@@ -62,8 +62,8 @@ try:
             test_smtp_connection
         )
 except ImportError as e:
-    print(f"[WARNING]  Konnte email_manager nicht importieren: {e}")
-    print("[WARNING]  Stelle sicher, dass der Pfad korrekt ist")
+    print(f"Konnte email_manager nicht importieren: {e}")
+    print("Stelle sicher, dass der Pfad korrekt ist")
     sys.exit(1)
 
 
@@ -154,11 +154,11 @@ def test_create_email_template():
         assert template['category'] == "Test", "Kategorie stimmt nicht"
         assert "customer_name" in template['placeholders'], "Platzhalter fehlt"
         
-        print("   [OK] E-Mail-Vorlage erfolgreich erstellt")
-        print(f"   [OK] Template-ID: {template_id}")
+        print("   E-Mail-Vorlage erfolgreich erstellt")
+        print(f"   Template-ID: {template_id}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -190,10 +190,10 @@ def test_create_duplicate_template():
         
         assert template_id2 is None, "Duplikat sollte None zurückgeben"
         
-        print("   [OK] Duplikat-Vorlage korrekt abgelehnt")
+        print("   Duplikat-Vorlage korrekt abgelehnt")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -221,10 +221,10 @@ def test_get_template_by_name():
         assert template['name'] == "Name-Test", "Name stimmt nicht"
         assert template['subject'] == "Test", "Betreff stimmt nicht"
         
-        print("   [OK] Vorlage erfolgreich nach Name abgerufen")
+        print("   Vorlage erfolgreich nach Name abgerufen")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -250,11 +250,11 @@ def test_list_email_templates():
         cat_a_templates = list_email_templates(conn, category="Kategorie A")
         assert len(cat_a_templates) == 2, f"Sollte 2 Vorlagen in Kategorie A finden"
         
-        print("   [OK] Vorlagen erfolgreich aufgelistet")
-        print(f"   [OK] Gesamt: {len(all_templates)}, Kategorie A: {len(cat_a_templates)}")
+        print("   Vorlagen erfolgreich aufgelistet")
+        print(f"   Gesamt: {len(all_templates)}, Kategorie A: {len(cat_a_templates)}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -290,10 +290,10 @@ def test_update_email_template():
         assert template['subject'] == "Neuer Betreff", "Betreff nicht aktualisiert"
         assert template['body'] == "Neuer Body", "Body nicht aktualisiert"
         
-        print("   [OK] Vorlage erfolgreich aktualisiert")
+        print("   Vorlage erfolgreich aktualisiert")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -327,10 +327,10 @@ def test_delete_email_template():
         assert len(all_templates) == 1, "Vorlage sollte noch in DB sein"
         assert not all_templates[0]['is_active'], "Vorlage sollte inaktiv sein"
         
-        print("   [OK] Vorlage erfolgreich gelöscht (soft delete)")
+        print("   Vorlage erfolgreich gelöscht (soft delete)")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -358,11 +358,11 @@ def test_replace_placeholders_basic():
         assert "max@example.com" in result, "email nicht ersetzt"
         assert "{{" not in result, "Platzhalter nicht vollständig ersetzt"
         
-        print("   [OK] Grundlegende Platzhalter erfolgreich ersetzt")
-        print(f"   [OK] Ergebnis: {result}")
+        print("   Grundlegende Platzhalter erfolgreich ersetzt")
+        print(f"   Ergebnis: {result}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -413,10 +413,10 @@ def test_replace_placeholders_all_types():
         assert "25000" in result, "project_value nicht ersetzt"
         assert "{{" not in result, "Noch Platzhalter übrig"
         
-        print("   [OK] Alle Platzhalter-Typen erfolgreich ersetzt")
+        print("   Alle Platzhalter-Typen erfolgreich ersetzt")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -438,11 +438,11 @@ def test_replace_placeholders_missing_data():
         assert "Hallo Max" in result, "Sollte mit vorhandenem Namen ersetzen"
         assert "max@example.com" in result, "E-Mail sollte ersetzt werden"
         
-        print("   [OK] Fehlende Daten korrekt behandelt (leere Strings)")
-        print(f"   [OK] Ergebnis: {result}")
+        print("   Fehlende Daten korrekt behandelt (leere Strings)")
+        print(f"   Ergebnis: {result}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -459,11 +459,11 @@ def test_extract_placeholders():
         assert "email" in placeholders, "email fehlt"
         assert "phone" in placeholders, "phone fehlt"
         
-        print("   [OK] Platzhalter erfolgreich extrahiert")
-        print(f"   [OK] Gefunden: {placeholders}")
+        print("   Platzhalter erfolgreich extrahiert")
+        print(f"   Gefunden: {placeholders}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -511,11 +511,11 @@ def test_send_email_mock():
             mock_server.send_message.assert_called_once()
             mock_server.quit.assert_called_once()
             
-            print("   [OK] E-Mail erfolgreich versendet (Mock)")
-            print(f"   [OK] Nachricht: {message}")
+            print("   E-Mail erfolgreich versendet (Mock)")
+            print(f"   Nachricht: {message}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -553,10 +553,10 @@ def test_send_email_with_attachments_mock():
             assert success, "E-Mail mit Anhängen sollte erfolgreich sein"
             mock_server.send_message.assert_called_once()
             
-            print("   [OK] E-Mail mit Anhängen erfolgreich versendet (Mock)")
+            print("   E-Mail mit Anhängen erfolgreich versendet (Mock)")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -592,11 +592,11 @@ def test_send_email_authentication_error_mock():
             assert not success, "E-Mail-Versand sollte fehlschlagen"
             assert "authentifizierung" in message.lower(), "Fehlermeldung sollte Authentifizierung erwähnen"
             
-            print("   [OK] Authentifizierungsfehler korrekt behandelt")
-            print(f"   [OK] Fehlermeldung: {message}")
+            print("   Authentifizierungsfehler korrekt behandelt")
+            print(f"   Fehlermeldung: {message}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -624,11 +624,11 @@ def test_send_email_incomplete_config():
         assert not success, "E-Mail-Versand sollte fehlschlagen"
         assert "unvollständig" in message.lower(), "Fehlermeldung sollte 'unvollständig' enthalten"
         
-        print("   [OK] Unvollständige Konfiguration korrekt erkannt")
-        print(f"   [OK] Fehlermeldung: {message}")
+        print("   Unvollständige Konfiguration korrekt erkannt")
+        print(f"   Fehlermeldung: {message}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -658,10 +658,10 @@ def test_test_smtp_connection_mock():
             mock_server.login.assert_called_once()
             mock_server.quit.assert_called_once()
             
-            print("   [OK] SMTP-Verbindungstest erfolgreich (Mock)")
+            print("   SMTP-Verbindungstest erfolgreich (Mock)")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
 
 
@@ -723,11 +723,11 @@ def test_send_email_with_template_mock():
             assert "max@example.com" in history[0]['body'], "Platzhalter im Body nicht ersetzt"
             assert history[0]['status'] == 'sent', "Status sollte 'sent' sein"
             
-            print("   [OK] E-Mail mit Vorlage erfolgreich versendet (Mock)")
-            print(f"   [OK] Betreff: {history[0]['subject']}")
+            print("   E-Mail mit Vorlage erfolgreich versendet (Mock)")
+            print(f"   Betreff: {history[0]['subject']}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -786,11 +786,11 @@ def test_send_email_with_template_failed_mock():
             assert history[0]['status'] == 'failed', "Status sollte 'failed' sein"
             assert history[0]['error_message'] is not None, "Fehlermeldung sollte gespeichert sein"
             
-            print("   [OK] Fehlgeschlagener Versand korrekt in Historie gespeichert")
-            print(f"   [OK] Fehlermeldung: {history[0]['error_message']}")
+            print("   Fehlgeschlagener Versand korrekt in Historie gespeichert")
+            print(f"   Fehlermeldung: {history[0]['error_message']}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -828,10 +828,10 @@ def test_save_email_to_history():
         assert history[0]['subject'] == 'Test-Betreff', "Betreff stimmt nicht"
         assert history[0]['status'] == 'sent', "Status stimmt nicht"
         
-        print("   [OK] E-Mail erfolgreich in Historie gespeichert")
+        print("   E-Mail erfolgreich in Historie gespeichert")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -867,11 +867,11 @@ def test_get_email_history_multiple():
         subjects = [h['subject'] for h in history]
         assert 'E-Mail 1' in subjects and 'E-Mail 2' in subjects and 'E-Mail 3' in subjects, "Alle E-Mails sollten vorhanden sein"
         
-        print("   [OK] Mehrere E-Mails korrekt in Historie")
-        print(f"   [OK] Anzahl: {len(history)}")
+        print("   Mehrere E-Mails korrekt in Historie")
+        print(f"   Anzahl: {len(history)}")
         
     except AssertionError as e:
-        print(f"   [ERROR] Test fehlgeschlagen: {e}")
+        print(f"   Test fehlgeschlagen: {e}")
         raise
     finally:
         cleanup_test_db(conn)
@@ -927,26 +927,26 @@ def run_all_tests():
             passed += 1
         except Exception as e:
             failed += 1
-            print(f"\n[ERROR] Test '{test_name}' fehlgeschlagen: {e}")
+            print(f"\nTest '{test_name}' fehlgeschlagen: {e}")
     
     # Zusammenfassung
     print("\n" + "=" * 70)
     print("Test-Zusammenfassung")
     print("=" * 70)
-    print(f"[OK] Bestanden: {passed}/{len(tests)}")
-    print(f"[ERROR] Fehlgeschlagen: {failed}/{len(tests)}")
+    print(f"Bestanden: {passed}/{len(tests)}")
+    print(f"Fehlgeschlagen: {failed}/{len(tests)}")
     
     if failed == 0:
         print("\n🎉 Alle Tests erfolgreich!")
         print("\nGetestete Funktionalität:")
-        print("  [OK] E-Mail-Vorlagen-System (CRUD) (Requirement 4.2)")
-        print("  [OK] Platzhalter-Ersetzung (alle Typen) (Requirement 4.2)")
-        print("  [OK] E-Mail-Versand mit Mock (Requirement 4.1)")
-        print("  [OK] E-Mail-Versand mit Vorlagen (Requirement 4.3)")
-        print("  [OK] E-Mail-Historie und Tracking")
-        print("  [OK] Fehlerbehandlung und Validierung")
+        print("  E-Mail-Vorlagen-System (CRUD) (Requirement 4.2)")
+        print("  Platzhalter-Ersetzung (alle Typen) (Requirement 4.2)")
+        print("  E-Mail-Versand mit Mock (Requirement 4.1)")
+        print("  E-Mail-Versand mit Vorlagen (Requirement 4.3)")
+        print("  E-Mail-Historie und Tracking")
+        print("  Fehlerbehandlung und Validierung")
     else:
-        print(f"\n[WARNING]  {failed} Test(s) fehlgeschlagen - bitte überprüfen!")
+        print(f"\n{failed} Test(s) fehlgeschlagen - bitte überprüfen!")
     
     print("=" * 70)
     

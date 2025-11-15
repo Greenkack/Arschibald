@@ -17,18 +17,18 @@ from typing import List, Tuple
 def check_file_exists(filepath: str) -> Tuple[bool, str]:
     """Prüft, ob eine Datei existiert."""
     if os.path.exists(filepath):
-        return True, f"[OK] {filepath}"
+        return True, f"{filepath}"
     else:
-        return False, f"[ERROR] {filepath} - FEHLT"
+        return False, f"{filepath} - FEHLT"
 
 
 def check_import(module_name: str) -> Tuple[bool, str]:
     """Prüft, ob ein Modul importiert werden kann."""
     try:
         __import__(module_name)
-        return True, f"[OK] {module_name}"
+        return True, f"{module_name}"
     except ImportError as e:
-        return False, f"[ERROR] {module_name} - FEHLER: {str(e)}"
+        return False, f"{module_name} - FEHLER: {str(e)}"
 
 
 def check_function_exists(module_name: str, function_name: str) -> Tuple[bool, str]:
@@ -36,11 +36,11 @@ def check_function_exists(module_name: str, function_name: str) -> Tuple[bool, s
     try:
         module = __import__(module_name, fromlist=[function_name])
         if hasattr(module, function_name):
-            return True, f"[OK] {module_name}.{function_name}"
+            return True, f"{module_name}.{function_name}"
         else:
-            return False, f"[ERROR] {module_name}.{function_name} - FEHLT"
+            return False, f"{module_name}.{function_name} - FEHLT"
     except Exception as e:
-        return False, f"[ERROR] {module_name}.{function_name} - FEHLER: {str(e)}"
+        return False, f"{module_name}.{function_name} - FEHLER: {str(e)}"
 
 
 def run_verification():
@@ -147,18 +147,18 @@ def run_verification():
     
     try:
         import pytest
-        print("[OK] pytest installiert")
+        print("pytest installiert")
         
         # Versuche Tests zu laden
         test_file = "crm/utils/test_import_export_manager.py"
         if os.path.exists(test_file):
-            print(f"[OK] Test-Datei gefunden: {test_file}")
+            print(f"Test-Datei gefunden: {test_file}")
             print("   Führen Sie Tests aus mit: pytest crm/utils/test_import_export_manager.py -v")
         else:
-            print(f"[ERROR] Test-Datei nicht gefunden: {test_file}")
+            print(f"Test-Datei nicht gefunden: {test_file}")
             all_checks_passed = False
     except ImportError:
-        print("[ERROR] pytest nicht installiert")
+        print("pytest nicht installiert")
         print("   Installieren Sie mit: pip install pytest")
         all_checks_passed = False
     
@@ -172,23 +172,23 @@ def run_verification():
         from database import get_db_connection
         conn = get_db_connection()
         if conn:
-            print("[OK] Datenbankverbindung erfolgreich")
+            print("Datenbankverbindung erfolgreich")
             
             # Prüfe customers-Tabelle
             cursor = conn.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='customers'")
             if cursor.fetchone():
-                print("[OK] customers-Tabelle existiert")
+                print("customers-Tabelle existiert")
             else:
-                print("[ERROR] customers-Tabelle existiert nicht")
+                print("customers-Tabelle existiert nicht")
                 all_checks_passed = False
             
             conn.close()
         else:
-            print("[ERROR] Datenbankverbindung fehlgeschlagen")
+            print("Datenbankverbindung fehlgeschlagen")
             all_checks_passed = False
     except Exception as e:
-        print(f"[ERROR] Fehler bei Datenbankverbindung: {str(e)}")
+        print(f"Fehler bei Datenbankverbindung: {str(e)}")
         all_checks_passed = False
     
     print()
@@ -196,7 +196,7 @@ def run_verification():
     # Zusammenfassung
     print("=" * 70)
     if all_checks_passed:
-        print("[OK] ALLE PRÜFUNGEN BESTANDEN")
+        print("ALLE PRÜFUNGEN BESTANDEN")
         print()
         print("Das Import/Export-System ist vollständig installiert und einsatzbereit!")
         print()
@@ -206,7 +206,7 @@ def run_verification():
         print("3. Dokumentation lesen (siehe IMPORT_EXPORT_QUICK_REFERENCE.md)")
         return 0
     else:
-        print("[ERROR] EINIGE PRÜFUNGEN FEHLGESCHLAGEN")
+        print("EINIGE PRÜFUNGEN FEHLGESCHLAGEN")
         print()
         print("Bitte beheben Sie die oben genannten Fehler.")
         return 1

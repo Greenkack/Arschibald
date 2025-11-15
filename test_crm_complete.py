@@ -15,7 +15,7 @@ from crm import create_tables_crm, save_customer, load_customer, load_all_custom
 
 create_tables_crm(conn)
 
-print('[TEST] Vollständige CRM-Integration')
+print('Vollständige CRM-Integration')
 print()
 
 # Test Tag-System
@@ -35,48 +35,48 @@ assign_tag_to_customer(conn, customer1_id, tag1)
 assign_tag_to_customer(conn, customer1_id, tag2)
 
 tags = get_customer_tags(conn, customer1_id)
-print(f'[OK] Kunde mit {len(tags)} Tags erstellt')
+print(f'Kunde mit {len(tags)} Tags erstellt')
 
 # Test Lead Scoring
 try:
     from crm.features.lead_scoring import calculate_lead_score, get_lead_score
     score = calculate_lead_score(conn, customer1_id)
-    print(f'[OK] Lead Score berechnet: {score}')
+    print(f'Lead Score berechnet: {score}')
     loaded_score = get_lead_score(conn, customer1_id)
     if loaded_score:
         score_val = loaded_score.get('score', 0)
-        print(f'[OK] Lead Score geladen: {score_val}')
+        print(f'Lead Score geladen: {score_val}')
 except Exception as e:
-    print(f'[INFO] Lead Scoring: {e}')
+    print(f'Lead Scoring: {e}')
 
 # Test Integration Bridges
 try:
     from crm.integration.calculation_bridge import link_calculation_to_customer
-    print('[OK] Calculation Bridge verfügbar')
+    print('Calculation Bridge verfügbar')
 except ImportError:
-    print('[INFO] Calculation Bridge nicht verfügbar')
+    print('Calculation Bridge nicht verfügbar')
 
 try:
     from crm.integration.data_input_bridge import get_customer_for_data_input
-    print('[OK] Data Input Bridge verfügbar')
+    print('Data Input Bridge verfügbar')
 except ImportError:
-    print('[INFO] Data Input Bridge nicht verfügbar')
+    print('Data Input Bridge nicht verfügbar')
 
 try:
     from crm.integration.pdf_bridge import get_customer_for_pdf
-    print('[OK] PDF Bridge verfügbar')
+    print('PDF Bridge verfügbar')
 except ImportError:
-    print('[INFO] PDF Bridge nicht verfügbar')
+    print('PDF Bridge nicht verfügbar')
 
 # Test Tag-basierte Suche
 customers_with_vip = get_customers_by_tags(conn, [tag1])
-print(f'[OK] {len(customers_with_vip)} Kunden mit VIP-Tag gefunden')
+print(f'{len(customers_with_vip)} Kunden mit VIP-Tag gefunden')
 
 all_customers = load_all_customers(conn)
-print(f'[OK] {len(all_customers)} Kunden im System')
+print(f'{len(all_customers)} Kunden im System')
 
 print()
-print('[ZUSAMMENFASSUNG] CRM-System vollständig getestet')
+print('CRM-System vollständig getestet')
 print('  ✅ Kernfunktionen: Funktional')
 print('  ✅ Tag-System: Funktional')  
 print('  ⚠️  Lead Scoring: optional')

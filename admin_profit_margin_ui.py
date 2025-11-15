@@ -152,12 +152,12 @@ except ImportError as e:
 def render_profit_margin_management_ui():
     """Main function to render the profit margin management interface"""
 
-    st.header("[TARGET] Gewinnspannen-Verwaltung")
+    st.header("Gewinnspannen-Verwaltung")
     st.markdown(
         "Verwalten Sie Gewinnspannen auf Produkt-, Kategorie- und globaler Ebene.")
 
     if not PRICING_AVAILABLE:
-        st.warning("[WARNING] Pricing-Module nicht verfügbar. UI läuft im Test-Modus.")
+        st.warning("Pricing-Module nicht verfügbar. UI läuft im Test-Modus.")
 
     # Initialize margin manager
     try:
@@ -170,7 +170,7 @@ def render_profit_margin_management_ui():
     tab1, tab2, tab3, tab4 = st.tabs([
         "🌍 Globale Spannen",
         "📂 Kategorie-Spannen",
-        "[PACKAGE] Produkt-Spannen",
+        "Produkt-Spannen",
         "🧮 Kalkulations-Vorschau"
     ])
 
@@ -207,7 +207,7 @@ def render_global_margins_tab(margin_manager: ProfitMarginManager):
         st.markdown("**Aktuelle globale Spannen:**")
 
         for key, margin_data in global_margins.items():
-            with st.expander(f"[CHART] {key.title()} Spanne", expanded=False):
+            with st.expander(f"{key.title()} Spanne", expanded=False):
                 col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
 
                 col1.metric("Typ", margin_data.get('margin_type', 'N/A'))
@@ -219,14 +219,14 @@ def render_global_margins_tab(margin_manager: ProfitMarginManager):
                 col3.metric("Priorität", margin_data.get('priority', 0))
 
                 if col4.button(
-                    "[DELETE]",
+                    "",
                     key=f"delete_global_{key}",
                         help="Globale Spanne löschen"):
                     # Note: Implementation would need a delete method in
                     # ProfitMarginManager
                     st.warning(f"Löschen von '{key}' noch nicht implementiert")
     else:
-        st.info("[INFO] Keine globalen Spannen konfiguriert.")
+        st.info("Keine globalen Spannen konfiguriert.")
 
     st.markdown("---")
 
@@ -281,13 +281,13 @@ def render_global_margins_tab(margin_manager: ProfitMarginManager):
 
                 if success:
                     st.success(
-                        f"[OK] Globale Spanne '{margin_key}' erfolgreich hinzugefügt!")
+                        f"Globale Spanne '{margin_key}' erfolgreich hinzugefügt!")
                     request_rerun()
                 else:
-                    st.error("[ERROR] Fehler beim Hinzufügen der globalen Spanne")
+                    st.error("Fehler beim Hinzufügen der globalen Spanne")
 
             except Exception as e:
-                st.error(f"[ERROR] Fehler: {e}")
+                st.error(f"Fehler: {e}")
 
 
 def render_category_margins_tab(margin_manager: ProfitMarginManager):
@@ -305,7 +305,7 @@ def render_category_margins_tab(margin_manager: ProfitMarginManager):
         categories = []
 
     if not categories:
-        st.warning("[WARNING] Keine Produktkategorien gefunden.")
+        st.warning("Keine Produktkategorien gefunden.")
         return
 
     # Get current category margins
@@ -334,7 +334,7 @@ def render_category_margins_tab(margin_manager: ProfitMarginManager):
 
                 # Apply to all products in category button
                 if col4.button(
-                    "[PACKAGE] Auf alle Produkte anwenden",
+                    "Auf alle Produkte anwenden",
                         key=f"apply_cat_{category}"):
                     try:
                         config = MarginConfig(
@@ -349,22 +349,22 @@ def render_category_margins_tab(margin_manager: ProfitMarginManager):
 
                         if result.get('success'):
                             st.success(
-                                f"[OK] Spanne auf {
+                                f"Spanne auf {
                                     result.get(
                                         'updated_count',
                                         0)} Produkte angewendet")
                         else:
                             st.error(
-                                f"[ERROR] {
+                                f"{
                                     result.get(
                                         'message',
                                         'Unbekannter Fehler')}")
 
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler: {e}")
+                        st.error(f"Fehler: {e}")
 
                 if col5.button(
-                    "[DELETE]",
+                    "",
                     key=f"delete_cat_{category}",
                         help="Kategorie-Spanne löschen"):
                     try:
@@ -372,12 +372,12 @@ def render_category_margins_tab(margin_manager: ProfitMarginManager):
                             category)
                         if success:
                             st.success(
-                                f"[OK] Kategorie-Spanne für '{category}' gelöscht")
+                                f"Kategorie-Spanne für '{category}' gelöscht")
                             request_rerun()
                         else:
-                            st.error("[ERROR] Fehler beim Löschen")
+                            st.error("Fehler beim Löschen")
                     except Exception as e:
-                        st.error(f"[ERROR] Fehler: {e}")
+                        st.error(f"Fehler: {e}")
 
     st.markdown("---")
 
@@ -437,19 +437,19 @@ def render_category_margins_tab(margin_manager: ProfitMarginManager):
 
                 if success:
                     st.success(
-                        f"[OK] Kategorie-Spanne für '{selected_category}' erfolgreich hinzugefügt!")
+                        f"Kategorie-Spanne für '{selected_category}' erfolgreich hinzugefügt!")
                     request_rerun()
                 else:
-                    st.error("[ERROR] Fehler beim Hinzufügen der Kategorie-Spanne")
+                    st.error("Fehler beim Hinzufügen der Kategorie-Spanne")
 
             except Exception as e:
-                st.error(f"[ERROR] Fehler: {e}")
+                st.error(f"Fehler: {e}")
 
 
 def render_product_margins_tab(margin_manager: ProfitMarginManager):
     """Render the product-specific margins configuration tab"""
 
-    st.subheader("[PACKAGE] Produkt-spezifische Gewinnspannen")
+    st.subheader("Produkt-spezifische Gewinnspannen")
     st.markdown(
         "Konfigurieren Sie individuelle Gewinnspannen für einzelne Produkte.")
 
@@ -464,7 +464,7 @@ def render_product_margins_tab(margin_manager: ProfitMarginManager):
         products = []
 
     if not products:
-        st.warning("[WARNING] Keine Produkte gefunden.")
+        st.warning("Keine Produkte gefunden.")
         return
 
     # Filter products by category
@@ -488,7 +488,7 @@ def render_product_margins_tab(margin_manager: ProfitMarginManager):
                                                       'Unbekannt')})": p for p in filtered_products}
 
     if not product_options:
-        st.info("[INFO] Keine Produkte in der ausgewählten Kategorie gefunden.")
+        st.info("Keine Produkte in der ausgewählten Kategorie gefunden.")
         return
 
     selected_product_key = st.selectbox(
@@ -618,7 +618,7 @@ def render_product_margins_tab(margin_manager: ProfitMarginManager):
                 submitted = st.form_submit_button("💾 Spanne speichern")
 
             with col_remove:
-                remove_margin = st.form_submit_button("[DELETE] Spanne entfernen")
+                remove_margin = st.form_submit_button("Spanne entfernen")
 
             if submitted:
                 try:
@@ -634,14 +634,14 @@ def render_product_margins_tab(margin_manager: ProfitMarginManager):
 
                     if success:
                         st.success(
-                            f"[OK] Gewinnspanne für '{
+                            f"Gewinnspanne für '{
                                 selected_product.get('model_name')}' erfolgreich gespeichert!")
                         request_rerun()
                     else:
-                        st.error("[ERROR] Fehler beim Speichern der Gewinnspanne")
+                        st.error("Fehler beim Speichern der Gewinnspanne")
 
                 except Exception as e:
-                    st.error(f"[ERROR] Fehler: {e}")
+                    st.error(f"Fehler: {e}")
 
             if remove_margin:
                 try:
@@ -658,14 +658,14 @@ def render_product_margins_tab(margin_manager: ProfitMarginManager):
 
                     if success:
                         st.success(
-                            f"[OK] Gewinnspanne für '{
+                            f"Gewinnspanne für '{
                                 selected_product.get('model_name')}' entfernt!")
                         request_rerun()
                     else:
-                        st.error("[ERROR] Fehler beim Entfernen der Gewinnspanne")
+                        st.error("Fehler beim Entfernen der Gewinnspanne")
 
                 except Exception as e:
-                    st.error(f"[ERROR] Fehler: {e}")
+                    st.error(f"Fehler: {e}")
 
 
 def render_margin_preview_tab(margin_manager: ProfitMarginManager):
@@ -780,7 +780,7 @@ def render_margin_preview_tab(margin_manager: ProfitMarginManager):
             )
 
             # Display results
-            st.markdown("**[CHART] Berechnungs-Ergebnisse:**")
+            st.markdown("**Berechnungs-Ergebnisse:**")
 
             # Unit calculations
             st.markdown("*Einzel-Kalkulation:*")
@@ -810,7 +810,7 @@ def render_margin_preview_tab(margin_manager: ProfitMarginManager):
                 total_calc['margin_source'].title())
 
             # Additional information
-            st.markdown("**[INFO] Zusätzliche Informationen:**")
+            st.markdown("**Zusätzliche Informationen:**")
             info_col1, info_col2, info_col3 = st.columns(3)
 
             info_col1.info(f"**Berechnungsart:** {calculate_per}")
@@ -819,23 +819,23 @@ def render_margin_preview_tab(margin_manager: ProfitMarginManager):
 
             # Validation warnings
             if breakdown.margin_percentage < 10:
-                st.warning("[WARNING] Niedrige Gewinnspanne (< 10%)")
+                st.warning("Niedrige Gewinnspanne (< 10%)")
             elif breakdown.margin_percentage > 100:
-                st.warning("[WARNING] Sehr hohe Gewinnspanne (> 100%)")
+                st.warning("Sehr hohe Gewinnspanne (> 100%)")
 
             if breakdown.source == 'none':
                 st.warning(
-                    "[WARNING] Keine Gewinnspanne konfiguriert - Verkaufspreis = Einkaufspreis")
+                    "Keine Gewinnspanne konfiguriert - Verkaufspreis = Einkaufspreis")
 
         except Exception as e:
-            st.error(f"[ERROR] Fehler bei der Berechnung: {e}")
+            st.error(f"Fehler bei der Berechnung: {e}")
             st.error(f"Details: {traceback.format_exc()}")
 
     # Margin comparison section
     st.markdown("---")
-    st.markdown("**[STATS] Spannen-Vergleich:**")
+    st.markdown("**Spannen-Vergleich:**")
 
-    if st.button("[CHART] Vergleich erstellen", key="create_comparison"):
+    if st.button("Vergleich erstellen", key="create_comparison"):
         try:
             # Create comparison for different margin scenarios
             scenarios = [
@@ -877,7 +877,7 @@ def render_margin_preview_tab(margin_manager: ProfitMarginManager):
             st.dataframe(df_comparison, use_container_width=True)
 
         except Exception as e:
-            st.error(f"[ERROR] Fehler beim Erstellen des Vergleichs: {e}")
+            st.error(f"Fehler beim Erstellen des Vergleichs: {e}")
 
 
 # Main entry point

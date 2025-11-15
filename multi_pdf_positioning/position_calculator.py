@@ -519,4 +519,4 @@ if __name__ == "__main__":
         for error in errors:
             print(f"    - {error}")
     
-    print("\n[OK] Position Calculator module ready")
+    print("\nPosition Calculator module ready")

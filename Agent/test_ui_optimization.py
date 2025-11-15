@@ -39,7 +39,7 @@ def test_async_execution_state():
     # Check initial state
     assert not state.is_running(), "Should not be running initially"
     assert state.get_result() is None, "Should have no result initially"
-    print("[OK] Initial state correct")
+    print("Initial state correct")
 
     # Start execution
     print("\nStarting async execution...")
@@ -47,7 +47,7 @@ def test_async_execution_state():
 
     # Should be running
     assert state.is_running(), "Should be running after start"
-    print("[OK] Execution started")
+    print("Execution started")
 
     # Wait for completion
     print("Waiting for completion...")
@@ -58,15 +58,15 @@ def test_async_execution_state():
 
     # Should be complete
     assert not state.is_running(), "Should not be running after completion"
-    print("[OK] Execution completed")
+    print("Execution completed")
 
     # Check result
     result = state.get_result()
     assert result is not None, "Should have result"
     assert result['success'], "Should be successful"
-    print("[OK] Result available")
+    print("Result available")
 
-    print("\n[OK] Async execution state test passed")
+    print("\nAsync execution state test passed")
 
 
 def test_async_error_handling():
@@ -96,9 +96,9 @@ def test_async_error_handling():
     error = state.get_error()
     assert error is not None, "Should have error"
     assert "Test error" in error, "Should contain error message"
-    print("[OK] Error captured correctly")
+    print("Error captured correctly")
 
-    print("\n[OK] Async error handling test passed")
+    print("\nAsync error handling test passed")
 
 
 def test_display_agent_status():
@@ -122,12 +122,12 @@ def test_display_agent_status():
     try:
         # This would normally render in Streamlit
         # We're just checking it doesn't error
-        print("[OK] Status display function callable")
+        print("Status display function callable")
     except Exception as e:
-        print(f"[ERROR] Error: {e}")
+        print(f"Error: {e}")
         raise
 
-    print("\n[OK] Display agent status test passed")
+    print("\nDisplay agent status test passed")
 
 
 def test_format_agent_output():
@@ -148,9 +148,9 @@ def test_format_agent_output():
     print("\nTesting successful result formatting...")
     try:
         # This would normally render in Streamlit
-        print("[OK] Success result format callable")
+        print("Success result format callable")
     except Exception as e:
-        print(f"[ERROR] Error: {e}")
+        print(f"Error: {e}")
         raise
 
     # Test failed result
@@ -168,12 +168,12 @@ def test_format_agent_output():
     print("Testing failed result formatting...")
     try:
         # This would normally render in Streamlit
-        print("[OK] Failed result format callable")
+        print("Failed result format callable")
     except Exception as e:
-        print(f"[ERROR] Error: {e}")
+        print(f"Error: {e}")
         raise
 
-    print("\n[OK] Format agent output test passed")
+    print("\nFormat agent output test passed")
 
 
 def test_streaming_mode():
@@ -193,12 +193,12 @@ def test_streaming_mode():
     print("\nTesting streaming mode...")
     try:
         # This would normally render in Streamlit with streaming
-        print("[OK] Streaming mode callable")
+        print("Streaming mode callable")
     except Exception as e:
-        print(f"[ERROR] Error: {e}")
+        print(f"Error: {e}")
         raise
 
-    print("\n[OK] Streaming mode test passed")
+    print("\nStreaming mode test passed")
 
 
 def test_large_output_handling():
@@ -221,12 +221,12 @@ def test_large_output_handling():
     try:
         # This would normally render in Streamlit
         # Should handle large output efficiently
-        print("[OK] Large output handling callable")
+        print("Large output handling callable")
     except Exception as e:
-        print(f"[ERROR] Error: {e}")
+        print(f"Error: {e}")
         raise
 
-    print("\n[OK] Large output handling test passed")
+    print("\nLarge output handling test passed")
 
 
 def test_progress_indicators():
@@ -258,9 +258,9 @@ def test_progress_indicators():
         checks += 1
 
     assert not state.is_running(), "Should complete eventually"
-    print("[OK] Progress tracking works")
+    print("Progress tracking works")
 
-    print("\n[OK] Progress indicators test passed")
+    print("\nProgress indicators test passed")
 
 
 def test_optimized_rendering():
@@ -290,12 +290,12 @@ def test_optimized_rendering():
     try:
         # This would normally render in Streamlit
         # Should handle many steps efficiently
-        print("[OK] Optimized rendering callable")
+        print("Optimized rendering callable")
     except Exception as e:
-        print(f"[ERROR] Error: {e}")
+        print(f"Error: {e}")
         raise
 
-    print("\n[OK] Optimized rendering test passed")
+    print("\nOptimized rendering test passed")
 
 
 def run_all_tests():
@@ -315,16 +315,16 @@ def run_all_tests():
         test_optimized_rendering()
 
         print("\n" + "=" * 70)
-        print("[OK] ALL TESTS PASSED")
+        print("ALL TESTS PASSED")
         print("=" * 70)
         print("\nNote: Some tests verify function callability only.")
         print("Full UI rendering tests require Streamlit environment.")
 
     except AssertionError as e:
-        print(f"\n[ERROR] Test failed: {e}")
+        print(f"\nTest failed: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] Unexpected error: {e}")
+        print(f"\nUnexpected error: {e}")
         import traceback
         traceback.print_exc()
         return False

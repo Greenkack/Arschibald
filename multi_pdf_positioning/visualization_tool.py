@@ -722,7 +722,7 @@ if __name__ == "__main__":
         title="Test Movement"
     )
     
-    print("\n[OK] Visualization Tool module ready")
+    print("\nVisualization Tool module ready")
     print("  Generated test images:")
     print("    - test_overlay.png")
     print("    - test_comparison.png")

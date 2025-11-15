@@ -718,10 +718,10 @@ def format_import_statistics(stats: Dict[str, Any]) -> str:
     lines = [
         f"Import abgeschlossen:",
         f"  Gesamt: {stats['total']} Zeilen",
-        f"  [OK] Erfolgreich importiert: {stats['success']}",
+        f"  Erfolgreich importiert: {stats['success']}",
         f"  ↻ Aktualisiert: {stats['updated']}",
         f"  ⊘ Übersprungen (Duplikate): {stats['skipped']}",
-        f"  [ERROR] Fehler: {stats['errors']}"
+        f"  Fehler: {stats['errors']}"
     ]
     
     if stats['error_details']:

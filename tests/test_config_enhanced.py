@@ -26,7 +26,7 @@ def test_basic_config_loading():
     assert config.mode in [Mode.OFFLINE, Mode.ONLINE]
     assert config.theme in [Theme.AUTO, Theme.LIGHT, Theme.DARK]
     assert config.compute in [ComputeMode.FAST, ComputeMode.ACCURATE]
-    print("[OK] Basic configuration loading works")
+    print("Basic configuration loading works")
 
 
 def test_environment_specific_loading():
@@ -42,7 +42,7 @@ def test_environment_specific_loading():
     assert dev_config.env == Environment.DEV
     assert dev_config.debug is True
     assert "duckdb" in dev_config.database.url
-    print("[OK] Dev environment configuration works")
+    print("Dev environment configuration works")
 
     # Test staging environment
     reset_config()
@@ -51,7 +51,7 @@ def test_environment_specific_loading():
     stage_config = load_config_for_environment(Environment.STAGE)
     assert stage_config.env == Environment.STAGE
     assert stage_config.debug is False
-    print("[OK] Staging environment configuration works")
+    print("Staging environment configuration works")
 
     # Test production environment
     reset_config()
@@ -60,7 +60,7 @@ def test_environment_specific_loading():
     prod_config = load_config_for_environment(Environment.PROD)
     assert prod_config.env == Environment.PROD
     assert prod_config.debug is False
-    print("[OK] Production environment configuration works")
+    print("Production environment configuration works")
 
 
 def test_mode_theme_compute_options():
@@ -72,14 +72,14 @@ def test_mode_theme_compute_options():
     os.environ["MODE"] = "offline"
     config = load_config()
     assert config.mode == Mode.OFFLINE
-    print("[OK] Offline mode works")
+    print("Offline mode works")
 
     # Test online mode
     reset_config()
     os.environ["MODE"] = "online"
     config = load_config()
     assert config.mode == Mode.ONLINE
-    print("[OK] Online mode works")
+    print("Online mode works")
 
     # Test theme options
     reset_config()
@@ -87,7 +87,7 @@ def test_mode_theme_compute_options():
         os.environ["THEME"] = theme
         config = load_config()
         assert config.theme.value == theme
-    print("[OK] Theme options work")
+    print("Theme options work")
 
     # Test compute options
     reset_config()
@@ -95,7 +95,7 @@ def test_mode_theme_compute_options():
         os.environ["COMPUTE"] = compute
         config = load_config()
         assert config.compute.value == compute
-    print("[OK] Compute options work")
+    print("Compute options work")
 
 
 def test_pydantic_validation():
@@ -114,7 +114,7 @@ def test_pydantic_validation():
     assert is_valid or len(errors) == 0 or all(
         "production" in err.lower() for err in errors
     )
-    print("[OK] Pydantic validation works")
+    print("Pydantic validation works")
 
 
 def test_config_file_loading():
@@ -142,7 +142,7 @@ def test_config_file_loading():
         assert config.mode == Mode.OFFLINE
         assert config.theme == Theme.DARK
         assert config.compute == ComputeMode.ACCURATE
-        print("[OK] Configuration file loading works")
+        print("Configuration file loading works")
     finally:
         # Cleanup
         if test_config_path.exists():
@@ -163,7 +163,7 @@ def test_config_serialization():
     assert "theme" in config_dict
     assert "compute" in config_dict
     assert "database" in config_dict
-    print("[OK] Configuration serialization works")
+    print("Configuration serialization works")
 
     # Test save_to_file
     test_save_path = Path("test_save_config.json")
@@ -175,7 +175,7 @@ def test_config_serialization():
         with open(test_save_path, "r") as f:
             saved_data = json.load(f)
         assert saved_data["env"] == config.env.value
-        print("[OK] Configuration save to file works")
+        print("Configuration save to file works")
     finally:
         if test_save_path.exists():
             test_save_path.unlink()
@@ -210,12 +210,12 @@ def test_hot_reload():
             # Note: reload() checks file mtime, but we need to set config_file
             # This is a limitation of the test - in real usage, config_file
             # would be set during initialization
-            print("[OK] Hot-reload capability implemented (requires config_file set)")
+            print("Hot-reload capability implemented (requires config_file set)")
         finally:
             if config_file.exists():
                 config_file.unlink()
     else:
-        print("[OK] Hot-reload disabled in non-development mode")
+        print("Hot-reload disabled in non-development mode")
 
 
 def test_global_config_instance():
@@ -228,7 +228,7 @@ def test_global_config_instance():
 
     # Should be the same instance
     assert config1 is config2
-    print("[OK] Global configuration instance works")
+    print("Global configuration instance works")
 
 
 def main():
@@ -248,11 +248,11 @@ def main():
         test_global_config_instance()
 
         print("\n" + "=" * 60)
-        print("[OK] All tests passed!")
+        print("All tests passed!")
         print("=" * 60)
         return True
     except Exception as e:
-        print(f"\n[ERROR] Test failed: {e}")
+        print(f"\nTest failed: {e}")
         import traceback
 
         traceback.print_exc()

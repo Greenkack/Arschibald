@@ -50,12 +50,12 @@ def test_invalid_input_validation():
         is_valid, error_msg = validate_input_parameters(module_count, storage_model)
         
         if is_valid == expected_valid:
-            print(f"[OK] {description}: {'Gültig' if is_valid else 'Ungültig'}")
+            print(f"{description}: {'Gültig' if is_valid else 'Ungültig'}")
             if not is_valid:
                 print(f"  Fehlermeldung: {error_msg}")
             passed += 1
         else:
-            print(f"[ERROR] {description}: Erwartet {expected_valid}, erhalten {is_valid}")
+            print(f"{description}: Erwartet {expected_valid}, erhalten {is_valid}")
             failed += 1
     
     print(f"\nErgebnis: {passed} bestanden, {failed} fehlgeschlagen")
@@ -69,7 +69,7 @@ def test_edge_case_empty_matrix():
     # Erstelle leere Matrix
     matrix_id = price_matrix_store.create_matrix("Test Leere Matrix")
     if not matrix_id:
-        print("[ERROR] Konnte Test-Matrix nicht erstellen")
+        print("Konnte Test-Matrix nicht erstellen")
         return False
     
     # Teste mit leerer Matrix
@@ -82,11 +82,11 @@ def test_edge_case_empty_matrix():
     )
     
     if success:
-        print(f"[OK] Leere Matrix korrekt erkannt")
+        print(f"Leere Matrix korrekt erkannt")
         print(f"  Fehlertyp: {result['error_type']}")
         print(f"  Fehlermeldung: {result['error']}")
     else:
-        print(f"[ERROR] Leere Matrix nicht korrekt behandelt")
+        print(f"Leere Matrix nicht korrekt behandelt")
         print(f"  Result: {result}")
     
     # Cleanup
@@ -116,11 +116,11 @@ def test_edge_case_no_active_matrix():
     )
     
     if success:
-        print(f"[OK] Fehlende aktive Matrix korrekt erkannt")
+        print(f"Fehlende aktive Matrix korrekt erkannt")
         print(f"  Fehlermeldung: {result['error']}")
         print(f"  User Message: {result['user_message'][:100]}...")
     else:
-        print(f"[ERROR] Fehlende aktive Matrix nicht korrekt behandelt")
+        print(f"Fehlende aktive Matrix nicht korrekt behandelt")
     
     return success
 
@@ -132,7 +132,7 @@ def test_module_count_not_found():
     # Erstelle Test-Matrix
     matrix_id = price_matrix_store.create_matrix("Test Module Count")
     if not matrix_id:
-        print("[ERROR] Konnte Test-Matrix nicht erstellen")
+        print("Konnte Test-Matrix nicht erstellen")
         return False
     
     # Füge Zeilen und Spalten hinzu
@@ -155,12 +155,12 @@ def test_module_count_not_found():
     )
     
     if success:
-        print(f"[OK] Modulanzahl nicht gefunden korrekt erkannt")
+        print(f"Modulanzahl nicht gefunden korrekt erkannt")
         print(f"  Fehlermeldung: {result['error']}")
         print(f"  User Message (erste 200 Zeichen):")
         print(f"  {result['user_message'][:200]}...")
     else:
-        print(f"[ERROR] Modulanzahl nicht gefunden nicht korrekt behandelt")
+        print(f"Modulanzahl nicht gefunden nicht korrekt behandelt")
     
     # Cleanup
     price_matrix_store.delete_matrix(matrix_id)
@@ -175,7 +175,7 @@ def test_storage_model_not_found():
     # Erstelle Test-Matrix
     matrix_id = price_matrix_store.create_matrix("Test Storage Model")
     if not matrix_id:
-        print("[ERROR] Konnte Test-Matrix nicht erstellen")
+        print("Konnte Test-Matrix nicht erstellen")
         return False
     
     # Füge Header-Zeile hinzu (Position 0)
@@ -202,12 +202,12 @@ def test_storage_model_not_found():
     )
     
     if success:
-        print(f"[OK] Speichermodell nicht gefunden korrekt erkannt")
+        print(f"Speichermodell nicht gefunden korrekt erkannt")
         print(f"  Fehlermeldung: {result['error']}")
         print(f"  User Message (erste 200 Zeichen):")
         print(f"  {result['user_message'][:200]}...")
     else:
-        print(f"[ERROR] Speichermodell nicht gefunden nicht korrekt behandelt")
+        print(f"Speichermodell nicht gefunden nicht korrekt behandelt")
         print(f"  Result: {result}")
     
     # Cleanup
@@ -223,7 +223,7 @@ def test_empty_price_cell():
     # Erstelle Test-Matrix
     matrix_id = price_matrix_store.create_matrix("Test Empty Cell")
     if not matrix_id:
-        print("[ERROR] Konnte Test-Matrix nicht erstellen")
+        print("Konnte Test-Matrix nicht erstellen")
         return False
     
     # Füge Header-Zeile hinzu
@@ -246,10 +246,10 @@ def test_empty_price_cell():
     )
     
     if success:
-        print(f"[OK] Leere Preis-Zelle korrekt erkannt")
+        print(f"Leere Preis-Zelle korrekt erkannt")
         print(f"  Fehlermeldung: {result['error']}")
     else:
-        print(f"[ERROR] Leere Preis-Zelle nicht korrekt behandelt")
+        print(f"Leere Preis-Zelle nicht korrekt behandelt")
         print(f"  Result: {result}")
     
     # Cleanup
@@ -265,7 +265,7 @@ def test_fallback_module_count():
     # Erstelle Test-Matrix
     matrix_id = price_matrix_store.create_matrix("Test Fallback Module")
     if not matrix_id:
-        print("[ERROR] Konnte Test-Matrix nicht erstellen")
+        print("Konnte Test-Matrix nicht erstellen")
         return False
     
     # Füge Header-Zeile hinzu
@@ -298,7 +298,7 @@ def test_fallback_module_count():
     )
     
     if success:
-        print(f"[OK] Fallback für Modulanzahl funktioniert")
+        print(f"Fallback für Modulanzahl funktioniert")
         print(f"  Gesuchte Modulanzahl: 10")
         print(f"  Verwendete Modulanzahl: {result['row_used']}")
         print(f"  Preis: {result['base_price']} EUR")
@@ -311,12 +311,12 @@ def test_fallback_module_count():
         )
         
         if not result_no_fallback['success'] and result_no_fallback['error_type'] == 'no_row':
-            print(f"[OK] Fallback-Logik korrekt (ohne Fallback würde es fehlschlagen)")
+            print(f"Fallback-Logik korrekt (ohne Fallback würde es fehlschlagen)")
             print(f"  Hinweis: Floor-Logik funktioniert bereits in find_module_count_row")
             print(f"  Fallback ist nur für Fälle nötig wo KEINE passende Zeile existiert")
             success = True
         else:
-            print(f"[ERROR] Fallback für Modulanzahl fehlgeschlagen")
+            print(f"Fallback für Modulanzahl fehlgeschlagen")
             print(f"  Result mit Fallback: {result}")
             print(f"  Result ohne Fallback: {result_no_fallback}")
     
@@ -333,7 +333,7 @@ def test_fallback_storage_model():
     # Erstelle Test-Matrix
     matrix_id = price_matrix_store.create_matrix("Test Fallback Storage")
     if not matrix_id:
-        print("[ERROR] Konnte Test-Matrix nicht erstellen")
+        print("Konnte Test-Matrix nicht erstellen")
         return False
     
     # Füge Header-Zeile hinzu
@@ -363,13 +363,13 @@ def test_fallback_storage_model():
     )
     
     if success:
-        print(f"[OK] Fallback für Speichermodell funktioniert")
+        print(f"Fallback für Speichermodell funktioniert")
         print(f"  Gesuchtes Modell: 30kWh")
         print(f"  Verwendetes Modell: {result['column_used']}")
         print(f"  Preis: {result['base_price']} EUR")
         print(f"  Fallback-Info: {result['fallback_info']['message']}")
     else:
-        print(f"[ERROR] Fallback für Speichermodell fehlgeschlagen")
+        print(f"Fallback für Speichermodell fehlgeschlagen")
         print(f"  Result: {result}")
     
     # Cleanup
@@ -397,16 +397,16 @@ def test_user_friendly_error_messages():
         message = create_user_friendly_error_message(error)
         
         # Prüfe ob Nachricht benutzerfreundlich ist
-        has_emoji = "[ERROR]" in message
+        has_emoji = "" in message
         has_suggestions = "Lösungsvorschläge" in message or "Verfügbare" in message
         is_multiline = "\n" in message
         
         if has_emoji and has_suggestions and is_multiline:
-            print(f"[OK] {description}: Benutzerfreundliche Nachricht")
+            print(f"{description}: Benutzerfreundliche Nachricht")
             print(f"  Erste Zeile: {message.split(chr(10))[0]}")
             passed += 1
         else:
-            print(f"[ERROR] {description}: Nachricht nicht benutzerfreundlich genug")
+            print(f"{description}: Nachricht nicht benutzerfreundlich genug")
             print(f"  Message: {message[:100]}...")
             failed += 1
     
@@ -421,7 +421,7 @@ def test_logging_functionality():
     # Erstelle Test-Matrix
     matrix_id = price_matrix_store.create_matrix("Test Logging")
     if not matrix_id:
-        print("[ERROR] Konnte Test-Matrix nicht erstellen")
+        print("Konnte Test-Matrix nicht erstellen")
         return False
     
     # Füge Header-Zeile hinzu
@@ -442,10 +442,10 @@ def test_logging_functionality():
     success = result['success']
     
     if success:
-        print(f"[OK] Logging-Test erfolgreich")
+        print(f"Logging-Test erfolgreich")
         print(f"  (Prüfen Sie die Konsole für Log-Ausgaben)")
     else:
-        print(f"[ERROR] Logging-Test fehlgeschlagen")
+        print(f"Logging-Test fehlgeschlagen")
         print(f"  Result: {result}")
     
     # Cleanup
@@ -479,7 +479,7 @@ def run_all_tests():
             result = test_func()
             results.append((name, result))
         except Exception as e:
-            print(f"\n[ERROR] Test '{name}' ist mit Fehler abgebrochen: {e}")
+            print(f"\nTest '{name}' ist mit Fehler abgebrochen: {e}")
             import traceback
             traceback.print_exc()
             results.append((name, False))
@@ -493,7 +493,7 @@ def run_all_tests():
     failed = len(results) - passed
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"{status}: {name}")
     
     print(f"\nGesamt: {passed}/{len(results)} Tests bestanden")
@@ -502,7 +502,7 @@ def run_all_tests():
         print("\n🎉 Alle Tests erfolgreich!")
         return True
     else:
-        print(f"\n[WARNING]  {failed} Test(s) fehlgeschlagen")
+        print(f"\n{failed} Test(s) fehlgeschlagen")
         return False
 
 

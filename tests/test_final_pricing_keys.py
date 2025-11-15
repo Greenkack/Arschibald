@@ -52,20 +52,20 @@ def test_keys_in_placeholders():
     for key in required_keys:
         if key in PLACEHOLDER_MAPPING:
             found_keys.append(key)
-            print(f"[OK] {key:45} -> {PLACEHOLDER_MAPPING[key]}")
+            print(f"{key:45} -> {PLACEHOLDER_MAPPING[key]}")
         else:
             missing_keys.append(key)
-            print(f"[ERROR] {key:45} -> FEHLT!")
+            print(f"{key:45} -> FEHLT!")
 
     print("\n" + "=" * 80)
     print(f"Ergebnis: {len(found_keys)}/{len(required_keys)} Keys gefunden")
 
     if missing_keys:
-        print(f"\n[WARNING] FEHLENDE KEYS ({len(missing_keys)}):")
+        print(f"\nFEHLENDE KEYS ({len(missing_keys)}):")
         for key in missing_keys:
             print(f"   - {key}")
         return False
-    print("\n[OK] ALLE KEYS VORHANDEN!")
+    print("\nALLE KEYS VORHANDEN!")
     return True
 
 
@@ -102,7 +102,7 @@ def test_solar_calculator_keys():
                 return key in self.data
 
         # Simuliere die Berechnung
-        print("\n[CHART] Simuliere finale Preisberechnung...")
+        print("\nSimuliere finale Preisberechnung...")
 
         # Beispiel-Werte
         endergebnis_brutto = 20000.0
@@ -120,7 +120,7 @@ def test_solar_calculator_keys():
         mwst_in_zwischensumme = zwischensumme_final * 0.19 / 1.19
         final_end_preis = zwischensumme_final - mwst_in_zwischensumme
 
-        print("\n[STATS] Berechnete Werte:")
+        print("\nBerechnete Werte:")
         print(
             f"   Basis (SIMPLE_ENDERGEBNIS_BRUTTO):     {
                 endergebnis_brutto:>12,.2f} €")
@@ -143,11 +143,11 @@ def test_solar_calculator_keys():
             f"   = FINAL END PREIS (NETTO):             {
                 final_end_preis:>12,.2f} €")
 
-        print("\n[OK] Berechnung erfolgreich!")
+        print("\nBerechnung erfolgreich!")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler bei der Berechnung: {e}")
+        print(f"\nFehler bei der Berechnung: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -173,7 +173,7 @@ SIMPLE_ENDERGEBNIS_BRUTTO
 
 
 if __name__ == "__main__":
-    print("\n[SEARCH] VOLLSTÄNDIGER TEST DER FINALEN PRICING KEYS\n")
+    print("\nVOLLSTÄNDIGER TEST DER FINALEN PRICING KEYS\n")
 
     # Test 1: Keys im PLACEHOLDER_MAPPING
     test1_passed = test_keys_in_placeholders()
@@ -190,17 +190,17 @@ if __name__ == "__main__":
     print("=" * 80)
 
     if test1_passed and test2_passed:
-        print("[OK] ALLE TESTS BESTANDEN!")
+        print("ALLE TESTS BESTANDEN!")
         print("\nDie finale Preisberechnung ist vollständig implementiert:")
-        print("  [OK] Alle Keys sind im PLACEHOLDER_MAPPING vorhanden")
-        print("  [OK] Die Berechnungslogik ist korrekt")
-        print("  [OK] Keys werden in Session State gespeichert")
-        print("  [OK] Keys sind für PDF-Export verfügbar")
+        print("  Alle Keys sind im PLACEHOLDER_MAPPING vorhanden")
+        print("  Die Berechnungslogik ist korrekt")
+        print("  Keys werden in Session State gespeichert")
+        print("  Keys sind für PDF-Export verfügbar")
         sys.exit(0)
     else:
-        print("[ERROR] EINIGE TESTS FEHLGESCHLAGEN!")
+        print("EINIGE TESTS FEHLGESCHLAGEN!")
         if not test1_passed:
-            print("  [ERROR] Keys fehlen im PLACEHOLDER_MAPPING")
+            print("  Keys fehlen im PLACEHOLDER_MAPPING")
         if not test2_passed:
-            print("  [ERROR] Berechnung fehlgeschlagen")
+            print("  Berechnung fehlgeschlagen")
         sys.exit(1)

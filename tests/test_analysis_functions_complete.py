@@ -24,7 +24,7 @@ try:
     )
     from utils.pv3d import BuildingDims, ModuleTransform
 except ImportError as e:
-    print(f"[ERROR] Import-Fehler: {e}")
+    print(f"Import-Fehler: {e}")
     print("Stelle sicher, dass utils/pv3d_analysis.py und utils/pv3d.py existieren")
     sys.exit(1)
 
@@ -98,7 +98,7 @@ def test_optimization_all_goals():
         print(f"  Module: {best.metrics['estimated_modules']}")
         print(f"  Ertragsfaktor: {best.metrics['yield_factor']:.3f}")
     
-    print("\n[OK] Optimierungs-Assistent mit allen drei Zielen erfolgreich getestet\n")
+    print("\nOptimierungs-Assistent mit allen drei Zielen erfolgreich getestet\n")
     return all_results
 
 
@@ -195,7 +195,7 @@ def test_shading_at_different_times():
         shade = shading_results[time_label].get(0, 0.0)
         print(f"  {time_label:25s}: {shade:5.1f}%")
     
-    print("\n[OK] Verschattungs-Analyse zu verschiedenen Tageszeiten erfolgreich getestet\n")
+    print("\nVerschattungs-Analyse zu verschiedenen Tageszeiten erfolgreich getestet\n")
     return shading_results
 
 
@@ -303,7 +303,7 @@ def test_yield_heatmap_visualization():
     print(f"  Durchschnitt Süd-Module: {avg_south:.1f}%")
     print(f"  Durchschnitt Nord-Module: {avg_north:.1f}%")
     assert avg_south > avg_north, "Süd-Module sollten höheren Ertrag haben als Nord-Module"
-    print(f"  [OK] Süd-Module haben höheren Ertrag als Nord-Module")
+    print(f"  Süd-Module haben höheren Ertrag als Nord-Module")
     
     # Höher positionierte Module sollten besseren Ertrag haben
     high_module = 8  # Modul auf 7.0m Höhe
@@ -312,9 +312,9 @@ def test_yield_heatmap_visualization():
     print(f"\n  Modul {high_module} (7.0m Höhe): {yield_map[high_module]:.1f}%")
     print(f"  Modul {low_module} (6.0m Höhe): {yield_map[low_module]:.1f}%")
     assert yield_map[high_module] >= yield_map[low_module], "Höhere Module sollten besseren Ertrag haben"
-    print(f"  [OK] Höher positionierte Module haben besseren oder gleichen Ertrag")
+    print(f"  Höher positionierte Module haben besseren oder gleichen Ertrag")
     
-    print("\n[OK] Ertrags-Heatmap Visualisierung erfolgreich getestet\n")
+    print("\nErtrags-Heatmap Visualisierung erfolgreich getestet\n")
     return yield_map
 
 
@@ -393,9 +393,9 @@ def test_sun_path_animation():
     assert sunset_time is not None, "Sonnenuntergang sollte gefunden werden"
     assert max_elevation > 50.0, f"Max. Elevation sollte > 50° sein (ist {max_elevation:.1f}°)"
     assert 11.0 <= max_elevation_time <= 13.0, f"Max. Elevation sollte um Mittag sein (ist {max_elevation_time:.1f})"
-    print(f"  [OK] Sonnenaufgang und -untergang korrekt berechnet")
-    print(f"  [OK] Maximale Elevation zur Mittagszeit")
-    print(f"  [OK] Tageslänge plausibel für Sommersonnenwende")
+    print(f"  Sonnenaufgang und -untergang korrekt berechnet")
+    print(f"  Maximale Elevation zur Mittagszeit")
+    print(f"  Tageslänge plausibel für Sommersonnenwende")
     
     # Teste auch Wintersonnenwende zum Vergleich
     print(f"\n{'─' * 80}")
@@ -428,9 +428,9 @@ def test_sun_path_animation():
     print(f"  Unterschied: {max_elevation - winter_max_elevation:.1f}°")
     
     assert winter_max_elevation < max_elevation, "Winter-Elevation sollte niedriger sein als Sommer"
-    print(f"  [OK] Winter-Elevation niedriger als Sommer-Elevation")
+    print(f"  Winter-Elevation niedriger als Sommer-Elevation")
     
-    print("\n[OK] Sonnenverlauf-Animation erfolgreich getestet\n")
+    print("\nSonnenverlauf-Animation erfolgreich getestet\n")
     return sun_positions
 
 
@@ -459,24 +459,24 @@ def main():
         
         # Abschluss
         print("=" * 80)
-        print("[OK] ALLE TESTS ERFOLGREICH ABGESCHLOSSEN")
+        print("ALLE TESTS ERFOLGREICH ABGESCHLOSSEN")
         print("=" * 80)
         print("\nZusammenfassung:")
-        print(f"  [OK] Optimierungs-Assistent mit 3 Zielen getestet")
-        print(f"  [OK] Verschattungs-Analyse zu 5 Tageszeiten getestet")
-        print(f"  [OK] Ertrags-Heatmap mit 10 Modulen visualisiert")
-        print(f"  [OK] Sonnenverlauf-Animation für Sommer und Winter getestet")
+        print(f"  Optimierungs-Assistent mit 3 Zielen getestet")
+        print(f"  Verschattungs-Analyse zu 5 Tageszeiten getestet")
+        print(f"  Ertrags-Heatmap mit 10 Modulen visualisiert")
+        print(f"  Sonnenverlauf-Animation für Sommer und Winter getestet")
         print("\nAlle Anforderungen (2.1, 2.2, 2.3) erfüllt!")
         
         return 0
         
     except AssertionError as e:
-        print(f"\n[ERROR] VALIDIERUNGS-FEHLER: {e}")
+        print(f"\nVALIDIERUNGS-FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return 1
     except Exception as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return 1

@@ -479,7 +479,7 @@ if __name__ == '__main__':
         test_requirements_verification()
 
         print("\n" + "=" * 60)
-        print("ALL TESTS PASSED [SUCCESS]")
+        print("ALL TESTS PASSED ")
         print("=" * 60)
         print("\nTask 7.1 Implementation Summary:")
         print("- Extended output check implemented in generate_offer_pdf()")
@@ -492,7 +492,7 @@ if __name__ == '__main__':
         print(f"\n[FAIL] TEST FAILED: {e}")
         raise
     except Exception as e:
-        print(f"\n[ERROR] ERROR: {e}")
+        print(f"\nERROR: {e}")
         import traceback
         traceback.print_exc()
         raise

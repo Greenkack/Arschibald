@@ -143,7 +143,7 @@ def test_save_calculation_basic():
     assert stored_data['total_investment_netto'] == 15000.0
 
     conn.close()
-    print("[OK] Test save_calculation_basic bestanden")
+    print("Test save_calculation_basic bestanden")
 
 
 def test_save_calculation_versioning():
@@ -190,7 +190,7 @@ def test_save_calculation_versioning():
     assert cursor.fetchone()['version'] == 3
 
     conn.close()
-    print("[OK] Test save_calculation_versioning bestanden")
+    print("Test save_calculation_versioning bestanden")
 
 
 def test_get_calculations_for_project():
@@ -220,7 +220,7 @@ def test_get_calculations_for_project():
     assert calculations[2]['version'] == 1
 
     conn.close()
-    print("[OK] Test get_calculations_for_project bestanden")
+    print("Test get_calculations_for_project bestanden")
 
 
 def test_set_main_offer():
@@ -271,7 +271,7 @@ def test_set_main_offer():
     assert cursor.fetchone()['is_main_offer'] == 0
 
     conn.close()
-    print("[OK] Test set_main_offer bestanden")
+    print("Test set_main_offer bestanden")
 
 
 def test_compare_calculations():
@@ -327,7 +327,7 @@ def test_compare_calculations():
     assert diff_savings['percent'] == 20.0
 
     conn.close()
-    print("[OK] Test compare_calculations bestanden")
+    print("Test compare_calculations bestanden")
 
 
 def test_integration_full_workflow():
@@ -395,7 +395,7 @@ def test_integration_full_workflow():
             assert len(remaining_calcs) == 1
 
     conn.close()
-    print("[OK] Test integration_full_workflow bestanden")
+    print("Test integration_full_workflow bestanden")
 
 
 if __name__ == '__main__':
@@ -422,18 +422,18 @@ if __name__ == '__main__':
             test_func()
             passed_count += 1
         except AssertionError as e:
-            print(f"\n[ERROR] FEHLGESCHLAGEN: {e}\n")
+            print(f"\nFEHLGESCHLAGEN: {e}\n")
             import traceback
             traceback.print_exc()
         except Exception as e:
-            print(f"\n[ERROR] FEHLER: {e}\n")
+            print(f"\nFEHLER: {e}\n")
             import traceback
             traceback.print_exc()
 
     print("\n" + "="*70)
     print(f"  Ergebnis: {passed_count}/{test_count} Tests bestanden")
     if passed_count == test_count:
-        print("  [OK] ALLE TESTS ERFOLGREICH!")
+        print("  ALLE TESTS ERFOLGREICH!")
     else:
-        print(f"  [WARNING]  {test_count - passed_count} Test(s) fehlgeschlagen")
+        print(f"  {test_count - passed_count} Test(s) fehlgeschlagen")
     print("="*70 + "\n")

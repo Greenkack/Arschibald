@@ -55,7 +55,7 @@ def test_module_group_creation():
     assert group.has_module(0), "has_module gibt False für existierendes Modul"
     assert not group.has_module(10), "has_module gibt True für nicht-existierendes Modul"
     
-    print("[OK] Gruppen-Erstellung funktioniert")
+    print("Gruppen-Erstellung funktioniert")
 
 
 def test_module_group_serialization():
@@ -89,7 +89,7 @@ def test_module_group_serialization():
     assert restored_group.tilt_deg == group.tilt_deg, "Neigung nicht wiederhergestellt"
     assert restored_group.color == group.color, "Farbe nicht wiederhergestellt"
     
-    print("[OK] Gruppen-Serialisierung funktioniert")
+    print("Gruppen-Serialisierung funktioniert")
 
 
 def test_advanced_layout_config_with_groups():
@@ -139,7 +139,7 @@ def test_advanced_layout_config_with_groups():
     assert restored_group1.module_indices == [0, 1, 2], "Süddach-Indizes falsch"
     assert restored_group1.azimuth_deg == 0.0, "Süddach-Azimuth falsch"
     
-    print("[OK] Gruppen in AdvancedLayoutConfig funktionieren")
+    print("Gruppen in AdvancedLayoutConfig funktionieren")
 
 
 def test_group_transformations():
@@ -195,7 +195,7 @@ def test_group_transformations():
         assert config.module_transforms[module_idx].azimuth_deg == new_azimuth, f"Azimuth für Modul {module_idx} nicht aktualisiert"
         assert config.module_transforms[module_idx].tilt_deg == new_tilt, f"Neigung für Modul {module_idx} nicht aktualisiert"
     
-    print("[OK] Gruppen-Transformationen funktionieren")
+    print("Gruppen-Transformationen funktionieren")
 
 
 def test_group_templates():
@@ -242,9 +242,9 @@ def test_group_templates():
         assert group.tilt_deg == template_data["tilt"], f"{template_name}: Neigung falsch"
         assert group.color == template_data["color"], f"{template_name}: Farbe falsch"
         
-        print(f"  [OK] Template '{template_name}' korrekt (Azimuth: {group.azimuth_deg}°)")
+        print(f"  Template '{template_name}' korrekt (Azimuth: {group.azimuth_deg}°)")
     
-    print("[OK] Gruppen-Templates funktionieren")
+    print("Gruppen-Templates funktionieren")
 
 
 def test_group_deletion():
@@ -295,7 +295,7 @@ def test_group_deletion():
         if module_idx in config.module_transforms:
             assert config.module_transforms[module_idx].group_id is None, f"group_id für Modul {module_idx} nicht entfernt"
     
-    print("[OK] Gruppen-Löschung funktioniert")
+    print("Gruppen-Löschung funktioniert")
 
 
 def run_all_tests():
@@ -320,23 +320,23 @@ def run_all_tests():
         test_group_templates()
         
         print("\n" + "="*60)
-        print("[OK] ALLE TESTS BESTANDEN")
+        print("ALLE TESTS BESTANDEN")
         print("="*60)
         print("\nTask 16: Modul-Gruppen-Verwaltung erfolgreich implementiert!")
         print("\nImplementierte Features:")
-        print("  [OK] 16.1: Gruppen-Erstellung mit Name, Indizes und Eigenschaften")
-        print("  [OK] 16.2: Gruppen-Übersicht mit Anzeige und Lösch-Funktion")
-        print("  [OK] 16.3: Gruppen-Transformationen (Azimuth/Neigung)")
-        print("  [OK] 16.4: Gruppen-Templates (Süd, Ost, West, Nord)")
+        print("  16.1: Gruppen-Erstellung mit Name, Indizes und Eigenschaften")
+        print("  16.2: Gruppen-Übersicht mit Anzeige und Lösch-Funktion")
+        print("  16.3: Gruppen-Transformationen (Azimuth/Neigung)")
+        print("  16.4: Gruppen-Templates (Süd, Ost, West, Nord)")
         print("\n" + "="*60)
         
         return True
         
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST FEHLGESCHLAGEN: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] FEHLER: {e}")
+        print(f"\nFEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False

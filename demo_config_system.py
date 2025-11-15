@@ -123,18 +123,18 @@ def demo_file_operations():
     # Save to file
     config_file = Path("demo_config.json")
     config.save_to_file(config_file)
-    print(f"[OK] Configuration saved to {config_file}")
+    print(f"Configuration saved to {config_file}")
 
     # Load from file
     loaded_config = load_config(config_file=config_file)
-    print(f"[OK] Configuration loaded from {config_file}")
+    print(f"Configuration loaded from {config_file}")
     print(f"  App Name: {loaded_config.app_name}")
     print(f"  Environment: {loaded_config.env.value}")
 
     # Cleanup
     if config_file.exists():
         config_file.unlink()
-        print(f"[OK] Cleaned up {config_file}")
+        print(f"Cleaned up {config_file}")
 
 
 def demo_serialization():
@@ -211,7 +211,7 @@ def main():
         print("=" * 70 + "\n")
 
     except Exception as e:
-        print(f"\n[ERROR] Demo failed: {e}")
+        print(f"\nDemo failed: {e}")
         import traceback
 
         traceback.print_exc()

@@ -344,7 +344,7 @@ def calculate_price_from_matrix(
         if not is_valid:
             result['error'] = validation_error
             result['error_type'] = 'invalid_input'
-            result['user_message'] = f"[ERROR] Ungültige Eingabe: {validation_error}"
+            result['user_message'] = f"Ungültige Eingabe: {validation_error}"
             logger.warning(f"Invalid input parameters: {validation_error}")
             return result
         
@@ -375,7 +375,7 @@ def calculate_price_from_matrix(
         edge_case_result = handle_edge_cases(module_count, storage_model, matrix_data)
         if edge_case_result:
             result.update(edge_case_result)
-            result['user_message'] = f"[ERROR] {edge_case_result['error']}"
+            result['user_message'] = f"{edge_case_result['error']}"
             logger.error(f"Edge case detected: {edge_case_result['error']}")
             return result
         
@@ -478,7 +478,7 @@ def calculate_price_from_matrix(
         result['error'] = f"Unerwarteter Fehler: {str(e)}"
         result['error_type'] = 'unexpected_error'
         result['user_message'] = (
-            "[ERROR] Ein unerwarteter Fehler ist aufgetreten.\n\n"
+            "Ein unerwarteter Fehler ist aufgetreten.\n\n"
             "Bitte kontaktieren Sie den Administrator und geben Sie folgende Informationen an:\n"
             f"• Modulanzahl: {module_count}\n"
             f"• Speichermodell: {storage_model}\n"

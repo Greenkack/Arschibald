@@ -262,7 +262,7 @@ def test_all_requirements_covered():
     # Requirement 4.6: Matrix klonen
     assert callable(_render_clone_matrix_dialog)
     
-    print("[OK] Alle Requirements aus Task 11 sind implementiert")
+    print("Alle Requirements aus Task 11 sind implementiert")
 
 
 if __name__ == "__main__":
@@ -271,13 +271,13 @@ if __name__ == "__main__":
     print()
     
     test_matrix_management_imports()
-    print("[OK] Import-Test bestanden")
+    print("Import-Test bestanden")
     
     test_initialize_session_state_includes_management_dialogs()
-    print("[OK] Session State Test bestanden")
+    print("Session State Test bestanden")
     
     test_all_requirements_covered()
-    print("[OK] Requirements-Test bestanden")
+    print("Requirements-Test bestanden")
     
     print()
     print("=" * 60)
@@ -285,11 +285,11 @@ if __name__ == "__main__":
     print("=" * 60)
     print()
     print("Implementierte Features:")
-    print("  [OK] Dialog für neue Matrix erstellen")
-    print("  [OK] Matrix-Liste anzeigen mit Details")
-    print("  [OK] Matrix laden")
-    print("  [OK] Matrix löschen mit Bestätigung")
-    print("  [OK] Matrix umbenennen")
-    print("  [OK] Matrix klonen")
+    print("  Dialog für neue Matrix erstellen")
+    print("  Matrix-Liste anzeigen mit Details")
+    print("  Matrix laden")
+    print("  Matrix löschen mit Bestätigung")
+    print("  Matrix umbenennen")
+    print("  Matrix klonen")
     print()
     print("Alle Requirements (4.1-4.6) erfüllt!")

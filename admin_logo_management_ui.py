@@ -196,7 +196,7 @@ def render_logo_upload_section():
                     st.image(image, width=150)
 
                 # Datei-Info
-                st.caption(f"[FOLDER] {uploaded_file.name}")
+                st.caption(f"{uploaded_file.name}")
                 st.caption(f"📏 {uploaded_file.size / 1024:.1f} KB")
 
             except Exception as e:
@@ -228,10 +228,10 @@ def render_logo_upload_section():
         # Speichern
         success = add_brand_logo(brand_name, logo_base64, logo_format)
         if success:
-            st.success(f"[OK] Logo für '{brand_name}' erfolgreich gespeichert!")
+            st.success(f"Logo für '{brand_name}' erfolgreich gespeichert!")
             st.rerun()
         else:
-            st.error("[ERROR] Fehler beim Speichern des Logos!")
+            st.error("Fehler beim Speichern des Logos!")
 
 
 def render_logo_management_section():
@@ -264,7 +264,7 @@ def render_logo_management_section():
     st.dataframe(df, use_container_width=True)
 
     # Logo-Details und Aktionen
-    st.subheader("[SEARCH] Logo-Details")
+    st.subheader("Logo-Details")
 
     selected_logo_id = st.selectbox(
         "Logo auswählen:",
@@ -309,7 +309,7 @@ def render_logo_management_section():
 
                     with col_delete:
                         if st.button(
-                            "[DELETE] Löschen",
+                            "Löschen",
                             key=f"delete_logo_{logo_id}",
                                 type="secondary"):
                             if st.session_state.get(
@@ -318,15 +318,15 @@ def render_logo_management_section():
                                     selected_logo['brand_name'])
                                 if success:
                                     st.success(
-                                        f"[OK] Logo für '{
+                                        f"Logo für '{
                                             selected_logo['brand_name']}' gelöscht!")
                                     st.rerun()
                                 else:
-                                    st.error("[ERROR] Fehler beim Löschen!")
+                                    st.error("Fehler beim Löschen!")
                             else:
                                 st.session_state[f'confirm_delete_{logo_id}'] = True
                                 st.warning(
-                                    "[WARNING] Klicken Sie erneut zum Bestätigen!")
+                                    "Klicken Sie erneut zum Bestätigen!")
 
 
 def render_logo_edit_section(logo_id: int, logo_data: dict[str, Any]):
@@ -356,19 +356,19 @@ def render_logo_edit_section(logo_id: int, logo_data: dict[str, Any]):
             key=f"save_edit_{logo_id}",
                 type="primary"):
             # TODO: Implementierung der Bearbeitung
-            st.success("[OK] Änderungen gespeichert!")
+            st.success("Änderungen gespeichert!")
             del st.session_state[f'edit_mode_{logo_id}']
             st.rerun()
 
     with col2:
-        if st.button("[ERROR] Abbrechen", key=f"cancel_edit_{logo_id}"):
+        if st.button("Abbrechen", key=f"cancel_edit_{logo_id}"):
             del st.session_state[f'edit_mode_{logo_id}']
             st.rerun()
 
 
 def render_logo_management_ui():
     """Hauptfunktion für die Logo-Management UI"""
-    st.title("[DESIGN] Logo-Management")
+    st.title("Logo-Management")
     st.markdown("---")
 
     # Erweiterte Tabs mit allen CRUD-Funktionen integriert
@@ -376,10 +376,10 @@ def render_logo_management_ui():
         "📋 Übersicht",
         "➕ Hinzufügen",
         "✏️ Bearbeiten",
-        "[TOOL] Tools",
+        "Tools",
         "📤 Upload (Legacy)",
         "🗂️ Verwaltung",
-        "[CHART] Statistiken"
+        "Statistiken"
     ])
 
     with tab1:
@@ -459,7 +459,7 @@ def render_logo_overview_section():
                             st.rerun()
                     with col2:
                         if st.button(
-                                "[DELETE]",
+                                "",
                                 key=f"delete_{
                                     brand['id']}",
                                 help="Löschen"):
@@ -566,13 +566,13 @@ def render_logo_add_section():
 
                         if result:
                             st.success(
-                                f"[OK] Logo für '{brand_name}' erfolgreich hinzugefügt!")
+                                f"Logo für '{brand_name}' erfolgreich hinzugefügt!")
                             st.rerun()
                         else:
-                            st.error("[ERROR] Fehler beim Hinzufügen des Logos")
+                            st.error("Fehler beim Hinzufügen des Logos")
                     else:
                         st.error(
-                            f"[ERROR] Logo-Verarbeitung fehlgeschlagen: {
+                            f"Logo-Verarbeitung fehlgeschlagen: {
                                 logo_result.get(
                                     'error', 'Unbekannter Fehler')}")
 
@@ -683,7 +683,7 @@ def render_logo_edit_section():
 
                         with col_delete:
                             delete_submitted = st.form_submit_button(
-                                "[DELETE] Löschen", type="secondary")
+                                "Löschen", type="secondary")
 
                         if save_submitted:
                             update_data = {
@@ -709,18 +709,18 @@ def render_logo_edit_section():
 
                             if admin.update_brand_logo(
                                     brand_data['id'], update_data):
-                                st.success("[OK] Logo erfolgreich aktualisiert!")
+                                st.success("Logo erfolgreich aktualisiert!")
                                 st.rerun()
                             else:
                                 st.error(
-                                    "[ERROR] Fehler beim Aktualisieren des Logos")
+                                    "Fehler beim Aktualisieren des Logos")
 
                         if delete_submitted:
                             if admin.delete_brand_logo(brand_data['id']):
-                                st.success("[OK] Logo erfolgreich gelöscht!")
+                                st.success("Logo erfolgreich gelöscht!")
                                 st.rerun()
                             else:
-                                st.error("[ERROR] Fehler beim Löschen des Logos")
+                                st.error("Fehler beim Löschen des Logos")
 
     except ImportError as e:
         st.error(f"Brand-Logo-Admin nicht verfügbar: {e}")
@@ -728,7 +728,7 @@ def render_logo_edit_section():
 
 def render_logo_tools_section():
     """Rendert die Tools-Sektion"""
-    st.subheader("[TOOL] Logo-Tools")
+    st.subheader("Logo-Tools")
 
     try:
         from admin_brand_logo_management_ui import BrandLogoAdmin
@@ -738,9 +738,9 @@ def render_logo_tools_section():
         col1, col2 = st.columns(2)
 
         with col1:
-            st.markdown("### [PACKAGE] Export & Backup")
+            st.markdown("### Export & Backup")
 
-            if st.button("[FILE] Alle Logos exportieren (JSON)"):
+            if st.button("Alle Logos exportieren (JSON)"):
                 brands = admin.get_all_brands()
                 if brands:
                     import json
@@ -768,7 +768,7 @@ def render_logo_tools_section():
         with col2:
             st.markdown("### 🧹 Bereinigung")
 
-            if st.button("[SEARCH] Doppelte Logos suchen"):
+            if st.button("Doppelte Logos suchen"):
                 brands = admin.get_all_brands()
                 duplicates = []
                 seen_names = {}
@@ -782,7 +782,7 @@ def render_logo_tools_section():
 
                 if duplicates:
                     st.warning(
-                        f"[WARNING] {
+                        f"{
                             len(duplicates)} mögliche Duplikate gefunden:")
                     for dup_pair in duplicates:
                         st.write(
@@ -792,7 +792,7 @@ def render_logo_tools_section():
                                 dup_pair[1]['brand_name']} (ID: {
                                 dup_pair[1]['id']})")
                 else:
-                    st.success("[OK] Keine Duplikate gefunden!")
+                    st.success("Keine Duplikate gefunden!")
 
             if st.button("📏 Logo-Größen optimieren"):
                 st.info(
@@ -843,7 +843,7 @@ def render_logo_tools_section():
                                     success_count += 1
 
                         st.success(
-                            f"[OK] {success_count} von {
+                            f"{success_count} von {
                                 len(selected_brands)} Logos aktualisiert!")
                         if success_count > 0:
                             st.rerun()
@@ -869,7 +869,7 @@ def render_logo_tools_section():
                         f"📋 {
                             len(brands_to_import)} Logos zum Import gefunden")
 
-                    if st.button("[LAUNCH] Import starten"):
+                    if st.button("Import starten"):
                         success_count = 0
                         error_count = 0
 
@@ -897,14 +897,14 @@ def render_logo_tools_section():
                                             'Unbekannt')}': {e}")
 
                         st.success(
-                            f"[OK] Import abgeschlossen: {success_count} erfolgreich, {error_count} Fehler")
+                            f"Import abgeschlossen: {success_count} erfolgreich, {error_count} Fehler")
                         if success_count > 0:
                             st.rerun()
                 else:
-                    st.error("[ERROR] Ungültiges Import-Format")
+                    st.error("Ungültiges Import-Format")
 
             except Exception as e:
-                st.error(f"[ERROR] Import-Fehler: {e}")
+                st.error(f"Import-Fehler: {e}")
 
     except ImportError as e:
         st.error(f"Brand-Logo-Admin nicht verfügbar: {e}")
@@ -929,7 +929,7 @@ def render_logo_positions_tab():
 
 def render_logo_statistics_section():
     """Rendert Statistiken über die Logos"""
-    st.subheader("[CHART] Logo-Statistiken")
+    st.subheader("Logo-Statistiken")
 
     if not LOGO_DB_AVAILABLE:
         st.error("Logo-Datenbank nicht verfügbar!")

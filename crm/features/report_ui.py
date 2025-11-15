@@ -25,7 +25,7 @@ except ImportError as e:
 
 def render_reporting_ui():
     """Hauptfunktion für die Reporting-UI."""
-    st.title("[CHART] CRM Reports & Analysen")
+    st.title("CRM Reports & Analysen")
     
     # Datenbankverbindung
     conn = get_db_connection()
@@ -37,8 +37,8 @@ def render_reporting_ui():
     
     # Tab-Navigation
     tab1, tab2, tab3, tab4 = st.tabs([
-        "[STATS] Vordefinierte Reports",
-        "[TOOL] Report Builder",
+        "Vordefinierte Reports",
+        "Report Builder",
         "💾 Gespeicherte Vorlagen",
         "📥 Export"
     ])
@@ -186,7 +186,7 @@ def render_predefined_reports(engine: ReportingEngine):
                     st.plotly_chart(result["chart"], use_container_width=True)
                     
                     # Funnel-Stufen Details
-                    with st.expander("[CHART] Funnel-Stufen Details"):
+                    with st.expander("Funnel-Stufen Details"):
                         funnel_df = pd.DataFrame([
                             {"Stufe": "Leads", "Anzahl": result["funnel_stages"]["lead"]},
                             {"Stufe": "Qualifiziert", "Anzahl": result["funnel_stages"]["qualified"]},
@@ -233,7 +233,7 @@ def render_report_builder(engine: ReportingEngine, conn):
     """Rendert den benutzerdefinierten Report Builder."""
     st.header("Benutzerdefinierter Report Builder")
     
-    st.info("[IDEA] Erstellen Sie individuelle Reports mit flexiblen Filtern und Gruppierungen")
+    st.info("Erstellen Sie individuelle Reports mit flexiblen Filtern und Gruppierungen")
     
     # Tabellen-Auswahl
     available_tables = get_available_tables(conn)
@@ -362,13 +362,13 @@ def render_report_builder(engine: ReportingEngine, conn):
                 )
                 
                 if result["success"]:
-                    st.success(f"[OK] Report erfolgreich erstellt ({result['row_count']} Zeilen)")
+                    st.success(f"Report erfolgreich erstellt ({result['row_count']} Zeilen)")
                     
                     # Daten anzeigen
                     st.dataframe(result["data"], use_container_width=True)
                     
                     # Query anzeigen
-                    with st.expander("[SEARCH] SQL Query anzeigen"):
+                    with st.expander("SQL Query anzeigen"):
                         st.code(result["query"], language="sql")
                     
                     # In Session State speichern
@@ -428,7 +428,7 @@ def render_saved_templates(engine: ReportingEngine):
     st.write(f"**{len(templates)} Vorlage(n) verfügbar**")
     
     for template in templates:
-        with st.expander(f"[FILE] {template['name']}"):
+        with st.expander(f"{template['name']}"):
             col1, col2, col3 = st.columns([2, 1, 1])
             
             with col1:
@@ -451,7 +451,7 @@ def render_saved_templates(engine: ReportingEngine):
                         st.error(result["message"])
             
             with col3:
-                if st.button("[DELETE] Löschen", key=f"del_{template['id']}"):
+                if st.button("Löschen", key=f"del_{template['id']}"):
                     result = engine.delete_report_template(template['id'])
                     if result["success"]:
                         st.success(result["message"])
@@ -477,7 +477,7 @@ def render_export_section():
     
     with col1:
         # Excel Export
-        st.subheader("[CHART] Excel")
+        st.subheader("Excel")
         
         conn = get_db_connection()
         if conn:
@@ -494,7 +494,7 @@ def render_export_section():
     
     with col2:
         # CSV Export
-        st.subheader("[FILE] CSV")
+        st.subheader("CSV")
         
         conn = get_db_connection()
         if conn:
@@ -512,7 +512,7 @@ def render_export_section():
     with col3:
         # Chart Export (wenn vorhanden)
         if 'last_report_chart' in st.session_state:
-            st.subheader("[STATS] Diagramm")
+            st.subheader("Diagramm")
             
             conn = get_db_connection()
             if conn:

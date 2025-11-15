@@ -23,7 +23,7 @@ def get_db_functions():
 
         return load_admin_setting, save_admin_setting
     except ImportError:
-        st.error("[ERROR] Datenbankmodul nicht verfügbar")
+        st.error("Datenbankmodul nicht verfügbar")
         return None, None
 
 
@@ -42,7 +42,7 @@ def render_pdf_settings_ui():
 
     if not load_setting or not save_setting:
         st.error(
-            "[ERROR] Datenbank-Funktionen nicht verfügbar. "
+            "Datenbank-Funktionen nicht verfügbar. "
             "Einstellungen können nicht geladen werden."
         )
         return
@@ -53,13 +53,13 @@ def render_pdf_settings_ui():
     # Tab-Navigation für verschiedene Einstellungsbereiche
     tabs = st.tabs(
         [
-            "[DESIGN] PDF-Design",
-            "[CHART] Diagramm-Farben",
+            "PDF-Design",
+            "Diagramm-Farben",
             "🖼️ UI-Themes",
-            "[FILE] PDF-Templates",
-            "[DESIGN] Layout-Optionen",
+            "PDF-Templates",
+            "Layout-Optionen",
             "💾 Import/Export",
-            "[PACKAGE] Versionierung",
+            "Versionierung",
         ]
     )
 
@@ -103,7 +103,7 @@ def render_pdf_design_settings(load_setting, save_setting):
     - Footer-Format
     - Wasserzeichen
     """
-    st.header("[DESIGN] PDF-Design-Einstellungen")
+    st.header("PDF-Design-Einstellungen")
     st.markdown("Passen Sie das Aussehen Ihrer PDF-Dokumente an.")
 
     # Load current settings
@@ -136,7 +136,7 @@ def render_pdf_design_settings(load_setting, save_setting):
 
     with col_settings:
         # Section 1: Farbauswahl (Task 9.1)
-        st.subheader("[DESIGN] Farbauswahl")
+        st.subheader("Farbauswahl")
 
         col1, col2 = st.columns(2)
         with col1:
@@ -469,7 +469,7 @@ def render_chart_color_settings(load_setting, save_setting):
     - Farbpaletten-Bibliothek
     - Individuelle Diagramm-Konfiguration
     """
-    st.header("[CHART] Diagramm-Farbeinstellungen")
+    st.header("Diagramm-Farbeinstellungen")
     st.markdown(
         "Konfigurieren Sie die Farben für alle Diagramme " "und Visualisierungen."
     )
@@ -479,7 +479,7 @@ def render_chart_color_settings(load_setting, save_setting):
 
     # Create sub-tabs for different chart color settings
     sub_tabs = st.tabs(
-        ["🌐 Globale Farben", "[DESIGN] Farbpaletten", "⚙️ Individuelle Konfiguration"]
+        ["🌐 Globale Farben", "Farbpaletten", "⚙️ Individuelle Konfiguration"]
     )
 
     # Sub-Tab 1: Globale Farbeinstellungen (Task 10.1)
@@ -603,7 +603,7 @@ def render_color_palette_library(visualization_settings, load_setting, save_sett
 
     Zeigt vordefinierte Farbpaletten und ermöglicht deren Anwendung
     """
-    st.subheader("[DESIGN] Farbpaletten-Bibliothek")
+    st.subheader("Farbpaletten-Bibliothek")
     st.markdown(
         "Wählen Sie eine vordefinierte Palette oder " "erstellen Sie eine eigene."
     )
@@ -686,7 +686,7 @@ def render_color_palette_library(visualization_settings, load_setting, save_sett
 
             # Apply button
             if st.button(
-                "[OK] Palette anwenden",
+                "Palette anwenden",
                 key=f"apply_palette_{palette_key}",
                 use_container_width=True,
             ):
@@ -1031,7 +1031,7 @@ def render_ui_theme_settings(load_setting, save_setting):
 
     with col_settings:
         # Task 11.1: Theme-Auswahl
-        st.subheader("[DESIGN] Theme-Auswahl")
+        st.subheader("Theme-Auswahl")
 
         # Theme dropdown
         selected_theme_key = st.selectbox(
@@ -1051,14 +1051,14 @@ def render_ui_theme_settings(load_setting, save_setting):
         # Show theme description
         if selected_theme_key != "custom":
             st.info(
-                f"[INFO] {
+                f"{
                     predefined_themes[selected_theme_key]['description']}"
             )
 
         # Theme aktivieren button
         if selected_theme_key != "custom":
             if st.button(
-                "[OK] Theme aktivieren",
+                "Theme aktivieren",
                 type="primary",
                 use_container_width=True,
                 key="activate_theme",
@@ -1331,7 +1331,7 @@ def render_ui_theme_settings(load_setting, save_setting):
         st.markdown("---")
 
         # Theme color summary
-        with st.expander("[DESIGN] Farbübersicht"):
+        with st.expander("Farbübersicht"):
             st.markdown(
                 f"""
             **Primärfarbe:** `{preview_theme['primary_color']}`
@@ -1397,7 +1397,7 @@ def render_pdf_template_management(load_setting, save_setting):
     - Template-Details-Anzeige (Task 12.2)
     - Neues Template hinzufügen (Task 12.3)
     """
-    st.header("[FILE] PDF-Template-Verwaltung")
+    st.header("PDF-Template-Verwaltung")
     st.markdown(
         "Verwalten Sie verschiedene PDF-Templates für unterschiedliche "
         "Angebots-Designs."
@@ -1444,7 +1444,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
 
     if not templates:
         st.info(
-            "[INFO] Noch keine Templates vorhanden. "
+            "Noch keine Templates vorhanden. "
             "Fügen Sie ein neues Template im Tab "
             "'Neues Template hinzufügen' hinzu."
         )
@@ -1477,7 +1477,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
     )
 
     if not selected_template:
-        st.error("[ERROR] Template nicht gefunden.")
+        st.error("Template nicht gefunden.")
         return
 
     st.markdown("---")
@@ -1539,9 +1539,9 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                         use_container_width=True,
                     )
                 except Exception as e:
-                    st.warning(f"[WARNING] Vorschau konnte nicht geladen werden: {e}")
+                    st.warning(f"Vorschau konnte nicht geladen werden: {e}")
             else:
-                st.info("[INFO] Vorschaubild nicht gefunden")
+                st.info("Vorschaubild nicht gefunden")
         else:
             # Show placeholder preview
             placeholder_html = """
@@ -1560,7 +1560,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             ">
                 <div>
-                    <div style="font-size: 48px; margin-bottom: 10px;">[FILE]</div>
+                    <div style="font-size: 48px; margin-bottom: 10px;"></div>
                     <div>Keine Vorschau verfügbar</div>
                 </div>
             </div>
@@ -1572,7 +1572,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
     # Show file paths with enhanced display
     st.markdown("**Dateipfade:**")
 
-    with st.expander("[FOLDER] Template-Dateien anzeigen", expanded=False):
+    with st.expander("Template-Dateien anzeigen", expanded=False):
         import os
 
         # Summary statistics
@@ -1615,13 +1615,13 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                     try:
                         file_size = os.path.getsize(page_path)
                         size_kb = file_size / 1024
-                        status_icon = "[OK]"
+                        status_icon = ""
                         status_text = f"({size_kb:.1f} KB)"
                     except BaseException:
-                        status_icon = "[OK]"
+                        status_icon = ""
                         status_text = ""
                 else:
-                    status_icon = "[ERROR]"
+                    status_icon = ""
                     status_text = "(Datei nicht gefunden)"
 
                 st.text(f"{status_icon} Seite {i}: {page_path} {status_text}")
@@ -1646,13 +1646,13 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                     try:
                         file_size = os.path.getsize(coord_path)
                         size_kb = file_size / 1024
-                        status_icon = "[OK]"
+                        status_icon = ""
                         status_text = f"({size_kb:.1f} KB)"
                     except BaseException:
-                        status_icon = "[OK]"
+                        status_icon = ""
                         status_text = ""
                 else:
-                    status_icon = "[ERROR]"
+                    status_icon = ""
                     status_text = "(Datei nicht gefunden)"
 
                 st.text(f"{status_icon} Seite {i}: {coord_path} {status_text}")
@@ -1666,13 +1666,13 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
         expected_files = 16  # 8 backgrounds + 8 coords
 
         if total_files == expected_files:
-            st.success(f"[OK] Alle Dateien vorhanden ({total_files}/{expected_files})")
+            st.success(f"Alle Dateien vorhanden ({total_files}/{expected_files})")
         elif total_files > 0:
             st.warning(
-                f"[WARNING] Unvollständig: {total_files}/{expected_files} Dateien vorhanden"
+                f"Unvollständig: {total_files}/{expected_files} Dateien vorhanden"
             )
         else:
-            st.error("[ERROR] Keine Dateien konfiguriert")
+            st.error("Keine Dateien konfiguriert")
 
     st.markdown("---")
 
@@ -1683,7 +1683,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
         # Only show activate button if not already active
         if not is_active:
             if st.button(
-                "[OK] Template aktivieren",
+                "Template aktivieren",
                 type="primary",
                 use_container_width=True,
                 key="activate_template",
@@ -1699,12 +1699,12 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                 else:
                     _show_error_message("Fehler beim Aktivieren des Templates.")
         else:
-            st.success("[OK] Dieses Template ist aktiv")
+            st.success("Dieses Template ist aktiv")
 
     with col2:
         # Delete template button
         if st.button(
-            "[DELETE] Löschen",
+            "Löschen",
             use_container_width=True,
             key="delete_template",
             help="Template löschen",
@@ -1718,7 +1718,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
     # Confirmation dialog for deletion
     if st.session_state.get("confirm_delete", False):
         st.warning(
-            f"[WARNING] Möchten Sie das Template '{selected_template['name']}' "
+            f"Möchten Sie das Template '{selected_template['name']}' "
             "wirklich löschen?"
         )
 
@@ -1901,7 +1901,7 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
 
             if errors:
                 for error in errors:
-                    st.error(f"[ERROR] {error}")
+                    st.error(f"{error}")
             else:
                 # Create new template
                 import datetime
@@ -1940,7 +1940,7 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
             st.rerun()
 
     # Help section
-    with st.expander("[INFO] Hilfe zu Template-Dateipfaden"):
+    with st.expander("Hilfe zu Template-Dateipfaden"):
         st.markdown(
             """
         **Hintergrund-PDFs:**
@@ -1969,7 +1969,7 @@ def render_layout_options(load_setting, save_setting):
     - Layout-Liste (Task 13.1)
     - Layout-Konfiguration (Task 13.2)
     """
-    st.header("[DESIGN] Layout-Optionen")
+    st.header("Layout-Optionen")
     st.markdown("Verwalten Sie verfügbare PDF-Layouts und deren Einstellungen.")
 
     # Load current settings
@@ -1980,7 +1980,7 @@ def render_layout_options(load_setting, save_setting):
         "standard": {
             "name": "Standard-Layout",
             "description": "8-Seiten PDF mit allen Standardinformationen",
-            "icon": "[FILE]",
+            "icon": "",
             "pages": 8,
             "features": [
                 "Deckblatt mit Projektübersicht",
@@ -2074,7 +2074,7 @@ def render_layout_options(load_setting, save_setting):
 
         with st.expander(
             f"{layout_info['icon']} **{layout_info['name']}** "
-            f"({'[OK] Aktiviert' if current_config['enabled'] else '[ERROR] Deaktiviert'}"
+            f"({'Aktiviert' if current_config['enabled'] else 'Deaktiviert'}"
             f"{' • ⭐ Standard' if current_config['is_default'] else ''})",
             expanded=current_config["is_default"],
         ):
@@ -2239,7 +2239,7 @@ def render_layout_options(load_setting, save_setting):
     st.markdown("---")
 
     # Summary section
-    st.subheader("[CHART] Übersicht")
+    st.subheader("Übersicht")
 
     # Count enabled layouts
     enabled_count = sum(1 for cfg in updated_layouts.values() if cfg["enabled"])
@@ -2271,7 +2271,7 @@ def render_layout_options(load_setting, save_setting):
         for layout_key, layout_info in available_layouts.items():
             config = updated_layouts[layout_key]
 
-            status_icon = "[OK]" if config["enabled"] else "[ERROR]"
+            status_icon = "" if config["enabled"] else ""
             default_icon = "⭐" if config["is_default"] else ""
 
             st.markdown(f"{status_icon} **{layout_info['name']}** {default_icon}")
@@ -2393,12 +2393,12 @@ def render_import_export(load_setting, save_setting):
                 is_valid, validation_errors = _validate_imported_config(imported_config)
 
                 if is_valid:
-                    st.success("[OK] Konfiguration erfolgreich geladen und validiert!")
+                    st.success("Konfiguration erfolgreich geladen und validiert!")
 
                     # Show metadata if available
                     if "_metadata" in imported_config:
                         metadata = imported_config["_metadata"]
-                        with st.expander("[INFO] Datei-Informationen"):
+                        with st.expander("Datei-Informationen"):
                             st.markdown(
                                 f"""
                             - **Export-Datum**: {metadata.get('export_date', 'Unbekannt')}
@@ -2419,7 +2419,7 @@ def render_import_export(load_setting, save_setting):
                         for key in imported_config.keys():
                             if not key.startswith("_"):
                                 friendly_name = _get_setting_friendly_name(key)
-                                st.markdown(f"- [OK] {friendly_name}")
+                                st.markdown(f"- {friendly_name}")
 
                     # Preview imported data
                     with st.expander("👁️ Vorschau der importierten Daten"):
@@ -2435,7 +2435,7 @@ def render_import_export(load_setting, save_setting):
 
                     # Warning message
                     st.warning(
-                        "[WARNING] **Achtung**: Der Import überschreibt alle "
+                        "**Achtung**: Der Import überschreibt alle "
                         "aktuellen Einstellungen!"
                     )
 
@@ -2448,7 +2448,7 @@ def render_import_export(load_setting, save_setting):
 
                     # Import button
                     if st.button(
-                        "[OK] Konfiguration importieren",
+                        "Konfiguration importieren",
                         type="primary",
                         disabled=not confirm_import,
                         use_container_width=True,
@@ -2468,27 +2468,27 @@ def render_import_export(load_setting, save_setting):
                             )
 
                 else:
-                    st.error("[ERROR] Ungültige Konfigurationsdatei!")
+                    st.error("Ungültige Konfigurationsdatei!")
 
-                    with st.expander("[SEARCH] Validierungsfehler"):
+                    with st.expander("Validierungsfehler"):
                         for error in validation_errors:
                             st.markdown(f"- {error}")
 
             except json.JSONDecodeError as e:
-                st.error(f"[ERROR] Fehler beim Parsen der JSON-Datei: {str(e)}")
+                st.error(f"Fehler beim Parsen der JSON-Datei: {str(e)}")
             except Exception as e:
-                st.error(f"[ERROR] Unerwarteter Fehler: {str(e)}")
+                st.error(f"Unerwarteter Fehler: {str(e)}")
 
         else:
             st.info(
-                "[INFO] Wählen Sie eine JSON-Datei aus, um die "
+                "Wählen Sie eine JSON-Datei aus, um die "
                 "Konfiguration zu importieren."
             )
 
     st.markdown("---")
 
     # Additional information
-    with st.expander("[INFO] Hilfe & Informationen"):
+    with st.expander("Hilfe & Informationen"):
         st.markdown(
             """
         ### Import/Export-Funktionen
@@ -2723,7 +2723,7 @@ def render_version_management(load_setting, save_setting):
     - Laden von Versionen (Task 15.2)
     - Löschen von Versionen (Task 15.3)
     """
-    st.header("[PACKAGE] Versionsverwaltung")
+    st.header("Versionsverwaltung")
     st.markdown(
         "Speichern und verwalten Sie verschiedene Versionen "
         "Ihrer Design-Konfigurationen."
@@ -2764,7 +2764,7 @@ def render_version_management(load_setting, save_setting):
         ):
             if version_name.strip() in versions:
                 st.warning(
-                    f"[WARNING] Version '{version_name}' existiert bereits. "
+                    f"Version '{version_name}' existiert bereits. "
                     "Bitte wählen Sie einen anderen Namen."
                 )
             else:
@@ -2806,13 +2806,13 @@ def render_version_management(load_setting, save_setting):
     st.subheader("📚 Gespeicherte Versionen")
 
     if not versions:
-        st.info("[INFO] Noch keine Versionen gespeichert.")
+        st.info("Noch keine Versionen gespeichert.")
     else:
         st.markdown(f"**{len(versions)} Version(en) verfügbar:**")
 
         # Display versions in a table-like format
         for version_name, version_data in versions.items():
-            with st.expander(f"[PACKAGE] {version_name}", expanded=False):
+            with st.expander(f"{version_name}", expanded=False):
                 # Get metadata
                 metadata = version_data.get("_metadata", {})
                 created_at = metadata.get("created_at", "Unbekannt")
@@ -2847,7 +2847,7 @@ def render_version_management(load_setting, save_setting):
                     ]:
                         if key in version_data:
                             included_settings.append(
-                                f"[OK] {_get_setting_friendly_name(key)}"
+                                f"{_get_setting_friendly_name(key)}"
                             )
 
                     if included_settings:
@@ -2871,7 +2871,7 @@ def render_version_management(load_setting, save_setting):
 
                     # Delete button (Task 15.3)
                     if st.button(
-                        "[DELETE] Löschen",
+                        "Löschen",
                         use_container_width=True,
                         key=f"delete_version_{version_name}",
                         help="Löscht diese Version permanent",
@@ -2887,7 +2887,7 @@ def render_version_management(load_setting, save_setting):
 
         st.markdown("---")
         st.warning(
-            f"[WARNING] **Bestätigung erforderlich**\n\n"
+            f"**Bestätigung erforderlich**\n\n"
             f"Möchten Sie wirklich die Version '{version_to_load}' laden?\n\n"
             f"**Alle aktuellen Einstellungen werden überschrieben!**"
         )
@@ -2896,7 +2896,7 @@ def render_version_management(load_setting, save_setting):
 
         with col1:
             if st.button(
-                "[OK] Ja, laden",
+                "Ja, laden",
                 type="primary",
                 use_container_width=True,
                 key="confirm_load_yes",
@@ -2914,7 +2914,7 @@ def render_version_management(load_setting, save_setting):
 
         with col2:
             if st.button(
-                "[ERROR] Abbrechen", use_container_width=True, key="confirm_load_no"
+                "Abbrechen", use_container_width=True, key="confirm_load_no"
             ):
                 del st.session_state.confirm_load_version
                 st.rerun()
@@ -2925,7 +2925,7 @@ def render_version_management(load_setting, save_setting):
 
         st.markdown("---")
         st.error(
-            f"[WARNING] **Bestätigung erforderlich**\n\n"
+            f"**Bestätigung erforderlich**\n\n"
             f"Möchten Sie wirklich die Version '{version_to_delete}' löschen?\n\n"
             f"**Diese Aktion kann nicht rückgängig gemacht werden!**"
         )
@@ -2934,7 +2934,7 @@ def render_version_management(load_setting, save_setting):
 
         with col1:
             if st.button(
-                "[OK] Ja, löschen",
+                "Ja, löschen",
                 type="primary",
                 use_container_width=True,
                 key="confirm_delete_yes",
@@ -2958,7 +2958,7 @@ def render_version_management(load_setting, save_setting):
 
         with col2:
             if st.button(
-                "[ERROR] Abbrechen", use_container_width=True, key="confirm_delete_no"
+                "Abbrechen", use_container_width=True, key="confirm_delete_no"
             ):
                 del st.session_state.confirm_delete_version
                 st.rerun()
@@ -2966,7 +2966,7 @@ def render_version_management(load_setting, save_setting):
     st.markdown("---")
 
     # Info section
-    with st.expander("[INFO] Hilfe zur Versionsverwaltung"):
+    with st.expander("Hilfe zur Versionsverwaltung"):
         st.markdown(
             """
         ### Wie funktioniert die Versionsverwaltung?
@@ -3104,17 +3104,17 @@ def _get_setting_friendly_name(key: str) -> str:
 # Helper function for future use
 def _show_success_message(message: str):
     """Shows a success message"""
-    st.success(f"[OK] {message}")
+    st.success(f"{message}")
 
 
 def _show_error_message(message: str):
     """Shows an error message"""
-    st.error(f"[ERROR] {message}")
+    st.error(f"{message}")
 
 
 def _show_info_message(message: str):
     """Shows an info message"""
-    st.info(f"[INFO] {message}")
+    st.info(f"{message}")
 
 
 # Main entry point for testing

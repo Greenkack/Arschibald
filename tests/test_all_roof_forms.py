@@ -45,9 +45,9 @@ def test_roof_colors():
     for covering, expected_color in test_cases:
         color = _roof_color_from_covering(covering)
         assert color == expected_color, f"Color mismatch for {covering}: got {color}, expected {expected_color}"
-        print(f"[OK] {covering}: {color}")
+        print(f"{covering}: {color}")
     
-    print("\n[OK] All roof colors correct")
+    print("\nAll roof colors correct")
     return True
 
 
@@ -64,7 +64,7 @@ def test_flat_roof():
     assert roof is not None, "Flat roof creation failed"
     assert roof.n_points > 0, "Flat roof has no points"
     
-    print(f"[OK] Flat roof created with {roof.n_points} points and {roof.n_cells} cells")
+    print(f"Flat roof created with {roof.n_points} points and {roof.n_cells} cells")
     
     # Test with scene (default mounting is Süd)
     project_data = {
@@ -87,7 +87,7 @@ def test_flat_roof():
     
     assert plotter is not None, "Plotter creation failed for flat roof"
     assert len(panels["main"]) > 0, "No panels placed on flat roof"
-    print(f"[OK] Flat roof scene: {len(panels['main'])} panels placed")
+    print(f"Flat roof scene: {len(panels['main'])} panels placed")
     
     plotter.close()
     
@@ -102,7 +102,7 @@ def test_flat_roof():
         base_z=dims.wall_height_m
     )
     assert len(panels_south) > 0, "No panels with south mounting"
-    print(f"[OK] Süd mounting: {len(panels_south)} panels placed")
+    print(f"Süd mounting: {len(panels_south)} panels placed")
     
     panels_ew = place_panels_flat_roof(
         roof_length=dims.length_m,
@@ -112,9 +112,9 @@ def test_flat_roof():
         base_z=dims.wall_height_m
     )
     assert len(panels_ew) > 0, "No panels with east-west mounting"
-    print(f"[OK] Ost-West mounting: {len(panels_ew)} panels placed")
+    print(f"Ost-West mounting: {len(panels_ew)} panels placed")
     
-    print("\n[OK] Flat roof tests passed")
+    print("\nFlat roof tests passed")
     return True
 
 
@@ -132,7 +132,7 @@ def test_gable_roof():
         roof = make_roof_gable(dims.length_m, dims.width_m, dims.wall_height_m, incl)
         assert roof is not None, f"Gable roof creation failed for {incl}°"
         assert roof.n_points > 0, f"Gable roof has no points for {incl}°"
-        print(f"[OK] Gable roof {incl}°: {roof.n_points} points, {roof.n_cells} cells")
+        print(f"Gable roof {incl}°: {roof.n_points} points, {roof.n_cells} cells")
     
     # Test with scene
     project_data = {
@@ -155,11 +155,11 @@ def test_gable_roof():
     
     assert plotter is not None, "Plotter creation failed for gable roof"
     assert len(panels["main"]) > 0, "No panels placed on gable roof"
-    print(f"[OK] Gable roof scene: {len(panels['main'])} panels placed")
+    print(f"Gable roof scene: {len(panels['main'])} panels placed")
     
     plotter.close()
     
-    print("\n[OK] Gable roof tests passed")
+    print("\nGable roof tests passed")
     return True
 
 
@@ -174,7 +174,7 @@ def test_hip_roof():
     roof = make_roof_hip(dims.length_m, dims.width_m, dims.wall_height_m, 30)
     assert roof is not None, "Hip roof creation failed"
     assert roof.n_points > 0, "Hip roof has no points"
-    print(f"[OK] Hip roof created with {roof.n_points} points and {roof.n_cells} cells")
+    print(f"Hip roof created with {roof.n_points} points and {roof.n_cells} cells")
     
     # Test with scene
     project_data = {
@@ -197,11 +197,11 @@ def test_hip_roof():
     
     assert plotter is not None, "Plotter creation failed for hip roof"
     assert len(panels["main"]) > 0, "No panels placed on hip roof"
-    print(f"[OK] Hip roof scene: {len(panels['main'])} panels placed")
+    print(f"Hip roof scene: {len(panels['main'])} panels placed")
     
     plotter.close()
     
-    print("\n[OK] Hip roof tests passed")
+    print("\nHip roof tests passed")
     return True
 
 
@@ -216,7 +216,7 @@ def test_pent_roof():
     roof = make_roof_pent(dims.length_m, dims.width_m, dims.wall_height_m, 15)
     assert roof is not None, "Pent roof creation failed"
     assert roof.n_points > 0, "Pent roof has no points"
-    print(f"[OK] Pent roof created with {roof.n_points} points and {roof.n_cells} cells")
+    print(f"Pent roof created with {roof.n_points} points and {roof.n_cells} cells")
     
     # Test with scene
     project_data = {
@@ -239,11 +239,11 @@ def test_pent_roof():
     
     assert plotter is not None, "Plotter creation failed for pent roof"
     assert len(panels["main"]) > 0, "No panels placed on pent roof"
-    print(f"[OK] Pent roof scene: {len(panels['main'])} panels placed")
+    print(f"Pent roof scene: {len(panels['main'])} panels placed")
     
     plotter.close()
     
-    print("\n[OK] Pent roof tests passed")
+    print("\nPent roof tests passed")
     return True
 
 
@@ -258,7 +258,7 @@ def test_pyramid_roof():
     roof = make_roof_pyramid(dims.length_m, dims.width_m, dims.wall_height_m, 30)
     assert roof is not None, "Pyramid roof creation failed"
     assert roof.n_points > 0, "Pyramid roof has no points"
-    print(f"[OK] Pyramid roof created with {roof.n_points} points and {roof.n_cells} cells")
+    print(f"Pyramid roof created with {roof.n_points} points and {roof.n_cells} cells")
     
     # Test with scene
     project_data = {
@@ -281,11 +281,11 @@ def test_pyramid_roof():
     
     assert plotter is not None, "Plotter creation failed for pyramid roof"
     assert len(panels["main"]) > 0, "No panels placed on pyramid roof"
-    print(f"[OK] Pyramid roof scene: {len(panels['main'])} panels placed")
+    print(f"Pyramid roof scene: {len(panels['main'])} panels placed")
     
     plotter.close()
     
-    print("\n[OK] Pyramid roof tests passed")
+    print("\nPyramid roof tests passed")
     return True
 
 
@@ -311,10 +311,10 @@ if __name__ == "__main__":
             if test():
                 passed += 1
         except AssertionError as e:
-            print(f"\n[ERROR] {test.__name__} failed: {e}")
+            print(f"\n{test.__name__} failed: {e}")
             failed += 1
         except Exception as e:
-            print(f"\n[ERROR] {test.__name__} error: {e}")
+            print(f"\n{test.__name__} error: {e}")
             import traceback
             traceback.print_exc()
             failed += 1
@@ -324,8 +324,8 @@ if __name__ == "__main__":
     print("=" * 60)
     
     if failed == 0:
-        print("\n[OK] ALL ROOF FORM TESTS PASSED!")
+        print("\nALL ROOF FORM TESTS PASSED!")
         exit(0)
     else:
-        print(f"\n[ERROR] {failed} TEST(S) FAILED")
+        print(f"\n{failed} TEST(S) FAILED")
         exit(1)

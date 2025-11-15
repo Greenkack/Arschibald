@@ -75,14 +75,14 @@ def test_predefined_themes():
     # Test 1: All expected themes exist
     assert set(predefined_themes.keys()) == set(expected_themes), \
         f"Expected themes {expected_themes}, got {list(predefined_themes.keys())}"
-    print("[OK] All expected themes exist")
+    print("All expected themes exist")
 
     # Test 2: Each theme has all required properties
     for theme_key, theme in predefined_themes.items():
         for prop in required_properties:
             assert prop in theme, \
                 f"Theme '{theme_key}' missing property '{prop}'"
-        print(f"[OK] Theme '{theme_key}' has all required properties")
+        print(f"Theme '{theme_key}' has all required properties")
 
     # Test 3: Color values are valid hex colors
     import re
@@ -94,9 +94,9 @@ def test_predefined_themes():
             color_value = theme[color_prop]
             assert hex_pattern.match(color_value), \
                 f"Theme '{theme_key}' has invalid color '{color_value}' for '{color_prop}'"
-        print(f"[OK] Theme '{theme_key}' has valid color values")
+        print(f"Theme '{theme_key}' has valid color values")
 
-    print("\n[OK] All predefined theme tests passed!")
+    print("\nAll predefined theme tests passed!")
     return True
 
 
@@ -123,7 +123,7 @@ def test_theme_structure():
         "Settings missing 'active_theme'"
     assert 'theme_config' in ui_theme_settings, \
         "Settings missing 'theme_config'"
-    print("[OK] Theme settings have required keys")
+    print("Theme settings have required keys")
 
     # Test 2: Theme config has all color properties
     theme_config = ui_theme_settings['theme_config']
@@ -138,7 +138,7 @@ def test_theme_structure():
     for color in required_colors:
         assert color in theme_config, \
             f"Theme config missing '{color}'"
-    print("[OK] Theme config has all required colors")
+    print("Theme config has all required colors")
 
     # Test 3: Custom theme structure
     custom_theme_settings = {
@@ -167,9 +167,9 @@ def test_theme_structure():
         "Custom theme not set as active"
     assert 'custom_theme' in custom_theme_settings, \
         "Custom theme settings missing 'custom_theme'"
-    print("[OK] Custom theme structure is correct")
+    print("Custom theme structure is correct")
 
-    print("\n[OK] All theme structure tests passed!")
+    print("\nAll theme structure tests passed!")
     return True
 
 
@@ -180,7 +180,7 @@ def test_theme_requirements():
     # Requirement 22.1: Vordefinierte Themes verfügbar
     predefined_themes = ['light', 'dark', 'corporate', 'high_contrast']
     print(
-        f"[OK] Requirement 22.1: {
+        f"Requirement 22.1: {
             len(predefined_themes)} vordefinierte Themes verfügbar")
 
     # Requirement 22.2: Theme-Elemente anpassbar
@@ -192,25 +192,25 @@ def test_theme_requirements():
         'accent_color'
     ]
     print(
-        f"[OK] Requirement 22.2: {
+        f"Requirement 22.2: {
             len(theme_elements)} Theme-Elemente anpassbar")
 
     # Requirement 22.3: Custom-Theme erstellbar
-    print("[OK] Requirement 22.3: Custom-Theme kann erstellt werden")
+    print("Requirement 22.3: Custom-Theme kann erstellt werden")
 
     # Requirement 22.4: Theme speicherbar
-    print("[OK] Requirement 22.4: Theme kann gespeichert werden")
+    print("Requirement 22.4: Theme kann gespeichert werden")
 
     # Requirement 28.1: Live-Vorschau verfügbar
-    print("[OK] Requirement 28.1: Live-Vorschau wird aktualisiert")
+    print("Requirement 28.1: Live-Vorschau wird aktualisiert")
 
     # Requirement 28.2: Diagramm-Vorschau (nicht für UI-Themes relevant)
-    print("[OK] Requirement 28.2: N/A für UI-Themes")
+    print("Requirement 28.2: N/A für UI-Themes")
 
     # Requirement 28.4: UI aktualisiert sich bei Theme-Wechsel
-    print("[OK] Requirement 28.4: UI wird bei Theme-Wechsel aktualisiert")
+    print("Requirement 28.4: UI wird bei Theme-Wechsel aktualisiert")
 
-    print("\n[OK] All requirements tests passed!")
+    print("\nAll requirements tests passed!")
     return True
 
 
@@ -242,7 +242,7 @@ def test_theme_preview_html():
     for color_key, color_value in test_theme.items():
         assert color_value in preview_html, \
             f"Preview HTML missing color '{color_key}': {color_value}"
-    print("[OK] Preview HTML contains all theme colors")
+    print("Preview HTML contains all theme colors")
 
     # Test 2: HTML has required elements
     required_elements = [
@@ -254,9 +254,9 @@ def test_theme_preview_html():
     for element in required_elements:
         assert element in preview_html, \
             f"Preview HTML missing element '{element}'"
-    print("[OK] Preview HTML has all required elements")
+    print("Preview HTML has all required elements")
 
-    print("\n[OK] All preview HTML tests passed!")
+    print("\nAll preview HTML tests passed!")
     return True
 
 
@@ -273,27 +273,27 @@ def run_all_tests():
         test_theme_preview_html()
 
         print("\n" + "=" * 60)
-        print("[OK] ALLE TESTS ERFOLGREICH!")
+        print("ALLE TESTS ERFOLGREICH!")
         print("=" * 60)
         print("\nTask 11 Implementation Summary:")
-        print("- [OK] Task 11.1: Theme-Auswahl implementiert")
-        print("- [OK] Task 11.2: Theme-Vorschau implementiert")
-        print("- [OK] Task 11.3: Theme-Editor implementiert")
+        print("- Task 11.1: Theme-Auswahl implementiert")
+        print("- Task 11.2: Theme-Vorschau implementiert")
+        print("- Task 11.3: Theme-Editor implementiert")
         print("\nRequirements erfüllt:")
-        print("- [OK] Requirement 22.1: Vordefinierte Themes verfügbar")
-        print("- [OK] Requirement 22.2: Theme-Elemente anpassbar")
-        print("- [OK] Requirement 22.3: Custom-Theme erstellbar")
-        print("- [OK] Requirement 22.4: Theme speicherbar")
-        print("- [OK] Requirement 28.1: Live-Vorschau verfügbar")
-        print("- [OK] Requirement 28.4: UI aktualisiert sich")
+        print("- Requirement 22.1: Vordefinierte Themes verfügbar")
+        print("- Requirement 22.2: Theme-Elemente anpassbar")
+        print("- Requirement 22.3: Custom-Theme erstellbar")
+        print("- Requirement 22.4: Theme speicherbar")
+        print("- Requirement 28.1: Live-Vorschau verfügbar")
+        print("- Requirement 28.4: UI aktualisiert sich")
 
         return True
 
     except AssertionError as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         return False
     except Exception as e:
-        print(f"\n[ERROR] ERROR: {e}")
+        print(f"\nERROR: {e}")
         import traceback
         traceback.print_exc()
         return False

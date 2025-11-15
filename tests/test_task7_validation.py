@@ -46,9 +46,9 @@ def test_7_1_grid_positioning():
         
         # Erwarte 14 Module (realistisch) mit Warnung
         if len(positions_1) >= 14 and len(positions_1) < 20:
-            print(f"[OK] PASS: {len(positions_1)} Module platziert (realistisch, Warnung ausgegeben)")
+            print(f"PASS: {len(positions_1)} Module platziert (realistisch, Warnung ausgegeben)")
         else:
-            print(f"[ERROR] FAIL: {len(positions_1)} Module (erwartet ~14 mit Warnung)")
+            print(f"FAIL: {len(positions_1)} Module (erwartet ~14 mit Warnung)")
             all_passed = False
         
         # Test 2: 20m x 12m Dach, 50 Module
@@ -57,9 +57,9 @@ def test_7_1_grid_positioning():
         positions_2 = calculate_grid_positions(20.0, 12.0, 50)
         
         if len(positions_2) == 50:
-            print(f"[OK] PASS: Exakt 50 Module platziert")
+            print(f"PASS: Exakt 50 Module platziert")
         else:
-            print(f"[ERROR] FAIL: {len(positions_2)} Module statt 50")
+            print(f"FAIL: {len(positions_2)} Module statt 50")
             all_passed = False
         
         # Test 3: 10m x 6m Dach, 100 Module (zu viele)
@@ -76,9 +76,9 @@ def test_7_1_grid_positioning():
         max_total = max_x * max_y
         
         if len(positions_3) <= max_total and len(positions_3) < 100:
-            print(f"[OK] PASS: Warnung ausgegeben, {len(positions_3)} Module platziert (max: {max_total})")
+            print(f"PASS: Warnung ausgegeben, {len(positions_3)} Module platziert (max: {max_total})")
         else:
-            print(f"[ERROR] FAIL: Falsche Anzahl Module: {len(positions_3)}")
+            print(f"FAIL: Falsche Anzahl Module: {len(positions_3)}")
             all_passed = False
         
         # Test 4: Zentrierung prüfen
@@ -94,29 +94,29 @@ def test_7_1_grid_positioning():
             print(f"   Grid-Zentrum: ({x_center:.3f}, {y_center:.3f})")
             
             if abs(x_center) < 0.5 and abs(y_center) < 0.5:
-                print(f"[OK] PASS: Grid ist korrekt zentriert (Toleranz: ±0.5m)")
+                print(f"PASS: Grid ist korrekt zentriert (Toleranz: ±0.5m)")
             else:
-                print(f"[ERROR] FAIL: Grid nicht zentriert")
+                print(f"FAIL: Grid nicht zentriert")
                 all_passed = False
         
         # Test 5: Logging-Ausgaben validieren
         print("\n📋 Test 5: Logging-Ausgaben")
         print("-" * 70)
-        print("[OK] PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
+        print("PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
         
         if all_passed:
             print("\n" + "="*70)
-            print("[OK] TEST 7.1 BESTANDEN: Grid-Positionierung funktioniert korrekt!")
+            print("TEST 7.1 BESTANDEN: Grid-Positionierung funktioniert korrekt!")
             print("="*70)
             return True
         else:
             print("\n" + "="*70)
-            print("[ERROR] TEST 7.1 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
+            print("TEST 7.1 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
             print("="*70)
             return False
             
     except Exception as e:
-        print(f"\n[ERROR] TEST 7.1 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 7.1 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -158,9 +158,9 @@ def test_7_2_mounting_height():
         mounting_height_1 = avg_z_1 - 5.0
         
         if mounting_height_1 > 0.1:
-            print(f"[OK] PASS: Durchschnittliche Z-Erhöhung = {mounting_height_1:.3f}m (> 0.1m)")
+            print(f"PASS: Durchschnittliche Z-Erhöhung = {mounting_height_1:.3f}m (> 0.1m)")
         else:
-            print(f"[ERROR] FAIL: Durchschnittliche Z-Erhöhung = {mounting_height_1:.3f}m (sollte > 0.1m sein)")
+            print(f"FAIL: Durchschnittliche Z-Erhöhung = {mounting_height_1:.3f}m (sollte > 0.1m sein)")
             all_passed = False
         
         # Test 2-5: Weitere Dachformen (verwende Durchschnitt statt Minimum)
@@ -188,9 +188,9 @@ def test_7_2_mounting_height():
             mounting_height = avg_z - 5.0
             
             if mounting_height > 0.1:
-                print(f"[OK] PASS: Durchschnittliche Z-Erhöhung = {mounting_height:.3f}m (> 0.1m)")
+                print(f"PASS: Durchschnittliche Z-Erhöhung = {mounting_height:.3f}m (> 0.1m)")
             else:
-                print(f"[ERROR] FAIL: Durchschnittliche Z-Erhöhung = {mounting_height:.3f}m")
+                print(f"FAIL: Durchschnittliche Z-Erhöhung = {mounting_height:.3f}m")
                 all_passed = False
         
         # Test 6: Flachdach mit 0° Neigung
@@ -207,9 +207,9 @@ def test_7_2_mounting_height():
         mounting_height_6 = avg_z_6 - 5.0
         
         if abs(mounting_height_6) < 0.05:
-            print(f"[OK] PASS: Durchschnittliche Z-Erhöhung = {mounting_height_6:.3f}m (≈ 0m)")
+            print(f"PASS: Durchschnittliche Z-Erhöhung = {mounting_height_6:.3f}m (≈ 0m)")
         else:
-            print(f"[WARNING]  INFO: Durchschnittliche Z-Erhöhung = {mounting_height_6:.3f}m")
+            print(f"INFO: Durchschnittliche Z-Erhöhung = {mounting_height_6:.3f}m")
         
         # Test 7: Module sinken NICHT in Dachfläche ein (prüfe Durchschnitt)
         print("\n📋 Test 7: Module sind über der Dachfläche (Durchschnitts-Z)")
@@ -222,33 +222,33 @@ def test_7_2_mounting_height():
         for i, (name, vertices) in enumerate(zip(roof_names, all_vertices)):
             avg_z = sum(v[2] for v in vertices) / len(vertices)
             if avg_z >= 5.0:
-                print(f"   [OK] {name}: Durchschnitt Z = {avg_z:.3f}m (>= 5.0m)")
+                print(f"   {name}: Durchschnitt Z = {avg_z:.3f}m (>= 5.0m)")
             else:
-                print(f"   [ERROR] {name}: Durchschnitt Z = {avg_z:.3f}m (< 5.0m)")
+                print(f"   {name}: Durchschnitt Z = {avg_z:.3f}m (< 5.0m)")
                 all_above_roof = False
                 all_passed = False
         
         if all_above_roof:
-            print(f"[OK] PASS: Alle Module sind korrekt über der Dachfläche")
+            print(f"PASS: Alle Module sind korrekt über der Dachfläche")
         
         # Test 8: Logging-Ausgaben validieren
         print("\n📋 Test 8: Logging-Ausgaben")
         print("-" * 70)
-        print("[OK] PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
+        print("PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
         
         if all_passed:
             print("\n" + "="*70)
-            print("[OK] TEST 7.2 BESTANDEN: Modul-Aufständerung funktioniert korrekt!")
+            print("TEST 7.2 BESTANDEN: Modul-Aufständerung funktioniert korrekt!")
             print("="*70)
             return True
         else:
             print("\n" + "="*70)
-            print("[ERROR] TEST 7.2 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
+            print("TEST 7.2 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
             print("="*70)
             return False
             
     except Exception as e:
-        print(f"\n[ERROR] TEST 7.2 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 7.2 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -286,11 +286,11 @@ def test_7_3_optimization_assistant():
         configs_balanced = optimize_layout(dims, target_modules, roof_type, "balanced")
         
         if len(configs_balanced) == 3:
-            print(f"[OK] PASS: 3 Konfigurationen generiert")
+            print(f"PASS: 3 Konfigurationen generiert")
             for i, (config, score) in enumerate(configs_balanced, 1):
                 print(f"   {i}. {config.mounting_mode}: Score {score:.1f}")
         else:
-            print(f"[ERROR] FAIL: {len(configs_balanced)} Konfigurationen statt 3")
+            print(f"FAIL: {len(configs_balanced)} Konfigurationen statt 3")
             all_passed = False
         
         # Test 2: goal="max_modules" - Erwarte höchsten Score für Garage+Fassade
@@ -308,9 +308,9 @@ def test_7_3_optimization_assistant():
             # Prüfe ob Konfiguration mit Garage+Fassade hohen Score hat
             has_extras = best_config.use_garage or best_config.use_facade
             if has_extras and best_score > 80:
-                print(f"[OK] PASS: Konfiguration mit Extras hat hohen Score")
+                print(f"PASS: Konfiguration mit Extras hat hohen Score")
             else:
-                print(f"[WARNING]  INFO: Score-Verteilung kann variieren")
+                print(f"INFO: Score-Verteilung kann variieren")
         
         # Test 3: goal="max_yield" - Erwarte höchsten Score für Süd-Aufständerung
         print("\n📋 Test 3: Optimierung mit goal='max_yield'")
@@ -324,9 +324,9 @@ def test_7_3_optimization_assistant():
             print(f"   Score: {best_score:.1f}")
             
             if best_config.mounting_mode == "south" and best_score > 80:
-                print(f"[OK] PASS: Süd-Aufständerung hat höchsten Score")
+                print(f"PASS: Süd-Aufständerung hat höchsten Score")
             else:
-                print(f"[WARNING]  INFO: {best_config.mounting_mode} hat höchsten Score (erwartet: south)")
+                print(f"INFO: {best_config.mounting_mode} hat höchsten Score (erwartet: south)")
         
         # Test 4: goal="balanced" - Erwarte ausgewogene Scores
         print("\n📋 Test 4: Optimierung mit goal='balanced'")
@@ -340,9 +340,9 @@ def test_7_3_optimization_assistant():
             print(f"   Score-Range: {score_range:.1f}")
             
             if score_range < 40:
-                print(f"[OK] PASS: Scores sind ausgewogen (Range < 40)")
+                print(f"PASS: Scores sind ausgewogen (Range < 40)")
             else:
-                print(f"[WARNING]  INFO: Score-Range ist {score_range:.1f} (erwartet < 40)")
+                print(f"INFO: Score-Range ist {score_range:.1f} (erwartet < 40)")
         
         # Test 5: evaluate_config() Funktion
         print("\n📋 Test 5: evaluate_config() Funktion")
@@ -358,29 +358,29 @@ def test_7_3_optimization_assistant():
         score = evaluate_config(test_config, dims, target_modules, "balanced")
         
         if 0 <= score <= 100:
-            print(f"[OK] PASS: Score ist im gültigen Bereich (0-100): {score:.1f}")
+            print(f"PASS: Score ist im gültigen Bereich (0-100): {score:.1f}")
         else:
-            print(f"[ERROR] FAIL: Score außerhalb des Bereichs: {score:.1f}")
+            print(f"FAIL: Score außerhalb des Bereichs: {score:.1f}")
             all_passed = False
         
         # Test 6: Logging-Ausgaben validieren
         print("\n📋 Test 6: Logging-Ausgaben")
         print("-" * 70)
-        print("[OK] PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
+        print("PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
         
         if all_passed:
             print("\n" + "="*70)
-            print("[OK] TEST 7.3 BESTANDEN: Optimierungs-Assistent funktioniert korrekt!")
+            print("TEST 7.3 BESTANDEN: Optimierungs-Assistent funktioniert korrekt!")
             print("="*70)
             return True
         else:
             print("\n" + "="*70)
-            print("[ERROR] TEST 7.3 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
+            print("TEST 7.3 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
             print("="*70)
             return False
             
     except Exception as e:
-        print(f"\n[ERROR] TEST 7.3 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 7.3 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -416,10 +416,10 @@ def test_7_4_pdf_screenshot_integration():
         mock_session_state["pdf_3d_screenshot"] = mock_png_bytes
         
         if "pdf_3d_screenshot" in mock_session_state:
-            print(f"[OK] PASS: Screenshot in Session State gespeichert")
+            print(f"PASS: Screenshot in Session State gespeichert")
             print(f"   Größe: {len(mock_session_state['pdf_3d_screenshot'])} bytes")
         else:
-            print(f"[ERROR] FAIL: Screenshot nicht in Session State")
+            print(f"FAIL: Screenshot nicht in Session State")
             all_passed = False
         
         # Test 2: PDF-Integration Funktion existiert
@@ -428,9 +428,9 @@ def test_7_4_pdf_screenshot_integration():
         
         try:
             from pdf_visual_inject import make_pv3d_image_flowable
-            print(f"[OK] PASS: make_pv3d_image_flowable() Funktion existiert")
+            print(f"PASS: make_pv3d_image_flowable() Funktion existiert")
         except ImportError as e:
-            print(f"[WARNING]  INFO: make_pv3d_image_flowable() nicht gefunden: {e}")
+            print(f"INFO: make_pv3d_image_flowable() nicht gefunden: {e}")
             # Nicht als Fehler werten, da Funktion möglicherweise anders heißt
         
         # Test 3: Bildgröße Berechnung (17cm Breite, 16:10 Verhältnis)
@@ -449,9 +449,9 @@ def test_7_4_pdf_screenshot_integration():
         print(f"   Seitenverhältnis: {aspect_ratio:.2f}")
         
         if abs(height_cm - 10.625) < 0.1:
-            print(f"[OK] PASS: Bildgröße korrekt (17cm x 10.625cm, 16:10)")
+            print(f"PASS: Bildgröße korrekt (17cm x 10.625cm, 16:10)")
         else:
-            print(f"[ERROR] FAIL: Bildgröße inkorrekt")
+            print(f"FAIL: Bildgröße inkorrekt")
             all_passed = False
         
         # Test 4: Fehlerbehandlung bei fehlendem Screenshot
@@ -462,15 +462,15 @@ def test_7_4_pdf_screenshot_integration():
         screenshot = empty_session_state.get("pdf_3d_screenshot")
         
         if screenshot is None:
-            print(f"[OK] PASS: Kein Screenshot vorhanden - Fallback sollte greifen")
+            print(f"PASS: Kein Screenshot vorhanden - Fallback sollte greifen")
         else:
-            print(f"[ERROR] FAIL: Unerwarteter Screenshot vorhanden")
+            print(f"FAIL: Unerwarteter Screenshot vorhanden")
             all_passed = False
         
         # Test 5: Logging-Ausgaben
         print("\n📋 Test 5: Logging-Ausgaben")
         print("-" * 70)
-        print("[OK] PASS: Logging-Ausgaben wurden validiert")
+        print("PASS: Logging-Ausgaben wurden validiert")
         
         # Hinweis für manuelle Tests
         print("\n📋 Hinweis: Manuelle Tests erforderlich")
@@ -483,17 +483,17 @@ def test_7_4_pdf_screenshot_integration():
         
         if all_passed:
             print("\n" + "="*70)
-            print("[OK] TEST 7.4 BESTANDEN: PDF-Screenshot-Integration funktioniert!")
+            print("TEST 7.4 BESTANDEN: PDF-Screenshot-Integration funktioniert!")
             print("="*70)
             return True
         else:
             print("\n" + "="*70)
-            print("[ERROR] TEST 7.4 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
+            print("TEST 7.4 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
             print("="*70)
             return False
             
     except Exception as e:
-        print(f"\n[ERROR] TEST 7.4 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 7.4 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -535,13 +535,13 @@ def test_7_5_error_handling():
             )
             
             if fig is not None:
-                print(f"[OK] PASS: Szene mit leeren project_data erstellt (Fallback funktioniert)")
+                print(f"PASS: Szene mit leeren project_data erstellt (Fallback funktioniert)")
             else:
-                print(f"[ERROR] FAIL: Szene konnte nicht erstellt werden")
+                print(f"FAIL: Szene konnte nicht erstellt werden")
                 all_passed = False
                 
         except Exception as e:
-            print(f"[WARNING]  INFO: Fehler bei leerem project_data: {e}")
+            print(f"INFO: Fehler bei leerem project_data: {e}")
             # Nicht als Fehler werten, da Fallback möglicherweise anders implementiert
         
         # Test 2: Ungültige Dimensionen - Erwarte Fehlerbehandlung
@@ -554,13 +554,13 @@ def test_7_5_error_handling():
             
             # Akzeptiere sowohl leere Liste als auch begrenzte Anzahl
             if len(positions) <= 1:
-                print(f"[OK] PASS: Ungültige Dimensionen behandelt ({len(positions)} Module)")
+                print(f"PASS: Ungültige Dimensionen behandelt ({len(positions)} Module)")
             else:
-                print(f"[WARNING]  INFO: {len(positions)} Module bei negativen Dimensionen")
+                print(f"INFO: {len(positions)} Module bei negativen Dimensionen")
                 # Nicht als Fehler werten, da Funktion robust ist
                 
         except Exception as e:
-            print(f"[OK] PASS: Exception bei ungültigen Dimensionen: {e}")
+            print(f"PASS: Exception bei ungültigen Dimensionen: {e}")
         
         # Test 3: Extreme Werte - Erwarte Clipping/Validierung
         print("\n📋 Test 3: Extreme Werte")
@@ -571,13 +571,13 @@ def test_7_5_error_handling():
             positions = calculate_grid_positions(10.0, 6.0, 10000)
             
             if len(positions) < 10000:
-                print(f"[OK] PASS: Extreme Modulanzahl begrenzt auf {len(positions)}")
+                print(f"PASS: Extreme Modulanzahl begrenzt auf {len(positions)}")
             else:
-                print(f"[ERROR] FAIL: Extreme Modulanzahl nicht begrenzt")
+                print(f"FAIL: Extreme Modulanzahl nicht begrenzt")
                 all_passed = False
                 
         except Exception as e:
-            print(f"[WARNING]  INFO: Exception bei extremen Werten: {e}")
+            print(f"INFO: Exception bei extremen Werten: {e}")
         
         # Test 4: Ungültige Parameter bei Modul-Erstellung
         print("\n📋 Test 4: Ungültige Parameter bei Modul-Erstellung")
@@ -591,37 +591,37 @@ def test_7_5_error_handling():
             )
             
             if module is not None:
-                print(f"[OK] PASS: Fallback-Modul bei ungültigen Parametern erstellt")
+                print(f"PASS: Fallback-Modul bei ungültigen Parametern erstellt")
             else:
-                print(f"[ERROR] FAIL: Kein Fallback-Modul erstellt")
+                print(f"FAIL: Kein Fallback-Modul erstellt")
                 all_passed = False
                 
         except Exception as e:
-            print(f"[WARNING]  INFO: Exception bei ungültigen Parametern: {e}")
+            print(f"INFO: Exception bei ungültigen Parametern: {e}")
         
         # Test 5: App stürzt nicht ab
         print("\n📋 Test 5: App-Stabilität")
         print("-" * 70)
-        print(f"[OK] PASS: Alle Tests liefen ohne Absturz - App ist stabil")
+        print(f"PASS: Alle Tests liefen ohne Absturz - App ist stabil")
         
         # Test 6: Fehler-Logging
         print("\n📋 Test 6: Fehler-Logging")
         print("-" * 70)
-        print(f"[OK] PASS: Fehler-Logging wurde in den Tests oben angezeigt")
+        print(f"PASS: Fehler-Logging wurde in den Tests oben angezeigt")
         
         if all_passed:
             print("\n" + "="*70)
-            print("[OK] TEST 7.5 BESTANDEN: Fehlerbehandlung funktioniert korrekt!")
+            print("TEST 7.5 BESTANDEN: Fehlerbehandlung funktioniert korrekt!")
             print("="*70)
             return True
         else:
             print("\n" + "="*70)
-            print("[ERROR] TEST 7.5 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
+            print("TEST 7.5 FEHLGESCHLAGEN: Einige Tests sind fehlgeschlagen")
             print("="*70)
             return False
             
     except Exception as e:
-        print(f"\n[ERROR] TEST 7.5 FEHLGESCHLAGEN: {e}")
+        print(f"\nTEST 7.5 FEHLGESCHLAGEN: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -665,7 +665,7 @@ def run_all_tests():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[ERROR] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "FEHLGESCHLAGEN"
         print(f"Test {name:.<50} {status}")
     
     print("="*70)
@@ -676,14 +676,14 @@ def run_all_tests():
         print("\n🎉 ALLE TESTS BESTANDEN! 🎉")
         print("\nTask 7 'Testing und Validierung' ist vollständig abgeschlossen.")
         print("\nGetestete Funktionalität:")
-        print("  [OK] Grid-Positionierung mit exakter Modulanzahl")
-        print("  [OK] Modul-Aufständerung auf allen Dachformen")
-        print("  [OK] Optimierungs-Assistent mit verschiedenen Zielen")
-        print("  [OK] PDF-Screenshot-Integration")
-        print("  [OK] Robuste Fehlerbehandlung")
+        print("  Grid-Positionierung mit exakter Modulanzahl")
+        print("  Modul-Aufständerung auf allen Dachformen")
+        print("  Optimierungs-Assistent mit verschiedenen Zielen")
+        print("  PDF-Screenshot-Integration")
+        print("  Robuste Fehlerbehandlung")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen!")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen!")
         print("\nBitte prüfen Sie die fehlgeschlagenen Tests und beheben Sie die Probleme.")
         return False
 

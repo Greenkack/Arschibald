@@ -43,18 +43,18 @@ def example_basic_usage():
         user = User(name="John Doe", email="john@example.com")
         session.add(user)
 
-    print("[OK] User created successfully")
+    print("User created successfully")
 
     # Query data
     with manager.session_scope() as session:
         users = session.query(User).all()
-        print(f"[OK] Found {len(users)} users")
+        print(f"Found {len(users)} users")
         for user in users:
             print(f"  - {user.name} ({user.email})")
 
     # Clean up
     manager.dispose()
-    print("\n[OK] Connection manager disposed")
+    print("\nConnection manager disposed")
 
 
 def example_health_monitoring():
@@ -73,20 +73,20 @@ def example_health_monitoring():
 
     # Get health status
     status = manager.get_health_status()
-    print(f"\n[OK] Database healthy: {status['healthy']}")
+    print(f"\nDatabase healthy: {status['healthy']}")
 
     if status.get('health_stats'):
         stats = status['health_stats']
-        print(f"[OK] Total health checks: {stats['total_checks']}")
-        print(f"[OK] Success rate: {stats['success_rate']:.1f}%")
-        print(f"[OK] Avg response time: {stats['avg_response_time']:.3f}s")
+        print(f"Total health checks: {stats['total_checks']}")
+        print(f"Success rate: {stats['success_rate']:.1f}%")
+        print(f"Avg response time: {stats['avg_response_time']:.3f}s")
 
     # Get last health check
     if manager.health_monitor:
         last_check = manager.health_monitor.get_last_check()
         if last_check:
-            print(f"\n[OK] Last check at: {last_check.timestamp}")
-            print(f"[OK] Response time: {last_check.response_time:.3f}s")
+            print(f"\nLast check at: {last_check.timestamp}")
+            print(f"Response time: {last_check.response_time:.3f}s")
 
     manager.dispose()
 
@@ -108,11 +108,11 @@ def example_connection_pool_metrics():
     for i in range(4):
         session = manager.get_session()
         sessions.append(session)
-        print(f"[OK] Checked out session {i + 1}")
+        print(f"Checked out session {i + 1}")
 
     # Get pool metrics
     metrics = manager.get_pool_metrics()
-    print("\n[OK] Pool metrics:")
+    print("\nPool metrics:")
     print(f"  - Pool size: {metrics.size}")
     print(f"  - Checked out: {metrics.checked_out}")
     print(f"  - Checked in: {metrics.checked_in}")
@@ -126,7 +126,7 @@ def example_connection_pool_metrics():
 
     # Get updated metrics
     metrics = manager.get_pool_metrics()
-    print("\n[OK] After closing sessions:")
+    print("\nAfter closing sessions:")
     print(f"  - Checked out: {metrics.checked_out}")
     print(f"  - Checked in: {metrics.checked_in}")
 
@@ -157,12 +157,12 @@ def example_leak_detection():
 
     # Check for leaks
     metrics = manager.get_pool_metrics()
-    print(f"\n[OK] Leaked connections detected: {metrics.leaked_connections}")
+    print(f"\nLeaked connections detected: {metrics.leaked_connections}")
 
     if manager.leak_detector:
         leaked = manager.leak_detector.detect_leaks()
         for leak in leaked:
-            print("\n[OK] Leak details:")
+            print("\nLeak details:")
             print(f"  - Connection ID: {leak.connection_id}")
             print(f"  - Duration: {leak.duration:.1f}s")
             print(f"  - Thread: {leak.checked_out_by}")
@@ -185,13 +185,13 @@ def example_failover():
     # Get failover status
     if manager.failover_manager:
         stats = manager.failover_manager.get_failover_stats()
-        print("[OK] Failover enabled: True")
-        print(f"[OK] Current database: {stats['current_url']}")
-        print(f"[OK] Is primary: {stats['is_primary']}")
-        print(f"[OK] Available failovers: {stats['available_failovers']}")
-        print(f"[OK] Failover count: {stats['failover_count']}")
+        print("Failover enabled: True")
+        print(f"Current database: {stats['current_url']}")
+        print(f"Is primary: {stats['is_primary']}")
+        print(f"Available failovers: {stats['available_failovers']}")
+        print(f"Failover count: {stats['failover_count']}")
     else:
-        print("[ERROR] Failover not enabled")
+        print("Failover not enabled")
 
     manager.dispose()
 
@@ -211,25 +211,25 @@ def example_with_database_manager():
         user = User(name="Jane Smith", email="jane@example.com")
         session.add(user)
 
-    print("[OK] User created via DatabaseManager")
+    print("User created via DatabaseManager")
 
     # Get connection pool metrics
     pool_metrics = db_manager.get_connection_pool_metrics()
-    print("\n[OK] Pool metrics:")
+    print("\nPool metrics:")
     for key, value in pool_metrics.items():
         print(f"  - {key}: {value}")
 
     # Check for leaks
     leaks = db_manager.detect_connection_leaks()
-    print(f"\n[OK] Connection leaks detected: {len(leaks)}")
+    print(f"\nConnection leaks detected: {len(leaks)}")
 
     # Get health status
     health = db_manager.health_check()
-    print(f"\n[OK] Database healthy: {health['healthy']}")
+    print(f"\nDatabase healthy: {health['healthy']}")
 
     # Get failover status
     failover = db_manager.get_failover_status()
-    print(f"\n[OK] Failover enabled: {failover.get('failover_enabled', False)}")
+    print(f"\nFailover enabled: {failover.get('failover_enabled', False)}")
 
 
 def example_advanced_configuration():
@@ -253,7 +253,7 @@ def example_advanced_configuration():
         failover_retry_delay=1.0
     )
 
-    print("[OK] Custom configuration created:")
+    print("Custom configuration created:")
     print(f"  - Pool size: {config.pool_size}")
     print(f"  - Max overflow: {config.max_overflow}")
     print(f"  - Pool timeout: {config.pool_timeout}s")
@@ -267,7 +267,7 @@ def example_advanced_configuration():
     # Create manager with custom config
     manager = EnhancedConnectionManager(config, "sqlite:///example.db")
 
-    print("\n[OK] Connection manager created with custom configuration")
+    print("\nConnection manager created with custom configuration")
 
     manager.dispose()
 
@@ -293,7 +293,7 @@ def example_concurrent_access():
                 email=f"user{user_id}@example.com"
             )
             session.add(user)
-        print(f"[OK] Thread {user_id}: User created")
+        print(f"Thread {user_id}: User created")
 
     # Create users concurrently
     threads = []
@@ -309,11 +309,11 @@ def example_concurrent_access():
     # Verify all users created
     with manager.session_scope() as session:
         count = session.query(User).count()
-        print(f"\n[OK] Total users created: {count}")
+        print(f"\nTotal users created: {count}")
 
     # Get pool metrics
     metrics = manager.get_pool_metrics()
-    print("\n[OK] Pool metrics after concurrent access:")
+    print("\nPool metrics after concurrent access:")
     print(f"  - Total checkouts: {metrics.total_checkouts}")
     print(f"  - Avg checkout time: {metrics.avg_checkout_time:.3f}s")
 
@@ -341,7 +341,7 @@ def main():
         print("=" * 60)
 
     except Exception as e:
-        print(f"\n[ERROR] Error: {e}")
+        print(f"\nError: {e}")
         import traceback
         traceback.print_exc()
 

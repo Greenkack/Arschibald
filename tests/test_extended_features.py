@@ -47,13 +47,13 @@ def test_module_selection_single():
         assert selected_module_index in config.module_transforms, \
             "Modul sollte in module_transforms sein"
         
-        print(f"[OK] Modul {selected_module_index} erfolgreich einzeln ausgewaehlt")
+        print(f"Modul {selected_module_index} erfolgreich einzeln ausgewaehlt")
         print(f"  Transform: Azimuth={transform.azimuth_deg} Grad, Tilt={transform.tilt_deg} Grad")
         
         return True
         
     except Exception as e:
-        print(f"[FEHLER] Fehler: {e}")
+        print(f"Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -86,7 +86,7 @@ def test_module_selection_group():
         assert "Süddach" in config.module_groups, "Gruppe sollte existieren"
         assert len(group.module_indices) == 5, "Gruppe sollte 5 Module enthalten"
         
-        print(f"[OK] Gruppe 'Süddach' erfolgreich ausgewählt")
+        print(f"Gruppe 'Süddach' erfolgreich ausgewählt")
         print(f"  Module: {group.module_indices}")
         print(f"  Azimuth: {group.azimuth_deg} Grad, Tilt: {group.tilt_deg} Grad")
         
@@ -136,7 +136,7 @@ def test_module_selection_range():
             assert module_idx in config.module_transforms, \
                 f"Modul {module_idx} sollte ausgewählt sein"
         
-        print(f"[OK] Bereich {start_index}-{end_index} erfolgreich ausgewählt")
+        print(f"Bereich {start_index}-{end_index} erfolgreich ausgewählt")
         print(f"  Anzahl Module: {len(selected_range)}")
         
         return True
@@ -186,7 +186,7 @@ def test_module_properties_azimuth():
             "Azimuth sollte geändert sein"
         
         print(f"  Neuer Azimuth: {new_azimuth} Grad")
-        print(f"[OK] Azimuth erfolgreich von {original_azimuth} Grad auf {new_azimuth} Grad geändert")
+        print(f"Azimuth erfolgreich von {original_azimuth} Grad auf {new_azimuth} Grad geändert")
         
         return True
         
@@ -235,7 +235,7 @@ def test_module_properties_tilt():
             "Neigung sollte geändert sein"
         
         print(f"  Neue Neigung: {new_tilt} Grad")
-        print(f"[OK] Neigung erfolgreich von {original_tilt} Grad auf {new_tilt} Grad geändert")
+        print(f"Neigung erfolgreich von {original_tilt} Grad auf {new_tilt} Grad geändert")
         
         return True
         
@@ -292,7 +292,7 @@ def test_module_properties_offsets():
             "Offset Z sollte geändert sein"
         
         print(f"  Neue Offsets: X={new_offset_x}, Y={new_offset_y}, Z={new_offset_z}")
-        print(f"[OK] Offsets erfolgreich geändert")
+        print(f"Offsets erfolgreich geändert")
         
         return True
         
@@ -332,7 +332,7 @@ def test_group_management_create():
         assert len(config.module_groups[group_name].module_indices) == 4, \
             "Gruppe sollte 4 Module enthalten"
         
-        print(f"[OK] Gruppe '{group_name}' erfolgreich erstellt")
+        print(f"Gruppe '{group_name}' erfolgreich erstellt")
         print(f"  Module: {group.module_indices}")
         print(f"  Azimuth: {group.azimuth_deg} Grad, Tilt: {group.tilt_deg} Grad")
         print(f"  Farbe: {group.color}")
@@ -409,7 +409,7 @@ def test_group_management_edit():
                 f"Modul {module_idx} Neigung sollte geändert sein"
         
         print(f"  Neu: Azimuth={new_azimuth} Grad, Tilt={new_tilt} Grad")
-        print(f"[OK] Gruppe '{group_name}' erfolgreich bearbeitet")
+        print(f"Gruppe '{group_name}' erfolgreich bearbeitet")
         print(f"  Alle {len(group.module_indices)} Module wurden aktualisiert")
         
         return True
@@ -475,7 +475,7 @@ def test_group_management_delete():
                 assert config.module_transforms[module_idx].group_id is None, \
                     f"group_id für Modul {module_idx} sollte None sein"
         
-        print(f"[OK] Gruppe '{group_name}' erfolgreich gelöscht")
+        print(f"Gruppe '{group_name}' erfolgreich gelöscht")
         print(f"  group_id von allen Modulen entfernt")
         
         return True
@@ -544,13 +544,13 @@ def test_group_templates():
             assert group.color == template_data["color"], \
                 f"{template_name}: Farbe falsch"
             
-            print(f"  [OK] Template '{template_name}': Azimuth={group.azimuth_deg} Grad, "
+            print(f"  Template '{template_name}': Azimuth={group.azimuth_deg} Grad, "
                   f"Tilt={group.tilt_deg} Grad, Color={group.color}")
         
         # Prüfe dass alle Templates erstellt wurden
         assert len(config.module_groups) == 4, "Alle 4 Templates sollten erstellt sein"
         
-        print(f"[OK] Alle {len(templates)} Gruppen-Templates erfolgreich getestet")
+        print(f"Alle {len(templates)} Gruppen-Templates erfolgreich getestet")
         
         return True
         
@@ -580,7 +580,7 @@ def test_collision_detection():
         
         collisions = detect_collisions(panels_no_collision)
         assert len(collisions) == 0, "Keine Kollisionen erwartet"
-        print(f"    [OK] Keine Kollisionen erkannt ({len(panels_no_collision)} Module)")
+        print(f"    Keine Kollisionen erkannt ({len(panels_no_collision)} Module)")
         
         # Test 2: Eine Kollision
         print("\n  Test 2: Eine Kollision - Zwei überlappende Module")
@@ -592,7 +592,7 @@ def test_collision_detection():
         
         collisions = detect_collisions(panels_one_collision)
         assert len(collisions) >= 1, "Mindestens eine Kollision erwartet"
-        print(f"    [OK] Kollision erkannt: {collisions}")
+        print(f"    Kollision erkannt: {collisions}")
         
         # Test 3: Kollisionserkennung aktiviert/deaktiviert
         print("\n  Test 3: Kollisionserkennung aktiviert/deaktiviert")
@@ -604,15 +604,15 @@ def test_collision_detection():
         config.enable_collision_detection = True
         assert config.enable_collision_detection == True, \
             "Kollisionserkennung sollte aktiviert sein"
-        print(f"    [OK] Kollisionserkennung aktiviert")
+        print(f"    Kollisionserkennung aktiviert")
         
         # Deaktiviert
         config.enable_collision_detection = False
         assert config.enable_collision_detection == False, \
             "Kollisionserkennung sollte deaktiviert sein"
-        print(f"    [OK] Kollisionserkennung deaktiviert")
+        print(f"    Kollisionserkennung deaktiviert")
         
-        print(f"\n[OK] Kollisionserkennung erfolgreich getestet")
+        print(f"\nKollisionserkennung erfolgreich getestet")
         
         return True
         
@@ -659,7 +659,7 @@ def run_all_tests():
     total = len(results)
     
     for name, result in results:
-        status = "[OK] BESTANDEN" if result else "[X] FEHLGESCHLAGEN"
+        status = "BESTANDEN" if result else "[X] FEHLGESCHLAGEN"
         print(f"{name}: {status}")
     
     print("\n" + "=" * 70)
@@ -667,16 +667,16 @@ def run_all_tests():
     print("=" * 70)
     
     if passed == total:
-        print("\n[SUCCESS] Alle Tests erfolgreich! Task 10 ist vollständig implementiert.")
+        print("\nAlle Tests erfolgreich! Task 10 ist vollständig implementiert.")
         print("\nGetestete Funktionen:")
-        print("  [OK] Modul-Auswahl (Einzeln, Gruppe, Bereich)")
-        print("  [OK] Modul-Eigenschaften bearbeiten (Azimuth, Neigung, Offsets)")
-        print("  [OK] Gruppen-Verwaltung (Erstellen, Bearbeiten, Löschen)")
-        print("  [OK] Gruppen-Templates (Süddach, Ostdach, Westdach, Norddach)")
-        print("  [OK] Kollisionserkennung")
+        print("  Modul-Auswahl (Einzeln, Gruppe, Bereich)")
+        print("  Modul-Eigenschaften bearbeiten (Azimuth, Neigung, Offsets)")
+        print("  Gruppen-Verwaltung (Erstellen, Bearbeiten, Löschen)")
+        print("  Gruppen-Templates (Süddach, Ostdach, Westdach, Norddach)")
+        print("  Kollisionserkennung")
         return True
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen. Bitte überprüfen Sie die Implementierung.")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen. Bitte überprüfen Sie die Implementierung.")
         return False
 
 

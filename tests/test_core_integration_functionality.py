@@ -9,28 +9,28 @@ import sys
 
 def test_initialization():
     """Test core initialization"""
-    print("[TOOL] Testing Core Initialization...")
+    print("Testing Core Initialization...")
     try:
         from core_integration import init_core_integration
         status = init_core_integration(enable_logging=True)
         
-        print(f"   [OK] Initialization completed")
-        print(f"   [CHART] Status: {len([k for k, v in status.items() if v is True and k != 'errors'])} modules enabled")
+        print(f"   Initialization completed")
+        print(f"   Status: {len([k for k, v in status.items() if v is True and k != 'errors'])} modules enabled")
         
         if status.get('errors'):
-            print(f"   [WARNING] Errors: {len(status['errors'])}")
+            print(f"   Errors: {len(status['errors'])}")
             for error in status['errors'][:5]:  # Show first 5 errors
                 print(f"      - {error}")
         
         return True
     except Exception as e:
-        print(f"   [ERROR] Initialization failed: {e}")
+        print(f"   Initialization failed: {e}")
         return False
 
 
 def test_phase_1_4_getters():
     """Test Phase 1-4 getter functions"""
-    print("\n[PACKAGE] Testing Phase 1-4 Getters...")
+    print("\nTesting Phase 1-4 Getters...")
     from core_integration import (
         get_app_config,
         get_app_logger,
@@ -52,12 +52,12 @@ def test_phase_1_4_getters():
         try:
             result = func()
             if result is not None:
-                print(f"   [OK] {name}: Available")
+                print(f"   {name}: Available")
                 passed += 1
             else:
-                print(f"   [WARNING] {name}: Disabled (feature flag off)")
+                print(f"   {name}: Disabled (feature flag off)")
         except Exception as e:
-            print(f"   [ERROR] {name}: Error - {e}")
+            print(f"   {name}: Error - {e}")
     
     return passed == len(tests)
 
@@ -100,12 +100,12 @@ def test_phase_5_12_getters():
         try:
             result = func()
             if result is not None:
-                print(f"   [OK] {name}: Available")
+                print(f"   {name}: Available")
                 passed += 1
             else:
-                print(f"   [WARNING] {name}: Disabled (feature flag off)")
+                print(f"   {name}: Disabled (feature flag off)")
         except Exception as e:
-            print(f"   [ERROR] {name}: Error - {e}")
+            print(f"   {name}: Error - {e}")
     
     return passed > 0  # At least some should work
 
@@ -118,12 +118,12 @@ def test_feature_flags():
     enabled = [k for k, v in FEATURES.items() if v is True]
     disabled = [k for k, v in FEATURES.items() if v is False]
     
-    print(f"   [OK] Enabled: {len(enabled)}")
+    print(f"   Enabled: {len(enabled)}")
     for feature in enabled:
         print(f"      - {feature}")
     
     if disabled:
-        print(f"   [WARNING] Disabled: {len(disabled)}")
+        print(f"   Disabled: {len(disabled)}")
         for feature in disabled:
             print(f"      - {feature}")
     
@@ -145,34 +145,34 @@ def test_helper_functions():
     # Test is_feature_enabled
     try:
         result = is_feature_enabled('config')
-        print(f"   [OK] is_feature_enabled('config'): {result}")
+        print(f"   is_feature_enabled('config'): {result}")
         tests_passed += 1
     except Exception as e:
-        print(f"   [ERROR] is_feature_enabled failed: {e}")
+        print(f"   is_feature_enabled failed: {e}")
     
     # Test cache_get (may return None if cache disabled)
     try:
         result = cache_get('test_key', 'default')
-        print(f"   [OK] cache_get: {result}")
+        print(f"   cache_get: {result}")
         tests_passed += 1
     except Exception as e:
-        print(f"   [ERROR] cache_get failed: {e}")
+        print(f"   cache_get failed: {e}")
     
     # Test cache_set
     try:
         cache_set('test_key', 'test_value', ttl=60)
-        print(f"   [OK] cache_set: Success")
+        print(f"   cache_set: Success")
         tests_passed += 1
     except Exception as e:
-        print(f"   [ERROR] cache_set failed: {e}")
+        print(f"   cache_set failed: {e}")
     
     # Test log_error
     try:
         log_error("test_event", "Test error message")
-        print(f"   [OK] log_error: Success")
+        print(f"   log_error: Success")
         tests_passed += 1
     except Exception as e:
-        print(f"   [ERROR] log_error failed: {e}")
+        print(f"   log_error failed: {e}")
     
     return tests_passed >= 2  # At least 2 should work
 
@@ -192,7 +192,7 @@ results.append(("Helper Functions", test_helper_functions()))
 
 # Summary
 print("\n" + "=" * 70)
-print("[CHART] TEST SUMMARY")
+print("TEST SUMMARY")
 print("=" * 70)
 
 passed = sum(1 for _, result in results if result)
@@ -200,7 +200,7 @@ total = len(results)
 
 print()
 for name, result in results:
-    status = "[OK] PASSED" if result else "[ERROR] FAILED"
+    status = "PASSED" if result else "FAILED"
     print(f"{status}: {name}")
 
 print()
@@ -208,7 +208,7 @@ if total != 0:
     success_rate = (passed / total * 100) if total > 0 else 0
 else:
     success_rate = 0.0
-print(f"[STATS] Success Rate: {success_rate:.1f}% ({passed}/{total})")
+print(f"Success Rate: {success_rate:.1f}% ({passed}/{total})")
 
 print("=" * 70)
 

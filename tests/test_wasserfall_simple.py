@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_wasserfall_overlay():
     """Testet das Wasserfall-Diagramm durch direkte Overlay-Generierung"""
 
-    print("[TOOL] Test des Wasserfall-Diagramms mit Overlay")
+    print("Test des Wasserfall-Diagramms mit Overlay")
     print("=" * 45)
 
     # Test-Daten für das Wasserfall-Diagramm
@@ -44,11 +44,11 @@ def test_wasserfall_overlay():
 
     try:
         # Generiere Overlay
-        print("[FILE] Generiere Overlay mit Wasserfall-Diagramm...")
+        print("Generiere Overlay mit Wasserfall-Diagramm...")
 
         coords_dir = Path("coords")
         if not coords_dir.exists():
-            print(f"[ERROR] Koordinaten-Verzeichnis nicht gefunden: {coords_dir}")
+            print(f"Koordinaten-Verzeichnis nicht gefunden: {coords_dir}")
             return False
 
         overlay_bytes = generate_overlay(
@@ -63,10 +63,10 @@ def test_wasserfall_overlay():
             with open(output_file, "wb") as f:
                 f.write(overlay_bytes)
 
-            print(f"[OK] Overlay-PDF erfolgreich erstellt: {output_file}")
-            print(f"[PACKAGE] Dateigröße: {len(overlay_bytes):,} bytes")
+            print(f"Overlay-PDF erfolgreich erstellt: {output_file}")
+            print(f"Dateigröße: {len(overlay_bytes):,} bytes")
             print("📋 Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
-            print("[CHART] Daten:")
+            print("Daten:")
             print(
                 f"   - Direktverbrauch: {dynamic_data['einsparung_direktverbrauch_eur']}€")
             print(
@@ -78,7 +78,7 @@ def test_wasserfall_overlay():
             # Zusätzlich: Prüfe PDF-Struktur
             try:
                 reader = PdfReader(io.BytesIO(overlay_bytes))
-                print(f"[FILE] PDF-Info: {len(reader.pages)} Seiten")
+                print(f"PDF-Info: {len(reader.pages)} Seiten")
 
                 # Prüfe Seite 3 (Index 2)
                 if len(reader.pages) >= 3:
@@ -86,14 +86,14 @@ def test_wasserfall_overlay():
                     print(f"📍 Seite 3 Größe: {page3.mediabox}")
 
             except Exception as e:
-                print(f"[WARNING] PDF-Struktur-Prüfung fehlgeschlagen: {e}")
+                print(f"PDF-Struktur-Prüfung fehlgeschlagen: {e}")
 
             return True
-        print("[ERROR] Overlay-Generierung fehlgeschlagen - keine Bytes erhalten")
+        print("Overlay-Generierung fehlgeschlagen - keine Bytes erhalten")
         return False
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei der Overlay-Generierung: {e}")
+        print(f"Fehler bei der Overlay-Generierung: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -102,7 +102,7 @@ def test_wasserfall_overlay():
 def test_wasserfall_with_template():
     """Testet das Wasserfall-Diagramm mit Template-Hintergrund"""
 
-    print("\n[TOOL] Test mit Template-Hintergrund")
+    print("\nTest mit Template-Hintergrund")
     print("=" * 35)
 
     # Prüfe ob Template-Dateien existieren
@@ -122,13 +122,13 @@ def test_wasserfall_with_template():
             missing_templates.append(str(template_path))
 
     if missing_templates:
-        print("[WARNING] Template-Dateien fehlen:")
+        print("Template-Dateien fehlen:")
         for missing in missing_templates:
             print(f"   - {missing}")
         print("📋 Test wird nur mit Overlay durchgeführt")
         return test_wasserfall_overlay()
 
-    print("[OK] Alle Template-Dateien gefunden")
+    print("Alle Template-Dateien gefunden")
 
     try:
         # Generiere Overlay
@@ -150,11 +150,11 @@ def test_wasserfall_with_template():
         )
 
         if not overlay_bytes:
-            print("[ERROR] Overlay-Generierung fehlgeschlagen")
+            print("Overlay-Generierung fehlgeschlagen")
             return False
 
         # Lade Template-PDFs und kombiniere mit Overlay
-        print("[FILE] Kombiniere mit Template-Hintergründen...")
+        print("Kombiniere mit Template-Hintergründen...")
 
         writer = PdfWriter()
         overlay_reader = PdfReader(io.BytesIO(overlay_bytes))
@@ -186,22 +186,22 @@ def test_wasserfall_with_template():
         with open(output_file, "wb") as f:
             f.write(combined_bytes)
 
-        print(f"[OK] Kombinierte PDF erstellt: {output_file}")
-        print(f"[PACKAGE] Dateigröße: {len(combined_bytes):,} bytes")
+        print(f"Kombinierte PDF erstellt: {output_file}")
+        print(f"Dateigröße: {len(combined_bytes):,} bytes")
         print(
             "📋 Das Wasserfall-Diagramm sollte auf Seite 3 über dem Template sichtbar sein")
 
         return True
 
     except Exception as e:
-        print(f"[ERROR] Fehler bei Template-Kombination: {e}")
+        print(f"Fehler bei Template-Kombination: {e}")
         import traceback
         traceback.print_exc()
         return False
 
 
 if __name__ == "__main__":
-    print("[LAUNCH] Einfacher Test des Wasserfall-Diagramms")
+    print("Einfacher Test des Wasserfall-Diagramms")
     print("=" * 50)
 
     # Test 1: Nur Overlay
@@ -218,6 +218,6 @@ if __name__ == "__main__":
         if success2:
             print("   - test_wasserfall_with_template.pdf (Mit Template-Hintergrund)")
         print("📍 Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
-        print("[CHART] Position: Zwischen 'Neigung des Daches' und 'Art' Spalten")
+        print("Position: Zwischen 'Neigung des Daches' und 'Art' Spalten")
     else:
-        print("\n[ERROR] Alle Tests fehlgeschlagen")
+        print("\nAlle Tests fehlgeschlagen")

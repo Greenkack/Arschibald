@@ -53,7 +53,7 @@ def test_flask_api_solid_principles():
         # Check test structure
         assert os.path.exists(os.path.join(project_path, "tests"))
 
-        print("[OK] Flask API follows SOLID principles")
+        print("Flask API follows SOLID principles")
     finally:
         teardown_workspace()
 
@@ -87,7 +87,7 @@ def test_fastapi_clean_architecture():
             assert "CORSMiddleware" in content
             assert "@app.get" in content
 
-        print("[OK] FastAPI follows clean architecture")
+        print("FastAPI follows clean architecture")
     finally:
         teardown_workspace()
 
@@ -128,7 +128,7 @@ def test_python_package_structure():
             assert "[tool.pytest.ini_options]" in content
             assert "[tool.black]" in content
 
-        print("[OK] Python package has proper structure")
+        print("Python package has proper structure")
     finally:
         teardown_workspace()
 
@@ -164,7 +164,7 @@ def test_streamlit_app_modular_structure():
         config_path = os.path.join(project_path, ".streamlit", "config.toml")
         assert os.path.exists(config_path)
 
-        print("[OK] Streamlit app has modular structure")
+        print("Streamlit app has modular structure")
     finally:
         teardown_workspace()
 
@@ -198,7 +198,7 @@ def test_data_analysis_project_structure():
             assert "numpy" in content
             assert "matplotlib" in content
 
-        print("[OK] Data analysis project has proper structure")
+        print("Data analysis project has proper structure")
     finally:
         teardown_workspace()
 
@@ -225,7 +225,7 @@ def test_readme_generation():
             assert "pip install -r requirements.txt" in content
             assert "Tests" in content
 
-        print("[OK] README.md generated with proper content")
+        print("README.md generated with proper content")
     finally:
         teardown_workspace()
 
@@ -250,7 +250,7 @@ def test_gitignore_generation():
             assert "*.pyc" in content
             assert "venv" in content
 
-        print("[OK] .gitignore generated properly")
+        print(".gitignore generated properly")
     finally:
         teardown_workspace()
 
@@ -275,7 +275,7 @@ def test_requirements_txt_generation():
             assert "flask-cors" in content
             assert "python-dotenv" in content
 
-        print("[OK] requirements.txt generated with dependencies")
+        print("requirements.txt generated with dependencies")
     finally:
         teardown_workspace()
 
@@ -305,10 +305,10 @@ def run_all_tests():
             test()
             passed += 1
         except AssertionError as e:
-            print(f"[ERROR] {test.__name__} failed: {e}")
+            print(f"{test.__name__} failed: {e}")
             failed += 1
         except Exception as e:
-            print(f"[ERROR] {test.__name__} error: {e}")
+            print(f"{test.__name__} error: {e}")
             failed += 1
 
     print("\n" + "=" * 60)

@@ -49,15 +49,15 @@ def run_tests():
     print("Test 1: Migration ausführen...")
     success = migrate_crm_enhancements()
     if not success:
-        print("[ERROR] FEHLER: Migration fehlgeschlagen!")
+        print("FEHLER: Migration fehlgeschlagen!")
         return False
-    print("[OK] Migration erfolgreich durchgeführt")
+    print("Migration erfolgreich durchgeführt")
     print()
     
     # Verbindung für Tests herstellen
     conn = get_db_connection()
     if not conn:
-        print("[ERROR] FEHLER: Keine Datenbankverbindung!")
+        print("FEHLER: Keine Datenbankverbindung!")
         return False
     
     try:
@@ -73,13 +73,13 @@ def run_tests():
         all_tables_exist = True
         for table in tables_to_check:
             exists = test_table_exists(conn, table)
-            status = "[OK]" if exists else "[ERROR]"
+            status = "" if exists else ""
             print(f"  {status} Tabelle '{table}': {'existiert' if exists else 'FEHLT'}")
             if not exists:
                 all_tables_exist = False
         
         if not all_tables_exist:
-            print("[ERROR] FEHLER: Nicht alle Tabellen wurden erstellt!")
+            print("FEHLER: Nicht alle Tabellen wurden erstellt!")
             return False
         print()
         
@@ -97,13 +97,13 @@ def run_tests():
         all_columns_exist = True
         for column in columns_to_check:
             exists = test_column_exists(conn, 'projects', column)
-            status = "[OK]" if exists else "[ERROR]"
+            status = "" if exists else ""
             print(f"  {status} Spalte '{column}': {'existiert' if exists else 'FEHLT'}")
             if not exists:
                 all_columns_exist = False
         
         if not all_columns_exist:
-            print("[ERROR] FEHLER: Nicht alle Spalten wurden hinzugefügt!")
+            print("FEHLER: Nicht alle Spalten wurden hinzugefügt!")
             return False
         print()
         
@@ -121,13 +121,13 @@ def run_tests():
         all_indices_exist = True
         for index in indices_to_check:
             exists = test_index_exists(conn, index)
-            status = "[OK]" if exists else "[ERROR]"
+            status = "" if exists else ""
             print(f"  {status} Index '{index}': {'existiert' if exists else 'FEHLT'}")
             if not exists:
                 all_indices_exist = False
         
         if not all_indices_exist:
-            print("[WARNING]  WARNUNG: Nicht alle Indizes wurden erstellt (nicht kritisch)")
+            print("WARNUNG: Nicht alle Indizes wurden erstellt (nicht kritisch)")
         print()
         
         # Test 5: Tabellen-Schema prüfen
@@ -152,13 +152,13 @@ def run_tests():
         schema_ok = True
         for col, expected_type in required_calc_columns.items():
             if col not in calc_columns:
-                print(f"  [ERROR] Spalte '{col}' fehlt in project_calculations")
+                print(f"  Spalte '{col}' fehlt in project_calculations")
                 schema_ok = False
             else:
-                print(f"  [OK] Spalte '{col}' ({calc_columns[col]}) vorhanden")
+                print(f"  Spalte '{col}' ({calc_columns[col]}) vorhanden")
         
         if not schema_ok:
-            print("[ERROR] FEHLER: Schema von project_calculations ist unvollständig!")
+            print("FEHLER: Schema von project_calculations ist unvollständig!")
             return False
         print()
         
@@ -167,9 +167,9 @@ def run_tests():
         cursor.execute("PRAGMA foreign_keys")
         fk_enabled = cursor.fetchone()[0]
         if fk_enabled:
-            print("  [OK] Foreign Keys sind aktiviert")
+            print("  Foreign Keys sind aktiviert")
         else:
-            print("  [WARNING]  WARNUNG: Foreign Keys sind nicht aktiviert")
+            print("  WARNUNG: Foreign Keys sind nicht aktiviert")
         print()
         
         # Test 7: Test-Daten einfügen und wieder löschen
@@ -181,21 +181,21 @@ def run_tests():
                 VALUES ('test', 1, 'test_type', datetime('now'), 'Test-Erinnerung')
             """)
             reminder_id = cursor.lastrowid
-            print(f"  [OK] Test-Erinnerung eingefügt (ID: {reminder_id})")
+            print(f"  Test-Erinnerung eingefügt (ID: {reminder_id})")
             
             # Test-Erinnerung wieder löschen
             cursor.execute("DELETE FROM crm_reminders WHERE id = ?", (reminder_id,))
             conn.commit()
-            print("  [OK] Test-Erinnerung gelöscht")
+            print("  Test-Erinnerung gelöscht")
             
         except Exception as e:
-            print(f"  [ERROR] FEHLER beim Einfügen/Löschen von Test-Daten: {e}")
+            print(f"  FEHLER beim Einfügen/Löschen von Test-Daten: {e}")
             return False
         print()
         
         # Alle Tests bestanden
         print("=" * 70)
-        print("[OK] ALLE TESTS BESTANDEN!")
+        print("ALLE TESTS BESTANDEN!")
         print("=" * 70)
         print()
         print("Die CRM-Erweiterungstabellen wurden erfolgreich erstellt:")
@@ -205,7 +205,7 @@ def run_tests():
         print("  • crm_reminders (Automatische Erinnerungen)")
         print("  • projects Tabelle erweitert (Angebots-Felder)")
         print()
-        print("Task 1.1 ist abgeschlossen! [OK]")
+        print("Task 1.1 ist abgeschlossen! ")
         print()
         
         return True
@@ -219,7 +219,7 @@ if __name__ == "__main__":
         success = run_tests()
         sys.exit(0 if success else 1)
     except Exception as e:
-        print(f"\n[ERROR] KRITISCHER FEHLER: {e}")
+        print(f"\nKRITISCHER FEHLER: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

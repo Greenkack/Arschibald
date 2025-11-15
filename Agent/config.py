@@ -146,10 +146,10 @@ def get_setup_instructions() -> str:
     missing = get_missing_keys()
 
     if not missing:
-        return "[OK] All API keys are configured!"
+        return "All API keys are configured!"
 
     instructions = """
-[TOOL] KAI Agent Setup Instructions
+KAI Agent Setup Instructions
 ================================
 
 The following API keys are missing from your .env file:
@@ -157,11 +157,11 @@ The following API keys are missing from your .env file:
 """
 
     for key in missing:
-        instructions += f"  [ERROR] {key}\n"
+        instructions += f"  {key}\n"
 
     instructions += """
 
-[NOTE] Setup Steps:
+Setup Steps:
 ---------------
 
 1. Create a .env file in your project root (if it doesn't exist)
@@ -209,7 +209,7 @@ def validate_env_file_security() -> tuple[bool, list[str]]:
     # Check if .env exists
     if not env_path.exists():
         warnings.append(
-            "[WARNING]  .env file not found. Create one from .env.example")
+            ".env file not found. Create one from .env.example")
         return False, warnings
 
     # Check if .env is in .gitignore
@@ -222,7 +222,7 @@ def validate_env_file_security() -> tuple[bool, list[str]]:
                 return False, warnings
     else:
         warnings.append(
-            "[WARNING]  .gitignore not found. Ensure .env is not committed to version control.")
+            ".gitignore not found. Ensure .env is not committed to version control.")
 
     # Check file permissions (Unix systems only)
     try:
@@ -237,16 +237,16 @@ def validate_env_file_security() -> tuple[bool, list[str]]:
             # Check if file is world-readable or group-readable
             if mode & stat.S_IROTH:
                 warnings.append(
-                    "[WARNING]  .env is readable by others. Run: chmod 600 .env")
+                    ".env is readable by others. Run: chmod 600 .env")
             elif mode & stat.S_IRGRP:
                 warnings.append(
-                    "[WARNING]  .env is readable by group. Run: chmod 600 .env")
+                    ".env is readable by group. Run: chmod 600 .env")
     except (AttributeError, OSError):
         # Permission check not available
         pass
 
     if not warnings:
-        logger.info("[OK] .env file security validated")
+        logger.info(".env file security validated")
 
     return len(warnings) == 0, warnings
 
@@ -288,7 +288,7 @@ def validate_api_key_format(
             return False, f"{key_name} should start with '+' (international format)"
 
     # Key format looks valid
-    logger.debug(f"[OK] {key_name} format validated (value not logged)")
+    logger.debug(f"{key_name} format validated (value not logged)")
     return True, None
 
 
@@ -327,7 +327,7 @@ def validate_startup_security() -> tuple[bool, list[str]]:
         if key_value:  # Only validate if key is present
             is_valid, error_msg = validate_api_key_format(key_name, key_value)
             if not is_valid:
-                issues.append(f"[WARNING]  {error_msg}")
+                issues.append(f"{error_msg}")
 
     # Check that OPENAI_API_KEY is present (required)
     if not keys_to_validate["OPENAI_API_KEY"]:
@@ -336,10 +336,10 @@ def validate_startup_security() -> tuple[bool, list[str]]:
 
     # Log validation result (without sensitive data)
     if not issues:
-        logger.info("[OK] Startup security validation passed")
+        logger.info("Startup security validation passed")
     else:
         logger.warning(
-            f"[WARNING]  Startup security validation found {
+            f"Startup security validation found {
                 len(issues)} issue(s)")
 
     return len(issues) == 0, issues
@@ -364,9 +364,9 @@ def ensure_no_key_logging():
 
     if not has_filter:
         logger.warning(
-            "[WARNING]  Sensitive data filter not detected in logging configuration. "
+            "Sensitive data filter not detected in logging configuration. "
             "Ensure logging_config.setup_logging() is called before using the agent.")
     else:
-        logger.debug("[OK] Sensitive data filter active in logging")
+        logger.debug("Sensitive data filter active in logging")
 
     return has_filter

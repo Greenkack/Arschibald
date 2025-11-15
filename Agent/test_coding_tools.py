@@ -111,7 +111,7 @@ class TestFileOperations:
 
         # List files
         result = list_files.invoke({"path": "."})
-        assert "[FILE]" in result
+        assert "" in result
         assert "[DIR]" in result
         assert "file1.txt" in result
         assert "file2.txt" in result

@@ -19,40 +19,40 @@ def main():
     chart_pattern = r'fig\s*=\s*go\.Figure\(\)'
     charts = list(re.finditer(chart_pattern, content))
     
-    print(f"\n[CHART] Gefundene Charts: {len(charts)}")
+    print(f"\nGefundene Charts: {len(charts)}")
     
     # Finde alle apply_chart_theme Aufrufe
     theme_pattern = r'apply_chart_theme\(fig\d*\)'
     themes = list(re.finditer(theme_pattern, content))
     
-    print(f"[OK] apply_chart_theme Aufrufe: {len(themes)}")
+    print(f"apply_chart_theme Aufrufe: {len(themes)}")
     
     # Prüfe ob get_chart_theme und apply_chart_theme Funktionen existieren
     if 'def get_chart_theme():' in content:
-        print("\n[OK] get_chart_theme() Funktion gefunden")
+        print("\nget_chart_theme() Funktion gefunden")
     else:
-        print("\n[ERROR] get_chart_theme() Funktion FEHLT!")
+        print("\nget_chart_theme() Funktion FEHLT!")
     
     if 'def apply_chart_theme(fig):' in content:
-        print("[OK] apply_chart_theme() Funktion gefunden")
+        print("apply_chart_theme() Funktion gefunden")
     else:
-        print("[ERROR] apply_chart_theme() Funktion FEHLT!")
+        print("apply_chart_theme() Funktion FEHLT!")
     
     # Prüfe Theme-Features
     if '"plot_bgcolor": paper_color' in content:
-        print("[OK] Dynamischer Plot-Hintergrund")
+        print("Dynamischer Plot-Hintergrund")
     
     if '"paper_bgcolor": bg_color' in content:
-        print("[OK] Dynamischer Paper-Hintergrund")
+        print("Dynamischer Paper-Hintergrund")
     
     if 'theme = st.get_option("theme.base")' in content:
-        print("[OK] Streamlit Theme Detection")
+        print("Streamlit Theme Detection")
     
     if 'bg_color = "#0a0a0a"' in content:
-        print("[OK] Dark Mode Farben (Shadcn UI)")
+        print("Dark Mode Farben (Shadcn UI)")
     
     if 'bg_color = "#ffffff"' in content:
-        print("[OK] Light Mode Farben")
+        print("Light Mode Farben")
     
     # Shadcn UI Farben
     shadcn_colors = [
@@ -63,23 +63,23 @@ def main():
     ]
     
     found_colors = [color for color in shadcn_colors if color in content]
-    print(f"\n[DESIGN] Shadcn UI Farben gefunden: {len(found_colors)}/{len(shadcn_colors)}")
+    print(f"\nShadcn UI Farben gefunden: {len(found_colors)}/{len(shadcn_colors)}")
     
     print("\n" + "=" * 80)
     print("ZUSAMMENFASSUNG")
     print("=" * 80)
     
     if len(themes) >= 7:  # Mindestens 7 Charts sollten gethemed sein
-        print("[OK] Mindestens 7 Charts haben Shadcn UI Theme!")
+        print("Mindestens 7 Charts haben Shadcn UI Theme!")
     else:
-        print(f"[WARNING] Nur {len(themes)} Charts gethemed (erwartet: ≥7)")
+        print(f"Nur {len(themes)} Charts gethemed (erwartet: ≥7)")
     
     if 'def get_chart_theme():' in content and 'def apply_chart_theme(fig):' in content:
-        print("[OK] Theme-System vollständig implementiert!")
+        print("Theme-System vollständig implementiert!")
     else:
-        print("[ERROR] Theme-System unvollständig!")
+        print("Theme-System unvollständig!")
     
-    print("\n[OK] ALLE CHARTS HABEN JETZT:")
+    print("\nALLE CHARTS HABEN JETZT:")
     print("   - Dunklen Hintergrund (passt sich an App-Theme an)")
     print("   - Shadcn UI Farbschema")
     print("   - Moderne Inter-Font")

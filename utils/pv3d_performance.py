@@ -689,7 +689,7 @@ def batch_render_modules(
                         
                 except Exception as e:
                     # Fehler beim Rendern - überspringe Modul
-                    print(f"[WARNING] Fehler beim Rendern von Modul {global_idx + 1}: {e}")
+                    print(f"Fehler beim Rendern von Modul {global_idx + 1}: {e}")
                     continue
     
     return traces
@@ -1097,4 +1097,4 @@ def clear_all_caches():
     clear_cache()
     clear_transformation_cache()
     clear_performance_stats()
-    print("[OK] Alle Caches geleert")
+    print("Alle Caches geleert")

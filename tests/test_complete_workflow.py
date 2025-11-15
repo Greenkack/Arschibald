@@ -170,7 +170,7 @@ def analyze_pdf_content(pdf_path):
         }
 
     except Exception as e:
-        print(f"\n[ERROR] Error analyzing PDF: {e}")
+        print(f"\nError analyzing PDF: {e}")
         return {
             "total_pages": 0,
             "file_size_kb": 0,
@@ -225,7 +225,7 @@ def verify_requirements(analysis_result, expected_components):
 
     # Print verification results
     for check in checks:
-        print(f"\n[OK] {check['requirement']}")
+        print(f"\n{check['requirement']}")
         print(f"  Description: {check['description']}")
         print(f"  Expected: {check['expected']}")
         print(f"  Status: {check['status']}")
@@ -258,7 +258,7 @@ def main():
         "charts": 6
     }
 
-    print(f"[OK] Test data created")
+    print(f"Test data created")
     print(f"  - Main components: 3 (module, inverter, storage)")
     print(f"  - Accessory components: 6 (wallbox, EMS, optimizer, carport, notstrom, tierabwehr)")
     print(f"  - Company documents: {expected_components['company_docs']}")
@@ -290,13 +290,13 @@ def main():
         )
 
         if not pdf_bytes:
-            print("[ERROR] PDF generation returned None or empty bytes")
+            print("PDF generation returned None or empty bytes")
             return False
 
-        print(f"[OK] PDF generated successfully ({len(pdf_bytes)} bytes)")
+        print(f"PDF generated successfully ({len(pdf_bytes)} bytes)")
 
     except Exception as e:
-        print(f"[ERROR] Error generating PDF: {e}")
+        print(f"Error generating PDF: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -308,9 +308,9 @@ def main():
     try:
         with open(output_path, "wb") as f:
             f.write(pdf_bytes)
-        print(f"[OK] PDF saved successfully")
+        print(f"PDF saved successfully")
     except Exception as e:
-        print(f"[ERROR] Error saving PDF: {e}")
+        print(f"Error saving PDF: {e}")
         return False
 
     # Step 4: Analyze PDF
@@ -318,7 +318,7 @@ def main():
     analysis_result = analyze_pdf_content(output_path)
 
     if not analysis_result["success"]:
-        print(f"[ERROR] PDF analysis failed")
+        print(f"PDF analysis failed")
         return False
 
     # Step 5: Verify requirements
@@ -329,17 +329,17 @@ def main():
     print(f"\n{'=' * 80}")
     print(f"TEST SUMMARY")
     print(f"{'=' * 80}")
-    print(f"[OK] PDF generated: {output_path}")
-    print(f"[OK] Total pages: {analysis_result['total_pages']}")
-    print(f"[OK] File size: {analysis_result['file_size_kb']:.2f} KB")
-    print(f"\n[INFO] MANUAL VERIFICATION REQUIRED:")
+    print(f"PDF generated: {output_path}")
+    print(f"Total pages: {analysis_result['total_pages']}")
+    print(f"File size: {analysis_result['file_size_kb']:.2f} KB")
+    print(f"\nMANUAL VERIFICATION REQUIRED:")
     print(f"   1. Open {output_path}")
     print(f"   2. Verify main pages (1-8) contain project information and charts")
     print(f"   3. Verify product datasheets are appended after main pages")
     print(f"   4. Verify company documents are appended after datasheets")
     print(f"   5. Check terminal output above for debug information")
     print(
-        f"\n[INFO] Expected page count: ~8 (main) + {
+        f"\nExpected page count: ~8 (main) + {
             expected_components['total_products']} (datasheets) + {
             expected_components['company_docs']} (docs)")
     print(f"  Actual page count: {analysis_result['total_pages']}")

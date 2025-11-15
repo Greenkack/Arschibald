@@ -92,14 +92,14 @@ try:
                 
                 # Zeige Recovery-Hinweis (nur einmal)
                 if not st.session_state.get('recovery_notice_shown'):
-                    st.toast("[OK] Sitzung wiederhergestellt", icon="🔄")
+                    st.toast("Sitzung wiederhergestellt", icon="🔄")
                     st.session_state.recovery_notice_shown = True
             else:
                 st.session_state.user_session_recovered = False
                 
 except Exception as e:
     # Fallback - App funktioniert auch ohne core-Module
-    print(f"[WARNING] Core integration disabled: {e}")
+    print(f"Core integration disabled: {e}")
     def log_info(msg, **kwargs): print(f"INFO: {msg}")
     def log_error(msg, **kwargs): print(f"ERROR: {msg}")
     def log_warning(msg, **kwargs): print(f"WARNING: {msg}")
@@ -127,7 +127,7 @@ try:
         atexit.register(shutdown_tracing)
     MONITORING_AVAILABLE = True
 except ImportError as e:
-    print(f"[WARNING] Monitoring not available: {e}")
+    print(f"Monitoring not available: {e}")
     MONITORING_AVAILABLE = False
     # Fallback stubs
     def track_success(op): pass
@@ -1025,7 +1025,7 @@ def main():
         from ui_settings_handler import apply_ui_settings
         apply_ui_settings()
     except Exception as e:
-        st.warning(f"[WARNING] UI-Einstellungen konnten nicht geladen werden: {e}")
+        st.warning(f"UI-Einstellungen konnten nicht geladen werden: {e}")
 
     # ============================================================================
     # DYNAMISCHE GLOBALE UI-EFFEKTE (10 verschiedene Stile zur Auswahl)
@@ -2411,7 +2411,7 @@ def main():
 
         # Multi-Angebote Tab wieder aktiviert
         with tab_multi_offers:
-            st.markdown("### [PACKAGE] Multi-Firmen-Angebotsgenerator (KASKADIEREND) v2.0")
+            st.markdown("### Multi-Firmen-Angebotsgenerator (KASKADIEREND) v2.0")
             
             # Cache-Buster: Timestamp hinzugefügt
             from datetime import datetime
@@ -2432,7 +2432,7 @@ def main():
                 "1️⃣ **Mehrere Firmen** konfiguriert im Admin-Panel\n\n"
                 "2️⃣ **Vollständige Projektanalyse** durchgeführt\n\n"
                 "3️⃣ **Produktauswahl** abgeschlossen\n\n"
-                "👉 Für **Einzel-Firmen-PDFs** nutzen Sie den Tab '[FILE] PDF-Ausgabe' oben."
+                "👉 Für **Einzel-Firmen-PDFs** nutzen Sie den Tab 'PDF-Ausgabe' oben."
             )
             
             st.markdown("---")
@@ -2443,7 +2443,7 @@ def main():
                     all_firms = database_module.list_companies()
                     
                     if not all_firms:
-                        st.warning("[WARNING] Keine Firmen in der Datenbank gefunden. Bitte fügen Sie erst Firmen hinzu.")
+                        st.warning("Keine Firmen in der Datenbank gefunden. Bitte fügen Sie erst Firmen hinzu.")
                     else:
                         # === FIRMEN-AUSWAHL ===
                         st.markdown("### 🏢 Firmen-Auswahl")
@@ -2458,7 +2458,7 @@ def main():
                             st.markdown(f"**Verfügbare Firmen:** {len(all_firms)}")
                         
                         with col_button:
-                            if st.button("[OK] Alle auswählen", key="select_all_firms_multi"):
+                            if st.button("Alle auswählen", key="select_all_firms_multi"):
                                 st.session_state.multi_pdf_selected_firms = list(firm_options.keys())
                                 st.rerun()
                         
@@ -2474,7 +2474,7 @@ def main():
                         selected_firms = [firm_options[name] for name in selected_firm_names]
                         
                         if selected_firms:
-                            st.success(f"[OK] {len(selected_firms)} Firma(n) ausgewählt")
+                            st.success(f"{len(selected_firms)} Firma(n) ausgewählt")
                             
                             st.markdown("---")
                             
@@ -2485,7 +2485,7 @@ def main():
                             
                             with col1:
                                 base_modifier = st.slider(
-                                    "[CHART] Basis-Aufschlag (%)",
+                                    "Basis-Aufschlag (%)",
                                     min_value=0,
                                     max_value=50,
                                     value=15,
@@ -2508,12 +2508,12 @@ def main():
                             st.markdown("---")
                             
                             # === PDF-INHALTSOPTIONEN ===
-                            st.markdown("### [FILE] PDF-Inhalte & Features")
+                            st.markdown("### PDF-Inhalte & Features")
                             
                             col1, col2, col3 = st.columns(3)
                             
                             with col1:
-                                st.markdown("**[CHART] Diagramme & Visualisierungen:**")
+                                st.markdown("**Diagramme & Visualisierungen:**")
                                 include_charts = st.checkbox(
                                     "Diagramme einbinden",
                                     value=True,
@@ -2546,9 +2546,9 @@ def main():
                                         key="multi_pdf_savings_chart"
                                     )
                                 
-                                # [OK] NEU: Erweiterte Ausgabe für Multi-PDF
+                                # NEU: Erweiterte Ausgabe für Multi-PDF
                                 st.markdown("---")
-                                st.markdown("**[FILE] Erweiterte Ausgabe:**")
+                                st.markdown("**Erweiterte Ausgabe:**")
                                 append_additional_pages = st.checkbox(
                                     "📑 Zusätzliche Angebotsseiten anhängen",
                                     value=False,
@@ -2595,7 +2595,7 @@ def main():
                                 )
                             
                             with col3:
-                                st.markdown("**[TOOL] Technische Details:**")
+                                st.markdown("**Technische Details:**")
                                 include_tech_specs = st.checkbox(
                                     "Technische Spezifikationen",
                                     value=True,
@@ -2679,12 +2679,12 @@ def main():
                             st.markdown("### 🔄 Produkt-Rotation")
                             
                             st.info(
-                                "[TARGET] **Automatische Marken-Rotation:** Jede Firma erhält automatisch andere "
+                                "**Automatische Marken-Rotation:** Jede Firma erhält automatisch andere "
                                 "Produkt-Marken. Die Spezifikationen (Leistung, Kapazität) bleiben gleich."
                             )
                             
                             strict_rotation = st.checkbox(
-                                "[WARNING] Strikte Rotation (Fehler bei Marken-Erschöpfung)",
+                                "Strikte Rotation (Fehler bei Marken-Erschöpfung)",
                                 value=False,
                                 key="multi_pdf_strict_rotation",
                                 help="Bei deaktiviert: Erlaube Duplikate mit anderen Modellen"
@@ -2693,13 +2693,13 @@ def main():
                             st.markdown("---")
                             
                             # === PDF-GENERIERUNG ===
-                            st.markdown("### [TARGET] PDF-Generierung starten")
+                            st.markdown("### PDF-Generierung starten")
                             
                             # Hole Session State Daten
                             project_data = st.session_state.get('project_data', {})
                             analysis_results = st.session_state.get('analysis_results', {})
                             
-                            # [OK] PRODUKTE aus project_data holen (RICHTIGE Feldnamen!)
+                            # PRODUKTE aus project_data holen (RICHTIGE Feldnamen!)
                             pv_module_id = project_data.get('project_details', {}).get('selected_module_id')
                             inverter_id = project_data.get('project_details', {}).get('selected_inverter_id')
                             battery_id = project_data.get('project_details', {}).get('selected_storage_id')
@@ -2718,15 +2718,15 @@ def main():
                                     if battery_id:
                                         battery = product_db_module.get_product_by_id(battery_id)
                                 except Exception as e:
-                                    st.error(f"[ERROR] Fehler beim Laden der Produkte: {e}")
+                                    st.error(f"Fehler beim Laden der Produkte: {e}")
                             
-                            # [WARNING] VALIDIERUNG: Produkte müssen ausgewählt sein!
+                            # VALIDIERUNG: Produkte müssen ausgewählt sein!
                             if not pv_module:
-                                st.error("[ERROR] **FEHLER:** Kein PV-Modul ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie ein PV-Modul aus.")
+                                st.error("**FEHLER:** Kein PV-Modul ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie ein PV-Modul aus.")
                                 st.stop()
                             
                             if not inverter:
-                                st.error("[ERROR] **FEHLER:** Kein Wechselrichter ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie einen Wechselrichter aus.")
+                                st.error("**FEHLER:** Kein Wechselrichter ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie einen Wechselrichter aus.")
                                 st.stop()
                             
                             # Sammle alle Optionen
@@ -2749,7 +2749,7 @@ def main():
                                 'include_page_numbers': include_page_numbers,
                                 'include_payment_terms': include_payment_terms,
                                 'include_financing': include_financing,
-                                # [OK] NEU: Erweiterte Ausgabe Optionen
+                                # NEU: Erweiterte Ausgabe Optionen
                                 'append_additional_pages_after_main6': st.session_state.get('multi_pdf_append_additional', False),
                                 'include_all_documents': st.session_state.get('multi_pdf_include_all_docs', False) if st.session_state.get('multi_pdf_append_additional', False) else False
                             }
@@ -2792,14 +2792,14 @@ def main():
                                         )
                                         
                                         if not results:
-                                            st.error("[ERROR] Keine PDFs konnten generiert werden!")
-                                            st.warning("[WARNING] **BITTE KONSOLE PRÜFEN!** Dort stehen die Fehlerdetails.")
+                                            st.error("Keine PDFs konnten generiert werden!")
+                                            st.warning("**BITTE KONSOLE PRÜFEN!** Dort stehen die Fehlerdetails.")
                                             st.info("[IDEA] Häufige Ursachen:\n"
                                                    "- Produkte können nicht aus DB geladen werden\n"
                                                    "- Produkt-Rotation schlägt fehl (keine Alternativen gefunden)\n"
                                                    "- Preis-Berechnung schlägt fehl")
                                         else:
-                                            st.success(f"[OK] {len(results)} PDF(s) erfolgreich generiert!")
+                                            st.success(f"{len(results)} PDF(s) erfolgreich generiert!")
                                             
                                             # Erstelle ZIP-Archiv
                                             zip_buffer = io.BytesIO()
@@ -2816,7 +2816,7 @@ def main():
                                             
                                             # Download-Button für ZIP
                                             st.download_button(
-                                                label=f"[PACKAGE] Alle {len(results)} PDFs herunterladen (ZIP)",
+                                                label=f"Alle {len(results)} PDFs herunterladen (ZIP)",
                                                 data=zip_bytes,
                                                 file_name=f"Multi_Angebote_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
                                                 mime="application/zip",
@@ -2824,11 +2824,11 @@ def main():
                                             )
                                             
                                             # Optional: Einzelne Download-Buttons
-                                            with st.expander("[FILE] Einzelne PDFs herunterladen", expanded=False):
+                                            with st.expander("Einzelne PDFs herunterladen", expanded=False):
                                                 for firm_name, pdf_bytes in results:
                                                     safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
                                                     st.download_button(
-                                                        label=f"[FILE] {firm_name}",
+                                                        label=f"{firm_name}",
                                                         data=pdf_bytes,
                                                         file_name=f"Angebot_{safe_name}_{datetime.now().strftime('%Y%m%d')}.pdf",
                                                         mime="application/pdf",
@@ -2836,21 +2836,21 @@ def main():
                                                     )
                                     
                                     except Exception as e:
-                                        st.error(f"[ERROR] Fehler bei Multi-PDF Generierung: {e}")
+                                        st.error(f"Fehler bei Multi-PDF Generierung: {e}")
                                         import traceback
-                                        with st.expander("[SEARCH] Fehlerdetails", expanded=False):
+                                        with st.expander("Fehlerdetails", expanded=False):
                                             st.code(tb_module.format_exc())
                         else:
-                            st.warning("[WARNING] Bitte wählen Sie mindestens 1 Firma aus!")
+                            st.warning("Bitte wählen Sie mindestens 1 Firma aus!")
                 else:
-                    st.error("[ERROR] Datenbank-Modul nicht verfügbar")
+                    st.error("Datenbank-Modul nicht verfügbar")
             
             except ImportError:
-                st.error("[ERROR] Firmendatenbank-Modul nicht gefunden")
+                st.error("Firmendatenbank-Modul nicht gefunden")
             except Exception as e:
-                st.error(f"[ERROR] Fehler beim Laden der Firmen: {e}")
+                st.error(f"Fehler beim Laden der Firmen: {e}")
                 import traceback
-                with st.expander("[SEARCH] Fehlerdetails", expanded=False):
+                with st.expander("Fehlerdetails", expanded=False):
                     st.code(tb_module.format_exc())
 
     elif selected_page_key == "monitoring":
@@ -2952,7 +2952,7 @@ def main():
                     except sr.RequestError:
                         st.error("Spracherkennung nicht verfügbar")
             except ImportError:
-                st.warning("[WARNING] Spracherkennung nicht installiert. Bitte installieren Sie 'SpeechRecognition' und 'pyaudio'.")
+                st.warning("Spracherkennung nicht installiert. Bitte installieren Sie 'SpeechRecognition' und 'pyaudio'.")
             
             st.session_state['voice_mode'] = False
         
@@ -3047,7 +3047,7 @@ def main():
                     import traceback
                     error_msg = tb_module.format_exc()
                     print(f"ERROR: options_module.render_options() fehlgeschlagen:\n{error_msg}")
-                    st.error(f"[ERROR] Fehler beim Laden der Einstellungen: {e}")
+                    st.error(f"Fehler beim Laden der Einstellungen: {e}")
                     st.text_area("Fehlerdetails:", error_msg, height=200)
             else:
                 print("WARNING: options_module nicht verfügbar oder render_options nicht callable")

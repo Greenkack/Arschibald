@@ -6,9 +6,9 @@ Nutze dies um zu prüfen, welche Werte tatsächlich in der App gesetzt sind.
 
 import streamlit as st
 
-st.set_page_config(page_title="Debug Session State", page_icon="[SEARCH]")
+st.set_page_config(page_title="Debug Session State", page_icon="")
 
-st.title("[SEARCH] Debug: Multi-Offer Session State")
+st.title("Debug: Multi-Offer Session State")
 
 st.markdown("---")
 
@@ -21,16 +21,16 @@ if "multi_offer_settings" in st.session_state:
     st.json(settings)
 
     # Wichtige Werte hervorheben
-    st.markdown("### [TARGET] Kritische Werte:")
+    st.markdown("### Kritische Werte:")
 
     col1, col2, col3 = st.columns(3)
 
     with col1:
         rotation_enabled = settings.get("enable_product_rotation", False)
         if rotation_enabled:
-            st.success("[OK] Produktrotation: **EIN**")
+            st.success("Produktrotation: **EIN**")
         else:
-            st.error("[ERROR] Produktrotation: **AUS**")
+            st.error("Produktrotation: **AUS**")
 
         st.info(
             f"Rotations-Schritt: **{settings.get('product_rotation_step', 1)}**")
@@ -38,10 +38,10 @@ if "multi_offer_settings" in st.session_state:
     with col2:
         price_increment = settings.get("price_increment_percent", 0)
         if price_increment > 0:
-            st.success(f"[OK] Preisstaffelung: **{price_increment}%**")
+            st.success(f"Preisstaffelung: **{price_increment}%**")
         else:
             st.error(
-                f"[ERROR] Preisstaffelung: **{price_increment}%** (DEAKTIVIERT!)")
+                f"Preisstaffelung: **{price_increment}%** (DEAKTIVIERT!)")
 
         st.info(
             f"Modus: **{settings.get('price_calculation_mode', 'linear')}**")
@@ -51,12 +51,12 @@ if "multi_offer_settings" in st.session_state:
 
         storage_enabled = settings.get("include_storage", False)
         if storage_enabled:
-            st.success("[OK] Speicher: **EIN**")
+            st.success("Speicher: **EIN**")
         else:
-            st.warning("[WARNING] Speicher: **AUS**")
+            st.warning("Speicher: **AUS**")
 
     # Vorschau
-    st.markdown("### [CHART] Preis-Vorschau (5 Firmen)")
+    st.markdown("### Preis-Vorschau (5 Firmen)")
 
     if price_increment > 0:
         calc_mode = settings.get("price_calculation_mode", "linear")
@@ -87,10 +87,10 @@ if "multi_offer_settings" in st.session_state:
         st.dataframe(df, use_container_width=True)
     else:
         st.warning(
-            "[WARNING] Preisstaffelung deaktiviert (0%) - alle Firmen bekommen den gleichen Preis!")
+            "Preisstaffelung deaktiviert (0%) - alle Firmen bekommen den gleichen Preis!")
 
 else:
-    st.error("[ERROR] `multi_offer_settings` nicht in Session State gefunden!")
+    st.error("`multi_offer_settings` nicht in Session State gefunden!")
     st.info(
         "Gehe zuerst zur Multi-Angebote-Seite, um die Einstellungen zu initialisieren.")
 

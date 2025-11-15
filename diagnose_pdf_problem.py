@@ -11,7 +11,7 @@ print("=" * 100)
 print()
 
 # 1. Prüfe wo final_pricing_data gesetzt wird
-print("[SEARCH] PRÜFUNG 1: Wo wird 'final_pricing_data' gesetzt?")
+print("PRÜFUNG 1: Wo wird 'final_pricing_data' gesetzt?")
 print("-" * 100)
 
 def find_in_file(filepath, pattern):
@@ -41,7 +41,7 @@ files_to_check = [
 
 for filename in files_to_check:
     if os.path.exists(filename):
-        print(f"\n[FILE] {filename}:")
+        print(f"\n{filename}:")
         # Suche nach session_state['final_pricing_data'] =
         pattern = r"session_state\[['\"](final_pricing_data)['\"]]\s*="
         matches = find_in_file(filename, pattern)
@@ -49,16 +49,16 @@ for filename in files_to_check:
             for line_num, line_content in matches:
                 print(f"   Zeile {line_num:4d}: {line_content}")
         else:
-            print("   [ERROR] NICHT GEFUNDEN!")
+            print("   NICHT GEFUNDEN!")
 
 print()
 print("=" * 100)
-print("[SEARCH] PRÜFUNG 2: Wo wird 'final_pricing_data' gelesen?")
+print("PRÜFUNG 2: Wo wird 'final_pricing_data' gelesen?")
 print("-" * 100)
 
 for filename in files_to_check:
     if os.path.exists(filename):
-        print(f"\n[FILE] {filename}:")
+        print(f"\n{filename}:")
         # Suche nach session_state.get('final_pricing_data') oder session_state['final_pricing_data']
         pattern = r"session_state\[?\.?['\"]final_pricing_data['\"]?\]?"
         matches = find_in_file(filename, pattern)
@@ -70,15 +70,15 @@ for filename in files_to_check:
             if len(matches) > 5:
                 print(f"   ... und {len(matches) - 5} weitere")
         else:
-            print("   [ERROR] NICHT GEFUNDEN!")
+            print("   NICHT GEFUNDEN!")
 
 print()
 print("=" * 100)
-print("[SEARCH] PRÜFUNG 3: Was wird in solar_calculator.py gespeichert?")
+print("PRÜFUNG 3: Was wird in solar_calculator.py gespeichert?")
 print("-" * 100)
 
 if os.path.exists('solar_calculator.py'):
-    print("\n[FILE] solar_calculator.py:")
+    print("\nsolar_calculator.py:")
     # Suche nach allen session_state Zuweisungen für pricing
     pattern = r"session_state\[['\"]([^'\"]*pricing[^'\"]*)['\"]]\s*="
     matches = find_in_file('solar_calculator.py', pattern)
@@ -86,14 +86,14 @@ if os.path.exists('solar_calculator.py'):
         for line_num, line_content in matches:
             print(f"   Zeile {line_num:4d}: {line_content}")
     else:
-        print("   [ERROR] KEINE PRICING DATEN GEFUNDEN!")
+        print("   KEINE PRICING DATEN GEFUNDEN!")
 
 print()
 print("=" * 100)
-print("[IDEA] DIAGNOSE ABGESCHLOSSEN")
+print("DIAGNOSE ABGESCHLOSSEN")
 print("=" * 100)
 print()
-print("[CHART] ZUSAMMENFASSUNG:")
+print("ZUSAMMENFASSUNG:")
 print()
 print("Problem: placeholders.py liest aus 'final_pricing_data',")
 print("         aber solar_calculator.py speichert nur:")

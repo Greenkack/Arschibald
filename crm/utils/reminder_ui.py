@@ -37,7 +37,7 @@ def render_reminders_widget(texts: dict[str, str] = None):
         texts: Übersetzungstexte (optional)
     """
     if not NOTIFICATION_MANAGER_AVAILABLE:
-        st.warning("[WARNING] Erinnerungssystem nicht verfügbar")
+        st.warning("Erinnerungssystem nicht verfügbar")
         return
     
     st.subheader("🔔 Fällige Erinnerungen")
@@ -46,7 +46,7 @@ def render_reminders_widget(texts: dict[str, str] = None):
     due_reminders = get_due_reminders()
     
     if not due_reminders:
-        st.success("[OK] Keine fälligen Erinnerungen!")
+        st.success("Keine fälligen Erinnerungen!")
         st.info("Alle Erinnerungen sind auf dem neuesten Stand.")
         return
     
@@ -117,7 +117,7 @@ def render_reminder_card(reminder: dict[str, Any]):
             # Aktions-Buttons
             st.write("")  # Spacing
             
-            if st.button("[OK] Erledigt", key=f"complete_{reminder_id}", use_container_width=True):
+            if st.button("Erledigt", key=f"complete_{reminder_id}", use_container_width=True):
                 if update_reminder_status(reminder_id, 'completed'):
                     st.success("Erinnerung als erledigt markiert!")
                     st.rerun()
@@ -131,7 +131,7 @@ def render_reminder_card(reminder: dict[str, Any]):
                 else:
                     st.error("Fehler beim Verschieben")
             
-            if st.button("[ERROR] Verwerfen", key=f"dismiss_{reminder_id}", use_container_width=True):
+            if st.button("Verwerfen", key=f"dismiss_{reminder_id}", use_container_width=True):
                 if update_reminder_status(reminder_id, 'dismissed'):
                     st.success("Erinnerung verworfen!")
                     st.rerun()
@@ -148,7 +148,7 @@ def render_reminders_management_ui(texts: dict[str, str] = None):
         texts: Übersetzungstexte (optional)
     """
     if not NOTIFICATION_MANAGER_AVAILABLE:
-        st.error("[WARNING] Erinnerungssystem nicht verfügbar")
+        st.error("Erinnerungssystem nicht verfügbar")
         return
     
     st.header("🔔 Erinnerungsverwaltung")
@@ -156,9 +156,9 @@ def render_reminders_management_ui(texts: dict[str, str] = None):
     # Tabs für verschiedene Ansichten
     tabs = st.tabs([
         "📋 Fällige Erinnerungen",
-        "[CHART] Alle Erinnerungen",
+        "Alle Erinnerungen",
         "➕ Neue Erinnerung",
-        "[STATS] Statistiken"
+        "Statistiken"
     ])
     
     with tabs[0]:
@@ -181,7 +181,7 @@ def render_due_reminders_tab():
     due_reminders = get_due_reminders()
     
     if not due_reminders:
-        st.success("[OK] Keine fälligen Erinnerungen!")
+        st.success("Keine fälligen Erinnerungen!")
         return
     
     st.info(f"Sie haben {len(due_reminders)} fällige Erinnerung(en)")
@@ -193,7 +193,7 @@ def render_due_reminders_tab():
 
 def render_all_reminders_tab():
     """Rendert Tab mit allen Erinnerungen."""
-    st.subheader("[CHART] Alle Erinnerungen")
+    st.subheader("Alle Erinnerungen")
     
     # Filter
     col_status, col_type = st.columns(2)
@@ -266,7 +266,7 @@ def render_all_reminders_tab():
             
             with col2:
                 if reminder.get('status') not in ['completed', 'dismissed']:
-                    if st.button("[OK] Erledigt", key=f"complete_all_{reminder['id']}"):
+                    if st.button("Erledigt", key=f"complete_all_{reminder['id']}"):
                         if update_reminder_status(reminder['id'], 'completed'):
                             st.success("Erledigt!")
                             st.rerun()
@@ -336,15 +336,15 @@ def render_create_reminder_tab():
                 )
                 
                 if reminder_id:
-                    st.success(f"[OK] Erinnerung #{reminder_id} erfolgreich erstellt!")
+                    st.success(f"Erinnerung #{reminder_id} erfolgreich erstellt!")
                     st.balloons()
                 else:
-                    st.error("[ERROR] Fehler beim Erstellen der Erinnerung")
+                    st.error("Fehler beim Erstellen der Erinnerung")
 
 
 def render_statistics_tab():
     """Rendert Tab mit Statistiken."""
-    st.subheader("[STATS] Erinnerungs-Statistiken")
+    st.subheader("Erinnerungs-Statistiken")
     
     stats = get_reminder_statistics()
     
@@ -423,9 +423,9 @@ def render_statistics_tab():
         
         status_labels = {
             'pending': '⏳ Ausstehend',
-            'completed': '[OK] Erledigt',
+            'completed': 'Erledigt',
             'snoozed': '💤 Verschoben',
-            'dismissed': '[ERROR] Verworfen'
+            'dismissed': 'Verworfen'
         }
         
         for status, count in by_status.items():

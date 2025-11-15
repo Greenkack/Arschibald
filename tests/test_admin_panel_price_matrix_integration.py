@@ -23,7 +23,7 @@ def test_admin_tab_keys_definition():
     assert idx == services_idx + 1, \
         f"admin_tab_price_matrix sollte direkt nach admin_tab_services_management sein (Position {services_idx + 1}, ist aber {idx})"
     
-    print("[OK] admin_tab_price_matrix ist korrekt in ADMIN_TAB_KEYS_DEFINITION_GLOBAL integriert")
+    print("admin_tab_price_matrix ist korrekt in ADMIN_TAB_KEYS_DEFINITION_GLOBAL integriert")
 
 
 def test_admin_tab_icons():
@@ -34,10 +34,10 @@ def test_admin_tab_icons():
         "Icon für admin_tab_price_matrix sollte definiert sein"
     
     icon = ADMIN_TAB_ICONS["admin_tab_price_matrix"]
-    assert icon == "[CHART]", \
-        f"Icon sollte '[CHART]' sein, ist aber '{icon}'"
+    assert icon == "", \
+        f"Icon sollte '' sein, ist aber '{icon}'"
     
-    print(f"[OK] Icon für admin_tab_price_matrix ist korrekt definiert: {icon}")
+    print(f"Icon für admin_tab_price_matrix ist korrekt definiert: {icon}")
 
 
 def test_admin_tab_descriptions():
@@ -51,7 +51,7 @@ def test_admin_tab_descriptions():
     assert len(description) > 0, \
         "Beschreibung sollte nicht leer sein"
     
-    print(f"[OK] Beschreibung für admin_tab_price_matrix: '{description}'")
+    print(f"Beschreibung für admin_tab_price_matrix: '{description}'")
 
 
 def test_admin_tab_labels():
@@ -65,7 +65,7 @@ def test_admin_tab_labels():
     assert label == "Preis Matrix", \
         f"Label sollte 'Preis Matrix' sein, ist aber '{label}'"
     
-    print(f"[OK] Deutsches Label für admin_tab_price_matrix: '{label}'")
+    print(f"Deutsches Label für admin_tab_price_matrix: '{label}'")
 
 
 def test_render_price_matrix_tab_exists():
@@ -75,7 +75,7 @@ def test_render_price_matrix_tab_exists():
     assert callable(render_price_matrix_tab), \
         "render_price_matrix_tab sollte eine aufrufbare Funktion sein"
     
-    print("[OK] render_price_matrix_tab Funktion existiert")
+    print("render_price_matrix_tab Funktion existiert")
 
 
 def test_render_price_matrix_tab_docstring():
@@ -89,7 +89,7 @@ def test_render_price_matrix_tab_docstring():
     assert "Requirements: 1.1, 1.2, 1.3, 1.4" in docstring, \
         "Dokumentation sollte Requirements-Referenzen enthalten"
     
-    print("[OK] render_price_matrix_tab hat korrekte Dokumentation")
+    print("render_price_matrix_tab hat korrekte Dokumentation")
 
 
 def test_tab_to_area_map():
@@ -101,7 +101,7 @@ def test_tab_to_area_map():
     assert callable(render_admin_panel), \
         "render_admin_panel sollte eine aufrufbare Funktion sein"
     
-    print("[OK] render_admin_panel Funktion ist verfügbar")
+    print("render_admin_panel Funktion ist verfügbar")
 
 
 def run_all_tests():
@@ -128,10 +128,10 @@ def run_all_tests():
             test()
             passed += 1
         except AssertionError as e:
-            print(f"[ERROR] {test.__name__} fehlgeschlagen: {e}")
+            print(f"{test.__name__} fehlgeschlagen: {e}")
             failed += 1
         except Exception as e:
-            print(f"[ERROR] {test.__name__} Fehler: {e}")
+            print(f"{test.__name__} Fehler: {e}")
             failed += 1
     
     print("\n" + "="*60)

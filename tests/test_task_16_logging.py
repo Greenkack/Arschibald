@@ -56,7 +56,7 @@ def test_extended_pdf_logger():
     assert summary_after_clear['warning_count'] == 0, "Should have 0 warnings after clear"
     assert summary_after_clear['info_count'] == 0, "Should have 0 info messages after clear"
 
-    print("\n[OK] ExtendedPDFLogger basic functionality test passed!")
+    print("\nExtendedPDFLogger basic functionality test passed!")
 
 
 def test_logger_integration():
@@ -96,7 +96,7 @@ def test_logger_integration():
 
     assert summary['info_count'] > 0, "Should have info messages"
 
-    print("  [OK] ExtendedPDFGenerator logging works")
+    print("  ExtendedPDFGenerator logging works")
 
     # Test FinancingPageGenerator with logger
     logger.clear()
@@ -114,7 +114,7 @@ def test_logger_integration():
     print(f"  Info messages: {summary['info_count']}")
     print(f"  Warnings: {summary['warning_count']}")
 
-    print("  [OK] FinancingPageGenerator logging works")
+    print("  FinancingPageGenerator logging works")
 
     # Test ProductDatasheetMerger with logger
     logger.clear()
@@ -131,7 +131,7 @@ def test_logger_integration():
 
     assert summary['warning_count'] > 0 or summary['error_count'] > 0, "Should have warnings or errors"
 
-    print("  [OK] ProductDatasheetMerger logging works")
+    print("  ProductDatasheetMerger logging works")
 
     # Test CompanyDocumentMerger with logger
     logger.clear()
@@ -148,7 +148,7 @@ def test_logger_integration():
 
     assert summary['warning_count'] > 0 or summary['error_count'] > 0, "Should have warnings or errors"
 
-    print("  [OK] CompanyDocumentMerger logging works")
+    print("  CompanyDocumentMerger logging works")
 
     # Test ChartPageGenerator with logger
     logger.clear()
@@ -169,9 +169,9 @@ def test_logger_integration():
 
     assert summary['warning_count'] > 0, "Should have warnings about missing charts"
 
-    print("  [OK] ChartPageGenerator logging works")
+    print("  ChartPageGenerator logging works")
 
-    print("\n[OK] All components have logger integration!")
+    print("\nAll components have logger integration!")
 
 
 def test_graceful_degradation():
@@ -213,7 +213,7 @@ def test_graceful_degradation():
     # Should have warnings/errors but not crash
     assert summary['warning_count'] > 0 or summary['error_count'] > 0, "Should have logged issues"
 
-    print("\n[OK] Graceful degradation test passed - no crashes!")
+    print("\nGraceful degradation test passed - no crashes!")
 
 
 def test_logger_summary_format():
@@ -254,7 +254,7 @@ def test_logger_summary_format():
     assert '--- Errors ---' in summary_text
     assert '--- Warnings ---' in summary_text
 
-    print("\n[OK] Logger summary formatting test passed!")
+    print("\nLogger summary formatting test passed!")
 
 
 def main():
@@ -270,25 +270,25 @@ def main():
         test_logger_summary_format()
 
         print("\n" + "=" * 60)
-        print("ALL TESTS PASSED! [OK]")
+        print("ALL TESTS PASSED! ")
         print("=" * 60)
         print("\nTask 16 Implementation Summary:")
-        print("  [OK] ExtendedPDFLogger class created with log_error, log_warning, log_info")
-        print("  [OK] Logger integrated into all components:")
+        print("  ExtendedPDFLogger class created with log_error, log_warning, log_info")
+        print("  Logger integrated into all components:")
         print("    - ExtendedPDFGenerator")
         print("    - FinancingPageGenerator")
         print("    - ProductDatasheetMerger")
         print("    - CompanyDocumentMerger")
         print("    - ChartPageGenerator")
-        print("  [OK] Graceful degradation implemented:")
+        print("  Graceful degradation implemented:")
         print("    - Fallback to base PDF on errors")
         print("    - Warnings displayed in UI")
         print("    - No crashes on partial failures")
-        print("  [OK] User-friendly summary generation")
-        print("  [OK] Logger clear functionality")
+        print("  User-friendly summary generation")
+        print("  Logger clear functionality")
 
     except Exception as e:
-        print(f"\n[ERROR] TEST FAILED: {e}")
+        print(f"\nTEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         return 1

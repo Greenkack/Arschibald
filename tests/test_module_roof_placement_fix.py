@@ -27,7 +27,7 @@ def test_z_position_calculation():
     print(f"  Z-Position: {z_flat:.2f}m")
     print(f"  Erwartung: 0.30m (Aufständerung)")
     assert abs(z_flat - 0.3) < 0.01, f"Flachdach Z-Position falsch: {z_flat}"
-    print("  [OK] PASS")
+    print("  PASS")
     print()
     
     # Test 2: Satteldach mit 30° Neigung
@@ -55,7 +55,7 @@ def test_z_position_calculation():
     assert z_gable > 0.0, \
         f"Module zu niedrig! Z={z_gable:.2f}m - sollten über der Dachbasis sein!"
     
-    print("  [OK] PASS - Module sind korrekt positioniert!")
+    print("  PASS - Module sind korrekt positioniert!")
     print()
     
     # Test 3: Pultdach mit 25° Neigung
@@ -78,7 +78,7 @@ def test_z_position_calculation():
     assert z_pent > 0.0, \
         f"Module zu niedrig! Z={z_pent:.2f}m - sollten über der Dachbasis sein!"
     
-    print("  [OK] PASS - Module sind korrekt positioniert!")
+    print("  PASS - Module sind korrekt positioniert!")
     print()
     
     # Test 4: Walmdach mit 35° Neigung
@@ -101,7 +101,7 @@ def test_z_position_calculation():
     assert z_hip > 0.0, \
         f"Module zu niedrig! Z={z_hip:.2f}m - sollten über der Dachbasis sein!"
     
-    print("  [OK] PASS - Module sind korrekt positioniert!")
+    print("  PASS - Module sind korrekt positioniert!")
     print()
     
     # Test 5: Vergleich vorher/nachher
@@ -118,18 +118,18 @@ def test_z_position_calculation():
     new_z = calculate_z_position("Satteldach", roof_pitch, roof_width)
     
     print(f"  Firsthöhe: {ridge_height:.2f}m")
-    print(f"  Alte Z-Position: {old_z:.2f}m [ERROR] (auf Gebäudefläche)")
-    print(f"  Neue Z-Position: {new_z:.2f}m [OK] (auf Dachoberfläche)")
+    print(f"  Alte Z-Position: {old_z:.2f}m (auf Gebäudefläche)")
+    print(f"  Neue Z-Position: {new_z:.2f}m (auf Dachoberfläche)")
     print(f"  Hinweis: Z-Position ist relativ zur Traufhöhe")
     print(f"  Die Dachneigung wird durch die Dachgeometrie dargestellt")
     
     assert new_z == 0.15, "Neue Position sollte 0.15m sein!"
     
-    print("  [OK] PASS - Module werden jetzt korrekt AUF dem Dach platziert!")
+    print("  PASS - Module werden jetzt korrekt AUF dem Dach platziert!")
     print()
     
     print("=" * 70)
-    print("[OK] ALLE TESTS BESTANDEN!")
+    print("ALLE TESTS BESTANDEN!")
     print("=" * 70)
     print()
     print("ZUSAMMENFASSUNG:")

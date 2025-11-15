@@ -20,7 +20,7 @@ def merge_zips(zip_a, zip_b, out_zip):
         for item in zip2.infolist():
             merged.writestr(item, zip2.read(item.filename))
 
-    print(f"[OK] {out_zip.name} erstellt")
+    print(f"{out_zip.name} erstellt")
 
 for firma in firmen:
     if f != 0:

@@ -19,11 +19,11 @@ def test_imports():
 
     try:
         import solar_3d_view_module
-        print("[OK] solar_3d_view_module importiert")
+        print("solar_3d_view_module importiert")
 
         # Prüfe Hauptfunktion
         assert hasattr(solar_3d_view_module, 'render_3d_view')
-        print("[OK] render_3d_view() Funktion gefunden")
+        print("render_3d_view() Funktion gefunden")
 
         # Prüfe Helper-Funktionen
         helpers = [
@@ -40,13 +40,13 @@ def test_imports():
 
         for helper in helpers:
             assert hasattr(solar_3d_view_module, helper)
-            print(f"[OK] {helper}() Funktion gefunden")
+            print(f"{helper}() Funktion gefunden")
 
-        print("\n[OK] Alle Imports erfolgreich!\n")
+        print("\nAlle Imports erfolgreich!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Import-Fehler: {e}")
+        print(f"\nImport-Fehler: {e}")
         traceback.print_exc()
         return False
 
@@ -70,19 +70,19 @@ def test_module_availability():
         }
 
         for flag_name, flag_value in flags.items():
-            status = "[OK]" if flag_value else "[WARNING]"
+            status = "" if flag_value else ""
             print(f"{status} {flag_name}: {flag_value}")
 
         all_available = all(flags.values())
         if all_available:
-            print("\n[OK] Alle Module verfügbar!\n")
+            print("\nAlle Module verfügbar!\n")
         else:
-            print("\n[WARNING] Einige Module nicht verfügbar (siehe oben)\n")
+            print("\nEinige Module nicht verfügbar (siehe oben)\n")
 
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -100,42 +100,42 @@ def test_helper_functions():
         project_data = {"roof_type": "Satteldach"}
         roof_type = svm.extract_roof_type(project_data)
         assert roof_type == "Satteldach"
-        print("[OK] extract_roof_type() funktioniert")
+        print("extract_roof_type() funktioniert")
 
         # Test extract_roof_type mit Fallback
         empty_data = {}
         roof_type = svm.extract_roof_type(empty_data)
         assert roof_type == "Flachdach"
-        print("[OK] extract_roof_type() Fallback funktioniert")
+        print("extract_roof_type() Fallback funktioniert")
 
         # Test extract_module_quantity
         project_data = {"module_quantity": 25}
         analysis_results = {}
         qty = svm.extract_module_quantity(project_data, analysis_results)
         assert qty == 25
-        print("[OK] extract_module_quantity() funktioniert")
+        print("extract_module_quantity() funktioniert")
 
         # Test extract_module_quantity mit Fallback
         qty = svm.extract_module_quantity({}, {})
         assert qty == 20  # Default
-        print("[OK] extract_module_quantity() Fallback funktioniert")
+        print("extract_module_quantity() Fallback funktioniert")
 
         # Test extract_building_type
         project_data = {"building_type": "Mehrfamilienhaus"}
         building_type = svm.extract_building_type(project_data)
         assert building_type == "Mehrfamilienhaus"
-        print("[OK] extract_building_type() funktioniert")
+        print("extract_building_type() funktioniert")
 
         # Test extract_building_type mit Fallback
         building_type = svm.extract_building_type({})
         assert building_type == "Einfamilienhaus"
-        print("[OK] extract_building_type() Fallback funktioniert")
+        print("extract_building_type() Fallback funktioniert")
 
-        print("\n[OK] Alle Helper-Funktionen funktionieren!\n")
+        print("\nAlle Helper-Funktionen funktionieren!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -150,7 +150,7 @@ def test_building_dims_creation():
         import solar_3d_view_module as svm
 
         if not svm.PV3D_AVAILABLE:
-            print("[WARNING] PV3D nicht verfügbar, überspringe Test")
+            print("PV3D nicht verfügbar, überspringe Test")
             return True
 
         # Test create_building_dims
@@ -164,20 +164,20 @@ def test_building_dims_creation():
         assert dims.length_m == 12.0
         assert dims.width_m == 8.0
         assert dims.wall_height_m == 6.0
-        print("[OK] create_building_dims() funktioniert")
+        print("create_building_dims() funktioniert")
 
         # Test mit Defaults
         dims = svm.create_building_dims({})
         assert dims.length_m == 10.0
         assert dims.width_m == 6.0
         assert dims.wall_height_m == 3.0
-        print("[OK] create_building_dims() Defaults funktionieren")
+        print("create_building_dims() Defaults funktionieren")
 
-        print("\n[OK] BuildingDims-Erstellung funktioniert!\n")
+        print("\nBuildingDims-Erstellung funktioniert!\n")
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Fehler: {e}")
+        print(f"\nFehler: {e}")
         traceback.print_exc()
         return False
 
@@ -205,7 +205,7 @@ def main():
     total = len(results)
 
     for test_name, result in results:
-        status = "[OK] PASS" if result else "[ERROR] FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"{status}: {test_name}")
 
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
@@ -214,7 +214,7 @@ def main():
         print("\n🎉 Alle Tests erfolgreich!")
         return 0
     else:
-        print(f"\n[WARNING] {total - passed} Test(s) fehlgeschlagen")
+        print(f"\n{total - passed} Test(s) fehlgeschlagen")
         return 1
 
 

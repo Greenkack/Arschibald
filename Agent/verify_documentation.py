@@ -31,7 +31,7 @@ def check_docstring(obj, name: str) -> bool:
     doc = inspect.getdoc(obj)
     if doc and len(doc.strip()) > 10:
         return True
-    print(f"  [ERROR] Missing docstring: {name}")
+    print(f"  Missing docstring: {name}")
     return False
 
 
@@ -60,7 +60,7 @@ def check_type_hints(func, name: str) -> bool:
         has_hints = True
 
     if not has_hints:
-        print(f"  [WARNING]  Missing type hints: {name}")
+        print(f"  Missing type hints: {name}")
 
     return has_hints
 
@@ -82,7 +82,7 @@ def verify_module(module_name: str) -> dict:
     try:
         module = __import__(module_name, fromlist=[''])
     except ImportError as e:
-        print(f"[ERROR] Failed to import: {e}")
+        print(f"Failed to import: {e}")
         return {'success': False, 'error': str(e)}
 
     results = {
@@ -98,7 +98,7 @@ def verify_module(module_name: str) -> dict:
     # Check module docstring
     if check_docstring(module, module_name):
         results['module_doc'] = True
-        print("[OK] Module docstring: Present")
+        print("Module docstring: Present")
         print(f"\n{inspect.getdoc(module)[:200]}...\n")
 
     # Check functions and classes
@@ -138,7 +138,7 @@ def verify_module(module_name: str) -> dict:
                         results['functions_typed'] += 1
 
     # Print summary
-    print("\n[CHART] Summary:")
+    print("\nSummary:")
     print(f"  Functions: {results['functions']}")
     print(f"  Functions documented: {results['functions_documented']}")
     print(f"  Functions with type hints: {results['functions_typed']}")
@@ -209,20 +209,20 @@ def main():
     if total_functions > 0:
         doc_pct = total_documented / total_functions * 100
         type_pct = total_typed / total_functions * 100
-        print(f"\n[STATS] Overall documentation coverage: {doc_pct:.1f}%")
-        print(f"[STATS] Overall type hint coverage: {type_pct:.1f}%")
+        print(f"\nOverall documentation coverage: {doc_pct:.1f}%")
+        print(f"Overall type hint coverage: {type_pct:.1f}%")
 
     if total_classes > 0:
         class_pct = total_classes_doc / total_classes * 100
-        print(f"[STATS] Class documentation coverage: {class_pct:.1f}%")
+        print(f"Class documentation coverage: {class_pct:.1f}%")
 
     # Final verdict
     print(f"\n{'=' * 60}")
     if (total_documented == total_functions and
             total_classes_doc == total_classes):
-        print("[OK] ALL CODE IS FULLY DOCUMENTED!")
+        print("ALL CODE IS FULLY DOCUMENTED!")
     else:
-        print("[WARNING]  Some documentation is missing. See details above.")
+        print("Some documentation is missing. See details above.")
     print('=' * 60)
 
 

@@ -27,7 +27,7 @@ def test_ui_component_imports():
     
     try:
         from utils.pv3d_module_placement_ui import render_module_placement_panel
-        print("[OK] render_module_placement_panel imported successfully")
+        print("render_module_placement_panel imported successfully")
         
         from utils.pv3d_placement_handler import (
             handle_auto_placement,
@@ -37,11 +37,11 @@ def test_ui_component_imports():
             handle_move_selected,
             handle_rotate_selected
         )
-        print("[OK] All placement handler functions imported successfully")
+        print("All placement handler functions imported successfully")
         
         return True
     except ImportError as e:
-        print(f"[ERROR] Import failed: {e}")
+        print(f"Import failed: {e}")
         return False
 
 
@@ -71,7 +71,7 @@ def test_placement_handler_functions():
         assert z_flat == 0.30, "Flachdach Z-position incorrect"
         assert z_gable == 0.15, "Satteldach Z-position incorrect"
         assert z_shed == 0.15, "Pultdach Z-position incorrect"
-        print("  [OK] All Z-positions correct")
+        print("  All Z-positions correct")
         
         # Test 2.2: Tilt angle calculation
         print("\n2.2: Tilt Angle Calculation")
@@ -86,7 +86,7 @@ def test_placement_handler_functions():
         assert tilt_flat == 30.0, "Flachdach tilt angle incorrect"
         assert tilt_gable == 35.0, "Satteldach tilt angle incorrect"
         assert tilt_shed == 25.0, "Pultdach tilt angle incorrect"
-        print("  [OK] All tilt angles correct")
+        print("  All tilt angles correct")
         
         # Test 2.3: Collision detection
         print("\n2.3: Collision Detection")
@@ -103,7 +103,7 @@ def test_placement_handler_functions():
         print(f"  No collision: {result_no_collision['collision']} "
               f"(expected: False)")
         assert not result_no_collision['collision'], "False positive collision"
-        print("  [OK] No collision detected correctly")
+        print("  No collision detected correctly")
         
         # Test module-to-module collision
         result_module_collision = check_module_collision(
@@ -118,7 +118,7 @@ def test_placement_handler_functions():
               f"(expected: True)")
         assert result_module_collision['collision'], "Missed module collision"
         assert result_module_collision['type'] == 'module', "Wrong collision type"
-        print("  [OK] Module collision detected correctly")
+        print("  Module collision detected correctly")
         
         # Test boundary collision
         result_boundary_collision = check_module_collision(
@@ -133,12 +133,12 @@ def test_placement_handler_functions():
               f"(expected: True)")
         assert result_boundary_collision['collision'], "Missed boundary collision"
         assert result_boundary_collision['type'] == 'boundary', "Wrong collision type"
-        print("  [OK] Boundary collision detected correctly")
+        print("  Boundary collision detected correctly")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Test failed: {e}")
+        print(f"Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -161,8 +161,8 @@ def test_ui_panel_structure():
         
         # Note: This would need Streamlit session state to run fully
         # We're just checking the function signature and imports
-        print("  [OK] Function signature correct")
-        print("  [OK] All imports successful")
+        print("  Function signature correct")
+        print("  All imports successful")
         
         # Check expected return structure
         print("\n3.2: Expected return structure")
@@ -188,12 +188,12 @@ def test_ui_panel_structure():
         print("  Expected return keys:")
         for key in expected_keys:
             print(f"    - {key}")
-        print("  [OK] All expected keys documented")
+        print("  All expected keys documented")
         
         return True
         
     except Exception as e:
-        print(f"[ERROR] Test failed: {e}")
+        print(f"Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -213,7 +213,7 @@ def test_requirements_coverage():
             "Übersichtlichkeit": True
         },
         "5.2 Buttons hinzufügen": {
-            "'[TARGET] Automatisch belegen' Button": True,
+            "'Automatisch belegen' Button": True,
             "'➕ Modul hinzufügen' Button": True,
             "'➖ Ausgewählte entfernen' Button": True,
             "'🔄 Alle zurücksetzen' Button": True,
@@ -232,15 +232,15 @@ def test_requirements_coverage():
     for task, checks in requirements.items():
         print(f"\n{task}:")
         for check, status in checks.items():
-            symbol = "[OK]" if status else "[ERROR]"
+            symbol = "" if status else ""
             print(f"  {symbol} {check}")
             if not status:
                 all_passed = False
     
     if all_passed:
-        print("\n[OK] All requirements covered")
+        print("\nAll requirements covered")
     else:
-        print("\n[ERROR] Some requirements not covered")
+        print("\nSome requirements not covered")
     
     return all_passed
 
@@ -271,16 +271,16 @@ def main():
     total = len(results)
     
     for test_name, result in results:
-        symbol = "[OK]" if result else "[ERROR]"
+        symbol = "" if result else ""
         print(f"{symbol} {test_name}")
     
     print(f"\nPassed: {passed}/{total}")
     
     if passed == total:
-        print("\n[OK] ALL TESTS PASSED - Task 5 is complete!")
+        print("\nALL TESTS PASSED - Task 5 is complete!")
         return 0
     else:
-        print(f"\n[WARNING] {total - passed} test(s) failed")
+        print(f"\n{total - passed} test(s) failed")
         return 1
 
 

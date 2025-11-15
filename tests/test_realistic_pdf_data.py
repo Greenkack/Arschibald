@@ -10,7 +10,7 @@ sys.path.append('.')
 def test_realistic_pdf_data():
     """Teste mit realistischen Daten aus Solar Calculator"""
 
-    print("[TOOL] TEST MIT REALISTISCHEN DATEN")
+    print("TEST MIT REALISTISCHEN DATEN")
     print("=" * 60)
 
     try:
@@ -56,16 +56,16 @@ def test_realistic_pdf_data():
         # Teste build_dynamic_data
         result = build_dynamic_data(test_project_data, test_analysis_results, test_company_info)
 
-        print("[OK] build_dynamic_data erfolgreich ausgeführt!")
+        print("build_dynamic_data erfolgreich ausgeführt!")
 
         # Teste die 3 kritischen Werte
-        print("\\n[TARGET] DIE 3 KRITISCHEN WERTE:")
+        print("\\nDIE 3 KRITISCHEN WERTE:")
         print(f"  1. vat_amount_eur: {result.get('vat_amount_eur', 'FEHLT')}")
         print(f"  2. amortization_time: {result.get('amortization_time', 'FEHLT')}")
         print(f"  3. preis_mit_mwst_formatted: {result.get('preis_mit_mwst_formatted', 'FEHLT')}")
 
         # Teste alle Seite 7 Werte
-        print("\\n[FILE] SEITE 7 ALLE WERTE:")
+        print("\\nSEITE 7 ALLE WERTE:")
         seite7_keys = [
             "preis_mit_mwst_formatted",
             "minus_rabatt_formatted",
@@ -81,15 +81,15 @@ def test_realistic_pdf_data():
             print(f"  {key}: {value}")
 
         # Validierung
-        print("\\n[OK] VALIDIERUNG:")
+        print("\\nVALIDIERUNG:")
 
         # 1. MwSt (sollte aus simple_pricing_data.mwst_betrag kommen)
         vat_ok = result.get("vat_amount_eur_formatted") == "3.515,00 €"
-        print(f"  1. MwSt: {'[OK]' if vat_ok else '[ERROR]'} ({result.get('vat_amount_eur_formatted', 'FEHLT')})")
+        print(f"  1. MwSt: {'' if vat_ok else ''} ({result.get('vat_amount_eur_formatted', 'FEHLT')})")
 
         # 2. Amortisationszeit (sollte aus amortization_time_years kommen)
         amort_ok = result.get("amortization_time") == "12,50 Jahre"
-        print(f"  2. Amortisation: {'[OK]' if amort_ok else '[ERROR]'} ({result.get('amortization_time', 'FEHLT')})")
+        print(f"  2. Amortisation: {'' if amort_ok else ''} ({result.get('amortization_time', 'FEHLT')})")
 
         # 3. Seite 7 Werte (sollten berechnet werden) - prüfe die gemappten Keys
         seite7_mapped_keys = [
@@ -102,16 +102,16 @@ def test_realistic_pdf_data():
             "final_end_preis_formatted"
         ]
         seite7_ok = all(result.get(key) and result.get(key) != "0,00 €" for key in seite7_mapped_keys)
-        print(f"  3. Seite 7: {'[OK]' if seite7_ok else '[ERROR]'}")
+        print(f"  3. Seite 7: {'' if seite7_ok else ''}")
 
         if vat_ok and amort_ok and seite7_ok:
             print("\\n🎉 ALLE 3 PROBLEME GELÖST!")
             return True
-        print("\\n[ERROR] PROBLEME BESTEHEN NOCH!")
+        print("\\nPROBLEME BESTEHEN NOCH!")
         return False
 
     except Exception as e:
-        print(f"[ERROR] FEHLER: {e}")
+        print(f"FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -119,6 +119,6 @@ def test_realistic_pdf_data():
 if __name__ == "__main__":
     success = test_realistic_pdf_data()
     if success:
-        print("\\n[OK] PDF FIXES ERFOLGREICH!")
+        print("\\nPDF FIXES ERFOLGREICH!")
     else:
-        print("\\n[ERROR] PDF FIXES BENÖTIGEN WEITERE ARBEIT!")
+        print("\\nPDF FIXES BENÖTIGEN WEITERE ARBEIT!")

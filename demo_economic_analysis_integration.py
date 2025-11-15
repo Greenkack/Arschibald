@@ -165,7 +165,7 @@ def demo_economic_analysis():
     system_performance = create_sample_system_performance()
     economic_parameters = create_sample_economic_parameters()
 
-    print("\n[CHART] System Configuration:")
+    print("\nSystem Configuration:")
     print(f"   • Components: {len(components)}")
     print(f"   • System Power: {system_performance['system_power_kwp']} kWp")
     print(
@@ -190,7 +190,7 @@ def demo_economic_analysis():
         economic_parameters
     )
 
-    print("\n[MONEY] Economic Analysis Results:")
+    print("\nEconomic Analysis Results:")
     print(
         f"   • Total Investment (Net): {
             economic_result.total_investment_net:,.2f}€")
@@ -207,7 +207,7 @@ def demo_economic_analysis():
     print(f"   • NPV: {economic_result.npv_eur:,.2f}€")
     print(f"   • IRR: {economic_result.irr_percent:.1f}%")
 
-    print("\n[GREEN] Environmental Impact:")
+    print("\nEnvironmental Impact:")
     print(
         f"   • Annual CO2 Savings: {
             economic_result.annual_co2_savings_kg:,.0f} kg")
@@ -247,7 +247,7 @@ def demo_profitability_reporting():
     historical_data = create_sample_historical_data()
 
     print(
-        f"\n[STATS] Analyzing {
+        f"\nAnalyzing {
             len(final_pricing_results)} pricing configurations...")
 
     # Initialize profitability reporting engine
@@ -268,7 +268,7 @@ def demo_profitability_reporting():
         f"   • Gross Margin: {
             profitability_report.gross_margin_percent:.1f}%")
 
-    print("\n[TOOL] Component Analysis:")
+    print("\nComponent Analysis:")
     print(
         f"   • Components Analyzed: {len(profitability_report.component_analyses)}")
     print(
@@ -283,7 +283,7 @@ def demo_profitability_reporting():
                 top_component.component_name} ({
                 top_component.average_margin_percent:.1f}% margin)")
 
-    print("\n[CHART] Pricing Trends:")
+    print("\nPricing Trends:")
     for trend in profitability_report.pricing_trends[:3]:
         print(
             f"   • {
@@ -291,7 +291,7 @@ def demo_profitability_reporting():
                 trend.trend_direction} ({
                 trend.price_change_percent:+.1f}%)")
 
-    print("\n[TARGET] Optimization Opportunities:")
+    print("\nOptimization Opportunities:")
     print(
         f"   • Total Optimization Potential: {
             profitability_report.total_optimization_potential:,.2f}€")
@@ -299,7 +299,7 @@ def demo_profitability_reporting():
     print(
         f"   • Strategic Initiatives: {len(profitability_report.strategic_initiatives)}")
 
-    print("\n[IDEA] Top Optimization Suggestions:")
+    print("\nTop Optimization Suggestions:")
     for i, suggestion in enumerate(
             profitability_report.optimization_suggestions[:3], 1):
         print(f"   {i}. {suggestion.title}")
@@ -310,7 +310,7 @@ def demo_profitability_reporting():
         print(f"      • Implementation: {suggestion.implementation_effort}")
         print(f"      • Priority Score: {suggestion.priority_score:.1f}")
 
-    print("\n[STATS] Performance Metrics:")
+    print("\nPerformance Metrics:")
     for metric, value in list(
             profitability_report.performance_metrics.items())[:4]:
         if "percent" in metric or "ratio" in metric:
@@ -370,7 +370,7 @@ def demo_integration_workflow():
     components = create_sample_components()
     final_pricing_result = create_sample_final_pricing_result(components)
     print(
-        f"   [OK] Final pricing calculated: {
+        f"   Final pricing calculated: {
             final_pricing_result.final_price_net:,.2f}€")
 
     print("\n🔄 Step 2: Economic Analysis Integration")
@@ -384,7 +384,7 @@ def demo_integration_workflow():
         economic_parameters
     )
     print(
-        f"   [OK] Economic analysis completed: {
+        f"   Economic analysis completed: {
             economic_result.payback_period_years:.1f} year payback")
 
     print("\n🔄 Step 3: Profitability Analysis")
@@ -396,7 +396,7 @@ def demo_integration_workflow():
         historical_data
     )
     print(
-        f"   [OK] Profitability report generated: {
+        f"   Profitability report generated: {
             profitability_report.gross_margin_percent:.1f}% margin")
 
     print("\n🔄 Step 4: PDF Integration Ready")
@@ -404,13 +404,13 @@ def demo_integration_workflow():
     all_keys.update(final_pricing_result.dynamic_keys)
     all_keys.update(economic_result.dynamic_keys)
     all_keys.update(profitability_report.dynamic_keys)
-    print(f"   [OK] {len(all_keys)} dynamic keys ready for PDF generation")
+    print(f"   {len(all_keys)} dynamic keys ready for PDF generation")
 
     print("\n📋 Integration Summary:")
-    print("   • Enhanced Pricing: [OK] Complete")
-    print("   • Economic Analysis: [OK] Complete")
-    print("   • Profitability Reporting: [OK] Complete")
-    print("   • PDF Key Generation: [OK] Complete")
+    print("   • Enhanced Pricing: Complete")
+    print("   • Economic Analysis: Complete")
+    print("   • Profitability Reporting: Complete")
+    print("   • PDF Key Generation: Complete")
     print("   • Total Processing Time: < 1 second")
 
     return {
@@ -424,7 +424,7 @@ def demo_integration_workflow():
 def main():
     """Main demonstration function"""
 
-    print("[LAUNCH] Starting Economic Analysis Integration Demo")
+    print("Starting Economic Analysis Integration Demo")
     print(f"📅 Demo Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
     try:
@@ -436,16 +436,16 @@ def main():
         workflow_results = demo_integration_workflow()
 
         print("\n" + "=" * 80)
-        print("[OK] DEMO COMPLETED SUCCESSFULLY")
+        print("DEMO COMPLETED SUCCESSFULLY")
         print("=" * 80)
-        print("\n[TARGET] Key Achievements:")
+        print("\nKey Achievements:")
         print("   • Economic analysis integrated with enhanced pricing")
         print("   • Profitability reporting with trend analysis")
         print("   • Comprehensive optimization suggestions")
         print("   • Dynamic PDF key generation")
         print("   • Real-time calculation performance")
 
-        print("\n[CHART] Demo Statistics:")
+        print("\nDemo Statistics:")
         print(
             f"   • Components Analyzed: {len(workflow_results['final_pricing_result'].components)}")
         print("   • Economic Metrics Calculated: 8")
@@ -459,7 +459,7 @@ def main():
         return True
 
     except Exception as e:
-        print(f"\n[ERROR] Demo failed with error: {str(e)}")
+        print(f"\nDemo failed with error: {str(e)}")
         import traceback
         traceback.print_exc()
         return False

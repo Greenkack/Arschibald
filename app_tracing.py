@@ -11,8 +11,8 @@ This module provides centralized tracing for the entire application to monitor:
 """
 
 from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider, ReadableSpan
-from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter, SpanExporter, SpanExportResult
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
@@ -21,97 +21,12 @@ from opentelemetry.trace import Status, StatusCode
 from functools import wraps
 import logging
 import time
-from typing import Any, Callable, Dict, Optional, Sequence
+from typing import Any, Callable, Dict, Optional
 import traceback
-import os
-import warnings
-
-# Suppress OpenTelemetry and urllib3 connection warnings
-warnings.filterwarnings('ignore', category=Warning, module='opentelemetry')
-warnings.filterwarnings('ignore', category=Warning, module='urllib3')
-
-# Suppress urllib3, requests, and opentelemetry connection error logging
-logging.getLogger('urllib3.connectionpool').setLevel(logging.CRITICAL)
-logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.CRITICAL)
-logging.getLogger('opentelemetry.exporter.otlp.proto.http.trace_exporter').setLevel(logging.CRITICAL)
-logging.getLogger('opentelemetry.sdk._shared_internal').setLevel(logging.CRITICAL)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Suppress connection error warnings from urllib3 and requests
-logging.getLogger('urllib3.connectionpool').setLevel(logging.ERROR)
-logging.getLogger('opentelemetry.exporter.otlp.proto.http.trace_exporter').setLevel(logging.ERROR)
-logging.getLogger('opentelemetry.sdk._logs._internal').setLevel(logging.ERROR)
-
-# Environment variable to disable tracing entirely
-TRACING_DISABLED = os.getenv('DISABLE_TRACING', 'false').lower() == 'true'
-
-
-class SafeOTLPSpanExporter(SpanExporter):
-    """
-    Wrapper around OTLPSpanExporter that silently handles connection failures.
-    
-    This prevents application crashes when the OTLP collector is not available,
-    while still allowing tracing to work if the collector becomes available later.
-    """
-    
-    def __init__(self, endpoint: str, timeout: int = 2):
-        """Initialize the safe exporter."""
-        self.endpoint = endpoint
-        self.timeout = timeout
-        self._exporter: Optional[OTLPSpanExporter] = None
-        self._connection_failed = False
-        self._last_error_log = 0
-        
-        try:
-            self._exporter = OTLPSpanExporter(endpoint=endpoint, timeout=timeout)
-        except Exception as e:
-            logger.debug(f"OTLP exporter initialization warning: {e}")
-            self._connection_failed = True
-    
-    def export(self, spans: Sequence[ReadableSpan]) -> SpanExportResult:
-        """
-        Export spans, silently handling connection errors.
-        
-        Returns SUCCESS even if export fails to prevent application crashes.
-        """
-        if self._connection_failed or not self._exporter:
-            # Silently skip export if connection is known to be failed
-            return SpanExportResult.SUCCESS
-        
-        try:
-            # Attempt export with timeout
-            result = self._exporter.export(spans)
-            return result
-        except Exception:
-            # Suppress ALL exceptions (ConnectionError, TimeoutError, etc.)
-            # Mark connection as failed to skip future attempts
-            if not self._connection_failed:
-                self._connection_failed = True
-                # Log only once on first failure
-                logger.debug("OTLP collector unavailable - tracing continues locally without export")
-            
-            # Return success to prevent BatchSpanProcessor from logging errors
-            return SpanExportResult.SUCCESS
-    
-    def shutdown(self) -> None:
-        """Shutdown the exporter."""
-        if self._exporter:
-            try:
-                self._exporter.shutdown()
-            except Exception:
-                pass
-    
-    def force_flush(self, timeout_millis: int = 30000) -> bool:
-        """Force flush pending spans."""
-        if self._exporter and not self._connection_failed:
-            try:
-                return self._exporter.force_flush(timeout_millis)
-            except Exception:
-                return True
-        return True
 
 
 class AppTracer:
@@ -138,13 +53,8 @@ class AppTracer:
         Returns:
             bool: True if successful, False otherwise
         """
-        if TRACING_DISABLED:
-            logger.info("[INFO] Tracing disabled via DISABLE_TRACING environment variable")
-            self._initialized = False
-            return False
-            
         if self._initialized:
-            logger.debug("Tracing already initialized")
+            logger.info("Tracing already initialized")
             return True
             
         try:
@@ -158,12 +68,10 @@ class AppTracer:
             # Set up tracer provider
             self.tracer_provider = TracerProvider(resource=resource)
             
-            # Configure OTLP exporter with safe wrapper
-            # The SafeOTLPSpanExporter will handle connection failures gracefully
-            otlp_exporter = SafeOTLPSpanExporter(
-                endpoint=self.otlp_endpoint,
-                timeout=2
-            )
+            # Configure OTLP exporter
+            otlp_exporter = OTLPSpanExporter(endpoint=self.otlp_endpoint)
+            
+            # Add span processor
             span_processor = BatchSpanProcessor(otlp_exporter)
             self.tracer_provider.add_span_processor(span_processor)
             
@@ -173,39 +81,30 @@ class AppTracer:
             # Get tracer instance
             self.tracer = trace.get_tracer(__name__)
             
-            # Instrument libraries
+            # Instrument common libraries
             self._instrument_libraries()
             
             self._initialized = True
-            logger.info(f"[OK] Tracing initialized: {self.service_name}")
-            logger.debug(f"OTLP endpoint: {self.otlp_endpoint} (exports handled gracefully if unavailable)")
+            logger.info(f"Tracing initialized: {self.service_name} -> {self.otlp_endpoint}")
             return True
             
         except Exception as e:
-            logger.warning(f"[WARNING] Tracing initialization failed (running without tracing): {e}")
-            # Don't fail the application - just disable tracing
-            self._initialized = False
+            logger.error(f"Failed to initialize tracing: {e}")
+            logger.error(traceback.format_exc())
             return False
     
     def _instrument_libraries(self):
         """Automatically instrument common libraries."""
         try:
             # Instrument HTTP requests
-            try:
-                RequestsInstrumentor().instrument()
-                logger.debug("[OK] Requests instrumented")
-            except Exception as e:
-                logger.debug(f"Requests instrumentation skipped: {e}")
+            RequestsInstrumentor().instrument()
             
             # Instrument SQLite database
-            try:
-                SQLite3Instrumentor().instrument()
-                logger.debug("[OK] SQLite3 instrumented")
-            except Exception as e:
-                logger.debug(f"SQLite3 instrumentation skipped: {e}")
+            SQLite3Instrumentor().instrument()
             
+            logger.info("Libraries instrumented: requests, sqlite3")
         except Exception as e:
-            logger.debug(f"Library instrumentation warning: {e}")
+            logger.warning(f"Library instrumentation partial: {e}")
     
     def trace_function(self, operation_name: Optional[str] = None, attributes: Optional[Dict[str, Any]] = None):
         """
@@ -314,7 +213,7 @@ class AppTracer:
         """Shutdown tracing gracefully."""
         if self.tracer_provider:
             self.tracer_provider.shutdown()
-            logger.info("[OK] Tracing shutdown complete")
+            logger.info("Tracing shutdown complete")
 
 
 # Global tracer instance

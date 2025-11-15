@@ -649,7 +649,7 @@ def cmd_scan(args: argparse.Namespace) -> None:
             indent=2,
             ensure_ascii=False))
 
-    print(f"[OK] Scan fertig. Output: {out_root}")
+    print(f"Scan fertig. Output: {out_root}")
 
 # ---------- APPLY ----------
 
@@ -708,7 +708,7 @@ def cmd_apply(args: argparse.Namespace) -> None:
         # Patchdatei
         patch_file = out_root / "patches" / (mod_rel + ".insert.py")
         if not patch_file.exists():
-            print(f"[SKIP] Keine Patchdatei für {mod_rel}")
+            print(f"Keine Patchdatei für {mod_rel}")
             continue
         patch_text = patch_file.read_text(encoding="utf-8")
         # Split in Blöcke
@@ -774,7 +774,7 @@ def cmd_apply(args: argparse.Namespace) -> None:
             elif kind == "method":
                 if not apply_methods:
                     print(
-                        f"[INFO] Methode ausgelassen (manuell einfügen): {mod_rel} :: {qual}")
+                        f"Methode ausgelassen (manuell einfügen): {mod_rel} :: {qual}")
                     continue
                 # Grob: Einfügen *innerhalb* der Klasse (Anchor ist Ende letzter Methodenkörper)
                 # Heuristik: Block ggf. korrekt einrücken
@@ -786,7 +786,7 @@ def cmd_apply(args: argparse.Namespace) -> None:
         # Schreiben
         dst_file.write_text("\n".join(dst_lines) +
                             ("\n" if dst_lines else ""), encoding="utf-8")
-        print(f"[OK] Eingespielt: {mod_rel}")
+        print(f"Eingespielt: {mod_rel}")
 
 
 def _detect_class_indent(lines: list[str], class_name: str) -> str:
