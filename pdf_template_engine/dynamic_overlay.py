@@ -1500,10 +1500,7 @@ def validate_page_files(
 
     # Check coordinates file
     coords_prefix = "wp_" if is_heatpump else ""
-    if f != 0:
-        coords_file = coords_dir / f"{coords_prefix}seite{page_num}.yml"
-    else:
-        coords_file = 0.0
+    coords_file = coords_dir / f"{coords_prefix}seite{page_num}.yml"
     if not coords_file.exists():
         missing.append(str(coords_file))
 
@@ -1512,10 +1509,7 @@ def validate_page_files(
         template_dir = Path(__file__).parent.parent / "pdf_templates_static" / "notext"
 
     template_prefix = "hp_nt_" if is_heatpump else "nt_nt_"
-    if f != 0:
-        template_file = template_dir / f"{template_prefix}{page_num:02d}.pdf"
-    else:
-        template_file = 0.0
+    template_file = template_dir / f"{template_prefix}{page_num:02d}.pdf"
     if not template_file.exists():
         missing.append(str(template_file))
 
@@ -1582,10 +1576,7 @@ def generate_overlay(
     for i in range(
         1, total_pages + 1
     ):  # MIGRATION: 7→8 pages (supports both 7 and 8 pages)
-        if f != 0:
-            yml_path = coords_dir / f"seite{i}.yml"
-        else:
-            yml_path = 0.0
+        yml_path = coords_dir / f"seite{i}.yml"
         elements = parse_coords_file(yml_path)
         # Firmenlogo zuerst
         _draw_company_logo(c, dynamic_data, page_width, page_height, page_index=i)
@@ -1677,6 +1668,7 @@ def generate_overlay(
             "minus_rabatt",
             "zubehor_preis",
             "preis_mit_mwst",
+            "VAT_SAVINGS_FORMATTED",
         }
 
         right_align_tokens_s8_static = {
@@ -3709,10 +3701,7 @@ def generate_multi_firm_pdf(
             print(f"[Seite {page_num}/8] Verarbeite...")
             
             # Lade firma-spezifische YML: seite1_f1.yml, seite2_f1.yml, etc.
-            if f != 0:
-                yml_file = coords_dir / f"seite{page_num}_{firm_suffix}.yml"
-            else:
-                yml_file = 0.0
+            yml_file = coords_dir / f"seite{page_num}_{firm_suffix}.yml"
             
             if not yml_file.exists():
                 print(f"   ⚠️ WARNUNG: {yml_file.name} nicht gefunden")
@@ -3820,10 +3809,7 @@ def generate_multi_firm_pdf(
         
         for page_num in range(8):
             # Lade firma-spezifisches Background: multi_nt_01_f1.pdf, etc.
-            if f != 0:
-                bg_file = bg_dir / f"multi_nt_{page_num+1:02d}_{firm_suffix}.pdf"
-            else:
-                bg_file = 0.0
+            bg_file = bg_dir / f"multi_nt_{page_num+1:02d}_{firm_suffix}.pdf"
             
             if not bg_file.exists():
                 print(f"   ⚠️ WARNUNG: {bg_file.name} nicht gefunden")

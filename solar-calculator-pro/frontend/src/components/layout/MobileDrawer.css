@@ -1,0 +1,34 @@
+/* Mobile Drawer Styles */
+
+.mobile-drawer {
+  width: 280px !important;
+}
+
+.mobile-drawer .p-sidebar-content {
+  padding: 0;
+  height: 100%;
+}
+
+.mobile-drawer .app-sidebar {
+  position: static;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Overlay styling */
+.p-sidebar-mask {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Animation */
+.p-sidebar-left {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Desktop - hide drawer, show static sidebar */
+@media (min-width: 993px) {
+  .mobile-drawer {
+    display: none;
+  }
+}

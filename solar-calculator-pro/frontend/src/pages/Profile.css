@@ -1,0 +1,111 @@
+/**
+ * Profile Page Styles
+ */
+
+.profile-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.profile-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.profile-avatar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.profile-header-info h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--text-color);
+}
+
+.profile-role {
+  margin: 0.25rem 0 0;
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+
+.profile-message {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.p-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.p-label {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.p-error {
+  color: var(--red-500);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.p-invalid {
+  border-color: var(--red-500) !important;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--surface-300);
+}
+
+.profile-actions .p-button {
+  min-width: 120px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profile-container {
+    margin: 1rem auto;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-header-info h2 {
+    font-size: 1.5rem;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+  }
+
+  .profile-actions .p-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,508 @@
+.heat-pump-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.results-summary-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.results-summary-card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.summary-item:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.summary-item.highlight {
+  background: rgba(16, 185, 129, 0.2);
+  border: 2px solid rgba(16, 185, 129, 0.5);
+}
+
+.summary-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.summary-content {
+  flex: 1;
+}
+
+.summary-label {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  margin-bottom: 0.25rem;
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.summary-subtext {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+.efficiency-card h3 {
+  color: #3b82f6;
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.efficiency-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.metric-row:hover {
+  background: #f1f5f9;
+}
+
+.metric-row.highlight {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.metric-label {
+  font-weight: 500;
+}
+
+.metric-value {
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.efficiency-explanation {
+  padding: 1rem;
+  background: #eff6ff;
+  border-left: 4px solid #3b82f6;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.energy-mix-chart {
+  margin-top: 2rem;
+}
+
+.cost-comparison-card h3 {
+  color: #10b981;
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.cost-metrics {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.cost-item {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: transform 0.2s;
+}
+
+.cost-item:hover {
+  transform: scale(1.02);
+}
+
+.cost-item.current-system {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border: 2px solid #ef4444;
+}
+
+.cost-item.heat-pump {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border: 2px solid #10b981;
+}
+
+.cost-item h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.cost-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0.5rem 0;
+}
+
+.cost-label {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.cost-arrow {
+  font-size: 2rem;
+  color: #10b981;
+  font-weight: 700;
+}
+
+.savings-highlight {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.savings-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.savings-label {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.savings-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.savings-progress {
+  margin: 1rem 0;
+  height: 12px;
+}
+
+.savings-percentage {
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.cost-comparison-chart {
+  margin-top: 2rem;
+}
+
+.savings-projections-card h3 {
+  color: #8b5cf6;
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.projections-info {
+  padding: 1rem;
+  background: #faf5ff;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.projections-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.projection-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.projection-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.projection-item.highlight {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  border-color: #8b5cf6;
+}
+
+.projection-period {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.projection-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.savings-chart {
+  margin: 2rem 0;
+}
+
+.investment-note {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: #fef3c7;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.investment-note i {
+  color: #f59e0b;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.environmental-impact-card h3 {
+  color: #10b981;
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.environmental-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.environmental-metric {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f0fdf4;
+  border-radius: 12px;
+  border: 2px solid #bbf7d0;
+  transition: all 0.2s;
+}
+
+.environmental-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+}
+
+.environmental-metric.highlight {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-color: #10b981;
+}
+
+.environmental-metric .metric-icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.environmental-metric .metric-content {
+  flex: 1;
+}
+
+.environmental-metric .metric-label {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  margin-bottom: 0.25rem;
+}
+
+.environmental-metric .metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.environmental-metric .metric-subtext {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+.co2-comparison-chart {
+  margin: 2rem 0;
+}
+
+.environmental-explanation {
+  padding: 1.5rem;
+  background: #f0fdf4;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.environmental-explanation h4 {
+  margin: 0 0 1rem 0;
+  color: #059669;
+}
+
+.environmental-explanation ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.environmental-explanation li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.environmental-actions {
+  margin-top: 2rem;
+}
+
+.action-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.action-item:hover {
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+.action-item i {
+  color: #10b981;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.action-item strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #1e293b;
+}
+
+.action-item p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.technical-details-card h3 {
+  color: #6366f1;
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.technical-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.technical-section {
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+}
+
+.technical-section h4 {
+  margin: 0 0 1rem 0;
+  color: #1e293b;
+  font-size: 1.125rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row span:first-child {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.detail-row span:last-child {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-metrics {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .cost-arrow {
+    transform: rotate(90deg);
+  }
+
+  .projections-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .environmental-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .technical-grid {
+    grid-template-columns: 1fr;
+  }
+}

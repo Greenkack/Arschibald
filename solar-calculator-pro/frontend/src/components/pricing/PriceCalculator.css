@@ -1,0 +1,367 @@
+/**
+ * Price Calculator Styles
+ * Task 38: Price Calculation Interface
+ */
+
+.price-calculator {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.calculator-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.form-field .required {
+  color: var(--red-500);
+}
+
+.field-hint {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Storage Option Template */
+.storage-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.option-name {
+  font-weight: 500;
+}
+
+.option-details {
+  color: var(--text-color-secondary);
+}
+
+/* Extras Grid */
+.extras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.extra-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.extra-item:hover {
+  border-color: var(--primary-color);
+  background-color: var(--surface-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.extra-item .p-checkbox {
+  margin-top: 0.25rem;
+}
+
+.extra-label {
+  flex: 1;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.extra-name {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.extra-price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.extra-description {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.extra-category {
+  align-self: flex-start;
+  font-size: 0.75rem;
+}
+
+/* Services Grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.service-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.service-item:hover {
+  border-color: var(--primary-color);
+  background-color: var(--surface-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-item .p-checkbox {
+  margin-top: 0.25rem;
+}
+
+.service-label {
+  flex: 1;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.service-name {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.service-price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--green-600);
+}
+
+.service-description {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+/* Calculator Actions */
+.calculator-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.calculator-actions .p-button {
+  min-width: 150px;
+}
+
+/* Calculating Overlay */
+.calculating-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  background-color: var(--surface-overlay);
+  border-radius: 6px;
+  margin: 2rem 0;
+}
+
+.calculating-overlay p {
+  color: var(--text-color-secondary);
+  font-weight: 500;
+}
+
+/* Price Breakdown */
+.price-breakdown {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: var(--surface-ground);
+  border-radius: 6px;
+  border: 2px solid var(--primary-color);
+}
+
+.price-breakdown h3 {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-color);
+  font-size: 1.5rem;
+}
+
+.breakdown-table {
+  margin-bottom: 1rem;
+}
+
+.breakdown-table .item-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-type-badge {
+  font-size: 1.25rem;
+}
+
+.item-type-badge.base {
+  color: var(--blue-600);
+}
+
+.item-type-badge.extra {
+  color: var(--orange-600);
+}
+
+.item-type-badge.service {
+  color: var(--green-600);
+}
+
+/* Price Summary */
+.price-summary {
+  padding: 1rem;
+  background-color: var(--surface-card);
+  border-radius: 6px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  font-size: 1rem;
+}
+
+.summary-row.discount {
+  color: var(--green-600);
+}
+
+.summary-row.tax {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.summary-row.total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  padding-top: 1rem;
+}
+
+.summary-row .amount {
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.summary-row.total .amount {
+  font-size: 1.75rem;
+}
+
+/* Calculation Metadata */
+.calculation-metadata {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: var(--surface-hover);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.calculation-metadata small {
+  color: var(--text-color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .extras-grid,
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-actions {
+    flex-direction: column;
+  }
+
+  .calculator-actions .p-button {
+    width: 100%;
+  }
+
+  .summary-row {
+    font-size: 0.875rem;
+  }
+
+  .summary-row.total {
+    font-size: 1.25rem;
+  }
+
+  .summary-row.total .amount {
+    font-size: 1.5rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .extra-item:hover,
+  .service-item:hover {
+    background-color: var(--surface-hover);
+  }
+
+  .price-breakdown {
+    background-color: var(--surface-card);
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.price-breakdown {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Print Styles */
+@media print {
+  .calculator-actions,
+  .p-panel-toggler {
+    display: none;
+  }
+
+  .price-breakdown {
+    border: 1px solid #000;
+    page-break-inside: avoid;
+  }
+}

@@ -1,0 +1,56 @@
+/* Matrix List Styles */
+
+.matrix-list {
+  width: 100%;
+}
+
+.matrix-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--surface-card);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.matrix-list-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+.matrix-table {
+  background: var(--surface-card);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.matrix-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.matrix-actions .p-button {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .matrix-list-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .matrix-list-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .matrix-actions {
+    flex-wrap: wrap;
+  }
+}

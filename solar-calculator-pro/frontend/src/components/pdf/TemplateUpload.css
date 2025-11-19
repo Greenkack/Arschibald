@@ -1,0 +1,154 @@
+/* Template Upload Styles */
+
+.template-upload-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+.template-upload-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.form-field .required {
+  color: var(--red-500);
+}
+
+.form-field .text-muted {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.selected-file-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--surface-100);
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+}
+
+.selected-file-info i {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.file-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.file-name {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.file-size {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.upload-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.upload-info {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--blue-50);
+  border: 1px solid var(--blue-200);
+  border-radius: 8px;
+}
+
+.upload-info i {
+  font-size: 1.25rem;
+  color: var(--blue-500);
+  margin-top: 0.25rem;
+}
+
+.upload-info p {
+  margin: 0 0 0.5rem 0;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.upload-info ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.upload-info li {
+  margin-bottom: 0.25rem;
+}
+
+.template-upload-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* File Upload Component Customization */
+.template-upload-content .p-fileupload {
+  border: 2px dashed var(--surface-border);
+  border-radius: 8px;
+  background: var(--surface-50);
+  transition: all 0.3s ease;
+}
+
+.template-upload-content .p-fileupload:hover {
+  border-color: var(--primary-color);
+  background: var(--surface-100);
+}
+
+.template-upload-content .p-fileupload-choose {
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .template-upload-dialog {
+    width: 95vw !important;
+  }
+  
+  .template-upload-content {
+    gap: 1rem;
+  }
+  
+  .upload-info {
+    flex-direction: column;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .upload-info {
+    background: rgba(33, 150, 243, 0.1);
+    border-color: rgba(33, 150, 243, 0.3);
+  }
+}

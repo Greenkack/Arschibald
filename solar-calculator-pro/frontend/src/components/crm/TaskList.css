@@ -1,0 +1,48 @@
+/* Task List Styles */
+
+.task-list {
+  width: 100%;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.task-datatable {
+  margin-top: 1rem;
+}
+
+.task-datatable .p-datatable-tbody > tr > td {
+  padding: 1rem;
+}
+
+.task-datatable .font-bold {
+  font-weight: 600;
+  color: #333;
+}
+
+.task-datatable .text-gray-600 {
+  color: #6b7280;
+}
+
+.task-datatable .text-red-600 {
+  color: #dc2626;
+}
+
+.task-datatable .p-tag {
+  font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+  }
+  
+  .filter-bar > * {
+    width: 100%;
+  }
+}

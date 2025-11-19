@@ -1,0 +1,153 @@
+/**
+ * Solar Projects Page Styles
+ */
+
+.solar-projects-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Table Header */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-left h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.header-right {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-dropdown {
+  min-width: 150px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+/* Projects Table */
+.projects-table {
+  font-size: 0.95rem;
+}
+
+.projects-table .p-datatable-thead > tr > th {
+  background: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  padding: 1rem;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.projects-table .p-datatable-tbody > tr {
+  transition: background-color 0.2s;
+}
+
+.projects-table .p-datatable-tbody > tr:hover {
+  background-color: #f8f9fa;
+}
+
+.projects-table .p-datatable-tbody > tr > td {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Create Project Dialog */
+.create-project-form {
+  padding: 1rem 0;
+}
+
+.create-project-form .field {
+  margin-bottom: 1.5rem;
+}
+
+.create-project-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.create-project-form .w-full {
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .solar-projects-page {
+    padding: 1rem;
+  }
+  
+  .table-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .header-left,
+  .header-right {
+    width: 100%;
+  }
+  
+  .header-right {
+    flex-direction: column;
+  }
+  
+  .filter-dropdown {
+    width: 100%;
+  }
+}
+
+/* Empty State */
+.p-datatable-emptymessage {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+/* Loading State */
+.p-datatable-loading-overlay {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Pagination */
+.p-paginator {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.p-paginator .p-paginator-current {
+  color: #495057;
+}
+
+/* Tags */
+.p-tag {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+}

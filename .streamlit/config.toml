@@ -20,13 +20,11 @@ maxMessageSize = 500                # Max WebSocket Message Size in MB
 serverAddress = "localhost"
 serverPort = 8501
 gatherUsageStats = true           # Keine Telemetrie an Streamlit senden
-# Browser automatisch öffnen beim Start
-gatherUsageStats = true
 
 # ---------- CLIENT ----------
 [client]
-showErrorDetails = true             # Zeige Fehler-Details
-toolbarMode = "developer"           # "auto"|"developer"|"viewer"|"minimal"
+showErrorDetails = true            # Verstecke Fehler-Details im Production-Modus
+toolbarMode = "developer"             # Minimale Toolbar ohne "Running..." Meldungen
 showSidebarNavigation = true
 
 # ---------- RUNNER ----------
@@ -36,7 +34,7 @@ magicEnabled = true
 fastReruns = true                   # Schnellere Reruns bei kleinen Änderungen
 postScriptGC = true                 # Garbage Collection nach Script-Ausführung
 # Memory Management
-enforceSerializableSessionState = false  # Für komplexe Objekte in Session State
+enforceSerializableSessionState = true  # Für komplexe Objekte in Session State
 
 # ---------- THEME ----------
 [theme]

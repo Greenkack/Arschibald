@@ -1,0 +1,184 @@
+/**
+ * German Input Components Styles
+ * 
+ * Styles for custom German number formatting input components.
+ */
+
+/* Common wrapper styles */
+.german-number-input-wrapper,
+.german-currency-input-wrapper,
+.german-percent-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Label styles */
+.german-number-input-label,
+.german-currency-input-label,
+.german-percent-input-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  margin-bottom: 0.25rem;
+}
+
+/* Input styles */
+.german-number-input,
+.german-currency-input,
+.german-percent-input {
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  text-align: right;
+}
+
+/* Error styles */
+.german-number-input-error,
+.german-currency-input-error,
+.german-percent-input-error {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--red-500);
+}
+
+/* Slider wrapper */
+.german-slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+/* Slider header */
+.german-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.german-slider-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+.german-slider-value {
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* Slider container */
+.german-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.german-slider-min,
+.german-slider-max {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  min-width: 4rem;
+  text-align: center;
+}
+
+.german-slider {
+  flex: 1;
+}
+
+.german-slider.dragging {
+  cursor: grabbing;
+}
+
+.german-slider-value-bottom {
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-top: 0.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .german-slider-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .german-slider-min,
+  .german-slider-max {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .german-slider {
+    width: 100%;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .german-number-input-label,
+  .german-currency-input-label,
+  .german-percent-input-label,
+  .german-slider-label {
+    color: var(--text-color, #e0e0e0);
+  }
+
+  .german-slider-min,
+  .german-slider-max {
+    color: var(--text-color-secondary, #a0a0a0);
+  }
+}
+
+/* Focus styles */
+.german-number-input:focus,
+.german-currency-input:focus,
+.german-percent-input:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Disabled styles */
+.german-number-input:disabled,
+.german-currency-input:disabled,
+.german-percent-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--surface-100);
+}
+
+/* Invalid state */
+.p-invalid {
+  border-color: var(--red-500) !important;
+}
+
+/* Hover effects */
+.german-number-input:hover:not(:disabled),
+.german-currency-input:hover:not(:disabled),
+.german-percent-input:hover:not(:disabled) {
+  border-color: var(--primary-color);
+}
+
+/* Transition effects */
+.german-number-input,
+.german-currency-input,
+.german-percent-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.german-slider {
+  transition: opacity 0.2s ease;
+}
+
+.german-slider:hover:not(:disabled) {
+  opacity: 0.9;
+}

@@ -1,0 +1,93 @@
+/**
+ * PDF Emailer Styles
+ */
+
+.pdf-emailer {
+  display: inline-flex;
+}
+
+.email-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+.email-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.email-info-message {
+  width: 100%;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: var(--red-500);
+}
+
+.form-hint {
+  color: var(--text-color-secondary);
+  font-size: 0.85rem;
+}
+
+.advanced-toggle {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--surface-border);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.advanced-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--surface-50);
+  border-radius: 6px;
+}
+
+.email-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Chips styling */
+.p-chips .p-chips-multiple-container {
+  width: 100%;
+}
+
+.p-chips .p-chips-token {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .email-dialog {
+    width: 95vw !important;
+  }
+
+  .email-dialog-content {
+    gap: 1rem;
+  }
+
+  .form-section {
+    gap: 0.375rem;
+  }
+}
