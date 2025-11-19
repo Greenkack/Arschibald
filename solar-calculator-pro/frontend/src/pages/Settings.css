@@ -1,0 +1,48 @@
+/**
+ * Settings Page Styles
+ */
+
+.settings-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.settings-header {
+  margin-bottom: 2rem;
+}
+
+.settings-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  color: var(--text-color);
+}
+
+.settings-subtitle {
+  margin: 0;
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+}
+
+.settings-tabs {
+  background: var(--surface-card);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-security,
+.settings-preferences,
+.settings-notifications {
+  padding: 1rem 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .settings-container {
+    padding: 1rem;
+  }
+
+  .settings-header h1 {
+    font-size: 1.5rem;
+  }
+}

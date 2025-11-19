@@ -184,3 +184,39 @@ Dieses Dokument beschreibt die Anforderungen für die Migration der bestehenden 
 5. THE Frontend Application SHALL TypeScript-Interfaces für alle Datenstrukturen definieren
 6. THE Desktop Application SHALL ein Developer-Guide für Onboarding bereitstellen
 7. THE Desktop Application SHALL ein User-Manual für End-Benutzer bereitstellen
+
+
+### Requirement 13: Global UI Customization System
+
+**User Story:** Als Benutzer möchte ich die gesamte Benutzeroberfläche nach meinen Vorlieben anpassen können, einschließlich Emojis, Themes und visuellen Effekten für alle UI-Komponenten.
+
+#### Acceptance Criteria
+
+1. THE Frontend Application SHALL provide a global emoji toggle that enables or disables emojis throughout the entire application
+2. THE Frontend Application SHALL apply emoji settings to all UI elements including buttons, labels, menus, dropdowns, cards, forms, and notifications
+3. THE Frontend Application SHALL provide multiple theme options (light, dark, high-contrast, custom) that affect all UI components
+4. THE Frontend Application SHALL allow users to customize visual effects (animations, transitions, shadows, blur) for all UI elements
+5. THE Frontend Application SHALL persist customization settings across sessions
+6. WHEN a user changes a customization setting, THEN THE Frontend Application SHALL apply changes immediately to all visible components
+7. THE Frontend Application SHALL provide granular control over effects for different component categories (buttons, inputs, cards, menus, etc.)
+8. THE Frontend Application SHALL include preset customization profiles (minimal, standard, enhanced, maximum)
+9. THE Frontend Application SHALL allow export and import of customization settings
+10. THE Frontend Application SHALL provide a live preview of customization changes before applying them
+
+
+### Requirement 14: German Number Formatting and Universal Data System
+
+**User Story:** Als Benutzer möchte ich, dass alle Zahlen in der gesamten Anwendung im deutschen Format angezeigt werden (Punkt als Tausendertrennzeichen, Komma als Dezimaltrennzeichen, 2 Dezimalstellen) und dass alle Daten mit dynamischen Keys und PDF-Bytes ausgestattet sind.
+
+#### Acceptance Criteria
+
+1. THE Frontend Application SHALL format all numbers with German locale (de-DE) using dot (.) as thousand separator and comma (,) as decimal separator
+2. THE Frontend Application SHALL display exactly 2 decimal places for all decimal numbers throughout the application
+3. THE Frontend Application SHALL apply German number formatting to all input fields, display fields, calculations, results, charts, tables, and reports
+4. THE Backend Service SHALL store all numeric data with dynamic keys for flexible access and manipulation
+5. THE Backend Service SHALL generate PDF-ready byte representations for all data types (numbers, text, images, charts, documents)
+6. THE Frontend Application SHALL provide bidirectional conversion between German format (display) and standard format (calculation)
+7. THE Backend Service SHALL attach dynamic keys to all database records, form inputs, dropdown options, slider values, and calculation results
+8. THE Backend Service SHALL generate PDF bytes for all visual elements including charts, diagrams, images, photos, and documents
+9. THE Frontend Application SHALL validate German-formatted number inputs and convert them correctly for calculations
+10. THE Backend Service SHALL provide a unified data access layer that supports both dynamic keys and PDF byte generation for all data types

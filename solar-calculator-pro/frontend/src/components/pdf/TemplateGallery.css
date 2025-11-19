@@ -1,0 +1,138 @@
+/* Template Gallery Styles */
+
+.template-gallery {
+  width: 100%;
+}
+
+.template-gallery-header {
+  margin-bottom: 2rem;
+}
+
+.template-gallery-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.template-gallery-header .text-muted {
+  margin: 0;
+  color: var(--text-color-secondary);
+  font-size: 0.95rem;
+}
+
+.template-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.template-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.template-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.template-card-selected {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.template-card-header {
+  position: relative;
+  background: var(--surface-100);
+  padding: 1rem;
+  border-radius: 8px 8px 0 0;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.template-preview-image {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.template-preview-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  color: var(--text-color-secondary);
+  background: var(--surface-50);
+  border-radius: 4px;
+}
+
+.template-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.template-badge-selected {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.template-card-content {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.template-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.template-meta i {
+  font-size: 0.875rem;
+}
+
+.template-card-footer {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+.template-card-footer .p-button {
+  flex: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .template-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .template-card-footer {
+    flex-direction: column;
+  }
+  
+  .template-card-footer .p-button {
+    width: 100%;
+  }
+}
+
+/* Loading State */
+.template-gallery-grid .p-skeleton {
+  border-radius: 8px;
+}

@@ -1,0 +1,92 @@
+{
+  "name": "solar-calculator-pro",
+  "version": "1.0.0",
+  "description": "Professional Solar Calculator Desktop Application",
+  "main": "electron/main.js",
+  "author": "Your Company",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:test": "cd frontend && npm test",
+    "frontend:lint": "cd frontend && npm run lint",
+    "frontend:format": "cd frontend && npm run format",
+    "backend:dev": "cd backend && python -m uvicorn main:app --reload --port 8000",
+    "backend:test": "cd backend && pytest tests/ -v --cov=backend",
+    "backend:lint": "cd backend && flake8 . && black --check .",
+    "backend:format": "cd backend && black .",
+    "electron:dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\" \"wait-on http://localhost:3000 http://localhost:8000/health && electron .\"",
+    "electron:build": "npm run frontend:build && electron-builder",
+    "electron:build:win": "npm run frontend:build && electron-builder --win",
+    "electron:build:mac": "npm run frontend:build && electron-builder --mac",
+    "electron:build:linux": "npm run frontend:build && electron-builder --linux",
+    "test": "npm run frontend:test && npm run backend:test",
+    "lint": "npm run frontend:lint && npm run backend:lint",
+    "format": "npm run frontend:format && npm run backend:format",
+    "prepare": "husky install",
+    "postinstall": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^27.1.0",
+    "electron-builder": "^24.9.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "electron-log": "^5.0.1",
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.1.7"
+  },
+  "build": {
+    "appId": "com.yourcompany.solarcalculator",
+    "productName": "Solar Calculator Pro",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "frontend/dist/**/*",
+      "backend/dist/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "backend/dist/main${os === 'win' ? '.exe' : ''}",
+        "to": "backend/main${os === 'win' ? '.exe' : ''}"
+      }
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.business"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "assets/icon.png",
+      "category": "Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx,js,jsx}": [
+      "cd frontend && npm run lint",
+      "cd frontend && npm run format"
+    ],
+    "backend/**/*.py": [
+      "cd backend && black .",
+      "cd backend && flake8 ."
+    ]
+  }
+}

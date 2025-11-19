@@ -1520,3 +1520,808 @@ This design provides a comprehensive architecture for migrating from Streamlit t
 8. **Performant**: Optimized for speed and efficiency
 
 The migration can be done incrementally, allowing for parallel operation of both systems during the transition period.
+
+
+## Global UI Customization System
+
+### Customization Architecture
+
+```typescript
+// frontend/src/store/customizationStore.ts
+
+interface EmojiSettings {
+  enabled: boolean;
+  style: 'native' | 'twemoji' | 'noto';
+  size: 'small' | 'medium' | 'large';
+  categories: {
+    buttons: boolean;
+    menus: boolean;
+    notifications: boolean;
+    headers: boolean;
+    labels: boolean;
+    tooltips: boolean;
+  };
+}
+
+interface ThemeSettings {
+  mode: 'light' | 'dark' | 'auto';
+  preset: string; // 'default', 'ocean', 'forest', 'sunset', 'custom'
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+    background: string;
+    surface: string;
+    text: string;
+    error: string;
+    warning: string;
+    success: string;
+    info: string;
+  };
+  typography: {
+    fontFamily: string;
+    fontSize: 'small' | 'medium' | 'large' | 'xlarge';
+    fontWeight: 'light' | 'normal' | 'medium' | 'bold';
+  };
+}
+
+interface EffectSettings {
+  animations: {
+    enabled: boolean;
+    speed: 'slow' | 'normal' | 'fast';
+    types: {
+      fade: boolean;
+      slide: boolean;
+      scale: boolean;
+      rotate: boolean;
+    };
+  };
+  transitions: {
+    enabled: boolean;
+    duration: number; // milliseconds
+    easing: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out';
+  };
+  shadows: {
+    enabled: boolean;
+    intensity: 'none' | 'subtle' | 'normal' | 'strong';
+  };
+  blur: {
+    enabled: boolean;
+    intensity: number; // 0-20px
+  };
+  borders: {
+    radius: number; // 0-20px
+    width: number; // 0-5px
+  };
+  hover: {
+    enabled: boolean;
+    scale: number; // 1.0-1.1
+    brightness: number; // 0.8-1.2
+  };
+}
+
+interface ComponentEffects {
+  buttons: EffectSettings;
+  inputs: EffectSettings;
+  cards: EffectSettings;
+  menus: EffectSettings;
+  dropdowns: EffectSettings;
+  modals: EffectSettings;
+  tooltips: EffectSettings;
+  tables: EffectSettings;
+  charts: EffectSettings;
+  sidebar: EffectSettings;
+}
+
+interface CustomizationState {
+  emoji: EmojiSettings;
+  theme: ThemeSettings;
+  effects: ComponentEffects;
+  presets: {
+    minimal: CustomizationState;
+    standard: CustomizationState;
+    enhanced: CustomizationState;
+    maximum: CustomizationState;
+  };
+}
+```
+
+### Emoji System
+
+```typescript
+// frontend/src/utils/emojiManager.ts
+
+class EmojiManager {
+  private settings: EmojiSettings;
+  
+  // Emoji mappings for different contexts
+  private emojiMap = {
+    buttons: {
+      save: '💾',
+      delete: '🗑️',
+      edit: '✏️',
+      add: '➕',
+      remove: '➖',
+      search: '🔍',
+      filter: '🔽',
+      export: '📤',
+      import: '📥',
+      print: '🖨️',
+      download: '⬇️',
+      upload: '⬆️',
+      refresh: '🔄',
+      settings: '⚙️',
+      help: '❓',
+      close: '✖️',
+      back: '◀️',
+      forward: '▶️',
+      home: '🏠',
+      dashboard: '📊',
+    },
+    status: {
+      success: '✅',
+      error: '❌',
+      warning: '⚠️',
+      info: 'ℹ️',
+      pending: '⏳',
+      completed: '✔️',
+    },
+    features: {
+      solar: '☀️',
+      heatpump: '🔥',
+      battery: '🔋',
+      money: '💰',
+      chart: '📈',
+      document: '📄',
+      calendar: '📅',
+      user: '👤',
+      email: '📧',
+      phone: '📞',
+      location: '📍',
+    },
+  };
+  
+  getEmoji(category: string, key: string): string {
+    if (!this.settings.enabled) return '';
+    if (!this.settings.categories[category]) return '';
+    return this.emojiMap[category]?.[key] || '';
+  }
+  
+  wrapWithEmoji(text: string, emoji: string): string {
+    if (!this.settings.enabled) return text;
+    return `${emoji} ${text}`;
+  }
+}
+```
+
+### Theme System
+
+```typescript
+// frontend/src/theme/themeEngine.ts
+
+class ThemeEngine {
+  private currentTheme: ThemeSettings;
+  
+  applyTheme(theme: ThemeSettings) {
+    // Generate CSS variables
+    const cssVars = {
+      '--color-primary': theme.colors.primary,
+      '--color-secondary': theme.colors.secondary,
+      '--color-accent': theme.colors.accent,
+      '--color-background': theme.colors.background,
+      '--color-surface': theme.colors.surface,
+      '--color-text': theme.colors.text,
+      '--color-error': theme.colors.error,
+      '--color-warning': theme.colors.warning,
+      '--color-success': theme.colors.success,
+      '--color-info': theme.colors.info,
+      '--font-family': theme.typography.fontFamily,
+      '--font-size-base': this.getFontSize(theme.typography.fontSize),
+      '--font-weight': this.getFontWeight(theme.typography.fontWeight),
+    };
+    
+    // Apply to document root
+    Object.entries(cssVars).forEach(([key, value]) => {
+      document.documentElement.style.setProperty(key, value);
+    });
+    
+    // Update PrimeReact theme
+    this.updatePrimeReactTheme(theme);
+  }
+  
+  private updatePrimeReactTheme(theme: ThemeSettings) {
+    // Dynamically update PrimeReact CSS variables
+    const primeVars = {
+      '--primary-color': theme.colors.primary,
+      '--surface-ground': theme.colors.background,
+      '--surface-card': theme.colors.surface,
+      '--text-color': theme.colors.text,
+    };
+    
+    Object.entries(primeVars).forEach(([key, value]) => {
+      document.documentElement.style.setProperty(key, value);
+    });
+  }
+}
+```
+
+### Effect System
+
+```typescript
+// frontend/src/effects/effectEngine.ts
+
+class EffectEngine {
+  applyEffects(component: string, effects: EffectSettings) {
+    const styles: React.CSSProperties = {};
+    
+    // Animations
+    if (effects.animations.enabled) {
+      styles.animation = this.getAnimationStyle(effects.animations);
+    }
+    
+    // Transitions
+    if (effects.transitions.enabled) {
+      styles.transition = `all ${effects.transitions.duration}ms ${effects.transitions.easing}`;
+    }
+    
+    // Shadows
+    if (effects.shadows.enabled) {
+      styles.boxShadow = this.getShadowStyle(effects.shadows.intensity);
+    }
+    
+    // Blur
+    if (effects.blur.enabled) {
+      styles.backdropFilter = `blur(${effects.blur.intensity}px)`;
+    }
+    
+    // Borders
+    styles.borderRadius = `${effects.borders.radius}px`;
+    styles.borderWidth = `${effects.borders.width}px`;
+    
+    return styles;
+  }
+  
+  private getShadowStyle(intensity: string): string {
+    const shadows = {
+      none: 'none',
+      subtle: '0 1px 3px rgba(0,0,0,0.12)',
+      normal: '0 4px 6px rgba(0,0,0,0.1)',
+      strong: '0 10px 25px rgba(0,0,0,0.15)',
+    };
+    return shadows[intensity];
+  }
+}
+```
+
+### Customization UI Component
+
+```typescript
+// frontend/src/components/CustomizationPanel.tsx
+
+export const CustomizationPanel: React.FC = () => {
+  const { customization, updateCustomization } = useCustomizationStore();
+  
+  return (
+    <div className="customization-panel">
+      <Tabs>
+        <TabPanel header="🎨 Themes">
+          <ThemeSelector />
+          <ColorPicker />
+          <TypographySettings />
+        </TabPanel>
+        
+        <TabPanel header="😀 Emojis">
+          <div className="emoji-toggle">
+            <label>Enable Emojis</label>
+            <InputSwitch 
+              checked={customization.emoji.enabled}
+              onChange={(e) => updateCustomization('emoji.enabled', e.value)}
+            />
+          </div>
+          
+          <div className="emoji-categories">
+            <h3>Show Emojis In:</h3>
+            {Object.keys(customization.emoji.categories).map(category => (
+              <Checkbox
+                key={category}
+                label={category}
+                checked={customization.emoji.categories[category]}
+                onChange={(e) => updateCustomization(`emoji.categories.${category}`, e.checked)}
+              />
+            ))}
+          </div>
+        </TabPanel>
+        
+        <TabPanel header="✨ Effects">
+          <EffectSettings component="buttons" />
+          <EffectSettings component="inputs" />
+          <EffectSettings component="cards" />
+          <EffectSettings component="menus" />
+          <EffectSettings component="dropdowns" />
+        </TabPanel>
+        
+        <TabPanel header="📦 Presets">
+          <PresetSelector />
+          <Button label="Export Settings" onClick={exportSettings} />
+          <Button label="Import Settings" onClick={importSettings} />
+        </TabPanel>
+      </Tabs>
+      
+      <div className="preview-panel">
+        <h3>Live Preview</h3>
+        <ComponentPreview />
+      </div>
+    </div>
+  );
+};
+```
+
+### Global Style Application
+
+```typescript
+// frontend/src/components/CustomizableComponent.tsx
+
+export const CustomizableButton: React.FC<ButtonProps> = (props) => {
+  const { customization } = useCustomizationStore();
+  const emojiManager = useEmojiManager();
+  const effectEngine = useEffectEngine();
+  
+  const emoji = emojiManager.getEmoji('buttons', props.action);
+  const effects = effectEngine.applyEffects('buttons', customization.effects.buttons);
+  const label = emoji ? `${emoji} ${props.label}` : props.label;
+  
+  return (
+    <Button
+      {...props}
+      label={label}
+      style={{...effects, ...props.style}}
+      className={`customizable-button ${props.className || ''}`}
+    />
+  );
+};
+```
+
+### Persistence
+
+```typescript
+// frontend/src/services/customizationService.ts
+
+class CustomizationService {
+  private storageKey = 'app_customization';
+  
+  async save(customization: CustomizationState) {
+    // Save to localStorage
+    localStorage.setItem(this.storageKey, JSON.stringify(customization));
+    
+    // Sync to backend for cross-device
+    await api.post('/api/v1/user/customization', customization);
+  }
+  
+  async load(): Promise<CustomizationState> {
+    // Try to load from backend first
+    try {
+      const response = await api.get('/api/v1/user/customization');
+      return response.data;
+    } catch {
+      // Fallback to localStorage
+      const stored = localStorage.getItem(this.storageKey);
+      return stored ? JSON.parse(stored) : this.getDefaultCustomization();
+    }
+  }
+  
+  export(): string {
+    const customization = useCustomizationStore.getState();
+    return JSON.stringify(customization, null, 2);
+  }
+  
+  import(data: string) {
+    const customization = JSON.parse(data);
+    useCustomizationStore.setState(customization);
+    this.save(customization);
+  }
+}
+```
+
+
+## German Number Formatting System
+
+### Number Formatter Service
+
+```typescript
+// frontend/src/utils/numberFormatter.ts
+
+class GermanNumberFormatter {
+  private locale = 'de-DE';
+  private decimalPlaces = 2;
+  
+  /**
+   * Format number to German format: 1.234,56
+   */
+  format(value: number | string, decimals: number = this.decimalPlaces): string {
+    const num = typeof value === 'string' ? this.parse(value) : value;
+    
+    return new Intl.NumberFormat(this.locale, {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(num);
+  }
+  
+  /**
+   * Parse German format to number: "1.234,56" -> 1234.56
+   */
+  parse(value: string): number {
+    // Remove thousand separators (.)
+    const withoutThousands = value.replace(/\./g, '');
+    // Replace decimal comma with dot
+    const standardFormat = withoutThousands.replace(',', '.');
+    return parseFloat(standardFormat);
+  }
+  
+  /**
+   * Format currency in German format
+   */
+  formatCurrency(value: number, currency: string = 'EUR'): string {
+    return new Intl.NumberFormat(this.locale, {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  }
+  
+  /**
+   * Format percentage in German format
+   */
+  formatPercent(value: number, decimals: number = 2): string {
+    return new Intl.NumberFormat(this.locale, {
+      style: 'percent',
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(value / 100);
+  }
+  
+  /**
+   * Validate German number format
+   */
+  isValid(value: string): boolean {
+    // German format: optional minus, digits with optional dots, optional comma with 2 digits
+    const pattern = /^-?\d{1,3}(\.\d{3})*(,\d{1,2})?$/;
+    return pattern.test(value);
+  }
+}
+
+export const germanFormatter = new GermanNumberFormatter();
+```
+
+### Custom Input Components
+
+```typescript
+// frontend/src/components/GermanNumberInput.tsx
+
+export const GermanNumberInput: React.FC<{
+  value: number;
+  onChange: (value: number) => void;
+  label?: string;
+  min?: number;
+  max?: number;
+}> = ({ value, onChange, label, min, max }) => {
+  const [displayValue, setDisplayValue] = useState(germanFormatter.format(value));
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    setDisplayValue(input);
+    
+    if (germanFormatter.isValid(input)) {
+      const numericValue = germanFormatter.parse(input);
+      if ((min === undefined || numericValue >= min) && 
+          (max === undefined || numericValue <= max)) {
+        onChange(numericValue);
+      }
+    }
+  };
+  
+  const handleBlur = () => {
+    // Reformat on blur to ensure consistent display
+    setDisplayValue(germanFormatter.format(value));
+  };
+  
+  return (
+    <div className="german-number-input">
+      {label && <label>{label}</label>}
+      <InputText
+        value={displayValue}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className="text-right"
+      />
+    </div>
+  );
+};
+```
+
+## Dynamic Keys and PDF Bytes System
+
+### Universal Data Model
+
+```python
+# backend/models/universal_data.py
+
+from typing import Any, Dict, Optional
+from pydantic import BaseModel
+from datetime import datetime
+import base64
+import io
+
+class DynamicKeyMixin:
+    """Mixin for dynamic key generation"""
+    
+    def get_dynamic_key(self, prefix: str = "") -> str:
+        """Generate unique dynamic key"""
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+        return f"{prefix}_{self.id}_{timestamp}" if hasattr(self, 'id') else f"{prefix}_{timestamp}"
+    
+    def to_dict_with_keys(self) -> Dict[str, Any]:
+        """Convert to dictionary with dynamic keys"""
+        data = self.dict() if hasattr(self, 'dict') else self.__dict__
+        return {
+            **data,
+            '_dynamic_key': self.get_dynamic_key(),
+            '_created_at': datetime.now().isoformat(),
+        }
+
+class PDFByteMixin:
+    """Mixin for PDF byte generation"""
+    
+    def to_pdf_bytes(self) -> bytes:
+        """Convert data to PDF-ready bytes"""
+        from reportlab.lib.pagesizes import A4
+        from reportlab.pdfgen import canvas
+        
+        buffer = io.BytesIO()
+        pdf = canvas.Canvas(buffer, pagesize=A4)
+        
+        # Render data to PDF
+        self._render_to_pdf(pdf)
+        
+        pdf.save()
+        buffer.seek(0)
+        return buffer.getvalue()
+    
+    def to_pdf_base64(self) -> str:
+        """Convert to base64-encoded PDF bytes"""
+        pdf_bytes = self.to_pdf_bytes()
+        return base64.b64encode(pdf_bytes).decode('utf-8')
+    
+    def _render_to_pdf(self, pdf: canvas.Canvas):
+        """Override in subclasses to customize PDF rendering"""
+        pass
+
+class UniversalDataModel(BaseModel, DynamicKeyMixin, PDFByteMixin):
+    """Base model for all data with dynamic keys and PDF bytes"""
+    
+    id: Optional[int] = None
+    data_type: str
+    content: Dict[str, Any]
+    metadata: Dict[str, Any] = {}
+    
+    def get_formatted_value(self, key: str, locale: str = 'de-DE') -> str:
+        """Get formatted value based on locale"""
+        value = self.content.get(key)
+        
+        if isinstance(value, (int, float)):
+            return self._format_number(value, locale)
+        return str(value)
+    
+    def _format_number(self, value: float, locale: str) -> str:
+        """Format number based on locale"""
+        if locale == 'de-DE':
+            # German format: 1.234,56
+            return f"{value:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+        return f"{value:,.2f}"
+```
+
+### Database Integration
+
+```python
+# backend/services/data_service.py
+
+class UniversalDataService:
+    """Service for managing all data with dynamic keys and PDF bytes"""
+    
+    def __init__(self, db: Session):
+        self.db = db
+    
+    def create_with_keys(self, model_class, data: Dict[str, Any]) -> UniversalDataModel:
+        """Create database record with dynamic keys"""
+        # Create instance
+        instance = model_class(**data)
+        
+        # Add dynamic key
+        instance.dynamic_key = instance.get_dynamic_key(model_class.__name__)
+        
+        # Generate PDF bytes
+        instance.pdf_bytes = instance.to_pdf_bytes()
+        instance.pdf_base64 = instance.to_pdf_base64()
+        
+        # Save to database
+        self.db.add(instance)
+        self.db.commit()
+        self.db.refresh(instance)
+        
+        return instance
+    
+    def get_with_pdf_bytes(self, model_class, id: int) -> Dict[str, Any]:
+        """Retrieve record with PDF bytes"""
+        instance = self.db.query(model_class).filter(model_class.id == id).first()
+        
+        if not instance:
+            return None
+        
+        return {
+            **instance.to_dict_with_keys(),
+            'pdf_bytes': instance.pdf_bytes,
+            'pdf_base64': instance.pdf_base64,
+        }
+    
+    def bulk_generate_pdf_bytes(self, model_class, ids: List[int]) -> Dict[str, bytes]:
+        """Generate PDF bytes for multiple records"""
+        instances = self.db.query(model_class).filter(model_class.id.in_(ids)).all()
+        
+        return {
+            instance.get_dynamic_key(): instance.to_pdf_bytes()
+            for instance in instances
+        }
+```
+
+### Chart and Visualization PDF Bytes
+
+```python
+# backend/services/chart_pdf_service.py
+
+import matplotlib.pyplot as plt
+import io
+from typing import Dict, Any
+
+class ChartPDFService:
+    """Generate PDF bytes for charts and visualizations"""
+    
+    def chart_to_pdf_bytes(self, chart_data: Dict[str, Any], chart_type: str) -> bytes:
+        """Convert chart data to PDF bytes"""
+        fig, ax = plt.subplots(figsize=(10, 6))
+        
+        if chart_type == 'line':
+            self._render_line_chart(ax, chart_data)
+        elif chart_type == 'bar':
+            self._render_bar_chart(ax, chart_data)
+        elif chart_type == 'pie':
+            self._render_pie_chart(ax, chart_data)
+        
+        # Save to bytes
+        buffer = io.BytesIO()
+        fig.savefig(buffer, format='pdf', bbox_inches='tight')
+        buffer.seek(0)
+        plt.close(fig)
+        
+        return buffer.getvalue()
+    
+    def _render_line_chart(self, ax, data: Dict[str, Any]):
+        """Render line chart with German number formatting"""
+        x = data['x']
+        y = data['y']
+        
+        ax.plot(x, y)
+        ax.set_xlabel(data.get('xlabel', ''))
+        ax.set_ylabel(data.get('ylabel', ''))
+        ax.set_title(data.get('title', ''))
+        
+        # Format y-axis with German numbers
+        ax.yaxis.set_major_formatter(
+            plt.FuncFormatter(lambda x, p: f"{x:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.'))
+        )
+```
+
+### Image and Document PDF Bytes
+
+```python
+# backend/services/media_pdf_service.py
+
+from PIL import Image
+from reportlab.lib.utils import ImageReader
+
+class MediaPDFService:
+    """Generate PDF bytes for images and documents"""
+    
+    def image_to_pdf_bytes(self, image_path: str, metadata: Dict[str, Any] = None) -> bytes:
+        """Convert image to PDF bytes"""
+        from reportlab.lib.pagesizes import A4
+        from reportlab.pdfgen import canvas
+        
+        buffer = io.BytesIO()
+        pdf = canvas.Canvas(buffer, pagesize=A4)
+        
+        # Load and resize image
+        img = Image.open(image_path)
+        img_reader = ImageReader(img)
+        
+        # Calculate dimensions
+        page_width, page_height = A4
+        img_width, img_height = img.size
+        
+        # Scale to fit page
+        scale = min(page_width / img_width, page_height / img_height) * 0.9
+        scaled_width = img_width * scale
+        scaled_height = img_height * scale
+        
+        # Center on page
+        x = (page_width - scaled_width) / 2
+        y = (page_height - scaled_height) / 2
+        
+        # Draw image
+        pdf.drawImage(img_reader, x, y, scaled_width, scaled_height)
+        
+        # Add metadata if provided
+        if metadata:
+            pdf.setFont("Helvetica", 10)
+            pdf.drawString(50, 50, f"Erstellt: {metadata.get('created_at', '')}")
+        
+        pdf.save()
+        buffer.seek(0)
+        return buffer.getvalue()
+    
+    def document_to_pdf_bytes(self, document_data: Dict[str, Any]) -> bytes:
+        """Convert document data to PDF bytes"""
+        # Implementation for various document types
+        pass
+```
+
+### Frontend Integration
+
+```typescript
+// frontend/src/services/dataService.ts
+
+class UniversalDataService {
+  async fetchWithPDFBytes(endpoint: string, id: number) {
+    const response = await api.get(`${endpoint}/${id}?include_pdf=true`);
+    return {
+      ...response.data,
+      formattedValues: this.formatAllNumbers(response.data),
+      pdfBytes: response.data.pdf_bytes,
+      dynamicKey: response.data._dynamic_key,
+    };
+  }
+  
+  formatAllNumbers(data: any): any {
+    if (typeof data === 'number') {
+      return germanFormatter.format(data);
+    }
+    
+    if (Array.isArray(data)) {
+      return data.map(item => this.formatAllNumbers(item));
+    }
+    
+    if (typeof data === 'object' && data !== null) {
+      const formatted: any = {};
+      for (const [key, value] of Object.entries(data)) {
+        formatted[key] = this.formatAllNumbers(value);
+      }
+      return formatted;
+    }
+    
+    return data;
+  }
+  
+  async downloadPDF(dynamicKey: string) {
+    const response = await api.get(`/api/v1/data/pdf/${dynamicKey}`, {
+      responseType: 'blob'
+    });
+    
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${dynamicKey}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+}
+```

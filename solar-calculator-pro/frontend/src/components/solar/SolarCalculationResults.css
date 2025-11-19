@@ -1,0 +1,477 @@
+/**
+ * Solar Calculation Results Styles
+ * 
+ * Comprehensive styling for the results display with:
+ * - Responsive grid layouts
+ * - Card-based design
+ * - Color-coded metrics
+ * - Chart containers
+ * - German number formatting support
+ */
+
+.solar-calculation-results {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.results-title h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--text-color);
+}
+
+.results-timestamp {
+  margin: 0.5rem 0 0 0;
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.results-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Warnings and Errors */
+.warnings-card,
+.errors-card {
+  margin-bottom: 1.5rem;
+}
+
+.warnings-card {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+}
+
+.errors-card {
+  background-color: #f8d7da;
+  border-left: 4px solid #dc3545;
+}
+
+.warnings-card h4,
+.errors-card h4 {
+  margin-top: 0;
+}
+
+.warnings-card ul,
+.errors-card ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+/* Summary Cards Grid */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.summary-card .card-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.summary-card .card-content {
+  flex: 1;
+}
+
+.summary-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-card .card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.summary-card .card-details {
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+}
+
+.summary-card .card-details p {
+  margin: 0.25rem 0;
+}
+
+/* Specific Card Colors */
+.system-size-card .card-value {
+  color: #f59e0b;
+}
+
+.production-card .card-value {
+  color: #f59e0b;
+}
+
+.self-consumption-card .card-value {
+  color: #10b981;
+}
+
+.savings-card .card-value {
+  color: #10b981;
+}
+
+.payback-card .card-value {
+  color: #3b82f6;
+}
+
+.co2-card .card-value {
+  color: #10b981;
+}
+
+/* Storage Analysis Card */
+.storage-analysis-card {
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+}
+
+.storage-analysis-card h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+}
+
+.storage-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.storage-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.storage-metric label {
+  font-weight: 600;
+  color: var(--text-color-secondary);
+}
+
+.storage-metric span {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+/* Charts Section */
+.charts-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card.full-width {
+  grid-column: 1 / -1;
+}
+
+.chart-card h3 {
+  margin-top: 0;
+  color: var(--text-color);
+  font-size: 1.25rem;
+}
+
+.payback-info,
+.savings-summary {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.payback-info p {
+  margin: 0;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.savings-summary {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.savings-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.savings-item label {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  font-weight: 600;
+}
+
+.savings-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.savings-value.highlight {
+  color: #10b981;
+  font-size: 1.75rem;
+}
+
+/* Detailed Metrics Card */
+.detailed-metrics-card {
+  margin-bottom: 2rem;
+}
+
+.detailed-metrics-card h3 {
+  margin-top: 0;
+  color: var(--text-color);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.metric-section h4 {
+  margin: 0 0 1rem 0;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.metric-row:last-child {
+  border-bottom: none;
+}
+
+.metric-row label {
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  flex: 1;
+}
+
+.metric-row span {
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: right;
+  flex: 0 0 auto;
+}
+
+/* Autarky Card */
+.autarky-card {
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
+}
+
+.autarky-card h3 {
+  margin-top: 0;
+  color: #10b981;
+}
+
+.autarky-visualization {
+  padding: 1rem 0;
+}
+
+.autarky-progress {
+  height: 2.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.autarky-progress .p-progressbar-value {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.autarky-description {
+  margin: 1rem 0 0 0;
+  font-size: 1rem;
+  color: var(--text-color);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.autarky-description strong {
+  color: #10b981;
+  font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-card.full-width {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .solar-calculation-results {
+    padding: 1rem;
+  }
+  
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .results-actions {
+    width: 100%;
+  }
+  
+  .results-actions button {
+    flex: 1;
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .summary-card .card-value {
+    font-size: 1.75rem;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .storage-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .savings-summary {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .results-title h2 {
+    font-size: 1.5rem;
+  }
+  
+  .summary-card {
+    padding: 1rem;
+  }
+  
+  .summary-card .card-icon {
+    font-size: 2rem;
+  }
+  
+  .summary-card .card-value {
+    font-size: 1.5rem;
+  }
+  
+  .chart-card {
+    padding: 1rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .results-actions {
+    display: none;
+  }
+  
+  .summary-card {
+    break-inside: avoid;
+  }
+  
+  .chart-card {
+    break-inside: avoid;
+  }
+  
+  .solar-calculation-results {
+    padding: 0;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .summary-card {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  }
+  
+  .chart-card {
+    background: #1f2937;
+  }
+  
+  .storage-analysis-card {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%);
+  }
+  
+  .autarky-card {
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+  }
+  
+  .metric-row {
+    border-bottom-color: #374151;
+  }
+  
+  .storage-metric {
+    background: #111827;
+  }
+  
+  .payback-info,
+  .savings-summary {
+    background: #111827;
+  }
+}

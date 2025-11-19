@@ -1,0 +1,348 @@
+/* System Settings Styles */
+
+.system-settings {
+  padding: 1rem;
+}
+
+.system-settings-header {
+  margin-bottom: 2rem;
+}
+
+.system-settings-header h2 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+}
+
+.system-settings-subtitle {
+  color: var(--text-color-secondary);
+  margin: 0;
+}
+
+.system-settings-error {
+  margin-bottom: 1rem;
+}
+
+.system-settings-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.system-settings-card {
+  margin-bottom: 1rem;
+}
+
+.system-settings-tabs {
+  margin-top: 1rem;
+}
+
+/* General Settings, Email, Backup, Logging Styles */
+
+.general-settings,
+.email-configuration,
+.backup-settings,
+.logging-configuration {
+  padding: 1rem;
+}
+
+.settings-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.settings-message {
+  margin-bottom: 1.5rem;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.settings-section:last-of-type {
+  border-bottom: none;
+}
+
+.settings-section h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
+.p-field {
+  margin-bottom: 1.5rem;
+}
+
+.p-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.p-field small {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.p-field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.p-field-checkbox label {
+  margin: 0;
+  font-weight: 500;
+}
+
+.p-field-checkbox small {
+  display: block;
+  margin-left: 2.5rem;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.settings-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+.settings-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--surface-border);
+  text-align: right;
+}
+
+.settings-footer small {
+  color: var(--text-color-secondary);
+}
+
+/* Status Displays */
+
+.test-status,
+.backup-status,
+.log-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background: var(--surface-ground);
+  border-radius: 4px;
+}
+
+/* Backup Dialog */
+
+.backup-dialog-content {
+  padding: 1rem 0;
+}
+
+.backup-dialog-content p {
+  margin-bottom: 1rem;
+  color: var(--text-color-secondary);
+}
+
+/* System Information Styles */
+
+.system-information {
+  padding: 1rem;
+}
+
+.system-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.p-chip-success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.p-chip-warning {
+  background-color: #ff9800;
+  color: white;
+}
+
+.p-chip-danger {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Info Grid */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.info-card {
+  height: 100%;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 500;
+  color: var(--text-color-secondary);
+}
+
+.info-value {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* Resources Section */
+
+.resources-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.resource-card {
+  width: 100%;
+}
+
+.resource-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+/* Health Checks */
+
+.health-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.health-check-card {
+  height: 100%;
+}
+
+.health-check-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.health-check-header h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.health-check-message {
+  margin: 0;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+/* Statistics Grid */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  text-align: center;
+  height: 100%;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-secondary {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  margin-top: 0.25rem;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+  .info-grid,
+  .health-checks,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+  }
+
+  .settings-actions button {
+    width: 100%;
+  }
+
+  .system-info-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* Dark Mode Support */
+
+@media (prefers-color-scheme: dark) {
+  .status-item {
+    background: var(--surface-card);
+  }
+}

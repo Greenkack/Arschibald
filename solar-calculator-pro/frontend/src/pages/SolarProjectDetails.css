@@ -1,0 +1,381 @@
+/**
+ * Solar Project Details Page Styles
+ */
+
+.solar-project-details-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Loading and Error States */
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.loading-container p {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.error-container h2 {
+  color: #495057;
+  margin: 1rem 0;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+  min-width: 300px;
+}
+
+.header-info h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.project-type {
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.project-key {
+  font-family: 'Courier New', monospace;
+  background: #f8f9fa;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #495057;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Content Grid */
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Cards */
+.info-card,
+.data-card,
+.results-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-card .p-card-title,
+.data-card .p-card-title,
+.results-card .p-card-title {
+  color: #2c3e50;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-item label {
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item span {
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.info-item .monospace {
+  font-family: 'Courier New', monospace;
+  background: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Data Preview */
+.data-preview {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Placeholder Text */
+.placeholder-text {
+  color: #6c757d;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .solar-project-details-page {
+    padding: 1rem;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .header-left {
+    flex-direction: column;
+  }
+  
+  .header-actions {
+    width: 100%;
+  }
+  
+  .header-actions button {
+    flex: 1;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Divider */
+.p-divider {
+  margin: 1.5rem 0;
+}
+
+/* Buttons */
+.p-button {
+  transition: all 0.2s;
+}
+
+.p-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tab View Styles */
+.solar-project-details-page .p-tabview {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.solar-project-details-page .p-tabview-panels {
+  padding: 2rem;
+}
+
+.solar-project-details-page .p-tabview-nav {
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.solar-project-details-page .p-tabview-nav li .p-tabview-nav-link {
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+  color: #6c757d;
+  transition: all 0.2s;
+}
+
+.solar-project-details-page .p-tabview-nav li .p-tabview-nav-link:hover {
+  color: #007bff;
+  background: #e9ecef;
+}
+
+.solar-project-details-page .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: #007bff;
+  border-color: #007bff;
+  background: white;
+}
+
+/* No Results Card */
+.no-results-card,
+.no-visualization-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px dashed #ced4da;
+  text-align: center;
+}
+
+.no-results-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1.5rem;
+}
+
+.no-results-content h3 {
+  margin: 0;
+  color: #495057;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.no-results-content p {
+  margin: 0;
+  color: #6c757d;
+  max-width: 600px;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.no-results-content .p-button {
+  margin-top: 1rem;
+}
+
+/* Visualization Container */
+.visualization-container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.visualization-info-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.visualization-info-card h3 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Input Data Card */
+.input-data-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input-data-card .p-card-title {
+  color: #2c3e50;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 992px) {
+  .solar-project-details-page .p-tabview-nav li .p-tabview-nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .visualization-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .solar-project-details-page {
+    padding: 0.5rem;
+  }
+  
+  .page-header {
+    padding: 1rem;
+  }
+  
+  .header-info h1 {
+    font-size: 1.5rem;
+  }
+  
+  .header-actions button {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .solar-project-details-page .p-tabview-panels {
+    padding: 1rem;
+  }
+  
+  .no-results-content {
+    padding: 2rem 1rem;
+  }
+  
+  .no-results-content h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Loading State for PDF Generation */
+.p-button.p-button-loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Smooth Transitions */
+.solar-project-details-page * {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Card Hover Effects */
+.info-card:hover,
+.data-card:hover,
+.input-data-card:hover,
+.visualization-info-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}

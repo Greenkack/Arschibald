@@ -1,0 +1,98 @@
+/**
+ * PDF Downloader Styles
+ */
+
+.pdf-downloader {
+  display: inline-flex;
+}
+
+.downloader-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.download-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+.download-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dialog-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dialog-label {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.dialog-hint {
+  color: var(--text-color-secondary);
+  font-size: 0.85rem;
+}
+
+.info-box {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--surface-50);
+  border-radius: 6px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.info-box i {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-title {
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.info-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.info-list li {
+  margin-bottom: 0.25rem;
+}
+
+.download-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .download-dialog {
+    width: 95vw !important;
+  }
+
+  .downloader-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .downloader-buttons button {
+    width: 100%;
+  }
+}
