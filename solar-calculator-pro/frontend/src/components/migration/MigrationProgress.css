@@ -1,0 +1,132 @@
+.migration-progress {
+  margin: 2rem 0;
+}
+
+.overall-progress {
+  margin-bottom: 2rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.current-step {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.progress-percentage {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+.overall-progress-bar {
+  height: 1.5rem;
+}
+
+.step-timeline {
+  margin-top: 2rem;
+}
+
+.migration-timeline {
+  padding: 1rem 0;
+}
+
+.custom-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--surface-card);
+  border: 2px solid var(--surface-border);
+  font-size: 1.2rem;
+}
+
+.migration-step-card {
+  margin: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.step-header h4 {
+  margin: 0;
+  color: var(--text-color);
+}
+
+.step-message {
+  color: var(--text-color-secondary);
+  margin: 0.5rem 0;
+}
+
+.step-progress {
+  margin-top: 1rem;
+}
+
+.progress-text {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.step-timing {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.step-timing i {
+  font-size: 0.8rem;
+}
+
+/* Status Colors */
+.text-green-500 {
+  color: var(--green-500);
+}
+
+.text-blue-500 {
+  color: var(--blue-500);
+}
+
+.text-red-500 {
+  color: var(--red-500);
+}
+
+.text-gray-400 {
+  color: var(--gray-400);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .migration-timeline {
+    padding: 0.5rem 0;
+  }
+
+  .custom-marker {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+
+  .step-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

@@ -1,0 +1,70 @@
+.notification-history {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.notification-history .history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.notification-history .search-section {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 300px;
+}
+
+.notification-history .search-section .p-input-icon-left {
+  flex: 1;
+}
+
+.notification-history .search-section .type-filter {
+  min-width: 150px;
+}
+
+.notification-history .action-section {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.notification-history .notification-table {
+  margin-top: 1rem;
+}
+
+.notification-history .notification-table .p-datatable-tbody > tr > td {
+  padding: 0.75rem;
+}
+
+.notification-history .notification-table .p-tag {
+  font-size: 0.875rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .notification-history .history-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .notification-history .search-section {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .notification-history .search-section .type-filter {
+    width: 100%;
+  }
+
+  .notification-history .action-section {
+    width: 100%;
+  }
+
+  .notification-history .action-section button {
+    flex: 1;
+  }
+}

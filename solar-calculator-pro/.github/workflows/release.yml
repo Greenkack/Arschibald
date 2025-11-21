@@ -1,0 +1,277 @@
+name: Release - Automated Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.version }}
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Get version from tag
+        id: get_version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
+      - name: Generate changelog
+        id: changelog
+        uses: metcalfc/changelog-generator@v4.0.1
+        with:
+          myToken: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Solar Calculator Pro v${{ steps.get_version.outputs.version }}
+          body: |
+            ## What's New in v${{ steps.get_version.outputs.version }}
+            
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ## Installation
+            
+            ### Windows
+            Download and run `Solar-Calculator-Pro-Setup-${{ steps.get_version.outputs.version }}.exe`
+            
+            ### macOS
+            Download and open `Solar-Calculator-Pro-${{ steps.get_version.outputs.version }}.dmg`
+            
+            ### Linux
+            Download `Solar-Calculator-Pro-${{ steps.get_version.outputs.version }}.AppImage` and make it executable:
+            ```bash
+            chmod +x Solar-Calculator-Pro-${{ steps.get_version.outputs.version }}.AppImage
+            ./Solar-Calculator-Pro-${{ steps.get_version.outputs.version }}.AppImage
+            ```
+            
+            ## Checksums
+            See attached `checksums.txt` for file verification.
+          draft: false
+          prerelease: false
+  
+  build-and-upload-windows:
+    name: Build and Upload Windows
+    needs: create-release
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && pip install -r requirements.txt && pip install pyinstaller
+          cd ../frontend && npm ci
+      
+      - name: Build application
+        run: |
+          cd frontend && npm run build
+          cd ../backend && python build_backend.py
+          cd .. && npm run electron:build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Calculate checksums
+        run: |
+          cd release
+          Get-FileHash *.exe -Algorithm SHA256 | Format-List | Out-File -FilePath checksums-windows.txt
+      
+      - name: Upload Windows installer
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./release/Solar-Calculator-Pro-Setup-${{ needs.create-release.outputs.version }}.exe
+          asset_name: Solar-Calculator-Pro-Setup-${{ needs.create-release.outputs.version }}.exe
+          asset_content_type: application/octet-stream
+      
+      - name: Upload Windows checksums
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./release/checksums-windows.txt
+          asset_name: checksums-windows.txt
+          asset_content_type: text/plain
+  
+  build-and-upload-macos:
+    name: Build and Upload macOS
+    needs: create-release
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && pip install -r requirements.txt && pip install pyinstaller
+          cd ../frontend && npm ci
+      
+      - name: Build application
+        run: |
+          cd frontend && npm run build
+          cd ../backend && python build_backend.py
+          cd .. && npm run electron:build:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      
+      - name: Calculate checksums
+        run: |
+          cd release
+          shasum -a 256 *.dmg > checksums-macos.txt
+      
+      - name: Upload macOS DMG
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./release/Solar-Calculator-Pro-${{ needs.create-release.outputs.version }}.dmg
+          asset_name: Solar-Calculator-Pro-${{ needs.create-release.outputs.version }}.dmg
+          asset_content_type: application/octet-stream
+      
+      - name: Upload macOS checksums
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./release/checksums-macos.txt
+          asset_name: checksums-macos.txt
+          asset_content_type: text/plain
+  
+  build-and-upload-linux:
+    name: Build and Upload Linux
+    needs: create-release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && pip install -r requirements.txt && pip install pyinstaller
+          cd ../frontend && npm ci
+      
+      - name: Build application
+        run: |
+          cd frontend && npm run build
+          cd ../backend && python build_backend.py
+          cd .. && npm run electron:build:linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Calculate checksums
+        run: |
+          cd release
+          sha256sum *.AppImage *.deb > checksums-linux.txt
+      
+      - name: Upload Linux AppImage
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./release/Solar-Calculator-Pro-${{ needs.create-release.outputs.version }}.AppImage
+          asset_name: Solar-Calculator-Pro-${{ needs.create-release.outputs.version }}.AppImage
+          asset_content_type: application/octet-stream
+      
+      - name: Upload Linux DEB
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./release/solar-calculator-pro_${{ needs.create-release.outputs.version }}_amd64.deb
+          asset_name: solar-calculator-pro_${{ needs.create-release.outputs.version }}_amd64.deb
+          asset_content_type: application/octet-stream
+      
+      - name: Upload Linux checksums
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./release/checksums-linux.txt
+          asset_name: checksums-linux.txt
+          asset_content_type: text/plain
+  
+  update-manifest:
+    name: Update Auto-Update Manifest
+    needs: [create-release, build-and-upload-windows, build-and-upload-macos, build-and-upload-linux]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      
+      - name: Generate update manifest
+        run: |
+          node scripts/generate-update-manifest.js ${{ needs.create-release.outputs.version }}
+      
+      - name: Upload manifest to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./latest.yml
+          asset_name: latest.yml
+          asset_content_type: text/yaml
+      
+      - name: Deploy manifest to update server
+        run: |
+          # Upload to your update server or S3 bucket
+          echo "Deploying update manifest..."
+          # aws s3 cp latest.yml s3://your-bucket/updates/latest.yml

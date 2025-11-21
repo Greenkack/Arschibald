@@ -2,30 +2,41 @@
  * Application Routes Configuration
  * 
  * This file defines all the routes for the application using React Router v6.
+ * Uses optimized lazy loading with retry logic and prefetching.
  */
 
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { lazyWithRetry, prefetchOnIdle } from '@utils/lazyLoad';
 
-// Lazy load pages for code splitting
-const Dashboard = lazy(() => import('@pages/Dashboard'));
-const SolarCalculator = lazy(() => import('@pages/SolarCalculator'));
-const SolarProjects = lazy(() => import('@pages/SolarProjects'));
-const SolarProjectDetails = lazy(() => import('@pages/SolarProjectDetails'));
-const Visualization3D = lazy(() => import('@pages/Visualization3D'));
-const HeatPump = lazy(() => import('@pages/HeatPump'));
-const PriceMatrix = lazy(() => import('@pages/PriceMatrix'));
-const CRM = lazy(() => import('@pages/CRM'));
-const Products = lazy(() => import('@pages/Products'));
-const ProductManagement = lazy(() => import('@pages/ProductManagement'));
-const Admin = lazy(() => import('@pages/Admin'));
-const Settings = lazy(() => import('@pages/Settings'));
-const Login = lazy(() => import('@pages/Login'));
+// Lazy load pages with retry logic for better reliability
+const Dashboard = lazyWithRetry(() => import('@pages/Dashboard'));
+const SolarCalculator = lazyWithRetry(() => import('@pages/SolarCalculator'));
+const SolarProjects = lazyWithRetry(() => import('@pages/SolarProjects'));
+const SolarProjectDetails = lazyWithRetry(() => import('@pages/SolarProjectDetails'));
+const Visualization3D = lazyWithRetry(() => import('@pages/Visualization3D'));
+const HeatPump = lazyWithRetry(() => import('@pages/HeatPump'));
+const PriceMatrix = lazyWithRetry(() => import('@pages/PriceMatrix'));
+const CRM = lazyWithRetry(() => import('@pages/CRM'));
+const Products = lazyWithRetry(() => import('@pages/Products'));
+const ProductManagement = lazyWithRetry(() => import('@pages/ProductManagement'));
+const Admin = lazyWithRetry(() => import('@pages/Admin'));
+const Settings = lazyWithRetry(() => import('@pages/Settings'));
+const Login = lazyWithRetry(() => import('@pages/Login'));
 
 // Layout components
-const MainLayout = lazy(() => import('@components/layout/MainLayout'));
-const AuthLayout = lazy(() => import('@components/layout/AuthLayout'));
+const MainLayout = lazyWithRetry(() => import('@components/layout/MainLayout'));
+const AuthLayout = lazyWithRetry(() => import('@components/layout/AuthLayout'));
+
+// Prefetch commonly used pages on idle
+if (typeof window !== 'undefined') {
+  prefetchOnIdle([
+    () => import('@pages/Dashboard'),
+    () => import('@pages/SolarCalculator'),
+    () => import('@pages/Settings'),
+  ]);
+}
 
 /**
  * Loading component shown during lazy loading

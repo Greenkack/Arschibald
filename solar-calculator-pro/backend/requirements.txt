@@ -36,3 +36,13 @@ mypy==1.7.1
 
 # Utilities
 python-dateutil==2.8.2
+
+# Performance and Caching
+redis==5.0.1
+psutil==5.9.6
+
+# Async operations
+aiofiles==23.2.1
+
+# Packaging
+pyinstaller==6.3.0

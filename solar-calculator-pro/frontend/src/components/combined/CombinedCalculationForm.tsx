@@ -207,3 +207,136 @@ export const CombinedCalculationForm: React.FC<CombinedCalculationFormProps> = (
         </div>
       </Card>
 
+      {/* Heat Pump Inputs */}
+      <Card className="form-section">
+        <h3>🔥 Wärmepumpe</h3>
+        <Divider />
+        
+        <div className="form-grid">
+          <div className="form-field">
+            <label htmlFor="heatedArea">Wohnfläche (m²)</label>
+            <InputNumber
+              id="heatedArea"
+              value={heatedArea}
+              onValueChange={(e) => setHeatedArea(e.value || 0)}
+              min={50}
+              max={500}
+              showButtons
+              className="w-full"
+            />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="buildingType">Gebäudetyp</label>
+            <Dropdown
+              id="buildingType"
+              value={buildingType}
+              options={buildingTypeOptions}
+              onChange={(e) => setBuildingType(e.value)}
+              className="w-full"
+            />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="insulationQuality">Dämmqualität</label>
+            <Dropdown
+              id="insulationQuality"
+              value={insulationQuality}
+              options={insulationOptions}
+              onChange={(e) => setInsulationQuality(e.value)}
+              className="w-full"
+            />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="currentHeatingSystem">Aktuelles Heizsystem</label>
+            <Dropdown
+              id="currentHeatingSystem"
+              value={currentHeatingSystem}
+              options={heatingSystemOptions}
+              onChange={(e) => setCurrentHeatingSystem(e.value)}
+              className="w-full"
+            />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="hotWaterDemand">Warmwasserbedarf</label>
+            <Dropdown
+              id="hotWaterDemand"
+              value={hotWaterDemand}
+              options={hotWaterDemandOptions}
+              onChange={(e) => setHotWaterDemand(e.value)}
+              className="w-full"
+            />
+          </div>
+        </div>
+      </Card>
+
+      {/* Combined System Options */}
+      <Card className="form-section">
+        <h3>🔄 Systemoptimierung</h3>
+        <Divider />
+        
+        <div className="form-options">
+          <div className="form-checkbox">
+            <Checkbox
+              inputId="optimizeForSelfConsumption"
+              checked={optimizeForSelfConsumption}
+              onChange={(e) => setOptimizeForSelfConsumption(e.checked || false)}
+            />
+            <label htmlFor="optimizeForSelfConsumption">
+              Für maximalen Eigenverbrauch optimieren
+            </label>
+          </div>
+
+          <div className="form-checkbox">
+            <Checkbox
+              inputId="smartControlEnabled"
+              checked={smartControlEnabled}
+              onChange={(e) => setSmartControlEnabled(e.checked || false)}
+            />
+            <label htmlFor="smartControlEnabled">
+              Intelligente Steuerung aktivieren
+            </label>
+          </div>
+
+          <div className="form-checkbox">
+            <Checkbox
+              inputId="includeStorage"
+              checked={includeStorage}
+              onChange={(e) => setIncludeStorage(e.checked || false)}
+            />
+            <label htmlFor="includeStorage">
+              Batteriespeicher einbeziehen
+            </label>
+          </div>
+
+          {includeStorage && (
+            <div className="form-field storage-capacity">
+              <label htmlFor="storageCapacity">Speicherkapazität (kWh)</label>
+              <InputNumber
+                id="storageCapacity"
+                value={storageCapacity}
+                onValueChange={(e) => setStorageCapacity(e.value || 0)}
+                min={5}
+                max={30}
+                step={5}
+                showButtons
+                className="w-full"
+              />
+            </div>
+          )}
+        </div>
+      </Card>
+
+      {/* Submit Button */}
+      <div className="form-actions">
+        <Button
+          type="submit"
+          label="Berechnung starten"
+          icon="pi pi-calculator"
+          loading={loading}
+          className="p-button-lg"
+        />
+      </div>
+    </f

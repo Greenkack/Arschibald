@@ -1,201 +1,331 @@
-# Application Icons
+# Application Assets
 
-This directory contains the application icons for the Solar Calculator Pro desktop application.
+This directory contains all graphical assets required for building Solar Calculator Pro.
 
-## Required Icon Files
+## Required Assets
 
-### 1. Main Application Icon
-**File:** `icon.png`
-- **Size:** 512x512 pixels
-- **Format:** PNG with transparency
-- **Usage:** Main application icon, used in various contexts
+### Application Icons
 
-### 2. Windows Icon
-**File:** `icon.ico`
-- **Sizes:** Multiple sizes embedded (16x16, 32x32, 48x48, 256x256)
-- **Format:** ICO
-- **Usage:** Windows application icon, taskbar, file associations
+#### 1. Main Application Icon (`icon.ico`)
 
-### 3. macOS Icon
-**File:** `icon.icns`
-- **Sizes:** Multiple sizes embedded (16x16 to 1024x1024)
-- **Format:** ICNS
-- **Usage:** macOS application icon, dock, Finder
+**Format**: ICO (Windows Icon)
+**Required Resolutions**:
+- 16x16 pixels
+- 32x32 pixels
+- 48x48 pixels
+- 64x64 pixels
+- 128x128 pixels
+- 256x256 pixels
 
-### 4. System Tray Icon
-**File:** `tray-icon.png`
-- **Size:** 22x22 pixels (macOS) or 16x16 pixels (Windows/Linux)
-- **Format:** PNG with transparency
-- **Usage:** System tray/notification area icon
-- **Note:** Should be simple and recognizable at small sizes
+**Usage**: 
+- Application icon in Windows
+- Taskbar icon
+- Window title bar icon
+- Installer icon
 
-## Creating Icons
+**How to Create**:
+1. Design a square logo (recommended: 512x512 or 1024x1024 PNG)
+2. Use an online converter or tool to create multi-resolution ICO:
+   - Online: https://icoconvert.com/
+   - GIMP: Export as ICO with multiple sizes
+   - ImageMagick: `convert icon.png -define icon:auto-resize=256,128,64,48,32,16 icon.ico`
 
-### From a Single Source Image
+#### 2. File Association Icon (`file-icon.ico`)
 
-If you have a single high-resolution image (e.g., 1024x1024), you can create all required formats:
+**Format**: ICO (Windows Icon)
+**Required Resolutions**: Same as main icon
+**Usage**: Icon for `.scp` (Solar Calculator Project) files
 
-#### Using Online Tools
-1. **PNG to ICO:** https://convertio.co/png-ico/
-2. **PNG to ICNS:** https://cloudconvert.com/png-to-icns
-3. **Image Resizer:** https://www.iloveimg.com/resize-image
+**Design Tips**:
+- Should be related to but distinct from main app icon
+- Consider adding a document/file element to the design
+- Use consistent color scheme with main icon
 
-#### Using Command Line Tools
+### Installer Graphics
 
-**ImageMagick (Cross-platform):**
-```bash
-# Install ImageMagick
-# Windows: choco install imagemagick
-# macOS: brew install imagemagick
-# Linux: sudo apt-get install imagemagick
+#### 3. Installer Header (`installer-header.bmp`)
 
-# Create main icon
-convert source.png -resize 512x512 icon.png
+**Format**: BMP (24-bit)
+**Size**: 150 pixels wide × 57 pixels high
+**Usage**: Displayed at the top of installer pages
 
-# Create tray icon
-convert source.png -resize 22x22 tray-icon.png
-
-# Create Windows ICO (multiple sizes)
-convert source.png -define icon:auto-resize=256,128,96,64,48,32,16 icon.ico
-```
-
-**iconutil (macOS only for ICNS):**
-```bash
-# Create iconset directory
-mkdir icon.iconset
-
-# Create all required sizes
-sips -z 16 16     source.png --out icon.iconset/icon_16x16.png
-sips -z 32 32     source.png --out icon.iconset/icon_16x16@2x.png
-sips -z 32 32     source.png --out icon.iconset/icon_32x32.png
-sips -z 64 64     source.png --out icon.iconset/icon_32x32@2x.png
-sips -z 128 128   source.png --out icon.iconset/icon_128x128.png
-sips -z 256 256   source.png --out icon.iconset/icon_128x128@2x.png
-sips -z 256 256   source.png --out icon.iconset/icon_256x256.png
-sips -z 512 512   source.png --out icon.iconset/icon_256x256@2x.png
-sips -z 512 512   source.png --out icon.iconset/icon_512x512.png
-sips -z 1024 1024 source.png --out icon.iconset/icon_512x512@2x.png
-
-# Create ICNS file
-iconutil -c icns icon.iconset
-```
-
-### Design Guidelines
-
-#### Main Application Icon
+**Design Guidelines**:
 - Use your brand colors
-- Keep it simple and recognizable
-- Should work well at both large and small sizes
-- Include a subtle shadow or depth for 3D effect
-- Consider using a sun symbol for solar calculator theme
+- Include company logo or app name
+- Keep it simple and professional
+- Avoid text that might be hard to read at small size
 
-#### Tray Icon
-- Must be simple and clear at 16x16 or 22x22 pixels
-- Use high contrast
-- Avoid fine details
-- Consider monochrome or simple two-color design
-- Should be recognizable even when very small
-
-### Example Icon Concepts
-
-**Solar Calculator Theme:**
-- Sun icon with rays
-- Solar panel symbol
-- Sun + calculator combination
-- Energy/lightning bolt symbol
-- House with solar panels
-
-**Color Schemes:**
-- Primary: Orange/Yellow (sun)
-- Secondary: Blue (sky/energy)
-- Accent: Green (eco-friendly)
-
-## Placeholder Icons
-
-If you don't have custom icons yet, you can use placeholder icons:
-
-### Create Simple Placeholder (Node.js)
-```javascript
-// create-placeholder-icons.js
-const { createCanvas } = require('canvas');
-const fs = require('fs');
-
-function createPlaceholderIcon(size, filename) {
-  const canvas = createCanvas(size, size);
-  const ctx = canvas.getContext('2d');
-  
-  // Background
-  ctx.fillStyle = '#FF9800';
-  ctx.fillRect(0, 0, size, size);
-  
-  // Sun symbol
-  ctx.fillStyle = '#FFF';
-  ctx.beginPath();
-  ctx.arc(size/2, size/2, size/3, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Save
-  const buffer = canvas.toBuffer('image/png');
-  fs.writeFileSync(filename, buffer);
-}
-
-createPlaceholderIcon(512, 'icon.png');
-createPlaceholderIcon(22, 'tray-icon.png');
+**Example Layout**:
+```
+┌─────────────────────────────────────────────┐
+│  [Logo]  Solar Calculator Pro               │
+└─────────────────────────────────────────────┘
 ```
 
-## Verification
+#### 4. Installer Sidebar (`installer-sidebar.bmp`)
 
-After creating your icons, verify they work:
+**Format**: BMP (24-bit)
+**Size**: 164 pixels wide × 314 pixels high
+**Usage**: Displayed on the left side of welcome and finish pages
 
-1. **Check file sizes:**
-   ```bash
-   ls -lh icon.png icon.ico icon.icns tray-icon.png
-   ```
+**Design Guidelines**:
+- Vertical orientation
+- Use brand colors and imagery
+- Can include:
+  - Large app icon or logo
+  - Product name
+  - Tagline or key features
+  - Decorative elements
+- Ensure good contrast for readability
 
-2. **Preview icons:**
-   - Windows: Right-click → Properties
-   - macOS: Quick Look (Space bar)
-   - Linux: File manager preview
+**Example Layout**:
+```
+┌──────────────┐
+│              │
+│   [Large     │
+│    Logo]     │
+│              │
+│  Solar       │
+│  Calculator  │
+│  Pro         │
+│              │
+│  Professional│
+│  Solar       │
+│  Design      │
+│  Software    │
+│              │
+└──────────────┘
+```
 
-3. **Test in application:**
-   ```bash
-   npm run electron:dev
-   ```
-   - Check taskbar/dock icon
-   - Check system tray icon
-   - Check window icon
+## Creating Assets
+
+### Method 1: Using Design Software
+
+**Recommended Tools**:
+- Adobe Photoshop
+- Adobe Illustrator
+- Figma (free)
+- Inkscape (free)
+- GIMP (free)
+
+**Workflow**:
+1. Design at high resolution (2048x2048 for icons)
+2. Export to PNG
+3. Convert PNG to ICO using tools mentioned above
+4. Create BMP files at exact required dimensions
+
+### Method 2: Using Online Tools
+
+**Icon Converters**:
+- https://icoconvert.com/
+- https://convertio.co/png-ico/
+- https://cloudconvert.com/png-to-ico
+
+**Image Editors**:
+- https://www.photopea.com/ (Photoshop alternative)
+- https://pixlr.com/
+- https://www.canva.com/
+
+### Method 3: Using Command Line Tools
+
+#### ImageMagick
+
+Install ImageMagick: https://imagemagick.org/
+
+```bash
+# Create ICO from PNG
+magick convert icon.png -define icon:auto-resize=256,128,64,48,32,16 icon.ico
+
+# Create BMP at specific size
+magick convert source.png -resize 150x57! installer-header.bmp
+magick convert source.png -resize 164x314! installer-sidebar.bmp
+```
+
+#### GIMP (Command Line)
+
+```bash
+# Convert to ICO
+gimp -i -b '(let* ((image (car (gimp-file-load RUN-NONINTERACTIVE "icon.png" "icon.png")))) (file-ico-save RUN-NONINTERACTIVE image (car (gimp-image-get-active-layer image)) "icon.ico" "icon.ico" 0)) (gimp-quit 0)'
+```
+
+## Asset Checklist
+
+Before building, ensure you have:
+
+- [ ] `icon.ico` - Main application icon (multi-resolution)
+- [ ] `file-icon.ico` - File association icon (multi-resolution)
+- [ ] `installer-header.bmp` - Installer header (150x57, 24-bit BMP)
+- [ ] `installer-sidebar.bmp` - Installer sidebar (164x314, 24-bit BMP)
+
+## Placeholder Assets
+
+If you don't have final assets yet, you can use placeholder images:
+
+### Creating Placeholder Icon
+
+```bash
+# Using ImageMagick
+magick -size 256x256 xc:blue -fill white -pointsize 72 -gravity center -annotate +0+0 "SC" icon.png
+magick convert icon.png -define icon:auto-resize=256,128,64,48,32,16 icon.ico
+```
+
+### Creating Placeholder BMP
+
+```bash
+# Header
+magick -size 150x57 xc:lightblue -fill darkblue -pointsize 20 -gravity center -annotate +0+0 "Solar Calculator Pro" installer-header.bmp
+
+# Sidebar
+magick -size 164x314 xc:lightblue -fill darkblue -pointsize 24 -gravity center -annotate +0-50 "Solar\nCalculator\nPro" installer-sidebar.bmp
+```
+
+## Design Tips
+
+### Icons
+
+1. **Simplicity**: Icons should be recognizable at small sizes
+2. **Consistency**: Use consistent style across all icons
+3. **Color**: Use 2-3 main colors maximum
+4. **Contrast**: Ensure good contrast for visibility
+5. **Uniqueness**: Make your icon distinctive and memorable
+
+### Installer Graphics
+
+1. **Branding**: Maintain consistent brand identity
+2. **Professionalism**: Use high-quality graphics
+3. **Readability**: Ensure text is legible
+4. **File Size**: Keep files reasonably small (< 1MB each)
+5. **Testing**: Test on different Windows themes (light/dark)
+
+## Color Schemes
+
+### Suggested Color Palettes for Solar Applications
+
+**Palette 1: Sunny**
+- Primary: #FDB813 (Golden Yellow)
+- Secondary: #FF6B35 (Orange)
+- Accent: #004E89 (Deep Blue)
+
+**Palette 2: Eco**
+- Primary: #52B788 (Green)
+- Secondary: #2D6A4F (Dark Green)
+- Accent: #FFB703 (Amber)
+
+**Palette 3: Professional**
+- Primary: #0077B6 (Blue)
+- Secondary: #023E8A (Navy)
+- Accent: #90E0EF (Light Blue)
+
+**Palette 4: Modern**
+- Primary: #6C757D (Gray)
+- Secondary: #495057 (Dark Gray)
+- Accent: #FFC107 (Yellow)
+
+## File Formats
+
+### ICO (Icon)
+- Multi-resolution container
+- Supports transparency
+- Windows native format
+- Can contain multiple sizes in one file
+
+### BMP (Bitmap)
+- Uncompressed raster format
+- 24-bit color depth required
+- No transparency support
+- Exact pixel dimensions required
+
+## Validation
+
+### Checking ICO Files
+
+```bash
+# Using ImageMagick
+magick identify icon.ico
+
+# Should show multiple resolutions:
+# icon.ico[0] ICO 256x256 ...
+# icon.ico[1] ICO 128x128 ...
+# icon.ico[2] ICO 64x64 ...
+# etc.
+```
+
+### Checking BMP Files
+
+```bash
+# Using ImageMagick
+magick identify installer-header.bmp
+# Should show: installer-header.bmp BMP 150x57 ...
+
+magick identify installer-sidebar.bmp
+# Should show: installer-sidebar.bmp BMP 164x314 ...
+```
 
 ## Troubleshooting
 
-### Icon Not Showing
-- Verify file exists in `assets/` directory
-- Check file permissions (should be readable)
-- Clear icon cache (Windows: restart Explorer, macOS: restart Dock)
-- Rebuild application: `npm run electron:build`
+### Icon Not Showing in Windows
 
-### Icon Looks Blurry
-- Ensure source image is high resolution (at least 512x512)
-- Use PNG format with transparency
-- Don't upscale small images
+1. Clear icon cache:
+   ```cmd
+   ie4uinit.exe -show
+   ```
 
-### Tray Icon Not Visible
-- Check icon size (should be 16x16 or 22x22)
-- Use high contrast colors
-- Test on both light and dark system themes
-- Consider creating separate icons for light/dark themes
+2. Rebuild icon cache:
+   ```cmd
+   ie4uinit.exe -ClearIconCache
+   ```
+
+3. Restart Windows Explorer:
+   ```cmd
+   taskkill /f /im explorer.exe
+   start explorer.exe
+   ```
+
+### BMP Format Issues
+
+- Ensure 24-bit color depth (not 32-bit)
+- Use exact pixel dimensions
+- Save without compression
+- Avoid transparency (not supported in BMP)
+
+### Build Errors
+
+If you get errors about missing assets:
+
+1. Check file names match exactly (case-sensitive)
+2. Verify files are in correct directory
+3. Ensure correct file formats
+4. Check file permissions
 
 ## Resources
 
-- [Electron Icon Requirements](https://www.electronjs.org/docs/latest/tutorial/application-distribution#icons)
-- [macOS Icon Guidelines](https://developer.apple.com/design/human-interface-guidelines/app-icons)
-- [Windows Icon Guidelines](https://docs.microsoft.com/en-us/windows/apps/design/style/iconography/app-icon-design)
-- [Icon Design Best Practices](https://www.smashingmagazine.com/2016/05/easy-steps-to-better-logo-design/)
+### Design Inspiration
 
-## Current Status
+- [Dribbble - App Icons](https://dribbble.com/tags/app_icon)
+- [Behance - Icon Design](https://www.behance.net/search/projects?search=icon%20design)
+- [IconFinder](https://www.iconfinder.com/)
 
-- [ ] icon.png (512x512)
-- [ ] icon.ico (Windows)
-- [ ] icon.icns (macOS)
-- [ ] tray-icon.png (16x16 or 22x22)
+### Tools
 
-Once all icons are created, check the boxes above and commit them to the repository.
+- [GIMP](https://www.gimp.org/) - Free image editor
+- [Inkscape](https://inkscape.org/) - Free vector editor
+- [ImageMagick](https://imagemagick.org/) - Command-line image processing
+- [IcoFX](https://icofx.ro/) - Icon editor (paid)
+
+### Tutorials
+
+- [Creating Windows Icons](https://docs.microsoft.com/en-us/windows/apps/design/style/iconography/app-icon-design)
+- [NSIS Installer Graphics](https://nsis.sourceforge.io/Docs/Modern%20UI%202/Readme.html)
+- [Icon Design Best Practices](https://material.io/design/iconography/product-icons.html)
+
+## Support
+
+For questions about assets:
+- Check the [Windows Build Guide](../docs/WINDOWS_BUILD_GUIDE.md)
+- Open an issue on GitHub
+- Contact: support@yourcompany.com
+
+---
+
+**Last Updated**: 2024
+**Version**: 1.0.0

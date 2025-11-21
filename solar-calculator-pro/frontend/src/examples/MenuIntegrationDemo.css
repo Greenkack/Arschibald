@@ -1,0 +1,140 @@
+.menu-integration-demo {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.menu-integration-demo h1 {
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+}
+
+.demo-section {
+  background: var(--surface-card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.demo-section h2 {
+  color: var(--text-color);
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.demo-section h3 {
+  color: var(--text-color);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.event-monitor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.event-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: var(--surface-ground);
+  border-radius: 4px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.event-item strong {
+  min-width: 150px;
+  color: var(--text-color);
+}
+
+.event-item span {
+  color: var(--text-color-secondary);
+  font-family: 'Courier New', monospace;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.code-examples {
+  margin-top: 1rem;
+}
+
+.code-examples pre {
+  background: var(--surface-ground);
+  border: 1px solid var(--surface-border);
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+.code-examples code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.shortcuts-dialog {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.shortcut-category {
+  margin-bottom: 2rem;
+}
+
+.shortcut-category:last-child {
+  margin-bottom: 0;
+}
+
+.shortcut-category h3 {
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--surface-border);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .menu-integration-demo {
+    padding: 1rem;
+  }
+
+  .demo-section {
+    padding: 1rem;
+  }
+
+  .event-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .event-item strong {
+    min-width: auto;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons .p-button {
+    width: 100%;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .demo-section {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}

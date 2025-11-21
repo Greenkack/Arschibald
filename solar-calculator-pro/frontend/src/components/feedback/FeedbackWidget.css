@@ -1,0 +1,110 @@
+/* Feedback Widget Styles */
+
+.feedback-widget {
+  position: fixed;
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out;
+}
+
+.feedback-widget-bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.feedback-widget-bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+.feedback-widget-top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.feedback-widget-top-left {
+  top: 20px;
+  left: 20px;
+}
+
+.feedback-widget-button {
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.feedback-widget-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.feedback-widget-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  animation: pulse 2s infinite;
+}
+
+.feedback-dialog-content {
+  padding: 1rem 0;
+}
+
+.feedback-dialog-intro {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: var(--surface-50);
+  border-radius: 6px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.feedback-dialog-intro p {
+  margin: 0.5rem 0;
+  color: var(--text-color-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.feedback-dialog-intro p:first-child {
+  margin-top: 0;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .feedback-widget {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .feedback-widget-button {
+    width: 48px;
+    height: 48px;
+  }
+}
