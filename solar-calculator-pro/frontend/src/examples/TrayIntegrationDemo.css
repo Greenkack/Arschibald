@@ -1,0 +1,245 @@
+.tray-demo {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tray-demo h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.tray-demo .subtitle {
+  font-size: 1.1rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 2rem;
+}
+
+.demo-card {
+  margin-bottom: 2rem;
+}
+
+.demo-card .p-card-title {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.preferences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.preference-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--surface-ground);
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+}
+
+.preference-item label {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.info-section {
+  margin-top: 1rem;
+}
+
+.info-section h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+}
+
+.recent-projects-list,
+.quick-actions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-projects-list li,
+.quick-actions-list li {
+  padding: 0.75rem;
+  background: var(--surface-ground);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--surface-border);
+}
+
+.recent-projects-list li strong {
+  color: var(--primary-color);
+}
+
+.project-date {
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.quick-actions-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quick-actions-list li.disabled {
+  opacity: 0.6;
+}
+
+.action-label {
+  font-weight: 500;
+  flex: 1;
+}
+
+.action-route {
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+  font-family: monospace;
+}
+
+.action-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.action-status.enabled {
+  background: var(--green-100);
+  color: var(--green-700);
+}
+
+.action-status.disabled {
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+
+.text-muted {
+  color: var(--text-color-secondary);
+  font-style: italic;
+}
+
+.code-examples {
+  background: var(--surface-ground);
+  padding: 1.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+}
+
+.code-examples h4 {
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.code-examples h4:first-child {
+  margin-top: 0;
+}
+
+.code-examples pre {
+  background: var(--surface-card);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  border: 1px solid var(--surface-border);
+}
+
+.code-examples code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tips-list li {
+  padding: 1rem;
+  background: var(--surface-ground);
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+  border-left: 4px solid var(--primary-color);
+}
+
+.tips-list li strong {
+  color: var(--primary-color);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tray-demo {
+    padding: 1rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .preferences-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .button-group .p-button {
+    width: 100%;
+  }
+
+  .quick-actions-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .preference-item,
+  .recent-projects-list li,
+  .quick-actions-list li,
+  .code-examples,
+  .tips-list li {
+    background: var(--surface-card);
+  }
+}

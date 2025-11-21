@@ -11,7 +11,10 @@
     "test:coverage": "vitest --coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test-storybook": "test-storybook"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -50,6 +53,16 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/user-event": "^14.5.1",
-    "@vitest/coverage-v8": "^1.0.4"
+    "@vitest/coverage-v8": "^1.0.4",
+    "@storybook/react": "^7.6.6",
+    "@storybook/react-vite": "^7.6.6",
+    "@storybook/addon-links": "^7.6.6",
+    "@storybook/addon-essentials": "^7.6.6",
+    "@storybook/addon-interactions": "^7.6.6",
+    "@storybook/addon-a11y": "^7.6.6",
+    "@storybook/addon-docs": "^7.6.6",
+    "@storybook/testing-library": "^0.2.2",
+    "@storybook/test-runner": "^0.16.0",
+    "storybook": "^7.6.6"
   }
 }

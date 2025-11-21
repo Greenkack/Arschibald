@@ -24,6 +24,43 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    // Performance optimizations
+    rollupOptions: {
+      output: {
+        // Manual chunk splitting for better caching
+        manualChunks: {
+          // Vendor chunks
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'primereact-vendor': ['primereact', 'primeicons'],
+          'chart-vendor': ['recharts', 'd3-scale', 'd3-shape'],
+          '3d-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
+          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'utils-vendor': ['axios', 'socket.io-client', 'zustand'],
+        },
+      },
+    },
+    // Optimize chunk size
+    chunkSizeWarningLimit: 1000,
+    // Enable minification
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+        drop_debugger: true,
+      },
+    },
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'primereact',
+      'recharts',
+      'zustand',
+      'axios',
+    ],
   },
   test: {
     globals: true,

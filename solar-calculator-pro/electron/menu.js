@@ -751,4 +751,205 @@ function createContextMenu(params = {}) {
       accelerator: 'CmdOrCtrl+Z'
     },
     {
-      
+      label: 'Redo',
+      role: 'redo',
+      enabled: editFlags && editFlags.canRedo,
+      accelerator: process.platform === 'darwin' ? 'Cmd+Shift+Z' : 'Ctrl+Y'
+    },
+    { type: 'separator' },
+    {
+      label: 'Cut',
+      role: 'cut',
+      enabled: hasSelection && editFlags && editFlags.canCut,
+      accelerator: 'CmdOrCtrl+X'
+    },
+    {
+      label: 'Copy',
+      role: 'copy',
+      enabled: hasSelection && editFlags && editFlags.canCopy,
+      accelerator: 'CmdOrCtrl+C'
+    },
+    {
+      label: 'Paste',
+      role: 'paste',
+      enabled: editFlags && editFlags.canPaste,
+      accelerator: 'CmdOrCtrl+V'
+    },
+    {
+      label: 'Delete',
+      role: 'delete',
+      enabled: hasSelection && editFlags && editFlags.canDelete
+    },
+    { type: 'separator' },
+    {
+      label: 'Select All',
+      role: 'selectAll',
+      enabled: editFlags && editFlags.canSelectAll,
+      accelerator: 'CmdOrCtrl+A'
+    }
+  ]);
+}
+
+// Context menu for links
+function createLinkContextMenu(linkURL) {
+  return Menu.buildFromTemplate([
+    {
+      label: 'Open Link',
+      click: () => {
+        shell.openExternal(linkURL);
+      }
+    },
+    {
+      label: 'Copy Link Address',
+      click: () => {
+        require('electron').clipboard.writeText(linkURL);
+      }
+    }
+  ]);
+}
+
+// Context menu for images
+function createImageContextMenu(params) {
+  const { srcURL } = params;
+  
+  return Menu.buildFromTemplate([
+    {
+      label: 'Copy Image',
+      role: 'copy'
+    },
+    {
+      label: 'Copy Image Address',
+      click: () => {
+        require('electron').clipboard.writeText(srcURL);
+      }
+    },
+    { type: 'separator' },
+    {
+      label: 'Save Image As...',
+      click: async () => {
+        const { dialog } = require('electron');
+        const result = await dialog.showSaveDialog({
+          defaultPath: srcURL.split('/').pop()
+        });
+        if (!result.canceled && result.filePath) {
+          // Download image logic would go here
+        }
+      }
+    },
+    {
+      label: 'Open Image in Browser',
+      click: () => {
+        shell.openExternal(srcURL);
+      }
+    }
+  ]);
+}
+
+// Setup context menu handler
+function setupContextMenu(mainWindow) {
+  mainWindow.webContents.on('context-menu', (event, params) => {
+    const { linkURL, srcURL, mediaType, isEditable } = params;
+
+    let contextMenu;
+
+    if (linkURL) {
+      // Link context menu
+      contextMenu = createLinkContextMenu(linkURL);
+    } else if (srcURL && mediaType === 'image') {
+      // Image context menu
+      contextMenu = createImageContextMenu(params);
+    } else if (isEditable) {
+      // Text input context menu
+      contextMenu = createContextMenu(params);
+    } else {
+      // Default context menu
+      contextMenu = Menu.buildFromTemplate([
+        { role: 'copy', enabled: params.selectionText && params.selectionText.length > 0 },
+        { type: 'separator' },
+        { role: 'selectAll' },
+        { type: 'separator' },
+        { role: 'reload' },
+        { role: 'toggleDevTools' }
+      ]);
+    }
+
+    contextMenu.popup();
+  });
+}
+
+// Get keyboard shortcuts list
+function getKeyboardShortcuts() {
+  const isMac = process.platform === 'darwin';
+  const cmdOrCtrl = isMac ? 'Cmd' : 'Ctrl';
+
+  return {
+    'File Operations': [
+      { action: 'New Project', shortcut: `${cmdOrCtrl}+N` },
+      { action: 'Open Project', shortcut: `${cmdOrCtrl}+O` },
+      { action: 'Save Project', shortcut: `${cmdOrCtrl}+S` },
+      { action: 'Save As', shortcut: `${cmdOrCtrl}+Shift+S` },
+      { action: 'Save All', shortcut: `${cmdOrCtrl}+Alt+S` },
+      { action: 'Close Project', shortcut: `${cmdOrCtrl}+W` },
+      { action: 'Import Excel', shortcut: `${cmdOrCtrl}+Shift+I` },
+      { action: 'Export PDF', shortcut: `${cmdOrCtrl}+P` },
+      { action: 'Export Excel', shortcut: `${cmdOrCtrl}+E` },
+      { action: 'Print', shortcut: `${cmdOrCtrl}+Shift+P` }
+    ],
+    'Edit Operations': [
+      { action: 'Undo', shortcut: `${cmdOrCtrl}+Z` },
+      { action: 'Redo', shortcut: isMac ? 'Cmd+Shift+Z' : 'Ctrl+Y' },
+      { action: 'Cut', shortcut: `${cmdOrCtrl}+X` },
+      { action: 'Copy', shortcut: `${cmdOrCtrl}+C` },
+      { action: 'Paste', shortcut: `${cmdOrCtrl}+V` },
+      { action: 'Select All', shortcut: `${cmdOrCtrl}+A` },
+      { action: 'Find', shortcut: `${cmdOrCtrl}+F` },
+      { action: 'Find Next', shortcut: isMac ? 'Cmd+G' : 'F3' },
+      { action: 'Replace', shortcut: `${cmdOrCtrl}+H` },
+      { action: 'Preferences', shortcut: `${cmdOrCtrl}+,` }
+    ],
+    'Navigation': [
+      { action: 'Dashboard', shortcut: `${cmdOrCtrl}+1` },
+      { action: 'Solar Calculator', shortcut: `${cmdOrCtrl}+2` },
+      { action: 'Heat Pump', shortcut: `${cmdOrCtrl}+3` },
+      { action: 'Combined System', shortcut: `${cmdOrCtrl}+4` },
+      { action: 'CRM', shortcut: `${cmdOrCtrl}+5` },
+      { action: 'Products', shortcut: `${cmdOrCtrl}+6` },
+      { action: 'Price Matrix', shortcut: `${cmdOrCtrl}+7` },
+      { action: 'PDF Generation', shortcut: `${cmdOrCtrl}+8` },
+      { action: '3D Visualization', shortcut: `${cmdOrCtrl}+9` },
+      { action: 'Go Back', shortcut: `${cmdOrCtrl}+[` },
+      { action: 'Go Forward', shortcut: `${cmdOrCtrl}+]` }
+    ],
+    'View Operations': [
+      { action: 'Reload', shortcut: `${cmdOrCtrl}+R` },
+      { action: 'Force Reload', shortcut: `${cmdOrCtrl}+Shift+R` },
+      { action: 'Toggle DevTools', shortcut: isMac ? 'Alt+Cmd+I' : 'Ctrl+Shift+I' },
+      { action: 'Actual Size', shortcut: `${cmdOrCtrl}+0` },
+      { action: 'Zoom In', shortcut: `${cmdOrCtrl}+Plus` },
+      { action: 'Zoom Out', shortcut: `${cmdOrCtrl}+-` },
+      { action: 'Toggle Full Screen', shortcut: isMac ? 'Ctrl+Cmd+F' : 'F11' },
+      { action: 'Toggle Sidebar', shortcut: `${cmdOrCtrl}+B` },
+      { action: 'Toggle Theme', shortcut: `${cmdOrCtrl}+T` }
+    ],
+    'Window Operations': [
+      { action: 'Minimize', shortcut: `${cmdOrCtrl}+M` },
+      { action: 'Close', shortcut: isMac ? 'Cmd+W' : 'Alt+F4' }
+    ],
+    'Help': [
+      { action: 'Documentation', shortcut: 'F1' },
+      { action: 'Keyboard Shortcuts', shortcut: `${cmdOrCtrl}+/` },
+      { action: 'Search Help', shortcut: `${cmdOrCtrl}+Shift+H` }
+    ]
+  };
+}
+
+module.exports = {
+  createApplicationMenu,
+  createContextMenu,
+  createLinkContextMenu,
+  createImageContextMenu,
+  setupContextMenu,
+  updateMenu,
+  getKeyboardShortcuts,
+  menuState
+};

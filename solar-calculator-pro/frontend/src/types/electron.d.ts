@@ -23,18 +23,60 @@ interface UpdateError {
 }
 
 interface FileDialogOptions {
+  title?: string;
+  buttonLabel?: string;
   defaultPath?: string;
   filters?: Array<{
     name: string;
     extensions: string[];
   }>;
+  properties?: string[];
+}
+
+interface FileResult {
+  canceled: boolean;
+  filePath: string | null;
+  fileName?: string;
+}
+
+interface FilesResult {
+  canceled: boolean;
+  filePaths: string[];
+  fileNames?: string[];
+  count?: number;
+}
+
+interface DirectoryResult {
+  canceled: boolean;
+  directoryPath: string | null;
+  directoryName?: string;
 }
 
 interface ElectronAPI {
   // File operations
-  selectFile: () => Promise<string | undefined>;
-  saveFile: (options: FileDialogOptions) => Promise<string | undefined>;
-  selectDirectory: () => Promise<string | undefined>;
+  
+  // Single file selection
+  selectFile: (options?: FileDialogOptions) => Promise<FileResult>;
+  
+  // Multiple file selection
+  selectFiles: (options?: FileDialogOptions) => Promise<FilesResult>;
+  
+  // Save file dialog
+  saveFile: (options?: FileDialogOptions) => Promise<FileResult>;
+  
+  // Directory selection
+  selectDirectory: (options?: FileDialogOptions) => Promise<DirectoryResult>;
+  
+  // Specialized file type dialogs
+  selectExcelFile: (options?: FileDialogOptions) => Promise<FileResult>;
+  selectPDFFile: (options?: FileDialogOptions) => Promise<FileResult>;
+  selectImageFile: (options?: FileDialogOptions) => Promise<FileResult>;
+  selectImageFiles: (options?: FileDialogOptions) => Promise<FilesResult>;
+  
+  // Specialized save dialogs
+  saveExcelFile: (options?: FileDialogOptions) => Promise<FileResult>;
+  savePDFFile: (options?: FileDialogOptions) => Promise<FileResult>;
+  saveImageFile: (options?: FileDialogOptions) => Promise<FileResult>;
 
   // Backend communication
   getBackendUrl: () => Promise<string | null>;
