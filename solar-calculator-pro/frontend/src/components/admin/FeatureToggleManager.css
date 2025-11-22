@@ -1,0 +1,147 @@
+/**
+ * Feature Toggle Manager Styles
+ */
+
+.feature-toggle-manager {
+  padding: 1rem;
+}
+
+.feature-toggle-manager .card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feature-toggle-manager h2 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.feature-toggle-manager .field {
+  margin-bottom: 1.5rem;
+}
+
+.feature-toggle-manager .field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.feature-toggle-manager .field-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.feature-toggle-manager .p-datatable .p-datatable-thead > tr > th {
+  background: var(--surface-100);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.feature-toggle-manager .p-datatable .p-datatable-tbody > tr {
+  transition: background-color 0.2s;
+}
+
+.feature-toggle-manager .p-datatable .p-datatable-tbody > tr:hover {
+  background: var(--surface-hover);
+}
+
+.feature-toggle-manager .p-chip {
+  color: white;
+  font-weight: 500;
+}
+
+.feature-toggle-manager .p-progressbar {
+  height: 0.5rem;
+  border-radius: 4px;
+}
+
+.feature-toggle-manager .p-dialog .p-dialog-header {
+  background: var(--surface-card);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.feature-toggle-manager .p-dialog .p-dialog-content {
+  background: var(--surface-card);
+  color: var(--text-color);
+}
+
+.feature-toggle-manager .p-dialog .p-dialog-footer {
+  background: var(--surface-card);
+  border-top: 1px solid var(--surface-border);
+}
+
+.feature-toggle-manager .p-tabview .p-tabview-nav {
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.feature-toggle-manager .p-tabview .p-tabview-panels {
+  background: var(--surface-card);
+  color: var(--text-color);
+}
+
+.feature-toggle-manager .grid .card {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--surface-50);
+  border-radius: 8px;
+}
+
+.feature-toggle-manager .grid .card h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.feature-toggle-manager .grid .card p {
+  margin: 0;
+}
+
+.feature-toggle-manager .p-message {
+  margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .feature-toggle-manager {
+    padding: 0.5rem;
+  }
+
+  .feature-toggle-manager .card {
+    padding: 1rem;
+  }
+
+  .feature-toggle-manager h2 {
+    font-size: 1.5rem;
+  }
+
+  .feature-toggle-manager .flex.gap-2 {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .feature-toggle-manager .flex.gap-2 button {
+    width: 100%;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .feature-toggle-manager .card {
+    background: var(--surface-900);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .feature-toggle-manager .grid .card {
+    background: var(--surface-800);
+  }
+}

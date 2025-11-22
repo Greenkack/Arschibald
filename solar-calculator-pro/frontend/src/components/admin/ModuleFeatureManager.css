@@ -1,0 +1,190 @@
+/**
+ * Module Feature Manager Styles
+ */
+
+.module-feature-manager {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.module-feature-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.module-feature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.module-feature-description {
+  flex: 1;
+  color: var(--text-color-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.module-feature-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.module-feature-manager-loading,
+.module-feature-manager-error,
+.module-feature-manager-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.module-icon {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.module-title {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.module-switch {
+  margin-left: auto;
+}
+
+.sub-features-container {
+  padding: 1rem;
+  background-color: var(--surface-ground);
+  border-radius: 6px;
+}
+
+.sub-feature-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--surface-card);
+  border-radius: 4px;
+  border: 1px solid var(--surface-border);
+  transition: all 0.2s ease;
+}
+
+.sub-feature-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sub-feature-item:last-child {
+  margin-bottom: 0;
+}
+
+.sub-feature-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.sub-feature-label {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.sub-feature-key {
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+  font-family: 'Courier New', monospace;
+}
+
+.sub-feature-switch {
+  flex-shrink: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .module-feature-header {
+    flex-direction: column;
+  }
+
+  .module-feature-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .module-feature-actions button {
+    flex: 1;
+  }
+
+  .module-header {
+    flex-wrap: wrap;
+  }
+
+  .module-switch {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .sub-feature-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .sub-feature-switch {
+    align-self: flex-end;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .module-feature-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .sub-feature-item:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Loading State */
+.module-feature-manager-loading .p-progress-spinner {
+  width: 50px;
+  height: 50px;
+}
+
+/* Disabled State */
+.sub-feature-item .p-inputswitch.p-disabled {
+  opacity: 0.5;
+}
+
+/* Animation */
+.sub-feature-item {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
