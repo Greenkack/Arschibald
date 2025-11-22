@@ -1,0 +1,216 @@
+/**
+ * Component Toggle Manager Styles
+ */
+
+.component-toggle-manager {
+  padding: 2rem;
+  background: var(--surface-ground);
+  border-radius: 8px;
+}
+
+.component-toggle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--surface-border);
+}
+
+.component-toggle-header h2 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.component-toggle-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.component-toggle-error {
+  margin-bottom: 1.5rem;
+}
+
+.component-toggle-manager-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.component-toggle-manager-loading p {
+  color: var(--text-color-secondary);
+  font-size: 1.1rem;
+}
+
+/* Tab Content */
+.toggle-tab-content {
+  padding: 1.5rem 0;
+}
+
+.toggle-tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.toggle-tab-header h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* DataTable Customization */
+.component-toggle-manager .p-datatable {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.component-toggle-manager .p-datatable-thead > tr > th {
+  background: var(--surface-100);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.component-toggle-manager .p-datatable-tbody > tr > td {
+  padding: 1rem;
+}
+
+.component-toggle-manager .p-datatable-tbody > tr:hover {
+  background: var(--surface-hover);
+}
+
+/* InputSwitch in table */
+.component-toggle-manager .p-inputswitch {
+  transform: scale(1.1);
+}
+
+/* TabView Customization */
+.component-toggle-manager .p-tabview-nav {
+  background: var(--surface-card);
+  border-bottom: 2px solid var(--surface-border);
+}
+
+.component-toggle-manager .p-tabview-nav-link {
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+}
+
+.component-toggle-manager .p-tabview-panels {
+  background: var(--surface-card);
+  padding: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .component-toggle-manager {
+    padding: 1rem;
+  }
+
+  .component-toggle-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .component-toggle-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .component-toggle-actions button {
+    width: 100%;
+  }
+
+  .toggle-tab-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .bulk-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .bulk-actions button {
+    width: 100%;
+  }
+
+  .component-toggle-manager .p-datatable-thead > tr > th,
+  .component-toggle-manager .p-datatable-tbody > tr > td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .component-toggle-manager {
+    background: var(--surface-ground);
+  }
+
+  .component-toggle-header h2,
+  .toggle-tab-header h3 {
+    color: var(--text-color);
+  }
+}
+
+/* Animation */
+.component-toggle-manager .p-inputswitch {
+  transition: all 0.2s ease;
+}
+
+.component-toggle-manager .p-inputswitch:hover {
+  transform: scale(1.15);
+}
+
+.component-toggle-manager .p-datatable-tbody > tr {
+  transition: background-color 0.2s ease;
+}
+
+/* Status Indicators */
+.toggle-status-enabled {
+  color: var(--green-500);
+  font-weight: 600;
+}
+
+.toggle-status-disabled {
+  color: var(--red-500);
+  font-weight: 600;
+}
+
+/* Button Customization */
+.component-toggle-manager .p-button {
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.component-toggle-manager .p-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.component-toggle-manager .p-button-outlined {
+  border-width: 2px;
+}
+
+/* Loading State */
+.component-toggle-manager-loading .p-progress-spinner {
+  width: 60px;
+  height: 60px;
+}
