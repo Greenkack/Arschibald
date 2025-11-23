@@ -1,0 +1,61 @@
+.pdf-export-manager {
+  padding: 1rem;
+}
+
+.export-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.export-actions button {
+  min-width: 150px;
+}
+
+.export-progress {
+  margin-top: 1rem;
+}
+
+.email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.email-form .p-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.email-form label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.email-form .p-field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.email-form .p-field-checkbox label {
+  font-weight: normal;
+  margin: 0;
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .export-actions {
+    flex-direction: column;
+  }
+
+  .export-actions button {
+    width: 100%;
+  }
+}
