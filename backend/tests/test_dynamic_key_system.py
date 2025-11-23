@@ -427,6 +427,9 @@ class TestDynamicKeyService:
         """Test export and import through service"""
         service = DynamicKeyService()
         
+        # Clear any existing data first
+        service.clear_all()
+        
         service.set_value("key1", "value1")
         service.set_value("key2", 42, key_type=KeyType.INTEGER)
         
