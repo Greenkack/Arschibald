@@ -164,7 +164,7 @@ Diese Module existieren, werden aber nicht aktiv in `gui.py` geladen:
 
 ## 🎯 **KONKRETE NÄCHSTE SCHRITTE**
 
-### 1. SOFORT zu prüfen (10 Module):
+### 1. SOFORT zu prüfen (10 Module)
 
 ```python
 # Diese Module importieren checken:
@@ -180,7 +180,7 @@ teilen.py
 enhanced_product_management_ui.py
 ```
 
-### 2. ZU INTEGRIEREN (5 Module):
+### 2. ZU INTEGRIEREN (5 Module)
 
 ```python
 # Diese sollten in Haupt-Module integriert werden:
@@ -191,7 +191,7 @@ chart_styling_improvements.py → in chart_styling.py
 solar_3d_view_enhanced.py → in solar_3d_view_module.py
 ```
 
-### 3. ZU LÖSCHEN (8 Module):
+### 3. ZU LÖSCHEN (8 Module)
 
 ```python
 # Vermutlich veraltet:
@@ -204,7 +204,7 @@ multi_pdf_integration.py (prüfen)
 multi_pdf_integration_complete.py (prüfen)
 ```
 
-### 4. BRIDGE-MODULE UNTERSUCHEN (5 Module):
+### 4. BRIDGE-MODULE UNTERSUCHEN (5 Module)
 
 ```bash
 # Grep-Suche ob diese importiert werden:

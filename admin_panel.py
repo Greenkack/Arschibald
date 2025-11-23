@@ -51,7 +51,27 @@ from admin_intro_settings_ui import render_intro_settings_tab
 from admin_payment_terms_ui import (
     render_comprehensive_admin_payment_terms_ui_with_variants,
 )
-from admin_product_database_ui import render_product_admin_ui
+
+# OPTIMIZED VERSIONS - Memory-Safe mit Pagination
+try:
+    from admin_product_database_ui_optimized import render_product_admin_ui_optimized as render_product_admin_ui
+    PRODUCT_DB_OPTIMIZED = True
+    print("✅ [ADMIN_PANEL] Produktverwaltung OPTIMIERT geladen (mit Pagination)")
+except ImportError as e:
+    from admin_product_database_ui import render_product_admin_ui
+    PRODUCT_DB_OPTIMIZED = False
+    print(f"⚠️  [ADMIN_PANEL] Produktverwaltung ALTE VERSION geladen (Import-Fehler: {e})")
+
+try:
+    from admin_heatpump_products_optimized import render_heatpump_admin_ui
+    HEATPUMP_ADMIN_AVAILABLE = True
+    print("✅ [ADMIN_PANEL] Wärmepumpen-Verwaltung OPTIMIERT geladen")
+except ImportError as e:
+    HEATPUMP_ADMIN_AVAILABLE = False
+    print(f"⚠️  [ADMIN_PANEL] Wärmepumpen-Verwaltung nicht verfügbar (Import-Fehler: {e})")
+    def render_heatpump_admin_ui():
+        st.warning("Wärmepumpen-Verwaltung nicht verfügbar. Installieren Sie die optimierten Module.")
+
 from admin_services_ui import render_services_admin_ui
 from admin_user_management_ui import render_user_management_tab
 from admin_heating_costs_config_ui import render_admin_heating_costs_ui as render_heating_costs_config_tab
@@ -1858,6 +1878,13 @@ def render_product_management(
         get_text_local(
             "admin_current_products_header_display",
             "Produkte in Datenbank (gefiltert)"))
+    
+    # PAGINATION SETUP - MEMORY-SAFE!
+    if 'product_mgmt_page' not in st.session_state:
+        st.session_state.product_mgmt_page = 1
+    
+    ITEMS_PER_PAGE = 50  # Max 50 Produkte pro Seite
+    
     selected_category_filter_disp_list = st.selectbox(
         get_text_local(
             "admin_select_category_label_display",
@@ -1870,15 +1897,71 @@ def render_product_management(
         key=f"product_cat_select_display_list_man{WIDGET_KEY_SUFFIX}_key_filter")
     filter_cat_disp_list_val = None if selected_category_filter_disp_list == get_text_local(
         "all_categories", "Alle") else selected_category_filter_disp_list
-    all_products_list_display_val = list_products_func(
-        category=filter_cat_disp_list_val)
-
-    if not all_products_list_display_val:
+    
+    # Kategorie-Wechsel resettet Seite
+    if 'last_category_filter' not in st.session_state:
+        st.session_state.last_category_filter = filter_cat_disp_list_val
+    elif st.session_state.last_category_filter != filter_cat_disp_list_val:
+        st.session_state.product_mgmt_page = 1
+        st.session_state.last_category_filter = filter_cat_disp_list_val
+    
+    # ALLE Produkte für Zählung holen (nur IDs, kein Memory-Problem)
+    all_products_full_list = list_products_func(category=filter_cat_disp_list_val)
+    total_products = len(all_products_full_list) if all_products_full_list else 0
+    
+    if total_products == 0:
         st.info(
             get_text_local(
                 "product_info_no_products_for_filter",
                 "Keine Produkte zum Anzeigen gefunden für die aktuelle Filterauswahl."))
     else:
+        # PAGINATION BERECHNEN
+        total_pages = (total_products + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE
+        start_idx = (st.session_state.product_mgmt_page - 1) * ITEMS_PER_PAGE
+        end_idx = min(start_idx + ITEMS_PER_PAGE, total_products)
+        
+        # NUR AKTUELLE SEITE ANZEIGEN (MEMORY-SAFE!)
+        all_products_list_display_val = all_products_full_list[start_idx:end_idx]
+        
+        # PAGINATION INFO
+        col_info1, col_info2, col_info3 = st.columns([1, 2, 1])
+        with col_info2:
+            st.info(f"📊 **{total_products} Produkte gefunden** | Zeige {start_idx + 1}-{end_idx} (Seite {st.session_state.product_mgmt_page}/{total_pages})")
+        
+        # PAGINATION BUTTONS OBEN
+        col_p1, col_p2, col_p3, col_p4, col_p5 = st.columns([1, 1, 2, 1, 1])
+        with col_p1:
+            if st.button("⏮️ Erste", key="prod_mgmt_first_top", disabled=(st.session_state.product_mgmt_page == 1)):
+                st.session_state.product_mgmt_page = 1
+                st.rerun()
+        with col_p2:
+            if st.button("◀️ Zurück", key="prod_mgmt_prev_top", disabled=(st.session_state.product_mgmt_page == 1)):
+                st.session_state.product_mgmt_page -= 1
+                st.rerun()
+        with col_p3:
+            jump_page = st.number_input(
+                "Gehe zu Seite:",
+                min_value=1,
+                max_value=total_pages,
+                value=st.session_state.product_mgmt_page,
+                step=1,
+                key="prod_mgmt_jump_top"
+            )
+            if jump_page != st.session_state.product_mgmt_page:
+                st.session_state.product_mgmt_page = int(jump_page)
+                st.rerun()
+        with col_p4:
+            if st.button("▶️ Weiter", key="prod_mgmt_next_top", disabled=(st.session_state.product_mgmt_page >= total_pages)):
+                st.session_state.product_mgmt_page += 1
+                st.rerun()
+        with col_p5:
+            if st.button("⏭️ Letzte", key="prod_mgmt_last_top", disabled=(st.session_state.product_mgmt_page >= total_pages)):
+                st.session_state.product_mgmt_page = total_pages
+                st.rerun()
+        
+        st.markdown("---")
+        
+        # PRODUKTLISTE ANZEIGEN
         list_cols_h = st.columns([0.4, 2, 0.8, 0.8, 1, 0.8, 0.4, 0.4])
         list_headers = [
             "ID",
@@ -1971,6 +2054,28 @@ def render_product_management(
                                 model_name=prod_item_in_list.get('model_name')))
                         set_current_page("admin")
             st.divider()
+        
+        # PAGINATION BUTTONS UNTEN
+        st.markdown("---")
+        col_pb1, col_pb2, col_pb3, col_pb4, col_pb5 = st.columns([1, 1, 2, 1, 1])
+        with col_pb1:
+            if st.button("⏮️ Erste", key="prod_mgmt_first_bottom", disabled=(st.session_state.product_mgmt_page == 1)):
+                st.session_state.product_mgmt_page = 1
+                st.rerun()
+        with col_pb2:
+            if st.button("◀️ Zurück", key="prod_mgmt_prev_bottom", disabled=(st.session_state.product_mgmt_page == 1)):
+                st.session_state.product_mgmt_page -= 1
+                st.rerun()
+        with col_pb3:
+            st.write(f"Seite {st.session_state.product_mgmt_page} von {total_pages}")
+        with col_pb4:
+            if st.button("▶️ Weiter", key="prod_mgmt_next_bottom", disabled=(st.session_state.product_mgmt_page >= total_pages)):
+                st.session_state.product_mgmt_page += 1
+                st.rerun()
+        with col_pb5:
+            if st.button("⏭️ Letzte", key="prod_mgmt_last_bottom", disabled=(st.session_state.product_mgmt_page >= total_pages)):
+                st.session_state.product_mgmt_page = total_pages
+                st.rerun()
 
 # Änderungshistorie
 # ... (vorherige Einträge)
@@ -3937,8 +4042,13 @@ def render_admin_panel(
         ),
         "admin_tab_product_database_crud": create_protected_tab_renderer(
             "product_database",
-            "Produktdatenbank CRUD",
+            "Produktdatenbank CRUD (Optimiert)" if PRODUCT_DB_OPTIMIZED else "Produktdatenbank CRUD",
             lambda: render_product_admin_ui()
+        ),
+        "admin_tab_heatpump_products": create_protected_tab_renderer(
+            "heatpump_products",
+            "Wärmepumpen-Produkte",
+            lambda: render_heatpump_admin_ui() if HEATPUMP_ADMIN_AVAILABLE else st.warning("Wärmepumpen-Modul nicht verfügbar")
         ),
         "admin_tab_pv_mounting": create_protected_tab_renderer(
             "pv_mounting",

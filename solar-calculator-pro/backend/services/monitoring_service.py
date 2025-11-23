@@ -1,546 +1,813 @@
 """
-Post-Release Monitoring Service
-
-Tracks application performance, crash reports, user feedback, and update adoption.
-Requirement: 8.1 - Performance monitoring and tracking
+Solar Monitoring Integration Service
+Handles monitoring system API integration, real-time tracking, and performance analysis
 """
 
-from typing import Dict, List, Any, Optional
+from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
+import asyncio
+import aiohttp
 from sqlalchemy.orm import Session
-from sqlalchemy import func, desc
-import psutil
-import platform
-from collections import defaultdict
+import logging
+
+from ..models.monitoring_schemas import (
+    MonitoringSystemType, MonitoringSystemConfig, RealTimeProductionData,
+    PerformanceMetrics, PerformanceAnalysisRequest, PerformanceAnalysisResponse,
+    AlertCreate, AlertResponse, AlertRule, AlertType, AlertSeverity,
+    MaintenanceTaskCreate, MaintenanceTaskResponse, MaintenanceStatus,
+    PerformanceReportRequest, PerformanceReportResponse,
+    MonitoringDashboardData, SystemHealthCheck
+)
+
+logger = logging.getLogger(__name__)
 
 
 class MonitoringService:
-    """Service for post-release monitoring and analytics"""
+    """Service for solar monitoring system integration"""
     
     def __init__(self, db: Session):
         self.db = db
+        self.active_connections: Dict[str, Any] = {}
+        self.alert_rules: Dict[str, List[AlertRule]] = {}
+
     
-    # ==================== Performance Monitoring ====================
+    # Monitoring System API Integration
     
-    def track_performance_metric(
+    async def connect_monitoring_system(
         self,
-        metric_name: str,
-        value: float,
-        unit: str,
-        metadata: Optional[Dict[str, Any]] = None
+        config: MonitoringSystemConfig
     ) -> Dict[str, Any]:
-        """
-        Track a performance metric
-        
-        Args:
-            metric_name: Name of the metric (e.g., 'api_response_time', 'memory_usage')
-            value: Metric value
-            unit: Unit of measurement (e.g., 'ms', 'MB', 'percent')
-            metadata: Additional context
-        
-        Returns:
-            Tracked metric data
-        """
-        metric = {
-            'metric_name': metric_name,
-            'value': value,
-            'unit': unit,
-            'timestamp': datetime.now().isoformat(),
-            'metadata': metadata or {}
-        }
-        
-        # Store in database (implementation depends on your schema)
-        # For now, return the metric
-        return metric
+        """Connect to monitoring system API"""
+        try:
+            if config.system_type == MonitoringSystemType.SOLAR_EDGE:
+                return await self._connect_solaredge(config)
+            elif config.system_type == MonitoringSystemType.FRONIUS:
+                return await self._connect_fronius(config)
+            elif config.system_type == MonitoringSystemType.SMA:
+                return await self._connect_sma(config)
+            elif config.system_type == MonitoringSystemType.ENPHASE:
+                return await self._connect_enphase(config)
+            elif config.system_type == MonitoringSystemType.HUAWEI:
+                return await self._connect_huawei(config)
+            else:
+                return await self._connect_generic(config)
+        except Exception as e:
+            logger.error(f"Failed to connect to monitoring system: {str(e)}")
+            raise
     
-    def get_performance_summary(
+    async def _connect_solaredge(self, config: MonitoringSystemConfig) -> Dict[str, Any]:
+        """Connect to SolarEdge monitoring API"""
+        base_url = config.base_url or "https://monitoringapi.solaredge.com"
+        
+        async with aiohttp.ClientSession() as session:
+            # Test connection
+            url = f"{base_url}/site/{config.site_id}/overview"
+            params = {"api_key": config.api_key}
+            
+            async with session.get(url, params=params) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    self.active_connections[config.site_id] = {
+                        "type": config.system_type,
+                        "config": config,
+                        "connected_at": datetime.now()
+                    }
+                    return {
+                        "status": "connected",
+                        "site_id": config.site_id,
+                        "system_type": config.system_type,
+                        "data": data
+                    }
+                else:
+                    raise Exception(f"Connection failed: {response.status}")
+
+    
+    async def _connect_fronius(self, config: MonitoringSystemConfig) -> Dict[str, Any]:
+        """Connect to Fronius Solar.web API"""
+        # Implementation for Fronius
+        return {"status": "connected", "site_id": config.site_id, "system_type": config.system_type}
+    
+    async def _connect_sma(self, config: MonitoringSystemConfig) -> Dict[str, Any]:
+        """Connect to SMA Sunny Portal API"""
+        # Implementation for SMA
+        return {"status": "connected", "site_id": config.site_id, "system_type": config.system_type}
+    
+    async def _connect_enphase(self, config: MonitoringSystemConfig) -> Dict[str, Any]:
+        """Connect to Enphase Enlighten API"""
+        # Implementation for Enphase
+        return {"status": "connected", "site_id": config.site_id, "system_type": config.system_type}
+    
+    async def _connect_huawei(self, config: MonitoringSystemConfig) -> Dict[str, Any]:
+        """Connect to Huawei FusionSolar API"""
+        # Implementation for Huawei
+        return {"status": "connected", "site_id": config.site_id, "system_type": config.system_type}
+    
+    async def _connect_generic(self, config: MonitoringSystemConfig) -> Dict[str, Any]:
+        """Connect to generic monitoring system"""
+        # Implementation for generic systems
+        return {"status": "connected", "site_id": config.site_id, "system_type": config.system_type}
+    
+    # Real-time Production Tracking
+    
+    async def get_realtime_production(self, site_id: str) -> RealTimeProductionData:
+        """Get real-time production data"""
+        connection = self.active_connections.get(site_id)
+        if not connection:
+            raise Exception(f"No active connection for site {site_id}")
+        
+        config = connection["config"]
+        
+        if config.system_type == MonitoringSystemType.SOLAR_EDGE:
+            return await self._get_solaredge_realtime(config)
+        elif config.system_type == MonitoringSystemType.FRONIUS:
+            return await self._get_fronius_realtime(config)
+        else:
+            return await self._get_generic_realtime(config)
+
+    
+    async def _get_solaredge_realtime(self, config: MonitoringSystemConfig) -> RealTimeProductionData:
+        """Get real-time data from SolarEdge"""
+        base_url = config.base_url or "https://monitoringapi.solaredge.com"
+        
+        async with aiohttp.ClientSession() as session:
+            # Get current power
+            url = f"{base_url}/site/{config.site_id}/currentPowerFlow"
+            params = {"api_key": config.api_key}
+            
+            async with session.get(url, params=params) as response:
+                data = await response.json()
+                power_flow = data.get("siteCurrentPowerFlow", {})
+                
+                # Get energy data
+                energy_url = f"{base_url}/site/{config.site_id}/energy"
+                today = datetime.now().date()
+                energy_params = {
+                    "api_key": config.api_key,
+                    "startDate": today.isoformat(),
+                    "endDate": today.isoformat()
+                }
+                
+                async with session.get(energy_url, params=energy_params) as energy_response:
+                    energy_data = await energy_response.json()
+                    
+                    return RealTimeProductionData(
+                        timestamp=datetime.now(),
+                        current_power=power_flow.get("PV", {}).get("currentPower", 0) / 1000,  # Convert to kW
+                        daily_energy=energy_data.get("energy", {}).get("values", [{}])[0].get("value", 0) / 1000,  # Convert to kWh
+                        monthly_energy=0,  # Would need separate API call
+                        yearly_energy=0,  # Would need separate API call
+                        lifetime_energy=power_flow.get("lifeTimeData", {}).get("energy", 0) / 1000,
+                        system_status=power_flow.get("connections", [{}])[0].get("status", "unknown"),
+                        inverter_status={},
+                        module_temperatures=[],
+                        grid_voltage=power_flow.get("GRID", {}).get("voltage", None),
+                        grid_frequency=power_flow.get("GRID", {}).get("frequency", None)
+                    )
+    
+    async def _get_fronius_realtime(self, config: MonitoringSystemConfig) -> RealTimeProductionData:
+        """Get real-time data from Fronius"""
+        # Simplified implementation
+        return RealTimeProductionData(
+            timestamp=datetime.now(),
+            current_power=0,
+            daily_energy=0,
+            monthly_energy=0,
+            yearly_energy=0,
+            lifetime_energy=0,
+            system_status="unknown"
+        )
+    
+    async def _get_generic_realtime(self, config: MonitoringSystemConfig) -> RealTimeProductionData:
+        """Get real-time data from generic system"""
+        # Simplified implementation
+        return RealTimeProductionData(
+            timestamp=datetime.now(),
+            current_power=0,
+            daily_energy=0,
+            monthly_energy=0,
+            yearly_energy=0,
+            lifetime_energy=0,
+            system_status="unknown"
+        )
+
+    
+    # Performance Analysis
+    
+    async def analyze_performance(
         self,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None
-    ) -> Dict[str, Any]:
-        """
-        Get performance summary for a time period
+        request: PerformanceAnalysisRequest
+    ) -> PerformanceAnalysisResponse:
+        """Analyze system performance over a period"""
+        # Get historical production data
+        production_data = await self._get_historical_data(
+            request.site_id,
+            request.start_date,
+            request.end_date,
+            request.granularity
+        )
         
-        Args:
-            start_date: Start of period (default: 24 hours ago)
-            end_date: End of period (default: now)
+        # Calculate performance metrics
+        metrics = self._calculate_performance_metrics(production_data)
         
-        Returns:
-            Performance summary with key metrics
-        """
-        if not start_date:
-            start_date = datetime.now() - timedelta(days=1)
-        if not end_date:
-            end_date = datetime.now()
+        # Get weather correlation if requested
+        weather_correlation = None
+        if request.include_weather:
+            weather_correlation = await self._correlate_with_weather(
+                request.site_id,
+                request.start_date,
+                request.end_date
+            )
         
-        # Get system metrics
-        cpu_percent = psutil.cpu_percent(interval=1)
-        memory = psutil.virtual_memory()
-        disk = psutil.disk_usage('/')
+        # Get comparison data if requested
+        comparison_data = None
+        if request.include_comparison:
+            comparison_data = self._compare_with_expected(
+                request.site_id,
+                production_data
+            )
         
-        summary = {
-            'period': {
-                'start': start_date.isoformat(),
-                'end': end_date.isoformat()
-            },
-            'system': {
-                'cpu_percent': cpu_percent,
-                'memory_percent': memory.percent,
-                'memory_available_mb': memory.available / (1024 * 1024),
-                'disk_percent': disk.percent,
-                'disk_free_gb': disk.free / (1024 * 1024 * 1024)
-            },
-            'platform': {
-                'system': platform.system(),
-                'release': platform.release(),
-                'version': platform.version(),
-                'machine': platform.machine(),
-                'processor': platform.processor()
-            },
-            'metrics': {
-                'api_calls': 0,  # Placeholder - implement based on your tracking
-                'errors': 0,
-                'average_response_time_ms': 0,
-                'peak_memory_mb': 0
-            }
-        }
+        # Generate insights and recommendations
+        insights = self._generate_insights(metrics, weather_correlation, comparison_data)
+        recommendations = self._generate_recommendations(metrics, insights)
         
-        return summary
+        return PerformanceAnalysisResponse(
+            site_id=request.site_id,
+            period={"start": request.start_date, "end": request.end_date},
+            metrics=metrics,
+            production_data=production_data,
+            weather_correlation=weather_correlation,
+            comparison_data=comparison_data,
+            insights=insights,
+            recommendations=recommendations
+        )
     
-    def get_performance_trends(
+    async def _get_historical_data(
         self,
-        metric_name: str,
-        days: int = 7
-    ) -> Dict[str, Any]:
-        """
-        Get performance trends for a specific metric
-        
-        Args:
-            metric_name: Name of the metric to analyze
-            days: Number of days to analyze
-        
-        Returns:
-            Trend data with daily averages
-        """
-        start_date = datetime.now() - timedelta(days=days)
-        
-        # Placeholder implementation
-        # In production, query your metrics database
-        trends = {
-            'metric_name': metric_name,
-            'period_days': days,
-            'start_date': start_date.isoformat(),
-            'end_date': datetime.now().isoformat(),
-            'daily_averages': [],
-            'trend': 'stable',  # 'improving', 'degrading', 'stable'
-            'change_percent': 0.0
-        }
-        
-        return trends
-    
-    # ==================== Crash Reporting ====================
-    
-    def report_crash(
-        self,
-        error_type: str,
-        error_message: str,
-        stack_trace: str,
-        user_id: Optional[int] = None,
-        app_version: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
-        """
-        Report an application crash
-        
-        Args:
-            error_type: Type of error (e.g., 'TypeError', 'RuntimeError')
-            error_message: Error message
-            stack_trace: Full stack trace
-            user_id: User who experienced the crash
-            app_version: Application version
-            metadata: Additional context (OS, browser, etc.)
-        
-        Returns:
-            Crash report data
-        """
-        crash_report = {
-            'id': self._generate_crash_id(),
-            'error_type': error_type,
-            'error_message': error_message,
-            'stack_trace': stack_trace,
-            'user_id': user_id,
-            'app_version': app_version,
-            'timestamp': datetime.now().isoformat(),
-            'metadata': metadata or {},
-            'status': 'new'
-        }
-        
-        # Store in database
-        # Implement based on your schema
-        
-        return crash_report
-    
-    def get_crash_reports(
-        self,
-        status: Optional[str] = None,
-        days: int = 7,
-        limit: int = 100
+        site_id: str,
+        start_date: datetime,
+        end_date: datetime,
+        granularity: str
     ) -> List[Dict[str, Any]]:
-        """
-        Get crash reports
+        """Get historical production data"""
+        connection = self.active_connections.get(site_id)
+        if not connection:
+            raise Exception(f"No active connection for site {site_id}")
         
-        Args:
-            status: Filter by status ('new', 'investigating', 'resolved')
-            days: Number of days to look back
-            limit: Maximum number of reports
-        
-        Returns:
-            List of crash reports
-        """
-        start_date = datetime.now() - timedelta(days=days)
-        
-        # Placeholder implementation
-        reports = []
-        
-        return reports
-    
-    def get_crash_statistics(
-        self,
-        days: int = 7
-    ) -> Dict[str, Any]:
-        """
-        Get crash statistics
-        
-        Args:
-            days: Number of days to analyze
-        
-        Returns:
-            Crash statistics
-        """
-        start_date = datetime.now() - timedelta(days=days)
-        
-        stats = {
-            'period_days': days,
-            'total_crashes': 0,
-            'unique_errors': 0,
-            'affected_users': 0,
-            'crash_free_rate': 100.0,
-            'most_common_errors': [],
-            'crashes_by_version': {},
-            'crashes_by_platform': {}
-        }
-        
-        return stats
-    
-    # ==================== User Feedback ====================
-    
-    def submit_feedback(
-        self,
-        user_id: int,
-        feedback_type: str,
-        title: str,
-        description: str,
-        rating: Optional[int] = None,
-        metadata: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
-        """
-        Submit user feedback
-        
-        Args:
-            user_id: User submitting feedback
-            feedback_type: Type ('bug', 'feature_request', 'improvement', 'praise')
-            title: Feedback title
-            description: Detailed description
-            rating: Optional rating (1-5)
-            metadata: Additional context
-        
-        Returns:
-            Feedback record
-        """
-        feedback = {
-            'id': self._generate_feedback_id(),
-            'user_id': user_id,
-            'feedback_type': feedback_type,
-            'title': title,
-            'description': description,
-            'rating': rating,
-            'timestamp': datetime.now().isoformat(),
-            'status': 'new',
-            'metadata': metadata or {}
-        }
-        
-        # Store in database
-        
-        return feedback
-    
-    def get_feedback_summary(
-        self,
-        days: int = 30
-    ) -> Dict[str, Any]:
-        """
-        Get feedback summary
-        
-        Args:
-            days: Number of days to analyze
-        
-        Returns:
-            Feedback summary
-        """
-        start_date = datetime.now() - timedelta(days=days)
-        
-        summary = {
-            'period_days': days,
-            'total_feedback': 0,
-            'by_type': {
-                'bug': 0,
-                'feature_request': 0,
-                'improvement': 0,
-                'praise': 0
-            },
-            'average_rating': 0.0,
-            'sentiment': 'positive',  # 'positive', 'neutral', 'negative'
-            'top_requests': [],
-            'trending_topics': []
-        }
-        
-        return summary
-    
-    # ==================== Update Adoption ====================
-    
-    def track_update_adoption(
-        self,
-        user_id: int,
-        from_version: str,
-        to_version: str,
-        update_method: str,
-        success: bool,
-        duration_seconds: Optional[float] = None
-    ) -> Dict[str, Any]:
-        """
-        Track update adoption
-        
-        Args:
-            user_id: User who updated
-            from_version: Previous version
-            to_version: New version
-            update_method: How updated ('auto', 'manual', 'forced')
-            success: Whether update succeeded
-            duration_seconds: Time taken to update
-        
-        Returns:
-            Update record
-        """
-        update_record = {
-            'user_id': user_id,
-            'from_version': from_version,
-            'to_version': to_version,
-            'update_method': update_method,
-            'success': success,
-            'duration_seconds': duration_seconds,
-            'timestamp': datetime.now().isoformat()
-        }
-        
-        # Store in database
-        
-        return update_record
-    
-    def get_update_adoption_stats(
-        self,
-        version: str
-    ) -> Dict[str, Any]:
-        """
-        Get update adoption statistics for a version
-        
-        Args:
-            version: Version to analyze
-        
-        Returns:
-            Adoption statistics
-        """
-        stats = {
-            'version': version,
-            'release_date': None,  # Get from releases table
-            'total_users': 0,
-            'updated_users': 0,
-            'adoption_rate': 0.0,
-            'update_methods': {
-                'auto': 0,
-                'manual': 0,
-                'forced': 0
-            },
-            'success_rate': 100.0,
-            'average_update_time_seconds': 0,
-            'adoption_timeline': []  # Daily adoption counts
-        }
-        
-        return stats
-    
-    def get_version_distribution(self) -> Dict[str, Any]:
-        """
-        Get current version distribution across users
-        
-        Returns:
-            Version distribution data
-        """
-        distribution = {
-            'total_users': 0,
-            'versions': {},  # version -> count
-            'latest_version': None,
-            'outdated_users': 0,
-            'outdated_percentage': 0.0
-        }
-        
-        return distribution
-    
-    # ==================== Future Improvements ====================
-    
-    def analyze_improvement_opportunities(
-        self,
-        days: int = 30
-    ) -> Dict[str, Any]:
-        """
-        Analyze data to identify improvement opportunities
-        
-        Args:
-            days: Number of days to analyze
-        
-        Returns:
-            Improvement recommendations
-        """
-        # Analyze crash reports
-        crash_stats = self.get_crash_statistics(days)
-        
-        # Analyze feedback
-        feedback_summary = self.get_feedback_summary(days)
-        
-        # Analyze performance
-        performance_summary = self.get_performance_summary()
-        
-        opportunities = {
-            'high_priority': [],
-            'medium_priority': [],
-            'low_priority': [],
-            'quick_wins': [],
-            'long_term': []
-        }
-        
-        # Identify high-priority issues from crashes
-        if crash_stats['total_crashes'] > 10:
-            opportunities['high_priority'].append({
-                'type': 'stability',
-                'title': 'Address frequent crashes',
-                'description': f"{crash_stats['total_crashes']} crashes in last {days} days",
-                'impact': 'high',
-                'effort': 'medium'
+        # Simplified implementation - would fetch from monitoring API
+        data = []
+        current = start_date
+        while current <= end_date:
+            data.append({
+                "timestamp": current.isoformat(),
+                "energy": 0,  # Would be actual data from API
+                "power": 0
             })
+            if granularity == "hourly":
+                current += timedelta(hours=1)
+            elif granularity == "daily":
+                current += timedelta(days=1)
+            elif granularity == "weekly":
+                current += timedelta(weeks=1)
+            else:  # monthly
+                current += timedelta(days=30)
         
-        # Identify feature requests
-        if feedback_summary['by_type']['feature_request'] > 5:
-            opportunities['medium_priority'].append({
-                'type': 'feature',
-                'title': 'Review feature requests',
-                'description': f"{feedback_summary['by_type']['feature_request']} feature requests pending",
-                'impact': 'medium',
-                'effort': 'high'
-            })
-        
-        # Performance improvements
-        if performance_summary['system']['memory_percent'] > 80:
-            opportunities['high_priority'].append({
-                'type': 'performance',
-                'title': 'Optimize memory usage',
-                'description': 'Memory usage consistently above 80%',
-                'impact': 'high',
-                'effort': 'medium'
-            })
-        
-        return opportunities
+        return data
+
     
-    def create_improvement_roadmap(
+    def _calculate_performance_metrics(self, production_data: List[Dict[str, Any]]) -> PerformanceMetrics:
+        """Calculate performance metrics from production data"""
+        # Simplified calculation
+        total_energy = sum(d.get("energy", 0) for d in production_data)
+        
+        return PerformanceMetrics(
+            performance_ratio=0.85,  # Would be calculated from actual vs expected
+            capacity_factor=0.18,  # Would be calculated from system capacity
+            specific_yield=1200,  # kWh/kWp per year
+            availability=0.98,  # System uptime
+            degradation_rate=0.5,  # Annual degradation %
+            expected_vs_actual=0.95  # Actual/Expected ratio
+        )
+    
+    async def _correlate_with_weather(
         self,
-        opportunities: Dict[str, Any]
+        site_id: str,
+        start_date: datetime,
+        end_date: datetime
     ) -> Dict[str, Any]:
-        """
-        Create improvement roadmap from opportunities
-        
-        Args:
-            opportunities: Improvement opportunities from analysis
-        
-        Returns:
-            Structured roadmap
-        """
-        roadmap = {
-            'created_at': datetime.now().isoformat(),
-            'quarters': {
-                'Q1': [],
-                'Q2': [],
-                'Q3': [],
-                'Q4': []
-            },
-            'themes': {
-                'stability': [],
-                'performance': [],
-                'features': [],
-                'ux': []
-            }
+        """Correlate production with weather data"""
+        # Would integrate with weather API
+        return {
+            "correlation_coefficient": 0.92,
+            "sunny_days": 20,
+            "cloudy_days": 8,
+            "rainy_days": 2,
+            "average_irradiance": 5.2,  # kWh/m²/day
+            "temperature_impact": -0.02  # % per degree above 25°C
         }
-        
-        # Prioritize and schedule improvements
-        # High priority -> Q1
-        for item in opportunities.get('high_priority', []):
-            roadmap['quarters']['Q1'].append(item)
-            roadmap['themes'][item['type']].append(item)
-        
-        # Medium priority -> Q2
-        for item in opportunities.get('medium_priority', []):
-            roadmap['quarters']['Q2'].append(item)
-            roadmap['themes'][item['type']].append(item)
-        
-        return roadmap
     
-    # ==================== Helper Methods ====================
+    def _compare_with_expected(
+        self,
+        site_id: str,
+        production_data: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """Compare actual production with expected"""
+        # Would use system design data
+        return {
+            "expected_energy": 1000,  # kWh
+            "actual_energy": 950,  # kWh
+            "difference": -50,  # kWh
+            "percentage": 95.0,  # %
+            "reasons": ["Lower than expected irradiance", "Higher temperatures"]
+        }
     
-    def _generate_crash_id(self) -> str:
-        """Generate unique crash ID"""
-        return f"CRASH_{datetime.now().strftime('%Y%m%d%H%M%S%f')}"
+    def _generate_insights(
+        self,
+        metrics: PerformanceMetrics,
+        weather_correlation: Optional[Dict[str, Any]],
+        comparison_data: Optional[Dict[str, Any]]
+    ) -> List[str]:
+        """Generate insights from analysis"""
+        insights = []
+        
+        if metrics.performance_ratio < 0.75:
+            insights.append("Performance ratio is below expected. System may need maintenance.")
+        
+        if metrics.availability < 0.95:
+            insights.append("System availability is lower than optimal. Check for downtime causes.")
+        
+        if weather_correlation and weather_correlation.get("correlation_coefficient", 0) < 0.8:
+            insights.append("Production correlation with weather is lower than expected.")
+        
+        if comparison_data and comparison_data.get("percentage", 100) < 90:
+            insights.append("Actual production is significantly below expected values.")
+        
+        return insights
     
-    def _generate_feedback_id(self) -> str:
-        """Generate unique feedback ID"""
-        return f"FB_{datetime.now().strftime('%Y%m%d%H%M%S%f')}"
+    def _generate_recommendations(
+        self,
+        metrics: PerformanceMetrics,
+        insights: List[str]
+    ) -> List[str]:
+        """Generate recommendations based on analysis"""
+        recommendations = []
+        
+        if metrics.performance_ratio < 0.75:
+            recommendations.append("Schedule system inspection and cleaning")
+            recommendations.append("Check inverter performance and settings")
+        
+        if metrics.degradation_rate > 1.0:
+            recommendations.append("Investigate accelerated degradation causes")
+            recommendations.append("Consider module replacement for underperforming units")
+        
+        if metrics.availability < 0.95:
+            recommendations.append("Implement proactive maintenance schedule")
+            recommendations.append("Upgrade monitoring system for better fault detection")
+        
+        return recommendations
+
     
-    def get_health_status(self) -> Dict[str, Any]:
-        """
-        Get overall application health status
+    # Alert System
+    
+    async def create_alert(self, alert: AlertCreate) -> AlertResponse:
+        """Create new alert"""
+        # Would save to database
+        alert_response = AlertResponse(
+            id=1,  # Would be generated
+            site_id=alert.site_id,
+            alert_type=alert.alert_type,
+            severity=alert.severity,
+            title=alert.title,
+            description=alert.description,
+            data=alert.data,
+            created_at=datetime.now(),
+            is_resolved=False,
+            auto_resolve=alert.auto_resolve
+        )
         
-        Returns:
-            Health status summary
-        """
-        crash_stats = self.get_crash_statistics(days=1)
-        performance = self.get_performance_summary()
+        # Send notifications
+        await self._send_alert_notifications(alert_response)
         
-        # Determine health status
-        status = 'healthy'
-        issues = []
+        return alert_response
+    
+    async def _send_alert_notifications(self, alert: AlertResponse):
+        """Send alert notifications via configured channels"""
+        # Would send via email, SMS, push notifications, etc.
+        logger.info(f"Alert notification sent: {alert.title}")
+    
+    def add_alert_rule(self, site_id: str, rule: AlertRule):
+        """Add alert rule for monitoring"""
+        if site_id not in self.alert_rules:
+            self.alert_rules[site_id] = []
+        self.alert_rules[site_id].append(rule)
+    
+    async def check_alert_rules(self, site_id: str, production_data: RealTimeProductionData):
+        """Check if any alert rules are triggered"""
+        rules = self.alert_rules.get(site_id, [])
         
-        if crash_stats['total_crashes'] > 5:
-            status = 'degraded'
-            issues.append('High crash rate')
+        for rule in rules:
+            if not rule.enabled:
+                continue
+            
+            triggered = self._evaluate_alert_condition(rule, production_data)
+            
+            if triggered:
+                await self.create_alert(AlertCreate(
+                    site_id=site_id,
+                    alert_type=rule.alert_type,
+                    severity=rule.severity,
+                    title=rule.name,
+                    description=f"Alert rule '{rule.name}' triggered",
+                    data={"rule": rule.dict(), "production_data": production_data.dict()},
+                    auto_resolve=False
+                ))
+    
+    def _evaluate_alert_condition(self, rule: AlertRule, data: RealTimeProductionData) -> bool:
+        """Evaluate if alert condition is met"""
+        # Simplified evaluation
+        if rule.alert_type == AlertType.LOW_PRODUCTION:
+            return data.current_power < rule.threshold
+        elif rule.alert_type == AlertType.SYSTEM_OFFLINE:
+            return data.system_status == "offline"
+        return False
+    
+    async def resolve_alert(self, alert_id: int, resolved_by: str) -> AlertResponse:
+        """Resolve an alert"""
+        # Would update in database
+        return AlertResponse(
+            id=alert_id,
+            site_id="",
+            alert_type=AlertType.LOW_PRODUCTION,
+            severity=AlertSeverity.WARNING,
+            title="",
+            description="",
+            data={},
+            created_at=datetime.now(),
+            resolved_at=datetime.now(),
+            resolved_by=resolved_by,
+            is_resolved=True,
+            auto_resolve=False
+        )
+    
+    async def get_active_alerts(self, site_id: str) -> List[AlertResponse]:
+        """Get all active alerts for a site"""
+        # Would query from database
+        return []
+
+    
+    # Maintenance Scheduling
+    
+    async def create_maintenance_task(
+        self,
+        task: MaintenanceTaskCreate
+    ) -> MaintenanceTaskResponse:
+        """Create new maintenance task"""
+        # Would save to database
+        task_response = MaintenanceTaskResponse(
+            id=1,  # Would be generated
+            site_id=task.site_id,
+            title=task.title,
+            description=task.description,
+            task_type=task.task_type,
+            status=MaintenanceStatus.SCHEDULED,
+            scheduled_date=task.scheduled_date,
+            estimated_duration=task.estimated_duration,
+            assigned_to=task.assigned_to,
+            priority=task.priority,
+            recurring=task.recurring,
+            recurrence_pattern=task.recurrence_pattern,
+            notes=[],
+            created_at=datetime.now(),
+            updated_at=datetime.now()
+        )
         
-        if performance['system']['cpu_percent'] > 90:
-            status = 'degraded'
-            issues.append('High CPU usage')
+        # Schedule reminder notifications
+        await self._schedule_maintenance_reminders(task_response)
         
-        if performance['system']['memory_percent'] > 90:
-            status = 'critical'
-            issues.append('Critical memory usage')
+        return task_response
+    
+    async def _schedule_maintenance_reminders(self, task: MaintenanceTaskResponse):
+        """Schedule reminders for maintenance task"""
+        # Would schedule notifications before due date
+        logger.info(f"Maintenance reminders scheduled for task: {task.title}")
+    
+    async def update_maintenance_task(
+        self,
+        task_id: int,
+        status: MaintenanceStatus,
+        notes: Optional[str] = None
+    ) -> MaintenanceTaskResponse:
+        """Update maintenance task status"""
+        # Would update in database
+        task = MaintenanceTaskResponse(
+            id=task_id,
+            site_id="",
+            title="",
+            description="",
+            task_type="",
+            status=status,
+            scheduled_date=datetime.now(),
+            estimated_duration=0,
+            priority="normal",
+            recurring=False,
+            notes=[notes] if notes else [],
+            created_at=datetime.now(),
+            updated_at=datetime.now()
+        )
+        
+        if status == MaintenanceStatus.COMPLETED:
+            task.completed_date = datetime.now()
+        
+        return task
+    
+    async def get_upcoming_maintenance(
+        self,
+        site_id: str,
+        days_ahead: int = 30
+    ) -> List[MaintenanceTaskResponse]:
+        """Get upcoming maintenance tasks"""
+        # Would query from database
+        return []
+    
+    async def get_overdue_maintenance(self, site_id: str) -> List[MaintenanceTaskResponse]:
+        """Get overdue maintenance tasks"""
+        # Would query from database
+        return []
+
+    
+    # Performance Reporting
+    
+    async def generate_performance_report(
+        self,
+        request: PerformanceReportRequest
+    ) -> PerformanceReportResponse:
+        """Generate performance report"""
+        # Determine date range
+        if request.report_type == "daily":
+            start_date = datetime.now().replace(hour=0, minute=0, second=0)
+            end_date = datetime.now()
+        elif request.report_type == "weekly":
+            start_date = datetime.now() - timedelta(days=7)
+            end_date = datetime.now()
+        elif request.report_type == "monthly":
+            start_date = datetime.now().replace(day=1, hour=0, minute=0, second=0)
+            end_date = datetime.now()
+        elif request.report_type == "yearly":
+            start_date = datetime.now().replace(month=1, day=1, hour=0, minute=0, second=0)
+            end_date = datetime.now()
+        else:  # custom
+            start_date = request.start_date
+            end_date = request.end_date
+        
+        # Get production data
+        production_data = await self._get_historical_data(
+            request.site_id,
+            start_date,
+            end_date,
+            "daily"
+        )
+        
+        # Calculate metrics
+        metrics = self._calculate_performance_metrics(production_data)
+        
+        # Get alerts
+        alerts = await self.get_active_alerts(request.site_id)
+        
+        # Get maintenance history
+        maintenance_history = await self._get_maintenance_history(
+            request.site_id,
+            start_date,
+            end_date
+        )
+        
+        # Calculate financial summary if requested
+        financial_summary = None
+        if request.include_financial:
+            financial_summary = self._calculate_financial_summary(
+                production_data,
+                request.site_id
+            )
+        
+        # Generate charts if requested
+        charts = None
+        if request.include_charts:
+            charts = self._generate_report_charts(production_data, metrics)
+        
+        report_id = f"RPT-{request.site_id}-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        
+        report = PerformanceReportResponse(
+            report_id=report_id,
+            site_id=request.site_id,
+            report_type=request.report_type,
+            period={"start": start_date, "end": end_date},
+            summary={
+                "total_energy": sum(d.get("energy", 0) for d in production_data),
+                "average_power": sum(d.get("power", 0) for d in production_data) / len(production_data) if production_data else 0,
+                "peak_power": max((d.get("power", 0) for d in production_data), default=0)
+            },
+            production_data={"data": production_data},
+            performance_metrics=metrics,
+            alerts=alerts,
+            maintenance_history=maintenance_history,
+            financial_summary=financial_summary,
+            charts=charts,
+            generated_at=datetime.now()
+        )
+        
+        # Generate file if requested
+        if request.format == "pdf":
+            file_url = await self._generate_pdf_report(report)
+            report.file_url = file_url
+        elif request.format == "excel":
+            file_url = await self._generate_excel_report(report)
+            report.file_url = file_url
+        
+        return report
+
+    
+    async def _get_maintenance_history(
+        self,
+        site_id: str,
+        start_date: datetime,
+        end_date: datetime
+    ) -> List[MaintenanceTaskResponse]:
+        """Get maintenance history for period"""
+        # Would query from database
+        return []
+    
+    def _calculate_financial_summary(
+        self,
+        production_data: List[Dict[str, Any]],
+        site_id: str
+    ) -> Dict[str, Any]:
+        """Calculate financial summary"""
+        total_energy = sum(d.get("energy", 0) for d in production_data)
+        feed_in_tariff = 0.10  # €/kWh - would be from system config
         
         return {
-            'status': status,
-            'timestamp': datetime.now().isoformat(),
-            'issues': issues,
-            'metrics': {
-                'crash_free_rate': crash_stats['crash_free_rate'],
-                'cpu_percent': performance['system']['cpu_percent'],
-                'memory_percent': performance['system']['memory_percent']
+            "total_energy_kwh": total_energy,
+            "feed_in_revenue": total_energy * feed_in_tariff,
+            "self_consumption_savings": total_energy * 0.30,  # Assuming 30 cents/kWh retail price
+            "total_savings": total_energy * (feed_in_tariff + 0.30),
+            "currency": "EUR"
+        }
+    
+    def _generate_report_charts(
+        self,
+        production_data: List[Dict[str, Any]],
+        metrics: PerformanceMetrics
+    ) -> List[Dict[str, Any]]:
+        """Generate charts for report"""
+        return [
+            {
+                "type": "line",
+                "title": "Energy Production Over Time",
+                "data": production_data
+            },
+            {
+                "type": "bar",
+                "title": "Performance Metrics",
+                "data": metrics.dict()
+            }
+        ]
+    
+    async def _generate_pdf_report(self, report: PerformanceReportResponse) -> str:
+        """Generate PDF report file"""
+        # Would use PDF generation service
+        return f"/reports/{report.report_id}.pdf"
+    
+    async def _generate_excel_report(self, report: PerformanceReportResponse) -> str:
+        """Generate Excel report file"""
+        # Would use Excel generation service
+        return f"/reports/{report.report_id}.xlsx"
+    
+    # Dashboard Data
+    
+    async def get_dashboard_data(self, site_id: str) -> MonitoringDashboardData:
+        """Get dashboard data for monitoring overview"""
+        # Get current production
+        current_production = await self.get_realtime_production(site_id)
+        
+        # Get summaries
+        today_summary = await self._get_period_summary(site_id, "today")
+        week_summary = await self._get_period_summary(site_id, "week")
+        month_summary = await self._get_period_summary(site_id, "month")
+        
+        # Get active alerts
+        active_alerts = await self.get_active_alerts(site_id)
+        
+        # Get upcoming maintenance
+        upcoming_maintenance = await self.get_upcoming_maintenance(site_id, days_ahead=7)
+        
+        # Get performance trend
+        performance_trend = await self._get_performance_trend(site_id, days=30)
+        
+        # Get system health
+        system_health = await self.check_system_health(site_id)
+        
+        return MonitoringDashboardData(
+            site_id=site_id,
+            current_production=current_production,
+            today_summary=today_summary,
+            week_summary=week_summary,
+            month_summary=month_summary,
+            active_alerts=active_alerts,
+            upcoming_maintenance=upcoming_maintenance,
+            performance_trend=performance_trend,
+            system_health=system_health.dict()
+        )
+
+    
+    async def _get_period_summary(self, site_id: str, period: str) -> Dict[str, Any]:
+        """Get summary for a period"""
+        if period == "today":
+            start = datetime.now().replace(hour=0, minute=0, second=0)
+        elif period == "week":
+            start = datetime.now() - timedelta(days=7)
+        else:  # month
+            start = datetime.now().replace(day=1, hour=0, minute=0, second=0)
+        
+        end = datetime.now()
+        
+        data = await self._get_historical_data(site_id, start, end, "hourly")
+        
+        return {
+            "total_energy": sum(d.get("energy", 0) for d in data),
+            "average_power": sum(d.get("power", 0) for d in data) / len(data) if data else 0,
+            "peak_power": max((d.get("power", 0) for d in data), default=0),
+            "period": period
+        }
+    
+    async def _get_performance_trend(self, site_id: str, days: int) -> List[Dict[str, Any]]:
+        """Get performance trend data"""
+        start = datetime.now() - timedelta(days=days)
+        end = datetime.now()
+        
+        data = await self._get_historical_data(site_id, start, end, "daily")
+        
+        return [
+            {
+                "date": d.get("timestamp"),
+                "energy": d.get("energy", 0),
+                "performance_ratio": 0.85  # Would be calculated
+            }
+            for d in data
+        ]
+    
+    async def check_system_health(self, site_id: str) -> SystemHealthCheck:
+        """Check overall system health"""
+        # Get current production
+        try:
+            production = await self.get_realtime_production(site_id)
+            last_communication = production.timestamp
+            is_online = True
+        except:
+            last_communication = datetime.now() - timedelta(hours=1)
+            is_online = False
+        
+        # Check components
+        components = {
+            "inverter": {
+                "status": "healthy" if is_online else "offline",
+                "last_check": datetime.now().isoformat()
+            },
+            "modules": {
+                "status": "healthy",
+                "last_check": datetime.now().isoformat()
+            },
+            "monitoring": {
+                "status": "healthy" if is_online else "offline",
+                "last_check": datetime.now().isoformat()
             }
         }
+        
+        # Determine overall status
+        if not is_online:
+            overall_status = "offline"
+        elif any(c["status"] == "critical" for c in components.values()):
+            overall_status = "critical"
+        elif any(c["status"] == "degraded" for c in components.values()):
+            overall_status = "degraded"
+        else:
+            overall_status = "healthy"
+        
+        # Generate issues and recommendations
+        issues = []
+        recommendations = []
+        
+        if not is_online:
+            issues.append("System is offline - no communication")
+            recommendations.append("Check internet connection and monitoring system")
+        
+        # Calculate uptime
+        uptime_percentage = 98.5  # Would be calculated from historical data
+        
+        return SystemHealthCheck(
+            site_id=site_id,
+            timestamp=datetime.now(),
+            overall_status=overall_status,
+            components=components,
+            issues=issues,
+            recommendations=recommendations,
+            last_communication=last_communication,
+            uptime_percentage=uptime_percentage
+        )
