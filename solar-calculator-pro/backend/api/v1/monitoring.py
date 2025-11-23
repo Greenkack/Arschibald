@@ -1,365 +1,270 @@
 """
-Monitoring API Endpoints
-
-Provides endpoints for post-release monitoring, crash reporting, and analytics.
-Requirement: 8.1 - Performance monitoring and tracking
+Solar Monitoring Integration API Endpoints
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import Optional, List
-from datetime import datetime
-from pydantic import BaseModel, Field
+from typing import List
 
-from backend.core.dependencies import get_db
-from backend.services.monitoring_service import MonitoringService
-
+from ...core.dependencies import get_db
+from ...services.monitoring_service import MonitoringService
+from ...models.monitoring_schemas import (
+    MonitoringSystemConfig, RealTimeProductionData,
+    PerformanceAnalysisRequest, PerformanceAnalysisResponse,
+    AlertCreate, AlertResponse, AlertRule,
+    MaintenanceTaskCreate, MaintenanceTaskResponse, MaintenanceStatus,
+    PerformanceReportRequest, PerformanceReportResponse,
+    MonitoringDashboardData, SystemHealthCheck
+)
 
 router = APIRouter(prefix="/monitoring", tags=["monitoring"])
 
 
-# ==================== Request/Response Models ====================
-
-class PerformanceMetricRequest(BaseModel):
-    metric_name: str = Field(..., description="Name of the metric")
-    value: float = Field(..., description="Metric value")
-    unit: str = Field(..., description="Unit of measurement")
-    metadata: dict = Field(default_factory=dict, description="Additional context")
+def get_monitoring_service(db: Session = Depends(get_db)) -> MonitoringService:
+    """Get monitoring service instance"""
+    return MonitoringService(db)
 
 
-class CrashReportRequest(BaseModel):
-    error_type: str = Field(..., description="Type of error")
-    error_message: str = Field(..., description="Error message")
-    stack_trace: str = Field(..., description="Full stack trace")
-    user_id: Optional[int] = Field(None, description="User ID")
-    app_version: Optional[str] = Field(None, description="Application version")
-    metadata: dict = Field(default_factory=dict, description="Additional context")
+# Monitoring System Connection
 
-
-class FeedbackRequest(BaseModel):
-    user_id: int = Field(..., description="User ID")
-    feedback_type: str = Field(..., description="Type of feedback")
-    title: str = Field(..., description="Feedback title")
-    description: str = Field(..., description="Detailed description")
-    rating: Optional[int] = Field(None, ge=1, le=5, description="Rating 1-5")
-    metadata: dict = Field(default_factory=dict, description="Additional context")
-
-
-class UpdateAdoptionRequest(BaseModel):
-    user_id: int = Field(..., description="User ID")
-    from_version: str = Field(..., description="Previous version")
-    to_version: str = Field(..., description="New version")
-    update_method: str = Field(..., description="Update method")
-    success: bool = Field(..., description="Update success")
-    duration_seconds: Optional[float] = Field(None, description="Update duration")
-
-
-# ==================== Performance Monitoring Endpoints ====================
-
-@router.post("/performance/track")
-async def track_performance_metric(
-    request: PerformanceMetricRequest,
-    db: Session = Depends(get_db)
+@router.post("/connect", response_model=dict)
+async def connect_monitoring_system(
+    config: MonitoringSystemConfig,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Track a performance metric
-    
-    **Example metrics:**
-    - api_response_time (ms)
-    - memory_usage (MB)
-    - cpu_usage (percent)
-    - database_query_time (ms)
-    """
-    service = MonitoringService(db)
-    
-    metric = service.track_performance_metric(
-        metric_name=request.metric_name,
-        value=request.value,
-        unit=request.unit,
-        metadata=request.metadata
-    )
-    
-    return {
-        "success": True,
-        "metric": metric
-    }
+    """Connect to monitoring system API"""
+    try:
+        result = await service.connect_monitoring_system(config)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to connect: {str(e)}"
+        )
 
 
-@router.get("/performance/summary")
-async def get_performance_summary(
-    start_date: Optional[datetime] = Query(None, description="Start date"),
-    end_date: Optional[datetime] = Query(None, description="End date"),
-    db: Session = Depends(get_db)
+# Real-time Production Tracking
+
+@router.get("/realtime/{site_id}", response_model=RealTimeProductionData)
+async def get_realtime_production(
+    site_id: str,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Get performance summary for a time period
-    
-    Returns system metrics, platform info, and performance statistics.
-    """
-    service = MonitoringService(db)
-    
-    summary = service.get_performance_summary(
-        start_date=start_date,
-        end_date=end_date
-    )
-    
-    return summary
+    """Get real-time production data"""
+    try:
+        data = await service.get_realtime_production(site_id)
+        return data
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get real-time data: {str(e)}"
+        )
 
 
-@router.get("/performance/trends/{metric_name}")
-async def get_performance_trends(
-    metric_name: str,
-    days: int = Query(7, ge=1, le=90, description="Number of days"),
-    db: Session = Depends(get_db)
+
+# Performance Analysis
+
+@router.post("/analyze", response_model=PerformanceAnalysisResponse)
+async def analyze_performance(
+    request: PerformanceAnalysisRequest,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Get performance trends for a specific metric
-    
-    Returns daily averages and trend analysis.
-    """
-    service = MonitoringService(db)
-    
-    trends = service.get_performance_trends(
-        metric_name=metric_name,
-        days=days
-    )
-    
-    return trends
+    """Analyze system performance"""
+    try:
+        analysis = await service.analyze_performance(request)
+        return analysis
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to analyze performance: {str(e)}"
+        )
 
 
-# ==================== Crash Reporting Endpoints ====================
+# Alert System
 
-@router.post("/crashes/report")
-async def report_crash(
-    request: CrashReportRequest,
-    db: Session = Depends(get_db)
+@router.post("/alerts", response_model=AlertResponse)
+async def create_alert(
+    alert: AlertCreate,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Report an application crash
-    
-    Captures error details, stack trace, and context for debugging.
-    """
-    service = MonitoringService(db)
-    
-    crash_report = service.report_crash(
-        error_type=request.error_type,
-        error_message=request.error_message,
-        stack_trace=request.stack_trace,
-        user_id=request.user_id,
-        app_version=request.app_version,
-        metadata=request.metadata
-    )
-    
-    return {
-        "success": True,
-        "crash_report": crash_report
-    }
+    """Create new alert"""
+    try:
+        result = await service.create_alert(alert)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create alert: {str(e)}"
+        )
 
 
-@router.get("/crashes/reports")
-async def get_crash_reports(
-    status: Optional[str] = Query(None, description="Filter by status"),
-    days: int = Query(7, ge=1, le=90, description="Number of days"),
-    limit: int = Query(100, ge=1, le=1000, description="Maximum results"),
-    db: Session = Depends(get_db)
+@router.get("/alerts/{site_id}", response_model=List[AlertResponse])
+async def get_active_alerts(
+    site_id: str,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Get crash reports
-    
-    Filter by status: new, investigating, resolved
-    """
-    service = MonitoringService(db)
-    
-    reports = service.get_crash_reports(
-        status=status,
-        days=days,
-        limit=limit
-    )
-    
-    return {
-        "total": len(reports),
-        "reports": reports
-    }
+    """Get active alerts for a site"""
+    try:
+        alerts = await service.get_active_alerts(site_id)
+        return alerts
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get alerts: {str(e)}"
+        )
 
 
-@router.get("/crashes/statistics")
-async def get_crash_statistics(
-    days: int = Query(7, ge=1, le=90, description="Number of days"),
-    db: Session = Depends(get_db)
+@router.put("/alerts/{alert_id}/resolve", response_model=AlertResponse)
+async def resolve_alert(
+    alert_id: int,
+    resolved_by: str,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Get crash statistics
-    
-    Returns crash counts, affected users, and crash-free rate.
-    """
-    service = MonitoringService(db)
-    
-    stats = service.get_crash_statistics(days=days)
-    
-    return stats
+    """Resolve an alert"""
+    try:
+        result = await service.resolve_alert(alert_id, resolved_by)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to resolve alert: {str(e)}"
+        )
 
 
-# ==================== User Feedback Endpoints ====================
-
-@router.post("/feedback/submit")
-async def submit_feedback(
-    request: FeedbackRequest,
-    db: Session = Depends(get_db)
+@router.post("/alerts/rules/{site_id}")
+async def add_alert_rule(
+    site_id: str,
+    rule: AlertRule,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Submit user feedback
-    
-    **Feedback types:**
-    - bug: Report a bug
-    - feature_request: Request a new feature
-    - improvement: Suggest an improvement
-    - praise: Positive feedback
-    """
-    service = MonitoringService(db)
-    
-    feedback = service.submit_feedback(
-        user_id=request.user_id,
-        feedback_type=request.feedback_type,
-        title=request.title,
-        description=request.description,
-        rating=request.rating,
-        metadata=request.metadata
-    )
-    
-    return {
-        "success": True,
-        "feedback": feedback
-    }
+    """Add alert rule"""
+    try:
+        service.add_alert_rule(site_id, rule)
+        return {"status": "success", "message": "Alert rule added"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to add alert rule: {str(e)}"
+        )
 
 
-@router.get("/feedback/summary")
-async def get_feedback_summary(
-    days: int = Query(30, ge=1, le=365, description="Number of days"),
-    db: Session = Depends(get_db)
+
+# Maintenance Scheduling
+
+@router.post("/maintenance", response_model=MaintenanceTaskResponse)
+async def create_maintenance_task(
+    task: MaintenanceTaskCreate,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Get feedback summary
-    
-    Returns feedback counts by type, average rating, and trending topics.
-    """
-    service = MonitoringService(db)
-    
-    summary = service.get_feedback_summary(days=days)
-    
-    return summary
+    """Create maintenance task"""
+    try:
+        result = await service.create_maintenance_task(task)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create maintenance task: {str(e)}"
+        )
 
 
-# ==================== Update Adoption Endpoints ====================
-
-@router.post("/updates/track")
-async def track_update_adoption(
-    request: UpdateAdoptionRequest,
-    db: Session = Depends(get_db)
+@router.put("/maintenance/{task_id}", response_model=MaintenanceTaskResponse)
+async def update_maintenance_task(
+    task_id: int,
+    status: MaintenanceStatus,
+    notes: str = None,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Track update adoption
-    
-    Records when users update to new versions.
-    """
-    service = MonitoringService(db)
-    
-    update_record = service.track_update_adoption(
-        user_id=request.user_id,
-        from_version=request.from_version,
-        to_version=request.to_version,
-        update_method=request.update_method,
-        success=request.success,
-        duration_seconds=request.duration_seconds
-    )
-    
-    return {
-        "success": True,
-        "update_record": update_record
-    }
+    """Update maintenance task"""
+    try:
+        result = await service.update_maintenance_task(task_id, status, notes)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update maintenance task: {str(e)}"
+        )
 
 
-@router.get("/updates/adoption/{version}")
-async def get_update_adoption_stats(
-    version: str,
-    db: Session = Depends(get_db)
+@router.get("/maintenance/{site_id}/upcoming", response_model=List[MaintenanceTaskResponse])
+async def get_upcoming_maintenance(
+    site_id: str,
+    days_ahead: int = 30,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Get update adoption statistics for a version
-    
-    Returns adoption rate, update methods, and timeline.
-    """
-    service = MonitoringService(db)
-    
-    stats = service.get_update_adoption_stats(version=version)
-    
-    return stats
+    """Get upcoming maintenance tasks"""
+    try:
+        tasks = await service.get_upcoming_maintenance(site_id, days_ahead)
+        return tasks
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get upcoming maintenance: {str(e)}"
+        )
 
 
-@router.get("/updates/distribution")
-async def get_version_distribution(
-    db: Session = Depends(get_db)
+@router.get("/maintenance/{site_id}/overdue", response_model=List[MaintenanceTaskResponse])
+async def get_overdue_maintenance(
+    site_id: str,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Get current version distribution across users
-    
-    Shows which versions users are running.
-    """
-    service = MonitoringService(db)
-    
-    distribution = service.get_version_distribution()
-    
-    return distribution
+    """Get overdue maintenance tasks"""
+    try:
+        tasks = await service.get_overdue_maintenance(site_id)
+        return tasks
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get overdue maintenance: {str(e)}"
+        )
 
 
-# ==================== Improvement Planning Endpoints ====================
+# Performance Reporting
 
-@router.get("/improvements/opportunities")
-async def analyze_improvement_opportunities(
-    days: int = Query(30, ge=1, le=365, description="Number of days"),
-    db: Session = Depends(get_db)
+@router.post("/reports", response_model=PerformanceReportResponse)
+async def generate_performance_report(
+    request: PerformanceReportRequest,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Analyze data to identify improvement opportunities
-    
-    Returns prioritized list of improvements based on crashes, feedback, and performance.
-    """
-    service = MonitoringService(db)
-    
-    opportunities = service.analyze_improvement_opportunities(days=days)
-    
-    return opportunities
+    """Generate performance report"""
+    try:
+        report = await service.generate_performance_report(request)
+        return report
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate report: {str(e)}"
+        )
 
 
-@router.post("/improvements/roadmap")
-async def create_improvement_roadmap(
-    opportunities: dict,
-    db: Session = Depends(get_db)
+# Dashboard
+
+@router.get("/dashboard/{site_id}", response_model=MonitoringDashboardData)
+async def get_dashboard_data(
+    site_id: str,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Create improvement roadmap from opportunities
-    
-    Organizes improvements into quarterly plan.
-    """
-    service = MonitoringService(db)
-    
-    roadmap = service.create_improvement_roadmap(opportunities=opportunities)
-    
-    return roadmap
+    """Get dashboard data"""
+    try:
+        data = await service.get_dashboard_data(site_id)
+        return data
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get dashboard data: {str(e)}"
+        )
 
 
-# ==================== Health Status Endpoint ====================
-
-@router.get("/health")
-async def get_health_status(
-    db: Session = Depends(get_db)
+@router.get("/health/{site_id}", response_model=SystemHealthCheck)
+async def check_system_health(
+    site_id: str,
+    service: MonitoringService = Depends(get_monitoring_service)
 ):
-    """
-    Get overall application health status
-    
-    Returns: healthy, degraded, or critical
-    """
-    service = MonitoringService(db)
-    
-    health = service.get_health_status()
-    
-    return health
+    """Check system health"""
+    try:
+        health = await service.check_system_health(site_id)
+        return health
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to check system health: {str(e)}"
+        )

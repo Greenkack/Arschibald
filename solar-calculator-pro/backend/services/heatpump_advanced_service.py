@@ -147,6 +147,17 @@ class EnvironmentalImpact:
     environmental_score: float
     carbon_footprint_reduction_percent: float
     equivalent_trees_planted: int
+    # Enhanced environmental metrics
+    lifetime_co2_savings_kg: float  # 25 years
+    carbon_footprint_kg_year: float
+    carbon_footprint_tracking: List[Dict[str, Any]]  # Yearly tracking
+    sustainability_rating: str  # A+, A, B, C, D, E, F
+    environmental_certifications: List[str]
+    renewable_energy_contribution_kwh: float
+    fossil_fuel_replacement_percent: float
+    air_quality_improvement_score: float
+    water_conservation_liters_year: float
+    noise_pollution_reduction_db: float
 
 
 
@@ -894,10 +905,13 @@ class HeatPumpAdvancedService(BaseService):
         electricity_co2_g_kwh: float = 400.0,  # Grid electricity CO2 intensity
         gas_co2_g_kwh: float = 200.0,
         oil_co2_g_kwh: float = 266.0,
-        renewable_energy_percent: float = 0.0
+        renewable_energy_percent: float = 0.0,
+        lifetime_years: int = 25,
+        building_area_m2: float = 150.0,
+        heat_pump_type: HeatPumpType = HeatPumpType.AIR_SOURCE
     ) -> EnvironmentalImpact:
         """
-        Analyze environmental impact of heat pump
+        Comprehensive environmental impact analysis of heat pump
         
         Args:
             annual_heating_demand_kwh: Annual heating demand
@@ -906,9 +920,12 @@ class HeatPumpAdvancedService(BaseService):
             gas_co2_g_kwh: CO2 intensity of gas
             oil_co2_g_kwh: CO2 intensity of oil
             renewable_energy_percent: Percentage of renewable energy in grid
+            lifetime_years: System lifetime for analysis
+            building_area_m2: Building area for calculations
+            heat_pump_type: Type of heat pump
             
         Returns:
-            EnvironmentalImpact with environmental analysis
+            EnvironmentalImpact with comprehensive environmental analysis
         """
         # Calculate heat pump electricity consumption
         hp_electricity_kwh = annual_heating_demand_kwh / heat_pump_cop
@@ -931,6 +948,39 @@ class HeatPumpAdvancedService(BaseService):
         co2_savings_vs_oil_kg = oil_co2_kg - hp_co2_kg
         annual_co2_savings_kg = max(co2_savings_vs_gas_kg, co2_savings_vs_oil_kg)
         
+        # Calculate lifetime CO2 savings (25 years)
+        # Account for grid decarbonization (assume 2% improvement per year)
+        lifetime_co2_savings_kg = 0.0
+        for year in range(lifetime_years):
+            year_grid_co2 = electricity_co2_g_kwh * (0.98 ** year)
+            year_effective_co2 = year_grid_co2 * (1 - renewable_energy_percent / 100)
+            year_hp_co2 = hp_electricity_kwh * year_effective_co2 / 1000
+            year_gas_co2 = gas_consumption_kwh * gas_co2_g_kwh / 1000
+            lifetime_co2_savings_kg += (year_gas_co2 - year_hp_co2)
+        
+        # Calculate carbon footprint per year
+        carbon_footprint_kg_year = hp_co2_kg
+        
+        # Create carbon footprint tracking (yearly)
+        carbon_footprint_tracking = []
+        cumulative_savings = 0.0
+        for year in range(1, min(lifetime_years + 1, 26)):
+            year_grid_co2 = electricity_co2_g_kwh * (0.98 ** (year - 1))
+            year_effective_co2 = year_grid_co2 * (1 - renewable_energy_percent / 100)
+            year_hp_co2 = hp_electricity_kwh * year_effective_co2 / 1000
+            year_gas_co2 = gas_consumption_kwh * gas_co2_g_kwh / 1000
+            year_savings = year_gas_co2 - year_hp_co2
+            cumulative_savings += year_savings
+            
+            carbon_footprint_tracking.append({
+                "year": year,
+                "hp_emissions_kg": round(year_hp_co2, 2),
+                "gas_emissions_kg": round(year_gas_co2, 2),
+                "annual_savings_kg": round(year_savings, 2),
+                "cumulative_savings_kg": round(cumulative_savings, 2),
+                "grid_co2_intensity_g_kwh": round(year_grid_co2, 2)
+            })
+        
         # Calculate primary energy factor
         # Heat pump: electricity * 1.8 (primary energy factor) / COP
         # Gas: direct consumption * 1.1
@@ -939,10 +989,15 @@ class HeatPumpAdvancedService(BaseService):
         primary_energy_factor = hp_primary_energy / gas_primary_energy if gas_primary_energy > 0 else 1.0
         
         # Calculate environmental score (0-100)
-        # Based on CO2 savings and renewable energy
-        co2_reduction_score = min(100, co2_savings_vs_gas_kg / gas_co2_kg * 100)
+        # Based on CO2 savings, renewable energy, and efficiency
+        co2_reduction_score = min(100, co2_savings_vs_gas_kg / gas_co2_kg * 100) if gas_co2_kg > 0 else 0
         renewable_score = renewable_energy_percent
-        environmental_score = (co2_reduction_score * 0.7 + renewable_score * 0.3)
+        efficiency_score = min(100, heat_pump_cop / 5.0 * 100)
+        environmental_score = (
+            co2_reduction_score * 0.5 + 
+            renewable_score * 0.3 + 
+            efficiency_score * 0.2
+        )
         
         # Calculate carbon footprint reduction
         carbon_footprint_reduction_percent = (co2_savings_vs_gas_kg / gas_co2_kg * 100) if gas_co2_kg > 0 else 0
@@ -950,6 +1005,42 @@ class HeatPumpAdvancedService(BaseService):
         # Calculate equivalent trees planted
         # One tree absorbs ~20 kg CO2 per year
         equivalent_trees_planted = int(annual_co2_savings_kg / 20)
+        
+        # Determine sustainability rating (A+ to F)
+        sustainability_rating = self._calculate_sustainability_rating(
+            environmental_score, 
+            carbon_footprint_reduction_percent,
+            renewable_energy_percent
+        )
+        
+        # Determine environmental certifications
+        environmental_certifications = self._determine_certifications(
+            heat_pump_cop,
+            renewable_energy_percent,
+            carbon_footprint_reduction_percent,
+            heat_pump_type
+        )
+        
+        # Calculate renewable energy contribution
+        renewable_energy_contribution_kwh = hp_electricity_kwh * renewable_energy_percent / 100
+        
+        # Calculate fossil fuel replacement
+        fossil_fuel_replacement_percent = (gas_consumption_kwh / (gas_consumption_kwh + hp_electricity_kwh) * 100) if (gas_consumption_kwh + hp_electricity_kwh) > 0 else 0
+        
+        # Calculate air quality improvement score
+        # Based on reduction of local combustion emissions
+        air_quality_improvement_score = self._calculate_air_quality_score(
+            co2_savings_vs_gas_kg,
+            building_area_m2
+        )
+        
+        # Calculate water conservation (heat pumps use less water than conventional systems)
+        # Gas boilers use water for combustion and condensation
+        water_conservation_liters_year = annual_heating_demand_kwh * 0.5  # Approximate
+        
+        # Calculate noise pollution reduction
+        # Modern heat pumps are quieter than old heating systems
+        noise_pollution_reduction_db = self._calculate_noise_reduction(heat_pump_type)
         
         return EnvironmentalImpact(
             annual_co2_savings_kg=annual_co2_savings_kg,
@@ -959,8 +1050,201 @@ class HeatPumpAdvancedService(BaseService):
             primary_energy_factor=primary_energy_factor,
             environmental_score=environmental_score,
             carbon_footprint_reduction_percent=carbon_footprint_reduction_percent,
-            equivalent_trees_planted=equivalent_trees_planted
+            equivalent_trees_planted=equivalent_trees_planted,
+            lifetime_co2_savings_kg=lifetime_co2_savings_kg,
+            carbon_footprint_kg_year=carbon_footprint_kg_year,
+            carbon_footprint_tracking=carbon_footprint_tracking,
+            sustainability_rating=sustainability_rating,
+            environmental_certifications=environmental_certifications,
+            renewable_energy_contribution_kwh=renewable_energy_contribution_kwh,
+            fossil_fuel_replacement_percent=fossil_fuel_replacement_percent,
+            air_quality_improvement_score=air_quality_improvement_score,
+            water_conservation_liters_year=water_conservation_liters_year,
+            noise_pollution_reduction_db=noise_pollution_reduction_db
         )
+    
+    def _calculate_sustainability_rating(
+        self,
+        environmental_score: float,
+        carbon_reduction_percent: float,
+        renewable_percent: float
+    ) -> str:
+        """Calculate sustainability rating (A+ to F)"""
+        # Weighted score
+        total_score = (
+            environmental_score * 0.5 +
+            carbon_reduction_percent * 0.3 +
+            renewable_percent * 0.2
+        )
+        
+        if total_score >= 90:
+            return "A+"
+        elif total_score >= 80:
+            return "A"
+        elif total_score >= 70:
+            return "B"
+        elif total_score >= 60:
+            return "C"
+        elif total_score >= 50:
+            return "D"
+        elif total_score >= 40:
+            return "E"
+        else:
+            return "F"
+    
+    def _determine_certifications(
+        self,
+        cop: float,
+        renewable_percent: float,
+        carbon_reduction_percent: float,
+        heat_pump_type: HeatPumpType
+    ) -> List[str]:
+        """Determine applicable environmental certifications"""
+        certifications = []
+        
+        # Energy efficiency certifications
+        if cop >= 4.5:
+            certifications.append("Energy Star Certified")
+            certifications.append("EU Energy Label A+++")
+        elif cop >= 4.0:
+            certifications.append("EU Energy Label A++")
+        elif cop >= 3.5:
+            certifications.append("EU Energy Label A+")
+        
+        # Renewable energy certifications
+        if renewable_percent >= 80:
+            certifications.append("100% Renewable Ready")
+        elif renewable_percent >= 50:
+            certifications.append("Renewable Energy Compatible")
+        
+        # Carbon reduction certifications
+        if carbon_reduction_percent >= 70:
+            certifications.append("Carbon Neutral Certified")
+        elif carbon_reduction_percent >= 50:
+            certifications.append("Low Carbon Technology")
+        
+        # Heat pump specific certifications
+        if heat_pump_type == HeatPumpType.GROUND_SOURCE:
+            certifications.append("Geothermal Certified")
+        
+        # Environmental management
+        certifications.append("ISO 14001 Compatible")
+        
+        # Refrigerant certifications
+        certifications.append("F-Gas Compliant")
+        certifications.append("Low GWP Refrigerant")
+        
+        return certifications
+    
+    def _calculate_air_quality_score(
+        self,
+        co2_savings_kg: float,
+        building_area_m2: float
+    ) -> float:
+        """Calculate air quality improvement score (0-100)"""
+        # Air quality improves by eliminating local combustion
+        # Score based on CO2 savings per m2
+        co2_per_m2 = co2_savings_kg / building_area_m2 if building_area_m2 > 0 else 0
+        
+        # Normalize to 0-100 scale
+        # Assume 50 kg CO2/m2/year is excellent
+        score = min(100, co2_per_m2 / 50 * 100)
+        
+        return score
+    
+    def _calculate_noise_reduction(self, heat_pump_type: HeatPumpType) -> float:
+        """Calculate noise pollution reduction in dB"""
+        # Compared to old oil/gas boilers
+        if heat_pump_type == HeatPumpType.GROUND_SOURCE:
+            return 15.0  # Very quiet, indoor unit only
+        elif heat_pump_type == HeatPumpType.WATER_SOURCE:
+            return 12.0  # Quiet, indoor unit only
+        elif heat_pump_type == HeatPumpType.AIR_SOURCE:
+            return 8.0  # Outdoor unit, but modern and quiet
+        else:
+            return 10.0  # Default
+    
+    @log_service_call(service_name="heatpump_advanced", log_timing=True)
+    @handle_service_errors(service_name="heatpump_advanced", error_message="Sustainability report generation failed")
+    def generate_sustainability_report(
+        self,
+        environmental_impact: EnvironmentalImpact,
+        system_details: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Generate comprehensive sustainability report
+        
+        Args:
+            environmental_impact: Environmental impact analysis results
+            system_details: Heat pump system details
+            
+        Returns:
+            Dictionary with sustainability report
+        """
+        report = {
+            "executive_summary": {
+                "sustainability_rating": environmental_impact.sustainability_rating,
+                "environmental_score": round(environmental_impact.environmental_score, 1),
+                "annual_co2_savings_tons": round(environmental_impact.annual_co2_savings_kg / 1000, 2),
+                "lifetime_co2_savings_tons": round(environmental_impact.lifetime_co2_savings_kg / 1000, 2),
+                "equivalent_trees": environmental_impact.equivalent_trees_planted
+            },
+            "carbon_footprint": {
+                "annual_footprint_kg": round(environmental_impact.carbon_footprint_kg_year, 2),
+                "reduction_vs_gas_percent": round(environmental_impact.carbon_footprint_reduction_percent, 1),
+                "tracking": environmental_impact.carbon_footprint_tracking
+            },
+            "renewable_energy": {
+                "grid_renewable_percent": environmental_impact.renewable_energy_percent,
+                "renewable_contribution_kwh": round(environmental_impact.renewable_energy_contribution_kwh, 0),
+                "fossil_fuel_replacement_percent": round(environmental_impact.fossil_fuel_replacement_percent, 1)
+            },
+            "environmental_benefits": {
+                "air_quality_score": round(environmental_impact.air_quality_improvement_score, 1),
+                "water_conservation_liters": round(environmental_impact.water_conservation_liters_year, 0),
+                "noise_reduction_db": environmental_impact.noise_pollution_reduction_db,
+                "primary_energy_factor": round(environmental_impact.primary_energy_factor, 2)
+            },
+            "certifications": environmental_impact.environmental_certifications,
+            "system_details": system_details,
+            "recommendations": self._generate_recommendations(environmental_impact)
+        }
+        
+        return report
+    
+    def _generate_recommendations(self, impact: EnvironmentalImpact) -> List[str]:
+        """Generate recommendations for improving environmental performance"""
+        recommendations = []
+        
+        if impact.renewable_energy_percent < 50:
+            recommendations.append(
+                "Consider switching to a green electricity tariff to increase renewable energy usage"
+            )
+        
+        if impact.environmental_score < 70:
+            recommendations.append(
+                "Improve building insulation to reduce heating demand and environmental impact"
+            )
+        
+        if impact.carbon_footprint_reduction_percent < 50:
+            recommendations.append(
+                "Consider combining with solar PV system for maximum carbon reduction"
+            )
+        
+        if impact.sustainability_rating in ["D", "E", "F"]:
+            recommendations.append(
+                "Upgrade to a more efficient heat pump model to improve sustainability rating"
+            )
+        
+        recommendations.append(
+            "Regular maintenance ensures optimal efficiency and environmental performance"
+        )
+        
+        recommendations.append(
+            "Monitor and optimize operation schedule to maximize renewable energy usage"
+        )
+        
+        return recommendations
     
     # ========== Helper Methods ==========
     
