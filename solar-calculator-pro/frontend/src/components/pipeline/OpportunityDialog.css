@@ -1,0 +1,69 @@
+.opportunity-dialog .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.opportunity-dialog .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.opportunity-dialog .form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.opportunity-dialog .form-field label {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.875rem;
+}
+
+.opportunity-dialog .form-field input,
+.opportunity-dialog .form-field textarea,
+.opportunity-dialog .form-field .p-dropdown,
+.opportunity-dialog .form-field .p-calendar {
+  width: 100%;
+}
+
+.opportunity-dialog .dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.opportunity-dialog .footer-left,
+.opportunity-dialog .footer-right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.opportunity-dialog .dialog-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-color-secondary);
+}
+
+@media (max-width: 768px) {
+  .opportunity-dialog .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .opportunity-dialog .dialog-footer {
+    flex-direction: column;
+  }
+  
+  .opportunity-dialog .footer-left,
+  .opportunity-dialog .footer-right {
+    width: 100%;
+    justify-content: stretch;
+  }
+  
+  .opportunity-dialog .footer-left button,
+  .opportunity-dialog .footer-right button {
+    flex: 1;
+  }
+}

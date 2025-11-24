@@ -1,0 +1,139 @@
+.pipeline-analytics {
+  padding: 1.5rem;
+}
+
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.analytics-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.date-filter {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metric-card {
+  text-align: center;
+}
+
+.metric-card .p-card-body {
+  padding: 1.5rem;
+}
+
+.metric-card .p-card-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.metric-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  margin-top: 0.5rem;
+}
+
+.metric-card.success .metric-value {
+  color: #10B981;
+}
+
+.metric-card.danger .metric-value {
+  color: #EF4444;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.forecast-header {
+  margin-bottom: 1.5rem;
+}
+
+.forecast-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.forecast-header p {
+  margin: 0;
+  color: var(--text-color-secondary);
+}
+
+.forecast-period {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.forecast-note {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.analytics-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  font-size: 1.25rem;
+  color: var(--text-color-secondary);
+}
+
+@media (max-width: 1200px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .pipeline-analytics {
+    padding: 1rem;
+  }
+  
+  .analytics-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .date-filter {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .date-filter .p-calendar,
+  .date-filter button {
+    width: 100%;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

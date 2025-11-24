@@ -1,457 +1,445 @@
-# Migration Scripts Documentation
+# Database Migration System
 
-This directory contains migration scripts for migrating data from the Streamlit application to the new Electron-based application.
+Comprehensive database migration system with validation, rollback, and progress tracking.
 
-## Overview
+## Features
 
-The migration system handles:
-- **Database Migration** (Requirement 5.1): SQLite database schema and data migration
-- **Settings Migration** (Requirement 5.2): Application settings and configuration
-- **Project Data Conversion** (Requirement 5.3): Project-specific data transformation
-- **User Data Migration** (Requirement 5.4): User accounts, preferences, and authentication
+- ✅ **Schema Migrations**: Add/modify tables and columns
+- ✅ **Data Migrations**: Transform and migrate data
+- ✅ **Validation**: Pre and post-migration validation
+- ✅ **Rollback**: Full rollback capabilities
+- ✅ **Progress Tracking**: Real-time progress updates
+- ✅ **Dependency Resolution**: Automatic dependency ordering
+- ✅ **Incremental Migration**: Migrate to specific versions
+- ✅ **Dry Run**: Test migrations without applying changes
 
-## Components
+## Quick Start
 
-### 1. Migration Manager (`migration_manager.py`)
+### 1. Create a Migration
 
-The main orchestrator that coordinates all migration tasks.
+```python
+from migration_manager import MigrationStep, MigrationType
 
-**Features:**
-- Automatic backup creation before migration
-- Sequential execution of all migration steps
-- Comprehensive validation
-- Automatic rollback on failure
-- Detailed migration reporting
+# Schema migration
+migration = MigrationStep(
+    id="001_add_user_email",
+    name="Add Email Column",
+    description="Add email column to users table",
+    type=MigrationType.SCHEMA,
+    up_sql="ALTER TABLE users ADD COLUMN email TEXT",
+    down_sql="ALTER TABLE users DROP COLUMN email"
+)
+```
 
-**Usage:**
+### 2. Register and Execute
+
 ```python
 from migration_manager import MigrationManager
 
-manager = MigrationManager(
-    source_path=Path("/path/to/streamlit/data"),
-    target_path=Path("/path/to/electron/data")
-)
+# Initialize manager
+manager = MigrationManager("sqlite:///database.db")
 
-report = manager.run_full_migration()
+# Register migration
+manager.register_migration(migration)
+
+# Execute migrations
+result = manager.migrate()
+print(f"Migrations executed: {result['migrations_executed']}")
 ```
 
-### 2. Database Migrator (`database_migrator.py`)
-
-Handles SQLite database migration with schema transformation support.
-
-**Features:**
-- Automatic table schema detection
-- Column mapping and renaming
-- Data transformation functions
-- Record count validation
-- Transaction management
-
-**Usage:**
-```python
-from database_migrator import DatabaseMigrator
-
-migrator = DatabaseMigrator(
-    source_db=Path("source.db"),
-    target_db=Path("target.db")
-)
-
-# Add schema mapping
-migrator.add_schema_mapping("users", {
-    "old_column": "new_column"
-})
-
-# Add data transformer
-def transform_user(row):
-    row['created_at'] = datetime.now().isoformat()
-    return row
-
-migrator.add_data_transformer("users", transform_user)
-
-# Run migration
-result = migrator.migrate()
-
-# Validate
-validation = migrator.validate_migration()
-```
-
-### 3. Settings Migrator (`settings_migrator.py`)
-
-Migrates application settings from various formats (JSON, YAML, INI, TOML).
-
-**Features:**
-- Multi-format support (JSON, YAML, INI, TOML)
-- Streamlit config to Electron config transformation
-- Settings consolidation
-- Format standardization to JSON
-
-**Usage:**
-```python
-from settings_migrator import SettingsMigrator
-
-migrator = SettingsMigrator(
-    source_path=Path("/path/to/source/settings"),
-    target_path=Path("/path/to/target/settings")
-)
-
-result = migrator.migrate()
-validation = migrator.validate_migration()
-```
-
-### 4. Project Data Converter (`project_data_converter.py`)
-
-Converts project-specific data to the new format.
-
-**Features:**
-- Project metadata transformation
-- Calculation data conversion
-- 3D visualization data migration
-- PDF configuration migration
-- File attachment copying
-
-**Usage:**
-```python
-from project_data_converter import ProjectDataConverter
-
-converter = ProjectDataConverter(
-    source_path=Path("/path/to/source/projects"),
-    target_path=Path("/path/to/target/projects")
-)
-
-result = converter.convert()
-validation = converter.validate_conversion()
-```
-
-### 5. User Data Migrator (`user_data_migrator.py`)
-
-Migrates user accounts and preferences with security considerations.
-
-**Features:**
-- Password hashing with bcrypt
-- Role mapping
-- User preferences migration
-- Default admin creation
-- Email validation
-
-**Usage:**
-```python
-from user_data_migrator import UserDataMigrator
-
-migrator = UserDataMigrator(
-    source_path=Path("/path/to/source/users"),
-    target_path=Path("/path/to/target/users")
-)
-
-result = migrator.migrate()
-validation = migrator.validate_migration()
-```
-
-## CLI Tool
-
-The `migrate_cli.py` provides a command-line interface for running migrations.
-
-### Full Migration
-
-```bash
-python migrate_cli.py full /path/to/streamlit/data /path/to/electron/data
-```
-
-### Individual Migrations
-
-```bash
-# Database only
-python migrate_cli.py database /path/to/source.db /path/to/target.db
-
-# Settings only
-python migrate_cli.py settings /path/to/source/settings /path/to/target/settings
-
-# Projects only
-python migrate_cli.py projects /path/to/source/projects /path/to/target/projects
-
-# Users only
-python migrate_cli.py users /path/to/source/users /path/to/target/users
-```
-
-## Migration Process
-
-### 1. Pre-Migration Checklist
-
-- [ ] Backup all source data
-- [ ] Verify source data integrity
-- [ ] Ensure sufficient disk space
-- [ ] Stop Streamlit application
-- [ ] Review migration logs directory
-
-### 2. Running Migration
-
-```bash
-# Full migration with all steps
-python migrate_cli.py full /path/to/streamlit/data /path/to/electron/data
-```
-
-### 3. Post-Migration Validation
-
-The migration automatically validates:
-- Database record counts
-- File counts
-- Data integrity (checksums)
-- User account structure
-- Settings format
-
-### 4. Migration Report
-
-After migration, a detailed report is saved to `migration_report.json`:
-
-```json
-{
-  "started_at": "2024-01-01T10:00:00",
-  "completed_at": "2024-01-01T10:05:00",
-  "success": true,
-  "steps": [
-    {
-      "step": "backup",
-      "success": true,
-      "message": "Backup created successfully: 1234 files"
-    },
-    {
-      "step": "database_migration",
-      "success": true,
-      "message": "Migrated 5 databases, 25 tables, 10000 records"
-    }
-  ],
-  "errors": []
-}
-```
-
-## Rollback
-
-If migration fails, automatic rollback is attempted:
-
-1. Target directory is removed
-2. Data is restored from backup
-3. Rollback status is included in migration report
-
-## Data Transformations
-
-### Database Transformations
-
-Example user table transformation:
+### 3. Rollback if Needed
 
 ```python
-def user_transformer(row):
-    # Add created_at if missing
-    if 'created_at' not in row:
-        row['created_at'] = datetime.now().isoformat()
+# Rollback last migration
+result = manager.rollback()
+
+# Rollback to specific version
+result = manager.rollback(target_version="001_add_user_email")
+```
+
+## Migration Types
+
+### Schema Migrations
+
+Modify database structure:
+
+```python
+MigrationStep(
+    id="001_create_table",
+    name="Create Products Table",
+    type=MigrationType.SCHEMA,
+    up_sql="""
+        CREATE TABLE products (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            price REAL NOT NULL
+        )
+    """,
+    down_sql="DROP TABLE products"
+)
+```
+
+### Data Migrations
+
+Transform existing data:
+
+```python
+def transform_data(session):
+    transformer = DataTransformer(session)
     
-    # Hash password if plain text
-    if 'password' in row and not row['password'].startswith('$2b$'):
-        import bcrypt
-        row['password'] = bcrypt.hashpw(
-            row['password'].encode(), 
-            bcrypt.gensalt()
-        ).decode()
+    # Normalize text
+    transformer.normalize_text('users', 'email', lowercase=True)
     
-    return row
+    # Convert types
+    transformer.convert_type('products', 'price', float)
+    
+    return transformer.transformations_applied
+
+MigrationStep(
+    id="002_normalize_data",
+    name="Normalize User Data",
+    type=MigrationType.DATA,
+    up_function=transform_data
+)
 ```
 
-### Settings Transformations
+### Transformation Migrations
 
-Streamlit theme to Electron theme:
+Complex data transformations:
 
 ```python
-# Streamlit config
-{
-  "theme": {
-    "base": "light",
-    "primaryColor": "#1976d2"
-  }
-}
+def split_names(session):
+    transformer = DataTransformer(session)
+    
+    # Split full_name into first_name and last_name
+    transformer.split_column(
+        table='users',
+        source_column='full_name',
+        target_columns=['first_name', 'last_name'],
+        separator=' '
+    )
+    
+    return transformer.transformations_applied
 
-# Electron config
-{
-  "theme": {
-    "mode": "light",
-    "colors": {
-      "primary": "#1976d2"
-    }
-  }
-}
+MigrationStep(
+    id="003_split_names",
+    name="Split User Names",
+    type=MigrationType.TRANSFORMATION,
+    up_function=split_names
+)
 ```
 
-### Project Data Transformations
+## Data Transformation
 
-Old format:
-```json
-{
-  "project_name": "Solar Project 1",
-  "status": "active",
-  "system_size": 10.5
-}
-```
-
-New format:
-```json
-{
-  "id": 1,
-  "name": "Solar Project 1",
-  "type": "solar",
-  "status": "in_progress",
-  "data": {
-    "solar": {
-      "system_size": 10.5
-    }
-  },
-  "_migrated_at": "2024-01-01T10:00:00"
-}
-```
-
-## Error Handling
-
-All migration components include comprehensive error handling:
-
-- **Try-catch blocks** around all critical operations
-- **Detailed error logging** with stack traces
-- **Error collection** in migration reports
-- **Graceful degradation** - partial success is possible
-- **Automatic rollback** on critical failures
-
-## Logging
-
-Migration logs are saved to:
-- `migration_YYYYMMDD_HHMMSS.log` - Detailed log file
-- Console output - Real-time progress
-- `migration_report.json` - Structured report
-
-Log levels:
-- **INFO**: Normal progress messages
-- **WARNING**: Non-critical issues
-- **ERROR**: Failures that don't stop migration
-- **CRITICAL**: Failures that stop migration
-
-## Security Considerations
-
-### Password Handling
-
-- All passwords are hashed with bcrypt
-- Plain text passwords are automatically hashed during migration
-- Salt is generated for each password
-- Minimum password strength is not enforced during migration (should be enforced in application)
-
-### Default Admin User
-
-If no users exist after migration, a default admin is created:
-- **Username**: admin
-- **Password**: admin123 (MUST BE CHANGED)
-- **Role**: admin
-
-**⚠️ IMPORTANT**: Change the default admin password immediately after migration!
-
-### Data Encryption
-
-- Database files are not encrypted during migration
-- Sensitive data should be encrypted at application level
-- Consider encrypting backup files
-
-## Performance
-
-### Optimization Tips
-
-1. **Large Databases**: Use batch processing for tables with millions of records
-2. **Network Storage**: Copy data locally before migration
-3. **Parallel Processing**: Run independent migrations in parallel
-4. **Incremental Migration**: Migrate in stages for very large datasets
-
-### Expected Performance
-
-- **Small dataset** (< 1GB): 1-5 minutes
-- **Medium dataset** (1-10GB): 5-30 minutes
-- **Large dataset** (> 10GB): 30+ minutes
-
-## Troubleshooting
-
-### Common Issues
-
-**Issue**: Database migration fails with "database is locked"
-**Solution**: Ensure source database is not in use
-
-**Issue**: Settings migration fails with "invalid JSON"
-**Solution**: Validate source JSON files manually
-
-**Issue**: User migration creates default admin
-**Solution**: Check if source user files exist and are readable
-
-**Issue**: Validation fails with record count mismatch
-**Solution**: Check migration logs for specific table issues
-
-### Debug Mode
-
-Enable debug logging:
+### Available Transformations
 
 ```python
-import logging
-logging.basicConfig(level=logging.DEBUG)
+from data_transformer import DataTransformer
+
+transformer = DataTransformer(session)
+
+# 1. Transform column values
+transformer.transform_column(
+    table='users',
+    column='email',
+    transform_func=lambda x: x.lower()
+)
+
+# 2. Map values
+transformer.map_values(
+    table='users',
+    column='status',
+    value_map={'0': 'inactive', '1': 'active'}
+)
+
+# 3. Convert data types
+transformer.convert_type('products', 'price', float)
+
+# 4. Normalize text
+transformer.normalize_text(
+    table='users',
+    column='name',
+    lowercase=True,
+    strip=True
+)
+
+# 5. Split columns
+transformer.split_column(
+    table='users',
+    source_column='full_name',
+    target_columns=['first_name', 'last_name']
+)
+
+# 6. Merge columns
+transformer.merge_columns(
+    table='users',
+    source_columns=['first_name', 'last_name'],
+    target_column='full_name'
+)
+
+# 7. Transform JSON data
+transformer.migrate_json_data(
+    table='settings',
+    column='config',
+    transform_func=lambda data: {**data, 'version': 2}
+)
+
+# 8. Remove duplicates
+transformer.deduplicate_rows(
+    table='users',
+    unique_columns=['email'],
+    keep='first'
+)
 ```
 
-## Testing
+## Data Validation
 
-### Unit Tests
+### Built-in Validation Rules
 
-```bash
-pytest tests/test_migration_manager.py
-pytest tests/test_database_migrator.py
-pytest tests/test_settings_migrator.py
-pytest tests/test_project_data_converter.py
-pytest tests/test_user_data_migrator.py
+```python
+from data_validator import DataValidator
+
+validator = DataValidator(session)
+
+# Table and column existence
+validator.add_table_exists('users')
+validator.add_column_exists('users', 'email')
+
+# Data integrity
+validator.add_not_null('users', 'email')
+validator.add_unique('users', 'email')
+
+# Data types
+validator.add_data_type('products', 'price', float)
+
+# Value ranges
+validator.add_range('products', 'price', min_value=0, max_value=10000)
+
+# Pattern matching
+validator.add_pattern('users', 'email', r'^[\w\.-]+@[\w\.-]+\.\w+$')
+
+# Foreign keys
+validator.add_foreign_key('orders', 'user_id', 'users', 'id')
+
+# Custom validation
+validator.add_custom(
+    name='check_admin_exists',
+    description='At least one admin user must exist',
+    validation_func=lambda s: s.execute(
+        text("SELECT COUNT(*) FROM users WHERE role='admin'")
+    ).scalar() > 0
+)
+
+# Execute validation
+result = validator.validate()
+if not result['valid']:
+    print(f"Validation failed: {result['failed']} rules")
+    for failure in validator.get_failed_rules():
+        print(f"  - {failure['message']}")
 ```
 
-### Integration Tests
+## Progress Tracking
 
-```bash
-pytest tests/test_migration_integration.py
+### Real-time Progress Updates
+
+```python
+from progress_tracker import ProgressTracker, ProgressLogger
+
+# Create tracker
+tracker = ProgressTracker(total_steps=3)
+
+# Add console logging
+logger = ProgressLogger(tracker)
+
+# Track progress
+tracker.start_step("Creating tables")
+# ... do work ...
+tracker.complete_step()
+
+tracker.start_step("Migrating data")
+# ... do work ...
+tracker.update_step_progress(0.5)  # 50% complete
+# ... do more work ...
+tracker.complete_step()
+
+tracker.start_step("Creating indexes")
+# ... do work ...
+tracker.complete_step()
+
+# Get summary
+summary = tracker.get_summary()
+print(f"Progress: {summary['progress']['percentage']:.1f}%")
 ```
 
-### Test Data
+### WebSocket Progress Updates
 
-Test data is available in `tests/fixtures/`:
-- `test_database.db` - Sample database
-- `test_settings/` - Sample settings files
-- `test_projects/` - Sample project data
-- `test_users/` - Sample user data
+```python
+from progress_tracker import ProgressWebSocket
+
+# Send progress via WebSocket
+ws_progress = ProgressWebSocket(tracker, websocket_manager)
+
+# Progress updates will be automatically broadcast to connected clients
+```
+
+## Advanced Usage
+
+### Dependency Management
+
+```python
+# Migrations with dependencies
+migration_1 = MigrationStep(
+    id="001_create_users",
+    name="Create Users Table",
+    type=MigrationType.SCHEMA,
+    up_sql="CREATE TABLE users (...)",
+    dependencies=[]
+)
+
+migration_2 = MigrationStep(
+    id="002_create_orders",
+    name="Create Orders Table",
+    type=MigrationType.SCHEMA,
+    up_sql="CREATE TABLE orders (...)",
+    dependencies=["001_create_users"]  # Depends on users table
+)
+
+# Manager will execute in correct order
+manager.register_migration(migration_1)
+manager.register_migration(migration_2)
+manager.migrate()  # Executes 001 first, then 002
+```
+
+### Incremental Migration
+
+```python
+# Migrate to specific version
+manager.migrate(target_version="002_create_orders")
+
+# Check current status
+status = manager.get_migration_status()
+print(f"Current version: {status['current_version']}")
+print(f"Pending migrations: {status['pending_migrations']}")
+```
+
+### Dry Run
+
+```python
+# Test migration without applying changes
+result = manager.migrate(dry_run=True)
+print(f"Would execute {len(result['migrations_to_execute'])} migrations")
+```
+
+### Database Validation
+
+```python
+# Validate database integrity
+validation = manager.validate_database()
+
+if not validation['valid']:
+    print(f"Found {validation['issues_found']} issues:")
+    for issue in validation['issues']:
+        print(f"  [{issue['severity']}] {issue['message']}")
+```
+
+### Export Migration History
+
+```python
+# Export history to JSON
+manager.export_migration_history('migration_history.json')
+```
+
+## Best Practices
+
+### 1. Always Include Rollback
+
+```python
+# Good: Includes rollback
+MigrationStep(
+    id="001_add_column",
+    up_sql="ALTER TABLE users ADD COLUMN email TEXT",
+    down_sql="ALTER TABLE users DROP COLUMN email"
+)
+
+# Bad: No rollback
+MigrationStep(
+    id="001_add_column",
+    up_sql="ALTER TABLE users ADD COLUMN email TEXT"
+    # Missing down_sql!
+)
+```
+
+### 2. Add Validation
+
+```python
+def validate(session):
+    validator = DataValidator(session)
+    validator.add_column_exists('users', 'email')
+    validator.add_not_null('users', 'email')
+    return validator.validate()['valid']
+
+MigrationStep(
+    id="001_add_email",
+    up_sql="ALTER TABLE users ADD COLUMN email TEXT NOT NULL",
+    down_sql="ALTER TABLE users DROP COLUMN email",
+    validation_function=validate
+)
+```
+
+### 3. Use Batch Processing
+
+```python
+# Process large datasets in batches
+transformer.transform_column(
+    table='users',
+    column='email',
+    transform_func=lambda x: x.lower(),
+    batch_size=1000  # Process 1000 rows at a time
+)
+```
+
+### 4. Track Progress
+
+```python
+def migrate_with_progress(session):
+    tracker = ProgressTracker(total_steps=3)
+    transformer = DataTransformer(session)
+    
+    tracker.start_step("Step 1")
+    # ... work ...
+    tracker.complete_step()
+    
+    tracker.start_step("Step 2")
+    # ... work ...
+    tracker.complete_step()
+    
+    return transformer.transformations_applied
+```
+
+### 5. Handle Errors Gracefully
+
+```python
+def safe_migration(session):
+    try:
+        # Attempt migration
+        result = perform_migration(session)
+        return result
+    except Exception as e:
+        logger.error(f"Migration failed: {str(e)}")
+        # Rollback is automatic
+        raise
+```
 
 ## Requirements
 
-### Python Dependencies
-
-```
-sqlite3 (built-in)
-json (built-in)
-pathlib (built-in)
-bcrypt>=4.0.0
-pyyaml>=6.0
-toml>=0.10.2
-```
-
-### System Requirements
-
 - Python 3.10+
-- Sufficient disk space (2x source data size)
-- Read/write permissions on source and target directories
+- SQLAlchemy 2.0+
+- Database: SQLite, PostgreSQL, MySQL
 
-## Support
+## Related Documentation
 
-For issues or questions:
-1. Check migration logs
-2. Review this documentation
-3. Check migration report JSON
-4. Enable debug logging
-5. Contact development team
-
-## Version History
-
-- **1.0.0** (2024-01-01): Initial release
-  - Database migration
-  - Settings migration
-  - Project data conversion
-  - User data migration
-  - CLI tool
-  - Validation system
-  - Rollback functionality
+- [Migration Manager API](migration_manager.py)
+- [Data Transformer API](data_transformer.py)
+- [Data Validator API](data_validator.py)
+- [Progress Tracker API](progress_tracker.py)
+- [Example Migrations](examples/)
