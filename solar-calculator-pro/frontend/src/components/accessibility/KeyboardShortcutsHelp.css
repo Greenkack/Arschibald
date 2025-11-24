@@ -1,0 +1,201 @@
+.shortcuts-dialog .p-dialog-content {
+  padding: 0;
+}
+
+.shortcuts-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.shortcuts-search {
+  position: sticky;
+  top: 0;
+  background: var(--surface-0);
+  z-index: 1;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.shortcuts-category {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shortcuts-category h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.shortcuts-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--surface-50);
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.shortcut-item:hover {
+  background: var(--surface-100);
+}
+
+.shortcut-description {
+  flex: 1;
+  color: var(--text-color);
+  font-size: 0.9375rem;
+}
+
+.shortcut-keys {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--surface-0);
+  border: 1px solid var(--surface-border);
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+  box-shadow: 0 2px 0 var(--surface-border);
+}
+
+.key-separator {
+  color: var(--text-color-secondary);
+  font-weight: 600;
+  margin: 0 0.25rem;
+}
+
+.shortcuts-tip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--primary-50);
+  border-radius: 6px;
+  color: var(--primary-color);
+  font-size: 0.875rem;
+}
+
+.shortcuts-tip i {
+  font-size: 1.25rem;
+}
+
+.shortcuts-tip kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  padding: 0.125rem 0.375rem;
+  background: var(--surface-0);
+  border: 1px solid var(--primary-color);
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-color-secondary);
+}
+
+.shortcuts-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+/* Scrollbar styling */
+.shortcuts-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.shortcuts-list::-webkit-scrollbar-track {
+  background: var(--surface-50);
+  border-radius: 4px;
+}
+
+.shortcuts-list::-webkit-scrollbar-thumb {
+  background: var(--surface-300);
+  border-radius: 4px;
+}
+
+.shortcuts-list::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-400);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .shortcuts-dialog {
+    width: 95vw !important;
+  }
+
+  .shortcuts-content {
+    padding: 1rem;
+  }
+
+  .shortcut-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .shortcuts-list {
+    max-height: 400px;
+  }
+}
+
+/* High contrast mode */
+.high-contrast .key {
+  border-width: 2px;
+  border-color: #000000;
+}
+
+.high-contrast .shortcut-item {
+  border: 1px solid #000000;
+}
+
+/* Reduced motion */
+.reduced-motion .shortcut-item {
+  transition: none;
+}
+
+/* Focus styles */
+.shortcut-item:focus-within {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}

@@ -1,0 +1,76 @@
+.drag-drop-demo {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.drag-drop-demo h1 {
+  margin-bottom: 1.5rem;
+  color: var(--text-color, #495057);
+}
+
+.drag-drop-demo .p-message {
+  margin-bottom: 2rem;
+}
+
+.drag-drop-demo .p-tabview {
+  margin-top: 2rem;
+}
+
+.uploaded-files {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: var(--surface-ground, #f8f9fa);
+  border-radius: 6px;
+}
+
+.uploaded-files h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-color, #495057);
+}
+
+.uploaded-files ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.uploaded-files li {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--surface-card, #ffffff);
+  border: 1px solid var(--surface-border, #dee2e6);
+  border-radius: 4px;
+}
+
+.card-zones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.card-zone h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-color, #495057);
+}
+
+.card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sample-widget {
+  padding: 1rem;
+  text-align: center;
+  color: var(--text-color-secondary, #6c757d);
+}
+
+@media (max-width: 768px) {
+  .card-zones {
+    grid-template-columns: 1fr;
+  }
+}

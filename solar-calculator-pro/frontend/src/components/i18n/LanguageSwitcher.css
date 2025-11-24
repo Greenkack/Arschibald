@@ -1,0 +1,155 @@
+/**
+ * Language Switcher Styles
+ */
+
+.language-switcher-dropdown {
+  min-width: 150px;
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.language-flag {
+  font-size: 1.5rem;
+}
+
+.language-name {
+  font-size: 0.95rem;
+}
+
+.language-selected {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.language-code {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.language-switcher-button {
+  font-size: 1.2rem;
+}
+
+.language-dialog {
+  width: 90vw;
+  max-width: 600px;
+}
+
+.language-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.language-card {
+  width: 100%;
+  height: 100px;
+  border: 2px solid var(--surface-border);
+  border-radius: 8px;
+  background: var(--surface-card);
+  transition: all 0.3s ease;
+}
+
+.language-card:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.language-card.active {
+  border-color: var(--primary-color);
+  background: var(--primary-color-light);
+}
+
+.language-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 100%;
+  position: relative;
+}
+
+.language-card-flag {
+  font-size: 2.5rem;
+}
+
+.language-card-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.language-card-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.language-switcher-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.language-menu-item {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.language-menu-item:hover {
+  background: var(--surface-hover);
+}
+
+.language-menu-item.active {
+  background: var(--primary-color-light);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* RTL Support */
+[dir='rtl'] .language-option {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .language-selected {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .language-card-check {
+  right: auto;
+  left: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .language-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .language-card {
+    height: 80px;
+  }
+
+  .language-card-flag {
+    font-size: 2rem;
+  }
+
+  .language-card-name {
+    font-size: 0.85rem;
+  }
+}

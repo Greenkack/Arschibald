@@ -1,0 +1,18 @@
+.theme-panel {
+  padding: 1.5rem;
+  background: var(--surface-card);
+  border-radius: 8px;
+}
+
+.theme-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.theme-panel-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
