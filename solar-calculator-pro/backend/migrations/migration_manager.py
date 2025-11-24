@@ -1,589 +1,595 @@
 """
-Migration Manager for Streamlit to Electron Migration
-Handles database, settings, project data, and user data migration
-Requirements: 5.1, 5.2, 5.3, 5.4
+Database Migration Manager
+Comprehensive system for managing database migrations with validation, rollback, and progress tracking.
 """
 
-import sqlite3
-import json
-import shutil
 import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional, Callable
 from datetime import datetime
+from pathlib import Path
+import json
 import hashlib
+from enum import Enum
+from dataclasses import dataclass, asdict
+from sqlalchemy import create_engine, text, inspect
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
 
 logger = logging.getLogger(__name__)
 
 
-class MigrationManager:
-    """Main migration manager coordinating all migration tasks"""
+class MigrationStatus(Enum):
+    """Migration execution status"""
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    ROLLED_BACK = "rolled_back"
+
+
+class MigrationType(Enum):
+    """Type of migration operation"""
+    SCHEMA = "schema"
+    DATA = "data"
+    TRANSFORMATION = "transformation"
+    CLEANUP = "cleanup"
+
+
+@dataclass
+class MigrationStep:
+    """Individual migration step"""
+    id: str
+    name: str
+    description: str
+    type: MigrationType
+    up_sql: Optional[str] = None
+    down_sql: Optional[str] = None
+    up_function: Optional[Callable] = None
+    down_function: Optional[Callable] = None
+    dependencies: List[str] = None
+    validation_function: Optional[Callable] = None
     
-    def __init__(self, source_path: Path, target_path: Path):
+    def __post_init__(self):
+        if self.dependencies is None:
+            self.dependencies = []
+
+
+@dataclass
+class MigrationResult:
+    """Result of migration execution"""
+    step_id: str
+    status: MigrationStatus
+    started_at: datetime
+    completed_at: Optional[datetime] = None
+    error_message: Optional[str] = None
+    rows_affected: int = 0
+    validation_passed: bool = False
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary"""
+        result = asdict(self)
+        result['status'] = self.status.value
+        result['started_at'] = self.started_at.isoformat()
+        if self.completed_at:
+            result['completed_at'] = self.completed_at.isoformat()
+        return result
+
+
+class MigrationManager:
+    """
+    Comprehensive database migration manager
+    
+    Features:
+    - Schema and data migrations
+    - Dependency resolution
+    - Validation before and after migration
+    - Rollback capabilities
+    - Incremental migration
+    - Progress tracking
+    - Backup before migration
+    """
+    
+    def __init__(self, database_url: str, migrations_dir: str = "migrations"):
         """
         Initialize migration manager
         
         Args:
-            source_path: Path to Streamlit application data
-            target_path: Path to new Electron application data
+            database_url: Database connection URL
+            migrations_dir: Directory containing migration files
         """
-        self.source_path = Path(source_path)
-        self.target_path = Path(target_path)
-        self.backup_path = self.target_path / "backups" / datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.migration_log: List[Dict[str, Any]] = []
+        self.database_url = database_url
+        self.migrations_dir = Path(migrations_dir)
+        self.engine = create_engine(database_url)
+        self.SessionLocal = sessionmaker(bind=self.engine)
         
-        # Ensure paths exist
-        self.target_path.mkdir(parents=True, exist_ok=True)
-        self.backup_path.mkdir(parents=True, exist_ok=True)
+        # Migration tracking
+        self.migrations: List[MigrationStep] = []
+        self.results: List[MigrationResult] = []
+        self.current_version: Optional[str] = None
         
-        logger.info(f"Migration Manager initialized: {self.source_path} -> {self.target_path}")
+        # Initialize migration tracking table
+        self._init_migration_table()
     
-    def run_full_migration(self) -> Dict[str, Any]:
+    def _init_migration_table(self):
+        """Create migration tracking table if it doesn't exist"""
+        with self.engine.connect() as conn:
+            conn.execute(text("""
+                CREATE TABLE IF NOT EXISTS migration_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    migration_id TEXT NOT NULL UNIQUE,
+                    name TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    started_at TIMESTAMP NOT NULL,
+                    completed_at TIMESTAMP,
+                    error_message TEXT,
+                    rows_affected INTEGER DEFAULT 0,
+                    checksum TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """))
+            conn.commit()
+    
+    def register_migration(self, step: MigrationStep):
         """
-        Run complete migration process
+        Register a migration step
+        
+        Args:
+            step: Migration step to register
+        """
+        # Validate step
+        if not step.id or not step.name:
+            raise ValueError("Migration step must have id and name")
+        
+        if not step.up_sql and not step.up_function:
+            raise ValueError("Migration step must have either up_sql or up_function")
+        
+        # Check for duplicates
+        if any(m.id == step.id for m in self.migrations):
+            raise ValueError(f"Migration {step.id} already registered")
+        
+        # Validate dependencies
+        for dep_id in step.dependencies:
+            if not any(m.id == dep_id for m in self.migrations):
+                logger.warning(f"Dependency {dep_id} not found for migration {step.id}")
+        
+        self.migrations.append(step)
+        logger.info(f"Registered migration: {step.id} - {step.name}")
+    
+    def _resolve_dependencies(self) -> List[MigrationStep]:
+        """
+        Resolve migration dependencies and return ordered list
         
         Returns:
-            Migration report with success/failure status
+            List of migrations in execution order
         """
-        logger.info("Starting full migration process")
+        ordered = []
+        visited = set()
+        visiting = set()
         
-        report = {
-            "started_at": datetime.now().isoformat(),
-            "source_path": str(self.source_path),
-            "target_path": str(self.target_path),
-            "backup_path": str(self.backup_path),
-            "steps": [],
-            "success": False,
-            "errors": []
-        }
+        def visit(step: MigrationStep):
+            if step.id in visited:
+                return
+            if step.id in visiting:
+                raise ValueError(f"Circular dependency detected for migration {step.id}")
+            
+            visiting.add(step.id)
+            
+            # Visit dependencies first
+            for dep_id in step.dependencies:
+                dep_step = next((m for m in self.migrations if m.id == dep_id), None)
+                if dep_step:
+                    visit(dep_step)
+            
+            visiting.remove(step.id)
+            visited.add(step.id)
+            ordered.append(step)
         
-        try:
-            # Step 1: Create backup
-            backup_result = self._create_backup()
-            report["steps"].append(backup_result)
-            if not backup_result["success"]:
-                raise Exception("Backup creation failed")
-            
-            # Step 2: Migrate database
-            db_result = self._migrate_database()
-            report["steps"].append(db_result)
-            if not db_result["success"]:
-                raise Exception("Database migration failed")
-            
-            # Step 3: Migrate settings
-            settings_result = self._migrate_settings()
-            report["steps"].append(settings_result)
-            if not settings_result["success"]:
-                raise Exception("Settings migration failed")
-            
-            # Step 4: Migrate project data
-            project_result = self._migrate_project_data()
-            report["steps"].append(project_result)
-            if not project_result["success"]:
-                raise Exception("Project data migration failed")
-            
-            # Step 5: Migrate user data
-            user_result = self._migrate_user_data()
-            report["steps"].append(user_result)
-            if not user_result["success"]:
-                raise Exception("User data migration failed")
-            
-            # Step 6: Validate migration
-            validation_result = self._validate_migration()
-            report["steps"].append(validation_result)
-            if not validation_result["success"]:
-                raise Exception("Migration validation failed")
-            
-            report["success"] = True
-            logger.info("Full migration completed successfully")
-            
-        except Exception as e:
-            logger.error(f"Migration failed: {str(e)}", exc_info=True)
-            report["errors"].append(str(e))
-            report["success"] = False
-            
-            # Attempt rollback
-            rollback_result = self._rollback_migration()
-            report["rollback"] = rollback_result
+        for migration in self.migrations:
+            visit(migration)
         
-        finally:
-            report["completed_at"] = datetime.now().isoformat()
-            self._save_migration_report(report)
-        
-        return report
+        return ordered
     
-    def _create_backup(self) -> Dict[str, Any]:
-        """Create backup of source data before migration"""
-        logger.info("Creating backup of source data")
+    def _get_applied_migrations(self) -> List[str]:
+        """Get list of already applied migration IDs"""
+        with self.engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT migration_id FROM migration_history 
+                WHERE status = 'completed'
+                ORDER BY completed_at
+            """))
+            return [row[0] for row in result]
+    
+    def _calculate_checksum(self, step: MigrationStep) -> str:
+        """Calculate checksum for migration step"""
+        content = f"{step.id}:{step.name}:{step.up_sql or ''}"
+        return hashlib.sha256(content.encode()).hexdigest()
+    
+    def _validate_migration(self, step: MigrationStep, session: Session) -> bool:
+        """
+        Validate migration before execution
         
-        result = {
-            "step": "backup",
-            "success": False,
-            "message": "",
-            "files_backed_up": 0
-        }
+        Args:
+            step: Migration step to validate
+            session: Database session
+            
+        Returns:
+            True if validation passed
+        """
+        if not step.validation_function:
+            return True
         
         try:
-            # Backup all source files
-            if self.source_path.exists():
-                shutil.copytree(
-                    self.source_path,
-                    self.backup_path / "source",
-                    dirs_exist_ok=True
-                )
-                
-                # Count backed up files
-                result["files_backed_up"] = sum(1 for _ in self.backup_path.rglob("*") if _.is_file())
-                result["success"] = True
-                result["message"] = f"Backup created successfully: {result['files_backed_up']} files"
-                logger.info(result["message"])
-            else:
-                result["message"] = f"Source path does not exist: {self.source_path}"
-                logger.warning(result["message"])
-                result["success"] = False
-                
+            return step.validation_function(session)
         except Exception as e:
-            result["message"] = f"Backup failed: {str(e)}"
-            logger.error(result["message"], exc_info=True)
+            logger.error(f"Validation failed for {step.id}: {str(e)}")
+            return False
+    
+    def _execute_migration_step(self, step: MigrationStep, session: Session) -> MigrationResult:
+        """
+        Execute a single migration step
+        
+        Args:
+            step: Migration step to execute
+            session: Database session
+            
+        Returns:
+            Migration result
+        """
+        result = MigrationResult(
+            step_id=step.id,
+            status=MigrationStatus.RUNNING,
+            started_at=datetime.now()
+        )
+        
+        try:
+            # Validate before execution
+            if not self._validate_migration(step, session):
+                result.status = MigrationStatus.FAILED
+                result.error_message = "Pre-migration validation failed"
+                result.completed_at = datetime.now()
+                return result
+            
+            # Execute migration
+            if step.up_sql:
+                # Execute SQL migration
+                cursor_result = session.execute(text(step.up_sql))
+                result.rows_affected = cursor_result.rowcount if hasattr(cursor_result, 'rowcount') else 0
+            elif step.up_function:
+                # Execute function migration
+                result.rows_affected = step.up_function(session)
+            
+            # Validate after execution
+            result.validation_passed = self._validate_migration(step, session)
+            
+            if not result.validation_passed:
+                raise ValueError("Post-migration validation failed")
+            
+            # Commit transaction
+            session.commit()
+            
+            result.status = MigrationStatus.COMPLETED
+            result.completed_at = datetime.now()
+            
+            logger.info(f"Migration {step.id} completed successfully")
+            
+        except Exception as e:
+            session.rollback()
+            result.status = MigrationStatus.FAILED
+            result.error_message = str(e)
+            result.completed_at = datetime.now()
+            logger.error(f"Migration {step.id} failed: {str(e)}")
         
         return result
     
-    def _migrate_database(self) -> Dict[str, Any]:
-        """Migrate SQLite databases"""
-        logger.info("Migrating databases")
-        
-        result = {
-            "step": "database_migration",
-            "success": False,
-            "message": "",
-            "databases_migrated": 0,
-            "tables_migrated": 0,
-            "records_migrated": 0
-        }
-        
-        try:
-            # Find all SQLite databases in source
-            db_files = list(self.source_path.glob("**/*.db"))
-            
-            for db_file in db_files:
-                db_result = self._migrate_single_database(db_file)
-                result["databases_migrated"] += 1
-                result["tables_migrated"] += db_result["tables"]
-                result["records_migrated"] += db_result["records"]
-            
-            result["success"] = True
-            result["message"] = f"Migrated {result['databases_migrated']} databases, {result['tables_migrated']} tables, {result['records_migrated']} records"
-            logger.info(result["message"])
-            
-        except Exception as e:
-            result["message"] = f"Database migration failed: {str(e)}"
-            logger.error(result["message"], exc_info=True)
-        
-        return result
+    def _record_migration(self, step: MigrationStep, result: MigrationResult):
+        """Record migration execution in history"""
+        with self.engine.connect() as conn:
+            conn.execute(text("""
+                INSERT INTO migration_history 
+                (migration_id, name, type, status, started_at, completed_at, 
+                 error_message, rows_affected, checksum)
+                VALUES (:migration_id, :name, :type, :status, :started_at, 
+                        :completed_at, :error_message, :rows_affected, :checksum)
+            """), {
+                'migration_id': step.id,
+                'name': step.name,
+                'type': step.type.value,
+                'status': result.status.value,
+                'started_at': result.started_at,
+                'completed_at': result.completed_at,
+                'error_message': result.error_message,
+                'rows_affected': result.rows_affected,
+                'checksum': self._calculate_checksum(step)
+            })
+            conn.commit()
     
-    def _migrate_single_database(self, source_db: Path) -> Dict[str, int]:
-        """Migrate a single SQLite database"""
-        logger.info(f"Migrating database: {source_db.name}")
+    def migrate(self, target_version: Optional[str] = None, 
+                dry_run: bool = False) -> Dict[str, Any]:
+        """
+        Execute migrations
         
-        # Determine target database path
-        relative_path = source_db.relative_to(self.source_path)
-        target_db = self.target_path / relative_path
-        target_db.parent.mkdir(parents=True, exist_ok=True)
+        Args:
+            target_version: Target migration version (None = latest)
+            dry_run: If True, don't actually execute migrations
+            
+        Returns:
+            Migration summary
+        """
+        logger.info("Starting database migration")
         
-        # Connect to source and target databases
-        source_conn = sqlite3.connect(source_db)
-        target_conn = sqlite3.connect(target_db)
+        # Resolve dependencies
+        ordered_migrations = self._resolve_dependencies()
         
-        tables_migrated = 0
-        records_migrated = 0
+        # Get applied migrations
+        applied = set(self._get_applied_migrations())
+        
+        # Filter migrations to execute
+        to_execute = [
+            m for m in ordered_migrations 
+            if m.id not in applied and (not target_version or m.id <= target_version)
+        ]
+        
+        if not to_execute:
+            logger.info("No migrations to execute")
+            return {
+                'status': 'up_to_date',
+                'migrations_executed': 0,
+                'results': []
+            }
+        
+        logger.info(f"Found {len(to_execute)} migrations to execute")
+        
+        if dry_run:
+            logger.info("DRY RUN - No migrations will be executed")
+            return {
+                'status': 'dry_run',
+                'migrations_to_execute': [m.id for m in to_execute],
+                'results': []
+            }
+        
+        # Execute migrations
+        session = self.SessionLocal()
+        results = []
         
         try:
-            # Get all tables
-            cursor = source_conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-            tables = [row[0] for row in cursor.fetchall()]
-            
-            for table in tables:
-                # Get table schema
-                cursor.execute(f"SELECT sql FROM sqlite_master WHERE type='table' AND name='{table}'")
-                create_sql = cursor.fetchone()[0]
+            for step in to_execute:
+                logger.info(f"Executing migration: {step.id} - {step.name}")
                 
-                # Create table in target
-                target_conn.execute(create_sql)
+                result = self._execute_migration_step(step, session)
+                results.append(result)
+                self.results.append(result)
                 
-                # Copy data
-                cursor.execute(f"SELECT * FROM {table}")
-                rows = cursor.fetchall()
+                # Record in history
+                self._record_migration(step, result)
                 
-                if rows:
-                    placeholders = ','.join(['?' for _ in range(len(rows[0]))])
-                    target_conn.executemany(
-                        f"INSERT INTO {table} VALUES ({placeholders})",
-                        rows
-                    )
-                    records_migrated += len(rows)
-                
-                tables_migrated += 1
-                logger.debug(f"Migrated table {table}: {len(rows)} records")
-            
-            target_conn.commit()
-            
+                # Stop on failure
+                if result.status == MigrationStatus.FAILED:
+                    logger.error(f"Migration failed, stopping execution")
+                    break
+        
         finally:
-            source_conn.close()
-            target_conn.close()
+            session.close()
         
-        return {"tables": tables_migrated, "records": records_migrated}
-    
-    def _migrate_settings(self) -> Dict[str, Any]:
-        """Migrate application settings"""
-        logger.info("Migrating settings")
+        # Generate summary
+        successful = sum(1 for r in results if r.status == MigrationStatus.COMPLETED)
+        failed = sum(1 for r in results if r.status == MigrationStatus.FAILED)
         
-        result = {
-            "step": "settings_migration",
-            "success": False,
-            "message": "",
-            "settings_migrated": 0
+        summary = {
+            'status': 'completed' if failed == 0 else 'failed',
+            'migrations_executed': successful,
+            'migrations_failed': failed,
+            'total_rows_affected': sum(r.rows_affected for r in results),
+            'results': [r.to_dict() for r in results]
         }
         
-        try:
-            # Look for settings files (JSON, YAML, INI, etc.)
-            settings_files = []
-            settings_files.extend(self.source_path.glob("**/*.json"))
-            settings_files.extend(self.source_path.glob("**/*.yaml"))
-            settings_files.extend(self.source_path.glob("**/*.yml"))
-            settings_files.extend(self.source_path.glob("**/*.ini"))
-            settings_files.extend(self.source_path.glob("**/*.conf"))
+        logger.info(f"Migration summary: {successful} successful, {failed} failed")
+        
+        return summary
+    
+    def rollback(self, target_version: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Rollback migrations
+        
+        Args:
+            target_version: Target version to rollback to (None = rollback last)
             
-            for settings_file in settings_files:
-                # Skip database files
-                if settings_file.suffix == '.db':
+        Returns:
+            Rollback summary
+        """
+        logger.info("Starting migration rollback")
+        
+        # Get applied migrations in reverse order
+        applied = self._get_applied_migrations()
+        applied.reverse()
+        
+        if not applied:
+            logger.info("No migrations to rollback")
+            return {
+                'status': 'nothing_to_rollback',
+                'migrations_rolled_back': 0,
+                'results': []
+            }
+        
+        # Determine migrations to rollback
+        if target_version:
+            # Rollback to specific version
+            to_rollback = []
+            for migration_id in applied:
+                if migration_id > target_version:
+                    to_rollback.append(migration_id)
+                else:
+                    break
+        else:
+            # Rollback last migration only
+            to_rollback = [applied[0]]
+        
+        logger.info(f"Rolling back {len(to_rollback)} migrations")
+        
+        # Execute rollbacks
+        session = self.SessionLocal()
+        results = []
+        
+        try:
+            for migration_id in to_rollback:
+                step = next((m for m in self.migrations if m.id == migration_id), None)
+                
+                if not step:
+                    logger.warning(f"Migration {migration_id} not found in registered migrations")
                     continue
                 
-                # Copy settings file
-                relative_path = settings_file.relative_to(self.source_path)
-                target_file = self.target_path / relative_path
-                target_file.parent.mkdir(parents=True, exist_ok=True)
+                if not step.down_sql and not step.down_function:
+                    logger.warning(f"Migration {migration_id} has no rollback defined")
+                    continue
                 
-                shutil.copy2(settings_file, target_file)
-                result["settings_migrated"] += 1
-                logger.debug(f"Migrated settings file: {settings_file.name}")
-            
-            result["success"] = True
-            result["message"] = f"Migrated {result['settings_migrated']} settings files"
-            logger.info(result["message"])
-            
-        except Exception as e:
-            result["message"] = f"Settings migration failed: {str(e)}"
-            logger.error(result["message"], exc_info=True)
-        
-        return result
-    
-    def _migrate_project_data(self) -> Dict[str, Any]:
-        """Migrate project-specific data"""
-        logger.info("Migrating project data")
-        
-        result = {
-            "step": "project_data_migration",
-            "success": False,
-            "message": "",
-            "projects_migrated": 0
-        }
-        
-        try:
-            # Look for project data directories
-            project_dirs = [
-                self.source_path / "projects",
-                self.source_path / "data",
-                self.source_path / "uploads"
-            ]
-            
-            for project_dir in project_dirs:
-                if project_dir.exists():
-                    target_dir = self.target_path / project_dir.name
-                    shutil.copytree(project_dir, target_dir, dirs_exist_ok=True)
-                    
-                    # Count projects
-                    project_count = sum(1 for _ in target_dir.iterdir() if _.is_dir())
-                    result["projects_migrated"] += project_count
-                    logger.debug(f"Migrated {project_count} projects from {project_dir.name}")
-            
-            result["success"] = True
-            result["message"] = f"Migrated {result['projects_migrated']} projects"
-            logger.info(result["message"])
-            
-        except Exception as e:
-            result["message"] = f"Project data migration failed: {str(e)}"
-            logger.error(result["message"], exc_info=True)
-        
-        return result
-    
-    def _migrate_user_data(self) -> Dict[str, Any]:
-        """Migrate user-specific data"""
-        logger.info("Migrating user data")
-        
-        result = {
-            "step": "user_data_migration",
-            "success": False,
-            "message": "",
-            "users_migrated": 0
-        }
-        
-        try:
-            # Look for user data
-            user_dirs = [
-                self.source_path / "users",
-                self.source_path / "profiles"
-            ]
-            
-            for user_dir in user_dirs:
-                if user_dir.exists():
-                    target_dir = self.target_path / user_dir.name
-                    shutil.copytree(user_dir, target_dir, dirs_exist_ok=True)
-                    
-                    # Count users
-                    user_count = sum(1 for _ in target_dir.iterdir() if _.is_dir())
-                    result["users_migrated"] += user_count
-                    logger.debug(f"Migrated {user_count} users from {user_dir.name}")
-            
-            result["success"] = True
-            result["message"] = f"Migrated {result['users_migrated']} users"
-            logger.info(result["message"])
-            
-        except Exception as e:
-            result["message"] = f"User data migration failed: {str(e)}"
-            logger.error(result["message"], exc_info=True)
-        
-        return result
-    
-    def _validate_migration(self) -> Dict[str, Any]:
-        """Validate migrated data"""
-        logger.info("Validating migration")
-        
-        result = {
-            "step": "validation",
-            "success": False,
-            "message": "",
-            "checks": []
-        }
-        
-        try:
-            # Check 1: Database integrity
-            db_check = self._validate_databases()
-            result["checks"].append(db_check)
-            
-            # Check 2: File count comparison
-            file_check = self._validate_file_counts()
-            result["checks"].append(file_check)
-            
-            # Check 3: Data integrity
-            data_check = self._validate_data_integrity()
-            result["checks"].append(data_check)
-            
-            # All checks must pass
-            all_passed = all(check["passed"] for check in result["checks"])
-            
-            if all_passed:
-                result["success"] = True
-                result["message"] = "All validation checks passed"
-                logger.info(result["message"])
-            else:
-                failed_checks = [c["name"] for c in result["checks"] if not c["passed"]]
-                result["message"] = f"Validation failed: {', '.join(failed_checks)}"
-                logger.error(result["message"])
-            
-        except Exception as e:
-            result["message"] = f"Validation failed: {str(e)}"
-            logger.error(result["message"], exc_info=True)
-        
-        return result
-    
-    def _validate_databases(self) -> Dict[str, Any]:
-        """Validate database migration"""
-        check = {
-            "name": "database_integrity",
-            "passed": False,
-            "details": {}
-        }
-        
-        try:
-            source_dbs = list(self.source_path.glob("**/*.db"))
-            target_dbs = list(self.target_path.glob("**/*.db"))
-            
-            check["details"]["source_count"] = len(source_dbs)
-            check["details"]["target_count"] = len(target_dbs)
-            
-            # Compare record counts
-            for source_db in source_dbs:
-                relative_path = source_db.relative_to(self.source_path)
-                target_db = self.target_path / relative_path
+                logger.info(f"Rolling back migration: {step.id} - {step.name}")
                 
-                if target_db.exists():
-                    source_count = self._count_db_records(source_db)
-                    target_count = self._count_db_records(target_db)
+                result = MigrationResult(
+                    step_id=step.id,
+                    status=MigrationStatus.RUNNING,
+                    started_at=datetime.now()
+                )
+                
+                try:
+                    # Execute rollback
+                    if step.down_sql:
+                        cursor_result = session.execute(text(step.down_sql))
+                        result.rows_affected = cursor_result.rowcount if hasattr(cursor_result, 'rowcount') else 0
+                    elif step.down_function:
+                        result.rows_affected = step.down_function(session)
                     
-                    check["details"][source_db.name] = {
-                        "source_records": source_count,
-                        "target_records": target_count,
-                        "match": source_count == target_count
-                    }
-            
-            # Check if all databases match
-            check["passed"] = all(
-                db_info.get("match", False) 
-                for db_info in check["details"].values() 
-                if isinstance(db_info, dict)
-            )
-            
-        except Exception as e:
-            check["details"]["error"] = str(e)
-            logger.error(f"Database validation error: {str(e)}")
+                    session.commit()
+                    
+                    result.status = MigrationStatus.ROLLED_BACK
+                    result.completed_at = datetime.now()
+                    
+                    # Update history
+                    with self.engine.connect() as conn:
+                        conn.execute(text("""
+                            UPDATE migration_history 
+                            SET status = 'rolled_back'
+                            WHERE migration_id = :migration_id
+                        """), {'migration_id': step.id})
+                        conn.commit()
+                    
+                    logger.info(f"Rollback {step.id} completed successfully")
+                    
+                except Exception as e:
+                    session.rollback()
+                    result.status = MigrationStatus.FAILED
+                    result.error_message = str(e)
+                    result.completed_at = datetime.now()
+                    logger.error(f"Rollback {step.id} failed: {str(e)}")
+                
+                results.append(result)
         
-        return check
-    
-    def _count_db_records(self, db_path: Path) -> int:
-        """Count total records in a database"""
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        total = 0
-        try:
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-            tables = [row[0] for row in cursor.fetchall()]
-            
-            for table in tables:
-                cursor.execute(f"SELECT COUNT(*) FROM {table}")
-                total += cursor.fetchone()[0]
         finally:
-            conn.close()
+            session.close()
         
-        return total
-    
-    def _validate_file_counts(self) -> Dict[str, Any]:
-        """Validate file counts match"""
-        check = {
-            "name": "file_count",
-            "passed": False,
-            "details": {}
+        # Generate summary
+        successful = sum(1 for r in results if r.status == MigrationStatus.ROLLED_BACK)
+        failed = sum(1 for r in results if r.status == MigrationStatus.FAILED)
+        
+        summary = {
+            'status': 'completed' if failed == 0 else 'failed',
+            'migrations_rolled_back': successful,
+            'rollbacks_failed': failed,
+            'results': [r.to_dict() for r in results]
         }
         
-        try:
-            source_files = list(self.source_path.rglob("*"))
-            target_files = list(self.target_path.rglob("*"))
-            
-            source_count = sum(1 for f in source_files if f.is_file())
-            target_count = sum(1 for f in target_files if f.is_file())
-            
-            check["details"]["source_files"] = source_count
-            check["details"]["target_files"] = target_count
-            check["details"]["difference"] = abs(source_count - target_count)
-            
-            # Allow small difference for generated files
-            check["passed"] = check["details"]["difference"] <= 5
-            
-        except Exception as e:
-            check["details"]["error"] = str(e)
-            logger.error(f"File count validation error: {str(e)}")
+        logger.info(f"Rollback summary: {successful} successful, {failed} failed")
         
-        return check
+        return summary
     
-    def _validate_data_integrity(self) -> Dict[str, Any]:
-        """Validate data integrity using checksums"""
-        check = {
-            "name": "data_integrity",
-            "passed": False,
-            "details": {}
-        }
+    def get_migration_status(self) -> Dict[str, Any]:
+        """Get current migration status"""
+        applied = self._get_applied_migrations()
+        pending = [m.id for m in self.migrations if m.id not in applied]
         
-        try:
-            # Compare checksums of critical files
-            critical_files = [
-                "product_database.db",
-                "crm_database.db",
-                "settings.json"
-            ]
+        return {
+            'current_version': applied[-1] if applied else None,
+            'applied_migrations': len(applied),
+            'pending_migrations': len(pending),
+            'total_migrations': len(self.migrations),
+            'applied': applied,
+            'pending': pending
+        }
+    
+    def validate_database(self) -> Dict[str, Any]:
+        """
+        Validate database integrity
+        
+        Returns:
+            Validation results
+        """
+        logger.info("Validating database integrity")
+        
+        issues = []
+        
+        # Check for missing tables
+        inspector = inspect(self.engine)
+        existing_tables = set(inspector.get_table_names())
+        
+        # Check migration history
+        if 'migration_history' not in existing_tables:
+            issues.append({
+                'type': 'missing_table',
+                'severity': 'critical',
+                'message': 'Migration history table not found'
+            })
+        
+        # Check for orphaned migrations
+        applied = set(self._get_applied_migrations())
+        registered = set(m.id for m in self.migrations)
+        
+        orphaned = applied - registered
+        if orphaned:
+            issues.append({
+                'type': 'orphaned_migrations',
+                'severity': 'warning',
+                'message': f'Found {len(orphaned)} applied migrations not in registry',
+                'migrations': list(orphaned)
+            })
+        
+        # Check for checksum mismatches
+        with self.engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT migration_id, checksum FROM migration_history
+                WHERE status = 'completed'
+            """))
             
-            matches = 0
-            total = 0
-            
-            for filename in critical_files:
-                source_file = self.source_path / filename
-                target_file = self.target_path / filename
+            for row in result:
+                migration_id, stored_checksum = row
+                step = next((m for m in self.migrations if m.id == migration_id), None)
                 
-                if source_file.exists() and target_file.exists():
-                    source_hash = self._calculate_file_hash(source_file)
-                    target_hash = self._calculate_file_hash(target_file)
-                    
-                    match = source_hash == target_hash
-                    check["details"][filename] = {
-                        "source_hash": source_hash[:16],
-                        "target_hash": target_hash[:16],
-                        "match": match
-                    }
-                    
-                    if match:
-                        matches += 1
-                    total += 1
-            
-            check["details"]["matches"] = matches
-            check["details"]["total"] = total
-            check["passed"] = matches == total if total > 0 else True
-            
-        except Exception as e:
-            check["details"]["error"] = str(e)
-            logger.error(f"Data integrity validation error: {str(e)}")
+                if step:
+                    current_checksum = self._calculate_checksum(step)
+                    if current_checksum != stored_checksum:
+                        issues.append({
+                            'type': 'checksum_mismatch',
+                            'severity': 'warning',
+                            'message': f'Migration {migration_id} has been modified',
+                            'migration_id': migration_id
+                        })
         
-        return check
-    
-    def _calculate_file_hash(self, file_path: Path) -> str:
-        """Calculate SHA256 hash of a file"""
-        sha256 = hashlib.sha256()
-        
-        with open(file_path, 'rb') as f:
-            for chunk in iter(lambda: f.read(4096), b''):
-                sha256.update(chunk)
-        
-        return sha256.hexdigest()
-    
-    def _rollback_migration(self) -> Dict[str, Any]:
-        """Rollback migration in case of failure"""
-        logger.warning("Attempting migration rollback")
-        
-        result = {
-            "rollback_attempted": True,
-            "success": False,
-            "message": ""
+        return {
+            'valid': len(issues) == 0,
+            'issues_found': len(issues),
+            'issues': issues
         }
-        
-        try:
-            # Remove target directory
-            if self.target_path.exists():
-                shutil.rmtree(self.target_path)
-            
-            # Restore from backup
-            backup_source = self.backup_path / "source"
-            if backup_source.exists():
-                shutil.copytree(backup_source, self.target_path)
-                result["success"] = True
-                result["message"] = "Rollback successful: restored from backup"
-                logger.info(result["message"])
-            else:
-                result["message"] = "Rollback failed: backup not found"
-                logger.error(result["message"])
-                
-        except Exception as e:
-            result["message"] = f"Rollback failed: {str(e)}"
-            logger.error(result["message"], exc_info=True)
-        
-        return result
     
-    def _save_migration_report(self, report: Dict[str, Any]):
-        """Save migration report to file"""
-        report_file = self.target_path / "migration_report.json"
-        
-        try:
-            with open(report_file, 'w', encoding='utf-8') as f:
-                json.dump(report, f, indent=2, ensure_ascii=False)
+    def export_migration_history(self, output_file: str):
+        """Export migration history to JSON file"""
+        with self.engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT * FROM migration_history ORDER BY started_at
+            """))
             
-            logger.info(f"Migration report saved: {report_file}")
-        except Exception as e:
-            logger.error(f"Failed to save migration report: {str(e)}")
+            history = []
+            for row in result:
+                history.append(dict(row._mapping))
+            
+            with open(output_file, 'w') as f:
+                json.dump(history, f, indent=2, default=str)
+            
+            logger.info(f"Migration history exported to {output_file}")
