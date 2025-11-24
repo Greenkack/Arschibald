@@ -1,0 +1,239 @@
+/**
+ * Shortcut Manager Styles
+ */
+
+.shortcut-manager {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.shortcut-manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.shortcut-manager-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-actions label {
+  margin-left: 0.5rem;
+  margin-right: 1rem;
+}
+
+.shortcut-conflicts-warning {
+  margin-bottom: 1.5rem;
+}
+
+.shortcut-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.shortcut-filters .p-input-icon-left {
+  flex: 1;
+  min-width: 250px;
+}
+
+.category-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.shortcuts-table {
+  margin-top: 1rem;
+}
+
+.shortcut-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.category-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--surface-100);
+  color: var(--text-color);
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.context-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--surface-200);
+  color: var(--text-color);
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.shortcut-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.conflicts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.conflict-item {
+  padding: 1rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+}
+
+.conflict-item ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.conflict-item em {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-color-secondary);
+}
+
+.edit-shortcut-dialog .field {
+  margin-bottom: 1.5rem;
+}
+
+.edit-shortcut-dialog label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.edit-shortcut-dialog p {
+  margin: 0;
+  color: var(--text-color-secondary);
+}
+
+.edit-shortcut-dialog small {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-color-secondary);
+}
+
+/* Cheat Sheet Styles */
+.shortcut-cheat-sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.cheat-sheet-category {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.cheat-sheet-category h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+}
+
+.cheat-sheet-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cheat-sheet-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.cheat-sheet-item:hover {
+  background: var(--surface-hover);
+}
+
+.cheat-sheet-description {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.cheat-sheet-shortcut {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Print Styles for Cheat Sheet */
+@media print {
+  .shortcut-manager-header,
+  .shortcut-filters,
+  .p-tabview-nav {
+    display: none;
+  }
+
+  .shortcut-cheat-sheet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cheat-sheet-item {
+    page-break-inside: avoid;
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .shortcut-manager {
+    padding: 1rem;
+  }
+
+  .shortcut-manager-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .shortcut-filters {
+    flex-direction: column;
+  }
+
+  .shortcut-filters .p-input-icon-left {
+    width: 100%;
+  }
+
+  .shortcut-cheat-sheet {
+    grid-template-columns: 1fr;
+  }
+}
