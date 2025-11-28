@@ -95,8 +95,20 @@ warn_return_any = true
 warn_unused_configs = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "backend/tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "--cov=core --cov=models --cov=repositories --cov=services --cov-report=html --cov-report=term-missing"
+addopts = "--cov=backend/core --cov=backend/models --cov=backend/services --cov-report=html --cov-report=term-missing --cov-config=.coveragerc"
+
+[tool.coverage.run]
+source = ["backend"]
+omit = ["*/tests/*", "*/__pycache__/*", "*/migrations/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

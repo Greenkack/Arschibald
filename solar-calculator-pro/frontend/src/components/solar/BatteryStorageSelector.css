@@ -1,0 +1,420 @@
+/**
+ * Battery Storage Selector Styles
+ * 
+ * Task: 250. Battery Storage Configuration
+ */
+
+.battery-storage-selector {
+  width: 100%;
+}
+
+/* Selection Header */
+.selection-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.manufacturer-filter {
+  min-width: 200px;
+}
+
+.no-storage-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.no-storage-toggle label {
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.sizing-recommendation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--blue-50);
+  border-radius: 8px;
+  border-left: 4px solid var(--blue-500);
+}
+
+.sizing-recommendation i {
+  color: var(--blue-500);
+}
+
+/* Battery Table */
+.battery-table {
+  margin-top: 1rem;
+}
+
+.battery-table .p-datatable-header {
+  background: transparent;
+  border: none;
+}
+
+.battery-table .p-datatable-tbody > tr.no-storage-row {
+  background: var(--surface-50);
+  font-style: italic;
+}
+
+.battery-table .p-datatable-tbody > tr.no-storage-row:hover {
+  background: var(--surface-100);
+}
+
+.no-storage-label {
+  color: var(--text-color-secondary);
+  font-style: italic;
+}
+
+/* Battery Name */
+.battery-name {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.battery-name .manufacturer {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+.battery-name .model {
+  font-weight: 600;
+}
+
+/* Capacity Display */
+.capacity-display {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.capacity-display .capacity-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.capacity-display .capacity-unit {
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+}
+
+/* Price Display */
+.price-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.price-display .price-gross {
+  font-weight: 600;
+}
+
+.price-display .price-per-kwh {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+/* Features List */
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.feature-tag {
+  font-size: 0.75rem;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Battery Details */
+.battery-details {
+  padding: 1rem 0;
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.details-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.spec-card {
+  height: 100%;
+}
+
+.spec-card h4 {
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.spec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--surface-border);
+}
+
+.spec-item:last-child {
+  border-bottom: none;
+}
+
+.spec-label {
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.spec-value {
+  font-weight: 600;
+}
+
+.spec-value.highlight {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+/* Compatible Inverters */
+.compatible-inverters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.inverter-tag {
+  font-size: 0.85rem;
+}
+
+/* Features Section */
+.features-section h5 {
+  margin: 1rem 0 0.5rem 0;
+  color: var(--text-color-secondary);
+}
+
+.features-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ROI Analysis */
+.roi-analysis {
+  padding: 1rem 0;
+}
+
+.roi-parameters {
+  margin-bottom: 2rem;
+}
+
+.roi-parameters h4 {
+  margin: 0 0 1rem 0;
+}
+
+.parameter-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.parameter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.parameter-item label {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.parameter-item .p-inputnumber {
+  width: 150px;
+}
+
+.recalculate-btn {
+  height: fit-content;
+}
+
+/* ROI Results */
+.roi-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.roi-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.roi-card {
+  text-align: center;
+}
+
+.roi-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.roi-chart-card {
+  padding: 1rem;
+}
+
+/* Comparison Table */
+.battery-comparison {
+  padding: 1rem 0;
+}
+
+.comparison-table {
+  margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .manufacturer-filter {
+    width: 100%;
+  }
+  
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .parameter-grid {
+    flex-direction: column;
+  }
+  
+  .parameter-item .p-inputnumber {
+    width: 100%;
+  }
+  
+  .roi-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .metric-value {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .roi-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .sizing-recommendation {
+    background: var(--blue-900);
+    border-left-color: var(--blue-400);
+  }
+  
+  .sizing-recommendation i {
+    color: var(--blue-400);
+  }
+  
+  .battery-table .p-datatable-tbody > tr.no-storage-row {
+    background: var(--surface-800);
+  }
+  
+  .battery-table .p-datatable-tbody > tr.no-storage-row:hover {
+    background: var(--surface-700);
+  }
+}
+
+/* Animations */
+.battery-storage-selector .p-tabview-panels {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Selection Highlight */
+.battery-table .p-highlight {
+  background: var(--primary-100) !important;
+}
+
+.battery-table .p-highlight td {
+  color: var(--primary-900);
+}
+
+/* Tooltip Styling */
+.p-tooltip {
+  max-width: 300px;
+}
+
+.p-tooltip .p-tooltip-text {
+  font-size: 0.85rem;
+}

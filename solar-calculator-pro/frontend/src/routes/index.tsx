@@ -24,6 +24,13 @@ const ProductManagement = lazyWithRetry(() => import('@pages/ProductManagement')
 const Admin = lazyWithRetry(() => import('@pages/Admin'));
 const Settings = lazyWithRetry(() => import('@pages/Settings'));
 const Login = lazyWithRetry(() => import('@pages/Login'));
+const ProjectWizard = lazyWithRetry(() => import('@pages/ProjectWizard'));
+const CombinedSystem = lazyWithRetry(() => import('@pages/CombinedSystem'));
+const PDFGeneration = lazyWithRetry(() => import('@pages/PDFGeneration'));
+const Migration = lazyWithRetry(() => import('@pages/Migration'));
+const Profile = lazyWithRetry(() => import('@pages/Profile'));
+const UserManagement = lazyWithRetry(() => import('@pages/UserManagement'));
+const CommunicationHistory = lazyWithRetry(() => import('@pages/CommunicationHistory'));
 
 // Layout components
 const MainLayout = lazyWithRetry(() => import('@components/layout/MainLayout'));
@@ -188,6 +195,78 @@ export const router = createBrowserRouter([
         element: (
           <LazyRoute>
             <Settings />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'project-wizard',
+        element: (
+          <LazyRoute>
+            <ProjectWizard />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'solar-calculator',
+        element: (
+          <LazyRoute>
+            <SolarCalculator />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'heat-pump',
+        element: (
+          <LazyRoute>
+            <HeatPump />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'combined-system',
+        element: (
+          <LazyRoute>
+            <CombinedSystem />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'pdf-generation',
+        element: (
+          <LazyRoute>
+            <PDFGeneration />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'migration',
+        element: (
+          <LazyRoute>
+            <Migration />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <LazyRoute>
+            <Profile />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'user-management',
+        element: (
+          <LazyRoute>
+            <UserManagement />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'communication-history',
+        element: (
+          <LazyRoute>
+            <CommunicationHistory />
           </LazyRoute>
         ),
       },

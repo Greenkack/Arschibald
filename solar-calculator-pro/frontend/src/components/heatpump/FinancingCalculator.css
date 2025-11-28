@@ -1,0 +1,318 @@
+/**
+ * Financing Calculator Styles
+ * 
+ * Task: 256. Heat Pump Financing Options
+ */
+
+.financing-calculator {
+  background: var(--card-background, #ffffff);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+/* Header */
+.calculator-header {
+  margin-bottom: 20px;
+}
+
+.calculator-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a2e);
+}
+
+.calculator-description {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+/* Investment Summary */
+.investment-summary {
+  display: flex;
+  gap: 24px;
+  padding: 16px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.investment-summary .summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.investment-summary .label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+}
+
+.investment-summary .value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.investment-summary .value.highlight {
+  color: #fef08a;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary, #6b7280);
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: var(--input-background, #ffffff);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Error */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  color: var(--error-color, #dc2626);
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+}
+
+/* Results Section */
+.results-section {
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.results-section h4 {
+  margin: 0 0 16px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a2e);
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.result-card {
+  background: var(--card-background-secondary, #f9fafb);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+}
+
+.result-card.primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+}
+
+.result-card.primary .result-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.result-card.primary .result-value {
+  color: #ffffff;
+}
+
+.result-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-secondary, #6b7280);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.result-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+}
+
+.result-value.highlight {
+  color: var(--success-color, #10b981);
+}
+
+/* Amortization Section */
+.amortization-section {
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  padding-top: 20px;
+}
+
+.amortization-section h4 {
+  margin: 0 0 16px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a2e);
+}
+
+.amortization-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.amort-card {
+  background: var(--card-background-secondary, #f9fafb);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+}
+
+.amort-card.highlight {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+}
+
+.amort-card.highlight .amort-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.amort-card.highlight .amort-value {
+  color: #ffffff;
+}
+
+.amort-card.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+}
+
+.amort-card.success .amort-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.amort-card.success .amort-value {
+  color: #ffffff;
+}
+
+.amort-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-secondary, #6b7280);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.amort-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-weight: 500;
+  color: var(--text-secondary, #6b7280);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .financing-calculator {
+    padding: 16px;
+  }
+
+  .investment-summary {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .results-grid,
+  .amortization-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .results-grid,
+  .amortization-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .financing-calculator {
+    background: var(--card-background-dark, #1f2937);
+  }
+
+  .calculator-header h3,
+  .results-section h4,
+  .amortization-section h4,
+  .result-value,
+  .amort-value {
+    color: var(--text-primary-dark, #f9fafb);
+  }
+
+  .form-group input,
+  .form-group select {
+    background: var(--input-background-dark, #374151);
+    border-color: var(--border-color-dark, #4b5563);
+    color: var(--text-primary-dark, #f9fafb);
+  }
+
+  .result-card,
+  .amort-card {
+    background: var(--card-background-secondary-dark, #374151);
+  }
+
+  .loading-overlay {
+    background: rgba(31, 41, 55, 0.8);
+  }
+}

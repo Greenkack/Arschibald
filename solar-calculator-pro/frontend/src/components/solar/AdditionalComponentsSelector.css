@@ -1,0 +1,212 @@
+/**
+ * Additional Components Selector Styles
+ * 
+ * Task: 251. Additional Components (Wallbox, EMS, Optimizer)
+ */
+
+.additional-components-selector {
+  width: 100%;
+}
+
+.selector-content {
+  margin-bottom: 1.5rem;
+}
+
+/* Accordion Header */
+.accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.accordion-header i {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+/* Component Table */
+.component-table {
+  margin-top: 0.5rem;
+}
+
+.component-table .p-datatable-tbody > tr {
+  cursor: pointer;
+}
+
+.component-table .p-datatable-tbody > tr:hover {
+  background: var(--surface-hover);
+}
+
+.component-table .p-highlight {
+  background: var(--primary-100) !important;
+}
+
+/* Component Name */
+.component-name {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.component-name .manufacturer {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+.component-name .model {
+  font-weight: 600;
+}
+
+/* Price Display */
+.component-price {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.total-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.total-price small {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+}
+
+/* Features List */
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.feature-tag {
+  font-size: 0.7rem;
+}
+
+/* Cost Summary Card */
+.cost-summary-card {
+  background: var(--surface-card);
+  border: 2px solid var(--primary-color);
+}
+
+.cost-summary-card h4 {
+  margin: 0 0 1rem 0;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.cost-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cost-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--surface-border);
+}
+
+.cost-item:last-child {
+  border-bottom: none;
+}
+
+.item-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name small {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+.item-price {
+  font-weight: 500;
+}
+
+.cost-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cost-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+}
+
+.cost-row.total {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  padding-top: 0.5rem;
+  border-top: 2px solid var(--primary-color);
+}
+
+/* Selection Indicators */
+.text-green-500 {
+  color: #22c55e;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .component-table .p-datatable-thead > tr > th,
+  .component-table .p-datatable-tbody > tr > td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .accordion-header {
+    font-size: 0.9rem;
+  }
+  
+  .cost-summary-card {
+    margin-top: 1rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .cost-summary-card {
+    background: var(--surface-800);
+  }
+  
+  .component-table .p-highlight {
+    background: var(--primary-900) !important;
+  }
+}
+
+/* Animations */
+.additional-components-selector .p-accordion-content {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Message styling */
+.additional-components-selector .p-message {
+  margin-bottom: 1rem;
+}
+
+/* Button styling in tables */
+.component-table .p-button-sm {
+  width: 2rem;
+  height: 2rem;
+}

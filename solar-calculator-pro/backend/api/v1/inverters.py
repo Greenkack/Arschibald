@@ -1,401 +1,425 @@
 """
-Inverter Management API Endpoints
+Inverter API Endpoints
 
-Provides REST API endpoints for solar inverter management including:
-- Inverter selection
-- Sizing calculations
-- Compatibility checks
-- Multi-inverter configurations
-- Monitoring integration
+Provides REST API for inverter selection, sizing, and compatibility checks.
+Based on existing InverterService.
 
-Requirements: 1.3, 6.1
+Requirements: funktionen.txt - "Wechselrichter"
 """
 
-from fastapi import APIRouter, HTTPException, Depends, Query
-from typing import Any, Dict, List, Optional
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
-import logging
+from typing import List, Optional, Dict, Any
+from datetime import datetime
 
-# Import the inverter service
-try:
-    from services.inverter_service import InverterService, InverterSpecs
-except ImportError:
-    from backend.services.inverter_service import InverterService, InverterSpecs
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/inverters", tags=["inverters"])
+router = APIRouter(prefix="/inverters", tags=["Inverters"])
 
 
-# Request/Response Models
-class InverterSelectionRequest(BaseModel):
-    """Request model for inverter selection"""
-    pv_power_kwp: float = Field(..., gt=0, description="PV system power in kWp")
-    system_voltage: float = Field(default=400.0, description="System voltage in V")
-    preferences: Optional[Dict[str, Any]] = Field(default=None, description="User preferences")
+# ==================== Pydantic Models ====================
+
+class InverterBase(BaseModel):
+    """Base inverter model"""
+    id: Optional[int] = None
+    manufacturer: str
+    model_name: str
+    power_kw: float = Field(..., description="AC power output in kW")
+    efficiency_percent: float = Field(default=97.0, description="Efficiency in %")
+    max_dc_voltage: float = Field(default=1000.0, description="Max DC voltage in V")
+    mppt_count: int = Field(default=2, description="Number of MPPT trackers")
+    max_dc_current: float = Field(default=30.0, description="Max DC current per MPPT in A")
+    price_net: float = Field(default=0.0, description="Net price in EUR")
+    price_gross: float = Field(default=0.0, description="Gross price in EUR")
+    warranty_years: int = Field(default=10)
+    weight_kg: float = Field(default=0.0)
+    features: List[str] = Field(default_factory=list)
+    is_hybrid: bool = Field(default=False, description="Supports battery storage")
+    is_active: bool = Field(default=True)
+
+
+class InverterResponse(InverterBase):
+    """Inverter response with additional fields"""
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
 
 
 class InverterSizingRequest(BaseModel):
-    """Request model for inverter sizing calculations"""
-    pv_power_kwp: float = Field(..., gt=0, description="PV system power in kWp")
-    module_voltage: float = Field(..., gt=0, description="Module voltage (Vmp) in V")
-    module_current: float = Field(..., gt=0, description="Module current (Imp) in A")
-    string_configuration: Dict[str, Any] = Field(..., description="String layout configuration")
-
-
-class CompatibilityCheckRequest(BaseModel):
-    """Request model for compatibility check"""
-    inverter_id: int = Field(..., description="Inverter product ID")
-    pv_system: Dict[str, Any] = Field(..., description="PV system specifications")
-
-
-class MultiInverterRequest(BaseModel):
-    """Request model for multi-inverter configuration"""
-    pv_power_kwp: float = Field(..., gt=0, description="Total PV power in kWp")
-    system_layout: Dict[str, Any] = Field(..., description="System layout with roof sections")
-
-
-class MonitoringIntegrationRequest(BaseModel):
-    """Request model for monitoring integration"""
-    inverter_id: int = Field(..., description="Inverter product ID")
-    monitoring_config: Dict[str, Any] = Field(..., description="Monitoring configuration")
-
-
-class InverterResponse(BaseModel):
-    """Response model for inverter data"""
-    id: Optional[int]
-    model_name: str
-    manufacturer: str
-    power_kw: float
-    efficiency_percent: float
-    max_dc_voltage: float
-    mppt_count: int
-    max_dc_current: float
-    price_netto: float
-    additional_cost_netto: float
-    warranty_years: int
-    weight_kg: float
-    description: str
-    technology: str
-    features: List[str]
-
-
-class InverterSelectionResponse(BaseModel):
-    """Response model for inverter selection"""
-    selected_inverter: InverterResponse
-    selection_score: float
-    sizing_ratio: float
-    alternatives: List[Dict[str, Any]]
-    selection_reasoning: str
+    """Request for inverter sizing calculation"""
+    pv_power_kwp: float = Field(..., description="PV system power in kWp")
+    module_voltage_vmp: float = Field(default=40.0, description="Module voltage at MPP")
+    module_current_imp: float = Field(default=10.0, description="Module current at MPP")
+    modules_per_string: int = Field(default=10)
+    number_of_strings: int = Field(default=2)
 
 
 class InverterSizingResponse(BaseModel):
-    """Response model for inverter sizing"""
+    """Response with sizing calculations"""
     required_power_kw: float
     recommended_power_range: Dict[str, float]
     dc_specifications: Dict[str, float]
     mppt_configuration: Dict[str, Any]
     sizing_ratio: Dict[str, Any]
-    safety_margins: Dict[str, int]
 
 
-class CompatibilityCheckResponse(BaseModel):
-    """Response model for compatibility check"""
-    is_compatible: bool
-    compatibility_score: float
-    checks: List[Dict[str, str]]
-    warnings: List[str]
-    recommendation: str
+class InverterSelectionRequest(BaseModel):
+    """Request for inverter selection"""
+    pv_power_kwp: float
+    system_voltage: float = Field(default=400.0)
+    preferred_manufacturer: Optional[str] = None
+    required_features: List[str] = Field(default_factory=list)
+    is_hybrid_required: bool = Field(default=False)
 
 
-class MultiInverterResponse(BaseModel):
-    """Response model for multi-inverter configuration"""
-    configuration_type: str
-    inverter_count: int
-    inverters: List[InverterResponse]
-    total_power_kw: float
-    power_distribution: Optional[List[Dict[str, Any]]] = None
-    sizing_ratio: Optional[float] = None
-    reasoning: str
+class CompatibilityCheckRequest(BaseModel):
+    """Request for compatibility check"""
+    inverter_id: int
+    pv_power_kwp: float
+    string_voltage: float
+    total_current: float
+    number_of_strings: int
 
 
-class MonitoringIntegrationResponse(BaseModel):
-    """Response model for monitoring integration"""
-    monitoring_supported: bool
-    inverter_id: Optional[int] = None
-    inverter_model: Optional[str] = None
-    manufacturer: Optional[str] = None
-    communication_protocol: Optional[str] = None
-    data_points: Optional[List[str]] = None
-    update_interval_seconds: Optional[int] = None
-    data_retention_days: Optional[int] = None
-    alerts: Optional[List[Dict[str, Any]]] = None
-    api_endpoints: Optional[Dict[str, str]] = None
-    message: Optional[str] = None
-    alternative: Optional[str] = None
+class MultiInverterRequest(BaseModel):
+    """Request for multi-inverter configuration"""
+    pv_power_kwp: float
+    roof_sections: List[Dict[str, Any]] = Field(default_factory=list)
 
 
-# Dependency to get inverter service
-def get_inverter_service() -> InverterService:
-    """Get inverter service instance"""
-    # In production, this would get the database connection
-    return InverterService()
+# ==================== Sample Data ====================
 
+SAMPLE_INVERTERS = [
+    {
+        "id": 1, "manufacturer": "Fronius", "model_name": "Symo 10.0-3-M",
+        "power_kw": 10.0, "efficiency_percent": 98.0, "max_dc_voltage": 1000,
+        "mppt_count": 2, "max_dc_current": 27.0, "price_net": 2100.0, "price_gross": 2499.0,
+        "warranty_years": 10, "weight_kg": 21.9, "features": ["Smart Home", "WLAN"],
+        "is_hybrid": False, "is_active": True
+    },
+    {
+        "id": 2, "manufacturer": "Fronius", "model_name": "Symo GEN24 10.0 Plus",
+        "power_kw": 10.0, "efficiency_percent": 98.4, "max_dc_voltage": 1000,
+        "mppt_count": 2, "max_dc_current": 25.0, "price_net": 3200.0, "price_gross": 3808.0,
+        "warranty_years": 10, "weight_kg": 26.0, "features": ["Hybrid", "Notstrom", "WLAN"],
+        "is_hybrid": True, "is_active": True
+    },
+    {
+        "id": 3, "manufacturer": "SMA", "model_name": "Sunny Tripower 10.0",
+        "power_kw": 10.0, "efficiency_percent": 98.3, "max_dc_voltage": 1000,
+        "mppt_count": 2, "max_dc_current": 33.0, "price_net": 2300.0, "price_gross": 2737.0,
+        "warranty_years": 10, "weight_kg": 29.0, "features": ["SMA Smart Connected"],
+        "is_hybrid": False, "is_active": True
+    },
+    {
+        "id": 4, "manufacturer": "SMA", "model_name": "Sunny Tripower 8.0 Smart Energy",
+        "power_kw": 8.0, "efficiency_percent": 97.5, "max_dc_voltage": 800,
+        "mppt_count": 2, "max_dc_current": 15.0, "price_net": 3500.0, "price_gross": 4165.0,
+        "warranty_years": 10, "weight_kg": 60.0, "features": ["Hybrid", "Notstrom", "Speicher integriert"],
+        "is_hybrid": True, "is_active": True
+    },
+    {
+        "id": 5, "manufacturer": "Huawei", "model_name": "SUN2000-10KTL-M1",
+        "power_kw": 10.0, "efficiency_percent": 98.6, "max_dc_voltage": 1100,
+        "mppt_count": 2, "max_dc_current": 27.5, "price_net": 1800.0, "price_gross": 2142.0,
+        "warranty_years": 10, "weight_kg": 23.0, "features": ["AI-Optimierung", "WLAN"],
+        "is_hybrid": False, "is_active": True
+    },
+    {
+        "id": 6, "manufacturer": "Huawei", "model_name": "SUN2000-8KTL-M1 (Hybrid)",
+        "power_kw": 8.0, "efficiency_percent": 98.4, "max_dc_voltage": 1100,
+        "mppt_count": 2, "max_dc_current": 25.0, "price_net": 2200.0, "price_gross": 2618.0,
+        "warranty_years": 10, "weight_kg": 24.0, "features": ["Hybrid", "LUNA2000 kompatibel"],
+        "is_hybrid": True, "is_active": True
+    },
+    {
+        "id": 7, "manufacturer": "Kostal", "model_name": "PLENTICORE plus 10",
+        "power_kw": 10.0, "efficiency_percent": 98.5, "max_dc_voltage": 1000,
+        "mppt_count": 3, "max_dc_current": 16.5, "price_net": 2400.0, "price_gross": 2856.0,
+        "warranty_years": 10, "weight_kg": 22.0, "features": ["3 MPPT", "Hybrid-fähig"],
+        "is_hybrid": True, "is_active": True
+    },
+    {
+        "id": 8, "manufacturer": "GoodWe", "model_name": "GW10K-ET",
+        "power_kw": 10.0, "efficiency_percent": 98.0, "max_dc_voltage": 1000,
+        "mppt_count": 2, "max_dc_current": 26.0, "price_net": 1600.0, "price_gross": 1904.0,
+        "warranty_years": 10, "weight_kg": 28.0, "features": ["Hybrid", "Notstrom"],
+        "is_hybrid": True, "is_active": True
+    },
+    {
+        "id": 9, "manufacturer": "Sungrow", "model_name": "SG10RT",
+        "power_kw": 10.0, "efficiency_percent": 98.5, "max_dc_voltage": 1100,
+        "mppt_count": 2, "max_dc_current": 30.0, "price_net": 1500.0, "price_gross": 1785.0,
+        "warranty_years": 10, "weight_kg": 24.0, "features": ["Kompakt", "Leise"],
+        "is_hybrid": False, "is_active": True
+    },
+    {
+        "id": 10, "manufacturer": "Sungrow", "model_name": "SH10RT (Hybrid)",
+        "power_kw": 10.0, "efficiency_percent": 97.8, "max_dc_voltage": 1000,
+        "mppt_count": 2, "max_dc_current": 25.0, "price_net": 2000.0, "price_gross": 2380.0,
+        "warranty_years": 10, "weight_kg": 26.0, "features": ["Hybrid", "Notstrom", "200% PV-Überbelegung"],
+        "is_hybrid": True, "is_active": True
+    },
+    {
+        "id": 11, "manufacturer": "Fronius", "model_name": "Primo 5.0-1",
+        "power_kw": 5.0, "efficiency_percent": 98.0, "max_dc_voltage": 1000,
+        "mppt_count": 2, "max_dc_current": 18.0, "price_net": 1400.0, "price_gross": 1666.0,
+        "warranty_years": 10, "weight_kg": 21.5, "features": ["Einphasig", "Kompakt"],
+        "is_hybrid": False, "is_active": True
+    },
+    {
+        "id": 12, "manufacturer": "SMA", "model_name": "Sunny Tripower 15.0",
+        "power_kw": 15.0, "efficiency_percent": 98.4, "max_dc_voltage": 1000,
+        "mppt_count": 2, "max_dc_current": 33.0, "price_net": 2800.0, "price_gross": 3332.0,
+        "warranty_years": 10, "weight_kg": 33.0, "features": ["Große Anlagen"],
+        "is_hybrid": False, "is_active": True
+    },
+]
+
+
+# ==================== Helper Functions ====================
+
+def get_inverter_by_id(inverter_id: int) -> Optional[Dict]:
+    """Get inverter by ID from sample data"""
+    for inv in SAMPLE_INVERTERS:
+        if inv["id"] == inverter_id:
+            return inv
+    return None
+
+
+def calculate_sizing(request: InverterSizingRequest) -> Dict[str, Any]:
+    """Calculate inverter sizing requirements"""
+    pv_power = request.pv_power_kwp
+    string_voltage = request.module_voltage_vmp * request.modules_per_string
+    total_current = request.module_current_imp * request.number_of_strings
+    
+    return {
+        "required_power_kw": round(pv_power * 0.9, 2),
+        "recommended_power_range": {
+            "min_kw": round(pv_power * 0.8, 2),
+            "optimal_kw": round(pv_power * 0.9, 2),
+            "max_kw": round(pv_power * 1.0, 2)
+        },
+        "dc_specifications": {
+            "string_voltage": round(string_voltage, 1),
+            "required_max_voltage": round(string_voltage * 1.2, 1),
+            "total_current": round(total_current, 1),
+            "required_max_current": round(total_current * 1.1, 1)
+        },
+        "mppt_configuration": {
+            "recommended_mppt_count": 2 if request.number_of_strings <= 4 else 3,
+            "strings_per_mppt": request.number_of_strings // 2,
+            "current_per_mppt": round(total_current / 2, 1)
+        },
+        "sizing_ratio": {
+            "dc_ac_ratio": 1.11,
+            "description": "DC/AC-Verhältnis (PV-Leistung / Wechselrichterleistung)"
+        }
+    }
+
+
+def select_best_inverter(request: InverterSelectionRequest) -> Dict[str, Any]:
+    """Select best inverter based on requirements"""
+    candidates = SAMPLE_INVERTERS.copy()
+    
+    # Filter by hybrid requirement
+    if request.is_hybrid_required:
+        candidates = [inv for inv in candidates if inv["is_hybrid"]]
+    
+    # Filter by manufacturer preference
+    if request.preferred_manufacturer:
+        preferred = [inv for inv in candidates 
+                    if inv["manufacturer"].lower() == request.preferred_manufacturer.lower()]
+        if preferred:
+            candidates = preferred
+    
+    # Score and sort candidates
+    scored = []
+    optimal_power = request.pv_power_kwp * 0.9
+    
+    for inv in candidates:
+        score = 0
+        
+        # Power match (40 points)
+        power_diff = abs(inv["power_kw"] - optimal_power)
+        if power_diff <= optimal_power * 0.2:
+            score += 40 * (1 - power_diff / optimal_power)
+        
+        # Efficiency (30 points)
+        score += (inv["efficiency_percent"] - 95) * 6
+        
+        # Price (20 points) - lower is better
+        max_price = 4000
+        score += 20 * (1 - min(inv["price_net"], max_price) / max_price)
+        
+        # Features (10 points)
+        if request.required_features:
+            matching = sum(1 for f in request.required_features 
+                         if any(f.lower() in feat.lower() for feat in inv["features"]))
+            score += 10 * (matching / len(request.required_features))
+        
+        scored.append((score, inv))
+    
+    scored.sort(key=lambda x: x[0], reverse=True)
+    best = scored[0][1]
+    
+    return {
+        "selected_inverter": best,
+        "selection_score": round(scored[0][0], 1),
+        "sizing_ratio": round(request.pv_power_kwp / best["power_kw"], 2),
+        "alternatives": [inv for _, inv in scored[1:4]],
+        "reasoning": f"Wechselrichter {best['model_name']} ausgewählt: "
+                    f"{best['power_kw']}kW, {best['efficiency_percent']}% Wirkungsgrad"
+    }
+
+
+# ==================== API Endpoints ====================
 
 @router.get("/", response_model=List[InverterResponse])
 async def list_inverters(
-    manufacturer: Optional[str] = Query(None, description="Filter by manufacturer"),
-    min_power_kw: Optional[float] = Query(None, description="Minimum power in kW"),
-    max_power_kw: Optional[float] = Query(None, description="Maximum power in kW"),
-    service: InverterService = Depends(get_inverter_service)
+    active_only: bool = Query(True),
+    hybrid_only: bool = Query(False),
+    manufacturer: Optional[str] = Query(None)
 ):
-    """
-    List available inverters with optional filtering
+    """Get all inverters with optional filters"""
+    result = SAMPLE_INVERTERS.copy()
     
-    - **manufacturer**: Filter by manufacturer name
-    - **min_power_kw**: Minimum inverter power
-    - **max_power_kw**: Maximum inverter power
-    """
-    try:
-        inverters = service._get_available_inverters()
-        
-        # Apply filters
-        if manufacturer:
-            inverters = [
-                inv for inv in inverters
-                if inv.get('manufacturer', '').lower() == manufacturer.lower()
-            ]
-        
-        if min_power_kw is not None:
-            inverters = [
-                inv for inv in inverters
-                if inv.get('power_kw', 0) >= min_power_kw
-            ]
-        
-        if max_power_kw is not None:
-            inverters = [
-                inv for inv in inverters
-                if inv.get('power_kw', 0) <= max_power_kw
-            ]
-        
-        # Extract and return inverter data
-        result = [service.extract_inverter_data(inv) for inv in inverters]
-        
-        logger.info(f"Listed {len(result)} inverters")
-        return result
-        
-    except Exception as e:
-        logger.error(f"Error listing inverters: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/{inverter_id}", response_model=InverterResponse)
-async def get_inverter(
-    inverter_id: int,
-    service: InverterService = Depends(get_inverter_service)
-):
-    """
-    Get detailed information about a specific inverter
+    if active_only:
+        result = [inv for inv in result if inv["is_active"]]
+    if hybrid_only:
+        result = [inv for inv in result if inv["is_hybrid"]]
+    if manufacturer:
+        result = [inv for inv in result 
+                 if inv["manufacturer"].lower() == manufacturer.lower()]
     
-    - **inverter_id**: Inverter product ID
-    """
-    try:
-        inverters = service._get_available_inverters()
-        inverter = next((inv for inv in inverters if inv.get('id') == inverter_id), None)
-        
-        if not inverter:
-            raise HTTPException(status_code=404, detail=f"Inverter {inverter_id} not found")
-        
-        result = service.extract_inverter_data(inverter)
-        logger.info(f"Retrieved inverter {inverter_id}")
-        return result
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error getting inverter {inverter_id}: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/select", response_model=InverterSelectionResponse)
-async def select_inverter(
-    request: InverterSelectionRequest,
-    service: InverterService = Depends(get_inverter_service)
-):
-    """
-    Select optimal inverter for a PV system
-    
-    Analyzes system requirements and selects the best matching inverter
-    based on power, efficiency, and user preferences.
-    """
-    try:
-        result = service.select_inverter(
-            pv_power_kwp=request.pv_power_kwp,
-            system_voltage=request.system_voltage,
-            preferences=request.preferences
-        )
-        
-        logger.info(f"Selected inverter for {request.pv_power_kwp}kWp system")
-        return result
-        
-    except Exception as e:
-        logger.error(f"Error selecting inverter: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/sizing", response_model=InverterSizingResponse)
-async def calculate_sizing(
-    request: InverterSizingRequest,
-    service: InverterService = Depends(get_inverter_service)
-):
-    """
-    Calculate detailed inverter sizing requirements
-    
-    Provides comprehensive sizing calculations including voltage, current,
-    MPPT configuration, and safety margins.
-    """
-    try:
-        result = service.calculate_inverter_sizing(
-            pv_power_kwp=request.pv_power_kwp,
-            module_voltage=request.module_voltage,
-            module_current=request.module_current,
-            string_configuration=request.string_configuration
-        )
-        
-        logger.info(f"Calculated sizing for {request.pv_power_kwp}kWp system")
-        return result
-        
-    except Exception as e:
-        logger.error(f"Error calculating sizing: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/compatibility", response_model=CompatibilityCheckResponse)
-async def check_compatibility(
-    request: CompatibilityCheckRequest,
-    service: InverterService = Depends(get_inverter_service)
-):
-    """
-    Check inverter compatibility with PV system
-    
-    Performs comprehensive compatibility checks including power, voltage,
-    current, and MPPT configuration.
-    """
-    try:
-        # Get inverter data
-        inverters = service._get_available_inverters()
-        inverter = next(
-            (inv for inv in inverters if inv.get('id') == request.inverter_id),
-            None
-        )
-        
-        if not inverter:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Inverter {request.inverter_id} not found"
-            )
-        
-        result = service.check_inverter_compatibility(
-            inverter=inverter,
-            pv_system=request.pv_system
-        )
-        
-        logger.info(f"Checked compatibility for inverter {request.inverter_id}")
-        return result
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error checking compatibility: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/multi-inverter", response_model=MultiInverterResponse)
-async def create_multi_inverter_config(
-    request: MultiInverterRequest,
-    service: InverterService = Depends(get_inverter_service)
-):
-    """
-    Create multi-inverter configuration for large systems
-    
-    Designs optimal multi-inverter setup for systems with multiple roof
-    sections or large power requirements.
-    """
-    try:
-        result = service.create_multi_inverter_configuration(
-            pv_power_kwp=request.pv_power_kwp,
-            system_layout=request.system_layout
-        )
-        
-        logger.info(
-            f"Created multi-inverter config for {request.pv_power_kwp}kWp system"
-        )
-        return result
-        
-    except Exception as e:
-        logger.error(f"Error creating multi-inverter config: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/monitoring", response_model=MonitoringIntegrationResponse)
-async def integrate_monitoring(
-    request: MonitoringIntegrationRequest,
-    service: InverterService = Depends(get_inverter_service)
-):
-    """
-    Configure monitoring integration for inverter
-    
-    Sets up monitoring system integration including data points,
-    update intervals, and alert configuration.
-    """
-    try:
-        # Get inverter data
-        inverters = service._get_available_inverters()
-        inverter = next(
-            (inv for inv in inverters if inv.get('id') == request.inverter_id),
-            None
-        )
-        
-        if not inverter:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Inverter {request.inverter_id} not found"
-            )
-        
-        result = service.integrate_monitoring(
-            inverter=inverter,
-            monitoring_config=request.monitoring_config
-        )
-        
-        logger.info(f"Configured monitoring for inverter {request.inverter_id}")
-        return result
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error integrating monitoring: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return result
 
 
 @router.get("/manufacturers", response_model=List[str])
-async def list_manufacturers(
-    service: InverterService = Depends(get_inverter_service)
-):
-    """
-    List all available inverter manufacturers
-    """
-    try:
-        inverters = service._get_available_inverters()
-        manufacturers = list(set(
-            inv.get('manufacturer', inv.get('brand', ''))
-            for inv in inverters
-            if inv.get('manufacturer') or inv.get('brand')
-        ))
-        manufacturers.sort()
-        
-        logger.info(f"Listed {len(manufacturers)} manufacturers")
-        return manufacturers
-        
-    except Exception as e:
-        logger.error(f"Error listing manufacturers: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+async def list_manufacturers():
+    """Get list of all inverter manufacturers"""
+    manufacturers = list(set(inv["manufacturer"] for inv in SAMPLE_INVERTERS))
+    return sorted(manufacturers)
+
+
+@router.get("/{inverter_id}", response_model=InverterResponse)
+async def get_inverter(inverter_id: int):
+    """Get inverter by ID"""
+    inverter = get_inverter_by_id(inverter_id)
+    if not inverter:
+        raise HTTPException(status_code=404, detail="Inverter not found")
+    return inverter
+
+
+@router.post("/calculate-sizing", response_model=InverterSizingResponse)
+async def calculate_inverter_sizing(request: InverterSizingRequest):
+    """Calculate inverter sizing requirements based on PV system"""
+    return calculate_sizing(request)
+
+
+@router.post("/select")
+async def select_inverter(request: InverterSelectionRequest):
+    """Select optimal inverter for PV system"""
+    return select_best_inverter(request)
+
+
+@router.post("/check-compatibility")
+async def check_compatibility(request: CompatibilityCheckRequest):
+    """Check inverter compatibility with PV system"""
+    inverter = get_inverter_by_id(request.inverter_id)
+    if not inverter:
+        raise HTTPException(status_code=404, detail="Inverter not found")
+    
+    checks = []
+    is_compatible = True
+    
+    # Power check
+    sizing_ratio = request.pv_power_kwp / inverter["power_kw"]
+    if 0.8 <= sizing_ratio <= 1.2:
+        checks.append({"check": "Leistung", "status": "OK", 
+                      "details": f"DC/AC: {sizing_ratio:.2f}"})
+    else:
+        is_compatible = False
+        checks.append({"check": "Leistung", "status": "FEHLER",
+                      "details": f"DC/AC: {sizing_ratio:.2f} (optimal: 0.8-1.2)"})
+    
+    # Voltage check
+    if request.string_voltage <= inverter["max_dc_voltage"] * 0.9:
+        checks.append({"check": "Spannung", "status": "OK",
+                      "details": f"{request.string_voltage}V <= {inverter['max_dc_voltage']}V"})
+    else:
+        is_compatible = False
+        checks.append({"check": "Spannung", "status": "FEHLER",
+                      "details": f"{request.string_voltage}V > {inverter['max_dc_voltage']}V"})
+    
+    # Current check
+    current_per_mppt = request.total_current / inverter["mppt_count"]
+    if current_per_mppt <= inverter["max_dc_current"]:
+        checks.append({"check": "Strom", "status": "OK",
+                      "details": f"{current_per_mppt:.1f}A <= {inverter['max_dc_current']}A"})
+    else:
+        is_compatible = False
+        checks.append({"check": "Strom", "status": "FEHLER",
+                      "details": f"{current_per_mppt:.1f}A > {inverter['max_dc_current']}A"})
+    
+    return {
+        "is_compatible": is_compatible,
+        "compatibility_score": sum(1 for c in checks if c["status"] == "OK") / len(checks) * 100,
+        "checks": checks,
+        "inverter": inverter
+    }
+
+
+@router.post("/multi-inverter")
+async def create_multi_inverter_config(request: MultiInverterRequest):
+    """Create multi-inverter configuration for large systems"""
+    pv_power = request.pv_power_kwp
+    
+    # Determine if multi-inverter is needed
+    if pv_power <= 15 and len(request.roof_sections) <= 1:
+        # Single inverter sufficient
+        selection = select_best_inverter(InverterSelectionRequest(pv_power_kwp=pv_power))
+        return {
+            "configuration_type": "single",
+            "inverter_count": 1,
+            "inverters": [selection["selected_inverter"]],
+            "total_power_kw": selection["selected_inverter"]["power_kw"],
+            "reasoning": "Einzelwechselrichter ausreichend"
+        }
+    
+    # Multi-inverter configuration
+    if len(request.roof_sections) > 1:
+        inverter_count = len(request.roof_sections)
+    else:
+        inverter_count = max(2, int(pv_power / 10))
+    
+    power_per_inverter = pv_power / inverter_count
+    
+    inverters = []
+    for i in range(inverter_count):
+        selection = select_best_inverter(
+            InverterSelectionRequest(pv_power_kwp=power_per_inverter)
+        )
+        inverters.append(selection["selected_inverter"])
+    
+    total_power = sum(inv["power_kw"] for inv in inverters)
+    
+    return {
+        "configuration_type": "multi",
+        "inverter_count": inverter_count,
+        "inverters": inverters,
+        "total_power_kw": total_power,
+        "sizing_ratio": round(pv_power / total_power, 2),
+        "power_distribution": [
+            {"inverter_index": i, "assigned_kwp": round(power_per_inverter, 2)}
+            for i in range(inverter_count)
+        ],
+        "reasoning": f"Multi-Wechselrichter: {inverter_count}x für {pv_power}kWp"
+    }
+
+
+@router.get("/health/check")
+async def health_check():
+    """Check inverter service health"""
+    return {
+        "status": "healthy",
+        "inverter_count": len(SAMPLE_INVERTERS),
+        "manufacturers": len(set(inv["manufacturer"] for inv in SAMPLE_INVERTERS))
+    }

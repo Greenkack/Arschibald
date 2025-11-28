@@ -1,0 +1,15 @@
+/**
+ * Project Wizard Page Styles
+ */
+
+.project-wizard-page {
+  min-height: 100vh;
+  background: var(--surface-ground, #f8f9fa);
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .project-wizard-page {
+    padding: 0.5rem;
+  }
+}

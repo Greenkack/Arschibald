@@ -1,0 +1,19 @@
+[run]
+source = backend
+omit = 
+    */tests/*
+    */__pycache__/*
+    */migrations/*
+    */alembic/*
+    */.venv/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    pass
+
+[html]
+directory = htmlcov
