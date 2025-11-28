@@ -1,220 +1,143 @@
-# Dynamic Keys System - Quick Reference
-
-## Quick Start
-
-```python
-from backend.services.dynamic_key_service import get_dynamic_key_service
-from backend.core.dynamic_keys import KeyPrefix, KeyType
-
-service = get_dynamic_key_service()
-```
-
-## Key Generation
-
-```python
-# Generate standard key
-key = service.generate_key(KeyPrefix.SOLAR_CALCULATION)
-# Result: SOL_20231116_143052_a1b2c3d4
-
-# Generate hash key
-hash_key = service.generate_hash_key_from_data("data", KeyPrefix.DATA)
-# Result: DAT_f4a3b2c1d0e9f8g7
-```
-
-## Store & Retrieve
-
-```python
-# Set value
-service.set_value("key", "value", key_type=KeyType.STRING)
-
-# Get value
-value = service.get_value("key")
-
-# Delete value
-service.delete_value("key")
-
-# Check existence
-exists = service.value_exists("key")
-```
-
-## Namespaces
-
-```python
-# Create namespace
-service.create_namespace("root.solar.calculations")
-
-# Set value in namespace
-service.set_value("key", "value", namespace="root.solar")
-
-# Get keys from namespace
-keys = service.get_namespace_keys("root.solar", recursive=True)
-```
-
-## Search & Filter
-
-```python
-# Search by pattern
-keys = service.search_keys(pattern="solar_.*")
-
-# Filter by prefix
-keys = service.filter_by_prefix(KeyPrefix.SOLAR_CALCULATION)
-
-# Filter by type
-keys = service.filter_by_type(KeyType.FLOAT)
-
-# Filter by namespace
-keys = service.filter_by_namespace("root.solar")
-```
-
-## Usage Tracking
-
-```python
-# Get statistics
-stats = service.get_usage_statistics("key")
-
-# Most accessed
-most = service.get_most_accessed_keys(limit=10)
-
-# Recently accessed
-recent = service.get_recently_accessed_keys(limit=10)
-
-# Unused keys
-unused = service.get_unused_keys()
-```
-
-## Bulk Operations
-
-```python
-# Bulk set
-service.bulk_set({"key1": "val1", "key2": "val2"})
-
-# Bulk get
-values = service.bulk_get(["key1", "key2"])
-
-# Bulk delete
-count = service.bulk_delete(["key1", "key2"])
-```
-
-## Export & Import
-
-```python
-# Export
-data = service.export_configuration()
-
-# Import
-service.import_configuration(data)
-```
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/dynamic-keys/generate` | Generate key |
-| POST | `/dynamic-keys/set` | Store value |
-| GET | `/dynamic-keys/get/{key}` | Retrieve value |
-| DELETE | `/dynamic-keys/delete/{key}` | Delete value |
-| POST | `/dynamic-keys/search` | Search keys |
-| GET | `/dynamic-keys/filter/prefix/{prefix}` | Filter by prefix |
-| GET | `/dynamic-keys/usage/statistics` | Get usage stats |
-| POST | `/dynamic-keys/bulk/set` | Bulk set |
-| GET | `/dynamic-keys/export` | Export config |
-| POST | `/dynamic-keys/import` | Import config |
+# Dynamic Keys Quick Reference
 
 ## Key Prefixes
 
 | Prefix | Type | Example |
 |--------|------|---------|
-| SOL | Solar Calculation | SOL_20231116_a1b2c3d4 |
-| HP | Heat Pump | HP_20231116_e5f6g7h8 |
-| PMX | Price Matrix | PMX_20231116_i9j0k1l2 |
-| PDF | PDF Document | PDF_20231116_m3n4o5p6 |
-| PRJ | Project | PRJ_20231116_q7r8s9t0 |
-| CUS | Customer | CUS_20231116_u1v2w3x4 |
+| `USR` | User | `USR_20231116_a1b2c3d4` |
+| `PRJ` | Project | `PRJ_20231116_b2c3d4e5` |
+| `CUS` | Customer | `CUS_20231116_c3d4e5f6` |
+| `SOL` | Solar Calculation | `SOL_20231116_d4e5f6g7` |
+| `HP` | Heat Pump | `HP_20231116_e5f6g7h8` |
+| `PMX` | Price Matrix | `PMX_20231116_f6g7h8i9` |
+| `PDF` | PDF Document | `PDF_20231116_g7h8i9j0` |
+| `OFF` | Offer | `OFF_20231116_h8i9j0k1` |
+| `DAT` | Generic Data | `DAT_20231116_i9j0k1l2` |
 
-## Key Types
+## Quick Generation
 
-| Type | Validation | Example |
-|------|------------|---------|
-| STRING | Text | "Hello" |
-| INTEGER | Whole number | 42 |
-| FLOAT | Decimal | 3.14 |
-| BOOLEAN | True/False | true |
-| CURRENCY | Money (≥0) | 99.99 |
-| PERCENTAGE | 0-100 | 85.5 |
-| JSON | Object/Array | {"key": "value"} |
-| EMAIL | Email address | "user@example.com" |
+```python
+from backend.core.dynamic_keys import (
+    generate_hash_key,
+    KeyPrefix,
+    DynamicKeyMixin
+)
+
+# Hash-based (deterministic)
+key = generate_hash_key("field_name", KeyPrefix.DATA)
+# "DAT_a1b2c3d4e5f6g7h8"
+
+# Timestamp-based (unique)
+mixin = DynamicKeyMixin()
+key = mixin.generate_dynamic_key(KeyPrefix.SOLAR_CALCULATION)
+# "SOL_20231116_143052_a1b2c3d4"
+```
+
+## Key Validation
+
+```python
+from backend.core.dynamic_keys import DynamicKeyMixin
+
+# Validate format
+DynamicKeyMixin.validate_key("SOL_20231116_a1b2c3d4")  # True
+DynamicKeyMixin.validate_key("invalid")                # False
+
+# Extract prefix
+DynamicKeyMixin.extract_prefix("SOL_20231116_a1b2c3d4")  # "SOL"
+```
+
+## Key Index
+
+```python
+from backend.core.dynamic_keys import DynamicKeyIndex
+
+index = DynamicKeyIndex()
+
+# Add
+index.add("PRJ_123", project_obj)
+
+# Get
+obj = index.get("PRJ_123")
+
+# Get by prefix
+projects = index.get_by_prefix("PRJ")
+
+# Check existence
+exists = index.exists("PRJ_123")  # True
+
+# Remove
+index.remove("PRJ_123")
+
+# Statistics
+stats = index.get_statistics()
+```
 
 ## Common Patterns
 
-### Store Calculation Result
-
+### Form Keys
 ```python
-key = service.generate_key(KeyPrefix.SOLAR_CALCULATION)
-service.set_value(
-    key=f"{key}_result",
-    value={"size": 10.5, "modules": 30},
-    key_type=KeyType.JSON,
-    namespace="root.solar.calculations",
-    metadata={"date": "2023-11-16"}
-)
+def form_key(field):
+    return generate_hash_key(f"form_{field}", KeyPrefix.DATA)
 ```
 
-### Search Recent Calculations
-
+### Calculation Keys
 ```python
-keys = service.search_keys(
-    pattern="SOL_.*_result",
-    namespace="root.solar.calculations",
-    key_type=KeyType.JSON
-)
+def calc_key(name):
+    return generate_hash_key(f"calc_{name}", KeyPrefix.SOLAR_CALCULATION)
 ```
 
-### Track Most Used Features
-
+### PDF Keys
 ```python
-most_accessed = service.get_most_accessed_keys(limit=10)
-for key, count in most_accessed:
-    print(f"{key}: {count} accesses")
+def pdf_key(element):
+    return generate_hash_key(f"pdf_{element}", KeyPrefix.PDF_DOCUMENT)
 ```
 
-### Clean Up Old Data
+## Key Format
 
-```python
-# Get unused keys
-unused = service.get_unused_keys()
-
-# Delete them
-service.bulk_delete(unused)
+```
+PREFIX_TIMESTAMP_UUID_[SUFFIX]
+  │       │       │      │
+  │       │       │      └── Optional custom suffix
+  │       │       └── 8-char hex UUID
+  │       └── YYYYMMDD_HHMMSS
+  └── 2-4 uppercase letters
 ```
 
-## Error Handling
+## Namespace Usage
 
 ```python
-try:
-    service.set_value("key", "value", key_type=KeyType.INTEGER)
-except ValueError as e:
-    print(f"Type validation failed: {e}")
+from backend.core.dynamic_keys import KeyNamespace
 
-try:
-    value = service.get_value("nonexistent_key")
-    if value is None:
-        print("Key not found")
-except Exception as e:
-    print(f"Error: {e}")
+root = KeyNamespace("root")
+solar = root.add_child("solar")
+solar.add_key("SOL_123")
+
+path = solar.get_full_path()  # "root.solar"
+keys = solar.get_all_keys()   # ["SOL_123"]
 ```
 
-## Performance Tips
+## Key-Value Store
 
-1. **Use bulk operations** for multiple keys
-2. **Enable caching** for frequently accessed values
-3. **Use namespaces** to organize related keys
-4. **Clean up unused keys** periodically
-5. **Use appropriate types** for validation
-6. **Track usage** to identify optimization opportunities
+```python
+from backend.core.dynamic_keys import KeyValueStore, KeyType
 
-## Requirements
+store = KeyValueStore()
 
-- **4.1**: API-First design
-- **6.1**: Modular code extraction
-- **14.4**: Dynamic key generation
-- **14.7**: Key-value storage
+# Set with type
+store.set("price", 1234.56, key_type=KeyType.CURRENCY)
+
+# Get
+value = store.get("price")
+
+# Search by type
+keys = store.search(key_type=KeyType.CURRENCY)
+```
+
+## Performance
+
+| Operation | Time |
+|-----------|------|
+| Generate key | < 0.1ms |
+| Validate key | < 0.01ms |
+| Index lookup | O(1) |
+| 10,000 keys | < 5s |

@@ -145,5 +145,16 @@
   "backend/tests/test_security.py::TestRateLimiting::test_rate_limit_exceeded": true,
   "backend/tests/test_security.py::TestRateLimiting::test_rate_limit_headers": true,
   "backend/tests/test_security.py::TestSecurityIntegration::test_full_security_stack": true,
-  "backend/tests/test_security.py::TestSecurityIntegration::test_sql_injection_prevention": true
+  "backend/tests/test_security.py::TestSecurityIntegration::test_sql_injection_prevention": true,
+  "backend/tests/test_legacy_integration_verification.py::TestSolarServiceIntegration::test_solar_service_exists": true,
+  "backend/tests/test_legacy_integration_verification.py::TestSolarServiceIntegration::test_solar_service_has_calculate_method": true,
+  "backend/tests/test_legacy_integration_verification.py::TestPDFGeneratorIntegration::test_pdf_service_exists": true,
+  "backend/tests/test_legacy_integration_verification.py::TestPDFGeneratorIntegration::test_pdf_service_has_generate_method": true,
+  "backend/tests/test_legacy_integration_verification.py::TestDatabaseIntegration::test_database_service_exists": true,
+  "backend/tests/test_legacy_integration_verification.py::TestDatabaseIntegration::test_database_service_has_crud_methods": true,
+  "backend/tests/test_legacy_integration_verification.py::TestCRMIntegration::test_crm_service_exists": true,
+  "backend/tests/test_legacy_integration_verification.py::TestCRMIntegration::test_crm_service_has_methods": true,
+  "backend/tests/test_legacy_integration_verification.py::TestAPIEndpointsExist::test_crm_api_exists": true,
+  "backend/tests/test_legacy_integration_verification.py::TestAPIEndpointsExist::test_products_api_exists": true,
+  "backend/tests/test_legacy_integration_verification.py::TestServiceWrapperCompleteness::test_all_services_importable": true
 }

@@ -1,0 +1,123 @@
+/**
+ * Address Input Component Styles
+ */
+
+.address-input {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auto-parse-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-with-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.full-address-input {
+  flex: 1;
+}
+
+.input-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.parsing-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  font-size: 0.875rem;
+}
+
+.manual-input-section {
+  margin-top: 0.5rem;
+}
+
+.manual-input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.manual-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.field-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.field-group .p-inputtext {
+  width: 100%;
+}
+
+.validation-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.suggestions-section {
+  background: var(--surface-ground);
+  border-radius: 6px;
+  padding: 1rem;
+  border-left: 4px solid var(--primary-color);
+}
+
+.confidence-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.confidence-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--red-500) 0%, var(--orange-500) 50%, var(--green-500) 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  min-width: 2px;
+}
+
+.p-inputtext.p-valid {
+  border-color: var(--green-500) !important;
+}
+
+.p-inputtext.p-invalid {
+  border-color: var(--red-500) !important;
+}
+
+@media (max-width: 768px) {
+  .input-with-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .field-row {
+    flex-direction: column;
+  }
+}

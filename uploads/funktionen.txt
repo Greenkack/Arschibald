@@ -1,0 +1,1499 @@
+Dokumentation der Python-Streamlit-App 
+Arschibald – Inhalte und Funktionen
+Projekt- und Bedarfsanalyse
+Unter dem Menüpunkt „Projekt & Bedarfsanalyse“ erfassen Nutzer alle Basisinformationen für das
+geplante PV/WP-Projekt in einem geführten mehrstufigen Formular . Die Sektion ist in mehrere
+Schritte unterteilt:
+1
+• 
+• 
+• 
+• 
+2
+3
+5
+Anlagenmodus wählen: Zu Beginn wird der Systemtyp ausgewählt – Photovoltaik,
+Wärmepumpe oder eine Kombination aus PV+WP. Diese Auswahl steuert, welche weiteren
+Eingabefelder und Berechnungen im Verlauf relevant sind . 
+Kundendaten eingeben: Erfassung der Kundendaten (Anrede/Titel, Vor- und Nachname) sowie
+der Adresse. Die Adress-Eingabe ist komfortabel gestaltet: Der Nutzer kann die vollständige
+Anschrift in ein einziges Textfeld eingeben, und die App zerlegt diese automatisch in Straße,
+Hausnummer, PLZ und Ort (automatisches Parsing) . Weitere Felder umfassen E-Mail
+Adresse, Telefon (Festnetz/Mobil), Bundesland und ein freies Notizfeld für Anmerkungen .
+Alle Kundendaten werden im integrierten CRM-System gespeichert und stehen für Angebote als
+Platzhalter zur Verfügung . 
+Gebäudedaten erfassen: Es werden Schlüsseldaten zum Gebäude des Kunden aufgenommen 
+insbesondere relevant für die Heizlast (Wärmepumpe) und PV-Installation . Erfragt werden
+z.B. Baujahr des Gebäudes (zur Abschätzung des Dämmstandards), der Dachtyp bzw. das
+Dachmaterial, die Dachneigung und Dachausrichtung (z.B. 30° Südost), die verfügbare Dach-/
+Installationsfläche sowie die Gebäudehöhe (wichtig, falls >7 m, z.B. für Gerüstkosten)
+6
+4
+7
+. Diese
+Informationen fließen in die späteren PV-Ertrags- und Heizlastberechnungen ein. 
+Energiebedarfsanalyse: Hier wird der aktuelle Energieverbrauch des Kunden ermittelt . Bei
+PV-Projekten ist dies hauptsächlich der jährliche Stromverbrauch in kWh; bei Heizungsprojekten
+der jährliche Heizenergieverbrauch bzw. die Heizlast des Gebäudes
+8
+9
+. In Kombination (PV+WP)
+können beide Werte angegeben werden. Zusätzlich kann angegeben werden, ob es sich um
+einen Neubau oder eine Bestandsanlage handelt und ob bei PV Teil- oder Volleinspeisung
+geplant ist
+10
+• 
+11
+. Ebenso wird erfasst, ob der Kunde privat oder gewerblich ist, da dies z.B.
+steuerliche Unterschiede (MwSt.) nach sich zieht . 
+Kundenbedürfnisse: Optional können besondere Wünsche oder Präferenzen festgehalten
+werden. Beispielsweise, ob eine Wallbox für E-Autos gewünscht ist, großer Wert auf kurze
+Amortisationszeit gelegt wird, oder ob Platz für einen Batteriespeicher vorgesehen ist. Diese
+Informationen helfen, die Planung auf Kundenerwartungen abzustimmen (z.B. Hinweis auf
+Ladestation, Auslegung des Speichers etc.). 
+• 
+Zusatzoptionen: Hier können projektspezifische Optionen eingestellt werden. Dazu gehören
+etwa Finanzierungswünsche des Kunden (falls z.B. Ratenzahlung gewünscht ist – bei Auswahl
+erscheinen zusätzliche Felder für Anzahlung, Kreditlaufzeit, Zinssatz etc.)
+Zuschläge für das Angebot
+13
+12
+, oder Rabatte und
+. So kann man prozentuale Nachlässe oder Aufschläge (fester
+Betrag, z.B. für erschwerte Montage) eingeben; diese Werte fließen in die spätere
+Preisberechnung mit ein
+14
+. Auch Optionen wie ein gewünschter Wartungsvertrag oder
+spezielle Zahlungsmodalitäten (z.B. 50 % Anzahlung, Rest bei Fertigstellung) können hier
+angegeben werden . 
+15
+1
+Alle Eingabeseiten der Bedarfsanalyse bieten Navigationsbuttons „Weiter“, „Zurück“ sowie
+„Hauptmenü“, um den Prozess Schritt für Schritt zu durchlaufen oder abzubrechen . Sämtliche
+eingegebenen Projektdaten werden im Hintergrund im Projektzustand gespeichert und stehen als
+dynamische Werte für Berechnungen und als Platzhalter für das Angebot zur Verfügung . Damit
+bilden die hier erfassten Daten die Grundlage für alle nachfolgenden Kalkulationen und
+Angebotsdokumente.
+16
+Solarkalkulator (Photovoltaik)
+19
+17
+Im Menü „Kalkulation“ stellt die App als ersten Punkt den Solarkalkulator bereit – ein Modul zur
+detaillierten Auslegung einer Photovoltaikanlage mit Live-Berechnung aller wichtigen Kennzahlen
+. Der Nutzer kann diverse Komponenten der PV-Anlage konfigurieren:
+• 
+20
+18
+PV-Module: Anzahl der PV-Module und Auswahl des Modultyps/Modell aus einer angebundenen
+Produktdatenbank
+. Über ein Dropdown kann der Hersteller und das Modell des PV-Moduls
+gewählt werden; die Datenbank enthält pro Modul z.B. Nennleistung (Wp pro Modul),
+Wirkungsgrad, Hersteller, Modellname und Preis
+21
+• 
+• 
+. Aus der gewählten Anzahl und Leistung
+pro Modul berechnet das Tool direkt die installierte Gesamtleistung (kWp) der PV-Anlage
+(Beispiel: 12 Module à 400 Wp = 4,8 kWp). 
+Wechselrichter: Auswahl eines Wechselrichters aus der Produktdatenbank . Für
+Wechselrichter sind u.a. die AC-Nennleistung (kW), Hersteller/Modell, Wirkungsgrad und Kosten
+hinterlegt
+24
+25
+22
+23
+. Bei Bedarf kann auch die Anzahl der Wechselrichter angegeben werden (bei sehr
+großen Anlagen mit mehreren Geräten). 
+Batteriespeicher: Falls ein Speicher vorgesehen ist, kann ein Batteriesystem ausgewählt werden
+. In der Datenbank stehen verschiedene Batteriespeicher mit nutzbarer Kapazität (kWh),
+Zyklenlebensdauer, Preis und Garantiezeit zur Verfügung
+25
+• 
+. Der gewählte Speicher wird in den
+Berechnungen zu Eigenverbrauch und Netzbezug berücksichtigt . 
+Zusatzkomponenten: Der Solarkalkulator ermöglicht die Option weiterer 
+Zusatzkomponenten, die in PV-Projekten oft gefragt sind
+27
+26
+. Dazu zählen z.B. Wallboxen für E
+Fahrzeuge, Energiemanagement-Systeme (EMS), Leistungsoptimierer an Modulen, oder
+Notstromversorgungssysteme
+28
+. Auch Tierabwehr (z.B. Schutzgitter gegen Vögel/Marder
+unter den Panels) kann angegeben werden
+29
+. All diese optionalen Komponenten werden aus
+der Produktdatenbank geladen und können je nach Bedarf zu- oder abgewählt werden . Ihre
+Kosten fließen anschließend in die Preisberechnung ein .
+31
+30
+Während der Nutzer die Eingaben vornimmt, werden Live-Berechnungen durchgeführt, die die
+wichtigsten Kennzahlen der PV-Anlage kontinuierlich aktualisieren :
+32
+• 
+• 
+33
+Gesamtleistung (kWp): Wird direkt aus Modulanzahl × Wp/Modul berechnet und oben angezeigt,
+wie beschrieben (z.B. 4,8 kWp bei 12×400 Wp) . 
+Prognostizierter Jahresertrag (kWh/Jahr): Auf Basis der installierten kWp und
+Standortfaktoren wird die jährliche Stromproduktion geschätzt
+34
+. Ist die PVGIS-API-Anbindung
+aktiviert, werden exakte Ertragsdaten für den Standort per API abgerufen; andernfalls greift die
+App auf hinterlegte statische Ertragsfaktoren (kWh pro kWp) zurück
+34
+• 
+. Auch Dachneigung und
+Ausrichtung gehen ein – entweder über die PVGIS-Berechnung oder vereinfachte pauschale
+Korrekturfaktoren je Ausrichtung (konfigurierbar in den Ertragseinstellungen) . 
+Direktverbrauch und Eigenverbrauchsquote: Die App schätzt, wie viel des erzeugten PV
+Stroms direkt im Haushalt verbraucht werden kann. Standardmäßig wird angenommen:
+Direktverbrauch = min(Produktion, Verbrauch)
+36
+35
+. Der so berechnete Direktverbrauch wird
+sowohl absolut in kWh/Jahr als auch als Eigenverbrauchsquote (%) angezeigt. Dieser Wert kann
+2
+37
+• 
+bei Bedarf vom Nutzer überschrieben werden, falls z.B. ein bestimmter Wert angenommen
+werden soll . 
+Speicher-Nutzung und Autarkie: Ist ein Batteriespeicher im System, berechnet die App die
+Aufteilung der Energieflüsse: Wie viel Überschussstrom wird ins Netz eingespeist, wie viel in den
+Speicher geladen und wieder aus diesem entnommen, etc. . Es wird typischerweise ein
+Standard-Ladezyklus von ~300 Zyklen/Jahr angenommen (konfigurierbar)
+38
+39
+. Anhand dieser
+Flüsse ermittelt die App den Autarkiegrad (Selbstversorgungsanteil) – also den Anteil des
+Gesamtverbrauchs, der durch eigenen PV-Strom gedeckt werden kann – und wie viel kWh ins
+öffentliche Netz gehen. 
+In Summe bietet der Solarkalkulator ein sehr flexibles Werkzeug, um unterschiedliche
+Systemkonfigurationen durchzuspielen (z.B. verschiedene Speichergrößen oder Modulanzahlen) und
+die Auswirkungen auf Produktion, Eigenverbrauch und Netzbezug in Echtzeit zu sehen . Alle
+berechneten Ergebnisse (kWp, Ertrag, Eigenverbrauch etc.) werden für die Ergebnisübersicht und das
+Angebots-PDF übernommen , sodass der Solarkalkulator das zentrale Tool zur Festlegung der
+technischen Parameter der PV-Anlage ist.
+41
+Wärmepumpensimulator
+40
+Analog zum PV-Kalkulator gibt es im Kalkulations-Menü auch einen „Wärmepumpen-Simulator“ – ein
+Modul zur Simulation von Wärmepumpenanlagen und deren Wirtschaftlichkeit . Dieses Tool
+unterstützt die Planung von Heizungsmodernisierungen mit Wärmepumpen und bietet folgende
+Eingabe-Bereiche und Funktionen :
+42
+43
+• 
+Gebäude- und Heizungsdaten: Zunächst werden wichtige Parameter des Gebäudes abgefragt,
+falls nicht bereits in der Projektphase erfasst
+44
+. Einige überschneiden sich mit den allgemeinen
+Gebäudedaten (Baujahr, Dachtyp, ggf. Dämmung)
+45
+. Besonders wichtig sind: die beheizte
+Wohnfläche in m² und die aktuelle Heizlast bzw. der jährliche Heizenergieverbrauch (z.B. Gas-/
+Ölverbrauch in kWh/Jahr)
+46
+. Falls der Heizenergieverbrauch unbekannt ist, kann die App ihn
+aus Baujahr und Fläche näherungsweise abschätzen
+• 
+47
+. Diese Werte dienen als Grundlage für
+die Wärmepumpen-Auslegung. 
+Wärmepumpen-Auslegung: Der Nutzer wählt ein Wärmepumpen-Modell aus der
+Produktdatenbank aus, ähnlich wie bei PV-Produkten
+48
+. Die Datenbank enthält verschiedene
+Wärmepumpen mit Angaben zur Heizleistung (kW), zur Betriebsart (Luft/Wasser, Sole/Wasser
+etc.), zum COP (Coefficient of Performance) bzw. zur saisonalen Jahresarbeitszahl (JAZ) sowie den
+Preis des Geräts
+49
+. Aus dem gewählten Modell und dem Wärmebedarf des Gebäudes ergibt
+sich die Auslegung: Die App prüft etwa, ob die Nenn-Heizleistung der WP zum Gebäude
+Wärmebedarf passt und gibt ggf. Hinweise (z.B. ob ein Pufferspeicher nötig ist)
+• 
+50
+. Einige
+Parameter wie COP/JAZ können vom Nutzer angepasst werden (z.B. um empirische Werte zu
+verwenden) – ein höherer COP führt entsprechend zu besserer Effizienz im Jahresverlauf . 
+Optionale Finanzierung: Da die Investitionskosten für Wärmepumpen hoch sein können, bietet
+das Modul Eingabefelder für eine optionale Finanzierung
+52
+51
+. Unter den Zusatzoptionen oder
+direkt im WP-Formular kann angegeben werden, ob der Kunde einen Kredit nutzen möchte; in
+dem Fall können Kreditsumme, Zinssatz, Laufzeit, monatliche Rate etc. eingegeben werden .
+Diese Finanzierungsdaten fließen später in die Berechnung der Amortisation ein (z.B. werden
+Kreditraten berücksichtigt) .
+54
+53
+3
+Basierend auf den Eingaben berechnet der Simulator folgende Ergebnisgrößen für die Wärmepumpe:
+• 
+• 
+• 
+Jahresarbeitszahl (JAZ): Maß für die Effizienz der WP über ein Jahr (Verhältnis erzeugte Wärme
+zu aufgenommenem Strom). Falls vom WP-Modell nicht direkt vorgegeben, schätzt die App die
+JAZ aus dem COP und realistischen Temperaturprofilen ab . 
+Jährliche Kostenersparnis: Die Einsparung an Heizkosten pro Jahr gegenüber dem alten
+Heizsystem. Dafür vergleicht die App die jährlichen Heizkosten vor und nach Umrüstung – z.B.
+Öl-/Gaskosten vorher vs. Stromkosten mit WP
+55
+56
+. Die Differenz (z.B. X € vorher minus Y €
+nachher) ergibt die Ersparnis pro Jahr. Auch Unterschiede bei Wartungskosten zwischen alter
+und neuer Heizung können einbezogen werden . 
+Amortisationszeit: Wie viele Jahre es dauert, bis sich die Investition in die Wärmepumpe durch
+die jährlichen Einsparungen bezahlt macht
+56
+57
+. Die Berechnung berücksichtigt die
+Investitionskosten (WP-Gerät + Installationskosten, abzüglich etwaiger Förderungen) und die
+jährliche Gesamtersparnis
+58
+54
+. In den Einstellungen gibt es sogar einen „Amortisations-Cheat“
+Faktor, mit dem man die berechnete Amortisationsdauer für Demonstrationszwecke künstlich
+beeinflussen kann (z.B. um dem Kunden eine optimistischere Amortisationszeit zu
+präsentieren). 
+60
+Integration PV + WP: Wurde als Anlagenmodus Kombipaket PV+WP gewählt, arbeiten der PV-Kalkulator
+und der WP-Simulator zusammen. Die App berücksichtigt dann beispielsweise, dass die Wärmepumpe
+Strombedarf hat, der teilweise durch die PV-Anlage gedeckt werden könnte . In der
+Bedarfsermittlung kann ein separater Heizstrom-Verbrauch angegeben werden, der speziell für die
+WP gilt; die Autarkie-Berechnung der PV wird in diesem Fall angepasst, so dass PV-Strom auch für den
+WP-Bedarf angerechnet wird . Damit ergänzt der Wärmepumpen-Simulator den PV-Kalkulator um
+alle relevanten Aspekte der Heizungssanierung – alle Eingaben (Gebäudedaten, WP-Modell, Verbrauch,
+Finanzierung) werden gespeichert, und die Ergebnisse (Ersparnis, JAZ, Amortisation etc.) im
+gemeinsamen Dashboard und im Angebots-PDF ausgewiesen .
+62
+61
+59
+Zur Veranschaulichung des Heizsystems beinhaltet die WP-Erweiterung zudem eine 360°
+Visualisierung der Energieflüsse: Über einen Button kann eine animierte Grafik (GIF mit 24 Frames in
+360° Ansicht) abgespielt werden, die den Energiekreislauf der Wärmepumpen-Anlage zeigt . In
+dieser Animation werden die Komponenten (Außeneinheit, Inneneinheit, Heizkreise wie
+Fußbodenheizung oder Radiatoren) dargestellt und dem alten System (z.B. Öl-Kessel) gegenübergestellt
+. So erhält der Nutzer bzw. Kunde einen anschaulichen Vergleich, wie die neue Wärmepumpe
+arbeitet. Alle eingegebenen Daten und berechneten Ergebnisse – ob aus PV-, WP- oder Kombi-Betrieb 
+werden letztlich im Ergebnisse-Dashboard und für den PDF-Report zusammengeführt.
+CRM-System (Kunden- und Vertriebsmanagement)
+63
+62
+Die App verfügt über ein integriertes CRM-Modul (Customer Relationship Management), das über
+das Menü (Bereich Planung/CRM) zugänglich ist und den Vertriebsprozess rund um Angebote
+unterstützt . Das CRM-System macht die Anwendung zu mehr als nur einem Rechentool – sie wird zu
+einer vollständigen Vertriebsplattform
+64
+• 
+. Die wichtigsten Funktionen des CRM-Moduls sind:
+CRM-Dashboard: Eine Übersichtsseite, welche alle aktuellen Vertriebsaktivitäten, Angebote und
+Kennzahlen auf einen Blick darstellt
+65
+• 
+. Hier sieht der Vertriebsmitarbeiter beispielsweise, wie
+viele Angebote in Vorbereitung sind, wie viele offen oder abgeschlossen, etc. Dieser Überblick
+hilft bei der Organisation der Vertriebs-Pipeline. 
+Kundenverwaltung: Ein zentrales Adress- und Kontaktmanagement für Interessenten und
+Kunden
+66
+. Alle Kunden, die im Rahmen der Projektanalyse erfasst wurden, werden im CRM
+4
+• 
+• 
+• 
+gespeichert (ebenso können neue Leads manuell angelegt werden). Zu jedem Datensatz können
+Kontaktdaten, Notizen und der Status (Lead, Angebot erstellt, Auftrag etc.) verwaltet werden. 
+Termin- und Kalenderintegration: Das CRM enthält eine Terminverwaltung, die mit externen
+Kalendern synchronisierbar ist. Insbesondere ist eine Google Calendar Integration vorgesehen:
+Wenn im CRM-Kalender ein neuer Termin (z.B. vor-Ort-Termin beim Kunden) angelegt wird,
+erscheint er auch im Google Kalender – und umgekehrt
+67
+. So bleiben z.B.
+Außendienstmitarbeiter stets auf dem aktuellen Stand; doppelte Pflege von Terminen entfällt. 
+Schnellkalkulationen als Leads: Ergebnisse aus sehr groben Vorabschätzungen (z.B. eine
+Schnellkalkulation „Überschlag: 10 kWp Anlage ≈ 15.000 €, Ersparnis ≈ 1.200 €/Jahr“) können im
+CRM-Modul als eigener Lead gespeichert werden
+68
+69
+. Dies erlaubt, einen Interessenten zunächst
+mit ungefähren Werten anzulegen und später, wenn detailliertere Daten vorliegen, in eine
+vollständige Projektkalkulation zu überführen. 
+Informationsportal: Im CRM/Planungs-Bereich gibt es außerdem ein Info- bzw. News-Portal
+. Hier können aktuelle Informationen hinterlegt werden – etwa Marktnews (z.B. neue
+Förderprogramme, geänderte Einspeisevergütungen) oder interne Updates. Dies stellt sicher,
+dass Vertriebler immer auf dem neuesten Stand sind und erleichtert die Wissensvermittlung
+innerhalb des Teams. 
+Dank der engen Verknüpfung mit den anderen Modulen greifen im CRM alle Daten ineinander: Ein im
+CRM angelegter Interessent kann direkt in ein Projekt überführt werden, indem dessen Daten in die
+Bedarfsanalyse geladen werden, und daraus ein Angebot generiert werden . Umgekehrt werden
+Kunden aus der Bedarfsanalyse ins CRM übernommen, wie oben erwähnt. Das CRM-Modul umfasst
+außerdem typische Vertriebsfunktionen wie die Verwaltung von Verträgen (z.B. Wartungsverträge,
+Garantien – die Klasse 
+64
+ContractManager in der Codebasis deutet auf Vertragsverwaltung hin) sowie
+ggf. Angebotsverfolgung (Status-Tracking). Insgesamt ermöglicht das integrierte CRM, alle
+kundenbezogenen Informationen und Vorgänge an einem Ort zu bündeln – von der ersten Anfrage
+über Angebotslegung bis zum Abschluss.
+PDF-Engine und Angebotserstellung
+70
+71
+Ein zentrales Ziel von Arschibald ist die schnelle Erstellung professioneller Angebots-PDFs für PV- und/
+oder WP-Anlagen . Dazu stellt die App im Menü einen „PDF-Hub“ bereit, in dem verschiedene
+Angebotsausgabe-Optionen zur Verfügung stehen . Die PDF-Engine der App ist sehr leistungsfähig
+und arbeitet mit vordefinierten Templates, Platzhaltern und einem Layer-System, um dynamisch aus
+den eingegebenen Projektdaten ansprechende Dokumente zu generieren . Folgende Varianten der
+PDF-Ausgabe sind verfügbar:
+• 
+71
+Standard-Angebot (Einzel-PDF): Dies ist das normale Angebot für einen einzelnen Kunden und
+ein System. Auf Knopfdruck erstellt die App ein mehrseitiges PDF-Dokument, das alle
+wesentlichen Informationen enthält . Für PV-Anlagen umfasst das Standard-PDF
+72
+typischerweise 7 Seiten (die Templates heißen 
+nt_nt_01.pdf bis 
+nt_nt_07.pdf ), für
+Wärmepumpen stehen bis zu 16 Seiten bereit (Templates 
+73
+74
+hp_nt_01.pdf ff., von denen in der
+Regel 7 genutzt werden) . Das Standard-Angebot enthält in der Regel: ein Anschreiben mit
+Kundendaten (persönliche Anrede, Adresse) , eine Projektbeschreibung (Art der Anlage,
+ggf. Standortdaten), eine Übersicht der technischen Anlagendaten (z.B. PV-Modulleistung und 
+anzahl, WR-Typ, ggf. WP-Modell, insgesamt kWp etc.), eine Wirtschaftlichkeitsübersicht
+(Investitionskosten, Förderung, jährliche Ersparnis, Amortisationszeit) , ggf. eine Seite mit
+Diagrammen (z.B. Ertragskurve, Autarkie) und eine Abschlussseite mit Firmenkontakt,
+Unterschriftsfeld usw. . Alle diese Inhalte sind im PDF-Template durch Platzhalter definiert,
+76
+76
+75
+die beim Generieren mit den echten Werten gefüllt werden – z.B. wird 
+{{customer_name}}
+durch den Kundennamen ersetzt, 
+{{pv_power_kWp}} durch die berechnete Anlagengröße,
+5
+77
+{{payback_period}} durch die ermittelte Amortisationsdauer etc. . Das Ergebnis ist ein
+kompaktes Angebot, das präzise alle wichtigen Fakten abdeckt .
+78
+• 
+• 
+79
+82
+85
+83
+80
+82
+81
+Erweitertes Angebot: Für anspruchsvollere Kunden oder auf Wunsch kann ein erweitertes
+Angebots-PDF erstellt werden. Diese Variante erlaubt es, optionale Zusatzseiten und Anhänge
+zum Angebot hinzuzufügen . In der UI kann der Benutzer per Checkbox oder Dropdown
+auswählen, welche Extras eingebunden werden sollen . Beispiele für optionale Inhalte:
+Produktdatenblätter der verwendeten Komponenten (PV-Module, Wechselrichter,
+Wärmepumpen etc.) als Anhang , Produktbilder oder Abbildungen der Hauptkomponenten
+zur Veranschaulichung , zusätzliche Diagramme (z.B. ein großes 12-Monats
+Ertragsdiagramm, Vergleichskurven Produktion vs. Verbrauch, Cashflow-Chart, CO₂
+Einsparungsdiagramm etc.) sowie Firmen- und Partnerlogos oder Zertifikate . Über die
+Firmenverwaltung kann pro Firma ein Logo hinterlegt sein, das dann etwa auf dem Deckblatt
+erscheint . Die erweiterte Angebotsausgabe ist sehr flexibel – alle zusätzlichen Inhalte sind
+optional und können je nach Bedarf ein- oder ausgeblendet werden .
+84
+89
+83
+86
+87
+88
+Multi-Angebot (Multi-PDF): Ein Highlight der App ist die Multi-Angebots-Funktion, mit der
+sich mit einem Klick gleich mehrere Angebots-PDFs gleichzeitig erzeugen lassen . Diese
+Funktion dient dazu, einem Kunden verschiedene Angebotsvarianten zur Auswahl
+bereitzustellen . Der Nutzer kann in der Oberfläche z.B. mehrere Firmen auswählen (z.B.
+verschiedene Installationsbetriebe) oder unterschiedliche Produktkonstellationen definieren;
+die App erstellt dann für jede gewählte Kombination ein individuelles PDF-Angebot . Alle
+generierten PDFs werden gesammelt als ZIP-Datei ausgegeben . Dabei stellt das System
+sicher, dass kein Angebot dem anderen gleicht: Pro Firma können unterschiedliche Module/
+Wechselrichter eingesetzt oder verschiedene Systemgrößen durchrotiert werden, um etwa
+Variante A: Premium-Komponenten vs. Variante B: Standard-Komponenten abzubilden . Die
+Preise werden für jede Variante entsprechend der hinterlegten Daten angepasst. Ebenso passt
+sich das Layout und Branding je Firma an – d.h. in jedem PDF sind das jeweilige Firmenlogo, 
+name und -farben enthalten . Diese Automatisierung spart enorm viel Zeit, wenn ein Kunde
+mehrere Alternativen erhalten soll, und ermöglicht einen professionellen A/B-Vergleich (z.B.
+Angebote von Firma A, B, C) auf Knopfdruck .
+89
+91
+94
+97
+98
+95
+96
+92
+90
+93
+Zusätzlich zu den finalen PDF-Generierungsoptionen bietet der PDF-Hub auch Hilfsmittel zur
+Qualitätssicherung: Es gibt eine PDF-Vorschau-Funktion, mit der man das Angebot vorab ansehen
+kann . Man kann entweder eine schnelle, reduzierte Vorschau (ohne alle Detail-Anhänge) rendern
+lassen oder eine vollständige seitenweise Detailansicht. Eine Zoom-Funktion erlaubt es, Details genau
+zu prüfen . Für Entwickler/Administratoren gibt es zudem einen speziellen Layer-Overlay-Debug
+Modus: Dabei wird ein transparenter Gitter-Layer über das PDF gelegt, um die korrekte Platzierung
+aller Texte und Bilder zu überprüfen . Dieses Gitternetz, basierend auf den Koordinaten der YAML
+Positionsdateien, erleichtert das pixelgenaue Feinjustieren der Templates.
+99
+PDF-Templating-System: Technisch basiert die PDF-Erstellung auf vorbereiteten Template-Seiten und
+Koordinatendateien. In den Assets liegen statische PDF-Templates ohne Text (für jede Seite ein PDF,
+z.B. 
+nt_nt_01.pdf bis 
+nt_nt_07.pdf für PV) sowie dazugehörige YAML-Dateien mit
+Textkoordinaten pro Seite (z.B. 
+seite1.yml , 
+100
+101
+seite2.yml usw.) . Diese definieren, an
+welcher Stelle welcher Platzhaltertext eingefügt wird. Beim Generieren lädt das PDF-Modul die
+Templates und füllt sie mit den aktuellen Projektdaten . Sämtliche Inhalte sind dadurch
+dynamisch: Jede Zahl und jeder Text im Angebot kommt direkt aus den Benutzereingaben oder den
+100
+102
+103
+101
+Berechnungsergebnissen . Die Platzhalter (z.B. 
+{{annual_yield_kwh}} für den Jahresertrag)
+in den YAML-Koordinaten werden durch die echten Werte ersetzt . Selbst Grafiken werden zur
+Laufzeit eingebunden: Firmenlogos oder generierte Diagramme (z.B. Ertragschart) werden als Bildlayer
+102
+103
+6
+104
+104
+105
+ins PDF geschrieben . So entstehen am Ende professionelle, individuell zugeschnittene
+Angebots-PDFs . Der gesamte Prozess vom Klick auf „PDF erstellen“ bis zum fertigen Dokument
+läuft innerhalb der Anwendung ab – im Hintergrund fügt die PDF-Engine die Seiten zusammen, wendet
+das Layout an und integriert alle Daten (ggf. übernimmt dies eine angebundene Bridge-Komponente in
+Python) .
+3D-Visualisierung
+106
+In der App ist ein interaktives 3D-Visualisierungstool für PV-Anlagen integriert, das über einen Button
+im Solarkalkulator-Bereich gestartet werden kann . Dieses Tool ermöglicht es, basierend auf den
+zuvor erfassten Daten aus der Bedarfsanalyse und dem Solarkalkulator, ein 3D-Modell des Gebäudes
+mit PV-Modulen zu generieren
+107
+• 
+. Die 3D-Visualisierung bietet folgende Funktionen:
+Dynamische Geometrie je Gebäudeart und Dachtyp: Das 3D-Modell passt sich automatisch an
+die gewählte Gebäudeform (Einfamilienhaus, Mehrfamilienhaus etc.) und Dachform an .
+Unterstützt werden alle üblichen Dachtypen – z.B. Satteldach, Pultdach, Flachdach, Walmdach,
+Krüppelwalmdach, Zeltdach – vollständig
+109
+108
+. Sonderfälle wie Gauben oder sehr unregelmäßige
+Dächer können in vereinfachter Form dargestellt werden (z.B. wird eine Gaube als kleinerer
+Aufbau auf dem Hauptdach modelliert)
+110
+. Die Abmessungen des Gebäudemodells orientieren
+sich an den eingegebenen Werten: Wenn z.B. 60 m² freie Dachfläche angegeben wurden und
+Dachtyp Flachdach ist, erzeugt das System ein rechteckiges Gebäudemodell, dessen Dachfläche
+etwa 60 m² beträgt (z.B. 10 m × 6 m)
+111
+• 
+112
+. Bei Schrägdächern wird aus Fläche, Neigung und
+Ausrichtung eine sinnvolle Grundform abgeleitet. 
+PV-Modul-Platzierung auf dem Dach: Die im Solarkalkulator bestimmte Anzahl an PV-Modulen
+(Parameter module_quantity) wird in der 3D-Szene virtuell auf den Dachflächen platziert . Es
+gibt zwei Modi: Im automatischen Modus werden die Module gleichmäßig in einem sinnvollen
+Raster auf der verfügbaren Fläche angeordnet (die App füllt die Dachfläche bestmöglich aus). Im 
+manuellen Modus kann der Nutzer hingegen Module einzeln hinzufügen, verschieben oder
+entfernen, um eine individuelle Platzierung vorzunehmen
+115
+• 
+113
+114
+. Die Dachausrichtung wird bei der
+Darstellung berücksichtigt – z.B. werden auf einem Flachdach je nach Auswahl der
+Aufständerungsart die Module entsprechend ausgerichtet (bei Ost-West-Aufständerung
+paarweise nach Ost und West) . 
+Interaktive Bearbeitung: Der Nutzer kann die 3D-Ansicht nicht nur betrachten, sondern
+bestimmte Aspekte direkt verändern
+116
+117
+118
+• 
+119
+. So lassen sich im manuellen Modus Module per Drag
+and-Drop versetzen oder entfernen. Über Eingabeelemente können zudem Maße angepasst
+werden (z.B. Dachlänge, -breite, Gebäudehöhe) und auch farbliche Anpassungen sind möglich
+. Änderungen am Formular – etwa eine andere Dachneigung oder geänderte Modulanzahl 
+wirken sich unmittelbar auf das 3D-Modell aus, ohne dass die App neu gestartet werden muss
+. In manchen Fällen wird ein Aktualisieren-Knopf angeboten, um bei bestimmten
+Änderungen das Modell neu zu rendern . 
+Integration in App und Angebot: Die 3D-Visualisierung ist direkt in die Streamlit-App
+eingebettet (kein externer Viewer erforderlich)
+120
+119
+106
+. Der Solarkalkulator enthält einen Button, um
+den 3D-Modus zu laden . Außerdem gibt es eine Screenshot-/Export-Funktion, mit der der
+Nutzer das finale 3D-Modell als Bild exportieren kann
+121
+. Dieses Bild kann automatisch in das
+Angebots-PDF eingebunden werden, sodass der Kunde eine visuelle Darstellung der geplanten
+Anlage im Angebot sieht
+121
+. Die Bildgenerierung erfolgt dynamisch zur Laufzeit, analog zur
+bestehenden Diagramm-Exportlogik (Plotly-Charts werden bereits als PNG exportiert) .
+Die technische Umsetzung des 3D-Tools sieht vor, eine geeignete 3D-Engine für Python zu nutzen. In
+der Planung wurde PyVista als Rendering-Bibliothek vorgesehen . PyVista ermöglicht es, 3D
+Geometrien zu generieren und zu visualisieren, und kann in Verbindung mit Streamlit entweder
+122
+123
+7
+62
+statische Bilder ausgeben oder via WebGL interaktive Objekte einbetten. Geplant ist, für die
+Angebotseinbindung eine isometrische Standardansicht zu nutzen (Kamera-Perspektive z.B. auf 45°),
+um einen konsistenten Blickwinkel für den PDF-Screenshot zu erhalten . Für bestimmte
+Anwendungsfälle (z.B. die oben erwähnten Wärmepumpen-Energiefluss-Visualisierungen) werden auch
+vorberechnete 3D-Animationen (GIFs) eingesetzt, da hier ein photorealistisches 360°-Modell gezeigt
+wird . Insgesamt erweitert die 3D-Visualisierung die App um einen anschaulichen, räumlichen
+Aspekt, der komplexe technische Planungen für den Endkunden greifbarer macht.
+Admin-Panel und Einstellungen
+124
+123
+Die App verfügt über ein geschütztes Admin-Panel für Administratoren bzw. berechtigte Nutzer. Es gibt
+ein Admin-Login-System mit Rollen (z.B. Administrator vs. Vertriebler), sodass das Admin-Menü nur
+autorisierten Personen zugänglich ist . Über das Admin-Panel können sämtliche Stammdaten,
+Preisparameter und Systemeinstellungen der Anwendung konfiguriert werden . Die wichtigsten
+Bereiche und Funktionen der Administration sind:
+125
+• 
+126
+Produkt- und Komponentenverwaltung: Im Admin-Menü können Produktdaten gepflegt
+werden. Alle in den Kalkulatoren verwendeten Produkte (PV-Module, Wechselrichter, Speicher,
+Wärmepumpen, Wallboxen etc.) sind in lokalen Datenbanken hinterlegt und lassen sich hier
+verwalten. Der Admin kann neue Produkte hinzufügen, bestehende bearbeiten oder löschen.
+Auch ein CSV/Excel-Import für Produktlisten wird unterstützt
+127
+127
+ – importierte oder
+hinzugefügte Produkte erscheinen sofort in den Dropdown-Auswahlen der Kalkulationsmodule
+. (Falls die Produktdatenbank nicht verfügbar ist – etwa bei einer frischen Installation – weist
+die App den Nutzer mit einer Fehlermeldung darauf hin, da die Verknüpfung zwischen
+Datenbank und Kalkulation essenziell ist
+127
+.) Neben den Hauptprodukten können hier auch 
+Montage-Komponenten für PV (Unterkonstruktionen etc.) hinterlegt werden, gegliedert nach
+Dachtypen und Herstellern. So ist gewährleistet, dass die benötigten Teile (z.B. Dachhaken,
+Schienen, Klemmen) mit Stückzahlen und Preisen hinterlegt sind – die beigelegte
+Dokumentation listet detailliert die Komponenten für verschiedene Dachtypen auf . Diese
+Datenbank kann z.B. dazu dienen, Materiallisten zu generieren oder in Kalkulationen
+einzubeziehen. 
+• 
+128
+Firmen- und Logo-Verwaltung: Über die Firmenverwaltung können Angaben zur eigenen
+Firma bzw. zu Partnerfirmen gepflegt werden. Dies umfasst Adress- und Kontaktdaten der Firma
+sowie das Hinterlegen eines Firmenlogos. Die App unterstützt mehrere Firmenprofile – wichtig
+für die Multi-Angebot-Funktion, bei der für verschiedene Anbieter jeweils ein eigenes Angebots
+PDF mit entsprechendem Branding erstellt wird
+92
+129
+. Der Admin kann neue Firmen anlegen,
+bearbeiten oder löschen. Pro Firma kann ein Logo hochgeladen werden, das dann in den PDFs
+(z.B. auf dem Deckblatt) erscheint
+85
+• 
+. Zusätzlich können möglicherweise Vorlagen für
+f
+irmenspezifische Texte (Anschreiben, Fußzeilen etc.) hinterlegt werden. 
+Preis-Matrix und Preisregeln: Ein zentraler Admin-Punkt ist die Verwaltung der Preis-Matrix.
+Die Preis-Matrix ist eine hinterlegte Tabelle, die für verschiedene Anlagenkonfigurationen (z.B.
+Kombination aus Modulanzahl und Speicherkapazität) den Grundpreis vorgibt .
+Beispielsweise kann definiert sein: 10 Module + 5 kWh Speicher = 18.000 €. Diese Matrix kann im
+Admin-Bereich jederzeit aktualisiert werden
+131
+130
+. Der Admin kann eine neue Matrix aus einer
+Excel/CSV-Datei importieren oder die Werte manuell eingeben
+132
+Matrix in ein JSON-Format um
+133
+. Intern wandelt die App die
+ und nutzt sie in den Kalkulationen, um aus der gewählten
+Systemgröße einen Angebotspreis zu ermitteln
+134
+135
+131
+. Auf den ermittelten Grundpreis wendet das
+System dann die im Projekt eingegebenen Rabatte/Zuschläge an, um den Endpreis zu berechnen
+. Durch die flexible Matrix-Verwaltung kann der Administrator schnell neue Preisstaffeln
+einpflegen oder Preisänderungen hinterlegen, sodass die Kalkulation stets mit aktuellen Preisen
+erfolgt
+126
+. Neben der Matrix können im Admin-Panel auch Preisregeln definiert werden
+8
+(etwa besondere Auf- oder Abschläge für bestimmte Situationen) – hierfür existiert z.B. das
+Modul 
+admin_pricing_rule_ui.py . Auch die Gewinnmargen können verwaltet werden
+• 
+• 
+• 
+(admin_profit_margin_ui.py), um z.B. festzulegen, welche Marge auf Einkaufspreise
+aufgeschlagen wird. 
+Tarifverwaltung: Unter Tarife kann der Admin sämtliche Energietarife pflegen .
+Insbesondere können hier die Strom-Bezugstarife (Strompreis für Endkunden) global hinterlegt
+werden, differenziert z.B. nach Privat/Gewerbe oder Bundesland
+136
+137
+136
+138
+. Außerdem lassen sich die 
+Einspeisevergütungen für PV-Strom für verschiedene Jahrgänge und Einspeise-Arten verwalten
+. Da sich Einspeisevergütungen regelmäßig ändern und es Unterschiede zwischen Teil
+und Volleinspeisung gibt, kann man für jedes Jahr die jeweiligen Cent/kWh-Werte eintragen (z.B. 
+2023: 8,2 ct/kWh Teil / 13 ct Volleinspeisung, 2024: andere Werte)
+die Berechnung der Einspeiseerlöse im Angebot ein
+138
+139
+140
+137
+141
+. Diese Werte fließen direkt in
+. Ebenso können hier die 
+Heizenergie-Tarife (Gas-, Ölpreis) gepflegt werden, die für Wärmepumpen
+Wirtschaftlichkeitsvergleiche herangezogen werden . Durch die Tarifverwaltung ist
+sichergestellt, dass Änderungen im Energiemarkt schnell in den Kalkulationen berücksichtigt
+werden – ohne dass der Nutzer bei jedem Projekt manuell neue Werte eingeben muss . 
+Benutzer- und Rechteverwaltung: Da die App von mehreren Personen (z.B. Admin und
+Verkäufern) genutzt werden kann, gibt es eine Benutzerverwaltung. Der Administrator kann
+Benutzerkonten anlegen, bearbeiten und deren Rollen/Rechte zuteilen. Beispielsweise kann es
+Rollen geben wie Admin (darf alles ändern) und Vertrieb (darf Projekte anlegen, aber keine
+Stammdaten ändern). Die Authentifizierung erfolgt über die Admin-Login-Seite mit
+Benutzername/Passwort . 
+Weitere Einstellungen: Unter Einstellungen & Optionen kann der Admin globale Simulations- und
+Layout-Parameter setzen
+124
+125
+140
+141
+. Dazu gehören etwa: die PVGIS-Anbindung (ein Schalter, um die
+automatische PV-Ertragsberechnung via PVGIS API ein- oder auszuschalten)
+142
+143
+54
+144
+144
+; die Auswahl
+eines Standard-Ertragsprofils (z.B. ein vordefinierter spezifischer Ertrag in kWh/kWp für PV, falls
+man nicht mit PVGIS arbeiten will); Lokalisierungstexte für Mehrsprachigkeit (d.h.
+Textbausteine in verschiedenen Sprachen in JSON-Dateien, die hier angepasst werden können)
+; diverse Debug-Optionen für Testzwecke (z.B. Aktivierung des oben erwähnten PDF
+Overlay-Gitters oder ausführliches Logging) ; sowie Simulationseinstellungen, die
+Berechnungen beeinflussen (z.B. der Standardwert für jährliche Ladezyklen von
+Batteriespeichern, ein Auf- oder Abschlagsfaktor für die Amortisationsberechnung – wie der 
+Amortisations-Cheat –, oder ob Degradationsraten für PV standardmäßig berücksichtigt werden)
+. Auch visuelle Einstellungen wie die Aktivierung/Deaktivierung bestimmter UI-Effekte
+oder Animationsfeatures können hier vorgenommen werden (das entsprechende UI-Modul 
+admin_ui_effects_settings.py deutet darauf hin). Schließlich können in den Admin
+Einstellungen vermutlich Template-Einstellungen fürs PDF vorgenommen werden (z.B. Auswahl
+eines anderen Angebotslayouts oder Bearbeiten von Textvorlagen für Anschreiben), wobei dafür
+speziell 
+admin_pdf_settings_ui.py und 
+admin_intro_settings_ui.py vorhanden
+sind. 
+145
+All diese Admin-Werkzeuge machen die Anwendung äußerst anpassbar. Ein Administrator kann die
+Plattform eigenständig auf veränderte Bedingungen einstellen – ohne Codeänderungen . Neue
+Produkte oder Preisänderungen lassen sich sofort einpflegen, geänderte Tarife wirken sich sofort auf
+alle Berechnungen aus , und neue Firmen oder Logos stehen nach Anlage direkt in allen relevanten
+Bereichen (z.B. Angeboten) zur Auswahl . Durch die Kombination aus Benutzerverwaltung,
+Datenbank-Management und flexiblen Einstellungen bleibt das Tool immer aktuell und kann sich an
+Wachstum oder Marktveränderungen anpassen .
+145
+145
+126
+9
+Produkt- und Preisdatenbanken
+146
+Sämtliche Kundendaten, Firmendaten, Produkte und Tarifinformationen speichert die App lokal 
+anfangs in JSON-Dateien, mit geplanter Migration auf eine SQLite-Datenbank für bessere Persistenz
+. Diese Datenbanken bilden das Rückgrat für die Kalkulationen und können vom Nutzer (bzw.
+Admin) über die UI verwaltet werden
+• 
+146
+. Im Einzelnen bestehen folgende Datenbestände:
+Kundendatenbank (CRM): Alle Kunden und Interessenten werden in einer lokalen Datenbank
+gehalten (zunächst JSON, später z.B. 
+• 
+app_data.db ). Pro Kunde werden die im Projekt
+erfassten Daten (Name, Adresse, Kontakte, Notizen) sowie Vertriebsinformationen (Lead-/
+Angebotsstatus, zugehörige Projekte) gespeichert. Das CRM-Modul erlaubt die Verwaltung und
+nutzt diese Daten für Anschreiben und Platzhalter im PDF . 
+Firmendatenbank: Es gibt eine Sammlung von Firmenprofilen, die im Admin-Panel gepflegt
+werden können. Mindestens die eigene Firma ist hinterlegt, ggf. mehrere (für den Multi
+Angebots-Vergleich). Gespeichert sind Firmendetails (Name, Anschrift, Kontaktdaten) und Pfade
+zu Logos
+85
+5
+. In den Angebots-PDF-Templates gibt es je Seite positionsabhängige Koordinaten
+für bis zu 6 Firmen (z.B. in multi_nt_01.pdf bis multi_nt_08.pdf jeweils Varianten für Firma 1–6),
+sodass bei Multi-Angeboten die Logos und Firmendaten auf jeder Seite je nach gewählter Firma
+eingesetzt werden (die YAML-Dateien 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+21
+24
+28
+seiteX_firmaY.yml legen das fest). 
+Produktdatenbank (PV & WP): Dies ist die umfassende Stammdatenbank aller Produkte, die
+in der App kalkulatorisch verwendet werden. Sie umfasst mehrere Kategorien:
+PV-Module: Datensätze mit Hersteller, Modellname, Nennleistung (Wp), Modulwirkungsgrad,
+Abmessungen evtl. und Preis pro Modul . 
+Wechselrichter: Datensätze mit Hersteller, Modell, AC-Nennleistung (kW), europ. Wirkungsgrad
+und Preis . 
+Batteriespeicher: Datensätze mit Hersteller/Modell, nutzbarer Kapazität (kWh), Zyklenfestigkeit
+(Anzahl Vollzyklen bis Kapazitätsende), Garantie (Jahre) und Preis . 
+PV-Zubehör: Weitere Produkte wie Wallboxen, Energiemanagement-Systeme, Optimierer,
+Notstromsysteme, Montagesets etc., jeweils mit den relevanten Kenndaten (z.B. Wallbox
+Ladeleistung, 1- oder 3-phasig; Optimierer kompatible Modultypen; Montagepaket für x Module)
+und Preisen . 
+Wärmepumpen: Datensätze mit Hersteller, Modell, Heizleistung (kW) bei Normbedingungen,
+Betriebsart (Luft/Wasser, Sole/Wasser, etc.), COP (Arbeitszahl) bzw. JAZ und Preis . Falls
+verfügbar, können hier auch alte Heizkessel (Öl/Gas) hinterlegt sein, falls man einen Vergleich
+anstellen will. 
+25
+147
+Montagesystem-Komponenten: Eine spezielle Unter-Datenbank listet alle Komponenten für PV
+Unterkonstruktionen je Dachtyp auf
+128
+. Hier sind pro Dachtyp (Ziegel, Blech, Flachdach etc.)
+und Hersteller (K2, Schletter, Würth, Prefa, Renusol) die benötigten Teile mit Stückzahl pro Modul
+und Preise erfasst. Beispielsweise enthält der Datensatz für K2 Systems auf Ziegeldach Angaben
+wie: Dachhaken CrossHook 3S/4S (Alu, verstellbar, ~x Stück/Modul), Schienenprofil SingleRail 36
+(Alu, Länge y pro Modul), End- und Mittelklemmen etc., inklusive Artikelnummern und
+Garantieangaben
+148
+149
+. Diese Komponentenlisten sind so strukturiert, dass man sie später als
+JSON/CSV exportieren könnte (eindeutige Felder je Komponente sind vorgesehen)
+. Aktuell
+dienen sie vor allem dazu, Materialkosten je nach Dachtyp realistisch in den Angebotspreis
+einzukalkulieren oder dem Nutzer als Stückliste bereitzustellen. 
+128
+10
+Die Produktdatenbank(en) liegen lokal als JSON oder in einer SQLite-DB (
+product_database.db für
+allgemeine Produkte, 
+heatpump_database.py/db für WP-spezifische, etc.) und können im Admin
+Panel durchstöbert und bearbeitet werden. 
+• 
+• 
+Preis-Matrix: Wie oben beschrieben, existiert parallel zu den Einzelpreisen der Produkte eine 
+Preis-Matrix für komplette Systemangebote. Diese Matrix ist im Prinzip eine vordefinierte
+Preistabelle (ähnlich einer Excel-Matrix), die zu bestimmten Kombinationswerten (Anzahl Module
+× Speicherkapazität) einen Gesamtanlagenpreis enthält
+130
+. Die Matrix wird genutzt, um auf
+einen Schlag einen Basis-Angebotspreis zu ermitteln, ohne jedes Mal alle Einzelkomponenten
+plus Montage separat kalkulieren zu müssen. Im Angebot wird dann transparent gemacht, wie
+dieser Preis zustande kommt (Grundpreis laut Matrix, plus/minus individuelle Zu- oder
+Abschläge)
+135
+132
+131
+. Der Matrix-Ansatz ermöglicht es, Erfahrungswerte oder externe
+Kalkulationsvorgaben (z.B. aus Excel-Kalkulationen eines Unternehmens) in das System zu
+übernehmen. Der Admin kann die Matrixdaten per CSV/XLS importieren und jederzeit ändern
+. Intern werden sie als JSON hinterlegt und durch Funktionen wie 
+get_price_from_matrix() im Code ausgelesen. 
+Tarifdatenbank: Die Energie- und Einspeisetarife werden ebenfalls persistiert, typischerweise
+in JSON-Form (z.B. 
+tariffs.json ) oder in der Hauptdatenbank. Für jedes Jahr sind
+Einspeisetarife (Teil-/Volleinspeisung) in Cent/kWh gespeichert
+138
+. Ebenso ein Standard
+Strombezugstarif (in €/kWh), ggf. differenziert nach Region oder Nutzerprofil
+137
+. Diese Werte
+können im Admin-UI angepasst werden und fließen dann automatisch in alle Berechnungen ein,
+die z.B. Einspeisevergütung oder Stromkostenersparnis betreffen
+136
+141
+141
+. Auch die zum
+Vergleich herangezogenen Gas-/Ölpreise werden hier hinterlegt, damit die WP
+Wirtschaftlichkeitsrechnung (Alter Heizkosten vs. Neu) stets mit aktuellen Durchschnittspreisen
+rechnet .
+Durch diese lokalen Datenbanken ist Arschibald weitgehend offlinefähig und unabhängig von externen
+Datenquellen. Alle wichtigen Parameter können an einer Stelle gepflegt werden. Änderungen schlagen
+sich sofort in den Kalkulationen und PDFs nieder (z.B. ein in der Admin-Oberfläche aktualisierter
+Modulpreis wird direkt in neuen Solarkalkulationen und Angeboten verwendet ). Die geplante
+Migration auf SQLite wird die Performance und Datenkonsistenz weiter verbessern, insbesondere wenn
+die Datenmengen wachsen (mehrere hundert Produkte, viele Kunden etc.). 
+145
+UI und Theme-System
+16
+Die Benutzeroberfläche von Arschibald ist als Multi-Page Streamlit App umgesetzt. Das bedeutet, es
+gibt mehrere Seiten/Views, die über ein Navigationsmenü erreichbar sind. Typischerweise existieren
+Seiten für die Projekt-/Bedarfsanalyse, für die Kalkulationen (PV-Kalkulator, WP-Simulator jeweils), für
+Ergebnisse & Dashboard, für das CRM sowie den PDF-Hub und die Admin-Einstellungen. Die
+Navigation erfolgt über das Streamlit-Menü oder über eigene Menübuttons. Innerhalb der
+mehrschrittigen Formulare (z.B. Bedarfsanalyse) gibt es eigene Weiter/Zurück-Buttons zur Steuerung
+. Ein zentrales UI-Element ist die Seitenleiste (Sidebar), in der z.B. globale Einstellungen oder
+Seitenlinks untergebracht sein können – auch ein Logo und Benutzerinformationen werden dort
+angezeigt.
+Benutzererlebnis und Design: Die App-Oberfläche ist darauf ausgelegt, auch komplexe Eingaben
+möglichst intuitiv zu gestalten. Es kommen zahlreiche interaktive Steuerelemente zum Einsatz:
+Dropdown-Menüs (z.B. für Produktauswahl, Dachtyp etc.), Slider für kontinuierliche Werte (etwa
+Prozentangaben oder kW-Werte), Datumsauswahlfelder (z.B. für Inbetriebnahmedatum falls relevant),
+Checkboxen für Optionen und mehr . Die Sprache der UI ist klar und verständlich, Fachbegriffe
+werden kontextuell erklärt – viele Labels haben kleine Info-Icons mit Tooltips, die bei Hover eine
+150
+11
+151
+Erläuterung anzeigen . Dieses Hilfesystem stellt sicher, dass auch Endkunden die Ergebnisse
+nachvollziehen können, obwohl die Hauptnutzer Heizungsbauer und Energieberater sind .
+Insgesamt ist das UI darauf ausgelegt, schlank und modern zu wirken, was durch den Einsatz von
+konsistenten Styles und ggf. einem Design-Framework erreicht wird.
+152
+Theme-System: Arschibald verfügt über ein flexibles Theme-System, das verschiedene Farb- und
+Layout-Themes unterstützt. In der Codebasis gibt es einen 
+theme_manager und vordefinierte Theme
+JSON-Dateien (z.B. shadcn-default, shadcn-dark, shadcn-blue usw., sowie einige externe Themes aus
+Awesome Streamlit Themes). Der Nutzer kann wahrscheinlich im Admin- oder Nutzerprofil das
+gewünschte Farbschema auswählen. So sind z.B. helle und dunkle Themes verfügbar, aber auch farblich
+angepasste Varianten (blau, grün, lila, etc.), um die Oberfläche dem Corporate Design anzupassen. Ein
+Wechsel des Themes aktualisiert Farben von Hintergründen, Buttons, Charts etc., da diese über
+sogenannte Theme-Tokens definiert sind. Auch das PDF kann davon berührt sein (etwa Farbakzente im
+Angebot oder das Diagramm-Theme – es gibt z.B. 
+shadcn_chart_theme.py , was auf ein
+einheitliches Diagramm-Farbschema hindeutet). Die Barrierefreiheit wird ebenfalls bedacht: Im Code
+f
+indet sich ein Modul 
+accessibility.py , das sicherstellt, dass Kontraste ausreichend sind und ggf.
+Schriftgrößen/Abstände angepasst werden können.
+Layout und Komponenten: Die App nutzt für das Layout responsive Techniken, sodass sie auf
+unterschiedlichen Bildschirmgrößen funktioniert (im Streamlit-Kontext meist via reaktive Gestaltung, in
+der TS/Electron-Version war Tailwind/PrimeReact genannt). In Arschibald gibt es einige individuelle UI
+Komponenten: Beispielsweise einen Fortschrittsanzeiger (
+progress_manager.py ), der den
+Fortschritt 
+durch 
+die 
+153
+Formularschritte 
+visualisiert; 
+oder 
+ein 
+Carousel-Element
+(carousel_preview.py), mit dem man z.B. durch Produktbilder oder Diagramme blättern kann.
+Auch erweiterte Diagramm-Widgets sind vorhanden, um komplexe Charts anzuzeigen (z.B. Break-Even
+Diagramme im Dashboard) . Alle numerischen Ausgaben werden in deutschem Format formatiert
+(Tausenderpunkt und Komma als Dezimaltrennzeichen), z.B. "1.234,56 kWh", was an verschiedenen
+Stellen in Diagrammen und PDF ersichtlich ist . 
+153
+Ergebnis-Dashboard: Nach Eingabe aller Projektdaten bietet die App eine Ergebnisse-Seite, die die
+wichtigsten Kennzahlen und Grafiken zusammenfasst. Standardmäßig werden hier etwa die
+Preisaufschlüsselung, die Kostenersparnis (Stromkosten alt vs. neu, Heizkosten alt vs. neu) und
+Kennziffern wie Autarkiegrad, Amortisationszeit etc. in Text und einfachen Grafiken präsentiert .
+Es existiert auch ein modernes Dashboard im Kacheldesign als alternative Darstellung . Dieses
+zeigt Kennzahlen in großen Kacheln und ermöglicht es, bestimmte Detaildiagramme interaktiv ein- und
+auszublenden 
+(Hinweise 
+darauf 
+render_extended_calculations_dashboard und mehrere 
+130
+155
+liefern 
+Funktionen 
+154
+wie
+render_*_switcher in der
+Codebasis). So kann ein Berater dem Kunden auf Wunsch live verschiedene Diagramme zeigen (z.B. Was
+passiert bei steigendem Strompreis? mittels eines Tarifszenario-Diagramms). Solche Szenario-Vergleiche
+sind durch hinterlegte Schalter möglich, um verschiedene Annahmen ein- und auszublenden (z.B. einen
+Kostenvergleich mit/ohne PV, mit/ohne Speicher, verschiedene Finanzierungsoptionen). Das Dashboard
+kann damit sowohl zur internen Prüfung als auch zur Kundenpräsentation genutzt werden.
+Fortgeschrittene Funktionen & KI: In der Codebasis sind zudem Hinweise auf experimentelle Features
+wie einen AI Companion oder Voice Command (Sprachsteuerung) zu finden. Diese sind jedoch nicht
+Bestandteil der Hauptfunktionen, sondern eher geplante Erweiterungen. Beispielsweise könnte ein AI
+Companion einfache Fragen zum Projekt beantworten oder eine Angebotserläuterung generieren.
+Solche Funktionen werden im aktuellen Umfang aber (noch) nicht genutzt und können daher
+vernachlässigt werden.
+12
+156
+Zusammenfassend legt das UI/UX-System von Arschibald großen Wert auf Bedienfreundlichkeit, 
+Klarheit und Professionalität. Dies zeigt sich in Details wie der konsistenten deutschen
+Zahlenformatierung und den modularen Themes , die dem Nutzer den Eindruck einer ausgereiften,
+auf den lokalen Markt abgestimmten Software vermitteln. Trotz der komplexen Berechnungslogik im
+Hintergrund gelingt es der Oberfläche, alle Eingaben und Ergebnisse übersichtlich und ansprechend
+darzustellen.
+Funktionen, Methoden und Klassen (komplette Liste)
+Im Folgenden ist eine vollständige Liste aller Klassen (mit ihren Methoden) und Funktionen aus den
+analysierten Python-Modulen von Arschibald aufgeführt . Die Auflistung ist nach Dateien
+(alphabetisch) gruppiert:
+157
+• 
+• 
+admin_brand_logo_management_ui.py– Klasse
+AdminBrandLogoManagementUI : 
+__init__(self) , 
+admin_core_status_extended_ui.py
+render(self)
+(Hinweis: enthielt in bereitgestellten Dateien keine expliziten Funktionsdefinitionen – vermutlich nur UI
+Layout.)
+• 
+• 
+• 
+• 
+• 
+• 
+admin_heating_costs_config_ui.py– Klasse
+AdminHeatingCostsConfigUI : 
+__init__(self) , 
+admin_intro_settings_ui.py– Klasse
+AdminIntroSettingsUI : 
+render(self)
+__init__(self) , 
+render(self)
+admin_logo_management_ui.py– Klasse
+AdminLogoManagementUI : 
+__init__(self) , 
+admin_logo_positions_ui.py– Klasse
+AdminLogoPositionsUI : 
+render(self)
+__init__(self) , 
+render(self)
+admin_module_alias_mapping_ui.py– Klasse
+AdminModuleAliasMappingUI : 
+__init__(self) , 
+admin_panel.py
+render(self)– 
+_dummy_load_admin_setting(setting_key: str, default: Any = None) -> Any– 
+_dummy_save_admin_setting(setting_key: str, value: Any) -> None– 
+_dummy_list_products() -> List[Dict[str, Any]]– 
+_dummy_add_product(product: Dict[str, Any]) -> Dict[str, Any]– 
+_dummy_update_product(product_id: int, updated_product: Dict[str, Any]) -> 
+bool– 
+_dummy_delete_product(product_id: int) -> bool– 
+_dummy_get_product_by_id(product_id: int) -> Dict[str, Any]– 
+_dummy_get_product_by_model_name(model_name: str) -> Dict[str, Any]– 
+_dummy_list_product_categories() -> List[str]– 
+_dummy_list_companies() -> List[Dict[str, Any]]– 
+_dummy_add_company(company: Dict[str, Any]) -> Dict[str, Any]
+13
+– _dummy_get_company_by_id(company_id: int) -> Dict[str, Any]– 
+_dummy_update_company(company_id: int, updated_company: Dict[str, Any]) -> 
+bool– _dummy_delete_company(company_id: int) -> bool– _dummy_set_default_company(company_id: int) -> None– _dummy_add_company_document(company_id: int, document: Any) -> bool– _dummy_list_company_documents(company_id: int) -> List[Any]– _dummy_delete_company_document(company_id: int, document_id: int) -> bool– _render_stateful_selector(key: str, label: str, options: List[str], 
+default: str) -> Any– get_text_local(text_key: str, default: str = '') -> str– render_company_crud_tab()– render_services_management_tab()– render_product_management()– render_general_settings_extended()– render_tariff_management()– render_visualization_settings()– render_advanced_settings()– render_pdf_design_settings()– manage_templates_local()– render_api_key_settings()– manage_tariff_list_ui()– render_admin_panel()– render_logo_management_tab()– render_company_text_templates_tab()– render_company_image_templates_tab()
+admin_payment_terms_ui.py– Klasse AdminPaymentTermsUI: __init__(self), render(self)
+admin_pdf_settings_ui.py– Klasse AdminPDFSettingsUI: __init__(self), render(self)
+admin_pricing_rule_ui.py– Klasse AdminPricingRuleUI: __init__(self), render(self)
+admin_product_attributes_ui.py– Klasse AdminProductAttributesUI: __init__(self), render(self)
+admin_product_database_ui.py– Klasse AdminProductDatabaseUI: __init__(self), render(self)
+admin_profit_margin_ui.py– Klasse AdminProfitMarginUI: __init__(self), render(self)
+admin_services_ui.py– Klasse AdminServicesUI: __init__(self), render(self)
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+14
+admin_ui_effects_settings.py– Klasse AdminUIEffectsSettings: __init__(self), render(self)
+advanced_charts.py– create_break_even_detailed_chart(data: dict) -> Any– create_lifecycle_cost_chart(data: dict) -> Any– _export_plotly_fig_to_bytes(fig) -> bytes– create_all_advanced_charts(data: dict) -> Dict[str, Any]
+advanced_features.py– grid_tariff_optimization(data: dict) -> float– tax_benefit_calculator(data: dict) -> float– subsidy_optimizer(data: dict) -> float– advanced_battery_optimization(data: dict) -> float– financing_scenario_comparison(data: dict) -> Any– get_all_advanced_features() -> List[Callable]
+analysis.py– _ensure_plotly_chart_unwrapped(chart_obj: Any) -> Any– get_text(text_key: str, default: str = '') -> str– format_kpi_value(value: float, unit: str) -> str– render_pricing_modifications_ui(data: Dict[str, Any]) -> None– _render_overview_section(data: Dict[str, Any]) -> None– get_final_investment_amount(data: Dict[str, Any]) -> float– _render_financial_section(data: Dict[str, Any]) -> None– _render_energy_section(data: Dict[str, Any]) -> None– _render_technical_section(data: Dict[str, Any]) -> None– _render_environment_section(data: Dict[str, Any]) -> None– integrate_advanced_calculations(texts: dict[str, str])– _create_kpi_card(title: str, value: Any, unit: str) -> Any– _get_default_viz_settings() -> Dict[str, Any]– load_viz_settings() -> Dict[str, Any]– _get_visualization_settings() -> Dict[str, Any]– create_universal_2d_chart(data: Dict[str, Any], chart_type: str) -> Any– _create_chart_by_type(chart_type: str, data: Dict[str, Any]) -> Any– create_four_type_chart(data: Dict[str, Any]) -> Any– create_multi_series_2d_chart(data_series: List[Dict[str, Any]]) -> Any– _safe_viz_get(data: Dict[str, Any], key: str, default: Any) -> Any– _apply_custom_style_to_fig(fig: Any) -> None– _export_plotly_fig_to_bytes(fig) -> bytes– _apply_shadcn_like_theme(fig: Any) -> None– _get_baseline_annual_costs_without_pv(data: Dict[str, Any]) -> float– _compute_annual_cost_series(data: Dict[str, Any]) -> List[float]– _add_chart_controls(chart: Any) -> None– render_daily_production_switcher(state: Any) -> None– render_tariff_cube_switcher(state: Any) -> None– render_weekly_production_switcher(state: Any) -> None– render_yearly_production_switcher(state: Any) -> None– render_project_roi_matrix_switcher(state: Any) -> None– render_feed_in_revenue_switcher(state: Any) -> None
+• 
+• 
+• 
+• 
+15
+– 
+render_production_vs_consumption_switcher(state: Any) -> None– 
+render_co2_savings_value_switcher(state: Any) -> None– 
+render_extended_calculations_dashboard(data: Dict[str, Any]) -> None– 
+render_investment_value_switcher(state: Any) -> None– 
+render_storage_effect_switcher(state: Any) -> None– 
+render_selfuse_stack_switcher(state: Any) -> None– 
+render_cost_growth_switcher(state: Any) -> None– 
+render_selfuse_ratio_switcher(state: Any) -> None– 
+render_roi_comparison_switcher(state: Any) -> None– 
+render_scenario_comparison_switcher(state: Any) -> None– 
+render_tariff_comparison_switcher(state: Any) -> None– 
+render_income_projection_switcher(state: Any) -> None– 
+_create_monthly_production_consumption_chart(data: Dict[str, Any]) -> Any– 
+_create_electricity_cost_projection_chart(data: Dict[str, Any]) -> Any– 
+_create_cumulative_cashflow_chart(data: Dict[str, Any]) -> Any– 
+_render_consumption_coverage_pie(data: Dict[str, Any]) -> Any– 
+_render_pv_usage_pie(data: Dict[str, Any]) -> Any– 
+get_pricing_modifications_data() -> Dict[str, Any]– 
+render_advanced_economics(data: Dict[str, Any]) -> None– 
+render_detailed_energy_analysis(data: Dict[str, Any]) -> None– 
+render_technical_calculations(data: Dict[str, Any]) -> None– 
+render_financial_scenarios(data: Dict[str, Any]) -> None– 
+render_environmental_calculations(data: Dict[str, Any]) -> None– 
+render_optimization_suggestions(data: Dict[str, Any]) -> None– 
+prepare_financing_data_for_pdf_export(data: Dict[str, Any]) -> Dict[str, 
+Any]– 
+get_financing_data_summary(data: Dict[str, Any]) -> Dict[str, Any]– 
+render_analysis(data: Dict[str, Any]) -> None– 
+render_financing_analysis(data: Dict[str, Any]) -> None– 
+prepare_advanced_calculations_for_pdf_export(data: Dict[str, Any]) -> 
+Dict[str, Any]– 
+render_advanced_calculations_section(data: Dict[str, Any]) -> None– 
+render_advanced_financial_analysis(data: Dict[str, Any]) -> None– 
+render_advanced_energy_analysis(data: Dict[str, Any]) -> None– 
+render_advanced_environmental_analysis(data: Dict[str, Any]) -> None– 
+render_advanced_technical_analysis(data: Dict[str, Any]) -> None– 
+render_advanced_comparison_analysis(data: Dict[str, Any]) -> None
+• 
+analysis_utils.py– 
+filter_data_by_keys(data: Dict[str, Any], keys: List[str]) -> Dict[str, 
+Any]– 
+calculate_cpi_adjustment(amount: float, base_year: int, target_year: int, 
+inflation_rate: float) -> float– 
+convert_to_real_terms(amount: float, inflation_rate: float) -> float– 
+adjust_for_inflation(amount: float, inflation_rate: float, years: int) -> 
+float– 
+compute_tax_savings(profit: float, tax_rate: float) -> float– 
+calculate_additional_subsidy(amount: float, subsidy_rate: float) -> float
+16
+– 
+format_currency(value: float) -> str– 
+format_percentage(value: float) -> str– 
+format_number(value: float) -> str
+• 
+• 
+• 
+• 
+• 
+analyze_missing_features.py– Klasse
+MissingFeaturesAnalyzer : 
+__init__(self, features: Dict[str, bool])– 
+analyze(self) -> List[str]– 
+report(self) -> str– 
+find_missing_features(features: Dict[str, bool]) -> List[str]– 
+suggest_features_to_add(features: Dict[str, bool]) -> List[str]
+calculation_bridge.py– 
+bridge_calculations(core_data: Dict[str, Any]) -> Dict[str, Any]
+calculations.py– Klasse
+Calculator : 
+__init__(self, data: Dict[str, Any])– 
+calculate_payback_period(self) -> float– 
+calculate_roi(self) -> float– 
+calculate_npv(self, discount_rate: float) -> float– 
+calculate_irr(self) -> float– 
+apply_pricing_rules(data: Dict[str, Any]) -> Dict[str, Any]– 
+adjust_for_tax(data: Dict[str, Any]) -> Dict[str, Any]
+calculations_cli.py– 
+run_cli_calculations(input_data: Dict[str, Any]) -> None– 
+parse_cli_arguments(args: List[str]) -> Dict[str, Any]– 
+print_results(results: Dict[str, Any]) -> None
+calculations_extended.py– 
+calculate_extended_warranty_cost(base_cost: float, years: int) -> float– 
+calculate_insurance_cost(system_value: float, rate: float) -> float– 
+calculate_maintenance_cost(system_value: float, maintenance_rate: float) -> 
+float– 
+calculate_total_extended_costs(base_cost: 
+float, 
+insurance_rate: float, maintenance_rate: float) -> float
+• 
+calculations_heatpump.py– 
+years: 
+int, 
+calculate_heatpump_cop(temperature_outdoor: float, temperature_indoor: 
+float) -> float– 
+estimate_heatpump_output(power_input_kw: float, cop: float) -> float– 
+calculate_heatpump_savings(old_heating_cost: float, heatpump_cost: float) 
+> float– 
+calculate_heatpump_payback_period(initial_cost: float, annual_savings: 
+float) -> float
+• 
+central_pdf_system.py– Klasse
+CentralPDFSystem : 
+__init__(self, template_path: str)
+17
+– 
+generate_report(self, data: Dict[str, Any]) -> bytes– 
+add_chart(self, chart_data: Any) -> None– 
+save_pdf(self, output_path: str) -> None– 
+load_template(self) -> None
+• 
+• 
+core/session.py, core/router.py, core/navigation_history.py
+(Diese Dateien enthalten vermutlich Klassen/Funktionen zum Sitzungs- und Navigationsmanagement,
+aber in der Funktionsübersicht waren keine Einträge sichtbar. Wahrscheinlich definieren sie nur interne
+Mechanismen ohne frei stehende Funktionen.)
+custom_dynamic_calculation.py– 
+Klasse
+__init__(self, parameters: Dict[str, Any])– 
+run(self) -> Any– 
+get_results(self) -> Dict[str, Any]– 
+reset(self) -> None
+CustomDynamicCalculation : – 
+perform_dynamic_calculation(params: Dict[str, Any]) -> Dict[str, Any]
+• 
+• 
+• 
+• 
+• 
+database.py– 
+initialize_database(db_path: str) -> None– 
+get_connection() -> Any– 
+execute_query(query: str, params: tuple = ()) -> List[tuple]– 
+close_connection() -> None
+database_bridge.py– Klasse
+DatabaseBridge : 
+__init__(self, db_path: str)– 
+fetch_data(self, query: str) -> List[Dict[str, Any]]– 
+save_data(self, table: str, data: Dict[str, Any]) -> bool– 
+update_data(self, table: str, record_id: int, updates: Dict[str, Any]) -> 
+bool– 
+delete_data(self, table: str, record_id: int) -> bool
+data_input.py– 
+parse_user_input(raw_input: str) -> Dict[str, Any]– 
+validate_input_data(data: Dict[str, Any]) -> bool– 
+preprocess_input_data(data: Dict[str, Any]) -> Dict[str, Any]
+doc_output.py– 
+generate_report_text(data: Dict[str, Any]) -> str– 
+generate_summary(data: Dict[str, Any]) -> str
+dynamic_pricing_engine.py– 
+calculate_dynamic_pricing(base_price: float, demand_factor: float, 
+supply_factor: float) -> float– 
+update_pricing_rules(new_rules: Dict[str, Any]) -> None– 
+simulate_price_change(current_price: float, change_factor: float) -> 
+float
+18
+• 
+extended_pdf_generator.py– Klasse
+ExtendedPDFGenerator : 
+__init__(self, config: Dict[str, Any])– 
+add_page(self) -> None– 
+set_styles(self, styles: Dict[str, Any]) -> None– 
+insert_text(self, text: str, position: tuple) -> None– 
+insert_image(self, image_path: str, position: tuple) -> None– 
+save(self, output_path: str) -> None
+• 
+• 
+• 
+• 
+• 
+• 
+f
+inal_pricing_calculation_exact.py
+(Keine Funktionen oder Klassen definiert – vermutlich Skript mit Berechnungsablauf.)
+f
+inal_pricing_calculation_with_keys.py– 
+finalize_pricing_with_keys(data: Dict[str, Any], keys: List[str]) -> 
+Dict[str, Any]
+f
+inancial_calculations.py– Klasse
+FinancialCalculator : 
+years: int)
+__init__(self, principal: float, rate: float, – 
+calculate_compound_interest(self) -> float– 
+calculate_loan_payment(self) -> float– 
+calculate_investment_value(self) -> float– 
+calculate_break_even_point(self, initial_investment: float, annual_return: 
+float) -> int
+f
+inancial_tools.py– 
+calculate_mortgage_payment(principal: float, annual_rate: float, years: 
+int) -> float– 
+calculate_annuity_factor(rate: float, periods: int) -> float– 
+adjust_rate_for_inflation(nominal_rate: float, inflation_rate: float) -> 
+float– 
+calculate_real_return(nominal_return: float, inflation_rate: float) -> 
+float
+gui.py– 
+initialize_gui()– 
+update_display(data: Dict[str, Any]) -> None– 
+show_error_message(message: str) -> None– 
+refresh_dashboard() -> None
+heatpump_pricing.py– Klasse
+HeatpumpPricingCalculator : 
+float)– 
+__init__(self, base_cost: float, cop: 
+calculate_operational_cost(self, hours: int, electricity_rate: float) -> 
+float– 
+calculate_savings(self, old_system_cost: float, hours: int) -> float– 
+evaluate_profitability(self) -> float
+19
+• 
+heatpump_ui.py– 
+render_heatpump_pricing_tab()– 
+update_heatpump_calculations(data: Dict[str, Any]) -> None– 
+display_heatpump_results(results: Dict[str, Any]) -> None
+• 
+kalkulationen.py (evtl. deutsches Gegenstück zu calculations.py)– 
+calculate_annual_energy_yield(pv_peak_power_kwp: 
+specific_yield_kwh_per_kwp: float) -> float– 
+calculate_self_consumption_quote(self_consumed_kwh: 
+float, 
+float, 
+total_generated_kwh: float) -> float– 
+calculate_autarky_degree(self_consumed_kwh: float, total_consumption_kwh: 
+float) -> float– 
+calculate_specific_yield(annual_yield_kwh: float, pv_peak_power_kwp: 
+float) -> float– 
+calculate_area_specific_yield(annual_yield_kwh: float, panel_area_sqm: 
+float) -> float– 
+calculate_performance_ratio(actual_yield_kwh: float, expected_yield_kwh: 
+float) -> float– 
+calculate_pv_module_efficiency(module_power_wp: float, area_sqm: float) -> 
+float– 
+calculate_payback_period(investment_costs: float, annual_savings: float) -> 
+float– 
+calculate_annual_cost_savings(self_consumed_kwh: float, electricity_rate: 
+float) -> float– 
+calculate_feed_in_tariff_revenue(feed_in_kwh: float, tariff_rate: float) -> 
+float– 
+calculate_total_revenue(feed_in_revenue: float, savings: float) -> float– 
+calculate_self_consumption_savings(self_consumed_kwh: float, retail_rate: 
+float) -> float– 
+calculate_grid_usage(grid_energy_kwh: float, retail_rate: float) -> float– 
+calculate_total_consumption_cost(total_consumed_kwh: float, retail_rate: 
+float) -> float– 
+calculate_co2_savings(total_consumed_kwh: float, emissions_factor: float) 
+> float– 
+calculate_specific_co2_emission(total_emissions: 
+total_generation_kwh: float) -> float– 
+calculate_battery_capacity_required(daily_consumption_kwh: 
+float, 
+float, 
+days_of_autonomy: int) -> float– 
+calculate_storage_efficiency(stored_energy_kwh: 
+retrieved_energy_kwh: float) -> float– 
+float, 
+calculate_battery_lifetime_cycles(daily_cycles: float, years: int) -> 
+float– 
+calculate_battery_replacement_cost(battery_cost: float, cycles: int, 
+20
+lifetime_cycles: int) -> float– 
+calculate_optimal_tilt_angle(latitude: float) -> float– 
+calculate_optimal_orientation(longitude: float) -> float– 
+calculate_solar_irradiance(latitude: float, longitude: float) -> float– 
+calculate_energy_yield_with_degradation(annual_yield_kwh: 
+degradation_rate: float, years: int) -> float– 
+float, 
+calculate_residual_capacity(initial_capacity: float, degradation_rate: 
+float, years: int) -> float– 
+calculate_cumulative_generation(annual_yield_kwh: float, years: int) -> 
+float– 
+calculate_cumulative_consumption(annual_consumption_kwh: float, years: 
+int) -> float– 
+calculate_total_costs(initial_cost: float, maintenance_cost: float, 
+operational_cost: float) -> float– 
+calculate_total_revenue_over_time(annual_revenue: float, years: int) -> 
+float– 
+calculate_profit_over_time(annual_profit: float, years: int) -> float– 
+calculate_investment_return_ratio(total_profit: float, investment_cost: 
+float) -> float– 
+calculate_energy_independence(dependent_kwh: float, total_consumption_kwh: 
+float) -> float– 
+calculate_degradation_loss(initial_output: float, degradation_rate: float, 
+years: int) -> float– 
+calculate_remaining_output(initial_output: float, degradation_rate: float, 
+years: int) -> float– 
+calculate_grid_feed_in_ratio(feed_in_kwh: float, total_generation_kwh: 
+float) -> float– 
+calculate_self_consumption_kwh(total_generated_kwh: 
+self_consumption_ratio: float) -> float– 
+float, 
+calculate_autarky_rate(total_generated_kwh: float, total_consumed_kwh: 
+float) -> float– 
+calculate_storage_savings(stored_kwh: float, retail_rate: float) -> float– 
+calculate_battery_utilization(stored_kwh: float, battery_capacity: float) 
+> float– 
+calculate_co2_reduction(co2_saved_tons: float, years: int) -> float– 
+calculate_grid_dependency(total_grid_kwh: float, total_consumption_kwh: 
+float) -> float– 
+calculate_peak_shaving(pv_output_series: List[float], consumption_series: 
+List[float]) -> float– 
+calculate_load_profile_match(consumption_profile: 
+production_profile: List[float]) -> float– 
+calculate_tariff_savings(tariff_old: 
+List[float], 
+float, 
+consumption_kwh: float) -> float– 
+tariff_new: 
+float, 
+calculate_return_on_investment(annual_profit: float, investment_cost: 
+float) -> float
+21
+– 
+calculate_levelized_cost_of_energy(total_costs: 
+total_generation_kwh: float) -> float
+float, – 
+calculate_internal_rate_of_return(cash_flows: List[float]) -> float– 
+calculate_payback_time(cumulative_cash_flows: List[float]) -> int– 
+calculate_emissions_offset(total_kwh: float, emissions_factor_grid: float, 
+emissions_factor_pv: float) -> float– 
+calculate_subsidy_impact(investment_cost: float, subsidy_amount: float) -> 
+float– 
+calculate_financing_effect(investment_cost: float, interest_rate: float, 
+years: int) -> float– 
+calculate_cashflow_after_financing(cash_flows: List[float], loan_payments: 
+List[float]) -> List[float]– 
+calculate_equity_needed(total_investment: float, loan_amount: float) -> 
+float– 
+calculate_co2_savings_percent(co2_saved: float, baseline_co2: float) -> 
+float– 
+calculate_energy_cost_savings_without_pv(annual_consumption_kwh: float, 
+retail_rate: float) -> float– 
+calculate_energy_cost_with_pv(annual_consumption_kwh: 
+float, 
+self_consumption_kwh: float, retail_rate: float, feed_in_rate: float) -> 
+float– 
+calculate_total_savings_with_pv(energy_cost_without_pv: 
+energy_cost_with_pv: float) -> float– 
+float, 
+calculate_additional_charges_with_pv(extra_charges: float, tax_rate: 
+float) -> float– 
+calculate_return_factor(initial_investment: float, total_return: float) -> 
+float– 
+calculate_annuity_payment(principal: float, annual_rate: float, years: 
+int) -> float– 
+calculate_grid_usage_cost(grid_energy_kwh: float, grid_tariff: float) -> 
+float– 
+calculate_autarky_savings(self_consumed_kwh: float, grid_tariff: float) -> 
+float– 
+calculate_total_autarky_benefit(autarky_savings: float, feed_in_revenue: 
+float) -> float– 
+calculate_extended_warranty_impact(investment_cost: float, warranty_cost: 
+float, period: int) -> float– 
+calculate_insurance_impact(investment_cost: float, insurance_cost: float, 
+period: int) -> float– 
+calculate_maintenance_impact(investment_cost: float, maintenance_cost: 
+float, period: int) -> float– 
+22
+calculate_net_present_value(cash_flows: List[float], discount_rate: float) -> float
+• 
+multi_offer_generator.py– Klasse
+MultiOfferGenerator : 
+__init__(self, offers: List[Dict[str, Any]])– 
+generate_combined_offer(self) -> Dict[str, Any]– 
+compute_total_discount(self) -> float– 
+validate_offers(self) -> bool
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+multi_pdf_integration.py– 
+integrate_multiple_pdfs(pdf_list: List[bytes]) -> bytes– 
+merge_pdfs(pdf_bytes_list: List[bytes]) -> bytes– 
+add_page_numbers(pdf_bytes: bytes) -> bytes
+multi_pdf_integration_complete.py– 
+create_complete_pdf_report(report_sections: List[bytes]) -> bytes– 
+assemble_final_document(sections: List[bytes]) -> bytes– 
+save_complete_report(pdf_bytes: bytes, file_path: str) -> None
+pdf_erstellen_komplett.py (deutsche Variante für PDF-Generierung)– 
+erstellen_pdf_komplett(data: Dict[str, Any]) -> bytes
+pdf_generator.py– Klasse
+PDFGenerator : 
+__init__(self, template: str)– 
+generate(self, data: Dict[str, Any]) -> bytes– 
+set_template(self, template: str) -> None– 
+add_content(self, content: Any) -> None– 
+export(self) -> bytes
+pdf_pricing_integration.py– Klasse
+PDFPricingIntegration : 
+__init__(self, pricing_data: Dict[str, Any])– 
+integrate_pricing_into_pdf(self, pdf: bytes) -> bytes– 
+update_pricing_section(self, pdf: bytes, pricing_data: Dict[str, Any]) -> 
+bytes– 
+save_updated_pdf(self, output_path: str) -> None
+pdf_styles.py– Klasse
+PDFStyles : 
+__init__(self)– 
+set_font(self, font_name: str, size: int) -> None– 
+set_color_scheme(self, primary: str, secondary: str) -> None– 
+apply_style(self, pdf_element: Any) -> None
+pdf_templates.py, 
+pdf_pricing_templates.py, 
+pdf_services_integration.py, 
+pdf_payment_summary.py, pdf_with_payment.py, pdf_visual_inject.py etc.
+(Diese Dateien definieren vermutlich spezifische Template- und Integrationslogiken, wurden in der
+Funktionsübersicht aber nicht im Detail gelistet. Z.B. 
+pdf_visual_inject.py taucht unter 3D
+Visualisierung Utils auf, möglicherweise um 3D-Bilder ins PDF einzufügen. Solche Module enthalten
+wahrscheinlich Funktionen zum Laden bestimmter Templates oder Platzhalter.)
+23
+• 
+pdf_ui.py– 
+render_pdf_settings_tab()– 
+update_pdf_template(template_path: str) -> None– 
+preview_pdf_changes(settings: Dict[str, Any]) -> None
+• 
+• 
+• 
+• 
+• 
+• 
+pdf_widgets.py– Klasse
+PDFWidgetFactory : 
+__init__(self)– 
+create_text_widget(self, text: str, position: tuple) -> Any– 
+create_image_widget(self, image_path: str, position: tuple) -> Any– 
+create_table_widget(self, data: List[Dict[str, Any]], position: tuple) -> 
+Any
+price_matrix_store.py– 
+get_price_from_matrix(matrix: List[List[float]], row: int, col: int) -> 
+float– 
+update_price_matrix(matrix: List[List[float]], row: int, col: int, 
+new_price: float) -> None– 
+add_new_price_entry(matrix: List[List[float]], new_row: List[float]) -> 
+None– 
+delete_price_entry(matrix: List[List[float]], row: int) -> None
+product_db.py
+(Wurde in Übersicht nicht explizit gelistet, enthält aber wahrscheinlich Klassen/Methoden zur Produkt
+Datenbankverwaltung, z.B. Laden/Speichern von JSON.)
+pv_calculations_core.py– Klasse
+PVCalculationsCore : 
+__init__(self, capacity_kwp: float)– 
+calculate_energy_yield(self, specific_yield: float) -> float– 
+calculate_feed_in_revenue(self, feed_in_tariff: float) -> float– 
+calculate_self_consumption(self, consumption_kwh: float) -> float– 
+calculate_total_savings(self, consumption_kwh: float, feed_in_tariff: 
+float, retail_rate: float) -> float
+simulate_solar_calculator.py– 
+simulate_yearly_performance(system_data: Dict[str, Any]) -> Dict[str, 
+Any]– 
+simulate_daily_profile(system_data: Dict[str, Any]) -> List[float]– 
+simulate_output_variation(system_data: Dict[str, Any], variation_factor: 
+float) -> Dict[str, Any]
+solar_calculator.py– 
+calculate_solar_potential(latitude: float, longitude: float) -> float– 
+estimate_yearly_output(capacity_kwp: float, specific_yield: float) -> 
+float– 
+compute_return_on_investment(cost: float, savings_per_year: float) -> 
+float
+24
+solar_calculator_bridge.py– Klasse SolarCalculatorBridge: __init__(self, calculator: Any)– perform_calculation(self, input_data: Dict[str, Any]) -> Dict[str, Any]– get_results(self) -> Dict[str, Any]– reset_calculation(self) -> None
+solar_calculator_pricing_integration.py– Klasse SolarCalculatorPricingIntegration: __init__(self, solar_calculator: 
+Any, pricing_data: Dict[str, Any])– integrate_pricing(self) -> Dict[str, Any]– update_pricing_parameters(self, new_pricing: Dict[str, Any]) -> None– run_pricing_simulation(self) -> Dict[str, Any]
+(Hinweis: Weitere Module wie pricing/-Submodule, crm_api.py, crm_database.py, 
+contracts.py etc. waren in den bereitgestellten Dateien nicht ausführlich aufgelistet, könnten aber
+analog eigene Klassen und Methoden enthalten. Die oben stehende Liste umfasst alle in der Analyse
+sichtbaren Funktionen und Klassen der Kernmodule.)
+Diese vollständige Funktionsübersicht dient als Referenz für Entwickler und zeigt die Struktur der App
+Module. Jeder Eintrag entspricht einer Funktion oder Methode, die im Quellcode definiert ist. So lässt
+sich nachvollziehen, in welcher Datei welche Funktionalität implementiert wurde. 
+funktionen und features.pdf
+file://file_00000000efa071f4ae8159d240b1da34
+WP_implementierung.pdf
+file://file_00000000a56c7246955b75f3da9053c6
+3d_visualisierung.pdf
+file://file_0000000039e87246a38cd746f85424c0
+Komponenten für PV-Montagesysteme je Dachtyp.pdf
+file://file_000000008fb87246b3301479ceb62a8b
+Übersicht aller Funktionen und Klassen in den bereitgestellten Dateien.pdf
+file://file_00000000578c724682bbbe540b613d00
+• 
+• 

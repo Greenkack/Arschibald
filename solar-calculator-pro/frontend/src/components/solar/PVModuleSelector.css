@@ -1,0 +1,154 @@
+/**
+ * PV Module Selector Styles
+ */
+
+.pv-module-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.selection-card h4,
+.specs-card h4,
+.system-card h4,
+.modules-list-card h4 {
+  margin: 0 0 1rem 0;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
+/* Selection Grid */
+.selection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.selection-grid .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.selection-grid .field label {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Specs Grid */
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: var(--surface-ground);
+  border-radius: 6px;
+}
+
+.spec-label {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+}
+
+.spec-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* System Grid */
+.system-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.system-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: var(--surface-ground);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.system-item.highlight {
+  background: var(--primary-50);
+  border: 2px solid var(--primary-color);
+}
+
+.system-label {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+}
+
+.system-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.system-item.highlight .system-value {
+  color: var(--primary-color);
+}
+
+/* Modules List */
+.modules-list-card {
+  max-height: 400px;
+  overflow: auto;
+}
+
+.modules-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modules-header h4 {
+  margin: 0;
+}
+
+/* Best Value Highlight */
+.best-value {
+  color: var(--green-600);
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .selection-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .system-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .selection-grid,
+  .specs-grid,
+  .system-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modules-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+}
