@@ -12,6 +12,7 @@ import { lazyWithRetry, prefetchOnIdle } from '@utils/lazyLoad';
 
 // Lazy load pages with retry logic for better reliability
 const Dashboard = lazyWithRetry(() => import('@pages/Dashboard'));
+const DashboardModern = lazyWithRetry(() => import('@pages/DashboardModern'));
 const SolarCalculator = lazyWithRetry(() => import('@pages/SolarCalculator'));
 const SolarProjects = lazyWithRetry(() => import('@pages/SolarProjects'));
 const SolarProjectDetails = lazyWithRetry(() => import('@pages/SolarProjectDetails'));
@@ -34,6 +35,7 @@ const CommunicationHistory = lazyWithRetry(() => import('@pages/CommunicationHis
 
 // Layout components
 const MainLayout = lazyWithRetry(() => import('@components/layout/MainLayout'));
+const MainLayoutModern = lazyWithRetry(() => import('@components/layout/MainLayoutModern'));
 const AuthLayout = lazyWithRetry(() => import('@components/layout/AuthLayout'));
 
 // Prefetch commonly used pages on idle
@@ -94,7 +96,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: (
       <LazyRoute>
-        <MainLayout />
+        <MainLayoutModern />
       </LazyRoute>
     ),
     children: [
@@ -106,9 +108,31 @@ export const router = createBrowserRouter([
         path: 'dashboard',
         element: (
           <LazyRoute>
+            <DashboardModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'dashboard-old',
+        element: (
+          <LazyRoute>
             <Dashboard />
           </LazyRoute>
         ),
+      },
+      {
+        path: 'layout-old',
+        element: (
+          <LazyRoute>
+            <MainLayout />
+          </LazyRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <Navigate to="/dashboard" replace />,
+          },
+        ],
       },
       {
         path: 'solar',

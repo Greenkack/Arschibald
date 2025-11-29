@@ -351,10 +351,10 @@ Typ Session: {type(pvgis_session).__name__}
                     load_admin_setting('ui_dark_mode_enabled', True))
             
             dark_mode = st.checkbox(
-                " Dark Mode aktivieren",
+                "🌙 Dark Mode (Aktiviert = Dunkel, Deaktiviert = Hell)",
                 value=st.session_state[session_key_dark],
                 key=session_key_dark,
-                help="Dunkles Design für eine entspannte Arbeitsatmosphäre"
+                help="✅ Aktiviert = Dunkles Theme (Dark Mode)\n❌ Deaktiviert = Helles Theme (Light Mode)"
             )
 
             # Animationen mit Session State
@@ -431,6 +431,56 @@ Typ Session: {type(pvgis_session).__name__}
                 index=['left', 'right'].index(current_sidebar_pos) if current_sidebar_pos in ['left', 'right'] else 0,
                 help="Position der Navigationsleiste"
             )
+        
+        # Speichern-Button für UI/UX direkt im Expander
+        st.markdown("---")
+        if st.button("💾 UI/UX Einstellungen speichern & SOFORT anwenden", type="primary", key="save_ui_ux"):
+            success_count = 0
+            total_count = 6
+            
+            # Hole aktuelle Werte aus Session State
+            dark_mode_value = st.session_state.get('ui_dark_mode_checkbox', dark_mode)
+            animations_value = st.session_state.get('ui_animations_checkbox', animations_enabled)
+            compact_value = st.session_state.get('ui_compact_view_checkbox', compact_view)
+            sound_value = st.session_state.get('ui_sound_effects_checkbox', sound_effects)
+            
+            if save_admin_setting('ui_dark_mode_enabled', dark_mode_value):
+                success_count += 1
+            if save_admin_setting('ui_animations_enabled', animations_value):
+                success_count += 1
+            if save_admin_setting('ui_compact_view_enabled', compact_value):
+                success_count += 1
+            if save_admin_setting('ui_sound_effects_enabled', sound_value):
+                success_count += 1
+            if save_admin_setting('ui_color_scheme', color_scheme):
+                success_count += 1
+            if save_admin_setting('ui_sidebar_position', sidebar_position):
+                success_count += 1
+            
+            if success_count == total_count:
+                st.success(f"✅ Alle {total_count} UI/UX Einstellungen gespeichert!")
+                
+                # Theme SOFORT anwenden via CSS!
+                from ui_settings_handler import apply_dark_mode_styles, apply_light_mode_styles
+                
+                if dark_mode_value:
+                    st.info("🌙 Dark Mode wird JETZT aktiviert...")
+                    apply_dark_mode_styles()
+                else:
+                    st.info("☀️ Light Mode wird JETZT aktiviert...")
+                    apply_light_mode_styles()
+                
+                st.success("🎨 Theme erfolgreich gewechselt!")
+                st.info("🔄 Seite wird aktualisiert...")
+                
+                # Kurze Verzögerung damit User die Meldungen sieht
+                import time
+                time.sleep(1)
+                st.rerun()
+            elif success_count > 0:
+                st.warning(f"⚠️ Nur {success_count}/{total_count} Einstellungen gespeichert!")
+            else:
+                st.error("❌ Fehler beim Speichern der Einstellungen!")
 
     # ===  PERFORMANCE & CACHING ===
     with st.expander(" PERFORMANCE & CACHING", expanded=False):

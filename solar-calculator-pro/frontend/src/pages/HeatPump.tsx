@@ -55,8 +55,7 @@ export const HeatPump: React.FC = () => {
   const handleBuildingDataSubmit = async (data: BuildingData) => {
     setBuildingData(data);
     
-    // TODO: Ca
-ll backend API to calculate heat load
+    // TODO: Call backend API to calculate heat load
     // For now, use a simple estimation
     const estimatedHeatLoad = calculateHeatLoad(data);
     setCalculatedHeatLoad(estimatedHeatLoad);

@@ -16,14 +16,18 @@ def apply_ui_settings():
         from database import load_admin_setting
         
         # Dark Mode
-        dark_mode = load_admin_setting('ui_dark_mode_enabled', False)
+        dark_mode = load_admin_setting('ui_dark_mode_enabled', True)  # Default: Dark
         if isinstance(dark_mode, str):
             dark_mode = dark_mode.lower() in ('true', '1', 'yes')
         
+        st.session_state['theme_mode'] = 'dark' if dark_mode else 'light'
+        st.session_state['ui_dark_mode_enabled'] = dark_mode
+        
+        # Wende SOFORT CSS an - wirkt ohne Neustart!
         if dark_mode:
-            st.session_state['theme_mode'] = 'dark'
-            # Setze dark mode CSS
             apply_dark_mode_styles()
+        else:
+            apply_light_mode_styles()
         
         # Animationen
         animations_enabled = load_admin_setting('ui_animations_enabled', True)
@@ -55,42 +59,302 @@ def apply_ui_settings():
 
 
 def apply_dark_mode_styles():
-    """Wendet Dark Mode CSS an"""
+    """Wendet Dark Mode CSS an - SOFORT wirksam!"""
     st.markdown("""
     <style>
-    /* Dark Mode Styles */
+    /* ============================================
+       DARK MODE - VOLLSTÄNDIGE UI TRANSFORMATION
+       ============================================ */
+    
+    /* Main App Container */
     .stApp {
-        background-color: #0e1117;
-        color: #fafafa;
+        background-color: #0B0F14 !important;
+        color: #E6F7FF !important;
     }
     
+    /* Sidebar Dark */
+    section[data-testid="stSidebar"] {
+        background-color: #111720 !important;
+    }
+    
+    section[data-testid="stSidebar"] .stMarkdown {
+        color: #E6F7FF !important;
+    }
+    
+    /* Main Content Area */
+    .main .block-container {
+        background-color: #0B0F14 !important;
+        color: #E6F7FF !important;
+    }
+    
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: #00E5FF !important;
+    }
+    
+    /* Text & Paragraphs */
+    p, span, div, label {
+        color: #E6F7FF !important;
+    }
+    
+    /* Buttons */
     .stButton > button {
-        background-color: #262730;
-        color: #fafafa;
+        background-color: #1a2332 !important;
+        color: #E6F7FF !important;
+        border: 1px solid #2a3342 !important;
     }
     
     .stButton > button:hover {
-        background-color: #31333f;
-        border-color: #4c9eff;
+        background-color: #2a3342 !important;
+        border-color: #00E5FF !important;
+        color: #00E5FF !important;
     }
     
-    .stTextInput > div > div > input {
-        background-color: #262730;
-        color: #fafafa;
+    .stButton > button[kind="primary"] {
+        background-color: #00E5FF !important;
+        color: #0B0F14 !important;
     }
     
-    .stSelectbox > div > div > div {
-        background-color: #262730;
-        color: #fafafa;
+    .stButton > button[kind="primary"]:hover {
+        background-color: #4EA1FF !important;
+        color: #0B0F14 !important;
     }
     
-    .stExpander {
-        background-color: #1a1c25;
-        border: 1px solid #31333f;
+    /* Input Fields */
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input,
+    .stTextArea > div > div > textarea {
+        background-color: #1a2332 !important;
+        color: #E6F7FF !important;
+        border: 1px solid #2a3342 !important;
     }
     
-    .stMarkdown {
-        color: #fafafa;
+    /* Selectbox & Dropdown */
+    .stSelectbox > div > div,
+    div[data-baseweb="select"] > div {
+        background-color: #1a2332 !important;
+        color: #E6F7FF !important;
+        border: 1px solid #2a3342 !important;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background-color: #1a2332 !important;
+        color: #E6F7FF !important;
+    }
+    
+    .streamlit-expanderContent {
+        background-color: #111720 !important;
+        border: 1px solid #2a3342 !important;
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #111720 !important;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        color: #E6F7FF !important;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #1a2332 !important;
+        color: #00E5FF !important;
+    }
+    
+    /* Dataframe & Tables */
+    .dataframe {
+        background-color: #1a2332 !important;
+        color: #E6F7FF !important;
+    }
+    
+    /* Metrics */
+    [data-testid="stMetricValue"] {
+        color: #00E5FF !important;
+    }
+    
+    /* Code Blocks */
+    code {
+        background-color: #0B1220 !important;
+        color: #00E5FF !important;
+    }
+    
+    pre {
+        background-color: #0B1220 !important;
+        border: 1px solid #2a3342 !important;
+    }
+    
+    /* Info/Warning/Error Boxes */
+    .stAlert {
+        background-color: #1a2332 !important;
+        color: #E6F7FF !important;
+        border-left: 4px solid #00E5FF !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+
+def apply_light_mode_styles():
+    """Wendet Light Mode CSS an - SOFORT wirksam!"""
+    st.markdown("""
+    <style>
+    /* ============================================
+       LIGHT MODE - VOLLSTÄNDIGE UI TRANSFORMATION
+       ============================================ */
+    
+    /* Main App Container */
+    .stApp {
+        background-color: #FFFFFF !important;
+        color: #262730 !important;
+    }
+    
+    /* Sidebar Light */
+    section[data-testid="stSidebar"] {
+        background-color: #F7F9FC !important;
+    }
+    
+    section[data-testid="stSidebar"] .stMarkdown {
+        color: #262730 !important;
+    }
+    
+    /* Main Content Area */
+    .main .block-container {
+        background-color: #FFFFFF !important;
+        color: #262730 !important;
+    }
+    
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: #1a202c !important;
+    }
+    
+    /* Text & Paragraphs */
+    p, span, div, label {
+        color: #262730 !important;
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        background-color: #F0F2F6 !important;
+        color: #262730 !important;
+        border: 1px solid #D0D5DD !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: #E0E4EA !important;
+        border-color: #667eea !important;
+        color: #1a202c !important;
+    }
+    
+    .stButton > button[kind="primary"] {
+        background-color: #667eea !important;
+        color: #FFFFFF !important;
+    }
+    
+    .stButton > button[kind="primary"]:hover {
+        background-color: #5568d3 !important;
+        color: #FFFFFF !important;
+    }
+    
+    /* Input Fields */
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input,
+    .stTextArea > div > div > textarea {
+        background-color: #FFFFFF !important;
+        color: #262730 !important;
+        border: 1px solid #D0D5DD !important;
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stNumberInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus {
+        border-color: #667eea !important;
+        box-shadow: 0 0 0 1px #667eea !important;
+    }
+    
+    /* Selectbox & Dropdown */
+    .stSelectbox > div > div,
+    div[data-baseweb="select"] > div {
+        background-color: #FFFFFF !important;
+        color: #262730 !important;
+        border: 1px solid #D0D5DD !important;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background-color: #F7F9FC !important;
+        color: #262730 !important;
+        border: 1px solid #E0E4EA !important;
+    }
+    
+    .streamlit-expanderContent {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E0E4EA !important;
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #F7F9FC !important;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        color: #262730 !important;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #FFFFFF !important;
+        color: #667eea !important;
+        border-bottom: 2px solid #667eea !important;
+    }
+    
+    /* Dataframe & Tables */
+    .dataframe {
+        background-color: #FFFFFF !important;
+        color: #262730 !important;
+        border: 1px solid #E0E4EA !important;
+    }
+    
+    .dataframe th {
+        background-color: #F7F9FC !important;
+        color: #1a202c !important;
+    }
+    
+    /* Metrics */
+    [data-testid="stMetricValue"] {
+        color: #667eea !important;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        color: #4a5568 !important;
+    }
+    
+    /* Code Blocks */
+    code {
+        background-color: #F7F9FC !important;
+        color: #667eea !important;
+        border: 1px solid #E0E4EA !important;
+    }
+    
+    pre {
+        background-color: #F7F9FC !important;
+        border: 1px solid #E0E4EA !important;
+    }
+    
+    /* Info/Warning/Error Boxes */
+    .stAlert {
+        background-color: #F7F9FC !important;
+        color: #262730 !important;
+    }
+    
+    /* Checkbox & Radio */
+    .stCheckbox label,
+    .stRadio label {
+        color: #262730 !important;
+    }
+    
+    /* Slider */
+    .stSlider [data-testid="stTickBar"] {
+        background-color: #E0E4EA !important;
     }
     </style>
     """, unsafe_allow_html=True)
