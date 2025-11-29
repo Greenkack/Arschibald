@@ -12,6 +12,7 @@ import { lazyWithRetry, prefetchOnIdle } from '@utils/lazyLoad';
 
 // Lazy load pages with retry logic for better reliability
 const Dashboard = lazyWithRetry(() => import('@pages/Dashboard'));
+const DashboardModern = lazyWithRetry(() => import('@pages/DashboardModern'));
 const SolarCalculator = lazyWithRetry(() => import('@pages/SolarCalculator'));
 const SolarProjects = lazyWithRetry(() => import('@pages/SolarProjects'));
 const SolarProjectDetails = lazyWithRetry(() => import('@pages/SolarProjectDetails'));
@@ -104,6 +105,14 @@ export const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
+        element: (
+          <LazyRoute>
+            <DashboardModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'dashboard-old',
         element: (
           <LazyRoute>
             <Dashboard />
