@@ -40,6 +40,7 @@
     "@react-three/drei": "^9.93.0",
     "@react-three/fiber": "^8.15.13",
     "axios": "^1.6.2",
+    "cmdk": "^1.1.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.555.0",
