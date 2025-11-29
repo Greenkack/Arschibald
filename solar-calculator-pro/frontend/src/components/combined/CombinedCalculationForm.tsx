@@ -339,4 +339,6 @@ export const CombinedCalculationForm: React.FC<CombinedCalculationFormProps> = (
           className="p-button-lg"
         />
       </div>
-    </f
+    </form>
+  );
+};

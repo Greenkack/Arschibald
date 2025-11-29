@@ -35,6 +35,7 @@ const CommunicationHistory = lazyWithRetry(() => import('@pages/CommunicationHis
 
 // Layout components
 const MainLayout = lazyWithRetry(() => import('@components/layout/MainLayout'));
+const MainLayoutModern = lazyWithRetry(() => import('@components/layout/MainLayoutModern'));
 const AuthLayout = lazyWithRetry(() => import('@components/layout/AuthLayout'));
 
 // Prefetch commonly used pages on idle
@@ -95,7 +96,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: (
       <LazyRoute>
-        <MainLayout />
+        <MainLayoutModern />
       </LazyRoute>
     ),
     children: [
@@ -118,6 +119,20 @@ export const router = createBrowserRouter([
             <Dashboard />
           </LazyRoute>
         ),
+      },
+      {
+        path: 'layout-old',
+        element: (
+          <LazyRoute>
+            <MainLayout />
+          </LazyRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <Navigate to="/dashboard" replace />,
+          },
+        ],
       },
       {
         path: 'solar',

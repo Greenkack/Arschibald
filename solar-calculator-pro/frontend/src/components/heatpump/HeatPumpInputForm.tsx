@@ -29,7 +29,7 @@ interface BuildingData {
   heatingHours: number;
   
   // Heating Costs
-  gasMonthlyC cost: number;
+  gasMonthlyCost: number;
   oilPricePerTon: number;
   woodPricePerSter: number;
   
@@ -65,7 +65,7 @@ export const HeatPumpInputForm: React.FC<HeatPumpInputFormProps> = ({
     woodConsumption: initialData.woodConsumption || 0,
     systemEfficiency: initialData.systemEfficiency || 90,
     heatingHours: initialData.heatingHours || 1800,
-    gasMonthlyC cost: initialData.gasMonthlyC cost || 0,
+    gasMonthlyCost: initialData.gasMonthlyCost || 0,
     oilPricePerTon: initialData.oilPricePerTon || 1071,
     woodPricePerSter: initialData.woodPricePerSter || 80,
     desiredTemperature: initialData.desiredTemperature || 21,
@@ -140,7 +140,7 @@ export const HeatPumpInputForm: React.FC<HeatPumpInputFormProps> = ({
   };
 
   // Calculate total annual heating costs
-  const gasAnnualCost = formData.gasMonthlyC cost * 12;
+  const gasAnnualCost = formData.gasMonthlyCost * 12;
   const oilAnnualCost = (formData.oilConsumption / 1190) * formData.oilPricePerTon;
   const woodAnnualCost = formData.woodConsumption * formData.woodPricePerSter;
   const totalAnnualCost = gasAnnualCost + oilAnnualCost + woodAnnualCost;
@@ -356,11 +356,11 @@ export const HeatPumpInputForm: React.FC<HeatPumpInputFormProps> = ({
           <div className="p-grid">
             <div className="p-col-12 p-md-4">
               <div className="p-field">
-                <label htmlFor="gasMonthlyC cost">Monatliche Gaskosten (€)</label>
+                <label htmlFor="gasMonthlyCost">Monatliche Gaskosten (€)</label>
                 <InputNumber
-                  id="gasMonthlyC cost"
-                  value={formData.gasMonthlyC cost}
-                  onValueChange={(e) => handleInputChange('gasMonthlyC cost', e.value)}
+                  id="gasMonthlyCost"
+                  value={formData.gasMonthlyCost}
+                  onValueChange={(e) => handleInputChange('gasMonthlyCost', e.value)}
                   min={0}
                   step={10}
                   mode="currency"
@@ -368,7 +368,7 @@ export const HeatPumpInputForm: React.FC<HeatPumpInputFormProps> = ({
                   locale="de-DE"
                   showButtons
                 />
-                {formData.gasMonthlyC cost > 0 && (
+                {formData.gasMonthlyCost > 0 && (
                   <small className="p-text-secondary">
                     Jährlich: {gasAnnualCost.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                   </small>
