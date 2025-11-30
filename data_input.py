@@ -655,12 +655,6 @@ def render_data_input(texts: dict[str, str]) -> None:
                 inputs['customer_data']['zip_code'] = parsed_data.get("zip_code", "")
                 inputs['customer_data']['city'] = parsed_data.get("city", "")
                 
-                # ✅ KRITISCH: Widget-Keys DIREKT setzen damit Streamlit die Werte beim Rerun verwendet
-                st.session_state['address_di_manual_v6_exp_stable'] = parsed_data.get("street", "")
-                st.session_state['house_number_di_manual_v6_exp_stable'] = parsed_data.get("house_number", "")
-                st.session_state['zip_code_di_manual_v6_exp_stable'] = parsed_data.get("zip_code", "")
-                st.session_state['city_di_manual_v6_exp_stable'] = parsed_data.get("city", "")
-                
                 if parsed_data.get("zip_code") and parsed_data.get("city"):
                     st.success(
                         get_text_di(
