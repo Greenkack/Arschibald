@@ -68,8 +68,7 @@ const ProductComparison: React.FC<ProductComparisonProps> = ({
 
             <div className="comparison-card-body">
               <div className="product-image-large">
-                {prod
-uct.image_url ? (
+                {product.image_url ? (
                   <Image
                     src={product.image_url}
                     alt={product.model_name}

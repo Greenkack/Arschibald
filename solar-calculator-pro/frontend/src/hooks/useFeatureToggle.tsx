@@ -4,7 +4,7 @@
  * Custom hook for checking feature flag status in components
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 
 interface FeatureFlagCheckResponse {

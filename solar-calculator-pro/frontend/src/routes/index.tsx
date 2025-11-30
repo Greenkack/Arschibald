@@ -7,31 +7,48 @@
 
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { ProgressSpinner } from 'primereact/progressspinner';
+import { Loader2 } from 'lucide-react';
 import { lazyWithRetry, prefetchOnIdle } from '@utils/lazyLoad';
 
 // Lazy load pages with retry logic for better reliability
 const Dashboard = lazyWithRetry(() => import('@pages/Dashboard'));
 const DashboardModern = lazyWithRetry(() => import('@pages/DashboardModern'));
 const SolarCalculator = lazyWithRetry(() => import('@pages/SolarCalculator'));
+const SolarCalculatorModern = lazyWithRetry(() => import('@pages/SolarCalculatorModern'));
 const SolarProjects = lazyWithRetry(() => import('@pages/SolarProjects'));
+const SolarProjectsModern = lazyWithRetry(() => import('@pages/SolarProjectsModern'));
 const SolarProjectDetails = lazyWithRetry(() => import('@pages/SolarProjectDetails'));
+const SolarProjectDetailsModern = lazyWithRetry(() => import('@pages/SolarProjectDetailsModern'));
 const Visualization3D = lazyWithRetry(() => import('@pages/Visualization3D'));
+const Visualization3DModern = lazyWithRetry(() => import('@pages/Visualization3DModern'));
 const HeatPump = lazyWithRetry(() => import('@pages/HeatPump'));
+const HeatPumpModern = lazyWithRetry(() => import('@pages/HeatPumpModern'));
 const PriceMatrix = lazyWithRetry(() => import('@pages/PriceMatrix'));
+const PriceMatrixModern = lazyWithRetry(() => import('@pages/PriceMatrixModern'));
 const CRM = lazyWithRetry(() => import('@pages/CRM'));
+const CRMModern = lazyWithRetry(() => import('@pages/CRMModern'));
 const Products = lazyWithRetry(() => import('@pages/Products'));
 const ProductManagement = lazyWithRetry(() => import('@pages/ProductManagement'));
+const ProductManagementModern = lazyWithRetry(() => import('@pages/ProductManagementModern'));
 const Admin = lazyWithRetry(() => import('@pages/Admin'));
+const AdminModern = lazyWithRetry(() => import('@pages/AdminModern'));
 const Settings = lazyWithRetry(() => import('@pages/Settings'));
+const SettingsModern = lazyWithRetry(() => import('@pages/SettingsModern'));
 const Login = lazyWithRetry(() => import('@pages/Login'));
+const LoginModern = lazyWithRetry(() => import('@pages/LoginModern'));
 const ProjectWizard = lazyWithRetry(() => import('@pages/ProjectWizard'));
+const ProjectWizardModern = lazyWithRetry(() => import('@pages/ProjectWizardModern'));
 const CombinedSystem = lazyWithRetry(() => import('@pages/CombinedSystem'));
+const CombinedSystemModern = lazyWithRetry(() => import('@pages/CombinedSystemModern'));
 const PDFGeneration = lazyWithRetry(() => import('@pages/PDFGeneration'));
+const PDFGenerationModern = lazyWithRetry(() => import('@pages/PDFGenerationModern'));
 const Migration = lazyWithRetry(() => import('@pages/Migration'));
 const Profile = lazyWithRetry(() => import('@pages/Profile'));
+const ProfileModern = lazyWithRetry(() => import('@pages/ProfileModern'));
 const UserManagement = lazyWithRetry(() => import('@pages/UserManagement'));
+const UserManagementModern = lazyWithRetry(() => import('@pages/UserManagementModern'));
 const CommunicationHistory = lazyWithRetry(() => import('@pages/CommunicationHistory'));
+const CommunicationHistoryModern = lazyWithRetry(() => import('@pages/CommunicationHistoryModern'));
 
 // Layout components
 const MainLayout = lazyWithRetry(() => import('@components/layout/MainLayout'));
@@ -51,13 +68,8 @@ if (typeof window !== 'undefined') {
  * Loading component shown during lazy loading
  */
 const LoadingFallback: React.FC = () => (
-  <div style={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    height: '100vh' 
-  }}>
-    <ProgressSpinner />
+  <div className="flex items-center justify-center h-screen">
+    <Loader2 className="h-8 w-8 animate-spin text-primary" />
   </div>
 );
 
@@ -84,6 +96,14 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'login',
+        element: (
+          <LazyRoute>
+            <LoginModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'login-old',
         element: (
           <LazyRoute>
             <Login />
@@ -138,12 +158,28 @@ export const router = createBrowserRouter([
         path: 'solar',
         element: (
           <LazyRoute>
+            <SolarCalculatorModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'solar-old',
+        element: (
+          <LazyRoute>
             <SolarCalculator />
           </LazyRoute>
         ),
       },
       {
         path: 'solar-projects',
+        element: (
+          <LazyRoute>
+            <SolarProjectsModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'solar-projects-old',
         element: (
           <LazyRoute>
             <SolarProjects />
@@ -154,12 +190,28 @@ export const router = createBrowserRouter([
         path: 'solar-projects/:projectId',
         element: (
           <LazyRoute>
+            <SolarProjectDetailsModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'solar-projects-old/:projectId',
+        element: (
+          <LazyRoute>
             <SolarProjectDetails />
           </LazyRoute>
         ),
       },
       {
         path: '3d-visualization',
+        element: (
+          <LazyRoute>
+            <Visualization3DModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: '3d-visualization-old',
         element: (
           <LazyRoute>
             <Visualization3D />
@@ -170,6 +222,14 @@ export const router = createBrowserRouter([
         path: 'heatpump',
         element: (
           <LazyRoute>
+            <HeatPumpModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'heatpump-old',
+        element: (
+          <LazyRoute>
             <HeatPump />
           </LazyRoute>
         ),
@@ -178,12 +238,28 @@ export const router = createBrowserRouter([
         path: 'pricing',
         element: (
           <LazyRoute>
+            <PriceMatrixModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'pricing-old',
+        element: (
+          <LazyRoute>
             <PriceMatrix />
           </LazyRoute>
         ),
       },
       {
         path: 'crm',
+        element: (
+          <LazyRoute>
+            <CRMModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'crm-old',
         element: (
           <LazyRoute>
             <CRM />
@@ -202,12 +278,28 @@ export const router = createBrowserRouter([
         path: 'products/manage',
         element: (
           <LazyRoute>
+            <ProductManagementModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'products/manage-old',
+        element: (
+          <LazyRoute>
             <ProductManagement />
           </LazyRoute>
         ),
       },
       {
         path: 'admin',
+        element: (
+          <LazyRoute>
+            <AdminModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'admin-old',
         element: (
           <LazyRoute>
             <Admin />
@@ -218,12 +310,28 @@ export const router = createBrowserRouter([
         path: 'settings',
         element: (
           <LazyRoute>
+            <SettingsModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'settings-old',
+        element: (
+          <LazyRoute>
             <Settings />
           </LazyRoute>
         ),
       },
       {
         path: 'project-wizard',
+        element: (
+          <LazyRoute>
+            <ProjectWizardModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'project-wizard-old',
         element: (
           <LazyRoute>
             <ProjectWizard />
@@ -234,7 +342,7 @@ export const router = createBrowserRouter([
         path: 'solar-calculator',
         element: (
           <LazyRoute>
-            <SolarCalculator />
+            <SolarCalculatorModern />
           </LazyRoute>
         ),
       },
@@ -242,12 +350,20 @@ export const router = createBrowserRouter([
         path: 'heat-pump',
         element: (
           <LazyRoute>
-            <HeatPump />
+            <HeatPumpModern />
           </LazyRoute>
         ),
       },
       {
         path: 'combined-system',
+        element: (
+          <LazyRoute>
+            <CombinedSystemModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'combined-system-old',
         element: (
           <LazyRoute>
             <CombinedSystem />
@@ -256,6 +372,14 @@ export const router = createBrowserRouter([
       },
       {
         path: 'pdf-generation',
+        element: (
+          <LazyRoute>
+            <PDFGenerationModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'pdf-generation-old',
         element: (
           <LazyRoute>
             <PDFGeneration />
@@ -274,6 +398,14 @@ export const router = createBrowserRouter([
         path: 'profile',
         element: (
           <LazyRoute>
+            <ProfileModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'profile-old',
+        element: (
+          <LazyRoute>
             <Profile />
           </LazyRoute>
         ),
@@ -282,12 +414,28 @@ export const router = createBrowserRouter([
         path: 'user-management',
         element: (
           <LazyRoute>
+            <UserManagementModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'user-management-old',
+        element: (
+          <LazyRoute>
             <UserManagement />
           </LazyRoute>
         ),
       },
       {
         path: 'communication-history',
+        element: (
+          <LazyRoute>
+            <CommunicationHistoryModern />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'communication-history-old',
         element: (
           <LazyRoute>
             <CommunicationHistory />
