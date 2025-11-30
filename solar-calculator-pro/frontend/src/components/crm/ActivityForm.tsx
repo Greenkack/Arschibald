@@ -207,4 +207,14 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
             <Checkbox
               inputId="is_important"
               checked={formData.is_important || false}
-  
+              onChange={(e) => setFormData({ ...formData, is_important: e.checked })}
+            />
+            <label htmlFor="is_important">Mark as Important</label>
+          </div>
+        </form>
+      </Dialog>
+    </>
+  );
+};
+
+export default ActivityForm;
