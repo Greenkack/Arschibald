@@ -2804,12 +2804,23 @@ def main():
                                             # Erstelle ZIP-Archiv
                                             zip_buffer = io.BytesIO()
                                             
+                                            # Extrahiere Kundendaten für Dateinamen
+                                            customer_data = project_data.get('customer_details', {}) or project_data.get('customer_data', {})
+                                            anrede = customer_data.get('salutation') or customer_data.get('anrede') or customer_data.get('title', 'Kunde')
+                                            nachname = customer_data.get('last_name') or customer_data.get('nachname') or customer_data.get('name', 'Unbekannt')
+                                            
+                                            # Anlagengröße aus analysis_results
+                                            anlagengroesse_kwp = analysis_results.get('system_size_kwp', analysis_results.get('total_capacity_kwp', 0))
+                                            anlagengroesse = f"{anlagengroesse_kwp:.1f}kWp".replace('.', ',') if anlagengroesse_kwp > 0 else 'PV'
+                                            
                                             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-                                                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                                                 
                                                 for firm_name, pdf_bytes in results:
-                                                    safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
-                                                    filename = f"Angebot_{safe_name}_{timestamp}.pdf"
+                                                    # Format: anrede_nachname_angebot_anlagengröße.pdf
+                                                    safe_anrede = "".join(c for c in anrede if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    safe_nachname = "".join(c for c in nachname if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    
+                                                    filename = f"{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}.pdf"
                                                     zip_file.writestr(filename, pdf_bytes)
                                             
                                             zip_bytes = zip_buffer.getvalue()
@@ -2826,13 +2837,18 @@ def main():
                                             # Optional: Einzelne Download-Buttons
                                             with st.expander("Einzelne PDFs herunterladen", expanded=False):
                                                 for firm_name, pdf_bytes in results:
-                                                    safe_name = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip()
+                                                    safe_anrede = "".join(c for c in anrede if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    safe_nachname = "".join(c for c in nachname if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    safe_firma = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    
+                                                    filename = f"{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}.pdf"
+                                                    
                                                     st.download_button(
                                                         label=f"{firm_name}",
                                                         data=pdf_bytes,
-                                                        file_name=f"Angebot_{safe_name}_{datetime.now().strftime('%Y%m%d')}.pdf",
+                                                        file_name=filename,
                                                         mime="application/pdf",
-                                                        key=f"download_{safe_name}"
+                                                        key=f"download_{safe_firma}"
                                                     )
                                     
                                     except Exception as e:

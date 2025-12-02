@@ -3,6 +3,7 @@
 ## ✅ Was wurde implementiert
 
 ### 1. Dependencies Installiert
+
 ```bash
 npm install -D tailwindcss postcss autoprefixer @tailwindcss/typography tailwindcss-animate
 npm install class-variance-authority clsx tailwind-merge
@@ -12,6 +13,7 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 ```
 
 ### 2. Konfiguration
+
 - ✅ `tailwind.config.js` - Tailwind Konfiguration mit shadcn/ui Presets
 - ✅ `postcss.config.js` - PostCSS für Tailwind Processing
 - ✅ `src/lib/utils.ts` - `cn()` Utility für Class-Merging
@@ -20,6 +22,7 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 ### 3. Basis-Komponenten Erstellt
 
 #### Button (`src/components/ui/button.tsx`)
+
 ```tsx
 <Button variant="default">Default</Button>
 <Button variant="outline">Outline</Button>
@@ -34,6 +37,7 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 ```
 
 #### Card (`src/components/ui/card.tsx`)
+
 ```tsx
 <Card>
   <CardHeader>
@@ -46,6 +50,7 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 ```
 
 #### Input (`src/components/ui/input.tsx`)
+
 ```tsx
 <Input type="text" placeholder="Enter text..." />
 <Input type="email" placeholder="Email" />
@@ -53,6 +58,7 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 ```
 
 #### Label (`src/components/ui/label.tsx`)
+
 ```tsx
 <Label htmlFor="email">Email Address</Label>
 <Input id="email" type="email" />
@@ -63,6 +69,7 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 **Neue Datei**: `src/pages/DashboardModern.tsx`
 
 **Features**:
+
 - ✅ Moderne Stat-Cards mit Trends (TrendingUp/Down Icons)
 - ✅ Recent Projects Liste mit Status-Badges
 - ✅ Quick Actions Cards mit Hover-Effekten
@@ -77,12 +84,14 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 ## 📋 Komponenten-Roadmap
 
 ### ✅ Implementiert
+
 - [x] Button
 - [x] Card
 - [x] Input
 - [x] Label
 
 ### 🔄 Als Nächstes
+
 - [ ] Dialog/Modal
 - [ ] Dropdown Menu
 - [ ] Select
@@ -103,6 +112,7 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 ### Farben (CSS Variables)
 
 **Light Mode**:
+
 - Primary: `hsl(221.2 83.2% 53.3%)` - Blau
 - Secondary: `hsl(210 40% 96.1%)` - Hellgrau
 - Destructive: `hsl(0 84.2% 60.2%)` - Rot
@@ -110,21 +120,25 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 - Border: `hsl(214.3 31.8% 91.4%)`
 
 **Dark Mode**:
+
 - Primary: `hsl(217.2 91.2% 59.8%)` - Hellblau
 - Background: `hsl(222.2 84% 4.9%)` - Dunkel
 - etc.
 
 ### Typography
+
 - Font: System Font Stack (Segoe UI, Roboto, etc.)
 - Sizes: `text-sm`, `text-base`, `text-lg`, `text-xl`, `text-2xl`, `text-3xl`
 - Weights: `font-medium`, `font-semibold`, `font-bold`
 
 ### Spacing
+
 - Padding: `p-2`, `p-4`, `p-6`, `p-8`
 - Margin: `m-2`, `m-4`, `m-6`
 - Gap: `gap-2`, `gap-4`, `gap-6`
 
 ### Radius
+
 - `rounded-sm` - 4px
 - `rounded-md` - 6px
 - `rounded-lg` - 8px
@@ -134,6 +148,7 @@ npm install @radix-ui/react-label @radix-ui/react-select @radix-ui/react-separat
 ## 🚀 Verwendung
 
 ### 1. Neue Komponente nutzen
+
 ```tsx
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -155,6 +170,7 @@ function MyComponent() {
 ```
 
 ### 2. Dark Mode umschalten
+
 ```tsx
 // Im Root-Element
 <html className="dark">
@@ -167,6 +183,7 @@ function MyComponent() {
 ```
 
 ### 3. Custom Styling mit cn()
+
 ```tsx
 import { cn } from '@/lib/utils';
 
@@ -182,29 +199,34 @@ import { cn } from '@/lib/utils';
 ## 📦 Migration Plan
 
 ### Phase 1: Core Components (✅ DONE)
+
 - Button, Card, Input, Label
 - Dashboard Modernization
 - Tailwind Setup
 
 ### Phase 2: Navigation & Layout (🔄 IN PROGRESS)
+
 - Sidebar mit Sheet Component
 - Header mit Dropdown Menu
 - Breadcrumbs
 - Footer
 
 ### Phase 3: Forms (⏳ TODO)
+
 - Form Component mit react-hook-form
 - Form Fields (Input, Select, Textarea, Checkbox, Radio)
 - Form Validation mit zod
 - Error Messages
 
 ### Phase 4: Data Display (⏳ TODO)
+
 - DataTable mit Sorting, Filtering, Pagination
 - Badge Component
 - Status Indicators
 - Charts Integration (Recharts + Tailwind)
 
 ### Phase 5: Feedback (⏳ TODO)
+
 - Alert Component
 - Toast Notifications (ersetze react-toastify)
 - Dialog/Modal
@@ -212,6 +234,7 @@ import { cn } from '@/lib/utils';
 - Skeleton Loaders
 
 ### Phase 6: Alle Pages migrieren (⏳ TODO)
+
 - Solar Calculator
 - Heat Pump
 - Combined System
@@ -223,6 +246,7 @@ import { cn } from '@/lib/utils';
 ## 🔥 Vorteile von shadcn/ui
 
 ### vs. PrimeReact
+
 ✅ **Kleinere Bundle Size** - Nur importieren was gebraucht wird
 ✅ **Vollständige Kontrolle** - Code ist in deinem Projekt, nicht node_modules
 ✅ **TypeScript-First** - Bessere Type Safety
@@ -232,6 +256,7 @@ import { cn } from '@/lib/utils';
 ✅ **Performance** - Keine Runtime CSS-in-JS, alles compile-time
 
 ### Performance-Vergleich
+
 | Metrik | PrimeReact | shadcn/ui |
 |--------|-----------|-----------|
 | Bundle Size | ~800KB | ~200KB |
@@ -242,8 +267,10 @@ import { cn } from '@/lib/utils';
 ## 🛠️ Troubleshooting
 
 ### CSS nicht geladen?
+
 1. Prüfe ob `global.css` importiert wird
 2. Stelle sicher dass Tailwind directives am Anfang stehen:
+
    ```css
    @tailwind base;
    @tailwind components;
@@ -251,7 +278,9 @@ import { cn } from '@/lib/utils';
    ```
 
 ### Komponenten nicht gefunden?
+
 1. Prüfe Alias in `vite.config.ts`:
+
    ```ts
    alias: {
      '@': path.resolve(__dirname, './src'),
@@ -259,6 +288,7 @@ import { cn } from '@/lib/utils';
    ```
 
 ### Dark Mode funktioniert nicht?
+
 1. Füge `darkMode: ["class"]` zu `tailwind.config.js` hinzu
 2. Nutze `.dark` Klasse am Root-Element
 
@@ -271,7 +301,7 @@ import { cn } from '@/lib/utils';
 
 ## 🎯 Next Steps
 
-1. **App testen**: Öffne http://localhost:3000/dashboard
+1. **App testen**: Öffne <http://localhost:3000/dashboard>
 2. **Dark Mode testen**: Toggle Theme im Browser
 3. **Weitere Komponenten**: Dialog, Select, Tabs implementieren
 4. **Forms migrieren**: Solar Calculator Form mit shadcn/ui

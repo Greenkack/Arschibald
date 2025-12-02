@@ -21,11 +21,13 @@ Phase 4 der shadcn/ui-Migration ist **zu 100% abgeschlossen**. Alle 6 Komponente
 ## Migration Details
 
 ### 1. ProductAttributeManagerModern.tsx
+
 **Zeilen**: 650  
 **Status**: ✅ Erstellt & Kompiliert  
 **Pfad**: `frontend/src/components/products/ProductAttributeManagerModern.tsx`
 
 **Features**:
+
 - 3-Tab-Interface (Tabs component)
   - Attributes: Verwaltung von Produktattributen
   - Groups: Gruppierung von Attributen
@@ -38,6 +40,7 @@ Phase 4 der shadcn/ui-Migration ist **zu 100% abgeschlossen**. Alle 6 Komponente
 - Toast-Notifications für alle Operationen
 
 **shadcn/ui Components**:
+
 - Table (3 Tabellen)
 - Tabs, TabsList, TabsTrigger, TabsContent
 - Dialog (3 Typen: Attribute, Group, Template)
@@ -47,6 +50,7 @@ Phase 4 der shadcn/ui-Migration ist **zu 100% abgeschlossen**. Alle 6 Komponente
 - useToast
 
 **TypeScript Interfaces**:
+
 ```typescript
 interface ProductAttribute {
   id: number;
@@ -78,6 +82,7 @@ interface AttributeTemplate {
 ```
 
 **API Endpoints**:
+
 - `GET/POST /products/attributes`
 - `GET/POST /products/attribute-groups`
 - `GET/POST /products/attribute-templates`
@@ -86,11 +91,13 @@ interface AttributeTemplate {
 ---
 
 ### 2. ProductSetManagerModern.tsx
+
 **Zeilen**: 237  
 **Status**: ✅ Erstellt & Kompiliert  
 **Pfad**: `frontend/src/components/products/ProductSetManagerModern.tsx`
 
 **Features**:
+
 - List View für alle Produktsets
 - Tabelle mit 8 Spalten:
   - Name
@@ -106,6 +113,7 @@ interface AttributeTemplate {
 - Callback zu ProductSetEditor via `onEdit` prop
 
 **shadcn/ui Components**:
+
 - Card, CardHeader, CardContent
 - Table, TableHeader, TableBody, TableRow, TableHead, TableCell
 - Badge (3 Varianten: outline, secondary, default)
@@ -115,6 +123,7 @@ interface AttributeTemplate {
 - useToast
 
 **TypeScript Interface**:
+
 ```typescript
 interface ProductSet {
   id: number;
@@ -132,17 +141,20 @@ interface ProductSet {
 ```
 
 **API Endpoints**:
+
 - `GET /products/sets` - Load all sets
 - `DELETE /products/sets/:id` - Delete set
 
 ---
 
 ### 3. ProductSetEditorModern.tsx
+
 **Zeilen**: 280  
 **Status**: ✅ Erstellt & Kompiliert  
 **Pfad**: `frontend/src/components/products/ProductSetEditorModern.tsx`
 
 **Features**:
+
 - Create/Edit Form für Produktsets
 - 2-spaltige Grid-Layouts (responsive)
 - Felder:
@@ -158,6 +170,7 @@ interface ProductSet {
 - Callbacks: `onSave()`, `onCancel()`
 
 **shadcn/ui Components**:
+
 - Card, CardHeader, CardContent
 - Input, Textarea, Label
 - Select, SelectTrigger, SelectContent, SelectItem
@@ -168,6 +181,7 @@ interface ProductSet {
 - useToast
 
 **Kategorien**:
+
 ```typescript
 const CATEGORIES = [
   'PV-Komplettset',
@@ -181,6 +195,7 @@ const CATEGORIES = [
 ```
 
 **API Endpoints**:
+
 - `GET /products` - Load available products
 - `POST /products/sets` - Create new set
 - `PUT /products/sets/:id` - Update existing set
@@ -188,11 +203,13 @@ const CATEGORIES = [
 ---
 
 ### 4. PriceCalculatorModern.tsx
+
 **Zeilen**: 470  
 **Status**: ✅ Erstellt & Kompiliert  
 **Pfad**: `frontend/src/components/pricing/PriceCalculatorModern.tsx`
 
 **Features**:
+
 - Accordion-basiertes Layout (3 Sektionen)
   1. Produktauswahl: Modulanzahl (1-200) + Speichermodell
   2. Extras & Zubehör: 5 Checkbox-Cards
@@ -211,6 +228,7 @@ const CATEGORIES = [
 - Error Handling (Alert variant="destructive")
 
 **shadcn/ui Components**:
+
 - Card, CardHeader, CardContent, CardDescription, CardTitle
 - Accordion, AccordionItem, AccordionTrigger, AccordionContent
 - Select, Checkbox, Input, Button, Label
@@ -219,6 +237,7 @@ const CATEGORIES = [
 - useToast
 
 **Calculation Logic**:
+
 ```typescript
 // Real-time recalculation
 useEffect(() => {
@@ -239,6 +258,7 @@ const total = subtotal - discount + tax;
 ```
 
 **API Endpoints**:
+
 - `POST /api/v1/pricing/calculate` - Calculate base price
   - Request: `{ module_count, storage_model, enable_fallback }`
   - Response: `{ success, price, metadata }`
@@ -246,11 +266,13 @@ const total = subtotal - discount + tax;
 ---
 
 ### 5. PricingMatrixModern.tsx
+
 **Zeilen**: 390  
 **Status**: ✅ Erstellt & Kompiliert  
 **Pfad**: `frontend/src/components/pricing/PricingMatrixModern.tsx`
 
 **Features**:
+
 - Table-basierte Pricing Matrix
   - Zeilen: 6 Modulbereich-Ranges (1-10, 11-20, ..., 51-100)
   - Spalten: 6 Speicheroptionen (Ohne, BYD 5/10/15, sonnen 10/15)
@@ -266,6 +288,7 @@ const total = subtotal - discount + tax;
 - Loading States
 
 **shadcn/ui Components**:
+
 - Card (2 Verwendungen)
 - Table, TableHeader, TableBody, TableRow, TableHead, TableCell
 - Input (Number, File)
@@ -277,6 +300,7 @@ const total = subtotal - discount + tax;
 - useToast
 
 **Data Structures**:
+
 ```typescript
 interface PriceCell {
   module_count_min: number;
@@ -297,11 +321,13 @@ interface PricingMatrix {
 ```
 
 **API Endpoints**:
+
 - `GET /pricing/matrix` - Load active matrix
 - `GET /pricing/matrix/versions` - Load version history
 - `PUT /pricing/matrix/:id` - Save changes
 
 **CSV Format**:
+
 ```csv
 Module Range,Storage,Price
 1-10,Ohne Speicher,5500.00
@@ -312,11 +338,13 @@ Module Range,Storage,Price
 ---
 
 ### 6. PricingRulesModern.tsx
+
 **Zeilen**: 580  
 **Status**: ✅ Erstellt & Kompiliert  
 **Pfad**: `frontend/src/components/pricing/PricingRulesModern.tsx`
 
 **Features**:
+
 - Rule Builder Interface
 - IF-THEN Logic:
   - **Conditions**: module_count, storage_model, customer_type, region, total_power
@@ -341,6 +369,7 @@ Module Range,Storage,Price
 - Delete Confirmation (AlertDialog)
 
 **shadcn/ui Components**:
+
 - Card, CardHeader, CardContent
 - Table, Button (ghost, outline variants)
 - Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription
@@ -353,6 +382,7 @@ Module Range,Storage,Price
 - useToast
 
 **Rule Structure**:
+
 ```typescript
 interface Condition {
   field: string; // 'module_count', 'storage_model', etc.
@@ -378,6 +408,7 @@ interface PricingRule {
 ```
 
 **API Endpoints**:
+
 - `GET /pricing/rules` - Load all rules
 - `POST /pricing/rules` - Create rule
 - `PUT /pricing/rules/:id` - Update rule
@@ -385,6 +416,7 @@ interface PricingRule {
 - `POST /pricing/rules/:id/priority` - Change priority
 
 **Condition Fields**:
+
 ```typescript
 const CONDITION_FIELDS = [
   { value: 'module_count', label: 'Modulanzahl' },
@@ -420,6 +452,7 @@ const CONDITION_FIELDS = [
 **API Endpoints**: 18 Endpoints dokumentiert  
 
 **Unique shadcn/ui Components**:
+
 1. Table + TableHeader/TableBody/TableRow/TableHead/TableCell
 2. Card + CardHeader/CardContent/CardDescription/CardTitle
 3. Dialog + DialogContent/DialogHeader/DialogFooter/DialogTitle/DialogDescription
@@ -444,7 +477,9 @@ const CONDITION_FIELDS = [
 ## Migration Verification
 
 ### ✅ Compilation Status
+
 Alle 6 Komponenten kompilieren fehlerfrei:
+
 - ProductAttributeManagerModern.tsx ✅
 - ProductSetManagerModern.tsx ✅
 - ProductSetEditorModern.tsx ✅
@@ -453,26 +488,31 @@ Alle 6 Komponenten kompilieren fehlerfrei:
 - PricingRulesModern.tsx ✅
 
 ### ✅ PrimeReact Dependencies Removed
+
 **Before**: DataTable, Column, Dialog, TabView, TabPanel, Toast, confirmDialog, Toolbar, Dropdown, InputNumber, Panel, Message, ProgressSpinner, Chips, Tag
 
 **After**: 0 PrimeReact imports - **100% migrated zu shadcn/ui**
 
 ### ✅ TypeScript Typing
+
 - Alle Komponenten voll typisiert
 - Props interfaces definiert
 - State types spezifiziert
 - API Response types dokumentiert
 
 ### ✅ German Localization
+
 - Currency formatting: `formatCurrency()` - "1.234,56 €"
 - Number formatting: `toLocaleString('de-DE')`
 - UI-Texte auf Deutsch
 - MwSt (19%) korrekt berechnet
 
 ### ✅ Dark Mode Support
+
 Alle shadcn/ui Komponenten sind Dark Mode-kompatibel via CSS Variables.
 
 ### ✅ Accessibility
+
 - Label-For-Attribut für alle Inputs
 - AlertDialog für Lösch-Confirmations
 - Keyboard Navigation (Tab, Enter, Escape)
@@ -485,6 +525,7 @@ Alle shadcn/ui Komponenten sind Dark Mode-kompatibel via CSS Variables.
 **Endpoints implementiert**: 18
 
 ### Product APIs
+
 - `GET/POST /products/attributes` - Attribute CRUD
 - `GET/POST /products/attribute-groups` - Group CRUD
 - `GET/POST /products/attribute-templates` - Template CRUD
@@ -494,6 +535,7 @@ Alle shadcn/ui Komponenten sind Dark Mode-kompatibel via CSS Variables.
 - `PUT/DELETE /products/sets/:id` - Update/Delete Sets
 
 ### Pricing APIs
+
 - `POST /api/v1/pricing/calculate` - Real-time calculation
 - `GET /pricing/matrix` - Load pricing matrix
 - `GET /pricing/matrix/versions` - Version history
@@ -520,6 +562,7 @@ const formatCurrency = (value: number): string => {
 ```
 
 **Verwendung in**:
+
 - ProductSetManagerModern (base_price)
 - PriceCalculatorModern (alle Preise)
 - PricingMatrixModern (cell prices)
@@ -529,6 +572,7 @@ const formatCurrency = (value: number): string => {
 ## Patterns & Best Practices
 
 ### 1. State Management
+
 ```typescript
 // Consistent pattern für alle Komponenten
 const [data, setData] = useState<Type[]>([]);
@@ -538,6 +582,7 @@ const [showDialog, setShowDialog] = useState(false);
 ```
 
 ### 2. API Error Handling
+
 ```typescript
 try {
   const response = await api.get('/endpoint');
@@ -554,6 +599,7 @@ try {
 ```
 
 ### 3. Delete Confirmations
+
 ```typescript
 const [deleteConfirm, setDeleteConfirm] = useState<{
   show: boolean;
@@ -569,6 +615,7 @@ const [deleteConfirm, setDeleteConfirm] = useState<{
 ```
 
 ### 4. Form Validation
+
 ```typescript
 if (!form.name || !form.category) {
   toast({
@@ -581,6 +628,7 @@ if (!form.name || !form.category) {
 ```
 
 ### 5. React Hooks Dependencies
+
 ```typescript
 const loadData = React.useCallback(async () => {
   // ... fetch logic
@@ -596,6 +644,7 @@ React.useEffect(() => {
 ## Testing Checklist
 
 ### Manual Testing (Recommended)
+
 - [ ] ProductAttributeManager: Create/Edit/Delete Attributes
 - [ ] ProductAttributeManager: Create/Edit/Delete Groups
 - [ ] ProductAttributeManager: Create/Edit/Delete Templates
@@ -620,6 +669,7 @@ React.useEffect(() => {
 - [ ] PricingRules: Active/Inactive toggle
 
 ### Unit Testing (Optional)
+
 ```bash
 # Beispiel: Jest + React Testing Library
 npm test -- ProductAttributeManagerModern
@@ -633,6 +683,7 @@ npm test -- PriceCalculatorModern
 **Phase 4**: ✅ **100% ABGESCHLOSSEN**
 
 **Gesamtfortschritt** (All Phases):
+
 - Phase 1 (Foundation): 7 components ✅
 - Phase 2 (Settings): 11 components ✅
 - Phase 3 (Project Wizard): 7 components ✅
@@ -648,10 +699,12 @@ npm test -- PriceCalculatorModern
 ## Next Steps (Optional)
 
 ### Phase 5 (Optional): Utility Components
+
 - DataTableUtility.tsx - Generische Datentabelle
 - ChartComponents.tsx - Diagramme (wenn PrimeReact Charts verwendet)
 
 ### Deployment
+
 1. **Testing**: Manual testing aller 6 Komponenten
 2. **Code Review**: TypeScript types, Error handling, UX
 3. **Integration**: Import in Main App
@@ -659,6 +712,7 @@ npm test -- PriceCalculatorModern
 5. **Deploy**: Production deployment
 
 ### Documentation Updates
+
 - Update README.md mit shadcn/ui migration status
 - API Documentation (falls Endpoints neu)
 - Component Storybook (optional)
@@ -668,6 +722,7 @@ npm test -- PriceCalculatorModern
 ## Lessons Learned
 
 ### Migration Best Practices
+
 1. **Parallel Tool Calls**: File search + grep_search gleichzeitig → 50% schneller
 2. **Pattern-Based Creation**: Bei fehlenden Source Files → Nutze etablierte Patterns
 3. **Inline Helpers**: `formatCurrency()` direkt in Komponente → Keine externe Dependencies
@@ -675,6 +730,7 @@ npm test -- PriceCalculatorModern
 5. **TypeScript Types**: Explizite Parameter-Typen `(open: boolean)` → Keine implicit any
 
 ### shadcn/ui vs. PrimeReact
+
 | Feature | PrimeReact | shadcn/ui |
 |---------|-----------|-----------|
 | DataTable | `<DataTable>` + `<Column>` | `<Table>` + TableHeader/Body/Row/Cell |

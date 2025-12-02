@@ -23,10 +23,12 @@ Phase 3 successfully migrated the entire **ProjectWizard** system - the core bus
 ## Components Migrated
 
 ### 1. ProjectWizardModern.tsx (Main Orchestrator)
+
 **Lines**: ~430  
 **Purpose**: Multi-step wizard controller with navigation, validation, and state management
 
 **Key Features**:
+
 - 6-step workflow with visual stepper (custom implementation)
 - Progress bar showing completion percentage
 - Per-step validation with toast notifications
@@ -35,6 +37,7 @@ Phase 3 successfully migrated the entire **ProjectWizard** system - the core bus
 - Conditional validation based on system type
 
 **shadcn/ui Components Used**:
+
 - `Card`, `CardContent`, `CardDescription`, `CardHeader`, `CardTitle`
 - `Button` (4 variants: ghost, outline, primary, success)
 - `Progress` (percentage completion)
@@ -44,6 +47,7 @@ Phase 3 successfully migrated the entire **ProjectWizard** system - the core bus
 **Icons**: `Home`, `ArrowLeft`, `ArrowRight`, `Check`, `CheckCircle2`
 
 **Notable Patterns**:
+
 ```typescript
 // Custom stepper with completed/active/disabled states
 <div className={cn(
@@ -59,10 +63,12 @@ Phase 3 successfully migrated the entire **ProjectWizard** system - the core bus
 ---
 
 ### 2. SystemTypeStepModern.tsx (Step 1)
+
 **Lines**: ~140  
 **Purpose**: System type selection (PV, Wärmepumpe, or PV+WP)
 
 **Key Features**:
+
 - 3 large selection cards with icons (☀️, 🔥, ⚡)
 - Feature lists per system type (4 features each)
 - Keyboard navigation (Enter/Space)
@@ -70,21 +76,25 @@ Phase 3 successfully migrated the entire **ProjectWizard** system - the core bus
 - Info alert with combination benefits tip
 
 **shadcn/ui Components Used**:
+
 - `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`
 - `Alert`, `AlertDescription`
 - `Info` icon
 
 **Business Logic**:
+
 - Sets `systemType: 'pv' | 'wp' | 'pv_wp'`
 - Determines which fields appear in later steps (electricity vs. heating consumption)
 
 ---
 
 ### 3. CustomerDataStepModern.tsx (Step 2)
+
 **Lines**: ~390  
 **Purpose**: Customer contact data with address auto-parsing
 
 **Key Features**:
+
 - **Name Section**: Salutation (4), Title (6), First/Last name
 - **Address Section**:
   - Auto-parsing mode: "Street Number, PLZ City" → parsed fields
@@ -94,6 +104,7 @@ Phase 3 successfully migrated the entire **ProjectWizard** system - the core bus
 - **Notes**: Free-text textarea
 
 **shadcn/ui Components Used**:
+
 - `Card`, `CardContent`
 - `Input` (8 fields), `Textarea` (1 field)
 - `Label`, `Separator`
@@ -103,6 +114,7 @@ Phase 3 successfully migrated the entire **ProjectWizard** system - the core bus
 **Icons**: `ChevronDown`, `ChevronUp`
 
 **Notable Logic**:
+
 ```typescript
 // Address parsing regex
 const pattern1 = /^(.+?)\s+(\d+[a-zA-Z]?)\s*,?\s*(\d{5})\s+(.+)$/;
@@ -125,10 +137,12 @@ useEffect(() => {
 ---
 
 ### 4. BuildingDataStepModern.tsx (Step 3)
+
 **Lines**: ~320  
 **Purpose**: Building and roof specifications
 
 **Key Features**:
+
 - **Building Section**:
   - Building type (9 options: Einfamilienhaus, Mehrfamilienhaus, Gewerbe, etc.)
   - Building year → Auto-calculate insulation standard (7 levels from 1970-2020)
@@ -142,6 +156,7 @@ useEffect(() => {
 - **Alerts**: Height warning (>7m), Nord orientation warning, optimization tip
 
 **shadcn/ui Components Used**:
+
 - `Card`, `CardContent`
 - `Input` (3 numeric fields), `Label`, `Separator`
 - `Select` (4 dropdowns)
@@ -151,6 +166,7 @@ useEffect(() => {
 **Icons**: `AlertTriangle`, `Info`
 
 **Notable Logic**:
+
 ```typescript
 const getInsulationStandard = (year: number | null): string => {
   if (!year) return 'Unbekannt';
@@ -167,10 +183,12 @@ const getInsulationStandard = (year: number | null): string => {
 ---
 
 ### 5. EnergyDemandStepModern.tsx (Step 4)
+
 **Lines**: ~280  
 **Purpose**: Energy consumption analysis for system sizing
 
 **Key Features**:
+
 - **Customer Type**: Private / Commercial (ToggleGroup)
 - **Building Status**: Bestandsgebäude / Neubau (ToggleGroup)
 - **Electricity Consumption** (if PV):
@@ -184,6 +202,7 @@ const getInsulationStandard = (year: number | null): string => {
   - Reference info alert
 
 **shadcn/ui Components Used**:
+
 - `Card`, `CardContent`
 - `Input` (2 numeric fields), `Label`, `Separator`
 - `ToggleGroup`, `ToggleGroupItem` (2 toggle groups)
@@ -193,6 +212,7 @@ const getInsulationStandard = (year: number | null): string => {
 **Icons**: `Info`, `Lightbulb`
 
 **Notable Logic**:
+
 ```typescript
 const estimateHeatingConsumption = (
   buildingYear: number | null,
@@ -215,16 +235,19 @@ const estimateHeatingConsumption = (
 ```
 
 **Conditional Rendering**:
+
 - Electricity section only shows if `systemType === 'pv' || systemType === 'pv_wp'`
 - Heating section only shows if `systemType === 'wp' || systemType === 'pv_wp'`
 
 ---
 
 ### 6. CustomerNeedsStepModern.tsx (Step 5)
+
 **Lines**: ~190  
 **Purpose**: Customer-specific requirements and priorities
 
 **Key Features**:
+
 - **E-Mobility** (only if PV):
   - Wallbox checkbox
   - Info alert: +2.500-3.000 kWh/year for 15.000 km
@@ -237,6 +260,7 @@ const estimateHeatingConsumption = (
 - **Additional Wishes**: Free-text textarea (6 rows)
 
 **shadcn/ui Components Used**:
+
 - `Card`, `CardContent`
 - `Label`, `Separator`
 - `Checkbox` (3 checkboxes)
@@ -246,16 +270,19 @@ const estimateHeatingConsumption = (
 **Icons**: `Info`, `Battery`, `Car`, `TrendingUp`
 
 **Conditional Rendering**:
+
 - E-Mobility and Battery sections only render if `hasPV = true`
 - Info alert at bottom if WP-only system
 
 ---
 
 ### 7. AdditionalOptionsStepModern.tsx (Step 6)
+
 **Lines**: ~390  
 **Purpose**: Financing, pricing modifiers, payment terms
 
 **Key Features**:
+
 - **Financing**:
   - Checkbox to enable financing section
   - Conditional fields: Down payment (€), Loan term (dropdown 5-20 years), Interest rate (%)
@@ -272,6 +299,7 @@ const estimateHeatingConsumption = (
   - Default info: 50% down, 50% after acceptance
 
 **shadcn/ui Components Used**:
+
 - `Card`, `CardContent`
 - `Input` (6 numeric fields), `Label`, `Separator`
 - `Checkbox` (2 checkboxes)
@@ -281,6 +309,7 @@ const estimateHeatingConsumption = (
 **Icons**: `Info`, `CreditCard`, `DollarSign`, `Wrench`
 
 **Validation**:
+
 - If `wantsFinancing = true`, loan term and interest rate are required
 
 ---
@@ -288,6 +317,7 @@ const estimateHeatingConsumption = (
 ## Type Definitions
 
 ### ProjectWizardData Interface
+
 **Fields**: 40+ properties across 6 steps
 
 ```typescript
@@ -455,6 +485,7 @@ const validateStep = (step: number): boolean => {
 ## Advanced Features Implemented
 
 ### 1. Address Auto-Parsing
+
 **File**: `CustomerDataStepModern.tsx`
 
 ```typescript
@@ -478,6 +509,7 @@ const parseAddress = (fullAddress: string) => {
 **Example**: "Musterstraße 123, 12345 Musterstadt" → Parses into 4 fields
 
 ### 2. PLZ → Bundesland Auto-Detection
+
 **File**: `CustomerDataStepModern.tsx`
 
 - **Mapping Table**: 98 entries (2-digit PLZ prefixes → 16 Bundesländer)
@@ -485,6 +517,7 @@ const parseAddress = (fullAddress: string) => {
 - **Coverage**: All German postal codes (01-99)
 
 ### 3. Insulation Standard Calculation
+
 **File**: `BuildingDataStepModern.tsx`
 
 - **Input**: Building year
@@ -493,6 +526,7 @@ const parseAddress = (fullAddress: string) => {
 - **Display**: Shows below building year field
 
 ### 4. Heating Consumption Estimation
+
 **File**: `EnergyDemandStepModern.tsx`
 
 - **Algorithm**: `(roofArea * 2 floors) * consumptionPerSqm(buildingYear)`
@@ -501,6 +535,7 @@ const parseAddress = (fullAddress: string) => {
 - **Business Logic**: Helps customers without exact heating bills
 
 ### 5. Conditional Rendering
+
 **All Step Files**
 
 - **E-Mobility/Battery**: Only if `systemType includes 'pv'`
@@ -514,6 +549,7 @@ const parseAddress = (fullAddress: string) => {
 ## Migration Success Metrics
 
 ### Code Quality
+
 - ✅ **Zero PrimeReact imports** in all 7 files
 - ✅ **100% TypeScript** with full type safety
 - ✅ **Single responsibility**: Each step component handles one phase
@@ -521,6 +557,7 @@ const parseAddress = (fullAddress: string) => {
 - ✅ **Accessibility**: All inputs have labels, keyboard navigation supported
 
 ### Feature Parity
+
 - ✅ **All original features preserved**:
   - 6-step workflow
   - Per-step validation
@@ -537,6 +574,7 @@ const parseAddress = (fullAddress: string) => {
   - Dark mode support (all shadcn components)
 
 ### Component Stats
+
 - **Files Created**: 7 (1 main + 6 steps)
 - **Total Lines**: ~2,300
 - **shadcn/ui Components**: 13 types, 127 instances
@@ -655,12 +693,14 @@ const Dashboard = () => {
 ### API Integration Points
 
 **onComplete Callback** should:
+
 1. Validate final data (all steps)
 2. POST to backend: `/api/projects/create`
 3. Payload: `ProjectWizardData` interface (40+ fields)
 4. Response: `projectId`, redirect to `/projects/{id}`
 
 **Potential Backend Endpoints**:
+
 - `POST /api/projects/create` - Create new project with wizard data
 - `GET /api/customers/{id}` - Pre-fill customer data if editing
 - `POST /api/estimates/heating` - Server-side heating consumption estimation (optional)
@@ -690,6 +730,7 @@ solar-calculator-pro/frontend/src/components/wizard/
 ## Future Enhancements (Out of Scope)
 
 ### Potential Improvements
+
 1. **Multi-language Support**: i18n integration for field labels
 2. **Step Persistence**: Save wizard state to localStorage (resume later)
 3. **Prefill from CRM**: Auto-populate customer data from existing CRM records
@@ -716,12 +757,15 @@ solar-calculator-pro/frontend/src/components/wizard/
 ## Dependencies
 
 ### Required shadcn/ui Components
+
 All components already installed (Phase 1-2). No additional installation needed.
 
 ### Lucide React Icons
+
 All icons used are from existing installation. No additional icons required.
 
 ### External Libraries
+
 None. Pure shadcn/ui + Lucide React.
 
 ---
@@ -729,6 +773,7 @@ None. Pure shadcn/ui + Lucide React.
 ## Cumulative Progress
 
 ### Phase 1 (7 components)
+
 - FormField system (10 types)
 - FormContainer (auto-save)
 - German inputs (Number, Currency, Percent)
@@ -736,6 +781,7 @@ None. Pure shadcn/ui + Lucide React.
 - LoadingFallback (routes)
 
 ### Phase 2 (11 components)
+
 - Theme system (Selector, Preview)
 - PasswordChangeForm (strength validation)
 - NotificationCenter (Popover, polling)
@@ -743,6 +789,7 @@ None. Pure shadcn/ui + Lucide React.
 - MonitoringDashboard (Recharts)
 
 ### Phase 3 (7 components) ← **CURRENT**
+
 - ProjectWizard (main orchestrator)
 - 6 step components (full workflow)
 

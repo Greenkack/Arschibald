@@ -16,10 +16,8 @@ import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
 import { ProgressBar } from 'primereact/progressbar';
-import { LineChart } from '../charts/LineChart';
 import { BarChart } from '../charts/BarChart';
 import { PieChart } from '../charts/PieChart';
-import { AreaChart } from '../charts/AreaChart';
 import { germanFormatter } from '../../utils/germanNumberFormatter';
 import './SolarCalculationResults.css';
 
@@ -412,15 +410,13 @@ const SolarCalculationResults: React.FC<SolarCalculationResultsProps> = ({
         <Card className="chart-card full-width">
           <h3>💵 Amortisationsverlauf</h3>
           <Divider />
-          <LineChart
+          <BarChart
             data={generatePaybackData()}
-            lines={[
-              { key: 'investment', name: 'Investition', color: '#ef4444' },
-              { key: 'savings', name: 'Kumulierte Ersparnis', color: '#10b981' }
-            ]}
             xKey="year"
+            yKey="savings"
             xLabel="Jahr"
             yLabel="Betrag (€)"
+            color="#10b981"
             height={350}
           />
           <div className="payback-info">
@@ -436,7 +432,7 @@ const SolarCalculationResults: React.FC<SolarCalculationResultsProps> = ({
         <Card className="chart-card full-width">
           <h3>📈 Kumulierte Ersparnis über 25 Jahre</h3>
           <Divider />
-          <AreaChart
+          <BarChart
             data={generateCumulativeSavings()}
             xKey="year"
             yKey="savings"

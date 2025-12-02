@@ -2413,6 +2413,8 @@ def render_pdf_ui(
         st.session_state.selected_cover_letter_name_doc_output = None
     if "selected_cover_letter_text_content_doc_output" not in st.session_state:
         st.session_state.selected_cover_letter_text_content_doc_output = ""
+    if "special_agreements_text" not in st.session_state:
+        st.session_state.special_agreements_text = ""
 
     if 'pdf_inclusion_options' not in st.session_state:
         st.session_state.pdf_inclusion_options = {
@@ -2562,6 +2564,40 @@ def render_pdf_ui(
         st.session_state.selected_cover_letter_name_doc_output = selected_cover_letter_name
         st.session_state.selected_cover_letter_text_content_doc_output = cover_letter_options.get(
             selected_cover_letter_name, "")
+
+        # 📝 SONDERVEREINBARUNGEN (Seite 8)
+        st.markdown("---")
+        st.markdown(
+            "**📝 " +
+            get_text_pdf_ui(
+                texts,
+                "special_agreements_section",
+                "Sondervereinbarungen (Seite 8)") +
+            "**")
+        st.caption(
+            get_text_pdf_ui(
+                texts,
+                "special_agreements_help",
+                "Geben Sie hier individuelle Vereinbarungen ein, die auf Seite 8 des PDFs unter 'SONDERVEREINBARUNGEN' erscheinen sollen."))
+        
+        special_agreements_input = st.text_area(
+            get_text_pdf_ui(
+                texts,
+                "special_agreements_label",
+                "Text für Sondervereinbarungen"),
+            value=st.session_state.special_agreements_text,
+            height=150,
+            max_chars=1000,
+            placeholder="z.B.: Kostenlose Wartung für 2 Jahre\\nErweiterte Garantie auf Wechselrichter\\nFertigstellung bis 30.06.2026",
+            help="Wird als mehrzeiliger Text unter 'SONDERVEREINBARUNGEN:' auf Seite 8 angezeigt.",
+            key="special_agreements_textarea_v1"
+        )
+        st.session_state.special_agreements_text = special_agreements_input
+        
+        if special_agreements_input:
+            st.success(f"✅ {len(special_agreements_input)} Zeichen eingegeben")
+        else:
+            st.info("ℹ️ Keine Sondervereinbarungen - Standardtext wird verwendet")
 
         # Template-Vorschau hinzufügen (aus Multi-Generator)
         with st.expander(" Template-Vorschau", expanded=False):
@@ -3434,21 +3470,33 @@ def render_pdf_ui(
             st.markdown("---")
             st.success("PDF wurde erfolgreich generiert!")
             
-            customer_name_for_file = customer_data_pdf.get(
-                'last_name', 'Angebot')
-            if not customer_name_for_file or not str(
-                    customer_name_for_file).strip():
-                customer_name_for_file = "Photovoltaik_Angebot"
-            timestamp_file = base64.b32encode(
-                os.urandom(5)).decode('utf-8').lower()
-            file_name = f"Angebot_{
-                str(customer_name_for_file).replace(
-                    ' ', '_')}_{timestamp_file}.pdf"
+            # Extrahiere Kundendaten für Dateinamen
+            anrede = customer_data_pdf.get('salutation') or customer_data_pdf.get('anrede', 'Kunde')
+            nachname = customer_data_pdf.get('last_name') or customer_data_pdf.get('nachname', 'Unbekannt')
+            
+            # Extrahiere Anlagengröße aus Analyseergebnissen (anlage_kwp ist der richtige Key)
+            anlagengroesse_kwp = analysis_results.get('anlage_kwp', 0)
+            if anlagengroesse_kwp > 0:
+                anlagengroesse = f"{anlagengroesse_kwp:.2f}kWp".replace('.', ',')
+            else:
+                anlagengroesse = "PV"
+            
+            # Sanitize für Dateinamen (Leerzeichen entfernen, Sonderzeichen bereinigen)
+            safe_anrede = str(anrede).replace(' ', '_').replace('/', '_')
+            safe_nachname = str(nachname).replace(' ', '_').replace('/', '_')
+            
+            # Format: anrede_nachname_angebot_anlagengröße.pdf (Beispiel: Herr_Mueller_Angebot_9,2kWp.pdf)
+            file_name = f"{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}.pdf"
             st.success(
                 get_text_pdf_ui(
                     texts,
                     "pdf_generation_success",
                     "PDF erfolgreich erstellt!"))
+            
+            # Eindeutiger Key für Download-Button (basierend auf Dateinamen)
+            import hashlib
+            unique_key = hashlib.md5(file_name.encode()).hexdigest()[:8]
+            
             st.download_button(
                 label=get_text_pdf_ui(
                     texts,
@@ -3457,7 +3505,7 @@ def render_pdf_ui(
                 data=pdf_bytes_to_download,
                 file_name=file_name,
                 mime="application/pdf",
-                key=f"pdf_download_btn_final_{timestamp_file}",
+                key=f"pdf_download_btn_final_{unique_key}",
                 use_container_width=True)
             
             # Button zum Zurücksetzen (neues PDF generieren)

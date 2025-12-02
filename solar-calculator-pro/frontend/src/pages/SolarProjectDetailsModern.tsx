@@ -105,11 +105,25 @@ const SolarProjectDetailsModern: React.FC = () => {
         responseType: 'blob'
       });
       
+      // Extract customer data for filename
+      const customerData = project.data?.customer_data as Record<string, unknown> || {};
+      const calculationResults = project.data?.calculation_results as Record<string, unknown>;
+      
+      // Format filename: anrede_nachname_angebot_anlagengröße.pdf
+      const anrede = ((customerData.salutation || customerData.anrede || 'Kunde') as string).replace(/\s+/g, '_');
+      const nachname = ((customerData.last_name || customerData.nachname || customerData.name || 'Unbekannt') as string).replace(/\s+/g, '_');
+      const systemSizing = calculationResults?.system_sizing as { system_size_kwp?: number } | undefined;
+      const anlagengröße = systemSizing?.system_size_kwp 
+        ? `${systemSizing.system_size_kwp.toString().replace('.', ',')}kWp` 
+        : 'PV';
+      
+      const filename = `${anrede}_${nachname}_Angebot_${anlagengröße}.pdf`;
+      
       const blob = new Blob([response.data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `${project.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

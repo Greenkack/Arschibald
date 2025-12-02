@@ -1,9 +1,11 @@
 # shadcn/ui Migration Status Report
+
 **Stand: 30. November 2025 - FINALE VERSION ✅**
 
 ## ✅ MIGRATION ABGESCHLOSSEN (18 Seiten - 86%)
 
 ### 1. **LoginModern.tsx** ✅
+
 - **Ersetzte Komponenten**: Card, InputText, Password, Button, Checkbox, Message
 - **Neue Komponenten**: Card, Input, Label, Button, Checkbox, Alert
 - **Features**:
@@ -15,6 +17,7 @@
 - **Route**: `/auth/login` (alte Version: `/auth/login-old`)
 
 ### 2. **SettingsModern.tsx** ✅
+
 - **Ersetzte Komponenten**: TabView
 - **Neue Komponenten**: Tabs, Card
 - **Features**:
@@ -25,6 +28,7 @@
 - **Route**: `/settings` (alte Version: `/settings-old`)
 
 ### 3. **ProfileModern.tsx** ✅
+
 - **Ersetzte Komponenten**: Card, InputText, Button, Avatar, Divider, Message
 - **Neue Komponenten**: Card, Input, Button, Avatar, Separator, Alert
 - **Features**:
@@ -36,6 +40,7 @@
 - **Route**: `/profile` (alte Version: `/profile-old`)
 
 ### 4. **SolarCalculatorModern.tsx** ✅
+
 - **Ersetzte Komponenten**: Card, Toast (PrimeReact)
 - **Neue Komponenten**: Sonner Toast System
 - **Features**:
@@ -46,6 +51,7 @@
 - **Route**: `/solar`, `/solar-calculator` (alte Version: `/solar-old`)
 
 ### 5. **CRMModern.tsx** ✅
+
 - **Ersetzte Komponenten**: Card, Button, Dialog, TabView (4 Komponenten)
 - **Neue Komponenten**: Card, Button, Dialog, Tabs
 - **Features**:
@@ -57,6 +63,7 @@
 - **Route**: `/crm` (alte Version: `/crm-old`)
 
 ### 6. **AdminModern.tsx** ✅
+
 - **Ersetzte Komponenten**: TabView, Card
 - **Neue Komponenten**: Tabs, Card
 - **Features**:
@@ -67,9 +74,11 @@
 - **Route**: `/admin` (alte Version: `/admin-old`)
 
 ### 7. **DashboardModern.tsx** ✅ (bereits zuvor erstellt)
+
 - **Route**: `/dashboard` (alte Version: `/dashboard-old`)
 
 ### 8. **HeatPumpModern.tsx** ✅ NEU
+
 - **Ersetzte Komponenten**: TabView, Card
 - **Neue Komponenten**: Tabs, Card
 - **Features**:
@@ -81,6 +90,7 @@
 - **Route**: `/heatpump`, `/heat-pump` (alte Version: `/heatpump-old`)
 
 ### 9. **CombinedSystemModern.tsx** ✅ NEU
+
 - **Ersetzte Komponenten**: TabView, Card, Toast
 - **Neue Komponenten**: Tabs, Card, Sonner Toast
 - **Features**:
@@ -92,6 +102,7 @@
 - **Route**: `/combined-system` (alte Version: `/combined-system-old`)
 
 ### 10. **PriceMatrixModern.tsx** ✅ NEU
+
 - **Ersetzte Komponenten**: Card, TabView
 - **Neue Komponenten**: Tabs, Card
 - **Features**:
@@ -102,6 +113,7 @@
 - **Route**: `/pricing` (alte Version: `/pricing-old`)
 
 ### 11. **ProjectWizardModern.tsx** ✅ NEU
+
 - **Ersetzte Komponenten**: Toast
 - **Neue Komponenten**: Sonner Toast
 - **Features**:
@@ -113,6 +125,7 @@
 - **Route**: `/project-wizard` (alte Version: `/project-wizard-old`)
 
 ### 12. **PDFGenerationModern.tsx** ✅ NEU (Batch 3)
+
 - **Ersetzte Komponenten**: TabView, Button, Card
 - **Neue Komponenten**: Tabs, Button, Card
 - **Features**:
@@ -126,6 +139,7 @@
 - **Route**: `/pdf-generation` (alte Version: `/pdf-generation-old`)
 
 ### 13. **UserManagementModern.tsx** ✅ NEU (Batch 3)
+
 - **Ersetzte Komponenten**: TabView, Button, Card
 - **Neue Komponenten**: Tabs, Button, Card
 - **Features**:
@@ -137,6 +151,7 @@
 - **Route**: `/user-management` (alte Version: `/user-management-old`)
 
 ### 14. **CommunicationHistoryModern.tsx** ✅ NEU (Batch 3)
+
 - **Ersetzte Komponenten**: TabView, Card, Dropdown
 - **Neue Komponenten**: Tabs, Card, Select
 - **Features**:
@@ -148,6 +163,7 @@
 - **Route**: `/communication-history` (alte Version: `/communication-history-old`)
 
 ### 15. **Visualization3DModern.tsx** ✅ NEU (Batch 3)
+
 - **Ersetzte Komponenten**: Card, Dropdown, InputNumber, Slider
 - **Neue Komponenten**: Card, Select, Input (type="number"), Slider
 - **Features**:
@@ -161,6 +177,7 @@
 - **Route**: `/3d-visualization` (alte Version: `/3d-visualization-old`)
 
 ### 16. **SolarProjectsModern.tsx** ✅ NEU (Batch 4 - FINALE)
+
 - **Ersetzte Komponenten**: DataTable, Column, Button, InputText, Dropdown, Dialog, Toast, ConfirmDialog, Tag
 - **Neue Komponenten**: @tanstack/react-table, Button, Input, Select, Dialog, AlertDialog, Badge, Table
 - **Features**:
@@ -174,6 +191,7 @@
 - **Route**: `/solar-projects` (alte Version: `/solar-projects-old`)
 
 ### 17. **SolarProjectDetailsModern.tsx** ✅ NEU (Batch 4 - FINALE)
+
 - **Ersetzte Komponenten**: Card, Button, Toast, ConfirmDialog, Tag, Divider, ProgressSpinner, TabView
 - **Neue Komponenten**: Card, Button, AlertDialog, Badge, Separator, Tabs, Loader2
 - **Features**:
@@ -187,6 +205,7 @@
 - **Route**: `/solar-projects/:projectId` (alte Version: `/solar-projects-old/:projectId`)
 
 ### 18. **ProductManagementModern.tsx** ✅ NEU (Batch 4 - FINALE - MOST COMPLEX)
+
 - **Ersetzte Komponenten**: DataTable, Dialog, Toast, ConfirmDialog, InputText, Dropdown, Tag, Toolbar
 - **Neue Komponenten**: @tanstack/react-table, Dialog, AlertDialog, Input, Select, Badge, Table, Checkbox
 - **Features**:
@@ -216,6 +235,7 @@ Diese 3 Seiten werden **NICHT** migriert, da sie nur Legacy-Routen oder einfache
 ---
 
 ### ALTE VERSIONEN (Nur als Fallback behalten)
+
 - **Dashboard.tsx** - wird nicht migriert (DashboardModern existiert)
 - **Login.tsx** - wird nicht migriert (LoginModern existiert)
 - **Profile.tsx** - wird nicht migriert (ProfileModern existiert)
@@ -274,7 +294,9 @@ Diese 3 Seiten werden **NICHT** migriert, da sie nur Legacy-Routen oder einfache
 ## 🎯 Nächste Schritte
 
 ### Phase 1: Child-Komponenten (Empfohlen)
+
 Viele Seiten verwenden Child-Komponenten aus `/components/`, die noch PrimeReact nutzen:
+
 - `components/solar/*` (BatteryStorageSelector, InverterSelector, etc.)
 - `components/crm/*` (CustomerList, CustomerForm, CustomerDetail)
 - `components/admin/*` (SystemSettings)
@@ -288,7 +310,9 @@ Viele Seiten verwenden Child-Komponenten aus `/components/`, die noch PrimeReact
 3. **ProductManagement** (sehr komplex - 7 Komponenten + DataTable CRUD)
 
 ### Phase 3: Spezialkomponenten
+
 Für komplexe Komponenten wie DataTable müssen shadcn/ui-Wrapper erstellt werden:
+
 - **DataTable Wrapper** für @tanstack/react-table
 - **ConfirmDialog** mit AlertDialog
 - **Toast** global mit Sonner (bereits vorhanden)
@@ -296,6 +320,7 @@ Für komplexe Komponenten wie DataTable müssen shadcn/ui-Wrapper erstellt werde
 ---
 
 ## 📦 Installierte Dependencies
+
 - ✅ **sonner** (1.x) - Toast-System
 - ✅ **@radix-ui/*** (18 Pakete) - Primitives für shadcn/ui
 - ✅ **lucide-react** - Icon-Bibliothek
@@ -305,6 +330,7 @@ Für komplexe Komponenten wie DataTable müssen shadcn/ui-Wrapper erstellt werde
 ---
 
 ## 🔗 Routes-Status
+
 **Datei**: `routes/index.tsx`
 
 ### Modern Routes (Aktiv - 18 Seiten) ✅
@@ -352,6 +378,7 @@ Für komplexe Komponenten wie DataTable müssen shadcn/ui-Wrapper erstellt werde
 ---
 
 ## ✅ Qualitätssicherung
+
 - Alle Modern-Seiten kompilieren erfolgreich
 - TypeScript-Warnungen: nur 'any'-Types (nicht kritisch)
 - Alle Routes funktionieren

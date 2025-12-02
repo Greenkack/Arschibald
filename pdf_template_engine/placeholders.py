@@ -6483,4 +6483,21 @@ def build_dynamic_data(
     except Exception as e:
         print(f"DEBUG: Fehler beim Laden des 3D-Screenshots: {e}")
 
+    # ═══════════════════════════════════════════════════════════════════════
+    # SONDERVEREINBARUNGEN (Seite 8)
+    # ═══════════════════════════════════════════════════════════════════════
+    # Hole Sondervereinbarungen aus Session State
+    special_agreements = session_get("special_agreements_text", "")
+    if special_agreements and special_agreements.strip():
+        result["special_agreements_custom_text"] = special_agreements.strip()
+        print(f"DEBUG: Sondervereinbarungen gesetzt ({len(special_agreements)} Zeichen)")
+    else:
+        # Standardtext wenn keine Sondervereinbarungen eingegeben wurden
+        result["special_agreements_custom_text"] = (
+            "Wir übernehmen für Sie alle erforderlichen Schritte und Prozesse rund um den Erwerb "
+            "einer Photovoltaikanlage – einschließlich der kompletten Abwicklung und der "
+            "ordnungsgemäßen Abnahme vom EVU."
+        )
+        print("DEBUG: Sondervereinbarungen - Standardtext verwendet")
+
     return result

@@ -1729,6 +1729,58 @@ def generate_overlay(
                 )
                 continue
 
+            # SPEZIAL-HANDLER: Sondervereinbarungen (Seite 8, Multiline)
+            if text == "special_agreements_custom_text" and i == 8:
+                special_text = dynamic_data.get("special_agreements_custom_text", "")
+                
+                if not special_text:
+                    print(f"   ⚠️ Sondervereinbarungen: Kein Text in dynamic_data (Seite {i})")
+                    continue
+                
+                # Multiline-Rendering mit Word-Wrapping
+                from reportlab.lib.utils import simpleSplit
+                
+                pos = elem.get("position", (0, 0, 0, 0))
+                if len(pos) == 4:
+                    x0, y0, x1, y1 = pos
+                else:
+                    print(f"   ⚠️ Sondervereinbarungen: Ungültige Position")
+                    continue
+                
+                # Font und Farbe
+                font_name = elem.get("font", "Helvetica")
+                font_size = float(elem.get("font_size", 9.0))
+                color_int = int(elem.get("color", 0))
+                
+                c.setFillColor(int_to_color(color_int))
+                c.setFont("Helvetica", font_size)
+                
+                # Text in Zeilen aufteilen (max. Breite: 274pt)
+                max_width = x1 - x0  # Berechne aus Position
+                lines = []
+                for paragraph in str(special_text).split('\n'):
+                    if paragraph.strip():
+                        wrapped = simpleSplit(paragraph, "Helvetica", font_size, max_width)
+                        lines.extend(wrapped)
+                    else:
+                        lines.append("")  # Leerzeile beibehalten
+                
+                # Start-Y: UNTERHALB von "SONDERVEREINBARUNGEN:" Header
+                # Header ist bei Y=278-298, also starte bei Y=265 (ca. 13pt Abstand)
+                line_height = 11.0
+                start_y = page_height - 298 - 15  # 15pt Abstand nach Header
+                current_y = start_y
+                
+                for line in lines:
+                    if current_y < (page_height - 270 - 80):  # Max 80pt Höhe (ca. 7 Zeilen)
+                        print(f"   ⚠️ Sondervereinbarungen: Text zu lang, abgeschnitten")
+                        break
+                    c.drawString(x0, current_y, line)
+                    current_y -= line_height
+                
+                print(f"   ✓ Sondervereinbarungen: {len(lines)} Zeilen @ Y={start_y:.1f}")
+                continue  # Überspringe normales Rendering
+            
             # Seite 4 & 5: Firmenname und TÜV-Text dynamisch behandeln
             if i in (4, 5) and text == "firmen_name":
                 company_name = dynamic_data.get("company_name", "")
@@ -3734,6 +3786,53 @@ def generate_multi_firm_pdf(
                 if not position or len(position) < 4:
                     continue
                 
+                # SPEZIAL-HANDLER für special_agreements_custom_text (multiline)
+                # MUSS VOR der Placeholder-Prüfung stehen!
+                if text_key == "special_agreements_custom_text" and page_num == 8:
+                    # Hole Wert aus dynamic_data
+                    value = dynamic_data.get(text_key, "")
+                    
+                    if not value:
+                        print(f"   ⚠️ Sondervereinbarungen: Kein Text in dynamic_data")
+                        continue
+                    
+                    # Multiline-Text mit automatischem Zeilenumbruch
+                    from reportlab.lib.utils import simpleSplit
+                    
+                    # Font und Farbe setzen
+                    c.setFillColor(int_to_color(color))
+                    c.setFont("Helvetica", 9.0)
+                    
+                    # Position aus YML: (x0, y0, x1, y1) - ReportLab Koordinaten (Y von unten!)
+                    # Header "SONDERVEREINBARUNGEN:" ist bei Y=278-298 (von unten)
+                    # Text-Bereich ist bei Y=183-270 (von unten)
+                    # Starte Text bei Y=260 (ca. 18pt unter Header-Unterkante 278)
+                    x0, y0, x1, y1 = position
+                    max_width = x1 - x0  # Breite aus Position berechnen
+                    
+                    # Text in Zeilen aufteilen
+                    lines = []
+                    for paragraph in str(value).split('\n'):
+                        if paragraph.strip():
+                            wrapped = simpleSplit(paragraph, "Helvetica", 9.0, max_width)
+                            lines.extend(wrapped)
+                        else:
+                            lines.append("")  # Leerzeile beibehalten
+                    
+                    # Start bei Y=260 (von unten gemessen), nach unten fortsetzen
+                    line_height = 11.0
+                    current_y = 260.0
+                    
+                    for line in lines:
+                        if current_y < 190.0:  # Stop bei Y=190 (Unterkante Textbereich)
+                            print(f"   ⚠️ Sondervereinbarungen: Text abgeschnitten ({len(lines)} Zeilen)")
+                            break
+                        c.drawString(x0, current_y, line)
+                        current_y -= line_height
+                    
+                    print(f"   ✓ Sondervereinbarungen: {len(lines)} Zeilen @ Y=260 (Multi-Firma)")
+                    continue  # Überspringe normales Rendering
+                
                 # Hole Wert aus dynamic_data oder verwende Literal-Text
                 if text_key in dynamic_data:
                     value = dynamic_data[text_key]
@@ -3746,6 +3845,9 @@ def generate_multi_firm_pdf(
                 
                 # Position: (x0, y0, x1, y1) - verwende x0, y0 als Startpunkt
                 x, y = position[0], position[1]
+                
+                # Setze Farbe und Font
+                c.setFillColor(int_to_color(color))
                 
                 # FONT-NAME NORMALISIERUNG für ReportLab
                 # YML verwendet "Helvetica-Regular", ReportLab kennt nur "Helvetica"

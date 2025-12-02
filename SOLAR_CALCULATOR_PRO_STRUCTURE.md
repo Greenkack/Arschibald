@@ -963,6 +963,7 @@ electron/
 ## 📊 STATISTIK
 
 ### Frontend (React/TypeScript)
+
 - **Komponenten**: 150+ React Components
 - **Custom Hooks**: 12 Hooks
 - **Services**: 9 API Services
@@ -971,6 +972,7 @@ electron/
 - **Beispiele**: 5 Demo Components
 
 ### Backend (Python/FastAPI)
+
 - **API Endpoints**: 115+ REST Endpoints
 - **Services**: 97 Business Logic Services
 - **Models**: 92 Data Models & Schemas
@@ -979,12 +981,14 @@ electron/
 - **Tests**: 10 Test Suites
 
 ### Electron (JavaScript)
+
 - **Main Process Scripts**: 16 Module
 - **IPC Channels**: ~30+ Channels
 - **Window Manager**: Multi-Window Support
 - **Auto-Updater**: Production-Ready
 
 ### Gesamt
+
 - **Code-Dateien**: ~500+
 - **Dokumentation**: 74 MD-Dateien
 - **Technologien**: 15+ (React, TypeScript, Python, FastAPI, Electron, Vite, SQLite, etc.)
@@ -995,6 +999,7 @@ electron/
 ## 🔧 BUILD & DEPLOYMENT
 
 ### Development
+
 ```bash
 npm run electron:dev          # Start Development (Frontend + Backend + Electron)
 npm run frontend:dev          # Frontend Only
@@ -1002,6 +1007,7 @@ npm run backend:dev           # Backend Only
 ```
 
 ### Production Build
+
 ```bash
 npm run electron:build        # Build All Platforms
 npm run electron:build:win    # Windows Only
@@ -1010,6 +1016,7 @@ npm run electron:build:linux  # Linux Only
 ```
 
 ### Testing
+
 ```bash
 npm run test                  # All Tests
 npm run frontend:test         # Frontend Tests
@@ -1017,6 +1024,7 @@ npm run backend:test          # Backend Tests (pytest)
 ```
 
 ### Linting & Formatting
+
 ```bash
 npm run lint                  # Lint All
 npm run format                # Format All
@@ -1027,6 +1035,7 @@ npm run format                # Format All
 ## 🎯 KEY FEATURES
 
 ### ✅ Vollständig Implementiert
+
 1. **Multi-Language Support** (DE/EN)
 2. **3D Visualisierung** mit Kollisionserkennung
 3. **PDF-Generierung** (Multi-Template, Batch, Kompression)
@@ -1044,6 +1053,7 @@ npm run format                # Format All
 15. **Responsive Design** (Desktop + Mobile)
 
 ### 🔐 Sicherheit
+
 - **Verschlüsselung** (AES-256)
 - **Advanced Authentication** (2FA, SSO)
 - **Audit Logging**
@@ -1051,6 +1061,7 @@ npm run format                # Format All
 - **Code Signing** (Windows + macOS)
 
 ### 📦 Deployment
+
 - **Electron Builder** für Multi-Platform
 - **Auto-Updater** mit Rollback
 - **CI/CD** via GitHub Actions

@@ -2,7 +2,6 @@ import React from 'react';
 import { Card } from 'primereact/card';
 import { Divider } from 'primereact/divider';
 import { ProgressBar } from 'primereact/progressbar';
-import { LineChart } from '../charts/LineChart';
 import { BarChart } from '../charts/BarChart';
 import { PieChart } from '../charts/PieChart';
 import './HeatPumpResults.css';
@@ -429,7 +428,7 @@ export const HeatPumpResults: React.FC<HeatPumpResultsProps> = ({
         </div>
 
         <div className="savings-chart">
-          <LineChart
+          <BarChart
             data={savingsChartData}
             options={{
               responsive: true,

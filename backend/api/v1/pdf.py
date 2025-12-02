@@ -53,7 +53,24 @@ async def generate_pdf(request: PDFGenerationRequest):
         # Store PDF if requested
         stored_path = None
         if request.store_pdf:
-            filename = request.filename or f"offer_{request.offer_data.get('customer_name', 'unknown')}.pdf"
+            # Generate filename in new format: anrede_nachname_angebot_anlagengröße.pdf
+            if not request.filename:
+                customer_data = request.offer_data.get('customer_data', {}) or request.offer_data.get('customer_details', {})
+                anrede = customer_data.get('salutation') or customer_data.get('anrede', 'Kunde')
+                nachname = customer_data.get('last_name') or customer_data.get('nachname', 'Unbekannt')
+                
+                analysis = request.offer_data.get('analysis_results', {})
+                system_size = analysis.get('system_size_kwp', 0)
+                anlagengroesse = f"{system_size:.1f}kWp".replace('.', ',') if system_size > 0 else 'PV'
+                
+                # Sanitize filename
+                safe_anrede = str(anrede).replace(' ', '_').replace('/', '_')
+                safe_nachname = str(nachname).replace(' ', '_').replace('/', '_')
+                
+                filename = f"{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}.pdf"
+            else:
+                filename = request.filename
+                
             stored_path = pdf_service.store_pdf(
                 pdf_bytes=pdf_bytes,
                 filename=filename,
@@ -102,7 +119,23 @@ async def generate_pdf_async(request: PDFGenerationRequest, background_tasks: Ba
         # Store PDF if requested (in background)
         stored_path = None
         if request.store_pdf:
-            filename = request.filename or f"offer_{request.offer_data.get('customer_name', 'unknown')}.pdf"
+            # Generate filename in new format: anrede_nachname_angebot_anlagengröße.pdf
+            if not request.filename:
+                customer_data = request.offer_data.get('customer_data', {}) or request.offer_data.get('customer_details', {})
+                anrede = customer_data.get('salutation') or customer_data.get('anrede', 'Kunde')
+                nachname = customer_data.get('last_name') or customer_data.get('nachname', 'Unbekannt')
+                
+                analysis = request.offer_data.get('analysis_results', {})
+                system_size = analysis.get('anlage_kwp', 0)
+                anlagengroesse = f"{system_size:.2f}kWp".replace('.', ',') if system_size > 0 else 'PV'
+                
+                # Sanitize filename
+                safe_anrede = str(anrede).replace(' ', '_').replace('/', '_')
+                safe_nachname = str(nachname).replace(' ', '_').replace('/', '_')
+                
+                filename = f"{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}.pdf"
+            else:
+                filename = request.filename
             
             def store_in_background():
                 pdf_service.store_pdf(
