@@ -2413,6 +2413,8 @@ def render_pdf_ui(
         st.session_state.selected_cover_letter_name_doc_output = None
     if "selected_cover_letter_text_content_doc_output" not in st.session_state:
         st.session_state.selected_cover_letter_text_content_doc_output = ""
+    if "special_agreements_text" not in st.session_state:
+        st.session_state.special_agreements_text = ""
 
     if 'pdf_inclusion_options' not in st.session_state:
         st.session_state.pdf_inclusion_options = {
@@ -2562,6 +2564,40 @@ def render_pdf_ui(
         st.session_state.selected_cover_letter_name_doc_output = selected_cover_letter_name
         st.session_state.selected_cover_letter_text_content_doc_output = cover_letter_options.get(
             selected_cover_letter_name, "")
+
+        # 📝 SONDERVEREINBARUNGEN (Seite 8)
+        st.markdown("---")
+        st.markdown(
+            "**📝 " +
+            get_text_pdf_ui(
+                texts,
+                "special_agreements_section",
+                "Sondervereinbarungen (Seite 8)") +
+            "**")
+        st.caption(
+            get_text_pdf_ui(
+                texts,
+                "special_agreements_help",
+                "Geben Sie hier individuelle Vereinbarungen ein, die auf Seite 8 des PDFs unter 'SONDERVEREINBARUNGEN' erscheinen sollen."))
+        
+        special_agreements_input = st.text_area(
+            get_text_pdf_ui(
+                texts,
+                "special_agreements_label",
+                "Text für Sondervereinbarungen"),
+            value=st.session_state.special_agreements_text,
+            height=150,
+            max_chars=1000,
+            placeholder="z.B.: Kostenlose Wartung für 2 Jahre\\nErweiterte Garantie auf Wechselrichter\\nFertigstellung bis 30.06.2026",
+            help="Wird als mehrzeiliger Text unter 'SONDERVEREINBARUNGEN:' auf Seite 8 angezeigt.",
+            key="special_agreements_textarea_v1"
+        )
+        st.session_state.special_agreements_text = special_agreements_input
+        
+        if special_agreements_input:
+            st.success(f"✅ {len(special_agreements_input)} Zeichen eingegeben")
+        else:
+            st.info("ℹ️ Keine Sondervereinbarungen - Standardtext wird verwendet")
 
         # Template-Vorschau hinzufügen (aus Multi-Generator)
         with st.expander(" Template-Vorschau", expanded=False):

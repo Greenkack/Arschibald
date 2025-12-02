@@ -6,10 +6,12 @@
 ## ✅ ABGESCHLOSSEN (7 Komponenten)
 
 ### 1. **FormFieldModern.tsx** ✅
+
 **Status**: Vollständig migriert  
 **Datei**: `src/components/forms/FormFieldModern.tsx`
 
 **Ersetzt**:
+
 - InputText → Input
 - InputNumber → Input (type="number")
 - InputTextarea → Textarea
@@ -22,6 +24,7 @@
 - Password → Input (type="password")
 
 **Komponenten**: 10 Funktionen
+
 - FormTextField
 - FormNumberField
 - FormTextareaField
@@ -34,6 +37,7 @@
 - FormPasswordField
 
 **Features**:
+
 - ✅ React Hook Form Integration
 - ✅ Validation & Error Display
 - ✅ Required Fields mit Asterisk
@@ -44,14 +48,17 @@
 ---
 
 ### 2. **FormContainerModern.tsx** ✅
+
 **Status**: Vollständig migriert  
 **Datei**: `src/components/forms/FormContainerModern.tsx`
 
 **Ersetzt**:
+
 - Button → Button (shadcn)
 - ProgressSpinner → Loader2 (lucide-react)
 
 **Features**:
+
 - ✅ Auto-Save Indicator mit Loader2
 - ✅ Last Saved Timestamp (deutsche Formatierung)
 - ✅ Submit & Cancel Buttons
@@ -61,13 +68,16 @@
 ---
 
 ### 3. **GermanNumberInputModern.tsx** ✅
+
 **Status**: Vollständig migriert  
 **Datei**: `src/components/GermanNumberInputModern.tsx`
 
 **Ersetzt**:
+
 - InputText → Input
 
 **Features**:
+
 - ✅ Deutsche Zahlenformatierung (1.234,56)
 - ✅ Bidirektionale Konvertierung
 - ✅ Min/Max Validation
@@ -78,13 +88,16 @@
 ---
 
 ### 4. **GermanCurrencyInputModern.tsx** ✅
+
 **Status**: Vollständig migriert  
 **Datei**: `src/components/GermanCurrencyInputModern.tsx`
 
 **Ersetzt**:
+
 - InputText → Input
 
 **Features**:
+
 - ✅ Währungssymbol (€, $, etc.)
 - ✅ Symbol Position (prefix/suffix)
 - ✅ Deutsche Zahlenformatierung
@@ -95,13 +108,16 @@
 ---
 
 ### 5. **GermanPercentInputModern.tsx** ✅
+
 **Status**: Vollständig migriert  
 **Datei**: `src/components/GermanPercentInputModern.tsx`
 
 **Ersetzt**:
+
 - InputText → Input
 
 **Features**:
+
 - ✅ Prozent-Formatierung (15,00 %)
 - ✅ multiplyBy100 Option (0.15 ↔ 15%)
 - ✅ Deutsche Zahlenformatierung
@@ -112,10 +128,12 @@
 ---
 
 ### 6. **routes/index.tsx** ✅
+
 **Status**: ProgressSpinner ersetzt  
 **Datei**: `src/routes/index.tsx`
 
 **Änderungen**:
+
 ```typescript
 // ALT:
 import { ProgressSpinner } from 'primereact/progressspinner';
@@ -127,6 +145,7 @@ import { Loader2 } from 'lucide-react';
 ```
 
 **LoadingFallback**:
+
 - ✅ Inline Styles → Tailwind Classes
 - ✅ ProgressSpinner → Loader2 Icon
 - ✅ Spinning Animation
@@ -135,16 +154,19 @@ import { Loader2 } from 'lucide-react';
 ---
 
 ### 7. **Viewer3DModern.tsx** ✅
+
 **Status**: Vollständig migriert  
 **Datei**: `src/components/3d/Viewer3DModern.tsx`
 
 **Ersetzt**:
+
 - Card → Card (shadcn)
 - Button → Button (shadcn)
 - Checkbox → Checkbox (shadcn)
 - Slider → Slider (shadcn)
 
 **Features**:
+
 - ✅ 3D Scene Integration (Scene3D)
 - ✅ Camera Controls (Distance Slider)
 - ✅ View Options (Grid, Sky, Auto-Rotate)
@@ -159,8 +181,10 @@ import { Loader2 } from 'lucide-react';
 ## 🟡 IN ARBEIT (9 Komponenten)
 
 ### 8. **ProjectWizard.tsx + Steps** 🔄
+
 **Priorität**: 🔴 KRITISCH  
 **Dateien**:
+
 - `src/components/wizard/ProjectWizard.tsx`
 - `src/components/wizard/steps/BuildingDataStep.tsx`
 - `src/components/wizard/steps/CustomerDataStep.tsx`
@@ -169,6 +193,7 @@ import { Loader2 } from 'lucide-react';
 - `src/components/wizard/steps/AdditionalOptionsStep.tsx`
 
 **Zu ersetzen**:
+
 - Steps → Custom Stepper oder Tabs
 - Button → Button
 - Card → Card
@@ -184,8 +209,10 @@ import { Loader2 } from 'lucide-react';
 ---
 
 ### 9. **ProductAttributeManager.tsx** 🔄
+
 **Priorität**: 🔴 KRITISCH  
 **Zu ersetzen**:
+
 - DataTable → @tanstack/react-table + Table
 - Dialog → Dialog
 - Toast → Sonner
@@ -201,9 +228,11 @@ import { Loader2 } from 'lucide-react';
 ---
 
 ### 10. **Product-Komponenten (Set 1)** 🔄
+
 **Priorität**: 🔴 KRITISCH
 
 **ProductCatalog.tsx**:
+
 - DataTable → @tanstack/react-table
 - Column → ColumnDef
 - Button → Button
@@ -211,6 +240,7 @@ import { Loader2 } from 'lucide-react';
 - Image → img + fallback
 
 **ProductForm.tsx**:
+
 - InputText → Input
 - InputNumber → Input (type="number")
 - InputTextarea → Textarea
@@ -222,6 +252,7 @@ import { Loader2 } from 'lucide-react';
 - Divider → Separator
 
 **ProductBulkImport.tsx**:
+
 - FileUpload → Input (type="file")
 - DataTable → @tanstack/react-table
 - ProgressBar → Progress
@@ -232,8 +263,10 @@ import { Loader2 } from 'lucide-react';
 ---
 
 ### 11. **PriceCalculator.tsx** 🔄
+
 **Priorität**: 🔴 KRITISCH  
 **Zu ersetzen**:
+
 - Card → Card
 - InputNumber → GermanNumberInputModern
 - Dropdown → Select
@@ -250,8 +283,10 @@ import { Loader2 } from 'lucide-react';
 ---
 
 ### 12. **NotificationCenter.tsx** 🔄
+
 **Priorität**: 🟡 WICHTIG  
 **Zu ersetzen**:
+
 - Badge → Badge
 - Button → Button
 - OverlayPanel → Popover
@@ -263,8 +298,10 @@ import { Loader2 } from 'lucide-react';
 ---
 
 ### 13. **MonitoringDashboard.tsx** 🔄
+
 **Priorität**: 🟡 WICHTIG  
 **Zu ersetzen**:
+
 - Card → Card
 - TabView → Tabs
 - Chart → Recharts (Area, Bar, Line, Pie)
@@ -278,9 +315,11 @@ import { Loader2 } from 'lucide-react';
 ---
 
 ### 14. **Update-Komponenten** 🔄
+
 **Priorität**: 🟢 NIEDRIG
 
 **UpdateNotification.tsx**:
+
 - Dialog → Dialog
 - Button → Button
 - Checkbox → Checkbox
@@ -288,6 +327,7 @@ import { Loader2 } from 'lucide-react';
 - Tag → Badge
 
 **UpdatePreferences.tsx**:
+
 - Card → Card
 - InputSwitch → Switch
 - Dropdown → Select
@@ -296,24 +336,29 @@ import { Loader2 } from 'lucide-react';
 - Divider → Separator
 
 **UpdateProgress.tsx**:
+
 - Dialog → Dialog
 - ProgressBar → Progress
 - Button → Button
 
 **UpdateReady.tsx**:
+
 - Dialog → Dialog
 - Button → Button
 
 ---
 
 ### 15. **Theme-Komponenten** 🔄
+
 **Priorität**: 🟢 NIEDRIG
 
 **ThemeSelector.tsx**:
+
 - Dropdown → Select
 - Button → Button
 
 **ThemePreview.tsx**:
+
 - Button → Button
 - InputText → Input
 - Card → Card
@@ -322,8 +367,10 @@ import { Loader2 } from 'lucide-react';
 ---
 
 ### 16. **PasswordChangeForm.tsx** 🔄
+
 **Priorität**: 🟡 WICHTIG  
 **Zu ersetzen**:
+
 - Card → Card
 - Password → Input (type="password")
 - Button → Button
@@ -334,9 +381,10 @@ import { Loader2 } from 'lucide-react';
 
 ## 📈 STATISTIK
 
-### Komponenten-Typen:
+### Komponenten-Typen
 
 **Formular-Komponenten**:
+
 - ✅ Input (Text, Number, Password, Date) → Input
 - ✅ Textarea → Textarea
 - ✅ Dropdown → Select
@@ -348,31 +396,37 @@ import { Loader2 } from 'lucide-react';
 - ⏳ Calendar → Popover + Calendar (erweitert, noch TODO)
 
 **Layout-Komponenten**:
+
 - ✅ Card → Card
 - ✅ Button → Button
 - ⏳ Divider → Separator
 - ⏳ Panel → Card/Collapsible
 
 **Feedback-Komponenten**:
+
 - ✅ ProgressSpinner → Loader2
 - ⏳ ProgressBar → Progress
 - ⏳ Message → Alert
 - ⏳ Toast → Sonner
 
 **Overlay-Komponenten**:
+
 - ⏳ Dialog → Dialog
 - ⏳ ConfirmDialog → AlertDialog
 - ⏳ OverlayPanel → Popover
 
 **Daten-Komponenten**:
+
 - ⏳ DataTable → @tanstack/react-table + Table
 - ⏳ Column → ColumnDef
 
 **Visualisierung**:
+
 - ⏳ Chart → Recharts
 - ⏳ Timeline → Custom Timeline
 
 **Weitere**:
+
 - ⏳ Tag → Badge
 - ⏳ Steps → Custom Stepper
 - ⏳ TabView → Tabs
@@ -387,20 +441,23 @@ import { Loader2 } from 'lucide-react';
 
 ## 🎯 NÄCHSTE SCHRITTE
 
-### Phase 2 (Hohe Priorität):
+### Phase 2 (Hohe Priorität)
+
 1. **ProjectWizard + Steps** (6 Dateien)
 2. **ProductAttributeManager** (komplex mit DataTable)
 3. **Product-Komponenten Set 1** (3 Dateien)
 4. **PriceCalculator** (komplexe Berechnungen)
 
-### Phase 3 (Mittlere Priorität):
+### Phase 3 (Mittlere Priorität)
+
 5. **Product-Komponenten Set 2** (7 Dateien)
 6. **Pricing-Komponenten** (3 Dateien)
 7. **NotificationCenter**
 8. **PasswordChangeForm**
 9. **MonitoringDashboard**
 
-### Phase 4 (Niedrige Priorität):
+### Phase 4 (Niedrige Priorität)
+
 10. **Update-Komponenten** (4 Dateien)
 11. **Theme-Komponenten** (2 Dateien)
 
@@ -409,6 +466,7 @@ import { Loader2 } from 'lucide-react';
 ## ✅ QUALITÄTSSICHERUNG
 
 **Alle migrierten Komponenten haben**:
+
 - ✅ Vollständige TypeScript-Typisierung
 - ✅ Props-Interface mit Dokumentation
 - ✅ shadcn/ui Komponenten
@@ -420,6 +478,7 @@ import { Loader2 } from 'lucide-react';
 - ✅ Accessibility (ARIA)
 
 **Code-Qualität**:
+
 - ✅ Keine PrimeReact Imports in Modern-Dateien
 - ✅ Konsistente Namenskonvention (Modern-Suffix)
 - ✅ Gleiche Funktionalität wie Original
@@ -503,7 +562,7 @@ function SolarVisualization() {
 
 ---
 
-## 🚀 MIGRATION ERFOLGREICH BEGONNEN!
+## 🚀 MIGRATION ERFOLGREICH BEGONNEN
 
 **Abgeschlossen**: 7 kritische Komponenten (44%)  
 **Verbleibend**: 9 wichtige Komponenten (56%)  

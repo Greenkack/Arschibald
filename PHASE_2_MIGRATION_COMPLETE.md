@@ -4,7 +4,8 @@
 
 **Phase 2** der shadcn/ui Migration erfolgreich abgeschlossen! Alle kritischen Utility-Komponenten wurden von PrimeReact auf shadcn/ui migriert.
 
-**Fertigstellungsgrad**: 
+**Fertigstellungsgrad**:
+
 - **Phase 1**: 7 Komponenten (FormField-System, German Inputs, Viewer3D, Routes) ✅
 - **Phase 2**: 11 Komponenten (Theme, Password, Notifications, Updates, Monitoring) ✅
 - **Gesamt**: **18 Modern-Komponenten** erstellt
@@ -16,13 +17,16 @@
 ### 1. **Theme-Komponenten** ✅
 
 #### ThemeSelectorModern.tsx (110 Zeilen)
+
 **Pfad**: `src/components/theme/ThemeSelectorModern.tsx`
 
 **Ersetzt**:
+
 - `Dropdown` (PrimeReact) → `Select/SelectTrigger/SelectValue` (shadcn)
 - `Button` → `Button` (shadcn)
 
 **Features**:
+
 - Theme Preset Auswahl via Select
 - Color Swatches Grid (6 Farben: Primary, Secondary, Accent, Success, Warning, Error)
 - "Create Custom" Button mit Palette Icon
@@ -34,15 +38,18 @@
 ---
 
 #### ThemePreviewModern.tsx (200 Zeilen)
+
 **Pfad**: `src/components/theme/ThemePreviewModern.tsx`
 
 **Ersetzt**:
+
 - `Card` → `Card/CardHeader/CardContent` (shadcn)
 - `Button` → `Button` (shadcn, 6 Varianten)
 - `InputText` → `Input` (shadcn)
 - `Message` → `Alert/AlertDescription` (shadcn, 4 Typen)
 
 **Features**:
+
 - Live Preview mit echten UI-Komponenten
 - Button-Varianten: default, secondary, outline, ghost, destructive, link
 - Alert-Typen: Success (grün), Info (blau), Warning (gelb), Error (rot)
@@ -58,9 +65,11 @@
 ### 2. **Password Change Form** ✅
 
 #### PasswordChangeFormModern.tsx (400 Zeilen)
+
 **Pfad**: `src/components/PasswordChangeFormModern.tsx`
 
 **Ersetzt**:
+
 - `Card` → `Card/CardHeader/CardContent` (shadcn)
 - `Password` → `Input type="password"` mit Eye/EyeOff Toggle
 - `Button` → `Button` (shadcn)
@@ -68,6 +77,7 @@
 - `Divider` → `Separator` (shadcn)
 
 **Features**:
+
 - 3 Password-Felder: Current, New, Confirm
 - Password Strength Checker (5 Levels: Very Weak, Weak, Fair, Good, Strong)
 - Progress Bar für Stärke (farbcodiert: Rot → Gelb → Grün)
@@ -88,9 +98,11 @@
 ### 3. **Notification Center** ✅
 
 #### NotificationCenterModern.tsx (350 Zeilen)
+
 **Pfad**: `src/components/notifications/NotificationCenterModern.tsx`
 
 **Ersetzt**:
+
 - `OverlayPanel` → `Popover/PopoverTrigger/PopoverContent` (shadcn)
 - `Badge` → `Badge` (shadcn)
 - `Button` → `Button` (shadcn)
@@ -99,6 +111,7 @@
 - `Divider` → `Separator` (shadcn)
 
 **Features**:
+
 - Bell Icon mit Unread Badge (99+ Support)
 - Popover mit 400px Breite
 - Filter: All / Unread Only
@@ -125,9 +138,11 @@
 ### 4. **Update-Komponenten** (4 Komponenten) ✅
 
 #### UpdateNotificationModern.tsx (250 Zeilen)
+
 **Pfad**: `src/components/update/UpdateNotificationModern.tsx`
 
 **Ersetzt**:
+
 - `Dialog` → `Dialog/DialogContent/DialogHeader/DialogFooter` (shadcn)
 - `Button` → `Button` (shadcn)
 - `Checkbox` → `Checkbox` (shadcn)
@@ -135,6 +150,7 @@
 - `Tag` → `Badge` (shadcn)
 
 **Features**:
+
 - Version Comparison (Current → New mit Arrow)
 - Release Date (Calendar Icon)
 - Release Notes (ScrollArea, 200px, HTML-Rendering)
@@ -149,14 +165,17 @@
 ---
 
 #### UpdateProgressModern.tsx (180 Zeilen)
+
 **Pfad**: `src/components/update/UpdateProgressModern.tsx`
 
 **Ersetzt**:
+
 - `Dialog` → `Dialog/DialogContent` (shadcn)
 - `ProgressBar` → `Progress` (shadcn)
 - `Button` → `Button` (shadcn)
 
 **Features**:
+
 - Progress Bar (0-100%)
 - Prozentanzeige (groß, 2xl)
 - Transferred / Total (formatBytes: KB, MB, GB)
@@ -172,13 +191,16 @@
 ---
 
 #### UpdateReadyModern.tsx (140 Zeilen)
+
 **Pfad**: `src/components/update/UpdateReadyModern.tsx`
 
 **Ersetzt**:
+
 - `Dialog` → `Dialog/DialogContent` (shadcn)
 - `Button` → `Button` (shadcn)
 
 **Features**:
+
 - Success Icon (großer grüner Kreis, CheckCircle2)
 - Version Badge
 - 2 Options Cards:
@@ -192,9 +214,11 @@
 ---
 
 #### UpdatePreferencesModern.tsx (320 Zeilen)
+
 **Pfad**: `src/components/update/UpdatePreferencesModern.tsx`
 
 **Ersetzt**:
+
 - `Card` → `Card/CardHeader/CardContent` (shadcn)
 - `InputSwitch` → `Switch` (shadcn)
 - `Dropdown` → `Select` (shadcn)
@@ -203,6 +227,7 @@
 - `Divider` → `Separator` (shadcn)
 
 **Features**:
+
 - **Switches** (4x):
   - Auto Download
   - Install on Quit
@@ -227,9 +252,11 @@
 ### 5. **Monitoring Dashboard** ✅
 
 #### MonitoringDashboardModern.tsx (550 Zeilen)
+
 **Pfad**: `src/components/monitoring/MonitoringDashboardModern.tsx`
 
 **Ersetzt**:
+
 - `Card` → `Card/CardHeader/CardContent` (shadcn)
 - `TabView/TabPanel` → `Tabs/TabsList/TabsTrigger/TabsContent` (shadcn)
 - `Chart` → Recharts (PieChart, BarChart)
@@ -242,11 +269,13 @@
 **Features**:
 
 **Header**:
+
 - Title mit BarChart Icon
 - Time Range Select (24h, 7d, 30d, 90d)
 - Refresh Button (RotateCw, animiert bei Loading)
 
 **Tabs** (4):
+
 1. **Performance** (Activity Icon):
    - **CPU Usage**: Doughnut Chart (Used/Free, rot/grau), Prozent, Health Badge
    - **Memory Usage**: Doughnut Chart (Used/Free, blau/grau), Prozent, MB available, Health Badge
@@ -278,11 +307,13 @@
    - Placeholder Card ("View Version Distribution" Button)
 
 **Health Badge Logik**:
+
 - Critical (≥ threshold.critical): destructive
 - Warning (≥ threshold.warning): yellow
 - Healthy: green
 
 **API-Integration**:
+
 - `/api/v1/monitoring/performance/summary`
 - `/api/v1/monitoring/crashes/statistics?days={timeRange}`
 - `/api/v1/monitoring/feedback/summary?days={timeRange}`
@@ -290,6 +321,7 @@
 **Icons**: `BarChart`, `RotateCw`, `Activity`, `AlertTriangle` (lucide-react)
 
 **Recharts-Komponenten**:
+
 - `PieChart`, `Pie`, `Cell` (CPU, Memory, Feedback)
 - `Tooltip`, `Legend`
 - `ResponsiveContainer`
@@ -299,6 +331,7 @@
 ## 📊 Statistik - Phase 2
 
 ### Erstellte Dateien
+
 ```
 11 Modern-Komponenten:
 ├── ThemeSelectorModern.tsx (110 Zeilen)
@@ -315,6 +348,7 @@ Gesamt: ~2.500 Zeilen Code
 ```
 
 ### Ersetzte PrimeReact-Komponenten (Phase 2)
+
 ```
 Theme:
 - Dropdown → Select
@@ -359,6 +393,7 @@ Monitoring:
 ```
 
 ### shadcn/ui Komponenten genutzt (Phase 2)
+
 ```
 - Button (alle 11 Komponenten)
 - Card/CardHeader/CardContent (8 Komponenten)
@@ -379,6 +414,7 @@ Monitoring:
 ```
 
 ### Lucide Icons genutzt (Phase 2)
+
 ```
 42 Icon-Typen:
 CheckCircle2, Info, AlertTriangle, AlertCircle, Lock, Eye, EyeOff, 
@@ -388,6 +424,7 @@ RotateCw, Undo2, BarChart, Activity, Palette, TrendingUp, TrendingDown
 ```
 
 ### Recharts Integration (Monitoring)
+
 ```
 - PieChart (3x: CPU, Memory, Feedback)
 - BarChart (optional für zukünftige Erweiterungen)
@@ -401,6 +438,7 @@ RotateCw, Undo2, BarChart, Activity, Palette, TrendingUp, TrendingDown
 ## 🎨 Design-Patterns
 
 ### 1. **Dialog-Pattern** (Updates)
+
 ```tsx
 <Dialog open={visible} onOpenChange={onClose}>
   <DialogContent className="sm:max-w-[500px]">
@@ -423,6 +461,7 @@ RotateCw, Undo2, BarChart, Activity, Palette, TrendingUp, TrendingDown
 ```
 
 ### 2. **Alert-Pattern** (Notifications, Updates)
+
 ```tsx
 {/* Success */}
 <Alert className="border-green-500 bg-green-50 dark:bg-green-950">
@@ -448,6 +487,7 @@ RotateCw, Undo2, BarChart, Activity, Palette, TrendingUp, TrendingDown
 ```
 
 ### 3. **Badge-Pattern** (Monitoring, Updates)
+
 ```tsx
 {/* Success */}
 <Badge variant="default" className="bg-green-500">Healthy</Badge>
@@ -468,6 +508,7 @@ RotateCw, Undo2, BarChart, Activity, Palette, TrendingUp, TrendingDown
 ```
 
 ### 4. **Tabs-Pattern** (Monitoring)
+
 ```tsx
 <Tabs value={activeTab} onValueChange={setActiveTab}>
   <TabsList className="grid w-full grid-cols-4">
@@ -485,6 +526,7 @@ RotateCw, Undo2, BarChart, Activity, Palette, TrendingUp, TrendingDown
 ```
 
 ### 5. **Switch-Pattern** (UpdatePreferences)
+
 ```tsx
 <div className="flex items-center justify-between">
   <div className="space-y-0.5">
@@ -500,6 +542,7 @@ RotateCw, Undo2, BarChart, Activity, Palette, TrendingUp, TrendingDown
 ```
 
 ### 6. **Recharts Pie Chart** (Monitoring)
+
 ```tsx
 <ResponsiveContainer width="100%" height={300}>
   <PieChart>
@@ -548,6 +591,7 @@ Alle 11 Komponenten erfüllen:
 ## 📝 Verwendungsbeispiele - Phase 2
 
 ### Theme Components
+
 ```tsx
 import { ThemeSelectorModern } from '@/components/theme/ThemeSelectorModern';
 import { ThemePreviewModern } from '@/components/theme/ThemePreviewModern';
@@ -563,6 +607,7 @@ function ThemeSettings() {
 ```
 
 ### Password Change
+
 ```tsx
 import { PasswordChangeFormModern } from '@/components/PasswordChangeFormModern';
 
@@ -572,6 +617,7 @@ function SecuritySettings() {
 ```
 
 ### Notifications
+
 ```tsx
 import { NotificationCenterModern } from '@/components/notifications/NotificationCenterModern';
 
@@ -586,6 +632,7 @@ function AppHeader() {
 ```
 
 ### Update System
+
 ```tsx
 import { UpdateNotificationModern } from '@/components/update/UpdateNotificationModern';
 import { UpdateProgressModern } from '@/components/update/UpdateProgressModern';
@@ -637,6 +684,7 @@ function UpdateManager() {
 ```
 
 ### Monitoring Dashboard
+
 ```tsx
 import { MonitoringDashboardModern } from '@/components/monitoring/MonitoringDashboardModern';
 
@@ -654,6 +702,7 @@ function AdminDashboard() {
 ## 🔄 Nächste Schritte
 
 ### Phase 3: Produkt-Komponenten (6 Tasks verbleibend)
+
 ```
 4. ProjectWizard.tsx + Steps (5 Step-Dateien)
 6. ProductAttributeManager.tsx (DataTable → @tanstack/react-table)
@@ -664,6 +713,7 @@ function AdminDashboard() {
 ```
 
 ### Priorität
+
 1. **ProjectWizard** (größter Task, 6 Dateien)
 2. **PriceCalculator** (Kernfunktion)
 3. **ProductAttributeManager** (DataTable → react-table Migration)
@@ -675,6 +725,7 @@ function AdminDashboard() {
 ## 📦 Gesamt-Status (Phase 1 + 2)
 
 **Migrierte Komponenten**: 18/~25 (72%)
+
 - Phase 1: 7 Komponenten ✅
 - Phase 2: 11 Komponenten ✅
 
