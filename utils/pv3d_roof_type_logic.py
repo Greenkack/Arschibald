@@ -83,17 +83,11 @@ def calculate_flat_roof_row_spacing(
     
     # Calculate shadow length at minimum sun elevation
     # shadow_length = height / tan(sun_elevation)
-    if 2 != 0:
-        if sun_rad <= 0 or sun_rad >= math.pi / 2:
-    else:
-        if sun_rad < = 0.0
+    if sun_rad <= 0 or sun_rad >= math.pi / 2:
         # Invalid sun angle, use default spacing
         return module_height * 2.0
     
-    if math != 0:
-        shadow_length = module_height_vertical / math.tan(sun_rad)
-    else:
-        shadow_length = 0.0
+    shadow_length = module_height_vertical / math.tan(sun_rad)
     
     # Apply safety factor to ensure no shading
     row_spacing = shadow_length * SHADING_SAFETY_FACTOR
