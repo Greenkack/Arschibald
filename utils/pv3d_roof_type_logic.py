@@ -613,9 +613,15 @@ def get_roof_type_placement(
     # Normalize roof type
     roof_type_normalized = roof_type.strip().lower() if roof_type else "flachdach"
     
+    # DEBUG: Log roof type detection
+    print(f"   🏠 Dachtyp-Erkennung:")
+    print(f"      Original: '{roof_type}'")
+    print(f"      Normalisiert: '{roof_type_normalized}'")
+    
     # Route to appropriate function
     if "flach" in roof_type_normalized:
         # TASK 6.1: Flat roof
+        print(f"      → Verwende FLACHDACH-Logik (aufgeständert)")
         return calculate_flat_roof_positions(
             roof_length=roof_length,
             roof_width=roof_width,
@@ -625,6 +631,7 @@ def get_roof_type_placement(
     
     elif "satteldach" in roof_type_normalized or "gable" in roof_type_normalized:
         # TASK 6.3: Gabled roof
+        print(f"      → Verwende SATTELDACH-Logik (beide Dachflächen)")
         result = calculate_gabled_roof_positions(
             roof_length=roof_length,
             roof_width=roof_width,
@@ -637,6 +644,7 @@ def get_roof_type_placement(
     
     elif "pult" in roof_type_normalized or "shed" in roof_type_normalized:
         # TASK 6.2: Pitched roof (single slope)
+        print(f"      → Verwende PULTDACH-Logik (einseitig geneigt)")
         return calculate_pitched_roof_positions(
             roof_length=roof_length,
             roof_width=roof_width,
@@ -647,7 +655,7 @@ def get_roof_type_placement(
     
     else:
         # Default: Use pitched roof logic for other types
-        print(f"   Unbekannter Dachtyp '{roof_type}', verwende Schrägdach-Logik")
+        print(f"      ⚠️ Unbekannter Dachtyp '{roof_type}', verwende SCHRÄGDACH-Logik (Fallback)")
         return calculate_pitched_roof_positions(
             roof_length=roof_length,
             roof_width=roof_width,
