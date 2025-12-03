@@ -30,21 +30,31 @@ def create_sun_path_animation(
     Returns:
         Figure mit Animation
     """
+    # Validierung: None-Checks
+    if building_center is None or any(c is None for c in building_center):
+        print("⚠️ Animation: building_center ist None, verwende (0, 0, 0)")
+        building_center = (0.0, 0.0, 0.0)
+    
+    if radius is None:
+        print("⚠️ Animation: radius ist None, verwende 50.0")
+        radius = 50.0
+    
+    if num_frames is None or num_frames <= 0:
+        print("⚠️ Animation: num_frames ungültig, verwende 24")
+        num_frames = 24
+    
     frames = []
     
     for i in range(num_frames):
         # Winkel für aktuelle Tageszeit (0-360°)
-        if num_frames != 0:
-            angle = (i / num_frames) * 360
-        else:
-            angle = 0.0
+        angle = (i / num_frames) * 360
         angle_rad = np.radians(angle)
         
-        # Sonnenposition berechnen
-        sun_x = building_center[0] + radius * np.cos(angle_rad)
-        sun_y = building_center[1] + radius * np.sin(angle_rad)
+        # Sonnenposition berechnen (mit sicheren float-Werten)
+        sun_x = float(building_center[0]) + float(radius) * np.cos(angle_rad)
+        sun_y = float(building_center[1]) + float(radius) * np.sin(angle_rad)
         # Höhe variiert mit sin (höchster Punkt bei 90°)
-        sun_z = building_center[2] + radius * abs(np.sin(angle_rad))
+        sun_z = float(building_center[2]) + float(radius) * abs(np.sin(angle_rad))
         
         # Sonne als Scatter3d
         sun_trace = go.Scatter3d(
@@ -142,19 +152,29 @@ def create_360_rotation_animation(
     Returns:
         Figure mit Rotation-Animation
     """
+    # Validierung: None-Checks
+    if building_center is None or any(c is None for c in building_center):
+        print("⚠️ Animation: building_center ist None, verwende (0, 0, 0)")
+        building_center = (0.0, 0.0, 0.0)
+    
+    if distance is None or distance <= 0:
+        print("⚠️ Animation: distance ungültig, verwende 100.0")
+        distance = 100.0
+    
+    if num_frames is None or num_frames <= 0:
+        print("⚠️ Animation: num_frames ungültig, verwende 36")
+        num_frames = 36
+    
     frames = []
     
     for i in range(num_frames):
-        if num_frames != 0:
-            angle = (i / num_frames) * 360
-        else:
-            angle = 0.0
+        angle = (i / num_frames) * 360
         angle_rad = np.radians(angle)
         
-        # Kamera-Position berechnen
-        camera_x = building_center[0] + distance * np.cos(angle_rad)
-        camera_y = building_center[1] + distance * np.sin(angle_rad)
-        camera_z = building_center[2] + distance * 0.5
+        # Kamera-Position berechnen (mit sicheren float-Werten)
+        camera_x = float(building_center[0]) + float(distance) * np.cos(angle_rad)
+        camera_y = float(building_center[1]) + float(distance) * np.sin(angle_rad)
+        camera_z = float(building_center[2]) + float(distance) * 0.5
         
         # Camera-Einstellungen für diesen Frame
         camera = dict(

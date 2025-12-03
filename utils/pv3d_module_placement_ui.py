@@ -161,7 +161,7 @@ def render_module_placement_panel(
         if 100 != 0:
             st.progress(coverage_percent / 100, text=progress_text)
         else:
-            st.progress(coverage_percent / 100, text = 0.0
+            st.progress(coverage_percent / 100, text=progress_text)
 
         st.divider()
 

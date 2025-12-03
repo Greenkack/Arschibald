@@ -1815,12 +1815,16 @@ def _render_3d_view_impl():
                 if st.button("🎬 Animation erstellen", key="sun_anim"):
                     try:
                         params = render_animation_controls("sun_path")
-                        # FIX: Sichere Berechnung des building_center
+                        # FIX: Sichere Berechnung des building_center mit None-Checks
                         if 'dims' in locals() and dims is not None:
+                            # Sichere Werte mit None-Checks und Defaults
+                            length = dims.length_m if dims.length_m is not None else 10.0
+                            width = dims.width_m if dims.width_m is not None else 8.0
+                            height = dims.wall_height_m if dims.wall_height_m is not None else 10.0
                             building_center = (
-                                dims.length_m / 2,
-                                dims.width_m / 2,
-                                dims.wall_height_m
+                                float(length) / 2.0,
+                                float(width) / 2.0,
+                                float(height)
                             )
                         else:
                             building_center = (5.0, 4.0, 5.0)
@@ -1836,18 +1840,24 @@ def _render_3d_view_impl():
                             st.success("Sonnenbahn-Animation erstellt!")
                     except Exception as e:
                         st.error(f"Fehler bei Animation: {e}")
+                        import traceback
+                        st.code(traceback.format_exc())
             
             with animation_tabs[1]:
                 st.markdown("**360°-Rotation**")
                 if st.button("🔄 Rotation starten", key="rotation_anim"):
                     try:
                         params = render_animation_controls("rotation")
-                        # FIX: Sichere Berechnung des building_center
+                        # FIX: Sichere Berechnung des building_center mit None-Checks
                         if 'dims' in locals() and dims is not None:
+                            # Sichere Werte mit None-Checks und Defaults
+                            length = dims.length_m if dims.length_m is not None else 10.0
+                            width = dims.width_m if dims.width_m is not None else 8.0
+                            height = dims.wall_height_m if dims.wall_height_m is not None else 10.0
                             building_center = (
-                                dims.length_m / 2,
-                                dims.width_m / 2,
-                                dims.wall_height_m
+                                float(length) / 2.0,
+                                float(width) / 2.0,
+                                float(height)
                             )
                         else:
                             building_center = (5.0, 4.0, 5.0)
@@ -1863,6 +1873,8 @@ def _render_3d_view_impl():
                             st.success("360°-Animation erstellt!")
                     except Exception as e:
                         st.error(f"Fehler bei Rotation: {e}")
+                        import traceback
+                        st.code(traceback.format_exc())
             
             with animation_tabs[2]:
                 st.markdown("**Jahreszeiten-Verschattung**")
