@@ -1297,7 +1297,7 @@ def _render_3d_view_impl():
                 print("Fehler beim Multi-View Export:")
                 traceback.print_exc()
         
-        # 360° Animation (VERBESSERT: Funktioniert jetzt!)
+        # 360° Animation (OPTIMIERT: Echte Progress-Anzeige!)
         if export_settings.get("trigger_360", False) or st.session_state.get("force_360_export", False):
             # Reset Trigger
             st.session_state["trigger_360_export"] = False
@@ -1307,16 +1307,21 @@ def _render_3d_view_impl():
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
-                frames = export_settings.get("animation_frames", 36)
+                # OPTIMIERUNG: Reduziere Frames für schnelleres Rendering
+                # 36 Frames sind mit Kaleido sehr langsam (ca. 1-2 Min)
+                # 18 Frames sind immer noch flüssig (20° pro Frame)
+                frames = export_settings.get("animation_frames", 18)  # DEFAULT: 18 statt 36
                 resolution = export_settings.get("animation_resolution", (600, 450))
                 
-                status_text.text(f"🔄 Erstelle {frames} Frames...")
-                progress_bar.progress(10)
+                status_text.text(f"🔄 Erstelle 360° Animation ({frames} Frames)...")
+                progress_bar.progress(5)
                 
-                # Simuliere Frame-Fortschritt
-                for i in range(0, 70, 10):
-                    progress_bar.progress(10 + i)
-                    status_text.text(f"🔄 Rendere Frame {int(frames * i / 70)}/{frames}...")
+                # Progress Callback für echte Updates
+                def update_progress(current_frame: int, total_frames: int):
+                    """Callback für Frame-Rendering Progress"""
+                    progress = int(5 + (current_frame / total_frames) * 85)  # 5-90%
+                    progress_bar.progress(progress)
+                    status_text.text(f"🎬 Rendere Frame {current_frame + 1}/{total_frames}...")
                 
                 gif_bytes = export_360_animation(
                     project_data=project_data,
@@ -1326,15 +1331,16 @@ def _render_3d_view_impl():
                     layout_config=layout_config,
                     frames=frames,
                     resolution=resolution,
-                    return_bytes=True  # FIX: GIF-Bytes zurückgeben statt Datei schreiben
+                    return_bytes=True,
+                    progress_callback=update_progress  # ECHTE Progress-Updates!
                 )
                 
-                progress_bar.progress(90)
-                status_text.text("🔄 Erstelle GIF-Animation...")
+                progress_bar.progress(95)
+                status_text.text("🔄 Finalisiere GIF...")
                 
                 if gif_bytes:
                     progress_bar.progress(100)
-                    status_text.text("360° Animation abgeschlossen!")
+                    status_text.text("✅ 360° Animation fertig!")
                     
                     # BENUTZER-FEEDBACK: Erfolgreicher Export
                     st.success(
