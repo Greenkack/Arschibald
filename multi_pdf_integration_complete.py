@@ -88,7 +88,7 @@ def render_multi_pdf_customer_input() -> bool:
     Rückgabewert:
         True wenn Daten vollständig, sonst False
     """
-    st.subheader("📋 Schritt 1: Kundendaten")
+    st.subheader(" Schritt 1: Kundendaten")
     
     # Versuche automatische Übernahme
     auto_customer_data = load_customer_data_from_project()
@@ -107,7 +107,7 @@ def render_multi_pdf_customer_input() -> bool:
             st.text_input("PLZ", value=auto_customer_data.get("zip_code", ""), disabled=True)
             st.text_input("Ort", value=auto_customer_data.get("city", ""), disabled=True)
         
-        if st.button("🔄 Kundendaten manuell ändern"):
+        if st.button(" Kundendaten manuell ändern"):
             st.session_state.multi_offer_customer_data = {}
             st.rerun()
         
@@ -155,7 +155,7 @@ def render_multi_pdf_company_selection(companies: List[Dict]) -> List[int]:
     Rückgabewert:
         Liste der ausgewählten Firmen-IDs
     """
-    st.subheader("🏢 Schritt 2: Firmenauswahl (2-20+ Firmen)")
+    st.subheader(" Schritt 2: Firmenauswahl (2-20+ Firmen)")
     
     if not companies:
         st.error("Keine Firmen in Datenbank gefunden!")
@@ -201,7 +201,7 @@ def render_multi_pdf_company_selection(companies: List[Dict]) -> List[int]:
             
             with col_master:
                 master = st.checkbox(
-                    "🎛️ Alle erweitern",
+                    " Alle erweitern",
                     value=st.session_state.get("multi_offer_extend_all", False),
                     help="Aktiviert erweiterte PDF-Ausgabe für ALLE Firmen"
                 )
@@ -225,18 +225,18 @@ def render_multi_pdf_company_selection(companies: List[Dict]) -> List[int]:
 
 def render_multi_pdf_settings():
     """Rendert Einstellungen für Multi-PDF"""
-    st.subheader("⚙️ Schritt 3: Angebotskonfiguration")
+    st.subheader(" Schritt 3: Angebotskonfiguration")
     
     settings = st.session_state.multi_offer_settings
     
     # Produktrotation & Preisstaffelung
-    st.markdown("### 🔄 Automatische Produktrotation & Preisstaffelung")
+    st.markdown("###  Automatische Produktrotation & Preisstaffelung")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
         settings["enable_product_rotation"] = st.checkbox(
-            "🔄 Produktrotation aktivieren",
+            " Produktrotation aktivieren",
             value=settings.get("enable_product_rotation", True),
             help="Jede Firma bekommt andere Produkte aus der gleichen Kategorie"
         )
@@ -296,7 +296,7 @@ def render_heatpump_integration_toggle() -> bool:
     Rückgabewert:
         True wenn Wärmepumpe aktiviert, sonst False
     """
-    st.subheader("🔥 Wärmepumpen-Integration (optional)")
+    st.subheader(" Wärmepumpen-Integration (optional)")
     
     enabled = st.checkbox(
         "Wärmepumpe in Angebote integrieren",
@@ -528,7 +528,7 @@ def batch_generate_offers():
                     company = get_company(company_id) if callable(get_company) else {"id": company_id, "name": company_name}
                     company_name = company.get("name", company_name)
                     
-                    status_text.text(f"🔄 Erstelle Angebot für {company_name} ({i+1}/{total_companies})...")
+                    status_text.text(f" Erstelle Angebot für {company_name} ({i+1}/{total_companies})...")
                     
                     # Angebotsdaten vorbereiten mit Rotation & Preisstaffelung
                     offer_data = prepare_offer_data(customer_data, company, settings, project_data, i)
@@ -560,7 +560,7 @@ def batch_generate_offers():
             if generated_pdfs:
                 zip_content = create_multi_pdf_zip(generated_pdfs)
                 
-                st.success(f"🎉 **{len(generated_pdfs)} Angebote erfolgreich erstellt!**")
+                st.success(f" **{len(generated_pdfs)} Angebote erfolgreich erstellt!**")
                 
                 # Download-Button
                 st.download_button(
@@ -588,7 +588,7 @@ def render_crm_integration(customer_data: dict, generated_pdfs: List[Dict], proj
     """
     Rendert CRM-Integration für Kundenspeicherung
     """
-    with st.expander("💼 CRM: Kunde speichern & Angebote in Kundenakte ablegen"):
+    with st.expander(" CRM: Kunde speichern & Angebote in Kundenakte ablegen"):
         try:
             import sqlite3
             from database import get_db_connection, add_customer_document
@@ -663,7 +663,7 @@ def render_crm_integration(customer_data: dict, generated_pdfs: List[Dict], proj
                 st.success(f"{saved_docs} PDF(s) in Kundenakte abgelegt!")
                 
                 # Navigation zu CRM
-                if st.button("👤 Zur CRM Kundenverwaltung"):
+                if st.button(" Zur CRM Kundenverwaltung"):
                     st.session_state['selected_page_key_sui'] = 'crm'
                     st.session_state['selected_customer_id'] = crm_customer_id
                     st.session_state['crm_view_mode'] = 'view_customer'
@@ -701,7 +701,7 @@ def render_multi_pdf_generator():
     customer_data_complete = render_multi_pdf_customer_input()
     
     if not customer_data_complete:
-        st.info("👆 Bitte erst Kundendaten eingeben")
+        st.info(" Bitte erst Kundendaten eingeben")
         return
     
     st.markdown("---")
@@ -711,7 +711,7 @@ def render_multi_pdf_generator():
     selected_company_ids = render_multi_pdf_company_selection(available_companies)
     
     if not selected_company_ids or len(selected_company_ids) < 2:
-        st.info("👆 Bitte mindestens 2 Firmen auswählen")
+        st.info(" Bitte mindestens 2 Firmen auswählen")
         return
     
     st.markdown("---")
@@ -729,11 +729,11 @@ def render_multi_pdf_generator():
     # Schritt 5: Zusammenfassung & Generierung
     st.info(f"""
     **Zusammenfassung:**
-    - 👥 {len(selected_company_ids)} Firma(en) ausgewählt
-    - 🧑 Kunde: {st.session_state.multi_offer_customer_data.get('first_name')} {st.session_state.multi_offer_customer_data.get('last_name')}
-    - 🔄 Produktrotation: {'Aktiv' if st.session_state.multi_offer_settings.get('enable_product_rotation') else 'Deaktiviert'}
+    -  {len(selected_company_ids)} Firma(en) ausgewählt
+    -  Kunde: {st.session_state.multi_offer_customer_data.get('first_name')} {st.session_state.multi_offer_customer_data.get('last_name')}
+    -  Produktrotation: {'Aktiv' if st.session_state.multi_offer_settings.get('enable_product_rotation') else 'Deaktiviert'}
     - Preisstaffelung: {st.session_state.multi_offer_settings.get('price_increment_percent', 0)}%
-    - 🔥 Wärmepumpe: {'Ja' if heatpump_enabled else 'Nein'}
+    -  Wärmepumpe: {'Ja' if heatpump_enabled else 'Nein'}
     """)
     
     # PDF-Generierung

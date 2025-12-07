@@ -568,7 +568,7 @@ class FinalValidator:
         if report.invalid_files == 0 and report.total_errors == 0:
             print("ALL FILES VALID - SYSTEM READY FOR DEPLOYMENT")
         elif report.invalid_files == 0:
-            print(f"⚠ ALL FILES VALID BUT {report.total_warnings} WARNINGS")
+            print(f" ALL FILES VALID BUT {report.total_warnings} WARNINGS")
         else:
             print(f"{report.invalid_files} INVALID FILES - REVIEW REQUIRED")
         print("=" * 70)

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\controlling\managers.py
+# hypothesis_version: 6.147.0
+
+['City is required', 'birth_date', 'calculation_method', 'city', 'description', 'first_name', 'include_inactive', 'is_active', 'is_standard', 'last_name', 'name', 'position_id', 'start_date']

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\dcc\express.py
+# hypothesis_version: 6.147.0
+
+['rb', 'to_csv', 'to_excel', 'to_feather', 'to_html', 'to_json', 'to_msgpack', 'to_parquet', 'to_pickle', 'to_stata']

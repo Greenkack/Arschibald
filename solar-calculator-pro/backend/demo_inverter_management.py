@@ -96,7 +96,7 @@ def demo_inverter_selection():
     print("Selecting inverter for 10kWp PV system...")
     result = service.select_inverter(pv_power_kwp=10.0)
     
-    print(f"\n✓ Selected Inverter: {result['selected_inverter']['model_name']}")
+    print(f"\n Selected Inverter: {result['selected_inverter']['model_name']}")
     print(f"  Manufacturer: {result['selected_inverter']['manufacturer']}")
     print(f"  Power: {result['selected_inverter']['power_kw']}kW")
     print(f"  Efficiency: {result['selected_inverter']['efficiency_percent']}%")
@@ -142,7 +142,7 @@ def demo_inverter_sizing():
         string_configuration=string_config
     )
     
-    print(f"\n✓ Sizing Results:")
+    print(f"\n Sizing Results:")
     print(f"\nRequired Inverter Power: {sizing['required_power_kw']}kW")
     
     print(f"\nRecommended Power Range:")
@@ -191,16 +191,16 @@ def demo_compatibility_check(inverter):
         pv_system=pv_system
     )
     
-    print(f"\n✓ Compatibility Results:")
-    print(f"\nOverall: {'✓ COMPATIBLE' if compatibility['is_compatible'] else '✗ NOT COMPATIBLE'}")
+    print(f"\n Compatibility Results:")
+    print(f"\nOverall: {' COMPATIBLE' if compatibility['is_compatible'] else ' NOT COMPATIBLE'}")
     print(f"Compatibility Score: {compatibility['compatibility_score']:.1f}%")
     
     print(f"\nDetailed Checks:")
     for check in compatibility['checks']:
         status_symbol = {
-            'OK': '✓',
-            'WARNUNG': '⚠',
-            'FEHLER': '✗'
+            'OK': '',
+            'WARNUNG': '',
+            'FEHLER': ''
         }.get(check['status'], '?')
         print(f"  {status_symbol} {check['check']}: {check['status']}")
         print(f"     {check['details']}")
@@ -208,7 +208,7 @@ def demo_compatibility_check(inverter):
     if compatibility['warnings']:
         print(f"\nWarnings:")
         for warning in compatibility['warnings']:
-            print(f"  ⚠ {warning}")
+            print(f"   {warning}")
     
     print(f"\nRecommendation:")
     print(f"  {compatibility['recommendation']}")
@@ -279,7 +279,7 @@ def demo_multi_inverter_configuration():
         system_layout=system_layout
     )
     
-    print(f"\n✓ Multi-Inverter Configuration:")
+    print(f"\n Multi-Inverter Configuration:")
     print(f"\nConfiguration Type: {config['configuration_type'].upper()}")
     print(f"Number of Inverters: {config['inverter_count']}")
     print(f"Total Inverter Power: {config['total_power_kw']}kW")
@@ -329,7 +329,7 @@ def demo_monitoring_integration(inverter):
     )
     
     if integration['monitoring_supported']:
-        print(f"\n✓ Monitoring Integration Successful")
+        print(f"\n Monitoring Integration Successful")
         print(f"\nInverter: {integration['inverter_model']}")
         print(f"Manufacturer: {integration['manufacturer']}")
         print(f"Protocol: {integration['communication_protocol']}")
@@ -350,7 +350,7 @@ def demo_monitoring_integration(inverter):
         for name, endpoint in integration['api_endpoints'].items():
             print(f"  {name}: {endpoint}")
     else:
-        print(f"\n✗ Monitoring Not Supported")
+        print(f"\n Monitoring Not Supported")
         print(f"  {integration['message']}")
         if integration.get('alternative'):
             print(f"  Alternative: {integration['alternative']}")
@@ -384,11 +384,11 @@ def main():
         print_section("DEMONSTRATION COMPLETE")
         print("All inverter management features demonstrated successfully!")
         print("\nKey Features:")
-        print("  ✓ Intelligent inverter selection with scoring")
-        print("  ✓ Detailed sizing calculations with safety margins")
-        print("  ✓ Comprehensive compatibility checking")
-        print("  ✓ Multi-inverter configuration for large systems")
-        print("  ✓ Monitoring system integration")
+        print("   Intelligent inverter selection with scoring")
+        print("   Detailed sizing calculations with safety margins")
+        print("   Comprehensive compatibility checking")
+        print("   Multi-inverter configuration for large systems")
+        print("   Monitoring system integration")
         
         print("\nFor more information, see:")
         print("  - docs/INVERTER_MANAGEMENT_GUIDE.md")
@@ -396,7 +396,7 @@ def main():
         print("  - tests/test_inverter_service.py")
         
     except Exception as e:
-        print(f"\n✗ Error during demonstration: {e}")
+        print(f"\n Error during demonstration: {e}")
         import traceback
         traceback.print_exc()
         return 1

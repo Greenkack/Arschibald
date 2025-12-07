@@ -24,11 +24,11 @@ def main():
     
     st.set_page_config(
         page_title="Hot Reload Demo",
-        page_icon="🔄",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("🔄 Hot Reload für Theme-Entwicklung")
+    st.title(" Hot Reload für Theme-Entwicklung")
     st.markdown("---")
     
     # Initialisiere Session State
@@ -50,7 +50,7 @@ def main():
     
     # Sidebar: Konfiguration
     with st.sidebar:
-        st.header("⚙️ Konfiguration")
+        st.header(" Konfiguration")
         
         # Development Mode
         dev_mode = st.checkbox(
@@ -65,7 +65,7 @@ def main():
         st.markdown("---")
         
         # Hot Reload Einstellungen
-        st.subheader("🔄 Hot Reload")
+        st.subheader(" Hot Reload")
         
         hot_reload_enabled = st.checkbox(
             "Hot Reload aktivieren",
@@ -86,7 +86,7 @@ def main():
         
         # Validierung
         st.markdown("---")
-        st.subheader("✅ Validierung")
+        st.subheader(" Validierung")
         
         validate_on_reload = st.checkbox(
             "Bei Reload validieren",
@@ -106,7 +106,7 @@ def main():
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.header("📁 Theme-Dateien")
+        st.header(" Theme-Dateien")
         
         # Zeige Theme-Verzeichnis
         themes_dir = theme_manager.themes_dir
@@ -122,7 +122,7 @@ def main():
             col_a, col_b, col_c = st.columns([3, 1, 1])
             
             with col_a:
-                st.text(f"📄 {theme_name}.json")
+                st.text(f" {theme_name}.json")
             
             with col_b:
                 if theme_file.exists():
@@ -138,26 +138,26 @@ def main():
                         is_valid, errors = validator.validate_theme(theme.to_dict())
                         
                         if is_valid:
-                            st.success(f"✅ {theme_name} ist valide")
+                            st.success(f" {theme_name} ist valide")
                         else:
-                            st.error(f"❌ {theme_name} hat Fehler:")
+                            st.error(f" {theme_name} hat Fehler:")
                             for error in errors:
                                 st.text(f"  - {error}")
         
         st.markdown("---")
         
         # Anleitung
-        st.subheader("📝 Anleitung")
+        st.subheader(" Anleitung")
         
         st.markdown("""
         **So verwendest du Hot Reload:**
         
-        1. ✅ Aktiviere "Development Mode" in der Sidebar
-        2. ✅ Aktiviere "Hot Reload aktivieren"
-        3. 📝 Öffne eine Theme-Datei in deinem Editor
-        4. ✏️ Ändere Farben, Schriftarten, etc.
-        5. 💾 Speichere die Datei
-        6. 🔄 Das Theme wird automatisch neu geladen!
+        1.  Aktiviere "Development Mode" in der Sidebar
+        2.  Aktiviere "Hot Reload aktivieren"
+        3.  Öffne eine Theme-Datei in deinem Editor
+        4.  Ändere Farben, Schriftarten, etc.
+        5.  Speichere die Datei
+        6.  Das Theme wird automatisch neu geladen!
         
         **Beispiel-Änderung:**
         
@@ -172,13 +172,13 @@ def main():
         
         **Tipps:**
         
-        - 🎯 Nutze den Debounce-Slider um die Reaktionszeit anzupassen
-        - ✅ Aktiviere "Bei Reload validieren" um Fehler sofort zu sehen
-        - 📊 Beobachte die Statistiken um zu sehen wie oft Themes geladen wurden
+        -  Nutze den Debounce-Slider um die Reaktionszeit anzupassen
+        -  Aktiviere "Bei Reload validieren" um Fehler sofort zu sehen
+        -  Beobachte die Statistiken um zu sehen wie oft Themes geladen wurden
         """)
     
     with col2:
-        st.header("📊 Status")
+        st.header(" Status")
         
         # Hot Reload Status
         if st.session_state.hot_reload_manager:
@@ -197,12 +197,12 @@ def main():
                 st.text(f"Uptime:")
                 st.text(stats['uptime_formatted'])
         else:
-            st.warning("🔴 Hot Reload inaktiv")
+            st.warning(" Hot Reload inaktiv")
         
         st.markdown("---")
         
         # Aktuelles Theme
-        st.subheader("🎨 Aktuelles Theme")
+        st.subheader(" Aktuelles Theme")
         current_theme = theme_manager.get_current_theme()
         st.info(f"**{current_theme}**")
         
@@ -220,14 +220,14 @@ def main():
         st.markdown("---")
         
         # Actions
-        st.subheader("🎬 Aktionen")
+        st.subheader(" Aktionen")
         
-        if st.button("🔄 Alle Themes neu laden", use_container_width=True):
+        if st.button(" Alle Themes neu laden", use_container_width=True):
             theme_manager.load_themes()
             st.success("Themes neu geladen!")
             st.rerun()
         
-        if st.button("🧹 Historie löschen", use_container_width=True):
+        if st.button(" Historie löschen", use_container_width=True):
             validation_display.clear_history()
             st.success("Historie gelöscht!")
     
@@ -264,7 +264,7 @@ def main():
         if manager:
             manager.start(callback=on_theme_reload)
             st.session_state.hot_reload_manager = manager
-            st.success("✅ Hot Reload gestartet!")
+            st.success(" Hot Reload gestartet!")
             time.sleep(1)
             st.rerun()
     
@@ -278,7 +278,7 @@ def main():
     
     # Validierungs-Historie
     st.markdown("---")
-    st.header("📋 Validierungs-Historie")
+    st.header(" Validierungs-Historie")
     
     summary = validation_display.get_error_summary()
     
@@ -303,7 +303,7 @@ def main():
     
     # CSS Preview
     st.markdown("---")
-    st.header("🎨 CSS Preview")
+    st.header(" CSS Preview")
     
     with st.expander("Generiertes CSS anzeigen", expanded=False):
         try:

@@ -78,7 +78,7 @@ def test_seite6_data_generation():
             'storage_production_ratio_percent'
         ]
 
-        print("\n📋 Seite 6 Werte:")
+        print("\n Seite 6 Werte:")
         for key in seite6_keys:
             value = dynamic_data.get(key, "NICHT GEFUNDEN")
             print(f"  {key}: {value}")
@@ -110,7 +110,7 @@ def test_seite6_data_generation():
 
 def test_seite6_coords():
     """Teste die Seite 7 Koordinaten (OLD: page 6 -> NEW: page 7)"""
-    print("\n🗺️ Teste Seite 7 Koordinaten (old page 6)...")
+    print("\n Teste Seite 7 Koordinaten (old page 6)...")
 
     try:
         coords_file = Path("coords/seite7.yml")
@@ -122,7 +122,7 @@ def test_seite6_coords():
         from pdf_template_engine.dynamic_overlay import parse_coords_file
         elements = parse_coords_file(coords_file)
 
-        print(f"📍 Gefundene Elemente: {len(elements)}")
+        print(f" Gefundene Elemente: {len(elements)}")
 
         # Suche nach Seite 6 spezifischen Platzhaltern
         seite6_placeholders = [
@@ -156,7 +156,7 @@ def test_seite6_coords():
 
 def test_placeholder_mapping():
     """Teste das Platzhalter-Mapping für Seite 6"""
-    print("\n🔗 Teste Platzhalter-Mapping...")
+    print("\n Teste Platzhalter-Mapping...")
 
     try:
         from pdf_template_engine.placeholders import PLACEHOLDER_MAPPING

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\dcc\Store.py
+# hypothesis_version: 6.147.0
+
+['Required argument `', 'Store', '__init__', '_explicit_args', '` was not specified.', 'children', 'clear_data', 'dash_core_components', 'data', 'id', 'local', 'memory', 'modified_timestamp', 'session', 'storage_type']

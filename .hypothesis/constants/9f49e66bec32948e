@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\worksheet\dimensions.py
+# hypothesis_version: 6.147.0
+
+['A', 'bestFit', 'col', 'collapsed', 'cols', 'customFormat', 'customHeight', 'customWidth', 'dimension', 'hidden', 'ht', 'index', 'max', 'min', 'outlineLevel', 's', 'sheetFormatPr', 'style', 'style_id', 'thickBot', 'thickTop', 'width', 'worksheet']

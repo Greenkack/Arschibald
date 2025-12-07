@@ -104,7 +104,7 @@ categories = {
 }
 
 for category, modules in categories.items():
-    print(f"\n📂 {category}:")
+    print(f"\n {category}:")
     for module in modules:
         if module in NOT_INTEGRATED:
             exists = "" if module in all_modules else ""

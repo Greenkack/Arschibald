@@ -104,7 +104,7 @@ def verify_task_8_1():
     
     print("\nWarnings detected:")
     for warning in report_2.get_warnings():
-        print(f"  ⚠ {warning.message}")
+        print(f"   {warning.message}")
     
     # Verify requirement
     warnings_2 = report_2.get_warnings()

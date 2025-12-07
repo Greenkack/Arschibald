@@ -207,16 +207,16 @@ def test_requirements_coverage():
     
     requirements = {
         "5.1 Modul-Belegungs-Panel erstellen": {
-            "Neuer Expander '🔲 Modul-Belegung'": True,
+            "Neuer Expander ' Modul-Belegung'": True,
             "Zeige Statistiken (platziert/gesamt)": True,
             "Zeige Belegungsgrad in %": True,
             "Übersichtlichkeit": True
         },
         "5.2 Buttons hinzufügen": {
             "'Automatisch belegen' Button": True,
-            "'➕ Modul hinzufügen' Button": True,
-            "'➖ Ausgewählte entfernen' Button": True,
-            "'🔄 Alle zurücksetzen' Button": True,
+            "' Modul hinzufügen' Button": True,
+            "' Ausgewählte entfernen' Button": True,
+            "' Alle zurücksetzen' Button": True,
             "'↻ Rückgängig' Button (via selection)": True,
             "Alle Funktionen zugänglich": True
         },

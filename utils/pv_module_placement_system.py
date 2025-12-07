@@ -334,6 +334,14 @@ class ModulePlacementManager:
         self.default_dimensions = ModuleDimensions()
         self.default_orientation = ModuleOrientation.LANDSCAPE
     
+    def __getstate__(self):
+        """Ermöglicht Pickle-Serialisierung für Streamlit Session State"""
+        return self.__dict__.copy()
+    
+    def __setstate__(self, state):
+        """Ermöglicht Pickle-Deserialisierung für Streamlit Session State"""
+        self.__dict__.update(state)
+    
     # ========================================================================
     # DACHFLÄCHEN-VERWALTUNG
     # ========================================================================

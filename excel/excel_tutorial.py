@@ -12,7 +12,7 @@ from typing import Dict, List, Any
 TUTORIAL_STEPS = [
     {
         "step": 1,
-        "title": "Willkommen zur Excel-Integration! 👋",
+        "title": "Willkommen zur Excel-Integration! ",
         "content": """
 Herzlich willkommen! Dieses Tutorial führt Sie durch die wichtigsten Features 
 der Excel-Integration.
@@ -36,7 +36,7 @@ Eine Matrix ist eine Tabelle mit Zeilen und Spalten, ähnlich wie in Excel.
 
 **So erstellen Sie eine neue Matrix:**
 
-1. Klicken Sie auf den Button **"➕ Neue Matrix"**
+1. Klicken Sie auf den Button **" Neue Matrix"**
 2. Geben Sie einen Namen ein (z.B. "Meine erste Matrix")
 3. Wählen Sie die Anzahl der Zeilen und Spalten
 4. Klicken Sie auf "Erstellen"
@@ -48,7 +48,7 @@ Eine Matrix ist eine Tabelle mit Zeilen und Spalten, ähnlich wie in Excel.
     },
     {
         "step": 3,
-        "title": "Zellen bearbeiten ✏️",
+        "title": "Zellen bearbeiten ",
         "content": """
 Jetzt können Sie Werte in die Zellen eingeben.
 
@@ -68,7 +68,7 @@ Jetzt können Sie Werte in die Zellen eingeben.
     },
     {
         "step": 4,
-        "title": "Formeln verwenden 🔢",
+        "title": "Formeln verwenden ",
         "content": """
 Formeln ermöglichen automatische Berechnungen.
 
@@ -91,17 +91,17 @@ Formeln ermöglichen automatische Berechnungen.
     },
     {
         "step": 5,
-        "title": "Zeilen und Spalten verwalten ➕",
+        "title": "Zeilen und Spalten verwalten ",
         "content": """
 Sie können jederzeit Zeilen und Spalten hinzufügen oder löschen.
 
 **Zeile hinzufügen:**
 1. Wählen Sie die Position
-2. Klicken Sie auf **"➕ Zeile hinzufügen"**
+2. Klicken Sie auf **" Zeile hinzufügen"**
 
 **Spalte hinzufügen:**
 1. Wählen Sie die Position
-2. Klicken Sie auf **"➕ Spalte hinzufügen"**
+2. Klicken Sie auf **" Spalte hinzufügen"**
 
 **Wichtig:** Formeln werden automatisch angepasst!
 
@@ -112,19 +112,19 @@ Sie können jederzeit Zeilen und Spalten hinzufügen oder löschen.
     },
     {
         "step": 6,
-        "title": "Speichern und Laden 💾",
+        "title": "Speichern und Laden ",
         "content": """
 Vergessen Sie nicht, Ihre Arbeit zu speichern!
 
 **Speichern:**
-- Klicken Sie auf **"💾 Speichern"**
+- Klicken Sie auf **" Speichern"**
 - Oder drücken Sie **Strg+S**
 
 **Auto-Save:**
-- Aktivieren Sie **"🔄 Auto-Save"** für automatisches Speichern
+- Aktivieren Sie **" Auto-Save"** für automatisches Speichern
 
 **Laden:**
-- Klicken Sie auf **"📂 Laden"**
+- Klicken Sie auf **" Laden"**
 - Wählen Sie eine gespeicherte Matrix aus
 
 **Probieren Sie es aus:** Speichern Sie Ihre Matrix.
@@ -155,13 +155,13 @@ Fehler passieren - kein Problem!
     },
     {
         "step": 8,
-        "title": "Kopieren und Einfügen 📋",
+        "title": "Kopieren und Einfügen ",
         "content": """
 Kopieren Sie Zellwerte schnell und einfach.
 
 **Kopieren:**
 1. Wählen Sie eine Zelle
-2. Klicken Sie auf **"📋 Kopieren"** oder drücken Sie **Strg+C**
+2. Klicken Sie auf **" Kopieren"** oder drücken Sie **Strg+C**
 
 **Einfügen:**
 1. Wählen Sie die Zielzelle
@@ -176,17 +176,17 @@ Kopieren Sie Zellwerte schnell und einfach.
     },
     {
         "step": 9,
-        "title": "Import und Export 📥📤",
+        "title": "Import und Export ",
         "content": """
 Arbeiten Sie mit externen Dateien.
 
 **CSV Import:**
-- Klicken Sie auf **"📥 CSV Import"**
+- Klicken Sie auf **" CSV Import"**
 - Wählen Sie eine CSV-Datei
 - Die Daten werden automatisch importiert
 
 **Excel Export:**
-- Klicken Sie auf **"📤 Excel Export"**
+- Klicken Sie auf **" Excel Export"**
 - Ihre Matrix wird als XLSX-Datei exportiert
 - **Formeln bleiben erhalten!**
 
@@ -197,7 +197,7 @@ Arbeiten Sie mit externen Dateien.
     },
     {
         "step": 10,
-        "title": "Tastatur-Shortcuts ⌨️",
+        "title": "Tastatur-Shortcuts ⌨",
         "content": """
 Arbeiten Sie schneller mit Tastatur-Shortcuts!
 
@@ -216,14 +216,14 @@ Arbeiten Sie schneller mit Tastatur-Shortcuts!
 **Speichern:**
 - **Strg+S** - Speichern
 
-**Tipp:** Aktivieren Sie "⌨️ Tastaturnavigation" für volle Unterstützung!
+**Tipp:** Aktivieren Sie "⌨ Tastaturnavigation" für volle Unterstützung!
         """,
         "action": None,
         "highlight": "keyboard_nav_checkbox"
     },
     {
         "step": 11,
-        "title": "Beispiel-Matrizen 📚",
+        "title": "Beispiel-Matrizen ",
         "content": """
 Lernen Sie von Beispielen!
 
@@ -269,7 +269,7 @@ Brauchen Sie Hilfe?
     },
     {
         "step": 13,
-        "title": "Fertig! 🎉",
+        "title": "Fertig! ",
         "content": """
 Herzlichen Glückwunsch! Sie haben das Tutorial abgeschlossen.
 

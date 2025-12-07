@@ -136,7 +136,7 @@ def test_position_shift():
     new_chart_top = page_height - (516.11 - 30)
     new_chart_bottom = page_height - (645.42 - 30)
 
-    print("📍 Koordinaten-Vergleich:")
+    print(" Koordinaten-Vergleich:")
     print("   Alte Position:")
     print(f"     - Oben: {old_chart_top:.1f}")
     print(f"     - Unten: {old_chart_bottom:.1f}")
@@ -174,7 +174,7 @@ def test_position_shift():
                 f.write(overlay_bytes)
 
             print(f"Test-PDF mit neuer Position erstellt: {output_file}")
-            print("📋 Das Diagramm sollte 20 Punkte höher als vorher positioniert sein")
+            print(" Das Diagramm sollte 20 Punkte höher als vorher positioniert sein")
         else:
             print("Position-Test fehlgeschlagen")
 
@@ -192,9 +192,9 @@ if __name__ == "__main__":
     # Test 2: Position-Verschiebung
     test_position_shift()
 
-    print("\n🎉 Alle Tests abgeschlossen!")
-    print("📋 Überprüfen Sie die generierten PDF-Dateien:")
+    print("\n Alle Tests abgeschlossen!")
+    print(" Überprüfen Sie die generierten PDF-Dateien:")
     print("   - Alle 4 Balken sollten sichtbar sein (auch bei Wert 0)")
     print("   - Das Diagramm sollte 20 Punkte höher positioniert sein")
     print("   - Direktverbrauch-Balken sollte immer angezeigt werden")
-    print("📍 Position: Zwischen 'Neigung des Daches' und 'Art' Spalten, 20 Punkte höher")
+    print(" Position: Zwischen 'Neigung des Daches' und 'Art' Spalten, 20 Punkte höher")

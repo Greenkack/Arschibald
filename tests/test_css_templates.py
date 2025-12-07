@@ -76,7 +76,7 @@ st.write("---")
 
 # Tabs
 st.write("## Tabs")
-tab1, tab2, tab3 = st.tabs(["🏠 Tab 1", "Tab 2", "⚙️ Tab 3"])
+tab1, tab2, tab3 = st.tabs([" Tab 1", "Tab 2", " Tab 3"])
 
 with tab1:
     st.write("Inhalt von Tab 1")
@@ -93,7 +93,7 @@ with tab3:
 st.write("---")
 
 # Expander
-with st.expander("🔽 Erweiterte Optionen"):
+with st.expander(" Erweiterte Optionen"):
     st.write("Dieser Expander hat Glasmorphism-Effekt")
     st.checkbox("Option 1")
     st.checkbox("Option 2")

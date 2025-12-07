@@ -320,7 +320,7 @@ def test_invalid_option_types():
     for invalid_options, description in test_cases:
         # In a real implementation, you would validate and handle these
         # For now, we just document the expected behavior
-        print(f"⚠ {description}")
+        print(f" {description}")
         print(f"  Invalid value: {invalid_options}")
     
     print("Invalid option types documented")

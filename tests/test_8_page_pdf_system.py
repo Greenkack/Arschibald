@@ -137,7 +137,7 @@ def test_page_content_placement():
                 page_texts.append(text)
                 print(f"   Page {i+1}: {len(text)} characters extracted")
             except Exception as e:
-                print(f"   ⚠ Page {i+1}: Could not extract text ({e})")
+                print(f"    Page {i+1}: Could not extract text ({e})")
                 page_texts.append("")
         
         # Verify page 1 (new page)
@@ -155,7 +155,7 @@ def test_page_content_placement():
         if "ANGEBOT" in page2_text.upper() or "PERSÖNLICH" in page2_text.upper():
             print(f"   Page 2 contains expected offer text")
         else:
-            print(f"   ⚠ Page 2 text extraction may be incomplete (this is common with PDF text extraction)")
+            print(f"    Page 2 text extraction may be incomplete (this is common with PDF text extraction)")
         
         # Verify page 4 (old page 3) - should have waterfall chart
         print(f"\n6. Verifying page 4 (old page 3 - waterfall chart)...")
@@ -374,7 +374,7 @@ def test_renamed_functions_exist():
                     func(c, test_data, page_width, page_height)
                     print(f"   {func_name} can be called successfully")
                 except Exception as e:
-                    print(f"   ⚠ {func_name} raised exception: {e}")
+                    print(f"    {func_name} raised exception: {e}")
                     # This is acceptable - the function exists and can be called,
                     # even if it fails with test data
         
@@ -433,11 +433,11 @@ def run_all_tests():
     print(f"\n{passed}/{total} tests passed")
     
     if passed == total:
-        print("\n🎉 ALL TESTS PASSED! The 8-page PDF system is working correctly.")
+        print("\n ALL TESTS PASSED! The 8-page PDF system is working correctly.")
         print("="*70 + "\n")
         return True
     else:
-        print(f"\n⚠ {total - passed} test(s) failed. Please review the output above.")
+        print(f"\n {total - passed} test(s) failed. Please review the output above.")
         print("="*70 + "\n")
         return False
 

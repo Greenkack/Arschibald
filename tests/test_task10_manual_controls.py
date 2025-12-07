@@ -318,8 +318,8 @@ def test_ui_component_buttons():
     print("   1. Starten Sie die Anwendung: streamlit run gui.py")
     print("   2. Navigieren Sie zur 3D-Visualisierung")
     print("   3. Prüfen Sie dass folgende Buttons vorhanden sind:")
-    print("      - ➕ Modul hinzufügen (enabled)")
-    print("      - ➖ Ausgewählte entfernen (disabled wenn keine Auswahl)")
+    print("      -  Modul hinzufügen (enabled)")
+    print("      -  Ausgewählte entfernen (disabled wenn keine Auswahl)")
     print("   4. Prüfen Sie dass die Buttons funktionieren:")
     print("      - Klicken Sie auf 'Modul hinzufügen'")
     print("      - Wählen Sie Module aus")
@@ -422,7 +422,7 @@ def run_all_tests():
     print("=" * 70)
     
     if passed == total:
-        print("\n🎉 ALLE TESTS BESTANDEN! Task 10 ist vollständig implementiert.")
+        print("\n ALLE TESTS BESTANDEN! Task 10 ist vollständig implementiert.")
         return True
     else:
         print(f"\n{total - passed} Test(s) fehlgeschlagen. Bitte beheben Sie die Fehler.")

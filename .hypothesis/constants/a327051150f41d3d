@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\utils\log.py
+# hypothesis_version: 6.147.0
+
+[100, 200, 300, 304, 400, 404, 500, '%d/%b/%Y %H:%M:%S', '%s\n\n%s', '%s (%s IP): %s', '%s: %s', '()', 'ERROR', 'EXTERNAL', 'INFO', 'REMOTE_ADDR', '\\n', '\\r', '_has_been_logged', 'ascii', 'class', 'console', 'django', 'django.request', 'django.server', 'error', 'filters', 'format', 'formatter', 'formatters', 'handlers', 'info', 'internal', 'level', 'loggers', 'mail_admins', 'propagate', 'request', 'require_debug_false', 'require_debug_true', 'server_time', 'status_code', 'style', 'unicode_escape', 'version', 'warning', '{', '{server_time}']

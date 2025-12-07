@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\trio\_core\_generated_run.py
+# hypothesis_version: 6.147.0
+
+[0.0, 'current_clock', 'current_root_task', 'current_statistics', 'current_time', 'current_trio_token', 'reschedule', 'spawn_system_task']

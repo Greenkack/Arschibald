@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\narwhals\_compliant\series.py
+# hypothesis_version: 6.147.0
+
+['CompliantSeries', 'EagerSeries', 'EagerSeriesHist', 'EagerSeriesNamespace', 'Into1DArray', 'Iterable[Any]', '_1DArray', '_CountsT_co', 'both', 'breakpoint', 'count', 'full', 'none']

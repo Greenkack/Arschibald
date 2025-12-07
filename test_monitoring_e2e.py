@@ -40,7 +40,7 @@ def test_calculations():
 
 def test_database():
     """Test database module tracing."""
-    print("\n🗄️  Testing Database Module...")
+    print("\n  Testing Database Module...")
     try:
         from database import get_db_connection
         
@@ -62,7 +62,7 @@ def test_database():
 
 def test_crm():
     """Test CRM module tracing."""
-    print("\n👥 Testing CRM Module...")
+    print("\n Testing CRM Module...")
     try:
         from crm import save_customer, load_all_customers
         from database import get_db_connection
@@ -106,7 +106,7 @@ def test_evaluation_system():
         
         # Health status
         health = evaluation_system.get_health_status()
-        print(f"  🏥 Health Status: {health['status']}")
+        print(f"   Health Status: {health['status']}")
         
         return True
     except Exception as e:
@@ -126,7 +126,7 @@ def test_tracing_export():
             span.set_attribute("test_result", "success")
         
         print("  Test span created and exported")
-        print("  📡 Check AI Toolkit at: http://localhost:4318/v1/traces")
+        print("   Check AI Toolkit at: http://localhost:4318/v1/traces")
         print("  In VSCode: Ctrl+Shift+P → 'AI Toolkit: Open Tracing'")
         
         return True
@@ -181,7 +181,7 @@ def main():
     print(f"\nPassed: {passed}/{total}")
     
     if passed == total:
-        print("\n🎉 All tests passed!")
+        print("\n All tests passed!")
         print("\nNext steps:")
         print("  1. Open AI Toolkit in VSCode: Ctrl+Shift+P → 'AI Toolkit: Open Tracing'")
         print("  2. Run Streamlit app: streamlit run gui.py")

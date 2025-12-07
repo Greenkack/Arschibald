@@ -180,7 +180,7 @@ def force_repair_all_pdf_systems():
     # Ergebnis
     st.markdown("---")
     if success_count == total_systems:
-        st.success(f"🎉 Alle {total_systems} PDF-Systeme erfolgreich repariert!")
+        st.success(f" Alle {total_systems} PDF-Systeme erfolgreich repariert!")
     else:
         st.warning(f"{success_count}/{total_systems} PDF-Systeme repariert")
 
@@ -264,7 +264,7 @@ def diagnose_pdf_system_issues():
 
     # 4. Probleme zusammenfassen
     if issues:
-        st.markdown("**🚨 Gefundene Probleme:**")
+        st.markdown("** Gefundene Probleme:**")
         for i, issue in enumerate(issues):
             st.error(f"{i+1}. {issue}")
 
@@ -272,7 +272,7 @@ def diagnose_pdf_system_issues():
         for i, solution in enumerate(solutions):
             st.info(f"{i+1}. {solution}")
     else:
-        st.success("🎉 Keine Probleme gefunden!")
+        st.success(" Keine Probleme gefunden!")
 
     # 5. PV-Daten Status prüfen
     st.markdown("---")
@@ -321,7 +321,7 @@ def diagnose_pdf_system_issues():
 
     # Gesamtstatus
     if modules_ok and inverters_ok:
-        st.success("🎉 **PV-Daten vollständig verfügbar!**")
+        st.success(" **PV-Daten vollständig verfügbar!**")
     else:
         st.warning("**PV-Daten unvollständig - Reparatur erforderlich**")
 
@@ -362,9 +362,9 @@ def show_pdf_repair_interface():
 
     # Session State cleaner
     st.markdown("---")
-    st.subheader("🧹 Session State Management")
+    st.subheader(" Session State Management")
 
-    if st.button("🧹 PDF Session State zurücksetzen"):
+    if st.button(" PDF Session State zurücksetzen"):
         keys_to_remove = [k for k in st.session_state.keys() if 'pdf_' in k.lower()]
         for key in keys_to_remove:
             del st.session_state[key]

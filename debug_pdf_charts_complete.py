@@ -194,7 +194,7 @@ def test_overlay_generation():
             if hasattr(page6_overlay, 'get_contents'):
                 contents = page6_overlay.get_contents()
                 if contents:
-                    print(f"📋 Overlay Seite 6 hat Inhalt: {type(contents)}")
+                    print(f" Overlay Seite 6 hat Inhalt: {type(contents)}")
                 else:
                     print("Overlay Seite 6 hat keinen Inhalt!")
 
@@ -236,7 +236,7 @@ def test_template_merge():
             template_page = template_reader.pages[0]
             overlay_page = overlay_reader.pages[5]  # Seite 6 des Overlays
 
-            print("🔄 Führe Template + Overlay zusammen...")
+            print(" Führe Template + Overlay zusammen...")
 
             # Erstelle Kopie der Template-Seite
             merged_page = template_page

@@ -120,7 +120,7 @@ def create_test_pdf():
         with open(output_path, "wb") as output_file:
             writer.write(output_file)
 
-        print(f"🎉 Test-PDF erstellt: {output_path}")
+        print(f" Test-PDF erstellt: {output_path}")
         print(f"Anzahl Seiten: {len(writer.pages)}")
 
         # Dateigröße anzeigen
@@ -162,7 +162,7 @@ def main():
 
     if success:
         print("\nTest erfolgreich abgeschlossen!")
-        print("📋 Die Donut-Charts sollten jetzt auf Seite 6 sichtbar sein:")
+        print(" Die Donut-Charts sollten jetzt auf Seite 6 sichtbar sein:")
         print("   - Oberer Chart: Speicher zu Tagesverbrauch (ca. 74%)")
         print("   - Unterer Chart: Speicher zu PV-Produktion (ca. 53%)")
         print("   - Beide Charts zeigen die Prozentwerte in der Mitte")

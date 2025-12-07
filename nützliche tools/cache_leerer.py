@@ -20,7 +20,7 @@ def clear_python_cache():
             cache_dir = os.path.join(root, "__pycache__")
             cache_dirs.append(cache_dir)
 
-    print("🐍 PYTHON CACHE BEREINIGUNG:")
+    print(" PYTHON CACHE BEREINIGUNG:")
     print(f"Gefundene __pycache__ Ordner: {len(cache_dirs)}")
 
     deleted_count = 0
@@ -93,7 +93,7 @@ def clear_streamlit_cache():
 def clear_all_caches():
     """Löscht alle Caches"""
 
-    print("🧹 KOMPLETTE CACHE-BEREINIGUNG GESTARTET")
+    print(" KOMPLETTE CACHE-BEREINIGUNG GESTARTET")
     print("=" * 50)
 
     python_deleted = clear_python_cache()
@@ -101,9 +101,9 @@ def clear_all_caches():
 
     total_deleted = python_deleted + streamlit_deleted
 
-    print("\n🎉 CACHE-BEREINIGUNG ABGESCHLOSSEN!")
+    print("\n CACHE-BEREINIGUNG ABGESCHLOSSEN!")
     print(f"Insgesamt {total_deleted} Cache-Einträge gelöscht")
-    print("💾 Freier Speicherplatz gewonnen!")
+    print(" Freier Speicherplatz gewonnen!")
 
     return total_deleted
 

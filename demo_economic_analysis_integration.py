@@ -181,7 +181,7 @@ def demo_economic_analysis():
     # Initialize economic analysis integration
     economic_integration = get_economic_analysis_integration("pv")
 
-    print("\n🔄 Calculating Economic Analysis...")
+    print("\n Calculating Economic Analysis...")
 
     # Perform economic analysis
     economic_result = economic_integration.calculate_economic_analysis(
@@ -218,7 +218,7 @@ def demo_economic_analysis():
         f"   • Lifetime CO2 Savings: {
             economic_result.lifetime_co2_savings_tons:.1f} tons")
 
-    print("\n🔑 Dynamic Keys Generated:")
+    print("\n Dynamic Keys Generated:")
     for key, value in list(economic_result.dynamic_keys.items())[:5]:
         print(f"   • {key}: {value}")
     print(f"   ... and {len(economic_result.dynamic_keys) - 5} more keys")
@@ -260,7 +260,7 @@ def demo_profitability_reporting():
         "Q1_2024"
     )
 
-    print("\n💼 Executive Summary:")
+    print("\n Executive Summary:")
     print(f"   • Total Revenue: {profitability_report.total_revenue:,.2f}€")
     print(f"   • Total Costs: {profitability_report.total_costs:,.2f}€")
     print(f"   • Gross Profit: {profitability_report.gross_profit:,.2f}€")
@@ -318,7 +318,7 @@ def demo_profitability_reporting():
         else:
             print(f"   • {metric.replace('_', ' ').title()}: {value:.2f}")
 
-    print("\n🏪 Market Insights:")
+    print("\n Market Insights:")
     market_insights = profitability_report.market_insights
     if "competitive_analysis" in market_insights:
         comp_analysis = market_insights["competitive_analysis"]
@@ -351,7 +351,7 @@ def demo_profitability_reporting():
                     'volatile_components',
                     0)}")
 
-    print("\n🔑 Report Dynamic Keys:")
+    print("\n Report Dynamic Keys:")
     for key, value in list(profitability_report.dynamic_keys.items())[:5]:
         print(f"   • {key}: {value}")
     print(f"   ... and {len(profitability_report.dynamic_keys) - 5} more keys")
@@ -366,14 +366,14 @@ def demo_integration_workflow():
     print("COMPLETE INTEGRATION WORKFLOW DEMO")
     print("=" * 80)
 
-    print("\n🔄 Step 1: Enhanced Pricing Calculation")
+    print("\n Step 1: Enhanced Pricing Calculation")
     components = create_sample_components()
     final_pricing_result = create_sample_final_pricing_result(components)
     print(
         f"   Final pricing calculated: {
             final_pricing_result.final_price_net:,.2f}€")
 
-    print("\n🔄 Step 2: Economic Analysis Integration")
+    print("\n Step 2: Economic Analysis Integration")
     system_performance = create_sample_system_performance()
     economic_parameters = create_sample_economic_parameters()
 
@@ -387,7 +387,7 @@ def demo_integration_workflow():
         f"   Economic analysis completed: {
             economic_result.payback_period_years:.1f} year payback")
 
-    print("\n🔄 Step 3: Profitability Analysis")
+    print("\n Step 3: Profitability Analysis")
     historical_data = create_sample_historical_data()
 
     reporting_engine = get_profitability_reporting_engine("pv")
@@ -399,14 +399,14 @@ def demo_integration_workflow():
         f"   Profitability report generated: {
             profitability_report.gross_margin_percent:.1f}% margin")
 
-    print("\n🔄 Step 4: PDF Integration Ready")
+    print("\n Step 4: PDF Integration Ready")
     all_keys = {}
     all_keys.update(final_pricing_result.dynamic_keys)
     all_keys.update(economic_result.dynamic_keys)
     all_keys.update(profitability_report.dynamic_keys)
     print(f"   {len(all_keys)} dynamic keys ready for PDF generation")
 
-    print("\n📋 Integration Summary:")
+    print("\n Integration Summary:")
     print("   • Enhanced Pricing: Complete")
     print("   • Economic Analysis: Complete")
     print("   • Profitability Reporting: Complete")
@@ -425,7 +425,7 @@ def main():
     """Main demonstration function"""
 
     print("Starting Economic Analysis Integration Demo")
-    print(f"📅 Demo Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f" Demo Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
     try:
         # Run individual demos

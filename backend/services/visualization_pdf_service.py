@@ -681,7 +681,7 @@ class VisualizationPDFService:
                 trend = kpi['trend']
                 trend_color = (0, 0.7, 0) if trend > 0 else (0.7, 0, 0)
                 pdf.setFillColorRGB(*trend_color)
-                trend_symbol = "▲" if trend > 0 else "▼"
+                trend_symbol = "" if trend > 0 else ""
                 pdf.setFont("Helvetica", 12)
                 pdf.drawCentredString(x + kpi_width/2 - 5, y_position - 65, 
                                     f"{trend_symbol} {abs(trend):.1f}%")

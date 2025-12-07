@@ -11,11 +11,11 @@ from components.badge import Badge, BadgeGroup, badge, badge_group
 # Seiten-Konfiguration
 st.set_page_config(
     page_title="Alert & Badge Demo",
-    page_icon="🎨",
+    page_icon="",
     layout="wide"
 )
 
-st.title("🎨 Alert & Badge Komponenten Demo")
+st.title(" Alert & Badge Komponenten Demo")
 st.markdown("---")
 
 # Tabs für verschiedene Komponenten
@@ -85,7 +85,7 @@ with tab1:
             message="Neue Nachricht erhalten",
             type="info",
             title="Posteingang",
-            icon="📧",
+            icon="",
             key="alert_custom_1"
         )
 
@@ -93,7 +93,7 @@ with tab1:
         alert_component.render(
             message="Daten wurden gespeichert",
             type="success",
-            icon="💾",
+            icon="",
             key="alert_custom_2"
         )
 
@@ -311,17 +311,17 @@ with tab3:
 
     with col1:
         badge_component.render(
-            text="Verified", variant="success", icon="✓", key="badge_icon_1"
+            text="Verified", variant="success", icon="", key="badge_icon_1"
         )
 
     with col2:
         badge_component.render(
-            text="Premium", variant="warning", icon="⭐", key="badge_icon_2"
+            text="Premium", variant="warning", icon="", key="badge_icon_2"
         )
 
     with col3:
         badge_component.render(
-            text="New", variant="info", icon="🎉", key="badge_icon_3"
+            text="New", variant="info", icon="", key="badge_icon_3"
         )
 
     st.markdown("---")
@@ -352,14 +352,14 @@ from components.badge import badge
 badge(
     text="Quick Badge",
     variant="success",
-    icon="✓"
+    icon=""
 )
     """)
 
     badge(
         text="Quick Badge",
         variant="success",
-        icon="✓",
+        icon="",
         key="badge_convenience"
     )
 
@@ -388,10 +388,10 @@ with tab4:
 
     group_component.render(
         badges=[
-            {"text": "Verified", "variant": "success", "icon": "✓"},
-            {"text": "Premium", "variant": "warning", "icon": "⭐"},
-            {"text": "New", "variant": "info", "icon": "🎉"},
-            {"text": "Popular", "variant": "error", "icon": "🔥"}
+            {"text": "Verified", "variant": "success", "icon": ""},
+            {"text": "Premium", "variant": "warning", "icon": ""},
+            {"text": "New", "variant": "info", "icon": ""},
+            {"text": "Popular", "variant": "error", "icon": ""}
         ],
         key="badge_group_2"
     )
@@ -496,7 +496,7 @@ badge_group(
 
 # Sidebar mit Informationen
 with st.sidebar:
-    st.header("ℹ️ Informationen")
+    st.header("ℹ Informationen")
     st.markdown("""
     ### Alert Komponente
     - 4 Typen: info, success, warning, error

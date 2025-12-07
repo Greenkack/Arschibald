@@ -146,7 +146,7 @@ def demo_templates():
 
 def demo_migration_history():
     """Demo: Show migration history"""
-    console.print(Panel.fit("📜 Demo 5: Migration History", style="bold cyan"))
+    console.print(Panel.fit(" Demo 5: Migration History", style="bold cyan"))
 
     try:
         manager = get_migration_manager()
@@ -200,7 +200,7 @@ def demo_usage_examples():
 
 def demo_cli_commands():
     """Demo: Show CLI commands"""
-    console.print(Panel.fit("🖥️  Demo 7: CLI Commands", style="bold cyan"))
+    console.print(Panel.fit("  Demo 7: CLI Commands", style="bold cyan"))
 
     commands = [
         ("Initialize", "python -m core.cli_migrations init"),
@@ -227,7 +227,7 @@ def demo_cli_commands():
 
 def demo_safety_features():
     """Demo: Show safety features"""
-    console.print(Panel.fit("🛡️  Demo 8: Safety Features", style="bold cyan"))
+    console.print(Panel.fit("  Demo 8: Safety Features", style="bold cyan"))
 
     features = [
         ("Transaction per migration", "Each migration runs in its own transaction for safety"),

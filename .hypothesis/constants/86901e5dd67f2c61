@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\werkzeug\datastructures\auth.py
+# hypothesis_version: 6.147.0
+
+[':', '=', '_on_update', '_parameters', '_token', '_type', 'ascii', 'basic', 'digest', 'domain', 'nonce', 'opaque', 'password', 'qop', 'realm', 'username']

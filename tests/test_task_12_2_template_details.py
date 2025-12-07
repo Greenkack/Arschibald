@@ -77,7 +77,7 @@ def test_template_details_display_logic():
 
     assert is_active is True
 
-    status_color = "🟢" if is_active else "⚪"
+    status_color = "🟢" if is_active else ""
     status_text = "Aktiv" if is_active else "Inaktiv"
 
     assert status_color == "🟢"
@@ -378,7 +378,7 @@ def run_all_tests():
 
     for test_name, test_func in tests:
         try:
-            print(f"\n📋 Testing: {test_name}")
+            print(f"\n Testing: {test_name}")
             print("-" * 60)
             test_func()
             passed += 1

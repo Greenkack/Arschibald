@@ -424,7 +424,7 @@ def render_matrix_upload_ui():
     
     Requirements: 2.1, 2.2, 2.4
     """
-    st.subheader("📤 Preismatrix hochladen")
+    st.subheader(" Preismatrix hochladen")
     
     # Hilfetext
     with st.expander("Hilfe: Matrix-Struktur", expanded=False):
@@ -466,7 +466,7 @@ def render_matrix_upload_ui():
         if validation_result['warnings']:
             st.warning("**Warnungen:**")
             for warning in validation_result['warnings']:
-                st.warning(f"⚠ {warning}")
+                st.warning(f" {warning}")
         
         # Zeige Informationen
         if validation_result['info']:
@@ -496,12 +496,12 @@ def render_matrix_upload_ui():
                 models_str = ', '.join(str(m) for m in info['storage_models'][:5])
                 if len(info['storage_models']) > 5:
                     models_str += f" ... ({len(info['storage_models'])} gesamt)"
-                st.info(f"🔋 Speichermodelle: {models_str}")
+                st.info(f" Speichermodelle: {models_str}")
         
         # Zeige Vorschau
         if validation_result['preview_df'] is not None:
             st.markdown("---")
-            st.markdown("### 👁️ Vorschau")
+            st.markdown("###  Vorschau")
             
             preview_df = validation_result['preview_df']
             
@@ -517,7 +517,7 @@ def render_matrix_upload_ui():
             st.markdown("---")
             
             with st.form("matrix_import_form"):
-                st.markdown("### 💾 Matrix importieren")
+                st.markdown("###  Matrix importieren")
                 
                 matrix_name = st.text_input(
                     "Matrix-Name",
@@ -540,7 +540,7 @@ def render_matrix_upload_ui():
                 col1, col2 = st.columns(2)
                 with col1:
                     submitted = st.form_submit_button(
-                        "📥 Importieren",
+                        " Importieren",
                         use_container_width=True,
                         type="primary"
                     )
@@ -573,7 +573,7 @@ def render_matrix_upload_ui():
                                     if set_active_matrix(matrix_id):
                                         st.success("Matrix als aktiv gesetzt")
                                     else:
-                                        st.warning("⚠ Matrix konnte nicht als aktiv gesetzt werden")
+                                        st.warning(" Matrix konnte nicht als aktiv gesetzt werden")
                                 
                                 # Validiere importierte Matrix
                                 st.info("Validiere importierte Matrix...")
@@ -582,13 +582,13 @@ def render_matrix_upload_ui():
                                 if validation['valid']:
                                     st.success("Importierte Matrix ist gültig für Preisberechnung")
                                 else:
-                                    st.warning("⚠ Importierte Matrix hat Validierungsprobleme:")
+                                    st.warning(" Importierte Matrix hat Validierungsprobleme:")
                                     for error in validation['errors']:
                                         st.warning(f"• {error}")
                                 
                                 # Zeige Zusammenfassung
                                 st.markdown("---")
-                                st.markdown("### 📋 Import-Zusammenfassung")
+                                st.markdown("###  Import-Zusammenfassung")
                                 st.code(get_validation_summary(validation))
                                 
                                 # Rerun um Upload-Widget zurückzusetzen
@@ -617,7 +617,7 @@ def render_matrix_list_ui():
     
     for matrix in matrices:
         with st.expander(
-            f"{'🟢' if matrix['is_active'] else '⚪'} {matrix['name']}",
+            f"{'🟢' if matrix['is_active'] else ''} {matrix['name']}",
             expanded=matrix['is_active']
         ):
             # Matrix-Informationen

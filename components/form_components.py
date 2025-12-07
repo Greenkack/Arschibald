@@ -33,7 +33,7 @@ class Input(ShadcnComponent):
             label="E-Mail",
             placeholder="ihre@email.de",
             type="email",
-            prefix_icon="📧",
+            prefix_icon="",
             required=True
         )
         ```
@@ -740,7 +740,7 @@ def input_field(
         email = input_field(
             label="E-Mail",
             type="email",
-            prefix_icon="📧",
+            prefix_icon="",
             required=True
         )
         ```

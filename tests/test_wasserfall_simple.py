@@ -65,7 +65,7 @@ def test_wasserfall_overlay():
 
             print(f"Overlay-PDF erfolgreich erstellt: {output_file}")
             print(f"Dateigröße: {len(overlay_bytes):,} bytes")
-            print("📋 Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
+            print(" Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
             print("Daten:")
             print(
                 f"   - Direktverbrauch: {dynamic_data['einsparung_direktverbrauch_eur']}€")
@@ -83,7 +83,7 @@ def test_wasserfall_overlay():
                 # Prüfe Seite 3 (Index 2)
                 if len(reader.pages) >= 3:
                     page3 = reader.pages[2]
-                    print(f"📍 Seite 3 Größe: {page3.mediabox}")
+                    print(f" Seite 3 Größe: {page3.mediabox}")
 
             except Exception as e:
                 print(f"PDF-Struktur-Prüfung fehlgeschlagen: {e}")
@@ -125,7 +125,7 @@ def test_wasserfall_with_template():
         print("Template-Dateien fehlen:")
         for missing in missing_templates:
             print(f"   - {missing}")
-        print("📋 Test wird nur mit Overlay durchgeführt")
+        print(" Test wird nur mit Overlay durchgeführt")
         return test_wasserfall_overlay()
 
     print("Alle Template-Dateien gefunden")
@@ -189,7 +189,7 @@ def test_wasserfall_with_template():
         print(f"Kombinierte PDF erstellt: {output_file}")
         print(f"Dateigröße: {len(combined_bytes):,} bytes")
         print(
-            "📋 Das Wasserfall-Diagramm sollte auf Seite 3 über dem Template sichtbar sein")
+            " Das Wasserfall-Diagramm sollte auf Seite 3 über dem Template sichtbar sein")
 
         return True
 
@@ -211,13 +211,13 @@ if __name__ == "__main__":
     success2 = test_wasserfall_with_template()
 
     if success1 or success2:
-        print("\n🎉 Test erfolgreich abgeschlossen!")
-        print("📋 Überprüfen Sie die generierten PDF-Dateien:")
+        print("\n Test erfolgreich abgeschlossen!")
+        print(" Überprüfen Sie die generierten PDF-Dateien:")
         if success1:
             print("   - test_wasserfall_overlay.pdf (Nur Overlay)")
         if success2:
             print("   - test_wasserfall_with_template.pdf (Mit Template-Hintergrund)")
-        print("📍 Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
+        print(" Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
         print("Position: Zwischen 'Neigung des Daches' und 'Art' Spalten")
     else:
         print("\nAlle Tests fehlgeschlagen")

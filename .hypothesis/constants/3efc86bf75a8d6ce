@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\parso\python\prefix.py
+# hypothesis_version: 6.147.0
+
+['#', '#[^\\n\\r\\f]*', '$', '%s(%s, %s, %s)', '[ \\t]*', '\\', '\\\\\\r?\\n|\\\\\\r', '\\f', '\\r?\\n|\\r', 'backslash', 'bom', 'comment', 'formfeed', 'newline', 'spacing', 'utf-8']

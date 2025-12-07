@@ -101,7 +101,7 @@ def render_customer_list_with_cards(
     metric_card(
         label="Gesamt Kunden",
         value=str(len(customers)),
-        icon="👥",
+        icon="",
         size="medium",
         theme_manager=theme_manager
     )
@@ -141,13 +141,13 @@ def render_customer_card(
     
     # Create card content
     card_content = f"""
-    **📍 Stadt:** {customer_city}  
-    **📧 E-Mail:** {customer_email[:30]}{'...' if len(customer_email) > 30 else ''}  
-    **📞 Telefon:** {customer_phone}
+    ** Stadt:** {customer_city}  
+    ** E-Mail:** {customer_email[:30]}{'...' if len(customer_email) > 30 else ''}  
+    ** Telefon:** {customer_phone}
     """
     
     with card(
-        title=f"👤 {customer_name}",
+        title=f" {customer_name}",
         content=card_content,
         variant="outlined",
         theme_manager=theme_manager
@@ -156,19 +156,19 @@ def render_customer_card(
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            if st.button("👁️", key=f"view_customer_{customer['id']}", help="Ansehen", use_container_width=True):
+            if st.button("", key=f"view_customer_{customer['id']}", help="Ansehen", use_container_width=True):
                 st.session_state['selected_customer_id'] = customer['id']
                 st.session_state['crm_view_mode'] = 'view_customer'
                 st.rerun()
         
         with col2:
-            if st.button("✏️", key=f"edit_customer_{customer['id']}", help="Bearbeiten", use_container_width=True):
+            if st.button("", key=f"edit_customer_{customer['id']}", help="Bearbeiten", use_container_width=True):
                 st.session_state['selected_customer_id'] = customer['id']
                 st.session_state['crm_view_mode'] = 'edit_customer'
                 st.rerun()
         
         with col3:
-            if st.button("❌", key=f"del_customer_{customer['id']}", help="Löschen", use_container_width=True):
+            if st.button("", key=f"del_customer_{customer['id']}", help="Löschen", use_container_width=True):
                 confirm_key = f"confirm_delete_customer_{customer['id']}"
                 if st.session_state.get(confirm_key, False):
                     if delete_customer(conn, customer['id']):
@@ -217,13 +217,13 @@ def render_customer_form_with_shadcn(
     form_title = "Kunden bearbeiten" if is_edit else "Neuen Kunden anlegen"
     
     with card(
-        title=f"📝 {form_title}",
+        title=f" {form_title}",
         variant="elevated",
         theme_manager=theme_manager
     ):
         with st.form("customer_form_shadcn", clear_on_submit=False):
             # Personal Information Section
-            st.markdown("### 👤 Persönliche Daten")
+            st.markdown("###  Persönliche Daten")
             
             col1, col2 = st.columns(2)
             with col1:
@@ -260,7 +260,7 @@ def render_customer_form_with_shadcn(
             )
             
             st.markdown("---")
-            st.markdown("### 📍 Adresse")
+            st.markdown("###  Adresse")
             
             col1, col2 = st.columns([3, 1])
             with col1:
@@ -289,7 +289,7 @@ def render_customer_form_with_shadcn(
                 )
             
             st.markdown("---")
-            st.markdown("### 📞 Kontakt")
+            st.markdown("###  Kontakt")
             
             col1, col2 = st.columns(2)
             with col1:
@@ -306,7 +306,7 @@ def render_customer_form_with_shadcn(
             
             # Submit button
             submitted = st.form_submit_button(
-                "💾 Speichern",
+                " Speichern",
                 use_container_width=True,
                 type="primary"
             )
@@ -359,7 +359,7 @@ def render_crm_dashboard_with_metrics(
         metric_card(
             label="Gesamt Kunden",
             value=str(total_customers),
-            icon="👥",
+            icon="",
             size="medium",
             theme_manager=theme_manager
         )
@@ -370,7 +370,7 @@ def render_crm_dashboard_with_metrics(
         metric_card(
             label="Mit E-Mail",
             value=str(customers_with_email),
-            icon="📧",
+            icon="",
             size="medium",
             theme_manager=theme_manager
         )
@@ -381,7 +381,7 @@ def render_crm_dashboard_with_metrics(
         metric_card(
             label="Mit Telefon",
             value=str(customers_with_phone),
-            icon="📞",
+            icon="",
             size="medium",
             theme_manager=theme_manager
         )
@@ -392,7 +392,7 @@ def render_crm_dashboard_with_metrics(
         metric_card(
             label="Städte",
             value=str(unique_cities),
-            icon="📍",
+            icon="",
             size="medium",
             theme_manager=theme_manager
         )

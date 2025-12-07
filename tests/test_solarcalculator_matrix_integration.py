@@ -147,7 +147,7 @@ def run_all_tests():
     failed = 0
     
     for test_name, test_func in tests:
-        print(f"\n📋 Test: {test_name}")
+        print(f"\n Test: {test_name}")
         print("-" * 60)
         try:
             test_func()

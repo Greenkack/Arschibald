@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\worksheet\print_settings.py
+# hypothesis_version: 6.147.0
+
+[',', 'cells', 'cols', 'notquoted', 'quoted', 'rows', '{0}{1}?,?{2}?,?']

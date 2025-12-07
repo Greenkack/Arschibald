@@ -68,7 +68,7 @@ class CRMPipeline:
                 'name': 'Verhandlung',
                 'description': 'In Verhandlung',
                 'color': '#8B5CF6',
-                'icon': '🤝',
+                'icon': '',
                 'order': 4
             },
             'won': {
@@ -136,7 +136,7 @@ class CRMPipeline:
                 ">
                     <p style="margin: 0; font-size: 0.9em; opacity: 0.9;">Gesamte Leads</p>
                     <h2 style="margin: 5px 0; font-size: 2em;">{}</h2>
-                    <p style="margin: 0; font-size: 0.8em;">+{} diesen Monat ↗️</p>
+                    <p style="margin: 0; font-size: 0.8em;">+{} diesen Monat ↗</p>
                 </div>
             """.format(stats['total_leads'], stats['new_leads_this_month']), unsafe_allow_html=True)
 
@@ -285,7 +285,7 @@ class CRMPipeline:
         score = lead.get('score', 0)
         if score >= 80:
             score_color = "#10B981"
-            score_label = "🔥"
+            score_label = ""
         elif score >= 60:
             score_color = "#F59E0B"
             score_label = ""
@@ -294,7 +294,7 @@ class CRMPipeline:
             score_label = ""
         else:
             score_color = "#6B7280"
-            score_label = "❄️"
+            score_label = ""
 
         with st.container():
             # Moderne Lead-Karte mit Score
@@ -321,7 +321,7 @@ class CRMPipeline:
                         ">{score_label} {score}</span>
                     </div>
                     <h5 style="margin: 0 0 8px 0; font-size: 0.95em; padding-right: 50px;">
-                        🏢 {lead['company_name']}
+                         {lead['company_name']}
                     </h5>
                     <div style="margin: 5px 0; font-size: 0.8em;">
                         <span style="
@@ -333,7 +333,7 @@ class CRMPipeline:
                         ">{lead['estimated_value']:,.0f} €</span>
                     </div>
                     <p style="margin: 8px 0 0 0; font-size: 0.75em; opacity: 0.8;">
-                        ⏱️ {days_in_stage} Tage in Stufe
+                        ⏱ {days_in_stage} Tage in Stufe
                     </p>
                 </div>
             """, unsafe_allow_html=True)
@@ -342,7 +342,7 @@ class CRMPipeline:
             col1, col2 = st.columns(2)
             with col1:
                 if st.button(
-                        "👁️",
+                        "",
                         key=f"view_{
                             lead['id']}",
                         help="Details anzeigen"):
@@ -351,7 +351,7 @@ class CRMPipeline:
 
             with col2:
                 if st.button(
-                        "↔️",
+                        "↔",
                         key=f"move_{
                             lead['id']}",
                         help="Stufe ändern"):

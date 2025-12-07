@@ -118,7 +118,7 @@ def simulate_multi_offer_generation():
 
         # Berechnung durchführen (wie in multi_offer_generator.py)
         calculation_errors = []
-        print("\n🔄 Führe Berechnung durch...")
+        print("\n Führe Berechnung durch...")
 
         recalculated_results = perform_calculations(
             calc_input, {}, calculation_errors)
@@ -135,7 +135,7 @@ def simulate_multi_offer_generation():
             product_price_logs = [
                 e for e in calculation_errors if 'Preis aus DB' in e or 'Produktdatenbank' in e]
             if product_price_logs:
-                print("\n   📋 Produktpreis-Berechnung:")
+                print("\n    Produktpreis-Berechnung:")
                 for log in product_price_logs:
                     print(f"      {log}")
 

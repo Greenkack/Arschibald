@@ -201,11 +201,11 @@ def main():
     test_file = Path(__file__).parent / "test_css_templates.py"
     
     if test_file.exists():
-        print(f"🧪 TEST-MODUS: Verarbeite {test_file.name}")
+        print(f" TEST-MODUS: Verarbeite {test_file.name}")
         print("=" * 80)
         
         # Dry-Run
-        print("\n📋 DRY-RUN (keine Änderungen):")
+        print("\n DRY-RUN (keine Änderungen):")
         lines_changed, emojis_replaced = process_file(test_file, dry_run=True)
         print(f"\n→ Würde ändern: {lines_changed} Zeilen, {emojis_replaced} Emojis")
         
@@ -214,7 +214,7 @@ def main():
         response = input("\nTest-Datei WIRKLICH ändern? (ja/nein): ").strip().lower()
         
         if response == 'ja':
-            print("\n🔄 SCHREIBE ÄNDERUNGEN...")
+            print("\n SCHREIBE ÄNDERUNGEN...")
             lines_changed, emojis_replaced = process_file(test_file, dry_run=False)
             print(f"\nFERTIG: {lines_changed} Zeilen geändert, {emojis_replaced} Emojis ersetzt")
         else:

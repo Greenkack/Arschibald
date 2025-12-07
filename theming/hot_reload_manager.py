@@ -91,8 +91,8 @@ class ThemeFileHandler(FileSystemEventHandler):
                 if STREAMLIT_AVAILABLE:
                     try:
                         st.toast(
-                            f"✅ Theme '{theme_name}' neu geladen",
-                            icon="🔄"
+                            f" Theme '{theme_name}' neu geladen",
+                            icon=""
                         )
                     except Exception:
                         # Streamlit context nicht verfügbar
@@ -103,7 +103,7 @@ class ThemeFileHandler(FileSystemEventHandler):
                 if STREAMLIT_AVAILABLE:
                     try:
                         st.error(
-                            f"❌ Fehler beim Laden von Theme '{theme_name}'. "
+                            f" Fehler beim Laden von Theme '{theme_name}'. "
                             "Siehe Logs für Details."
                         )
                     except Exception:
@@ -117,7 +117,7 @@ class ThemeFileHandler(FileSystemEventHandler):
             
             if STREAMLIT_AVAILABLE:
                 try:
-                    st.error(f"❌ Fehler beim Laden von '{theme_name}': {e}")
+                    st.error(f" Fehler beim Laden von '{theme_name}': {e}")
                 except Exception:
                     pass
 

@@ -197,7 +197,7 @@ def render_product_price_config_ui(
                     st.success(f"Berechneter Preis: **{calc_result.total_price:,.2f} €**")
                     
                     # Details anzeigen
-                    with st.expander("📋 Berechnungs-Details", expanded=False):
+                    with st.expander(" Berechnungs-Details", expanded=False):
                         col1, col2 = st.columns(2)
                         
                         with col1:
@@ -273,7 +273,7 @@ def render_product_price_config_ui(
     # Speichern-Button (optional)
     if on_save_callback:
         st.markdown("---")
-        if st.button("💾 Konfiguration speichern", type="primary", use_container_width=True):
+        if st.button(" Konfiguration speichern", type="primary", use_container_width=True):
             on_save_callback(result)
             st.success("Konfiguration gespeichert!")
     

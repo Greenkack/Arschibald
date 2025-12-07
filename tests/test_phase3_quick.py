@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 # Test 1: Module Import
-print("🧪 Test 1: Module Import")
+print(" Test 1: Module Import")
 try:
     from core_integration import (
         bootstrap_session,
@@ -34,7 +34,7 @@ except Exception as e:
     sys.exit(1)
 
 # Test 2: Feature Flag
-print("\n🧪 Test 2: Feature Flag")
+print("\n Test 2: Feature Flag")
 session_enabled = is_feature_enabled('session')
 if session_enabled:
     print(f"Session Persistence: ENABLED")
@@ -43,7 +43,7 @@ else:
     print("   Set FEATURE_SESSION_PERSISTENCE=true in .env to enable")
 
 # Test 3: Session Manager
-print("\n🧪 Test 3: Session Manager")
+print("\n Test 3: Session Manager")
 try:
     from core.session_manager import SessionManager
     sm = SessionManager()
@@ -53,7 +53,7 @@ except Exception as e:
     sys.exit(1)
 
 # Test 4: Database
-print("\n🧪 Test 4: Database Connection")
+print("\n Test 4: Database Connection")
 try:
     from core.session_persistence import get_persistence_engine
     engine = get_persistence_engine()
@@ -63,7 +63,7 @@ except Exception as e:
     sys.exit(1)
 
 # Test 5: Session Bootstrap (without Streamlit)
-print("\n🧪 Test 5: Session Bootstrap")
+print("\n Test 5: Session Bootstrap")
 try:
     from core.session import UserSession
     test_session = UserSession(user_id="test_user")
@@ -75,7 +75,7 @@ except Exception as e:
     sys.exit(1)
 
 # Test 6: Form Data Storage
-print("\n🧪 Test 6: Form Data Storage")
+print("\n Test 6: Form Data Storage")
 try:
     test_session.update_form_data("test_form", "test_key", "test_value")
     print("Form data stored")
@@ -85,7 +85,7 @@ except Exception as e:
     sys.exit(1)
 
 # Test 7: Session Persistence
-print("\n🧪 Test 7: Session Persistence")
+print("\n Test 7: Session Persistence")
 try:
     from core.session_persistence import persist_session
     persist_session(test_session, immediate=True)
@@ -95,7 +95,7 @@ except Exception as e:
     sys.exit(1)
 
 # Test 8: Session Recovery
-print("\n🧪 Test 8: Session Recovery")
+print("\n Test 8: Session Recovery")
 try:
     from core.session_persistence import recover_session
     recovered = recover_session(test_session.session_id)
@@ -109,7 +109,7 @@ except Exception as e:
     sys.exit(1)
 
 # Test 9: File Structure
-print("\n🧪 Test 9: File Structure")
+print("\n Test 9: File Structure")
 required_files = [
     "core/session.py",
     "core/session_manager.py",
@@ -128,7 +128,7 @@ for file in required_files:
         print(f"{file} - MISSING")
 
 # Test 10: Environment Variables
-print("\n🧪 Test 10: Environment Variables")
+print("\n Test 10: Environment Variables")
 import os
 env_vars = {
     'FEATURE_SESSION_PERSISTENCE': os.getenv('FEATURE_SESSION_PERSISTENCE', 'not set'),

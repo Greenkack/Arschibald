@@ -43,10 +43,10 @@ def test_super_visible_donuts():
             f"   - Speicher zu Tagesverbrauch: {dynamic_data['storage_consumption_ratio_percent']}%")
         print(
             f"   - Speicher zu PV-Produktion: {dynamic_data['storage_production_ratio_percent']}%")
-        print("📍 Position: MITTE DER SEITE für maximale Sichtbarkeit")
-        print("📏 Größe: SEHR GROß (Radius 50/30)")
+        print(" Position: MITTE DER SEITE für maximale Sichtbarkeit")
+        print(" Größe: SEHR GROß (Radius 50/30)")
         print("Farben: REINES ROT und REINES BLAU")
-        print("🖼️ Extras: Schwarzer Rahmen und Titel")
+        print(" Extras: Schwarzer Rahmen und Titel")
 
         overlay_bytes = generate_overlay(
             coords_dir=coords_dir,
@@ -62,10 +62,10 @@ def test_super_visible_donuts():
             print(
                 f"\nPDF mit SUPER SICHTBAREN Donut-Charts erstellt: {output_file}")
             print(f"Dateigröße: {len(overlay_bytes):,} bytes")
-            print("📋 Die Charts sollten jetzt DEFINITIV sichtbar sein auf Seite 6:")
-            print("   🔴 Linker Chart: Tagesverbrauch (85%) - REINES ROT")
-            print("   🔵 Rechter Chart: PV-Produktion (75%) - REINES BLAU")
-            print("   ⬛ Schwarzer Rahmen um beide Charts")
+            print(" Die Charts sollten jetzt DEFINITIV sichtbar sein auf Seite 6:")
+            print("    Linker Chart: Tagesverbrauch (85%) - REINES ROT")
+            print("    Rechter Chart: PV-Produktion (75%) - REINES BLAU")
+            print("    Schwarzer Rahmen um beide Charts")
             print("   Titel: 'SPEICHER-RELATIONEN'")
 
             return True
@@ -119,7 +119,7 @@ def test_extreme_values():
                 f.write(overlay_bytes)
 
             print(f"Extreme-PDF erstellt: {output_file}")
-            print("📋 Beide Charts sollten komplett gefüllt sein (100%)")
+            print(" Beide Charts sollten komplett gefüllt sein (100%)")
         else:
             print("Extreme-Test fehlgeschlagen")
 
@@ -138,8 +138,8 @@ if __name__ == "__main__":
         # Test 2: Extreme Werte
         test_extreme_values()
 
-        print("\n🎉 Tests abgeschlossen!")
-        print("📋 Falls die Charts IMMER NOCH nicht sichtbar sind:")
+        print("\n Tests abgeschlossen!")
+        print(" Falls die Charts IMMER NOCH nicht sichtbar sind:")
         print("   1. Überprüfen Sie Seite 6 der generierten PDFs")
         print("   2. Die Charts sind jetzt in der MITTE der Seite")
         print("   3. Sie haben einen schwarzen Rahmen und Titel")

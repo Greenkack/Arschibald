@@ -250,7 +250,7 @@ def verify_ui_integration():
             print("render_reminders_widget wird nicht aufgerufen")
             return False
         
-        if '🔔 Erinnerungen' in dashboard_content:
+        if ' Erinnerungen' in dashboard_content:
             print("Erinnerungs-Tab im Dashboard vorhanden")
         else:
             print("Erinnerungs-Tab im Dashboard fehlt")
@@ -330,7 +330,7 @@ def main():
     print("="*60)
     
     if passed == total:
-        print("\n🎉 TASK 7 VOLLSTÄNDIG IMPLEMENTIERT UND VERIFIZIERT! 🎉")
+        print("\n TASK 7 VOLLSTÄNDIG IMPLEMENTIERT UND VERIFIZIERT! ")
         print("\nDas Erinnerungssystem ist:")
         print("  Vollständig implementiert")
         print("  Getestet und funktionsfähig")

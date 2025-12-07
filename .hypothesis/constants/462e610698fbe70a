@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlparse\sql.py
+# hypothesis_version: 6.147.0
+
+['"', "'", '(', ')', ',', '.', '...', '::', 'AS', 'BEGIN', 'CASE', 'DAY', 'ELSE', 'END', 'END IF', 'END LOOP', 'EXCEPT', 'FOR', 'FOREACH', 'GROUP BY', 'HAVING', 'HOUR', 'IF', 'INTO', 'LIMIT', 'MINUTE', 'MONTH', 'ORDER BY', 'OVER', 'RETURNING', 'SECOND', 'THEN', 'TIMESTAMP', 'UNION', 'UNION ALL', 'UNKNOWN', 'WHEN', 'WHERE', 'YEAR', '[', '\\s+', ']', '`- ', 'is_group', 'is_keyword', 'is_newline', 'is_whitespace', 'normalized', 'parent', 'tokens', 'ttype', 'value', '|  ', '|- ']

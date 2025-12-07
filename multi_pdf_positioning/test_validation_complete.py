@@ -432,7 +432,7 @@ class ValidationTestSuite:
             
             if result["warnings"]:
                 self.summary["total_warnings"] += len(result["warnings"])
-                print(f"  ⚠ {len(result['warnings'])} warning(s)")
+                print(f"   {len(result['warnings'])} warning(s)")
         
         return self.generate_report()
     

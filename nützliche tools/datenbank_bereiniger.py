@@ -21,14 +21,14 @@ def clean_database(db_path="solar_app.db"):
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
         tables = cursor.fetchall()
 
-        print(f"🗄️ DATENBANK-BEREINIGUNG für {db_path}")
+        print(f" DATENBANK-BEREINIGUNG für {db_path}")
         print(f"Gefundene Tabellen: {len(tables)}")
 
         for (table_name,) in tables:
             # Zähle Einträge
             cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
             count = cursor.fetchone()[0]
-            print(f"  📋 {table_name}: {count} Einträge")
+            print(f"   {table_name}: {count} Einträge")
 
             # Finde leere/null Einträge
             cursor.execute(
@@ -38,7 +38,7 @@ def clean_database(db_path="solar_app.db"):
                 print(f"    {null_count} NULL-Einträge gefunden")
 
         # VACUUM für Optimierung
-        print("🧹 Führe VACUUM aus...")
+        print(" Führe VACUUM aus...")
         cursor.execute("VACUUM")
 
         # Analysiere für bessere Query-Performance

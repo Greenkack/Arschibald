@@ -152,7 +152,7 @@ class ProgressTracker:
             Progress bar string
         """
         filled = int(width * percentage / 100)
-        bar = "█" * filled + "░" * (width - filled)
+        bar = "" * filled + "" * (width - filled)
         return f"[{bar}]"
     
     def finish(self, message: str = "Complete"):
@@ -607,7 +607,7 @@ class MainWorkflow:
         if summary.successful == summary.total_combinations:
             print("\nAll combinations processed successfully!")
         elif summary.successful > 0:
-            print(f"\n⚠ Partially successful: {summary.successful}/"
+            print(f"\n Partially successful: {summary.successful}/"
                   f"{summary.total_combinations} combinations processed")
         else:
             print("\nWorkflow failed: No combinations processed successfully")

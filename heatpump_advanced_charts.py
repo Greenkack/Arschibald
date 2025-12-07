@@ -397,7 +397,7 @@ def create_kpi_dashboard(
         rating_score += 0.5
     
     rating_stars = min(5, rating_score)
-    rating_text = '⭐' * int(rating_stars) + ('½' if rating_stars % 1 >= 0.5 else '')
+    rating_text = '' * int(rating_stars) + ('½' if rating_stars % 1 >= 0.5 else '')
     
     fig.add_trace(go.Indicator(
         mode="number",

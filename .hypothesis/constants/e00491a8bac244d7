@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_pie.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'automargin', 'customdata', 'customdatasrc', 'direction', 'dlabel', 'domain', 'hole', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hovertemplate', 'hovertemplatesrc', 'hovertext', 'hovertextsrc', 'ids', 'idssrc', 'insidetextfont', 'label0', 'labels', 'labelssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'marker', 'meta', 'metasrc', 'name', 'opacity', 'outsidetextfont', 'pie', 'pull', 'pullsrc', 'rotation', 'scalegroup', 'showlegend', 'skip_invalid', 'sort', 'stream', 'text', 'textfont', 'textinfo', 'textposition', 'textpositionsrc', 'textsrc', 'texttemplate', 'texttemplatesrc', 'title', 'type', 'uid', 'uirevision', 'values', 'valuessrc', 'visible']

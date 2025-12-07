@@ -151,14 +151,14 @@ def render_admin_navigation_with_shadcn(
             management_items.append(MenuItem(
                 key=tab_key,
                 label=ADMIN_TAB_LABELS_DE.get(tab_key, tab_key),
-                icon=ADMIN_TAB_ICONS.get(tab_key, "📋"),
+                icon=ADMIN_TAB_ICONS.get(tab_key, ""),
                 active=tab_key == current_tab,
                 on_click=lambda k=tab_key: on_tab_change(k)
             ))
     
     if management_items:
         menu_groups.append(MenuGroup(
-            title="🏢 Verwaltung",
+            title=" Verwaltung",
             items=management_items
         ))
     
@@ -169,14 +169,14 @@ def render_admin_navigation_with_shadcn(
             database_items.append(MenuItem(
                 key=tab_key,
                 label=ADMIN_TAB_LABELS_DE.get(tab_key, tab_key),
-                icon=ADMIN_TAB_ICONS.get(tab_key, "📋"),
+                icon=ADMIN_TAB_ICONS.get(tab_key, ""),
                 active=tab_key == current_tab,
                 on_click=lambda k=tab_key: on_tab_change(k)
             ))
     
     if database_items:
         menu_groups.append(MenuGroup(
-            title="💾 Datenbank",
+            title=" Datenbank",
             items=database_items
         ))
     
@@ -187,14 +187,14 @@ def render_admin_navigation_with_shadcn(
             crm_items.append(MenuItem(
                 key=tab_key,
                 label=ADMIN_TAB_LABELS_DE.get(tab_key, tab_key),
-                icon=ADMIN_TAB_ICONS.get(tab_key, "📋"),
+                icon=ADMIN_TAB_ICONS.get(tab_key, ""),
                 active=tab_key == current_tab,
                 on_click=lambda k=tab_key: on_tab_change(k)
             ))
     
     if crm_items:
         menu_groups.append(MenuGroup(
-            title="👥 CRM",
+            title=" CRM",
             items=crm_items
         ))
     
@@ -205,14 +205,14 @@ def render_admin_navigation_with_shadcn(
             settings_items.append(MenuItem(
                 key=tab_key,
                 label=ADMIN_TAB_LABELS_DE.get(tab_key, tab_key),
-                icon=ADMIN_TAB_ICONS.get(tab_key, "📋"),
+                icon=ADMIN_TAB_ICONS.get(tab_key, ""),
                 active=tab_key == current_tab,
                 on_click=lambda k=tab_key: on_tab_change(k)
             ))
     
     if settings_items:
         menu_groups.append(MenuGroup(
-            title="⚙️ Einstellungen",
+            title=" Einstellungen",
             items=settings_items
         ))
     
@@ -223,14 +223,14 @@ def render_admin_navigation_with_shadcn(
             system_items.append(MenuItem(
                 key=tab_key,
                 label=ADMIN_TAB_LABELS_DE.get(tab_key, tab_key),
-                icon=ADMIN_TAB_ICONS.get(tab_key, "📋"),
+                icon=ADMIN_TAB_ICONS.get(tab_key, ""),
                 active=tab_key == current_tab,
                 on_click=lambda k=tab_key: on_tab_change(k)
             ))
     
     if system_items:
         menu_groups.append(MenuGroup(
-            title="🔧 System",
+            title=" System",
             items=system_items
         ))
     
@@ -289,7 +289,7 @@ def render_admin_settings_form_with_shadcn(
     settings: Dict[str, Any],
     on_save: Callable[[Dict[str, Any]], bool],
     form_title: str = "Einstellungen",
-    form_icon: str = "⚙️"
+    form_icon: str = ""
 ):
     """
     Render admin settings form using shadcn/ui components.
@@ -337,7 +337,7 @@ def render_admin_settings_form_with_shadcn(
             
             # Submit button
             submitted = st.form_submit_button(
-                "💾 Einstellungen speichern",
+                " Einstellungen speichern",
                 use_container_width=True,
                 type="primary"
             )
@@ -377,10 +377,10 @@ def render_admin_dashboard_with_metrics(
     cols = st.columns(4)
     
     metric_configs = [
-        ("total_products", "Produkte", "📦"),
-        ("total_customers", "Kunden", "👥"),
-        ("total_companies", "Firmen", "🏢"),
-        ("total_users", "Benutzer", "👤"),
+        ("total_products", "Produkte", ""),
+        ("total_customers", "Kunden", ""),
+        ("total_companies", "Firmen", ""),
+        ("total_users", "Benutzer", ""),
     ]
     
     for i, (key, label, icon) in enumerate(metric_configs):

@@ -190,47 +190,47 @@ class CallTranscript:
             duration = f"{delta.total_seconds():.0f} seconds"
 
         summary = f"""
-╔══════════════════════════════════════════════════════════════╗
-║                    CALL TRANSCRIPT SUMMARY                    ║
-╚══════════════════════════════════════════════════════════════╝
 
-📞 Call ID: {self.call_id}
-📱 Phone: {self.phone_number}
+                    CALL TRANSCRIPT SUMMARY                    
+
+
+ Call ID: {self.call_id}
+ Phone: {self.phone_number}
 Goal: {self.goal}
-⏱️  Duration: {duration}
+⏱  Duration: {duration}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💬 CONVERSATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ CONVERSATION
+
 """
         for msg in self.messages:
-            speaker_icon = "🤖" if msg['speaker'] == "KAI" else "👤"
+            speaker_icon = "" if msg['speaker'] == "KAI" else ""
             summary += (
                 f"\n{speaker_icon} {msg['speaker']}: {msg['text']}\n"
             )
 
         if self.notes:
             summary += """
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 AGENT NOTES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 """
             for note in self.notes:
                 summary += f"\n• {note['note']}\n"
 
         if self.outcome or self.next_steps:
             summary += """
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 OUTCOME & NEXT STEPS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 """
             if self.outcome:
                 summary += f"\nOutcome: {self.outcome}\n"
             if self.next_steps:
-                summary += f"\n📋 Next Steps: {self.next_steps}\n"
+                summary += f"\n Next Steps: {self.next_steps}\n"
 
         summary += (
-            "\n╚══════════════════════════════════════════════════════════════╝"
+            "\n"
         )
         return summary
 
@@ -1374,13 +1374,13 @@ def analyze_call_sentiment(call_id: str) -> str:
     # Determine sentiment category
     if sentiment_score > 0.1:
         sentiment = "Positiv"
-        emoji = "😊"
+        emoji = ""
     elif sentiment_score < -0.1:
         sentiment = "Negativ"
-        emoji = "😟"
+        emoji = ""
     else:
         sentiment = "Neutral"
-        emoji = "😐"
+        emoji = ""
     
     result = f"Sentiment-Analyse fur Call {call_id}\n"
     result += "=" * 50 + "\n\n"
@@ -1865,7 +1865,7 @@ def start_interactive_call(
     call.add_message("KAI", opening_statement)
 
     print("\n" + "=" * 60)
-    print("📞 STARTING EXPERT CALL SIMULATION")
+    print(" STARTING EXPERT CALL SIMULATION")
     print("=" * 60)
     print(f"Call ID: {call_id}")
     print(f"Dialing: {phone_number}")
@@ -1879,7 +1879,7 @@ def start_interactive_call(
             try:
                 logger.info("Initializing ElevenLabs voice synthesis")
                 client = ElevenLabs(api_key=api_key)
-                print(f"🤖 KAI: {opening_statement}\n")
+                print(f" KAI: {opening_statement}\n")
 
                 # Generate and stream audio
                 logger.debug("Generating audio stream")
@@ -1936,7 +1936,7 @@ TIP: Use 'get_call_protocol_guide' for guidance on call phases!
         print("Continuing with text-only simulation...\n")
 
     # Text-only fallback
-    print(f"🤖 KAI: {opening_statement}\n")
+    print(f" KAI: {opening_statement}\n")
 
     return f"""
 Call started successfully!
@@ -1992,8 +1992,8 @@ Please start a call first using 'start_interactive_call'.
     call.add_message("CUSTOMER", customer_response)
     call.add_message("KAI", kai_response)
 
-    print(f"👤 CUSTOMER: {customer_response}\n")
-    print(f"🤖 KAI: {kai_response}\n")
+    print(f" CUSTOMER: {customer_response}\n")
+    print(f" KAI: {kai_response}\n")
 
     # Try voice synthesis for KAI's response
     if ELEVENLABS_AVAILABLE:
@@ -2095,7 +2095,7 @@ Please start a call first using 'start_interactive_call'.
     call.ended_at = datetime.now()
 
     print("\n" + "=" * 60)
-    print("📞 ENDING CALL")
+    print(" ENDING CALL")
     print("=" * 60 + "\n")
 
     # Generate and display summary

@@ -23,7 +23,7 @@ def print_header(title):
 
 def print_result(test_name, passed, details=""):
     """Druckt Test-Ergebnis"""
-    status = "✅ PASS" if passed else "❌ FAIL"
+    status = " PASS" if passed else " FAIL"
     print(f"{status} - {test_name}")
     if details:
         print(f"       {details}")
@@ -270,15 +270,15 @@ def main():
         print_header("ZUSAMMENFASSUNG")
         
         if all_passed:
-            print("\n✅ ALLE TESTS BESTANDEN!")
+            print("\n ALLE TESTS BESTANDEN!")
             print("\nPerformance-Ziele:")
-            print("  ✅ CSS-Generierung < 100ms")
-            print("  ✅ Component-Rendering < 50ms")
-            print("  ✅ CSS-Größe < 50KB")
-            print("  ✅ Cache-Hit-Rate > 80%")
-            print("\nStatus: Produktionsbereit! 🎉")
+            print("   CSS-Generierung < 100ms")
+            print("   Component-Rendering < 50ms")
+            print("   CSS-Größe < 50KB")
+            print("   Cache-Hit-Rate > 80%")
+            print("\nStatus: Produktionsbereit! ")
         else:
-            print("\n❌ EINIGE TESTS FEHLGESCHLAGEN")
+            print("\n EINIGE TESTS FEHLGESCHLAGEN")
             print("\nBitte prüfe die Fehler oben.")
         
         print("\n" + "=" * 70 + "\n")
@@ -286,7 +286,7 @@ def main():
         return 0 if all_passed else 1
         
     except Exception as e:
-        print(f"\n❌ FEHLER: {e}")
+        print(f"\n FEHLER: {e}")
         import traceback
         traceback.print_exc()
         return 1

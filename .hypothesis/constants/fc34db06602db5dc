@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\db\models\__init__.py
+# hypothesis_version: 6.147.0
+
+['CASCADE', 'Case', 'CompositePrimaryKey', 'DEFERRED', 'DO_NOTHING', 'Exists', 'Expression', 'ExpressionList', 'ExpressionWrapper', 'F', 'FileField', 'FilteredRelation', 'ForeignKey', 'ForeignObject', 'ForeignObjectRel', 'Func', 'GeneratedField', 'ImageField', 'JSONField', 'Lookup', 'Manager', 'ManyToManyField', 'ManyToManyRel', 'ManyToOneRel', 'Model', 'ObjectDoesNotExist', 'OneToOneField', 'OneToOneRel', 'OrderBy', 'OrderWrt', 'OuterRef', 'PROTECT', 'Prefetch', 'ProtectedError', 'Q', 'QuerySet', 'RESTRICT', 'RestrictedError', 'RowRange', 'SET', 'SET_DEFAULT', 'SET_NULL', 'Subquery', 'Transform', 'Value', 'ValueRange', 'When', 'Window', 'WindowFrame', 'WindowFrameExclusion', 'signals']

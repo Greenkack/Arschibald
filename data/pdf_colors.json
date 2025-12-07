@@ -1,0 +1,16 @@
+{
+  "primary_color": "#127d1c",
+  "secondary_color": "#000000",
+  "title_color": "#127d1c",
+  "text_color": "#000000",
+  "header_text_color": "#FFFFFF",
+  "table_header_bg": "#94b4ec",
+  "table_row_bg": "#cbcbcb",
+  "table_alt_row_bg": "#FFFFFF",
+  "success_color": "#2E7D32",
+  "warning_color": "#F57C00",
+  "error_color": "#B71C1C",
+  "info_color": "#0277BD",
+  "border_color": "#000000",
+  "grid_color": "#CCCCCC"
+}

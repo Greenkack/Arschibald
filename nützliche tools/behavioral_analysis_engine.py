@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🧐 BEHAVIORAL ANALYSIS ENGINE
+ BEHAVIORAL ANALYSIS ENGINE
 =============================
 Analysiert Benutzerverhalten und erkennt Anomalien
 """
@@ -339,7 +339,7 @@ class BehavioralAnalysisEngine:
         conn.commit()
         conn.close()
 
-        print(f"🚨 ANOMALIE ERKANNT: {description}")
+        print(f" ANOMALIE ERKANNT: {description}")
 
         # Aktualisiere Benutzer-Trust-Score
         self.update_trust_score(user_id, risk_score)
@@ -441,7 +441,7 @@ if __name__ == "__main__":
     test_users = ['admin_user', 'normal_user', 'suspicious_user']
 
     for user in test_users:
-        print(f"\n🧐 Simuliere Aktivitäten für {user}")
+        print(f"\n Simuliere Aktivitäten für {user}")
 
         if user == 'suspicious_user':
             # Verdächtige Aktivitäten
@@ -462,10 +462,10 @@ if __name__ == "__main__":
     print("\nBENUTZER-RISIKOPROFILE:")
     for user in test_users:
         profile = engine.get_user_risk_profile(user)
-        print(f"\n👤 {user}:")
+        print(f"\n {user}:")
         print(f"  Trust Score: {profile['trust_score']:.2f}")
         print(f"  Anomalien: {profile['anomaly_count']}")
         print(f"  Aktive Alerts: {len(profile['active_anomalies'])}")
 
         for anomaly in profile['active_anomalies']:
-            print(f"    🚨 {anomaly['severity']}: {anomaly['description']}")
+            print(f"     {anomaly['severity']}: {anomaly['description']}")

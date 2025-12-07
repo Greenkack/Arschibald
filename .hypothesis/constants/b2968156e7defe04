@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\controlling\notifications.py
+# hypothesis_version: 6.147.0
+
+[10.0, 15.0, 20.0, 25.0, 30.0, 70.0, 90.0, 'Abschlussquote', 'Benachrichtigung', 'Hinweis', 'QC bestanden Quote', 'Termine-Anfahrquote', 'Warnung', 'Ziel erreicht!', 'Zu teuer Quote', 'above', 'below', 'error', 'info', 'success', 'warning']

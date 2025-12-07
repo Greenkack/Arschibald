@@ -209,9 +209,9 @@ class ValidationError:
     
     def __str__(self) -> str:
         severity_emoji = {
-            'error': '❌',
-            'warning': '⚠️',
-            'info': 'ℹ️'
+            'error': '',
+            'warning': '',
+            'info': 'ℹ'
         }
         emoji = severity_emoji.get(self.severity, '•')
         
@@ -242,9 +242,9 @@ class ValidationResult:
         lines = []
         
         if self.is_valid:
-            lines.append("✅ Theme ist gültig!")
+            lines.append(" Theme ist gültig!")
         else:
-            lines.append("❌ Theme ist ungültig!")
+            lines.append(" Theme ist ungültig!")
         
         lines.append(f"\nFehler: {len(self.errors)}")
         lines.append(f"Warnungen: {len(self.warnings)}")

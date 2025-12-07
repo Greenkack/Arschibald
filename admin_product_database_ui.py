@@ -252,13 +252,13 @@ class ProductDatabaseAdmin:
 
 def render_product_admin_ui():
     """Streamlit UI für Produktdatenbank Administration"""
-    st.title("🗄️ Produktdatenbank Administration")
+    st.title(" Produktdatenbank Administration")
 
     admin = ProductDatabaseAdmin()
 
     # Tabs für verschiedene Aktionen
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📋 Übersicht", "➕ Hinzufügen", "📤 Import/Export", "Tools"])
+        [" Übersicht", " Hinzufügen", " Import/Export", "Tools"])
 
     with tab1:
         st.subheader("Produktübersicht")

@@ -128,18 +128,18 @@ class ContrastChecker:
         # Generate recommendation
         if is_large_text:
             if passes_aaa_large:
-                recommendation = "✅ Excellent contrast (WCAG AAA)"
+                recommendation = " Excellent contrast (WCAG AAA)"
             elif passes_aa_large:
-                recommendation = "✅ Good contrast (WCAG AA)"
+                recommendation = " Good contrast (WCAG AA)"
             else:
-                recommendation = f"❌ Insufficient contrast ({ratio:.2f}:1). Need at least 3:1 for large text."
+                recommendation = f" Insufficient contrast ({ratio:.2f}:1). Need at least 3:1 for large text."
         else:
             if passes_aaa_normal:
-                recommendation = "✅ Excellent contrast (WCAG AAA)"
+                recommendation = " Excellent contrast (WCAG AAA)"
             elif passes_aa_normal:
-                recommendation = "✅ Good contrast (WCAG AA)"
+                recommendation = " Good contrast (WCAG AA)"
             else:
-                recommendation = f"❌ Insufficient contrast ({ratio:.2f}:1). Need at least 4.5:1 for normal text."
+                recommendation = f" Insufficient contrast ({ratio:.2f}:1). Need at least 4.5:1 for normal text."
         
         return ContrastResult(
             ratio=ratio,
@@ -628,7 +628,7 @@ class AccessibilityAuditor:
             """
         
         if not issues_html:
-            issues_html = '<p style="color: #22c55e;">✅ No contrast issues found!</p>'
+            issues_html = '<p style="color: #22c55e;"> No contrast issues found!</p>'
         
         recommendations_html = ""
         for rec in report.recommendations:

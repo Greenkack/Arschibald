@@ -36,7 +36,7 @@ def st_capture(output_func):
 
 # --- Streamlit UI Konfiguration ---
 st.set_page_config(page_title="KAI Agent", layout="wide")
-st.title("🤖 KAI - Autonomer KI-Branchenexperte")
+st.title(" KAI - Autonomer KI-Branchenexperte")
 st.subheader("Experte für Erneuerbare Energien & Software-Architektur")
 
 # --- Initialisierung & API-Schlüssel-Prüfung ---
@@ -79,7 +79,7 @@ output_placeholder = st.empty()
 
 # --- Agenten-Logik ---
 if start_button and user_task:
-    output_placeholder.markdown("### 🧠 Denkprozess des Agenten...")
+    output_placeholder.markdown("###  Denkprozess des Agenten...")
     log_container = st.container()
 
     with st_capture(log_container.code):

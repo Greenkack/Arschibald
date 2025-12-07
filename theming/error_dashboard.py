@@ -32,7 +32,7 @@ def render_error_dashboard(error_handler: Optional[ErrorHandler] = None):
     
     handler = error_handler or get_error_handler()
     
-    st.title("🔍 Theme System Error Dashboard")
+    st.title(" Theme System Error Dashboard")
     st.markdown("---")
     
     # Get error report
@@ -75,7 +75,7 @@ def render_error_dashboard(error_handler: Optional[ErrorHandler] = None):
     
     # Error types breakdown
     if report['error_types']:
-        st.subheader("📊 Error Types Breakdown")
+        st.subheader(" Error Types Breakdown")
         
         col1, col2 = st.columns([2, 1])
         
@@ -106,7 +106,7 @@ def render_error_dashboard(error_handler: Optional[ErrorHandler] = None):
     
     # Recent errors
     if report['recent_errors']:
-        st.subheader("🕐 Recent Errors")
+        st.subheader(" Recent Errors")
         
         # Filter options
         col1, col2 = st.columns([3, 1])
@@ -126,7 +126,7 @@ def render_error_dashboard(error_handler: Optional[ErrorHandler] = None):
                 continue
             
             with st.expander(
-                f"❌ {error['error_type']}: {error['error_message'][:80]}...",
+                f" {error['error_type']}: {error['error_message'][:80]}...",
                 expanded=False
             ):
                 col1, col2 = st.columns(2)
@@ -150,13 +150,13 @@ def render_error_dashboard(error_handler: Optional[ErrorHandler] = None):
                     st.markdown("**Stack Trace:**")
                     st.code(error['stack_trace'], language='python')
     else:
-        st.info("✅ No errors recorded yet!")
+        st.info(" No errors recorded yet!")
     
     st.markdown("---")
     
     # Recovery attempts
     if report['recovery_attempts']:
-        st.subheader("🔄 Recovery Attempts")
+        st.subheader(" Recovery Attempts")
         
         recovery_data = [
             {'Operation': op, 'Attempts': count}
@@ -172,25 +172,25 @@ def render_error_dashboard(error_handler: Optional[ErrorHandler] = None):
     st.markdown("---")
     
     # Actions
-    st.subheader("⚙️ Actions")
+    st.subheader(" Actions")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("🗑️ Clear Error History", type="secondary"):
+        if st.button(" Clear Error History", type="secondary"):
             handler.clear_history()
             st.success("Error history cleared!")
             st.rerun()
     
     with col2:
-        if st.button("💾 Export Report", type="secondary"):
+        if st.button(" Export Report", type="secondary"):
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filepath = f"logs/error_report_{timestamp}.json"
             handler.export_error_report(filepath)
             st.success(f"Report exported to {filepath}")
     
     with col3:
-        if st.button("🔄 Refresh", type="primary"):
+        if st.button(" Refresh", type="primary"):
             st.rerun()
     
     # Report metadata
@@ -212,7 +212,7 @@ def render_error_summary_widget(error_handler: Optional[ErrorHandler] = None):
     report = handler.get_error_report()
     
     if report['total_errors'] == 0:
-        st.success("✅ No errors")
+        st.success(" No errors")
         return
     
     # Show warning if there are errors
@@ -220,13 +220,13 @@ def render_error_summary_widget(error_handler: Optional[ErrorHandler] = None):
     
     if severity_counts['critical'] > 0:
         st.error(
-            f"❌ {severity_counts['critical']} critical error(s) | "
-            f"⚠️ {severity_counts['warning']} warning(s)"
+            f" {severity_counts['critical']} critical error(s) | "
+            f" {severity_counts['warning']} warning(s)"
         )
     elif severity_counts['warning'] > 0:
-        st.warning(f"⚠️ {severity_counts['warning']} warning(s)")
+        st.warning(f" {severity_counts['warning']} warning(s)")
     else:
-        st.info(f"ℹ️ {report['total_errors']} info message(s)")
+        st.info(f"ℹ {report['total_errors']} info message(s)")
     
     # Show link to full dashboard
     if st.button("View Error Dashboard", key="view_error_dashboard"):
@@ -253,13 +253,13 @@ def render_inline_error_notification(
     
     # Choose icon and color based on severity
     if severity == "error":
-        icon = "❌"
+        icon = ""
         st.error(f"{icon} **{error_type}**: {message}")
     elif severity == "warning":
-        icon = "⚠️"
+        icon = ""
         st.warning(f"{icon} **{error_type}**: {message}")
     else:
-        icon = "ℹ️"
+        icon = "ℹ"
         st.info(f"{icon} **{error_type}**: {message}")
     
     # Show details in expander if provided
@@ -286,13 +286,13 @@ def render_error_toast(
     
     # Map severity to icon
     icons = {
-        'error': '❌',
-        'warning': '⚠️',
-        'info': 'ℹ️',
-        'success': '✅'
+        'error': '',
+        'warning': '',
+        'info': 'ℹ',
+        'success': ''
     }
     
-    icon = icons.get(severity, 'ℹ️')
+    icon = icons.get(severity, 'ℹ')
     
     st.toast(f"{icon} {message}", icon=icon)
 

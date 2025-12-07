@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\core\mail\__init__.py
+# hypothesis_version: 6.147.0
+
+['%s%s', 'BadHeaderError', 'CachedDnsName', 'DNS_NAME', 'EmailAlternative', 'EmailAttachment', 'EmailMessage', 'SafeMIMEMultipart', 'SafeMIMEText', 'get_connection', 'mail_admins', 'mail_managers', 'make_msgid', 'send_mail', 'send_mass_mail', 'text/html']

@@ -145,7 +145,7 @@ def demonstrate_visual_comparison():
     print("       /‾‾‾‾‾‾‾\\  ← Module (30° tilted)")
     print("      /         \\")
     print("     /__________\\  ← Mounting frame (0.3m high)")
-    print("    ═════════════  ← Roof surface")
+    print("      ← Roof surface")
     
     print("\n  Satteldach (Gable Roof):")
     print("        /‾‾‾‾‾‾‾\\  ← Module (parallel to roof)")

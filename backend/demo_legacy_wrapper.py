@@ -345,7 +345,7 @@ def demo_basic_usage():
     calc_service = CalculatorService()
     calc_service.initialize()
     
-    print(f"\n✓ Service initialized: {calc_service.service_name}")
+    print(f"\n Service initialized: {calc_service.service_name}")
     print(f"  Status: {'Initialized' if calc_service.is_initialized else 'Not initialized'}")
     
     # Use service
@@ -376,13 +376,13 @@ def demo_dependency_injection():
     db_service.initialize()
     container.register_singleton("database", db_service)
     
-    print("\n✓ Registered database service in container")
+    print("\n Registered database service in container")
     
     # Create calculator service with dependency
     calc_service = CalculatorService()
     calc_service.initialize()
     
-    print(f"✓ Calculator service has database dependency: {calc_service.has_dependency('database')}")
+    print(f" Calculator service has database dependency: {calc_service.has_dependency('database')}")
     
     # Use services together
     system_size = calc_service.calculate_system_size(50.0, 0.2)
@@ -416,7 +416,7 @@ def demo_health_monitoring():
     monitor.register_service("calculator", calc_service)
     monitor.register_service("database", db_service)
     
-    print("\n✓ Registered services with health monitor")
+    print("\n Registered services with health monitor")
     
     # Check individual service
     print("\n→ Checking calculator service health...")
@@ -454,33 +454,33 @@ def demo_error_handling():
     print("\n→ Testing with valid input...")
     try:
         result = calc_service.calculate_system_size(50.0, 0.2)
-        print(f"  ✓ Success: {result:.2f} kWp")
+        print(f"   Success: {result:.2f} kWp")
     except Exception as e:
-        print(f"  ✗ Error: {e}")
+        print(f"   Error: {e}")
     
     # Invalid input (negative roof area)
     print("\n→ Testing with invalid input (negative roof area)...")
     try:
         result = calc_service.calculate_system_size(-50.0, 0.2)
-        print(f"  ✓ Success: {result:.2f} kWp")
+        print(f"   Success: {result:.2f} kWp")
     except Exception as e:
-        print(f"  ✗ Error caught: {type(e).__name__}: {e}")
+        print(f"   Error caught: {type(e).__name__}: {e}")
     
     # Invalid input (efficiency out of range)
     print("\n→ Testing with invalid input (efficiency > 1)...")
     try:
         result = calc_service.calculate_system_size(50.0, 1.5)
-        print(f"  ✓ Success: {result:.2f} kWp")
+        print(f"   Success: {result:.2f} kWp")
     except Exception as e:
-        print(f"  ✗ Error caught: {type(e).__name__}: {e}")
+        print(f"   Error caught: {type(e).__name__}: {e}")
     
     # Invalid calculation (zero savings)
     print("\n→ Testing with invalid calculation (zero savings)...")
     try:
         result = calc_service.calculate_payback(15000, 0)
-        print(f"  ✓ Success: {result:.1f} years")
+        print(f"   Success: {result:.1f} years")
     except Exception as e:
-        print(f"  ✗ Error caught: {type(e).__name__}: {e}")
+        print(f"   Error caught: {type(e).__name__}: {e}")
 
 
 def demo_complete_workflow():
@@ -506,7 +506,7 @@ def demo_complete_workflow():
     monitor.register_service("calculator", calc_service)
     monitor.register_service("database", db_service)
     
-    print("  ✓ Services initialized and registered")
+    print("   Services initialized and registered")
     
     # Perform calculations
     print("\n→ Performing solar calculations...")
@@ -526,7 +526,7 @@ def demo_complete_workflow():
         "payback": payback
     }
     db_service.save("calc_final", calculation_data)
-    print("  ✓ Results saved")
+    print("   Results saved")
     
     # Check health
     print("\n→ Final health check...")
@@ -552,7 +552,7 @@ def main():
         demo_complete_workflow()
         
         print("\n" + "="*70)
-        print("✓ ALL DEMOS COMPLETED SUCCESSFULLY")
+        print(" ALL DEMOS COMPLETED SUCCESSFULLY")
         print("="*70)
         print("\nNext steps:")
         print("  1. Review backend/docs/LEGACY_WRAPPER_GUIDE.md")
@@ -561,7 +561,7 @@ def main():
         print("  4. Start wrapping your legacy modules!")
         
     except Exception as e:
-        print(f"\n✗ Demo failed: {e}")
+        print(f"\n Demo failed: {e}")
         import traceback
         traceback.print_exc()
 

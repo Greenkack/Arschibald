@@ -151,7 +151,7 @@ if __name__ == "__main__":
     test_shadcn_implementation()
     check_apply_chart_theme_calls()
     
-    print("\n✨ SHADCN UI FEATURES:")
+    print("\n SHADCN UI FEATURES:")
     print("-" * 80)
     print("Moderne Farbpalette (Shadcn UI Farben)")
     print("Gradient-Fills für Scatter/Area Charts")

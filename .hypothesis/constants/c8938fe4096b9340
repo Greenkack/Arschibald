@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\chart\line_chart.py
+# hypothesis_version: 6.147.0
+
+['axId', 'dLbls', 'dropLines', 'gapDepth', 'grouping', 'hiLowLines', 'line', 'line3DChart', 'lineChart', 'marker', 'percentStacked', 'ser', 'smooth', 'stacked', 'standard', 'upDownBars', 'varyColors']

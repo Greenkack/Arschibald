@@ -12,7 +12,7 @@ def create_super_admin_account():
     # Prüfe ob bereits ein Super-Admin existiert
     existing_super = um.get_super_admin()
     if existing_super:
-        print(f"⚠ Super-Admin existiert bereits: {existing_super['username']}")
+        print(f" Super-Admin existiert bereits: {existing_super['username']}")
         return False
 
     # Erstelle Super-Admin
@@ -30,7 +30,7 @@ def create_super_admin_account():
         print("   Rang: Geschäftsführer")
         print("   Rolle: admin")
         print("   Super-Admin: JA")
-        print("\n🔐 Rechte:")
+        print("\n Rechte:")
         print("   - Volle Kontrolle über alle Funktionen")
         print("   - Kann alle Benutzer verwalten")
         print("   - Kann Super-Admin-Rechte übertragen")

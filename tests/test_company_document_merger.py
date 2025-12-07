@@ -47,7 +47,7 @@ def test_company_document_merger_with_real_documents():
 
         conn = get_db_connection()
         if not conn:
-            print("⚠ Could not connect to database, skipping real document test")
+            print(" Could not connect to database, skipping real document test")
             return
 
         cursor = conn.cursor()
@@ -56,7 +56,7 @@ def test_company_document_merger_with_real_documents():
         conn.close()
 
         if not rows:
-            print("⚠ No company documents found in database, skipping real document test")
+            print(" No company documents found in database, skipping real document test")
             return
 
         document_ids = [row[0] for row in rows]
@@ -74,10 +74,10 @@ def test_company_document_merger_with_real_documents():
                 f"Successfully merged {
                     len(document_ids)} documents into {num_pages} pages")
         else:
-            print("⚠ No documents could be merged (files may not exist on disk)")
+            print(" No documents could be merged (files may not exist on disk)")
 
     except Exception as e:
-        print(f"⚠ Error testing real documents: {e}")
+        print(f" Error testing real documents: {e}")
 
 
 def test_company_document_merger_mixed_valid_invalid():
@@ -89,7 +89,7 @@ def test_company_document_merger_mixed_valid_invalid():
 
         conn = get_db_connection()
         if not conn:
-            print("⚠ Could not connect to database, skipping mixed ID test")
+            print(" Could not connect to database, skipping mixed ID test")
             return
 
         cursor = conn.cursor()
@@ -98,7 +98,7 @@ def test_company_document_merger_mixed_valid_invalid():
         conn.close()
 
         if not row:
-            print("⚠ No company documents found in database, skipping mixed ID test")
+            print(" No company documents found in database, skipping mixed ID test")
             return
 
         valid_id = row[0]
@@ -116,10 +116,10 @@ def test_company_document_merger_mixed_valid_invalid():
             print(
                 f"Successfully merged valid documents, skipped invalid ones ({num_pages} pages)")
         else:
-            print("⚠ No documents could be merged (file may not exist on disk)")
+            print(" No documents could be merged (file may not exist on disk)")
 
     except Exception as e:
-        print(f"⚠ Error testing mixed IDs: {e}")
+        print(f" Error testing mixed IDs: {e}")
 
 
 def test_company_document_merger_load_document_method():
@@ -153,9 +153,9 @@ def test_company_document_merger_load_document_method():
                         f"_load_document successfully loaded document {valid_id}")
                 else:
                     print(
-                        f"⚠ _load_document returned None for valid ID {valid_id} (file may not exist)")
+                        f" _load_document returned None for valid ID {valid_id} (file may not exist)")
     except Exception as e:
-        print(f"⚠ Error testing _load_document with valid ID: {e}")
+        print(f" Error testing _load_document with valid ID: {e}")
 
 
 def main():

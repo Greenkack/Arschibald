@@ -11,7 +11,7 @@ from theming import ThemeManager
 # Seiten-Konfiguration
 st.set_page_config(
     page_title="MetricCard Demo",
-    page_icon="📊",
+    page_icon="",
     layout="wide"
 )
 
@@ -27,7 +27,7 @@ css = theme_manager.generate_css()
 st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 # Titel
-st.title("📊 MetricCard Komponente Demo")
+st.title(" MetricCard Komponente Demo")
 st.markdown("---")
 
 # Basis-Beispiele
@@ -40,7 +40,7 @@ with col1:
     metric_card(
         label="Umsatz",
         value="€45,231",
-        icon="💰",
+        icon="",
         theme_manager=theme_manager
     )
 
@@ -51,7 +51,7 @@ with col2:
         value="1,234",
         trend=12.5,
         trend_label="+12.5% vs. letzter Monat",
-        icon="👥",
+        icon="",
         theme_manager=theme_manager
     )
 
@@ -62,7 +62,7 @@ with col3:
         value="23.4%",
         trend=-5.2,
         trend_label="-5.2% vs. letzter Monat",
-        icon="📉",
+        icon="",
         theme_manager=theme_manager
     )
 
@@ -79,7 +79,7 @@ with col1:
         label="Besucher",
         value="12,345",
         trend=8.2,
-        icon="👁️",
+        icon="",
         size="small",
         theme_manager=theme_manager
     )
@@ -90,7 +90,7 @@ with col2:
         label="Besucher",
         value="12,345",
         trend=8.2,
-        icon="👁️",
+        icon="",
         size="medium",
         theme_manager=theme_manager
     )
@@ -101,7 +101,7 @@ with col3:
         label="Besucher",
         value="12,345",
         trend=8.2,
-        icon="👁️",
+        icon="",
         size="large",
         theme_manager=theme_manager
     )
@@ -119,7 +119,7 @@ with col1:
         label="Conversion Rate",
         value="3.24%",
         trend=1.2,
-        icon="🎯",
+        icon="",
         variant="default",
         theme_manager=theme_manager
     )
@@ -130,7 +130,7 @@ with col2:
         label="Conversion Rate",
         value="3.24%",
         trend=1.2,
-        icon="🎯",
+        icon="",
         variant="outlined",
         theme_manager=theme_manager
     )
@@ -141,7 +141,7 @@ with col3:
         label="Conversion Rate",
         value="3.24%",
         trend=1.2,
-        icon="🎯",
+        icon="",
         variant="elevated",
         theme_manager=theme_manager
     )
@@ -159,7 +159,7 @@ with col1:
         value="€127.50",
         description="Basierend auf 1,234 Bestellungen in diesem Monat",
         trend=5.3,
-        icon="🛒",
+        icon="",
         size="large",
         theme_manager=theme_manager
     )
@@ -171,7 +171,7 @@ with col2:
         description="Durchschnittliche Bewertung aus 567 Umfragen",
         trend=0.3,
         trend_label="+0.3 Punkte",
-        icon="⭐",
+        icon="",
         size="large",
         theme_manager=theme_manager
     )
@@ -190,7 +190,7 @@ with col1:
         value="+15.2%",
         trend=15.2,
         show_trend_arrow=True,
-        icon="📈",
+        icon="",
         theme_manager=theme_manager
     )
 
@@ -201,7 +201,7 @@ with col2:
         value="+15.2%",
         trend=15.2,
         show_trend_arrow=False,
-        icon="📈",
+        icon="",
         theme_manager=theme_manager
     )
 
@@ -219,28 +219,28 @@ metric_card_group(
             "value": "€245,231",
             "trend": 12.5,
             "trend_label": "+12.5% vs. letzter Monat",
-            "icon": "💰"
+            "icon": ""
         },
         {
             "label": "Neue Kunden",
             "value": "1,234",
             "trend": 8.2,
             "trend_label": "+8.2% vs. letzter Monat",
-            "icon": "👥"
+            "icon": ""
         },
         {
             "label": "Bestellungen",
             "value": "3,456",
             "trend": -3.1,
             "trend_label": "-3.1% vs. letzter Monat",
-            "icon": "📦"
+            "icon": ""
         },
         {
             "label": "Conversion Rate",
             "value": "3.24%",
             "trend": 1.2,
             "trend_label": "+1.2% vs. letzter Monat",
-            "icon": "🎯"
+            "icon": ""
         }
     ],
     columns=4,
@@ -261,14 +261,14 @@ metric_card_group(
             "label": "Umsatz",
             "value": "€45,231",
             "trend": 12.5,
-            "icon": "💰",
+            "icon": "",
             "size": "large"
         },
         {
             "label": "Kunden",
             "value": "1,234",
             "trend": -3.2,
-            "icon": "👥",
+            "icon": "",
             "size": "large"
         }
     ],
@@ -286,19 +286,19 @@ metric_card_group(
             "label": "Umsatz",
             "value": "€45,231",
             "trend": 12.5,
-            "icon": "💰"
+            "icon": ""
         },
         {
             "label": "Kunden",
             "value": "1,234",
             "trend": -3.2,
-            "icon": "👥"
+            "icon": ""
         },
         {
             "label": "Bestellungen",
             "value": "3,456",
             "trend": 5.7,
-            "icon": "📦"
+            "icon": ""
         }
     ],
     columns=3,
@@ -321,7 +321,7 @@ metric_card_group(
             "description": "Von 10 kW Nennleistung",
             "trend": 15.2,
             "trend_label": "+15.2% vs. gestern",
-            "icon": "☀️",
+            "icon": "",
             "size": "large"
         },
         {
@@ -330,7 +330,7 @@ metric_card_group(
             "description": "Seit Sonnenaufgang",
             "trend": 8.5,
             "trend_label": "+8.5% vs. gestern",
-            "icon": "⚡",
+            "icon": "",
             "size": "large"
         },
         {
@@ -338,7 +338,7 @@ metric_card_group(
             "value": "18.2 kg",
             "description": "Heute eingespart",
             "trend": 8.5,
-            "icon": "🌱",
+            "icon": "",
             "size": "large"
         },
         {
@@ -347,7 +347,7 @@ metric_card_group(
             "description": "Selbst verbraucht",
             "trend": 3.2,
             "trend_label": "+3.2% vs. letzter Monat",
-            "icon": "🏠",
+            "icon": "",
             "size": "large"
         }
     ],
@@ -374,7 +374,7 @@ with col1:
         label="Animiert",
         value="€12,345",
         trend=10.5,
-        icon="✨",
+        icon="",
         animate=True,
         theme_manager=theme_manager
     )
@@ -384,7 +384,7 @@ with col2:
         label="Nicht animiert",
         value="€12,345",
         trend=10.5,
-        icon="🔒",
+        icon="",
         animate=False,
         theme_manager=theme_manager
     )
@@ -394,7 +394,7 @@ with col3:
         label="Animiert",
         value="€12,345",
         trend=10.5,
-        icon="✨",
+        icon="",
         animate=True,
         theme_manager=theme_manager
     )
@@ -413,7 +413,7 @@ metric_card(
     value="€45,231",
     trend=12.5,
     trend_label="+12.5% vs. letzter Monat",
-    icon="💰"
+    icon=""
 )
     """, language="python")
 
@@ -426,7 +426,7 @@ metric_card(
     value="€127.50",
     description="Basierend auf 1,234 Bestellungen",
     trend=5.3,
-    icon="🛒",
+    icon="",
     size="large"
 )
     """, language="python")
@@ -441,13 +441,13 @@ metric_card_group(
             "label": "Umsatz",
             "value": "€45,231",
             "trend": 12.5,
-            "icon": "💰"
+            "icon": ""
         },
         {
             "label": "Kunden",
             "value": "1,234",
             "trend": -3.2,
-            "icon": "👥"
+            "icon": ""
         }
     ],
     columns=2,
@@ -461,11 +461,11 @@ st.markdown("---")
 # Footer
 st.info("""
 **Features:**
-- ✅ Verschiedene Größen (small, medium, large)
-- ✅ Trend-Indikatoren mit Pfeilen und Farben
-- ✅ Optionale Icons
-- ✅ Animierte Wert-Änderungen
-- ✅ Responsive Grid-Layout
-- ✅ Verschiedene Varianten (default, outlined, elevated)
-- ✅ Beschreibungen und Trend-Labels
+-  Verschiedene Größen (small, medium, large)
+-  Trend-Indikatoren mit Pfeilen und Farben
+-  Optionale Icons
+-  Animierte Wert-Änderungen
+-  Responsive Grid-Layout
+-  Verschiedene Varianten (default, outlined, elevated)
+-  Beschreibungen und Trend-Labels
 """)

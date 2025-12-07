@@ -64,7 +64,7 @@ def test_phase_1_4_getters():
 
 def test_phase_5_12_getters():
     """Test Phase 5-12 getter functions"""
-    print("\n🔐 Testing Phase 5-12 Getters...")
+    print("\n Testing Phase 5-12 Getters...")
     from core_integration import (
         get_security_manager,
         get_router,
@@ -112,7 +112,7 @@ def test_phase_5_12_getters():
 
 def test_feature_flags():
     """Test feature flags"""
-    print("\n🚩 Testing Feature Flags...")
+    print("\n Testing Feature Flags...")
     from core_integration import FEATURES
     
     enabled = [k for k, v in FEATURES.items() if v is True]
@@ -132,7 +132,7 @@ def test_feature_flags():
 
 def test_helper_functions():
     """Test helper functions"""
-    print("\n🛠️ Testing Helper Functions...")
+    print("\n Testing Helper Functions...")
     from core_integration import (
         is_feature_enabled,
         log_error,
@@ -213,11 +213,11 @@ print(f"Success Rate: {success_rate:.1f}% ({passed}/{total})")
 print("=" * 70)
 
 if success_rate == 100:
-    print("🎉 ALL FUNCTIONALITY TESTS PASSED!")
+    print(" ALL FUNCTIONALITY TESTS PASSED!")
     sys.exit(0)
 elif success_rate >= 80:
     print("🟢 GOOD: Core integration is functional")
     sys.exit(0)
 else:
-    print("🔴 CRITICAL: Core integration has issues")
+    print(" CRITICAL: Core integration has issues")
     sys.exit(1)

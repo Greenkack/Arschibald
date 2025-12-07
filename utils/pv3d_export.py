@@ -360,11 +360,12 @@ def export_360_animation(
         # Rendere jeden Frame
         for i in range(frames):
             try:
+                # Progress Callback aufrufen
+                if progress_callback:
+                    progress_callback(i, frames)
+                
                 # Berechne Rotationswinkel
-                if frames != 0:
-                    angle_deg = (360.0 / frames) * i
-                else:
-                    angle_deg = 0.0
+                angle_deg = (360.0 / frames) * i
                 angle_rad = math.radians(angle_deg)
                 
                 # Berechne Kamera-Position (Rotation um Z-Achse)
@@ -385,18 +386,20 @@ def export_360_animation(
                     )
                 )
                 
-                # Konvertiere zu PNG
+                # Konvertiere zu PNG (dieser Schritt ist langsam!)
                 png_bytes = fig.to_image(format="png", scale=1.0)
                 img = Image.open(io.BytesIO(png_bytes))
                 images.append(img)
                 
-                # Fortschritt (jedes 6. Frame)
-                if (i + 1) % 6 == 0:
+                # Fortschritt loggen (jedes 3. Frame für weniger Spam)
+                if (i + 1) % max(1, frames // 12) == 0 or i == frames - 1:
                     progress = ((i + 1) / frames) * 100
-                    print(f"  Fortschritt: {progress:.0f}% ({i + 1}/{frames} Frames)")
+                    print(f"  Rendering: {progress:.0f}% ({i + 1}/{frames} Frames)")
                 
             except Exception as e:
-                print(f"Fehler beim Rendern von Frame {i}: {e}")
+                print(f"Fehler beim Rendern von Frame {i + 1}/{frames}: {e}")
+                # Wichtig: Trotz Fehler weitermachen
+                continue
         
         # Erstelle GIF
         if images:

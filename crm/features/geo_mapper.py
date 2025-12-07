@@ -307,9 +307,9 @@ class GeoMapper:
             <div style="font-family: Arial; min-width: 200px;">
                 <h4 style="margin: 0 0 10px 0;">{customer['name']}</h4>
                 {f"<p style='margin: 5px 0;'><b>{customer['company']}</b></p>" if customer['company'] else ""}
-                <p style="margin: 5px 0;">📍 {customer['address']}<br>{customer['zip_code']} {customer['city']}</p>
-                {f"<p style='margin: 5px 0;'>📧 {customer['email']}</p>" if customer['email'] else ""}
-                {f"<p style='margin: 5px 0;'>📞 {customer['phone']}</p>" if customer['phone'] else ""}
+                <p style="margin: 5px 0;"> {customer['address']}<br>{customer['zip_code']} {customer['city']}</p>
+                {f"<p style='margin: 5px 0;'> {customer['email']}</p>" if customer['email'] else ""}
+                {f"<p style='margin: 5px 0;'> {customer['phone']}</p>" if customer['phone'] else ""}
                 <p style="margin: 10px 0 0 0;"><a href="#" onclick="alert('Kunde-ID: {customer['id']}')">Details anzeigen</a></p>
             </div>
             """
@@ -506,9 +506,9 @@ class GeoMapper:
             <div style="font-family: Arial; min-width: 200px;">
                 <h4 style="margin: 0 0 10px 0;">Stopp {i + 1}: {customer['name']}</h4>
                 {f"<p style='margin: 5px 0;'><b>{customer['company']}</b></p>" if customer['company'] else ""}
-                <p style="margin: 5px 0;">📍 {customer['address']}<br>{customer['zip_code']} {customer['city']}</p>
-                <p style="margin: 5px 0;">🚗 Entfernung: {customer.get('distance_km', 0)} km</p>
-                <p style="margin: 5px 0;">📏 Gesamt: {customer.get('cumulative_distance_km', 0)} km</p>
+                <p style="margin: 5px 0;"> {customer['address']}<br>{customer['zip_code']} {customer['city']}</p>
+                <p style="margin: 5px 0;"> Entfernung: {customer.get('distance_km', 0)} km</p>
+                <p style="margin: 5px 0;"> Gesamt: {customer.get('cumulative_distance_km', 0)} km</p>
             </div>
             """
             

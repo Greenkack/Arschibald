@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\narwhals\_compliant\typing.py
+# hypothesis_version: 6.147.0
+
+['AliasName', 'AliasNames', 'CompliantDataFrameT', 'CompliantExprT', 'CompliantExprT_co', 'CompliantFrameT', 'CompliantFrameT_co', 'CompliantLazyFrameT', 'CompliantNamespaceT', 'CompliantSeriesT', 'CompliantSeriesT_co', 'CompliantSeries[Any]', 'DepthTrackingExprT', 'EagerDataFrameT', 'EagerExprT', 'EagerExprT_contra', 'EagerExpr[Any, Any]', 'EagerSeriesT', 'EagerSeriesT_co', 'EagerSeries[Any]', 'EvalNames', 'EvalSeries', 'IntoCompliantExpr', 'LazyExprT', 'LazyExprT_contra', 'LazyExpr[Any, Any]', 'NarwhalsAggregation', 'NativeExpr', 'NativeExprT', 'NativeExprT_co', 'NativeFrame', 'NativeFrameT', 'NativeFrameT_co', 'NativeFrameT_contra', 'NativeSeries', 'NativeSeriesT', 'NativeSeriesT_co', 'NativeSeriesT_contra', 'all', 'any', 'count', 'len', 'max', 'mean', 'median', 'min', 'n_unique', 'quantile', 'std', 'sum', 'var']

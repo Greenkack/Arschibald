@@ -4207,7 +4207,7 @@ def optimize_layout(
         
         # DETAILLIERTES LOGGING: Zeige Optimierungsparameter
         print(f"\nOptimierung gestartet:")
-        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print(f"   ")
         print(f"   Eingabeparameter:")
         print(f"     • Optimierungsziel: {optimization_goal}")
         print(f"     • Gewünschte Module: {target_modules}")
@@ -4217,7 +4217,7 @@ def optimize_layout(
         print(f"       - Breite: {building_dims.width_m:.1f}m")
         print(f"       - Wandhöhe: {building_dims.wall_height_m:.1f}m")
         print(f"       - Dachfläche: {building_dims.length_m * building_dims.width_m:.1f}m²")
-        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print(f"   ")
     
         configurations = []
         
@@ -4292,7 +4292,7 @@ def optimize_layout(
             print(f"   FEHLER: Keine Konfigurationen konnten generiert werden!")
             return []
         
-        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print(f"   ")
         
         # Sortiere nach Score (höchster zuerst)
         configurations.sort(key=lambda x: x[1], reverse=True)
@@ -4309,7 +4309,7 @@ def optimize_layout(
             if extras:
                 mode_name += " + " + " + ".join(extras)
             print(f"     {i}. {mode_name}: Score {score:.1f}")
-        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+        print(f"   \n")
         
         # Gebe Top 3 zurück
         return configurations[:3]

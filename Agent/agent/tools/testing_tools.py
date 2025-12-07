@@ -162,7 +162,7 @@ def generate_test_summary(result: Dict[str, Any]) -> str:
     ]
 
     if result['errors'] > 0:
-        summary_lines.append(f"⚠ Errors: {result['errors']}")
+        summary_lines.append(f" Errors: {result['errors']}")
 
     if result['skipped'] > 0:
         summary_lines.append(f"⊘ Skipped: {result['skipped']}")

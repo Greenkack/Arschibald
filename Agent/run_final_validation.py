@@ -47,7 +47,7 @@ def run_test_suite(test_file, suite_name):
             "stderr": result.stderr
         }
     except subprocess.TimeoutExpired:
-        print(f"⚠ {suite_name} timed out after 5 minutes")
+        print(f" {suite_name} timed out after 5 minutes")
         return {
             "suite": suite_name,
             "passed": False,
@@ -133,7 +133,7 @@ def main():
     results = []
     for suite in test_suites:
         if not suite["file"].exists():
-            print(f"⚠ Warning: Test file not found: {suite['file']}")
+            print(f" Warning: Test file not found: {suite['file']}")
             results.append({
                 "suite": suite["name"],
                 "passed": False,

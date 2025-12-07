@@ -586,7 +586,7 @@ def create_sun_marker(azimuth_deg, elevation_deg, distance=20.0):
             symbol='circle',
             line=dict(color='orange', width=3)
         ),
-        name='☀️ Sonne',
+        name=' Sonne',
         showlegend=True,
         hovertemplate=f'Sonne<br>Azimuth: {azimuth_deg:.1f}°<br>Elevation: {elevation_deg:.1f}°<extra></extra>'
     )
@@ -1776,7 +1776,7 @@ def build_plotly_scene(
             bgcolor='#0B0F14'
         ),
         title=dict(
-            text=f'🏠 3D PV-Visualisierung ({module_quantity} Module)',
+            text=f' 3D PV-Visualisierung ({module_quantity} Module)',
             font=dict(size=20, color='#FFFFFF', family='Arial, sans-serif')
         ),
         showlegend=True,

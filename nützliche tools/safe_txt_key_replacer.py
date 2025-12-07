@@ -136,7 +136,7 @@ def apply_safe_replacements() -> int:
 
     total_replacements = 0
 
-    print("🔄 Führe SICHERE Ersetzungen durch...")
+    print(" Führe SICHERE Ersetzungen durch...")
 
     for txt_file in sorted(txt_files):
         filename = os.path.basename(txt_file)
@@ -162,7 +162,7 @@ def apply_safe_replacements() -> int:
                 with open(txt_file, 'w', encoding='utf-8') as f:
                     f.write(content)
                 print(
-                    f"💾 {filename}: {file_replacements} sichere Ersetzungen gespeichert")
+                    f" {filename}: {file_replacements} sichere Ersetzungen gespeichert")
                 total_replacements += file_replacements
 
         except Exception as e:
@@ -185,7 +185,7 @@ def main():
         return
 
     print(
-        f"\n📋 Gefundene potentielle statische Werte in {
+        f"\n Gefundene potentielle statische Werte in {
             len(findings)} Dateien:")
     for filename, static_values in findings.items():
         print(f"\n{filename}:")
@@ -195,7 +195,7 @@ def main():
             print(f"  ... und {len(static_values) - 5} weitere")
 
     # 2. SICHERE ERSETZUNGEN
-    print("\n2. 🛡️ SICHERE Ersetzungen...")
+    print("\n2.  SICHERE Ersetzungen...")
     safe_replacements = get_safe_replacements()
 
     if safe_replacements:

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\_patch.py
+# hypothesis_version: 6.147.0
+
+['Add', 'Append', 'Assign', 'Clear', 'Delete', 'Div', 'Extend', 'Insert', 'Merge', 'Mul', 'Patch', 'Prepend', 'Remove', 'Reverse', 'Sub', '__dash_patch_update', '_location', '_operations', 'location', 'operation', 'operations', 'params', 'tolist']

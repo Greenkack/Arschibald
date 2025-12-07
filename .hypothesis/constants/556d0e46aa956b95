@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\httpx\_decoders.py
+# hypothesis_version: 6.147.0
+
+['br', 'decompress', 'deflate', 'finish', 'gzip', 'identity', 'replace', 'utf-8', 'zstd']

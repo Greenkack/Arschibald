@@ -263,7 +263,7 @@ def get_matrix_structure_help() -> str:
     Requirement: 2.5
     """
     return """
-📋 PREISMATRIX-STRUKTUR
+ PREISMATRIX-STRUKTUR
 
 Die Preismatrix definiert schlüsselfertige Preise basierend auf:
 • Modulanzahl (Zeilen)
@@ -306,7 +306,7 @@ TIPPS:
 • Sortieren Sie Modulanzahlen aufsteigend
 • Verwenden Sie eindeutige Speichermodell-Namen
 
-📖 Weitere Informationen: docs/PRICE_MATRIX_STRUCTURE_GUIDE.md
+ Weitere Informationen: docs/PRICE_MATRIX_STRUCTURE_GUIDE.md
 """
 
 

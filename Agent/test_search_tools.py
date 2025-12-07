@@ -112,9 +112,9 @@ def test_api_key_validation():
 
 def main():
     """Run all tests."""
-    print("\n" + "╔" + "=" * 68 + "╗")
-    print("║" + " " * 20 + "SEARCH TOOLS TEST SUITE" + " " * 25 + "║")
-    print("╚" + "=" * 68 + "╝")
+    print("\n" + "" + "=" * 68 + "")
+    print("" + " " * 20 + "SEARCH TOOLS TEST SUITE" + " " * 25 + "")
+    print("" + "=" * 68 + "")
 
     tests = [
         ("API Key Validation", test_api_key_validation),
@@ -135,9 +135,9 @@ def main():
             results.append((test_name, False))
 
     # Print summary
-    print("\n" + "╔" + "=" * 68 + "╗")
-    print("║" + " " * 25 + "TEST SUMMARY" + " " * 30 + "║")
-    print("╚" + "=" * 68 + "╝\n")
+    print("\n" + "" + "=" * 68 + "")
+    print("" + " " * 25 + "TEST SUMMARY" + " " * 30 + "")
+    print("" + "=" * 68 + "\n")
 
     passed = sum(1 for _, success in results if success)
     total = len(results)
@@ -151,7 +151,7 @@ def main():
     print(f"{'=' * 70}\n")
 
     if passed == total:
-        print("🎉 All tests passed!")
+        print(" All tests passed!")
     else:
         print("Some tests failed. Review the output above.")
 

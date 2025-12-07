@@ -176,7 +176,7 @@ Setup Steps:
 
 3. Restart the application
 
-📚 Where to get API keys:
+ Where to get API keys:
 -------------------------
 
 - OpenAI: https://platform.openai.com/api-keys (REQUIRED)
@@ -218,7 +218,7 @@ def validate_env_file_security() -> tuple[bool, list[str]]:
             gitignore_content = f.read()
             if '.env' not in gitignore_content:
                 warnings.append(
-                    "🔴 SECURITY RISK: .env is not in .gitignore! Add it immediately.")
+                    " SECURITY RISK: .env is not in .gitignore! Add it immediately.")
                 return False, warnings
     else:
         warnings.append(
@@ -331,7 +331,7 @@ def validate_startup_security() -> tuple[bool, list[str]]:
 
     # Check that OPENAI_API_KEY is present (required)
     if not keys_to_validate["OPENAI_API_KEY"]:
-        issues.append("🔴 OPENAI_API_KEY is required but not found in .env")
+        issues.append(" OPENAI_API_KEY is required but not found in .env")
         return False, issues
 
     # Log validation result (without sensitive data)

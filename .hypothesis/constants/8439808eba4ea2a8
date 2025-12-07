@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\core\validators.py
+# hypothesis_version: 6.147.0
+
+[1e-09, 253, 255, 320, '\x00', '$', '(', '(-)?', '(?:\\.(?!-)[a-z', ',', ', ', '0-9-]{0,61}[a-z', '0-9-]{1,63}(?<!-))*', '0-9](?:[a-z', '0-9])?', '://', '@', 'Enter a number.', 'Enter a valid URL.', 'Enter a valid value.', 'F', 'IPv4', 'IPv4 or IPv6', 'IPv6', 'N', '[a-z', '\\.(?!-)(?:[a-z', '\\.?', '\\Z', '\\[([A-F0-9:.]+)\\]\\Z', '\\[[0-9a-f:.]+\\]', '^', '^-?\\d+\\Z', '^[-\\w]+\\Z', '^[-a-zA-Z0-9_]+\\Z', 'accept_idna', 'allowed_extensions', 'both', 'extension', 'ftp', 'ftps', 'http', 'https', 'invalid', 'invalid_extension', 'ipv4', 'ipv6', 'limit_value', 'localhost', 'max', 'max_decimal_places', 'max_digits', 'max_length', 'max_value', 'max_whole_digits', 'min_length', 'min_value', 'n', 'neg', 'offset', 'protocol', 'sep', 'show_value', 'step_size', 'valid_value1', 'valid_value2', 'value', '|', '|localhost)', '¡-\uffff']

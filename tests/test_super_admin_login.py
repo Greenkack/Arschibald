@@ -9,7 +9,7 @@ def test_login():
     """Testet Super-Admin Login"""
     um = UserManagement()
 
-    print("🔐 Teste Super-Admin Login...")
+    print(" Teste Super-Admin Login...")
     print()
 
     # Login versuchen
@@ -18,17 +18,17 @@ def test_login():
     if user:
         print("Login erfolgreich!")
         print()
-        print("📋 Benutzer-Details:")
+        print(" Benutzer-Details:")
         print(f"   ID: {user['id']}")
         print(f"   Username: {user['username']}")
         print(f"   Name: {user['full_name']}")
         print(f"   Rang: {user['rank']}")
         print(f"   Rolle: {user['role']}")
         print(
-            f"   Super-Admin: {'JA ⭐' if user.get('is_super_admin', 0) == 1 else 'NEIN'}")
+            f"   Super-Admin: {'JA ' if user.get('is_super_admin', 0) == 1 else 'NEIN'}")
         print(f"   Status: {user['status']}")
         print()
-        print("🔐 Berechtigungen:")
+        print(" Berechtigungen:")
         for perm, value in user['permissions'].items():
             print(f"   - {perm}: {value}")
 
@@ -36,7 +36,7 @@ def test_login():
         is_super = um.is_super_admin(user['id'])
         print()
         print(
-            f"Super-Admin-Verifizierung: {'BESTÄTIGT ⭐' if is_super else 'FEHLGESCHLAGEN'}")
+            f"Super-Admin-Verifizierung: {'BESTÄTIGT ' if is_super else 'FEHLGESCHLAGEN'}")
 
         return True
     print("Login fehlgeschlagen!")

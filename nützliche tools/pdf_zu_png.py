@@ -30,7 +30,7 @@ def pdfs_zu_bildern(input_path, output_path):
 
         doc.close()
 
-    print("\n🎉 Alle PDFs wurden erfolgreich in PNGs umgewandelt.")
+    print("\n Alle PDFs wurden erfolgreich in PNGs umgewandelt.")
 
 # === AUSFÜHRUNG ===
 pdfs_zu_bildern(input_ordner, output_ordner)

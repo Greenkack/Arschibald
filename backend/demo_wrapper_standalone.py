@@ -73,7 +73,7 @@ class CalculatorService(BaseService, HealthCheckInterface):
     def initialize(self):
         self._legacy_module = LegacyCalculator()
         self._set_initialized(True)
-        print("✓ Service initialized")
+        print(" Service initialized")
     
     def health_check(self):
         if not self.is_initialized:
@@ -125,25 +125,25 @@ print("\n4. Testing error handling with invalid input...")
 try:
     result = service.calculate(-5)
 except ValidationError as e:
-    print(f"   ✓ Error caught: {e.message}")
+    print(f"    Error caught: {e.message}")
 
 print("\n5. Testing dependency container...")
 container = DependencyContainer()
 container.register_singleton("calculator", service)
 retrieved = container.resolve("calculator")
-print(f"   ✓ Service retrieved from container: {retrieved.service_name}")
+print(f"    Service retrieved from container: {retrieved.service_name}")
 
 print("\n6. Testing health monitor...")
 monitor = HealthMonitor()
 monitor.register_service("calculator", service)
 health_check = monitor.check_service("calculator")
-print(f"   ✓ Health check: {health_check.status.value}")
+print(f"    Health check: {health_check.status.value}")
 
 report = monitor.get_system_report()
-print(f"   ✓ System status: {report['overall_status']}")
+print(f"    System status: {report['overall_status']}")
 
 print("\n" + "="*70)
-print("✓ DEMO COMPLETED SUCCESSFULLY")
+print(" DEMO COMPLETED SUCCESSFULLY")
 print("="*70)
 print("\nThe legacy code wrapper infrastructure provides:")
 print("  • BaseService - Base class for service wrappers")

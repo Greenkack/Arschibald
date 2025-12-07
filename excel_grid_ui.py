@@ -230,13 +230,13 @@ def _render_toolbar():
     col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 1, 1, 2])
     
     with col1:
-        if st.button("➕ Neue Matrix", help="Erstellt eine neue leere Matrix", use_container_width=True):
+        if st.button(" Neue Matrix", help="Erstellt eine neue leere Matrix", use_container_width=True):
             st.session_state.excel_grid_show_new_matrix_dialog = True
     
     with col2:
         save_disabled = manager is None or not manager.has_unsaved_changes
         if st.button(
-            "💾 Speichern",
+            " Speichern",
             help="Speichert die aktuelle Matrix" if not save_disabled else "Keine Änderungen zum Speichern",
             disabled=save_disabled,
             use_container_width=True,
@@ -246,7 +246,7 @@ def _render_toolbar():
                 _save_matrix_to_database(manager)
     
     with col3:
-        if st.button("📂 Laden", help="Lädt eine gespeicherte Matrix", use_container_width=True):
+        if st.button(" Laden", help="Lädt eine gespeicherte Matrix", use_container_width=True):
             st.session_state.excel_grid_show_load_dialog = True
     
     with col4:
@@ -278,7 +278,7 @@ def _render_toolbar():
     with col6:
         # Auto-Save Toggle
         auto_save = st.checkbox(
-            "🔄 Auto-Save",
+            " Auto-Save",
             value=st.session_state.excel_grid_auto_save_enabled,
             help=f"Automatisches Speichern alle {st.session_state.excel_grid_auto_save_interval} Sekunden"
         )
@@ -308,7 +308,7 @@ def _render_toolbar():
         active_cell = st.session_state.excel_grid_active_cell
         copy_disabled = manager is None or active_cell is None
         if st.button(
-            "📋 Kopieren",
+            " Kopieren",
             help="Kopiert die aktive Zelle (Strg+C)",
             disabled=copy_disabled,
             use_container_width=True
@@ -358,7 +358,7 @@ def _render_toolbar():
     with col4:
         # Tastaturnavigation Toggle
         keyboard_nav = st.checkbox(
-            "⌨️ Tastaturnavigation",
+            "⌨ Tastaturnavigation",
             value=st.session_state.excel_grid_keyboard_nav_enabled,
             help="Aktiviert Tastaturnavigation (Pfeiltasten, Tab, Enter)"
         )
@@ -368,7 +368,7 @@ def _render_toolbar():
     with col5:
         # CSV Import Button (Task 13)
         if st.button(
-            "📥 CSV Import",
+            " CSV Import",
             help="Importiert eine CSV-Datei als neue Matrix",
             use_container_width=True
         ):
@@ -382,7 +382,7 @@ def _render_toolbar():
         # CSV Export Button
         export_disabled = manager is None
         if st.button(
-            "📤 CSV Export",
+            " CSV Export",
             help="Exportiert die Matrix als CSV-Datei",
             disabled=export_disabled,
             use_container_width=True
@@ -393,7 +393,7 @@ def _render_toolbar():
     with col2:
         # Excel Export Button
         if st.button(
-            "📤 Excel Export",
+            " Excel Export",
             help="Exportiert die Matrix als Excel-Datei (XLSX) mit Formeln",
             disabled=export_disabled,
             use_container_width=True
@@ -405,7 +405,7 @@ def _render_toolbar():
         # Export-Vorschau
         if not export_disabled and manager:
             if st.button(
-                "👁️ Export-Info",
+                " Export-Info",
                 help="Zeigt Informationen über den Export",
                 use_container_width=True
             ):
@@ -425,7 +425,7 @@ def _render_toolbar():
     with col5:
         # Hilfe anzeigen (Task 4.2)
         if st.button(
-            "❓ Hilfe",
+            " Hilfe",
             help="Zeigt Hilfe zur Matrix-Struktur und Beispiele",
             use_container_width=True
         ):
@@ -433,7 +433,7 @@ def _render_toolbar():
     
     # Vierte Zeile: Beispiel-Matrizen (Task 4.2)
     st.markdown("---")
-    st.markdown("**📋 Beispiel-Matrizen erstellen:**")
+    st.markdown("** Beispiel-Matrizen erstellen:**")
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
@@ -535,15 +535,15 @@ def _render_formula_bar():
         
         with col1:
             # Zeige Zellreferenz prominent
-            st.markdown(f"### 📍 {cell_ref}")
+            st.markdown(f"###  {cell_ref}")
             
             # Zeige Zelltyp mit visueller Unterscheidung (Task 3.3)
             if cell.is_formula():
-                st.markdown("🔢 **Formel**")
+                st.markdown(" **Formel**")
             elif cell.is_error():
                 st.markdown("**Fehler**")
             elif cell.data_type == "number":
-                st.markdown("🔢 **Zahl**")
+                st.markdown(" **Zahl**")
             elif cell.data_type == "text":
                 st.markdown("**Text**")
             else:
@@ -604,7 +604,7 @@ def _render_formula_bar():
             if cell.data_type == "text":
                 st.info(f"**Aktueller Text:** `{formula_value}`")
             elif cell.data_type == "number":
-                st.info(f"🔢 **Aktuelle Zahl:** `{formula_value}`")
+                st.info(f" **Aktuelle Zahl:** `{formula_value}`")
             else:
                 st.info(f"**Aktueller Wert:** `{formula_value}`")
         
@@ -684,7 +684,7 @@ def _render_formula_bar():
         
         # Zeige Abhängigkeiten
         if cell.is_formula():
-            with st.expander("🔗 Formel-Details"):
+            with st.expander(" Formel-Details"):
                 _show_formula_details(manager, cell, cell_ref)
     
     else:
@@ -749,7 +749,7 @@ def _render_grid():
             key="add_row_position",
             help="Position, an der die neue Zeile eingefügt wird"
         )
-        if st.button("➕ Zeile hinzufügen", use_container_width=True, help="Fügt eine neue Zeile an der angegebenen Position ein"):
+        if st.button(" Zeile hinzufügen", use_container_width=True, help="Fügt eine neue Zeile an der angegebenen Position ein"):
             manager.add_row(position=row_position - 1)  # 0-basiert
             st.success(f"Zeile an Position {row_position} hinzugefügt")
             _safe_rerun()
@@ -766,7 +766,7 @@ def _render_grid():
             key="add_col_position",
             help="Position, an der die neue Spalte eingefügt wird"
         )
-        if st.button("➕ Spalte hinzufügen", use_container_width=True, help="Fügt eine neue Spalte an der angegebenen Position ein"):
+        if st.button(" Spalte hinzufügen", use_container_width=True, help="Fügt eine neue Spalte an der angegebenen Position ein"):
             manager.add_column(position=col_position - 1)  # 0-basiert
             st.success(f"Spalte an Position {col_position} hinzugefügt")
             _safe_rerun()
@@ -825,7 +825,7 @@ def _render_grid():
         )
     
     with col2:
-        if st.button("📍 Zelle auswählen", use_container_width=True, help="Springt zur angegebenen Zelle"):
+        if st.button(" Zelle auswählen", use_container_width=True, help="Springt zur angegebenen Zelle"):
             try:
                 from excel.excel_utils import a1_to_cell
                 row, col = a1_to_cell(cell_ref_input)
@@ -847,34 +847,34 @@ def _render_grid():
             cell_format = st.session_state.excel_grid_cell_format.get((row, col), "auto")
             
             if cell.is_error():
-                st.error(f"📍 {active_ref} - {cell.error}")
+                st.error(f" {active_ref} - {cell.error}")
             elif cell.is_formula():
-                st.info(f"📍 {active_ref} - 🔢 Formel ({cell_format})")
+                st.info(f" {active_ref} -  Formel ({cell_format})")
             else:
-                st.success(f"📍 {active_ref} - {cell_format}")
+                st.success(f" {active_ref} - {cell_format}")
     
     # Tastaturnavigation (Task 10)
     if st.session_state.excel_grid_keyboard_nav_enabled:
-        st.markdown("**⌨️ Tastaturnavigation:**")
+        st.markdown("**⌨ Tastaturnavigation:**")
         nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns(5)
         
         with nav_col1:
-            if st.button("⬆️", use_container_width=True, help="Nach oben (↑)"):
+            if st.button("", use_container_width=True, help="Nach oben (↑)"):
                 _navigate_cell(manager, 'up')
                 _safe_rerun()
         
         with nav_col2:
-            if st.button("⬇️", use_container_width=True, help="Nach unten (↓)"):
+            if st.button("", use_container_width=True, help="Nach unten (↓)"):
                 _navigate_cell(manager, 'down')
                 _safe_rerun()
         
         with nav_col3:
-            if st.button("⬅️", use_container_width=True, help="Nach links (←)"):
+            if st.button("", use_container_width=True, help="Nach links (←)"):
                 _navigate_cell(manager, 'left')
                 _safe_rerun()
         
         with nav_col4:
-            if st.button("➡️", use_container_width=True, help="Nach rechts (→)"):
+            if st.button("", use_container_width=True, help="Nach rechts (→)"):
                 _navigate_cell(manager, 'right')
                 _safe_rerun()
         
@@ -889,7 +889,7 @@ def _render_grid():
     st.subheader("Excel Grid")
     
     # Zeige erweiterte Legende mit Tooltips (Task 21)
-    with st.expander("📖 Legende & Hilfe", expanded=False):
+    with st.expander(" Legende & Hilfe", expanded=False):
         col1, col2 = st.columns(2)
         
         with col1:
@@ -1514,7 +1514,7 @@ def _auto_save_matrix(manager: ExcelManager):
         if success:
             st.session_state.excel_grid_last_auto_save = now
             # Zeige dezente Info-Meldung
-            st.caption(f"🔄 Auto-Save: {now.strftime('%H:%M:%S')}")
+            st.caption(f" Auto-Save: {now.strftime('%H:%M:%S')}")
 
 
 def _get_unsaved_changes_indicator(manager: ExcelManager) -> str:
@@ -1531,7 +1531,7 @@ def _get_unsaved_changes_indicator(manager: ExcelManager) -> str:
         return ""
     
     if manager.has_unsaved_changes:
-        return "● "  # Roter Punkt für ungespeicherte Änderungen
+        return " "  # Roter Punkt für ungespeicherte Änderungen
     else:
         return ""  # Häkchen für gespeichert
 
@@ -1610,7 +1610,7 @@ def _render_matrix_management_dialog():
     if not st.session_state.get('excel_grid_show_load_dialog', False):
         return
     
-    st.subheader("📂 Matrix-Verwaltung")
+    st.subheader(" Matrix-Verwaltung")
     st.markdown("Verwalten Sie Ihre gespeicherten Matrizen")
     
     # Lade alle Matrizen
@@ -1628,7 +1628,7 @@ def _render_matrix_management_dialog():
     
     for matrix in matrices:
         with st.expander(
-            f"{'🟢 ' if matrix['is_active'] else '⚪ '}{matrix['name']} (ID: {matrix['id']})",
+            f"{'🟢 ' if matrix['is_active'] else ' '}{matrix['name']} (ID: {matrix['id']})",
             expanded=False
         ):
             # Matrix-Details
@@ -1667,7 +1667,7 @@ def _render_matrix_management_dialog():
             with action_col1:
                 # Laden
                 if st.button(
-                    "📂 Laden",
+                    " Laden",
                     key=f"load_{matrix['id']}",
                     use_container_width=True,
                     help="Matrix laden und bearbeiten"
@@ -1681,7 +1681,7 @@ def _render_matrix_management_dialog():
             with action_col2:
                 # Klonen
                 if st.button(
-                    "📋 Klonen",
+                    " Klonen",
                     key=f"clone_{matrix['id']}",
                     use_container_width=True,
                     help="Kopie dieser Matrix erstellen"
@@ -1693,7 +1693,7 @@ def _render_matrix_management_dialog():
             with action_col3:
                 # Umbenennen
                 if st.button(
-                    "✏️ Umbenennen",
+                    " Umbenennen",
                     key=f"rename_{matrix['id']}",
                     use_container_width=True,
                     help="Matrix umbenennen"
@@ -1744,7 +1744,7 @@ def _render_clone_matrix_dialog():
             return
         
         with st.form("clone_matrix_form"):
-            st.subheader(f"📋 Matrix klonen: {matrix_data['meta']['name']}")
+            st.subheader(f" Matrix klonen: {matrix_data['meta']['name']}")
             
             new_name = st.text_input(
                 "Neuer Name",
@@ -1805,7 +1805,7 @@ def _render_rename_matrix_dialog():
             return
         
         with st.form("rename_matrix_form"):
-            st.subheader(f"✏️ Matrix umbenennen")
+            st.subheader(f" Matrix umbenennen")
             
             st.markdown(f"**Aktueller Name:** {matrix_data['meta']['name']}")
             
@@ -1955,7 +1955,7 @@ def _render_csv_import_dialog():
     if not st.session_state.get('excel_grid_show_import_dialog', False):
         return
     
-    st.subheader("📥 CSV Import")
+    st.subheader(" CSV Import")
     st.markdown("Importieren Sie eine CSV-Datei als neue Matrix")
     
     # Datei-Upload Widget
@@ -2067,7 +2067,7 @@ def _render_csv_import_dialog():
                     col1, col2 = st.columns(2)
                     with col1:
                         submitted = st.form_submit_button(
-                            "📥 Importieren",
+                            " Importieren",
                             use_container_width=True,
                             type="primary"
                         )
@@ -2211,15 +2211,15 @@ def render_excel_grid_ui():
         
         **Features:**
         - Excel-ähnliche Grid-Darstellung
-        - 🔢 Formelunterstützung (SUM, AVERAGE, IF, etc.)
-        - 💾 Auto-Save Funktion
-        - 📥 CSV/Excel Import & Export
+        -  Formelunterstützung (SUM, AVERAGE, IF, etc.)
+        -  Auto-Save Funktion
+        -  CSV/Excel Import & Export
         - Zellformatierung (Währung, Prozent, Datum)
-        - ⌨️ Tastaturnavigation
+        - ⌨ Tastaturnavigation
         """)
     
     # Hilfe-Bereich (zugeklappt)
-    with st.expander("📖 Hilfe & Anleitung", expanded=False):
+    with st.expander(" Hilfe & Anleitung", expanded=False):
         col1, col2 = st.columns(2)
         
         with col1:
@@ -2227,7 +2227,7 @@ def render_excel_grid_ui():
             ### Schnellstart
             
             **1. Matrix erstellen:**
-            - Klicken Sie auf "➕ Neue Matrix"
+            - Klicken Sie auf " Neue Matrix"
             - Geben Sie Name, Zeilen und Spalten ein
             - Bestätigen Sie mit "Erstellen"
             
@@ -2236,7 +2236,7 @@ def render_excel_grid_ui():
             - Geben Sie einen Wert oder eine Formel ein
             - Formeln beginnen mit `=`
             
-            **Text vs. 🔢 Zahlen (Neu!):**
+            **Text vs.  Zahlen (Neu!):**
             - **Text:** Wird ohne Formatierung gespeichert
               - Beispiel: "10kWh Speicher", "Kein Speicher"
             - **Zahlen:** Automatisch erkannt für Berechnungen
@@ -2254,12 +2254,12 @@ def render_excel_grid_ui():
             
             **4. Speichern:**
             - Auto-Save ist standardmäßig aktiv
-            - Oder nutzen Sie "💾 Speichern"
+            - Oder nutzen Sie " Speichern"
             """)
         
         with col2:
             st.markdown("""
-            ### ⌨️ Tastenkombinationen
+            ### ⌨ Tastenkombinationen
             
             **Bearbeitung:**
             - `Strg+C` - Zelle kopieren
@@ -2275,7 +2275,7 @@ def render_excel_grid_ui():
             **Formatierung:**
             - Wählen Sie Format: Auto, Zahl, Währung, Prozent, Datum, Text
             
-            ### 📥 Import/Export
+            ###  Import/Export
             - **CSV Import**: Laden Sie bestehende Daten
             - **CSV/Excel Export**: Speichern Sie Ihre Matrix
             
@@ -2330,7 +2330,7 @@ def render_excel_grid_ui():
     
     # Erweiterte Hilfe-Sektion (Task 10)
     with st.expander("Hilfe & Tastenkombinationen", expanded=False):
-        tab1, tab2, tab3, tab4 = st.tabs(["Excel-Funktionen", "⌨️ Tastenkombinationen", "Formatierung", "❓ Fehler & Tipps"])
+        tab1, tab2, tab3, tab4 = st.tabs(["Excel-Funktionen", "⌨ Tastenkombinationen", "Formatierung", " Fehler & Tipps"])
         
         with tab1:
             st.markdown("""
@@ -2485,7 +2485,7 @@ def _render_csv_export_dialog():
         st.session_state.excel_grid_show_csv_export_dialog = False
         return
     
-    st.subheader("📤 CSV Export")
+    st.subheader(" CSV Export")
     st.markdown("Exportieren Sie die Matrix als CSV-Datei")
     
     # Zeige Matrix-Info
@@ -2563,7 +2563,7 @@ def _render_csv_export_dialog():
         col1, col2 = st.columns(2)
         with col1:
             submitted = st.form_submit_button(
-                "📤 Exportieren",
+                " Exportieren",
                 use_container_width=True,
                 type="primary"
             )
@@ -2587,7 +2587,7 @@ def _render_csv_export_dialog():
                 
                 # Download-Button
                 st.download_button(
-                    label="💾 CSV-Datei herunterladen",
+                    label=" CSV-Datei herunterladen",
                     data=csv_data,
                     file_name=filename,
                     mime="text/csv",
@@ -2617,7 +2617,7 @@ def _render_excel_export_dialog():
         st.session_state.excel_grid_show_excel_export_dialog = False
         return
     
-    st.subheader("📤 Excel Export")
+    st.subheader(" Excel Export")
     st.markdown("Exportieren Sie die Matrix als Excel-Datei (XLSX) mit Formeln")
     
     # Prüfe ob openpyxl verfügbar ist
@@ -2686,7 +2686,7 @@ def _render_excel_export_dialog():
         col1, col2 = st.columns(2)
         with col1:
             submitted = st.form_submit_button(
-                "📤 Exportieren",
+                " Exportieren",
                 use_container_width=True,
                 type="primary"
             )
@@ -2709,7 +2709,7 @@ def _render_excel_export_dialog():
                 
                 # Download-Button
                 st.download_button(
-                    label="💾 Excel-Datei herunterladen",
+                    label=" Excel-Datei herunterladen",
                     data=excel_data,
                     file_name=filename,
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -2739,7 +2739,7 @@ def _render_export_info_dialog():
         st.session_state.excel_grid_show_export_info = False
         return
     
-    st.subheader("👁️ Export-Informationen")
+    st.subheader(" Export-Informationen")
     st.markdown("Informationen über den Export dieser Matrix")
     
     try:
@@ -2838,7 +2838,7 @@ def _render_help_dialog():
         return
     
     st.markdown("---")
-    st.subheader("❓ Hilfe: Preismatrix-Struktur")
+    st.subheader(" Hilfe: Preismatrix-Struktur")
     
     try:
         from price_matrix_examples import get_matrix_structure_help, get_quick_help_tooltips
@@ -2848,7 +2848,7 @@ def _render_help_dialog():
         st.markdown(help_text)
         
         # Zeige Tooltips in Tabs
-        st.markdown("### 📚 Detaillierte Hilfe")
+        st.markdown("###  Detaillierte Hilfe")
         
         tooltips = get_quick_help_tooltips()
         
@@ -2877,7 +2877,7 @@ def _render_help_dialog():
         
         # Link zur vollständigen Dokumentation
         st.markdown("---")
-        st.markdown("📖 **Vollständige Dokumentation:** `docs/PRICE_MATRIX_STRUCTURE_GUIDE.md`")
+        st.markdown(" **Vollständige Dokumentation:** `docs/PRICE_MATRIX_STRUCTURE_GUIDE.md`")
         
         # Schließen-Button
         if st.button("Schließen", key="close_help_dialog"):
@@ -2984,7 +2984,7 @@ def _render_validation_dialog():
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("🔄 Erneut validieren", key="revalidate_matrix"):
+            if st.button(" Erneut validieren", key="revalidate_matrix"):
                 st.rerun()
         
         with col2:

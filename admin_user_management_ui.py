@@ -120,7 +120,7 @@ def render_user_list(um: UserManagement):
         # Prefix basierend auf Rolle und Super-Admin Status
         is_super = user.get('is_super_admin', 0) == 1
         if is_super:
-            role_prefix = "⭐ [SUPER-ADMIN] "
+            role_prefix = " [SUPER-ADMIN] "
         elif user['role'] == 'admin':
             role_prefix = "[Admin] "
         else:

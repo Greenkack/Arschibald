@@ -32,7 +32,7 @@ def force_cleanup_all_non_serializable():
             print(f"Fehler beim Löschen von {key}: {e}")
     
     if keys_to_delete:
-        print(f"\n🧹 Cleanup abgeschlossen: {len(keys_to_delete)} nicht-serialisierbare Objekte entfernt")
+        print(f"\n Cleanup abgeschlossen: {len(keys_to_delete)} nicht-serialisierbare Objekte entfernt")
     
     return len(keys_to_delete)
 

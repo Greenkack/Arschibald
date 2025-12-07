@@ -163,7 +163,7 @@ def debug_chart_availability():
                 for chart_key in report['placeholder_list']:
                     name = CHART_KEY_TO_FRIENDLY_NAME_MAP.get(
                         chart_key, chart_key)
-                    st.warning(f"⚠ {name} (Platzhalter)")
+                    st.warning(f" {name} (Platzhalter)")
 
     except Exception as e:
         st.error(f"Fehler beim Debug: {e}")

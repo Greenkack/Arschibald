@@ -53,7 +53,7 @@ def render_documentation_tab(docs: list[dict], tab_name: str):
         st.info(f"Keine {tab_name} gefunden.")
         return
     
-    st.write(f"### 📚 {tab_name}")
+    st.write(f"###  {tab_name}")
     st.write(f"**{len(docs)}** Dokumente gefunden")
     
     # Suchfeld
@@ -90,7 +90,7 @@ def render_documentation_tab(docs: list[dict], tab_name: str):
                 
                 # Download-Button
                 st.download_button(
-                    label="📥 Herunterladen",
+                    label=" Herunterladen",
                     data=content,
                     file_name=doc['path'].name,
                     mime="text/markdown",
@@ -132,7 +132,7 @@ def render_build_info_statistics():
             import datetime
             latest_date = datetime.datetime.fromtimestamp(latest_time)
             
-            st.info(f"🕐 Letzte Änderung: {latest_date.strftime('%d.%m.%Y %H:%M')} - {latest_file.name}")
+            st.info(f Letzte Änderung: {latest_date.strftime('%d.%m.%Y %H:%M')} - {latest_file.name}")
     
     except Exception as e:
         st.error(f"Fehler beim Laden der Build-Informationen: {e}")
@@ -149,7 +149,7 @@ def render_build_infos_tab():
         return  # Zugriff verweigert
     
     # Header
-    st.title("📋 Build Infos & Dokumentation")
+    st.title("Build Infos & Dokumentation")
     st.markdown("""
     Dieser Bereich enthält alle technischen Dokumentationen, Build-Informationen 
     und detaillierte Anleitungen zur App-Entwicklung und -Wartung.
@@ -168,8 +168,8 @@ def render_build_infos_tab():
     
     # Erstelle Tabs für Haupt- und Detaillierte Docs
     tab_main, tab_detailed = st.tabs([
-        f"📚 Hauptdokumentation ({len(main_docs)})",
-        f"📖 Detaillierte Docs ({len(detailed_docs)})"
+        f" Hauptdokumentation ({len(main_docs)})",
+        f" Detaillierte Docs ({len(detailed_docs)})"
     ])
     
     with tab_main:

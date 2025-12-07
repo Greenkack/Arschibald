@@ -17,4 +17,4 @@ def scan_injections(directory="."):
                 code = f.read()
             for pat in suspicious_patterns:
                 for m in re.finditer(pat, code):
-                    print(f"‼️ Verdächtig in {file}: {m.group(0)}")
+                    print(f"‼ Verdächtig in {file}: {m.group(0)}")

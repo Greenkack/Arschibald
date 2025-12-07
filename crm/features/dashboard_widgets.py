@@ -52,7 +52,7 @@ class OpenTasksWidget(DashboardWidget):
         super().__init__(
             widget_id="open_tasks",
             title="Offene Aufgaben",
-            icon="📋"
+            icon=""
         )
 
     def get_data(self):
@@ -140,10 +140,10 @@ class OpenTasksWidget(DashboardWidget):
             }.get(task['priority'], '#808080')
 
             priority_icon = {
-                'high': '🔴',
+                'high': '',
                 'medium': '🟡',
                 'low': '🟢'
-            }.get(task['priority'], '⚪')
+            }.get(task['priority'], '')
 
             # Prüfe ob überfällig
             is_overdue = False
@@ -157,10 +157,10 @@ class OpenTasksWidget(DashboardWidget):
                         due_text = f"Überfällig seit {
                             (today - due_date).days} Tagen"
                     elif due_date == today:
-                        due_text = "📅 Heute fällig"
+                        due_text = " Heute fällig"
                     else:
                         days_until = (due_date - today).days
-                        due_text = f"📅 Fällig in {days_until} Tagen"
+                        due_text = f" Fällig in {days_until} Tagen"
                 except ValueError:
                     pass
 
@@ -191,7 +191,7 @@ class UpcomingAppointmentsWidget(DashboardWidget):
         super().__init__(
             widget_id="upcoming_appointments",
             title="Anstehende Termine",
-            icon="📅"
+            icon=""
         )
 
     def get_data(self):
@@ -242,7 +242,7 @@ class UpcomingAppointmentsWidget(DashboardWidget):
         appointments = self.get_data()
 
         if not appointments:
-            st.info("📅 Keine anstehenden Termine in den nächsten 7 Tagen")
+            st.info(" Keine anstehenden Termine in den nächsten 7 Tagen")
             return
 
         st.markdown(f"### {self.icon} {self.title}")
@@ -256,14 +256,14 @@ class UpcomingAppointmentsWidget(DashboardWidget):
                 is_tomorrow = apt_date == today + timedelta(days=1)
 
                 if is_today:
-                    date_text = "🔴 Heute"
+                    date_text = " Heute"
                     bg_color = '#ffe6e6'
                 elif is_tomorrow:
                     date_text = "🟡 Morgen"
                     bg_color = '#fff6e6'
                 else:
                     days_until = (apt_date - today).days
-                    date_text = f"📅 In {days_until} Tagen"
+                    date_text = f" In {days_until} Tagen"
                     bg_color = '#f0f0f0'
 
                 time_text = apt['time'] if apt['time'] else "Ganztägig"
@@ -638,7 +638,7 @@ class WidgetManager:
 
     def render_widget_config_ui(self, user_id: str = "default"):
         """Rendert UI zur Widget-Konfiguration"""
-        st.subheader("⚙️ Widget-Einstellungen")
+        st.subheader(" Widget-Einstellungen")
 
         config = self.get_widget_config(user_id)
 
@@ -679,7 +679,7 @@ class WidgetManager:
                 'order': order
             }
 
-        if st.button("💾 Einstellungen speichern", type="primary"):
+        if st.button(" Einstellungen speichern", type="primary"):
             if self.save_widget_config(user_id, updated_config):
                 st.success("Einstellungen gespeichert!")
                 st.rerun()
@@ -713,7 +713,7 @@ def render_dashboard_with_widgets(
                 margin-bottom: 20px;
                 text-align: center;
             ">
-                🔄 Auto-Refresh aktiv (alle {refresh_interval} Sekunden)
+                 Auto-Refresh aktiv (alle {refresh_interval} Sekunden)
             </div>
         """, unsafe_allow_html=True)
 
@@ -728,7 +728,7 @@ def render_dashboard_with_widgets(
             st.rerun()
 
     # Tabs für Dashboard und Einstellungen
-    tab1, tab2 = st.tabs(["Dashboard", "⚙️ Einstellungen"])
+    tab1, tab2 = st.tabs(["Dashboard", " Einstellungen"])
 
     with tab1:
         # Rendere Widgets
@@ -743,7 +743,7 @@ def render_dashboard_with_widgets(
         st.markdown("---")
 
         # Auto-Refresh Einstellungen
-        st.subheader("🔄 Auto-Refresh Einstellungen")
+        st.subheader(" Auto-Refresh Einstellungen")
 
         col1, col2 = st.columns(2)
 
@@ -763,6 +763,6 @@ def render_dashboard_with_widgets(
                 key="refresh_interval_select"
             )
 
-        if st.button("🔄 Jetzt aktualisieren"):
+        if st.button(" Jetzt aktualisieren"):
             st.session_state.last_refresh = datetime.now()
             st.rerun()

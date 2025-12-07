@@ -34,7 +34,7 @@ class MetricCard(ShadcnComponent):
             value="€45,231",
             trend=12.5,
             trend_label="+12.5% vs. letzter Monat",
-            icon="💰",
+            icon="",
             size="large"
         )
         ```
@@ -80,7 +80,7 @@ class MetricCard(ShadcnComponent):
                 value="1,234",
                 trend=8.2,
                 trend_label="+8.2% vs. Vormonat",
-                icon="👥",
+                icon="",
                 size="medium"
             )
             ```
@@ -340,13 +340,13 @@ class MetricCardGroup(ShadcnComponent):
                     "label": "Umsatz",
                     "value": "€45,231",
                     "trend": 12.5,
-                    "icon": "💰"
+                    "icon": ""
                 },
                 {
                     "label": "Kunden",
                     "value": "1,234",
                     "trend": -3.2,
-                    "icon": "👥"
+                    "icon": ""
                 }
             ],
             columns=2
@@ -475,7 +475,7 @@ def metric_card(
             label="Umsatz",
             value="€45,231",
             trend=12.5,
-            icon="💰"
+            icon=""
         )
         ```
     """

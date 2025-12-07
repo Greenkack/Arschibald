@@ -231,7 +231,7 @@ def generate_test_pdf_heatpump_variant(output_dir: Path):
         final_reader = PdfReader(io.BytesIO(final_pdf_bytes))
         print(f"   Final PDF merged: {len(final_reader.pages)} pages")
         print(
-            f"   ⚠ Note: Using normal templates (hp_nt_XX.pdf support requires merger update)")
+            f"    Note: Using normal templates (hp_nt_XX.pdf support requires merger update)")
 
         print("\n4. Saving heatpump test PDF...")
         output_path = output_dir / "manual_test_8_page_heatpump.pdf"
@@ -266,7 +266,7 @@ def generate_test_pdf_heatpump_variant(output_dir: Path):
         if all_exist:
             print(f"   All heatpump files exist")
         else:
-            print(f"   ⚠ Some heatpump files are missing")
+            print(f"    Some heatpump files are missing")
 
         print(f"\n{'=' * 70}")
         print("TASK 10.5 COMPLETED: Heatpump variant PDF generated!")
@@ -390,9 +390,9 @@ def text_alignment_verification(pdf_bytes: bytes):
                 # Check for common issues
                 if text_length == 0:
                     print(
-                        f"      ⚠ Warning: No text extracted (may be image-based)")
+                        f"       Warning: No text extracted (may be image-based)")
                 elif text_length < 50:
-                    print(f"      ⚠ Warning: Very little text extracted")
+                    print(f"       Warning: Very little text extracted")
                 else:
                     print(f"      Text extraction successful")
 
@@ -587,12 +587,12 @@ def run_manual_validation():
     print("=" * 70 + "\n")
 
     if passed == total:
-        print("🎉 All automated tasks completed successfully!")
+        print(" All automated tasks completed successfully!")
         print("   Manual visual inspection is still required.\n")
         return True
     else:
         print(
-            f"⚠ {
+            f" {
                 total -
                 passed} task(s) failed. Please review the output above.\n")
         return False

@@ -168,10 +168,10 @@ def render_profit_margin_management_ui():
 
     # Create tabs for different margin management areas
     tab1, tab2, tab3, tab4 = st.tabs([
-        "🌍 Globale Spannen",
-        "📂 Kategorie-Spannen",
+        " Globale Spannen",
+        " Kategorie-Spannen",
         "Produkt-Spannen",
-        "🧮 Kalkulations-Vorschau"
+        " Kalkulations-Vorschau"
     ])
 
     with tab1:
@@ -190,7 +190,7 @@ def render_profit_margin_management_ui():
 def render_global_margins_tab(margin_manager: ProfitMarginManager):
     """Render the global margins configuration tab"""
 
-    st.subheader("🌍 Globale Gewinnspannen")
+    st.subheader(" Globale Gewinnspannen")
     st.markdown(
         "Konfigurieren Sie Standard-Gewinnspannen, die als Fallback verwendet werden.")
 
@@ -266,7 +266,7 @@ def render_global_margins_tab(margin_manager: ProfitMarginManager):
                 help="Höhere Zahlen = höhere Priorität"
             )
 
-        submitted = st.form_submit_button("➕ Globale Spanne hinzufügen")
+        submitted = st.form_submit_button(" Globale Spanne hinzufügen")
 
         if submitted:
             try:
@@ -293,7 +293,7 @@ def render_global_margins_tab(margin_manager: ProfitMarginManager):
 def render_category_margins_tab(margin_manager: ProfitMarginManager):
     """Render the category margins configuration tab"""
 
-    st.subheader("📂 Kategorie-Gewinnspannen")
+    st.subheader(" Kategorie-Gewinnspannen")
     st.markdown(
         "Konfigurieren Sie spezifische Gewinnspannen für Produktkategorien.")
 
@@ -321,7 +321,7 @@ def render_category_margins_tab(margin_manager: ProfitMarginManager):
         st.markdown("**Aktuelle Kategorie-Spannen:**")
 
         for category, margin_data in category_margins.items():
-            with st.expander(f"📂 {category}", expanded=False):
+            with st.expander(f" {category}", expanded=False):
                 col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 2, 1])
 
                 col1.metric("Typ", margin_data.get('margin_type', 'N/A'))
@@ -421,7 +421,7 @@ def render_category_margins_tab(margin_manager: ProfitMarginManager):
                 key="cat_priority"
             )
 
-        submitted = st.form_submit_button("➕ Kategorie-Spanne hinzufügen")
+        submitted = st.form_submit_button(" Kategorie-Spanne hinzufügen")
 
         if submitted:
             try:
@@ -502,7 +502,7 @@ def render_product_margins_tab(margin_manager: ProfitMarginManager):
         product_id = selected_product.get('id')
 
         # Display current product information
-        with st.expander("📋 Produkt-Informationen", expanded=True):
+        with st.expander(" Produkt-Informationen", expanded=True):
             col1, col2, col3, col4 = st.columns(4)
 
             col1.metric("ID", product_id)
@@ -615,7 +615,7 @@ def render_product_margins_tab(margin_manager: ProfitMarginManager):
             col_submit, col_remove = st.columns([1, 1])
 
             with col_submit:
-                submitted = st.form_submit_button("💾 Spanne speichern")
+                submitted = st.form_submit_button(" Spanne speichern")
 
             with col_remove:
                 remove_margin = st.form_submit_button("Spanne entfernen")
@@ -671,7 +671,7 @@ def render_product_margins_tab(margin_manager: ProfitMarginManager):
 def render_margin_preview_tab(margin_manager: ProfitMarginManager):
     """Render the margin calculation preview and validation tab"""
 
-    st.subheader("🧮 Kalkulations-Vorschau")
+    st.subheader(" Kalkulations-Vorschau")
     st.markdown(
         "Testen Sie Gewinnspannen-Berechnungen mit verschiedenen Parametern.")
 
@@ -756,7 +756,7 @@ def render_margin_preview_tab(margin_manager: ProfitMarginManager):
     st.markdown("---")
 
     # Calculation section
-    if st.button("🧮 Berechnung durchführen", key="calculate_preview"):
+    if st.button(" Berechnung durchführen", key="calculate_preview"):
         try:
             # Get margin breakdown
             product_id = selected_product_data.get(

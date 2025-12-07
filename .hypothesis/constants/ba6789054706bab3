@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\styles\fills.py
+# hypothesis_version: 6.147.0
+
+['bgColor', 'darkDown', 'darkGray', 'darkGrid', 'darkHorizontal', 'darkTrellis', 'darkUp', 'darkVertical', 'fgColor', 'fill', 'gradientFill', 'gray0625', 'gray125', 'lightDown', 'lightGray', 'lightGrid', 'lightHorizontal', 'lightTrellis', 'lightUp', 'lightVertical', 'linear', 'mediumGray', 'none', 'path', 'patternFill', 'patternType', 'solid', 'stop', 'type']

@@ -83,7 +83,7 @@ def test_logo_data_preparation():
 
 def test_direct_logo_fetch():
     """Testet direkten Logo-Abruf"""
-    print("\n🔗 TESTE DIREKTEN LOGO-ABRUF")
+    print("\n TESTE DIREKTEN LOGO-ABRUF")
     print("=" * 50)
 
     brands = ["Huawei", "GoodWe", "BYD"]
@@ -101,7 +101,7 @@ def test_direct_logo_fetch():
 
 
 if __name__ == "__main__":
-    print("🧪 SIMPLE LOGO TEST")
+    print(" SIMPLE LOGO TEST")
     print("=" * 70)
 
     try:
@@ -117,7 +117,7 @@ if __name__ == "__main__":
         print(f"  Direkter Abruf: {direct_count}/3 Logos gefunden")
 
         if logo_count == 3 and direct_count == 3:
-            print("🎉 ALLE TESTS BESTANDEN! Logos sollten in der PDF erscheinen.")
+            print(" ALLE TESTS BESTANDEN! Logos sollten in der PDF erscheinen.")
         else:
             print("PROBLEM: Nicht alle Logos wurden gefunden.")
 

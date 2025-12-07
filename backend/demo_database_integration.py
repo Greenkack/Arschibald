@@ -68,12 +68,12 @@ def demo_basic_operations():
         db.commit()
         db.refresh(customer)
         
-        print(f"✓ Customer created with ID: {customer.id}")
+        print(f" Customer created with ID: {customer.id}")
         
         # Generate dynamic key
         print("\nGenerating dynamic key...")
         key = service.generate_key_for_record(customer, KeyPrefix.CUSTOMER)
-        print(f"✓ Generated key: {key}")
+        print(f" Generated key: {key}")
         
         # Generate PDF
         print("\nGenerating PDF...")
@@ -83,18 +83,18 @@ def demo_basic_operations():
             subject="Customer Details"
         )
         pdf_bytes = service.generate_pdf_for_record(customer, metadata)
-        print(f"✓ Generated PDF: {len(pdf_bytes)} bytes")
+        print(f" Generated PDF: {len(pdf_bytes)} bytes")
         
         # Save PDF to file
         pdf_file = "customer_demo.pdf"
         with open(pdf_file, 'wb') as f:
             f.write(pdf_bytes)
-        print(f"✓ Saved PDF to: {pdf_file}")
+        print(f" Saved PDF to: {pdf_file}")
         
         # Get formatted data
         print("\nGetting formatted data...")
         formatted = service.get_formatted_data(customer, locale='de-DE')
-        print(f"✓ Formatted data:")
+        print(f" Formatted data:")
         for key, value in formatted.items():
             if not key.startswith('_') and value:
                 print(f"  {key}: {value}")
@@ -102,7 +102,7 @@ def demo_basic_operations():
         return db, service
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
         db.close()
         os.close(db_fd)
         os.unlink(db_path)
@@ -131,25 +131,25 @@ def demo_bulk_operations(db, service):
     for product in products:
         db.refresh(product)
     
-    print(f"✓ Created {len(products)} products")
+    print(f" Created {len(products)} products")
     
     # Bulk generate keys
     print("\nGenerating keys for all products...")
     keys = service.bulk_generate_keys(products, KeyPrefix.PRODUCT)
-    print(f"✓ Generated {len(keys)} keys")
+    print(f" Generated {len(keys)} keys")
     print(f"  First key: {keys[0]}")
     print(f"  Last key: {keys[-1]}")
     
     # Bulk generate PDFs
     print("\nGenerating PDFs for all products...")
     pdfs = service.bulk_generate_pdfs(products)
-    print(f"✓ Generated {len(pdfs)} PDFs")
+    print(f" Generated {len(pdfs)} PDFs")
     print(f"  Total size: {sum(len(pdf) for pdf in pdfs)} bytes")
     
     # Get statistics
     print("\nGetting statistics...")
     stats = service.get_statistics(Product)
-    print(f"✓ Statistics:")
+    print(f" Statistics:")
     print(f"  Total records: {stats['total_records']}")
     print(f"  With keys: {stats['records_with_keys']}")
     print(f"  With PDFs: {stats['records_with_pdfs']}")
@@ -175,22 +175,22 @@ def demo_key_lookups(db, service):
     db.refresh(project)
     
     key = service.generate_key_for_record(project, KeyPrefix.PROJECT)
-    print(f"✓ Created project with key: {key}")
+    print(f" Created project with key: {key}")
     
     # Find by key
     print("\nFinding project by key...")
     found = service.get_by_dynamic_key(Project, key)
     if found:
-        print(f"✓ Found project: {found.name}")
+        print(f" Found project: {found.name}")
         print(f"  Status: {found.status}")
         print(f"  Type: {found.project_type}")
     else:
-        print("✗ Project not found")
+        print(" Project not found")
     
     # Find by prefix
     print("\nFinding all projects by prefix...")
     all_projects = service.get_by_prefix(Project, "PRJ")
-    print(f"✓ Found {len(all_projects)} projects with PRJ prefix")
+    print(f" Found {len(all_projects)} projects with PRJ prefix")
 
 
 def demo_batch_pdf_generation(db):
@@ -216,7 +216,7 @@ def demo_batch_pdf_generation(db):
     for task in tasks:
         db.refresh(task)
     
-    print(f"✓ Created {len(tasks)} tasks")
+    print(f" Created {len(tasks)} tasks")
     
     # Generate PDFs with progress
     print("\nGenerating PDFs in batches...")
@@ -234,7 +234,7 @@ def demo_batch_pdf_generation(db):
         progress_callback=progress_callback
     )
     
-    print(f"\n✓ Batch generation complete:")
+    print(f"\n Batch generation complete:")
     print(f"  Total records: {results['total_records']}")
     print(f"  Generated: {results['generated']}")
     print(f"  Failed: {results['failed']}")
@@ -264,15 +264,15 @@ def demo_solar_calculation(db, service):
     db.commit()
     db.refresh(calc)
     
-    print(f"✓ Created solar calculation")
+    print(f" Created solar calculation")
     
     # Generate key and PDF
     key, pdf = service.generate_key_and_pdf(
         calc,
         KeyPrefix.SOLAR_CALCULATION
     )
-    print(f"✓ Generated key: {key}")
-    print(f"✓ Generated PDF: {len(pdf)} bytes")
+    print(f" Generated key: {key}")
+    print(f" Generated PDF: {len(pdf)} bytes")
     
     # Get formatted values
     print("\nFormatted values (German format):")
@@ -286,7 +286,7 @@ def demo_solar_calculation(db, service):
     # Export to JSON
     print("\nExporting to JSON...")
     json_str = service.export_to_json(calc)
-    print(f"✓ JSON export: {len(json_str)} characters")
+    print(f" JSON export: {len(json_str)} characters")
     print(f"  Preview: {json_str[:200]}...")
 
 
@@ -311,32 +311,32 @@ def demo_pdf_management(db, service):
     for offer in offers:
         db.refresh(offer)
     
-    print(f"✓ Created {len(offers)} offers")
+    print(f" Created {len(offers)} offers")
     
     # Generate PDFs for first 3
     print("\nGenerating PDFs for first 3 offers...")
     service.bulk_generate_pdfs(offers[:3])
-    print("✓ PDFs generated")
+    print(" PDFs generated")
     
     # Find offers with PDFs
     print("\nFinding offers with PDFs...")
     with_pdfs = service.get_records_with_pdf(Offer)
-    print(f"✓ Found {len(with_pdfs)} offers with PDFs")
+    print(f" Found {len(with_pdfs)} offers with PDFs")
     
     # Find offers without PDFs
     print("\nFinding offers without PDFs...")
     without_pdfs = service.get_records_without_pdf(Offer)
-    print(f"✓ Found {len(without_pdfs)} offers without PDFs")
+    print(f" Found {len(without_pdfs)} offers without PDFs")
     
     # Regenerate PDF
     print("\nRegenerating PDF for first offer...")
     new_pdf = service.regenerate_pdf(offers[0])
-    print(f"✓ Regenerated PDF: {len(new_pdf)} bytes")
+    print(f" Regenerated PDF: {len(new_pdf)} bytes")
     
     # Delete PDF
     print("\nDeleting PDF from second offer...")
     deleted = service.delete_pdf(offers[1])
-    print(f"✓ PDF deleted: {deleted}")
+    print(f" PDF deleted: {deleted}")
 
 
 def main():
@@ -356,7 +356,7 @@ def main():
         demo_pdf_management(db, service)
         
         print_section("Demo Complete")
-        print("✓ All demonstrations completed successfully!")
+        print(" All demonstrations completed successfully!")
         print("\nGenerated files:")
         print("  - customer_demo.pdf")
         
@@ -364,7 +364,7 @@ def main():
         db.close()
         
     except Exception as e:
-        print(f"\n✗ Demo failed: {e}")
+        print(f"\n Demo failed: {e}")
         import traceback
         traceback.print_exc()
         return 1

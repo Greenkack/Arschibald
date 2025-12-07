@@ -21,10 +21,10 @@ def verify_imports():
             ProductSearchRequest, ProductExportRequest, ProductImportRequest
         )
         from backend.api.v1 import products
-        print("✓ All imports successful")
+        print(" All imports successful")
         return True
     except ImportError as e:
-        print(f"✗ Import error: {e}")
+        print(f" Import error: {e}")
         return False
 
 
@@ -34,10 +34,10 @@ def verify_service_creation():
     try:
         from backend.services.product_service import ProductService
         service = ProductService()
-        print(f"✓ Service created: {service.service_name}")
+        print(f" Service created: {service.service_name}")
         return True
     except Exception as e:
-        print(f"✗ Service creation failed: {e}")
+        print(f" Service creation failed: {e}")
         return False
 
 
@@ -47,10 +47,10 @@ def verify_service_initialization():
     try:
         from backend.services.product_service import get_product_service
         service = get_product_service()
-        print(f"✓ Service initialized: {service.is_initialized}")
+        print(f" Service initialized: {service.is_initialized}")
         return True
     except Exception as e:
-        print(f"✗ Service initialization failed: {e}")
+        print(f" Service initialization failed: {e}")
         return False
 
 
@@ -61,14 +61,14 @@ def verify_health_check():
         from backend.services.product_service import get_product_service
         service = get_product_service()
         health = service.health_check()
-        print(f"✓ Health check status: {health.status.value}")
+        print(f" Health check status: {health.status.value}")
         print(f"  Message: {health.message}")
         if health.details:
             for key, value in health.details.items():
                 print(f"  {key}: {value}")
         return True
     except Exception as e:
-        print(f"✗ Health check failed: {e}")
+        print(f" Health check failed: {e}")
         return False
 
 
@@ -97,13 +97,13 @@ def verify_api_endpoints():
         
         for route in expected_routes:
             if route in routes:
-                print(f"✓ Endpoint exists: {route}")
+                print(f" Endpoint exists: {route}")
             else:
-                print(f"✗ Endpoint missing: {route}")
+                print(f" Endpoint missing: {route}")
         
         return True
     except Exception as e:
-        print(f"✗ API endpoint verification failed: {e}")
+        print(f" API endpoint verification failed: {e}")
         return False
 
 
@@ -123,11 +123,11 @@ def verify_schemas():
             brand="TestBrand",
             price_euro=200.0
         )
-        print(f"✓ ProductCreate schema valid")
+        print(f" ProductCreate schema valid")
         
         # Test ProductUpdate
         product_update = ProductUpdate(price_euro=210.0)
-        print(f"✓ ProductUpdate schema valid")
+        print(f" ProductUpdate schema valid")
         
         # Test ProductSearchRequest
         search_request = ProductSearchRequest(
@@ -135,11 +135,11 @@ def verify_schemas():
             category="Modul",
             limit=50
         )
-        print(f"✓ ProductSearchRequest schema valid")
+        print(f" ProductSearchRequest schema valid")
         
         return True
     except Exception as e:
-        print(f"✗ Schema verification failed: {e}")
+        print(f" Schema verification failed: {e}")
         return False
 
 
@@ -157,9 +157,9 @@ def verify_documentation():
     all_exist = True
     for doc_file in doc_files:
         if os.path.exists(doc_file):
-            print(f"✓ Documentation exists: {doc_file}")
+            print(f" Documentation exists: {doc_file}")
         else:
-            print(f"✗ Documentation missing: {doc_file}")
+            print(f" Documentation missing: {doc_file}")
             all_exist = False
     
     return all_exist
@@ -171,7 +171,7 @@ def verify_tests():
     
     test_file = 'backend/tests/test_product_service.py'
     if os.path.exists(test_file):
-        print(f"✓ Test file exists: {test_file}")
+        print(f" Test file exists: {test_file}")
         
         # Count test functions
         with open(test_file, 'r') as f:
@@ -181,7 +181,7 @@ def verify_tests():
         
         return True
     else:
-        print(f"✗ Test file missing: {test_file}")
+        print(f" Test file missing: {test_file}")
         return False
 
 
@@ -212,13 +212,13 @@ def main():
     total = len(results)
     
     for name, result in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = " PASS" if result else " FAIL"
         print(f"{status}: {name}")
     
     print(f"\nTotal: {passed}/{total} verifications passed")
     
     if passed == total:
-        print("\n✓ ALL VERIFICATIONS PASSED!")
+        print("\n ALL VERIFICATIONS PASSED!")
         print("\nThe Product Management Service is ready to use.")
         print("\nNext steps:")
         print("  1. Run tests: pytest backend/tests/test_product_service.py -v")
@@ -227,7 +227,7 @@ def main():
         print("  4. View API docs: http://localhost:8000/api/docs")
         return 0
     else:
-        print(f"\n✗ {total - passed} VERIFICATION(S) FAILED")
+        print(f"\n {total - passed} VERIFICATION(S) FAILED")
         print("\nPlease review the errors above.")
         return 1
 

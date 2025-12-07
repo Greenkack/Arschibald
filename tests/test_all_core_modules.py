@@ -85,7 +85,7 @@ test_module_import("connection_manager", "Connection Pooling")
 print()
 
 # Test 2: Phase 5 (Security & Auth)
-print("🔐 Testing Phase 5: Security & Authentication")
+print(" Testing Phase 5: Security & Authentication")
 print("-" * 70)
 
 test_module_import("security", "User Auth, RBAC, Tokens")
@@ -105,7 +105,7 @@ test_module_import("widget_validation", "Form Validation")
 print()
 
 # Test 4: Phase 7 (Navigation)
-print("🧭 Testing Phase 7: Navigation")
+print(" Testing Phase 7: Navigation")
 print("-" * 70)
 
 test_module_import("navigation_history", "Navigation Tracking")
@@ -113,7 +113,7 @@ test_module_import("navigation_history", "Navigation Tracking")
 print()
 
 # Test 5: Phase 8 (Jobs)
-print("⚙️ Testing Phase 8: Jobs & Background Tasks")
+print(" Testing Phase 8: Jobs & Background Tasks")
 print("-" * 70)
 
 test_module_import("jobs", "Job System Core")
@@ -124,7 +124,7 @@ test_module_import("job_ui", "Job Management UI")
 print()
 
 # Test 6: Phase 9 (Migrations)
-print("🔄 Testing Phase 9: Database Migrations")
+print(" Testing Phase 9: Database Migrations")
 print("-" * 70)
 
 test_module_import("migrations", "Migration Core")
@@ -145,7 +145,7 @@ test_module_import("cache_warming", "Cache Pre-Population")
 print()
 
 # Test 8: Phase 11 (DB Extensions)
-print("🗄️ Testing Phase 11: Database Extensions")
+print(" Testing Phase 11: Database Extensions")
 print("-" * 70)
 
 test_module_import("db_performance_monitor", "Query Performance")
@@ -162,7 +162,7 @@ test_module_import("containers", "DI Container")
 print()
 
 # Test 10: Core Integration
-print("🔗 Testing Core Integration Layer")
+print(" Testing Core Integration Layer")
 print("-" * 70)
 
 test_core_integration()
@@ -198,7 +198,7 @@ print()
 print("=" * 70)
 
 if success_rate == 100:
-    print("🎉 ALL TESTS PASSED! All 31 modules are available!")
+    print(" ALL TESTS PASSED! All 31 modules are available!")
     sys.exit(0)
 elif success_rate >= 80:
     print("🟢 GOOD: Most modules are available")
@@ -207,5 +207,5 @@ elif success_rate >= 50:
     print("🟡 PARTIAL: Some modules are missing")
     sys.exit(1)
 else:
-    print("🔴 CRITICAL: Many modules are missing")
+    print(" CRITICAL: Many modules are missing")
     sys.exit(1)

@@ -40,7 +40,7 @@ def show_geo_mapping_ui(db_path: str):
         
     Requirement: 16.1, 16.2, 16.3, 16.4, 16.5
     """
-    st.title("🗺️ Geo-Mapping & Routenplanung")
+    st.title(" Geo-Mapping & Routenplanung")
     
     # Prüfen, ob erforderliche Bibliotheken installiert sind
     if not GEOCODING_AVAILABLE:
@@ -63,9 +63,9 @@ def show_geo_mapping_ui(db_path: str):
     
     # Tab-Navigation
     tab1, tab2, tab3, tab4 = st.tabs([
-        "📍 Kunden-Karte",
-        "🔄 Geocoding",
-        "🚗 Routenplanung",
+        " Kunden-Karte",
+        " Geocoding",
+        " Routenplanung",
         "Statistiken"
     ])
     
@@ -129,17 +129,17 @@ def show_customer_map_tab(mapper: GeoMapper):
         st.info("Öffnen Sie die Datei in Ihrem Browser, um die Karte anzuzeigen.")
     
     # Kundenliste anzeigen
-    with st.expander("📋 Kundenliste anzeigen"):
+    with st.expander(" Kundenliste anzeigen"):
         for i, customer in enumerate(customers, 1):
             st.write(f"**{i}. {customer['name']}**")
             if customer['company']:
                 st.write(f"   Firma: {customer['company']}")
-            st.write(f"   📍 {customer['address']}, {customer['zip_code']} {customer['city']}")
+            st.write(f"    {customer['address']}, {customer['zip_code']} {customer['city']}")
             if customer['email']:
-                st.write(f"   📧 {customer['email']}")
+                st.write(f"    {customer['email']}")
             if customer['phone']:
-                st.write(f"   📞 {customer['phone']}")
-            st.write(f"   🌍 Koordinaten: {customer['latitude']:.6f}, {customer['longitude']:.6f}")
+                st.write(f"    {customer['phone']}")
+            st.write(f"    Koordinaten: {customer['latitude']:.6f}, {customer['longitude']:.6f}")
             st.divider()
 
 
@@ -200,7 +200,7 @@ def show_geocoding_tab(mapper: GeoMapper):
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("🔄 Alle nicht-geocodierten Kunden geocodieren", type="primary"):
+        if st.button(" Alle nicht-geocodierten Kunden geocodieren", type="primary"):
             with st.spinner("Geocoding läuft..."):
                 stats = mapper.geocode_all_customers(force_update=False)
                 
@@ -213,7 +213,7 @@ def show_geocoding_tab(mapper: GeoMapper):
                 """)
     
     with col2:
-        if st.button("🔄 Alle Kunden neu geocodieren"):
+        if st.button(" Alle Kunden neu geocodieren"):
             if st.checkbox("Ich bestätige, dass alle Kunden neu geocodiert werden sollen"):
                 with st.spinner("Geocoding läuft..."):
                     stats = mapper.geocode_all_customers(force_update=True)
@@ -260,7 +260,7 @@ def show_geocoding_tab(mapper: GeoMapper):
             key="geocode_single_customer"
         )
         
-        if st.button("📍 Diesen Kunden geocodieren"):
+        if st.button(" Diesen Kunden geocodieren"):
             with st.spinner("Geocoding..."):
                 success = mapper.update_customer_coordinates(selected_customer['id'])
                 
@@ -317,7 +317,7 @@ def show_route_planning_tab(mapper: GeoMapper):
     st.success(f"{len(selected_customer_ids)} Kunden ausgewählt")
     
     # Route berechnen
-    if st.button("🚗 Route optimieren", type="primary"):
+    if st.button(" Route optimieren", type="primary"):
         with st.spinner("Route wird berechnet..."):
             route = mapper.optimize_route(selected_customer_ids)
             
@@ -342,22 +342,22 @@ def show_route_planning_tab(mapper: GeoMapper):
         st.metric("Gesamtstrecke", f"{total_distance} km")
         
         # Routenliste
-        with st.expander("📋 Routendetails anzeigen", expanded=True):
+        with st.expander(" Routendetails anzeigen", expanded=True):
             for i, stop in enumerate(route):
                 st.write(f"**Stopp {i + 1}: {stop['name']}**")
                 if stop['company']:
                     st.write(f"   Firma: {stop['company']}")
-                st.write(f"   📍 {stop['address']}, {stop['zip_code']} {stop['city']}")
+                st.write(f"    {stop['address']}, {stop['zip_code']} {stop['city']}")
                 if i > 0:
-                    st.write(f"   🚗 Entfernung vom vorherigen Stopp: {stop['distance_km']} km")
-                st.write(f"   📏 Gesamtstrecke bis hier: {stop['cumulative_distance_km']} km")
+                    st.write(f"    Entfernung vom vorherigen Stopp: {stop['distance_km']} km")
+                st.write(f"    Gesamtstrecke bis hier: {stop['cumulative_distance_km']} km")
                 st.divider()
         
         # Karte anzeigen
         route_map = mapper.create_route_map(route)
         
         if route_map and STREAMLIT_FOLIUM_AVAILABLE:
-            st.subheader("🗺️ Routenkarte")
+            st.subheader(" Routenkarte")
             st_folium(route_map, width=1000, height=600)
         elif route_map:
             map_path = "temp_route_map.html"
@@ -366,7 +366,7 @@ def show_route_planning_tab(mapper: GeoMapper):
         
         # Kalender-Export
         st.divider()
-        st.subheader("📅 Route in Kalender exportieren")
+        st.subheader(" Route in Kalender exportieren")
         
         col1, col2 = st.columns(2)
         
@@ -403,19 +403,19 @@ def show_route_planning_tab(mapper: GeoMapper):
         )
         
         # Termine-Vorschau
-        with st.expander("📋 Termine-Vorschau", expanded=True):
+        with st.expander(" Termine-Vorschau", expanded=True):
             for i, apt in enumerate(appointments, 1):
                 start = datetime.fromisoformat(apt['start_time'])
                 end = datetime.fromisoformat(apt['end_time'])
                 
                 st.write(f"**Termin {i}**")
                 st.write(f"   {apt['title']}")
-                st.write(f"   🕐 {start.strftime('%H:%M')} - {end.strftime('%H:%M')}")
-                st.write(f"   📍 {apt['location']}")
+                st.write(f"    {start.strftime('%H:%M')} - {end.strftime('%H:%M')}")
+                st.write(f"    {apt['location']}")
                 st.divider()
         
         # In Kalender speichern
-        if st.button("💾 Termine in Kalender speichern", type="primary"):
+        if st.button(" Termine in Kalender speichern", type="primary"):
             saved_count = mapper.save_appointments_to_db(appointments)
             
             if saved_count > 0:
@@ -557,7 +557,7 @@ def show_customer_location_widget(customer_id: int, db_path: str):
         row = cursor.fetchone()
         
         if row and row['latitude'] and row['longitude']:
-            st.success(f"📍 Koordinaten: {row['latitude']:.6f}, {row['longitude']:.6f}")
+            st.success(f" Koordinaten: {row['latitude']:.6f}, {row['longitude']:.6f}")
             
             if row['geocoded_at']:
                 try:
@@ -580,7 +580,7 @@ def show_customer_location_widget(customer_id: int, db_path: str):
                 
                 st_folium(m, width=400, height=300)
         else:
-            st.info("📍 Noch nicht geocodiert")
+            st.info(" Noch nicht geocodiert")
             
             if st.button("Jetzt geocodieren", key=f"geocode_{customer_id}"):
                 with st.spinner("Geocoding..."):

@@ -73,10 +73,10 @@ def demo_basic_extended_wp_pdf():
         output_path = "demo_basic_extended_wp_pdf.pdf"
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        logger.info(f"✓ PDF generated successfully: {output_path}")
+        logger.info(f" PDF generated successfully: {output_path}")
         logger.info(f"  Size: {len(pdf_bytes)} bytes")
     else:
-        logger.error("✗ Failed to generate PDF")
+        logger.error(" Failed to generate PDF")
 
 
 def demo_extended_wp_pdf_with_diagrams():
@@ -124,10 +124,10 @@ def demo_extended_wp_pdf_with_diagrams():
         output_path = "demo_extended_wp_pdf_with_diagrams.pdf"
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        logger.info(f"✓ PDF generated successfully: {output_path}")
+        logger.info(f" PDF generated successfully: {output_path}")
         logger.info(f"  Size: {len(pdf_bytes)} bytes")
     else:
-        logger.error("✗ Failed to generate PDF")
+        logger.error(" Failed to generate PDF")
 
 
 def demo_get_available_wp_components():
@@ -200,10 +200,10 @@ def demo_full_extended_wp_pdf():
         output_path = "demo_full_extended_wp_pdf.pdf"
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        logger.info(f"✓ PDF generated successfully: {output_path}")
+        logger.info(f" PDF generated successfully: {output_path}")
         logger.info(f"  Size: {len(pdf_bytes)} bytes")
     else:
-        logger.error("✗ Failed to generate PDF")
+        logger.error(" Failed to generate PDF")
 
 
 def main():

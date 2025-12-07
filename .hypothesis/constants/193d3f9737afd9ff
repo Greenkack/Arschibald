@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\nodes\scoped_nodes\__init__.py
+# hypothesis_version: 6.147.0
+
+['AsyncFunctionDef', 'ClassDef', 'ComprehensionScope', 'DictComp', 'FunctionDef', 'GeneratorExp', 'Lambda', 'ListComp', 'LocalsDictNodeNG', 'Module', 'SetComp', '_is_metaclass', 'builtin_lookup', 'function_to_method', 'get_wrapping_class']

@@ -77,14 +77,14 @@ def test_pdf_3d_screenshot_integration():
             if has_image:
                 print("   Image-Element gefunden")
             else:
-                print("   ⚠ Kein Image-Element gefunden")
+                print("    Kein Image-Element gefunden")
             
             if has_caption:
                 print("   Bildunterschrift gefunden")
             else:
-                print("   ⚠ Keine Bildunterschrift gefunden")
+                print("    Keine Bildunterschrift gefunden")
         else:
-            print("   ⚠ Story ist leer")
+            print("    Story ist leer")
         
         print("\n2. Teste _draw_3d_visualization() OHNE Screenshot...")
         
@@ -110,7 +110,7 @@ def test_pdf_3d_screenshot_integration():
         if has_placeholder:
             print("   Platzhalter-Text gefunden")
         else:
-            print("   ⚠ Kein Platzhalter-Text gefunden")
+            print("    Kein Platzhalter-Text gefunden")
         
         print("\n" + "="*60)
         print("ERGEBNIS: Task 4.2 ist korrekt implementiert! ")

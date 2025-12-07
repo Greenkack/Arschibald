@@ -168,7 +168,7 @@ def test_integration_with_real_files():
         if total_pages == 3:
             print("   Page count matches!")
         else:
-            print(f"   ⚠ Page count mismatch (got {total_pages}, expected 3)")
+            print(f"    Page count mismatch (got {total_pages}, expected 3)")
 
     print("\n" + "=" * 60)
     print("Integration Test Completed Successfully")

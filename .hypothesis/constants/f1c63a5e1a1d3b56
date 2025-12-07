@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\backend\core\__init__.py
+# hypothesis_version: 6.147.0
+
+['Base', 'engine', 'get_db', 'settings']

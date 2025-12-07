@@ -36,7 +36,7 @@ def main():
         time.sleep(1)
 
     # Demo 2: Context Manager
-    st.header("2. 🔄 Context Manager")
+    st.header("2.  Context Manager")
     if st.button("Starte Context Manager Demo", key="demo2"):
         with ProgressContext("Verarbeite mit Context Manager...") as progress:
             for i in range(5):
@@ -110,7 +110,7 @@ def main():
             st.error(f"Fehler: {e}")
 
     # Demo 6: Nested Progress (ohne Context Manager für Simplizität)
-    st.header("6. 🔗 Verschachtelte Progress Bars")
+    st.header("6.  Verschachtelte Progress Bars")
     if st.button("Starte verschachtelte Demo", key="demo6"):
         main_progress = create_progress_bar(
             "Hauptprozess läuft...", st.container())
@@ -132,7 +132,7 @@ def main():
         main_progress.complete("Alle Hauptschritte abgeschlossen!")
 
     # Demo 7: Custom Colors (falls verfügbar)
-    st.header("7. 🌈 Eigene Farben")
+    st.header("7.  Eigene Farben")
 
     col1, col2, col3 = st.columns(3)
 
@@ -164,7 +164,7 @@ def main():
         time.sleep(1)
 
     # Einstellungen anzeigen
-    st.header("8. ⚙️ Aktuelle Einstellungen")
+    st.header("8.  Aktuelle Einstellungen")
 
     with st.expander("Progress Manager Konfiguration"):
         config = progress_manager.config

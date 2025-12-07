@@ -326,15 +326,15 @@ def demo_complete_workflow():
     except ImportError:
         print("   PDF generation requires reportlab")
 
-    print("\n✓ Complete workflow finished successfully!")
+    print("\n Complete workflow finished successfully!")
 
 
 def main():
     """Run all demonstrations"""
     print("\n")
-    print("╔" + "=" * 68 + "╗")
-    print("║" + " " * 15 + "UNIVERSAL DATA MODEL DEMONSTRATION" + " " * 19 + "║")  # noqa: E501
-    print("╚" + "=" * 68 + "╝")
+    print("" + "=" * 68 + "")
+    print("" + " " * 15 + "UNIVERSAL DATA MODEL DEMONSTRATION" + " " * 19 + "")  # noqa: E501
+    print("" + "=" * 68 + "")
 
     demos = [
         demo_basic_usage,

@@ -321,7 +321,7 @@ def demo_custom_rules():
     print(f"\nApplied Custom Rules:")
     for rule_result in result['applied_custom_rules']:
         if rule_result['applied']:
-            print(f"  ✓ {rule_result['rule_name']}")
+            print(f"   {rule_result['rule_name']}")
     
     if 'discount_applied' in result:
         print(f"\nTotal Discounts: {service._format_currency(result['discount_applied'])}")

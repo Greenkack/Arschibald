@@ -19,7 +19,7 @@ from theming import ThemeManager
 def main():
     st.set_page_config(
         page_title="shadcn/ui Sidebar Demo",
-        page_icon="📋",
+        page_icon="",
         layout="wide"
     )
 
@@ -32,7 +32,7 @@ def main():
     theme_css = st.session_state.theme_manager.generate_css()
     st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
 
-    st.title("📋 shadcn/ui Sidebar Demo")
+    st.title(" shadcn/ui Sidebar Demo")
     st.markdown("---")
 
     # Demo-Auswahl
@@ -90,17 +90,17 @@ def demo_basic_sidebar():
         MenuGroup(
             title="Navigation",
             items=[
-                MenuItem(label="Home", icon="🏠", key="home"),
-                MenuItem(label="About", icon="ℹ️", key="about"),
-                MenuItem(label="Contact", icon="📧", key="contact"),
+                MenuItem(label="Home", icon="", key="home"),
+                MenuItem(label="About", icon="ℹ", key="about"),
+                MenuItem(label="Contact", icon="", key="contact"),
             ]
         ),
         MenuGroup(
             title="Features",
             items=[
-                MenuItem(label="Dashboard", icon="📊", key="dashboard"),
-                MenuItem(label="Analytics", icon="📈", key="analytics"),
-                MenuItem(label="Reports", icon="📄", key="reports"),
+                MenuItem(label="Dashboard", icon="", key="dashboard"),
+                MenuItem(label="Analytics", icon="", key="analytics"),
+                MenuItem(label="Reports", icon="", key="reports"),
             ]
         )
     ]
@@ -108,7 +108,7 @@ def demo_basic_sidebar():
     selected = sidebar.render(groups)
 
     if selected:
-        st.success(f"✅ Ausgewählt: {selected}")
+        st.success(f" Ausgewählt: {selected}")
 
 
 def demo_with_callbacks():
@@ -130,13 +130,13 @@ def demo_with_callbacks():
             items=[
                 MenuItem(
                     label="Dashboard",
-                    icon="📊",
+                    icon="",
                     key="dashboard_cb",
                     callback=on_dashboard_click
                 ),
                 MenuItem(
                     label="Einstellungen",
-                    icon="⚙️",
+                    icon="",
                     key="settings_cb",
                     callback=on_settings_click
                 ),
@@ -161,16 +161,16 @@ def demo_collapsible_groups():
         MenuGroup(
             title="Immer sichtbar",
             items=[
-                MenuItem(label="Home", icon="🏠", key="home_coll"),
-                MenuItem(label="Dashboard", icon="📊", key="dash_coll"),
+                MenuItem(label="Home", icon="", key="home_coll"),
+                MenuItem(label="Dashboard", icon="", key="dash_coll"),
             ]
         ),
         MenuGroup(
             title="Erweiterte Optionen",
             items=[
-                MenuItem(label="Option 1", icon="1️⃣", key="opt1"),
-                MenuItem(label="Option 2", icon="2️⃣", key="opt2"),
-                MenuItem(label="Option 3", icon="3️⃣", key="opt3"),
+                MenuItem(label="Option 1", icon="1⃣", key="opt1"),
+                MenuItem(label="Option 2", icon="2⃣", key="opt2"),
+                MenuItem(label="Option 3", icon="3⃣", key="opt3"),
             ],
             collapsible=True,
             collapsed=True
@@ -178,8 +178,8 @@ def demo_collapsible_groups():
         MenuGroup(
             title="Admin-Bereich",
             items=[
-                MenuItem(label="Benutzer", icon="👥", key="users_coll"),
-                MenuItem(label="Logs", icon="📋", key="logs_coll"),
+                MenuItem(label="Benutzer", icon="", key="users_coll"),
+                MenuItem(label="Logs", icon="", key="logs_coll"),
             ],
             collapsible=True,
             collapsed=False
@@ -189,7 +189,7 @@ def demo_collapsible_groups():
     selected = sidebar.render(groups)
 
     if selected:
-        st.success(f"✅ Ausgewählt: {selected}")
+        st.success(f" Ausgewählt: {selected}")
 
 
 def demo_with_footer():
@@ -199,9 +199,9 @@ def demo_with_footer():
 
     def render_footer():
         st.markdown("---")
-        st.caption("📦 Version 1.0.0")
+        st.caption(" Version 1.0.0")
         st.caption("© 2024 Firma GmbH")
-        st.caption("🌐 www.example.com")
+        st.caption(" www.example.com")
 
     sidebar = ShadcnSidebar()
 
@@ -209,8 +209,8 @@ def demo_with_footer():
         MenuGroup(
             title="Navigation",
             items=[
-                MenuItem(label="Home", icon="🏠", key="home_footer"),
-                MenuItem(label="About", icon="ℹ️", key="about_footer"),
+                MenuItem(label="Home", icon="", key="home_footer"),
+                MenuItem(label="About", icon="ℹ", key="about_footer"),
             ]
         )
     ]
@@ -218,7 +218,7 @@ def demo_with_footer():
     selected = sidebar.render(groups, footer_content=render_footer)
 
     if selected:
-        st.success(f"✅ Ausgewählt: {selected}")
+        st.success(f" Ausgewählt: {selected}")
 
 
 def demo_disabled_items():
@@ -234,24 +234,24 @@ def demo_disabled_items():
             items=[
                 MenuItem(
                     label="Verfügbar",
-                    icon="✅",
+                    icon="",
                     key="available"
                 ),
                 MenuItem(
                     label="In Entwicklung",
-                    icon="🚧",
+                    icon="",
                     key="dev",
                     disabled=True
                 ),
                 MenuItem(
                     label="Bald verfügbar",
-                    icon="🔒",
+                    icon="",
                     key="soon",
                     disabled=True
                 ),
                 MenuItem(
                     label="Beta",
-                    icon="🧪",
+                    icon="",
                     key="beta"
                 ),
             ]
@@ -261,7 +261,7 @@ def demo_disabled_items():
     selected = sidebar.render(groups)
 
     if selected:
-        st.success(f"✅ Ausgewählt: {selected}")
+        st.success(f" Ausgewählt: {selected}")
 
 
 def demo_predefined_menus():
@@ -273,7 +273,7 @@ def demo_predefined_menus():
     selected = sidebar.render(get_default_menu())
 
     if selected:
-        st.success(f"✅ Ausgewählt: {selected}")
+        st.success(f" Ausgewählt: {selected}")
 
 
 def demo_solar_menu():
@@ -285,7 +285,7 @@ def demo_solar_menu():
     selected = sidebar.render(get_solar_calculator_menu())
 
     if selected:
-        st.success(f"✅ Ausgewählt: {selected}")
+        st.success(f" Ausgewählt: {selected}")
 
 
 def demo_convenience_function():
@@ -297,9 +297,9 @@ def demo_convenience_function():
         MenuGroup(
             title="Quick Menu",
             items=[
-                MenuItem("Item 1", icon="1️⃣", key="item1_conv"),
-                MenuItem("Item 2", icon="2️⃣", key="item2_conv"),
-                MenuItem("Item 3", icon="3️⃣", key="item3_conv"),
+                MenuItem("Item 1", icon="1⃣", key="item1_conv"),
+                MenuItem("Item 2", icon="2⃣", key="item2_conv"),
+                MenuItem("Item 3", icon="3⃣", key="item3_conv"),
             ]
         )
     ]
@@ -310,7 +310,7 @@ def demo_convenience_function():
     )
 
     if selected:
-        st.success(f"✅ Ausgewählt: {selected}")
+        st.success(f" Ausgewählt: {selected}")
 
 
 def show_main_content(demo_type: str):
@@ -319,7 +319,7 @@ def show_main_content(demo_type: str):
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.subheader("📝 Code-Beispiel")
+        st.subheader(" Code-Beispiel")
 
         if demo_type == "Basis-Sidebar":
             st.code("""
@@ -331,8 +331,8 @@ groups = [
     MenuGroup(
         title="Navigation",
         items=[
-            MenuItem(label="Home", icon="🏠", key="home"),
-            MenuItem(label="About", icon="ℹ️", key="about"),
+            MenuItem(label="Home", icon="", key="home"),
+            MenuItem(label="About", icon="ℹ", key="about"),
         ]
     )
 ]
@@ -351,7 +351,7 @@ groups = [
         items=[
             MenuItem(
                 label="Button",
-                icon="🔘",
+                icon="",
                 key="btn",
                 callback=on_click
             ),
@@ -388,7 +388,7 @@ sidebar.render(groups, footer_content=render_footer)
             st.code("""
 MenuItem(
     label="Bald verfügbar",
-    icon="🔒",
+    icon="",
     key="soon",
     disabled=True
 )
@@ -416,7 +416,7 @@ selected = create_sidebar_menu(groups)
             """, language="python")
 
     with col2:
-        st.subheader("ℹ️ Info")
+        st.subheader("ℹ Info")
 
         if demo_type == "Basis-Sidebar":
             st.info("""
@@ -485,7 +485,7 @@ selected = create_sidebar_menu(groups)
 
     # Session State Info
     st.markdown("---")
-    st.subheader("🔍 Session State")
+    st.subheader(" Session State")
 
     col1, col2 = st.columns(2)
 

@@ -83,7 +83,7 @@ def demo_3d_visualization_pdf():
     with open(output_path, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ 3D Visualization PDF created: {output_path}")
+    print(f" 3D Visualization PDF created: {output_path}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  Views: {len(viz_data['views'])}")
     print(f"  Total Power: 9,60 kWp (German format)")
@@ -145,7 +145,7 @@ def demo_diagram_pdf():
     with open(output_path, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Diagram PDF created: {output_path}")
+    print(f" Diagram PDF created: {output_path}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  Nodes: {len(diagram_data['nodes'])}")
     print(f"  Connections: {len(diagram_data['edges'])}")
@@ -196,7 +196,7 @@ def demo_flowchart_pdf():
     with open(output_path, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Flowchart PDF created: {output_path}")
+    print(f" Flowchart PDF created: {output_path}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  Steps: {len(flowchart_data['steps'])}")
     print(f"  Connections: {len(flowchart_data['connections'])}")
@@ -257,7 +257,7 @@ def demo_infographic_pdf():
     with open(output_path, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Infographic PDF created: {output_path}")
+    print(f" Infographic PDF created: {output_path}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  Sections: {len(infographic_data['sections'])}")
     print(f"  Annual Production: 9.876,54 kWh (German format)")
@@ -333,7 +333,7 @@ def demo_dashboard_pdf():
     with open(output_path, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Dashboard PDF created: {output_path}")
+    print(f" Dashboard PDF created: {output_path}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  KPIs: {len(dashboard_data['kpis'])}")
     print(f"  Widgets: {len(dashboard_data['widgets'])}")
@@ -375,7 +375,7 @@ def demo_batch_export():
     
     results = service.export_multiple_visualizations(visualizations, "separate")
     
-    print(f"✓ Batch export completed")
+    print(f" Batch export completed")
     print(f"  Visualizations exported: {len(results)}")
     
     for i, (key, pdf_bytes) in enumerate(results.items(), 1):
@@ -405,15 +405,15 @@ def main():
     print("="*70)
     print("\nGenerated PDFs are saved in: backend/demo_output/")
     print("\nFeatures demonstrated:")
-    print("  ✓ 3D visualization PDF export with multiple views")
-    print("  ✓ System diagram PDF generation with legend")
-    print("  ✓ Process flowchart PDF export with decision nodes")
-    print("  ✓ Infographic PDF with stats, comparisons, and charts")
-    print("  ✓ Dashboard PDF with KPIs and widget grid")
-    print("  ✓ Batch export of multiple visualizations")
-    print("  ✓ German number formatting throughout (1.234,56)")
-    print("  ✓ Dynamic keys for all PDFs")
-    print("  ✓ Professional layouts and styling")
+    print("   3D visualization PDF export with multiple views")
+    print("   System diagram PDF generation with legend")
+    print("   Process flowchart PDF export with decision nodes")
+    print("   Infographic PDF with stats, comparisons, and charts")
+    print("   Dashboard PDF with KPIs and widget grid")
+    print("   Batch export of multiple visualizations")
+    print("   German number formatting throughout (1.234,56)")
+    print("   Dynamic keys for all PDFs")
+    print("   Professional layouts and styling")
 
 
 if __name__ == "__main__":

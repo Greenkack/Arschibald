@@ -14,20 +14,20 @@ from pathlib import Path
 
 def verify_modules():
     """Prüft ob alle Module importierbar sind."""
-    print("🔍 Prüfe Module...")
+    print(" Prüfe Module...")
     
     try:
         from crm.features import feedback_manager
-        print("  ✅ feedback_manager importiert")
+        print("   feedback_manager importiert")
     except ImportError as e:
-        print(f"  ❌ feedback_manager Import fehlgeschlagen: {e}")
+        print(f"   feedback_manager Import fehlgeschlagen: {e}")
         return False
     
     try:
         from crm.features import feedback_ui
-        print("  ✅ feedback_ui importiert")
+        print("   feedback_ui importiert")
     except ImportError as e:
-        print(f"  ❌ feedback_ui Import fehlgeschlagen: {e}")
+        print(f"   feedback_ui Import fehlgeschlagen: {e}")
         return False
     
     return True
@@ -35,7 +35,7 @@ def verify_modules():
 
 def verify_database_tables():
     """Prüft ob Datenbank-Tabellen erstellt werden können."""
-    print("\n🔍 Prüfe Datenbank-Tabellen...")
+    print("\n Prüfe Datenbank-Tabellen...")
     
     try:
         from crm.features import feedback_manager
@@ -50,38 +50,38 @@ def verify_database_tables():
         # Prüfe feedback_surveys
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='feedback_surveys'")
         if cursor.fetchone():
-            print("  ✅ Tabelle 'feedback_surveys' erstellt")
+            print("   Tabelle 'feedback_surveys' erstellt")
         else:
-            print("  ❌ Tabelle 'feedback_surveys' fehlt")
+            print("   Tabelle 'feedback_surveys' fehlt")
             return False
         
         # Prüfe feedback_responses
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='feedback_responses'")
         if cursor.fetchone():
-            print("  ✅ Tabelle 'feedback_responses' erstellt")
+            print("   Tabelle 'feedback_responses' erstellt")
         else:
-            print("  ❌ Tabelle 'feedback_responses' fehlt")
+            print("   Tabelle 'feedback_responses' fehlt")
             return False
         
         # Prüfe feedback_triggers
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='feedback_triggers'")
         if cursor.fetchone():
-            print("  ✅ Tabelle 'feedback_triggers' erstellt")
+            print("   Tabelle 'feedback_triggers' erstellt")
         else:
-            print("  ❌ Tabelle 'feedback_triggers' fehlt")
+            print("   Tabelle 'feedback_triggers' fehlt")
             return False
         
         conn.close()
         return True
         
     except Exception as e:
-        print(f"  ❌ Fehler beim Erstellen der Tabellen: {e}")
+        print(f"   Fehler beim Erstellen der Tabellen: {e}")
         return False
 
 
 def verify_crud_operations():
     """Prüft CRUD-Operationen."""
-    print("\n🔍 Prüfe CRUD-Operationen...")
+    print("\n Prüfe CRUD-Operationen...")
     
     try:
         from crm.features import feedback_manager
@@ -107,17 +107,17 @@ def verify_crud_operations():
         )
         
         if survey_id:
-            print("  ✅ CREATE: Umfrage erstellt")
+            print("   CREATE: Umfrage erstellt")
         else:
-            print("  ❌ CREATE: Fehler beim Erstellen")
+            print("   CREATE: Fehler beim Erstellen")
             return False
         
         # READ
         survey = feedback_manager.get_survey_by_id(conn, survey_id)
         if survey and survey['name'] == "Test Umfrage":
-            print("  ✅ READ: Umfrage geladen")
+            print("   READ: Umfrage geladen")
         else:
-            print("  ❌ READ: Fehler beim Laden")
+            print("   READ: Fehler beim Laden")
             return False
         
         # UPDATE
@@ -125,12 +125,12 @@ def verify_crud_operations():
         if success:
             survey = feedback_manager.get_survey_by_id(conn, survey_id)
             if survey['name'] == "Neue Umfrage":
-                print("  ✅ UPDATE: Umfrage aktualisiert")
+                print("   UPDATE: Umfrage aktualisiert")
             else:
-                print("  ❌ UPDATE: Änderung nicht gespeichert")
+                print("   UPDATE: Änderung nicht gespeichert")
                 return False
         else:
-            print("  ❌ UPDATE: Fehler beim Aktualisieren")
+            print("   UPDATE: Fehler beim Aktualisieren")
             return False
         
         # DELETE
@@ -138,25 +138,25 @@ def verify_crud_operations():
         if success:
             survey = feedback_manager.get_survey_by_id(conn, survey_id)
             if survey is None:
-                print("  ✅ DELETE: Umfrage gelöscht")
+                print("   DELETE: Umfrage gelöscht")
             else:
-                print("  ❌ DELETE: Umfrage noch vorhanden")
+                print("   DELETE: Umfrage noch vorhanden")
                 return False
         else:
-            print("  ❌ DELETE: Fehler beim Löschen")
+            print("   DELETE: Fehler beim Löschen")
             return False
         
         conn.close()
         return True
         
     except Exception as e:
-        print(f"  ❌ Fehler bei CRUD-Operationen: {e}")
+        print(f"   Fehler bei CRUD-Operationen: {e}")
         return False
 
 
 def verify_trigger_system():
     """Prüft Trigger-System."""
-    print("\n🔍 Prüfe Trigger-System...")
+    print("\n Prüfe Trigger-System...")
     
     try:
         from crm.features import feedback_manager
@@ -193,38 +193,38 @@ def verify_trigger_system():
         )
         
         if trigger_ids and len(trigger_ids) > 0:
-            print("  ✅ Trigger erstellt")
+            print("   Trigger erstellt")
         else:
-            print("  ❌ Trigger nicht erstellt")
+            print("   Trigger nicht erstellt")
             return False
         
         # Lade ausstehende Trigger
         pending = feedback_manager.get_pending_triggers(conn, datetime.now().strftime('%Y-%m-%d'))
         if len(pending) > 0:
-            print("  ✅ Ausstehende Trigger geladen")
+            print("   Ausstehende Trigger geladen")
         else:
-            print("  ❌ Keine ausstehenden Trigger gefunden")
+            print("   Keine ausstehenden Trigger gefunden")
             return False
         
         # Markiere als versendet
         success = feedback_manager.mark_trigger_sent(conn, trigger_ids[0])
         if success:
-            print("  ✅ Trigger als versendet markiert")
+            print("   Trigger als versendet markiert")
         else:
-            print("  ❌ Fehler beim Markieren")
+            print("   Fehler beim Markieren")
             return False
         
         conn.close()
         return True
         
     except Exception as e:
-        print(f"  ❌ Fehler im Trigger-System: {e}")
+        print(f"   Fehler im Trigger-System: {e}")
         return False
 
 
 def verify_analytics():
     """Prüft Analytics-Funktionen."""
-    print("\n🔍 Prüfe Analytics...")
+    print("\n Prüfe Analytics...")
     
     try:
         from crm.features import feedback_manager
@@ -257,38 +257,38 @@ def verify_analytics():
         # Statistiken
         stats = feedback_manager.get_survey_statistics(conn, survey_id)
         if stats['total_responses'] == 3:
-            print("  ✅ Statistiken berechnet")
+            print("   Statistiken berechnet")
         else:
-            print(f"  ❌ Falsche Anzahl Antworten: {stats['total_responses']}")
+            print(f"   Falsche Anzahl Antworten: {stats['total_responses']}")
             return False
         
         # Negativ-Feedback
         alerts = feedback_manager.get_negative_feedback_alerts(conn, days=7)
         if len(alerts) == 1:
-            print("  ✅ Negativ-Feedback erkannt")
+            print("   Negativ-Feedback erkannt")
         else:
-            print(f"  ❌ Falsche Anzahl Alerts: {len(alerts)}")
+            print(f"   Falsche Anzahl Alerts: {len(alerts)}")
             return False
         
         # Fragen-Statistiken
         q_stats = feedback_manager.get_question_statistics(conn, survey_id, 'q1')
         if q_stats['total_answers'] == 3:
-            print("  ✅ Fragen-Statistiken berechnet")
+            print("   Fragen-Statistiken berechnet")
         else:
-            print(f"  ❌ Falsche Anzahl Antworten: {q_stats['total_answers']}")
+            print(f"   Falsche Anzahl Antworten: {q_stats['total_answers']}")
             return False
         
         conn.close()
         return True
         
     except Exception as e:
-        print(f"  ❌ Fehler bei Analytics: {e}")
+        print(f"   Fehler bei Analytics: {e}")
         return False
 
 
 def verify_files():
     """Prüft ob alle Dateien vorhanden sind."""
-    print("\n🔍 Prüfe Dateien...")
+    print("\n Prüfe Dateien...")
     
     files = [
         "crm/features/feedback_manager.py",
@@ -302,9 +302,9 @@ def verify_files():
     all_exist = True
     for file_path in files:
         if Path(file_path).exists():
-            print(f"  ✅ {file_path}")
+            print(f"   {file_path}")
         else:
-            print(f"  ❌ {file_path} fehlt")
+            print(f"   {file_path} fehlt")
             all_exist = False
     
     return all_exist
@@ -343,7 +343,7 @@ def main():
     
     all_passed = True
     for name, passed in results:
-        status = "✅ BESTANDEN" if passed else "❌ FEHLGESCHLAGEN"
+        status = " BESTANDEN" if passed else " FEHLGESCHLAGEN"
         print(f"{name:.<50} {status}")
         if not passed:
             all_passed = False
@@ -351,11 +351,11 @@ def main():
     print("\n" + "=" * 70)
     
     if all_passed:
-        print("✅ ALLE TESTS BESTANDEN - IMPLEMENTIERUNG VOLLSTÄNDIG")
+        print(" ALLE TESTS BESTANDEN - IMPLEMENTIERUNG VOLLSTÄNDIG")
         print("=" * 70 + "\n")
         return 0
     else:
-        print("❌ EINIGE TESTS FEHLGESCHLAGEN - BITTE PRÜFEN")
+        print(" EINIGE TESTS FEHLGESCHLAGEN - BITTE PRÜFEN")
         print("=" * 70 + "\n")
         return 1
 

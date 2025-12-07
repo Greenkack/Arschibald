@@ -68,7 +68,7 @@ def example_2_show_customers_on_map():
         print("\n   Beispiel-Kunden:")
         for i, customer in enumerate(customers[:3], 1):
             print(f"   {i}. {customer['name']} ({customer['city']})")
-            print(f"      📍 {customer['latitude']:.6f}, {customer['longitude']:.6f}")
+            print(f"       {customer['latitude']:.6f}, {customer['longitude']:.6f}")
         
         # Karte erstellen
         print("\n2. Karte erstellen...")
@@ -109,7 +109,7 @@ def example_3_filter_customers():
     if customers:
         for i, customer in enumerate(customers, 1):
             print(f"   {i}. {customer['name']}")
-            print(f"      📍 {customer['address']}, {customer['zip_code']} {customer['city']}")
+            print(f"       {customer['address']}, {customer['zip_code']} {customer['city']}")
         
         # Karte für diese Stadt erstellen
         print(f"\n2. Karte für {city} erstellen...")
@@ -183,15 +183,15 @@ def example_5_optimize_route():
     
     if route:
         print(f"\n   Route optimiert!")
-        print(f"   📏 Gesamtstrecke: {route[-1]['cumulative_distance_km']:.2f} km")
+        print(f"    Gesamtstrecke: {route[-1]['cumulative_distance_km']:.2f} km")
         
         print("\n2. Routendetails:")
         for i, stop in enumerate(route, 1):
             print(f"\n   Stopp {i}: {stop['name']}")
-            print(f"      📍 {stop['address']}, {stop['zip_code']} {stop['city']}")
+            print(f"       {stop['address']}, {stop['zip_code']} {stop['city']}")
             if i > 1:
-                print(f"      🚗 Entfernung vom vorherigen Stopp: {stop['distance_km']:.2f} km")
-            print(f"      📏 Gesamtstrecke bis hier: {stop['cumulative_distance_km']:.2f} km")
+                print(f"       Entfernung vom vorherigen Stopp: {stop['distance_km']:.2f} km")
+            print(f"       Gesamtstrecke bis hier: {stop['cumulative_distance_km']:.2f} km")
         
         # Routenkarte erstellen
         print("\n3. Routenkarte erstellen...")
@@ -243,7 +243,7 @@ def example_6_export_to_calendar():
     start_date = today + timedelta(days=days_until_monday)
     start_date = start_date.replace(hour=9, minute=0, second=0, microsecond=0)
     
-    print(f"   📅 Startdatum: {start_date.strftime('%d.%m.%Y %H:%M')}")
+    print(f"    Startdatum: {start_date.strftime('%d.%m.%Y %H:%M')}")
     
     # Termine generieren
     print("\n2. Termine generieren...")
@@ -263,8 +263,8 @@ def example_6_export_to_calendar():
         
         print(f"\n   Termin {i}:")
         print(f"      {apt['title']}")
-        print(f"      🕐 {start.strftime('%H:%M')} - {end.strftime('%H:%M')}")
-        print(f"      📍 {apt['location']}")
+        print(f"       {start.strftime('%H:%M')} - {end.strftime('%H:%M')}")
+        print(f"       {apt['location']}")
     
     # In Datenbank speichern
     print("\n4. Termine in Kalender speichern...")
@@ -292,17 +292,17 @@ def example_7_complete_workflow():
     mapper = GeoMapper('data/app_data.db')
     
     # Schritt 1: Geo-Spalten sicherstellen
-    print("\n📋 Schritt 1: Datenbank vorbereiten")
+    print("\n Schritt 1: Datenbank vorbereiten")
     ensure_geo_columns()
     print("   Geo-Spalten vorhanden")
     
     # Schritt 2: Kunden geocodieren
-    print("\n📍 Schritt 2: Kunden geocodieren")
+    print("\n Schritt 2: Kunden geocodieren")
     stats = mapper.geocode_all_customers()
     print(f"   {stats['success']} Kunden geocodiert")
     
     # Schritt 3: Kunden auf Karte anzeigen
-    print("\n🗺️ Schritt 3: Kundenkarte erstellen")
+    print("\n Schritt 3: Kundenkarte erstellen")
     customers = mapper.get_customers_with_coordinates()
     
     if customers:
@@ -312,7 +312,7 @@ def example_7_complete_workflow():
             print(f"   Karte mit {len(customers)} Kunden erstellt")
     
     # Schritt 4: Route planen
-    print("\n🚗 Schritt 4: Route planen")
+    print("\n Schritt 4: Route planen")
     
     if len(customers) >= 3:
         customer_ids = [c['id'] for c in customers[:3]]
@@ -328,7 +328,7 @@ def example_7_complete_workflow():
                 print("   Routenkarte erstellt")
             
             # Schritt 5: Kalender-Export
-            print("\n📅 Schritt 5: Termine erstellen")
+            print("\n Schritt 5: Termine erstellen")
             
             start_date = datetime.now() + timedelta(days=1)
             start_date = start_date.replace(hour=9, minute=0, second=0, microsecond=0)

@@ -18,9 +18,9 @@ def test_theme_system():
     print("\n1. Initializing ThemeManager...")
     try:
         theme_manager = ThemeManager()
-        print("   ✓ ThemeManager initialized successfully")
+        print("    ThemeManager initialized successfully")
     except Exception as e:
-        print(f"   ✗ Failed to initialize ThemeManager: {e}")
+        print(f"    Failed to initialize ThemeManager: {e}")
         return False
     
     # Test 2: Check available themes
@@ -34,17 +34,17 @@ def test_theme_system():
                        'shadcn-forest', 'shadcn-sunset']
     
     if all(theme in available_themes for theme in expected_themes):
-        print("   ✓ All 5 expected themes found")
+        print("    All 5 expected themes found")
     else:
-        print("   ✗ Not all expected themes found")
+        print("    Not all expected themes found")
         return False
     
     # Test 3: Load and set default theme
     print("\n3. Loading shadcn-default theme...")
     if theme_manager.set_theme('shadcn-default'):
-        print("   ✓ Theme set successfully")
+        print("    Theme set successfully")
     else:
-        print("   ✗ Failed to set theme")
+        print("    Failed to set theme")
         return False
     
     # Test 4: Test token access
@@ -63,9 +63,9 @@ def test_theme_system():
     for token_path, expected_value in test_tokens:
         value = theme_manager.get_token(token_path)
         if value == expected_value:
-            print(f"   ✓ {token_path}: {value}")
+            print(f"    {token_path}: {value}")
         else:
-            print(f"   ✗ {token_path}: expected '{expected_value}', got '{value}'")
+            print(f"    {token_path}: expected '{expected_value}', got '{value}'")
             all_tokens_ok = False
     
     if not all_tokens_ok:
@@ -79,9 +79,9 @@ def test_theme_system():
     token_categories = ['colors', 'typography', 'spacing', 'shadows', 'borders', 'animations']
     for category in token_categories:
         if hasattr(theme, category):
-            print(f"   ✓ {category} tokens present")
+            print(f"    {category} tokens present")
         else:
-            print(f"   ✗ {category} tokens missing")
+            print(f"    {category} tokens missing")
             return False
     
     # Test 6: Test theme switching
@@ -90,12 +90,12 @@ def test_theme_system():
         if theme_manager.set_theme(theme_name):
             current = theme_manager.current_theme.name
             if current == theme_name:
-                print(f"   ✓ Switched to {theme_name}")
+                print(f"    Switched to {theme_name}")
             else:
-                print(f"   ✗ Theme switch failed for {theme_name}")
+                print(f"    Theme switch failed for {theme_name}")
                 return False
         else:
-            print(f"   ✗ Could not set theme {theme_name}")
+            print(f"    Could not set theme {theme_name}")
             return False
     
     # Test 7: Test display names
@@ -113,9 +113,9 @@ def test_theme_system():
     for theme_name, expected_display in expected_display_names.items():
         actual_display = display_names.get(theme_name)
         if actual_display == expected_display:
-            print(f"   ✓ {theme_name}: '{actual_display}'")
+            print(f"    {theme_name}: '{actual_display}'")
         else:
-            print(f"   ✗ {theme_name}: expected '{expected_display}', got '{actual_display}'")
+            print(f"    {theme_name}: expected '{expected_display}', got '{actual_display}'")
             all_names_ok = False
     
     if not all_names_ok:
@@ -125,13 +125,13 @@ def test_theme_system():
     print("\n8. Testing fallback theme...")
     fallback = theme_manager.get_fallback_theme()
     if fallback:
-        print(f"   ✓ Fallback theme available: {fallback.name}")
+        print(f"    Fallback theme available: {fallback.name}")
     else:
-        print("   ✗ No fallback theme available")
+        print("    No fallback theme available")
         return False
     
     print("\n" + "=" * 60)
-    print("✓ All tests passed! Theme System Infrastructure is working.")
+    print(" All tests passed! Theme System Infrastructure is working.")
     print("=" * 60)
     
     return True

@@ -18,7 +18,7 @@ def check_file_exists(filepath: str) -> bool:
         filepath = filepath[8:]
     path = Path(filepath)
     exists = path.exists()
-    status = "✓" if exists else "✗"
+    status = "" if exists else ""
     print(f"  {status} {filepath}")
     return exists
 
@@ -28,12 +28,12 @@ def check_import(module_path: str, items: list) -> bool:
         module = __import__(module_path, fromlist=items)
         for item in items:
             if not hasattr(module, item):
-                print(f"  ✗ {module_path}.{item} - Not found")
+                print(f"   {module_path}.{item} - Not found")
                 return False
-        print(f"  ✓ {module_path} - All imports successful")
+        print(f"   {module_path} - All imports successful")
         return True
     except Exception as e:
-        print(f"  ✗ {module_path} - Import failed: {e}")
+        print(f"   {module_path} - Import failed: {e}")
         return False
 
 def main():
@@ -92,9 +92,9 @@ def main():
             get_db_stats,
             transaction,
         )
-        print("  ✓ Sync database imports successful")
+        print("   Sync database imports successful")
     except Exception as e:
-        print(f"  ✗ Sync database imports failed: {e}")
+        print(f"   Sync database imports failed: {e}")
         all_checks_passed = False
     
     # Check 5: Dependencies Module Imports
@@ -106,9 +106,9 @@ def main():
             PaginationParams,
             BatchOperationContext,
         )
-        print("  ✓ Dependencies imports successful")
+        print("   Dependencies imports successful")
     except Exception as e:
-        print(f"  ✗ Dependencies imports failed: {e}")
+        print(f"   Dependencies imports failed: {e}")
         all_checks_passed = False
     
     # Check 6: Config Updates
@@ -125,12 +125,12 @@ def main():
         ]
         missing = [attr for attr in required_attrs if not hasattr(settings, attr)]
         if missing:
-            print(f"  ✗ Missing config attributes: {missing}")
+            print(f"   Missing config attributes: {missing}")
             all_checks_passed = False
         else:
-            print("  ✓ All database config attributes present")
+            print("   All database config attributes present")
     except Exception as e:
-        print(f"  ✗ Config check failed: {e}")
+        print(f"   Config check failed: {e}")
         all_checks_passed = False
     
     # Check 7: Database Models
@@ -145,9 +145,9 @@ def main():
             Offer,
             Task,
         )
-        print("  ✓ All database models imported successfully")
+        print("   All database models imported successfully")
     except Exception as e:
-        print(f"  ✗ Model imports failed: {e}")
+        print(f"   Model imports failed: {e}")
         all_checks_passed = False
     
     # Check 8: Basic Functionality
@@ -157,39 +157,39 @@ def main():
         
         # Check engine
         if engine is not None:
-            print("  ✓ Database engine created")
+            print("   Database engine created")
         else:
-            print("  ✗ Database engine is None")
+            print("   Database engine is None")
             all_checks_passed = False
         
         # Check session factory
         if SessionLocal is not None:
-            print("  ✓ Session factory created")
+            print("   Session factory created")
         else:
-            print("  ✗ Session factory is None")
+            print("   Session factory is None")
             all_checks_passed = False
         
         # Check Base
         if Base is not None and hasattr(Base, 'metadata'):
-            print("  ✓ Base class created with metadata")
+            print("   Base class created with metadata")
         else:
-            print("  ✗ Base class invalid")
+            print("   Base class invalid")
             all_checks_passed = False
         
         # Test connection
         if check_db_connection():
-            print("  ✓ Database connection successful")
+            print("   Database connection successful")
         else:
-            print("  ✗ Database connection failed")
+            print("   Database connection failed")
             all_checks_passed = False
         
         # Test session creation
         db = SessionLocal()
         db.close()
-        print("  ✓ Session creation and closure successful")
+        print("   Session creation and closure successful")
         
     except Exception as e:
-        print(f"  ✗ Functionality check failed: {e}")
+        print(f"   Functionality check failed: {e}")
         all_checks_passed = False
     
     # Check 9: Transaction Management
@@ -201,11 +201,11 @@ def main():
             with transaction(db) as tx:
                 # Just test that the context manager works
                 pass
-            print("  ✓ Transaction context manager works")
+            print("   Transaction context manager works")
         finally:
             db.close()
     except Exception as e:
-        print(f"  ✗ Transaction management failed: {e}")
+        print(f"   Transaction management failed: {e}")
         all_checks_passed = False
     
     # Check 10: Pagination
@@ -214,17 +214,17 @@ def main():
         from backend.core.dependencies import get_pagination_params, PaginationParams
         params = get_pagination_params(skip=10, limit=50)
         if isinstance(params, PaginationParams):
-            print("  ✓ Pagination params created successfully")
+            print("   Pagination params created successfully")
             if params.skip == 10 and params.limit == 50:
-                print("  ✓ Pagination params have correct values")
+                print("   Pagination params have correct values")
             else:
-                print("  ✗ Pagination params have incorrect values")
+                print("   Pagination params have incorrect values")
                 all_checks_passed = False
         else:
-            print("  ✗ Pagination params type incorrect")
+            print("   Pagination params type incorrect")
             all_checks_passed = False
     except Exception as e:
-        print(f"  ✗ Pagination check failed: {e}")
+        print(f"   Pagination check failed: {e}")
         all_checks_passed = False
     
     # Check 11: Requirements File
@@ -235,18 +235,18 @@ def main():
             required_packages = ['aiosqlite', 'asyncpg', 'aiomysql', 'greenlet']
             missing = [pkg for pkg in required_packages if pkg not in content]
             if missing:
-                print(f"  ⚠ Missing packages in requirements.txt: {missing}")
+                print(f"   Missing packages in requirements.txt: {missing}")
                 print("  ℹ These packages need to be installed for async support")
             else:
-                print("  ✓ All async database packages listed in requirements.txt")
+                print("   All async database packages listed in requirements.txt")
     except Exception as e:
-        print(f"  ✗ Requirements file check failed: {e}")
+        print(f"   Requirements file check failed: {e}")
         all_checks_passed = False
     
     # Final Summary
     print("\n" + "="*80)
     if all_checks_passed:
-        print("✅ ALL CHECKS PASSED - Task 3 Implementation Verified!")
+        print(" ALL CHECKS PASSED - Task 3 Implementation Verified!")
         print("\nNext Steps:")
         print("  1. Install async packages: pip install aiosqlite asyncpg aiomysql greenlet")
         print("  2. Initialize database: python -c 'from backend.core.database import init_db; init_db()'")
@@ -255,7 +255,7 @@ def main():
         print("  5. Run tests: pytest backend/tests/test_database_setup.py -v")
         print("  6. Run demo: python backend/demo_database_setup.py")
     else:
-        print("❌ SOME CHECKS FAILED - Please review the errors above")
+        print(" SOME CHECKS FAILED - Please review the errors above")
     print("="*80 + "\n")
     
     return 0 if all_checks_passed else 1

@@ -53,7 +53,7 @@ def demo_basic_validation():
     
     print("\nWarnings:")
     for warning in report.get_warnings():
-        print(f"  ⚠ {warning.message}")
+        print(f"   {warning.message}")
 
 
 def demo_collision_detection():

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\numpy\core\memmap.py
+# hypothesis_version: 6.147.0
+
+[b'\x00', -100.0, 'C', '_mmap', 'b', 'c', 'copyonwrite', 'flush', 'memmap', 'name', 'numpy', 'r', 'r+', 'read', 'readonly', 'readwrite', 'w+', 'write']

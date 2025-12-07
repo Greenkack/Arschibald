@@ -392,9 +392,9 @@ def render_crm(
 
     # CRM Tab-Navigation
     crm_tabs = st.tabs([
-        "👥 Kundenverwaltung",
-        "📊 Lead Scoring", 
-        "💾 Backup & Daten"
+        " Kundenverwaltung",
+        " Lead Scoring", 
+        " Backup & Daten"
     ])
     
     # Tab 1: Kundenverwaltung (bestehende Funktionalität)
@@ -427,7 +427,7 @@ def render_customer_management(texts: dict[str, str], conn):
         col_btn, col_search = st.columns([1, 3])
         with col_btn:
             if st.button(
-                    "➕ " + get_text_crm(
+                    " " + get_text_crm(
                         texts,
                         "crm_add_new_customer_button",
                         "Neuen Kunden anlegen"),
@@ -471,7 +471,7 @@ def render_customer_management(texts: dict[str, str], conn):
                     if all_tags:
                         tag_options = {tag['id']: tag['name'] for tag in all_tags}
                         selected_tag_ids = st.multiselect(
-                            "🏷️ Tags filtern",
+                            " Tags filtern",
                             options=list(tag_options.keys()),
                             format_func=lambda x: tag_options[x],
                             key="customer_tag_filter"
@@ -551,28 +551,28 @@ def render_customer_management(texts: dict[str, str], conn):
                                             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
                                         ">
                                             <h4 style="margin: 0 0 6px 0; color: #1f77b4; font-size: 0.95em;">
-                                                👤 {customer.get('first_name', '')} {customer.get('last_name', '')}
+                                                 {customer.get('first_name', '')} {customer.get('last_name', '')}
                                             </h4>
                                             <p style="margin: 2px 0; font-size: 0.75em; color: #1a1a1a;">
-                                                📍 {customer.get('city', 'N/A')}
+                                                 {customer.get('city', 'N/A')}
                                             </p>
                                             <p style="margin: 2px 0; font-size: 0.7em; color: #2a2a2a;">
-                                                📧 {customer.get('email', 'N/A')[:25]}{'...' if len(customer.get('email', '')) > 25 else ''}
+                                                 {customer.get('email', 'N/A')[:25]}{'...' if len(customer.get('email', '')) > 25 else ''}
                                             </p>
                                             <p style="margin: 2px 0; font-size: 0.75em; color: #2a2a2a;">
-                                                📞 {customer.get('phone', 'N/A')}
+                                                 {customer.get('phone', 'N/A')}
                                             </p>
                                         </div>
                                         """, unsafe_allow_html=True)
                                         
                                         col1, col2, col3 = st.columns(3)
                                         with col1:
-                                            if st.button("👁️", key=f"view_customer_{customer['id']}", help="Ansehen", use_container_width=True):
+                                            if st.button("", key=f"view_customer_{customer['id']}", help="Ansehen", use_container_width=True):
                                                 st.session_state['selected_customer_id'] = customer['id']
                                                 st.session_state['crm_view_mode'] = 'view_customer'
                                                 st.rerun()
                                         with col2:
-                                            if st.button("✏️", key=f"edit_customer_{customer['id']}", help="Bearbeiten", use_container_width=True):
+                                            if st.button("", key=f"edit_customer_{customer['id']}", help="Bearbeiten", use_container_width=True):
                                                 st.session_state['selected_customer_id'] = customer['id']
                                                 st.session_state['crm_view_mode'] = 'edit_customer'
                                                 st.rerun()
@@ -580,7 +580,7 @@ def render_customer_management(texts: dict[str, str], conn):
                                             delete_button_key = f"del_customer_{customer['id']}"
                                             confirm_delete_key = f"confirm_delete_customer_{customer['id']}"
                                             
-                                            if st.button("❌", key=delete_button_key, help="Löschen", use_container_width=True):
+                                            if st.button("", key=delete_button_key, help="Löschen", use_container_width=True):
                                                 if st.session_state.get(confirm_delete_key, False):
                                                     if delete_customer(conn, customer['id']):
                                                         st.success("Kunde gelöscht.")
@@ -634,17 +634,17 @@ def render_customer_management(texts: dict[str, str], conn):
                     
                     col1, col2, col3 = st.columns(3)
                     with col1:
-                        if st.button("👁️ Ansehen", key="view_selected_customer", use_container_width=True):
+                        if st.button(" Ansehen", key="view_selected_customer", use_container_width=True):
                             st.session_state['selected_customer_id'] = selected_id
                             st.session_state['crm_view_mode'] = 'view_customer'
                             st.rerun()
                     with col2:
-                        if st.button("✏️ Bearbeiten", key="edit_selected_customer", use_container_width=True):
+                        if st.button(" Bearbeiten", key="edit_selected_customer", use_container_width=True):
                             st.session_state['selected_customer_id'] = selected_id
                             st.session_state['crm_view_mode'] = 'edit_customer'
                             st.rerun()
                     with col3:
-                        if st.button("🗑️ Löschen", key="delete_selected_customer", use_container_width=True):
+                        if st.button(" Löschen", key="delete_selected_customer", use_container_width=True):
                             if delete_customer(conn, selected_id):
                                 st.success("Kunde gelöscht.")
                                 st.rerun()
@@ -1188,7 +1188,7 @@ def render_customer_management(texts: dict[str, str], conn):
                                     if path and os.path.exists(path):
                                         with open(path, "rb") as fh:
                                             st.download_button(
-                                                "📥",
+                                                "",
                                                 data=fh.read(),
                                                 file_name=d.get("file_name", "dokument.bin"),
                                                 key=f"dl_doc_{d.get('id')}",
@@ -1197,7 +1197,7 @@ def render_customer_management(texts: dict[str, str], conn):
                                 except Exception:
                                     pass
                         with action_cols[1]:
-                            if st.button("❌", key=f"del_doc_{d.get('id')}", help="Löschen"):
+                            if st.button("", key=f"del_doc_{d.get('id')}", help="Löschen"):
                                 if callable(_delete_customer_document_db) and _delete_customer_document_db(d.get("id")):
                                     st.success(get_text_crm(texts, "crm_filevault_delete_success", "Dokument gelöscht."))
                                     st.rerun()
@@ -1816,7 +1816,7 @@ def render_customer_management(texts: dict[str, str], conn):
 
         # Berechnungs-Historie anzeigen
         st.markdown("---")
-        st.subheader("📊 Berechnungs-Historie")
+        st.subheader(" Berechnungs-Historie")
         
         try:
             from crm.integration.calculation_bridge import (
@@ -1833,7 +1833,7 @@ def render_customer_management(texts: dict[str, str], conn):
                 
                 # Vergleichs-Modus
                 if len(calculations) >= 2:
-                    with st.expander("🔍 Berechnungen vergleichen", expanded=False):
+                    with st.expander(" Berechnungen vergleichen", expanded=False):
                         col1, col2, col3 = st.columns(3)
                         with col1:
                             calc_ids = [c['id'] for c in calculations]
@@ -1884,7 +1884,7 @@ def render_customer_management(texts: dict[str, str], conn):
                 # Liste der Berechnungen
                 for calc in calculations:
                     with st.expander(
-                        f"{'⭐ ' if calc['is_main_offer'] else ''}Version {calc['version']} - {calc['created_at'][:16].replace('T', ' ')}",
+                        f"{' ' if calc['is_main_offer'] else ''}Version {calc['version']} - {calc['created_at'][:16].replace('T', ' ')}",
                         expanded=calc['is_main_offer']
                     ):
                         col1, col2, col3 = st.columns([2, 1, 1])
@@ -1900,7 +1900,7 @@ def render_customer_management(texts: dict[str, str], conn):
                             # Hauptangebot-Button
                             if not calc['is_main_offer']:
                                 if st.button(
-                                    "⭐ Als Hauptangebot",
+                                    " Als Hauptangebot",
                                     key=f"set_main_{calc['id']}",
                                     help="Diese Berechnung als Hauptangebot markieren"
                                 ):
@@ -1910,12 +1910,12 @@ def render_customer_management(texts: dict[str, str], conn):
                                     else:
                                         st.error("Fehler beim Markieren")
                             else:
-                                st.success("⭐ Hauptangebot")
+                                st.success(" Hauptangebot")
                         
                         with col3:
                             # Löschen-Button
                             if st.button(
-                                "🗑️ Löschen",
+                                " Löschen",
                                 key=f"delete_calc_{calc['id']}",
                                 help="Diese Berechnung löschen"
                             ):
@@ -2181,7 +2181,7 @@ if __name__ == "__main__":
 
 def render_lead_scoring_tab(texts: dict[str, str], conn):
     """Lead Scoring Tab - Bewertung und Priorisierung von Leads"""
-    st.subheader("📊 Lead Scoring & Priorisierung")
+    st.subheader(" Lead Scoring & Priorisierung")
     
     try:
         from crm.features.lead_scoring_ui import render_lead_scoring_admin
@@ -2206,7 +2206,7 @@ def render_lead_scoring_tab(texts: dict[str, str], conn):
         
         # Einfache Fallback-Funktion
         st.markdown("---")
-        st.markdown("### 📝 Kunden nach Potenzial sortieren")
+        st.markdown("###  Kunden nach Potenzial sortieren")
         
         cursor = conn.cursor()
         cursor.execute("""
@@ -2223,19 +2223,19 @@ def render_lead_scoring_tab(texts: dict[str, str], conn):
                 with st.expander(f"{cust[1]} {cust[2]} - {cust[3] or 'Privatkunde'}"):
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.write(f"📧 {cust[4]}")
-                        st.write(f"📱 {cust[5]}")
+                        st.write(f" {cust[4]}")
+                        st.write(f" {cust[5]}")
                     with col2:
-                        st.write(f"📍 {cust[6]}")
+                        st.write(f" {cust[6]}")
                         score = st.slider("Lead Score", 0, 100, 50, key=f"score_{cust[0]}")
-                        st.caption(f"Bewertung: {'🔥 Heiß' if score > 75 else '⚡ Warm' if score > 50 else '❄️ Kalt'}")
+                        st.caption(f"Bewertung: {' Heiß' if score > 75 else ' Warm' if score > 50 else ' Kalt'}")
         else:
             st.info("Keine Kunden vorhanden. Erstellen Sie zuerst Kunden in der Kundenverwaltung.")
 
 
 def render_backup_tab(conn):
     """Backup & Daten Tab - Datensicherung und Export"""
-    st.subheader("💾 Backup & Datenverwaltung")
+    st.subheader(" Backup & Datenverwaltung")
     
     try:
         from crm.utils.backup_ui import render_admin_backup_tab
@@ -2260,13 +2260,13 @@ def render_backup_tab(conn):
         
         # Einfache Fallback-Funktion
         st.markdown("---")
-        st.markdown("### 📦 Daten exportieren")
+        st.markdown("###  Daten exportieren")
         
         col1, col2 = st.columns(2)
         
         with col1:
             st.markdown("#### Kunden exportieren")
-            if st.button("📥 Kunden als CSV exportieren", use_container_width=True):
+            if st.button(" Kunden als CSV exportieren", use_container_width=True):
                 try:
                     cursor = conn.cursor()
                     cursor.execute("SELECT * FROM customers")
@@ -2288,12 +2288,12 @@ def render_backup_tab(conn):
                         
                         csv_data = output.getvalue()
                         st.download_button(
-                            label="💾 CSV herunterladen",
+                            label=" CSV herunterladen",
                             data=csv_data,
                             file_name=f"kunden_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                             mime="text/csv"
                         )
-                        st.success(f"✅ {len(customers)} Kunden bereit zum Download")
+                        st.success(f" {len(customers)} Kunden bereit zum Download")
                     else:
                         st.warning("Keine Kunden zum Exportieren vorhanden")
                 except Exception as e:
@@ -2322,13 +2322,13 @@ def render_backup_tab(conn):
                 except:
                     tag_count = 0
                 
-                st.metric("👥 Kunden", customer_count)
-                st.metric("📁 Projekte", project_count)
-                st.metric("🏷️ Tags", tag_count)
+                st.metric(" Kunden", customer_count)
+                st.metric(" Projekte", project_count)
+                st.metric(" Tags", tag_count)
                 
             except Exception as e:
                 st.error(f"Fehler beim Laden der Statistiken: {e}")
         
         st.markdown("---")
-        st.caption("💡 Tipp: Installieren Sie das vollständige Backup-Modul für automatische Backups und erweiterte Funktionen.")
+        st.caption(" Tipp: Installieren Sie das vollständige Backup-Modul für automatische Backups und erweiterte Funktionen.")
 

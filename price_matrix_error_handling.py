@@ -250,7 +250,7 @@ def format_error_message_for_ui(
         ErrorSeverity.INFO: "",
         ErrorSeverity.WARNING: "",
         ErrorSeverity.ERROR: "",
-        ErrorSeverity.CRITICAL: "🚨"
+        ErrorSeverity.CRITICAL: ""
     }
     icon = severity_icons.get(error_info.severity, "")
     

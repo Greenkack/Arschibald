@@ -33,7 +33,7 @@ def render_offer_tracking_ui(conn: sqlite3.Connection, texts: dict[str, str]) ->
     # Stelle sicher, dass Tabellen existieren
     create_offer_tracking_tables(conn)
     
-    st.header("📋 Angebotsverfolgung (Offer Tracking)")
+    st.header(" Angebotsverfolgung (Offer Tracking)")
     
     # Tabs für verschiedene Ansichten
     tab1, tab2, tab3 = st.tabs([
@@ -144,7 +144,7 @@ def render_offer_overview(conn: sqlite3.Connection, texts: dict[str, str]) -> No
     
     status_labels = {
         'draft': 'Entwurf',
-        'sent': '📤 Versendet',
+        'sent': ' Versendet',
         'accepted': 'Angenommen',
         'rejected': 'Abgelehnt'
     }
@@ -193,7 +193,7 @@ def render_all_offers(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
             format_func=lambda x: {
                 'all': 'Alle Status',
                 'draft': 'Entwurf',
-                'sent': '📤 Versendet',
+                'sent': ' Versendet',
                 'accepted': 'Angenommen',
                 'rejected': 'Abgelehnt'
             }[x]
@@ -263,7 +263,7 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
     
     status_icons = {
         'draft': '',
-        'sent': '📤',
+        'sent': '',
         'accepted': '',
         'rejected': ''
     }
@@ -277,7 +277,7 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
     
     status = offer.get('offer_status', 'draft')
     color = status_colors.get(status, '#808080')
-    icon = status_icons.get(status, '📋')
+    icon = status_icons.get(status, '')
     label = status_labels.get(status, status)
     
     customer_name = offer.get('customer_company_name') or f"{offer.get('customer_first_name', '')} {offer.get('customer_last_name', '')}".strip()
@@ -290,9 +290,9 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
             st.text(f"Projekt: {offer['project_name']}")
             st.text(f"Kunde: {customer_name}")
             if offer.get('customer_email'):
-                st.text(f"📧 {offer['customer_email']}")
+                st.text(f" {offer['customer_email']}")
             if offer.get('customer_phone'):
-                st.text(f"📞 {offer['customer_phone']}")
+                st.text(f" {offer['customer_phone']}")
         
         with col2:
             st.markdown("**Angebots-Info:**")
@@ -304,14 +304,14 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
             if offer.get('offer_sent_date'):
                 sent_date = datetime.fromisoformat(offer['offer_sent_date'])
                 days_ago = (datetime.now() - sent_date).days
-                st.text(f"📅 Versendet: vor {days_ago} Tagen")
+                st.text(f" Versendet: vor {days_ago} Tagen")
         
         with col3:
             st.markdown("**Aktionen:**")
             
             # Status-Änderungs-Buttons
             if status == 'draft':
-                if st.button("📤 Als versendet markieren", key=f"send_{offer['id']}"):
+                if st.button(" Als versendet markieren", key=f"send_{offer['id']}"):
                     if update_offer_status(conn, offer['id'], 'sent'):
                         st.success("Status auf 'Versendet' aktualisiert!")
                         st.rerun()
@@ -354,7 +354,7 @@ def render_offer_card(conn: sqlite3.Connection, offer: dict[str, Any], texts: di
             
             col_a, col_b = st.columns(2)
             with col_a:
-                if st.button("💾 Ablehnung speichern", key=f"save_rejection_{offer['id']}"):
+                if st.button(" Ablehnung speichern", key=f"save_rejection_{offer['id']}"):
                     if update_offer_status(
                         conn,
                         offer['id'],
@@ -388,7 +388,7 @@ def render_follow_ups(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
     follow_ups = get_pending_follow_ups(conn)
     
     if not follow_ups:
-        st.success("🎉 Keine ausstehenden Follow-ups! Alle Angebote sind aktuell.")
+        st.success(" Keine ausstehenden Follow-ups! Alle Angebote sind aktuell.")
         return
     
     st.warning(f"**{len(follow_ups)}** Angebote benötigen ein Follow-up!")
@@ -403,7 +403,7 @@ def render_follow_ups(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
         # Dringlichkeits-Farbe
         if days_overdue > 7:
             urgency_color = '#EF4444'  # Rot
-            urgency_label = '🔴 Sehr dringend'
+            urgency_label = ' Sehr dringend'
         elif days_overdue > 3:
             urgency_color = '#F59E0B'  # Orange
             urgency_label = '🟠 Dringend'
@@ -422,7 +422,7 @@ def render_follow_ups(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 ">
                     <h4 style="margin: 0 0 10px 0; color: #333;">
-                        📋 {follow_up['project_name']}
+                         {follow_up['project_name']}
                     </h4>
                     <p style="margin: 5px 0; color: #666;">
                         <strong>Kunde:</strong> {customer_name}
@@ -444,11 +444,11 @@ def render_follow_ups(conn: sqlite3.Connection, texts: dict[str, str]) -> None:
                         st.rerun()
             
             with col2:
-                if st.button("📧 E-Mail senden", key=f"email_followup_{follow_up['id']}"):
+                if st.button(" E-Mail senden", key=f"email_followup_{follow_up['id']}"):
                     st.info("E-Mail-Funktion wird in Task 9 implementiert.")
             
             with col3:
-                if st.button("👁️ Details", key=f"view_followup_{follow_up['id']}"):
+                if st.button(" Details", key=f"view_followup_{follow_up['id']}"):
                     st.session_state['selected_project_id'] = follow_up['id']
                     st.session_state['crm_view_mode'] = 'view_project'
                     st.rerun()

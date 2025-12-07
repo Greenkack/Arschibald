@@ -589,7 +589,7 @@ class BatchProcessor:
             self.logger.info("\nAll combinations processed successfully!")
         elif summary.successful > 0:
             self.logger.info(
-                f"\n⚠ Partially successful: {summary.successful}/"
+                f"\n Partially successful: {summary.successful}/"
                 f"{summary.total_processed}"
             )
         else:

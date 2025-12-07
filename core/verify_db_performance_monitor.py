@@ -377,7 +377,7 @@ def run_all_verifications():
     print(f"Results: {passed}/{total} tests passed")
 
     if passed == total:
-        print("🎉 All verifications passed!")
+        print(" All verifications passed!")
         print("=" * 70)
         return True
     print("Some verifications failed")

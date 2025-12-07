@@ -371,7 +371,7 @@ def run_all_tests():
     print(f"  Fehlgeschlagen: {failed}")
     
     if failed == 0:
-        print("\n🎉 ALLE TESTS BESTANDEN!")
+        print("\n ALLE TESTS BESTANDEN!")
         return True
     else:
         print(f"\n{failed} TEST(S) FEHLGESCHLAGEN")

@@ -289,7 +289,7 @@ def run_all_tests():
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n🎉 ALLE TESTS BESTANDEN!")
+        print("\n ALLE TESTS BESTANDEN!")
         print("\nTask 8.3 ist vollständig implementiert:")
         print("  8.3.1: Zeige Platzierungs-Raster")
         print("  8.3.2: Hilfslinien für Ausrichtung")

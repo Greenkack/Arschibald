@@ -17,17 +17,17 @@ from theming.theme_validator import (
 
 
 def main():
-    st.set_page_config(page_title="Theme Validator Demo", page_icon="✅", layout="wide")
+    st.set_page_config(page_title="Theme Validator Demo", page_icon="", layout="wide")
     
-    st.title("🎨 Theme Validator Demo")
+    st.title(" Theme Validator Demo")
     st.markdown("Demonstriert die Validierung von Theme-Dateien")
     
     # Tabs
     tab1, tab2, tab3, tab4 = st.tabs([
-        "📁 Datei validieren",
-        "✏️ Theme erstellen",
-        "📊 Batch-Validierung",
-        "📖 Dokumentation"
+        " Datei validieren",
+        " Theme erstellen",
+        " Batch-Validierung",
+        " Dokumentation"
     ])
     
     with tab1:
@@ -80,7 +80,7 @@ def demo_file_validation():
     
     with col2:
         if not uploaded_file:
-            st.info("👈 Lade eine Theme-Datei hoch, um zu beginnen")
+            st.info(" Lade eine Theme-Datei hoch, um zu beginnen")
             
             # Beispiel-Themes zum Download
             st.subheader("Beispiel-Themes")
@@ -92,7 +92,7 @@ def demo_file_validation():
                         theme_data = f.read()
                     
                     st.download_button(
-                        f"📥 {theme_file.stem}",
+                        f" {theme_file.stem}",
                         theme_data,
                         file_name=theme_file.name,
                         mime="application/json",
@@ -150,7 +150,7 @@ def demo_theme_creation():
         )
         
         # Theme erstellen
-        if st.button("🎨 Theme erstellen", type="primary"):
+        if st.button(" Theme erstellen", type="primary"):
             theme_data = create_theme_data(
                 theme_name, display_name,
                 background, foreground,
@@ -171,7 +171,7 @@ def demo_theme_creation():
                 if result.is_valid and result.fixed_theme:
                     theme_json = json.dumps(result.fixed_theme, indent=2)
                     st.download_button(
-                        "📥 Theme herunterladen",
+                        " Theme herunterladen",
                         theme_json,
                         file_name=f"{theme_name}.json",
                         mime="application/json"
@@ -179,7 +179,7 @@ def demo_theme_creation():
     
     with col2:
         if 'result' not in locals():
-            st.info("👈 Erstelle ein Theme, um die Vorschau zu sehen")
+            st.info(" Erstelle ein Theme, um die Vorschau zu sehen")
 
 
 def demo_batch_validation():
@@ -207,7 +207,7 @@ def demo_batch_validation():
     with col2:
         show_details = st.checkbox("Details anzeigen", value=False, key="batch_details")
     
-    if st.button("🔍 Alle validieren", type="primary"):
+    if st.button(" Alle validieren", type="primary"):
         validator = ThemeValidator()
         
         # Progress Bar
@@ -232,16 +232,16 @@ def demo_batch_validation():
         with col1:
             st.metric("Gesamt", len(results))
         with col2:
-            st.metric("✅ Gültig", valid_count)
+            st.metric(" Gültig", valid_count)
         with col3:
-            st.metric("❌ Ungültig", invalid_count)
+            st.metric(" Ungültig", invalid_count)
         
         # Details
         st.subheader("Ergebnisse")
         
         for name, result in results.items():
             with st.expander(
-                f"{'✅' if result.is_valid else '❌'} {name}",
+                f"{'' if result.is_valid else ''} {name}",
                 expanded=not result.is_valid or show_details
             ):
                 show_validation_result(result, name, compact=not show_details)
@@ -252,9 +252,9 @@ def show_validation_result(result: ValidationResult, filename: str, compact: boo
     
     # Status
     if result.is_valid:
-        st.success(f"✅ **{filename}** ist gültig!")
+        st.success(f" **{filename}** ist gültig!")
     else:
-        st.error(f"❌ **{filename}** ist ungültig!")
+        st.error(f" **{filename}** ist ungültig!")
     
     # Metriken
     col1, col2, col3 = st.columns(3)
@@ -270,25 +270,25 @@ def show_validation_result(result: ValidationResult, filename: str, compact: boo
     
     # Fehler
     if result.errors:
-        st.subheader("❌ Fehler")
+        st.subheader(" Fehler")
         for error in result.errors:
             st.error(str(error))
     
     # Warnungen
     if result.warnings:
-        st.subheader("⚠️ Warnungen")
+        st.subheader(" Warnungen")
         for warning in result.warnings:
             st.warning(str(warning))
     
     # Hinweise
     if result.info:
-        st.subheader("ℹ️ Hinweise")
+        st.subheader("ℹ Hinweise")
         for info in result.info:
             st.info(str(info))
     
     # Korrigiertes Theme
     if result.fixed_theme and not compact:
-        with st.expander("📄 Korrigiertes Theme anzeigen"):
+        with st.expander(" Korrigiertes Theme anzeigen"):
             st.json(result.fixed_theme)
 
 
@@ -326,7 +326,7 @@ def create_theme_data(
 
 def show_documentation():
     """Zeigt Dokumentation an"""
-    st.header("📖 Dokumentation")
+    st.header(" Dokumentation")
     
     st.markdown("""
     ## Theme Validator
@@ -335,11 +335,11 @@ def show_documentation():
     
     ### Features
     
-    - ✅ JSON-Schema-Validierung
-    - 🎨 Farb-Validierung (Hex, RGB, RGBA)
-    - 📝 Typography-Validierung
-    - 🔧 Automatisches Auffüllen fehlender Properties
-    - 📊 Detaillierte Fehlerberichte
+    -  JSON-Schema-Validierung
+    -  Farb-Validierung (Hex, RGB, RGBA)
+    -  Typography-Validierung
+    -  Automatisches Auffüllen fehlender Properties
+    -  Detaillierte Fehlerberichte
     
     ### Verwendung
     
@@ -352,10 +352,10 @@ def show_documentation():
     result = validate_theme_file('my-theme.json', fix_errors=True)
     
     if result.is_valid:
-        print("✅ Theme ist gültig!")
+        print(" Theme ist gültig!")
         theme_data = result.fixed_theme
     else:
-        print("❌ Theme ist ungültig!")
+        print(" Theme ist ungültig!")
         for error in result.errors:
             print(f"  {error}")
     ```

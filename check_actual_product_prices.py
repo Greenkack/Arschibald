@@ -14,7 +14,7 @@ def check_product_prices():
         print(f"Datenbank nicht gefunden: {db_path}")
         return
 
-    print(f"📂 Verwende Datenbank: {db_path}\n")
+    print(f" Verwende Datenbank: {db_path}\n")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 

@@ -59,7 +59,7 @@ def print_error(text):
 
 def print_warning(text):
     """Print warning message."""
-    print(f"{Colors.YELLOW}⚠ {text}{Colors.RESET}")
+    print(f"{Colors.YELLOW} {text}{Colors.RESET}")
 
 
 def print_info(text):

@@ -46,7 +46,7 @@ def test_seite1_donuts():
             f"   - Speicher zu Tagesverbrauch: {dynamic_data['storage_consumption_ratio_percent']}%")
         print(
             f"   - Speicher zu PV-Produktion: {dynamic_data['storage_production_ratio_percent']}%")
-        print("📍 Position: Seite 1, links unten, unterhalb 'TECHNISCHE SPEZIFIKATIONEN'")
+        print(" Position: Seite 1, links unten, unterhalb 'TECHNISCHE SPEZIFIKATIONEN'")
         print(
             "Design: Große Charts (Radius 40/25), rote und blaue Farben, schwarze Labels")
 
@@ -64,7 +64,7 @@ def test_seite1_donuts():
             print(
                 f"\nPDF mit Seite 1 Test-Donut-Charts erstellt: {output_file}")
             print(f"Dateigröße: {len(overlay_bytes):,} bytes")
-            print("📋 Überprüfen Sie Seite 1 für die Test-Donut-Charts:")
+            print(" Überprüfen Sie Seite 1 für die Test-Donut-Charts:")
             print("   - Oberer Chart (ROT): Speicher zu Tagesverbrauch (85%)")
             print("   - Unterer Chart (BLAU): Speicher zu PV-Produktion (65%)")
             print("   - Position: Links unten auf der Seite")
@@ -164,13 +164,13 @@ if __name__ == "__main__":
         # Test 2: Verschiedene Werte
         test_verschiedene_werte()
 
-        print("\n🎉 Alle Tests abgeschlossen!")
-        print("📋 Die Donut-Charts sollten jetzt auf Seite 1 sichtbar sein:")
+        print("\n Alle Tests abgeschlossen!")
+        print(" Die Donut-Charts sollten jetzt auf Seite 1 sichtbar sein:")
         print("   Position: Links unten, unterhalb 'TECHNISCHE SPEZIFIKATIONEN'")
         print("   Große Größe (Radius 40/25) für maximale Sichtbarkeit")
         print("   Rote und blaue Farben für hohen Kontrast")
         print("   Schwarze Labels für beste Lesbarkeit")
-        print("📍 Falls sichtbar: Problem war die Position auf Seite 6")
-        print("📍 Falls nicht sichtbar: Problem liegt an der Donut-Zeichnung selbst")
+        print(" Falls sichtbar: Problem war die Position auf Seite 6")
+        print(" Falls nicht sichtbar: Problem liegt an der Donut-Zeichnung selbst")
     else:
         print("\nBasis-Test fehlgeschlagen - weitere Tests übersprungen")

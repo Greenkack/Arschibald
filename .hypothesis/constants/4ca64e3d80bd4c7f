@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\pool\impl.py
+# hypothesis_version: 6.147.0
+
+[30.0, ' at:\n%s', '3o7r', 'AssertionPool', 'NullPool', 'Pool disposed. %s', 'Pool recreating', 'StaticPool', 'connection', 'store_traceback']

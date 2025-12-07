@@ -265,7 +265,7 @@ def main():
         demo_currency_formatting()
         demo_component_grouping()
 
-        print("🎉 All demos completed successfully!")
+        print(" All demos completed successfully!")
         print("\nKey Features Demonstrated:")
         print("Dynamic key generation from pricing data")
         print("Template placeholder population")

@@ -24,7 +24,7 @@ def cleanup_non_serializable_objects():
                 print(f"Fehler beim Entfernen von {key}: {e}")
     
     if removed_count > 0:
-        print(f"\n🎉 {removed_count} nicht-serialisierbare Objekte entfernt!")
+        print(f"\n {removed_count} nicht-serialisierbare Objekte entfernt!")
     else:
         print("\nKeine problematischen Objekte in Session State gefunden.")
     
@@ -33,7 +33,7 @@ def cleanup_non_serializable_objects():
 
 if __name__ == "__main__":
     print("=" * 80)
-    print("🧹 Session State Cleanup")
+    print(" Session State Cleanup")
     print("=" * 80)
     print("\nHinweis: Dieses Script sollte VOR dem Start der Streamlit-App ausgeführt werden.")
     print("Es entfernt bekannte nicht-serialisierbare Objekte aus dem Session State.\n")

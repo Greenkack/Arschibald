@@ -94,14 +94,14 @@ class TestBreadcrumb:
             label='Test Page',
             page='test',
             params={'id': '123'},
-            icon='🧪',
+            icon='',
             is_current=True
         )
 
         assert breadcrumb.label == 'Test Page'
         assert breadcrumb.page == 'test'
         assert breadcrumb.params == {'id': '123'}
-        assert breadcrumb.icon == '🧪'
+        assert breadcrumb.icon == ''
         assert breadcrumb.is_current is True
 
 
@@ -275,9 +275,9 @@ class TestNavigationHistory:
     def test_register_page_icon(self):
         """Test registering page icon"""
         history = NavigationHistory()
-        history.register_page_icon('home', '🏠')
+        history.register_page_icon('home', '')
 
-        assert history._page_icons['home'] == '🏠'
+        assert history._page_icons['home'] == ''
 
     def test_get_breadcrumbs_empty(self):
         """Test getting breadcrumbs with empty history"""
@@ -401,7 +401,7 @@ class TestNavigationHistory:
                 }
             ],
             'page_titles': {'home': 'Home'},
-            'page_icons': {'home': '🏠'}
+            'page_icons': {'home': ''}
         }
 
         history = NavigationHistory.from_dict(data)

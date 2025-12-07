@@ -11,20 +11,20 @@ import os
 def test_crm_integration():
     """Testet die CRM-Integration ohne die App zu starten"""
     
-    print("🧪 Teste CRM Integration...")
+    print(" Teste CRM Integration...")
     print("=" * 60)
     
     # 1. Import Test
-    print("\n1️⃣ Import Test...")
+    print("\n1⃣ Import Test...")
     try:
         import crm
-        print("   ✅ CRM Modul importiert")
+        print("    CRM Modul importiert")
     except Exception as e:
-        print(f"   ❌ Import fehlgeschlagen: {e}")
+        print(f"    Import fehlgeschlagen: {e}")
         return False
     
     # 2. Funktions-Verfügbarkeit
-    print("\n2️⃣ Funktions-Verfügbarkeit...")
+    print("\n2⃣ Funktions-Verfügbarkeit...")
     required_functions = [
         'render_crm',
         'render_customer_management', 
@@ -37,24 +37,24 @@ def test_crm_integration():
     
     for func_name in required_functions:
         if hasattr(crm, func_name):
-            print(f"   ✅ {func_name} verfügbar")
+            print(f"    {func_name} verfügbar")
         else:
-            print(f"   ❌ {func_name} FEHLT")
+            print(f"    {func_name} FEHLT")
             return False
     
     # 3. Datenbank-Operationen
-    print("\n3️⃣ Datenbank-Operationen...")
+    print("\n3⃣ Datenbank-Operationen...")
     try:
         # Temporäre Datenbank erstellen
         temp_db = tempfile.NamedTemporaryFile(delete=False, suffix='.db')
         temp_db.close()
         
         conn = sqlite3.connect(temp_db.name)
-        print(f"   ✅ Test-Datenbank erstellt: {temp_db.name}")
+        print(f"    Test-Datenbank erstellt: {temp_db.name}")
         
         # Tabellen erstellen
         crm.create_tables_crm(conn)
-        print("   ✅ CRM-Tabellen erstellt")
+        print("    CRM-Tabellen erstellt")
         
         # Test-Kunde erstellen
         test_customer = {
@@ -68,50 +68,50 @@ def test_crm_integration():
         }
         
         customer_id = crm.save_customer(conn, test_customer)
-        print(f"   ✅ Test-Kunde erstellt (ID: {customer_id})")
+        print(f"    Test-Kunde erstellt (ID: {customer_id})")
         
         # Kunde laden
         loaded = crm.load_customer(conn, customer_id)
         if loaded and loaded['first_name'] == 'Max':
-            print("   ✅ Test-Kunde erfolgreich geladen")
+            print("    Test-Kunde erfolgreich geladen")
         else:
-            print("   ❌ Fehler beim Laden des Test-Kunden")
+            print("    Fehler beim Laden des Test-Kunden")
             return False
         
         # Alle Kunden laden
         all_customers = crm.load_all_customers(conn)
         if len(all_customers) == 1:
-            print(f"   ✅ Kundenliste korrekt ({len(all_customers)} Kunde)")
+            print(f"    Kundenliste korrekt ({len(all_customers)} Kunde)")
         else:
-            print(f"   ⚠️  Unerwartete Anzahl: {len(all_customers)}")
+            print(f"     Unerwartete Anzahl: {len(all_customers)}")
         
         conn.close()
         os.unlink(temp_db.name)
-        print("   ✅ Test-Datenbank bereinigt")
+        print("    Test-Datenbank bereinigt")
         
     except Exception as e:
-        print(f"   ❌ Datenbank-Test fehlgeschlagen: {e}")
+        print(f"    Datenbank-Test fehlgeschlagen: {e}")
         return False
     
     # 4. Tab-Funktionen (Import-Check)
-    print("\n4️⃣ Tab-Funktionen Verfügbarkeit...")
+    print("\n4⃣ Tab-Funktionen Verfügbarkeit...")
     
     # Lead Scoring
     try:
         from crm.features.lead_scoring_ui import render_lead_scoring_admin
-        print("   ✅ Lead Scoring Modul verfügbar")
+        print("    Lead Scoring Modul verfügbar")
     except ImportError:
-        print("   ℹ️  Lead Scoring Modul optional (Fallback aktiv)")
+        print("   ℹ  Lead Scoring Modul optional (Fallback aktiv)")
     
     # Backup
     try:
         from crm.utils.backup_ui import render_admin_backup_tab
-        print("   ✅ Backup Modul verfügbar")
+        print("    Backup Modul verfügbar")
     except ImportError:
-        print("   ℹ️  Backup Modul optional (Fallback aktiv)")
+        print("   ℹ  Backup Modul optional (Fallback aktiv)")
     
     print("\n" + "=" * 60)
-    print("✅ ALLE TESTS BESTANDEN!")
+    print(" ALLE TESTS BESTANDEN!")
     print("\nDie CRM-Integration ist funktionsfähig und hat keine")
     print("negativen Auswirkungen auf die bestehende App.")
     print("\nNeue Features:")

@@ -288,7 +288,7 @@ class TestAlertComponent:
 
     def test_alert_with_icon(self):
         """Test Alert mit Icon."""
-        alert_html = '<div class="alert alert-info"><span class="icon">ℹ️</span>Message</div>'
+        alert_html = '<div class="alert alert-info"><span class="icon">ℹ</span>Message</div>'
         
         assert "icon" in alert_html
         assert "alert-info" in alert_html

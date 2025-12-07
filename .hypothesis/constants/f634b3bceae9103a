@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\sql\annotation.py
+# hypothesis_version: 6.147.0
+
+['Annotated%s', 'SupportsAnnotations', '_SA', '_annotations', '_generate_cache_key', '_traverse_internals', 'detect_subquery_cols', 'entity_namespace', 'inherit_cache', 'proxy_set']

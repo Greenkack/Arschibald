@@ -55,10 +55,10 @@ def demo_standard_pages_only():
         Path("demo_output").mkdir(exist_ok=True)
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        logger.info(f"✓ PDF generated: {output_path}")
+        logger.info(f" PDF generated: {output_path}")
         logger.info(f"  Size: {len(pdf_bytes):,} bytes")
     else:
-        logger.error("✗ Failed to generate PDF")
+        logger.error(" Failed to generate PDF")
     
     logger.info("")
 
@@ -98,11 +98,11 @@ def demo_with_detailed_calculations():
         Path("demo_output").mkdir(exist_ok=True)
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        logger.info(f"✓ PDF generated: {output_path}")
+        logger.info(f" PDF generated: {output_path}")
         logger.info(f"  Size: {len(pdf_bytes):,} bytes")
         logger.info(f"  Pages: 8 standard + 1 calculation = 9 total")
     else:
-        logger.error("✗ Failed to generate PDF")
+        logger.error(" Failed to generate PDF")
     
     logger.info("")
 
@@ -143,11 +143,11 @@ def demo_with_diagrams():
         Path("demo_output").mkdir(exist_ok=True)
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        logger.info(f"✓ PDF generated: {output_path}")
+        logger.info(f" PDF generated: {output_path}")
         logger.info(f"  Size: {len(pdf_bytes):,} bytes")
         logger.info(f"  Pages: 8 standard + 3 diagrams = 11 total")
     else:
-        logger.error("✗ Failed to generate PDF")
+        logger.error(" Failed to generate PDF")
     
     logger.info("")
 
@@ -185,9 +185,9 @@ def demo_with_all_components():
     )
     
     logger.info("Generating PDF with all components...")
-    logger.info("  ✓ Detailed calculations")
-    logger.info("  ✓ Additional diagrams (2)")
-    logger.info("  ✓ Extended visualizations")
+    logger.info("   Detailed calculations")
+    logger.info("   Additional diagrams (2)")
+    logger.info("   Extended visualizations")
     
     pdf_bytes = service.generate_extended_pdf(data, selection)
     
@@ -196,11 +196,11 @@ def demo_with_all_components():
         Path("demo_output").mkdir(exist_ok=True)
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        logger.info(f"✓ PDF generated: {output_path}")
+        logger.info(f" PDF generated: {output_path}")
         logger.info(f"  Size: {len(pdf_bytes):,} bytes")
         logger.info(f"  Pages: 8 standard + 4 additional = 12 total")
     else:
-        logger.error("✗ Failed to generate PDF")
+        logger.error(" Failed to generate PDF")
     
     logger.info("")
 
@@ -282,10 +282,10 @@ def demo_with_product_specific_components():
         Path("demo_output").mkdir(exist_ok=True)
         with open(output_path, 'wb') as f:
             f.write(pdf_bytes)
-        logger.info(f"✓ PDF generated: {output_path}")
+        logger.info(f" PDF generated: {output_path}")
         logger.info(f"  Size: {len(pdf_bytes):,} bytes")
     else:
-        logger.error("✗ Failed to generate PDF")
+        logger.error(" Failed to generate PDF")
     
     logger.info("")
 
@@ -293,9 +293,9 @@ def demo_with_product_specific_components():
 def main():
     """Run all demos"""
     logger.info("\n")
-    logger.info("╔" + "=" * 78 + "╗")
-    logger.info("║" + " " * 20 + "EXTENDED PV PDF SERVICE DEMO" + " " * 30 + "║")
-    logger.info("╚" + "=" * 78 + "╝")
+    logger.info("" + "=" * 78 + "")
+    logger.info("" + " " * 20 + "EXTENDED PV PDF SERVICE DEMO" + " " * 30 + "")
+    logger.info("" + "=" * 78 + "")
     logger.info("\n")
     
     try:
@@ -311,8 +311,8 @@ def main():
         logger.info("=" * 80)
         logger.info("DEMO SUMMARY")
         logger.info("=" * 80)
-        logger.info("✓ All demos completed successfully")
-        logger.info("✓ Check demo_output/ folder for generated PDFs")
+        logger.info(" All demos completed successfully")
+        logger.info(" Check demo_output/ folder for generated PDFs")
         logger.info("")
         logger.info("Key Features Demonstrated:")
         logger.info("  1. Standard 8-page PDF generation")

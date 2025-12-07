@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\brain\brain_nose.py
+# hypothesis_version: 6.147.0
+
+['([A-Z])', '_', '__all__', '__all__ = []', 'a', 'assert', 'assertEqual', 'assert_equals', 'eq_', 'nose.tools', 'nose.tools.trivial', 'ok_']

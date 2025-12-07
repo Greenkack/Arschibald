@@ -31,7 +31,7 @@ def demo_lifecycle_management():
         # Get lifecycle
         print(f"Getting lifecycle for product {product_id}...")
         lifecycle = service.get_product_lifecycle(product_id)
-        print(f"✓ Current status: {lifecycle['status']}")
+        print(f" Current status: {lifecycle['status']}")
         print(f"  Version: {lifecycle['version']}")
         print(f"  Is active: {lifecycle['is_active']}")
         
@@ -42,10 +42,10 @@ def demo_lifecycle_management():
             "discontinued",
             "End of life - replaced by newer model"
         )
-        print(f"✓ Lifecycle updated successfully")
+        print(f" Lifecycle updated successfully")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def demo_versioning():
@@ -66,18 +66,18 @@ def demo_versioning():
             },
             version_notes="Price increase and efficiency improvement"
         )
-        print(f"✓ Version {version['version']} created")
+        print(f" Version {version['version']} created")
         print(f"  Previous version: {version['previous_version']}")
         
         # Get version history
         print(f"\nGetting version history...")
         history = service.get_product_version_history(product_id, limit=10)
-        print(f"✓ Found {len(history)} versions")
+        print(f" Found {len(history)} versions")
         for v in history:
             print(f"  - Version {v['version']}: {v.get('version_notes', 'N/A')}")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def demo_comparison():
@@ -94,7 +94,7 @@ def demo_comparison():
             comparison_attributes=["power_wp", "efficiency", "price_euro"]
         )
         
-        print(f"✓ Compared {comparison['summary']['total_products']} products")
+        print(f" Compared {comparison['summary']['total_products']} products")
         print(f"  Attributes compared: {comparison['summary']['total_attributes']}")
         
         print("\nProducts:")
@@ -109,7 +109,7 @@ def demo_comparison():
                     print(f"    Product {val['product_id']}: {val['formatted_value']}")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def demo_recommendations():
@@ -133,7 +133,7 @@ def demo_recommendations():
             limit=5
         )
         
-        print(f"✓ Found {len(recommendations)} recommendations")
+        print(f" Found {len(recommendations)} recommendations")
         
         for i, rec in enumerate(recommendations, 1):
             print(f"\n{i}. {rec['model_name']} (Score: {rec['recommendation_score']:.1f})")
@@ -145,7 +145,7 @@ def demo_recommendations():
                 print(f"     - {reason}")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def demo_availability():
@@ -160,7 +160,7 @@ def demo_availability():
         print(f"Getting availability for product {product_id}...")
         availability = service.get_product_availability(product_id)
         
-        print(f"✓ Status: {availability['status']}")
+        print(f" Status: {availability['status']}")
         print(f"  Stock quantity: {availability['stock_quantity']}")
         print(f"  Reorder point: {availability['reorder_point']}")
         print(f"  Available: {availability['is_available']}")
@@ -172,11 +172,11 @@ def demo_availability():
             stock_quantity=50,
             reorder_point=15
         )
-        print(f"✓ Availability updated")
+        print(f" Availability updated")
         print(f"  New stock: {updated['stock_quantity']}")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def demo_suppliers():
@@ -191,7 +191,7 @@ def demo_suppliers():
         print(f"Getting suppliers for product {product_id}...")
         suppliers = service.get_product_suppliers(product_id)
         
-        print(f"✓ Found {len(suppliers)} suppliers")
+        print(f" Found {len(suppliers)} suppliers")
         for supplier in suppliers:
             print(f"\n  {supplier['supplier_name']}")
             print(f"    SKU: {supplier.get('supplier_sku', 'N/A')}")
@@ -210,10 +210,10 @@ def demo_suppliers():
                 "lead_time_days": 14
             }
         )
-        print(f"✓ Supplier added: {new_supplier['supplier_name']}")
+        print(f" Supplier added: {new_supplier['supplier_name']}")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def demo_pricing_history():
@@ -228,7 +228,7 @@ def demo_pricing_history():
         print(f"Getting pricing history for product {product_id}...")
         history = service.get_pricing_history(product_id, limit=10)
         
-        print(f"✓ Found {len(history)} price changes")
+        print(f" Found {len(history)} price changes")
         for record in history[:5]:
             print(f"  {record.get('changed_at', 'N/A')}: €{record.get('price_euro', 0):.2f}")
         
@@ -237,7 +237,7 @@ def demo_pricing_history():
         trends = service.analyze_pricing_trends(product_id, period_days=90)
         
         if trends.get('has_data'):
-            print(f"✓ Trend analysis:")
+            print(f" Trend analysis:")
             print(f"  Current price: €{trends['current_price']:.2f}")
             print(f"  Min price: €{trends['min_price']:.2f}")
             print(f"  Max price: €{trends['max_price']:.2f}")
@@ -246,10 +246,10 @@ def demo_pricing_history():
             print(f"  Trend: {trends['trend']}")
             print(f"  Volatility: €{trends['volatility']:.2f}")
         else:
-            print(f"✗ No pricing data available")
+            print(f" No pricing data available")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def demo_performance():
@@ -264,7 +264,7 @@ def demo_performance():
         print(f"Getting performance for product {product_id} (30 days)...")
         performance = service.get_product_performance(product_id, period_days=30)
         
-        print(f"✓ Performance metrics:")
+        print(f" Performance metrics:")
         metrics = performance['metrics']
         print(f"  Total sales: {metrics['total_sales']}")
         print(f"  Total revenue: €{metrics['total_revenue']:,.2f}")
@@ -288,13 +288,13 @@ def demo_performance():
         )
         
         if category_perf.get('has_data'):
-            print(f"✓ Category: {category_perf['category']}")
+            print(f" Category: {category_perf['category']}")
             print(f"  Total products: {category_perf['total_products']}")
             print(f"  Total revenue: €{category_perf['totals']['total_revenue']:,.2f}")
             print(f"  Total units: {category_perf['totals']['total_units_sold']}")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def demo_price_matrix():
@@ -312,7 +312,7 @@ def demo_price_matrix():
             context={"discount_code": "DEMO10"}
         )
         
-        print(f"✓ Pricing calculated:")
+        print(f" Pricing calculated:")
         print(f"  Base price: €{pricing.get('base_price', 0):.2f}")
         print(f"  Total price: €{pricing.get('total_price', 0):.2f}")
         
@@ -324,7 +324,7 @@ def demo_price_matrix():
             context={"customer_type": "wholesale"}
         )
         
-        print(f"✓ Bulk pricing:")
+        print(f" Bulk pricing:")
         print(f"  Product count: {bulk_pricing['product_count']}")
         print(f"  Total quantity: {bulk_pricing['total_quantity']}")
         print(f"  Subtotal: €{bulk_pricing['subtotal']:,.2f}")
@@ -332,7 +332,7 @@ def demo_price_matrix():
         print(f"  Total price: €{bulk_pricing['total_price']:,.2f}")
         
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 def main():
@@ -346,7 +346,7 @@ def main():
         print("\nInitializing service...")
         service = get_product_advanced_service()
         health = service.health_check()
-        print(f"✓ Service status: {health.status}")
+        print(f" Service status: {health.status}")
         
         # Run demos
         demo_lifecycle_management()
@@ -364,7 +364,7 @@ def main():
         print("=" * 60 + "\n")
         
     except Exception as e:
-        print(f"\n✗ Demo failed: {e}")
+        print(f"\n Demo failed: {e}")
         import traceback
         traceback.print_exc()
 

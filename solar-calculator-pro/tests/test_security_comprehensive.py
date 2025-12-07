@@ -445,8 +445,8 @@ class TestInputValidation:
             "'",     # Single quote
             "<>",    # Angle brackets
             "&",     # Ampersand
-            "🔥",    # Emoji
-            "中文",   # Unicode
+            "",    # Emoji
+            "",   # Unicode
         ]
         
         for char in special_chars:

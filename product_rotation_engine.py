@@ -334,7 +334,7 @@ def rotate_products(
     # PV Module Specs
     if 'pv_modules' in standard_products:
         pv = standard_products['pv_modules']
-        if pv is not None:  # ⬅️ ABSICHERUNG gegen None!
+        if pv is not None:  #  ABSICHERUNG gegen None!
             power_w = pv.get('power_w') or pv.get('Leistung_W')
             specs['pv_modules'] = ProductSpecs(power_w=power_w)
             logger.info(f"PV Module Ziel-Specs: {power_w}W")
@@ -344,7 +344,7 @@ def rotate_products(
     # Wechselrichter Specs
     if 'inverters' in standard_products:
         inv = standard_products['inverters']
-        if inv is not None:  # ⬅️ ABSICHERUNG gegen None!
+        if inv is not None:  #  ABSICHERUNG gegen None!
             power_kw = inv.get('power_kw') or inv.get('Leistung_kW')
             specs['inverters'] = ProductSpecs(power_kw=power_kw)
             logger.info(f"Wechselrichter Ziel-Specs: {power_kw}kW")
@@ -354,7 +354,7 @@ def rotate_products(
     # Batteriespeicher Specs
     if 'battery_storage' in standard_products:
         bat = standard_products['battery_storage']
-        if bat is not None:  # ⬅️ ABSICHERUNG gegen None!
+        if bat is not None:  #  ABSICHERUNG gegen None!
             capacity_kwh = bat.get('capacity_kwh') or bat.get('Kapazität_kWh')
             specs['battery_storage'] = ProductSpecs(capacity_kwh=capacity_kwh)
             logger.info(f"Batteriespeicher Ziel-Specs: {capacity_kwh}kWh")

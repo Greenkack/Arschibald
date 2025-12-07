@@ -450,7 +450,7 @@ def subsidy_optimizer(
             'important_notes': [
                 'Förderungen IMMER vor Vertragsschluss beantragen!',
                 'Mehrere Förderungen sind oft kombinierbar',
-                '📅 Fristen und Budget beachten (teilweise begrenzt)',
+                ' Fristen und Budget beachten (teilweise begrenzt)',
                 'Alle Nachweise und Belege aufbewahren'
             ],
             'has_battery': has_battery,

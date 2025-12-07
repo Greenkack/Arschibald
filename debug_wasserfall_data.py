@@ -64,9 +64,9 @@ def debug_dynamic_data():
 
             print(f"Debug-PDF erstellt: {output_file}")
             print(
-                "📋 Schauen Sie in die Konsolen-Ausgabe nach 'DEBUG: Verfügbare dynamic_data Keys'")
+                " Schauen Sie in die Konsolen-Ausgabe nach 'DEBUG: Verfügbare dynamic_data Keys'")
             print(
-                "📋 Schauen Sie auch nach 'DEBUG: Wasserfall-Werte' um zu sehen welche Werte erkannt wurden")
+                " Schauen Sie auch nach 'DEBUG: Wasserfall-Werte' um zu sehen welche Werte erkannt wurden")
         else:
             print("Debug-Overlay-Generierung fehlgeschlagen")
 
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     # Test 2: Echte Berechnungs-Keys
     test_real_calculation_keys()
 
-    print("\n📋 Zusammenfassung:")
+    print("\n Zusammenfassung:")
     print("   - Schauen Sie in die Konsolen-Ausgabe nach DEBUG-Meldungen")
     print("   - Die PDFs zeigen ob die Werte korrekt erkannt werden")
     print("   - Falls Werte fehlen, müssen die Keys in der Wasserfall-Funktion angepasst werden")

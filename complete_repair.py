@@ -282,7 +282,7 @@ def main():
     print("REPARATUR ABGESCHLOSSEN")
     print("=" * 80)
     print(f"Gelöscht:        {deleted} Dateien (Backup in _syntax_errors_backup/)")
-    print(f"💾 Backup erstellt: {backed_up} Dateien")
+    print(f" Backup erstellt: {backed_up} Dateien")
     print(f"Erstellt:        {created} Dummy-Module")
     
     print("\nERWARTETE VERBESSERUNG:")

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\animation.py
+# hypothesis_version: 6.147.0
+
+['back', 'back-in', 'back-in-out', 'back-out', 'batch_animate', 'bounce', 'bounce-in', 'bounce-in-out', 'bounce-out', 'circle', 'circle-in', 'circle-in-out', 'circle-out', 'cubic', 'cubic-in', 'cubic-in-out', 'cubic-out', 'duration', 'easing', 'elastic', 'elastic-in', 'elastic-in-out', 'elastic-out', 'exp', 'exp-in', 'exp-in-out', 'exp-out', 'linear', 'linear-in', 'linear-in-out', 'linear-out', 'quad', 'quad-in', 'quad-in-out', 'quad-out', 'sin', 'sin-in', 'sin-in-out', 'sin-out']

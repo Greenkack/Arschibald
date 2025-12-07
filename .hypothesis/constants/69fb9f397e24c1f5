@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\itsdangerous\timed.py
+# hypothesis_version: 6.147.0
+
+['Malformed timestamp', '_te.Literal[False]', '_te.Literal[True]', 'max_age', 'timestamp missing']

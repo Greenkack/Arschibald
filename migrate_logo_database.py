@@ -66,16 +66,16 @@ def migrate_logo_database():
 
 
 if __name__ == "__main__":
-    print("🔄 LOGO-DATENBANK MIGRATION")
+    print(" LOGO-DATENBANK MIGRATION")
     print("=" * 40)
 
     success = migrate_logo_database()
 
     if success:
-        print("\n🎉 Migration erfolgreich abgeschlossen!")
+        print("\n Migration erfolgreich abgeschlossen!")
 
         # Teste die Migration
-        print("\n🧪 Teste die Migration...")
+        print("\n Teste die Migration...")
         try:
             from brand_logo_db import add_brand_logo
 

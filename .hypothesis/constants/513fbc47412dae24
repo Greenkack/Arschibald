@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\layout\yaxis\_tickfont.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'color', 'family', 'layout.yaxis', 'lineposition', 'shadow', 'size', 'skip_invalid', 'style', 'textcase', 'tickfont', 'variant', 'weight']

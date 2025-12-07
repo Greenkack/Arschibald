@@ -25,7 +25,7 @@ from utils.shadcn_chart_theme import (
 def main():
     st.set_page_config(page_title="shadcn/ui Chart Theme Demo", layout="wide")
     
-    st.title("📊 shadcn/ui Chart Theme Demo")
+    st.title(" shadcn/ui Chart Theme Demo")
     st.markdown("Demonstriert das Chart-Styling-System mit verschiedenen Chart-Typen")
     
     # Initialisiere Theme Manager
@@ -37,7 +37,7 @@ def main():
     
     # Sidebar: Theme-Auswahl
     with st.sidebar:
-        st.header("⚙️ Einstellungen")
+        st.header(" Einstellungen")
         
         # Theme Selector
         available_themes = theme_manager.get_available_themes()
@@ -77,12 +77,12 @@ def main():
     
     # Hauptbereich: Chart-Demos
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        "📈 Linien-Charts",
-        "📊 Area-Charts",
-        "📊 Bar-Charts",
-        "🥧 Pie-Charts",
-        "🔥 Heatmaps",
-        "🎨 Erweitert"
+        " Linien-Charts",
+        " Area-Charts",
+        " Bar-Charts",
+        " Pie-Charts",
+        " Heatmaps",
+        " Erweitert"
     ])
     
     # Tab 1: Linien-Charts
@@ -402,18 +402,18 @@ def main():
     # Footer
     st.divider()
     st.markdown("""
-    ### 📚 Features
+    ###  Features
     
-    - ✅ **Automatisches Theme-Styling**: Alle Charts passen sich dem gewählten Theme an
-    - ✅ **Glatte Spline-Kurven**: Moderne, fließende Linien statt eckiger Verbindungen
-    - ✅ **Gradient-Fills**: Schöne Farbverläufe für Area-Charts
-    - ✅ **Responsive Layouts**: Optimiert für Desktop und Mobile
-    - ✅ **Dark Mode Support**: Automatische Anpassung an helle/dunkle Themes
-    - ✅ **Konsistente Farben**: 5 harmonische Chart-Farben pro Theme
-    - ✅ **Moderne Schriftarten**: Inter/System-Fonts für professionelles Aussehen
-    - ✅ **Hover-Effekte**: Gestylte Tooltips im Theme-Design
+    -  **Automatisches Theme-Styling**: Alle Charts passen sich dem gewählten Theme an
+    -  **Glatte Spline-Kurven**: Moderne, fließende Linien statt eckiger Verbindungen
+    -  **Gradient-Fills**: Schöne Farbverläufe für Area-Charts
+    -  **Responsive Layouts**: Optimiert für Desktop und Mobile
+    -  **Dark Mode Support**: Automatische Anpassung an helle/dunkle Themes
+    -  **Konsistente Farben**: 5 harmonische Chart-Farben pro Theme
+    -  **Moderne Schriftarten**: Inter/System-Fonts für professionelles Aussehen
+    -  **Hover-Effekte**: Gestylte Tooltips im Theme-Design
     
-    ### 💡 Verwendung
+    ###  Verwendung
     
     ```python
     from theming.theme_manager import ThemeManager

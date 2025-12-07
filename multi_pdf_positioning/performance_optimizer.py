@@ -637,7 +637,7 @@ class PerformanceOptimizer:
         if metrics.bottlenecks:
             print(f"\nBottlenecks:")
             for bottleneck in metrics.bottlenecks:
-                print(f"  ⚠ {bottleneck}")
+                print(f"   {bottleneck}")
         
         # Recommendations
         print(f"\nRecommendations:")

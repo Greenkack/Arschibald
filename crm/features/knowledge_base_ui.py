@@ -32,7 +32,7 @@ except ImportError:
 
 def render_knowledge_base_ui():
     """Hauptfunktion für die Wissensdatenbank-UI."""
-    st.title("📚 Wissensdatenbank")
+    st.title(" Wissensdatenbank")
     
     # Initialisiere Manager
     conn = get_db_connection()
@@ -124,7 +124,7 @@ def render_article_card(kb_manager: KnowledgeBaseManager, article: dict):
             # Titel mit Featured-Badge
             title = article['title']
             if article.get('is_featured'):
-                title = f"⭐ {title}"
+                title = f" {title}"
             st.markdown(f"### {title}")
             
             # Metadaten
@@ -132,18 +132,18 @@ def render_article_card(kb_manager: KnowledgeBaseManager, article: dict):
             if article.get('category_name'):
                 meta_parts.append(f"{article['category_name']}")
             if article.get('author'):
-                meta_parts.append(f"✍️ {article['author']}")
+                meta_parts.append(f" {article['author']}")
             if article.get('view_count'):
-                meta_parts.append(f"👁️ {article['view_count']} Aufrufe")
+                meta_parts.append(f" {article['view_count']} Aufrufe")
             if article.get('avg_rating'):
-                stars = "⭐" * int(round(article['avg_rating']))
+                stars = "" * int(round(article['avg_rating']))
                 meta_parts.append(f"{stars} ({article.get('rating_count', 0)})")
             
             if meta_parts:
                 st.caption(" | ".join(meta_parts))
         
         with col2:
-            if st.button("📖 Öffnen", key=f"open_article_{article['id']}", use_container_width=True):
+            if st.button(" Öffnen", key=f"open_article_{article['id']}", use_container_width=True):
                 st.session_state['kb_view_article_id'] = article['id']
                 st.rerun()
         
@@ -168,10 +168,10 @@ def render_article_view(kb_manager: KnowledgeBaseManager, article_id: int):
         with col1:
             st.markdown(f"## {article['title']}")
         with col2:
-            if st.button("📧 Per E-Mail teilen", key=f"share_{article_id}"):
+            if st.button(" Per E-Mail teilen", key=f"share_{article_id}"):
                 st.session_state['kb_share_article_id'] = article_id
         with col3:
-            if st.button("✖️ Schließen", key=f"close_{article_id}"):
+            if st.button(" Schließen", key=f"close_{article_id}"):
                 if 'kb_view_article_id' in st.session_state:
                     del st.session_state['kb_view_article_id']
                 st.rerun()
@@ -181,9 +181,9 @@ def render_article_view(kb_manager: KnowledgeBaseManager, article_id: int):
         with col1:
             st.caption(f"Kategorie: {article.get('category_name', 'Keine')}")
         with col2:
-            st.caption(f"✍️ Autor: {article.get('author', 'Unbekannt')}")
+            st.caption(f" Autor: {article.get('author', 'Unbekannt')}")
         with col3:
-            st.caption(f"📅 Erstellt: {article.get('created_at', '')[:10]}")
+            st.caption(f" Erstellt: {article.get('created_at', '')[:10]}")
         
         st.divider()
         
@@ -194,7 +194,7 @@ def render_article_view(kb_manager: KnowledgeBaseManager, article_id: int):
         
         # Tags
         if article.get('tags'):
-            st.caption(f"🏷️ Tags: {article['tags']}")
+            st.caption(f" Tags: {article['tags']}")
         
         # Bewertungs-Sektion
         render_rating_section(kb_manager, article_id)
@@ -206,7 +206,7 @@ def render_article_view(kb_manager: KnowledgeBaseManager, article_id: int):
 
 def render_rating_section(kb_manager: KnowledgeBaseManager, article_id: int):
     """Rendert die Bewertungs-Sektion."""
-    st.subheader("⭐ Bewertungen")
+    st.subheader(" Bewertungen")
     
     # Statistiken
     stats = kb_manager.get_article_rating_stats(article_id)
@@ -222,12 +222,12 @@ def render_rating_section(kb_manager: KnowledgeBaseManager, article_id: int):
             for rating in range(5, 0, -1):
                 count = stats['distribution'].get(rating, 0)
                 percentage = (count / stats['count'] * 100) if stats['count'] > 0 else 0
-                st.progress(percentage / 100, text=f"{'⭐' * rating} ({count})")
+                st.progress(percentage / 100, text=f"{'' * rating} ({count})")
     
     st.divider()
     
     # Neue Bewertung abgeben
-    with st.expander("✍️ Artikel bewerten"):
+    with st.expander(" Artikel bewerten"):
         col1, col2 = st.columns([1, 3])
         with col1:
             rating = st.select_slider(
@@ -260,7 +260,7 @@ def render_rating_section(kb_manager: KnowledgeBaseManager, article_id: int):
             with st.container():
                 col1, col2 = st.columns([1, 5])
                 with col1:
-                    st.markdown(f"**{'⭐' * rating_data['rating']}**")
+                    st.markdown(f"**{'' * rating_data['rating']}**")
                 with col2:
                     if rating_data.get('comment'):
                         st.markdown(rating_data['comment'])
@@ -270,7 +270,7 @@ def render_rating_section(kb_manager: KnowledgeBaseManager, article_id: int):
 
 def render_email_share_dialog(kb_manager: KnowledgeBaseManager, article: dict):
     """Rendert den E-Mail-Share-Dialog."""
-    with st.expander("📧 Artikel per E-Mail teilen", expanded=True):
+    with st.expander(" Artikel per E-Mail teilen", expanded=True):
         recipient_email = st.text_input(
             "Empfänger E-Mail",
             key=f"share_email_{article['id']}"
@@ -285,7 +285,7 @@ def render_email_share_dialog(kb_manager: KnowledgeBaseManager, article: dict):
         
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("📧 Senden", key=f"send_email_{article['id']}", type="primary"):
+            if st.button(" Senden", key=f"send_email_{article['id']}", type="primary"):
                 if recipient_email:
                     success = send_article_email(recipient_email, article, message)
                     if success:
@@ -367,7 +367,7 @@ def render_articles_tab(kb_manager: KnowledgeBaseManager):
     # Aktionen
     col1, col2 = st.columns([3, 1])
     with col2:
-        if st.button("➕ Neuer Artikel", type="primary", use_container_width=True):
+        if st.button(" Neuer Artikel", type="primary", use_container_width=True):
             st.session_state['kb_create_article'] = True
     
     # Artikel erstellen/bearbeiten
@@ -387,17 +387,17 @@ def render_articles_tab(kb_manager: KnowledgeBaseManager):
                 
                 with col1:
                     status = "Veröffentlicht" if article['is_published'] else "Entwurf"
-                    featured = "⭐" if article['is_featured'] else ""
+                    featured = "" if article['is_featured'] else ""
                     st.markdown(f"**{featured} {article['title']}** ({status})")
                     st.caption(f"Kategorie: {article.get('category_name', 'Keine')} | Aufrufe: {article['view_count']}")
                 
                 with col2:
-                    if st.button("✏️", key=f"edit_article_{article['id']}", help="Bearbeiten"):
+                    if st.button("", key=f"edit_article_{article['id']}", help="Bearbeiten"):
                         st.session_state['kb_edit_article_id'] = article['id']
                         st.rerun()
                 
                 with col3:
-                    if st.button("👁️", key=f"view_article_{article['id']}", help="Ansehen"):
+                    if st.button("", key=f"view_article_{article['id']}", help="Ansehen"):
                         st.session_state['kb_view_article_id'] = article['id']
                         st.rerun()
                 
@@ -416,7 +416,7 @@ def render_article_editor(kb_manager: KnowledgeBaseManager):
     article = kb_manager.get_article(article_id) if article_id else None
     
     with st.form("article_editor_form"):
-        st.subheader("✏️ Artikel bearbeiten" if article else "➕ Neuer Artikel")
+        st.subheader(" Artikel bearbeiten" if article else " Neuer Artikel")
         
         title = st.text_input(
             "Titel *",
@@ -479,7 +479,7 @@ def render_article_editor(kb_manager: KnowledgeBaseManager):
         
         col1, col2 = st.columns(2)
         with col1:
-            submit = st.form_submit_button("💾 Speichern", type="primary", use_container_width=True)
+            submit = st.form_submit_button(" Speichern", type="primary", use_container_width=True)
         with col2:
             cancel = st.form_submit_button("Abbrechen", use_container_width=True)
         
@@ -537,7 +537,7 @@ def render_categories_tab(kb_manager: KnowledgeBaseManager):
     st.subheader("Kategorien verwalten")
     
     # Neue Kategorie erstellen
-    with st.expander("➕ Neue Kategorie erstellen"):
+    with st.expander(" Neue Kategorie erstellen"):
         with st.form("create_category_form"):
             name = st.text_input("Name *")
             description = st.text_area("Beschreibung")
@@ -581,7 +581,7 @@ def render_categories_tab(kb_manager: KnowledgeBaseManager):
 def render_category_tree(kb_manager: KnowledgeBaseManager, categories: list, level: int = 0):
     """Rendert den Kategorien-Baum rekursiv."""
     for category in categories:
-        indent = "　" * level
+        indent = "" * level
         icon = category.get('icon', '')
         article_count = category.get('article_count', 0)
         
@@ -590,10 +590,10 @@ def render_category_tree(kb_manager: KnowledgeBaseManager, categories: list, lev
         with col1:
             st.markdown(f"{indent}{icon} **{category['name']}** ({article_count} Artikel)")
             if category.get('description'):
-                st.caption(f"{indent}　{category['description']}")
+                st.caption(f"{indent}{category['description']}")
         
         with col2:
-            if st.button("✏️", key=f"edit_cat_{category['id']}", help="Bearbeiten"):
+            if st.button("", key=f"edit_cat_{category['id']}", help="Bearbeiten"):
                 st.session_state['kb_edit_category_id'] = category['id']
         
         with col3:
@@ -633,29 +633,29 @@ def render_statistics_tab(kb_manager: KnowledgeBaseManager):
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("🔥 Beliebteste Artikel")
+        st.subheader(" Beliebteste Artikel")
         popular = kb_manager.get_popular_articles(limit=5)
         for article in popular:
             st.markdown(f"**{article['title']}**")
-            st.caption(f"👁️ {article['view_count']} Aufrufe")
+            st.caption(f" {article['view_count']} Aufrufe")
             st.divider()
     
     with col2:
-        st.subheader("⭐ Am besten bewertet")
+        st.subheader(" Am besten bewertet")
         top_rated = kb_manager.get_top_rated_articles(limit=5)
         for article in top_rated:
             st.markdown(f"**{article['title']}**")
-            st.caption(f"⭐ {article.get('avg_rating', 0):.1f} ({article.get('rating_count', 0)} Bewertungen)")
+            st.caption(f" {article.get('avg_rating', 0):.1f} ({article.get('rating_count', 0)} Bewertungen)")
             st.divider()
     
     st.divider()
     
     # Neueste Artikel
-    st.subheader("🆕 Neueste Artikel")
+    st.subheader(" Neueste Artikel")
     recent = kb_manager.get_recent_articles(limit=5)
     for article in recent:
         st.markdown(f"**{article['title']}**")
-        st.caption(f"📅 {article.get('created_at', '')[:10]} | {article.get('category_name', 'Keine')}")
+        st.caption(f" {article.get('created_at', '')[:10]} | {article.get('category_name', 'Keine')}")
         st.divider()
 
 

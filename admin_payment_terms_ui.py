@@ -236,7 +236,7 @@ def get_comprehensive_default_payment_terms() -> dict[str, Any]:
                                  "description": "Zahlung bei Anlieferung der Komponenten",
                                  "discount_percent": 2.0,
                                  "enabled": True,
-                                 "icon": "🚚",
+                                 "icon": "",
                                  "payment_type": "on_delivery"},
                                 {"id": "installments_2",
                                  "name": "2 Raten (50/50)",
@@ -277,7 +277,7 @@ def get_comprehensive_default_payment_terms() -> dict[str, Any]:
                                  "description": "Kundenspezifische Zahlungsaufteilung",
                                  "discount_percent": 0.0,
                                  "enabled": False,
-                                 "icon": "⚙️",
+                                 "icon": "",
                                  "payment_type": "custom_installments",
                                  "customizable": True},
                                 {"id": "financing_solar",
@@ -285,7 +285,7 @@ def get_comprehensive_default_payment_terms() -> dict[str, Any]:
                                  "description": "Finanzierung über Partnerbank mit attraktiven Konditionen",
                                  "discount_percent": 0.0,
                                  "enabled": True,
-                                 "icon": "🏦",
+                                 "icon": "",
                                  "payment_type": "financing",
                                  "financing_options": [{"name": "Standard-Finanzierung",
                                                         "duration_months": 60,
@@ -310,7 +310,7 @@ def get_comprehensive_default_payment_terms() -> dict[str, Any]:
                                  "description": "Keine Anschaffungskosten - monatliche Leasingrate",
                                  "discount_percent": 0.0,
                                  "enabled": False,
-                                 "icon": "📋",
+                                 "icon": "",
                                  "payment_type": "leasing",
                                  "leasing_options": [{"duration_months": 120,
                                                       "monthly_rate_factor": 0.012,
@@ -379,7 +379,7 @@ Es gelten unsere aktuellen AGB. Änderungen bedürfen der Schriftform. Erfüllun
 def render_payment_options_management(
         payment_options: list[dict[str, Any]], widget_suffix: str) -> list[dict[str, Any]]:
     """Erweiterte UI für die Verwaltung der Zahlungsoptionen."""
-    st.subheader("💳 Zahlungsoptionen verwalten")
+    st.subheader(" Zahlungsoptionen verwalten")
     st.markdown(
         "Konfigurieren Sie die verfügbaren Zahlungsmodalitäten für Ihre Kunden.")
 
@@ -387,7 +387,7 @@ def render_payment_options_management(
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        if st.button("➕ Barzahlung", key=f"add_cash_{widget_suffix}"):
+        if st.button(" Barzahlung", key=f"add_cash_{widget_suffix}"):
             new_option = {
                 "id": f"cash_{
                     len(payment_options)}_{
@@ -402,7 +402,7 @@ def render_payment_options_management(
             st.rerun()
 
     with col2:
-        if st.button("➕ Ratenzahlung", key=f"add_installment_{widget_suffix}"):
+        if st.button(" Ratenzahlung", key=f"add_installment_{widget_suffix}"):
             new_option = {
                 "id": f"installment_{len(payment_options)}_{datetime.now().strftime('%H%M%S')}",
                 "name": "Neue Ratenzahlung",
@@ -420,14 +420,14 @@ def render_payment_options_management(
             st.rerun()
 
     with col3:
-        if st.button("➕ Finanzierung", key=f"add_financing_{widget_suffix}"):
+        if st.button(" Finanzierung", key=f"add_financing_{widget_suffix}"):
             new_option = {
                 "id": f"financing_{len(payment_options)}_{datetime.now().strftime('%H%M%S')}",
                 "name": "Neue Finanzierung",
                 "description": "Finanzierung über Bank",
                 "discount_percent": 0.0,
                 "enabled": True,
-                "icon": "🏦",
+                "icon": "",
                 "payment_type": "financing",
                 "financing_options": [
                     {"duration_months": 60, "interest_rate": 3.0, "monthly_fee": 0.0}
@@ -437,7 +437,7 @@ def render_payment_options_management(
             st.rerun()
 
     with col4:
-        if st.button("➕ Benutzerdefiniert", key=f"add_custom_{widget_suffix}"):
+        if st.button(" Benutzerdefiniert", key=f"add_custom_{widget_suffix}"):
             new_option = {
                 "id": f"custom_{
                     len(payment_options)}_{
@@ -446,7 +446,7 @@ def render_payment_options_management(
                 "description": "Individuelle Zahlungsmodalität",
                 "discount_percent": 0.0,
                 "enabled": False,
-                "icon": "⚙️",
+                "icon": "",
                 "payment_type": "custom"}
             payment_options.append(new_option)
             st.rerun()
@@ -458,7 +458,7 @@ def render_payment_options_management(
     for i, option in enumerate(payment_options):
         option_id = option.get('id', f'option_{i}')
 
-        with st.expander(f"{option.get('icon', '💳')} {option.get('name', 'Unbenannt')} ({'Aktiv' if option.get('enabled', True) else 'Inaktiv'})", expanded=False):
+        with st.expander(f"{option.get('icon', '')} {option.get('name', 'Unbenannt')} ({'Aktiv' if option.get('enabled', True) else 'Inaktiv'})", expanded=False):
 
             # Grundeinstellungen
             col_basic1, col_basic2 = st.columns(2)
@@ -474,41 +474,41 @@ def render_payment_options_management(
                     "Icon",
                     options=[
                         "",
-                        "🚚",
                         "",
-                        "🏦",
-                        "📋",
-                        "⚙️",
-                        "💳",
                         "",
-                        "⭐",
-                        "🔥"],
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""],
                     index=[
                         "",
-                        "🚚",
                         "",
-                        "🏦",
-                        "📋",
-                        "⚙️",
-                        "💳",
                         "",
-                        "⭐",
-                        "🔥"].index(
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""].index(
                         option.get(
                             'icon',
-                            '💳')) if option.get(
+                            '')) if option.get(
                         'icon',
-                        '💳') in [
+                        '') in [
                             "",
-                            "🚚",
                             "",
-                            "🏦",
-                            "📋",
-                            "⚙️",
-                            "💳",
                             "",
-                            "⭐",
-                            "🔥"] else 0,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""] else 0,
                     key=f"option_icon_{option_id}_{widget_suffix}")
 
                 option['discount_percent'] = st.number_input(
@@ -572,7 +572,7 @@ def render_payment_options_management(
 
                 # Button zum Hinzufügen einer neuen Rate
                 if st.button(
-                    "➕ Rate hinzufügen",
+                    " Rate hinzufügen",
                         key=f"add_installment_{option_id}_{widget_suffix}"):
                     schedule.append({
                         "percentage": 20.0,
@@ -634,12 +634,12 @@ def render_payment_options_management(
                         f"Summe der Raten: {total_percentage}% (sollte 100% sein)")
 
             elif payment_type == "financing":
-                st.markdown("**🏦 Finanzierungsoptionen konfigurieren:**")
+                st.markdown("** Finanzierungsoptionen konfigurieren:**")
                 financing_opts = option.get('financing_options', [])
 
                 # Button zum Hinzufügen einer neuen Finanzierungsoption
                 if st.button(
-                    "➕ Finanzierungsoption hinzufügen",
+                    " Finanzierungsoption hinzufügen",
                         key=f"add_financing_{option_id}_{widget_suffix}"):
                     financing_opts.append({
                         "name": f"Option {len(financing_opts) + 1}",
@@ -723,7 +723,7 @@ def render_payment_options_management(
                 option['financing_options'] = updated_financing
 
             elif payment_type == "leasing":
-                st.markdown("**📋 Leasing-Konfiguration:**")
+                st.markdown("** Leasing-Konfiguration:**")
                 leasing_opts = option.get('leasing_options', [{}])
 
                 if leasing_opts:
@@ -807,12 +807,12 @@ def render_payment_options_management(
 def render_general_terms_management(
         general_terms: dict[str, Any], widget_suffix: str) -> dict[str, Any]:
     """Erweiterte UI für allgemeine Zahlungsbedingungen."""
-    st.subheader("⚖️ Allgemeine Geschäftsbedingungen")
+    st.subheader(" Allgemeine Geschäftsbedingungen")
     st.markdown(
         "Konfigurieren Sie die grundlegenden Bedingungen für alle Zahlungsmodalitäten.")
 
     # Hauptbedingungen
-    st.markdown("**📋 Grundlegende Bedingungen:**")
+    st.markdown("** Grundlegende Bedingungen:**")
     col1, col2, col3 = st.columns(3)
 
     with col1:
@@ -956,7 +956,7 @@ def render_discount_rules_management(
     st.markdown("**Mengenrabatte (nach kWp):**")
     volume_discounts = discount_rules.get('volume_discounts', [])
 
-    if st.button("➕ Mengenstaffel hinzufügen",
+    if st.button(" Mengenstaffel hinzufügen",
                  key=f"add_volume_discount_{widget_suffix}"):
         volume_discounts.append({"min_kwp": 10.0, "discount_percent": 1.0})
         discount_rules['volume_discounts'] = volume_discounts
@@ -994,7 +994,7 @@ def render_discount_rules_management(
     discount_rules['volume_discounts'] = updated_volume_discounts
 
     # Saisonrabatt
-    st.markdown("**🌟 Saisonaler Rabatt:**")
+    st.markdown("** Saisonaler Rabatt:**")
     seasonal = discount_rules.get('seasonal_discount', {})
 
     col_season1, col_season2, col_season3 = st.columns(3)
@@ -1032,7 +1032,7 @@ def render_discount_rules_management(
     discount_rules['seasonal_discount'] = seasonal
 
     # Empfehlungsrabatt
-    st.markdown("**👥 Empfehlungsrabatt:**")
+    st.markdown("** Empfehlungsrabatt:**")
     referral = discount_rules.get('referral_discount', {})
 
     col_ref1, col_ref2, col_ref3 = st.columns(3)
@@ -1084,17 +1084,17 @@ def render_discount_rules_management(
 def render_legal_texts_management(
         legal_texts: dict[str, str], widget_suffix: str) -> dict[str, str]:
     """Erweiterte UI für rechtliche Texte und Bedingungen."""
-    st.subheader("📋 Rechtliche Texte und Bedingungen")
+    st.subheader(" Rechtliche Texte und Bedingungen")
     st.markdown(
         "Bearbeiten Sie die standardmäßigen rechtlichen Texte für Angebote und Verträge.")
 
     # Tab-Navigation für verschiedene Textbereiche
     text_tabs = st.tabs([
-        "💳 Zahlungsbedingungen",
-        "🛡️ Garantien",
-        "🚚 Lieferung",
-        "↩️ Widerruf",
-        "🔒 Datenschutz",
+        " Zahlungsbedingungen",
+        " Garantien",
+        " Lieferung",
+        "↩ Widerruf",
+        " Datenschutz",
         "AGB"
     ])
 
@@ -1159,7 +1159,7 @@ def render_legal_texts_management(
 def render_calculation_settings(
         calc_settings: dict[str, Any], widget_suffix: str) -> dict[str, Any]:
     """UI für Berechnungseinstellungen."""
-    st.subheader("🧮 Berechnungseinstellungen")
+    st.subheader(" Berechnungseinstellungen")
     st.markdown(
         "Konfigurieren Sie die Parameter für Preisberechnungen und Darstellung.")
 
@@ -1309,7 +1309,7 @@ def render_display_settings(
 def render_payment_preview_detailed(
         payment_terms: dict[str, Any], example_price: float = 25000.0) -> None:
     """Detaillierte Vorschau der konfigurierten Zahlungsmodalitäten."""
-    st.subheader("👁️ Detaillierte Vorschau")
+    st.subheader(" Detaillierte Vorschau")
     st.markdown(
         f"Simulation für eine Beispielanlage im Wert von **{example_price:,.2f} €**")
 
@@ -1367,7 +1367,7 @@ def render_payment_preview_detailed(
                     'min_kwp', 0)} kWp)")
 
     if seasonal_discount > 0:
-        st.info(f"🌟 Saisonrabatt: {seasonal_discount}% (aktueller Monat)")
+        st.info(f" Saisonrabatt: {seasonal_discount}% (aktueller Monat)")
 
     # Zahlungsoptionen darstellen
     recommended_id = payment_terms.get(
@@ -1380,7 +1380,7 @@ def render_payment_preview_detailed(
         # Container für jede Zahlungsoption
         container = st.container()
         if is_recommended:
-            container.markdown("🌟 **EMPFOHLEN**")
+            container.markdown(" **EMPFOHLEN**")
 
         with container:
             col_main1, col_main2 = st.columns([2, 3])
@@ -1391,7 +1391,7 @@ def render_payment_preview_detailed(
                     f"### {
                         option.get(
                             'icon',
-                            '💳')} {
+                            '')} {
                         option.get(
                             'name',
                             'Unbenannt')}")
@@ -1436,7 +1436,7 @@ def render_payment_preview_detailed(
                         )
 
                 elif payment_type == "financing":
-                    st.markdown("**🏦 Finanzierungsoptionen:**")
+                    st.markdown("** Finanzierungsoptionen:**")
                     financing_opts = option.get('financing_options', [])
 
                     for fin_opt in financing_opts:
@@ -1468,7 +1468,7 @@ def render_payment_preview_detailed(
                                 total_interest:,.2f} €)")
 
                 elif payment_type == "leasing":
-                    st.markdown("**📋 Leasing-Konditionen:**")
+                    st.markdown("** Leasing-Konditionen:**")
                     leasing_opts = option.get('leasing_options', [])
 
                     if leasing_opts:
@@ -1494,7 +1494,7 @@ def render_payment_preview_detailed(
                         st.markdown("**Sofortige Vollzahlung**")
                         st.markdown("- Zahlung bei Vertragsabschluss")
                     else:
-                        st.markdown("**🚚 Zahlung bei Lieferung**")
+                        st.markdown("** Zahlung bei Lieferung**")
                         st.markdown(
                             "- Zahlung bei Anlieferung der Komponenten")
 
@@ -1504,7 +1504,7 @@ def render_payment_preview_detailed(
             # Zusätzliche Informationen
             general_terms = payment_terms.get('general_terms', {})
             if general_terms:
-                with st.expander("📋 Weitere Bedingungen", expanded=False):
+                with st.expander(" Weitere Bedingungen", expanded=False):
                     col_terms1, col_terms2 = st.columns(2)
 
                     with col_terms1:
@@ -1539,9 +1539,9 @@ def render_import_export_tools(widget_suffix: str) -> dict[str, Any] | None:
     col_ie1, col_ie2 = st.columns(2)
 
     with col_ie1:
-        st.markdown("**📤 Export:**")
+        st.markdown("** Export:**")
         if st.button(
-            "💾 Konfiguration exportieren",
+            " Konfiguration exportieren",
                 key=f"export_config_{widget_suffix}"):
             # Hier würde die aktuelle Konfiguration exportiert werden
             config_json = json.dumps(
@@ -1559,7 +1559,7 @@ def render_import_export_tools(widget_suffix: str) -> dict[str, Any] | None:
                 key=f"download_config_{widget_suffix}")
 
     with col_ie2:
-        st.markdown("**📥 Import:**")
+        st.markdown("** Import:**")
         uploaded_file = st.file_uploader(
             "Konfigurationsdatei hochladen",
             type=["json"],
@@ -1573,12 +1573,12 @@ def render_import_export_tools(widget_suffix: str) -> dict[str, Any] | None:
                 st.success("Konfiguration erfolgreich geladen!")
 
                 if st.button(
-                    "📥 Konfiguration übernehmen",
+                    " Konfiguration übernehmen",
                         key=f"apply_import_{widget_suffix}"):
                     return config_data
 
                 # Vorschau der importierten Konfiguration
-                with st.expander("👁️ Vorschau der importierten Konfiguration"):
+                with st.expander(" Vorschau der importierten Konfiguration"):
                     st.json(config_data)
 
             except json.JSONDecodeError:
@@ -1602,7 +1602,7 @@ def render_comprehensive_admin_payment_terms_ui(
     """Umfassende Hauptfunktion für die Zahlungsmodalitäten-Verwaltung im Admin-Bereich."""
 
     # Header
-    st.header("💳 Zahlungsmodalitäten - Umfassende Verwaltung")
+    st.header(" Zahlungsmodalitäten - Umfassende Verwaltung")
     st.markdown("""
     Hier können Sie alle Aspekte der Zahlungsmodalitäten für Ihre Angebote konfigurieren:
     - Verschiedene Zahlungsoptionen (Bar, Raten, Finanzierung, Leasing)
@@ -1639,13 +1639,13 @@ def render_comprehensive_admin_payment_terms_ui(
 
     # Hauptnavigation
     main_tabs = st.tabs([
-        "💳 Zahlungsoptionen",
-        "⚖️ Geschäftsbedingungen",
+        " Zahlungsoptionen",
+        " Geschäftsbedingungen",
         "Rabatte & Boni",
-        "📋 Rechtliche Texte",
-        "🧮 Berechnungen",
+        " Rechtliche Texte",
+        " Berechnungen",
         "Darstellung",
-        "👁️ Vorschau"
+        " Vorschau"
     ])
 
     # Tab 1: Zahlungsoptionen
@@ -1700,7 +1700,7 @@ def render_comprehensive_admin_payment_terms_ui(
 
     with col_save1:
         if st.button(
-            "💾 Alle Einstellungen speichern",
+            " Alle Einstellungen speichern",
             key=f"save_all_payment_terms{widget_key_suffix}",
                 type="primary"):
             try:
@@ -1735,7 +1735,7 @@ def render_comprehensive_admin_payment_terms_ui(
                 st.error(f"Fehler beim Speichern: {str(e)}")
 
     with col_save2:
-        if st.button("🔄 Auf Standard zurücksetzen",
+        if st.button(" Auf Standard zurücksetzen",
                      key=f"reset_payment_terms{widget_key_suffix}"):
             if st.session_state.get(
                     f"confirm_reset{widget_key_suffix}", False):
@@ -1762,7 +1762,7 @@ def render_dynamic_payment_variants_ui(
     mit konfigurierbaren Prozentsätzen, optionalen festen Beträgen und Textbausteinen.
     """
 
-    st.title("💳 Dynamische Zahlungsmodalitäten konfigurieren")
+    st.title(" Dynamische Zahlungsmodalitäten konfigurieren")
     st.markdown("---")
     st.markdown("""
     **Konfigurieren Sie bis zu 5 verschiedene Zahlungsvarianten mit:**
@@ -1807,11 +1807,11 @@ def render_dynamic_payment_variants_ui(
 
     # Tab-Layout für die Varianten
     variant_tabs = st.tabs([
-        "🚫 Variante 0 (Keine Vorkasse)",
+        " Variante 0 (Keine Vorkasse)",
         "Variante 1 (Anzahlung)",
-        "💯 Variante 2 (100% Fertigstellung)",
+        " Variante 2 (100% Fertigstellung)",
         "Variante 3 (2 Raten)",
-        "⚙️ Variante 4 (Individuell)"
+        " Variante 4 (Individuell)"
     ])
 
     variant_keys = [
@@ -1855,7 +1855,7 @@ def render_dynamic_payment_variants_ui(
                 )
 
             # Prozentsätze konfigurieren
-            st.markdown("**💯 Prozentuale Aufteilung:**")
+            st.markdown("** Prozentuale Aufteilung:**")
 
             is_static = variant_data.get('is_static', False)
             is_fully_customizable = variant_data.get(
@@ -1984,7 +1984,7 @@ def render_dynamic_payment_variants_ui(
                 key=f"variant_{variant_key}_text{widget_key_suffix}")
 
             # Vorschau generieren
-            st.markdown("**👁️ Vorschau:**")
+            st.markdown("** Vorschau:**")
             try:
                 preview_text = format_payment_text_with_placeholders(
                     text_template,
@@ -2034,13 +2034,13 @@ def render_dynamic_payment_variants_ui(
 
     # Speichern und Aktionen
     st.markdown("---")
-    st.subheader("💾 Aktionen")
+    st.subheader(" Aktionen")
 
     col_save1, col_save2, col_save3 = st.columns(3)
 
     with col_save1:
         if st.button(
-            "💾 Zahlungsvarianten speichern",
+            " Zahlungsvarianten speichern",
             key=f"save_variants{widget_key_suffix}",
                 type="primary"):
             try:
@@ -2076,7 +2076,7 @@ def render_dynamic_payment_variants_ui(
 
     with col_save2:
         if st.button(
-            "🔄 Auf Standard zurücksetzen",
+            " Auf Standard zurücksetzen",
                 key=f"reset_variants{widget_key_suffix}"):
             if st.session_state.get(
                     f"confirm_reset_variants{widget_key_suffix}", False):
@@ -2095,7 +2095,7 @@ def render_dynamic_payment_variants_ui(
     with col_save3:
         if st.button("Alle Varianten testen",
                      key=f"test_variants{widget_key_suffix}"):
-            st.markdown("### 🧪 Test aller Zahlungsvarianten")
+            st.markdown("###  Test aller Zahlungsvarianten")
             for variant_key, variant_data in updated_variants.items():
                 if variant_data.get('enabled', False):
                     st.markdown(f"**{variant_data['name']}:**")
@@ -2125,11 +2125,11 @@ def render_comprehensive_admin_payment_terms_ui_with_variants(
     als auch die neuen dynamischen Zahlungsvarianten.
     """
 
-    st.title("💳 Erweiterte Zahlungsmodalitäten-Verwaltung")
+    st.title(" Erweiterte Zahlungsmodalitäten-Verwaltung")
 
     # Haupttabs
     main_tab1, main_tab2 = st.tabs([
-        "💼 Umfassende Zahlungsoptionen",
+        " Umfassende Zahlungsoptionen",
         "Dynamische Zahlungsvarianten"
     ])
 
@@ -2190,7 +2190,7 @@ def render_payment_variant_selector_for_pdf(
             "Keine Zahlungsvarianten konfiguriert. Bitte konfigurieren Sie zuerst die Zahlungsmodalitäten im Admin-Bereich.")
         return None
 
-    st.markdown("### 💳 Zahlungsmodalitäten für PDF")
+    st.markdown("###  Zahlungsmodalitäten für PDF")
     st.caption("Wählen Sie die gewünschte Zahlungsvariante für dieses Angebot:")
 
     # Varianten als Liste für Selectbox vorbereiten
@@ -2231,7 +2231,7 @@ def render_payment_variant_selector_for_pdf(
             help="Fügt die berechneten Euro-Beträge neben den Prozentsätzen hinzu")
 
     with col_preview:
-        st.markdown("**👁️ Vorschau:**")
+        st.markdown("** Vorschau:**")
 
         # Vorschau-Text generieren
         try:
@@ -2355,7 +2355,7 @@ def render_payment_variant_compact_selector(
 
     # Kompakte Auswahl
     selected_display = st.selectbox(
-        "💳 Zahlungsmodalitäten:",
+        " Zahlungsmodalitäten:",
         options=variant_options,
         index=0,
         key=f"payment_variant_compact{widget_key_suffix}",
@@ -2387,7 +2387,7 @@ def render_payment_variant_compact_selector(
                 except Exception:
                     pass
 
-        with st.expander("👁️ Vorschau der Zahlungsmodalitäten", expanded=False):
+        with st.expander(" Vorschau der Zahlungsmodalitäten", expanded=False):
             try:
                 preview_text = format_payment_text_with_placeholders(
                     preview_variant.get('text_template', ''),

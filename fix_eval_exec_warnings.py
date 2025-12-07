@@ -72,7 +72,7 @@ def fix_file(file_path: str, line_numbers: list) -> bool:
 
 def main():
     print("=" * 80)
-    print("🔒 EVAL/EXEC WARNUNGEN BEHEBEN (noqa hinzufügen)")
+    print(" EVAL/EXEC WARNUNGEN BEHEBEN (noqa hinzufügen)")
     print("=" * 80)
     print(f"\nBearbeite {len(FILES_TO_FIX)} Dateien...\n")
     

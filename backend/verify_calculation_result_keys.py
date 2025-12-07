@@ -29,10 +29,10 @@ def verify_imports():
             CalculationComparison,
             get_calculation_result_manager
         )
-        print("✓ All imports successful")
+        print(" All imports successful")
         return True
     except ImportError as e:
-        print(f"✗ Import failed: {e}")
+        print(f" Import failed: {e}")
         return False
 
 
@@ -60,7 +60,7 @@ def verify_dynamic_keys():
         assert "SOL_" in key, "Key should have SOL prefix"
         assert "PRJ_TEST" in key, "Key should include project ID"
 
-        print("✓ Dynamic key generation works")
+        print(" Dynamic key generation works")
 
         # Test result registration
         data = {'system_size': 10.5, 'annual_production': 12000}
@@ -72,11 +72,11 @@ def verify_dynamic_keys():
         assert result.key is not None, "Result should have key"
         assert result.data == data, "Result data should match"
 
-        print("✓ Result registration with dynamic key works")
+        print(" Result registration with dynamic key works")
 
         return True
     except Exception as e:
-        print(f"✗ Dynamic keys verification failed: {e}")
+        print(f" Dynamic keys verification failed: {e}")
         return False
 
 
@@ -106,7 +106,7 @@ def verify_versioning():
         assert len(versions) == 1, "Should have 1 initial version"
         assert versions[0].version_number == 1, "First version should be 1"
 
-        print("✓ Initial version creation works")
+        print(" Initial version creation works")
 
         # Create new version
         updated_data = {'system_size': 12.0}
@@ -119,30 +119,30 @@ def verify_versioning():
         assert version.version_number == 2, "Second version should be 2"
         assert version.change_summary == "Increased size"
 
-        print("✓ Version creation works")
+        print(" Version creation works")
 
         # Get versions
         all_versions = manager.get_versions(result.key)
         assert len(all_versions) == 2, "Should have 2 versions"
 
-        print("✓ Get versions works")
+        print(" Get versions works")
 
         # Get specific version
         v2 = manager.get_version(result.key, 2)
         assert v2 is not None, "Version 2 should exist"
         assert v2.data['system_size'] == 12.0
 
-        print("✓ Get specific version works")
+        print(" Get specific version works")
 
         # Get latest version
         latest = manager.get_latest_version(result.key)
         assert latest.version_number == 2, "Latest should be version 2"
 
-        print("✓ Get latest version works")
+        print(" Get latest version works")
 
         return True
     except Exception as e:
-        print(f"✗ Versioning verification failed: {e}")
+        print(f" Versioning verification failed: {e}")
         return False
 
 
@@ -182,12 +182,12 @@ def verify_comparison():
         assert len(comparison.differences) > 0, "Should have differences"
         assert 'system_size' in comparison.differences
 
-        print("✓ Result comparison works")
+        print(" Result comparison works")
 
         # Check similarity score
         assert 0.0 <= comparison.similarity_score <= 1.0
 
-        print("✓ Similarity score calculation works")
+        print(" Similarity score calculation works")
 
         # Check change calculation
         size_diff = comparison.differences['system_size']
@@ -195,11 +195,11 @@ def verify_comparison():
         assert size_diff['value1'] == 10.5
         assert size_diff['value2'] == 12.0
 
-        print("✓ Change calculation works")
+        print(" Change calculation works")
 
         return True
     except Exception as e:
-        print(f"✗ Comparison verification failed: {e}")
+        print(f" Comparison verification failed: {e}")
         return False
 
 
@@ -228,7 +228,7 @@ def verify_history():
         history = manager.get_result_history()
         assert len(history) > 0, "History should not be empty"
 
-        print("✓ Get history works")
+        print(" Get history works")
 
         # Filter by type
         solar_history = manager.get_result_history(
@@ -236,17 +236,17 @@ def verify_history():
         )
         assert len(solar_history) > 0, "Solar history should not be empty"
 
-        print("✓ Filter history by type works")
+        print(" Filter history by type works")
 
         # Limit results
         limited = manager.get_result_history(limit=2)
         assert len(limited) <= 2, "Should respect limit"
 
-        print("✓ History limit works")
+        print(" History limit works")
 
         return True
     except Exception as e:
-        print(f"✗ History verification failed: {e}")
+        print(f" History verification failed: {e}")
         return False
 
 
@@ -278,14 +278,14 @@ def verify_export():
         json_data = json.loads(json_export)
         assert json_data['key'] == result.key
 
-        print("✓ Export as JSON works")
+        print(" Export as JSON works")
 
         # Export as dict
         dict_export = manager.export_result(result.key, format='dict')
         assert isinstance(dict_export, dict), "Dict export should be dict"
         assert dict_export['key'] == result.key
 
-        print("✓ Export as dict works")
+        print(" Export as dict works")
 
         # Export with versions
         manager.create_version(result.key, {'system_size': 12.0})
@@ -297,7 +297,7 @@ def verify_export():
         assert 'versions' in versioned_export
         assert len(versioned_export['versions']) == 2
 
-        print("✓ Export with versions works")
+        print(" Export with versions works")
 
         # Export with German formatting
         german_export = manager.export_result(
@@ -309,11 +309,11 @@ def verify_export():
         system_size = german_export['data']['system_size']
         assert isinstance(system_size, str), "Should be formatted string"
 
-        print("✓ Export with German formatting works")
+        print(" Export with German formatting works")
 
         return True
     except Exception as e:
-        print(f"✗ Export verification failed: {e}")
+        print(f" Export verification failed: {e}")
         return False
 
 
@@ -337,7 +337,7 @@ def verify_all_features():
             success = verify_func()
             results.append((name, success))
         except Exception as e:
-            print(f"✗ {name} failed with exception: {e}")
+            print(f" {name} failed with exception: {e}")
             results.append((name, False))
 
     print("\n" + "=" * 60)
@@ -346,7 +346,7 @@ def verify_all_features():
 
     all_passed = True
     for name, success in results:
-        status = "✓ PASS" if success else "✗ FAIL"
+        status = " PASS" if success else " FAIL"
         print(f"{status}: {name}")
         if not success:
             all_passed = False
@@ -363,7 +363,7 @@ def main():
 
     # Check imports first
     if not verify_imports():
-        print("\n✗ Import verification failed. Cannot continue.")
+        print("\n Import verification failed. Cannot continue.")
         sys.exit(1)
 
     # Run all feature verifications
@@ -371,12 +371,12 @@ def main():
 
     print("\n" + "=" * 60)
     if all_passed:
-        print("✓ ALL VERIFICATIONS PASSED")
+        print(" ALL VERIFICATIONS PASSED")
         print("=" * 60)
         print("\nTask 225 is complete and all features are working correctly!")
         sys.exit(0)
     else:
-        print("✗ SOME VERIFICATIONS FAILED")
+        print(" SOME VERIFICATIONS FAILED")
         print("=" * 60)
         print("\nPlease review the failures above.")
         sys.exit(1)

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\utils\dates.py
+# hypothesis_version: 6.147.0
+
+['April', 'Aug.', 'August', 'Dec.', 'December', 'Feb.', 'February', 'Fri', 'Friday', 'Jan.', 'January', 'July', 'June', 'March', 'May', 'Mon', 'Monday', 'Nov.', 'November', 'Oct.', 'October', 'Sat', 'Saturday', 'Sept.', 'September', 'Sun', 'Sunday', 'Thu', 'Thursday', 'Tue', 'Tuesday', 'Wed', 'Wednesday', 'abbrev. month', 'alt. month', 'apr', 'aug', 'dec', 'feb', 'jan', 'jul', 'jun', 'mar', 'may', 'nov', 'oct', 'sep']

@@ -449,7 +449,7 @@ def _render_3d_view_impl():
     # SCHRITT 2: TITEL UND BESCHREIBUNG
     # ============================================================================
     
-    st.title("🏠 3D PV-Visualisierung")
+    st.title(" 3D PV-Visualisierung")
     st.markdown("""
     Visualisieren Sie Ihre PV-Anlage in 3D. Passen Sie Gebäudedimensionen an,
     wählen Sie zwischen automatischer und manueller Modul-Platzierung und
@@ -462,7 +462,7 @@ def _render_3d_view_impl():
     # SCHRITT 3: SIDEBAR - UI-KOMPONENTEN RENDERN
     # ============================================================================
     
-    st.sidebar.header("⚙️ Einstellungen")
+    st.sidebar.header(" Einstellungen")
     
     # Rendere alle UI-Komponenten mit Fehlerbehandlung
     basis_settings = {}
@@ -843,7 +843,7 @@ def _render_3d_view_impl():
             status_placeholder = st.empty()
         
         # Erstelle Plotly-Szene
-        with st.spinner("🔄 Erstelle 3D-Visualisierung..."):
+        with st.spinner(" Erstelle 3D-Visualisierung..."):
             fig = build_plotly_scene(
                 project_data=project_data,
                 dims=dims,
@@ -948,13 +948,13 @@ def _render_3d_view_impl():
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
-                status_text.text("🔄 Initialisiere Optimierung...")
+                status_text.text(" Initialisiere Optimierung...")
                 progress_bar.progress(10)
                 
                 optimization_goal = analysis_settings.get("optimization_goal", "balanced")
                 constraints = analysis_settings.get("constraints", {})
                 
-                status_text.text("🔄 Generiere Konfigurationen...")
+                status_text.text(" Generiere Konfigurationen...")
                 progress_bar.progress(30)
                 
                 optimized_configs = optimize_layout(
@@ -965,7 +965,7 @@ def _render_3d_view_impl():
                     latitude=51.0  # Deutschland
                 )
                 
-                status_text.text("🔄 Bewerte Konfigurationen...")
+                status_text.text(" Bewerte Konfigurationen...")
                 progress_bar.progress(70)
                 
                 if optimized_configs:
@@ -1021,19 +1021,19 @@ def _render_3d_view_impl():
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
-                status_text.text("🔄 Initialisiere Verschattungs-Analyse...")
+                status_text.text(" Initialisiere Verschattungs-Analyse...")
                 progress_bar.progress(10)
                 
                 time_of_day = analysis_settings.get("time_of_day", 12.0)
                 day_of_year = analysis_settings.get("day_of_year", 172)
                 
-                status_text.text("🔄 Berechne Sonnenposition...")
+                status_text.text(" Berechne Sonnenposition...")
                 progress_bar.progress(30)
                 
                 # Hole Modul-Positionen aus Layout-Config
                 module_positions = []  # TODO: Extrahiere aus layout_config
                 
-                status_text.text("🔄 Analysiere Verschattung...")
+                status_text.text(" Analysiere Verschattung...")
                 progress_bar.progress(60)
                 
                 _ = calculate_shading_analysis(
@@ -1071,14 +1071,14 @@ def _render_3d_view_impl():
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
-                status_text.text("🔄 Initialisiere Ertrags-Heatmap...")
+                status_text.text(" Initialisiere Ertrags-Heatmap...")
                 progress_bar.progress(10)
                 
                 # Hole Modul-Positionen und Transforms
                 module_positions = []  # TODO: Extrahiere aus layout_config
                 module_transforms = layout_config.module_transforms if layout_config else {}
                 
-                status_text.text("🔄 Berechne Erträge...")
+                status_text.text(" Berechne Erträge...")
                 progress_bar.progress(50)
                 
                 _ = calculate_yield_heatmap(
@@ -1151,7 +1151,7 @@ def _render_3d_view_impl():
                 height = export_settings.get("screenshot_height", 1000)
                 
                 # DETAILLIERTES LOGGING
-                print(f"\n📸 Screenshot-Export:")
+                print(f"\n Screenshot-Export:")
                 print(f"   • Format: {format.upper()}")
                 print(f"   • Auflösung: {width}x{height}px")
                 
@@ -1159,7 +1159,7 @@ def _render_3d_view_impl():
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
-                status_text.text(f"🔄 Erstelle Screenshot ({format.upper()})...")
+                status_text.text(f" Erstelle Screenshot ({format.upper()})...")
                 progress_bar.progress(20)
                 
                 screenshot_bytes = export_screenshot(
@@ -1201,7 +1201,7 @@ def _render_3d_view_impl():
                     )
                     
                     st.download_button(
-                        label=f"📥 Screenshot herunterladen ({format.upper()})",
+                        label=f" Screenshot herunterladen ({format.upper()})",
                         data=screenshot_bytes,
                         file_name=f"pv_3d_view.{format}",
                         mime=f"image/{format}",
@@ -1241,7 +1241,7 @@ def _render_3d_view_impl():
                 views = export_settings.get("views", ["isometric", "top", "south", "east"])
                 resolution = export_settings.get("multi_view_resolution", (1200, 750))
                 
-                status_text.text(f"🔄 Erstelle {len(views)} Ansichten...")
+                status_text.text(f" Erstelle {len(views)} Ansichten...")
                 progress_bar.progress(20)
                 
                 zip_bytes = export_multi_view(
@@ -1272,7 +1272,7 @@ def _render_3d_view_impl():
                     )
                     
                     st.download_button(
-                        label="📥 Multi-View ZIP herunterladen",
+                        label=" Multi-View ZIP herunterladen",
                         data=zip_bytes,
                         file_name="pv_3d_multi_view.zip",
                         mime="application/zip",
@@ -1297,7 +1297,7 @@ def _render_3d_view_impl():
                 print("Fehler beim Multi-View Export:")
                 traceback.print_exc()
         
-        # 360° Animation (VERBESSERT: Funktioniert jetzt!)
+        # 360° Animation (OPTIMIERT: Echte Progress-Anzeige!)
         if export_settings.get("trigger_360", False) or st.session_state.get("force_360_export", False):
             # Reset Trigger
             st.session_state["trigger_360_export"] = False
@@ -1307,16 +1307,21 @@ def _render_3d_view_impl():
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
-                frames = export_settings.get("animation_frames", 36)
+                # OPTIMIERUNG: Reduziere Frames für schnelleres Rendering
+                # 36 Frames sind mit Kaleido sehr langsam (ca. 1-2 Min)
+                # 18 Frames sind immer noch flüssig (20° pro Frame)
+                frames = export_settings.get("animation_frames", 18)  # DEFAULT: 18 statt 36
                 resolution = export_settings.get("animation_resolution", (600, 450))
                 
-                status_text.text(f"🔄 Erstelle {frames} Frames...")
-                progress_bar.progress(10)
+                status_text.text(f" Erstelle 360° Animation ({frames} Frames)...")
+                progress_bar.progress(5)
                 
-                # Simuliere Frame-Fortschritt
-                for i in range(0, 70, 10):
-                    progress_bar.progress(10 + i)
-                    status_text.text(f"🔄 Rendere Frame {int(frames * i / 70)}/{frames}...")
+                # Progress Callback für echte Updates
+                def update_progress(current_frame: int, total_frames: int):
+                    """Callback für Frame-Rendering Progress"""
+                    progress = int(5 + (current_frame / total_frames) * 85)  # 5-90%
+                    progress_bar.progress(progress)
+                    status_text.text(f" Rendere Frame {current_frame + 1}/{total_frames}...")
                 
                 gif_bytes = export_360_animation(
                     project_data=project_data,
@@ -1326,15 +1331,16 @@ def _render_3d_view_impl():
                     layout_config=layout_config,
                     frames=frames,
                     resolution=resolution,
-                    return_bytes=True  # FIX: GIF-Bytes zurückgeben statt Datei schreiben
+                    return_bytes=True,
+                    progress_callback=update_progress  # ECHTE Progress-Updates!
                 )
                 
-                progress_bar.progress(90)
-                status_text.text("🔄 Erstelle GIF-Animation...")
+                progress_bar.progress(95)
+                status_text.text(" Finalisiere GIF...")
                 
                 if gif_bytes:
                     progress_bar.progress(100)
-                    status_text.text("360° Animation abgeschlossen!")
+                    status_text.text(" 360° Animation fertig!")
                     
                     # BENUTZER-FEEDBACK: Erfolgreicher Export
                     st.success(
@@ -1346,7 +1352,7 @@ def _render_3d_view_impl():
                     )
                     
                     st.download_button(
-                        label="📥 360° Animation herunterladen (GIF)",
+                        label=" 360° Animation herunterladen (GIF)",
                         data=gif_bytes,
                         file_name="pv_3d_animation_360.gif",
                         mime="image/gif",
@@ -1375,7 +1381,7 @@ def _render_3d_view_impl():
             try:
                 format = export_settings.get("model_format", "stl")
                 
-                with st.spinner(f"🔄 Erstelle 3D-Modell ({format.upper()})..."):
+                with st.spinner(f" Erstelle 3D-Modell ({format.upper()})..."):
                     model_bytes = export_3d_model(
                         project_data=project_data,
                         dims=dims,
@@ -1388,7 +1394,7 @@ def _render_3d_view_impl():
                     if model_bytes:
                         st.success(f"3D-Modell ({format.upper()}) erfolgreich erstellt!")
                         st.download_button(
-                            label=f"📥 3D-Modell herunterladen ({format.upper()})",
+                            label=f" 3D-Modell herunterladen ({format.upper()})",
                             data=model_bytes,
                             file_name=f"pv_3d_model.{format}",
                             mime=f"application/{format}",
@@ -1408,7 +1414,7 @@ def _render_3d_view_impl():
             try:
                 import pandas as pd
                 
-                with st.spinner("🔄 Erstelle CSV..."):
+                with st.spinner(" Erstelle CSV..."):
                     # Erstelle Modul-Daten
                     modules_data = []
                     for i in range(module_quantity):
@@ -1424,7 +1430,7 @@ def _render_3d_view_impl():
                     
                     st.success(f"CSV mit {len(modules_data)} Modulen erstellt!")
                     st.download_button(
-                        label="📥 CSV herunterladen",
+                        label=" CSV herunterladen",
                         data=csv_data,
                         file_name="pv_module_data.csv",
                         mime="text/csv",
@@ -1444,7 +1450,7 @@ def _render_3d_view_impl():
             try:
                 import json
                 
-                with st.spinner("🔄 Erstelle JSON..."):
+                with st.spinner(" Erstelle JSON..."):
                     # Erstelle Szenen-Daten
                     scene_data = {
                         "building": {
@@ -1469,7 +1475,7 @@ def _render_3d_view_impl():
                     
                     st.success("JSON erfolgreich erstellt!")
                     st.download_button(
-                        label="📥 JSON herunterladen",
+                        label=" JSON herunterladen",
                         data=json_data,
                         file_name="pv_scene_data.json",
                         mime="application/json",
@@ -1486,7 +1492,7 @@ def _render_3d_view_impl():
     
     # BENUTZER-FEEDBACK: Echtzeit-Update-Indikator
     st.caption(
-        "🔄 **Echtzeit-Updates aktiviert:** Die 3D-Visualisierung "
+        " **Echtzeit-Updates aktiviert:** Die 3D-Visualisierung "
         "aktualisiert sich automatisch bei Änderungen der Einstellungen."
     )
     
@@ -1585,7 +1591,7 @@ def _render_3d_view_impl():
                 st.caption(f"... und {len(selected_modules) - 20} weitere")
     
     # Zeige Hilfe
-    with st.expander("❓ Hilfe", expanded=False):
+    with st.expander(" Hilfe", expanded=False):
         st.markdown("""
         ### Bedienung
         
@@ -1701,13 +1707,13 @@ def _render_3d_view_impl():
         )
         
         # Erweiterte Features in Sidebar
-        with st.sidebar.expander("✨ Erweiterte Features", expanded=False):
+        with st.sidebar.expander(" Erweiterte Features", expanded=False):
             st.markdown("### WOW-Funktionen")
             st.caption("Beeindruckende neue Features für professionelle Präsentationen")
             
             feature_tabs = st.tabs([
-                "☀️", "", "", "", "📱", 
-                "⚖️", "🎞️", "🤖", "🌤️", "🎤"
+                "", "", "", "", "", 
+                "", "", "", "", ""
             ])
             
             with feature_tabs[0]:
@@ -1755,7 +1761,7 @@ def _render_3d_view_impl():
         
         # Zeige Hinweis auf neue Features
         st.info(
-            "✨ **Neue Features verfügbar!** Öffnen Sie 'Erweiterte Features' "
+            " **Neue Features verfügbar!** Öffnen Sie 'Erweiterte Features' "
             "in der Sidebar um 10 beeindruckende neue Funktionen zu entdecken!"
         )
     
@@ -1799,28 +1805,32 @@ def _render_3d_view_impl():
         except (NameError, UnboundLocalError):
             dims = create_building_dims(basis_settings)
         
-        with st.expander("🎬 Animationen", expanded=False):
-            st.markdown("### 🌟 3D-Animationen")
+        with st.expander(" Animationen", expanded=False):
+            st.markdown("###  3D-Animationen")
             st.caption("Erstellen Sie beeindruckende Animationen Ihrer PV-Anlage")
             
             animation_tabs = st.tabs([
-                "☀️ Sonnenbahn",
-                "🔄 360° Rotation",
-                "🌓 Jahreszeiten",
+                " Sonnenbahn",
+                " 360° Rotation",
+                " Jahreszeiten",
                 "Ertrags-Zeitraffer"
             ])
             
             with animation_tabs[0]:
                 st.markdown("**Sonnenbahn-Animation**")
-                if st.button("🎬 Animation erstellen", key="sun_anim"):
+                if st.button(" Animation erstellen", key="sun_anim"):
                     try:
                         params = render_animation_controls("sun_path")
-                        # FIX: Sichere Berechnung des building_center
+                        # FIX: Sichere Berechnung des building_center mit None-Checks
                         if 'dims' in locals() and dims is not None:
+                            # Sichere Werte mit None-Checks und Defaults
+                            length = dims.length_m if dims.length_m is not None else 10.0
+                            width = dims.width_m if dims.width_m is not None else 8.0
+                            height = dims.wall_height_m if dims.wall_height_m is not None else 10.0
                             building_center = (
-                                dims.length_m / 2,
-                                dims.width_m / 2,
-                                dims.wall_height_m
+                                float(length) / 2.0,
+                                float(width) / 2.0,
+                                float(height)
                             )
                         else:
                             building_center = (5.0, 4.0, 5.0)
@@ -1836,18 +1846,24 @@ def _render_3d_view_impl():
                             st.success("Sonnenbahn-Animation erstellt!")
                     except Exception as e:
                         st.error(f"Fehler bei Animation: {e}")
+                        import traceback
+                        st.code(traceback.format_exc())
             
             with animation_tabs[1]:
                 st.markdown("**360°-Rotation**")
-                if st.button("🔄 Rotation starten", key="rotation_anim"):
+                if st.button(" Rotation starten", key="rotation_anim"):
                     try:
                         params = render_animation_controls("rotation")
-                        # FIX: Sichere Berechnung des building_center
+                        # FIX: Sichere Berechnung des building_center mit None-Checks
                         if 'dims' in locals() and dims is not None:
+                            # Sichere Werte mit None-Checks und Defaults
+                            length = dims.length_m if dims.length_m is not None else 10.0
+                            width = dims.width_m if dims.width_m is not None else 8.0
+                            height = dims.wall_height_m if dims.wall_height_m is not None else 10.0
                             building_center = (
-                                dims.length_m / 2,
-                                dims.width_m / 2,
-                                dims.wall_height_m
+                                float(length) / 2.0,
+                                float(width) / 2.0,
+                                float(height)
                             )
                         else:
                             building_center = (5.0, 4.0, 5.0)
@@ -1863,10 +1879,12 @@ def _render_3d_view_impl():
                             st.success("360°-Animation erstellt!")
                     except Exception as e:
                         st.error(f"Fehler bei Rotation: {e}")
+                        import traceback
+                        st.code(traceback.format_exc())
             
             with animation_tabs[2]:
                 st.markdown("**Jahreszeiten-Verschattung**")
-                if st.button("🌓 Jahreszeiten simulieren", key="season_anim"):
+                if st.button(" Jahreszeiten simulieren", key="season_anim"):
                     try:
                         if 'fig' in locals() and 'dims' in locals():
                             animated_fig = create_seasonal_shadow_animation(
@@ -1914,7 +1932,7 @@ def _render_3d_view_impl():
     # 3D-Rendering-Features
     if RENDERING_3D_AVAILABLE:
         with st.expander("3D-Rendering-Optionen", expanded=False):
-            st.markdown("### 🔥 Erweiterte Rendering-Features")
+            st.markdown("###  Erweiterte Rendering-Features")
             st.caption("Hochwertige 3D-Visualisierung mit Legacy-Rendering-Engine")
             
             col1, col2 = st.columns(2)

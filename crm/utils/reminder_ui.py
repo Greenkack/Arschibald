@@ -40,7 +40,7 @@ def render_reminders_widget(texts: dict[str, str] = None):
         st.warning("Erinnerungssystem nicht verfügbar")
         return
     
-    st.subheader("🔔 Fällige Erinnerungen")
+    st.subheader(" Fällige Erinnerungen")
     
     # Lade fällige Erinnerungen
     due_reminders = get_due_reminders()
@@ -124,7 +124,7 @@ def render_reminder_card(reminder: dict[str, Any]):
                 else:
                     st.error("Fehler beim Aktualisieren")
             
-            if st.button("💤 Snooze (2 Tage)", key=f"snooze_{reminder_id}", use_container_width=True):
+            if st.button(" Snooze (2 Tage)", key=f"snooze_{reminder_id}", use_container_width=True):
                 if snooze_reminder(reminder_id, days=2):
                     st.success("Erinnerung um 2 Tage verschoben!")
                     st.rerun()
@@ -151,13 +151,13 @@ def render_reminders_management_ui(texts: dict[str, str] = None):
         st.error("Erinnerungssystem nicht verfügbar")
         return
     
-    st.header("🔔 Erinnerungsverwaltung")
+    st.header(" Erinnerungsverwaltung")
     
     # Tabs für verschiedene Ansichten
     tabs = st.tabs([
-        "📋 Fällige Erinnerungen",
+        " Fällige Erinnerungen",
         "Alle Erinnerungen",
-        "➕ Neue Erinnerung",
+        " Neue Erinnerung",
         "Statistiken"
     ])
     
@@ -176,7 +176,7 @@ def render_reminders_management_ui(texts: dict[str, str] = None):
 
 def render_due_reminders_tab():
     """Rendert Tab mit fälligen Erinnerungen."""
-    st.subheader("📋 Fällige Erinnerungen")
+    st.subheader(" Fällige Erinnerungen")
     
     due_reminders = get_due_reminders()
     
@@ -271,7 +271,7 @@ def render_all_reminders_tab():
                             st.success("Erledigt!")
                             st.rerun()
                     
-                    if st.button("💤 Snooze", key=f"snooze_all_{reminder['id']}"):
+                    if st.button(" Snooze", key=f"snooze_all_{reminder['id']}"):
                         if snooze_reminder(reminder['id']):
                             st.success("Verschoben!")
                             st.rerun()
@@ -279,7 +279,7 @@ def render_all_reminders_tab():
 
 def render_create_reminder_tab():
     """Rendert Tab zum Erstellen neuer Erinnerungen."""
-    st.subheader("➕ Neue Erinnerung erstellen")
+    st.subheader(" Neue Erinnerung erstellen")
     
     with st.form("create_reminder_form"):
         st.write("**Erinnerungsdetails**")
@@ -322,7 +322,7 @@ def render_create_reminder_tab():
         )
         
         # Submit
-        submitted = st.form_submit_button("🔔 Erinnerung erstellen", use_container_width=True)
+        submitted = st.form_submit_button(" Erinnerung erstellen", use_container_width=True)
         
         if submitted:
             if not message or not message.strip():
@@ -424,7 +424,7 @@ def render_statistics_tab():
         status_labels = {
             'pending': '⏳ Ausstehend',
             'completed': 'Erledigt',
-            'snoozed': '💤 Verschoben',
+            'snoozed': ' Verschoben',
             'dismissed': 'Verworfen'
         }
         
@@ -437,10 +437,10 @@ def render_statistics_tab():
         by_type = stats.get('by_type', {})
         
         type_labels = {
-            'lead_created': '👤 Lead Follow-up',
-            'offer_sent': '📋 Angebots Follow-up',
-            'appointment_completed': '📅 Termin Follow-up',
-            'manual': '✏️ Manuell'
+            'lead_created': ' Lead Follow-up',
+            'offer_sent': ' Angebots Follow-up',
+            'appointment_completed': ' Termin Follow-up',
+            'manual': ' Manuell'
         }
         
         for reminder_type, count in by_type.items():

@@ -257,7 +257,7 @@ def main():
     
     if all_passed:
         print("\n" + "="*70)
-        print("🎉 ALL TESTS PASSED - TASK 3 COMPLETE!")
+        print(" ALL TESTS PASSED - TASK 3 COMPLETE!")
         print("="*70)
         print("\nAutomatische Belegung funktioniert:")
         print("  Grid-Berechnung berechnet korrekte Positionen")

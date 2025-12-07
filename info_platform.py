@@ -1,66 +1,65 @@
 # info_platform.py
-# Modul für den Info-Plattform Tab (D)
-
+# Modul für den Controlling Tab - Integration des Employee Controlling Systems
 
 import streamlit as st
+import logging
+import traceback
 
-# Importiere benötigte Funktionen/Daten (falls die Info-Plattform darauf
-# zugreift)
-try:
-    # Beispiel: Wenn die Info-Plattform Produktinformationen anzeigt
-    # from product_db import list_products
-    # Beispiel: Wenn die Info-Plattform Admin Settings braucht
-    # from database import load_admin_setting
-    info_platform_dependencies_available = True
-except ImportError as e:
-    st.error(
-        f"FEHLER: Benötigte Module für Info-Plattform konnten nicht geladen werden: {e}")
-    info_platform_dependencies_available = False
-    # Definiere Dummy Funktionen, falls Import fehlschlägt
-    # def list_products(category=None): return []
+logger = logging.getLogger(__name__)
+
+# Dependencies für künftige Features
+info_platform_dependencies_available = True
 
 
-# KORREKTUR: render_info_platform Funktion mit korrekter Signatur, die
-# **kwargs akzeptiert
-# KORREKTUR: **kwargs hinzugefügt
-def render_info_platform(texts: dict[str, str], **kwargs):
+def render_info_platform(texts: dict[str, str] = None, **kwargs):
     """
-    Rendert den Info-Plattform Tab (D) der Streamlit Anwendung.
-    Zeigt informative Inhalte rund um Photovoltaik, Förderungen, etc. an.
+    Rendert den Controlling Tab der Streamlit Anwendung.
+    Zeigt das Employee Controlling System an.
 
     Args:
-      texts: Dictionary mit den lokalisierten Texten.
+      texts: Dictionary mit den lokalisierten Texten (optional).
       **kwargs: Zusätzliche Keyword-Argumente, z.B. 'module_name' von gui.py.
     """
-    # Der Header wird in gui.py gesetzt, aber hier kann der Modulname aus
-    # kwargs geholt werden, falls nötig
-    module_name = kwargs.get(
-        'module_name',
-        texts.get(
-            "menu_item_info_platform",
-            "Info-Plattform"))
+    # Try to import and render controlling UI dynamically
+    try:
+        from controlling_ui import render_controlling_page
 
-    # --- Hier kommt der Inhalt für die Info-Plattform hin ---
-    # st.write(f"Willkommen im {module_name} Bereich.") # Beispiel Nutzung des
-    # übergebenen Namens
+        # Render the controlling page
+        render_controlling_page()
 
-    st.info(
-        texts.get(
-            "info_platform_content_placeholder",
-            "Inhalte zur Info-Plattform werden hier geladen und angezeigt (Platzhalter)."))  # Neuer Text Schlüssel
+    except ImportError as e:
+        logger.error(f"Failed to import controlling_ui: {e}")
+        st.error(
+            " Das Employee Controlling System konnte nicht "
+            "geladen werden."
+        )
+        st.warning(
+            "**Import-Fehler:** Das Controlling-Modul ist nicht "
+            "verfügbar. Bitte stellen Sie sicher, dass alle "
+            "erforderlichen Module installiert sind."
+        )
 
-    # Beispiel für Anzeige von Produktlisten, falls dependencies_available
-    # if info_platform_dependencies_available:
-    # st.subheader("Beispiel: Modul-Liste (aus DB)")
-    # try:
-    #  all_modules = list_products(category="Modul") # Beispielaufruf Produkt DB
-    #  if all_modules:
-    #   for module in all_modules[:5]: # Nur erste 5 anzeigen
-    #    st.write(f"- {module.get('brand', '')} {module.get('model_name', '')} ({module.get('capacity_w', 0)} W)")
-    #  else:
-    #   st.info("Keine Module in der Produktdatenbank gefunden.")
-    # except Exception as e:
-    #  st.error(f"Fehler beim Laden der Modul-Liste: {e}")
-    #  traceback.print_exc()
+        with st.expander(" Technische Details"):
+            st.code(f"ImportError: {str(e)}")
+            st.code(traceback.format_exc())
 
-    # Entfernen Sie dies, wenn Sie den Inhalt implementieren
+        st.info(
+            "**Mögliche Lösungen:**\n\n"
+            "1. Prüfen Sie, ob `controlling_ui.py` existiert\n"
+            "2. Installieren Sie Abhängigkeiten: "
+            "`pip install -r requirements.txt`\n"
+            "3. Initialisieren Sie die Datenbank: "
+            "`python controlling/database.py`"
+        )
+
+    except Exception as e:
+        logger.error(f"Error rendering controlling page: {e}")
+        st.error(f" Fehler beim Laden des Controlling-Systems: {str(e)}")
+
+        with st.expander(" Technische Details"):
+            st.code(traceback.format_exc())
+
+        st.info(
+            "Bitte kontaktieren Sie den Administrator, wenn dieser Fehler "
+            "weiterhin auftritt."
+        )

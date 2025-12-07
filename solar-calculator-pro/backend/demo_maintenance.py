@@ -42,9 +42,9 @@ def demo_database_maintenance(service: MaintenanceService):
         DatabaseMaintenanceRequest(operation="vacuum", full=False),
         user="demo_user"
     )
-    print(f"   ✅ Status: {result.status}")
-    print(f"   ✅ Tables processed: {len(result.tables_processed)}")
-    print(f"   ✅ Duration: {result.duration_seconds:.2f}s")
+    print(f"    Status: {result.status}")
+    print(f"    Tables processed: {len(result.tables_processed)}")
+    print(f"    Duration: {result.duration_seconds:.2f}s")
     
     # Analyze database
     print("\n2. Analyzing database...")
@@ -52,8 +52,8 @@ def demo_database_maintenance(service: MaintenanceService):
         DatabaseMaintenanceRequest(operation="analyze"),
         user="demo_user"
     )
-    print(f"   ✅ Status: {result.status}")
-    print(f"   ✅ Tables processed: {len(result.tables_processed)}")
+    print(f"    Status: {result.status}")
+    print(f"    Tables processed: {len(result.tables_processed)}")
     
     # Optimize database
     print("\n3. Optimizing database...")
@@ -61,8 +61,8 @@ def demo_database_maintenance(service: MaintenanceService):
         DatabaseMaintenanceRequest(operation="optimize"),
         user="demo_user"
     )
-    print(f"   ✅ Status: {result.status}")
-    print(f"   ✅ Tables processed: {len(result.tables_processed)}")
+    print(f"    Status: {result.status}")
+    print(f"    Tables processed: {len(result.tables_processed)}")
 
 
 def demo_cache_management(service: MaintenanceService):
@@ -72,10 +72,10 @@ def demo_cache_management(service: MaintenanceService):
     # Get cache stats
     print("1. Getting cache statistics...")
     stats = service.get_cache_stats()
-    print(f"   📊 Total entries: {stats.total_entries}")
-    print(f"   📊 Total size: {stats.total_size_mb} MB")
-    print(f"   📊 Hit rate: {stats.hit_rate}")
-    print(f"   📊 Cache types: {stats.cache_types}")
+    print(f"    Total entries: {stats.total_entries}")
+    print(f"    Total size: {stats.total_size_mb} MB")
+    print(f"    Hit rate: {stats.hit_rate}")
+    print(f"    Cache types: {stats.cache_types}")
     
     # Clear unused cache
     print("\n2. Clearing unused cache entries...")
@@ -83,8 +83,8 @@ def demo_cache_management(service: MaintenanceService):
         CacheClearRequest(unused_only=True),
         user="demo_user"
     )
-    print(f"   ✅ Entries cleared: {result.entries_cleared}")
-    print(f"   ✅ Size freed: {result.size_freed_mb} MB")
+    print(f"    Entries cleared: {result.entries_cleared}")
+    print(f"    Size freed: {result.size_freed_mb} MB")
     
     # Clear old cache
     print("\n3. Clearing cache older than 7 days...")
@@ -92,8 +92,8 @@ def demo_cache_management(service: MaintenanceService):
         CacheClearRequest(older_than_days=7),
         user="demo_user"
     )
-    print(f"   ✅ Entries cleared: {result.entries_cleared}")
-    print(f"   ✅ Size freed: {result.size_freed_mb} MB")
+    print(f"    Entries cleared: {result.entries_cleared}")
+    print(f"    Size freed: {result.size_freed_mb} MB")
 
 
 def demo_log_management(service: MaintenanceService):
@@ -103,11 +103,11 @@ def demo_log_management(service: MaintenanceService):
     # Get log stats
     print("1. Getting log statistics...")
     stats = service.get_log_stats()
-    print(f"   📊 Total log files: {stats.total_log_files}")
-    print(f"   📊 Total size: {stats.total_size_mb} MB")
-    print(f"   📊 Log types: {stats.log_types}")
-    print(f"   📊 Errors (24h): {stats.error_count_24h}")
-    print(f"   📊 Warnings (24h): {stats.warning_count_24h}")
+    print(f"    Total log files: {stats.total_log_files}")
+    print(f"    Total size: {stats.total_size_mb} MB")
+    print(f"    Log types: {stats.log_types}")
+    print(f"    Errors (24h): {stats.error_count_24h}")
+    print(f"    Warnings (24h): {stats.warning_count_24h}")
     
     # Cleanup old logs
     print("\n2. Cleaning up logs older than 30 days...")
@@ -115,9 +115,9 @@ def demo_log_management(service: MaintenanceService):
         LogCleanupRequest(older_than_days=30, compress_before_delete=True),
         user="demo_user"
     )
-    print(f"   ✅ Files deleted: {result.files_deleted}")
-    print(f"   ✅ Files compressed: {result.files_compressed}")
-    print(f"   ✅ Size freed: {result.size_freed_mb} MB")
+    print(f"    Files deleted: {result.files_deleted}")
+    print(f"    Files compressed: {result.files_compressed}")
+    print(f"    Size freed: {result.size_freed_mb} MB")
 
 
 def demo_temp_file_cleanup(service: MaintenanceService):
@@ -127,10 +127,10 @@ def demo_temp_file_cleanup(service: MaintenanceService):
     # Get temp file stats
     print("1. Getting temp file statistics...")
     stats = service.get_temp_file_stats()
-    print(f"   📊 Total files: {stats.total_files}")
-    print(f"   📊 Total size: {stats.total_size_mb} MB")
-    print(f"   📊 File types: {stats.file_types}")
-    print(f"   📊 Files to delete: {stats.files_to_delete}")
+    print(f"    Total files: {stats.total_files}")
+    print(f"    Total size: {stats.total_size_mb} MB")
+    print(f"    File types: {stats.file_types}")
+    print(f"    Files to delete: {stats.files_to_delete}")
     
     # Cleanup old temp files
     print("\n2. Cleaning up temp files older than 24 hours...")
@@ -138,8 +138,8 @@ def demo_temp_file_cleanup(service: MaintenanceService):
         TempFileCleanupRequest(older_than_hours=24),
         user="demo_user"
     )
-    print(f"   ✅ Files deleted: {result.files_deleted}")
-    print(f"   ✅ Size freed: {result.size_freed_mb} MB")
+    print(f"    Files deleted: {result.files_deleted}")
+    print(f"    Size freed: {result.size_freed_mb} MB")
 
 
 def demo_system_diagnostics(service: MaintenanceService):
@@ -161,7 +161,7 @@ def demo_system_diagnostics(service: MaintenanceService):
     
     print("\nDetailed Results:")
     for diag in result.diagnostics:
-        status_icon = "✅" if diag.status.value == "healthy" else "⚠️" if diag.status.value == "warning" else "❌"
+        status_icon = "" if diag.status.value == "healthy" else "" if diag.status.value == "warning" else ""
         print(f"\n{status_icon} {diag.diagnostic_type.upper()}")
         print(f"   Status: {diag.status.value}")
         print(f"   Metrics: {diag.metrics}")
@@ -185,9 +185,9 @@ def demo_repair_tools(service: MaintenanceService):
         ),
         user="demo_user"
     )
-    print(f"   ✅ Operation: {result.operation.value}")
-    print(f"   ✅ Status: {result.status}")
-    print(f"   ✅ Items to repair: {result.items_repaired}")
+    print(f"    Operation: {result.operation.value}")
+    print(f"    Status: {result.status}")
+    print(f"    Items to repair: {result.items_repaired}")
     
     # Rebuild indexes
     print("\n2. Rebuilding database indexes...")
@@ -199,11 +199,11 @@ def demo_repair_tools(service: MaintenanceService):
         ),
         user="demo_user"
     )
-    print(f"   ✅ Operation: {result.operation.value}")
-    print(f"   ✅ Status: {result.status}")
-    print(f"   ✅ Items repaired: {result.items_repaired}")
+    print(f"    Operation: {result.operation.value}")
+    print(f"    Status: {result.status}")
+    print(f"    Items repaired: {result.items_repaired}")
     if result.backup_created:
-        print(f"   ✅ Backup created: {result.backup_created}")
+        print(f"    Backup created: {result.backup_created}")
 
 
 def demo_maintenance_logs(service: MaintenanceService):
@@ -215,7 +215,7 @@ def demo_maintenance_logs(service: MaintenanceService):
     logs = service.get_maintenance_logs(limit=10)
     
     for log in logs:
-        status_icon = "✅" if log.status == "success" else "❌" if log.status == "failed" else "⏳"
+        status_icon = "" if log.status == "success" else "" if log.status == "failed" else "⏳"
         print(f"{status_icon} {log.operation_type.upper()}: {log.operation_name}")
         print(f"   Started: {log.started_at}")
         if log.completed_at:
@@ -248,7 +248,7 @@ def main():
         demo_maintenance_logs(service)
         
         print_section("DEMO COMPLETED")
-        print("✅ All maintenance operations demonstrated successfully!")
+        print(" All maintenance operations demonstrated successfully!")
         print("\nNext steps:")
         print("  1. Review the maintenance logs")
         print("  2. Schedule regular maintenance tasks")
@@ -256,7 +256,7 @@ def main():
         print("  4. Configure automated cleanup policies")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {str(e)}")
+        print(f"\n Error during demo: {str(e)}")
         import traceback
         traceback.print_exc()
     

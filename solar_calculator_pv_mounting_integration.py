@@ -331,7 +331,7 @@ def render_mounting_calculation_summary(project_details: Dict[str, Any]) -> None
         st.warning("**Hinweise:**\n\n" + "\n".join(f"- {w}" for w in warnings))
     
     # Komponenten-Tabelle
-    with st.expander("📋 Komponenten-Details"):
+    with st.expander(" Komponenten-Details"):
         components = project_details.get('mounting_components_calculated', [])
         
         if components:

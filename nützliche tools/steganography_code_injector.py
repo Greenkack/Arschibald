@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🎭 STEGANOGRAPHY CODE INJECTOR
+ STEGANOGRAPHY CODE INJECTOR
 ==============================
 Versteckt Code in Kommentaren, Strings und Whitespace
 """
@@ -51,7 +51,7 @@ class SteganographyInjector:
         with open(f"{source_file}.steganified", 'w', encoding='utf-8') as f:
             f.write(modified_content)
 
-        print(f"🎭 Code versteckt in {source_file}.steganified")
+        print(f" Code versteckt in {source_file}.steganified")
         return f"{source_file}.steganified"
 
     def extract_hidden_code(self, steganified_file):
@@ -82,7 +82,7 @@ class SteganographyInjector:
             if len(byte) == 8:
                 hidden_code += chr(int(byte, 2))
 
-        print(f"🔓 Versteckter Code extrahiert: {len(hidden_code)} Zeichen")
+        print(f" Versteckter Code extrahiert: {len(hidden_code)} Zeichen")
         return hidden_code
 
     def inject_payload_in_docstrings(self, target_file, payload):
@@ -142,7 +142,7 @@ class SteganographyInjector:
         with open(f"{target_file}.injected", 'w') as f:
             f.write(modified_code)
 
-        print(f"💉 Payload in Docstrings versteckt: {target_file}.injected")
+        print(f" Payload in Docstrings versteckt: {target_file}.injected")
         return f"{target_file}.injected"
 
 
@@ -159,4 +159,4 @@ if __name__ == "__main__":
 
     injector.hide_code_in_comments("innocent_file.py", secret_payload)
     extracted = injector.extract_hidden_code("innocent_file.py.steganified")
-    print(f"🔓 Extrahiert: {extracted}")
+    print(f" Extrahiert: {extracted}")

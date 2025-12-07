@@ -55,7 +55,7 @@ def demo_version_creation(service):
     )
     
     version1 = service.create_version(version1_data, user_id=1)
-    print(f"✅ Created Version {version1.version_number}: {version1.version_name}")
+    print(f" Created Version {version1.version_number}: {version1.version_name}")
     print(f"   Status: {version1.status}")
     print(f"   Created by: User {version1.created_by}")
     print(f"   Created at: {version1.created_at}")
@@ -82,7 +82,7 @@ def demo_version_creation(service):
     )
     
     version2 = service.create_version(version2_data, user_id=1)
-    print(f"✅ Created Version {version2.version_number}: {version2.version_name}")
+    print(f" Created Version {version2.version_number}: {version2.version_name}")
     
     return version1, version2
 
@@ -94,7 +94,7 @@ def demo_approval_workflow(service, version):
     # Submit for approval
     print(f"Submitting Version {version.version_number} for approval...")
     version = service.submit_for_approval(version.id, user_id=1)
-    print(f"✅ Status changed to: {version.status}")
+    print(f" Status changed to: {version.status}")
     
     # Approve version
     print(f"\nApproving Version {version.version_number}...")
@@ -102,14 +102,14 @@ def demo_approval_workflow(service, version):
         approval_notes="Pricing reviewed and approved. Ready for activation."
     )
     version = service.approve_version(version.id, approval_data, user_id=2)
-    print(f"✅ Status changed to: {version.status}")
+    print(f" Status changed to: {version.status}")
     print(f"   Approved by: User {version.approved_by}")
     print(f"   Approved at: {version.approved_at}")
     
     # Activate version
     print(f"\nActivating Version {version.version_number}...")
     version = service.activate_version(version.id, user_id=1)
-    print(f"✅ Status changed to: {version.status}")
+    print(f" Status changed to: {version.status}")
     print(f"   Is active: {version.is_active}")
     
     return version
@@ -129,7 +129,7 @@ def demo_version_comparison(service, version1, version2):
     
     comparison = service.compare_versions(comparison_data, user_id=1)
     
-    print(f"\n📊 Comparison Summary:")
+    print(f"\n Comparison Summary:")
     print(f"   Total changes: {comparison.summary['total_changes']}")
     print(f"   Added: {comparison.summary['total_added']}")
     print(f"   Modified: {comparison.summary['total_modified']}")
@@ -137,12 +137,12 @@ def demo_version_comparison(service, version1, version2):
     print(f"   Unchanged: {comparison.summary['total_unchanged']}")
     
     if comparison.differences['added']:
-        print(f"\n➕ Added items:")
+        print(f"\n Added items:")
         for item in comparison.differences['added'][:3]:  # Show first 3
             print(f"   - {item['key']}: {item['new_value']}")
     
     if comparison.differences['modified']:
-        print(f"\n✏️  Modified items:")
+        print(f"\n  Modified items:")
         for item in comparison.differences['modified'][:3]:  # Show first 3
             print(f"   - {item['key']}")
             print(f"     Old: {item['old_value']}")
@@ -163,7 +163,7 @@ def demo_version_update(service, version):
     )
     
     updated_version = service.update_version(version.id, update_data, user_id=1)
-    print(f"✅ Version updated successfully")
+    print(f" Version updated successfully")
     print(f"   New name: {updated_version.version_name}")
     print(f"   Updated at: {updated_version.updated_at}")
     
@@ -183,7 +183,7 @@ def demo_version_rollback(service, target_version):
     
     result = service.rollback_to_version(target_version.id, rollback_data, user_id=1)
     
-    print(f"✅ Rollback completed successfully")
+    print(f" Rollback completed successfully")
     print(f"   Rolled back to version: {result['rolled_back_to_version']}")
     print(f"   Previous version: {result['previous_version']}")
     print(f"   Backup version ID: {result['backup_version_id']}")
@@ -204,7 +204,7 @@ def demo_version_history(service, matrix_id):
     
     history = service.get_version_history(matrix_id=matrix_id, limit=10)
     
-    print(f"\n📚 Version History:")
+    print(f"\n Version History:")
     print(f"   Total versions: {history['total_count']}")
     
     if history['active_version']:
@@ -212,7 +212,7 @@ def demo_version_history(service, matrix_id):
     
     print(f"\n   All versions:")
     for version in history['versions']:
-        status_icon = "🟢" if version.is_active else "⚪"
+        status_icon = "🟢" if version.is_active else ""
         print(f"   {status_icon} Version {version.version_number}: {version.version_name}")
         print(f"      Status: {version.status}")
         print(f"      Created: {version.created_at}")
@@ -228,7 +228,7 @@ def demo_version_changes(service, version):
     
     changes, total_count = service.get_version_changes(version.id, limit=10)
     
-    print(f"\n📝 Change Log:")
+    print(f"\n Change Log:")
     print(f"   Total changes: {total_count}")
     
     for change in changes:
@@ -273,7 +273,7 @@ def demo_version_migration(service, from_version, to_version):
         user_id=1
     )
     
-    print(f"\n✅ Migration completed")
+    print(f"\n Migration completed")
     print(f"   Success: {result['success']}")
     print(f"   From version: {result['from_version']}")
     print(f"   To version: {result['to_version']}")
@@ -281,12 +281,12 @@ def demo_version_migration(service, from_version, to_version):
     print(f"   Migration time: {result['migration_time']:.3f} seconds")
     
     if result['errors']:
-        print(f"\n   ⚠️  Errors:")
+        print(f"\n     Errors:")
         for error in result['errors']:
             print(f"   - {error}")
     
     if result['warnings']:
-        print(f"\n   ⚠️  Warnings:")
+        print(f"\n     Warnings:")
         for warning in result['warnings']:
             print(f"   - {warning}")
     
@@ -322,7 +322,7 @@ def main():
         service.submit_for_approval(version2.id, user_id=1)
         service.approve_version(version2.id, PriceMatrixVersionApprove(), user_id=2)
         service.activate_version(version2.id, user_id=1)
-        print("✅ Version 2 activated")
+        print(" Version 2 activated")
         
         # 6. Rollback to first version
         rollback_result = demo_version_rollback(service, version1)
@@ -345,19 +345,19 @@ def main():
         migration_result = demo_version_migration(service, version1, version3)
         
         print_section("DEMO COMPLETED SUCCESSFULLY")
-        print("✅ All versioning features demonstrated successfully!")
+        print(" All versioning features demonstrated successfully!")
         print("\nKey Features Demonstrated:")
-        print("  1. ✅ Version creation with auto-incrementing version numbers")
-        print("  2. ✅ Complete approval workflow (draft → pending → approved → active)")
-        print("  3. ✅ Detailed version comparison with change tracking")
-        print("  4. ✅ Version updates (draft versions only)")
-        print("  5. ✅ Version rollback with automatic backup")
-        print("  6. ✅ Complete version history tracking")
-        print("  7. ✅ Detailed change log for each version")
-        print("  8. ✅ Version migration with custom rules")
+        print("  1.  Version creation with auto-incrementing version numbers")
+        print("  2.  Complete approval workflow (draft → pending → approved → active)")
+        print("  3.  Detailed version comparison with change tracking")
+        print("  4.  Version updates (draft versions only)")
+        print("  5.  Version rollback with automatic backup")
+        print("  6.  Complete version history tracking")
+        print("  7.  Detailed change log for each version")
+        print("  8.  Version migration with custom rules")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
     

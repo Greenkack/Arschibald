@@ -13,7 +13,7 @@ st.title("Debug: Multi-Offer Session State")
 st.markdown("---")
 
 # Multi-Offer Settings anzeigen
-st.subheader("📋 Multi-Offer Einstellungen")
+st.subheader(" Multi-Offer Einstellungen")
 
 if "multi_offer_settings" in st.session_state:
     settings = st.session_state.multi_offer_settings
@@ -97,13 +97,13 @@ else:
 st.markdown("---")
 
 # Alle Session-State Keys anzeigen
-with st.expander("🔑 Alle Session State Keys"):
+with st.expander(" Alle Session State Keys"):
     keys = list(st.session_state.keys())
     st.write(f"Anzahl Keys: {len(keys)}")
     st.write(keys)
 
 # Reset-Button
-if st.button("🔄 Session State zurücksetzen"):
+if st.button(" Session State zurücksetzen"):
     for key in list(st.session_state.keys()):
         del st.session_state[key]
     st.success("Session State wurde zurückgesetzt!")

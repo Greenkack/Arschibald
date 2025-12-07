@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\iniconfig\_parse.py
+# hypothesis_version: 6.147.0
+
+['#;', ':', '=', '[', ']', 'empty section name', 'unexpected line: %r']

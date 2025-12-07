@@ -111,22 +111,22 @@ def shadcn_ui_workflow():
     Workflow zur Anwendung des Shadcn UI Themes:
     
     1. THEME DETECTION
-       └─> get_chart_theme() erkennt Streamlit Dark/Light Mode
+       > get_chart_theme() erkennt Streamlit Dark/Light Mode
     
     2. COLOR SELECTION
-       └─> Wählt passende Shadcn UI Farben für Theme
+       > Wählt passende Shadcn UI Farben für Theme
     
     3. LAYOUT APPLICATION
-       └─> Wendet moderne Typografie, Margins, Grid an
+       > Wendet moderne Typografie, Margins, Grid an
     
     4. CHART ENHANCEMENT
-       └─> apply_chart_theme(fig) optimiert jeden Chart-Typ:
-           ├─> Scatter/Line: Gradient-Fills, Spline-Kurven, 3px Linien
-           ├─> Bar Charts: Abgerundete Ecken, 70% Width
-           └─> Histogram: Shadcn-Farben, 85% Opacity
+       > apply_chart_theme(fig) optimiert jeden Chart-Typ:
+           > Scatter/Line: Gradient-Fills, Spline-Kurven, 3px Linien
+           > Bar Charts: Abgerundete Ecken, 70% Width
+           > Histogram: Shadcn-Farben, 85% Opacity
     
     5. RENDER
-       └─> st.plotly_chart(fig) zeigt optimierten Chart
+       > st.plotly_chart(fig) zeigt optimierten Chart
     """
     pass
 
@@ -153,7 +153,7 @@ apply_chart_theme(fig)
 # 3. Chart anzeigen
 st.plotly_chart(fig, use_container_width=True)
 
-# DAS WAR'S! 🎉
+# DAS WAR'S! 
 # Der Chart hat jetzt:
 # Automatische Dark/Light Mode Erkennung
 # Shadcn UI Farben
@@ -170,22 +170,22 @@ st.plotly_chart(fig, use_container_width=True)
 # ============================================================================
 
 COMPARISON = """
-┌─────────────────────────┬──────────────────────┬─────────────────────┐
-│ Feature                 │ Standard Plotly      │ Shadcn UI Theme     │
-├─────────────────────────┼──────────────────────┼─────────────────────┤
-│ Hintergrund             │ Weiß/Schwarz         │ #020817 / #ffffff   │
-│ Grid Lines              │ Grau                 │ Shadcn Border       │
-│ Farben                  │ Plotly Default       │ Shadcn Palette      │
-│ Typografie              │ Arial 12px           │ Inter 13px          │
-│ Title                   │ 16px                 │ 20px (weight: 600)  │
-│ Margins                 │ Klein (40-50)        │ Groß (70-80)        │
-│ Line Width              │ 2px                  │ 3px                 │
-│ Curves                  │ Linear               │ Spline (glatt)      │
-│ Gradient Fills          │ Nein                 │ Ja (15% Opacity)    │
-│ Hover Mode              │ Standard             │ Unified (Popover)   │
-│ Dark/Light Mode         │ Manuell              │ Automatisch         │
-│ Modebar                 │ Standard             │ Shadcn-angepasst    │
-└─────────────────────────┴──────────────────────┴─────────────────────┘
+
+ Feature                  Standard Plotly       Shadcn UI Theme     
+
+ Hintergrund              Weiß/Schwarz          #020817 / #ffffff   
+ Grid Lines               Grau                  Shadcn Border       
+ Farben                   Plotly Default        Shadcn Palette      
+ Typografie               Arial 12px            Inter 13px          
+ Title                    16px                  20px (weight: 600)  
+ Margins                  Klein (40-50)         Groß (70-80)        
+ Line Width               2px                   3px                 
+ Curves                   Linear                Spline (glatt)      
+ Gradient Fills           Nein                  Ja (15% Opacity)    
+ Hover Mode               Standard              Unified (Popover)   
+ Dark/Light Mode          Manuell               Automatisch         
+ Modebar                  Standard              Shadcn-angepasst    
+
 """
 
 
@@ -213,30 +213,30 @@ STATISTICS = {
 
 BENEFITS = """
 KONSISTENTES DESIGN
-   └─> Alle Charts folgen demselben Shadcn UI Design-System
+   > Alle Charts folgen demselben Shadcn UI Design-System
 
 AUTOMATISCHE THEME-ANPASSUNG
-   └─> Charts passen sich automatisch an Dark/Light Mode an
+   > Charts passen sich automatisch an Dark/Light Mode an
 
 MODERNE ÄSTHETIK
-   └─> Glatte Kurven, Gradients, moderne Typografie
+   > Glatte Kurven, Gradients, moderne Typografie
 
 BESSERE LESBARKEIT
-   └─> Großzügige Margins, optimierte Farbkontraste
+   > Großzügige Margins, optimierte Farbkontraste
 
 PROFESSIONELLES AUSSEHEN
-   └─> Wie moderne SaaS-Dashboards (Vercel, Stripe, Linear)
+   > Wie moderne SaaS-Dashboards (Vercel, Stripe, Linear)
 
 EINFACHE WARTUNG
-   └─> Zentrale Theme-Funktion für alle Charts
+   > Zentrale Theme-Funktion für alle Charts
 
 RESPONSIVE
-   └─> Charts skalieren perfekt auf allen Bildschirmgrößen
+   > Charts skalieren perfekt auf allen Bildschirmgrößen
 """
 
 
 # ============================================================================
-# 📖 DOKUMENTATION DER MODULE
+#  DOKUMENTATION DER MODULE
 # ============================================================================
 
 MODULES = {
@@ -317,5 +317,5 @@ if __name__ == "__main__":
     print(USAGE_EXAMPLE)
     
     print("\n" + "=" * 80)
-    print("✨ STATUS: PRODUKTIONSBEREIT!")
+    print(" STATUS: PRODUKTIONSBEREIT!")
     print("=" * 80)

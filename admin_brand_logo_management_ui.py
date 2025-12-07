@@ -258,13 +258,13 @@ class BrandLogoAdmin:
 
 def render_brand_logo_admin_ui():
     """Streamlit UI für Brand Logo Administration"""
-    st.title("🏷️ Marken-Logo Administration")
+    st.title(" Marken-Logo Administration")
 
     admin = BrandLogoAdmin()
 
     # Tabs für verschiedene Aktionen
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📋 Übersicht", "➕ Hinzufügen", "✏️ Bearbeiten", "Tools"])
+        [" Übersicht", " Hinzufügen", " Bearbeiten", "Tools"])
 
     with tab1:
         st.subheader("Logo-Übersicht")
@@ -288,9 +288,9 @@ def render_brand_logo_admin_ui():
                             st.image(
                                 logo_bytes, width=150, caption=brand['brand_name'])
                         except BaseException:
-                            st.write(f"🏷️ {brand['brand_name']}")
+                            st.write(f" {brand['brand_name']}")
                     else:
-                        st.write(f"🏷️ {brand['brand_name']}")
+                        st.write(f" {brand['brand_name']}")
 
                     st.write(f"**{brand['brand_name']}**")
                     if brand['category']:
@@ -302,7 +302,7 @@ def render_brand_logo_admin_ui():
                     col1, col2 = st.columns(2)
                     with col1:
                         if st.button(
-                                "✏️",
+                                "",
                                 key=f"edit_{
                                     brand['id']}",
                                 help="Bearbeiten"):

@@ -50,7 +50,7 @@ def verify_pdf_content():
 
             # Überprüfe Seiteninhalt (Annotations, etc.)
             if hasattr(page6, 'annotations') and page6.annotations:
-                print(f"📋 Annotationen gefunden: {len(page6.annotations)}")
+                print(f" Annotationen gefunden: {len(page6.annotations)}")
 
             # Überprüfe MediaBox/CropBox
             if hasattr(page6, 'mediabox'):
@@ -147,7 +147,7 @@ def create_simple_test():
         with open(output_path, "wb") as output_file:
             writer.write(output_file)
 
-        print(f"🎉 Seite 6 Test-PDF erstellt: {output_path}")
+        print(f" Seite 6 Test-PDF erstellt: {output_path}")
         return True
 
     except Exception as e:

@@ -32,11 +32,11 @@ from components import (
 def main():
     st.set_page_config(
         page_title="Erweiterte shadcn/ui Komponenten Demo",
-        page_icon="🎨",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("🎨 Erweiterte shadcn/ui Komponenten Demo")
+    st.title(" Erweiterte shadcn/ui Komponenten Demo")
     st.markdown("---")
     
     # Initialisiere Theme Manager
@@ -94,21 +94,21 @@ def main():
                         "content": "Solar-Energie ist die Energie der Sonne, "
                                  "die durch Photovoltaik-Module in "
                                  "elektrischen Strom umgewandelt wird.",
-                        "icon": "☀️"
+                        "icon": ""
                     },
                     {
                         "title": "Wie funktioniert eine PV-Anlage?",
                         "content": "PV-Module wandeln Sonnenlicht direkt in "
                                  "Gleichstrom um. Ein Wechselrichter "
                                  "konvertiert diesen in Wechselstrom.",
-                        "icon": "⚡"
+                        "icon": ""
                     },
                     {
                         "title": "Welche Förderungen gibt es?",
                         "content": "Es gibt verschiedene staatliche "
                                  "Förderungen und Einspeisevergütungen "
                                  "für Solaranlagen.",
-                        "icon": "💰"
+                        "icon": ""
                     }
                 ],
                 type="single",
@@ -153,9 +153,9 @@ def main():
         bc = Breadcrumb(theme_manager=st.session_state.theme_manager)
         clicked = bc.render(
             items=[
-                {"label": "Home", "icon": "🏠"},
-                {"label": "Projekte", "icon": "📁"},
-                {"label": "Solar-Anlage", "icon": "☀️"},
+                {"label": "Home", "icon": ""},
+                {"label": "Projekte", "icon": ""},
+                {"label": "Solar-Anlage", "icon": ""},
                 {"label": "Konfiguration"}
             ],
             separator="/",
@@ -193,14 +193,14 @@ def main():
             dd = DropdownMenu(theme_manager=st.session_state.theme_manager)
             selected = dd.render(
                 trigger_label="Aktionen",
-                trigger_icon="⚙️",
+                trigger_icon="",
                 items=[
-                    {"label": "Bearbeiten", "icon": "✏️", "value": "edit"},
-                    {"label": "Duplizieren", "icon": "📋", "value": "duplicate"},
+                    {"label": "Bearbeiten", "icon": "", "value": "edit"},
+                    {"label": "Duplizieren", "icon": "", "value": "duplicate"},
                     {"separator": True},
                     {
                         "label": "Löschen",
-                        "icon": "🗑️",
+                        "icon": "",
                         "value": "delete",
                         "disabled": False
                     }
@@ -217,13 +217,13 @@ def main():
             dd2 = DropdownMenu(theme_manager=st.session_state.theme_manager)
             selected2 = dd2.render(
                 trigger_label="Exportieren",
-                trigger_icon="📤",
+                trigger_icon="",
                 items=[
-                    {"label": "Als PDF", "icon": "📄", "value": "pdf"},
-                    {"label": "Als Excel", "icon": "📊", "value": "excel"},
-                    {"label": "Als CSV", "icon": "📋", "value": "csv"},
+                    {"label": "Als PDF", "icon": "", "value": "pdf"},
+                    {"label": "Als Excel", "icon": "", "value": "excel"},
+                    {"label": "Als CSV", "icon": "", "value": "csv"},
                     {"separator": True},
-                    {"label": "Drucken", "icon": "🖨️", "value": "print"}
+                    {"label": "Drucken", "icon": "", "value": "print"}
                 ],
                 align="right",
                 key="dropdown_export"
@@ -243,7 +243,7 @@ def main():
             pop = Popover(theme_manager=st.session_state.theme_manager)
             pop.render(
                 trigger_label="Info anzeigen",
-                trigger_icon="ℹ️",
+                trigger_icon="ℹ",
                 title="Wichtige Information",
                 content="Dies ist ein Popover mit zusätzlichen "
                        "Informationen. Es kann durch Klicken "
@@ -260,7 +260,7 @@ def main():
             pop2 = Popover(theme_manager=st.session_state.theme_manager)
             pop2.render(
                 trigger_label="Hover für Details",
-                trigger_icon="💡",
+                trigger_icon="",
                 title="Tipp",
                 content="Dieser Popover erscheint beim Hovern über "
                        "dem Trigger-Element.",

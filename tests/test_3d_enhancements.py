@@ -146,7 +146,7 @@ def run_all_tests():
     print("="*60 + "\n")
     
     if passed == total:
-        print("🎉 Alle Tests bestanden! Die Integration ist vollständig.")
+        print(" Alle Tests bestanden! Die Integration ist vollständig.")
         return 0
     else:
         print("Einige Tests fehlgeschlagen. Bitte prüfen Sie die Fehler oben.")

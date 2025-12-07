@@ -79,7 +79,7 @@ def verify_knowledge_base_manager():
     
     # Test Kategorien-CRUD
     print("\nKategorien-CRUD:")
-    cat_id = kb_manager.create_category(name="Test-Kategorie", icon="📚")
+    cat_id = kb_manager.create_category(name="Test-Kategorie", icon="")
     print(f"  Kategorie erstellt (ID: {cat_id})")
     
     category = kb_manager.get_category(cat_id)
@@ -113,7 +113,7 @@ def verify_knowledge_base_manager():
     print(f"  Artikel aktualisiert")
     
     # Test Kategorien-Hierarchie
-    print("\n🌳 Kategorien-Hierarchie:")
+    print("\n Kategorien-Hierarchie:")
     child_id = kb_manager.create_category(name="Unterkategorie", parent_id=cat_id)
     tree = kb_manager.get_category_tree()
     assert len(tree) > 0
@@ -126,7 +126,7 @@ def verify_knowledge_base_manager():
     print(f"  Volltextsuche funktioniert ({len(results)} Ergebnisse)")
     
     # Test Bewertungssystem
-    print("\n⭐ Bewertungssystem:")
+    print("\n Bewertungssystem:")
     kb_manager.rate_article(article_id, "user1", 5, "Sehr gut!")
     kb_manager.rate_article(article_id, "user2", 4, "Gut")
     
@@ -300,7 +300,7 @@ def main():
     
     print("\n" + "=" * 70)
     if all_passed:
-        print("🎉 ALLE ANFORDERUNGEN ERFÜLLT!")
+        print(" ALLE ANFORDERUNGEN ERFÜLLT!")
         print("=" * 70)
         print("\nTask 17 ist vollständig implementiert:")
         print("  Datenbank-Tabellen (kb_articles, kb_categories, kb_ratings)")

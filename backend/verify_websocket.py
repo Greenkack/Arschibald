@@ -15,40 +15,40 @@ if project_root not in sys.path:
 
 def verify_imports():
     """Verify all WebSocket modules can be imported"""
-    print("✓ Verifying imports...")
+    print(" Verifying imports...")
     
     try:
         from backend.core.websocket_manager import WebSocketManager, MessageType, get_websocket_manager
-        print("  ✓ WebSocket Manager imported")
+        print("   WebSocket Manager imported")
         
         from backend.middleware.websocket_auth import WebSocketAuthMiddleware
-        print("  ✓ WebSocket Authentication imported")
+        print("   WebSocket Authentication imported")
         
         from backend.api.v1 import websocket
-        print("  ✓ WebSocket API imported")
+        print("   WebSocket API imported")
         
         return True
     except Exception as e:
-        print(f"  ✗ Import failed: {e}")
+        print(f"   Import failed: {e}")
         return False
 
 
 def verify_websocket_manager():
     """Verify WebSocket Manager functionality"""
-    print("\n✓ Verifying WebSocket Manager...")
+    print("\n Verifying WebSocket Manager...")
     
     try:
         from backend.core.websocket_manager import WebSocketManager, MessageType
         
         # Create manager
         manager = WebSocketManager()
-        print("  ✓ WebSocket Manager created")
+        print("   WebSocket Manager created")
         
         # Check attributes
         assert hasattr(manager, 'sio'), "Missing sio attribute"
         assert hasattr(manager, 'active_connections'), "Missing active_connections"
         assert hasattr(manager, 'session_data'), "Missing session_data"
-        print("  ✓ Manager has required attributes")
+        print("   Manager has required attributes")
         
         # Check methods
         methods = [
@@ -69,7 +69,7 @@ def verify_websocket_manager():
         
         for method in methods:
             assert hasattr(manager, method), f"Missing method: {method}"
-        print(f"  ✓ Manager has all {len(methods)} required methods")
+        print(f"   Manager has all {len(methods)} required methods")
         
         # Check message types
         assert MessageType.CALCULATION_PROGRESS == "calculation_progress"
@@ -79,17 +79,17 @@ def verify_websocket_manager():
         assert MessageType.STATUS_UPDATE == "status_update"
         assert MessageType.DATA_UPDATE == "data_update"
         assert MessageType.HEARTBEAT == "heartbeat"
-        print("  ✓ All message types defined correctly")
+        print("   All message types defined correctly")
         
         return True
     except Exception as e:
-        print(f"  ✗ Verification failed: {e}")
+        print(f"   Verification failed: {e}")
         return False
 
 
 def verify_authentication():
     """Verify WebSocket Authentication"""
-    print("\n✓ Verifying WebSocket Authentication...")
+    print("\n Verifying WebSocket Authentication...")
     
     try:
         from backend.middleware.websocket_auth import WebSocketAuthMiddleware
@@ -105,36 +105,36 @@ def verify_authentication():
         
         for method in methods:
             assert hasattr(WebSocketAuthMiddleware, method), f"Missing method: {method}"
-        print(f"  ✓ Authentication has all {len(methods)} required methods")
+        print(f"   Authentication has all {len(methods)} required methods")
         
         # Test token extraction
         auth = {'token': 'test_token'}
         token = WebSocketAuthMiddleware.extract_token_from_auth(auth)
         assert token == 'test_token', "Token extraction failed"
-        print("  ✓ Token extraction works")
+        print("   Token extraction works")
         
         # Test Bearer token extraction
         auth = {'Authorization': 'Bearer test_token'}
         token = WebSocketAuthMiddleware.extract_token_from_auth(auth)
         assert token == 'test_token', "Bearer token extraction failed"
-        print("  ✓ Bearer token extraction works")
+        print("   Bearer token extraction works")
         
         return True
     except Exception as e:
-        print(f"  ✗ Verification failed: {e}")
+        print(f"   Verification failed: {e}")
         return False
 
 
 def verify_api_endpoints():
     """Verify WebSocket API endpoints"""
-    print("\n✓ Verifying WebSocket API...")
+    print("\n Verifying WebSocket API...")
     
     try:
         from backend.api.v1 import websocket
         
         # Check router exists
         assert hasattr(websocket, 'router'), "Missing router"
-        print("  ✓ API router exists")
+        print("   API router exists")
         
         # Check endpoints
         routes = [route.path for route in websocket.router.routes]
@@ -150,17 +150,17 @@ def verify_api_endpoints():
         
         for route in expected_routes:
             assert route in routes, f"Missing route: {route}"
-        print(f"  ✓ All {len(expected_routes)} API endpoints defined")
+        print(f"   All {len(expected_routes)} API endpoints defined")
         
         return True
     except Exception as e:
-        print(f"  ✗ Verification failed: {e}")
+        print(f"   Verification failed: {e}")
         return False
 
 
 def verify_documentation():
     """Verify documentation exists"""
-    print("\n✓ Verifying documentation...")
+    print("\n Verifying documentation...")
     
     docs = [
         'backend/docs/WEBSOCKET_GUIDE.md',
@@ -172,9 +172,9 @@ def verify_documentation():
     for doc in docs:
         if os.path.exists(doc):
             size = os.path.getsize(doc)
-            print(f"  ✓ {doc} ({size:,} bytes)")
+            print(f"   {doc} ({size:,} bytes)")
         else:
-            print(f"  ✗ {doc} not found")
+            print(f"   {doc} not found")
             all_exist = False
     
     return all_exist
@@ -182,42 +182,42 @@ def verify_documentation():
 
 def verify_tests():
     """Verify tests exist"""
-    print("\n✓ Verifying tests...")
+    print("\n Verifying tests...")
     
     test_file = 'backend/tests/test_websocket.py'
     
     if os.path.exists(test_file):
         size = os.path.getsize(test_file)
-        print(f"  ✓ {test_file} ({size:,} bytes)")
+        print(f"   {test_file} ({size:,} bytes)")
         
         # Count test functions
         with open(test_file, 'r', encoding='utf-8') as f:
             content = f.read()
             test_count = content.count('def test_')
-            print(f"  ✓ Contains {test_count} test functions")
+            print(f"   Contains {test_count} test functions")
         
         return True
     else:
-        print(f"  ✗ {test_file} not found")
+        print(f"   {test_file} not found")
         return False
 
 
 def verify_dependencies():
     """Verify required dependencies are installed"""
-    print("\n✓ Verifying dependencies...")
+    print("\n Verifying dependencies...")
     
     try:
         import socketio
         version = getattr(socketio, '__version__', 'unknown')
-        print(f"  ✓ python-socketio {version}")
+        print(f"   python-socketio {version}")
         
         import websockets
         version = getattr(websockets, '__version__', 'unknown')
-        print(f"  ✓ websockets {version}")
+        print(f"   websockets {version}")
         
         return True
     except ImportError as e:
-        print(f"  ✗ Missing dependency: {e}")
+        print(f"   Missing dependency: {e}")
         return False
 
 
@@ -247,14 +247,14 @@ def main():
     total = len(results)
     
     for name, result in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = " PASS" if result else " FAIL"
         print(f"{status:8} {name}")
     
     print("="*60)
     print(f"Result: {passed}/{total} checks passed")
     
     if passed == total:
-        print("\n✅ All verifications passed!")
+        print("\n All verifications passed!")
         print("\nWebSocket implementation is complete and ready to use.")
         print("\nNext steps:")
         print("1. Start the backend: python backend/main.py")
@@ -262,7 +262,7 @@ def main():
         print("3. Run tests: pytest backend/tests/test_websocket.py -v")
         return 0
     else:
-        print("\n❌ Some verifications failed!")
+        print("\n Some verifications failed!")
         print("Please review the errors above.")
         return 1
 

@@ -41,7 +41,7 @@ def test_basic_key_generation():
     assert key.startswith("SOL_")
     assert mixin.get_dynamic_key() == key
     
-    print(f"✓ Generated key: {key}")
+    print(f" Generated key: {key}")
 
 
 def test_key_uniqueness():
@@ -57,9 +57,9 @@ def test_key_uniqueness():
     
     assert key1 != key2
     
-    print(f"✓ Key 1: {key1}")
-    print(f"✓ Key 2: {key2}")
-    print("✓ Keys are unique")
+    print(f" Key 1: {key1}")
+    print(f" Key 2: {key2}")
+    print(" Keys are unique")
 
 
 def test_key_validation():
@@ -80,11 +80,11 @@ def test_key_validation():
     
     for key in valid_keys:
         assert DynamicKeyMixin.validate_key(key), f"Key should be valid: {key}"
-        print(f"✓ Valid: {key}")
+        print(f" Valid: {key}")
     
     for key in invalid_keys:
         assert not DynamicKeyMixin.validate_key(key), f"Key should be invalid: {key}"
-        print(f"✓ Invalid (as expected): {key}")
+        print(f" Invalid (as expected): {key}")
 
 
 def test_index_operations():
@@ -98,18 +98,18 @@ def test_index_operations():
     # Add
     index.add(key, obj)
     assert index.exists(key)
-    print(f"✓ Added object with key: {key}")
+    print(f" Added object with key: {key}")
     
     # Get
     retrieved = index.get(key)
     assert retrieved == obj
-    print(f"✓ Retrieved object: {retrieved}")
+    print(f" Retrieved object: {retrieved}")
     
     # Remove
     removed = index.remove(key)
     assert removed is True
     assert not index.exists(key)
-    print("✓ Removed object")
+    print(" Removed object")
 
 
 def test_prefix_queries():
@@ -126,18 +126,18 @@ def test_prefix_queries():
     # Query by prefix
     solar_objects = index.get_by_prefix("SOL")
     assert len(solar_objects) == 2
-    print(f"✓ Found {len(solar_objects)} solar objects")
+    print(f" Found {len(solar_objects)} solar objects")
     
     solar_keys = index.get_keys_by_prefix("SOL")
     assert len(solar_keys) == 2
-    print(f"✓ Solar keys: {solar_keys}")
+    print(f" Solar keys: {solar_keys}")
     
     # Count by prefix
     solar_count = index.count_by_prefix("SOL")
     hp_count = index.count_by_prefix("HP")
     assert solar_count == 2
     assert hp_count == 1
-    print(f"✓ Counts - Solar: {solar_count}, Heat Pump: {hp_count}")
+    print(f" Counts - Solar: {solar_count}, Heat Pump: {hp_count}")
     
     # Cleanup
     index.clear()
@@ -154,14 +154,14 @@ def test_validator():
     is_valid, error = validator.validate(key)
     assert is_valid is True
     assert error is None
-    print(f"✓ Valid key: {key}")
+    print(f" Valid key: {key}")
     
     # Invalid key
     key = "invalid_key"
     is_valid, error = validator.validate(key)
     assert is_valid is False
     assert error is not None
-    print(f"✓ Invalid key detected: {key}")
+    print(f" Invalid key detected: {key}")
     print(f"  Error: {error}")
     
     # Custom rules
@@ -169,7 +169,7 @@ def test_validator():
     short_key = "SOL_1"
     is_valid, error = validator.validate(short_key)
     assert is_valid is False
-    print(f"✓ Custom rule applied: min_length=15")
+    print(f" Custom rule applied: min_length=15")
 
 
 def test_hash_key_generation():
@@ -181,12 +181,12 @@ def test_hash_key_generation():
     key2 = generate_hash_key(data)
     
     assert key1 == key2
-    print(f"✓ Deterministic hash key: {key1}")
+    print(f" Deterministic hash key: {key1}")
     
     # Different data produces different keys
     key3 = generate_hash_key("different_data")
     assert key1 != key3
-    print(f"✓ Different data produces different key: {key3}")
+    print(f" Different data produces different key: {key3}")
 
 
 def test_key_metadata():
@@ -205,8 +205,8 @@ def test_key_metadata():
     assert metadata['custom_suffix'] == "important"
     assert 'key_age_seconds' in metadata
     
-    print(f"✓ Key: {key}")
-    print(f"✓ Metadata: {metadata}")
+    print(f" Key: {key}")
+    print(f" Metadata: {metadata}")
 
 
 def test_key_components():
@@ -218,14 +218,14 @@ def test_key_components():
     # Extract prefix
     prefix = DynamicKeyMixin.extract_prefix(key)
     assert prefix == "SOL"
-    print(f"✓ Extracted prefix: {prefix}")
+    print(f" Extracted prefix: {prefix}")
     
     # Extract components
     components = DynamicKeyMixin.extract_components(key)
     assert components['prefix'] == "SOL"
     assert 'date' in components
     assert 'uuid' in components
-    print(f"✓ Extracted components: {components}")
+    print(f" Extracted components: {components}")
 
 
 def test_index_statistics():
@@ -248,7 +248,7 @@ def test_index_statistics():
     assert stats['keys_by_prefix']['HP'] == 1
     assert stats['has_metadata'] == 2
     
-    print(f"✓ Statistics: {stats}")
+    print(f" Statistics: {stats}")
     
     # Cleanup
     index.clear()
@@ -267,12 +267,12 @@ def test_all_prefixes():
         assert prefix.value.isalpha()
         prefix_count += 1
     
-    print(f"✓ Validated {prefix_count} prefixes")
+    print(f" Validated {prefix_count} prefixes")
     
     # Test uniqueness
     prefixes = [p.value for p in KeyPrefix]
     assert len(prefixes) == len(set(prefixes))
-    print("✓ All prefixes are unique")
+    print(" All prefixes are unique")
 
 
 def run_all_tests():
@@ -295,15 +295,15 @@ def run_all_tests():
         test_all_prefixes()
         
         print("\n" + "=" * 60)
-        print("✓ ALL TESTS PASSED")
+        print(" ALL TESTS PASSED")
         print("=" * 60)
         return True
         
     except AssertionError as e:
-        print(f"\n✗ TEST FAILED: {e}")
+        print(f"\n TEST FAILED: {e}")
         return False
     except Exception as e:
-        print(f"\n✗ ERROR: {e}")
+        print(f"\n ERROR: {e}")
         import traceback
         traceback.print_exc()
         return False

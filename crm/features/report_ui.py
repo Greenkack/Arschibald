@@ -39,8 +39,8 @@ def render_reporting_ui():
     tab1, tab2, tab3, tab4 = st.tabs([
         "Vordefinierte Reports",
         "Report Builder",
-        "💾 Gespeicherte Vorlagen",
-        "📥 Export"
+        " Gespeicherte Vorlagen",
+        " Export"
     ])
     
     with tab1:
@@ -134,7 +134,7 @@ def render_predefined_reports(engine: ReportingEngine):
                     st.plotly_chart(result["chart"], use_container_width=True)
                     
                     # Daten-Tabelle
-                    with st.expander("📋 Detaillierte Daten anzeigen"):
+                    with st.expander(" Detaillierte Daten anzeigen"):
                         st.dataframe(result["data"], use_container_width=True)
                     
                     # In Session State speichern für Export
@@ -386,7 +386,7 @@ def render_report_builder(engine: ReportingEngine, conn):
                     with col2:
                         st.write("")
                         st.write("")
-                        if st.button("💾 Speichern"):
+                        if st.button(" Speichern"):
                             if template_name:
                                 config = {
                                     "table": selected_table,
@@ -442,7 +442,7 @@ def render_saved_templates(engine: ReportingEngine):
                     st.write(f"**Zuletzt verwendet:** {template['last_used']}")
             
             with col2:
-                if st.button("▶️ Ausführen", key=f"run_{template['id']}"):
+                if st.button(" Ausführen", key=f"run_{template['id']}"):
                     result = engine.load_report_template(template['id'])
                     if result["success"]:
                         st.info("Vorlage geladen. Bitte wechseln Sie zum Report Builder Tab.")

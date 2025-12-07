@@ -68,7 +68,7 @@ def render_ui_effects_admin():
 
     # Effekte aktivieren/deaktivieren
     st.markdown("---")
-    st.markdown("#### ⚙️ Grundeinstellungen")
+    st.markdown("####  Grundeinstellungen")
 
     enabled = st.checkbox(
         "UI-Effekte aktivieren",
@@ -81,7 +81,7 @@ def render_ui_effects_admin():
             "UI-Effekte sind derzeit deaktiviert. Aktivieren Sie sie, um einen Effekt auszuwählen.")
 
     st.markdown("---")
-    st.markdown("#### 🎭 Effekt-Auswahl")
+    st.markdown("####  Effekt-Auswahl")
 
     # Erstelle eine Liste mit Effekt-Optionen für das Selectbox
     effect_options = []
@@ -128,7 +128,7 @@ def render_ui_effects_admin():
             border-left: 4px solid #667eea;
             margin: 10px 0;
         ">
-            <h5 style="margin: 0 0 10px 0; color: #667eea;">✨ {effect_name}</h5>
+            <h5 style="margin: 0 0 10px 0; color: #667eea;"> {effect_name}</h5>
             <p style="margin: 0; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
                 {effect_description}
             </p>
@@ -136,7 +136,7 @@ def render_ui_effects_admin():
         """, unsafe_allow_html=True)
 
         # Effekt-Vorschau mit Beispiel-Button
-        st.markdown("#### 👀 Live-Vorschau")
+        st.markdown("####  Live-Vorschau")
         st.markdown(
             "Bewegen Sie die Maus über die Elemente, um den Effekt zu sehen:")
 
@@ -144,12 +144,12 @@ def render_ui_effects_admin():
 
         with col1:
             if st.button(
-                "🔘 Beispiel Button",
+                " Beispiel Button",
                 key="preview_btn_1",
                     help="Hover für Effekt"):
                 pass
 
-        with col2, st.expander("📂 Beispiel Expander"):
+        with col2, st.expander(" Beispiel Expander"):
             st.write("Beispielinhalt")
 
         with col3:
@@ -167,7 +167,7 @@ def render_ui_effects_admin():
 
     with col_save:
         if st.button(
-            "💾 Einstellungen speichern",
+            " Einstellungen speichern",
             type="primary",
                 use_container_width=True):
             new_settings = {
@@ -189,7 +189,7 @@ def render_ui_effects_admin():
                 st.error("Fehler beim Speichern der Einstellungen!")
 
     with col_reset:
-        if st.button("🔄 Zurücksetzen", help="Auf Standard zurücksetzen"):
+        if st.button(" Zurücksetzen", help="Auf Standard zurücksetzen"):
             default_settings = {
                 "active_effect": get_default_effect(),
                 "enabled": True
@@ -202,7 +202,7 @@ def render_ui_effects_admin():
     st.markdown("---")
     st.markdown("#### Hinweise")
 
-    with st.expander("📚 Effekt-Übersicht", expanded=False):
+    with st.expander(" Effekt-Übersicht", expanded=False):
         st.markdown("""
         **Verfügbare Effekte:**
 
@@ -225,7 +225,7 @@ def render_ui_effects_admin():
         - Checkboxen und Radio-Buttons
         """)
 
-    with st.expander("⚙️ Technische Details", expanded=False):
+    with st.expander(" Technische Details", expanded=False):
         st.markdown("""
         **Implementierung:**
         - Die Effekte werden als CSS-Animationen implementiert
@@ -254,4 +254,4 @@ def render_ui_effects_admin():
         st.metric("Aktiver Effekt", effect_info.get("name", "N/A"))
 
     with status_col2:
-        st.metric("Status", "🟢 Aktiv" if enabled else "🔴 Deaktiviert")
+        st.metric("Status", "🟢 Aktiv" if enabled else " Deaktiviert")

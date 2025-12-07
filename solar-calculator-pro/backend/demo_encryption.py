@@ -48,7 +48,7 @@ def demo_database_encryption():
         user_id="demo_user"
     )
     print(f"   Decrypted: {decrypted_email}")
-    print(f"   ✅ Match: {decrypted_email == original_email}")
+    print(f"    Match: {decrypted_email == original_email}")
     
     # Encrypt a database row
     print("\n3. Encrypting a database row...")
@@ -76,7 +76,7 @@ def demo_database_encryption():
         user_id="demo_user"
     )
     print(f"   Decrypted row: {decrypted_row}")
-    print(f"   ✅ Match: {decrypted_row == user_data}")
+    print(f"    Match: {decrypted_row == user_data}")
 
 
 def demo_file_encryption():
@@ -105,7 +105,7 @@ def demo_file_encryption():
     )
     print(f"   Decrypted size: {len(decrypted_data)} bytes")
     print(f"   Decrypted data: {decrypted_data.decode('utf-8')}")
-    print(f"   ✅ Match: {decrypted_data == original_data}")
+    print(f"    Match: {decrypted_data == original_data}")
 
 
 def demo_communication_encryption():
@@ -139,7 +139,7 @@ def demo_communication_encryption():
         user_id="demo_user"
     )
     print(f"   Decrypted payload: {decrypted_payload}")
-    print(f"   ✅ Match: {decrypted_payload == payload}")
+    print(f"    Match: {decrypted_payload == payload}")
     
     # Encrypt WebSocket message
     print("\n3. Encrypting WebSocket message...")
@@ -159,7 +159,7 @@ def demo_communication_encryption():
         user_id="demo_user"
     )
     print(f"   Decrypted message: {decrypted_message}")
-    print(f"   ✅ Match: {decrypted_message == message}")
+    print(f"    Match: {decrypted_message == message}")
 
 
 def demo_key_management():
@@ -176,9 +176,9 @@ def demo_key_management():
             key_name=key_name,
             user_id="admin_user"
         )
-        print(f"   ✅ Key '{key_name}' generated successfully")
+        print(f"    Key '{key_name}' generated successfully")
     except Exception as e:
-        print(f"   ℹ️  Key may already exist: {e}")
+        print(f"   ℹ  Key may already exist: {e}")
     
     # List all keys
     print("\n2. Listing all encryption keys...")
@@ -192,9 +192,9 @@ def demo_key_management():
             key_name=key_name,
             user_id="admin_user"
         )
-        print(f"   ✅ Key '{key_name}' rotated successfully")
+        print(f"    Key '{key_name}' rotated successfully")
     except Exception as e:
-        print(f"   ⚠️  Key rotation failed: {e}")
+        print(f"     Key rotation failed: {e}")
     
     # Delete the demo key
     print("\n4. Deleting demo key...")
@@ -203,9 +203,9 @@ def demo_key_management():
             key_name=key_name,
             user_id="admin_user"
         )
-        print(f"   ✅ Key '{key_name}' deleted successfully")
+        print(f"    Key '{key_name}' deleted successfully")
     except Exception as e:
-        print(f"   ⚠️  Key deletion failed: {e}")
+        print(f"     Key deletion failed: {e}")
 
 
 def demo_audit_logging():
@@ -235,7 +235,7 @@ def demo_audit_logging():
     if audit_logs:
         print("\n   Recent operations:")
         for log in audit_logs[-5:]:  # Show last 5
-            print(f"   - {log['timestamp']}: {log['operation']} ({log['data_type']}) - {'✅' if log['success'] else '❌'}")
+            print(f"   - {log['timestamp']}: {log['operation']} ({log['data_type']}) - {'' if log['success'] else ''}")
 
 
 def demo_encryption_status():
@@ -254,13 +254,13 @@ def demo_encryption_status():
     # Validate encryption system
     print("\n2. Validating encryption system...")
     validation = encryption_service.validate_encryption()
-    print(f"   Database encryption: {'✅' if validation['database_encryption'] else '❌'}")
-    print(f"   File encryption: {'✅' if validation['file_encryption'] else '❌'}")
-    print(f"   Communication encryption: {'✅' if validation['communication_encryption'] else '❌'}")
-    print(f"   Key management: {'✅' if validation['key_management'] else '❌'}")
+    print(f"   Database encryption: {'' if validation['database_encryption'] else ''}")
+    print(f"   File encryption: {'' if validation['file_encryption'] else ''}")
+    print(f"   Communication encryption: {'' if validation['communication_encryption'] else ''}")
+    print(f"   Key management: {'' if validation['key_management'] else ''}")
     
     all_valid = all(validation.values())
-    print(f"\n   Overall status: {'✅ All systems operational' if all_valid else '❌ Some systems need attention'}")
+    print(f"\n   Overall status: {' All systems operational' if all_valid else ' Some systems need attention'}")
 
 
 def main():
@@ -280,14 +280,14 @@ def main():
         
         # Final summary
         print_section("DEMO COMPLETE")
-        print("✅ All encryption features demonstrated successfully!")
+        print(" All encryption features demonstrated successfully!")
         print("\nFor more information, see:")
         print("  - docs/ENCRYPTION_SYSTEM_GUIDE.md")
         print("  - docs/ENCRYPTION_QUICK_REFERENCE.md")
         print("  - API documentation at /docs")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

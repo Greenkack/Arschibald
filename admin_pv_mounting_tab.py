@@ -7,8 +7,8 @@ KOMPLETT ÜBERARBEITETES Admin-Dashboard für PV-Unterkonstruktion
 NEU in Version 2.0:
 - Verbessertes Dashboard mit erweiterten Statistiken
 - Marken-Dropdown zur Filterung
-- ✏️ Vollständige CRUD-Funktionen (Create, Read, Update, Delete)
-- 🔎 Erweiterte Such- und Filterfunktionen
+-  Vollständige CRUD-Funktionen (Create, Read, Update, Delete)
+-  Erweiterte Such- und Filterfunktionen
 - Visualisierungen mit Charts
 - Moderne, übersichtliche UI
 
@@ -107,10 +107,10 @@ def render_pv_mounting_admin_tab_v2() -> None:
     # Navigation mit Icons
     sub_tabs = st.tabs([
         "Dashboard & Statistiken",
-        "📋 Komponenten verwalten",
-        "➕ Neue Komponente",
-        "🔎 Erweiterte Suche",
-        "📤 Import/Export"
+        " Komponenten verwalten",
+        " Neue Komponente",
+        " Erweiterte Suche",
+        " Import/Export"
     ])
     
     with sub_tabs[0]:
@@ -151,14 +151,14 @@ def _render_enhanced_dashboard() -> None:
         
         with col2:
             st.metric(
-                "🏭 Hersteller",
+                " Hersteller",
                 len(stats['by_manufacturer']),
                 help="Verschiedene Hersteller"
             )
         
         with col3:
             st.metric(
-                "📂 Kategorien",
+                " Kategorien",
                 len(stats['by_category']),
                 help="Produktkategorien"
             )
@@ -227,7 +227,7 @@ def _render_enhanced_dashboard() -> None:
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.markdown("#### 🏠 Nach Dachtyp")
+            st.markdown("####  Nach Dachtyp")
             if stats['by_roof_type']:
                 df_roof = pd.DataFrame(
                     list(stats['by_roof_type'].items()),
@@ -236,7 +236,7 @@ def _render_enhanced_dashboard() -> None:
                 st.dataframe(df_roof, use_container_width=True, hide_index=True)
         
         with col2:
-            st.markdown("#### 💶 Preisstatistik")
+            st.markdown("####  Preisstatistik")
             prices = [c.get('price_netto', 0) for c in all_components if c.get('price_netto', 0) > 0]
             if prices:
                 price_stats = pd.DataFrame({
@@ -265,7 +265,7 @@ def _render_enhanced_dashboard() -> None:
         
         # === RECENT ADDITIONS ===
         st.markdown("---")
-        st.markdown("#### 🆕 Neueste Komponenten")
+        st.markdown("####  Neueste Komponenten")
         
         # Sort by ID (newest first)
         recent = sorted(all_components, key=lambda x: x.get('id', 0), reverse=True)[:5]
@@ -285,7 +285,7 @@ def _render_enhanced_dashboard() -> None:
 def _render_enhanced_component_list() -> None:
     """Verbesserte Komponentenliste mit Marken-Dropdown und Filtern."""
     
-    st.markdown('<p class="section-header">📋 Komponenten verwalten</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-header"> Komponenten verwalten</p>', unsafe_allow_html=True)
     
     try:
         all_components = read_components()
@@ -303,7 +303,7 @@ def _render_enhanced_component_list() -> None:
             # Marken-Dropdown
             manufacturers = sorted(set(c.get('manufacturer', '') for c in all_components))
             selected_manufacturer = st.selectbox(
-                "🏭 Hersteller",
+                " Hersteller",
                 ['Alle'] + manufacturers,
                 key='filter_manufacturer'
             )
@@ -312,7 +312,7 @@ def _render_enhanced_component_list() -> None:
             # Kategorie-Filter
             categories = sorted(set(c.get('category', '') for c in all_components))
             selected_category = st.selectbox(
-                "📂 Kategorie",
+                " Kategorie",
                 ['Alle'] + categories,
                 key='filter_category'
             )
@@ -321,7 +321,7 @@ def _render_enhanced_component_list() -> None:
             # Dachtyp-Filter
             roof_types = sorted(set(c.get('roof_type', '') for c in all_components))
             selected_roof = st.selectbox(
-                "🏠 Dachtyp",
+                " Dachtyp",
                 ['Alle'] + roof_types,
                 key='filter_roof'
             )
@@ -329,7 +329,7 @@ def _render_enhanced_component_list() -> None:
         with col4:
             # Suchfeld
             search_term = st.text_input(
-                "🔎 Suche",
+                " Suche",
                 placeholder="Produktname...",
                 key='search_term'
             )
@@ -381,7 +381,7 @@ def _render_enhanced_component_list() -> None:
             
             # === ACTIONS ===
             st.markdown("---")
-            st.markdown("#### ⚙️ Aktionen")
+            st.markdown("####  Aktionen")
             
             col_action1, col_action2 = st.columns([1, 3])
             
@@ -398,12 +398,12 @@ def _render_enhanced_component_list() -> None:
                 col_btn1, col_btn2, col_btn3 = st.columns(3)
                 
                 with col_btn1:
-                    if st.button("✏️ Bearbeiten", use_container_width=True):
+                    if st.button(" Bearbeiten", use_container_width=True):
                         st.session_state['edit_component_id'] = selected_id
                         st.rerun()
                 
                 with col_btn2:
-                    if st.button("🔄 Duplizieren", use_container_width=True):
+                    if st.button(" Duplizieren", use_container_width=True):
                         st.session_state['duplicate_component_id'] = selected_id
                         st.rerun()
                 
@@ -438,7 +438,7 @@ def _render_edit_component_modal(component_id: int) -> None:
             return
         
         st.markdown("---")
-        st.markdown(f"### ✏️ Komponente bearbeiten: {component.get('product_name', '')}")
+        st.markdown(f"###  Komponente bearbeiten: {component.get('product_name', '')}")
         
         with st.form("edit_component_form"):
             col1, col2 = st.columns(2)
@@ -466,7 +466,7 @@ def _render_edit_component_modal(component_id: int) -> None:
             col_submit, col_cancel = st.columns(2)
             
             with col_submit:
-                submitted = st.form_submit_button("💾 Speichern", use_container_width=True, type="primary")
+                submitted = st.form_submit_button(" Speichern", use_container_width=True, type="primary")
             
             with col_cancel:
                 cancelled = st.form_submit_button("Abbrechen", use_container_width=True)
@@ -545,7 +545,7 @@ def _render_delete_confirmation(component_id: int) -> None:
 def _render_enhanced_create_component() -> None:
     """Verbesserte Komponenten-Erstellung."""
     
-    st.markdown('<p class="section-header">➕ Neue Komponente erstellen</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-header"> Neue Komponente erstellen</p>', unsafe_allow_html=True)
     
     # Quick-Add-Vorlagen
     st.markdown("#### Schnell-Vorlagen")
@@ -576,7 +576,7 @@ def _render_enhanced_create_component() -> None:
     for idx, (template_name, template_data) in enumerate(templates.items()):
         col = [col1, col2, col3][idx]
         with col:
-            if st.button(f"📋 {template_name}", use_container_width=True):
+            if st.button(f" {template_name}", use_container_width=True):
                 st.session_state['component_template'] = template_data
                 st.rerun()
     
@@ -591,23 +591,23 @@ def _render_enhanced_create_component() -> None:
         col1, col2 = st.columns(2)
         
         with col1:
-            manufacturer = st.text_input("🏭 Hersteller *", value=template.get('manufacturer', ''))
+            manufacturer = st.text_input(" Hersteller *", value=template.get('manufacturer', ''))
             product_name = st.text_input("Produktname *", value=template.get('product_name', ''))
-            article_number = st.text_input("🔢 Artikelnummer", value=template.get('article_number', ''))
-            category = st.text_input("📂 Kategorie *", value=template.get('category', ''))
-            roof_type = st.text_input("🏠 Dachtyp *", value=template.get('roof_type', 'Universal'))
+            article_number = st.text_input(" Artikelnummer", value=template.get('article_number', ''))
+            category = st.text_input(" Kategorie *", value=template.get('category', ''))
+            roof_type = st.text_input(" Dachtyp *", value=template.get('roof_type', 'Universal'))
         
         with col2:
-            material = st.text_input("⚙️ Material", value=template.get('material', ''))
-            dimensions = st.text_input("📏 Abmessungen", value=template.get('dimensions', ''))
-            weight_kg = st.number_input("⚖️ Gewicht (kg)", value=template.get('weight_kg', 0.0), format="%.3f")
-            price_netto = st.number_input("💶 Preis netto (€)", value=template.get('price_netto', 0.0), format="%.2f")
+            material = st.text_input(" Material", value=template.get('material', ''))
+            dimensions = st.text_input(" Abmessungen", value=template.get('dimensions', ''))
+            weight_kg = st.number_input(" Gewicht (kg)", value=template.get('weight_kg', 0.0), format="%.3f")
+            price_netto = st.number_input(" Preis netto (€)", value=template.get('price_netto', 0.0), format="%.2f")
             unit = st.selectbox("Einheit", ['Stk', 'm', 'kg', 'Set', 'Paar'], 
                                index=['Stk', 'm', 'kg', 'Set', 'Paar'].index(template.get('unit', 'Stk')))
         
-        quantity_per_module = st.number_input("🔢 Menge pro Modul", value=template.get('quantity_per_module', 0.0), format="%.2f")
-        compatibility = st.text_area("🔗 Kompatibilität", value=template.get('compatibility', ''))
-        warranty_years = st.number_input("🛡️ Garantie (Jahre)", value=template.get('warranty_years', 10))
+        quantity_per_module = st.number_input(" Menge pro Modul", value=template.get('quantity_per_module', 0.0), format="%.2f")
+        compatibility = st.text_area(" Kompatibilität", value=template.get('compatibility', ''))
+        warranty_years = st.number_input(" Garantie (Jahre)", value=template.get('warranty_years', 10))
         notes = st.text_area("Notizen", value=template.get('notes', ''))
         
         submitted = st.form_submit_button("Komponente erstellen", use_container_width=True, type="primary")
@@ -650,7 +650,7 @@ def _render_enhanced_create_component() -> None:
 def _render_advanced_search() -> None:
     """Erweiterte Suchfunktion."""
     
-    st.markdown('<p class="section-header">🔎 Erweiterte Suche</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-header"> Erweiterte Suche</p>', unsafe_allow_html=True)
     
     st.info("Suchen Sie Komponenten mit erweiterten Filtern")
     
@@ -710,12 +710,12 @@ def _render_advanced_search() -> None:
 def _render_import_export() -> None:
     """Import/Export-Funktionen."""
     
-    st.markdown('<p class="section-header">📤 Daten Import/Export</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-header"> Daten Import/Export</p>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### 📥 Export")
+        st.markdown("###  Export")
         
         try:
             all_components = read_components()
@@ -765,7 +765,7 @@ def _render_import_export() -> None:
             st.error(f"Export-Fehler: {e}")
     
     with col2:
-        st.markdown("### 📤 Import")
+        st.markdown("###  Import")
         st.info("Import-Funktion in Entwicklung")
 
 

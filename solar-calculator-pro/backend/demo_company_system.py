@@ -50,7 +50,7 @@ def demo_create_company(db: Session):
     
     company = service.create_company(company_data)
     
-    print(f"\n✓ Created company:")
+    print(f"\n Created company:")
     print(f"  ID: {company.id}")
     print(f"  Name: {company.name}")
     print(f"  Display Name: {company.display_name}")
@@ -71,9 +71,9 @@ def demo_list_companies(db: Session):
     service = CompanyService(db)
     companies = service.get_companies(active_only=False)
     
-    print(f"\n✓ Found {len(companies)} companies:")
+    print(f"\n Found {len(companies)} companies:")
     for company in companies:
-        status = "✓ Active" if company.is_active else "✗ Inactive"
+        status = " Active" if company.is_active else " Inactive"
         default = " [DEFAULT]" if company.is_default else ""
         print(f"\n  {company.id}. {company.display_name}{default}")
         print(f"     Name: {company.name}")
@@ -133,10 +133,10 @@ def demo_add_documents(db: Session, company_id: int):
         )
     ]
     
-    print(f"\n✓ Adding {len(documents)} documents:")
+    print(f"\n Adding {len(documents)} documents:")
     for doc_data in documents:
         doc = service.create_company_document(doc_data)
-        include_status = "✓ Include in PDF" if doc.include_in_pdf else "✗ Not in PDF"
+        include_status = " Include in PDF" if doc.include_in_pdf else " Not in PDF"
         print(f"\n  {doc.id}. {doc.title}")
         print(f"     Type: {doc.document_type}")
         print(f"     File: {doc.file_name}")
@@ -195,10 +195,10 @@ def demo_add_images(db: Session, company_id: int):
         )
     ]
     
-    print(f"\n✓ Adding {len(images)} images:")
+    print(f"\n Adding {len(images)} images:")
     for img_data in images:
         img = service.create_company_image(img_data)
-        include_status = "✓ Include in PDF" if img.include_in_pdf else "✗ Not in PDF"
+        include_status = " Include in PDF" if img.include_in_pdf else " Not in PDF"
         print(f"\n  {img.id}. {img.title}")
         print(f"     Type: {img.image_type}")
         print(f"     File: {img.file_name}")
@@ -256,10 +256,10 @@ def demo_add_pricing_rules(db: Session, company_id: int):
         )
     ]
     
-    print(f"\n✓ Adding {len(rules)} pricing rules:")
+    print(f"\n Adding {len(rules)} pricing rules:")
     for rule_data in rules:
         rule = service.create_pricing_rule(rule_data)
-        status = "✓ Active" if rule.is_active else "✗ Inactive"
+        status = " Active" if rule.is_active else " Inactive"
         print(f"\n  {rule.id}. {rule.rule_name}")
         print(f"     Type: {rule.rule_type}")
         print(f"     Priority: {rule.priority}")
@@ -284,7 +284,7 @@ def demo_load_company_data(db: Session, company_id: int):
     service = CompanyService(db)
     data = service.load_company_data(company_id)
     
-    print(f"\n✓ Loaded complete data for company {company_id}:")
+    print(f"\n Loaded complete data for company {company_id}:")
     
     # Company info
     company = data['company']
@@ -344,7 +344,7 @@ def demo_multi_company_selection(db: Session):
     service = CompanyService(db)
     companies = service.get_companies(active_only=True)
     
-    print(f"\n✓ Available companies for multi-PDF generation:")
+    print(f"\n Available companies for multi-PDF generation:")
     print(f"  Total: {len(companies)} active companies")
     
     for i, company in enumerate(companies, 1):
@@ -355,7 +355,7 @@ def demo_multi_company_selection(db: Session):
         print(f"      Images: {len(company.images)}")
         print(f"      Pricing Rules: {len(company.pricing_rules)}")
     
-    print(f"\n  💡 Select multiple companies to generate PDFs for all at once!")
+    print(f"\n   Select multiple companies to generate PDFs for all at once!")
     print(f"     Example: Select companies 1, 2, 3 → Generate 3 PDFs with one click")
 
 
@@ -383,7 +383,7 @@ def demo_update_company(db: Session, company_id: int):
     
     updated = service.update_company(company_id, update_data)
     
-    print(f"\n  ✓ Updated data:")
+    print(f"\n   Updated data:")
     print(f"    Display Name: {updated.display_name}")
     print(f"    Price Increase: {updated.price_increase_percentage}%")
     print(f"    Primary Color: {updated.primary_color}")
@@ -436,7 +436,7 @@ def main():
         print("\n" + "="*80)
         
     except Exception as e:
-        print(f"\n✗ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
     finally:

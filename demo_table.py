@@ -14,11 +14,11 @@ from theming.theme_manager import ThemeManager
 def main():
     st.set_page_config(
         page_title="shadcn/ui Table Demo",
-        page_icon="📊",
+        page_icon="",
         layout="wide"
     )
 
-    st.title("📊 shadcn/ui Table-Komponente Demo")
+    st.title(" shadcn/ui Table-Komponente Demo")
     st.markdown("---")
 
     # Theme Manager initialisieren
@@ -55,7 +55,7 @@ def main():
 
     # Sidebar für Optionen
     with st.sidebar:
-        st.header("⚙️ Table-Optionen")
+        st.header(" Table-Optionen")
 
         sortable = st.checkbox("Sortierbar", value=True)
         striped = st.checkbox("Zebra-Striping", value=True)
@@ -83,7 +83,7 @@ def main():
             max_height = f"{max_height}px"
 
     # Demo 1: Basis-Tabelle
-    st.header("1️⃣ Basis-Tabelle")
+    st.header("1⃣ Basis-Tabelle")
     st.markdown("Einfache Tabelle mit allen Standard-Features")
 
     table_component = Table(theme_manager=theme_manager)
@@ -101,12 +101,12 @@ def main():
     )
 
     if sorted_df is not None and sortable:
-        st.info(f"📊 Tabelle wurde sortiert. Zeige {len(sorted_df)} Zeilen.")
+        st.info(f" Tabelle wurde sortiert. Zeige {len(sorted_df)} Zeilen.")
 
     st.markdown("---")
 
     # Demo 2: Convenience-Funktion
-    st.header("2️⃣ Convenience-Funktion")
+    st.header("2⃣ Convenience-Funktion")
     st.markdown("Verwendung der `table()` Shortcut-Funktion")
 
     with st.expander("Code anzeigen"):
@@ -135,7 +135,7 @@ table(
     st.markdown("---")
 
     # Demo 3: Kompakte Tabelle
-    st.header("3️⃣ Kompakte Tabelle")
+    st.header("3⃣ Kompakte Tabelle")
     st.markdown("Platzsparende Darstellung für viele Daten")
 
     table(
@@ -152,7 +152,7 @@ table(
     st.markdown("---")
 
     # Demo 4: Große Tabelle mit Sticky Header
-    st.header("4️⃣ Scrollbare Tabelle mit Sticky Header")
+    st.header("4⃣ Scrollbare Tabelle mit Sticky Header")
     st.markdown("Header bleibt beim Scrollen sichtbar")
 
     # Erstelle größere Tabelle
@@ -173,7 +173,7 @@ table(
     st.markdown("---")
 
     # Demo 5: Custom CSS
-    st.header("5️⃣ Tabelle mit Custom CSS")
+    st.header("5⃣ Tabelle mit Custom CSS")
     st.markdown("Angepasstes Styling mit zusätzlichem CSS")
 
     custom_css = """
@@ -202,7 +202,7 @@ table(
     st.markdown("---")
 
     # Demo 6: st.dataframe() Override
-    st.header("6️⃣ st.dataframe() mit shadcn/ui-Styling")
+    st.header("6⃣ st.dataframe() mit shadcn/ui-Styling")
     st.markdown("Standard Streamlit DataFrame mit überschriebenem Styling")
 
     # Override aktivieren
@@ -213,7 +213,7 @@ table(
     st.markdown("---")
 
     # Demo 7: Verschiedene Datentypen
-    st.header("7️⃣ Verschiedene Datentypen")
+    st.header("7⃣ Verschiedene Datentypen")
     st.markdown("Tabelle mit verschiedenen Spaltentypen")
 
     mixed_df = pd.DataFrame({
@@ -238,7 +238,7 @@ table(
     st.markdown("---")
 
     # Demo 8: Responsive Design
-    st.header("8️⃣ Responsive Design")
+    st.header("8⃣ Responsive Design")
     st.markdown(
         "Tabelle passt sich an Bildschirmgröße an (horizontal "
         "scrollbar auf kleinen Bildschirmen)"
@@ -262,7 +262,7 @@ table(
     st.markdown("---")
 
     # Statistiken
-    st.header("📈 Tabellen-Statistiken")
+    st.header(" Tabellen-Statistiken")
 
     col1, col2, col3, col4 = st.columns(4)
 
@@ -283,14 +283,14 @@ table(
     st.markdown("---")
     st.markdown(
         """
-        **💡 Tipp:** Die Table-Komponente unterstützt:
-        - ✅ Zebra-Striping für bessere Lesbarkeit
-        - ✅ Hover-Effekte für interaktive Erfahrung
-        - ✅ Sortierbare Spalten
-        - ✅ Responsive Design mit horizontalem Scroll
-        - ✅ Sticky Header für lange Tabellen
-        - ✅ Verschiedene Größen (compact, default, comfortable)
-        - ✅ Custom CSS für individuelle Anpassungen
+        ** Tipp:** Die Table-Komponente unterstützt:
+        -  Zebra-Striping für bessere Lesbarkeit
+        -  Hover-Effekte für interaktive Erfahrung
+        -  Sortierbare Spalten
+        -  Responsive Design mit horizontalem Scroll
+        -  Sticky Header für lange Tabellen
+        -  Verschiedene Größen (compact, default, comfortable)
+        -  Custom CSS für individuelle Anpassungen
         """
     )
 

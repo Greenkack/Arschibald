@@ -83,7 +83,7 @@ def demo_german_format():
     print("\nValidating German number formats:")
     for test_value in test_cases:
         result = validator.validate(test_value)
-        status = "✓ Valid" if result.is_valid else "✗ Invalid"
+        status = " Valid" if result.is_valid else " Invalid"
         print(f"   {test_value:15} -> {status}")
         if not result.is_valid:
             print(f"      Error: {result.errors[0].message}")
@@ -143,7 +143,7 @@ def demo_solar_calculator_input():
         "location": "Berlin"
     }
     result = validator.validate(valid_input)
-    print(f"   Result: {'✓ Valid' if result.is_valid else '✗ Invalid'}")
+    print(f"   Result: {' Valid' if result.is_valid else ' Invalid'}")
     
     # Test case 2: Invalid input
     print("\nTest Case 2: Invalid Input")
@@ -155,7 +155,7 @@ def demo_solar_calculator_input():
         "location": "B"  # Too short
     }
     result = validator.validate(invalid_input)
-    print(f"   Result: {'✓ Valid' if result.is_valid else '✗ Invalid'}")
+    print(f"   Result: {' Valid' if result.is_valid else ' Invalid'}")
     if not result.is_valid:
         print(f"   Found {len(result.errors)} errors:")
         for error in result.errors:
@@ -181,7 +181,7 @@ def demo_price_matrix_validation():
     prices = ["1.234,56", "50,00", "-10,00", "999.999,99"]
     for price in prices:
         result = price_validator.validate(price)
-        status = "✓ Valid" if result.is_valid else "✗ Invalid"
+        status = " Valid" if result.is_valid else " Invalid"
         print(f"   {price:15} -> {status}")
         if not result.is_valid:
             print(f"      Error: {result.errors[0].message}")
@@ -197,7 +197,7 @@ def demo_price_matrix_validation():
     codes = ["PV-12345", "INV-1234", "BAT-123456", "invalid", "pv-12345"]
     for code in codes:
         result = code_validator.validate(code)
-        status = "✓ Valid" if result.is_valid else "✗ Invalid"
+        status = " Valid" if result.is_valid else " Invalid"
         print(f"   {code:15} -> {status}")
 
 
@@ -249,7 +249,7 @@ def demo_user_registration():
         "website": "https://johndoe.com"
     }
     result = validator.validate(valid_data)
-    print(f"   Result: {'✓ Valid' if result.is_valid else '✗ Invalid'}")
+    print(f"   Result: {' Valid' if result.is_valid else ' Invalid'}")
     
     # Invalid registration
     print("\nTest Case 2: Invalid Registration")
@@ -261,7 +261,7 @@ def demo_user_registration():
         "website": "not-a-url"  # Invalid URL
     }
     result = validator.validate(invalid_data)
-    print(f"   Result: {'✓ Valid' if result.is_valid else '✗ Invalid'}")
+    print(f"   Result: {' Valid' if result.is_valid else ' Invalid'}")
     if not result.is_valid:
         print(f"   Found {len(result.errors)} errors:")
         for error in result.errors:
@@ -284,7 +284,7 @@ def demo_custom_validators():
     
     for num in [2, 4, 5, 8, 9]:
         result = even_validator.validate(num)
-        status = "✓ Valid" if result.is_valid else "✗ Invalid"
+        status = " Valid" if result.is_valid else " Invalid"
         print(f"   {num} -> {status}")
     
     # Multiple of 5 validator
@@ -297,7 +297,7 @@ def demo_custom_validators():
     
     for num in [5, 10, 12, 15, 17]:
         result = multiple_validator.validate(num)
-        status = "✓ Valid" if result.is_valid else "✗ Invalid"
+        status = " Valid" if result.is_valid else " Invalid"
         print(f"   {num} -> {status}")
     
     # Password strength validator
@@ -315,7 +315,7 @@ def demo_custom_validators():
     passwords = ["password", "Password", "Password1", "pass"]
     for pwd in passwords:
         result = password_validator.validate(pwd)
-        status = "✓ Valid" if result.is_valid else "✗ Invalid"
+        status = " Valid" if result.is_valid else " Invalid"
         print(f"   {pwd:15} -> {status}")
         if not result.is_valid:
             for error in result.errors:
@@ -342,23 +342,23 @@ def demo_list_validation():
     
     # Valid list
     result = list_validator.validate([85, 90, 95])
-    print(f"   [85, 90, 95] -> {'✓ Valid' if result.is_valid else '✗ Invalid'}")
+    print(f"   [85, 90, 95] -> {' Valid' if result.is_valid else ' Invalid'}")
     
     # Invalid: duplicate values
     result = list_validator.validate([85, 90, 85])
-    print(f"   [85, 90, 85] -> {'✓ Valid' if result.is_valid else '✗ Invalid'}")
+    print(f"   [85, 90, 85] -> {' Valid' if result.is_valid else ' Invalid'}")
     if not result.is_valid:
         print(f"      Error: {result.errors[0].message}")
     
     # Invalid: value out of range
     result = list_validator.validate([85, 150, 95])
-    print(f"   [85, 150, 95] -> {'✓ Valid' if result.is_valid else '✗ Invalid'}")
+    print(f"   [85, 150, 95] -> {' Valid' if result.is_valid else ' Invalid'}")
     if not result.is_valid:
         print(f"      Error: {result.errors[0].message}")
     
     # Invalid: too many items
     result = list_validator.validate(list(range(15)))
-    print(f"   [0..14] (15 items) -> {'✓ Valid' if result.is_valid else '✗ Invalid'}")
+    print(f"   [0..14] (15 items) -> {' Valid' if result.is_valid else ' Invalid'}")
     if not result.is_valid:
         print(f"      Error: {result.errors[0].message}")
 
@@ -381,7 +381,7 @@ def demo_composite_validators():
     ages = [25, 17, 105, 25.5]
     for age in ages:
         result = composite.validate(age)
-        status = "✓ Valid" if result.is_valid else "✗ Invalid"
+        status = " Valid" if result.is_valid else " Invalid"
         print(f"   {age} -> {status}")
         if not result.is_valid:
             for error in result.errors:
@@ -424,9 +424,9 @@ def demo_error_handling():
 def main():
     """Run all demos"""
     print("\n")
-    print("╔" + "=" * 58 + "╗")
-    print("║" + " " * 10 + "VALIDATION FRAMEWORK DEMO" + " " * 23 + "║")
-    print("╚" + "=" * 58 + "╝")
+    print("" + "=" * 58 + "")
+    print("" + " " * 10 + "VALIDATION FRAMEWORK DEMO" + " " * 23 + "")
+    print("" + "=" * 58 + "")
     
     demo_basic_validation()
     demo_german_format()

@@ -64,7 +64,7 @@ def show_enhanced_product_management():
 
 def show_product_list():
     """Zeigt die Produktliste mit Filteroptionen"""
-    st.header("📋 Produktliste")
+    st.header(" Produktliste")
 
     # Filter-Optionen
     col1, col2, col3 = st.columns(3)
@@ -81,7 +81,7 @@ def show_product_list():
             "Dynamische Keys anzeigen", value=False)
 
     with col3:
-        if st.button("🔄 Aktualisieren"):
+        if st.button(" Aktualisieren"):
             st.rerun()
 
     # Produkte laden
@@ -269,7 +269,7 @@ def show_product_details(product_id: int):
 
         # Dynamische Keys anzeigen
         if 'dynamic_keys' in product and product['dynamic_keys']:
-            with st.expander("🔑 Dynamische Keys für PDF"):
+            with st.expander(" Dynamische Keys für PDF"):
                 st.json(product['dynamic_keys'])
 
     except Exception as e:
@@ -278,7 +278,7 @@ def show_product_details(product_id: int):
 
 def show_add_product():
     """Formular zum Hinzufügen neuer Produkte"""
-    st.header("➕ Neues Produkt hinzufügen")
+    st.header(" Neues Produkt hinzufügen")
 
     with st.form("add_product_form"):
         # Grunddaten
@@ -492,7 +492,7 @@ def show_add_product():
                     product_with_keys = get_product_with_dynamic_keys(
                         product_id)
                     if product_with_keys and 'dynamic_keys' in product_with_keys:
-                        with st.expander("🔑 Generierte dynamische Keys"):
+                        with st.expander(" Generierte dynamische Keys"):
                             st.json(product_with_keys['dynamic_keys'])
                 else:
                     st.error("Fehler beim Hinzufügen des Produkts!")
@@ -502,7 +502,7 @@ def show_add_product():
 
 def show_edit_product():
     """Formular zum Bearbeiten bestehender Produkte"""
-    st.header("✏️ Produkt bearbeiten")
+    st.header(" Produkt bearbeiten")
 
     # Produkt auswählen
     products = list_products()
@@ -730,7 +730,7 @@ def show_edit_product():
                     product_with_keys = get_product_with_dynamic_keys(
                         selected_product_id)
                     if product_with_keys and 'dynamic_keys' in product_with_keys:
-                        with st.expander("🔑 Aktualisierte dynamische Keys"):
+                        with st.expander(" Aktualisierte dynamische Keys"):
                             st.json(product_with_keys['dynamic_keys'])
                 else:
                     st.error("Fehler beim Aktualisieren des Produkts!")
@@ -740,7 +740,7 @@ def show_edit_product():
 
 def show_dynamic_keys():
     """Zeigt dynamische Keys für alle Produkte"""
-    st.header("🔑 Dynamische Keys für PDF-Integration")
+    st.header(" Dynamische Keys für PDF-Integration")
 
     st.info("""
     Diese Seite zeigt die automatisch generierten dynamischen Keys für alle Produkte.
@@ -768,7 +768,7 @@ def show_dynamic_keys():
         products_with_keys = get_products_with_dynamic_keys()
 
         for product in products_with_keys:
-            with st.expander(f"🔑 {product['model_name']} ({product['category']})"):
+            with st.expander(f" {product['model_name']} ({product['category']})"):
                 col1, col2 = st.columns(2)
 
                 with col1:
@@ -828,7 +828,7 @@ def show_dynamic_keys():
                     hide_index=True)
 
                 # JSON-Export Option
-                if st.button("📋 Keys als JSON kopieren"):
+                if st.button(" Keys als JSON kopieren"):
                     st.code(
                         json.dumps(
                             product_with_keys['dynamic_keys'],
@@ -855,7 +855,7 @@ def show_dynamic_keys():
 
 def show_database_management():
     """Datenbank-Verwaltung mit Reset-Funktionalität"""
-    st.header("🗄️ Datenbank-Verwaltung")
+    st.header(" Datenbank-Verwaltung")
 
     st.warning(
         "**Achtung:** Die Aktionen in diesem Bereich können nicht rückgängig gemacht werden!")
@@ -963,7 +963,7 @@ def show_database_management():
 
     # Export/Import Optionen (für zukünftige Erweiterung)
     st.markdown("---")
-    st.subheader("📤 Export/Import (Zukünftige Funktion)")
+    st.subheader(" Export/Import (Zukünftige Funktion)")
     st.info("""
     **Geplante Funktionen:**
     - Export der Produktdatenbank als Excel/CSV

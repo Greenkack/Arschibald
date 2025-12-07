@@ -565,7 +565,7 @@ def main():
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
-        print("\n🎉 Alle Tests erfolgreich!")
+        print("\n Alle Tests erfolgreich!")
         print("\nAlle UI-Komponenten sind sichtbar")
         print("Gebäudedimensionen können geändert werden")
         print("Dachform-Auswahl funktioniert")

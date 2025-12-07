@@ -82,7 +82,7 @@ def test_all_fixes():
             f"   - Anzahl: {dynamic_data.get('optional_services_count', 'NICHT GEFUNDEN')}")
 
         # Zeige Solarfabrik-Daten
-        print("\\n🏭 Solarfabrik Module-Attribute:")
+        print("\\n Solarfabrik Module-Attribute:")
         print(
             f"   - Zellentechnologie: {
                 dynamic_data.get(
@@ -123,7 +123,7 @@ def test_all_fixes():
 
             print(f"\\nTest-PDF erstellt: {output_file}")
             print(f"Dateigröße: {len(overlay_bytes):,} bytes")
-            print("\\n📋 Überprüfen Sie:")
+            print("\\n Überprüfen Sie:")
             print(
                 "   1. Seite 4: Solarfabrik sollte 'k.A.' statt spezifische Werte zeigen")
             print("   2. Seite 6: Dienstleistungen sollten angezeigt werden")
@@ -174,7 +174,7 @@ def test_services_only():
     try:
         dynamic_data = build_dynamic_data(project_data, {}, {})
 
-        print("📋 Services-Integration Ergebnis:")
+        print(" Services-Integration Ergebnis:")
         print(
             f"   - Liste: {dynamic_data.get('optional_services_list', 'FEHLT')}")
         print(
@@ -202,8 +202,8 @@ if __name__ == "__main__":
     # Test 2: Alle Korrekturen zusammen
     test_all_fixes()
 
-    print("\\n🎉 Tests abgeschlossen!")
-    print("📋 Erwartete Korrekturen:")
+    print("\\n Tests abgeschlossen!")
+    print(" Erwartete Korrekturen:")
     print("   1. Solarfabrik: Zeigt 'k.A.' statt spezifische Fallback-Werte")
     print("   2. Dienstleistungen: Werden auf Seite 6 angezeigt")
     print("   3. Donut-Charts: An exakten Platzhalter-Positionen sichtbar")

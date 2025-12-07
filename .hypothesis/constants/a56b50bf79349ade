@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\dependencies.py
+# hypothesis_version: 6.147.0
+
+['ALL', 'ALLSMALLER', 'MATCH', 'PreventUpdate', '_dashprivate_', 'allow_optional', 'id', 'inputs', 'no_update', 'output', 'prevent_initial_call', 'property', 'state']

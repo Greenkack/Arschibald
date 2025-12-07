@@ -113,7 +113,7 @@ def render_pv_mounting_selection(
     details['pv_mounting_roof_type'] = selected_roof_type if selected_roof_type != please_select_text else None
     
     if not details.get('pv_mounting_roof_type'):
-        st.info("👆 Bitte Dachtyp auswählen, um Komponenten zu konfigurieren.")
+        st.info(" Bitte Dachtyp auswählen, um Komponenten zu konfigurieren.")
         return
     
     # === AUTOMATIC QUANTITY CALCULATION ===
@@ -122,10 +122,10 @@ def render_pv_mounting_selection(
         col_calc1, col_calc2 = st.columns([3, 1])
         
         with col_calc1:
-            st.markdown("#### 🔢 Automatische Mengenberechnung")
+            st.markdown("####  Automatische Mengenberechnung")
             
         with col_calc2:
-            if st.button("🔄 Berechnen", key='calc_mounting_quantities'):
+            if st.button(" Berechnen", key='calc_mounting_quantities'):
                 # FIX: Prüfe beide mögliche Keys für Modulanzahl
                 module_count = (
                     details.get('module_count', 0) or 
@@ -165,28 +165,28 @@ def render_pv_mounting_selection(
             'key': 'mounting_rail',
             'category': 'Montageschiene',
             'label': 'Montageschiene',
-            'icon': '📏',
+            'icon': '',
             'required': True
         },
         {
             'key': 'end_clamp',
             'category': 'Modulklemme (End)',
             'label': 'Endklemme',
-            'icon': '🔗',
+            'icon': '',
             'required': True
         },
         {
             'key': 'mid_clamp',
             'category': 'Modulklemme (Mittel)',
             'label': 'Mittelklemme',
-            'icon': '🔗',
+            'icon': '',
             'required': True
         },
         {
             'key': 'screw',
             'category': 'Schrauben',
             'label': 'Schrauben',
-            'icon': '🔩',
+            'icon': '',
             'required': False
         },
         {
@@ -228,7 +228,7 @@ def _render_component_selector(
         manufacturers = get_pv_mounting_manufacturers_by_category(category)
         
         if not manufacturers:
-            st.info(f"📭 Keine Hersteller für '{label}' verfügbar.")
+            st.info(f" Keine Hersteller für '{label}' verfügbar.")
             return
         
         col1, col2 = st.columns(2)
@@ -302,7 +302,7 @@ def _render_component_selector(
                             if component.get('article_number'):
                                 st.caption(f"Art.-Nr: {component['article_number']}")
             else:
-                st.info("👈 Bitte zuerst Hersteller wählen")
+                st.info(" Bitte zuerst Hersteller wählen")
                 details[f'pv_mounting_{key}_name'] = None
 
 

@@ -39,7 +39,7 @@ def render_activity_timeline(customer_id: int, show_filters: bool = True):
         customer_id: ID des Kunden
         show_filters: Ob Filter angezeigt werden sollen
     """
-    st.subheader("📋 Kommunikationshistorie & Timeline")
+    st.subheader(" Kommunikationshistorie & Timeline")
     
     # Statistiken anzeigen
     stats = get_activity_statistics(customer_id)
@@ -140,10 +140,10 @@ def render_activity_card(activity: Dict[str, Any], customer_id: int):
     # Icon basierend auf Typ
     type_icons = {
         "note": "",
-        "email": "📧",
-        "call": "📞",
-        "appointment": "📅",
-        "meeting": "👥",
+        "email": "",
+        "call": "",
+        "appointment": "",
+        "meeting": "",
         "task": "",
         "other": ""
     }
@@ -158,9 +158,9 @@ def render_activity_card(activity: Dict[str, Any], customer_id: int):
             # Titel mit Icon und wichtig-Marker
             title_text = f"{icon} **{activity['title']}**"
             if activity.get("is_important"):
-                title_text = f"⭐ {title_text}"
+                title_text = f" {title_text}"
             if activity.get("archived"):
-                title_text = f"🗄️ {title_text}"
+                title_text = f" {title_text}"
             st.markdown(title_text)
         
         with col2:
@@ -174,7 +174,7 @@ def render_activity_card(activity: Dict[str, Any], customer_id: int):
                 
                 # Zeige "alt" Marker
                 if activity.get("is_old"):
-                    st.caption(f"🕐 {date_str}")
+                    st.caption(f" {date_str}")
                 else:
                     st.caption(date_str)
             except:
@@ -194,7 +194,7 @@ def render_activity_card(activity: Dict[str, Any], customer_id: int):
         with col2:
             # Wichtig-Button
             if st.button(
-                "⭐" if not activity.get("is_important") else "☆",
+                "" if not activity.get("is_important") else "",
                 key=f"toggle_important_{activity_id}",
                 help="Als wichtig markieren/entfernen"
             ):
@@ -204,7 +204,7 @@ def render_activity_card(activity: Dict[str, Any], customer_id: int):
         
         with col3:
             # Bearbeiten-Button
-            if st.button("✏️", key=f"edit_activity_{activity_id}", help="Bearbeiten"):
+            if st.button("", key=f"edit_activity_{activity_id}", help="Bearbeiten"):
                 st.session_state[f"edit_activity_{activity_id}"] = True
                 st.rerun()
         
@@ -236,7 +236,7 @@ def render_edit_activity_dialog(activity: Dict[str, Any], customer_id: int):
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            if st.form_submit_button("💾 Speichern", use_container_width=True):
+            if st.form_submit_button(" Speichern", use_container_width=True):
                 if update_activity(
                     activity_id,
                     title=new_title,
@@ -272,7 +272,7 @@ def render_add_activity_form(customer_id: int):
     Args:
         customer_id: ID des Kunden
     """
-    st.subheader("➕ Neue Aktivität hinzufügen")
+    st.subheader(" Neue Aktivität hinzufügen")
     
     with st.form(key=f"add_activity_form_{customer_id}"):
         # Typ auswählen
@@ -301,7 +301,7 @@ def render_add_activity_form(customer_id: int):
             is_important = st.checkbox("Als wichtig markieren", key=f"new_activity_important_{customer_id}")
         
         # Submit
-        if st.form_submit_button("💾 Aktivität erstellen", use_container_width=True):
+        if st.form_submit_button(" Aktivität erstellen", use_container_width=True):
             if not title:
                 st.error("Bitte geben Sie einen Titel ein!")
             else:
@@ -337,15 +337,15 @@ def render_quick_add_buttons(customer_id: int):
             st.session_state[f"quick_add_type_{customer_id}"] = "note"
     
     with col2:
-        if st.button("📞 Anruf", key=f"quick_call_{customer_id}", use_container_width=True):
+        if st.button(" Anruf", key=f"quick_call_{customer_id}", use_container_width=True):
             st.session_state[f"quick_add_type_{customer_id}"] = "call"
     
     with col3:
-        if st.button("📧 E-Mail", key=f"quick_email_{customer_id}", use_container_width=True):
+        if st.button(" E-Mail", key=f"quick_email_{customer_id}", use_container_width=True):
             st.session_state[f"quick_add_type_{customer_id}"] = "email"
     
     with col4:
-        if st.button("📅 Termin", key=f"quick_appointment_{customer_id}", use_container_width=True):
+        if st.button(" Termin", key=f"quick_appointment_{customer_id}", use_container_width=True):
             st.session_state[f"quick_add_type_{customer_id}"] = "appointment"
     
     # Schnell-Formular anzeigen
@@ -373,7 +373,7 @@ def render_quick_add_form(customer_id: int, activity_type: str):
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.form_submit_button("💾 Speichern", use_container_width=True):
+            if st.form_submit_button(" Speichern", use_container_width=True):
                 if not title:
                     st.error("Bitte geben Sie einen Titel ein!")
                 else:
@@ -419,9 +419,9 @@ def render_activity_summary(customer_id: int):
     for activity in recent:
         icon = {
             "note": "",
-            "email": "📧",
-            "call": "📞",
-            "appointment": "📅"
+            "email": "",
+            "call": "",
+            "appointment": ""
         }.get(activity["activity_type"], "")
         
         try:

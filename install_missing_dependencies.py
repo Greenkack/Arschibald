@@ -59,7 +59,7 @@ def install_packages():
         for pkg, err in failed:
             print(f"   • {pkg}: {err}")
     else:
-        print("\n🎉 ALLE PACKAGES ERFOLGREICH INSTALLIERT!")
+        print("\n ALLE PACKAGES ERFOLGREICH INSTALLIERT!")
     
     return len(failed) == 0
 

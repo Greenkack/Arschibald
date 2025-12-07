@@ -73,7 +73,7 @@ For more information, visit our website or contact support."""
     with open(output_file, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Created text PDF: {output_file}")
+    print(f" Created text PDF: {output_file}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  Title: {metadata.title}")
     
@@ -127,7 +127,7 @@ print(f"Modules: {result['modules']}")
     with open(output_file, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Created formatted text PDF: {output_file}")
+    print(f" Created formatted text PDF: {output_file}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  Formatting: Preserved")
     
@@ -184,7 +184,7 @@ CO₂-Einsparung: 5.625,25 kg/Jahr
     with open(output_file, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Created German numbers PDF: {output_file}")
+    print(f" Created German numbers PDF: {output_file}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  Numbers: German format (1.234,56)")
     
@@ -215,7 +215,7 @@ def demo_merge_pdfs():
         metadata=PDFMetadata(title="Cost Analysis")
     )
     
-    print(f"✓ Created 3 individual PDFs")
+    print(f" Created 3 individual PDFs")
     print(f"  PDF 1: {len(pdf1):,} bytes")
     print(f"  PDF 2: {len(pdf2):,} bytes")
     print(f"  PDF 3: {len(pdf3):,} bytes")
@@ -237,7 +237,7 @@ def demo_merge_pdfs():
     with open(output_file, 'wb') as f:
         f.write(merged_pdf)
     
-    print(f"\n✓ Merged into single PDF: {output_file}")
+    print(f"\n Merged into single PDF: {output_file}")
     print(f"  Size: {len(merged_pdf):,} bytes")
     print(f"  Pages: 3 documents merged")
     
@@ -275,7 +275,7 @@ def demo_batch_conversion():
             metadata=PDFMetadata(title=doc['title'])
         )
         pdf_list.append(pdf_bytes)
-        print(f"✓ Converted document {i}: {doc['title']} ({len(pdf_bytes):,} bytes)")
+        print(f" Converted document {i}: {doc['title']} ({len(pdf_bytes):,} bytes)")
     
     # Save individually
     for i, pdf_bytes in enumerate(pdf_list, 1):
@@ -283,7 +283,7 @@ def demo_batch_conversion():
         with open(output_file, 'wb') as f:
             f.write(pdf_bytes)
     
-    print(f"\n✓ Created {len(pdf_list)} individual PDFs")
+    print(f"\n Created {len(pdf_list)} individual PDFs")
     
     # Also create merged version
     merged = service.merge_pdf_documents(
@@ -295,7 +295,7 @@ def demo_batch_conversion():
     with open(output_file, 'wb') as f:
         f.write(merged)
     
-    print(f"✓ Created merged PDF: {output_file} ({len(merged):,} bytes)")
+    print(f" Created merged PDF: {output_file} ({len(merged):,} bytes)")
     
     return pdf_list, merged
 
@@ -321,7 +321,7 @@ def demo_convenience_functions():
         metadata=PDFMetadata(title="Convenience Function Demo")
     )
     
-    print(f"✓ Used text_to_pdf() convenience function")
+    print(f" Used text_to_pdf() convenience function")
     print(f"  Input: {temp_file}")
     print(f"  Output: demo_convenience.pdf")
     print(f"  Size: {len(pdf_bytes):,} bytes")
@@ -355,7 +355,7 @@ Mathematik: ∑∫∂√∞
 Pfeile: ←→↑↓
 Symbole: ©®™§¶
 
-Emojis: ☀️🔋💡⚡🌍
+Emojis: 
 """
     
     metadata = PDFMetadata(
@@ -373,7 +373,7 @@ Emojis: ☀️🔋💡⚡🌍
     with open(output_file, 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Created Unicode PDF: {output_file}")
+    print(f" Created Unicode PDF: {output_file}")
     print(f"  Size: {len(pdf_bytes):,} bytes")
     print(f"  Characters: German, French, Spanish, Greek, Russian, Symbols")
     
@@ -419,7 +419,7 @@ def main():
         print("- demo_unicode.pdf")
         
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n Error: {e}")
         import traceback
         traceback.print_exc()
 

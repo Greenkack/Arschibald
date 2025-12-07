@@ -48,7 +48,7 @@ for key in alle_keys:
 print("\n" + "=" * 100)
 print(f"ERGEBNIS: {erfolg}/{len(alle_keys)} Keys vorhanden")
 if fehler == 0:
-    print("🎉 ALLE KEYS ERFOLGREICH HINZUGEFÜGT!")
+    print(" ALLE KEYS ERFOLGREICH HINZUGEFÜGT!")
 else:
     print(f"ACHTUNG: {fehler} Keys fehlen noch!")
 print("=" * 100)
@@ -113,6 +113,6 @@ print()
 
 if fehler == 0 and pricing_erfolg == len(
         pricing_keys) and final_erfolg == len(final_duplikate):
-    print("🎊 PERFEKT! OPTION A VOLLSTÄNDIG IMPLEMENTIERT!")
+    print(" PERFEKT! OPTION A VOLLSTÄNDIG IMPLEMENTIERT!")
 else:
     print("Es fehlen noch einige Keys!")

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\brain\brain_numpy_core_multiarray.py
+# hypothesis_version: 6.147.0
+
+['array', 'bincount', 'busday_count', 'busday_offset', 'can_cast', 'concatenate', 'copyto', 'datetime_as_string', 'dot', 'empty', 'empty_like', 'is_busday', 'lexsort', 'may_share_memory', 'packbits', 'shares_memory', 'unpackbits', 'unravel_index', 'where', 'zeros']

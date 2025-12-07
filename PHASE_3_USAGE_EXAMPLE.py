@@ -21,7 +21,7 @@ def example_customer_form():
     
     Bei Browser-Refresh bleiben alle Eingaben erhalten!
     """
-    st.markdown("### 👤 Kundendaten (mit Auto-Save)")
+    st.markdown("###  Kundendaten (mit Auto-Save)")
     
     col1, col2 = st.columns(2)
     
@@ -96,7 +96,7 @@ def example_calculation_with_persistence():
     
     Nach Browser-Refresh ist das Ergebnis sofort verfügbar!
     """
-    st.markdown("### 🧮 Berechnung mit Auto-Save")
+    st.markdown("###  Berechnung mit Auto-Save")
     
     # Input
     investment = session_number_input(
@@ -164,7 +164,7 @@ def example_migration_pattern():
     """
     Beispiel: Schrittweise Migration von Standard zu Session-Widgets
     """
-    st.markdown("### 🔄 Migrations-Muster")
+    st.markdown("###  Migrations-Muster")
     
     st.code("""
 # === VORHER (Standard Streamlit) ===
@@ -192,7 +192,7 @@ def example_advanced_usage():
     """
     Beispiel: Erweiterte Nutzung
     """
-    st.markdown("### 🎓 Erweiterte Nutzung")
+    st.markdown("###  Erweiterte Nutzung")
     
     st.markdown("#### 1. Immediate Write für kritische Daten:")
     st.code("""
@@ -235,24 +235,24 @@ def main():
     """Haupt-Demo-App"""
     st.set_page_config(
         page_title="Phase 3 - Session Persistence Demo",
-        page_icon="💾",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("💾 Phase 3: Session Persistence Demo")
+    st.title(" Phase 3: Session Persistence Demo")
     
     # Tab-Navigation
     tab1, tab2, tab3, tab4 = st.tabs([
-        "👤 Kundenformular",
-        "🧮 Berechnung",
-        "🔄 Migration",
-        "🎓 Advanced"
+        " Kundenformular",
+        " Berechnung",
+        " Migration",
+        " Advanced"
     ])
     
     with tab1:
         customer_data = example_customer_form()
         
-        with st.expander("📋 Eingabedaten anzeigen"):
+        with st.expander(" Eingabedaten anzeigen"):
             st.json(customer_data)
     
     with tab2:

@@ -7,7 +7,7 @@ print("=" * 120)
 print("ANALYSE: WO WIRD AMORTISATIONSZEIT BERECHNET?")
 print("=" * 120)
 
-print("\n📍 HAUPTBERECHNUNG 1: calculations.py (Zeile 3640-3698)")
+print("\n HAUPTBERECHNUNG 1: calculations.py (Zeile 3640-3698)")
 print("-" * 120)
 print("""
 FUNKTION: perform_calculations()
@@ -30,7 +30,7 @@ ZUSÄTZLICH:
 - Wird in results["amortization_time_years"] gespeichert
 """)
 
-print("\n📍 BERECHNUNG 2: analysis.py (Zeile 403)")
+print("\n BERECHNUNG 2: analysis.py (Zeile 403)")
 print("-" * 120)
 print("""
 FUNKTION: _calculate_amortization_time()
@@ -46,7 +46,7 @@ FEHLER:
 - Das könnte zu einem Runtime-Error führen!
 """)
 
-print("\n📍 PDF-SEITE 1: placeholders.py (Zeile 892-899)")
+print("\n PDF-SEITE 1: placeholders.py (Zeile 892-899)")
 print("-" * 120)
 print("""
 FUNKTION: generate_placeholders()
@@ -70,7 +70,7 @@ PDF-PLACEHOLDER:
 - "29.150,00 EUR*": "amortization_time"  (Zeile 152)
 """)
 
-print("\n📍 WEITERE BERECHNUNGEN:")
+print("\n WEITERE BERECHNUNGEN:")
 print("-" * 120)
 
 berechnungen = [
@@ -176,7 +176,7 @@ for key, quelle, status in keys:
     print(f"\n{key:30} | {quelle:45} | {status}")
 
 print("\n" + "=" * 120)
-print("🔥 KRITISCHE PROBLEME")
+print(" KRITISCHE PROBLEME")
 print("=" * 120)
 
 probleme = [{"problem": "analysis.py ruft _calculate_amortization_time() auf",

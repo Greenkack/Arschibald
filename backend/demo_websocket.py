@@ -28,60 +28,60 @@ class WebSocketClient:
         
         @self.sio.event
         async def connect():
-            print(f"✅ Connected to WebSocket server at {self.url}")
+            print(f" Connected to WebSocket server at {self.url}")
             self.connected = True
         
         @self.sio.event
         async def disconnect():
-            print("❌ Disconnected from WebSocket server")
+            print(" Disconnected from WebSocket server")
             self.connected = False
         
         @self.sio.event
         async def connected(data):
-            print(f"📡 Connection confirmed: {data}")
+            print(f" Connection confirmed: {data}")
         
         @self.sio.event
         async def calculation_progress(data):
-            print(f"📊 Calculation Progress: {data['progress']:.1f}% - {data['message']}")
+            print(f" Calculation Progress: {data['progress']:.1f}% - {data['message']}")
         
         @self.sio.event
         async def calculation_complete(data):
-            print(f"✅ Calculation Complete: {data['calculation_id']}")
+            print(f" Calculation Complete: {data['calculation_id']}")
             print(f"   Result: {data['result']}")
         
         @self.sio.event
         async def calculation_error(data):
-            print(f"❌ Calculation Error: {data['error']}")
+            print(f" Calculation Error: {data['error']}")
         
         @self.sio.event
         async def notification(data):
             level_emoji = {
-                'info': 'ℹ️',
-                'success': '✅',
-                'warning': '⚠️',
-                'error': '❌'
+                'info': 'ℹ',
+                'success': '',
+                'warning': '',
+                'error': ''
             }
-            emoji = level_emoji.get(data['level'], 'ℹ️')
+            emoji = level_emoji.get(data['level'], 'ℹ')
             print(f"{emoji} Notification: {data['title']}")
             print(f"   {data['message']}")
         
         @self.sio.event
         async def status_update(data):
-            print(f"🔄 Status Update: {data['status']}")
+            print(f" Status Update: {data['status']}")
             print(f"   Data: {data['data']}")
         
         @self.sio.event
         async def data_update(data):
-            print(f"📝 Data Update: {data['entity_type']} {data['action']}")
+            print(f" Data Update: {data['entity_type']} {data['action']}")
             print(f"   ID: {data['entity_id']}")
         
         @self.sio.event
         async def pong(data):
-            print(f"🏓 Pong received: {data['timestamp']}")
+            print(f" Pong received: {data['timestamp']}")
         
         @self.sio.event
         async def error(data):
-            print(f"❌ Error: {data['message']}")
+            print(f" Error: {data['message']}")
     
     async def connect(self):
         """Connect to WebSocket server"""
@@ -263,9 +263,9 @@ async def main():
 
 if __name__ == "__main__":
     print("""
-    ╔══════════════════════════════════════════════════════════╗
-    ║         WebSocket Demo - Solar Calculator Pro           ║
-    ╚══════════════════════════════════════════════════════════╝
+    
+             WebSocket Demo - Solar Calculator Pro           
+    
     """)
     
     asyncio.run(main())

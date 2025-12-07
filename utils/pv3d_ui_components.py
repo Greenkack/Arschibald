@@ -74,7 +74,7 @@ def render_basis_settings(project_data: Dict[str, Any]) -> Dict[str, Any]:
     if "project_details" in project_data:
         roof_type = project_data["project_details"].get("roof_type", roof_type)
     
-    with st.sidebar.expander("🏠 Basis-Einstellungen", expanded=True):
+    with st.sidebar.expander(" Basis-Einstellungen", expanded=True):
         # Zeige kontextbezogene Hilfe
         show_contextual_help("basis_settings")
         
@@ -386,7 +386,7 @@ def render_advanced_controls(
         - enable_collision_detection: bool
         - selected_modules: List[int]
     """
-    with st.sidebar.expander("🎛️ Erweiterte Kontrolle", expanded=False):
+    with st.sidebar.expander(" Erweiterte Kontrolle", expanded=False):
         # Zeige kontextbezogene Hilfe
         show_contextual_help("advanced_controls")
         
@@ -441,7 +441,7 @@ def render_advanced_controls(
             col_select, col_deselect = st.columns(2)
             
             with col_select:
-                if st.button("➕ Auswählen", use_container_width=True):
+                if st.button(" Auswählen", use_container_width=True):
                     if single_index not in selected_modules:
                         selected_modules.append(single_index)
                         st.session_state["pv3d_selected_modules"] = selected_modules
@@ -451,7 +451,7 @@ def render_advanced_controls(
                         st.info(f"Modul {single_index} ist bereits ausgewählt")
             
             with col_deselect:
-                if st.button("➖ Entfernen", use_container_width=True):
+                if st.button(" Entfernen", use_container_width=True):
                     if single_index in selected_modules:
                         selected_modules.remove(single_index)
                         st.session_state["pv3d_selected_modules"] = selected_modules
@@ -484,7 +484,7 @@ def render_advanced_controls(
                 help="Wählen Sie eine Gruppe von Modulen aus"
             )
             
-            if st.button("🔘 Gruppe auswählen", use_container_width=True):
+            if st.button(" Gruppe auswählen", use_container_width=True):
                 # Bestimme Modul-Indizes basierend auf Gruppe
                 if selected_group == "Alle Module":
                     group_indices = list(range(max_modules))
@@ -534,7 +534,7 @@ def render_advanced_controls(
                     help="End-Index des Bereichs (inklusiv)"
                 )
             
-            if st.button("🔘 Bereich auswählen", use_container_width=True):
+            if st.button(" Bereich auswählen", use_container_width=True):
                 # Validiere Bereich
                 if start_index <= end_index:
                     range_indices = list(range(start_index, end_index + 1))
@@ -555,7 +555,7 @@ def render_advanced_controls(
             )
             
             # Button zum Aufheben der Auswahl
-            if st.button("🔄 Auswahl aufheben", use_container_width=True):
+            if st.button(" Auswahl aufheben", use_container_width=True):
                 st.session_state["pv3d_selected_modules"] = []
                 st.success("Auswahl aufgehoben")
                 st.rerun()
@@ -622,7 +622,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         st.divider()
 
         # Verschattungs-Analyse
-        st.markdown("**☀️ Verschattungs-Analyse**")
+        st.markdown("** Verschattungs-Analyse**")
         st.caption("Analysieren Sie die Verschattung der Module zu verschiedenen Tageszeiten und Jahreszeiten.")
         
         enable_shading_analysis = st.checkbox(
@@ -682,7 +682,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         st.divider()
         
         # Sonnenverlauf-Animation
-        st.markdown("**🌅 Sonnenverlauf-Animation**")
+        st.markdown("** Sonnenverlauf-Animation**")
         st.caption("Animiere den Sonnenverlauf über den Tag und sehe die Verschattung in Echtzeit.")
         
         enable_sun_animation = st.checkbox(
@@ -693,7 +693,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         )
         
         if enable_sun_animation:
-            st.info("🎬 Animation wird nach dem Rendern verfügbar sein")
+            st.info(" Animation wird nach dem Rendern verfügbar sein")
             
             # Animation-Einstellungen
             anim_speed = st.slider(
@@ -729,7 +729,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         st.divider()
         
         # Ertrags-Heatmap
-        st.markdown("**🔥 Ertrags-Heatmap**")
+        st.markdown("** Ertrags-Heatmap**")
         st.caption("Visualisiere das Ertragspotential jedes Moduls mit Farbcodierung.")
         
         enable_yield_heatmap = st.checkbox(
@@ -837,7 +837,7 @@ def render_export_options() -> Dict[str, Any]:
         st.caption("Exportieren Sie die 3D-Visualisierung in verschiedenen Formaten.")
         
         # Screenshot-Export
-        st.markdown("**📷 Screenshot**")
+        st.markdown("** Screenshot**")
         
         # FIX: Button statt Checkbox verwenden um Dauerschleife zu vermeiden
         col_format, col_res = st.columns(2)
@@ -869,7 +869,7 @@ def render_export_options() -> Dict[str, Any]:
         
         # Button für Screenshot-Export (verhindert Dauerschleife)
         export_screenshot = st.button(
-            "📸 Screenshot exportieren",
+            " Screenshot exportieren",
             help="Klicken Sie hier, um einen Screenshot zu erstellen",
             key="export_screenshot_button",
             use_container_width=True
@@ -878,7 +878,7 @@ def render_export_options() -> Dict[str, Any]:
         st.divider()
         
         # Multi-View Export
-        st.markdown("**🎬 Multi-View Screenshots**")
+        st.markdown("** Multi-View Screenshots**")
         export_multiview = st.checkbox(
             "Multi-View Export",
             value=False,
@@ -907,7 +907,7 @@ def render_export_options() -> Dict[str, Any]:
         st.divider()
         
         # 360° Animation
-        st.markdown("**🔄 360° Animation**")
+        st.markdown("** 360° Animation**")
         export_360 = st.checkbox(
             "360° Animation exportieren",
             value=False,
@@ -999,7 +999,7 @@ def render_export_options() -> Dict[str, Any]:
         # Screenshot Button
         if export_screenshot:
             if st.button(
-                f"📷 Screenshot exportieren ({screenshot_format.upper()})",
+                f" Screenshot exportieren ({screenshot_format.upper()})",
                 key="btn_export_screenshot_inline",
                 use_container_width=True,
                 type="primary"
@@ -1010,7 +1010,7 @@ def render_export_options() -> Dict[str, Any]:
         # Multi-View Button
         if export_multiview:
             if st.button(
-                "🎬 Multi-View exportieren",
+                " Multi-View exportieren",
                 key="btn_export_multiview_inline",
                 use_container_width=True
             ):
@@ -1020,14 +1020,14 @@ def render_export_options() -> Dict[str, Any]:
         # 360° Animation Button - VERBESSERT
         if export_360:
             if st.button(
-                f"🔄 360° Animation ({animation_frames} Frames)",
+                f" 360° Animation ({animation_frames} Frames)",
                 key="btn_export_360_inline",
                 use_container_width=True,
                 type="secondary"
             ):
                 st.session_state["trigger_360_export"] = True
                 st.session_state["force_360_export"] = True  # Zusätzlicher Flag
-                st.info("🔄 360° Animation wird erstellt... Bitte warten Sie.")
+                st.info(" 360° Animation wird erstellt... Bitte warten Sie.")
                 st.rerun()  # Sofort neu laden um Export zu triggern
         
         # 3D-Modell Button - VERBESSERT
@@ -1059,14 +1059,14 @@ def render_export_options() -> Dict[str, Any]:
         # JSON Button - VERBESSERT
         if export_json:
             if st.button(
-                "📋 JSON exportieren",
+                " JSON exportieren",
                 key="btn_export_json_inline",
                 use_container_width=True,
                 type="secondary"
             ):
                 st.session_state["trigger_json_export"] = True
                 st.session_state["force_json_export"] = True  # Zusätzlicher Flag
-                st.info("📋 JSON wird erstellt... Bitte warten Sie.")
+                st.info(" JSON wird erstellt... Bitte warten Sie.")
                 st.rerun()  # Sofort neu laden um Export zu triggern
     
     return {

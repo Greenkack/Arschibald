@@ -829,7 +829,7 @@ class PDFGenerator:
 
         # FIX 2024: Prüfe zuerst ob Screenshot in Session State vorhanden ist
         print(f"\nPDF 3D-Integration:")
-        print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print(f"   ")
         
         try:
             import streamlit as st
@@ -882,7 +882,7 @@ class PDFGenerator:
                 ))
                 
                 print(f"   3D-Screenshot erfolgreich in PDF eingefügt!")
-                print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+                print(f"   \n")
                 return
             else:
                 print(f"     • Kein Screenshot vorhanden")
@@ -907,7 +907,7 @@ class PDFGenerator:
             print(f"     • _PV3D_AVAILABLE: {_PV3D_AVAILABLE}")
             print(f"     • make_pv3d_image_flowable: {make_pv3d_image_flowable is not None}")
             print(f"   Fallback: Platzhalter-Text wird eingefügt")
-            print(f"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            print(f"   \n")
             
             self.story.append(
                 Paragraph(
@@ -3658,7 +3658,7 @@ def _get_chart_description(chart_key: str,
         'consumption_coverage_pie_chart_bytes': get_text(
             texts,
             "chart_desc_consumption_coverage",
-            "🏠 <b>Ihr Grad der Energiefreiheit:</b> Dieses Kreisdiagramm zeigt, wie unabhängig Sie vom Stromnetz werden. "
+            " <b>Ihr Grad der Energiefreiheit:</b> Dieses Kreisdiagramm zeigt, wie unabhängig Sie vom Stromnetz werden. "
             "Je größer der grüne Anteil, desto mehr Ihres Haushaltsstroms kommt direkt vom eigenen Dach. "
             "Das bedeutet weniger Abhängigkeit von Strompreiserhöhungen und mehr Kontrolle über Ihre Energiekosten. Ihre persönliche Energiewende visualisiert!"),
         'pv_usage_pie_chart_bytes': get_text(
@@ -3670,19 +3670,19 @@ def _get_chart_description(chart_key: str,
         'daily_production_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_daily_production",
-            "🌅 <b>Ihr Kraftwerk im Tagesverlauf:</b> Erleben Sie, wie Ihre Anlage mit der Sonne 'aufwacht' und arbeitet! "
+            " <b>Ihr Kraftwerk im Tagesverlauf:</b> Erleben Sie, wie Ihre Anlage mit der Sonne 'aufwacht' und arbeitet! "
             "Von den ersten Strahlen am Morgen bis zum Sonnenuntergang sehen Sie hier die natürliche Leistungskurve. "
             "Die Mittagsspitze zeigt Ihr maximales Potenzial – genau dann, wenn auch Ihr Haushalt oft am meisten Strom braucht. Perfektes Timing der Natur!"),
         'weekly_production_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_weekly_production",
-            "📅 <b>Ihre Wochenenergie im Überblick:</b> So arbeitet Ihre Anlage durch die ganze Woche für Sie! "
+            " <b>Ihre Wochenenergie im Überblick:</b> So arbeitet Ihre Anlage durch die ganze Woche für Sie! "
             "Interessant zu sehen: Auch am Wochenende, wenn Sie vielleicht mehr zu Hause sind, produziert Ihre Anlage zuverlässig. "
             "Die gleichmäßige Verteilung zeigt: Ihre Investition arbeitet 7 Tage die Woche ohne Pause für Ihren Geldbeutel."),
         'yearly_production_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_yearly_production",
-            "🗓️ <b>Ihr Energiejahr in 3D:</b> Hier erleben Sie die Kraft der Jahreszeiten! Die hohen Säulen im Sommer zeigen Ihre 'Erntezeit' – "
+            " <b>Ihr Energiejahr in 3D:</b> Hier erleben Sie die Kraft der Jahreszeiten! Die hohen Säulen im Sommer zeigen Ihre 'Erntezeit' – "
             "jetzt sammeln Sie Energie für das ganze Jahr. Selbst in den schwächeren Wintermonaten arbeitet Ihre Anlage noch profitabel. "
             "Diese natürlichen Schwankungen sind eingeplant und machen Ihre Jahresrechnung trotzdem sehr positiv!"),
         'project_roi_matrix_switcher_chart_bytes': get_text(
@@ -3694,13 +3694,13 @@ def _get_chart_description(chart_key: str,
         'feed_in_revenue_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_feed_in_revenue",
-            "💶 <b>Ihre garantierten Einnahmen:</b> Das ist Ihr 'Gehalt' vom Stromnetz! 20 Jahre lang bekommen Sie für jede eingespeiste kWh "
+            " <b>Ihre garantierten Einnahmen:</b> Das ist Ihr 'Gehalt' vom Stromnetz! 20 Jahre lang bekommen Sie für jede eingespeiste kWh "
             "die staatlich garantierte Vergütung – ein sicheres Einkommen neben Ihrer Stromersparnis. "
             "Diese Kurve zeigt Ihnen, wie sich Ihre Einspeisevergütung über die Jahre summiert. Nebeneinkommen war nie so einfach!"),
         'prod_vs_cons_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_prod_vs_cons",
-            "⚖️ <b>Das perfekte Gleichgewicht:</b> Hier sehen Sie das Zusammenspiel zwischen dem, was Sie erzeugen und dem, was Sie verbrauchen. "
+            " <b>Das perfekte Gleichgewicht:</b> Hier sehen Sie das Zusammenspiel zwischen dem, was Sie erzeugen und dem, was Sie verbrauchen. "
             "Die ideale Balance bedeutet: wenig Strom einkaufen müssen und trotzdem schöne Überschüsse für die Einspeisung. "
             "Ihre Anlage ist so dimensioniert, dass Sie optimal zwischen Eigenverbrauch und Gewinnoptimierung navigieren!"),
         'co2_savings_chart_bytes': get_text(
@@ -3712,19 +3712,19 @@ def _get_chart_description(chart_key: str,
         'investment_value_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_investment_value",
-            "💎 <b>Mehr als nur Geld – Ihr Wertzuwachs:</b> Diese Darstellung zeigt den Gesamtwert Ihrer Investition: "
+            " <b>Mehr als nur Geld – Ihr Wertzuwachs:</b> Diese Darstellung zeigt den Gesamtwert Ihrer Investition: "
             "Finanzielle Rendite + Umweltnutzen + Unabhängigkeit + Immobilienwert-Steigerung. "
             "Eine PV-Anlage ist mehr als nur Technik – sie ist Ihre persönliche Energiewende mit messbaren Vorteilen auf allen Ebenen!"),
         'storage_effect_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_storage_effect",
-            "🔋 <b>Ihr persönlicher Energietresor:</b> Der Batteriespeicher macht Sie noch unabhängiger! "
+            " <b>Ihr persönlicher Energietresor:</b> Der Batteriespeicher macht Sie noch unabhängiger! "
             "Tagsüber 'tanken' Sie Sonnenstrom, abends nutzen Sie ihn gemütlich beim Fernsehen oder Kochen. "
             "Diese Grafik zeigt, wie sich Ihr Eigenverbrauch durch den Speicher erhöht – weniger Netzbezug, mehr Ersparnis, mehr Autarkie!"),
         'selfuse_stack_switcher_chart_bytes': get_text(
             texts,
             "chart_desc_selfuse_stack",
-            "🏠 <b>Eigenverbrauch ist bares Geld:</b> Jede selbst verbrauchte kWh ist wertvoller als eine eingespeiste! "
+            " <b>Eigenverbrauch ist bares Geld:</b> Jede selbst verbrauchte kWh ist wertvoller als eine eingespeiste! "
             "Diese gestapelte Darstellung zeigt Ihr optimales Verhältnis: Ein hoher blauer Bereich bedeutet direkte Kosteneinsparung, "
             "der orange Bereich bringt Ihnen die Einspeisevergütung. Die perfekte Mischung für maximalen finanziellen Vorteil!"),
         'cost_growth_switcher_chart_bytes': get_text(
@@ -3757,7 +3757,7 @@ def _get_chart_description(chart_key: str,
         get_text(
             texts,
             "chart_desc_generic",
-            "🔆 <b>Ihre persönliche Energieanalyse:</b> Dieses Diagramm visualisiert wichtige Aspekte Ihrer maßgeschneiderten Photovoltaikanlage. "
+            " <b>Ihre persönliche Energieanalyse:</b> Dieses Diagramm visualisiert wichtige Aspekte Ihrer maßgeschneiderten Photovoltaikanlage. "
             "Jede Grafik hilft Ihnen dabei, die Vorteile Ihrer Investition besser zu verstehen und fundierte Entscheidungen für Ihre Energiezukunft zu treffen."))
 
 
@@ -3911,6 +3911,7 @@ def _replace_placeholders(text_template: str,
         "[KundenStrasseNr]": f"{customer_data.get('address', '')} {customer_data.get('house_number', '',)}".strip(),
         "[KundenPLZOrt]": f"{customer_data.get('zip_code', '')} {customer_data.get('city', '',)}".strip(),
         "[KundenFirmenname]": str(customer_data.get("company_name", "")),
+        "[Agentname]": str(customer_data.get("agent_name", "")),
     }
     if analysis_results_for_placeholder and isinstance(
             analysis_results_for_placeholder, dict):
@@ -7500,7 +7501,7 @@ def generate_heatpump_offer_pdf(
             icon = ""
             color_hex = '#2E7D32'
         elif 'Grenz' in status:
-            icon = "○"
+            icon = ""
             color_hex = '#F57C00'
         else:
             icon = "!"

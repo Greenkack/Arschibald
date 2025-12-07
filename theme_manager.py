@@ -41,16 +41,16 @@ MODULE_ROOT = Path(__file__).resolve().parent
 THEMES_ROOT = MODULE_ROOT / "theming" / "amazing" / "awesome-streamlit-themes"
 
 THEME_EMOJI_MAP: Mapping[str, str] = {
-    "healthcare": "🏥",
-    "bootstrap": "💼",
-    "dark-mode": "🌙",
-    "material-design": "📱",
+    "healthcare": "",
+    "bootstrap": "",
+    "dark-mode": "",
+    "material-design": "",
     "saas-startup": "",
-    "editorial": "📰",
+    "editorial": "",
     "financial": "",
     "tailwind": "",
-    "cyberpunk": "🌆",
-    "toddler": "🧸",
+    "cyberpunk": "",
+    "toddler": "",
 }
 
 IMAGE_EXTENSIONS: tuple[str, ...] = (".png", ".jpg", ".jpeg", ".webp", ".gif")

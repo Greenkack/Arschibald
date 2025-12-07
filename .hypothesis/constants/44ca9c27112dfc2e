@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_histogram2d.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'autobinx', 'autobiny', 'autocolorscale', 'bingroup', 'coloraxis', 'colorbar', 'colorscale', 'customdata', 'customdatasrc', 'histfunc', 'histnorm', 'histogram2d', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hovertemplate', 'hovertemplatesrc', 'ids', 'idssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'marker', 'meta', 'metasrc', 'name', 'nbinsx', 'nbinsy', 'opacity', 'reversescale', 'showlegend', 'showscale', 'skip_invalid', 'stream', 'textfont', 'texttemplate', 'type', 'uid', 'uirevision', 'visible', 'x', 'xaxis', 'xbingroup', 'xbins', 'xcalendar', 'xgap', 'xhoverformat', 'xsrc', 'y', 'yaxis', 'ybingroup', 'ybins', 'ycalendar', 'ygap', 'yhoverformat', 'ysrc', 'z', 'zauto', 'zhoverformat', 'zmax', 'zmid', 'zmin', 'zsmooth', 'zsrc']

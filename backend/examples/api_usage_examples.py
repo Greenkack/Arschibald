@@ -352,7 +352,7 @@ def example_complete_workflow():
     # 1. Login
     print("1. Logging in...")
     login_response = client.login("admin", "password")
-    print(f"   ✓ Logged in successfully\n")
+    print(f"    Logged in successfully\n")
     
     # 2. Calculate solar system
     print("2. Calculating solar system...")
@@ -365,9 +365,9 @@ def example_complete_workflow():
         annual_consumption=4000.0,
         location="Berlin"
     )
-    print(f"   ✓ System size: {calculation['formatted']['system_size']}")
-    print(f"   ✓ Module count: {calculation['module_count']}")
-    print(f"   ✓ Annual production: {calculation['formatted']['annual_production']}\n")
+    print(f"    System size: {calculation['formatted']['system_size']}")
+    print(f"    Module count: {calculation['module_count']}")
+    print(f"    Annual production: {calculation['formatted']['annual_production']}\n")
     
     # 3. Create project
     print("3. Creating project...")
@@ -378,7 +378,7 @@ def example_complete_workflow():
         project_type="solar",
         data=calculation
     )
-    print(f"   ✓ Project created with ID: {project['id']}\n")
+    print(f"    Project created with ID: {project['id']}\n")
     
     # 4. Calculate price
     print("4. Calculating price...")
@@ -388,8 +388,8 @@ def example_complete_workflow():
         extras=["monitoring", "insurance"],
         discounts={"early_bird": 0.05}
     )
-    print(f"   ✓ Base price: {price['formatted']['base_price']}")
-    print(f"   ✓ Total price: {price['formatted']['total_price']}\n")
+    print(f"    Base price: {price['formatted']['base_price']}")
+    print(f"    Total price: {price['formatted']['total_price']}\n")
     
     # 5. Generate PDF
     print("5. Generating PDF report...")
@@ -402,8 +402,8 @@ def example_complete_workflow():
             "language": "de"
         }
     )
-    print(f"   ✓ PDF generated: {pdf['file_name']}")
-    print(f"   ✓ Size: {pdf['size_bytes']} bytes\n")
+    print(f"    PDF generated: {pdf['file_name']}")
+    print(f"    Size: {pdf['size_bytes']} bytes\n")
     
     print("=== Workflow completed successfully! ===")
 
@@ -430,7 +430,7 @@ def example_crm_workflow():
             "country": "Germany"
         }
     )
-    print(f"   ✓ Customer created: {customer['name']} (ID: {customer['id']})\n")
+    print(f"    Customer created: {customer['name']} (ID: {customer['id']})\n")
     
     # 2. Create offer
     print("2. Creating offer...")
@@ -446,7 +446,7 @@ def example_crm_workflow():
         }
     )
     offer = offer_response.json()
-    print(f"   ✓ Offer created: {offer['formatted']['amount']}\n")
+    print(f"    Offer created: {offer['formatted']['amount']}\n")
     
     # 3. Create follow-up task
     print("3. Creating follow-up task...")
@@ -462,7 +462,7 @@ def example_crm_workflow():
         }
     )
     task = task_response.json()
-    print(f"   ✓ Task created: {task['title']}\n")
+    print(f"    Task created: {task['title']}\n")
     
     print("=== CRM workflow completed! ===")
 
@@ -479,7 +479,7 @@ def example_product_management():
     # 1. List products
     print("1. Listing solar modules...")
     products = client.list_products(category="solar_modules", page_size=5)
-    print(f"   ✓ Found {products['total']} products")
+    print(f"    Found {products['total']} products")
     for product in products['items'][:3]:
         print(f"   - {product['name']}: {product['formatted']['price']}")
     print()
@@ -492,7 +492,7 @@ def example_product_management():
         params={"q": "400W", "category": "solar_modules"}
     )
     search_results = search_response.json()
-    print(f"   ✓ Found {len(search_results['items'])} matching products\n")
+    print(f"    Found {len(search_results['items'])} matching products\n")
     
     print("=== Product management completed! ===")
 
@@ -510,7 +510,7 @@ def example_error_handling():
     try:
         client.login("invalid_user", "wrong_password")
     except requests.exceptions.HTTPError as e:
-        print(f"   ✓ Caught authentication error: {e.response.status_code}")
+        print(f"    Caught authentication error: {e.response.status_code}")
         error_data = e.response.json()
         print(f"   Message: {error_data['error']['message']}\n")
     
@@ -528,7 +528,7 @@ def example_error_handling():
             location="Berlin"
         )
     except requests.exceptions.HTTPError as e:
-        print(f"   ✓ Caught validation error: {e.response.status_code}")
+        print(f"    Caught validation error: {e.response.status_code}")
         error_data = e.response.json()
         print(f"   Message: {error_data['error']['message']}\n")
     
@@ -541,7 +541,7 @@ def example_error_handling():
         )
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        print(f"   ✓ Caught not found error: {e.response.status_code}")
+        print(f"    Caught not found error: {e.response.status_code}")
         error_data = e.response.json()
         print(f"   Message: {error_data['error']['message']}\n")
     
@@ -567,5 +567,5 @@ if __name__ == "__main__":
         example_error_handling()
         
     except Exception as e:
-        print(f"\n❌ Error running examples: {e}")
+        print(f"\n Error running examples: {e}")
         print("Make sure the API server is running at http://localhost:8000")

@@ -116,7 +116,7 @@ def test_search_queries():
                     print(f"Relevant terms found: {', '.join(found_terms)}")
                 else:
                     print(
-                        f"⚠ WARNING: None of expected terms found: {
+                        f" WARNING: None of expected terms found: {
                             ', '.join(expected_terms)}")
                     print(f"  Result preview: {result[:200]}...")
 
@@ -210,7 +210,7 @@ def test_result_relevance():
                             ', '.join(found_optional)}")
                 else:
                     print(
-                        f"⚠ WARNING: No optional terms found: {
+                        f" WARNING: No optional terms found: {
                             ', '.join(
                                 test['should_contain'])}")
 
@@ -261,7 +261,7 @@ def test_empty_knowledge_base():
         if os.path.exists(placeholder_file):
             print(f"Placeholder file created: {placeholder_file}")
         else:
-            print("⚠ WARNING: No placeholder file created")
+            print(" WARNING: No placeholder file created")
 
         # Try to search (should handle gracefully)
         if vector_store is not None:
@@ -272,7 +272,7 @@ def test_empty_knowledge_base():
                     f"Search handled gracefully (returned: {
                         len(result)} chars)")
             except Exception as e:
-                print(f"⚠ Search raised exception: {e}")
+                print(f" Search raised exception: {e}")
         else:
             print("Empty knowledge base handled gracefully (returned None)")
 
@@ -340,13 +340,13 @@ def test_index_caching():
         if first_mtime == second_mtime:
             print("Index was reused (not rebuilt)")
         else:
-            print("⚠ WARNING: Index appears to have been rebuilt")
+            print(" WARNING: Index appears to have been rebuilt")
 
         # Second load should be faster (or similar if already fast)
         if second_load_time <= first_load_time * 1.5:
             print("Caching provides performance benefit")
         else:
-            print("⚠ WARNING: Second load not significantly faster")
+            print(" WARNING: Second load not significantly faster")
 
         return True
 
@@ -397,7 +397,7 @@ def main():
     print("=" * 70)
 
     if passed == total:
-        print("\n🎉 All tests passed! Knowledge base is working correctly.")
+        print("\n All tests passed! Knowledge base is working correctly.")
         print("\nVerified functionality:")
         print("  PDF documents loaded successfully")
         print("  FAISS vector store created")
@@ -412,7 +412,7 @@ def main():
         print("  3.4: Similarity search returns top 3 results")
         print("  3.5: Empty knowledge base handled gracefully")
     else:
-        print(f"\n⚠ {total - passed} test(s) failed. Review output above.")
+        print(f"\n {total - passed} test(s) failed. Review output above.")
 
     return passed == total
 

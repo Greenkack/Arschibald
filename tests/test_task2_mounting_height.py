@@ -31,9 +31,9 @@ def test_mounting_height_calculation():
     all_passed = True
     
     for roof_type, tilt_deg, expected_min_height in test_cases:
-        print(f"\n{'─'*80}")
+        print(f"\n{''*80}")
         print(f"Test: {roof_type} mit {tilt_deg}° Neigung")
-        print(f"{'─'*80}")
+        print(f"{''*80}")
         
         # Erstelle Modul
         try:

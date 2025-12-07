@@ -34,10 +34,10 @@ from crm.utils.import_export_manager import (
 def render_import_export_ui():
     """Hauptfunktion für Import/Export UI im Admin-Panel."""
     
-    st.title("📥📤 Kunden Import/Export")
+    st.title(" Kunden Import/Export")
     
     # Tabs für Import und Export
-    tab_export, tab_import = st.tabs(["📤 Export", "📥 Import"])
+    tab_export, tab_import = st.tabs([" Export", " Import"])
     
     with tab_export:
         render_export_ui()
@@ -165,7 +165,7 @@ def render_export_ui():
                             
                             # Download-Button
                             st.download_button(
-                                label="📥 CSV herunterladen",
+                                label=" CSV herunterladen",
                                 data=csv_data,
                                 file_name=f"kunden_export_{st.session_state.get('export_timestamp', 'data')}.csv",
                                 mime="text/csv",
@@ -189,7 +189,7 @@ def render_export_ui():
                                 excel_data = f.read()
                             
                             st.download_button(
-                                label="📥 Excel herunterladen",
+                                label=" Excel herunterladen",
                                 data=excel_data,
                                 file_name=f"kunden_export_{st.session_state.get('export_timestamp', 'data')}.xlsx",
                                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -272,7 +272,7 @@ def render_import_ui():
         )
     
     if not uploaded_file:
-        st.info("👆 Bitte laden Sie eine Datei hoch, um fortzufahren")
+        st.info(" Bitte laden Sie eine Datei hoch, um fortzufahren")
         return
     
     # Datei parsen
@@ -392,7 +392,7 @@ def render_import_ui():
         format_func=lambda x: {
             "skip": "⊘ Überspringen (Duplikate werden nicht importiert)",
             "update": "↻ Aktualisieren (Existierende Kunden werden aktualisiert)",
-            "create": "➕ Neu erstellen (Duplikate werden trotzdem erstellt)"
+            "create": " Neu erstellen (Duplikate werden trotzdem erstellt)"
         }[x],
         help="Duplikate werden erkannt über E-Mail, Telefon oder Name+PLZ"
     )

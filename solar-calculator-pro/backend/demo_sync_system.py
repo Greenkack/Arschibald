@@ -44,12 +44,12 @@ def demo_basic_sync():
             operation=operation
         )
         
-        print(f"✓ Sync operation created: ID={sync_op.id}, Status={sync_op.status.value}")
+        print(f" Sync operation created: ID={sync_op.id}, Status={sync_op.status.value}")
         
         # Get sync status
         print("\n2. Getting sync status...")
         status = sync_service.get_sync_status(1, "demo-device-1")
-        print(f"✓ Sync status:")
+        print(f" Sync status:")
         print(f"  - Pending operations: {status['pending_operations']}")
         print(f"  - Conflicts: {status['conflicts_count']}")
         print(f"  - Offline queue: {status['offline_queue_size']}")
@@ -104,10 +104,10 @@ def demo_batch_sync():
         )
         
         # Process batch
-        print(f"✓ Processing {len(operations)} operations...")
+        print(f" Processing {len(operations)} operations...")
         sync_session_id, results = sync_service.process_batch_sync(1, batch_request)
         
-        print(f"\n✓ Batch sync completed:")
+        print(f"\n Batch sync completed:")
         print(f"  - Session ID: {sync_session_id}")
         print(f"  - Total operations: {len(results)}")
         print(f"  - Completed: {sum(1 for r in results if r.status.value == 'completed')}")
@@ -144,7 +144,7 @@ def demo_conflict_resolution():
             device_id="demo-device-1",
             operation=operation1
         )
-        print(f"✓ First operation: Status={sync_op1.status.value}")
+        print(f" First operation: Status={sync_op1.status.value}")
         
         # Create conflicting operation
         print("\n2. Creating conflicting operation...")
@@ -163,7 +163,7 @@ def demo_conflict_resolution():
             device_id="demo-device-2",
             operation=operation2
         )
-        print(f"✓ Second operation: Status={sync_op2.status.value}")
+        print(f" Second operation: Status={sync_op2.status.value}")
         
         # Check for conflicts
         print("\n3. Checking for conflicts...")
@@ -174,7 +174,7 @@ def demo_conflict_resolution():
         ).all()
         
         if conflicts:
-            print(f"✓ Found {len(conflicts)} conflict(s)")
+            print(f" Found {len(conflicts)} conflict(s)")
             
             # Resolve first conflict
             conflict = conflicts[0]
@@ -189,9 +189,9 @@ def demo_conflict_resolution():
             )
             
             resolved = sync_service.resolve_conflict(1, resolution)
-            print(f"✓ Conflict resolved: {resolved.resolved}")
+            print(f" Conflict resolved: {resolved.resolved}")
         else:
-            print("✓ No conflicts detected")
+            print(" No conflicts detected")
         
     finally:
         db.close()
@@ -217,7 +217,7 @@ def demo_sync_scheduling():
             entity_types=["project", "customer", "product"]
         )
         
-        print(f"✓ Schedule created:")
+        print(f" Schedule created:")
         print(f"  - Sync interval: {schedule.sync_interval}s")
         print(f"  - Auto sync: {schedule.auto_sync}")
         print(f"  - Next sync: {schedule.next_sync_at}")
@@ -225,12 +225,12 @@ def demo_sync_scheduling():
         # Trigger manual sync
         print("\n2. Triggering manual sync...")
         sync_scheduler.trigger_manual_sync(1, "demo-device-1")
-        print("✓ Manual sync triggered")
+        print(" Manual sync triggered")
         
         # Disable schedule
         print("\n3. Disabling schedule...")
         sync_scheduler.disable_schedule(db, 1, "demo-device-1")
-        print("✓ Schedule disabled")
+        print(" Schedule disabled")
         
     finally:
         db.close()
@@ -264,17 +264,17 @@ def demo_offline_queue():
                 data=data,
                 priority=priority
             )
-            print(f"✓ Added to queue: {entity_type}:{entity_id} (priority={priority})")
+            print(f" Added to queue: {entity_type}:{entity_id} (priority={priority})")
         
         # Get queue status
         print("\n2. Checking offline queue...")
         status = sync_service.get_sync_status(1, "demo-device-1")
-        print(f"✓ Offline queue size: {status['offline_queue_size']}")
+        print(f" Offline queue size: {status['offline_queue_size']}")
         
         # Process queue
         print("\n3. Processing offline queue...")
         results = sync_service.process_offline_queue(1, "demo-device-1")
-        print(f"✓ Processed {len(results)} operations from queue")
+        print(f" Processed {len(results)} operations from queue")
         
     finally:
         db.close()
@@ -323,7 +323,7 @@ def demo_sync_statistics():
             )
         ).count()
         
-        print(f"\n✓ Sync Statistics:")
+        print(f"\n Sync Statistics:")
         print(f"  - Total syncs: {total_syncs}")
         print(f"  - Successful: {successful}")
         print(f"  - Failed: {failed}")
@@ -366,7 +366,7 @@ def main():
         print("- docs/SYNCHRONIZATION_QUICK_REFERENCE.md")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {str(e)}")
+        print(f"\n Error during demo: {str(e)}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

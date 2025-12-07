@@ -68,13 +68,13 @@ def render_task_management_ui(
     if texts is None:
         texts = {}
     
-    st.header("📋 Aufgabenverwaltung")
+    st.header(" Aufgabenverwaltung")
     
     # Tabs für verschiedene Ansichten
     tabs = st.tabs([
         "Übersicht",
         "Alle Aufgaben",
-        "➕ Neue Aufgabe",
+        " Neue Aufgabe",
         "Benachrichtigungen"
     ])
     
@@ -185,7 +185,7 @@ def render_task_overview():
     
     with col1:
         high = stats.get('by_priority', {}).get('high', 0)
-        st.metric("🔴 Hoch", high)
+        st.metric(" Hoch", high)
     
     with col2:
         medium = stats.get('by_priority', {}).get('medium', 0)
@@ -193,12 +193,12 @@ def render_task_overview():
     
     with col3:
         low = stats.get('by_priority', {}).get('low', 0)
-        st.metric("🔵 Niedrig", low)
+        st.metric(" Niedrig", low)
     
     st.markdown("---")
     
     # Fälligkeits-Übersicht
-    st.subheader("📅 Fälligkeiten")
+    st.subheader(" Fälligkeiten")
     
     col1, col2, col3 = st.columns(3)
     
@@ -208,7 +208,7 @@ def render_task_overview():
     
     with col2:
         due_week = stats.get('due_this_week', 0)
-        st.metric("📅 Diese Woche", due_week)
+        st.metric(" Diese Woche", due_week)
     
     with col3:
         st.metric("Überfällig", overdue)
@@ -352,7 +352,7 @@ def render_task_card(task: dict):
         
         with col1:
             if task.get('status') != 'in_progress':
-                if st.button("🔄 In Arbeit", key=f"progress_{task_id}", use_container_width=True):
+                if st.button(" In Arbeit", key=f"progress_{task_id}", use_container_width=True):
                     if mark_task_in_progress(task_id):
                         st.success("Status aktualisiert!")
                         st.rerun()
@@ -366,13 +366,13 @@ def render_task_card(task: dict):
         
         with col3:
             if task.get('status') == 'completed':
-                if st.button("🔓 Wieder öffnen", key=f"reopen_{task_id}", use_container_width=True):
+                if st.button(" Wieder öffnen", key=f"reopen_{task_id}", use_container_width=True):
                     if reopen_task(task_id):
                         st.success("Aufgabe wieder geöffnet!")
                         st.rerun()
         
         with col4:
-            if st.button("✏️ Bearbeiten", key=f"edit_{task_id}", use_container_width=True):
+            if st.button(" Bearbeiten", key=f"edit_{task_id}", use_container_width=True):
                 st.session_state[f'edit_task_{task_id}'] = True
                 st.rerun()
         
@@ -402,7 +402,7 @@ def render_create_task_form(
     lead_id: Optional[int] = None
 ):
     """Formular zum Erstellen einer neuen Aufgabe."""
-    st.subheader("➕ Neue Aufgabe erstellen")
+    st.subheader(" Neue Aufgabe erstellen")
     
     with st.form("create_task_form", clear_on_submit=True):
         title = st.text_input("Titel *", placeholder="z.B. Kunde anrufen")
@@ -503,7 +503,7 @@ def render_edit_task_form(task: dict):
     task_id = task['id']
     
     st.markdown("---")
-    st.subheader(f"✏️ Aufgabe #{task_id} bearbeiten")
+    st.subheader(f" Aufgabe #{task_id} bearbeiten")
     
     with st.form(f"edit_task_form_{task_id}"):
         title = st.text_input("Titel", value=task.get('title', ''))
@@ -548,7 +548,7 @@ def render_edit_task_form(task: dict):
         col_save, col_cancel = st.columns(2)
         
         with col_save:
-            save_button = st.form_submit_button("💾 Speichern", use_container_width=True)
+            save_button = st.form_submit_button(" Speichern", use_container_width=True)
         
         with col_cancel:
             cancel_button = st.form_submit_button("Abbrechen", use_container_width=True)
@@ -588,7 +588,7 @@ def render_task_notifications():
     notifications = get_tasks_needing_notification()
     
     if not notifications:
-        st.success("🎉 Keine dringenden Benachrichtigungen!")
+        st.success(" Keine dringenden Benachrichtigungen!")
         st.info("Alle Aufgaben sind im Plan.")
         return
     
@@ -599,7 +599,7 @@ def render_task_notifications():
     
     # Überfällige Tasks (Rot)
     if overdue:
-        st.markdown("### 🚨 Überfällige Aufgaben")
+        st.markdown("###  Überfällige Aufgaben")
         for task in overdue:
             display_task = format_task_for_display(task)
             st.error(f"**{display_task['title']}** - {display_task['due_date_label']}")
@@ -613,7 +613,7 @@ def render_task_notifications():
     
     # Morgen fällige Tasks (Info)
     if due_tomorrow:
-        st.markdown("### 📅 Morgen fällig")
+        st.markdown("###  Morgen fällig")
         for task in due_tomorrow:
             display_task = format_task_for_display(task)
             st.info(f"**{display_task['title']}** - {display_task['priority_label']}")

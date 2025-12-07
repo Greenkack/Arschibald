@@ -51,7 +51,7 @@ def render_forecasting_dashboard(texts: Optional[dict] = None):
     tab1, tab2, tab3, tab4 = st.tabs([
         "Übersicht",
         "Ziele verwalten",
-        "🔮 Forecasts",
+        " Forecasts",
         "Warnungen"
     ])
     
@@ -156,11 +156,11 @@ def render_overview_tab():
                 # Health Badge
                 health_emoji = {
                     'excellent': '🟢',
-                    'good': '🔵',
+                    'good': '',
                     'warning': '🟠',
-                    'critical': '🔴'
+                    'critical': ''
                 }
-                st.write(f"{health_emoji.get(status['health'], '⚪')} {status['health'].upper()}")
+                st.write(f"{health_emoji.get(status['health'], '')} {status['health'].upper()}")
         
         st.divider()
 
@@ -170,7 +170,7 @@ def render_targets_management_tab():
     st.subheader("Verkaufsziele verwalten")
     
     # Neues Ziel erstellen
-    with st.expander("➕ Neues Ziel erstellen", expanded=False):
+    with st.expander(" Neues Ziel erstellen", expanded=False):
         with st.form("new_target_form"):
             col1, col2 = st.columns(2)
             
@@ -227,7 +227,7 @@ def render_targets_management_tab():
     st.divider()
     
     # Bestehende Ziele anzeigen
-    st.subheader("📋 Bestehende Ziele")
+    st.subheader(" Bestehende Ziele")
     
     # Filter
     col1, col2, col3 = st.columns(3)
@@ -287,7 +287,7 @@ def render_targets_management_tab():
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
-                    if st.button(f"🔄 Fortschritt aktualisieren", key=f"update_{target['id']}"):
+                    if st.button(f" Fortschritt aktualisieren", key=f"update_{target['id']}"):
                         if auto_update_target_progress_from_pipeline(target['id']):
                             st.success("Fortschritt aktualisiert")
                             st.rerun()
@@ -302,7 +302,7 @@ def render_targets_management_tab():
                         key=f"status_{target['id']}"
                     )
                     if new_status != target['status']:
-                        if st.button(f"💾 Status speichern", key=f"save_status_{target['id']}"):
+                        if st.button(f" Status speichern", key=f"save_status_{target['id']}"):
                             if update_target_status(target['id'], new_status):
                                 st.success("Status aktualisiert")
                                 st.rerun()
@@ -310,10 +310,10 @@ def render_targets_management_tab():
 
 def render_forecasts_tab():
     """Rendert die Forecast-Seite."""
-    st.subheader("🔮 Sales Forecasts")
+    st.subheader(" Sales Forecasts")
     
     # Neuen Forecast erstellen
-    with st.expander("➕ Neuen Forecast erstellen", expanded=False):
+    with st.expander(" Neuen Forecast erstellen", expanded=False):
         st.write("**Automatischer Pipeline-basierter Forecast**")
         
         col1, col2 = st.columns(2)
@@ -328,7 +328,7 @@ def render_forecasts_tab():
         target_options = ['Kein Ziel'] + [f"{t['target_name']} (ID: {t['id']})" for t in targets]
         selected_target = st.selectbox("Mit Ziel verknüpfen (optional)", target_options)
         
-        if st.button("🔮 Forecast berechnen"):
+        if st.button(" Forecast berechnen"):
             # Berechne Forecast
             forecast_data = calculate_pipeline_forecast(
                 period_start.strftime('%Y-%m-%d'),
@@ -370,7 +370,7 @@ def render_forecasts_tab():
                     st.plotly_chart(fig, use_container_width=True)
                 
                 # Forecast speichern
-                if st.button("💾 Forecast speichern"):
+                if st.button(" Forecast speichern"):
                     target_id = None
                     if selected_target != 'Kein Ziel':
                         # Extrahiere ID aus String
@@ -404,7 +404,7 @@ def render_forecasts_tab():
         st.info("Keine Forecasts vorhanden")
     else:
         for forecast in forecasts:
-            with st.expander(f"🔮 Forecast {forecast['period_start']} - {forecast['period_end']}"):
+            with st.expander(f" Forecast {forecast['period_start']} - {forecast['period_end']}"):
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
@@ -443,10 +443,10 @@ def render_warnings_tab():
         
         health_colors = {
             'warning': '🟠',
-            'critical': '🔴'
+            'critical': ''
         }
         
-        with st.expander(f"{health_colors.get(status['health'], '⚪')} {target['target_name']} - {status['health'].upper()}"):
+        with st.expander(f"{health_colors.get(status['health'], '')} {target['target_name']} - {status['health'].upper()}"):
             col1, col2 = st.columns(2)
             
             with col1:
@@ -460,7 +460,7 @@ def render_warnings_tab():
                 
                 # Empfehlung
                 if status['health'] == 'critical':
-                    st.error("🔴 **KRITISCH:** Sofortige Maßnahmen erforderlich!")
+                    st.error(" **KRITISCH:** Sofortige Maßnahmen erforderlich!")
                     st.write("Empfohlene Aktionen:")
                     st.write("- Pipeline-Review durchführen")
                     st.write("- Zusätzliche Ressourcen einsetzen")

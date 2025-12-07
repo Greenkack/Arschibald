@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 def test_basic_additional_costs_calculation():
     """Test der grundlegenden Zusatzkosten-Berechnung"""
 
-    print("🧪 Teste grundlegende Zusatzkosten-Berechnung...")
+    print(" Teste grundlegende Zusatzkosten-Berechnung...")
 
     # Test-Szenario: Matrixpreis + Zubehör - Rabatte
     base_matrix_price = 15000.0  # Preis aus Matrix
@@ -91,7 +91,7 @@ def test_basic_additional_costs_calculation():
 def test_various_scenarios():
     """Test verschiedener Preisszenarien"""
 
-    print("\n🧪 Teste verschiedene Preisszenarien...")
+    print("\n Teste verschiedene Preisszenarien...")
 
     scenarios = [
         {
@@ -127,7 +127,7 @@ def test_various_scenarios():
     ]
 
     for scenario in scenarios:
-        print(f"\n   📋 Szenario: {scenario['name']}")
+        print(f"\n    Szenario: {scenario['name']}")
 
         result = _calculate_final_price_with_correct_formula(
             base_matrix_price=scenario['matrix_price'],
@@ -157,7 +157,7 @@ def test_various_scenarios():
 def test_formula_correctness():
     """Test der korrekten Formel: Matrixpreis + Zubehör - Rabatte"""
 
-    print("\n🧪 Teste Formel-Korrektheit: Matrixpreis + Zubehör - Rabatte...")
+    print("\n Teste Formel-Korrektheit: Matrixpreis + Zubehör - Rabatte...")
 
     # Basis-Werte
     matrix_price = 20000.0
@@ -266,7 +266,7 @@ def main():
         test_formula_correctness()
 
         print("\n" + "=" * 60)
-        print("🎉 ALLE TESTS BESTANDEN!")
+        print(" ALLE TESTS BESTANDEN!")
         print("Die Zusatzkosten-Integration funktioniert korrekt:")
         print("   - Matrixpreis wird als Basis verwendet")
         print("   - Korrekte Formel: Matrixpreis + Zubehör - Rabatte")

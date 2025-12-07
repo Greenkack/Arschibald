@@ -49,7 +49,7 @@ def demo_create_results(service: ResultHistoryService, user_id: int):
     )
     
     result1 = service.create_result(user_id, solar_data)
-    print(f"✓ Created solar result: {result1.result_name} (ID: {result1.id})")
+    print(f" Created solar result: {result1.result_name} (ID: {result1.id})")
     
     # Create heat pump result
     heatpump_data = ResultHistoryCreate(
@@ -74,7 +74,7 @@ def demo_create_results(service: ResultHistoryService, user_id: int):
     )
     
     result2 = service.create_result(user_id, heatpump_data)
-    print(f"✓ Created heat pump result: {result2.result_name} (ID: {result2.id})")
+    print(f" Created heat pump result: {result2.result_name} (ID: {result2.id})")
     
     # Create combined result
     combined_data = ResultHistoryCreate(
@@ -97,7 +97,7 @@ def demo_create_results(service: ResultHistoryService, user_id: int):
     )
     
     result3 = service.create_result(user_id, combined_data)
-    print(f"✓ Created combined result: {result3.result_name} (ID: {result3.id})")
+    print(f" Created combined result: {result3.result_name} (ID: {result3.id})")
     
     return [result1.id, result2.id, result3.id]
 
@@ -115,7 +115,7 @@ def demo_search_and_filter(service: ResultHistoryService, user_id: int):
         page_size=10
     )
     results1, total1 = service.search_results(user_id, search1)
-    print(f"\n✓ Search 'residential': Found {total1} results")
+    print(f"\n Search 'residential': Found {total1} results")
     for r in results1:
         print(f"  - {r.result_name} ({r.result_type})")
     
@@ -126,7 +126,7 @@ def demo_search_and_filter(service: ResultHistoryService, user_id: int):
         page_size=10
     )
     results2, total2 = service.search_results(user_id, search2)
-    print(f"\n✓ Filter by type 'solar': Found {total2} results")
+    print(f"\n Filter by type 'solar': Found {total2} results")
     
     # Filter by tags
     search3 = ResultSearchRequest(
@@ -135,15 +135,15 @@ def demo_search_and_filter(service: ResultHistoryService, user_id: int):
         page_size=10
     )
     results3, total3 = service.search_results(user_id, search3)
-    print(f"\n✓ Filter by tag 'premium': Found {total3} results")
+    print(f"\n Filter by tag 'premium': Found {total3} results")
     
     # Get favorites
     favorites = service.get_favorites(user_id, limit=10)
-    print(f"\n✓ Favorites: {len(favorites)} results")
+    print(f"\n Favorites: {len(favorites)} results")
     
     # Get recent
     recent = service.get_recent_results(user_id, limit=5)
-    print(f"\n✓ Recent results: {len(recent)} results")
+    print(f"\n Recent results: {len(recent)} results")
     for r in recent:
         print(f"  - {r.result_name} (created: {r.created_at})")
 
@@ -159,21 +159,21 @@ def demo_update_and_organize(service: ResultHistoryService, user_id: int, result
         is_favorite=True
     )
     result = service.update_result(result_id, user_id, update1)
-    print(f"✓ Marked as favorite: {result.result_name}")
+    print(f" Marked as favorite: {result.result_name}")
     
     # Add more tags
     update2 = ResultHistoryUpdate(
         tags=["residential", "10kw", "smith", "premium", "approved", "2024"]
     )
     result = service.update_result(result_id, user_id, update2)
-    print(f"✓ Updated tags: {[tag.tag_name for tag in result.tags]}")
+    print(f" Updated tags: {[tag.tag_name for tag in result.tags]}")
     
     # Update description
     update3 = ResultHistoryUpdate(
         description="Updated calculation with final approval from customer"
     )
     result = service.update_result(result_id, user_id, update3)
-    print(f"✓ Updated description: {result.description}")
+    print(f" Updated description: {result.description}")
 
 
 def demo_versioning(service: ResultHistoryService, user_id: int, result_id: int):
@@ -184,7 +184,7 @@ def demo_versioning(service: ResultHistoryService, user_id: int, result_id: int)
     
     # Get original result
     original = service.get_result(result_id, user_id)
-    print(f"\n✓ Original result: {original.result_name} (v{original.version})")
+    print(f"\n Original result: {original.result_name} (v{original.version})")
     
     # Create version 2
     version2_data = ResultHistoryCreate(
@@ -202,7 +202,7 @@ def demo_versioning(service: ResultHistoryService, user_id: int, result_id: int)
     )
     
     version2 = service.create_version(result_id, user_id, version2_data)
-    print(f"✓ Created version 2: {version2.result_name} (v{version2.version})")
+    print(f" Created version 2: {version2.result_name} (v{version2.version})")
     
     # Create version 3
     version3_data = ResultHistoryCreate(
@@ -220,11 +220,11 @@ def demo_versioning(service: ResultHistoryService, user_id: int, result_id: int)
     )
     
     version3 = service.create_version(version2.id, user_id, version3_data)
-    print(f"✓ Created version 3: {version3.result_name} (v{version3.version})")
+    print(f" Created version 3: {version3.result_name} (v{version3.version})")
     
     # Get version tree
     tree = service.get_version_tree(version2.id, user_id)
-    print(f"\n✓ Version tree:")
+    print(f"\n Version tree:")
     print(f"  - Root: {tree['current'].result_name} (v{tree['current'].version})")
     if tree['parent']:
         print(f"  - Parent: {tree['parent'].result_name} (v{tree['parent'].version})")
@@ -245,18 +245,18 @@ def demo_comparison(service: ResultHistoryService, user_id: int, result_ids: lis
         metrics=["total_cost", "payback_period"]
     )
     
-    print(f"\n✓ Comparing {len(comparison_data['results'])} results:")
+    print(f"\n Comparing {len(comparison_data['results'])} results:")
     for r in comparison_data['results']:
         print(f"  - {r.result_name}")
     
-    print(f"\n✓ Differences:")
+    print(f"\n Differences:")
     for metric, data in comparison_data['differences'].items():
         print(f"  - {metric}:")
         print(f"    Values: {data['values']}")
         if data['min'] is not None:
             print(f"    Range: {data['min']} - {data['max']} (avg: {data['avg']:.2f})")
     
-    print(f"\n✓ Summary:")
+    print(f"\n Summary:")
     print(f"  - Result count: {comparison_data['summary']['result_count']}")
     print(f"  - Result types: {comparison_data['summary']['result_types']}")
     print(f"  - Metrics compared: {comparison_data['summary']['metrics_compared']}")
@@ -272,11 +272,11 @@ def demo_comparison(service: ResultHistoryService, user_id: int, result_ids: lis
     )
     
     saved_comparison = service.create_comparison(user_id, saved_comparison_data)
-    print(f"\n✓ Saved comparison: {saved_comparison.comparison_name} (ID: {saved_comparison.id})")
+    print(f"\n Saved comparison: {saved_comparison.comparison_name} (ID: {saved_comparison.id})")
     
     # Get all comparisons
     comparisons = service.get_comparisons(user_id)
-    print(f"\n✓ Total saved comparisons: {len(comparisons)}")
+    print(f"\n Total saved comparisons: {len(comparisons)}")
 
 
 def demo_sharing(service: ResultHistoryService, user_id: int, result_id: int):
@@ -294,7 +294,7 @@ def demo_sharing(service: ResultHistoryService, user_id: int, result_id: int):
     )
     
     share1 = service.create_share(user_id, share1_data)
-    print(f"\n✓ Created public share:")
+    print(f"\n Created public share:")
     print(f"  - Token: {share1.share_token}")
     print(f"  - URL: https://app.example.com/shared/{share1.share_token}")
     print(f"  - Expires: {share1.expires_at}")
@@ -309,14 +309,14 @@ def demo_sharing(service: ResultHistoryService, user_id: int, result_id: int):
     )
     
     share2 = service.create_share(user_id, share2_data)
-    print(f"\n✓ Created private share:")
+    print(f"\n Created private share:")
     print(f"  - Shared with user ID: {share2.shared_with_user_id}")
     print(f"  - Can edit: {share2.can_edit}")
     print(f"  - Expires: {share2.expires_at}")
     
     # Get all shares for result
     shares = service.get_shares_for_result(result_id, user_id)
-    print(f"\n✓ Total shares for this result: {len(shares)}")
+    print(f"\n Total shares for this result: {len(shares)}")
 
 
 def demo_statistics(service: ResultHistoryService, user_id: int):
@@ -327,20 +327,20 @@ def demo_statistics(service: ResultHistoryService, user_id: int):
     
     stats = service.get_statistics(user_id)
     
-    print(f"\n✓ Overall Statistics:")
+    print(f"\n Overall Statistics:")
     print(f"  - Total results: {stats['total_results']}")
     print(f"  - Favorites: {stats['favorite_count']}")
     print(f"  - Archived: {stats['archived_count']}")
     
-    print(f"\n✓ Results by Type:")
+    print(f"\n Results by Type:")
     for result_type, count in stats['results_by_type'].items():
         print(f"  - {result_type}: {count}")
     
-    print(f"\n✓ Recent Results:")
+    print(f"\n Recent Results:")
     for r in stats['recent_results'][:3]:
         print(f"  - {r.result_name} ({r.created_at})")
     
-    print(f"\n✓ Tag Usage:")
+    print(f"\n Tag Usage:")
     for tag, count in sorted(stats['tags_usage'].items(), key=lambda x: x[1], reverse=True)[:5]:
         print(f"  - {tag}: {count} results")
 
@@ -384,17 +384,17 @@ def main():
         print("DEMO COMPLETED SUCCESSFULLY!")
         print("="*80)
         print("\nAll features demonstrated:")
-        print("✓ Result creation and storage")
-        print("✓ Search and filtering")
-        print("✓ Update and organization")
-        print("✓ Version tracking")
-        print("✓ Result comparison")
-        print("✓ Secure sharing")
-        print("✓ Statistics and analytics")
+        print(" Result creation and storage")
+        print(" Search and filtering")
+        print(" Update and organization")
+        print(" Version tracking")
+        print(" Result comparison")
+        print(" Secure sharing")
+        print(" Statistics and analytics")
         print("\n")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {str(e)}")
+        print(f"\n Error during demo: {str(e)}")
         import traceback
         traceback.print_exc()
     finally:

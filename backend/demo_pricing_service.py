@@ -45,13 +45,13 @@ def demo_price_calculation():
     )
     
     if result['success']:
-        print(f"  ✓ Success!")
+        print(f"   Success!")
         print(f"  Base price: {result['base_price']} EUR")
         print(f"  Row used: {result['row_used']}")
         print(f"  Column used: {result['column_used']}")
         print(f"  Matrix: {result['matrix_name']}")
     else:
-        print(f"  ✗ Error: {result['user_message']}")
+        print(f"   Error: {result['user_message']}")
     
     # Test case 2: No storage
     print("\nTest 2: Price without storage")
@@ -65,11 +65,11 @@ def demo_price_calculation():
     )
     
     if result['success']:
-        print(f"  ✓ Success!")
+        print(f"   Success!")
         print(f"  Base price: {result['base_price']} EUR")
         print(f"  Column used: {result['column_used']}")
     else:
-        print(f"  ✗ Error: {result['user_message']}")
+        print(f"   Error: {result['user_message']}")
     
     # Test case 3: Fallback scenario
     print("\nTest 3: Fallback scenario (module count not in matrix)")
@@ -83,13 +83,13 @@ def demo_price_calculation():
     )
     
     if result['success']:
-        print(f"  ✓ Success with fallback!")
+        print(f"   Success with fallback!")
         print(f"  Base price: {result['base_price']} EUR")
         print(f"  Row used: {result['row_used']} (floor logic)")
         if result['fallback_used']:
             print(f"  Fallback info: {result['fallback_info'].get('message', '')}")
     else:
-        print(f"  ✗ Error: {result['user_message']}")
+        print(f"   Error: {result['user_message']}")
 
 
 def demo_matrix_management():
@@ -105,10 +105,10 @@ def demo_matrix_management():
     if result['success']:
         print(f"  Found {result['count']} matrices:")
         for matrix in result['matrices']:
-            active = "✓ ACTIVE" if matrix['is_active'] else ""
+            active = " ACTIVE" if matrix['is_active'] else ""
             print(f"    - ID {matrix['id']}: {matrix['name']} {active}")
     else:
-        print(f"  ✗ Error: {result.get('error', 'Unknown error')}")
+        print(f"   Error: {result.get('error', 'Unknown error')}")
     
     # Create new matrix
     print("\nCreating new matrix:")
@@ -119,10 +119,10 @@ def demo_matrix_management():
     )
     
     if result['success']:
-        print(f"  ✓ Created matrix with ID: {result['matrix_id']}")
+        print(f"   Created matrix with ID: {result['matrix_id']}")
         demo_matrix_id = result['matrix_id']
     else:
-        print(f"  ✗ Error: {result.get('error', 'Unknown error')}")
+        print(f"   Error: {result.get('error', 'Unknown error')}")
         return
 
 
@@ -151,23 +151,23 @@ def demo_matrix_upload():
     )
     
     if result['success']:
-        print(f"  ✓ Upload successful!")
+        print(f"   Upload successful!")
         print(f"  Matrix ID: {result['matrix_id']}")
         
         # Show validation results
         validation = result.get('validation', {})
         if validation.get('valid'):
-            print(f"  ✓ Validation passed")
+            print(f"   Validation passed")
             info = validation.get('info', {})
             print(f"    - Rows: {info.get('total_rows', 0)}")
             print(f"    - Columns: {info.get('total_columns', 0)}")
             print(f"    - Cells: {info.get('total_cells', 0)}")
         else:
-            print(f"  ✗ Validation failed:")
+            print(f"   Validation failed:")
             for error in validation.get('errors', []):
                 print(f"      - {error}")
     else:
-        print(f"  ✗ Error: {result.get('error', 'Unknown error')}")
+        print(f"   Error: {result.get('error', 'Unknown error')}")
 
 
 def demo_crud_operations():
@@ -202,10 +202,10 @@ def demo_crud_operations():
     )
     
     if result['success']:
-        print(f"  ✓ {result['message']}")
+        print(f"   {result['message']}")
         row_id = result['row_id']
     else:
-        print(f"  ✗ Error: {result.get('error', 'Unknown error')}")
+        print(f"   Error: {result.get('error', 'Unknown error')}")
         return
     
     # Add column
@@ -216,10 +216,10 @@ def demo_crud_operations():
     )
     
     if result['success']:
-        print(f"  ✓ {result['message']}")
+        print(f"   {result['message']}")
         column_id = result['column_id']
     else:
-        print(f"  ✗ Error: {result.get('error', 'Unknown error')}")
+        print(f"   Error: {result.get('error', 'Unknown error')}")
         return
     
     # Set cell value
@@ -233,9 +233,9 @@ def demo_crud_operations():
     )
     
     if result['success']:
-        print(f"  ✓ {result['message']}")
+        print(f"   {result['message']}")
     else:
-        print(f"  ✗ Error: {result.get('error', 'Unknown error')}")
+        print(f"   Error: {result.get('error', 'Unknown error')}")
 
 
 def demo_error_handling():
@@ -252,7 +252,7 @@ def demo_error_handling():
     )
     
     if not result['success']:
-        print(f"  ✓ Error caught correctly")
+        print(f"   Error caught correctly")
         print(f"  Error type: {result.get('error_type', 'unknown')}")
         print(f"  User message: {result.get('user_message', 'No message')}")
     
@@ -265,11 +265,11 @@ def demo_error_handling():
     )
     
     if result['success'] and result['fallback_used']:
-        print(f"  ✓ Fallback successful")
+        print(f"   Fallback successful")
         print(f"  Fallback strategy: {result['fallback_info'].get('fallback_type', 'unknown')}")
         print(f"  Message: {result['fallback_info'].get('message', '')}")
     elif not result['success']:
-        print(f"  ✗ Error: {result.get('user_message', 'Unknown error')}")
+        print(f"   Error: {result.get('user_message', 'Unknown error')}")
         if result.get('suggestions'):
             print(f"  Suggestions:")
             for suggestion in result['suggestions']:
@@ -293,9 +293,9 @@ def demo_cache_management():
     result = service.clear_cache()
     
     if result['success']:
-        print(f"  ✓ {result['message']}")
+        print(f"   {result['message']}")
     else:
-        print(f"  ✗ Error: {result.get('error', 'Unknown error')}")
+        print(f"   Error: {result.get('error', 'Unknown error')}")
 
 
 def main():
@@ -318,7 +318,7 @@ def main():
         print("=" * 80 + "\n")
         
     except Exception as e:
-        print(f"\n✗ Demo failed with error: {e}")
+        print(f"\n Demo failed with error: {e}")
         import traceback
         traceback.print_exc()
 

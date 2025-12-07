@@ -170,7 +170,7 @@ def demo_pdf_generation():
     with open(output_path, 'wb') as f:
         f.write(pdf_bytes)
     
-    logger.info(f"   ✓ Generated: {output_path} ({len(pdf_bytes)} bytes)")
+    logger.info(f"    Generated: {output_path} ({len(pdf_bytes)} bytes)")
     logger.info(f"   Data types: {', '.join(data_types.values())}")
     
     # 2. Generate PDF for BAR chart
@@ -186,7 +186,7 @@ def demo_pdf_generation():
     with open(output_path, 'wb') as f:
         f.write(chart_pdf)
     
-    logger.info(f"   ✓ Generated: {output_path} ({len(chart_pdf)} bytes)")
+    logger.info(f"    Generated: {output_path} ({len(chart_pdf)} bytes)")
     logger.info(f"   Chart type: BAR")
     
     # 3. Generate PDF for PIE chart
@@ -202,7 +202,7 @@ def demo_pdf_generation():
     with open(output_path, 'wb') as f:
         f.write(pie_pdf)
     
-    logger.info(f"   ✓ Generated: {output_path} ({len(pie_pdf)} bytes)")
+    logger.info(f"    Generated: {output_path} ({len(pie_pdf)} bytes)")
     logger.info(f"   Chart type: PIE")
     
     # 4. Generate PDF for DONUT chart
@@ -218,7 +218,7 @@ def demo_pdf_generation():
     with open(output_path, 'wb') as f:
         f.write(donut_pdf)
     
-    logger.info(f"   ✓ Generated: {output_path} ({len(donut_pdf)} bytes)")
+    logger.info(f"    Generated: {output_path} ({len(donut_pdf)} bytes)")
     logger.info(f"   Chart type: DONUT")
     
     # 5. Generate PDF for LINE chart
@@ -234,7 +234,7 @@ def demo_pdf_generation():
     with open(output_path, 'wb') as f:
         f.write(line_pdf)
     
-    logger.info(f"   ✓ Generated: {output_path} ({len(line_pdf)} bytes)")
+    logger.info(f"    Generated: {output_path} ({len(line_pdf)} bytes)")
     logger.info(f"   Chart type: LINE")
     
     # 6. Generate PDF for document
@@ -262,7 +262,7 @@ def demo_pdf_generation():
     with open(output_path, 'wb') as f:
         f.write(doc_pdf)
     
-    logger.info(f"   ✓ Generated: {output_path} ({len(doc_pdf)} bytes)")
+    logger.info(f"    Generated: {output_path} ({len(doc_pdf)} bytes)")
     logger.info(f"   Sections: {len(document_data['sections'])}")
     
     # 7. Generate PDF for 3D visualization
@@ -284,10 +284,10 @@ def demo_pdf_generation():
     with open(output_path, 'wb') as f:
         f.write(vis_pdf)
     
-    logger.info(f"   ✓ Generated: {output_path} ({len(vis_pdf)} bytes)")
+    logger.info(f"    Generated: {output_path} ({len(vis_pdf)} bytes)")
     logger.info(f"   Module count: {visualization_data['module_count']}")
     
-    logger.info(f"\n✓ All PDFs generated successfully in: {output_dir}")
+    logger.info(f"\n All PDFs generated successfully in: {output_dir}")
     
     return generator
 
@@ -316,7 +316,7 @@ def demo_integration():
     }
     
     calc_keys = key_manager.import_from_calculations(calculation_data)
-    logger.info(f"   ✓ Imported {len(calc_keys)} keys")
+    logger.info(f"    Imported {len(calc_keys)} keys")
     
     # 2. Create formatted data dictionary
     logger.info("\n2. Creating formatted data dictionary...")
@@ -354,7 +354,7 @@ def demo_integration():
         formatted_data[german_label] = calculation_data[original_key]
         data_types[german_label] = type_map.get(original_key, 'text')
     
-    logger.info(f"   ✓ Created formatted data with {len(formatted_data)} entries")
+    logger.info(f"    Created formatted data with {len(formatted_data)} entries")
     
     # 3. Generate PDF with formatted data
     logger.info("\n3. Generating PDF with formatted data...")
@@ -371,7 +371,7 @@ def demo_integration():
     with open(output_path, 'wb') as f:
         f.write(pdf_bytes)
     
-    logger.info(f"   ✓ Generated: {output_path} ({len(pdf_bytes)} bytes)")
+    logger.info(f"    Generated: {output_path} ({len(pdf_bytes)} bytes)")
     
     # 4. Show summary
     logger.info("\n4. Summary:")
@@ -380,7 +380,7 @@ def demo_integration():
     logger.info(f"   - PDF size: {len(pdf_bytes)} bytes")
     logger.info(f"   - Output file: {output_path}")
     
-    logger.info("\n✓ Integration demo complete!")
+    logger.info("\n Integration demo complete!")
 
 
 def main():
@@ -401,24 +401,24 @@ def main():
         demo_integration()
         
         logger.info("\n" + "=" * 80)
-        logger.info("✓ ALL DEMOS COMPLETED SUCCESSFULLY")
+        logger.info(" ALL DEMOS COMPLETED SUCCESSFULLY")
         logger.info("=" * 80)
         logger.info("\nGenerated files are in: demo_output/")
         logger.info("\nFeatures demonstrated:")
-        logger.info("  ✓ Import keys from calculations.py")
-        logger.info("  ✓ Import keys from database.py")
-        logger.info("  ✓ Import keys from product_db.py")
-        logger.info("  ✓ Import keys from price_matrix_*.py")
-        logger.info("  ✓ Import keys from charts")
-        logger.info("  ✓ German formatting (16.999,00 €, 85,5%, 12.500 kWh)")
-        logger.info("  ✓ PDF generation for all data types")
-        logger.info("  ✓ PDF generation for all 10 chart types")
-        logger.info("  ✓ PDF generation for documents")
-        logger.info("  ✓ PDF generation for 3D visualizations")
-        logger.info("  ✓ Integrated system (keys + PDF)")
+        logger.info("   Import keys from calculations.py")
+        logger.info("   Import keys from database.py")
+        logger.info("   Import keys from product_db.py")
+        logger.info("   Import keys from price_matrix_*.py")
+        logger.info("   Import keys from charts")
+        logger.info("   German formatting (16.999,00 €, 85,5%, 12.500 kWh)")
+        logger.info("   PDF generation for all data types")
+        logger.info("   PDF generation for all 10 chart types")
+        logger.info("   PDF generation for documents")
+        logger.info("   PDF generation for 3D visualizations")
+        logger.info("   Integrated system (keys + PDF)")
         
     except Exception as e:
-        logger.error(f"\n✗ Demo failed: {e}", exc_info=True)
+        logger.error(f"\n Demo failed: {e}", exc_info=True)
         raise
 
 

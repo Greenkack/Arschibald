@@ -54,7 +54,7 @@ def print_error(text):
 
 def print_warning(text):
     """Print a warning message."""
-    print(f"{Colors.YELLOW}⚠ {text}{Colors.RESET}")
+    print(f"{Colors.YELLOW} {text}{Colors.RESET}")
 
 
 def print_info(text):
@@ -331,11 +331,11 @@ def main():
     """Main installation flow."""
     print()
     print(f"{Colors.BOLD}{Colors.CYAN}")
-    print("╔═══════════════════════════════════════════════════════════════════╗")
-    print("║                                                                   ║")
-    print("║              KAI Agent Installation Script                        ║")
-    print("║                                                                   ║")
-    print("╚═══════════════════════════════════════════════════════════════════╝")
+    print("")
+    print("                                                                   ")
+    print("              KAI Agent Installation Script                        ")
+    print("                                                                   ")
+    print("")
     print(f"{Colors.RESET}")
 
     # Track success of each step

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_choropleth.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'autocolorscale', 'choropleth', 'coloraxis', 'colorbar', 'colorscale', 'country names', 'customdata', 'customdatasrc', 'featureidkey', 'geo', 'geojson', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hovertemplate', 'hovertemplatesrc', 'hovertext', 'hovertextsrc', 'ids', 'idssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'locationmode', 'locations', 'locationssrc', 'marker', 'meta', 'metasrc', 'name', 'reversescale', 'selected', 'selectedpoints', 'showlegend', 'showscale', 'skip_invalid', 'stream', 'text', 'textsrc', 'type', 'uid', 'uirevision', 'unselected', 'visible', 'z', 'zauto', 'zmax', 'zmid', 'zmin', 'zsrc']

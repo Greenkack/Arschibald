@@ -28,7 +28,7 @@ def test_color_differentiation():
         from utils.pv3d_plotly import create_pv_module_3d
         
         # Test 1.1: Normales Modul (dunkelblau)
-        print("\n📋 Test 1.1: Normales Modul (dunkelblau #1a1a2e)")
+        print("\n Test 1.1: Normales Modul (dunkelblau #1a1a2e)")
         module_normal, vertices_normal = create_pv_module_3d(
             x=0.0, y=0.0, z=5.0,
             azimuth_deg=0, tilt_deg=30,
@@ -45,7 +45,7 @@ def test_color_differentiation():
         print("Normales Modul hat korrekte Farbe (dunkelblau)")
         
         # Test 1.2: Ausgewähltes Modul (hellblau)
-        print("\n📋 Test 1.2: Ausgewähltes Modul (hellblau #4a90e2)")
+        print("\n Test 1.2: Ausgewähltes Modul (hellblau #4a90e2)")
         module_selected, vertices_selected = create_pv_module_3d(
             x=1.0, y=0.0, z=5.0,
             azimuth_deg=0, tilt_deg=30,
@@ -62,7 +62,7 @@ def test_color_differentiation():
         print("Ausgewähltes Modul hat korrekte Farbe (hellblau)")
         
         # Test 1.3: Ungültiges Modul (rot)
-        print("\n📋 Test 1.3: Ungültiges Modul (rot #e74c3c)")
+        print("\n Test 1.3: Ungültiges Modul (rot #e74c3c)")
         module_invalid, vertices_invalid = create_pv_module_3d(
             x=2.0, y=0.0, z=5.0,
             azimuth_deg=0, tilt_deg=30,
@@ -79,7 +79,7 @@ def test_color_differentiation():
         print("Ungültiges Modul hat korrekte Farbe (rot)")
         
         # Test 1.4: Priorität - Invalid überschreibt Selected
-        print("\n📋 Test 1.4: Priorität - Invalid überschreibt Selected")
+        print("\n Test 1.4: Priorität - Invalid überschreibt Selected")
         module_both, vertices_both = create_pv_module_3d(
             x=3.0, y=0.0, z=5.0,
             azimuth_deg=0, tilt_deg=30,
@@ -115,7 +115,7 @@ def test_module_numbers():
         from utils.pv3d_plotly import create_pv_module_3d, create_module_number_annotation
         
         # Test 2.1: Modul ohne Nummer
-        print("\n📋 Test 2.1: Modul ohne Nummer")
+        print("\n Test 2.1: Modul ohne Nummer")
         module_no_number, _ = create_pv_module_3d(
             x=0.0, y=0.0, z=5.0,
             azimuth_deg=0, tilt_deg=30,
@@ -131,7 +131,7 @@ def test_module_numbers():
         print("Modul ohne Nummer hat keinen Nummern-Suffix")
         
         # Test 2.2: Modul mit Nummer
-        print("\n📋 Test 2.2: Modul mit Nummer")
+        print("\n Test 2.2: Modul mit Nummer")
         module_with_number, _ = create_pv_module_3d(
             x=1.0, y=0.0, z=5.0,
             azimuth_deg=0, tilt_deg=30,
@@ -147,7 +147,7 @@ def test_module_numbers():
         print("Modul mit Nummer hat korrekten Nummern-Suffix")
         
         # Test 2.3: Modul-Nummern Annotation
-        print("\n📋 Test 2.3: Modul-Nummern Annotation")
+        print("\n Test 2.3: Modul-Nummern Annotation")
         annotation = create_module_number_annotation(
             x=0.0, y=0.0, z=5.0,
             module_number=123,
@@ -189,7 +189,7 @@ def test_grid_overlay():
         from utils.pv3d_plotly import create_placement_grid
         
         # Test 3.1: Raster-Erstellung
-        print("\n📋 Test 3.1: Raster-Erstellung")
+        print("\n Test 3.1: Raster-Erstellung")
         grid = create_placement_grid(
             roof_length=10.0,
             roof_width=8.0,
@@ -210,7 +210,7 @@ def test_grid_overlay():
         print(f"Raster erstellt mit {len(grid.x)} Punkten")
         
         # Test 3.2: Raster-Dimensionen
-        print("\n📋 Test 3.2: Raster-Dimensionen")
+        print("\n Test 3.2: Raster-Dimensionen")
         # Raster sollte von -5 bis +5 in X (10m) und -4 bis +4 in Y (8m) gehen
         x_coords = [x for x in grid.x if x is not None]
         y_coords = [y for y in grid.y if y is not None]
@@ -226,7 +226,7 @@ def test_grid_overlay():
         print("Raster-Dimensionen korrekt")
         
         # Test 3.3: Raster-Spacing
-        print("\n📋 Test 3.3: Raster-Spacing")
+        print("\n Test 3.3: Raster-Spacing")
         # Mit 1m Spacing sollten wir 11 vertikale Linien (X: -5 bis +5)
         # und 9 horizontale Linien (Y: -4 bis +4) haben
         # Jede Linie hat 3 Punkte (start, end, None)
@@ -260,7 +260,7 @@ def test_color_legend():
         from utils.pv3d_plotly import create_color_legend
         
         # Test 4.1: Legende erstellen
-        print("\n📋 Test 4.1: Legende erstellen")
+        print("\n Test 4.1: Legende erstellen")
         legend_items = create_color_legend()
         
         assert isinstance(legend_items, list), \
@@ -270,7 +270,7 @@ def test_color_legend():
         print(f"Legende erstellt mit {len(legend_items)} Einträgen")
         
         # Test 4.2: Legende-Einträge prüfen
-        print("\n📋 Test 4.2: Legende-Einträge prüfen")
+        print("\n Test 4.2: Legende-Einträge prüfen")
         names = [item.name for item in legend_items]
         colors = [item.marker.color for item in legend_items]
         
@@ -291,7 +291,7 @@ def test_color_legend():
         print("Alle Legende-Einträge korrekt")
         
         # Test 4.3: Legende ist unsichtbar (nur für Legende)
-        print("\n📋 Test 4.3: Legende ist unsichtbar")
+        print("\n Test 4.3: Legende ist unsichtbar")
         for item in legend_items:
             assert item.visible == 'legendonly', \
                 f"Legende-Eintrag sollte 'legendonly' sein, ist aber {item.visible}"
@@ -320,7 +320,7 @@ def test_ui_options():
         import inspect
         
         # Test 5.1: Prüfe dass Checkboxen nicht mehr disabled sind
-        print("\n📋 Test 5.1: Prüfe UI-Code")
+        print("\n Test 5.1: Prüfe UI-Code")
         
         # Lese den Quellcode der Funktion
         source = inspect.getsource(render_module_placement_panel)
@@ -384,7 +384,7 @@ def run_all_tests():
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n🎉 Alle Tests erfolgreich! Task 12 ist vollständig implementiert.")
+        print("\n Alle Tests erfolgreich! Task 12 ist vollständig implementiert.")
         return True
     else:
         print(f"\n{total - passed} Test(s) fehlgeschlagen. Bitte Fehler beheben.")

@@ -98,6 +98,7 @@ def get_admin_protected_areas() -> dict[str, bool]:
         'pv_mounting': True,  # PV-Unterkonstruktionen GESCHÜTZT
         'services_management': True,  # Dienstleistungen geschützt
         'price_matrix': True,  # Preis Matrix GESCHÜTZT
+        'controlling_settings': True,  # Controlling Einstellungen GESCHÜTZT
         'economic_settings': True,  # Allgemeine Einstellungen GESCHÜTZT
         'tariff_management': True,  # Einspeisevergütungen GESCHÜTZT
         'heatpump_settings': True,  # Wärmepumpen geschützt
@@ -213,7 +214,7 @@ def require_admin_auth(area_id: str, area_name: str = None) -> bool:
         return True  # Bereits authentifiziert
     
     # Zeige Login-Dialog
-    st.warning(f"🔒 Der Bereich **{area_name}** ist passwortgeschützt.")
+    st.warning(f" Der Bereich **{area_name}** ist passwortgeschützt.")
     st.info("Bitte geben Sie Ihre Admin-Zugangsdaten ein:")
     
     col1, col2 = st.columns(2)
@@ -236,7 +237,7 @@ def require_admin_auth(area_id: str, area_name: str = None) -> bool:
     col_btn1, col_btn2, col_btn3 = st.columns([1, 1, 2])
     
     with col_btn1:
-        if st.button("🔓 Entsperren", key=f"{area_id}_unlock", type="primary"):
+        if st.button(" Entsperren", key=f"{area_id}_unlock", type="primary"):
             if username and password:
                 if verify_admin_password(username, password):
                     st.session_state[auth_key] = True
@@ -249,7 +250,7 @@ def require_admin_auth(area_id: str, area_name: str = None) -> bool:
                 st.warning("Bitte Benutzername und Passwort eingeben!")
     
     with col_btn2:
-        if st.button("🚪 Abbrechen", key=f"{area_id}_cancel"):
+        if st.button(" Abbrechen", key=f"{area_id}_cancel"):
             st.info("Zugriff verweigert. Kehre zurück...")
             return False
     
@@ -258,7 +259,7 @@ def require_admin_auth(area_id: str, area_name: str = None) -> bool:
 
 def render_admin_security_settings():
     """Rendert die Admin-Security-Einstellungen im Admin-Panel"""
-    st.subheader("🔐 Sicherheitseinstellungen")
+    st.subheader("Sicherheitseinstellungen")
     
     st.markdown("""
     Hier können Sie festlegen, welche Admin-Bereiche ein Passwort erfordern.
@@ -268,24 +269,25 @@ def render_admin_security_settings():
     protected_areas = get_admin_protected_areas()
     
     area_labels = {
-        'build_infos': '📋 Build Infos & Dokumentation',
-        'user_management': '👥 Benutzerverwaltung',
-        'company_management': '🏢 Firmenverwaltung',
+        'build_infos': 'Build Infos & Dokumentation',
+        'user_management': 'Benutzerverwaltung',
+        'company_management': 'Firmenverwaltung',
         'product_management': 'Produktverwaltung',
-        'product_database': '�️ Produktdatenbank CRUD',
+        'product_database': 'Produktdatenbank CRUD',
         'pv_mounting': 'PV-Unterkonstruktionen',
-        'services_management': '🛠️ Dienstleistungsverwaltung',
+        'services_management': 'Dienstleistungsverwaltung',
         'price_matrix': 'Preis Matrix',
+        'controlling_settings': 'Controlling Einstellungen',
         'economic_settings': 'Wirtschaftlichkeitseinstellungen',
         'tariff_management': 'Einspeisung Tarifverwaltung',
-        'heatpump_settings': '🔥 Wärmepumpen-Einstellungen',
+        'heatpump_settings': 'Wärmepumpen-Einstellungen',
         'ui_customization': 'UI-Anpassungen',
-        'logo_management': '🖼️ Logo-Verwaltung',
-        'intro_settings': '🎬 Intro-Einstellungen',
-        'payment_terms': '💳 Zahlungsbedingungen',
-        'visualization_settings': '� Anzeigeeinstellungen',
-        'pdf_settings': '� PDF-Design Einstellungen',
-        'advanced_settings': '🧠 Erweiterte Einstellungen',
+        'logo_management': 'Logo-Verwaltung',
+        'intro_settings': 'Intro-Einstellungen',
+        'payment_terms': 'Zahlungsbedingungen',
+        'visualization_settings': 'Anzeigeeinstellungen',
+        'pdf_settings': 'PDF-Design Einstellungen',
+        'advanced_settings': 'Erweiterte Einstellungen',
     }
     
     st.write("### Geschützte Bereiche konfigurieren")
@@ -316,7 +318,7 @@ def render_admin_security_settings():
     col_save, col_cancel = st.columns(2)
     
     with col_save:
-        if st.button("💾 Änderungen speichern", type="primary", use_container_width=True, disabled=not changed):
+        if st.button("Änderungen speichern", type="primary", use_container_width=True, disabled=not changed):
             if save_admin_protected_areas(new_areas):
                 st.success("Sicherheitseinstellungen gespeichert!")
                 st.rerun()
@@ -324,12 +326,12 @@ def render_admin_security_settings():
                 st.error("Fehler beim Speichern!")
     
     with col_cancel:
-        if st.button("↩️ Abbrechen", use_container_width=True, disabled=not changed):
+        if st.button("Abbrechen", use_container_width=True, disabled=not changed):
             st.rerun()
     
     # Aktuelle Authentifizierungen anzeigen
     st.divider()
-    st.write("### 🔓 Aktive Sitzungen")
+    st.write("###  Aktive Sitzungen")
     
     active_auths = []
     for key in st.session_state.keys():
@@ -345,7 +347,7 @@ def render_admin_security_settings():
             with col_info:
                 st.info(f"{area_name} - Authentifiziert als: **{user}**")
             with col_logout:
-                if st.button("🚪 Abmelden", key=f"logout_{area}"):
+                if st.button(" Abmelden", key=f"logout_{area}"):
                     del st.session_state[f'admin_auth_{area}']
                     if f'admin_auth_{area}_user' in st.session_state:
                         del st.session_state[f'admin_auth_{area}_user']

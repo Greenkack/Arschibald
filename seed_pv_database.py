@@ -546,7 +546,7 @@ def seed_database():
             print(f"Fehler: {comp['manufacturer']} - {comp['product_name']}: {e}")
             error_count += 1
     
-    print(f"\n🎉 Seeding abgeschlossen!")
+    print(f"\n Seeding abgeschlossen!")
     print(f"Erfolgreich: {success_count}")
     print(f"Fehler: {error_count}")
     

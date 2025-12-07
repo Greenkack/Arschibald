@@ -51,7 +51,7 @@ def test_pdf_templates():
     for template in pv_templates:
         print(f"  {template}")
 
-    print("\n🔥 Wärmepumpen-Templates (hp_nt_XX.pdf):")
+    print("\n Wärmepumpen-Templates (hp_nt_XX.pdf):")
     for template in hp_templates:
         print(f"  {template}")
 
@@ -136,7 +136,7 @@ def test_pdf_templates():
 if __name__ == "__main__":
     success = test_pdf_templates()
     if success:
-        print("\n🎉 TEMPLATE-SYSTEM FUNKTIONIERT!")
+        print("\n TEMPLATE-SYSTEM FUNKTIONIERT!")
         print("Die PDF-Templates werden korrekt geladen und gemergt.")
     else:
         print("\nTEMPLATE-SYSTEM DEFEKT!")

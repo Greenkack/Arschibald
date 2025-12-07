@@ -32,7 +32,7 @@ def test_seite7_platzhalter():
     try:
         dynamic_data = build_dynamic_data(project_data, {})
 
-        print("📋 Seite 7 Platzhalter-Ergebnisse:")
+        print(" Seite 7 Platzhalter-Ergebnisse:")
         seite7_mapping = {
             'preis_mit_mwst_formatted': 'Gesamtsumme Brutto',
             'zubehor_preis_formatted': 'Zubehör / Extras',

@@ -94,7 +94,7 @@ def demo_standalone_ui():
     # Zeige Konfiguration
     if 'saved_config' in st.session_state:
         st.markdown("---")
-        st.subheader("💾 Gespeicherte Konfiguration")
+        st.subheader(" Gespeicherte Konfiguration")
         st.json(st.session_state.saved_config)
 
 
@@ -243,7 +243,7 @@ def demo_matrix_comparison():
 
 def demo_cleanup():
     """Demo: Cleanup-Funktion"""
-    st.header("🧹 Cleanup")
+    st.header(" Cleanup")
     st.markdown("---")
     
     matrices = list_matrices()

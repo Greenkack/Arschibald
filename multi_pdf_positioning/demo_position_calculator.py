@@ -137,7 +137,7 @@ def main():
         if len(collisions) == 0:
             print("No collisions detected!")
         else:
-            print(f"⚠ Found {len(collisions)} collision(s):")
+            print(f" Found {len(collisions)} collision(s):")
             for collision in collisions[:5]:  # Show first 5
                 elem1 = elements[collision.element1_index]
                 elem2 = elements[collision.element2_index]

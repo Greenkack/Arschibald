@@ -133,7 +133,7 @@ def main():
     print(f"Found keywords: {', '.join(found)}")
 
     if missing:
-        print(f"⚠ Missing keywords: {', '.join(missing)}")
+        print(f" Missing keywords: {', '.join(missing)}")
 
     if len(found) < len(pv_keywords) * 0.7:  # At least 70% of keywords
         print("FAILED: Insufficient relevant content in photovoltaics PDF")
@@ -169,7 +169,7 @@ def main():
     print(f"Found keywords: {', '.join(found)}")
 
     if missing:
-        print(f"⚠ Missing keywords: {', '.join(missing)}")
+        print(f" Missing keywords: {', '.join(missing)}")
 
     if len(found) < len(hp_keywords) * 0.7:  # At least 70% of keywords
         print("FAILED: Insufficient relevant content in heat pump PDF")
@@ -200,12 +200,12 @@ def main():
     if has_tech_specs:
         print("Photovoltaics PDF contains technical specifications")
     else:
-        print("⚠ WARNING: Technical specifications may be incomplete")
+        print(" WARNING: Technical specifications may be incomplete")
 
     if has_economic_data:
         print("Photovoltaics PDF contains economic data")
     else:
-        print("⚠ WARNING: Economic data may be incomplete")
+        print(" WARNING: Economic data may be incomplete")
 
     # Check HP PDF for technical data
     with open(hp_pdf, 'rb') as f:
@@ -229,12 +229,12 @@ def main():
     if has_tech_specs:
         print("Heat pump PDF contains technical specifications")
     else:
-        print("⚠ WARNING: Technical specifications may be incomplete")
+        print(" WARNING: Technical specifications may be incomplete")
 
     if has_economic_data:
         print("Heat pump PDF contains economic data")
     else:
-        print("⚠ WARNING: Economic data may be incomplete")
+        print(" WARNING: Economic data may be incomplete")
 
     # Knowledge base functionality note
     print("\n6. Knowledge base functionality notes...")
@@ -263,17 +263,17 @@ def main():
     print("  Content verified for relevance")
     print("  System handles empty knowledge base gracefully")
     print("  Index caching mechanism in place")
-    print("\n📋 Requirements validated:")
+    print("\n Requirements validated:")
     print("  3.1: PDF documents in knowledge_base directory")
     print("  3.5: Technical specifications included")
     print("  3.5: Economic data included")
-    print("\n⚠ Note: Full search testing requires OPENAI_API_KEY to be set")
+    print("\n Note: Full search testing requires OPENAI_API_KEY to be set")
     print("  Once API key is configured, the knowledge base will:")
     print("  - Create embeddings automatically")
     print("  - Enable semantic search")
     print("  - Return relevant results for queries")
     print("=" * 70)
-    print("\n🎉 Knowledge base setup complete!")
+    print("\n Knowledge base setup complete!")
 
     return True
 

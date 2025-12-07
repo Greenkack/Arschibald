@@ -326,30 +326,30 @@ class ThemeGenerator:
         palette = self.generate_color_palette()
         
         preview = f"""
-╔══════════════════════════════════════════════════════════════╗
-║                    THEME PREVIEW                             ║
-╠══════════════════════════════════════════════════════════════╣
-║ Name: {theme['display_name']:<52} ║
-║ Mode: {'Dark' if self.is_dark else 'Light':<52} ║
-╠══════════════════════════════════════════════════════════════╣
-║                    COLOR PALETTE                             ║
-╠══════════════════════════════════════════════════════════════╣
-║ Primary:     {palette.primary:<45} ║
-║ Secondary:   {palette.secondary:<45} ║
-║ Accent:      {palette.accent:<45} ║
-║ Success:     {palette.success:<45} ║
-║ Warning:     {palette.warning:<45} ║
-║ Error:       {palette.error:<45} ║
-║ Info:        {palette.info:<45} ║
-╠══════════════════════════════════════════════════════════════╣
-║                    CHART COLORS                              ║
-╠══════════════════════════════════════════════════════════════╣
+
+                    THEME PREVIEW                             
+
+ Name: {theme['display_name']:<52} 
+ Mode: {'Dark' if self.is_dark else 'Light':<52} 
+
+                    COLOR PALETTE                             
+
+ Primary:     {palette.primary:<45} 
+ Secondary:   {palette.secondary:<45} 
+ Accent:      {palette.accent:<45} 
+ Success:     {palette.success:<45} 
+ Warning:     {palette.warning:<45} 
+ Error:       {palette.error:<45} 
+ Info:        {palette.info:<45} 
+
+                    CHART COLORS                              
+
 """
         chart_colors = self.generate_chart_colors(palette)
         for i, color in enumerate(chart_colors, 1):
-            preview += f"║ Chart {i}:     {color:<45} ║\n"
+            preview += f" Chart {i}:     {color:<45} \n"
         
-        preview += "╚══════════════════════════════════════════════════════════════╝"
+        preview += ""
         
         return preview
 
@@ -389,9 +389,9 @@ def interactive_mode():
     print("\n\nExport theme to JSON? (y/n):")
     if input("> ").strip().lower() == 'y':
         filepath = generator.export_to_json()
-        print(f"\n✅ Theme exported to: {filepath}")
+        print(f"\n Theme exported to: {filepath}")
     else:
-        print("\n❌ Theme not exported.")
+        print("\n Theme not exported.")
     
     print("\n" + "="*60 + "\n")
 
@@ -416,9 +416,9 @@ def batch_generate_themes():
     for config in themes_config:
         generator = ThemeGenerator(**config)
         filepath = generator.export_to_json()
-        print(f"✅ Generated: {config['theme_name']}")
+        print(f" Generated: {config['theme_name']}")
     
-    print(f"\n✅ Successfully generated {len(themes_config)} themes!")
+    print(f"\n Successfully generated {len(themes_config)} themes!")
     print("="*60 + "\n")
 
 
@@ -503,7 +503,7 @@ Examples:
     # Command-line mode
     if not args.base_color or not args.name:
         parser.print_help()
-        print("\n❌ Error: --base-color and --name are required (or use --interactive)")
+        print("\n Error: --base-color and --name are required (or use --interactive)")
         return
     
     # Generiere Theme
@@ -515,7 +515,7 @@ Examples:
     # Exportiere (falls nicht preview-only)
     if not args.preview_only:
         filepath = generator.export_to_json(args.output)
-        print(f"\n✅ Theme exported to: {filepath}")
+        print(f"\n Theme exported to: {filepath}")
     else:
         print("\n(Preview only - not exported)")
 

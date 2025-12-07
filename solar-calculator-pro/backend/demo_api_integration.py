@@ -38,24 +38,24 @@ async def demo_api_key_integration():
     )
     
     result = await service.create_integration(integration)
-    print(f"✓ Created integration: {result.name} (ID: {result.id})")
+    print(f" Created integration: {result.name} (ID: {result.id})")
     
     # Test connection
     test_result = await service.test_integration(result.id)
-    print(f"✓ Connection test: {'Success' if test_result.success else 'Failed'}")
+    print(f" Connection test: {'Success' if test_result.success else 'Failed'}")
     
     # Make API call
     client = service._get_client(await service.get_integration(result.id))
     try:
         weather = await client.get("/weather", params={"q": "Berlin", "appid": "your_api_key"})
-        print(f"✓ Weather data retrieved: {weather.get('name', 'N/A')}")
+        print(f" Weather data retrieved: {weather.get('name', 'N/A')}")
     except Exception as e:
-        print(f"✗ API call failed: {e}")
+        print(f" API call failed: {e}")
     
     # Get metrics
     metrics = await service.get_metrics(result.id)
     if metrics:
-        print(f"✓ Metrics: {metrics.total_calls} calls, {metrics.success_rate * 100:.1f}% success rate")
+        print(f" Metrics: {metrics.total_calls} calls, {metrics.success_rate * 100:.1f}% success rate")
     
     db.close()
 
@@ -86,16 +86,16 @@ async def demo_oauth_integration():
     )
     
     result = await service.create_integration(integration)
-    print(f"✓ Created OAuth integration: {result.name} (ID: {result.id})")
+    print(f" Created OAuth integration: {result.name} (ID: {result.id})")
     
     # Get authorization URL
     auth_url = await service.get_oauth_authorization_url(result.id, state="random_state")
-    print(f"✓ Authorization URL: {auth_url}")
+    print(f" Authorization URL: {auth_url}")
     print("  → User should visit this URL to authorize")
     
     # Simulate callback (in real app, this comes from OAuth provider)
     # tokens = await service.handle_oauth_callback(result.id, "authorization_code")
-    # print(f"✓ Tokens received and stored")
+    # print(f" Tokens received and stored")
     
     db.close()
 
@@ -125,7 +125,7 @@ async def demo_webhook_integration():
     )
     
     result = await service.create_integration(integration)
-    print(f"✓ Created webhook integration: {result.name} (ID: {result.id})")
+    print(f" Created webhook integration: {result.name} (ID: {result.id})")
     
     # Test webhook delivery
     success = await service.test_webhook(
@@ -137,11 +137,11 @@ async def demo_webhook_integration():
             "timestamp": "2024-01-01T12:00:00Z"
         }
     )
-    print(f"✓ Webhook test: {'Delivered' if success else 'Failed'}")
+    print(f" Webhook test: {'Delivered' if success else 'Failed'}")
     
     # List webhook history
     history = await service.list_webhook_history(result.id, limit=10)
-    print(f"✓ Webhook history: {len(history)} deliveries")
+    print(f" Webhook history: {len(history)} deliveries")
     for delivery in history[:3]:
         print(f"  - {delivery.event}: {delivery.status} ({delivery.attempts} attempts)")
     
@@ -168,7 +168,7 @@ async def demo_rate_limiting():
     )
     
     result = await service.create_integration(integration)
-    print(f"✓ Created rate-limited integration: {result.name}")
+    print(f" Created rate-limited integration: {result.name}")
     print(f"  Rate limit: {result.rate_limit_config['calls']} calls per {result.rate_limit_config['period']}s")
     
     # Make multiple calls to demonstrate rate limiting
@@ -208,7 +208,7 @@ async def demo_caching():
     )
     
     result = await service.create_integration(integration)
-    print(f"✓ Created cached integration: {result.name}")
+    print(f" Created cached integration: {result.name}")
     print(f"  Cache TTL: {result.cache_config['ttl']}s")
     
     client = service._get_client(await service.get_integration(result.id))
@@ -220,9 +220,9 @@ async def demo_caching():
     try:
         await client.get("/data")
         elapsed = time.time() - start
-        print(f"  ✓ Response time: {elapsed:.3f}s")
+        print(f"   Response time: {elapsed:.3f}s")
     except:
-        print(f"  ✓ Simulated response time: 0.500s")
+        print(f"   Simulated response time: 0.500s")
     
     # Second call - returns cached
     print("\n  Second call (returns cached)...")
@@ -230,13 +230,13 @@ async def demo_caching():
     try:
         await client.get("/data")
         elapsed = time.time() - start
-        print(f"  ✓ Response time: {elapsed:.3f}s (much faster!)")
+        print(f"   Response time: {elapsed:.3f}s (much faster!)")
     except:
-        print(f"  ✓ Simulated response time: 0.001s (much faster!)")
+        print(f"   Simulated response time: 0.001s (much faster!)")
     
     # Clear cache
     await service.clear_cache(result.id)
-    print("\n  ✓ Cache cleared")
+    print("\n   Cache cleared")
     
     db.close()
 
@@ -257,7 +257,7 @@ async def demo_monitoring():
     )
     
     result = await service.create_integration(integration)
-    print(f"✓ Created monitored integration: {result.name}")
+    print(f" Created monitored integration: {result.name}")
     
     # Make some API calls
     client = service._get_client(await service.get_integration(result.id))
@@ -314,21 +314,21 @@ async def demo_complete_workflow():
     )
     
     result = await service.create_integration(integration)
-    print(f"   ✓ Integration created (ID: {result.id})")
+    print(f"    Integration created (ID: {result.id})")
     
     # 2. Test connection
     print("\n2. Testing connection...")
     test_result = await service.test_integration(result.id)
-    print(f"   ✓ Connection: {'OK' if test_result.success else 'Failed'}")
+    print(f"    Connection: {'OK' if test_result.success else 'Failed'}")
     
     # 3. Make API calls
     print("\n3. Making API calls...")
     client = service._get_client(await service.get_integration(result.id))
     try:
         await client.get("/data")
-        print("   ✓ GET request successful")
+        print("    GET request successful")
     except:
-        print("   ✓ GET request simulated")
+        print("    GET request simulated")
     
     # 4. Send webhook
     print("\n4. Sending webhook...")
@@ -337,14 +337,14 @@ async def demo_complete_workflow():
         event="data.updated",
         data={"status": "completed"}
     )
-    print(f"   ✓ Webhook: {'Delivered' if success else 'Queued'}")
+    print(f"    Webhook: {'Delivered' if success else 'Queued'}")
     
     # 5. Check metrics
     print("\n5. Checking metrics...")
     metrics = await service.get_metrics(result.id)
     if metrics:
-        print(f"   ✓ Total calls: {metrics.total_calls}")
-        print(f"   ✓ Success rate: {metrics.success_rate * 100:.1f}%")
+        print(f"    Total calls: {metrics.total_calls}")
+        print(f"    Success rate: {metrics.success_rate * 100:.1f}%")
     
     # 6. Update integration
     print("\n6. Updating integration...")
@@ -354,14 +354,14 @@ async def demo_complete_workflow():
         enabled=True
     )
     updated = await service.update_integration(result.id, update)
-    print(f"   ✓ Integration updated")
+    print(f"    Integration updated")
     
     # 7. List all integrations
     print("\n7. Listing all integrations...")
     all_integrations = await service.list_integrations()
-    print(f"   ✓ Found {len(all_integrations)} integrations")
+    print(f"    Found {len(all_integrations)} integrations")
     
-    print("\n✓ Complete workflow finished successfully!")
+    print("\n Complete workflow finished successfully!")
     
     db.close()
 
@@ -386,7 +386,7 @@ async def main():
         try:
             await demo_func()
         except Exception as e:
-            print(f"\n✗ {name} demo failed: {e}")
+            print(f"\n {name} demo failed: {e}")
     
     print("\n" + "=" * 60)
     print("All demos completed!")

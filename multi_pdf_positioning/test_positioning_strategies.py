@@ -270,11 +270,11 @@ def test_with_real_files():
     pdf_dir = Path("pdf_templates_static/multi")
     
     if not yml_dir.exists():
-        print("  ⚠ coords_multi directory not found, skipping real file tests")
+        print("   coords_multi directory not found, skipping real file tests")
         return True
     
     if not pdf_dir.exists():
-        print("  ⚠ PDF directory not found, skipping real file tests")
+        print("   PDF directory not found, skipping real file tests")
         return True
     
     try:
@@ -318,7 +318,7 @@ def test_with_real_files():
                     print(f"      - {error}")
                 return False
         else:
-            print("  ⚠ Test files not found, skipping")
+            print("   Test files not found, skipping")
             return True
     
     except Exception as e:

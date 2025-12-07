@@ -123,7 +123,7 @@ def render_core_status_dashboard():
     
     # Detailed Status
     if config_enabled:
-        st.markdown("### ⚙️ Konfiguration Details")
+        st.markdown("###  Konfiguration Details")
         config = get_app_config()
         if config:
             config_col1, config_col2 = st.columns(2)
@@ -149,7 +149,7 @@ Max Memory: {config.performance.max_memory_mb}MB
                 """, language="text")
     
     if cache_enabled:
-        st.markdown("### 💾 Cache Performance")
+        st.markdown("###  Cache Performance")
         cache = get_app_cache()
         if cache:
             try:
@@ -215,7 +215,7 @@ Debug Mode: {config.debug}
     
     # Database Pool Status (Phase 4)
     if is_feature_enabled('database'):
-        st.markdown("### 🗄️ Database Pool Status")
+        st.markdown("###  Database Pool Status")
         
         db_manager = get_database_manager()
         if db_manager:
@@ -287,7 +287,7 @@ Debug Mode: {config.debug}
     """)
     
     # All Features Status Table
-    st.markdown("### 📋 Alle Features")
+    st.markdown("###  Alle Features")
     
     feature_data = []
     for feature_name, enabled in FEATURES.items():

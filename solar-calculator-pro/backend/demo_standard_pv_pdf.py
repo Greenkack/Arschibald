@@ -56,13 +56,13 @@ def demo_basic_pdf_generation():
             output_file = "demo_basic_pv_pdf.pdf"
             with open(output_file, 'wb') as f:
                 f.write(pdf_bytes)
-            logger.info(f"✓ PDF generated successfully: {output_file}")
+            logger.info(f" PDF generated successfully: {output_file}")
             logger.info(f"  Size: {len(pdf_bytes):,} bytes")
         else:
-            logger.error("✗ PDF generation failed")
+            logger.error(" PDF generation failed")
             
     except Exception as e:
-        logger.error(f"✗ Error: {e}", exc_info=True)
+        logger.error(f" Error: {e}", exc_info=True)
 
 
 def demo_complete_pdf_with_pricing():
@@ -122,14 +122,14 @@ def demo_complete_pdf_with_pricing():
             output_file = "demo_complete_pv_pdf.pdf"
             with open(output_file, 'wb') as f:
                 f.write(pdf_bytes)
-            logger.info(f"✓ Complete PDF generated: {output_file}")
+            logger.info(f" Complete PDF generated: {output_file}")
             logger.info(f"  Size: {len(pdf_bytes):,} bytes")
             logger.info(f"  Pages: 8")
         else:
-            logger.error("✗ PDF generation failed")
+            logger.error(" PDF generation failed")
             
     except Exception as e:
-        logger.error(f"✗ Error: {e}", exc_info=True)
+        logger.error(f" Error: {e}", exc_info=True)
 
 
 def demo_specific_pages():
@@ -162,14 +162,14 @@ def demo_specific_pages():
             output_file = "demo_partial_pv_pdf.pdf"
             with open(output_file, 'wb') as f:
                 f.write(pdf_bytes)
-            logger.info(f"✓ Partial PDF generated: {output_file}")
+            logger.info(f" Partial PDF generated: {output_file}")
             logger.info(f"  Size: {len(pdf_bytes):,} bytes")
             logger.info(f"  Pages: {len(pages_to_generate)}")
         else:
-            logger.error("✗ PDF generation failed")
+            logger.error(" PDF generation failed")
             
     except Exception as e:
-        logger.error(f"✗ Error: {e}", exc_info=True)
+        logger.error(f" Error: {e}", exc_info=True)
 
 
 def demo_german_formatting():
@@ -205,7 +205,7 @@ def demo_coordinate_inspection():
     elements = service.load_page_coordinates(1)
     
     if elements:
-        logger.info(f"✓ Found {len(elements)} text elements")
+        logger.info(f" Found {len(elements)} text elements")
         logger.info("\nFirst 5 elements:")
         for i, elem in enumerate(elements[:5], 1):
             logger.info(f"\n  Element {i}:")
@@ -216,7 +216,7 @@ def demo_coordinate_inspection():
             if pos:
                 logger.info(f"    Position: ({pos.get('x')}, {pos.get('y')})")
     else:
-        logger.warning("✗ No coordinates found")
+        logger.warning(" No coordinates found")
 
 
 def demo_template_availability():
@@ -231,12 +231,12 @@ def demo_template_availability():
     templates = service.template_loader.get_all_templates()
     
     if templates:
-        logger.info(f"✓ Found {len(templates)} templates:")
+        logger.info(f" Found {len(templates)} templates:")
         for page_num in sorted(templates.keys()):
             size = len(templates[page_num])
             logger.info(f"  Page {page_num}: {size:,} bytes")
     else:
-        logger.warning("✗ No templates found")
+        logger.warning(" No templates found")
         logger.info("  Make sure templates exist in: pdf_templates_static/notext/")
 
 
@@ -253,29 +253,29 @@ def demo_error_handling():
     try:
         pdf_bytes = service.generate_complete_pdf({}, include_pages=[1])
         if pdf_bytes:
-            logger.info("✓ PDF generated (with empty placeholders)")
+            logger.info(" PDF generated (with empty placeholders)")
         else:
-            logger.warning("✗ PDF generation failed")
+            logger.warning(" PDF generation failed")
     except Exception as e:
-        logger.error(f"✗ Error: {e}")
+        logger.error(f" Error: {e}")
     
     # Test 2: Invalid page number
     logger.info("\nTest 2: Load coordinates for invalid page")
     try:
         elements = service.load_page_coordinates(99)
         if elements:
-            logger.info(f"✓ Found {len(elements)} elements")
+            logger.info(f" Found {len(elements)} elements")
         else:
-            logger.warning("✗ No coordinates found (expected)")
+            logger.warning(" No coordinates found (expected)")
     except Exception as e:
-        logger.error(f"✗ Error: {e}")
+        logger.error(f" Error: {e}")
 
 
 def main():
     """Run all demos"""
-    logger.info("╔" + "=" * 58 + "╗")
-    logger.info("║" + " " * 10 + "Standard PV PDF Service - Demo Suite" + " " * 11 + "║")
-    logger.info("╚" + "=" * 58 + "╝")
+    logger.info("" + "=" * 58 + "")
+    logger.info("" + " " * 10 + "Standard PV PDF Service - Demo Suite" + " " * 11 + "")
+    logger.info("" + "=" * 58 + "")
     
     demos = [
         ("Basic PDF Generation", demo_basic_pdf_generation),

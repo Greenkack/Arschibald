@@ -19,7 +19,7 @@ def main():
     """Haupt-Demo-Funktion"""
     st.set_page_config(
         page_title="Theme Selector Demo",
-        page_icon="🎨",
+        page_icon="",
         layout="wide"
     )
 
@@ -34,11 +34,11 @@ def main():
 
     # Sidebar mit Theme Selector
     with st.sidebar:
-        st.title("🎨 Theme Demo")
+        st.title(" Theme Demo")
 
         # Callback für Theme-Wechsel
         def on_theme_change(theme_name: str):
-            st.toast(f"✅ Theme gewechselt zu: {theme_name}", icon="🎨")
+            st.toast(f" Theme gewechselt zu: {theme_name}", icon="")
 
         # Rendere Theme Selector
         render_theme_selector(
@@ -49,7 +49,7 @@ def main():
         )
 
     # Hauptinhalt
-    st.title("🎨 Theme Selector Demo")
+    st.title(" Theme Selector Demo")
 
     # Zeige aktuelles Theme
     current_theme = get_current_theme_name()
@@ -176,7 +176,7 @@ def main():
     st.markdown("---")
 
     # Anleitung
-    st.header("📖 Anleitung")
+    st.header(" Anleitung")
 
     st.markdown("""
     ### Theme-Wechsel
@@ -188,12 +188,12 @@ def main():
 
     ### Features
 
-    - ✅ **Live Theme-Wechsel** ohne Seiten-Reload
-    - ✅ **Dark Mode Toggle** für schnellen Wechsel
-    - ✅ **Farbvorschau** mit allen wichtigen Theme-Farben
-    - ✅ **Local Storage** Persistierung der Theme-Auswahl
-    - ✅ **Session State** Integration
-    - ✅ **Callback-Support** für Theme-Wechsel-Events
+    -  **Live Theme-Wechsel** ohne Seiten-Reload
+    -  **Dark Mode Toggle** für schnellen Wechsel
+    -  **Farbvorschau** mit allen wichtigen Theme-Farben
+    -  **Local Storage** Persistierung der Theme-Auswahl
+    -  **Session State** Integration
+    -  **Callback-Support** für Theme-Wechsel-Events
 
     ### Verfügbare Themes
 

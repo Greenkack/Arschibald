@@ -150,7 +150,7 @@ class TestAdminPricingRuleUI:
         render_pricing_rule_management_ui()
 
         # Verify UI elements were created
-        mock_st.header.assert_called_with("⚙️ Preisregel-Verwaltung")
+        mock_st.header.assert_called_with(" Preisregel-Verwaltung")
         mock_st.markdown.assert_called()
         mock_st.tabs.assert_called_once()
 
@@ -290,7 +290,7 @@ class TestAdminPricingRuleUI:
         render_rule_testing_tab(self.mock_pricing_engine)
 
         # Verify UI elements
-        mock_st.subheader.assert_called_with("🧪 Regel-Test")
+        mock_st.subheader.assert_called_with(" Regel-Test")
 
         # Verify pricing calculations were called
         self.mock_pricing_engine.calculate_modifications.assert_called()

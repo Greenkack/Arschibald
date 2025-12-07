@@ -227,9 +227,9 @@ def demo_integration_with_manager():
 def main():
     """Hauptfunktion"""
     print("\n")
-    print("╔" + "=" * 68 + "╗")
-    print("║" + " " * 10 + "DEMO: Fehlerbehandlung und Validierung (Task 21)" + " " * 9 + "║")
-    print("╚" + "=" * 68 + "╝")
+    print("" + "=" * 68 + "")
+    print("" + " " * 10 + "DEMO: Fehlerbehandlung und Validierung (Task 21)" + " " * 9 + "")
+    print("" + "=" * 68 + "")
     
     # Führe alle Demos aus
     demo_validation()

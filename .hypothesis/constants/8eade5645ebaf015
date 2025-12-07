@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\template\loader_tags.py
+# hypothesis_version: 6.147.0
+
+['"', "'", '\'"', '../', './', '/', '<%s: extends %s>', '__include_context', 'block', 'block_context', 'context', 'endblock', 'endblock %s', 'extends', 'extends_context', 'include', 'only', 'render', 'template', 'with']

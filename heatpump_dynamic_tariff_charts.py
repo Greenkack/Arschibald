@@ -393,7 +393,7 @@ def create_stromcloud_waterfall(cloud_result: dict[str, Any]) -> go.Figure:
     # Layout
     fig.update_layout(
         title={
-            'text': "☁️ Stromcloud Kosten-Bilanz (Waterfall)",
+            'text': " Stromcloud Kosten-Bilanz (Waterfall)",
             'x': 0.5,
             'xanchor': 'center',
             'font': {'size': 18, 'color': '#2C3E50'}
@@ -492,7 +492,7 @@ def create_load_shifting_heatmap(hourly_data: list[dict[str, Any]]) -> go.Figure
     # Layout
     fig.update_layout(
         title={
-            'text': "🔥 Load-Shifting Heatmap (Woche)",
+            'text': " Load-Shifting Heatmap (Woche)",
             'x': 0.5,
             'xanchor': 'center',
             'font': {'size': 18, 'color': '#2C3E50'}

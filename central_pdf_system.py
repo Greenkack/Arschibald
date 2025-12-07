@@ -1019,7 +1019,7 @@ class CentralPDFInterface:
             'monthly_prod_cons_chart_bytes': ' Monatliche Produktion vs. Verbrauch',
             'cost_projection_chart_bytes': ' Kostenprojektion über 25 Jahre',
             'cumulative_cashflow_chart_bytes': ' Kumulierter Cashflow',
-            'consumption_coverage_pie_chart_bytes': '🥧 Verbrauchsdeckung (Kreisdiagramm)',
+            'consumption_coverage_pie_chart_bytes': ' Verbrauchsdeckung (Kreisdiagramm)',
             'pv_usage_pie_chart_bytes': ' PV-Nutzungsverteilung',
             'yearly_production_chart_bytes': ' 3D-Jahresproduktion',
             'co2_savings_chart_bytes': ' CO₂-Einsparungen',
@@ -1061,7 +1061,7 @@ class CentralPDFInterface:
 
         # Automatische Auswahl (empfohlen)
         layout_options.append("auto")
-        layout_descriptions["auto"] = "🤖 Automatisch (beste verfügbare Option)"
+        layout_descriptions["auto"] = " Automatisch (beste verfügbare Option)"
 
         # Mega Hybrid (falls verfügbar)
         if status['mega_hybrid']:
@@ -1748,7 +1748,7 @@ class CentralPDFInterface:
                     'monthly_prod_cons_chart_bytes': ' Monatliche Produktion vs. Verbrauch',
                     'cost_projection_chart_bytes': ' Kostenprojektion über 25 Jahre',
                     'cumulative_cashflow_chart_bytes': ' Kumulierter Cashflow',
-                    'consumption_coverage_pie_chart_bytes': '🥧 Verbrauchsdeckung (Kreisdiagramm)',
+                    'consumption_coverage_pie_chart_bytes': ' Verbrauchsdeckung (Kreisdiagramm)',
                     'pv_usage_pie_chart_bytes': ' PV-Nutzungsverteilung',
                     'yearly_production_chart_bytes': ' 3D-Jahresproduktion',
                     'co2_savings_chart_bytes': ' CO₂-Einsparungen',
@@ -2369,7 +2369,7 @@ def cleanup_old_pdf_session_state():
                 break
 
     if cleaned_count > 0:
-        st.info(f"🧹 {cleaned_count} alte PDF Session State Variablen bereinigt")
+        st.info(f" {cleaned_count} alte PDF Session State Variablen bereinigt")
 
 # =============================================================================
 # ZENTRALE PDF-UI WRAPPER FUNKTION

@@ -29,7 +29,7 @@ def test_theme_selector_initialization():
     assert selector.theme_manager is not None
     assert selector.theme_manager == theme_manager
 
-    print("✅ ThemeSelectorUI erfolgreich initialisiert")
+    print(" ThemeSelectorUI erfolgreich initialisiert")
 
 
 def test_theme_manager_integration():
@@ -54,7 +54,7 @@ def test_theme_manager_integration():
     for theme_name in expected_themes:
         assert theme_name in themes, f"Theme '{theme_name}' nicht gefunden"
 
-    print(f"✅ {len(themes)} Themes verfügbar: {', '.join(themes)}")
+    print(f" {len(themes)} Themes verfügbar: {', '.join(themes)}")
 
 
 def test_theme_display_names():
@@ -68,7 +68,7 @@ def test_theme_display_names():
     assert 'shadcn-default' in display_names
     assert display_names['shadcn-default'] == 'shadcn/ui Default'
 
-    print("✅ Display-Namen korrekt:")
+    print(" Display-Namen korrekt:")
     for name, display_name in display_names.items():
         print(f"   - {name}: {display_name}")
 
@@ -94,7 +94,7 @@ def test_theme_switching():
     assert success, "Konnte shadcn-ocean nicht setzen"
     assert theme_manager.current_theme.name == 'shadcn-ocean'
 
-    print("✅ Theme-Wechsel funktioniert")
+    print(" Theme-Wechsel funktioniert")
 
 
 def test_theme_colors():
@@ -119,7 +119,7 @@ def test_theme_colors():
     assert colors.primary.startswith('#')
     assert len(colors.primary) == 7  # #RRGGBB
 
-    print("✅ Theme-Farben korrekt:")
+    print(" Theme-Farben korrekt:")
     print(f"   - Primary: {colors.primary}")
     print(f"   - Secondary: {colors.secondary}")
     print(f"   - Success: {colors.success}")
@@ -151,7 +151,7 @@ def test_css_generation():
     assert '.p-4' in css
     assert '.text-primary' in css
 
-    print(f"✅ CSS generiert ({len(css)} Zeichen)")
+    print(f" CSS generiert ({len(css)} Zeichen)")
     print(f"   - Enthält :root Variablen")
     print(f"   - Enthält Component-Styles")
     print(f"   - Enthält Utility-Klassen")
@@ -171,7 +171,7 @@ def test_dark_mode_detection():
     theme_manager.set_theme('shadcn-dark')
     assert theme_manager.current_theme.name.endswith('-dark')
 
-    print("✅ Dark Mode Erkennung funktioniert")
+    print(" Dark Mode Erkennung funktioniert")
 
 
 def test_all_themes():
@@ -197,9 +197,9 @@ def test_all_themes():
         assert theme.borders is not None
         assert theme.animations is not None
 
-        print(f"   ✅ {theme.display_name}")
+        print(f"    {theme.display_name}")
 
-    print(f"✅ Alle {len(themes)} Themes erfolgreich geladen")
+    print(f" Alle {len(themes)} Themes erfolgreich geladen")
 
 
 def test_callback_mechanism():
@@ -223,7 +223,7 @@ def test_callback_mechanism():
     assert callback_called['count'] == 1
     assert callback_called['last_theme'] == 'shadcn-ocean'
 
-    print("✅ Callback-Mechanismus funktioniert")
+    print(" Callback-Mechanismus funktioniert")
 
 
 def run_all_tests():
@@ -244,17 +244,17 @@ def run_all_tests():
         test_callback_mechanism()
 
         print("\n" + "=" * 60)
-        print("✅ Alle Tests erfolgreich!")
+        print(" Alle Tests erfolgreich!")
         print("=" * 60)
 
         return True
 
     except AssertionError as e:
-        print(f"\n❌ Test fehlgeschlagen: {e}")
+        print(f"\n Test fehlgeschlagen: {e}")
         return False
 
     except Exception as e:
-        print(f"\n❌ Fehler: {e}")
+        print(f"\n Fehler: {e}")
         import traceback
         traceback.print_exc()
         return False

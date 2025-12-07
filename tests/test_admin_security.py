@@ -32,7 +32,7 @@ except ImportError as e:
 
 # Test 2: get_admin_protected_areas()
 print()
-print('🔐 TEST 2: GET_ADMIN_PROTECTED_AREAS()')
+print(' TEST 2: GET_ADMIN_PROTECTED_AREAS()')
 print('-' * 80)
 
 try:
@@ -44,7 +44,7 @@ try:
     
     protected_count = 0
     for i, (area_id, is_protected) in enumerate(areas.items(), 1):
-        status = '🔒 Geschützt' if is_protected else '🔓 Offen'
+        status = ' Geschützt' if is_protected else ' Offen'
         print(f'  {i:2d}. {area_id:30s} → {status}')
         if is_protected:
             protected_count += 1
@@ -74,7 +74,7 @@ try:
     print('Teste verschiedene Bereiche:')
     for area_id, area_name in test_areas:
         is_protected = is_area_protected(area_id)
-        status = '🔒 GESCHÜTZT' if is_protected else '🔓 OFFEN'
+        status = ' GESCHÜTZT' if is_protected else ' OFFEN'
         print(f'  {area_name:30s} ({area_id:20s}) → {status}')
     
     print()
@@ -140,5 +140,5 @@ print('is_area_protected(): Erfolgreich')
 print('Fallback für unbekannte Bereiche: Erfolgreich')
 print('admin_panel.py Integration: Verifiziert')
 print()
-print('🎉 ALLE TESTS BESTANDEN!')
+print(' ALLE TESTS BESTANDEN!')
 print('=' * 80)

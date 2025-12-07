@@ -105,7 +105,7 @@ def render_template_list() -> None:
             show_inactive = st.checkbox("Inaktive anzeigen", key="show_inactive_templates")
         
         with col3:
-            if st.button("➕ Neue Vorlage", key="new_template_btn", use_container_width=True):
+            if st.button(" Neue Vorlage", key="new_template_btn", use_container_width=True):
                 st.session_state['template_action'] = 'create'
                 st.rerun()
         
@@ -150,17 +150,17 @@ def render_template_list() -> None:
                                 st.code(f"{{{{{ph}}}}} - {desc}")
                 
                 with col2:
-                    if st.button("✏️ Bearbeiten", key=f"edit_template_{template['id']}", use_container_width=True):
+                    if st.button(" Bearbeiten", key=f"edit_template_{template['id']}", use_container_width=True):
                         st.session_state['template_action'] = 'edit'
                         st.session_state['template_id'] = template['id']
                         st.rerun()
                     
-                    if st.button("👁️ Vorschau", key=f"preview_template_{template['id']}", use_container_width=True):
+                    if st.button(" Vorschau", key=f"preview_template_{template['id']}", use_container_width=True):
                         st.session_state['template_action'] = 'preview'
                         st.session_state['template_id'] = template['id']
                         st.rerun()
                     
-                    if st.button("📋 Duplizieren", key=f"duplicate_template_{template['id']}", use_container_width=True):
+                    if st.button(" Duplizieren", key=f"duplicate_template_{template['id']}", use_container_width=True):
                         st.session_state['template_action'] = 'duplicate'
                         st.session_state['template_id'] = template['id']
                         st.rerun()
@@ -197,7 +197,7 @@ def render_template_editor(template_id: int | None = None) -> None:
         is_edit = template_id is not None
         template = get_template_by_id(conn, template_id) if is_edit else None
         
-        st.subheader("✏️ Vorlage bearbeiten" if is_edit else "➕ Neue Vorlage erstellen")
+        st.subheader(" Vorlage bearbeiten" if is_edit else " Neue Vorlage erstellen")
         
         # Zurück-Button
         if st.button("← Zurück zur Übersicht"):
@@ -233,7 +233,7 @@ def render_template_editor(template_id: int | None = None) -> None:
             )
             
             # Platzhalter-Hilfe
-            with st.expander("📋 Verfügbare Platzhalter", expanded=False):
+            with st.expander(" Verfügbare Platzhalter", expanded=False):
                 st.write("Verwenden Sie diese Platzhalter in Ihrer Vorlage:")
                 cols = st.columns(2)
                 for i, (key, desc) in enumerate(AVAILABLE_PLACEHOLDERS.items()):
@@ -274,7 +274,7 @@ def render_template_editor(template_id: int | None = None) -> None:
                 )
             
             submitted = st.form_submit_button(
-                "💾 Speichern",
+                " Speichern",
                 use_container_width=True,
                 type="primary"
             )
@@ -323,7 +323,7 @@ def render_template_editor(template_id: int | None = None) -> None:
         # Versionshistorie (nur bei Bearbeitung)
         if is_edit and template:
             st.divider()
-            st.subheader("📚 Versionshistorie")
+            st.subheader(" Versionshistorie")
             
             versions = get_template_versions(conn, template_id)
             if versions:
@@ -340,7 +340,7 @@ def render_template_editor(template_id: int | None = None) -> None:
                         
                         if version['version'] != template['version']:
                             if st.button(
-                                "🔄 Diese Version wiederherstellen",
+                                " Diese Version wiederherstellen",
                                 key=f"restore_version_{version['version']}"
                             ):
                                 if restore_template_version(conn, template_id, version['version'], user):
@@ -372,7 +372,7 @@ def render_template_preview(template_id: int) -> None:
             st.error("Vorlage nicht gefunden")
             return
         
-        st.subheader(f"👁️ Vorschau: {template['name']}")
+        st.subheader(f" Vorschau: {template['name']}")
         
         # Zurück-Button
         if st.button("← Zurück zur Übersicht"):
@@ -438,7 +438,7 @@ def render_template_duplicate(template_id: int) -> None:
             st.error("Vorlage nicht gefunden")
             return
         
-        st.subheader(f"📋 Vorlage duplizieren: {template['name']}")
+        st.subheader(f" Vorlage duplizieren: {template['name']}")
         
         # Zurück-Button
         if st.button("← Zurück zur Übersicht"):
@@ -455,7 +455,7 @@ def render_template_duplicate(template_id: int) -> None:
                 placeholder="Neuer Name"
             )
             
-            submitted = st.form_submit_button("📋 Duplizieren", use_container_width=True, type="primary")
+            submitted = st.form_submit_button(" Duplizieren", use_container_width=True, type="primary")
             
             if submitted:
                 if not new_name:

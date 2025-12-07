@@ -68,15 +68,15 @@ def example_setup_smtp_config(save_admin_setting_func: Callable[[str, Any], bool
     # Verbindung testen
     success, message = test_smtp_connection(gmail_config)
     if success:
-        print(f"✅ SMTP-Verbindung erfolgreich: {message}")
+        print(f" SMTP-Verbindung erfolgreich: {message}")
         
         # Konfiguration speichern
         if save_smtp_config(save_admin_setting_func, gmail_config):
-            print("✅ SMTP-Konfiguration gespeichert")
+            print(" SMTP-Konfiguration gespeichert")
         else:
-            print("❌ Fehler beim Speichern der Konfiguration")
+            print(" Fehler beim Speichern der Konfiguration")
     else:
-        print(f"❌ SMTP-Verbindung fehlgeschlagen: {message}")
+        print(f" SMTP-Verbindung fehlgeschlagen: {message}")
 
 
 # ============================================================================
@@ -114,9 +114,9 @@ Telefon: {{phone}}
     )
     
     if template_id:
-        print(f"✅ Vorlage erstellt mit ID: {template_id}")
+        print(f" Vorlage erstellt mit ID: {template_id}")
     else:
-        print("❌ Fehler beim Erstellen der Vorlage")
+        print(" Fehler beim Erstellen der Vorlage")
     
     return template_id
 
@@ -136,7 +136,7 @@ def example_send_email_with_template(
     template = get_email_template_by_name(conn, "Angebot Nachfass")
     
     if not template:
-        print("❌ Vorlage nicht gefunden")
+        print(" Vorlage nicht gefunden")
         return
     
     # E-Mail senden
@@ -149,9 +149,9 @@ def example_send_email_with_template(
     )
     
     if success:
-        print(f"✅ E-Mail erfolgreich gesendet: {message}")
+        print(f" E-Mail erfolgreich gesendet: {message}")
     else:
-        print(f"❌ Fehler beim Senden: {message}")
+        print(f" Fehler beim Senden: {message}")
 
 
 # ============================================================================
@@ -184,7 +184,7 @@ Ihr Solar-Team""",
     )
     
     if success:
-        print(f"✅ E-Mail mit Anhang gesendet: {message}")
+        print(f" E-Mail mit Anhang gesendet: {message}")
         
         # In Historie speichern
         save_email_to_history(
@@ -198,7 +198,7 @@ Ihr Solar-Team""",
             sent_by="Max Mustermann"
         )
     else:
-        print(f"❌ Fehler beim Senden: {message}")
+        print(f" Fehler beim Senden: {message}")
 
 
 # ============================================================================
@@ -211,14 +211,14 @@ def example_get_email_history(conn: sqlite3.Connection, customer_id: int):
     # Historie abrufen
     history = get_email_history_for_customer(conn, customer_id, limit=10)
     
-    print(f"\n📧 E-Mail-Historie für Kunde {customer_id}:")
+    print(f"\n E-Mail-Historie für Kunde {customer_id}:")
     print("=" * 70)
     
     if not history:
         print("Keine E-Mails gefunden.")
     else:
         for email in history:
-            status_icon = "✅" if email['status'] == 'sent' else "❌"
+            status_icon = "" if email['status'] == 'sent' else ""
             print(f"\n{status_icon} {email['sent_at']}")
             print(f"   Betreff: {email['subject']}")
             print(f"   An: {email['recipient_email']}")
@@ -266,7 +266,7 @@ Mit freundlichen Grüßen
     # Platzhalter ersetzen
     result = replace_placeholders(text, customer_data)
     
-    print("\n📝 Platzhalter-Ersetzung:")
+    print("\n Platzhalter-Ersetzung:")
     print("=" * 70)
     print(result)
 
@@ -281,7 +281,7 @@ def example_create_default_templates(conn: sqlite3.Connection):
     # Standard-Vorlagen erstellen
     create_default_templates(conn)
     
-    print("✅ Standard-Vorlagen erstellt:")
+    print(" Standard-Vorlagen erstellt:")
     print("   - Willkommens-E-Mail")
     print("   - Angebots-Nachfass")
     print("   - Projekt-Bestätigung")
@@ -298,14 +298,14 @@ def example_list_all_templates(conn: sqlite3.Connection):
     # Alle aktiven Vorlagen
     templates = list_email_templates(conn, active_only=True)
     
-    print("\n📋 Verfügbare E-Mail-Vorlagen:")
+    print("\n Verfügbare E-Mail-Vorlagen:")
     print("=" * 70)
     
     if not templates:
         print("Keine Vorlagen gefunden.")
     else:
         for template in templates:
-            print(f"\n📧 {template['name']}")
+            print(f"\n {template['name']}")
             print(f"   Kategorie: {template['category'] or 'Keine'}")
             print(f"   Betreff: {template['subject']}")
             print(f"   Erstellt: {template['created_at']}")
@@ -335,17 +335,17 @@ def example_complete_email_workflow(
     print("=" * 70)
     
     # 1. SMTP-Konfiguration laden
-    print("\n1️⃣ SMTP-Konfiguration laden...")
+    print("\n1⃣ SMTP-Konfiguration laden...")
     smtp_config = get_smtp_config(load_admin_setting_func)
     
     if not smtp_config.get('smtp_host'):
-        print("❌ SMTP nicht konfiguriert. Bitte zuerst einrichten.")
+        print(" SMTP nicht konfiguriert. Bitte zuerst einrichten.")
         return
     
-    print(f"✅ SMTP-Host: {smtp_config['smtp_host']}")
+    print(f" SMTP-Host: {smtp_config['smtp_host']}")
     
     # 2. Vorlage erstellen (falls nicht vorhanden)
-    print("\n2️⃣ E-Mail-Vorlage erstellen...")
+    print("\n2⃣ E-Mail-Vorlage erstellen...")
     template_id = create_email_template(
         conn,
         name="Demo Workflow",
@@ -355,12 +355,12 @@ def example_complete_email_workflow(
     )
     
     if template_id:
-        print(f"✅ Vorlage erstellt: ID {template_id}")
+        print(f" Vorlage erstellt: ID {template_id}")
     else:
-        print("ℹ️ Vorlage existiert bereits")
+        print("ℹ Vorlage existiert bereits")
     
     # 3. Test-Kundendaten
-    print("\n3️⃣ Test-Kundendaten vorbereiten...")
+    print("\n3⃣ Test-Kundendaten vorbereiten...")
     customer_data = {
         'id': 1,
         'first_name': 'Max',
@@ -368,16 +368,16 @@ def example_complete_email_workflow(
         'email': 'max@example.com',
         'city': 'Musterstadt'
     }
-    print(f"✅ Kunde: {customer_data['first_name']} {customer_data['last_name']}")
+    print(f" Kunde: {customer_data['first_name']} {customer_data['last_name']}")
     
     # 4. E-Mail senden (Mock-Modus für Demo)
-    print("\n4️⃣ E-Mail senden...")
-    print("ℹ️ Im Produktivbetrieb würde jetzt eine echte E-Mail gesendet")
+    print("\n4⃣ E-Mail senden...")
+    print("ℹ Im Produktivbetrieb würde jetzt eine echte E-Mail gesendet")
     
     # 5. Historie anzeigen
-    print("\n5️⃣ E-Mail-Historie abrufen...")
+    print("\n5⃣ E-Mail-Historie abrufen...")
     history = get_email_history_for_customer(conn, customer_data['id'])
-    print(f"✅ {len(history)} E-Mail(s) in Historie")
+    print(f" {len(history)} E-Mail(s) in Historie")
     
     print("\n" + "=" * 70)
     print("WORKFLOW ABGESCHLOSSEN")
@@ -401,16 +401,16 @@ if __name__ == "__main__":
     create_email_tables(conn)
     
     # Beispiele ausführen
-    print("\n📝 Beispiel 2: E-Mail-Vorlage erstellen")
+    print("\n Beispiel 2: E-Mail-Vorlage erstellen")
     example_create_email_template(conn)
     
-    print("\n📝 Beispiel 6: Platzhalter ersetzen")
+    print("\n Beispiel 6: Platzhalter ersetzen")
     example_replace_placeholders()
     
-    print("\n📝 Beispiel 7: Standard-Vorlagen erstellen")
+    print("\n Beispiel 7: Standard-Vorlagen erstellen")
     example_create_default_templates(conn)
     
-    print("\n📝 Beispiel 8: Alle Vorlagen auflisten")
+    print("\n Beispiel 8: Alle Vorlagen auflisten")
     example_list_all_templates(conn)
     
     # Cleanup

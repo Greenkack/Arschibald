@@ -82,7 +82,7 @@ def demo_template_details(service: MultiPDFTemplateService, company_id: int):
     
     print(f"Templates for Company {company_id}:")
     for template in templates:
-        status = "✓" if template.exists else "✗"
+        status = "" if template.exists else ""
         size = f"{template.file_size:,} bytes" if template.file_size else "N/A"
         print(f"  {status} Page {template.page_number}: {template.file_path.name} ({size})")
 
@@ -95,7 +95,7 @@ def demo_coordinate_details(service: MultiPDFTemplateService, company_id: int):
     
     print(f"Coordinates for Company {company_id}:")
     for coord in coordinates:
-        status = "✓" if coord.exists else "✗"
+        status = "" if coord.exists else ""
         num_coords = len(coord.coordinates) if coord.coordinates else 0
         print(f"  {status} Page {coord.page_number}: {coord.file_path.name} ({num_coords} elements)")
 
@@ -142,7 +142,7 @@ def demo_validation(service: MultiPDFTemplateService, company_id: int):
         for file in coords_missing:
             print(f"    - {file}")
     
-    print(f"\nOverall Status: {'✓ Ready' if (templates_valid and coords_valid) else '✗ Not Ready'}")
+    print(f"\nOverall Status: {' Ready' if (templates_valid and coords_valid) else ' Not Ready'}")
 
 
 def demo_batch_operations(service: MultiPDFTemplateService, company_ids: list):
@@ -179,7 +179,7 @@ def demo_all_companies_summary(service: MultiPDFTemplateService):
     
     print(f"\nDetailed Status:")
     for company_id, details in summary['details'].items():
-        status = "✓ Ready" if details['ready_for_generation'] else "✗ Not Ready"
+        status = " Ready" if details['ready_for_generation'] else " Not Ready"
         print(f"  Company {company_id}: {status}")
         print(f"    Templates: {details['templates']['existing']}/{details['templates']['total']}")
         print(f"    Coordinates: {details['coordinates']['existing']}/{details['coordinates']['total']}")
@@ -196,7 +196,7 @@ def main():
         service, companies = demo_discover_companies()
         
         if not companies:
-            print("\n⚠ No companies found!")
+            print("\n No companies found!")
             print("Make sure the following directories exist and contain files:")
             print(f"  - {service.template_base_dir}")
             print(f"  - {service.coordinate_base_dir}")
@@ -226,10 +226,10 @@ def main():
         demo_all_companies_summary(service)
         
         print_section("Demo Complete")
-        print("✓ All demonstrations completed successfully!")
+        print(" All demonstrations completed successfully!")
         
     except Exception as e:
-        print(f"\n✗ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

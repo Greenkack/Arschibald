@@ -21,13 +21,13 @@ class Colors:
     BOLD = '\033[1m'
 
 def print_success(message):
-    print(f"{Colors.OKGREEN}✓ {message}{Colors.ENDC}")
+    print(f"{Colors.OKGREEN} {message}{Colors.ENDC}")
 
 def print_error(message):
-    print(f"{Colors.FAIL}✗ {message}{Colors.ENDC}")
+    print(f"{Colors.FAIL} {message}{Colors.ENDC}")
 
 def print_warning(message):
-    print(f"{Colors.WARNING}⚠ {message}{Colors.ENDC}")
+    print(f"{Colors.WARNING} {message}{Colors.ENDC}")
 
 def print_header(message):
     print(f"\n{Colors.BOLD}{message}{Colors.ENDC}")
@@ -184,13 +184,13 @@ def print_summary(results):
     print(f"\nChecks passed: {passed}/{total}")
     
     if passed == total:
-        print_success("\n✓ All checks passed! Ready to build.")
+        print_success("\n All checks passed! Ready to build.")
         print("\nNext steps:")
         print("  1. Run: python build_backend.py")
         print("  2. Or: python build_backend.py --clean --optimize --test --package")
         return 0
     else:
-        print_error("\n✗ Some checks failed. Please fix the issues above.")
+        print_error("\n Some checks failed. Please fix the issues above.")
         print("\nCommon fixes:")
         print("  - Install dependencies: pip install -r requirements.txt")
         print("  - Install PyInstaller: pip install pyinstaller")

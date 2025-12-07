@@ -317,7 +317,7 @@ def main():
 
     print("\n" + "=" * 80)
     if all_passed:
-        print("🎉 ALL TESTS PASSED - Task 8.3 is complete!")
+        print(" ALL TESTS PASSED - Task 8.3 is complete!")
     else:
         print("SOME TESTS FAILED - Please review the errors above")
     print("=" * 80 + "\n")

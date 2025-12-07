@@ -639,7 +639,7 @@ def create_sun_marker(azimuth_deg, elevation_deg, distance=20.0):
             symbol='circle',
             line=dict(color='orange', width=3)
         ),
-        name='☀️ Sonne',
+        name=' Sonne',
         showlegend=True,
         hovertemplate=f'Sonne<br>Azimuth: {azimuth_deg:.1f}°<br>Elevation: {elevation_deg:.1f}°<extra></extra>'
     )
@@ -1499,11 +1499,11 @@ def build_plotly_scene(
                     
                     # Requirement 10.3: Extract position coordinates
                     if len(position) == 3:
-                        x, y, z_relative = position
+                        x, y, z_coord = position
                         
                         # Requirement 11.1: Validate coordinate values
                         if not all(isinstance(coord, (int, float))
-                                   for coord in [x, y, z_relative]):
+                                   for coord in [x, y, z_coord]):
                             print(
                                 f"Invalid coordinate types at index {i}: "
                                 f"{position}"
@@ -1514,7 +1514,7 @@ def build_plotly_scene(
                         # Check for NaN or Inf values
                         import math
                         if any(math.isnan(coord) or math.isinf(coord)
-                               for coord in [x, y, z_relative]):
+                               for coord in [x, y, z_coord]):
                             print(
                                 f"Invalid coordinate values (NaN/Inf) "
                                 f"at index {i}: {position}"
@@ -1522,10 +1522,26 @@ def build_plotly_scene(
                             failed_renders += 1
                             continue
                         
-                        # FIX: Add building height to z-position
-                        # z_relative is relative to roof surface,
-                        # we need absolute position
-                        z = dims.wall_height_m + z_relative
+                        # FIX: Z-Koordinate Interpretation (absolut vs relativ)
+                        # - Flachdach: z_coord ist relativ zu Dachhöhe (z.B. 0.25 für Aufständerung)
+                        # - Schrägdächer: z_coord ist bereits absolut (inklusive Wandhöhe + Dachneigung)
+                        # Heuristik: Wenn z_coord < 2.0m, dann relativ; sonst absolut
+                        if z_coord < 2.0:
+                            # Relative Koordinate (Flachdach-Aufständerung)
+                            z = dims.wall_height_m + z_coord
+                            z_interpretation = "relativ → absolut"
+                        else:
+                            # Absolute Koordinate (Schrägdach, bereits mit base_z)
+                            z = z_coord
+                            z_interpretation = "absolut"
+                        
+                        # Debug-Logging für erste 3 Module
+                        if i < 3:
+                            print(
+                                f"    Modul {i+1}: "
+                                f"X={x:.2f}m, Y={y:.2f}m, "
+                                f"Z_in={z_coord:.2f}m → Z_out={z:.2f}m ({z_interpretation})"
+                            )
                     else:
                         print(
                             f"Invalid position format at index {i}: "
@@ -1888,7 +1904,7 @@ def build_plotly_scene(
             bgcolor='#0B0F14'
         ),
         title=dict(
-            text=f'🏠 3D PV-Visualisierung ({module_quantity} Module)',
+            text=f' 3D PV-Visualisierung ({module_quantity} Module)',
             font=dict(size=20, color='#FFFFFF', family='Arial, sans-serif')
         ),
         showlegend=True,

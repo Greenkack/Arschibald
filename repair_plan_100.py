@@ -58,7 +58,7 @@ def main():
         ("notwendig oder nicht/zu implementieren/kalkulationen.py", "OLD", "LÖSCHEN"),
     ]
     
-    print("\n📋 REPARATUR-PLAN FÜR SYNTAX-FEHLER:")
+    print("\n REPARATUR-PLAN FÜR SYNTAX-FEHLER:")
     print("-" * 80)
     
     to_delete = [f for f, t, a in syntax_errors if a == "LÖSCHEN"]

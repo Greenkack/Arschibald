@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\db\models\sql\query.py
+# hypothesis_version: 6.147.0
+
+[' or ', '%', '%s', '%s%d', '%s__isnull', '(%s)', '*', ', ', '-', '--', '.', '<%s: %s>', '?', 'ASC', 'ExplainInfo', 'JoinInfo', 'Query', 'RawQuery', 'SQLCompiler', 'T', '[\\w-]+', '__count', '__iter__', '_make', '_meta', '_setup_query', 'a', 'attname', 'base_table', 'conditional', 'contains_aggregate', 'contains_over_clause', 'contains_subquery', 'exact', 'external_aliases', 'filterable', 'final_field', 'flatten', 'format', 'get_external_cols', 'iexact', 'isnull', 'joins', 'options', 'opts', 'path', 'path_infos', 'pk', 'resolve_expression', 'set_returning', 'subq_aliases', 'target', 'targets', 'transform_function', 'union']

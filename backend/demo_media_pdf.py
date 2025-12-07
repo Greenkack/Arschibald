@@ -54,7 +54,7 @@ def create_demo_images(output_dir: Path) -> list:
         img_path = output_dir / f"demo_{name}.jpg"
         img.save(img_path, 'JPEG', quality=90)
         images.append(img_path)
-        print(f"✓ Created {img_path.name}")
+        print(f" Created {img_path.name}")
     
     return images
 
@@ -66,7 +66,7 @@ def demo_single_image_to_pdf():
     print("="*60)
     
     if not (REPORTLAB_AVAILABLE and PIL_AVAILABLE):
-        print("❌ Required libraries not available")
+        print(" Required libraries not available")
         return
     
     # Create demo image
@@ -77,7 +77,7 @@ def demo_single_image_to_pdf():
     img_path = demo_dir / "demo_single.jpg"
     img.save(img_path, 'JPEG')
     
-    print(f"\n📸 Created demo image: {img_path}")
+    print(f"\n Created demo image: {img_path}")
     
     # Convert to PDF
     pdf_bytes = image_to_pdf_bytes(
@@ -91,7 +91,7 @@ def demo_single_image_to_pdf():
     pdf_path = demo_dir / "demo_single_image.pdf"
     pdf_path.write_bytes(pdf_bytes)
     
-    print(f"✓ Generated PDF: {pdf_path}")
+    print(f" Generated PDF: {pdf_path}")
     print(f"  Size: {len(pdf_bytes) / 1024:.1f} KB")
     print(f"  Includes metadata: Yes")
     print(f"  Optimized: Yes")
@@ -104,7 +104,7 @@ def demo_photo_to_pdf():
     print("="*60)
     
     if not (REPORTLAB_AVAILABLE and PIL_AVAILABLE):
-        print("❌ Required libraries not available")
+        print(" Required libraries not available")
         return
     
     # Create demo photo
@@ -115,7 +115,7 @@ def demo_photo_to_pdf():
     img_path = demo_dir / "demo_photo.jpg"
     img.save(img_path, 'JPEG', quality=95)
     
-    print(f"\n📷 Created demo photo: {img_path}")
+    print(f"\n Created demo photo: {img_path}")
     
     # Convert to PDF
     pdf_bytes = photo_to_pdf_bytes(
@@ -128,7 +128,7 @@ def demo_photo_to_pdf():
     pdf_path = demo_dir / "demo_photo.pdf"
     pdf_path.write_bytes(pdf_bytes)
     
-    print(f"✓ Generated PDF: {pdf_path}")
+    print(f" Generated PDF: {pdf_path}")
     print(f"  Size: {len(pdf_bytes) / 1024:.1f} KB")
     print(f"  Title: Beautiful Landscape")
     print(f"  Description: Included")
@@ -141,17 +141,17 @@ def demo_multi_image_pdf():
     print("="*60)
     
     if not (REPORTLAB_AVAILABLE and PIL_AVAILABLE):
-        print("❌ Required libraries not available")
+        print(" Required libraries not available")
         return
     
     # Create demo images
     demo_dir = Path("backend/demo_output")
     images = create_demo_images(demo_dir)
     
-    print(f"\n📚 Created {len(images)} demo images")
+    print(f"\n Created {len(images)} demo images")
     
     # Layout 1: One per page
-    print("\n📄 Layout 1: One image per page")
+    print("\n Layout 1: One image per page")
     pdf_bytes_1 = multi_image_pdf(
         images,
         title="Image Collection - One Per Page",
@@ -159,10 +159,10 @@ def demo_multi_image_pdf():
     )
     pdf_path_1 = demo_dir / "demo_multi_one_per_page.pdf"
     pdf_path_1.write_bytes(pdf_bytes_1)
-    print(f"  ✓ Generated: {pdf_path_1.name} ({len(pdf_bytes_1) / 1024:.1f} KB)")
+    print(f"   Generated: {pdf_path_1.name} ({len(pdf_bytes_1) / 1024:.1f} KB)")
     
     # Layout 2: Two per page
-    print("\n📄 Layout 2: Two images per page")
+    print("\n Layout 2: Two images per page")
     pdf_bytes_2 = multi_image_pdf(
         images,
         title="Image Collection - Two Per Page",
@@ -170,10 +170,10 @@ def demo_multi_image_pdf():
     )
     pdf_path_2 = demo_dir / "demo_multi_two_per_page.pdf"
     pdf_path_2.write_bytes(pdf_bytes_2)
-    print(f"  ✓ Generated: {pdf_path_2.name} ({len(pdf_bytes_2) / 1024:.1f} KB)")
+    print(f"   Generated: {pdf_path_2.name} ({len(pdf_bytes_2) / 1024:.1f} KB)")
     
     # Layout 3: Grid (4 per page)
-    print("\n📄 Layout 3: Grid layout (4 per page)")
+    print("\n Layout 3: Grid layout (4 per page)")
     pdf_bytes_3 = multi_image_pdf(
         images,
         title="Image Collection - Grid",
@@ -181,7 +181,7 @@ def demo_multi_image_pdf():
     )
     pdf_path_3 = demo_dir / "demo_multi_grid.pdf"
     pdf_path_3.write_bytes(pdf_bytes_3)
-    print(f"  ✓ Generated: {pdf_path_3.name} ({len(pdf_bytes_3) / 1024:.1f} KB)")
+    print(f"   Generated: {pdf_path_3.name} ({len(pdf_bytes_3) / 1024:.1f} KB)")
 
 
 def demo_image_gallery():
@@ -191,7 +191,7 @@ def demo_image_gallery():
     print("="*60)
     
     if not (REPORTLAB_AVAILABLE and PIL_AVAILABLE):
-        print("❌ Required libraries not available")
+        print(" Required libraries not available")
         return
     
     # Create demo images
@@ -232,7 +232,7 @@ def demo_image_gallery():
         }
     ]
     
-    print(f"\n🖼️  Creating gallery with {len(gallery_images)} images")
+    print(f"\n  Creating gallery with {len(gallery_images)} images")
     
     # Generate gallery PDF
     pdf_bytes = image_gallery_pdf(
@@ -244,7 +244,7 @@ def demo_image_gallery():
     pdf_path = demo_dir / "demo_image_gallery.pdf"
     pdf_path.write_bytes(pdf_bytes)
     
-    print(f"✓ Generated gallery PDF: {pdf_path}")
+    print(f" Generated gallery PDF: {pdf_path}")
     print(f"  Size: {len(pdf_bytes) / 1024:.1f} KB")
     print(f"  Images: {len(gallery_images)}")
     print(f"  Includes: Titles, descriptions, and metadata")
@@ -257,11 +257,11 @@ def demo_image_optimization():
     print("="*60)
     
     if not PIL_AVAILABLE:
-        print("❌ Pillow not available")
+        print(" Pillow not available")
         return
     
     # Create large image
-    print("\n📐 Creating large test image...")
+    print("\n Creating large test image...")
     large_img = Image.new('RGB', (4000, 3000), color='coral')
     
     print(f"  Original size: {large_img.width} x {large_img.height} px")
@@ -277,7 +277,7 @@ def demo_image_optimization():
     compressed = optimizer.compress_image(optimized, quality=85)
     print(f"  Compressed size: {len(compressed) / 1024:.1f} KB")
     
-    print("\n✓ Optimization complete")
+    print("\n Optimization complete")
 
 
 def demo_metadata_extraction():
@@ -287,7 +287,7 @@ def demo_metadata_extraction():
     print("="*60)
     
     if not (REPORTLAB_AVAILABLE and PIL_AVAILABLE):
-        print("❌ Required libraries not available")
+        print(" Required libraries not available")
         return
     
     # Create demo image
@@ -298,7 +298,7 @@ def demo_metadata_extraction():
     img_path = demo_dir / "demo_metadata.jpg"
     img.save(img_path, 'JPEG', quality=90)
     
-    print(f"\n📊 Extracting metadata from: {img_path.name}")
+    print(f"\n Extracting metadata from: {img_path.name}")
     
     # Extract metadata
     service = MediaPDFService()
@@ -315,7 +315,7 @@ def demo_metadata_extraction():
     
     # Convert to dict
     metadata_dict = metadata.to_dict()
-    print(f"\n✓ Metadata dictionary has {len(metadata_dict)} fields")
+    print(f"\n Metadata dictionary has {len(metadata_dict)} fields")
 
 
 def main():
@@ -326,15 +326,15 @@ def main():
     print("="*60)
     
     if not REPORTLAB_AVAILABLE:
-        print("\n⚠️  Warning: reportlab not installed")
+        print("\n  Warning: reportlab not installed")
         print("   Install with: pip install reportlab")
     
     if not PIL_AVAILABLE:
-        print("\n⚠️  Warning: Pillow not installed")
+        print("\n  Warning: Pillow not installed")
         print("   Install with: pip install Pillow")
     
     if not (REPORTLAB_AVAILABLE and PIL_AVAILABLE):
-        print("\n❌ Cannot run demos without required libraries")
+        print("\n Cannot run demos without required libraries")
         return
     
     try:
@@ -347,9 +347,9 @@ def main():
         demo_metadata_extraction()
         
         print("\n" + "="*60)
-        print("✓ ALL DEMOS COMPLETED SUCCESSFULLY")
+        print(" ALL DEMOS COMPLETED SUCCESSFULLY")
         print("="*60)
-        print("\n📁 Output files saved to: backend/demo_output/")
+        print("\n Output files saved to: backend/demo_output/")
         print("\nGenerated PDFs:")
         print("  • demo_single_image.pdf - Single image with metadata")
         print("  • demo_photo.pdf - Photo with title and description")
@@ -359,7 +359,7 @@ def main():
         print("  • demo_image_gallery.pdf - Full gallery with descriptions")
         
     except Exception as e:
-        print(f"\n❌ Error running demos: {e}")
+        print(f"\n Error running demos: {e}")
         import traceback
         traceback.print_exc()
 

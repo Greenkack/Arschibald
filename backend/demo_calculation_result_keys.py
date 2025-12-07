@@ -50,7 +50,7 @@ def demo_basic_usage():
         user_id="USER_123"
     )
 
-    print(f"\n✓ Registered solar calculation result")
+    print(f"\n Registered solar calculation result")
     print(f"  Key: {result.key}")
     print(f"  Type: {result.calculation_type.value}")
     print(f"  System Size: {result.get_value('system_size')} kWp")
@@ -70,7 +70,7 @@ def demo_versioning(result_key):
 
     # Get original result
     result = manager.get_result_by_key(result_key)
-    print(f"\n✓ Original result (Version 1):")
+    print(f"\n Original result (Version 1):")
     print(f"  System Size: {result.get_value('system_size')} kWp")
 
     # Update result - creates version 2
@@ -86,7 +86,7 @@ def demo_versioning(result_key):
         change_summary="Increased system size to 12 kWp"
     )
 
-    print(f"\n✓ Updated result (Version 2):")
+    print(f"\n Updated result (Version 2):")
     print(f"  System Size: {updated_data['system_size']} kWp")
     print(f"  Change: Increased system size to 12 kWp")
 
@@ -103,12 +103,12 @@ def demo_versioning(result_key):
         change_summary="Further increased to 15 kWp"
     )
 
-    print(f"\n✓ Created Version 3:")
+    print(f"\n Created Version 3:")
     print(f"  System Size: {updated_data2['system_size']} kWp")
 
     # Get all versions
     versions = manager.get_versions(result_key)
-    print(f"\n✓ Total versions: {len(versions)}")
+    print(f"\n Total versions: {len(versions)}")
     for v in versions:
         print(f"  - Version {v.version_number}: "
               f"{v.data['system_size']} kWp "
@@ -116,7 +116,7 @@ def demo_versioning(result_key):
 
     # Get latest version
     latest = manager.get_latest_version(result_key)
-    print(f"\n✓ Latest version: {latest.version_number}")
+    print(f"\n Latest version: {latest.version_number}")
     print(f"  System Size: {latest.data['system_size']} kWp")
 
 
@@ -155,14 +155,14 @@ def demo_comparison():
         project_id="PRJ_COMPARE_B"
     )
 
-    print(f"\n✓ Created two results for comparison:")
+    print(f"\n Created two results for comparison:")
     print(f"  Result 1: {data1['system_size']} kWp system")
     print(f"  Result 2: {data2['system_size']} kWp system")
 
     # Compare results
     comparison = manager.compare_results(result1.key, result2.key)
 
-    print(f"\n✓ Comparison results:")
+    print(f"\n Comparison results:")
     print(f"  Similarity Score: {comparison.similarity_score:.2%}")
     print(f"  Differences found: {len(comparison.differences)}")
 
@@ -188,7 +188,7 @@ def demo_history():
     # Get history
     history = manager.get_result_history(limit=10)
 
-    print(f"\n✓ Recent history (last 10 entries):")
+    print(f"\n Recent history (last 10 entries):")
     for i, entry in enumerate(history, 1):
         action = entry.get('action', 'unknown')
         calc_type = entry.get('calculation_type', 'N/A')
@@ -202,7 +202,7 @@ def demo_history():
         limit=5
     )
 
-    print(f"\n✓ Solar calculation history (last 5):")
+    print(f"\n Solar calculation history (last 5):")
     for i, entry in enumerate(solar_history, 1):
         action = entry.get('action', 'unknown')
         timestamp = entry.get('timestamp', 'N/A')
@@ -237,7 +237,7 @@ def demo_export():
     updated_data['system_size'] = 12.0
     manager.create_version(result.key, updated_data)
 
-    print(f"\n✓ Created result with 2 versions")
+    print(f"\n Created result with 2 versions")
 
     # Export as dictionary
     exported_dict = manager.export_result(
@@ -247,7 +247,7 @@ def demo_export():
         apply_german_formatting=False
     )
 
-    print(f"\n✓ Exported as dictionary:")
+    print(f"\n Exported as dictionary:")
     print(f"  Key: {exported_dict['key']}")
     print(f"  Type: {exported_dict['calculation_type']}")
     print(f"  Versions: {len(exported_dict['versions'])}")
@@ -259,7 +259,7 @@ def demo_export():
         apply_german_formatting=True
     )
 
-    print(f"\n✓ Exported with German formatting:")
+    print(f"\n Exported with German formatting:")
     print(f"  System Size: {exported_german['data']['system_size']}")
     print(f"  Total Cost: {exported_german['data']['total_cost']}")
 
@@ -270,7 +270,7 @@ def demo_export():
         include_versions=False
     )
 
-    print(f"\n✓ Exported as JSON (first 200 chars):")
+    print(f"\n Exported as JSON (first 200 chars):")
     print(f"  {exported_json[:200]}...")
 
 
@@ -284,7 +284,7 @@ def demo_statistics():
 
     stats = manager.get_statistics()
 
-    print(f"\n✓ System Statistics:")
+    print(f"\n System Statistics:")
     print(f"  Total Results: {stats['total_results']}")
     print(f"  Total Versions: {stats['total_versions']}")
     print(f"  Total Comparisons: {stats['total_comparisons']}")
@@ -292,7 +292,7 @@ def demo_statistics():
           f"{stats['average_versions_per_result']:.2f}")
     print(f"  History Entries: {stats['history_entries']}")
 
-    print(f"\n✓ Results by Type:")
+    print(f"\n Results by Type:")
     for calc_type, count in stats['results_by_type'].items():
         print(f"  - {calc_type}: {count}")
 
@@ -306,7 +306,7 @@ def demo_advanced_usage():
     manager = get_calculation_result_manager()
 
     # Scenario: Track optimization iterations
-    print(f"\n✓ Scenario: Optimization Iterations")
+    print(f"\n Scenario: Optimization Iterations")
 
     base_data = {
         'system_size': 10.0,
@@ -381,12 +381,12 @@ def main():
     print("=" * 60)
     print("\nAll calculation result key features demonstrated successfully!")
     print("\nKey Features:")
-    print("  ✓ Dynamic key generation for all calculation results")
-    print("  ✓ Result versioning with change tracking")
-    print("  ✓ Key-based result comparison")
-    print("  ✓ Result history tracking")
-    print("  ✓ Result export with German formatting")
-    print("  ✓ Comprehensive statistics")
+    print("   Dynamic key generation for all calculation results")
+    print("   Result versioning with change tracking")
+    print("   Key-based result comparison")
+    print("   Result history tracking")
+    print("   Result export with German formatting")
+    print("   Comprehensive statistics")
     print("\n")
 
 

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\pool\events.py
+# hypothesis_version: 6.147.0
+
+['2.0', 'SomeEngineOrPool', 'asyncio', 'connection_record', 'dbapi_connection', 'sqlalchemy.engine']

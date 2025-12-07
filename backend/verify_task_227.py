@@ -31,12 +31,12 @@ def verify_imports():
             REPORTLAB_AVAILABLE,
             PIL_AVAILABLE
         )
-        print("✓ All imports successful")
+        print(" All imports successful")
         print(f"  - reportlab available: {REPORTLAB_AVAILABLE}")
         print(f"  - Pillow available: {PIL_AVAILABLE}")
         return True
     except ImportError as e:
-        print(f"✗ Import failed: {e}")
+        print(f" Import failed: {e}")
         return False
 
 
@@ -50,12 +50,12 @@ def verify_service_creation():
         from backend.services.media_pdf_service import MediaPDFService
         
         service = MediaPDFService()
-        print("✓ MediaPDFService created successfully")
+        print(" MediaPDFService created successfully")
         print(f"  - Engine: {service.engine is not None}")
         print(f"  - Optimizer: {service.optimizer is not None}")
         return True
     except Exception as e:
-        print(f"✗ Service creation failed: {e}")
+        print(f" Service creation failed: {e}")
         return False
 
 
@@ -77,13 +77,13 @@ def verify_metadata_class():
             size_bytes=102400
         )
         
-        print("✓ ImageMetadata created successfully")
+        print(" ImageMetadata created successfully")
         print(f"  - Dimensions: {metadata.get_dimensions_str()}")
         print(f"  - Aspect ratio: {metadata.get_aspect_ratio():.2f}")
         print(f"  - Dictionary conversion: {len(metadata.to_dict())} fields")
         return True
     except Exception as e:
-        print(f"✗ ImageMetadata failed: {e}")
+        print(f" ImageMetadata failed: {e}")
         return False
 
 
@@ -97,7 +97,7 @@ def verify_optimizer():
         from backend.services.media_pdf_service import ImageOptimizer, PIL_AVAILABLE
         
         if not PIL_AVAILABLE:
-            print("⚠ Pillow not available, skipping optimizer test")
+            print(" Pillow not available, skipping optimizer test")
             return True
         
         from PIL import Image
@@ -106,7 +106,7 @@ def verify_optimizer():
         test_img = Image.new('RGB', (800, 600), color='blue')
         
         optimized = optimizer.optimize_for_pdf(test_img)
-        print("✓ ImageOptimizer working")
+        print(" ImageOptimizer working")
         print(f"  - Original: 800 x 600")
         print(f"  - Optimized: {optimized.width} x {optimized.height}")
         
@@ -114,7 +114,7 @@ def verify_optimizer():
         print(f"  - Compressed size: {len(compressed) / 1024:.1f} KB")
         return True
     except Exception as e:
-        print(f"✗ ImageOptimizer failed: {e}")
+        print(f" ImageOptimizer failed: {e}")
         return False
 
 
@@ -132,14 +132,14 @@ def verify_convenience_functions():
             image_gallery_pdf
         )
         
-        print("✓ All convenience functions available")
+        print(" All convenience functions available")
         print("  - image_to_pdf_bytes")
         print("  - photo_to_pdf_bytes")
         print("  - multi_image_pdf")
         print("  - image_gallery_pdf")
         return True
     except Exception as e:
-        print(f"✗ Convenience functions failed: {e}")
+        print(f" Convenience functions failed: {e}")
         return False
 
 
@@ -161,9 +161,9 @@ def verify_documentation():
         path = Path(doc)
         if path.exists():
             size = path.stat().st_size / 1024
-            print(f"✓ {doc} ({size:.1f} KB)")
+            print(f" {doc} ({size:.1f} KB)")
         else:
-            print(f"✗ {doc} - NOT FOUND")
+            print(f" {doc} - NOT FOUND")
             all_exist = False
     
     return all_exist
@@ -179,7 +179,7 @@ def verify_tests():
     
     if test_file.exists():
         size = test_file.stat().st_size / 1024
-        print(f"✓ Test file exists ({size:.1f} KB)")
+        print(f" Test file exists ({size:.1f} KB)")
         
         # Count test functions
         content = test_file.read_text()
@@ -187,7 +187,7 @@ def verify_tests():
         print(f"  - Test functions: {test_count}")
         return True
     else:
-        print("✗ Test file not found")
+        print(" Test file not found")
         return False
 
 
@@ -201,7 +201,7 @@ def verify_demo():
     
     if demo_file.exists():
         size = demo_file.stat().st_size / 1024
-        print(f"✓ Demo file exists ({size:.1f} KB)")
+        print(f" Demo file exists ({size:.1f} KB)")
         
         # Count demo functions
         try:
@@ -212,7 +212,7 @@ def verify_demo():
             print("  - Demo functions: (encoding issue, but file exists)")
         return True
     else:
-        print("✗ Demo file not found")
+        print(" Demo file not found")
         return False
 
 
@@ -244,7 +244,7 @@ def main():
     total = len(results)
     
     for name, result in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = " PASS" if result else " FAIL"
         print(f"{status} - {name}")
     
     print("\n" + "=" * 60)
@@ -252,11 +252,11 @@ def main():
     print("=" * 60)
     
     if passed == total:
-        print("\n✓ ALL VERIFICATIONS PASSED")
+        print("\n ALL VERIFICATIONS PASSED")
         print("Task 227 is complete and working correctly!")
         return 0
     else:
-        print(f"\n✗ {total - passed} VERIFICATION(S) FAILED")
+        print(f"\n {total - passed} VERIFICATION(S) FAILED")
         print("Please review the failed checks above.")
         return 1
 

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\narwhals\_compliant\any_namespace.py
+# hypothesis_version: 6.147.0
+
+['CatNamespace', 'DateTimeNamespace', 'ListNamespace', 'NameNamespace', 'StringNamespace', 'StructNamespace']

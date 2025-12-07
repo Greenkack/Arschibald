@@ -354,7 +354,7 @@ class TestAdditionalCostsIntegration:
 def run_additional_costs_integration_tests():
     """Führt alle Tests für die Zusatzkosten-Integration aus"""
 
-    print("🧪 Starte Tests für Zusatzkosten-Integration...")
+    print(" Starte Tests für Zusatzkosten-Integration...")
 
     test_suite = TestAdditionalCostsIntegration()
 
@@ -385,7 +385,7 @@ def run_additional_costs_integration_tests():
     print(f"\nTest-Ergebnisse: {passed} bestanden, {failed} fehlgeschlagen")
 
     if failed == 0:
-        print("🎉 Alle Tests für die Zusatzkosten-Integration bestanden!")
+        print(" Alle Tests für die Zusatzkosten-Integration bestanden!")
         return True
     print("Einige Tests sind fehlgeschlagen. Bitte überprüfen Sie die Implementierung.")
     return False

@@ -82,10 +82,10 @@ def scan_for_secrets():
             continue
 
     if findings:
-        print(f"\n🚨 {len(findings)} VERDÄCHTIGE SECRETS GEFUNDEN:")
+        print(f"\n {len(findings)} VERDÄCHTIGE SECRETS GEFUNDEN:")
         for finding in findings:
             print(f"  {finding['file']}:{finding['line']}")
-            print(f"     🏷️ {finding['category']}: {finding['match']}")
+            print(f"      {finding['category']}: {finding['match']}")
             print()
 
         print("WARNUNG: Entfernen Sie diese Secrets vor dem Commit!")

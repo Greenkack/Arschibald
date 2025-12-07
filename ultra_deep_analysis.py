@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-🔬 ULTRA-TIEFE APP-ANALYSE - 100% Coverage
+ ULTRA-TIEFE APP-ANALYSE - 100% Coverage
 Analysiert JEDEN Aspekt der App auf Fehler, fehlende Module, kaputte Imports
 """
 
@@ -26,7 +26,7 @@ class DeepAppAnalyzer:
         
     def scan_all_files(self):
         """Scannt alle Python-Dateien"""
-        print("📂 SCANNE ALLE PYTHON-DATEIEN...")
+        print(" SCANNE ALLE PYTHON-DATEIEN...")
         self.all_py_files = list(self.root.rglob('*.py'))
         
         # Filtere __pycache__ und venv
@@ -118,7 +118,7 @@ class DeepAppAnalyzer:
     def run_analysis(self):
         """Führt vollständige Analyse durch"""
         print("\n" + "=" * 80)
-        print("🔬 STARTE ULTRA-TIEFE ANALYSE")
+        print(" STARTE ULTRA-TIEFE ANALYSE")
         print("=" * 80)
         
         # Schritt 1: Dateien scannen
@@ -140,7 +140,7 @@ class DeepAppAnalyzer:
         """Gibt Ergebnisse aus"""
         
         print("\n" + "=" * 80)
-        print("🐛 SYNTAX-FEHLER")
+        print(" SYNTAX-FEHLER")
         print("=" * 80)
         if self.syntax_errors:
             for file_path, error in self.syntax_errors:
@@ -203,15 +203,15 @@ class DeepAppAnalyzer:
         modules_with_import_errors = len(self.import_errors)
         total_imports = len(self.all_imports)
         
-        print(f"📂 Python-Dateien:        {total_files}")
-        print(f"🐛 Dateien mit Syntax-Fehlern: {files_with_errors}")
+        print(f" Python-Dateien:        {total_files}")
+        print(f" Dateien mit Syntax-Fehlern: {files_with_errors}")
         print(f"Verschiedene Imports:  {total_imports}")
         print(f"Module mit Problemen:  {modules_with_import_errors}")
         
         health_score = ((total_files - files_with_errors) / total_files * 100) if total_files > 0 else 0
         import_health = ((total_imports - modules_with_import_errors) / total_imports * 100) if total_imports > 0 else 0
         
-        print(f"\n🏥 GESUNDHEITSSTATUS:")
+        print(f"\n GESUNDHEITSSTATUS:")
         print(f"   Syntax-Gesundheit:     {health_score:.1f}%")
         print(f"   Import-Gesundheit:     {import_health:.1f}%")
         
@@ -240,7 +240,7 @@ class DeepAppAnalyzer:
         
         if not self.syntax_errors and not self.import_errors:
             print("KEINE PROBLEME GEFUNDEN!")
-            print("🎉 App ist in perfektem Zustand!")
+            print(" App ist in perfektem Zustand!")
 
 def main():
     analyzer = DeepAppAnalyzer()

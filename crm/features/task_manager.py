@@ -656,17 +656,17 @@ def format_task_for_display(task: dict[str, Any]) -> dict[str, Any]:
     
     # Status-Labels
     status_labels = {
-        'open': '📋 Offen',
-        'in_progress': '🔄 In Arbeit',
+        'open': ' Offen',
+        'in_progress': ' In Arbeit',
         'completed': 'Erledigt'
     }
     display_task['status_label'] = status_labels.get(task.get('status', 'open'), 'Unbekannt')
     
     # Prioritäts-Labels
     priority_labels = {
-        'low': '🔵 Niedrig',
+        'low': ' Niedrig',
         'medium': '🟡 Mittel',
-        'high': '🔴 Hoch'
+        'high': ' Hoch'
     }
     display_task['priority_label'] = priority_labels.get(task.get('priority', 'medium'), 'Unbekannt')
     
@@ -680,13 +680,13 @@ def format_task_for_display(task: dict[str, Any]) -> dict[str, Any]:
             if due_date == today:
                 display_task['due_date_label'] = '⏰ Heute'
             elif due_date == today + timedelta(days=1):
-                display_task['due_date_label'] = '📅 Morgen'
+                display_task['due_date_label'] = ' Morgen'
             elif due_date < today:
                 days_overdue = (today - due_date).days
                 display_task['due_date_label'] = f'{days_overdue} Tag(e) überfällig'
             else:
                 days_until = (due_date - today).days
-                display_task['due_date_label'] = f'📅 In {days_until} Tag(en)'
+                display_task['due_date_label'] = f' In {days_until} Tag(en)'
         except (ValueError, AttributeError):
             display_task['due_date_label'] = due_date_str
     else:

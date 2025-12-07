@@ -44,7 +44,7 @@ def demo_license_creation(service: LicenseService):
         user_email="trial@example.com",
         organization_name="Trial User"
     ))
-    print(f"✓ Trial License Created: {trial_license.license_key}")
+    print(f" Trial License Created: {trial_license.license_key}")
     print(f"  - Expires: {trial_license.expires_at}")
     print(f"  - Status: {trial_license.status}")
     
@@ -58,7 +58,7 @@ def demo_license_creation(service: LicenseService):
         max_projects=100,
         max_calculations_per_month=1000
     ))
-    print(f"✓ Professional License Created: {pro_license.license_key}")
+    print(f" Professional License Created: {pro_license.license_key}")
     print(f"  - Max Users: {pro_license.max_users}")
     print(f"  - Max Projects: {pro_license.max_projects}")
     print(f"  - Expires: {pro_license.expires_at}")
@@ -75,7 +75,7 @@ def demo_license_creation(service: LicenseService):
             "api_access": True
         }
     ))
-    print(f"✓ Enterprise License Created: {ent_license.license_key}")
+    print(f" Enterprise License Created: {ent_license.license_key}")
     print(f"  - Enabled Features: {list(ent_license.enabled_features.keys())}")
     
     return trial_license, pro_license, ent_license
@@ -94,12 +94,12 @@ def demo_license_activation(service: LicenseService, license):
     ))
     
     if result.success:
-        print(f"✓ License Activated Successfully")
+        print(f" License Activated Successfully")
         print(f"  - Status: {result.license.status}")
         print(f"  - Activated At: {result.license.activated_at}")
         print(f"  - Hardware ID: {result.license.hardware_id}")
     else:
-        print(f"✗ Activation Failed: {result.message}")
+        print(f" Activation Failed: {result.message}")
     
     return result.success
 
@@ -136,7 +136,7 @@ def demo_license_validation(service: LicenseService, license):
     
     print(f"\nFeature Access:")
     for feature, has_access in result.feature_access.items():
-        status = "✓" if has_access else "✗"
+        status = "" if has_access else ""
         print(f"  {status} {feature}: {has_access}")
 
 
@@ -175,13 +175,13 @@ def demo_license_renewal(service: LicenseService, license):
     ))
     
     if result:
-        print(f"\n✓ License Renewed Successfully")
+        print(f"\n License Renewed Successfully")
         print(f"  - Old Expiry: {result.old_expires_at}")
         print(f"  - New Expiry: {result.new_expires_at}")
         print(f"  - Renewal Period: {result.renewal_period_days} days")
         print(f"  - Renewed At: {result.renewed_at}")
     else:
-        print(f"✗ Renewal Failed")
+        print(f" Renewal Failed")
 
 
 def demo_license_report(service: LicenseService):
@@ -260,7 +260,7 @@ def main():
     # Create database tables
     print("\nInitializing database...")
     Base.metadata.create_all(bind=engine)
-    print("✓ Database initialized")
+    print(" Database initialized")
     
     # Create service
     db = SessionLocal()
@@ -288,7 +288,7 @@ def main():
         print("  4. Set up automated renewal reminders")
         
     except Exception as e:
-        print(f"\n✗ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
     finally:

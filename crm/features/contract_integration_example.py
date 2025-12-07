@@ -124,7 +124,7 @@ def example_3_check_expiring_contracts():
         
         # Garantien die in 30 Tagen ablaufen
         expiring_warranties = contract_manager.get_expiring_warranties(conn, days_ahead=30)
-        print(f"\n🛡️ Ablaufende Garantien (30 Tage): {len(expiring_warranties)}")
+        print(f"\n Ablaufende Garantien (30 Tage): {len(expiring_warranties)}")
         for warranty in expiring_warranties:
             days_left = (datetime.strptime(warranty['end_date'], '%Y-%m-%d') - datetime.now()).days
             print(f"   - {warranty['title']}: {days_left} Tage")
@@ -161,7 +161,7 @@ def example_4_customer_contracts_overview():
         
         # Alle Garantien des Kunden
         warranties = contract_manager.get_warranties_by_customer(conn, customer_id)
-        print(f"\n🛡️ Garantien von Kunde {customer_id}: {len(warranties)}")
+        print(f"\n Garantien von Kunde {customer_id}: {len(warranties)}")
         for warranty in warranties:
             status_icon = "" if warranty['status'] == 'active' else ""
             print(f"   {status_icon} {warranty['title']} ({warranty['warranty_type']})")
@@ -196,7 +196,7 @@ def example_5_statistics_dashboard():
         
         # Garantie-Statistiken
         warranty_stats = contract_manager.get_warranty_statistics(conn)
-        print("\n🛡️ Garantie-Statistiken:")
+        print("\n Garantie-Statistiken:")
         print(f"   Gesamt: {warranty_stats['total']}")
         print(f"   Aktiv: {warranty_stats['by_status'].get('active', 0)}")
         print(f"   Abgelaufen: {warranty_stats['expired']}")

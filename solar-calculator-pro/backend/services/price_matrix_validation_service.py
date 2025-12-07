@@ -592,10 +592,10 @@ class PriceMatrixValidationService:
         
         # Overall status
         if validation_result.valid:
-            lines.append("✓ VALIDATION PASSED")
+            lines.append(" VALIDATION PASSED")
             lines.append("Matrix is valid and ready for use in price calculations.")
         else:
-            lines.append("✗ VALIDATION FAILED")
+            lines.append(" VALIDATION FAILED")
             lines.append("Matrix has errors that must be fixed before use.")
         
         lines.append("")

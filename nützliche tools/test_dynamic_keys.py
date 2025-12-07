@@ -35,7 +35,7 @@ company_info = {
     'address': {'street': 'Solarstraße 42', 'city': '10115 Berlin'}  # Neu!
 }
 
-print('🧪 Teste TOM90 mit dynamischen Keys...')
+print(' Teste TOM90 mit dynamischen Keys...')
 renderer = TOM90ExactRenderer(project_data, analysis_results, company_info)
 pdf_bytes = renderer.build_pdf()
 
@@ -44,11 +44,11 @@ if pdf_bytes:
         f.write(pdf_bytes)
     print(f'DYNAMISCHE 20-Seiten PDF erstellt: {len(pdf_bytes):,} bytes')
     print('ALLE neuen Werte sollten jetzt dynamisch sein!')
-    print('   👤 Kunde:', project_data['customer_name'])
-    print('   🏢 Firma:', company_info['name'])
+    print('    Kunde:', project_data['customer_name'])
+    print('    Firma:', company_info['name'])
     print('   Anlage:', analysis_results['anlage_kwp'], 'kWp')
     print(
-        '   🔋 Batterie:',
+        '    Batterie:',
         project_data['battery_details']['capacity_kwh'],
         'kWh')
     print(

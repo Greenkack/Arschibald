@@ -49,8 +49,8 @@ def render_lead_scoring_admin(texts: dict[str, str]) -> None:
         # Tabs für verschiedene Bereiche
         tab1, tab2, tab3 = st.tabs([
             "Übersicht",
-            "⚙️ Regeln verwalten",
-            "🔄 Scores aktualisieren"
+            " Regeln verwalten",
+            " Scores aktualisieren"
         ])
         
         with tab1:
@@ -105,7 +105,7 @@ def _render_scoring_overview(conn) -> None:
     st.markdown("---")
     
     # High-Score Leads
-    st.markdown("#### 🔥 Top-Leads (Score ≥ 70)")
+    st.markdown("####  Top-Leads (Score ≥ 70)")
     
     high_score_leads = get_high_score_leads(conn, min_score=70)
     
@@ -114,8 +114,8 @@ def _render_scoring_overview(conn) -> None:
             col1, col2, col3, col4 = st.columns([3, 2, 2, 1])
             
             with col1:
-                st.markdown(f"**🏢 {lead['company_name']}**")
-                st.caption(f"👤 {lead['contact_person']}")
+                st.markdown(f"** {lead['company_name']}**")
+                st.caption(f" {lead['contact_person']}")
             
             with col2:
                 st.markdown(f"**{lead['estimated_value']:,.0f} €**")
@@ -123,14 +123,14 @@ def _render_scoring_overview(conn) -> None:
             
             with col3:
                 stage_icons = {
-                    'lead': '🆕',
+                    'lead': '',
                     'qualified': '',
                     'proposal': '',
-                    'negotiation': '🤝'
+                    'negotiation': ''
                 }
-                stage_icon = stage_icons.get(lead['stage'], '❓')
+                stage_icon = stage_icons.get(lead['stage'], '')
                 st.markdown(f"**{stage_icon} {lead['stage'].title()}**")
-                st.caption(f"📅 {lead['created_at'][:10]}")
+                st.caption(f" {lead['created_at'][:10]}")
             
             with col4:
                 # Score Badge
@@ -164,14 +164,14 @@ def _render_scoring_overview(conn) -> None:
         st.info("Keine Leads mit Score ≥ 70 vorhanden")
     
     # Benachrichtigungen
-    st.markdown("#### 🔔 Neue High-Score Leads (letzte 24h)")
+    st.markdown("####  Neue High-Score Leads (letzte 24h)")
     
     notifications = check_high_score_notifications(conn, threshold=80)
     
     if notifications:
         for notif in notifications:
             st.success(f"""
-                🔥 **{notif['company_name']}** hat einen Score von **{notif['new_score']}** erreicht!
+                 **{notif['company_name']}** hat einen Score von **{notif['new_score']}** erreicht!
                 (vorher: {notif['old_score'] or 0})
                 - Kontakt: {notif['contact_person']}
                 - Wert: {notif['estimated_value']:,.0f} €
@@ -182,7 +182,7 @@ def _render_scoring_overview(conn) -> None:
 
 def _render_rules_management(conn) -> None:
     """Rendert Regel-Verwaltung"""
-    st.markdown("### ⚙️ Scoring-Regeln verwalten")
+    st.markdown("###  Scoring-Regeln verwalten")
     
     # Aktuelle Regeln anzeigen
     rules = get_scoring_rules(conn, active_only=False)
@@ -200,8 +200,8 @@ def _render_rules_management(conn) -> None:
         
         type_names = {
             'project_size': 'Projektgröße',
-            'lead_source': '📍 Lead-Quelle',
-            'response_time': '⏱️ Reaktionszeit',
+            'lead_source': ' Lead-Quelle',
+            'response_time': '⏱ Reaktionszeit',
             'engagement': 'Engagement',
             'stage': 'Pipeline-Stufe'
         }
@@ -240,7 +240,7 @@ def _render_rules_management(conn) -> None:
     st.markdown("---")
     
     # Neue Regel hinzufügen
-    st.markdown("#### ➕ Neue Regel hinzufügen")
+    st.markdown("####  Neue Regel hinzufügen")
     
     with st.form("add_scoring_rule"):
         col1, col2 = st.columns(2)
@@ -253,8 +253,8 @@ def _render_rules_management(conn) -> None:
                 options=['project_size', 'lead_source', 'response_time', 'engagement', 'stage', 'custom'],
                 format_func=lambda x: {
                     'project_size': 'Projektgröße',
-                    'lead_source': '📍 Lead-Quelle',
-                    'response_time': '⏱️ Reaktionszeit',
+                    'lead_source': ' Lead-Quelle',
+                    'response_time': '⏱ Reaktionszeit',
                     'engagement': 'Engagement',
                     'stage': 'Pipeline-Stufe',
                     'custom': 'Benutzerdefiniert'
@@ -303,7 +303,7 @@ def _render_rules_management(conn) -> None:
                 step=5
             )
         
-        submitted = st.form_submit_button("➕ Regel hinzufügen", type="primary")
+        submitted = st.form_submit_button(" Regel hinzufügen", type="primary")
         
         if submitted:
             if rule_name and condition_field and condition_operator and condition_value:
@@ -328,7 +328,7 @@ def _render_rules_management(conn) -> None:
 
 def _render_score_update(conn) -> None:
     """Rendert Score-Aktualisierung"""
-    st.markdown("### 🔄 Scores aktualisieren")
+    st.markdown("###  Scores aktualisieren")
     
     st.info("""
         **Hinweis:** Scores werden automatisch aktualisiert, wenn:
@@ -342,7 +342,7 @@ def _render_score_update(conn) -> None:
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("🔄 Alle Scores neu berechnen", type="primary", use_container_width=True):
+        if st.button(" Alle Scores neu berechnen", type="primary", use_container_width=True):
             with st.spinner("Berechne Scores..."):
                 updated_count = update_all_lead_scores(conn)
                 st.success(f"{updated_count} Lead-Scores wurden aktualisiert!")

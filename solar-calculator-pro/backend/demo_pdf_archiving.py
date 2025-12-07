@@ -34,7 +34,7 @@ def demo_basic_archiving():
     pdf_bytes = create_sample_pdf()
     
     # Archive PDF
-    print("\n📄 Archiving PDF to customer record...")
+    print("\n Archiving PDF to customer record...")
     doc_id = service.auto_save_to_crm(
         pdf_bytes=pdf_bytes,
         filename="Angebot_Mustermann_PV.pdf",
@@ -50,10 +50,10 @@ def demo_basic_archiving():
     )
     
     if doc_id:
-        print(f"✅ PDF archived successfully!")
+        print(f" PDF archived successfully!")
         print(f"   Document ID: {doc_id}")
     else:
-        print("❌ Failed to archive PDF")
+        print(" Failed to archive PDF")
 
 
 def demo_metadata_extraction():
@@ -68,7 +68,7 @@ def demo_metadata_extraction():
     pdf_bytes = create_sample_pdf()
     
     # Create metadata
-    print("\n📋 Creating PDF metadata...")
+    print("\n Creating PDF metadata...")
     metadata = service.create_metadata(
         pdf_bytes=pdf_bytes,
         filename="Angebot_Schmidt_v2_2025-01-15.pdf",
@@ -81,7 +81,7 @@ def demo_metadata_extraction():
         total_price=18500.00
     )
     
-    print("\n✅ Metadata created:")
+    print("\n Metadata created:")
     print(f"   Creation Date: {metadata.creation_date}")
     print(f"   Company: {metadata.company_name} (ID: {metadata.company_id})")
     print(f"   Products: {len(metadata.products)} items")
@@ -101,14 +101,14 @@ def demo_versioning():
     service = PDFArchivingService()
     
     # Get next version number
-    print("\n🔢 Getting next version number...")
+    print("\n Getting next version number...")
     version = service.get_next_version_number(
         customer_id=1,
         pdf_type='offer_pdf',
         project_id=10
     )
     
-    print(f"✅ Next version: v{version}")
+    print(f" Next version: v{version}")
     
     # Create versioned filename
     metadata = PDFMetadata(
@@ -134,15 +134,15 @@ def demo_pdf_history():
     service = PDFArchivingService()
     
     # Get PDF history for customer
-    print("\n📚 Retrieving PDF history for customer...")
+    print("\n Retrieving PDF history for customer...")
     history = service.get_pdf_history(
         customer_id=1,
         pdf_type='offer_pdf'
     )
     
-    print(f"\n✅ Found {len(history)} PDFs:")
+    print(f"\n Found {len(history)} PDFs:")
     for doc in history[:5]:  # Show first 5
-        print(f"\n   📄 {doc.get('display_name', 'Unknown')}")
+        print(f"\n    {doc.get('display_name', 'Unknown')}")
         print(f"      Type: {doc.get('type_label', doc.get('doc_type', 'Unknown'))}")
         print(f"      Date: {doc.get('formatted_date', doc.get('uploaded_at', 'Unknown'))}")
         if doc.get('version'):
@@ -158,16 +158,16 @@ def demo_pdf_search():
     service = PDFArchivingService()
     
     # Search PDFs
-    print("\n🔍 Searching for PDFs...")
+    print("\n Searching for PDFs...")
     results = service.search_pdfs(
         search_term='Angebot',
         pdf_type='offer_pdf',
         start_date=datetime.now() - timedelta(days=30)
     )
     
-    print(f"\n✅ Found {len(results)} matching PDFs:")
+    print(f"\n Found {len(results)} matching PDFs:")
     for doc in results[:5]:  # Show first 5
-        print(f"\n   📄 {doc.get('display_name', 'Unknown')}")
+        print(f"\n    {doc.get('display_name', 'Unknown')}")
         print(f"      Customer: {doc.get('customer_name', 'Unknown')}")
         print(f"      Date: {doc.get('uploaded_at', 'Unknown')}")
 
@@ -181,14 +181,14 @@ def demo_pdf_export():
     service = PDFArchivingService()
     
     # Export PDF
-    print("\n💾 Exporting PDF from archive...")
+    print("\n Exporting PDF from archive...")
     pdf_bytes = service.export_pdf(document_id=1)
     
     if pdf_bytes:
-        print(f"✅ PDF exported successfully!")
+        print(f" PDF exported successfully!")
         print(f"   Size: {len(pdf_bytes) / 1024:.1f} KB")
     else:
-        print("❌ PDF not found or export failed")
+        print(" PDF not found or export failed")
 
 
 def demo_statistics():
@@ -200,10 +200,10 @@ def demo_statistics():
     service = PDFArchivingService()
     
     # Get statistics
-    print("\n📊 Getting PDF archive statistics...")
+    print("\n Getting PDF archive statistics...")
     stats = service.get_pdf_statistics()
     
-    print("\n✅ Statistics:")
+    print("\n Statistics:")
     print(f"   Total PDFs: {stats.get('total_pdfs', 0)}")
     print(f"   Total Customers: {stats.get('total_customers', 0)}")
     
@@ -222,7 +222,7 @@ def demo_complete_workflow():
     service = PDFArchivingService()
     
     # Step 1: Create PDF with offer data
-    print("\n📄 Step 1: Creating PDF with offer data...")
+    print("\n Step 1: Creating PDF with offer data...")
     pdf_bytes = create_sample_pdf()
     
     offer_data = {
@@ -240,7 +240,7 @@ def demo_complete_workflow():
     }
     
     # Step 2: Archive PDF
-    print("\n💾 Step 2: Archiving PDF to CRM...")
+    print("\n Step 2: Archiving PDF to CRM...")
     doc_id = service.auto_save_to_crm(
         pdf_bytes=pdf_bytes,
         filename="Angebot_Mustermann_PV_2025.pdf",
@@ -250,21 +250,21 @@ def demo_complete_workflow():
     )
     
     if doc_id:
-        print(f"✅ PDF archived with ID: {doc_id}")
+        print(f" PDF archived with ID: {doc_id}")
         
         # Step 3: Retrieve PDF history
-        print("\n📚 Step 3: Retrieving PDF history...")
+        print("\n Step 3: Retrieving PDF history...")
         history = service.get_pdf_history(customer_id=1)
-        print(f"✅ Customer has {len(history)} PDFs in archive")
+        print(f" Customer has {len(history)} PDFs in archive")
         
         # Step 4: Get statistics
-        print("\n📊 Step 4: Getting statistics...")
+        print("\n Step 4: Getting statistics...")
         stats = service.get_pdf_statistics(customer_id=1)
-        print(f"✅ Customer statistics: {stats.get('total_pdfs', 0)} PDFs")
+        print(f" Customer statistics: {stats.get('total_pdfs', 0)} PDFs")
         
-        print("\n🎉 Complete workflow executed successfully!")
+        print("\n Complete workflow executed successfully!")
     else:
-        print("❌ Workflow failed at archiving step")
+        print(" Workflow failed at archiving step")
 
 
 def main():
@@ -293,11 +293,11 @@ def main():
         demo_complete_workflow()
         
         print("\n" + "="*60)
-        print("✅ ALL DEMOS COMPLETED SUCCESSFULLY!")
+        print(" ALL DEMOS COMPLETED SUCCESSFULLY!")
         print("="*60)
         
     except Exception as e:
-        print(f"\n❌ Error running demos: {e}")
+        print(f"\n Error running demos: {e}")
         import traceback
         traceback.print_exc()
 

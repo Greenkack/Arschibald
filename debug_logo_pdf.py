@@ -109,6 +109,6 @@ def test_logo_rendering_debug():
 if __name__ == "__main__":
     pdf_path = test_logo_rendering_debug()
     if pdf_path:
-        print(f"\n🎉 Debug-PDF erstellt: {pdf_path}")
+        print(f"\n Debug-PDF erstellt: {pdf_path}")
     else:
         print("\nDebug-Test fehlgeschlagen")

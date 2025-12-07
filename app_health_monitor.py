@@ -117,7 +117,7 @@ class ApplicationHealthMonitor:
         self.monitoring_active = False
         if self._monitor_thread:
             self._monitor_thread.join(timeout=5)
-        logger.info("🛑 Health monitoring stopped")
+        logger.info(" Health monitoring stopped")
     
     def _monitor_loop(self, interval: int):
         """Continuous monitoring loop."""
@@ -249,7 +249,7 @@ class ApplicationHealthMonitor:
         }
         
         self.error_log.append(alert)
-        logger.critical(f"🚨 CRITICAL ALERT: {json.dumps(alert, indent=2)}")
+        logger.critical(f" CRITICAL ALERT: {json.dumps(alert, indent=2)}")
         
         # Save alert to file
         alert_file = Path("alerts") / f"alert_{int(time.time())}.json"
@@ -413,6 +413,6 @@ if __name__ == "__main__":
                 while True:
                     time.sleep(1)
         except KeyboardInterrupt:
-            print("\n🛑 Shutting down...")
+            print("\n Shutting down...")
         finally:
             health_monitor.shutdown()

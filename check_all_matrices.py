@@ -24,7 +24,7 @@ def check_matrix_file(file_path):
             df = pd.read_excel(file_path, index_col=0)
 
         print(f"Shape: {df.shape}")
-        print(f"📋 Index range: {df.index.min()} - {df.index.max()}")
+        print(f" Index range: {df.index.min()} - {df.index.max()}")
 
         # Prüfe 'Ohne Speicher' Spalte
         if 'Ohne Speicher' in df.columns:
@@ -43,7 +43,7 @@ def check_matrix_file(file_path):
                 elif preis_20 == 13855.30:
                     print("20 Module haben den alten falschen Preis!")
                 else:
-                    print(f"❓ 20 Module: unerwarteter Preis {preis_20}")
+                    print(f" 20 Module: unerwarteter Preis {preis_20}")
         else:
             print("'Ohne Speicher' Spalte nicht gefunden!")
             print(f"Verfügbare Spalten: {list(df.columns)[:5]}...")

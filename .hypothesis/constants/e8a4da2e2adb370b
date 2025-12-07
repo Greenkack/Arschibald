@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\IPython\utils\_process_win32.py
+# hypothesis_version: 6.147.0
+
+[0.01, '"pushd %s &&"%s', 'C:', '\\\\', 'replace']

@@ -47,7 +47,7 @@ def example_1_simple_text_pdf():
     with open("example_1_simple.pdf", "wb") as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Created example_1_simple.pdf ({len(pdf_bytes)} bytes)")
+    print(f" Created example_1_simple.pdf ({len(pdf_bytes)} bytes)")
 
 
 def example_2_dictionary_pdf():
@@ -76,7 +76,7 @@ def example_2_dictionary_pdf():
     with open("example_2_dictionary.pdf", "wb") as f:
         f.write(pdf_bytes)
     
-    print(f"✓ Created example_2_dictionary.pdf ({len(pdf_bytes)} bytes)")
+    print(f" Created example_2_dictionary.pdf ({len(pdf_bytes)} bytes)")
 
 
 class SolarCalculationReport(PDFByteMixin):
@@ -173,7 +173,7 @@ def example_3_solar_report():
     print("\nExample 3: Solar Calculation Report")
     
     if not REPORTLAB_AVAILABLE:
-        print("⚠ Skipped (reportlab not installed)")
+        print(" Skipped (reportlab not installed)")
         return
     
     report = SolarCalculationReport(
@@ -196,7 +196,7 @@ def example_3_solar_report():
     report.set_pdf_metadata(metadata)
     report.save_pdf("example_3_solar_report.pdf")
     
-    print("✓ Created example_3_solar_report.pdf")
+    print(" Created example_3_solar_report.pdf")
 
 
 class InvoiceDocument(PDFByteMixin):
@@ -292,7 +292,7 @@ def example_4_invoice():
     print("\nExample 4: Professional Invoice")
     
     if not REPORTLAB_AVAILABLE:
-        print("⚠ Skipped (reportlab not installed)")
+        print(" Skipped (reportlab not installed)")
         return
     
     customer = {
@@ -324,7 +324,7 @@ def example_4_invoice():
     invoice.set_pdf_metadata(metadata)
     invoice.save_pdf("example_4_invoice.pdf")
     
-    print("✓ Created example_4_invoice.pdf")
+    print(" Created example_4_invoice.pdf")
 
 
 def example_5_base64_encoding():
@@ -339,7 +339,7 @@ def example_5_base64_encoding():
     # Get base64-encoded PDF
     pdf_base64 = doc.to_pdf_base64()
     
-    print(f"✓ Generated base64-encoded PDF ({len(pdf_base64)} characters)")
+    print(f" Generated base64-encoded PDF ({len(pdf_base64)} characters)")
     print(f"  First 100 characters: {pdf_base64[:100]}...")
     
     # Decode and save
@@ -349,7 +349,7 @@ def example_5_base64_encoding():
     with open("example_5_base64.pdf", "wb") as f:
         f.write(pdf_bytes)
     
-    print("✓ Decoded and saved example_5_base64.pdf")
+    print(" Decoded and saved example_5_base64.pdf")
 
 
 def example_6_german_formatting():
@@ -393,7 +393,7 @@ def example_6_german_formatting():
     with open("example_6_formatting.pdf", "wb") as f:
         f.write(pdf_bytes)
     
-    print("\n✓ Created example_6_formatting.pdf")
+    print("\n Created example_6_formatting.pdf")
 
 
 def run_all_examples():
@@ -403,7 +403,7 @@ def run_all_examples():
     print("=" * 60)
     
     if not REPORTLAB_AVAILABLE:
-        print("\n⚠ WARNING: reportlab not installed")
+        print("\n WARNING: reportlab not installed")
         print("Some examples will be skipped.")
         print("Install with: pip install reportlab\n")
     

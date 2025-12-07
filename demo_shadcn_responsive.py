@@ -23,7 +23,7 @@ from utils.shadcn_responsive import (
 # Page Config
 st.set_page_config(
     page_title="Responsive Design Demo",
-    page_icon="📱",
+    page_icon="",
     layout="wide"
 )
 
@@ -40,7 +40,7 @@ system = ResponsiveDesignSystem()
 
 # Sidebar
 with st.sidebar:
-    st.title("📱 Navigation")
+    st.title(" Navigation")
     st.markdown("---")
     
     page = st.radio(
@@ -58,19 +58,19 @@ with st.sidebar:
     )
     
     st.markdown("---")
-    st.markdown("### 📊 Current Viewport")
+    st.markdown("###  Current Viewport")
     breakpoint = system.get_current_breakpoint()
     st.info(f"**Breakpoint:** {breakpoint}")
     
     if system.is_mobile():
-        st.success("📱 Mobile View")
+        st.success(" Mobile View")
     elif system.is_tablet():
-        st.info("📱 Tablet View")
+        st.info(" Tablet View")
     else:
-        st.success("🖥️ Desktop View")
+        st.success(" Desktop View")
 
 # Main Content
-st.title("📱 shadcn/ui Responsive Design Demo")
+st.title(" shadcn/ui Responsive Design Demo")
 st.markdown("Resize your browser to see responsive behavior!")
 
 if page == "Overview":
@@ -79,21 +79,21 @@ if page == "Overview":
     st.markdown("""
     Das Responsive Design System bietet:
     
-    - ✅ **Media Queries** für Breakpoints (mobile, tablet, desktop)
-    - ✅ **Kollabierbare Sidebar** für Mobile
-    - ✅ **Gestapelte Layouts** für Mobile
-    - ✅ **Touch-freundliche Größen** (min. 44px)
-    - ✅ **Verhindert horizontales Scrollen**
+    -  **Media Queries** für Breakpoints (mobile, tablet, desktop)
+    -  **Kollabierbare Sidebar** für Mobile
+    -  **Gestapelte Layouts** für Mobile
+    -  **Touch-freundliche Größen** (min. 44px)
+    -  **Verhindert horizontales Scrollen**
     """)
     
     st.markdown("---")
     
-    st.subheader("📐 Breakpoints")
+    st.subheader(" Breakpoints")
     
     cols = st.columns(3)
     with cols[0]:
         st.markdown("""
-        **📱 Mobile**
+        ** Mobile**
         - 0-767px
         - 1 Spalte
         - Stack Layout
@@ -102,7 +102,7 @@ if page == "Overview":
     
     with cols[1]:
         st.markdown("""
-        **📱 Tablet**
+        ** Tablet**
         - 768-1023px
         - 2 Spalten
         - Reduzierte Sidebar
@@ -111,7 +111,7 @@ if page == "Overview":
     
     with cols[2]:
         st.markdown("""
-        **🖥️ Desktop**
+        ** Desktop**
         - 1024px+
         - Volle Spalten
         - Normale Sidebar
@@ -120,7 +120,7 @@ if page == "Overview":
     
     st.markdown("---")
     
-    st.subheader("🚀 Quick Start")
+    st.subheader(" Quick Start")
     
     st.code("""
 from utils.shadcn_responsive import inject_responsive_design
@@ -133,7 +133,7 @@ st.title("Responsive App")
     """, language="python")
 
 elif page == "Breakpoints":
-    st.header("📐 Breakpoints")
+    st.header(" Breakpoints")
     
     st.markdown("""
     Das System verwendet drei Breakpoints:
@@ -143,7 +143,7 @@ elif page == "Breakpoints":
     cols = st.columns(3)
     
     with cols[0]:
-        st.markdown("### 📱 Mobile")
+        st.markdown("###  Mobile")
         st.info("**0-767px**")
         st.markdown("""
         - Smartphones
@@ -154,7 +154,7 @@ elif page == "Breakpoints":
         """)
     
     with cols[1]:
-        st.markdown("### 📱 Tablet")
+        st.markdown("###  Tablet")
         st.info("**768-1023px**")
         st.markdown("""
         - Tablets
@@ -165,7 +165,7 @@ elif page == "Breakpoints":
         """)
     
     with cols[2]:
-        st.markdown("### 🖥️ Desktop")
+        st.markdown("###  Desktop")
         st.info("**1024px+**")
         st.markdown("""
         - Desktop/Laptop
@@ -185,15 +185,15 @@ elif page == "Breakpoints":
         st.metric("Breakpoint", breakpoint.upper())
     
     with col2:
-        is_mobile = "✅ Yes" if system.is_mobile() else "❌ No"
+        is_mobile = " Yes" if system.is_mobile() else " No"
         st.metric("Is Mobile?", is_mobile)
     
     with col3:
-        is_desktop = "✅ Yes" if system.is_desktop() else "❌ No"
+        is_desktop = " Yes" if system.is_desktop() else " No"
         st.metric("Is Desktop?", is_desktop)
 
 elif page == "Responsive Columns":
-    st.header("📊 Responsive Columns")
+    st.header(" Responsive Columns")
     
     st.markdown("""
     Columns passen sich automatisch an die Viewport-Größe an:
@@ -250,7 +250,7 @@ with cols[2]:
     """, language="python")
 
 elif page == "Responsive Grid":
-    st.header("🎨 Responsive Grid")
+    st.header(" Responsive Grid")
     
     st.markdown("""
     Das Grid-System passt sich automatisch an:
@@ -299,7 +299,7 @@ elif page == "Responsive Grid":
             st.metric(metrics[i][0], metrics[i][1], metrics[i][2])
 
 elif page == "Touch Optimization":
-    st.header("👆 Touch Optimization")
+    st.header(" Touch Optimization")
     
     st.markdown("""
     Alle interaktiven Elemente sind touch-optimiert:
@@ -321,7 +321,7 @@ elif page == "Touch Optimization":
     with cols[2]:
         st.button("Tertiary Button", type="secondary")
     
-    st.info("✅ Alle Buttons haben min. 44px Höhe")
+    st.info(" Alle Buttons haben min. 44px Höhe")
     
     st.markdown("---")
     
@@ -337,7 +337,7 @@ elif page == "Touch Optimization":
         st.selectbox("Select", ["Option 1", "Option 2", "Option 3"])
         st.date_input("Date Input")
     
-    st.info("✅ Alle Inputs haben min. 44px Höhe und font-size: 16px")
+    st.info(" Alle Inputs haben min. 44px Höhe und font-size: 16px")
     
     st.markdown("---")
     
@@ -353,10 +353,10 @@ elif page == "Touch Optimization":
     with col2:
         st.radio("Radio", ["Option 1", "Option 2", "Option 3"])
     
-    st.info("✅ Checkboxes und Radio Buttons sind 24px × 24px")
+    st.info(" Checkboxes und Radio Buttons sind 24px × 24px")
 
 elif page == "Visibility Classes":
-    st.header("👁️ Visibility Classes")
+    st.header(" Visibility Classes")
     
     st.markdown("""
     Zeige oder verstecke Content basierend auf Viewport:
@@ -373,7 +373,7 @@ elif page == "Visibility Classes":
         border-radius: 0.5rem;
         text-align: center;
     ">
-        ❌ Dieser Content ist auf Mobile versteckt
+         Dieser Content ist auf Mobile versteckt
     </div>
     """, unsafe_allow_html=True)
     
@@ -388,7 +388,7 @@ elif page == "Visibility Classes":
         border-radius: 0.5rem;
         text-align: center;
     ">
-        📱 Dieser Content ist nur auf Mobile sichtbar
+         Dieser Content ist nur auf Mobile sichtbar
     </div>
     """, unsafe_allow_html=True)
     
@@ -403,7 +403,7 @@ elif page == "Visibility Classes":
         border-radius: 0.5rem;
         text-align: center;
     ">
-        🖥️ Dieser Content ist auf Desktop versteckt
+         Dieser Content ist auf Desktop versteckt
     </div>
     """, unsafe_allow_html=True)
     
@@ -424,7 +424,7 @@ elif page == "Visibility Classes":
     """, language="html")
 
 elif page == "Sidebar Toggle":
-    st.header("📱 Sidebar Toggle")
+    st.header(" Sidebar Toggle")
     
     st.markdown("""
     Auf Mobile wird automatisch ein Toggle-Button angezeigt:
@@ -443,12 +443,12 @@ elif page == "Sidebar Toggle":
     
     with col1:
         st.markdown("""
-        **✅ Automatisch auf Mobile**
+        ** Automatisch auf Mobile**
         - Zeigt sich nur auf Viewports < 768px
         - Hamburger-Icon
         - Fixed Position
         
-        **✅ Touch-Optimiert**
+        ** Touch-Optimiert**
         - Min. 44px × 44px
         - Großer Touch-Bereich
         - Visual Feedback
@@ -456,12 +456,12 @@ elif page == "Sidebar Toggle":
     
     with col2:
         st.markdown("""
-        **✅ Smooth Animations**
+        ** Smooth Animations**
         - Slide-in/out Transition
         - Overlay Fade
         - 300ms Duration
         
-        **✅ Accessibility**
+        ** Accessibility**
         - Keyboard-Navigation
         - ARIA-Labels
         - Focus-Indikatoren
@@ -490,10 +490,10 @@ with st.sidebar:
     st.button("About")
     """, language="python")
     
-    st.info("💡 Resize your browser to < 768px to see the toggle button!")
+    st.info(" Resize your browser to < 768px to see the toggle button!")
 
 elif page == "Complete Example":
-    st.header("🎯 Complete Example")
+    st.header(" Complete Example")
     
     st.markdown("""
     Ein vollständiges Beispiel mit allen Features:
@@ -520,14 +520,14 @@ elif page == "Complete Example":
         """, unsafe_allow_html=True)
     
     # Metrics
-    st.subheader("📊 Key Metrics")
+    st.subheader(" Key Metrics")
     cols = responsive_columns(4)
     
     metrics_data = [
-        ("Total Users", "12,345", "+12.5%", "👥"),
-        ("Revenue", "$45.2K", "+8.3%", "💰"),
-        ("Orders", "892", "+15.2%", "📦"),
-        ("Growth", "23.4%", "+5.1%", "📈")
+        ("Total Users", "12,345", "+12.5%", ""),
+        ("Revenue", "$45.2K", "+8.3%", ""),
+        ("Orders", "892", "+15.2%", ""),
+        ("Growth", "23.4%", "+5.1%", "")
     ]
     
     for i, col in enumerate(cols):
@@ -551,7 +551,7 @@ elif page == "Complete Example":
     st.markdown("---")
     
     # Charts Section
-    st.subheader("📈 Analytics")
+    st.subheader(" Analytics")
     
     col1, col2 = responsive_columns(2)
     
@@ -570,7 +570,7 @@ elif page == "Complete Example":
     st.markdown("---")
     
     # Data Table
-    st.subheader("📋 Recent Orders")
+    st.subheader(" Recent Orders")
     
     import pandas as pd
     
@@ -586,22 +586,22 @@ elif page == "Complete Example":
     st.markdown("---")
     
     # Action Buttons
-    st.subheader("⚡ Quick Actions")
+    st.subheader(" Quick Actions")
     
     cols = responsive_columns(3)
     
     with cols[0]:
-        st.button("📊 View Reports", use_container_width=True)
+        st.button(" View Reports", use_container_width=True)
     with cols[1]:
-        st.button("➕ Add Order", use_container_width=True, type="primary")
+        st.button(" Add Order", use_container_width=True, type="primary")
     with cols[2]:
-        st.button("⚙️ Settings", use_container_width=True)
+        st.button(" Settings", use_container_width=True)
 
 # Footer
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center; color: var(--muted-foreground); padding: 2rem 0;">
-    <p>📱 Responsive Design Demo | shadcn/ui Theme System</p>
+    <p> Responsive Design Demo | shadcn/ui Theme System</p>
     <p>Resize your browser to see responsive behavior!</p>
 </div>
 """, unsafe_allow_html=True)

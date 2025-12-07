@@ -118,7 +118,7 @@ def fix_placeholders_for_multi_pdf():
         search_marker = "if hasattr(st, 'session_state') and 'project_data' in st.session_state:"
         if search_marker in content:
             print("Marker gefunden - manuelle Anpassung erforderlich")
-            print(f"\n📍 Suche nach: {search_marker}")
+            print(f"\n Suche nach: {search_marker}")
             print("Diese Stelle muss manuell angepasst werden:")
             print("   1. Zuerst übergebene project_details prüfen")
             print("   2. Dann erst session_state als Fallback")
@@ -135,7 +135,7 @@ def fix_placeholders_for_multi_pdf():
         return False
     
     # Speichere die geänderte Datei
-    print(f"💾 Schreibe geänderte Datei...")
+    print(f" Schreibe geänderte Datei...")
     with open(placeholders_file, 'w', encoding='utf-8') as f:
         f.write(new_content)
     
@@ -273,7 +273,7 @@ if __name__ == "__main__":
         print("\n" + "="*80)
         print("FIX ERFOLGREICH ANGEWENDET!")
         print("="*80)
-        print("\n📋 Nächste Schritte:")
+        print("\n Nächste Schritte:")
         print("1. python test_multi_pdf_variations.py # Teste Preisstaffelung")
         print("2. streamlit run gui.py # Teste in der App")
         print("3. Multi-PDF für 3 Firmen generieren")

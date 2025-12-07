@@ -104,7 +104,7 @@ def test_payment_terms_final_price():
             return project_total, "Error"
 
     # Test 1: Mit Solar Calculator Daten
-    print("\\n🧪 Test 1: Mit Solar Calculator Daten")
+    print("\\n Test 1: Mit Solar Calculator Daten")
     result_price, source = simulate_payment_terms_price_logic(
         mock_session_state)
 
@@ -117,7 +117,7 @@ def test_payment_terms_final_price():
                 result_price:,.2f} € aus {source}")
 
     # Test 2: Ohne Solar Calculator Daten (Fallback-Test)
-    print("\\n🧪 Test 2: Ohne Solar Calculator Daten (Fallback-Test)")
+    print("\\n Test 2: Ohne Solar Calculator Daten (Fallback-Test)")
     mock_session_state_fallback = {
         'live_pricing_calculations': {
             'final_price': 22000.00
@@ -136,7 +136,7 @@ def test_payment_terms_final_price():
         print("FEHLER: Fallback funktioniert nicht korrekt")
 
     # Test 3: Komplett ohne Daten (Default-Test)
-    print("\\n🧪 Test 3: Komplett ohne Daten (Default-Test)")
+    print("\\n Test 3: Komplett ohne Daten (Default-Test)")
     mock_session_state_empty = {}
 
     result_price_empty, source_empty = simulate_payment_terms_price_logic(
@@ -147,8 +147,8 @@ def test_payment_terms_final_price():
     else:
         print("FEHLER: Default-Wert funktioniert nicht korrekt")
 
-    print("\\n🎉 Test abgeschlossen!")
-    print("\\n📋 Zusammenfassung:")
+    print("\\n Test abgeschlossen!")
+    print("\\n Zusammenfassung:")
     print("   1. Solar Calculator Preis hat höchste Priorität")
     print("   2. Fallback-Mechanismus funktioniert")
     print("   3. Default-Wert wird als letzter Ausweg verwendet")

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\conf\__init__.py
+# hypothesis_version: 6.147.0
+
+['%s%s', '/', '/usr/share/zoneinfo', '<%(cls)s>', 'ALLOWED_HOSTS', 'INSTALLED_APPS', 'LOCALE_PATHS', 'MEDIA_URL', 'SECRET_KEY', 'SECRET_KEY_FALLBACKS', 'STATIC_URL', 'TEMPLATE_DIRS', 'TZ', '_deleted', '_wrapped', 'cls', 'default', 'http://', 'https://', 'is_overridden', 'setting %s', 'settings', 'settings_module', 'staticfiles', 'tzset']

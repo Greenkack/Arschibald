@@ -9,7 +9,7 @@ import streamlit as st
 # Simuliere die Integration
 st.set_page_config(page_title="shadcn/ui Integration Demo", layout="wide")
 
-st.title("🎨 shadcn/ui Integration in gui.py")
+st.title(" shadcn/ui Integration in gui.py")
 
 st.markdown("""
 ## Übersicht
@@ -18,28 +18,28 @@ Das shadcn/ui Theme System wurde erfolgreich in die Haupt-App (gui.py) integrier
 
 ### Implementierte Features
 
-#### 1. ✅ ThemeManager Initialisierung beim App-Start
+#### 1.  ThemeManager Initialisierung beim App-Start
 - ThemeManager wird beim ersten Laden der App erstellt
 - Gespeichertes Theme wird aus der Datenbank geladen
 - Fallback auf Standard-Theme wenn kein Theme gespeichert ist
 
-#### 2. ✅ Globale CSS-Injection
+#### 2.  Globale CSS-Injection
 - CSS wird beim App-Start automatisch injiziert
 - CSS wird bei Theme-Wechsel neu generiert und injiziert
 - Verwendet `st.markdown()` mit `unsafe_allow_html=True`
 
-#### 3. ✅ Theme-Selector in Sidebar
+#### 3.  Theme-Selector in Sidebar
 - Theme-Selector wird in der Sidebar unter "DESIGN" angezeigt
 - Nur sichtbar wenn Feature aktiviert ist
 - Live-Vorschau der Theme-Farben
 - Speichert Theme-Auswahl in Datenbank
 
-#### 4. ✅ Feature-Flag (enable_shadcn_ui)
+#### 4.  Feature-Flag (enable_shadcn_ui)
 - Feature kann über Session State aktiviert/deaktiviert werden
 - Einstellung wird in Datenbank gespeichert
 - Standard: aktiviert (True)
 
-#### 5. ✅ Rückwärtskompatibilität
+#### 5.  Rückwärtskompatibilität
 - App funktioniert auch ohne shadcn/ui Module
 - Graceful Fallback bei Import-Fehlern
 - Bestehende Funktionalität bleibt erhalten
@@ -153,30 +153,30 @@ streamlit run gui.py
 ```
 
 Prüfe:
-- ✅ Theme-Selector erscheint in Sidebar
-- ✅ Theme-Wechsel funktioniert
-- ✅ CSS wird korrekt angewendet
-- ✅ Theme-Auswahl wird gespeichert
-- ✅ App funktioniert auch ohne shadcn/ui Module
+-  Theme-Selector erscheint in Sidebar
+-  Theme-Wechsel funktioniert
+-  CSS wird korrekt angewendet
+-  Theme-Auswahl wird gespeichert
+-  App funktioniert auch ohne shadcn/ui Module
 ```
 """)
 
 # Zeige aktuellen Status
 st.markdown("---")
-st.subheader("📊 Aktueller Status")
+st.subheader(" Aktueller Status")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.metric(
         label="shadcn/ui verfügbar",
-        value="✅ Ja" if st.session_state.get('shadcn_theme_manager') else "❌ Nein"
+        value=" Ja" if st.session_state.get('shadcn_theme_manager') else " Nein"
     )
 
 with col2:
     st.metric(
         label="Feature aktiviert",
-        value="✅ Ja" if st.session_state.get('enable_shadcn_ui', False) else "❌ Nein"
+        value=" Ja" if st.session_state.get('enable_shadcn_ui', False) else " Nein"
     )
 
 with col3:
@@ -190,7 +190,7 @@ with col3:
 # Zeige verfügbare Themes
 if theme_manager:
     st.markdown("---")
-    st.subheader("🎨 Verfügbare Themes")
+    st.subheader(" Verfügbare Themes")
     
     themes = theme_manager.themes
     cols = st.columns(len(themes))
@@ -207,7 +207,7 @@ if theme_manager:
 
 # Zeige Code-Beispiele
 st.markdown("---")
-st.subheader("💻 Code-Beispiele")
+st.subheader(" Code-Beispiele")
 
 with st.expander("Theme programmatisch wechseln"):
     st.code("""
@@ -251,4 +251,4 @@ st.markdown(f'<div style="color: {primary_color}">Text</div>', unsafe_allow_html
 """, language="python")
 
 st.markdown("---")
-st.success("✅ Integration abgeschlossen! Das shadcn/ui Theme System ist jetzt in gui.py integriert.")
+st.success(" Integration abgeschlossen! Das shadcn/ui Theme System ist jetzt in gui.py integriert.")

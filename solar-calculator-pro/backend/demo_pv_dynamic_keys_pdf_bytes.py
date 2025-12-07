@@ -325,25 +325,25 @@ def demo_complete_workflow():
     for original_key, dynamic_key in calc_keys.items():
         value = manager.get_value_by_key(dynamic_key)
         if value is not None:
-            logger.info(f"✓ {original_key}: Retrieved successfully")
+            logger.info(f" {original_key}: Retrieved successfully")
         else:
-            logger.warning(f"✗ {original_key}: Failed to retrieve")
+            logger.warning(f" {original_key}: Failed to retrieve")
     
-    logger.info("\n✓ Complete workflow finished successfully!")
+    logger.info("\n Complete workflow finished successfully!")
     logger.info("")
 
 
 def main():
     """Run all demos"""
     logger.info("\n")
-    logger.info("╔" + "=" * 58 + "╗")
-    logger.info("║" + " " * 58 + "║")
-    logger.info("║" + "  PV Dynamic Keys & PDF Bytes System - Demo".center(58) + "║")
-    logger.info("║" + " " * 58 + "║")
-    logger.info("║" + "  Task 115: Standard PV PDF Dynamic Keys & PDF Bytes".center(58) + "║")
-    logger.info("║" + "  Requirements: 1.3, 4.5, 14.1, 14.2".center(58) + "║")
-    logger.info("║" + " " * 58 + "║")
-    logger.info("╚" + "=" * 58 + "╝")
+    logger.info("" + "=" * 58 + "")
+    logger.info("" + " " * 58 + "")
+    logger.info("" + "  PV Dynamic Keys & PDF Bytes System - Demo".center(58) + "")
+    logger.info("" + " " * 58 + "")
+    logger.info("" + "  Task 115: Standard PV PDF Dynamic Keys & PDF Bytes".center(58) + "")
+    logger.info("" + "  Requirements: 1.3, 4.5, 14.1, 14.2".center(58) + "")
+    logger.info("" + " " * 58 + "")
+    logger.info("" + "=" * 58 + "")
     logger.info("\n")
     
     try:
@@ -374,7 +374,7 @@ def main():
         logger.info("  - demo_pv_data_model.pdf")
         logger.info("  - workflow_calculation.pdf")
         logger.info("  - workflow_product.pdf")
-        logger.info("\nAll demos completed successfully! ✓")
+        logger.info("\nAll demos completed successfully! ")
         logger.info("")
         
     except Exception as e:

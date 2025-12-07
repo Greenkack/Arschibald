@@ -29,7 +29,7 @@ def test_module_details_hover():
     print("=" * 70)
     
     # Test 1: Modul mit Nummer und Standard-Leistung (400W)
-    print("\n📋 Test 1: Modul mit Nummer und Standard-Leistung")
+    print("\n Test 1: Modul mit Nummer und Standard-Leistung")
     print("-" * 70)
     
     module_1, vertices_1 = create_pv_module_3d(
@@ -56,7 +56,7 @@ def test_module_details_hover():
     print(f"   {hover_text}")
     
     # Test 2: Modul mit höherer Leistung (450W) und West-Ausrichtung
-    print("\n📋 Test 2: Modul mit 450W und West-Ausrichtung")
+    print("\n Test 2: Modul mit 450W und West-Ausrichtung")
     print("-" * 70)
     
     module_2, vertices_2 = create_pv_module_3d(
@@ -79,7 +79,7 @@ def test_module_details_hover():
     print(f"   {hover_text_2}")
     
     # Test 3: Modul ohne Nummer
-    print("\n📋 Test 3: Modul ohne Nummer")
+    print("\n Test 3: Modul ohne Nummer")
     print("-" * 70)
     
     module_3, vertices_3 = create_pv_module_3d(
@@ -102,7 +102,7 @@ def test_module_details_hover():
     print(f"   {hover_text_3}")
     
     # Test 4: Verschiedene Himmelsrichtungen
-    print("\n📋 Test 4: Verschiedene Himmelsrichtungen")
+    print("\n Test 4: Verschiedene Himmelsrichtungen")
     print("-" * 70)
     
     directions = [

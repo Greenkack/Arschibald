@@ -11,7 +11,7 @@ from core.db_performance_monitor import (
 
 def alert_callback(alert):
     """Callback function for performance alerts"""
-    print(f"\n🚨 ALERT [{alert.severity.value.upper()}]: {alert.message}")
+    print(f"\n ALERT [{alert.severity.value.upper()}]: {alert.message}")
     print(f"   Metric: {alert.metric_name}")
     print(
         f"   Current: {
@@ -70,14 +70,14 @@ def example_basic_usage():
     # Get slow queries
     slow_queries = monitor.get_slow_queries(limit=5)
     if slow_queries:
-        print("\n🐌 Slow Queries:")
+        print("\n Slow Queries:")
         for sq in slow_queries:
             print(f"   - {sq.query[:60]}... ({sq.duration:.2f}s)")
 
     # Get alerts
     alerts = monitor.get_alerts(limit=10)
     if alerts:
-        print(f"\n🚨 Recent Alerts: {len(alerts)}")
+        print(f"\n Recent Alerts: {len(alerts)}")
         for alert in alerts[-3:]:
             print(f"   - [{alert.severity.value}] {alert.message}")
 
@@ -103,7 +103,7 @@ def example_custom_thresholds():
         enable_recommendations=True
     )
 
-    print("\n⚙️  Custom Thresholds:")
+    print("\n  Custom Thresholds:")
     print(f"   Slow Query: {thresholds.slow_query_threshold}s")
     print(f"   Very Slow Query: {thresholds.very_slow_query_threshold}s")
     print(f"   Error Rate: {thresholds.error_rate_threshold:.1%}")
@@ -292,7 +292,7 @@ def example_real_time_monitoring():
 
     def counting_callback(alert):
         alert_count['count'] += 1
-        print(f"\n   🚨 Alert #{alert_count['count']}: {alert.message}")
+        print(f"\n    Alert #{alert_count['count']}: {alert.message}")
 
     monitor.register_alert_callback(counting_callback)
 

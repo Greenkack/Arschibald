@@ -103,7 +103,7 @@ def show_txt_system_overview():
     st.success(f"{len(pages)} Seiten gefunden: {', '.join(map(str, pages))}")
 
     # Seiten-Details
-    with st.expander("📋 Seiten-Details", expanded=False):
+    with st.expander(" Seiten-Details", expanded=False):
         for page_num in pages[:10]:  # Zeige erste 10 Seiten
             files = get_page_files(page_num)
 
@@ -123,7 +123,7 @@ def show_txt_system_overview():
                 if img_files:
                     for img_key, img_path in img_files.items():
                         ext = os.path.splitext(img_path)[1]
-                        st.text(f"🖼️ {img_key}{ext}")
+                        st.text(f" {img_key}{ext}")
                 else:
                     st.text("Keine Bilder")
 
@@ -226,7 +226,7 @@ def validate_page_structure(page_num: int) -> dict[str, bool]:
     return validation
 
 if __name__ == "__main__":
-    print("🧪 TXT-PDF Management Tool")
+    print(" TXT-PDF Management Tool")
     print("=" * 40)
 
     pages = list_available_pages()
@@ -240,7 +240,7 @@ if __name__ == "__main__":
         print("Template-Seiten erstellt")
 
     # Validiere erste 5 Seiten
-    print("\n📋 Struktur-Validierung (erste 5 Seiten):")
+    print("\n Struktur-Validierung (erste 5 Seiten):")
     for page_num in pages[:5]:
         validation = validate_page_structure(page_num)
         all_valid = all(validation.values())

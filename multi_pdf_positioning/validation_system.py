@@ -666,7 +666,7 @@ class ValidationSystem:
             lines.append(f"WARNINGS ({len(warnings)})")
             lines.append("-" * 70)
             for msg in warnings:
-                lines.append(f"  ⚠ {msg.message}")
+                lines.append(f"   {msg.message}")
                 if msg.details:
                     lines.append(f"    Details: {msg.details}")
             lines.append("")

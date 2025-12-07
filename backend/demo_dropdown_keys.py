@@ -46,7 +46,7 @@ def demo_basic_dropdown():
         searchable=True
     )
 
-    print(f"\n✓ Created dropdown: {dropdown.label}")
+    print(f"\n Created dropdown: {dropdown.label}")
     print(f"  Key: {dropdown.key}")
     print(f"  Type: {dropdown.dropdown_type.value}")
     print(f"  Options: {len(dropdown.get_options())}")
@@ -96,7 +96,7 @@ def demo_grouped_dropdown():
         options=product_options
     )
 
-    print(f"\n✓ Created grouped dropdown: {dropdown.label}")
+    print(f"\n Created grouped dropdown: {dropdown.label}")
 
     # Group options by group
     groups = {}
@@ -152,7 +152,7 @@ def demo_cascading_dropdown():
         form_id="address_form"
     )
 
-    print(f"\n✓ Created cascading dropdown: {country_dropdown.label}")
+    print(f"\n Created cascading dropdown: {country_dropdown.label}")
     print(f"  Key: {country_dropdown.key}")
 
     print("\n  Countries and States:")
@@ -192,7 +192,7 @@ def demo_selection_history():
         options=options
     )
 
-    print(f"\n✓ Created dropdown: {dropdown.label}")
+    print(f"\n Created dropdown: {dropdown.label}")
 
     # Simulate user selections
     print("\n  Recording selections...")
@@ -254,7 +254,7 @@ def demo_multi_select_dropdown():
         multiple=True
     )
 
-    print(f"\n✓ Created multi-select dropdown: {dropdown.label}")
+    print(f"\n Created multi-select dropdown: {dropdown.label}")
     print(f"  Key: {dropdown.key}")
     print(f"  Multiple selection: {dropdown.multiple}")
 
@@ -294,7 +294,7 @@ def demo_searchable_dropdown():
         searchable=True
     )
 
-    print(f"\n✓ Created searchable dropdown: {dropdown.label}")
+    print(f"\n Created searchable dropdown: {dropdown.label}")
     print(f"  Key: {dropdown.key}")
     print(f"  Searchable: {dropdown.searchable}")
     print(f"  Total options: {len(dropdown.get_options())}")
@@ -328,7 +328,7 @@ def demo_dropdown_schema_export():
         metadata={"category": "test"}
     )
 
-    print(f"\n✓ Created dropdown: {dropdown.label}")
+    print(f"\n Created dropdown: {dropdown.label}")
 
     # Export schema
     schema = manager.export_dropdown_schema(dropdown.key)
@@ -412,7 +412,7 @@ def main():
         try:
             demo()
         except Exception as e:
-            print(f"\n❌ Error in {demo.__name__}: {e}")
+            print(f"\n Error in {demo.__name__}: {e}")
 
     print("\n" + "=" * 60)
     print("DEMO COMPLETE")

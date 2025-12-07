@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\markupsafe\__init__.py
+# hypothesis_version: 6.147.0
+
+['-->', '<', '<!--', '>', '__getitem__', '__html__', '__html_format__', '__version__', 'escape', 'markupsafe', 'obj', 'strict']

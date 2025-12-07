@@ -36,15 +36,15 @@ dynamic_data = build_dynamic_data()
 # Check result
 if "special_agreements_custom_text" in dynamic_data:
     text = dynamic_data["special_agreements_custom_text"]
-    print(f"✅ Placeholder gefunden!")
-    print(f"📝 Länge: {len(text)} Zeichen")
-    print(f"📄 Zeilen: {len(text.split(chr(10)))}")
+    print(f" Placeholder gefunden!")
+    print(f" Länge: {len(text)} Zeichen")
+    print(f" Zeilen: {len(text.split(chr(10)))}")
     print(f"\nInhalt:")
     print("-" * 40)
     print(text)
     print("-" * 40)
 else:
-    print("❌ Placeholder NICHT gefunden!")
+    print(" Placeholder NICHT gefunden!")
     print(f"Keys in dynamic_data: {list(dynamic_data.keys())[:10]}...")
 
 print("\n")
@@ -60,15 +60,15 @@ dynamic_data = build_dynamic_data()
 
 if "special_agreements_custom_text" in dynamic_data:
     text = dynamic_data["special_agreements_custom_text"]
-    print(f"✅ Fallback-Text aktiv!")
-    print(f"📝 Länge: {len(text)} Zeichen")
+    print(f" Fallback-Text aktiv!")
+    print(f" Länge: {len(text)} Zeichen")
     print(f"\nInhalt:")
     print("-" * 40)
     print(text[:100] + "..." if len(text) > 100 else text)
     print("-" * 40)
 else:
-    print("❌ Placeholder NICHT gefunden!")
+    print(" Placeholder NICHT gefunden!")
 
 print("\n" + "=" * 60)
-print("✅ Test abgeschlossen!")
+print(" Test abgeschlossen!")
 print("=" * 60)

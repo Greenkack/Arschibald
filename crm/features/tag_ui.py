@@ -36,16 +36,16 @@ def render_tag_management_ui(texts: dict[str, str]):
     """Hauptfunktion für Tag-Verwaltung UI."""
     
     if not TAG_MANAGER_AVAILABLE:
-        st.error("🏷️ Tag-Verwaltung nicht verfügbar - Module fehlen")
+        st.error(" Tag-Verwaltung nicht verfügbar - Module fehlen")
         return
     
-    st.subheader("🏷️ Tag-Verwaltung")
+    st.subheader(" Tag-Verwaltung")
     st.markdown("Verwalten Sie Tags zur Kategorisierung und Segmentierung von Kunden")
     
     # Tabs für verschiedene Bereiche
     tabs = st.tabs([
-        "📋 Alle Tags",
-        "➕ Neuer Tag",
+        " Alle Tags",
+        " Neuer Tag",
         "Statistiken"
     ])
     
@@ -163,7 +163,7 @@ def render_tag_card(tag: dict[str, Any], conn, texts: dict[str, str]):
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("✏️", key=f"edit_tag_{tag['id']}", help="Bearbeiten", use_container_width=True):
+        if st.button("", key=f"edit_tag_{tag['id']}", help="Bearbeiten", use_container_width=True):
             st.session_state[f'edit_tag_{tag["id"]}'] = True
             st.rerun()
     
@@ -200,7 +200,7 @@ def render_tag_card(tag: dict[str, Any], conn, texts: dict[str, str]):
             
             col_submit, col_cancel = st.columns(2)
             with col_submit:
-                if st.form_submit_button("💾 Speichern", use_container_width=True):
+                if st.form_submit_button(" Speichern", use_container_width=True):
                     if update_tag(
                         conn,
                         tag['id'],
@@ -274,7 +274,7 @@ def render_create_tag_section(texts: dict[str, str]):
                 placeholder="Ihr Name"
             )
             
-            if st.form_submit_button("➕ Tag erstellen", use_container_width=True):
+            if st.form_submit_button(" Tag erstellen", use_container_width=True):
                 if not name or not name.strip():
                     st.error("Bitte geben Sie einen Tag-Namen ein")
                 else:
@@ -402,7 +402,7 @@ def render_customer_tag_selector(
         return
     
     try:
-        st.markdown("#### 🏷️ Tags")
+        st.markdown("####  Tags")
         
         # Aktuelle Tags des Kunden
         current_tags = get_customer_tags(conn, customer_id)
@@ -440,7 +440,7 @@ def render_customer_tag_selector(
             st.info("Keine Tags zugewiesen")
         
         # Tag hinzufügen/entfernen
-        with st.expander("🏷️ Tags verwalten"):
+        with st.expander(" Tags verwalten"):
             # Multiselect für Tags
             tag_options = {tag['id']: f"{tag['name']} ({tag.get('category', 'Keine Kategorie')})" 
                           for tag in all_tags}
@@ -454,7 +454,7 @@ def render_customer_tag_selector(
             )
             
             # Änderungen speichern
-            if st.button("💾 Tags speichern", key=f"save_tags_{customer_id}_{key_suffix}"):
+            if st.button(" Tags speichern", key=f"save_tags_{customer_id}_{key_suffix}"):
                 # Tags hinzufügen
                 for tag_id in selected_tag_ids:
                     if tag_id not in current_tag_ids:
@@ -490,7 +490,7 @@ def render_bulk_tag_assignment(customer_ids: list[int], texts: dict[str, str]):
         return
     
     try:
-        st.markdown(f"### 🏷️ Massen-Tagging für {len(customer_ids)} Kunden")
+        st.markdown(f"###  Massen-Tagging für {len(customer_ids)} Kunden")
         
         all_tags = get_all_tags(conn, active_only=True)
         
@@ -511,7 +511,7 @@ def render_bulk_tag_assignment(customer_ids: list[int], texts: dict[str, str]):
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("➕ Tags hinzufügen", use_container_width=True):
+            if st.button(" Tags hinzufügen", use_container_width=True):
                 if selected_tag_ids:
                     stats = assign_tags_to_customers(conn, customer_ids, selected_tag_ids)
                     st.success(f"{stats['success']} Tags zugewiesen, {stats['skipped']} übersprungen")
@@ -520,7 +520,7 @@ def render_bulk_tag_assignment(customer_ids: list[int], texts: dict[str, str]):
                     st.warning("Bitte wählen Sie mindestens einen Tag aus")
         
         with col2:
-            if st.button("➖ Tags entfernen", use_container_width=True):
+            if st.button(" Tags entfernen", use_container_width=True):
                 if selected_tag_ids:
                     removed = remove_tags_from_customers(conn, customer_ids, selected_tag_ids)
                     st.success(f"{removed} Tag-Zuordnungen entfernt")

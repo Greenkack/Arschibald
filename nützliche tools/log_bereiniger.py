@@ -43,14 +43,14 @@ def clean_debug_statements(directory="."):
                 cleaned_files += 1
                 total_removals += file_removals
                 print(
-                    f"🧹 {
+                    f" {
                         os.path.basename(file_path)}: {file_removals} Debug-Statements entfernt")
 
         except Exception as e:
             print(f"Fehler bei {file_path}: {e}")
 
     print(
-        f"\n🎉 {cleaned_files} Dateien bereinigt, {total_removals} Debug-Statements entfernt!")
+        f"\n {cleaned_files} Dateien bereinigt, {total_removals} Debug-Statements entfernt!")
 
 
 if __name__ == "__main__":

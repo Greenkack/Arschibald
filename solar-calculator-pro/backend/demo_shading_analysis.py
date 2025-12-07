@@ -73,18 +73,18 @@ def demo_basic_analysis():
     result = service.analyze_shading(request)
     
     # Display results
-    print(f"📊 SHADING LOSS ANALYSIS")
+    print(f" SHADING LOSS ANALYSIS")
     print(f"   Total Annual Loss: {result.losses.total_annual_loss_percent:.2f}%")
     print(f"   Affected Area: {result.losses.affected_area_percent:.2f}%")
-    print(f"\n📅 MONTHLY LOSSES:")
+    print(f"\n MONTHLY LOSSES:")
     for month, loss in list(result.losses.monthly_losses.items())[:6]:
         print(f"   {month}: {loss:.2f}%")
     
-    print(f"\n⚠️  CRITICAL PERIODS (Top 5):")
+    print(f"\n  CRITICAL PERIODS (Top 5):")
     for period in result.losses.critical_periods[:5]:
         print(f"   {period['date']}: {period['loss_percent']:.2f}% loss, {period['shaded_hours']:.1f} hours shaded")
     
-    print(f"\n💡 OPTIMIZATION SUGGESTIONS ({len(result.suggestions)} total):")
+    print(f"\n OPTIMIZATION SUGGESTIONS ({len(result.suggestions)} total):")
     for i, suggestion in enumerate(result.suggestions[:3], 1):
         print(f"\n   {i}. {suggestion.type.upper()}")
         print(f"      {suggestion.description}")
@@ -122,11 +122,11 @@ def demo_quick_check():
         module_azimuth=180.0
     )
     
-    print(f"🌞 CURRENT CONDITIONS")
+    print(f" CURRENT CONDITIONS")
     print(f"   Timestamp: {result['timestamp']}")
     print(f"   Sun Altitude: {result['sun_altitude']:.2f}°")
     print(f"   Sun Azimuth: {result['sun_azimuth']:.2f}°")
-    print(f"   Currently Shaded: {'Yes ⚠️' if result['currently_shaded'] else 'No ✅'}")
+    print(f"   Currently Shaded: {'Yes ' if result['currently_shaded'] else 'No '}")
     print(f"   Shading Percentage: {result['shading_percent']:.2f}%")
     
     if result['shading_obstacles']:
@@ -155,7 +155,7 @@ def demo_sun_path():
         time_resolution=60
     )
     
-    print(f"☀️  SUN PATH - Summer Solstice (June 21, 2024)")
+    print(f"  SUN PATH - Summer Solstice (June 21, 2024)")
     print(f"   Total daylight hours: {len(sun_path)}")
     print(f"\n   Sample positions:")
     
@@ -175,7 +175,7 @@ def demo_sun_path():
         time_resolution=60
     )
     
-    print(f"\n❄️  SUN PATH - Winter Solstice (December 21, 2024)")
+    print(f"\n  SUN PATH - Winter Solstice (December 21, 2024)")
     print(f"   Total daylight hours: {len(winter_path)}")
     print(f"   Difference from summer: {len(sun_path) - len(winter_path)} hours")
 
@@ -214,7 +214,7 @@ def demo_shadow_profile():
         module_azimuth=180.0
     )
     
-    print(f"🌓 SHADOW PROFILE - June 21, 2024")
+    print(f" SHADOW PROFILE - June 21, 2024")
     print(f"   Total time periods analyzed: {len(shadow_profile)}")
     
     shaded_periods = [p for p in shadow_profile if p['shaded']]
@@ -277,7 +277,7 @@ def demo_optimization_suggestions():
         location=location
     )
     
-    print(f"💡 OPTIMIZATION SUGGESTIONS")
+    print(f" OPTIMIZATION SUGGESTIONS")
     print(f"   Total suggestions: {len(suggestions)}")
     
     for i, suggestion in enumerate(suggestions, 1):
@@ -324,7 +324,7 @@ def demo_visualization_data():
         days=365
     )
     
-    print(f"📊 ANNUAL SHADING HEATMAP")
+    print(f" ANNUAL SHADING HEATMAP")
     print(f"   Data points: {len(heatmap['data'])}")
     print(f"   Minimum shading: {heatmap['min_shading']:.2f}%")
     print(f"   Maximum shading: {heatmap['max_shading']:.2f}%")
@@ -345,7 +345,7 @@ def demo_visualization_data():
             noon_sun[0]['azimuth']
         )
         
-        print(f"\n🌑 OBSTACLE SHADOWS (at solar noon)")
+        print(f"\n OBSTACLE SHADOWS (at solar noon)")
         for shadow in shadows:
             print(f"   {shadow['obstacle_type']} ({shadow['obstacle_id']})")
             print(f"      Shadow length: {shadow['shadow_length']:.2f}m")
@@ -383,7 +383,7 @@ def demo_seasonal_comparison():
         ("Fall", datetime(2024, 9, 21))
     ]
     
-    print(f"🌍 SEASONAL SHADING COMPARISON")
+    print(f" SEASONAL SHADING COMPARISON")
     print(f"\n   Season      | Loss % | Daylight Hours")
     print(f"   " + "-" * 45)
     
@@ -425,11 +425,11 @@ def main():
         demo_seasonal_comparison()
         
         print("\n" + "=" * 80)
-        print("  ✅ ALL DEMOS COMPLETED SUCCESSFULLY")
+        print("   ALL DEMOS COMPLETED SUCCESSFULLY")
         print("=" * 80 + "\n")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {str(e)}")
+        print(f"\n Error during demo: {str(e)}")
         import traceback
         traceback.print_exc()
 

@@ -226,7 +226,7 @@ def main():
     print(f"{'='*60}")
     print(f"Dateien geändert: {total_files}")
     print(f"Zeilen geändert: {total_lines}")
-    print(f"😀 Emojis ersetzt: {total_emojis}")
+    print(f" Emojis ersetzt: {total_emojis}")
     print(f"{'='*60}\n")
     
     if total_emojis > 0:

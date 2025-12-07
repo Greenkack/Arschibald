@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\dcc\Tab.py
+# hypothesis_version: 6.147.0
+
+['Tab', '__init__', '_explicit_args', 'children', 'className', 'dash_core_components', 'disabled', 'disabled_className', 'disabled_style', 'id', 'label', 'selected_className', 'selected_style', 'style', 'value']

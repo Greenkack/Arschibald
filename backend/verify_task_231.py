@@ -38,29 +38,29 @@ def verify_endpoint(method, url, description, expected_status=None):
         elif method == "DELETE":
             response = client.delete(url)
         else:
-            print(f"❌ Unknown method: {method}")
+            print(f" Unknown method: {method}")
             return False
         
         # Check if endpoint exists (not 404)
         if response.status_code == 404:
-            print(f"❌ {method} {url}")
+            print(f" {method} {url}")
             print(f"   Status: 404 Not Found - Endpoint does not exist")
             return False
         
         # If expected status provided, check it
         if expected_status and response.status_code != expected_status:
-            print(f"⚠️  {method} {url}")
+            print(f"  {method} {url}")
             print(f"   Status: {response.status_code} (expected {expected_status})")
             print(f"   Description: {description}")
             return True  # Endpoint exists but returns different status
         
-        print(f"✅ {method} {url}")
+        print(f" {method} {url}")
         print(f"   Status: {response.status_code}")
         print(f"   Description: {description}")
         return True
         
     except Exception as e:
-        print(f"❌ {method} {url}")
+        print(f" {method} {url}")
         print(f"   Error: {str(e)}")
         return False
 
@@ -154,16 +154,16 @@ def main():
     failed = total - passed
     
     print(f"Total Endpoints: {total}")
-    print(f"✅ Accessible: {passed}")
-    print(f"❌ Failed: {failed}")
+    print(f" Accessible: {passed}")
+    print(f" Failed: {failed}")
     print(f"\nSuccess Rate: {(passed/total)*100:.1f}%")
     
     if passed == total:
-        print("\n🎉 All API endpoints are properly implemented and accessible!")
-        print("\nTask 231 Status: ✅ COMPLETE")
+        print("\n All API endpoints are properly implemented and accessible!")
+        print("\nTask 231 Status:  COMPLETE")
     else:
-        print(f"\n⚠️  {failed} endpoint(s) need attention")
-        print("\nTask 231 Status: ⚠️  INCOMPLETE")
+        print(f"\n  {failed} endpoint(s) need attention")
+        print("\nTask 231 Status:   INCOMPLETE")
     
     # Additional checks
     print_section("Additional Checks")
@@ -172,24 +172,24 @@ def main():
     try:
         response = client.get("/api/docs")
         if response.status_code == 200:
-            print("✅ OpenAPI documentation accessible at /api/docs")
+            print(" OpenAPI documentation accessible at /api/docs")
         else:
-            print("❌ OpenAPI documentation not accessible")
+            print(" OpenAPI documentation not accessible")
     except:
-        print("❌ Error accessing OpenAPI documentation")
+        print(" Error accessing OpenAPI documentation")
     
     # Check health endpoint
     try:
         response = client.get("/health")
         if response.status_code == 200:
-            print("✅ Health check endpoint working")
+            print(" Health check endpoint working")
             data = response.json()
             print(f"   Service: {data.get('service', 'Unknown')}")
             print(f"   Status: {data.get('status', 'Unknown')}")
         else:
-            print("❌ Health check endpoint not working")
+            print(" Health check endpoint not working")
     except:
-        print("❌ Error accessing health endpoint")
+        print(" Error accessing health endpoint")
     
     print_section("Documentation")
     
@@ -203,9 +203,9 @@ def main():
     for doc in docs:
         doc_path = Path(doc)
         if doc_path.exists():
-            print(f"✅ {doc}")
+            print(f" {doc}")
         else:
-            print(f"❌ {doc} (not found)")
+            print(f" {doc} (not found)")
     
     print_section("Requirements Validation")
     
@@ -216,15 +216,15 @@ def main():
     ]
     
     for req_id, req_desc, req_met in requirements:
-        status = "✅" if req_met else "❌"
+        status = "" if req_met else ""
         print(f"{status} Requirement {req_id}: {req_desc}")
     
     all_requirements_met = all(req[2] for req in requirements)
     
     if all_requirements_met:
-        print("\n✅ All requirements satisfied!")
+        print("\n All requirements satisfied!")
     else:
-        print("\n❌ Some requirements not satisfied")
+        print("\n Some requirements not satisfied")
     
     print_section("Next Steps")
     

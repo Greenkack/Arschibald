@@ -23,13 +23,13 @@ class TestMenuItem:
         """Test: MenuItem kann erstellt werden"""
         item = MenuItem(
             label="Test",
-            icon="🔘",
+            icon="",
             key="test",
             disabled=False
         )
 
         assert item.label == "Test"
-        assert item.icon == "🔘"
+        assert item.icon == ""
         assert item.key == "test"
         assert item.disabled is False
         assert item.callback is None
@@ -219,14 +219,14 @@ class TestIntegration:
             MenuGroup(
                 title="Group 1",
                 items=[
-                    MenuItem("Item 1", icon="🔘", key="i1"),
-                    MenuItem("Item 2", icon="🔘", key="i2"),
+                    MenuItem("Item 1", icon="", key="i1"),
+                    MenuItem("Item 2", icon="", key="i2"),
                 ]
             ),
             MenuGroup(
                 title="Group 2",
                 items=[
-                    MenuItem("Item 3", icon="🔘", key="i3"),
+                    MenuItem("Item 3", icon="", key="i3"),
                 ],
                 collapsible=True,
                 collapsed=True

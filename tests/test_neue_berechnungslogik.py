@@ -83,7 +83,7 @@ def test_neue_berechnungslogik():
         # Baue dynamische Daten für PDF
         dynamic_data = build_dynamic_data(project_data, {})
 
-        print("\\n📋 PDF Seite 7 Platzhalter-Werte:")
+        print("\\n PDF Seite 7 Platzhalter-Werte:")
         seite7_keys = [
             'preis_mit_mwst_formatted',
             'zubehor_preis_formatted',
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     # Test 2: Provision versteckt
     test2_success = test_provision_versteckt()
 
-    print("\\n🎉 Test-Zusammenfassung:")
+    print("\\n Test-Zusammenfassung:")
     print(f"   1. Neue Berechnungslogik: {'' if test1_success else ''}")
     print(f"   2. Provision versteckt: {'' if test2_success else ''}")
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-🌊 MARIANA-GRABEN TIEFE ANALYSE
+ MARIANA-GRABEN TIEFE ANALYSE
 Die tiefstmögliche Prüfung der gesamten App
 Prüft ALLES: Syntax, Imports, Runtime, Datenbank, Konfiguration, Dependencies
 """
@@ -46,7 +46,7 @@ class MarianaTrenchAnalyzer:
                    and 'venv' not in str(f)
                    and '_syntax_errors_backup' not in str(f)]
         
-        print(f"📂 Analysiere {len(py_files)} Python-Dateien...")
+        print(f" Analysiere {len(py_files)} Python-Dateien...")
         
         for i, file_path in enumerate(py_files):
             if i % 100 == 0 and i > 0:
@@ -163,7 +163,7 @@ class MarianaTrenchAnalyzer:
         ]
         
         for test_name, test_func in runtime_tests:
-            print(f"   🧪 Testing: {test_name}...")
+            print(f"    Testing: {test_name}...")
             try:
                 result = test_func()
                 if result:
@@ -233,7 +233,7 @@ class MarianaTrenchAnalyzer:
         self.banner("LEVEL 4: DATENBANK-INTEGRITÄTSPRÜFUNG", '=')
         
         db_files = list(self.root.rglob('*.db'))
-        print(f"💾 Gefundene Datenbanken: {len(db_files)}")
+        print(f" Gefundene Datenbanken: {len(db_files)}")
         
         for db_path in db_files:
             try:
@@ -302,7 +302,7 @@ class MarianaTrenchAnalyzer:
         with open('requirements.txt', 'r') as f:
             requirements = [line.strip() for line in f if line.strip() and not line.startswith('#')]
         
-        print(f"📋 Prüfe {len(requirements)} Dependencies...")
+        print(f" Prüfe {len(requirements)} Dependencies...")
         
         # Teste ob alle installiert sind
         for req in requirements[:50]:  # Erste 50 testen
@@ -324,7 +324,7 @@ class MarianaTrenchAnalyzer:
         ]
         
         for check_name, check_func in security_checks:
-            print(f"   🔒 Checking: {check_name}...")
+            print(f"    Checking: {check_name}...")
             try:
                 issues = check_func()
                 if issues:
@@ -466,7 +466,7 @@ class MarianaTrenchAnalyzer:
         print("=" * 80)
         
         if health >= 95:
-            print("\n🎉 EXZELLENT: App ist in hervorragendem Zustand!")
+            print("\n EXZELLENT: App ist in hervorragendem Zustand!")
         elif health >= 85:
             print("\nGUT: App ist einsatzbereit mit kleineren Optimierungen")
         elif health >= 70:
@@ -476,7 +476,7 @@ class MarianaTrenchAnalyzer:
     
     def run(self):
         """Führe vollständige Analyse durch"""
-        self.banner("🌊 MARIANA-GRABEN TIEFENANALYSE GESTARTET", '█')
+        self.banner(" MARIANA-GRABEN TIEFENANALYSE GESTARTET", '')
         print("Dies ist die tiefstmögliche Analyse...")
         print("Prüfung auf 9 verschiedenen Ebenen:\n")
         print("Level 1: Syntax & AST-Analyse")

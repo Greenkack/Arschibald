@@ -12,7 +12,7 @@ from theming import ThemeManager
 # Seiten-Konfiguration
 st.set_page_config(
     page_title="Card Component Demo",
-    page_icon="🎴",
+    page_icon="",
     layout="wide"
 )
 
@@ -30,7 +30,7 @@ css = css_gen.generate_full_css()
 st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 # Titel
-st.title("🎴 Card Component Demo")
+st.title(" Card Component Demo")
 st.markdown("Demonstration aller Features der shadcn/ui Card-Komponente")
 
 # Sidebar für Optionen
@@ -85,7 +85,7 @@ card(
     description="Mit allen Features",
     content="Hauptinhalt hier",
     footer="Footer-Text",
-    icon="🎯",
+    icon="",
     badge="Neu",
     badge_variant="success"
 )
@@ -96,7 +96,7 @@ card(
         description="Mit allen Features",
         content="Hauptinhalt hier",
         footer="Footer-Text",
-        icon="🎯",
+        icon="",
         badge="Neu",
         badge_variant="success",
         theme_manager=theme_manager
@@ -115,7 +115,7 @@ with col1:
         title="Default Card",
         content="Standard-Variante mit leichtem Schatten und Border",
         variant="default",
-        icon="📄",
+        icon="",
         theme_manager=theme_manager
     )
 
@@ -125,7 +125,7 @@ with col2:
         title="Outlined Card",
         content="Variante mit stärkerem Border, ohne Schatten",
         variant="outlined",
-        icon="🔲",
+        icon="",
         theme_manager=theme_manager
     )
 
@@ -135,7 +135,7 @@ with col3:
         title="Elevated Card",
         content="Variante mit starkem Schatten für Hervorhebung",
         variant="elevated",
-        icon="⬆️",
+        icon="",
         theme_manager=theme_manager
     )
 
@@ -211,7 +211,7 @@ with col1:
         content="<h1 style='margin:0; font-size: 3rem; text-align: center;'>28.5 kWh</h1>",
         footer="↑ 12% vs. gestern",
         variant="elevated",
-        icon="⚡",
+        icon="",
         badge="+12%",
         badge_variant="success",
         theme_manager=theme_manager
@@ -224,14 +224,14 @@ with col2:
         description="Alle Systeme betriebsbereit",
         content="""
             <div style='display: flex; flex-direction: column; gap: 0.5rem;'>
-                <div>✅ Wechselrichter</div>
-                <div>✅ Speicher</div>
-                <div>✅ Monitoring</div>
+                <div> Wechselrichter</div>
+                <div> Speicher</div>
+                <div> Monitoring</div>
             </div>
         """,
         footer="Letzte Prüfung: vor 2 Minuten",
         variant="outlined",
-        icon="🔧",
+        icon="",
         badge="Online",
         badge_variant="success",
         theme_manager=theme_manager
@@ -245,7 +245,7 @@ with col3:
         content="Bitte kontaktieren Sie den Service für eine Wartung der Solaranlage.",
         footer="Fällig seit: 10.11.2025",
         variant="default",
-        icon="⚠️",
+        icon="",
         badge="Dringend",
         badge_variant="warning",
         theme_manager=theme_manager
@@ -266,7 +266,7 @@ card(
     """,
     footer="Footer-Bereich" if show_footer else None,
     variant=demo_variant,
-    icon="🎨" if show_icon else None,
+    icon="" if show_icon else None,
     badge="Demo" if show_badge else None,
     badge_variant=demo_badge_variant,
     hover_effect=hover_effect,
@@ -281,10 +281,10 @@ st.header("6. Grid-Layout mit Cards")
 col1, col2, col3, col4 = st.columns(4)
 
 metrics = [
-    ("Leistung", "4.5 kW", "⚡", "success"),
-    ("Ertrag", "28 kWh", "☀️", "info"),
-    ("Effizienz", "94%", "📊", "success"),
-    ("Temperatur", "45°C", "🌡️", "warning"),
+    ("Leistung", "4.5 kW", "", "success"),
+    ("Ertrag", "28 kWh", "", "info"),
+    ("Effizienz", "94%", "", "success"),
+    ("Temperatur", "45°C", "", "warning"),
 ]
 
 for col, (title, value, icon, badge_var) in zip([col1, col2, col3, col4], metrics):
@@ -312,7 +312,7 @@ with col1:
         description="Passen Sie die Parameter an",
         content="",
         variant="outlined",
-        icon="⚙️",
+        icon="",
         theme_manager=theme_manager
     )
     
@@ -327,7 +327,7 @@ with col2:
         description="Exportieren Sie Ihre Daten",
         content="",
         variant="outlined",
-        icon="📥",
+        icon="",
         theme_manager=theme_manager
     )
     
@@ -345,7 +345,7 @@ card(
     title="Card mit Custom CSS",
     content="Diese Card hat zusätzliches Custom-Styling",
     variant="elevated",
-    icon="🎨",
+    icon="",
     custom_css="""
         .shadcn-card-body-* {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -409,6 +409,6 @@ st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #71717a;'>
     <p>shadcn/ui Card Component Demo</p>
-    <p>Erstellt mit ❤️ für Streamlit</p>
+    <p>Erstellt mit  für Streamlit</p>
 </div>
 """, unsafe_allow_html=True)

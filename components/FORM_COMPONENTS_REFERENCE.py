@@ -15,15 +15,15 @@ KOMPONENTEN-ÜBERSICHT
 FEATURES
 --------
 
-✓ Floating Labels
-✓ Prefix/Suffix Icons
-✓ Validierung mit visuellem Feedback
-✓ Error/Success States
-✓ Responsive Design
-✓ Theme-Support
-✓ Accessibility (WCAG 2.1 AA)
+ Floating Labels
+ Prefix/Suffix Icons
+ Validierung mit visuellem Feedback
+ Error/Success States
+ Responsive Design
+ Theme-Support
+ Accessibility (WCAG 2.1 AA)
 
-═══════════════════════════════════════════════════════════════════
+
 
 1. INPUT COMPONENT
 ==================
@@ -48,7 +48,7 @@ value = input_comp.render(
 value = input_field(
     label="E-Mail",
     type="email",
-    prefix_icon="📧",
+    prefix_icon="",
     required=True
 )
 ```
@@ -117,7 +117,7 @@ name = input_field(
 email = input_field(
     label="E-Mail",
     type="email",
-    prefix_icon="📧",
+    prefix_icon="",
     placeholder="ihre@email.de",
     required=True
 )
@@ -126,7 +126,7 @@ email = input_field(
 password = input_field(
     label="Passwort",
     type="password",
-    prefix_icon="🔒",
+    prefix_icon="",
     help_text="Mindestens 8 Zeichen"
 )
 
@@ -134,7 +134,7 @@ password = input_field(
 age = input_field(
     label="Alter",
     type="number",
-    suffix_icon="🎂"
+    suffix_icon=""
 )
 
 # Input mit Error State
@@ -147,7 +147,7 @@ username = input_field(
 username = input_field(
     label="Benutzername",
     value="john_doe",
-    success="✓ Benutzername verfügbar"
+    success=" Benutzername verfügbar"
 )
 
 # Input mit Validierung
@@ -180,7 +180,7 @@ password = input_field(label="Passwort", type="password")
 if password and len(password) < 8:
     st.warning("Passwort zu kurz")
 
-═══════════════════════════════════════════════════════════════════
+
 
 2. DATEPICKER COMPONENT
 ========================
@@ -290,7 +290,7 @@ if birth_date:
     if age < 18:
         st.warning("Sie müssen mindestens 18 Jahre alt sein")
 
-═══════════════════════════════════════════════════════════════════
+
 
 3. CALENDAR COMPONENT
 ======================
@@ -365,7 +365,7 @@ end_date = calendar(
     key="end_date"
 )
 
-═══════════════════════════════════════════════════════════════════
+
 
 4. INPUT OTP COMPONENT
 =======================
@@ -441,7 +441,7 @@ code = input_otp(
 
 if code and len(code) == 6:
     if code.isdigit():
-        st.success("✓ Code vollständig")
+        st.success(" Code vollständig")
     else:
         st.error("Nur Zahlen erlaubt")
 elif code:
@@ -469,11 +469,11 @@ if code and not code.isdigit():
 # Code verifizieren
 VALID_CODE = "123456"
 if code == VALID_CODE:
-    st.success("✓ Code korrekt")
+    st.success(" Code korrekt")
 elif code and len(code) == 6:
-    st.error("✗ Ungültiger Code")
+    st.error(" Ungültiger Code")
 
-═══════════════════════════════════════════════════════════════════
+
 
 VOLLSTÄNDIGES FORMULAR-BEISPIEL
 ================================
@@ -507,7 +507,7 @@ with st.form("registration"):
     email = input_field(
         label="E-Mail",
         type="email",
-        prefix_icon="📧",
+        prefix_icon="",
         required=True,
         key="email"
     )
@@ -515,7 +515,7 @@ with st.form("registration"):
     phone = input_field(
         label="Telefon",
         type="tel",
-        prefix_icon="📱",
+        prefix_icon="",
         key="phone"
     )
 
@@ -538,7 +538,7 @@ with st.form("registration"):
     password = input_field(
         label="Passwort",
         type="password",
-        prefix_icon="🔒",
+        prefix_icon="",
         help_text="Mindestens 8 Zeichen",
         required=True,
         key="password"
@@ -582,10 +582,10 @@ with st.form("registration"):
             for error in errors:
                 st.error(error)
         else:
-            st.success("✓ Registrierung erfolgreich!")
+            st.success(" Registrierung erfolgreich!")
 ```
 
-═══════════════════════════════════════════════════════════════════
+
 
 STYLING UND THEMING
 ===================
@@ -616,19 +616,19 @@ Custom CSS hinzufügen:
 # Siehe theming/theme_manager.py für Details
 ```
 
-═══════════════════════════════════════════════════════════════════
+
 
 ACCESSIBILITY
 =============
 
 Alle Komponenten sind WCAG 2.1 AA konform:
 
-✓ Keyboard-Navigation
-✓ Screen-Reader-Support
-✓ Focus-Indikatoren
-✓ Ausreichender Kontrast
-✓ ARIA-Labels
-✓ Error-Announcements
+ Keyboard-Navigation
+ Screen-Reader-Support
+ Focus-Indikatoren
+ Ausreichender Kontrast
+ ARIA-Labels
+ Error-Announcements
 
 Keyboard-Shortcuts:
 
@@ -637,7 +637,7 @@ Keyboard-Shortcuts:
 - Enter: Formular absenden
 - Escape: Abbrechen
 
-═══════════════════════════════════════════════════════════════════
+
 
 BEST PRACTICES
 ==============
@@ -704,15 +704,15 @@ password = input_field(
 # Icons für bessere UX
 email = input_field(
     label="E-Mail",
-    prefix_icon="📧"
+    prefix_icon=""
 )
 
 phone = input_field(
     label="Telefon",
-    prefix_icon="📱"
+    prefix_icon=""
 )
 
-═══════════════════════════════════════════════════════════════════
+
 
 TROUBLESHOOTING
 ===============
@@ -732,7 +732,7 @@ Lösung: Verwende datetime.date Objekte, nicht Strings
 Problem: OTP-Felder nicht fokussierbar
 Lösung: Verwende eindeutige Keys für jedes Feld
 
-═══════════════════════════════════════════════════════════════════
+
 
 WEITERE RESSOURCEN
 ==================
@@ -742,5 +742,5 @@ WEITERE RESSOURCEN
 - Dokumentation: components/FORM_COMPONENTS_QUICK_REFERENCE.md
 - Theme-System: theming/THEME_SELECTOR_REFERENCE.md
 
-═══════════════════════════════════════════════════════════════════
+
 """

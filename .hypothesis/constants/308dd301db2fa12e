@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\urls\resolvers.py
+# hypothesis_version: 6.147.0
+
+[" [name='{}']", '$', '%', '%%', '%s.%s', '%s/', "'{}'", '(?P<', '.', '/', '/~:@', '2_0.W001', ':', '<', '<%s %s (%s:%s) %s>', '<%s %s>', '<%s list>', '>', '[<>]', '\\$', '\\Z', '^', '^%s%s', '^/', '^\\/', '__module__', '__name__', "arguments '%s'", 'handler%s', 'no arguments', 'path', 'populating', 'regex', 'str', 'tried', 'urlpatterns', 'urls.E009', 'urls.W001', 'urls.W002', 'urls.W003', 'urls.W010', 'view', 'view_class']

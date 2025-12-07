@@ -81,7 +81,7 @@ def test_pdf_fixes():
             print(f"  {key}: {value}")
 
         # Teste PLACEHOLDER_MAPPING
-        print("\n🗺️ PLACEHOLDER_MAPPING TESTS:")
+        print("\n PLACEHOLDER_MAPPING TESTS:")
         test_placeholders = [
             "ersparte Mehrwertsteuer",
             "29.150,00 EUR*",
@@ -116,7 +116,7 @@ def test_pdf_fixes():
         print(f"  Placeholder Mapping: {'' if mapping_ok else ''}")
 
         if vat_ok and amort_ok and seite7_ok and mapping_ok:
-            print("\n🎉 ALLE TESTS ERFOLGREICH!")
+            print("\n ALLE TESTS ERFOLGREICH!")
             return True
         print("\nEINIGE TESTS FEHLGESCHLAGEN!")
         return False

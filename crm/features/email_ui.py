@@ -68,7 +68,7 @@ def render_smtp_configuration_ui(
 ):
     """Render SMTP configuration UI in admin panel"""
     
-    st.subheader("📧 E-Mail-Konfiguration (SMTP)")
+    st.subheader(" E-Mail-Konfiguration (SMTP)")
     
     st.info("""
     **E-Mail-Integration einrichten**
@@ -152,10 +152,10 @@ def render_smtp_configuration_ui(
         col_save, col_test = st.columns(2)
         
         with col_save:
-            submit_save = st.form_submit_button("💾 Konfiguration speichern", use_container_width=True)
+            submit_save = st.form_submit_button(" Konfiguration speichern", use_container_width=True)
         
         with col_test:
-            submit_test = st.form_submit_button("🔍 Verbindung testen", use_container_width=True)
+            submit_test = st.form_submit_button(" Verbindung testen", use_container_width=True)
     
     # Handle form submission
     if submit_save or submit_test:
@@ -175,20 +175,20 @@ def render_smtp_configuration_ui(
                 success, message = test_smtp_connection(new_config)
                 
                 if success:
-                    st.success(f"✅ {message}")
+                    st.success(f" {message}")
                 else:
-                    st.error(f"❌ {message}")
+                    st.error(f" {message}")
         
         if submit_save:
             # Save configuration
             if save_smtp_config(save_admin_setting_func, new_config):
-                st.success("✅ SMTP-Konfiguration erfolgreich gespeichert!")
+                st.success(" SMTP-Konfiguration erfolgreich gespeichert!")
                 st.rerun()
             else:
-                st.error("❌ Fehler beim Speichern der Konfiguration")
+                st.error(" Fehler beim Speichern der Konfiguration")
     
     # Quick setup guides
-    with st.expander("📖 Schnellanleitungen für gängige Anbieter"):
+    with st.expander(" Schnellanleitungen für gängige Anbieter"):
         st.markdown("""
         ### Gmail
         - **Host:** smtp.gmail.com
@@ -213,16 +213,16 @@ def render_smtp_configuration_ui(
 def render_email_template_management_ui(conn: sqlite3.Connection):
     """Render email template management UI in admin panel"""
     
-    st.subheader("📝 E-Mail-Vorlagen verwalten")
+    st.subheader(" E-Mail-Vorlagen verwalten")
     
     # Ensure tables exist
     ensure_email_tables(conn)
     
     # Tabs for different actions
     tab_list, tab_create, tab_edit = st.tabs([
-        "📋 Vorlagen anzeigen",
-        "➕ Neue Vorlage",
-        "✏️ Vorlage bearbeiten"
+        " Vorlagen anzeigen",
+        " Neue Vorlage",
+        " Vorlage bearbeiten"
     ])
     
     # Tab 1: List templates
@@ -250,13 +250,13 @@ def render_email_template_management_ui(conn: sqlite3.Connection):
             st.info("Keine Vorlagen gefunden. Erstellen Sie eine neue Vorlage im Tab 'Neue Vorlage'.")
         else:
             for template in templates:
-                with st.expander(f"📧 {template['name']} ({template['category'] or 'Keine Kategorie'})"):
+                with st.expander(f" {template['name']} ({template['category'] or 'Keine Kategorie'})"):
                     col_info, col_actions = st.columns([3, 1])
                     
                     with col_info:
                         st.markdown(f"**Betreff:** {template['subject']}")
                         st.markdown(f"**Kategorie:** {template['category'] or 'Keine'}")
-                        st.markdown(f"**Status:** {'✅ Aktiv' if template['is_active'] else '❌ Inaktiv'}")
+                        st.markdown(f"**Status:** {' Aktiv' if template['is_active'] else ' Inaktiv'}")
                         st.markdown(f"**Erstellt:** {template['created_at']}")
                         
                         if template['placeholders']:
@@ -280,7 +280,7 @@ def render_email_template_management_ui(conn: sqlite3.Connection):
                             )
                     
                     with col_actions:
-                        if st.button("🗑️ Löschen", key=f"delete_{template['id']}", use_container_width=True):
+                        if st.button(" Löschen", key=f"delete_{template['id']}", use_container_width=True):
                             if delete_email_template(conn, template['id']):
                                 st.success("Vorlage gelöscht!")
                                 st.rerun()
@@ -338,7 +338,7 @@ Mit freundlichen Grüßen
 {{current_date}}     - Aktuelles Datum
             """)
             
-            submit_create = st.form_submit_button("✅ Vorlage erstellen", use_container_width=True)
+            submit_create = st.form_submit_button(" Vorlage erstellen", use_container_width=True)
         
         if submit_create:
             if not template_name or not template_subject or not template_body:
@@ -357,10 +357,10 @@ Mit freundlichen Grüßen
                 )
                 
                 if template_id:
-                    st.success(f"✅ Vorlage '{template_name}' erfolgreich erstellt!")
+                    st.success(f" Vorlage '{template_name}' erfolgreich erstellt!")
                     st.rerun()
                 else:
-                    st.error("❌ Fehler beim Erstellen der Vorlage. Möglicherweise existiert bereits eine Vorlage mit diesem Namen.")
+                    st.error(" Fehler beim Erstellen der Vorlage. Möglicherweise existiert bereits eine Vorlage mit diesem Namen.")
     
     # Tab 3: Edit template
     with tab_edit:
@@ -400,7 +400,7 @@ Mit freundlichen Grüßen
                             index=["Angebot", "Nachfass", "Bestätigung", "Sonstiges"].index(template['category']) if template['category'] in ["Angebot", "Nachfass", "Bestätigung", "Sonstiges"] else 3
                         )
                         
-                        submit_edit = st.form_submit_button("💾 Änderungen speichern", use_container_width=True)
+                        submit_edit = st.form_submit_button(" Änderungen speichern", use_container_width=True)
                     
                     if submit_edit:
                         # Extract new placeholders
@@ -414,10 +414,10 @@ Mit freundlichen Grüßen
                             category=edit_category,
                             placeholders=placeholders
                         ):
-                            st.success("✅ Vorlage erfolgreich aktualisiert!")
+                            st.success(" Vorlage erfolgreich aktualisiert!")
                             st.rerun()
                         else:
-                            st.error("❌ Fehler beim Aktualisieren der Vorlage")
+                            st.error(" Fehler beim Aktualisieren der Vorlage")
 
 
 # ============================================================================
@@ -432,7 +432,7 @@ def render_send_email_ui(
 ):
     """Render email sending UI in customer profile"""
     
-    st.subheader(f"📧 E-Mail an {customer_data.get('first_name', '')} {customer_data.get('last_name', '')} senden")
+    st.subheader(f" E-Mail an {customer_data.get('first_name', '')} {customer_data.get('last_name', '')} senden")
     
     # Ensure tables exist
     ensure_email_tables(conn)
@@ -443,14 +443,14 @@ def render_send_email_ui(
     # Check if SMTP is configured
     if not smtp_config.get('smtp_host') or not smtp_config.get('smtp_username'):
         st.warning("""
-        ⚠️ **E-Mail-Versand nicht konfiguriert**
+         **E-Mail-Versand nicht konfiguriert**
         
         Bitte konfigurieren Sie zuerst die SMTP-Einstellungen im Admin-Panel unter "E-Mail-Konfiguration".
         """)
         return
     
     # Tabs for template or custom email
-    tab_template, tab_custom = st.tabs(["📝 Mit Vorlage", "✍️ Individuelle E-Mail"])
+    tab_template, tab_custom = st.tabs([" Mit Vorlage", " Individuelle E-Mail"])
     
     # Tab 1: Send with template
     with tab_template:
@@ -496,7 +496,7 @@ def render_send_email_ui(
                                         attachments.append((doc['filename'], doc['file_data']))
                     
                     # Send button
-                    if st.button("📤 E-Mail senden", key="send_template_button", use_container_width=True):
+                    if st.button(" E-Mail senden", key="send_template_button", use_container_width=True):
                         with st.spinner("Sende E-Mail..."):
                             success, message = send_email_with_template(
                                 conn,
@@ -508,9 +508,9 @@ def render_send_email_ui(
                             )
                             
                             if success:
-                                st.success(f"✅ {message}")
+                                st.success(f" {message}")
                             else:
-                                st.error(f"❌ {message}")
+                                st.error(f" {message}")
     
     # Tab 2: Send custom email
     with tab_custom:
@@ -544,7 +544,7 @@ def render_send_email_ui(
                             if doc['filename'] in selected_docs:
                                 attachments.append((doc['filename'], doc['file_data']))
             
-            submit_custom = st.form_submit_button("📤 E-Mail senden", use_container_width=True)
+            submit_custom = st.form_submit_button(" E-Mail senden", use_container_width=True)
         
         if submit_custom:
             if not custom_subject or not custom_body:
@@ -571,7 +571,7 @@ def render_send_email_ui(
                             status='sent',
                             sent_by="CRM User"
                         )
-                        st.success(f"✅ {message}")
+                        st.success(f" {message}")
                     else:
                         # Save failed attempt to history
                         save_email_to_history(
@@ -584,7 +584,7 @@ def render_send_email_ui(
                             error_message=message,
                             sent_by="CRM User"
                         )
-                        st.error(f"❌ {message}")
+                        st.error(f" {message}")
 
 
 # ============================================================================
@@ -594,7 +594,7 @@ def render_send_email_ui(
 def render_email_history_ui(conn: sqlite3.Connection, customer_id: int):
     """Render email history for a customer"""
     
-    st.subheader("📧 E-Mail-Historie")
+    st.subheader(" E-Mail-Historie")
     
     # Ensure tables exist
     ensure_email_tables(conn)
@@ -606,7 +606,7 @@ def render_email_history_ui(conn: sqlite3.Connection, customer_id: int):
         st.info("Noch keine E-Mails an diesen Kunden versendet.")
     else:
         for email in history:
-            status_icon = "✅" if email['status'] == 'sent' else "❌"
+            status_icon = "" if email['status'] == 'sent' else ""
             
             with st.expander(f"{status_icon} {email['subject']} - {email['sent_at']}"):
                 col1, col2 = st.columns([3, 1])
@@ -639,9 +639,9 @@ def render_email_history_ui(conn: sqlite3.Connection, customer_id: int):
                         try:
                             attachments = json.loads(email['attachments'])
                             for att in attachments:
-                                st.text(f"📎 {att}")
+                                st.text(f" {att}")
                         except:
-                            st.text("📎 Anhänge vorhanden")
+                            st.text(" Anhänge vorhanden")
 
 
 # ============================================================================

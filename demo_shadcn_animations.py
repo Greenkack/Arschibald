@@ -29,7 +29,7 @@ from theming.theme_manager import ThemeManager
 # Page config
 st.set_page_config(
     page_title="shadcn/ui Animations Demo",
-    page_icon="✨",
+    page_icon="",
     layout="wide"
 )
 
@@ -46,17 +46,17 @@ if 'animations_injected' not in st.session_state:
     st.session_state.animations_injected = True
 
 # Title
-st.title("✨ shadcn/ui Animations & Transitions Demo")
+st.title(" shadcn/ui Animations & Transitions Demo")
 st.markdown("Comprehensive demonstration of all animation features")
 
 # Tabs for different animation types
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-    "🎯 Base Transitions",
-    "🌟 Fade-In Animations",
-    "📱 Slide Animations",
+    " Base Transitions",
+    " Fade-In Animations",
+    " Slide Animations",
     "⏳ Skeleton Loaders",
-    "📐 Layout Stability",
-    "🎨 Complete Examples"
+    " Layout Stability",
+    " Complete Examples"
 ])
 
 # Tab 1: Base Transitions
@@ -256,7 +256,7 @@ with tab4:
         st.rerun()
     
     if st.session_state.get('demo_loaded'):
-        st.success("✅ Content loaded successfully!")
+        st.success(" Content loaded successfully!")
         for i in range(3):
             st.markdown(
                 f'<div class="animate-fade-in-up" style="padding: 1.5rem; margin-bottom: 1rem; background: #f4f4f5; border-radius: 0.5rem;">Card {i+1} - Loaded Content</div>',
@@ -347,7 +347,7 @@ with tab6:
             items = ["User Profile", "Dashboard", "Settings", "Analytics"]
             for item in items:
                 st.markdown(
-                    f'<div style="padding: 1rem; margin-bottom: 0.5rem; background: #f4f4f5; border-radius: 0.5rem;">📊 {item}</div>',
+                    f'<div style="padding: 1rem; margin-bottom: 0.5rem; background: #f4f4f5; border-radius: 0.5rem;"> {item}</div>',
                     unsafe_allow_html=True
                 )
         
@@ -399,7 +399,7 @@ with tab6:
     
     if st.session_state.get('form_submitted'):
         st.markdown(
-            '<div class="animate-fade-in-scale" style="padding: 1rem; background: #22c55e; color: white; border-radius: 0.5rem; text-align: center;">✅ Form submitted successfully!</div>',
+            '<div class="animate-fade-in-scale" style="padding: 1rem; background: #22c55e; color: white; border-radius: 0.5rem; text-align: center;"> Form submitted successfully!</div>',
             unsafe_allow_html=True
         )
 
@@ -432,9 +432,9 @@ with st.sidebar:
     
     st.markdown("**Features:**")
     st.markdown("""
-    - ✅ Base transitions
-    - ✅ Fade-in animations
-    - ✅ Slide animations
-    - ✅ Skeleton loaders
-    - ✅ Layout stability
+    -  Base transitions
+    -  Fade-in animations
+    -  Slide animations
+    -  Skeleton loaders
+    -  Layout stability
     """)

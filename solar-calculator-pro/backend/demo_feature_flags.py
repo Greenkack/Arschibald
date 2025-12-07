@@ -55,7 +55,7 @@ def demo_global_flags():
         )
         
         flag = service.create_feature_flag(flag_data)
-        print(f"✅ Created flag: {flag.key}")
+        print(f" Created flag: {flag.key}")
         print(f"   Name: {flag.name}")
         print(f"   Enabled: {flag.enabled}")
         print(f"   Type: {flag.flag_type}")
@@ -63,18 +63,18 @@ def demo_global_flags():
         # Check if feature is enabled
         print("\nChecking if feature is enabled...")
         result = service.is_feature_enabled("solar.advanced_features")
-        print(f"✅ Feature enabled: {result.enabled}")
+        print(f" Feature enabled: {result.enabled}")
         print(f"   Reason: {result.reason}")
         
         # Disable the flag
         print("\nDisabling the flag...")
         update_data = FeatureFlagUpdate(enabled=False)
         updated_flag = service.update_feature_flag(flag.id, update_data)
-        print(f"✅ Flag disabled: {updated_flag.enabled}")
+        print(f" Flag disabled: {updated_flag.enabled}")
         
         # Check again
         result = service.is_feature_enabled("solar.advanced_features")
-        print(f"✅ Feature enabled: {result.enabled}")
+        print(f" Feature enabled: {result.enabled}")
         print(f"   Reason: {result.reason}")
         
     finally:
@@ -101,7 +101,7 @@ def demo_percentage_rollout():
         )
         
         flag = service.create_feature_flag(flag_data)
-        print(f"✅ Created flag: {flag.key}")
+        print(f" Created flag: {flag.key}")
         print(f"   Rollout: {flag.rollout_percentage}%")
         
         # Check for multiple users
@@ -109,12 +109,12 @@ def demo_percentage_rollout():
         enabled_count = 0
         for user_id in range(1, 11):
             result = service.is_feature_enabled("experiment.new_ui", user_id)
-            status = "✅ Enabled" if result.enabled else "❌ Disabled"
+            status = " Enabled" if result.enabled else " Disabled"
             print(f"   User {user_id:2d}: {status}")
             if result.enabled:
                 enabled_count += 1
         
-        print(f"\n📊 {enabled_count}/10 users have feature enabled (~{enabled_count*10}%)")
+        print(f"\n {enabled_count}/10 users have feature enabled (~{enabled_count*10}%)")
         
         # Update rollout percentage
         print("\nIncreasing rollout to 75%...")
@@ -127,7 +127,7 @@ def demo_percentage_rollout():
             if result.enabled:
                 enabled_count += 1
         
-        print(f"📊 {enabled_count}/10 users have feature enabled (~{enabled_count*10}%)")
+        print(f" {enabled_count}/10 users have feature enabled (~{enabled_count*10}%)")
         
     finally:
         db.close()
@@ -147,13 +147,13 @@ def demo_role_based_flags():
             name="admin",
             description="Administrator role"
         ))
-        print(f"✅ Created role: {admin_role.name}")
+        print(f" Created role: {admin_role.name}")
         
         beta_role = service.create_role(RoleCreate(
             name="beta_tester",
             description="Beta tester role"
         ))
-        print(f"✅ Created role: {beta_role.name}")
+        print(f" Created role: {beta_role.name}")
         
         # Create role-based flag
         print("\nCreating role-based feature flag...")
@@ -167,7 +167,7 @@ def demo_role_based_flags():
         )
         
         flag = service.create_feature_flag(flag_data)
-        print(f"✅ Created flag: {flag.key}")
+        print(f" Created flag: {flag.key}")
         print(f"   Allowed roles: {[role.name for role in flag.roles]}")
         
     finally:
@@ -198,7 +198,7 @@ def demo_bulk_check():
                 flag_type=FeatureFlagType.GLOBAL
             )
             service.create_feature_flag(flag_data)
-            print(f"✅ Created: {key} (enabled={enabled})")
+            print(f" Created: {key} (enabled={enabled})")
         
         # Check all flags at once
         print("\nChecking all flags at once...")
@@ -207,7 +207,7 @@ def demo_bulk_check():
         
         print("\nResults:")
         for key, enabled in results.items():
-            status = "✅ Enabled" if enabled else "❌ Disabled"
+            status = " Enabled" if enabled else " Disabled"
             print(f"   {key}: {status}")
         
     finally:
@@ -232,7 +232,7 @@ def demo_caching():
         )
         
         flag = service.create_feature_flag(flag_data)
-        print(f"✅ Created flag: {flag.key}")
+        print(f" Created flag: {flag.key}")
         
         # Check multiple times (should use cache)
         print("\nChecking flag 5 times (should use cache)...")
@@ -250,7 +250,7 @@ def demo_caching():
         
         # Check again
         result = service.is_feature_enabled("cache.test")
-        print(f"✅ After update - Enabled: {result.enabled}")
+        print(f" After update - Enabled: {result.enabled}")
         
     finally:
         db.close()
@@ -268,10 +268,10 @@ def demo_list_and_search():
         print("Listing all feature flags...")
         flags = service.list_feature_flags()
         
-        print(f"\n📋 Total flags: {len(flags)}\n")
+        print(f"\n Total flags: {len(flags)}\n")
         
         for flag in flags:
-            status = "✅" if flag.enabled else "❌"
+            status = "" if flag.enabled else ""
             print(f"{status} {flag.key}")
             print(f"   Name: {flag.name}")
             print(f"   Type: {flag.flag_type}")
@@ -290,9 +290,9 @@ def cleanup():
     print("Removing demo database...")
     if os.path.exists("demo_feature_flags.db"):
         os.remove("demo_feature_flags.db")
-        print("✅ Demo database removed")
+        print(" Demo database removed")
     else:
-        print("ℹ️  No demo database to remove")
+        print("ℹ  No demo database to remove")
 
 
 def main():
@@ -312,13 +312,13 @@ def main():
         print("\n" + "=" * 60)
         print("  DEMO COMPLETE!")
         print("=" * 60)
-        print("\n✅ All demos completed successfully!")
-        print("\n📚 For more information, see:")
+        print("\n All demos completed successfully!")
+        print("\n For more information, see:")
         print("   - backend/docs/FEATURE_FLAGS_GUIDE.md")
         print("   - backend/docs/FEATURE_FLAGS_QUICK_REFERENCE.md")
         
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n Error: {e}")
         import traceback
         traceback.print_exc()
     
@@ -329,7 +329,7 @@ def main():
         if response.lower() == 'y':
             cleanup()
         else:
-            print("ℹ️  Demo database kept at: demo_feature_flags.db")
+            print("ℹ  Demo database kept at: demo_feature_flags.db")
 
 
 if __name__ == '__main__':

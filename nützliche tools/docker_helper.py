@@ -40,7 +40,7 @@ ENTRYPOINT ["streamlit", "run", "gui.py", "--server.port=8501", "--server.addres
     with open('Dockerfile', 'w') as f:
         f.write(dockerfile_content)
 
-    print("🐳 Dockerfile erstellt!")
+    print(" Dockerfile erstellt!")
 
 
 def create_docker_compose():
@@ -79,7 +79,7 @@ services:
     with open('docker-compose.yml', 'w') as f:
         f.write(compose_content)
 
-    print("🐳 docker-compose.yml erstellt!")
+    print(" docker-compose.yml erstellt!")
 
 
 def build_and_run():
@@ -102,6 +102,6 @@ if __name__ == "__main__":
     create_dockerfile()
     create_docker_compose()
 
-    build = input("🐳 Docker-Image bauen und starten? (y/n): ")
+    build = input(" Docker-Image bauen und starten? (y/n): ")
     if build.lower() == 'y':
         build_and_run()

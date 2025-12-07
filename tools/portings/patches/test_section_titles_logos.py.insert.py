@@ -70,7 +70,7 @@ def test_section_titles_and_logos():
         else:
             print(f"  {title}: FEHLT")
 
-    print("\n🖼️ LOGO-DATEN:")
+    print("\n LOGO-DATEN:")
     logo_keys = [
         ("module_brand_logo_b64", "PV-Module"),
         ("inverter_brand_logo_b64", "Wechselrichter"),
@@ -84,7 +84,7 @@ def test_section_titles_and_logos():
         else:
             print(f"  {component}: Kein Logo")
 
-    print("\n📋 ZUSÄTZLICHE WERTE:")
+    print("\n ZUSÄTZLICHE WERTE:")
     extra_keys = [
         ("module_quantity", "Module Anzahl"),
         ("inverter_total_power_kw", "WR Gesamtleistung"),

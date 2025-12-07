@@ -40,7 +40,7 @@ class ValidationDisplay:
         # Zeige Fehler
         if errors:
             with st.expander(
-                f"❌ Validierungs-Fehler in Theme '{theme_name}' ({len(errors)})",
+                f" Validierungs-Fehler in Theme '{theme_name}' ({len(errors)})",
                 expanded=True
             ):
                 st.error(
@@ -51,14 +51,14 @@ class ValidationDisplay:
                     st.markdown(f"{i}. {error}")
                 
                 st.info(
-                    "💡 **Tipp:** Behebe die Fehler in der Theme-Datei. "
+                    " **Tipp:** Behebe die Fehler in der Theme-Datei. "
                     "Das Theme wird automatisch neu geladen."
                 )
         
         # Zeige Warnungen
         if warnings:
             with st.expander(
-                f"⚠️ Warnungen in Theme '{theme_name}' ({len(warnings)})",
+                f" Warnungen in Theme '{theme_name}' ({len(warnings)})",
                 expanded=False
             ):
                 st.warning(
@@ -75,7 +75,7 @@ class ValidationDisplay:
         Args:
             theme_name: Name des Themes
         """
-        st.success(f"✅ Theme '{theme_name}' erfolgreich validiert und geladen!")
+        st.success(f" Theme '{theme_name}' erfolgreich validiert und geladen!")
     
     def show_realtime_validation(
         self,
@@ -100,9 +100,9 @@ class ValidationDisplay:
         
         # Status-Badge
         if is_valid:
-            st.success(f"✅ **{theme_name}** - Valide")
+            st.success(f" **{theme_name}** - Valide")
         else:
-            st.error(f"❌ **{theme_name}** - Ungültig ({len(errors)} Fehler)")
+            st.error(f" **{theme_name}** - Ungültig ({len(errors)} Fehler)")
         
         # Details
         if errors or warnings:
@@ -133,7 +133,7 @@ class ValidationDisplay:
             st.info("Keine Validierungs-Historie verfügbar")
             return
         
-        st.subheader("📋 Validierungs-Historie")
+        st.subheader(" Validierungs-Historie")
         
         # Zeige letzte N Einträge
         recent = self.error_history[-limit:]
@@ -146,13 +146,13 @@ class ValidationDisplay:
             
             # Status-Icon
             if error_count > 0:
-                icon = "❌"
+                icon = ""
                 status = "Fehler"
             elif warning_count > 0:
-                icon = "⚠️"
+                icon = ""
                 status = "Warnungen"
             else:
-                icon = "✅"
+                icon = ""
                 status = "OK"
             
             with st.expander(

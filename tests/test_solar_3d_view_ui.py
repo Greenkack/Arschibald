@@ -194,7 +194,7 @@ def main():
     print(f"Gesamt: {passed}/{total} Tests bestanden ({passed*100//total}%)")
     
     if passed == total:
-        print("\n🎉 Alle Tests erfolgreich!")
+        print("\n Alle Tests erfolgreich!")
         return 0
     else:
         print(f"\n{total - passed} Test(s) fehlgeschlagen")

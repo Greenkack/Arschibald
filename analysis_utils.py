@@ -460,7 +460,7 @@ DEFAULT_FINANCIAL_ASSUMPTIONS = {
 
 if __name__ == "__main__":
     # Test der Utility-Funktionen
-    print("🧪 Testing Analysis Utils...")
+    print(" Testing Analysis Utils...")
 
     # Test Formatierungsfunktionen
     print("", format_currency(12345.67))

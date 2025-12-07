@@ -25,7 +25,7 @@ from utils.shadcn_migration_helpers import (
 # Page config
 st.set_page_config(
     page_title="Module Migration Demo",
-    page_icon="🎨",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -34,17 +34,17 @@ st.set_page_config(
 inject_shadcn_styles()
 
 # Title
-st.title("🎨 Module Migration Demo")
+st.title(" Module Migration Demo")
 st.markdown("Demonstration of migrated modules using shadcn/ui components")
 
 # Check if shadcn/ui is available
 if not SHADCN_AVAILABLE:
-    st.error("⚠️ shadcn/ui components are not available. Please install the required modules.")
+    st.error(" shadcn/ui components are not available. Please install the required modules.")
     st.stop()
 
 # Sidebar - Theme selector
 with st.sidebar:
-    st.markdown("### 🎨 Theme Selection")
+    st.markdown("###  Theme Selection")
     
     theme_manager = get_theme_manager()
     if theme_manager:
@@ -71,7 +71,7 @@ with st.sidebar:
             st.rerun()
     
     st.markdown("---")
-    st.markdown("### 📚 Demo Sections")
+    st.markdown("###  Demo Sections")
     
     demo_section = st.radio(
         "Choose Demo",
@@ -88,7 +88,7 @@ with st.sidebar:
 
 # Main content
 if demo_section == "Overview":
-    st.markdown("## 📋 Migration Overview")
+    st.markdown("##  Migration Overview")
     
     shadcn_alert(
         "Successfully migrated 3 main modules to shadcn/ui components!",
@@ -103,7 +103,7 @@ if demo_section == "Overview":
         shadcn_metric(
             label="Modules Migrated",
             value="3",
-            icon="📦",
+            icon="",
             size="medium"
         )
     
@@ -111,7 +111,7 @@ if demo_section == "Overview":
         shadcn_metric(
             label="Helper Functions",
             value="10+",
-            icon="🛠️",
+            icon="",
             size="medium"
         )
     
@@ -119,7 +119,7 @@ if demo_section == "Overview":
         shadcn_metric(
             label="Documentation Pages",
             value="2",
-            icon="📚",
+            icon="",
             size="medium"
         )
     
@@ -127,7 +127,7 @@ if demo_section == "Overview":
         shadcn_metric(
             label="Code Lines",
             value="1,470+",
-            icon="💻",
+            icon="",
             size="medium"
         )
     
@@ -135,7 +135,7 @@ if demo_section == "Overview":
     
     # Migrated modules
     shadcn_card(
-        title="📦 Migrated Modules",
+        title=" Migrated Modules",
         content="""
         **1. solar_calculator.py → solar_calculator_shadcn.py**
         - Enhanced pricing display with metric cards
@@ -153,7 +153,7 @@ if demo_section == "Overview":
         - Admin dashboard with metrics
         """,
         variant="elevated",
-        icon="📦"
+        icon=""
     )
     
     st.markdown("---")
@@ -163,7 +163,7 @@ if demo_section == "Overview":
     
     with col1:
         shadcn_card(
-            title="✨ Key Features",
+            title=" Key Features",
             content="""
             - **Automatic Fallback**: Works even without shadcn/ui
             - **Theme Support**: 5 built-in themes
@@ -176,7 +176,7 @@ if demo_section == "Overview":
     
     with col2:
         shadcn_card(
-            title="🎯 Benefits",
+            title=" Benefits",
             content="""
             - **Modern UI**: Professional design
             - **Better UX**: Improved visual hierarchy
@@ -188,7 +188,7 @@ if demo_section == "Overview":
         )
 
 elif demo_section == "Cards Demo":
-    st.markdown("## 🎴 Cards Demo")
+    st.markdown("##  Cards Demo")
     
     st.markdown("### Card Variants")
     
@@ -200,7 +200,7 @@ elif demo_section == "Cards Demo":
             content="This is a default card with standard styling.",
             footer="Card footer",
             variant="default",
-            icon="📄"
+            icon=""
         )
     
     with col2:
@@ -209,7 +209,7 @@ elif demo_section == "Cards Demo":
             content="This is an outlined card with a border.",
             footer="Card footer",
             variant="outlined",
-            icon="🔲"
+            icon=""
         )
     
     with col3:
@@ -218,14 +218,14 @@ elif demo_section == "Cards Demo":
             content="This is an elevated card with a shadow.",
             footer="Card footer",
             variant="elevated",
-            icon="⬆️"
+            icon=""
         )
     
     st.markdown("---")
     st.markdown("### Card with Rich Content")
     
     shadcn_card(
-        title="📊 Sales Dashboard",
+        title=" Sales Dashboard",
         content="""
         **Monthly Performance**
         
@@ -237,11 +237,11 @@ elif demo_section == "Cards Demo":
         """,
         footer="View detailed report →",
         variant="elevated",
-        icon="📊"
+        icon=""
     )
 
 elif demo_section == "Alerts Demo":
-    st.markdown("## 🔔 Alerts Demo")
+    st.markdown("##  Alerts Demo")
     
     st.markdown("### Alert Types")
     
@@ -276,7 +276,7 @@ elif demo_section == "Alerts Demo":
         "Database connection established successfully!",
         alert_type="success",
         title="Connected",
-        icon="🔌"
+        icon=""
     )
     
     shadcn_alert(
@@ -287,7 +287,7 @@ elif demo_section == "Alerts Demo":
     )
 
 elif demo_section == "Metrics Demo":
-    st.markdown("## 📊 Metrics Demo")
+    st.markdown("##  Metrics Demo")
     
     st.markdown("### Metric Sizes")
     
@@ -299,7 +299,7 @@ elif demo_section == "Metrics Demo":
             label="Users",
             value="1,234",
             delta="+12%",
-            icon="👥",
+            icon="",
             size="small"
         )
     
@@ -309,7 +309,7 @@ elif demo_section == "Metrics Demo":
             label="Revenue",
             value="$45K",
             delta="+8%",
-            icon="💰",
+            icon="",
             size="medium"
         )
     
@@ -319,7 +319,7 @@ elif demo_section == "Metrics Demo":
             label="Orders",
             value="567",
             delta="-3%",
-            icon="📦",
+            icon="",
             size="large"
         )
     
@@ -333,7 +333,7 @@ elif demo_section == "Metrics Demo":
             label="Total Customers",
             value="2,345",
             delta="+15%",
-            icon="👥",
+            icon="",
             size="medium"
         )
     
@@ -342,7 +342,7 @@ elif demo_section == "Metrics Demo":
             label="Active Projects",
             value="89",
             delta="+5",
-            icon="📁",
+            icon="",
             size="medium"
         )
     
@@ -351,7 +351,7 @@ elif demo_section == "Metrics Demo":
             label="Completion Rate",
             value="94%",
             delta="+2%",
-            icon="✅",
+            icon="",
             size="medium"
         )
     
@@ -360,12 +360,12 @@ elif demo_section == "Metrics Demo":
             label="Avg Response Time",
             value="2.3h",
             delta="-0.5h",
-            icon="⏱️",
+            icon="⏱",
             size="medium"
         )
 
 elif demo_section == "Charts Demo":
-    st.markdown("## 📈 Charts Demo")
+    st.markdown("##  Charts Demo")
     
     st.markdown("### Themed Charts")
     
@@ -401,7 +401,7 @@ elif demo_section == "Charts Demo":
     st.plotly_chart(fig2, use_container_width=True)
 
 elif demo_section == "Complete Example":
-    st.markdown("## 🎯 Complete Example")
+    st.markdown("##  Complete Example")
     
     st.markdown("### Full Dashboard with All Components")
     
@@ -413,7 +413,7 @@ elif demo_section == "Complete Example":
             label="Total Revenue",
             value="$125K",
             delta="+18%",
-            icon="💰",
+            icon="",
             size="medium"
         )
     
@@ -422,7 +422,7 @@ elif demo_section == "Complete Example":
             label="New Customers",
             value="234",
             delta="+12",
-            icon="👥",
+            icon="",
             size="medium"
         )
     
@@ -431,7 +431,7 @@ elif demo_section == "Complete Example":
             label="Active Orders",
             value="89",
             delta="+5",
-            icon="📦",
+            icon="",
             size="medium"
         )
     
@@ -440,7 +440,7 @@ elif demo_section == "Complete Example":
             label="Satisfaction",
             value="4.8/5",
             delta="+0.2",
-            icon="⭐",
+            icon="",
             size="medium"
         )
     
@@ -451,7 +451,7 @@ elif demo_section == "Complete Example":
         "Your monthly report is ready for review. Click here to view details.",
         alert_type="info",
         title="Report Ready",
-        icon="📊"
+        icon=""
     )
     
     st.markdown("---")
@@ -461,7 +461,7 @@ elif demo_section == "Complete Example":
     
     with col1:
         shadcn_card(
-            title="📈 Sales Overview",
+            title=" Sales Overview",
             content="""
             **This Month**
             - Revenue: $45,000
@@ -478,7 +478,7 @@ elif demo_section == "Complete Example":
     
     with col2:
         shadcn_card(
-            title="👥 Customer Insights",
+            title=" Customer Insights",
             content="""
             **Demographics**
             - New Customers: 234

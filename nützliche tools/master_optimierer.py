@@ -11,11 +11,11 @@ def run_all_optimizations():
     print("=" * 50)
 
     optimizations = [
-        ("🧹 Emoji-Bereinigung", "remove_emojis_from_files()"),
+        (" Emoji-Bereinigung", "remove_emojis_from_files()"),
         ("Streamlit-Fixes", "fix_streamlit_deprecations()"),
         ("Code-Statistiken", "analyze_code_stats()"),
-        ("🗄️ Datenbank-Bereinigung", "clean_database()"),
-        ("🧹 Debug-Bereinigung", "clean_debug_statements()"),
+        (" Datenbank-Bereinigung", "clean_database()"),
+        (" Debug-Bereinigung", "clean_debug_statements()"),
         ("Duplikat-Suche", "find_duplicate_files()"),
     ]
 
@@ -27,8 +27,8 @@ def run_all_optimizations():
         except Exception as e:
             print(f"Fehler bei {name}: {e}")
 
-    print("\n🎉 MASTER-OPTIMIERUNG ABGESCHLOSSEN!")
-    print("📋 Empfohlene nächste Schritte:")
+    print("\n MASTER-OPTIMIERUNG ABGESCHLOSSEN!")
+    print(" Empfohlene nächste Schritte:")
     print("   1. Git-Commit der bereinigten Dateien")
     print("   2. Tests ausführen")
     print("   3. App-Performance prüfen")

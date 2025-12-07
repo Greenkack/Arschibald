@@ -68,7 +68,7 @@ def test_create_category(kb_manager):
     category_id = kb_manager.create_category(
         name="Solar-Technik",
         description="Alles über Solartechnik",
-        icon="☀️",
+        icon="",
         sort_order=1,
         created_by="test_user"
     )
@@ -80,7 +80,7 @@ def test_create_category(kb_manager):
     assert category is not None
     assert category['name'] == "Solar-Technik"
     assert category['description'] == "Alles über Solartechnik"
-    assert category['icon'] == "☀️"
+    assert category['icon'] == ""
     assert category['sort_order'] == 1
     assert category['is_active'] == 1
 
@@ -499,7 +499,7 @@ def test_get_statistics(kb_manager):
 def test_full_workflow(kb_manager):
     """Test: Vollständiger Workflow."""
     # 1. Kategorien erstellen
-    root_cat = kb_manager.create_category(name="Solar-Technik", icon="☀️")
+    root_cat = kb_manager.create_category(name="Solar-Technik", icon="")
     sub_cat = kb_manager.create_category(name="Photovoltaik", parent_id=root_cat)
     
     # 2. Artikel erstellen

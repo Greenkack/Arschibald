@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\urllib3\contrib\socks.py
+# hypothesis_version: 6.147.0
+
+[':', '_socks_options', 'http', 'https', 'password', 'proxy_host', 'proxy_port', 'rdns', 'socket_options', 'socks4', 'socks4a', 'socks5', 'socks5h', 'socks_version', 'source_address', 'username']

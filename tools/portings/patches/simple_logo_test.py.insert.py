@@ -84,7 +84,7 @@ def test_logo_data_preparation():
 # --- DEF BLOCK START: func test_direct_logo_fetch ---
 def test_direct_logo_fetch():
     """Testet direkten Logo-Abruf"""
-    print("\n🔗 TESTE DIREKTEN LOGO-ABRUF")
+    print("\n TESTE DIREKTEN LOGO-ABRUF")
     print("=" * 50)
 
     brands = ["Huawei", "GoodWe", "BYD"]

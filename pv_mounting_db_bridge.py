@@ -286,7 +286,7 @@ if __name__ == "__main__":
         print()
         
         # Test manufacturers
-        print("🏭 Manufacturers for 'Dachhaken':")
+        print(" Manufacturers for 'Dachhaken':")
         manufacturers = get_pv_mounting_manufacturers_by_category("Dachhaken")
         for manuf in manufacturers:
             print(f"  - {manuf}")

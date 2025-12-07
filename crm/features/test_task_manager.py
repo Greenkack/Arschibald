@@ -771,7 +771,7 @@ def run_all_tests():
     print(f"Fehlgeschlagen: {failed}/{len(tests)}")
     
     if failed == 0:
-        print("\n🎉 Alle Tests erfolgreich!")
+        print("\n Alle Tests erfolgreich!")
         print("\nGetestete Funktionalität:")
         print("  Task-Erstellung mit allen Feldern (Requirement 5.1)")
         print("  Status-Workflow (open → in_progress → completed) (Requirement 5.2)")

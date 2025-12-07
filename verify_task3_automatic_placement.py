@@ -37,7 +37,7 @@ def test_grid_calculation():
         print("Grid calculator module imported successfully")
         
         # Test 1: Standard roof (10m x 8m, 20 modules)
-        print("\n📋 Test 1: Standard roof (10m x 8m, 20 modules)")
+        print("\n Test 1: Standard roof (10m x 8m, 20 modules)")
         positions = calculate_module_grid(10.0, 8.0, 20)
         
         assert len(positions) > 0, "Should return positions"
@@ -47,7 +47,7 @@ def test_grid_calculation():
         print(f"  Last module: ({positions[-1][0]:.2f}, {positions[-1][1]:.2f})")
         
         # Test 2: Verify spacing between modules
-        print("\n📋 Test 2: Verify spacing between modules")
+        print("\n Test 2: Verify spacing between modules")
         if len(positions) >= 2:
             # Check spacing between first two modules in same row
             x1, y1 = positions[0]
@@ -71,7 +71,7 @@ def test_grid_calculation():
                 print(f"  Y spacing correct: {dy:.2f}m")
         
         # Test 3: Verify margins are respected
-        print("\n📋 Test 3: Verify margins are respected")
+        print("\n Test 3: Verify margins are respected")
         roof_length = 10.0
         roof_width = 8.0
         
@@ -92,7 +92,7 @@ def test_grid_calculation():
         print(f"  Margins respected: {DEFAULT_MARGIN}m from edges")
         
         # Test 4: Maximum capacity calculation
-        print("\n📋 Test 4: Maximum capacity calculation")
+        print("\n Test 4: Maximum capacity calculation")
         max_modules = calculate_max_modules(15.0, 12.0)
         print(f"  Maximum modules for 15m x 12m roof: {max_modules}")
         
@@ -103,7 +103,7 @@ def test_grid_calculation():
         print(f"  Successfully placed all {len(positions_max)} modules")
         
         # Test 5: Overlapping prevention
-        print("\n📋 Test 5: Overlapping prevention")
+        print("\n Test 5: Overlapping prevention")
         # Check no modules overlap
         for i, (x1, y1) in enumerate(positions):
             for j, (x2, y2) in enumerate(positions):
@@ -151,7 +151,7 @@ def test_placement_algorithm():
         )
         
         # Test 1: Maximize module count
-        print("\n📋 Test 1: Maximize module count on available area")
+        print("\n Test 1: Maximize module count on available area")
         roof_length = 12.0
         roof_width = 10.0
         
@@ -167,7 +167,7 @@ def test_placement_algorithm():
         print(f"  Correctly limited to maximum: {len(positions)} modules")
         
         # Test 2: Edge spacing consideration
-        print("\n📋 Test 2: Edge spacing consideration")
+        print("\n Test 2: Edge spacing consideration")
         from utils.pv3d_grid_calculator import DEFAULT_MARGIN
         
         # Small roof where margins matter
@@ -197,7 +197,7 @@ def test_placement_algorithm():
         print(f"  All modules respect edge margins")
         
         # Test 3: Centering optimization
-        print("\n📋 Test 3: Centering optimization")
+        print("\n Test 3: Centering optimization")
         # Grid should be centered on roof
         positions_centered = calculate_module_grid(10.0, 8.0, 12)
         
@@ -232,12 +232,12 @@ def test_button_integration():
     
     try:
         # Test 1: Import UI module
-        print("\n📋 Test 1: Import UI module")
+        print("\n Test 1: Import UI module")
         from utils.pv3d_module_placement_ui import render_module_placement_panel
         print("  UI module imported successfully")
         
         # Test 2: Import placement handler
-        print("\n📋 Test 2: Import placement handler")
+        print("\n Test 2: Import placement handler")
         from utils.pv3d_placement_handler import (
             handle_auto_placement,
             initialize_session_state
@@ -245,7 +245,7 @@ def test_button_integration():
         print("  Placement handler imported successfully")
         
         # Test 3: Check integration in main UI
-        print("\n📋 Test 3: Check integration in main UI")
+        print("\n Test 3: Check integration in main UI")
         with open("solar_3d_view_module.py", "r", encoding="utf-8") as f:
             content = f.read()
         
@@ -264,7 +264,7 @@ def test_button_integration():
             print(f"  {check_name}")
         
         # Test 4: Verify button creates trigger
-        print("\n📋 Test 4: Verify button creates trigger")
+        print("\n Test 4: Verify button creates trigger")
         # Check that button sets trigger in session state (flexible check)
         trigger_patterns = [
             'st.session_state["trigger_auto_placement"] = True',
@@ -283,13 +283,13 @@ def test_button_integration():
         print("  Button sets trigger in session state")
         
         # Test 5: Verify trigger is handled
-        print("\n📋 Test 5: Verify trigger is handled")
+        print("\n Test 5: Verify trigger is handled")
         assert 'st.session_state["trigger_auto_placement"] = False' in content, \
             "Trigger should be reset after handling"
         print("  Trigger is reset after handling")
         
         # Test 6: Verify result display
-        print("\n📋 Test 6: Verify result display")
+        print("\n Test 6: Verify result display")
         assert "st.rerun()" in content, \
             "Should rerun after placement"
         print("  Page reruns after placement")
@@ -312,7 +312,7 @@ def test_session_state_management():
     try:
         from utils.pv3d_placement_handler import initialize_session_state
         
-        print("\n📋 Test: Initialize session state")
+        print("\n Test: Initialize session state")
         # Note: This requires Streamlit context, so we just verify the function exists
         print("  initialize_session_state function exists")
         
@@ -369,7 +369,7 @@ def main():
     
     if all_passed:
         print("\n" + "="*70)
-        print("🎉 ALL TESTS PASSED!")
+        print(" ALL TESTS PASSED!")
         print("="*70)
         print("\nTask 3 'Automatische Belegung reparieren' is COMPLETE:")
         print("  Grid calculation works correctly")
