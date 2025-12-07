@@ -191,7 +191,7 @@ class TestAdminProfitMarginUI:
         render_global_margins_tab(self.mock_margin_manager)
 
         # Verify UI elements
-        mock_st.subheader.assert_called_with("🌍 Globale Gewinnspannen")
+        mock_st.subheader.assert_called_with(" Globale Gewinnspannen")
         mock_st.form.assert_called()
 
         # Verify margin manager was called
@@ -227,7 +227,7 @@ class TestAdminProfitMarginUI:
         render_category_margins_tab(self.mock_margin_manager)
 
         # Verify UI elements
-        mock_st.subheader.assert_called_with("📂 Kategorie-Gewinnspannen")
+        mock_st.subheader.assert_called_with(" Kategorie-Gewinnspannen")
 
         # Verify margin manager methods were called
         self.mock_margin_manager.get_available_categories.assert_called()
@@ -297,7 +297,7 @@ class TestAdminProfitMarginUI:
         render_margin_preview_tab(self.mock_margin_manager)
 
         # Verify UI elements
-        mock_st.subheader.assert_called_with("🧮 Kalkulations-Vorschau")
+        mock_st.subheader.assert_called_with(" Kalkulations-Vorschau")
 
         # Verify margin calculations were called
         self.mock_margin_manager.get_margin_breakdown.assert_called()

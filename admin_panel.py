@@ -8,6 +8,7 @@ Datum: 2025-06-04 (Überarbeitet für Syntaxkonsistenz)
 import base64
 import json
 import os
+import sys
 import time
 import traceback
 from collections.abc import Callable
@@ -56,19 +57,19 @@ from admin_payment_terms_ui import (
 try:
     from admin_product_database_ui_optimized import render_product_admin_ui_optimized as render_product_admin_ui
     PRODUCT_DB_OPTIMIZED = True
-    print("✅ [ADMIN_PANEL] Produktverwaltung OPTIMIERT geladen (mit Pagination)")
+    print(" [ADMIN_PANEL] Produktverwaltung OPTIMIERT geladen (mit Pagination)")
 except ImportError as e:
     from admin_product_database_ui import render_product_admin_ui
     PRODUCT_DB_OPTIMIZED = False
-    print(f"⚠️  [ADMIN_PANEL] Produktverwaltung ALTE VERSION geladen (Import-Fehler: {e})")
+    print(f"  [ADMIN_PANEL] Produktverwaltung ALTE VERSION geladen (Import-Fehler: {e})")
 
 try:
     from admin_heatpump_products_optimized import render_heatpump_admin_ui
     HEATPUMP_ADMIN_AVAILABLE = True
-    print("✅ [ADMIN_PANEL] Wärmepumpen-Verwaltung OPTIMIERT geladen")
+    print(" [ADMIN_PANEL] Wärmepumpen-Verwaltung OPTIMIERT geladen")
 except ImportError as e:
     HEATPUMP_ADMIN_AVAILABLE = False
-    print(f"⚠️  [ADMIN_PANEL] Wärmepumpen-Verwaltung nicht verfügbar (Import-Fehler: {e})")
+    print(f"  [ADMIN_PANEL] Wärmepumpen-Verwaltung nicht verfügbar (Import-Fehler: {e})")
     def render_heatpump_admin_ui():
         st.warning("Wärmepumpen-Verwaltung nicht verfügbar. Installieren Sie die optimierten Module.")
 
@@ -110,6 +111,36 @@ except ImportError:
     TEMPLATE_MANAGEMENT_AVAILABLE = False
     def render_template_management():
         st.warning("Dokument-Vorlagen-Management ist nicht verfügbar. Bitte prüfen Sie die Installation der CRM-Module.")
+
+# Employee Controlling System
+try:
+    from admin_controlling_settings_ui import render_admin_controlling_settings
+    CONTROLLING_SETTINGS_AVAILABLE = True
+    print(" [ADMIN_PANEL] Employee Controlling System geladen")
+except ImportError as e:
+    CONTROLLING_SETTINGS_AVAILABLE = False
+    print(f"  [ADMIN_PANEL] Employee Controlling System nicht verfügbar (Import-Fehler: {e})")
+    import traceback
+    print(traceback.format_exc())
+except Exception as e:
+    CONTROLLING_SETTINGS_AVAILABLE = False
+    print(f"  [ADMIN_PANEL] Employee Controlling System Fehler: {e}")
+    import traceback
+    print(traceback.format_exc())
+    def render_admin_controlling_settings():
+        st.error(" Employee Controlling System konnte nicht geladen werden")
+        st.warning(
+            "**Mögliche Ursachen:**\n\n"
+            "1. Module nicht installiert\n"
+            "2. Datenbank nicht initialisiert\n"
+            "3. Import-Fehler (siehe Konsole)"
+        )
+        st.info(
+            "**Lösungen:**\n\n"
+            "1. Installieren Sie Dependencies: `pip install reportlab openpyxl sqlalchemy plotly`\n"
+            "2. Initialisieren Sie die Datenbank: `python controlling/database.py`\n"
+            "3. Prüfen Sie die Konsole auf Fehlerdetails"
+        )
 
 from ui_state_manager import (
     commit_widget_value,
@@ -267,6 +298,7 @@ ADMIN_TAB_KEYS_DEFINITION_GLOBAL = [
     "admin_tab_price_matrix",  # NEU: Excel-Integration für Preismatrizen
     "admin_tab_tag_management",  # NEU: Tag-Verwaltung für CRM
     "admin_tab_template_management",  # NEU: Dokument-Vorlagen-Management
+    "admin_tab_controlling_settings",  # NEU: Employee Controlling System
     "admin_tab_general_settings",
     "admin_tab_intro_settings",
     "admin_tab_tariff_management",
@@ -290,6 +322,7 @@ ADMIN_TAB_ICONS = {
     "admin_tab_price_matrix": "",  # NEU: Excel-Integration für Preismatrizen
     "admin_tab_tag_management": "",  # NEU: Tag-Verwaltung für CRM
     "admin_tab_template_management": "",  # NEU: Dokument-Vorlagen-Management
+    "admin_tab_controlling_settings": "",  # NEU: Employee Controlling System
     "admin_tab_general_settings": "",
     "admin_tab_intro_settings": "",
     "admin_tab_tariff_management": "",
@@ -314,6 +347,7 @@ ADMIN_TAB_DESCRIPTIONS = {
     "admin_tab_price_matrix": "Excel-ähnliche Preismatrizen erstellen und verwalten",  # NEU
     "admin_tab_tag_management": "Tags für Kundensegmentierung erstellen und verwalten",  # NEU
     "admin_tab_template_management": "Dokument-Vorlagen mit Platzhaltern erstellen und verwalten",  # NEU
+    "admin_tab_controlling_settings": "Mitarbeiter, Positionen, Kriterien & Benachrichtigungen verwalten",  # NEU
     "admin_tab_general_settings": "Globale Parameter, Einheiten und Defaults",
     "admin_tab_intro_settings": "Intro-Inhalte und Onboarding-Story anpassen",
     "admin_tab_tariff_management": "Einspeisevergütungen & Tarife konfigurieren",
@@ -337,6 +371,7 @@ ADMIN_TAB_LABELS_DE = {
     "admin_tab_price_matrix": "Preis Matrix",  # NEU: Excel-Integration
     "admin_tab_tag_management": "Tag-Verwaltung",  # NEU: CRM Tag Management
     "admin_tab_template_management": "Dokument-Vorlagen",  # NEU: Document Template Management
+    "admin_tab_controlling_settings": "Controlling Einstellungen",  # NEU: Employee Controlling System
     "admin_tab_general_settings": "Allgemeine Einstellungen",
     "admin_tab_intro_settings": "Intro-Einstellungen",
     "admin_tab_tariff_management": "Einspeisung Tarifverwaltung",
@@ -344,8 +379,8 @@ ADMIN_TAB_LABELS_DE = {
     "admin_tab_pdf_design": "PDF-Design Einstellungen",
     "admin_tab_payment_terms": "Zahlungsbedingungen Einstellungen",
     "admin_tab_visualization_settings": "Anzeigeeinstellungen",
-    "admin_tab_build_infos": "📋 Build Infos",  # NEU
-    "admin_tab_security_settings": "🔐 Sicherheitseinstellungen",  # NEU
+    "admin_tab_build_infos": "Build Infos",  # NEU
+    "admin_tab_security_settings": "Sicherheitseinstellungen",  # NEU
     "admin_tab_ui_effects": "UI-Effekte",
     "admin_tab_advanced": "Erweiterte Einstellungen"
 }
@@ -474,7 +509,7 @@ def _render_horizontal_menu_selector(
     st.markdown('<div class="admin-nav-container">', unsafe_allow_html=True)
 
     for option_key in option_keys:
-        icon = icons.get(option_key, "📋")
+        icon = icons.get(option_key, "")
         display_label = option_labels[option_key]
         description = ADMIN_TAB_DESCRIPTIONS.get(option_key, "")
         is_active = option_key == current_selection
@@ -1332,7 +1367,7 @@ def render_product_management(
             if uploaded_product_image_manual_file_form:
                 st.image(
                     uploaded_product_image_manual_file_form,
-                    caption=f"🆕 Neues Bild: {
+                    caption=f" Neues Bild: {
                         uploaded_product_image_manual_file_form.name} ({
                         uploaded_product_image_manual_file_form.size} Bytes)",
                     width=100)
@@ -1366,7 +1401,7 @@ def render_product_management(
             # Zeige Upload-Vorschau
             if uploaded_datasheet_pdf_file_form:
                 st.caption(
-                    f"🆕 Neues Datenblatt: {
+                    f" Neues Datenblatt: {
                         uploaded_datasheet_pdf_file_form.name} ({
                         uploaded_datasheet_pdf_file_form.size} Bytes)")
 
@@ -1642,7 +1677,7 @@ def render_product_management(
                         # Zusätzliche Bestätigung für Uploads
                         if uploaded_product_image_manual_file_form:
                             st.info(
-                                "🖼️ Produktbild wurde erfolgreich gespeichert.")
+                                " Produktbild wurde erfolgreich gespeichert.")
 
                         if datasheet_content_bytes_to_write and original_datasheet_filename_to_write:
                             prod_specific_dir = os.path.join(
@@ -1926,16 +1961,16 @@ def render_product_management(
         # PAGINATION INFO
         col_info1, col_info2, col_info3 = st.columns([1, 2, 1])
         with col_info2:
-            st.info(f"📊 **{total_products} Produkte gefunden** | Zeige {start_idx + 1}-{end_idx} (Seite {st.session_state.product_mgmt_page}/{total_pages})")
+            st.info(f" **{total_products} Produkte gefunden** | Zeige {start_idx + 1}-{end_idx} (Seite {st.session_state.product_mgmt_page}/{total_pages})")
         
         # PAGINATION BUTTONS OBEN
         col_p1, col_p2, col_p3, col_p4, col_p5 = st.columns([1, 1, 2, 1, 1])
         with col_p1:
-            if st.button("⏮️ Erste", key="prod_mgmt_first_top", disabled=(st.session_state.product_mgmt_page == 1)):
+            if st.button("⏮ Erste", key="prod_mgmt_first_top", disabled=(st.session_state.product_mgmt_page == 1)):
                 st.session_state.product_mgmt_page = 1
                 st.rerun()
         with col_p2:
-            if st.button("◀️ Zurück", key="prod_mgmt_prev_top", disabled=(st.session_state.product_mgmt_page == 1)):
+            if st.button(" Zurück", key="prod_mgmt_prev_top", disabled=(st.session_state.product_mgmt_page == 1)):
                 st.session_state.product_mgmt_page -= 1
                 st.rerun()
         with col_p3:
@@ -1951,11 +1986,11 @@ def render_product_management(
                 st.session_state.product_mgmt_page = int(jump_page)
                 st.rerun()
         with col_p4:
-            if st.button("▶️ Weiter", key="prod_mgmt_next_top", disabled=(st.session_state.product_mgmt_page >= total_pages)):
+            if st.button(" Weiter", key="prod_mgmt_next_top", disabled=(st.session_state.product_mgmt_page >= total_pages)):
                 st.session_state.product_mgmt_page += 1
                 st.rerun()
         with col_p5:
-            if st.button("⏭️ Letzte", key="prod_mgmt_last_top", disabled=(st.session_state.product_mgmt_page >= total_pages)):
+            if st.button("⏭ Letzte", key="prod_mgmt_last_top", disabled=(st.session_state.product_mgmt_page >= total_pages)):
                 st.session_state.product_mgmt_page = total_pages
                 st.rerun()
         
@@ -2059,21 +2094,21 @@ def render_product_management(
         st.markdown("---")
         col_pb1, col_pb2, col_pb3, col_pb4, col_pb5 = st.columns([1, 1, 2, 1, 1])
         with col_pb1:
-            if st.button("⏮️ Erste", key="prod_mgmt_first_bottom", disabled=(st.session_state.product_mgmt_page == 1)):
+            if st.button("⏮ Erste", key="prod_mgmt_first_bottom", disabled=(st.session_state.product_mgmt_page == 1)):
                 st.session_state.product_mgmt_page = 1
                 st.rerun()
         with col_pb2:
-            if st.button("◀️ Zurück", key="prod_mgmt_prev_bottom", disabled=(st.session_state.product_mgmt_page == 1)):
+            if st.button(" Zurück", key="prod_mgmt_prev_bottom", disabled=(st.session_state.product_mgmt_page == 1)):
                 st.session_state.product_mgmt_page -= 1
                 st.rerun()
         with col_pb3:
             st.write(f"Seite {st.session_state.product_mgmt_page} von {total_pages}")
         with col_pb4:
-            if st.button("▶️ Weiter", key="prod_mgmt_next_bottom", disabled=(st.session_state.product_mgmt_page >= total_pages)):
+            if st.button(" Weiter", key="prod_mgmt_next_bottom", disabled=(st.session_state.product_mgmt_page >= total_pages)):
                 st.session_state.product_mgmt_page += 1
                 st.rerun()
         with col_pb5:
-            if st.button("⏭️ Letzte", key="prod_mgmt_last_bottom", disabled=(st.session_state.product_mgmt_page >= total_pages)):
+            if st.button("⏭ Letzte", key="prod_mgmt_last_bottom", disabled=(st.session_state.product_mgmt_page >= total_pages)):
                 st.session_state.product_mgmt_page = total_pages
                 st.rerun()
 
@@ -2639,7 +2674,7 @@ def render_visualization_settings(
                 action_cols = st.columns([1, 1, 1])
                 with action_cols[0]:
                     if st.button(
-                        "💾 Akzente speichern",
+                        " Akzente speichern",
                         key=f"save_theme_accents{WIDGET_KEY_SUFFIX}",
                             type="primary"):
                         filtered_overrides = {
@@ -2661,7 +2696,7 @@ def render_visualization_settings(
 
                 with action_cols[1]:
                     if st.button(
-                        "🔄 Akzente zurücksetzen",
+                        " Akzente zurücksetzen",
                             key=f"reset_theme_accents{WIDGET_KEY_SUFFIX}"):
                         if selected_key in overrides:
                             overrides.pop(selected_key)
@@ -2756,7 +2791,7 @@ def render_visualization_settings(
                     'Keine Beschreibung verfügbar'))
 
             # Speichern-Button
-            if st.button("💾 UI-Effekte speichern", type="primary",
+            if st.button(" UI-Effekte speichern", type="primary",
                          key=f"save_ui_effects{WIDGET_KEY_SUFFIX}"):
                 new_settings = {
                     "active_effect": selected_effect_key,
@@ -2876,7 +2911,7 @@ def render_visualization_settings(
                 key=f"viz_font_size_tick_num{WIDGET_KEY_SUFFIX}")
 
             submitted_viz_settings = st.form_submit_button(
-                "💾 Visualisierungs-Einstellungen speichern")
+                " Visualisierungs-Einstellungen speichern")
 
         if submitted_viz_settings:
             new_viz_settings = {
@@ -3537,7 +3572,7 @@ def render_pricing_mode_settings(
     
     # Zeige aktuellen Modus prominent
     if current_mode == "matrix":
-        st.success("🔵 **Aktuell aktiv:** Preismatrix (Schlüsselfertige Preise)")
+        st.success(" **Aktuell aktiv:** Preismatrix (Schlüsselfertige Preise)")
     else:
         st.success("🟢 **Aktuell aktiv:** Standardberechnung (Einzelprodukte)")
     
@@ -3628,7 +3663,7 @@ def render_pricing_mode_settings(
     
     with col2:
         save_button = st.button(
-            "💾 Speichern",
+            " Speichern",
             key=f"save_pricing_mode_btn{WIDGET_KEY_SUFFIX}",
             type="primary",
             use_container_width=True,
@@ -3850,7 +3885,7 @@ def create_protected_tab_renderer(area_id: str, area_label: str, render_function
                 </style>
                 """, unsafe_allow_html=True)
                 
-                st.warning(f"🔒 {area_label} ist nur für Administratoren zugänglich.")
+                st.warning(f" {area_label} ist nur für Administratoren zugänglich.")
                 
                 col1, col2 = st.columns(2)
                 
@@ -3862,7 +3897,7 @@ def create_protected_tab_renderer(area_id: str, area_label: str, render_function
                 
                 col_btn1, col_btn2 = st.columns([1, 4])
                 with col_btn1:
-                    if st.button("🔓 Entsperren", key=f"unlock_{area_id}", type="primary"):
+                    if st.button(" Entsperren", key=f"unlock_{area_id}", type="primary"):
                         if not username or not password:
                             st.error("Bitte Benutzername und Passwort eingeben!")
                         else:
@@ -3884,7 +3919,7 @@ def create_protected_tab_renderer(area_id: str, area_label: str, render_function
             render_function()
             
             # Sperre-Button
-            if st.button(f"🔒 {area_label} wieder sperren", key=f"lock_{area_id}"):
+            if st.button(f" {area_label} wieder sperren", key=f"lock_{area_id}"):
                 st.session_state[session_key] = False
                 if f"{session_key}_user" in st.session_state:
                     del st.session_state[f"{session_key}_user"]
@@ -4075,6 +4110,11 @@ def render_admin_panel(
             "Dokument-Vorlagen",
             lambda: render_template_management()
         ),
+        "admin_tab_controlling_settings": create_protected_tab_renderer(
+            "controlling_settings",
+            "Controlling Einstellungen",
+            lambda: render_controlling_settings_tab()
+        ),
         "admin_tab_general_settings": create_protected_tab_renderer(
             "economic_settings",
             "Allgemeine Einstellungen",
@@ -4169,6 +4209,7 @@ def render_admin_panel(
         "admin_tab_price_matrix": "price_matrix",
         "admin_tab_tag_management": "tag_management",
         "admin_tab_template_management": "template_management",
+        "admin_tab_controlling_settings": "controlling_settings",
         "admin_tab_general_settings": "economic_settings",
         "admin_tab_intro_settings": "intro_settings",
         "admin_tab_tariff_management": "economic_settings",
@@ -4508,6 +4549,64 @@ def render_tag_management_tab():
         st.text(traceback.format_exc())
 
 
+def render_controlling_settings_tab():
+    """Rendert den Employee Controlling Settings Tab"""
+    try:
+        if CONTROLLING_SETTINGS_AVAILABLE:
+            render_admin_controlling_settings()
+        else:
+            st.error(" Employee Controlling System ist nicht verfügbar")
+            st.warning(
+                "**Das Controlling-Modul konnte nicht geladen werden.**\n\n"
+                "Mögliche Ursachen:\n"
+                "- Module nicht installiert\n"
+                "- Datenbank nicht initialisiert\n"
+                "- Import-Fehler beim Start"
+            )
+            st.info(
+                "**Lösungsschritte:**\n\n"
+                "1. Prüfen Sie die Konsole auf Fehlerdetails\n"
+                "2. Installieren Sie Dependencies:\n"
+                "   ```\n"
+                "   pip install reportlab openpyxl sqlalchemy plotly aiosqlite\n"
+                "   ```\n"
+                "3. Initialisieren Sie die Datenbank:\n"
+                "   ```\n"
+                "   python controlling/database.py\n"
+                "   ```\n"
+                "4. Starten Sie die App neu"
+            )
+            
+            # Debug-Informationen
+            with st.expander(" Debug-Informationen"):
+                st.code(f"CONTROLLING_SETTINGS_AVAILABLE = {CONTROLLING_SETTINGS_AVAILABLE}")
+                st.code(f"Python Version: {sys.version}")
+                
+                # Test imports
+                st.write("**Import-Tests:**")
+                try:
+                    import admin_controlling_settings_ui
+                    st.success(" admin_controlling_settings_ui kann importiert werden")
+                except Exception as e:
+                    st.error(f" admin_controlling_settings_ui Import-Fehler: {e}")
+                
+                try:
+                    import controlling
+                    st.success(" controlling package kann importiert werden")
+                except Exception as e:
+                    st.error(f" controlling Import-Fehler: {e}")
+                
+                try:
+                    from controlling.database import SessionLocal
+                    st.success(" controlling.database kann importiert werden")
+                except Exception as e:
+                    st.error(f" controlling.database Import-Fehler: {e}")
+    except Exception as e:
+        st.error(f" Fehler beim Rendern der Controlling-Einstellungen: {e}")
+        with st.expander(" Fehlerdetails"):
+            st.code(traceback.format_exc())
+
+
 def render_build_infos_tab():
     """Rendert den Build Infos Tab mit Passwortschutz"""
     try:
@@ -4529,7 +4628,7 @@ def render_security_settings_tab():
             st.session_state.security_settings_unlocked = False
         
         if not st.session_state.security_settings_unlocked:
-            st.warning("🔒 Dieser Bereich ist nur für Administratoren zugänglich.")
+            st.warning(" Dieser Bereich ist nur für Administratoren zugänglich.")
             
             col1, col2 = st.columns(2)
             
@@ -4541,7 +4640,7 @@ def render_security_settings_tab():
             
             col_btn1, col_btn2 = st.columns([1, 4])
             with col_btn1:
-                if st.button("🔓 Entsperren", key="unlock_security_settings", type="primary"):
+                if st.button(" Entsperren", key="unlock_security_settings", type="primary"):
                     if not username or not password:
                         st.error("Bitte Benutzername und Passwort eingeben!")
                     else:
@@ -4563,7 +4662,7 @@ def render_security_settings_tab():
         render_admin_security_settings()
         
         # Sperre-Button
-        if st.button("🔒 Bereich wieder sperren", key="lock_security_settings"):
+        if st.button(" Bereich wieder sperren", key="lock_security_settings"):
             st.session_state.security_settings_unlocked = False
             st.rerun()
             
@@ -4583,7 +4682,7 @@ def render_heatpump_settings_tab():
             st.session_state.heatpump_settings_unlocked = False
         
         if not st.session_state.heatpump_settings_unlocked:
-            st.warning("🔒 Dieser Bereich ist nur für Administratoren zugänglich.")
+            st.warning(" Dieser Bereich ist nur für Administratoren zugänglich.")
             
             col1, col2 = st.columns(2)
             
@@ -4595,7 +4694,7 @@ def render_heatpump_settings_tab():
             
             col_btn1, col_btn2 = st.columns([1, 4])
             with col_btn1:
-                if st.button("🔓 Entsperren", key="unlock_heatpump_settings", type="primary"):
+                if st.button(" Entsperren", key="unlock_heatpump_settings", type="primary"):
                     if not username or not password:
                         st.error("Bitte Benutzername und Passwort eingeben!")
                     else:
@@ -4617,7 +4716,7 @@ def render_heatpump_settings_tab():
         render_admin_heatpump_settings_ui()
         
         # Sperre-Button
-        if st.button("🔒 Bereich wieder sperren", key="lock_heatpump_settings"):
+        if st.button(" Bereich wieder sperren", key="lock_heatpump_settings"):
             st.session_state.heatpump_settings_unlocked = False
             st.rerun()
             

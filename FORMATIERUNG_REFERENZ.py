@@ -50,6 +50,6 @@ SCOP:            4,20
 Prozent:         85,5 %
 CO2:             3.456,78 kg
 
-✨ Status: PRODUKTIONSBEREIT
+ Status: PRODUKTIONSBEREIT
 """
 print(__doc__)

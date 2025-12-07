@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\brain\brain_gi.py
+# hypothesis_version: 6.147.0
+
+['    pass\n', '"%s"', '<GType ', '<enum ', '<flags', 'Exception', '\\', '\\\\', '^[A-Za-z_]\\w*$', '__', '__bool__', '__contains__', '__del__', '__delattr__', '__delitem__', '__enter__', '__eq__', '__exit__', '__ge__', '__getattr__', '__getitem__', '__gt__', '__hash__', '__iter__', '__le__', '__len__', '__lt__', '__ne__', '__next__', '__nonzero__', '__repr__', '__setattr__', '__setitem__', '__str__', 'gi', 'gi._glib', 'gi._gobject', 'gi.repository.', 'gi.repository.GLib', 'ignore', 'object', 'pass\n', 'require_version']

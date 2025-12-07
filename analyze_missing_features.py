@@ -182,7 +182,7 @@ def main():
     print()
 
     # Berechnungs-Features
-    print(f"🧮 BERECHNUNGS-FEATURES ({len(all_calculation_funcs)} gefunden):")
+    print(f" BERECHNUNGS-FEATURES ({len(all_calculation_funcs)} gefunden):")
     print("-" * 100)
     for filename, result in all_results.items():
         calcs = result.get('calculations', [])
@@ -192,7 +192,7 @@ def main():
                 doc = calc.get('docstring', '')[:60] if calc.get(
                     'docstring') else 'Keine Beschreibung'
                 print(f"    • {calc['name']}() - Zeile {calc['lineno']}")
-                print(f"      └─ {doc}...")
+                print(f"       {doc}...")
 
     print()
     print("=" * 100)
@@ -208,7 +208,7 @@ def main():
                 doc = chart.get('docstring', '')[:60] if chart.get(
                     'docstring') else 'Keine Beschreibung'
                 print(f"    • {chart['name']}() - Zeile {chart['lineno']}")
-                print(f"      └─ {doc}...")
+                print(f"       {doc}...")
 
     print()
     print("=" * 100)
@@ -224,7 +224,7 @@ def main():
                 doc = feat.get('docstring', '')[:60] if feat.get(
                     'docstring') else 'Keine Beschreibung'
                 print(f"    • {feat['name']}() - Zeile {feat['lineno']}")
-                print(f"      └─ {doc}...")
+                print(f"       {doc}...")
 
     print()
     print("=" * 100)

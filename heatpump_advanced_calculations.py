@@ -249,12 +249,12 @@ def _get_jaz_recommendations(
     
     if insulation_factor < 1.0:
         recommendations.append(
-            "🏠 Dämmung verbessern: Dach, Fassade oder Keller dämmen (JAZ-Gewinn: +5-10%)"
+            " Dämmung verbessern: Dach, Fassade oder Keller dämmen (JAZ-Gewinn: +5-10%)"
         )
     
     if hydraulic_factor < 1.0:
         recommendations.append(
-            "⚙️ Hydraulischen Abgleich durchführen (Kosten: ~500€, JAZ-Gewinn: +7%)"
+            " Hydraulischen Abgleich durchführen (Kosten: ~500€, JAZ-Gewinn: +7%)"
         )
     
     if not recommendations:
@@ -512,7 +512,7 @@ def _get_scenario_recommendation(scenarios: Dict) -> str:
     if isinstance(realistic_payback, int) and realistic_payback <= 10:
         return f"Sehr empfehlenswert: Amortisation in {realistic_payback} Jahren, Ersparnis nach 20J: {realistic_savings:,.2f}€"
     elif isinstance(realistic_payback, int) and realistic_payback <= 15:
-        return f"👍 Empfehlenswert: Amortisation in {realistic_payback} Jahren, langfristig rentabel"
+        return f" Empfehlenswert: Amortisation in {realistic_payback} Jahren, langfristig rentabel"
     else:
         return "Langfristige Investition: Amortisation >15 Jahre, andere Faktoren (Komfort, CO₂) berücksichtigen"
 
@@ -683,7 +683,7 @@ def calculate_tax_benefits(
         "Steuervorteile kommen ZUSÄTZLICH zur BEG-Förderung",
         "Fachunternehmererklärung erforderlich",
         "⏰ Antrag nach Fertigstellung stellen",
-        "🏦 Nur bei Eigennutzung (nicht Vermietung)"
+        " Nur bei Eigennutzung (nicht Vermietung)"
     ]
     
     return tax_benefits
@@ -1163,9 +1163,9 @@ def _get_smart_grid_recommendations(pv_data: Dict, scenarios: Dict) -> List[str]
         recs.append("Ohne PV-Anlage ist Nutzen begrenzt - dynamischer Tarif empfohlen")
     
     recs.extend([
-        "🔌 Dynamischen Stromtarif wählen (z.B. Tibber, aWATTar)",
-        "📱 Home-Energy-Management-System einplanen",
-        "🔋 Pufferspeicher mind. 500L für Lastverschiebung"
+        " Dynamischen Stromtarif wählen (z.B. Tibber, aWATTar)",
+        " Home-Energy-Management-System einplanen",
+        " Pufferspeicher mind. 500L für Lastverschiebung"
     ])
     
     return recs
@@ -2414,13 +2414,13 @@ def compare_multiple_heatpumps(
     for rank, result in enumerate(ranked, 1):
         result['rank'] = rank
         if rank == 1:
-            result['medal'] = '🥇'
+            result['medal'] = ''
             result['rating'] = 'TESTSIEGER'
         elif rank == 2:
-            result['medal'] = '🥈'
+            result['medal'] = ''
             result['rating'] = 'SEHR GUT'
         elif rank == 3:
-            result['medal'] = '🥉'
+            result['medal'] = ''
             result['rating'] = 'GUT'
         else:
             result['medal'] = ''

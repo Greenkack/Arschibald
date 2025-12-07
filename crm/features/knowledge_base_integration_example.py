@@ -15,7 +15,7 @@ from crm.features.knowledge_base_ui import render_knowledge_base_ui
 
 def demo_basic_usage():
     """Zeigt grundlegende Verwendung der Wissensdatenbank."""
-    st.header("📚 Wissensdatenbank - Grundlegende Verwendung")
+    st.header(" Wissensdatenbank - Grundlegende Verwendung")
     
     conn = get_db_connection()
     if not conn:
@@ -31,7 +31,7 @@ def demo_basic_usage():
             solar_cat = kb_manager.create_category(
                 name="Solar-Technik",
                 description="Alles über Photovoltaik und Solartechnik",
-                icon="☀️",
+                icon="",
                 sort_order=1
             )
             
@@ -173,14 +173,14 @@ def demo_search():
                 st.markdown(article['content'][:300] + "...")
                 st.caption(f"Kategorie: {article.get('category_name', 'Keine')} | "
                           f"Aufrufe: {article['view_count']} | "
-                          f"⭐ {article.get('avg_rating', 0):.1f}")
+                          f" {article.get('avg_rating', 0):.1f}")
     
     conn.close()
 
 
 def demo_top_articles():
     """Zeigt Top-Artikel."""
-    st.header("⭐ Top-bewertete Artikel")
+    st.header(" Top-bewertete Artikel")
     
     conn = get_db_connection()
     if not conn:
@@ -201,7 +201,7 @@ def demo_top_articles():
                     st.markdown(f"**{i}. {article['title']}**")
                     st.caption(f"Kategorie: {article.get('category_name', 'Keine')}")
                 with col2:
-                    st.metric("Rating", f"{article.get('avg_rating', 0):.1f} ⭐")
+                    st.metric("Rating", f"{article.get('avg_rating', 0):.1f} ")
                     st.caption(f"{article.get('rating_count', 0)} Bewertungen")
                 st.divider()
     
@@ -210,7 +210,7 @@ def demo_top_articles():
 
 def demo_integration_in_crm():
     """Zeigt Integration in CRM-Dashboard."""
-    st.header("🔗 Integration in CRM-Dashboard")
+    st.header(" Integration in CRM-Dashboard")
     
     st.markdown("""
     ### Möglichkeiten zur Integration:
@@ -235,7 +235,7 @@ def demo_integration_in_crm():
     kb_manager = KnowledgeBaseManager(conn)
     
     # Top-Artikel Widget
-    st.subheader("📚 Beliebte Wissensdatenbank-Artikel")
+    st.subheader(" Beliebte Wissensdatenbank-Artikel")
     top_articles = kb_manager.get_top_rated_articles(limit=3)
     for article in top_articles:
         st.markdown(f"- [{article['title']}](#)")
@@ -258,7 +258,7 @@ def demo_integration_in_crm():
     # Artikel per E-Mail an Kunden senden
     from crm.features.knowledge_base_ui import send_article_email
     
-    if st.button("📧 Artikel an Kunde senden"):
+    if st.button(" Artikel an Kunde senden"):
         article = kb_manager.get_article(article_id)
         success = send_article_email(
             recipient=customer_email,
@@ -273,11 +273,11 @@ def main():
     """Hauptfunktion für Demo."""
     st.set_page_config(
         page_title="Wissensdatenbank - Integration Demo",
-        page_icon="📚",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("📚 Wissensdatenbank - Integration Demo")
+    st.title(" Wissensdatenbank - Integration Demo")
     
     st.markdown("""
     Diese Demo zeigt verschiedene Möglichkeiten, die Wissensdatenbank 

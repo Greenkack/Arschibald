@@ -113,7 +113,7 @@ def render_module_placement_panel(
     # Requirement 11.3: Try-Catch around UI rendering
     try:
         # Erstelle Expander-Panel
-        with st.expander("🔲 Modul-Belegung", expanded=True):
+        with st.expander(" Modul-Belegung", expanded=True):
 
             # Berechne Statistiken
             if module_quantity > 0:
@@ -184,7 +184,7 @@ def render_module_placement_panel(
         with btn_col2:
             # Reset Button
             if st.button(
-                "🔄 Alle zurücksetzen",
+                " Alle zurücksetzen",
                 use_container_width=True,
                 help="Entfernt alle platzierten Module"
             ):
@@ -205,7 +205,7 @@ def render_module_placement_panel(
                 "Fügt ein Modul an der nächsten verfügbaren Position hinzu"
             )
             if st.button(
-                "➕ Modul hinzufügen",
+                " Modul hinzufügen",
                 use_container_width=True,
                 disabled=False,
                 help=manual_add_help
@@ -225,7 +225,7 @@ def render_module_placement_panel(
             remove_disabled = (selected_count == 0)
             
             if st.button(
-                f"➖ Ausgewählte entfernen ({selected_count})",
+                f" Ausgewählte entfernen ({selected_count})",
                 use_container_width=True,
                 disabled=remove_disabled,
                 help=remove_help
@@ -264,7 +264,7 @@ def render_module_placement_panel(
             
             with move_col3:
                 if st.button(
-                    "↔️ Verschieben",
+                    "↔ Verschieben",
                     use_container_width=True,
                     disabled=(abs(offset_x) < 0.01 and abs(offset_y) < 0.01),
                     help=f"Verschiebt {selected_count} Module um (Δx={offset_x:.2f}m, Δy={offset_y:.2f}m)"
@@ -290,7 +290,7 @@ def render_module_placement_panel(
             
             with rotate_col2:
                 if st.button(
-                    "🔄 Drehen",
+                    " Drehen",
                     use_container_width=True,
                     disabled=(abs(rotation_angle) < 1.0),
                     help=f"Dreht {selected_count} Module um {rotation_angle:.1f}°"
@@ -334,7 +334,7 @@ def render_module_placement_panel(
             
             with quick_col1:
                 if st.button(
-                    "⬅️ Links",
+                    " Links",
                     use_container_width=True,
                     help=f"Verschiebt {selected_count} Module nach links ({step_label})"
                 ):
@@ -345,7 +345,7 @@ def render_module_placement_panel(
             with quick_col2:
                 # Oben und Unten in einer Spalte
                 if st.button(
-                    "⬆️ Oben",
+                    " Oben",
                     use_container_width=True,
                     help=f"Verschiebt {selected_count} Module nach oben ({step_label})"
                 ):
@@ -354,7 +354,7 @@ def render_module_placement_panel(
                     actions["quick_move_step"] = step_size
                 
                 if st.button(
-                    "⬇️ Unten",
+                    " Unten",
                     use_container_width=True,
                     help=f"Verschiebt {selected_count} Module nach unten ({step_label})"
                 ):
@@ -364,7 +364,7 @@ def render_module_placement_panel(
             
             with quick_col3:
                 if st.button(
-                    "➡️ Rechts",
+                    " Rechts",
                     use_container_width=True,
                     help=f"Verschiebt {selected_count} Module nach rechts ({step_label})"
                 ):

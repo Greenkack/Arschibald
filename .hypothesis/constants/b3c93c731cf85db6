@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\IPython\terminal\prompts.py
+# hypothesis_version: 6.147.0
+
+['-', '... ', '...:', '> ', '>>> ', 'In [', 'InputMode.', 'Out[', '[', '] ', ']: ', 'editing_mode', 'vi-', '⋮ ']

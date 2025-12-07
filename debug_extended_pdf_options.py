@@ -79,7 +79,7 @@ try:
     if merged_page_count > 8:
         print(f"   SUCCESS: Extended pages were added! ({merged_page_count - 8} additional pages)")
     else:
-        print(f"   ⚠ WARNING: No extended pages added (still {merged_page_count} pages)")
+        print(f"    WARNING: No extended pages added (still {merged_page_count} pages)")
         
 except Exception as e:
     print(f"   Error: {e}")

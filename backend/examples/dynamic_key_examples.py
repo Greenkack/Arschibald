@@ -385,7 +385,7 @@ def demo_validation():
     print(f"Valid: {results['valid']}, Invalid: {results['invalid']}\n")
     
     for result in results['results']:
-        status = "✓" if result['is_valid'] else "✗"
+        status = "" if result['is_valid'] else ""
         print(f"{status} {result['key']}")
         if not result['is_valid']:
             print(f"  Error: {result['error']}")

@@ -72,7 +72,7 @@ def demo_theme_generation():
         
         # Exportiere Theme
         filepath = generator.export_to_json("theming/themes")
-        print(f"\n✅ Exported to: {filepath}\n")
+        print(f"\n Exported to: {filepath}\n")
 
 
 def demo_color_palette():

@@ -46,7 +46,7 @@ try:
         'include_pv_mounting': True
     }
     
-    print("\n📋 Input:")
+    print("\n Input:")
     print(f"  Module: {project_details['module_count']}x {project_details['module_width_mm']}x{project_details['module_height_mm']}mm")
     print(f"  Dachtyp: {project_details['roof_type']}")
     print(f"  Hersteller: {project_details['mounting_manufacturer']}")
@@ -103,7 +103,7 @@ try:
     
     merged = merge_manual_and_calculated_components(project_details)
     
-    print(f"\n🔀 Merged Komponenten (manuell + berechnet):")
+    print(f"\n Merged Komponenten (manuell + berechnet):")
     for comp in merged:
         manual_flag = " [MANUELL]" if comp.get('manual') else ""
         auto_flag = " [AUTO-MENGE]" if comp.get('auto_calculated') else ""
@@ -155,7 +155,7 @@ try:
     # Simuliere was calculations.py machen würde
     cost_pv_mounting_netto = get_mounting_total_price(project_details)
     
-    print(f"\n💵 cost_pv_mounting_netto: {cost_pv_mounting_netto:.2f} EUR")
+    print(f"\n cost_pv_mounting_netto: {cost_pv_mounting_netto:.2f} EUR")
     
     # Simuliere total_additional_costs_netto
     cost_modules_aufpreis_netto = 500.0
@@ -184,7 +184,7 @@ try:
     print(f"  Inverter Aufpreis: {cost_inverter_aufpreis_netto:.2f} EUR")
     print(f"  Zubehör: {cost_accessories_aufpreis_netto:.2f} EUR")
     print(f"  Gerüst: {cost_scaffolding_netto:.2f} EUR")
-    print(f"  PV-Unterkonstruktion: {cost_pv_mounting_netto:.2f} EUR ⭐")
+    print(f"  PV-Unterkonstruktion: {cost_pv_mounting_netto:.2f} EUR ")
     print(f"  " + "-" * 60)
     print(f"  Gesamt Zusatzkosten: {total_additional_costs_netto:.2f} EUR")
     
@@ -199,7 +199,7 @@ except Exception as e:
 
 # Zusammenfassung
 print("\n" + "=" * 80)
-print("🎉 ALLE TESTS ERFOLGREICH!")
+print(" ALLE TESTS ERFOLGREICH!")
 print("=" * 80)
 print("\nMengenberechnung funktioniert")
 print("Pricing-Integration funktioniert")

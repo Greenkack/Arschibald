@@ -37,7 +37,7 @@ class ThemeSelectorUI:
             show_dark_mode_toggle: Zeige Dark Mode Toggle
         """
         st.sidebar.markdown("---")
-        st.sidebar.subheader("🎨 Theme")
+        st.sidebar.subheader(" Theme")
 
         # Initialisiere Session State
         self._init_session_state()
@@ -135,7 +135,7 @@ class ThemeSelectorUI:
     def _render_dark_mode_toggle(self) -> None:
         """Rendert Dark Mode Toggle"""
         dark_mode = st.sidebar.toggle(
-            "🌙 Dark Mode",
+            " Dark Mode",
             value=st.session_state.dark_mode,
             key="dark_mode_toggle"
         )
@@ -304,7 +304,7 @@ class ThemeSelectorUI:
         if not theme:
             return
 
-        with st.sidebar.expander("ℹ️ Theme Info"):
+        with st.sidebar.expander("ℹ Theme Info"):
             st.markdown(f"**Name:** {theme.display_name}")
             st.markdown(f"**ID:** `{theme.name}`")
             st.markdown(

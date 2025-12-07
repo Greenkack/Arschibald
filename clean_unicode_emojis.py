@@ -13,7 +13,7 @@ import re
 def clean_unicode_emojis():
     """Entfernt alle problematischen Unicode-Emojis aus PDF-Dateien."""
 
-    print("🧹 Unicode-Emoji Bereinigung gestartet...")
+    print(" Unicode-Emoji Bereinigung gestartet...")
 
     # PDF-relevante Dateien
     pdf_files = [

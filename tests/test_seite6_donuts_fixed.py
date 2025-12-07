@@ -61,11 +61,11 @@ def test_fixed_donuts():
             print(
                 f"\nPDF mit korrigierten Donut-Charts erstellt: {output_file}")
             print(f"Dateigröße: {len(overlay_bytes):,} bytes")
-            print("📋 Überprüfen Sie Seite 6 für die Donut-Charts:")
+            print(" Überprüfen Sie Seite 6 für die Donut-Charts:")
             print("   - Oberer Chart: Speicher zu Tagesverbrauch (74%)")
             print("   - Unterer Chart: Speicher zu PV-Produktion (53%)")
             print(
-                "📍 Position: Links von den Platzhaltern bei X=280, Y basierend auf seite6.yml")
+                " Position: Links von den Platzhaltern bei X=280, Y basierend auf seite6.yml")
 
             return True
         print("\nOverlay-Generierung fehlgeschlagen")
@@ -161,8 +161,8 @@ if __name__ == "__main__":
         # Test 2: Verschiedene Werte
         test_different_values()
 
-        print("\n🎉 Alle Tests abgeschlossen!")
-        print("📋 Die Donut-Charts sollten jetzt korrekt auf Seite 6 sichtbar sein:")
+        print("\n Alle Tests abgeschlossen!")
+        print(" Die Donut-Charts sollten jetzt korrekt auf Seite 6 sichtbar sein:")
         print("   Position: Links von den Platzhaltern (X=280)")
         print("   Vertikal gestapelt basierend auf seite6.yml Koordinaten")
         print("   Angemessene Größe (Radius 30/18)")

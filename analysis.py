@@ -8624,7 +8624,7 @@ def render_analysis(
     # NEUE ERWEITERTE FEATURES (8 fehlende Features aktiviert)
     # ========================================================================
 
-    st.markdown("### 🌟 Erweiterte Analysen")
+    st.markdown("###  Erweiterte Analysen")
 
     try:
         from advanced_charts import create_all_advanced_charts
@@ -8682,7 +8682,7 @@ def render_analysis(
                 st.info(f"{tax_benefits.get('vat_note', '')}")
 
         # 3. Förderungen
-        with st.expander("🎁 Verfügbare Förderungen", expanded=False):
+        with st.expander(" Verfügbare Förderungen", expanded=False):
             subsidies = advanced_features.get('subsidy_optimization', {})
             if 'error' not in subsidies:
                 st.success(
@@ -8702,7 +8702,7 @@ def render_analysis(
 
         # 4. Batterie-Optimierung
         if results_for_display.get('has_battery_storage', False):
-            with st.expander("🔋 Batterie-Optimierung", expanded=False):
+            with st.expander(" Batterie-Optimierung", expanded=False):
                 battery_opt = advanced_features.get('battery_optimization', {})
                 if 'error' not in battery_opt:
                     st.info(f"{battery_opt.get('recommendation', '')}")
@@ -8728,7 +8728,7 @@ def render_analysis(
                                     'additional_savings', 0):,.2f} €/Jahr")
 
         # 5. Finanzierungs-Vergleich
-        with st.expander("💳 Finanzierungs-Szenarien", expanded=False):
+        with st.expander(" Finanzierungs-Szenarien", expanded=False):
             financing = advanced_features.get('financing_scenarios', {})
             if 'error' not in financing:
                 st.success(f"{financing.get('recommendation', '')}")
@@ -10411,7 +10411,7 @@ def render_advanced_energy_analysis(
     # Debug-Info (falls aktiviert)
     if results.get('app_debug_mode_enabled', False):
         st.expander(
-            "🐛 Energie-Debug-Info",
+            " Energie-Debug-Info",
             expanded=False).write(
             {
                 'annual_production': annual_production,

@@ -107,8 +107,8 @@ def test_real_pdf_with_waterfall():
 
             print(f"PDF erfolgreich erstellt: {output_file}")
             print(f"Dateigröße: {len(pdf_bytes):,} bytes")
-            print("📋 Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
-            print("📍 Position: Zwischen 'Neigung des Daches' und 'Art' Spalten")
+            print(" Das Wasserfall-Diagramm sollte auf Seite 3 sichtbar sein")
+            print(" Position: Zwischen 'Neigung des Daches' und 'Art' Spalten")
             print(f"Daten: Direktverbrauch={test_data['einsparung_direktverbrauch_eur']}€, "
                   f"Einspeisung={test_data['einnahmen_einspeisung_eur']}€, "
                   f"Steuer={test_data['vorteile_steuerfrei_eur']}€")
@@ -240,10 +240,10 @@ if __name__ == "__main__":
         # Test 2: Verschiedene Werte
         test_different_waterfall_values()
 
-        print("\n🎉 Alle Tests abgeschlossen!")
-        print("📋 Überprüfen Sie die generierten PDF-Dateien:")
+        print("\n Alle Tests abgeschlossen!")
+        print(" Überprüfen Sie die generierten PDF-Dateien:")
         print("   - test_wasserfall_real_pdf.pdf (Haupttest)")
         print("   - test_wasserfall_scenario_*.pdf (Verschiedene Szenarien)")
-        print("📍 Das Wasserfall-Diagramm sollte auf Seite 3 zwischen den angegebenen Koordinaten sichtbar sein")
+        print(" Das Wasserfall-Diagramm sollte auf Seite 3 zwischen den angegebenen Koordinaten sichtbar sein")
     else:
         print("\nGrundtest fehlgeschlagen - weitere Tests übersprungen")

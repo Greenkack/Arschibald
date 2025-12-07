@@ -89,7 +89,7 @@ class TestMetricCard:
             metric_card.render(
                 label="Test Metrik",
                 value="€12,345",
-                icon="💰"
+                icon=""
             )
             assert True
         except Exception as e:
@@ -238,7 +238,7 @@ class TestMetricCard:
                 description="Test Beschreibung",
                 trend=12.5,
                 trend_label="+12.5% vs. letzter Monat",
-                icon="💰",
+                icon="",
                 size="large",
                 variant="elevated",
                 show_trend_arrow=True,
@@ -290,8 +290,8 @@ class TestMetricCardGroup:
         try:
             metric_card_group.render(
                 metrics=[
-                    {"label": "Metrik 1", "value": "€12,345", "icon": "💰"},
-                    {"label": "Metrik 2", "value": "1,234", "icon": "👥"}
+                    {"label": "Metrik 1", "value": "€12,345", "icon": ""},
+                    {"label": "Metrik 2", "value": "1,234", "icon": ""}
                 ]
             )
             assert True
@@ -418,7 +418,7 @@ class TestMetricCardGroup:
                         "description": "Beschreibung 1",
                         "trend": 12.5,
                         "trend_label": "+12.5%",
-                        "icon": "💰",
+                        "icon": "",
                         "size": "large",
                         "variant": "elevated"
                     },
@@ -428,7 +428,7 @@ class TestMetricCardGroup:
                         "description": "Beschreibung 2",
                         "trend": -5.2,
                         "trend_label": "-5.2%",
-                        "icon": "👥",
+                        "icon": "",
                         "size": "large",
                         "variant": "elevated"
                     }
@@ -460,7 +460,7 @@ class TestMetricCardIntegration:
                     label="Test Metrik",
                     value="€12,345",
                     trend=12.5,
-                    icon="💰"
+                    icon=""
                 )
                 assert True
             except Exception as e:

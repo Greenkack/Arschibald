@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\opentelemetry\sdk\environment_variables\__init__.py
+# hypothesis_version: 6.147.0
+
+['OTEL_LOG_LEVEL', 'OTEL_SDK_DISABLED', 'OTEL_SERVICE_NAME', 'OTEL_TRACES_SAMPLER']

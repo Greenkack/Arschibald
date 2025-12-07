@@ -166,7 +166,7 @@ def test_coords_update():
 
 def run_all_tests():
     """Führt alle Tests aus"""
-    print("🧪 LOGO-INTEGRATION VOLLTEST")
+    print(" LOGO-INTEGRATION VOLLTEST")
     print("=" * 50)
 
     tests = [
@@ -202,7 +202,7 @@ def run_all_tests():
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
-        print("🎉 ALLE TESTS BESTANDEN! Logo-Integration ist bereit.")
+        print(" ALLE TESTS BESTANDEN! Logo-Integration ist bereit.")
     else:
         print("EINIGE TESTS FEHLGESCHLAGEN. Überprüfung erforderlich.")
 

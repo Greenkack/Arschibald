@@ -452,7 +452,7 @@ def main():
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n🎉 ALLE EXPORT-TESTS BESTANDEN!")
+        print("\n ALLE EXPORT-TESTS BESTANDEN!")
         print("\nTask 9 erfolgreich abgeschlossen:")
         print("   - Screenshot-Export in PNG und JPEG funktioniert")
         print("   - Multi-View Export als ZIP funktioniert")

@@ -35,14 +35,14 @@ def render_monitoring_dashboard(
     container = st.sidebar if show_in_sidebar else st
     
     with container:
-        st.subheader("🔍 Theme System Monitoring")
+        st.subheader(" Theme System Monitoring")
         
         # Tabs für verschiedene Ansichten
         tab1, tab2, tab3, tab4 = st.tabs([
-            "📊 Übersicht",
-            "📝 Logs",
-            "⚡ Performance",
-            "⚙️ Einstellungen"
+            " Übersicht",
+            " Logs",
+            " Performance",
+            " Einstellungen"
         ])
         
         with tab1:
@@ -60,7 +60,7 @@ def render_monitoring_dashboard(
 
 def _render_overview_tab(logger: ThemeLogger) -> None:
     """Rendert Übersichts-Tab"""
-    st.markdown("### 📈 Statistiken")
+    st.markdown("###  Statistiken")
     
     stats = logger.get_stats()
     
@@ -98,7 +98,7 @@ def _render_overview_tab(logger: ThemeLogger) -> None:
         )
     
     # Cache-Statistiken
-    st.markdown("### 💾 Cache-Performance")
+    st.markdown("###  Cache-Performance")
     
     col1, col2, col3 = st.columns(3)
     
@@ -124,7 +124,7 @@ def _render_overview_tab(logger: ThemeLogger) -> None:
         )
     
     # Aktivitäts-Timeline
-    st.markdown("### 📅 Aktivitäts-Timeline")
+    st.markdown("###  Aktivitäts-Timeline")
     
     recent_entries = logger.get_recent_entries(count=100)
     
@@ -162,7 +162,7 @@ def _render_overview_tab(logger: ThemeLogger) -> None:
         st.info("Noch keine Aktivitätsdaten vorhanden")
     
     # Kategorie-Verteilung
-    st.markdown("### 📊 Event-Kategorien")
+    st.markdown("###  Event-Kategorien")
     
     if recent_entries:
         category_counts = Counter(entry.category for entry in recent_entries)
@@ -187,7 +187,7 @@ def _render_overview_tab(logger: ThemeLogger) -> None:
 
 def _render_logs_tab(logger: ThemeLogger) -> None:
     """Rendert Logs-Tab"""
-    st.markdown("### 📝 Log-Einträge")
+    st.markdown("###  Log-Einträge")
     
     # Filter-Optionen
     col1, col2, col3 = st.columns(3)
@@ -238,16 +238,16 @@ def _render_logs_tab(logger: ThemeLogger) -> None:
             # Farbe basierend auf Level
             if entry.level == "ERROR" or entry.level == "CRITICAL":
                 color = "#ef4444"
-                icon = "🔴"
+                icon = ""
             elif entry.level == "WARNING":
                 color = "#f59e0b"
                 icon = "🟡"
             elif entry.level == "INFO":
                 color = "#3b82f6"
-                icon = "🔵"
+                icon = ""
             else:
                 color = "#6b7280"
-                icon = "⚪"
+                icon = ""
             
             # Expandable Log-Eintrag
             with st.expander(
@@ -273,19 +273,19 @@ def _render_logs_tab(logger: ThemeLogger) -> None:
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("📥 Als JSON exportieren", use_container_width=True):
+        if st.button(" Als JSON exportieren", use_container_width=True):
             filepath = logger.export_logs(format="json")
             st.success(f"Logs exportiert nach: {filepath}")
     
     with col2:
-        if st.button("📥 Als CSV exportieren", use_container_width=True):
+        if st.button(" Als CSV exportieren", use_container_width=True):
             filepath = logger.export_logs(format="csv")
             st.success(f"Logs exportiert nach: {filepath}")
 
 
 def _render_performance_tab(logger: ThemeLogger) -> None:
     """Rendert Performance-Tab"""
-    st.markdown("### ⚡ Performance-Metriken")
+    st.markdown("###  Performance-Metriken")
     
     # Hole Performance-Einträge
     perf_entries = logger.get_recent_entries(
@@ -408,7 +408,7 @@ def _render_performance_tab(logger: ThemeLogger) -> None:
 
 def _render_settings_tab(logger: ThemeLogger) -> None:
     """Rendert Einstellungen-Tab"""
-    st.markdown("### ⚙️ Logger-Einstellungen")
+    st.markdown("###  Logger-Einstellungen")
     
     # Log-Level
     current_level = logger.log_level
@@ -428,24 +428,24 @@ def _render_settings_tab(logger: ThemeLogger) -> None:
     st.markdown("---")
     
     # Aktionen
-    st.markdown("### 🔧 Aktionen")
+    st.markdown("###  Aktionen")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("🗑️ Logs löschen", use_container_width=True):
+        if st.button(" Logs löschen", use_container_width=True):
             logger.clear_logs()
             st.success("Logs gelöscht")
             st.rerun()
     
     with col2:
-        if st.button("🔄 Dashboard aktualisieren", use_container_width=True):
+        if st.button(" Dashboard aktualisieren", use_container_width=True):
             st.rerun()
     
     st.markdown("---")
     
     # System-Info
-    st.markdown("### ℹ️ System-Info")
+    st.markdown("### ℹ System-Info")
     
     stats = logger.get_stats()
     
@@ -471,7 +471,7 @@ def render_compact_monitoring(
     
     with st.sidebar:
         st.markdown("---")
-        st.markdown("### 📊 System Status")
+        st.markdown("###  System Status")
         
         stats = logger.get_stats()
         
@@ -487,7 +487,7 @@ def render_compact_monitoring(
             st.metric("Cache", stats['cache_hit_rate'], label_visibility="visible")
         
         # Link zum vollständigen Dashboard
-        if st.button("🔍 Vollständiges Dashboard", use_container_width=True):
+        if st.button(" Vollständiges Dashboard", use_container_width=True):
             st.session_state['show_monitoring_dashboard'] = True
 
 

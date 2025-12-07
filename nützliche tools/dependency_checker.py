@@ -26,15 +26,15 @@ def check_outdated_packages():
             print(f"VERALTETE PAKETE ({len(outdated)}):")
             for package in outdated:
                 print(
-                    f"  📌 {
+                    f"   {
                         package['name']}: {
                         package['version']} → {
                         package['latest_version']}")
 
-            update_all = input("\n🔄 Alle Pakete aktualisieren? (y/n): ")
+            update_all = input("\n Alle Pakete aktualisieren? (y/n): ")
             if update_all.lower() == 'y':
                 for package in outdated:
-                    print(f"⬆️ Aktualisiere {package['name']}...")
+                    print(f" Aktualisiere {package['name']}...")
                     subprocess.run([sys.executable, '-m', 'pip',
                                    'install', '--upgrade', package['name']])
                 print("Alle Pakete aktualisiert!")
@@ -47,7 +47,7 @@ def check_outdated_packages():
 def check_security_vulnerabilities():
     """Prüft Sicherheitslücken in Dependencies"""
 
-    print("\n🔒 SICHERHEITS-CHECK:")
+    print("\n SICHERHEITS-CHECK:")
 
     try:
         # Installiere safety wenn nicht vorhanden

@@ -86,7 +86,7 @@ def test_product_data_creation():
 
 
 if __name__ == "__main__":
-    print("🧪 Admin Panel Fix Test\n")
+    print(" Admin Panel Fix Test\n")
 
     success = True
     success &= test_admin_panel_import()
@@ -95,4 +95,4 @@ if __name__ == "__main__":
 
     print(
         f"\n{
-            '🎉 Alle Tests erfolgreich!' if success else 'Einige Tests sind fehlgeschlagen.'}")
+            ' Alle Tests erfolgreich!' if success else 'Einige Tests sind fehlgeschlagen.'}")

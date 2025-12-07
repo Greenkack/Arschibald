@@ -130,8 +130,8 @@ def demo_grid_connection():
     print(f"Connection Type: {request.connection_type.value}")
     print(f"Distance to Grid: {request.distance_to_grid_m} m")
     print(f"\nCONNECTION FEASIBILITY:")
-    print(f"  Feasible: {'✓ Yes' if result.connection_feasible else '✗ No'}")
-    print(f"  Grid Capacity Sufficient: {'✓ Yes' if result.grid_capacity_sufficient else '✗ No'}")
+    print(f"  Feasible: {' Yes' if result.connection_feasible else ' No'}")
+    print(f"  Grid Capacity Sufficient: {' Yes' if result.grid_capacity_sufficient else ' No'}")
     print(f"\nTECHNICAL REQUIREMENTS:")
     print(f"  Required Cable Size: {result.required_cable_size_mm2} mm²")
     print(f"  Voltage Drop: {result.voltage_drop_percent:.2f}%")
@@ -174,7 +174,7 @@ def demo_power_quality():
     
     print(f"\nSystem Size: {request.system_size_kwp} kWp")
     print(f"Standard: {request.standard.value}")
-    print(f"\nCOMPLIANCE STATUS: {'✓ COMPLIANT' if result.compliant else '✗ NON-COMPLIANT'}")
+    print(f"\nCOMPLIANCE STATUS: {' COMPLIANT' if result.compliant else ' NON-COMPLIANT'}")
     print(f"\nPOWER QUALITY METRICS:")
     print(f"  Voltage Regulation: {result.voltage_regulation_percent:.2f}%")
     print(f"  Frequency Deviation: ±{result.frequency_deviation_hz:.3f} Hz")
@@ -189,7 +189,7 @@ def demo_power_quality():
     if result.compliance_issues:
         print(f"\nCOMPLIANCE ISSUES:")
         for issue in result.compliance_issues:
-            print(f"  ✗ {issue}")
+            print(f"   {issue}")
     
     if result.recommendations:
         print(f"\nRECOMMENDATIONS:")
@@ -226,12 +226,12 @@ def demo_grid_stability():
     print(f"  Reactive Power Capability: {result.reactive_power_capability_kvar:.2f} kVAR")
     print(f"\nGRID SUPPORT SERVICES:")
     for service_name in result.grid_support_services:
-        print(f"  ✓ {service_name}")
+        print(f"   {service_name}")
     
     if result.stability_concerns:
         print(f"\nSTABILITY CONCERNS:")
         for concern in result.stability_concerns:
-            print(f"  ⚠ {concern}")
+            print(f"   {concern}")
     
     print(f"\nRECOMMENDED SETTINGS:")
     for setting, value in result.recommended_settings.items():
@@ -263,21 +263,21 @@ def demo_smart_grid():
     
     print(f"\nSystem Size: {request.system_size_kwp} kWp")
     print(f"Battery Capacity: {request.battery_capacity_kwh} kWh")
-    print(f"\nSMART GRID READINESS: {'✓ READY' if result.smart_grid_ready else '✗ NOT READY'}")
+    print(f"\nSMART GRID READINESS: {' READY' if result.smart_grid_ready else ' NOT READY'}")
     print(f"\nAVAILABLE SERVICES:")
     for service_name in result.available_services:
-        print(f"  ✓ {service_name}")
+        print(f"   {service_name}")
     print(f"\nREVENUE STREAMS:")
     total_revenue = 0
     for stream, revenue in result.potential_revenue_streams.items():
         print(f"  {stream}: {revenue:,.2f} €/year")
         total_revenue += revenue
-    print(f"  {'─' * 40}")
+    print(f"  {'' * 40}")
     print(f"  Total Annual Revenue: {result.annual_grid_services_revenue:,.2f} €/year")
     print(f"\nCAPABILITIES:")
     print(f"  Demand Response Capacity: {result.demand_response_capacity_kw:.2f} kW")
-    print(f"  Frequency Regulation: {'✓ Yes' if result.frequency_regulation_capability else '✗ No'}")
-    print(f"  Voltage Support: {'✓ Yes' if result.voltage_support_capability else '✗ No'}")
+    print(f"  Frequency Regulation: {' Yes' if result.frequency_regulation_capability else ' No'}")
+    print(f"  Voltage Support: {' Yes' if result.voltage_support_capability else ' No'}")
     print(f"\nFINANCIAL ANALYSIS:")
     print(f"  Integration Cost: {result.integration_cost:,.2f} €")
     if result.payback_period_years:
@@ -343,12 +343,12 @@ def demo_comprehensive_analysis():
         print(f"   Grid Independence: {result.net_metering_analysis.grid_independence_rate * 100:.1f}%")
     
     print(f"\n3. GRID CONNECTION:")
-    print(f"   Feasible: {'✓ Yes' if result.connection_requirements.connection_feasible else '✗ No'}")
+    print(f"   Feasible: {' Yes' if result.connection_requirements.connection_feasible else ' No'}")
     print(f"   Cable Size: {result.connection_requirements.required_cable_size_mm2} mm²")
     print(f"   Estimated Cost: {result.connection_requirements.estimated_connection_cost:,.2f} €")
     
     print(f"\n4. POWER QUALITY:")
-    print(f"   Compliant: {'✓ Yes' if result.power_quality.compliant else '✗ No'}")
+    print(f"   Compliant: {' Yes' if result.power_quality.compliant else ' No'}")
     print(f"   Power Factor: {result.power_quality.power_factor:.3f}")
     print(f"   THD: {result.power_quality.total_harmonic_distortion_percent:.2f}%")
     
@@ -358,7 +358,7 @@ def demo_comprehensive_analysis():
     
     if result.smart_grid_potential:
         print(f"\n6. SMART GRID:")
-        print(f"   Ready: {'✓ Yes' if result.smart_grid_potential.smart_grid_ready else '✗ No'}")
+        print(f"   Ready: {' Yes' if result.smart_grid_potential.smart_grid_ready else ' No'}")
         print(f"   Annual Revenue: {result.smart_grid_potential.annual_grid_services_revenue:,.2f} €")
 
 
@@ -394,7 +394,7 @@ def main():
         print("  - docs/GRID_INTEGRATION_QUICK_REFERENCE.md")
         
     except Exception as e:
-        print(f"\n✗ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

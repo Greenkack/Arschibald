@@ -1,0 +1,709 @@
+# crm_dashboard_ui.py
+"""
+CRM Dashboard UI Module
+Zentrale Übersicht für das Kundenbeziehungsmanagement
+
+Author: GitHub Copilot
+Version: 2.0 (Vollständig implementiert)
+Date: 2025-01-12
+"""
+
+from typing import Any
+
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
+
+# Import der notwendigen Funktionen
+try:
+    from database import (
+        get_all_active_customers,
+        get_customer_by_id,
+        get_db_connection,
+        update_customer,
+    )
+    from locales import get_text
+    DATABASE_AVAILABLE = True
+except ImportError as e:
+    st.error(f"Datenbankmodul nicht verfügbar: {e}")
+    DATABASE_AVAILABLE = False
+
+# Import Task Management UI
+try:
+    from crm.features.task_ui import render_task_management_ui
+    TASK_MANAGEMENT_AVAILABLE = True
+except ImportError as e:
+    print(f"Task Management UI nicht verfügbar: {e}")
+    TASK_MANAGEMENT_AVAILABLE = False
+
+
+def render_crm_dashboard(
+        texts: dict[str, str], module_name: str | None = None):
+    """Hauptfunktion für das CRM Dashboard"""
+
+    if not DATABASE_AVAILABLE:
+        st.error(" CRM Dashboard nicht verfügbar - Datenbankmodul fehlt")
+        return
+
+    if module_name:
+        st.header(module_name)
+    else:
+        st.header(" CRM Dashboard")
+    st.markdown("Zentrale Übersicht über alle Kunden und Geschäftsprozesse")
+
+    # Tabs für verschiedene Dashboard-Bereiche
+    tabs = st.tabs([
+        " Übersicht",
+        "Widgets",
+        " Kunden",
+        " Projekte",
+        " Umsatz",
+        " Statistiken",
+        "📋 Aufgaben"
+    ])
+
+    with tabs[0]:
+        render_overview_section(texts)
+
+    with tabs[1]:
+        render_widgets_section(texts)
+
+    with tabs[2]:
+        render_customers_section(texts)
+
+    with tabs[3]:
+        render_projects_section(texts)
+
+    with tabs[4]:
+        render_revenue_section(texts)
+
+    with tabs[5]:
+        render_statistics_section(texts)
+    
+    with tabs[6]:
+        render_tasks_section(texts)
+
+
+def render_overview_section(texts: dict[str, str]):
+    """Übersichts-Sektion des CRM Dashboards"""
+
+    st.subheader("Geschäftsübersicht")
+
+    # KPIs in modernen Cards
+    col1, col2, col3, col4 = st.columns(4)
+
+    try:
+        customers = get_all_active_customers()
+
+        with col1:
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 20px;
+                    border-radius: 15px;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                ">
+                    <h3 style="margin: 0; font-size: 1.2em;">👥 Aktive Kunden</h3>
+                    <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
+                    <p style="margin: 0; opacity: 0.9;">+5 diese Woche ↗️</p>
+                </div>
+            """.format(len(customers)), unsafe_allow_html=True)
+
+        with col2:
+            # Projekte berechnen (vereinfacht)
+            projects_count = sum(
+                1 for customer in customers if customer.get('project_status') == 'active')
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 20px;
+                    border-radius: 15px;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                ">
+                    <h3 style="margin: 0; font-size: 1.2em;">Laufende Projekte</h3>
+                    <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
+                    <p style="margin: 0; opacity: 0.9;">+2 diese Woche ↗️</p>
+                </div>
+            """.format(projects_count), unsafe_allow_html=True)
+
+        with col3:
+            # Angebote berechnen (vereinfacht)
+            offers_count = sum(
+                1 for customer in customers if customer.get('offer_status') == 'pending')
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 20px;
+                    border-radius: 15px;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                ">
+                    <h3 style="margin: 0; font-size: 1.2em;">📋 Offene Angebote</h3>
+                    <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
+                    <p style="margin: 0; opacity: 0.9;">-1 diese Woche ↘️</p>
+                </div>
+            """.format(offers_count), unsafe_allow_html=True)
+
+        with col4:
+            # Umsatz berechnen (vereinfacht)
+            total_revenue = sum(customer.get('project_value', 0)
+                                for customer in customers)
+            st.markdown("""
+                <div style="
+                    background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                    padding: 20px;
+                    border-radius: 15px;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                ">
+                    <h3 style="margin: 0; font-size: 1.2em;">Gesamtumsatz</h3>
+                    <h1 style="margin: 10px 0; font-size: 2.5em;">{:,.0f}€</h1>
+                    <p style="margin: 0; opacity: 0.9;">+12% vs Vormonat ↗️</p>
+                </div>
+            """.format(total_revenue), unsafe_allow_html=True)
+
+    except Exception as e:
+        st.error(f"Fehler beim Laden der Übersichtsdaten: {e}")
+
+    # Aktivitäts-Timeline mit modernen Cards
+    st.subheader("📋 Letzte Aktivitäten")
+
+    # Dummy-Daten für Aktivitäten
+    activities = [{"time": "Heute 14:30",
+                   "action": "Neuer Kunde angelegt",
+                   "details": "Max Mustermann"},
+                  {"time": "Heute 11:15",
+                   "action": "Angebot versendet",
+                   "details": "Projekt PV-2025-001"},
+                  {"time": "Gestern 16:45",
+                   "action": "Termin vereinbart",
+                   "details": "Vor-Ort Besichtigung"},
+                  {"time": "Gestern 09:20",
+                   "action": "Projekt abgeschlossen",
+                   "details": "Installation 15kWp"},
+                  ]
+
+    for activity in activities:
+        st.markdown(f"""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 15px;
+                border-radius: 10px;
+                margin-bottom: 10px;
+                color: white;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="font-size: 1.1em;">{activity['action']}</strong><br>
+                        <span style="opacity: 0.8;">{activity['details']}</span>
+                    </div>
+                    <div style="text-align: right; opacity: 0.8; font-size: 0.9em;">
+                        ⏰ {activity['time']}
+                    </div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+
+
+def render_customers_section(texts: dict[str, str]):
+    """Kunden-Sektion des CRM Dashboards"""
+
+    st.subheader(" Kundenübersicht")
+
+    try:
+        customers = get_all_active_customers()
+
+        if not customers:
+            st.info("Noch keine Kunden angelegt.")
+            return
+
+        # Kunden-Tabelle
+        df_customers = pd.DataFrame(customers)
+
+        # Spalten-Mapping für bessere Darstellung
+        column_mapping = {
+            'name': 'Name',
+            'email': 'E-Mail',
+            'phone': 'Telefon',
+            'created_at': 'Erstellt am',
+            'project_status': 'Projektstatus'
+        }
+
+        # Nur verfügbare Spalten anzeigen
+        available_columns = [
+            col for col in column_mapping if col in df_customers.columns]
+        display_df = df_customers[available_columns].rename(
+            columns=column_mapping)
+
+        # Filter und Suche
+        col_search, col_filter = st.columns([2, 1])
+
+        with col_search:
+            search_term = st.text_input(
+                " Kunde suchen...",
+                placeholder="Name oder E-Mail eingeben")
+
+        with col_filter:
+            status_filter = st.selectbox(
+                "Status filtern",
+                options=["Alle", "Aktiv", "Interessent", "Abgeschlossen"]
+            )
+
+        # Filter anwenden
+        if search_term:
+            mask = display_df.astype(str).apply(
+                lambda x: x.str.contains(
+                    search_term,
+                    case=False,
+                    na=False)).any(
+                axis=1)
+            display_df = display_df[mask]
+
+        # Tabelle anzeigen
+        st.dataframe(
+            display_df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+        # Kundendetails bei Auswahl
+        if len(display_df) > 0:
+            selected_customer = st.selectbox(
+                "Kunde für Details auswählen:",
+                options=display_df['Name'].tolist() if 'Name' in display_df.columns else [])
+
+            if selected_customer:
+                customer_details = next(
+                    (c for c in customers if c.get('name') == selected_customer), None)
+                if customer_details:
+                    render_customer_details(customer_details, texts)
+
+    except Exception as e:
+        st.error(f"Fehler beim Laden der Kundendaten: {e}")
+
+
+def render_customer_details(customer: dict[str, Any], texts: dict[str, str]):
+    """Detailansicht für einen Kunden"""
+
+    st.subheader(f"Kundendetails: {customer.get('name', 'Unbekannt')}")
+
+    # Kunde-Info in Spalten
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.write("**Kontaktdaten:**")
+        st.write(f" {customer.get('email', 'Nicht angegeben')}")
+        st.write(f" {customer.get('phone', 'Nicht angegeben')}")
+        st.write(f" {customer.get('address', 'Nicht angegeben')}")
+
+    with col2:
+        st.write("**Projektdaten:**")
+        st.write(f"Status: {customer.get('project_status', 'Unbekannt')}")
+        st.write(f"Anlagengröße: {customer.get('system_size', 0)} kWp")
+        st.write(f"Projektwert: {customer.get('project_value', 0):,.0f} €")
+
+    # Notizen
+    st.write("**Notizen:**")
+    notes = customer.get('notes', 'Keine Notizen vorhanden')
+    st.text_area("", value=notes, height=100, disabled=True)
+
+
+def render_projects_section(texts: dict[str, str]):
+    """Projekte-Sektion des CRM Dashboards"""
+
+    st.subheader("Projektübersicht")
+
+    # Projekt-Status Übersicht mit modernen Cards
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">Neue Anfragen</h3>
+                <h1 style="margin: 10px 0; font-size: 2.2em;">12</h1>
+                <p style="margin: 0; opacity: 0.8;">+3 ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">In Planung</h3>
+                <h1 style="margin: 10px 0; font-size: 2.2em;">8</h1>
+                <p style="margin: 0; opacity: 0.8;">+1 ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">In Umsetzung</h3>
+                <h1 style="margin: 10px 0; font-size: 2.2em;">5</h1>
+                <p style="margin: 0; opacity: 0.8;">-1 ↘️</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # Projekt-Pipeline Visualisierung
+    st.subheader(" Projekt-Pipeline")
+
+    # Dummy-Daten für Pipeline
+    pipeline_data = {
+        'Phase': ['Anfrage', 'Angebot', 'Bestellung', 'Installation', 'Abgeschlossen'],
+        'Anzahl': [12, 8, 5, 3, 25],
+        'Wert': [300000, 200000, 125000, 75000, 625000]
+    }
+
+    df_pipeline = pd.DataFrame(pipeline_data)
+
+    # Funnel Chart
+    fig = go.Figure(go.Funnel(
+        y=df_pipeline['Phase'],
+        x=df_pipeline['Anzahl'],
+        textinfo="value+percent initial"
+    ))
+
+    fig.update_layout(
+        title="Projekt-Pipeline (Anzahl Projekte)",
+        height=400
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def render_revenue_section(texts: dict[str, str]):
+    """Umsatz-Sektion des CRM Dashboards"""
+
+    st.subheader("Umsatzanalyse")
+
+    # Umsatz-KPIs mit modernen Cards
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Monatsumsatz</h3>
+                <h1 style="margin: 10px 0; font-size: 1.8em;">85.000 €</h1>
+                <p style="margin: 0; opacity: 0.8;">+12.5% ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Jahresumsatz</h3>
+                <h1 style="margin: 10px 0; font-size: 1.8em;">920.000 €</h1>
+                <p style="margin: 0; opacity: 0.8;">+18.2% ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Ø Projektgröße</h3>
+                <h1 style="margin: 10px 0; font-size: 1.8em;">18.400 €</h1>
+                <p style="margin: 0; opacity: 0.8;">+5.1% ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with col4:
+        st.markdown("""
+            <div style="
+                background: linear-gradient(145deg, #808080 0%, #6a6a6a 100%);
+                padding: 20px;
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                text-align: center;
+            ">
+                <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Conversion Rate</h3>
+                <h1 style="margin: 10px 0; font-size: 1.8em;">68%</h1>
+                <p style="margin: 0; opacity: 0.8;">+3% ↗️</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # Umsatz-Chart
+    st.subheader(" Umsatzentwicklung")
+
+    # Dummy-Daten für Umsatzentwicklung
+    months = [
+        'Jan',
+        'Feb',
+        'Mär',
+        'Apr',
+        'Mai',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Okt',
+        'Nov',
+        'Dez']
+    revenue_2024 = [
+        45000,
+        52000,
+        61000,
+        48000,
+        73000,
+        68000,
+        82000,
+        77000,
+        85000,
+        91000,
+        88000,
+        95000]
+    revenue_2023 = [
+        38000,
+        41000,
+        45000,
+        42000,
+        58000,
+        55000,
+        62000,
+        59000,
+        64000,
+        69000,
+        71000,
+        75000]
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=months,
+        y=revenue_2024,
+        mode='lines+markers',
+        name='2024',
+        line=dict(color='#1f77b4', width=3)
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=months,
+        y=revenue_2023,
+        mode='lines+markers',
+        name='2023',
+        line=dict(color='#ff7f0e', width=2, dash='dash')
+    ))
+
+    fig.update_layout(
+        title="Monatlicher Umsatz (Vergleich)",
+        xaxis_title="Monat",
+        yaxis_title="Umsatz (€)",
+        hovermode='x unified'
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def render_statistics_section(texts: dict[str, str]):
+    """Statistiken-Sektion des CRM Dashboards"""
+
+    st.subheader(" Geschäftsstatistiken")
+
+    # Tag-Statistiken anzeigen
+    try:
+        from crm.features.tag_manager import get_tag_statistics
+        conn = get_db_connection()
+        if conn:
+            tag_stats = get_tag_statistics(conn)
+            conn.close()
+            
+            if tag_stats:
+                st.markdown("#### 🏷️ Tag-Nutzung")
+                
+                # Top 5 Tags
+                top_tags = tag_stats[:5]
+                cols = st.columns(len(top_tags))
+                for idx, tag_stat in enumerate(top_tags):
+                    with cols[idx]:
+                        color = tag_stat.get('color', '#808080')
+                        name = tag_stat.get('name', 'Unbekannt')
+                        count = tag_stat.get('customer_count', 0)
+                        
+                        st.markdown(f"""
+                            <div style="
+                                background: linear-gradient(145deg, {color} 0%, {color}cc 100%);
+                                padding: 15px;
+                                border-radius: 10px;
+                                text-align: center;
+                                color: white;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                            ">
+                                <h4 style="margin: 0; font-size: 0.9em;">{name}</h4>
+                                <h2 style="margin: 5px 0; font-size: 1.8em;">{count}</h2>
+                                <p style="margin: 0; font-size: 0.8em; opacity: 0.9;">Kunden</p>
+                            </div>
+                        """, unsafe_allow_html=True)
+                
+                st.markdown("---")
+    except ImportError:
+        pass  # Tag-System nicht verfügbar
+
+    # Statistiken in zwei Spalten
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader(" Kundenverteilung")
+
+        # Pie Chart für Kundentypen
+        customer_types = [
+            'Privatkunden',
+            'Gewerbekunden',
+            'Landwirtschaft',
+            'Öffentlich']
+        customer_counts = [45, 18, 12, 5]
+
+        fig_pie = px.pie(
+            values=customer_counts,
+            names=customer_types,
+            title="Kundenverteilung nach Typ"
+        )
+
+        st.plotly_chart(fig_pie, use_container_width=True)
+
+    with col2:
+        st.subheader(" Anlagengrößen")
+
+        # Histogram für Anlagengrößen
+        system_sizes = [5, 8, 10, 12, 15, 18, 20,
+                        25, 30, 35, 8, 10, 12, 15, 18, 20, 25]
+
+        fig_hist = px.histogram(
+            x=system_sizes,
+            nbins=10,
+            title="Verteilung der Anlagengrößen (kWp)",
+            labels={'x': 'Anlagengröße (kWp)', 'y': 'Anzahl Projekte'}
+        )
+
+        st.plotly_chart(fig_hist, use_container_width=True)
+
+    # Performance-Metriken
+    st.subheader(" Performance-Metriken")
+
+    metrics_data = {
+        'Metrik': [
+            'Durchschnittliche Bearbeitungszeit',
+            'Kundenzufriedenheit',
+            'Weiterempfehlungsrate',
+            'Terminpünktlichkeit',
+            'Projektabschlussrate'
+        ],
+        'Wert': ['12 Tage', '4.8/5', '92%', '96%', '98%'],
+        'Trend': ['↓ -2 Tage', '↑ +0.2', '↑ +3%', '→ 0%', '↑ +1%']
+    }
+
+    df_metrics = pd.DataFrame(metrics_data)
+
+    st.dataframe(
+        df_metrics,
+        use_container_width=True,
+        hide_index=True
+    )
+
+def render_widgets_section(texts: dict[str, str]):
+    """Widget-Sektion des CRM Dashboards mit konfigurierbaren Widgets"""
+    
+    try:
+        from crm.features.dashboard_widgets import (
+            render_dashboard_with_widgets
+        )
+        
+        # Auto-Refresh Einstellungen aus Session State
+        auto_refresh = st.session_state.get('dashboard_auto_refresh', False)
+        refresh_interval = st.session_state.get(
+            'dashboard_refresh_interval', 60)
+        
+        # Rendere Dashboard mit Widgets
+        render_dashboard_with_widgets(
+            texts=texts,
+            user_id="default",
+            auto_refresh=auto_refresh,
+            refresh_interval=refresh_interval
+        )
+        
+    except ImportError as e:
+        st.error("Dashboard Widget System nicht verfügbar")
+        st.info(
+            "Das Dashboard Widget Modul konnte nicht geladen werden. "
+            "Bitte stellen Sie sicher, dass alle Abhängigkeiten "
+            "installiert sind."
+        )
+        st.code(str(e))
+
+
+def render_tasks_section(texts: dict[str, str]):
+    """Aufgaben-Sektion des CRM Dashboards"""
+    
+    if not TASK_MANAGEMENT_AVAILABLE:
+        st.warning("📋 Aufgabenverwaltung ist nicht verfügbar.")
+        st.info("Das Task Management Modul konnte nicht geladen werden.")
+        return
+    
+    # Rendere die vollständige Task Management UI
+    render_task_management_ui(texts=texts)
+
+
+# Haupt-Export-Funktion
+
+
+def show_crm_dashboard(texts: dict[str, str]):
+    """Öffentliche Funktion zum Anzeigen des CRM Dashboards"""
+    render_crm_dashboard(texts)
+
+
+if __name__ == "__main__":
+    # Test-Modus
+    st.set_page_config(page_title="CRM Dashboard Test", layout="wide")
+
+    # Dummy-Texte für Test
+    test_texts = {
+        'crm_dashboard': 'CRM Dashboard',
+        'customers': 'Kunden',
+        'projects': 'Projekte'
+    }
+
+    show_crm_dashboard(test_texts)

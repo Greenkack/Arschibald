@@ -26,7 +26,7 @@ def test_service_initialization():
     print(f"Service health: {health.status}")
     print(f"Message: {health.message}")
     
-    print("✓ Service initialization test passed")
+    print(" Service initialization test passed")
 
 
 def test_customer_management():
@@ -45,38 +45,38 @@ def test_customer_management():
     
     try:
         customer = service.create_customer(customer_data)
-        print(f"✓ Created customer ID: {customer['id']}")
+        print(f" Created customer ID: {customer['id']}")
         customer_id = customer['id']
         
         # Get customer
         retrieved = service.get_customer(customer_id)
         assert retrieved is not None, "Customer should be retrieved"
         assert retrieved['first_name'] == "Test", "First name should match"
-        print(f"✓ Retrieved customer: {retrieved['first_name']} {retrieved['last_name']}")
+        print(f" Retrieved customer: {retrieved['first_name']} {retrieved['last_name']}")
         
         # Update customer
         update_data = {"email": "updated@example.com"}
         updated = service.update_customer(customer_id, update_data)
         assert updated['email'] == "updated@example.com", "Email should be updated"
-        print(f"✓ Updated customer email to: {updated['email']}")
+        print(f" Updated customer email to: {updated['email']}")
         
         # List customers
         customers = service.list_customers(limit=10)
         assert len(customers) > 0, "Should have at least one customer"
-        print(f"✓ Listed {len(customers)} customers")
+        print(f" Listed {len(customers)} customers")
         
         # Search customers
         search_results = service.list_customers(search="Test")
         assert len(search_results) > 0, "Should find test customer"
-        print(f"✓ Search found {len(search_results)} customers")
+        print(f" Search found {len(search_results)} customers")
         
         # Delete customer
         success = service.delete_customer(customer_id)
         assert success, "Customer should be deleted"
-        print(f"✓ Deleted customer ID: {customer_id}")
+        print(f" Deleted customer ID: {customer_id}")
         
     except Exception as e:
-        print(f"✗ Customer management test failed: {e}")
+        print(f" Customer management test failed: {e}")
         raise
 
 
@@ -98,13 +98,13 @@ def test_task_management():
     try:
         task_id = service.create_task(task_data)
         assert task_id is not None, "Task ID should not be None"
-        print(f"✓ Created task ID: {task_id}")
+        print(f" Created task ID: {task_id}")
         
         # Get task
         task = service.get_task(task_id)
         assert task is not None, "Task should be retrieved"
         assert task['title'] == "Test Task", "Title should match"
-        print(f"✓ Retrieved task: {task['title']}")
+        print(f" Retrieved task: {task['title']}")
         
         # Update task
         update_data = {"status": "in_progress", "priority": "medium"}
@@ -113,12 +113,12 @@ def test_task_management():
         
         updated_task = service.get_task(task_id)
         assert updated_task['status'] == "in_progress", "Status should be updated"
-        print(f"✓ Updated task status to: {updated_task['status']}")
+        print(f" Updated task status to: {updated_task['status']}")
         
         # List tasks
         tasks = service.list_tasks()
         assert len(tasks) > 0, "Should have at least one task"
-        print(f"✓ Listed {len(tasks)} tasks")
+        print(f" Listed {len(tasks)} tasks")
         
         # Mark as completed
         success = service.mark_task_completed(task_id)
@@ -126,19 +126,19 @@ def test_task_management():
         
         completed_task = service.get_task(task_id)
         assert completed_task['status'] == "completed", "Status should be completed"
-        print(f"✓ Marked task as completed")
+        print(f" Marked task as completed")
         
         # Get statistics
         stats = service.get_task_statistics()
-        print(f"✓ Task statistics: {stats['total']} total, {stats['overdue']} overdue")
+        print(f" Task statistics: {stats['total']} total, {stats['overdue']} overdue")
         
         # Delete task
         success = service.delete_task(task_id)
         assert success, "Task should be deleted"
-        print(f"✓ Deleted task ID: {task_id}")
+        print(f" Deleted task ID: {task_id}")
         
     except Exception as e:
-        print(f"✗ Task management test failed: {e}")
+        print(f" Task management test failed: {e}")
         raise
 
 
@@ -158,7 +158,7 @@ def test_activity_management():
     try:
         customer = service.create_customer(customer_data)
         customer_id = customer['id']
-        print(f"✓ Created test customer ID: {customer_id}")
+        print(f" Created test customer ID: {customer_id}")
         
         # Create activity
         activity_data = {
@@ -171,13 +171,13 @@ def test_activity_management():
         
         activity_id = service.create_activity(activity_data)
         assert activity_id is not None, "Activity ID should not be None"
-        print(f"✓ Created activity ID: {activity_id}")
+        print(f" Created activity ID: {activity_id}")
         
         # Get activity
         activity = service.get_activity(activity_id)
         assert activity is not None, "Activity should be retrieved"
         assert activity['title'] == "Test Note", "Title should match"
-        print(f"✓ Retrieved activity: {activity['title']}")
+        print(f" Retrieved activity: {activity['title']}")
         
         # Update activity
         update_data = {"is_important": False, "content": "Updated content"}
@@ -186,33 +186,33 @@ def test_activity_management():
         
         updated_activity = service.get_activity(activity_id)
         assert updated_activity['is_important'] == False, "Important flag should be updated"
-        print(f"✓ Updated activity")
+        print(f" Updated activity")
         
         # Get customer activities
         activities = service.get_customer_activities(customer_id)
         assert len(activities) > 0, "Should have at least one activity"
-        print(f"✓ Listed {len(activities)} activities for customer")
+        print(f" Listed {len(activities)} activities for customer")
         
         # Search activities
         search_results = service.search_activities("Test", customer_id=customer_id)
         assert len(search_results) > 0, "Should find test activity"
-        print(f"✓ Search found {len(search_results)} activities")
+        print(f" Search found {len(search_results)} activities")
         
         # Get statistics
         stats = service.get_activity_statistics(customer_id)
-        print(f"✓ Activity statistics: {stats['total']} total")
+        print(f" Activity statistics: {stats['total']} total")
         
         # Delete activity
         success = service.delete_activity(activity_id)
         assert success, "Activity should be deleted"
-        print(f"✓ Deleted activity ID: {activity_id}")
+        print(f" Deleted activity ID: {activity_id}")
         
         # Clean up customer
         service.delete_customer(customer_id)
-        print(f"✓ Cleaned up test customer")
+        print(f" Cleaned up test customer")
         
     except Exception as e:
-        print(f"✗ Activity management test failed: {e}")
+        print(f" Activity management test failed: {e}")
         raise
 
 
@@ -225,7 +225,7 @@ def test_offer_tracking():
     try:
         # Get offer statistics
         stats = service.get_offer_statistics()
-        print(f"✓ Offer statistics: {stats['total_offers']} total offers")
+        print(f" Offer statistics: {stats['total_offers']} total offers")
         print(f"  - Draft: {stats['draft']}")
         print(f"  - Sent: {stats['sent']}")
         print(f"  - Accepted: {stats['accepted']}")
@@ -234,14 +234,14 @@ def test_offer_tracking():
         
         # List all offers
         offers = service.list_offers()
-        print(f"✓ Listed {len(offers)} offers")
+        print(f" Listed {len(offers)} offers")
         
         # Get pending follow-ups
         follow_ups = service.get_pending_follow_ups()
-        print(f"✓ Found {len(follow_ups)} pending follow-ups")
+        print(f" Found {len(follow_ups)} pending follow-ups")
         
     except Exception as e:
-        print(f"✗ Offer tracking test failed: {e}")
+        print(f" Offer tracking test failed: {e}")
         raise
 
 
@@ -259,12 +259,12 @@ def run_all_tests():
         test_offer_tracking()
         
         print("\n" + "=" * 60)
-        print("✓ All tests passed successfully!")
+        print(" All tests passed successfully!")
         print("=" * 60)
         
     except Exception as e:
         print("\n" + "=" * 60)
-        print(f"✗ Test suite failed: {e}")
+        print(f" Test suite failed: {e}")
         print("=" * 60)
         raise
 

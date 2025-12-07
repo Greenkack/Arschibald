@@ -14,7 +14,7 @@ def test_mounting_validation():
     print("\n=== Test: Montagetyp-Validierung ===")
     
     # Test 1: Satteldach mit Aufdach-Montage sollte VALID sein
-    print("\n📋 Test 1: Satteldach + Aufdach-Montage")
+    print("\n Test 1: Satteldach + Aufdach-Montage")
     allowed = get_allowed_mounting_types("Satteldach")
     print(f"  Erlaubte Typen für Satteldach: {allowed}")
     
@@ -28,7 +28,7 @@ def test_mounting_validation():
     print("  Aufdach-Montage ist für Satteldach VALID")
     
     # Test 2: Satteldach mit Aufständerung sollte INVALID sein
-    print("\n📋 Test 2: Satteldach + Aufständerung Süd")
+    print("\n Test 2: Satteldach + Aufständerung Süd")
     validation = validate_mounting_selection("Satteldach", "Aufständerung Süd")
     print(f"  Validierung: {validation}")
     
@@ -39,7 +39,7 @@ def test_mounting_validation():
     print("  Aufständerung wird für Satteldach korrekt abgelehnt")
     
     # Test 3: Flachdach mit Aufständerung sollte VALID sein
-    print("\n📋 Test 3: Flachdach + Aufständerung Süd")
+    print("\n Test 3: Flachdach + Aufständerung Süd")
     allowed = get_allowed_mounting_types("Flachdach")
     print(f"  Erlaubte Typen für Flachdach: {allowed}")
     
@@ -53,7 +53,7 @@ def test_mounting_validation():
     print("  Aufständerung ist für Flachdach VALID")
     
     # Test 4: Flachdach mit Aufdach-Montage sollte VALID sein (aber nicht optimal)
-    print("\n📋 Test 4: Flachdach + Aufdach-Montage")
+    print("\n Test 4: Flachdach + Aufdach-Montage")
     validation = validate_mounting_selection("Flachdach", "Aufdach-Montage")
     print(f"  Validierung: {validation}")
     
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         test_mounting_validation()
         
         print("\n" + "=" * 70)
-        print("🎉 ALLE TESTS ERFOLGREICH!")
+        print(" ALLE TESTS ERFOLGREICH!")
         print("=" * 70)
         
     except AssertionError as e:

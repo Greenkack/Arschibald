@@ -36,11 +36,11 @@ from theming.theme_manager import ThemeManager
 def main():
     st.set_page_config(
         page_title="Accessibility Features Demo",
-        page_icon="♿",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("♿ Accessibility (A11y) Features Demo")
+    st.title(" Accessibility (A11y) Features Demo")
     st.markdown("Comprehensive accessibility features for the shadcn/ui theme system")
     
     # Inject accessibility CSS
@@ -60,15 +60,15 @@ def main():
     st.markdown('<div id="main-content">', unsafe_allow_html=True)
     
     tabs = st.tabs([
-        "🎨 Contrast Checker",
-        "👁️ Color Blindness",
-        "⌨️ Keyboard Nav",
-        "🏷️ ARIA Labels",
-        "🎯 Focus Management",
-        "📢 Screen Reader",
-        "📏 Text Scaling",
-        "📊 Theme Audit",
-        "🎨 CB-Friendly Themes"
+        " Contrast Checker",
+        " Color Blindness",
+        "⌨ Keyboard Nav",
+        " ARIA Labels",
+        " Focus Management",
+        " Screen Reader",
+        " Text Scaling",
+        " Theme Audit",
+        " CB-Friendly Themes"
     ])
     
     # Tab 1: Contrast Checker
@@ -112,7 +112,7 @@ def main():
 
 def demo_contrast_checker():
     """Demo contrast checking functionality"""
-    st.header("🎨 WCAG Contrast Checker")
+    st.header(" WCAG Contrast Checker")
     st.markdown("Check if color combinations meet WCAG 2.1 Level AA/AAA standards")
     
     col1, col2 = st.columns(2)
@@ -147,28 +147,28 @@ def demo_contrast_checker():
     with col1:
         st.metric(
             "WCAG AA (Normal)",
-            "✅ Pass" if result.passes_aa_normal else "❌ Fail",
+            " Pass" if result.passes_aa_normal else " Fail",
             delta="4.5:1 required"
         )
     
     with col2:
         st.metric(
             "WCAG AA (Large)",
-            "✅ Pass" if result.passes_aa_large else "❌ Fail",
+            " Pass" if result.passes_aa_large else " Fail",
             delta="3:1 required"
         )
     
     with col3:
         st.metric(
             "WCAG AAA (Normal)",
-            "✅ Pass" if result.passes_aaa_normal else "❌ Fail",
+            " Pass" if result.passes_aaa_normal else " Fail",
             delta="7:1 required"
         )
     
     with col4:
         st.metric(
             "WCAG AAA (Large)",
-            "✅ Pass" if result.passes_aaa_large else "❌ Fail",
+            " Pass" if result.passes_aaa_large else " Fail",
             delta="4.5:1 required"
         )
     
@@ -179,7 +179,7 @@ def demo_contrast_checker():
         st.error(result.recommendation)
     
     # Info box
-    with st.expander("ℹ️ About WCAG Contrast Requirements"):
+    with st.expander("ℹ About WCAG Contrast Requirements"):
         st.markdown("""
         **WCAG 2.1 Contrast Requirements:**
         
@@ -199,7 +199,7 @@ def demo_contrast_checker():
 
 def demo_color_blindness():
     """Demo color blindness simulation"""
-    st.header("👁️ Color Blindness Simulation")
+    st.header(" Color Blindness Simulation")
     st.markdown("See how colors appear to people with different types of color blindness")
     
     # Color input
@@ -267,7 +267,7 @@ def demo_color_blindness():
         </div>
         """, unsafe_allow_html=True)
     
-    with st.expander("ℹ️ About Color Blindness"):
+    with st.expander("ℹ About Color Blindness"):
         st.markdown("""
         **Types of Color Blindness:**
         
@@ -286,10 +286,10 @@ def demo_color_blindness():
 
 def demo_keyboard_navigation():
     """Demo keyboard navigation features"""
-    st.header("⌨️ Keyboard Navigation")
+    st.header("⌨ Keyboard Navigation")
     st.markdown("All interactive elements should be keyboard accessible")
     
-    st.info("💡 Try pressing Tab to navigate through the elements below")
+    st.info(" Try pressing Tab to navigate through the elements below")
     
     # Demo buttons
     st.subheader("Buttons with Focus Indicators")
@@ -316,7 +316,7 @@ def demo_keyboard_navigation():
     option = st.selectbox("Choose an option", ["Option 1", "Option 2", "Option 3"])
     
     # Keyboard shortcuts info
-    with st.expander("⌨️ Keyboard Shortcuts"):
+    with st.expander("⌨ Keyboard Shortcuts"):
         st.markdown("""
         **Standard Keyboard Navigation:**
         
@@ -335,7 +335,7 @@ def demo_keyboard_navigation():
 
 def demo_aria_labels():
     """Demo ARIA labels and attributes"""
-    st.header("🏷️ ARIA Labels and Attributes")
+    st.header(" ARIA Labels and Attributes")
     st.markdown("Proper ARIA labels help screen readers understand the UI")
     
     # Button ARIA
@@ -375,7 +375,7 @@ def demo_aria_labels():
     nav_aria = ARIAHelper.get_navigation_aria(label="Main navigation")
     st.code(f'<nav {nav_aria}>...</nav>', language="html")
     
-    with st.expander("ℹ️ About ARIA"):
+    with st.expander("ℹ About ARIA"):
         st.markdown("""
         **ARIA (Accessible Rich Internet Applications):**
         
@@ -397,7 +397,7 @@ def demo_aria_labels():
 
 def demo_focus_management():
     """Demo focus management features"""
-    st.header("🎯 Focus Management")
+    st.header(" Focus Management")
     st.markdown("Proper focus management improves keyboard navigation")
     
     # Focus trap demo
@@ -421,7 +421,7 @@ def demo_focus_management():
     </div>
     """, unsafe_allow_html=True)
     
-    with st.expander("ℹ️ About Focus Management"):
+    with st.expander("ℹ About Focus Management"):
         st.markdown("""
         **Focus Management Best Practices:**
         
@@ -439,7 +439,7 @@ def demo_focus_management():
 
 def demo_screen_reader():
     """Demo screen reader support"""
-    st.header("📢 Screen Reader Support")
+    st.header(" Screen Reader Support")
     st.markdown("Screen readers help visually impaired users navigate the UI")
     
     # Screen reader only content
@@ -464,7 +464,7 @@ def demo_screen_reader():
     with st.expander("View CSS"):
         st.code(ScreenReaderHelper.get_sr_only_css(), language="css")
     
-    with st.expander("ℹ️ About Screen Readers"):
+    with st.expander("ℹ About Screen Readers"):
         st.markdown("""
         **Screen Reader Support:**
         
@@ -484,7 +484,7 @@ def demo_screen_reader():
 
 def demo_text_scaling():
     """Demo text scaling support"""
-    st.header("📏 Text Scaling Support")
+    st.header(" Text Scaling Support")
     st.markdown("UI should remain usable when text is scaled up to 200%")
     
     # Show responsive text CSS
@@ -516,7 +516,7 @@ def demo_text_scaling():
         st.markdown("""
         <button style="min-width: 44px; min-height: 44px; background: #3b82f6; 
                        color: white; border: none; border-radius: 4px; cursor: pointer;">
-            ✓
+            
         </button>
         <p style="font-size: 12px; margin-top: 5px;">44x44px (Good)</p>
         """, unsafe_allow_html=True)
@@ -525,7 +525,7 @@ def demo_text_scaling():
         st.markdown("""
         <button style="min-width: 32px; min-height: 32px; background: #ef4444; 
                        color: white; border: none; border-radius: 4px; cursor: pointer;">
-            ✗
+            
         </button>
         <p style="font-size: 12px; margin-top: 5px;">32x32px (Too small)</p>
         """, unsafe_allow_html=True)
@@ -534,12 +534,12 @@ def demo_text_scaling():
         st.markdown("""
         <button style="min-width: 60px; min-height: 60px; background: #22c55e; 
                        color: white; border: none; border-radius: 4px; cursor: pointer;">
-            ✓✓
+            
         </button>
         <p style="font-size: 12px; margin-top: 5px;">60x60px (Excellent)</p>
         """, unsafe_allow_html=True)
     
-    with st.expander("ℹ️ About Text Scaling"):
+    with st.expander("ℹ About Text Scaling"):
         st.markdown("""
         **Text Scaling Requirements:**
         
@@ -558,7 +558,7 @@ def demo_text_scaling():
 
 def demo_theme_audit():
     """Demo theme accessibility audit"""
-    st.header("📊 Theme Accessibility Audit")
+    st.header(" Theme Accessibility Audit")
     st.markdown("Audit themes for accessibility compliance")
     
     try:
@@ -609,7 +609,7 @@ def demo_theme_audit():
 
 def demo_colorblind_themes():
     """Demo colorblind-friendly theme generation"""
-    st.header("🎨 Colorblind-Friendly Themes")
+    st.header(" Colorblind-Friendly Themes")
     st.markdown("Generate themes optimized for color blindness")
     
     try:
@@ -650,7 +650,7 @@ def demo_colorblind_themes():
                 st.success(f"Generated: {cb_theme['display_name']}")
                 st.json(cb_theme['colors'])
         
-        with st.expander("ℹ️ About Colorblind-Friendly Themes"):
+        with st.expander("ℹ About Colorblind-Friendly Themes"):
             st.markdown("""
             **High Contrast Themes:**
             - Pure black and white for maximum contrast

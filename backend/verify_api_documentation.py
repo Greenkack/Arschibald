@@ -29,11 +29,11 @@ def verify_documentation():
             sys.path.insert(0, str(parent_dir))
         
         from backend.core.api_documentation import custom_openapi_schema, get_common_responses
-        print("   ✓ Custom OpenAPI schema module loaded")
-        print("   ✓ custom_openapi_schema function available")
-        print("   ✓ get_common_responses helper available")
+        print("    Custom OpenAPI schema module loaded")
+        print("    custom_openapi_schema function available")
+        print("    get_common_responses helper available")
     except Exception as e:
-        print(f"   ✗ Error: {e}")
+        print(f"    Error: {e}")
         return False
     print()
     
@@ -50,9 +50,9 @@ def verify_documentation():
         file_path = docs_dir / file_name
         if file_path.exists():
             size = file_path.stat().st_size
-            print(f"   ✓ {file_name} ({size:,} bytes)")
+            print(f"    {file_name} ({size:,} bytes)")
         else:
-            print(f"   ✗ {file_name} not found")
+            print(f"    {file_name} not found")
             return False
     print()
     
@@ -63,13 +63,13 @@ def verify_documentation():
     
     if example_file.exists():
         size = example_file.stat().st_size
-        print(f"   ✓ api_usage_examples.py ({size:,} bytes)")
+        print(f"    api_usage_examples.py ({size:,} bytes)")
         
         # Check if it can be imported
         try:
             sys.path.insert(0, str(examples_dir))
             from api_usage_examples import SolarCalculatorAPIClient
-            print("   ✓ SolarCalculatorAPIClient class available")
+            print("    SolarCalculatorAPIClient class available")
             
             # Check methods
             methods = [
@@ -79,14 +79,14 @@ def verify_documentation():
             ]
             for method in methods:
                 if hasattr(SolarCalculatorAPIClient, method):
-                    print(f"   ✓ Method: {method}")
+                    print(f"    Method: {method}")
                 else:
-                    print(f"   ✗ Method missing: {method}")
+                    print(f"    Method missing: {method}")
         except Exception as e:
-            print(f"   ✗ Error importing examples: {e}")
+            print(f"    Error importing examples: {e}")
             return False
     else:
-        print(f"   ✗ api_usage_examples.py not found")
+        print(f"    api_usage_examples.py not found")
         return False
     print()
     
@@ -98,9 +98,9 @@ def verify_documentation():
         with open(postman_file, 'r', encoding='utf-8') as f:
             collection = json.load(f)
         
-        print(f"   ✓ Collection name: {collection['info']['name']}")
-        print(f"   ✓ Collection version: {collection['info']['version']}")
-        print(f"   ✓ Number of folders: {len(collection['item'])}")
+        print(f"    Collection name: {collection['info']['name']}")
+        print(f"    Collection version: {collection['info']['version']}")
+        print(f"    Number of folders: {len(collection['item'])}")
         
         # Count total requests
         total_requests = 0
@@ -110,17 +110,17 @@ def verify_documentation():
             else:
                 total_requests += 1
         
-        print(f"   ✓ Total requests: {total_requests}")
+        print(f"    Total requests: {total_requests}")
         
         # List folders
-        print("   ✓ Folders:")
+        print("    Folders:")
         for folder in collection['item']:
             if 'item' in folder:
                 print(f"      - {folder['name']} ({len(folder['item'])} requests)")
             else:
                 print(f"      - {folder['name']} (single request)")
     except Exception as e:
-        print(f"   ✗ Error checking Postman collection: {e}")
+        print(f"    Error checking Postman collection: {e}")
         return False
     print()
     
@@ -132,24 +132,24 @@ def verify_documentation():
             content = f.read()
         
         if 'from backend.core.api_documentation import custom_openapi_schema' in content:
-            print("   ✓ Custom OpenAPI schema imported in main.py")
+            print("    Custom OpenAPI schema imported in main.py")
         else:
-            print("   ✗ Custom OpenAPI schema not imported in main.py")
+            print("    Custom OpenAPI schema not imported in main.py")
             return False
         
         if 'app.openapi = lambda: custom_openapi_schema(app)' in content:
-            print("   ✓ Custom OpenAPI schema configured in main.py")
+            print("    Custom OpenAPI schema configured in main.py")
         else:
-            print("   ✗ Custom OpenAPI schema not configured in main.py")
+            print("    Custom OpenAPI schema not configured in main.py")
             return False
     except Exception as e:
-        print(f"   ✗ Error checking main.py: {e}")
+        print(f"    Error checking main.py: {e}")
         return False
     print()
     
     # 6. Summary
     print("="*70)
-    print("✓ All API documentation components verified successfully!")
+    print(" All API documentation components verified successfully!")
     print("="*70)
     print()
     print("Documentation Access Points:")

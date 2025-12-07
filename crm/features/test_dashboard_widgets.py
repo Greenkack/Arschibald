@@ -336,13 +336,13 @@ def test_widget_base_class():
     widget = DashboardWidget(
         widget_id="test_widget",
         title="Test Widget",
-        icon="🧪",
+        icon="",
         default_visible=True
     )
 
     assert widget.widget_id == "test_widget"
     assert widget.title == "Test Widget"
-    assert widget.icon == "🧪"
+    assert widget.icon == ""
     assert widget.default_visible is True
 
     # render() sollte NotImplementedError werfen

@@ -42,7 +42,7 @@ def verify_basic_functionality():
         options
     )
 
-    print(f"✓ Created dropdown: {dropdown.label}")
+    print(f" Created dropdown: {dropdown.label}")
     print(f"  Key: {dropdown.key}")
     print(f"  Options: {len(dropdown.get_options())}")
 
@@ -51,7 +51,7 @@ def verify_basic_functionality():
         print(f"  - {option.label} (key: {option.key[:20]}...)")
 
     assert len(dropdown.get_options()) == 3
-    print("\n✓ Basic functionality verified")
+    print("\n Basic functionality verified")
 
 
 def verify_selection_history():
@@ -86,9 +86,9 @@ def verify_selection_history():
     history = manager.get_selection_history()
     assert len(history) >= 1
 
-    print(f"✓ Recorded {len(history)} selection(s)")
+    print(f" Recorded {len(history)} selection(s)")
     print(f"  Latest: {history[0].option_label} by {history[0].user_id}")
-    print("\n✓ Selection history verified")
+    print("\n Selection history verified")
 
 
 def verify_cascading_dropdown():
@@ -105,7 +105,7 @@ def verify_cascading_dropdown():
         "state"
     )
 
-    print(f"✓ Created cascading relationship")
+    print(f" Created cascading relationship")
     print(f"  Parent key: {parent_key[:30]}...")
     print(f"  Child key: {child_key[:30]}...")
 
@@ -114,7 +114,7 @@ def verify_cascading_dropdown():
     assert child_key in children
 
     print(f"  Children: {len(children)}")
-    print("\n✓ Cascading dropdown verified")
+    print("\n Cascading dropdown verified")
 
 
 def verify_statistics():
@@ -140,7 +140,7 @@ def verify_statistics():
 
     stats = manager.get_statistics()
 
-    print(f"✓ Statistics:")
+    print(f" Statistics:")
     print(f"  Total Dropdowns: {stats['total_dropdowns']}")
     print(f"  Total Options: {stats['total_options']}")
     print(f"  Avg Options/Dropdown: "
@@ -149,7 +149,7 @@ def verify_statistics():
     assert stats['total_dropdowns'] >= 3
     assert stats['total_options'] >= 6
 
-    print("\n✓ Statistics verified")
+    print("\n Statistics verified")
 
 
 def verify_global_manager():
@@ -163,9 +163,9 @@ def verify_global_manager():
 
     assert manager1 is manager2
 
-    print("✓ Global manager is singleton")
+    print(" Global manager is singleton")
     print(f"  Manager ID: {id(manager1)}")
-    print("\n✓ Global manager verified")
+    print("\n Global manager verified")
 
 
 def main():
@@ -190,7 +190,7 @@ def main():
             verify_func()
             passed += 1
         except Exception as e:
-            print(f"\n❌ FAILED: {verify_func.__name__}")
+            print(f"\n FAILED: {verify_func.__name__}")
             print(f"   Error: {e}")
             failed += 1
 
@@ -201,10 +201,10 @@ def main():
     print(f"Failed: {failed}/{len(verifications)}")
 
     if failed == 0:
-        print("\n✓ ALL VERIFICATIONS PASSED")
+        print("\n ALL VERIFICATIONS PASSED")
         return 0
     else:
-        print("\n❌ SOME VERIFICATIONS FAILED")
+        print("\n SOME VERIFICATIONS FAILED")
         return 1
 
 

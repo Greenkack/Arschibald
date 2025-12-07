@@ -88,7 +88,7 @@ def run_tests():
     
     print("="*60)
     if result1 and result2:
-        print("🎉 Alle Tests bestanden!")
+        print(" Alle Tests bestanden!")
         print("\nExport-Buttons sind jetzt SICHTBAR!")
         print("\nSo testen Sie in der App:")
         print("1. Starten Sie: streamlit run gui.py")

@@ -61,7 +61,7 @@ def create_waterfall_test():
 
         print(
             f"Chart-Bereich: Links={chart_left}, Rechts={chart_right}, Oben={chart_top}, Unten={chart_bottom}")
-        print(f"📏 Chart-Größe: Breite={chart_width}, Höhe={chart_height}")
+        print(f" Chart-Größe: Breite={chart_width}, Höhe={chart_height}")
 
         # Zeichne Chart-Rahmen zur Orientierung
         c.setStrokeColorRGB(1, 0, 0)  # Roter Rahmen

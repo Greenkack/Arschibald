@@ -295,14 +295,14 @@ class CallProtocolManager:
             return f"Unknown phase: {phase}"
 
         guide = f"""
-╔══════════════════════════════════════════════════════════════╗
-║  CALL PROTOCOL: {protocol.phase.upper():^44} ║
-╚══════════════════════════════════════════════════════════════╝
+
+  CALL PROTOCOL: {protocol.phase.upper():^44} 
+
 
 OBJECTIVE:
    {protocol.objective}
 
-📋 STRATEGIES:
+ STRATEGIES:
 """
         for i, strategy in enumerate(protocol.strategies, 1):
             guide += f"   {i}. {strategy}\n"
@@ -312,12 +312,12 @@ OBJECTIVE:
             guide += f"   • {point}\n"
 
         if protocol.common_objections:
-            guide += "\n🛡️  COMMON OBJECTIONS & RESPONSES:\n"
+            guide += "\n  COMMON OBJECTIONS & RESPONSES:\n"
             for obj in protocol.common_objections:
-                guide += f"\n   ❓ \"{obj['objection']}\"\n"
+                guide += f"\n    \"{obj['objection']}\"\n"
                 guide += f"   {obj['response']}\n"
 
-        guide += "\n╚══════════════════════════════════════════════════════════════╝"
+        guide += "\n"
         return guide
 
     def get_objection_response(
@@ -466,7 +466,7 @@ def handle_objection(objection: str) -> str:
 
     if response:
         return f"""
-🛡️  OBJECTION DETECTED: "{objection}"
+  OBJECTION DETECTED: "{objection}"
 
 SUGGESTED RESPONSE:
 {response}
@@ -480,7 +480,7 @@ REMEMBER THE 4-STEP PROCESS:
 
     # Generic objection handling guidance
     return f"""
-🛡️  OBJECTION DETECTED: "{objection}"
+  OBJECTION DETECTED: "{objection}"
 
 No pre-defined response found. Follow the 4-STEP PROCESS:
 

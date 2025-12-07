@@ -21,7 +21,7 @@ def demo_complete_model_generation():
     viz = VisualizationAdvancedService()
     
     if not viz.is_available():
-        print("❌ 3D visualization service not available")
+        print(" 3D visualization service not available")
         return
     
     # Define building and configuration
@@ -55,7 +55,7 @@ def demo_complete_model_generation():
         "lighting": "realistic"
     }
     
-    print("\n📊 Generating complete 3D model...")
+    print("\n Generating complete 3D model...")
     result = viz.generate_complete_3d_model(
         building_dims=building_dims,
         roof_config=roof_config,
@@ -64,15 +64,15 @@ def demo_complete_model_generation():
         rendering_options=rendering_options
     )
     
-    print("\n✅ Model generated successfully!")
-    print(f"\n📈 Statistics:")
+    print("\n Model generated successfully!")
+    print(f"\n Statistics:")
     print(f"  - Total modules: {result['statistics']['total_modules']}")
     print(f"  - Total power: {result['statistics']['total_power_kw']} kW")
     print(f"  - Roof coverage: {result['statistics']['roof_coverage_percent']:.1f}%")
     print(f"  - Total weight: {result['statistics']['total_weight_kg']} kg")
     print(f"  - Installation time: {result['statistics']['installation_time_hours']} hours")
     
-    print(f"\n🔍 Collision Detection:")
+    print(f"\n Collision Detection:")
     collision = result['collision_result']
     print(f"  - Has collisions: {collision['has_collisions']}")
     print(f"  - Severity: {collision['severity']}")
@@ -80,7 +80,7 @@ def demo_complete_model_generation():
     for rec in collision['recommendations']:
         print(f"    • {rec}")
     
-    print(f"\n🔧 Mounting System:")
+    print(f"\n Mounting System:")
     mounting = result['mounting_result']
     print(f"  - Rails: {mounting['rail_count']}")
     print(f"  - Clamps: {mounting['clamp_count']}")
@@ -98,7 +98,7 @@ def demo_roof_detection():
     viz = VisualizationAdvancedService()
     
     if not viz.is_available():
-        print("❌ 3D visualization service not available")
+        print(" 3D visualization service not available")
         return
     
     building_dims = {
@@ -112,10 +112,10 @@ def demo_roof_detection():
         "symmetrical": True
     }
     
-    print("\n🏠 Detecting roof type...")
+    print("\n Detecting roof type...")
     result = viz.detect_roof_type(building_dims, roof_hints)
     
-    print("\n✅ Roof detected!")
+    print("\n Roof detected!")
     print(f"  - Type: {result.roof_type}")
     print(f"  - Confidence: {result.confidence * 100:.1f}%")
     print(f"  - Angle: {result.angle_deg}°")
@@ -133,7 +133,7 @@ def demo_collision_detection():
     viz = VisualizationAdvancedService()
     
     if not viz.is_available():
-        print("❌ 3D visualization service not available")
+        print(" 3D visualization service not available")
         return
     
     # Create some test positions (some with collisions)
@@ -156,7 +156,7 @@ def demo_collision_detection():
         "orientation": "south"
     }
     
-    print("\n🔍 Detecting collisions...")
+    print("\n Detecting collisions...")
     result = viz.detect_collisions_advanced(
         module_positions=module_positions,
         building_dims=building_dims,
@@ -164,17 +164,17 @@ def demo_collision_detection():
         tolerance=0.01
     )
     
-    print("\n✅ Collision detection complete!")
+    print("\n Collision detection complete!")
     print(f"  - Has collisions: {result.has_collisions}")
     print(f"  - Collision count: {result.collision_count}")
     print(f"  - Severity: {result.severity}")
     
     if result.collisions:
-        print(f"\n⚠️  Detected collisions:")
+        print(f"\n  Detected collisions:")
         for i, collision in enumerate(result.collisions, 1):
             print(f"  {i}. {collision['type']} (severity: {collision['severity']})")
     
-    print(f"\n💡 Recommendations:")
+    print(f"\n Recommendations:")
     for rec in result.recommendations:
         print(f"  • {rec}")
 
@@ -188,7 +188,7 @@ def demo_automatic_placement():
     viz = VisualizationAdvancedService()
     
     if not viz.is_available():
-        print("❌ 3D visualization service not available")
+        print(" 3D visualization service not available")
         return
     
     building_dims = {
@@ -212,24 +212,24 @@ def demo_automatic_placement():
         "optimize_for": "max_modules"
     }
     
-    print("\n📐 Calculating automatic placement...")
+    print("\n Calculating automatic placement...")
     positions = viz.calculate_automatic_placement(
         building_dims=building_dims,
         roof_config=roof_config,
         module_config=module_config
     )
     
-    print(f"\n✅ Placement calculated!")
+    print(f"\n Placement calculated!")
     print(f"  - Requested modules: {module_config['count']}")
     print(f"  - Placed modules: {len(positions)}")
     print(f"  - Optimization goal: {module_config['optimize_for']}")
     
     if len(positions) < module_config['count']:
-        print(f"\n⚠️  Could only place {len(positions)} of {module_config['count']} modules")
+        print(f"\n  Could only place {len(positions)} of {module_config['count']} modules")
         print(f"  - Reason: Space constraints with current settings")
     
     # Show first few positions
-    print(f"\n📍 Sample positions:")
+    print(f"\n Sample positions:")
     for i, pos in enumerate(positions[:3], 1):
         print(f"  {i}. x={pos['x']:.2f}m, y={pos['y']:.2f}m, z={pos['z']:.2f}m")
 
@@ -243,7 +243,7 @@ def demo_mounting_system():
     viz = VisualizationAdvancedService()
     
     if not viz.is_available():
-        print("❌ 3D visualization service not available")
+        print(" 3D visualization service not available")
         return
     
     # Create sample positions
@@ -263,21 +263,21 @@ def demo_mounting_system():
         "module_weight_kg": 20.0
     }
     
-    print("\n🔧 Calculating mounting system...")
+    print("\n Calculating mounting system...")
     result = viz.calculate_mounting_system(
         module_positions=module_positions,
         roof_config=roof_config,
         module_config=module_config
     )
     
-    print("\n✅ Mounting system calculated!")
+    print("\n Mounting system calculated!")
     print(f"  - Rails: {result.rail_count}")
     print(f"  - Clamps: {result.clamp_count}")
     print(f"  - Total weight: {result.total_weight_kg} kg")
     print(f"  - Cost estimate: €{result.cost_estimate:.2f}")
     print(f"  - Installation time: {result.installation_time_hours} hours")
     
-    print(f"\n📋 Bill of Materials:")
+    print(f"\n Bill of Materials:")
     for item in result.bom[:5]:  # Show first 5 items
         print(f"  - {item['item']}: {item['quantity']} units @ €{item['unit_price']:.2f}")
 
@@ -288,12 +288,12 @@ def demo_multi_view_export():
     print("DEMO 6: Multi-View Export")
     print("="*80)
     
-    print("\n📸 Multi-view export would generate:")
+    print("\n Multi-view export would generate:")
     print("  - Front view (1920x1080 PNG)")
     print("  - Side view (1920x1080 PNG)")
     print("  - Top view (1920x1080 PNG)")
     print("  - Perspective view (1920x1080 PNG)")
-    print("\n💡 Each view would be returned as base64-encoded image data")
+    print("\n Each view would be returned as base64-encoded image data")
     print("  (Actual export requires scene_data from model generation)")
 
 
@@ -303,12 +303,12 @@ def demo_animation_generation():
     print("DEMO 7: Animation Generation")
     print("="*80)
     
-    print("\n🎬 Available animation types:")
+    print("\n Available animation types:")
     print("  1. 360° Rotation (60 frames, 6 seconds)")
     print("  2. Assembly Animation (shows modules being placed)")
     print("  3. Flythrough Animation (camera movement)")
     print("  4. Exploded View (component breakdown)")
-    print("\n💡 Animations are returned as base64-encoded GIF or MP4")
+    print("\n Animations are returned as base64-encoded GIF or MP4")
     print("  (Actual generation requires scene_data from model generation)")
 
 
@@ -329,15 +329,15 @@ def main():
         demo_animation_generation()
         
         print("\n" + "="*80)
-        print("✅ ALL DEMOS COMPLETED SUCCESSFULLY!")
+        print(" ALL DEMOS COMPLETED SUCCESSFULLY!")
         print("="*80)
-        print("\n📚 For more information, see:")
+        print("\n For more information, see:")
         print("  - docs/VISUALIZATION_ADVANCED_GUIDE.md")
         print("  - docs/VISUALIZATION_ADVANCED_QUICK_REFERENCE.md")
         print("  - API endpoints at /api/v1/visualization/advanced/")
         
     except Exception as e:
-        print(f"\n❌ Error running demos: {e}")
+        print(f"\n Error running demos: {e}")
         import traceback
         traceback.print_exc()
 

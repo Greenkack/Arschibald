@@ -310,7 +310,7 @@ def scan_and_report(output_file: str = "code_analysis_report.json"):
     # Show critical issues
     critical = scanner.get_critical_issues()
     if critical:
-        print(f"\n🔴 CRITICAL ISSUES ({len(critical)}):")
+        print(f"\n CRITICAL ISSUES ({len(critical)}):")
         for issue in critical[:5]:
             print(f"  - {issue.file}:{issue.line} - {issue.message}")
 

@@ -12,7 +12,7 @@ test_results = {
     'co2_savings_tons_per_year': 2.5
 }
 
-print("🧪 VOLLSTÄNDIGER TEST: Alle 55 Charts")
+print(" VOLLSTÄNDIGER TEST: Alle 55 Charts")
 print("=" * 80)
 
 results = []
@@ -42,5 +42,5 @@ if unavailable_charts:
         print(f"  {chart_key}")
         print(f"     → {chart_name}")
 else:
-    print("\n🎉 PERFEKT! ALLE 55 Charts sind verfügbar!")
+    print("\n PERFEKT! ALLE 55 Charts sind verfügbar!")
     print("100% Chart-Verfügbarkeit erreicht!")

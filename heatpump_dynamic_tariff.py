@@ -733,13 +733,13 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "♻️ Umweltfreundlich",
+            "title": " Umweltfreundlich",
             "description": "Automatischer Verbrauch wenn viel Solar-/Windstrom verfügbar",
             "weight": 8,
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "🤖 Perfekt für Smart-Home",
+            "title": " Perfekt für Smart-Home",
             "description": "WP, E-Auto, Batterie automatisch zur besten Zeit steuern",
             "weight": 9,
             "applies_to": ["residential", "commercial"]
@@ -757,7 +757,7 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
             "applies_to": ["commercial", "multi_family"]
         },
         {
-            "title": "🔮 Zukunftssicher",
+            "title": " Zukunftssicher",
             "description": "EU plant dynamische Tarife als Standard ab 2025",
             "weight": 8,
             "applies_to": ["residential", "commercial", "multi_family"]
@@ -772,19 +772,19 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "🔌 Smart Meter Pflicht",
+            "title": " Smart Meter Pflicht",
             "description": "Intelligenter Stromzähler nötig (300-500 EUR Einbau, 40-100 EUR/Jahr)",
             "weight": 7,
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "🤔 Komplexität",
+            "title": " Komplexität",
             "description": "Mehr Aufwand als normaler Stromtarif, Technik-Affinität hilfreich",
             "weight": 6,
             "applies_to": ["residential"]
         },
         {
-            "title": "📱 Automatisierung empfohlen",
+            "title": " Automatisierung empfohlen",
             "description": "Ohne Smart-Home/EMS kaum Einspar-Potenzial (manuelle Steuerung zu aufwändig)",
             "weight": 9,
             "applies_to": ["residential", "commercial", "multi_family"]
@@ -802,7 +802,7 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
             "applies_to": ["residential", "commercial", "multi_family"]
         },
         {
-            "title": "🏠 Komfort-Einschränkungen möglich",
+            "title": " Komfort-Einschränkungen möglich",
             "description": "WP heizt nachts statt tagsüber, E-Auto lädt zu festgelegten Zeiten",
             "weight": 5,
             "applies_to": ["residential"]
@@ -823,10 +823,10 @@ def get_dynamic_tariff_pros_cons(building_type: str = "residential") -> dict[str
         recommendation = "Sehr empfehlenswert"
         recommendation_detail = "Dynamischer Tarif passt hervorragend zu Ihrem Profil"
     elif total_score >= 5:
-        recommendation = "👍 Empfehlenswert"
+        recommendation = " Empfehlenswert"
         recommendation_detail = "Vorteile überwiegen die Nachteile deutlich"
     elif total_score >= -5:
-        recommendation = "⚖️ Neutral"
+        recommendation = " Neutral"
         recommendation_detail = "Vorteile und Nachteile halten sich die Waage"
     elif total_score >= -15:
         recommendation = "Mit Vorsicht"
@@ -909,11 +909,11 @@ def compare_tariff_providers(
             "base_fee_eur_month": 3.99,
             "markup_eur_kwh": 0.06,  # 6 ct/kWh Aufschlag
             "features": [
-                "🤖 Beste App & Smart-Home Integration",
+                " Beste App & Smart-Home Integration",
                 "Stündliche Prognose für nächsten Tag",
-                "🔌 Pulse-Hardware für Echtzeit-Tracking (optional)",
-                "🚗 Spezial-Tarif für E-Autos",
-                "♻️ 100% Ökostrom"
+                " Pulse-Hardware für Echtzeit-Tracking (optional)",
+                " Spezial-Tarif für E-Autos",
+                " 100% Ökostrom"
             ],
             "pros": ["Top Smart-Home", "Sehr gute App", "Große Community"],
             "cons": ["Höchster Aufschlag", "Pulse kostet 99 EUR extra"],
@@ -929,9 +929,9 @@ def compare_tariff_providers(
             "features": [
                 "Keine Grundgebühr",
                 "Transparent: Börsenpreis + 5 ct/kWh",
-                "🤝 Viele Partnerschaften (Sonnen, E3DC, etc.)",
-                "🔌 HOURLY und YEARLY Tarif verfügbar",
-                "♻️ 100% Ökostrom"
+                " Viele Partnerschaften (Sonnen, E3DC, etc.)",
+                " HOURLY und YEARLY Tarif verfügbar",
+                " 100% Ökostrom"
             ],
             "pros": ["Keine Grundgebühr", "Sehr transparent", "Günstig"],
             "cons": ["App weniger komfortabel", "Keine Echtzeit-Daten"],
@@ -945,11 +945,11 @@ def compare_tariff_providers(
             "base_fee_eur_month": 9.99,
             "markup_eur_kwh": 0.04,  # Niedrigster Aufschlag!
             "features": [
-                "💚 Niedrigster Aufschlag (4 ct/kWh)",
-                "📱 Moderne App mit Widget",
-                "🔔 Push-Benachrichtigungen bei Negativ-Preisen",
-                "🌍 100% Ökostrom aus Deutschland",
-                "🤝 Chargepool Integration (E-Auto)"
+                " Niedrigster Aufschlag (4 ct/kWh)",
+                " Moderne App mit Widget",
+                " Push-Benachrichtigungen bei Negativ-Preisen",
+                " 100% Ökostrom aus Deutschland",
+                " Chargepool Integration (E-Auto)"
             ],
             "pros": ["Niedrigster kWh-Preis", "Deutsche Firma", "Gute App"],
             "cons": ["Höhere Grundgebühr", "Weniger Smart-Home Integrationen"],
@@ -963,11 +963,11 @@ def compare_tariff_providers(
             "base_fee_eur_month": 5.99,
             "markup_eur_kwh": 0.055,
             "features": [
-                "🚗 Spezialisiert auf E-Autos",
-                "🤖 KI-gesteuerte Lade-Optimierung",
-                "🔌 Eigene Wallbox-Hardware",
+                " Spezialisiert auf E-Autos",
+                " KI-gesteuerte Lade-Optimierung",
+                " Eigene Wallbox-Hardware",
                 "THG-Quote direkt abrechenbar",
-                "♻️ 100% Ökostrom"
+                " 100% Ökostrom"
             ],
             "pros": ["Beste E-Auto Integration", "THG-Bonus", "KI-Optimierung"],
             "cons": ["Nur für E-Auto-Besitzer sinnvoll", "Mittlerer Preis"],

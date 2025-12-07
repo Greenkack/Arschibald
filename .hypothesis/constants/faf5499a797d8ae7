@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\styles\borders.py
+# hypothesis_version: 6.147.0
+
+['border', 'bottom', 'dashDot', 'dashDotDot', 'dashed', 'diagonal', 'dotted', 'double', 'end', 'hair', 'horizontal', 'left', 'medium', 'mediumDashDot', 'mediumDashDotDot', 'mediumDashed', 'outline', 'right', 'slantDashDot', 'start', 'style', 'thick', 'thin', 'top', 'vertical']

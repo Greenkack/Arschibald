@@ -57,20 +57,20 @@ def demo_basic_analysis():
     
     result = service.analyze_combined_system(request)
     
-    print("\n📊 SYSTEM CONFIGURATION")
+    print("\n SYSTEM CONFIGURATION")
     print(f"PV System: {result.system_configuration['pv_system_size_kwp']} kWp")
     print(f"Heat Pump: {result.system_configuration['heat_pump_model']}")
     print(f"Battery: {result.system_configuration['battery_capacity_kwh']} kWh")
     print(f"Control Strategy: {result.system_configuration['control_strategy']}")
     
-    print("\n⚡ ANNUAL ENERGY FLOW")
+    print("\n ANNUAL ENERGY FLOW")
     print(f"PV Production: {result.annual_energy_flow['total_pv_production']:,.0f} kWh")
     print(f"HP Consumption: {result.annual_energy_flow['total_hp_consumption']:,.0f} kWh")
     print(f"Self-Consumption: {result.annual_energy_flow['total_self_consumption']:,.0f} kWh")
     print(f"Grid Import: {result.annual_energy_flow['total_grid_import']:,.0f} kWh")
     print(f"Grid Export: {result.annual_energy_flow['total_grid_export']:,.0f} kWh")
     
-    print("\n🔄 SYNERGY ANALYSIS")
+    print("\n SYNERGY ANALYSIS")
     print(f"PV to HP Direct: {result.synergy_analysis.pv_to_hp_direct:,.0f} kWh")
     print(f"PV to HP via Battery: {result.synergy_analysis.pv_to_hp_via_battery:,.0f} kWh")
     print(f"Total PV for Heating: {result.synergy_analysis.total_pv_for_heating:,.0f} kWh")
@@ -79,7 +79,7 @@ def demo_basic_analysis():
     print(f"COP Improvement: +{result.synergy_analysis.cop_improvement:.2f}")
     print(f"Heating Grid Independence: {result.synergy_analysis.grid_independence_heating:.1f}%")
     
-    print("\n💰 FINANCIAL ANALYSIS")
+    print("\n FINANCIAL ANALYSIS")
     print(f"Total Investment: €{result.financial_analysis.total_investment:,.2f}")
     print(f"  - PV System: €{result.financial_analysis.pv_system_cost:,.2f}")
     print(f"  - Heat Pump: €{result.financial_analysis.heat_pump_cost:,.2f}")
@@ -91,20 +91,20 @@ def demo_basic_analysis():
     print(f"IRR: {result.financial_analysis.irr:.1f}%")
     print(f"LCOE: €{result.financial_analysis.lcoe:.3f}/kWh")
     
-    print("\n📈 PERFORMANCE METRICS")
+    print("\n PERFORMANCE METRICS")
     print(f"Self-Consumption Rate: {result.self_consumption_rate * 100:.1f}%")
     print(f"Grid Independence Rate: {result.grid_independence_rate * 100:.1f}%")
     print(f"Renewable Energy Rate: {result.renewable_energy_rate * 100:.1f}%")
     
-    print("\n🌱 ENVIRONMENTAL IMPACT")
+    print("\n ENVIRONMENTAL IMPACT")
     print(f"Annual CO2 Savings: {result.annual_co2_savings:,.0f} kg")
     print(f"Equivalent Trees Planted: {result.equivalent_trees_planted}")
     
-    print("\n📋 CONTROL RECOMMENDATIONS")
+    print("\n CONTROL RECOMMENDATIONS")
     for i, rec in enumerate(result.control_recommendations, 1):
         print(f"{i}. {rec}")
     
-    print("\n✅ Analysis Complete!\n")
+    print("\n Analysis Complete!\n")
 
 
 def demo_time_of_use_tariff():
@@ -164,18 +164,18 @@ def demo_time_of_use_tariff():
     print("Off-Peak Hours (0-5): €0.20/kWh")
     print("Standard Hours: €0.30/kWh")
     
-    print("\n💰 FINANCIAL IMPACT")
+    print("\n FINANCIAL IMPACT")
     print(f"Annual Savings: €{result.financial_analysis.annual_savings:,.2f}")
     print(f"Payback Period: {result.financial_analysis.simple_payback_years:.1f} years")
     
-    print("\n🎯 SMART CONTROL SCHEDULE (First 24 Hours)")
+    print("\n SMART CONTROL SCHEDULE (First 24 Hours)")
     print(f"{'Hour':<6} {'Mode':<12} {'Power':<8} {'Reason':<50}")
     print("-" * 80)
     for schedule in result.smart_control_schedule[:24]:
         print(f"{schedule.hour:02d}:00  {schedule.hp_operation_mode:<12} "
               f"{schedule.hp_power_level:.1f}      {schedule.reason}")
     
-    print("\n✅ Time-of-Use Analysis Complete!\n")
+    print("\n Time-of-Use Analysis Complete!\n")
 
 
 def demo_comparison_scenarios():
@@ -209,31 +209,31 @@ def demo_comparison_scenarios():
     
     result = service.analyze_combined_system(request)
     
-    print("\n📊 SCENARIO COMPARISON")
-    print("\n1️⃣  PV ONLY (No Heat Pump)")
+    print("\n SCENARIO COMPARISON")
+    print("\n1⃣  PV ONLY (No Heat Pump)")
     print(f"   Investment: €{result.comparison_pv_only['investment']:,.2f}")
     print(f"   Annual Savings: €{result.comparison_pv_only['annual_savings']:,.2f}")
     print(f"   Payback: {result.comparison_pv_only['payback_years']:.1f} years")
     
-    print("\n2️⃣  HEAT PUMP ONLY (No PV)")
+    print("\n2⃣  HEAT PUMP ONLY (No PV)")
     print(f"   Investment: €{result.comparison_hp_only['investment']:,.2f}")
     print(f"   Annual Savings: €{result.comparison_hp_only['annual_savings']:,.2f}")
     print(f"   Payback: {result.comparison_hp_only['payback_years']:.1f} years")
     
-    print("\n3️⃣  COMBINED SYSTEM (PV + Heat Pump)")
+    print("\n3⃣  COMBINED SYSTEM (PV + Heat Pump)")
     print(f"   Investment: €{result.financial_analysis.total_investment:,.2f}")
     print(f"   Annual Savings: €{result.financial_analysis.annual_savings:,.2f}")
     print(f"   Payback: {result.financial_analysis.simple_payback_years:.1f} years")
     
-    print("\n4️⃣  CONVENTIONAL (No PV, No HP)")
+    print("\n4⃣  CONVENTIONAL (No PV, No HP)")
     print(f"   Annual Cost: €{result.comparison_conventional['annual_cost']:,.2f}")
     
-    print("\n🎁 SYNERGY BENEFIT")
+    print("\n SYNERGY BENEFIT")
     print(f"Additional benefit from combination: €{result.synergy_benefit:,.2f}/year")
     print(f"This is the extra savings you get by combining PV and HP")
     print(f"compared to installing them separately!")
     
-    print("\n✅ Comparison Complete!\n")
+    print("\n Comparison Complete!\n")
 
 
 def demo_monitoring():
@@ -247,15 +247,15 @@ def demo_monitoring():
     # Get monitoring data (simulated)
     monitoring = service.get_monitoring_data(system_id=1)
     
-    print(f"\n📅 Timestamp: {monitoring.timestamp}")
+    print(f"\n Timestamp: {monitoring.timestamp}")
     
-    print("\n☀️ PV SYSTEM")
+    print("\n PV SYSTEM")
     print(f"Current Power: {monitoring.pv_current_power:.2f} kW")
     print(f"Daily Production: {monitoring.pv_daily_production:.1f} kWh")
     print(f"Monthly Production: {monitoring.pv_monthly_production:.1f} kWh")
     print(f"Annual Production: {monitoring.pv_annual_production:.1f} kWh")
     
-    print("\n🔥 HEAT PUMP")
+    print("\n HEAT PUMP")
     print(f"Status: {monitoring.hp_status.upper()}")
     print(f"Current Power: {monitoring.hp_current_power:.2f} kW")
     print(f"Current COP: {monitoring.hp_current_cop:.1f}")
@@ -263,21 +263,21 @@ def demo_monitoring():
     print(f"Supply Temperature: {monitoring.hp_supply_temperature:.1f}°C")
     print(f"Return Temperature: {monitoring.hp_return_temperature:.1f}°C")
     
-    print("\n🔋 BATTERY")
+    print("\n BATTERY")
     print(f"State of Charge: {monitoring.battery_soc:.1f}%")
     print(f"Power: {monitoring.battery_power:+.2f} kW {'(charging)' if monitoring.battery_power > 0 else '(discharging)'}")
     
-    print("\n🔌 GRID")
+    print("\n GRID")
     print(f"Power: {monitoring.grid_power:+.2f} kW {'(importing)' if monitoring.grid_power > 0 else '(exporting)'}")
     print(f"Daily Import: {monitoring.grid_daily_import:.1f} kWh")
     print(f"Daily Export: {monitoring.grid_daily_export:.1f} kWh")
     
-    print("\n📊 PERFORMANCE")
+    print("\n PERFORMANCE")
     print(f"Self-Consumption Rate Today: {monitoring.self_consumption_rate_today * 100:.1f}%")
     print(f"Grid Independence Rate Today: {monitoring.grid_independence_rate_today * 100:.1f}%")
     print(f"Cost Savings Today: €{monitoring.cost_savings_today:.2f}")
     
-    print("\n✅ Monitoring Data Retrieved!\n")
+    print("\n Monitoring Data Retrieved!\n")
 
 
 def main():
@@ -303,7 +303,7 @@ def main():
         print("=" * 80)
         
     except Exception as e:
-        print(f"\n❌ Error: {str(e)}")
+        print(f"\n Error: {str(e)}")
         import traceback
         traceback.print_exc()
 

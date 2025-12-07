@@ -34,7 +34,7 @@ def render_export_action_buttons(
     # Screenshot Export Button
     if export_options.get("export_screenshot", False):
         if st.button(
-            "📷 Screenshot exportieren",
+            " Screenshot exportieren",
             key="btn_export_screenshot",
             use_container_width=True,
             type="primary"
@@ -48,7 +48,7 @@ def render_export_action_buttons(
     # Multi-View Export Button
     if export_options.get("export_multiview", False):
         if st.button(
-            "🎬 Multi-View exportieren",
+            " Multi-View exportieren",
             key="btn_export_multiview",
             use_container_width=True
         ):
@@ -60,7 +60,7 @@ def render_export_action_buttons(
     # 360° Animation Button
     if export_options.get("export_360", False):
         if st.button(
-            "🔄 360° Animation exportieren",
+            " 360° Animation exportieren",
             key="btn_export_360",
             use_container_width=True
         ):
@@ -94,7 +94,7 @@ def render_export_action_buttons(
     # JSON Export Button
     if export_options.get("export_json", False):
         if st.button(
-            "📋 JSON exportieren",
+            " JSON exportieren",
             key="btn_export_json",
             use_container_width=True
         ):
@@ -121,7 +121,7 @@ def _export_screenshot_action(figure, format_type: str, resolution: tuple) -> Di
                 
                 # Download-Button anbieten
                 st.download_button(
-                    label=f"⬇️ {format_type} herunterladen",
+                    label=f" {format_type} herunterladen",
                     data=result["data"],
                     file_name=result["filename"],
                     mime=result["mime_type"],
@@ -155,7 +155,7 @@ def _export_multiview_action(scene_data, resolution: tuple) -> Dict:
                 # ZIP-Download anbieten
                 if "zip_data" in result:
                     st.download_button(
-                        label="⬇️ Multi-View ZIP herunterladen",
+                        label=" Multi-View ZIP herunterladen",
                         data=result["zip_data"],
                         file_name=result.get("filename", "multiview.zip"),
                         mime="application/zip",
@@ -195,7 +195,7 @@ def _export_360_action(scene_data, frames: int, resolution: tuple) -> Dict:
                 # GIF-Download anbieten
                 if "gif_data" in result:
                     st.download_button(
-                        label="⬇️ Animation (GIF) herunterladen",
+                        label=" Animation (GIF) herunterladen",
                         data=result["gif_data"],
                         file_name=result.get("filename", "animation_360.gif"),
                         mime="image/gif",
@@ -228,7 +228,7 @@ def _export_3d_model_action(scene_data, model_format: str) -> Dict:
                 
                 # Download anbieten
                 st.download_button(
-                    label=f"⬇️ {model_format} herunterladen",
+                    label=f" {model_format} herunterladen",
                     data=result["data"],
                     file_name=result["filename"],
                     mime=result.get("mime_type", "application/octet-stream"),
@@ -272,7 +272,7 @@ def _export_csv_action(scene_data) -> Dict:
                 st.success(f"CSV mit {len(modules_data)} Modulen erstellt!")
                 
                 st.download_button(
-                    label="⬇️ CSV herunterladen",
+                    label=" CSV herunterladen",
                     data=csv_data,
                     file_name="pv_module_data.csv",
                     mime="text/csv",
@@ -301,7 +301,7 @@ def _export_json_action(scene_data) -> Dict:
                 st.success("JSON erstellt!")
                 
                 st.download_button(
-                    label="⬇️ JSON herunterladen",
+                    label=" JSON herunterladen",
                     data=json_data,
                     file_name="pv_scene_data.json",
                     mime="application/json",

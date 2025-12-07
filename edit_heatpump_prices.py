@@ -51,7 +51,7 @@ def render_price_editor():
         st.caption(f"Beschreibung: {db_product.get('description', 'N/A')[:50]}...")
     
     # Bearbeite Preis
-    st.markdown("### ✏️ Preis bearbeiten")
+    st.markdown("###  Preis bearbeiten")
     
     new_price = st.number_input(
         "Neuer Preis (€)",
@@ -82,7 +82,7 @@ def render_price_editor():
     """)
     
     # Speichern-Button
-    if st.button("💾 Preis speichern", type="primary", use_container_width=True):
+    if st.button(" Preis speichern", type="primary", use_container_width=True):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()

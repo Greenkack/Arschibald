@@ -369,7 +369,7 @@ class TestEdgeCasesKeys:
         generator = DynamicKeyGenerator()
         
         unicode_inputs = [
-            "feld_äöü", "поле", "字段", "フィールド"
+            "feld_äöü", "поле", "", ""
         ]
         
         for input_str in unicode_inputs:

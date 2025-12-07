@@ -15,7 +15,7 @@ def check_file_exists(filepath: str) -> bool:
     """Check if a file exists."""
     path = Path(filepath)
     exists = path.exists()
-    status = "✓" if exists else "✗"
+    status = "" if exists else ""
     print(f"  {status} {filepath}")
     return exists
 
@@ -27,10 +27,10 @@ def check_import(module_path: str) -> bool:
         module = __import__(module_path)
         for part in parts[1:]:
             module = getattr(module, part)
-        print(f"  ✓ {module_path}")
+        print(f"   {module_path}")
         return True
     except Exception as e:
-        print(f"  ✗ {module_path}: {e}")
+        print(f"   {module_path}: {e}")
         return False
 
 
@@ -75,7 +75,7 @@ def verify_implementation():
         from backend.services.visualization_service import VisualizationService
         
         service = VisualizationService()
-        print(f"  ✓ Service instantiation")
+        print(f"   Service instantiation")
         all_checks.append(True)
         
         # Check methods exist
@@ -92,14 +92,14 @@ def verify_implementation():
         
         for method in methods:
             if hasattr(service, method):
-                print(f"  ✓ Method: {method}")
+                print(f"   Method: {method}")
                 all_checks.append(True)
             else:
-                print(f"  ✗ Method: {method}")
+                print(f"   Method: {method}")
                 all_checks.append(False)
         
     except Exception as e:
-        print(f"  ✗ Service functionality: {e}")
+        print(f"   Service functionality: {e}")
         all_checks.append(False)
     
     # Check schemas
@@ -124,11 +124,11 @@ def verify_implementation():
         ]
         
         for schema in schemas:
-            print(f"  ✓ Schema: {schema}")
+            print(f"   Schema: {schema}")
             all_checks.append(True)
         
     except Exception as e:
-        print(f"  ✗ Schemas: {e}")
+        print(f"   Schemas: {e}")
         all_checks.append(False)
     
     # Check API endpoints
@@ -136,7 +136,7 @@ def verify_implementation():
     try:
         from backend.api.v1.visualization import router
         
-        print(f"  ✓ Router created")
+        print(f"   Router created")
         all_checks.append(True)
         
         # Check routes
@@ -154,14 +154,14 @@ def verify_implementation():
         
         for route in expected_routes:
             if any(route in r for r in routes):
-                print(f"  ✓ Endpoint: {route}")
+                print(f"   Endpoint: {route}")
                 all_checks.append(True)
             else:
-                print(f"  ✗ Endpoint: {route}")
+                print(f"   Endpoint: {route}")
                 all_checks.append(False)
         
     except Exception as e:
-        print(f"  ✗ API endpoints: {e}")
+        print(f"   API endpoints: {e}")
         all_checks.append(False)
     
     # Run tests
@@ -175,14 +175,14 @@ def verify_implementation():
         ])
         
         if result == 0:
-            print(f"  ✓ All tests passed")
+            print(f"   All tests passed")
             all_checks.append(True)
         else:
-            print(f"  ⚠ Some tests failed or skipped (expected if modules unavailable)")
+            print(f"   Some tests failed or skipped (expected if modules unavailable)")
             all_checks.append(True)  # Still count as success
         
     except Exception as e:
-        print(f"  ✗ Tests: {e}")
+        print(f"   Tests: {e}")
         all_checks.append(False)
     
     # Summary
@@ -197,10 +197,10 @@ def verify_implementation():
     print(f"\nChecks Passed: {passed}/{total} ({percentage:.1f}%)")
     
     if passed == total:
-        print("\n✓ ALL CHECKS PASSED - Task 14 is COMPLETE!")
+        print("\n ALL CHECKS PASSED - Task 14 is COMPLETE!")
         return True
     else:
-        print(f"\n⚠ {total - passed} checks failed")
+        print(f"\n {total - passed} checks failed")
         return False
 
 

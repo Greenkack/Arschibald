@@ -160,14 +160,14 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
                 message="Aktivieren Sie eine Preismatrix in den Admin-Einstellungen.",
                 alert_type="info",
                 title="Lösung",
-                icon="💡",
+                icon="",
                 theme_manager=theme_manager
             )
         return
     
     # Display pricing with cards
     with card(
-        title="💰 Preisübersicht (Preismatrix-Modus)",
+        title=" Preisübersicht (Preismatrix-Modus)",
         variant="elevated",
         theme_manager=theme_manager
     ):
@@ -184,7 +184,7 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
             metric_card(
                 label="Basispreis",
                 value=_format_german_currency(base_price),
-                icon="💵",
+                icon="",
                 size="medium",
                 theme_manager=theme_manager
             )
@@ -193,7 +193,7 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
             metric_card(
                 label="Extras",
                 value=_format_german_currency(extras_price),
-                icon="➕",
+                icon="",
                 size="medium",
                 theme_manager=theme_manager
             )
@@ -202,7 +202,7 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
             metric_card(
                 label="Netto-Gesamt",
                 value=_format_german_currency(net_total),
-                icon="📊",
+                icon="",
                 size="medium",
                 theme_manager=theme_manager
             )
@@ -211,9 +211,9 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
         
         # Display final price prominently
         metric_card(
-            label="🎯 Brutto-Gesamtpreis",
+            label=" Brutto-Gesamtpreis",
             value=_format_german_currency(gross_total),
-            icon="🎯",
+            icon="",
             size="large",
             theme_manager=theme_manager
         )

@@ -54,9 +54,9 @@ def test_optimization_all_goals():
     all_results = {}
     
     for goal in goals:
-        print(f"\n{'─' * 80}")
+        print(f"\n{'' * 80}")
         print(f"Optimierungsziel: {goal.upper()}")
-        print(f"{'─' * 80}")
+        print(f"{'' * 80}")
         
         results = run_optimization_assistant(
             building_dims=dims,
@@ -150,9 +150,9 @@ def test_shading_at_different_times():
     shading_results = {}
     
     for hour, time_label in test_times:
-        print(f"\n{'─' * 80}")
+        print(f"\n{'' * 80}")
         print(f"{time_label}")
-        print(f"{'─' * 80}")
+        print(f"{'' * 80}")
         
         # Berechne Sonnenposition
         sun_azimuth, sun_elevation = calculate_sun_position_for_time(
@@ -182,7 +182,7 @@ def test_shading_at_different_times():
         for i in range(len(positions)):
             shade_pct = shading.get(i, 0.0)
             bar_length = int(shade_pct / 5)  # 20 chars = 100%
-            bar = "█" * bar_length + "░" * (20 - bar_length)
+            bar = "" * bar_length + "" * (20 - bar_length)
             print(f"  Modul {i}: {bar} {shade_pct:5.1f}%")
     
     print(f"\n{'=' * 80}")
@@ -252,7 +252,7 @@ def test_yield_heatmap_visualization():
     yield_map = calculate_yield_heatmap(positions, transforms, latitude, dims)
     
     print(f"\nErtragspotential pro Modul (0-100):")
-    print(f"{'─' * 80}")
+    print(f"{'' * 80}")
     
     # Sortiere nach Ertrag (höchster zuerst)
     sorted_modules = sorted(yield_map.items(), key=lambda x: x[1], reverse=True)
@@ -283,15 +283,15 @@ def test_yield_heatmap_visualization():
         
         # Visualisiere Ertrag als Balken
         bar_length = int(yield_val / 5)  # 20 chars = 100%
-        bar = "█" * bar_length + "░" * (20 - bar_length)
+        bar = "" * bar_length + "" * (20 - bar_length)
         
         print(f"  Modul {i:2d}: {bar} {yield_val:5.1f}% | "
               f"{direction:10s} {azimuth:6.1f}° | Neigung {tilt:4.1f}° | Höhe {pos[2]:.1f}m")
     
     # Validierungen
-    print(f"\n{'─' * 80}")
+    print(f"\n{'' * 80}")
     print("VALIDIERUNGEN:")
-    print(f"{'─' * 80}")
+    print(f"{'' * 80}")
     
     # Süd sollte besser sein als Nord
     south_modules = [i for i, t in transforms.items() if t.azimuth_deg == 0.0]
@@ -341,9 +341,9 @@ def test_sun_path_animation():
     sun_positions = []
     
     print(f"\nSonnenverlauf am 21. Juni (Sommersonnenwende) bei {latitude}°N:")
-    print(f"{'─' * 80}")
+    print(f"{'' * 80}")
     print(f"{'Zeit':>8s} | {'Azimuth':>10s} | {'Elevation':>10s} | {'Visualisierung':>30s}")
-    print(f"{'─' * 80}")
+    print(f"{'' * 80}")
     
     for hour in hours:
         azimuth, elevation = calculate_sun_position_for_time(latitude, day_of_year, hour)
@@ -354,9 +354,9 @@ def test_sun_path_animation():
             # Visualisiere Elevation als Balken
             if elevation > 0:
                 bar_length = int(elevation / 3)  # 30 chars = 90°
-                bar = "☀" + "─" * bar_length
+                bar = "" + "" * bar_length
             else:
-                bar = "🌙 (unter Horizont)"
+                bar = " (unter Horizont)"
             
             # Formatiere Zeit
             hour_int = int(hour)
@@ -380,7 +380,7 @@ def test_sun_path_animation():
         if elevation <= 0 and sunrise_time is not None and sunset_time is None:
             sunset_time = hour
     
-    print(f"{'─' * 80}")
+    print(f"{'' * 80}")
     print(f"\nSONNENVERLAUF-STATISTIKEN:")
     print(f"  Sonnenaufgang: ~{sunrise_time:.1f} Uhr ({int(sunrise_time):02d}:{int((sunrise_time % 1) * 60):02d})")
     print(f"  Sonnenuntergang: ~{sunset_time:.1f} Uhr ({int(sunset_time):02d}:{int((sunset_time % 1) * 60):02d})")
@@ -398,9 +398,9 @@ def test_sun_path_animation():
     print(f"  Tageslänge plausibel für Sommersonnenwende")
     
     # Teste auch Wintersonnenwende zum Vergleich
-    print(f"\n{'─' * 80}")
+    print(f"\n{'' * 80}")
     print(f"VERGLEICH: Wintersonnenwende (21. Dezember)")
-    print(f"{'─' * 80}")
+    print(f"{'' * 80}")
     
     day_of_year_winter = 355  # 21. Dezember
     winter_positions = []
@@ -415,9 +415,9 @@ def test_sun_path_animation():
         
         if elevation > 0:
             bar_length = int(elevation / 3)
-            bar = "☀" + "─" * bar_length
+            bar = "" + "" * bar_length
         else:
-            bar = "🌙 (unter Horizont)"
+            bar = " (unter Horizont)"
         
         print(f"{time_str:>8s} | {azimuth:8.1f}° | {elevation:8.1f}° | {bar}")
     

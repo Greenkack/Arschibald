@@ -238,7 +238,7 @@ async def demo_integration_status(service: ThirdPartyIntegrationService):
     test_results = await service.test_all_connections()
     print("\n   Connection Test Results:")
     for integration, success in test_results.items():
-        status_icon = "✓" if success else "✗"
+        status_icon = "" if success else ""
         print(f"   {status_icon} {integration}: {'Connected' if success else 'Failed'}")
 
 

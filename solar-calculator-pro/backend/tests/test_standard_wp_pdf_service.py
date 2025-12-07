@@ -405,9 +405,9 @@ class TestWPPDFIntegration:
                 # PDF should start with %PDF
                 assert pdf_bytes[:4] == b'%PDF'
                 
-                print(f"✓ Generated WP PDF: {len(pdf_bytes)} bytes")
+                print(f" Generated WP PDF: {len(pdf_bytes)} bytes")
         except Exception as e:
-            print(f"⚠ PDF generation skipped (templates not available): {e}")
+            print(f" PDF generation skipped (templates not available): {e}")
     
     def test_all_placeholders_coverage(self):
         """Test that all placeholders are properly handled"""

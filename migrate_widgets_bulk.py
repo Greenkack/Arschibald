@@ -91,7 +91,7 @@ def main():
     """Main migration function"""
     
     print("=" * 60)
-    print("🔄 Bulk Widget Migration")
+    print(" Bulk Widget Migration")
     print("=" * 60)
     
     base_path = Path(__file__).parent
@@ -125,7 +125,7 @@ def main():
     # Ask for confirmation
     print("\nHINWEIS: Dies migriert nur die Widget-Funktionen.")
     print("   Parameter wie 'form_id' müssen manuell hinzugefügt werden.")
-    print("\n❓ Migration durchführen? (j/n): ", end="")
+    print("\n Migration durchführen? (j/n): ", end="")
     
     response = input().strip().lower()
     

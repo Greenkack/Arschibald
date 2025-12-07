@@ -19,11 +19,11 @@ except ImportError:
 def main():
     st.set_page_config(
         page_title="Logging & Monitoring Demo",
-        page_icon="📊",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("📊 Theme Logging & Monitoring System Demo")
+    st.title(" Theme Logging & Monitoring System Demo")
     
     # Initialisiere Logger
     if 'logger' not in st.session_state:
@@ -33,7 +33,7 @@ def main():
     
     # Sidebar mit kompaktem Monitoring
     with st.sidebar:
-        st.header("⚙️ Steuerung")
+        st.header(" Steuerung")
         
         # Log-Level
         log_level = st.selectbox(
@@ -53,9 +53,9 @@ def main():
     
     # Hauptbereich mit Tabs
     tab1, tab2, tab3 = st.tabs([
-        "🎮 Demo-Aktionen",
-        "📊 Monitoring Dashboard",
-        "📖 Dokumentation"
+        " Demo-Aktionen",
+        " Monitoring Dashboard",
+        " Dokumentation"
     ])
     
     with tab1:
@@ -70,7 +70,7 @@ def main():
 
 def render_demo_actions(logger):
     """Rendert Demo-Aktionen"""
-    st.header("🎮 Demo-Aktionen")
+    st.header(" Demo-Aktionen")
     
     st.markdown("""
     Führe verschiedene Aktionen aus, um das Logging-System zu testen.
@@ -94,7 +94,7 @@ def render_demo_actions(logger):
             ["shadcn-dark", "shadcn-default", "shadcn-ocean", "shadcn-forest", "shadcn-sunset"]
         )
     
-    if st.button("🔄 Theme wechseln", use_container_width=True):
+    if st.button(" Theme wechseln", use_container_width=True):
         start = time.perf_counter()
         time.sleep(0.045)  # Simuliere Theme-Wechsel
         duration_ms = (time.perf_counter() - start) * 1000
@@ -119,7 +119,7 @@ def render_demo_actions(logger):
         key="css_theme"
     )
     
-    if st.button("⚙️ CSS generieren", use_container_width=True):
+    if st.button(" CSS generieren", use_container_width=True):
         start = time.perf_counter()
         time.sleep(0.078)  # Simuliere CSS-Generierung
         duration_ms = (time.perf_counter() - start) * 1000
@@ -153,7 +153,7 @@ def render_demo_actions(logger):
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("✅ Erfolgreich rendern", use_container_width=True):
+        if st.button(" Erfolgreich rendern", use_container_width=True):
             start = time.perf_counter()
             time.sleep(0.023)  # Simuliere Rendering
             duration_ms = (time.perf_counter() - start) * 1000
@@ -168,7 +168,7 @@ def render_demo_actions(logger):
             st.success(f"{component_name} gerendert: {duration_ms:.2f}ms")
     
     with col2:
-        if st.button("❌ Fehler simulieren", use_container_width=True):
+        if st.button(" Fehler simulieren", use_container_width=True):
             start = time.perf_counter()
             time.sleep(0.015)
             duration_ms = (time.perf_counter() - start) * 1000
@@ -198,7 +198,7 @@ def render_demo_actions(logger):
     with col3:
         metric_unit = st.selectbox("Einheit", ["ms", "KB", "MB", "count"])
     
-    if st.button("📊 Metrik loggen", use_container_width=True):
+    if st.button(" Metrik loggen", use_container_width=True):
         logger.log_performance_metric(
             metric_name=metric_name,
             value=metric_value,
@@ -216,7 +216,7 @@ def render_demo_actions(logger):
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("✅ Cache Hit", use_container_width=True):
+        if st.button(" Cache Hit", use_container_width=True):
             logger.log_cache_event(
                 event_type="theme_cache",
                 cache_key="shadcn-dark",
@@ -225,7 +225,7 @@ def render_demo_actions(logger):
             st.success("Cache Hit geloggt")
     
     with col2:
-        if st.button("❌ Cache Miss", use_container_width=True):
+        if st.button(" Cache Miss", use_container_width=True):
             logger.log_cache_event(
                 event_type="theme_cache",
                 cache_key="shadcn-custom",
@@ -243,7 +243,7 @@ def render_demo_actions(logger):
         "Beispiel-Fehler: Theme konnte nicht geladen werden"
     )
     
-    if st.button("🔴 Fehler loggen", use_container_width=True):
+    if st.button(" Fehler loggen", use_container_width=True):
         logger.log_error(
             error_message=error_message,
             category=logger.CATEGORY_ERROR,
@@ -256,7 +256,7 @@ def render_demo_actions(logger):
     # Bulk-Aktionen
     st.subheader("7. Bulk-Aktionen")
     
-    if st.button("🚀 Viele Events generieren", use_container_width=True):
+    if st.button(" Viele Events generieren", use_container_width=True):
         with st.spinner("Generiere Events..."):
             # Theme-Wechsel
             for i in range(5):
@@ -293,19 +293,19 @@ def render_demo_actions(logger):
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("📥 Als JSON exportieren", use_container_width=True):
+        if st.button(" Als JSON exportieren", use_container_width=True):
             filepath = logger.export_logs(format="json")
             st.success(f"Exportiert nach: {filepath}")
     
     with col2:
-        if st.button("📥 Als CSV exportieren", use_container_width=True):
+        if st.button(" Als CSV exportieren", use_container_width=True):
             filepath = logger.export_logs(format="csv")
             st.success(f"Exportiert nach: {filepath}")
     
     # Logs löschen
     st.markdown("---")
     
-    if st.button("🗑️ Alle Logs löschen", type="secondary", use_container_width=True):
+    if st.button(" Alle Logs löschen", type="secondary", use_container_width=True):
         logger.clear_logs()
         st.warning("Alle Logs gelöscht!")
         st.rerun()
@@ -313,7 +313,7 @@ def render_demo_actions(logger):
 
 def render_documentation():
     """Rendert Dokumentation"""
-    st.header("📖 Dokumentation")
+    st.header(" Dokumentation")
     
     st.markdown("""
     ## Übersicht
@@ -323,15 +323,15 @@ def render_documentation():
     
     ## Features
     
-    - ✅ **Theme-Wechsel-Logging** mit Timestamp und User-ID
-    - ✅ **CSS-Injection-Logging** mit Performance-Metriken
-    - ✅ **Komponenten-Rendering-Logging** mit Fehlerbehandlung
-    - ✅ **Performance-Metriken** für alle Operationen
-    - ✅ **Cache-Ereignisse** (Hits und Misses)
-    - ✅ **Fehler-Logging** mit Stack-Traces
-    - ✅ **Interaktives Monitoring-Dashboard**
-    - ✅ **Export** als JSON oder CSV
-    - ✅ **Konfigurierbares Log-Level**
+    -  **Theme-Wechsel-Logging** mit Timestamp und User-ID
+    -  **CSS-Injection-Logging** mit Performance-Metriken
+    -  **Komponenten-Rendering-Logging** mit Fehlerbehandlung
+    -  **Performance-Metriken** für alle Operationen
+    -  **Cache-Ereignisse** (Hits und Misses)
+    -  **Fehler-Logging** mit Stack-Traces
+    -  **Interaktives Monitoring-Dashboard**
+    -  **Export** als JSON oder CSV
+    -  **Konfigurierbares Log-Level**
     
     ## Schnellstart
     
@@ -370,10 +370,10 @@ def render_documentation():
     
     Das Dashboard zeigt:
     
-    - 📊 **Übersicht**: Statistiken und Metriken
-    - 📝 **Logs**: Gefilterte Log-Einträge
-    - ⚡ **Performance**: Performance-Analysen
-    - ⚙️ **Einstellungen**: Logger-Konfiguration
+    -  **Übersicht**: Statistiken und Metriken
+    -  **Logs**: Gefilterte Log-Einträge
+    -  **Performance**: Performance-Analysen
+    -  **Einstellungen**: Logger-Konfiguration
     
     ## Weitere Ressourcen
     

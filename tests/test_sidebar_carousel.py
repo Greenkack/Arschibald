@@ -48,13 +48,13 @@ def test_carousel_structure():
         # Bestimme Status
         if i == active_index:
             status = "ACTIVE (grün)"
-            marker = "║"
+            marker = ""
         elif i == preview_index:
             status = "PREVIEW (blau)"
-            marker = "╠"
+            marker = ""
         else:
             status = "dimmed (40%)"
-            marker = "│"
+            marker = ""
 
         # Nur 5 Items um preview herum zeigen
         if preview_index - 2 <= i <= preview_index + 2:
@@ -236,9 +236,9 @@ def test_fallback_mechanism():
 def main():
     """Führt alle Tests aus"""
     print("\n")
-    print("╔" + "=" * 58 + "╗")
-    print("║" + " " * 10 + "SIDEBAR CAROUSEL - SCHNELLTEST" + " " * 17 + "║")
-    print("╚" + "=" * 58 + "╝")
+    print("" + "=" * 58 + "")
+    print("" + " " * 10 + "SIDEBAR CAROUSEL - SCHNELLTEST" + " " * 17 + "")
+    print("" + "=" * 58 + "")
     print("\n")
 
     test_carousel_structure()

@@ -31,7 +31,7 @@ def fix_solarfabrik_values():
     }
 
     print(
-        f"📋 Referenz-Werte von TrinaSolar '{reference_product.get('model_name')}':")
+        f" Referenz-Werte von TrinaSolar '{reference_product.get('model_name')}':")
     for key, value in reference_values.items():
         print(f"   {key}: {value}")
 
@@ -71,7 +71,7 @@ def fix_solarfabrik_values():
             print(f"   Fehler: {e}")
 
     print(
-        f"\\n🎉 {success_count}/{
+        f"\\n {success_count}/{
             len(solarfabrik_products)} Solarfabrik-Produkte erfolgreich aktualisiert!")
 
     return success_count == len(solarfabrik_products)
@@ -99,7 +99,7 @@ def verify_solarfabrik_values():
     solarfabrik_products = [p for p in products if p.get(
         'manufacturer') and 'solarfabrik' in p.get('manufacturer', '').lower()]
 
-    print(f"📋 TrinaSolar Referenz: {reference_product.get('model_name')}")
+    print(f" TrinaSolar Referenz: {reference_product.get('model_name')}")
     print(f"   cell_technology: {reference_product.get('cell_technology')}")
     print(f"   module_structure: {reference_product.get('module_structure')}")
     print(f"   cell_type: {reference_product.get('cell_type')}")
@@ -123,7 +123,7 @@ def verify_solarfabrik_values():
 
     if all_match:
         print(
-            "\\n🎉 Alle Solarfabrik-Produkte haben jetzt die gleichen Werte wie TrinaSolar!")
+            "\\n Alle Solarfabrik-Produkte haben jetzt die gleichen Werte wie TrinaSolar!")
     else:
         print("\\nEinige Solarfabrik-Produkte haben noch abweichende Werte!")
 

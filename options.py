@@ -88,7 +88,7 @@ def render_options(texts: dict[str, str], **kwargs):
         border-radius: 15px; padding: 25px; margin: 20px 0;
         box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
         <h2 style="color: white; margin: 0; font-weight: 600;">
-            ⚙️ Globale Einstellungen
+             Globale Einstellungen
         </h2>
         <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 14px;">
             Konfigurieren Sie die Anwendung nach Ihren Bedürfnissen
@@ -108,7 +108,7 @@ def render_options(texts: dict[str, str], **kwargs):
     
     # === 1. PV-GIS INTEGRATION (KRITISCH) ===
     # PV-Gis Section mit Expander
-    with st.expander("🌍 PV-GIS INTEGRATION & PRODUKTIONSWERTE", expanded=False):
+    with st.expander(" PV-GIS INTEGRATION & PRODUKTIONSWERTE", expanded=False):
         st.info("PV-Gis liefert präzise Ertragsdaten basierend auf geografischen und meteorologischen Daten der EU-Kommission.")
 
         # Aktuelle PV-Gis Einstellung laden - KORRIGIERT: Boolean handling
@@ -132,7 +132,7 @@ def render_options(texts: dict[str, str], **kwargs):
         with col1:
             # PV-Gis aktivieren/deaktivieren
             pvgis_enabled = st.checkbox(
-                "🌍 PV-Gis Integration & Produktionswerte aktivieren",
+                " PV-Gis Integration & Produktionswerte aktivieren",
                 value=st.session_state[session_key],
                 key=session_key,
                 help="Wenn aktiviert, werden Ertragsdaten von PV-Gis abgerufen. API-Zugriff auf EU-Server erforderlich!"
@@ -157,7 +157,7 @@ def render_options(texts: dict[str, str], **kwargs):
             current_timeout = load_admin_setting(
                 'pvgis_api_timeout_seconds', 25)
             api_timeout = st.number_input(
-                "⏱️ API Timeout (Sekunden)",
+                "⏱ API Timeout (Sekunden)",
                 min_value=10,
                 max_value=60,
                 value=int(current_timeout),
@@ -168,7 +168,7 @@ def render_options(texts: dict[str, str], **kwargs):
             current_fallback_yield = load_admin_setting(
                 'default_specific_yield_kwh_kwp', 950.0)
             fallback_yield = st.number_input(
-                "☀️ Spezifischer Ertrag (kWh/kWp/a)",
+                " Spezifischer Ertrag (kWh/kWp/a)",
                 min_value=600.0,
                 max_value=1500.0,
                 value=float(current_fallback_yield),
@@ -178,7 +178,7 @@ def render_options(texts: dict[str, str], **kwargs):
 
         # Speichern-Button für PV-Gis Einstellungen
         # Speichern-Button für PV-Gis Einstellungen
-        if st.button("💾 PV-Gis Einstellungen speichern", type="primary", key="save_pvgis"):
+        if st.button(" PV-Gis Einstellungen speichern", type="primary", key="save_pvgis"):
             # Alle PV-Gis Einstellungen speichern
             success_count = 0
             total_count = 4
@@ -241,7 +241,7 @@ Typ Session: {type(pvgis_session).__name__}
                 st.markdown("**System-Status:**")
                 if pvgis_enabled:
                     st.success("API-Verbindung aktiv")
-                    st.info(f"⏱️ Timeout: {api_timeout}s")
+                    st.info(f"⏱ Timeout: {api_timeout}s")
                 else:
                     st.warning("API-Verbindung deaktiviert")
                     st.info(f"Fallback: {fallback_yield} kWh/kWp/a")
@@ -282,7 +282,7 @@ Typ Session: {type(pvgis_session).__name__}
     st.markdown("---")
 
     # === 3. EMOJI DARSTELLUNG (WICHTIG) ===
-    st.markdown("### 😀 Emoji Darstellung")
+    st.markdown("###  Emoji Darstellung")
 
     default_show_emojis = convert_to_bool(
         load_admin_setting('ui_show_emojis', True))
@@ -317,7 +317,7 @@ Typ Session: {type(pvgis_session).__name__}
     st.info("Klicken Sie auf die Bereiche, um weitere Optionen anzuzeigen")
 
     # === PV-Gis INTEGRATION EINSTELLUNGEN ===
-    with st.expander("🌍 Erweiterte PV-Gis Einstellungen", expanded=False):
+    with st.expander(" Erweiterte PV-Gis Einstellungen", expanded=False):
         st.markdown("**Zusätzliche PV-Gis Konfiguration**")
         st.info("Hier können Sie weitere technische Parameter für die PV-Gis Integration einstellen.")
         
@@ -351,10 +351,10 @@ Typ Session: {type(pvgis_session).__name__}
                     load_admin_setting('ui_dark_mode_enabled', True))
             
             dark_mode = st.checkbox(
-                "🌙 Dark Mode (Aktiviert = Dunkel, Deaktiviert = Hell)",
+                " Dark Mode (Aktiviert = Dunkel, Deaktiviert = Hell)",
                 value=st.session_state[session_key_dark],
                 key=session_key_dark,
-                help="✅ Aktiviert = Dunkles Theme (Dark Mode)\n❌ Deaktiviert = Helles Theme (Light Mode)"
+                help=" Aktiviert = Dunkles Theme (Dark Mode)\n Deaktiviert = Helles Theme (Light Mode)"
             )
 
             # Animationen mit Session State
@@ -434,7 +434,7 @@ Typ Session: {type(pvgis_session).__name__}
         
         # Speichern-Button für UI/UX direkt im Expander
         st.markdown("---")
-        if st.button("💾 UI/UX Einstellungen speichern & SOFORT anwenden", type="primary", key="save_ui_ux"):
+        if st.button(" UI/UX Einstellungen speichern & SOFORT anwenden", type="primary", key="save_ui_ux"):
             success_count = 0
             total_count = 6
             
@@ -458,29 +458,29 @@ Typ Session: {type(pvgis_session).__name__}
                 success_count += 1
             
             if success_count == total_count:
-                st.success(f"✅ Alle {total_count} UI/UX Einstellungen gespeichert!")
+                st.success(f" Alle {total_count} UI/UX Einstellungen gespeichert!")
                 
                 # Theme SOFORT anwenden via CSS!
                 from ui_settings_handler import apply_dark_mode_styles, apply_light_mode_styles
                 
                 if dark_mode_value:
-                    st.info("🌙 Dark Mode wird JETZT aktiviert...")
+                    st.info(" Dark Mode wird JETZT aktiviert...")
                     apply_dark_mode_styles()
                 else:
-                    st.info("☀️ Light Mode wird JETZT aktiviert...")
+                    st.info(" Light Mode wird JETZT aktiviert...")
                     apply_light_mode_styles()
                 
-                st.success("🎨 Theme erfolgreich gewechselt!")
-                st.info("🔄 Seite wird aktualisiert...")
+                st.success(" Theme erfolgreich gewechselt!")
+                st.info(" Seite wird aktualisiert...")
                 
                 # Kurze Verzögerung damit User die Meldungen sieht
                 import time
                 time.sleep(1)
                 st.rerun()
             elif success_count > 0:
-                st.warning(f"⚠️ Nur {success_count}/{total_count} Einstellungen gespeichert!")
+                st.warning(f" Nur {success_count}/{total_count} Einstellungen gespeichert!")
             else:
-                st.error("❌ Fehler beim Speichern der Einstellungen!")
+                st.error(" Fehler beim Speichern der Einstellungen!")
 
     # ===  PERFORMANCE & CACHING ===
     with st.expander(" PERFORMANCE & CACHING", expanded=False):
@@ -579,8 +579,8 @@ Typ Session: {type(pvgis_session).__name__}
                 help="Protokollierung aller wichtigen Benutzeraktionen"
             )
 
-    # === 🤖 AI & MACHINE LEARNING ===
-    with st.expander("🤖 AI & MACHINE LEARNING", expanded=False):
+    # ===  AI & MACHINE LEARNING ===
+    with st.expander(" AI & MACHINE LEARNING", expanded=False):
         st.markdown("**Künstliche Intelligenz Features**")
 
         col1, col2 = st.columns(2)
@@ -590,7 +590,7 @@ Typ Session: {type(pvgis_session).__name__}
             current_ai_assistant = convert_to_bool(
                 load_admin_setting('ai_assistant_enabled', True))
             ai_assistant = st.checkbox(
-                "🤖 AI-Assistent aktivieren",
+                " AI-Assistent aktivieren",
                 value=current_ai_assistant,
                 help="Intelligenter Chatbot für Benutzerunterstützung"
             )
@@ -716,7 +716,7 @@ Typ Session: {type(pvgis_session).__name__}
             current_leaderboard = convert_to_bool(
                 load_admin_setting('gamification_leaderboard', True))
             leaderboard = st.checkbox(
-                "🥇 Bestenliste",
+                " Bestenliste",
                 value=current_leaderboard,
                 help="Vergleichen Sie sich mit anderen Nutzern"
             )
@@ -857,7 +857,7 @@ Typ Session: {type(pvgis_session).__name__}
 
     st.markdown("---")
     # ===  SUPER SAVE BUTTON ===
-    st.markdown("### 💾 Alle Einstellungen speichern")
+    st.markdown("###  Alle Einstellungen speichern")
     
     # Info-Box mit Hinweis
     st.info("""
@@ -878,7 +878,7 @@ Typ Session: {type(pvgis_session).__name__}
         "**ALLE ERWEITERTEN EINSTELLUNGEN SPEICHERN**",
         type="primary",
             use_container_width=True):
-        with st.spinner("💫 Speichere alle Einstellungen..."):
+        with st.spinner(" Speichere alle Einstellungen..."):
             success_count = 0
             total_settings = 0
             failed_settings = []
@@ -961,7 +961,7 @@ Typ Session: {type(pvgis_session).__name__}
 
                  **{success_count}/{total_settings}** Einstellungen wurden gespeichert
 
-                🔄 Die App wird gleich neu geladen, um alle Änderungen anzuwenden...
+                 Die App wird gleich neu geladen, um alle Änderungen anzuwenden...
                 """)
 
                 # Session State für UI-Updates setzen

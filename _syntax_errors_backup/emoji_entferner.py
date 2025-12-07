@@ -1,14 +1,14 @@
 # Emoji-Entferner für einzelne Datei
 Get - Content "analysis.py" | ForEach - Object {
-    $_ -replace "☀️ ", "" - replace "🗓️ ", "" - replace "", "" - replace "", ""
-    - replace "⚖️ ", "" - replace "🌍 ", "" - replace "", "" - replace "🔥 ", ""
-    - replace "", "" - replace "", "" - replace "🌟 ", "" - replace "", ""
+    $_ -replace " ", "" - replace " ", "" - replace "", "" - replace "", ""
+    - replace " ", "" - replace " ", "" - replace "", "" - replace " ", ""
+    - replace "", "" - replace "", "" - replace " ", "" - replace "", ""
     - replace "", "" - replace "", "" - replace "", "" - replace "", ""
-    - replace "", "" - replace "", "" - replace "📱 ", "" - replace "💻 ", ""
-    - replace "", "" - replace "🏗️ ", "" - replace "⭐ ", "" - replace "💎 ", ""
-    - replace "🎉 ", "" - replace "", "" - replace "🌞 ", "" - replace "️ ", ""
-    - replace "🏡 ", "" - replace "🎆 ", "" - replace "☁️ ", "" - replace "🛠️ ", ""
-    - replace "🏘️ ", ""
+    - replace "", "" - replace "", "" - replace " ", "" - replace " ", ""
+    - replace "", "" - replace " ", "" - replace " ", "" - replace " ", ""
+    - replace " ", "" - replace "", "" - replace " ", "" - replace " ", ""
+    - replace " ", "" - replace " ", "" - replace " ", "" - replace " ", ""
+    - replace " ", ""
 } | Set - Content "analysis_clean.py"
 
 # Alle Python-Dateien in einem Ordner bereinigen

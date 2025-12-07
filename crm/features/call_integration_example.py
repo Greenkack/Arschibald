@@ -82,7 +82,7 @@ def example_2_quick_call_button():
             st.write(customer['phone'])
         
         with col3:
-            if st.button("📞 Anrufen", key=f"call_{customer['id']}"):
+            if st.button(" Anrufen", key=f"call_{customer['id']}"):
                 st.session_state.show_call_dialog = True
                 st.session_state.call_customer_id = customer['id']
                 st.session_state.call_customer_name = customer['name']
@@ -181,11 +181,11 @@ def example_4_call_timeline_integration():
     for activity in activities:
         # Icon basierend auf Typ
         icon = {
-            "call": "📞",
-            "email": "📧",
+            "call": "",
+            "email": "",
             "note": "",
-            "appointment": "📅",
-            "meeting": "👥"
+            "appointment": "",
+            "meeting": ""
         }.get(activity["activity_type"], "")
         
         with st.expander(f"{icon} {activity['title']} - {activity['created_at']}"):
@@ -242,7 +242,7 @@ def example_5_automated_call_logging():
     
     for call in calls:
         if call["created_by"] == "VoIP-System":
-            st.write(f"📞 {call['call_direction_display']} - {call['call_phone_number']} - {call['created_at']}")
+            st.write(f" {call['call_direction_display']} - {call['call_phone_number']} - {call['created_at']}")
 
 
 def example_6_call_reporting():
@@ -286,7 +286,7 @@ def example_6_call_reporting():
         # Export-Button
         csv = df.to_csv(index=False)
         st.download_button(
-            label="📥 Als CSV exportieren",
+            label=" Als CSV exportieren",
             data=csv,
             file_name="anruf_report.csv",
             mime="text/csv"

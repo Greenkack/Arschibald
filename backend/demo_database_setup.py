@@ -44,15 +44,15 @@ def demo_sync_database():
     # Check connection
     print("\n1. Checking database connection...")
     if check_db_connection():
-        print("   ✓ Database connection successful")
+        print("    Database connection successful")
     else:
-        print("   ✗ Database connection failed")
+        print("    Database connection failed")
         return
     
     # Initialize database
     print("\n2. Initializing database...")
     init_db()
-    print("   ✓ Database initialized with all tables")
+    print("    Database initialized with all tables")
     
     # Get pool statistics
     print("\n3. Connection pool statistics:")
@@ -76,7 +76,7 @@ def demo_sync_database():
         db.add(user)
         db.commit()
         db.refresh(user)
-        print(f"   ✓ User created with ID: {user.id}")
+        print(f"    User created with ID: {user.id}")
         print(f"   - Username: {user.username}")
         print(f"   - Email: {user.email}")
         print(f"   - Dynamic Key: {user.dynamic_key}")
@@ -84,7 +84,7 @@ def demo_sync_database():
         # Query users
         print("\n6. Querying users...")
         users = db.query(User).all()
-        print(f"   ✓ Found {len(users)} user(s)")
+        print(f"    Found {len(users)} user(s)")
         
         # Use transaction context
         print("\n7. Using transaction context...")
@@ -97,14 +97,14 @@ def demo_sync_database():
                 country="Germany"
             )
             tx.add(customer)
-        print("   ✓ Customer created in transaction")
+        print("    Customer created in transaction")
         
         # Pagination example
         print("\n8. Pagination example...")
         pagination = get_pagination_params(skip=0, limit=10)
         query = db.query(User)
         paginated_users = pagination.apply_to_query(query).all()
-        print(f"   ✓ Retrieved {len(paginated_users)} users (page 1)")
+        print(f"    Retrieved {len(paginated_users)} users (page 1)")
         
         # Batch operations
         print("\n9. Batch operations...")
@@ -117,7 +117,7 @@ def demo_sync_database():
                     status="draft"
                 )
                 batch_ctx.add(project)
-        print("   ✓ Created 12 projects in batches")
+        print("    Created 12 projects in batches")
         
         # Verify batch creation
         project_count = db.query(Project).count()
@@ -137,15 +137,15 @@ async def demo_async_database():
     # Check async connection
     print("\n1. Checking async database connection...")
     if await check_async_db_connection():
-        print("   ✓ Async database connection successful")
+        print("    Async database connection successful")
     else:
-        print("   ✗ Async database connection failed")
+        print("    Async database connection failed")
         return
     
     # Initialize async database
     print("\n2. Initializing async database...")
     await init_async_db()
-    print("   ✓ Async database initialized")
+    print("    Async database initialized")
     
     # Create async session
     print("\n3. Creating async database session...")
@@ -162,7 +162,7 @@ async def demo_async_database():
         session.add(user)
         await session.commit()
         await session.refresh(user)
-        print(f"   ✓ User created with ID: {user.id}")
+        print(f"    User created with ID: {user.id}")
         print(f"   - Username: {user.username}")
         print(f"   - Email: {user.email}")
         
@@ -170,7 +170,7 @@ async def demo_async_database():
         print("\n5. Querying users asynchronously...")
         result = await session.execute(select(User))
         users = result.scalars().all()
-        print(f"   ✓ Found {len(users)} user(s)")
+        print(f"    Found {len(users)} user(s)")
         
         # Use async transaction context
         print("\n6. Using async transaction context...")
@@ -183,7 +183,7 @@ async def demo_async_database():
                 country="Germany"
             )
             tx.add(customer)
-        print("   ✓ Customer created in async transaction")
+        print("    Customer created in async transaction")
         
         # Query with filter
         print("\n7. Querying with filter...")
@@ -192,7 +192,7 @@ async def demo_async_database():
         )
         user = result.scalar_one_or_none()
         if user:
-            print(f"   ✓ Found user: {user.username}")
+            print(f"    Found user: {user.username}")
         
         # Count records
         print("\n8. Counting records...")
@@ -222,7 +222,7 @@ def demo_model_features():
         db.add(user)
         db.commit()
         db.refresh(user)
-        print(f"   ✓ User created with dynamic key: {user.dynamic_key}")
+        print(f"    User created with dynamic key: {user.dynamic_key}")
         
         # Get formatted values
         print("\n2. Getting formatted values (German format)...")
@@ -243,12 +243,12 @@ def demo_model_features():
         # Convert to dictionary
         print("\n3. Converting model to dictionary...")
         user_dict = user.to_dict(include_keys=True, formatted=False)
-        print(f"   ✓ User dictionary keys: {list(user_dict.keys())[:5]}...")
+        print(f"    User dictionary keys: {list(user_dict.keys())[:5]}...")
         
         # JSON serializable
         print("\n4. Converting to JSON-serializable format...")
         user_json = user.to_json_serializable()
-        print(f"   ✓ JSON-serializable data ready")
+        print(f"    JSON-serializable data ready")
         print(f"   - Keys: {list(user_json.keys())[:5]}...")
         
     finally:
@@ -318,14 +318,14 @@ def main():
         print("\n" + "="*80)
         print("DEMONSTRATION COMPLETE")
         print("="*80)
-        print("\n✓ All database features demonstrated successfully!")
+        print("\n All database features demonstrated successfully!")
         print("\nNext steps:")
         print("  1. Run 'alembic revision --autogenerate -m \"Initial migration\"'")
         print("  2. Run 'alembic upgrade head' to apply migrations")
         print("  3. Use the database in your FastAPI endpoints")
         
     except Exception as e:
-        print(f"\n✗ Error during demonstration: {e}")
+        print(f"\n Error during demonstration: {e}")
         import traceback
         traceback.print_exc()
 

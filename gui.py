@@ -92,7 +92,7 @@ try:
                 
                 # Zeige Recovery-Hinweis (nur einmal)
                 if not st.session_state.get('recovery_notice_shown'):
-                    st.toast("Sitzung wiederhergestellt", icon="🔄")
+                    st.toast("Sitzung wiederhergestellt", icon="")
                     st.session_state.recovery_notice_shown = True
             else:
                 st.session_state.user_session_recovered = False
@@ -179,7 +179,7 @@ except (FileNotFoundError, ValueError, json.JSONDecodeError):
     _texts_initial = {
         "app_title": "ÖMERs ALL in ONE DINGSBUMS", "menu_item_input": "Projekt- Bedarfsanalyse",
     "menu_item_analysis": "Ergebnisse & Visualisierungen", "menu_item_quick_calc": "A.G.E.N.T.",
-        "menu_item_crm": "Kundenmanagement CRM", "menu_item_info_platform": "Kundenmanagement CRM",
+        "menu_item_crm": "Kundenmanagement CRM", "menu_item_info_platform": "Controlling",
         "menu_item_options": "Administration & Verwaltung", "menu_item_admin": "Administration & Verwaltung",
         "menu_item_doc_output": "Dokumenterstellung & Output", "sidebar_navigation_title": "Angebotserstellung",
         "sidebar_select_area": "Bereich:", "import_errors_title": " Ladefehler",
@@ -1460,13 +1460,13 @@ def main():
         drawer.innerHTML = `
             <button class="drawer-close">×</button>
             <div class="drawer-title">Schnellzugriff</div>
-            <button class="drawer-btn" data-action="voice_command">🎤 Sprachbefehl</button>
-            <button class="drawer-btn" data-action="3d_view">🏠 3D Visualisierung</button>
-            <button class="drawer-btn" data-action="save_customer">💾 Kunde ins CRM</button>
-            <button class="drawer-btn" data-action="monitoring">📊 Überwachung & Diagnose</button>
-            <button class="drawer-btn" data-action="quick_pdf">⚡ Blitz-Angebot</button>
-            <button class="drawer-btn" data-action="help_menu">❓ Hilfe-Menü</button>
-            <button class="drawer-btn" data-action="logout" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);">🚪 Abmelden</button>
+            <button class="drawer-btn" data-action="voice_command"> Sprachbefehl</button>
+            <button class="drawer-btn" data-action="3d_view"> 3D Visualisierung</button>
+            <button class="drawer-btn" data-action="save_customer"> Kunde ins CRM</button>
+            <button class="drawer-btn" data-action="monitoring"> Überwachung & Diagnose</button>
+            <button class="drawer-btn" data-action="quick_pdf"> Blitz-Angebot</button>
+            <button class="drawer-btn" data-action="help_menu"> Hilfe-Menü</button>
+            <button class="drawer-btn" data-action="logout" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);"> Abmelden</button>
         `;
         parentDoc.body.appendChild(drawer);
         
@@ -1501,7 +1501,7 @@ def main():
         const btn = parentDoc.createElement('button');
         btn.id = 'drawer-btn';
         btn.className = 'drawer-button';
-        btn.innerHTML = '☰';
+        btn.innerHTML = '';
         btn.title = 'Schnellzugriff';
         
         btn.onclick = function() {
@@ -2278,7 +2278,7 @@ def main():
 
         # === PDF-VORSCHAU TAB ===
         with tab_pdf_preview:
-            st.subheader("👁️ Live PDF-Vorschau & Bearbeitung")
+            st.subheader(" Live PDF-Vorschau & Bearbeitung")
 
             # PDF-Vorschau Modul importieren und verwenden
             try:
@@ -2303,7 +2303,7 @@ def main():
                         with col_feature1:
                             st.markdown("""
                             ** Live-Vorschau Modi:**
-                            - ‍ Schnellvorschau (erste Seiten)
+                            -  Schnellvorschau (erste Seiten)
                             -  Vollständige Vorschau
                             -  Seitenweise Navigation
                             
@@ -2421,18 +2421,18 @@ def main():
             st.info(
                 "**[IDEA] Multi-Firmen-Angebote: KASKADIERENDE Preisberechnung**\n\n"
                 "**Wichtig:** Die Preise werden KASKADIEREND berechnet!\n\n"
-                "🔹 Firma 1: Haupt-PDF Preis + Basis-Aufschlag %\n\n"
-                "🔹 Firma 2: Preis von Firma 1 + Progression %\n\n"
-                "🔹 Firma 3: Preis von Firma 2 + Progression %\n\n"
-                "➡️ Beispiel: Basis 100.000 €, +5%, +5%\n"
+                " Firma 1: Haupt-PDF Preis + Basis-Aufschlag %\n\n"
+                " Firma 2: Preis von Firma 1 + Progression %\n\n"
+                " Firma 3: Preis von Firma 2 + Progression %\n\n"
+                " Beispiel: Basis 100.000 €, +5%, +5%\n"
                 "   • Firma 1: 105.000 €\n"
                 "   • Firma 2: 110.250 € (NICHT 110.000!)\n"
                 "   • Firma 3: 115.762,50 € (NICHT 115.000!)\n\n"
                 "**Voraussetzungen:**\n\n"
-                "1️⃣ **Mehrere Firmen** konfiguriert im Admin-Panel\n\n"
-                "2️⃣ **Vollständige Projektanalyse** durchgeführt\n\n"
-                "3️⃣ **Produktauswahl** abgeschlossen\n\n"
-                "👉 Für **Einzel-Firmen-PDFs** nutzen Sie den Tab 'PDF-Ausgabe' oben."
+                "1⃣ **Mehrere Firmen** konfiguriert im Admin-Panel\n\n"
+                "2⃣ **Vollständige Projektanalyse** durchgeführt\n\n"
+                "3⃣ **Produktauswahl** abgeschlossen\n\n"
+                " Für **Einzel-Firmen-PDFs** nutzen Sie den Tab 'PDF-Ausgabe' oben."
             )
             
             st.markdown("---")
@@ -2446,7 +2446,7 @@ def main():
                         st.warning("Keine Firmen in der Datenbank gefunden. Bitte fügen Sie erst Firmen hinzu.")
                     else:
                         # === FIRMEN-AUSWAHL ===
-                        st.markdown("### 🏢 Firmen-Auswahl")
+                        st.markdown("###  Firmen-Auswahl")
                         
                         # ERST firm_options definieren (wird im Button gebraucht!)
                         firm_options = {f"{firm.get('name', 'Unbekannt')} ({firm.get('location', 'Kein Ort')})": firm 
@@ -2550,7 +2550,7 @@ def main():
                                 st.markdown("---")
                                 st.markdown("**Erweiterte Ausgabe:**")
                                 append_additional_pages = st.checkbox(
-                                    "📑 Zusätzliche Angebotsseiten anhängen",
+                                    " Zusätzliche Angebotsseiten anhängen",
                                     value=False,
                                     key="multi_pdf_append_additional",
                                     help="Fügt detaillierte Berechnungen, Diagramme und individuelle Inhalte hinzu"
@@ -2558,7 +2558,7 @@ def main():
                                 
                                 if append_additional_pages:
                                     include_all_docs = st.checkbox(
-                                        "📋 Datenblätter & Dokumente anhängen",
+                                        " Datenblätter & Dokumente anhängen",
                                         value=True,
                                         key="multi_pdf_include_all_docs",
                                         help="Produktdatenblätter und Firmendokumente"
@@ -2627,7 +2627,7 @@ def main():
                             st.markdown("---")
                             
                             # === ZUSÄTZLICHE OPTIONEN ===
-                            with st.expander("⚙️ Erweiterte Optionen", expanded=False):
+                            with st.expander(" Erweiterte Optionen", expanded=False):
                                 col1, col2 = st.columns(2)
                                 
                                 with col1:
@@ -2652,7 +2652,7 @@ def main():
                                     )
                                 
                                 with col2:
-                                    st.markdown("**📋 Zahlungsmodalitäten:**")
+                                    st.markdown("** Zahlungsmodalitäten:**")
                                     
                                     include_payment_terms = st.checkbox(
                                         "Zahlungsbedingungen einbinden",
@@ -2676,7 +2676,7 @@ def main():
                             st.markdown("---")
                             
                             # === PRODUKT-ROTATION ===
-                            st.markdown("### 🔄 Produkt-Rotation")
+                            st.markdown("###  Produkt-Rotation")
                             
                             st.info(
                                 "**Automatische Marken-Rotation:** Jede Firma erhält automatisch andere "
@@ -2722,11 +2722,11 @@ def main():
                             
                             # VALIDIERUNG: Produkte müssen ausgewählt sein!
                             if not pv_module:
-                                st.error("**FEHLER:** Kein PV-Modul ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie ein PV-Modul aus.")
+                                st.error("**FEHLER:** Kein PV-Modul ausgewählt! Bitte gehen Sie zum Tab ' Produktauswahl' und wählen Sie ein PV-Modul aus.")
                                 st.stop()
                             
                             if not inverter:
-                                st.error("**FEHLER:** Kein Wechselrichter ausgewählt! Bitte gehen Sie zum Tab '🏠 Produktauswahl' und wählen Sie einen Wechselrichter aus.")
+                                st.error("**FEHLER:** Kein Wechselrichter ausgewählt! Bitte gehen Sie zum Tab ' Produktauswahl' und wählen Sie einen Wechselrichter aus.")
                                 st.stop()
                             
                             # Sammle alle Optionen
@@ -2885,7 +2885,7 @@ def main():
             
             with col1:
                 status = current.get('status', 'UNKNOWN')
-                status_emoji = {"HEALTHY": "🟢", "DEGRADED": "🟡", "CRITICAL": "🔴", "OFFLINE": "⚫"}.get(status, "❓")
+                status_emoji = {"HEALTHY": "🟢", "DEGRADED": "🟡", "CRITICAL": "", "OFFLINE": ""}.get(status, "")
                 st.metric("Status", f"{status_emoji} {status}")
             
             with col2:
@@ -2910,7 +2910,7 @@ def main():
             col1, col2, col3 = st.columns(3)
             
             with col1:
-                if st.button("🔄 Rescan Application", use_container_width=True):
+                if st.button(" Rescan Application", use_container_width=True):
                     with st.spinner("Scanning application..."):
                         from app_diagnostics import scan_and_report
                         scan_and_report()
@@ -2918,7 +2918,7 @@ def main():
                     st.rerun()
             
             with col2:
-                if st.button("📊 Generate Health Report", use_container_width=True):
+                if st.button(" Generate Health Report", use_container_width=True):
                     report = health_monitor.generate_health_report()
                     st.success("Health report generated!")
                     st.json(report)
@@ -2926,13 +2926,13 @@ def main():
             with col3:
                 monitoring_active = health_status.get('monitoring_active', False)
                 if monitoring_active:
-                    if st.button("⏸️ Stop Monitoring", use_container_width=True):
+                    if st.button("⏸ Stop Monitoring", use_container_width=True):
                         from app_health_monitor import stop_health_monitoring
                         stop_health_monitoring()
                         st.success("Monitoring stopped")
                         st.rerun()
                 else:
-                    if st.button("▶️ Start Monitoring", use_container_width=True):
+                    if st.button(" Start Monitoring", use_container_width=True):
                         from app_health_monitor import start_health_monitoring
                         start_health_monitoring(interval=60)
                         st.success("Monitoring started (60s interval)")
@@ -2951,7 +2951,7 @@ def main():
         # A.G.E.N.T. - Autonomous AI Expert System
         # Check for voice mode activation
         if st.session_state.get('voice_mode'):
-            st.info("🎤 **Sprachsteuerung aktiviert!** Sprechen Sie Ihre Anfrage.")
+            st.info(" **Sprachsteuerung aktiviert!** Sprechen Sie Ihre Anfrage.")
             # Add voice input handling here if speech_recognition available
             try:
                 import speech_recognition as sr
@@ -3036,7 +3036,7 @@ def main():
         if info_platform_module and callable(getattr(info_platform_module, 'render_info_platform', None)):
             info_platform_module.render_info_platform(TEXTS, module_name=get_text_gui("menu_item_info_platform")) # type: ignore
         else:
-            st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_info","Info-Plattform nicht verfügbar.")))
+            st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_info","Controlling-Modul nicht verfügbar.")))
 
     elif selected_page_key == "options":
         st.header(get_text_gui("menu_item_options"))
@@ -3051,7 +3051,7 @@ def main():
         print("=" * 80)
 
         # Tabs für die Optionen erstellen
-        tab_general, tab_ai = st.tabs([" Allgemeine Einstellungen", "🤖 A.G.E.N.T. Begleiter"])
+        tab_general, tab_ai = st.tabs([" Allgemeine Einstellungen", " A.G.E.N.T. Begleiter"])
 
         with tab_general:
             if options_module and callable(getattr(options_module, 'render_options', None)):
@@ -3091,7 +3091,7 @@ def main():
             st.warning(get_text_gui("module_unavailable_details", "Solar Calculator Modul nicht verfügbar."))
     
     elif selected_page_key == "3d_view":
-        st.header("🏠 3D PV-Visualisierung")
+        st.header(" 3D PV-Visualisierung")
         try:
             # Execute the 3D view page code directly
             import os

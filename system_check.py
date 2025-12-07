@@ -59,26 +59,26 @@ def main():
             ("pikepdf", "pikepdf"),
         ],
         
-        "🔐 AUTHENTIFIZIERUNG & SECURITY": [
+        " AUTHENTIFIZIERUNG & SECURITY": [
             ("PyJWT", "jwt"),
             ("cryptography", "cryptography"),
             ("python-dotenv", "dotenv"),
         ],
         
-        "🗄️ DATENBANK": [
+        " DATENBANK": [
             ("SQLAlchemy", "sqlalchemy"),
             ("redis", "redis"),
             ("duckdb", "duckdb"),
         ],
         
-        "🌐 HTTP & API": [
+        " HTTP & API": [
             ("requests", "requests"),
             ("fastapi", "fastapi"),
             ("uvicorn", "uvicorn"),
             ("websockets", "websockets"),
         ],
         
-        "🤖 AI & MACHINE LEARNING": [
+        " AI & MACHINE LEARNING": [
             ("langchain", "langchain"),
             ("langchain-openai", "langchain_openai"),
             ("langchain-community", "langchain_community"),
@@ -94,14 +94,14 @@ def main():
             ("pvlib", "pvlib"),
         ],
         
-        "🧪 TESTING": [
+        " TESTING": [
             ("pytest", "pytest"),
             ("pytest-asyncio", "pytest_asyncio"),
             ("hypothesis", "hypothesis"),
             ("Faker", "faker"),
         ],
         
-        "🛠️ ENTWICKLUNGSTOOLS": [
+        " ENTWICKLUNGSTOOLS": [
             ("black", "black"),
             ("ruff", "ruff"),
             ("mypy", "mypy"),
@@ -129,7 +129,7 @@ def main():
                 missing_packages.append((package_name, info))
     
     # Python Standard Library (kritisch)
-    print(f"\n🐍 PYTHON STANDARD LIBRARY")
+    print(f"\n PYTHON STANDARD LIBRARY")
     print("-" * 80)
     std_libs = ["json", "io", "pathlib", "typing", "datetime", "os", "sys", "re"]
     for lib in std_libs:
@@ -158,7 +158,7 @@ def main():
             print(f"  {module:30s} {info[:40]}")
     
     # Konfigurationsdateien prüfen
-    print(f"\n⚙️  KONFIGURATIONSDATEIEN")
+    print(f"\n  KONFIGURATIONSDATEIEN")
     print("-" * 80)
     
     config_files = [
@@ -192,11 +192,11 @@ def main():
         print("\nInstallation mit:")
         print(f"   pip install {' '.join([pkg for pkg, _ in missing_packages])}")
     else:
-        print("\n🎉 ALLE PAKETE SIND INSTALLIERT!")
+        print("\n ALLE PAKETE SIND INSTALLIERT!")
     
     print("\n" + "=" * 80)
-    print(f"🐍 Python Version: {sys.version}")
-    print(f"📍 Python Path: {sys.executable}")
+    print(f" Python Version: {sys.version}")
+    print(f" Python Path: {sys.executable}")
     print("=" * 80)
 
 if __name__ == "__main__":

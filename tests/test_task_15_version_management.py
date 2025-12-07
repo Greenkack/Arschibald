@@ -130,7 +130,7 @@ def test_version_management_functions():
         if friendly_name and friendly_name != key:
             print(f"    Benutzerfreundlicher Name vorhanden")
         else:
-            print(f"    ⚠ Kein benutzerfreundlicher Name definiert")
+            print(f"     Kein benutzerfreundlicher Name definiert")
 
     print("\n" + "=" * 80)
     print("Alle Tests erfolgreich abgeschlossen!")
@@ -173,7 +173,7 @@ def test_ui_structure():
         print("Docstring vorhanden")
         print(f"  {render_version_management.__doc__.strip()[:100]}...")
     else:
-        print("⚠ Keine Docstring vorhanden")
+        print(" Keine Docstring vorhanden")
 
     print("\n" + "=" * 80)
     print("UI-Struktur-Test erfolgreich!")

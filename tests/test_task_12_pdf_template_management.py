@@ -335,7 +335,7 @@ def run_all_tests():
     print(f"\n{passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n🎉 ALLE TESTS BESTANDEN!")
+        print("\n ALLE TESTS BESTANDEN!")
         print("\nTask 12 ist vollständig implementiert:")
         print("  Task 12.1: Template-Auswahl")
         print("  Task 12.2: Template-Details-Anzeige")

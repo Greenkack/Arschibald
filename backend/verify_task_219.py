@@ -30,10 +30,10 @@ def verify_component(name, test_func):
     """Verify a component and print result"""
     try:
         test_func()
-        print(f"✓ {name}")
+        print(f" {name}")
         return True
     except Exception as e:
-        print(f"✗ {name}: {e}")
+        print(f" {name}: {e}")
         return False
 
 
@@ -146,9 +146,9 @@ def verify_files_exist():
     for file_path in required_files:
         full_path = base_path / file_path
         if full_path.exists():
-            print(f"✓ File exists: {file_path}")
+            print(f" File exists: {file_path}")
         else:
-            print(f"✗ File missing: {file_path}")
+            print(f" File missing: {file_path}")
             all_exist = False
     
     return all_exist
@@ -183,13 +183,13 @@ def main():
     print("=" * 60)
     
     if all(results) and files_ok:
-        print("✓ ALL VERIFICATIONS PASSED")
+        print(" ALL VERIFICATIONS PASSED")
         print()
         print("Task 219 is COMPLETE and ready for use!")
         print()
         print("Requirements Satisfied:")
-        print("  ✓ Requirement 14.4: Dynamic key generation for all data types")
-        print("  ✓ Requirement 14.7: Key indexing for fast lookup")
+        print("   Requirement 14.4: Dynamic key generation for all data types")
+        print("   Requirement 14.7: Key indexing for fast lookup")
         print()
         print("Next Steps:")
         print("  - Integrate with database models")
@@ -198,7 +198,7 @@ def main():
         print("  - Implement Task 221: Universal Data Model")
         return 0
     else:
-        print("✗ SOME VERIFICATIONS FAILED")
+        print(" SOME VERIFICATIONS FAILED")
         print()
         print("Please review the errors above and fix any issues.")
         return 1

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\chart\trendline.py
+# hypothesis_version: 6.147.0
+
+['backward', 'dispEq', 'dispRSqr', 'exp', 'forward', 'intercept', 'layout', 'linear', 'log', 'movingAvg', 'numFmt', 'order', 'period', 'poly', 'power', 'spPr', 'trendline', 'trendlineLbl', 'trendlineType', 'tx', 'txPr']

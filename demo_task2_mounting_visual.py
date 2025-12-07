@@ -40,9 +40,9 @@ def demo_mounting_height():
     ]
     
     for roof_type in roof_types:
-        print(f"\n{'─'*80}")
+        print(f"\n{''*80}")
         print(f"Erstelle Visualisierung für: {roof_type}")
-        print(f"{'─'*80}")
+        print(f"{''*80}")
         
         try:
             # Erstelle 3D-Szene

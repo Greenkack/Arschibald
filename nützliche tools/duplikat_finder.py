@@ -26,9 +26,9 @@ def find_duplicate_files(directory="."):
                 else:
                     file_hashes[file_hash] = file_path
 
-    print("📋 DUPLIKATE GEFUNDEN:")
+    print(" DUPLIKATE GEFUNDEN:")
     for dup1, dup2 in duplicates:
-        print(f"🔗 {dup1} ↔️ {dup2}")
+        print(f" {dup1} ↔ {dup2}")
 
     return duplicates
 
@@ -66,7 +66,7 @@ def find_similar_files(directory=".", threshold=0.8):
     for file1, file2, sim in sorted(
             similar_pairs, key=lambda x: x[2], reverse=True):
         print(
-            f"{sim:.1%} - {os.path.basename(file1)} ↔️ {os.path.basename(file2)}")
+            f"{sim:.1%} - {os.path.basename(file1)} ↔ {os.path.basename(file2)}")
 
     return similar_pairs
 

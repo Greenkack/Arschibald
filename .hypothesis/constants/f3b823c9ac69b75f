@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\trio\_core\_thread_cache.py
+# hypothesis_version: 6.147.0
+
+['RetT', '_default_name', '_idle_workers', '_job', '_thread', '_thread_cache', '_worker_lock', 'ascii', 'darwin', 'libc.so', 'pthread', 'pthread_setname_np', 'register_at_fork', 'replace']

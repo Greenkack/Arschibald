@@ -15,12 +15,12 @@ from components import shadcn_ui_integration as sui
 # Page config
 st.set_page_config(
     page_title="shadcn/ui Integration Demo",
-    page_icon="🎨",
+    page_icon="",
     layout="wide"
 )
 
 # Title
-st.title("🎨 streamlit-shadcn-ui Integration Demo")
+st.title(" streamlit-shadcn-ui Integration Demo")
 st.markdown("---")
 
 # Show availability status
@@ -92,7 +92,7 @@ with tab1:
         sui.button("Large", key="btn_lg", size="lg")
     
     with col4:
-        sui.button("🔍", key="btn_icon", size="icon")
+        sui.button("", key="btn_icon", size="icon")
     
     st.markdown("---")
     
@@ -336,10 +336,10 @@ with tab5:
     
     if sui.is_available():
         version = sui.get_version()
-        st.success(f"✅ streamlit-shadcn-ui version: {version}")
+        st.success(f" streamlit-shadcn-ui version: {version}")
         st.info("All components are using the native shadcn/ui library.")
     else:
-        st.warning("⚠️ streamlit-shadcn-ui is not installed")
+        st.warning(" streamlit-shadcn-ui is not installed")
         st.info("All components are using fallback implementations with native Streamlit widgets.")
     
     st.markdown("---")
@@ -389,4 +389,4 @@ with st.sidebar:
 
 # Footer
 st.markdown("---")
-st.caption("Built with ❤️ using Streamlit and shadcn/ui")
+st.caption("Built with  using Streamlit and shadcn/ui")

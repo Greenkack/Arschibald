@@ -79,7 +79,7 @@ HELP_TEXTS = {
     },
     
     "shading_analysis": {
-        "title": "☀️ Verschattungs-Analyse",
+        "title": " Verschattungs-Analyse",
         "description": "Analysiert die Verschattung jedes Moduls zu verschiedenen Tageszeiten und Jahreszeiten.",
         "steps": [
             "1. Aktivieren Sie 'Verschattungs-Analyse aktivieren'",
@@ -92,7 +92,7 @@ HELP_TEXTS = {
             "🟢 Grün: Keine Verschattung (0-10%) - Optimal",
             "🟡 Gelb: Leichte Verschattung (10-30%) - Gut",
             "🟠 Orange: Mittlere Verschattung (30-60%) - Akzeptabel",
-            "🔴 Rot: Starke Verschattung (60-100%) - Problematisch"
+            " Rot: Starke Verschattung (60-100%) - Problematisch"
         ],
         "tips": [
             "Testen Sie verschiedene Tageszeiten (Morgen, Mittag, Abend)",
@@ -102,7 +102,7 @@ HELP_TEXTS = {
     },
     
     "yield_heatmap": {
-        "title": "🔥 Ertrags-Heatmap",
+        "title": " Ertrags-Heatmap",
         "description": "Visualisiert das Ertragspotential jedes Moduls mit Farbcodierung.",
         "steps": [
             "1. Aktivieren Sie 'Ertrags-Heatmap aktivieren'",
@@ -116,7 +116,7 @@ HELP_TEXTS = {
             "🟢 Hellgrün: Guter Ertrag (70-90%) - Behalten",
             "🟡 Gelb: Mittlerer Ertrag (50-70%) - Prüfen",
             "🟠 Orange: Niedriger Ertrag (30-50%) - Überdenken",
-            "🔴 Rot: Sehr niedriger Ertrag (<30%) - Entfernen"
+            " Rot: Sehr niedriger Ertrag (<30%) - Entfernen"
         ],
         "tips": [
             "Entfernen Sie Module mit <50% Ertrag für bessere Wirtschaftlichkeit",
@@ -126,26 +126,26 @@ HELP_TEXTS = {
     },
     
     "module_selection": {
-        "title": "🎛️ Modul-Auswahl & Bearbeitung",
+        "title": " Modul-Auswahl & Bearbeitung",
         "description": "Wählen Sie einzelne Module oder Gruppen aus, um deren Eigenschaften zu bearbeiten.",
         "modes": {
             "Einzeln": [
                 "1. Wählen Sie 'Einzeln' als Auswahl-Modus",
                 "2. Geben Sie den Index des Moduls ein (0 = erstes Modul)",
-                "3. Klicken Sie auf '➕ Auswählen'",
+                "3. Klicken Sie auf ' Auswählen'",
                 "4. Das Modul wird in der 3D-Ansicht hervorgehoben"
             ],
             "Gruppe": [
                 "1. Wählen Sie 'Gruppe' als Auswahl-Modus",
                 "2. Wählen Sie eine vordefinierte Gruppe aus",
-                "3. Klicken Sie auf '🔘 Gruppe auswählen'",
+                "3. Klicken Sie auf ' Gruppe auswählen'",
                 "4. Alle Module der Gruppe werden ausgewählt"
             ],
             "Bereich": [
                 "1. Wählen Sie 'Bereich' als Auswahl-Modus",
                 "2. Geben Sie Start-Index ein (z.B. 0)",
                 "3. Geben Sie End-Index ein (z.B. 9)",
-                "4. Klicken Sie auf '🔘 Bereich auswählen'",
+                "4. Klicken Sie auf ' Bereich auswählen'",
                 "5. Module 0-9 werden ausgewählt"
             ]
         },
@@ -259,11 +259,11 @@ def show_help_dialog(topic: str):
     
     help_data = HELP_TEXTS[topic]
     
-    with st.expander(f"❓ Hilfe: {help_data['title']}", expanded=True):
+    with st.expander(f" Hilfe: {help_data['title']}", expanded=True):
         st.markdown(f"**{help_data['description']}**")
         
         if "steps" in help_data:
-            st.markdown("### 📋 Schritt-für-Schritt-Anleitung")
+            st.markdown("###  Schritt-für-Schritt-Anleitung")
             for step in help_data["steps"]:
                 st.markdown(step)
         
@@ -342,14 +342,14 @@ def render_help_sidebar():
     """
     Rendert eine Hilfe-Sidebar mit allen verfügbaren Hilfe-Themen.
     """
-    with st.sidebar.expander("❓ Hilfe & Anleitungen", expanded=False):
-        st.markdown("### 📚 Verfügbare Hilfe-Themen")
+    with st.sidebar.expander(" Hilfe & Anleitungen", expanded=False):
+        st.markdown("###  Verfügbare Hilfe-Themen")
         
         help_topics = {
             "optimization_assistant": "Optimierungs-Assistent",
-            "shading_analysis": "☀️ Verschattungs-Analyse",
-            "yield_heatmap": "🔥 Ertrags-Heatmap",
-            "module_selection": "🎛️ Modul-Auswahl",
+            "shading_analysis": " Verschattungs-Analyse",
+            "yield_heatmap": " Ertrags-Heatmap",
+            "module_selection": " Modul-Auswahl",
             "export_options": "Export-Optionen"
         }
         
@@ -360,12 +360,12 @@ def render_help_sidebar():
             key="help_topic_select"
         )
         
-        if st.button("📖 Hilfe anzeigen", use_container_width=True):
+        if st.button(" Hilfe anzeigen", use_container_width=True):
             st.session_state["show_help_for"] = selected_topic
         
         st.divider()
         
-        st.markdown("### 📋 Beispiel-Konfigurationen")
+        st.markdown("###  Beispiel-Konfigurationen")
         
         example_names = list(EXAMPLE_CONFIGS.keys())
         selected_example = st.selectbox(
@@ -374,7 +374,7 @@ def render_help_sidebar():
             key="example_config_select"
         )
         
-        if st.button("👁️ Beispiel anzeigen", use_container_width=True):
+        if st.button(" Beispiel anzeigen", use_container_width=True):
             show_example_config(selected_example)
         
         st.divider()
@@ -394,7 +394,7 @@ def show_contextual_help(context: str):
     """
     context_help = {
         "basis_settings": {
-            "title": "🏠 Basis-Einstellungen",
+            "title": " Basis-Einstellungen",
             "tips": [
                 "Messen Sie Ihr Gebäude präzise für beste Ergebnisse",
                 "Die Traufhöhe ist die Höhe der Außenwände, nicht die Firsthöhe",
@@ -410,7 +410,7 @@ def show_contextual_help(context: str):
             ]
         },
         "advanced_controls": {
-            "title": "🎛️ Erweiterte Kontrolle",
+            "title": " Erweiterte Kontrolle",
             "tips": [
                 "Kollisionserkennung hilft unrealistische Konfigurationen zu vermeiden",
                 "Verwenden Sie Gruppen-Auswahl für schnelle Anpassungen",

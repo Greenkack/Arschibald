@@ -25,7 +25,7 @@ def render_sun_path_animation(
     
     WOW-Faktor: Benutzer sieht wie sich Schatten über den Tag bewegen!
     """
-    st.markdown("### ☀️ Sonnenverlauf-Animation")
+    st.markdown("###  Sonnenverlauf-Animation")
     
     col1, col2 = st.columns([2, 1])
     
@@ -42,7 +42,7 @@ def render_sun_path_animation(
     
     with col2:
         animate = st.checkbox(
-            "🎬 Animieren",
+            " Animieren",
             value=False,
             help="Automatische Animation des Sonnenverlaufs",
             key="sun_path_animate"
@@ -159,7 +159,7 @@ def render_module_inspector() -> Dict[str, Any]:
             st.metric("Effizienz", "98.5%")
         
         # Modul-spezifische Aktionen
-        if st.button("🔄 Modul drehen", key="rotate_module"):
+        if st.button(" Modul drehen", key="rotate_module"):
             st.success("Modul um 90° gedreht")
         
         if st.button("Modul entfernen", key="remove_module"):
@@ -184,7 +184,7 @@ def render_realtime_performance_sim() -> Dict[str, Any]:
     
     with col1:
         cloud_cover = st.slider(
-            "☁️ Bewölkung",
+            " Bewölkung",
             min_value=0,
             max_value=100,
             value=20,
@@ -250,7 +250,7 @@ def render_ar_preview_mode() -> Dict[str, Any]:
     
     WOW-Faktor: Sieht aus wie echte Augmented Reality!
     """
-    st.markdown("### 📱 AR-Vorschau-Modus")
+    st.markdown("###  AR-Vorschau-Modus")
     
     ar_enabled = st.toggle(
         "AR-Modus aktivieren",
@@ -267,19 +267,19 @@ def render_ar_preview_mode() -> Dict[str, Any]:
         
         with col1:
             show_measurements = st.checkbox(
-                "📏 Maße anzeigen",
+                " Maße anzeigen",
                 value=True,
                 key="ar_measurements"
             )
             show_labels = st.checkbox(
-                "🏷️ Beschriftungen",
+                " Beschriftungen",
                 value=True,
                 key="ar_labels"
             )
         
         with col2:
             show_arrows = st.checkbox(
-                "➡️ Richtungspfeile",
+                " Richtungspfeile",
                 value=True,
                 key="ar_arrows"
             )
@@ -313,7 +313,7 @@ def render_comparison_mode() -> Dict[str, Any]:
     
     WOW-Faktor: Direkter visueller Vergleich verschiedener Layouts!
     """
-    st.markdown("### ⚖️ Vergleichs-Modus")
+    st.markdown("###  Vergleichs-Modus")
     
     comparison_enabled = st.toggle(
         "Vergleich aktivieren",
@@ -326,7 +326,7 @@ def render_comparison_mode() -> Dict[str, Any]:
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("#### 🅰️ Konfiguration A")
+            st.markdown("####  Konfiguration A")
             config_a = st.selectbox(
                 "Layout A",
                 options=["Optimal", "Maximal", "Ost-West", "Süd"],
@@ -336,7 +336,7 @@ def render_comparison_mode() -> Dict[str, Any]:
             st.metric("Module A", "35 Stück")
         
         with col2:
-            st.markdown("#### 🅱️ Konfiguration B")
+            st.markdown("####  Konfiguration B")
             config_b = st.selectbox(
                 "Layout B",
                 options=["Optimal", "Maximal", "Ost-West", "Süd"],
@@ -379,7 +379,7 @@ def render_timelapse_simulation() -> Dict[str, Any]:
     
     WOW-Faktor: Sehen Sie wie sich Verschattung über das Jahr ändert!
     """
-    st.markdown("### 🎞️ Jahres-Zeitraffer")
+    st.markdown("###  Jahres-Zeitraffer")
     
     col1, col2 = st.columns([3, 1])
     
@@ -396,13 +396,13 @@ def render_timelapse_simulation() -> Dict[str, Any]:
     
     with col2:
         play_timelapse = st.button(
-            "▶️ Abspielen",
+            " Abspielen",
             key="play_timelapse",
             use_container_width=True
         )
     
     if play_timelapse:
-        st.info("🎬 Zeitraffer-Animation wird abgespielt...")
+        st.info(" Zeitraffer-Animation wird abgespielt...")
         progress = st.progress(0)
         for i in range(100):
             progress.progress(i + 1)
@@ -437,7 +437,7 @@ def render_ai_optimization_assistant() -> Dict[str, Any]:
     
     WOW-Faktor: Intelligente Vorschläge wie ein echter Experte!
     """
-    st.markdown("### 🤖 KI-Optimierungs-Assistent")
+    st.markdown("###  KI-Optimierungs-Assistent")
     
     if st.button(
         "Layout analysieren",
@@ -469,7 +469,7 @@ def render_ai_optimization_assistant() -> Dict[str, Any]:
                 "impact": "+2% Effizienz"
             },
             {
-                "icon": "🔄",
+                "icon": "",
                 "title": "Ost-West Ausrichtung erwägen",
                 "description": "Für Ihren Verbrauch könnte Ost-West günstiger sein",
                 "impact": "+15% Eigenverbrauch"
@@ -502,7 +502,7 @@ def render_weather_integration() -> Dict[str, Any]:
     
     WOW-Faktor: Echte Wetterdaten in Echtzeit!
     """
-    st.markdown("### 🌤️ Wetter-Integration")
+    st.markdown("###  Wetter-Integration")
     
     # Simuliere Wetterdaten (in Produktion: API-Call)
     weather_data = {
@@ -522,23 +522,23 @@ def render_weather_integration() -> Dict[str, Any]:
             f"{weather_data['temperature']}°C"
         )
         st.metric(
-            "☁️ Bewölkung",
+            " Bewölkung",
             f"{weather_data['cloud_cover']}%"
         )
     
     with col2:
         st.metric(
-            "💨 Wind",
+            " Wind",
             f"{weather_data['wind_speed']} km/h"
         )
         st.metric(
-            "💧 Luftfeuchtigkeit",
+            " Luftfeuchtigkeit",
             f"{weather_data['humidity']}%"
         )
     
     with col3:
         st.metric(
-            "☀️ UV-Index",
+            " UV-Index",
             weather_data['uv_index']
         )
         
@@ -550,14 +550,14 @@ def render_weather_integration() -> Dict[str, Any]:
         )
     
     # Wettervorhersage
-    st.markdown("#### 📅 3-Tages-Vorhersage")
+    st.markdown("####  3-Tages-Vorhersage")
     
     forecast_cols = st.columns(3)
     
     forecast = [
-        {"day": "Morgen", "icon": "☀️", "temp": 24, "yield": 45},
-        {"day": "Übermorgen", "icon": "⛅", "temp": 21, "yield": 38},
-        {"day": "In 3 Tagen", "icon": "🌧️", "temp": 18, "yield": 22}
+        {"day": "Morgen", "icon": "", "temp": 24, "yield": 45},
+        {"day": "Übermorgen", "icon": "", "temp": 21, "yield": 38},
+        {"day": "In 3 Tagen", "icon": "", "temp": 18, "yield": 22}
     ]
     
     for i, day_data in enumerate(forecast):
@@ -579,7 +579,7 @@ def render_presentation_mode() -> Dict[str, Any]:
     
     WOW-Faktor: Beeindruckende Präsentation auf Knopfdruck!
     """
-    st.markdown("### 🎤 Präsentations-Modus")
+    st.markdown("###  Präsentations-Modus")
     
     presentation_active = st.toggle(
         "Präsentations-Modus",
@@ -596,24 +596,24 @@ def render_presentation_mode() -> Dict[str, Any]:
         
         with col1:
             hide_controls = st.checkbox(
-                "🎛️ Steuerelemente ausblenden",
+                " Steuerelemente ausblenden",
                 value=True,
                 key="hide_controls"
             )
             fullscreen = st.checkbox(
-                "🖥️ Vollbild-Modus",
+                " Vollbild-Modus",
                 value=False,
                 key="fullscreen"
             )
         
         with col2:
             show_logo = st.checkbox(
-                "🏢 Firmenlogo anzeigen",
+                " Firmenlogo anzeigen",
                 value=True,
                 key="show_logo"
             )
             auto_rotate = st.checkbox(
-                "🔄 Auto-Rotation",
+                " Auto-Rotation",
                 value=False,
                 key="auto_rotate"
             )
@@ -637,11 +637,11 @@ def render_presentation_mode() -> Dict[str, Any]:
         col_prev, col_next, col_export = st.columns(3)
         
         with col_prev:
-            st.button("⬅️ Zurück", key="slide_prev", use_container_width=True)
+            st.button(" Zurück", key="slide_prev", use_container_width=True)
         with col_next:
-            st.button("➡️ Weiter", key="slide_next", use_container_width=True)
+            st.button(" Weiter", key="slide_next", use_container_width=True)
         with col_export:
-            st.button("📤 Teilen", key="share_presentation", use_container_width=True)
+            st.button(" Teilen", key="share_presentation", use_container_width=True)
     
     return {
         "presentation_active": presentation_active,

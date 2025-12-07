@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\scatter3d\_line.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'autocolorscale', 'cauto', 'cmax', 'cmid', 'cmin', 'color', 'coloraxis', 'colorbar', 'colorscale', 'colorsrc', 'dash', 'line', 'reversescale', 'scatter3d', 'scatter3d.line', 'showscale', 'skip_invalid', 'width']

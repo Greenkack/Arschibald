@@ -28,8 +28,8 @@ class Breadcrumb(ShadcnComponent):
         breadcrumb = Breadcrumb()
         breadcrumb.render(
             items=[
-                {"label": "Home", "icon": "🏠"},
-                {"label": "Projekte", "icon": "📁"},
+                {"label": "Home", "icon": ""},
+                {"label": "Projekte", "icon": ""},
                 {"label": "Solar-Anlage"}
             ],
             separator="/"

@@ -30,7 +30,7 @@ try:
     else:
         print("   Database.py nicht gefunden")
     
-    print("\n🎉 Alle Tests erfolgreich!")
+    print("\n Alle Tests erfolgreich!")
     
 except Exception as e:
     print(f"FEHLER: {e}")

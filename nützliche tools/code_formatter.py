@@ -26,7 +26,7 @@ def format_code():
             subprocess.run([sys.executable, '-m', 'pip', 'install', formatter])
 
     # Black Formatierung
-    print("🖤 Führe Black-Formatierung aus...")
+    print(" Führe Black-Formatierung aus...")
     result = subprocess.run([sys.executable,
                              '-m',
                              'black',
@@ -37,11 +37,11 @@ def format_code():
     print(f"  {result.stdout.count('reformatted')} Dateien reformatiert")
 
     # isort Import-Sortierung
-    print("📋 Sortiere Imports mit isort...")
+    print(" Sortiere Imports mit isort...")
     subprocess.run([sys.executable, '-m', 'isort', '.'])
 
     # AutoPEP8 für PEP8-Konformität
-    print("📏 PEP8-Korrekturen mit autopep8...")
+    print(" PEP8-Korrekturen mit autopep8...")
     for py_file in python_files:
         subprocess.run([sys.executable, '-m', 'autopep8',
                        '--in-place', '--aggressive', py_file])

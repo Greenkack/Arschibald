@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\pytest_django\fixtures.py
+# hypothesis_version: 6.147.0
+
+[':memory:', 'ENGINE', 'NAME', 'TEST', 'TOX_PARALLEL_ENV', '__all__', '__init__', '_live_server_helper', '_to_restore', 'admin', 'admin@example.com', 'admin_client', 'admin_user', 'async_client', 'async_rf', 'client', 'cls', 'create_db', 'databases', 'db', 'django_db', 'django_db_setup', 'django_user_model', 'email', 'fixturenames', 'keepdb', 'live_server', 'liveserver', 'localhost', 'nomigrations', 'or less ', 'password', 'reuse_db', 'rf', 'serialized_rollback', 'session', 'settings', 'sql', 'transactional_db', 'verbose', 'verbosity', 'was', 'were', 'workerid', 'workerinput']

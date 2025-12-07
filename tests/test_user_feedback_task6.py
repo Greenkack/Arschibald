@@ -79,7 +79,7 @@ def test_feedback_features():
         ]
         
         for status, progress in operations:
-            print(f"🔄 [{progress:3d}%] {status}")
+            print(f" [{progress:3d}%] {status}")
         
         results["passed"].append("Progress bar feedback")
         print()
@@ -200,7 +200,7 @@ def test_feedback_features():
     print("Test 9: Real-time Update Indicator")
     print("-" * 80)
     try:
-        print("🔄 Echtzeit-Updates aktiviert")
+        print(" Echtzeit-Updates aktiviert")
         print("   Die 3D-Visualisierung aktualisiert sich automatisch")
         print("   bei Änderungen der Einstellungen.")
         

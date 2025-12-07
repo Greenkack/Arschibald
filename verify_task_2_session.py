@@ -313,7 +313,7 @@ def run_verification():
     print("=" * 60)
 
     if passed == total:
-        print("\n🎉 All verifications passed! Task 2 is complete.")
+        print("\n All verifications passed! Task 2 is complete.")
         return 0
     else:
         print(f"\n{total - passed} verification(s) failed.")

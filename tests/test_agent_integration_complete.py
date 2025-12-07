@@ -88,7 +88,7 @@ def main():
 
     # Overall result
     if passed_suites == total_suites:
-        print("🎉 ALL INTEGRATION TESTS PASSED! 🎉")
+        print(" ALL INTEGRATION TESTS PASSED! ")
         print()
         print("The KAI Agent system is successfully integrated into the")
         print("Bokuk2 application with proper isolation and dependency")

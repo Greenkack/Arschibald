@@ -29,12 +29,12 @@ def test_yml_parser():
     
     for yml_file in test_files:
         if not Path(yml_file).exists():
-            print(f"\n⚠ Skipping {yml_file} (not found)")
+            print(f"\n Skipping {yml_file} (not found)")
             continue
         
-        print(f"\n{'─' * 60}")
+        print(f"\n{'' * 60}")
         print(f"Testing: {yml_file}")
-        print('─' * 60)
+        print('' * 60)
         
         try:
             # Parse the file
@@ -101,12 +101,12 @@ def test_format_preserver():
     
     for yml_file in test_files:
         if not Path(yml_file).exists():
-            print(f"\n⚠ Skipping {yml_file} (not found)")
+            print(f"\n Skipping {yml_file} (not found)")
             continue
         
-        print(f"\n{'─' * 60}")
+        print(f"\n{'' * 60}")
         print(f"Testing: {yml_file}")
-        print('─' * 60)
+        print('' * 60)
         
         try:
             # Parse the file
@@ -119,7 +119,7 @@ def test_format_preserver():
             
             # Get structure info
             info = preserver.get_structure_info()
-            print(f"\n📋 Structure Info:")
+            print(f"\n Structure Info:")
             print(f"   Line ending: {repr(info['line_ending'])}")
             print(f"   Separator: '{info['separator']}'")
             print(f"   Number of blocks: {info['num_blocks']}")
@@ -134,7 +134,7 @@ def test_format_preserver():
             if is_valid:
                 print(f"\nFormat preservation validated successfully")
             else:
-                print(f"\n⚠ Format preservation differences:")
+                print(f"\n Format preservation differences:")
                 for diff in differences:
                     print(f"   - {diff}")
             
@@ -142,7 +142,7 @@ def test_format_preserver():
             new_positions = [(x1+10, y1+10, x2+10, y2+10) for x1, y1, x2, y2 in original_positions]
             reconstructed_modified = preserver.reconstruct_yml(elements, new_positions)
             
-            print(f"\n🔄 Testing with modified positions:")
+            print(f"\n Testing with modified positions:")
             print(f"   Original first position: {original_positions[0]}")
             print(f"   Modified first position: {new_positions[0]}")
             
@@ -172,7 +172,7 @@ def test_integration():
     yml_file = "coords_multi/seite1_f1.yml"
     
     if not Path(yml_file).exists():
-        print(f"\n⚠ Skipping integration test ({yml_file} not found)")
+        print(f"\n Skipping integration test ({yml_file} not found)")
         return
     
     print(f"\nTesting with: {yml_file}")
@@ -205,7 +205,7 @@ def test_integration():
         if is_valid:
             print(f"Format preservation validated")
         else:
-            print(f"⚠ Format differences: {len(differences)}")
+            print(f" Format differences: {len(differences)}")
         
         # Show sample of new content
         print(f"\nSample of new content (first 500 chars):")
@@ -218,7 +218,7 @@ def test_integration():
 
 
 if __name__ == "__main__":
-    print("\n" + "🧪 YML Parser & Format Preserver Test Suite" + "\n")
+    print("\n" + " YML Parser & Format Preserver Test Suite" + "\n")
     
     test_yml_parser()
     test_format_preserver()

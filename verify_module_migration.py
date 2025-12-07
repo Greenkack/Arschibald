@@ -24,9 +24,9 @@ def test_imports() -> Tuple[bool, List[str]]:
             get_theme_manager,
             SHADCN_AVAILABLE,
         )
-        print("✅ Migration helpers imported successfully")
+        print(" Migration helpers imported successfully")
     except ImportError as e:
-        errors.append(f"❌ Failed to import migration helpers: {e}")
+        errors.append(f" Failed to import migration helpers: {e}")
     
     try:
         from solar_calculator_shadcn import (
@@ -34,9 +34,9 @@ def test_imports() -> Tuple[bool, List[str]]:
             display_pricing_with_shadcn,
             apply_chart_theme_to_all_figures,
         )
-        print("✅ Solar calculator shadcn module imported successfully")
+        print(" Solar calculator shadcn module imported successfully")
     except ImportError as e:
-        errors.append(f"❌ Failed to import solar_calculator_shadcn: {e}")
+        errors.append(f" Failed to import solar_calculator_shadcn: {e}")
     
     try:
         from crm_shadcn import (
@@ -44,9 +44,9 @@ def test_imports() -> Tuple[bool, List[str]]:
             render_customer_list_with_cards,
             render_crm_dashboard_with_metrics,
         )
-        print("✅ CRM shadcn module imported successfully")
+        print(" CRM shadcn module imported successfully")
     except ImportError as e:
-        errors.append(f"❌ Failed to import crm_shadcn: {e}")
+        errors.append(f" Failed to import crm_shadcn: {e}")
     
     try:
         from admin_panel_shadcn import (
@@ -54,9 +54,9 @@ def test_imports() -> Tuple[bool, List[str]]:
             render_admin_navigation_with_shadcn,
             render_admin_dashboard_with_metrics,
         )
-        print("✅ Admin panel shadcn module imported successfully")
+        print(" Admin panel shadcn module imported successfully")
     except ImportError as e:
-        errors.append(f"❌ Failed to import admin_panel_shadcn: {e}")
+        errors.append(f" Failed to import admin_panel_shadcn: {e}")
     
     return len(errors) == 0, errors
 
@@ -69,21 +69,21 @@ def test_helper_functions() -> Tuple[bool, List[str]]:
         from utils.shadcn_migration_helpers import SHADCN_AVAILABLE
         
         if SHADCN_AVAILABLE:
-            print("✅ shadcn/ui components are available")
+            print(" shadcn/ui components are available")
         else:
-            print("⚠️  shadcn/ui components not available (fallback mode)")
+            print("  shadcn/ui components not available (fallback mode)")
     except Exception as e:
-        errors.append(f"❌ Failed to check SHADCN_AVAILABLE: {e}")
+        errors.append(f" Failed to check SHADCN_AVAILABLE: {e}")
     
     try:
         from utils.shadcn_migration_helpers import get_theme_manager
         theme_manager = get_theme_manager()
         if theme_manager:
-            print("✅ Theme manager initialized successfully")
+            print(" Theme manager initialized successfully")
         else:
-            print("⚠️  Theme manager not available (fallback mode)")
+            print("  Theme manager not available (fallback mode)")
     except Exception as e:
-        errors.append(f"❌ Failed to initialize theme manager: {e}")
+        errors.append(f" Failed to initialize theme manager: {e}")
     
     return len(errors) == 0, errors
 
@@ -101,9 +101,9 @@ def test_documentation() -> Tuple[bool, List[str]]:
     
     for doc in docs:
         if os.path.exists(doc):
-            print(f"✅ Documentation exists: {doc}")
+            print(f" Documentation exists: {doc}")
         else:
-            errors.append(f"❌ Documentation missing: {doc}")
+            errors.append(f" Documentation missing: {doc}")
     
     return len(errors) == 0, errors
 
@@ -119,9 +119,9 @@ def test_demo_files() -> Tuple[bool, List[str]]:
     
     for demo in demos:
         if os.path.exists(demo):
-            print(f"✅ Demo file exists: {demo}")
+            print(f" Demo file exists: {demo}")
         else:
-            errors.append(f"❌ Demo file missing: {demo}")
+            errors.append(f" Demo file missing: {demo}")
     
     return len(errors) == 0, errors
 
@@ -139,9 +139,9 @@ def test_original_modules_unchanged() -> Tuple[bool, List[str]]:
     
     for original in originals:
         if os.path.exists(original):
-            print(f"✅ Original module preserved: {original}")
+            print(f" Original module preserved: {original}")
         else:
-            errors.append(f"❌ Original module missing: {original}")
+            errors.append(f" Original module missing: {original}")
     
     return len(errors) == 0, errors
 
@@ -208,7 +208,7 @@ def run_all_tests():
     # Summary
     print("=" * 60)
     if all_passed:
-        print("✅ ALL TESTS PASSED")
+        print(" ALL TESTS PASSED")
         print()
         print("Task 17 verification complete!")
         print("All modules migrated successfully to shadcn/ui components.")
@@ -219,7 +219,7 @@ def run_all_tests():
         print("3. Integrate into gui.py")
         return 0
     else:
-        print("❌ SOME TESTS FAILED")
+        print(" SOME TESTS FAILED")
         print()
         print("Please review the errors above and fix any issues.")
         return 1

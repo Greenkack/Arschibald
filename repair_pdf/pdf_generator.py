@@ -1137,7 +1137,7 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
             "Der Break-Even-Punkt markiert den Beginn Ihrer 'kostenlosen' Stromzeit – ab dann ist jede kWh reiner Gewinn für Sie!"),
         
         'consumption_coverage_pie_chart_bytes': get_text(texts, "chart_desc_consumption_coverage", 
-            "🏠 <b>Ihr Grad der Energiefreiheit:</b> Dieses Kreisdiagramm zeigt, wie unabhängig Sie vom Stromnetz werden. "
+            " <b>Ihr Grad der Energiefreiheit:</b> Dieses Kreisdiagramm zeigt, wie unabhängig Sie vom Stromnetz werden. "
             "Je größer der grüne Anteil, desto mehr Ihres Haushaltsstroms kommt direkt vom eigenen Dach. "
             "Das bedeutet weniger Abhängigkeit von Strompreiserhöhungen und mehr Kontrolle über Ihre Energiekosten. Ihre persönliche Energiewende visualisiert!"),
         
@@ -1147,17 +1147,17 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
             "Jede selbst verbrauchte kWh spart Ihnen ca. 30 Cent, jede eingespeiste kWh bringt Ihnen sichere Einnahmen!"),
         
         'daily_production_switcher_chart_bytes': get_text(texts, "chart_desc_daily_production", 
-            "🌅 <b>Ihr Kraftwerk im Tagesverlauf:</b> Erleben Sie, wie Ihre Anlage mit der Sonne 'aufwacht' und arbeitet! "
+            " <b>Ihr Kraftwerk im Tagesverlauf:</b> Erleben Sie, wie Ihre Anlage mit der Sonne 'aufwacht' und arbeitet! "
             "Von den ersten Strahlen am Morgen bis zum Sonnenuntergang sehen Sie hier die natürliche Leistungskurve. "
             "Die Mittagsspitze zeigt Ihr maximales Potenzial – genau dann, wenn auch Ihr Haushalt oft am meisten Strom braucht. Perfektes Timing der Natur!"),
         
         'weekly_production_switcher_chart_bytes': get_text(texts, "chart_desc_weekly_production", 
-            "📅 <b>Ihre Wochenenergie im Überblick:</b> So arbeitet Ihre Anlage durch die ganze Woche für Sie! "
+            " <b>Ihre Wochenenergie im Überblick:</b> So arbeitet Ihre Anlage durch die ganze Woche für Sie! "
             "Interessant zu sehen: Auch am Wochenende, wenn Sie vielleicht mehr zu Hause sind, produziert Ihre Anlage zuverlässig. "
             "Die gleichmäßige Verteilung zeigt: Ihre Investition arbeitet 7 Tage die Woche ohne Pause für Ihren Geldbeutel."),
         
         'yearly_production_switcher_chart_bytes': get_text(texts, "chart_desc_yearly_production", 
-            "🗓️ <b>Ihr Energiejahr in 3D:</b> Hier erleben Sie die Kraft der Jahreszeiten! Die hohen Säulen im Sommer zeigen Ihre 'Erntezeit' – "
+            " <b>Ihr Energiejahr in 3D:</b> Hier erleben Sie die Kraft der Jahreszeiten! Die hohen Säulen im Sommer zeigen Ihre 'Erntezeit' – "
             "jetzt sammeln Sie Energie für das ganze Jahr. Selbst in den schwächeren Wintermonaten arbeitet Ihre Anlage noch profitabel. "
             "Diese natürlichen Schwankungen sind eingeplant und machen Ihre Jahresrechnung trotzdem sehr positiv!"),
         
@@ -1167,12 +1167,12 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
             "Vergleichen Sie das mal mit Ihrem Sparbuch: Hier sehen Sie reale Werte zwischen 3-8% Rendite pro Jahr. Ihre Anlage ist eine Geldanlage mit Garantie!"),
         
         'feed_in_revenue_switcher_chart_bytes': get_text(texts, "chart_desc_feed_in_revenue", 
-            "💶 <b>Ihre garantierten Einnahmen:</b> Das ist Ihr 'Gehalt' vom Stromnetz! 20 Jahre lang bekommen Sie für jede eingespeiste kWh "
+            " <b>Ihre garantierten Einnahmen:</b> Das ist Ihr 'Gehalt' vom Stromnetz! 20 Jahre lang bekommen Sie für jede eingespeiste kWh "
             "die staatlich garantierte Vergütung – ein sicheres Einkommen neben Ihrer Stromersparnis. "
             "Diese Kurve zeigt Ihnen, wie sich Ihre Einspeisevergütung über die Jahre summiert. Nebeneinkommen war nie so einfach!"),
         
         'prod_vs_cons_switcher_chart_bytes': get_text(texts, "chart_desc_prod_vs_cons", 
-            "⚖️ <b>Das perfekte Gleichgewicht:</b> Hier sehen Sie das Zusammenspiel zwischen dem, was Sie erzeugen und dem, was Sie verbrauchen. "
+            " <b>Das perfekte Gleichgewicht:</b> Hier sehen Sie das Zusammenspiel zwischen dem, was Sie erzeugen und dem, was Sie verbrauchen. "
             "Die ideale Balance bedeutet: wenig Strom einkaufen müssen und trotzdem schöne Überschüsse für die Einspeisung. "
             "Ihre Anlage ist so dimensioniert, dass Sie optimal zwischen Eigenverbrauch und Gewinnoptimierung navigieren!"),
         
@@ -1182,17 +1182,17 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
             "das entspricht [Bäume-Anzahl] gepflanzten Bäumen! Sie investieren nicht nur in Ihre Finanzen, sondern in eine saubere Zukunft."),
         
         'investment_value_switcher_chart_bytes': get_text(texts, "chart_desc_investment_value", 
-            "💎 <b>Mehr als nur Geld – Ihr Wertzuwachs:</b> Diese Darstellung zeigt den Gesamtwert Ihrer Investition: "
+            " <b>Mehr als nur Geld – Ihr Wertzuwachs:</b> Diese Darstellung zeigt den Gesamtwert Ihrer Investition: "
             "Finanzielle Rendite + Umweltnutzen + Unabhängigkeit + Immobilienwert-Steigerung. "
             "Eine PV-Anlage ist mehr als nur Technik – sie ist Ihre persönliche Energiewende mit messbaren Vorteilen auf allen Ebenen!"),
         
         'storage_effect_switcher_chart_bytes': get_text(texts, "chart_desc_storage_effect", 
-            "🔋 <b>Ihr persönlicher Energietresor:</b> Der Batteriespeicher macht Sie noch unabhängiger! "
+            " <b>Ihr persönlicher Energietresor:</b> Der Batteriespeicher macht Sie noch unabhängiger! "
             "Tagsüber 'tanken' Sie Sonnenstrom, abends nutzen Sie ihn gemütlich beim Fernsehen oder Kochen. "
             "Diese Grafik zeigt, wie sich Ihr Eigenverbrauch durch den Speicher erhöht – weniger Netzbezug, mehr Ersparnis, mehr Autarkie!"),
         
         'selfuse_stack_switcher_chart_bytes': get_text(texts, "chart_desc_selfuse_stack", 
-            "🏠 <b>Eigenverbrauch ist bares Geld:</b> Jede selbst verbrauchte kWh ist wertvoller als eine eingespeiste! "
+            " <b>Eigenverbrauch ist bares Geld:</b> Jede selbst verbrauchte kWh ist wertvoller als eine eingespeiste! "
             "Diese gestapelte Darstellung zeigt Ihr optimales Verhältnis: Ein hoher blauer Bereich bedeutet direkte Kosteneinsparung, "
             "der orange Bereich bringt Ihnen die Einspeisevergütung. Die perfekte Mischung für maximalen finanziellen Vorteil!"),
         
@@ -1218,7 +1218,7 @@ def _get_chart_description(chart_key: str, texts: Dict[str, str]) -> str:
     }
     
     return descriptions.get(chart_key, get_text(texts, "chart_desc_generic", 
-        "🔆 <b>Ihre persönliche Energieanalyse:</b> Dieses Diagramm visualisiert wichtige Aspekte Ihrer maßgeschneiderten Photovoltaikanlage. "
+        " <b>Ihre persönliche Energieanalyse:</b> Dieses Diagramm visualisiert wichtige Aspekte Ihrer maßgeschneiderten Photovoltaikanlage. "
         "Jede Grafik hilft Ihnen dabei, die Vorteile Ihrer Investition besser zu verstehen und fundierte Entscheidungen für Ihre Energiezukunft zu treffen."))
 
 def page_layout_handler(canvas_obj: canvas.Canvas, doc_template: SimpleDocTemplate, texts_ref: Dict[str, str], company_info_ref: Dict, company_logo_base64_ref: Optional[str], offer_number_ref: str, page_width_ref: float, page_height_ref: float, margin_left_ref: float, margin_right_ref: float, margin_top_ref: float, margin_bottom_ref: float, doc_width_ref: float, doc_height_ref: float, include_custom_footer_ref: bool = True, include_header_logo_ref: bool = True):

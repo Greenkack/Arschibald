@@ -163,7 +163,7 @@ def test_complete_financing_generator():
             if num_pages == 2:
                 print("\n   PDF structure is correct!")
             else:
-                print(f"\n   ⚠ Warning: Expected 2 pages, got {num_pages}")
+                print(f"\n    Warning: Expected 2 pages, got {num_pages}")
             
             return True
         else:

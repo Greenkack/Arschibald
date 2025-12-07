@@ -216,4 +216,4 @@ with open('gui.py', 'w', encoding='utf-8') as f:
     f.writelines(lines)
 
 print("Erfolgreich! Slider- und Checkbox-Effekte wurden in gui.py eingefügt.")
-print(f"📍 Eingefügt vor Zeile {insert_index + 1}")
+print(f" Eingefügt vor Zeile {insert_index + 1}")

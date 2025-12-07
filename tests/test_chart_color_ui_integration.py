@@ -179,7 +179,7 @@ def run_all_tests():
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
-        print("\n🎉 Alle Integration Tests erfolgreich!")
+        print("\n Alle Integration Tests erfolgreich!")
         print("\nTask 10 vollständig implementiert:")
         print("   - Task 10.1: Globale Farbeinstellungen")
         print("   - Task 10.2: Farbpaletten-Bibliothek")

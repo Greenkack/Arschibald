@@ -10,7 +10,7 @@ from pathlib import Path
 
 def verify_files_exist():
     """Prüft ob alle erforderlichen Dateien existieren"""
-    print("🔍 Prüfe Dateien...")
+    print(" Prüfe Dateien...")
     
     required_files = [
         "utils/shadcn_sidebar.py",
@@ -24,7 +24,7 @@ def verify_files_exist():
     all_exist = True
     for file_path in required_files:
         exists = Path(file_path).exists()
-        status = "✅" if exists else "❌"
+        status = "" if exists else ""
         print(f"  {status} {file_path}")
         if not exists:
             all_exist = False
@@ -34,7 +34,7 @@ def verify_files_exist():
 
 def verify_imports():
     """Prüft ob alle Importe funktionieren"""
-    print("\n🔍 Prüfe Importe...")
+    print("\n Prüfe Importe...")
     
     try:
         from utils.shadcn_sidebar import (
@@ -45,25 +45,25 @@ def verify_imports():
             get_default_menu,
             get_solar_calculator_menu
         )
-        print("  ✅ Alle Importe erfolgreich")
+        print("   Alle Importe erfolgreich")
         return True
     except ImportError as e:
-        print(f"  ❌ Import-Fehler: {e}")
+        print(f"   Import-Fehler: {e}")
         return False
 
 
 def verify_classes():
     """Prüft ob alle Klassen korrekt definiert sind"""
-    print("\n🔍 Prüfe Klassen...")
+    print("\n Prüfe Klassen...")
     
     from utils.shadcn_sidebar import MenuItem, MenuGroup, ShadcnSidebar
     
     # MenuItem
-    item = MenuItem(label="Test", icon="🔘", key="test")
+    item = MenuItem(label="Test", icon="", key="test")
     assert item.label == "Test"
-    assert item.icon == "🔘"
+    assert item.icon == ""
     assert item.key == "test"
-    print("  ✅ MenuItem funktioniert")
+    print("   MenuItem funktioniert")
     
     # MenuGroup
     group = MenuGroup(
@@ -74,19 +74,19 @@ def verify_classes():
     assert group.title == "Test Group"
     assert len(group.items) == 1
     assert group.collapsible is True
-    print("  ✅ MenuGroup funktioniert")
+    print("   MenuGroup funktioniert")
     
     # ShadcnSidebar
     sidebar = ShadcnSidebar()
     assert sidebar is not None
-    print("  ✅ ShadcnSidebar funktioniert")
+    print("   ShadcnSidebar funktioniert")
     
     return True
 
 
 def verify_methods():
     """Prüft ob alle Methoden vorhanden sind"""
-    print("\n🔍 Prüfe Methoden...")
+    print("\n Prüfe Methoden...")
     
     from utils.shadcn_sidebar import ShadcnSidebar
     
@@ -103,7 +103,7 @@ def verify_methods():
     all_present = True
     for method in methods:
         has_method = hasattr(sidebar, method)
-        status = "✅" if has_method else "❌"
+        status = "" if has_method else ""
         print(f"  {status} {method}()")
         if not has_method:
             all_present = False
@@ -113,7 +113,7 @@ def verify_methods():
 
 def verify_predefined_menus():
     """Prüft vordefinierte Menüs"""
-    print("\n🔍 Prüfe vordefinierte Menüs...")
+    print("\n Prüfe vordefinierte Menüs...")
     
     from utils.shadcn_sidebar import (
         get_default_menu,
@@ -124,20 +124,20 @@ def verify_predefined_menus():
     default_menu = get_default_menu()
     assert isinstance(default_menu, list)
     assert len(default_menu) > 0
-    print(f"  ✅ Default-Menü ({len(default_menu)} Gruppen)")
+    print(f"   Default-Menü ({len(default_menu)} Gruppen)")
     
     # Solar-Menü
     solar_menu = get_solar_calculator_menu()
     assert isinstance(solar_menu, list)
     assert len(solar_menu) > 0
-    print(f"  ✅ Solar-Menü ({len(solar_menu)} Gruppen)")
+    print(f"   Solar-Menü ({len(solar_menu)} Gruppen)")
     
     return True
 
 
 def verify_documentation():
     """Prüft Dokumentation"""
-    print("\n🔍 Prüfe Dokumentation...")
+    print("\n Prüfe Dokumentation...")
     
     # Technische Referenz
     ref_path = Path("utils/SHADCN_SIDEBAR_REFERENCE.md")
@@ -146,9 +146,9 @@ def verify_documentation():
         assert "MenuItem" in content
         assert "MenuGroup" in content
         assert "ShadcnSidebar" in content
-        print("  ✅ Technische Referenz vollständig")
+        print("   Technische Referenz vollständig")
     else:
-        print("  ❌ Technische Referenz fehlt")
+        print("   Technische Referenz fehlt")
         return False
     
     # Quick Reference
@@ -157,9 +157,9 @@ def verify_documentation():
         content = quick_path.read_text(encoding='utf-8')
         assert "Schnellstart" in content
         assert "Beispiele" in content
-        print("  ✅ Quick Reference vollständig")
+        print("   Quick Reference vollständig")
     else:
-        print("  ❌ Quick Reference fehlt")
+        print("   Quick Reference fehlt")
         return False
     
     return True
@@ -167,7 +167,7 @@ def verify_documentation():
 
 def verify_tests():
     """Prüft Tests"""
-    print("\n🔍 Prüfe Tests...")
+    print("\n Prüfe Tests...")
     
     import subprocess
     
@@ -182,14 +182,14 @@ def verify_tests():
         if result.returncode == 0:
             # Zähle bestandene Tests
             passed = result.stdout.count(" passed")
-            print(f"  ✅ Alle Tests bestanden ({passed} Tests)")
+            print(f"   Alle Tests bestanden ({passed} Tests)")
             return True
         else:
-            print(f"  ❌ Tests fehlgeschlagen")
+            print(f"   Tests fehlgeschlagen")
             print(result.stdout[-500:])  # Letzte 500 Zeichen
             return False
     except Exception as e:
-        print(f"  ⚠️  Tests konnten nicht ausgeführt werden: {e}")
+        print(f"    Tests konnten nicht ausgeführt werden: {e}")
         return False
 
 
@@ -214,17 +214,17 @@ def main():
     print("=" * 60)
     
     for check, passed in results.items():
-        status = "✅" if passed else "❌"
+        status = "" if passed else ""
         print(f"{status} {check}")
     
     all_passed = all(results.values())
     
     print("\n" + "=" * 60)
     if all_passed:
-        print("✅ ALLE PRÜFUNGEN BESTANDEN!")
+        print(" ALLE PRÜFUNGEN BESTANDEN!")
         print("Task 11 ist vollständig implementiert.")
     else:
-        print("❌ EINIGE PRÜFUNGEN FEHLGESCHLAGEN")
+        print(" EINIGE PRÜFUNGEN FEHLGESCHLAGEN")
         print("Bitte behebe die Fehler.")
     print("=" * 60)
     

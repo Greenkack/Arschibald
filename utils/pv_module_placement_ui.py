@@ -72,11 +72,11 @@ def render_module_placement_ui(fig: go.Figure,
     # TAB-LAYOUT
     # ========================================================================
     tabs = st.tabs([
-        "⚙️ Automatisch",
+        " Automatisch",
         "Manuell",
-        "✏️ Bearbeiten",
+        " Bearbeiten",
         "Übersicht",
-        "💾 Speichern/Laden"
+        " Speichern/Laden"
     ])
     
     # ========================================================================
@@ -177,7 +177,7 @@ def render_module_placement_ui(fig: go.Figure,
                 mounting_type = st.radio(
                     "Aufständerungstyp",
                     options=["south", "east_west"],
-                    format_func=lambda x: "☀️ Süd-Aufständerung (15°)" if x == "south" else "🔄 Ost-West-Aufständerung (Dreieck)",
+                    format_func=lambda x: " Süd-Aufständerung (15°)" if x == "south" else " Ost-West-Aufständerung (Dreieck)",
                     help="Süd: Klassische Aufständerung nach Süden. Ost-West: Module abwechselnd nach Osten und Westen für bessere Flächennutzung"
                 )
             else:
@@ -222,7 +222,7 @@ def render_module_placement_ui(fig: go.Figure,
                 st.error("Anzahl ist 0!")
         
         with col_btn3:
-            if st.button("🔄 Alles löschen", use_container_width=True):
+            if st.button(" Alles löschen", use_container_width=True):
                 manager.modules.clear()
                 manager.next_module_id = 1
                 manager.roof_surfaces.clear()
@@ -324,7 +324,7 @@ def render_module_placement_ui(fig: go.Figure,
                         st.write(f"  - Modul {mid}: Position ({mod.transform.x:.2f}, {mod.transform.y:.2f}, {mod.transform.z:.2f})")
                     
                     # WICHTIG: Rerun auslösen damit die Module in der ERSTEN Figure erscheinen
-                    st.info("🔄 Seite wird neu geladen um Module anzuzeigen...")
+                    st.info(" Seite wird neu geladen um Module anzuzeigen...")
                     st.rerun()
                 else:
                     st.warning("Keine Module platziert - prüfe Dachfläche und Parameter")
@@ -373,7 +373,7 @@ def render_module_placement_ui(fig: go.Figure,
                                   if "Landscape" in new_orientation_str 
                                   else ModuleOrientation.PORTRAIT)
             
-            if st.button("➕ Modul hinzufügen", use_container_width=True):
+            if st.button(" Modul hinzufügen", use_container_width=True):
                 module = manager.add_module(
                     x=new_x, y=new_y, z=new_z,
                     module_type=new_module_type,
@@ -388,7 +388,7 @@ def render_module_placement_ui(fig: go.Figure,
         with col2:
             st.markdown("**Schnell-Aktionen**")
             
-            if st.button("🎲 Zufällig platzieren", use_container_width=True):
+            if st.button(" Zufällig platzieren", use_container_width=True):
                 import random
                 for _ in range(5):
                     x = random.uniform(-dims.length_m/3, dims.length_m/3)
@@ -430,7 +430,7 @@ def render_module_placement_ui(fig: go.Figure,
                 module = manager.modules[selected_id]
                 
                 # Bearbeitungs-Tabs
-                edit_tabs = st.tabs(["📍 Position", "🔄 Rotation", "Eigenschaften", "Löschen"])
+                edit_tabs = st.tabs([" Position", " Rotation", "Eigenschaften", "Löschen"])
                 
                 # Position
                 with edit_tabs[0]:
@@ -444,7 +444,7 @@ def render_module_placement_ui(fig: go.Figure,
                     with col3:
                         edit_z = st.number_input("Z", value=module.transform.z, step=0.1, format="%.2f", key=f"edit_z_{selected_id}")
                     
-                    if st.button("💾 Position speichern", key="save_pos"):
+                    if st.button(" Position speichern", key="save_pos"):
                         module.transform.x = edit_x
                         module.transform.y = edit_y
                         module.transform.z = edit_z
@@ -457,17 +457,17 @@ def render_module_placement_ui(fig: go.Figure,
                     with move_col1:
                         move_step = st.number_input("Schrittweite (m)", value=0.5, step=0.1, key="move_step")
                     with move_col2:
-                        if st.button("⬅️ X-", key="move_x_neg"):
+                        if st.button(" X-", key="move_x_neg"):
                             module.transform.x -= move_step
                             st.rerun()
-                        if st.button("➡️ X+", key="move_x_pos"):
+                        if st.button(" X+", key="move_x_pos"):
                             module.transform.x += move_step
                             st.rerun()
                     with move_col3:
-                        if st.button("⬇️ Y-", key="move_y_neg"):
+                        if st.button(" Y-", key="move_y_neg"):
                             module.transform.y -= move_step
                             st.rerun()
-                        if st.button("⬆️ Y+", key="move_y_pos"):
+                        if st.button(" Y+", key="move_y_pos"):
                             module.transform.y += move_step
                             st.rerun()
                 
@@ -483,7 +483,7 @@ def render_module_placement_ui(fig: go.Figure,
                     with rot_col3:
                         edit_rot_z = st.number_input("Z-Achse (Drehung)", value=module.transform.rotation_z, step=5.0, format="%.1f", key=f"rot_z_{selected_id}")
                     
-                    if st.button("💾 Rotation speichern", key="save_rot"):
+                    if st.button(" Rotation speichern", key="save_rot"):
                         module.transform.rotation_x = edit_rot_x
                         module.transform.rotation_y = edit_rot_y
                         module.transform.rotation_z = edit_rot_z
@@ -552,7 +552,7 @@ def render_module_placement_ui(fig: go.Figure,
                         key=f"change_notes_{selected_id}"
                     )
                     
-                    if st.button("💾 Eigenschaften speichern", key="save_props"):
+                    if st.button(" Eigenschaften speichern", key="save_props"):
                         module.module_type = (ModuleType.MONOCRYSTALLINE 
                                             if "Mono" in new_type 
                                             else ModuleType.POLYCRYSTALLINE)
@@ -599,9 +599,9 @@ def render_module_placement_ui(fig: go.Figure,
         st.markdown("**Modul-Verteilung**")
         mono_col, poly_col = st.columns(2)
         with mono_col:
-            st.info(f"⚫ **Monokristallin:** {stats['monocrystalline_count']} Module")
+            st.info(f" **Monokristallin:** {stats['monocrystalline_count']} Module")
         with poly_col:
-            st.info(f"🔵 **Polykristallin:** {stats['polycrystalline_count']} Module")
+            st.info(f" **Polykristallin:** {stats['polycrystalline_count']} Module")
         
         # Modul-Liste (ohne Expanders wegen verschachtelter Expander-Beschränkung)
         if manager.modules:
@@ -617,9 +617,9 @@ def render_module_placement_ui(fig: go.Figure,
                     # Details in Spalten
                     col1, col2, col3 = st.columns(3)
                     with col1:
-                        st.caption(f"📍 Position: ({module.transform.x:.2f}, {module.transform.y:.2f}, {module.transform.z:.2f})")
+                        st.caption(f" Position: ({module.transform.x:.2f}, {module.transform.y:.2f}, {module.transform.z:.2f})")
                     with col2:
-                        st.caption(f"🔄 Rotation: X={module.transform.rotation_x:.1f}°, Y={module.transform.rotation_y:.1f}°, Z={module.transform.rotation_z:.1f}°")
+                        st.caption(f" Rotation: X={module.transform.rotation_x:.1f}°, Y={module.transform.rotation_y:.1f}°, Z={module.transform.rotation_z:.1f}°")
                     with col3:
                         st.caption(f"Leistung: {module.dimensions.power_wp:.0f} Wp")
                     
@@ -627,7 +627,7 @@ def render_module_placement_ui(fig: go.Figure,
                         extra_col1, extra_col2 = st.columns(2)
                         if module.name:
                             with extra_col1:
-                                st.caption(f"🏷️ Name: {module.name}")
+                                st.caption(f" Name: {module.name}")
                         if module.notes:
                             with extra_col2:
                                 st.caption(f"Notizen: {module.notes}")
@@ -644,14 +644,14 @@ def render_module_placement_ui(fig: go.Figure,
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("**💾 Layout speichern**")
+            st.markdown("** Layout speichern**")
             
             layout_name = st.text_input("Layout-Name", value="Mein Layout", key="save_layout_name")
             
-            if st.button("💾 Als JSON exportieren", use_container_width=True):
+            if st.button(" Als JSON exportieren", use_container_width=True):
                 json_data = manager.to_json()
                 st.download_button(
-                    label="📥 JSON herunterladen",
+                    label=" JSON herunterladen",
                     data=json_data,
                     file_name=f"pv_layout_{layout_name.replace(' ', '_')}.json",
                     mime="application/json",
@@ -660,7 +660,7 @@ def render_module_placement_ui(fig: go.Figure,
                 st.success("Export bereit!")
         
         with col2:
-            st.markdown("**📂 Layout laden**")
+            st.markdown("** Layout laden**")
             
             uploaded_file = st.file_uploader(
                 "JSON-Datei hochladen",

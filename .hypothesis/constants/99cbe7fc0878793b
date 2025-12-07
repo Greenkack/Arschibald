@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_barpolar.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'barpolar', 'base', 'basesrc', 'customdata', 'customdatasrc', 'dr', 'dtheta', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hovertemplate', 'hovertemplatesrc', 'hovertext', 'hovertextsrc', 'ids', 'idssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'marker', 'meta', 'metasrc', 'name', 'offset', 'offsetsrc', 'opacity', 'r', 'r0', 'rsrc', 'selected', 'selectedpoints', 'showlegend', 'skip_invalid', 'stream', 'subplot', 'text', 'textsrc', 'theta', 'theta0', 'thetasrc', 'thetaunit', 'type', 'uid', 'uirevision', 'unselected', 'visible', 'width', 'widthsrc']

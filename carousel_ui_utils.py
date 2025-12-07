@@ -377,7 +377,7 @@ def render_horizontal_carousel(
     col_prev, col_next = st.columns([1, 1])
     with col_prev:
         if st.button(
-            "◄ Zurück",
+            " Zurück",
             key=f"{state_key}_prev",
             disabled=(
                 current_index <= 0)):
@@ -385,7 +385,7 @@ def render_horizontal_carousel(
             st.rerun()
     with col_next:
         if st.button(
-            "Weiter ►",
+            "Weiter ",
             key=f"{state_key}_next",
             disabled=(
                 current_index >= len(options) -

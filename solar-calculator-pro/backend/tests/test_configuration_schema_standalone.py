@@ -186,7 +186,7 @@ class TestConfigurationModel:
         assert config.version == 1
         assert config.is_active is True
         assert config.created_at is not None
-        print("✅ test_create_configuration passed")
+        print(" test_create_configuration passed")
     
     def test_configuration_with_parent(self, db_session):
         """Test configuration inheritance"""
@@ -214,7 +214,7 @@ class TestConfigurationModel:
         assert child.parent_id == parent.id
         assert child.parent == parent
         assert child in parent.children
-        print("✅ test_configuration_with_parent passed")
+        print(" test_configuration_with_parent passed")
     
     def test_configuration_validation_schema(self, db_session):
         """Test configuration with validation schema"""
@@ -236,7 +236,7 @@ class TestConfigurationModel:
         db_session.commit()
         
         assert config.validation_schema == validation_schema
-        print("✅ test_configuration_validation_schema passed")
+        print(" test_configuration_validation_schema passed")
 
 
 class TestConfigurationVersion:
@@ -268,7 +268,7 @@ class TestConfigurationVersion:
         assert version.id is not None
         assert version.configuration_id == config.id
         assert version.configuration == config
-        print("✅ test_create_version passed")
+        print(" test_create_version passed")
 
 
 class TestConfigurationBackup:
@@ -298,7 +298,7 @@ class TestConfigurationBackup:
         assert backup.id is not None
         assert backup.configuration_count == 2
         assert backup.status == "completed"
-        print("✅ test_create_backup passed")
+        print(" test_create_backup passed")
 
 
 class TestConfigurationTemplate:
@@ -326,7 +326,7 @@ class TestConfigurationTemplate:
         assert template.id is not None
         assert template.usage_count == 0
         assert template.is_active is True
-        print("✅ test_create_template passed")
+        print(" test_create_template passed")
 
 
 def run_all_tests():
@@ -366,7 +366,7 @@ def run_all_tests():
                 method(session)
                 passed_tests += 1
             except Exception as e:
-                print(f"❌ {method_name} failed: {e}")
+                print(f" {method_name} failed: {e}")
             finally:
                 session.close()
     
@@ -375,10 +375,10 @@ def run_all_tests():
     print("="*60 + "\n")
     
     if passed_tests == total_tests:
-        print("✅ All tests passed!")
+        print(" All tests passed!")
         return 0
     else:
-        print(f"❌ {total_tests - passed_tests} tests failed")
+        print(f" {total_tests - passed_tests} tests failed")
         return 1
 
 

@@ -17,15 +17,15 @@ Dieses Beispiel zeigt, wie das Backup-System in admin_panel.py und gui.py integr
 from crm.utils.backup_ui import render_admin_backup_tab
 
 def render_admin_panel():
-    st.title("⚙️ Admin-Panel")
+    st.title(" Admin-Panel")
     
     # Bestehende Tabs + neuer Backup-Tab
     tabs = st.tabs([
         "Produkte",
         "Preise",
         "PDF-Einstellungen",
-        "👥 Benutzerverwaltung",
-        "🗄️ Backup-Verwaltung"  # NEUER TAB
+        " Benutzerverwaltung",
+        " Backup-Verwaltung"  # NEUER TAB
     ])
     
     with tabs[0]:
@@ -63,11 +63,11 @@ from crm.utils.backup_scheduler import start_scheduler, get_scheduler_status
 if 'backup_scheduler_initialized' not in st.session_state:
     success, message = start_scheduler()
     if success:
-        st.success(f"{message}", icon="🗄️")
+        st.success(f"{message}", icon="")
     else:
         # APScheduler nicht installiert oder bereits gestartet
         if "bereits" not in message.lower():
-            st.warning(f"{message}", icon="🗄️")
+            st.warning(f"{message}", icon="")
     
     st.session_state.backup_scheduler_initialized = True
 """
@@ -117,7 +117,7 @@ def render_crm_dashboard():
     st.title("CRM Dashboard")
     
     # Backup-Status Widget
-    with st.expander("🗄️ Backup-Status", expanded=False):
+    with st.expander(" Backup-Status", expanded=False):
         col1, col2, col3 = st.columns(3)
         
         # Hole Statistiken
@@ -132,7 +132,7 @@ def render_crm_dashboard():
             )
         
         with col2:
-            status_icon = "🟢" if scheduler_status["running"] else "🔴"
+            status_icon = "🟢" if scheduler_status["running"] else ""
             st.metric(
                 "Scheduler",
                 f"{status_icon} {'Aktiv' if scheduler_status['running'] else 'Inaktiv'}"
@@ -173,7 +173,7 @@ def check_backup_health():
         st.warning(
             "**Keine Backups vorhanden!**\\n\\n"
             "Erstellen Sie ein Backup im Admin-Panel → Backup-Verwaltung",
-            icon="🗄️"
+            icon=""
         )
         return
     
@@ -188,7 +188,7 @@ def check_backup_health():
                 st.warning(
                     f"**Letztes Backup ist {days_old} Tage alt!**\\n\\n"
                     "Erstellen Sie ein neues Backup oder aktivieren Sie den Scheduler.",
-                    icon="🗄️"
+                    icon=""
                 )
         except:
             pass
@@ -198,7 +198,7 @@ def check_backup_health():
         st.info(
             f"**Backup-Verzeichnis wird groß:** {stats['total_size_mb']} MB\\n\\n"
             "Erwägen Sie, alte Backups zu löschen.",
-            icon="🗄️"
+            icon=""
         )
 
 # In gui.py oder crm_dashboard_ui.py aufrufen:
@@ -258,7 +258,7 @@ from crm.utils.backup_scheduler import list_backups
 def render_backup_download_section():
     '''Zeigt Download-Buttons für Backups.'''
     
-    st.subheader("📥 Backups herunterladen")
+    st.subheader(" Backups herunterladen")
     
     backups = list_backups()
     
@@ -277,7 +277,7 @@ def render_backup_download_section():
             # Download-Button
             with open(backup['path'], 'rb') as f:
                 st.download_button(
-                    label="📥 Download",
+                    label=" Download",
                     data=f,
                     file_name=backup['filename'],
                     mime="application/x-sqlite3",
@@ -309,7 +309,7 @@ import os
 def render_backup_upload_section():
     '''Ermöglicht Upload und Wiederherstellung von Backup-Dateien.'''
     
-    st.subheader("📤 Backup hochladen und wiederherstellen")
+    st.subheader(" Backup hochladen und wiederherstellen")
     
     uploaded_file = st.file_uploader(
         "Wählen Sie eine Backup-Datei (.db)",
@@ -320,7 +320,7 @@ def render_backup_upload_section():
     if uploaded_file is not None:
         st.info(f"Datei: {uploaded_file.name} ({uploaded_file.size / 1024 / 1024:.2f} MB)")
         
-        if st.button("🔄 Backup wiederherstellen", type="primary"):
+        if st.button(" Backup wiederherstellen", type="primary"):
             # Warnung anzeigen
             st.warning(
                 "**ACHTUNG:** Die aktuelle Datenbank wird überschrieben!\\n\\n"
@@ -364,19 +364,19 @@ from crm.utils.backup_scheduler import start_scheduler, get_scheduler_status
 def render_admin_panel():
     '''Rendert das Admin-Panel mit Backup-Integration.'''
     
-    st.title("⚙️ Admin-Panel")
+    st.title(" Admin-Panel")
     
     # Scheduler-Status in Sidebar
     with st.sidebar:
         st.markdown("---")
-        st.subheader("🗄️ Backup-Status")
+        st.subheader(" Backup-Status")
         
         status = get_scheduler_status()
         if status["running"]:
             st.success("Scheduler aktiv")
         else:
             st.warning("Scheduler inaktiv")
-            if st.button("▶️ Scheduler starten"):
+            if st.button(" Scheduler starten"):
                 success, message = start_scheduler()
                 if success:
                     st.success(message)
@@ -389,8 +389,8 @@ def render_admin_panel():
         "Produkte",
         "Preise",
         "PDF-Einstellungen",
-        "👥 Benutzer",
-        "🗄️ Backup"
+        " Benutzer",
+        " Backup"
     ])
     
     with tabs[0]:

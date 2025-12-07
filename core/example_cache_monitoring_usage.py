@@ -212,7 +212,7 @@ def example_performance_alerts():
     degradation = monitor.analyzer.detect_performance_degradation("memory")
 
     if degradation:
-        print("\n⚠ Degradation Detected:")
+        print("\n Degradation Detected:")
         print(f"  Current Hit Rate: {degradation['current_hit_rate']:.2%}")
         print(f"  Historical Avg: {degradation['historical_avg']:.2%}")
         print(f"  Degradation: {degradation['degradation_percent']:.1f}%")
@@ -284,17 +284,17 @@ def example_monitoring_dashboard():
         print(f"   Trend: {hit_rate['trend']}")
         print(f"   Hits: {hit_rate['hits']}, Misses: {hit_rate['misses']}")
 
-        print(f"\n💾 Cache Size: {size['entries']}/{size['max_entries']}")
+        print(f"\n Cache Size: {size['entries']}/{size['max_entries']}")
         print(f"   Utilization: {size['utilization']:.2%}")
         print(f"   Total Size: {size['total_size_mb']:.2f} MB")
 
-        print(f"\n🔄 Evictions: {evictions['evictions']}")
+        print(f"\n Evictions: {evictions['evictions']}")
         print(f"   Expirations: {evictions['expirations']}")
 
     # Monitoring status
     if "monitoring_status" in report:
         status = report["monitoring_status"]
-        print("\n⚙️  Monitoring Status:")
+        print("\n  Monitoring Status:")
         print(f"   Running: {status['running']}")
         print(f"   Interval: {status['collection_interval_seconds']}s")
         print(f"   Collections: {status['collection_count']}")

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\attr\_config.py
+# hypothesis_version: 6.147.0
+
+["'run' must be bool.", 'get_run_validators', 'set_run_validators']

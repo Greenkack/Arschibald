@@ -54,7 +54,7 @@ def fix_streamlit_deprecations(directory="."):
         except Exception as e:
             print(f"Fehler bei {file_path}: {e}")
 
-    print(f"\n🎉 {fixed_files} Dateien repariert, {total_fixes} Fixes insgesamt!")
+    print(f"\n {fixed_files} Dateien repariert, {total_fixes} Fixes insgesamt!")
 
 
 if __name__ == "__main__":

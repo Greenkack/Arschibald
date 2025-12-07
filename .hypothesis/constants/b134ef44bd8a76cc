@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\objects.py
+# hypothesis_version: 6.147.0
+
+['Super of', '_T', '__class__', '_proxied', 'builtins.frozenset', 'builtins.property', 'builtins.super', 'classmethod', 'frozenset', 'method', 'property', 'staticmethod', 'super']

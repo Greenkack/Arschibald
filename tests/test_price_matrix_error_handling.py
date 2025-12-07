@@ -499,7 +499,7 @@ def run_all_tests():
     print(f"\nGesamt: {passed}/{len(results)} Tests bestanden")
     
     if failed == 0:
-        print("\n🎉 Alle Tests erfolgreich!")
+        print("\n Alle Tests erfolgreich!")
         return True
     else:
         print(f"\n{failed} Test(s) fehlgeschlagen")

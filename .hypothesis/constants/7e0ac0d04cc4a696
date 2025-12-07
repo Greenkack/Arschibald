@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\db\models\constraints.py
+# hypothesis_version: 6.147.0
+
+[' condition=%s', ' deferrable=%r', ' expressions=%s', ' fields=%s', ' include=%s', ' name=%s', ' nulls_distinct=%r', ' opclasses=%s', '%s.%s', 'BaseConstraint', 'CheckConstraint', 'Deferrable', 'UniqueConstraint', 'condition', 'conditional', 'constraints', 'deferrable', 'deferred', 'django.db.models', 'fields', 'get_lookup', 'get_transform', 'immediate', 'include', 'models.E041', 'models.W027', 'models.W036', 'models.W038', 'models.W039', 'models.W044', 'models.W045', 'models.W047', 'name', 'nulls_distinct', 'opclasses', 'pk', 'violation_error_code']

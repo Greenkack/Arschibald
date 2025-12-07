@@ -324,16 +324,16 @@ def get_heatpump_price(manufacturer: str, hp_type: str, model: str, power_kw: fl
 def render_admin_heatpump_settings_ui():
     """Hauptfunktion: Rendert die Wärmepumpen-Einstellungen UI"""
     
-    st.title("🔥 Wärmepumpen-Einstellungen")
+    st.title(" Wärmepumpen-Einstellungen")
     st.markdown("---")
     
     # Tab-Navigation
     tabs = st.tabs([
         "Wärmepumpen-Preise",
         "Heizkosten-Konfiguration",
-        "� Bulk-Upload",  # NEU: Bulk-Upload Tab
-        "�Übersicht & Export",
-        "🔗 Integration & Tests"
+        " Bulk-Upload",  # NEU: Bulk-Upload Tab
+        "Übersicht & Export",
+        " Integration & Tests"
     ])
     
     # Tab 1: Wärmepumpen-Preise
@@ -467,21 +467,21 @@ def render_heatpump_prices_tab():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("💾 Preise speichern", type="primary", use_container_width=True):
+        if st.button(" Preise speichern", type="primary", use_container_width=True):
             if save_heatpump_prices(prices):
                 st.success("Preise erfolgreich gespeichert!")
             else:
                 st.error("Fehler beim Speichern!")
     
     with col2:
-        if st.button("🔄 Standardpreise wiederherstellen", use_container_width=True):
+        if st.button(" Standardpreise wiederherstellen", use_container_width=True):
             prices = DEFAULT_HEATPUMP_PRICES.copy()
             if save_heatpump_prices(prices):
                 st.success("Standardpreise wiederhergestellt!")
                 st.rerun()
     
     with col3:
-        if st.button("📋 Alle Preise anzeigen", use_container_width=True):
+        if st.button(" Alle Preise anzeigen", use_container_width=True):
             st.json(prices)
 
 
@@ -530,7 +530,7 @@ def render_overview_tab():
     
     # Export-Funktionen
     st.markdown("---")
-    st.markdown("### 📥 Export & Backup")
+    st.markdown("###  Export & Backup")
     
     col1, col2 = st.columns(2)
     
@@ -565,10 +565,10 @@ def render_overview_tab():
 def render_integration_tab():
     """Integration & Tests"""
     
-    st.subheader("🔗 Integration & Tests")
+    st.subheader(" Integration & Tests")
     
     # Test: Preisabfrage
-    st.markdown("### 🧪 Preisabfrage testen")
+    st.markdown("###  Preisabfrage testen")
     
     col1, col2, col3, col4 = st.columns(4)
     
@@ -599,7 +599,7 @@ def render_integration_tab():
             test_power = None
     
     if test_manufacturer and test_type and test_model and test_power:
-        if st.button("🧪 Preis abrufen", type="primary"):
+        if st.button(" Preis abrufen", type="primary"):
             price_data = get_heatpump_price(test_manufacturer, test_type, test_model, test_power)
             
             st.success("Preisabfrage erfolgreich!")
@@ -614,7 +614,7 @@ def render_integration_tab():
     
     # Integrationspunkte anzeigen
     st.markdown("---")
-    st.markdown("### 📋 Integrationspunkte")
+    st.markdown("###  Integrationspunkte")
     
     integration_points = [
         {"Module": "heatpump_ui.py", "Funktion": "render_heatpump_analysis()", "Status": "Aktiv"},
@@ -790,13 +790,13 @@ def clean_heatpump_data(df: pd.DataFrame) -> pd.DataFrame:
 def render_bulk_upload_tab():
     """Tab für Bulk-Upload von Wärmepumpen-Daten"""
     
-    st.subheader("📤 Bulk-Upload Wärmepumpen-Daten")
+    st.subheader(" Bulk-Upload Wärmepumpen-Daten")
     st.caption("Importieren Sie mehrere Wärmepumpen gleichzeitig via CSV, Excel oder JSON")
     
     # Info-Box mit Formatbeschreibung
     with st.expander("Format-Informationen & Beispiele", expanded=False):
         st.markdown("""
-        ### 📋 Erforderliche Spalten/Felder:
+        ###  Erforderliche Spalten/Felder:
         
         | Feld | Beschreibung | Beispiel |
         |------|--------------|----------|
@@ -989,12 +989,12 @@ def render_bulk_upload_tab():
                     st.success("Alle Pflichtfelder gefunden oder erfolgreich gemappt!")
             
             # JETZT Datenbereinigung durchführen (NACH dem Mapping!)
-            st.info("🧹 Bereinige Daten...")
+            st.info(" Bereinige Daten...")
             df = clean_heatpump_data(df)
             st.success(f"Datenbereinigung abgeschlossen - {len(df)} Zeilen übrig")
             
             # Datenvorschau
-            st.markdown("### 👀 Datenvorschau")
+            st.markdown("###  Datenvorschau")
             st.dataframe(df.head(10), use_container_width=True)
             
             # Statistiken
@@ -1007,7 +1007,7 @@ def render_bulk_upload_tab():
                 st.metric("Typen", df['heatpump_type'].nunique())
             
             # Import-Optionen
-            st.markdown("### ⚙️ Import-Optionen")
+            st.markdown("###  Import-Optionen")
             
             col_opt1, col_opt2 = st.columns(2)
             
@@ -1035,7 +1035,7 @@ def render_bulk_upload_tab():
                     import_heatpump_bulk_data(df, overwrite_existing, validate_data)
             
             with col_btn2:
-                if st.button("📋 Validierung", use_container_width=True):
+                if st.button(" Validierung", use_container_width=True):
                     validate_bulk_data(df, validate_data)
             
             with col_btn3:
@@ -1049,7 +1049,7 @@ def render_bulk_upload_tab():
     
     # Template-Download
     st.markdown("---")
-    st.markdown("### 📥 Vorlagen herunterladen")
+    st.markdown("###  Vorlagen herunterladen")
     st.caption("Laden Sie eine Vorlage herunter um die richtige Struktur zu sehen")
     
     col_tpl1, col_tpl2, col_tpl3 = st.columns(3)
@@ -1343,7 +1343,7 @@ def import_heatpump_bulk_data(df: pd.DataFrame, overwrite: bool = False, validat
         
         # Datenbank-Datei aktualisieren
         try:
-            st.info("💾 Speichere Daten in heatpump_products_database.py...")
+            st.info(" Speichere Daten in heatpump_products_database.py...")
             
             # heatpump_products_database.py neu schreiben
             db_file_path = "heatpump_products_database.py"

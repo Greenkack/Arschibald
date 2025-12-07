@@ -40,7 +40,7 @@ test_cases = [
     (999.99, 2, "999,99"),
 ]
 
-print("🧪 Teste format_german_number() Funktion\n")
+print(" Teste format_german_number() Funktion\n")
 print("=" * 70)
 
 all_passed = True

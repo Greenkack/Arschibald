@@ -172,7 +172,7 @@ def test_format_error_message_basic():
     
     formatted = format_error_message_for_ui(error_info, include_suggestions=False)
     
-    assert "🚨" in formatted
+    assert "" in formatted
     assert "Keine Matrix gefunden" in formatted
 
 

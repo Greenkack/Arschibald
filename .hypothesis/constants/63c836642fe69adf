@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\dcc\Interval.py
+# hypothesis_version: 6.147.0
+
+['Interval', '__init__', '_explicit_args', 'children', 'dash_core_components', 'disabled', 'id', 'interval', 'max_intervals', 'n_intervals']

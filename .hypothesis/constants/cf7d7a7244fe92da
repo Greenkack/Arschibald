@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\chart\layout.py
+# hypothesis_version: 6.147.0
+
+['edge', 'factor', 'h', 'hMode', 'inner', 'layout', 'layoutTarget', 'manualLayout', 'outer', 'w', 'wMode', 'x', 'xMode', 'y', 'yMode']

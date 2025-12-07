@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\IPython\lib\clipboard.py
+# hypothesis_version: 6.147.0
+
+[b'\n', b'\r', '-Prefer', 'XDG_SESSION_TYPE', 'ascii', 'pbpaste', 'wayland', 'wl-paste']

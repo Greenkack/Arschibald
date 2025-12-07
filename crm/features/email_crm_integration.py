@@ -32,14 +32,14 @@ def render_customer_email_section(
     
     # Check if customer has email
     if not customer_data.get('email'):
-        st.info("📧 Keine E-Mail-Adresse für diesen Kunden hinterlegt.")
+        st.info(" Keine E-Mail-Adresse für diesen Kunden hinterlegt.")
         return
     
     st.markdown("---")
-    st.subheader("📧 E-Mail-Kommunikation")
+    st.subheader(" E-Mail-Kommunikation")
     
     # Create tabs for sending and history
-    tab_send, tab_history = st.tabs(["📤 E-Mail senden", "📋 E-Mail-Historie"])
+    tab_send, tab_history = st.tabs([" E-Mail senden", " E-Mail-Historie"])
     
     with tab_send:
         try:
@@ -88,7 +88,7 @@ def add_email_quick_action_button(
         return False
     
     if st.button(
-        f"📧 E-Mail an {customer_data.get('first_name', '')} {customer_data.get('last_name', '')}",
+        f" E-Mail an {customer_data.get('first_name', '')} {customer_data.get('last_name', '')}",
         key=f"quick_email_{customer_data['id']}_{key_suffix}",
         use_container_width=True
     ):

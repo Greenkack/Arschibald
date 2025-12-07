@@ -43,7 +43,7 @@ def demo_line_chart():
     with open("demo_line_chart.pdf", "wb") as f:
         f.write(pdf_bytes)
 
-    print(f"✓ Line chart PDF generated: {len(pdf_bytes)} bytes")
+    print(f" Line chart PDF generated: {len(pdf_bytes)} bytes")
     print("  Saved as: demo_line_chart.pdf")
     print(f"  Data points: {len(chart_data.labels)}")
     print(f"  Series: {len(chart_data.data)}")
@@ -71,7 +71,7 @@ def demo_bar_chart():
     with open("demo_bar_chart.pdf", "wb") as f:
         f.write(pdf_bytes)
 
-    print(f"✓ Bar chart PDF generated: {len(pdf_bytes)} bytes")
+    print(f" Bar chart PDF generated: {len(pdf_bytes)} bytes")
     print("  Saved as: demo_bar_chart.pdf")
 
 
@@ -108,7 +108,7 @@ def demo_pie_chart():
     with open("demo_pie_chart.pdf", "wb") as f:
         f.write(pdf_bytes)
 
-    print(f"✓ Pie chart PDF generated: {len(pdf_bytes)} bytes")
+    print(f" Pie chart PDF generated: {len(pdf_bytes)} bytes")
     print("  Saved as: demo_pie_chart.pdf")
     print(f"  Categories: {len(chart_data.labels)}")
 
@@ -135,7 +135,7 @@ def demo_area_chart():
     with open("demo_area_chart.pdf", "wb") as f:
         f.write(pdf_bytes)
 
-    print(f"✓ Area chart PDF generated: {len(pdf_bytes)} bytes")
+    print(f" Area chart PDF generated: {len(pdf_bytes)} bytes")
     print("  Saved as: demo_area_chart.pdf")
 
 
@@ -165,7 +165,7 @@ def demo_scatter_plot():
     with open("demo_scatter_plot.pdf", "wb") as f:
         f.write(pdf_bytes)
 
-    print(f"✓ Scatter plot PDF generated: {len(pdf_bytes)} bytes")
+    print(f" Scatter plot PDF generated: {len(pdf_bytes)} bytes")
     print("  Saved as: demo_scatter_plot.pdf")
 
 
@@ -202,7 +202,7 @@ def demo_german_formatting():
     with open("demo_german_formatting.pdf", "wb") as f:
         f.write(pdf_bytes)
 
-    print(f"\n✓ German formatting PDF generated: {len(pdf_bytes)} bytes")
+    print(f"\n German formatting PDF generated: {len(pdf_bytes)} bytes")
     print("  Saved as: demo_german_formatting.pdf")
 
 
@@ -237,7 +237,7 @@ def demo_multi_series():
     with open("demo_multi_series.pdf", "wb") as f:
         f.write(pdf_bytes)
 
-    print(f"✓ Multi-series chart PDF generated: {len(pdf_bytes)} bytes")
+    print(f" Multi-series chart PDF generated: {len(pdf_bytes)} bytes")
     print("  Saved as: demo_multi_series.pdf")
     print(f"  Series count: {len(chart_data.data)}")
 
@@ -249,7 +249,7 @@ def demo_all_charts():
     print("=" * 60)
 
     if not REPORTLAB_AVAILABLE:
-        print("\n❌ Error: reportlab not installed")
+        print("\n Error: reportlab not installed")
         print("Install with: pip install reportlab")
         return
 
@@ -263,7 +263,7 @@ def demo_all_charts():
         demo_multi_series()
 
         print("\n" + "=" * 60)
-        print("✓ All demos completed successfully!")
+        print(" All demos completed successfully!")
         print("=" * 60)
         print("\nGenerated files:")
         print("  - demo_line_chart.pdf")
@@ -275,7 +275,7 @@ def demo_all_charts():
         print("  - demo_multi_series.pdf")
 
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n Error: {e}")
         import traceback
         traceback.print_exc()
 

@@ -95,7 +95,7 @@ def create_final_pricing_calculation():
         generated_keys = key_manager.generate_keys(
             final_pricing_keys, prefix='PDF_', category=KeyCategory.PRICING)
 
-        print("🧮 FINALE PREISBERECHNUNG:")
+        print(" FINALE PREISBERECHNUNG:")
         print("=" * 50)
         print(
             f"SIMPLE_ENDERGEBNIS_BRUTTO:     {
@@ -119,7 +119,7 @@ def create_final_pricing_calculation():
             f"= FINAL END PREIS (NETTO):     {
                 format_currency(final_end_preis)}")
 
-        print("\n🔑 GENERIERTE KEYS FÜR PDF:")
+        print("\n GENERIERTE KEYS FÜR PDF:")
         print("=" * 50)
         for key, value in generated_keys.items():
             print(f"{key}: {value}")
@@ -185,7 +185,7 @@ def create_pdf_placeholder_mapping():
         "final_end_preis": "PDF__FINAL_END_PREIS_FORMATTED"
     }
 
-    print("\n🗺️ PDF PLATZHALTER MAPPING:")
+    print("\n PDF PLATZHALTER MAPPING:")
     print("=" * 50)
     for placeholder, key in placeholder_mapping.items():
         print(f"{placeholder} -> {key}")

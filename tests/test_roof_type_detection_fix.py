@@ -97,7 +97,7 @@ if __name__ == "__main__":
         test_get_allowed_mounting_types()
         
         print("\n" + "=" * 70)
-        print("🎉 ALLE TESTS ERFOLGREICH!")
+        print(" ALLE TESTS ERFOLGREICH!")
         print("=" * 70)
         print("\nDas Problem ist behoben:")
         print("- Satteldach wird korrekt als Schrägdach erkannt")

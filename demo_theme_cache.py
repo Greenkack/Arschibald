@@ -28,11 +28,11 @@ import plotly.graph_objects as go
 def main():
     st.set_page_config(
         page_title="Theme Cache System Demo",
-        page_icon="🗄️",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("🗄️ Theme Cache System Demo")
+    st.title(" Theme Cache System Demo")
     st.markdown("---")
     
     # Sidebar Navigation
@@ -106,7 +106,7 @@ def demo_basic_caching():
             duration = (time.time() - start) * 1000
             
             if theme_data:
-                st.success(f"✅ Theme geladen in {duration:.3f}ms")
+                st.success(f" Theme geladen in {duration:.3f}ms")
                 st.json({
                     "name": theme_data['name'],
                     "display_name": theme_data['display_name'],
@@ -114,7 +114,7 @@ def demo_basic_caching():
                     "cached": True
                 })
             else:
-                st.error("❌ Theme nicht im Cache")
+                st.error(" Theme nicht im Cache")
     
     with col2:
         st.subheader("Theme neu laden")
@@ -125,7 +125,7 @@ def demo_basic_caching():
             theme_data = theme_manager.current_theme.to_dict()
             duration = (time.time() - start) * 1000
             
-            st.info(f"⏱️ Theme geladen in {duration:.3f}ms")
+            st.info(f"⏱ Theme geladen in {duration:.3f}ms")
             st.json({
                 "name": theme_data['name'],
                 "display_name": theme_data['display_name'],
@@ -135,7 +135,7 @@ def demo_basic_caching():
             
             # Cache it
             cache_theme_data(selected_theme, theme_data)
-            st.success("✅ Theme wurde gecached")
+            st.success(" Theme wurde gecached")
 
 
 def demo_performance_comparison():
@@ -152,7 +152,7 @@ def demo_performance_comparison():
     
     num_iterations = st.slider("Anzahl Iterationen:", 1, 10, 5)
     
-    if st.button("🚀 Performance-Test starten"):
+    if st.button(" Performance-Test starten"):
         # Test 1: Ohne Cache
         st.subheader("Test 1: CSS Generation ohne Cache")
         
@@ -205,7 +205,7 @@ def demo_performance_comparison():
             st.metric("Max", f"{max(times_with_cache):.2f}ms")
         
         # Vergleich
-        st.subheader("📈 Ergebnis")
+        st.subheader(" Ergebnis")
         
         speedup = avg_no_cache / avg_with_cache if avg_with_cache > 0 else 0
         time_saved = avg_no_cache - avg_with_cache
@@ -267,7 +267,7 @@ def demo_cache_statistics():
     stats = get_cache_statistics()
     
     # Metriken
-    st.subheader("📊 Haupt-Metriken")
+    st.subheader(" Haupt-Metriken")
     
     col1, col2, col3, col4 = st.columns(4)
     
@@ -296,7 +296,7 @@ def demo_cache_statistics():
         )
     
     # Detaillierte Statistiken
-    st.subheader("📈 Detaillierte Statistiken")
+    st.subheader(" Detaillierte Statistiken")
     
     col1, col2 = st.columns(2)
     
@@ -315,7 +315,7 @@ def demo_cache_statistics():
         st.write(f"- Cached CSS: {stats['session_cache']['cached_css_count']}")
     
     # Visualisierung
-    st.subheader("📊 Cache Hit Rate Visualisierung")
+    st.subheader(" Cache Hit Rate Visualisierung")
     
     fig = go.Figure(data=[
         go.Bar(
@@ -349,7 +349,7 @@ def demo_cache_statistics():
     st.plotly_chart(fig, use_container_width=True)
     
     # Gecachte Themes
-    st.subheader("📦 Gecachte Themes")
+    st.subheader(" Gecachte Themes")
     
     cached_themes = stats['session_cache']['cached_themes']
     if cached_themes:
@@ -410,7 +410,7 @@ def demo_theme_switcher():
             # Update Session State
             st.session_state.demo_current_theme = selected_theme
             
-            st.success(f"✅ Theme gewechselt in {duration:.2f}ms ({cache_status})")
+            st.success(f" Theme gewechselt in {duration:.2f}ms ({cache_status})")
     
     # Zeige aktuelles Theme
     st.subheader("Aktuelles Theme")
@@ -442,7 +442,7 @@ def demo_cache_management():
     stats = get_cache_statistics()
     
     # Cache-Info
-    st.subheader("📊 Cache Information")
+    st.subheader(" Cache Information")
     
     col1, col2 = st.columns(2)
     
@@ -460,7 +460,7 @@ def demo_cache_management():
         st.write(f"**Total Requests:** {total_requests}")
     
     # Gecachte Themes
-    st.subheader("📦 Gecachte Themes")
+    st.subheader(" Gecachte Themes")
     
     cached_themes = stats['session_cache']['cached_themes']
     
@@ -469,37 +469,37 @@ def demo_cache_management():
             col1, col2 = st.columns([3, 1])
             
             with col1:
-                st.write(f"📦 {theme_name}")
+                st.write(f" {theme_name}")
             
             with col2:
                 if st.button("Invalidieren", key=f"inv_{theme_name}"):
                     invalidate_theme_cache(theme_name)
-                    st.success(f"✅ Theme '{theme_name}' invalidiert")
+                    st.success(f" Theme '{theme_name}' invalidiert")
                     st.rerun()
     else:
         st.info("Keine Themes im Cache")
     
     # Cache-Aktionen
-    st.subheader("🗑️ Cache-Aktionen")
+    st.subheader(" Cache-Aktionen")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
         if st.button("Session Cache leeren"):
             invalidate_theme_cache()
-            st.success("✅ Session Cache geleert")
+            st.success(" Session Cache geleert")
             st.rerun()
     
     with col2:
         if st.button("Streamlit Cache leeren"):
             StreamlitCacheIntegration.clear_all_caches()
-            st.success("✅ Streamlit Cache geleert")
+            st.success(" Streamlit Cache geleert")
             st.rerun()
     
     with col3:
         if st.button("Alle Caches leeren"):
             reset_theme_cache()
-            st.success("✅ Alle Caches geleert")
+            st.success(" Alle Caches geleert")
             st.rerun()
 
 

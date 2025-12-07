@@ -170,13 +170,13 @@ def daily_target_monitoring():
                 
                 # Warnungen
                 if status['health'] == 'critical':
-                    print(f"   🔴 KRITISCH: Sofortige Maßnahmen erforderlich!")
+                    print(f"    KRITISCH: Sofortige Maßnahmen erforderlich!")
                 elif status['health'] == 'warning':
                     print(f"   🟠 WARNUNG: Ziel gefährdet")
                 elif status['health'] == 'excellent':
                     print(f"   🟢 EXZELLENT: Ziel erreicht!")
                 else:
-                    print(f"   🔵 GUT: Auf Kurs")
+                    print(f"    GUT: Auf Kurs")
     
     # 2. Prüfe gefährdete Ziele
     at_risk = check_at_risk_targets()
@@ -296,11 +296,11 @@ def render_forecasting_widget_for_dashboard():
             with col3:
                 health_emoji = {
                     'excellent': '🟢',
-                    'good': '🔵',
+                    'good': '',
                     'warning': '🟠',
-                    'critical': '🔴'
+                    'critical': ''
                 }
-                st.write(f"{health_emoji.get(status['health'], '⚪')} {status['health'].upper()}")
+                st.write(f"{health_emoji.get(status['health'], '')} {status['health'].upper()}")
             
             # Progress Bar
             progress = min(achievement / 100, 1.0)

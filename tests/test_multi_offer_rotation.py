@@ -49,7 +49,7 @@ def test_product_rotation():
     if products.get('module'):
         base_settings['selected_module_id'] = products['module'][0].get('id')
         print(
-            f"🔹 Basis-Modul: {
+            f" Basis-Modul: {
                 products['module'][0].get('model_name')} (Marke: {
                 products['module'][0].get('brand')})")
 
@@ -57,14 +57,14 @@ def test_product_rotation():
         base_settings['selected_inverter_id'] = products['inverter'][0].get(
             'id')
         print(
-            f"🔹 Basis-Wechselrichter: {
+            f" Basis-Wechselrichter: {
                 products['inverter'][0].get('model_name')} (Marke: {
                 products['inverter'][0].get('brand')})")
 
     if products.get('storage'):
         base_settings['selected_storage_id'] = products['storage'][0].get('id')
         print(
-            f"🔹 Basis-Speicher: {
+            f" Basis-Speicher: {
                 products['storage'][0].get('model_name')} (Marke: {
                 products['storage'][0].get('brand')})")
 

@@ -42,7 +42,7 @@ def render_logo_position_settings(
         load_admin_setting_func,
         save_admin_setting_func):
     """Rendert die Logo-Positions-Einstellungen"""
-    st.subheader("📍 Logo-Positionen auf PDF Seite 4")
+    st.subheader(" Logo-Positionen auf PDF Seite 4")
     st.markdown("---")
 
     # Aktuelle Einstellungen laden
@@ -149,7 +149,7 @@ def render_logo_position_settings(
     col_save, col_reset, col_preview, col_visual = st.columns(4)
 
     with col_save:
-        if st.button("💾 Positionen speichern", type="primary"):
+        if st.button(" Positionen speichern", type="primary"):
             try:
                 success = save_admin_setting_func(
                     "pdf_logo_positions", edited_positions)
@@ -162,7 +162,7 @@ def render_logo_position_settings(
                 st.error(f"Speicher-Fehler: {e}")
 
     with col_reset:
-        if st.button("🔄 Auf Standard zurücksetzen"):
+        if st.button(" Auf Standard zurücksetzen"):
             try:
                 success = save_admin_setting_func(
                     "pdf_logo_positions", DEFAULT_POSITIONS.copy())
@@ -175,11 +175,11 @@ def render_logo_position_settings(
                 st.error(f"Reset-Fehler: {e}")
 
     with col_preview:
-        if st.button("👁️ Koordinaten-Übersicht"):
+        if st.button(" Koordinaten-Übersicht"):
             st.session_state['show_logo_coords_preview'] = True
 
     with col_visual:
-        if st.button("🖼️ Visuelle Vorschau"):
+        if st.button(" Visuelle Vorschau"):
             st.session_state['show_logo_visual_preview'] = True
 
     # Koordinaten-Übersicht
@@ -213,7 +213,7 @@ def render_logo_position_settings(
 
     # Visuelle Vorschau (vereinfachter A4-Canvas)
     if st.session_state.get('show_logo_visual_preview', False):
-        st.subheader("🖼️ Visuelle Live-Vorschau (A4 S.4)")
+        st.subheader(" Visuelle Live-Vorschau (A4 S.4)")
         st.caption(
             "Hinweis: Maßstab vereinfacht – zeigt Bounding-Boxen und resultierende Positionen. Orientierung: (0,0) unten links.")
 
@@ -387,7 +387,7 @@ def render_logo_position_settings(
                 st.session_state['show_logo_visual_preview'] = False
                 st.rerun()
         with col_toggle:
-            if st.button("🔁 Alignment umschalten (nur Vorschau)"):
+            if st.button(" Alignment umschalten (nur Vorschau)"):
                 # Toggle Simulation
                 st.session_state['show_logo_visual_preview'] = True
                 # Temporär Setting toggeln (Simulation unabhängig vom
@@ -398,7 +398,7 @@ def render_logo_position_settings(
 
 def render_logo_position_test():
     """Test-Funktion für Logo-Positionen"""
-    st.subheader("🧪 Logo-Position Test")
+    st.subheader(" Logo-Position Test")
 
     st.info("""
     **Test der Logo-Positionen:**

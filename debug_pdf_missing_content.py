@@ -165,7 +165,7 @@ def test_complete_pdf_flow():
         issues_found.append("Keine Charts ausgewählt")
     
     if issues_found:
-        print("\n🚨 GEFUNDENE PROBLEME:")
+        print("\n GEFUNDENE PROBLEME:")
         for issue in issues_found:
             print(f"   {issue}")
         
@@ -182,17 +182,17 @@ def test_complete_pdf_flow():
     # ERWARTETES VERHALTEN
     # ========================================================================
     print("\n" + "=" * 100)
-    print("📋 ERWARTETES VERHALTEN BEI KORREKTER KONFIGURATION")
+    print(" ERWARTETES VERHALTEN BEI KORREKTER KONFIGURATION")
     print("=" * 100)
     
-    print("\n1️⃣  Console-Output beim PDF-Generieren:")
+    print("\n1⃣  Console-Output beim PDF-Generieren:")
     print("   'Anhängen von Produktdatenblättern und Firmendokumenten...'")
     print("   'Using auto-selected main component datasheets: [101, 202, 303]'")
     print("   'Chart-Generierung gestartet: 2 Chart(s) ausgewählt'")
     print("   '2 Chart-Seite(n) erfolgreich angehängt'")
     print("   'Finale PDF erstellt mit X Seiten'")
     
-    print("\n2️⃣  PDF sollte enthalten:")
+    print("\n2⃣  PDF sollte enthalten:")
     print("   PV-Modul Datenblatt")
     print("   Wechselrichter Datenblatt")
     print("   Speicher Datenblatt")
@@ -200,10 +200,10 @@ def test_complete_pdf_flow():
     print("   Firmendokumente")
     print("   Chart-Seiten (1-2 Charts pro Seite)")
     
-    print("\n3️⃣  UI-Checkboxen müssen AKTIV sein:")
-    print("   ☑️  'Zusätzliche Seiten nach Hauptseiten anhängen'")
-    print("   ☑️  'Alle Dokumente anhängen' (im Formular)")
-    print("   ☑️  Mindestens 1 Chart ausgewählt (außerhalb Formular)")
+    print("\n3⃣  UI-Checkboxen müssen AKTIV sein:")
+    print("     'Zusätzliche Seiten nach Hauptseiten anhängen'")
+    print("     'Alle Dokumente anhängen' (im Formular)")
+    print("     Mindestens 1 Chart ausgewählt (außerhalb Formular)")
     
     print("\n" + "=" * 100)
     print("ANALYSE ABGESCHLOSSEN")

@@ -21,11 +21,11 @@ from components.metric_card import MetricCard
 def main():
     st.set_page_config(
         page_title="Performance-Optimierung Demo",
-        page_icon="⚡",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("⚡ Performance-Optimierung Demo")
+    st.title(" Performance-Optimierung Demo")
     st.markdown("Demonstriert CSS-Caching, Minification und Performance-Monitoring")
     
     # Initialisiere Theme Manager
@@ -37,10 +37,10 @@ def main():
     
     # Tabs für verschiedene Demos
     tab1, tab2, tab3, tab4 = st.tabs([
-        "📊 CSS Performance",
-        "🎨 Caching Demo",
-        "📦 Minification",
-        "⏱️ Component Rendering"
+        " CSS Performance",
+        " Caching Demo",
+        " Minification",
+        "⏱ Component Rendering"
     ])
     
     # Tab 1: CSS Performance
@@ -57,7 +57,7 @@ def main():
                 css = theme_manager.generate_css(minified=False, use_cache=False)
                 duration = (time.time() - start) * 1000
                 
-                st.success(f"✅ Generiert in {duration:.2f}ms")
+                st.success(f" Generiert in {duration:.2f}ms")
                 st.metric("CSS-Größe", f"{len(css.encode('utf-8')):,} bytes")
                 
                 with st.expander("CSS anzeigen (erste 500 Zeichen)"):
@@ -71,7 +71,7 @@ def main():
                 css = theme_manager.generate_css(minified=True, use_cache=True)
                 duration = (time.time() - start) * 1000
                 
-                st.success(f"✅ Generiert in {duration:.2f}ms")
+                st.success(f" Generiert in {duration:.2f}ms")
                 st.metric("CSS-Größe (minifiziert)", f"{len(css.encode('utf-8')):,} bytes")
                 
                 with st.expander("Minifiziertes CSS anzeigen (erste 500 Zeichen)"):
@@ -114,16 +114,16 @@ def main():
             )
         
         # Detaillierte Metriken
-        with st.expander("📈 Detaillierte Metriken"):
+        with st.expander(" Detaillierte Metriken"):
             st.json(metrics)
         
         # Performance-Report
-        with st.expander("📄 Performance-Report"):
+        with st.expander(" Performance-Report"):
             report = optimizer.get_performance_report()
             st.text(report)
         
         # Reset-Button
-        if st.button("🔄 Metriken zurücksetzen"):
+        if st.button(" Metriken zurücksetzen"):
             optimizer.reset_metrics()
             st.rerun()
     
@@ -143,7 +143,7 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("1️⃣ Erste Generierung (Cache-Miss)", key="cache_miss"):
+            if st.button("1⃣ Erste Generierung (Cache-Miss)", key="cache_miss"):
                 # Cache für dieses Theme invalidieren
                 optimizer = get_optimizer()
                 optimizer.invalidate_cache(selected_theme)
@@ -155,17 +155,17 @@ def main():
                 css = theme_manager.generate_css(minified=True, use_cache=True)
                 duration = (time.time() - start) * 1000
                 
-                st.warning(f"⏱️ Cache-Miss: {duration:.2f}ms")
+                st.warning(f"⏱ Cache-Miss: {duration:.2f}ms")
                 st.info("CSS wurde neu generiert und im Cache gespeichert")
         
         with col2:
-            if st.button("2️⃣ Zweite Generierung (Cache-Hit)", key="cache_hit"):
+            if st.button("2⃣ Zweite Generierung (Cache-Hit)", key="cache_hit"):
                 # CSS aus Cache laden
                 start = time.time()
                 css = theme_manager.generate_css(minified=True, use_cache=True)
                 duration = (time.time() - start) * 1000
                 
-                st.success(f"⚡ Cache-Hit: {duration:.2f}ms")
+                st.success(f" Cache-Hit: {duration:.2f}ms")
                 st.info("CSS wurde aus dem Cache geladen (viel schneller!)")
         
         # Cache-Statistiken
@@ -194,7 +194,7 @@ def main():
             )
         
         # Cache leeren
-        if st.button("🗑️ Cache leeren"):
+        if st.button(" Cache leeren"):
             optimizer.invalidate_cache()
             st.success("Cache wurde geleert")
             st.rerun()
@@ -272,7 +272,7 @@ def main():
         # Anzahl Komponenten
         num_components = st.slider("Anzahl zu rendernder Komponenten", 1, 20, 5)
         
-        if st.button("🎨 Komponenten rendern"):
+        if st.button(" Komponenten rendern"):
             card = Card(theme_manager)
             metric_card = MetricCard(theme_manager)
             
@@ -294,7 +294,7 @@ def main():
                         trend=5.2 if i % 2 == 0 else -3.1
                     )
             
-            st.success(f"✅ {num_components * 2} Komponenten gerendert")
+            st.success(f" {num_components * 2} Komponenten gerendert")
         
         # Render-Statistiken
         st.divider()
@@ -320,9 +320,9 @@ def main():
                 
                 # Warnung bei langsamen Komponenten
                 if stats['avg_ms'] > 50:
-                    st.warning(f"⚠️ {component} ist langsamer als Ziel (50ms)")
+                    st.warning(f" {component} ist langsamer als Ziel (50ms)")
                 else:
-                    st.success(f"✅ {component} erfüllt Performance-Ziel")
+                    st.success(f" {component} erfüllt Performance-Ziel")
         else:
             st.info("Noch keine Komponenten gerendert")
         
@@ -331,7 +331,7 @@ def main():
         
         if slow_components:
             st.divider()
-            st.subheader("⚠️ Langsame Komponenten")
+            st.subheader(" Langsame Komponenten")
             
             for comp in slow_components:
                 st.warning(
@@ -340,13 +340,13 @@ def main():
                 )
         
         # Reset-Button
-        if st.button("🔄 Statistiken zurücksetzen", key="reset_comp"):
+        if st.button(" Statistiken zurücksetzen", key="reset_comp"):
             comp_optimizer.reset_stats()
             st.rerun()
     
     # Sidebar mit Informationen
     with st.sidebar:
-        st.header("ℹ️ Informationen")
+        st.header("ℹ Informationen")
         
         st.markdown("""
         ### Performance-Ziele
@@ -358,10 +358,10 @@ def main():
         
         ### Optimierungen
         
-        ✅ CSS-Caching (LRU)  
-        ✅ CSS-Minification  
-        ✅ Performance-Monitoring  
-        ✅ Component-Render-Tracking  
+         CSS-Caching (LRU)  
+         CSS-Minification  
+         Performance-Monitoring  
+         Component-Render-Tracking  
         
         ### Features
         
@@ -376,7 +376,7 @@ def main():
         # Globale Aktionen
         st.subheader("Globale Aktionen")
         
-        if st.button("🔄 Alles zurücksetzen"):
+        if st.button(" Alles zurücksetzen"):
             reset_optimizer()
             if 'component_optimizer' in st.session_state:
                 del st.session_state.component_optimizer

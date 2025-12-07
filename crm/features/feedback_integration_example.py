@@ -69,7 +69,7 @@ Mit freundlichen Grüßen
 Ihr Team"""
     )
     
-    print(f"✅ Projekt-Abschluss Umfrage erstellt (ID: {project_survey_id})")
+    print(f" Projekt-Abschluss Umfrage erstellt (ID: {project_survey_id})")
     
     # 2. Installation Feedback (schnelles Follow-up)
     installation_survey_id = feedback_manager.create_survey(
@@ -114,7 +114,7 @@ Bitte nehmen Sie sich kurz Zeit für 4 schnelle Fragen.
 Vielen Dank!"""
     )
     
-    print(f"✅ Installation Feedback erstellt (ID: {installation_survey_id})")
+    print(f" Installation Feedback erstellt (ID: {installation_survey_id})")
     
     # 3. Langzeit-Zufriedenheit (nach 90 Tagen)
     longterm_survey_id = feedback_manager.create_survey(
@@ -158,7 +158,7 @@ wie Ihre Erfahrungen sind.
 Ihr Feedback ist uns wichtig!"""
     )
     
-    print(f"✅ Langzeit-Zufriedenheit erstellt (ID: {longterm_survey_id})\n")
+    print(f" Langzeit-Zufriedenheit erstellt (ID: {longterm_survey_id})\n")
     
     return {
         'project': project_survey_id,
@@ -176,7 +176,7 @@ def example_trigger_workflow(conn: sqlite3.Connection):
     customer_id = 1
     project_id = 1
     
-    print(f"📋 Projekt {project_id} für Kunde {customer_id} abgeschlossen")
+    print(f" Projekt {project_id} für Kunde {customer_id} abgeschlossen")
     
     # Löse automatische Umfragen aus
     trigger_ids = feedback_manager.trigger_survey_on_event(
@@ -186,12 +186,12 @@ def example_trigger_workflow(conn: sqlite3.Connection):
         project_id=project_id
     )
     
-    print(f"✅ {len(trigger_ids)} Umfrage(n) geplant\n")
+    print(f" {len(trigger_ids)} Umfrage(n) geplant\n")
     
     # Zeige ausstehende Trigger
     pending = feedback_manager.get_pending_triggers(conn)
     
-    print(f"📅 Ausstehende Trigger: {len(pending)}")
+    print(f" Ausstehende Trigger: {len(pending)}")
     for trigger in pending:
         print(f"  - Umfrage: {trigger.get('survey_name', 'N/A')}")
         print(f"    Kunde: {trigger.get('first_name', '')} {trigger.get('last_name', '')}")
@@ -250,8 +250,8 @@ def example_response_submission(conn: sqlite3.Connection, survey_id: int):
             overall_rating=data['overall_rating']
         )
         
-        sentiment = '😊' if data['overall_rating'] >= 4 else '😐' if data['overall_rating'] == 3 else '😞'
-        print(f"{sentiment} Antwort von Kunde {data['customer_id']}: {data['overall_rating']}⭐ (ID: {response_id})")
+        sentiment = '' if data['overall_rating'] >= 4 else '' if data['overall_rating'] == 3 else ''
+        print(f"{sentiment} Antwort von Kunde {data['customer_id']}: {data['overall_rating']} (ID: {response_id})")
     
     print()
 
@@ -264,20 +264,20 @@ def example_analytics(conn: sqlite3.Connection, survey_id: int):
     # Gesamtstatistiken
     stats = feedback_manager.get_survey_statistics(conn, survey_id)
     
-    print("📊 Gesamtstatistiken:")
+    print(" Gesamtstatistiken:")
     print(f"  Antworten: {stats.get('total_responses', 0)}")
-    print(f"  Ø Bewertung: {stats.get('avg_rating', 0):.1f}⭐")
+    print(f"  Ø Bewertung: {stats.get('avg_rating', 0):.1f}")
     print(f"  Response Rate: {stats.get('response_rate', 0):.1f}%")
     print(f"  Positiv: {stats.get('positive_count', 0)} ({stats.get('positive_count', 0) / max(stats.get('total_responses', 1), 1) * 100:.0f}%)")
     print(f"  Neutral: {stats.get('neutral_count', 0)}")
     print(f"  Negativ: {stats.get('negative_count', 0)}\n")
     
     # Fragen-Statistiken
-    print("📈 Fragen-Statistiken:")
+    print(" Fragen-Statistiken:")
     for q_id in ['q1', 'q2', 'q3']:
         q_stats = feedback_manager.get_question_statistics(conn, survey_id, q_id)
         if q_stats.get('avg'):
-            print(f"  {q_id}: Ø {q_stats['avg']:.1f}⭐ (Min: {q_stats['min']}, Max: {q_stats['max']})")
+            print(f"  {q_id}: Ø {q_stats['avg']:.1f} (Min: {q_stats['min']}, Max: {q_stats['max']})")
     
     print()
 
@@ -291,16 +291,16 @@ def example_negative_feedback_handling(conn: sqlite3.Connection):
     alerts = feedback_manager.get_negative_feedback_alerts(conn, days=7)
     
     if not alerts:
-        print("✅ Kein negatives Feedback in den letzten 7 Tagen!\n")
+        print(" Kein negatives Feedback in den letzten 7 Tagen!\n")
         return
     
-    print(f"⚠️ {len(alerts)} negative(s) Feedback gefunden:\n")
+    print(f" {len(alerts)} negative(s) Feedback gefunden:\n")
     
     for alert in alerts:
         print(f"Kunde: {alert.get('first_name', '')} {alert.get('last_name', '')}")
         print(f"E-Mail: {alert.get('email', 'N/A')}")
         print(f"Projekt: {alert.get('project_name', 'N/A')}")
-        print(f"Bewertung: {alert.get('overall_rating', 0)}⭐")
+        print(f"Bewertung: {alert.get('overall_rating', 0)}")
         print(f"Datum: {alert['submitted_at'][:10]}")
         print(f"Antworten:")
         for q_id, answer in alert['responses'].items():
@@ -327,7 +327,7 @@ def example_trend_analysis(conn: sqlite3.Connection, survey_id: int):
         print("Noch keine Trend-Daten vorhanden.\n")
         return
     
-    print("📈 Trend der letzten 30 Tage:\n")
+    print(" Trend der letzten 30 Tage:\n")
     print("Datum       | Antworten | Ø Rating | Positiv | Negativ")
     print("-" * 60)
     

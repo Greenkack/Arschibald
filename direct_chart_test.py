@@ -45,7 +45,7 @@ def create_direct_chart_pdf():
             f"Zeichne Charts bei ({left_cx}, {chart_cy}) und ({right_cx}, {chart_cy})")
 
         # Linker Chart - Blau
-        print("🔵 Zeichne blauen Chart...")
+        print(" Zeichne blauen Chart...")
 
         # Äußerer Kreis (Hintergrund)
         c.setFillColorRGB(0.8, 0.8, 0.8)
@@ -72,7 +72,7 @@ def create_direct_chart_pdf():
         c.drawString(left_cx - 40, chart_cy - outer_r - 20, "Tagesverbrauch")
 
         # Rechter Chart - Rot
-        print("🔴 Zeichne roten Chart...")
+        print(" Zeichne roten Chart...")
 
         # Äußerer Kreis (Hintergrund)
         c.setFillColorRGB(0.8, 0.8, 0.8)
@@ -171,7 +171,7 @@ def test_template_pdf_content():
             if hasattr(page, 'get_contents'):
                 contents = page.get_contents()
                 if contents:
-                    print(f"📋 Template hat Inhalt: {type(contents)}")
+                    print(f" Template hat Inhalt: {type(contents)}")
                 else:
                     print("Template hat keinen Inhalt!")
 

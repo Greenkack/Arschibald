@@ -162,7 +162,7 @@ def test_position_verification():
 
             print(f"Position-Test-PDF erstellt: {output_file}")
             print(
-                "📍 Das Diagramm sollte 20 Punkte höher als in der ursprünglichen Version sein")
+                " Das Diagramm sollte 20 Punkte höher als in der ursprünglichen Version sein")
             print("Alle 4 Balken sollten sichtbar sein:")
             print("   1. Direktverbrauch: 1.200,00 €")
             print("   2. Einspeisevergütung: 800,00 €")
@@ -185,12 +185,12 @@ if __name__ == "__main__":
     # Test 2: Position-Verifikation
     test_position_verification()
 
-    print("\n🎉 Alle Tests abgeschlossen!")
-    print("📋 Überprüfen Sie die generierten PDF-Dateien:")
+    print("\n Alle Tests abgeschlossen!")
+    print(" Überprüfen Sie die generierten PDF-Dateien:")
     print("   Alle 4 Balken sollten sichtbar sein (inklusive Direktverbrauch)")
     print("   Das Diagramm sollte 20 Punkte höher positioniert sein")
     print("   Echte dynamische Werte aus dem System werden verwendet")
-    print("📍 Keys verwendet:")
+    print(" Keys verwendet:")
     print("   - self_consumption_without_battery_eur (Direktverbrauch)")
     print("   - annual_feed_in_revenue_eur (Einspeisevergütung)")
     print("   - tax_benefits_eur (Steuervorteile)")

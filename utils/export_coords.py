@@ -175,7 +175,7 @@ if __name__ == "__main__":
         format='%(levelname)s: %(message)s'
     )
     
-    print("📍 PDF-Koordinaten-Exporter")
+    print(" PDF-Koordinaten-Exporter")
     print("=" * 50)
     
     success = export_pdf_coordinates()

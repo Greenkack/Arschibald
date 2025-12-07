@@ -457,7 +457,7 @@ def render_debug_toolbar(location: str = "sidebar") -> None:
     widget_prefix = f"{location}_"
     with container:
         st.markdown("---")
-        st.markdown("### 🛠️ Debug-Tools")
+        st.markdown("###  Debug-Tools")
 
         enabled = bool(st.session_state.get(DEBUG_MODE_KEY, False))
         new_enabled = st.toggle(

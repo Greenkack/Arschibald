@@ -105,7 +105,7 @@ def test_realistic_pdf_data():
         print(f"  3. Seite 7: {'' if seite7_ok else ''}")
 
         if vat_ok and amort_ok and seite7_ok:
-            print("\\n🎉 ALLE 3 PROBLEME GELÖST!")
+            print("\\n ALLE 3 PROBLEME GELÖST!")
             return True
         print("\\nPROBLEME BESTEHEN NOCH!")
         return False

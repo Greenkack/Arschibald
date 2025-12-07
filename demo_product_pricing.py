@@ -68,7 +68,7 @@ def demo_pauschal_pricing():
         print(f"  - Zellen: {validation['info']['cell_count']}")
     
     # Berechne Beispiel-Preise
-    print("\n💵 Berechne Preise...")
+    print("\n Berechne Preise...")
     
     # Beispiel 1: Exakte Übereinstimmung
     result = calculate_product_price_from_matrix("20", "10kWh")
@@ -138,7 +138,7 @@ def demo_additiv_pricing():
     print("  Basis-Preise gesetzt")
     
     # Berechne mit verschiedenen Zubehör-Kombinationen
-    print("\n💵 Berechne Preise mit Zubehör...")
+    print("\n Berechne Preise mit Zubehör...")
     
     # Ohne Zubehör
     result = calculate_product_price_from_matrix("20", "10kWh")

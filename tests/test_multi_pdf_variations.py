@@ -35,7 +35,7 @@ def test_product_rotation():
     print(f"  Wechselrichter: {len(generator.products.get('inverter', []))} verfügbar")
     print(f"  Speicher: {len(generator.products.get('storage', []))} verfügbar")
     
-    print(f"\n🔄 Teste Rotation für 5 Firmen:")
+    print(f"\n Teste Rotation für 5 Firmen:")
     for i in range(5):
         rotated = generator.get_rotated_products_for_company(i, base_settings, {})
         print(f"\nFirma {i+1}:")
@@ -71,9 +71,9 @@ def test_price_scaling():
     
     print(f"\nBasis-Preis: {base_calc_results['total_investment_netto']:.2f} € (netto)")
     print(f"Preissteigerung: {price_settings['price_increment_percent']}% pro Firma")
-    print(f"🧮 Modus: {price_settings['price_calculation_mode']}")
+    print(f" Modus: {price_settings['price_calculation_mode']}")
     
-    print(f"\n💵 Preisstaffelung für 5 Firmen:")
+    print(f"\n Preisstaffelung für 5 Firmen:")
     for i in range(5):
         scaled = generator.apply_price_scaling(i, price_settings, base_calc_results.copy())
         price = scaled.get('total_investment_netto', 0)
@@ -113,7 +113,7 @@ def test_exponential_price_scaling():
     print(f"\nBasis-Preis: {base_calc_results['total_investment_netto']:.2f} € (netto)")
     print(f"Exponent: {price_settings['price_exponent']}")
     
-    print(f"\n💵 Exponentielle Preisstaffelung:")
+    print(f"\n Exponentielle Preisstaffelung:")
     for i in range(5):
         scaled = generator.apply_price_scaling(i, price_settings, base_calc_results.copy())
         price = scaled.get('total_investment_netto', 0)
@@ -149,7 +149,7 @@ def test_combined_rotation_and_pricing():
         'total_investment_netto': 20000.0,
     }
     
-    print(f"\n🔄 Simuliere 3 Firmen mit BEIDEN Features:")
+    print(f"\n Simuliere 3 Firmen mit BEIDEN Features:")
     for i in range(3):
         print(f"\n{'='*60}")
         print(f"Firma {i+1}:")
@@ -176,7 +176,7 @@ def test_combined_rotation_and_pricing():
 
 
 if __name__ == "__main__":
-    print("\n" + "🧪 MULTI-PDF TEST SUITE" + "\n")
+    print("\n" + " MULTI-PDF TEST SUITE" + "\n")
     print("Testet ob verschiedene Produkte UND Preise funktionieren")
     print("="*80)
     
@@ -187,7 +187,7 @@ if __name__ == "__main__":
         test_combined_rotation_and_pricing()
         
         print("\n" + "="*80)
-        print("🎉 ALLE TESTS ERFOLGREICH!")
+        print(" ALLE TESTS ERFOLGREICH!")
         print("="*80)
         print("\nProduktrotation: FUNKTIONIERT")
         print("Preisstaffelung (linear): FUNKTIONIERT")
@@ -195,7 +195,7 @@ if __name__ == "__main__":
         print("Kombiniert: FUNKTIONIERT")
         
         print("\n" + "="*80)
-        print("📋 ZUSAMMENFASSUNG")
+        print(" ZUSAMMENFASSUNG")
         print("="*80)
         print("""
 Das Multi-PDF-System KANN BEREITS:

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\worksheet\table.py
+# hypothesis_version: 6.147.0
+
+['/table', '/tables/table{0}.xml', '/xl', 'Column{0}', 'PivotStyleDark{0}', 'PivotStyleLight{0}', 'PivotStyleMedium{0}', 'TableStyleDark{0}', 'TableStyleLight{0}', 'TableStyleMedium{0}', 'attr_text', 'autoFilter', 'average', 'count', 'countNums', 'custom', 'extLst', 'max', 'min', 'name', 'queryTable', 'sortState', 'stdDev', 'sum', 'table', 'tableColumn', 'tableColumns', 'tableFormula', 'tablePart', 'tableParts', 'tableStyleInfo', 'totalsRowFormula', 'var', 'worksheet', 'xml', 'xmlColumnPr', 'xmlns']

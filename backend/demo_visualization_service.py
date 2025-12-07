@@ -36,7 +36,7 @@ def demo_service_availability():
         print(f"  • PV Module Height: {service.pv_height}m")
         print(f"  • PV Module Thickness: {service.pv_thickness}m")
     else:
-        print("  ⚠ 3D visualization modules not installed")
+        print("   3D visualization modules not installed")
         print("  Install with: pip install pyvista numpy")
     
     return service, available
@@ -112,7 +112,7 @@ def demo_3d_model_generation():
     service = VisualizationService()
     
     if not service.is_available():
-        print("⚠ Skipping: 3D visualization modules not available")
+        print(" Skipping: 3D visualization modules not available")
         return
     
     # Configuration
@@ -149,18 +149,18 @@ def demo_3d_model_generation():
             placement_mode="auto"
         )
         
-        print("\n✓ Model generated successfully!")
+        print("\n Model generated successfully!")
         print(f"  • Modules placed: {len(result['module_positions'])}")
         print(f"  • Total area: {result['statistics']['total_area_m2']}m²")
         print(f"  • Roof coverage: {result['statistics']['roof_coverage_percent']}%")
         
         if result['warnings']:
-            print(f"\n⚠ Warnings ({len(result['warnings'])}):")
+            print(f"\n Warnings ({len(result['warnings'])}):")
             for warning in result['warnings']:
                 print(f"  • {warning}")
         
     except Exception as e:
-        print(f"\n✗ Error: {e}")
+        print(f"\n Error: {e}")
 
 
 def demo_auto_placement():
@@ -170,7 +170,7 @@ def demo_auto_placement():
     service = VisualizationService()
     
     if not service.is_available():
-        print("⚠ Skipping: 3D visualization modules not available")
+        print(" Skipping: 3D visualization modules not available")
         return
     
     building_dims = {
@@ -200,7 +200,7 @@ def demo_auto_placement():
             module_config=module_config
         )
         
-        print(f"\n✓ Placement calculated: {len(positions)} modules")
+        print(f"\n Placement calculated: {len(positions)} modules")
         
         # Show first 3 positions
         print("\nFirst 3 module positions:")
@@ -210,7 +210,7 @@ def demo_auto_placement():
                   f"tilt={pos['tilt']:.1f}°")
         
     except Exception as e:
-        print(f"\n✗ Error: {e}")
+        print(f"\n Error: {e}")
 
 
 def main():
@@ -232,7 +232,7 @@ def main():
         demo_auto_placement()
     else:
         print_section("Additional Demos")
-        print("⚠ Additional demos require 3D visualization modules")
+        print(" Additional demos require 3D visualization modules")
         print("  Install with: pip install pyvista numpy")
     
     print("\n" + "=" * 70)

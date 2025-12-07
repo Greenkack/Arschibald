@@ -208,9 +208,9 @@ def test_boundary_calculation():
 
 if __name__ == "__main__":
     print("\n")
-    print("╔" + "=" * 68 + "╗")
-    print("║" + " " * 15 + "ANIMATION & KOLLISIONS-FIX TESTS" + " " * 21 + "║")
-    print("╚" + "=" * 68 + "╝")
+    print("" + "=" * 68 + "")
+    print("" + " " * 15 + "ANIMATION & KOLLISIONS-FIX TESTS" + " " * 21 + "")
+    print("" + "=" * 68 + "")
     print()
     
     results = []

@@ -740,7 +740,7 @@ def run_all_tests():
     print("\n" + "="*70)
     
     if passed == total:
-        print("🎉 ALLE TESTS BESTANDEN!")
+        print(" ALLE TESTS BESTANDEN!")
         print("="*70)
         print("\nImplementierte Features (Requirements 4.1-4.10):")
         print("  4.1: Screenshot-Button generiert PNG-Bytes")

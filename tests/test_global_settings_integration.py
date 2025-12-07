@@ -180,7 +180,7 @@ def test_global_settings_integration():
     print("\n" + "="*80)
     print("ALLE TESTS ERFOLGREICH!")
     print("="*80)
-    print("\n📋 ZUSAMMENFASSUNG:")
+    print("\n ZUSAMMENFASSUNG:")
     print("   - Database-Funktionen: OK")
     print("   - Calculations Integration: OK")
     print("   - Admin Panel: OK")

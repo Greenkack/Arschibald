@@ -23,7 +23,7 @@ print()
 # 1. UI-OPTIONEN PRÜFEN
 # ============================================================================
 
-print("📋 1. UI-OPTIONEN PRÜFEN")
+print(" 1. UI-OPTIONEN PRÜFEN")
 print("-" * 80)
 
 ui_options_expected = [
@@ -63,7 +63,7 @@ print()
 # 2. BACKEND-VERARBEITUNG PRÜFEN
 # ============================================================================
 
-print("🛠️  2. BACKEND-VERARBEITUNG PRÜFEN")
+print("  2. BACKEND-VERARBEITUNG PRÜFEN")
 print("-" * 80)
 
 backend_checks = {
@@ -152,7 +152,7 @@ print()
 # 4. REKURSIONSSCHUTZ PRÜFEN
 # ============================================================================
 
-print("🔄 4. REKURSIONSSCHUTZ PRÜFEN")
+print(" 4. REKURSIONSSCHUTZ PRÜFEN")
 print("-" * 80)
 
 if PDF_GENERATOR.exists():

@@ -70,10 +70,10 @@ def analyze_code_stats(directory="."):
     print(f"Dateien: {stats['total_files']}")
     print(f"Zeilen: {stats['total_lines']:,}")
     print(f"Funktionen: {stats['total_functions']}")
-    print(f"🏗️ Klassen: {stats['total_classes']}")
+    print(f" Klassen: {stats['total_classes']}")
     print(f"Dateien mit Fehlern: {stats['files_with_errors']}")
 
-    print("\n📏 GRÖßTE DATEIEN:")
+    print("\n GRÖßTE DATEIEN:")
     for file_path, line_count in stats['largest_files']:
         print(f"  {line_count:4d} Zeilen - {os.path.basename(file_path)}")
 

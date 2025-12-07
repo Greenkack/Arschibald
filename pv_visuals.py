@@ -574,9 +574,9 @@ def render_co2_savings_visualization(
 
     # Erstelle 2D-Balkendiagramm mit verbessertem Styling (Task 4.1-4.2)
     categories = [
-        f'🌳 Bäume<br>({trees_equiv:.0f} Stück)',
-        f'🚗 Autokilometer<br>({car_km_equiv:,.0f} km)',
-        f'✈️ Flugkilometer<br>({airplane_km_equiv:,.0f} km)'
+        f' Bäume<br>({trees_equiv:.0f} Stück)',
+        f' Autokilometer<br>({car_km_equiv:,.0f} km)',
+        f' Flugkilometer<br>({airplane_km_equiv:,.0f} km)'
     ]
 
     values = [trees_equiv, car_km_equiv, airplane_km_equiv]
@@ -656,21 +656,21 @@ def render_co2_savings_visualization(
 
     with col1:
         st.metric(
-            label="🌳 Bäume (CO₂-Bindung)",
+            label=" Bäume (CO₂-Bindung)",
             value=f"{trees_equiv:.0f}",
             help="Anzahl Bäume, die dieselbe Menge CO₂ binden würden"
         )
 
     with col2:
         st.metric(
-            label="🚗 Vermiedene Autokilometer",
+            label=" Vermiedene Autokilometer",
             value=f"{car_km_equiv:,.0f} km",
             help="Entspricht der CO₂-Emission dieser Autokilometer"
         )
 
     with col3:
         st.metric(
-            label="✈️ Vermiedene Flugkilometer",
+            label=" Vermiedene Flugkilometer",
             value=f"{airplane_km_equiv:,.0f} km",
             help="Entspricht der CO₂-Emission dieser Flugkilometer"
         )

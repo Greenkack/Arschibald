@@ -8,7 +8,7 @@ from pathlib import Path
 
 def run_command(cmd, description):
     """Run a command and handle errors"""
-    print(f"🔄 {description}...")
+    print(f" {description}...")
     try:
         result = subprocess.run(
             cmd, shell=True, check=True, capture_output=True, text=True)
@@ -133,7 +133,7 @@ def create_directories():
 
 def test_installation():
     """Test if the installation works"""
-    print("\n🧪 Testing installation...")
+    print("\n Testing installation...")
 
     # Test imports
     test_imports = [
@@ -182,8 +182,8 @@ def main():
     test_installation()
 
     print("\n" + "=" * 40)
-    print("🎉 Installation completed!")
-    print("\n📋 Next steps:")
+    print(" Installation completed!")
+    print("\n Next steps:")
     print("1. Review and update .env file if needed")
     print("2. Run simple version: streamlit run simple_app.py")
     print("3. Or run full version: streamlit run app.py")

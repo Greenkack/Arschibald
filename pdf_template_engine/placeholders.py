@@ -225,6 +225,9 @@ PLACEHOLDER_MAPPING.update(
         "85748 Garching b. München": "company_city_zip",
         "Tel: +49 89 1250 36 860": "company_phone",
         "mail@tommatech.de": "company_email",
+        # Agentname (Mitarbeiter/Vertriebsmitarbeiter)
+        "agent_name": "agent_name",
+        "Agentname": "agent_name",
     }
 )
 
@@ -4800,7 +4803,7 @@ def build_dynamic_data(
         if not active or not checkmarks_on or symbol_style == "none" or hide_value_col:
             return ""
         if symbol_style == "checkbox":
-            return "☑"
+            return ""
         if symbol_style == "dot":
             return "•"
         # default 'check'
@@ -6463,9 +6466,9 @@ def build_dynamic_data(
         formatter=_format_amort_value,
     )
 
-    # ═══════════════════════════════════════════════════════════════════════
+    # 
     # 3D-VISUALISIERUNGS-SCREENSHOT INTEGRATION
-    # ═══════════════════════════════════════════════════════════════════════
+    # 
     # Versuche 3D-Screenshot zu generieren und als Base64 zu speichern
     try:
         # Prüfe ob 3D-Modul verfügbar ist
@@ -6483,9 +6486,9 @@ def build_dynamic_data(
     except Exception as e:
         print(f"DEBUG: Fehler beim Laden des 3D-Screenshots: {e}")
 
-    # ═══════════════════════════════════════════════════════════════════════
+    # 
     # SONDERVEREINBARUNGEN (Seite 8)
-    # ═══════════════════════════════════════════════════════════════════════
+    # 
     # Hole Sondervereinbarungen aus Session State
     special_agreements = session_get("special_agreements_text", "")
     if special_agreements and special_agreements.strip():

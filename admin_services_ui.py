@@ -237,11 +237,11 @@ def delete_service(service_id: int) -> bool:
 
 def render_services_admin_ui():
     """Render the services administration UI"""
-    st.header("🛠️ Dienstleistungen & Service Einstellungen")
+    st.header(" Dienstleistungen & Service Einstellungen")
 
     # Tabs for different functions
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📋 Übersicht", "➕ Hinzufügen", "📤 Import/Export", "PDF-Reihenfolge"])
+        [" Übersicht", " Hinzufügen", " Import/Export", "PDF-Reihenfolge"])
 
     with tab1:
         render_services_overview()
@@ -293,7 +293,7 @@ def render_services_overview():
     # Display services table
     if filtered_services:
         for service in filtered_services:
-            with st.expander(f"{'⭐ ' if service['is_standard'] else ''}🛠️ {service['name']}"):
+            with st.expander(f"{' ' if service['is_standard'] else ''} {service['name']}"):
                 col1, col2, col3 = st.columns([2, 1, 1])
 
                 with col1:
@@ -312,7 +312,7 @@ def render_services_overview():
 
                 with col2:
                     if st.button(
-                        "✏️ Bearbeiten",
+                        " Bearbeiten",
                         key=f"edit_service_{
                             service['id']}"):
                         st.session_state[f"edit_service_data_{service['id']}"] = service
@@ -377,7 +377,7 @@ def render_edit_service_form(service_id: int):
 
         col1, col2 = st.columns(2)
         with col1:
-            if st.form_submit_button("💾 Speichern", type="primary"):
+            if st.form_submit_button(" Speichern", type="primary"):
                 updated_data = {
                     'id': service_id,
                     'name': name,
@@ -439,7 +439,7 @@ def render_add_service_form():
                 )
 
         if st.form_submit_button(
-            "➕ Dienstleistung hinzufügen",
+            " Dienstleistung hinzufügen",
                 type="primary"):
             if name and price >= 0:
                 service_data = {
@@ -466,14 +466,14 @@ def render_import_export():
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("#### 📤 Export")
+        st.markdown("####  Export")
         if st.button("Services als CSV exportieren"):
             services = load_services()
             if services:
                 df = pd.DataFrame(services)
                 csv = df.to_csv(index=False)
                 st.download_button(
-                    label="💾 CSV herunterladen",
+                    label=" CSV herunterladen",
                     data=csv,
                     file_name=f"services_export_{
                         datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
@@ -482,7 +482,7 @@ def render_import_export():
                 st.info("Keine Services zum Exportieren vorhanden.")
 
     with col2:
-        st.markdown("#### 📥 Import")
+        st.markdown("####  Import")
         uploaded_file = st.file_uploader(
             "CSV-Datei hochladen",
             type=['csv'],
@@ -504,7 +504,7 @@ def render_import_export():
                     st.write("Vorschau der zu importierenden Daten:")
                     st.dataframe(df.head())
 
-                    if st.button("📥 Import starten"):
+                    if st.button(" Import starten"):
                         success_count = 0
                         error_count = 0
 
@@ -644,7 +644,7 @@ def render_pdf_order_management():
                 updated_orders[service['id']] = new_order
 
             with col2:
-                status_icon = "⭐" if service['is_standard'] else ""
+                status_icon = "" if service['is_standard'] else ""
                 st.write(f"{status_icon} **{service['name']}**")
                 if service['description']:
                     st.caption(service['description'])
@@ -665,7 +665,7 @@ def render_pdf_order_management():
 
         with col1:
             if st.form_submit_button(
-                "💾 Reihenfolge speichern",
+                " Reihenfolge speichern",
                     type="primary"):
                 success_count = 0
                 error_count = 0
@@ -686,7 +686,7 @@ def render_pdf_order_management():
                         f"{error_count} Services konnten nicht aktualisiert werden.")
 
         with col2:
-            if st.form_submit_button("🔄 Automatisch sortieren"):
+            if st.form_submit_button(" Automatisch sortieren"):
                 # Auto-assign orders based on current position
                 for i, service in enumerate(services_sorted):
                     update_service_pdf_order(
@@ -696,7 +696,7 @@ def render_pdf_order_management():
                 st.rerun()
 
         with col3:
-            if st.form_submit_button("↩️ Zurücksetzen"):
+            if st.form_submit_button("↩ Zurücksetzen"):
                 # Reset all to 0
                 for service in services:
                     update_service_pdf_order(service['id'], 0)
@@ -706,7 +706,7 @@ def render_pdf_order_management():
 
     # Preview section
     st.markdown("---")
-    st.markdown("### 👀 PDF-Vorschau der Reihenfolge")
+    st.markdown("###  PDF-Vorschau der Reihenfolge")
 
     # Show how it would appear in PDF
     services_pdf_order = sorted(
@@ -716,7 +716,7 @@ def render_pdf_order_management():
     st.markdown("**So würden die Services in der PDF erscheinen:**")
 
     for i, service in enumerate(services_pdf_order, 1):
-        status_icon = "⭐" if service['is_standard'] else ""
+        status_icon = "" if service['is_standard'] else ""
         col1, col2 = st.columns([1, 4])
 
         with col1:
@@ -755,7 +755,7 @@ def render_pdf_order_management():
             st.rerun()
 
     with col2:
-        if st.button("📂 Nach Kategorie sortieren"):
+        if st.button(" Nach Kategorie sortieren"):
             # Sort by category, then by name
             services_by_category = sorted(
                 services, key=lambda x: (

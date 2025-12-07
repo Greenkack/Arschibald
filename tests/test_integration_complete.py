@@ -689,7 +689,7 @@ def run_all_tests():
     print(f"\n{passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n🎉 ALLE INTEGRATION TESTS ERFOLGREICH!")
+        print("\n ALLE INTEGRATION TESTS ERFOLGREICH!")
         print("\nDie 3D-Visualisierung ist vollständig funktionsfähig:")
         print("Alle Module können importiert werden")
         print("Vollständiger Workflow funktioniert")

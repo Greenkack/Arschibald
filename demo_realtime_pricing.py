@@ -32,7 +32,7 @@ def create_demo_matrix():
 def simulate_realtime_pricing_updates():
     """Simuliert Echtzeit-Preisänderungen"""
 
-    print("🔄 ECHTZEIT-PREISBERECHNUNG DEMONSTRATION")
+    print(" ECHTZEIT-PREISBERECHNUNG DEMONSTRATION")
     print("=" * 60)
 
     # Setup
@@ -81,7 +81,7 @@ def simulate_realtime_pricing_updates():
                                     'special_discount': 500.0,
                                     'additional_costs': 300.0}}]
 
-    print("\n🔄 Echtzeit-Preisänderungen:")
+    print("\n Echtzeit-Preisänderungen:")
     print("-" * 60)
 
     previous_price = None
@@ -116,7 +116,7 @@ def simulate_realtime_pricing_updates():
             elif change < 0:
                 print(f"   [DOWN] Änderung: {change:,.2f}€ ({change_percent:.1f}%)")
             else:
-                print("   ➡️  Keine Änderung")
+                print("     Keine Änderung")
 
         # Zeige angewandte Modifikationen
         mods = scenario['modifications']
@@ -131,7 +131,7 @@ def simulate_realtime_pricing_updates():
             active_mods.append(f"{mods['additional_costs']}€ Zusatzkosten")
 
         if active_mods:
-            print(f"   🏷️  Aktive Modifikationen: {', '.join(active_mods)}")
+            print(f"     Aktive Modifikationen: {', '.join(active_mods)}")
 
         previous_price = current_price_netto
 
@@ -145,7 +145,7 @@ def simulate_realtime_pricing_updates():
 def demonstrate_different_matrix_scenarios():
     """Demonstriert verschiedene Matrix-Szenarien"""
 
-    print("\n\n🏗️  VERSCHIEDENE MATRIX-SZENARIEN")
+    print("\n\n  VERSCHIEDENE MATRIX-SZENARIEN")
     print("=" * 60)
 
     price_matrix = create_demo_matrix()
@@ -212,8 +212,8 @@ def main():
         demonstrate_different_matrix_scenarios()
 
         print("\n" + "=" * 80)
-        print("🎉 DEMONSTRATION ERFOLGREICH ABGESCHLOSSEN!")
-        print("\n📋 Implementierte Anforderungen (Task 8):")
+        print(" DEMONSTRATION ERFOLGREICH ABGESCHLOSSEN!")
+        print("\n Implementierte Anforderungen (Task 8):")
         print("   Matrixpreis wird als Basis verwendet")
         print("   Korrekte Formel: Matrixpreis + Zubehör - Rabatte")
         print("   Echtzeit-Aktualisierung bei Änderungen")

@@ -190,7 +190,7 @@ def demo_enhanced_product_pricing():
             if result['validation_warnings']:
                 print("\nWarnings:")
                 for warning in result['validation_warnings']:
-                    print(f"  ⚠ {warning}")
+                    print(f"   {warning}")
         else:
             print(f"Error: {result['error']}")
 

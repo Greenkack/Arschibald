@@ -217,7 +217,7 @@ def test_complete_integration():
 
     final_end_preis = dynamic_data.get('final_end_preis_formatted', 'FEHLT')
 
-    print("\\n📋 Ergebnisse:")
+    print("\\n Ergebnisse:")
     print(f"   - Seite 7 final_end_preis: {final_end_preis}")
 
     success = final_end_preis == '28.750,50 €'
@@ -243,7 +243,7 @@ if __name__ == "__main__":
     # Test 3: Komplette Integration
     test3_success = test_complete_integration()
 
-    print("\\n🎉 Test-Zusammenfassung:")
+    print("\\n Test-Zusammenfassung:")
     print(f"   1. PDF UI base_cost Fix: {'' if test1_success else ''}")
     print(
         f"   2. Seite 7 final_end_preis Fix: {

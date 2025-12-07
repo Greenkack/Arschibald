@@ -241,7 +241,7 @@ def render_services_selection(show_standard: bool = True):
 
             with col2:
                 if service['category']:
-                    st.caption(f"📂 {service['category']}")
+                    st.caption(f" {service['category']}")
 
             if selected:
                 selected_optional_services.append(service['id'])

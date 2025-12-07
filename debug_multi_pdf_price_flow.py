@@ -46,7 +46,7 @@ def debug_price_flow():
         # 1. Preisstaffelung anwenden
         scaled_results = generator.apply_price_scaling(i, base_settings, base_calc_results.copy())
         
-        print(f"\n1️⃣  NACH apply_price_scaling():")
+        print(f"\n1⃣  NACH apply_price_scaling():")
         print(f"   total_investment_netto: {scaled_results.get('total_investment_netto', 'FEHLT'):,.2f}")
         print(f"   total_investment_brutto: {scaled_results.get('total_investment_brutto', 'FEHLT'):,.2f}")
         print(f"   final_price_net: {scaled_results.get('final_price_net', 'FEHLT')}")
@@ -56,7 +56,7 @@ def debug_price_flow():
         net_price = scaled_results.get('final_price_net') or scaled_results.get('total_investment_netto')
         gross_price = scaled_results.get('final_price_brutto') or scaled_results.get('total_investment_brutto')
         
-        print(f"\n2️⃣  Was würde in project_details geschrieben:")
+        print(f"\n2⃣  Was würde in project_details geschrieben:")
         print(f"   final_offer_price_net: {net_price:,.2f} €")
         print(f"   final_price_with_provision: {net_price:,.2f} €")
         print(f"   final_price_brutto: {gross_price:,.2f} €")
@@ -69,11 +69,11 @@ def debug_price_flow():
             'final_price_brutto': gross_price,
         }
         
-        print(f"\n3️⃣  Was placeholders.py aus project_details holen würde:")
+        print(f"\n3⃣  Was placeholders.py aus project_details holen würde:")
         print(f"   final_price_with_provision: {mock_project_details.get('final_price_with_provision', 'FEHLT'):,.2f} €")
         
         # 4. Prüfe ob analysis_results auch skaliert ist
-        print(f"\n4️⃣  Was placeholders.py aus analysis_results holen würde:")
+        print(f"\n4⃣  Was placeholders.py aus analysis_results holen würde:")
         print(f"   total_investment_netto: {scaled_results.get('total_investment_netto', 'FEHLT'):,.2f} €")
         
         # 5. Zeige den Unterschied
@@ -93,7 +93,7 @@ Das Problem könnte sein:
 
 1. apply_price_scaling() funktioniert → scaled_results hat richtige Preise
 2. project_details wird korrekt gesetzt → hat skalierte Preise
-3. ❓ placeholders.py: Nutzt es project_details oder analysis_results?
+3.  placeholders.py: Nutzt es project_details oder analysis_results?
 
 Wenn placeholders.py analysis_results nutzt statt project_details:
    → analysis_results hat NICHT die skalierten Preise!

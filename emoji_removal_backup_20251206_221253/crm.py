@@ -1,0 +1,2334 @@
+# crm.py
+# Modul für das Customer Relationship Management (CRM)
+
+import os
+import sqlite3
+from collections.abc import Callable
+from datetime import datetime
+from typing import Any
+import time
+
+import pandas as pd
+import streamlit as st
+
+__all__ = [
+    'render_crm',
+    'save_customer',
+    'load_customer',
+    'load_all_customers',
+    'delete_customer',
+    'MONITORING_AVAILABLE',
+]
+
+# Monitoring integration
+try:
+    from app_tracing import app_tracer
+    from app_evaluation import track_success, track_error, evaluate_performance
+    MONITORING_AVAILABLE = True
+    
+    def trace_crm(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            op_name = f"crm.{func.__name__}"
+            try:
+                with app_tracer.create_span(op_name, {"function": func.__name__}) as span:
+                    result = func(*args, **kwargs)
+                    track_success(op_name)
+                    evaluate_performance(op_name, time.time() - start_time)
+                    return result
+            except Exception as e:
+                track_error(op_name, e)
+                raise
+        wrapper.__name__ = func.__name__
+        return wrapper
+except ImportError:
+    MONITORING_AVAILABLE = False
+    def trace_crm(func): return func
+    def track_success(op): pass
+    def track_error(op, err): pass
+
+try:
+    from database import get_db_connection as real_get_db_connection
+    if not callable(real_get_db_connection):
+        raise ImportError("Imported get_db_connection is not callable.")
+    get_db_connection_safe_crm = real_get_db_connection
+except ImportError as e:
+    def _dummy_get_db_connection_ie():  # type: ignore
+        print(
+            f"crm.py: Importfehler für database.py: {e}. Dummy DB-Verbindung genutzt.")
+        return
+    get_db_connection_safe_crm = _dummy_get_db_connection_ie
+    print(
+        f"crm.py: Importfehler für database.py: {e}. Dummy DB Funktionen werden genutzt.")
+except Exception as e:
+    def _dummy_get_db_connection_ex():  # type: ignore
+        print(
+            f"crm.py: Fehler beim Laden von database.py: {e}. Dummy DB-Verbindung genutzt.")
+        return
+    get_db_connection_safe_crm = _dummy_get_db_connection_ex
+    print(
+        f"crm.py: Fehler beim Laden von database.py: {e}. Dummy DB Funktionen werden genutzt.")
+
+# Kundenakte: optionale DB-Helfer für Dokumente
+try:
+    from database import (
+        add_customer_document as _add_customer_document_db,
+    )
+    from database import (
+        delete_customer_document as _delete_customer_document_db,
+    )
+    from database import (
+        ensure_customer_documents_table as _ensure_customer_documents_table,
+    )
+    from database import (
+        get_customer_document_file_path as _get_customer_document_file_path,
+    )
+    from database import (
+        list_customer_documents as _list_customer_documents_db,
+    )
+except Exception:
+    _add_customer_document_db = None
+    _list_customer_documents_db = None
+    _delete_customer_document_db = None
+    def _ensure_customer_documents_table(): return None  # type: ignore
+    _get_customer_document_file_path = None
+
+
+def get_text_crm(texts_dict: dict[str, str], key: str,
+                 fallback_text: str | None = None) -> str:
+    return texts_dict.get(
+        key, fallback_text if fallback_text is not None else key.replace(
+            "_", " ").title())
+
+
+def create_tables_crm(conn: sqlite3.Connection):
+    cursor = conn.cursor()
+    # KORREKTUR: Alle Spalten in der CREATE TABLE Anweisung definieren.
+    # ALTER TABLE wird verwendet, um fehlende Spalten HINZUZUFÜGEN,
+    # falls die Tabelle bereits ohne sie existiert.
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS customers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            salutation TEXT,
+            title TEXT,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            company_name TEXT,
+            address TEXT,
+            house_number TEXT,
+            zip_code TEXT,
+            city TEXT,
+            state TEXT,
+            region TEXT,
+            email TEXT,
+            phone_landline TEXT,
+            phone_mobile TEXT,
+            income_tax_rate_percent REAL DEFAULT 0.0,
+            creation_date TEXT,
+            last_updated TEXT
+        )
+    """)
+    conn.commit()  # Commit changes before attempting ALTER TABLE
+    
+    # Tag-System Tabellen erstellen
+    try:
+        from crm.features.tag_manager import create_tag_tables
+        create_tag_tables(conn)
+    except ImportError:
+        pass  # Tag-System optional
+
+    # KORREKTUR: Migrationslogik für fehlende Spalten nach der initialen Erstellung
+    # Dies ist eine gängige Methode, um das Schema zu aktualisieren, ohne Daten zu verlieren.
+    # Wir versuchen, jede Spalte hinzuzufügen und fangen den Fehler ab, wenn
+    # sie bereits existiert.
+    current_customer_columns = [col[1] for col in conn.execute(
+        "PRAGMA table_info(customers)").fetchall()]
+
+    columns_to_add = {
+        "state": "TEXT",
+        "region": "TEXT",
+        "email": "TEXT",
+        "phone_landline": "TEXT",
+        "phone_mobile": "TEXT",
+        "income_tax_rate_percent": "REAL DEFAULT 0.0",
+        "creation_date": "TEXT",
+        "last_updated": "TEXT"
+    }
+
+    for col_name, col_type in columns_to_add.items():
+        if col_name not in current_customer_columns:
+            try:
+                cursor.execute(
+                    f"ALTER TABLE customers ADD COLUMN {col_name} {col_type}")
+                conn.commit()
+                print(
+                    f"CRM DB: Spalte '{col_name}' zur Tabelle 'customers' hinzugefügt.")
+            except sqlite3.OperationalError as e:
+                # Dies sollte nur bei "duplicate column name" passieren, was ok
+                # ist.
+                print(
+                    f"CRM DB migration warning: Konnte Spalte '{col_name}' nicht hinzufügen, da sie bereits existiert oder ein anderer Fehler auftrat: {e}")
+            except Exception as e:
+                print(
+                    f"CRM DB migration ERROR adding column '{col_name}': {e}")
+
+    conn.commit()  # Sicherstellen, dass alle ALTER TABLEs committed sind
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS projects (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_id INTEGER NOT NULL,
+            project_name TEXT NOT NULL,
+            project_status TEXT,
+            roof_type TEXT,
+            roof_covering_type TEXT,
+            free_roof_area_sqm REAL,
+            roof_orientation TEXT,
+            roof_inclination_deg INTEGER,
+            building_height_gt_7m INTEGER,
+            annual_consumption_kwh REAL,
+            costs_household_euro_mo REAL,
+            annual_heating_kwh REAL,
+            costs_heating_euro_mo REAL,
+            anlage_type TEXT,
+            feed_in_type TEXT,
+            module_quantity INTEGER,
+            selected_module_id INTEGER,
+            selected_inverter_id INTEGER,
+            include_storage INTEGER,
+            selected_storage_id INTEGER,
+            selected_storage_storage_power_kw REAL,
+            include_additional_components INTEGER,
+            selected_wallbox_id INTEGER,
+            selected_ems_id INTEGER,
+            selected_optimizer_id INTEGER,
+            selected_carport_id INTEGER,
+            selected_notstrom_id INTEGER,
+            selected_tierabwehr_id INTEGER,
+            visualize_roof_in_pdf INTEGER,
+            latitude REAL,
+            longitude REAL,
+            creation_date TEXT,
+            last_updated TEXT,
+            FOREIGN KEY (customer_id) REFERENCES customers(id)
+        )
+    """)
+    conn.commit()
+
+
+@trace_crm
+def save_customer(conn: sqlite3.Connection,
+                  customer_data: dict[str, Any]) -> int | None:
+    cursor = conn.cursor()
+    now = datetime.now().isoformat()
+    # Sanitize and defaults to satisfy NOT NULL constraints
+    customer_data = customer_data.copy()
+    customer_data['last_updated'] = now
+    # ensure non-empty names
+    fn = (customer_data.get('first_name') or '').strip() or 'Interessent'
+    ln = (customer_data.get('last_name') or '').strip() or 'Unbekannt'
+    customer_data['first_name'] = fn
+    customer_data['last_name'] = ln
+    # normalize optional strings
+    for k in [
+        'salutation',
+        'title',
+        'company_name',
+        'address',
+        'house_number',
+        'zip_code',
+        'city',
+        'state',
+        'region',
+        'email',
+        'phone_landline',
+            'phone_mobile']:
+        if k in customer_data and customer_data[k] is not None:
+            customer_data[k] = str(customer_data[k]).strip()
+
+    table_info_cursor = conn.execute("PRAGMA table_info(customers)").fetchall()
+    existing_db_columns = [info[1] for info in table_info_cursor]
+
+    data_to_save = {
+        k: v for k,
+        v in customer_data.items() if k in existing_db_columns}
+
+    if 'id' in data_to_save and data_to_save['id']:
+        # Update existing customer
+        customer_id = data_to_save['id']
+        fields = [f"{k}=?" for k in data_to_save if k != 'id']
+        values = [data_to_save[k] for k in data_to_save if k != 'id']
+        values.append(customer_id)
+        cursor.execute(
+            f"UPDATE customers SET {
+                ', '.join(fields)} WHERE id=?",
+            values)
+        conn.commit()
+        return customer_id
+    fields = ', '.join(data_to_save.keys())
+    placeholders = ', '.join(['?'] * len(data_to_save))
+    cursor.execute(
+        f"INSERT INTO customers ({fields}) VALUES ({placeholders})",
+        list(
+            data_to_save.values()))
+    conn.commit()
+    return cursor.lastrowid
+
+
+@trace_crm
+def load_customer(conn: sqlite3.Connection,
+                  customer_id: int) -> dict[str, Any] | None:
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM customers WHERE id=?", (customer_id,))
+    row = cursor.fetchone()
+    if row:
+        columns = [desc[0] for desc in cursor.description]
+        return dict(zip(columns, row))
+    return None
+
+
+def delete_customer(conn: sqlite3.Connection, customer_id: int) -> bool:
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM projects WHERE customer_id=?", (customer_id,))
+    cursor.execute("DELETE FROM customers WHERE id=?", (customer_id,))
+    conn.commit()
+    return cursor.rowcount > 0
+
+
+def load_all_customers(conn: sqlite3.Connection) -> list[dict[str, Any]]:
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM customers")
+    rows = cursor.fetchall()
+    if not rows:
+        return []
+    columns = [desc[0] for desc in cursor.description]
+    return [dict(zip(columns, row)) for row in rows]
+
+
+def save_project(conn: sqlite3.Connection,
+                 project_data: dict[str, Any]) -> int | None:
+    cursor = conn.cursor()
+    now = datetime.now().isoformat()
+    project_data['last_updated'] = now
+    project_data['creation_date'] = project_data.get('creation_date', now)
+
+    table_info_cursor = conn.execute("PRAGMA table_info(projects)").fetchall()
+    existing_columns = [info[1] for info in table_info_cursor]
+
+    insert_data = {
+        k: v for k,
+        v in project_data.items() if k in existing_columns}
+
+    if 'id' in project_data and project_data['id']:
+        project_id = project_data['id']
+        fields = [f"{k}=?" for k in insert_data if k != 'id']
+        values = [insert_data[k] for k in insert_data if k != 'id']
+        values.append(project_id)
+        cursor.execute(
+            f"UPDATE projects SET {
+                ', '.join(fields)} WHERE id=?",
+            values)
+        conn.commit()
+        return project_id
+    fields = ', '.join(insert_data.keys())
+    placeholders = ', '.join(['?'] * len(insert_data))
+    cursor.execute(
+        f"INSERT INTO projects ({fields}) VALUES ({placeholders})",
+        list(
+            insert_data.values()))
+    conn.commit()
+    return cursor.lastrowid
+
+
+def load_project(conn: sqlite3.Connection,
+                 project_id: int) -> dict[str, Any] | None:
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM projects WHERE id=?", (project_id,))
+    row = cursor.fetchone()
+    return dict(row) if row else None
+
+
+def delete_project(conn: sqlite3.Connection, project_id: int) -> bool:
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM projects WHERE id=?", (project_id,))
+    conn.commit()
+    return cursor.rowcount > 0
+
+
+def load_projects_for_customer(
+        conn: sqlite3.Connection, customer_id: int) -> list[dict[str, Any]]:
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM projects WHERE customer_id=?", (customer_id,))
+    rows = cursor.fetchall()
+    return [dict(row) for row in rows]
+
+
+def render_crm(
+    texts: dict[str, str],
+    get_db_connection_func: Callable[[], sqlite3.Connection | None],
+    *,
+    show_header: bool = True,
+    **kwargs
+):
+    if show_header:
+        st.header(
+            get_text_crm(
+                texts,
+                "menu_item_crm",
+                "Kundenverwaltung (CRM - C)"))
+
+    conn = get_db_connection_func()
+    if conn is None:
+        st.error(
+            get_text_crm(
+                texts,
+                "db_connection_unavailable",
+                "Datenbankverbindung nicht verfügbar. CRM-Funktionen eingeschränkt."))
+        return
+
+    # Erstellt die Tabellen (inkl. neuer Spalten) oder fügt Spalten hinzu
+    create_tables_crm(conn)
+
+    # CRM Tab-Navigation
+    crm_tabs = st.tabs([
+        "👥 Kundenverwaltung",
+        "📊 Lead Scoring", 
+        "💾 Backup & Daten"
+    ])
+    
+    # Tab 1: Kundenverwaltung (bestehende Funktionalität)
+    with crm_tabs[0]:
+        render_customer_management(texts, conn)
+    
+    # Tab 2: Lead Scoring
+    with crm_tabs[1]:
+        render_lead_scoring_tab(texts, conn)
+    
+    # Tab 3: Backup & Daten
+    with crm_tabs[2]:
+        render_backup_tab(conn)
+
+
+def render_customer_management(texts: dict[str, str], conn):
+    """Rendert die Kundenverwaltung (bisherige Hauptfunktionalität)"""
+    view_mode = st.session_state.get('crm_view_mode', 'customer_list')
+    selected_customer_id = st.session_state.get('selected_customer_id', None)
+    selected_project_id = st.session_state.get('selected_project_id', None)
+
+    if view_mode == 'customer_list':
+        st.subheader(
+            get_text_crm(
+                texts,
+                "crm_customer_list_header",
+                "Alle Kunden"))
+
+        # Neuer Kunde Button
+        col_btn, col_search = st.columns([1, 3])
+        with col_btn:
+            if st.button(
+                    "➕ " + get_text_crm(
+                        texts,
+                        "crm_add_new_customer_button",
+                        "Neuen Kunden anlegen"),
+                    key="add_new_customer_btn",
+                    use_container_width=True):
+                st.session_state['crm_view_mode'] = 'add_customer'
+                st.session_state['selected_customer_id'] = None
+                st.session_state['selected_project_id'] = None
+                st.rerun()
+
+        customers = load_all_customers(conn)
+        
+        if customers:
+            # Suchfunktion und Filter
+            with col_search:
+                search_query = st.text_input(
+                    "Suche nach Name, Stadt, E-Mail oder Telefon",
+                    key="customer_search",
+                    placeholder="Kunde suchen..."
+                )
+            
+            # Filteroptionen
+            col_filter1, col_filter2, col_filter3, col_filter4 = st.columns(4)
+            with col_filter1:
+                sort_by = st.selectbox(
+                    "Sortieren nach",
+                    ["Name (A-Z)", "Name (Z-A)", "Stadt", "Neueste zuerst", "Älteste zuerst"],
+                    key="customer_sort"
+                )
+            with col_filter2:
+                city_filter = st.multiselect(
+                    "Stadt filtern",
+                    options=sorted(list(set([c.get('city', '') for c in customers if c.get('city')]))),
+                    key="customer_city_filter"
+                )
+            with col_filter3:
+                # Tag-Filter
+                try:
+                    from crm.features.tag_manager import get_all_tags, get_customers_by_tags
+                    all_tags = get_all_tags(conn, active_only=True)
+                    if all_tags:
+                        tag_options = {tag['id']: tag['name'] for tag in all_tags}
+                        selected_tag_ids = st.multiselect(
+                            "🏷️ Tags filtern",
+                            options=list(tag_options.keys()),
+                            format_func=lambda x: tag_options[x],
+                            key="customer_tag_filter"
+                        )
+                    else:
+                        selected_tag_ids = []
+                except ImportError:
+                    selected_tag_ids = []
+            with col_filter4:
+                view_style = st.radio(
+                    "Ansicht",
+                    ["Karten", "Tabelle"],
+                    horizontal=True,
+                    key="customer_view_style"
+                )
+            
+            # Filter anwenden
+            filtered_customers = customers.copy()
+            
+            # Suchfilter
+            if search_query:
+                search_lower = search_query.lower()
+                filtered_customers = [
+                    c for c in filtered_customers
+                    if search_lower in f"{c.get('first_name', '')} {c.get('last_name', '')}".lower()
+                    or search_lower in c.get('city', '').lower()
+                    or search_lower in c.get('email', '').lower()
+                    or search_lower in c.get('phone', '').lower()
+                ]
+            
+            # Stadt-Filter
+            if city_filter:
+                filtered_customers = [c for c in filtered_customers if c.get('city', '') in city_filter]
+            
+            # Tag-Filter
+            if selected_tag_ids:
+                try:
+                    from crm.features.tag_manager import get_customers_by_tags
+                    customer_ids_with_tags = get_customers_by_tags(conn, selected_tag_ids, match_all=False)
+                    filtered_customers = [c for c in filtered_customers if c.get('id') in customer_ids_with_tags]
+                except ImportError:
+                    pass
+            
+            # Sortierung
+            if sort_by == "Name (A-Z)":
+                filtered_customers.sort(key=lambda x: f"{x.get('first_name', '')} {x.get('last_name', '')}".lower())
+            elif sort_by == "Name (Z-A)":
+                filtered_customers.sort(key=lambda x: f"{x.get('first_name', '')} {x.get('last_name', '')}".lower(), reverse=True)
+            elif sort_by == "Stadt":
+                filtered_customers.sort(key=lambda x: x.get('city', '').lower())
+            elif sort_by == "Neueste zuerst":
+                filtered_customers.sort(key=lambda x: x.get('id', 0), reverse=True)
+            elif sort_by == "Älteste zuerst":
+                filtered_customers.sort(key=lambda x: x.get('id', 0))
+            
+            st.markdown(f"**{len(filtered_customers)}** von **{len(customers)}** Kunden angezeigt")
+            st.markdown("---")
+            
+            if filtered_customers:
+                if view_style == "Karten":
+                    # Moderne Card-Ansicht (4 Spalten - kompakt)
+                    cols_per_row = 4
+                    for i in range(0, len(filtered_customers), cols_per_row):
+                        cols = st.columns(cols_per_row)
+                        for j in range(cols_per_row):
+                            if i + j < len(filtered_customers):
+                                customer = filtered_customers[i + j]
+                                with cols[j]:
+                                    with st.container():
+                                        st.markdown(f"""
+                                        <div style="
+                                            border: 1px solid #666;
+                                            border-radius: 8px;
+                                            padding: 10px;
+                                            margin-bottom: 8px;
+                                            background-color: #c0c0c0;
+                                            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+                                        ">
+                                            <h4 style="margin: 0 0 6px 0; color: #1f77b4; font-size: 0.95em;">
+                                                👤 {customer.get('first_name', '')} {customer.get('last_name', '')}
+                                            </h4>
+                                            <p style="margin: 2px 0; font-size: 0.75em; color: #1a1a1a;">
+                                                📍 {customer.get('city', 'N/A')}
+                                            </p>
+                                            <p style="margin: 2px 0; font-size: 0.7em; color: #2a2a2a;">
+                                                📧 {customer.get('email', 'N/A')[:25]}{'...' if len(customer.get('email', '')) > 25 else ''}
+                                            </p>
+                                            <p style="margin: 2px 0; font-size: 0.75em; color: #2a2a2a;">
+                                                📞 {customer.get('phone', 'N/A')}
+                                            </p>
+                                        </div>
+                                        """, unsafe_allow_html=True)
+                                        
+                                        col1, col2, col3 = st.columns(3)
+                                        with col1:
+                                            if st.button("👁️", key=f"view_customer_{customer['id']}", help="Ansehen", use_container_width=True):
+                                                st.session_state['selected_customer_id'] = customer['id']
+                                                st.session_state['crm_view_mode'] = 'view_customer'
+                                                st.rerun()
+                                        with col2:
+                                            if st.button("✏️", key=f"edit_customer_{customer['id']}", help="Bearbeiten", use_container_width=True):
+                                                st.session_state['selected_customer_id'] = customer['id']
+                                                st.session_state['crm_view_mode'] = 'edit_customer'
+                                                st.rerun()
+                                        with col3:
+                                            delete_button_key = f"del_customer_{customer['id']}"
+                                            confirm_delete_key = f"confirm_delete_customer_{customer['id']}"
+                                            
+                                            if st.button("❌", key=delete_button_key, help="Löschen", use_container_width=True):
+                                                if st.session_state.get(confirm_delete_key, False):
+                                                    if delete_customer(conn, customer['id']):
+                                                        st.success("Kunde gelöscht.")
+                                                        del st.session_state[confirm_delete_key]
+                                                        st.rerun()
+                                                    else:
+                                                        st.error("Löschen fehlgeschlagen.")
+                                                else:
+                                                    st.warning("Nochmal klicken zum Bestätigen!")
+                                                    st.session_state[confirm_delete_key] = True
+                
+                else:  # Tabellen-Ansicht
+                    # Erstelle DataFrame mit Aktions-Spalte
+                    df_data = []
+                    for customer in filtered_customers:
+                        df_data.append({
+                            'ID': customer['id'],
+                            'Name': f"{customer.get('first_name', '')} {customer.get('last_name', '')}",
+                            'Stadt': customer.get('city', ''),
+                            'E-Mail': customer.get('email', ''),
+                            'Telefon': customer.get('phone', ''),
+                            'PLZ': customer.get('zip_code', ''),
+                        })
+                    
+                    df_customers = pd.DataFrame(df_data)
+                    
+                    # Interaktive Tabelle
+                    st.dataframe(
+                        df_customers,
+                        use_container_width=True,
+                        hide_index=True,
+                        column_config={
+                            "ID": st.column_config.NumberColumn("ID", width="small"),
+                            "Name": st.column_config.TextColumn("Name", width="medium"),
+                            "Stadt": st.column_config.TextColumn("Stadt", width="small"),
+                            "E-Mail": st.column_config.TextColumn("E-Mail", width="medium"),
+                            "Telefon": st.column_config.TextColumn("Telefon", width="small"),
+                            "PLZ": st.column_config.TextColumn("PLZ", width="small"),
+                        }
+                    )
+                    
+                    # Aktionsleiste unter Tabelle
+                    st.markdown("### Aktionen")
+                    selected_id = st.number_input(
+                        "Kunden-ID auswählen für Aktion:",
+                        min_value=1,
+                        max_value=max([c['id'] for c in filtered_customers]),
+                        step=1,
+                        key="selected_customer_id_action"
+                    )
+                    
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        if st.button("👁️ Ansehen", key="view_selected_customer", use_container_width=True):
+                            st.session_state['selected_customer_id'] = selected_id
+                            st.session_state['crm_view_mode'] = 'view_customer'
+                            st.rerun()
+                    with col2:
+                        if st.button("✏️ Bearbeiten", key="edit_selected_customer", use_container_width=True):
+                            st.session_state['selected_customer_id'] = selected_id
+                            st.session_state['crm_view_mode'] = 'edit_customer'
+                            st.rerun()
+                    with col3:
+                        if st.button("🗑️ Löschen", key="delete_selected_customer", use_container_width=True):
+                            if delete_customer(conn, selected_id):
+                                st.success("Kunde gelöscht.")
+                                st.rerun()
+                            else:
+                                st.error("Löschen fehlgeschlagen.")
+            else:
+                st.info("Keine Kunden gefunden mit den aktuellen Filterkriterien.")
+
+        else:
+            st.info(
+                get_text_crm(
+                    texts,
+                    "crm_no_customers_found",
+                    "Keine Kunden in der Datenbank."))
+
+    elif view_mode == 'add_customer' or view_mode == 'edit_customer':
+        customer_to_edit = {}
+        if view_mode == 'edit_customer' and selected_customer_id:
+            customer_to_edit = load_customer(conn, selected_customer_id) or {}
+            st.subheader(
+                get_text_crm(
+                    texts,
+                    "crm_edit_customer_header",
+                    f"Kunden bearbeiten: {
+                        customer_to_edit.get(
+                            'first_name',
+                            '')} {
+                        customer_to_edit.get(
+                            'last_name',
+                            '')}"))
+        else:
+            st.subheader(
+                get_text_crm(
+                    texts,
+                    "crm_add_customer_header",
+                    "Neuen Kunden anlegen"))
+
+        with st.form("customer_form", clear_on_submit=False):
+            st.write(
+                get_text_crm(
+                    texts,
+                    "crm_customer_form_intro",
+                    "Kundendaten eingeben/bearbeiten:"))
+
+            salutation = st.selectbox(
+                get_text_crm(
+                    texts, "salutation_label", "Anrede"), options=[
+                    'Herr', 'Frau', 'Familie', 'Divers', ''], index=[
+                    'Herr', 'Frau', 'Familie', 'Divers', ''].index(
+                    customer_to_edit.get(
+                        'salutation', '')))
+            title = st.text_input(
+                get_text_crm(
+                    texts, "title_label", "Titel"), value=customer_to_edit.get(
+                    'title', ''))
+            first_name = st.text_input(
+                get_text_crm(
+                    texts,
+                    "first_name_label",
+                    "Vorname"),
+                value=customer_to_edit.get(
+                    'first_name',
+                    ''))
+            last_name = st.text_input(
+                get_text_crm(
+                    texts,
+                    "last_name_label",
+                    "Nachname"),
+                value=customer_to_edit.get(
+                    'last_name',
+                    ''))
+            company_name = st.text_input(
+                get_text_crm(
+                    texts,
+                    "company_name_label",
+                    "Firmenname (optional)"),
+                value=customer_to_edit.get(
+                    'company_name',
+                    ''))
+
+            address = st.text_input(
+                get_text_crm(
+                    texts, "street_label", "Straße"), value=customer_to_edit.get(
+                    'address', ''))
+            house_number = st.text_input(
+                get_text_crm(
+                    texts,
+                    "house_number_label",
+                    "Hausnummer"),
+                value=customer_to_edit.get(
+                    'house_number',
+                    ''))
+            zip_code = st.text_input(
+                get_text_crm(
+                    texts, "zip_code_label", "PLZ"), value=customer_to_edit.get(
+                    'zip_code', ''))
+            city = st.text_input(
+                get_text_crm(
+                    texts, "city_label", "Ort"), value=customer_to_edit.get(
+                    'city', ''))
+            state = st.text_input(
+                get_text_crm(
+                    texts,
+                    "state_label",
+                    "Bundesland"),
+                value=customer_to_edit.get(
+                    'state',
+                    ''))
+            region = st.text_input(
+                get_text_crm(
+                    texts,
+                    "region_label",
+                    "Region"),
+                value=customer_to_edit.get(
+                    'region',
+                    ''))
+
+            email = st.text_input(
+                get_text_crm(
+                    texts,
+                    "email_label",
+                    "E-Mail"),
+                value=customer_to_edit.get(
+                    'email',
+                    ''))
+            phone_landline = st.text_input(
+                get_text_crm(
+                    texts,
+                    "phone_landline_label",
+                    "Telefon (Festnetz)"),
+                value=customer_to_edit.get(
+                    'phone_landline',
+                    ''))
+            phone_mobile = st.text_input(
+                get_text_crm(
+                    texts,
+                    "phone_mobile_label",
+                    "Telefon (Mobil)"),
+                value=customer_to_edit.get(
+                    'phone_mobile',
+                    ''))
+            income_tax_rate_percent = st.number_input(
+                get_text_crm(
+                    texts,
+                    "income_tax_rate_label",
+                    "Einkommenssteuersatz (%)"),
+                min_value=0.0,
+                max_value=100.0,
+                value=float(
+                    customer_to_edit.get(
+                        'income_tax_rate_percent',
+                        0.0)))
+
+            submitted = st.form_submit_button(
+                get_text_crm(
+                    texts,
+                    "crm_save_customer_button",
+                    "Kunden speichern"))
+            if submitted:
+                new_customer_data = {
+                    'id': customer_to_edit.get('id'),
+                    'salutation': salutation if salutation else None,
+                    'title': title if title else None,
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'company_name': company_name if company_name else None,
+                    'address': address if address else None,
+                    'house_number': house_number if house_number else None,
+                    'zip_code': zip_code if zip_code else None,
+                    'city': city if city else None,
+                    'state': state if state else None,
+                    'region': region if region else None,
+                    'email': email if email else None,
+                    'phone_landline': phone_landline if phone_landline else None,
+                    'phone_mobile': phone_mobile if phone_mobile else None,
+                    'income_tax_rate_percent': income_tax_rate_percent,
+                    'creation_date': customer_to_edit.get(
+                        'creation_date',
+                        datetime.now().isoformat())}
+
+                if not new_customer_data['first_name'] or not new_customer_data['last_name']:
+                    st.error(
+                        get_text_crm(
+                            texts,
+                            "crm_name_required_error",
+                            "Vor- und Nachname sind Pflichtfelder."))
+                else:
+                    saved_id = save_customer(conn, new_customer_data)
+                    if saved_id:
+                        st.success(
+                            get_text_crm(
+                                texts,
+                                "crm_customer_saved",
+                                "Kunde erfolgreich gespeichert!"))
+                        st.session_state['crm_view_mode'] = 'customer_list'
+                        st.session_state['selected_customer_id'] = saved_id
+                        st.rerun()
+                    else:
+                        st.error(
+                            get_text_crm(
+                                texts,
+                                "crm_customer_save_failed",
+                                "Fehler beim Speichern des Kunden."))
+
+            if st.form_submit_button(
+                get_text_crm(
+                    texts,
+                    "crm_cancel_button",
+                    "Abbrechen")):
+                st.session_state['crm_view_mode'] = 'customer_list'
+                st.session_state['selected_customer_id'] = None
+                st.rerun()
+
+    elif view_mode == 'view_customer' or view_mode == 'add_project' or view_mode == 'edit_project' or view_mode == 'view_project':
+        if selected_customer_id is None:
+            st.error(
+                get_text_crm(
+                    texts,
+                    "crm_no_customer_selected",
+                    "Kein Kunde ausgewählt."))
+            if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_back_to_list_button",
+                    "Zurück zur Kundenliste")):
+                st.session_state['crm_view_mode'] = 'customer_list'
+                st.rerun()
+            return
+
+        current_customer = load_customer(conn, selected_customer_id)
+        if not current_customer:
+            st.error(
+                get_text_crm(
+                    texts,
+                    "crm_customer_not_found",
+                    "Kunde nicht gefunden."))
+            if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_back_to_list_button",
+                    "Zurück zur Kundenliste")):
+                st.session_state['crm_view_mode'] = 'customer_list'
+                st.rerun()
+            return
+
+        st.subheader(
+            get_text_crm(
+                texts,
+                "crm_customer_details_header",
+                "Kundendetails"))
+        st.write(f"**{get_text_crm(texts,
+                                   'first_name_label',
+                                   'Vorname')}:** {current_customer.get('first_name',
+                                                                        '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'last_name_label',
+                                   'Nachname')}:** {current_customer.get('last_name',
+                                                                         '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'email_label',
+                                   'E-Mail')}:** {current_customer.get('email',
+                                                                       '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'address_label',
+                                   'Adresse')}:** {current_customer.get('address',
+                                                                        '')} {current_customer.get('house_number',
+                                                                                                   '')}, {current_customer.get('zip_code',
+                                                                                                                               '')} {current_customer.get('city',
+                                                                                                                                                          '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'income_tax_rate_label',
+                                   'Einkommenssteuersatz')}:** {current_customer.get('income_tax_rate_percent',
+                                                                                     0.0)}%")
+
+        # Tag-Verwaltung für Kunden
+        st.markdown("---")
+        try:
+            from crm.features.tag_ui import render_customer_tag_selector
+            render_customer_tag_selector(selected_customer_id, texts, key_suffix="view")
+        except ImportError:
+            pass  # Tag-System nicht verfügbar
+
+        # E-Mail-Integration für Kunden
+        try:
+            from crm.features.email_crm_integration import render_customer_email_section
+            # Get load_admin_setting function from kwargs or create a dummy one
+            load_admin_setting_func = kwargs.get('load_admin_setting_func')
+            if load_admin_setting_func:
+                render_customer_email_section(
+                    conn,
+                    current_customer,
+                    load_admin_setting_func,
+                    texts
+                )
+        except ImportError:
+            pass  # E-Mail-System nicht verfügbar
+        except Exception as e:
+            st.warning(f"E-Mail-Integration konnte nicht geladen werden: {e}")
+
+        st.markdown("---")
+        st.subheader(
+            get_text_crm(
+                texts,
+                "crm_projects_header",
+                "Projekte des Kunden"))
+
+        if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_add_new_project_button",
+                    " Neues Projekt anlegen"),
+                key="add_new_project_btn_2"):
+            st.session_state['crm_view_mode'] = 'add_project'
+            st.session_state['selected_project_id'] = None
+            st.rerun()
+
+        projects = load_projects_for_customer(conn, selected_customer_id)
+        if projects:
+            df_projects = pd.DataFrame(projects)
+            # KORREKTUR: hide_row_index durch hide_index ersetzen
+            st.dataframe(
+                df_projects,
+                use_container_width=True,
+                hide_index=True)
+
+            for project in projects:
+                col_p_id, col_p_name, col_p_actions = st.columns([0.5, 2, 2])
+                col_p_id.write(project['id'])
+                col_p_name.write(project.get('project_name', ''))
+
+                with col_p_actions:
+                    btn_view_p = col_p_actions.button(
+                        get_text_crm(
+                            texts,
+                            "crm_view_button",
+                            "Ansehen"),
+                        key=f"view_project_{
+                            project['id']}")
+                    btn_edit_p = col_p_actions.button(
+                        get_text_crm(
+                            texts,
+                            "crm_edit_button",
+                            "Bearbeiten"),
+                        key=f"edit_project_{
+                            project['id']}")
+                    delete_project_button_key = f"del_project_{project['id']}"
+                    confirm_delete_project_key = f"confirm_delete_project_{
+                        project['id']}"
+
+                    if btn_view_p:
+                        st.session_state['selected_project_id'] = project['id']
+                        st.session_state['crm_view_mode'] = 'view_project'
+                        st.rerun()
+                    if btn_edit_p:
+                        st.session_state['selected_project_id'] = project['id']
+                        st.session_state['crm_view_mode'] = 'edit_project'
+                        st.rerun()
+
+                    if col_p_actions.button(
+                            get_text_crm(
+                                texts,
+                                "crm_delete_button",
+                                "Löschen"),
+                            key=delete_project_button_key):
+                        if st.session_state.get(
+                                confirm_delete_project_key, False):
+                            if delete_project(conn, project['id']):
+                                st.success(
+                                    get_text_crm(
+                                        texts,
+                                        "crm_project_deleted",
+                                        "Projekt gelöscht."))
+                                del st.session_state[confirm_delete_project_key]
+                                st.rerun()
+                            else:
+                                st.error(
+                                    get_text_crm(
+                                        texts,
+                                        "crm_delete_project_failed",
+                                        "Löschen fehlgeschlagen."))
+                        else:
+                            st.warning(
+                                get_text_crm(
+                                    texts,
+                                    "crm_confirm_delete_project",
+                                    "Sicher? Klick nochmal zum Bestätigen."))
+                            st.session_state[confirm_delete_project_key] = True
+        else:
+            st.info(
+                get_text_crm(
+                    texts,
+                    "crm_no_projects_found",
+                    "Keine Projekte für diesen Kunden."))
+
+        if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_back_to_customers_button",
+                    "Zurück zu Kundenprojekten"),
+                key="back_to_customer_list_from_projects"):
+            st.session_state['crm_view_mode'] = 'customer_list'
+            st.session_state['selected_customer_id'] = None
+            st.session_state['selected_project_id'] = None
+            st.rerun()
+
+        # Kundenakte: Dateien & Dokumente
+        st.markdown("---")
+        with st.expander(get_text_crm(texts, "crm_customer_filevault_header", "Kundenakte: Dateien & Dokumente"), expanded=False):
+            _ensure_customer_documents_table()
+            # Upload-Bereich
+            uploaded_files = st.file_uploader(
+                get_text_crm(
+                    texts,
+                    "crm_filevault_upload_label",
+                    "Dateien zur Kundenakte hinzufügen"),
+                accept_multiple_files=True,
+                type=[
+                    "pdf",
+                    "jpg",
+                    "jpeg",
+                    "png",
+                    "gif",
+                    "bmp",
+                    "doc",
+                    "docx",
+                    "xls",
+                    "xlsx",
+                    "txt"],
+                key=f"crm_filevault_uploader_{
+                    current_customer['id']}")
+            if uploaded_files:
+                for up in uploaded_files:
+                    try:
+                        file_bytes = up.read()
+                        display_name = up.name
+                        doc_type = "offer_pdf" if display_name.lower().endswith(".pdf") else "file"
+                        if callable(_add_customer_document_db):
+                            _add_customer_document_db(
+                                current_customer['id'],
+                                file_bytes,
+                                display_name=display_name,
+                                doc_type=doc_type,
+                                project_id=None,
+                                suggested_filename=display_name)
+                    except Exception as e:
+                        st.warning(
+                            f"Fehler beim Speichern von '{
+                                getattr(
+                                    up,
+                                    'name',
+                                    'Datei')}' : {e}")
+                st.success(
+                    get_text_crm(
+                        texts,
+                        "crm_filevault_upload_success",
+                        "Dateien gespeichert."))
+                st.rerun()
+
+            # Liste vorhandener Dokumente
+            docs: list[dict[str, Any]] = []
+            if callable(_list_customer_documents_db):
+                docs = _list_customer_documents_db(current_customer['id'])
+            
+            if docs:
+                # Sortiere Dokumente chronologisch (neueste zuerst)
+                docs_sorted = sorted(docs, key=lambda x: x.get('uploaded_at', ''), reverse=True)
+                
+                # Import PDF Bridge für Badges
+                try:
+                    from crm.integration.pdf_bridge import get_pdf_type_badge_color, get_pdf_type_label
+                    pdf_bridge_available = True
+                except ImportError:
+                    pdf_bridge_available = False
+                
+                for d in docs_sorted:
+                    cols = st.columns([4, 2, 2, 2])
+                    
+                    # Dateiname mit Badge
+                    doc_type = d.get("doc_type", "")
+                    display_name = d.get("display_name") or d.get("file_name")
+                    
+                    if pdf_bridge_available and doc_type:
+                        badge_color = get_pdf_type_badge_color(doc_type)
+                        type_label = get_pdf_type_label(doc_type)
+                        
+                        # Extrahiere Versionsnummer aus Dateinamen
+                        import re
+                        version_match = re.search(r'v(\d+)', display_name, re.IGNORECASE)
+                        version_text = f" v{version_match.group(1)}" if version_match else ""
+                        
+                        # Badge mit Typ und Version
+                        badge_html = f'<span style="background-color: {badge_color}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-right: 8px;">{type_label}{version_text}</span>'
+                        cols[0].markdown(f"{badge_html} {display_name}", unsafe_allow_html=True)
+                    else:
+                        cols[0].write(display_name)
+                    
+                    # Datum formatieren
+                    uploaded_at = d.get("uploaded_at", "")
+                    if uploaded_at:
+                        try:
+                            from datetime import datetime
+                            # Parse verschiedene Datumsformate
+                            if 'T' in uploaded_at:
+                                dt = datetime.fromisoformat(uploaded_at.replace('Z', '+00:00'))
+                            else:
+                                dt = datetime.strptime(uploaded_at, '%Y-%m-%d %H:%M:%S')
+                            formatted_date = dt.strftime('%d.%m.%Y %H:%M')
+                            cols[1].write(formatted_date)
+                        except Exception:
+                            cols[1].write(uploaded_at)
+                    else:
+                        cols[1].write("-")
+                    
+                    # Dateigröße anzeigen (falls verfügbar)
+                    if _get_customer_document_file_path:
+                        path = _get_customer_document_file_path(d.get("id"))
+                        if path and os.path.exists(path):
+                            try:
+                                file_size = os.path.getsize(path)
+                                if file_size < 1024:
+                                    size_str = f"{file_size} B"
+                                elif file_size < 1024 * 1024:
+                                    size_str = f"{file_size / 1024:.1f} KB"
+                                else:
+                                    size_str = f"{file_size / (1024 * 1024):.1f} MB"
+                                cols[2].write(size_str)
+                            except Exception:
+                                cols[2].write("-")
+                        else:
+                            cols[2].write("-")
+                    else:
+                        cols[2].write("-")
+                    
+                    # Download & Löschen
+                    with cols[3]:
+                        action_cols = st.columns(2)
+                        with action_cols[0]:
+                            if _get_customer_document_file_path:
+                                path = _get_customer_document_file_path(d.get("id"))
+                                try:
+                                    if path and os.path.exists(path):
+                                        with open(path, "rb") as fh:
+                                            st.download_button(
+                                                "📥",
+                                                data=fh.read(),
+                                                file_name=d.get("file_name", "dokument.bin"),
+                                                key=f"dl_doc_{d.get('id')}",
+                                                help="Herunterladen"
+                                            )
+                                except Exception:
+                                    pass
+                        with action_cols[1]:
+                            if st.button("❌", key=f"del_doc_{d.get('id')}", help="Löschen"):
+                                if callable(_delete_customer_document_db) and _delete_customer_document_db(d.get("id")):
+                                    st.success(get_text_crm(texts, "crm_filevault_delete_success", "Dokument gelöscht."))
+                                    st.rerun()
+            else:
+                st.caption(get_text_crm(texts, "crm_filevault_empty", "Noch keine Dokumente hinterlegt."))
+
+    elif view_mode == 'add_project' or view_mode == 'edit_project':
+        project_to_edit = {}
+        if view_mode == 'edit_project' and selected_project_id:
+            project_to_edit = load_project(conn, selected_project_id) or {}
+            st.subheader(
+                get_text_crm(
+                    texts,
+                    "crm_edit_project_header",
+                    f"Projekt bearbeiten: {
+                        project_to_edit.get(
+                            'project_name',
+                            '')}"))
+        else:
+            st.subheader(
+                get_text_crm(
+                    texts,
+                    "crm_add_project_header",
+                    "Neues Projekt anlegen"))
+
+        st.info(
+            get_text_crm(
+                texts,
+                "crm_project_data_from_input_tab_info",
+                "Projektdaten können aus dem 'Projektdateneingabe (A)' Tab geladen werden, oder manuell eingegeben werden."))
+
+        if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_load_from_input_tab",
+                    "Daten aus Eingabe-Tab laden"),
+                key="load_from_input_tab_btn"):
+            if 'project_data' in st.session_state:
+                st.session_state['crm_temp_project_data'] = st.session_state['project_data']
+                st.success(
+                    get_text_crm(
+                        texts,
+                        "crm_data_loaded_from_input",
+                        "Daten aus Eingabe-Tab geladen. Bitte unten prüfen und speichern."))
+            else:
+                st.warning(
+                    get_text_crm(
+                        texts,
+                        "crm_no_data_in_input_tab",
+                        "Keine Daten im Eingabe-Tab gefunden."))
+
+        with st.form("project_form", clear_on_submit=False):
+            project_data_form = st.session_state.get(
+                'crm_temp_project_data', project_to_edit)
+
+            project_name = st.text_input(
+                get_text_crm(
+                    texts,
+                    "crm_project_name_label",
+                    "Projektname"),
+                value=project_data_form.get(
+                    'project_name',
+                    ''))
+            project_status = st.selectbox(
+                get_text_crm(
+                    texts,
+                    "crm_project_status_label",
+                    "Status"),
+                options=[
+                    'Angebot',
+                    'In Planung',
+                    'Installiert',
+                    'Abgeschlossen',
+                    'Storniert',
+                    ''],
+                index=[
+                    'Angebot',
+                    'In Planung',
+                    'Installiert',
+                    'Abgeschlossen',
+                    'Storniert',
+                    ''].index(
+                    project_data_form.get(
+                        'project_status',
+                        '')))
+
+            st.subheader(
+                get_text_crm(
+                    texts,
+                    "crm_general_project_details_header",
+                    "Allgemeine Projektdetails"))
+            col_roof_type, col_roof_covering = st.columns(2)
+            roof_type = col_roof_type.selectbox(
+                get_text_crm(
+                    texts, "roof_type_label", "Dachart"), options=[
+                    'Satteldach', 'Flachdach', 'Sonstiges', ''], index=[
+                    'Satteldach', 'Flachdach', 'Sonstiges', ''].index(
+                    project_data_form.get(
+                        'roof_type', '')))
+            roof_covering_type = col_roof_covering.selectbox(
+                get_text_crm(
+                    texts, "roof_covering_label", "Dachdeckungsart"), options=[
+                    'Ziegel', 'Blech', 'Bitumen', ''], index=[
+                    'Ziegel', 'Blech', 'Bitumen', ''].index(
+                    project_data_form.get(
+                        'roof_covering_type', '')))
+
+            col_roof_area, col_orientation = st.columns(2)
+            free_roof_area_sqm = col_roof_area.number_input(
+                get_text_crm(
+                    texts,
+                    "free_roof_area_label",
+                    "Freie Dachfläche (m²)"),
+                min_value=0.0,
+                value=float(
+                    project_data_form.get(
+                        'free_roof_area_sqm',
+                        0.0)))
+            roof_orientation = col_orientation.selectbox(
+                get_text_crm(
+                    texts, "roof_orientation_label", "Dachausrichtung"), options=[
+                    'Süd', 'Ost', 'West', 'Nord', ''], index=[
+                    'Süd', 'Ost', 'West', 'Nord', ''].index(
+                    project_data_form.get(
+                        'roof_orientation', '')))
+
+            roof_inclination_deg = st.number_input(
+                get_text_crm(
+                    texts,
+                    "roof_inclination_label",
+                    "Dachneigung (Grad)"),
+                min_value=0,
+                max_value=90,
+                value=int(
+                    project_data_form.get(
+                        'roof_inclination_deg',
+                        30)))
+            building_height_gt_7m = st.checkbox(
+                get_text_crm(
+                    texts, "building_height_gt_7m_label", "Gebäudehöhe > 7 Meter"), value=bool(
+                    project_data_form.get(
+                        'building_height_gt_7m', False)))
+
+            st.subheader(
+                get_text_crm(
+                    texts,
+                    "crm_consumption_details_header",
+                    "Verbrauchsdetails"))
+            col_cons_hh, col_costs_hh = st.columns(2)
+            annual_consumption_kwh = col_cons_hh.number_input(
+                get_text_crm(
+                    texts,
+                    "annual_consumption_kwh_label",
+                    "Jahresverbrauch Haushalt (kWh)"),
+                min_value=0.0,
+                value=float(
+                    project_data_form.get(
+                        'annual_consumption_kwh_yr',
+                        0.0)))
+            costs_household_euro_mo = col_costs_hh.number_input(
+                get_text_crm(
+                    texts,
+                    "monthly_costs_household_label",
+                    "Monatliche Kosten Haushalt (€)"),
+                min_value=0.0,
+                value=float(
+                    project_data_form.get(
+                        'costs_household_euro_mo',
+                        0.0)))
+
+            col_cons_heat, col_costs_heat = st.columns(2)
+            annual_heating_kwh = col_cons_heat.number_input(
+                get_text_crm(
+                    texts,
+                    "annual_heating_kwh_optional_label",
+                    "Jahresverbrauch Heizung (kWh, optional)"),
+                min_value=0.0,
+                value=float(
+                    project_data_form.get(
+                        'consumption_heating_kwh_yr',
+                        0.0)))
+            costs_heating_euro_mo = col_cons_heat.number_input(
+                get_text_crm(
+                    texts,
+                    "monthly_costs_heating_optional_label",
+                    "Monatliche Kosten Heizung (€, optional)"),
+                min_value=0.0,
+                value=float(
+                    project_data_form.get(
+                        'costs_heating_euro_mo',
+                        0.0)))
+
+            st.subheader(
+                get_text_crm(
+                    texts,
+                    "crm_system_details_header",
+                    "Systemdetails"))
+            anlage_type = st.selectbox(
+                get_text_crm(
+                    texts, "anlage_type_label", "Anlagentyp"), options=[
+                    'Neuanlage', 'Bestandsanlage', ''], index=[
+                    'Neuanlage', 'Bestandsanlage', ''].index(
+                    project_data_form.get(
+                        'anlage_type', '')))
+            feed_in_type = st.selectbox(
+                get_text_crm(
+                    texts, "feed_in_type_label", "Einspeisetyp"), options=[
+                    'Teileinspeisung', 'Volleinspeisung', ''], index=[
+                    'Teileinspeisung', 'Volleinspeisung', ''].index(
+                    project_data_form.get(
+                        'feed_in_type', '')))
+
+            col_modules, col_inverter = st.columns(2)
+            module_quantity = col_modules.number_input(
+                get_text_crm(
+                    texts, "module_quantity_label", "Anzahl PV Module"), min_value=0, value=int(
+                    project_data_form.get(
+                        'module_quantity', 0)))
+
+            module_products = []
+            if 'product_db_module' in st.session_state and st.session_state.product_db_module:
+                module_products = st.session_state.product_db_module.list_products(
+                    category='Modul')
+            module_options = [
+                get_text_crm(
+                    texts,
+                    "please_select_option",
+                    "--- Bitte wählen ---")] + [
+                p['model_name'] for p in module_products if p.get('model_name')]
+
+            selected_module_name = col_inverter.selectbox(
+                get_text_crm(
+                    texts,
+                    "module_model_label",
+                    "PV Modul Modell"),
+                options=module_options,
+                index=module_options.index(
+                    project_data_form.get(
+                        'selected_module_name',
+                        get_text_crm(
+                            texts,
+                            "please_select_option",
+                            "--- Bitte wählen ---"))))
+            selected_module_id = next(
+                (p['id'] for p in module_products if p['model_name'] == selected_module_name),
+                None)
+
+            inverter_products = []
+            if 'product_db_module' in st.session_state and st.session_state.product_db_module:
+                inverter_products = st.session_state.product_db_module.list_products(
+                    category='Wechselrichter')
+            inverter_options = [
+                get_text_crm(
+                    texts,
+                    "please_select_option",
+                    "--- Bitte wählen ---")] + [
+                p['model_name'] for p in inverter_products if p.get('model_name')]
+
+            selected_inverter_name = st.selectbox(
+                get_text_crm(
+                    texts,
+                    "inverter_model_label",
+                    "Wechselrichter Modell"),
+                options=inverter_options,
+                index=inverter_options.index(
+                    project_data_form.get(
+                        'selected_inverter_name',
+                        get_text_crm(
+                            texts,
+                            "please_select_option",
+                            "--- Bitte wählen ---"))))
+            selected_inverter_id = next(
+                (p['id'] for p in inverter_products if p['model_name'] == selected_inverter_name),
+                None)
+
+            include_storage = st.checkbox(
+                get_text_crm(
+                    texts, "include_storage_label", "Batteriespeicher einplanen"), value=bool(
+                    project_data_form.get(
+                        'include_storage', False)))
+            selected_storage_id = None
+            selected_storage_storage_power_kw = 0.0
+
+            if include_storage:
+                storage_products = []
+                if 'product_db_module' in st.session_state and st.session_state.product_db_module:
+                    storage_products = st.session_state.product_db_module.list_products(
+                        category='Batteriespeicher')
+                storage_options = [
+                    get_text_crm(
+                        texts,
+                        "please_select_option",
+                        "--- Bitte wählen ---")] + [
+                    p['model_name'] for p in storage_products if p.get('model_name')]
+
+                selected_storage_name = st.selectbox(
+                    get_text_crm(
+                        texts,
+                        "storage_model_label",
+                        "Speicher Modell"),
+                    options=storage_options,
+                    index=storage_options.index(
+                        project_data_form.get(
+                            'selected_storage_name',
+                            get_text_crm(
+                                texts,
+                                "please_select_option",
+                                "--- Bitte wählen ---"))))
+                selected_storage_id = next(
+                    (p['id'] for p in storage_products if p['model_name'] == selected_storage_name),
+                    None)
+
+                selected_storage_storage_power_kw = st.number_input(
+                    get_text_crm(
+                        texts,
+                        "storage_capacity_manual_label",
+                        "Gewünschte Gesamtkapazität (kWh)"),
+                    min_value=0.0,
+                    value=float(
+                        project_data_form.get(
+                            'selected_storage_storage_power_kw',
+                            0.0)))
+
+            include_additional_components = st.checkbox(
+                get_text_crm(
+                    texts,
+                    "include_additional_components_label",
+                    "Zusätzliche Komponenten einplanen"),
+                value=bool(
+                    project_data_form.get(
+                        'include_additional_components',
+                        False)))
+
+            selected_wallbox_id = None
+            selected_ems_id = None
+            selected_optimizer_id = None
+            selected_carport_id = None
+            selected_notstrom_id = None
+            selected_tierabwehr_id = None
+
+            if include_additional_components:
+                st.info(
+                    get_text_crm(
+                        texts,
+                        "crm_additional_components_placeholder",
+                        "Zusätzliche Komponenten können hier ausgewählt werden (Platzhalter)."))
+
+            visualize_roof_in_pdf = st.checkbox(
+                get_text_crm(
+                    texts,
+                    "visualize_roof_in_pdf_label",
+                    "Dachbelegung in PDF visualisieren (Luftbild)"),
+                value=bool(
+                    project_data_form.get(
+                        'visualize_roof_in_pdf',
+                        False)))
+            latitude = st.number_input(
+                get_text_crm(
+                    texts, "latitude_label", "Breitengrad"), value=float(
+                    project_data_form.get(
+                        'latitude', 0.0)))
+            longitude = st.number_input(
+                get_text_crm(
+                    texts, "longitude_label", "Längengrad"), value=float(
+                    project_data_form.get(
+                        'longitude', 0.0)))
+
+            submitted_project = st.form_submit_button(get_text_crm(
+                texts, "crm_save_project_button", "Projekt speichern"))
+            if submitted_project:
+                new_project_data = {
+                    'id': project_to_edit.get('id'),
+                    'customer_id': selected_customer_id,
+                    'project_name': project_name,
+                    'project_status': project_status if project_status else None,
+                    'roof_type': roof_type if roof_type else None,
+                    'roof_covering_type': roof_covering_type if roof_covering_type else None,
+                    'free_roof_area_sqm': free_roof_area_sqm,
+                    'roof_orientation': roof_orientation if roof_orientation else None,
+                    'roof_inclination_deg': roof_inclination_deg,
+                    'building_height_gt_7m': int(building_height_gt_7m),
+                    'annual_consumption_kwh': annual_consumption_kwh,
+                    'costs_household_euro_mo': costs_household_euro_mo,
+                    'annual_heating_kwh': annual_heating_kwh,
+                    'costs_heating_euro_mo': costs_heating_euro_mo,
+                    'anlage_type': anlage_type if anlage_type else None,
+                    'feed_in_type': feed_in_type if feed_in_type else None,
+                    'module_quantity': module_quantity,
+                    'selected_module_id': selected_module_id,
+                    'selected_inverter_id': selected_inverter_id,
+                    'include_storage': int(include_storage),
+                    'selected_storage_id': selected_storage_id,
+                    'selected_storage_storage_power_kw': selected_storage_storage_power_kw,
+                    'include_additional_components': int(include_additional_components),
+                    'selected_wallbox_id': selected_wallbox_id,
+                    'selected_ems_id': selected_ems_id,
+                    'selected_optimizer_id': selected_optimizer_id,
+                    'selected_carport_id': selected_carport_id,
+                    'selected_notstrom_id': selected_notstrom_id,
+                    'selected_tierabwehr_id': selected_tierabwehr_id,
+                    'visualize_roof_in_pdf': int(visualize_roof_in_pdf),
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'creation_date': project_to_edit.get(
+                        'creation_date',
+                        datetime.now().isoformat())}
+
+                if not project_name:
+                    st.error(
+                        get_text_crm(
+                            texts,
+                            "crm_project_name_required_error",
+                            "Projektname ist ein Pflichtfeld."))
+                else:
+                    saved_project_id = save_project(conn, new_project_data)
+                    if saved_project_id:
+                        st.success(
+                            get_text_crm(
+                                texts,
+                                "crm_project_saved",
+                                "Projekt erfolgreich gespeichert!"))
+                        st.session_state['crm_view_mode'] = 'view_customer'
+                        st.session_state['selected_project_id'] = saved_project_id
+                        st.rerun()
+                    else:
+                        st.error(
+                            get_text_crm(
+                                texts,
+                                "crm_project_save_failed",
+                                "Fehler beim Speichern des Projekts."))
+
+            if st.form_submit_button(
+                get_text_crm(
+                    texts,
+                    "crm_cancel_button",
+                    "Abbrechen")):
+                st.session_state['crm_view_mode'] = 'view_customer'
+                st.session_state['selected_project_id'] = None
+                st.rerun()
+
+    elif view_mode == 'view_project':
+        if selected_customer_id is None:
+            st.error(
+                get_text_crm(
+                    texts,
+                    "crm_no_customer_selected",
+                    "Kein Kunde ausgewählt."))
+            if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_back_to_list_button",
+                    "Zurück zur Kundenliste")):
+                st.session_state['crm_view_mode'] = 'customer_list'
+                st.rerun()
+            return
+
+        current_customer = load_customer(conn, selected_customer_id)
+        if not current_customer:
+            st.error(
+                get_text_crm(
+                    texts,
+                    "crm_customer_not_found",
+                    "Kunde nicht gefunden."))
+            if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_back_to_list_button",
+                    "Zurück zur Kundenliste")):
+                st.session_state['crm_view_mode'] = 'customer_list'
+                st.rerun()
+            return
+
+        if selected_project_id is None:
+            st.error(
+                get_text_crm(
+                    texts,
+                    "crm_no_project_selected",
+                    "Kein Projekt ausgewählt."))
+            if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_back_to_list_button",
+                    "Zurück zur Kundenliste")):
+                st.session_state['crm_view_mode'] = 'customer_list'
+                st.rerun()
+            return
+
+        project_details = load_project(conn, selected_project_id)
+        if not project_details:
+            st.error(
+                get_text_crm(
+                    texts,
+                    "crm_project_not_found",
+                    "Projekt nicht gefunden."))
+            if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_back_to_list_button",
+                    "Zurück zur Kundenliste")):
+                st.session_state['crm_view_mode'] = 'customer_list'
+                st.rerun()
+            return
+
+        st.subheader(
+            get_text_crm(
+                texts,
+                "crm_project_details_header",
+                "Projektdetails"))
+        st.write(f"**{get_text_crm(texts,
+                                   'crm_project_name_label',
+                                   'Projektname')}:** {project_details.get('project_name',
+                                                                           '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'crm_project_status_label',
+                                   'Status')}:** {project_details.get('project_status',
+                                                                      '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'anlage_type_label',
+                                   'Anlagentyp')}:** {project_details.get('anlage_type',
+                                                                          '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'feed_in_type_label',
+                                   'Einspeisetyp')}:** {project_details.get('feed_in_type',
+                                                                            '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'module_quantity_label',
+                                   'Anzahl PV Module')}:** {project_details.get('module_quantity',
+                                                                                '')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'module_model_label',
+                                   'PV Modul Modell')}:** {project_details.get('selected_module_name',
+                                                                               'N/A')}")
+        st.write(f"**{get_text_crm(texts,
+                                   'inverter_model_label',
+                                   'Wechselrichter Modell')}:** {project_details.get('selected_inverter_name',
+                                                                                     'N/A')}")
+        st.write(
+            f"**{
+                get_text_crm(
+                    texts,
+                    'include_storage_label',
+                    'Speicher eingeplant')}:** {
+                'Ja' if project_details.get('include_storage') else 'Nein'}")
+        if project_details.get('include_storage'):
+            st.write(f"**{get_text_crm(texts,
+                                       'storage_model_label',
+                                       'Speicher Modell')}:** {project_details.get('selected_storage_name',
+                                                                                   'N/A')}")
+            st.write(
+                f"**{
+                    get_text_crm(
+                        texts,
+                        'storage_capacity_manual_label',
+                        'Speicherkapazität')}:** {
+                    project_details.get(
+                        'selected_storage_storage_power_kw',
+                        0.0)} kWh")
+
+        st.write(
+            f"**{
+                get_text_crm(
+                    texts,
+                    "visualize_roof_in_pdf_label",
+                    "Dachvisualisierung in PDF")}:** {
+                'Ja' if project_details.get('visualize_roof_in_pdf') else 'Nein'}")
+        st.write(f"**{get_text_crm(texts,
+                                   "latitude_label",
+                                   "Breitengrad")}:** {project_details.get('latitude',
+                                                                           'N/A')}")
+        st.write(f"**{get_text_crm(texts,
+                                   "longitude_label",
+                                   "Längengrad")}:** {project_details.get('longitude',
+                                                                          'N/A')}")
+
+        col_view_p_buttons = st.columns(3)
+        if col_view_p_buttons[0].button(
+                get_text_crm(
+                    texts,
+                    "crm_edit_project_button",
+                    "Projekt bearbeiten"),
+                key=f"edit_project_btn_view_{selected_project_id}"):
+            st.session_state['crm_view_mode'] = 'edit_project'
+            st.rerun()
+        if col_view_p_buttons[1].button(
+                get_text_crm(
+                    texts,
+                    "crm_delete_button",
+                    "Projekt löschen"),
+                key=f"delete_project_btn_view_{selected_project_id}"):
+            if st.session_state.get(
+                    f"confirm_delete_project_view_{selected_project_id}",
+                    False):
+                if delete_project(conn, selected_project_id):
+                    st.success(
+                        get_text_crm(
+                            texts,
+                            "crm_project_deleted",
+                            "Projekt gelöscht."))
+                    st.session_state['crm_view_mode'] = 'view_customer'
+                    st.session_state['selected_project_id'] = None
+                    del st.session_state[f"confirm_delete_project_view_{selected_project_id}"]
+                    st.rerun()
+                else:
+                    st.error(
+                        get_text_crm(
+                            texts,
+                            "crm_delete_project_failed",
+                            "Löschen fehlgeschlagen."))
+            else:
+                st.warning(
+                    get_text_crm(
+                        texts,
+                        "crm_confirm_delete_project",
+                        "Sicher? Klick nochmal zum Bestätigen."))
+                st.session_state[f"confirm_delete_project_view_{selected_project_id}"] = True
+
+        # Berechnungs-Historie anzeigen
+        st.markdown("---")
+        st.subheader("📊 Berechnungs-Historie")
+        
+        try:
+            from crm.integration.calculation_bridge import (
+                get_calculations_for_project,
+                set_main_offer,
+                compare_calculations,
+                delete_calculation
+            )
+            
+            calculations = get_calculations_for_project(selected_project_id)
+            
+            if calculations:
+                st.write(f"**{len(calculations)}** gespeicherte Berechnungen für dieses Projekt")
+                
+                # Vergleichs-Modus
+                if len(calculations) >= 2:
+                    with st.expander("🔍 Berechnungen vergleichen", expanded=False):
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            calc_ids = [c['id'] for c in calculations]
+                            calc_labels = [f"v{c['version']} ({c['created_at'][:10]})" for c in calculations]
+                            calc1_idx = st.selectbox(
+                                "Berechnung 1",
+                                range(len(calculations)),
+                                format_func=lambda i: calc_labels[i],
+                                key="compare_calc1"
+                            )
+                        with col2:
+                            calc2_idx = st.selectbox(
+                                "Berechnung 2",
+                                range(len(calculations)),
+                                format_func=lambda i: calc_labels[i],
+                                index=min(1, len(calculations)-1),
+                                key="compare_calc2"
+                            )
+                        with col3:
+                            if st.button("Vergleichen", key="compare_btn"):
+                                comparison = compare_calculations(
+                                    calc_ids[calc1_idx],
+                                    calc_ids[calc2_idx]
+                                )
+                                
+                                if 'error' not in comparison:
+                                    st.markdown("### Vergleichsergebnisse")
+                                    
+                                    # Erstelle Vergleichstabelle
+                                    comp_data = []
+                                    for field, diff in comparison['differences'].items():
+                                        val1 = comparison['calc1']['values'].get(field, 0)
+                                        val2 = comparison['calc2']['values'].get(field, 0)
+                                        
+                                        comp_data.append({
+                                            'Kennzahl': field.replace('_', ' ').title(),
+                                            f"v{comparison['calc1']['version']}": f"{val1:,.2f}" if isinstance(val1, (int, float)) else str(val1),
+                                            f"v{comparison['calc2']['version']}": f"{val2:,.2f}" if isinstance(val2, (int, float)) else str(val2),
+                                            'Differenz': f"{diff['absolute']:,.2f}" if isinstance(diff['absolute'], (int, float)) else diff['absolute'],
+                                            'Differenz %': f"{diff['percent']:,.1f}%" if isinstance(diff['percent'], (int, float)) else diff['percent']
+                                        })
+                                    
+                                    df_comparison = pd.DataFrame(comp_data)
+                                    st.dataframe(df_comparison, use_container_width=True, hide_index=True)
+                                else:
+                                    st.error(comparison['error'])
+                
+                # Liste der Berechnungen
+                for calc in calculations:
+                    with st.expander(
+                        f"{'⭐ ' if calc['is_main_offer'] else ''}Version {calc['version']} - {calc['created_at'][:16].replace('T', ' ')}",
+                        expanded=calc['is_main_offer']
+                    ):
+                        col1, col2, col3 = st.columns([2, 1, 1])
+                        
+                        with col1:
+                            st.write(f"**Typ:** {calc['calculation_type']}")
+                            if calc['created_by']:
+                                st.write(f"**Erstellt von:** {calc['created_by']}")
+                            if calc['notes']:
+                                st.write(f"**Notizen:** {calc['notes']}")
+                        
+                        with col2:
+                            # Hauptangebot-Button
+                            if not calc['is_main_offer']:
+                                if st.button(
+                                    "⭐ Als Hauptangebot",
+                                    key=f"set_main_{calc['id']}",
+                                    help="Diese Berechnung als Hauptangebot markieren"
+                                ):
+                                    if set_main_offer(calc['id'], selected_project_id):
+                                        st.success("Als Hauptangebot markiert!")
+                                        st.rerun()
+                                    else:
+                                        st.error("Fehler beim Markieren")
+                            else:
+                                st.success("⭐ Hauptangebot")
+                        
+                        with col3:
+                            # Löschen-Button
+                            if st.button(
+                                "🗑️ Löschen",
+                                key=f"delete_calc_{calc['id']}",
+                                help="Diese Berechnung löschen"
+                            ):
+                                if st.session_state.get(f"confirm_delete_calc_{calc['id']}", False):
+                                    if delete_calculation(calc['id']):
+                                        st.success("Berechnung gelöscht!")
+                                        del st.session_state[f"confirm_delete_calc_{calc['id']}"]
+                                        st.rerun()
+                                    else:
+                                        st.error("Fehler beim Löschen")
+                                else:
+                                    st.warning("Nochmal klicken zum Bestätigen!")
+                                    st.session_state[f"confirm_delete_calc_{calc['id']}"] = True
+                        
+                        # Wichtige Kennzahlen anzeigen
+                        st.markdown("**Wichtige Kennzahlen:**")
+                        data = calc['calculation_data']
+                        
+                        kpi_col1, kpi_col2, kpi_col3, kpi_col4 = st.columns(4)
+                        with kpi_col1:
+                            st.metric(
+                                "Investition (netto)",
+                                f"{data.get('total_investment_netto', 0):,.2f} €"
+                            )
+                        with kpi_col2:
+                            st.metric(
+                                "Jährl. Ertrag",
+                                f"{data.get('annual_pv_production_kwh', 0):,.0f} kWh"
+                            )
+                        with kpi_col3:
+                            st.metric(
+                                "Autarkiegrad",
+                                f"{data.get('self_supply_rate_percent', 0):.1f}%"
+                            )
+                        with kpi_col4:
+                            st.metric(
+                                "Amortisation",
+                                f"{data.get('payback_period_years', 0):.1f} Jahre"
+                            )
+            else:
+                st.info("Noch keine Berechnungen für dieses Projekt gespeichert.")
+                st.write("**Tipp:** Führen Sie eine Berechnung im Solar Calculator durch, während dieses Projekt ausgewählt ist, um sie automatisch hier zu speichern.")
+        
+        except ImportError:
+            st.warning("Berechnungs-Historie nicht verfügbar (CRM-Integration fehlt)")
+        except Exception as e:
+            st.error(f"Fehler beim Laden der Berechnungs-Historie: {e}")
+        
+        st.markdown("---")
+        
+        if st.button(
+                get_text_crm(
+                    texts,
+                    "crm_back_to_customer_projects_button",
+                    "Zurück zu Kundenprojekten"),
+                key="back_from_project_details"):
+            st.session_state['crm_view_mode'] = 'customer_list'
+            st.session_state['selected_customer_id'] = None
+            st.session_state['selected_project_id'] = None
+            st.rerun()
+
+    conn.close()
+
+
+# --- Testlauf für crm.py ---
+if __name__ == "__main__":
+    print("--- Testlauf für crm.py ---")
+
+    class MockDatabase:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
+        def get_db_connection(self):
+            conn = sqlite3.connect(':memory:')
+            conn.row_factory = sqlite3.Row
+            create_tables_crm(conn)  # Erstelle die Tabellen und migriere
+            return conn
+
+    class MockAdminSettings:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
+        def load_admin_setting(self, key, default=None):
+            if key == 'salutation_options':
+                return ['Herr', 'Frau', 'Familie', 'Divers']
+            if key == 'title_options':
+                return ['Dr.', 'Prof.', 'Mag.', 'Ing.', None]
+            return default
+
+    class MockProductDB:
+        def __getstate__(self):
+            """Ermöglicht Pickle-Serialisierung für Session State"""
+            return self.__dict__.copy()
+        
+        def __setstate__(self, state):
+            """Ermöglicht Pickle-Deserialisierung für Session State"""
+            self.__dict__.update(state)
+        
+        def list_products(self, category: str |
+                          None = None) -> list[dict[str, Any]]:
+            if category == 'Modul':
+                return [{'id': 1, 'model_name': 'TestModul 400Wp', 'category': 'Modul'}, {
+                    'id': 2, 'model_name': 'SuperModul 450Wp', 'category': 'Modul'}]
+            if category == 'Wechselrichter':
+                return [{'id': 3,
+                         'model_name': 'WR PowerInverter 10kW',
+                         'category': 'Wechselrichter'}]
+            if category == 'Batteriespeicher':
+                return [{'id': 4,
+                         'model_name': 'BatteryStore 10kWh',
+                         'category': 'Batteriespeicher'}]
+            return []
+
+        def get_product_by_model_name(
+                self, model_name: str) -> dict[str, Any] | None:
+            if "TestModul" in model_name:
+                return {
+                    'id': 1,
+                    'model_name': 'TestModul 400Wp',
+                    'category': 'Modul',
+                    'capacity_w': 400.0,
+                    'length_m': 1.7,
+                    'width_m': 1.0}
+            if "WR PowerInverter" in model_name:
+                return {
+                    'id': 3,
+                    'model_name': 'WR PowerInverter 10kW',
+                    'category': 'Wechselrichter',
+                    'power_kw': 10.0}
+            if "BatteryStore" in model_name:
+                return {
+                    'id': 4,
+                    'model_name': 'BatteryStore 10kWh',
+                    'category': 'Batteriespeicher',
+                    'storage_power_kw': 10.0}
+            return None
+
+        def get_product_by_id(self, product_id: int) -> dict[str, Any] | None:
+            if product_id == 1:
+                return {
+                    'id': 1,
+                    'model_name': 'TestModul 400Wp',
+                    'category': 'Modul',
+                    'capacity_w': 400.0,
+                    'length_m': 1.7,
+                    'width_m': 1.0}
+            return None
+
+    _original_get_db_connection_safe_crm = get_db_connection_safe_crm
+    get_product_by_model_name_safe = None
+    _original_get_product_by_model_name_safe = get_product_by_model_name_safe
+    load_admin_setting_safe = None
+    _original_load_admin_setting_safe = load_admin_setting_safe
+    list_products_safe = None
+    _original_list_products_safe = list_products_safe
+
+    mock_db = MockDatabase()
+    get_db_connection_safe_crm = mock_db.get_db_connection
+    load_admin_setting_safe = MockAdminSettings().load_admin_setting
+    list_products_safe = MockProductDB().list_products
+    get_product_by_model_name_safe = MockProductDB().get_product_by_model_name
+
+    conn_test = get_db_connection_safe_crm()
+    if conn_test:
+        print("Datenbankverbindung im crm.py Test verfügbar.")
+
+        dummy_texts_for_crm = {}
+
+        print("\nTeste create_tables_crm...")
+        create_tables_crm(conn_test)
+        print("create_tables_crm abgeschlossen (keine Fehler erwartet).")
+
+        print("\nTeste save_customer...")
+        test_customer_data = {
+            'salutation': 'Herr',
+            'first_name': 'Max',
+            'last_name': 'Mustermann',
+            'email': 'max.mustermann@example.com',
+            'city': 'Musterstadt',
+            'creation_date': datetime.now().isoformat()}
+        test_customer_data['state'] = 'NRW'
+        test_customer_data['region'] = 'West'
+        test_customer_data['phone_landline'] = '02303-123456'
+        test_customer_data['phone_mobile'] = '0176-98765432'
+        test_customer_data['income_tax_rate_percent'] = 42.0
+
+        customer_id = save_customer(conn_test, test_customer_data)
+        print(f"Kunde gespeichert mit ID: {customer_id}")
+
+        print("\nTeste load_customer...")
+        if customer_id:
+            loaded_customer = load_customer(conn_test, customer_id)
+            print(f"Geladener Kunde: {loaded_customer}")
+
+        print("\nTeste load_all_customers...")
+        all_customers = load_all_customers(conn_test)
+        print(f"Gefundene Kunden: {len(all_customers)}")
+        for cust in all_customers:
+            print(
+                f" - {cust.get('first_name')} {cust.get('last_name')} (ID: {cust.get('id')})")
+
+        print("\nTeste save_project...")
+        if customer_id:
+            test_project_data = {
+                'customer_id': customer_id,
+                'project_name': 'PV Anlage Musterhaus',
+                'project_status': 'Angebot',
+                'module_quantity': 20,
+                'selected_module_id': 1,
+                'selected_inverter_id': 3,
+                'include_storage': 1,
+                'selected_storage_id': 4,
+                'selected_storage_storage_power_kw': 10.0,
+                'visualize_roof_in_pdf': 1,
+                'latitude': 52.5, 'longitude': 13.4,
+                'creation_date': datetime.now().isoformat()
+            }
+            project_id = save_project(conn_test, test_project_data)
+            print(f"Projekt gespeichert mit ID: {project_id}")
+
+            print("\nTeste load_project...")
+            if project_id:
+                loaded_project = load_project(conn_test, project_id)
+                print(f"Geladenes Projekt: {loaded_project}")
+
+            print("\nTeste load_projects_for_customer...")
+            projects_for_customer = load_projects_for_customer(
+                conn_test, customer_id)
+            print(
+                f"Projekte für Kunde {customer_id}: {
+                    len(projects_for_customer)}")
+
+            if project_id:
+                print(f"\nTeste delete_project (ID: {project_id})...")
+                if delete_project(conn_test, project_id):
+                    print("Projekt erfolgreich gelöscht.")
+                else:
+                    print("Fehler beim Löschen des Projekts.")
+
+        print(f"\nTeste delete_customer (ID: {customer_id})...")
+        if delete_customer(conn_test, customer_id):
+            print("Kunde erfolgreich gelöscht.")
+        else:
+            print("Fehler beim Löschen des Kunden.")
+
+        conn_test.close()
+
+    else:
+        print("\nFEHLER: Keine Datenbankverbindung für Test verfügbar.")
+
+    print("\n--- Testlauf beendet ---")
+
+
+def render_lead_scoring_tab(texts: dict[str, str], conn):
+    """Lead Scoring Tab - Bewertung und Priorisierung von Leads"""
+    st.subheader("📊 Lead Scoring & Priorisierung")
+    
+    try:
+        from crm.features.lead_scoring_ui import render_lead_scoring_admin
+        render_lead_scoring_admin(texts)
+    except ImportError:
+        st.info("""
+        ### Lead Scoring Modul
+        
+        Das Lead Scoring Modul ist optional und kann bei Bedarf installiert werden.
+        
+        **Funktionen:**
+        - Automatische Bewertung von Leads
+        - Priorisierung nach Abschlusswahrscheinlichkeit
+        - Scorekarten und Bewertungskriterien
+        - ROI-Prognosen
+        
+        **Installation:**
+        ```bash
+        pip install crm-lead-scoring
+        ```
+        """)
+        
+        # Einfache Fallback-Funktion
+        st.markdown("---")
+        st.markdown("### 📝 Kunden nach Potenzial sortieren")
+        
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT id, first_name, last_name, company, email, phone, city
+            FROM customers 
+            ORDER BY created_at DESC 
+            LIMIT 50
+        """)
+        customers = cursor.fetchall()
+        
+        if customers:
+            st.write(f"**{len(customers)} neueste Kunden**")
+            for cust in customers:
+                with st.expander(f"{cust[1]} {cust[2]} - {cust[3] or 'Privatkunde'}"):
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.write(f"📧 {cust[4]}")
+                        st.write(f"📱 {cust[5]}")
+                    with col2:
+                        st.write(f"📍 {cust[6]}")
+                        score = st.slider("Lead Score", 0, 100, 50, key=f"score_{cust[0]}")
+                        st.caption(f"Bewertung: {'🔥 Heiß' if score > 75 else '⚡ Warm' if score > 50 else '❄️ Kalt'}")
+        else:
+            st.info("Keine Kunden vorhanden. Erstellen Sie zuerst Kunden in der Kundenverwaltung.")
+
+
+def render_backup_tab(conn):
+    """Backup & Daten Tab - Datensicherung und Export"""
+    st.subheader("💾 Backup & Datenverwaltung")
+    
+    try:
+        from crm.utils.backup_ui import render_admin_backup_tab
+        render_admin_backup_tab()
+    except ImportError:
+        st.info("""
+        ### Backup-Verwaltung Modul
+        
+        Das Backup-Modul ist optional und kann bei Bedarf installiert werden.
+        
+        **Funktionen:**
+        - Automatische Backups
+        - Manuelle Datensicherung
+        - Datenwiederherstellung
+        - Export-Funktionen
+        
+        **Installation:**
+        ```bash
+        pip install crm-backup-manager
+        ```
+        """)
+        
+        # Einfache Fallback-Funktion
+        st.markdown("---")
+        st.markdown("### 📦 Daten exportieren")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("#### Kunden exportieren")
+            if st.button("📥 Kunden als CSV exportieren", use_container_width=True):
+                try:
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT * FROM customers")
+                    customers = cursor.fetchall()
+                    
+                    if customers:
+                        import csv
+                        import io
+                        
+                        output = io.StringIO()
+                        writer = csv.writer(output)
+                        
+                        # Header
+                        writer.writerow([desc[0] for desc in cursor.description])
+                        
+                        # Daten
+                        for row in customers:
+                            writer.writerow(row)
+                        
+                        csv_data = output.getvalue()
+                        st.download_button(
+                            label="💾 CSV herunterladen",
+                            data=csv_data,
+                            file_name=f"kunden_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                            mime="text/csv"
+                        )
+                        st.success(f"✅ {len(customers)} Kunden bereit zum Download")
+                    else:
+                        st.warning("Keine Kunden zum Exportieren vorhanden")
+                except Exception as e:
+                    st.error(f"Fehler beim Export: {e}")
+        
+        with col2:
+            st.markdown("#### Datenbank-Info")
+            try:
+                cursor = conn.cursor()
+                
+                # Anzahl Kunden
+                cursor.execute("SELECT COUNT(*) FROM customers")
+                customer_count = cursor.fetchone()[0]
+                
+                # Anzahl Projekte
+                try:
+                    cursor.execute("SELECT COUNT(*) FROM projects")
+                    project_count = cursor.fetchone()[0]
+                except:
+                    project_count = 0
+                
+                # Anzahl Tags
+                try:
+                    cursor.execute("SELECT COUNT(*) FROM crm_tags")
+                    tag_count = cursor.fetchone()[0]
+                except:
+                    tag_count = 0
+                
+                st.metric("👥 Kunden", customer_count)
+                st.metric("📁 Projekte", project_count)
+                st.metric("🏷️ Tags", tag_count)
+                
+            except Exception as e:
+                st.error(f"Fehler beim Laden der Statistiken: {e}")
+        
+        st.markdown("---")
+        st.caption("💡 Tipp: Installieren Sie das vollständige Backup-Modul für automatische Backups und erweiterte Funktionen.")
+

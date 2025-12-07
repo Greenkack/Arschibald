@@ -181,7 +181,7 @@ def render_statistics_section():
 
 def render_search_and_filter():
     """Rendert Such- und Filterleiste."""
-    st.subheader("🔎 Suche & Filter")
+    st.subheader(" Suche & Filter")
     
     col1, col2 = st.columns([3, 1])
     
@@ -266,7 +266,7 @@ def get_filtered_components() -> pd.DataFrame:
 
 def render_components_table():
     """Rendert Komponenten-Tabelle."""
-    st.subheader("📋 Komponenten-Liste")
+    st.subheader(" Komponenten-Liste")
     
     df = get_filtered_components()
     
@@ -315,7 +315,7 @@ def render_components_table():
             key="edit_component_id"
         )
         
-        if st.button("✏️ Bearbeiten", use_container_width=True):
+        if st.button(" Bearbeiten", use_container_width=True):
             st.session_state.selected_component_id = component_id
             st.session_state.show_edit_form = True
             st.rerun()
@@ -336,14 +336,14 @@ def render_components_table():
                 st.error(f"Komponente #{delete_id} konnte nicht gelöscht werden.")
     
     with col3:
-        if st.button("➕ Neue Komponente", use_container_width=True, type="primary"):
+        if st.button(" Neue Komponente", use_container_width=True, type="primary"):
             st.session_state.show_create_form = True
             st.rerun()
 
 
 def render_create_form():
     """Rendert Formular zum Erstellen einer neuen Komponente."""
-    st.header("➕ Neue Komponente erstellen")
+    st.header(" Neue Komponente erstellen")
     
     with st.form("create_component_form", clear_on_submit=False):
         col1, col2 = st.columns(2)
@@ -391,7 +391,7 @@ def render_create_form():
         )
         
         # PDF-Upload
-        st.subheader("📎 PDF-Anhang")
+        st.subheader(" PDF-Anhang")
         pdf_file = st.file_uploader(
             "Datenblatt hochladen (optional)",
             type=['pdf'],
@@ -401,7 +401,7 @@ def render_create_form():
         col_submit, col_cancel = st.columns(2)
         
         with col_submit:
-            submitted = st.form_submit_button("💾 Speichern", use_container_width=True, type="primary")
+            submitted = st.form_submit_button(" Speichern", use_container_width=True, type="primary")
         
         with col_cancel:
             cancelled = st.form_submit_button("Abbrechen", use_container_width=True)
@@ -472,7 +472,7 @@ def render_edit_form():
         st.session_state.show_edit_form = False
         return
     
-    st.header(f"✏️ Komponente #{component_id} bearbeiten")
+    st.header(f" Komponente #{component_id} bearbeiten")
     
     with st.form("edit_component_form"):
         col1, col2 = st.columns(2)
@@ -513,7 +513,7 @@ def render_edit_form():
         )
         
         # PDF
-        st.subheader("📎 PDF-Anhang")
+        st.subheader(" PDF-Anhang")
         
         if component.get('pdf_filename'):
             st.info(f"Aktuelles PDF: **{component['pdf_filename']}**")
@@ -523,7 +523,7 @@ def render_edit_form():
             with col_dl:
                 if component.get('pdf_bytes'):
                     st.download_button(
-                        "📥 PDF herunterladen",
+                        " PDF herunterladen",
                         data=component['pdf_bytes'],
                         file_name=component['pdf_filename'],
                         mime='application/pdf',
@@ -540,7 +540,7 @@ def render_edit_form():
         col_submit, col_cancel = st.columns(2)
         
         with col_submit:
-            submitted = st.form_submit_button("💾 Speichern", use_container_width=True, type="primary")
+            submitted = st.form_submit_button(" Speichern", use_container_width=True, type="primary")
         
         with col_cancel:
             cancelled = st.form_submit_button("Abbrechen", use_container_width=True)
@@ -601,9 +601,9 @@ def render_edit_form():
 
 def render_import_export_section():
     """Rendert Import/Export-Bereich."""
-    st.header("📥 📤 Import / Export")
+    st.header("  Import / Export")
     
-    tab1, tab2 = st.tabs(["📥 Import", "📤 Export"])
+    tab1, tab2 = st.tabs([" Import", " Export"])
     
     with tab1:
         st.subheader("Daten importieren")
@@ -688,7 +688,7 @@ def render_import_export_section():
         with col3:
             exp_category = st.selectbox("Kategorie", ["Alle"] + CATEGORIES, key="export_category")
         
-        if st.button(f"📤 Als {export_format} exportieren", type="primary"):
+        if st.button(f" Als {export_format} exportieren", type="primary"):
             # Filter aufbauen
             export_filters = {}
             
@@ -715,7 +715,7 @@ def render_import_export_section():
                     # Download-Button
                     with open(filename, 'rb') as f:
                         st.download_button(
-                            f"📥 {filename} herunterladen",
+                            f" {filename} herunterladen",
                             data=f.read(),
                             file_name=filename,
                             mime='text/csv' if export_format == "CSV" else 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -746,15 +746,15 @@ def main():
     
     # Sidebar Navigation
     with st.sidebar:
-        st.header("📋 Navigation")
+        st.header(" Navigation")
         
         page = st.radio(
             "Bereich wählen",
             [
                 "Dashboard",
-                "📋 Komponenten verwalten",
-                "➕ Neue Komponente",
-                "📥 📤 Import/Export"
+                " Komponenten verwalten",
+                " Neue Komponente",
+                "  Import/Export"
             ],
             label_visibility="collapsed"
         )
@@ -764,7 +764,7 @@ def main():
         # Quick Actions
         st.subheader("Quick Actions")
         
-        if st.button("🔄 Daten aktualisieren", use_container_width=True):
+        if st.button(" Daten aktualisieren", use_container_width=True):
             st.rerun()
         
         if st.button("Filter zurücksetzen", use_container_width=True):
@@ -778,13 +778,13 @@ def main():
     if page == "Dashboard":
         render_statistics_section()
         st.divider()
-        st.subheader("📋 Alle Komponenten (Übersicht)")
+        st.subheader(" Alle Komponenten (Übersicht)")
         df = get_filtered_components()
         if not df.empty:
             st.dataframe(df[['id', 'manufacturer', 'product_name', 'category', 'roof_type', 'price_netto']].head(20), use_container_width=True)
             st.caption(f"Zeige erste 20 von {len(df)} Komponenten")
     
-    elif page == "📋 Komponenten verwalten":
+    elif page == " Komponenten verwalten":
         # Edit-Form hat Priorität
         if st.session_state.show_edit_form:
             render_edit_form()
@@ -793,10 +793,10 @@ def main():
             st.divider()
             render_components_table()
     
-    elif page == "➕ Neue Komponente":
+    elif page == " Neue Komponente":
         render_create_form()
     
-    elif page == "📥 📤 Import/Export":
+    elif page == "  Import/Export":
         render_import_export_section()
 
 

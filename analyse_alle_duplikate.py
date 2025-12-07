@@ -235,7 +235,7 @@ for formel in formeln:
 
 for typ, formel_liste in sorted(nach_typ.items()):
     if len(formel_liste) > 1:
-        print(f"\n🔢 {typ}: {len(formel_liste)} Vorkommen")
+        print(f"\n {typ}: {len(formel_liste)} Vorkommen")
         print("-" * 120)
 
         # Gruppiere nach Datei

@@ -44,7 +44,7 @@ def remove_emojis_from_files(directory=".", file_pattern="*.py"):
         except Exception as e:
             print(f"Fehler bei {file_path}: {e}")
 
-    print(f"\n🎉 {cleaned_files} Dateien bereinigt!")
+    print(f"\n {cleaned_files} Dateien bereinigt!")
 
 
 if __name__ == "__main__":

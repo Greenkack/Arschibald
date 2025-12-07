@@ -32,17 +32,17 @@ class Alert(ShadcnComponent):
             type="success",
             title="Erfolg!",
             message="Die Aktion wurde erfolgreich ausgeführt.",
-            icon="✓"
+            icon=""
         )
         ```
     """
 
     # Standard-Icons für jeden Alert-Typ
     DEFAULT_ICONS = {
-        'info': 'ℹ️',
-        'success': '✓',
-        'warning': '⚠️',
-        'error': '✕'
+        'info': 'ℹ',
+        'success': '',
+        'warning': '',
+        'error': ''
     }
 
     def render(
@@ -129,7 +129,7 @@ class Alert(ShadcnComponent):
 
         # Verwende Standard-Icon falls keines angegeben
         if icon is None:
-            icon = self.DEFAULT_ICONS.get(type, 'ℹ️')
+            icon = self.DEFAULT_ICONS.get(type, 'ℹ')
 
         # CSS für Alert
         alert_css = f"""
@@ -355,7 +355,7 @@ class AlertDialog(ShadcnComponent):
 
         # Standard-Icon
         if icon is None:
-            icon = Alert.DEFAULT_ICONS.get(type, 'ℹ️')
+            icon = Alert.DEFAULT_ICONS.get(type, 'ℹ')
 
         # CSS für Dialog
         dialog_css = f"""

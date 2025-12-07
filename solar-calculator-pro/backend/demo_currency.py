@@ -48,9 +48,9 @@ def demo_currency_management(service: CurrencyService):
     for currency_data in currencies:
         try:
             currency = service.create_currency(currency_data)
-            print(f"   ✓ Created: {currency.code} - {currency.name} ({currency.symbol})")
+            print(f"    Created: {currency.code} - {currency.name} ({currency.symbol})")
         except ValueError as e:
-            print(f"   ⚠ {e}")
+            print(f"    {e}")
     
     # List currencies
     print("\n2. Listing all currencies...")
@@ -92,9 +92,9 @@ def demo_exchange_rates(service: CurrencyService):
                 is_active=True
             )
             result = service.create_exchange_rate(rate_data)
-            print(f"   ✓ EUR/{to_currency} = {rate}")
+            print(f"    EUR/{to_currency} = {rate}")
         except ValueError as e:
-            print(f"   ⚠ {e}")
+            print(f"    {e}")
     
     # List exchange rates
     print("\n2. Listing all exchange rates...")
@@ -128,7 +128,7 @@ def demo_currency_conversion(service: CurrencyService):
             result = service.convert_currency(request)
             print(f"   • 1000 {from_curr} = {result.converted_amount:.2f} {to_curr} (Rate: {result.exchange_rate})")
         except ValueError as e:
-            print(f"   ⚠ {e}")
+            print(f"    {e}")
     
     # Reverse conversion
     print("\n2. Reverse conversion (USD to EUR)...")
@@ -141,7 +141,7 @@ def demo_currency_conversion(service: CurrencyService):
         result = service.convert_currency(request)
         print(f"   • 1080 USD = {result.converted_amount:.2f} EUR (Rate: {result.exchange_rate:.4f})")
     except ValueError as e:
-        print(f"   ⚠ {e}")
+        print(f"    {e}")
 
 
 def demo_multi_currency_display(service: CurrencyService):
@@ -183,9 +183,9 @@ def demo_currency_rounding(service: CurrencyService):
             description="Standard Euro rounding"
         )
         service.create_rounding_rule(rule)
-        print("   ✓ EUR: Standard 2 decimal places")
+        print("    EUR: Standard 2 decimal places")
     except ValueError as e:
-        print(f"   ⚠ {e}")
+        print(f"    {e}")
     
     # 5-cent rounding for CHF
     try:
@@ -197,9 +197,9 @@ def demo_currency_rounding(service: CurrencyService):
             description="Swiss Franc 5-cent rounding"
         )
         service.create_rounding_rule(rule)
-        print("   ✓ CHF: 5-cent rounding")
+        print("    CHF: 5-cent rounding")
     except ValueError as e:
-        print(f"   ⚠ {e}")
+        print(f"    {e}")
     
     # No decimals for JPY
     try:
@@ -210,9 +210,9 @@ def demo_currency_rounding(service: CurrencyService):
             description="Japanese Yen has no decimal places"
         )
         service.create_rounding_rule(rule)
-        print("   ✓ JPY: No decimal places")
+        print("    JPY: No decimal places")
     except ValueError as e:
-        print(f"   ⚠ {e}")
+        print(f"    {e}")
     
     # Test rounding
     print("\n2. Testing rounding with amount 123.456...")

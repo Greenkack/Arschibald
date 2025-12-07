@@ -112,7 +112,7 @@ async def demo_pdf_export():
     
     response = await export_service.export_result(request, SAMPLE_RESULT)
     
-    print(f"✅ PDF Export Created")
+    print(f" PDF Export Created")
     print(f"   Export ID: {response.export_id}")
     print(f"   File Name: {response.file_name}")
     print(f"   File Size: {response.file_size:,} bytes")
@@ -142,7 +142,7 @@ async def demo_excel_export():
     
     response = await export_service.export_result(request, SAMPLE_RESULT)
     
-    print(f"✅ Excel Export Created")
+    print(f" Excel Export Created")
     print(f"   Export ID: {response.export_id}")
     print(f"   File Name: {response.file_name}")
     print(f"   File Size: {response.file_size:,} bytes")
@@ -171,7 +171,7 @@ async def demo_csv_export():
     
     response = await export_service.export_result(request, SAMPLE_RESULT)
     
-    print(f"✅ CSV Export Created")
+    print(f" CSV Export Created")
     print(f"   Export ID: {response.export_id}")
     print(f"   File Name: {response.file_name}")
     print(f"   File Size: {response.file_size:,} bytes")
@@ -207,7 +207,7 @@ async def demo_json_export():
     
     response = await export_service.export_result(request, SAMPLE_RESULT)
     
-    print(f"✅ JSON Export Created")
+    print(f" JSON Export Created")
     print(f"   Export ID: {response.export_id}")
     print(f"   File Name: {response.file_name}")
     print(f"   File Size: {response.file_size:,} bytes")
@@ -244,7 +244,7 @@ async def demo_xml_export():
     
     response = await export_service.export_result(request, SAMPLE_RESULT)
     
-    print(f"✅ XML Export Created")
+    print(f" XML Export Created")
     print(f"   Export ID: {response.export_id}")
     print(f"   File Name: {response.file_name}")
     print(f"   File Size: {response.file_size:,} bytes")
@@ -282,7 +282,7 @@ async def demo_batch_export():
     
     responses = await export_service.batch_export(request, results_data)
     
-    print(f"✅ Batch Export Created ({len(responses)} files)")
+    print(f" Batch Export Created ({len(responses)} files)")
     for i, response in enumerate(responses, start=1):
         print(f"\n   File {i}:")
         print(f"   - Export ID: {response.export_id}")
@@ -338,8 +338,8 @@ async def main():
     print("\n" + "="*60)
     print("DEMO COMPLETE")
     print("="*60)
-    print("\n✅ All export formats demonstrated successfully")
-    print("📁 Export files saved in: exports/")
+    print("\n All export formats demonstrated successfully")
+    print(" Export files saved in: exports/")
     print("⏰ Files expire after 24 hours")
     print("\nFor more information, see:")
     print("  - docs/RESULTS_EXPORT_GUIDE.md")

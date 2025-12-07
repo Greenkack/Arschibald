@@ -74,7 +74,7 @@ try:
         except Exception as e:
             print(f"   Invalid PDF: {e}")
     else:
-        print("   ⚠ No extended pages generated (empty bytes)")
+        print("    No extended pages generated (empty bytes)")
         
 except Exception as e:
     print(f"   Generation failed: {e}")

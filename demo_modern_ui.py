@@ -38,7 +38,7 @@ st.markdown("""
 
 # Tabs
 tab1, tab2, tab3, tab4 = st.tabs(
-    ["Effekte", "🔘 Buttons", "Inputs", "Charts"])
+    ["Effekte", " Buttons", "Inputs", "Charts"])
 
 with tab1:
     st.header("UI-Effekte")
@@ -49,7 +49,7 @@ with tab1:
         st.markdown(
             '<div class="glass" style="padding:25px; min-height:200px;">',
             unsafe_allow_html=True)
-        st.subheader("🔮 Glasmorphism")
+        st.subheader(" Glasmorphism")
         st.write("Transparenter Blur-Effekt")
         st.write("Mit sanften Schatten")
         st.write("Und Glas-Optik")
@@ -59,7 +59,7 @@ with tab1:
         st.markdown(
             '<div class="neu" style="padding:25px; min-height:200px;">',
             unsafe_allow_html=True)
-        st.subheader("⚪ Neumorphism")
+        st.subheader(" Neumorphism")
         st.write("3D-Schatten-Effekt")
         st.write("Soft-UI Design")
         st.write("Erhabene Optik")
@@ -69,7 +69,7 @@ with tab1:
         st.markdown(
             '<div class="neu-inset" style="padding:25px; min-height:200px;">',
             unsafe_allow_html=True)
-        st.subheader("🔵 Neu Inset")
+        st.subheader(" Neu Inset")
         st.write("Eingelassener Effekt")
         st.write("Innen-Schatten")
         st.write("Vertiefte Optik")
@@ -80,13 +80,13 @@ with tab2:
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.button("✨ Primär Button", type="primary", use_container_width=True)
+        st.button(" Primär Button", type="primary", use_container_width=True)
     with col2:
-        st.button("📌 Sekundär Button", use_container_width=True)
+        st.button(" Sekundär Button", use_container_width=True)
     with col3:
-        st.button("🔔 Info Button", use_container_width=True)
+        st.button(" Info Button", use_container_width=True)
     with col4:
-        st.button("⚙️ Settings", use_container_width=True)
+        st.button(" Settings", use_container_width=True)
 
     st.write("---")
 
@@ -102,10 +102,10 @@ with tab3:
     col1, col2 = st.columns(2)
 
     with col1:
-        st.text_input("🏷️ Name", placeholder="Ihr Name...")
-        st.text_input("📧 E-Mail", placeholder="ihre@email.de")
+        st.text_input(" Name", placeholder="Ihr Name...")
+        st.text_input(" E-Mail", placeholder="ihre@email.de")
         st.text_area(
-            "💬 Nachricht",
+            " Nachricht",
             placeholder="Ihre Nachricht...",
             height=150)
 
@@ -114,10 +114,10 @@ with tab3:
             "Kategorie", [
                 "Option 1", "Option 2", "Option 3", "Option 4"])
         st.multiselect(
-            "🏷️ Tags", [
+            " Tags", [
                 "Python", "JavaScript", "CSS", "HTML", "SQL"])
         st.slider("Wert", 0, 100, 50)
-        st.slider("📏 Bereich", 0, 100, (20, 80))
+        st.slider(" Bereich", 0, 100, (20, 80))
 
 with tab4:
     st.header("Charts & Visualisierungen")

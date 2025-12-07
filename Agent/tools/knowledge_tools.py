@@ -60,7 +60,7 @@ def setup_knowledge_base(
     # Check if FAISS index already exists (caching)
     if os.path.exists(db_path):
         try:
-            print(f"📚 Loading existing FAISS index from {db_path}...")
+            print(f" Loading existing FAISS index from {db_path}...")
             embeddings = OpenAIEmbeddings()
             vector_store = FAISS.load_local(
                 db_path,
@@ -71,7 +71,7 @@ def setup_knowledge_base(
             return vector_store
         except Exception as e:
             print(f"Error loading existing index: {e}")
-            print("🔄 Will rebuild index from PDFs...")
+            print(" Will rebuild index from PDFs...")
 
     # Find all PDF files in knowledge base directory
     pdf_files = list(kb_dir.glob("*.pdf"))
@@ -104,7 +104,7 @@ The agent will automatically index them for search.
         return None
 
     print(f"Found {len(pdf_files)} PDF files in knowledge base")
-    print("🔄 Loading and processing documents...")
+    print(" Loading and processing documents...")
 
     # Load all PDF documents
     documents = []
@@ -125,7 +125,7 @@ The agent will automatically index them for search.
     print(f"Loaded {len(documents)} pages from PDFs")
 
     # Split documents into chunks
-    print("✂️ Splitting documents into chunks...")
+    print(" Splitting documents into chunks...")
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
@@ -135,7 +135,7 @@ The agent will automatically index them for search.
     print(f"Created {len(chunks)} text chunks")
 
     # Create embeddings and build FAISS index
-    print("🧠 Creating embeddings and building FAISS index...")
+    print(" Creating embeddings and building FAISS index...")
     print("   (This may take a few minutes depending on document size)")
 
     try:
@@ -143,7 +143,7 @@ The agent will automatically index them for search.
         vector_store = FAISS.from_documents(chunks, embeddings)
 
         # Save the index for future use (caching)
-        print(f"💾 Saving FAISS index to {db_path}...")
+        print(f" Saving FAISS index to {db_path}...")
         vector_store.save_local(db_path)
 
         print("Knowledge base created and saved successfully!")

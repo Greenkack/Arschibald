@@ -129,7 +129,7 @@ def test_placeholders():
 # --- DEF BLOCK START: func test_analysis_functions ---
 def test_analysis_functions():
     """Teste ob Analysis-Funktionen verfügbar sind"""
-    print("\n⚙️ Teste Analysis-Funktionen...")
+    print("\n Teste Analysis-Funktionen...")
 
     try:
         import analysis
@@ -197,7 +197,7 @@ def test_pdf_functions():
 # --- DEF BLOCK START: func run_all_tests ---
 def run_all_tests():
     """Führe alle Tests aus"""
-    print("🧪 Starte Tests für HP-Funktionen...")
+    print(" Starte Tests für HP-Funktionen...")
     print("=" * 50)
 
     tests = [
@@ -226,7 +226,7 @@ def run_all_tests():
     print(f"Test-Ergebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
-        print("🎉 Alle Tests erfolgreich! HP-Funktionen sind verfügbar.")
+        print(" Alle Tests erfolgreich! HP-Funktionen sind verfügbar.")
         return True
     print("Einige Tests fehlgeschlagen. Überprüfe die Implementierung.")
     return False

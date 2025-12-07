@@ -35,10 +35,10 @@ def demo_1_check_installation():
     print_section("1. Installation Check")
     
     if REPORTLAB_AVAILABLE:
-        print("✓ reportlab is installed and available")
+        print(" reportlab is installed and available")
         print("  All PDF generation features are enabled")
     else:
-        print("✗ reportlab is NOT installed")
+        print(" reportlab is NOT installed")
         print("  Install with: pip install reportlab")
         return False
     
@@ -105,7 +105,7 @@ def demo_4_simple_pdf():
     text = "This is a simple PDF document.\n\nIt has multiple paragraphs."
     pdf_bytes = create_pdf_from_text(text, title="Simple Demo")
     
-    print(f"✓ Created PDF from text: {len(pdf_bytes)} bytes")
+    print(f" Created PDF from text: {len(pdf_bytes)} bytes")
     print(f"  PDF starts with: {pdf_bytes[:10]}")
     
     # Create from dictionary
@@ -118,7 +118,7 @@ def demo_4_simple_pdf():
     
     pdf_bytes = create_pdf_from_dict(data, title="Demo Report")
     
-    print(f"✓ Created PDF from dictionary: {len(pdf_bytes)} bytes")
+    print(f" Created PDF from dictionary: {len(pdf_bytes)} bytes")
 
 
 def demo_5_custom_model():
@@ -126,7 +126,7 @@ def demo_5_custom_model():
     print_section("5. Custom PDF Model with PDFByteMixin")
     
     if not REPORTLAB_AVAILABLE:
-        print("⚠ Skipped (reportlab not installed)")
+        print(" Skipped (reportlab not installed)")
         return
     
     from reportlab.platypus import Paragraph, Spacer
@@ -172,11 +172,11 @@ def demo_5_custom_model():
     
     # Generate PDF
     pdf_bytes = report.to_pdf_bytes()
-    print(f"✓ Created custom PDF: {len(pdf_bytes)} bytes")
+    print(f" Created custom PDF: {len(pdf_bytes)} bytes")
     
     # Generate base64
     pdf_base64 = report.to_pdf_base64()
-    print(f"✓ Generated base64: {len(pdf_base64)} characters")
+    print(f" Generated base64: {len(pdf_base64)} characters")
     print(f"  First 50 chars: {pdf_base64[:50]}...")
 
 
@@ -185,7 +185,7 @@ def demo_6_table_creation():
     print_section("6. Table Creation")
     
     if not REPORTLAB_AVAILABLE:
-        print("⚠ Skipped (reportlab not installed)")
+        print(" Skipped (reportlab not installed)")
         return
     
     engine = PDFRenderingEngine()
@@ -200,7 +200,7 @@ def demo_6_table_creation():
     
     table = engine.create_table(data)
     
-    print("✓ Created table with 4 rows and 4 columns")
+    print(" Created table with 4 rows and 4 columns")
     print("  Headers: Product, Price, Quantity, Total")
     print("  Data rows: 3")
 
@@ -220,14 +220,14 @@ def demo_7_save_to_file():
     # Check if file exists
     if Path(filename).exists():
         size = Path(filename).stat().st_size
-        print(f"✓ Saved PDF to {filename}")
+        print(f" Saved PDF to {filename}")
         print(f"  File size: {size} bytes")
         
         # Clean up
         Path(filename).unlink()
-        print(f"✓ Cleaned up {filename}")
+        print(f" Cleaned up {filename}")
     else:
-        print(f"✗ Failed to save {filename}")
+        print(f" Failed to save {filename}")
 
 
 def demo_8_metadata_integration():
@@ -252,7 +252,7 @@ def demo_8_metadata_integration():
     # Retrieve metadata
     retrieved = doc.get_pdf_metadata()
     
-    print("✓ Set and retrieved metadata:")
+    print(" Set and retrieved metadata:")
     print(f"  Title: {retrieved.title}")
     print(f"  Author: {retrieved.author}")
     print(f"  Subject: {retrieved.subject}")
@@ -267,7 +267,7 @@ def run_all_demos():
     
     # Check installation first
     if not demo_1_check_installation():
-        print("\n⚠ Cannot continue without reportlab")
+        print("\n Cannot continue without reportlab")
         print("Install with: pip install reportlab")
         return
     
@@ -284,7 +284,7 @@ def run_all_demos():
     print("\n" + "=" * 70)
     print("  DEMO COMPLETED SUCCESSFULLY")
     print("=" * 70)
-    print("\n✓ All PDF byte generation features are working correctly")
+    print("\n All PDF byte generation features are working correctly")
     print("\nNext steps:")
     print("  1. Run tests: pytest backend/tests/test_pdf_bytes.py -v")
     print("  2. See examples: python backend/examples/pdf_byte_examples.py")

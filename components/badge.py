@@ -31,7 +31,7 @@ class Badge(ShadcnComponent):
         badge.render(
             text="Neu",
             variant="success",
-            icon="✓"
+            icon=""
         )
         ```
     """
@@ -68,7 +68,7 @@ class Badge(ShadcnComponent):
                 text="Premium",
                 variant="success",
                 size="lg",
-                icon="⭐"
+                icon=""
             )
             ```
         """
@@ -270,7 +270,7 @@ class BadgeGroup(ShadcnComponent):
             group.render(
                 badges=[
                     {"text": "Tag 1", "variant": "default"},
-                    {"text": "Tag 2", "variant": "success", "icon": "✓"}
+                    {"text": "Tag 2", "variant": "success", "icon": ""}
                 ],
                 spacing="md"
             )
@@ -351,7 +351,7 @@ def badge(
         badge(
             text="Neu",
             variant="success",
-            icon="✓"
+            icon=""
         )
         ```
     """

@@ -41,14 +41,14 @@ def check_import(module_name: str) -> bool:
 
 def main():
     print("=" * 80)
-    print("🔬 TIEFGEHENDE IMPORT-ANALYSE")
+    print(" TIEFGEHENDE IMPORT-ANALYSE")
     print("=" * 80)
     
     # Finde alle Python-Dateien
     root = Path('.')
     python_files = list(root.glob('*.py'))
     
-    print(f"\n📂 Gefundene Python-Dateien: {len(python_files)}")
+    print(f"\n Gefundene Python-Dateien: {len(python_files)}")
     
     # Sammle alle Imports
     all_imports = defaultdict(list)
@@ -99,7 +99,7 @@ def main():
             missing.add(module)
     
     # Ausgabe
-    print(f"\n🐍 STANDARD LIBRARY ({len(std_lib)} Module)")
+    print(f"\n STANDARD LIBRARY ({len(std_lib)} Module)")
     print("-" * 80)
     for mod in sorted(std_lib):
         files_using = ', '.join(all_imports[mod][:3])
@@ -107,7 +107,7 @@ def main():
             files_using += f" (+{len(all_imports[mod])-3} mehr)"
         print(f"  {mod:30s} verwendet in: {files_using}")
     
-    print(f"\n📚 THIRD-PARTY PACKAGES ({len(third_party)} Pakete)")
+    print(f"\n THIRD-PARTY PACKAGES ({len(third_party)} Pakete)")
     print("-" * 80)
     for mod in sorted(third_party):
         files_using = ', '.join(all_imports[mod][:3])
@@ -115,7 +115,7 @@ def main():
             files_using += f" (+{len(all_imports[mod])-3} mehr)"
         print(f"  {mod:30s} verwendet in: {files_using}")
     
-    print(f"\n🏠 LOKALE MODULE ({len(local_modules)} Module)")
+    print(f"\n LOKALE MODULE ({len(local_modules)} Module)")
     print("-" * 80)
     for mod in sorted(local_modules):
         files_using = ', '.join(all_imports[mod][:3])
@@ -140,16 +140,16 @@ def main():
     available = len(std_lib) + len(third_party) + len(local_modules)
     
     print(f"Verfügbar:      {available}/{total} Module ({available/total*100:.1f}%)")
-    print(f"🐍 Standard Lib:   {len(std_lib)} Module")
-    print(f"📚 Third-Party:    {len(third_party)} Pakete")
-    print(f"🏠 Lokal:          {len(local_modules)} Module")
+    print(f" Standard Lib:   {len(std_lib)} Module")
+    print(f" Third-Party:    {len(third_party)} Pakete")
+    print(f" Lokal:          {len(local_modules)} Module")
     print(f"Fehlend:        {len(missing)} Module")
     
     if missing:
         print("\nKRITISCHE FEHLER: Fehlende Module müssen installiert werden!")
         print(f"   pip install {' '.join(sorted(missing))}")
     else:
-        print("\n🎉 ALLE IMPORTS SIND VERFÜGBAR!")
+        print("\n ALLE IMPORTS SIND VERFÜGBAR!")
 
 if __name__ == "__main__":
     main()

@@ -372,7 +372,7 @@ def main():
         print("=" * 70 + "\n")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

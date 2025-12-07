@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\pyphen\__init__.py
+# hypothesis_version: 6.147.0
+
+['#', '%', '(\\d?)(\\D?)', ',', '-', '.', '.dic', '/', '0', '0.17.2', '=', 'LANGUAGES', 'LEFTHYPHENMIN', 'Pyphen', 'RIGHTHYPHENMIN', '\\^{2}([0-9a-f]{2})', '_', 'cp1251', 'dictionaries', 'language_fallback', 'microsoft-cp1251', 'pyphen.dictionaries', 'rb']

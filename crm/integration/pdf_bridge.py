@@ -388,7 +388,7 @@ def show_customer_assignment_dialog() -> Optional[int]:
         
         st.warning("Kein Kunde zugeordnet - PDF wird nicht automatisch archiviert")
         
-        with st.expander("📋 Kunde für PDF-Archivierung auswählen", expanded=False):
+        with st.expander(" Kunde für PDF-Archivierung auswählen", expanded=False):
             st.info("Wählen Sie einen Kunden aus, um das PDF automatisch in der Kundenakte zu speichern.")
             
             # Kundenliste abrufen

@@ -25,7 +25,7 @@ def render_feedback_management(conn: sqlite3.Connection):
     
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3, tab4 = st.tabs([
-        "Umfragen", "Auswertungen", "🔔 Alerts", "⚙️ Trigger"
+        "Umfragen", "Auswertungen", " Alerts", " Trigger"
     ])
     
     with tab1:
@@ -48,7 +48,7 @@ def render_surveys_tab(conn: sqlite3.Connection):
     col1, col2 = st.columns([3, 1])
     
     with col2:
-        if st.button("➕ Neue Umfrage", use_container_width=True):
+        if st.button(" Neue Umfrage", use_container_width=True):
             st.session_state['show_survey_builder'] = True
     
     # Umfrage-Builder anzeigen
@@ -64,7 +64,7 @@ def render_surveys_tab(conn: sqlite3.Connection):
         return
     
     for survey in surveys:
-        with st.expander(f"📋 {survey['name']}" + (" " if survey['is_active'] else " ⏸️")):
+        with st.expander(f" {survey['name']}" + (" " if survey['is_active'] else " ⏸")):
             col1, col2, col3 = st.columns([2, 2, 1])
             
             with col1:
@@ -85,7 +85,7 @@ def render_surveys_tab(conn: sqlite3.Connection):
                     st.session_state['analyze_survey_id'] = survey['id']
                     st.rerun()
                 
-                if st.button("✏️ Bearbeiten", key=f"edit_{survey['id']}"):
+                if st.button(" Bearbeiten", key=f"edit_{survey['id']}"):
                     st.session_state['edit_survey_id'] = survey['id']
                     st.rerun()
                 
@@ -122,7 +122,7 @@ def render_survey_builder(conn: sqlite3.Connection):
             )
         
         # E-Mail-Vorlage
-        st.subheader("📧 E-Mail-Vorlage")
+        st.subheader(" E-Mail-Vorlage")
         email_subject = st.text_input(
             "E-Mail Betreff",
             value="Ihre Meinung ist uns wichtig!",
@@ -136,7 +136,7 @@ def render_survey_builder(conn: sqlite3.Connection):
         )
         
         # Fragen-Builder
-        st.subheader("❓ Fragen")
+        st.subheader(" Fragen")
         
         if 'survey_questions' not in st.session_state:
             st.session_state['survey_questions'] = []
@@ -154,7 +154,7 @@ def render_survey_builder(conn: sqlite3.Connection):
             question_text = st.text_input("Fragetext", key="new_question_text")
         
         with col3:
-            if st.form_submit_button("➕ Frage hinzufügen"):
+            if st.form_submit_button(" Frage hinzufügen"):
                 if question_text:
                     question = {
                         'id': f"q{len(st.session_state['survey_questions']) + 1}",
@@ -183,7 +183,7 @@ def render_survey_builder(conn: sqlite3.Connection):
         # Speichern
         col1, col2 = st.columns(2)
         with col1:
-            submit = st.form_submit_button("💾 Umfrage speichern", use_container_width=True)
+            submit = st.form_submit_button(" Umfrage speichern", use_container_width=True)
         with col2:
             cancel = st.form_submit_button("Abbrechen", use_container_width=True)
         
@@ -329,16 +329,16 @@ def render_analytics_tab(conn: sqlite3.Connection):
     if responses:
         for response in responses:
             sentiment_emoji = {
-                'positive': '😊',
-                'neutral': '😐',
-                'negative': '😞'
+                'positive': '',
+                'neutral': '',
+                'negative': ''
             }.get(response.get('sentiment', ''), '')
             
             with st.expander(
                 f"{sentiment_emoji} {response.get('first_name', '')} {response.get('last_name', '')} - "
                 f"{response['submitted_at'][:10]}"
             ):
-                st.write(f"**Bewertung:** {'⭐' * (response.get('overall_rating', 0) or 0)}")
+                st.write(f"**Bewertung:** {'' * (response.get('overall_rating', 0) or 0)}")
                 st.write(f"**Projekt:** {response.get('project_name', 'N/A')}")
                 
                 st.write("**Antworten:**")
@@ -350,7 +350,7 @@ def render_analytics_tab(conn: sqlite3.Connection):
 
 def render_alerts_tab(conn: sqlite3.Connection):
     """Tab für Negativ-Feedback Alerts."""
-    st.subheader("🔔 Negativ-Feedback Alerts")
+    st.subheader(" Negativ-Feedback Alerts")
     
     days = st.slider("Zeitraum (Tage)", 1, 30, 7)
     
@@ -365,7 +365,7 @@ def render_alerts_tab(conn: sqlite3.Connection):
     for alert in alerts:
         with st.expander(
             f"{alert.get('first_name', '')} {alert.get('last_name', '')} - "
-            f"{alert['submitted_at'][:10]} - ⭐{alert.get('overall_rating', 0)}"
+            f"{alert['submitted_at'][:10]} - {alert.get('overall_rating', 0)}"
         ):
             col1, col2 = st.columns(2)
             
@@ -377,7 +377,7 @@ def render_alerts_tab(conn: sqlite3.Connection):
             with col2:
                 st.write(f"**Umfrage:** {alert.get('survey_name', 'N/A')}")
                 st.write(f"**Datum:** {alert['submitted_at'][:10]}")
-                st.write(f"**Bewertung:** {'⭐' * (alert.get('overall_rating', 0) or 0)}")
+                st.write(f"**Bewertung:** {'' * (alert.get('overall_rating', 0) or 0)}")
             
             st.write("**Antworten:**")
             for q_id, answer in alert['responses'].items():
@@ -385,7 +385,7 @@ def render_alerts_tab(conn: sqlite3.Connection):
             
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("📧 Kunde kontaktieren", key=f"contact_{alert['id']}"):
+                if st.button(" Kunde kontaktieren", key=f"contact_{alert['id']}"):
                     st.info("E-Mail-Funktion wird geöffnet...")
             
             with col2:
@@ -395,7 +395,7 @@ def render_alerts_tab(conn: sqlite3.Connection):
 
 def render_triggers_tab(conn: sqlite3.Connection):
     """Tab für Trigger-Verwaltung."""
-    st.subheader("⚙️ Automatische Trigger")
+    st.subheader(" Automatische Trigger")
     
     # Ausstehende Trigger
     st.write("**Ausstehende Trigger:**")
@@ -409,15 +409,15 @@ def render_triggers_tab(conn: sqlite3.Connection):
             col1, col2, col3 = st.columns([3, 2, 1])
             
             with col1:
-                st.write(f"📋 {trigger.get('survey_name', 'N/A')}")
-                st.write(f"👤 {trigger.get('first_name', '')} {trigger.get('last_name', '')}")
+                st.write(f" {trigger.get('survey_name', 'N/A')}")
+                st.write(f" {trigger.get('first_name', '')} {trigger.get('last_name', '')}")
             
             with col2:
-                st.write(f"📅 {trigger['scheduled_date']}")
-                st.write(f"📧 {trigger.get('email', 'N/A')}")
+                st.write(f" {trigger['scheduled_date']}")
+                st.write(f" {trigger.get('email', 'N/A')}")
             
             with col3:
-                if st.button("📤 Jetzt senden", key=f"send_{trigger['id']}"):
+                if st.button(" Jetzt senden", key=f"send_{trigger['id']}"):
                     if feedback_manager.mark_trigger_sent(conn, trigger['id']):
                         st.success("Trigger als versendet markiert!")
                         st.rerun()
@@ -468,7 +468,7 @@ def render_survey_preview(survey: dict):
         st.write(f"{i}. {question['text']}")
         
         if question['type'] == 'rating':
-            st.write("⭐⭐⭐⭐⭐")
+            st.write("")
         elif question['type'] == 'text':
             st.text_input("", key=f"preview_text_{i}", disabled=True)
         elif question['type'] == 'multiple_choice':

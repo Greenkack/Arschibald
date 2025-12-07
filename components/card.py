@@ -35,7 +35,7 @@ class Card(ShadcnComponent):
             content="Hauptinhalt hier",
             footer="Footer-Text",
             variant="elevated",
-            icon="📊"
+            icon=""
         )
         ```
     """
@@ -82,7 +82,7 @@ class Card(ShadcnComponent):
                 description="Aktuelle Daten",
                 content="Hier steht der Inhalt",
                 variant="elevated",
-                icon="☀️",
+                icon="",
                 badge="Neu",
                 badge_variant="success"
             )

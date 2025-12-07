@@ -38,7 +38,7 @@ def demo_document_crud(service: DocumentService, user_id: int = 1):
     )
     
     document = service.create_document(document_data, file_content, user_id)
-    print(f"✓ Created document: {document.name} (ID: {document.id})")
+    print(f" Created document: {document.name} (ID: {document.id})")
     print(f"  - Type: {document.type}")
     print(f"  - Status: {document.status}")
     print(f"  - Version: {document.version}")
@@ -47,7 +47,7 @@ def demo_document_crud(service: DocumentService, user_id: int = 1):
     # Get document
     print("\n2. Retrieving document...")
     retrieved = service.get_document(document.id)
-    print(f"✓ Retrieved document: {retrieved.name}")
+    print(f" Retrieved document: {retrieved.name}")
     print(f"  - File size: {retrieved.file_size} bytes")
     print(f"  - Created: {retrieved.created_at}")
     
@@ -60,7 +60,7 @@ def demo_document_crud(service: DocumentService, user_id: int = 1):
         tags=["invoice", "updated", "important"]
     )
     updated = service.update_document(document.id, update_data, user_id)
-    print(f"✓ Updated document: {updated.name}")
+    print(f" Updated document: {updated.name}")
     print(f"  - New status: {updated.status}")
     print(f"  - New tags: {updated.tags}")
     
@@ -77,7 +77,7 @@ def demo_versioning(service: DocumentService, document_id: int, user_id: int = 1
     print("\n1. Creating version 2...")
     file_content_v2 = io.BytesIO(b"This is version 2 of the document with more content")
     version_2 = service.create_version(document_id, file_content_v2, user_id)
-    print(f"✓ Created version 2: {version_2.name}")
+    print(f" Created version 2: {version_2.name}")
     print(f"  - Version: {version_2.version}")
     print(f"  - Is latest: {version_2.is_latest_version}")
     
@@ -85,14 +85,14 @@ def demo_versioning(service: DocumentService, document_id: int, user_id: int = 1
     print("\n2. Creating version 3...")
     file_content_v3 = io.BytesIO(b"This is version 3 with even more content and improvements")
     version_3 = service.create_version(document_id, file_content_v3, user_id)
-    print(f"✓ Created version 3: {version_3.name}")
+    print(f" Created version 3: {version_3.name}")
     print(f"  - Version: {version_3.version}")
     print(f"  - Is latest: {version_3.is_latest_version}")
     
     # Get all versions
     print("\n3. Retrieving all versions...")
     versions = service.get_versions(document_id)
-    print(f"✓ Found {len(versions)} versions:")
+    print(f" Found {len(versions)} versions:")
     for v in versions:
         latest_marker = " (LATEST)" if v.is_latest_version else ""
         print(f"  - Version {v.version}: {v.file_size} bytes{latest_marker}")
@@ -116,7 +116,7 @@ def demo_templates(service: DocumentService, user_id: int = 1):
         tags=["invoice", "billing"]
     )
     template = service.create_template(template_data, user_id)
-    print(f"✓ Created template: {template.name} (ID: {template.id})")
+    print(f" Created template: {template.name} (ID: {template.id})")
     print(f"  - Type: {template.type}")
     print(f"  - Category: {template.category}")
     print(f"  - Variables: {template.template_variables}")
@@ -124,7 +124,7 @@ def demo_templates(service: DocumentService, user_id: int = 1):
     # List templates
     print("\n2. Listing templates...")
     templates = service.list_templates(type=DocumentType.PDF)
-    print(f"✓ Found {len(templates)} PDF templates:")
+    print(f" Found {len(templates)} PDF templates:")
     for t in templates:
         print(f"  - {t.name} ({t.category})")
     
@@ -152,12 +152,12 @@ def demo_generation(service: DocumentService, template_id: int, user_id: int = 1
     
     generated = service.generate_from_template(generate_request, user_id)
     if generated:
-        print(f"✓ Generated document: {generated.name}")
+        print(f" Generated document: {generated.name}")
         print(f"  - Type: {generated.type}")
         print(f"  - Tags: {generated.tags}")
         print(f"  - Metadata: {generated.metadata}")
     else:
-        print("✗ Failed to generate document")
+        print(" Failed to generate document")
 
 
 def demo_sharing(service: DocumentService, document_id: int, user_id: int = 1):
@@ -181,7 +181,7 @@ def demo_sharing(service: DocumentService, document_id: int, user_id: int = 1):
     
     share = service.share_document(share_data, user_id)
     if share:
-        print(f"✓ Shared document (Share ID: {share.id})")
+        print(f" Shared document (Share ID: {share.id})")
         print(f"  - Shared with user: {share.shared_with_user_id}")
         print(f"  - Permissions: View={share.can_view}, Edit={share.can_edit}")
         print(f"  - Access token: {share.access_token[:20]}...")
@@ -199,7 +199,7 @@ def demo_sharing(service: DocumentService, document_id: int, user_id: int = 1):
     
     email_share = service.share_document(email_share_data, user_id)
     if email_share:
-        print(f"✓ Shared via email: {email_share.shared_with_email}")
+        print(f" Shared via email: {email_share.shared_with_email}")
         print(f"  - Access token: {email_share.access_token[:20]}...")
 
 
@@ -216,7 +216,7 @@ def demo_search(service: DocumentService, user_id: int = 1):
         limit=10
     )
     documents, total = service.search_documents(search_request, user_id)
-    print(f"✓ Found {total} documents:")
+    print(f" Found {total} documents:")
     for doc in documents:
         print(f"  - {doc.name} ({doc.type}, {doc.status})")
     
@@ -228,7 +228,7 @@ def demo_search(service: DocumentService, user_id: int = 1):
         limit=10
     )
     documents, total = service.search_documents(search_request, user_id)
-    print(f"✓ Found {total} active PDF documents")
+    print(f" Found {total} active PDF documents")
     
     # Search by tags
     print("\n3. Searching by tags...")
@@ -237,7 +237,7 @@ def demo_search(service: DocumentService, user_id: int = 1):
         limit=10
     )
     documents, total = service.search_documents(search_request, user_id)
-    print(f"✓ Found {total} documents with specified tags")
+    print(f" Found {total} documents with specified tags")
     
     # Search by date range
     print("\n4. Searching by date range...")
@@ -246,7 +246,7 @@ def demo_search(service: DocumentService, user_id: int = 1):
         limit=10
     )
     documents, total = service.search_documents(search_request, user_id)
-    print(f"✓ Found {total} documents created in last 7 days")
+    print(f" Found {total} documents created in last 7 days")
 
 
 def main():
@@ -275,15 +275,15 @@ def main():
         print("DEMO COMPLETED SUCCESSFULLY!")
         print("="*60)
         print("\nAll document management features demonstrated:")
-        print("✓ Document CRUD operations")
-        print("✓ Document versioning")
-        print("✓ Document templates")
-        print("✓ Document generation")
-        print("✓ Document sharing")
-        print("✓ Document search")
+        print(" Document CRUD operations")
+        print(" Document versioning")
+        print(" Document templates")
+        print(" Document generation")
+        print(" Document sharing")
+        print(" Document search")
         
     except Exception as e:
-        print(f"\n✗ Error during demo: {str(e)}")
+        print(f"\n Error during demo: {str(e)}")
         import traceback
         traceback.print_exc()
     

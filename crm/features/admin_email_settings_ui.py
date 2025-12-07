@@ -37,7 +37,7 @@ def render_email_admin_settings(
         st.error("E-Mail-Module konnten nicht geladen werden. Bitte prüfen Sie die Installation.")
         return
     
-    st.header("📧 E-Mail-Integration")
+    st.header(" E-Mail-Integration")
     
     st.markdown("""
     Verwalten Sie hier die E-Mail-Integration für Ihr CRM-System.
@@ -51,8 +51,8 @@ def render_email_admin_settings(
     
     # Create tabs for different sections
     tab_smtp, tab_templates = st.tabs([
-        "⚙️ SMTP-Konfiguration",
-        "📝 E-Mail-Vorlagen"
+        " SMTP-Konfiguration",
+        " E-Mail-Vorlagen"
     ])
     
     # Tab 1: SMTP Configuration

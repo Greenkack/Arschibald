@@ -126,7 +126,7 @@ def test_real_pdf_generation():
 if __name__ == "__main__":
     success = test_real_pdf_generation()
     if success:
-        print("\n🎉 ALLE TESTS ERFOLGREICH!")
+        print("\n ALLE TESTS ERFOLGREICH!")
         print("Die neuen PDF-Berechnungen sind korrekt implementiert und sollten in der App funktionieren.")
     else:
         print("\nTESTS FEHLGESCHLAGEN!")

@@ -199,7 +199,7 @@ def run_all_tests():
     print(f"\n{passed}/{total} Tests bestanden")
     
     if passed == total:
-        print("\n🎉 ALLE TESTS BESTANDEN! 🎉")
+        print("\n ALLE TESTS BESTANDEN! ")
         return True
     else:
         print(f"\n{total - passed} Test(s) fehlgeschlagen!")

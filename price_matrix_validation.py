@@ -468,7 +468,7 @@ def get_validation_summary(validation_result: Dict[str, Any]) -> str:
     if validation_result['warnings']:
         lines.append("WARNUNGEN:")
         for warning in validation_result['warnings']:
-            lines.append(f"  ⚠ {warning}")
+            lines.append(f"   {warning}")
         lines.append("")
     
     # Informationen

@@ -266,7 +266,7 @@ def render_intro_settings_tab():
                         f"Rechtes Bild nicht gefunden: {image_right_path}")
 
                 st.markdown("---")
-                st.markdown("##### 👁️ Layout-Vorschau (3-Bilder-Ansicht)")
+                st.markdown("#####  Layout-Vorschau (3-Bilder-Ansicht)")
 
                 # Zeige Vorschau wie die 3 Bilder angeordnet werden
                 preview_col1, preview_col2, preview_col3 = st.columns([
@@ -362,7 +362,7 @@ def render_intro_settings_tab():
 
         with col_save3:
             preview_button = st.form_submit_button(
-                "👁 Vorschau",
+                " Vorschau",
                 use_container_width=True
             )
 
@@ -419,7 +419,7 @@ def render_intro_settings_tab():
                 "Tipp: Setzen Sie den Intro-Status zurück und laden Sie die Seite neu (F5), um eine Vorschau zu sehen")
 
     # Hilfe-Sektion
-    with st.expander("📖 Hilfe zu den Einstellungen"):
+    with st.expander(" Hilfe zu den Einstellungen"):
         st.markdown("""
         **Intro-Bildschirm aktivieren:**
         - Wenn aktiviert: Benutzer sehen beim Start den Willkommensbildschirm

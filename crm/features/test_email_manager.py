@@ -937,7 +937,7 @@ def run_all_tests():
     print(f"Fehlgeschlagen: {failed}/{len(tests)}")
     
     if failed == 0:
-        print("\n🎉 Alle Tests erfolgreich!")
+        print("\n Alle Tests erfolgreich!")
         print("\nGetestete Funktionalität:")
         print("  E-Mail-Vorlagen-System (CRUD) (Requirement 4.2)")
         print("  Platzhalter-Ersetzung (alle Typen) (Requirement 4.2)")

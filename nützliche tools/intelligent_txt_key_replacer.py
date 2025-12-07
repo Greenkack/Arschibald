@@ -237,7 +237,7 @@ class TXTKeyReplacer:
                     with open(file_path, 'w', encoding='utf-8') as f:
                         f.write(content)
                     print(
-                        f"💾 {filename}: {file_replacements} Ersetzungen gespeichert")
+                        f" {filename}: {file_replacements} Ersetzungen gespeichert")
                     total_replacements += file_replacements
 
             except Exception as e:

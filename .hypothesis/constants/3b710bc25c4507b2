@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\db\models\query.py
+# hypothesis_version: 6.147.0
+
+[2000, '&', "', '", ', ', '-', '-pk', '<%s %r>', '<%s: %s>', 'ASC', 'DESC', 'SQLCompiler', '^', '_iterable_class', '_result_cache', 'aggregate', 'alias', 'annotate', 'attname', 'bulk_create', 'bulk_update', 'contains', 'contains_aggregate', 'cursor', 'datefield', 'datetimefield', 'day', 'default_alias', 'defer', 'delete', 'difference', 'distinct', 'exclude', 'extra', 'filter', 'first', 'from_parent', 'get_latest_by', 'hour', 'intersection', 'last', 'local_setter', 'minute', 'model', 'month', 'more than %s', 'only', 'pk', 'prefetch_related', 'queryset', 'related_klass_infos', 'remote_setter', 'resolve_expression', 'second', 'select_fields', 'select_related', 'self', 'union', 'update', 'week', 'year', '{}__in', '|']

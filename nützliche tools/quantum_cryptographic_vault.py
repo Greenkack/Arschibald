@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌌 QUANTUM CRYPTOGRAPHIC VAULT
+ QUANTUM CRYPTOGRAPHIC VAULT
 ==============================
 Quanten-resistente Verschlüsselung für Ultra-Sensitive Daten
 """
@@ -175,7 +175,7 @@ class QuantumVault:
 
     def store_secret(self, secret_name: str, secret_data: str, password: str):
         """Speichert Geheimnisse im Quantum Vault"""
-        print(f"🌌 Speichere Geheimnis '{secret_name}' im Quantum Vault...")
+        print(f" Speichere Geheimnis '{secret_name}' im Quantum Vault...")
 
         # Lade existierende Vault oder erstelle neue
         vault = self.load_vault()
@@ -204,7 +204,7 @@ class QuantumVault:
 
     def retrieve_secret(self, secret_name: str, password: str) -> str:
         """Lädt Geheimnisse aus dem Quantum Vault"""
-        print(f"🔓 Lade Geheimnis '{secret_name}' aus Quantum Vault...")
+        print(f" Lade Geheimnis '{secret_name}' aus Quantum Vault...")
 
         vault = self.load_vault()
 
@@ -262,16 +262,16 @@ if __name__ == "__main__":
     for name, secret in ultra_secrets.items():
         vault.store_secret(name, secret, master_password)
 
-    print("\n🌌 QUANTUM VAULT STATUS:")
+    print("\n QUANTUM VAULT STATUS:")
     secrets = vault.list_secrets()
     for secret in secrets:
         print(
-            f"  🔐 {
+            f"   {
                 secret['name']}: {
                 secret['algorithm']} (vor {
                 secret['age_hours']:.1f}h)")
 
     # Lade ein Geheimnis
-    print("\n🔓 GEHEIMNIS LADEN:")
+    print("\n GEHEIMNIS LADEN:")
     retrieved = vault.retrieve_secret('admin_master_key', master_password)
     print(f"Retrieved: {retrieved}")

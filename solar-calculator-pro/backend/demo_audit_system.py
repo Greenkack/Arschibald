@@ -40,7 +40,7 @@ def demo_change_tracking(db: Session):
         ip_address="192.168.1.100",
         session_id="session_abc123"
     ))
-    print(f"✓ Created audit log ID: {create_log.id}")
+    print(f" Created audit log ID: {create_log.id}")
     
     # Log an UPDATE operation
     print("\n2. Logging UPDATE operation...")
@@ -61,7 +61,7 @@ def demo_change_tracking(db: Session):
         ip_address="192.168.1.100",
         session_id="session_abc123"
     ))
-    print(f"✓ Created audit log ID: {update_log.id}")
+    print(f" Created audit log ID: {update_log.id}")
     print(f"  Changes detected: {update_log.changes}")
     
     # Log a DELETE operation
@@ -80,12 +80,12 @@ def demo_change_tracking(db: Session):
         ip_address="192.168.1.100",
         session_id="session_abc123"
     ))
-    print(f"✓ Created audit log ID: {delete_log.id}")
+    print(f" Created audit log ID: {delete_log.id}")
     
     # Get record history
     print("\n4. Retrieving record history...")
     history = audit_service.get_record_history("projects", "123")
-    print(f"✓ Found {len(history)} changes for record projects/123:")
+    print(f" Found {len(history)} changes for record projects/123:")
     for log in history:
         print(f"  - {log.timestamp}: {log.action} by {log.username}")
 
@@ -109,7 +109,7 @@ def demo_data_access_logging(db: Session):
         result_count=1,
         ip_address="192.168.1.100"
     ))
-    print(f"✓ Created access log ID: {select_log.id}")
+    print(f" Created access log ID: {select_log.id}")
     
     # Log a SEARCH operation
     print("\n2. Logging SEARCH operation...")
@@ -122,7 +122,7 @@ def demo_data_access_logging(db: Session):
         result_count=50,
         ip_address="192.168.1.100"
     ))
-    print(f"✓ Created access log ID: {search_log.id}")
+    print(f" Created access log ID: {search_log.id}")
     print(f"  Query params: {search_log.query_params}")
     print(f"  Results: {search_log.result_count} records")
     
@@ -137,7 +137,7 @@ def demo_data_access_logging(db: Session):
         result_count=100,
         ip_address="192.168.1.100"
     ))
-    print(f"✓ Created access log ID: {export_log.id}")
+    print(f" Created access log ID: {export_log.id}")
     
     # Query access logs
     print("\n4. Querying access logs...")
@@ -147,7 +147,7 @@ def demo_data_access_logging(db: Session):
         limit=10
     )
     logs = audit_service.get_data_access_logs(query)
-    print(f"✓ Found {len(logs)} access logs for user 1 on customers table")
+    print(f" Found {len(logs)} access logs for user 1 on customers table")
 
 
 def demo_user_action_logging(db: Session):
@@ -170,7 +170,7 @@ def demo_user_action_logging(db: Session):
         duration_ms=150,
         ip_address="192.168.1.100"
     ))
-    print(f"✓ Created action log ID: {login_log.id}")
+    print(f" Created action log ID: {login_log.id}")
     
     # Log a solar calculation
     print("\n2. Logging solar calculation...")
@@ -188,7 +188,7 @@ def demo_user_action_logging(db: Session):
         duration_ms=1250,
         ip_address="192.168.1.100"
     ))
-    print(f"✓ Created action log ID: {calc_log.id}")
+    print(f" Created action log ID: {calc_log.id}")
     print(f"  Duration: {calc_log.duration_ms}ms")
     
     # Log a PDF generation
@@ -207,7 +207,7 @@ def demo_user_action_logging(db: Session):
         duration_ms=3500,
         ip_address="192.168.1.100"
     ))
-    print(f"✓ Created action log ID: {pdf_log.id}")
+    print(f" Created action log ID: {pdf_log.id}")
     
     # Log a failed action
     print("\n4. Logging failed action...")
@@ -222,7 +222,7 @@ def demo_user_action_logging(db: Session):
         duration_ms=50,
         ip_address="192.168.1.100"
     ))
-    print(f"✓ Created action log ID: {failed_log.id}")
+    print(f" Created action log ID: {failed_log.id}")
     print(f"  Error: {failed_log.error_message}")
     
     # Query action logs
@@ -233,7 +233,7 @@ def demo_user_action_logging(db: Session):
         limit=10
     )
     logs = audit_service.get_user_action_logs(query)
-    print(f"✓ Found {len(logs)} calculation actions for user 1")
+    print(f" Found {len(logs)} calculation actions for user 1")
 
 
 def demo_compliance_logging(db: Session):
@@ -264,7 +264,7 @@ def demo_compliance_logging(db: Session):
         },
         notes="User requested all personal data for review"
     ))
-    print(f"✓ Created compliance log ID: {gdpr_log.id}")
+    print(f" Created compliance log ID: {gdpr_log.id}")
     
     # Log a data retention event
     print("\n2. Logging data retention policy execution...")
@@ -282,7 +282,7 @@ def demo_compliance_logging(db: Session):
             "automated": True
         }
     ))
-    print(f"✓ Created compliance log ID: {retention_log.id}")
+    print(f" Created compliance log ID: {retention_log.id}")
     
     # Log a security event
     print("\n3. Logging security event...")
@@ -302,7 +302,7 @@ def demo_compliance_logging(db: Session):
         },
         notes="Multiple failed login attempts detected"
     ))
-    print(f"✓ Created compliance log ID: {security_log.id}")
+    print(f" Created compliance log ID: {security_log.id}")
     print(f"  Status: {security_log.compliance_status}")
     
     # Query compliance logs
@@ -312,7 +312,7 @@ def demo_compliance_logging(db: Session):
         limit=10
     )
     logs = audit_service.get_compliance_logs(query)
-    print(f"✓ Found {len(logs)} GDPR compliance logs")
+    print(f" Found {len(logs)} GDPR compliance logs")
 
 
 def demo_audit_reports(db: Session):
@@ -335,7 +335,7 @@ def demo_audit_reports(db: Session):
         ),
         created_by_id=1
     )
-    print(f"✓ Created report ID: {report.id}")
+    print(f" Created report ID: {report.id}")
     print(f"  Name: {report.report_name}")
     print(f"  Type: {report.report_type}")
     print(f"  Status: {report.status}")
@@ -353,7 +353,7 @@ def demo_audit_reports(db: Session):
         ),
         created_by_id=1
     )
-    print(f"✓ Created report ID: {access_report.id}")
+    print(f" Created report ID: {access_report.id}")
     
     # Create a compliance report
     print("\n3. Creating compliance report...")
@@ -367,12 +367,12 @@ def demo_audit_reports(db: Session):
         ),
         created_by_id=1
     )
-    print(f"✓ Created report ID: {compliance_report.id}")
+    print(f" Created report ID: {compliance_report.id}")
     
     # Get all reports
     print("\n4. Retrieving all reports...")
     reports = audit_service.get_audit_reports(limit=10)
-    print(f"✓ Found {len(reports)} reports")
+    print(f" Found {len(reports)} reports")
     for r in reports:
         print(f"  - {r.report_name} ({r.report_type}) - {r.status}")
 
@@ -391,7 +391,7 @@ def demo_statistics(db: Session):
         date_from=datetime.now() - timedelta(days=30),
         date_to=datetime.now()
     )
-    print(f"✓ Audit Statistics (Last 30 days):")
+    print(f" Audit Statistics (Last 30 days):")
     print(f"  Total changes: {audit_stats.total_changes}")
     print(f"  Changes by action: {audit_stats.changes_by_action}")
     print(f"  Changes by table: {audit_stats.changes_by_table}")
@@ -404,7 +404,7 @@ def demo_statistics(db: Session):
         date_from=datetime.now() - timedelta(days=30),
         date_to=datetime.now()
     )
-    print(f"✓ Access Statistics (Last 30 days):")
+    print(f" Access Statistics (Last 30 days):")
     print(f"  Total accesses: {access_stats.total_accesses}")
     print(f"  Accesses by type: {access_stats.accesses_by_type}")
     print(f"  Most accessed tables: {access_stats.most_accessed_tables[:3]}")
@@ -415,7 +415,7 @@ def demo_statistics(db: Session):
         date_from=datetime.now() - timedelta(days=30),
         date_to=datetime.now()
     )
-    print(f"✓ Compliance Statistics (Last 30 days):")
+    print(f" Compliance Statistics (Last 30 days):")
     print(f"  Total events: {compliance_stats.total_events}")
     print(f"  Events by type: {compliance_stats.events_by_type}")
     print(f"  Events by status: {compliance_stats.events_by_status}")
@@ -444,7 +444,7 @@ def main():
     db = None  # Replace with actual db session
     
     if db is None:
-        print("\n⚠️  Note: This is a demonstration script.")
+        print("\n  Note: This is a demonstration script.")
         print("    To run with actual database, uncomment the db initialization code.")
         print("    All functionality is implemented and ready to use!")
         return
@@ -460,8 +460,8 @@ def main():
         print("\n" + "="*80)
         print("DEMO COMPLETED SUCCESSFULLY!")
         print("="*80)
-        print("\n✓ All audit system features demonstrated")
-        print("✓ Ready for production use")
+        print("\n All audit system features demonstrated")
+        print(" Ready for production use")
         print("\nFor more information, see:")
         print("  - docs/AUDIT_SYSTEM_GUIDE.md")
         print("  - docs/AUDIT_SYSTEM_QUICK_REFERENCE.md")

@@ -133,7 +133,7 @@ def display_logo_preview(logo_data: dict[str, Any], max_width: int = 150):
 
 def render_logo_upload_section():
     """Rendert den Bereich für Logo-Upload"""
-    st.subheader("📤 Neues Logo hochladen")
+    st.subheader(" Neues Logo hochladen")
 
     col1, col2 = st.columns([2, 1])
 
@@ -144,14 +144,14 @@ def render_logo_upload_section():
         if brands_from_db:
             # Dropdown mit existierenden Herstellern plus "Neu eingeben" Option
             brand_options = ["-- Hersteller auswählen --"] + \
-                brands_from_db + ["🆕 Neuen Hersteller eingeben"]
+                brands_from_db + [" Neuen Hersteller eingeben"]
             selected_brand_option = st.selectbox(
                 "Hersteller auswählen:",
                 brand_options,
                 key="logo_brand_select"
             )
 
-            if selected_brand_option == "🆕 Neuen Hersteller eingeben":
+            if selected_brand_option == " Neuen Hersteller eingeben":
                 brand_name = st.text_input(
                     "Neuer Hersteller-Name:",
                     key="logo_brand_new",
@@ -197,14 +197,14 @@ def render_logo_upload_section():
 
                 # Datei-Info
                 st.caption(f"{uploaded_file.name}")
-                st.caption(f"📏 {uploaded_file.size / 1024:.1f} KB")
+                st.caption(f" {uploaded_file.size / 1024:.1f} KB")
 
             except Exception as e:
                 st.error(f"Vorschau-Fehler: {e}")
 
     # Upload-Button
     if st.button(
-            "💾 Logo speichern",
+            " Logo speichern",
             type="primary",
             disabled=not (
             brand_name and uploaded_file)):
@@ -236,7 +236,7 @@ def render_logo_upload_section():
 
 def render_logo_management_section():
     """Rendert den Bereich für Logo-Verwaltung"""
-    st.subheader("🗂️ Vorhandene Logos verwalten")
+    st.subheader(" Vorhandene Logos verwalten")
 
     if not LOGO_DB_AVAILABLE:
         st.error("Logo-Datenbank nicht verfügbar!")
@@ -246,7 +246,7 @@ def render_logo_management_section():
     logos = list_all_brand_logos()
 
     if not logos:
-        st.info("📭 Noch keine Logos vorhanden. Laden Sie das erste Logo hoch!")
+        st.info(" Noch keine Logos vorhanden. Laden Sie das erste Logo hoch!")
         return
 
     # Logos in Tabelle anzeigen
@@ -303,7 +303,7 @@ def render_logo_management_section():
 
                     with col_edit:
                         if st.button(
-                            "✏️ Bearbeiten",
+                            " Bearbeiten",
                                 key=f"edit_logo_{logo_id}"):
                             st.session_state[f'edit_mode_{logo_id}'] = True
 
@@ -331,7 +331,7 @@ def render_logo_management_section():
 
 def render_logo_edit_section(logo_id: int, logo_data: dict[str, Any]):
     """Rendert den Bearbeitungsmodus für ein Logo"""
-    st.subheader(f"✏️ Logo bearbeiten: {logo_data['brand_name']}")
+    st.subheader(f" Logo bearbeiten: {logo_data['brand_name']}")
 
     # Neuen Namen eingeben
     new_brand_name = st.text_input(
@@ -352,7 +352,7 @@ def render_logo_edit_section(logo_id: int, logo_data: dict[str, Any]):
 
     with col1:
         if st.button(
-            "💾 Änderungen speichern",
+            " Änderungen speichern",
             key=f"save_edit_{logo_id}",
                 type="primary"):
             # TODO: Implementierung der Bearbeitung
@@ -373,13 +373,13 @@ def render_logo_management_ui():
 
     # Erweiterte Tabs mit allen CRUD-Funktionen integriert
     tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
-        "📋 Übersicht",
-        "➕ Hinzufügen",
-        "✏️ Bearbeiten",
-        "Tools",
-        "📤 Upload (Legacy)",
-        "🗂️ Verwaltung",
-        "Statistiken"
+        " Übersicht",
+        " Hinzufügen",
+        " Bearbeiten",
+        " Tools",
+        " Upload (Legacy)",
+        " Verwaltung",
+        " Statistiken"
     ])
 
     with tab1:
@@ -407,7 +407,7 @@ def render_logo_management_ui():
 
 def render_logo_overview_section():
     """Rendert die Übersicht aller Logos"""
-    st.subheader("📋 Logo-Übersicht")
+    st.subheader(" Logo-Übersicht")
 
     if not LOGO_DB_AVAILABLE:
         st.error("Logo-Datenbank nicht verfügbar!")
@@ -437,9 +437,9 @@ def render_logo_overview_section():
                             st.image(
                                 logo_bytes, width=150, caption=brand['brand_name'])
                         except BaseException:
-                            st.write(f"🏷️ {brand['brand_name']}")
+                            st.write(f" {brand['brand_name']}")
                     else:
-                        st.write(f"🏷️ {brand['brand_name']}")
+                        st.write(f" {brand['brand_name']}")
 
                     st.write(f"**{brand['brand_name']}**")
                     if brand.get('category'):
@@ -451,7 +451,7 @@ def render_logo_overview_section():
                     col1, col2 = st.columns(2)
                     with col1:
                         if st.button(
-                                "✏️",
+                                "",
                                 key=f"edit_{
                                     brand['id']}",
                                 help="Bearbeiten"):
@@ -492,7 +492,7 @@ def render_logo_overview_section():
 
 def render_logo_add_section():
     """Rendert die Sektion zum Hinzufügen neuer Logos"""
-    st.subheader("➕ Neues Marken-Logo hinzufügen")
+    st.subheader(" Neues Marken-Logo hinzufügen")
 
     try:
         from admin_brand_logo_management_ui import BrandLogoAdmin
@@ -583,7 +583,7 @@ def render_logo_add_section():
 
 def render_logo_edit_section():
     """Rendert die Sektion zum Bearbeiten von Logos"""
-    st.subheader("✏️ Logos bearbeiten")
+    st.subheader(" Logos bearbeiten")
 
     try:
         from admin_brand_logo_management_ui import BrandLogoAdmin
@@ -679,7 +679,7 @@ def render_logo_edit_section():
 
                         with col_save:
                             save_submitted = st.form_submit_button(
-                                "� Speichern", type="primary")
+                                " Speichern", type="primary")
 
                         with col_delete:
                             delete_submitted = st.form_submit_button(
@@ -753,7 +753,7 @@ def render_logo_tools_section():
                     json_str = json.dumps(
                         export_data, indent=2, ensure_ascii=False)
                     st.download_button(
-                        label="📥 JSON herunterladen",
+                        label=" JSON herunterladen",
                         data=json_str,
                         file_name=f"logo_export_{
                             datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
@@ -761,12 +761,12 @@ def render_logo_tools_section():
                 else:
                     st.info("Keine Logos zum Exportieren vorhanden.")
 
-            if st.button("🗃️ Datenbank-Backup erstellen"):
+            if st.button(" Datenbank-Backup erstellen"):
                 st.info(
                     "Backup-Funktionalität wird in der nächsten Version verfügbar sein.")
 
         with col2:
-            st.markdown("### 🧹 Bereinigung")
+            st.markdown("###  Bereinigung")
 
             if st.button("Doppelte Logos suchen"):
                 brands = admin.get_all_brands()
@@ -794,12 +794,12 @@ def render_logo_tools_section():
                 else:
                     st.success("Keine Duplikate gefunden!")
 
-            if st.button("📏 Logo-Größen optimieren"):
+            if st.button(" Logo-Größen optimieren"):
                 st.info(
                     "Optimierungs-Tool wird in der nächsten Version verfügbar sein.")
 
         # Bulk-Operationen
-        st.markdown("### 🔄 Bulk-Operationen")
+        st.markdown("###  Bulk-Operationen")
 
         brands = admin.get_all_brands()
         if brands:
@@ -824,7 +824,7 @@ def render_logo_tools_section():
                         "Land setzen (leer = nicht ändern)")
 
                 with col_bulk3:
-                    if st.button("🔄 Bulk-Update ausführen"):
+                    if st.button(" Bulk-Update ausführen"):
                         success_count = 0
 
                         for brand_name in selected_brands:
@@ -849,7 +849,7 @@ def render_logo_tools_section():
                             st.rerun()
 
         # Import-Tools
-        st.markdown("### 📥 Import")
+        st.markdown("###  Import")
 
         uploaded_import = st.file_uploader(
             "Logos aus JSON importieren",
@@ -866,7 +866,7 @@ def render_logo_tools_section():
                 if 'brands' in import_data:
                     brands_to_import = import_data['brands']
                     st.info(
-                        f"📋 {
+                        f" {
                             len(brands_to_import)} Logos zum Import gefunden")
 
                     if st.button("Import starten"):

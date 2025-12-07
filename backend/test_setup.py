@@ -17,33 +17,33 @@ def test_imports():
     
     try:
         from backend.core.config import settings
-        print("✓ Config imported successfully")
+        print(" Config imported successfully")
         print(f"  - App Name: {settings.APP_NAME}")
         print(f"  - Host: {settings.HOST}")
         print(f"  - Port: {settings.PORT}")
     except Exception as e:
-        print(f"✗ Failed to import config: {e}")
+        print(f" Failed to import config: {e}")
         return False
     
     try:
         from backend.core.database import engine, Base, get_db
-        print("✓ Database module imported successfully")
+        print(" Database module imported successfully")
     except Exception as e:
-        print(f"✗ Failed to import database: {e}")
+        print(f" Failed to import database: {e}")
         return False
     
     try:
         from backend.middleware.error_handler import APIError, setup_error_handlers
-        print("✓ Middleware imported successfully")
+        print(" Middleware imported successfully")
     except Exception as e:
-        print(f"✗ Failed to import middleware: {e}")
+        print(f" Failed to import middleware: {e}")
         return False
     
     try:
         from backend.main import app
-        print("✓ Main app imported successfully")
+        print(" Main app imported successfully")
     except Exception as e:
-        print(f"✗ Failed to import main app: {e}")
+        print(f" Failed to import main app: {e}")
         return False
     
     return True
@@ -61,14 +61,14 @@ def test_health_endpoint():
         response = client.get("/health")
         
         if response.status_code == 200:
-            print("✓ Health endpoint working")
+            print(" Health endpoint working")
             print(f"  Response: {response.json()}")
             return True
         else:
-            print(f"✗ Health endpoint returned status {response.status_code}")
+            print(f" Health endpoint returned status {response.status_code}")
             return False
     except Exception as e:
-        print(f"✗ Failed to test health endpoint: {e}")
+        print(f" Failed to test health endpoint: {e}")
         return False
 
 
@@ -90,13 +90,13 @@ def main():
     
     print("\n" + "=" * 60)
     if all_passed:
-        print("✓ All tests passed! Backend setup is working correctly.")
+        print(" All tests passed! Backend setup is working correctly.")
         print("\nYou can now start the server with:")
         print("  python backend/main.py")
         print("\nOr with uvicorn:")
         print("  uvicorn backend.main:app --reload")
     else:
-        print("✗ Some tests failed. Please check the errors above.")
+        print(" Some tests failed. Please check the errors above.")
     print("=" * 60)
     
     return 0 if all_passed else 1

@@ -196,7 +196,7 @@ def demonstrate_session_state_integration():
 def demonstrate_real_time_updates():
     """Demonstrate real-time pricing updates"""
 
-    print("\n🔄 Real-time Pricing Updates Demo")
+    print("\n Real-time Pricing Updates Demo")
     print("=" * 40)
 
     # Simulate component selection changes
@@ -246,7 +246,7 @@ if __name__ == "__main__":
         demonstrate_session_state_integration()
         demonstrate_real_time_updates()
 
-        print("\n🎉 All demonstrations completed successfully!")
+        print("\n All demonstrations completed successfully!")
         print(
             "\nThe enhanced pricing system is now integrated with Streamlit session state")
         print("and provides real-time pricing updates with intelligent caching.")

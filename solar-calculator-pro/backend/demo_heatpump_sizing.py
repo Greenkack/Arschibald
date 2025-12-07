@@ -28,7 +28,7 @@ def demo_complete_sizing_workflow():
     # Initialize service
     service = HeatPumpSizingService()
     service.initialize()
-    print("✓ Service initialized\n")
+    print(" Service initialized\n")
     
     # Building parameters
     building_area_m2 = 150.0
@@ -140,7 +140,7 @@ def demo_complete_sizing_workflow():
     )
     
     if backup.backup_required:
-        print(f"✓ Backup Heating Required")
+        print(f" Backup Heating Required")
         print(f"  Type: {backup.backup_type}")
         print(f"  Capacity: {backup.backup_capacity_kw:.2f} kW")
         print(f"  Activation Temperature: {backup.backup_activation_temp_c}°C")
@@ -149,7 +149,7 @@ def demo_complete_sizing_workflow():
         print(f"  Annual Backup Cost: {backup.backup_cost_eur_year:.2f} EUR")
         print(f"  Backup Percentage: {backup.backup_percentage:.1f}% of total heating")
     else:
-        print("✓ No Backup Heating Required (Monovalent Operation)")
+        print(" No Backup Heating Required (Monovalent Operation)")
     print()
     
     # Step 5: Sizing Warnings
@@ -174,7 +174,7 @@ def demo_complete_sizing_workflow():
     if warnings_optimal.warnings:
         print("\n  Warnings:")
         for warning in warnings_optimal.warnings:
-            print(f"    ⚠ {warning}")
+            print(f"     {warning}")
     
     if warnings_optimal.recommendations:
         print("\n  Recommendations:")
@@ -193,7 +193,7 @@ def demo_complete_sizing_workflow():
     print(f"  Efficiency Impact: {warnings_over.efficiency_impact_percent:.1f}%")
     if warnings_over.warnings:
         for warning in warnings_over.warnings[:2]:  # Show first 2 warnings
-            print(f"    ⚠ {warning}")
+            print(f"     {warning}")
     
     # Test with undersized unit
     print(f"\nUndersized Example (5 kW):")
@@ -207,7 +207,7 @@ def demo_complete_sizing_workflow():
     print(f"  Efficiency Impact: {warnings_under.efficiency_impact_percent:.1f}%")
     if warnings_under.warnings:
         for warning in warnings_under.warnings[:2]:  # Show first 2 warnings
-            print(f"    ⚠ {warning}")
+            print(f"     {warning}")
     print()
     
     # Step 6: Seasonal Performance Prediction
@@ -320,4 +320,4 @@ if __name__ == "__main__":
     # Run comparison demo
     demo_comparison_scenarios()
     
-    print("\n✓ Demo completed successfully!")
+    print("\n Demo completed successfully!")

@@ -148,17 +148,17 @@ async def demo_basic_batch():
         options={"price_increase_percentage": 7.0}
     )
     
-    print(f"\n📋 Request:")
+    print(f"\n Request:")
     print(f"   Companies: {request.company_ids}")
     print(f"   Base Price: {request.analysis_data['base_price']:,.2f} €")
     print(f"   Price Increase: {request.options['price_increase_percentage']}%")
     
     # Generate batch
-    print(f"\n🚀 Starting batch generation...")
+    print(f"\n Starting batch generation...")
     result = await service.generate_batch(request)
     
     # Display results
-    print(f"\n✅ Batch Generation Complete!")
+    print(f"\n Batch Generation Complete!")
     print(f"   Batch ID: {result.batch_id}")
     print(f"   Total Companies: {result.total_companies}")
     print(f"   Successful: {result.successful}")
@@ -166,9 +166,9 @@ async def demo_basic_batch():
     print(f"   Total Time: {result.total_time:.2f}s")
     print(f"   ZIP Size: {result.zip_size:,} bytes")
     
-    print(f"\n📄 Individual Results:")
+    print(f"\n Individual Results:")
     for i, company_result in enumerate(result.results, 1):
-        status = "✅" if company_result.success else "❌"
+        status = "" if company_result.success else ""
         print(f"   {status} {company_result.company_name}")
         if company_result.success:
             print(f"      File: {Path(company_result.pdf_path).name}")
@@ -210,21 +210,21 @@ async def demo_large_batch():
         options={"price_increase_percentage": 7.0}
     )
     
-    print(f"\n📋 Request:")
+    print(f"\n Request:")
     print(f"   Companies: {len(request.company_ids)}")
     print(f"   Base Price: {request.analysis_data['base_price']:,.2f} €")
     
     # Generate batch
-    print(f"\n🚀 Starting batch generation...")
+    print(f"\n Starting batch generation...")
     result = await service.generate_batch(request)
     
     # Display results
-    print(f"\n✅ Batch Generation Complete!")
+    print(f"\n Batch Generation Complete!")
     print(f"   Total Time: {result.total_time:.2f}s")
     print(f"   Average Time per PDF: {result.total_time / result.total_companies:.2f}s")
     print(f"   ZIP Size: {result.zip_size:,} bytes")
     
-    print(f"\n📊 Price Progression (7% increase per offer):")
+    print(f"\n Price Progression (7% increase per offer):")
     for i, company_result in enumerate(result.results, 1):
         if company_result.success:
             print(f"   Offer {i}: {company_result.company_name}")
@@ -252,7 +252,7 @@ async def demo_progress_tracking():
         template_type="standard_pv"
     )
     
-    print(f"\n📋 Generating PDFs for {len(request.company_ids)} companies...")
+    print(f"\n Generating PDFs for {len(request.company_ids)} companies...")
     
     # Start generation in background
     task = asyncio.create_task(service.generate_batch(request))
@@ -277,7 +277,7 @@ async def demo_progress_tracking():
     # Get result
     result = await task
     
-    print(f"\n✅ Complete!")
+    print(f"\n Complete!")
     print(f"   Total Time: {result.total_time:.2f}s")
 
 
@@ -310,7 +310,7 @@ async def demo_product_rotation():
         template_type="standard_pv"
     )
     
-    print(f"\n📋 Original Products:")
+    print(f"\n Original Products:")
     print(f"   PV Module: {request.analysis_data['products']['pv_module']}")
     print(f"   Inverter: {request.analysis_data['products']['inverter']}")
     print(f"   Battery: {request.analysis_data['products']['battery']}")
@@ -318,7 +318,7 @@ async def demo_product_rotation():
     # Generate batch
     result = await service.generate_batch(request)
     
-    print(f"\n🔄 Rotated Products per Offer:")
+    print(f"\n Rotated Products per Offer:")
     rotation_service = MockProductRotationService()
     for i in range(4):
         rotated = rotation_service.rotate_products(request.analysis_data["products"], i)
@@ -337,12 +337,12 @@ async def demo_price_increase():
     base_price = 16999.00
     increase_percentage = 7.0
     
-    print(f"\n💰 Base Price: {base_price:,.2f} €")
-    print(f"📈 Increase: {increase_percentage}% per offer")
+    print(f"\n Base Price: {base_price:,.2f} €")
+    print(f" Increase: {increase_percentage}% per offer")
     
     price_service = MockPriceIncreaseService()
     
-    print(f"\n💵 Price Progression:")
+    print(f"\n Price Progression:")
     for i in range(5):
         price = price_service.apply_increase(base_price, i, increase_percentage)
         increase = price - base_price
@@ -372,11 +372,11 @@ async def main():
         await demo_price_increase()
         
         print("\n" + "="*80)
-        print("ALL DEMOS COMPLETED SUCCESSFULLY! ✅")
+        print("ALL DEMOS COMPLETED SUCCESSFULLY! ")
         print("="*80)
         
     except Exception as e:
-        print(f"\n❌ Error: {str(e)}")
+        print(f"\n Error: {str(e)}")
         import traceback
         traceback.print_exc()
 

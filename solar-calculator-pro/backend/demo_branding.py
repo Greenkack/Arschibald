@@ -59,7 +59,7 @@ def demo_basic_branding(db_session):
     )
     
     branding = service.create_branding(branding_data)
-    print(f"✅ Created branding ID: {branding.id}")
+    print(f" Created branding ID: {branding.id}")
     print(f"   Company ID: {branding.company_id}")
     print(f"   Primary Color: {branding.primary_color}")
     print(f"   Font: {branding.font_family}")
@@ -89,7 +89,7 @@ def demo_logo_positions(db_session, branding_id):
         scale=1.0
     )
     pos1 = service.add_logo_position(branding_id, header_position)
-    print(f"✅ Added header logo position ID: {pos1.id}")
+    print(f" Added header logo position ID: {pos1.id}")
     print(f"   Position: ({pos1.x}, {pos1.y})")
     print(f"   Size: {pos1.width}x{pos1.height}")
     
@@ -106,7 +106,7 @@ def demo_logo_positions(db_session, branding_id):
         scale=1.0
     )
     pos2 = service.add_logo_position(branding_id, footer_position)
-    print(f"✅ Added footer logo position ID: {pos2.id}")
+    print(f" Added footer logo position ID: {pos2.id}")
     print(f"   Position: ({pos2.x}, {pos2.y})")
     print(f"   Opacity: {pos2.opacity}")
     
@@ -123,7 +123,7 @@ def demo_logo_positions(db_session, branding_id):
         scale=1.5
     )
     pos3 = service.add_logo_position(branding_id, watermark_position)
-    print(f"✅ Added watermark logo position ID: {pos3.id}")
+    print(f" Added watermark logo position ID: {pos3.id}")
     print(f"   Rotation: {pos3.rotation}°")
     print(f"   Scale: {pos3.scale}x")
 
@@ -147,7 +147,7 @@ def demo_color_scheme(db_session, branding_id):
         "footer": service.get_color(branding_id, "footer")
     }
     
-    print("✅ Color Scheme:")
+    print(" Color Scheme:")
     for name, color in colors.items():
         print(f"   {name.capitalize()}: {color}")
 
@@ -171,7 +171,7 @@ def demo_watermark(db_session, branding_id):
     )
     
     branding = service.update_branding(branding_id, update_data)
-    print(f"✅ Watermark enabled")
+    print(f" Watermark enabled")
     print(f"   Text: {branding.watermark_text}")
     print(f"   Opacity: {branding.watermark_opacity}")
     print(f"   Rotation: {branding.watermark_rotation}°")
@@ -210,14 +210,14 @@ def demo_template_system(db_session):
     )
     
     template = service.create_template(template_data)
-    print(f"✅ Created template ID: {template.id}")
+    print(f" Created template ID: {template.id}")
     print(f"   Name: {template.name}")
     print(f"   Description: {template.description}")
     print(f"   Public: {template.is_public}")
     
     # List templates
     templates = service.list_templates(public_only=True)
-    print(f"\n✅ Available templates: {len(templates)}")
+    print(f"\n Available templates: {len(templates)}")
     for t in templates:
         print(f"   - {t.name}")
     
@@ -247,19 +247,19 @@ def demo_pdf_generation(db_session, branding_id):
         
         # Apply header
         service.apply_header(pdf_canvas, branding_id, page_num)
-        print(f"   ✓ Applied header")
+        print(f"    Applied header")
         
         # Apply footer
         service.apply_footer(pdf_canvas, branding_id, page_num, total_pages)
-        print(f"   ✓ Applied footer")
+        print(f"    Applied footer")
         
         # Apply watermark
         service.apply_watermark(pdf_canvas, branding_id)
-        print(f"   ✓ Applied watermark")
+        print(f"    Applied watermark")
         
         # Apply logo positioning
         service.apply_logo_positioning(pdf_canvas, branding_id, page_num, "header")
-        print(f"   ✓ Applied logo positioning")
+        print(f"    Applied logo positioning")
         
         # Add page content
         service.apply_font_settings(pdf_canvas, branding_id, "heading")
@@ -275,7 +275,7 @@ def demo_pdf_generation(db_session, branding_id):
     
     # Save PDF
     pdf_canvas.save()
-    print(f"\n✅ PDF generated: {output_file}")
+    print(f"\n PDF generated: {output_file}")
     print(f"   Pages: {total_pages}")
     print(f"   Size: {Path(output_file).stat().st_size / 1024:.2f} KB")
 
@@ -325,7 +325,7 @@ def demo_multi_company(db_session):
         
         branding = service.create_branding(branding_data)
         branding_ids.append(branding.id)
-        print(f"✅ Created branding for {company['name']}")
+        print(f" Created branding for {company['name']}")
         print(f"   ID: {branding.id}, Color: {company['color']}")
     
     # Generate PDF for each company
@@ -346,9 +346,9 @@ def demo_multi_company(db_session):
         pdf_canvas.drawString(100, 600, f"Firmen-spezifisches Branding mit Farbe {company['color']}")
         
         pdf_canvas.save()
-        print(f"   ✓ Generated PDF: {output_file}")
+        print(f"    Generated PDF: {output_file}")
     
-    print(f"\n✅ Generated {len(companies)} company-specific PDFs")
+    print(f"\n Generated {len(companies)} company-specific PDFs")
 
 
 def demo_yml_coordinates(db_session, branding_id):
@@ -364,7 +364,7 @@ def demo_yml_coordinates(db_session, branding_id):
         coordinates = service.load_yml_coordinates(branding_id, page_number=1)
         
         if coordinates:
-            print(f"✅ Loaded YML coordinates for page 1")
+            print(f" Loaded YML coordinates for page 1")
             print(f"   Keys: {list(coordinates.keys())}")
             
             # Show some coordinates
@@ -373,10 +373,10 @@ def demo_yml_coordinates(db_session, branding_id):
                 if isinstance(coord, dict):
                     print(f"   {key}: x={coord.get('x')}, y={coord.get('y')}")
         else:
-            print("ℹ️  No YML coordinates found (file may not exist)")
+            print("ℹ  No YML coordinates found (file may not exist)")
             print("   This is normal if coords/seite1.yml doesn't exist yet")
     except Exception as e:
-        print(f"ℹ️  Could not load YML coordinates: {e}")
+        print(f"ℹ  Could not load YML coordinates: {e}")
         print("   This is expected if the coords/ folder doesn't exist yet")
 
 
@@ -412,7 +412,7 @@ def main():
         demo_yml_coordinates(db_session, branding_id)
         
         print("\n" + "="*60)
-        print("✅ ALL DEMOS COMPLETED SUCCESSFULLY!")
+        print(" ALL DEMOS COMPLETED SUCCESSFULLY!")
         print("="*60)
         print("\nGenerated files:")
         print("  - demo_branding_output.pdf (3 pages with full branding)")
@@ -428,7 +428,7 @@ def main():
         print("  4. Read PDF_BRANDING_GUIDE.md for detailed documentation")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
     finally:

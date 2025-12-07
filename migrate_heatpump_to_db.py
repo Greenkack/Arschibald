@@ -76,7 +76,7 @@ class HeatpumpDatabaseMigrator:
         
         conn.commit()
         conn.close()
-        print("✅ Wärmepumpen-Tabellen erstellt mit Performance-Indizes")
+        print(" Wärmepumpen-Tabellen erstellt mit Performance-Indizes")
     
     def migrate_from_python_dict(self, heatpump_data: dict, clear_existing: bool = False):
         """
@@ -94,7 +94,7 @@ class HeatpumpDatabaseMigrator:
             cursor.execute("DELETE FROM heatpump_heating_powers")
             cursor.execute("DELETE FROM heatpump_features")
             cursor.execute("DELETE FROM heatpump_awards")
-            print("🗑️ Existierende Wärmepumpen-Daten gelöscht")
+            print(" Existierende Wärmepumpen-Daten gelöscht")
         
         total_models = 0
         
@@ -153,14 +153,14 @@ class HeatpumpDatabaseMigrator:
                         # Commit alle 100 Modelle
                         if total_models % 100 == 0:
                             conn.commit()
-                            print(f"📊 {total_models} Modelle migriert...")
+                            print(f" {total_models} Modelle migriert...")
             
             conn.commit()
-            print(f"✅ Migration abgeschlossen: {total_models} Wärmepumpen-Modelle importiert")
+            print(f" Migration abgeschlossen: {total_models} Wärmepumpen-Modelle importiert")
             
         except Exception as e:
             conn.rollback()
-            print(f"❌ Fehler bei Migration: {e}")
+            print(f" Fehler bei Migration: {e}")
             raise
         finally:
             conn.close()
@@ -419,7 +419,7 @@ def migrate_heatpump_products_to_db():
     Haupt-Migrations-Funktion
     Lädt heatpump_products_database.py und migriert in SQLite
     """
-    print("🚀 Starte Wärmepumpen-Migration...")
+    print(" Starte Wärmepumpen-Migration...")
     
     try:
         # Import der riesigen Python-Datei (nur einmal!)
@@ -435,7 +435,7 @@ def migrate_heatpump_products_to_db():
         
         # Statistiken anzeigen
         stats = migrator.export_statistics()
-        print("\n📊 Migrations-Statistiken:")
+        print("\n Migrations-Statistiken:")
         print(f"   Gesamt Modelle: {stats['total_models']}")
         print(f"   Durchschn. SCOP: {stats['avg_scop']}")
         print(f"   Durchschn. Rating: {stats['avg_rating']}")
@@ -443,17 +443,17 @@ def migrate_heatpump_products_to_db():
         for manufacturer, count in stats['by_manufacturer'].items():
             print(f"      {manufacturer}: {count} Modelle")
         
-        print("\n✅ Migration erfolgreich abgeschlossen!")
-        print("💡 Die Datei 'heatpump_products_database.py' kann nun archiviert werden.")
+        print("\n Migration erfolgreich abgeschlossen!")
+        print(" Die Datei 'heatpump_products_database.py' kann nun archiviert werden.")
         
         return True
         
     except ImportError:
-        print("❌ Fehler: heatpump_products_database.py nicht gefunden!")
+        print(" Fehler: heatpump_products_database.py nicht gefunden!")
         print("   Stelle sicher, dass die Datei im gleichen Verzeichnis liegt.")
         return False
     except Exception as e:
-        print(f"❌ Fehler bei Migration: {e}")
+        print(f" Fehler bei Migration: {e}")
         import traceback
         traceback.print_exc()
         return False

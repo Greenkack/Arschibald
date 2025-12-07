@@ -44,7 +44,7 @@ def main():
     - **shadow_fading** - Schatten-Fading (Boolean)
     - **smart_home** - Smart Home Integration (Boolean)
 
-    ### 🔑 **2. Dynamische Keys für PDF-Integration**
+    ###  **2. Dynamische Keys für PDF-Integration**
 
     **a) PV-Module Keys:**
     - id, category, model_name, brand, price_euro, calculate_per
@@ -79,7 +79,7 @@ def main():
 
     with col1:
         if st.button(
-            "📋 Produktverwaltung öffnen",
+            " Produktverwaltung öffnen",
             type="primary",
                 use_container_width=True):
             st.info(
@@ -93,7 +93,7 @@ def main():
 
     with col2:
         if st.button(
-            "🧪 Tests ausführen",
+            " Tests ausführen",
             type="secondary",
                 use_container_width=True):
             st.info("Tests für die erweiterte Produktdatenbank...")
@@ -105,7 +105,7 @@ def main():
             """)
 
     with col3:
-        if st.button("📖 Dokumentation", use_container_width=True):
+        if st.button(" Dokumentation", use_container_width=True):
             show_documentation()
 
 
@@ -113,7 +113,7 @@ def show_documentation():
     """Zeigt die ausführliche Dokumentation"""
 
     st.markdown("---")
-    st.header("📖 Ausführliche Dokumentation")
+    st.header(" Ausführliche Dokumentation")
 
     # Implementierungsdetails
     with st.expander("Implementierungsdetails", expanded=True):
@@ -202,7 +202,7 @@ def show_documentation():
         """)
 
     # API-Referenz
-    with st.expander("📚 API-Referenz"):
+    with st.expander(" API-Referenz"):
         st.markdown("""
         ### Neue Funktionen
 
@@ -237,13 +237,13 @@ def show_documentation():
         """)
 
     # Kategorie-spezifische Felder
-    with st.expander("🏷️ Kategorie-spezifische Felder"):
+    with st.expander(" Kategorie-spezifische Felder"):
 
         col1, col2, col3 = st.columns(3)
 
         with col1:
             st.markdown("""
-            ### 🔋 PV-Module
+            ###  PV-Module
             **Spezifische Felder:**
             - `capacity_w` - Leistung in Watt
             - `efficiency_percent` - Wirkungsgrad
@@ -279,7 +279,7 @@ def show_documentation():
 
         with col3:
             st.markdown("""
-            ### 🔋 Batteriespeicher
+            ###  Batteriespeicher
             **Spezifische Felder:**
             - `storage_power_kw` - Speicherleistung in kW
             - `max_kwh_capacity` - Max. Kapazität in kWh
@@ -294,7 +294,7 @@ def show_documentation():
             """)
 
     # Sicherheitshinweise
-    with st.expander("🔒 Sicherheitshinweise"):
+    with st.expander(" Sicherheitshinweise"):
         st.markdown("""
         ### Produktdatenbank-Reset
 

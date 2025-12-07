@@ -86,7 +86,7 @@ def demonstrate_storage_resolution():
     ]
 
     for storage_id, include_storage, description in test_scenarios:
-        print(f"\n📋 Scenario: {description}")
+        print(f"\n Scenario: {description}")
         print(
             f"   Input: storage_id='{storage_id}', include_storage={include_storage}")
 
@@ -147,7 +147,7 @@ def demonstrate_storage_resolution():
         print(f"   '{test_name}' → '{result}' ({match_type})")
 
     # Test caching
-    print("\n💾 Testing caching functionality:")
+    print("\n Testing caching functionality:")
     print("-" * 40)
 
     # Clear cache and show stats
@@ -172,7 +172,7 @@ def demonstrate_storage_resolution():
 
 def demonstrate_integration_with_price_matrix():
     """Show how StorageModelResolver integrates with price matrix lookups."""
-    print("\n🔗 Integration with Price Matrix:")
+    print("\n Integration with Price Matrix:")
     print("-" * 40)
 
     # Simulate a price matrix lookup workflow

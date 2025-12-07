@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\shapeannotation.py
+# hypothesis_version: 6.147.0
+
+['annotation_', 'annotation_position', 'bottom', 'center', 'hline', 'hrect', 'inside', 'left', 'line', 'middle', 'outside', 'rect', 'right', 'top', 'top right', 'vline', 'vrect', 'x0', 'x1', 'y0', 'y1']

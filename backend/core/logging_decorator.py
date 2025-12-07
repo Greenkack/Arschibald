@@ -211,7 +211,7 @@ def log_entry_exit(
                 logger.log(log_level, f"← Exiting {full_name}")
                 return result
             except Exception as e:
-                logger.log(log_level, f"✗ Exiting {full_name} with exception: {type(e).__name__}")
+                logger.log(log_level, f" Exiting {full_name} with exception: {type(e).__name__}")
                 raise
         
         return wrapper

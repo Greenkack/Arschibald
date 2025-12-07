@@ -49,7 +49,7 @@ def demo_all_formats():
     print("Supported Formats:")
     print("-" * 80)
     for format_name, supported in service.supported_formats.items():
-        status = "✓" if supported else "✗"
+        status = "" if supported else ""
         print(f"  {status} {format_name.upper()}")
     print()
     
@@ -86,11 +86,11 @@ def demo_all_formats():
                 f.write(file_bytes)
             
             file_size_kb = len(file_bytes) / 1024
-            print(f"  ✓ Exported: {output_file} ({file_size_kb:.1f} KB)")
+            print(f"   Exported: {output_file} ({file_size_kb:.1f} KB)")
             print()
             
         except Exception as e:
-            print(f"  ✗ Error: {e}")
+            print(f"   Error: {e}")
             print()
     
     print("=" * 80)
@@ -126,7 +126,7 @@ def demo_stl_export():
     with open("model_for_printing.stl", 'wb') as f:
         f.write(stl_bytes)
     
-    print(f"✓ STL exported: model_for_printing.stl ({len(stl_bytes) / 1024:.1f} KB)")
+    print(f" STL exported: model_for_printing.stl ({len(stl_bytes) / 1024:.1f} KB)")
     print("  Ready for 3D printing!")
 
 
@@ -158,7 +158,7 @@ def demo_dxf_export():
     with open("model_for_cad.dxf", 'wb') as f:
         f.write(dxf_bytes)
     
-    print(f"✓ DXF exported: model_for_cad.dxf ({len(dxf_bytes) / 1024:.1f} KB)")
+    print(f" DXF exported: model_for_cad.dxf ({len(dxf_bytes) / 1024:.1f} KB)")
     print("  Layers: Building_Base, Walls, Roof, PV_Modules")
     print("  Ready for AutoCAD import!")
 
@@ -192,7 +192,7 @@ def demo_web_export():
     with open("model_for_web.glb", 'wb') as f:
         f.write(glb_bytes)
     
-    print(f"✓ GLB exported: model_for_web.glb ({len(glb_bytes) / 1024:.1f} KB)")
+    print(f" GLB exported: model_for_web.glb ({len(glb_bytes) / 1024:.1f} KB)")
     print("  Ready for web 3D viewers, AR, and VR!")
 
 
@@ -225,7 +225,7 @@ def demo_image_export():
     with open("model_highres.png", 'wb') as f:
         f.write(png_bytes)
     
-    print(f"✓ PNG exported: model_highres.png ({len(png_bytes) / 1024:.1f} KB)")
+    print(f" PNG exported: model_highres.png ({len(png_bytes) / 1024:.1f} KB)")
     
     # Export JPG (compressed)
     print("Exporting compressed JPG...")
@@ -241,7 +241,7 @@ def demo_image_export():
     with open("model_compressed.jpg", 'wb') as f:
         f.write(jpg_bytes)
     
-    print(f"✓ JPG exported: model_compressed.jpg ({len(jpg_bytes) / 1024:.1f} KB)")
+    print(f" JPG exported: model_compressed.jpg ({len(jpg_bytes) / 1024:.1f} KB)")
     print("  Ready for presentations and documentation!")
 
 
@@ -273,7 +273,7 @@ def demo_pdf_export():
     with open("model_documentation.pdf", 'wb') as f:
         f.write(pdf_bytes)
     
-    print(f"✓ PDF exported: model_documentation.pdf ({len(pdf_bytes) / 1024:.1f} KB)")
+    print(f" PDF exported: model_documentation.pdf ({len(pdf_bytes) / 1024:.1f} KB)")
     print("  Includes project info, 3D preview, and embedded model data!")
 
 

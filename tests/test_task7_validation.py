@@ -38,7 +38,7 @@ def test_7_1_grid_positioning():
         all_passed = True
         
         # Test 1: 10m x 6m Dach, 20 Module (realistisch: ~14 passen)
-        print("\n📋 Test 1: 10m x 6m Dach, 20 Module gewünscht")
+        print("\n Test 1: 10m x 6m Dach, 20 Module gewünscht")
         print("-" * 70)
         print("   HINWEIS: Mit Randabständen (0.5m) und Spacing (0.25m) passen")
         print("   realistisch nur ~14 Module auf ein 10m x 6m Dach")
@@ -52,7 +52,7 @@ def test_7_1_grid_positioning():
             all_passed = False
         
         # Test 2: 20m x 12m Dach, 50 Module
-        print("\n📋 Test 2: 20m x 12m Dach, 50 Module")
+        print("\n Test 2: 20m x 12m Dach, 50 Module")
         print("-" * 70)
         positions_2 = calculate_grid_positions(20.0, 12.0, 50)
         
@@ -63,7 +63,7 @@ def test_7_1_grid_positioning():
             all_passed = False
         
         # Test 3: 10m x 6m Dach, 100 Module (zu viele)
-        print("\n📋 Test 3: 10m x 6m Dach, 100 Module (Überlauf-Test)")
+        print("\n Test 3: 10m x 6m Dach, 100 Module (Überlauf-Test)")
         print("-" * 70)
         positions_3 = calculate_grid_positions(10.0, 6.0, 100)
         
@@ -82,7 +82,7 @@ def test_7_1_grid_positioning():
             all_passed = False
         
         # Test 4: Zentrierung prüfen
-        print("\n📋 Test 4: Zentrierung des Grids")
+        print("\n Test 4: Zentrierung des Grids")
         print("-" * 70)
         
         if len(positions_1) > 0:
@@ -100,7 +100,7 @@ def test_7_1_grid_positioning():
                 all_passed = False
         
         # Test 5: Logging-Ausgaben validieren
-        print("\n📋 Test 5: Logging-Ausgaben")
+        print("\n Test 5: Logging-Ausgaben")
         print("-" * 70)
         print("PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
         
@@ -142,7 +142,7 @@ def test_7_2_mounting_height():
         all_passed = True
         
         # Test 1: Satteldach mit 30° Neigung
-        print("\n📋 Test 1: Satteldach mit 30° Neigung")
+        print("\n Test 1: Satteldach mit 30° Neigung")
         print("-" * 70)
         print("   HINWEIS: Mounting Height wird im Logging angezeigt")
         print("   (Rotation des Moduls führt zu komplexer Z-Verteilung)")
@@ -174,7 +174,7 @@ def test_7_2_mounting_height():
         all_vertices = [vertices_1]  # Sammle alle Vertices für Test 7
         
         for roof_name, tilt, test_num in test_cases:
-            print(f"\n📋 Test {test_num}: {roof_name} mit {tilt}° Neigung")
+            print(f"\n Test {test_num}: {roof_name} mit {tilt}° Neigung")
             print("-" * 70)
             module, vertices = create_pv_module_3d(
                 x=0, y=0, z=5.0,
@@ -194,7 +194,7 @@ def test_7_2_mounting_height():
                 all_passed = False
         
         # Test 6: Flachdach mit 0° Neigung
-        print("\n📋 Test 6: Flachdach mit 0° Neigung")
+        print("\n Test 6: Flachdach mit 0° Neigung")
         print("-" * 70)
         module_6, vertices_6 = create_pv_module_3d(
             x=0, y=0, z=5.0,
@@ -212,7 +212,7 @@ def test_7_2_mounting_height():
             print(f"INFO: Durchschnittliche Z-Erhöhung = {mounting_height_6:.3f}m")
         
         # Test 7: Module sinken NICHT in Dachfläche ein (prüfe Durchschnitt)
-        print("\n📋 Test 7: Module sind über der Dachfläche (Durchschnitts-Z)")
+        print("\n Test 7: Module sind über der Dachfläche (Durchschnitts-Z)")
         print("-" * 70)
         print("   HINWEIS: Durch Rotation können einzelne Vertices unter Z=5.0 liegen,")
         print("   aber der Durchschnitt sollte erhöht sein")
@@ -232,7 +232,7 @@ def test_7_2_mounting_height():
             print(f"PASS: Alle Module sind korrekt über der Dachfläche")
         
         # Test 8: Logging-Ausgaben validieren
-        print("\n📋 Test 8: Logging-Ausgaben")
+        print("\n Test 8: Logging-Ausgaben")
         print("-" * 70)
         print("PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
         
@@ -280,7 +280,7 @@ def test_7_3_optimization_assistant():
         roof_type = "Satteldach"
         
         # Test 1: Optimierung starten - Erwarte 3 Konfigurationen
-        print("\n📋 Test 1: Optimierung starten")
+        print("\n Test 1: Optimierung starten")
         print("-" * 70)
         
         configs_balanced = optimize_layout(dims, target_modules, roof_type, "balanced")
@@ -294,7 +294,7 @@ def test_7_3_optimization_assistant():
             all_passed = False
         
         # Test 2: goal="max_modules" - Erwarte höchsten Score für Garage+Fassade
-        print("\n📋 Test 2: Optimierung mit goal='max_modules'")
+        print("\n Test 2: Optimierung mit goal='max_modules'")
         print("-" * 70)
         
         configs_max = optimize_layout(dims, target_modules, roof_type, "max_modules")
@@ -313,7 +313,7 @@ def test_7_3_optimization_assistant():
                 print(f"INFO: Score-Verteilung kann variieren")
         
         # Test 3: goal="max_yield" - Erwarte höchsten Score für Süd-Aufständerung
-        print("\n📋 Test 3: Optimierung mit goal='max_yield'")
+        print("\n Test 3: Optimierung mit goal='max_yield'")
         print("-" * 70)
         
         configs_yield = optimize_layout(dims, target_modules, roof_type, "max_yield")
@@ -329,7 +329,7 @@ def test_7_3_optimization_assistant():
                 print(f"INFO: {best_config.mounting_mode} hat höchsten Score (erwartet: south)")
         
         # Test 4: goal="balanced" - Erwarte ausgewogene Scores
-        print("\n📋 Test 4: Optimierung mit goal='balanced'")
+        print("\n Test 4: Optimierung mit goal='balanced'")
         print("-" * 70)
         
         if len(configs_balanced) >= 3:
@@ -345,7 +345,7 @@ def test_7_3_optimization_assistant():
                 print(f"INFO: Score-Range ist {score_range:.1f} (erwartet < 40)")
         
         # Test 5: evaluate_config() Funktion
-        print("\n📋 Test 5: evaluate_config() Funktion")
+        print("\n Test 5: evaluate_config() Funktion")
         print("-" * 70)
         
         test_config = AdvancedLayoutConfig(
@@ -364,7 +364,7 @@ def test_7_3_optimization_assistant():
             all_passed = False
         
         # Test 6: Logging-Ausgaben validieren
-        print("\n📋 Test 6: Logging-Ausgaben")
+        print("\n Test 6: Logging-Ausgaben")
         print("-" * 70)
         print("PASS: Detaillierte Logging-Ausgaben wurden in den Tests oben angezeigt")
         
@@ -405,7 +405,7 @@ def test_7_4_pdf_screenshot_integration():
         all_passed = True
         
         # Test 1: Session State Simulation
-        print("\n📋 Test 1: Session State für Screenshot")
+        print("\n Test 1: Session State für Screenshot")
         print("-" * 70)
         
         # Simuliere Session State
@@ -423,7 +423,7 @@ def test_7_4_pdf_screenshot_integration():
             all_passed = False
         
         # Test 2: PDF-Integration Funktion existiert
-        print("\n📋 Test 2: PDF-Integration Funktion")
+        print("\n Test 2: PDF-Integration Funktion")
         print("-" * 70)
         
         try:
@@ -434,7 +434,7 @@ def test_7_4_pdf_screenshot_integration():
             # Nicht als Fehler werten, da Funktion möglicherweise anders heißt
         
         # Test 3: Bildgröße Berechnung (17cm Breite, 16:10 Verhältnis)
-        print("\n📋 Test 3: Bildgröße im PDF")
+        print("\n Test 3: Bildgröße im PDF")
         print("-" * 70)
         
         width_cm = 17.0
@@ -455,7 +455,7 @@ def test_7_4_pdf_screenshot_integration():
             all_passed = False
         
         # Test 4: Fehlerbehandlung bei fehlendem Screenshot
-        print("\n📋 Test 4: Fehlerbehandlung ohne Screenshot")
+        print("\n Test 4: Fehlerbehandlung ohne Screenshot")
         print("-" * 70)
         
         empty_session_state = {}
@@ -468,12 +468,12 @@ def test_7_4_pdf_screenshot_integration():
             all_passed = False
         
         # Test 5: Logging-Ausgaben
-        print("\n📋 Test 5: Logging-Ausgaben")
+        print("\n Test 5: Logging-Ausgaben")
         print("-" * 70)
         print("PASS: Logging-Ausgaben wurden validiert")
         
         # Hinweis für manuelle Tests
-        print("\n📋 Hinweis: Manuelle Tests erforderlich")
+        print("\n Hinweis: Manuelle Tests erforderlich")
         print("-" * 70)
         print("   Die folgenden Tests müssen manuell in der UI durchgeführt werden:")
         print("   • '3D-Screenshot erstellen' Button klicken")
@@ -520,7 +520,7 @@ def test_7_5_error_handling():
         all_passed = True
         
         # Test 1: Fehlende project_data - Erwarte Fallback-Werte
-        print("\n📋 Test 1: Fehlende project_data")
+        print("\n Test 1: Fehlende project_data")
         print("-" * 70)
         
         try:
@@ -545,7 +545,7 @@ def test_7_5_error_handling():
             # Nicht als Fehler werten, da Fallback möglicherweise anders implementiert
         
         # Test 2: Ungültige Dimensionen - Erwarte Fehlerbehandlung
-        print("\n📋 Test 2: Ungültige Dimensionen")
+        print("\n Test 2: Ungültige Dimensionen")
         print("-" * 70)
         print("   HINWEIS: Negative Dimensionen sollten erkannt und behandelt werden")
         
@@ -563,7 +563,7 @@ def test_7_5_error_handling():
             print(f"PASS: Exception bei ungültigen Dimensionen: {e}")
         
         # Test 3: Extreme Werte - Erwarte Clipping/Validierung
-        print("\n📋 Test 3: Extreme Werte")
+        print("\n Test 3: Extreme Werte")
         print("-" * 70)
         
         try:
@@ -580,7 +580,7 @@ def test_7_5_error_handling():
             print(f"INFO: Exception bei extremen Werten: {e}")
         
         # Test 4: Ungültige Parameter bei Modul-Erstellung
-        print("\n📋 Test 4: Ungültige Parameter bei Modul-Erstellung")
+        print("\n Test 4: Ungültige Parameter bei Modul-Erstellung")
         print("-" * 70)
         
         try:
@@ -600,12 +600,12 @@ def test_7_5_error_handling():
             print(f"INFO: Exception bei ungültigen Parametern: {e}")
         
         # Test 5: App stürzt nicht ab
-        print("\n📋 Test 5: App-Stabilität")
+        print("\n Test 5: App-Stabilität")
         print("-" * 70)
         print(f"PASS: Alle Tests liefen ohne Absturz - App ist stabil")
         
         # Test 6: Fehler-Logging
-        print("\n📋 Test 6: Fehler-Logging")
+        print("\n Test 6: Fehler-Logging")
         print("-" * 70)
         print(f"PASS: Fehler-Logging wurde in den Tests oben angezeigt")
         
@@ -673,7 +673,7 @@ def run_all_tests():
     print("="*70)
     
     if passed == total:
-        print("\n🎉 ALLE TESTS BESTANDEN! 🎉")
+        print("\n ALLE TESTS BESTANDEN! ")
         print("\nTask 7 'Testing und Validierung' ist vollständig abgeschlossen.")
         print("\nGetestete Funktionalität:")
         print("  Grid-Positionierung mit exakter Modulanzahl")

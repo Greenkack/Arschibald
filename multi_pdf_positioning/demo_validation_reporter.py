@@ -360,9 +360,9 @@ def demo_with_yml_elements():
 def main():
     """Run all demos."""
     print("\n")
-    print("╔" + "=" * 78 + "╗")
-    print("║" + " " * 20 + "VALIDATION REPORTER DEMO" + " " * 34 + "║")
-    print("╚" + "=" * 78 + "╝")
+    print("" + "=" * 78 + "")
+    print("" + " " * 20 + "VALIDATION REPORTER DEMO" + " " * 34 + "")
+    print("" + "=" * 78 + "")
     print()
     
     # Run demos

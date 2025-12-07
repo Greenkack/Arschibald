@@ -46,7 +46,7 @@ def display_error_message(
     
     # Wähle Streamlit-Komponente basierend auf Severity
     if error_info.severity == ErrorSeverity.CRITICAL:
-        container.error(error_info.user_message, icon="🚨")
+        container.error(error_info.user_message, icon="")
     elif error_info.severity == ErrorSeverity.ERROR:
         container.error(error_info.user_message, icon="")
     elif error_info.severity == ErrorSeverity.WARNING:
@@ -62,7 +62,7 @@ def display_error_message(
     
     # Hilfe-Button
     if show_help_button:
-        if container.button("❓ Detaillierte Hilfe anzeigen", key=f"help_{error_info.category.value}"):
+        if container.button(" Detaillierte Hilfe anzeigen", key=f"help_{error_info.category.value}"):
             show_error_help_dialog(error_info.category)
 
 
@@ -101,7 +101,7 @@ def display_error_with_fallback(
             f"**Automatischer Fallback aktiviert**\n\n"
             f"{fallback_result.get('message', 'Fallback wurde verwendet')}\n\n"
             f"Strategie: {fallback_result.get('strategy', 'unbekannt')}",
-            icon="🔄"
+            icon=""
         )
     
     # Zeige Hauptfehler
@@ -110,7 +110,7 @@ def display_error_with_fallback(
     # Admin-Benachrichtigung Hinweis
     if error_result.get('admin_notified'):
         container.info(
-            "📧 Der Administrator wurde über diesen Fehler benachrichtigt.",
+            " Der Administrator wurde über diesen Fehler benachrichtigt.",
             icon=""
         )
 
@@ -127,7 +127,7 @@ def show_error_help_dialog(category: ErrorCategory) -> None:
     help_text = get_error_help_text(category)
     
     # Verwende Modal-Dialog (Streamlit 1.23+)
-    with st.expander("📖 Detaillierte Hilfe", expanded=True):
+    with st.expander(" Detaillierte Hilfe", expanded=True):
         st.markdown(help_text)
         
         # Zusätzliche Aktionen basierend auf Fehlertyp
@@ -201,7 +201,7 @@ def display_validation_results(
         warnings = val_result.get('warnings', [])
         
         if errors:
-            with container.expander("🚨 Fehler", expanded=True):
+            with container.expander(" Fehler", expanded=True):
                 for error in errors:
                     st.markdown(f"• {error}")
         
@@ -217,13 +217,13 @@ def display_validation_results(
                 st.session_state['navigate_to'] = 'admin_matrix'
                 st.rerun()
         with col2:
-            if st.button("📖 Hilfe anzeigen", key="show_validation_help"):
+            if st.button(" Hilfe anzeigen", key="show_validation_help"):
                 show_validation_help()
 
 
 def show_validation_help() -> None:
     """Zeigt Hilfe für Matrix-Validierung"""
-    with st.expander("📖 Matrix-Validierung Hilfe", expanded=True):
+    with st.expander(" Matrix-Validierung Hilfe", expanded=True):
         st.markdown("""
 ### Matrix-Struktur Anforderungen
 
@@ -320,7 +320,7 @@ def display_price_lookup_error(
         container.info(
             "**Automatischer Fallback verfügbar**\n\n"
             "Das System kann automatisch einen alternativen Wert verwenden.",
-            icon="🔄"
+            icon=""
         )
         
         col1, col2 = container.columns(2)
@@ -360,9 +360,9 @@ def display_admin_notification_banner(
     
     # Zeige kritische Fehler
     if critical:
-        with container.expander(f"🚨 {len(critical)} Kritische Fehler", expanded=True):
+        with container.expander(f" {len(critical)} Kritische Fehler", expanded=True):
             for notif in critical:
-                st.error(notif.get('message', ''), icon="🚨")
+                st.error(notif.get('message', ''), icon="")
                 if notif.get('recommended_actions'):
                     st.write("**Empfohlene Aktionen:**")
                     for action in notif['recommended_actions']:

@@ -20,7 +20,7 @@ test_keys = [
     'cost_projection_chart_bytes'
 ]
 
-print("🧪 TEST: Chart-Verfügbarkeit")
+print(" TEST: Chart-Verfügbarkeit")
 print("=" * 60)
 
 results = []
@@ -38,6 +38,6 @@ print(
             available_count * 100 // len(results)}%)")
 
 if available_count == len(results):
-    print("\n🎉 PERFEKT! Alle getesteten Charts sind verfügbar!")
+    print("\n PERFEKT! Alle getesteten Charts sind verfügbar!")
 else:
     print(f"\n{len(results) - available_count} Charts noch nicht verfügbar")

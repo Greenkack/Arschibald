@@ -434,7 +434,7 @@ def main():
     print("=" * 70)
 
     if passed == total:
-        print("\n🎉 Alle Tests erfolgreich! Task 14 ist vollständig implementiert.")
+        print("\n Alle Tests erfolgreich! Task 14 ist vollständig implementiert.")
         return 0
     else:
         print(f"\n{total - passed} Test(s) fehlgeschlagen.")

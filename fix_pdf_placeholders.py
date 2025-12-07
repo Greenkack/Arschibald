@@ -50,7 +50,7 @@ def fix_pdf_placeholder_problems():
         print(f"      - {key} -> {label}")
 
     # 3. SOLAR CALCULATOR KEYS ANALYSIEREN
-    print("\n3. 🧮 SOLAR CALCULATOR KEYS:")
+    print("\n3.  SOLAR CALCULATOR KEYS:")
 
     # Aus final_pricing_calculation_with_keys.py:
     solar_calc_keys = {
@@ -69,7 +69,7 @@ def fix_pdf_placeholder_problems():
         print(f"      - {key}: {value}")
 
     # 4. MAPPING ERSTELLEN
-    print("\n4. 🗺️ KEY MAPPING:")
+    print("\n4.  KEY MAPPING:")
 
     # Seite 1 Mapping
     seite1_mapping = {
@@ -119,7 +119,7 @@ def fix_pdf_placeholder_problems():
         print(f"      - PLACEHOLDER_MAPPING['{placeholder}'] = '{key}'")
 
     # 6. DYNAMIC DATA BUILDER UPDATE VORBEREITEN
-    print("\n6. 🏗️ DYNAMIC DATA BUILDER UPDATE:")
+    print("\n6.  DYNAMIC DATA BUILDER UPDATE:")
 
     dynamic_data_updates = {
         # Seite 1

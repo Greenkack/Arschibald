@@ -400,7 +400,7 @@ def render_pdf_ui(
                     "COLUMN": " Säulen",
                     "LINE": " Linie",
                     "AREA": " Fläche",
-                    "PIE": "🥧 Torte"}.get(
+                    "PIE": " Torte"}.get(
                     x,
                     x),
                 index=0,
@@ -1243,7 +1243,7 @@ def render_pdf_ui(
                 ** Standard Charts:**
                 -  Balkendiagramm
                 -  Liniendiagramm
-                - 🥧 Kreisdiagramm
+                -  Kreisdiagramm
                 -  Flächendiagramm
                 """)
 
@@ -1376,13 +1376,13 @@ def render_pdf_ui(
                     min-height: 300px; background: #1e1e1e; text-align: center;">
             <h3 style="color: #e0e0e0; margin-top: 50px;">DRAG & DROP CANVAS</h3>
             <p style="color: #b0b0b0;">Ziehen Sie Elemente aus der Bibliothek hierher</p>
-            <p style="color: #b0b0b0;">Real-Time Vorschau | 💾 Auto-Save | Grid-Snap</p>
+            <p style="color: #b0b0b0;">Real-Time Vorschau |  Auto-Save | Grid-Snap</p>
 
             <div style="margin: 20px 0; padding: 20px; background: #2a2a2a; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.5);">
                 <h4 style="color: #e0e0e0;">BEISPIEL PDF-SEITE</h4>
                 <p style="color: #b0b0b0;">Hier würden Ihre Drag & Drop Elemente erscheinen...</p>
                 <div style="height: 2px; background: linear-gradient(90deg, #667eea, #764ba2); margin: 10px 0;"></div>
-                <p style="color: #b0b0b0;"><em>✨ Interaktiver Editor mit Real-Time Updates</em></p>
+                <p style="color: #b0b0b0;"><em> Interaktiver Editor mit Real-Time Updates</em></p>
             </div>
         </div>
         """
@@ -1775,11 +1775,11 @@ def render_pdf_ui(
                     shadow_opacity = st.slider("Transparenz:", 0, 100, 25, help="0 = transparent, 100 = undurchsichtig")
 
             with effects_col2:
-                st.markdown("**✨ SPEZIAL-EFFEKTE:**")
+                st.markdown("** SPEZIAL-EFFEKTE:**")
                 glow_effect = st.checkbox("Glow-Effekt")
-                emboss_effect = st.checkbox("🔲 Prägung")
+                emboss_effect = st.checkbox(" Prägung")
                 glass_effect = st.checkbox("🪟 Glas-Effekt")
-                neon_effect = st.checkbox("🌟 Neon-Effekt")
+                neon_effect = st.checkbox(" Neon-Effekt")
 
         with advanced_design_tabs[3]:  # Responsive
             st.markdown("** RESPONSIVE DESIGN:**")
@@ -1803,7 +1803,7 @@ def render_pdf_ui(
 
         # Design Preview
         st.markdown("---")
-        st.markdown("**⭐ DESIGN-VORSCHAU:**")
+        st.markdown("** DESIGN-VORSCHAU:**")
 
         # Live Preview Simulation - mit Sicherheitsprüfung
         if 'pdf_design_config' not in st.session_state or 'theme' not in st.session_state.pdf_design_config:
@@ -2109,7 +2109,7 @@ def render_pdf_ui(
                 st.session_state['pdf_fin_financing_years'] = 15
             
             include_cash_flow = st.checkbox(
-                "💸 Cash-Flow Projektion", 
+                " Cash-Flow Projektion", 
                 value=st.session_state['pdf_fin_include_cashflow'],
                 key="pdf_fin_include_cashflow")
             include_sensitivity = st.checkbox(
@@ -2160,7 +2160,7 @@ def render_pdf_ui(
                 st.session_state['pdf_financing_data'] = None
 
     # === ZAHLUNGSMODALITÄTEN ===
-    with st.expander("💳 ZAHLUNGSMODALITÄTEN", expanded=False):
+    with st.expander(" ZAHLUNGSMODALITÄTEN", expanded=False):
         st.markdown("**Wählen Sie die Zahlungsbedingungen für das Angebot:**")
         
         try:
@@ -2186,7 +2186,7 @@ def render_pdf_ui(
                 
                 # Zahlungsvariante auswählen
                 selected_payment_name = st.selectbox(
-                    "📋 Zahlungsvariante",
+                    " Zahlungsvariante",
                     options=list(payment_options.keys()),
                     index=list(payment_options.values()).index(
                         st.session_state['selected_payment_variant_key']
@@ -2565,10 +2565,10 @@ def render_pdf_ui(
         st.session_state.selected_cover_letter_text_content_doc_output = cover_letter_options.get(
             selected_cover_letter_name, "")
 
-        # 📝 SONDERVEREINBARUNGEN (Seite 8)
+        #  SONDERVEREINBARUNGEN (Seite 8)
         st.markdown("---")
         st.markdown(
-            "**📝 " +
+            "** " +
             get_text_pdf_ui(
                 texts,
                 "special_agreements_section",
@@ -2595,9 +2595,9 @@ def render_pdf_ui(
         st.session_state.special_agreements_text = special_agreements_input
         
         if special_agreements_input:
-            st.success(f"✅ {len(special_agreements_input)} Zeichen eingegeben")
+            st.success(f" {len(special_agreements_input)} Zeichen eingegeben")
         else:
-            st.info("ℹ️ Keine Sondervereinbarungen - Standardtext wird verwendet")
+            st.info("ℹ Keine Sondervereinbarungen - Standardtext wird verwendet")
 
         # Template-Vorschau hinzufügen (aus Multi-Generator)
         with st.expander(" Template-Vorschau", expanded=False):
@@ -3114,7 +3114,7 @@ def render_pdf_ui(
                 " Interaktive Widgets", value=extended_features['wow_features'].get(
                     'interactive_widgets', False), help="Interaktive PDF-Elemente (experimentell)")
             extended_features['wow_features']['ai_layout_optimization'] = st.checkbox(
-                "🤖 AI Layout-Optimierung",
+                " AI Layout-Optimierung",
                 value=extended_features['wow_features'].get(
                     'ai_layout_optimization',
                     False),
@@ -3501,7 +3501,7 @@ def render_pdf_ui(
                 label=get_text_pdf_ui(
                     texts,
                     "pdf_download_button",
-                    "📥 PDF herunterladen"),
+                    " PDF herunterladen"),
                 data=pdf_bytes_to_download,
                 file_name=file_name,
                 mime="application/pdf",
@@ -3509,7 +3509,7 @@ def render_pdf_ui(
                 use_container_width=True)
             
             # Button zum Zurücksetzen (neues PDF generieren)
-            if st.button("🔄 Neues PDF erstellen", key="reset_pdf_generation", use_container_width=True):
+            if st.button(" Neues PDF erstellen", key="reset_pdf_generation", use_container_width=True):
                 del st.session_state['generated_pdf_bytes_for_download_v1']
                 st.rerun()
                 

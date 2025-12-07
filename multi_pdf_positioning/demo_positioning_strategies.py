@@ -37,11 +37,11 @@ def demo_strategy_for_firma(firma: int, seite: int = 1):
     
     # Check if files exist
     if not yml_file.exists():
-        print(f"⚠ YML file not found: {yml_file}")
+        print(f" YML file not found: {yml_file}")
         return
     
     if not pdf_file.exists():
-        print(f"⚠ PDF file not found: {pdf_file}")
+        print(f" PDF file not found: {pdf_file}")
         return
     
     try:

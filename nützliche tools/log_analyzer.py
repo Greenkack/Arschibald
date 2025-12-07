@@ -25,10 +25,10 @@ def analyze_logs():
         all_logs.extend(glob.glob(pattern, recursive=True))
 
     if not all_logs:
-        print("📋 Keine Log-Dateien gefunden")
+        print(" Keine Log-Dateien gefunden")
         return
 
-    print(f"📋 LOG-ANALYSE ({len(all_logs)} Dateien):")
+    print(f" LOG-ANALYSE ({len(all_logs)} Dateien):")
 
     # Statistiken sammeln
     error_patterns = {
@@ -79,7 +79,7 @@ def analyze_logs():
 
     # Letzte Fehler
     if recent_errors:
-        print("\n🚨 LETZTE FEHLER:")
+        print("\n LETZTE FEHLER:")
         for log_file, error_line in recent_errors[-5:]:
             print(f"  {os.path.basename(log_file)}: {error_line[:100]}...")
 

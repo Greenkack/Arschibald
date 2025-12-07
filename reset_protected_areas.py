@@ -35,7 +35,7 @@ try:
         'advanced_settings': True,  # NEU GESCHÜTZT
     }
     
-    print('🔄 Aktualisiere Datenbank...')
+    print(' Aktualisiere Datenbank...')
     print('-' * 80)
     
     conn = get_db_connection()
@@ -65,11 +65,11 @@ try:
     protected_count = sum(1 for v in new_protected_areas.values() if v)
     total_count = len(new_protected_areas)
     
-    print(f'🔒 Geschützte Bereiche: {protected_count}/{total_count}')
+    print(f' Geschützte Bereiche: {protected_count}/{total_count}')
     print()
     
     for area_id, is_protected in sorted(new_protected_areas.items()):
-        status = '🔒 GESCHÜTZT' if is_protected else '🔓 OFFEN'
+        status = ' GESCHÜTZT' if is_protected else ' OFFEN'
         print(f'  {area_id:30s} → {status}')
     
     print()

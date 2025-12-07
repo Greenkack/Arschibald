@@ -42,7 +42,7 @@ def demo_rotation_360():
         config=config
     )
     
-    print(f"✓ Generated {len(frames)} frames")
+    print(f" Generated {len(frames)} frames")
     
     # Show sample frames
     print("\nSample frames:")
@@ -100,7 +100,7 @@ def demo_fly_through():
         config=config
     )
     
-    print(f"✓ Generated {len(frames)} frames")
+    print(f" Generated {len(frames)} frames")
     
     # Show waypoint progression
     print("\nWaypoint progression:")
@@ -145,7 +145,7 @@ def demo_assembly():
         config=config
     )
     
-    print(f"✓ Generated {len(frames)} frames")
+    print(f" Generated {len(frames)} frames")
     
     # Show assembly progression
     print("\nAssembly sequence:")
@@ -193,7 +193,7 @@ def demo_time_lapse():
         config=config
     )
     
-    print(f"✓ Generated {len(frames)} frames")
+    print(f" Generated {len(frames)} frames")
     
     # Show sun position progression
     print("\nSun position progression:")
@@ -263,7 +263,7 @@ def demo_presentation():
         config=config
     )
     
-    print(f"✓ Generated {len(frames)} frames")
+    print(f" Generated {len(frames)} frames")
     
     # Show scene breakdown
     print("\nScene breakdown:")
@@ -384,7 +384,7 @@ def main():
         print("  - docs/3D_ANIMATION_QUICK_REFERENCE.md")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

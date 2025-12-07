@@ -107,7 +107,7 @@ def create_demo_database():
         
         conn.commit()
     
-    print("\n✓ Demo database created successfully!")
+    print("\n Demo database created successfully!")
     print(f"  - 1000 users")
     print(f"  - 5000 orders")
     print(f"  - 500 products")
@@ -183,22 +183,22 @@ def demo_index_management(service: DatabaseOptimizationService):
     # Email index
     result1 = service.create_index("users", ["email"], unique=True)
     if result1['success']:
-        print(f"   ✓ Created index: {result1['index_name']}")
+        print(f"    Created index: {result1['index_name']}")
     
     # User ID index on orders
     result2 = service.create_index("orders", ["user_id"])
     if result2['success']:
-        print(f"   ✓ Created index: {result2['index_name']}")
+        print(f"    Created index: {result2['index_name']}")
     
     # Category index on products
     result3 = service.create_index("products", ["category"])
     if result3['success']:
-        print(f"   ✓ Created index: {result3['index_name']}")
+        print(f"    Created index: {result3['index_name']}")
     
     # Composite index
     result4 = service.create_index("orders", ["user_id", "order_date"])
     if result4['success']:
-        print(f"   ✓ Created index: {result4['index_name']}")
+        print(f"    Created index: {result4['index_name']}")
 
 
 def demo_partitioning_analysis(service: DatabaseOptimizationService):
@@ -249,8 +249,8 @@ def demo_data_archiving(service: DatabaseOptimizationService):
             )
             
             if result['success']:
-                print(f"   ✓ Archived {result['archived_count']} records")
-                print(f"   ✓ Archive table: {result['archive_table']}")
+                print(f"    Archived {result['archived_count']} records")
+                print(f"    Archive table: {result['archive_table']}")
     else:
         print("   No archiving candidates found")
 
@@ -263,16 +263,16 @@ def demo_maintenance_operations(service: DatabaseOptimizationService):
     print("1. Running ANALYZE to update statistics:")
     analyze_result = service.analyze_tables()
     if analyze_result['success']:
-        print(f"   ✓ ANALYZE completed in {analyze_result['duration_seconds']}s")
+        print(f"    ANALYZE completed in {analyze_result['duration_seconds']}s")
     
     # Run VACUUM
     print("\n2. Running VACUUM to reclaim space:")
     vacuum_result = service.vacuum_database()
     if vacuum_result['success']:
-        print(f"   ✓ VACUUM completed in {vacuum_result['duration_seconds']}s")
-        print(f"   ✓ Space freed: {vacuum_result['space_freed_mb']} MB")
-        print(f"   ✓ Size before: {vacuum_result['size_before_bytes'] / (1024*1024):.2f} MB")
-        print(f"   ✓ Size after: {vacuum_result['size_after_bytes'] / (1024*1024):.2f} MB")
+        print(f"    VACUUM completed in {vacuum_result['duration_seconds']}s")
+        print(f"    Space freed: {vacuum_result['space_freed_mb']} MB")
+        print(f"    Size before: {vacuum_result['size_before_bytes'] / (1024*1024):.2f} MB")
+        print(f"    Size after: {vacuum_result['size_after_bytes'] / (1024*1024):.2f} MB")
     
     # Configure maintenance schedule
     print("\n3. Configuring automatic maintenance schedule:")
@@ -282,8 +282,8 @@ def demo_maintenance_operations(service: DatabaseOptimizationService):
         vacuum_schedule="weekly",
         analyze_schedule="daily"
     )
-    print(f"   ✓ VACUUM: {schedule['vacuum']['schedule']} (enabled: {schedule['vacuum']['enabled']})")
-    print(f"   ✓ ANALYZE: {schedule['analyze']['schedule']} (enabled: {schedule['analyze']['enabled']})")
+    print(f"    VACUUM: {schedule['vacuum']['schedule']} (enabled: {schedule['vacuum']['enabled']})")
+    print(f"    ANALYZE: {schedule['analyze']['schedule']} (enabled: {schedule['analyze']['enabled']})")
 
 
 def demo_performance_monitoring(service: DatabaseOptimizationService):
@@ -372,13 +372,13 @@ def main():
     print_section("Demo Complete")
     print("All database optimization features demonstrated successfully!")
     print("\nKey Features:")
-    print("  ✓ Query analysis and optimization")
-    print("  ✓ Index management and recommendations")
-    print("  ✓ Table partitioning analysis")
-    print("  ✓ Data archiving for old records")
-    print("  ✓ VACUUM and ANALYZE operations")
-    print("  ✓ Performance monitoring and metrics")
-    print("  ✓ Comprehensive optimization reports")
+    print("   Query analysis and optimization")
+    print("   Index management and recommendations")
+    print("   Table partitioning analysis")
+    print("   Data archiving for old records")
+    print("   VACUUM and ANALYZE operations")
+    print("   Performance monitoring and metrics")
+    print("   Comprehensive optimization reports")
     print("\nDemo database saved as: demo_optimization.db")
 
 

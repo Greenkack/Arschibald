@@ -275,10 +275,10 @@ def verify_requirements():
 def main():
     """Run all verifications."""
     print("\n")
-    print("╔" + "=" * 78 + "╗")
-    print("║" + " " * 22 + "TASK 8.3 VERIFICATION" + " " * 35 + "║")
-    print("║" + " " * 24 + "Validierungs-Report" + " " * 37 + "║")
-    print("╚" + "=" * 78 + "╝")
+    print("" + "=" * 78 + "")
+    print("" + " " * 22 + "TASK 8.3 VERIFICATION" + " " * 35 + "")
+    print("" + " " * 24 + "Validierungs-Report" + " " * 37 + "")
+    print("" + "=" * 78 + "")
     print()
     
     try:

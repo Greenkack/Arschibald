@@ -10,16 +10,16 @@ print("=" * 70 + "\n")
 print("VORHER (Alt):")
 print("-" * 70)
 print("""
-┌────────────────────────────┐
-│ → [CRM] CRM System         │  ← 70px Höhe
-│ (Text evtl. abgeschnitten) │
-└────────────────────────────┘
-├────────────────────────────┤
-│ [GRAF] Analyse             │  ← 70px
-└────────────────────────────┘
-├────────────────────────────┤
-│ [CALC] Quick-Kalkulator    │  ← 70px
-└────────────────────────────┘
+
+ → [CRM] CRM System           ← 70px Höhe
+ (Text evtl. abgeschnitten) 
+
+
+ [GRAF] Analyse               ← 70px
+
+
+ [CALC] Quick-Kalkulator      ← 70px
+
 
 Sidebar Breite: 320px
 """)
@@ -29,18 +29,18 @@ print("\n" + "=" * 70 + "\n")
 print("NACHHER (Neu & Optimiert):")
 print("-" * 70)
 print("""
-┌───────────────────────────────────┐
-│ → **[CRM]**                       │  ← 75px Höhe
-│   CRM Kundenverwaltung            │  ← Zweizeilig!
-└───────────────────────────────────┘
-├───────────────────────────────────┤
-│   **[GRAF]**                      │  ← 75px
-│   Analyse                         │  ← Zweizeilig
-└───────────────────────────────────┘
-├───────────────────────────────────┤
-│   **[CALC]**                      │  ← 75px
-│   Quick-Kalkulator                │  ← Zweizeilig
-└───────────────────────────────────┘
+
+ → **[CRM]**                         ← 75px Höhe
+   CRM Kundenverwaltung              ← Zweizeilig!
+
+
+   **[GRAF]**                        ← 75px
+   Analyse                           ← Zweizeilig
+
+
+   **[CALC]**                        ← 75px
+   Quick-Kalkulator                  ← Zweizeilig
+
 
 Sidebar Breite: 340px (breiter!)
 """)
@@ -61,7 +61,7 @@ improvements = [
 ]
 
 for feature, description, diff in improvements:
-    print(f"{feature:25} │ {description:35} │ {diff:>8}")
+    print(f"{feature:25}  {description:35}  {diff:>8}")
 
 print("\n" + "=" * 70 + "\n")
 
@@ -103,9 +103,9 @@ print("\n" + "=" * 70 + "\n")
 print("NAVIGATION-BUTTONS:")
 print("-" * 70)
 print("""
-┌───────────────┬───────────────┐
-│   ⬆️ Hoch     │   ⬇️ Runter   │  ← Gleiche Größe (75px)
-└───────────────┴───────────────┘
+
+    Hoch         Runter     ← Gleiche Größe (75px)
+
 """)
 
 print("\n" + "=" * 70 + "\n")
@@ -113,10 +113,10 @@ print("\n" + "=" * 70 + "\n")
 print("CONFIRM-BUTTON:")
 print("-" * 70)
 print("""
-┌───────────────────────────────────┐
-│ **Wechseln zu:**                │  ← 75px, Primary (Blau)
-│   **[HEAT]** Wärmepumpe           │  ← Zweizeilig mit Icon
-└───────────────────────────────────┘
+
+ **Wechseln zu:**                  ← 75px, Primary (Blau)
+   **[HEAT]** Wärmepumpe             ← Zweizeilig mit Icon
+
 """)
 
 print("\n" + "=" * 70 + "\n")

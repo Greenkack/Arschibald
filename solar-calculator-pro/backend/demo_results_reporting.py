@@ -124,7 +124,7 @@ async def demo_all_reports():
     print()
     
     for report_type, type_name in report_types:
-        print(f"📄 Generating {type_name}...")
+        print(f" Generating {type_name}...")
         
         request = ReportGenerationRequest(
             project_id=1,
@@ -144,13 +144,13 @@ async def demo_all_reports():
             
             generated_reports.append(result)
             
-            print(f"   ✅ Generated: {result.report_id}")
-            print(f"   📊 Size: {result.metadata.file_size:,} bytes")
-            print(f"   📥 Download: {result.download_url}")
+            print(f"    Generated: {result.report_id}")
+            print(f"    Size: {result.metadata.file_size:,} bytes")
+            print(f"    Download: {result.download_url}")
             print()
             
         except Exception as e:
-            print(f"   ❌ Error: {str(e)}")
+            print(f"    Error: {str(e)}")
             print()
     
     # Generate detailed report in all formats
@@ -159,7 +159,7 @@ async def demo_all_reports():
     print()
     
     for format_type, format_name in formats:
-        print(f"📄 Generating {format_name} format...")
+        print(f" Generating {format_name} format...")
         
         request = ReportGenerationRequest(
             project_id=1,
@@ -179,13 +179,13 @@ async def demo_all_reports():
             
             generated_reports.append(result)
             
-            print(f"   ✅ Generated: {result.report_id}")
-            print(f"   📊 Size: {result.metadata.file_size:,} bytes")
-            print(f"   📥 Download: {result.download_url}")
+            print(f"    Generated: {result.report_id}")
+            print(f"    Size: {result.metadata.file_size:,} bytes")
+            print(f"    Download: {result.download_url}")
             print()
             
         except Exception as e:
-            print(f"   ❌ Error: {str(e)}")
+            print(f"    Error: {str(e)}")
             print()
     
     # Summary
@@ -292,15 +292,15 @@ async def demo_custom_report():
             user_id="demo_user"
         )
         
-        print(f"✅ Generated: {result.report_id}")
-        print(f"📊 Size: {result.metadata.file_size:,} bytes")
-        print(f"📥 Download: {result.download_url}")
+        print(f" Generated: {result.report_id}")
+        print(f" Size: {result.metadata.file_size:,} bytes")
+        print(f" Download: {result.download_url}")
         print()
         
         return result
         
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f" Error: {str(e)}")
         print()
         return None
 
@@ -309,9 +309,9 @@ async def main():
     """Main demo function"""
     
     print()
-    print("╔" + "═" * 78 + "╗")
-    print("║" + " " * 20 + "RESULTS REPORTING SYSTEM DEMO" + " " * 29 + "║")
-    print("╚" + "═" * 78 + "╝")
+    print("" + "" * 78 + "")
+    print("" + " " * 20 + "RESULTS REPORTING SYSTEM DEMO" + " " * 29 + "")
+    print("" + "" * 78 + "")
     print()
     
     # Generate all standard reports
@@ -324,7 +324,7 @@ async def main():
     print("DEMO COMPLETE")
     print("=" * 80)
     print()
-    print("✅ All reports generated successfully!")
+    print(" All reports generated successfully!")
     print()
     print("Next steps:")
     print("1. Check the ./reports/ directory for generated files")

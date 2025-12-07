@@ -15,12 +15,12 @@ from crm.features import contract_manager
 
 def render_contract_management_ui():
     """Hauptfunktion für die Vertrags- und Garantieverwaltung UI."""
-    st.header("📋 Vertrags- und Garantieverwaltung")
+    st.header(" Vertrags- und Garantieverwaltung")
     
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3, tab4 = st.tabs([
         "Verträge",
-        "🛡️ Garantien",
+        " Garantien",
         "⏰ Erinnerungen",
         "Übersicht"
     ])
@@ -45,10 +45,10 @@ def render_contracts_tab():
     # Action Buttons
     col1, col2, col3 = st.columns([2, 2, 6])
     with col1:
-        if st.button("➕ Neuer Vertrag", use_container_width=True):
+        if st.button(" Neuer Vertrag", use_container_width=True):
             st.session_state['show_contract_form'] = True
     with col2:
-        if st.button("🔄 Aktualisieren", use_container_width=True):
+        if st.button(" Aktualisieren", use_container_width=True):
             st.rerun()
     
     # Neuer Vertrag Formular
@@ -209,7 +209,7 @@ def render_contract_form(contract_id: int | None = None):
         # Submit Button
         col1, col2 = st.columns([1, 5])
         with col1:
-            submitted = st.form_submit_button("💾 Speichern", use_container_width=True)
+            submitted = st.form_submit_button(" Speichern", use_container_width=True)
         with col2:
             if st.form_submit_button("Abbrechen", use_container_width=True):
                 st.session_state['show_contract_form'] = False
@@ -294,7 +294,7 @@ def render_contract_card(contract: dict):
                 st.markdown(f"**Wert:** {contract['value']:.2f} {contract.get('currency', 'EUR')}")
         
         with col3:
-            if st.button("✏️ Bearbeiten", key=f"edit_contract_{contract['id']}", use_container_width=True):
+            if st.button(" Bearbeiten", key=f"edit_contract_{contract['id']}", use_container_width=True):
                 st.session_state[f'edit_contract_{contract["id"]}'] = True
                 st.rerun()
             
@@ -325,10 +325,10 @@ def render_warranties_tab():
     # Action Buttons
     col1, col2, col3 = st.columns([2, 2, 6])
     with col1:
-        if st.button("➕ Neue Garantie", use_container_width=True):
+        if st.button(" Neue Garantie", use_container_width=True):
             st.session_state['show_warranty_form'] = True
     with col2:
-        if st.button("🔄 Aktualisieren", key="refresh_warranties", use_container_width=True):
+        if st.button(" Aktualisieren", key="refresh_warranties", use_container_width=True):
             st.rerun()
     
     # Neue Garantie Formular
@@ -474,7 +474,7 @@ def render_warranty_form(warranty_id: int | None = None):
         # Submit Button
         col1, col2 = st.columns([1, 5])
         with col1:
-            submitted = st.form_submit_button("💾 Speichern", use_container_width=True)
+            submitted = st.form_submit_button(" Speichern", use_container_width=True)
         with col2:
             if st.form_submit_button("Abbrechen", use_container_width=True):
                 st.session_state['show_warranty_form'] = False
@@ -544,7 +544,7 @@ def render_warranty_form(warranty_id: int | None = None):
 
 def render_warranty_card(warranty: dict):
     """Rendert eine Garantiekarte."""
-    with st.expander(f"🛡️ {warranty['title']} - {warranty['warranty_type']}", expanded=False):
+    with st.expander(f" {warranty['title']} - {warranty['warranty_type']}", expanded=False):
         col1, col2, col3 = st.columns([2, 2, 1])
         
         with col1:
@@ -560,7 +560,7 @@ def render_warranty_card(warranty: dict):
             st.markdown(f"**Laufzeit:** {warranty['duration_months']} Monate")
         
         with col3:
-            if st.button("✏️ Bearbeiten", key=f"edit_warranty_{warranty['id']}", use_container_width=True):
+            if st.button(" Bearbeiten", key=f"edit_warranty_{warranty['id']}", use_container_width=True):
                 st.session_state[f'edit_warranty_{warranty["id"]}'] = True
                 st.rerun()
             
@@ -626,7 +626,7 @@ def render_reminders_tab():
             if expiring_contracts:
                 for contract in expiring_contracts:
                     days_until = (datetime.strptime(contract['end_date'], '%Y-%m-%d') - datetime.now()).days
-                    color = "🔴" if days_until <= 7 else "🟡" if days_until <= 14 else "🟢"
+                    color = "" if days_until <= 7 else "🟡" if days_until <= 14 else "🟢"
                     
                     with st.expander(f"{color} {contract['title']} - {days_until} Tage"):
                         st.markdown(f"**Vertragstyp:** {contract['contract_type']}")
@@ -639,11 +639,11 @@ def render_reminders_tab():
                 st.info("Keine ablaufenden Verträge in diesem Zeitraum.")
         
         with col2:
-            st.markdown(f"### 🛡️ Ablaufende Garantien ({len(expiring_warranties)})")
+            st.markdown(f"###  Ablaufende Garantien ({len(expiring_warranties)})")
             if expiring_warranties:
                 for warranty in expiring_warranties:
                     days_until = (datetime.strptime(warranty['end_date'], '%Y-%m-%d') - datetime.now()).days
-                    color = "🔴" if days_until <= 7 else "🟡" if days_until <= 14 else "🟢"
+                    color = "" if days_until <= 7 else "🟡" if days_until <= 14 else "🟢"
                     
                     with st.expander(f"{color} {warranty['title']} - {days_until} Tage"):
                         st.markdown(f"**Garantietyp:** {warranty['warranty_type']}")
@@ -694,7 +694,7 @@ def render_overview_tab():
         st.markdown("---")
         
         # Garantie-Statistiken
-        st.markdown("### 🛡️ Garantien")
+        st.markdown("###  Garantien")
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
@@ -721,7 +721,7 @@ def show_customer_contracts_warranties(customer_id: int):
     
     Diese Funktion kann in der Kundendetailansicht verwendet werden.
     """
-    st.markdown("### 📋 Verträge & Garantien")
+    st.markdown("###  Verträge & Garantien")
     
     conn = get_db_connection()
     if conn:

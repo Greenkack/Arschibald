@@ -44,7 +44,7 @@ def demo_basic_usage():
         }
     )
 
-    print(f"\n✓ Registered text input")
+    print(f"\n Registered text input")
     print(f"  Key: {text_input.key}")
     print(f"  Form ID: {text_input.form_id}")
     print(f"  Field Name: {text_input.field_name}")
@@ -52,7 +52,7 @@ def demo_basic_usage():
 
     # Update value
     manager.update_input_value(text_input.key, "john_doe")
-    print(f"\n✓ Updated value to: {manager.get_input_value(text_input.key)}")
+    print(f"\n Updated value to: {manager.get_input_value(text_input.key)}")
 
 
 def demo_solar_calculator_form():
@@ -112,7 +112,7 @@ def demo_solar_calculator_form():
         }
     ]
 
-    print("\n✓ Registering solar calculator inputs...")
+    print("\n Registering solar calculator inputs...")
     for input_config in inputs:
         manager.register_form_input(
             form_id="solar_calculator",
@@ -121,13 +121,13 @@ def demo_solar_calculator_form():
         print(f"  - {input_config['label']}")
 
     # Get key mapping
-    print("\n✓ Key Mapping:")
+    print("\n Key Mapping:")
     mapping = manager.get_form_key_mapping("solar_calculator")
     for field_name, key in mapping.items():
         print(f"  {field_name}: {key[:40]}...")
 
     # Set form data
-    print("\n✓ Setting form data...")
+    print("\n Setting form data...")
     form_data = {
         'customer_name': 'John Doe',
         'roof_area': 75.5,
@@ -139,23 +139,23 @@ def demo_solar_calculator_form():
 
     errors = manager.set_form_data("solar_calculator", form_data, validate=True)
     if errors:
-        print(f"  ✗ Validation errors: {errors}")
+        print(f"   Validation errors: {errors}")
     else:
-        print("  ✓ All data set successfully")
+        print("   All data set successfully")
 
     # Get form data
-    print("\n✓ Current form data:")
+    print("\n Current form data:")
     current_data = manager.get_form_data("solar_calculator")
     for field, value in current_data.items():
         print(f"  {field}: {value}")
 
     # Validate form
-    print("\n✓ Validating form...")
+    print("\n Validating form...")
     is_valid, errors = manager.validate_form("solar_calculator")
     if is_valid:
-        print("  ✓ Form is valid")
+        print("   Form is valid")
     else:
-        print(f"  ✗ Validation errors: {errors}")
+        print(f"   Validation errors: {errors}")
 
 
 def demo_validation():
@@ -179,28 +179,28 @@ def demo_validation():
         }
     )
 
-    print("\n✓ Testing number validation (min: 18, max: 120)...")
+    print("\n Testing number validation (min: 18, max: 120)...")
 
     # Test valid value
     try:
         manager.update_input_value(number_input.key, 25, validate=True)
-        print("  ✓ Value 25: Valid")
+        print("   Value 25: Valid")
     except ValueError as e:
-        print(f"  ✗ Value 25: {e}")
+        print(f"   Value 25: {e}")
 
     # Test invalid value (too low)
     try:
         manager.update_input_value(number_input.key, 15, validate=True)
-        print("  ✓ Value 15: Valid")
+        print("   Value 15: Valid")
     except ValueError as e:
-        print(f"  ✗ Value 15: {e}")
+        print(f"   Value 15: {e}")
 
     # Test invalid value (too high)
     try:
         manager.update_input_value(number_input.key, 150, validate=True)
-        print("  ✓ Value 150: Valid")
+        print("   Value 150: Valid")
     except ValueError as e:
-        print(f"  ✗ Value 150: {e}")
+        print(f"   Value 150: {e}")
 
     # Email validation
     email_input = manager.register_form_input(
@@ -210,7 +210,7 @@ def demo_validation():
         label="Email"
     )
 
-    print("\n✓ Testing email validation...")
+    print("\n Testing email validation...")
 
     test_emails = [
         "valid@example.com",
@@ -220,7 +220,7 @@ def demo_validation():
 
     for email in test_emails:
         is_valid, error = email_input.validate_value(email)
-        status = "✓" if is_valid else "✗"
+        status = "" if is_valid else ""
         print(f"  {status} {email}: {error if error else 'Valid'}")
 
 
@@ -242,32 +242,32 @@ def demo_persistence():
         default_value="initial"
     )
 
-    print("\n✓ Saving form input to database...")
+    print("\n Saving form input to database...")
     success = persistence.save_form_input(input_obj.to_dict())
-    print(f"  {'✓' if success else '✗'} Save {'successful' if success else 'failed'}")
+    print(f"  {'' if success else ''} Save {'successful' if success else 'failed'}")
 
     # Load input
-    print("\n✓ Loading form input from database...")
+    print("\n Loading form input from database...")
     loaded = persistence.load_form_input(input_obj.key)
     if loaded:
-        print(f"  ✓ Loaded successfully")
+        print(f"   Loaded successfully")
         print(f"    Key: {loaded['key'][:40]}...")
         print(f"    Field: {loaded['field_name']}")
         print(f"    Value: {loaded['current_value']}")
 
     # Save form submission
-    print("\n✓ Saving form submission...")
+    print("\n Saving form submission...")
     submission_id = persistence.save_form_submission(
         form_id="persist_demo",
         data={'test_field': 'submitted value'},
         user_id="demo_user"
     )
-    print(f"  ✓ Submission saved with ID: {submission_id}")
+    print(f"   Submission saved with ID: {submission_id}")
 
     # Load submissions
-    print("\n✓ Loading form submissions...")
+    print("\n Loading form submissions...")
     submissions = persistence.load_form_submissions("persist_demo")
-    print(f"  ✓ Found {len(submissions)} submission(s)")
+    print(f"   Found {len(submissions)} submission(s)")
     for sub in submissions:
         print(f"    - Submitted at: {sub['submitted_at']}")
         print(f"      Data: {sub['data']}")
@@ -290,14 +290,14 @@ def demo_value_history():
         default_value=0
     )
 
-    print("\n✓ Setting multiple values...")
+    print("\n Setting multiple values...")
     values = [10, 20, 30, 40, 50]
     for value in values:
         input_obj.set_value(value)
         print(f"  - Set value to: {value}")
 
     # Get history
-    print("\n✓ Value history:")
+    print("\n Value history:")
     history = input_obj.get_value_history()
     for i, entry in enumerate(history, 1):
         print(f"  {i}. Value: {entry['value']} at {entry['timestamp']}")
@@ -321,7 +321,7 @@ def demo_form_schema():
         )
 
     # Export schema
-    print("\n✓ Exporting form schema...")
+    print("\n Exporting form schema...")
     schema = manager.export_form_schema("schema_demo")
 
     print(f"\n  Form ID: {schema['form_id']}")
@@ -343,7 +343,7 @@ def demo_statistics():
     # Get statistics
     stats = manager.get_statistics()
 
-    print("\n✓ Manager Statistics:")
+    print("\n Manager Statistics:")
     print(f"  Total Inputs: {stats['total_inputs']}")
     print(f"  Total Forms: {stats['total_forms']}")
 
@@ -378,7 +378,7 @@ def main():
         print("=" * 60)
 
     except Exception as e:
-        print(f"\n✗ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

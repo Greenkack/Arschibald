@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\httpx\_types.py
+# hypothesis_version: 6.147.0
+
+['AsyncByteStream', 'Auth', 'Cookies', 'Headers', 'Proxy', 'QueryParams', 'Request', 'SyncByteStream', 'Timeout', 'URL']

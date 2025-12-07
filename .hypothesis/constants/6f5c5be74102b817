@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlparse\cli.py
+# hypothesis_version: 6.147.0
+
+['"{}"', ', ', '-', '--comma_first', '--compact', '--encoding', '--identifiers', '--indent_after_first', '--indent_columns', '--indent_width', '--keywords', '--language', '--outfile', '--reindent', '--reindent_aligned', '--strip-comments', '--version', '--wrap_after', '-a', '-i', '-k', '-l', '-o', '-r', '-s', 'CHOICE', 'FILE', 'Formatting Options', 'Invalid options: {}', 'LANG', '[ERROR] {}\n', 'capitalize', 'comma_first', 'compact', 'encoding', 'filename', 'identifier_case', 'indent_after_first', 'indent_columns', 'indent_width', 'keyword_case', 'lower', 'outfile', 'output_format', 'php', 'python', 'reindent', 'reindent statements', 'remove comments', 'sqlformat', 'store_true', 'strip_comments', 'upper', 'utf-8', 'version', 'w', 'wrap_after']

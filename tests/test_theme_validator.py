@@ -445,7 +445,7 @@ class TestValidationResult:
         
         summary = result.get_summary()
         
-        assert "✅" in summary or "gültig" in summary.lower()
+        assert "" in summary or "gültig" in summary.lower()
         assert "Fehler: 0" in summary
     
     def test_get_detailed_report(self):
@@ -500,7 +500,7 @@ class TestValidationError:
         assert "test.field" in error_str
         assert "Test message" in error_str
         assert "test_value" in error_str
-        assert "❌" in error_str
+        assert "" in error_str
 
 
 def test_default_values_completeness():

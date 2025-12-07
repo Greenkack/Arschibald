@@ -65,7 +65,7 @@ def demo_basic_generation():
     if is_valid:
         print("   Validation passed!")
     else:
-        print(f"   ⚠ Validation found {len(errors)} issues:")
+        print(f"    Validation found {len(errors)} issues:")
         for error in errors[:5]:  # Show first 5
             print(f"     - {error}")
     
@@ -138,7 +138,7 @@ def demo_format_preservation():
     if orig_sep_count == gen_sep_count:
         print("   Separator count preserved")
     else:
-        print("   ⚠ Separator count differs")
+        print("    Separator count differs")
     
     # Check line count
     orig_lines = len(original_content.split('\n'))
@@ -148,7 +148,7 @@ def demo_format_preservation():
     if line_diff <= 5:
         print(f"   Line count similar (diff: {line_diff})")
     else:
-        print(f"   ⚠ Line count differs significantly (diff: {line_diff})")
+        print(f"    Line count differs significantly (diff: {line_diff})")
     
     # Check element count
     parser2 = YMLParser()
@@ -157,7 +157,7 @@ def demo_format_preservation():
     if len(elements) == len(gen_elements):
         print("   Element count preserved")
     else:
-        print("   ⚠ Element count differs")
+        print("    Element count differs")
     
     return True
 
@@ -221,7 +221,7 @@ def demo_validation():
     if mismatches == 0:
         print(f"   All attributes preserved correctly")
     else:
-        print(f"   ⚠ Found {mismatches} attribute mismatches")
+        print(f"    Found {mismatches} attribute mismatches")
     
     # Check 3: Positions changed
     print(f"\n   Check 3: Positions updated")
@@ -238,16 +238,16 @@ def demo_validation():
     for i, elem in enumerate(gen_elements):
         x1, y1, x2, y2 = elem.position
         if not (0 <= x1 < x2 <= 595):
-            print(f"   ⚠ Element {i}: X coordinates out of bounds")
+            print(f"    Element {i}: X coordinates out of bounds")
             out_of_bounds += 1
         if not (0 <= y1 < y2 <= 842):
-            print(f"   ⚠ Element {i}: Y coordinates out of bounds")
+            print(f"    Element {i}: Y coordinates out of bounds")
             out_of_bounds += 1
     
     if out_of_bounds == 0:
         print(f"   All positions within bounds")
     else:
-        print(f"   ⚠ {out_of_bounds} positions out of bounds")
+        print(f"    {out_of_bounds} positions out of bounds")
     
     # Full validation
     print(f"\n3. Running full validation")
@@ -256,7 +256,7 @@ def demo_validation():
     if is_valid:
         print("   Full validation passed!")
     else:
-        print(f"   ⚠ Validation found {len(errors)} issues")
+        print(f"    Validation found {len(errors)} issues")
         print(f"   First 3 errors:")
         for error in errors[:3]:
             print(f"     - {error}")
@@ -376,7 +376,7 @@ def main():
         print("  • Batch process multiple files")
         return 0
     else:
-        print(f"\n⚠ {len(results) - success_count} demo(s) failed")
+        print(f"\n {len(results) - success_count} demo(s) failed")
         return 1
 
 

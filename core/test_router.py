@@ -58,7 +58,7 @@ class TestRouter:
             'test_page',
             MockPage,
             title='Test Page',
-            icon='🧪'
+            icon=''
         )
 
         assert 'test_page' in router.routes
@@ -66,7 +66,7 @@ class TestRouter:
         assert route.name == 'test_page'
         assert route.page_class == MockPage
         assert route.title == 'Test Page'
-        assert route.icon == '🧪'
+        assert route.icon == ''
 
     def test_register_middleware(self):
         """Test middleware registration"""

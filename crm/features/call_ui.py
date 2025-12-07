@@ -39,7 +39,7 @@ def render_call_dialog(customer_id: int, customer_name: str, phone_numbers: list
     # Stelle sicher, dass die Felder existieren
     ensure_call_fields()
     
-    st.subheader(f"📞 Anruf protokollieren - {customer_name}")
+    st.subheader(f" Anruf protokollieren - {customer_name}")
     
     # Initialisiere Session State für Timer
     if "call_timer_running" not in st.session_state:
@@ -76,7 +76,7 @@ def render_call_dialog(customer_id: int, customer_name: str, phone_numbers: list
     
     # Timer-Bereich
     st.markdown("---")
-    st.markdown("**⏱️ Anrufdauer**")
+    st.markdown("**⏱ Anrufdauer**")
     
     timer_col1, timer_col2, timer_col3 = st.columns([2, 1, 1])
     
@@ -90,19 +90,19 @@ def render_call_dialog(customer_id: int, customer_name: str, phone_numbers: list
     
     with timer_col2:
         if not st.session_state.call_timer_running:
-            if st.button("▶️ Start", key="call_timer_start_btn", use_container_width=True):
+            if st.button(" Start", key="call_timer_start_btn", use_container_width=True):
                 st.session_state.call_timer_running = True
                 st.session_state.call_timer_start = time.time()
                 st.rerun()
         else:
-            if st.button("⏸️ Stopp", key="call_timer_stop_btn", use_container_width=True):
+            if st.button("⏸ Stopp", key="call_timer_stop_btn", use_container_width=True):
                 st.session_state.call_timer_running = False
                 st.session_state.call_timer_elapsed += int(time.time() - st.session_state.call_timer_start)
                 st.session_state.call_timer_start = None
                 st.rerun()
     
     with timer_col3:
-        if st.button("🔄 Reset", key="call_timer_reset_btn", use_container_width=True):
+        if st.button(" Reset", key="call_timer_reset_btn", use_container_width=True):
             st.session_state.call_timer_running = False
             st.session_state.call_timer_start = None
             st.session_state.call_timer_elapsed = 0
@@ -129,7 +129,7 @@ def render_call_dialog(customer_id: int, customer_name: str, phone_numbers: list
     col_save, col_cancel = st.columns([1, 1])
     
     with col_save:
-        if st.button("💾 Anruf speichern", type="primary", use_container_width=True):
+        if st.button(" Anruf speichern", type="primary", use_container_width=True):
             # Bestimme Dauer
             if manual_duration:
                 duration = parse_duration(manual_duration)
@@ -184,7 +184,7 @@ def render_call_list(customer_id: int, limit: int = 20):
         customer_id: ID des Kunden
         limit: Maximale Anzahl anzuzeigender Anrufe
     """
-    st.subheader("📞 Anruf-Historie")
+    st.subheader(" Anruf-Historie")
     
     # Filter
     col1, col2 = st.columns([2, 1])
@@ -230,7 +230,7 @@ def render_call_list(customer_id: int, limit: int = 20):
             with col3:
                 st.markdown(f"**Erstellt von:** {call['created_by']}")
                 if call['is_important']:
-                    st.markdown("⭐ **Wichtig**")
+                    st.markdown(" **Wichtig**")
             
             if call['call_notes']:
                 st.markdown("**Notizen:**")
@@ -298,7 +298,7 @@ def render_call_quick_action(customer_id: int, customer_name: str, phone_numbers
         customer_name: Name des Kunden
         phone_numbers: Liste von Telefonnummern des Kunden
     """
-    if st.button("📞 Anruf protokollieren", key=f"quick_call_{customer_id}"):
+    if st.button(" Anruf protokollieren", key=f"quick_call_{customer_id}"):
         st.session_state.show_call_dialog = True
         st.session_state.call_dialog_customer_id = customer_id
         st.session_state.call_dialog_customer_name = customer_name
@@ -328,7 +328,7 @@ def integrate_call_logging_to_customer_profile(customer_id: int, customer_data: 
         customer_data: Dictionary mit Kundendaten
     """
     st.markdown("---")
-    st.markdown("### 📞 Anrufe")
+    st.markdown("###  Anrufe")
     
     # Sammle Telefonnummern
     phone_numbers = []

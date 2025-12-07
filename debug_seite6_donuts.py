@@ -163,7 +163,7 @@ def test_with_real_calculation_data():
 
             print(f"Real-Data-PDF erstellt: {output_file}")
             print(
-                "📋 Diese PDF sollte sowohl Wasserfall-Diagramm (Seite 3) als auch Donut-Charts (Seite 6) zeigen")
+                " Diese PDF sollte sowohl Wasserfall-Diagramm (Seite 3) als auch Donut-Charts (Seite 6) zeigen")
         else:
             print("Real-Data-Test fehlgeschlagen")
 
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     # Test 2: Echte Berechnungsdaten
     test_with_real_calculation_data()
 
-    print("\n📋 Zusammenfassung:")
+    print("\n Zusammenfassung:")
     print("   - Schauen Sie in die Konsolen-Ausgabe nach 'DEBUG: Seite 6 Donut-Charts'")
     print("   - Die PDFs zeigen ob die Donut-Charts sichtbar sind")
     print("   - Falls Charts fehlen, liegt es an der Werte-Extraktion oder Position")

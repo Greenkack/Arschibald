@@ -86,7 +86,7 @@ def render_progress_settings():
                 background_color)
 
     # Zusätzliche Optionen
-    st.subheader("⚙️ Erweiterte Optionen")
+    st.subheader(" Erweiterte Optionen")
 
     col3, col4 = st.columns(2)
 
@@ -134,7 +134,7 @@ def render_progress_settings():
         st.session_state.progress_config = current_config
 
     # Vorschau
-    st.subheader("👀 Vorschau")
+    st.subheader(" Vorschau")
 
     # Demo-Ladebalken
     if st.button("Demo starten", type="primary"):

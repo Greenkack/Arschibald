@@ -100,7 +100,7 @@ else:
 print()
 
 if fehler_alte == 0 and fehler_neue == 0:
-    print("🎊 PERFEKT! NUR OPTION A KEYS AKTIV!")
+    print(" PERFEKT! NUR OPTION A KEYS AKTIV!")
     print("   Alle alten lowercase Keys auskommentiert")
     print("   Alle neuen UPPERCASE Keys aktiv")
     print("   Keine Duplikate mehr!")

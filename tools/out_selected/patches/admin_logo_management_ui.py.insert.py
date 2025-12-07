@@ -101,7 +101,7 @@ def display_logo_preview(logo_data: dict[str, Any], max_width: int = 150):
 # --- DEF BLOCK START: func render_logo_upload_section ---
 def render_logo_upload_section():
     """Rendert den Bereich für Logo-Upload"""
-    st.subheader("📤 Neues Logo hochladen")
+    st.subheader(" Neues Logo hochladen")
 
     col1, col2 = st.columns([2, 1])
 
@@ -112,14 +112,14 @@ def render_logo_upload_section():
         if brands_from_db:
             # Dropdown mit existierenden Herstellern plus "Neu eingeben" Option
             brand_options = ["-- Hersteller auswählen --"] + \
-                brands_from_db + ["🆕 Neuen Hersteller eingeben"]
+                brands_from_db + [" Neuen Hersteller eingeben"]
             selected_brand_option = st.selectbox(
                 "Hersteller auswählen:",
                 brand_options,
                 key="logo_brand_select"
             )
 
-            if selected_brand_option == "🆕 Neuen Hersteller eingeben":
+            if selected_brand_option == " Neuen Hersteller eingeben":
                 brand_name = st.text_input(
                     "Neuer Hersteller-Name:",
                     key="logo_brand_new",
@@ -165,14 +165,14 @@ def render_logo_upload_section():
 
                 # Datei-Info
                 st.caption(f"{uploaded_file.name}")
-                st.caption(f"📏 {uploaded_file.size / 1024:.1f} KB")
+                st.caption(f" {uploaded_file.size / 1024:.1f} KB")
 
             except Exception as e:
                 st.error(f"Vorschau-Fehler: {e}")
 
     # Upload-Button
     if st.button(
-            "💾 Logo speichern",
+            " Logo speichern",
             type="primary",
             disabled=not (
             brand_name and uploaded_file)):
@@ -206,7 +206,7 @@ def render_logo_upload_section():
 # --- DEF BLOCK START: func render_logo_management_section ---
 def render_logo_management_section():
     """Rendert den Bereich für Logo-Verwaltung"""
-    st.subheader("🗂️ Vorhandene Logos verwalten")
+    st.subheader(" Vorhandene Logos verwalten")
 
     if not LOGO_DB_AVAILABLE:
         st.error("Logo-Datenbank nicht verfügbar!")
@@ -216,7 +216,7 @@ def render_logo_management_section():
     logos = list_all_brand_logos()
 
     if not logos:
-        st.info("📭 Noch keine Logos vorhanden. Laden Sie das erste Logo hoch!")
+        st.info(" Noch keine Logos vorhanden. Laden Sie das erste Logo hoch!")
         return
 
     # Logos in Tabelle anzeigen
@@ -273,7 +273,7 @@ def render_logo_management_section():
 
                     with col_edit:
                         if st.button(
-                            "✏️ Bearbeiten",
+                            " Bearbeiten",
                                 key=f"edit_logo_{logo_id}"):
                             st.session_state[f'edit_mode_{logo_id}'] = True
 
@@ -303,7 +303,7 @@ def render_logo_management_section():
 # --- DEF BLOCK START: func render_logo_edit_section ---
 def render_logo_edit_section(logo_id: int, logo_data: dict[str, Any]):
     """Rendert den Bearbeitungsmodus für ein Logo"""
-    st.subheader(f"✏️ Logo bearbeiten: {logo_data['brand_name']}")
+    st.subheader(f" Logo bearbeiten: {logo_data['brand_name']}")
 
     # Neuen Namen eingeben
     new_brand_name = st.text_input(
@@ -324,7 +324,7 @@ def render_logo_edit_section(logo_id: int, logo_data: dict[str, Any]):
 
     with col1:
         if st.button(
-            "💾 Änderungen speichern",
+            " Änderungen speichern",
             key=f"save_edit_{logo_id}",
                 type="primary"):
             # TODO: Implementierung der Bearbeitung
@@ -347,7 +347,7 @@ def render_logo_management_ui():
 
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📤 Upload", "🗂️ Verwaltung", "� Positionen", "�Statistiken"])
+        [" Upload", " Verwaltung", " Positionen", "Statistiken"])
 
     with tab1:
         render_logo_upload_section()

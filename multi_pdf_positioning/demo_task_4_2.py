@@ -29,7 +29,7 @@ def main():
     # Configuration
     yml_file = "coords_multi/seite1_f1.yml"
     
-    print(f"\n1️⃣  Loading YML file: {yml_file}")
+    print(f"\n1⃣  Loading YML file: {yml_file}")
     print("-" * 70)
     
     # Parse YML
@@ -42,7 +42,7 @@ def main():
         print(f"   {i+1}. '{elem.text[:30]}' at {elem.position}")
     
     # Create PDF analysis
-    print(f"\n2️⃣  Creating PDF analysis")
+    print(f"\n2⃣  Creating PDF analysis")
     print("-" * 70)
     
     pdf_analysis = PDFAnalysis(
@@ -62,7 +62,7 @@ def main():
     print(f"   Safe zones: {len(pdf_analysis.safe_zones)}")
     
     # Show positioning rules
-    print(f"\n3️⃣  Positioning rules")
+    print(f"\n3⃣  Positioning rules")
     print("-" * 70)
     print(f"   Min margin: {POSITIONING_RULES['min_margin']} points")
     print(f"   Min spacing: {POSITIONING_RULES['min_spacing']} points")
@@ -71,7 +71,7 @@ def main():
     print(f"   Grid padding: {POSITIONING_RULES['grid_padding']} points")
     
     # Calculate positions using convenience function
-    print(f"\n4️⃣  Calculating positions (convenience function)")
+    print(f"\n4⃣  Calculating positions (convenience function)")
     print("-" * 70)
     
     new_positions = calculate_positions(elements, pdf_analysis)
@@ -91,7 +91,7 @@ def main():
         print(f"      Δ: ({dx:+.1f}, {dy:+.1f})")
     
     # Calculate positions using calculator class
-    print(f"\n5️⃣  Calculating positions (calculator class)")
+    print(f"\n5⃣  Calculating positions (calculator class)")
     print("-" * 70)
     
     calculator = PositionCalculator()
@@ -103,7 +103,7 @@ def main():
     print(f"   Calculated {len(new_positions_2)} positions")
     
     # Validate positions
-    print(f"\n6️⃣  Validating positions")
+    print(f"\n6⃣  Validating positions")
     print("-" * 70)
     
     is_valid, errors = calculator.validate_positions(new_positions_2)
@@ -111,14 +111,14 @@ def main():
     if is_valid:
         print(f"   All positions are valid!")
     else:
-        print(f"   ⚠ Found {len(errors)} validation issue(s)")
+        print(f"    Found {len(errors)} validation issue(s)")
         for error in errors[:3]:
             print(f"      - {error}")
         if len(errors) > 3:
             print(f"      ... and {len(errors) - 3} more")
     
     # Check collisions
-    print(f"\n7️⃣  Checking collisions")
+    print(f"\n7⃣  Checking collisions")
     print("-" * 70)
     
     collisions = calculator.check_collisions(new_positions_2)
@@ -126,12 +126,12 @@ def main():
     if len(collisions) == 0:
         print(f"   No collisions detected!")
     else:
-        print(f"   ⚠ Found {len(collisions)} collision(s)")
+        print(f"    Found {len(collisions)} collision(s)")
         print(f"   Note: Grid strategy may have collisions.")
         print(f"   Advanced strategies in Task 5 will reduce these.")
     
     # Statistics
-    print(f"\n8️⃣  Statistics")
+    print(f"\n8⃣  Statistics")
     print("-" * 70)
     
     # Calculate bounds coverage

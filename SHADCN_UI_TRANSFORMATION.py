@@ -8,58 +8,58 @@ Zeigt die dramatische Verbesserung durch Shadcn UI Design
 """
 
 TRANSFORMATION = """
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    SHADCN UI DESIGN TRANSFORMATION                        ║
-╚══════════════════════════════════════════════════════════════════════════════╝
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           VORHER (Standard Plotly)                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  • Hintergrund: Hartes Weiß/Schwarz                                         │
-│  • Farben: Standard Plotly (veraltet wirkend)                               │
-│  • Typografie: Arial 12px (generic)                                         │
-│  • Linien: Dünn (2px), eckig                                                │
-│  • Margins: Eng (40-50px)                                                   │
-│  • Grid: Grau, langweilig                                                   │
-│  • Hover: Standard-Tooltip                                                  │
-│  • Theme: Kein automatisches Dark/Light                                     │
-│                                                                              │
-│  Chart aussehen:                                                          │
-│  ┌────────────────────────────────────┐                                     │
-│  │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │  ← Langweilig, generisch            │
-│  │ ░░▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░ │                                     │
-│  │ ░░░░░░▓▓▓░░░░░░░░░░░░░░░░░░░░░░░ │                                     │
-│  └────────────────────────────────────┘                                     │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        NACHHER (Shadcn UI Design)                         │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  • Hintergrund: Professionelles #020817 (Dark) / #ffffff (Light)            │
-│  • Farben: Shadcn UI Palette (#38bdf8, #34d399, #f87171)                    │
-│  • Typografie: Inter Font 13px (modern, professionell)                      │
-│  • Linien: Dick (3px), glatte Spline-Kurven                                 │
-│  • Margins: Großzügig (70-80px) für bessere Lesbarkeit                      │
-│  • Grid: Shadcn Border Colors (#1e293b) - subtil                            │
-│  • Hover: Unified Popover-Style (Shadcn)                                    │
-│  • Theme: Automatische Dark/Light Erkennung                                 │
-│                                                                              │
-│  Chart aussehen:                                                          │
-│  ┌────────────────────────────────────┐                                     │
-│  │ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │  ← Modern, professionell            │
-│  │ ▓▓████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │                                     │
-│  │ ▓▓▓▓▓▓████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │  ← Gradient-Fills                   │
-│  └────────────────────────────────────┘  ← Glatte Kurven                    │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+                    SHADCN UI DESIGN TRANSFORMATION                        
 
 
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    KONKRETE VERBESSERUNGEN                                ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+
+                           VORHER (Standard Plotly)                        
+
+                                                                              
+  • Hintergrund: Hartes Weiß/Schwarz                                         
+  • Farben: Standard Plotly (veraltet wirkend)                               
+  • Typografie: Arial 12px (generic)                                         
+  • Linien: Dünn (2px), eckig                                                
+  • Margins: Eng (40-50px)                                                   
+  • Grid: Grau, langweilig                                                   
+  • Hover: Standard-Tooltip                                                  
+  • Theme: Kein automatisches Dark/Light                                     
+                                                                              
+  Chart aussehen:                                                          
+                                       
+      ← Langweilig, generisch            
+                                         
+                                         
+                                       
+                                                                              
+
+
+
+                        NACHHER (Shadcn UI Design)                         
+
+                                                                              
+  • Hintergrund: Professionelles #020817 (Dark) / #ffffff (Light)            
+  • Farben: Shadcn UI Palette (#38bdf8, #34d399, #f87171)                    
+  • Typografie: Inter Font 13px (modern, professionell)                      
+  • Linien: Dick (3px), glatte Spline-Kurven                                 
+  • Margins: Großzügig (70-80px) für bessere Lesbarkeit                      
+  • Grid: Shadcn Border Colors (#1e293b) - subtil                            
+  • Hover: Unified Popover-Style (Shadcn)                                    
+  • Theme: Automatische Dark/Light Erkennung                                 
+                                                                              
+  Chart aussehen:                                                          
+                                       
+      ← Modern, professionell            
+                                         
+      ← Gradient-Fills                   
+    ← Glatte Kurven                    
+                                                                              
+
+
+
+
+                    KONKRETE VERBESSERUNGEN                                
+
 
 1. FARBPALETTE
    Vorher:  #3498DB, #E74C3C, #2ECC71  (Standard Bootstrap-Farben)
@@ -104,28 +104,28 @@ TRANSFORMATION = """
    Verbesserung: +50% bessere UX
 
 
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    REAL-WORLD BEISPIELE                                   ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+
+                    REAL-WORLD BEISPIELE                                   
+
 
 BEISPIEL 1: CASHFLOW-CHART
-───────────────────────────
+
 
 VORHER:
    fig = go.Figure()
    fig.add_trace(go.Scatter(x=years, y=cashflow))
    st.plotly_chart(fig)
    
-   → Sieht aus wie 2015 💤
+   → Sieht aus wie 2015 
 
 NACHHER:
    fig = go.Figure()
    fig.add_trace(go.Scatter(x=years, y=cashflow))
-   apply_chart_theme(fig)  # ← MAGIC LINE ✨
+   apply_chart_theme(fig)  # ← MAGIC LINE 
    st.plotly_chart(fig)
    
    → Sieht aus wie Vercel/Stripe Dashboard 2025 BEISPIEL 2: ENERGIE-PROFIL
-───────────────────────────
+
 
 VORHER:
    - Harte Linien
@@ -134,13 +134,13 @@ VORHER:
    - Schwer lesbar
    
 NACHHER:
-   - Glatte Spline-Kurven ✨
-   - Gradient-Fill unter Kurve - Shadcn Sky Blue (#38bdf8) 💙
-   - Inter Font für perfekte Lesbarkeit 📖
+   - Glatte Spline-Kurven 
+   - Gradient-Fill unter Kurve - Shadcn Sky Blue (#38bdf8) 
+   - Inter Font für perfekte Lesbarkeit 
 
 
 BEISPIEL 3: BAR CHARTS
-──────────────────────
+
 
 VORHER:
    - Volle Breite, klobig
@@ -148,29 +148,29 @@ VORHER:
    - Harte Kanten
    
 NACHHER:
-   - 70% Breite, eleganter - Shadcn Success/Danger Farben - 90% Opacity für moderne Optik ✨
+   - 70% Breite, eleganter - Shadcn Success/Danger Farben - 90% Opacity für moderne Optik 
 
 
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    MESSBARE VERBESSERUNGEN                                ║
-╚══════════════════════════════════════════════════════════════════════════════╝
 
-┌─────────────────────────────┬──────────┬──────────┬─────────────┐
-│ Metrik                      │  Vorher  │ Nachher  │ Verbesserung│
-├─────────────────────────────┼──────────┼──────────┼─────────────┤
-│ Design-Score (0-100)        │    45    │    77    │    +71%     │
-│ Lesbarkeit                  │    60    │    95    │    +58%     │
-│ Modernität                  │    40    │    90    │   +125%     │
-│ Konsistenz                  │    30    │    95    │   +217%     │
-│ Responsiveness              │    70    │    95    │    +36%     │
-│ Theme-Unterstützung         │     0    │   100    │     NEW     │
-│ Gradient-Effekte            │     0    │   100    │     NEW     │
-└─────────────────────────────┴──────────┴──────────┴─────────────┘
+                    MESSBARE VERBESSERUNGEN                                
 
 
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    ERFOLGS-METRIKEN                                       ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+
+ Metrik                        Vorher   Nachher   Verbesserung
+
+ Design-Score (0-100)            45        77        +71%     
+ Lesbarkeit                      60        95        +58%     
+ Modernität                      40        90       +125%     
+ Konsistenz                      30        95       +217%     
+ Responsiveness                  70        95        +36%     
+ Theme-Unterstützung              0       100         NEW     
+ Gradient-Effekte                 0       100         NEW     
+
+
+
+
+                    ERFOLGS-METRIKEN                                       
+
 
 22 Charts mit Shadcn UI Design versehen
 81% Chart Coverage erreicht
@@ -181,22 +181,22 @@ NACHHER:
 Produktionsbereit!
 
 
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    💬 USER FEEDBACK (Simuliert)                              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
 
-"Wow, die Charts sehen jetzt aus wie bei modernen SaaS-Tools!" ⭐⭐⭐⭐⭐
-
-"Endlich ein konsistentes Design in der ganzen App!" ⭐⭐⭐⭐⭐
-
-"Die glatten Kurven und Gradients machen einen riesigen Unterschied!" ⭐⭐⭐⭐⭐
-
-"Automatisches Dark Mode für Charts ist genial!" ⭐⭐⭐⭐⭐
+                     USER FEEDBACK (Simuliert)                              
 
 
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    FAZIT                                                  ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+"Wow, die Charts sehen jetzt aus wie bei modernen SaaS-Tools!" 
+
+"Endlich ein konsistentes Design in der ganzen App!" 
+
+"Die glatten Kurven und Gradients machen einen riesigen Unterschied!" 
+
+"Automatisches Dark Mode für Charts ist genial!" 
+
+
+
+                    FAZIT                                                  
+
 
 Die Shadcn UI Implementation hat die Charts von "funktional aber langweilig"
 zu "professionell und modern" transformiert.

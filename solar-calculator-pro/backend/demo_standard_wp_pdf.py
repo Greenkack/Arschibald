@@ -55,7 +55,7 @@ def demo_basic_wp_pdf_generation():
         'langes_datum_heute': '22. Januar 2025'
     }
     
-    print("\n📋 Sample Data:")
+    print("\n Sample Data:")
     for key, value in sample_data.items():
         print(f"  {key}: {value}")
     
@@ -67,14 +67,14 @@ def demo_basic_wp_pdf_generation():
             with open(output_file, 'wb') as f:
                 f.write(pdf_bytes)
             
-            print(f"\n✅ PDF generated successfully!")
+            print(f"\n PDF generated successfully!")
             print(f"   File: {output_file}")
             print(f"   Size: {len(pdf_bytes):,} bytes")
         else:
-            print("\n❌ PDF generation failed (no bytes returned)")
+            print("\n PDF generation failed (no bytes returned)")
             
     except Exception as e:
-        print(f"\n⚠️  Error: {e}")
+        print(f"\n  Error: {e}")
         print("   (This is expected if templates are not available)")
 
 
@@ -124,15 +124,15 @@ def demo_complete_wp_pdf_with_formatting():
         'total_price': 18999.00
     }
     
-    print("\n📊 Calculation Data:")
+    print("\n Calculation Data:")
     for key, value in calculation_data.items():
         print(f"  {key}: {value}")
     
-    print("\n👤 Customer Data:")
+    print("\n Customer Data:")
     for key, value in customer_data.items():
         print(f"  {key}: {value}")
     
-    print("\n💰 Pricing Data:")
+    print("\n Pricing Data:")
     for key, value in pricing_data.items():
         print(f"  {key}: {value}")
     
@@ -148,20 +148,20 @@ def demo_complete_wp_pdf_with_formatting():
             with open(output_file, 'wb') as f:
                 f.write(pdf_bytes)
             
-            print(f"\n✅ PDF generated successfully!")
+            print(f"\n PDF generated successfully!")
             print(f"   File: {output_file}")
             print(f"   Size: {len(pdf_bytes):,} bytes")
             
             # Show formatted values
-            print(f"\n📝 German Formatting Examples:")
+            print(f"\n German Formatting Examples:")
             print(f"   Total Price: {service._format_german_currency(pricing_data['total_price'])}")
             print(f"   Heating Costs/Year: {service._format_german_currency(calculation_data['wp_heizkosten_jahr'])}")
             print(f"   COP Value: {service._format_german_decimal(calculation_data['wp_cop_wert'], 1)}")
         else:
-            print("\n❌ PDF generation failed (no bytes returned)")
+            print("\n PDF generation failed (no bytes returned)")
             
     except Exception as e:
-        print(f"\n⚠️  Error: {e}")
+        print(f"\n  Error: {e}")
         print("   (This is expected if templates are not available)")
 
 
@@ -192,8 +192,8 @@ def demo_partial_page_generation():
     # Generate only pages 1-3
     include_pages = [1, 2, 3]
     
-    print(f"\n📄 Generating pages: {include_pages}")
-    print("\n📋 Sample Data:")
+    print(f"\n Generating pages: {include_pages}")
+    print("\n Sample Data:")
     for key, value in sample_data.items():
         print(f"  {key}: {value}")
     
@@ -208,15 +208,15 @@ def demo_partial_page_generation():
             with open(output_file, 'wb') as f:
                 f.write(pdf_bytes)
             
-            print(f"\n✅ Partial PDF generated successfully!")
+            print(f"\n Partial PDF generated successfully!")
             print(f"   File: {output_file}")
             print(f"   Pages: {len(include_pages)}")
             print(f"   Size: {len(pdf_bytes):,} bytes")
         else:
-            print("\n❌ PDF generation failed (no bytes returned)")
+            print("\n PDF generation failed (no bytes returned)")
             
     except Exception as e:
-        print(f"\n⚠️  Error: {e}")
+        print(f"\n  Error: {e}")
         print("   (This is expected if templates are not available)")
 
 
@@ -230,16 +230,16 @@ def demo_placeholder_system():
     print("DEMO 4: WP Placeholder System")
     print("="*80)
     
-    print("\n📌 Static Placeholders:")
+    print("\n Static Placeholders:")
     for placeholder in sorted(WPPlaceholderSystem.STATIC_PLACEHOLDERS.keys()):
         print(f"  • {placeholder}")
     
-    print(f"\n🔄 Dynamic Placeholders ({len(WPPlaceholderSystem.DYNAMIC_PLACEHOLDERS)}):")
+    print(f"\n Dynamic Placeholders ({len(WPPlaceholderSystem.DYNAMIC_PLACEHOLDERS)}):")
     for placeholder in sorted(WPPlaceholderSystem.DYNAMIC_PLACEHOLDERS):
         print(f"  • {placeholder}")
     
     # Test placeholder replacement
-    print("\n🔧 Placeholder Replacement Examples:")
+    print("\n Placeholder Replacement Examples:")
     test_data = {
         'wp_modell_name': 'Viessmann Vitocal 200-S',
         'wp_cop_wert': '4,5',
@@ -248,7 +248,7 @@ def demo_placeholder_system():
     
     for placeholder in ['wp_modell_name', 'wp_cop_wert', 'wp_hersteller', 'wp_leistung_kw']:
         result = WPPlaceholderSystem.replace_placeholder(placeholder, test_data)
-        status = "✓" if result != placeholder else "✗"
+        status = "" if result != placeholder else ""
         print(f"  {status} {placeholder} → {result}")
 
 
@@ -264,13 +264,13 @@ def demo_german_formatting():
     
     service = StandardWPPDFService()
     
-    print("\n💶 Currency Formatting:")
+    print("\n Currency Formatting:")
     test_amounts = [99.99, 1250.50, 16999.00, 18999.00, 1000000.00]
     for amount in test_amounts:
         formatted = service._format_german_currency(amount)
         print(f"  {amount:>12.2f} → {formatted}")
     
-    print("\n🔢 Decimal Formatting:")
+    print("\n Decimal Formatting:")
     test_values = [
         (4.5, 1, "COP Value"),
         (4.25, 2, "JAZ"),
@@ -294,11 +294,11 @@ def demo_service_info():
     
     service = StandardWPPDFService()
     
-    print("\n📁 Directory Configuration:")
+    print("\n Directory Configuration:")
     print(f"  Template Directory: {service.template_loader.template_dir}")
     print(f"  Coordinates Directory: {service.coords_dir}")
     
-    print("\n📄 Expected Files:")
+    print("\n Expected Files:")
     print("  Templates:")
     for i in range(1, 9):
         print(f"    • hp_nt_{i:02d}.pdf")
@@ -311,18 +311,18 @@ def demo_service_info():
     template_exists = service.template_loader.template_dir.exists()
     coords_exists = service.coords_dir.exists()
     
-    print("\n✓ Directory Status:")
-    print(f"  Template Directory: {'✓ EXISTS' if template_exists else '✗ NOT FOUND'}")
-    print(f"  Coordinates Directory: {'✓ EXISTS' if coords_exists else '✗ NOT FOUND'}")
+    print("\n Directory Status:")
+    print(f"  Template Directory: {' EXISTS' if template_exists else ' NOT FOUND'}")
+    print(f"  Coordinates Directory: {' EXISTS' if coords_exists else ' NOT FOUND'}")
     
     # Try to load templates
     try:
         templates = service.template_loader.get_all_templates()
-        print(f"\n📊 Available Templates: {len(templates)}/8")
+        print(f"\n Available Templates: {len(templates)}/8")
         for page_num in sorted(templates.keys()):
-            print(f"  ✓ Page {page_num}")
+            print(f"   Page {page_num}")
     except Exception as e:
-        print(f"\n⚠️  Could not load templates: {e}")
+        print(f"\n  Could not load templates: {e}")
 
 
 def main():
@@ -344,7 +344,7 @@ def main():
     print("\n" + "="*80)
     print("DEMO COMPLETE")
     print("="*80)
-    print("\n✅ All demos executed successfully!")
+    print("\n All demos executed successfully!")
     print("\nGenerated files:")
     print("  • demo_wp_basic.pdf (if templates available)")
     print("  • demo_wp_complete.pdf (if templates available)")

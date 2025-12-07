@@ -56,9 +56,9 @@ def monitor_system(duration=60):
 
         # Live-Anzeige
         print(
-            f"\r🖥️ CPU: {
-                cpu_percent:5.1f}% | 💾 RAM: {
-                memory.percent:5.1f}% | 💽 Disk: {
+            f"\r CPU: {
+                cpu_percent:5.1f}% |  RAM: {
+                memory.percent:5.1f}% |  Disk: {
                 disk.percent:5.1f}%",
             end='')
 
@@ -72,13 +72,13 @@ def monitor_system(duration=60):
     max_memory_mb = max(stats['memory_used_mb'])
 
     print("MONITORING-ERGEBNISSE:")
-    print(f"🖥️ Durchschnittliche CPU: {avg_cpu:.1f}%")
-    print(f"💾 Durchschnittlicher RAM: {avg_memory:.1f}%")
-    print(f"💾 Max RAM-Verbrauch: {max_memory_mb:.1f} MB")
+    print(f" Durchschnittliche CPU: {avg_cpu:.1f}%")
+    print(f" Durchschnittlicher RAM: {avg_memory:.1f}%")
+    print(f" Max RAM-Verbrauch: {max_memory_mb:.1f} MB")
     print(
-        f"🌐 Netzwerk gesendet: {stats['network_sent'][-1] / 1024 / 1024:.1f} MB")
+        f" Netzwerk gesendet: {stats['network_sent'][-1] / 1024 / 1024:.1f} MB")
     print(
-        f"🌐 Netzwerk empfangen: {stats['network_recv'][-1] / 1024 / 1024:.1f} MB")
+        f" Netzwerk empfangen: {stats['network_recv'][-1] / 1024 / 1024:.1f} MB")
 
     # Warnungen
     if avg_cpu > 80:

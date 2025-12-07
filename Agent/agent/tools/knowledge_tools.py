@@ -102,7 +102,7 @@ def setup_knowledge_base(
     if os.path.exists(db_path):
         try:
             logger.info(f"Loading existing FAISS index from {db_path}")
-            print(f"📚 Loading existing FAISS index from {db_path}...")
+            print(f" Loading existing FAISS index from {db_path}...")
 
             # Check if index is up-to-date
             needs_rebuild = False
@@ -116,7 +116,7 @@ def setup_knowledge_base(
 
                 if cached_files != current_files:
                     logger.info("Document changes detected, rebuilding index")
-                    print("🔄 Document changes detected, rebuilding index...")
+                    print(" Document changes detected, rebuilding index...")
                     needs_rebuild = True
 
             if not needs_rebuild:
@@ -150,7 +150,7 @@ def setup_knowledge_base(
         except Exception as e:
             logger.warning(f"Error loading existing index: {e}")
             print(f"Error loading existing index: {e}")
-            print("🔄 Will rebuild index from PDFs...")
+            print(" Will rebuild index from PDFs...")
 
     # Find all PDF files in knowledge base directory
     pdf_files = list(kb_dir.glob("*.pdf"))
@@ -188,7 +188,7 @@ The agent will automatically index them for search.
         return None
 
     print(f"Found {len(pdf_files)} PDF files in knowledge base")
-    print("🔄 Loading and processing documents...")
+    print(" Loading and processing documents...")
     logger.info("Loading and processing PDF documents")
 
     # Batch processing optimization: Load all PDFs efficiently
@@ -228,7 +228,7 @@ The agent will automatically index them for search.
         f"Splitting documents into chunks "
         f"(size={chunk_size}, overlap={chunk_overlap})"
     )
-    print("✂️ Splitting documents into optimized chunks...")
+    print(" Splitting documents into optimized chunks...")
 
     # Optimized text splitter configuration
     text_splitter = RecursiveCharacterTextSplitter(
@@ -243,7 +243,7 @@ The agent will automatically index them for search.
 
     # Create embeddings and build FAISS index
     logger.info("Creating embeddings and building FAISS index")
-    print("🧠 Creating embeddings and building FAISS index...")
+    print(" Creating embeddings and building FAISS index...")
     print("   (This may take a few minutes depending on document size)")
 
     try:
@@ -283,7 +283,7 @@ The agent will automatically index them for search.
 
         # Save the index for future use (caching)
         logger.info(f"Saving FAISS index to {db_path}")
-        print(f"💾 Saving FAISS index to {db_path}...")
+        print(f" Saving FAISS index to {db_path}...")
         try:
             vector_store.save_local(db_path)
         except Exception as e:

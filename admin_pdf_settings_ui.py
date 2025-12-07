@@ -47,19 +47,19 @@ def render_pdf_settings_ui():
         )
         return
 
-    st.title("⚙️ PDF & Design Einstellungen")
+    st.title(" PDF & Design Einstellungen")
     st.markdown("---")
 
     # Tab-Navigation für verschiedene Einstellungsbereiche
     tabs = st.tabs(
         [
-            "PDF-Design",
-            "Diagramm-Farben",
-            "🖼️ UI-Themes",
-            "PDF-Templates",
-            "Layout-Optionen",
-            "💾 Import/Export",
-            "Versionierung",
+            " PDF-Design",
+            " Diagramm-Farben",
+            " UI-Themes",
+            " PDF-Templates",
+            " Layout-Optionen",
+            " Import/Export",
+            " Versionierung",
         ]
     )
 
@@ -156,7 +156,7 @@ def render_pdf_design_settings(load_setting, save_setting):
         st.markdown("---")
 
         # Section 2: Schriftart-Einstellungen (Task 9.2)
-        st.subheader("🔤 Schriftart-Einstellungen")
+        st.subheader(" Schriftart-Einstellungen")
 
         font_family = st.selectbox(
             "Schriftart",
@@ -211,7 +211,7 @@ def render_pdf_design_settings(load_setting, save_setting):
         st.markdown("---")
 
         # Section 3: Logo & Layout-Einstellungen (Task 9.3)
-        st.subheader("🖼️ Logo & Layout-Einstellungen")
+        st.subheader(" Logo & Layout-Einstellungen")
 
         col1, col2 = st.columns(2)
         with col1:
@@ -249,7 +249,7 @@ def render_pdf_design_settings(load_setting, save_setting):
         st.markdown("---")
 
         # Section 4: Wasserzeichen-Einstellungen (Task 9.4)
-        st.subheader("💧 Wasserzeichen-Einstellungen")
+        st.subheader(" Wasserzeichen-Einstellungen")
 
         watermark_enabled = st.checkbox(
             "Wasserzeichen aktivieren",
@@ -284,7 +284,7 @@ def render_pdf_design_settings(load_setting, save_setting):
         # Save button
         col1, col2, col3 = st.columns([1, 1, 2])
         with col1:
-            if st.button("💾 Speichern", type="primary", use_container_width=True):
+            if st.button(" Speichern", type="primary", use_container_width=True):
                 new_settings = {
                     "primary_color": primary_color,
                     "secondary_color": secondary_color,
@@ -308,7 +308,7 @@ def render_pdf_design_settings(load_setting, save_setting):
                     _show_error_message("Fehler beim Speichern der Einstellungen.")
 
         with col2:
-            if st.button("🔄 Zurücksetzen", use_container_width=True):
+            if st.button(" Zurücksetzen", use_container_width=True):
                 if save_setting("pdf_design_settings", defaults):
                     _show_success_message("Einstellungen auf Standard zurückgesetzt!")
                     st.rerun()
@@ -317,7 +317,7 @@ def render_pdf_design_settings(load_setting, save_setting):
 
     # Section 5: Live-Vorschau (Task 9.5)
     with col_preview:
-        st.subheader("👁️ Live-Vorschau")
+        st.subheader(" Live-Vorschau")
 
         # Create preview HTML
         preview_html = f"""
@@ -434,7 +434,7 @@ def render_pdf_design_settings(load_setting, save_setting):
         st.markdown("---")
 
         # Settings summary
-        with st.expander("📋 Einstellungsübersicht"):
+        with st.expander(" Einstellungsübersicht"):
             st.markdown(
                 f"""
             **Farben:**
@@ -479,7 +479,7 @@ def render_chart_color_settings(load_setting, save_setting):
 
     # Create sub-tabs for different chart color settings
     sub_tabs = st.tabs(
-        ["🌐 Globale Farben", "Farbpaletten", "⚙️ Individuelle Konfiguration"]
+        [" Globale Farben", "Farbpaletten", " Individuelle Konfiguration"]
     )
 
     # Sub-Tab 1: Globale Farbeinstellungen (Task 10.1)
@@ -503,7 +503,7 @@ def render_global_chart_colors(visualization_settings, load_setting, save_settin
 
     Ermöglicht die Konfiguration von 6 globalen Farben für alle Diagramme
     """
-    st.subheader("🌐 Globale Diagrammfarben")
+    st.subheader(" Globale Diagrammfarben")
     st.markdown("Diese Farben werden standardmäßig für alle Diagramme verwendet.")
 
     # Default global colors
@@ -571,7 +571,7 @@ def render_global_chart_colors(visualization_settings, load_setting, save_settin
 
     with col1:
         if st.button(
-            "💾 Speichern",
+            " Speichern",
             type="primary",
             use_container_width=True,
             key="save_global_colors",
@@ -586,7 +586,7 @@ def render_global_chart_colors(visualization_settings, load_setting, save_settin
 
     with col2:
         if st.button(
-            "🔄 Zurücksetzen", use_container_width=True, key="reset_global_colors"
+            " Zurücksetzen", use_container_width=True, key="reset_global_colors"
         ):
             visualization_settings["global_chart_colors"] = default_colors
 
@@ -729,7 +729,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
 
     Ermöglicht die Konfiguration von Farben für einzelne Diagramme
     """
-    st.subheader("⚙️ Individuelle Diagramm-Konfiguration")
+    st.subheader(" Individuelle Diagramm-Konfiguration")
     st.markdown(
         "Konfigurieren Sie Farben für einzelne Diagramme. "
         "Diese überschreiben die globalen Einstellungen."
@@ -890,7 +890,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
 
     with col1:
         if st.button(
-            "💾 Speichern",
+            " Speichern",
             type="primary",
             use_container_width=True,
             key=f"save_chart_{selected_chart_key}",
@@ -914,7 +914,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
 
     with col2:
         if st.button(
-            "🔄 Auf Global zurücksetzen",
+            " Auf Global zurücksetzen",
             use_container_width=True,
             key=f"reset_chart_{selected_chart_key}",
         ):
@@ -935,7 +935,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
     st.markdown("---")
 
     if individual_charts:
-        with st.expander(f"📋 Konfigurierte Diagramme ({len(individual_charts)})"):
+        with st.expander(f" Konfigurierte Diagramme ({len(individual_charts)})"):
             for chart_key, config in individual_charts.items():
                 # Find chart name
                 chart_name = chart_key
@@ -973,7 +973,7 @@ def render_ui_theme_settings(load_setting, save_setting):
     - Theme-Vorschau (Task 11.2)
     - Theme-Editor (Task 11.3)
     """
-    st.header("🖼️ UI-Theme-System")
+    st.header(" UI-Theme-System")
     st.markdown(
         "Wählen Sie ein Theme für die Benutzeroberfläche "
         "oder erstellen Sie ein eigenes."
@@ -1081,7 +1081,7 @@ def render_ui_theme_settings(load_setting, save_setting):
 
         # Task 11.3: Theme-Editor (nur für Custom Theme)
         if selected_theme_key == "custom":
-            st.subheader("✏️ Theme-Editor")
+            st.subheader(" Theme-Editor")
             st.markdown("Erstellen Sie Ihr eigenes Theme mit individuellen Farben.")
 
             # Get custom theme or use current as base
@@ -1143,7 +1143,7 @@ def render_ui_theme_settings(load_setting, save_setting):
 
             with col1:
                 if st.button(
-                    "💾 Theme speichern",
+                    " Theme speichern",
                     type="primary",
                     use_container_width=True,
                     key="save_custom_theme",
@@ -1174,7 +1174,7 @@ def render_ui_theme_settings(load_setting, save_setting):
 
             with col2:
                 if st.button(
-                    "🔄 Zurücksetzen",
+                    " Zurücksetzen",
                     use_container_width=True,
                     key="reset_custom_theme",
                 ):
@@ -1192,7 +1192,7 @@ def render_ui_theme_settings(load_setting, save_setting):
 
     # Task 11.2: Theme-Vorschau
     with col_preview:
-        st.subheader("👁️ Theme-Vorschau")
+        st.subheader(" Theme-Vorschau")
 
         # Get theme to preview
         if selected_theme_key == "custom":
@@ -1355,7 +1355,7 @@ def render_ui_theme_settings(load_setting, save_setting):
     st.markdown("---")
 
     # Current active theme info
-    st.markdown("### 📌 Aktuell aktives Theme")
+    st.markdown("###  Aktuell aktives Theme")
 
     if current_theme_key in predefined_themes:
         theme_name = predefined_themes[current_theme_key]["name"]
@@ -1417,7 +1417,7 @@ def render_pdf_template_management(load_setting, save_setting):
         pdf_templates["active_template_id"] = None
 
     # Create tabs for different sections
-    tab1, tab2 = st.tabs(["📋 Template-Auswahl", "➕ Neues Template hinzufügen"])
+    tab1, tab2 = st.tabs([" Template-Auswahl", " Neues Template hinzufügen"])
 
     # Tab 1: Template-Auswahl (Task 12.1 & 12.2)
     with tab1:
@@ -1437,7 +1437,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
     - "Template aktivieren" Button
     - Template-Details (Name, Beschreibung, Dateipfade)
     """
-    st.subheader("📋 Verfügbare Templates")
+    st.subheader(" Verfügbare Templates")
 
     templates = pdf_templates.get("templates", [])
     active_template_id = pdf_templates.get("active_template_id")
@@ -1507,7 +1507,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
 
             # Status indicator
             is_active = selected_template_id == active_template_id
-            status_color = "🟢" if is_active else "⚪"
+            status_color = "🟢" if is_active else ""
             status_text = "Aktiv" if is_active else "Inaktiv"
             st.markdown(f"**Status:** {status_color} {status_text}")
 
@@ -1605,7 +1605,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
             page_path = selected_template.get(page_key, "")
 
             if not page_path:
-                st.text(f"⚪ Seite {i}: Nicht konfiguriert")
+                st.text(f" Seite {i}: Nicht konfiguriert")
             else:
                 # Check if file exists
                 file_exists = os.path.exists(page_path)
@@ -1636,7 +1636,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
             coord_path = selected_template.get(coord_key, "")
 
             if not coord_path:
-                st.text(f"⚪ Seite {i}: Nicht konfiguriert")
+                st.text(f" Seite {i}: Nicht konfiguriert")
             else:
                 # Check if file exists
                 file_exists = os.path.exists(coord_path)
@@ -1757,7 +1757,7 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
     - Text Inputs für Dateipfade
     - "Template hinzufügen" Button
     """
-    st.subheader("➕ Neues Template hinzufügen")
+    st.subheader(" Neues Template hinzufügen")
     st.markdown(
         "Erstellen Sie ein neues PDF-Template mit benutzerdefinierten "
         "Hintergründen und Koordinaten."
@@ -1866,7 +1866,7 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
 
     with col1:
         if st.button(
-            "➕ Template hinzufügen",
+            " Template hinzufügen",
             type="primary",
             use_container_width=True,
             key="add_template_button",
@@ -1935,7 +1935,7 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
 
     with col2:
         if st.button(
-            "🔄 Formular zurücksetzen", use_container_width=True, key="reset_form"
+            " Formular zurücksetzen", use_container_width=True, key="reset_form"
         ):
             st.rerun()
 
@@ -1996,7 +1996,7 @@ def render_layout_options(load_setting, save_setting):
         "extended": {
             "name": "Erweiterte Layouts",
             "description": "Standard-PDF mit optionalen Zusatzseiten",
-            "icon": "📑",
+            "icon": "",
             "pages": "8+",
             "features": [
                 "Alle Standard-Seiten",
@@ -2010,7 +2010,7 @@ def render_layout_options(load_setting, save_setting):
         "compact": {
             "name": "Kompakt-Layout",
             "description": "Reduzierte Version mit Kerninfos (4-6 Seiten)",
-            "icon": "📋",
+            "icon": "",
             "pages": "4-6",
             "features": [
                 "Deckblatt",
@@ -2022,7 +2022,7 @@ def render_layout_options(load_setting, save_setting):
         "custom": {
             "name": "Custom-Layout",
             "description": "Frei konfigurierbares Layout",
-            "icon": "⚙️",
+            "icon": "",
             "pages": "variabel",
             "features": [
                 "Individuelle Seitenauswahl",
@@ -2058,7 +2058,7 @@ def render_layout_options(load_setting, save_setting):
     st.markdown("---")
 
     # Task 13.1: Layout-Liste
-    st.subheader("📋 Verfügbare Layouts")
+    st.subheader(" Verfügbare Layouts")
     st.markdown(
         "Aktivieren oder deaktivieren Sie Layouts und "
         "legen Sie ein Standard-Layout fest."
@@ -2075,7 +2075,7 @@ def render_layout_options(load_setting, save_setting):
         with st.expander(
             f"{layout_info['icon']} **{layout_info['name']}** "
             f"({'Aktiviert' if current_config['enabled'] else 'Deaktiviert'}"
-            f"{' • ⭐ Standard' if current_config['is_default'] else ''})",
+            f"{' •  Standard' if current_config['is_default'] else ''})",
             expanded=current_config["is_default"],
         ):
             # Layout description
@@ -2136,7 +2136,7 @@ def render_layout_options(load_setting, save_setting):
 
             # Individual save button for this layout
             if st.button(
-                "💾 Speichern",
+                " Speichern",
                 key=f"save_layout_{layout_key}",
                 use_container_width=True,
                 type="primary" if changes_made else "secondary",
@@ -2176,13 +2176,13 @@ def render_layout_options(load_setting, save_setting):
     st.markdown("---")
 
     # Global save button
-    st.subheader("💾 Alle Änderungen speichern")
+    st.subheader(" Alle Änderungen speichern")
 
     col1, col2, col3 = st.columns([1, 1, 2])
 
     with col1:
         if st.button(
-            "💾 Alle speichern",
+            " Alle speichern",
             type="primary",
             use_container_width=True,
             key="save_all_layouts",
@@ -2216,7 +2216,7 @@ def render_layout_options(load_setting, save_setting):
 
     with col2:
         if st.button(
-            "🔄 Zurücksetzen", use_container_width=True, key="reset_all_layouts"
+            " Zurücksetzen", use_container_width=True, key="reset_all_layouts"
         ):
             # Reset to defaults
             default_layout_options = {
@@ -2265,14 +2265,14 @@ def render_layout_options(load_setting, save_setting):
         st.metric("Verfügbare Layouts", len(available_layouts), delta=None)
 
     # Detailed status table
-    with st.expander("📋 Detaillierte Status-Übersicht"):
+    with st.expander(" Detaillierte Status-Übersicht"):
         st.markdown("**Status aller Layouts:**")
 
         for layout_key, layout_info in available_layouts.items():
             config = updated_layouts[layout_key]
 
             status_icon = "" if config["enabled"] else ""
-            default_icon = "⭐" if config["is_default"] else ""
+            default_icon = "" if config["is_default"] else ""
 
             st.markdown(f"{status_icon} **{layout_info['name']}** {default_icon}")
             st.markdown(
@@ -2292,7 +2292,7 @@ def render_import_export(load_setting, save_setting):
     - Import von Design-Konfigurationen
     - Validierung importierter Daten
     """
-    st.header("💾 Import/Export von Design-Konfigurationen")
+    st.header(" Import/Export von Design-Konfigurationen")
     st.markdown(
         "Exportieren und importieren Sie alle Design-Einstellungen " "als JSON-Datei."
     )
@@ -2302,13 +2302,13 @@ def render_import_export(load_setting, save_setting):
 
     # Export Section (Task 14.1)
     with col_export:
-        st.subheader("📤 Export")
+        st.subheader(" Export")
         st.markdown(
             "Exportieren Sie alle aktuellen Design-Einstellungen " "in eine JSON-Datei."
         )
 
         # Show what will be exported
-        with st.expander("📋 Was wird exportiert?"):
+        with st.expander(" Was wird exportiert?"):
             st.markdown(
                 """
             Die folgenden Einstellungen werden exportiert:
@@ -2325,7 +2325,7 @@ def render_import_export(load_setting, save_setting):
 
         # Export button
         if st.button(
-            "📥 Konfiguration exportieren",
+            " Konfiguration exportieren",
             type="primary",
             use_container_width=True,
             key="export_config_btn",
@@ -2348,7 +2348,7 @@ def render_import_export(load_setting, save_setting):
 
                 # Create download button
                 st.download_button(
-                    label="💾 JSON-Datei herunterladen",
+                    label=" JSON-Datei herunterladen",
                     data=json_str,
                     file_name=f"design_config_{
                         datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
@@ -2363,14 +2363,14 @@ def render_import_export(load_setting, save_setting):
                 )
 
                 # Show preview
-                with st.expander("👁️ Vorschau der exportierten Daten"):
+                with st.expander(" Vorschau der exportierten Daten"):
                     st.json(config_data)
             else:
                 _show_error_message("Fehler beim Sammeln der Konfigurationsdaten.")
 
     # Import Section (Task 14.2)
     with col_import:
-        st.subheader("📥 Import")
+        st.subheader(" Import")
         st.markdown("Importieren Sie Design-Einstellungen aus einer JSON-Datei.")
 
         # File upload
@@ -2408,7 +2408,7 @@ def render_import_export(load_setting, save_setting):
                             )
 
                     # Show what will be imported
-                    with st.expander("📋 Was wird importiert?"):
+                    with st.expander(" Was wird importiert?"):
                         settings_count = len(
                             [k for k in imported_config.keys() if not k.startswith("_")]
                         )
@@ -2422,7 +2422,7 @@ def render_import_export(load_setting, save_setting):
                                 st.markdown(f"- {friendly_name}")
 
                     # Preview imported data
-                    with st.expander("👁️ Vorschau der importierten Daten"):
+                    with st.expander(" Vorschau der importierten Daten"):
                         # Remove metadata for preview
                         preview_data = {
                             k: v
@@ -2740,7 +2740,7 @@ def render_version_management(load_setting, save_setting):
     st.markdown("---")
 
     # Section 1: Version speichern (Task 15.1)
-    st.subheader("💾 Neue Version speichern")
+    st.subheader(" Neue Version speichern")
     st.markdown("Erstellen Sie einen Snapshot aller aktuellen Design-Einstellungen.")
 
     col1, col2 = st.columns([3, 1])
@@ -2756,7 +2756,7 @@ def render_version_management(load_setting, save_setting):
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)  # Spacing
         if st.button(
-            "💾 Version speichern",
+            " Version speichern",
             type="primary",
             use_container_width=True,
             disabled=not version_name or version_name.strip() == "",
@@ -2803,7 +2803,7 @@ def render_version_management(load_setting, save_setting):
     st.markdown("---")
 
     # Section 2: Gespeicherte Versionen (Task 15.2 & 15.3)
-    st.subheader("📚 Gespeicherte Versionen")
+    st.subheader(" Gespeicherte Versionen")
 
     if not versions:
         st.info("Noch keine Versionen gespeichert.")
@@ -2859,7 +2859,7 @@ def render_version_management(load_setting, save_setting):
                 with col2:
                     # Load button (Task 15.2)
                     if st.button(
-                        "📥 Version laden",
+                        " Version laden",
                         use_container_width=True,
                         key=f"load_version_{version_name}",
                         help="Stellt alle Einstellungen dieser Version wieder her",
@@ -3120,6 +3120,6 @@ def _show_info_message(message: str):
 # Main entry point for testing
 if __name__ == "__main__":
     st.set_page_config(
-        page_title="PDF & Design Einstellungen", page_icon="⚙️", layout="wide"
+        page_title="PDF & Design Einstellungen", page_icon="", layout="wide"
     )
     render_pdf_settings_ui()

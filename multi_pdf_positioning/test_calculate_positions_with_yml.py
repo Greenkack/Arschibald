@@ -71,7 +71,7 @@ def test_with_real_yml():
     print(f"   Safe zones: {len(pdf_analysis.safe_zones)}")
     
     # Calculate new positions using grid strategy
-    print(f"\n🔄 Calculating new positions (grid strategy)...")
+    print(f"\n Calculating new positions (grid strategy)...")
     
     calculator = PositionCalculator()
     new_positions = calculator.calculate_positions(
@@ -105,7 +105,7 @@ def test_with_real_yml():
     if is_valid:
         print("All positions are valid!")
     else:
-        print(f"⚠ Validation found {len(errors)} issue(s):")
+        print(f" Validation found {len(errors)} issue(s):")
         for error in errors[:10]:  # Show first 10 errors
             print(f"   - {error}")
         if len(errors) > 10:
@@ -117,7 +117,7 @@ def test_with_real_yml():
     if len(collisions) == 0:
         print("No collisions detected!")
     else:
-        print(f"⚠ Found {len(collisions)} collision(s):")
+        print(f" Found {len(collisions)} collision(s):")
         for collision in collisions[:5]:  # Show first 5
             elem1 = elements[collision.element1_index]
             elem2 = elements[collision.element2_index]
@@ -190,7 +190,7 @@ def test_convenience_function():
     )
     
     # Use convenience function
-    print(f"\n🔄 Using convenience function...")
+    print(f"\n Using convenience function...")
     positions = calculate_positions(elements, pdf_analysis)
     
     print(f"Calculated {len(positions)} positions")
@@ -265,7 +265,7 @@ def test_grid_distribution():
     if all_in_bounds:
         print(f"\nAll positions are within page bounds!")
     else:
-        print(f"\n⚠ Some positions are outside bounds")
+        print(f"\n Some positions are outside bounds")
     
     return True
 

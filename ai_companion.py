@@ -141,7 +141,7 @@ ANTWORTE IMMER:
         col1, col2, col3 = st.columns([10, 1, 1])
         with col2:
             if st.button(
-                "🤖",
+                "",
                 help="AI-Begleiter ein/ausblenden",
                     key="ai_toggle"):
                 st.session_state.ai_companion_visible = not st.session_state.ai_companion_visible
@@ -181,7 +181,7 @@ ANTWORTE IMMER:
             """, unsafe_allow_html=True)
 
             # Header
-            st.markdown("### 🤖 Solar AI-Begleiter")
+            st.markdown("###  Solar AI-Begleiter")
             st.markdown("*Powered by DeepSeek*")
 
             # API-Key Eingabe (falls nicht gesetzt)
@@ -238,7 +238,7 @@ ANTWORTE IMMER:
                     # AI Response
                     st.markdown(f"""
                     <div style="background: #e8f4f8; padding: 8px; border-radius: 5px; margin: 5px 0;">
-                        <strong>🤖 AI:</strong><br>
+                        <strong> AI:</strong><br>
                         {entry['assistant']}
                     </div>
                     """, unsafe_allow_html=True)
@@ -296,7 +296,7 @@ ANTWORTE IMMER:
 
     def process_message(self, message: str):
         """Verarbeitet eine Nachricht"""
-        with st.spinner("🤖 AI denkt nach..."):
+        with st.spinner(" AI denkt nach..."):
             response = self.call_deepseek_api(message)
 
         if response:

@@ -65,7 +65,7 @@ def render_extended_core_status_dashboard():
     with col_stats2:
         st.metric("Verfügbare Module", total_count)
     with col_stats3:
-        integration_status = "🟢 FULL" if coverage == 100 else "🟡 PARTIAL" if coverage > 30 else "🔴 MINIMAL"
+        integration_status = "🟢 FULL" if coverage == 100 else "🟡 PARTIAL" if coverage > 30 else " MINIMAL"
         st.metric("Integration Status", integration_status)
     
     st.markdown("---")
@@ -73,8 +73,8 @@ def render_extended_core_status_dashboard():
     # Tabs für verschiedene Phasen
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "Phase 1-4 (Basis)",
-        "🔐 Phase 5-7 (UI & Auth)",
-        "⚙️ Phase 8-9 (Jobs & Migrations)",
+        " Phase 5-7 (UI & Auth)",
+        " Phase 8-9 (Jobs & Migrations)",
         "Phase 10-12 (Extensions)",
         "Performance Metrics"
     ])
@@ -103,7 +103,7 @@ def _render_phase_1_4():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("#### ⚙️ Configuration")
+        st.markdown("####  Configuration")
         if is_feature_enabled('config'):
             config = get_app_config()
             if config:
@@ -137,7 +137,7 @@ def _render_phase_1_4():
             st.info("Deaktiviert")
     
     # Phase 2: Cache
-    st.markdown("#### 💾 Cache System")
+    st.markdown("####  Cache System")
     if is_feature_enabled('cache'):
         cache = get_app_cache()
         if cache:
@@ -165,7 +165,7 @@ def _render_phase_1_4():
         st.info("Deaktiviert (optional)")
     
     # Phase 3: Session
-    st.markdown("#### 🔄 Session Persistence")
+    st.markdown("####  Session Persistence")
     if is_feature_enabled('session'):
         session_mgr = get_session_manager()
         if session_mgr:
@@ -187,7 +187,7 @@ def _render_phase_1_4():
         st.info("Deaktiviert (optional)")
     
     # Phase 4: Database
-    st.markdown("#### 🗄️ Database Connection Pooling")
+    st.markdown("####  Database Connection Pooling")
     if is_feature_enabled('database'):
         db_mgr = get_database_manager()
         if db_mgr:
@@ -219,13 +219,13 @@ def _render_phase_1_4():
 
 def _render_phase_5_7():
     """Phase 5-7: Security, Forms, Navigation"""
-    st.markdown("### 🔐 Phase 5-7: UI & Authentication")
+    st.markdown("###  Phase 5-7: UI & Authentication")
     
     # Phase 5: Security
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("#### 🔐 Security Manager")
+        st.markdown("####  Security Manager")
         if is_feature_enabled('security'):
             sec_mgr = get_security_manager()
             if sec_mgr:
@@ -240,7 +240,7 @@ def _render_phase_5_7():
             st.info("Deaktiviert")
     
     with col2:
-        st.markdown("#### 🧭 Router")
+        st.markdown("####  Router")
         if is_feature_enabled('router'):
             router = get_router()
             if router:
@@ -285,7 +285,7 @@ def _render_phase_5_7():
             st.info("Deaktiviert")
     
     # Phase 7: Navigation History
-    st.markdown("#### 📍 Navigation History")
+    st.markdown("####  Navigation History")
     if is_feature_enabled('navigation'):
         nav_hist = get_navigation_history()
         if nav_hist:
@@ -301,10 +301,10 @@ def _render_phase_5_7():
 
 def _render_phase_8_9():
     """Phase 8-9: Jobs & Migrations"""
-    st.markdown("### ⚙️ Phase 8-9: Jobs & Migrations")
+    st.markdown("###  Phase 8-9: Jobs & Migrations")
     
     # Phase 8: Jobs
-    st.markdown("#### ⚙️ Job Manager")
+    st.markdown("####  Job Manager")
     if is_feature_enabled('jobs'):
         job_mgr = get_job_manager()
         if job_mgr:
@@ -339,7 +339,7 @@ def _render_phase_8_9():
         st.info("Deaktiviert")
     
     # Phase 9: Migrations
-    st.markdown("#### 🔄 Migration Manager")
+    st.markdown("####  Migration Manager")
     if is_feature_enabled('migrations'):
         mig_mgr = get_migration_manager()
         if mig_mgr:
@@ -405,7 +405,7 @@ def _render_phase_10_12():
         st.info("Deaktiviert")
     
     # Phase 11: DB Extensions
-    st.markdown("#### 🗄️ Database Extensions")
+    st.markdown("####  Database Extensions")
     if is_feature_enabled('db_ext'):
         perf_mon = get_db_performance_monitor()
         if perf_mon:
@@ -443,7 +443,7 @@ def _render_performance_metrics():
     st.markdown("### Performance Metrics")
     
     # Overall system health
-    st.markdown("#### 🏥 System Health")
+    st.markdown("####  System Health")
     
     health_metrics = {}
     
@@ -483,7 +483,7 @@ def _render_performance_metrics():
     st.markdown("---")
     
     # Feature summary
-    st.markdown("#### 📋 Feature Summary")
+    st.markdown("####  Feature Summary")
     
     feature_groups = {
         'Basis (Phase 1-4)': ['config', 'logging', 'cache', 'session', 'database'],

@@ -70,7 +70,7 @@ requirements = {
     "5.3": "Belegungsgrad in Prozent anzeigen",
     "5.4": "Fortschrittsbalken anzeigen",
     "5.5": "Anzeigen sofort aktualisieren",
-    "8.1": "Expander-Panel '🔲 Modul-Belegung'",
+    "8.1": "Expander-Panel ' Modul-Belegung'",
     "8.2": "Statistiken (Gewünscht, Platziert, Abdeckung)",
     "8.3": "Fortschrittsbalken",
     "8.4": "Alle Steuerungs-Buttons",
@@ -82,7 +82,7 @@ for req_id, req_desc in requirements.items():
 
 # Check 7: Implementation details
 print("\nCheck 7: Implementation details")
-print("  Expander-Panel mit Icon '🔲 Modul-Belegung'")
+print("  Expander-Panel mit Icon ' Modul-Belegung'")
 print("  3 Statistik-Metriken (Gewünscht, Platziert, Abdeckung)")
 print("  Fortschrittsbalken mit Text")
 print("  Button 'Automatisch belegen' (Primary)")

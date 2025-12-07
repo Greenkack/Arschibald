@@ -65,7 +65,7 @@ def render_voice_input_ui():
     </head>
     <body>
         <div class="voice-container">
-            <button id="voiceBtn" class="voice-btn" onclick="toggleVoice()">🎤</button>
+            <button id="voiceBtn" class="voice-btn" onclick="toggleVoice()"></button>
             <div class="voice-status" id="status">Klicken Sie auf das Mikrofon</div>
             <div class="voice-transcript" id="transcript">...</div>
         </div>

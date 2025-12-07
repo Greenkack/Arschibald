@@ -21,18 +21,18 @@ def main():
     
     st.set_page_config(
         page_title="Admin Matrix Upload Demo",
-        page_icon="📤",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("📤 Admin Panel Matrix Upload Demo")
+    st.title(" Admin Panel Matrix Upload Demo")
     st.markdown("---")
     
     # Tabs für verschiedene Funktionen
     tab1, tab2, tab3 = st.tabs([
-        "📤 Matrix hochladen",
+        " Matrix hochladen",
         "Vorhandene Matrizen",
-        "🧪 Validierung testen"
+        " Validierung testen"
     ])
     
     # Tab 1: Matrix hochladen
@@ -89,7 +89,7 @@ DEF;18000.00;15000.00""",
 10;ABC;12000.00
 15;18000.00;XYZ""",
         
-        "⚠ Leere Zellen (Warnung)": """Anzahl Module;10kWh;15kWh;Ohne Speicher
+        " Leere Zellen (Warnung)": """Anzahl Module;10kWh;15kWh;Ohne Speicher
 10;15000.00;;12000.00
 15;;20500.00;15000.00
 20;21000.00;23500.00;"""
@@ -134,7 +134,7 @@ DEF;18000.00;15000.00""",
             if result['warnings']:
                 st.warning("**Warnungen:**")
                 for warning in result['warnings']:
-                    st.warning(f"⚠ {warning}")
+                    st.warning(f" {warning}")
             
             # Informationen
             if result['info']:
@@ -160,7 +160,7 @@ DEF;18000.00;15000.00""",
                 
                 if 'storage_models' in info and info['storage_models']:
                     models_str = ', '.join(str(m) for m in info['storage_models'])
-                    st.info(f"🔋 Speichermodelle: {models_str}")
+                    st.info(f" Speichermodelle: {models_str}")
             
             # Vorschau
             if result['preview_df'] is not None:

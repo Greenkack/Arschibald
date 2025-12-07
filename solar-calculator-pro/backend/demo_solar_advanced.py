@@ -365,7 +365,7 @@ def main():
         print("="*80 + "\n")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

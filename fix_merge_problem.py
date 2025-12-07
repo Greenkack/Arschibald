@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def test_simple_merge():
     """Teste einen einfachen Merge zwischen Template und Overlay"""
-    print("🔄 Teste einfachen Merge...")
+    print(" Teste einfachen Merge...")
 
     try:
         from pypdf import PdfReader, PdfWriter
@@ -41,7 +41,7 @@ def test_simple_merge():
         template_page = template_reader.pages[0]
         overlay_page6 = overlay_reader.pages[5]  # Seite 6 des Overlays
 
-        print("🔄 Führe Merge durch...")
+        print(" Führe Merge durch...")
 
         # Erstelle eine Kopie der Template-Seite
         merged_page = template_page
@@ -134,7 +134,7 @@ def create_working_seite6():
         template_page = template_reader.pages[0]
         overlay_page6 = overlay_reader.pages[5]  # Seite 6
 
-        print("🔄 Merge Template + Overlay...")
+        print(" Merge Template + Overlay...")
 
         # WICHTIG: Erstelle eine echte Kopie der Template-Seite
         from copy import deepcopy

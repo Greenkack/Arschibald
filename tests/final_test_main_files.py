@@ -124,7 +124,7 @@ if unique_prices == len(results) and all(p > 0 for p in results):
             len(results)} Konfigurationen haben UNTERSCHIEDLICHE Preise!")
     print(f"    Spanne: {min(results):.2f} € bis {max(results):.2f} €")
     print(f"    Differenz: {max(results) - min(results):.2f} €")
-    print("\n🎉 DIE APP SOLLTE JETZT FUNKTIONIEREN! 🎉")
+    print("\n DIE APP SOLLTE JETZT FUNKTIONIEREN! ")
 elif unique_prices == 1:
     print(f"\nPROBLEM: Alle Preise sind GLEICH: {results[0]:.2f} €")
     print("   Die Produktpreise werden NICHT verwendet!")

@@ -49,11 +49,11 @@ def demo_system_health():
     print(f"  Status: {health['disk']['status']}")
     
     if health['issues']:
-        print(f"\n⚠️  Issues Detected:")
+        print(f"\n  Issues Detected:")
         for issue in health['issues']:
             print(f"  - {issue}")
     else:
-        print(f"\n✅ No issues detected")
+        print(f"\n No issues detected")
     
     db.close()
 
@@ -204,20 +204,20 @@ def demo_system_alerts():
     alerts = service.get_system_alerts()
     
     if alerts:
-        print(f"\n⚠️  {len(alerts)} Active Alert(s):")
+        print(f"\n  {len(alerts)} Active Alert(s):")
         for alert in alerts:
             severity_icon = {
-                'info': 'ℹ️',
-                'warning': '⚠️',
-                'critical': '🚨'
-            }.get(alert['severity'], '❓')
+                'info': 'ℹ',
+                'warning': '',
+                'critical': ''
+            }.get(alert['severity'], '')
             
             print(f"\n{severity_icon} [{alert['severity'].upper()}] {alert['title']}")
             print(f"   Type: {alert['type']}")
             print(f"   Message: {alert['message']}")
             print(f"   Time: {alert['timestamp']}")
     else:
-        print(f"\n✅ No active alerts - System is healthy!")
+        print(f"\n No active alerts - System is healthy!")
     
     db.close()
 
@@ -235,25 +235,25 @@ def demo_dashboard_summary():
     
     print(f"\nTimestamp: {summary['timestamp']}")
     
-    print(f"\n📊 System Health: {summary['system_health']['status'].upper()}")
-    print(f"💾 Database: {summary['database_health']['status'].upper()}")
+    print(f"\n System Health: {summary['system_health']['status'].upper()}")
+    print(f" Database: {summary['database_health']['status'].upper()}")
     
     stats = summary['usage_statistics']
-    print(f"\n👥 Active Users: {stats['users']['active_users']}")
-    print(f"📁 New Projects: {stats['projects']['new_projects']}")
-    print(f"🧮 Calculations: {stats['calculations']['total_calculations']}")
-    print(f"📄 PDFs Generated: {stats['pdfs']['total_pdfs']}")
+    print(f"\n Active Users: {stats['users']['active_users']}")
+    print(f" New Projects: {stats['projects']['new_projects']}")
+    print(f" Calculations: {stats['calculations']['total_calculations']}")
+    print(f" PDFs Generated: {stats['pdfs']['total_pdfs']}")
     
     metrics = summary['performance_metrics']
-    print(f"\n⚡ Avg Response Time: {metrics['response_times']['average_ms']}ms")
-    print(f"📈 Throughput: {metrics['throughput']['requests_per_second']} req/s")
-    print(f"❌ Error Rate: {metrics['error_rates']['error_rate_percent']}%")
+    print(f"\n Avg Response Time: {metrics['response_times']['average_ms']}ms")
+    print(f" Throughput: {metrics['throughput']['requests_per_second']} req/s")
+    print(f" Error Rate: {metrics['error_rates']['error_rate_percent']}%")
     
     alerts = summary['active_alerts']
     if alerts:
-        print(f"\n⚠️  {len(alerts)} Active Alert(s)")
+        print(f"\n  {len(alerts)} Active Alert(s)")
     else:
-        print(f"\n✅ No Active Alerts")
+        print(f"\n No Active Alerts")
     
     db.close()
 
@@ -307,11 +307,11 @@ def main():
         demo_historical_metrics()
         
         print("\n" + "="*60)
-        print("✅ ALL DEMOS COMPLETED SUCCESSFULLY")
+        print(" ALL DEMOS COMPLETED SUCCESSFULLY")
         print("="*60)
         
     except Exception as e:
-        print(f"\n❌ Error running demos: {str(e)}")
+        print(f"\n Error running demos: {str(e)}")
         import traceback
         traceback.print_exc()
 

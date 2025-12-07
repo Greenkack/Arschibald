@@ -80,7 +80,7 @@ def main():
     # Sidebar - Feature flag toggle (optional, for testing)
     with st.sidebar:
         st.markdown("---")
-        st.markdown("### 🎨 UI Settings")
+        st.markdown("###  UI Settings")
         
         enable_shadcn = st.checkbox(
             "Enable Modern UI (shadcn/ui)",
@@ -226,7 +226,7 @@ def main_with_user_preference():
     # Sidebar - User preference toggle
     with st.sidebar:
         st.markdown("---")
-        st.markdown("### ⚙️ Preferences")
+        st.markdown("###  Preferences")
         
         new_preference = st.checkbox(
             "Modern UI Design",

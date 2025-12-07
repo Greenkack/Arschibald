@@ -238,7 +238,7 @@ def render_pdf_ui(
                     "COLUMN": " Säulen",
                     "LINE": " Linie",
                     "AREA": " Fläche",
-                    "PIE": "🥧 Torte"
+                    "PIE": " Torte"
                 }.get(x, x),
                 index=0,
                 key="pdf_chart_type"
@@ -950,7 +950,7 @@ def render_pdf_ui(
                 ** Standard Charts:**
                 -  Balkendiagramm
                 -  Liniendiagramm  
-                - 🥧 Kreisdiagramm
+                -  Kreisdiagramm
                 -  Flächendiagramm
                 """)
                 
@@ -2185,7 +2185,7 @@ def render_pdf_ui(
                 help="Interaktive PDF-Elemente (experimentell)"
             )
             extended_features['wow_features']['ai_layout_optimization'] = st.checkbox(
-                "🤖 AI Layout-Optimierung",
+                " AI Layout-Optimierung",
                 value=extended_features['wow_features'].get('ai_layout_optimization', False),
                 help="Automatische Layout-Optimierung (experimentell)"
             )

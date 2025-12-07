@@ -317,7 +317,7 @@ def migrate_container_to_card(
     Decorator to migrate a function that uses st.container() to use shadcn/ui Card.
     
     Usage:
-        @migrate_container_to_card(title="My Section", icon="📊")
+        @migrate_container_to_card(title="My Section", icon="")
         def my_section():
             st.write("Content here")
     """

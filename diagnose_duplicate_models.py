@@ -27,7 +27,7 @@ def main():
     
     duplicates = cursor.fetchall()
     
-    print(f"\n📋 Doppelte Modellnamen: {len(duplicates)}")
+    print(f"\n Doppelte Modellnamen: {len(duplicates)}")
     
     if duplicates:
         print("\nBeispiele:")

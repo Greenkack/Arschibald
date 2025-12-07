@@ -208,7 +208,7 @@ def demo_compatibility_check():
             print(f"    - [{warning['severity']}] {warning['message']}")
     
     if not report['issues'] and not report['warnings']:
-        print("\n  ✓ All products are compatible!")
+        print("\n   All products are compatible!")
 
 
 def demo_multi_offer_scenario():
@@ -297,7 +297,7 @@ def main():
         print("=" * 80 + "\n")
         
     except Exception as e:
-        print(f"\n❌ Error during demonstration: {e}")
+        print(f"\n Error during demonstration: {e}")
         import traceback
         traceback.print_exc()
 

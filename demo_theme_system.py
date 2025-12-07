@@ -20,9 +20,9 @@ def demo_theme_system():
     print_section("THEME SYSTEM INFRASTRUCTURE DEMO")
     
     # Initialize
-    print("\n📦 Initializing ThemeManager...")
+    print("\n Initializing ThemeManager...")
     theme_manager = ThemeManager()
-    print("✓ ThemeManager ready")
+    print(" ThemeManager ready")
     
     # Show available themes
     print_section("AVAILABLE THEMES")
@@ -38,7 +38,7 @@ def demo_theme_system():
         print_section(f"THEME: {theme.display_name}")
         
         # Show color palette
-        print("\n🎨 Color Palette:")
+        print("\n Color Palette:")
         print(f"  Background:  {theme.colors.background}")
         print(f"  Foreground:  {theme.colors.foreground}")
         print(f"  Primary:     {theme.colors.primary}")
@@ -49,7 +49,7 @@ def demo_theme_system():
         print(f"  Info:        {theme.colors.info}")
         
         # Show chart colors
-        print("\n📊 Chart Colors:")
+        print("\n Chart Colors:")
         print(f"  Chart 1:     {theme.colors.chart_1}")
         print(f"  Chart 2:     {theme.colors.chart_2}")
         print(f"  Chart 3:     {theme.colors.chart_3}")
@@ -57,29 +57,29 @@ def demo_theme_system():
         print(f"  Chart 5:     {theme.colors.chart_5}")
         
         # Show typography
-        print("\n✍️  Typography:")
+        print("\n  Typography:")
         print(f"  Font Family: {theme.typography.font_family[:50]}...")
         print(f"  Base Size:   {theme.typography.font_size_base}")
         print(f"  Bold Weight: {theme.typography.font_weight_bold}")
         
         # Show spacing
-        print("\n📏 Spacing Scale:")
+        print("\n Spacing Scale:")
         print(f"  Small:       {theme.spacing.spacing_2}")
         print(f"  Medium:      {theme.spacing.spacing_4}")
         print(f"  Large:       {theme.spacing.spacing_8}")
         
         # Show shadows
-        print("\n🌑 Shadows:")
+        print("\n Shadows:")
         print(f"  Small:       {theme.shadows.shadow_sm}")
         print(f"  Medium:      {theme.shadows.shadow_md}")
         
         # Show borders
-        print("\n🔲 Borders:")
+        print("\n Borders:")
         print(f"  Width:       {theme.borders.border_width}")
         print(f"  Radius:      {theme.borders.border_radius_lg}")
         
         # Show animations
-        print("\n⚡ Animations:")
+        print("\n Animations:")
         print(f"  Transition:  {theme.animations.transition_base}")
         print(f"  Easing:      {theme.animations.easing_default}")
     
@@ -102,9 +102,9 @@ def demo_theme_system():
         print(f"  {token_path:30} → {value}")
     
     print_section("DEMO COMPLETE")
-    print("\n✅ Theme System Infrastructure is fully operational!")
-    print("📝 See USAGE_EXAMPLE.md for integration examples")
-    print("🚀 Ready for Task 2: CSS Generator implementation\n")
+    print("\n Theme System Infrastructure is fully operational!")
+    print(" See USAGE_EXAMPLE.md for integration examples")
+    print(" Ready for Task 2: CSS Generator implementation\n")
 
 
 if __name__ == "__main__":

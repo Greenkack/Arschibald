@@ -29,10 +29,10 @@ class DropdownMenu(ShadcnComponent):
         selected = dropdown.render(
             trigger_label="Aktionen",
             items=[
-                {"label": "Bearbeiten", "icon": "✏️", "value": "edit"},
-                {"label": "Löschen", "icon": "🗑️", "value": "delete"},
+                {"label": "Bearbeiten", "icon": "", "value": "edit"},
+                {"label": "Löschen", "icon": "", "value": "delete"},
                 {"separator": True},
-                {"label": "Exportieren", "icon": "📤", "value": "export"}
+                {"label": "Exportieren", "icon": "", "value": "export"}
             ]
         )
         ```

@@ -35,7 +35,7 @@ from theming.error_dashboard import (
 
 def demo_exception_hierarchy():
     """Demonstrate exception hierarchy"""
-    st.header("1️⃣ Exception Hierarchy")
+    st.header("1⃣ Exception Hierarchy")
     
     st.markdown("""
     The error handling system provides a comprehensive exception hierarchy
@@ -48,16 +48,16 @@ def demo_exception_hierarchy():
         st.subheader("Available Exceptions")
         st.code("""
 ThemeError (base)
-├── ThemeLoadError
-├── ThemeValidationError
-├── ThemeNotFoundError
-├── CSSGenerationError
-├── CSSInjectionError
-├── ComponentRenderError
-├── TokenNotFoundError
-├── ThemeFileError
-├── ThemeCacheError
-└── ThemeStateError
+ ThemeLoadError
+ ThemeValidationError
+ ThemeNotFoundError
+ CSSGenerationError
+ CSSInjectionError
+ ComponentRenderError
+ TokenNotFoundError
+ ThemeFileError
+ ThemeCacheError
+ ThemeStateError
         """, language="text")
     
     with col2:
@@ -108,12 +108,12 @@ ThemeError (base)
                 )
             
             handler.handle_error(error, notify_user=True)
-            st.success(f"✅ {exception_type} raised and handled!")
+            st.success(f" {exception_type} raised and handled!")
 
 
 def demo_error_handler():
     """Demonstrate error handler functionality"""
-    st.header("2️⃣ Error Handler")
+    st.header("2⃣ Error Handler")
     
     st.markdown("""
     The ErrorHandler provides centralized error handling with:
@@ -206,12 +206,12 @@ except Exception as e:
                     fallback_callback=load_fallback
                 )
                 
-                st.success("✅ Fallback executed!")
+                st.success(" Fallback executed!")
                 st.json(result)
             
             if st.button("Test Component Fallback", key="component_fallback"):
                 def render_fallback():
-                    st.info("🔄 Fallback component rendered")
+                    st.info(" Fallback component rendered")
                     return "fallback"
                 
                 error = ComponentRenderError("Card", "Missing props")
@@ -221,7 +221,7 @@ except Exception as e:
                     fallback_callback=render_fallback
                 )
                 
-                st.success("✅ Component fallback executed!")
+                st.success(" Component fallback executed!")
     
     with tab3:
         st.subheader("Error Reports")
@@ -250,18 +250,18 @@ except Exception as e:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 filepath = f"logs/error_report_{timestamp}.json"
                 handler.export_error_report(filepath)
-                st.success(f"✅ Report exported to {filepath}")
+                st.success(f" Report exported to {filepath}")
         
         with col2:
             if st.button("Clear History", key="clear_history"):
                 handler.clear_history()
-                st.success("✅ Error history cleared!")
+                st.success(" Error history cleared!")
                 st.rerun()
 
 
 def demo_automatic_recovery():
     """Demonstrate automatic recovery"""
-    st.header("3️⃣ Automatic Recovery")
+    st.header("3⃣ Automatic Recovery")
     
     st.markdown("""
     The error handler automatically attempts recovery with retry limits.
@@ -302,15 +302,15 @@ Current Attempts: {len(handler.recovery_attempts)}
                         "demo_recovery",
                         recovery_function
                     )
-                    st.success(f"✅ Recovered after {attempt_count[0]} attempt(s)!")
+                    st.success(f" Recovered after {attempt_count[0]} attempt(s)!")
                     st.info(f"Result: {result}")
                 except Exception as e:
-                    st.error(f"❌ Recovery failed: {e}")
+                    st.error(f" Recovery failed: {e}")
 
 
 def demo_user_notifications():
     """Demonstrate user notifications"""
-    st.header("4️⃣ User Notifications")
+    st.header("4⃣ User Notifications")
     
     st.markdown("""
     Multiple notification styles for different use cases.
@@ -387,7 +387,7 @@ def demo_user_notifications():
 
 def demo_error_dashboard():
     """Demonstrate error dashboard"""
-    st.header("5️⃣ Error Dashboard")
+    st.header("5⃣ Error Dashboard")
     
     st.markdown("""
     Comprehensive error monitoring and reporting dashboard.
@@ -407,7 +407,7 @@ def demo_error_dashboard():
 
 def demo_integration_examples():
     """Show integration examples"""
-    st.header("6️⃣ Integration Examples")
+    st.header("6⃣ Integration Examples")
     
     st.markdown("""
     Examples of integrating error handling into your components.
@@ -495,11 +495,11 @@ def main():
     """Main demo application"""
     st.set_page_config(
         page_title="Error Handling Demo",
-        page_icon="🛡️",
+        page_icon="",
         layout="wide"
     )
     
-    st.title("🛡️ Theme System Error Handling Demo")
+    st.title(" Theme System Error Handling Demo")
     
     st.markdown("""
     This demo showcases the comprehensive error handling system for the shadcn/ui theme system.
@@ -549,7 +549,7 @@ def main():
             for error in errors:
                 handler.handle_error(error, notify_user=False)
             
-            st.success(f"✅ Generated {len(errors)} test errors")
+            st.success(f" Generated {len(errors)} test errors")
         
         st.markdown("---")
         

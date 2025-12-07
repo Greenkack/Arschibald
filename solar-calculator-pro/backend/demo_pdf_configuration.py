@@ -329,11 +329,11 @@ def demo_validation_errors():
     print(f"Configuration ID: {response.config_id}")
     print(f"\nValidation Errors:")
     for error in response.validation_errors:
-        print(f"  ❌ {error}")
+        print(f"   {error}")
     
     print(f"\nValidation Warnings:")
     for warning in response.validation_warnings:
-        print(f"  ⚠️  {warning}")
+        print(f"    {warning}")
 
 
 def demo_get_default_configuration():

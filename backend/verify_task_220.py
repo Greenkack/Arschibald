@@ -30,10 +30,10 @@ def verify_installation():
     print("=" * 70)
     
     if REPORTLAB_AVAILABLE:
-        print("✓ reportlab is installed")
+        print(" reportlab is installed")
         return True
     else:
-        print("✗ reportlab is NOT installed")
+        print(" reportlab is NOT installed")
         return False
 
 
@@ -63,12 +63,12 @@ def verify_pdf_metadata():
         assert 'title' in data
         assert 'creation_date' in data
         
-        print("✓ PDFMetadata creation")
-        print("✓ Metadata properties")
-        print("✓ Metadata to_dict conversion")
+        print(" PDFMetadata creation")
+        print(" Metadata properties")
+        print(" Metadata to_dict conversion")
         return True
     except Exception as e:
-        print(f"✗ Metadata verification failed: {e}")
+        print(f" Metadata verification failed: {e}")
         return False
 
 
@@ -92,14 +92,14 @@ def verify_german_formatting():
         for value, expected in test_cases:
             result = engine.format_german_number(value)
             if result == expected:
-                print(f"✓ {value} → {result}")
+                print(f" {value} → {result}")
             else:
-                print(f"✗ {value} → {result} (expected {expected})")
+                print(f" {value} → {result} (expected {expected})")
                 all_passed = False
         
         return all_passed
     except Exception as e:
-        print(f"✗ German formatting verification failed: {e}")
+        print(f" German formatting verification failed: {e}")
         return False
 
 
@@ -115,25 +115,25 @@ def verify_pdf_generation():
         pdf_bytes = create_pdf_from_text(text, title="Test")
         assert isinstance(pdf_bytes, bytes)
         assert pdf_bytes.startswith(b'%PDF')
-        print("✓ PDF generation from text")
+        print(" PDF generation from text")
         
         # Test 2: PDF from dictionary
         data = {"Price": 1234.56, "Quantity": 100}
         pdf_bytes = create_pdf_from_dict(data, title="Test Report")
         assert isinstance(pdf_bytes, bytes)
         assert pdf_bytes.startswith(b'%PDF')
-        print("✓ PDF generation from dictionary")
+        print(" PDF generation from dictionary")
         
         # Test 3: SimplePDFDocument
         doc = SimplePDFDocument(title="Test", content="Content")
         pdf_bytes = doc.to_pdf_bytes()
         assert isinstance(pdf_bytes, bytes)
         assert pdf_bytes.startswith(b'%PDF')
-        print("✓ SimplePDFDocument generation")
+        print(" SimplePDFDocument generation")
         
         return True
     except Exception as e:
-        print(f"✗ PDF generation verification failed: {e}")
+        print(f" PDF generation verification failed: {e}")
         return False
 
 
@@ -145,7 +145,7 @@ def verify_pdf_byte_mixin():
     
     try:
         if not REPORTLAB_AVAILABLE:
-            print("⚠ Skipped (reportlab not installed)")
+            print(" Skipped (reportlab not installed)")
             return True
         
         from reportlab.platypus import Paragraph, Spacer
@@ -172,24 +172,24 @@ def verify_pdf_byte_mixin():
         pdf_bytes = model.to_pdf_bytes()
         assert isinstance(pdf_bytes, bytes)
         assert pdf_bytes.startswith(b'%PDF')
-        print("✓ to_pdf_bytes() method")
+        print(" to_pdf_bytes() method")
         
         # Test to_pdf_base64
         pdf_base64 = model.to_pdf_base64()
         assert isinstance(pdf_base64, str)
         assert len(pdf_base64) > 0
-        print("✓ to_pdf_base64() method")
+        print(" to_pdf_base64() method")
         
         # Test metadata
         metadata = PDFMetadata(title="Custom")
         model.set_pdf_metadata(metadata)
         retrieved = model.get_pdf_metadata()
         assert retrieved.title == "Custom"
-        print("✓ Metadata integration")
+        print(" Metadata integration")
         
         return True
     except Exception as e:
-        print(f"✗ PDFByteMixin verification failed: {e}")
+        print(f" PDFByteMixin verification failed: {e}")
         return False
 
 
@@ -201,7 +201,7 @@ def verify_rendering_engine():
     
     try:
         if not REPORTLAB_AVAILABLE:
-            print("⚠ Skipped (reportlab not installed)")
+            print(" Skipped (reportlab not installed)")
             return True
         
         import io
@@ -212,23 +212,23 @@ def verify_rendering_engine():
         metadata = PDFMetadata(title="Test")
         doc = engine.create_document(buffer, metadata)
         assert doc is not None
-        print("✓ Document creation")
+        print(" Document creation")
         
         # Test canvas creation
         buffer = io.BytesIO()
         canvas = engine.create_canvas(buffer, metadata)
         assert canvas is not None
-        print("✓ Canvas creation")
+        print(" Canvas creation")
         
         # Test table creation
         data = [['A', 'B'], ['1', '2']]
         table = engine.create_table(data)
         assert table is not None
-        print("✓ Table creation")
+        print(" Table creation")
         
         return True
     except Exception as e:
-        print(f"✗ Rendering engine verification failed: {e}")
+        print(f" Rendering engine verification failed: {e}")
         return False
 
 
@@ -244,16 +244,16 @@ def verify_requirements():
     }
     
     print("\nRequirement 14.5: PDF Byte Generation")
-    print("  ✓ to_pdf_bytes() method implemented")
-    print("  ✓ to_pdf_base64() method implemented")
-    print("  ✓ save_pdf() method implemented")
-    print("  ✓ Works with all data types")
+    print("   to_pdf_bytes() method implemented")
+    print("   to_pdf_base64() method implemented")
+    print("   save_pdf() method implemented")
+    print("   Works with all data types")
     
     print("\nRequirement 14.8: PDF Rendering Engine")
-    print("  ✓ PDFRenderingEngine class implemented")
-    print("  ✓ Metadata system complete")
-    print("  ✓ German number formatting")
-    print("  ✓ Table and layout support")
+    print("   PDFRenderingEngine class implemented")
+    print("   Metadata system complete")
+    print("   German number formatting")
+    print("   Table and layout support")
     
     return True
 
@@ -284,14 +284,14 @@ def run_verification():
     total = len(results)
     
     for name, result in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = " PASS" if result else " FAIL"
         print(f"{status:8} {name}")
     
     print("\n" + "-" * 70)
     print(f"Results: {passed}/{total} verifications passed")
     
     if passed == total:
-        print("\n✅ ALL VERIFICATIONS PASSED")
+        print("\n ALL VERIFICATIONS PASSED")
         print("\nTask 220 is COMPLETE and ready for integration!")
         print("\nNext steps:")
         print("  1. Integrate with Dynamic Keys System (Task 219)")
@@ -299,7 +299,7 @@ def run_verification():
         print("  3. Implement Database Integration (Task 222)")
         return True
     else:
-        print("\n⚠ SOME VERIFICATIONS FAILED")
+        print("\n SOME VERIFICATIONS FAILED")
         print("Please review the failed verifications above.")
         return False
 

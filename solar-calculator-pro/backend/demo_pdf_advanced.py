@@ -71,7 +71,7 @@ def demo_basic_generation():
     print("\nGenerating PDF...")
     pdf_bytes = service.generate_advanced_pdf(offer_data, options)
     
-    print(f"✅ PDF Generated Successfully!")
+    print(f" PDF Generated Successfully!")
     print(f"   Size: {len(pdf_bytes):,} bytes ({len(pdf_bytes)/1024:.1f} KB)")
     print(f"   Template: {options.template.value}")
     print(f"   Language: {options.language.value}")
@@ -132,7 +132,7 @@ def demo_custom_branding():
     print("\nGenerating branded PDF...")
     pdf_bytes = service.generate_advanced_pdf(offer_data, options)
     
-    print(f"✅ Branded PDF Generated!")
+    print(f" Branded PDF Generated!")
     print(f"   Size: {len(pdf_bytes):,} bytes")
     
     filename = f"demo_branded_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
@@ -199,7 +199,7 @@ def demo_chart_integration():
     print("\nGenerating PDF with charts...")
     pdf_bytes = service.generate_advanced_pdf(offer_data, options)
     
-    print(f"✅ PDF with Charts Generated!")
+    print(f" PDF with Charts Generated!")
     print(f"   Size: {len(pdf_bytes):,} bytes")
     print(f"   Charts: {len(chart_types)}")
     
@@ -268,7 +268,7 @@ async def demo_batch_generation():
     duration = (end_time - start_time).total_seconds()
     total_size = sum(len(pdf) for pdf in pdf_list)
     
-    print(f"✅ Batch Generation Complete!")
+    print(f" Batch Generation Complete!")
     print(f"   PDFs Generated: {len(pdf_list)}")
     print(f"   Total Size: {total_size:,} bytes ({total_size/1024:.1f} KB)")
     print(f"   Duration: {duration:.2f} seconds")
@@ -332,7 +332,7 @@ def demo_multi_company_offer():
     print("\nGenerating ZIP file...")
     zip_bytes = service.generate_multi_company_offer(offer_data, companies)
     
-    print(f"✅ Multi-Company Offer Generated!")
+    print(f" Multi-Company Offer Generated!")
     print(f"   Companies: {len(companies)}")
     print(f"   ZIP Size: {len(zip_bytes):,} bytes ({len(zip_bytes)/1024:.1f} KB)")
     
@@ -354,7 +354,7 @@ def demo_templates_and_languages():
     templates = service.get_available_templates()
     print(f"\nAvailable Templates ({len(templates)}):")
     for template in templates[:10]:  # Show first 10
-        status = "✅" if template['available'] else "❌"
+        status = "" if template['available'] else ""
         print(f"   {status} {template['display_name']}")
     if len(templates) > 10:
         print(f"   ... and {len(templates) - 10} more")
@@ -422,21 +422,21 @@ def main():
         demo_statistics()
         
         print("\n" + "="*80)
-        print("ALL DEMOS COMPLETED SUCCESSFULLY! ✅")
+        print("ALL DEMOS COMPLETED SUCCESSFULLY! ")
         print("="*80)
         print("\nFeatures Demonstrated:")
-        print("   ✅ Basic PDF generation")
-        print("   ✅ Custom branding")
-        print("   ✅ Chart integration (10 types)")
-        print("   ✅ Batch generation (parallel)")
-        print("   ✅ Multi-company offers (ZIP)")
-        print("   ✅ Template management (88 templates)")
-        print("   ✅ Multi-language support (4 languages)")
-        print("   ✅ Service statistics")
-        print("\nTask 103 Status: COMPLETE ✅")
+        print("    Basic PDF generation")
+        print("    Custom branding")
+        print("    Chart integration (10 types)")
+        print("    Batch generation (parallel)")
+        print("    Multi-company offers (ZIP)")
+        print("    Template management (88 templates)")
+        print("    Multi-language support (4 languages)")
+        print("    Service statistics")
+        print("\nTask 103 Status: COMPLETE ")
         
     except Exception as e:
-        print(f"\n❌ Error during demo: {e}")
+        print(f"\n Error during demo: {e}")
         import traceback
         traceback.print_exc()
 

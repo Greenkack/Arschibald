@@ -229,11 +229,11 @@ def test_calculation_logic():
     print(f"12. = FINAL_END_PREIS (netto): {final_end_preis:,.2f} €")
     print("")
     print(
-        f"📌 ERSPARTE MEHRWERTSTEUER: {
+        f" ERSPARTE MEHRWERTSTEUER: {
             ersparte_mwst:,.2f} € ({
             final_end_preis:,.2f} × 0.19)")
     print(
-        f"📌 AMORTISATIONSZEIT: {
+        f" AMORTISATIONSZEIT: {
             amortisation:.2f} Jahre ({
             final_end_preis:,.2f} ÷ {
                 jahrliche_einnahmen:,.2f})")
@@ -244,16 +244,16 @@ def test_calculation_logic():
 
 if __name__ == "__main__":
     print("\n")
-    print("╔" + "=" * 78 + "╗")
+    print("" + "=" * 78 + "")
     print(
-        "║" +
+        "" +
         " " *
         15 +
         "TEST: AMORTISATION & ERSPARTE MWST FIX" +
         " " *
         24 +
-        "║")
-    print("╚" + "=" * 78 + "╝")
+        "")
+    print("" + "=" * 78 + "")
 
     tests = [
         ("Ersparte Mehrwertsteuer", test_ersparte_mehrwertsteuer),
@@ -287,9 +287,9 @@ if __name__ == "__main__":
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
-        print("\n" + "╔" + "=" * 78 + "╗")
-        print("║" + " " * 25 + "ALLE TESTS BESTANDEN!" + " " * 27 + "║")
-        print("╚" + "=" * 78 + "╝")
+        print("\n" + "" + "=" * 78 + "")
+        print("" + " " * 25 + "ALLE TESTS BESTANDEN!" + " " * 27 + "")
+        print("" + "=" * 78 + "")
     else:
         print("\nEinige Tests fehlgeschlagen!")
 

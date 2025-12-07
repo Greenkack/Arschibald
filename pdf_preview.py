@@ -28,9 +28,9 @@ def _show_unavailable(feature_name: str = "PDF-Vorschau") -> None:
         st.info(
             "**PDF-Vorschau benötigt vollständige Projektdaten**\n\n"
             "Um die Live-Vorschau zu nutzen:\n\n"
-            "1️⃣ Gehen Sie zu **'Dateneingabe'** → **'Analysestufe'**\n"
-            "2️⃣ Füllen Sie alle erforderlichen Projektinformationen aus\n"
-            "3️⃣ Kehren Sie zum Tab **'👁️ PDF-Vorschau'** zurück\n\n"
+            "1⃣ Gehen Sie zu **'Dateneingabe'** → **'Analysestufe'**\n"
+            "2⃣ Füllen Sie alle erforderlichen Projektinformationen aus\n"
+            "3⃣ Kehren Sie zum Tab **' PDF-Vorschau'** zurück\n\n"
             "Alternativ: Nutzen Sie **'PDF-Ausgabe'** für direkte PDF-Erzeugung.",
             icon="",
         )

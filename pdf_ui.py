@@ -18,7 +18,7 @@ def _show_unavailable(feature_name: str = "PDF UI") -> None:
         st.info(
             "**Legacy PDF UI archiviert**\n\n"
             "Diese alte Oberfläche wurde entfernt. Nutzen Sie stattdessen:\n\n"
-            "👉 **Tab 'PDF-Ausgabe'** oben für die Standard-PDF-Erzeugung mit vollständigen Projektdaten.\n\n"
+            " **Tab 'PDF-Ausgabe'** oben für die Standard-PDF-Erzeugung mit vollständigen Projektdaten.\n\n"
             "Der Kern-PDF-Generator ist voll funktionsfähig.",
             icon="",
         )

@@ -39,11 +39,11 @@ async def demo_monitoring_integration():
     
     try:
         connection_result = await service.connect_monitoring_system(config)
-        print(f"✓ Connected to {config.system_type}")
+        print(f" Connected to {config.system_type}")
         print(f"  Site ID: {config.site_id}")
         print(f"  Status: {connection_result.get('status')}")
     except Exception as e:
-        print(f"✗ Connection failed: {str(e)}")
+        print(f" Connection failed: {str(e)}")
     
     # 2. Get Real-time Production Data
     print("\n2. REAL-TIME PRODUCTION DATA")
@@ -63,7 +63,7 @@ async def demo_monitoring_integration():
         if realtime_data.grid_frequency:
             print(f"Grid Frequency: {realtime_data.grid_frequency:.1f} Hz")
     except Exception as e:
-        print(f"✗ Failed to get real-time data: {str(e)}")
+        print(f" Failed to get real-time data: {str(e)}")
     
     # 3. Performance Analysis
     print("\n3. PERFORMANCE ANALYSIS")
@@ -99,7 +99,7 @@ async def demo_monitoring_integration():
             for rec in analysis.recommendations:
                 print(f"  • {rec}")
     except Exception as e:
-        print(f"✗ Analysis failed: {str(e)}")
+        print(f" Analysis failed: {str(e)}")
     
     # 4. Alert System
     print("\n4. ALERT SYSTEM")
@@ -118,7 +118,7 @@ async def demo_monitoring_integration():
         notification_channels=["email"]
     )
     service.add_alert_rule("SITE-001", low_production_rule)
-    print("✓ Alert rule added")
+    print(" Alert rule added")
     
     # Create manual alert
     print("\nCreating manual alert...")
@@ -134,11 +134,11 @@ async def demo_monitoring_integration():
     
     try:
         alert_response = await service.create_alert(alert)
-        print(f"✓ Alert created: {alert_response.title}")
+        print(f" Alert created: {alert_response.title}")
         print(f"  Severity: {alert_response.severity}")
         print(f"  Created: {alert_response.created_at}")
     except Exception as e:
-        print(f"✗ Failed to create alert: {str(e)}")
+        print(f" Failed to create alert: {str(e)}")
     
     # 5. Maintenance Scheduling
     print("\n5. MAINTENANCE SCHEDULING")
@@ -159,14 +159,14 @@ async def demo_monitoring_integration():
     
     try:
         task_response = await service.create_maintenance_task(maintenance_task)
-        print(f"✓ Maintenance task created: {task_response.title}")
+        print(f" Maintenance task created: {task_response.title}")
         print(f"  Type: {task_response.task_type}")
         print(f"  Scheduled: {task_response.scheduled_date}")
         print(f"  Duration: {task_response.estimated_duration} minutes")
         print(f"  Assigned to: {task_response.assigned_to}")
         print(f"  Recurring: {task_response.recurring}")
     except Exception as e:
-        print(f"✗ Failed to create maintenance task: {str(e)}")
+        print(f" Failed to create maintenance task: {str(e)}")
     
     # 6. Performance Reporting
     print("\n6. PERFORMANCE REPORTING")
@@ -183,7 +183,7 @@ async def demo_monitoring_integration():
     
     try:
         report = await service.generate_performance_report(report_request)
-        print(f"✓ Report generated: {report.report_id}")
+        print(f" Report generated: {report.report_id}")
         print(f"  Type: {report.report_type}")
         print(f"  Period: {report.period['start']} to {report.period['end']}")
         print(f"\nSummary:")
@@ -200,7 +200,7 @@ async def demo_monitoring_integration():
         if report.file_url:
             print(f"\nReport File: {report.file_url}")
     except Exception as e:
-        print(f"✗ Failed to generate report: {str(e)}")
+        print(f" Failed to generate report: {str(e)}")
     
     # 7. Dashboard Data
     print("\n7. DASHBOARD DATA")
@@ -225,7 +225,7 @@ async def demo_monitoring_integration():
         print(f"\nActive Alerts: {len(dashboard.active_alerts)}")
         print(f"Upcoming Maintenance: {len(dashboard.upcoming_maintenance)}")
     except Exception as e:
-        print(f"✗ Failed to get dashboard data: {str(e)}")
+        print(f" Failed to get dashboard data: {str(e)}")
     
     # 8. System Health Check
     print("\n8. SYSTEM HEALTH CHECK")
@@ -244,14 +244,14 @@ async def demo_monitoring_integration():
         if health.issues:
             print(f"\nIssues:")
             for issue in health.issues:
-                print(f"  ⚠ {issue}")
+                print(f"   {issue}")
         
         if health.recommendations:
             print(f"\nRecommendations:")
             for rec in health.recommendations:
                 print(f"  • {rec}")
     except Exception as e:
-        print(f"✗ Failed to check system health: {str(e)}")
+        print(f" Failed to check system health: {str(e)}")
     
     print("\n" + "=" * 80)
     print("DEMO COMPLETE")
@@ -266,11 +266,11 @@ if __name__ == "__main__":
     
     print("\nDemo finished successfully!")
     print("\nKey Features Demonstrated:")
-    print("  ✓ Monitoring system API integration")
-    print("  ✓ Real-time production tracking")
-    print("  ✓ Performance analysis with metrics")
-    print("  ✓ Alert system with rules")
-    print("  ✓ Maintenance scheduling")
-    print("  ✓ Performance reporting")
-    print("  ✓ Dashboard data aggregation")
-    print("  ✓ System health monitoring")
+    print("   Monitoring system API integration")
+    print("   Real-time production tracking")
+    print("   Performance analysis with metrics")
+    print("   Alert system with rules")
+    print("   Maintenance scheduling")
+    print("   Performance reporting")
+    print("   Dashboard data aggregation")
+    print("   System health monitoring")

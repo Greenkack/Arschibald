@@ -176,7 +176,7 @@ def demo_dynamic_keys():
     # Get all dynamic keys
     all_keys = generator.get_all_dynamic_keys()
 
-    print(f"📋 All Dynamic Keys ({len(all_keys)} total):")
+    print(f" All Dynamic Keys ({len(all_keys)} total):")
 
     # Group keys by category
     categories = {
@@ -323,7 +323,7 @@ def demo_pdf_creation():
 
     try:
         # Create the PDF (this would normally generate a file)
-        print("\n🔄 Generating PDF...")
+        print("\n Generating PDF...")
         print("  - Filename: demo_complete.pdf")
         print(f"  - Pricing keys: {len(generator.pricing_keys)}")
         print(f"  - Dynamic keys: {len(generator.get_all_dynamic_keys())}")

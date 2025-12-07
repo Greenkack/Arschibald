@@ -43,7 +43,7 @@ def test_create_save_load_cycle():
         )
         
         # 1. Erstelle Matrix in Datenbank
-        print("\n1️⃣ Erstelle Matrix in Datenbank...")
+        print("\n1⃣ Erstelle Matrix in Datenbank...")
         matrix_name = f"Test Matrix {datetime.now().strftime('%Y%m%d_%H%M%S')}"
         matrix_id = create_matrix(matrix_name, "Test-Matrix für Persistenz-Tests")
         
@@ -54,7 +54,7 @@ def test_create_save_load_cycle():
         print(f"   Matrix erstellt mit ID: {matrix_id}")
         
         # 2. Füge Zeilen und Spalten hinzu
-        print("\n2️⃣ Füge Zeilen und Spalten hinzu...")
+        print("\n2⃣ Füge Zeilen und Spalten hinzu...")
         for i in range(10):
             add_row(matrix_id, f"Zeile {i+1}")
         
@@ -64,7 +64,7 @@ def test_create_save_load_cycle():
         print("   10 Zeilen und 5 Spalten hinzugefügt")
         
         # 3. Lade Matrix in ExcelManager
-        print("\n3️⃣ Lade Matrix in ExcelManager...")
+        print("\n3⃣ Lade Matrix in ExcelManager...")
         manager = ExcelManager.load_from_database(matrix_id)
         
         if not manager:
@@ -74,7 +74,7 @@ def test_create_save_load_cycle():
         print(f"   Matrix geladen: {manager.get_matrix().name}")
         
         # 4. Füge Daten und Formeln hinzu
-        print("\n4️⃣ Füge Daten und Formeln hinzu...")
+        print("\n4⃣ Füge Daten und Formeln hinzu...")
         
         # Füge Zahlen in Spalte A ein
         for row in range(5):
@@ -96,7 +96,7 @@ def test_create_save_load_cycle():
         print(f"      - D1 = =IF(B1>10, 'Groß', 'Klein') → {manager.get_cell_value(0, 3)}")
         
         # 5. Speichere Matrix
-        print("\n5️⃣ Speichere Matrix in Datenbank...")
+        print("\n5⃣ Speichere Matrix in Datenbank...")
         
         if not manager.has_unsaved_changes:
             print("   Keine ungespeicherten Änderungen erkannt")
@@ -112,7 +112,7 @@ def test_create_save_load_cycle():
         print(f"      - last_save_time: {manager.last_save_time}")
         
         # 6. Lade Matrix erneut
-        print("\n6️⃣ Lade Matrix erneut aus Datenbank...")
+        print("\n6⃣ Lade Matrix erneut aus Datenbank...")
         manager2 = ExcelManager.load_from_database(matrix_id)
         
         if not manager2:
@@ -122,7 +122,7 @@ def test_create_save_load_cycle():
         print("   Matrix erneut geladen")
         
         # 7. Vergleiche Daten
-        print("\n7️⃣ Vergleiche Daten...")
+        print("\n7⃣ Vergleiche Daten...")
         
         # Prüfe Werte in Spalte A
         for row in range(5):
@@ -168,7 +168,7 @@ def test_create_save_load_cycle():
         print("   Formeln und berechnete Werte stimmen überein")
         
         # 8. Cleanup
-        print("\n8️⃣ Cleanup...")
+        print("\n8⃣ Cleanup...")
         delete_matrix(matrix_id)
         print("   Test-Matrix gelöscht")
         
@@ -207,7 +207,7 @@ def test_formulas_persist():
         )
         
         # 1. Erstelle Matrix
-        print("\n1️⃣ Erstelle Matrix...")
+        print("\n1⃣ Erstelle Matrix...")
         matrix_name = f"Formula Test {datetime.now().strftime('%Y%m%d_%H%M%S')}"
         matrix_id = create_matrix(matrix_name, "Test für Formel-Persistenz")
         
@@ -220,7 +220,7 @@ def test_formulas_persist():
         print(f"   Matrix erstellt mit ID: {matrix_id}")
         
         # 2. Lade und füge komplexe Formeln hinzu
-        print("\n2️⃣ Füge komplexe Formeln hinzu...")
+        print("\n2⃣ Füge komplexe Formeln hinzu...")
         manager = ExcelManager.load_from_database(matrix_id)
         
         # Testdaten
@@ -248,7 +248,7 @@ def test_formulas_persist():
         print(f"   {len(test_formulas)} Formeln hinzugefügt")
         
         # 3. Speichere
-        print("\n3️⃣ Speichere Matrix...")
+        print("\n3⃣ Speichere Matrix...")
         success = manager.save_to_database()
         
         if not success:
@@ -258,12 +258,12 @@ def test_formulas_persist():
         print("   Matrix gespeichert")
         
         # 4. Lade erneut
-        print("\n4️⃣ Lade Matrix erneut...")
+        print("\n4⃣ Lade Matrix erneut...")
         manager2 = ExcelManager.load_from_database(matrix_id)
         print("   Matrix geladen")
         
         # 5. Vergleiche Formeln
-        print("\n5️⃣ Vergleiche Formeln...")
+        print("\n5⃣ Vergleiche Formeln...")
         
         all_match = True
         for row, col, expected_formula in test_formulas:
@@ -295,7 +295,7 @@ def test_formulas_persist():
             print(f"   {chr(65+col)}{row+1}: {expected_formula} → {loaded_value}")
         
         # 6. Cleanup
-        print("\n6️⃣ Cleanup...")
+        print("\n6⃣ Cleanup...")
         delete_matrix(matrix_id)
         print("   Test-Matrix gelöscht")
         
@@ -340,7 +340,7 @@ def test_large_matrix():
         )
         
         # 1. Erstelle große Matrix
-        print("\n1️⃣ Erstelle große Matrix (1000 Zeilen × 50 Spalten)...")
+        print("\n1⃣ Erstelle große Matrix (1000 Zeilen × 50 Spalten)...")
         matrix_name = f"Large Matrix {datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
         start_time = time.time()
@@ -365,7 +365,7 @@ def test_large_matrix():
         print(f"   Matrix erstellt in {create_time:.2f} Sekunden")
         
         # 2. Lade Matrix
-        print("\n2️⃣ Lade Matrix...")
+        print("\n2⃣ Lade Matrix...")
         start_time = time.time()
         manager = ExcelManager.load_from_database(matrix_id)
         load_time = time.time() - start_time
@@ -375,7 +375,7 @@ def test_large_matrix():
         print(f"      - Spalten: {manager.get_matrix().columns}")
         
         # 3. Füge Daten hinzu (nur erste 100 Zeilen für Performance)
-        print("\n3️⃣ Füge Daten hinzu (erste 100 Zeilen)...")
+        print("\n3⃣ Füge Daten hinzu (erste 100 Zeilen)...")
         start_time = time.time()
         
         for row in range(100):
@@ -392,7 +392,7 @@ def test_large_matrix():
         print(f"   Daten hinzugefügt in {data_time:.2f} Sekunden")
         
         # 4. Speichere Matrix
-        print("\n4️⃣ Speichere Matrix...")
+        print("\n4⃣ Speichere Matrix...")
         start_time = time.time()
         success = manager.save_to_database()
         save_time = time.time() - start_time
@@ -404,7 +404,7 @@ def test_large_matrix():
         print(f"   Matrix gespeichert in {save_time:.2f} Sekunden")
         
         # 5. Lade erneut
-        print("\n5️⃣ Lade Matrix erneut...")
+        print("\n5⃣ Lade Matrix erneut...")
         start_time = time.time()
         manager2 = ExcelManager.load_from_database(matrix_id)
         reload_time = time.time() - start_time
@@ -412,7 +412,7 @@ def test_large_matrix():
         print(f"   Matrix erneut geladen in {reload_time:.2f} Sekunden")
         
         # 6. Vergleiche Stichproben
-        print("\n6️⃣ Vergleiche Stichproben...")
+        print("\n6⃣ Vergleiche Stichproben...")
         
         sample_cells = [
             (0, 0), (0, 5), (0, 9),
@@ -442,7 +442,7 @@ def test_large_matrix():
                 print(f"   {chr(65+col)}{row+1}: {cell.formula} → {cell.value}")
         
         # 7. Performance-Zusammenfassung
-        print("\n7️⃣ Performance-Zusammenfassung:")
+        print("\n7⃣ Performance-Zusammenfassung:")
         print(f"   - Matrix erstellen: {create_time:.2f}s")
         print(f"   - Erstes Laden: {load_time:.2f}s")
         print(f"   - Daten hinzufügen: {data_time:.2f}s")
@@ -455,7 +455,7 @@ def test_large_matrix():
             print(f"   Warnung: Ladezeit ({reload_time:.2f}s) überschreitet 2 Sekunden")
         
         # 8. Cleanup
-        print("\n8️⃣ Cleanup...")
+        print("\n8⃣ Cleanup...")
         delete_matrix(matrix_id)
         print("   Test-Matrix gelöscht")
         
@@ -500,7 +500,7 @@ def test_change_tracking():
         )
         
         # 1. Erstelle Matrix
-        print("\n1️⃣ Erstelle Matrix...")
+        print("\n1⃣ Erstelle Matrix...")
         matrix_name = f"Change Tracking Test {datetime.now().strftime('%Y%m%d_%H%M%S')}"
         matrix_id = create_matrix(matrix_name, "Test für Änderungs-Tracking")
         
@@ -511,7 +511,7 @@ def test_change_tracking():
         print(f"   Matrix erstellt mit ID: {matrix_id}")
         
         # 2. Lade Matrix
-        print("\n2️⃣ Lade Matrix...")
+        print("\n2⃣ Lade Matrix...")
         manager = ExcelManager.load_from_database(matrix_id)
         
         print(f"   Matrix geladen")
@@ -526,7 +526,7 @@ def test_change_tracking():
         print("   Keine ungespeicherten Änderungen nach dem Laden")
         
         # 3. Mache Änderungen
-        print("\n3️⃣ Mache Änderungen...")
+        print("\n3⃣ Mache Änderungen...")
         manager.set_cell_value(0, 0, 42)
         
         print(f"   - Zelle A1 auf 42 gesetzt")
@@ -539,7 +539,7 @@ def test_change_tracking():
         print("   Ungespeicherte Änderungen erkannt")
         
         # 4. Speichere
-        print("\n4️⃣ Speichere Matrix...")
+        print("\n4⃣ Speichere Matrix...")
         old_save_time = manager.last_save_time
         success = manager.save_to_database()
         
@@ -564,7 +564,7 @@ def test_change_tracking():
         print("   Änderungs-Tracking funktioniert korrekt")
         
         # 5. Weitere Änderungen
-        print("\n5️⃣ Weitere Änderungen...")
+        print("\n5⃣ Weitere Änderungen...")
         manager.set_cell_value(1, 1, None, raw_input="=A1*2")
         manager.add_row()
         manager.add_column()
@@ -579,7 +579,7 @@ def test_change_tracking():
         print("   Änderungen werden getrackt")
         
         # 6. Cleanup
-        print("\n6️⃣ Cleanup...")
+        print("\n6⃣ Cleanup...")
         delete_matrix(matrix_id)
         print("   Test-Matrix gelöscht")
         

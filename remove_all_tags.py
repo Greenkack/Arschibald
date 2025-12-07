@@ -110,14 +110,14 @@ def process_file(filepath):
         return False, 0
         
     except Exception as e:
-        print(f"❌ Fehler bei {filepath}: {e}")
+        print(f" Fehler bei {filepath}: {e}")
         return False, 0
 
 def main():
     """Hauptfunktion - durchsucht alle Python-Dateien und entfernt Tags."""
     
     workspace_root = Path(__file__).parent
-    print(f"🔍 Durchsuche Workspace: {workspace_root}")
+    print(f" Durchsuche Workspace: {workspace_root}")
     print("=" * 60)
     
     total_files = 0
@@ -140,14 +140,14 @@ def main():
                     modified_files += 1
                     total_replacements += replacements
                     rel_path = os.path.relpath(filepath, workspace_root)
-                    print(f"✅ {rel_path}: {replacements} Tags entfernt")
+                    print(f" {rel_path}: {replacements} Tags entfernt")
     
     print("=" * 60)
-    print(f"\n📊 Zusammenfassung:")
+    print(f"\n Zusammenfassung:")
     print(f"   Dateien gescannt: {total_files}")
     print(f"   Dateien modifiziert: {modified_files}")
     print(f"   Tags entfernt: {total_replacements}")
-    print("\n✨ Fertig! Alle [TAG]-Markierungen wurden entfernt.")
+    print("\n Fertig! Alle [TAG]-Markierungen wurden entfernt.")
 
 if __name__ == "__main__":
     main()

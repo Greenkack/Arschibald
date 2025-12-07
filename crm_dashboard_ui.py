@@ -60,7 +60,7 @@ def render_crm_dashboard(
         " Projekte",
         " Umsatz",
         " Statistiken",
-        "📋 Aufgaben"
+        " Aufgaben"
     ])
 
     with tabs[0]:
@@ -105,9 +105,9 @@ def render_overview_section(texts: dict[str, str]):
                     color: white;
                     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
                 ">
-                    <h3 style="margin: 0; font-size: 1.2em;">👥 Aktive Kunden</h3>
+                    <h3 style="margin: 0; font-size: 1.2em;"> Aktive Kunden</h3>
                     <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
-                    <p style="margin: 0; opacity: 0.9;">+5 diese Woche ↗️</p>
+                    <p style="margin: 0; opacity: 0.9;">+5 diese Woche ↗</p>
                 </div>
             """.format(len(customers)), unsafe_allow_html=True)
 
@@ -125,7 +125,7 @@ def render_overview_section(texts: dict[str, str]):
                 ">
                     <h3 style="margin: 0; font-size: 1.2em;">Laufende Projekte</h3>
                     <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
-                    <p style="margin: 0; opacity: 0.9;">+2 diese Woche ↗️</p>
+                    <p style="margin: 0; opacity: 0.9;">+2 diese Woche ↗</p>
                 </div>
             """.format(projects_count), unsafe_allow_html=True)
 
@@ -141,9 +141,9 @@ def render_overview_section(texts: dict[str, str]):
                     color: white;
                     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
                 ">
-                    <h3 style="margin: 0; font-size: 1.2em;">📋 Offene Angebote</h3>
+                    <h3 style="margin: 0; font-size: 1.2em;"> Offene Angebote</h3>
                     <h1 style="margin: 10px 0; font-size: 2.5em;">{}</h1>
-                    <p style="margin: 0; opacity: 0.9;">-1 diese Woche ↘️</p>
+                    <p style="margin: 0; opacity: 0.9;">-1 diese Woche ↘</p>
                 </div>
             """.format(offers_count), unsafe_allow_html=True)
 
@@ -161,7 +161,7 @@ def render_overview_section(texts: dict[str, str]):
                 ">
                     <h3 style="margin: 0; font-size: 1.2em;">Gesamtumsatz</h3>
                     <h1 style="margin: 10px 0; font-size: 2.5em;">{:,.0f}€</h1>
-                    <p style="margin: 0; opacity: 0.9;">+12% vs Vormonat ↗️</p>
+                    <p style="margin: 0; opacity: 0.9;">+12% vs Vormonat ↗</p>
                 </div>
             """.format(total_revenue), unsafe_allow_html=True)
 
@@ -169,7 +169,7 @@ def render_overview_section(texts: dict[str, str]):
         st.error(f"Fehler beim Laden der Übersichtsdaten: {e}")
 
     # Aktivitäts-Timeline mit modernen Cards
-    st.subheader("📋 Letzte Aktivitäten")
+    st.subheader(" Letzte Aktivitäten")
 
     # Dummy-Daten für Aktivitäten
     activities = [{"time": "Heute 14:30",
@@ -332,7 +332,7 @@ def render_projects_section(texts: dict[str, str]):
             ">
                 <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">Neue Anfragen</h3>
                 <h1 style="margin: 10px 0; font-size: 2.2em;">12</h1>
-                <p style="margin: 0; opacity: 0.8;">+3 ↗️</p>
+                <p style="margin: 0; opacity: 0.8;">+3 ↗</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -348,7 +348,7 @@ def render_projects_section(texts: dict[str, str]):
             ">
                 <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">In Planung</h3>
                 <h1 style="margin: 10px 0; font-size: 2.2em;">8</h1>
-                <p style="margin: 0; opacity: 0.8;">+1 ↗️</p>
+                <p style="margin: 0; opacity: 0.8;">+1 ↗</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -364,7 +364,7 @@ def render_projects_section(texts: dict[str, str]):
             ">
                 <h3 style="margin: 0; font-size: 1em; opacity: 0.9;">In Umsetzung</h3>
                 <h1 style="margin: 10px 0; font-size: 2.2em;">5</h1>
-                <p style="margin: 0; opacity: 0.8;">-1 ↘️</p>
+                <p style="margin: 0; opacity: 0.8;">-1 ↘</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -415,7 +415,7 @@ def render_revenue_section(texts: dict[str, str]):
             ">
                 <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Monatsumsatz</h3>
                 <h1 style="margin: 10px 0; font-size: 1.8em;">85.000 €</h1>
-                <p style="margin: 0; opacity: 0.8;">+12.5% ↗️</p>
+                <p style="margin: 0; opacity: 0.8;">+12.5% ↗</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -431,7 +431,7 @@ def render_revenue_section(texts: dict[str, str]):
             ">
                 <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Jahresumsatz</h3>
                 <h1 style="margin: 10px 0; font-size: 1.8em;">920.000 €</h1>
-                <p style="margin: 0; opacity: 0.8;">+18.2% ↗️</p>
+                <p style="margin: 0; opacity: 0.8;">+18.2% ↗</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -447,7 +447,7 @@ def render_revenue_section(texts: dict[str, str]):
             ">
                 <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Ø Projektgröße</h3>
                 <h1 style="margin: 10px 0; font-size: 1.8em;">18.400 €</h1>
-                <p style="margin: 0; opacity: 0.8;">+5.1% ↗️</p>
+                <p style="margin: 0; opacity: 0.8;">+5.1% ↗</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -463,7 +463,7 @@ def render_revenue_section(texts: dict[str, str]):
             ">
                 <h3 style="margin: 0; font-size: 0.9em; opacity: 0.9;">Conversion Rate</h3>
                 <h1 style="margin: 10px 0; font-size: 1.8em;">68%</h1>
-                <p style="margin: 0; opacity: 0.8;">+3% ↗️</p>
+                <p style="margin: 0; opacity: 0.8;">+3% ↗</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -553,7 +553,7 @@ def render_statistics_section(texts: dict[str, str]):
             conn.close()
             
             if tag_stats:
-                st.markdown("#### 🏷️ Tag-Nutzung")
+                st.markdown("####  Tag-Nutzung")
                 
                 # Top 5 Tags
                 top_tags = tag_stats[:5]
@@ -679,7 +679,7 @@ def render_tasks_section(texts: dict[str, str]):
     """Aufgaben-Sektion des CRM Dashboards"""
     
     if not TASK_MANAGEMENT_AVAILABLE:
-        st.warning("📋 Aufgabenverwaltung ist nicht verfügbar.")
+        st.warning(" Aufgabenverwaltung ist nicht verfügbar.")
         st.info("Das Task Management Modul konnte nicht geladen werden.")
         return
     

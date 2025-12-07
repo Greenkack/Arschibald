@@ -165,7 +165,7 @@ except ImportError as e:
 def render_pricing_rule_management_ui():
     """Main function to render the pricing rule management interface"""
 
-    st.header("⚙️ Preisregel-Verwaltung")
+    st.header(" Preisregel-Verwaltung")
     st.markdown("Verwalten Sie Rabatte, Zuschläge und Zubehör-Preisregeln.")
 
     if not PRICING_AVAILABLE:
@@ -184,7 +184,7 @@ def render_pricing_rule_management_ui():
         "Rabatt-Regeln",
         "Zuschlag-Regeln",
         "Zubehör-Regeln",
-        "🧪 Regel-Test"
+        " Regel-Test"
     ])
 
     with tab1:
@@ -325,7 +325,7 @@ def render_discount_rules_tab(pricing_engine: PricingModificationEngine):
             help="JSON-Format für erweiterte Bedingungen"
         )
 
-        submitted = st.form_submit_button("➕ Rabatt-Regel hinzufügen")
+        submitted = st.form_submit_button(" Rabatt-Regel hinzufügen")
 
         if submitted:
             try:
@@ -490,7 +490,7 @@ def render_surcharge_rules_tab(pricing_engine: PricingModificationEngine):
             key="surcharge_conditions"
         )
 
-        submitted = st.form_submit_button("➕ Zuschlag-Regel hinzufügen")
+        submitted = st.form_submit_button(" Zuschlag-Regel hinzufügen")
 
         if submitted:
             try:
@@ -613,7 +613,7 @@ def render_accessory_rules_tab(pricing_engine: PricingModificationEngine):
                 help="Optionale Beschreibung"
             )
 
-        submitted = st.form_submit_button("➕ Zubehör hinzufügen")
+        submitted = st.form_submit_button(" Zubehör hinzufügen")
 
         if submitted:
             try:
@@ -643,7 +643,7 @@ def render_accessory_rules_tab(pricing_engine: PricingModificationEngine):
 def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
     """Render the rule testing and preview tab"""
 
-    st.subheader("🧪 Regel-Test")
+    st.subheader(" Regel-Test")
     st.markdown("Testen Sie Ihre Preisregeln mit verschiedenen Szenarien.")
 
     # Test parameters
@@ -686,7 +686,7 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
             key="test_context")
 
     # Test button
-    if st.button("🧪 Preisberechnung testen", key="test_pricing"):
+    if st.button(" Preisberechnung testen", key="test_pricing"):
         try:
             # Parse context
             context = {}
@@ -754,7 +754,7 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
 
             # Applied modifications
             if 'applied_modifications' in result and result['applied_modifications']:
-                st.markdown("**📋 Angewendete Regeln:**")
+                st.markdown("** Angewendete Regeln:**")
 
                 modifications_data = []
                 for mod in result['applied_modifications']:
@@ -776,7 +776,7 @@ def render_rule_testing_tab(pricing_engine: PricingModificationEngine):
 
             # Dynamic keys
             if 'dynamic_keys' in result and result['dynamic_keys']:
-                with st.expander("🔑 Generierte PDF-Schlüssel", expanded=False):
+                with st.expander(" Generierte PDF-Schlüssel", expanded=False):
                     for key, value in result['dynamic_keys'].items():
                         st.text(f"{key}: {value}")
 

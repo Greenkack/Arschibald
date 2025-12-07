@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\dialects\sqlite\dml.py
+# hypothesis_version: 6.147.0
+
+['Insert', '_post_values_clause', 'excluded', 'insert', 'sqlite']

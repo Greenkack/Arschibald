@@ -38,7 +38,7 @@ def create_smart_backup():
         "backup_*",
     ]
 
-    print(f"💾 ERSTELLE BACKUP: {backup_name}.zip")
+    print(f" ERSTELLE BACKUP: {backup_name}.zip")
 
     with zipfile.ZipFile(f"{backup_name}.zip", 'w', zipfile.ZIP_DEFLATED) as zipf:
         files_added = 0
@@ -78,7 +78,7 @@ def create_smart_backup():
                 1024 /
                 1024:.2f} MB\n")
 
-    print(f"📋 Backup-Info: {info_file}")
+    print(f" Backup-Info: {info_file}")
 
     # Alte Backups bereinigen (behalte nur die letzten 5)
     cleanup_old_backups()
@@ -99,7 +99,7 @@ def cleanup_old_backups(keep_count=5):
             if os.path.exists(info_file):
                 os.remove(info_file)
 
-        print(f"🧹 {len(old_backups)} alte Backups gelöscht")
+        print(f" {len(old_backups)} alte Backups gelöscht")
 
 
 if __name__ == "__main__":

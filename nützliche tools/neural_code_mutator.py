@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🧠 NEURAL CODE MUTATOR
+ NEURAL CODE MUTATOR
 ======================
 KI-gesteuerte Code-Mutation um Signaturen zu umgehen
 """
@@ -291,7 +291,7 @@ def __neural_decrypt__(encrypted_bytes, key):
             output_file,
             mutation_intensity=3):
         """Führt komplette neurale Mutation durch"""
-        print(f"🧠 NEURAL CODE MUTATION - INTENSITY {mutation_intensity}")
+        print(f" NEURAL CODE MUTATION - INTENSITY {mutation_intensity}")
         print("=" * 50)
 
         with open(source_file) as f:
@@ -323,8 +323,8 @@ def __neural_decrypt__(encrypted_bytes, key):
 
         print("\nMUTATION COMPLETE:")
         print(f"  Techniken angewendet: {len(applied_mutations)}")
-        print(f"  🔐 Original Hash: {original_hash}")
-        print(f"  🔐 Mutiert Hash: {mutated_hash}")
+        print(f"   Original Hash: {original_hash}")
+        print(f"   Mutiert Hash: {mutated_hash}")
         print(f"  Output: {output_file}")
 
         return output_file, applied_mutations

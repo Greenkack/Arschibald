@@ -28,7 +28,7 @@ class HomePage(Page):
     
 
     def render(self):
-        st.title("🏠 Home Page")
+        st.title(" Home Page")
         st.write("Welcome to the robust Streamlit application!")
 
         if st.button("Go to Dashboard"):
@@ -89,7 +89,7 @@ class SettingsPage(Page):
         self.permissions = {'settings.read', 'settings.write'}
 
     def render(self):
-        st.title("⚙️ Settings")
+        st.title(" Settings")
         st.write("Configure your application settings.")
 
         # Settings form
@@ -120,7 +120,7 @@ class AdminPage(Page):
         self.permissions = {'admin.read', 'admin.write'}
 
     def render(self):
-        st.title("👑 Admin Panel")
+        st.title(" Admin Panel")
         st.write("Administrative functions.")
 
         st.warning("This page requires admin privileges.")
@@ -135,7 +135,7 @@ def setup_router():
         'home',
         HomePage,
         title='Home',
-        icon='🏠'
+        icon=''
     )
 
     router.register_route(
@@ -149,14 +149,14 @@ def setup_router():
         'settings',
         SettingsPage,
         title='Settings',
-        icon='⚙️'
+        icon=''
     )
 
     router.register_route(
         'admin',
         AdminPage,
         title='Admin',
-        icon='👑',
+        icon='',
         guards=[
             RoleGuard(required_roles={'admin': {'admin', 'superuser'}})
         ]
@@ -191,7 +191,7 @@ def main():
     """Main application"""
     st.set_page_config(
         page_title="Navigation Example",
-        page_icon="🧭",
+        page_icon="",
         layout="wide"
     )
 
@@ -210,19 +210,19 @@ def main():
 
     # Sidebar navigation
     with st.sidebar:
-        st.title("🧭 Navigation")
+        st.title(" Navigation")
 
         # Navigation buttons
-        if st.button("🏠 Home", use_container_width=True):
+        if st.button(" Home", use_container_width=True):
             router.navigate('home')
 
         if st.button("Dashboard", use_container_width=True):
             router.navigate('dashboard')
 
-        if st.button("⚙️ Settings", use_container_width=True):
+        if st.button(" Settings", use_container_width=True):
             router.navigate('settings')
 
-        if st.button("👑 Admin", use_container_width=True):
+        if st.button(" Admin", use_container_width=True):
             router.navigate('admin')
 
         st.divider()

@@ -76,7 +76,7 @@ def render_multi_pdf_customer_input() -> bool:
     Rückgabewert:
         True wenn Daten vollständig, sonst False
     """
-    st.subheader("📋 Schritt 1: Kundendaten")
+    st.subheader(" Schritt 1: Kundendaten")
     
     # Versuche automatische Übernahme
     auto_customer_data = load_customer_data_from_project()
@@ -94,7 +94,7 @@ def render_multi_pdf_customer_input() -> bool:
             st.text_input("PLZ", value=auto_customer_data.get("zip_code", ""), disabled=True)
             st.text_input("Ort", value=auto_customer_data.get("city", ""), disabled=True)
         
-        if st.button("🔄 Kundendaten manuell ändern"):
+        if st.button(" Kundendaten manuell ändern"):
             st.session_state.multi_offer_customer_data = {}
             st.rerun()
         
@@ -116,7 +116,7 @@ def render_multi_pdf_customer_input() -> bool:
             city = st.text_input("Ort", value=st.session_state.multi_offer_customer_data.get("city", ""))
             phone = st.text_input("Telefon", value=st.session_state.multi_offer_customer_data.get("phone", ""))
         
-        submitted = st.form_submit_button("💾 Kundendaten speichern")
+        submitted = st.form_submit_button(" Kundendaten speichern")
         
         if submitted:
             if not name.strip():
@@ -147,7 +147,7 @@ def render_multi_pdf_company_selection(available_companies: List[Dict[str, Any]]
     Rückgabewert:
         Liste ausgewählter Company-IDs
     """
-    st.subheader("🏢 Schritt 2: Firmenauswahl (2-20+ Firmen)")
+    st.subheader(" Schritt 2: Firmenauswahl (2-20+ Firmen)")
     
     if not available_companies:
         st.warning("Keine Firmen verfügbar. Bitte erst Firmen im Admin-Panel anlegen.")
@@ -179,7 +179,7 @@ def render_multi_pdf_company_selection(available_companies: List[Dict[str, Any]]
         
         with col_check:
             is_selected = st.checkbox(
-                f"🏢 {company_name}",
+                f" {company_name}",
                 value=company_id in st.session_state.multi_offer_selected_companies,
                 key=f"multi_company_select_{company_id}"
             )
@@ -201,7 +201,7 @@ def render_multi_pdf_company_selection(available_companies: List[Dict[str, Any]]
     if selected_ids:
         st.markdown("---")
         master_extend = st.checkbox(
-            "📑 Alle PDFs erweitern (Master-Toggle)",
+            " Alle PDFs erweitern (Master-Toggle)",
             value=st.session_state.multi_offer_extend_all,
             help="Aktiviert erweiterte PDF für alle ausgewählten Firmen"
         )
@@ -222,14 +222,14 @@ def render_multi_pdf_company_selection(available_companies: List[Dict[str, Any]]
 
 def render_multi_pdf_settings():
     """Rendert Einstellungen für Multi-PDF"""
-    st.subheader("⚙️ Schritt 3: Angebots-Einstellungen")
+    st.subheader(" Schritt 3: Angebots-Einstellungen")
     
     settings = st.session_state.multi_offer_settings
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### 🔄 Produktrotation")
+        st.markdown("###  Produktrotation")
         
         settings["enable_product_rotation"] = st.checkbox(
             "Automatische Produktrotation aktivieren",
@@ -244,7 +244,7 @@ def render_multi_pdf_settings():
                 index=["linear", "random", "category_specific"].index(settings.get("rotation_mode", "linear")),
                 format_func=lambda x: {
                     "linear": "Linear (der Reihe nach)",
-                    "random": "🎲 Zufällig",
+                    "random": " Zufällig",
                     "category_specific": "Kategorie-spezifisch"
                 }.get(x, x)
             )
@@ -412,7 +412,7 @@ def render_multi_pdf_generator():
     customer_data_complete = render_multi_pdf_customer_input()
     
     if not customer_data_complete:
-        st.info("👆 Bitte erst Kundendaten eingeben")
+        st.info(" Bitte erst Kundendaten eingeben")
         return
     
     st.markdown("---")
@@ -422,7 +422,7 @@ def render_multi_pdf_generator():
     selected_company_ids = render_multi_pdf_company_selection(available_companies)
     
     if not selected_company_ids:
-        st.info("👆 Bitte mindestens 2 Firmen auswählen")
+        st.info(" Bitte mindestens 2 Firmen auswählen")
         return
     
     st.markdown("---")
@@ -451,7 +451,7 @@ def render_multi_pdf_generator():
                 # TODO: Implementierung der PDF-Generierung
                 # Wird aus repair_pdf/multi_offer_generator.py extrahiert
                 st.success("Angebote erfolgreich generiert!")
-                st.info("💾 Download wird vorbereitet...")
+                st.info(" Download wird vorbereitet...")
 
 
 if __name__ == "__main__":

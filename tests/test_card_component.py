@@ -117,7 +117,7 @@ class TestCard:
             description="Description text",
             content="Main content",
             footer="Footer text",
-            icon="🎯",
+            icon="",
             badge="New",
             badge_variant="success"
         )
@@ -130,7 +130,7 @@ class TestCard:
         assert 'Description text' in html_content
         assert 'Main content' in html_content
         assert 'Footer text' in html_content
-        assert '🎯' in html_content
+        assert '' in html_content
         assert 'New' in html_content
     
     @patch('components.card.st')

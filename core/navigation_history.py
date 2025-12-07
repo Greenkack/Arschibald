@@ -254,7 +254,7 @@ class NavigationHistory:
             breadcrumbs.append(Breadcrumb(
                 label=self._page_titles.get('home', 'Home'),
                 page='home',
-                icon=self._page_icons.get('home', '🏠'),
+                icon=self._page_icons.get('home', ''),
                 is_current=False
             ))
 

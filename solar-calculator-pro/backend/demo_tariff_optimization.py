@@ -50,14 +50,14 @@ def demo_time_of_use_optimization():
     result = service.optimize_schedule(request)
     
     # Display results
-    print(f"\n📊 Optimization Results:")
+    print(f"\n Optimization Results:")
     print(f"   Original Annual Cost: {result.original_cost:,.2f} EUR")
     print(f"   Optimized Annual Cost: {result.optimized_cost:,.2f} EUR")
-    print(f"   💰 Annual Savings: {result.savings:,.2f} EUR ({result.savings_percent:.1f}%)")
-    print(f"   ⚡ Peak Load Reduction: {result.peak_load_reduction:.2f} kW")
-    print(f"   😊 Comfort Score: {result.comfort_score * 100:.1f}%")
+    print(f"    Annual Savings: {result.savings:,.2f} EUR ({result.savings_percent:.1f}%)")
+    print(f"    Peak Load Reduction: {result.peak_load_reduction:.2f} kW")
+    print(f"    Comfort Score: {result.comfort_score * 100:.1f}%")
     
-    print(f"\n📅 Optimized Schedule (sample hours):")
+    print(f"\n Optimized Schedule (sample hours):")
     for hour in [0, 6, 12, 18, 22]:
         slot = result.optimized_schedule[hour]
         shifted = f" (shifted from hour {slot.shifted_from})" if slot.shifted_from else ""
@@ -111,12 +111,12 @@ def demo_tariff_comparison():
     
     comparisons = service.compare_tariffs([flat_rate, time_of_use, dynamic], heating_profile)
     
-    print(f"\n📊 Tariff Comparison Results:")
+    print(f"\n Tariff Comparison Results:")
     for i, comp in enumerate(comparisons, 1):
         print(f"\n{i}. {comp.tariff_name} ({comp.tariff_type.value})")
         print(f"   Annual Cost: {comp.annual_cost:,.2f} EUR")
         print(f"   Potential Savings: {comp.potential_savings:,.2f} EUR")
-        print(f"   {'✅ RECOMMENDED' if comp.recommended else '   Not recommended'}")
+        print(f"   {' RECOMMENDED' if comp.recommended else '   Not recommended'}")
         print(f"   Pros: {', '.join(comp.pros)}")
         print(f"   Cons: {', '.join(comp.cons)}")
 
@@ -146,17 +146,17 @@ def demo_demand_response():
     service = TariffOptimizationService()
     result = service.process_demand_response(event, schedule)
     
-    print(f"\n⚡ Demand Response Event Analysis:")
+    print(f"\n Demand Response Event Analysis:")
     print(f"   Event ID: {event.event_id}")
     print(f"   Duration: {event.start_time.strftime('%H:%M')} - {event.end_time.strftime('%H:%M')}")
     print(f"   Required Reduction: {event.required_reduction} kW")
     print(f"   Incentive Rate: {event.incentive_rate:.2f} EUR/kWh")
     
-    print(f"\n📊 Participation Analysis:")
-    print(f"   Can Participate: {'✅ Yes' if result['can_participate'] else '❌ No'}")
+    print(f"\n Participation Analysis:")
+    print(f"   Can Participate: {' Yes' if result['can_participate'] else ' No'}")
     print(f"   Current Load: {result['current_load']:.2f} kW")
     print(f"   Reduction Achieved: {result['reduction_achieved']:.2f} kW")
-    print(f"   💰 Incentive Earnings: {result['incentive_earnings']:.2f} EUR")
+    print(f"    Incentive Earnings: {result['incentive_earnings']:.2f} EUR")
     print(f"   Recommendation: {result['recommendation'].upper()}")
 
 
@@ -191,25 +191,25 @@ def demo_real_time_monitoring():
     service = TariffOptimizationService()
     result = service.monitor_real_time_tariff(tariff_data, schedule)
     
-    print(f"\n⚡ Real-Time Tariff Analysis:")
+    print(f"\n Real-Time Tariff Analysis:")
     print(f"   Current Rate: {result['current_rate']:.2f} EUR/kWh")
     print(f"   Average Forecast: {result['average_forecast']:.2f} EUR/kWh")
     print(f"   Grid Load Level: {result['grid_load_level'].upper()}")
-    print(f"   Is Favorable: {'✅ Yes' if result['is_favorable'] else '❌ No'}")
+    print(f"   Is Favorable: {' Yes' if result['is_favorable'] else ' No'}")
     
-    print(f"\n💡 Recommendation:")
+    print(f"\n Recommendation:")
     print(f"   {result['recommendation']}")
     print(f"   Action: {result['action'].upper()}")
-    print(f"   💰 Savings Opportunity: {result['savings_opportunity']:.2f} EUR per 10 kWh")
+    print(f"    Savings Opportunity: {result['savings_opportunity']:.2f} EUR per 10 kWh")
     
-    print(f"\n📅 Optimal Hours (Next 24h):")
+    print(f"\n Optimal Hours (Next 24h):")
     optimal_hours = result['optimal_hours_next_24h']
     print(f"   Best times to heat: {', '.join(f'{h:02d}:00' for h in optimal_hours[:5])}")
 
 
 def main():
     """Run all demos"""
-    print("\n🔥 HEAT PUMP DYNAMIC TARIFF OPTIMIZATION SYSTEM")
+    print("\n HEAT PUMP DYNAMIC TARIFF OPTIMIZATION SYSTEM")
     print("=" * 80)
     
     demo_time_of_use_optimization()
@@ -218,7 +218,7 @@ def main():
     demo_real_time_monitoring()
     
     print("\n" + "=" * 80)
-    print("✅ All demos completed successfully!")
+    print(" All demos completed successfully!")
     print("=" * 80)
 
 

@@ -71,10 +71,10 @@ def test_page_numbering_footer():
                     # Note: Some pages might not have extractable text if
                     # they're pure images
                     print(
-                        f"   ⚠ Page {page_num}: Could not extract 'Seite X' text (may be in template)")
+                        f"    Page {page_num}: Could not extract 'Seite X' text (may be in template)")
 
             except Exception as e:
-                print(f"   ⚠ Page {page_num}: Could not extract text: {e}")
+                print(f"    Page {page_num}: Could not extract text: {e}")
 
         print(f"\n3. Checking page sequence:")
         print(f"   Pages are sequential from 1 to {page_count}")
@@ -92,7 +92,7 @@ def test_page_numbering_footer():
             print(f"{'=' * 50}\n")
         else:
             print(f"{'=' * 50}")
-            print("⚠ WARNING: Some page numbers may be incorrect")
+            print(" WARNING: Some page numbers may be incorrect")
             print("   Please manually verify the generated PDF")
             print(f"{'=' * 50}\n")
 

@@ -75,7 +75,7 @@ def test_solarfabrik_real_values():
             project_data, analysis_results, result)
 
         # Zeige Solarfabrik-Daten
-        print("\\n🏭 Solarfabrik Module-Attribute:")
+        print("\\n Solarfabrik Module-Attribute:")
         print(
             f"   - Zellentechnologie: {
                 dynamic_data.get(
@@ -169,7 +169,7 @@ def test_solarfabrik_real_values():
             print(f"\\nTest-PDF erstellt: {output_file}")
             print(f"Dateigröße: {len(overlay_bytes):,} bytes")
 
-            print("\\n📋 Überprüfen Sie:")
+            print("\\n Überprüfen Sie:")
             print(
                 "   1. Seite 4: Solarfabrik sollte echte Werte zeigen (Monokristallin, Glas-Folie, etc.)")
             print("   2. Seite 6: Dienstleistungen sollten angezeigt werden")
@@ -227,7 +227,7 @@ if __name__ == "__main__":
     # Test 2: Alle Korrekturen mit echten Solarfabrik-Werten
     success = test_solarfabrik_real_values()
 
-    print("\\n🎉 Test abgeschlossen!")
+    print("\\n Test abgeschlossen!")
     if success:
         print("Alle drei Probleme sollten behoben sein:")
         print("   1. Solarfabrik zeigt echte DB-Werte")

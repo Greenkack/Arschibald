@@ -162,37 +162,37 @@ class ErrorHandler:
         """Show user notification in Streamlit"""
         if isinstance(error, ThemeLoadError):
             st.warning(
-                f"⚠️ Theme '{error.theme_name}' konnte nicht geladen werden. "
+                f" Theme '{error.theme_name}' konnte nicht geladen werden. "
                 f"Verwende Fallback-Theme."
             )
         elif isinstance(error, ThemeValidationError):
             st.error(
-                f"❌ Theme '{error.theme_name}' ist ungültig. "
+                f" Theme '{error.theme_name}' ist ungültig. "
                 f"Gefunden: {len(error.validation_errors)} Fehler."
             )
         elif isinstance(error, CSSInjectionError):
             st.error(
-                "❌ CSS konnte nicht geladen werden. "
+                " CSS konnte nicht geladen werden. "
                 "App läuft mit Standard-Styling."
             )
         elif isinstance(error, ComponentRenderError):
             st.warning(
-                f"⚠️ Komponente '{error.component_name}' konnte nicht "
+                f" Komponente '{error.component_name}' konnte nicht "
                 f"gerendert werden. Verwende Fallback."
             )
         elif isinstance(error, ThemeNotFoundError):
             available = ", ".join(error.available_themes[:5])
             st.warning(
-                f"⚠️ Theme '{error.theme_name}' nicht gefunden. "
+                f" Theme '{error.theme_name}' nicht gefunden. "
                 f"Verfügbar: {available}"
             )
         else:
             if severity == "error":
-                st.error(f"❌ Fehler: {str(error)}")
+                st.error(f" Fehler: {str(error)}")
             elif severity == "warning":
-                st.warning(f"⚠️ Warnung: {str(error)}")
+                st.warning(f" Warnung: {str(error)}")
             else:
-                st.info(f"ℹ️ {str(error)}")
+                st.info(f"ℹ {str(error)}")
     
     def handle_theme_load_error(
         self,
@@ -335,7 +335,7 @@ class ErrorHandler:
             )
             if STREAMLIT_AVAILABLE:
                 st.error(
-                    f"❌ Automatische Wiederherstellung fehlgeschlagen. "
+                    f" Automatische Wiederherstellung fehlgeschlagen. "
                     f"Bitte Seite neu laden."
                 )
             return None

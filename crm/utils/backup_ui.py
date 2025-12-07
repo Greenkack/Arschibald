@@ -40,14 +40,14 @@ def render_backup_management_ui() -> None:
         st.error("Backup-Modul nicht verfügbar. Bitte prüfen Sie die Installation.")
         return
     
-    st.title("🗄️ Backup-Verwaltung")
+    st.title(" Backup-Verwaltung")
     st.markdown("---")
     
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3, tab4 = st.tabs([
         "Übersicht",
-        "💾 Backups verwalten",
-        "⚙️ Automatische Backups",
+        " Backups verwalten",
+        " Automatische Backups",
         "Statistiken"
     ])
     
@@ -87,7 +87,7 @@ def render_backup_overview() -> None:
         st.metric("Gesamtgröße", f"{stats['total_size_mb']} MB")
     
     with col3:
-        status_icon = "🟢" if scheduler_status["running"] else "🔴"
+        status_icon = "🟢" if scheduler_status["running"] else ""
         st.metric("Scheduler", f"{status_icon} {'Aktiv' if scheduler_status['running'] else 'Inaktiv'}")
     
     with col4:
@@ -101,13 +101,13 @@ def render_backup_overview() -> None:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("**📅 Tägliche Backups**")
+        st.markdown("** Tägliche Backups**")
         daily_stats = stats["by_type"]["daily"]
         st.write(f"Anzahl: {daily_stats['count']} (max. 7)")
         st.write(f"Größe: {daily_stats['size_mb']} MB")
         st.write(f"Letztes: {daily_stats['latest']}")
         
-        st.markdown("**📆 Wöchentliche Backups**")
+        st.markdown("** Wöchentliche Backups**")
         weekly_stats = stats["by_type"]["weekly"]
         st.write(f"Anzahl: {weekly_stats['count']} (max. 4)")
         st.write(f"Größe: {weekly_stats['size_mb']} MB")
@@ -133,7 +133,7 @@ def render_backup_overview() -> None:
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("💾 Manuelles Backup erstellen", use_container_width=True):
+        if st.button(" Manuelles Backup erstellen", use_container_width=True):
             with st.spinner("Erstelle Backup..."):
                 success, message = create_backup("manual")
                 if success:
@@ -144,7 +144,7 @@ def render_backup_overview() -> None:
     
     with col2:
         if scheduler_status["running"]:
-            if st.button("⏸️ Scheduler stoppen", use_container_width=True):
+            if st.button("⏸ Scheduler stoppen", use_container_width=True):
                 success, message = stop_scheduler()
                 if success:
                     st.success(message)
@@ -152,7 +152,7 @@ def render_backup_overview() -> None:
                 else:
                     st.error(message)
         else:
-            if st.button("▶️ Scheduler starten", use_container_width=True):
+            if st.button(" Scheduler starten", use_container_width=True):
                 success, message = start_scheduler()
                 if success:
                     st.success(message)
@@ -161,14 +161,14 @@ def render_backup_overview() -> None:
                     st.error(message)
     
     with col3:
-        if st.button("🔄 Ansicht aktualisieren", use_container_width=True):
+        if st.button(" Ansicht aktualisieren", use_container_width=True):
             st.rerun()
 
 
 def render_backup_management() -> None:
     """Rendert die Backup-Verwaltung mit Liste und Aktionen."""
     
-    st.subheader("💾 Backup-Verwaltung")
+    st.subheader(" Backup-Verwaltung")
     
     # Manuelle Backup-Erstellung
     st.markdown("### Neues Backup erstellen")
@@ -179,7 +179,7 @@ def render_backup_management() -> None:
         st.info("Erstellen Sie ein manuelles Backup der Datenbank. Dieses wird im 'manual' Ordner gespeichert.")
     
     with col2:
-        if st.button("💾 Backup erstellen", use_container_width=True, type="primary"):
+        if st.button(" Backup erstellen", use_container_width=True, type="primary"):
             with st.spinner("Erstelle Backup..."):
                 success, message = create_backup("manual")
                 if success:
@@ -238,7 +238,7 @@ def render_backup_management() -> None:
                 restore_key = f"restore_{backup['filename']}"
                 delete_key = f"delete_{backup['filename']}"
                 
-                if st.button("🔄 Wiederherstellen", key=restore_key, use_container_width=True):
+                if st.button(" Wiederherstellen", key=restore_key, use_container_width=True):
                     st.session_state[f"confirm_restore_{backup['filename']}"] = True
                 
                 # Bestätigungs-Dialog
@@ -292,7 +292,7 @@ def render_backup_management() -> None:
 def render_scheduler_control() -> None:
     """Rendert die Scheduler-Steuerung."""
     
-    st.subheader("⚙️ Automatische Backups")
+    st.subheader(" Automatische Backups")
     
     # Prüfe APScheduler-Verfügbarkeit
     if not APSCHEDULER_AVAILABLE:
@@ -316,7 +316,7 @@ def render_scheduler_control() -> None:
     
     with col1:
         if status["running"]:
-            if st.button("⏸️ Scheduler stoppen", use_container_width=True, type="secondary"):
+            if st.button("⏸ Scheduler stoppen", use_container_width=True, type="secondary"):
                 success, message = stop_scheduler()
                 if success:
                     st.success(message)
@@ -324,7 +324,7 @@ def render_scheduler_control() -> None:
                 else:
                     st.error(message)
         else:
-            if st.button("▶️ Scheduler starten", use_container_width=True, type="primary"):
+            if st.button(" Scheduler starten", use_container_width=True, type="primary"):
                 success, message = start_scheduler()
                 if success:
                     st.success(message)
@@ -333,14 +333,14 @@ def render_scheduler_control() -> None:
                     st.error(message)
     
     with col2:
-        if st.button("🔄 Status aktualisieren", use_container_width=True):
+        if st.button(" Status aktualisieren", use_container_width=True):
             st.rerun()
     
     st.markdown("---")
     
     # Geplante Jobs
     if status["running"] and "jobs" in status:
-        st.subheader("📅 Geplante Backup-Jobs")
+        st.subheader(" Geplante Backup-Jobs")
         
         for job in status["jobs"]:
             with st.container():
@@ -357,13 +357,13 @@ def render_scheduler_control() -> None:
                 st.markdown("---")
     
     # Backup-Zeitplan Informationen
-    st.subheader("📋 Backup-Zeitplan")
+    st.subheader(" Backup-Zeitplan")
     
     st.markdown("""
     **Automatische Backups werden zu folgenden Zeiten erstellt:**
     
-    - 📅 **Täglich:** Jeden Tag um 2:00 Uhr (max. 7 Backups)
-    - 📆 **Wöchentlich:** Jeden Sonntag um 3:00 Uhr (max. 4 Backups)
+    -  **Täglich:** Jeden Tag um 2:00 Uhr (max. 7 Backups)
+    -  **Wöchentlich:** Jeden Sonntag um 3:00 Uhr (max. 4 Backups)
     - **Monatlich:** Am 1. jeden Monats um 4:00 Uhr (max. 12 Backups)
     
     **Backup-Rotation:**
@@ -423,7 +423,7 @@ def render_backup_statistics() -> None:
     st.markdown("---")
     
     # Neueste Backups
-    st.markdown("### 🕐 Neueste Backups")
+    st.markdown("###  Neueste Backups")
     
     recent_backups = backups[:5]  # Zeige die 5 neuesten
     

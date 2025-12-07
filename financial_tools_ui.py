@@ -50,7 +50,7 @@ def render_financial_tools_section(
         annual_consumption = project_data.get('annual_consumption', 0)
 
         # === 1. ANNUITÄT (KREDIT) ===
-        with st.expander("💳 Annuität - Kredit-Berechnung", expanded=False):
+        with st.expander(" Annuität - Kredit-Berechnung", expanded=False):
             st.markdown(f"**Investitionssumme:** {total_investment:,.2f} €")
 
             col1, col2 = st.columns(2)
@@ -135,7 +135,7 @@ def render_financial_tools_section(
                     st.error(f"Fehler: {e}")
 
         # === 2. LEASING ===
-        with st.expander("🚗 Leasing-Kosten", expanded=False):
+        with st.expander(" Leasing-Kosten", expanded=False):
             st.markdown(f"**Investitionssumme:** {total_investment:,.2f} €")
 
             col1, col2 = st.columns(2)
@@ -230,7 +230,7 @@ def render_financial_tools_section(
                     st.error(f"Fehler: {e}")
 
         # === 4. FINANZIERUNGS-VERGLEICH ===
-        with st.expander("⚖️ Finanzierungs-Vergleich (Kredit vs Leasing)", expanded=False):
+        with st.expander(" Finanzierungs-Vergleich (Kredit vs Leasing)", expanded=False):
             st.markdown(f"**Investitionssumme:** {total_investment:,.2f} €")
 
             col1, col2, col3 = st.columns(3)
@@ -345,7 +345,7 @@ def render_financial_tools_section(
                     st.error(f"Fehler: {e}")
 
         # === 6. CONTRACTING-KOSTEN ===
-        with st.expander("🔌 Contracting-Kosten (Alternative)", expanded=False):
+        with st.expander(" Contracting-Kosten (Alternative)", expanded=False):
             st.markdown(
                 f"**Jährlicher Verbrauch:** {annual_consumption:,.2f} kWh")
 

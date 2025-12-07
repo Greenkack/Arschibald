@@ -45,7 +45,7 @@ print(f"   Deutsche Trennzeichen: {separators_count} Charts formatiert")
 
 # 5. Prüfe DataFrames
 dataframes = content.count('pd.DataFrame(')
-print(f"\n📋 DataFrames: {dataframes} gefunden")
+print(f"\n DataFrames: {dataframes} gefunden")
 
 # 6. Suche nach verbleibenden "0 €" (sollte "0,00 €" sein für Konsistenz)
 zero_euro = content.count('"0 €"') + content.count("'0 €'")

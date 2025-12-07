@@ -39,7 +39,7 @@ project_data = {
 print("DEBUG: extract_brands_from_project_data")
 print("=" * 50)
 
-print("📥 Input project_data structure:")
+print(" Input project_data structure:")
 print(f"  Keys auf oberster Ebene: {list(project_data.keys())}")
 print(
     f"  selected_products Keys: {
@@ -50,7 +50,7 @@ print(
 
 # Test original function
 result = extract_brands_from_project_data(project_data)
-print(f"\n📤 Result from extract_brands_from_project_data: {result}")
+print(f"\n Result from extract_brands_from_project_data: {result}")
 
 print("\nManual extraction für selected_products:")
 selected_products = project_data.get('selected_products', {})
@@ -72,4 +72,4 @@ for prod_key, prod_data in selected_products.items():
         if brand:
             manual_result[mapped_category] = brand
 
-print(f"\n📋 Manual result: {manual_result}")
+print(f"\n Manual result: {manual_result}")

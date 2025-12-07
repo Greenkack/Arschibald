@@ -456,7 +456,7 @@ def main():
     print(f"\nTotal: {passed}/{total} tests passed")
 
     if passed == total:
-        print("\n🎉 All Docker security requirements verified!")
+        print("\n All Docker security requirements verified!")
         print("\nTask 12.2 is COMPLETE:")
         print("  Unprivileged user execution")
         print("  Network disabled by default")

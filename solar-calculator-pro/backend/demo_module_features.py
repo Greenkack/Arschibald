@@ -30,14 +30,14 @@ def demo_initialize():
         existing = sum(1 for v in results.values() if v == "already_exists")
         errors = sum(1 for v in results.values() if v.startswith("error"))
         
-        print(f"\n✅ Initialization complete!")
+        print(f"\n Initialization complete!")
         print(f"   Total: {len(results)}")
         print(f"   Created: {created}")
         print(f"   Existing: {existing}")
         print(f"   Errors: {errors}")
         
         if errors > 0:
-            print("\n❌ Errors:")
+            print("\n Errors:")
             for key, value in results.items():
                 if value.startswith("error"):
                     print(f"   {key}: {value}")
@@ -68,7 +68,7 @@ def demo_check_module():
         print("\nModule Status:")
         for name, key in modules:
             is_enabled = service.is_module_enabled(key)
-            status = "✅ ENABLED" if is_enabled else "❌ DISABLED"
+            status = " ENABLED" if is_enabled else " DISABLED"
             print(f"   {name:20} {status}")
     
     finally:
@@ -101,7 +101,7 @@ def demo_check_sub_features():
                 ModuleFeatureService.SOLAR_CALCULATOR,
                 key
             )
-            status = "✅ ENABLED" if is_enabled else "❌ DISABLED"
+            status = " ENABLED" if is_enabled else " DISABLED"
             print(f"   {name:25} {status}")
     
     finally:
@@ -125,13 +125,13 @@ def demo_toggle_module():
         print(f"\nInitial status: {'ENABLED' if initial_status else 'DISABLED'}")
         
         # Disable module
-        print("\n🔄 Disabling module...")
+        print("\n Disabling module...")
         service.disable_module(module_key)
         status_after_disable = service.is_module_enabled(module_key)
         print(f"   Status after disable: {'ENABLED' if status_after_disable else 'DISABLED'}")
         
         # Enable module
-        print("\n🔄 Enabling module...")
+        print("\n Enabling module...")
         service.enable_module(module_key)
         status_after_enable = service.is_module_enabled(module_key)
         print(f"   Status after enable: {'ENABLED' if status_after_enable else 'DISABLED'}")
@@ -141,7 +141,7 @@ def demo_toggle_module():
             service.enable_module(module_key)
         else:
             service.disable_module(module_key)
-        print(f"\n✅ Restored to initial status: {'ENABLED' if initial_status else 'DISABLED'}")
+        print(f"\n Restored to initial status: {'ENABLED' if initial_status else 'DISABLED'}")
     
     finally:
         db.close()
@@ -168,13 +168,13 @@ def demo_toggle_sub_feature():
         print(f"\nInitial status: {'ENABLED' if initial_status else 'DISABLED'}")
         
         # Disable sub-feature
-        print("\n🔄 Disabling sub-feature...")
+        print("\n Disabling sub-feature...")
         service.disable_sub_feature(sub_feature_key)
         status_after_disable = service.is_sub_feature_enabled(module_key, sub_feature_key)
         print(f"   Status after disable: {'ENABLED' if status_after_disable else 'DISABLED'}")
         
         # Enable sub-feature
-        print("\n🔄 Enabling sub-feature...")
+        print("\n Enabling sub-feature...")
         service.enable_sub_feature(sub_feature_key)
         status_after_enable = service.is_sub_feature_enabled(module_key, sub_feature_key)
         print(f"   Status after enable: {'ENABLED' if status_after_enable else 'DISABLED'}")
@@ -184,7 +184,7 @@ def demo_toggle_sub_feature():
             service.enable_sub_feature(sub_feature_key)
         else:
             service.disable_sub_feature(sub_feature_key)
-        print(f"\n✅ Restored to initial status: {'ENABLED' if initial_status else 'DISABLED'}")
+        print(f"\n Restored to initial status: {'ENABLED' if initial_status else 'DISABLED'}")
     
     finally:
         db.close()
@@ -202,14 +202,14 @@ def demo_get_all_status():
         status = service.get_module_status()
         
         for module_name, module_data in status.items():
-            module_status = "✅ ENABLED" if module_data["enabled"] else "❌ DISABLED"
+            module_status = " ENABLED" if module_data["enabled"] else " DISABLED"
             print(f"\n{module_name.upper().replace('_', ' ')} {module_status}")
             
             if module_data["sub_features"]:
                 print("  Sub-Features:")
                 for sub_key, sub_enabled in module_data["sub_features"].items():
                     sub_name = sub_key.split('.')[-1].replace('_', ' ').title()
-                    sub_status = "✅" if sub_enabled else "❌"
+                    sub_status = "" if sub_enabled else ""
                     print(f"    {sub_status} {sub_name}")
     
     finally:
@@ -233,22 +233,22 @@ def demo_parent_module_dependency():
         service.enable_sub_feature(sub_feature_key)
         
         # Disable parent module
-        print("\n1️⃣ Disabling parent module (Solar Calculator)...")
+        print("\n1⃣ Disabling parent module (Solar Calculator)...")
         service.disable_module(module_key)
         
         # Check sub-feature status
         sub_enabled = service.is_sub_feature_enabled(module_key, sub_feature_key)
         print(f"   Sub-feature status: {'ENABLED' if sub_enabled else 'DISABLED'}")
-        print("   ℹ️  Sub-feature is disabled because parent module is disabled")
+        print("   ℹ  Sub-feature is disabled because parent module is disabled")
         
         # Enable parent module
-        print("\n2️⃣ Enabling parent module...")
+        print("\n2⃣ Enabling parent module...")
         service.enable_module(module_key)
         
         # Check sub-feature status again
         sub_enabled = service.is_sub_feature_enabled(module_key, sub_feature_key)
         print(f"   Sub-feature status: {'ENABLED' if sub_enabled else 'DISABLED'}")
-        print("   ℹ️  Sub-feature is now enabled because parent module is enabled")
+        print("   ℹ  Sub-feature is now enabled because parent module is enabled")
     
     finally:
         db.close()
@@ -272,7 +272,7 @@ def main():
         demo_parent_module_dependency()
         
         print("\n" + "="*80)
-        print("✅ ALL DEMOS COMPLETED SUCCESSFULLY")
+        print(" ALL DEMOS COMPLETED SUCCESSFULLY")
         print("="*80)
         print("\nNext steps:")
         print("1. Use the admin UI to manage module features")
@@ -281,7 +281,7 @@ def main():
         print("4. See MODULE_FEATURES_GUIDE.md for detailed documentation")
         
     except Exception as e:
-        print(f"\n❌ Error running demos: {e}")
+        print(f"\n Error running demos: {e}")
         import traceback
         traceback.print_exc()
 

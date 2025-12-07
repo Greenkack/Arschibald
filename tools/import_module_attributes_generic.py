@@ -259,7 +259,7 @@ def _normalize_record(raw: dict[str, Any]) -> dict[str, Any]:
         # Entferne abschließende Doppelpunkte (z. B. "Kategorie:")
         try:
             import re as _re
-            low = _re.sub(r"[:：]+$", "", low).strip()
+            low = _re.sub(r"[:]+$", "", low).strip()
         except Exception:
             pass
         if low in cmap:

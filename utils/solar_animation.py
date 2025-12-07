@@ -32,15 +32,15 @@ def create_sun_path_animation(
     """
     # Validierung: None-Checks
     if building_center is None or any(c is None for c in building_center):
-        print("⚠️ Animation: building_center ist None, verwende (0, 0, 0)")
+        print(" Animation: building_center ist None, verwende (0, 0, 0)")
         building_center = (0.0, 0.0, 0.0)
     
     if radius is None:
-        print("⚠️ Animation: radius ist None, verwende 50.0")
+        print(" Animation: radius ist None, verwende 50.0")
         radius = 50.0
     
     if num_frames is None or num_frames <= 0:
-        print("⚠️ Animation: num_frames ungültig, verwende 24")
+        print(" Animation: num_frames ungültig, verwende 24")
         num_frames = 24
     
     frames = []
@@ -96,7 +96,7 @@ def create_sun_path_animation(
             'showactive': False,
             'buttons': [
                 {
-                    'label': '▶ Play',
+                    'label': ' Play',
                     'method': 'animate',
                     'args': [None, {
                         'frame': {'duration': 500, 'redraw': True},
@@ -154,15 +154,15 @@ def create_360_rotation_animation(
     """
     # Validierung: None-Checks
     if building_center is None or any(c is None for c in building_center):
-        print("⚠️ Animation: building_center ist None, verwende (0, 0, 0)")
+        print(" Animation: building_center ist None, verwende (0, 0, 0)")
         building_center = (0.0, 0.0, 0.0)
     
     if distance is None or distance <= 0:
-        print("⚠️ Animation: distance ungültig, verwende 100.0")
+        print(" Animation: distance ungültig, verwende 100.0")
         distance = 100.0
     
     if num_frames is None or num_frames <= 0:
-        print("⚠️ Animation: num_frames ungültig, verwende 36")
+        print(" Animation: num_frames ungültig, verwende 36")
         num_frames = 36
     
     frames = []
@@ -207,7 +207,7 @@ def create_360_rotation_animation(
             'x': 1.15,
             'buttons': [
                 {
-                    'label': '🔄 360° Rotation',
+                    'label': ' 360° Rotation',
                     'method': 'animate',
                     'args': [None, {
                         'frame': {'duration': 100, 'redraw': True},
@@ -439,7 +439,7 @@ def render_animation_controls(animation_type: str = "sun_path") -> Dict[str, Any
     Returns:
         Dictionary mit Animations-Parametern
     """
-    st.subheader("🎬 Animations-Einstellungen")
+    st.subheader(" Animations-Einstellungen")
     
     params = {}
     

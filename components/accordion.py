@@ -32,7 +32,7 @@ class Accordion(ShadcnComponent):
                 {
                     "title": "Abschnitt 1",
                     "content": "Inhalt 1",
-                    "icon": "📄"
+                    "icon": ""
                 },
                 {
                     "title": "Abschnitt 2",
@@ -180,7 +180,7 @@ class Accordion(ShadcnComponent):
             with col2:
                 icon_class = "shadcn-accordion-icon-open" if is_open else ""
                 st.markdown(
-                    f'<div class="shadcn-accordion-icon-{accordion_id} {icon_class}">▼</div>',
+                    f'<div class="shadcn-accordion-icon-{accordion_id} {icon_class}"></div>',
                     unsafe_allow_html=True
                 )
             

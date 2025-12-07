@@ -59,7 +59,7 @@ def render_health_status():
     status_colors = {
         "HEALTHY": "🟢",
         "DEGRADED": "🟡",
-        "UNHEALTHY": "🔴"
+        "UNHEALTHY": ""
     }
     
     col1, col2, col3 = st.columns(3)
@@ -67,7 +67,7 @@ def render_health_status():
     with col1:
         st.metric(
             "Status",
-            f"{status_colors.get(health['status'], '⚪')} {health['status']}"
+            f"{status_colors.get(health['status'], '')} {health['status']}"
         )
     
     with col2:
@@ -320,7 +320,7 @@ def render_reports():
         st.subheader("Aktueller Sitzungsbericht")
     
     with col2:
-        if st.button("💾 Bericht herunterladen", type="primary"):
+        if st.button(" Bericht herunterladen", type="primary"):
             report = evaluation_system.generate_report()
             filepath = evaluation_system.save_report(report)
             st.success(f"Bericht gespeichert: {filepath.name}")
@@ -340,7 +340,7 @@ def render_reports():
         
         if reports:
             for report_file in reports[:5]:  # Last 5 reports
-                with st.expander(f"📄 {report_file.name}"):
+                with st.expander(f" {report_file.name}"):
                     try:
                         with open(report_file, 'r') as f:
                             old_report = json.load(f)

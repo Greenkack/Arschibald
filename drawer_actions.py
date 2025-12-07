@@ -142,7 +142,7 @@ def render_help_menu():
     Button 5: Hilfe-Menü
     Zeigt FAQ/Help-Seite (ohne Dokumentation - die ist jetzt im Admin-Bereich)
     """
-    st.markdown("# 📚 Hilfe & Support")
+    st.markdown("#  Hilfe & Support")
     st.markdown("---")
     
     st.markdown("""
@@ -166,19 +166,19 @@ def render_help_menu():
     A: Gehen Sie zu "Dateneingabe", füllen Sie die Kundendaten aus, und klicken Sie auf "PDF erstellen".
     
     #### **Q: Wie speichere ich einen Kunden?**
-    A: Nutzen Sie den Quick Action Button "💾 Kunde ins CRM" im Drawer (unten rechts) oder gehen Sie ins CRM-Modul.
+    A: Nutzen Sie den Quick Action Button " Kunde ins CRM" im Drawer (unten rechts) oder gehen Sie ins CRM-Modul.
     
     #### **Q: Wie funktioniert der Blitz-Angebot Button?**
     A: Der Button "Blitz-Angebot" erstellt sofort ein Standard-PDF mit den aktuellen Daten, ohne zusätzliche UI-Schritte.
     
     #### **Q: Was macht der Sprachbefehl-Button?**
-    A: Der Button "🎤 Sprachbefehl" aktiviert die Sprachsteuerung für den KI-Agent.
+    A: Der Button " Sprachbefehl" aktiviert die Sprachsteuerung für den KI-Agent.
     
     #### **Q: Wo finde ich die vollständige Dokumentation?**
     A: Die vollständige Dokumentation (Hauptdokumentation + Detaillierte Docs) befindet sich im **Admin-Bereich** unter dem Tab **"Build Infos"** (passwortgeschützt).
     
     #### **Q: Wie funktioniert die 3D-Visualisierung?**
-    A: Klicken Sie auf "🏠 3D Visualisierung" im Drawer. Die Funktion zeigt interaktive 3D-Modelle von Wärmepumpen-Systemen.
+    A: Klicken Sie auf " 3D Visualisierung" im Drawer. Die Funktion zeigt interaktive 3D-Modelle von Wärmepumpen-Systemen.
     
     #### **Q: Was passiert bei Logout?**
     A: Alle Session-Daten werden gelöscht, und Sie werden zur Login-Seite weitergeleitet.
@@ -187,14 +187,14 @@ def render_help_menu():
     
     ### Tipps & Tricks:
     
-    - **Drawer**: Nutzen Sie das ☰ Symbol unten rechts für schnelle Aktionen
+    - **Drawer**: Nutzen Sie das  Symbol unten rechts für schnelle Aktionen
     - **Agent**: Der KI-Agent kann komplexe Berechnungen durchführen und Fragen beantworten
     - **Hotkeys**: Verwenden Sie Tastenkombinationen für schnelleres Arbeiten
     - **Admin-Panel**: Umfangreiche Einstellungen und Dokumentation im Admin-Bereich
     
     ---
     
-    ### 📞 Support:
+    ###  Support:
     
     Bei weiteren Fragen wenden Sie sich bitte an:
     - **E-Mail**: support@example.com
@@ -231,7 +231,7 @@ def show_drawer_notifications():
         # Download-Button
         if st.session_state.get('drawer_pdf_bytes'):
             st.download_button(
-                label="📥 PDF herunterladen",
+                label=" PDF herunterladen",
                 data=st.session_state['drawer_pdf_bytes'],
                 file_name="blitz_angebot.pdf",
                 mime="application/pdf"

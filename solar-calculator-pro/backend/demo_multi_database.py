@@ -112,7 +112,7 @@ def demo_sqlite():
     session.close()
     manager.disconnect()
     
-    print("\n✅ SQLite demo completed successfully!")
+    print("\n SQLite demo completed successfully!")
 
 
 def demo_database_types():
@@ -160,7 +160,7 @@ def demo_database_types():
     print(f"   Connection string: {mysql_config.get_connection_string()}")
     print(f"   Pool size: {mysql_config.pool_size}")
     
-    print("\n✅ Configuration demo completed!")
+    print("\n Configuration demo completed!")
 
 
 def demo_migration():
@@ -209,11 +209,11 @@ def demo_migration():
     print("\n4. Validating migration...")
     validation = migration_service.validate_migration()
     if validation["valid"]:
-        print("   ✅ Validation passed")
+        print("    Validation passed")
         if validation["warnings"]:
-            print(f"   ⚠️  Warnings: {validation['warnings']}")
+            print(f"     Warnings: {validation['warnings']}")
     else:
-        print(f"   ❌ Validation failed: {validation['errors']}")
+        print(f"    Validation failed: {validation['errors']}")
         return
     
     # Perform migration
@@ -235,14 +235,14 @@ def demo_migration():
     verification = migration_service.verify_migration()
     
     if verification["success"]:
-        print("   ✅ Verification passed")
+        print("    Verification passed")
         print(f"   - Tables verified: {verification['tables_verified']}")
         print(f"   - Tables failed: {verification['tables_failed']}")
     else:
-        print("   ❌ Verification failed")
+        print("    Verification failed")
         print(f"   - Mismatches: {verification['row_count_mismatches']}")
     
-    print("\n✅ Migration demo completed!")
+    print("\n Migration demo completed!")
 
 
 def demo_context_manager():
@@ -270,8 +270,8 @@ def demo_context_manager():
         
         session.close()
     
-    print("   ✅ Context manager automatically disconnected")
-    print("\n✅ Context manager demo completed!")
+    print("    Context manager automatically disconnected")
+    print("\n Context manager demo completed!")
 
 
 def demo_error_handling():
@@ -286,7 +286,7 @@ def demo_error_handling():
         config = DatabaseConfig(db_type=DatabaseType.SQLITE)
         config.get_connection_string()
     except ValueError as e:
-        print(f"   ✅ Caught expected error: {e}")
+        print(f"    Caught expected error: {e}")
     
     # Test invalid PostgreSQL configuration
     print("\n2. Testing invalid PostgreSQL configuration...")
@@ -297,7 +297,7 @@ def demo_error_handling():
         )
         config.get_connection_string()
     except ValueError as e:
-        print(f"   ✅ Caught expected error: {e}")
+        print(f"    Caught expected error: {e}")
     
     # Test connection to non-existent database
     print("\n3. Testing connection to non-existent database...")
@@ -309,9 +309,9 @@ def demo_error_handling():
         manager = DatabaseManager(config)
         manager.connect()
     except Exception as e:
-        print(f"   ✅ Caught expected error: {type(e).__name__}")
+        print(f"    Caught expected error: {type(e).__name__}")
     
-    print("\n✅ Error handling demo completed!")
+    print("\n Error handling demo completed!")
 
 
 def cleanup():
@@ -333,7 +333,7 @@ def cleanup():
             os.remove(file)
             print(f"   Removed: {file}")
     
-    print("\n✅ Cleanup completed!")
+    print("\n Cleanup completed!")
 
 
 def main():
@@ -357,11 +357,11 @@ def main():
         demo_error_handling()
         
         print("\n" + "="*60)
-        print("ALL DEMOS COMPLETED SUCCESSFULLY! ✅")
+        print("ALL DEMOS COMPLETED SUCCESSFULLY! ")
         print("="*60)
         
     except Exception as e:
-        print(f"\n❌ Demo failed with error: {e}")
+        print(f"\n Demo failed with error: {e}")
         import traceback
         traceback.print_exc()
     

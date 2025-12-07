@@ -147,13 +147,13 @@ print(f"TESTE FIRMA {company_index + 1} (sollte +5% haben)")
 print(f"{'='*80}")
 
 # 1. Preisstaffelung anwenden
-print(f"\n1️⃣  Wende Preisstaffelung an...")
+print(f"\n1⃣  Wende Preisstaffelung an...")
 scaled_calc_results = generator.apply_price_scaling(company_index, base_settings, base_calc_results.copy())
 print(f"   total_investment_netto: {scaled_calc_results.get('total_investment_netto'):,.2f} €")
 print(f"   final_price_net: {scaled_calc_results.get('final_price_net')}")
 
 # 2. Prepare offer_data (wie in multi_offer_generator.py)
-print(f"\n2️⃣  Bereite offer_data vor...")
+print(f"\n2⃣  Bereite offer_data vor...")
 offer_data = {
     "customer_data": customer_data,
     "company_data": company,
@@ -162,7 +162,7 @@ offer_data = {
 }
 
 # 3. Setze project_details (wie in multi_offer_generator.py Zeile 1175-1185)
-print(f"\n3️⃣  Setze project_details...")
+print(f"\n3⃣  Setze project_details...")
 calc_input = {
     "project_details": {
         "module_quantity": 20,
@@ -187,7 +187,7 @@ offer_data["project_details"] = project_details
 offer_data["calculation_results"] = scaled_calc_results
 
 # 4. Bereite pdf_project_data vor (wie in multi_offer_generator.py Zeile 1193-1201)
-print(f"\n4️⃣  Bereite pdf_project_data vor...")
+print(f"\n4⃣  Bereite pdf_project_data vor...")
 pdf_project_data = {
     "customer_data": offer_data.get("customer_data", {}),
     "project_details": project_details,
@@ -198,7 +198,7 @@ print(f"   pdf_project_data erstellt")
 print(f"   pdf_project_data['project_details']['final_offer_price_net']: {pdf_project_data['project_details'].get('final_offer_price_net'):,.2f} €")
 
 # 5. Rufe build_dynamic_data auf
-print(f"\n5️⃣  Rufe build_dynamic_data auf...")
+print(f"\n5⃣  Rufe build_dynamic_data auf...")
 print(f"   (Siehe Output oben für Details)")
 
 try:
@@ -208,7 +208,7 @@ try:
         company
     )
     
-    print(f"\n6️⃣  Ergebnis von build_dynamic_data:")
+    print(f"\n6⃣  Ergebnis von build_dynamic_data:")
     
     price_result_keys = [
         'final_end_preis_formatted',

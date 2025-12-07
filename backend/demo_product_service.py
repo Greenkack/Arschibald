@@ -26,8 +26,8 @@ def demo_service_initialization():
     
     # Get service instance
     service = get_product_service()
-    print(f"✓ Service created: {service.service_name}")
-    print(f"✓ Service initialized: {service.is_initialized}")
+    print(f" Service created: {service.service_name}")
+    print(f" Service initialized: {service.is_initialized}")
     
     # Check health
     health = service.health_check()
@@ -97,9 +97,9 @@ def demo_create_products(service):
         try:
             product = service.create_product(product_data)
             created_ids.append(product['id'])
-            print(f"✓ Created: {product['model_name']} (ID: {product['id']})")
+            print(f" Created: {product['model_name']} (ID: {product['id']})")
         except Exception as e:
-            print(f"✗ Failed to create {product_data['model_name']}: {e}")
+            print(f" Failed to create {product_data['model_name']}: {e}")
     
     return created_ids
 
@@ -116,7 +116,7 @@ def demo_read_products(service, product_ids):
     product_id = product_ids[0]
     product = service.get_product(product_id)
     if product:
-        print(f"✓ Retrieved product by ID {product_id}:")
+        print(f" Retrieved product by ID {product_id}:")
         print(f"  Model: {product['model_name']}")
         print(f"  Brand: {product['brand']}")
         print(f"  Price: €{product['price_euro']}")
@@ -125,7 +125,7 @@ def demo_read_products(service, product_ids):
     model_name = product['model_name']
     product = service.get_product_by_model_name(model_name)
     if product:
-        print(f"\n✓ Retrieved product by model name '{model_name}':")
+        print(f"\n Retrieved product by model name '{model_name}':")
         print(f"  ID: {product['id']}")
         print(f"  Category: {product['category']}")
 
@@ -136,17 +136,17 @@ def demo_list_and_search(service):
     
     # List all products
     all_products = service.list_products()
-    print(f"✓ Total products: {len(all_products)}")
+    print(f" Total products: {len(all_products)}")
     
     # List by category
     modules = service.list_products(category='Modul')
-    print(f"✓ PV Modules: {len(modules)}")
+    print(f" PV Modules: {len(modules)}")
     for module in modules:
         print(f"  - {module['model_name']}: €{module['price_euro']}")
     
     # Search products
     search_results = service.list_products(search_term='Solar')
-    print(f"\n✓ Search results for 'Solar': {len(search_results)}")
+    print(f"\n Search results for 'Solar': {len(search_results)}")
     for product in search_results:
         print(f"  - {product['model_name']}")
     
@@ -161,13 +161,13 @@ def demo_list_and_search(service):
         filters=filters,
         limit=10
     )
-    print(f"\n✓ Advanced search (Modules €150-250): {len(advanced_results)}")
+    print(f"\n Advanced search (Modules €150-250): {len(advanced_results)}")
     for product in advanced_results:
         print(f"  - {product['model_name']}: €{product['price_euro']}")
     
     # Get categories
     categories = service.get_categories()
-    print(f"\n✓ Product categories: {', '.join(categories)}")
+    print(f"\n Product categories: {', '.join(categories)}")
 
 
 def demo_update_products(service, product_ids):
@@ -196,12 +196,12 @@ def demo_update_products(service, product_ids):
     
     try:
         updated_product = service.update_product(product_id, update_data)
-        print(f"\n✓ Product updated:")
+        print(f"\n Product updated:")
         print(f"  New price: €{updated_product['price_euro']}")
         print(f"  New warranty: {updated_product['warranty_years']} years")
         print(f"  Description: {updated_product['description']}")
     except Exception as e:
-        print(f"✗ Failed to update product: {e}")
+        print(f" Failed to update product: {e}")
 
 
 def demo_pagination(service):
@@ -210,13 +210,13 @@ def demo_pagination(service):
     
     # Get first page
     page_1 = service.list_products(limit=2, offset=0)
-    print(f"✓ Page 1 (limit=2, offset=0): {len(page_1)} products")
+    print(f" Page 1 (limit=2, offset=0): {len(page_1)} products")
     for product in page_1:
         print(f"  - {product['model_name']}")
     
     # Get second page
     page_2 = service.list_products(limit=2, offset=2)
-    print(f"\n✓ Page 2 (limit=2, offset=2): {len(page_2)} products")
+    print(f"\n Page 2 (limit=2, offset=2): {len(page_2)} products")
     for product in page_2:
         print(f"  - {product['model_name']}")
 
@@ -230,13 +230,13 @@ def demo_export_import(service):
         category='Modul',
         format='json'
     )
-    print(f"✓ Exported {export_data['product_count']} products to JSON")
+    print(f" Exported {export_data['product_count']} products to JSON")
     print(f"  Export date: {export_data['export_date']}")
     print(f"  Format: {export_data['format']}")
     
     # Export to CSV
     csv_export = service.export_products(format='csv')
-    print(f"\n✓ Exported {csv_export['product_count']} products to CSV")
+    print(f"\n Exported {csv_export['product_count']} products to CSV")
     print(f"  CSV preview (first 200 chars):")
     print(f"  {csv_export['csv_data'][:200]}...")
     
@@ -266,7 +266,7 @@ def demo_export_import(service):
             format='json',
             update_existing=False
         )
-        print(f"\n✓ Import results:")
+        print(f"\n Import results:")
         print(f"  Total: {results['total']}")
         print(f"  Created: {results['created']}")
         print(f"  Updated: {results['updated']}")
@@ -276,7 +276,7 @@ def demo_export_import(service):
             for error in results['errors']:
                 print(f"    - {error}")
     except Exception as e:
-        print(f"✗ Import failed: {e}")
+        print(f" Import failed: {e}")
 
 
 def demo_delete_products(service, product_ids):
@@ -299,14 +299,14 @@ def demo_delete_products(service, product_ids):
         try:
             success = service.delete_product(product_id)
             if success:
-                print(f"✓ Product deleted successfully")
+                print(f" Product deleted successfully")
                 
                 # Verify deletion
                 deleted_product = service.get_product(product_id)
                 if deleted_product is None:
-                    print(f"✓ Verified: Product no longer exists")
+                    print(f" Verified: Product no longer exists")
         except Exception as e:
-            print(f"✗ Failed to delete product: {e}")
+            print(f" Failed to delete product: {e}")
 
 
 def main():
@@ -341,10 +341,10 @@ def main():
         demo_delete_products(service, product_ids)
         
         print_section("Demo Complete")
-        print("✓ All demonstrations completed successfully!")
+        print(" All demonstrations completed successfully!")
         
     except Exception as e:
-        print(f"\n✗ Demo failed with error: {e}")
+        print(f"\n Demo failed with error: {e}")
         import traceback
         traceback.print_exc()
 

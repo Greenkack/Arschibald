@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\layout\_coloraxis.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'autocolorscale', 'cauto', 'cmax', 'cmid', 'cmin', 'coloraxis', 'colorbar', 'colorscale', 'layout', 'layout.coloraxis', 'reversescale', 'showscale', 'skip_invalid']

@@ -595,7 +595,7 @@ def run_all_tests():
     print("="*60)
     
     if passed == total:
-        print("\n🎉 ALLE TESTS BESTANDEN! 🎉")
+        print("\n ALLE TESTS BESTANDEN! ")
         print("Das Notification Manager Modul funktioniert korrekt.")
     else:
         print(f"\n{total - passed} Test(s) fehlgeschlagen")

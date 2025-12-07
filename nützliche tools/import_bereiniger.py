@@ -35,7 +35,7 @@ def clean_unused_imports(file_path):
     unused_imports = [imp for imp in imports if imp not in used_names]
 
     if unused_imports:
-        print(f"🧹 Ungenutzte Imports in {file_path}: {unused_imports}")
+        print(f" Ungenutzte Imports in {file_path}: {unused_imports}")
         # Hier könnte man sie automatisch entfernen
     else:
         print(f"{file_path} hat keine ungenutzten Imports")

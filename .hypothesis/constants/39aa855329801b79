@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlparse\filters\reindent.py
+# hypothesis_version: 6.147.0
+
+[',', 'AND', 'BETWEEN', 'EXCEPT', 'FROM', 'GROUP BY', 'HAVING', 'JOIN$', 'LIMIT', 'OR', 'ORDER BY', 'SET', 'STRAIGHT_JOIN$', 'UNION', 'VALUES', 'WHEN ', 'WHERE', '_process_{cls}']

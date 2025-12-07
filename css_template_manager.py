@@ -147,9 +147,9 @@ class CSSTemplateManager:
         if menu_items is None:
             menu_html = """
             <div id="cxmenu">
-              <div class="item" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ Zum Anfang</div>
-              <div class="item" onclick="navigator.clipboard.writeText(window.getSelection().toString());">📋 Auswahl kopieren</div>
-              <div class="item" onclick="location.reload()">🔄 Neu laden</div>
+              <div class="item" onclick="window.scrollTo({top:0,behavior:'smooth'})"> Zum Anfang</div>
+              <div class="item" onclick="navigator.clipboard.writeText(window.getSelection().toString());"> Auswahl kopieren</div>
+              <div class="item" onclick="location.reload()"> Neu laden</div>
             </div>
             """
         else:

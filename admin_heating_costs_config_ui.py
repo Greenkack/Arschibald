@@ -86,7 +86,7 @@ def save_heating_config(config: dict) -> bool:
 def render_admin_heating_costs_ui():
     """Rendert die Admin-UI für Heizkosten-Konfiguration"""
     
-    st.title("⚙️ Heizkosten-Konfiguration")
+    st.title(" Heizkosten-Konfiguration")
     st.markdown("---")
     
     # Lade aktuelle Konfiguration
@@ -94,11 +94,11 @@ def render_admin_heating_costs_ui():
     
     # Tabs für verschiedene Kategorien
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "🌍 CO₂-Faktoren",
-        "⛽ Brennstoffpreise",
-        "🛠️ Betriebskosten",
-        "🔄 Umrechnungsfaktoren",
-        "💾 Aktionen"
+        " CO₂-Faktoren",
+        " Brennstoffpreise",
+        " Betriebskosten",
+        " Umrechnungsfaktoren",
+        " Aktionen"
     ])
     
     # Tab 1: CO₂-Faktoren
@@ -257,7 +257,7 @@ def render_admin_heating_costs_ui():
     with tab3:
         st.subheader("Jährliche Betriebskosten")
         
-        st.markdown("#### 🧹 Schornsteinfeger-Kosten")
+        st.markdown("####  Schornsteinfeger-Kosten")
         cost_col1, cost_col2, cost_col3 = st.columns(3)
         
         with cost_col1:
@@ -289,7 +289,7 @@ def render_admin_heating_costs_ui():
             )
         
         st.markdown("---")
-        st.markdown("#### 🛠️ Wartungskosten")
+        st.markdown("####  Wartungskosten")
         maint_col1, maint_col2, maint_col3, maint_col4 = st.columns(4)
         
         with maint_col1:
@@ -329,7 +329,7 @@ def render_admin_heating_costs_ui():
             )
         
         st.markdown("---")
-        st.markdown("#### 🔩 Durchschnittliche Reparaturkosten")
+        st.markdown("####  Durchschnittliche Reparaturkosten")
         repair_col1, repair_col2, repair_col3, repair_col4 = st.columns(4)
         
         with repair_col1:
@@ -455,21 +455,21 @@ def render_admin_heating_costs_ui():
         col_action1, col_action2, col_action3 = st.columns(3)
         
         with col_action1:
-            if st.button("💾 Konfiguration speichern", use_container_width=True, type="primary"):
+            if st.button(" Konfiguration speichern", use_container_width=True, type="primary"):
                 if save_heating_config(config):
                     st.success("Konfiguration erfolgreich gespeichert!")
                 else:
                     st.error("Fehler beim Speichern der Konfiguration")
         
         with col_action2:
-            if st.button("🔄 Standardwerte wiederherstellen", use_container_width=True):
+            if st.button(" Standardwerte wiederherstellen", use_container_width=True):
                 config = DEFAULT_HEATING_CONFIG.copy()
                 if save_heating_config(config):
                     st.success("Standardwerte wiederhergestellt!")
                     st.rerun()
         
         with col_action3:
-            if st.button("📥 Konfiguration exportieren", use_container_width=True):
+            if st.button(" Konfiguration exportieren", use_container_width=True):
                 config_json = json.dumps(config, indent=2, ensure_ascii=False)
                 st.download_button(
                     label="JSON herunterladen",
@@ -479,7 +479,7 @@ def render_admin_heating_costs_ui():
                 )
         
         st.markdown("---")
-        st.markdown("### 📋 Aktuelle Konfiguration (JSON)")
+        st.markdown("###  Aktuelle Konfiguration (JSON)")
         st.json(config, expanded=False)
         
         st.markdown("---")

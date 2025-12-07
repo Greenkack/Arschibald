@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\brain\brain_attrs.py
+# hypothesis_version: 6.147.0
+
+['__attrs_attrs__', 'attr.Factory', 'attr._next_gen', 'attr.attrib', 'attr.attributes', 'attr.attrs', 'attr.define', 'attr.field', 'attr.frozen', 'attr.ib', 'attr.mutable', 'attr.s', 'attrib', 'attrs', 'attrs.define', 'attrs.field', 'attrs.frozen', 'attrs.mutable', 'field', 'targets']

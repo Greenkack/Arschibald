@@ -83,7 +83,7 @@ print("=" * 100)
 alle_fixes_ok = alte_keys_auskommentiert and fallback_entfernt and funktion_gefixt
 
 if alle_fixes_ok:
-    print("\n🎊 ALLE 3 FIXES ERFOLGREICH!")
+    print("\n ALLE 3 FIXES ERFOLGREICH!")
     print("\nFix 1: Alte Preis-Keys auskommentiert")
     print("Fix 2: Fallback auf alten Key entfernt")
     print("Fix 3: Nicht-existierende Funktion ersetzt")

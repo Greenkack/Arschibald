@@ -24,7 +24,7 @@ class HeatpumpProductAdmin:
 
 def render_heatpump_admin_ui():
     """Streamlit UI für Wärmepumpen-Produktverwaltung"""
-    st.title("🌡️ Wärmepumpen-Produktverwaltung (Optimiert)")
+    st.title(" Wärmepumpen-Produktverwaltung (Optimiert)")
     
     # Session State
     if 'hp_current_page' not in st.session_state:
@@ -38,7 +38,7 @@ def render_heatpump_admin_ui():
     
     # Tabs
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📊 Dashboard", "🔍 Modelle durchsuchen", "🎯 Modell-Finder", "⚙️ Tools"]
+        [" Dashboard", " Modelle durchsuchen", " Modell-Finder", " Tools"]
     )
     
     # ============ TAB 1: DASHBOARD ============
@@ -51,13 +51,13 @@ def render_heatpump_admin_ui():
             # Metriken
             col1, col2, col3, col4 = st.columns(4)
             with col1:
-                st.metric("🌡️ Gesamt Modelle", f"{stats['total_models']:,}")
+                st.metric(" Gesamt Modelle", f"{stats['total_models']:,}")
             with col2:
-                st.metric("🏭 Hersteller", len(stats.get('by_manufacturer', {})))
+                st.metric(" Hersteller", len(stats.get('by_manufacturer', {})))
             with col3:
-                st.metric("⭐ Ø SCOP", stats.get('avg_scop', 0.0))
+                st.metric(" Ø SCOP", stats.get('avg_scop', 0.0))
             with col4:
-                st.metric("📊 Ø Rating", stats.get('avg_rating', 0.0))
+                st.metric(" Ø Rating", stats.get('avg_rating', 0.0))
             
             st.divider()
             
@@ -89,8 +89,8 @@ def render_heatpump_admin_ui():
                 df_types = pd.DataFrame(type_data)
                 st.dataframe(df_types, use_container_width=True, hide_index=True)
         else:
-            st.warning("⚠️ Keine Wärmepumpen-Daten gefunden!")
-            st.info("💡 Führen Sie zuerst die Migration aus: `python migrate_heatpump_to_db.py`")
+            st.warning(" Keine Wärmepumpen-Daten gefunden!")
+            st.info(" Führen Sie zuerst die Migration aus: `python migrate_heatpump_to_db.py`")
     
     # ============ TAB 2: MODELLE DURCHSUCHEN ============
     with tab2:
@@ -103,7 +103,7 @@ def render_heatpump_admin_ui():
             manufacturers = admin.db.get_manufacturers()
             if manufacturers:
                 manufacturer_filter = st.selectbox(
-                    "🏭 Hersteller filtern",
+                    " Hersteller filtern",
                     ["Alle Hersteller"] + manufacturers,
                     key="hp_manufacturer_filter"
                 )
@@ -118,7 +118,7 @@ def render_heatpump_admin_ui():
             if st.session_state.hp_selected_manufacturer:
                 types = admin.db.get_types_by_manufacturer(st.session_state.hp_selected_manufacturer)
                 type_filter = st.selectbox(
-                    "🌡️ Typ filtern",
+                    " Typ filtern",
                     ["Alle Typen"] + types,
                     key="hp_type_filter"
                 )
@@ -139,7 +139,7 @@ def render_heatpump_admin_ui():
         if total_count > 0:
             total_pages = (total_count + admin.items_per_page - 1) // admin.items_per_page
             
-            st.write(f"📊 **{total_count} Modelle gefunden** (Seite {st.session_state.hp_current_page} von {total_pages})")
+            st.write(f" **{total_count} Modelle gefunden** (Seite {st.session_state.hp_current_page} von {total_pages})")
             
             # Modelle laden
             models = admin.db.get_models_paginated(
@@ -165,7 +165,7 @@ def render_heatpump_admin_ui():
                         'SCOP': model['scop'],
                         'Max. VL-Temp': f"{model['max_flow_temp']}°C",
                         'Preis': model['price_range'],
-                        'Rating': f"⭐ {model['rating']}"
+                        'Rating': f" {model['rating']}"
                     })
                 
                 df_models = pd.DataFrame(table_data)
@@ -196,7 +196,7 @@ def render_heatpump_admin_ui():
                         st.write(f"- Max. Vorlauftemperatur: {selected_model['max_flow_temp']}°C")
                         st.write(f"- Kältemittel: {selected_model['refrigerant']}")
                         st.write(f"- Preisklasse: {selected_model['price_range']}")
-                        st.write(f"- Rating: ⭐ {selected_model['rating']}/5")
+                        st.write(f"- Rating:  {selected_model['rating']}/5")
                     
                     with col2:
                         st.write("**Verfügbare Heizleistungen:**")
@@ -206,23 +206,23 @@ def render_heatpump_admin_ui():
                         if selected_model['features']:
                             st.write("\n**Features:**")
                             for feature in selected_model['features']:
-                                st.write(f"✓ {feature}")
+                                st.write(f" {feature}")
                         
                         if selected_model['awards']:
                             st.write("\n**Auszeichnungen:**")
                             for award in selected_model['awards']:
-                                st.write(f"🏆 {award}")
+                                st.write(f" {award}")
                 
                 # Pagination
                 col1, col2, col3, col4, col5 = st.columns([1, 1, 2, 1, 1])
                 
                 with col1:
-                    if st.button("⏮️ Erste", disabled=(st.session_state.hp_current_page == 1), key="hp_first"):
+                    if st.button("⏮ Erste", disabled=(st.session_state.hp_current_page == 1), key="hp_first"):
                         st.session_state.hp_current_page = 1
                         st.rerun()
                 
                 with col2:
-                    if st.button("◀️ Zurück", disabled=(st.session_state.hp_current_page == 1), key="hp_prev"):
+                    if st.button(" Zurück", disabled=(st.session_state.hp_current_page == 1), key="hp_prev"):
                         st.session_state.hp_current_page -= 1
                         st.rerun()
                 
@@ -239,22 +239,22 @@ def render_heatpump_admin_ui():
                         st.rerun()
                 
                 with col4:
-                    if st.button("▶️ Weiter", disabled=(st.session_state.hp_current_page >= total_pages), key="hp_next"):
+                    if st.button(" Weiter", disabled=(st.session_state.hp_current_page >= total_pages), key="hp_next"):
                         st.session_state.hp_current_page += 1
                         st.rerun()
                 
                 with col5:
-                    if st.button("⏭️ Letzte", disabled=(st.session_state.hp_current_page >= total_pages), key="hp_last"):
+                    if st.button("⏭ Letzte", disabled=(st.session_state.hp_current_page >= total_pages), key="hp_last"):
                         st.session_state.hp_current_page = total_pages
                         st.rerun()
             else:
                 st.warning("Keine Modelle auf dieser Seite.")
         else:
-            st.info("ℹ️ Keine Modelle gefunden. Passen Sie die Filter an.")
+            st.info("ℹ Keine Modelle gefunden. Passen Sie die Filter an.")
     
     # ============ TAB 3: MODELL-FINDER ============
     with tab3:
-        st.subheader("🎯 Passende Wärmepumpe finden")
+        st.subheader(" Passende Wärmepumpe finden")
         st.write("Finden Sie die ideale Wärmepumpe basierend auf Ihren Anforderungen.")
         
         col1, col2 = st.columns(2)
@@ -293,7 +293,7 @@ def render_heatpump_admin_ui():
                 key="finder_type"
             )
         
-        if st.button("🔍 Passende Modelle suchen", use_container_width=True):
+        if st.button(" Passende Modelle suchen", use_container_width=True):
             suitable_models = admin.db.find_suitable_model(
                 heating_requirement_kw=heating_requirement,
                 heatpump_type=None if finder_type == "Beliebig" else finder_type,
@@ -302,10 +302,10 @@ def render_heatpump_admin_ui():
             )
             
             if suitable_models:
-                st.success(f"✅ {len(suitable_models)} passende Modelle gefunden!")
+                st.success(f" {len(suitable_models)} passende Modelle gefunden!")
                 
                 for idx, model in enumerate(suitable_models, 1):
-                    with st.expander(f"#{idx}: {model['manufacturer']} {model['model']} - ⭐ {model['rating']}"):
+                    with st.expander(f"#{idx}: {model['manufacturer']} {model['model']} -  {model['rating']}"):
                         col1, col2 = st.columns(2)
                         
                         with col1:
@@ -319,21 +319,21 @@ def render_heatpump_admin_ui():
                             st.write("**Heizleistungen:**")
                             for power in model['heating_power_kw']:
                                 if power >= heating_requirement:
-                                    st.write(f"✅ {power} kW (passt!)")
+                                    st.write(f" {power} kW (passt!)")
                                 else:
                                     st.write(f"- {power} kW")
                             
                             if model['features']:
                                 st.write("\n**Features:**")
                                 for feature in model['features'][:5]:  # Max 5 Features anzeigen
-                                    st.write(f"✓ {feature}")
+                                    st.write(f" {feature}")
                             
                             if model['awards']:
                                 st.write("\n**Auszeichnungen:**")
                                 for award in model['awards'][:3]:  # Max 3 Awards
-                                    st.write(f"🏆 {award}")
+                                    st.write(f" {award}")
             else:
-                st.warning("⚠️ Keine passenden Modelle gefunden. Passen Sie die Kriterien an.")
+                st.warning(" Keine passenden Modelle gefunden. Passen Sie die Kriterien an.")
     
     # ============ TAB 4: TOOLS ============
     with tab4:
@@ -342,31 +342,31 @@ def render_heatpump_admin_ui():
         col1, col2 = st.columns(2)
         
         with col1:
-            st.write("**🔧 Datenbank-Wartung**")
+            st.write("** Datenbank-Wartung**")
             
-            if st.button("🔄 Tabellen initialisieren"):
+            if st.button(" Tabellen initialisieren"):
                 admin.db.create_heatpump_tables()
-                st.success("✅ Wärmepumpen-Tabellen erstellt/überprüft!")
+                st.success(" Wärmepumpen-Tabellen erstellt/überprüft!")
             
-            if st.button("📊 Statistiken neu berechnen"):
+            if st.button(" Statistiken neu berechnen"):
                 stats = admin.db.export_statistics()
                 st.json(stats)
             
-            if st.button("🔄 Session State zurücksetzen"):
+            if st.button(" Session State zurücksetzen"):
                 st.session_state.hp_current_page = 1
                 st.session_state.hp_selected_manufacturer = None
                 st.session_state.hp_selected_type = None
-                st.success("✅ Session zurückgesetzt!")
+                st.success(" Session zurückgesetzt!")
                 st.rerun()
         
         with col2:
-            st.write("**📥 Migration**")
+            st.write("** Migration**")
             st.info("Migration aus `heatpump_products_database.py` durchführen:")
             st.code("python migrate_heatpump_to_db.py", language="bash")
             
-            st.warning("⚠️ **Wichtig:** Migration löscht existierende Wärmepumpen-Daten!")
+            st.warning(" **Wichtig:** Migration löscht existierende Wärmepumpen-Daten!")
             
-            if st.button("⚠️ Migration starten (gefährlich!)", type="secondary"):
+            if st.button(" Migration starten (gefährlich!)", type="secondary"):
                 try:
                     from migrate_heatpump_to_db import migrate_heatpump_products_to_db
                     
@@ -374,14 +374,14 @@ def render_heatpump_admin_ui():
                         success = migrate_heatpump_products_to_db()
                     
                     if success:
-                        st.success("✅ Migration erfolgreich!")
+                        st.success(" Migration erfolgreich!")
                         st.rerun()
                     else:
-                        st.error("❌ Migration fehlgeschlagen!")
+                        st.error(" Migration fehlgeschlagen!")
                 except ImportError:
-                    st.error("❌ heatpump_products_database.py nicht gefunden!")
+                    st.error(" heatpump_products_database.py nicht gefunden!")
                 except Exception as e:
-                    st.error(f"❌ Fehler: {e}")
+                    st.error(f" Fehler: {e}")
 
 
 if __name__ == "__main__":

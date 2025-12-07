@@ -109,7 +109,7 @@ def test_final_pdf_integration():
             print(f"  {status} {label}: {value}")
 
         # MAPPING TESTS
-        print("\n🗺️ WICHTIGE PLACEHOLDER MAPPINGS:")
+        print("\n WICHTIGE PLACEHOLDER MAPPINGS:")
         important_mappings = [
             ("Solaranlage", "vat_amount_eur_formatted"),
             ("29.150,00 EUR*", "amortization_time_formatted"),
@@ -152,7 +152,7 @@ def test_final_pdf_integration():
         all_ok = seite1_mwst_ok and seite1_amort_ok and seite7_values_ok and mapping_ok
 
         if all_ok:
-            print("\n🎉 ALLE PDF FIXES ERFOLGREICH!")
+            print("\n ALLE PDF FIXES ERFOLGREICH!")
             print("Seite 1: Ersparte Mehrwertsteuer und Amortisationszeit funktionieren")
             print("Seite 7: Alle Preisberechnungen funktionieren")
             print("Solar Calculator Integration funktioniert")

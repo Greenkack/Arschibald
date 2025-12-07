@@ -68,7 +68,7 @@ class SecurityManager:
         try:
             setup_rate_limiting(self.app)
             self.rate_limiter = get_limiter()
-            logger.info("✓ Rate limiting enabled")
+            logger.info(" Rate limiting enabled")
         except Exception as e:
             logger.error(f"Failed to setup rate limiting: {e}")
             raise
@@ -83,7 +83,7 @@ class SecurityManager:
             self.csrf_protection = get_csrf_protection(settings.SECRET_KEY)
             self.app.middleware("http")(self.csrf_protection)
             self.app.state.csrf_protection = self.csrf_protection
-            logger.info("✓ CSRF protection enabled")
+            logger.info(" CSRF protection enabled")
         except Exception as e:
             logger.error(f"Failed to setup CSRF protection: {e}")
             raise
@@ -97,7 +97,7 @@ class SecurityManager:
         try:
             self.input_sanitizer = get_input_sanitizer()
             self.app.middleware("http")(self.input_sanitizer)
-            logger.info("✓ Input sanitization enabled")
+            logger.info(" Input sanitization enabled")
         except Exception as e:
             logger.error(f"Failed to setup input sanitization: {e}")
             raise
@@ -110,7 +110,7 @@ class SecurityManager:
         
         try:
             setup_security_headers(self.app)
-            logger.info("✓ Security headers enabled")
+            logger.info(" Security headers enabled")
         except Exception as e:
             logger.error(f"Failed to setup security headers: {e}")
             raise
@@ -126,7 +126,7 @@ class SecurityManager:
         # 2. Input sanitization middleware
         # 3. Pydantic validation
         
-        logger.info("✓ SQL injection prevention enabled (via ORM + sanitization)")
+        logger.info(" SQL injection prevention enabled (via ORM + sanitization)")
     
     def setup_all(self):
         """Setup all security features"""

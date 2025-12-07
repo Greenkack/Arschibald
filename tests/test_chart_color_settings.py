@@ -226,7 +226,7 @@ def run_all_tests():
     print(f"\nErgebnis: {passed}/{total} Tests bestanden")
 
     if passed == total:
-        print("\n🎉 Alle Tests erfolgreich!")
+        print("\n Alle Tests erfolgreich!")
         return True
     else:
         print("\nEinige Tests fehlgeschlagen")

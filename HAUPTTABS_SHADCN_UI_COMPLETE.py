@@ -74,9 +74,9 @@ HAUPTTABS_CHARTS = {
 
 
 NEUE_IMPLEMENTIERUNGEN = """
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    🆕 NEU IMPLEMENTIERTE CHART-FUNKTIONEN                    ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+
+                     NEU IMPLEMENTIERTE CHART-FUNKTIONEN                    
+
 
 1. create_lifecycle_chart() - heatpump_advanced_charts.py
    Shadcn Success Color für Wärmepumpe (#34d399)
@@ -105,9 +105,9 @@ PLUS: 4 weitere Chart-Funktionen aktualisiert!
 
 
 STATISTIK = """
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    FINALE STATISTIK                                       ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+
+                    FINALE STATISTIK                                       
+
 
 apply_chart_theme Aufrufe: 28 (+6 neue!)
 st.plotly_chart Aufrufe: 27
@@ -124,9 +124,9 @@ SHADCN UI SCORE:
 
 
 BEFORE_AFTER = """
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    VORHER/NACHHER                                         ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+
+                    VORHER/NACHHER                                         
+
 
 BEISPIEL: Lebenszyklus-CO2-Bilanz
 
@@ -193,10 +193,10 @@ if __name__ == "__main__":
     print(BEFORE_AFTER)
     
     print("\n" + "=" * 80)
-    print("🎉 STATUS: ALLE HAUPTTABS VOLLSTÄNDIG THEMED!")
+    print(" STATUS: ALLE HAUPTTABS VOLLSTÄNDIG THEMED!")
     print("=" * 80)
     
-    print("\n✨ NÄCHSTE SCHRITTE:")
+    print("\n NÄCHSTE SCHRITTE:")
     print("1. App testen: python gui.py")
     print("2. Haupttabs durchgehen:")
     print("   - Dimensionierung")

@@ -39,4 +39,4 @@ for firma in firmen:
     if zip_a.exists() and zip_b.exists():
         merge_zips(zip_a, zip_b, out_zip)
     else:
-        print(f"⚠ Dateien für {firma} fehlen")
+        print(f" Dateien für {firma} fehlen")

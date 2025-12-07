@@ -38,7 +38,7 @@ def clear_cache(root_dir: str) -> tuple:
 
 def main():
     print("=" * 80)
-    print("🧹 Python Cache Cleaner")
+    print(" Python Cache Cleaner")
     print("=" * 80)
     
     root_dir = os.path.dirname(os.path.abspath(__file__))

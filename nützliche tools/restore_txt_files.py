@@ -122,7 +122,7 @@ def restore_numeric_corruptions():
 
 
 if __name__ == "__main__":
-    print("🚑 Starte Wiederherstellung der korruptierten TXT-Dateien...")
+    print(" Starte Wiederherstellung der korruptierten TXT-Dateien...")
     print("=" * 60)
 
     success = restore_numeric_corruptions()

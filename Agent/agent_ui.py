@@ -206,7 +206,7 @@ def display_agent_status(
         # Use progress bar for streaming (efficient updates)
         if progress > 0:
             st.progress(progress / 100.0)
-        st.markdown(f"🤖 **{status}**")
+        st.markdown(f" **{status}**")
     else:
         # Use spinner for non-streaming
         with st.spinner(status):
@@ -220,7 +220,7 @@ def display_agent_status(
         display_steps = intermediate_steps[-max_display_steps:]
 
         # Use expander for better performance with many steps
-        expander_title = f"🧠 Agent Reasoning Process ({total_steps} steps)"
+        expander_title = f" Agent Reasoning Process ({total_steps} steps)"
         if total_steps > max_display_steps:
             expander_title += f" - Showing last {max_display_steps}"
 
@@ -244,7 +244,7 @@ def display_agent_status(
 
                     # Display input/output in compact format
                     if hasattr(action, 'tool_input'):
-                        with st.expander("📥 Input", expanded=False):
+                        with st.expander(" Input", expanded=False):
                             # Truncate large inputs
                             input_str = str(action.tool_input)
                             if len(input_str) > 200:
@@ -255,10 +255,10 @@ def display_agent_status(
                     # Truncate long outputs for performance
                     obs_str = str(observation)
                     if len(obs_str) > 500:
-                        with st.expander("📤 Output (truncated)", expanded=False):
+                        with st.expander(" Output (truncated)", expanded=False):
                             st.code(obs_str[:500] + "...", language="text")
                     else:
-                        with st.expander("📤 Output", expanded=False):
+                        with st.expander(" Output", expanded=False):
                             st.code(obs_str, language="text")
 
                     if i < len(display_steps):
@@ -298,14 +298,14 @@ def format_agent_output(
     with col1:
         if 'execution_time' in result:
             st.metric(
-                "⏱️ Time",
+                "⏱ Time",
                 "{:.2f}s".format(result['execution_time'])
             )
 
     with col2:
         if 'retry_count' in result and result['retry_count'] > 0:
             st.metric(
-                "🔄 Retries",
+                " Retries",
                 result['retry_count']
             )
 
@@ -313,7 +313,7 @@ def format_agent_output(
         intermediate_steps = result.get('intermediate_steps', [])
         if intermediate_steps:
             st.metric(
-                "🧠 Steps",
+                " Steps",
                 len(intermediate_steps)
             )
 
@@ -324,7 +324,7 @@ def format_agent_output(
         # Display output
         output = result.get('output', '')
         if output:
-            st.markdown("### 📋 Result:")
+            st.markdown("###  Result:")
 
             # Truncate very long outputs for performance
             if len(output) > 5000:
@@ -408,7 +408,7 @@ def render_agent_menu():
         ConfigurationError: If required API keys are missing
     """
     # Page configuration
-    st.title("🤖 A.G.E.N.T. - Autonomous AI Expert System")
+    st.title(" A.G.E.N.T. - Autonomous AI Expert System")
     st.markdown(
         "**Künstliche Intelligenz** with dual expertise in "
         "Renewable Energy Consulting and Software Architecture"
@@ -420,20 +420,20 @@ def render_agent_menu():
 
     if st.session_state.first_visit:
         st.info("""
-        👋 **Welcome to KAI Agent!**
+         **Welcome to KAI Agent!**
 
         This AI assistant can help you with:
-        - 🌞 Renewable energy consulting (PV systems, heat pumps)
-        - 💻 Software development (code generation, testing, project setup)
-        - 🔄 Complex multi-step workflows
+        -  Renewable energy consulting (PV systems, heat pumps)
+        -  Software development (code generation, testing, project setup)
+        -  Complex multi-step workflows
 
         **Quick Start:** Enter a task below and click "Start Agent".
-        Click the ❓ Help button for detailed instructions and examples.
+        Click the  Help button for detailed instructions and examples.
         """)
 
         col_dismiss1, col_dismiss2, col_dismiss3 = st.columns([2, 1, 2])
         with col_dismiss2:
-            if st.button("Got it! 👍", use_container_width=True):
+            if st.button("Got it! ", use_container_width=True):
                 st.session_state.first_visit = False
                 st.rerun()
 
@@ -442,7 +442,7 @@ def render_agent_menu():
     # API key validation with help (Task 13.2)
     col_config1, col_config2 = st.columns([6, 1])
     with col_config1:
-        st.markdown("### 🔑 Configuration Check")
+        st.markdown("###  Configuration Check")
     with col_config2:
         st.markdown("""
         <div style="margin-top: 10px;">
@@ -486,7 +486,7 @@ def render_agent_menu():
     # Initialize knowledge base and agent (optimized with lazy loading)
     col_kb1, col_kb2 = st.columns([6, 1])
     with col_kb1:
-        st.markdown("### 📚 Knowledge Base Initialization")
+        st.markdown("###  Knowledge Base Initialization")
     with col_kb2:
         st.markdown("""
         <div style="margin-top: 10px;">
@@ -508,10 +508,10 @@ def render_agent_menu():
                         "domain-specific information about renewable energy systems.")
                 else:
                     st.info(
-                        "📚 Knowledge base is empty. "
+                        " Knowledge base is empty. "
                         "Add PDF files to `Agent/knowledge_base/` directory."
                     )
-                    with st.expander("📖 How to Add Documents", expanded=False):
+                    with st.expander(" How to Add Documents", expanded=False):
                         st.markdown("""
                         ### Adding Documents to Knowledge Base
 
@@ -566,7 +566,7 @@ def render_agent_menu():
     
     # Voice input option
     if st.session_state.get('voice_mode'):
-        st.info("🎤 **Sprachsteuerung aktiviert!**")
+        st.info(" **Sprachsteuerung aktiviert!**")
         try:
             from voice_command import render_voice_input_ui, integrate_voice_with_agent
             
@@ -585,12 +585,12 @@ def render_agent_menu():
     # Help button and dialog (Task 13.2)
     col_help1, col_help2 = st.columns([6, 1])
     with col_help2:
-        if st.button("❓ Help", use_container_width=True):
+        if st.button(" Help", use_container_width=True):
             st.session_state.show_help_dialog = True
 
     # Help dialog (Task 13.2)
     if st.session_state.get('show_help_dialog', False):
-        with st.expander("📖 Complete Help Guide", expanded=false):
+        with st.expander(" Complete Help Guide", expanded=false):
             st.markdown("""
             ## How to Use the KAI Agent
 
@@ -607,21 +607,21 @@ def render_agent_menu():
 
             ### Task Types You Can Request
 
-            #### 🌞 Renewable Energy Consulting
+            ####  Renewable Energy Consulting
             - Search knowledge base for technical information
             - Calculate ROI and amortization times
             - Prepare customer presentations
             - Compare different system configurations
             - Simulate sales calls
 
-            #### 💻 Software Development
+            ####  Software Development
             - Generate Python functions with tests
             - Create complete project structures
             - Write and execute unit tests
             - Debug and fix code errors
             - Generate API endpoints
 
-            #### 🔄 Combined Workflows
+            ####  Combined Workflows
             - Research → Code → Test → Document
             - Knowledge search → Calculation → Presentation
             - Multi-step complex tasks
@@ -644,12 +644,12 @@ def render_agent_menu():
             ### Available Tools
 
             The agent has access to:
-            - 📚 **Knowledge Base**: Domain-specific PDF documents
+            -  **Knowledge Base**: Domain-specific PDF documents
             - **Web Search**: Current information via Tavily API
-            - 🐳 **Code Execution**: Secure Docker sandbox
+            -  **Code Execution**: Secure Docker sandbox
             - **File Operations**: Read/write in workspace
-            - 📞 **Telephony**: Simulated sales calls
-            - 🧪 **Testing**: Automated pytest execution
+            -  **Telephony**: Simulated sales calls
+            -  **Testing**: Automated pytest execution
 
             ### Common Use Cases
 
@@ -682,7 +682,7 @@ def render_agent_menu():
 
             ### Need More Help?
 
-            📚 **Documentation**: Check the `Agent/` directory for detailed guides
+             **Documentation**: Check the `Agent/` directory for detailed guides
             - `README.md` - Overview and quick start
             - `BASIC_USAGE_TUTORIAL.md` - Beginner guide
             - `EXAMPLE_TASKS.md` - 20+ example tasks
@@ -691,7 +691,7 @@ def render_agent_menu():
 
             **Validation**: Run `python Agent/validate_config.py` to check setup
 
-            📖 **Installation**: See `AGENT_INSTALLATION_GUIDE.md` for setup help
+             **Installation**: See `AGENT_INSTALLATION_GUIDE.md` for setup help
             """)
 
             if st.button("Close Help", use_container_width=True):
@@ -701,9 +701,9 @@ def render_agent_menu():
     # Example tasks with categories (Task 13.2)
     with st.expander("Example Task Suggestions", expanded=False):
         tab1, tab2, tab3 = st.tabs([
-            "🌞 Energy Consulting",
-            "💻 Software Dev",
-            "🔄 Combined"
+            " Energy Consulting",
+            " Software Dev",
+            " Combined"
         ])
 
         with tab1:
@@ -741,7 +741,7 @@ def render_agent_menu():
             ```
             """)
 
-            if st.button("📋 Copy Example 1", key="copy_energy_1"):
+            if st.button(" Copy Example 1", key="copy_energy_1"):
                 st.session_state.agent_task_input = "Was sind die wichtigsten Vorteile von Photovoltaik-Anlagen?"
                 st.rerun()
 
@@ -783,7 +783,7 @@ def render_agent_menu():
             ```
             """)
 
-            if st.button("📋 Copy Example 2", key="copy_dev_1"):
+            if st.button(" Copy Example 2", key="copy_dev_1"):
                 st.session_state.agent_task_input = "Schreibe eine Python-Funktion zur Berechnung des ROI mit Type Hints, Docstring und Unit Tests"
                 st.rerun()
 
@@ -819,7 +819,7 @@ def render_agent_menu():
             ```
             """)
 
-            if st.button("📋 Copy Example 3", key="copy_combined_1"):
+            if st.button(" Copy Example 3", key="copy_combined_1"):
                 st.session_state.agent_task_input = "Suche in der Wissensdatenbank nach PV-Vorteilen, erstelle dann eine Python-Funktion zur Ertragsberechnung mit Tests"
                 st.rerun()
 
@@ -890,22 +890,22 @@ def render_agent_menu():
     # TELEPHONY MEGA EXTENSION - ALL NEW FEATURES
     # ====================================================================
     
-    with st.expander("📞 Telephony System - Bria Softphone & Advanced Features", expanded=False):
+    with st.expander(" Telephony System - Bria Softphone & Advanced Features", expanded=False):
         st.markdown("### Telephony Management Console")
         st.markdown("Vollständiges Telefonsystem mit 36 Tools für professionelle Anrufverwaltung")
         
         # Tabs für verschiedene Bereiche
         phone_tab1, phone_tab2, phone_tab3, phone_tab4, phone_tab5 = st.tabs([
-            "📞 Bria Softphone",
-            "📇 Kontakte",
+            " Bria Softphone",
+            " Kontakte",
             "Analytics",
-            "📚 Knowledge Base",
+            " Knowledge Base",
             "Erweiterte Features"
         ])
         
         # TAB 1: Bria Softphone
         with phone_tab1:
-            with st.expander("🔌 SIP Verbindung", expanded=False):
+            with st.expander(" SIP Verbindung", expanded=False):
                 st.markdown("**Bria Softphone Verbindung konfigurieren**")
                 
                 col1, col2 = st.columns(2)
@@ -925,7 +925,7 @@ def render_agent_menu():
                 if st.button("Trennen", key="bria_disconnect"):
                     st.code("bria_disconnect()")
             
-            with st.expander("📞 Ausgehende Anrufe", expanded=False):
+            with st.expander(" Ausgehende Anrufe", expanded=False):
                 st.markdown("**Anruf starten**")
                 
                 col1, col2 = st.columns([2, 1])
@@ -945,20 +945,20 @@ def render_agent_menu():
                     else:
                         st.warning("Bitte Telefonnummer eingeben")
             
-            with st.expander("📲 Anrufsteuerung", expanded=False):
+            with st.expander(" Anrufsteuerung", expanded=False):
                 st.markdown("**Aktiven Anruf verwalten**")
                 
                 call_id_control = st.text_input("Call ID", placeholder="CALL-12345678", key="call_id_control")
                 
                 col1, col2, col3, col4 = st.columns(4)
                 with col1:
-                    if st.button("⏸️ Halten", key="hold_call"):
+                    if st.button("⏸ Halten", key="hold_call"):
                         st.code(f"bria_hold_call('{call_id_control}')")
                 with col2:
-                    if st.button("▶️ Fortsetzen", key="resume_call"):
+                    if st.button(" Fortsetzen", key="resume_call"):
                         st.code(f"bria_resume_call('{call_id_control}')")
                 with col3:
-                    if st.button("➡️ Weiterleiten", key="transfer_btn"):
+                    if st.button(" Weiterleiten", key="transfer_btn"):
                         target = st.text_input("Ziel", key="transfer_target")
                         if target:
                             st.code(f"bria_transfer_call('{call_id_control}', '{target}')")
@@ -968,7 +968,7 @@ def render_agent_menu():
         
         # TAB 2: Kontakte
         with phone_tab2:
-            with st.expander("➕ Kontakt hinzufügen", expanded=False):
+            with st.expander(" Kontakt hinzufügen", expanded=False):
                 st.markdown("**Neuen Kontakt anlegen**")
                 
                 col1, col2 = st.columns(2)
@@ -1063,7 +1063,7 @@ def render_agent_menu():
                     
                     st.code(f"search_call_history({', '.join(filters)})")
             
-            with st.expander("💭 Sentiment-Analyse", expanded=False):
+            with st.expander(" Sentiment-Analyse", expanded=False):
                 st.markdown("**Stimmungsanalyse eines Anrufs**")
                 
                 sentiment_call_id = st.text_input("Call ID", placeholder="CALL-12345678", key="sentiment_call_id")
@@ -1083,7 +1083,7 @@ def render_agent_menu():
         
         # TAB 4: Knowledge Base
         with phone_tab4:
-            with st.expander("💾 Call-Skript speichern", expanded=False):
+            with st.expander(" Call-Skript speichern", expanded=False):
                 st.markdown("**Neues Anruf-Skript in Knowledge Base ablegen**")
                 
                 col1, col2 = st.columns(2)
@@ -1109,7 +1109,7 @@ def render_agent_menu():
                     else:
                         st.warning("Name, Kategorie und Eröffnung sind Pflichtfelder")
             
-            with st.expander("📚 Call-Skripte abrufen", expanded=False):
+            with st.expander(" Call-Skripte abrufen", expanded=False):
                 st.markdown("**Gespeicherte Skripte anzeigen**")
                 
                 script_filter = st.selectbox("Kategorie filtern", ["", "Verkauf", "Support", "Beratung", "Follow-up"], key="script_filter")
@@ -1122,7 +1122,7 @@ def render_agent_menu():
         
         # TAB 5: Erweiterte Features
         with phone_tab5:
-            with st.expander("🎙️ Call Recording", expanded=False):
+            with st.expander(" Call Recording", expanded=False):
                 st.markdown("**Anrufaufnahme starten & transkribieren**")
                 
                 col1, col2 = st.columns(2)
@@ -1148,7 +1148,7 @@ def render_agent_menu():
                         else:
                             st.warning("Bitte Dateipfad angeben")
             
-            with st.expander("🔗 CRM Integration", expanded=False):
+            with st.expander(" CRM Integration", expanded=False):
                 st.markdown("**Anruf ins CRM-System protokollieren**")
                 
                 col1, col2 = st.columns(2)
@@ -1166,7 +1166,7 @@ def render_agent_menu():
                     else:
                         st.warning("Bitte Call ID eingeben")
             
-            with st.expander("📅 Follow-up planen", expanded=False):
+            with st.expander(" Follow-up planen", expanded=False):
                 st.markdown("**Wiedervorlage nach Anruf setzen**")
                 
                 col1, col2 = st.columns(2)
@@ -1206,7 +1206,7 @@ def render_agent_menu():
                     else:
                         st.warning("Tag und Ziel sind Pflichtfelder")
             
-            with st.expander("🏷️ Weitere Features", expanded=False):
+            with st.expander(" Weitere Features", expanded=False):
                 st.markdown("**Zusätzliche Telephony-Tools**")
                 
                 # Call Tags
@@ -1274,7 +1274,7 @@ def render_agent_menu():
     st.markdown("""
     <div style="margin-bottom: 5px;">
         <span style="font-size: 14px; color: #666;">
-        💬 <b>Tip:</b> Be specific about what you want. Include parameters, requirements, and expected output.
+         <b>Tip:</b> Be specific about what you want. Include parameters, requirements, and expected output.
         </span>
     </div>
     """, unsafe_allow_html=True)
@@ -1300,7 +1300,7 @@ def render_agent_menu():
 
     with col2:
         clear_memory = st.button(
-            "🔄 Clear Memory",
+            " Clear Memory",
             use_container_width=True,
             help="Clear the agent's conversation memory. Use this to start fresh with a new context."
         )
@@ -1344,7 +1344,7 @@ def render_agent_menu():
             st.error(f"Input validation failed: {str(e)}")
             st.stop()
 
-        st.markdown("### 🤖 Agent Execution")
+        st.markdown("###  Agent Execution")
 
         # Initialize async execution state if not exists
         if 'async_state' not in st.session_state:
@@ -1382,9 +1382,9 @@ def render_agent_menu():
                     # Update UI
                     progress_bar.progress(progress / 100.0)
                     status_text.markdown(
-                        f"🧠 Agent is thinking... ({progress}%)"
+                        f" Agent is thinking... ({progress}%)"
                     )
-                    elapsed_text.caption(f"⏱️ Elapsed: {elapsed:.1f}s")
+                    elapsed_text.caption(f"⏱ Elapsed: {elapsed:.1f}s")
 
                     # Adaptive sleep (longer sleep = fewer reruns)
                     time.sleep(0.2)

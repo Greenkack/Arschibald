@@ -70,7 +70,7 @@ def demo_lru_cache():
     print("\n2. Getting values...")
     for i in range(7):
         value = cache.get(f'key{i}')
-        status = "✓ Found" if value else "✗ Evicted"
+        status = " Found" if value else " Evicted"
         print(f"   Get key{i}: {status}")
     
     # Show stats
@@ -208,7 +208,7 @@ def demo_precomputation():
     for query in ['query1', 'query2', 'query3']:
         should = precomputer.should_precompute(query)
         freq = precomputer.query_frequency[query]
-        status = "✓ Should precompute" if should else "✗ Below threshold"
+        status = " Should precompute" if should else " Below threshold"
         print(f"   {query} (frequency: {freq}): {status}")
     
     # Precompute
@@ -247,7 +247,7 @@ def demo_performance_service():
     # Build index
     print("\n1. Building index...")
     service.index.build_index(matrix_data)
-    print("   ✓ Index built")
+    print("    Index built")
     
     # Precompute common queries
     print("\n2. Precomputing common queries...")
@@ -256,12 +256,12 @@ def demo_performance_service():
         common_module_counts=[20, 25, 30],
         common_storage_models=['10kWh', '15kWh']
     )
-    print("   ✓ Queries precomputed")
+    print("    Queries precomputed")
     
     # Warm cache
     print("\n3. Warming cache...")
     service.warm_cache(matrix_data)
-    print("   ✓ Cache warmed")
+    print("    Cache warmed")
     
     # Perform lookups
     print("\n4. Performing optimized lookups...")
@@ -401,7 +401,7 @@ def main():
         try:
             demo_func()
         except Exception as e:
-            print(f"\n✗ Error in {name}: {e}")
+            print(f"\n Error in {name}: {e}")
     
     print("\n" + "="*70)
     print("DEMO COMPLETE")

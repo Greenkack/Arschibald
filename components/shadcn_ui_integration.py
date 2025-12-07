@@ -826,10 +826,10 @@ def show_availability_status():
     """Display the availability status of streamlit-shadcn-ui"""
     if SHADCN_UI_AVAILABLE:
         version = get_version()
-        st.success(f"✅ streamlit-shadcn-ui is available (version: {version})")
+        st.success(f" streamlit-shadcn-ui is available (version: {version})")
     else:
         st.warning(
-            "⚠️ streamlit-shadcn-ui is not available. "
+            " streamlit-shadcn-ui is not available. "
             "Install it with: `pip install streamlit-shadcn-ui`"
         )
         st.info("Using fallback components based on native Streamlit widgets.")

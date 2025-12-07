@@ -32,19 +32,19 @@ class Colors:
 
 def print_test(message):
     """Print test message"""
-    print(f"\n{Colors.OKBLUE}▶ {message}{Colors.ENDC}")
+    print(f"\n{Colors.OKBLUE} {message}{Colors.ENDC}")
 
 def print_success(message):
     """Print success message"""
-    print(f"{Colors.OKGREEN}  ✓ {message}{Colors.ENDC}")
+    print(f"{Colors.OKGREEN}   {message}{Colors.ENDC}")
 
 def print_error(message):
     """Print error message"""
-    print(f"{Colors.FAIL}  ✗ {message}{Colors.ENDC}")
+    print(f"{Colors.FAIL}   {message}{Colors.ENDC}")
 
 def print_warning(message):
     """Print warning message"""
-    print(f"{Colors.WARNING}  ⚠ {message}{Colors.ENDC}")
+    print(f"{Colors.WARNING}   {message}{Colors.ENDC}")
 
 def print_info(message):
     """Print info message"""
@@ -359,10 +359,10 @@ class BackendTester:
         print(f"{Colors.WARNING}Warnings: {self.test_results['warnings']}/{total}{Colors.ENDC}")
         
         if self.test_results['failed'] == 0:
-            print(f"\n{Colors.OKGREEN}{Colors.BOLD}✓ All critical tests passed!{Colors.ENDC}")
+            print(f"\n{Colors.OKGREEN}{Colors.BOLD} All critical tests passed!{Colors.ENDC}")
             return 0
         else:
-            print(f"\n{Colors.FAIL}{Colors.BOLD}✗ Some tests failed{Colors.ENDC}")
+            print(f"\n{Colors.FAIL}{Colors.BOLD} Some tests failed{Colors.ENDC}")
             return 1
     
     def run_all_tests(self):

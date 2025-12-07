@@ -99,9 +99,9 @@ def render_user_menu():
     # Super-Admin Badge und Status
     is_super = user_data and user_data.get('is_super_admin', 0) == 1
 
-    # Rang Display (Punkt 2: ⭐⭐⭐ General Admin ⭐⭐⭐)
+    # Rang Display (Punkt 2:  General Admin )
     if is_super:
-        rank_display = "<span style='font-size: 10px;'>⭐⭐⭐</span> General Admin <span style='font-size: 10px;'>⭐⭐⭐</span>"
+        rank_display = "<span style='font-size: 10px;'></span> General Admin <span style='font-size: 10px;'></span>"
     else:
         rank_display = user_rank
 
@@ -114,8 +114,8 @@ def render_user_menu():
         'Verfügbar': '🟢',
         'Beschäftigt': '🟡',
         'nicht am Platz': '🟠',
-        'nicht verfügbar': '🔴',
-        'Offline': '⚫'
+        'nicht verfügbar': '',
+        'Offline': ''
     }
     status_icon = status_icons.get(user_status, '🟢')
 
@@ -160,7 +160,7 @@ def render_user_menu():
     # Modal für Profilbild-Anzeige (oben, bevor das Hauptmenü kommt)
     if st.session_state.get('show_profile_image_modal', False):
         st.markdown("---")
-        st.markdown(f"### 📸 Profilbild von {username}")
+        st.markdown(f"###  Profilbild von {username}")
 
         col1, col2, col3 = st.columns([1, 3, 1])
         with col2:
@@ -169,7 +169,7 @@ def render_user_menu():
         col_a, col_b, col_c = st.columns([1, 2, 1])
         with col_b:
             if st.button(
-                "✖️ Schließen",
+                " Schließen",
                 use_container_width=True,
                 type="secondary",
                     key="close_profile_modal"):
@@ -201,7 +201,7 @@ def render_user_menu():
         """, unsafe_allow_html=True)
 
     # Einstellungen - VOLLE BREITE für bessere Lesbarkeit
-    with st.expander("⚙️ Account Menü ⚙️", expanded=False):
+    with st.expander(" Account Menü ", expanded=False):
         tab1, tab2, tab3 = st.tabs(["Profil", "Einstellungen", "Info"])
         with tab1:
             render_profile_tab(um, user_data, is_super)
@@ -223,7 +223,7 @@ def render_profile_tab(um: UserManagement, user_data: dict, is_super: bool):
 
     # Rolle für General Admin (Punkt 1)
     if is_super:
-        role_display = "⭐⭐⭐ General Admin ⭐⭐⭐"
+        role_display = " General Admin "
     else:
         role_display = user_data.get('role', 'N/A')
 
@@ -269,7 +269,7 @@ def render_profile_tab(um: UserManagement, user_data: dict, is_super: bool):
     # Profil bearbeiten
     st.markdown("---")
     if st.button(
-        "✏️ Profil bearbeiten",
+        " Profil bearbeiten",
         use_container_width=True,
             type="primary"):
         st.session_state['show_profile_editor'] = True
@@ -412,7 +412,7 @@ def render_info_tab(user_data: dict):
 
     # Berechtigungen
     st.markdown("---")
-    st.markdown("#### 🔐 Berechtigungen")
+    st.markdown("####  Berechtigungen")
 
     is_super = user_data.get('is_super_admin', 0) == 1
     permissions = user_data.get('permissions', {})
@@ -599,7 +599,7 @@ def render_profile_editor():
 
             with col_save:
                 if st.form_submit_button(
-                    "💾 Speichern",
+                    " Speichern",
                     use_container_width=True,
                         type="primary"):
                     if um.update_user(
@@ -625,7 +625,7 @@ def render_profile_editor():
 
     # Tab 2: Passwort ändern (Punkt 1)
     with tab2:
-        st.markdown("### 🔒 Passwort ändern")
+        st.markdown("###  Passwort ändern")
 
         with st.form("profile_editor_change_password_form"):
             current_pw = st.text_input(
@@ -643,7 +643,7 @@ def render_profile_editor():
                 help="Wiederholen Sie das neue Passwort")
 
             if st.form_submit_button(
-                "🔑 Passwort ändern",
+                " Passwort ändern",
                 use_container_width=True,
                     type="primary"):
                 if not current_pw or not new_pw:
@@ -718,6 +718,6 @@ def render_profile_editor():
 
     # Zurück-Button unten
     st.markdown("---")
-    if st.button("⬅️ Zurück zum Profil", use_container_width=True):
+    if st.button(" Zurück zum Profil", use_container_width=True):
         st.session_state['show_profile_editor'] = False
         st.rerun()

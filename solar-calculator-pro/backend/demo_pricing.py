@@ -38,7 +38,7 @@ def create_demo_data(db: Session):
         valid_from=datetime(2024, 1, 1),
         valid_until=datetime(2024, 12, 31)
     ))
-    print(f"✅ Created price list: {standard_list.name} (ID: {standard_list.id})")
+    print(f" Created price list: {standard_list.name} (ID: {standard_list.id})")
     
     wholesale_list = service.create_price_list(PriceListCreate(
         name="Wholesale Prices 2024",
@@ -49,7 +49,7 @@ def create_demo_data(db: Session):
         valid_from=datetime(2024, 1, 1),
         valid_until=datetime(2024, 12, 31)
     ))
-    print(f"✅ Created price list: {wholesale_list.name} (ID: {wholesale_list.id})")
+    print(f" Created price list: {wholesale_list.name} (ID: {wholesale_list.id})")
     
     # 2. Create Product Prices
     print("\n2. Creating Product Prices...")
@@ -64,7 +64,7 @@ def create_demo_data(db: Session):
         cost_price=70.00,
         margin_percentage=30.0
     ))
-    print(f"✅ Product 100: €{product_price_1.base_price:.2f} (Standard)")
+    print(f" Product 100: €{product_price_1.base_price:.2f} (Standard)")
     
     # Tiered pricing
     product_price_2 = service.create_product_price(ProductPriceCreate(
@@ -80,7 +80,7 @@ def create_demo_data(db: Session):
         cost_price=140.00,
         margin_percentage=30.0
     ))
-    print(f"✅ Product 101: €{product_price_2.base_price:.2f} (Tiered)")
+    print(f" Product 101: €{product_price_2.base_price:.2f} (Tiered)")
     print(f"   - 1-10 units: €200.00")
     print(f"   - 11-50 units: €190.00")
     print(f"   - 51+ units: €180.00")
@@ -94,7 +94,7 @@ def create_demo_data(db: Session):
         cost_price=70.00,
         margin_percentage=21.4
     ))
-    print(f"✅ Product 100 (Wholesale): €{wholesale_price.base_price:.2f}")
+    print(f" Product 100 (Wholesale): €{wholesale_price.base_price:.2f}")
     
     # 3. Create Volume Discounts
     print("\n3. Creating Volume Discounts...")
@@ -112,7 +112,7 @@ def create_demo_data(db: Session):
         valid_from=datetime(2024, 1, 1),
         valid_until=datetime(2024, 12, 31)
     ))
-    print(f"✅ {volume_discount_1.name}: {volume_discount_1.discount_value}% off for {volume_discount_1.min_quantity}+ units")
+    print(f" {volume_discount_1.name}: {volume_discount_1.discount_value}% off for {volume_discount_1.min_quantity}+ units")
     
     volume_discount_2 = service.create_volume_discount(VolumeDiscountCreate(
         name="Tiered Volume Discount",
@@ -131,7 +131,7 @@ def create_demo_data(db: Session):
         valid_from=datetime(2024, 1, 1),
         valid_until=datetime(2024, 12, 31)
     ))
-    print(f"✅ {volume_discount_2.name}:")
+    print(f" {volume_discount_2.name}:")
     print(f"   - 50-99 units: 5% off")
     print(f"   - 100-499 units: 10% off")
     print(f"   - 500+ units: 15% off")
@@ -155,7 +155,7 @@ def create_demo_data(db: Session):
         valid_from=datetime(2024, 6, 1),
         valid_until=datetime(2024, 8, 31)
     ))
-    print(f"✅ {promo_1.name}")
+    print(f" {promo_1.name}")
     print(f"   Code: {promo_1.promo_code}")
     print(f"   Discount: {promo_1.discount_value}% (max €{promo_1.max_discount_amount})")
     print(f"   Valid: {promo_1.valid_from.date()} to {promo_1.valid_until.date()}")
@@ -175,7 +175,7 @@ def create_demo_data(db: Session):
         valid_from=datetime(2024, 1, 1),
         valid_until=datetime(2024, 12, 31)
     ))
-    print(f"✅ {promo_2.name}")
+    print(f" {promo_2.name}")
     print(f"   Code: {promo_2.promo_code}")
     print(f"   Discount: €{promo_2.discount_value} off")
     
@@ -193,7 +193,7 @@ def create_demo_data(db: Session):
         valid_from=datetime(2024, 1, 1),
         valid_until=datetime(2024, 12, 31)
     ))
-    print(f"✅ Customer 1 - Product 100: €{customer_price.special_price:.2f}")
+    print(f" Customer 1 - Product 100: €{customer_price.special_price:.2f}")
     print(f"   Reason: {customer_price.reason}")
     print(f"   Discount: {customer_price.discount_percentage}%")
     
@@ -208,7 +208,7 @@ def demo_price_calculations(service: PricingService):
     print("="*80)
     
     # Example 1: Standard pricing
-    print("\n📊 Example 1: Standard Pricing")
+    print("\n Example 1: Standard Pricing")
     print("-" * 80)
     result = service.calculate_price(PriceCalculationRequest(
         product_id=100,
@@ -223,7 +223,7 @@ def demo_price_calculations(service: PricingService):
     print(f"Final Price: {result.formatted_price}")
     
     # Example 2: Volume discount
-    print("\n📊 Example 2: Volume Discount")
+    print("\n Example 2: Volume Discount")
     print("-" * 80)
     result = service.calculate_price(PriceCalculationRequest(
         product_id=100,
@@ -240,7 +240,7 @@ def demo_price_calculations(service: PricingService):
     print(f"Savings: €{result.savings:.2f} ({result.savings_percentage:.1f}%)")
     
     # Example 3: Promotional pricing
-    print("\n📊 Example 3: Promotional Pricing")
+    print("\n Example 3: Promotional Pricing")
     print("-" * 80)
     result = service.calculate_price(PriceCalculationRequest(
         product_id=100,
@@ -258,7 +258,7 @@ def demo_price_calculations(service: PricingService):
     print(f"Savings: €{result.savings:.2f} ({result.savings_percentage:.1f}%)")
     
     # Example 4: Customer-specific pricing
-    print("\n📊 Example 4: Customer-Specific Pricing")
+    print("\n Example 4: Customer-Specific Pricing")
     print("-" * 80)
     result = service.calculate_price(PriceCalculationRequest(
         product_id=100,
@@ -277,7 +277,7 @@ def demo_price_calculations(service: PricingService):
     print(f"Savings: €{result.savings:.2f} ({result.savings_percentage:.1f}%)")
     
     # Example 5: Combined discounts
-    print("\n📊 Example 5: Combined Discounts (Customer + Volume + Promo)")
+    print("\n Example 5: Combined Discounts (Customer + Volume + Promo)")
     print("-" * 80)
     result = service.calculate_price(PriceCalculationRequest(
         product_id=100,
@@ -321,21 +321,21 @@ def main():
         demo_price_calculations(service)
         
         print("\n" + "="*80)
-        print("✅ DEMO COMPLETED SUCCESSFULLY")
+        print(" DEMO COMPLETED SUCCESSFULLY")
         print("="*80)
         print("\nAll pricing features demonstrated:")
-        print("  ✓ Price Lists")
-        print("  ✓ Tiered Pricing")
-        print("  ✓ Volume Discounts")
-        print("  ✓ Promotional Pricing")
-        print("  ✓ Customer-Specific Pricing")
-        print("  ✓ Combined Discounts")
-        print("  ✓ German Number Formatting")
+        print("   Price Lists")
+        print("   Tiered Pricing")
+        print("   Volume Discounts")
+        print("   Promotional Pricing")
+        print("   Customer-Specific Pricing")
+        print("   Combined Discounts")
+        print("   German Number Formatting")
         print("\nAPI Documentation: http://localhost:8000/docs")
         print("="*80 + "\n")
         
     except Exception as e:
-        print(f"\n❌ Error: {str(e)}")
+        print(f"\n Error: {str(e)}")
         import traceback
         traceback.print_exc()
     finally:

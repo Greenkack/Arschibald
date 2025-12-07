@@ -109,7 +109,7 @@ def update_txt_files_with_keys():
 
     replacements = get_smart_replacements()
 
-    print("🔄 Aktualisiere TXT-Dateien mit dynamischen Keys...")
+    print(" Aktualisiere TXT-Dateien mit dynamischen Keys...")
 
     # Durchlaufe alle TXT-Dateien
     txt_files = glob.glob(os.path.join(input_dir, "seite_*_texte.txt"))
@@ -141,12 +141,12 @@ def update_txt_files_with_keys():
                 f.write(content)
             updated_files += 1
             total_replacements += file_replacements
-            print(f"  💾 {file_replacements} Ersetzungen gespeichert")
+            print(f"   {file_replacements} Ersetzungen gespeichert")
         else:
             print("  Keine Änderungen nötig")
 
     print(
-        f"\n🎉 Fertig! {updated_files} Dateien aktualisiert, {total_replacements} Ersetzungen insgesamt")
+        f"\n Fertig! {updated_files} Dateien aktualisiert, {total_replacements} Ersetzungen insgesamt")
 
     # Backup-Info
     print("\nWICHTIG: Originale sind in den Dateien überschrieben!")

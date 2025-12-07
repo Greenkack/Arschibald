@@ -115,7 +115,7 @@ def test_price_calculation_with_different_products():
             product_price_logs = [
                 e for e in errors if 'Preis aus DB' in e or 'Produktdatenbank' in e]
             if product_price_logs:
-                print(f"\n   📋 Produktpreis-Logs:")
+                print(f"\n    Produktpreis-Logs:")
                 for log in product_price_logs:
                     print(f"      {log}")
         else:

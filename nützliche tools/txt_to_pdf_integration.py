@@ -308,7 +308,7 @@ def update_txt_files_from_project_data(
                             f.write(new_content)
                 except Exception as e:
                     print(f"Fehler beim Aktualisieren von {filename}: {e}")
-        print("🔄 TXT-Dateien wurden mit dynamischen Werten aktualisiert")
+        print(" TXT-Dateien wurden mit dynamischen Werten aktualisiert")
         return True
 
     except Exception as e:
@@ -393,7 +393,7 @@ def generate_offer_pdf(*args, **kwargs) -> bytes | None:
 
 if __name__ == "__main__":
     # Test der Integration
-    print("🧪 Teste TXT-zu-PDF Integration...")
+    print(" Teste TXT-zu-PDF Integration...")
     print(f"Status: {get_system_status()}")
 
     # Test-PDF generieren

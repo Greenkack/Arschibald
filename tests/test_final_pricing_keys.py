@@ -164,10 +164,10 @@ SIMPLE_ENDERGEBNIS_BRUTTO
   + CALC_TOTAL_SURCHARGES_FORMATTED     (positiver Wert)
   + ZUBEHOR_TOTAL_FORMATTED             (Wallbox, Carport, etc.)
   + EXTRA_SERVICES_TOTAL_FORMATTED      (Dienstleistungen)
-────────────────────────────────────────
+
 = ZWISCHENSUMME_FINAL_FORMATTED         (brutto)
   - MWST_IN_ZWISCHENSUMME_FORMATTED     (19% herausrechnen)
-════════════════════════════════════════
+
 = FINAL_END_PREIS_FORMATTED             (NETTO!)
     """)
 

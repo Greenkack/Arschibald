@@ -9114,7 +9114,7 @@ def render_advanced_energy_analysis(results: Dict[str, Any], texts: Dict[str, st
     
     # Debug-Info (falls aktiviert)
     if results.get('app_debug_mode_enabled', False):
-        st.expander("🐛 Energie-Debug-Info", expanded=False).write({
+        st.expander(" Energie-Debug-Info", expanded=False).write({
             'annual_production': annual_production,
             'annual_consumption': annual_consumption,
             'production_sources': [k for k in results.keys() if 'production' in k.lower()],

@@ -420,7 +420,7 @@ class ProductDatabaseAdminOptimized:
 
 def render_product_admin_ui_optimized():
     """Optimierte Streamlit UI für Produktdatenbank mit Pagination"""
-    st.title("🗄️ Produktdatenbank Administration (Optimiert)")
+    st.title(" Produktdatenbank Administration (Optimiert)")
     
     # Session State initialisieren (EIGENER KEY um Konflikt mit Navigation zu vermeiden!)
     if 'product_db_current_page' not in st.session_state:
@@ -441,7 +441,7 @@ def render_product_admin_ui_optimized():
     
     # Tabs für verschiedene Aktionen
     tab1, tab2, tab3, tab4, tab5 = st.tabs(
-        ["📊 Dashboard", "📋 Produkte durchsuchen", "➕ Hinzufügen", "📤 Import/Export", "⚙️ Tools"]
+        [" Dashboard", " Produkte durchsuchen", " Hinzufügen", " Import/Export", " Tools"]
     )
     
     # ============ TAB 1: DASHBOARD ============
@@ -457,11 +457,11 @@ def render_product_admin_ui_optimized():
             
             col1, col2, col3 = st.columns(3)
             with col1:
-                st.metric("📦 Gesamt Produkte", f"{total_products:,}")
+                st.metric(" Gesamt Produkte", f"{total_products:,}")
             with col2:
-                st.metric("📁 Kategorien", len(stats))
+                st.metric(" Kategorien", len(stats))
             with col3:
-                st.metric("🏭 Hersteller", total_manufacturers)
+                st.metric(" Hersteller", total_manufacturers)
             
             st.divider()
             
@@ -480,7 +480,7 @@ def render_product_admin_ui_optimized():
             df_stats = pd.DataFrame(category_data)
             st.dataframe(df_stats, use_container_width=True, hide_index=True)
         else:
-            st.info("ℹ️ Noch keine Produkte in der Datenbank. Importieren Sie Daten oder fügen Sie manuell Produkte hinzu.")
+            st.info("ℹ Noch keine Produkte in der Datenbank. Importieren Sie Daten oder fügen Sie manuell Produkte hinzu.")
     
     # ============ TAB 2: PRODUKTE DURCHSUCHEN ============
     with tab2:
@@ -491,7 +491,7 @@ def render_product_admin_ui_optimized():
         
         with col1:
             category_filter = st.selectbox(
-                "📁 Kategorie filtern",
+                " Kategorie filtern",
                 ["Alle Kategorien"] + admin.categories,
                 key="category_filter_select"
             )
@@ -504,7 +504,7 @@ def render_product_admin_ui_optimized():
             if st.session_state.selected_category_filter:
                 manufacturers = admin.get_manufacturers_by_category(st.session_state.selected_category_filter)
                 manufacturer_filter = st.selectbox(
-                    "🏭 Hersteller filtern",
+                    " Hersteller filtern",
                     ["Alle Hersteller"] + manufacturers,
                     key="manufacturer_filter_select"
                 )
@@ -517,7 +517,7 @@ def render_product_admin_ui_optimized():
                 st.session_state.selected_manufacturer_filter = None
         
         with col3:
-            search_term = st.text_input("🔍 Suche (Modell, Hersteller, Beschreibung)", key="search_input")
+            search_term = st.text_input(" Suche (Modell, Hersteller, Beschreibung)", key="search_input")
         
         # Anzahl berechnen
         total_count = admin.get_product_count(
@@ -531,7 +531,7 @@ def render_product_admin_ui_optimized():
             
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
-                st.write(f"📊 **{total_count} Produkte gefunden** (Seite {st.session_state.product_db_current_page} von {total_pages})")
+                st.write(f" **{total_count} Produkte gefunden** (Seite {st.session_state.product_db_current_page} von {total_pages})")
             
             # Produkte laden
             df = admin.get_products_paginated(
@@ -561,12 +561,12 @@ def render_product_admin_ui_optimized():
                 col1, col2, col3, col4, col5 = st.columns([1, 1, 2, 1, 1])
                 
                 with col1:
-                    if st.button("⏮️ Erste", disabled=(st.session_state.product_db_current_page == 1)):
+                    if st.button("⏮ Erste", disabled=(st.session_state.product_db_current_page == 1)):
                         st.session_state.product_db_current_page = 1
                         st.rerun()
                 
                 with col2:
-                    if st.button("◀️ Zurück", disabled=(st.session_state.product_db_current_page == 1)):
+                    if st.button(" Zurück", disabled=(st.session_state.product_db_current_page == 1)):
                         st.session_state.product_db_current_page -= 1
                         st.rerun()
                 
@@ -585,18 +585,18 @@ def render_product_admin_ui_optimized():
                         st.rerun()
                 
                 with col4:
-                    if st.button("▶️ Weiter", disabled=(st.session_state.product_db_current_page >= total_pages)):
+                    if st.button(" Weiter", disabled=(st.session_state.product_db_current_page >= total_pages)):
                         st.session_state.product_db_current_page += 1
                         st.rerun()
                 
                 with col5:
-                    if st.button("⏭️ Letzte", disabled=(st.session_state.product_db_current_page >= total_pages)):
+                    if st.button("⏭ Letzte", disabled=(st.session_state.product_db_current_page >= total_pages)):
                         st.session_state.product_db_current_page = total_pages
                         st.rerun()
             else:
                 st.warning("Keine Produkte auf dieser Seite.")
         else:
-            st.info("ℹ️ Keine Produkte gefunden. Passen Sie die Filter an.")
+            st.info("ℹ Keine Produkte gefunden. Passen Sie die Filter an.")
     
     # ============ TAB 3: HINZUFÜGEN ============
     with tab3:
@@ -646,11 +646,11 @@ def render_product_admin_ui_optimized():
             if uploaded_image:
                 image_base64 = base64.b64encode(uploaded_image.read()).decode()
             
-            submitted = st.form_submit_button("✅ Produkt hinzufügen", use_container_width=True)
+            submitted = st.form_submit_button(" Produkt hinzufügen", use_container_width=True)
             
             if submitted:
                 if not all([kategorie, hersteller, produkt_modell]):
-                    st.error("❌ Kategorie, Hersteller und Produktmodell sind Pflichtfelder!")
+                    st.error(" Kategorie, Hersteller und Produktmodell sind Pflichtfelder!")
                 else:
                     product_data = {
                         'kategorie': kategorie,
@@ -675,7 +675,7 @@ def render_product_admin_ui_optimized():
                     }
                     
                     if admin.add_product(product_data):
-                        st.success("✅ Produkt erfolgreich hinzugefügt!")
+                        st.success(" Produkt erfolgreich hinzugefügt!")
                         st.rerun()
     
     # ============ TAB 4: IMPORT/EXPORT ============
@@ -685,12 +685,12 @@ def render_product_admin_ui_optimized():
         col1, col2 = st.columns(2)
         
         with col1:
-            st.write("**📥 Excel Import**")
+            st.write("** Excel Import**")
             st.info("Importieren Sie Produkte aus einer Excel-Datei. Große Dateien werden automatisch in Batches verarbeitet.")
             
             uploaded_file = st.file_uploader("Excel Datei (.xlsx)", type=['xlsx'], key="import_file")
             
-            if uploaded_file and st.button("🚀 Importieren starten"):
+            if uploaded_file and st.button(" Importieren starten"):
                 temp_path = f"temp_import_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
                 
                 with open(temp_path, "wb") as f:
@@ -708,16 +708,16 @@ def render_product_admin_ui_optimized():
                 success, message = admin.import_from_excel(temp_path, progress_callback=update_progress)
                 
                 if success:
-                    st.success(f"✅ {message}")
+                    st.success(f" {message}")
                 else:
-                    st.error(f"❌ {message}")
+                    st.error(f" {message}")
                 
                 # Cleanup
                 if os.path.exists(temp_path):
                     os.remove(temp_path)
         
         with col2:
-            st.write("**📤 Excel Export**")
+            st.write("** Excel Export**")
             st.info("Exportieren Sie Produkte nach Excel. Sie können nach Kategorie filtern.")
             
             export_category = st.selectbox(
@@ -726,7 +726,7 @@ def render_product_admin_ui_optimized():
                 key="export_category"
             )
             
-            if st.button("📥 Export starten"):
+            if st.button(" Export starten"):
                 category_filter = None if export_category == "Alle Kategorien" else export_category
                 df = admin.export_to_excel(category=category_filter)
                 
@@ -739,15 +739,15 @@ def render_product_admin_ui_optimized():
                     filename = f"products_export_{export_category.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
                     
                     st.download_button(
-                        label="📥 Download Excel",
+                        label=" Download Excel",
                         data=buffer,
                         file_name=filename,
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
                     
-                    st.success(f"✅ {len(df)} Produkte exportiert!")
+                    st.success(f" {len(df)} Produkte exportiert!")
                 else:
-                    st.warning("⚠️ Keine Produkte zum Exportieren gefunden.")
+                    st.warning(" Keine Produkte zum Exportieren gefunden.")
     
     # ============ TAB 5: TOOLS ============
     with tab5:
@@ -756,21 +756,21 @@ def render_product_admin_ui_optimized():
         col1, col2 = st.columns(2)
         
         with col1:
-            st.write("**⚙️ Datenbank-Wartung**")
+            st.write("** Datenbank-Wartung**")
             
-            if st.button("🔧 Tabelle & Indizes initialisieren"):
+            if st.button(" Tabelle & Indizes initialisieren"):
                 admin.create_products_table()
-                st.success("✅ Tabelle und Performance-Indizes erstellt/aktualisiert!")
+                st.success(" Tabelle und Performance-Indizes erstellt/aktualisiert!")
             
-            if st.button("🔄 Session State zurücksetzen"):
+            if st.button(" Session State zurücksetzen"):
                 st.session_state.product_db_current_page = 1
                 st.session_state.selected_category_filter = None
                 st.session_state.selected_manufacturer_filter = None
-                st.success("✅ Session zurückgesetzt!")
+                st.success(" Session zurückgesetzt!")
                 st.rerun()
         
         with col2:
-            st.write("**📊 Performance-Statistiken**")
+            st.write("** Performance-Statistiken**")
             
             total_products = admin.get_product_count()
             st.metric("Gesamt Produkte in DB", f"{total_products:,}")

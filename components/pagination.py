@@ -185,7 +185,7 @@ class Pagination(ShadcnComponent):
             with cols[col_idx]:
                 disabled = current == 1
                 if st.button(
-                    "⟪",
+                    "",
                     key=f"pagination_first_{pagination_id}",
                     disabled=disabled,
                     help="Erste Seite"
@@ -268,7 +268,7 @@ class Pagination(ShadcnComponent):
             with cols[col_idx]:
                 disabled = current == total_pages
                 if st.button(
-                    "⟫",
+                    "",
                     key=f"pagination_last_{pagination_id}",
                     disabled=disabled,
                     help="Letzte Seite"

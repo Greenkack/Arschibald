@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 def print_check(description: str, passed: bool):
     """Print check result"""
-    status = "✓" if passed else "✗"
+    status = "" if passed else ""
     print(f"  {status} {description}")
 
 
@@ -274,10 +274,10 @@ def main():
     print(f"\n  Passed: {passed}/{total} checks")
     
     if passed == total:
-        print("\n  ✓ ALL VERIFICATIONS PASSED")
+        print("\n   ALL VERIFICATIONS PASSED")
         print("  Task 12 is COMPLETE and ready for use!")
     else:
-        print("\n  ✗ SOME VERIFICATIONS FAILED")
+        print("\n   SOME VERIFICATIONS FAILED")
         print("  Please review the failed checks above.")
     
     print("\n" + "=" * 80 + "\n")

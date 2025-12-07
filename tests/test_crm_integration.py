@@ -203,8 +203,8 @@ class CRMIntegrationTest:
                 gui_content = f.read()
             
             # Suche nach CRM-Menüeintrag mit Icon
-            if '"icon": "👥"' in gui_content and '"key": "crm"' in gui_content:
-                print(f"CRM-Menüpunkt mit Icon 👥 gefunden")
+            if '"icon": ""' in gui_content and '"key": "crm"' in gui_content:
+                print(f"CRM-Menüpunkt mit Icon  gefunden")
                 self.results['passed'].append("Menü: CRM-Icon vorhanden")
             else:
                 print(f"CRM-Menüpunkt oder Icon nicht gefunden")
@@ -242,7 +242,7 @@ class CRMIntegrationTest:
         # Gesamtergebnis
         print("\n" + "="*60)
         if failed == 0 and warnings == 0:
-            print("🎉 ALLE TESTS BESTANDEN - CRM VOLLSTÄNDIG INTEGRIERT!")
+            print(" ALLE TESTS BESTANDEN - CRM VOLLSTÄNDIG INTEGRIERT!")
         elif failed == 0:
             print("TESTS BESTANDEN - Mit Warnungen")
         else:

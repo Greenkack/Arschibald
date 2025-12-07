@@ -70,7 +70,7 @@ def test_cache_effectiveness():
         print(f"Speedup: {speedup:.2f}x")
         print("Cache is effective")
     else:
-        print("⚠ Cache did not improve performance (may be due to small dataset)")
+        print(" Cache did not improve performance (may be due to small dataset)")
     
     return metrics_cached, metrics_uncached
 

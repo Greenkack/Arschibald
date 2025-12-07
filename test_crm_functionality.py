@@ -24,7 +24,7 @@ def test_crm_customer_management():
         return False
     
     # Test database connection
-    print("\n🗄️  Teste Datenbankverbindung...")
+    print("\n  Teste Datenbankverbindung...")
     try:
         conn = get_db_connection()
         if not conn:
@@ -36,7 +36,7 @@ def test_crm_customer_management():
         return False
     
     # Test: Load all customers
-    print("\n👥 Teste: Alle Kunden laden...")
+    print("\n Teste: Alle Kunden laden...")
     try:
         customers = crm.load_all_customers(conn)
         print(f"{len(customers)} Kunden gefunden")
@@ -47,7 +47,7 @@ def test_crm_customer_management():
         return False
     
     # Test: Create test customer
-    print("\n➕ Teste: Neuen Test-Kunden erstellen...")
+    print("\n Teste: Neuen Test-Kunden erstellen...")
     try:
         test_customer = {
             'name': 'Test Kunde',

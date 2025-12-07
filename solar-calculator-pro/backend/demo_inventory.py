@@ -46,7 +46,7 @@ def demo_inventory_management():
             currency="EUR",
             rating=4.5
         ))
-        print(f"✓ Created supplier: {supplier1.name} (ID: {supplier1.id})")
+        print(f" Created supplier: {supplier1.name} (ID: {supplier1.id})")
         
         supplier2 = service.create_supplier(SupplierCreate(
             name="Energy Components AG",
@@ -62,7 +62,7 @@ def demo_inventory_management():
             currency="EUR",
             rating=4.8
         ))
-        print(f"✓ Created supplier: {supplier2.name} (ID: {supplier2.id})")
+        print(f" Created supplier: {supplier2.name} (ID: {supplier2.id})")
         
         # ==================== Product-Supplier Relationships ====================
         print("\n2. PRODUCT-SUPPLIER RELATIONSHIPS")
@@ -82,7 +82,7 @@ def demo_inventory_management():
             lead_time_days=14,
             is_preferred=True
         ))
-        print(f"✓ Added supplier {supplier1.name} for product {product_id_1}")
+        print(f" Added supplier {supplier1.name} for product {product_id_1}")
         print(f"  Cost: €{250.00:.2f}, MOQ: 10, Lead time: 14 days")
         
         ps2 = service.add_product_supplier(ProductSupplierCreate(
@@ -94,7 +94,7 @@ def demo_inventory_management():
             lead_time_days=21,
             is_preferred=False
         ))
-        print(f"✓ Added alternative supplier {supplier2.name} for product {product_id_1}")
+        print(f" Added alternative supplier {supplier2.name} for product {product_id_1}")
         print(f"  Cost: €{260.00:.2f}, MOQ: 5, Lead time: 21 days")
         
         # ==================== Stock Management ====================
@@ -113,7 +113,7 @@ def demo_inventory_management():
             warehouse_location="Warehouse A",
             bin_location="A-12-03"
         ))
-        print(f"✓ Created stock for product {product_id_1}")
+        print(f" Created stock for product {product_id_1}")
         print(f"  On hand: {stock1.quantity_on_hand}, Available: {stock1.quantity_available}")
         print(f"  Status: {stock1.stock_status.value}")
         print(f"  Location: {stock1.warehouse_location} - {stock1.bin_location}")
@@ -129,7 +129,7 @@ def demo_inventory_management():
             warehouse_location="Warehouse A",
             bin_location="A-15-07"
         ))
-        print(f"\n✓ Created stock for product {product_id_2}")
+        print(f"\n Created stock for product {product_id_2}")
         print(f"  On hand: {stock2.quantity_on_hand}, Available: {stock2.quantity_available}")
         print(f"  Status: {stock2.stock_status.value}")
         
@@ -145,7 +145,7 @@ def demo_inventory_management():
             notes="Order #12345",
             performed_by="admin"
         ))
-        print(f"✓ Adjusted stock for product {product_id_1}")
+        print(f" Adjusted stock for product {product_id_1}")
         print(f"  Before: {adjustment_result['quantity_before']}")
         print(f"  After: {adjustment_result['quantity_after']}")
         print(f"  Status: {adjustment_result['stock_status']}")
@@ -155,7 +155,7 @@ def demo_inventory_management():
         print("-" * 80)
         
         alerts = service.get_stock_alerts(is_resolved=False)
-        print(f"✓ Found {len(alerts)} active alerts")
+        print(f" Found {len(alerts)} active alerts")
         for alert in alerts:
             print(f"  [{alert.severity.upper()}] {alert.alert_type}: {alert.message}")
             print(f"    Created: {alert.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -163,14 +163,14 @@ def demo_inventory_management():
         # Acknowledge an alert
         if alerts:
             service.acknowledge_alert(alerts[0].id, "admin")
-            print(f"\n✓ Acknowledged alert {alerts[0].id}")
+            print(f"\n Acknowledged alert {alerts[0].id}")
         
         # ==================== Reorder Calculations ====================
         print("\n6. REORDER CALCULATIONS")
         print("-" * 80)
         
         reorder_needs = service.calculate_reorder_needs()
-        print(f"✓ Found {len(reorder_needs)} products needing reorder")
+        print(f" Found {len(reorder_needs)} products needing reorder")
         for reorder in reorder_needs:
             print(f"\n  Product {reorder.product_id}:")
             print(f"    Current stock: {reorder.current_stock}")
@@ -208,7 +208,7 @@ def demo_inventory_management():
             ),
             created_by="admin"
         )
-        print(f"✓ Created purchase order: {po.order_number}")
+        print(f" Created purchase order: {po.order_number}")
         print(f"  Supplier: {supplier1.name}")
         print(f"  Status: {po.status.value}")
         print(f"  Items: {len(po.items)}")
@@ -223,7 +223,7 @@ def demo_inventory_management():
             PurchaseOrderStatusEnum.APPROVED,
             approved_by="manager"
         )
-        print(f"\n✓ Updated purchase order status to: {po_updated.status.value}")
+        print(f"\n Updated purchase order status to: {po_updated.status.value}")
         print(f"  Approved by: {po_updated.approved_by}")
         
         # Receive items
@@ -234,7 +234,7 @@ def demo_inventory_management():
                 product_id_2: 30
             }
         )
-        print(f"\n✓ Received items for purchase order {receive_result['order_number']}")
+        print(f"\n Received items for purchase order {receive_result['order_number']}")
         print(f"  Status: {receive_result['status']}")
         print(f"  All received: {receive_result['all_received']}")
         
@@ -243,7 +243,7 @@ def demo_inventory_management():
         print("-" * 80)
         
         report = service.get_inventory_report()
-        print(f"✓ Inventory Report (as of {report.report_date.strftime('%Y-%m-%d %H:%M:%S')})")
+        print(f" Inventory Report (as of {report.report_date.strftime('%Y-%m-%d %H:%M:%S')})")
         print(f"  Total products: {report.total_products}")
         print(f"  Products in stock: {report.products_in_stock}")
         print(f"  Products low stock: {report.products_low_stock}")
@@ -258,7 +258,7 @@ def demo_inventory_management():
         
         performance = service.get_supplier_performance(supplier1.id)
         if performance:
-            print(f"✓ Performance metrics for {performance.supplier_name}")
+            print(f" Performance metrics for {performance.supplier_name}")
             print(f"  Total orders: {performance.total_orders}")
             print(f"  On-time deliveries: {performance.on_time_deliveries}")
             print(f"  Late deliveries: {performance.late_deliveries}")
@@ -271,7 +271,7 @@ def demo_inventory_management():
         print("=" * 80)
         
     except Exception as e:
-        print(f"\n❌ Error: {str(e)}")
+        print(f"\n Error: {str(e)}")
         import traceback
         traceback.print_exc()
     finally:

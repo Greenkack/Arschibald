@@ -99,7 +99,7 @@ def demo_report_builder(db: Session):
     )
     
     report = service.create_report(report_create, user_id=1)
-    print(f"✅ Created report: {report.name} (ID: {report.id})")
+    print(f" Created report: {report.name} (ID: {report.id})")
     
     # Execute the report
     execute_request = ReportExecute(
@@ -110,12 +110,12 @@ def demo_report_builder(db: Session):
     
     try:
         result = service.execute_report(execute_request, user_id=1)
-        print(f"✅ Executed report successfully")
+        print(f" Executed report successfully")
         print(f"   - Rows returned: {result.metadata['row_count']}")
         print(f"   - Execution time: {result.metadata['execution_time_ms']}ms")
         print(f"   - Visualizations: {len(result.visualizations)}")
     except Exception as e:
-        print(f"⚠️  Report execution failed: {e}")
+        print(f"  Report execution failed: {e}")
 
 
 def demo_scheduled_reports(db: Session):
@@ -137,7 +137,7 @@ def demo_scheduled_reports(db: Session):
     )
     
     schedule = service.create_schedule(schedule_data)
-    print(f"✅ Created daily schedule (ID: {schedule.id})")
+    print(f" Created daily schedule (ID: {schedule.id})")
     print(f"   - Frequency: {schedule.frequency}")
     print(f"   - Time: {schedule.time_of_day}")
     print(f"   - Recipients: {len(schedule.recipients)}")
@@ -154,7 +154,7 @@ def demo_scheduled_reports(db: Session):
     )
     
     schedule2 = service.create_schedule(weekly_schedule)
-    print(f"✅ Created weekly schedule (ID: {schedule2.id})")
+    print(f" Created weekly schedule (ID: {schedule2.id})")
     print(f"   - Next run: {schedule2.next_run}")
 
 
@@ -175,7 +175,7 @@ def demo_dashboards(db: Session):
     )
     
     dashboard = service.create_dashboard(dashboard_data, user_id=1)
-    print(f"✅ Created dashboard: {dashboard.name} (ID: {dashboard.id})")
+    print(f" Created dashboard: {dashboard.name} (ID: {dashboard.id})")
     
     # Add metric widget
     metric_widget = WidgetCreate(
@@ -192,7 +192,7 @@ def demo_dashboards(db: Session):
     )
     
     widget1 = service.create_widget(metric_widget)
-    print(f"✅ Added metric widget (ID: {widget1.id})")
+    print(f" Added metric widget (ID: {widget1.id})")
     
     # Add chart widget
     chart_widget = WidgetCreate(
@@ -214,7 +214,7 @@ def demo_dashboards(db: Session):
     )
     
     widget2 = service.create_widget(chart_widget)
-    print(f"✅ Added chart widget (ID: {widget2.id})")
+    print(f" Added chart widget (ID: {widget2.id})")
 
 
 def demo_kpi_tracking(db: Session):
@@ -242,18 +242,18 @@ def demo_kpi_tracking(db: Session):
     )
     
     kpi = service.create_kpi(kpi_data, user_id=1)
-    print(f"✅ Created KPI: {kpi.name} (ID: {kpi.id})")
+    print(f" Created KPI: {kpi.name} (ID: {kpi.id})")
     
     # Calculate KPI
     try:
         result = service.calculate_kpi(kpi.id)
-        print(f"✅ KPI Calculation:")
+        print(f" KPI Calculation:")
         print(f"   - Current Value: €{result.current_value:,.2f}")
         print(f"   - Target Value: €{result.target_value:,.2f}")
         print(f"   - Achievement: {result.achievement_percentage:.1f}%")
         print(f"   - Trend: {result.trend}")
     except Exception as e:
-        print(f"⚠️  KPI calculation failed: {e}")
+        print(f"  KPI calculation failed: {e}")
 
 
 def demo_predictive_analytics(db: Session):
@@ -276,7 +276,7 @@ def demo_predictive_analytics(db: Session):
     
     try:
         result = service.create_prediction(prediction_request, user_id=1)
-        print(f"✅ Generated predictions for {len(result.predictions)} days")
+        print(f" Generated predictions for {len(result.predictions)} days")
         print(f"   - Model Type: {result.model_type}")
         print(f"   - R² Score: {result.accuracy_metrics['r2_score']:.3f}")
         print(f"   - RMSE: {result.accuracy_metrics['rmse']:.2f}")
@@ -284,7 +284,7 @@ def demo_predictive_analytics(db: Session):
         for pred in result.predictions[:3]:
             print(f"   - {pred['date']}: €{pred['predicted_value']:,.2f}")
     except Exception as e:
-        print(f"⚠️  Prediction failed: {e}")
+        print(f"  Prediction failed: {e}")
 
 
 def demo_data_export(db: Session):
@@ -309,14 +309,14 @@ def demo_data_export(db: Session):
     
     try:
         result = service.export_data(export_request, user_id=1)
-        print(f"✅ Data exported successfully")
+        print(f" Data exported successfully")
         print(f"   - File: {result.file_name}")
         print(f"   - Size: {result.file_size:,} bytes")
         print(f"   - Format: {result.format}")
         print(f"   - Download URL: {result.download_url}")
         print(f"   - Expires: {result.expires_at}")
     except Exception as e:
-        print(f"⚠️  Export failed: {e}")
+        print(f"  Export failed: {e}")
 
 
 def main():
@@ -337,11 +337,11 @@ def main():
         demo_data_export(db)
         
         print("\n" + "="*60)
-        print("✅ ALL DEMOS COMPLETED SUCCESSFULLY")
+        print(" ALL DEMOS COMPLETED SUCCESSFULLY")
         print("="*60)
         
     except Exception as e:
-        print(f"\n❌ Demo failed: {e}")
+        print(f"\n Demo failed: {e}")
         import traceback
         traceback.print_exc()
     

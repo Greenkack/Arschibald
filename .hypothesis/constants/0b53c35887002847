@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_scattergeo.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'connectgaps', 'country names', 'customdata', 'customdatasrc', 'featureidkey', 'fill', 'fillcolor', 'geo', 'geojson', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hovertemplate', 'hovertemplatesrc', 'hovertext', 'hovertextsrc', 'ids', 'idssrc', 'lat', 'latsrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'line', 'locationmode', 'locations', 'locationssrc', 'lon', 'lonsrc', 'marker', 'meta', 'metasrc', 'mode', 'name', 'opacity', 'scattergeo', 'selected', 'selectedpoints', 'showlegend', 'skip_invalid', 'stream', 'text', 'textfont', 'textposition', 'textpositionsrc', 'textsrc', 'texttemplate', 'texttemplatesrc', 'type', 'uid', 'uirevision', 'unselected', 'visible']

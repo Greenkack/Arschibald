@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\backend\core\database.py
+# hypothesis_version: 6.147.0
+
+[3600, 'All tables dropped', 'SELECT 1', 'check_same_thread', 'checked_in', 'checked_out', 'connect', 'connect_args', 'echo', 'max_overflow', 'message', 'mysql+aiomysql://', 'mysql://', 'overflow', 'pool_pre_ping', 'pool_recycle', 'pool_size', 'pool_timeout', 'poolclass', 'postgresql://', 'size', 'sqlite', 'sqlite+aiosqlite:///', 'sqlite:///', 'total_connections']

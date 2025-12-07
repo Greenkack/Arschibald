@@ -452,7 +452,7 @@ def render_data_input(texts: dict[str, str]) -> None:
             "no_tierabwehr_in_db",
             "Keine Tierabwehr in DB")]
 
-    # 🔌 Bedarfsanalyse - Mode Selection (Moved from analysis.py)
+    #  Bedarfsanalyse - Mode Selection (Moved from analysis.py)
     st.subheader("Bedarfsanalyse")
     st.write("Wählen Sie den gewünschten Anlagenmodus:")
 
@@ -634,7 +634,7 @@ def render_data_input(texts: dict[str, str]) -> None:
                 parsed_data = parse_full_address_string(
                     full_address_input_val, texts)
                 
-                # ✅ FIX: Widget-Keys direkt in session_state setzen (KRITISCH für Streamlit-Widgets)
+                #  FIX: Widget-Keys direkt in session_state setzen (KRITISCH für Streamlit-Widgets)
                 st.session_state['address_di_manual_v6_exp_stable'] = parsed_data.get("street", "")
                 st.session_state['house_number_di_manual_v6_exp_stable'] = parsed_data.get("house_number", "")
                 st.session_state['zip_code_di_manual_v6_exp_stable'] = parsed_data.get("zip_code", "")
@@ -666,15 +666,15 @@ def render_data_input(texts: dict[str, str]) -> None:
                         get_text_di(
                             texts,
                             "parse_address_success_all",
-                            "✅ Adresse erfolgreich geparst! Felder wurden aktualisiert."))
+                            " Adresse erfolgreich geparst! Felder wurden aktualisiert."))
                 else:
                     st.warning(
                         get_text_di(
                             texts,
                             "parse_address_partial_success",
-                            "⚠️ Adresse teilweise geparst. Bitte fehlende Felder ergänzen."))
+                            " Adresse teilweise geparst. Bitte fehlende Felder ergänzen."))
                 
-                # ✅ FIX: Rerun erzwingen um Widget-Werte anzuzeigen
+                #  FIX: Rerun erzwingen um Widget-Werte anzuzeigen
                 st.rerun()
             else:
                 st.warning(

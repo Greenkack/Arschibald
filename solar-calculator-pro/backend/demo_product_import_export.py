@@ -45,7 +45,7 @@ def demo_excel_import():
     df.to_excel(excel_file, index=False, engine='openpyxl')
     excel_file.seek(0)
     
-    print("\n📊 Sample Excel Data:")
+    print("\n Sample Excel Data:")
     print(df.to_string(index=False))
     
     # Create column mapping
@@ -58,7 +58,7 @@ def demo_excel_import():
         description_column='Description'
     )
     
-    print("\n🔄 Column Mapping:")
+    print("\n Column Mapping:")
     print(f"  Product Name → name")
     print(f"  Article Number → sku")
     print(f"  Category → category")
@@ -66,7 +66,7 @@ def demo_excel_import():
     print(f"  Unit Price → price")
     print(f"  Description → description")
     
-    print("\n✅ Import would process 3 products with custom column names")
+    print("\n Import would process 3 products with custom column names")
     print("   (Actual import requires database connection)")
 
 
@@ -84,16 +84,16 @@ Inverter 5kW,INV-5K-001,Inverters,PowerTech,1499.99,5000W,97.5%
 Inverter 10kW,INV-10K-001,Inverters,PowerTech,2499.99,10000W,98.0%
 Battery 10kWh,BAT-10K-001,Batteries,EnergyStore,3999.99,10kWh,95%"""
     
-    print("\n📄 Sample CSV Data:")
+    print("\n Sample CSV Data:")
     print(csv_data)
     
     # Parse CSV
     df = pd.read_csv(io.StringIO(csv_data))
     
-    print("\n📊 Parsed Data:")
+    print("\n Parsed Data:")
     print(df.to_string(index=False))
     
-    print("\n✅ Import would process 5 products")
+    print("\n Import would process 5 products")
     print("   Including custom specifications (spec_power, spec_efficiency)")
 
 
@@ -133,10 +133,10 @@ def demo_xml_import():
     </product>
 </products>"""
     
-    print("\n📄 Sample XML Data:")
+    print("\n Sample XML Data:")
     print(xml_data)
     
-    print("\n✅ Import would process 2 products from XML")
+    print("\n Import would process 2 products from XML")
     print("   Including nested specifications")
 
 
@@ -160,7 +160,7 @@ def demo_api_integration():
         }
     }
     
-    print("\n🌐 API Configuration:")
+    print("\n API Configuration:")
     print(f"  URL: {api_config['api_url']}")
     print(f"  Authentication: API Key")
     print(f"  Filters: category=solar-modules, in_stock=true, limit=100")
@@ -190,11 +190,11 @@ def demo_api_integration():
         }
     }
     
-    print("\n📦 Sample API Response:")
+    print("\n Sample API Response:")
     import json
     print(json.dumps(sample_response, indent=2))
     
-    print("\n✅ Import would process products from external API")
+    print("\n Import would process products from external API")
     print("   Supports pagination and filtering")
 
 
@@ -215,7 +215,7 @@ def demo_excel_export():
         "include_metadata": True
     }
     
-    print("\n📤 Export Configuration:")
+    print("\n Export Configuration:")
     print(f"  Format: Excel (.xlsx)")
     print(f"  Filters:")
     print(f"    - Category: Solar Modules")
@@ -223,7 +223,7 @@ def demo_excel_export():
     print(f"  Columns: name, sku, price, manufacturer, spec_power")
     print(f"  Include Metadata: Yes")
     
-    print("\n📊 Export would create Excel file with:")
+    print("\n Export would create Excel file with:")
     print("  - Products sheet with filtered data")
     print("  - Metadata sheet with export information")
     print("  - German number formatting (299,99 €)")
@@ -244,7 +244,7 @@ def demo_csv_export():
         "columns": ["name", "sku", "price", "category"]
     }
     
-    print("\n📤 Export Configuration:")
+    print("\n Export Configuration:")
     print(f"  Format: CSV")
     print(f"  Filters: manufacturer=SolarTech")
     print(f"  Columns: name, sku, price, category")
@@ -256,7 +256,7 @@ Solar Module 400W,SM-400-001,299.99,Solar Modules
 Solar Module 450W,SM-450-001,349.99,Solar Modules
 Solar Module 500W,SM-500-001,399.99,Solar Modules"""
     
-    print("\n📄 Sample CSV Output:")
+    print("\n Sample CSV Output:")
     print(sample_csv)
 
 
@@ -276,10 +276,10 @@ def demo_validation():
     
     df = pd.DataFrame(data_with_errors)
     
-    print("\n📊 Sample Data with Errors:")
+    print("\n Sample Data with Errors:")
     print(df.to_string(index=False))
     
-    print("\n❌ Validation Errors Found:")
+    print("\n Validation Errors Found:")
     print("  Row 2:")
     print("    - Name is required")
     print("  Row 3:")
@@ -289,7 +289,7 @@ def demo_validation():
     print("  Row 4:")
     print("    - Invalid price format")
     
-    print("\n✅ Validation Result:")
+    print("\n Validation Result:")
     print("  Total Rows: 4")
     print("  Valid Rows: 1")
     print("  Invalid Rows: 3")
@@ -302,14 +302,14 @@ def demo_bulk_operations():
     print("DEMO: Bulk Operations")
     print("="*60)
     
-    print("\n🔄 Bulk Update:")
+    print("\n Bulk Update:")
     print("  Product IDs: [1, 2, 3, 4, 5]")
     print("  Updates:")
     print("    - category: 'Premium Solar Modules'")
     print("    - price_multiplier: 1.1 (10% increase)")
     print("  Result: 5 products updated")
     
-    print("\n🗑️ Bulk Delete:")
+    print("\n Bulk Delete:")
     print("  Product IDs: [10, 11, 12]")
     print("  Confirmation: Required")
     print("  Result: 3 products deleted")
@@ -321,18 +321,18 @@ def demo_templates():
     print("DEMO: Import Templates")
     print("="*60)
     
-    print("\n📋 Available Templates:")
+    print("\n Available Templates:")
     print("  1. Excel Template (.xlsx)")
     print("  2. CSV Template (.csv)")
     print("  3. JSON Template (.json)")
     
-    print("\n📄 Template Contents:")
+    print("\n Template Contents:")
     print("  - Required columns with descriptions")
     print("  - Sample data rows")
     print("  - Import instructions")
     print("  - Validation rules")
     
-    print("\n📥 Download Template:")
+    print("\n Download Template:")
     print("  GET /api/v1/product-import-export/template/download/excel")
     print("  GET /api/v1/product-import-export/template/download/csv")
     print("  GET /api/v1/product-import-export/template/download/json")
@@ -364,9 +364,9 @@ def main():
     print("\n" + "="*60)
     print("DEMO COMPLETE")
     print("="*60)
-    print("\n✅ All import/export features demonstrated")
-    print("📚 See docs/PRODUCT_IMPORT_EXPORT_GUIDE.md for detailed documentation")
-    print("🔗 API documentation available at /docs")
+    print("\n All import/export features demonstrated")
+    print(" See docs/PRODUCT_IMPORT_EXPORT_GUIDE.md for detailed documentation")
+    print(" API documentation available at /docs")
 
 
 if __name__ == "__main__":

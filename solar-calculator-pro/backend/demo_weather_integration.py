@@ -31,18 +31,18 @@ async def demo_historical_analysis():
             years=5
         )
         
-        print(f"\n📊 Historical Weather Summary")
+        print(f"\n Historical Weather Summary")
         print(f"   Period: {summary.start_date.date()} to {summary.end_date.date()}")
         print(f"   Average Temperature: {summary.avg_temperature:.1f}°C")
         print(f"   Average Cloud Cover: {summary.avg_cloud_cover:.1f}%")
         print(f"   Average Solar Irradiance: {summary.avg_solar_irradiance:.1f} W/m²")
         print(f"   Total Sunshine Hours: {summary.total_sunshine_hours:.0f} hours")
         
-        print(f"\n🌍 Seasonal Variation:")
+        print(f"\n Seasonal Variation:")
         for season, irradiance in summary.seasonal_variation.items():
             print(f"   {season.capitalize():10s}: {irradiance:.1f} W/m²")
         
-        print(f"\n📅 Monthly Averages (Temperature & Irradiance):")
+        print(f"\n Monthly Averages (Temperature & Irradiance):")
         for month, data in summary.monthly_averages.items():
             temp = data.get("temperature", 0)
             irrad = data.get("solar_irradiance", 0)
@@ -57,10 +57,10 @@ async def demo_historical_analysis():
                 for month_data in summary.monthly_averages.values()
             )
         )
-        print(f"\n🌡️  Climate Zone: {climate_zone.value.upper()}")
+        print(f"\n  Climate Zone: {climate_zone.value.upper()}")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
 
 
 async def demo_production_forecast():
@@ -87,7 +87,7 @@ async def demo_production_forecast():
             days_ahead=7
         )
         
-        print(f"\n📈 7-Day Production Forecast:")
+        print(f"\n 7-Day Production Forecast:")
         print(f"{'Date':<12} {'Expected':<12} {'Optimal':<12} {'Confidence':<12} {'Weather':<10}")
         print(f"{'':12} {'(kWh)':<12} {'(kWh)':<12} {'(%)':<12} {'Factor':<10}")
         print("-" * 70)
@@ -111,11 +111,11 @@ async def demo_production_forecast():
         print(f"{'TOTAL':<12} {total_expected:>10.1f}  {total_optimal:>10.1f}")
         
         efficiency = (total_expected / total_optimal * 100) if total_optimal > 0 else 0
-        print(f"\n⚡ Overall Efficiency: {efficiency:.1f}%")
+        print(f"\n Overall Efficiency: {efficiency:.1f}%")
         print(f"   (Expected vs. Optimal Production)")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
 
 
 async def demo_seasonal_production():
@@ -146,7 +146,7 @@ async def demo_seasonal_production():
             system_size_kwp=system_size_kwp
         )
         
-        print(f"\n🌞 Seasonal Production Estimates (kWh/day):")
+        print(f"\n Seasonal Production Estimates (kWh/day):")
         print("-" * 50)
         
         seasons_order = ["winter", "spring", "summer", "autumn"]
@@ -167,11 +167,11 @@ async def demo_seasonal_production():
         min_prod = min(production.values())
         variation = ((max_prod - min_prod) / min_prod * 100) if min_prod > 0 else 0
         
-        print(f"\n📊 Seasonal Variation: {variation:.1f}%")
+        print(f"\n Seasonal Variation: {variation:.1f}%")
         print(f"   (Difference between highest and lowest season)")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
 
 
 async def demo_real_time_weather():
@@ -194,7 +194,7 @@ async def demo_real_time_weather():
             longitude=longitude
         )
         
-        print(f"\n🌤️  Current Weather Conditions:")
+        print(f"\n  Current Weather Conditions:")
         print(f"   Timestamp: {weather.timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"   Temperature: {weather.temperature:.1f}°C")
         print(f"   Cloud Cover: {weather.cloud_cover:.1f}%")
@@ -220,7 +220,7 @@ async def demo_real_time_weather():
         # Current production (kW)
         current_production = system_size_kwp * weather_factor * temp_factor * cloud_factor
         
-        print(f"\n⚡ Current Production Estimate:")
+        print(f"\n Current Production Estimate:")
         print(f"   System Size: {system_size_kwp} kWp")
         print(f"   Current Output: {current_production:.2f} kW")
         print(f"   Weather Factor: {weather_factor:.2f}")
@@ -235,12 +235,12 @@ async def demo_real_time_weather():
         elif current_production > system_size_kwp * 0.2:
             status = "🟠 Fair"
         else:
-            status = "🔴 Poor"
+            status = " Poor"
         
         print(f"   Status: {status}")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
 
 
 async def demo_climate_zones():
@@ -260,7 +260,7 @@ async def demo_climate_zones():
         ("Dubai (Arid)", 25.27, 27.0, 100.0),
     ]
     
-    print(f"\n🌍 Climate Zone Classification:")
+    print(f"\n Climate Zone Classification:")
     print(f"{'Location':<25} {'Latitude':<10} {'Avg Temp':<10} {'Climate Zone':<15}")
     print("-" * 70)
     
@@ -268,7 +268,7 @@ async def demo_climate_zones():
         zone = service.determine_climate_zone(lat, temp, precip)
         print(f"{name:<25} {lat:>8.2f}°  {temp:>7.1f}°C  {zone.value:<15}")
     
-    print("\n💡 Solar Potential by Climate Zone:")
+    print("\n Solar Potential by Climate Zone:")
     print("   Polar:       Low to Moderate (long summer days, but low angle)")
     print("   Cold:        Moderate (good in summer, poor in winter)")
     print("   Temperate:   Good (balanced throughout year)")
@@ -296,12 +296,12 @@ async def main():
         print("\n" + "=" * 80)
         print("DEMO COMPLETED SUCCESSFULLY")
         print("=" * 80)
-        print("\n✅ All weather integration features demonstrated")
-        print("✅ Historical analysis, forecasting, and real-time monitoring working")
-        print("✅ Climate zone determination and seasonal analysis functional")
+        print("\n All weather integration features demonstrated")
+        print(" Historical analysis, forecasting, and real-time monitoring working")
+        print(" Climate zone determination and seasonal analysis functional")
         
     except Exception as e:
-        print(f"\n❌ Demo failed: {e}")
+        print(f"\n Demo failed: {e}")
         import traceback
         traceback.print_exc()
 

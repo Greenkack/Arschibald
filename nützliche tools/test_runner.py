@@ -21,13 +21,13 @@ def run_python_tests():
         print("Keine Test-Dateien gefunden")
         return
 
-    print(f"🧪 TESTE {len(test_files)} Test-Dateien:")
+    print(f" TESTE {len(test_files)} Test-Dateien:")
 
     passed = 0
     failed = 0
 
     for test_file in test_files:
-        print(f"\n📋 {os.path.basename(test_file)}:")
+        print(f"\n {os.path.basename(test_file)}:")
         try:
             result = subprocess.run([sys.executable, test_file],
                                     capture_output=True, text=True, timeout=30)
@@ -41,7 +41,7 @@ def run_python_tests():
                 failed += 1
 
         except subprocess.TimeoutExpired:
-            print("  ⏱️ TIMEOUT")
+            print("  ⏱ TIMEOUT")
             failed += 1
         except Exception as e:
             print(f"  FEHLER: {e}")
@@ -57,7 +57,7 @@ def run_python_tests():
 def smoke_test_app():
     """Führt Smoke-Tests der Hauptfunktionen aus"""
 
-    print("\n🔥 SMOKE-TESTS:")
+    print("\n SMOKE-TESTS:")
 
     tests = [
         ("Import gui.py",

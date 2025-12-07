@@ -67,7 +67,7 @@ def test_monitor_directly():
 
         # Success
         print("\n" + "=" * 60)
-        print("🎉 ALL TESTS PASSED!")
+        print(" ALL TESTS PASSED!")
         print("=" * 60)
         return True
 
@@ -206,7 +206,7 @@ def main():
     print(f"Results: {passed}/{total} tests passed")
 
     if passed == total:
-        print("🎉 ALL TESTS PASSED!")
+        print(" ALL TESTS PASSED!")
         print("=" * 70)
         return 0
     print("SOME TESTS FAILED")
