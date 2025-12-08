@@ -191,10 +191,14 @@ def render_team_analysis_tab():
                         report_gen = ReportGenerator(db)
                         pdf_bytes = report_gen.export_team_report_to_pdf(team_data)
                         
+                        # Dateiname: Position_Zeitraum.pdf
+                        position_name = selected_position_name.replace(' ', '_')
+                        zeitraum = f"{start_date.strftime('%Y%m%d')}_bis_{end_date.strftime('%Y%m%d')}"
+                        
                         st.download_button(
                             label="PDF herunterladen",
                             data=pdf_bytes,
-                            file_name=f"team_auswertung_{selected_position_name}_{date.today()}.pdf",
+                            file_name=f"{position_name}_{zeitraum}.pdf",
                             mime="application/pdf",
                             key="download_team_pdf"
                         )
@@ -384,10 +388,13 @@ def render_comparison_tab():
                         report_gen = ReportGenerator(db)
                         pdf_bytes = report_gen.export_comparison_report_to_pdf(comp_data)
                         
+                        # Dateiname: Mitarbeitervergleich_Zeitraum.pdf
+                        zeitraum = f"{start_date.strftime('%Y%m%d')}_bis_{end_date.strftime('%Y%m%d')}"
+                        
                         st.download_button(
                             label="PDF herunterladen",
                             data=pdf_bytes,
-                            file_name=f"mitarbeiter_vergleich_{date.today()}.pdf",
+                            file_name=f"Mitarbeitervergleich_{zeitraum}.pdf",
                             mime="application/pdf",
                             key="download_comp_pdf"
                         )

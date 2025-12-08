@@ -511,6 +511,54 @@ def render_performance_entry_tab():
                     # Get active period ID from session
                     period_id = st.session_state.get('active_period_id')
                     
+                    # ============ VALIDIERUNG: KUNDEN TERMINIERT ============
+                    # Prüfe ob "Kunden terminiert" = Summe aller Unterkriterien
+                    kunden_terminiert_criterion = next((c for c in criteria if c.name == "Kunden terminiert"), None)
+                    validation_error = False
+                    
+                    if kunden_terminiert_criterion:
+                        kunden_terminiert_value = performance_data.get(kunden_terminiert_criterion.id, 0)
+                        
+                        # Definiere die Unterkriterien die zusammen "Kunden terminiert" ergeben müssen
+                        unterkriterien = [
+                            "Storniert / kein Interesse",
+                            "Technisch nicht machbar",
+                            "Sonstiges",
+                            "Folgetermin gemacht",
+                            "Angebot erhalten",
+                            "Nicht erreicht, neu terminieren",
+                            "Verkauf",
+                            "Zu teuer gewesen"
+                        ]
+                        
+                        # Berechne Summe der Unterkriterien
+                        summe_unterkriterien = 0
+                        for criterion in criteria:
+                            if criterion.name in unterkriterien:
+                                summe_unterkriterien += performance_data.get(criterion.id, 0)
+                        
+                        # Validierung: Stimmt die Summe?
+                        if abs(kunden_terminiert_value - summe_unterkriterien) > 0.01:
+                            st.error(
+                                f"**Validierungsfehler: Kunden terminiert**\n\n"
+                                f"Der Wert bei 'Kunden terminiert' ({int(kunden_terminiert_value)}) stimmt nicht "
+                                f"mit der Summe der Unterkriterien überein ({int(summe_unterkriterien)}).\n\n"
+                                f"**Unterkriterien:**\n"
+                                f"- Storniert / kein Interesse\n"
+                                f"- Technisch nicht machbar\n"
+                                f"- Sonstiges\n"
+                                f"- Folgetermin gemacht\n"
+                                f"- Angebot erhalten\n"
+                                f"- Nicht erreicht, neu terminieren\n"
+                                f"- Verkauf\n"
+                                f"- Zu teuer gewesen\n\n"
+                                f"Bitte korrigieren Sie die Werte!"
+                            )
+                            validation_error = True
+                    
+                    if validation_error:
+                        st.stop()
+                    
                     # Validate and save performance data
                     saved_count = 0
                     updated_count = 0
@@ -889,10 +937,20 @@ def render_report_dashboard(
         if st.button(" JSON Export", use_container_width=True):
             try:
                 json_data = report_gen.export_report_json(report_data)
+                
+                # Generiere Dateinamen: Agentname_Zeitraum.json
+                agent_name = report_data.get('agent_name', report_data.get('employee_name', 'Bericht')).replace(' ', '_')
+                start = report_data.get('start_date', '')
+                end = report_data.get('end_date', '')
+                if isinstance(start, str) and isinstance(end, str):
+                    zeitraum = f"{start}_bis_{end}".replace('-', '')
+                else:
+                    zeitraum = datetime.now().strftime('%Y%m%d')
+                
                 st.download_button(
                     label="JSON herunterladen",
                     data=json_data,
-                    file_name=f"bericht_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                    file_name=f"{agent_name}_{zeitraum}.json",
                     mime="application/json"
                 )
             except Exception as e:
@@ -902,10 +960,20 @@ def render_report_dashboard(
         if st.button(" Excel Export", use_container_width=True):
             try:
                 excel_data = report_gen.export_report_excel(report_data)
+                
+                # Generiere Dateinamen: Agentname_Zeitraum.xlsx
+                agent_name = report_data.get('agent_name', report_data.get('employee_name', 'Bericht')).replace(' ', '_')
+                start = report_data.get('start_date', '')
+                end = report_data.get('end_date', '')
+                if isinstance(start, str) and isinstance(end, str):
+                    zeitraum = f"{start}_bis_{end}".replace('-', '')
+                else:
+                    zeitraum = datetime.now().strftime('%Y%m%d')
+                
                 st.download_button(
                     label="Excel herunterladen",
                     data=excel_data,
-                    file_name=f"bericht_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                    file_name=f"{agent_name}_{zeitraum}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 )
             except Exception as e:
@@ -915,10 +983,20 @@ def render_report_dashboard(
         if st.button(" PDF Export", use_container_width=True):
             try:
                 pdf_data = report_gen.export_report_pdf(report_data)
+                
+                # Generiere Dateinamen: Agentname_Zeitraum.pdf
+                agent_name = report_data.get('agent_name', report_data.get('employee_name', 'Bericht')).replace(' ', '_')
+                start = report_data.get('start_date', '')
+                end = report_data.get('end_date', '')
+                if isinstance(start, str) and isinstance(end, str):
+                    zeitraum = f"{start}_bis_{end}".replace('-', '')
+                else:
+                    zeitraum = datetime.now().strftime('%Y%m%d')
+                
                 st.download_button(
                     label="PDF herunterladen",
                     data=pdf_data,
-                    file_name=f"bericht_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                    file_name=f"{agent_name}_{zeitraum}.pdf",
                     mime="application/pdf"
                 )
             except Exception as e:
@@ -1431,10 +1509,19 @@ def render_team_analysis_tab():
                         try:
                             pdf_bytes = report_gen.export_comparison_report_to_pdf(team_report)
                             
+                            # Dateiname: Teamname_Zeitraum.pdf
+                            team_name = team_report.get('team_name', 'team').replace(' ', '_')
+                            start = team_report.get('start_date', '')
+                            end = team_report.get('end_date', '')
+                            if isinstance(start, str) and isinstance(end, str):
+                                zeitraum = f"{start}_bis_{end}".replace('-', '')
+                            else:
+                                zeitraum = date.today().strftime('%Y%m%d')
+                            
                             st.download_button(
                                 label="PDF herunterladen",
                                 data=pdf_bytes,
-                                file_name=f"team_report_{team_report.get('team_name', 'team')}_{date.today()}.pdf",
+                                file_name=f"{team_name}_{zeitraum}.pdf",
                                 mime="application/pdf",
                                 use_container_width=True
                             )
@@ -1580,10 +1667,14 @@ def render_team_analysis_tab():
                         report_gen = ReportGenerator(db)
                         pdf_bytes = report_gen.export_team_report_to_pdf(team_data)
                         
+                        # Dateiname: Position_Zeitraum.pdf
+                        position_name = selected_position_name.replace(' ', '_')
+                        zeitraum = f"{start_date.strftime('%Y%m%d')}_bis_{end_date.strftime('%Y%m%d')}"
+                        
                         st.download_button(
                             label="PDF herunterladen",
                             data=pdf_bytes,
-                            file_name=f"team_auswertung_{selected_position_name}_{date.today()}.pdf",
+                            file_name=f"{position_name}_{zeitraum}.pdf",
                             mime="application/pdf",
                             key="download_team_pdf"
                         )
@@ -1778,10 +1869,13 @@ def render_comparison_tab():
                         report_gen = ReportGenerator(db)
                         pdf_bytes = report_gen.export_comparison_report_to_pdf(comp_data)
                         
+                        # Dateiname: Mitarbeitervergleich_Zeitraum.pdf
+                        zeitraum = f"{start_date.strftime('%Y%m%d')}_bis_{end_date.strftime('%Y%m%d')}"
+                        
                         st.download_button(
                             label="PDF herunterladen",
                             data=pdf_bytes,
-                            file_name=f"mitarbeiter_vergleich_{date.today()}.pdf",
+                            file_name=f"Mitarbeitervergleich_{zeitraum}.pdf",
                             mime="application/pdf",
                             key="download_comp_pdf"
                         )
