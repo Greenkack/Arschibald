@@ -24,6 +24,11 @@ from controlling.models import (  # noqa: E402
     PerformanceData,
     ReportType
 )
+from controlling.position_criteria import (  # noqa: E402
+    calculate_quotas_for_position,
+    calculate_ratio_description,
+    get_position_criteria
+)
 
 logger = logging.getLogger(__name__)
 
@@ -274,9 +279,9 @@ class AnalyticsEngine:
         criterion_name: str
     ) -> str:
         """
-        Generate a descriptive ratio for a quota.
-
-        Formula: "Jeder X. [context] ist [outcome]" where X = 100 / quota
+        DEPRECATED: Use controlling.position_criteria.calculate_ratio_description instead.
+        
+        This method is kept for backwards compatibility only.
 
         Args:
             quota_percentage: The quota as a percentage
@@ -284,77 +289,13 @@ class AnalyticsEngine:
 
         Returns:
             German description string
-
-        Requirements: 11.1, 11.2, 11.3
         """
-        if quota_percentage == 0:
-            return "keine Daten"
-
-        # Handle extreme percentages
-        if quota_percentage > 100:
-            # If quota > 100%, show multiplicative relationship instead
-            multiplier = round(quota_percentage / 100, 2)
-            context_map = {
-                "Abschlussquote": "angefahrenen Termin",
-                "Terminvereinbarungsquote": "Anruf",
-                "Termine-Anfahrquote": "terminierten Kunden",
-                "nicht interessierte Kunden Quote": "angefahrenen Termin",
-                "technisch nicht machbar Quote": "angefahrenen Termin",
-                "Quote der nicht erreichten Kunden": "Anruf",
-                "Quote für Folgetermine-Vereinbarungen": "angefahrenen Termin",
-                "Quote für Angebote": "angefahrenen Termin",
-                "Quote für zu teuer": "angefahrenen Termin",
-                "Quote für QC bestanden": "Verkauf"
-            }
-            context = context_map.get(criterion_name, "Element")
-            return f"⚠️ {multiplier}× pro {context} (Daten prüfen!)"
-        
-        # Normal case: quota <= 100%
-        ratio = round(100 / quota_percentage)
-        
-        # Prevent ratio = 0 (happens when quota is very high)
-        if ratio < 1:
-            ratio = 1
-
-        # Map criterion names to descriptions
-        descriptions = {
-            "Abschlussquote": (
-                f"Jeder {ratio}. angefahrene Termin ist ein Verkauf"
-            ),
-            "Terminvereinbarungsquote": (
-                f"Jeder {ratio}. Anruf führt zu einem Termin"
-            ),
-            "Termine-Anfahrquote": (
-                f"Jeder {ratio}. terminierte Kunde wird angefahren"
-            ),
-            "nicht interessierte Kunden Quote": (
-                f"Jeder {ratio}. angefahrene Termin ist nicht interessiert"
-            ),
-            "technisch nicht machbar Quote": (
-                f"Jeder {ratio}. angefahrene Termin ist technisch nicht "
-                f"machbar"
-            ),
-            "Quote der nicht erreichten Kunden": (
-                f"Jeder {ratio}. Anruf erreicht den Kunden nicht"
-            ),
-            "Quote für Folgetermine-Vereinbarungen": (
-                f"Jeder {ratio}. angefahrene Termin führt zu einem "
-                f"Folgetermin"
-            ),
-            "Quote für Angebote": (
-                f"Jeder {ratio}. angefahrene Termin erhält ein Angebot"
-            ),
-            "Quote für zu teuer": (
-                f"Jeder {ratio}. angefahrene Termin ist zu teuer"
-            ),
-            "Quote für QC bestanden": (
-                f"Jeder {ratio}. Verkauf besteht die Qualitätskontrolle"
-            )
-        }
-
-        return descriptions.get(
+        # Fallback to new function
+        from controlling.position_criteria import calculate_ratio_description
+        return calculate_ratio_description(
+            quota_percentage,
             criterion_name,
-            f"1 zu {ratio}"
+            "Sonstiges"  # Default position
         )
 
     def _get_criterion_value(
@@ -380,18 +321,52 @@ class AnalyticsEngine:
 
     def calculate_quotas(
         self,
+        performance_data: List[PerformanceData],
+        position_name: Optional[str] = None
+    ) -> Dict[str, float]:
+        """
+        Calculate position-specific quotas from performance data.
+
+        Args:
+            performance_data: List of performance data records
+            position_name: Name of position (for position-specific quotas)
+
+        Returns:
+            Dictionary mapping quota names to percentages
+
+        Requirements: 10.1, 10.2
+        """
+        # Aggregiere Rohdaten
+        raw_data = defaultdict(float)
+        for record in performance_data:
+            raw_data[record.criterion.name] += record.value
+        
+        # Wenn keine Position angegeben, versuche von erstem Record zu holen
+        if not position_name and performance_data:
+            try:
+                position_name = performance_data[0].employee.position.name
+            except:
+                position_name = None
+        
+        # Berechne positions-spezifische Quoten
+        if position_name:
+            return calculate_quotas_for_position(position_name, dict(raw_data))
+        
+        # Fallback: leeres Dict wenn keine Position
+        return {}
+
+    def calculate_quotas_legacy(
+        self,
         performance_data: List[PerformanceData]
     ) -> Dict[str, float]:
         """
-        Calculate all quotas from performance data.
+        Legacy quota calculation (deprecated - use calculate_quotas instead).
 
         Args:
             performance_data: List of performance data records
 
         Returns:
             Dictionary mapping quota names to percentages
-
-        Requirements: 10.1, 10.2
         """
         # Extract values for each criterion
         verkauf = self._get_criterion_value(performance_data, "Verkauf")
@@ -456,19 +431,19 @@ class AnalyticsEngine:
         for name, value in criteria_that_should_be_integers:
             if value != 0 and value != int(value):
                 validation_warnings.append(
-                    f"⚠️ {name}: {value} (erwartet ganze Zahl, nicht Dezimalzahl)"
+                    f"{name}: {value} (erwartet ganze Zahl, nicht Dezimalzahl)"
                 )
         
         # Check for logical inconsistencies
         if qc_bestanden > verkauf and verkauf > 0:
             validation_warnings.append(
-                f"⚠️ QC bestanden ({qc_bestanden}) > Verkauf ({verkauf}) - "
+                f"QC bestanden ({qc_bestanden}) > Verkauf ({verkauf}) - "
                 f"logisch unmöglich!"
             )
         
         if kunden_terminiert > getaetigte_anrufe_gesamt and getaetigte_anrufe_gesamt > 0:
             validation_warnings.append(
-                f"⚠️ Terminierte Kunden ({kunden_terminiert}) > "
+                f"Terminierte Kunden ({kunden_terminiert}) > "
                 f"Anrufe ({getaetigte_anrufe_gesamt}) - prüfen!"
             )
         
@@ -607,14 +582,20 @@ class AnalyticsEngine:
             PerformanceData.date <= end_date
         ).all()
 
-        # Calculate quotas
-        quotas = self.calculate_quotas(performance_data)
+        # Get position name for position-specific quotas
+        position_name = employee.position.name if employee.position else None
 
-        # Generate ratio descriptions
-        ratios = {
-            name: self.calculate_ratio_description(percentage, name)
-            for name, percentage in quotas.items()
-        }
+        # Calculate quotas (positions-spezifisch)
+        quotas = self.calculate_quotas(performance_data, position_name)
+
+        # Generate ratio descriptions (positions-spezifisch)
+        ratios = {}
+        for quota_name, percentage in quotas.items():
+            ratios[quota_name] = calculate_ratio_description(
+                percentage,
+                quota_name,
+                position_name or "Sonstiges"
+            )
 
         # Aggregate raw data by criterion
         raw_data = defaultdict(float)
@@ -624,6 +605,7 @@ class AnalyticsEngine:
         return {
             "employee_id": employee_id,
             "employee_name": employee.full_name,
+            "position_name": position_name,
             "period_type": period_type.value,
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),
