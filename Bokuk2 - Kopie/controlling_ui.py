@@ -13,6 +13,38 @@ from datetime import date, datetime
 from pathlib import Path
 import sys
 from typing import List, Dict, Any, Optional
+import locale
+
+# Setze deutsche Locale für Datums-Formatierung
+try:
+    locale.setlocale(locale.LC_TIME, 'de_DE.UTF-8')
+except:
+    try:
+        locale.setlocale(locale.LC_TIME, 'German_Germany.1252')
+    except:
+        pass  # Fallback auf Standardlocale
+
+def format_german_date(date_obj):
+    """Formatiert Datum als 'Wochentag, der TT.MM.JJJJ' z.B. 'Montag, der 30.12.2025'"""
+    if isinstance(date_obj, str):
+        # Versuche String zu parsen
+        try:
+            date_obj = datetime.strptime(date_obj, '%Y-%m-%d').date()
+        except:
+            return date_obj
+    
+    weekday_names = {
+        0: 'Montag',
+        1: 'Dienstag',
+        2: 'Mittwoch',
+        3: 'Donnerstag',
+        4: 'Freitag',
+        5: 'Samstag',
+        6: 'Sonntag'
+    }
+    
+    weekday = weekday_names.get(date_obj.weekday(), 'Unbekannt')
+    return f"{weekday}, der {date_obj.strftime('%d.%m.%Y')}"
 
 # Add project root to path
 project_root = Path(__file__).parent
@@ -272,7 +304,7 @@ def render_performance_entry_tab():
                             elif selected_period_type == PeriodType.YEARLY:
                                 period_name = f"Jahr {year}"
                             else:
-                                period_name = f"Auswertung {start_date} - {end_date}"
+                                period_name = f"Auswertung {format_german_date(start_date)} - {format_german_date(end_date)}"
                         
                         # Create period
                         new_period = period_manager.create_period(
@@ -302,7 +334,7 @@ def render_performance_entry_tab():
             col_select1, col_select2 = st.columns([3, 1])
             
             with col_select1:
-                period_options = {p.id: f"{p.name} ({p.start_date} - {p.end_date})" for p in active_periods}
+                period_options = {p.id: f"{p.name} ({format_german_date(p.start_date)} - {format_german_date(p.end_date)})" for p in active_periods}
                 
                 selected_period_id = st.selectbox(
                     "Aktive Auswertungsperiode wählen",
@@ -332,7 +364,7 @@ def render_performance_entry_tab():
                     st.info(
                         f"**{current_period.name}**  \n"
                         f"Typ: {current_period.period_type.value} | "
-                        f"Zeitraum: {current_period.start_date} - {current_period.end_date} | "
+                        f"Zeitraum: {format_german_date(current_period.start_date)} - {format_german_date(current_period.end_date)} | "
                         f"Dauer: {current_period.duration_days} Tage  \n"
                         f"{current_period.description if current_period.description else ''}"
                     )
@@ -414,7 +446,7 @@ def render_performance_entry_tab():
         if existing_values:
             st.info(
                 f"**Gespeicherte Daten werden geladen** - "
-                f"{len(existing_values)} Kriterien mit Werten vom {entry_date.strftime('%d.%m.%Y')}"
+                f"{len(existing_values)} Kriterien mit Werten vom {format_german_date(entry_date)}"
             )
         else:
             st.caption("Keine gespeicherten Daten für dieses Datum vorhanden")
@@ -563,7 +595,7 @@ def render_performance_entry_tab():
                         st.success(
                             f"**Leistungsdaten gespeichert!**\n\n" +
                             " | ".join(success_parts) +
-                            f"\n\nDatum: {entry_date.strftime('%d.%m.%Y')}"
+                            f"\n\nDatum: {format_german_date(entry_date)}"
                         )
                         
                         # Seite neu laden um aktualisierte Daten anzuzeigen
@@ -828,15 +860,15 @@ def render_report_dashboard(
         st.info(
             f"**Mitarbeiter:** {report_data.get('employee_name')} | "
             f"**Position:** {report_data.get('position')} | "
-            f"**Zeitraum:** {report_data.get('start_date')} bis "
-            f"{report_data.get('end_date')}"
+            f"**Zeitraum:** {format_german_date(report_data.get('start_date'))} bis "
+            f"{format_german_date(report_data.get('end_date'))}"
         )
     else:
         st.info(
             f"**Vergleichsbericht** | "
             f"**{report_data.get('employee_count')} Mitarbeiter** | "
-            f"**Zeitraum:** {report_data.get('start_date')} bis "
-            f"{report_data.get('end_date')}"
+            f"**Zeitraum:** {format_german_date(report_data.get('start_date'))} bis "
+            f"{format_german_date(report_data.get('end_date'))}"
         )
 
     # Action buttons
@@ -1011,7 +1043,7 @@ def render_archive_tab():
                         f"{'Vergleich' if report_meta['is_comparison'] else 'Bericht'} "
                         f"{report_meta.get('employee_name', 'Mehrere Mitarbeiter')} - "
                         f"{report_meta['report_type']} "
-                        f"({report_meta['start_date']} bis {report_meta['end_date']})",
+                        f"({format_german_date(report_meta['start_date'])} bis {format_german_date(report_meta['end_date'])})",
                         expanded=False
                     ):
                         col1, col2 = st.columns([3, 1])
@@ -1020,8 +1052,8 @@ def render_archive_tab():
                             st.write(f"**Erstellt:** {report_meta['created_at']}")
                             st.write(f"**Typ:** {report_meta['report_type']}")
                             st.write(
-                                f"**Zeitraum:** {report_meta['start_date']} bis "
-                                f"{report_meta['end_date']}"
+                                f"**Zeitraum:** {format_german_date(report_meta['start_date'])} bis "
+                                f"{format_german_date(report_meta['end_date'])}"
                             )
 
                         with col2:
@@ -1117,7 +1149,7 @@ def render_archive_tab():
                     
                     with st.expander(
                         f"{status_icon} {type_icon} {period.name} "
-                        f"({period.start_date} - {period.end_date})",
+                        f"({format_german_date(period.start_date)} - {format_german_date(period.end_date)})",
                         expanded=False
                     ):
                         col_det1, col_det2 = st.columns([2, 1])
@@ -1125,7 +1157,7 @@ def render_archive_tab():
                         with col_det1:
                             st.write(f"**Typ:** {period.period_type.value}")
                             st.write(f"**Status:** {period.status.value}")
-                            st.write(f"**Zeitraum:** {period.start_date} bis {period.end_date}")
+                            st.write(f"**Zeitraum:** {format_german_date(period.start_date)} bis {format_german_date(period.end_date)}")
                             st.write(f"**Dauer:** {period.duration_days} Tage")
                             
                             if period.description:
@@ -1346,7 +1378,7 @@ def render_team_analysis_tab():
             
             # Team header
             st.markdown(f"**Team:** {team_report.get('team_name', 'Unbekannt')}")
-            st.markdown(f"**Zeitraum:** {team_report.get('start_date', '')} - {team_report.get('end_date', '')}")
+            st.markdown(f"**Zeitraum:** {format_german_date(team_report.get('start_date', ''))} - {format_german_date(team_report.get('end_date', ''))}")
             st.markdown(f"**Mitarbeiter:** {len(team_report.get('employee_reports', []))}")
             
             # Employee reports table

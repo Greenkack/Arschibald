@@ -13,6 +13,28 @@ from datetime import date
 from pathlib import Path
 import sys
 
+def format_german_date(date_obj):
+    """Formatiert Datum als 'Wochentag, der TT.MM.JJJJ' z.B. 'Montag, der 30.12.2025'"""
+    if isinstance(date_obj, str):
+        from datetime import datetime
+        try:
+            date_obj = datetime.strptime(date_obj, '%Y-%m-%d').date()
+        except:
+            return date_obj
+    
+    weekday_names = {
+        0: 'Montag',
+        1: 'Dienstag',
+        2: 'Mittwoch',
+        3: 'Donnerstag',
+        4: 'Freitag',
+        5: 'Samstag',
+        6: 'Sonntag'
+    }
+    
+    weekday = weekday_names.get(date_obj.weekday(), 'Unbekannt')
+    return f"{weekday}, der {date_obj.strftime('%d.%m.%Y')}"
+
 # Add project root to path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
@@ -248,9 +270,9 @@ def render_employee_management_tab():
 
                     with col2:
                         st.markdown("**Beschäftigung**")
-                        st.write(f"Geburtsdatum: {emp.birth_date}")
+                        st.write(f"Geburtsdatum: {format_german_date(emp.birth_date)}")
                         st.write(f"Alter: {emp.age} Jahre")
-                        st.write(f"Start: {emp.start_date}")
+                        st.write(f"Start: {format_german_date(emp.start_date)}")
                         st.write(f"Gearbeitete Tage: {emp.days_employed}")
                         
                         st.markdown("**Zuordnungen**")
