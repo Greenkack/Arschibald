@@ -13,6 +13,10 @@ from sqlalchemy import func
 
 from controlling.models import Employee, PerformanceData, Position
 from controlling.analytics import AnalyticsEngine
+from controlling.position_criteria import (
+    calculate_quotas_for_position,
+    get_position_criteria
+)
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +45,8 @@ class TeamAnalytics:
         position_id: int,
         start_date: date,
         end_date: date,
-        include_inactive: bool = False
+        include_inactive: bool = False,
+        team_id: Optional[int] = None
     ) -> Dict[str, Any]:
         """
         Erstelle Team-Auswertung für alle Mitarbeiter einer Position.
@@ -51,6 +56,7 @@ class TeamAnalytics:
             start_date: Startdatum
             end_date: Enddatum
             include_inactive: Inaktive Mitarbeiter einbeziehen
+            team_id: Optional - Nur Mitarbeiter eines bestimmten Teams
             
         Returns:
             Team-Auswertungsdaten
@@ -63,10 +69,32 @@ class TeamAnalytics:
         if not position:
             raise ValueError(f"Position mit ID {position_id} nicht gefunden")
         
+        # Team-Informationen holen
+        team_name = None
+        team_leader = None
+        if team_id:
+            try:
+                from controlling.team_manager import TeamManager
+                team_manager = TeamManager(self.db)
+                team = team_manager.get_team(team_id)
+                if team:
+                    team_name = team.name
+                    if team.team_leader_id:
+                        from controlling.employee_manager import EmployeeManager
+                        emp_manager = EmployeeManager(self.db)
+                        leader = emp_manager.get_employee(team.team_leader_id)
+                        if leader:
+                            team_leader = leader.display_name
+            except Exception as e:
+                logger.warning(f"Could not load team info: {e}")
+        
         # Hole Mitarbeiter
         query = self.db.query(Employee).filter(
             Employee.position_id == position_id
         )
+        
+        if team_id:
+            query = query.filter(Employee.team_id == team_id)
         
         if not include_inactive:
             query = query.filter(Employee.is_active == True)
@@ -77,6 +105,8 @@ class TeamAnalytics:
             return {
                 "position_name": position.name,
                 "position_id": position_id,
+                "team_name": team_name,
+                "team_leader": team_leader,
                 "employee_count": 0,
                 "start_date": start_date.isoformat(),
                 "end_date": end_date.isoformat(),
@@ -99,8 +129,11 @@ class TeamAnalytics:
             if not perf_data:
                 continue
             
-            # Berechne Quotas für Mitarbeiter
-            quotas = self.analytics_engine.calculate_quotas(perf_data)
+            # Berechne Quotas für Mitarbeiter (positions-spezifisch)
+            quotas = self.analytics_engine.calculate_quotas(
+                perf_data,
+                employee.position.name if employee.position else None
+            )
             
             # Aggregiere Rohdaten
             aggregated = self.analytics_engine.aggregate_performance_data(perf_data)
@@ -123,8 +156,8 @@ class TeamAnalytics:
                     team_aggregates[key] = 0.0
                 team_aggregates[key] += value
         
-        # Berechne Team-Durchschnitts-Quotas
-        team_quotas = self._calculate_team_quotas(team_aggregates)
+        # Berechne Team-Durchschnitts-Quotas (positions-spezifisch)
+        team_quotas = self._calculate_team_quotas(team_aggregates, position.name)
         
         # Berechne Statistiken
         statistics = self._calculate_team_statistics(employee_data)
@@ -133,6 +166,8 @@ class TeamAnalytics:
             "report_type": "team",
             "position_name": position.name,
             "position_id": position_id,
+            "team_name": team_name,
+            "team_leader": team_leader,
             "employee_count": len(employee_data),
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),
@@ -190,6 +225,27 @@ class TeamAnalytics:
         # Sammle Daten für jeden Mitarbeiter
         employee_data = []
         
+        # Team-Informationen ermitteln (von erstem Mitarbeiter mit Team)
+        team_name = None
+        team_leader = None
+        for employee in employees:
+            if employee.team_id:
+                try:
+                    from controlling.team_manager import TeamManager
+                    team_manager = TeamManager(self.db)
+                    team = team_manager.get_team(employee.team_id)
+                    if team:
+                        team_name = team.name
+                        if team.team_leader_id:
+                            from controlling.employee_manager import EmployeeManager
+                            emp_manager = EmployeeManager(self.db)
+                            leader = emp_manager.get_employee(team.team_leader_id)
+                            if leader:
+                                team_leader = leader.display_name
+                        break  # Erste Team-Info verwenden
+                except Exception as e:
+                    logger.warning(f"Could not load team info: {e}")
+        
         for employee in employees:
             # Hole Performance-Daten
             perf_data = self.db.query(PerformanceData).filter(
@@ -198,8 +254,11 @@ class TeamAnalytics:
                 PerformanceData.date <= end_date
             ).all()
             
-            # Berechne Quotas
-            quotas = self.analytics_engine.calculate_quotas(perf_data)
+            # Berechne Quotas (positions-spezifisch)
+            quotas = self.analytics_engine.calculate_quotas(
+                perf_data,
+                employee.position.name if employee.position else None
+            )
             
             # Aggregiere Rohdaten
             aggregated = self.analytics_engine.aggregate_performance_data(perf_data)
@@ -224,6 +283,8 @@ class TeamAnalytics:
             "report_type": "comparison",
             "position_name": position_name,
             "same_position": same_position,
+            "team_name": team_name,
+            "team_leader": team_leader,
             "employee_count": len(employee_data),
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),
@@ -236,50 +297,23 @@ class TeamAnalytics:
             "comparison_statistics": comparison_stats
         }
     
-    def _calculate_team_quotas(self, team_aggregates: Dict[str, float]) -> Dict[str, float]:
+    def _calculate_team_quotas(
+        self,
+        team_aggregates: Dict[str, float],
+        position_name: str
+    ) -> Dict[str, float]:
         """
-        Berechne Team-Quotas aus aggregierten Daten.
+        Berechne Team-Quotas aus aggregierten Daten (positions-spezifisch).
         
         Args:
             team_aggregates: Aggregierte Team-Daten
+            position_name: Name der Position
             
         Returns:
             Dictionary mit Team-Quotas
         """
-        verkauf = team_aggregates.get("Verkauf", 0)
-        angefahrene_termine_gesamt = team_aggregates.get("Angefahrene Termine gesamt", 0)
-        kunden_terminiert = team_aggregates.get("Kunden terminiert", 0)
-        anrufe_gesamt = team_aggregates.get("Getätigte Anrufe gesamt", 0)
-        angefahrene_termine = team_aggregates.get("Angefahrene Termine", 0)
-        qc_bestanden = team_aggregates.get("QC bestanden", 0)
-        
-        quotas = {}
-        
-        # Abschlussquote
-        if angefahrene_termine_gesamt > 0:
-            quotas["Abschlussquote"] = (verkauf / angefahrene_termine_gesamt) * 100
-        else:
-            quotas["Abschlussquote"] = 0.0
-        
-        # Terminvereinbarungsquote
-        if anrufe_gesamt > 0:
-            quotas["Terminvereinbarungsquote"] = (kunden_terminiert / anrufe_gesamt) * 100
-        else:
-            quotas["Terminvereinbarungsquote"] = 0.0
-        
-        # Termine-Anfahrquote
-        if kunden_terminiert > 0:
-            quotas["Termine-Anfahrquote"] = (angefahrene_termine / kunden_terminiert) * 100
-        else:
-            quotas["Termine-Anfahrquote"] = 0.0
-        
-        # QC Quote
-        if verkauf > 0:
-            quotas["QC bestanden Quote"] = (qc_bestanden / verkauf) * 100
-        else:
-            quotas["QC bestanden Quote"] = 0.0
-        
-        return quotas
+        # Nutze positions-spezifische Berechnungen
+        return calculate_quotas_for_position(position_name, team_aggregates)
     
     def _calculate_team_statistics(self, employee_data: List[Dict]) -> Dict[str, Any]:
         """

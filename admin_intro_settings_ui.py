@@ -309,14 +309,130 @@ def render_intro_settings_tab():
                     'image_right_path', 'data/company_logos/right_logo.png')
 
         elif media_type == 'video':
-            video_url = st.text_input(
-                "Video-URL",
-                value=settings.get('video_url', ''),
-                help="YouTube-URL oder direkter Video-Link"
+            st.markdown("##### Video-Optionen")
+            
+            # Video-Größe Auswahl
+            st.markdown("**Video-Größe**")
+            video_size = st.selectbox(
+                "Größe/Darstellung des Videos",
+                options=["small", "medium", "large", "fullscreen"],
+                index=["small", "medium", "large", "fullscreen"].index(settings.get('video_size', 'fullscreen')),
+                format_func=lambda x: {
+                    'small': 'Klein (640x360) - Kompakt',
+                    'medium': 'Mittel (854x480) - Standard',
+                    'large': 'Groß (1280x720) - HD',
+                    'fullscreen': 'Vollbild - Hintergrund (empfohlen)'
+                }[x],
+                help="Fullscreen = Video füllt gesamten Bildschirm als Hintergrund"
             )
-
-            if video_url:
-                st.info(f"Video: {video_url}")
+            
+            # Video-Wiedergabe-Optionen
+            st.markdown("**Wiedergabe-Optionen**")
+            col_auto, col_loop = st.columns(2)
+            with col_auto:
+                video_autoplay = st.checkbox(
+                    "Automatisch starten",
+                    value=settings.get('video_autoplay', True),
+                    help="Video startet automatisch beim Laden (empfohlen für Hintergrund-Videos)"
+                )
+            with col_loop:
+                video_loop = st.checkbox(
+                    "Endlos wiederholen",
+                    value=settings.get('video_loop', True),
+                    help="Video wird automatisch wiederholt"
+                )
+            
+            st.markdown("---")
+            
+            video_source = st.radio(
+                "Video-Quelle",
+                options=["Upload (MP4, AVI, MOV)", "URL (YouTube oder direkt)"],
+                index=0 if settings.get('video_file_path') else 1,
+                help="Wählen Sie, ob Sie eine Video-Datei hochladen oder eine URL verwenden möchten"
+            )
+            
+            if video_source == "Upload (MP4, AVI, MOV)":
+                # Video-Upload
+                uploaded_video = st.file_uploader(
+                    "Video hochladen",
+                    type=["mp4", "avi", "mov", "mkv", "webm"],
+                    help="Unterstützte Formate: MP4, AVI, MOV, MKV, WebM"
+                )
+                
+                if uploaded_video is not None:
+                    # Speichere Video in static/intro_videos/ für Streamlit Static File Server
+                    video_dir = Path("static/intro_videos")
+                    video_dir.mkdir(exist_ok=True, parents=True)
+                    
+                    # Generiere eindeutigen Dateinamen
+                    file_extension = uploaded_video.name.split('.')[-1]
+                    video_filename = f"intro_video.{file_extension}"
+                    video_path = video_dir / video_filename
+                    
+                    # Speichere Video
+                    with open(video_path, "wb") as f:
+                        f.write(uploaded_video.getbuffer())
+                    
+                    st.success(f"Video hochgeladen: {video_filename}")
+                    st.info(f"Dateigröße: {uploaded_video.size / 1024 / 1024:.2f} MB")
+                    
+                    # Setze video_file_path als relativen Pfad für Browser
+                    video_file_path = f"static/intro_videos/{video_filename}"
+                    video_url = ""  # URL löschen wenn Upload verwendet wird
+                    
+                    # Vorschau
+                    try:
+                        st.video(str(video_path))
+                    except Exception as e:
+                        st.warning(f"Vorschau nicht verfügbar: {e}")
+                else:
+                    # Zeige aktuelles Video falls vorhanden
+                    current_video_path = settings.get('video_file_path', '')
+                    if current_video_path and Path(current_video_path).exists():
+                        st.info(f"Aktuelles Video: {Path(current_video_path).name}")
+                        try:
+                            st.video(current_video_path)
+                        except Exception as e:
+                            st.warning(f"Vorschau nicht verfügbar: {e}")
+                        
+                        # Option zum Löschen
+                        if st.button("Aktuelles Video entfernen", type="secondary"):
+                            video_file_path = ""
+                            st.rerun()
+                    else:
+                        st.info("Kein Video hochgeladen")
+                    
+                    video_file_path = current_video_path
+                    video_url = ""
+            
+            else:
+                # URL-Eingabe
+                video_url = st.text_input(
+                    "Video-URL",
+                    value=settings.get('video_url', ''),
+                    help="YouTube-URL oder direkter Video-Link (z.B. https://youtu.be/xxx oder https://example.com/video.mp4)"
+                )
+                
+                if video_url:
+                    st.info(f"Video-URL: {video_url}")
+                    
+                    # Vorschau für YouTube
+                    if 'youtube.com' in video_url or 'youtu.be' in video_url:
+                        try:
+                            if 'youtu.be' in video_url:
+                                video_id = video_url.split('/')[-1].split('?')[0]
+                            else:
+                                video_id = video_url.split('v=')[-1].split('&')[0]
+                            st.markdown(f'''
+                                <iframe width="100%" height="315"
+                                    src="https://www.youtube.com/embed/{video_id}"
+                                    frameborder="0" allowfullscreen>
+                                </iframe>
+                            ''', unsafe_allow_html=True)
+                        except Exception as e:
+                            st.warning(f"YouTube-Vorschau nicht verfügbar: {e}")
+                
+                video_file_path = ""  # File-Path löschen wenn URL verwendet wird
 
         st.markdown("---")
         st.markdown("#### Texte anpassen")
@@ -385,6 +501,18 @@ def render_intro_settings_tab():
                 'video_url': video_url if media_type == 'video' else settings.get(
                     'video_url',
                     ''),
+                'video_file_path': video_file_path if media_type == 'video' else settings.get(
+                    'video_file_path',
+                    ''),
+                'video_size': video_size if media_type == 'video' else settings.get(
+                    'video_size',
+                    'fullscreen'),
+                'video_autoplay': video_autoplay if media_type == 'video' else settings.get(
+                    'video_autoplay',
+                    True),
+                'video_loop': video_loop if media_type == 'video' else settings.get(
+                    'video_loop',
+                    True),
                 'require_login': require_login,
                 'allow_registration': allow_registration,
                 'require_company_info': require_company_info,

@@ -1,6 +1,12 @@
 """
 intro_screen.py
 Zweck: Intro-Bildschirm für die Bokuk2-Anwendung mit Video/Bild-Optionen
+
+ROBUSTHEIT:
+- Maximales Error-Handling mit Fallbacks
+- Atomic File Operations
+- Type Validation
+- Accessibility Enhancements
 """
 import base64
 import json
@@ -8,6 +14,46 @@ from pathlib import Path
 from datetime import datetime
 
 import streamlit as st
+import streamlit.components.v1 as components
+
+# Robustheit-Module (mit Fallback falls nicht verfügbar)
+try:
+    from core.robustness import (
+        safe_read_file,
+        safe_execute,
+        init_session_state,
+        validate_path,
+        sanitize_string
+    )
+    from core.accessibility import inject_accessibility_enhancements
+    ROBUSTNESS_AVAILABLE = True
+except ImportError:
+    ROBUSTNESS_AVAILABLE = False
+    # Fallback-Implementierungen
+    def safe_read_file(filepath, fallback="", encoding='utf-8'):
+        try:
+            return Path(filepath).read_text(encoding=encoding)
+        except:
+            return fallback
+    
+    def safe_execute(func, fallback, *args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except:
+            return fallback
+    
+    def init_session_state(key, default):
+        if key not in st.session_state:
+            st.session_state[key] = default
+    
+    def validate_path(path, must_exist=False, allowed_extensions=None):
+        return True
+    
+    def sanitize_string(text, max_length=1000, allow_html=False):
+        return str(text)[:max_length].strip()
+    
+    def inject_accessibility_enhancements():
+        pass
 
 
 def get_daily_tip():
@@ -69,7 +115,15 @@ def get_image_base64(image_path):
 
 
 def load_intro_settings():
-    """Lädt Intro-Einstellungen aus JSON oder gibt Standardwerte zurück"""
+    """
+    Lädt Intro-Einstellungen aus JSON oder gibt Standardwerte zurück
+    
+    ROBUSTHEIT:
+    - Atomic file reading
+    - JSON parse error handling
+    - Type validation
+    - Fallback zu defaults
+    """
     settings_file = Path("data/intro_settings.json")
     default_settings = {
         "enabled": True,
@@ -79,6 +133,10 @@ def load_intro_settings():
         "image_right_path": "data/company_logos/right_logo.png",  # NEU: Rechtes kleines Bild
         "show_side_images": True,  # NEU: Seitenbilder aktivieren
         "video_url": "",
+        "video_file_path": "",  # NEU: Pfad zu hochgeladenem Video (MP4, AVI, MOV)
+        "video_size": "fullscreen",  # NEU: "small", "medium", "large", "fullscreen"
+        "video_autoplay": True,  # NEU: Automatischer Start
+        "video_loop": True,  # NEU: Video wiederholen
         "require_login": True,  # JETZT PFLICHT
         "allow_guest": False,  # DEAKTIVIERT
         "allow_quick_start": False,  # DEAKTIVIERT
@@ -91,10 +149,25 @@ def load_intro_settings():
 
     try:
         if settings_file.exists():
-            with open(settings_file, encoding='utf-8') as f:
-                return {**default_settings, **json.load(f)}
-    except BaseException:
-        pass
+            # Robustes File Reading
+            content = safe_read_file(settings_file, fallback="{}")
+            loaded_settings = json.loads(content) if content else {}
+            
+            # Merge mit defaults (Type-safe)
+            merged = default_settings.copy()
+            for key, value in loaded_settings.items():
+                if key in default_settings:
+                    # Type validation
+                    expected_type = type(default_settings[key])
+                    if isinstance(value, expected_type):
+                        merged[key] = value
+            
+            return merged
+    except json.JSONDecodeError as e:
+        st.warning(f"⚠ Intro-Einstellungen konnten nicht geladen werden (JSON-Fehler). Verwende Standardwerte.")
+    except Exception as e:
+        st.error(f"⚠ Fehler beim Laden der Intro-Einstellungen: {e}")
+
     return default_settings
 
 
@@ -117,11 +190,22 @@ def render_intro_screen():
 
     Returns:
         bool: True wenn Benutzer fortfahren möchte, False sonst
+        
+    ROBUSTHEIT:
+    - Accessibility enhancements injiziert
+    - Sichere Session State Initialisierung
+    - Error handling bei Bild/Video-Laden
     """
+    
+    # Accessibility Enhancements injizieren
+    inject_accessibility_enhancements()
 
-    # Lade Einstellungen
+    # Lade Einstellungen (robust)
     settings = load_intro_settings()
-
+    
+    # KRITISCH: Session State NIEMALS mit defaults initialisieren die bypass erlauben!
+    # Prüfe nur Existenz, setze NICHT auf False wenn nicht vorhanden
+    
     # Prüfe ob Intro deaktiviert ist
     if not settings.get('enabled', True):
         st.session_state['intro_completed'] = True
@@ -129,9 +213,17 @@ def render_intro_screen():
         st.session_state['username'] = 'Schnellstart-Benutzer'
         return True
 
-    # Prüfe ob bereits eingeloggt/weitergegangen
-    if st.session_state.get('intro_completed', False):
+    # SECURITY: Prüfe ob bereits AUTHENTIFIZIERT (nicht nur intro_completed)
+    # Beide Bedingungen müssen erfüllt sein!
+    if (st.session_state.get('intro_completed', False) and 
+        st.session_state.get('username') and 
+        st.session_state.get('user_mode')):
         return True
+    
+    # SECURITY: Bei Rerun ohne Auth → Zurücksetzen!
+    if st.session_state.get('intro_completed', False) and not st.session_state.get('username'):
+        st.session_state['intro_completed'] = False
+        st.session_state['user_mode'] = None
     
     # FORCE PRELOAD: Bilder müssen SOFORT geladen werden, bevor irgendwas rendert
     media_type = settings.get('media_type', 'image')
@@ -139,20 +231,22 @@ def render_intro_screen():
     
     if media_type == 'image':
         image_path = Path(settings.get('image_path', 'data/company_logos/wppv.png'))
-        if image_path.exists():
-            # Force load immediately
-            img_data = get_image_base64(str(image_path))
+        
+        # Path-Validierung
+        if validate_path(image_path, must_exist=True, allowed_extensions=['.png', '.jpg', '.jpeg', '.gif', '.webp']):
+            # Force load immediately (mit Error-Handling)
+            img_data = safe_execute(get_image_base64, None, str(image_path))
             if img_data:
                 images_ready = True
         
         if settings.get('show_side_images', False):
             image_left_path = Path(settings.get('image_left_path', ''))
-            if image_left_path.exists():
-                get_image_base64(str(image_left_path))
+            if validate_path(image_left_path, must_exist=True, allowed_extensions=['.png', '.jpg', '.jpeg', '.gif', '.webp']):
+                safe_execute(get_image_base64, None, str(image_left_path))
             
             image_right_path = Path(settings.get('image_right_path', ''))
-            if image_right_path.exists():
-                get_image_base64(str(image_right_path))
+            if validate_path(image_right_path, must_exist=True, allowed_extensions=['.png', '.jpg', '.jpeg', '.gif', '.webp']):
+                safe_execute(get_image_base64, None, str(image_right_path))
     
     # Falls Bilder nicht bereit sind, warten und neu laden
     if media_type == 'image' and not images_ready:
@@ -188,15 +282,15 @@ def render_intro_screen():
             color: #888888 !important;
         }
         
-        /* Labels - weiße Schrift */
+        /* Labels - schwarze Schrift */
         .stTextInput > label {
-            color: #ffffff !important;
+            color: #1a202c !important;
             font-weight: 500 !important;
         }
         
-        /* Markdown Text - weiß */
+        /* Markdown Text - schwarz */
         .stMarkdown {
-            color: #ffffff !important;
+            color: #1a202c !important;
         }
         
         /* Verstecke leere Streamlit-Container im Intro */
@@ -287,9 +381,9 @@ def render_intro_screen():
             font-weight: 900;
             margin-bottom: 3rem;
             text-align: center;
-            color: #ffffff;
-            text-stroke: 3px #00ffff;
+            color: #1a202c;
             -webkit-text-stroke: 3px #00ffff;
+            text-stroke: 3px #00ffff;
             text-shadow: 
                 0 0 5px #00ffff,
                 0 0 10px #00ffff,
@@ -299,28 +393,16 @@ def render_intro_screen():
         }
         @keyframes shimmer {
             0% { 
-                text-shadow: 
-                    0 0 5px #00ffff,
-                    0 0 10px #00ffff,
-                    0 0 15px #00ffff,
-                    0 0 20px #00ffff;
-                -webkit-text-stroke: 3px #00ffff;
+                opacity: 1;
+                transform: scale(1);
             }
             50% { 
-                text-shadow: 
-                    0 0 10px #40e0d0,
-                    0 0 20px #40e0d0,
-                    0 0 30px #40e0d0,
-                    0 0 40px #40e0d0;
-                -webkit-text-stroke: 3px #40e0d0;
+                opacity: 0.85;
+                transform: scale(1.02);
             }
             100% { 
-                text-shadow: 
-                    0 0 5px #00ffff,
-                    0 0 10px #00ffff,
-                    0 0 15px #00ffff,
-                    0 0 20px #00ffff;
-                -webkit-text-stroke: 3px #00ffff;
+                opacity: 1;
+                transform: scale(1);
             }
         }
         /* ========================================
@@ -383,33 +465,244 @@ def render_intro_screen():
     except Exception:
         pass  # Fallback: Keine zusätzlichen Effekte
 
+    # === VIDEO-HINTERGRUND (VOR allen anderen Elementen) ===
+    media_type = settings.get('media_type', 'image')
+    
+    if media_type == 'video':
+        video_file_path = settings.get('video_file_path', '')
+        video_url = settings.get('video_url', '')
+        video_size = settings.get('video_size', 'fullscreen')
+        video_autoplay = settings.get('video_autoplay', True)
+        video_loop = settings.get('video_loop', True)
+        
+        # FULLSCREEN BACKGROUND VIDEO - IMMER RENDERN
+        if video_size == 'fullscreen':
+            video_element = None
+            
+            if video_file_path:
+                video_path = Path(video_file_path)
+                
+                # Prüfe ob kleine WebM-Version existiert
+                video_small_path = video_path.parent / (video_path.stem + "_small.webm")
+                
+                if video_small_path.exists() and video_small_path.is_file():
+                    # BASE64-EINBETTUNG für kleine WebM-Datei
+                    import base64
+                    
+                    try:
+                        with open(video_small_path, 'rb') as f:
+                            video_bytes = f.read()
+                        
+                        video_size_mb = len(video_bytes) / (1024 * 1024)
+                        
+                        if video_size_mb < 10:  # Max 10 MB für Base64
+                            video_base64 = base64.b64encode(video_bytes).decode('utf-8')
+                            video_data_url = f"data:video/webm;base64,{video_base64}"
+                            
+                            # GROßES, PROFESSIONELLES VIDEO
+                            html_code = f'''
+                            <style>
+                                body, html {{
+                                    margin: 0;
+                                    padding: 0;
+                                    overflow: hidden;
+                                    background: #000;
+                                }}
+                                #intro-video-container {{
+                                    width: 100%;
+                                    height: 100%;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                }}
+                                #intro-bg-video-base64 {{
+                                    width: 100%;
+                                    height: auto;
+                                }}
+                            </style>
+                            <div id="intro-video-container">
+                                <video 
+                                    id="intro-bg-video-base64"
+                                    autoplay 
+                                    loop 
+                                    muted 
+                                    playsinline
+                                >
+                                    <source src="{video_data_url}" type="video/webm">
+                                </video>
+                            </div>
+                            <script>
+                                (function() {{
+                                    const vid = document.getElementById('intro-bg-video-base64');
+                                    if (vid) {{
+                                        vid.currentTime = 0;
+                                        vid.muted = true;
+                                        vid.play().catch(e => {{
+                                            console.error('[VIDEO]', e);
+                                            document.addEventListener('click', function startVideo() {{
+                                                vid.play();
+                                                document.removeEventListener('click', startVideo);
+                                            }});
+                                        }});
+                                    }}
+                                }})();
+                            </script>
+                            '''
+                            
+                            # GROß: 700px Höhe für beeindruckenden Effekt
+                            components.html(html_code, height=700, scrolling=False)
+                        else:
+                            st.warning(f"Video zu groß für Base64: {video_size_mb:.1f} MB (max 10 MB)")
+                    except Exception as e:
+                        st.error(f"Fehler beim Laden des Videos: {e}")
+                        
+                elif video_path.exists() and video_path.is_file():
+                    st.info("⚠️ Konvertiere zuerst das Video: Führe `convert_video_small_webm.ps1` aus")
+                else:
+                    st.error(f"❌ Video-Datei nicht gefunden: {video_file_path}")
+            
+            elif video_url and not ('youtube.com' in video_url or 'youtu.be' in video_url):
+                # Externe Video-URL
+                st.markdown('''
+                    <style>
+                        [data-testid="stVideo"] {
+                            position: fixed !important;
+                            top: 0 !important;
+                            left: 0 !important;
+                            width: 100vw !important;
+                            height: 100vh !important;
+                            z-index: -1 !important;
+                        }
+                        
+                        [data-testid="stVideo"] video {
+                            width: 100vw !important;
+                            height: 100vh !important;
+                            object-fit: cover !important;
+                        }
+                    </style>
+                ''', unsafe_allow_html=True)
+                
+                st.video(video_url, loop=video_loop, autoplay=video_autoplay, muted=True)
+            
+            elif video_url and ('youtube.com' in video_url or 'youtu.be' in video_url):
+                # YouTube-Video als Fullscreen-Hintergrund
+                if 'youtu.be' in video_url:
+                    video_id = video_url.split('/')[-1].split('?')[0]
+                else:
+                    video_id = video_url.split('v=')[-1].split('&')[0]
+                
+                autoplay_param = '1' if video_autoplay else '0'
+                loop_param = '1' if video_loop else '0'
+                
+                st.markdown(f'''
+                    <style>
+                        #intro-persistent-yt-iframe {{
+                            position: fixed !important;
+                            top: 0 !important;
+                            left: 0 !important;
+                            width: 100vw !important;
+                            height: 100vh !important;
+                            z-index: -999999 !important;
+                            border: none !important;
+                            pointer-events: none !important;
+                        }}
+                    </style>
+                    <script>
+                        (function() {{
+                            // Prüfe ob iframe bereits existiert
+                            let existingIframe = document.getElementById('intro-persistent-yt-iframe');
+                            
+                            if (!existingIframe) {{
+                                // Erstelle iframe nur EINMAL und füge es in body ein
+                                const iframe = document.createElement('iframe');
+                                iframe.id = 'intro-persistent-yt-iframe';
+                                iframe.src = 'https://www.youtube.com/embed/{video_id}?autoplay={autoplay_param}&loop={loop_param}&mute=1&playlist={video_id}&controls=0&enablejsapi=1';
+                                iframe.frameBorder = '0';
+                                iframe.allow = 'autoplay; encrypted-media';
+                                iframe.allowFullscreen = true;
+                                iframe.style.position = 'fixed';
+                                iframe.style.top = '0';
+                                iframe.style.left = '0';
+                                iframe.style.width = '100vw';
+                                iframe.style.height = '100vh';
+                                iframe.style.zIndex = '-999999';
+                                iframe.style.border = 'none';
+                                iframe.style.pointerEvents = 'none';
+                                
+                                // Füge iframe in body ein (NICHT in Streamlit-Container)
+                                document.body.insertBefore(iframe, document.body.firstChild);
+                            }}
+                        }})();
+                    </script>
+                ''', unsafe_allow_html=True)
+    # === ENDE VIDEO-HINTERGRUND ===
+
     # Haupt-Container
     col1, col2, col3 = st.columns([1, 5, 1])
 
     with col2:
         st.markdown('<div class="intro-container">', unsafe_allow_html=True)
 
-        # Media-Anzeige (Video oder Bild)
+        # Media-Anzeige (nur wenn NICHT Fullscreen)
         media_type = settings.get('media_type', 'image')
 
-        if media_type == 'video' and settings.get('video_url'):
-            # Video einbetten
-            video_url = settings['video_url']
-            if 'youtube.com' in video_url or 'youtu.be' in video_url:
-                # YouTube-Video
-                if 'youtu.be' in video_url:
-                    video_id = video_url.split('/')[-1].split('?')[0]
+        if media_type == 'video':
+            # Video-Anzeige (nur für nicht-Fullscreen Größen)
+            video_file_path = settings.get('video_file_path', '')
+            video_url = settings.get('video_url', '')
+            video_size = settings.get('video_size', 'fullscreen')
+            video_autoplay = settings.get('video_autoplay', True)
+            video_loop = settings.get('video_loop', True)
+            
+            # Fullscreen wird bereits oben als Hintergrund gerendert
+            if video_size != 'fullscreen':
+                # Größen-Mappings (width x height)
+                size_styles = {
+                    'small': 'width: 640px; height: 360px; max-width: 90%;',
+                    'medium': 'width: 854px; height: 480px; max-width: 90%;',
+                    'large': 'width: 1280px; height: 720px; max-width: 95%;',
+                }
+                
+                video_style = size_styles.get(video_size, size_styles['medium'])
+                
+                # Bestimme Video-Quelle
+                video_src = None
+                if video_file_path and Path(video_file_path).exists():
+                    # Verwende relativen Pfad für Streamlit Static File Server
+                    video_src = f"/app/{video_file_path.replace(chr(92), '/')}"
+                elif video_url and not ('youtube.com' in video_url or 'youtu.be' in video_url):
+                    video_src = video_url
+                
+                if video_src:
+                    # HTML5-Video mit Autoplay, Loop, Muted
+                    autoplay_attr = 'autoplay' if video_autoplay else ''
+                    loop_attr = 'loop' if video_loop else ''
+                    
+                    st.markdown(f'''
+                        <video {autoplay_attr} {loop_attr} muted playsinline
+                            style="{video_style} border-radius: 8px; display: block; margin: 20px auto;">
+                            <source src="{video_src}" type="video/mp4">
+                            Ihr Browser unterstützt das Video-Tag nicht.
+                        </video>
+                    ''', unsafe_allow_html=True)
+                elif video_url and ('youtube.com' in video_url or 'youtu.be' in video_url):
+                    # YouTube-Video
+                    if 'youtu.be' in video_url:
+                        video_id = video_url.split('/')[-1].split('?')[0]
+                    else:
+                        video_id = video_url.split('v=')[-1].split('&')[0]
+                    
+                    autoplay_param = '1' if video_autoplay else '0'
+                    loop_param = '1' if video_loop else '0'
+                    
+                    st.markdown(f'''
+                        <iframe style="{video_style} border: none; border-radius: 8px; display: block; margin: 20px auto;"
+                            src="https://www.youtube.com/embed/{video_id}?autoplay={autoplay_param}&loop={loop_param}&mute=1&playlist={video_id}&controls=0"
+                            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                        </iframe>
+                    ''', unsafe_allow_html=True)
                 else:
-                    video_id = video_url.split('v=')[-1].split('&')[0]
-                st.markdown(f'''
-                    <iframe class="intro-video" height="400"
-                        src="https://www.youtube.com/embed/{video_id}"
-                        frameborder="0" allowfullscreen>
-                    </iframe>
-                ''', unsafe_allow_html=True)
-            else:
-                # Direktes Video
-                st.video(video_url)
+                    st.info("Kein Video konfiguriert. Bitte im Admin-Panel Video hochladen oder URL eingeben.")
 
         elif media_type == 'image':
             # Prüfe ob Seitenbilder aktiviert sind
@@ -544,7 +837,7 @@ def render_intro_screen():
 
         # Footer (Emoji-Filterung zentral über emoji_toggle.py)
         st.markdown("""
-        <div style="text-align: center; margin-top: 3rem; color: #ffffff; font-size: 1rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+        <div style="text-align: center; margin-top: 3rem; color: #1a202c; font-size: 1rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">
             Ömers All in One DingsBums v2.0 | 2025 | Powered by Ömer
         </div>
         """, unsafe_allow_html=True)

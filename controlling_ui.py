@@ -9,10 +9,42 @@ Requirements: 1.1, 1.2, 8.1, 8.2, 9.1, 12.4, 13.1, 16.1, 16.2
 
 import logging
 import streamlit as st
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 import sys
 from typing import List, Dict, Any, Optional
+import locale
+
+# Setze deutsche Locale für Datums-Formatierung
+try:
+    locale.setlocale(locale.LC_TIME, 'de_DE.UTF-8')
+except:
+    try:
+        locale.setlocale(locale.LC_TIME, 'German_Germany.1252')
+    except:
+        pass  # Fallback auf Standardlocale
+
+def format_german_date(date_obj):
+    """Formatiert Datum als 'Wochentag, der TT.MM.JJJJ' z.B. 'Montag, der 30.12.2025'"""
+    if isinstance(date_obj, str):
+        # Versuche String zu parsen
+        try:
+            date_obj = datetime.strptime(date_obj, '%Y-%m-%d').date()
+        except:
+            return date_obj
+    
+    weekday_names = {
+        0: 'Montag',
+        1: 'Dienstag',
+        2: 'Mittwoch',
+        3: 'Donnerstag',
+        4: 'Freitag',
+        5: 'Samstag',
+        6: 'Sonntag'
+    }
+    
+    weekday = weekday_names.get(date_obj.weekday(), 'Unbekannt')
+    return f"{weekday}, der {date_obj.strftime('%d.%m.%Y')}"
 
 # Add project root to path
 project_root = Path(__file__).parent
@@ -29,7 +61,8 @@ from controlling.models import ReportType  # noqa: E402
 from controlling.models import (  # noqa: E402
     PeriodType,
     PeriodStatus,
-    EvaluationPeriod
+    EvaluationPeriod,
+    PerformanceData  # ← Für direkte DB-Abfragen
 )
 from controlling.report_generator import ReportGenerator  # noqa: E402
 from controlling.chart_generator import ChartGenerator  # noqa: E402
@@ -70,13 +103,13 @@ def render_controlling_page():
 
     # Create tabs
     tabs = st.tabs([
-        "📝 Leistungsdaten erfassen",
-        "📊 Berichte erstellen",
-        "🏢 Team-Auswertung",
-        "🔍 Mitarbeiter-Vergleich",
-        "🏆 Rangliste",
-        "🎨 PDF-Farben",
-        "📁 Archiv"
+        "Leistungsdaten erfassen",
+        "Berichte erstellen",
+        "Team-Auswertung",
+        "Mitarbeiter-Vergleich",
+        "Rangliste",
+        "PDF-Farben",
+        "Archiv"
     ])
 
     with tabs[0]:
@@ -107,7 +140,7 @@ def render_performance_entry_tab():
 
     Requirements: 8.1, 8.2
     """
-    st.subheader("📝 Leistungsdaten erfassen")
+    st.subheader("Leistungsdaten erfassen")
 
     db = SessionLocal()
     emp_manager = EmployeeManager(db)
@@ -116,7 +149,7 @@ def render_performance_entry_tab():
 
     try:
         # ============ AUSWERTUNGSPERIODEN-VERWALTUNG ============
-        st.markdown("### 🗓️ Auswertungsperiode")
+        st.markdown("### Auswertungsperiode")
         
         col_header1, col_header2 = st.columns([2, 1])
         
@@ -131,19 +164,19 @@ def render_performance_entry_tab():
         # NEUE PERIODE ERSTELLEN
         if st.session_state.get('period_creation_mode', False):
             st.markdown("---")
-            st.markdown("#### ✨ Neue Auswertungsperiode erstellen")
+            st.markdown("#### Neue Auswertungsperiode erstellen")
             
             with st.form("create_period_form", clear_on_submit=False):
                 col_p1, col_p2 = st.columns(2)
                 
                 with col_p1:
                     period_type_options = {
-                        "📅 Täglich": PeriodType.DAILY,
-                        "📆 Wöchentlich": PeriodType.WEEKLY,
-                        "📊 Monatlich": PeriodType.MONTHLY,
-                        "📈 Quartalsweise": PeriodType.QUARTERLY,
-                        "📉 Jährlich": PeriodType.YEARLY,
-                        "🎯 Benutzerdefiniert": PeriodType.CUSTOM
+                        "Täglich": PeriodType.DAILY,
+                        "Wöchentlich": PeriodType.WEEKLY,
+                        "Monatlich": PeriodType.MONTHLY,
+                        "Quartalsweise": PeriodType.QUARTERLY,
+                        "Jährlich": PeriodType.YEARLY,
+                        "Benutzerdefiniert": PeriodType.CUSTOM
                     }
                     
                     selected_type_label = st.selectbox(
@@ -235,7 +268,7 @@ def render_performance_entry_tab():
                 # Mitarbeiter-Zuordnung (optional)
                 employees = emp_manager.list_employees()
                 employee_options = {0: "Alle Mitarbeiter (global)"}
-                employee_options.update({emp.id: emp.full_name for emp in employees})
+                employee_options.update({emp.id: emp.display_name for emp in employees})
                 
                 selected_emp_id = st.selectbox(
                     "Mitarbeiter",
@@ -247,10 +280,10 @@ def render_performance_entry_tab():
                 col_submit1, col_submit2 = st.columns([1, 1])
                 
                 with col_submit1:
-                    submitted = st.form_submit_button("✅ Periode erstellen", type="primary")
+                    submitted = st.form_submit_button("Periode erstellen", type="primary")
                 
                 with col_submit2:
-                    cancelled = st.form_submit_button("❌ Abbrechen")
+                    cancelled = st.form_submit_button("Abbrechen")
                 
                 if cancelled:
                     st.session_state.period_creation_mode = False
@@ -271,7 +304,7 @@ def render_performance_entry_tab():
                             elif selected_period_type == PeriodType.YEARLY:
                                 period_name = f"Jahr {year}"
                             else:
-                                period_name = f"Auswertung {start_date} - {end_date}"
+                                period_name = f"Auswertung {format_german_date(start_date)} - {format_german_date(end_date)}"
                         
                         # Create period
                         new_period = period_manager.create_period(
@@ -283,13 +316,13 @@ def render_performance_entry_tab():
                             employee_id=selected_emp_id if selected_emp_id > 0 else None
                         )
                         
-                        st.success(f"✅ Auswertungsperiode '{new_period.name}' erfolgreich erstellt!")
+                        st.success(f"Auswertungsperiode '{new_period.name}' erfolgreich erstellt!")
                         st.session_state.active_period_id = new_period.id
                         st.session_state.period_creation_mode = False
                         st.rerun()
                     
                     except Exception as e:
-                        st.error(f"❌ Fehler beim Erstellen der Periode: {e}")
+                        st.error(f"Fehler beim Erstellen der Periode: {e}")
                         logger.error(f"Error creating period: {e}")
             
             st.markdown("---")
@@ -301,7 +334,7 @@ def render_performance_entry_tab():
             col_select1, col_select2 = st.columns([3, 1])
             
             with col_select1:
-                period_options = {p.id: f"{p.name} ({p.start_date} - {p.end_date})" for p in active_periods}
+                period_options = {p.id: f"{p.name} ({format_german_date(p.start_date)} - {format_german_date(p.end_date)})" for p in active_periods}
                 
                 selected_period_id = st.selectbox(
                     "Aktive Auswertungsperiode wählen",
@@ -318,7 +351,7 @@ def render_performance_entry_tab():
                     st.session_state.active_period_id = selected_period_id
             
             with col_select2:
-                if selected_period_id and st.button("🗑️ Periode löschen", key="btn_delete_period"):
+                if selected_period_id and st.button("Periode löschen", key="btn_delete_period"):
                     if period_manager.delete_period(selected_period_id):
                         st.success("Periode gelöscht!")
                         st.session_state.active_period_id = None
@@ -329,19 +362,19 @@ def render_performance_entry_tab():
                 current_period = period_manager.get_period(selected_period_id)
                 if current_period:
                     st.info(
-                        f"📅 **{current_period.name}**  \n"
+                        f"**{current_period.name}**  \n"
                         f"Typ: {current_period.period_type.value} | "
-                        f"Zeitraum: {current_period.start_date} - {current_period.end_date} | "
+                        f"Zeitraum: {format_german_date(current_period.start_date)} - {format_german_date(current_period.end_date)} | "
                         f"Dauer: {current_period.duration_days} Tage  \n"
                         f"{current_period.description if current_period.description else ''}"
                     )
         else:
-            st.warning("⚠️ Keine aktiven Auswertungsperioden vorhanden. Erstelle eine neue Auswertung, um strukturiert Daten zu erfassen.")
+            st.warning("Keine aktiven Auswertungsperioden vorhanden. Erstelle eine neue Auswertung, um strukturiert Daten zu erfassen.")
         
         st.markdown("---")
         
         # ============ LEISTUNGSDATEN EINGABE ============
-        st.markdown("### 📊 Leistungsdaten erfassen")
+        st.markdown("### Leistungsdaten erfassen")
 
         # Employee selector
         employees = emp_manager.list_employees()
@@ -354,7 +387,7 @@ def render_performance_entry_tab():
             return
 
         # Employee selection
-        employee_options = {emp.id: emp.full_name for emp in employees}
+        employee_options = {emp.id: emp.display_name for emp in employees}
         selected_emp_id = st.selectbox(
             "Mitarbeiter auswählen",
             options=list(employee_options.keys()),
@@ -396,6 +429,28 @@ def render_performance_entry_tab():
             key="perf_entry_date"
         )
 
+        # ============ VORHANDENE DATEN LADEN ============
+        # Lade gespeicherte Performance-Daten für diesen Mitarbeiter und Datum
+        existing_data = perf_manager.get_performance_data(
+            employee_id=selected_emp_id,
+            start_date=entry_date,
+            end_date=entry_date
+        )
+        
+        # Erstelle Dictionary: criterion_id -> gespeicherter Wert
+        existing_values = {}
+        for perf_record in existing_data:
+            existing_values[perf_record.criterion_id] = perf_record.value
+        
+        # Info anzeigen wenn Daten vorhanden
+        if existing_values:
+            st.info(
+                f"**Gespeicherte Daten werden geladen** - "
+                f"{len(existing_values)} Kriterien mit Werten vom {format_german_date(entry_date)}"
+            )
+        else:
+            st.caption("Keine gespeicherten Daten für dieses Datum vorhanden")
+
         # Performance data entry form
         st.markdown("### Leistungsdaten eingeben")
 
@@ -419,14 +474,17 @@ def render_performance_entry_tab():
                     
                     is_integer_criterion = criterion.name in integer_only_criteria
                     
+                    # WICHTIG: Lade gespeicherten Wert falls vorhanden
+                    saved_value = existing_values.get(criterion.id, 0)
+                    
                     if is_integer_criterion:
                         # Nur ganze Zahlen erlauben
                         value = st.number_input(
                             criterion.name,
                             min_value=0,
-                            value=0,
+                            value=int(saved_value),  # ← Gespeicherter Wert!
                             step=1,
-                            key=f"perf_input_{criterion.id}",
+                            key=f"perf_input_{criterion.id}_{entry_date}_{selected_emp_id}",  # ← Unique Key!
                             help=criterion.description or "",
                             format="%d"
                         )
@@ -435,9 +493,9 @@ def render_performance_entry_tab():
                         value = st.number_input(
                             criterion.name,
                             min_value=0.0,
-                            value=0.0,
+                            value=float(saved_value),  # ← Gespeicherter Wert!
                             step=0.1,
-                            key=f"perf_input_{criterion.id}",
+                            key=f"perf_input_{criterion.id}_{entry_date}_{selected_emp_id}",  # ← Unique Key!
                             help=criterion.description or ""
                         )
                     
@@ -453,62 +511,145 @@ def render_performance_entry_tab():
                     # Get active period ID from session
                     period_id = st.session_state.get('active_period_id')
                     
+                    # ============ VALIDIERUNG: KUNDEN TERMINIERT ============
+                    # Prüfe ob "Kunden terminiert" = Summe aller Unterkriterien
+                    kunden_terminiert_criterion = next((c for c in criteria if c.name == "Kunden terminiert"), None)
+                    validation_error = False
+                    
+                    if kunden_terminiert_criterion:
+                        kunden_terminiert_value = performance_data.get(kunden_terminiert_criterion.id, 0)
+                        
+                        # Definiere die Unterkriterien die zusammen "Kunden terminiert" ergeben müssen
+                        unterkriterien = [
+                            "Storniert / kein Interesse",
+                            "Technisch nicht machbar",
+                            "Sonstiges",
+                            "Folgetermin gemacht",
+                            "Angebot erhalten",
+                            "Nicht erreicht, neu terminieren",
+                            "Verkauf",
+                            "Zu teuer gewesen"
+                        ]
+                        
+                        # Berechne Summe der Unterkriterien
+                        summe_unterkriterien = 0
+                        for criterion in criteria:
+                            if criterion.name in unterkriterien:
+                                summe_unterkriterien += performance_data.get(criterion.id, 0)
+                        
+                        # Validierung: Stimmt die Summe?
+                        if abs(kunden_terminiert_value - summe_unterkriterien) > 0.01:
+                            st.error(
+                                f"**Validierungsfehler: Kunden terminiert**\n\n"
+                                f"Der Wert bei 'Kunden terminiert' ({int(kunden_terminiert_value)}) stimmt nicht "
+                                f"mit der Summe der Unterkriterien überein ({int(summe_unterkriterien)}).\n\n"
+                                f"**Unterkriterien:**\n"
+                                f"- Storniert / kein Interesse\n"
+                                f"- Technisch nicht machbar\n"
+                                f"- Sonstiges\n"
+                                f"- Folgetermin gemacht\n"
+                                f"- Angebot erhalten\n"
+                                f"- Nicht erreicht, neu terminieren\n"
+                                f"- Verkauf\n"
+                                f"- Zu teuer gewesen\n\n"
+                                f"Bitte korrigieren Sie die Werte!"
+                            )
+                            validation_error = True
+                    
+                    if validation_error:
+                        st.stop()
+                    
                     # Validate and save performance data
                     saved_count = 0
+                    updated_count = 0
+                    deleted_count = 0
                     validation_warnings = []
                     
                     for criterion_id, value in performance_data.items():
-                        if value > 0:  # Only save non-zero values
-                            # Zusätzliche Validierung: Runde auf ganze Zahl für Zählkriterien
-                            criterion = next((c for c in criteria if c.id == criterion_id), None)
-                            if criterion:
-                                integer_only_criteria = [
-                                    "Verkauf", "Kunden terminiert", "Angefahrene Termine",
-                                    "Angefahrene Termine gesamt", "Getätigte Anrufe gesamt",
-                                    "QC bestanden", "Storniert / kein Interesse",
-                                    "Nicht erreicht / neu terminieren", "Technisch nicht machbar",
-                                    "Nicht angefahrene Termine", "Folgetermin gemacht",
-                                    "Zu teuer gewesen", "Angebot erhalten"
-                                ]
-                                
-                                if criterion.name in integer_only_criteria:
-                                    # Runde auf ganze Zahl und warne bei Abweichung
-                                    rounded_value = round(value)
-                                    if abs(value - rounded_value) > 0.01:
-                                        validation_warnings.append(
-                                            f"'{criterion.name}': {value:.2f} wurde auf {rounded_value} gerundet"
-                                        )
-                                    value = float(rounded_value)
+                        # Zusätzliche Validierung: Runde auf ganze Zahl für Zählkriterien
+                        criterion = next((c for c in criteria if c.id == criterion_id), None)
+                        if criterion:
+                            integer_only_criteria = [
+                                "Verkauf", "Kunden terminiert", "Angefahrene Termine",
+                                "Angefahrene Termine gesamt", "Getätigte Anrufe gesamt",
+                                "QC bestanden", "Storniert / kein Interesse",
+                                "Nicht erreicht / neu terminieren", "Technisch nicht machbar",
+                                "Nicht angefahrene Termine", "Folgetermin gemacht",
+                                "Zu teuer gewesen", "Angebot erhalten"
+                            ]
                             
-                            perf_manager.record_performance(
-                                employee_id=selected_emp_id,
-                                criterion_id=criterion_id,
-                                value=value,
-                                date=entry_date,
-                                period_id=period_id  # Verknüpfe mit Auswertungsperiode
-                            )
-                            saved_count += 1
+                            if criterion.name in integer_only_criteria:
+                                # Runde auf ganze Zahl und warne bei Abweichung
+                                rounded_value = round(value)
+                                if abs(value - rounded_value) > 0.01:
+                                    validation_warnings.append(
+                                        f"'{criterion.name}': {value:.2f} wurde auf {rounded_value} gerundet"
+                                    )
+                                value = float(rounded_value)
+                        
+                        # ============ UPDATE ODER INSERT LOGIK ============
+                        # Prüfe ob bereits Daten für diesen Mitarbeiter/Kriterium/Datum existieren
+                        existing_record = db.query(PerformanceData).filter(
+                            PerformanceData.employee_id == selected_emp_id,
+                            PerformanceData.criterion_id == criterion_id,
+                            PerformanceData.date == entry_date
+                        ).first()
+                        
+                        if value > 0:
+                            # Wert > 0: Speichern oder aktualisieren
+                            if existing_record:
+                                # UPDATE: Vorhandenen Eintrag aktualisieren
+                                if existing_record.value != value:
+                                    perf_manager.update_performance(
+                                        performance_id=existing_record.id,
+                                        value=value
+                                    )
+                                    updated_count += 1
+                            else:
+                                # INSERT: Neuen Eintrag erstellen
+                                perf_manager.record_performance(
+                                    employee_id=selected_emp_id,
+                                    criterion_id=criterion_id,
+                                    value=value,
+                                    date=entry_date,
+                                    period_id=period_id
+                                )
+                                saved_count += 1
+                        else:
+                            # Wert = 0: Existierenden Eintrag löschen falls vorhanden
+                            if existing_record:
+                                db.delete(existing_record)
+                                db.commit()
+                                deleted_count += 1
 
                     # Zeige Validierungswarnungen an
                     if validation_warnings:
                         st.warning(
-                            "⚠️ **Automatische Korrektur durchgeführt:**\n\n" +
+                            "**Automatische Korrektur durchgeführt:**\n\n" +
                             "\n".join(f"- {w}" for w in validation_warnings) +
                             "\n\n*Hinweis: Zählkriterien erlauben nur ganze Zahlen!*"
                         )
                     
-                    if saved_count > 0:
-                        period_info = ""
-                        if period_id:
-                            period = period_manager.get_period(period_id)
-                            period_info = f" (Periode: {period.name})" if period else ""
+                    # Erfolgs-Nachricht mit Details
+                    if saved_count > 0 or updated_count > 0 or deleted_count > 0:
+                        success_parts = []
+                        if saved_count > 0:
+                            success_parts.append(f"**{saved_count} neu gespeichert**")
+                        if updated_count > 0:
+                            success_parts.append(f"**{updated_count} aktualisiert**")
+                        if deleted_count > 0:
+                            success_parts.append(f"**{deleted_count} gelöscht** (Wert = 0)")
                         
                         st.success(
-                            f"✅ {saved_count} Leistungsdaten erfolgreich "
-                            f"gespeichert!{period_info}"
+                            f"**Leistungsdaten gespeichert!**\n\n" +
+                            " | ".join(success_parts) +
+                            f"\n\nDatum: {format_german_date(entry_date)}"
                         )
+                        
+                        # Seite neu laden um aktualisierte Daten anzuzeigen
+                        st.rerun()
                     else:
-                        st.info("Keine Daten zum Speichern (alle Werte = 0)")
+                        st.info("Keine Änderungen - alle Werte sind 0 oder unverändert")
 
                 except ValidationError as e:
                     st.error(f"Validierungsfehler: {e}")
@@ -597,13 +738,13 @@ def render_report_generation_tab():
             search_lower = name_search.lower()
             filtered_employees = [
                 emp for emp in filtered_employees
-                if search_lower in emp.full_name.lower()
+                if search_lower in emp.full_name.lower() or (emp.agent_name and search_lower in emp.agent_name.lower())
             ]
 
         # Employee selection
         st.markdown("---")
         employee_options = {
-            emp.id: f"{emp.full_name} - {emp.position.name if emp.position else 'Keine Position'}"
+            emp.id: f"{emp.display_name} - {emp.position.name if emp.position else 'Keine Position'}"
             for emp in filtered_employees
         }
 
@@ -651,12 +792,115 @@ def render_report_generation_tab():
             )
 
         with col2:
-            reference_date = st.date_input(
-                "Referenzdatum",
-                value=date.today(),
-                max_value=date.today(),
-                key="report_reference_date"
-            )
+            # Dynamische Zeitraumauswahl basierend auf Berichtstyp
+            if report_type == ReportType.DAILY:
+                # Tagesauswahl: Beliebiger Tag wählbar
+                selected_date = st.date_input(
+                    "Tag auswählen",
+                    value=date.today(),
+                    max_value=date.today(),
+                    key="report_daily_date",
+                    help="Wählen Sie den spezifischen Tag für die Auswertung"
+                )
+                reference_date = selected_date
+                
+            elif report_type == ReportType.WEEKLY:
+                # Wochenauswahl: Woche über Startdatum
+                week_start = st.date_input(
+                    "Woche auswählen (Montag)",
+                    value=date.today() - timedelta(days=date.today().weekday()),
+                    max_value=date.today(),
+                    key="report_weekly_start",
+                    help="Wählen Sie den Montag der gewünschten Woche"
+                )
+                # Berechne Wochenende (Sonntag)
+                week_end = week_start + timedelta(days=6)
+                reference_date = week_end
+                st.caption(f"Woche: {format_german_date(week_start)} - {format_german_date(week_end)}")
+                
+            elif report_type == ReportType.MONTHLY:
+                # Monatsauswahl: Monat und Jahr
+                col_month, col_year = st.columns(2)
+                with col_month:
+                    month = st.selectbox(
+                        "Monat",
+                        options=list(range(1, 13)),
+                        index=date.today().month - 1,
+                        format_func=lambda m: [
+                            "Januar", "Februar", "März", "April", "Mai", "Juni",
+                            "Juli", "August", "September", "Oktober", "November", "Dezember"
+                        ][m-1],
+                        key="report_month_select"
+                    )
+                with col_year:
+                    current_year = date.today().year
+                    year = st.number_input(
+                        "Jahr",
+                        min_value=2020,
+                        max_value=current_year,
+                        value=current_year,
+                        step=1,
+                        key="report_year_select"
+                    )
+                # Berechne letzten Tag des Monats
+                if month == 12:
+                    reference_date = date(year, 12, 31)
+                else:
+                    reference_date = date(year, month + 1, 1) - timedelta(days=1)
+                st.caption(f"Monat: {['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][month-1]} {year}")
+                
+            elif report_type == ReportType.QUARTERLY:
+                # Quartalsauswahl: Quartal und Jahr
+                col_quarter, col_year = st.columns(2)
+                with col_quarter:
+                    quarter = st.selectbox(
+                        "Quartal",
+                        options=[1, 2, 3, 4],
+                        index=(date.today().month - 1) // 3,
+                        format_func=lambda q: f"Q{q} ({['Jan-Mär', 'Apr-Jun', 'Jul-Sep', 'Okt-Dez'][q-1]})",
+                        key="report_quarter_select"
+                    )
+                with col_year:
+                    current_year = date.today().year
+                    year = st.number_input(
+                        "Jahr",
+                        min_value=2020,
+                        max_value=current_year,
+                        value=current_year,
+                        step=1,
+                        key="report_quarter_year_select"
+                    )
+                # Berechne letzten Tag des Quartals
+                end_month = quarter * 3
+                if end_month == 12:
+                    reference_date = date(year, 12, 31)
+                else:
+                    reference_date = date(year, end_month + 1, 1) - timedelta(days=1)
+                st.caption(f"Quartal: Q{quarter} {year}")
+                
+            elif report_type == ReportType.YEARLY:
+                # Jahresauswahl: Nur Jahr
+                current_year = date.today().year
+                year = st.number_input(
+                    "Jahr auswählen",
+                    min_value=2020,
+                    max_value=current_year,
+                    value=current_year,
+                    step=1,
+                    key="report_year_only_select"
+                )
+                reference_date = date(year, 12, 31)
+                st.caption(f"Jahr: {year}")
+                
+            else:  # SINCE_START
+                # Seit Arbeitsbeginn: Bis-Datum wählbar
+                reference_date = st.date_input(
+                    "Bis Datum",
+                    value=date.today(),
+                    max_value=date.today(),
+                    key="report_since_start_date",
+                    help="Auswertung vom Arbeitsbeginn bis zu diesem Datum"
+                )
 
         # Generate report button
         col1, col2, col3 = st.columns([2, 1, 1])
@@ -750,15 +994,27 @@ def render_report_generation_tab():
 def render_report_dashboard(
     report_data: Dict[str, Any],
     chart_gen: ChartGenerator,
-    report_gen: ReportGenerator
+    report_gen: ReportGenerator,
+    unique_id: str = None
 ):
     """
     Display report visualization dashboard.
 
     Requirements: 12.4
+    
+    Args:
+        report_data: Report data dictionary
+        chart_gen: Chart generator instance
+        report_gen: Report generator instance
+        unique_id: Unique identifier for widget keys (prevents duplicate key errors)
     """
     st.markdown("---")
     st.markdown("##  Berichtsvisualisierung")
+    
+    # Generate unique_id if not provided
+    if unique_id is None:
+        import uuid
+        unique_id = str(uuid.uuid4())[:8]
 
     # Report metadata
     is_comparison = "employee_reports" in report_data
@@ -767,15 +1023,15 @@ def render_report_dashboard(
         st.info(
             f"**Mitarbeiter:** {report_data.get('employee_name')} | "
             f"**Position:** {report_data.get('position')} | "
-            f"**Zeitraum:** {report_data.get('start_date')} bis "
-            f"{report_data.get('end_date')}"
+            f"**Zeitraum:** {format_german_date(report_data.get('start_date'))} bis "
+            f"{format_german_date(report_data.get('end_date'))}"
         )
     else:
         st.info(
             f"**Vergleichsbericht** | "
             f"**{report_data.get('employee_count')} Mitarbeiter** | "
-            f"**Zeitraum:** {report_data.get('start_date')} bis "
-            f"{report_data.get('end_date')}"
+            f"**Zeitraum:** {format_german_date(report_data.get('start_date'))} bis "
+            f"{format_german_date(report_data.get('end_date'))}"
         )
 
     # Action buttons
@@ -796,10 +1052,20 @@ def render_report_dashboard(
         if st.button(" JSON Export", use_container_width=True):
             try:
                 json_data = report_gen.export_report_json(report_data)
+                
+                # Generiere Dateinamen: Agentname_Zeitraum.json
+                agent_name = report_data.get('agent_name', report_data.get('employee_name', 'Bericht')).replace(' ', '_')
+                start = report_data.get('start_date', '')
+                end = report_data.get('end_date', '')
+                if isinstance(start, str) and isinstance(end, str):
+                    zeitraum = f"{start}_bis_{end}".replace('-', '')
+                else:
+                    zeitraum = datetime.now().strftime('%Y%m%d')
+                
                 st.download_button(
                     label="JSON herunterladen",
                     data=json_data,
-                    file_name=f"bericht_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                    file_name=f"{agent_name}_{zeitraum}.json",
                     mime="application/json"
                 )
             except Exception as e:
@@ -809,10 +1075,20 @@ def render_report_dashboard(
         if st.button(" Excel Export", use_container_width=True):
             try:
                 excel_data = report_gen.export_report_excel(report_data)
+                
+                # Generiere Dateinamen: Agentname_Zeitraum.xlsx
+                agent_name = report_data.get('agent_name', report_data.get('employee_name', 'Bericht')).replace(' ', '_')
+                start = report_data.get('start_date', '')
+                end = report_data.get('end_date', '')
+                if isinstance(start, str) and isinstance(end, str):
+                    zeitraum = f"{start}_bis_{end}".replace('-', '')
+                else:
+                    zeitraum = datetime.now().strftime('%Y%m%d')
+                
                 st.download_button(
                     label="Excel herunterladen",
                     data=excel_data,
-                    file_name=f"bericht_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                    file_name=f"{agent_name}_{zeitraum}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 )
             except Exception as e:
@@ -822,10 +1098,20 @@ def render_report_dashboard(
         if st.button(" PDF Export", use_container_width=True):
             try:
                 pdf_data = report_gen.export_report_pdf(report_data)
+                
+                # Generiere Dateinamen: Agentname_Zeitraum.pdf
+                agent_name = report_data.get('agent_name', report_data.get('employee_name', 'Bericht')).replace(' ', '_')
+                start = report_data.get('start_date', '')
+                end = report_data.get('end_date', '')
+                if isinstance(start, str) and isinstance(end, str):
+                    zeitraum = f"{start}_bis_{end}".replace('-', '')
+                else:
+                    zeitraum = datetime.now().strftime('%Y%m%d')
+                
                 st.download_button(
                     label="PDF herunterladen",
                     data=pdf_data,
-                    file_name=f"bericht_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                    file_name=f"{agent_name}_{zeitraum}.pdf",
                     mime="application/pdf"
                 )
             except Exception as e:
@@ -840,8 +1126,11 @@ def render_report_dashboard(
         figures = chart_gen.create_dashboard(report_data)
 
         # Display charts in grid
-        for fig in figures:
-            st.plotly_chart(fig, use_container_width=True)
+        # Erstelle unique key basierend auf unique_id
+        chart_key_prefix = f"chart_{unique_id}"
+        
+        for idx, fig in enumerate(figures):
+            st.plotly_chart(fig, use_container_width=True, key=f"{chart_key_prefix}_{idx}")
 
         # Display quotas table
         quotas = report_data.get("quotas", {})
@@ -891,7 +1180,7 @@ def render_archive_tab():
 
     Requirements: 13.1
     """
-    st.subheader("📁 Archiv")
+    st.subheader("Archiv")
 
     db = SessionLocal()
     report_gen = ReportGenerator(db)
@@ -900,11 +1189,11 @@ def render_archive_tab():
 
     try:
         # Tabs für verschiedene Archiv-Bereiche
-        archive_tabs = st.tabs(["📊 Berichte", "🗓️ Auswertungsperioden"])
+        archive_tabs = st.tabs(["Berichte", "Auswertungsperioden"])
         
         # ========== BERICHTE ARCHIV ==========
         with archive_tabs[0]:
-            st.markdown("### 📊 Gespeicherte Berichte")
+            st.markdown("### Gespeicherte Berichte")
             
             # Filters
             col1, col2, col3 = st.columns(3)
@@ -947,10 +1236,10 @@ def render_archive_tab():
                 # Display reports
                 for report_meta in reports:
                     with st.expander(
-                        f"{'🔍 Vergleich' if report_meta['is_comparison'] else '📊'} "
+                        f"{'Vergleich' if report_meta['is_comparison'] else 'Bericht'} "
                         f"{report_meta.get('employee_name', 'Mehrere Mitarbeiter')} - "
                         f"{report_meta['report_type']} "
-                        f"({report_meta['start_date']} bis {report_meta['end_date']})",
+                        f"({format_german_date(report_meta['start_date'])} bis {format_german_date(report_meta['end_date'])})",
                         expanded=False
                     ):
                         col1, col2 = st.columns([3, 1])
@@ -959,13 +1248,13 @@ def render_archive_tab():
                             st.write(f"**Erstellt:** {report_meta['created_at']}")
                             st.write(f"**Typ:** {report_meta['report_type']}")
                             st.write(
-                                f"**Zeitraum:** {report_meta['start_date']} bis "
-                                f"{report_meta['end_date']}"
+                                f"**Zeitraum:** {format_german_date(report_meta['start_date'])} bis "
+                                f"{format_german_date(report_meta['end_date'])}"
                             )
 
                         with col2:
                             if st.button(
-                                "📂 Laden",
+                                "Laden",
                                 key=f"load_report_{report_meta['report_id']}",
                                 type="primary"
                             ):
@@ -975,7 +1264,7 @@ def render_archive_tab():
                                         report_meta['report_id']
                                     )
                                     st.session_state.controlling_current_report = report_data
-                                    st.success("✅ Bericht geladen!")
+                                    st.success("Bericht geladen!")
                                     st.rerun()
                                 except Exception as e:
                                     st.error(f"Fehler beim Laden: {e}")
@@ -991,7 +1280,7 @@ def render_archive_tab():
         
         # ========== AUSWERTUNGSPERIODEN ARCHIV ==========
         with archive_tabs[1]:
-            st.markdown("### 🗓️ Gespeicherte Auswertungsperioden")
+            st.markdown("### Gespeicherte Auswertungsperioden")
             
             # Filter
             col_p1, col_p2, col_p3 = st.columns(3)
@@ -1002,8 +1291,8 @@ def render_archive_tab():
                     options=[None, PeriodStatus.ACTIVE, PeriodStatus.COMPLETED, PeriodStatus.ARCHIVED],
                     format_func=lambda x: {
                         None: "Alle",
-                        PeriodStatus.ACTIVE: "🟢 Aktiv",
-                        PeriodStatus.COMPLETED: "🔵 Abgeschlossen",
+                        PeriodStatus.ACTIVE: "Aktiv",
+                        PeriodStatus.COMPLETED: "Abgeschlossen",
                         PeriodStatus.ARCHIVED: "⚫ Archiviert"
                     }.get(x, str(x)),
                     key="period_status_filter"
@@ -1015,12 +1304,12 @@ def render_archive_tab():
                     options=[None] + list(PeriodType),
                     format_func=lambda x: {
                         None: "Alle",
-                        PeriodType.DAILY: "📅 Täglich",
-                        PeriodType.WEEKLY: "📆 Wöchentlich",
-                        PeriodType.MONTHLY: "📊 Monatlich",
-                        PeriodType.QUARTERLY: "📈 Quartalsweise",
-                        PeriodType.YEARLY: "📉 Jährlich",
-                        PeriodType.CUSTOM: "🎯 Benutzerdefiniert"
+                        PeriodType.DAILY: "Täglich",
+                        PeriodType.WEEKLY: "Wöchentlich",
+                        PeriodType.MONTHLY: "Monatlich",
+                        PeriodType.QUARTERLY: "Quartalsweise",
+                        PeriodType.YEARLY: "Jährlich",
+                        PeriodType.CUSTOM: "Benutzerdefiniert"
                     }.get(x, str(x)),
                     key="period_type_filter"
                 )
@@ -1039,24 +1328,24 @@ def render_archive_tab():
                 for period in periods:
                     # Status-Icon
                     status_icon = {
-                        PeriodStatus.ACTIVE: "🟢",
-                        PeriodStatus.COMPLETED: "🔵",
-                        PeriodStatus.ARCHIVED: "⚫"
-                    }.get(period.status, "⚪")
+                        PeriodStatus.ACTIVE: "[AKTIV]",
+                        PeriodStatus.COMPLETED: "[ABGESCHLOSSEN]",
+                        PeriodStatus.ARCHIVED: "[ARCHIVIERT]"
+                    }.get(period.status, "")
                     
                     # Typ-Icon
                     type_icon = {
-                        PeriodType.DAILY: "📅",
-                        PeriodType.WEEKLY: "📆",
-                        PeriodType.MONTHLY: "📊",
-                        PeriodType.QUARTERLY: "📈",
-                        PeriodType.YEARLY: "📉",
-                        PeriodType.CUSTOM: "🎯"
-                    }.get(period.period_type, "📋")
+                        PeriodType.DAILY: "Täglich",
+                        PeriodType.WEEKLY: "Wöchentlich",
+                        PeriodType.MONTHLY: "Monatlich",
+                        PeriodType.QUARTERLY: "Quartalsweise",
+                        PeriodType.YEARLY: "Jährlich",
+                        PeriodType.CUSTOM: "Benutzerdefiniert"
+                    }.get(period.period_type, "Sonstige")
                     
                     with st.expander(
                         f"{status_icon} {type_icon} {period.name} "
-                        f"({period.start_date} - {period.end_date})",
+                        f"({format_german_date(period.start_date)} - {format_german_date(period.end_date)})",
                         expanded=False
                     ):
                         col_det1, col_det2 = st.columns([2, 1])
@@ -1064,7 +1353,7 @@ def render_archive_tab():
                         with col_det1:
                             st.write(f"**Typ:** {period.period_type.value}")
                             st.write(f"**Status:** {period.status.value}")
-                            st.write(f"**Zeitraum:** {period.start_date} bis {period.end_date}")
+                            st.write(f"**Zeitraum:** {format_german_date(period.start_date)} bis {format_german_date(period.end_date)}")
                             st.write(f"**Dauer:** {period.duration_days} Tage")
                             
                             if period.description:
@@ -1083,7 +1372,7 @@ def render_archive_tab():
                             # Actions
                             if period.status == PeriodStatus.ACTIVE:
                                 if st.button(
-                                    "✅ Abschließen",
+                                    "Abschließen",
                                     key=f"complete_period_{period.id}"
                                 ):
                                     if period_manager.complete_period(period.id):
@@ -1091,7 +1380,7 @@ def render_archive_tab():
                                         st.rerun()
                                 
                                 if st.button(
-                                    "📂 Aktivieren",
+                                    "Aktivieren",
                                     key=f"activate_period_{period.id}"
                                 ):
                                     st.session_state.active_period_id = period.id
@@ -1100,7 +1389,7 @@ def render_archive_tab():
                             
                             elif period.status == PeriodStatus.COMPLETED:
                                 if st.button(
-                                    "📦 Archivieren",
+                                    "Archivieren",
                                     key=f"archive_period_{period.id}"
                                 ):
                                     if period_manager.archive_period(period.id):
@@ -1108,12 +1397,12 @@ def render_archive_tab():
                                         st.rerun()
                             
                             if st.button(
-                                "🗑️ Löschen",
+                                "Löschen",
                                 key=f"delete_period_archive_{period.id}"
                             ):
                                 if data_count > 0:
                                     st.warning(
-                                        f"⚠️ Diese Periode enthält {data_count} Leistungsdaten! "
+                                        f"Diese Periode enthält {data_count} Leistungsdaten! "
                                         "Diese werden ebenfalls gelöscht."
                                     )
                                 
@@ -1130,8 +1419,242 @@ def render_archive_tab():
 
 
 def render_team_analysis_tab():
+    """
+    Team-based performance analysis and reporting.
+    
+    Requirements: Team organization and collective reporting
+    """
+    st.subheader("Team-Auswertung")
+
+    db = SessionLocal()
+    
+    try:
+        from controlling.team_manager import TeamManager
+        from controlling.managers import EmployeeManager
+        
+        team_manager = TeamManager(db)
+        emp_manager = EmployeeManager(db)
+        report_gen = ReportGenerator(db)
+        chart_gen = ChartGenerator()
+    except ImportError as e:
+        st.error(f"Team-Funktionen konnten nicht geladen werden: {e}")
+        db.close()
+        return
+    
+    # Team selection
+    st.markdown("### Team auswählen")
+    
+    try:
+        teams = team_manager.list_teams(active_only=True, include_employee_count=True)
+        
+        if not teams:
+            st.info(
+                "Keine Teams vorhanden. Bitte erstellen Sie zuerst Teams in den "
+                "Controlling-Einstellungen."
+            )
+            db.close()
+            return
+        
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            team_options = {
+                team.id: f"{team.name} ({team.employee_count if hasattr(team, 'employee_count') else 0} Mitarbeiter)"
+                for team in teams
+            }
+            
+            selected_team_id = st.selectbox(
+                "Team",
+                options=list(team_options.keys()),
+                format_func=lambda x: team_options[x],
+                key="team_selector"
+            )
+        
+        with col2:
+            # Team statistics button
+            if st.button("Team-Statistiken anzeigen", use_container_width=True):
+                st.session_state['show_team_stats'] = True
+        
+        # Show team statistics
+        if st.session_state.get('show_team_stats', False):
+            st.markdown("---")
+            st.markdown("### Team-Statistiken")
+            
+            stats = team_manager.get_team_statistics(selected_team_id)
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric("Aktive Mitglieder", stats['active_members'])
+            
+            with col2:
+                st.metric("Positionen", len(stats['positions']))
+            
+            with col3:
+                if stats['has_team_leader']:
+                    st.metric("Teamleiter", stats['team_leader'])
+                else:
+                    st.info("Kein Teamleiter")
+            
+            # Position distribution
+            if stats['positions']:
+                st.markdown("**Positionen im Team:**")
+                for position_name, count in stats['positions'].items():
+                    st.markdown(f"  - {position_name}: {count}")
+        
+        # Get team members
+        team_members = team_manager.get_team_members(selected_team_id, active_only=True)
+        
+        if not team_members:
+            st.warning("Dieses Team hat keine aktiven Mitglieder.")
+            db.close()
+            return
+        
+        st.markdown("---")
+        st.markdown("### Auswertungszeitraum")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            report_type_options = {
+                "Täglich": ReportType.DAILY,
+                "Wöchentlich": ReportType.WEEKLY,
+                "Monatlich": ReportType.MONTHLY,
+                "Quartalsweise": ReportType.QUARTERLY,
+                "Jährlich": ReportType.YEARLY,
+                "Seit Arbeitsbeginn": ReportType.SINCE_START
+            }
+            
+            report_type = st.selectbox(
+                "Zeitraum",
+                options=list(report_type_options.values()),
+                format_func=lambda x: {v: k for k, v in report_type_options.items()}[x],
+                key="team_report_type"
+            )
+        
+        with col2:
+            reference_date = st.date_input(
+                "Referenzdatum",
+                value=date.today(),
+                max_value=date.today(),
+                key="team_reference_date"
+            )
+        
+        # Generate team report
+        if st.button("Team-Bericht erstellen", type="primary", use_container_width=True):
+            with st.spinner("Team-Bericht wird erstellt..."):
+                try:
+                    # Generate reports for all team members
+                    employee_ids = [member.id for member in team_members]
+                    
+                    team_report = report_gen.generate_comparison_report(
+                        employee_ids=employee_ids,
+                        report_type=report_type,
+                        end_date=reference_date
+                    )
+                    
+                    # Add team information
+                    team = team_manager.get_team(selected_team_id)
+                    team_report['team_name'] = team.name
+                    team_report['team_id'] = team.id
+                    
+                    st.session_state['current_team_report'] = team_report
+                    st.success(f"Team-Bericht für '{team.name}' erstellt!")
+                
+                except Exception as e:
+                    st.error(f"Fehler beim Erstellen des Team-Berichts: {e}")
+                    logger.error(f"Team report generation error: {e}")
+        
+        # Display team report
+        if 'current_team_report' in st.session_state:
+            st.markdown("---")
+            st.markdown("### Team-Auswertung")
+            
+            team_report = st.session_state['current_team_report']
+            
+            # Team header
+            st.markdown(f"**Team:** {team_report.get('team_name', 'Unbekannt')}")
+            st.markdown(f"**Zeitraum:** {format_german_date(team_report.get('start_date', ''))} - {format_german_date(team_report.get('end_date', ''))}")
+            st.markdown(f"**Mitarbeiter:** {len(team_report.get('employee_reports', []))}")
+            
+            # Employee reports table
+            st.markdown("#### Mitarbeiter-Übersicht")
+            
+            employee_reports = team_report.get("employee_reports", [])
+            
+            if employee_reports:
+                # Create comparison table
+                comparison_data = []
+                
+                for emp_report in employee_reports:
+                    row = {
+                        "**Mitarbeiter**": emp_report.get("employee_name"),
+                        "**Position**": emp_report.get("position")
+                    }
+                    
+                    # Add key quotas
+                    quotas = emp_report.get("quotas", {})
+                    for quota_name, quota_value in quotas.items():
+                        row[f"**{quota_name}**"] = f"{quota_value:.2f}%"
+                    
+                    comparison_data.append(row)
+                
+                st.table(comparison_data)
+                
+                # Charts
+                st.markdown("#### Visualisierungen")
+                
+                try:
+                    figures = chart_gen.create_comparison_charts(team_report)
+                    
+                    if figures:
+                        for idx, fig in enumerate(figures):
+                            st.plotly_chart(fig, use_container_width=True, key=f"team_comp_{unique_id}_{idx}")
+                    else:
+                        st.info("Keine Visualisierungen verfügbar.")
+                
+                except Exception as e:
+                    st.warning(f"Diagramme konnten nicht erstellt werden: {e}")
+                
+                # Export options
+                st.markdown("---")
+                st.markdown("#### Export")
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    if st.button("Als PDF exportieren", use_container_width=True):
+                        try:
+                            pdf_bytes = report_gen.export_comparison_report_to_pdf(team_report)
+                            
+                            # Dateiname: Teamname_Zeitraum.pdf
+                            team_name = team_report.get('team_name', 'team').replace(' ', '_')
+                            start = team_report.get('start_date', '')
+                            end = team_report.get('end_date', '')
+                            if isinstance(start, str) and isinstance(end, str):
+                                zeitraum = f"{start}_bis_{end}".replace('-', '')
+                            else:
+                                zeitraum = date.today().strftime('%Y%m%d')
+                            
+                            st.download_button(
+                                label="PDF herunterladen",
+                                data=pdf_bytes,
+                                file_name=f"{team_name}_{zeitraum}.pdf",
+                                mime="application/pdf",
+                                use_container_width=True
+                            )
+                        
+                        except Exception as e:
+                            st.error(f"PDF-Export fehlgeschlagen: {e}")
+    
+    except Exception as e:
+        st.error(f"Fehler beim Laden der Team-Auswertung: {e}")
+        logger.error(f"Team analysis error: {e}")
+    
+    finally:
+        db.close()
     """Rendere Team-Auswertungs-Tab."""
-    st.subheader("📊 Team-Auswertung")
+    st.subheader("Team-Auswertung")
     st.caption("Alle Mitarbeiter einer Position gemeinsam auswerten")
     
     db = SessionLocal()
@@ -1185,7 +1708,7 @@ def render_team_analysis_tab():
             )
         
         # Auswertung erstellen
-        if st.button("🎯 Team-Auswertung erstellen", type="primary", key="create_team_report"):
+        if st.button("Team-Auswertung erstellen", type="primary", key="create_team_report"):
             with st.spinner("Erstelle Team-Auswertung..."):
                 try:
                     team_analytics = TeamAnalytics(db)
@@ -1198,10 +1721,10 @@ def render_team_analysis_tab():
                     
                     # Speichere in Session State
                     st.session_state['team_report_data'] = team_data
-                    st.success(f"✅ Team-Auswertung erstellt für {team_data['employee_count']} Mitarbeiter!")
+                    st.success(f"Team-Auswertung erstellt für {team_data['employee_count']} Mitarbeiter!")
                     
                 except Exception as e:
-                    st.error(f"❌ Fehler beim Erstellen der Team-Auswertung: {e}")
+                    st.error(f"Fehler beim Erstellen der Team-Auswertung: {e}")
                     logger.error(f"Error creating team report: {e}")
                     return
         
@@ -1210,7 +1733,7 @@ def render_team_analysis_tab():
             team_data = st.session_state['team_report_data']
             
             st.markdown("---")
-            st.markdown("### 📈 Ergebnisse")
+            st.markdown("### Ergebnisse")
             
             # Team-Quotas
             st.write("**Team-Leistungsquoten (Gesamt)**")
@@ -1225,14 +1748,14 @@ def render_team_analysis_tab():
             
             # Statistiken
             st.markdown("---")
-            st.write("**📊 Statistiken & Leistungsvergleich**")
+            st.write("**Statistiken & Leistungsvergleich**")
             
             statistics = team_data.get('statistics', {})
             quota_stats = statistics.get('quota_statistics', {})
             
             if quota_stats:
                 for quota_name, stats in quota_stats.items():
-                    with st.expander(f"📈 {quota_name}"):
+                    with st.expander(f"{quota_name}"):
                         col_a, col_b, col_c = st.columns(3)
                         
                         with col_a:
@@ -1254,25 +1777,29 @@ def render_team_analysis_tab():
             col_export1, col_export2 = st.columns([3, 1])
             
             with col_export1:
-                st.write("**📄 Export**")
+                st.write("**Export**")
             
             with col_export2:
-                if st.button("📥 Als PDF exportieren", key="export_team_pdf"):
+                if st.button("Als PDF exportieren", key="export_team_pdf"):
                     try:
                         report_gen = ReportGenerator(db)
                         pdf_bytes = report_gen.export_team_report_to_pdf(team_data)
                         
+                        # Dateiname: Position_Zeitraum.pdf
+                        position_name = selected_position_name.replace(' ', '_')
+                        zeitraum = f"{start_date.strftime('%Y%m%d')}_bis_{end_date.strftime('%Y%m%d')}"
+                        
                         st.download_button(
-                            label="💾 PDF herunterladen",
+                            label="PDF herunterladen",
                             data=pdf_bytes,
-                            file_name=f"team_auswertung_{selected_position_name}_{date.today()}.pdf",
+                            file_name=f"{position_name}_{zeitraum}.pdf",
                             mime="application/pdf",
                             key="download_team_pdf"
                         )
-                        st.success("✅ PDF erfolgreich erstellt!")
+                        st.success("PDF erfolgreich erstellt!")
                     
                     except Exception as e:
-                        st.error(f"❌ Fehler beim PDF-Export: {e}")
+                        st.error(f"Fehler beim PDF-Export: {e}")
                         logger.error(f"Error exporting team PDF: {e}")
     
     finally:
@@ -1281,7 +1808,7 @@ def render_team_analysis_tab():
 
 def render_comparison_tab():
     """Rendere Mitarbeiter-Vergleichs-Tab."""
-    st.subheader("🔍 Mitarbeiter-Vergleich")
+    st.subheader("Mitarbeiter-Vergleich")
     st.caption("Mitarbeiter derselben Position direkt vergleichen")
     
     db = SessionLocal()
@@ -1335,7 +1862,7 @@ def render_comparison_tab():
         # Mitarbeiter auswählen
         st.markdown("**Mitarbeiter wählen (mindestens 2)**")
         
-        employee_options = {f"{emp.full_name} ({emp.position.name})": emp.id for emp in employees}
+        employee_options = {f"{emp.display_name} ({emp.position.name})": emp.id for emp in employees}
         
         selected_employees = st.multiselect(
             "Mitarbeiter",
@@ -1344,31 +1871,135 @@ def render_comparison_tab():
         )
         
         if len(selected_employees) < 2:
-            st.info("👆 Bitte mindestens 2 Mitarbeiter auswählen")
+            st.info("Bitte mindestens 2 Mitarbeiter auswählen")
         
-        # Zeitraum
+        # Zeitraum mit flexibler Auswahl
         st.markdown("**Zeitraum**")
-        col3, col4 = st.columns(2)
+        report_type = st.selectbox(
+            "Berichtstyp",
+            options=["DAILY", "WEEKLY", "MONTHLY", "QUARTERLY", "YEARLY", "CUSTOM"],
+            format_func=lambda x: {
+                "DAILY": "Täglich",
+                "WEEKLY": "Wöchentlich",
+                "MONTHLY": "Monatlich",
+                "QUARTERLY": "Quartalsweise",
+                "YEARLY": "Jährlich",
+                "CUSTOM": "Benutzerdefiniert"
+            }.get(x, x),
+            key="comp_report_type"
+        )
         
-        from datetime import timedelta
+        # Dynamische Datumsauswahl basierend auf Berichtstyp
+        start_date = None
+        end_date = None
         
-        with col3:
-            start_date = st.date_input(
-                "Von",
-                value=date.today() - timedelta(days=30),
-                key="comp_start_date"
-            )
-        
-        with col4:
-            end_date = st.date_input(
-                "Bis",
+        if report_type == "DAILY":
+            selected_day = st.date_input(
+                "Tag auswählen",
                 value=date.today(),
-                key="comp_end_date"
+                max_value=date.today(),
+                key="comp_daily_date"
             )
+            start_date = selected_day
+            end_date = selected_day
+            st.caption(f"Zeitraum: {format_german_date(start_date)}")
+        
+        elif report_type == "WEEKLY":
+            week_start = st.date_input(
+                "Woche auswählen (Montag)",
+                value=date.today() - timedelta(days=date.today().weekday()),
+                max_value=date.today(),
+                key="comp_week_start"
+            )
+            start_date = week_start
+            end_date = week_start + timedelta(days=6)
+            st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+        
+        elif report_type == "MONTHLY":
+            col_m1, col_m2 = st.columns(2)
+            with col_m1:
+                selected_month = st.selectbox(
+                    "Monat",
+                    options=list(range(1, 13)),
+                    format_func=lambda m: [
+                        "Januar", "Februar", "März", "April", "Mai", "Juni",
+                        "Juli", "August", "September", "Oktober", "November", "Dezember"
+                    ][m - 1],
+                    index=date.today().month - 1,
+                    key="comp_month"
+                )
+            with col_m2:
+                selected_year = st.number_input(
+                    "Jahr",
+                    min_value=2020,
+                    max_value=date.today().year,
+                    value=date.today().year,
+                    key="comp_year"
+                )
+            start_date = date(selected_year, selected_month, 1)
+            import calendar
+            last_day = calendar.monthrange(selected_year, selected_month)[1]
+            end_date = date(selected_year, selected_month, last_day)
+            st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+        
+        elif report_type == "QUARTERLY":
+            col_q1, col_q2 = st.columns(2)
+            with col_q1:
+                selected_quarter = st.selectbox(
+                    "Quartal",
+                    options=[1, 2, 3, 4],
+                    format_func=lambda q: f"Q{q}",
+                    key="comp_quarter"
+                )
+            with col_q2:
+                selected_year = st.number_input(
+                    "Jahr",
+                    min_value=2020,
+                    max_value=date.today().year,
+                    value=date.today().year,
+                    key="comp_quarter_year"
+                )
+            quarter_months = {1: (1, 3), 2: (4, 6), 3: (7, 9), 4: (10, 12)}
+            start_month, end_month = quarter_months[selected_quarter]
+            start_date = date(selected_year, start_month, 1)
+            import calendar
+            last_day = calendar.monthrange(selected_year, end_month)[1]
+            end_date = date(selected_year, end_month, last_day)
+            st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+        
+        elif report_type == "YEARLY":
+            selected_year = st.number_input(
+                "Jahr auswählen",
+                min_value=2020,
+                max_value=date.today().year,
+                value=date.today().year,
+                key="comp_yearly"
+            )
+            start_date = date(selected_year, 1, 1)
+            end_date = date(selected_year, 12, 31)
+            st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+        
+        elif report_type == "CUSTOM":
+            col_c1, col_c2 = st.columns(2)
+            with col_c1:
+                start_date = st.date_input(
+                    "Von",
+                    value=date.today() - timedelta(days=30),
+                    max_value=date.today(),
+                    key="comp_custom_start"
+                )
+            with col_c2:
+                end_date = st.date_input(
+                    "Bis",
+                    value=date.today(),
+                    max_value=date.today(),
+                    key="comp_custom_end"
+                )
+            st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
         
         # Vergleich erstellen
         if st.button(
-            "🎯 Vergleich erstellen",
+            "Vergleich erstellen",
             type="primary",
             disabled=len(selected_employees) < 2,
             key="create_comparison"
@@ -1386,10 +2017,10 @@ def render_comparison_tab():
                     
                     # Speichere in Session State
                     st.session_state['comparison_data'] = comparison_data
-                    st.success(f"✅ Vergleich erstellt für {len(selected_employees)} Mitarbeiter!")
+                    st.success(f"Vergleich erstellt für {len(selected_employees)} Mitarbeiter!")
                     
                 except Exception as e:
-                    st.error(f"❌ Fehler beim Erstellen des Vergleichs: {e}")
+                    st.error(f"Fehler beim Erstellen des Vergleichs: {e}")
                     logger.error(f"Error creating comparison: {e}")
                     return
         
@@ -1398,26 +2029,26 @@ def render_comparison_tab():
             comp_data = st.session_state['comparison_data']
             
             st.markdown("---")
-            st.markdown("### 📈 Vergleichsergebnisse")
+            st.markdown("### Vergleichsergebnisse")
             
             # Rankings
             comparison_stats = comp_data.get('comparison_statistics', {})
             rankings = comparison_stats.get('rankings', {})
             
             if rankings:
-                st.write("**🏆 Leistungsranking**")
+                st.write("**Leistungsranking**")
                 
                 for quota_name, ranking_list in rankings.items():
-                    with st.expander(f"📊 {quota_name}"):
+                    with st.expander(f"{quota_name}"):
                         # Erstelle Ranking-Tabelle
                         for item in ranking_list:
                             rank_emoji = ""
                             if item['rank'] == 1:
-                                rank_emoji = "🥇"
+                                rank_emoji = "[1]"
                             elif item['rank'] == 2:
-                                rank_emoji = "🥈"
+                                rank_emoji = "[2]"
                             elif item['rank'] == 3:
-                                rank_emoji = "🥉"
+                                rank_emoji = "[3]"
                             
                             st.write(f"{rank_emoji} **{item['rank']}.** {item['name']}: **{item['value']:.2f}%**")
             
@@ -1426,10 +2057,10 @@ def render_comparison_tab():
             
             if differences:
                 st.markdown("---")
-                st.write("**📊 Leistungsunterschiede**")
+                st.write("**Leistungsunterschiede**")
                 
                 for quota_name, diff_info in differences.items():
-                    with st.expander(f"📈 {quota_name}"):
+                    with st.expander(f"{quota_name}"):
                         col_diff1, col_diff2, col_diff3 = st.columns(3)
                         
                         with col_diff1:
@@ -1452,25 +2083,28 @@ def render_comparison_tab():
             col_export1, col_export2 = st.columns([3, 1])
             
             with col_export1:
-                st.write("**📄 Export**")
+                st.write("**Export**")
             
             with col_export2:
-                if st.button("📥 Als PDF exportieren", key="export_comp_pdf"):
+                if st.button("Als PDF exportieren", key="export_comp_pdf"):
                     try:
                         report_gen = ReportGenerator(db)
                         pdf_bytes = report_gen.export_comparison_report_to_pdf(comp_data)
                         
+                        # Dateiname: Mitarbeitervergleich_Zeitraum.pdf
+                        zeitraum = f"{start_date.strftime('%Y%m%d')}_bis_{end_date.strftime('%Y%m%d')}"
+                        
                         st.download_button(
-                            label="💾 PDF herunterladen",
+                            label="PDF herunterladen",
                             data=pdf_bytes,
-                            file_name=f"mitarbeiter_vergleich_{date.today()}.pdf",
+                            file_name=f"Mitarbeitervergleich_{zeitraum}.pdf",
                             mime="application/pdf",
                             key="download_comp_pdf"
                         )
-                        st.success("✅ PDF erfolgreich erstellt!")
+                        st.success("PDF erfolgreich erstellt!")
                     
                     except Exception as e:
-                        st.error(f"❌ Fehler beim PDF-Export: {e}")
+                        st.error(f"Fehler beim PDF-Export: {e}")
                         logger.error(f"Error exporting comparison PDF: {e}")
     
     finally:
@@ -1483,7 +2117,7 @@ def render_ranking_tab():
     
     Zeigt dynamische Rankings für alle Zeiträume/Perioden.
     """
-    st.subheader("🏆 Mitarbeiter-Rangliste")
+    st.subheader("Mitarbeiter-Rangliste")
     st.caption("Dynamische Platzierungen nach Leistungskriterien")
     
     db = SessionLocal()
@@ -1499,7 +2133,7 @@ def render_ranking_tab():
         positions = pos_manager.list_positions()
         
         if not positions:
-            st.warning("⚠️ Keine Positionen vorhanden. Bitte legen Sie zuerst Positionen an.")
+            st.warning("Keine Positionen vorhanden. Bitte legen Sie zuerst Positionen an.")
             return
         
         position_options = {pos.name: pos.id for pos in positions}
@@ -1515,7 +2149,7 @@ def render_ranking_tab():
         st.markdown("---")
         view_type = st.radio(
             "Ansicht",
-            options=["📅 Nach Periode", "📆 Benutzerdefinierter Zeitraum", "📜 Alle Perioden"],
+            options=["Nach Periode", "Benutzerdefinierter Zeitraum", "Alle Perioden"],
             horizontal=True,
             key="ranking_view_type"
         )
@@ -1523,15 +2157,16 @@ def render_ranking_tab():
         ranking_data = None
         all_period_rankings = None
         
-        if view_type == "📅 Nach Periode":
-            # Perioden für diese Position holen
-            periods = period_manager.list_periods(
-                status=[PeriodStatus.ACTIVE, PeriodStatus.COMPLETED],
-                include_global=True
-            )
+        if view_type == "Nach Periode":
+            # Perioden für diese Position holen - Alle aktiven und abgeschlossenen
+            all_periods = period_manager.list_periods(include_global=True)
+            periods = [
+                p for p in all_periods 
+                if p.status in [PeriodStatus.ACTIVE, PeriodStatus.COMPLETED]
+            ]
             
             if not periods:
-                st.info("ℹ️ Keine Auswertungsperioden vorhanden. Erstellen Sie zuerst eine Periode im Tab 'Leistungsdaten erfassen'.")
+                st.info("Keine Auswertungsperioden vorhanden. Erstellen Sie zuerst eine Periode im Tab 'Leistungsdaten erfassen'.")
                 return
             
             period_options = {
@@ -1548,7 +2183,7 @@ def render_ranking_tab():
             selected_period_id = period_options[selected_period_str]
             selected_period = next(p for p in periods if p.id == selected_period_id)
             
-            if st.button("🔄 Ranking berechnen", key="calc_period_ranking"):
+            if st.button("Ranking berechnen", key="calc_period_ranking"):
                 with st.spinner("Berechne Rankings..."):
                     ranking_data = ranking_sys.calculate_employee_rankings(
                         position_id=selected_position_id,
@@ -1559,27 +2194,134 @@ def render_ranking_tab():
                     ranking_data["period_name"] = selected_period.name
                     st.session_state["current_ranking"] = ranking_data
         
-        elif view_type == "📆 Benutzerdefinierter Zeitraum":
-            col_date1, col_date2 = st.columns(2)
+        elif view_type == "Benutzerdefinierter Zeitraum":
+            # Zeitraum mit flexibler Auswahl
+            report_type = st.selectbox(
+                "Berichtstyp",
+                options=["DAILY", "WEEKLY", "MONTHLY", "QUARTERLY", "YEARLY", "CUSTOM"],
+                format_func=lambda x: {
+                    "DAILY": "Täglich",
+                    "WEEKLY": "Wöchentlich",
+                    "MONTHLY": "Monatlich",
+                    "QUARTERLY": "Quartalsweise",
+                    "YEARLY": "Jährlich",
+                    "CUSTOM": "Benutzerdefiniert"
+                }.get(x, x),
+                key="ranking_report_type"
+            )
             
-            with col_date1:
-                start_date = st.date_input(
-                    "Von",
-                    value=date.today().replace(day=1),
-                    key="ranking_custom_start"
-                )
+            # Dynamische Datumsauswahl basierend auf Berichtstyp
+            start_date = None
+            end_date = None
             
-            with col_date2:
-                end_date = st.date_input(
-                    "Bis",
+            if report_type == "DAILY":
+                selected_day = st.date_input(
+                    "Tag auswählen",
                     value=date.today(),
-                    key="ranking_custom_end"
+                    max_value=date.today(),
+                    key="ranking_daily_date"
                 )
+                start_date = selected_day
+                end_date = selected_day
+                st.caption(f"Zeitraum: {format_german_date(start_date)}")
             
-            if st.button("🔄 Ranking berechnen", key="calc_custom_ranking"):
-                if start_date > end_date:
-                    st.error("❌ Startdatum muss vor Enddatum liegen!")
-                else:
+            elif report_type == "WEEKLY":
+                week_start = st.date_input(
+                    "Woche auswählen (Montag)",
+                    value=date.today() - timedelta(days=date.today().weekday()),
+                    max_value=date.today(),
+                    key="ranking_week_start"
+                )
+                start_date = week_start
+                end_date = week_start + timedelta(days=6)
+                st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+            
+            elif report_type == "MONTHLY":
+                col_m1, col_m2 = st.columns(2)
+                with col_m1:
+                    selected_month = st.selectbox(
+                        "Monat",
+                        options=list(range(1, 13)),
+                        format_func=lambda m: [
+                            "Januar", "Februar", "März", "April", "Mai", "Juni",
+                            "Juli", "August", "September", "Oktober", "November", "Dezember"
+                        ][m - 1],
+                        index=date.today().month - 1,
+                        key="ranking_month"
+                    )
+                with col_m2:
+                    selected_year = st.number_input(
+                        "Jahr",
+                        min_value=2020,
+                        max_value=date.today().year,
+                        value=date.today().year,
+                        key="ranking_year"
+                    )
+                start_date = date(selected_year, selected_month, 1)
+                import calendar
+                last_day = calendar.monthrange(selected_year, selected_month)[1]
+                end_date = date(selected_year, selected_month, last_day)
+                st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+            
+            elif report_type == "QUARTERLY":
+                col_q1, col_q2 = st.columns(2)
+                with col_q1:
+                    selected_quarter = st.selectbox(
+                        "Quartal",
+                        options=[1, 2, 3, 4],
+                        format_func=lambda q: f"Q{q}",
+                        key="ranking_quarter"
+                    )
+                with col_q2:
+                    selected_year = st.number_input(
+                        "Jahr",
+                        min_value=2020,
+                        max_value=date.today().year,
+                        value=date.today().year,
+                        key="ranking_quarter_year"
+                    )
+                quarter_months = {1: (1, 3), 2: (4, 6), 3: (7, 9), 4: (10, 12)}
+                start_month, end_month = quarter_months[selected_quarter]
+                start_date = date(selected_year, start_month, 1)
+                import calendar
+                last_day = calendar.monthrange(selected_year, end_month)[1]
+                end_date = date(selected_year, end_month, last_day)
+                st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+            
+            elif report_type == "YEARLY":
+                selected_year = st.number_input(
+                    "Jahr auswählen",
+                    min_value=2020,
+                    max_value=date.today().year,
+                    value=date.today().year,
+                    key="ranking_yearly"
+                )
+                start_date = date(selected_year, 1, 1)
+                end_date = date(selected_year, 12, 31)
+                st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+            
+            elif report_type == "CUSTOM":
+                col_c1, col_c2 = st.columns(2)
+                with col_c1:
+                    start_date = st.date_input(
+                        "Von",
+                        value=date.today().replace(day=1),
+                        max_value=date.today(),
+                        key="ranking_custom_start"
+                    )
+                with col_c2:
+                    end_date = st.date_input(
+                        "Bis",
+                        value=date.today(),
+                        max_value=date.today(),
+                        key="ranking_custom_end"
+                    )
+                st.caption(f"Zeitraum: {format_german_date(start_date)} bis {format_german_date(end_date)}")
+            
+            if st.button("Ranking berechnen", key="calc_custom_ranking"):
+                if start_date and end_date and start_date > end_date:
+                    st.error("Startdatum muss vor Enddatum liegen!")
+                elif start_date and end_date:
                     with st.spinner("Berechne Rankings..."):
                         ranking_data = ranking_sys.calculate_employee_rankings(
                             position_id=selected_position_id,
@@ -1587,9 +2329,11 @@ def render_ranking_tab():
                             end_date=end_date
                         )
                         st.session_state["current_ranking"] = ranking_data
+                else:
+                    st.error("Bitte wählen Sie einen gültigen Zeitraum aus!")
         
         else:  # Alle Perioden
-            if st.button("🔄 Alle Rankings laden", key="load_all_rankings"):
+            if st.button("Alle Rankings laden", key="load_all_rankings"):
                 with st.spinner("Lade Rankings für alle Perioden..."):
                     all_period_rankings = ranking_sys.get_rankings_for_all_periods(
                         position_id=selected_position_id
@@ -1597,22 +2341,22 @@ def render_ranking_tab():
                     st.session_state["all_period_rankings"] = all_period_rankings
         
         # Zeige gespeicherte Rankings
-        if "current_ranking" in st.session_state and view_type != "📜 Alle Perioden":
+        if "current_ranking" in st.session_state and view_type != "Alle Perioden":
             ranking_data = st.session_state["current_ranking"]
         
-        if "all_period_rankings" in st.session_state and view_type == "📜 Alle Perioden":
+        if "all_period_rankings" in st.session_state and view_type == "Alle Perioden":
             all_period_rankings = st.session_state["all_period_rankings"]
         
         # ========== ANZEIGE: EINZELNES RANKING ==========
-        if ranking_data and view_type != "📜 Alle Perioden":
+        if ranking_data and view_type != "Alle Perioden":
             st.markdown("---")
-            st.markdown("### 📊 Ranking-Ergebnisse")
+            st.markdown("### Ranking-Ergebnisse")
             
             # Gesamt-Ranking
             overall_ranking = ranking_data.get("overall_ranking", [])
             
             if overall_ranking:
-                st.markdown("#### 🥇 Gesamt-Rangliste")
+                st.markdown("#### Gesamt-Rangliste")
                 st.caption("Sortiert nach Durchschnitt aller Leistungskriterien")
                 
                 # Tabelle erstellen
@@ -1620,11 +2364,11 @@ def render_ranking_tab():
                 for entry in overall_ranking:
                     medal = ""
                     if entry["rank"] == 1:
-                        medal = "🥇"
+                        medal = "[1]"
                     elif entry["rank"] == 2:
-                        medal = "🥈"
+                        medal = "[2]"
                     elif entry["rank"] == 3:
-                        medal = "🥉"
+                        medal = "[3]"
                     
                     ranking_table_data.append({
                         "Rang": f"{medal} {entry['rank']}" if medal else str(entry['rank']),
@@ -1641,13 +2385,13 @@ def render_ranking_tab():
             
             if quota_rankings:
                 st.markdown("---")
-                st.markdown("#### 📈 Rankings nach Leistungskriterien")
+                st.markdown("#### Rankings nach Leistungskriterien")
                 
                 for quota_name, ranking_list in quota_rankings.items():
-                    with st.expander(f"🎯 {quota_name}", expanded=False):
+                    with st.expander(f"{quota_name}", expanded=False):
                         quota_table_data = []
                         for entry in ranking_list:
-                            medal = "🥇" if entry["rank"] == 1 else ""
+                            medal = "[1]" if entry["rank"] == 1 else ""
                             quota_table_data.append({
                                 "Rang": f"{medal} {entry['rank']}" if medal else str(entry['rank']),
                                 "Mitarbeiter": entry["name"],
@@ -1658,7 +2402,7 @@ def render_ranking_tab():
             
             # PDF Export
             st.markdown("---")
-            if st.button("📥 Ranking als PDF exportieren", key="export_ranking_pdf"):
+            if st.button("Ranking als PDF exportieren", key="export_ranking_pdf"):
                 try:
                     from controlling.report_generator import ReportGenerator
                     
@@ -1668,26 +2412,26 @@ def render_ranking_tab():
                     period_suffix = ranking_data.get("period_name", "zeitraum").replace(" ", "_")
                     
                     st.download_button(
-                        label="💾 PDF herunterladen",
+                        label="PDF herunterladen",
                         data=pdf_bytes,
                         file_name=f"rangliste_{period_suffix}_{date.today()}.pdf",
                         mime="application/pdf",
                         key="download_ranking_pdf"
                     )
-                    st.success("✅ PDF erfolgreich erstellt!")
+                    st.success("PDF erfolgreich erstellt!")
                 
                 except Exception as e:
-                    st.error(f"❌ Fehler beim PDF-Export: {e}")
+                    st.error(f"Fehler beim PDF-Export: {e}")
                     logger.error(f"Error exporting ranking PDF: {e}")
         
         # ========== ANZEIGE: ALLE PERIODEN ==========
-        elif all_period_rankings and view_type == "📜 Alle Perioden":
+        elif all_period_rankings and view_type == "Alle Perioden":
             st.markdown("---")
-            st.markdown(f"### 📅 Rankings für alle Perioden ({len(all_period_rankings)} Perioden)")
+            st.markdown(f"### Rankings für alle Perioden ({len(all_period_rankings)} Perioden)")
             
             for period_ranking in all_period_rankings:
                 with st.expander(
-                    f"🗓️ {period_ranking.get('period_name')} "
+                    f"{period_ranking.get('period_name')} "
                     f"({period_ranking.get('start_date')} - {period_ranking.get('end_date')})",
                     expanded=False
                 ):
@@ -1697,7 +2441,7 @@ def render_ranking_tab():
                         st.markdown("**Top 3:**")
                         top3_data = []
                         for entry in overall[:3]:
-                            medal = ["🥇", "🥈", "🥉"][entry["rank"] - 1]
+                            medal = ["[1]", "[2]", "[3]"][entry["rank"] - 1]
                             top3_data.append({
                                 "": medal,
                                 "Mitarbeiter": entry["name"],
@@ -1707,7 +2451,7 @@ def render_ranking_tab():
                         
                         # PDF Export für diese Periode
                         if st.button(
-                            f"📥 PDF für {period_ranking.get('period_name')}",
+                            f"PDF für {period_ranking.get('period_name')}",
                             key=f"export_period_{period_ranking.get('period_id')}_pdf"
                         ):
                             try:
@@ -1719,19 +2463,19 @@ def render_ranking_tab():
                                 period_name = period_ranking.get("period_name", "periode").replace(" ", "_")
                                 
                                 st.download_button(
-                                    label=f"💾 PDF {period_name} herunterladen",
+                                    label=f"PDF {period_name} herunterladen",
                                     data=pdf_bytes,
                                     file_name=f"rangliste_{period_name}_{date.today()}.pdf",
                                     mime="application/pdf",
                                     key=f"download_period_{period_ranking.get('period_id')}_pdf"
                                 )
-                                st.success("✅ PDF erstellt!")
+                                st.success("PDF erstellt!")
                             
                             except Exception as e:
-                                st.error(f"❌ Fehler: {e}")
+                                st.error(f"Fehler: {e}")
     
     except Exception as e:
-        st.error(f"❌ Fehler beim Laden des Ranking-Systems: {e}")
+        st.error(f"Fehler beim Laden des Ranking-Systems: {e}")
         logger.error(f"Error in ranking tab: {e}", exc_info=True)
     
     finally:
@@ -1740,7 +2484,7 @@ def render_ranking_tab():
 
 def render_pdf_color_settings():
     """Rendere PDF-Farbeinstellungs-Tab."""
-    st.subheader("🎨 PDF-Farbeinstellungen")
+    st.subheader("PDF-Farbeinstellungen")
     st.caption("Individuelle Anpassung aller PDF-Farben")
     
     config_manager = get_pdf_config_manager()
@@ -1837,7 +2581,7 @@ def render_pdf_color_settings():
         col_save1, col_save2, col_save3 = st.columns([2, 1, 1])
         
         with col_save2:
-            if st.button("💾 Farben speichern", type="primary", key="save_custom_colors"):
+            if st.button("Farben speichern", type="primary", key="save_custom_colors"):
                 new_scheme = PDFColorScheme(
                     primary_color=new_primary,
                     secondary_color=new_secondary,
@@ -1856,10 +2600,10 @@ def render_pdf_color_settings():
                 )
                 
                 if config_manager.save_color_scheme(new_scheme):
-                    st.success("✅ Farben erfolgreich gespeichert!")
+                    st.success("Farben erfolgreich gespeichert!")
                     st.rerun()
                 else:
-                    st.error("❌ Fehler beim Speichern")
+                    st.error("Fehler beim Speichern")
         
         with col_save3:
             if st.button("🔄 Auf Standard zurücksetzen", key="reset_colors"):

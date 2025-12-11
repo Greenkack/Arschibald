@@ -71,7 +71,7 @@ def migrate_add_evaluation_periods(db_path: str = "data/app_data.db"):
                 "CREATE INDEX idx_periods_employee ON controlling_evaluation_periods(employee_id)"
             )
             
-            logger.info("✅ controlling_evaluation_periods table created successfully")
+            logger.info("controlling_evaluation_periods table created successfully")
         else:
             logger.info("controlling_evaluation_periods table already exists")
         
@@ -94,18 +94,18 @@ def migrate_add_evaluation_periods(db_path: str = "data/app_data.db"):
                 "CREATE INDEX idx_performance_period ON controlling_performance_data(period_id)"
             )
             
-            logger.info("✅ period_id column added successfully")
+            logger.info("period_id column added successfully")
         else:
             logger.info("period_id column already exists in controlling_performance_data")
         
         conn.commit()
-        logger.info("✅ Migration completed successfully!")
+        logger.info("Migration completed successfully!")
         
         return True
         
     except Exception as e:
         conn.rollback()
-        logger.error(f"❌ Migration failed: {e}")
+        logger.error(f"Migration failed: {e}")
         raise
         
     finally:
@@ -139,10 +139,10 @@ def verify_migration(db_path: str = "data/app_data.db"):
         has_period_id = 'period_id' in columns
         
         if has_periods_table and has_period_id:
-            logger.info("✅ Migration verification successful!")
+            logger.info("Migration verification successful!")
             return True
         else:
-            logger.warning("⚠️ Migration incomplete:")
+            logger.warning("Migration incomplete:")
             if not has_periods_table:
                 logger.warning("  - controlling_evaluation_periods table missing")
             if not has_period_id:
@@ -174,17 +174,17 @@ if __name__ == "__main__":
         print("Verifying migration...")
         if verify_migration():
             print()
-            print("🎉 Migration erfolgreich abgeschlossen!")
+            print("Migration erfolgreich abgeschlossen!")
             print()
             print("Neue Funktionen:")
-            print("  ✅ Auswertungsperioden erstellen und verwalten")
-            print("  ✅ Leistungsdaten mit Perioden verknüpfen")
-            print("  ✅ Zeitraum-basierte Auswertungen (täglich, wöchentlich, monatlich, etc.)")
-            print("  ✅ Perioden-Archiv mit Statusverwaltung")
+            print("  Auswertungsperioden erstellen und verwalten")
+            print("  Leistungsdaten mit Perioden verknüpfen")
+            print("  Zeitraum-basierte Auswertungen (täglich, wöchentlich, monatlich, etc.)")
+            print("  Perioden-Archiv mit Statusverwaltung")
         else:
             print()
-            print("⚠️ Migration unvollständig. Bitte Logs prüfen.")
+            print("Migration unvollständig. Bitte Logs prüfen.")
     
     except Exception as e:
-        print(f"\n❌ Fehler bei Migration: {e}")
+        print(f"\nFehler bei Migration: {e}")
         print("Bitte Logs prüfen und erneut versuchen.")

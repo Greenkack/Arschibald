@@ -45,32 +45,36 @@ def render_user_menu():
     if not st.session_state.get('intro_completed', False):
         return
 
-    # CSS für besseres Styling
+    # CSS für besseres Styling - Card-Stil mit ORANGE Akzenten
     st.markdown("""
     <style>
     .user-menu-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 10px;
-        padding: 15px;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        border-left: 4px solid #ff8c00;
+        border-radius: 12px;
+        padding: 18px;
         margin: 10px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
     }
     .user-avatar {
         text-align: center;
         margin-bottom: 10px;
     }
     .user-info {
-        color: white;
+        color: #1a202c;
         text-align: center;
+        font-weight: 700;
     }
     .super-admin-badge {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        padding: 5px 10px;
-        border-radius: 15px;
+        background: linear-gradient(135deg, #ff8c00 0%, #ff9a1f 100%);
+        padding: 6px 12px;
+        border-radius: 20px;
         font-size: 0.8rem;
-        font-weight: bold;
+        font-weight: 700;
         color: white;
         display: inline-block;
         margin-bottom: 5px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -119,7 +123,7 @@ def render_user_menu():
     }
     status_icon = status_icons.get(user_status, '🟢')
 
-    # CSS für klickbares Profilbild
+    # CSS für klickbares Profilbild - ORANGE Akzent
     st.markdown("""
     <style>
     .profile-avatar-container {
@@ -130,29 +134,32 @@ def render_user_menu():
         border-radius: 50%;
     }
     .profile-avatar-container:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 25px rgba(102, 126, 234, 0.6) !important;
+        transform: scale(1.08);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.4) !important;
     }
     .profile-avatar-container:hover::before {
-        content: 'Klicken zum Vergrößern';
+        content: 'Klicken um Profilbild zu vergrößern';
         position: absolute;
         bottom: -25px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(0,0,0,0.8);
+        background: linear-gradient(135deg, #ff8c00 0%, #ff9a1f 100%);
         color: white;
-        padding: 4px 8px;
-        border-radius: 4px;
+        padding: 6px 10px;
+        border-radius: 8px;
         font-size: 11px;
+        font-weight: 700;
         white-space: nowrap;
         z-index: 1000;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
     }
     .profile-avatar-img {
         border-radius: 50%;
         width: 80px;
         height: 80px;
-        border: 3px solid #4CAF50;
+        border: 4px solid #ff8c00;
         display: block;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25), 0 3px 10px rgba(0, 0, 0, 0.18);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -191,15 +198,66 @@ def render_user_menu():
         """, unsafe_allow_html=True)
 
     with col_info:
-        # User-Info rechts vom Avatar - nach oben verschoben
+        # User-Info rechts vom Avatar - Card-Stil mit schwarzer Schattierung
         st.markdown(f"""
-        <div style="padding: 6px 12px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15)); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); margin-top: 0px;">
-            <div style="font-weight: bold; font-size: 17px; margin-bottom: 3px; margin-top: 2px;">{username}</div>
-            <div style="font-size: 14px; opacity: 0.7; line-height: 1.4;">{rank_display}</div>
-            <div style="font-size: 14px; opacity: 0.7; line-height: 1.4;">{status_icon} {user_status}</div>
+        <div style="padding: 12px 14px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00; margin-top: 0px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.14);">
+            <div style="font-weight: 700; font-size: 17px; margin-bottom: 4px; margin-top: 2px; color: #1a202c;">{username}</div>
+            <div style="font-size: 14px; font-weight: 600; color: #4a5568; line-height: 1.5;">{rank_display}</div>
+            <div style="font-size: 14px; font-weight: 600; color: #4a5568; line-height: 1.5;">{status_icon} {user_status}</div>
         </div>
         """, unsafe_allow_html=True)
 
+    # CSS für Tabs mit ORANGE Akzenten - transparenter Hintergrund
+    st.markdown("""
+    <style>
+    /* Tab-Buttons mit orangenem Akzent */
+    .stTabs [data-baseweb="tab-list"] {
+        background: transparent !important;
+    }
+    .stTabs [data-baseweb="tab-list"] button {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-bottom: 3px solid transparent !important;
+        border-radius: 8px 8px 0 0 !important;
+        margin-right: 4px !important;
+        padding: 12px 20px !important;
+        font-weight: 700 !important;
+        color: #1a202c !important;
+        transition: all 0.3s ease !important;
+    }
+    .stTabs [data-baseweb="tab-list"] button:hover {
+        border-bottom-color: rgba(255, 140, 0, 0.5) !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+        border-bottom: 3px solid #ff8c00 !important;
+        color: #ff8c00 !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    /* Tab-Content mit Card-Stil - transparenter Hintergrund außen */
+    .stTabs [data-baseweb="tab-panel"] {
+        background: transparent !important;
+        border-radius: 0 !important;
+        border: none !important;
+        padding: 12px 0 !important;
+        box-shadow: none !important;
+    }
+    /* Expander Hintergrund transparent */
+    section[data-testid="stSidebar"] .streamlit-expanderContent {
+        background: transparent !important;
+    }
+    /* Alle Tab-Container transparent */
+    section[data-testid="stSidebar"] .stTabs {
+        background: transparent !important;
+    }
+    section[data-testid="stSidebar"] div[data-baseweb="tab"] {
+        background: transparent !important;
+    }
+    section[data-testid="stSidebar"] div[role="tablist"] {
+        background: transparent !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Einstellungen - VOLLE BREITE für bessere Lesbarkeit
     with st.expander(" Account Menü ", expanded=False):
         tab1, tab2, tab3 = st.tabs(["Profil", "Einstellungen", "Info"])
@@ -219,7 +277,11 @@ def render_profile_tab(um: UserManagement, user_data: dict, is_super: bool):
         st.warning("Keine Benutzerdaten verfügbar")
         return
 
-    st.markdown("#### Mein Profil")
+    st.markdown("""
+    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);">
+        <h4 style="margin: 0; color: #1a202c; font-weight: 700;">Mein Profil</h4>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Rolle für General Admin (Punkt 1)
     if is_super:
@@ -230,34 +292,28 @@ def render_profile_tab(um: UserManagement, user_data: dict, is_super: bool):
     # Rang mit Infinity für General Admin
     rank_display = "Level ∞" if is_super else user_data.get('rank', 'N/A')
 
-    # Anzeige der Profil-Daten (Punkt 8: graue Bold-Schrift für Werte)
+    # Anzeige der Profil-Daten im Card-Stil mit schwarzer Schattierung
     st.markdown(f"""
-    <div style="font-size: 14px; line-height: 1.8;">
-        <div><strong>ID:</strong> {user_data.get('id', 'N/A')}</div>
-        <div><strong>Benutzername:</strong> <strong style="color: #888;">{user_data.get('username', 'N/A')}</strong></div>
-        <div><strong>Name:</strong> <strong style="color: #888;">{user_data.get('full_name', 'N/A')}</strong></div>
-        <div><strong>Rang:</strong> <strong style="color: #888;">{rank_display}</strong></div>
-        <div><strong>Rolle:</strong> <strong style="color: #888;">{role_display}</strong></div>
-        <div><strong>Status:</strong> <strong style="color: #888;">{user_data.get('status', 'N/A')}</strong></div>
+    <div style="padding: 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border-left: 4px solid #ff8c00; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.14); font-size: 14px; line-height: 2;">
+        <div><strong style="color: #1a202c;">ID:</strong> <strong style="color: #666;">{user_data.get('id', 'N/A')}</strong></div>
+        <div><strong style="color: #1a202c;">Benutzername:</strong> <strong style="color: #666;">{user_data.get('username', 'N/A')}</strong></div>
+        <div><strong style="color: #1a202c;">Name:</strong> <strong style="color: #666;">{user_data.get('full_name', 'N/A')}</strong></div>
+        <div><strong style="color: #1a202c;">Rang:</strong> <strong style="color: #666;">{rank_display}</strong></div>
+        <div><strong style="color: #1a202c;">Rolle:</strong> <strong style="color: #666;">{role_display}</strong></div>
+        <div><strong style="color: #1a202c;">Status:</strong> <strong style="color: #666;">{user_data.get('status', 'N/A')}</strong></div>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("---")
 
-    # Kontaktdaten (Punkt 8: graue Bold-Schrift)
+    # Kontaktdaten im Card-Stil mit schwarzer Schattierung
     st.markdown("**Kontakt:**")
-    st.markdown(
-        f"<div style='font-size: 14px;'><strong>Email:</strong> <strong style='color: #888;'>{
-            user_data.get(
-                'email',
-                'Nicht angegeben')}</strong></div>",
-        unsafe_allow_html=True)
-    st.markdown(
-        f"<div style='font-size: 14px;'><strong>Telefon:</strong> <strong style='color: #888;'>{
-            user_data.get(
-                'phone',
-                'Nicht angegeben')}</strong></div>",
-        unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="padding: 14px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border-left: 4px solid #ff8c00; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.14); font-size: 14px; line-height: 1.8; margin-top: 8px;">
+        <div><strong style="color: #1a202c;">Email:</strong> <strong style="color: #666;">{user_data.get('email', 'Nicht angegeben')}</strong></div>
+        <div><strong style="color: #1a202c;">Telefon:</strong> <strong style="color: #666;">{user_data.get('phone', 'Nicht angegeben')}</strong></div>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Über mich Bereich
     about_me = user_data.get('about_me', '')
@@ -282,7 +338,11 @@ def render_settings_tab(um: UserManagement, user_data: dict):
         st.warning("Keine Benutzerdaten verfügbar")
         return
 
-    st.markdown("#### Einstellungen")
+    st.markdown("""
+    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);">
+        <h4 style="margin: 0; color: #1a202c; font-weight: 700;">Einstellungen</h4>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Passwort ändern
     with st.expander("Passwort ändern"), st.form("change_password_form"):
@@ -367,7 +427,11 @@ def render_info_tab(user_data: dict):
         st.warning("Keine Benutzerdaten verfügbar")
         return
 
-    st.markdown("#### Account-Informationen")
+    st.markdown("""
+    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);">
+        <h4 style="margin: 0; color: #1a202c; font-weight: 700;">Account-Informationen</h4>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Account-Details
     st.markdown(f"**Erstellt am:** {user_data.get('created_at', 'N/A')[:10]}")
@@ -412,7 +476,11 @@ def render_info_tab(user_data: dict):
 
     # Berechtigungen
     st.markdown("---")
-    st.markdown("####  Berechtigungen")
+    st.markdown("""
+    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);">
+        <h4 style="margin: 0; color: #1a202c; font-weight: 700;">Berechtigungen</h4>
+    </div>
+    """, unsafe_allow_html=True)
 
     is_super = user_data.get('is_super_admin', 0) == 1
     permissions = user_data.get('permissions', {})

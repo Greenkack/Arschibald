@@ -23,7 +23,8 @@ try:
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.units import cm
     from reportlab.platypus import (
-        SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+        SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image,
+        KeepTogether, PageBreak
     )
     from reportlab.lib import colors
     REPORTLAB_AVAILABLE = True
@@ -260,12 +261,29 @@ class ReportGenerator:
         quotas = aggregated_data.get("quotas", {})
         ratio_descriptions = aggregated_data.get("ratios", {})
 
+        # Get team information
+        team_name = None
+        team_leader = None
+        if hasattr(employee, 'team') and employee.team:
+            team_name = employee.team.name
+            if employee.team.team_leader_id:
+                try:
+                    from controlling.employee_manager import EmployeeManager
+                    emp_manager = EmployeeManager(self.db)
+                    leader = emp_manager.get_employee(employee.team.team_leader_id)
+                    if leader:
+                        team_leader = leader.display_name
+                except Exception:
+                    pass
+
         # Build report data
         report_data = {
             "employee_id": employee_id,
             "employee_name": employee.full_name,
             "agent_name": employee.agent_name,
             "position": employee.position.name if employee.position else None,
+            "team_name": team_name,
+            "team_leader": team_leader,
             "report_type": report_type.value,
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),
@@ -725,10 +743,18 @@ class ReportGenerator:
         
         created_at_formatted = format_datetime_german(report_data.get('generated_at', ''))
         
+        # Team information (if available)
+        team_line = ""
+        if report_data.get('team_name'):
+            team_line = f"<b>Team:</b> {report_data.get('team_name')}<br/>"
+            if report_data.get('team_leader'):
+                team_line += f"<b>Teamleiter:</b> {report_data.get('team_leader')}<br/>"
+        
         metadata_text = f"""
         <b>Mitarbeiter:</b> {report_data.get('employee_name', 'N/A')}<br/>
         {agent_name_line}
         <b>Position:</b> {report_data.get('position', 'N/A')}<br/>
+        {team_line}
         <b>Berichtstyp:</b> {report_type_name}<br/>
         <b>Zeitraum:</b> {start_date_formatted} - {end_date_formatted}<br/>
         <b>Erstellt am:</b> {created_at_formatted}
@@ -736,8 +762,9 @@ class ReportGenerator:
         elements.append(Paragraph(metadata_text, styles['Normal']))
         elements.append(Spacer(1, 1*cm))
 
-        # Quotas section
-        elements.append(Paragraph("Leistungsquoten", heading_style))
+        # Quotas section (mit KeepTogether für Überschrift + Tabelle)
+        quotas_section = []
+        quotas_section.append(Paragraph("Leistungsquoten", heading_style))
 
         quotas = report_data.get("quotas", {})
         ratios = report_data.get("ratio_descriptions", {})
@@ -766,15 +793,19 @@ class ReportGenerator:
                 ('GRID', (0, 0), (-1, -1), 1, colors.HexColor(color_scheme.border_color)),
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
             ]))
-            elements.append(quota_table)
-            elements.append(Spacer(1, 1*cm))
+            quotas_section.append(quota_table)
+        
+        # KeepTogether verhindert Seitenumbruch zwischen Überschrift und Tabelle
+        elements.append(KeepTogether(quotas_section))
+        elements.append(Spacer(1, 1*cm))
 
-        # Raw data section
+        # Raw data section (mit KeepTogether)
         aggregated_data = report_data.get("aggregated_data", {})
         raw_data = aggregated_data.get("raw_data", {})
 
         if raw_data:
-            elements.append(Paragraph("Leistungsdaten", heading_style))
+            raw_data_section = []
+            raw_data_section.append(Paragraph("Leistungsdaten", heading_style))
 
             # Create raw data table
             raw_data_table = [["Bezeichnung", "Anzahl"]]
@@ -798,7 +829,10 @@ class ReportGenerator:
                 ('FONTNAME', (1, 1), (1, -1), 'Helvetica-Bold'),
                 ('GRID', (0, 0), (-1, -1), 1, colors.HexColor(color_scheme.border_color)),
             ]))
-            elements.append(data_table)
+            raw_data_section.append(data_table)
+            
+            # KeepTogether für Überschrift + Tabelle
+            elements.append(KeepTogether(raw_data_section))
             elements.append(Spacer(1, 1*cm))
 
         # Add charts if available
@@ -811,10 +845,12 @@ class ReportGenerator:
                 figures = chart_gen.create_dashboard(report_data)
                 
                 if figures:
-                    elements.append(Paragraph("Diagramme", heading_style))
-                    elements.append(Spacer(1, 0.5*cm))
+                    # Create chart section with KeepTogether to prevent orphaned heading
+                    chart_elements = []
+                    chart_elements.append(Paragraph("Diagramme", heading_style))
+                    chart_elements.append(Spacer(1, 0.5*cm))
                     
-                    # Convert each plotly figure to image and add to PDF
+                    # Convert each plotly figure to image and add to section
                     for fig in figures:
                         try:
                             # Convert plotly figure to PNG bytes
@@ -824,10 +860,13 @@ class ReportGenerator:
                             img_buffer = io.BytesIO(img_bytes)
                             img = Image(img_buffer, width=17*cm, height=10.5*cm)
                             
-                            elements.append(img)
-                            elements.append(Spacer(1, 0.5*cm))
+                            chart_elements.append(img)
+                            chart_elements.append(Spacer(1, 0.5*cm))
                         except Exception as e:
                             logger.warning(f"Fehler beim Hinzufügen des Diagramms: {e}")
+                    
+                    # Add entire chart section wrapped in KeepTogether
+                    elements.append(KeepTogether(chart_elements))
             except Exception as e:
                 logger.warning(f"Fehler beim Generieren der Diagramme: {e}")
 
@@ -917,6 +956,8 @@ class ReportGenerator:
         created_at_formatted = format_datetime_german(team_report_data.get('generated_at', ''))
         
         metadata_text = f"""
+        <b>Team:</b> {team_report_data.get('team_name', 'N/A')}<br/>
+        <b>Teamleiter:</b> {team_report_data.get('team_leader', 'Nicht zugewiesen')}<br/>
         <b>Position:</b> {team_report_data.get('position_name', 'N/A')}<br/>
         <b>Anzahl Mitarbeiter:</b> {team_report_data.get('employee_count', 0)}<br/>
         <b>Zeitraum:</b> {start_date_formatted} - {end_date_formatted}<br/>
@@ -1110,8 +1151,11 @@ class ReportGenerator:
         created_at_formatted = format_datetime_german(comparison_data.get('generated_at', ''))
         
         metadata_text = f"""
+        <b>Team:</b> {comparison_data.get('team_name', 'N/A')}<br/>
+        <b>Teamleiter:</b> {comparison_data.get('team_leader', 'Nicht zugewiesen')}<br/>
         <b>Position:</b> {comparison_data.get('position_name', 'N/A')}<br/>
         <b>Anzahl Mitarbeiter:</b> {comparison_data.get('employee_count', 0)}<br/>
+        <b>Verglichene Mitarbeiter:</b> {len(comparison_data.get('employees', []))}<br/>
         <b>Zeitraum:</b> {start_date_formatted} - {end_date_formatted}<br/>
         <b>Erstellt am:</b> {created_at_formatted}
         """
@@ -1331,7 +1375,9 @@ class ReportGenerator:
                 ])
             
             overall_table = Table(overall_data, colWidths=[2*cm, 5*cm, 4*cm, 4*cm, 4*cm])
-            overall_table.setStyle(TableStyle([
+            
+            # Basis-Styles
+            table_styles = [
                 ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor(color_scheme.table_header_bg)),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
                 ('ALIGN', (0, 0), (0, -1), 'CENTER'),
@@ -1344,17 +1390,15 @@ class ReportGenerator:
                 ('GRID', (0, 0), (-1, -1), 1, colors.HexColor(color_scheme.border_color)),
                 # Highlight Top 3
                 ('BACKGROUND', (0, 1), (-1, 1), colors.HexColor("#FFD700")),  # Gold
-            ]))
+            ]
             
             # Silber und Bronze nur wenn genug Teilnehmer
             if len(overall_ranking) > 1:
-                overall_table.setStyle(TableStyle([
-                    ('BACKGROUND', (0, 2), (-1, 2), colors.HexColor("#C0C0C0")),
-                ]), add=True)
+                table_styles.append(('BACKGROUND', (0, 2), (-1, 2), colors.HexColor("#C0C0C0")))  # Silber
             if len(overall_ranking) > 2:
-                overall_table.setStyle(TableStyle([
-                    ('BACKGROUND', (0, 3), (-1, 3), colors.HexColor("#CD7F32")),
-                ]), add=True)
+                table_styles.append(('BACKGROUND', (0, 3), (-1, 3), colors.HexColor("#CD7F32")))  # Bronze
+            
+            overall_table.setStyle(TableStyle(table_styles))
             
             elements.append(overall_table)
             elements.append(Spacer(1, 1*cm))

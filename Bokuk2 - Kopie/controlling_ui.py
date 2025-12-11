@@ -9,7 +9,7 @@ Requirements: 1.1, 1.2, 8.1, 8.2, 9.1, 12.4, 13.1, 16.1, 16.2
 
 import logging
 import streamlit as st
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 import sys
 from typing import List, Dict, Any, Optional
@@ -792,12 +792,115 @@ def render_report_generation_tab():
             )
 
         with col2:
-            reference_date = st.date_input(
-                "Referenzdatum",
-                value=date.today(),
-                max_value=date.today(),
-                key="report_reference_date"
-            )
+            # Dynamische Zeitraumauswahl basierend auf Berichtstyp
+            if report_type == ReportType.DAILY:
+                # Tagesauswahl: Beliebiger Tag wählbar
+                selected_date = st.date_input(
+                    "Tag auswählen",
+                    value=date.today(),
+                    max_value=date.today(),
+                    key="report_daily_date",
+                    help="Wählen Sie den spezifischen Tag für die Auswertung"
+                )
+                reference_date = selected_date
+                
+            elif report_type == ReportType.WEEKLY:
+                # Wochenauswahl: Woche über Startdatum
+                week_start = st.date_input(
+                    "Woche auswählen (Montag)",
+                    value=date.today() - timedelta(days=date.today().weekday()),
+                    max_value=date.today(),
+                    key="report_weekly_start",
+                    help="Wählen Sie den Montag der gewünschten Woche"
+                )
+                # Berechne Wochenende (Sonntag)
+                week_end = week_start + timedelta(days=6)
+                reference_date = week_end
+                st.caption(f"Woche: {format_german_date(week_start)} - {format_german_date(week_end)}")
+                
+            elif report_type == ReportType.MONTHLY:
+                # Monatsauswahl: Monat und Jahr
+                col_month, col_year = st.columns(2)
+                with col_month:
+                    month = st.selectbox(
+                        "Monat",
+                        options=list(range(1, 13)),
+                        index=date.today().month - 1,
+                        format_func=lambda m: [
+                            "Januar", "Februar", "März", "April", "Mai", "Juni",
+                            "Juli", "August", "September", "Oktober", "November", "Dezember"
+                        ][m-1],
+                        key="report_month_select"
+                    )
+                with col_year:
+                    current_year = date.today().year
+                    year = st.number_input(
+                        "Jahr",
+                        min_value=2020,
+                        max_value=current_year,
+                        value=current_year,
+                        step=1,
+                        key="report_year_select"
+                    )
+                # Berechne letzten Tag des Monats
+                if month == 12:
+                    reference_date = date(year, 12, 31)
+                else:
+                    reference_date = date(year, month + 1, 1) - timedelta(days=1)
+                st.caption(f"Monat: {['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][month-1]} {year}")
+                
+            elif report_type == ReportType.QUARTERLY:
+                # Quartalsauswahl: Quartal und Jahr
+                col_quarter, col_year = st.columns(2)
+                with col_quarter:
+                    quarter = st.selectbox(
+                        "Quartal",
+                        options=[1, 2, 3, 4],
+                        index=(date.today().month - 1) // 3,
+                        format_func=lambda q: f"Q{q} ({['Jan-Mär', 'Apr-Jun', 'Jul-Sep', 'Okt-Dez'][q-1]})",
+                        key="report_quarter_select"
+                    )
+                with col_year:
+                    current_year = date.today().year
+                    year = st.number_input(
+                        "Jahr",
+                        min_value=2020,
+                        max_value=current_year,
+                        value=current_year,
+                        step=1,
+                        key="report_quarter_year_select"
+                    )
+                # Berechne letzten Tag des Quartals
+                end_month = quarter * 3
+                if end_month == 12:
+                    reference_date = date(year, 12, 31)
+                else:
+                    reference_date = date(year, end_month + 1, 1) - timedelta(days=1)
+                st.caption(f"Quartal: Q{quarter} {year}")
+                
+            elif report_type == ReportType.YEARLY:
+                # Jahresauswahl: Nur Jahr
+                current_year = date.today().year
+                year = st.number_input(
+                    "Jahr auswählen",
+                    min_value=2020,
+                    max_value=current_year,
+                    value=current_year,
+                    step=1,
+                    key="report_year_only_select"
+                )
+                reference_date = date(year, 12, 31)
+                st.caption(f"Jahr: {year}")
+                
+            else:  # SINCE_START
+                # Seit Arbeitsbeginn: Bis-Datum wählbar
+                reference_date = st.date_input(
+                    "Bis Datum",
+                    value=date.today(),
+                    max_value=date.today(),
+                    key="report_since_start_date",
+                    help="Auswertung vom Arbeitsbeginn bis zu diesem Datum"
+                )
 
         # Generate report button
         col1, col2, col3 = st.columns([2, 1, 1])

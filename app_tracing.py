@@ -68,8 +68,11 @@ class AppTracer:
             # Set up tracer provider
             self.tracer_provider = TracerProvider(resource=resource)
             
-            # Configure OTLP exporter
-            otlp_exporter = OTLPSpanExporter(endpoint=self.otlp_endpoint)
+            # Configure OTLP exporter mit Timeout
+            otlp_exporter = OTLPSpanExporter(
+                endpoint=self.otlp_endpoint,
+                timeout=2  # 2 Sekunden Timeout statt endlos warten
+            )
             
             # Add span processor
             span_processor = BatchSpanProcessor(otlp_exporter)
@@ -89,8 +92,9 @@ class AppTracer:
             return True
             
         except Exception as e:
-            logger.error(f"Failed to initialize tracing: {e}")
-            logger.error(traceback.format_exc())
+            logger.warning(f"Tracing nicht verfügbar (OTLP-Server läuft nicht): {e}")
+            # Fallback: Dummy-Tracer für Offline-Betrieb
+            self._initialized = False
             return False
     
     def _instrument_libraries(self):

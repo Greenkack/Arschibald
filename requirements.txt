@@ -214,9 +214,35 @@ pytest-asyncio>=1.2.0  # Async test support
 pytest-sugar>=1.1.1    # Enhanced test output with colors and progress bar
 pytest-cov>=7.0.0      # Code coverage reporting
 pytest-django>=4.11.1  # Django-specific test utilities
-pytest-anyio>=4.10.0   # AnyIO compatibility for async tests
+pytest-anyio>=0.0.0    # AnyIO compatibility for async tests
 # Note: Die folgenden werden als Standard-Pakete installiert (keine pytest-Plugins):
 # - langsmith (für AI/Agent Testing)
 # - Faker (für Test-Datengenerierung)
 # - django-constance (für Django Settings Testing)
 # - dash (für Dashboard Testing)
+
+# OpenTelemetry Tracing Dependencies
+# ===================================
+opentelemetry-api>=1.20.0           # OpenTelemetry API
+opentelemetry-sdk>=1.20.0           # OpenTelemetry SDK
+opentelemetry-exporter-otlp>=1.20.0 # OTLP exporter
+opentelemetry-instrumentation-requests>=0.41b0  # Requests instrumentation
+opentelemetry-instrumentation-sqlite3>=0.41b0   # SQLite3 instrumentation
+
+# Image Processing
+# ================
+Pillow>=11.3.0         # PIL fork for image processing (already listed but ensuring correct version)
+
+# YAML Support
+# ============
+PyYAML>=6.0.2          # YAML parser (already listed)
+pyyaml-include>=1.3    # YAML include support for config files
+
+# Database Extensions
+# ===================
+# SQLAlchemy already listed in main dependencies via controlling/backend modules
+
+# Additional Utilities
+# ====================
+python-magic>=0.4.27   # File type detection
+python-magic-bin>=0.4.14; platform_system=="Windows"  # Windows binary for python-magic

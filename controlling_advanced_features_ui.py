@@ -7,6 +7,28 @@ from datetime import date, timedelta
 from pathlib import Path
 import sys
 
+def format_german_date(date_obj):
+    """Formatiert Datum als 'Wochentag, der TT.MM.JJJJ' z.B. 'Montag, der 30.12.2025'"""
+    if isinstance(date_obj, str):
+        from datetime import datetime
+        try:
+            date_obj = datetime.strptime(date_obj, '%Y-%m-%d').date()
+        except:
+            return date_obj
+    
+    weekday_names = {
+        0: 'Montag',
+        1: 'Dienstag',
+        2: 'Mittwoch',
+        3: 'Donnerstag',
+        4: 'Freitag',
+        5: 'Samstag',
+        6: 'Sonntag'
+    }
+    
+    weekday = weekday_names.get(date_obj.weekday(), 'Unbekannt')
+    return f"{weekday}, der {date_obj.strftime('%d.%m.%Y')}"
+
 # Add project root to path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
@@ -24,7 +46,7 @@ from controlling.pdf_config import (
 
 def render_team_analysis_tab():
     """Rendere Team-Auswertungs-Tab."""
-    st.header("📊 Team-Auswertung")
+    st.header("Team-Auswertung")
     st.markdown("---")
     
     db = SessionLocal()
@@ -74,7 +96,7 @@ def render_team_analysis_tab():
             )
         
         # Auswertung erstellen
-        if st.button("🎯 Team-Auswertung erstellen", type="primary", key="create_team_report"):
+        if st.button("Team-Auswertung erstellen", type="primary", key="create_team_report"):
             with st.spinner("Erstelle Team-Auswertung..."):
                 try:
                     team_analytics = TeamAnalytics(db)
@@ -87,10 +109,10 @@ def render_team_analysis_tab():
                     
                     # Speichere in Session State
                     st.session_state['team_report_data'] = team_data
-                    st.success(f"✅ Team-Auswertung erstellt für {team_data['employee_count']} Mitarbeiter!")
+                    st.success(f"Team-Auswertung erstellt für {team_data['employee_count']} Mitarbeiter!")
                     
                 except Exception as e:
-                    st.error(f"❌ Fehler beim Erstellen der Team-Auswertung: {e}")
+                    st.error(f"Fehler beim Erstellen der Team-Auswertung: {e}")
                     return
         
         # Zeige Auswertung
@@ -98,7 +120,7 @@ def render_team_analysis_tab():
             team_data = st.session_state['team_report_data']
             
             st.markdown("---")
-            st.subheading("📈 Ergebnisse")
+            st.subheading("Überschrift Ergebnisse")
             
             # Team-Quotas
             st.write("**Team-Leistungsquoten (Gesamt)**")
@@ -115,7 +137,7 @@ def render_team_analysis_tab():
             
             # Statistiken
             st.markdown("---")
-            st.write("**📊 Statistiken & Leistungsvergleich**")
+            st.write("**Statistiken & Leistungsvergleich**")
             
             statistics = team_data.get('statistics', {})
             quota_stats = statistics.get('quota_statistics', {})
@@ -138,7 +160,7 @@ def render_team_analysis_tab():
             
             # Einzelne Mitarbeiter
             st.markdown("---")
-            st.write("**👥 Einzelne Mitarbeiter**")
+            st.write("**Einzelne Mitarbeiter**")
             
             employees = team_data.get('employees', [])
             
@@ -161,25 +183,29 @@ def render_team_analysis_tab():
             col_export1, col_export2 = st.columns([3, 1])
             
             with col_export1:
-                st.write("**📄 Export**")
+                st.write("**Export**")
             
             with col_export2:
-                if st.button("📥 Als PDF exportieren", key="export_team_pdf"):
+                if st.button("Als PDF exportieren", key="export_team_pdf"):
                     try:
                         report_gen = ReportGenerator(db)
                         pdf_bytes = report_gen.export_team_report_to_pdf(team_data)
                         
+                        # Dateiname: Position_Zeitraum.pdf
+                        position_name = selected_position_name.replace(' ', '_')
+                        zeitraum = f"{start_date.strftime('%Y%m%d')}_bis_{end_date.strftime('%Y%m%d')}"
+                        
                         st.download_button(
-                            label="💾 PDF herunterladen",
+                            label="PDF herunterladen",
                             data=pdf_bytes,
-                            file_name=f"team_auswertung_{selected_position_name}_{date.today()}.pdf",
+                            file_name=f"{position_name}_{zeitraum}.pdf",
                             mime="application/pdf",
                             key="download_team_pdf"
                         )
-                        st.success("✅ PDF erfolgreich erstellt!")
+                        st.success("PDF erfolgreich erstellt!")
                     
                     except Exception as e:
-                        st.error(f"❌ Fehler beim PDF-Export: {e}")
+                        st.error(f"Fehler beim PDF-Export: {e}")
     
     finally:
         db.close()
@@ -187,7 +213,7 @@ def render_team_analysis_tab():
 
 def render_comparison_tab():
     """Rendere Mitarbeiter-Vergleichs-Tab."""
-    st.header("🔍 Mitarbeiter-Vergleich")
+    st.header("Mitarbeiter-Vergleich")
     st.markdown("---")
     
     db = SessionLocal()
@@ -270,7 +296,7 @@ def render_comparison_tab():
         
         # Vergleich erstellen
         if st.button(
-            "🎯 Vergleich erstellen",
+            "Vergleich erstellen",
             type="primary",
             disabled=len(selected_employees) < 2,
             key="create_comparison"
@@ -288,10 +314,10 @@ def render_comparison_tab():
                     
                     # Speichere in Session State
                     st.session_state['comparison_data'] = comparison_data
-                    st.success(f"✅ Vergleich erstellt für {len(selected_employees)} Mitarbeiter!")
+                    st.success(f"Vergleich erstellt für {len(selected_employees)} Mitarbeiter!")
                     
                 except Exception as e:
-                    st.error(f"❌ Fehler beim Erstellen des Vergleichs: {e}")
+                    st.error(f"Fehler beim Erstellen des Vergleichs: {e}")
                     return
         
         # Zeige Vergleich
@@ -299,35 +325,37 @@ def render_comparison_tab():
             comp_data = st.session_state['comparison_data']
             
             st.markdown("---")
-            st.subheading("📈 Vergleichsergebnisse")
+            st.subheading("Vergleichsergebnisse")
             
             # Rankings
             comparison_stats = comp_data.get('comparison_statistics', {})
             rankings = comparison_stats.get('rankings', {})
             
             if rankings:
-                st.write("**🏆 Leistungsranking**")
+                st.write("**Leistungsranking**")
                 
                 for quota_name, ranking_list in rankings.items():
                     with st.expander(f"{quota_name}"):
                         # Erstelle Ranking-Tabelle
                         for item in ranking_list:
-                            rank_emoji = ""
+                            rank_marker = ""
                             if item['rank'] == 1:
-                                rank_emoji = "🥇"
+                                rank_marker = "[1.]"
                             elif item['rank'] == 2:
-                                rank_emoji = "🥈"
+                                rank_marker = "[2.]"
                             elif item['rank'] == 3:
-                                rank_emoji = "🥉"
+                                rank_marker = "[3.]"
+                            else:
+                                rank_marker = f"[{item['rank']}.]"
                             
-                            st.write(f"{rank_emoji} **{item['rank']}.** {item['name']}: **{item['value']:.2f}%**")
+                            st.write(f"{rank_marker} **{item['name']}**: **{item['value']:.2f}%**")
             
             # Unterschiede
             differences = comparison_stats.get('differences', {})
             
             if differences:
                 st.markdown("---")
-                st.write("**📊 Leistungsunterschiede**")
+                st.write("**Leistungsunterschiede**")
                 
                 for quota_name, diff_info in differences.items():
                     with st.expander(f"{quota_name}"):
@@ -352,25 +380,28 @@ def render_comparison_tab():
             col_export1, col_export2 = st.columns([3, 1])
             
             with col_export1:
-                st.write("**📄 Export**")
+                st.write("**Export**")
             
             with col_export2:
-                if st.button("📥 Als PDF exportieren", key="export_comp_pdf"):
+                if st.button("Als PDF exportieren", key="export_comp_pdf"):
                     try:
                         report_gen = ReportGenerator(db)
                         pdf_bytes = report_gen.export_comparison_report_to_pdf(comp_data)
                         
+                        # Dateiname: Mitarbeitervergleich_Zeitraum.pdf
+                        zeitraum = f"{start_date.strftime('%Y%m%d')}_bis_{end_date.strftime('%Y%m%d')}"
+                        
                         st.download_button(
-                            label="💾 PDF herunterladen",
+                            label="PDF herunterladen",
                             data=pdf_bytes,
-                            file_name=f"mitarbeiter_vergleich_{date.today()}.pdf",
+                            file_name=f"Mitarbeitervergleich_{zeitraum}.pdf",
                             mime="application/pdf",
                             key="download_comp_pdf"
                         )
-                        st.success("✅ PDF erfolgreich erstellt!")
+                        st.success("PDF erfolgreich erstellt!")
                     
                     except Exception as e:
-                        st.error(f"❌ Fehler beim PDF-Export: {e}")
+                        st.error(f"Fehler beim PDF-Export: {e}")
     
     finally:
         db.close()
@@ -378,7 +409,7 @@ def render_comparison_tab():
 
 def render_pdf_color_settings():
     """Rendere PDF-Farbeinstellungs-Tab."""
-    st.header("🎨 PDF-Farbeinstellungen")
+    st.header("PDF-Farbeinstellungen")
     st.markdown("---")
     
     config_manager = get_pdf_config_manager()
@@ -402,12 +433,12 @@ def render_pdf_color_settings():
             )
         
         with col2:
-            if st.button("✅ Schema anwenden", key="apply_predefined_scheme"):
+            if st.button("Schema anwenden", key="apply_predefined_scheme"):
                 if config_manager.apply_predefined_scheme(selected_scheme_name):
-                    st.success(f"✅ Schema '{selected_scheme_name}' erfolgreich angewendet!")
+                    st.success(f"Schema '{selected_scheme_name}' erfolgreich angewendet!")
                     st.rerun()
                 else:
-                    st.error("❌ Fehler beim Anwenden des Schemas")
+                    st.error("Fehler beim Anwenden des Schemas")
         
         # Zeige Vorschau des gewählten Schemas
         preview_scheme = predefined_schemes[selected_scheme_name]
@@ -557,7 +588,7 @@ def render_pdf_color_settings():
         col_save1, col_save2, col_save3 = st.columns([2, 1, 1])
         
         with col_save2:
-            if st.button("💾 Farben speichern", type="primary", key="save_custom_colors"):
+            if st.button("Farben speichern", type="primary", key="save_custom_colors"):
                 new_scheme = PDFColorScheme(
                     primary_color=new_primary,
                     secondary_color=new_secondary,
@@ -576,15 +607,15 @@ def render_pdf_color_settings():
                 )
                 
                 if config_manager.save_color_scheme(new_scheme):
-                    st.success("✅ Farben erfolgreich gespeichert!")
+                    st.success("Farben erfolgreich gespeichert!")
                     st.rerun()
                 else:
-                    st.error("❌ Fehler beim Speichern")
+                    st.error("Fehler beim Speichern")
         
         with col_save3:
-            if st.button("🔄 Auf Standard zurücksetzen", key="reset_colors"):
+            if st.button("Auf Standard zurücksetzen", key="reset_colors"):
                 if config_manager.reset_to_default():
-                    st.success("✅ Auf Standard zurückgesetzt!")
+                    st.success("Auf Standard zurückgesetzt!")
                     st.rerun()
     
     with tab3:
@@ -630,16 +661,15 @@ def render_pdf_color_settings():
 if __name__ == "__main__":
     st.set_page_config(
         page_title="Controlling - Erweiterte Funktionen",
-        page_icon="📊",
         layout="wide"
     )
     
-    st.title("📊 Controlling - Erweiterte Funktionen")
+    st.title("Controlling - Erweiterte Funktionen")
     
     tab1, tab2, tab3 = st.tabs([
-        "🏢 Team-Auswertung",
-        "🔍 Mitarbeiter-Vergleich",
-        "🎨 PDF-Farben"
+        "Team-Auswertung",
+        "Mitarbeiter-Vergleich",
+        "PDF-Farben"
     ])
     
     with tab1:
