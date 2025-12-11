@@ -24,6 +24,11 @@ from controlling.models import (  # noqa: E402
     PerformanceData,
     ReportType
 )
+from controlling.position_criteria import (  # noqa: E402
+    calculate_quotas_for_position,
+    calculate_ratio_description,
+    get_position_criteria
+)
 
 logger = logging.getLogger(__name__)
 
@@ -41,25 +46,25 @@ class AnalyticsEngine:
     def calculate_abschlussquote(
         self,
         verkauf: float,
-        angefahrene_termine_gesamt: float
+        kunden_terminiert: float
     ) -> float:
         """
         Calculate Abschlussquote (closing rate).
 
-        Formula: (Verkauf / Angefahrene Termine gesamt) × 100
+        Formula: (Verkauf / Kunden terminiert) × 100
 
         Args:
             verkauf: Number of sales
-            angefahrene_termine_gesamt: Total appointments attended
+            kunden_terminiert: Number of customers scheduled
 
         Returns:
             Percentage as float
 
         Requirements: 10.1, 10.2
         """
-        if angefahrene_termine_gesamt == 0:
+        if kunden_terminiert == 0:
             return 0.0
-        return (verkauf / angefahrene_termine_gesamt) * 100
+        return (verkauf / kunden_terminiert) * 100
 
     def calculate_terminvereinbarungsquote(
         self,
@@ -110,48 +115,48 @@ class AnalyticsEngine:
     def calculate_nicht_interessiert_quote(
         self,
         storniert_kein_interesse: float,
-        angefahrene_termine_gesamt: float
+        kunden_terminiert: float
     ) -> float:
         """
         Calculate nicht interessierte Kunden Quote (not interested rate).
 
-        Formula: (Storniert/kein Interesse / Angefahrene Termine gesamt) × 100
+        Formula: (Storniert/kein Interesse / Kunden terminiert) × 100
 
         Args:
             storniert_kein_interesse: Number of cancelled/not interested
-            angefahrene_termine_gesamt: Total appointments attended
+            kunden_terminiert: Number of customers scheduled
 
         Returns:
             Percentage as float
 
         Requirements: 10.1, 10.2
         """
-        if angefahrene_termine_gesamt == 0:
+        if kunden_terminiert == 0:
             return 0.0
-        return (storniert_kein_interesse / angefahrene_termine_gesamt) * 100
+        return (storniert_kein_interesse / kunden_terminiert) * 100
 
     def calculate_technisch_nicht_machbar_quote(
         self,
         technisch_nicht_machbar: float,
-        angefahrene_termine_gesamt: float
+        kunden_terminiert: float
     ) -> float:
         """
         Calculate technisch nicht machbar Quote (technically unfeasible rate).
 
-        Formula: (Technisch nicht machbar / Angefahrene Termine gesamt) × 100
+        Formula: (Technisch nicht machbar / Kunden terminiert) × 100
 
         Args:
             technisch_nicht_machbar: Number of technically unfeasible projects
-            angefahrene_termine_gesamt: Total appointments attended
+            kunden_terminiert: Number of customers scheduled
 
         Returns:
             Percentage as float
 
         Requirements: 10.1, 10.2
         """
-        if angefahrene_termine_gesamt == 0:
+        if kunden_terminiert == 0:
             return 0.0
-        return (technisch_nicht_machbar / angefahrene_termine_gesamt) * 100
+        return (technisch_nicht_machbar / kunden_terminiert) * 100
 
     def calculate_nicht_erreicht_quote(
         self,
@@ -179,71 +184,71 @@ class AnalyticsEngine:
     def calculate_folgetermin_quote(
         self,
         folgetermin_gemacht: float,
-        angefahrene_termine_gesamt: float
+        kunden_terminiert: float
     ) -> float:
         """
         Calculate Quote für Folgetermine-Vereinbarungen (follow-up rate).
 
-        Formula: (Folgetermin gemacht / Angefahrene Termine gesamt) × 100
+        Formula: (Folgetermin gemacht / Kunden terminiert) × 100
 
         Args:
             folgetermin_gemacht: Number of follow-up appointments scheduled
-            angefahrene_termine_gesamt: Total appointments attended
+            kunden_terminiert: Number of customers scheduled
 
         Returns:
             Percentage as float
 
         Requirements: 10.1, 10.2
         """
-        if angefahrene_termine_gesamt == 0:
+        if kunden_terminiert == 0:
             return 0.0
-        return (folgetermin_gemacht / angefahrene_termine_gesamt) * 100
+        return (folgetermin_gemacht / kunden_terminiert) * 100
 
     def calculate_angebot_quote(
         self,
         angebot_erhalten: float,
-        angefahrene_termine_gesamt: float
+        kunden_terminiert: float
     ) -> float:
         """
         Calculate Quote für Angebote (quote rate).
 
-        Formula: (Angebot erhalten / Angefahrene Termine gesamt) × 100
+        Formula: (Angebot erhalten / Kunden terminiert) × 100
 
         Args:
             angebot_erhalten: Number of quotes provided
-            angefahrene_termine_gesamt: Total appointments attended
+            kunden_terminiert: Number of customers scheduled
 
         Returns:
             Percentage as float
 
         Requirements: 10.1, 10.2
         """
-        if angefahrene_termine_gesamt == 0:
+        if kunden_terminiert == 0:
             return 0.0
-        return (angebot_erhalten / angefahrene_termine_gesamt) * 100
+        return (angebot_erhalten / kunden_terminiert) * 100
 
     def calculate_zu_teuer_quote(
         self,
         zu_teuer: float,
-        angefahrene_termine_gesamt: float
+        kunden_terminiert: float
     ) -> float:
         """
         Calculate Quote für zu teuer (too expensive rate).
 
-        Formula: (Zu teuer / Angefahrene Termine gesamt) × 100
+        Formula: (Zu teuer / Kunden terminiert) × 100
 
         Args:
             zu_teuer: Number of customers who found pricing too high
-            angefahrene_termine_gesamt: Total appointments attended
+            kunden_terminiert: Number of customers scheduled
 
         Returns:
             Percentage as float
 
         Requirements: 10.1, 10.2
         """
-        if angefahrene_termine_gesamt == 0:
+        if kunden_terminiert == 0:
             return 0.0
-        return (zu_teuer / angefahrene_termine_gesamt) * 100
+        return (zu_teuer / kunden_terminiert) * 100
 
     def calculate_qc_bestanden_quote(
         self,
@@ -274,9 +279,9 @@ class AnalyticsEngine:
         criterion_name: str
     ) -> str:
         """
-        Generate a descriptive ratio for a quota.
-
-        Formula: "Jeder X. [context] ist [outcome]" where X = 100 / quota
+        DEPRECATED: Use controlling.position_criteria.calculate_ratio_description instead.
+        
+        This method is kept for backwards compatibility only.
 
         Args:
             quota_percentage: The quota as a percentage
@@ -284,77 +289,13 @@ class AnalyticsEngine:
 
         Returns:
             German description string
-
-        Requirements: 11.1, 11.2, 11.3
         """
-        if quota_percentage == 0:
-            return "keine Daten"
-
-        # Handle extreme percentages
-        if quota_percentage > 100:
-            # If quota > 100%, show multiplicative relationship instead
-            multiplier = round(quota_percentage / 100, 2)
-            context_map = {
-                "Abschlussquote": "angefahrenen Termin",
-                "Terminvereinbarungsquote": "Anruf",
-                "Termine-Anfahrquote": "terminierten Kunden",
-                "nicht interessierte Kunden Quote": "angefahrenen Termin",
-                "technisch nicht machbar Quote": "angefahrenen Termin",
-                "Quote der nicht erreichten Kunden": "Anruf",
-                "Quote für Folgetermine-Vereinbarungen": "angefahrenen Termin",
-                "Quote für Angebote": "angefahrenen Termin",
-                "Quote für zu teuer": "angefahrenen Termin",
-                "Quote für QC bestanden": "Verkauf"
-            }
-            context = context_map.get(criterion_name, "Element")
-            return f"⚠️ {multiplier}× pro {context} (Daten prüfen!)"
-        
-        # Normal case: quota <= 100%
-        ratio = round(100 / quota_percentage)
-        
-        # Prevent ratio = 0 (happens when quota is very high)
-        if ratio < 1:
-            ratio = 1
-
-        # Map criterion names to descriptions
-        descriptions = {
-            "Abschlussquote": (
-                f"Jeder {ratio}. angefahrene Termin ist ein Verkauf"
-            ),
-            "Terminvereinbarungsquote": (
-                f"Jeder {ratio}. Anruf führt zu einem Termin"
-            ),
-            "Termine-Anfahrquote": (
-                f"Jeder {ratio}. terminierte Kunde wird angefahren"
-            ),
-            "nicht interessierte Kunden Quote": (
-                f"Jeder {ratio}. angefahrene Termin ist nicht interessiert"
-            ),
-            "technisch nicht machbar Quote": (
-                f"Jeder {ratio}. angefahrene Termin ist technisch nicht "
-                f"machbar"
-            ),
-            "Quote der nicht erreichten Kunden": (
-                f"Jeder {ratio}. Anruf erreicht den Kunden nicht"
-            ),
-            "Quote für Folgetermine-Vereinbarungen": (
-                f"Jeder {ratio}. angefahrene Termin führt zu einem "
-                f"Folgetermin"
-            ),
-            "Quote für Angebote": (
-                f"Jeder {ratio}. angefahrene Termin erhält ein Angebot"
-            ),
-            "Quote für zu teuer": (
-                f"Jeder {ratio}. angefahrene Termin ist zu teuer"
-            ),
-            "Quote für QC bestanden": (
-                f"Jeder {ratio}. Verkauf besteht die Qualitätskontrolle"
-            )
-        }
-
-        return descriptions.get(
+        # Fallback to new function
+        from controlling.position_criteria import calculate_ratio_description
+        return calculate_ratio_description(
+            quota_percentage,
             criterion_name,
-            f"1 zu {ratio}"
+            "Sonstiges"  # Default position
         )
 
     def _get_criterion_value(
@@ -380,18 +321,52 @@ class AnalyticsEngine:
 
     def calculate_quotas(
         self,
+        performance_data: List[PerformanceData],
+        position_name: Optional[str] = None
+    ) -> Dict[str, float]:
+        """
+        Calculate position-specific quotas from performance data.
+
+        Args:
+            performance_data: List of performance data records
+            position_name: Name of position (for position-specific quotas)
+
+        Returns:
+            Dictionary mapping quota names to percentages
+
+        Requirements: 10.1, 10.2
+        """
+        # Aggregiere Rohdaten
+        raw_data = defaultdict(float)
+        for record in performance_data:
+            raw_data[record.criterion.name] += record.value
+        
+        # Wenn keine Position angegeben, versuche von erstem Record zu holen
+        if not position_name and performance_data:
+            try:
+                position_name = performance_data[0].employee.position.name
+            except:
+                position_name = None
+        
+        # Berechne positions-spezifische Quoten
+        if position_name:
+            return calculate_quotas_for_position(position_name, dict(raw_data))
+        
+        # Fallback: leeres Dict wenn keine Position
+        return {}
+
+    def calculate_quotas_legacy(
+        self,
         performance_data: List[PerformanceData]
     ) -> Dict[str, float]:
         """
-        Calculate all quotas from performance data.
+        Legacy quota calculation (deprecated - use calculate_quotas instead).
 
         Args:
             performance_data: List of performance data records
 
         Returns:
             Dictionary mapping quota names to percentages
-
-        Requirements: 10.1, 10.2
         """
         # Extract values for each criterion
         verkauf = self._get_criterion_value(performance_data, "Verkauf")
@@ -456,19 +431,19 @@ class AnalyticsEngine:
         for name, value in criteria_that_should_be_integers:
             if value != 0 and value != int(value):
                 validation_warnings.append(
-                    f"⚠️ {name}: {value} (erwartet ganze Zahl, nicht Dezimalzahl)"
+                    f"{name}: {value} (erwartet ganze Zahl, nicht Dezimalzahl)"
                 )
         
         # Check for logical inconsistencies
         if qc_bestanden > verkauf and verkauf > 0:
             validation_warnings.append(
-                f"⚠️ QC bestanden ({qc_bestanden}) > Verkauf ({verkauf}) - "
+                f"QC bestanden ({qc_bestanden}) > Verkauf ({verkauf}) - "
                 f"logisch unmöglich!"
             )
         
         if kunden_terminiert > getaetigte_anrufe_gesamt and getaetigte_anrufe_gesamt > 0:
             validation_warnings.append(
-                f"⚠️ Terminierte Kunden ({kunden_terminiert}) > "
+                f"Terminierte Kunden ({kunden_terminiert}) > "
                 f"Anrufe ({getaetigte_anrufe_gesamt}) - prüfen!"
             )
         
@@ -482,7 +457,7 @@ class AnalyticsEngine:
         quotas = {
             "Abschlussquote": self.calculate_abschlussquote(
                 verkauf,
-                angefahrene_termine_gesamt
+                kunden_terminiert
             ),
             "Terminvereinbarungsquote": (
                 self.calculate_terminvereinbarungsquote(
@@ -497,13 +472,13 @@ class AnalyticsEngine:
             "nicht interessierte Kunden Quote": (
                 self.calculate_nicht_interessiert_quote(
                     storniert_kein_interesse,
-                    angefahrene_termine_gesamt
+                    kunden_terminiert
                 )
             ),
             "technisch nicht machbar Quote": (
                 self.calculate_technisch_nicht_machbar_quote(
                     technisch_nicht_machbar,
-                    angefahrene_termine_gesamt
+                    kunden_terminiert
                 )
             ),
             "Quote der nicht erreichten Kunden": (
@@ -515,16 +490,16 @@ class AnalyticsEngine:
             "Quote für Folgetermine-Vereinbarungen": (
                 self.calculate_folgetermin_quote(
                     folgetermin_gemacht,
-                    angefahrene_termine_gesamt
+                    kunden_terminiert
                 )
             ),
             "Quote für Angebote": self.calculate_angebot_quote(
                 angebot_erhalten,
-                angefahrene_termine_gesamt
+                kunden_terminiert
             ),
             "Quote für zu teuer": self.calculate_zu_teuer_quote(
                 zu_teuer,
-                angefahrene_termine_gesamt
+                kunden_terminiert
             ),
             "Quote für QC bestanden": self.calculate_qc_bestanden_quote(
                 qc_bestanden,
@@ -534,6 +509,33 @@ class AnalyticsEngine:
 
         return quotas
 
+    def aggregate_performance_data(
+        self,
+        performance_data: List[PerformanceData]
+    ) -> Dict[str, Any]:
+        """
+        Aggregate performance data records into structured output.
+        
+        Args:
+            performance_data: List of PerformanceData objects
+            
+        Returns:
+            Dictionary with quotas and aggregated raw data
+        """
+        # Calculate quotas from performance data
+        quotas = self.calculate_quotas(performance_data)
+        
+        # Aggregate raw data by criterion
+        raw_data = defaultdict(float)
+        for record in performance_data:
+            raw_data[record.criterion.name] += record.value
+        
+        return {
+            "quotas": quotas,
+            "raw_data": dict(raw_data),
+            "record_count": len(performance_data)
+        }
+    
     def aggregate_data(
         self,
         employee_id: int,
@@ -580,14 +582,20 @@ class AnalyticsEngine:
             PerformanceData.date <= end_date
         ).all()
 
-        # Calculate quotas
-        quotas = self.calculate_quotas(performance_data)
+        # Get position name for position-specific quotas
+        position_name = employee.position.name if employee.position else None
 
-        # Generate ratio descriptions
-        ratios = {
-            name: self.calculate_ratio_description(percentage, name)
-            for name, percentage in quotas.items()
-        }
+        # Calculate quotas (positions-spezifisch)
+        quotas = self.calculate_quotas(performance_data, position_name)
+
+        # Generate ratio descriptions (positions-spezifisch)
+        ratios = {}
+        for quota_name, percentage in quotas.items():
+            ratios[quota_name] = calculate_ratio_description(
+                percentage,
+                quota_name,
+                position_name or "Sonstiges"
+            )
 
         # Aggregate raw data by criterion
         raw_data = defaultdict(float)
@@ -597,6 +605,7 @@ class AnalyticsEngine:
         return {
             "employee_id": employee_id,
             "employee_name": employee.full_name,
+            "position_name": position_name,
             "period_type": period_type.value,
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),

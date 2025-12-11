@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
 
 from controlling.models import (
-    Employee, PerformanceData, Position, EvaluationPeriod
+    Employee, PerformanceData, Position, EvaluationPeriod, PeriodStatus
 )
 from controlling.analytics import AnalyticsEngine
 
@@ -101,12 +101,15 @@ class RankingSystem:
             if not perf_data:
                 continue
             
-            # Berechne Quotas
-            quotas = self.analytics_engine.calculate_quotas(perf_data)
+            # Berechne Quotas (positions-spezifisch)
+            quotas = self.analytics_engine.calculate_quotas(
+                perf_data,
+                employee.position.name if employee.position else None
+            )
             
             employee_quotas.append({
                 "employee_id": employee.id,
-                "name": employee.name,
+                "name": employee.full_name,
                 "agent_name": employee.agent_name,
                 "quotas": quotas
             })
@@ -237,13 +240,12 @@ class RankingSystem:
         Returns:
             Liste mit Rankings pro Periode
         """
-        # Hole alle abgeschlossenen und aktiven Perioden
+        # Hole alle abgeschlossenen und aktiven Perioden (Positionsfilter folgt in Ranking)
         periods = self.db.query(EvaluationPeriod).filter(
-            and_(
-                EvaluationPeriod.status.in_(['ACTIVE', 'COMPLETED']),
-                (EvaluationPeriod.employee_id.is_(None)) |
-                (Employee.position_id == position_id)
-            )
+            EvaluationPeriod.status.in_([
+                PeriodStatus.ACTIVE,
+                PeriodStatus.COMPLETED
+            ])
         ).order_by(EvaluationPeriod.start_date.desc()).all()
         
         all_rankings = []

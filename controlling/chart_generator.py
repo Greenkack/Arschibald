@@ -327,7 +327,7 @@ class ChartGenerator:
         aggregated_data = report_data.get("aggregated_data", {})
         raw_data = aggregated_data.get("raw_data", {})
 
-        # 1. Quotas Bar Chart
+        # 1. Quotas Bar Chart (Hauptdiagramm)
         if quotas:
             quota_chart = self.create_bar_chart(
                 data=quotas,
@@ -337,21 +337,7 @@ class ChartGenerator:
             )
             figures.append(quota_chart)
 
-        # 2. Top 5 Quotas Column Chart
-        if quotas:
-            # Sort quotas and take top 5
-            sorted_quotas = dict(
-                sorted(quotas.items(), key=lambda x: x[1], reverse=True)[:5]
-            )
-            top_quotas_chart = self.create_column_chart(
-                data=sorted_quotas,
-                title="Top 5 Leistungsquoten",
-                x_label="Quote",
-                y_label="Prozent (%)"
-            )
-            figures.append(top_quotas_chart)
-
-        # 3. Quotas Distribution Donut Chart
+        # 2. Quotas Distribution Donut Chart (nur non-zero Werte)
         if quotas:
             # Filter out zero values for donut chart
             non_zero_quotas = {k: v for k, v in quotas.items() if v > 0}
@@ -362,15 +348,11 @@ class ChartGenerator:
                 )
                 figures.append(donut_chart)
 
-        # 4. Raw Performance Data Column Chart
+        # 3. Raw Performance Data (alle Kriterien, nicht nur Top 10)
         if raw_data:
-            # Take top 10 criteria by value
-            sorted_raw = dict(
-                sorted(raw_data.items(), key=lambda x: x[1], reverse=True)[:10]
-            )
             raw_data_chart = self.create_column_chart(
-                data=sorted_raw,
-                title="Top 10 Leistungskriterien",
+                data=raw_data,
+                title="Leistungskriterien Übersicht",
                 x_label="Kriterium",
                 y_label="Anzahl"
             )
@@ -388,6 +370,178 @@ class ChartGenerator:
                 showarrow=False,
                 font=dict(size=16, color="#9ca3af")
             )
+            figures.append(self.apply_shadcn_theme(fig))
+
+        return figures
+
+    def create_comparison_charts(
+        self,
+        comparison_report: Dict[str, Any]
+    ) -> List[go.Figure]:
+        """
+        Create comparison charts for team reports with multiple employees.
+
+        Args:
+            comparison_report: Team comparison report data with multiple employees
+
+        Returns:
+            List of Plotly figures for comparison display
+
+        Requirements: 12.3
+        """
+        figures = []
+
+        employees = comparison_report.get("employees", [])
+        
+        if not employees:
+            fig = go.Figure()
+            fig.add_annotation(
+                text="Keine Mitarbeiterdaten für Vergleich verfügbar",
+                xref="paper",
+                yref="paper",
+                x=0.5,
+                y=0.5,
+                showarrow=False,
+                font=dict(size=16, color="#9ca3af")
+            )
+            figures.append(self.apply_shadcn_theme(fig))
+            return figures
+
+        # Extract employee names and quota data
+        employee_names = [emp.get("full_name", "Unbekannt") for emp in employees]
+        
+        # 1. Abschlussquote Vergleich
+        abschlussquote_data = {}
+        for emp in employees:
+            quotas = emp.get("quotas", {})
+            abschlussquote = quotas.get("Abschlussquote", 0)
+            abschlussquote_data[emp.get("full_name", "Unbekannt")] = abschlussquote
+        
+        if abschlussquote_data:
+            fig = self.create_column_chart(
+                data=abschlussquote_data,
+                title="Abschlussquote Vergleich",
+                x_label="Mitarbeiter",
+                y_label="Quote (%)"
+            )
+            figures.append(fig)
+        
+        # 2. Top 3 Quotas Comparison (grouped bar chart)
+        top_quota_names = ["Abschlussquote", "Terminvereinbarungsquote", "Termine-Anfahrquote"]
+        
+        fig = go.Figure()
+        
+        for quota_name in top_quota_names:
+            quota_values = []
+            for emp in employees:
+                quotas = emp.get("quotas", {})
+                quota_values.append(quotas.get(quota_name, 0))
+            
+            fig.add_trace(go.Bar(
+                name=quota_name,
+                x=employee_names,
+                y=quota_values,
+                text=[f"{v:.1f}%" for v in quota_values],
+                textposition='auto',
+                textfont=dict(size=10, color="white"),
+                hovertemplate=f'<b>{quota_name}</b><br>%{{x}}<br>%{{y:.2f}}%<extra></extra>'
+            ))
+        
+        fig.update_layout(
+            title="Top 3 Quotas im Vergleich",
+            xaxis_title="Mitarbeiter",
+            yaxis_title="Quote (%)",
+            barmode='group',
+            height=450,
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1
+            )
+        )
+        
+        figures.append(self.apply_shadcn_theme(fig))
+        
+        # 3. Rohdaten Vergleich (Kontakte, Termine, Abschlüsse)
+        raw_data_labels = ["Kontakte", "Termine", "Abschlüsse"]
+        
+        fig = go.Figure()
+        
+        for label in raw_data_labels:
+            values = []
+            for emp in employees:
+                raw_data = emp.get("aggregated_data", {}).get("raw_data", {})
+                values.append(raw_data.get(label, 0))
+            
+            fig.add_trace(go.Bar(
+                name=label,
+                x=employee_names,
+                y=values,
+                text=[f"{int(v)}" for v in values],
+                textposition='auto',
+                textfont=dict(size=10, color="white"),
+                hovertemplate=f'<b>{label}</b><br>%{{x}}<br>%{{y}}<extra></extra>'
+            ))
+        
+        fig.update_layout(
+            title="Aktivitäten im Vergleich",
+            xaxis_title="Mitarbeiter",
+            yaxis_title="Anzahl",
+            barmode='group',
+            height=450,
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1
+            )
+        )
+        
+        figures.append(self.apply_shadcn_theme(fig))
+        
+        # 4. Durchschnittliche Performance (Radar Chart alternative: Multi-line)
+        # Alle Quotas im Vergleich als Liniendiagramm
+        all_quota_names = set()
+        for emp in employees:
+            all_quota_names.update(emp.get("quotas", {}).keys())
+        
+        all_quota_names = sorted(list(all_quota_names))[:8]  # Max 8 quotas
+        
+        if all_quota_names:
+            fig = go.Figure()
+            
+            for emp in employees:
+                quotas = emp.get("quotas", {})
+                quota_values = [quotas.get(qn, 0) for qn in all_quota_names]
+                
+                fig.add_trace(go.Scatter(
+                    x=all_quota_names,
+                    y=quota_values,
+                    mode='lines+markers',
+                    name=emp.get("full_name", "Unbekannt"),
+                    line=dict(width=3),
+                    marker=dict(size=8),
+                    hovertemplate='<b>%{fullData.name}</b><br>%{x}<br>%{y:.2f}%<extra></extra>'
+                ))
+            
+            fig.update_layout(
+                title="Alle Quotas im Vergleich",
+                xaxis_title="Quote",
+                yaxis_title="Prozent (%)",
+                height=500,
+                legend=dict(
+                    orientation="v",
+                    yanchor="top",
+                    y=1,
+                    xanchor="left",
+                    x=1.02
+                ),
+                xaxis=dict(tickangle=45)
+            )
+            
             figures.append(self.apply_shadcn_theme(fig))
 
         return figures

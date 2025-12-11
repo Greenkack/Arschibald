@@ -1819,30 +1819,26 @@ def render_solar_calculator(
             p for p in products if (
                 p.get('brand') or '').strip().lower() == brand.strip().lower()]
 
-    # Sichtbare Version / Build Tag zur Kontrolle, dass neue Datei wirklich
-    # geladen wurde
-    version_tag = "SolarCalcWizard-2025-09-05-v1"
-    st.caption(f"Solar Calculator – Schritt {step} / 2 | Build: {version_tag}")
-
-    # Optionaler Debug-Block zur Fehlersuche falls Nutzer nur Minimal-UI sieht
-    with st.expander("Debug (nur vorübergehend) ", expanded=False):
-        st.write(
-            {
-                'step': step,
-                'module_qty_state': st.session_state.get('module_quantity_sc_v1'),
-                'details_keys': sorted(
-                    details.keys()),
-                'have_products_modul': len(
-                    list_products_safe(
-                        category='Modul')) if callable(list_products_safe) else 'n/a',
-                'have_products_wr': len(
-                    list_products_safe(
-                        category='Wechselrichter')) if callable(list_products_safe) else 'n/a',
-                'have_products_storage': len(
-                    list_products_safe(
-                        category='Batteriespeicher')) if callable(list_products_safe) else 'n/a',
-            })
-        st.info("Falls hier 0 Produkte angezeigt werden, fehlen Einträge in der Produktdatenbank (Kategorie: 'Modul', 'Wechselrichter', 'Batteriespeicher').")
+    # Moderner Header mit Card-Design und schwarzer Schattierung
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        border-left: 6px solid #ff8c00;
+        border: 1px solid rgba(255, 200, 140, 0.3);
+        transition: all 0.3s ease;
+    ">
+        <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em;">
+            Solar Calculator
+        </h2>
+        <p style="color: #4a5568; margin: 0; font-size: 1rem; font-weight: 500;">
+            Schnelle Solar-Berechnung – Schritt {step} / 2
+        </p>
+    </div>
+    """.format(step=step), unsafe_allow_html=True)
 
     if step == 1:
         st.subheader(

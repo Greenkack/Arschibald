@@ -836,6 +836,392 @@ def show_availability_status():
 
 
 # ============================================================================
+# CAROUSEL COMPONENT
+# ============================================================================
+
+def carousel(
+    items: List[Dict[str, Any]],
+    auto_advance: bool = False,
+    interval: int = 5000,
+    show_dots: bool = True,
+    key: Optional[str] = None,
+    **kwargs
+) -> int:
+    """
+    Render a shadcn/ui carousel
+    
+    Args:
+        items: List of carousel items (each item is a dict with 'content', 'title', etc.)
+        auto_advance: Whether to auto-advance slides
+        interval: Auto-advance interval in milliseconds
+        show_dots: Whether to show navigation dots
+        key: Unique key for the carousel
+        **kwargs: Additional arguments
+    
+    Returns:
+        int: Currently active slide index
+    """
+    if SHADCN_UI_AVAILABLE:
+        try:
+            result = ui.carousel(
+                items=items,
+                auto_advance=auto_advance,
+                interval=interval,
+                show_dots=show_dots,
+                key=key,
+                **kwargs
+            )
+            return result
+        except Exception as e:
+            logger.error(f"Error rendering shadcn carousel: {e}")
+    
+    # Fallback to native selectbox-based carousel
+    if not items:
+        return 0
+    
+    # Use session state for carousel index
+    carousel_key = f"carousel_index_{key or 'default'}"
+    if carousel_key not in st.session_state:
+        st.session_state[carousel_key] = 0
+    
+    current_index = st.session_state[carousel_key]
+    
+    # Display current item
+    current_item = items[current_index]
+    st.markdown(f"### {current_item.get('title', '')}")
+    st.write(current_item.get('content', ''))
+    
+    # Navigation buttons
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col1:
+        if st.button("Previous", key=f"{key}_prev"):
+            st.session_state[carousel_key] = (current_index - 1) % len(items)
+            st.rerun()
+    with col2:
+        if show_dots:
+            st.write(f"Slide {current_index + 1} of {len(items)}")
+    with col3:
+        if st.button("Next", key=f"{key}_next"):
+            st.session_state[carousel_key] = (current_index + 1) % len(items)
+            st.rerun()
+    
+    return st.session_state[carousel_key]
+
+
+# ============================================================================
+# DRAWER COMPONENT
+# ============================================================================
+
+def drawer(
+    trigger_label: str,
+    content: Callable,
+    side: Literal["left", "right", "top", "bottom"] = "right",
+    size: Literal["sm", "default", "lg", "full"] = "default",
+    key: Optional[str] = None,
+    **kwargs
+) -> bool:
+    """
+    Render a shadcn/ui drawer (side panel)
+    
+    Args:
+        trigger_label: Label for the trigger button
+        content: Callable that renders drawer content
+        side: Side from which drawer slides in
+        size: Drawer size
+        key: Unique key for the drawer
+        **kwargs: Additional arguments
+    
+    Returns:
+        bool: True if drawer is open
+    """
+    if SHADCN_UI_AVAILABLE:
+        try:
+            result = ui.drawer(
+                trigger_label=trigger_label,
+                content=content,
+                side=side,
+                size=size,
+                key=key,
+                **kwargs
+            )
+            return result
+        except Exception as e:
+            logger.error(f"Error rendering shadcn drawer: {e}")
+    
+    # Fallback to expander
+    drawer_key = f"drawer_open_{key or 'default'}"
+    if drawer_key not in st.session_state:
+        st.session_state[drawer_key] = False
+    
+    if st.button(trigger_label, key=f"{key}_trigger"):
+        st.session_state[drawer_key] = not st.session_state[drawer_key]
+        st.rerun()
+    
+    if st.session_state[drawer_key]:
+        with st.expander("Drawer Content", expanded=True):
+            content()
+            if st.button("Close", key=f"{key}_close"):
+                st.session_state[drawer_key] = False
+                st.rerun()
+    
+    return st.session_state[drawer_key]
+
+
+# ============================================================================
+# SKELETON LOADER COMPONENT
+# ============================================================================
+
+def skeleton(
+    width: str = "100%",
+    height: str = "20px",
+    count: int = 1,
+    key: Optional[str] = None,
+    **kwargs
+) -> None:
+    """
+    Render a shadcn/ui skeleton loader
+    
+    Args:
+        width: Skeleton width (CSS value)
+        height: Skeleton height (CSS value)
+        count: Number of skeleton lines
+        key: Unique key for the skeleton
+        **kwargs: Additional arguments
+    """
+    if SHADCN_UI_AVAILABLE:
+        try:
+            ui.skeleton(
+                width=width,
+                height=height,
+                count=count,
+                key=key,
+                **kwargs
+            )
+            return
+        except Exception as e:
+            logger.error(f"Error rendering shadcn skeleton: {e}")
+    
+    # Fallback to styled divs with shimmer animation
+    for i in range(count):
+        st.markdown(
+            f'''
+            <div style="
+                width: {width};
+                height: {height};
+                background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+                background-size: 200% 100%;
+                animation: shimmer 1.5s infinite;
+                border-radius: 4px;
+                margin-bottom: 8px;
+            "></div>
+            <style>
+                @keyframes shimmer {{
+                    0% {{ background-position: 200% 0; }}
+                    100% {{ background-position: -200% 0; }}
+                }}
+            </style>
+            ''',
+            unsafe_allow_html=True
+        )
+
+
+# ============================================================================
+# PROGRESS COMPONENT
+# ============================================================================
+
+def progress(
+    value: float,
+    max_value: float = 100.0,
+    label: Optional[str] = None,
+    variant: Literal["default", "circular"] = "default",
+    key: Optional[str] = None,
+    **kwargs
+) -> None:
+    """
+    Render a shadcn/ui progress indicator
+    
+    Args:
+        value: Current progress value
+        max_value: Maximum value
+        label: Progress label
+        variant: Progress variant (default linear or circular)
+        key: Unique key for the progress
+        **kwargs: Additional arguments
+    """
+    if SHADCN_UI_AVAILABLE:
+        try:
+            ui.progress(
+                value=value,
+                max_value=max_value,
+                label=label,
+                variant=variant,
+                key=key,
+                **kwargs
+            )
+            return
+        except Exception as e:
+            logger.error(f"Error rendering shadcn progress: {e}")
+    
+    # Fallback to native progress
+    if label:
+        st.write(label)
+    
+    percentage = (value / max_value) * 100
+    
+    if variant == "circular":
+        # Circular progress (text-based fallback)
+        st.markdown(
+            f'''
+            <div style="text-align: center; font-size: 24px; font-weight: bold;">
+                {percentage:.0f}%
+            </div>
+            ''',
+            unsafe_allow_html=True
+        )
+    else:
+        # Linear progress
+        st.progress(value / max_value)
+        st.caption(f"{percentage:.1f}%")
+
+
+# ============================================================================
+# TOOLTIP COMPONENT
+# ============================================================================
+
+def tooltip(
+    content: str,
+    tooltip_text: str,
+    key: Optional[str] = None,
+    **kwargs
+) -> None:
+    """
+    Render a shadcn/ui tooltip
+    
+    Args:
+        content: Content to display (trigger element)
+        tooltip_text: Tooltip text shown on hover
+        key: Unique key for the tooltip
+        **kwargs: Additional arguments
+    """
+    if SHADCN_UI_AVAILABLE:
+        try:
+            ui.tooltip(
+                content=content,
+                tooltip_text=tooltip_text,
+                key=key,
+                **kwargs
+            )
+            return
+        except Exception as e:
+            logger.error(f"Error rendering shadcn tooltip: {e}")
+    
+    # Fallback to title attribute
+    st.markdown(
+        f'<span title="{tooltip_text}">{content}</span>',
+        unsafe_allow_html=True
+    )
+
+
+# ============================================================================
+# POPOVER COMPONENT
+# ============================================================================
+
+def popover(
+    trigger_label: str,
+    content: Callable,
+    key: Optional[str] = None,
+    **kwargs
+) -> bool:
+    """
+    Render a shadcn/ui popover
+    
+    Args:
+        trigger_label: Label for the trigger button
+        content: Callable that renders popover content
+        key: Unique key for the popover
+        **kwargs: Additional arguments
+    
+    Returns:
+        bool: True if popover is open
+    """
+    if SHADCN_UI_AVAILABLE:
+        try:
+            result = ui.popover(
+                trigger_label=trigger_label,
+                content=content,
+                key=key,
+                **kwargs
+            )
+            return result
+        except Exception as e:
+            logger.error(f"Error rendering shadcn popover: {e}")
+    
+    # Fallback to expander
+    popover_key = f"popover_open_{key or 'default'}"
+    if popover_key not in st.session_state:
+        st.session_state[popover_key] = False
+    
+    if st.button(trigger_label, key=f"{key}_trigger"):
+        st.session_state[popover_key] = not st.session_state[popover_key]
+        st.rerun()
+    
+    if st.session_state[popover_key]:
+        with st.container():
+            content()
+    
+    return st.session_state[popover_key]
+
+
+# ============================================================================
+# ACCORDION COMPONENT
+# ============================================================================
+
+def accordion(
+    items: List[Dict[str, Any]],
+    default_open: Optional[int] = None,
+    allow_multiple: bool = False,
+    key: Optional[str] = None,
+    **kwargs
+) -> List[int]:
+    """
+    Render a shadcn/ui accordion
+    
+    Args:
+        items: List of accordion items (each with 'title' and 'content')
+        default_open: Index of item to open by default
+        allow_multiple: Whether multiple items can be open simultaneously
+        key: Unique key for the accordion
+        **kwargs: Additional arguments
+    
+    Returns:
+        List[int]: Indices of open items
+    """
+    if SHADCN_UI_AVAILABLE:
+        try:
+            result = ui.accordion(
+                items=items,
+                default_open=default_open,
+                allow_multiple=allow_multiple,
+                key=key,
+                **kwargs
+            )
+            return result
+        except Exception as e:
+            logger.error(f"Error rendering shadcn accordion: {e}")
+    
+    # Fallback to native expanders
+    open_items = []
+    for i, item in enumerate(items):
+        expanded = (i == default_open) if default_open is not None else False
+        with st.expander(item.get('title', f'Item {i+1}'), expanded=expanded):
+            st.write(item.get('content', ''))
+            if expanded or st.session_state.get(f"{key}_accordion_{i}", False):
+                open_items.append(i)
+    
+    return open_items
+
+
+# ============================================================================
 # COMPONENT REGISTRY
 # ============================================================================
 
@@ -857,6 +1243,13 @@ COMPONENT_REGISTRY = {
     "metric": metric,
     "table": table,
     "element": element,
+    "carousel": carousel,
+    "drawer": drawer,
+    "skeleton": skeleton,
+    "progress": progress,
+    "tooltip": tooltip,
+    "popover": popover,
+    "accordion": accordion,
 }
 
 

@@ -13,6 +13,35 @@ import warnings
 from datetime import datetime
 from typing import Any, Dict
 
+# Starte Video-Server im Hintergrund für Intro-Screen Video
+# Singleton Pattern: verhindert doppelte Server-Starts
+try:
+    from video_server import start_video_server, get_server_status
+    import threading
+    
+    # Prüfe ob Server bereits läuft
+    server_status = get_server_status()
+    if not server_status.get('running', False):
+        # Starte Server in separatem Thread
+        def _start_video_server_safe():
+            try:
+                success, port, msg = start_video_server(port=8503, retry_attempts=3)
+                if success:
+                    print(f"✓ Video-Server erfolgreich gestartet auf http://localhost:{port}")
+                else:
+                    print(f"✗ Video-Server konnte nicht gestartet werden: {msg}")
+            except Exception as e:
+                print(f"✗ Video-Server Fehler in Thread: {e}")
+        
+        video_server_thread = threading.Thread(target=_start_video_server_safe, daemon=True, name="VideoServer")
+        video_server_thread.start()
+    else:
+        print(f"✓ Video-Server läuft bereits auf {server_status.get('address', 'unknown')}")
+except ImportError as e:
+    print(f"⚠ Video-Server Modul nicht gefunden: {e}")
+except Exception as e:
+    print(f"⚠ Video-Server konnte nicht initialisiert werden: {e}")
+
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -121,7 +150,8 @@ try:
     import atexit
     
     # Initialize tracing (AI Toolkit OTLP endpoint: http://localhost:4318)
-    TRACING_ENABLED = os.environ.get("ENABLE_TRACING", "true").lower() == "true"
+    # DEAKTIVIERT: OTLP-Server läuft nicht, verursacht Connection-Fehler
+    TRACING_ENABLED = os.environ.get("ENABLE_TRACING", "false").lower() == "true"
     if TRACING_ENABLED:
         initialize_tracing()
         atexit.register(shutdown_tracing)
@@ -405,19 +435,21 @@ def inject_custom_context_menu(nav_lock_enabled: bool) -> Any:
             const styleTag = parentDoc.createElement('style');
             styleTag.id = styleId;
             styleTag.innerHTML = `
-                .custom-context-menu {{
+                .custom-context-menu {
                     position: absolute;
                     z-index: 99999;
                     min-width: 228px;
                     background: rgba(17, 24, 39, 0.95);
+                    -webkit-backdrop-filter: blur(6px);
                     backdrop-filter: blur(6px);
                     border-radius: 12px;
+                    -webkit-box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
                     box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
                     padding: 8px 0;
                     color: #f9fafb;
                     font-family: 'Inter', sans-serif;
                     display: none;
-                }}
+                }
                 .custom-context-menu.visible {{
                     display: block;
                     animation: contextMenuFade 120ms ease-out;
@@ -991,9 +1023,9 @@ def main():
     theme_payload = getattr(theme_manager, "streamlit_theme", None)
     try:
         if isinstance(theme_payload, dict) and theme_payload:
-            st.set_page_config(page_title=get_text_gui("app_title"), layout="wide", theme=theme_payload)
+            st.set_page_config(page_title=get_text_gui("app_title"), page_icon="⚡", layout="wide", theme=theme_payload)
         else:
-            st.set_page_config(page_title=get_text_gui("app_title"), layout="wide")
+            st.set_page_config(page_title=get_text_gui("app_title"), page_icon="⚡", layout="wide")
     except TypeError:
         try:
             streamlit_theme_config = st.get_option("theme") or {}
@@ -1015,7 +1047,7 @@ def main():
                 except Exception:
                     pass
 
-        st.set_page_config(page_title=get_text_gui("app_title"), layout="wide")
+        st.set_page_config(page_title=get_text_gui("app_title"), page_icon="⚡", layout="wide")
     _apply_active_app_theme()
     
     # ============================================================================
@@ -1058,6 +1090,84 @@ def main():
         <style>
         /* ========== GLOBALE BUTTON-EFFEKTE (FALLBACK) ========== */
         {fallback_css}
+        </style>
+        """, unsafe_allow_html=True)
+
+    # ============================================================================
+    # GLOBALES DROPDOWN/SELECTBOX STYLING
+    # ============================================================================
+    # Lade Dropdown-Styling aus CSS-Datei
+    try:
+        from css_template_manager import get_css_manager
+        css_manager = get_css_manager()
+        dropdown_css = css_manager.load_template_css("dropdown_styling")
+        if dropdown_css:
+            st.markdown(f"""
+            <style>
+            /* ========== GLOBALES DROPDOWN STYLING ========== */
+            {dropdown_css}
+            </style>
+            """, unsafe_allow_html=True)
+    except Exception as e:
+        # Fallback: Inline CSS falls Manager nicht verfügbar
+        st.markdown("""
+        <style>
+        /* ========== DROPDOWN/SELECTBOX STYLING (FALLBACK) ========== */
+        div[data-baseweb="select"] {
+            margin-top: 0.25rem !important;
+        }
+        div[data-baseweb="select"] > div {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.95rem !important;
+            transition: all 0.2s ease !important;
+            min-height: 42px !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        div[data-baseweb="select"] > div:hover {
+            border-color: #ff8c00 !important;
+            box-shadow: 0 0 0 10px #ff8c00 !important;
+        }
+        div[data-baseweb="select"] > div:focus-within {
+            border-color: #ff8c00 !important;
+            box-shadow: 0 0 0 10px rgba(255, 140, 0, 0.2) !important;
+        }
+        div[data-baseweb="select"] > div > div {
+            display: flex !important;
+            align-items: center !important;
+            padding: 0 !important;
+        }
+        div[data-baseweb="select"] svg {
+            color: #ff8c00 !important;
+        }
+        .stSelectbox > label {
+            font-weight: 600 !important;
+            color: #2d3748 !important;
+            font-size: 0.9rem !important;
+            margin-bottom: 0.4rem !important;
+            display: block !important;
+        }
+        div[data-baseweb="popover"] {
+            border-radius: 8px !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+        }
+        ul[role="listbox"] > li {
+            padding: 0.6rem 0.75rem !important;
+            font-size: 0.95rem !important;
+            transition: background-color 0.15s ease !important;
+        }
+        ul[role="listbox"] > li:hover {
+            background-color: #f7f9fc !important;
+            color: #ff8c00 !important;
+        }
+        ul[role="listbox"] > li[aria-selected="true"] {
+            background-color: #ff8c00 !important;
+            color: white !important;
+            font-weight: 600 !important;
+        }
         </style>
         """, unsafe_allow_html=True)
 
@@ -1109,18 +1219,18 @@ def main():
     button[data-testid="stNumberInputStepDown"]:hover,
     div[data-testid="stNumberInput"] button:hover {
         background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.08) 100%) !important;
-        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2) !important;
+        box-shadow: 0 10px 10px rgba(102, 126, 234, 0.2) !important;
         transform: scale(1.05) !important;
         animation: sliderButtonPulse 1.5s ease-in-out infinite !important;
     }
     
     @keyframes sliderButtonPulse {
         0%, 100% {
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 10px 10px rgba(102, 126, 234, 0.2);
             transform: scale(1.05);
         }
         50% {
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 15px rgba(102, 126, 234, 0.3);
             transform: scale(1.08);
         }
     }
@@ -1135,7 +1245,7 @@ def main():
     
     /* Slider Track Hover */
     div[data-testid="stSlider"] div[role="slider"]:hover {
-        box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
         transform: scale(1.1) !important;
         transition: all 0.3s ease !important;
     }
@@ -1176,18 +1286,18 @@ def main():
     /* Checkbox Hover-Effekt - Shimmer */
     div[data-testid="stCheckbox"]:hover input[type="checkbox"],
     .stCheckbox:hover input[type="checkbox"] {
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
         border-color: rgba(102, 126, 234, 0.6) !important;
         animation: checkboxPulse 1.5s ease-in-out infinite !important;
     }
     
     @keyframes checkboxPulse {
         0%, 100% {
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15);
             transform: scale(1);
         }
         50% {
-            box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.25);
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.25);
             transform: scale(1.05);
         }
     }
@@ -1203,10 +1313,10 @@ def main():
     
     @keyframes checkboxCheckedPulse {
         0%, 100% {
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.2);
         }
         50% {
-            box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.3);
         }
     }
     
@@ -1238,7 +1348,7 @@ def main():
     
     div[data-testid="stRadio"] input[type="radio"]:hover,
     .stRadio input[type="radio"]:hover {
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
         animation: checkboxPulse 1.5s ease-in-out infinite !important;
     }
     
@@ -1375,20 +1485,20 @@ def main():
                     bottom: 25px !important;
                     right: 25px !important;
                     z-index: 999998 !important;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-                    color: white !important;
+                    background: linear-gradient(135deg, #ffffff 0%, #764ba2 100%) !important;
+                    color: #e9ebed !important;
                     border: none !important;
                     border-radius: 50% !important;
-                    width: 65px !important;
-                    height: 65px !important;
+                    width: 175px !important;
+                    height: 175px !important;
                     font-size: 28px !important;
                     cursor: pointer !important;
-                    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5) !important;
+                    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.5) !important;
                     transition: all 0.3s ease !important;
                 }
                 .drawer-button:hover {
                     transform: scale(1.1) !important;
-                    box-shadow: 0 8px 35px rgba(102, 126, 234, 0.7) !important;
+                    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.7) !important;
                 }
                 .drawer-panel {
                     position: fixed !important;
@@ -1396,7 +1506,7 @@ def main():
                     right: -350px !important;
                     width: 350px !important;
                     height: 500px !important;
-                    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+                    background: linear-gradient(180deg, #e9ebed 0%, #ffffff 100%) !important;
                     box-shadow: -5px 0 30px rgba(0,0,0,0.5) !important;
                     z-index: 999999 !important;
                     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -1409,11 +1519,11 @@ def main():
                 }
                 .drawer-close {
                     position: absolute;
-                    top: 15px;
-                    right: 15px;
-                    background: rgba(255,255,255,0.1);
+                    top: 25px;
+                    right: 25px;
+                    background: rgba(233, 235, 237, 0.1);
                     border: none;
-                    color: white;
+                    color: #e9ebed;
                     font-size: 24px;
                     width: 35px;
                     height: 35px;
@@ -1422,11 +1532,11 @@ def main():
                     transition: all 0.2s;
                 }
                 .drawer-close:hover {
-                    background: rgba(255,255,255,0.2);
+                    background: rgba(233, 235, 237, 0.2);
                     transform: rotate(90deg);
                 }
                 .drawer-title {
-                    color: white;
+                    color: #0, 0, 0;
                     font-size: 24px;
                     font-weight: bold;
                     margin-bottom: 20px;
@@ -1436,17 +1546,17 @@ def main():
                     width: 100%;
                     padding: 15px;
                     margin: 10px 0;
-                    background: rgba(102, 126, 234, 0.2);
+                    background: rgba(233, 235, 237, 0.2);
                     border: 1px solid rgba(102, 126, 234, 0.4);
                     border-radius: 10px;
-                    color: white;
+                    color: #e9ebed;
                     font-size: 16px;
                     cursor: pointer;
                     transition: all 0.3s;
                     text-align: left;
                 }
                 .drawer-btn:hover {
-                    background: rgba(102, 126, 234, 0.4);
+                    background: rgba(133, 235, 237, 0.4);
                     transform: translateX(-5px);
                 }
             `;
@@ -1566,32 +1676,251 @@ def main():
     # Sidebar-Styling - Moderne Navigation im Behance-Stil
     st.markdown("""
     <style>
-    /* Sidebar mit dunklem Gradient */
-    section[data-testid="stSidebar"] {
-        min-width: 300px !important;
-        background: linear-gradient(180deg, #1a1f35 0%, #0f1419 100%) !important;
+    /* HAUPT-HINTERGRUND: Dunkles Grau */
+    .stApp, .main, [data-testid="stAppViewContainer"], .block-container {
+        background-color: #d8dce1 !important;
     }
     
-    /* Moderne Button-Styles im Behance-Stil mit Shimmer-Effekt */
+    /* ========== GLOBALE TEXT-FORMATIERUNG: SCHWARZ & FETT ========== */
+    body, p, span, div, label, 
+    .stMarkdown, .stMarkdown p, .stMarkdown span, .stMarkdown li,
+    .stApp label, .main label,
+    div[data-testid="stWidgetLabel"], div[data-testid="stWidgetLabel"] p, div[data-testid="stWidgetLabel"] span,
+    .stSelectbox label, .stTextInput label, .stNumberInput label,
+    .stCheckbox label, .stRadio label, .stSlider label, .stTextArea label,
+    h1, h2, h3, h4, h5, h6 {
+        color: #1a202c !important;
+        font-weight: 700 !important;
+    }
+    
+    /* ========== MODERNE BUTTONS - Card-Stil mit ORANGE Akzent ========== */
+    .stButton > button {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #1a202c !important;
+        border: 4px solid rgba(200, 210, 220, 0.5) !important;
+        border-radius: 12px !important;
+        padding: 12px 24px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.08) !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-color: #ff8c00 !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.1) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    .stButton > button:active {
+        transform: translateY(0) !important;
+        background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%) !important;
+    }
+    
+    /* ========== INFO/WARNING/SUCCESS BOXEN - Card-Stil mit ORANGE ========== */
+    .stAlert, [data-testid="stAlert"],
+    div[data-baseweb="notification"],
+    .stInfo, .stSuccess, .stWarning, .stError {
+        background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%) !important;
+        color: #1a202c !important;
+        border-left: 5px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        padding: 16px 20px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.08) !important;
+        font-weight: 600 !important;
+    }
+    
+    /* ========== EXPANDER - Card-Stil mit ORANGE Akzent ========== */
+    .streamlit-expanderHeader {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #1a202c !important;
+        border-left: 5px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .streamlit-expanderHeader:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 6px solid #ff8c00 !important;
+    }
+    
+    /* ========== EINGABEFELDER - Card-Stil mit ORANGE Border ========== */
+    /* Äußere Container mit border-left */
+    .stTextInput > div,
+    .stNumberInput > div,
+    .stSelectbox > div,
+    .stTextArea > div,
+    .stDateInput > div,
+    .stTimeInput > div {
+        border-left: 3px solid #ff8c00 !important;
+        border-radius: 12px !important;
+    }
+    
+    /* Innere Input-Felder ohne border-left */
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input,
+    .stSelectbox > div > div > div,
+    .stTextArea > div > div > textarea,
+    .stDateInput > div > div > input,
+    .stTimeInput > div > div > input,
+    select, input[type="text"], input[type="number"], input[type="email"], 
+    input[type="tel"], textarea {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #1a202c !important;
+        border: 1px solid rgba(200, 210, 220, 0.5) !important;
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.06), 0 10px 10px rgba(0,0,0,0.04) !important;
+        transition: all 0.3s ease !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Focus auf Container */
+    .stTextInput > div:focus-within,
+    .stNumberInput > div:focus-within,
+    .stSelectbox > div:focus-within,
+    .stTextArea > div:focus-within,
+    .stDateInput > div:focus-within,
+    .stTimeInput > div:focus-within {
+        border-left: 4px solid #ff8c00 !important;
+        box-shadow: 0 10px 16px rgba(255,140,0,0.2), 0 10px 10px rgba(255,140,0,0.15) !important;
+    }
+    
+    /* Focus auf Input-Feldern */
+    .stTextInput > div > div > input:focus,
+    .stNumberInput > div > div > input:focus,
+    .stSelectbox > div > div > div:focus,
+    input:focus, select:focus, textarea:focus {
+        border-color: #ff8c00 !important;
+        outline: none !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    
+    /* Hover auf Container */
+    .stTextInput > div:hover,
+    .stNumberInput > div:hover,
+    .stSelectbox > div:hover,
+    .stTextArea > div:hover,
+    .stDateInput > div:hover,
+    .stTimeInput > div:hover {
+        box-shadow: 0 10px 16px rgba(255,140,0,0.1), 0 10px 10px rgba(255,140,0,0.08) !important;
+    }
+    
+    .stTextInput > div > div > input:hover,
+    .stNumberInput > div > div > input:hover,
+    .stSelectbox > div > div > div:hover,
+    input:hover, select:hover, textarea:hover {
+        border-color: #ff8c00 !important;
+    }
+    
+    /* ========== CHECKBOXEN & RADIO - Card-Stil mit ORANGE ========== */
+    .stCheckbox > label, .stRadio > label {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #1a202c !important;
+        border: 2px solid rgba(200, 210, 220, 0.5) !important;
+        border-left: 3px solid #ff8c00 !important;
+        border-radius: 10px !important;
+        padding: 10px 14px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.03) !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stCheckbox > label:hover, .stRadio > label:hover {
+        border-color: #ff8c00 !important;
+        border-left: 4px solid #ff8c00 !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    
+    /* Checkbox/Radio checked state */
+    input[type="checkbox"]:checked, input[type="radio"]:checked {
+        accent-color: #ff8c00 !important;
+    }
+    
+    /* ========== DATAFRAMES & TABELLEN - Card-Stil mit ORANGE ========== */
+    .stDataFrame, [data-testid="stDataFrame"],
+    .stTable, table {
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        overflow: hidden !important;
+    }
+    
+    /* ========== METRIKEN - Card-Stil mit ORANGE ========== */
+    div[data-testid="stMetric"],
+    .stMetric {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    div[data-testid="stMetric"]:hover,
+    .stMetric:hover {
+        border-left: 5px solid #ff8c00 !important;
+        box-shadow: 0 10px 16px rgba(255,140,0,0.2), 0 10px 10px rgba(0,0,0,0.12) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* ========== TABS - Card-Stil mit ORANGE ========== */
+    button[data-baseweb="tab"] {
+        border-bottom: 3px solid transparent !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    button[data-baseweb="tab"]:hover {
+        border-bottom-color: rgba(255, 140, 0, 0.5) !important;
+    }
+    
+    button[data-baseweb="tab"][aria-selected="true"] {
+        border-bottom: 3px solid #ff8c00 !important;
+        color: #ff8c00 !important;
+        font-weight: 700 !important;
+    }
+    
+    /* ========== DIVIDER mit ORANGE Akzent ========== */
+    hr, .stDivider, [data-testid="stHorizontalBlock"] hr {
+        border-top: 2px solid rgba(255, 140, 0, 0.3) !important;
+        margin: 24px 0 !important;
+    }
+    
+    /* ========== COLUMNS & CONTAINERS mit subtilen Borders ========== */
+    div[data-testid="column"] {
+        padding: 12px !important;
+    }
+    
+    /* ========== SIDEBAR - Dunkler als Hauptapp aber gut lesbar ========== */
+    section[data-testid="stSidebar"] {
+        min-width: 300px !important;
+        background: linear-gradient(180deg, #bcc0c6 0%, #adb2b8 100%) !important;
+        padding: 1.5rem 1rem !important;
+    }
+    
+    /* Sidebar Buttons - Card-Stil mit schwarzer Schattierung */
     section[data-testid="stSidebar"] .stButton > button {
         width: 100% !important;
         text-align: left !important;
-        padding: 14px 16px !important;
-        margin: 4px 0 !important;
-        background: rgba(102, 126, 234, 0.08) !important;
-        border: none !important;
-        border-left: 3px solid transparent !important;
-        border-radius: 0 10px 10px 0 !important;
-        color: rgba(255, 255, 255, 0.7) !important;
+        padding: 14px 18px !important;
+        margin: 8px 0 !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f5f7f9 100%) !important;
+        border: 2px solid rgba(200, 210, 220, 0.6) !important;
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        color: #1a202c !important;
         font-size: 15px !important;
-        font-weight: 500 !important;
+        font-weight: 700 !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: none !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1) !important;
         position: relative !important;
         overflow: hidden !important;
     }
     
-    /* Shimmer-Effekt (Lichtstrahl) */
+    /* Shimmer-Effekt (Lichtstrahl) mit Orange */
     section[data-testid="stSidebar"] .stButton > button::before {
         content: '' !important;
         position: absolute !important;
@@ -1599,7 +1928,7 @@ def main():
         left: -100% !important;
         width: 100% !important;
         height: 100% !important;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent) !important;
+        background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.3), transparent) !important;
         transition: left 0.5s !important;
     }
     
@@ -1609,37 +1938,77 @@ def main():
     }
     
     section[data-testid="stSidebar"] .stButton > button:hover {
-        background: rgba(102, 126, 234, 0.15) !important;
-        border-left-color: #667eea !important;
-        color: white !important;
-        transform: translateX(5px) !important;
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2) !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 5px solid #ff8c00 !important;
+        border-color: #ff8c00 !important;
+        color: #1a202c !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 6px 15px rgba(0, 0, 0, 0.15) !important;
     }
     
-    /* Aktiver Button (Primary) mit Pulse-Animation */
+    /* Aktiver Button (Primary) - NUR ORANGE AKZENT mit schwarzer Schattierung */
     section[data-testid="stSidebar"] .stButton > button[kind="primary"],
     section[data-testid="stSidebar"] .stButton > button[data-baseweb="button"][class*="primary"] {
-        background: linear-gradient(90deg, rgba(102, 126, 234, 0.25) 0%, rgba(102, 126, 234, 0.1) 100%) !important;
-        border-left-color: #667eea !important;
-        color: white !important;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2) !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f5f7f9 100%) !important;
+        border: 2px solid rgba(200, 210, 220, 0.6) !important;
+        border-left: 6px solid #ff8c00 !important;
+        color: #1a202c !important;
+        font-weight: 700 !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.15) !important;
     }
     
-    /* Pulse-Animation für aktiven Button */
+    /* Pulse-Animation für aktiven Button mit schwarzer Schattierung */
     @keyframes sidebarButtonPulse {
-        0%, 100% { transform: translateX(0) scale(1); }
-        50% { transform: translateX(2px) scale(1.02); }
+        0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.15); }
+        50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3), 0 5px 16px rgba(0, 0, 0, 0.2); }
     }
     
     section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover,
     section[data-testid="stSidebar"] .stButton > button[data-baseweb="button"][class*="primary"]:hover {
         animation: sidebarButtonPulse 2s ease-in-out infinite !important;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3) !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 7px solid #ff8c00 !important;
     }
     
-    /* Section Titles */
+    /* Section Titles - Card-Stil mit ORANGE Akzent */
     section[data-testid="stSidebar"] div[style*="text-transform: uppercase"] {
-        margin-top: 15px !important;
+        margin-top: 20px !important;
+        padding: 12px 16px !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%) !important;
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 10px !important;
+        color: #1a202c !important;
+        font-weight: 700 !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    /* Sidebar Divider/Trennlinien */
+    section[data-testid="stSidebar"] hr {
+        border-top: 2px solid rgba(255, 140, 0, 0.3) !important;
+        margin: 20px 0 !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Sidebar Text - dunkle Schrift mit gutem Kontrast */
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] span,
+    section[data-testid="stSidebar"] div,
+    section[data-testid="stSidebar"] label {
+        color: #1a202c !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Sidebar Selectbox/Input - Card-Stil mit weißem Hintergrund */
+    section[data-testid="stSidebar"] .stSelectbox > div > div,
+    section[data-testid="stSidebar"] .stTextInput > div > div > input,
+    section[data-testid="stSidebar"] .stNumberInput > div > div > input {
+        background: linear-gradient(135deg, #ffffff 0%, #f5f7f9 100%) !important;
+        border: 1px solid rgba(200, 210, 220, 0.6) !important;
+        border-left: 3px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        color: #1a202c !important;
+        font-weight: 600 !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -1941,6 +2310,7 @@ def main():
             border: 1px solid rgba(148, 163, 184, 0.35);
             border-right: none;
             background: rgba(15, 23, 42, 0.82);
+            -webkit-backdrop-filter: blur(16px);
             backdrop-filter: blur(16px);
             color: #f8fafc;
             cursor: pointer;
@@ -1961,6 +2331,7 @@ def main():
             display: flex;
             flex-direction: column;
             background: rgba(15, 23, 42, 0.92);
+            -webkit-backdrop-filter: blur(28px);
             backdrop-filter: blur(28px);
             border-radius: 0 24px 24px 0;
             border: 1px solid rgba(148, 163, 184, 0.35);
@@ -2134,14 +2505,50 @@ def main():
 
     # Seiten-Rendering basierend auf Auswahl
     if selected_page_key == "input":
-        st.header(get_text_gui("menu_item_input"))
+        # MODERNE HEADER IM SCREENSHOT-STIL (Phase 7)
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">
+                Stammdaten & Kalkulation
+            </h1>
+            <p style="color: #4a5568; margin-top: 0.5rem; font-size: 1rem; font-weight: 400;">
+                Geben Sie die Projektdaten ein und starten Sie die Berechnung
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
         if data_input_module and callable(getattr(data_input_module, 'render_data_input', None)):
             data_input_module.render_data_input(TEXTS)
         else:
             st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_input", "Eingabemodul nicht verfügbar.")))
 
     elif selected_page_key == "analysis":
-        st.header(get_text_gui("menu_item_analysis"))
+        # MODERNE HEADER IM SCREENSHOT-STIL (Phase 7)
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">
+                Ergebnis-Analyse
+            </h1>
+            <p style="color: #4a5568; margin-top: 0.5rem; font-size: 1rem; font-weight: 400;">
+                Detaillierte Auswertung Ihrer Solaranlage
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
         if analysis_module and callable(getattr(analysis_module, 'render_analysis', None)):
             try:
                 analysis_module.render_analysis(TEXTS, st.session_state.get("calculation_results"))
@@ -2208,7 +2615,22 @@ def main():
             st.warning(get_text_gui("module_unavailable_details", f"Admin-Panel oder dessen Abhängigkeiten ({', '.join(missing_modules_admin_list)}) nicht verfügbar."))
 
     elif selected_page_key == "doc_output":
-        st.header(get_text_gui("menu_item_doc_output"))
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                PDF-Angebote
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Erstellen und verwalten Sie Ihre Angebotsdokumente
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Tabs für PDF-Ausgabe erstellen - VEREINFACHT (Professional PDF Features sind jetzt in Standard PDF integriert)
         # Multi-Angebote Tab wieder eingefügt
@@ -2565,7 +2987,7 @@ def main():
                                     )
                             
                             with col2:
-                                st.markdown("**[MONEY] Wirtschaftlichkeit:**")
+                                st.markdown("** Wirtschaftlichkeit:**")
                                 include_roi = st.checkbox(
                                     "ROI-Analyse",
                                     value=True,
@@ -2631,7 +3053,7 @@ def main():
                                 col1, col2 = st.columns(2)
                                 
                                 with col1:
-                                    st.markdown("**[DESIGN] Design & Layout:**")
+                                    st.markdown("** Design & Layout:**")
                                     
                                     page_format = st.selectbox(
                                         "Seitenformat",
@@ -2756,7 +3178,7 @@ def main():
                             
                             # Generierungs-Button
                             if st.button(
-                                f"[LAUNCH] {len(selected_firms)} Multi-PDF(s) generieren",
+                                f"{len(selected_firms)} Multi-PDF(s) generieren",
                                 type="primary",
                                 use_container_width=True,
                                 key="generate_multi_pdfs_btn"
@@ -2794,7 +3216,7 @@ def main():
                                         if not results:
                                             st.error("Keine PDFs konnten generiert werden!")
                                             st.warning("**BITTE KONSOLE PRÜFEN!** Dort stehen die Fehlerdetails.")
-                                            st.info("[IDEA] Häufige Ursachen:\n"
+                                            st.info("Häufige Ursachen:\n"
                                                    "- Produkte können nicht aus DB geladen werden\n"
                                                    "- Produkt-Rotation schlägt fehl (keine Alternativen gefunden)\n"
                                                    "- Preis-Berechnung schlägt fehl")
@@ -2877,28 +3299,51 @@ def main():
             from monitoring_dashboard import render_monitoring_dashboard
             from app_health_monitor import health_monitor, get_health_status
             
-            # Show real-time health status
-            col1, col2, col3, col4 = st.columns(4)
-            
+            # MODERNE KPI-CARDS mit Gradients (Phase 7)
             health_status = get_health_status()
             current = health_status.get('current', {})
             
+            # Shadcn-ui Cards für KPIs
+            from components.shadcn_ui_integration import card
+            
+            col1, col2, col3, col4 = st.columns(4)
+            
             with col1:
                 status = current.get('status', 'UNKNOWN')
-                status_emoji = {"HEALTHY": "🟢", "DEGRADED": "🟡", "CRITICAL": "", "OFFLINE": ""}.get(status, "")
-                st.metric("Status", f"{status_emoji} {status}")
+                status_color = {"HEALTHY": "green", "DEGRADED": "yellow", "CRITICAL": "red", "OFFLINE": "gray"}.get(status, "gray")
+                card(
+                    title="Status",
+                    description=status,
+                    variant=status_color,
+                    key="kpi_status"
+                )
             
             with col2:
                 error_rate = current.get('error_rate', 0) * 100
-                st.metric("Error Rate", f"{error_rate:.1f}%")
+                card(
+                    title="Fehlerrate",
+                    description=f"{error_rate:.1f}%",
+                    variant="orange" if error_rate > 5 else "green",
+                    key="kpi_error_rate"
+                )
             
             with col3:
                 perf_score = current.get('performance_score', 0)
-                st.metric("Performance", f"{perf_score:.1f}/5.0")
+                card(
+                    title="Performance",
+                    description=f"{perf_score:.1f}/5.0",
+                    variant="blue",
+                    key="kpi_performance"
+                )
             
             with col4:
                 quality_score = current.get('code_quality_score', 0)
-                st.metric("Code Quality", f"{quality_score:.0f}/100")
+                card(
+                    title="Code-Qualität",
+                    description=f"{quality_score:.0f}/100",
+                    variant="purple",
+                    key="kpi_quality"
+                )
             
             st.markdown("---")
             
@@ -2983,7 +3428,22 @@ def main():
             st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_quick_calc","A.G.E.N.T. nicht verfügbar.")))
 
     elif selected_page_key == "crm":
-        st.header(get_text_gui("menu_item_crm"))
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                CRM & Kundenverwaltung
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Verwalten Sie Ihre Kunden und Projekte
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
         tab_labels = [
             get_text_gui("crm_tab_customers", get_text_gui("menu_item_crm")),
@@ -3032,14 +3492,44 @@ def main():
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_calendar", "CRM Kalender nicht verfügbar.")))
 
     elif selected_page_key == "info_platform":
-        st.header(get_text_gui("menu_item_info_platform"))
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                Info-Plattform
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Wissensdatenbank und Informationen
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         if info_platform_module and callable(getattr(info_platform_module, 'render_info_platform', None)):
             info_platform_module.render_info_platform(TEXTS, module_name=get_text_gui("menu_item_info_platform")) # type: ignore
         else:
             st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_info","Controlling-Modul nicht verfügbar.")))
 
     elif selected_page_key == "options":
-        st.header(get_text_gui("menu_item_options"))
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                Einstellungen
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Konfigurieren Sie Ihre App-Einstellungen
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
         # DEBUG: Prüfe ob options_module geladen ist
         print("=" * 80)
@@ -3077,21 +3567,66 @@ def main():
                 st.warning(" AA.G.E.N.T. Begleiter Modul nicht verfügbar.")
 
     elif selected_page_key == "heatpump":
-        st.header(get_text_gui("menu_item_heatpump"))
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                Wärmepumpen-Kalkulation
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Berechnen Sie Ihre Wärmepumpen-Installation
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         if heatpump_ui_module and callable(getattr(heatpump_ui_module, 'render_heatpump', None)):
             heatpump_ui_module.render_heatpump(TEXTS, module_name=get_text_gui("menu_item_heatpump")) # type: ignore
         else:
             st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_heatpump","Wärmepumpen-Modul nicht verfügbar.")))
 
     elif selected_page_key == "solar_calculator":
-        st.header(TEXTS.get("menu_item_solar_calculator", "Solar Calculator"))
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                Solar Calculator
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Schnelle Solar-Berechnung
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         if solar_calculator_module and callable(getattr(solar_calculator_module, 'render_solar_calculator', None)):
             solar_calculator_module.render_solar_calculator(TEXTS, module_name=TEXTS.get("menu_item_solar_calculator", "Solar Calculator")) # type: ignore
         else:
             st.warning(get_text_gui("module_unavailable_details", "Solar Calculator Modul nicht verfügbar."))
     
     elif selected_page_key == "3d_view":
-        st.header(" 3D PV-Visualisierung")
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                3D PV-Visualisierung
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Interaktive 3D-Ansicht Ihrer Solaranlage
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         try:
             # Execute the 3D view page code directly
             import os
@@ -3193,7 +3728,7 @@ if __name__ == "__main__":
         if database_module:
             main()
         else:
-            st.set_page_config(page_title=_texts_initial.get("app_title", "Fehler"), layout="wide")
+            st.set_page_config(page_title=_texts_initial.get("app_title", "Fehler"), page_icon="⚠", layout="wide")
             st.error(get_text_gui("gui_critical_error_no_db", "Datenbankmodul nicht geladen. Anwendung kann nicht starten."))
             if import_errors:
                 with st.sidebar:
@@ -3204,7 +3739,7 @@ if __name__ == "__main__":
     except Exception as e_global_gui_main_block:
         critical_error_text_for_display_main_block = get_text_gui("gui_critical_error", "Ein kritischer Fehler ist in der Anwendung aufgetreten!")
         try:
-            st.set_page_config(page_title="Kritischer Fehler", layout="wide")
+            st.set_page_config(page_title="Kritischer Fehler", page_icon="❌", layout="wide")
             st.error(f"{critical_error_text_for_display_main_block}\nDetails: {e_global_gui_main_block}")
             st.text_area("Traceback Global:", tb_module.format_exc(), height=300)
         except Exception:

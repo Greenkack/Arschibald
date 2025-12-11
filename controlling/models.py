@@ -55,6 +55,37 @@ class PeriodStatus(enum.Enum):
     ARCHIVED = "ARCHIVED"
 
 
+class Team(Base):
+    """
+    Team model for grouping employees into organizational units.
+    
+    Requirements: Team-based performance evaluation and reporting
+    """
+    __tablename__ = "controlling_teams"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), unique=True, nullable=False, index=True)
+    description = Column(Text, nullable=True)
+    team_leader_id = Column(
+        Integer,
+        ForeignKey("controlling_employees.id"),
+        nullable=True
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now()
+    )
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    is_active = Column(Boolean, default=True, nullable=False)
+    
+    # Relationships
+    employees = relationship("Employee", back_populates="team", foreign_keys="Employee.team_id")
+    team_leader = relationship("Employee", foreign_keys=[team_leader_id], post_update=True)
+    
+    def __repr__(self):
+        return f"<Team(id={self.id}, name='{self.name}')>"
+
+
 class Employee(Base):
     """
     Employee model for storing employee information.
@@ -74,6 +105,12 @@ class Employee(Base):
         ForeignKey("controlling_positions.id"),
         nullable=False
     )
+    team_id = Column(
+        Integer,
+        ForeignKey("controlling_teams.id"),
+        nullable=True,  # Optional, da nicht alle Mitarbeiter einem Team zugeordnet sein müssen
+        index=True
+    )
     start_date = Column(Date, nullable=False)
     created_at = Column(
         DateTime(timezone=True),
@@ -84,6 +121,7 @@ class Employee(Base):
     
     # Relationships
     position = relationship("Position", back_populates="employees")
+    team = relationship("Team", back_populates="employees", foreign_keys=[team_id])
     performance_data = relationship(
         "PerformanceData",
         back_populates="employee",
@@ -93,7 +131,14 @@ class Employee(Base):
     
     @property
     def full_name(self) -> str:
-        """Get full name of employee"""
+        """Get full name of employee."""
+        return f"{self.first_name} {self.last_name}"
+    
+    @property
+    def display_name(self) -> str:
+        """Get display name with agent name if available."""
+        if self.agent_name:
+            return f"{self.agent_name} / {self.first_name} {self.last_name}"
         return f"{self.first_name} {self.last_name}"
     
     @property

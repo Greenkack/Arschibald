@@ -280,6 +280,227 @@ def get_Maps_satellite_image_url(latitude: float,
 
 
 def render_data_input(texts: dict[str, str]) -> None:
+    # CSS für schwarze und fette Labels - ALLE Elemente + Schatten-Effekte
+    st.markdown("""
+    <style>
+    /* ALLE Labels und Texte in data_input schwarz und fett */
+    .main label,
+    .main .stSelectbox label,
+    .main .stTextInput label, 
+    .main .stTextInput > label,
+    .main .stNumberInput label,
+    .main .stNumberInput > label,
+    .main .stCheckbox label,
+    .main .stCheckbox > label,
+    .main .stRadio label,
+    .main .stRadio > label,
+    .main .stSlider label,
+    .main .stTextArea label,
+    .main .stDateInput label,
+    .main .stTimeInput label,
+    .main .stFileUploader label,
+    .main [data-testid="stWidgetLabel"],
+    .main div[data-testid="stWidgetLabel"],
+    .main .stMarkdown p,
+    .main .stMarkdown li,
+    .main .stMarkdown span,
+    .main .element-container label,
+    .main .row-widget label,
+    .main .stExpander label,
+    .main p,
+    .main span:not(.st-emotion-cache-10trblm) {
+        color: #1a202c !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Card-Überschriften auch schwarz */
+    .main h1, .main h2, .main h3, .main h4, .main h5, .main h6 {
+        color: #1a202c !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Expander mit Schatten und orangem Akzent */
+    .main .streamlit-expanderHeader {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+        padding: 1rem !important;
+        transition: all 0.3s ease !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .main .streamlit-expanderHeader:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+        border-left-color: #ff8c00 !important;
+        transform: translateX(2px) !important;
+    }
+    
+    /* Expander Content mit Schatten */
+    .main .streamlit-expanderContent {
+        background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%) !important;
+        border-radius: 0 0 12px 12px !important;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03) !important;
+        padding: 1.5rem !important;
+        border-left: 2px solid #ff8c00 !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Info/Warning/Success Boxen mit verstärkten Schatten */
+    .main .stAlert {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18), 0 3px 8px rgba(0, 0, 0, 0.12) !important;
+        border-radius: 12px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .main .stAlert:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    /* Karten/Columns mit Schatten */
+    .main .element-container {
+        transition: all 0.3s ease !important;
+    }
+    
+    /* Divider mit Schatten-Effekt */
+    .main hr {
+        border: none !important;
+        height: 2px !important;
+        background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.3), transparent) !important;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+        margin: 2rem 0 !important;
+    }
+    
+    /* Dropdown/Select Text zentrieren */
+    .main .stSelectbox > div > div {
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    .main .stSelectbox [data-baseweb="select"] > div {
+        display: flex !important;
+        align-items: center !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    
+    /* Alle Eingabefelder mit Schatten-Effekten */
+    .main input[type="text"],
+    .main input[type="number"],
+    .main input[type="email"],
+    .main input[type="tel"],
+    .main input[type="password"],
+    .main input[type="date"],
+    .main input[type="time"],
+    .main textarea,
+    .main .stSelectbox > div > div,
+    .main [data-baseweb="select"],
+    .main .stTextInput > div > div > input,
+    .main .stNumberInput > div > div > input {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        border: 1px solid rgba(255, 200, 140, 0.2) !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .main input[type="text"]:focus,
+    .main input[type="number"]:focus,
+    .main input[type="email"]:focus,
+    .main input[type="tel"]:focus,
+    .main input[type="password"]:focus,
+    .main input[type="date"]:focus,
+    .main input[type="time"]:focus,
+    .main textarea:focus {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+        border-color: #ff8c00 !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    
+    .main input[type="text"]:hover,
+    .main input[type="number"]:hover,
+    .main input[type="email"]:hover,
+    .main input[type="tel"]:hover,
+    .main input[type="password"]:hover,
+    .main textarea:hover,
+    .main .stSelectbox > div > div:hover {
+        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+        border-color: rgba(255, 140, 0, 0.4) !important;
+    }
+    
+    /* Number Input mit +/- Buttons - Schatten */
+    .main .stNumberInput > div {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        border-radius: 8px !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .main .stNumberInput > div:hover {
+        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .main .stNumberInput > div:focus-within {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    
+    /* +/- Buttons mit Schatten und Orange Hover */
+    .main .stNumberInput button {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border: 1px solid rgba(255, 200, 140, 0.3) !important;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12) !important;
+        transition: all 0.3s ease !important;
+        border-radius: 6px !important;
+    }
+    
+    .main .stNumberInput button:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-color: #ff8c00 !important;
+        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.12) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    .main .stNumberInput button:active {
+        transform: translateY(0) !important;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16) !important;
+    }
+    
+    /* Selectbox/Dropdown mit Schatten */
+    .main .stSelectbox [data-baseweb="select"] {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .main .stSelectbox [data-baseweb="select"]:hover {
+        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Textarea mit Schatten */
+    .main .stTextArea textarea {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        border: 1px solid rgba(255, 200, 140, 0.2) !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .main .stTextArea textarea:focus {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+        border-color: #ff8c00 !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    
+    .main .stTextArea textarea:hover {
+        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # KORREKTUR: `inputs` ist nun eine direkte Referenz auf `st.session_state.project_data`.
     # Die Initialisierung in gui.py stellt sicher, dass es existiert.
     inputs: dict[str, Any] = st.session_state.project_data
@@ -453,8 +674,25 @@ def render_data_input(texts: dict[str, str]) -> None:
             "Keine Tierabwehr in DB")]
 
     #  Bedarfsanalyse - Mode Selection (Moved from analysis.py)
-    st.subheader("Bedarfsanalyse")
-    st.write("Wählen Sie den gewünschten Anlagenmodus:")
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        border-left: 6px solid #ff8c00;
+        border: 1px solid rgba(255, 200, 140, 0.3);
+        transition: all 0.3s ease;
+    ">
+        <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em;">
+            Bedarfsanalyse
+        </h2>
+        <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
+            Wählen Sie den gewünschten Anlagenmodus
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
     ensure_session_defaults({"demand_mode_selection": "pv_wp_combined"})
     register_persistent_keys(["demand_mode_selection"])
@@ -513,13 +751,31 @@ def render_data_input(texts: dict[str, str]) -> None:
 
     st.divider()
 
-    st.subheader(get_text_di(texts, "customer_data_header", "Kundendaten"))
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        border-left: 6px solid #ff8c00;
+        border: 1px solid rgba(255, 200, 140, 0.3);
+        transition: all 0.3s ease;
+    ">
+        <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em;">
+            Kundendaten
+        </h2>
+        <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
+            Kundendaten eingeben
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     # KORREKTUR: `customer_data_expanded_di` wird direkt im session_state
     # verwendet.
     if 'customer_data_expanded_di' not in st.session_state:
         st.session_state.customer_data_expanded_di = False  # Default zu collapsed
 
-    with st.expander(get_text_di(texts, "customer_data_header", "Kundendaten"), expanded=st.session_state.customer_data_expanded_di):
+    with st.expander(get_text_di(texts, "customer_data_header", "Kundendaten eingeben"), expanded=st.session_state.customer_data_expanded_di):
         # ... (Inhalt des Kunden-Expanders bleibt gleich, aber `inputs` verweist jetzt direkt auf `st.session_state.project_data`)
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -940,14 +1196,28 @@ def render_data_input(texts: dict[str, str]) -> None:
     # ... (Rest der UI-Elemente für Bedarfsanalyse, Gebäudedaten, etc. bleibt strukturell gleich,
     # aber verwendet `inputs` anstelle von `st.session_state.project_data`
     # direkt und stabile Keys) ...
-    st.subheader(
-        get_text_di(
-            texts,
-            "consumption_analysis_header",
-            "Bedarfsanalyse"))
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        border-left: 6px solid #ff8c00;
+        border: 1px solid rgba(255, 200, 140, 0.3);
+        transition: all 0.3s ease;
+    ">
+        <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em;">
+            Verbräuche und Kosten
+        </h2>
+        <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
+            Verbrauchs- und Kostendaten eingeben
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     if 'consumption_data_expanded_di' not in st.session_state:
         st.session_state.consumption_data_expanded_di = False
-    with st.expander(get_text_di(texts, "consumption_costs_header", "Verbräuche und Kosten"), expanded=st.session_state.consumption_data_expanded_di):
+    with st.expander(get_text_di(texts, "consumption_data_header", "Verbrauche und Kosten eingeben"), expanded=st.session_state.consumption_data_expanded_di):
         col_cons_hh, col_cons_heat = st.columns(2)
         inputs['project_details']['annual_consumption_kwh_yr'] = col_cons_hh.number_input(
             label=get_text_di(
@@ -1061,14 +1331,28 @@ def render_data_input(texts: dict[str, str]) -> None:
                 key='electricity_price_kwh_di_v6_exp_stable')
             inputs['project_details']['costs_household_euro_mo'], inputs['project_details']['costs_heating_euro_mo'] = 0.0, 0.0
 
-    st.subheader(
-        get_text_di(
-            texts,
-            "building_data_header",
-            "Daten des Gebäudes"))
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        border-left: 6px solid #ff8c00;
+        border: 1px solid rgba(255, 200, 140, 0.3);
+        transition: all 0.3s ease;
+    ">
+        <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em;">
+            Daten des Gebäudes
+        </h2>
+        <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
+            Daten des Gebäudes eingeben
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     if 'building_data_expanded_di' not in st.session_state:
         st.session_state.building_data_expanded_di = False
-    with st.expander(get_text_di(texts, "building_data_header", "Daten des Gebäudes"), expanded=st.session_state.building_data_expanded_di):
+    with st.expander(get_text_di(texts, "building_data_header", ""), expanded=st.session_state.building_data_expanded_di):
         col_build1, col_build2 = st.columns(2)
         with col_build1:
             inputs['project_details']['build_year'] = st.number_input(
@@ -1183,11 +1467,25 @@ def render_data_input(texts: dict[str, str]) -> None:
             key='building_height_gt_7m_di_v6_exp_stable')
 
     st.markdown("---")
-    st.subheader(
-        get_text_di(
-            texts,
-            "future_consumption_header",
-            "Zukünftiger Mehrverbrauch"))
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        border-left: 6px solid #ff8c00;
+        border: 1px solid rgba(255, 200, 140, 0.3);
+        transition: all 0.3s ease;
+    ">
+        <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em;">
+            Zukünftiger Mehrverbrauch
+        </h2>
+        <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
+            Zukünftigen Mehrverbrauch eingeben
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     inputs['project_details']['future_ev'] = st.checkbox(
         get_text_di(
             texts,
@@ -1278,7 +1576,25 @@ def render_data_input(texts: dict[str, str]) -> None:
     #  FINANZIERUNG - Vollständige Bank-Finanzierungsfelder
     #
     st.markdown("---")
-    st.subheader(" Finanzierungsoptionen")
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        border-left: 6px solid #ff8c00;
+        border: 1px solid rgba(255, 200, 140, 0.3);
+        transition: all 0.3s ease;
+    ">
+        <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em;">
+            Finanzierungsoptionen
+        </h2>
+        <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
+            Finanzierungsoptionen eingeben / auswählen
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Finanzierung aktivieren Checkbox
     inputs['customer_data']['financing_requested'] = st.checkbox(
@@ -1637,14 +1953,28 @@ def render_data_input(texts: dict[str, str]) -> None:
             st.success(
                 " Finanzierungsberechnung wird im Analyse-Dashboard angezeigt!")
 
-    st.subheader(
-        get_text_di(
-            texts,
-            "economic_data_header",
-            "Wirtschaftliche Parameter"))
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        border-left: 6px solid #ff8c00;
+        border: 1px solid rgba(255, 200, 140, 0.3);
+        transition: all 0.3s ease;
+    ">
+        <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em;">
+            Wirtschaftliche Parameter
+        </h2>
+        <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
+            Wirtschaftliche Parameter eingeben
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     if 'economic_data_expanded_di' not in st.session_state:
         st.session_state.economic_data_expanded_di = False
-    with st.expander(get_text_di(texts, "economic_data_header", "Wirtschaftliche Parameter"), expanded=st.session_state.economic_data_expanded_di):
+    with st.expander(get_text_di(texts, "economic_data_header", "Wirtschaftliche Parameter eingeben"), expanded=st.session_state.economic_data_expanded_di):
         inputs['economic_data']['simulation_period_years'] = st.number_input(
             label=get_text_di(
                 texts,
