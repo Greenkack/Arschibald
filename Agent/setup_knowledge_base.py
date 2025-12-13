@@ -2,7 +2,7 @@
 """
 Knowledge Base Setup Script
 
-This script helps set up and manage the KAI Agent knowledge base.
+This script helps set up and manage the O.M.I Agent knowledge base.
 
 Features:
 - Create knowledge base directory
@@ -94,7 +94,7 @@ def init_knowledge_base():
         readme_path = kb_dir / "README.md"
         readme_content = """# Knowledge Base
 
-This directory contains PDF documents that the KAI Agent uses for domain knowledge.
+This directory contains PDF documents that the O.M.I Agent uses for domain knowledge.
 
 ## Adding Documents
 
@@ -421,7 +421,7 @@ def create_sample_documents():
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description="KAI Agent Knowledge Base Setup",
+        description="O.M.I Agent Knowledge Base Setup",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Commands:

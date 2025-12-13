@@ -142,7 +142,7 @@ def validate_docker_image() -> tuple[bool, str]:
         client = docker.from_env()
 
         try:
-            client.images.get("kai_agent_sandbox")
+            client.images.get("O.M.I_agent_sandbox")
             return True, "Docker sandbox image found"
         except docker.errors.ImageNotFound:
             return False, """
@@ -150,10 +150,10 @@ Docker sandbox image not found!
 
 Build the image with:
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 
 Or from project root:
-docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox
+docker build -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox
 
 """
     except Exception as e:
@@ -212,7 +212,7 @@ def run_validation(verbose: bool = True) -> bool:
     """
     if verbose:
         print("=" * 70)
-        print("KAI Agent Configuration Validation")
+        print("O.M.I Agent Configuration Validation")
         print("=" * 70)
         print()
 
@@ -273,7 +273,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Validate KAI Agent configuration and security"
+        description="Validate O.M.I Agent configuration and security"
     )
     parser.add_argument(
         "--quiet",

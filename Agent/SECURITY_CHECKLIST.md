@@ -1,8 +1,8 @@
-# Security Checklist for KAI Agent
+# Security Checklist for O.M.I Agent
 
 ## Pre-Deployment Security Checklist
 
-Use this checklist before deploying the KAI Agent to ensure all security measures are in place.
+Use this checklist before deploying the O.M.I Agent to ensure all security measures are in place.
 
 ### Configuration Security
 
@@ -186,18 +186,18 @@ python -c "from Agent.agent.security import validate_command; print(validate_com
 
 ```bash
 # Verify Docker image
-docker images | grep kai_agent_sandbox
+docker images | grep O.M.I_agent_sandbox
 
 # Check container user
-docker run --rm kai_agent_sandbox whoami
+docker run --rm O.M.I_agent_sandbox whoami
 # Should output: sandboxuser
 
 # Test network isolation
-docker run --rm --network none kai_agent_sandbox ping -c 1 google.com
+docker run --rm --network none O.M.I_agent_sandbox ping -c 1 google.com
 # Should fail with network unreachable
 
 # Check resource limits
-docker inspect kai_agent_sandbox | grep -A 10 "Memory"
+docker inspect O.M.I_agent_sandbox | grep -A 10 "Memory"
 ```
 
 ### Monitor Operations
@@ -275,7 +275,7 @@ docker stats
 
 - **v1.0** - Initial security checklist
 - Date: 2024-10-18
-- Author: KAI Agent Security Team
+- Author: O.M.I Agent Security Team
 
 ---
 

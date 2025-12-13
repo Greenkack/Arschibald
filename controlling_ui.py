@@ -86,6 +86,79 @@ def render_controlling_page():
     """
     st.header(" Controlling")
     st.caption("Mitarbeiterleistung erfassen, auswerten und visualisieren")
+    
+    # Globale CSS-Styles für Controlling-Seite
+    st.markdown("""
+    <style>
+    /* TABS: Schwarzen Hintergrund entfernen */
+    [data-testid="stTabs"] [data-baseweb="tab-list"] {
+        background-color: transparent !important;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+        gap: 10px !important;
+    }
+    
+    /* Tab-Buttons mit orangen Akzenten */
+    [data-testid="stTabs"] [data-baseweb="tab"] {
+        background-color: transparent !important;
+        border: none !important;
+        color: #333333 !important;
+        font-weight: 500 !important;
+        padding: 12px 24px !important;
+        border-radius: 8px 8px 0 0 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    [data-testid="stTabs"] [data-baseweb="tab"]:hover {
+        background-color: rgba(255, 140, 0, 0.1) !important;
+        color: #ff8c00 !important;
+    }
+    
+    [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
+        background-color: rgba(255, 140, 0, 0.15) !important;
+        color: #ff8c00 !important;
+        font-weight: 700 !important;
+        border-bottom: 3px solid #ff8c00 !important;
+    }
+    
+    /* BUTTONS: Alle Primary Buttons orange */
+    button[kind="primary"] {
+        background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%) !important;
+        color: #000000 !important;
+        border: 2px solid #ff8c00 !important;
+        font-weight: 600 !important;
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.4) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #ff9900 0%, #ff7700 100%) !important;
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 140, 0, 0.3) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* EINGABEFELDER: Schattierungen */
+    [data-testid="stTextInput"] input,
+    [data-testid="stTextArea"] textarea,
+    [data-testid="stNumberInput"] input,
+    [data-testid="stSelectbox"] > div > div,
+    [data-testid="stMultiSelect"] > div > div,
+    [data-testid="stDateInput"] input {
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.15), inset 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.3s ease !important;
+        background-color: #ffffff !important;
+    }
+    
+    [data-testid="stTextInput"] input:focus,
+    [data-testid="stTextArea"] textarea:focus,
+    [data-testid="stNumberInput"] input:focus,
+    [data-testid="stDateInput"] input:focus {
+        box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3), inset 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        border-color: #ff8c00 !important;
+        outline: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
     # Initialize session state
     if 'controlling_selected_employees' not in st.session_state:
@@ -100,6 +173,18 @@ def render_controlling_page():
         st.session_state.active_period_id = None
     if 'period_creation_mode' not in st.session_state:
         st.session_state.period_creation_mode = False
+    
+    # Fix: Entferne alte nicht-serialisierbare Enum-Werte aus Session State
+    keys_to_check = ['team_report_type', 'report_type', 'period_type']
+    for key in list(st.session_state.keys()):
+        if any(check_key in key for check_key in keys_to_check):
+            try:
+                # Versuche zu serialisieren - wenn Fehler, dann löschen
+                import pickle
+                pickle.dumps(st.session_state[key])
+            except (TypeError, AttributeError):
+                # Nicht serialisierbar - löschen
+                del st.session_state[key]
 
     # Create tabs
     tabs = st.tabs([
@@ -770,26 +855,30 @@ def render_report_generation_tab():
         col1, col2 = st.columns(2)
 
         with col1:
-            report_type = st.selectbox(
+            # Nutze Index statt direkten Enum-Wert
+            report_types = [
+                ReportType.DAILY,
+                ReportType.WEEKLY,
+                ReportType.MONTHLY,
+                ReportType.QUARTERLY,
+                ReportType.YEARLY,
+                ReportType.SINCE_START
+            ]
+            report_labels = [
+                "Täglich",
+                "Wöchentlich",
+                "Monatlich",
+                "Quartalsweise",
+                "Jährlich",
+                "Seit Arbeitsbeginn"
+            ]
+            report_type_idx = st.selectbox(
                 "Berichtstyp",
-                options=[
-                    ReportType.DAILY,
-                    ReportType.WEEKLY,
-                    ReportType.MONTHLY,
-                    ReportType.QUARTERLY,
-                    ReportType.YEARLY,
-                    ReportType.SINCE_START
-                ],
-                format_func=lambda x: {
-                    ReportType.DAILY: "Täglich",
-                    ReportType.WEEKLY: "Wöchentlich",
-                    ReportType.MONTHLY: "Monatlich",
-                    ReportType.QUARTERLY: "Quartalsweise",
-                    ReportType.YEARLY: "Jährlich",
-                    ReportType.SINCE_START: "Seit Arbeitsbeginn"
-                }.get(x, x.value),
-                key="report_type_selector"
+                options=range(len(report_types)),
+                format_func=lambda x: report_labels[x],
+                key="report_type_selector_idx"
             )
+            report_type = report_types[report_type_idx]
 
         with col2:
             # Dynamische Zeitraumauswahl basierend auf Berichtstyp
@@ -1525,12 +1614,15 @@ def render_team_analysis_tab():
                 "Seit Arbeitsbeginn": ReportType.SINCE_START
             }
             
-            report_type = st.selectbox(
+            # Nutze Index statt direkten Enum-Wert für Session State
+            report_type_labels = list(report_type_options.keys())
+            report_type_index = st.selectbox(
                 "Zeitraum",
-                options=list(report_type_options.values()),
-                format_func=lambda x: {v: k for k, v in report_type_options.items()}[x],
-                key="team_report_type"
+                options=range(len(report_type_labels)),
+                format_func=lambda x: report_type_labels[x],
+                key="team_report_type_index"
             )
+            report_type = list(report_type_options.values())[report_type_index]
         
         with col2:
             reference_date = st.date_input(
@@ -2147,10 +2239,9 @@ def render_ranking_tab():
         
         # Ansichtstyp wählen
         st.markdown("---")
-        view_type = st.radio(
+        view_type = st.selectbox(
             "Ansicht",
             options=["Nach Periode", "Benutzerdefinierter Zeitraum", "Alle Perioden"],
-            horizontal=True,
             key="ranking_view_type"
         )
         

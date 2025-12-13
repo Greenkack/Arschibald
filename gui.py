@@ -1129,11 +1129,11 @@ def main():
         }
         div[data-baseweb="select"] > div:hover {
             border-color: #ff8c00 !important;
-            box-shadow: 0 0 0 10px #ff8c00 !important;
+            box-shadow: 0 0 0 15px #ff8c00 !important;
         }
         div[data-baseweb="select"] > div:focus-within {
             border-color: #ff8c00 !important;
-            box-shadow: 0 0 0 10px rgba(255, 140, 0, 0.2) !important;
+            box-shadow: 0 0 0 15px rgba(255, 140, 0, 0.2) !important;
         }
         div[data-baseweb="select"] > div > div {
             display: flex !important;
@@ -1152,7 +1152,7 @@ def main():
         }
         div[data-baseweb="popover"] {
             border-radius: 8px !important;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15) !important;
         }
         ul[role="listbox"] > li {
             padding: 0.6rem 0.75rem !important;
@@ -1191,6 +1191,16 @@ def main():
         cursor: pointer !important;
     }
     
+    /* Number Input Buttons - Basis-Styling mit grauer Farbe */
+    button[data-testid="stNumberInputStepUp"],
+    button[data-testid="stNumberInputStepDown"],
+    div[data-testid="stNumberInput"] button {
+        background: linear-gradient(135deg, #acadae 0%, #acadae 100%) !important;
+        border: 1px solid #9ca3af !important;
+        color: #ffffff !important;
+        transition: all 0.3s ease !important;
+    }
+    
     /* Shimmer-Effekt für Slider-Buttons */
     button[data-testid="stNumberInputStepUp"]::before,
     button[data-testid="stNumberInputStepDown"]::before,
@@ -1201,7 +1211,7 @@ def main():
         left: -100% !important;
         width: 100% !important;
         height: 100% !important;
-        background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.25), transparent) !important;
+        background: linear-gradient(90deg, transparent, rgba(156, 163, 175, 0.3), transparent) !important;
         transition: left 0.4s ease !important;
         pointer-events: none !important;
         z-index: 1 !important;
@@ -1218,19 +1228,19 @@ def main():
     button[data-testid="stNumberInputStepUp"]:hover,
     button[data-testid="stNumberInputStepDown"]:hover,
     div[data-testid="stNumberInput"] button:hover {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.08) 100%) !important;
-        box-shadow: 0 10px 10px rgba(102, 126, 234, 0.2) !important;
+        background: linear-gradient(135deg, #7a8592 0%, #5b6571 100%) !important;
+        box-shadow: 0 10px 12px rgba(107, 114, 128, 0.3) !important;
         transform: scale(1.05) !important;
-        animation: sliderButtonPulse 1.5s ease-in-out infinite !important;
+        border: 1px solid #b0b7c0 !important;
     }
     
     @keyframes sliderButtonPulse {
         0%, 100% {
-            box-shadow: 0 10px 10px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 10px 12px rgba(107, 114, 128, 0.3);
             transform: scale(1.05);
         }
         50% {
-            box-shadow: 0 10px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 16px rgba(107, 114, 128, 0.4);
             transform: scale(1.08);
         }
     }
@@ -1240,17 +1250,108 @@ def main():
     button[data-testid="stNumberInputStepDown"]:active,
     div[data-testid="stNumberInput"] button:active {
         transform: scale(0.95) !important;
-        box-shadow: 0 1px 5px rgba(102, 126, 234, 0.3) inset !important;
+        box-shadow: 0 10px 10px rgba(107, 114, 128, 0.4) inset !important;
+        background: linear-gradient(135deg, #5b6571 0%, #4b5563 100%) !important;
     }
     
-    /* Slider Track Hover */
-    div[data-testid="stSlider"] div[role="slider"]:hover {
-        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
-        transform: scale(1.1) !important;
+    /* ========== SOLAR CALCULATOR MODULE BUTTONS (+ / -) ========== */
+    /* Spezielle Buttons für Modul-Anzahl im Solar Calculator */
+    button[kind="primary"][data-testid*="btn_module_qty"],
+    .stButton button[data-testid*="btn_module_qty"] {
+        background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%) !important;
+        border: 2px solid #ff8c00 !important;
+        color: #ffffff !important;
+        font-size: 28px !important;
+        font-weight: 900 !important;
+        padding: 16px 24px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 20px rgba(255, 140, 0, 0.4) !important;
         transition: all 0.3s ease !important;
+        min-width: 100% !important;
+        height: 65px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
     }
     
-    /* ========== ENDE GLOBALE SLIDER-EFFEKTE ========== */
+    button[kind="primary"][data-testid*="btn_module_qty"]:hover,
+    .stButton button[data-testid*="btn_module_qty"]:hover {
+        background: linear-gradient(135deg, #ffaa33 0%, #ff8800 100%) !important;
+        box-shadow: 0 10px 30px rgba(255, 140, 0, 0.6) !important;
+        transform: scale(1.05) translateY(-2px) !important;
+        border: 2px solid #ffaa33 !important;
+    }
+    
+    button[kind="primary"][data-testid*="btn_module_qty"]:active,
+    .stButton button[data-testid*="btn_module_qty"]:active {
+        transform: scale(0.95) !important;
+        box-shadow: 0 10px 12px rgba(255, 140, 0, 0.5) inset !important;
+        background: linear-gradient(135deg, #ff6600 0%, #ff4400 100%) !important;
+    }
+    
+    /* ========== SLIDER KOMPLETT ÜBERSCHREIBEN - ORANGE ========== */
+    
+    /* ALLE Slider-Container und Child-Elemente */
+    [data-testid="stSlider"],
+    [data-testid="stSlider"] *,
+    [data-baseweb="slider"],
+    [data-baseweb="slider"] * {
+        border-color: transparent !important;
+    }
+    
+    /* Track Background - HELLGRAU */
+    [data-baseweb="slider"] > div:first-child,
+    [data-baseweb="slider"] > div > div:first-child {
+        background-color: #e5e7eb !important;
+        background: #e5e7eb !important;
+    }
+    
+    /* Progress Bar (gefüllter Teil) - MITTELGRAU */
+    [data-baseweb="slider"] > div:first-child > div:first-child,
+    [data-baseweb="slider"] > div > div:first-child > div:first-child {
+        background-color: #d1d5db !important;
+        background: #d1d5db !important;
+    }
+    
+    /* THUMB (KREIS) - ORANGE mit maximaler Priorität */
+    [role="slider"],
+    div[role="slider"],
+    [data-baseweb="slider"] [role="slider"],
+    [data-testid="stSlider"] [role="slider"] {
+        background-color: #ff8c00 !important;
+        background: #ff8c00 !important;
+        border: 2px solid #ff8c00 !important;
+        width: 24px !important;
+        height: 24px !important;
+        box-shadow: 0 10px 10px rgba(255, 140, 0, 0.4) !important;
+    }
+    
+    /* Pseudo-Elemente auch orange */
+    [role="slider"]::before,
+    [role="slider"]::after {
+        background-color: #ff8c00 !important;
+        background: #ff8c00 !important;
+        border-color: #ff8c00 !important;
+    }
+    
+    /* Hover State */
+    [role="slider"]:hover {
+        background-color: #ff6600 !important;
+        background: #ff6600 !important;
+        border-color: #ff6600 !important;
+        box-shadow: 0 0 0 10px rgba(255, 140, 0, 0.15), 0 10px 10px rgba(255, 140, 0, 0.5) !important;
+    }
+    
+    /* Active/Focus State */
+    [role="slider"]:active,
+    [role="slider"]:focus {
+        background-color: #ff6600 !important;
+        background: #ff6600 !important;
+        border-color: #ff6600 !important;
+    }
+    
+    /* ========== ENDE SLIDER ========== */
     
     /* ========== GLOBALE CHECKBOX-EFFEKTE ========== */
     /* Shimmer- und Pulse-Animationen für Checkboxen */
@@ -1286,20 +1387,91 @@ def main():
     /* Checkbox Hover-Effekt - Shimmer */
     div[data-testid="stCheckbox"]:hover input[type="checkbox"],
     .stCheckbox:hover input[type="checkbox"] {
-        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.15) !important;
         border-color: rgba(102, 126, 234, 0.6) !important;
         animation: checkboxPulse 1.5s ease-in-out infinite !important;
     }
     
     @keyframes checkboxPulse {
         0%, 100% {
-            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15);
+            box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.15);
             transform: scale(1);
         }
         50% {
-            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.25);
+            box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.25);
             transform: scale(1.05);
         }
+    }
+    
+    /* ========== GLOBALE RADIO BUTTONS - ORANGE MIT KREIS ========== */
+    /* Radio Container - Kein Hintergrund */
+    div[data-testid="stRadio"],
+    div[data-testid="stRadio"] div[role="radiogroup"] {
+        background: transparent !important;
+    }
+    
+    /* Radio Label - Kein Hintergrund */
+    div[data-testid="stRadio"] label,
+    div[data-testid="stRadio"] label > div:last-child {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    
+    /* Radio Circle Container - Positionierung */
+    div[data-testid="stRadio"] label > div:first-child {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 20px !important;
+        min-height: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    /* Radio Button Outer Circle - Grauer Ring (unselected) */
+    div[data-testid="stRadio"] [data-baseweb="radio"] {
+        border: 2px solid #cbd5e0 !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        width: 20px !important;
+        height: 20px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Radio Button Outer Circle SELECTED - ORANGER Ring */
+    div[data-testid="stRadio"] input[type="radio"]:checked ~ div[data-baseweb="radio"],
+    div[data-testid="stRadio"] [aria-checked="true"][data-baseweb="radio"] {
+        border: 2px solid #ff8c00 !important;
+        background: transparent !important;
+    }
+    
+    /* Radio Button Inner Circle (Dot) SELECTED - ORANGER gefüllter Kreis */
+    div[data-testid="stRadio"] input[type="radio"]:checked ~ div[data-baseweb="radio"] > div,
+    div[data-testid="stRadio"] [aria-checked="true"][data-baseweb="radio"] > div {
+        background: #ff8c00 !important;
+        background-color: #ff8c00 !important;
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50% !important;
+    }
+    
+    /* Radio Button Hover - Orange Akzent */
+    div[data-testid="stRadio"] label:hover [data-baseweb="radio"] {
+        border-color: #ff8c00 !important;
+    }
+    
+    div[data-testid="stRadio"] label:hover {
+        background: transparent !important;
+    }
+    
+    /* Radio Button Focus State */
+    div[data-testid="stRadio"] input[type="radio"]:focus ~ div[data-baseweb="radio"] {
+        border-color: #ff8c00 !important;
+        box-shadow: 0 0 0 10px rgba(255, 140, 0, 0.15) !important;
     }
     
     /* Checked Checkbox - Pulse-Effekt */
@@ -1313,10 +1485,10 @@ def main():
     
     @keyframes checkboxCheckedPulse {
         0%, 100% {
-            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.2);
         }
         50% {
-            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.3);
         }
     }
     
@@ -1348,7 +1520,7 @@ def main():
     
     div[data-testid="stRadio"] input[type="radio"]:hover,
     .stRadio input[type="radio"]:hover {
-        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.15) !important;
         animation: checkboxPulse 1.5s ease-in-out infinite !important;
     }
     
@@ -1485,29 +1657,31 @@ def main():
                     bottom: 25px !important;
                     right: 25px !important;
                     z-index: 999998 !important;
-                    background: linear-gradient(135deg, #ffffff 0%, #764ba2 100%) !important;
-                    color: #e9ebed !important;
-                    border: none !important;
-                    border-radius: 50% !important;
-                    width: 175px !important;
-                    height: 175px !important;
-                    font-size: 28px !important;
+                    background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%) !important;
+                    color: #000000 !important;
+                    border: 2px solid #ff8c00 !important;
+                    border-radius: 15px !important;
+                    width: 150px !important;
+                    height: 50px !important;
+                    font-size: 16px !important;
+                    font-weight: bold !important;
                     cursor: pointer !important;
-                    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.5) !important;
+                    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.6) !important;
                     transition: all 0.3s ease !important;
                 }
                 .drawer-button:hover {
-                    transform: scale(1.1) !important;
-                    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.7) !important;
+                    transform: translateY(-3px) !important;
+                    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8) !important;
+                    background: linear-gradient(135deg, #ff9900 0%, #ff7700 100%) !important;
                 }
                 .drawer-panel {
                     position: fixed !important;
                     bottom: 0 !important;
-                    right: -350px !important;
-                    width: 350px !important;
-                    height: 500px !important;
-                    background: linear-gradient(180deg, #e9ebed 0%, #ffffff 100%) !important;
-                    box-shadow: -5px 0 30px rgba(0,0,0,0.5) !important;
+                    right: -500px !important;
+                    width: 450px !important;
+                    height: 600px !important;
+                    background: #888888 !important;
+                    box-shadow: -5px 0 30px rgba(0,0,0,0.8) !important;
                     z-index: 999999 !important;
                     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
                     border-radius: 20px 0 0 20px !important;
@@ -1521,23 +1695,30 @@ def main():
                     position: absolute;
                     top: 25px;
                     right: 25px;
-                    background: rgba(233, 235, 237, 0.1);
-                    border: none;
-                    color: #e9ebed;
+                    background: #2a2a2a;
+                    border: 2px solid #ff8c00;
+                    color: #ff8c00;
                     font-size: 24px;
                     width: 35px;
                     height: 35px;
-                    border-radius: 50%;
+                    border-radius: 8px;
                     cursor: pointer;
                     transition: all 0.2s;
+                    box-shadow: 0 15px 16px rgba(0, 0, 0, 0.6);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    line-height: 1;
                 }
                 .drawer-close:hover {
-                    background: rgba(233, 235, 237, 0.2);
+                    background: #ff8c00;
+                    color: #000000;
                     transform: rotate(90deg);
+                    box-shadow: 0 15px 16px rgba(0, 0, 0, 0.8);
                 }
                 .drawer-title {
-                    color: #0, 0, 0;
-                    font-size: 24px;
+                    color: #000000;
+                    font-size: 28px;
                     font-weight: bold;
                     margin-bottom: 20px;
                     padding-top: 10px;
@@ -1546,18 +1727,23 @@ def main():
                     width: 100%;
                     padding: 15px;
                     margin: 10px 0;
-                    background: rgba(233, 235, 237, 0.2);
-                    border: 1px solid rgba(102, 126, 234, 0.4);
+                    background: #ffffff;
+                    border: 2px solid #ff8c00;
                     border-radius: 10px;
-                    color: #e9ebed;
+                    color: #000000;
                     font-size: 16px;
+                    font-weight: 600;
                     cursor: pointer;
                     transition: all 0.3s;
                     text-align: left;
+                    box-shadow: 0 15px 16px rgba(0, 0, 0, 0.7), 0 15px 15px rgba(0, 0, 0, 0.5), inset 0 15px 15px rgba(255, 255, 255, 0.3);
                 }
                 .drawer-btn:hover {
-                    background: rgba(133, 235, 237, 0.4);
+                    background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
+                    color: #000000;
                     transform: translateX(-5px);
+                    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.8), 0 15px 15px rgba(255, 140, 0, 0.4), inset 0 15px 15px rgba(255, 255, 255, 0.3);
+                    border-color: #ff9900;
                 }
             `;
             parentDoc.head.appendChild(style);
@@ -1576,7 +1762,7 @@ def main():
             <button class="drawer-btn" data-action="monitoring"> Überwachung & Diagnose</button>
             <button class="drawer-btn" data-action="quick_pdf"> Blitz-Angebot</button>
             <button class="drawer-btn" data-action="help_menu"> Hilfe-Menü</button>
-            <button class="drawer-btn" data-action="logout" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);"> Abmelden</button>
+            <button class="drawer-btn" data-action="logout" style="background: #fd0100; border-color: #ffffff;"> Abmelden</button>
         `;
         parentDoc.body.appendChild(drawer);
         
@@ -1611,7 +1797,7 @@ def main():
         const btn = parentDoc.createElement('button');
         btn.id = 'drawer-btn';
         btn.className = 'drawer-button';
-        btn.innerHTML = '';
+        btn.innerHTML = '☰ Menü';
         btn.title = 'Schnellzugriff';
         
         btn.onclick = function() {
@@ -1693,28 +1879,48 @@ def main():
         font-weight: 700 !important;
     }
     
-    /* ========== MODERNE BUTTONS - Card-Stil mit ORANGE Akzent ========== */
+    /* ========== MODERNE BUTTONS - Card-Stil mit GRAU ========== */
     .stButton > button {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
         color: #1a202c !important;
         border: 4px solid rgba(200, 210, 220, 0.5) !important;
         border-radius: 12px !important;
         padding: 12px 24px !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.12), 0 15px 15px rgba(0,0,0,0.08) !important;
         font-weight: 700 !important;
         transition: all 0.3s ease !important;
     }
     
     .stButton > button:hover {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-        border-color: #ff8c00 !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.1) !important;
+        border-color: #9ca3af !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.15), 0 15px 15px rgba(0,0,0,0.1) !important;
         transform: translateY(-2px) !important;
     }
     
     .stButton > button:active {
         transform: translateY(0) !important;
-        background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%) !important;
+        background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%) !important;
+    }
+    
+    /* PRIMARY BUTTONS - GRAU statt türkis/blau */
+    .stButton > button[kind="primary"],
+    button[kind="primary"],
+    button[data-testid="baseButton-primary"] {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+        color: #ffffff !important;
+        border: 2px solid #4b5563 !important;
+    }
+    
+    .stButton > button[kind="primary"]:hover,
+    button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;
+        border-color: #374151 !important;
+    }
+    
+    .stButton > button[kind="primary"]:active,
+    button[kind="primary"]:active {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%) !important;
     }
     
     /* ========== INFO/WARNING/SUCCESS BOXEN - Card-Stil mit ORANGE ========== */
@@ -1726,7 +1932,7 @@ def main():
         border-left: 5px solid #ff8c00 !important;
         border-radius: 12px !important;
         padding: 16px 20px !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.12), 0 15px 15px rgba(0,0,0,0.08) !important;
         font-weight: 600 !important;
     }
     
@@ -1737,9 +1943,57 @@ def main():
         border-left: 5px solid #ff8c00 !important;
         border-radius: 12px !important;
         padding: 12px 16px !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.1), 0 15px 15px rgba(0,0,0,0.08) !important;
         font-weight: 700 !important;
         transition: all 0.3s ease !important;
+    }
+    
+    /* ========== GLOBALE TABS - ENTFERNE BLAUE FARBEN ========== */
+    /* Tab Container */
+    [data-testid="stTabs"],
+    div[data-testid="stTabs"],
+    [data-baseweb="tab-list"],
+    div[data-baseweb="tab-list"] {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+    }
+    
+    /* Tab Buttons */
+    [data-testid="stTabs"] button,
+    [data-baseweb="tab"],
+    div[data-baseweb="tab"] {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        border-bottom: 3px solid transparent !important;
+        color: #4a5568 !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Tab Active/Selected - ORANGE */
+    [data-testid="stTabs"] button[aria-selected="true"],
+    [data-baseweb="tab"][aria-selected="true"] {
+        background: rgba(255, 140, 0, 0.1) !important;
+        background-color: rgba(255, 140, 0, 0.1) !important;
+        border-bottom: 3px solid #ff8c00 !important;
+        color: #ff8c00 !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Tab Hover - Orange */
+    [data-testid="stTabs"] button:hover,
+    [data-baseweb="tab"]:hover {
+        background: rgba(255, 140, 0, 0.05) !important;
+        background-color: rgba(255, 140, 0, 0.05) !important;
+        color: #ff8c00 !important;
+    }
+    
+    /* Tab Panel (Content Area) */
+    [data-testid="stTabs"] [role="tabpanel"],
+    div[role="tabpanel"] {
+        background: transparent !important;
+        background-color: transparent !important;
     }
     
     .streamlit-expanderHeader:hover {
@@ -1773,7 +2027,7 @@ def main():
         border: 1px solid rgba(200, 210, 220, 0.5) !important;
         border-radius: 12px !important;
         padding: 12px 16px !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.06), 0 10px 10px rgba(0,0,0,0.04) !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.06), 0 15px 15px rgba(0,0,0,0.04) !important;
         transition: all 0.3s ease !important;
         font-weight: 600 !important;
     }
@@ -1786,7 +2040,7 @@ def main():
     .stDateInput > div:focus-within,
     .stTimeInput > div:focus-within {
         border-left: 4px solid #ff8c00 !important;
-        box-shadow: 0 10px 16px rgba(255,140,0,0.2), 0 10px 10px rgba(255,140,0,0.15) !important;
+        box-shadow: 0 15px 16px rgba(255,140,0,0.2), 0 15px 15px rgba(255,140,0,0.15) !important;
     }
     
     /* Focus auf Input-Feldern */
@@ -1806,7 +2060,7 @@ def main():
     .stTextArea > div:hover,
     .stDateInput > div:hover,
     .stTimeInput > div:hover {
-        box-shadow: 0 10px 16px rgba(255,140,0,0.1), 0 10px 10px rgba(255,140,0,0.08) !important;
+        box-shadow: 0 15px 16px rgba(255,140,0,0.1), 0 15px 15px rgba(255,140,0,0.08) !important;
     }
     
     .stTextInput > div > div > input:hover,
@@ -1824,7 +2078,7 @@ def main():
         border-left: 3px solid #ff8c00 !important;
         border-radius: 10px !important;
         padding: 10px 14px !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.03) !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.05), 0 15px 15px rgba(0,0,0,0.03) !important;
         font-weight: 700 !important;
         transition: all 0.3s ease !important;
     }
@@ -1845,7 +2099,7 @@ def main():
     .stTable, table {
         border-left: 4px solid #ff8c00 !important;
         border-radius: 12px !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.1), 0 15px 15px rgba(0,0,0,0.08) !important;
         overflow: hidden !important;
     }
     
@@ -1856,14 +2110,14 @@ def main():
         border-left: 4px solid #ff8c00 !important;
         border-radius: 12px !important;
         padding: 16px !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.1), 0 15px 15px rgba(0,0,0,0.08) !important;
         transition: all 0.3s ease !important;
     }
     
     div[data-testid="stMetric"]:hover,
     .stMetric:hover {
         border-left: 5px solid #ff8c00 !important;
-        box-shadow: 0 10px 16px rgba(255,140,0,0.2), 0 10px 10px rgba(0,0,0,0.12) !important;
+        box-shadow: 0 15px 16px rgba(255,140,0,0.2), 0 15px 15px rgba(0,0,0,0.12) !important;
         transform: translateY(-2px) !important;
     }
     
@@ -1915,7 +2169,7 @@ def main():
         font-size: 15px !important;
         font-weight: 700 !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 15px 16px rgba(0, 0, 0, 0.15), 0 15px 15px rgba(0, 0, 0, 0.1) !important;
         position: relative !important;
         overflow: hidden !important;
     }
@@ -1943,7 +2197,7 @@ def main():
         border-color: #ff8c00 !important;
         color: #1a202c !important;
         transform: translateY(-2px) !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 15px 15px rgba(0, 0, 0, 0.15) !important;
     }
     
     /* Aktiver Button (Primary) - NUR ORANGE AKZENT mit schwarzer Schattierung */
@@ -1954,13 +2208,13 @@ def main():
         border-left: 6px solid #ff8c00 !important;
         color: #1a202c !important;
         font-weight: 700 !important;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2), 0 15px 15px rgba(0, 0, 0, 0.15) !important;
     }
     
     /* Pulse-Animation für aktiven Button mit schwarzer Schattierung */
     @keyframes sidebarButtonPulse {
-        0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.15); }
-        50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3), 0 5px 16px rgba(0, 0, 0, 0.2); }
+        0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2), 0 15px 15px rgba(0, 0, 0, 0.15); }
+        50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 32px rgba(0, 0, 0, 0.3), 0 15px 16px rgba(0, 0, 0, 0.2); }
     }
     
     section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover,
@@ -1979,14 +2233,14 @@ def main():
         border-radius: 10px !important;
         color: #1a202c !important;
         font-weight: 700 !important;
-        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 15px 16px rgba(0, 0, 0, 0.12), 0 15px 15px rgba(0, 0, 0, 0.08) !important;
     }
     
     /* Sidebar Divider/Trennlinien */
     section[data-testid="stSidebar"] hr {
         border-top: 2px solid rgba(255, 140, 0, 0.3) !important;
         margin: 20px 0 !important;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+        box-shadow: 0 15px 16px rgba(0, 0, 0, 0.5) !important;
     }
     
     /* Sidebar Text - dunkle Schrift mit gutem Kontrast */
@@ -2008,7 +2262,7 @@ def main():
         border-radius: 12px !important;
         color: #1a202c !important;
         font-weight: 600 !important;
-        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.1), 0 15px 15px rgba(0,0,0,0.08) !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -2512,7 +2766,7 @@ def main():
             padding: 2.5rem;
             border-radius: 20px;
             margin-bottom: 2rem;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 15px 20px rgba(0, 0, 0, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.9);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">
@@ -2537,7 +2791,7 @@ def main():
             padding: 2.5rem;
             border-radius: 20px;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 15px 16px rgba(0, 0, 0, 0.07), 0 15px 20px rgba(0, 0, 0, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.9);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">
@@ -2617,11 +2871,11 @@ def main():
     elif selected_page_key == "doc_output":
         st.markdown("""
         <div style="
-            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 PDF-Angebote
@@ -2630,6 +2884,54 @@ def main():
                 Erstellen und verwalten Sie Ihre Angebotsdokumente
             </p>
         </div>
+        """, unsafe_allow_html=True)
+
+        # CSS für PDF-Tabs mit orangen Akzenten und Schatteneffekten
+        st.markdown("""
+        <style>
+        /* Tab-Container transparent (kein schwarzer Hintergrund) */
+        .stTabs [data-baseweb="tab-list"] {
+            background: transparent !important;
+            gap: 8px;
+        }
+        
+        /* Tab-Buttons mit weißem Hintergrund, Schatten und orangen Akzenten */
+        .stTabs [data-baseweb="tab-list"] button {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border: 2px solid transparent !important;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 14px 24px !important;
+            font-weight: 700 !important;
+            color: #2d3748 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.06) !important;
+            margin-right: 4px !important;
+        }
+        
+        /* Hover-Effekt */
+        .stTabs [data-baseweb="tab-list"] button:hover {
+            border-color: rgba(255, 140, 0, 0.4) !important;
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Aktiver Tab mit orangen Akzenten */
+        .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+            border-color: #ff8c00 !important;
+            border-bottom: 4px solid #ff8c00 !important;
+            color: #ff8c00 !important;
+            box-shadow: 0 10px 16px rgba(255, 140, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 140, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Tab-Content ohne schwarzen Hintergrund */
+        .stTabs [data-baseweb="tab-panel"] {
+            background: transparent !important;
+            padding: 20px 0 !important;
+            border: none !important;
+        }
+        </style>
         """, unsafe_allow_html=True)
 
         # Tabs für PDF-Ausgabe erstellen - VEREINFACHT (Professional PDF Features sind jetzt in Standard PDF integriert)
@@ -2901,7 +3203,7 @@ def main():
                             st.markdown("---")
                             
                             # === PREIS-EINSTELLUNGEN ===
-                            st.markdown("### [MONEY] Preis-Modifikation")
+                            st.markdown("###Preis-Modifikation")
                             
                             col1, col2 = st.columns(2)
                             
@@ -3430,11 +3732,11 @@ def main():
     elif selected_page_key == "crm":
         st.markdown("""
         <div style="
-            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 CRM & Kundenverwaltung
@@ -3443,6 +3745,54 @@ def main():
                 Verwalten Sie Ihre Kunden und Projekte
             </p>
         </div>
+        """, unsafe_allow_html=True)
+
+        # CSS für CRM-Tabs mit orangen Akzenten und Schatteneffekten
+        st.markdown("""
+        <style>
+        /* Tab-Container transparent (kein schwarzer Hintergrund) */
+        .stTabs [data-baseweb="tab-list"] {
+            background: transparent !important;
+            gap: 8px;
+        }
+        
+        /* Tab-Buttons mit weißem Hintergrund, Schatten und orangen Akzenten */
+        .stTabs [data-baseweb="tab-list"] button {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border: 2px solid transparent !important;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 14px 24px !important;
+            font-weight: 700 !important;
+            color: #2d3748 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.06) !important;
+            margin-right: 4px !important;
+        }
+        
+        /* Hover-Effekt */
+        .stTabs [data-baseweb="tab-list"] button:hover {
+            border-color: rgba(255, 140, 0, 0.4) !important;
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Aktiver Tab mit orangen Akzenten */
+        .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+            border-color: #ff8c00 !important;
+            border-bottom: 4px solid #ff8c00 !important;
+            color: #ff8c00 !important;
+            box-shadow: 0 10px 16px rgba(255, 140, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 140, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Tab-Content ohne schwarzen Hintergrund */
+        .stTabs [data-baseweb="tab-panel"] {
+            background: transparent !important;
+            padding: 20px 0 !important;
+            border: none !important;
+        }
+        </style>
         """, unsafe_allow_html=True)
 
         tab_labels = [
@@ -3494,17 +3844,17 @@ def main():
     elif selected_page_key == "info_platform":
         st.markdown("""
         <div style="
-            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
-                Info-Plattform
+                Controlling
             </h1>
             <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
-                Wissensdatenbank und Informationen
+                Mitarbeiterauswertung und Unternehmenskennzahlen
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -3516,11 +3866,11 @@ def main():
     elif selected_page_key == "options":
         st.markdown("""
         <div style="
-            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 Einstellungen
@@ -3540,6 +3890,41 @@ def main():
             print(f"  render_options callable: {callable(getattr(options_module, 'render_options', None))}")
         print("=" * 80)
 
+        # CSS für Tabs-Styling
+        st.markdown("""
+        <style>
+        /* TABS: Schwarzen Hintergrund entfernen */
+        [data-testid="stTabs"] [data-baseweb="tab-list"] {
+            background-color: transparent !important;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+            gap: 10px !important;
+        }
+        
+        /* Tab-Buttons mit orangen Akzenten */
+        [data-testid="stTabs"] [data-baseweb="tab"] {
+            background-color: transparent !important;
+            border: none !important;
+            color: #333333 !important;
+            font-weight: 500 !important;
+            padding: 12px 24px !important;
+            border-radius: 8px 8px 0 0 !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        [data-testid="stTabs"] [data-baseweb="tab"]:hover {
+            background-color: rgba(255, 140, 0, 0.1) !important;
+            color: #ff8c00 !important;
+        }
+        
+        [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
+            background-color: rgba(255, 140, 0, 0.15) !important;
+            color: #ff8c00 !important;
+            font-weight: 700 !important;
+            border-bottom: 3px solid #ff8c00 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
         # Tabs für die Optionen erstellen
         tab_general, tab_ai = st.tabs([" Allgemeine Einstellungen", " A.G.E.N.T. Begleiter"])
 
@@ -3564,16 +3949,16 @@ def main():
             if ai_companion_module and callable(getattr(ai_companion_module, 'render_ai_companion', None)):
                 ai_companion_module.render_ai_companion()
             else:
-                st.warning(" AA.G.E.N.T. Begleiter Modul nicht verfügbar.")
+                st.warning(" A.G.E.N.T. Begleiter Modul nicht verfügbar.")
 
     elif selected_page_key == "heatpump":
         st.markdown("""
         <div style="
-            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 Wärmepumpen-Kalkulation
@@ -3591,11 +3976,11 @@ def main():
     elif selected_page_key == "solar_calculator":
         st.markdown("""
         <div style="
-            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 Solar Calculator
@@ -3613,11 +3998,11 @@ def main():
     elif selected_page_key == "3d_view":
         st.markdown("""
         <div style="
-            background: linear-gradient(135deg, #434343 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 3D PV-Visualisierung

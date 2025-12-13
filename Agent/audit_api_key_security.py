@@ -308,7 +308,7 @@ def run_full_audit() -> bool:
         True if all audits pass, False otherwise
     """
     print("=" * 70)
-    print("KAI AGENT API KEY SECURITY AUDIT")
+    print("O.M.I AGENT API KEY SECURITY AUDIT")
     print("=" * 70)
     print("\nThis audit checks for common API key security issues:")
     print("  1. .env in .gitignore")

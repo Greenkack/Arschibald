@@ -34,7 +34,7 @@ def test_call_transcript():
     )
 
     # Add messages
-    transcript.add_message("KAI", "Hello, this is KAI")
+    transcript.add_message("O.M.I", "Hello, this is O.M.I")
     transcript.add_message("CUSTOMER", "Hi, I'm interested")
 
     # Add notes
@@ -49,7 +49,7 @@ def test_call_transcript():
 
     assert "TEST-001" in summary
     assert "+49123456789" in summary
-    assert "Hello, this is KAI" in summary
+    assert "Hello, this is O.M.I" in summary
     assert "Customer seems interested" in summary
     assert "Consultation scheduled" in summary
 

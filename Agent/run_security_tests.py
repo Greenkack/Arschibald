@@ -184,7 +184,7 @@ def test_file_operations_security():
 def main():
     """Run all security tests."""
     print("=" * 70)
-    print("KAI Agent Security Tests")
+    print("O.M.I Agent Security Tests")
     print("=" * 70)
     print()
 

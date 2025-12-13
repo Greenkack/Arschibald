@@ -206,21 +206,21 @@ python test_task_12_2_docker_security.py
 #### 1. Verify Unprivileged User
 
 ```bash
-docker run --rm kai_agent_sandbox whoami
+docker run --rm O.M.I_agent_sandbox whoami
 # Expected output: sandboxuser
 ```
 
 #### 2. Check Network Isolation
 
 ```bash
-docker run --rm --network none kai_agent_sandbox ping -c 1 google.com
+docker run --rm --network none O.M.I_agent_sandbox ping -c 1 google.com
 # Expected: Network unreachable or similar error
 ```
 
 #### 3. Verify Resource Limits
 
 ```bash
-docker inspect kai_agent_sandbox | grep -A 5 "Memory\|Cpu"
+docker inspect O.M.I_agent_sandbox | grep -A 5 "Memory\|Cpu"
 # Should show memory and CPU limits
 ```
 
@@ -231,7 +231,7 @@ docker inspect kai_agent_sandbox | grep -A 5 "Memory\|Cpu"
 python -c "from agent.tools.execution_tools import execute_python_code_in_sandbox; execute_python_code_in_sandbox.invoke({'code': 'print(1)'})"
 
 # Check for leftover containers
-docker ps -a | grep kai-sandbox
+docker ps -a | grep O.M.I-sandbox
 # Expected: No containers found
 ```
 
@@ -344,7 +344,7 @@ tail -f Agent/logs/agent.log
    ```bash
    docker pull python:3.11-slim
    cd Agent/sandbox
-   docker build -t kai_agent_sandbox .
+   docker build -t O.M.I_agent_sandbox .
    ```
 
 2. **Security Patches**: Apply immediately when available

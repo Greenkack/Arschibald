@@ -1,5 +1,5 @@
 """
-End-to-End Testing Suite for KAI Agent Integration
+End-to-End Testing Suite for O.M.I Agent Integration
 
 This module tests the complete installation process, all features,
 error scenarios, and validates security measures.
@@ -381,7 +381,7 @@ class TestDocumentation:
 def run_all_tests():
     """Run all end-to-end tests and generate report"""
     print("=" * 70)
-    print("KAI AGENT - END-TO-END TEST SUITE")
+    print("O.M.I AGENT - END-TO-END TEST SUITE")
     print("=" * 70)
 
     # Run pytest with verbose output

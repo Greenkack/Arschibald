@@ -30,7 +30,7 @@ def demo_basic_file_operations():
     print("\n1. Writing a file...")
     result = coding_tools.write_file.invoke({
         "path": "demo.txt",
-        "content": "Hello from KAI Agent!"
+        "content": "Hello from O.M.I Agent!"
     })
     print(f"   Result: {result}")
 
@@ -170,7 +170,7 @@ def show_workspace_summary():
 def main():
     """Run all demonstrations."""
     print("\n" + "=" * 60)
-    print("KAI AGENT - FILE SYSTEM TOOLS DEMONSTRATION")
+    print("O.M.I AGENT - FILE SYSTEM TOOLS DEMONSTRATION")
     print("=" * 60)
 
     try:

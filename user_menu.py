@@ -54,7 +54,7 @@ def render_user_menu():
         border-radius: 12px;
         padding: 18px;
         margin: 10px 0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.08);
     }
     .user-avatar {
         text-align: center;
@@ -74,7 +74,7 @@ def render_user_menu():
         color: white;
         display: inline-block;
         margin-bottom: 5px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -151,7 +151,7 @@ def render_user_menu():
         font-weight: 700;
         white-space: nowrap;
         z-index: 1000;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.4);
     }
     .profile-avatar-img {
         border-radius: 50%;
@@ -159,7 +159,7 @@ def render_user_menu():
         height: 80px;
         border: 4px solid #ff8c00;
         display: block;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25), 0 3px 10px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.18);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -184,83 +184,95 @@ def render_user_menu():
                 st.rerun()
         st.markdown("---")
 
-    # Benutzermenü mit zwei Spalten: Avatar + Info
-    col_avatar, col_info = st.columns([1, 4])
+    # Session State für Account-Menü-Zustand initialisieren (persistent)
+    if 'account_menu_expanded' not in st.session_state:
+        st.session_state['account_menu_expanded'] = False
 
-    with col_avatar:
-        # Zeige Avatar
-        st.markdown(f"""
-        <div style="position: relative; margin-bottom: 10px;">
-            <div class="profile-avatar-container">
-                <img src="{avatar_url}" class="profile-avatar-img" title="Klicken um Profilbild zu vergrößern">
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col_info:
-        # User-Info rechts vom Avatar - Card-Stil mit schwarzer Schattierung
-        st.markdown(f"""
-        <div style="padding: 12px 14px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00; margin-top: 0px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.14);">
-            <div style="font-weight: 700; font-size: 17px; margin-bottom: 4px; margin-top: 2px; color: #1a202c;">{username}</div>
-            <div style="font-size: 14px; font-weight: 600; color: #4a5568; line-height: 1.5;">{rank_display}</div>
-            <div style="font-size: 14px; font-weight: 600; color: #4a5568; line-height: 1.5;">{status_icon} {user_status}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    # CSS für Tabs mit ORANGE Akzenten - transparenter Hintergrund
-    st.markdown("""
-    <style>
-    /* Tab-Buttons mit orangenem Akzent */
-    .stTabs [data-baseweb="tab-list"] {
-        background: transparent !important;
-    }
-    .stTabs [data-baseweb="tab-list"] button {
-        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-        border-bottom: 3px solid transparent !important;
-        border-radius: 8px 8px 0 0 !important;
-        margin-right: 4px !important;
-        padding: 12px 20px !important;
-        font-weight: 700 !important;
-        color: #1a202c !important;
-        transition: all 0.3s ease !important;
-    }
-    .stTabs [data-baseweb="tab-list"] button:hover {
-        border-bottom-color: rgba(255, 140, 0, 0.5) !important;
-        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-    }
-    .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
-        border-bottom: 3px solid #ff8c00 !important;
-        color: #ff8c00 !important;
-        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-    }
-    /* Tab-Content mit Card-Stil - transparenter Hintergrund außen */
-    .stTabs [data-baseweb="tab-panel"] {
-        background: transparent !important;
-        border-radius: 0 !important;
-        border: none !important;
-        padding: 12px 0 !important;
-        box-shadow: none !important;
-    }
-    /* Expander Hintergrund transparent */
-    section[data-testid="stSidebar"] .streamlit-expanderContent {
-        background: transparent !important;
-    }
-    /* Alle Tab-Container transparent */
-    section[data-testid="stSidebar"] .stTabs {
-        background: transparent !important;
-    }
-    section[data-testid="stSidebar"] div[data-baseweb="tab"] {
-        background: transparent !important;
-    }
-    section[data-testid="stSidebar"] div[role="tablist"] {
-        background: transparent !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # Toggle-Button für Account-Menü (einfach und clean)
+    if st.button(f"👤 {username} - Account Menü", key="toggle_account_menu", use_container_width=True):
+        st.session_state['account_menu_expanded'] = not st.session_state['account_menu_expanded']
+        st.rerun()
     
-    # Einstellungen - VOLLE BREITE für bessere Lesbarkeit
-    with st.expander(" Account Menü ", expanded=False):
-        tab1, tab2, tab3 = st.tabs(["Profil", "Einstellungen", "Info"])
+    # Zeige Account-Menü nur wenn expanded = True
+    if st.session_state['account_menu_expanded']:
+        # Benutzermenü mit zwei Spalten: Avatar + Info
+        col_avatar, col_info = st.columns([1, 4])
+
+        with col_avatar:
+            # Zeige Avatar
+            st.markdown(f"""
+            <div style="position: relative; margin-bottom: 10px;">
+                <div class="profile-avatar-container">
+                    <img src="{avatar_url}" class="profile-avatar-img" title="Klicken um Profilbild zu vergrößern">
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_info:
+            # User-Info rechts vom Avatar - Card-Stil mit schwarzer Schattierung
+            st.markdown(f"""
+            <div style="padding: 12px 14px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00; margin-top: 0px; box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.14);">
+                <div style="font-weight: 700; font-size: 17px; margin-bottom: 4px; margin-top: 2px; color: #1a202c;">{username}</div>
+                <div style="font-size: 14px; font-weight: 600; color: #4a5568; line-height: 1.5;">{rank_display}</div>
+                <div style="font-size: 14px; font-weight: 600; color: #4a5568; line-height: 1.5;">{status_icon} {user_status}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        # CSS für Tabs mit ORANGE Akzenten - transparenter Hintergrund
+        st.markdown("""
+        <style>
+        /* Tab-Buttons mit orangenem Akzent */
+        .stTabs [data-baseweb="tab-list"] {
+            background: transparent !important;
+        }
+        .stTabs [data-baseweb="tab-list"] button {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border-bottom: 3px solid transparent !important;
+            border-radius: 8px 8px 0 0 !important;
+            margin-right: 4px !important;
+            padding: 12px 20px !important;
+            font-weight: 700 !important;
+            color: #1a202c !important;
+            transition: all 0.3s ease !important;
+        }
+        .stTabs [data-baseweb="tab-list"] button:hover {
+            border-bottom-color: rgba(255, 140, 0, 0.5) !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        }
+        .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+            border-bottom: 3px solid #ff8c00 !important;
+            color: #ff8c00 !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        }
+        /* Tab-Content mit Card-Stil - transparenter Hintergrund außen */
+        .stTabs [data-baseweb="tab-panel"] {
+            background: transparent !important;
+            border-radius: 0 !important;
+            border: none !important;
+            padding: 12px 0 !important;
+            box-shadow: none !important;
+        }
+        /* Expander Hintergrund transparent */
+        section[data-testid="stSidebar"] .streamlit-expanderContent {
+            background: transparent !important;
+        }
+        /* Alle Tab-Container transparent */
+        section[data-testid="stSidebar"] .stTabs {
+            background: transparent !important;
+        }
+        section[data-testid="stSidebar"] div[data-baseweb="tab"] {
+            background: transparent !important;
+        }
+        section[data-testid="stSidebar"] div[role="tablist"] {
+            background: transparent !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Tabs für Profil, Einstellungen, Info
+        tab1, tab2, tab3 = st.tabs(["📋 Profil", "⚙️ Einstellungen", "ℹ️ Info"])
         with tab1:
             render_profile_tab(um, user_data, is_super)
         with tab2:
@@ -278,7 +290,7 @@ def render_profile_tab(um: UserManagement, user_data: dict, is_super: bool):
         return
 
     st.markdown("""
-    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);">
+    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);">
         <h4 style="margin: 0; color: #1a202c; font-weight: 700;">Mein Profil</h4>
     </div>
     """, unsafe_allow_html=True)
@@ -292,35 +304,37 @@ def render_profile_tab(um: UserManagement, user_data: dict, is_super: bool):
     # Rang mit Infinity für General Admin
     rank_display = "Level ∞" if is_super else user_data.get('rank', 'N/A')
 
-    # Anzeige der Profil-Daten im Card-Stil mit schwarzer Schattierung
-    st.markdown(f"""
-    <div style="padding: 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border-left: 4px solid #ff8c00; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.14); font-size: 14px; line-height: 2;">
-        <div><strong style="color: #1a202c;">ID:</strong> <strong style="color: #666;">{user_data.get('id', 'N/A')}</strong></div>
-        <div><strong style="color: #1a202c;">Benutzername:</strong> <strong style="color: #666;">{user_data.get('username', 'N/A')}</strong></div>
-        <div><strong style="color: #1a202c;">Name:</strong> <strong style="color: #666;">{user_data.get('full_name', 'N/A')}</strong></div>
-        <div><strong style="color: #1a202c;">Rang:</strong> <strong style="color: #666;">{rank_display}</strong></div>
-        <div><strong style="color: #1a202c;">Rolle:</strong> <strong style="color: #666;">{role_display}</strong></div>
-        <div><strong style="color: #1a202c;">Status:</strong> <strong style="color: #666;">{user_data.get('status', 'N/A')}</strong></div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Ausklappbarer Bereich für Profilinformationen
+    with st.expander("📋 Profilinformationen anzeigen", expanded=False):
+        # Anzeige der Profil-Daten im Card-Stil mit schwarzer Schattierung
+        st.markdown(f"""
+        <div style="padding: 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border-left: 4px solid #ff8c00; box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.14); font-size: 14px; line-height: 2;">
+            <div><strong style="color: #1a202c;">ID:</strong> <strong style="color: #666;">{user_data.get('id', 'N/A')}</strong></div>
+            <div><strong style="color: #1a202c;">Benutzername:</strong> <strong style="color: #666;">{user_data.get('username', 'N/A')}</strong></div>
+            <div><strong style="color: #1a202c;">Name:</strong> <strong style="color: #666;">{user_data.get('full_name', 'N/A')}</strong></div>
+            <div><strong style="color: #1a202c;">Rang:</strong> <strong style="color: #666;">{rank_display}</strong></div>
+            <div><strong style="color: #1a202c;">Rolle:</strong> <strong style="color: #666;">{role_display}</strong></div>
+            <div><strong style="color: #1a202c;">Status:</strong> <strong style="color: #666;">{user_data.get('status', 'N/A')}</strong></div>
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("---")
-
-    # Kontaktdaten im Card-Stil mit schwarzer Schattierung
-    st.markdown("**Kontakt:**")
-    st.markdown(f"""
-    <div style="padding: 14px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border-left: 4px solid #ff8c00; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.14); font-size: 14px; line-height: 1.8; margin-top: 8px;">
-        <div><strong style="color: #1a202c;">Email:</strong> <strong style="color: #666;">{user_data.get('email', 'Nicht angegeben')}</strong></div>
-        <div><strong style="color: #1a202c;">Telefon:</strong> <strong style="color: #666;">{user_data.get('phone', 'Nicht angegeben')}</strong></div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Über mich Bereich
-    about_me = user_data.get('about_me', '')
-    if about_me:
         st.markdown("---")
-        st.markdown("**Über mich:**")
-        st.info(about_me)
+
+        # Kontaktdaten im Card-Stil mit schwarzer Schattierung
+        st.markdown("**Kontakt:**")
+        st.markdown(f"""
+        <div style="padding: 14px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-radius: 12px; border-left: 4px solid #ff8c00; box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.14); font-size: 14px; line-height: 1.8; margin-top: 8px;">
+            <div><strong style="color: #1a202c;">Email:</strong> <strong style="color: #666;">{user_data.get('email', 'Nicht angegeben')}</strong></div>
+            <div><strong style="color: #1a202c;">Telefon:</strong> <strong style="color: #666;">{user_data.get('phone', 'Nicht angegeben')}</strong></div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Über mich Bereich
+        about_me = user_data.get('about_me', '')
+        if about_me:
+            st.markdown("---")
+            st.markdown("**Über mich:**")
+            st.info(about_me)
 
     # Profil bearbeiten
     st.markdown("---")
@@ -339,7 +353,7 @@ def render_settings_tab(um: UserManagement, user_data: dict):
         return
 
     st.markdown("""
-    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);">
+    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);">
         <h4 style="margin: 0; color: #1a202c; font-weight: 700;">Einstellungen</h4>
     </div>
     """, unsafe_allow_html=True)
@@ -428,7 +442,7 @@ def render_info_tab(user_data: dict):
         return
 
     st.markdown("""
-    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);">
+    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);">
         <h4 style="margin: 0; color: #1a202c; font-weight: 700;">Account-Informationen</h4>
     </div>
     """, unsafe_allow_html=True)
@@ -477,7 +491,7 @@ def render_info_tab(user_data: dict):
     # Berechtigungen
     st.markdown("---")
     st.markdown("""
-    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);">
+    <div style="padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%); border-left: 4px solid #ff8c00; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);">
         <h4 style="margin: 0; color: #1a202c; font-weight: 700;">Berechtigungen</h4>
     </div>
     """, unsafe_allow_html=True)
@@ -566,6 +580,82 @@ def logout_user():
 def render_profile_editor():
     """Vollbild Profil-Editor mit allen Features"""
     st.title(" Profil bearbeiten")
+
+    # Globale CSS-Styles für den gesamten Profil-Editor
+    st.markdown("""
+    <style>
+    /* TABS: Schwarzen Hintergrund entfernen */
+    [data-testid="stTabs"] [data-baseweb="tab-list"] {
+        background-color: transparent !important;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+        gap: 10px !important;
+    }
+    
+    /* Tab-Buttons mit orangen Akzenten */
+    [data-testid="stTabs"] [data-baseweb="tab"] {
+        background-color: transparent !important;
+        border: none !important;
+        color: #333333 !important;
+        font-weight: 500 !important;
+        padding: 12px 24px !important;
+        border-radius: 8px 8px 0 0 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    [data-testid="stTabs"] [data-baseweb="tab"]:hover {
+        background-color: rgba(255, 140, 0, 0.1) !important;
+        color: #ff8c00 !important;
+    }
+    
+    [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
+        background-color: rgba(255, 140, 0, 0.15) !important;
+        color: #ff8c00 !important;
+        font-weight: 700 !important;
+        border-bottom: 3px solid #ff8c00 !important;
+    }
+    
+    /* BUTTONS: Alle Primary Buttons orange */
+    button[kind="primary"],
+    [data-testid="stFormSubmitButton"] button[kind="primary"] {
+        background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%) !important;
+        color: #000000 !important;
+        border: 2px solid #ff8c00 !important;
+        font-weight: 600 !important;
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.4) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    button[kind="primary"]:hover,
+    [data-testid="stFormSubmitButton"] button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #ff9900 0%, #ff7700 100%) !important;
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 140, 0, 0.3) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* EINGABEFELDER: Schattierungen */
+    [data-testid="stTextInput"] input,
+    [data-testid="stTextArea"] textarea,
+    [data-testid="stSelectbox"] > div > div {
+        box-shadow: 0 10px 8px rgba(0, 0, 0, 0.15), inset 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.3s ease !important;
+        background-color: #ffffff !important;
+    }
+    
+    [data-testid="stTextInput"] input:focus,
+    [data-testid="stTextArea"] textarea:focus {
+        box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3), inset 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        border-color: #ff8c00 !important;
+        outline: none !important;
+    }
+    
+    /* Selectbox Schattierung */
+    [data-testid="stSelectbox"] > div > div:hover {
+        box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2), inset 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        border-color: #ff8c00 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
     user_id = st.session_state.get('user_id')
     if not user_id:

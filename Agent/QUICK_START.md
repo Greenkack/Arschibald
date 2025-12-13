@@ -1,6 +1,6 @@
-# KAI Agent - Quick Start Guide
+# O.M.I Agent - Quick Start Guide
 
-Get up and running with the KAI Agent in 5 minutes!
+Get up and running with the O.M.I Agent in 5 minutes!
 
 ## Prerequisites
 
@@ -30,7 +30,7 @@ cp ../.env.example ../.env
 ### 3. Build Docker Sandbox
 
 ```bash
-docker build -t kai_agent_sandbox -f sandbox/Dockerfile sandbox/
+docker build -t O.M.I_agent_sandbox -f sandbox/Dockerfile sandbox/
 ```
 
 ### 4. Verify Installation
@@ -95,4 +95,4 @@ pip install -r requirements.txt
 
 ---
 
-That's it! You're ready to use the KAI Agent. 🚀
+That's it! You're ready to use the O.M.I Agent. 🚀

@@ -1,9 +1,9 @@
 """
-Error Classes and Exception Handling for KAI Agent
+Error Classes and Exception Handling for O.M.I Agent
 ===================================================
 
 Defines custom exception hierarchy and error handling utilities
-for the KAI Agent system.
+for the O.M.I Agent system.
 
 Requirements: 11.1, 11.2, 11.3, 11.4, 11.5
 """
@@ -16,7 +16,7 @@ class AgentError(Exception):
     """
     Base exception for all agent-related errors.
 
-    All custom exceptions in the KAI Agent system inherit from this class.
+    All custom exceptions in the O.M.I Agent system inherit from this class.
     This allows for catching all agent-specific errors with a single except clause.
 
     Attributes:
@@ -264,7 +264,7 @@ class DockerError(ExecutionError):
 
     Examples:
         - Docker daemon not running
-        - Image 'kai_agent_sandbox' not found
+        - Image 'O.M.I_agent_sandbox' not found
         - Container failed to start
         - Permission denied for Docker socket
     """

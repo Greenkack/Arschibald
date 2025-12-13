@@ -1,5 +1,5 @@
 """
-Agent Core Module - KAI Agent Orchestration
+Agent Core Module - O.M.I Agent Orchestration
 ============================================
 
 Main agent orchestration using LangChain's ReAct pattern with GPT-4.
@@ -219,7 +219,7 @@ class AgentCore:
         Requirements: 2.1, 2.2, 7.5, 8.1
         """
         system_message = """
-Du bist KAI, ein autonomer KI-Branchenexperte auf Weltklasse-Niveau. Deine Expertise ist zweigeteilt:
+Du bist O.M.I, ein autonomer KI-Branchenexperte auf Weltklasse-Niveau. Deine Expertise ist zweigeteilt:
 
 1. **Fachberater für Erneuerbare Energien:** Du bist ein absoluter Experte für Photovoltaik, Wärmepumpen und deren Kombination. Du kennst technische Details, wirtschaftliche Vorteile und kannst diese überzeugend am Telefon verkaufen und beraten.
 

@@ -1,5 +1,5 @@
 """
-Security Audit Suite for KAI Agent Integration
+Security Audit Suite for O.M.I Agent Integration
 
 This module performs comprehensive security testing including Docker isolation,
 path validation, API key security, and input sanitization.
@@ -140,7 +140,7 @@ except:
             initial_count = len(
                 client.containers.list(
                     all=True, filters={
-                        "ancestor": "kai-agent-sandbox"}))
+                        "ancestor": "O.M.I-agent-sandbox"}))
 
             # Execute code
             execute_python_code_in_sandbox("print('test')")
@@ -149,7 +149,7 @@ except:
             final_count = len(
                 client.containers.list(
                     all=True, filters={
-                        "ancestor": "kai-agent-sandbox"}))
+                        "ancestor": "O.M.I-agent-sandbox"}))
 
             # Should not have more containers (cleanup should happen)
             assert final_count <= initial_count + 1, \
@@ -523,7 +523,7 @@ class TestSecurityConfiguration:
 def run_security_audit():
     """Run complete security audit and generate report"""
     print("=" * 70)
-    print("KAI AGENT - SECURITY AUDIT")
+    print("O.M.I AGENT - SECURITY AUDIT")
     print("=" * 70)
 
     # Run pytest with verbose output

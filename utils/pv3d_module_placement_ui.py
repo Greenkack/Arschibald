@@ -153,6 +153,32 @@ def render_module_placement_panel(
                 help="Prozentsatz der platzierten Module"
             )
 
+        # CSS für transparenten Hintergrund und grauen Progress Bar
+        st.markdown("""
+        <style>
+        /* Entferne blauen Hintergrund vom Progress Text */
+        div[data-testid="stProgress"] > div > div {
+            background-color: transparent !important;
+        }
+        
+        /* Ändere Progress Bar von blau zu grau */
+        div[data-testid="stProgress"] > div > div > div {
+            background-color: #e5e7eb !important;
+        }
+        
+        /* Progress Bar Fill auf dunkelgrau */
+        div[data-testid="stProgress"] > div > div > div > div {
+            background-color: #6b7280 !important;
+        }
+        
+        /* Progress Text Styling */
+        div[data-testid="stProgress"] p {
+            color: #1a202c !important;
+            font-weight: 500 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
         # Fortschrittsbalken
         progress_text = (
             f"Belegungsfortschritt: {current_placed} von "
@@ -169,13 +195,14 @@ def render_module_placement_panel(
         btn_col1, btn_col2 = st.columns(2)
 
         with btn_col1:
-            # Primary Button: Automatisch belegen
+            # Primary Button: Automatisch belegen (Orange)
             auto_help = "Platziert Module automatisch auf der Dachfläche"
             if st.button(
                 "Automatisch belegen",
                 type="primary",
                 use_container_width=True,
-                help=auto_help
+                help=auto_help,
+                key="auto_belegen_orange_btn"
             ):
                 # Setze Trigger im Session State
                 st.session_state["trigger_auto_placement"] = True

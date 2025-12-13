@@ -269,7 +269,7 @@ def apply_light_mode_styles():
     .stNumberInput > div > div > input:focus,
     .stTextArea > div > div > textarea:focus {
         border-color: #667eea !important;
-        box-shadow: 0 0 0 1px #667eea !important;
+        box-shadow: 0 0 0 10px #667eea !important;
     }
     
     /* Selectbox & Dropdown */

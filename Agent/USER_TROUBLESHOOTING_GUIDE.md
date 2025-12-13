@@ -1,8 +1,8 @@
-# KAI Agent - User Troubleshooting Guide
+# O.M.I Agent - User Troubleshooting Guide
 
 ## Quick Start Troubleshooting
 
-This guide helps you solve common problems when using the KAI Agent. For technical details, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
+This guide helps you solve common problems when using the O.M.I Agent. For technical details, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 ## Table of Contents
 
@@ -58,7 +58,7 @@ This guide helps you solve common problems when using the KAI Agent. For technic
 
 **What you see:**
 ```
-❌ Docker image 'kai_agent_sandbox' not found
+❌ Docker image 'O.M.I_agent_sandbox' not found
 ```
 
 **Quick Fix:**

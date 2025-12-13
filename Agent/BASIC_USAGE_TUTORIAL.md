@@ -1,8 +1,8 @@
-# KAI Agent - Basic Usage Tutorial
+# O.M.I Agent - Basic Usage Tutorial
 
-## Welcome to KAI Agent!
+## Welcome to O.M.I Agent!
 
-KAI (Künstliche Intelligenz) Agent is your AI-powered assistant with dual expertise in renewable energy consulting and software development. This tutorial will guide you through the basics of using the agent.
+O.M.I (Künstliche Intelligenz) Agent is your AI-powered assistant with dual expertise in renewable energy consulting and software development. This tutorial will guide you through the basics of using the agent.
 
 ## Table of Contents
 
@@ -215,7 +215,7 @@ Jetzt brauche ich eine Funktion, die die Amortisationszeit berechnet.
 
 If you see Docker-related errors:
 1. Ensure Docker is installed and running
-2. Check if the sandbox image is built: `docker images | grep kai_agent-sandbox`
+2. Check if the sandbox image is built: `docker images | grep O.M.I_agent-sandbox`
 3. Rebuild if needed: `python Agent/build_sandbox.py`
 
 ## Next Steps

@@ -246,7 +246,7 @@ def test_automatic_cleanup():
     print("\n[4a] Counting containers before execution...")
     containers_before = [
         c for c in client.containers.list(all=True)
-        if 'kai-sandbox' in c.name
+        if 'O.M.I-sandbox' in c.name
     ]
     count_before = len(containers_before)
     print(f"Containers before: {count_before}")
@@ -265,7 +265,7 @@ def test_automatic_cleanup():
     print("\n[4c] Counting containers after execution...")
     containers_after = [
         c for c in client.containers.list(all=True)
-        if 'kai-sandbox' in c.name
+        if 'O.M.I-sandbox' in c.name
     ]
     count_after = len(containers_after)
     print(f"Containers after: {count_after}")
@@ -284,7 +284,7 @@ def test_automatic_cleanup():
     print("\n[4d] Testing cleanup on execution error...")
     containers_before = len([
         c for c in client.containers.list(all=True)
-        if 'kai-sandbox' in c.name
+        if 'O.M.I-sandbox' in c.name
     ])
 
     result = execute_python_code_in_sandbox.invoke({
@@ -296,7 +296,7 @@ def test_automatic_cleanup():
 
     containers_after = len([
         c for c in client.containers.list(all=True)
-        if 'kai-sandbox' in c.name
+        if 'O.M.I-sandbox' in c.name
     ])
 
     if containers_after == containers_before:

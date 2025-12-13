@@ -504,10 +504,12 @@ def render_pdf_ui(
     # Zusätzliche Diagramm-Konfiguration
     with st.expander(" DIAGRAMM-KONFIGURATION", expanded=False):
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    border-radius: 10px; padding: 15px; margin: 10px 0; color: white;">
-            <h4 style="margin: 0; color: white;"> ERWEITERTE DIAGRAMM-FEATURES</h4>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">Konfigurieren Sie Ihre Diagramme für maximale Wirkung</p>
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                    border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00;
+                    border-radius: 12px; padding: 16px; margin: 12px 0;
+                    box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);">
+            <h4 style="margin: 0; color: #ff8c00; font-weight: 700;"> ERWEITERTE DIAGRAMM-FEATURES</h4>
+            <p style="margin: 5px 0 0 0; color: #4a5568;">Konfigurieren Sie Ihre Diagramme für maximale Wirkung</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -661,10 +663,12 @@ def render_pdf_ui(
 
         if include_financing:
             st.markdown("""
-            <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-                        border-radius: 10px; padding: 15px; margin: 10px 0; color: white;">
-                <h4 style="margin: 0; color: white;"> FINANZIERUNGSOPTIONEN</h4>
-                <p style="margin: 5px 0 0 0; opacity: 0.9;">Konfigurieren Sie die Finanzierungsparameter für Ihr PDF</p>
+            <div style="background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                        border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00;
+                        border-radius: 12px; padding: 16px; margin: 12px 0;
+                        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);">
+                <h4 style="margin: 0; color: #ff8c00; font-weight: 700;"> FINANZIERUNGSOPTIONEN</h4>
+                <p style="margin: 5px 0 0 0; color: #4a5568;">Konfigurieren Sie die Finanzierungsparameter für Ihr PDF</p>
             </div>
             """, unsafe_allow_html=True)
 
@@ -855,10 +859,12 @@ def render_pdf_ui(
     #  UNLIMITED CUSTOM TEXTS & IMAGES
     with st.expander(" UNLIMITED CUSTOM TEXTS & IMAGES", expanded=False):
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #ff7b7b 0%, #667eea 100%);
-                    border-radius: 10px; padding: 15px; margin: 10px 0; color: white;">
-            <h4 style="margin: 0; color: white;"> UNBEGRENZTE ANPASSUNGSMÖGLICHKEITEN</h4>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">Fügen Sie beliebige Texte, Bilder und Inhalte zu Ihrem PDF hinzu</p>
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                    border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00;
+                    border-radius: 12px; padding: 16px; margin: 12px 0;
+                    box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);">
+            <h4 style="margin: 0; color: #ff8c00; font-weight: 700;"> UNBEGRENZTE ANPASSUNGSMÖGLICHKEITEN</h4>
+            <p style="margin: 5px 0 0 0; color: #4a5568;">Fügen Sie beliebige Texte, Bilder und Inhalte zu Ihrem PDF hinzu</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1370,19 +1376,23 @@ def render_pdf_ui(
         st.markdown("---")
         st.markdown("**DRAG & DROP EDITOR ZONE:**")
 
-        # Simulated Canvas mit components.html - DARK THEME
+        # Simulated Canvas mit components.html - LIGHT THEME mit orangen Akzenten
         canvas_html = """
-        <div style="border: 2px dashed #555; border-radius: 10px; padding: 30px;
-                    min-height: 300px; background: #1e1e1e; text-align: center;">
-            <h3 style="color: #e0e0e0; margin-top: 50px;">DRAG & DROP CANVAS</h3>
-            <p style="color: #b0b0b0;">Ziehen Sie Elemente aus der Bibliothek hierher</p>
-            <p style="color: #b0b0b0;">Real-Time Vorschau |  Auto-Save | Grid-Snap</p>
+        <div style="border: 2px dashed rgba(255, 140, 0, 0.4); border-radius: 12px; padding: 30px;
+                    min-height: 300px; background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                    box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);
+                    text-align: center;">
+            <h3 style="color: #ff8c00; margin-top: 50px; font-weight: 700;">DRAG & DROP CANVAS</h3>
+            <p style="color: #4a5568;">Ziehen Sie Elemente aus der Bibliothek hierher</p>
+            <p style="color: #4a5568;">Real-Time Vorschau |  Auto-Save | Grid-Snap</p>
 
-            <div style="margin: 20px 0; padding: 20px; background: #2a2a2a; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                <h4 style="color: #e0e0e0;">BEISPIEL PDF-SEITE</h4>
-                <p style="color: #b0b0b0;">Hier würden Ihre Drag & Drop Elemente erscheinen...</p>
-                <div style="height: 2px; background: linear-gradient(90deg, #667eea, #764ba2); margin: 10px 0;"></div>
-                <p style="color: #b0b0b0;"><em> Interaktiver Editor mit Real-Time Updates</em></p>
+            <div style="margin: 20px 0; padding: 20px; background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%);
+                        border: 2px solid rgba(255, 140, 0, 0.3); border-radius: 8px;
+                        box-shadow: 0 10px 10px rgba(255, 140, 0, 0.15);">
+                <h4 style="color: #2d3748; font-weight: 700;">BEISPIEL PDF-SEITE</h4>
+                <p style="color: #4a5568;">Hier würden Ihre Drag & Drop Elemente erscheinen...</p>
+                <div style="height: 3px; background: linear-gradient(90deg, #ff8c00, #ff6b00); margin: 10px 0; border-radius: 2px;"></div>
+                <p style="color: #4a5568;"><em> Interaktiver Editor mit Real-Time Updates</em></p>
             </div>
         </div>
         """
@@ -1447,10 +1457,12 @@ def render_pdf_ui(
     #  PDF UI VERSCHÖNERUNG (ADVANCED STYLING)
     with st.expander(" PDF UI VERSCHÖNERUNG (ADVANCED STYLING)", expanded=False):
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #ff9a56 0%, #ff6b95 100%);
-                    border-radius: 10px; padding: 15px; margin: 10px 0; color: white;">
-            <h4 style="margin: 0; color: white;"> ERWEITERTE PDF-GESTALTUNG</h4>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">Professionelle Design-Tools für perfekte PDF-Layouts</p>
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                    border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00;
+                    border-radius: 12px; padding: 16px; margin: 12px 0;
+                    box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);">
+            <h4 style="margin: 0; color: #ff8c00; font-weight: 700;"> ERWEITERTE PDF-GESTALTUNG</h4>
+            <p style="margin: 5px 0 0 0; color: #4a5568;">Professionelle Design-Tools für perfekte PDF-Layouts</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1821,31 +1833,34 @@ def render_pdf_ui(
         
         current_theme = st.session_state.pdf_design_config.get('theme', 'professional')
         
-        # HTML Preview mit components.html für bessere Kompatibilität - DARK THEME
+        # HTML Preview mit components.html für bessere Kompatibilität - LIGHT THEME mit orangen Akzenten
         preview_html = f"""
-        <div style="border: 2px solid #4a4a4a; border-radius: 12px; padding: 20px; background: #1e1e1e; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                <h3 style="margin: 0;">{current_theme.upper()} THEME PREVIEW</h3>
-                <p style="margin: 5px 0 0 0; opacity: 0.9;">Live-Vorschau Ihres PDF-Designs</p>
+        <div style="border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00;
+                    border-radius: 12px; padding: 20px;
+                    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);">
+            <div style="background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #ff8c00; box-shadow: 0 4px 12px rgba(255, 140, 0, 0.2);">
+                <h3 style="margin: 0; font-weight: 700; color: #2d3748;">{current_theme.upper()} THEME PREVIEW</h3>
+                <p style="margin: 5px 0 0 0; color: #4a5568;">Live-Vorschau Ihres PDF-Designs</p>
             </div>
 
             <div style="margin: 15px 0;">
-                <h4 style="color: #e0e0e0; margin-bottom: 10px;">Beispiel-Chart</h4>
-                <div style="height: 120px; background: linear-gradient(90deg, #ff7b7b, #667eea); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                <h4 style="color: #2d3748; margin-bottom: 10px; font-weight: 700;">Beispiel-Chart</h4>
+                <div style="height: 120px; background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #2d3748; font-weight: bold; box-shadow: 0 4px 12px rgba(255, 140, 0, 0.2); border-left: 4px solid #ff8c00;">
                     Ihr Chart hier mit aktuellen Design-Einstellungen
                 </div>
             </div>
 
             <div style="margin: 15px 0;">
-                <h4 style="color: #e0e0e0;">Beispiel-Text</h4>
-                <p style="color: #b0b0b0; line-height: 1.6;">
+                <h4 style="color: #2d3748; font-weight: 700;">Beispiel-Text</h4>
+                <p style="color: #4a5568; line-height: 1.6;">
                     Dies ist ein Beispieltext, der zeigt, wie Ihr PDF mit den aktuellen Design-Einstellungen aussehen wird.
                     Schriftart: {font_family}, Größe: {font_size_base}pt, Ausrichtung: {text_alignment}
                 </p>
             </div>
 
-            <div style="background: #2a2a2a; padding: 15px; border-radius: 6px; border-left: 4px solid #667eea;">
-                <strong style="color: #e0e0e0;">Design-Status:</strong> <span style="color: #b0b0b0;">{current_theme.title()} Theme aktiv mit erweiterten Styling-Optionen</span>
+            <div style="background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%); padding: 15px; border-radius: 8px; border-left: 4px solid #ff8c00; box-shadow: 0 4px 12px rgba(255, 140, 0, 0.15);">
+                <strong style="color: #2d3748;">Design-Status:</strong> <span style="color: #4a5568;">{current_theme.title()} Theme aktiv mit erweiterten Styling-Optionen</span>
             </div>
         </div>
         """
@@ -3334,19 +3349,19 @@ def render_pdf_ui(
                                             from pypdf import PdfReader
                                             temp_reader = PdfReader(io.BytesIO(additional_pdf_bytes))
                                             page_count = len(temp_reader.pages)
-                                            print(f"[DOC_OUTPUT] Zusatz-PDF erfolgreich generiert: {page_count} Seiten, {len(additional_pdf_bytes)} Bytes")
+                                            print(f" Zusatz-PDF erfolgreich generiert: {page_count} Seiten, {len(additional_pdf_bytes)} Bytes")
                                             st.success(f"Zusatz-PDF generiert: {page_count} Seiten")
                                         except Exception as e_debug:
-                                            print(f"[DOC_OUTPUT] Debug-Auswertung fehlgeschlagen: {e_debug}")
+                                            print(f"Debug-Auswertung fehlgeschlagen: {e_debug}")
                                             st.info(f"Zusatz-PDF generiert: {len(additional_pdf_bytes)} Bytes")
                                     else:
-                                        print("[DOC_OUTPUT] Zusatz-PDF ist None - keine Seiten generiert")
+                                        print("Zusatz-PDF ist None - keine Seiten generiert")
                                         st.warning("Zusatz-PDF konnte nicht generiert werden (None)")
                                         
                                 except Exception as e_additional:
                                     import traceback
                                     error_details = tb_module.format_exc()
-                                    print(f"[DOC_OUTPUT] Fehler bei Zusatzseiten-Generierung:\n{error_details}")
+                                    print(f"Fehler bei Zusatzseiten-Generierung:\n{error_details}")
                                     st.error(f"Zusatzseiten konnten nicht angehängt werden: {e_additional}")
                                     st.text_area("Fehlerdetails:", error_details, height=150)
                             

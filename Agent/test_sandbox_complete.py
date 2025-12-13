@@ -104,14 +104,14 @@ def test_docker_image_exists():
     exists, message = _ensure_docker_image_exists()
     print(f"Image exists: {exists}")
     print(f"Message: {message}")
-    assert exists, "Docker image 'kai_agent_sandbox' not found"
+    assert exists, "Docker image 'O.M.I_agent_sandbox' not found"
 
 
 def test_image_has_python():
     """Test that image has Python 3.11 (Requirement 5.5)."""
     client = docker.from_env()
     result = client.containers.run(
-        "kai_agent_sandbox",
+        "O.M.I_agent_sandbox",
         "python --version",
         remove=True
     )
@@ -124,7 +124,7 @@ def test_unprivileged_user():
     """Test that container runs as unprivileged user (Requirement 5.2)."""
     client = docker.from_env()
     result = client.containers.run(
-        "kai_agent_sandbox",
+        "O.M.I_agent_sandbox",
         "whoami",
         remove=True
     )
@@ -139,7 +139,7 @@ def test_user_has_no_sudo():
     client = docker.from_env()
     try:
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "sudo whoami",
             remove=True
         )
@@ -251,7 +251,7 @@ def test_automatic_cleanup():
     # Get initial container count
     client = docker.from_env()
     initial_containers = client.containers.list(
-        all=True, filters={"name": "kai-sandbox"})
+        all=True, filters={"name": "O.M.I-sandbox"})
     initial_count = len(initial_containers)
     print(f"Initial containers: {initial_count}")
 
@@ -263,7 +263,7 @@ def test_automatic_cleanup():
     # Check container count after execution
     time.sleep(1)  # Give Docker time to cleanup
     final_containers = client.containers.list(
-        all=True, filters={"name": "kai-sandbox"})
+        all=True, filters={"name": "O.M.I-sandbox"})
     final_count = len(final_containers)
     print(f"Final containers: {final_count}")
 

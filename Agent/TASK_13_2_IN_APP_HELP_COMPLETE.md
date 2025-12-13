@@ -2,7 +2,7 @@
 
 ## Overview
 
-Task 13.2 has been successfully implemented, adding comprehensive in-app help features to the KAI Agent UI. The implementation includes tooltips, example task suggestions, usage instructions, and a complete help dialog.
+Task 13.2 has been successfully implemented, adding comprehensive in-app help features to the O.M.I Agent UI. The implementation includes tooltips, example task suggestions, usage instructions, and a complete help dialog.
 
 ## Implemented Features
 
@@ -13,7 +13,7 @@ Task 13.2 has been successfully implemented, adding comprehensive in-app help fe
 **Features**:
 - Comprehensive help guide accessible with one click
 - Covers all major topics:
-  - What is KAI Agent
+  - What is O.M.I Agent
   - How it works (step-by-step)
   - Task types (Energy Consulting, Software Dev, Combined)
   - Tips for best results
@@ -120,7 +120,7 @@ st.button(
 **Implementation**:
 ```python
 if st.session_state.first_visit:
-    st.info("👋 Welcome to KAI Agent! ...")
+    st.info("👋 Welcome to O.M.I Agent! ...")
     if st.button("Got it! 👍"):
         st.session_state.first_visit = False
 ```

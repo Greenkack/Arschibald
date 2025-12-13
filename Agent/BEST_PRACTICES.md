@@ -1,8 +1,8 @@
-# KAI Agent - Best Practices
+# O.M.I Agent - Best Practices
 
 ## Introduction
 
-This document outlines best practices for using the KAI Agent effectively, securely, and efficiently. Following these guidelines will help you get the most value from the agent while avoiding common pitfalls.
+This document outlines best practices for using the O.M.I Agent effectively, securely, and efficiently. Following these guidelines will help you get the most value from the agent while avoiding common pitfalls.
 
 ## Table of Contents
 

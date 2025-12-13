@@ -35,8 +35,8 @@ def st_capture(output_func):
 
 
 # --- Streamlit UI Konfiguration ---
-st.set_page_config(page_title="KAI Agent", layout="wide")
-st.title("🤖 KAI - Autonomer KI-Branchenexperte")
+st.set_page_config(page_title="O.M.I Agent", layout="wide")
+st.title("🤖 O.M.I - Autonomer KI-Branchenexperte")
 st.subheader("Experte für Erneuerbare Energien & Software-Architektur")
 
 # --- Initialisierung & API-Schlüssel-Prüfung ---
@@ -71,7 +71,7 @@ if 'agent_core' not in st.session_state:
 # --- UI-Elemente ---
 st.info("Experten-Upgrade! Der Agent ist jetzt ein Fachberater für Photovoltaik & Wärmepumpen und ein Software-Architekt. Beispiel: 'Durchsuche die Wissensdatenbank nach den technischen Vorteilen einer Kombination aus PV-Anlage und Wärmepumpe. Plane dann die Software-Architektur für eine Python-App, die die Amortisationszeit berechnet. Rufe danach einen potenziellen Kunden an, präsentiere ihm überzeugend die Top 3 Vorteile und biete an, ihm eine personalisierte Berechnung zu erstellen.'")
 
-user_task = st.text_input("Ihre Aufgabe für KAI:", key="task_input")
+user_task = st.text_input("Ihre Aufgabe für O.M.I:", key="task_input")
 start_button = st.button("Agenten starten", type="primary")
 
 # Platzhalter für die Live-Ausgabe

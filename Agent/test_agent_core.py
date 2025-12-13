@@ -143,7 +143,7 @@ def test_memory_management():
 def main():
     """Run all tests."""
     print("\n" + "=" * 80)
-    print("KAI AGENT CORE TEST SUITE")
+    print("O.M.I AGENT CORE TEST SUITE")
     print("=" * 80)
 
     tests = [

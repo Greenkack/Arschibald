@@ -2330,11 +2330,10 @@ def _add_chart_controls(
         )
         st.session_state[key_type] = new_type
     with col2:
-        selected_color_method = st.radio(
+        selected_color_method = st.selectbox(
             get_text(texts, "chart_select_color_method_label", "Farbwahl"),
             options=["Palette", "Manuell"],
             key=f"radio_{key_color_method}",
-            horizontal=True,
             index=1 if current_color_method_is_manual else 0,
         )
         st.session_state[f"color_method_is_manual_{chart_key_prefix}"] = (
@@ -3518,6 +3517,54 @@ def render_extended_calculations_dashboard(
             "total_investment_cost_netto",
             20000),
     }
+
+    # CSS für Tabs mit orangen Akzenten und Schatteneffekten
+    st.markdown("""
+    <style>
+    /* Tab-Container transparent (kein schwarzer Hintergrund) */
+    .stTabs [data-baseweb="tab-list"] {
+        background: transparent !important;
+        gap: 8px;
+    }
+    
+    /* Tab-Buttons mit weißem Hintergrund, Schatten und orangen Akzenten */
+    .stTabs [data-baseweb="tab-list"] button {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border: 2px solid transparent !important;
+        border-radius: 12px 12px 0 0 !important;
+        padding: 14px 24px !important;
+        font-weight: 700 !important;
+        color: #2d3748 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.06) !important;
+        margin-right: 4px !important;
+    }
+    
+    /* Hover-Effekt */
+    .stTabs [data-baseweb="tab-list"] button:hover {
+        border-color: rgba(255, 140, 0, 0.4) !important;
+        box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* Aktiver Tab mit orangen Akzenten */
+    .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+        background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+        border-color: #ff8c00 !important;
+        border-bottom: 4px solid #ff8c00 !important;
+        color: #ff8c00 !important;
+        box-shadow: 0 10px 16px rgba(255, 140, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 140, 0, 0.1) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* Tab-Content ohne schwarzen Hintergrund */
+    .stTabs [data-baseweb="tab-panel"] {
+        background: transparent !important;
+        padding: 20px 0 !important;
+        border: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
     # Berechnungsmodule in Tabs
     tabs = st.tabs(
@@ -7881,7 +7928,7 @@ def render_analysis(
             return f"{integer_part},{decimal_part} €"
 
     # Switch für Berechnungsmethode
-    amortization_method = st.radio(
+    amortization_method = st.selectbox(
         "Berechnungsmethode wählen:",
         options=[
             "Klassisch (Investition ÷ Jährliche Vorteile)",

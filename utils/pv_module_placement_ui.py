@@ -61,12 +61,39 @@ def render_module_placement_ui(fig: go.Figure,
         roof_type: Dachtyp
         project_data: Projekt-Daten Dictionary
         module_quantity: Anzahl Module aus Solarcalculator (optional)
-    """
+    """    # CSS für orange Primary Buttons - MUSS AM ANFANG stehen!
+    st.markdown("""
+        <style>
+        /* Orange Button Styling für alle Primary Buttons */
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"],
+        div[data-testid="stButton"] > button[kind="primary"],
+        section[data-testid="stSidebar"] button[kind="primary"] {
+            background-color: #FF8C00 !important;
+            border-color: #FF8C00 !important;
+            color: white !important;
+        }
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover,
+        div[data-testid="stButton"] > button[kind="primary"]:hover,
+        section[data-testid="stSidebar"] button[kind="primary"]:hover {
+            background-color: #FF7700 !important;
+            border-color: #FF7700 !important;
+            color: white !important;
+        }
+        button[data-testid="baseButton-primary"]:active,
+        button[kind="primary"]:active {
+            background-color: #FF6600 !important;
+            border-color: #FF6600 !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
     init_placement_manager_in_session()
     manager = st.session_state.pv_placement_manager
     
     st.divider()
-    st.subheader("PV-Modul Platzierung")
+    st.subheader("⚡ PV-Modul Platzierung")
     
     # ========================================================================
     # TAB-LAYOUT
@@ -174,10 +201,10 @@ def render_module_placement_ui(fig: go.Figure,
             # Aufständerungstyp (nur relevant für Flachdach)
             mounting_type = "south"  # Default
             if roof_type == "Flachdach":
-                mounting_type = st.radio(
+                mounting_type = st.selectbox(
                     "Aufständerungstyp",
                     options=["south", "east_west"],
-                    format_func=lambda x: " Süd-Aufständerung (15°)" if x == "south" else " Ost-West-Aufständerung (Dreieck)",
+                    format_func=lambda x: "Süd-Aufständerung (15°)" if x == "south" else "Ost-West-Aufständerung (Dreieck)",
                     help="Süd: Klassische Aufständerung nach Süden. Ost-West: Module abwechselnd nach Osten und Westen für bessere Flächennutzung"
                 )
             else:
@@ -213,7 +240,8 @@ def render_module_placement_ui(fig: go.Figure,
             place_button = st.button(
                 "Automatisch platzieren",
                 type="primary",
-                use_container_width=True
+                use_container_width=True,
+                key="auto_platzieren_orange_btn"
             )
         
         with col_btn2:

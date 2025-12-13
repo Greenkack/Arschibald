@@ -615,7 +615,7 @@ def render_module_placement_panel(
                 f"**Platzierungs-Info:**\n\n"
                 f"- Dachfläche: {roof_area:.2f} m²\n"
                 f"- Module platziert: {current_placed}\n"
-                f"- Belegungsgrad: {coverage_percent:.1f}%"
+                f"- Belegungsgrad: {coverage_percent:.2f}%"
             )
             st.info(info_text)
         else:

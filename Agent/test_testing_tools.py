@@ -179,7 +179,7 @@ def main():
         print("=" * 60)
         print("\nNote: Full integration test with Docker requires:")
         print("1. Docker running")
-        print("2. kai_agent-sandbox image built")
+        print("2. O.M.I_agent-sandbox image built")
         print("3. Test files in the sandbox workspace")
 
     except Exception as e:

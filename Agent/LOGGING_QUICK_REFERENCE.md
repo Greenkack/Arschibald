@@ -1,8 +1,8 @@
-# KAI Agent Logging System - Quick Reference
+# O.M.I Agent Logging System - Quick Reference
 
 ## Overview
 
-The KAI Agent includes a comprehensive logging system that tracks all operations while automatically protecting sensitive data.
+The O.M.I Agent includes a comprehensive logging system that tracks all operations while automatically protecting sensitive data.
 
 ## Quick Start
 
@@ -45,7 +45,7 @@ from agent.logging_config import log_docker_operation
 log_docker_operation(
     logger,
     operation="execute",
-    image_name="kai_agent_sandbox",
+    image_name="O.M.I_agent_sandbox",
     container_id="abc123",
     success=True,
     duration=2.5

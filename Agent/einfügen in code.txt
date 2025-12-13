@@ -1,10 +1,10 @@
-KAI Agent: Projekt-Grundgerüst (Phase A)
+O.M.I Agent: Projekt-Grundgerüst (Phase A)
 Dieses Dokument definiert die initiale Code-Struktur und die Konfiguration der sicheren Sandbox-Umgebung, wie in Phase A des Projektplans beschrieben.
 
 1. Verzeichnisstruktur
 Eine modulare Struktur ist entscheidend, um die verschiedenen Komponenten des Agenten (Kernlogik, Werkzeuge, Sandbox) sauber zu trennen.
 
-kai_agent/
+O.M.I_agent/
 ├── agent/
 │   ├── __init__.py
 │   ├── agent_core.py      # Hier wird die zentrale Agenten-Logik (ReAct-Schleife) leben.
@@ -83,12 +83,12 @@ from dotenv import load_dotenv
 
 def main():
     """
-    Hauptfunktion zum Initialisieren und Starten des KAI-Agenten.
+    Hauptfunktion zum Initialisieren und Starten des O.M.I-Agenten.
     """
     # Lädt API-Schlüssel und andere Konfigurationen aus einer .env-Datei.
     load_dotenv()
     
-    print("KAI Agent wird initialisiert...")
+    print("O.M.I Agent wird initialisiert...")
     
     # Hier werden wir später die Agenten-Klasse aus agent/agent_core.py instanziieren.
     # agent = AgentCore()

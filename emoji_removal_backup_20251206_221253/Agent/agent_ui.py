@@ -2,7 +2,7 @@
 Agent UI Module
 ===============
 
-Streamlit interface for the KAI Agent system.
+Streamlit interface for the O.M.I Agent system.
 Provides task input, real-time status display, and results visualization.
 
 Performance Optimizations (Task 15.3):
@@ -420,7 +420,7 @@ def render_agent_menu():
 
     if st.session_state.first_visit:
         st.info("""
-        👋 **Welcome to KAI Agent!**
+        👋 **Welcome to O.M.I Agent!**
 
         This AI assistant can help you with:
         - 🌞 Renewable energy consulting (PV systems, heat pumps)
@@ -592,10 +592,10 @@ def render_agent_menu():
     if st.session_state.get('show_help_dialog', False):
         with st.expander("📖 Complete Help Guide", expanded=false):
             st.markdown("""
-            ## How to Use the KAI Agent
+            ## How to Use the O.M.I Agent
 
-            ### What is KAI Agent?
-            KAI (Künstliche Intelligenz) is an autonomous AI assistant with dual expertise:
+            ### What is O.M.I Agent?
+            O.M.I (Künstliche Intelligenz) is an autonomous AI assistant with dual expertise:
             - **Renewable Energy Consulting**: Photovoltaics, heat pumps, economic analysis
             - **Software Architecture**: Code generation, testing, project scaffolding
 
@@ -1090,7 +1090,7 @@ def render_agent_menu():
                 with col1:
                     script_name = st.text_input("Skriptname", placeholder="PV-Beratung Standard", key="script_name")
                     script_category = st.selectbox("Kategorie", ["Verkauf", "Support", "Beratung", "Follow-up"], key="script_category")
-                    script_opening = st.text_area("Eröffnungssatz", placeholder="Guten Tag, hier ist KAI von...", key="script_opening", height=100)
+                    script_opening = st.text_area("Eröffnungssatz", placeholder="Guten Tag, hier ist O.M.I von...", key="script_opening", height=100)
                 with col2:
                     script_keypoints = st.text_input("Key Points (kommagetrennt)", placeholder="Kostenersparnis,Umweltschutz,Unabhängigkeit", key="script_keypoints")
                     script_objections = st.text_area("Einwandbehandlung", placeholder="JSON format", key="script_objections", height=80)
@@ -1421,7 +1421,7 @@ def render_agent_menu():
     # Footer
     st.markdown("---")
     st.caption(
-        "KAI Agent - Powered by GPT-4, LangChain, and specialized tools"
+        "O.M.I Agent - Powered by GPT-4, LangChain, and specialized tools"
     )
 
 

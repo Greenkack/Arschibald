@@ -52,7 +52,7 @@ def verify_image_exists(client):
     """Verify the sandbox image exists."""
     print_header("Checking Docker Image")
 
-    image_name = "kai_agent_sandbox"
+    image_name = "O.M.I_agent_sandbox"
 
     try:
         image = client.images.get(image_name)
@@ -70,7 +70,7 @@ def verify_image_exists(client):
         print_check(False, f"Image '{image_name}' not found")
         print("\nTo build the image, run:")
         print("  cd Agent/sandbox")
-        print("  docker build -t kai_agent_sandbox .")
+        print("  docker build -t O.M.I_agent_sandbox .")
         print("\nOr use the build script:")
         print("  python Agent/build_sandbox.py")
         return False, None
@@ -82,7 +82,7 @@ def verify_python_version(client):
 
     try:
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "python --version",
             remove=True
         )
@@ -107,7 +107,7 @@ def verify_unprivileged_user(client):
     try:
         # Check username
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "whoami",
             remove=True
         )
@@ -121,7 +121,7 @@ def verify_unprivileged_user(client):
 
         # Check UID
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "id -u",
             remove=True
         )
@@ -142,7 +142,7 @@ def verify_workspace_directory(client):
 
     try:
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "pwd",
             remove=True
         )
@@ -153,7 +153,7 @@ def verify_workspace_directory(client):
 
         # Check if directory is writable
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "touch test.txt && rm test.txt && echo 'writable'",
             remove=True
         )
@@ -176,7 +176,7 @@ def verify_installed_packages(client):
 
     try:
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "pip list",
             remove=True
         )
@@ -205,7 +205,7 @@ def verify_security_features(client):
     total_checks += 1
     try:
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "which sudo",
             remove=True
         )
@@ -223,7 +223,7 @@ def verify_security_features(client):
     total_checks += 1
     try:
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "touch /etc/test.txt",
             remove=True
         )
@@ -237,7 +237,7 @@ def verify_security_features(client):
     total_checks += 1
     try:
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "echo $SHELL",
             remove=True
         )
@@ -257,7 +257,7 @@ def verify_basic_execution(client):
     try:
         # Test Python execution
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "python -c \"print('Hello from sandbox')\"",
             remove=True
         )
@@ -268,7 +268,7 @@ def verify_basic_execution(client):
 
         # Test file operations
         result = client.containers.run(
-            "kai_agent_sandbox",
+            "O.M.I_agent_sandbox",
             "python -c \"with open('test.txt', 'w') as f: f.write('test'); print('File created')\"",
             remove=True)
         output = result.decode('utf-8').strip()

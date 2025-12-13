@@ -466,6 +466,53 @@ def render_heatpump_analysis(
     st.markdown(
         "Optimale Dimensionierung und Wirtschaftlichkeitsanalyse für Wärmepumpen")
 
+    # CSS für Tabs - Mit Schattierungseffekten
+    st.markdown("""
+    <style>
+    /* Tab-Liste: Transparenter Hintergrund mit Schatten */
+    [data-testid="stTabs"] [data-baseweb="tab-list"] {
+        background-color: transparent !important;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+        gap: 10px !important;
+        padding: 0 0 5px 0 !important;
+    }
+    
+    /* Tab-Buttons: Heller Hintergrund mit Schattierung */
+    [data-testid="stTabs"] [data-baseweb="tab"] {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border: none !important;
+        color: #333333 !important;
+        font-weight: 500 !important;
+        padding: 12px 24px !important;
+        border-radius: 8px 8px 0 0 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.15), inset 0 10px 10px rgba(0, 0, 0, 0.05) !important;
+        margin-right: 4px !important;
+    }
+    
+    [data-testid="stTabs"] [data-baseweb="tab"]:hover {
+        background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%) !important;
+        color: #ff8c00 !important;
+        box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3), inset 0 10px 10px rgba(0, 0, 0, 0.05) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
+        background: linear-gradient(135deg, #ffffff 0%, #fff5e6 100%) !important;
+        color: #ff8c00 !important;
+        font-weight: 700 !important;
+        border-bottom: 3px solid #ff8c00 !important;
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(255, 140, 0, 0.3), inset 0 10px 10px rgba(0, 0, 0, 0.05) !important;
+    }
+    
+    /* Tab-Content: Transparenter Hintergrund */
+    [data-testid="stTabs"] [data-baseweb="tab-panel"] {
+        background-color: transparent !important;
+        padding: 20px 0 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     # Tabs für verschiedene Analyse-Bereiche
     tabs = st.tabs([
         " Gebäudeanalyse",
@@ -583,6 +630,55 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
     """Gebäudeanalyse und Heizlastberechnung"""
 
     st.subheader(" Gebäudeanalyse")
+
+    # CSS für Heizlast berechnen Button - Echter 3D-Button mit Rändern und Schattierungen
+    st.markdown("""
+    <style>
+    /* Heizlast berechnen Button - 3D-Effekt mit prominenten Rändern */
+    div[data-testid="stForm"] button[kind="primary"] {
+        background: linear-gradient(135deg, #6c6c6c 0%, #4a4a4a 100%) !important;
+        color: #ffffff !important;
+        border: 3px solid #ff8c00 !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        font-size: 16px !important;
+        padding: 12px 24px !important;
+        box-shadow: 
+            0 10px 16px rgba(0, 0, 0, 0.5), 
+            0 10px 10px rgba(0, 0, 0, 0.3),
+            0 0 0 10px rgba(255, 140, 0, 0.2),
+            inset 0 10px 10px rgba(255, 255, 255, 0.1),
+            inset 0 -2px 10px rgba(0, 0, 0, 0.2) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+    }
+    
+    div[data-testid="stForm"] button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #7a7a7a 0%, #5a5a5a 100%) !important;
+        border-color: #ff9900 !important;
+        border-width: 3px !important;
+        box-shadow: 
+            0 12px 24px rgba(0, 0, 0, 0.6), 
+            0 10px 12px rgba(0, 0, 0, 0.4),
+            0 0 0 10px rgba(255, 140, 0, 0.4),
+            0 0 20px rgba(255, 140, 0, 0.3),
+            inset 0 10px 10px rgba(255, 255, 255, 0.15),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.25) !important;
+        transform: translateY(-3px) !important;
+    }
+    
+    div[data-testid="stForm"] button[kind="primary"]:active {
+        background: linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%) !important;
+        border-color: #ff7700 !important;
+        box-shadow: 
+            0 10px 10px rgba(0, 0, 0, 0.4),
+            0 0 0 10px rgba(255, 140, 0, 0.3),
+            inset 0 10px 10px rgba(0, 0, 0, 0.4),
+            inset 0 -1px 10px rgba(255, 255, 255, 0.05) !important;
+        transform: translateY(1px) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
     with st.form("building_analysis_form"):
         col1, col2 = st.columns(2)
@@ -935,6 +1031,81 @@ def render_heatpump_selection(
     """Wärmepumpen-Auswahl und Dimensionierung"""
 
     st.subheader(" Wärmepumpen-Auswahl")
+    
+    # CSS für Wärmepumpen-Auswahl-Buttons mit hellem Hintergrund und orangem Akzent
+    st.markdown("""
+    <style>
+    /* Wählen-Button - Hell mit orangem Akzent und 3D-Schattierungen */
+    div[data-testid="stVerticalBlock"] > div[data-testid="column"]:last-child button {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #ff8c00 !important;
+        border: 2px solid #ff8c00 !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        padding: 10px 20px !important;
+        box-shadow: 
+            0 10px 12px rgba(255, 140, 0, 0.25),
+            0 10px 10px rgba(0, 0, 0, 0.15),
+            inset 0 1px 3px rgba(255, 255, 255, 0.8),
+            inset 0 -1px 3px rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+    }
+    
+    div[data-testid="stVerticalBlock"] > div[data-testid="column"]:last-child button:hover {
+        background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%) !important;
+        color: #ff6600 !important;
+        border-color: #ff6600 !important;
+        border-width: 2px !important;
+        box-shadow: 
+            0 10px 16px rgba(255, 140, 0, 0.4),
+            0 10px 10px rgba(0, 0, 0, 0.2),
+            0 0 20px rgba(255, 140, 0, 0.3),
+            inset 0 1px 3px rgba(255, 255, 255, 0.9),
+            inset 0 -1px 3px rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+    }
+    
+    div[data-testid="stVerticalBlock"] > div[data-testid="column"]:last-child button:active {
+        background: linear-gradient(135deg, #ffe6cc 0%, #ffd9b3 100%) !important;
+        color: #ff5500 !important;
+        border-color: #ff5500 !important;
+        box-shadow: 
+            0 10px 10px rgba(255, 140, 0, 0.3),
+            0 10px 10px rgba(0, 0, 0, 0.2),
+            inset 0 2px 4px rgba(0, 0, 0, 0.2),
+            inset 0 -1px 2px rgba(255, 255, 255, 0.5) !important;
+        transform: translateY(0px) scale(1) !important;
+    }
+    
+    /* Primary Button (Testsieger) - Intensiverer oranger Akzent */
+    div[data-testid="stVerticalBlock"] > div[data-testid="column"]:last-child button[kind="primary"] {
+        background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%) !important;
+        color: #ff6600 !important;
+        border: 3px solid #ff8c00 !important;
+        box-shadow: 
+            0 10px 16px rgba(255, 140, 0, 0.35),
+            0 10px 10px rgba(0, 0, 0, 0.2),
+            0 0 15px rgba(255, 140, 0, 0.2),
+            inset 0 1px 3px rgba(255, 255, 255, 0.9),
+            inset 0 -1px 3px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    div[data-testid="stVerticalBlock"] > div[data-testid="column"]:last-child button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #ffd9b3 0%, #ffcc99 100%) !important;
+        color: #ff5500 !important;
+        border-color: #ff6600 !important;
+        box-shadow: 
+            0 10px 20px rgba(255, 140, 0, 0.5),
+            0 10px 10px rgba(0, 0, 0, 0.25),
+            0 0 25px rgba(255, 140, 0, 0.4),
+            inset 0 1px 3px rgba(255, 255, 255, 1),
+            inset 0 -1px 3px rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-3px) scale(1.05) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
     heat_load = building_data.get('heat_load_kw', 0)
 
@@ -966,10 +1137,10 @@ def render_heatpump_selection(
 
     with col2:
         # Wahl zwischen automatischer Auswahl oder manuelle Produktauswahl
-        selection_mode = st.radio(
+        selection_mode = st.selectbox(
             "Auswahl-Modus",
             options=[" Automatische Empfehlung", " Manuelle Produktauswahl"],
-            horizontal=True
+            index=0
         )
         
         # Initialisiere Variablen
@@ -1610,8 +1781,18 @@ def render_radiator_check(
                 st.info(recommendation)
 
                 # Technische Details in Expander
-                with st.expander("Technische Details"):
-                    st.json(flow_temp_result)
+                with st.expander("📊 Technische Details"):
+                    col_tech1, col_tech2 = st.columns(2)
+                    
+                    with col_tech1:
+                        st.metric("Erforderliche Vorlauftemperatur", f"{flow_temp_result.get('required_flow_temp_c', 0):.1f} °C")
+                        st.metric("Erforderliche Rücklauftemperatur", f"{flow_temp_result.get('required_return_temp_c', 0):.1f} °C")
+                        st.metric("Mittlere Temperatur", f"{flow_temp_result.get('required_mean_temp_c', 0):.1f} °C")
+                    
+                    with col_tech2:
+                        st.metric("Radiator-Fläche", f"{flow_temp_result.get('radiator_area_m2', 0):.1f} m²")
+                        st.metric("Ursprüngliche Vorlauftemperatur", f"{flow_temp_result.get('original_flow_temp_c', 0):.1f} °C")
+                        st.metric("Heizlast", f"{flow_temp_result.get('heat_load_kw', 0):.1f} kW")
 
                 return radiator_data
 
@@ -3319,7 +3500,12 @@ def render_renovation_planner(texts: dict[str, str], building_data: dict[str, An
     with st.expander("Heizkörper vs. Fußbodenheizung Optimizer"):
         st.markdown("### Welches System ist optimal?")
         
-        current_system = st.radio("Aktuelles System", ["radiators", "underfloor"], format_func=lambda x: "Heizkörper" if x == "radiators" else "Fußbodenheizung")
+        current_system = st.selectbox(
+            "Aktuelles System",
+            options=["radiators", "underfloor"],
+            format_func=lambda x: "Heizkörper" if x == "radiators" else "Fußbodenheizung",
+            index=0
+        )
         
         if st.button("Systeme vergleichen", key="compare_heating"):
             result = compare_heating_systems(building_data, current_system)
@@ -3442,6 +3628,18 @@ def render_optimization_tools(texts: dict[str, str], building_data: dict[str, An
         
         st.markdown("**Anwesenheitsprofil (Wochentag):**")
         st.info("1 = Anwesend, 0 = Abwesend")
+        
+        # CSS: Blauen Hintergrund bei Multiselect entfernen
+        st.markdown("""
+        <style>
+        div[data-baseweb="select"] > div {
+            background-color: transparent !important;
+        }
+        div[data-baseweb="popover"] {
+            background-color: white !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
         
         # Vereinfachte Eingabe: 24 Stunden für Wochentag
         hours_occupied = st.multiselect(
@@ -4011,14 +4209,22 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
             
             cop = building_data.get("cop", 3.5)
             st.metric("JAZ (Jahresarbeitszahl)", f"{cop:.1f}")
+            
+            # WP-Anteil am Gesamtverbrauch berechnen
+            heat_load_kw = building_data.get("heat_load_kw", 10)
+            annual_heat_kwh = heat_load_kw * wp_annual_hours
+            wp_electricity_kwh = annual_heat_kwh / cop if cop > 0 else 0
+            total_consumption_kwh = annual_consumption + wp_electricity_kwh
+            heatpump_share = (wp_electricity_kwh / total_consumption_kwh * 100) if total_consumption_kwh > 0 else 30
         
         if st.button("Tarife vergleichen", type="primary"):
             with st.spinner("Berechne Einsparpotenzial..."):
-                # Berechnung
+                # Berechnung mit korrekten Parametern
                 comparison = calculate_dynamic_tariff_comparison(
                     building_data,
-                    annual_consumption,
-                    static_price
+                    current_price_eur_kwh=static_price,
+                    heatpump_share_percent=heatpump_share,
+                    smart_meter_cost_eur=100
                 )
                 
                 # Ergebnisse
@@ -4376,21 +4582,22 @@ def render_dynamic_tariff_tab(texts: dict[str, str], building_data: dict[str, An
         devices = {}
         
         with col1:
-            devices['heatpump'] = st.checkbox("Wärmepumpe", value=True)
-            devices['battery'] = st.checkbox(" Batteriespeicher", value=False)
-            devices['wallbox'] = st.checkbox(" E-Auto Wallbox", value=False)
+            devices['heatpump'] = st.checkbox("Wärmepumpe", value=True, key="dynamic_tariff_heatpump_checkbox")
+            devices['battery'] = st.checkbox(" Batteriespeicher", value=False, key="dynamic_tariff_battery_checkbox")
+            devices['wallbox'] = st.checkbox(" E-Auto Wallbox", value=False, key="dynamic_tariff_wallbox_checkbox")
         
         with col2:
-            devices['washing_machine'] = st.checkbox(" Waschmaschine", value=False)
-            devices['dishwasher'] = st.checkbox(" Geschirrspüler", value=False)
-            devices['dryer'] = st.checkbox(" Wäschetrockner", value=False)
+            devices['washing_machine'] = st.checkbox(" Waschmaschine", value=False, key="dynamic_tariff_washing_checkbox")
+            devices['dishwasher'] = st.checkbox(" Geschirrspüler", value=False, key="dynamic_tariff_dishwasher_checkbox")
+            devices['dryer'] = st.checkbox(" Wäschetrockner", value=False, key="dynamic_tariff_dryer_checkbox")
         
         with col3:
             automation_level = st.select_slider(
                 "Automatisierungs-Level",
                 options=["low", "medium", "high"],
                 value="medium",
-                help="low=Manuell | medium=Zeit-basiert | high=KI-gesteuert"
+                help="low=Manuell | medium=Zeit-basiert | high=KI-gesteuert",
+                key="dynamic_tariff_automation_slider"
             )
         
         if st.button(" Smart-Home analysieren", type="primary"):

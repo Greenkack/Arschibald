@@ -33,7 +33,7 @@ chmod +x build.sh
 
 ```bash
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ## Verify the Build

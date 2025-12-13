@@ -39,7 +39,7 @@
 
 ### Check User
 ```bash
-docker run --rm kai_agent_sandbox whoami
+docker run --rm O.M.I_agent_sandbox whoami
 # Expected: sandboxuser
 ```
 
@@ -54,13 +54,13 @@ result = execute_python_code_in_sandbox.invoke({
 
 ### Check Resource Limits
 ```bash
-docker inspect kai_agent_sandbox | grep -A 5 "Memory\|Cpu"
+docker inspect O.M.I_agent_sandbox | grep -A 5 "Memory\|Cpu"
 # Expected: Shows limits
 ```
 
 ### Check Cleanup
 ```bash
-docker ps -a | grep kai-sandbox
+docker ps -a | grep O.M.I-sandbox
 # Expected: No containers (after execution)
 ```
 
@@ -123,7 +123,7 @@ sudo systemctl start docker
 ### Image Not Found
 ```bash
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ### Container Not Cleaned Up

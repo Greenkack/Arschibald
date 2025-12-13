@@ -13,9 +13,11 @@ Das **Auswertungsperioden-System** ermöglicht strukturierte, zeitraum-basierte 
 Im Tab **"📝 Leistungsdaten erfassen"** findest du ganz oben die Perioden-Verwaltung:
 
 #### **Button: "➕ Neue Auswertung starten"**
+
 Klicke diesen Button, um eine neue Auswertungsperiode zu erstellen.
 
 #### **Zeitraum-Typen:**
+
 - **📅 Täglich** - Einzelner Tag
 - **📆 Wöchentlich** - 7-Tage-Zeitraum
 - **📊 Monatlich** - Automatische Monatsgrenzen (z.B. 1.-31. Dezember)
@@ -24,7 +26,9 @@ Klicke diesen Button, um eine neue Auswertungsperiode zu erstellen.
 - **🎯 Benutzerdefiniert** - Freie Datumswahl
 
 #### **Automatische Namensgebung:**
+
 Bei Standard-Typen (Monatlich, Quartalsweise, Jährlich) wird der Name automatisch generiert:
+
 - Monatlich: "Dezember 2025"
 - Quartalsweise: "Q1 2025"
 - Jährlich: "Jahr 2025"
@@ -36,13 +40,16 @@ Du kannst den Namen aber auch manuell anpassen!
 ### 2. 💾 Perioden-Auswahl & Verknüpfung
 
 #### **Aktive Periode wählen:**
+
 Nach dem Erstellen kannst du eine Periode aus der Dropdown-Liste wählen.  
 **WICHTIG:** Alle Leistungsdaten, die du erfasst, werden automatisch mit der aktiven Periode verknüpft!
 
 #### **Direkter Modus:**
+
 Wenn du **"Keine Periode (direkter Modus)"** wählst, werden Daten OHNE Periodenverknüpfung gespeichert (wie bisher).
 
 #### **Perioden-Löschen:**
+
 Mit dem **"🗑️ Periode löschen"** Button kannst du Perioden entfernen.  
 ⚠️ **Achtung:** Alle Leistungsdaten der Periode werden ebenfalls gelöscht!
 
@@ -65,22 +72,27 @@ Mit dem **"🗑️ Periode löschen"** Button kannst du Perioden entfernen.
 Im Tab **"📁 Archiv"** gibt es jetzt 2 Bereiche:
 
 #### **📊 Berichte** (wie bisher)
+
 Gespeicherte Reports anzeigen und laden.
 
 #### **🗓️ Auswertungsperioden** (NEU!)
+
 Alle Perioden mit folgenden Funktionen:
 
 **Filter:**
+
 - **Status:** 🟢 Aktiv / 🔵 Abgeschlossen / ⚫ Archiviert
 - **Typ:** Täglich, Monatlich, Jährlich, etc.
 
 **Aktionen pro Periode:**
+
 - **✅ Abschließen** - Aktive Periode als abgeschlossen markieren
 - **📂 Aktivieren** - Periode zur aktiven Periode machen
 - **📦 Archivieren** - Abgeschlossene Periode archivieren
 - **🗑️ Löschen** - Periode + zugehörige Daten löschen
 
 **Anzeige:**
+
 - Name & Zeitraum
 - Typ & Status
 - Dauer in Tagen
@@ -92,7 +104,7 @@ Alle Perioden mit folgenden Funktionen:
 
 ## 🔄 Workflow-Beispiel
 
-### Monatliche Auswertung erstellen:
+### Monatliche Auswertung erstellen
 
 1. **Controlling → Tab "📝 Leistungsdaten erfassen"**
 2. Klicke **"➕ Neue Auswertung starten"**
@@ -127,6 +139,7 @@ Alle Perioden mit folgenden Funktionen:
 ```
 
 **Hinweise:**
+
 - Aktive Perioden kannst du jederzeit aktivieren/bearbeiten
 - Abgeschlossene Perioden sind "eingefroren" aber sichtbar
 - Archivierte Perioden sind langfristig gespeichert
@@ -135,21 +148,25 @@ Alle Perioden mit folgenden Funktionen:
 
 ## 📊 Kalender-Integration
 
-### Monatliche Auswertung:
+### Monatliche Auswertung
+
 - Automatische Berechnung: 1. bis letzter Tag des Monats
 - Beispiel: Januar → 1.1. - 31.1.
 - Beispiel: Februar → 1.2. - 28./29.2. (Schaltjahr-fähig!)
 
-### Quartalsweise:
+### Quartalsweise
+
 - Q1: 1. Januar - 31. März
 - Q2: 1. April - 30. Juni
 - Q3: 1. Juli - 30. September
 - Q4: 1. Oktober - 31. Dezember
 
-### Jährliche Auswertung:
+### Jährliche Auswertung
+
 - Automatisch: 1. Januar - 31. Dezember
 
-### Benutzerdefiniert:
+### Benutzerdefiniert
+
 - Freie Start- und Enddatum-Wahl
 - Ideal für projektbezogene Auswertungen
 
@@ -165,6 +182,7 @@ Alle Perioden mit folgenden Funktionen:
 - **Keine Daten gehen verloren** bei der Migration
 
 **Migration automatisch durchgeführt:**
+
 - Neue Tabelle `controlling_evaluation_periods` erstellt
 - Spalte `period_id` zu `controlling_performance_data` hinzugefügt (nullable!)
 
@@ -172,7 +190,7 @@ Alle Perioden mit folgenden Funktionen:
 
 ## 💡 Tipps & Best Practices
 
-### ✅ Empfehlungen:
+### ✅ Empfehlungen
 
 1. **Monatliche Perioden für Standardauswertungen**
    - Erstelle am Monatsanfang die Periode für den aktuellen Monat
@@ -200,18 +218,22 @@ Alle Perioden mit folgenden Funktionen:
 ## 🆘 Troubleshooting
 
 ### ❓ "Ich sehe meine Periode nicht in der Liste"
+
 - **Lösung:** Überprüfe den Status-Filter im Archiv
 - Aktive Perioden: Status-Filter auf "🟢 Aktiv" setzen
 
 ### ❓ "Ich habe versehentlich eine Periode gelöscht"
+
 - **Problem:** Gelöschte Perioden + Daten sind permanent weg
 - **Vorbeugung:** Nutze "Archivieren" statt "Löschen"
 
 ### ❓ "Leistungsdaten erscheinen nicht in meiner Periode"
+
 - **Lösung 1:** Überprüfe, ob die Periode beim Speichern aktiv war
 - **Lösung 2:** Datum der Leistungsdaten muss im Zeitraum der Periode liegen
 
 ### ❓ "Kann ich Daten nachträglich zu einer Periode hinzufügen?"
+
 - **Ja!** Wähle die Periode aus und erfasse neue Daten
 - Die Daten werden automatisch verknüpft
 

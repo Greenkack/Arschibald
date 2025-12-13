@@ -2,7 +2,7 @@
 Agent UI Module
 ===============
 
-Streamlit interface for the KAI Agent system.
+Streamlit interface for the O.M.I Agent system.
 Provides task input, real-time status display, and results visualization.
 
 Performance Optimizations (Task 15.3):
@@ -168,9 +168,22 @@ def check_api_keys_ui() -> dict[str, bool]:
     for key in missing:
         st.markdown(f"- **{key}**")
 
-    # Show setup instructions
+    # Show setup instructions - styled mit weißem Hintergrund und orangenen Akzenten
     with st.expander("Setup Instructions", expanded=False):
-        st.code(get_setup_instructions(), language="text")
+        instructions_text = get_setup_instructions()
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                    border-left: 4px solid #ff8c00;
+                    border-radius: 8px;
+                    padding: 20px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
+                    font-family: 'Courier New', monospace;
+                    color: #2d3748;
+                    white-space: pre-wrap;
+                    line-height: 1.6;">
+{instructions_text}
+        </div>
+        """, unsafe_allow_html=True)
 
     return keys_status
 
@@ -420,7 +433,7 @@ def render_agent_menu():
 
     if st.session_state.first_visit:
         st.info("""
-         **Welcome to KAI Agent!**
+         **Welcome to O.M.I Agent!**
 
         This AI assistant can help you with:
         -  Renewable energy consulting (PV systems, heat pumps)
@@ -465,9 +478,22 @@ def render_agent_menu():
 
             1. **Erstelle/Bearbeite `.env` Datei** im Projektverzeichnis
             2. **Füge deinen OpenAI API Key hinzu**:
-               ```
-               OPENAI_API_KEY=sk-your-key-here
-               ```
+            """)
+            
+            # Gestyltes Code-Feld mit weißem Hintergrund und orangen Akzenten
+            st.markdown("""
+            <div style="background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                        border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00;
+                        border-radius: 8px; padding: 12px; margin: 10px 0;
+                        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);
+                        font-family: 'Courier New', monospace;">
+                <code style="color: #ffffff; font-size: 14px; font-weight: 600;">
+                    OPENAI_API_KEY=sk-your-key-here
+                </code>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown("""
             3. **Hole deinen API Key** von [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
             4. **Starte die Anwendung neu**
 
@@ -592,10 +618,10 @@ def render_agent_menu():
     if st.session_state.get('show_help_dialog', False):
         with st.expander(" Complete Help Guide", expanded=false):
             st.markdown("""
-            ## How to Use the KAI Agent
+            ## How to Use the O.M.I Agent
 
-            ### What is KAI Agent?
-            KAI (Künstliche Intelligenz) is an autonomous AI assistant with dual expertise:
+            ### What is O.M.I Agent?
+            O.M.I (Künstliche Intelligenz) is an autonomous AI assistant with dual expertise:
             - **Renewable Energy Consulting**: Photovoltaics, heat pumps, economic analysis
             - **Software Architecture**: Code generation, testing, project scaffolding
 
@@ -700,6 +726,73 @@ def render_agent_menu():
 
     # Example tasks with categories (Task 13.2)
     with st.expander("Example Task Suggestions", expanded=False):
+        # CSS für Tabs mit weißem Hintergrund und orangenen Akzenten - VOLLSTÄNDIG
+        st.markdown("""
+        <style>
+        /* Example Tasks Tabs - Alle schwarzen Hintergründe entfernen */
+        div[data-baseweb="tab-list"] {
+            background: transparent !important;
+        }
+        div[data-baseweb="tab-list"] button {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            color: #4a5568 !important;
+            border-radius: 8px 8px 0 0 !important;
+            border: 1px solid rgba(200, 210, 220, 0.5) !important;
+            border-bottom: none !important;
+            padding: 10px 20px !important;
+            margin: 0 2px !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+            transition: all 0.3s ease !important;
+        }
+        div[data-baseweb="tab-list"] button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3) !important;
+            color: #2d3748 !important;
+        }
+        div[data-baseweb="tab-list"] button[aria-selected="true"] {
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+            color: #1a202c !important;
+            border-bottom: 4px solid #ff8c00 !important;
+            font-weight: 600 !important;
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2) !important;
+        }
+        div[data-baseweb="tab-panel"] {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border-radius: 0 0 8px 8px !important;
+            border: 1px solid rgba(200, 210, 220, 0.5) !important;
+            border-top: none !important;
+            padding: 20px !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+        /* Alle verschachtelten Container weiß/transparent */
+        div[data-baseweb="tab-panel"] * {
+            background-color: transparent !important;
+        }
+        div[data-baseweb="tab-panel"] div[data-testid="stVerticalBlock"],
+        div[data-baseweb="tab-panel"] div[data-testid="column"],
+        div[data-baseweb="tab-panel"] div[data-testid="stHorizontalBlock"] {
+            background: transparent !important;
+        }
+        /* Code-Blöcke in Tabs weiß stylen */
+        div[data-baseweb="tab-panel"] pre {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border-left: 4px solid #ff8c00 !important;
+            border-radius: 8px !important;
+            padding: 15px !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+        div[data-baseweb="tab-panel"] code {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            color: #2d3748 !important;
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Markdown Container */
+        div[data-baseweb="tab-panel"] .stMarkdown {
+            background: transparent !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
         tab1, tab2, tab3 = st.tabs([
             " Energy Consulting",
             " Software Dev",
@@ -893,6 +986,83 @@ def render_agent_menu():
     with st.expander(" Telephony System - Bria Softphone & Advanced Features", expanded=False):
         st.markdown("### Telephony Management Console")
         st.markdown("Vollständiges Telefonsystem mit 36 Tools für professionelle Anrufverwaltung")
+        
+        # CSS für Telephony-Tabs - ALLE SCHWARZEN HINTERGRÜNDE ENTFERNEN
+        st.markdown("""
+        <style>
+        /* Telephony Tabs - Komplett weiß ohne schwarze Hintergründe */
+        div[data-baseweb="tab-list"] {
+            background: transparent !important;
+        }
+        div[data-baseweb="tab-list"] button {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            color: #4a5568 !important;
+            border-radius: 8px 8px 0 0 !important;
+            border: 1px solid rgba(200, 210, 220, 0.5) !important;
+            border-bottom: none !important;
+            padding: 10px 20px !important;
+            margin: 0 2px !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+            transition: all 0.3s ease !important;
+        }
+        div[data-baseweb="tab-list"] button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3) !important;
+            color: #2d3748 !important;
+        }
+        div[data-baseweb="tab-list"] button[aria-selected="true"] {
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+            color: #1a202c !important;
+            border-bottom: 4px solid #ff8c00 !important;
+            font-weight: 600 !important;
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2) !important;
+        }
+        div[data-baseweb="tab-panel"] {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border-radius: 0 0 8px 8px !important;
+            border: 1px solid rgba(200, 210, 220, 0.5) !important;
+            border-top: none !important;
+            padding: 20px !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+        /* KRITISCH: Alle verschachtelten Elemente transparent/weiß */
+        div[data-baseweb="tab-panel"] * {
+            background-color: transparent !important;
+        }
+        div[data-baseweb="tab-panel"] div[data-testid="stVerticalBlock"],
+        div[data-baseweb="tab-panel"] div[data-testid="column"],
+        div[data-baseweb="tab-panel"] div[data-testid="stHorizontalBlock"],
+        div[data-baseweb="tab-panel"] .stMarkdown,
+        div[data-baseweb="tab-panel"] .element-container {
+            background: transparent !important;
+        }
+        /* Expander innerhalb der Tabs weiß */
+        div[data-baseweb="tab-panel"] details {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        }
+        div[data-baseweb="tab-panel"] details summary {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            color: #2d3748 !important;
+        }
+        div[data-baseweb="tab-panel"] details[open] {
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+            border-left: 4px solid #ff8c00 !important;
+        }
+        /* Code-Blöcke weiß stylen */
+        div[data-baseweb="tab-panel"] pre {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border-left: 4px solid #ff8c00 !important;
+            border-radius: 8px !important;
+            padding: 15px !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+        div[data-baseweb="tab-panel"] code {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            color: #2d3748 !important;
+            font-family: 'Courier New', monospace !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
         
         # Tabs für verschiedene Bereiche
         phone_tab1, phone_tab2, phone_tab3, phone_tab4, phone_tab5 = st.tabs([
@@ -1090,7 +1260,7 @@ def render_agent_menu():
                 with col1:
                     script_name = st.text_input("Skriptname", placeholder="PV-Beratung Standard", key="script_name")
                     script_category = st.selectbox("Kategorie", ["Verkauf", "Support", "Beratung", "Follow-up"], key="script_category")
-                    script_opening = st.text_area("Eröffnungssatz", placeholder="Guten Tag, hier ist KAI von...", key="script_opening", height=100)
+                    script_opening = st.text_area("Eröffnungssatz", placeholder="Guten Tag, hier ist O.M.I von...", key="script_opening", height=100)
                 with col2:
                     script_keypoints = st.text_input("Key Points (kommagetrennt)", placeholder="Kostenersparnis,Umweltschutz,Unabhängigkeit", key="script_keypoints")
                     script_objections = st.text_area("Einwandbehandlung", placeholder="JSON format", key="script_objections", height=80)
@@ -1421,7 +1591,7 @@ def render_agent_menu():
     # Footer
     st.markdown("---")
     st.caption(
-        "KAI Agent - Powered by GPT-4, LangChain, and specialized tools"
+        "Telefonagent O.M.I powered von Ömer"
     )
 
 

@@ -1,5 +1,5 @@
 """
-Security Module for KAI Agent
+Security Module for O.M.I Agent
 ==============================
 
 Provides input validation, path sanitization, and security checks

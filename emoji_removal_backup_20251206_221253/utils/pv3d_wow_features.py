@@ -437,7 +437,7 @@ def render_ai_optimization_assistant() -> Dict[str, Any]:
     
     WOW-Faktor: Intelligente Vorschläge wie ein echter Experte!
     """
-    st.markdown("### 🤖 KI-Optimierungs-Assistent")
+    st.markdown("###  KI-Optimierungs-Assistent")
     
     if st.button(
         "Layout analysieren",

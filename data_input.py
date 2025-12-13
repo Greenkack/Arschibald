@@ -324,7 +324,7 @@ def render_data_input(texts: dict[str, str]) -> None:
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
         border-left: 4px solid #ff8c00 !important;
         border-radius: 12px !important;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
         padding: 1rem !important;
         transition: all 0.3s ease !important;
         margin-bottom: 0.5rem !important;
@@ -332,7 +332,7 @@ def render_data_input(texts: dict[str, str]) -> None:
     
     .main .streamlit-expanderHeader:hover {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25), 0 10px 14px rgba(0, 0, 0, 0.15) !important;
         border-left-color: #ff8c00 !important;
         transform: translateX(2px) !important;
     }
@@ -341,7 +341,7 @@ def render_data_input(texts: dict[str, str]) -> None:
     .main .streamlit-expanderContent {
         background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%) !important;
         border-radius: 0 0 12px 12px !important;
-        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03) !important;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.03) !important;
         padding: 1.5rem !important;
         border-left: 2px solid #ff8c00 !important;
         margin-bottom: 1rem !important;
@@ -349,13 +349,13 @@ def render_data_input(texts: dict[str, str]) -> None:
     
     /* Info/Warning/Success Boxen mit verstärkten Schatten */
     .main .stAlert {
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18), 0 3px 8px rgba(0, 0, 0, 0.12) !important;
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18), 0 10px 10px rgba(0, 0, 0, 0.12) !important;
         border-radius: 12px !important;
         transition: all 0.3s ease !important;
     }
     
     .main .stAlert:hover {
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25), 0 10px 12px rgba(0, 0, 0, 0.15) !important;
         transform: translateY(-1px) !important;
     }
     
@@ -369,7 +369,7 @@ def render_data_input(texts: dict[str, str]) -> None:
         border: none !important;
         height: 2px !important;
         background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.3), transparent) !important;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.15) !important;
         margin: 2rem 0 !important;
     }
     
@@ -400,7 +400,7 @@ def render_data_input(texts: dict[str, str]) -> None:
     .main .stTextInput > div > div > input,
     .main .stNumberInput > div > div > input {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08) !important;
         border: 1px solid rgba(255, 200, 140, 0.2) !important;
         border-radius: 8px !important;
         transition: all 0.3s ease !important;
@@ -414,7 +414,7 @@ def render_data_input(texts: dict[str, str]) -> None:
     .main input[type="date"]:focus,
     .main input[type="time"]:focus,
     .main textarea:focus {
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 10px 12px rgba(0, 0, 0, 0.12) !important;
         border-color: #ff8c00 !important;
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
     }
@@ -426,24 +426,24 @@ def render_data_input(texts: dict[str, str]) -> None:
     .main input[type="password"]:hover,
     .main textarea:hover,
     .main .stSelectbox > div > div:hover {
-        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.16), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
         border-color: rgba(255, 140, 0, 0.4) !important;
     }
     
     /* Number Input mit +/- Buttons - Schatten */
     .main .stNumberInput > div {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08) !important;
         border-radius: 8px !important;
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
         transition: all 0.3s ease !important;
     }
     
     .main .stNumberInput > div:hover {
-        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.16), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
     }
     
     .main .stNumberInput > div:focus-within {
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 10px 12px rgba(0, 0, 0, 0.12) !important;
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
     }
     
@@ -451,7 +451,7 @@ def render_data_input(texts: dict[str, str]) -> None:
     .main .stNumberInput button {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
         border: 1px solid rgba(255, 200, 140, 0.3) !important;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12) !important;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.12) !important;
         transition: all 0.3s ease !important;
         border-radius: 6px !important;
     }
@@ -459,44 +459,44 @@ def render_data_input(texts: dict[str, str]) -> None:
     .main .stNumberInput button:hover {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
         border-color: #ff8c00 !important;
-        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.12) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.12) !important;
         transform: translateY(-1px) !important;
     }
     
     .main .stNumberInput button:active {
         transform: translateY(0) !important;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16) !important;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.16) !important;
     }
     
     /* Selectbox/Dropdown mit Schatten */
     .main .stSelectbox [data-baseweb="select"] {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08) !important;
         border-radius: 8px !important;
         transition: all 0.3s ease !important;
     }
     
     .main .stSelectbox [data-baseweb="select"]:hover {
-        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.16), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
     }
     
     /* Textarea mit Schatten */
     .main .stTextArea textarea {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08) !important;
         border: 1px solid rgba(255, 200, 140, 0.2) !important;
         border-radius: 8px !important;
         transition: all 0.3s ease !important;
     }
     
     .main .stTextArea textarea:focus {
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 10px 12px rgba(0, 0, 0, 0.12) !important;
         border-color: #ff8c00 !important;
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
     }
     
     .main .stTextArea textarea:hover {
-        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.16), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -689,7 +689,7 @@ def render_data_input(texts: dict[str, str]) -> None:
             Bedarfsanalyse
         </h2>
         <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
-            Wählen Sie den gewünschten Anlagenmodus
+            Kundenanalyse & Bedarfsabdeckung
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -721,12 +721,11 @@ def render_data_input(texts: dict[str, str]) -> None:
     except ValueError:
         current_index = 2  # default to "pv_wp_combined"
 
-    # Render radio button with direct session state integration
-    selected_mode_code = st.radio(
-        "Bedarfsanalyse-Modus",
+    # Render selectbox with direct session state integration
+    selected_mode_code = st.selectbox(
+        "Auswahl der Bedarfskategorien",
         options=list(register_options.keys()),
         format_func=lambda code: register_options.get(code, code),
-        horizontal=True,
         index=current_index,
         key="demand_mode_selection_radio_widget",
     )
@@ -766,7 +765,7 @@ def render_data_input(texts: dict[str, str]) -> None:
             Kundendaten
         </h2>
         <p style="color: #4a5568; margin: 0; font-size: 0.95rem; font-weight: 500;">
-            Kundendaten eingeben
+            Kundendaten eingeben 
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -1352,7 +1351,7 @@ def render_data_input(texts: dict[str, str]) -> None:
     """, unsafe_allow_html=True)
     if 'building_data_expanded_di' not in st.session_state:
         st.session_state.building_data_expanded_di = False
-    with st.expander(get_text_di(texts, "building_data_header", ""), expanded=st.session_state.building_data_expanded_di):
+    with st.expander(get_text_di(texts, "building_data_header", "Daten des Gebäudes eingeben"), expanded=st.session_state.building_data_expanded_di):
         col_build1, col_build2 = st.columns(2)
         with col_build1:
             inputs['project_details']['build_year'] = st.number_input(
@@ -1607,12 +1606,11 @@ def render_data_input(texts: dict[str, str]) -> None:
     if inputs['customer_data']['financing_requested']:
 
         # Finanzierungsart wählen
-        financing_type = st.radio(
+        financing_type = st.selectbox(
             "Art der Finanzierung",
             options=["Bankkredit (Annuität)", "Leasing", "Contracting"],
             index=0,
-            key='financing_type_radio',
-            horizontal=True
+            key='financing_type_radio'
         )
         inputs['customer_data']['financing_type'] = financing_type
 

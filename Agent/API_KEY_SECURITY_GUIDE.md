@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide explains how the KAI Agent securely manages API keys and sensitive credentials.
+This guide explains how the O.M.I Agent securely manages API keys and sensitive credentials.
 
 **Requirements Implemented**: 12.1, 12.2, 12.3, 12.5
 

@@ -1,4 +1,4 @@
-# KAI Agent - Training Materials Overview
+# O.M.I Agent - Training Materials Overview
 
 ## Quick Access Guide
 
@@ -306,7 +306,7 @@ After completing training, users typically:
 4. **Try an example**: [Example Tasks](EXAMPLE_TASKS.md)
 5. **Get help if needed**: [User Troubleshooting Guide](USER_TROUBLESHOOTING_GUIDE.md)
 
-Welcome to the KAI Agent! Let's get started! 🚀
+Welcome to the O.M.I Agent! Let's get started! 🚀
 
 ---
 

@@ -1,4 +1,4 @@
-# KAI Agent - Troubleshooting Guide
+# O.M.I Agent - Troubleshooting Guide
 
 ## Quick Diagnostics
 
@@ -16,17 +16,17 @@ This will identify most common issues.
 
 #### Docker Image Not Found
 
-**Error**: `docker.errors.ImageNotFound: 404 Client Error for url: http+docker://localhost/v1.43/images/kai_agent_sandbox/json`
+**Error**: `docker.errors.ImageNotFound: 404 Client Error for url: http+docker://localhost/v1.43/images/O.M.I_agent_sandbox/json`
 
 **Cause**: Docker sandbox image hasn't been built
 
 **Solution**:
 ```bash
 # Build the image
-docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
+docker build -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
 
 # Verify
-docker images | grep kai_agent_sandbox
+docker images | grep O.M.I_agent_sandbox
 ```
 
 #### Docker Not Running
@@ -64,11 +64,11 @@ docker ps
 
 **Solution**:
 ```bash
-# List all kai-sandbox containers
-docker ps -a | grep kai-sandbox
+# List all O.M.I-sandbox containers
+docker ps -a | grep O.M.I-sandbox
 
 # Remove them manually
-docker ps -a | grep kai-sandbox | awk '{print $1}' | xargs docker rm -f
+docker ps -a | grep O.M.I-sandbox | awk '{print $1}' | xargs docker rm -f
 
 # Or remove all stopped containers
 docker container prune -f
@@ -436,8 +436,8 @@ pip list | grep faiss
 ```bash
 docker --version
 docker info
-docker images | grep kai_agent_sandbox
-docker ps -a | grep kai-sandbox
+docker images | grep O.M.I_agent_sandbox
+docker ps -a | grep O.M.I-sandbox
 ```
 
 ### Check Files
@@ -496,7 +496,7 @@ grep "task_id" Agent/logs/agent.log
    pip install -r Agent/requirements.txt
 
    # Rebuild Docker
-   docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
+   docker build -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
    ```
 
 5. **Check Documentation**:

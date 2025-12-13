@@ -2,7 +2,7 @@
 
 ## Overview
 
-The AgentCore is the heart of the KAI Agent system, implementing an autonomous AI expert with dual expertise in renewable energy consulting and software architecture.
+The AgentCore is the heart of the O.M.I Agent system, implementing an autonomous AI expert with dual expertise in renewable energy consulting and software architecture.
 
 ## Basic Usage
 
@@ -254,7 +254,7 @@ For code execution tools, Docker must be installed and running:
 ```bash
 # Build sandbox image
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ## Troubleshooting
@@ -267,13 +267,13 @@ docker build -t kai_agent_sandbox .
 
 ### Code Execution Fails
 
-**Problem:** `DockerError: Image 'kai_agent_sandbox' not found`
+**Problem:** `DockerError: Image 'O.M.I_agent_sandbox' not found`
 
 **Solution:** Build the Docker image:
 
 ```bash
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ### Task Times Out
