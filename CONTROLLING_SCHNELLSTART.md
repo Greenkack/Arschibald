@@ -1,20 +1,24 @@
 # 🚀 Controlling - Erweiterte Features - Schnellstart
 
-## ✅ Alle 4 Anforderungen implementiert!
+## ✅ Alle 4 Anforderungen implementiert
 
 ### 1. 🏢 Team-Auswertung
+
 **Was:** Alle Mitarbeiter einer Position als Team auswerten  
 **Wo:** `controlling_advanced_features_ui.py` → Tab "Team-Auswertung"
 
 ### 2. 🔍 Mitarbeiter-Vergleich
+
 **Was:** Mitarbeiter derselben Position vergleichen  
 **Wo:** `controlling_advanced_features_ui.py` → Tab "Mitarbeiter-Vergleich"
 
 ### 3. 📄 PDF Bytes Export
+
 **Was:** Alle Ergebnisse als PDF (direkt downloadbar, keine Dateien)  
 **Wo:** In allen Berichten verfügbar ("Als PDF exportieren" Button)
 
 ### 4. 🎨 PDF-Farbeinstellungen
+
 **Was:** Individuelle Anpassung aller PDF-Farben  
 **Wo:** `controlling_advanced_features_ui.py` → Tab "PDF-Farben"
 
@@ -23,11 +27,13 @@
 ## 🎯 Sofort starten
 
 ### Variante A: Separate App starten
+
 ```powershell
 streamlit run controlling_advanced_features_ui.py
 ```
 
 ### Variante B: In Haupt-App integrieren
+
 Füge in `gui.py` oder `controlling_ui.py` hinzu:
 
 ```python
@@ -65,6 +71,7 @@ with tab6:  # PDF-Farben
 ## 📋 Schnelltest
 
 ### Test 1: Team-Auswertung
+
 1. ✅ Streamlit-App starten
 2. ✅ Tab "Team-Auswertung" öffnen
 3. ✅ Position wählen (z.B. "Call Agent")
@@ -75,6 +82,7 @@ with tab6:  # PDF-Farben
 8. ✅ PDF herunterladen und öffnen
 
 **Erwartetes Ergebnis:**
+
 - Team-Gesamt-Quotas angezeigt
 - Statistiken mit Best/Worst Performern
 - Einzelne Mitarbeiter-Daten expandierbar
@@ -83,6 +91,7 @@ with tab6:  # PDF-Farben
 ---
 
 ### Test 2: Mitarbeiter-Vergleich
+
 1. ✅ Tab "Mitarbeiter-Vergleich" öffnen
 2. ✅ "Nach Position filtern" aktivieren
 3. ✅ Position wählen
@@ -93,6 +102,7 @@ with tab6:  # PDF-Farben
 8. ✅ PDF exportieren
 
 **Erwartetes Ergebnis:**
+
 - Ranking für jede Quote (1., 2., 3., ...)
 - Absolute und relative Unterschiede
 - Detaillierte Mitarbeiter-Tabellen
@@ -101,6 +111,7 @@ with tab6:  # PDF-Farben
 ---
 
 ### Test 3: PDF-Farbeinstellungen
+
 1. ✅ Tab "PDF-Farben" öffnen
 2. ✅ **Untab "Vordefinierte Schemata"**
    - Schema wählen (z.B. "Grün")
@@ -116,6 +127,7 @@ with tab6:  # PDF-Farben
 6. ✅ PDF öffnen → Neue Farben sollten sichtbar sein!
 
 **Erwartetes Ergebnis:**
+
 - Farbschema sofort gespeichert
 - Datei `data/pdf_colors.json` erstellt
 - Alle neuen PDFs verwenden neue Farben
@@ -126,7 +138,9 @@ with tab6:  # PDF-Farben
 ## 🔧 Fehlerbehebung
 
 ### Problem: "Import Error" bei Team Analytics
+
 **Lösung:**
+
 ```powershell
 # Prüfe ob Module korrekt erstellt wurden
 python -c "from controlling.team_analytics import TeamAnalytics; print('OK')"
@@ -134,13 +148,17 @@ python -c "from controlling.pdf_config import get_color_scheme; print('OK')"
 ```
 
 ### Problem: PDF-Farben werden nicht angewendet
+
 **Lösung:**
+
 1. Prüfe `data/pdf_colors.json` existiert
 2. Lösche die Datei und wähle neues Schema
 3. Streamlit-App neu starten (F5)
 
 ### Problem: "Keine Mitarbeiter gefunden"
+
 **Lösung:**
+
 1. Prüfe ob Mitarbeiter in Controlling-Datenbank existieren
 2. Prüfe ob Position korrekt zugewiesen
 3. Filter "Inaktive Mitarbeiter einbeziehen" aktivieren
@@ -149,7 +167,8 @@ python -c "from controlling.pdf_config import get_color_scheme; print('OK')"
 
 ## 📊 Features im Detail
 
-### Team-Auswertung Metriken:
+### Team-Auswertung Metriken
+
 - ✅ Abschlussquote (Team-Gesamt)
 - ✅ Terminvereinbarungsquote (Team-Gesamt)
 - ✅ Termine-Anfahrquote (Team-Gesamt)
@@ -158,14 +177,16 @@ python -c "from controlling.pdf_config import get_color_scheme; print('OK')"
 - ✅ Best/Worst Performer-Identifikation
 - ✅ Einzelne Mitarbeiter-Details
 
-### Mitarbeiter-Vergleich Metriken:
+### Mitarbeiter-Vergleich Metriken
+
 - ✅ Ranking-System (1., 2., 3., ...)
 - ✅ Absolute Unterschiede (Prozentpunkte)
 - ✅ Relative Unterschiede (Prozent)
 - ✅ Leader vs. Last Vergleich
 - ✅ Detaillierte Mitarbeiter-Tabellen
 
-### PDF-Farboptionen:
+### PDF-Farboptionen
+
 - ✅ 14 anpassbare Farben
 - ✅ 6 vordefinierte Schemata
 - ✅ Live-Vorschau
@@ -190,17 +211,20 @@ python -c "from controlling.pdf_config import get_color_scheme; print('OK')"
 
 ## 💡 Tipps & Best Practices
 
-### Team-Auswertung:
+### Team-Auswertung
+
 - **Tipp 1:** Nutze 30-Tage-Zeiträume für aussagekräftige Daten
 - **Tipp 2:** Exportiere PDFs monatlich für Archivierung
 - **Tipp 3:** Vergleiche Team-Durchschnitt mit Einzelperformern
 
-### Mitarbeiter-Vergleich:
+### Mitarbeiter-Vergleich
+
 - **Tipp 1:** Vergleiche nur Mitarbeiter gleicher Position für Fairness
 - **Tipp 2:** Nutze für Performance-Reviews
 - **Tipp 3:** Fokus auf relative Unterschiede (nicht nur absolute)
 
-### PDF-Farben:
+### PDF-Farben
+
 - **Tipp 1:** Wähle kontrastreiche Farben für Header/Text
 - **Tipp 2:** Teste Farbschema vor wichtigen Exporten
 - **Tipp 3:** Nutze Firmen-CI-Farben für Branding

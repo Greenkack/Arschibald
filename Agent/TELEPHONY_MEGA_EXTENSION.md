@@ -132,7 +132,7 @@ get_call_analytics()
 save_call_script(
     name='PV-Beratung Standard',
     category='Verkauf',
-    opening_statement='Guten Tag, hier ist KAI von GreenEnergy. Ich rufe an wegen...',
+    opening_statement='Guten Tag, hier ist O.M.I von GreenEnergy. Ich rufe an wegen...',
     key_points='Kostenersparnis,Umweltschutz,Unabhängigkeit,Förderung',
     objection_responses='{"zu_teuer": "Amortisation in 8 Jahren", "kompliziert": "Wir übernehmen alles"}',
     closing_statement='Vielen Dank für das Gespräch. Ich sende Ihnen...'

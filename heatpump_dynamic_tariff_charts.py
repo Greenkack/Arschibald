@@ -457,7 +457,8 @@ def create_load_shifting_heatmap(hourly_data: list[dict[str, Any]]) -> go.Figure
         for hour in range(24):
             idx = day * 24 + hour
             if idx < len(week_data):
-                price = week_data[idx]["price_dynamic_eur_kwh"]
+                # Unterstütze beide Key-Namen für Kompatibilität
+                price = week_data[idx].get("price_dynamic_eur_kwh") or week_data[idx].get("price_eur_kwh", 0.12)
             else:
                 price = 0.12  # Fallback
             day_prices.append(price)

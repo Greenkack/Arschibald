@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 def demo_ui_structure():
     """Demonstrate the UI module structure."""
     print("\n" + "=" * 70)
-    print("KAI Agent UI Module - Structure Verification")
+    print("O.M.I Agent UI Module - Structure Verification")
     print("=" * 70 + "\n")
 
     # Import the module

@@ -1,7 +1,7 @@
 # ui_effects_library.py
 """
 Datei: ui_effects_library.py
-Zweck: Bibliothek mit 10 verschiedenen UI-Effekt-Stilen für Buttons, Slider, Dropdowns, Expander
+Zweck: Bibliothek mit 21 verschiedenen UI-Effekt-Stilen für Buttons, Slider, Dropdowns, Expander
 Autor: GitHub Copilot
 Datum: 2025-10-23
 """
@@ -377,7 +377,7 @@ UI_EFFECTS_LIBRARY = {
         button[kind="secondary"]:hover,
         div[data-baseweb="button"]:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
 
         /* Pulse-Animation */
@@ -399,7 +399,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] .streamlit-expanderHeader:hover {
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
             transform: translateX(2px) scale(1.01);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 12px rgba(0,0,0,0.15);
         }
 
         /* ========== DROPDOWN HOVER (SHIMMER + PULSE) ========== */
@@ -409,7 +409,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="select"]:hover,
         section[data-testid="stSidebar"] .stSelectbox > div > div:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 16px rgba(0,0,0,0.15);
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
         }
 
@@ -419,7 +419,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepUp"]:hover,
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepDown"]:hover {
             transform: scale(1.08);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 12px rgba(0,0,0,0.2);
             animation: globalButtonPulse 1s ease-in-out;
         }
 
@@ -428,7 +428,7 @@ UI_EFFECTS_LIBRARY = {
         div[data-testid="stCheckbox"] label:hover,
         section[data-testid="stSidebar"] div[data-baseweb="checkbox"]:hover {
             transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 10px rgba(0,0,0,0.15);
         }
 
         /* ========== SIDEBAR NAVIGATION HOVER (SHIMMER + PULSE) ========== */
@@ -441,7 +441,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] p a:hover {
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
             transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 10px rgba(0,0,0,0.1);
             padding-left: 8px;
         }
 
@@ -481,12 +481,12 @@ UI_EFFECTS_LIBRARY = {
         .admin-carousel-card:hover .admin-carousel-icon,
         .admin-carousel-card.active .admin-carousel-icon {
             animation: globalButtonPulse 1.8s ease-in-out infinite;
-            filter: drop-shadow(0 6px 16px rgba(255,255,255,0.35));
+            filter: drop-shadow(0 10px 16px rgba(255,255,255,0.35));
         }
 
         .admin-carousel-nav button:hover {
             background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
-            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+            box-shadow: 0 10px 18px rgba(0,0,0,0.18);
             transform: translateY(-1px);
         }
 
@@ -512,7 +512,7 @@ UI_EFFECTS_LIBRARY = {
         div[data-baseweb="button"] {
             position: relative;
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.3));
+            filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.3));
         }
 
         .stButton button:hover,
@@ -571,7 +571,7 @@ UI_EFFECTS_LIBRARY = {
         div[data-baseweb="checkbox"]:hover,
         div[data-testid="stCheckbox"] label:hover,
         section[data-testid="stSidebar"] div[data-baseweb="checkbox"]:hover {
-            filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.6));
+            filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.6));
         }
 
         /* ========== SIDEBAR NAVIGATION HOVER (GLOW + BOUNCE) ========== */
@@ -603,14 +603,14 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] h3:hover,
         [data-testid="stSidebar"] .stMarkdown h1:hover,
         [data-testid="stSidebar"] .stMarkdown h2:hover {
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
             transform: translateX(1px);
         }
 
         /* Sidebar Content Blocks Hover */
         section[data-testid="stSidebar"] > div:hover,
         [data-testid="stSidebar"] [data-testid="stVerticalBlock"] > div:hover {
-            box-shadow: 0 0 5px rgba(76, 175, 80, 0.1);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.1);
         }
 
         /* ========== CAROUSEL HOVER (GLOW + BOUNCE) ========== */
@@ -770,7 +770,7 @@ UI_EFFECTS_LIBRARY = {
         [data-testid="stSidebar"] .stMarkdown h1:hover,
         [data-testid="stSidebar"] .stMarkdown h2:hover {
             border-left: 2px solid rgba(0, 255, 255, 0.6);
-            box-shadow: -2px 0 8px rgba(0, 255, 255, 0.3);
+            box-shadow: -2px 0 10px rgba(0, 255, 255, 0.3);
             padding-left: 6px;
         }
 
@@ -778,7 +778,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] > div:hover,
         [data-testid="stSidebar"] [data-testid="stVerticalBlock"] > div:hover {
             border-left: 1px solid rgba(0, 255, 255, 0.3);
-            box-shadow: -1px 0 5px rgba(0, 255, 255, 0.2);
+            box-shadow: -1px 0 10px rgba(0, 255, 255, 0.2);
         }
 
         /* ========== CAROUSEL HOVER (NEON + WAVE) ========== */
@@ -835,7 +835,7 @@ UI_EFFECTS_LIBRARY = {
         div[data-baseweb="button"]:hover {
             background-position: 100% 0;
             transform: translateX(5px);
-            box-shadow: -5px 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: -5px 10px 20px rgba(102, 126, 234, 0.4);
         }
 
         /* Expander Gradient */
@@ -854,7 +854,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] .streamlit-expanderHeader:hover {
             background-position: 100% 0;
             transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 12px rgba(102, 126, 234, 0.3);
         }
 
         /* ========== DROPDOWN HOVER (GRADIENT + SLIDE) ========== */
@@ -865,7 +865,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] .stSelectbox > div > div:hover {
             background: linear-gradient(90deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
             transform: translateX(3px);
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 10px 10px rgba(102, 126, 234, 0.2);
         }
 
         /* ========== NUMBER INPUT HOVER (GRADIENT + SLIDE) ========== */
@@ -904,7 +904,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] p a:hover {
             background: linear-gradient(90deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
             transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 12px rgba(102, 126, 234, 0.4);
             padding-left: 10px;
         }
 
@@ -945,7 +945,7 @@ UI_EFFECTS_LIBRARY = {
         .admin-carousel-card:hover .admin-carousel-icon,
         .admin-carousel-card.active .admin-carousel-icon {
             background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.05));
-            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.3);
+            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
             transform: translateY(-3px);
         }
 
@@ -1175,7 +1175,7 @@ UI_EFFECTS_LIBRARY = {
         div[data-baseweb="button"]:hover {
             opacity: 1;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
         }
 
         /* Expander Minimal */
@@ -1219,7 +1219,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="checkbox"]:hover,
         section[data-testid="stSidebar"] div[data-testid="stCheckbox"] label:hover {
             opacity: 1;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.08);
         }
 
         /* Dropdown Minimal */
@@ -1239,7 +1239,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="select"]:hover,
         section[data-testid="stSidebar"] .stSelectbox > div > div:hover {
             background-color: rgba(255, 255, 255, 0.07);
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
         }
 
         /* Sidebar Navigation Hover (Minimal + Fade) */
@@ -1252,7 +1252,7 @@ UI_EFFECTS_LIBRARY = {
             background-color: rgba(255, 255, 255, 0.06);
             border-radius: 6px;
             transform: translateX(3px);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 14px rgba(0, 0, 0, 0.08);
             padding-left: 8px;
         }
 
@@ -1291,14 +1291,14 @@ UI_EFFECTS_LIBRARY = {
         .admin-carousel-card:hover .admin-carousel-icon,
         .admin-carousel-card.active .admin-carousel-icon {
             opacity: 1;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
             transform: translateY(-2px);
         }
 
         .admin-carousel-nav button:hover,
         .admin-carousel-actions button:hover {
             background-color: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
         }
 
@@ -1323,7 +1323,7 @@ UI_EFFECTS_LIBRARY = {
         button[kind="secondary"],
         div[data-baseweb="button"] {
             border: 3px solid currentColor !important;
-            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
             transition: all 0.1s ease;
             image-rendering: pixelated;
         }
@@ -1335,7 +1335,7 @@ UI_EFFECTS_LIBRARY = {
         button[kind="secondary"]:hover,
         div[data-baseweb="button"]:hover {
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
             animation: pixelShake 0.3s ease-in-out;
         }
 
@@ -1349,13 +1349,13 @@ UI_EFFECTS_LIBRARY = {
         /* Expander Retro */
         .streamlit-expanderHeader {
             border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
             transition: all 0.1s ease;
         }
 
         .streamlit-expanderHeader:hover {
             transform: translate(1px, 1px);
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
         }
 
         /* Slider Retro */
@@ -1364,7 +1364,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepUp"],
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepDown"] {
             border: 2px solid currentColor !important;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
         }
 
         button[data-testid="stNumberInputStepUp"]:hover,
@@ -1372,7 +1372,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepUp"]:hover,
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepDown"]:hover {
             transform: translate(1px, 1px);
-            box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
         }
 
         /* Dropdown Retro */
@@ -1382,7 +1382,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="select"],
         section[data-testid="stSidebar"] .stSelectbox > div > div {
             border: 2px solid currentColor;
-            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.25);
             transition: all 0.12s ease;
             image-rendering: pixelated;
         }
@@ -1393,7 +1393,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="select"]:hover,
         section[data-testid="stSidebar"] .stSelectbox > div > div:hover {
             transform: translate(1px, 1px);
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
         }
 
         /* Checkbox Retro */
@@ -1402,7 +1402,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="checkbox"],
         section[data-testid="stSidebar"] div[data-testid="stCheckbox"] label {
             border: 2px solid currentColor;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
             transition: all 0.12s ease;
         }
 
@@ -1411,7 +1411,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="checkbox"]:hover,
         section[data-testid="stSidebar"] div[data-testid="stCheckbox"] label:hover {
             transform: translate(1px, 1px);
-            box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
         }
 
         /* Sidebar Navigation Hover (Retro + Pixel) */
@@ -1422,7 +1422,7 @@ UI_EFFECTS_LIBRARY = {
         [data-testid="stSidebar"] .stMarkdown a:hover,
         section[data-testid="stSidebar"] p a:hover {
             border: 2px solid currentColor;
-            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.25);
             transform: translate(2px, 2px);
             padding-left: 8px;
             image-rendering: pixelated;
@@ -1432,7 +1432,7 @@ UI_EFFECTS_LIBRARY = {
         [data-testid="stSidebar"] ul li:hover,
         [data-testid="stSidebar"] .stMarkdown li:hover {
             border: 2px solid currentColor;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
             transform: translate(1px, 1px);
             padding-left: 6px;
         }
@@ -1443,7 +1443,7 @@ UI_EFFECTS_LIBRARY = {
         [data-testid="stSidebar"] .stMarkdown h1:hover,
         [data-testid="stSidebar"] .stMarkdown h2:hover {
             border: 2px solid currentColor;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.18);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.18);
             transform: translate(1px, 1px);
             padding-left: 5px;
         }
@@ -1451,14 +1451,14 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] > div:hover,
         [data-testid="stSidebar"] [data-testid="stVerticalBlock"] > div:hover {
             border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.15);
         }
 
         /* ========== CAROUSEL HOVER (RETRO + PIXEL) ========== */
         .admin-carousel-card:hover,
         .admin-carousel-card.active {
             border: 3px solid currentColor;
-            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.35);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.35);
             transform: translate(-3px, -3px) scale(1.02);
             image-rendering: pixelated;
         }
@@ -1472,14 +1472,14 @@ UI_EFFECTS_LIBRARY = {
         .admin-carousel-nav button:hover,
         .admin-carousel-actions button:hover {
             border: 2px solid currentColor;
-            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.28);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.28);
             transform: translate(2px, 2px);
         }
 
         .admin-carousel-dot:hover,
         .admin-carousel-dot.active {
             transform: scale(1.3);
-            box-shadow: 0 0 0 2px currentColor, 3px 3px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 0 10px currentColor, 10px 10px 0 rgba(0, 0, 0, 0.3);
         }
         """
     },
@@ -1765,7 +1765,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepDown"] {
             background: linear-gradient(135deg, #ff00ff, #00ffff) !important;
             border: 1px solid #ff00ff !important;
-            box-shadow: 0 0 5px #ff00ff;
+            box-shadow: 0 0 10px #ff00ff;
         }
 
         button[data-testid="stNumberInputStepUp"]:hover,
@@ -1806,7 +1806,7 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="checkbox"],
         section[data-testid="stSidebar"] div[data-testid="stCheckbox"] label {
             border: 2px solid #ff00ff;
-            box-shadow: 0 0 8px rgba(255, 0, 255, 0.4);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
             transition: all 0.2s ease;
             clip-path: polygon(0 0, 100% 0, 100% 85%, 96% 100%, 0 100%);
         }
@@ -1905,9 +1905,9 @@ UI_EFFECTS_LIBRARY = {
         button[kind="secondary"],
         div[data-baseweb="button"] {
             position: relative;
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%) !important;
-            border: 2px solid #f6d365 !important;
-            box-shadow: 0 8px 16px rgba(246, 211, 101, 0.3);
+            background: linear-gradient(135deg, #c3c3c4 70%, #a5a5a5 30%) !important;
+            border: 2px solid #000000 !important;
+            box-shadow: 0 15px 16px rgba(0, 0, 0, 0.3);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
@@ -1935,9 +1935,9 @@ UI_EFFECTS_LIBRARY = {
         button[kind="primary"]:hover,
         button[kind="secondary"]:hover,
         div[data-baseweb="button"]:hover {
-            border: 2px solid #ffd700 !important;
-            box-shadow: 0 12px 24px rgba(255, 215, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
+            border: 2px solid #ff8200 !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+            transform: translateY(3px);
         }
 
         .stButton button:hover::before,
@@ -1958,13 +1958,13 @@ UI_EFFECTS_LIBRARY = {
         /* Expander Luxury */
         .streamlit-expanderHeader {
             background: linear-gradient(90deg, rgba(246, 211, 101, 0.1) 0%, rgba(253, 160, 133, 0.1) 100%);
-            border-left: 3px solid #f6d365;
+            border-left: 3px solid #ff8200;
             transition: all 0.4s ease;
         }
 
         .streamlit-expanderHeader:hover {
             background: linear-gradient(90deg, rgba(246, 211, 101, 0.2) 0%, rgba(253, 160, 133, 0.2) 100%);
-            border-left: 4px solid #ffd700;
+            border-left: 4px solid #ff8200;
             box-shadow: -5px 0 15px rgba(255, 215, 0, 0.3);
         }
 
@@ -1975,15 +1975,15 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepDown"] {
             background: linear-gradient(135deg, #f6d365, #fda085) !important;
             border: 1px solid #f6d365 !important;
-            box-shadow: 0 4px 8px rgba(246, 211, 101, 0.3);
+            box-shadow: 0 10px 10px rgba(255, 255, 255, 0.3);
         }
 
         button[data-testid="stNumberInputStepUp"]:hover,
         button[data-testid="stNumberInputStepDown"]:hover,
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepUp"]:hover,
         section[data-testid="stSidebar"] button[data-testid="stNumberInputStepDown"]:hover {
-            border: 1px solid #ffd700 !important;
-            box-shadow: 0 6px 12px rgba(255, 215, 0, 0.5);
+            border: 1px solid #ff8200 !important;
+            box-shadow: 0 10px 12px rgba(255, 130, 0, 0.5);
             transform: scale(1.05);
         }
 
@@ -1993,14 +1993,14 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="checkbox"],
         section[data-testid="stSidebar"] div[data-testid="stCheckbox"] label {
             transition: all 0.35s ease;
-            border-radius: 10px;
+            border-radius: 3px;
         }
 
         div[data-baseweb="checkbox"]:hover,
         div[data-testid="stCheckbox"] label:hover,
         section[data-testid="stSidebar"] div[data-baseweb="checkbox"]:hover,
         section[data-testid="stSidebar"] div[data-testid="stCheckbox"] label:hover {
-            box-shadow: 0 0 10px rgba(246, 211, 101, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             transform: translateY(-1px);
         }
 
@@ -2011,11 +2011,11 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[data-baseweb="select"],
         section[data-testid="stSidebar"] .stSelectbox > div > div {
             position: relative;
-            background: linear-gradient(135deg, rgba(246, 211, 101, 0.15), rgba(253, 160, 133, 0.15));
-            border: 1px solid rgba(246, 211, 101, 0.4);
-            box-shadow: 0 10px 20px rgba(246, 211, 101, 0.18);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 15px rgba(255, 255, 255, 0.18);
             transition: all 0.35s ease;
-            border-radius: 12px;
+            border-radius: 3px;
         }
 
         div[data-baseweb="select"]:hover,
@@ -2023,8 +2023,8 @@ UI_EFFECTS_LIBRARY = {
         div[data-testid="stSelectbox"] > div:hover,
         section[data-testid="stSidebar"] div[data-baseweb="select"]:hover,
         section[data-testid="stSidebar"] .stSelectbox > div > div:hover {
-            border: 1px solid rgba(255, 215, 0, 0.8);
-            box-shadow: 0 16px 30px rgba(255, 215, 0, 0.28);
+            border: 2px solid rgba(0, 0, 0, 0.8);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.28);
             transform: translateY(-3px);
         }
 
@@ -2035,22 +2035,22 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] div[class*="st-emotion-cache"] a:hover,
         [data-testid="stSidebar"] .stMarkdown a:hover,
         section[data-testid="stSidebar"] p a:hover {
-            background: linear-gradient(135deg, rgba(246, 211, 101, 0.25), rgba(253, 160, 133, 0.25));
-            border-left: 4px solid rgba(255, 215, 0, 0.9);
-            box-shadow: -6px 0 18px rgba(246, 211, 101, 0.25);
-            transform: translateX(4px);
-            padding-left: 12px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+            border-left: 3px solid rgba(0, 0, 0, 0.9);
+            box-shadow: -6px 0 18px rgba(0, 0, 0, 0.25);
+            transform: translateX(3px);
+            padding-left: 3px;
+            border-radius: 3px;
         }
 
         section[data-testid="stSidebar"] li:hover,
         [data-testid="stSidebar"] ul li:hover,
         [data-testid="stSidebar"] .stMarkdown li:hover {
-            background: linear-gradient(135deg, rgba(253, 160, 133, 0.18), rgba(246, 211, 101, 0.18));
-            border-left: 3px solid rgba(255, 215, 0, 0.8);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18));
+            border-left: 3px solid rgba(0, 0, 0, 0.8);
             transform: translateX(3px);
-            padding-left: 10px;
-            border-radius: 10px;
+            padding-left: 3px;
+            border-radius: 3px;
         }
 
         section[data-testid="stSidebar"] h1:hover,
@@ -2058,17 +2058,17 @@ UI_EFFECTS_LIBRARY = {
         section[data-testid="stSidebar"] h3:hover,
         [data-testid="stSidebar"] .stMarkdown h1:hover,
         [data-testid="stSidebar"] .stMarkdown h2:hover {
-            background: linear-gradient(135deg, rgba(246, 211, 101, 0.2), rgba(253, 160, 133, 0.2));
-            border-left: 3px solid rgba(255, 215, 0, 0.8);
-            transform: translateX(2px);
-            padding-left: 8px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+            border-left: 3px solid rgba(0, 0, 0, 0.8);
+            transform: translateX(3px);
+            padding-left: 3px;
+            border-radius: 3px;
         }
 
         section[data-testid="stSidebar"] > div:hover,
         [data-testid="stSidebar"] [data-testid="stVerticalBlock"] > div:hover {
-            background: linear-gradient(135deg, rgba(246, 211, 101, 0.12), rgba(253, 160, 133, 0.12));
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(204, 205, 205, 0.12), rgba(204, 205, 205, 0.12));
+            border-radius: 3px;
         }
 
         /* ========== CAROUSEL HOVER (ELEGANT + LUXURY) ========== */
@@ -2100,6 +2100,567 @@ UI_EFFECTS_LIBRARY = {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 215, 0, 0.95));
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
             transform: scale(1.32);
+        }
+        """
+    },
+    
+    "shimmer_elegant": {
+        "name": "Shimmer Elegant",
+        "description": "Mix aus Shimmer+Pulse Effekten mit elegantem Stil (ohne goldene Farben).",
+        "css": """
+        /* SHIMMER ELEGANT EFFEKT - Mix aus Shimmer+Pulse und Elegant Stil */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[data-testid="baseButton-secondary"],
+        button[kind="primary"],
+        button[kind="secondary"],
+        div[data-baseweb="button"] {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Shimmer-Effekt: Glänzender Sweep von links nach rechts */
+        .stButton button::before,
+        button[data-testid="baseButton-primary"]::before,
+        button[data-testid="baseButton-secondary"]::before,
+        button[kind="primary"]::before,
+        button[kind="secondary"]::before,
+        div[data-baseweb="button"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+            z-index: 1;
+        }
+
+        .stButton button:hover::before,
+        button[data-testid="baseButton-primary"]:hover::before,
+        button[data-testid="baseButton-secondary"]:hover::before,
+        button[kind="primary"]:hover::before,
+        button[kind="secondary"]:hover::before,
+        div[data-baseweb="button"]:hover::before {
+            left: 100%;
+        }
+
+        /* Hover-Effekte mit eleganter Transform */
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[data-testid="baseButton-secondary"]:hover,
+        button[kind="primary"]:hover,
+        button[kind="secondary"]:hover,
+        div[data-baseweb="button"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2), inset 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Pulse-Animation */
+        @keyframes shimmerElegantPulse {
+            0%, 100% { transform: scale(1) translateY(-3px); }
+            50% { transform: scale(1.02) translateY(-3px); }
+        }
+
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            animation: shimmerElegantPulse 2s ease-in-out infinite;
+        }
+
+        /* Expander - Shimmer Elegant */
+        details[data-testid="stExpander"] summary,
+        .streamlit-expanderHeader {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-left: 3px solid rgba(255, 140, 0, 0.5);
+            transition: all 0.4s ease;
+        }
+
+        details[data-testid="stExpander"] summary:hover,
+        .streamlit-expanderHeader:hover,
+        section[data-testid="stSidebar"] details[data-testid="stExpander"] summary:hover {
+            background: linear-gradient(90deg, rgba(255, 140, 0, 0.1) 0%, transparent 100%);
+            border-left: 4px solid rgba(255, 140, 0, 0.8);
+            transform: translateX(4px) scale(1.01);
+            box-shadow: -5px 0 15px rgba(255, 140, 0, 0.2), 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Dropdown - Shimmer Elegant */
+        div[data-baseweb="select"],
+        .stSelectbox > div > div,
+        div[data-testid="stSelectbox"] > div {
+            position: relative;
+            transition: all 0.35s ease;
+            border-radius: 12px;
+        }
+
+        div[data-baseweb="select"]:hover,
+        .stSelectbox > div > div:hover,
+        div[data-testid="stSelectbox"] > div:hover,
+        section[data-testid="stSidebar"] div[data-baseweb="select"]:hover {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Number Input - Shimmer Elegant */
+        button[data-testid="stNumberInputStepUp"],
+        button[data-testid="stNumberInputStepDown"],
+        section[data-testid="stSidebar"] button[data-testid="stNumberInputStepUp"],
+        section[data-testid="stSidebar"] button[data-testid="stNumberInputStepDown"] {
+            transition: all 0.35s ease;
+        }
+
+        button[data-testid="stNumberInputStepUp"]:hover,
+        button[data-testid="stNumberInputStepDown"]:hover,
+        section[data-testid="stSidebar"] button[data-testid="stNumberInputStepUp"]:hover,
+        section[data-testid="stSidebar"] button[data-testid="stNumberInputStepDown"]:hover {
+            transform: scale(1.08);
+            box-shadow: 0 10px 16px rgba(0,0,0,0.2);
+            animation: shimmerElegantPulse 1s ease-in-out;
+        }
+
+        /* Checkbox - Shimmer Elegant */
+        div[data-baseweb="checkbox"]:hover,
+        div[data-testid="stCheckbox"] label:hover,
+        section[data-testid="stSidebar"] div[data-baseweb="checkbox"]:hover {
+            transform: translateY(-1px) scale(1.05);
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2);
+        }
+
+        /* Sidebar Navigation - Shimmer Elegant */
+        section[data-testid="stSidebar"] a:hover,
+        [data-testid="stSidebar"] a[href]:hover,
+        section[data-testid="stSidebar"] nav a:hover {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            border-left: 4px solid rgba(255, 140, 0, 0.7);
+            box-shadow: -6px 0 18px rgba(255, 140, 0, 0.15);
+            transform: translateX(6px);
+            padding-left: 12px;
+            border-radius: 12px;
+        }
+
+        section[data-testid="stSidebar"] li:hover,
+        [data-testid="stSidebar"] ul li:hover {
+            background: linear-gradient(90deg, transparent, rgba(255,140,0,0.08), transparent);
+            border-left: 3px solid rgba(255, 140, 0, 0.5);
+            transform: translateX(4px);
+            padding-left: 8px;
+        }
+
+        /* Carousel - Shimmer Elegant */
+        .admin-carousel-card:hover,
+        .admin-carousel-card.active {
+            background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,140,0,0.05));
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18), 0 0 30px rgba(255,140,0,0.1);
+            transform: translateY(-4px) scale(1.01);
+        }
+
+        .admin-carousel-card:hover .admin-carousel-icon,
+        .admin-carousel-card.active .admin-carousel-icon {
+            animation: shimmerElegantPulse 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 10px 16px rgba(255,140,0,0.35));
+        }
+
+        .admin-carousel-nav button:hover {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+            transform: translateY(-2px);
+        }
+
+        .admin-carousel-dot:hover,
+        .admin-carousel-dot.active {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 140, 0, 0.4));
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+            transform: scale(1.25);
+        }
+        """
+    },
+    
+    "glass_morphism": {
+        "name": "Glass Morphism",
+        "description": "Moderner Glasmorphismus-Effekt mit Blur und Transparenz.",
+        "css": """
+        /* GLASS MORPHISM EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.1) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(15px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+            transform: translateY(-2px);
+        }
+        
+        details[data-testid="stExpander"] summary:hover,
+        .streamlit-expanderHeader:hover {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.1);
+            transform: translateX(3px);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        """
+    },
+    
+    "metallic_steel": {
+        "name": "Metallic Steel",
+        "description": "Metallischer Chrome-Effekt mit glänzenden Reflexionen.",
+        "css": """
+        /* METALLIC STEEL EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            background: linear-gradient(145deg, #e0e0e0, #c0c0c0) !important;
+            box-shadow: 10px 10px 10px #bebebe, -5px -5px 10px #ffffff !important;
+            border: none !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            background: linear-gradient(145deg, #f0f0f0, #d0d0d0) !important;
+            box-shadow: 10px 10px 16px #b0b0b0, -8px -8px 16px #ffffff, inset 0 0 10px rgba(255,255,255,0.5) !important;
+            transform: translateY(-3px) scale(1.02);
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            background: linear-gradient(90deg, #e8e8e8, #d8d8d8);
+            box-shadow: 10px 10px 8px #c0c0c0, -2px -2px 10px #ffffff;
+            transform: translateX(4px);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            background: linear-gradient(135deg, #e8e8e8, #d8d8d8);
+            box-shadow: 10px 10px 12px #c0c0c0, -4px -4px 12px #ffffff;
+        }
+        """
+    },
+    
+    "neon_subtle": {
+        "name": "Neon Subtle",
+        "description": "Dezenter Neon-Glow-Effekt in professionellem Blau.",
+        "css": """
+        /* NEON SUBTLE EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            background: #1a1a2e !important;
+            border: 2px solid #0f4c75 !important;
+            box-shadow: 0 0 10px rgba(15, 76, 117, 0.5) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            border: 2px solid #3282b8 !important;
+            box-shadow: 0 0 20px rgba(50, 130, 184, 0.8), 0 0 40px rgba(50, 130, 184, 0.4) !important;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            border-left: 3px solid #3282b8;
+            box-shadow: -3px 0 15px rgba(50, 130, 184, 0.5), 0 0 10px rgba(50, 130, 184, 0.3);
+            transform: translateX(3px);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            box-shadow: 0 0 15px rgba(50, 130, 184, 0.6), 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        """
+    },
+    
+    "shadow_depth": {
+        "name": "Shadow Depth",
+        "description": "Tiefenwirkung durch dynamische, mehrschichtige Schatten.",
+        "css": """
+        /* SHADOW DEPTH EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            box-shadow: 0 10px 10px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.1), 0 10px 16px rgba(0,0,0,0.1) !important;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            box-shadow: 0 10px 10px rgba(0,0,0,0.15), 0 10px 16px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.15), 0 32px 64px rgba(0,0,0,0.1) !important;
+            transform: translateY(-6px);
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            box-shadow: 0 10px 10px rgba(0,0,0,0.15), 0 10px 16px rgba(0,0,0,0.1);
+            transform: translateX(4px);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            box-shadow: 0 10px 12px rgba(0,0,0,0.15), 0 10px 24px rgba(0,0,0,0.12), 0 16px 48px rgba(0,0,0,0.08);
+            transform: translateY(-3px);
+        }
+        """
+    },
+    
+    "minimal_modern": {
+        "name": "Minimal Modern",
+        "description": "Ultra-minimalistisch mit subtilen Micro-Animationen.",
+        "css": """
+        /* MINIMAL MODERN EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            border-radius: 4px !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            opacity: 0.85;
+            transform: translateX(2px);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        button[data-testid="stNumberInputStepUp"]:hover,
+        button[data-testid="stNumberInputStepDown"]:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+        """
+    },
+    
+    "carbon_fiber": {
+        "name": "Carbon Fiber",
+        "description": "Sportlicher Carbon-Textur-Look mit strukturiertem Finish.",
+        "css": """
+        /* CARBON FIBER EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            background: linear-gradient(145deg, #2c2c2c 0%, #1a1a1a 50%, #2c2c2c 100%) !important;
+            background-size: 200% 200% !important;
+            border: 1px solid #404040 !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4), inset 0 10px 0 rgba(255, 255, 255, 0.1) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            background-position: 100% 50% !important;
+            border: 1px solid #606060 !important;
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.5), inset 0 10px 0 rgba(255, 255, 255, 0.2) !important;
+            transform: translateY(-2px);
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            background: linear-gradient(90deg, #2c2c2c, #1a1a1a, #2c2c2c);
+            border-left: 3px solid #606060;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        """
+    },
+    
+    "gradient_flow": {
+        "name": "Gradient Flow",
+        "description": "Fließende animierte Gradienten mit sanften Übergängen.",
+        "css": """
+        /* GRADIENT FLOW EFFEKT */
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            background: linear-gradient(270deg, #667eea, #764ba2, #f093fb) !important;
+            background-size: 400% 400% !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            animation: gradientFlow 3s ease infinite;
+            box-shadow: 0 10px 24px rgba(118, 75, 162, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            animation: gradientFlow 4s ease infinite;
+            transform: translateX(3px);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+            animation: gradientFlow 4s ease infinite;
+        }
+        """
+    },
+    
+    "frosted_glass": {
+        "name": "Frosted Glass",
+        "description": "Matter Glaseffekt mit starkem Blur und Frost-Textur.",
+        "css": """
+        /* FROSTED GLASS EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.2), inset 0 10x 10px rgba(255, 255, 255, 0.1) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+            backdrop-filter: blur(25px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25), inset 0 10px 10px rgba(255, 255, 255, 0.15) !important;
+            transform: translateY(-2px);
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px) saturate(160%);
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(18px) saturate(170%);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+        }
+        """
+    },
+    
+    "professional_dark": {
+        "name": "Professional Dark",
+        "description": "Dunkler, professioneller Business-Stil mit subtilen Akzenten.",
+        "css": """
+        /* PROFESSIONAL DARK EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            background: linear-gradient(135deg, #2d3436 0%, #1e272e 100%) !important;
+            border: 1px solid #4a5568 !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            background: linear-gradient(135deg, #3d4850 0%, #2e3940 100%) !important;
+            border: 1px solid #667eea !important;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3), 0 0 30px rgba(102, 126, 234, 0.1) !important;
+            transform: translateY(-2px);
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            background: linear-gradient(90deg, #2d3436, #1e272e);
+            border-left: 3px solid #667eea;
+            box-shadow: -4px 0 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            background: linear-gradient(135deg, #2d3436, #1e272e);
+            border: 1px solid #667eea;
+            box-shadow: 0 10px 24px rgba(102, 126, 234, 0.25);
+        }
+        """
+    },
+    
+    "smooth_slide": {
+        "name": "Smooth Slide",
+        "description": "Gleitende Slide-Effekte mit flüssigen Übergängen.",
+        "css": """
+        /* SMOOTH SLIDE EFFEKT */
+        .stButton button,
+        button[data-testid="baseButton-primary"],
+        button[kind="primary"] {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        
+        .stButton button::after,
+        button[data-testid="baseButton-primary"]::after,
+        button[kind="primary"]::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .stButton button:hover::after,
+        button[data-testid="baseButton-primary"]:hover::after,
+        button[kind="primary"]:hover::after {
+            left: 100%;
+        }
+        
+        .stButton button:hover,
+        button[data-testid="baseButton-primary"]:hover,
+        button[kind="primary"]:hover {
+            transform: translateX(8px);
+            box-shadow: -4px 10px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        details[data-testid="stExpander"] summary:hover {
+            transform: translateX(8px);
+            box-shadow: -3px 10px 12px rgba(0, 0, 0, 0.12);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        div[data-baseweb="select"]:hover {
+            transform: translateX(6px);
+            box-shadow: -4px 10px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         """
     }

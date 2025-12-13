@@ -134,7 +134,7 @@ Expected result: 15/15 tests passed (100%)
 ## Docker Image Specifications
 
 ```
-Image: kai_agent_sandbox
+Image: O.M.I_agent_sandbox
 Base: python:3.11-slim
 User: sandboxuser (UID 1000)
 Workdir: /app/workspace
@@ -290,7 +290,7 @@ Task 14 is **COMPLETE** and **PRODUCTION-READY**.
 - ✓ Performance optimized
 - ✓ Integration tested
 
-The Docker sandbox provides secure, isolated code execution for the KAI Agent system with comprehensive build scripts, verification tools, and extensive testing.
+The Docker sandbox provides secure, isolated code execution for the O.M.I Agent system with comprehensive build scripts, verification tools, and extensive testing.
 
 **Implementation Date:** October 19, 2025  
 **Status:** Production-ready  

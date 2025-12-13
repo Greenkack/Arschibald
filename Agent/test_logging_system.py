@@ -2,7 +2,7 @@
 Test Logging System Implementation
 ===================================
 
-This script tests the comprehensive logging system for the KAI Agent.
+This script tests the comprehensive logging system for the O.M.I Agent.
 Tests all logging features including:
 - Logging levels configuration
 - Agent reasoning logs
@@ -135,7 +135,7 @@ def test_docker_operation_logging():
     log_docker_operation(
         logger,
         operation="create",
-        image_name="kai_agent_sandbox",
+        image_name="O.M.I_agent_sandbox",
         container_id="abc123def456",
         success=True,
         duration=0.5
@@ -145,7 +145,7 @@ def test_docker_operation_logging():
     log_docker_operation(
         logger,
         operation="execute",
-        image_name="kai_agent_sandbox",
+        image_name="O.M.I_agent_sandbox",
         container_id="abc123def456",
         success=True,
         duration=2.3
@@ -155,7 +155,7 @@ def test_docker_operation_logging():
     log_docker_operation(
         logger,
         operation="cleanup",
-        image_name="kai_agent_sandbox",
+        image_name="O.M.I_agent_sandbox",
         container_id="abc123def456",
         success=True,
         duration=0.2
@@ -165,7 +165,7 @@ def test_docker_operation_logging():
     log_docker_operation(
         logger,
         operation="create",
-        image_name="kai_agent_sandbox",
+        image_name="O.M.I_agent_sandbox",
         success=False,
         error="Image not found"
     )
@@ -309,7 +309,7 @@ def test_log_file_creation():
 def main():
     """Run all logging tests."""
     print("\n" + "=" * 70)
-    print("KAI AGENT LOGGING SYSTEM TEST SUITE")
+    print("O.M.I AGENT LOGGING SYSTEM TEST SUITE")
     print("=" * 70)
     print("Testing comprehensive logging implementation...")
     print("Requirements: 11.5")

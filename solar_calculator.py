@@ -1826,16 +1826,16 @@ def render_solar_calculator(
         padding: 2rem;
         border-radius: 16px;
         margin-bottom: 2rem;
-        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 10px 16px rgba(0, 0, 0, 0.18);
         border-left: 6px solid #ff8c00;
         border: 1px solid rgba(255, 200, 140, 0.3);
         transition: all 0.3s ease;
     ">
         <h2 style="color: #1a202c; margin: 0 0 0.5rem 0; font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em;">
-            Solar Calculator
+            Photovoltaik Builder & Simulator
         </h2>
         <p style="color: #4a5568; margin: 0; font-size: 1rem; font-weight: 500;">
-            Schnelle Solar-Berechnung – Schritt {step} / 2
+            High-End Photovoltaik Builder & Simulator – Schritt {step} / 2
         </p>
     </div>
     """.format(step=step), unsafe_allow_html=True)
@@ -1845,7 +1845,7 @@ def render_solar_calculator(
             _get_text(
                 texts,
                 'technology_selection_header',
-                'Auswahl der Technik'))
+                'Bauen Sie Ihre PV-Anlage zusammen'))
 
         # Session-Guard vor Modul-Block
         if not _is_session_alive():
@@ -1868,44 +1868,107 @@ def render_solar_calculator(
                 st.session_state['module_quantity_sc_v1'] = int(
                     details.get('module_quantity', 20) or 20)
 
-            # Wir arbeiten mit einer lokalen Variable und schreiben am Ende
-            # zurück
-            local_qty = int(
-                st.session_state.get(
-                    'module_quantity_sc_v1',
-                    0) or 0)
-
-            # Guard vor number_input
+            # Guard vor Widgets
             if not _is_session_alive():
                 return
 
-            # Anzeige des aktuellen Werts (read-only) + Zahleneingabe via
-            # separate number_input ohne gleichen Key Konflikt
+            # CSS für gleichmäßige Button-Größen - VOR den Buttons laden!
+            st.markdown("""
+            <style>
+            /* Solar Calculator Modul-Buttons Styling */
+            div[data-testid="column"]:has(button[key="btn_module_qty_minus"]),
+            div[data-testid="column"]:has(button[key="btn_module_qty_plus"]) {
+                display: flex !important;
+                align-items: stretch !important;
+                height: 100% !important;
+            }
+            
+            /* Button Styling - gleiche Größe für beide */
+            .stButton > button[kind="secondary"] {
+                height: 40px !important;
+                min-height: 40px !important;
+                width: 100% !important;
+                font-size: 50px !important;
+                font-weight: 900 !important;
+                line-height: 1 !important;
+                padding: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            
+            /* Weiße Buttons mit orangem Rand-Schimmer */
+            button[kind="secondary"]:has-text("−"),
+            button[kind="secondary"]:has-text("+"),
+            .element-container:has(button[kind="secondary"]) button {
+                background: #ffffff !important;
+                border: 3px solid #ff8c00 !important;
+                border-radius: 5px !important;
+                box-shadow: 0 0 10px rgba(255, 140, 0, 0.5), inset 0 0 10px rgba(255, 140, 0, 0.1) !important;
+                transition: all 0.3s ease !important;
+                color: #1a202c !important;
+            }
+            
+            /* Hover: Orange Glow an den Rändern, Button bleibt weiß */
+            button[kind="secondary"]:hover {
+                background: #ffffff !important;
+                box-shadow: 0 0 15x rgba(255, 140, 0, 0.8), 0 0 10px rgba(255, 140, 0, 0.5), inset 0 0 15px rgba(255, 140, 0, 0.15) !important;
+                transform: translateY(-3px) scale(1.03) !important;
+                border: 3px solid #ff8c00 !important;
+                color: #1a202c !important;
+            }
+            
+            /* Active: Leichter Schatten-Effekt */
+            button[kind="secondary"]:active {
+                transform: scale(0.96) !important;
+                background: #f8f9fa !important;
+                box-shadow: 0 0 10px rgba(255, 140, 0, 0.6), inset 0 10px 10px rgba(255, 140, 0, 0.3) !important;
+                color: #1a202c !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+
+            # Number Input
+            current_qty = int(st.session_state.get('module_quantity_sc_v1', 20))
+            
             new_qty = st.number_input(
                 _get_text(texts, 'module_quantity_label', 'Anzahl PV Module'),
                 min_value=0,
-                value=local_qty,
+                value=current_qty,
                 key='module_quantity_sc_v1_input'
             )
 
-            # Buttons unterhalb für inkrement/dekrement
-            col_btn_minus, col_btn_plus = st.columns(2)
+            # Buttons unterhalb für inkrement/dekrement - MIT FUNKTIONIERENDER LOGIK
+            col_btn_minus, col_btn_plus = st.columns([1, 1], gap="small")
+            
+            btn_minus_clicked = False
+            btn_plus_clicked = False
+            
             with col_btn_minus:
-                if st.button('−', key='btn_module_qty_minus'):
-                    local_qty = max(0, local_qty - 1)
+                btn_minus_clicked = st.button('−', key='btn_module_qty_minus', use_container_width=True, type="secondary")
+            
             with col_btn_plus:
-                if st.button('+', key='btn_module_qty_plus'):
-                    local_qty = local_qty + 1
+                btn_plus_clicked = st.button('+', key='btn_module_qty_plus', use_container_width=True, type="secondary")
 
-            # Priorität: Button-Anpassungen > direkte Eingabe
-            if new_qty != st.session_state.get('module_quantity_sc_v1'):
+            # Button-Logik: Zuerst Buttons prüfen, dann number_input
+            if btn_minus_clicked:
+                current_qty = max(0, current_qty - 1)
+                st.session_state['module_quantity_sc_v1'] = current_qty
+                details['module_quantity'] = current_qty
+                st.rerun()
+            elif btn_plus_clicked:
+                current_qty = current_qty + 1
+                st.session_state['module_quantity_sc_v1'] = current_qty
+                details['module_quantity'] = current_qty
+                st.rerun()
+            elif new_qty != current_qty:
                 # Nutzer hat direkt im number_input geändert
-                local_qty = int(new_qty)
-
-            # Nur einmal schreiben (nach Widgets), um Streamlit Mutation nach
-            # Instanziierung zu vermeiden
-            st.session_state['module_quantity_sc_v1'] = int(local_qty)
-            details['module_quantity'] = int(local_qty)
+                st.session_state['module_quantity_sc_v1'] = int(new_qty)
+                details['module_quantity'] = int(new_qty)
+            else:
+                # Keine Änderung - sicherstellen dass Werte synchron sind
+                st.session_state['module_quantity_sc_v1'] = current_qty
+                details['module_quantity'] = current_qty
         with cols_mod_top[1]:
             # Hersteller Auswahl
             current_brand = details.get(

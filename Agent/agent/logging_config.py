@@ -1,5 +1,5 @@
 """
-Logging Configuration for KAI Agent
+Logging Configuration for O.M.I Agent
 ====================================
 
 Centralized logging configuration with multiple handlers and formatters.

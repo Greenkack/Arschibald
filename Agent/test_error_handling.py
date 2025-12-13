@@ -71,7 +71,7 @@ def test_error_classes():
     print("\n4. DockerError:")
     error = DockerError(
         "Docker image not found",
-        image_name="kai_agent_sandbox"
+        image_name="O.M.I_agent_sandbox"
     )
     print(format_error_message(error))
 
@@ -149,7 +149,7 @@ def test_logging_system():
     log_docker_operation(
         logger,
         operation="create",
-        image_name="kai_agent_sandbox",
+        image_name="O.M.I_agent_sandbox",
         container_id="abc123def456",
         success=True
     )
@@ -206,7 +206,7 @@ def test_error_to_dict():
 def main():
     """Run all tests."""
     print("\n" + "=" * 60)
-    print("KAI Agent Error Handling and Logging Tests")
+    print("O.M.I Agent Error Handling and Logging Tests")
     print("=" * 60)
 
     try:

@@ -1,4 +1,4 @@
-# KAI Agent Deployment Guide
+# O.M.I Agent Deployment Guide
 
 ## Table of Contents
 
@@ -174,7 +174,7 @@ OPENAI_API_KEY=sk-your-actual-key-here
 
 ```bash
 # From project root
-docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
+docker build -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
 
 # Or use the build script
 # Windows
@@ -189,7 +189,7 @@ chmod +x build.sh
 
 **Verify the build**:
 ```bash
-docker images | grep kai_agent_sandbox
+docker images | grep O.M.I_agent_sandbox
 ```
 
 #### Step 4: Set Up Directories
@@ -260,7 +260,7 @@ LLM_TEMPERATURE = 0.7  # 0.0 = deterministic, 1.0 = creative
 # Docker Settings
 DOCKER_TIMEOUT_PYTHON = 30  # seconds
 DOCKER_TIMEOUT_TERMINAL = 120  # seconds
-DOCKER_IMAGE_NAME = "kai_agent_sandbox"
+DOCKER_IMAGE_NAME = "O.M.I_agent_sandbox"
 
 # Knowledge Base Settings
 CHUNK_SIZE = 1000  # characters per chunk
@@ -287,7 +287,7 @@ To add Python packages available in the sandbox:
    ```
 3. Rebuild the Docker image:
    ```bash
-   docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
+   docker build -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
    ```
 
 ### Knowledge Base
@@ -324,7 +324,7 @@ python Agent/validate_config.py
 Expected output:
 ```
 ======================================================================
-KAI Agent Configuration Validation
+O.M.I Agent Configuration Validation
 ======================================================================
 
 Checking Environment File...
@@ -394,10 +394,10 @@ Start the application and:
 **Solution**:
 ```bash
 # Build the image
-docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
+docker build -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
 
 # Verify
-docker images | grep kai_agent_sandbox
+docker images | grep O.M.I_agent_sandbox
 ```
 
 #### 2. API Key Not Found
@@ -473,10 +473,10 @@ python Agent/setup_knowledge_base.py index
 **Solution**:
 ```bash
 # List containers
-docker ps -a | grep kai-sandbox
+docker ps -a | grep O.M.I-sandbox
 
 # Remove manually
-docker ps -a | grep kai-sandbox | awk '{print $1}' | xargs docker rm -f
+docker ps -a | grep O.M.I-sandbox | awk '{print $1}' | xargs docker rm -f
 
 # Or remove all stopped containers
 docker container prune -f
@@ -583,7 +583,7 @@ grep "task_id" Agent/logs/agent.log
 
 ```bash
 # List running containers
-docker ps | grep kai-sandbox
+docker ps | grep O.M.I-sandbox
 
 # Check container stats
 docker stats
@@ -681,7 +681,7 @@ pip install --upgrade langchain
 
 ```bash
 # Rebuild with latest base image
-docker build --no-cache -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
+docker build --no-cache -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
 ```
 
 #### Update Knowledge Base
@@ -782,9 +782,9 @@ python Agent/setup_knowledge_base.py verify
 python Agent/setup_knowledge_base.py rebuild
 
 # Docker
-docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
-docker images | grep kai_agent_sandbox
-docker ps | grep kai-sandbox
+docker build -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/
+docker images | grep O.M.I_agent_sandbox
+docker ps | grep O.M.I-sandbox
 docker container prune -f
 
 # Testing

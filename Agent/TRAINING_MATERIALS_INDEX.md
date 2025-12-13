@@ -1,8 +1,8 @@
-# KAI Agent - Training Materials Index
+# O.M.I Agent - Training Materials Index
 
-## Welcome to KAI Agent Training
+## Welcome to O.M.I Agent Training
 
-This document serves as your central hub for all training materials. Whether you're a new user or an experienced developer, you'll find resources here to help you master the KAI Agent system.
+This document serves as your central hub for all training materials. Whether you're a new user or an experienced developer, you'll find resources here to help you master the O.M.I Agent system.
 
 ## Quick Start Path
 
@@ -335,7 +335,7 @@ Try this complex workflow:
 
 ### Quiz 1: Basic Knowledge
 
-1. What are the two main areas of expertise for the KAI Agent?
+1. What are the two main areas of expertise for the O.M.I Agent?
 2. Where should API keys be stored?
 3. What happens when you submit a task to the agent?
 4. How do you access the agent interface?
@@ -417,7 +417,7 @@ Help us improve these training materials:
 
 **Training Materials Version**: 1.0.0  
 **Last Updated**: 2024-01-15  
-**Compatible with**: KAI Agent v1.0.0
+**Compatible with**: O.M.I Agent v1.0.0
 
 ## Next Steps
 
@@ -427,7 +427,7 @@ Help us improve these training materials:
 4. **Practice regularly** to build proficiency
 5. **Share your experience** with others
 
-Welcome to the KAI Agent community! 🚀
+Welcome to the O.M.I Agent community! 🚀
 
 ---
 

@@ -390,6 +390,54 @@ def render_crm(
     # Erstellt die Tabellen (inkl. neuer Spalten) oder fügt Spalten hinzu
     create_tables_crm(conn)
 
+    # CSS für CRM-Tabs mit orangen Akzenten und Schatteneffekten
+    st.markdown("""
+    <style>
+    /* Tab-Container transparent (kein schwarzer Hintergrund) */
+    .stTabs [data-baseweb="tab-list"] {
+        background: transparent !important;
+        gap: 8px;
+    }
+    
+    /* Tab-Buttons mit weißem Hintergrund, Schatten und orangen Akzenten */
+    .stTabs [data-baseweb="tab-list"] button {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border: 2px solid transparent !important;
+        border-radius: 12px 12px 0 0 !important;
+        padding: 14px 24px !important;
+        font-weight: 700 !important;
+        color: #2d3748 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.06) !important;
+        margin-right: 4px !important;
+    }
+    
+    /* Hover-Effekt */
+    .stTabs [data-baseweb="tab-list"] button:hover {
+        border-color: rgba(255, 140, 0, 0.4) !important;
+        box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* Aktiver Tab mit orangen Akzenten */
+    .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+        background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+        border-color: #ff8c00 !important;
+        border-bottom: 4px solid #ff8c00 !important;
+        color: #ff8c00 !important;
+        box-shadow: 0 10px 16px rgba(255, 140, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 140, 0, 0.1) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* Tab-Content ohne schwarzen Hintergrund */
+    .stTabs [data-baseweb="tab-panel"] {
+        background: transparent !important;
+        padding: 20px 0 !important;
+        border: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     # CRM Tab-Navigation
     crm_tabs = st.tabs([
         " Kundenverwaltung",
@@ -481,10 +529,10 @@ def render_customer_management(texts: dict[str, str], conn):
                 except ImportError:
                     selected_tag_ids = []
             with col_filter4:
-                view_style = st.radio(
+                view_style = st.selectbox(
                     "Ansicht",
-                    ["Karten", "Tabelle"],
-                    horizontal=True,
+                    options=["Karten", "Tabelle"],
+                    index=0,
                     key="customer_view_style"
                 )
             
@@ -540,57 +588,69 @@ def render_customer_management(texts: dict[str, str], conn):
                             if i + j < len(filtered_customers):
                                 customer = filtered_customers[i + j]
                                 with cols[j]:
-                                    with st.container():
-                                        st.markdown(f"""
-                                        <div style="
-                                            border: 1px solid #666;
-                                            border-radius: 8px;
-                                            padding: 10px;
-                                            margin-bottom: 8px;
-                                            background-color: #c0c0c0;
-                                            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-                                        ">
-                                            <h4 style="margin: 0 0 6px 0; color: #1f77b4; font-size: 0.95em;">
-                                                 {customer.get('first_name', '')} {customer.get('last_name', '')}
-                                            </h4>
-                                            <p style="margin: 2px 0; font-size: 0.75em; color: #1a1a1a;">
-                                                 {customer.get('city', 'N/A')}
-                                            </p>
-                                            <p style="margin: 2px 0; font-size: 0.7em; color: #2a2a2a;">
-                                                 {customer.get('email', 'N/A')[:25]}{'...' if len(customer.get('email', '')) > 25 else ''}
-                                            </p>
-                                            <p style="margin: 2px 0; font-size: 0.75em; color: #2a2a2a;">
-                                                 {customer.get('phone', 'N/A')}
-                                            </p>
-                                        </div>
-                                        """, unsafe_allow_html=True)
+                                    # Erstelle HTML-Card korrekt mit Escape für User-Daten
+                                    first_name = customer.get('first_name', '')
+                                    last_name = customer.get('last_name', '')
+                                    city = customer.get('city', 'N/A')
+                                    email = customer.get('email', 'N/A')
+                                    phone = customer.get('phone', 'N/A')
+                                    
+                                    # Email kürzen falls zu lang
+                                    email_display = email[:25] + '...' if len(email) > 25 else email
+                                    
+                                    card_html = f"""
+                                    <div style="
+                                        border: 2px solid rgba(200, 210, 220, 0.5);
+                                        border-left: 4px solid #ff8c00;
+                                        border-radius: 12px;
+                                        padding: 14px;
+                                        margin-bottom: 10px;
+                                        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+                                        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);
+                                        transition: transform 0.2s ease;
+                                    ">
+                                        <h4 style="margin: 0 0 8px 0; color: #ff8c00; font-size: 1.05em; font-weight: 700;">
+                                            {first_name} {last_name}
+                                        </h4>
+                                        <p style="margin: 4px 0; font-size: 0.85em; color: #2d3748;">
+                                            🏙️ {city}
+                                        </p>
+                                        <p style="margin: 4px 0; font-size: 0.8em; color: #4a5568;">
+                                            📧 {email_display}
+                                        </p>
+                                        <p style="margin: 4px 0; font-size: 0.85em; color: #4a5568;">
+                                            📞 {phone}
+                                        </p>
+                                    </div>
+                                    """
+                                    st.markdown(card_html, unsafe_allow_html=True)
+                                    
+                                    col1, col2, col3 = st.columns(3)
+                                    with col1:
+                                        if st.button("", key=f"view_customer_{customer['id']}", help="Ansehen", use_container_width=True):
+                                            st.session_state['selected_customer_id'] = customer['id']
+                                            st.session_state['crm_view_mode'] = 'view_customer'
+                                            st.rerun()
+                                    with col2:
+                                        if st.button("", key=f"edit_customer_{customer['id']}", help="Bearbeiten", use_container_width=True):
+                                            st.session_state['selected_customer_id'] = customer['id']
+                                            st.session_state['crm_view_mode'] = 'edit_customer'
+                                            st.rerun()
+                                    with col3:
+                                        delete_button_key = f"del_customer_{customer['id']}"
+                                        confirm_delete_key = f"confirm_delete_customer_{customer['id']}"
                                         
-                                        col1, col2, col3 = st.columns(3)
-                                        with col1:
-                                            if st.button("", key=f"view_customer_{customer['id']}", help="Ansehen", use_container_width=True):
-                                                st.session_state['selected_customer_id'] = customer['id']
-                                                st.session_state['crm_view_mode'] = 'view_customer'
-                                                st.rerun()
-                                        with col2:
-                                            if st.button("", key=f"edit_customer_{customer['id']}", help="Bearbeiten", use_container_width=True):
-                                                st.session_state['selected_customer_id'] = customer['id']
-                                                st.session_state['crm_view_mode'] = 'edit_customer'
-                                                st.rerun()
-                                        with col3:
-                                            delete_button_key = f"del_customer_{customer['id']}"
-                                            confirm_delete_key = f"confirm_delete_customer_{customer['id']}"
-                                            
-                                            if st.button("", key=delete_button_key, help="Löschen", use_container_width=True):
-                                                if st.session_state.get(confirm_delete_key, False):
-                                                    if delete_customer(conn, customer['id']):
-                                                        st.success("Kunde gelöscht.")
-                                                        del st.session_state[confirm_delete_key]
-                                                        st.rerun()
-                                                    else:
-                                                        st.error("Löschen fehlgeschlagen.")
+                                        if st.button("", key=delete_button_key, help="Löschen", use_container_width=True):
+                                            if st.session_state.get(confirm_delete_key, False):
+                                                if delete_customer(conn, customer['id']):
+                                                    st.success("Kunde gelöscht.")
+                                                    del st.session_state[confirm_delete_key]
+                                                    st.rerun()
                                                 else:
-                                                    st.warning("Nochmal klicken zum Bestätigen!")
-                                                    st.session_state[confirm_delete_key] = True
+                                                    st.error("Löschen fehlgeschlagen.")
+                                            else:
+                                                st.warning("Nochmal klicken zum Bestätigen!")
+                                                st.session_state[confirm_delete_key] = True
                 
                 else:  # Tabellen-Ansicht
                     # Erstelle DataFrame mit Aktions-Spalte

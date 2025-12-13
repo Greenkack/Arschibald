@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-KAI Agent Installation Script
+O.M.I Agent Installation Script
 
-This script automates the installation and setup of the KAI Agent system.
+This script automates the installation and setup of the O.M.I Agent system.
 
 Usage:
     python Agent/install.py
@@ -196,13 +196,13 @@ def build_docker_image():
         print_error(f"Sandbox directory not found: {sandbox_dir}")
         return False
 
-    print_info("Building image 'kai_agent_sandbox'...")
+    print_info("Building image 'O.M.I_agent_sandbox'...")
     print_info("This may take a few minutes on first build...")
     print()
 
     try:
         result = subprocess.run(
-            ["docker", "build", "-t", "kai_agent_sandbox", "-f",
+            ["docker", "build", "-t", "O.M.I_agent_sandbox", "-f",
              str(sandbox_dir / "Dockerfile"), str(sandbox_dir)],
             check=True
         )
@@ -214,7 +214,7 @@ def build_docker_image():
         print_error("Failed to build Docker image")
         print_info("Try running manually:")
         print_info(
-            "  docker build -t kai_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/")
+            "  docker build -t O.M.I_agent_sandbox -f Agent/sandbox/Dockerfile Agent/sandbox/")
         return False
 
 
@@ -333,7 +333,7 @@ def main():
     print(f"{Colors.BOLD}{Colors.CYAN}")
     print("╔═══════════════════════════════════════════════════════════════════╗")
     print("║                                                                   ║")
-    print("║              KAI Agent Installation Script                        ║")
+    print("║              O.M.I Agent Installation Script                        ║")
     print("║                                                                   ║")
     print("╚═══════════════════════════════════════════════════════════════════╝")
     print(f"{Colors.RESET}")

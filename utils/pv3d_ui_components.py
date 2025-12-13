@@ -191,7 +191,7 @@ def render_module_placement(project_data: Dict[str, Any], selected_roof_type: st
         
         st.markdown("**Belegungsmodus**")
         
-        layout_mode = st.radio(
+        layout_mode = st.selectbox(
             "Belegungsmodus",
             options=["Automatisch", "Manuell"],
             index=0,
@@ -406,7 +406,7 @@ def render_advanced_controls(
         st.caption("Wählen Sie einzelne Module oder Gruppen aus, um deren Eigenschaften zu bearbeiten.")
         
         # Auswahl-Modus
-        selection_mode = st.radio(
+        selection_mode = st.selectbox(
             "Auswahl-Modus",
             options=["Einzeln", "Gruppe", "Bereich"],
             index=0,
@@ -600,7 +600,7 @@ def render_analysis_panel() -> Dict[str, Any]:
         st.caption("Lassen Sie das System automatisch die beste Konfiguration für Ihre Anforderungen finden.")
         
         # Optimierungs-Ziel auswählen
-        optimization_goal = st.radio(
+        optimization_goal = st.selectbox(
             "Optimierungs-Ziel",
             options=["max_modules", "max_yield", "balanced"],
             format_func=lambda x: {

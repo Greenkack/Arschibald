@@ -1,5 +1,5 @@
 """
-Configuration Management for KAI Agent
+Configuration Management for O.M.I Agent
 ======================================
 
 Handles API keys, environment variables, and system configuration.
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class AgentConfig:
-    """Configuration container for KAI Agent."""
+    """Configuration container for O.M.I Agent."""
     def __getstate__(self):
         """Ermöglicht Pickle-Serialisierung für Session State"""
         return self.__dict__.copy()
@@ -50,7 +50,7 @@ class AgentConfig:
     agent_workspace_path: str = "agent_workspace"
 
     # Docker Configuration
-    docker_image_name: str = "kai_agent-sandbox"
+    docker_image_name: str = "O.M.I_agent-sandbox"
     docker_timeout_python: int = 30
     docker_timeout_terminal: int = 120
 
@@ -149,7 +149,7 @@ def get_setup_instructions() -> str:
         return "All API keys are configured!"
 
     instructions = """
-KAI Agent Setup Instructions
+O.M.I Agent Setup Instructions
 ================================
 
 The following API keys are missing from your .env file:

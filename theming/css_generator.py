@@ -390,7 +390,7 @@ class CSSGenerator:
 /* Tab Styles */
 .stTabs [data-baseweb="tab-list"] {
     gap: var(--spacing-2);
-    background-color: var(--muted);
+    background-color: transparent;
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-1);
 }

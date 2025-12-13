@@ -2,7 +2,7 @@
 
 ## Overview
 
-The KAI Agent execution tools provide secure code execution in isolated Docker containers. This guide will get you started quickly.
+The O.M.I Agent execution tools provide secure code execution in isolated Docker containers. This guide will get you started quickly.
 
 ## Prerequisites
 
@@ -144,7 +144,7 @@ result = execute_python_code_in_sandbox.invoke({"code": code})
 
 ```python
 result = execute_python_code_in_sandbox.invoke({"code": "print('test')"})
-# Result: "Docker image 'kai_agent_sandbox' not found..."
+# Result: "Docker image 'O.M.I_agent_sandbox' not found..."
 # Includes build instructions
 ```
 

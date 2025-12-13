@@ -1,4 +1,4 @@
-# KAI Agent Documentation Index
+# O.M.I Agent Documentation Index
 
 ## Quick Navigation
 
@@ -6,7 +6,7 @@ This index helps you find the right documentation for your needs.
 
 ## 🚀 Getting Started
 
-**New to KAI Agent? Start here:**
+**New to O.M.I Agent? Start here:**
 
 1. **[README.md](README.md)** - Overview and quick start
 2. **[AGENT_INSTALLATION_GUIDE.md](../AGENT_INSTALLATION_GUIDE.md)** - Installation instructions
@@ -205,7 +205,7 @@ This index helps you find the right documentation for your needs.
 
 ## 🔄 Documentation Updates
 
-This documentation is maintained as part of the KAI Agent project. For the latest version, check the `Agent/` directory.
+This documentation is maintained as part of the O.M.I Agent project. For the latest version, check the `Agent/` directory.
 
 **Last Updated**: 2025-01-XX  
 **Version**: 1.0.0

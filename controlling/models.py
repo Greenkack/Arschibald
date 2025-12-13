@@ -19,8 +19,8 @@ import enum
 from backend.core.database import Base
 
 
-# Enums for type safety
-class CalculationMethod(enum.Enum):
+# Enums for type safety - all inherit from str for pickle serialization (Streamlit session state)
+class CalculationMethod(str, enum.Enum):
     """Calculation methods for criteria"""
     SUM = "SUM"
     AVERAGE = "AVERAGE"
@@ -28,8 +28,8 @@ class CalculationMethod(enum.Enum):
     RATIO = "RATIO"
 
 
-class ReportType(enum.Enum):
-    """Types of reports"""
+class ReportType(str, enum.Enum):
+    """Types of reports - inherits from str to be pickle-serializable for Streamlit session state"""
     DAILY = "DAILY"
     WEEKLY = "WEEKLY"
     MONTHLY = "MONTHLY"
@@ -38,8 +38,8 @@ class ReportType(enum.Enum):
     SINCE_START = "SINCE_START"
 
 
-class PeriodType(enum.Enum):
-    """Types of evaluation periods"""
+class PeriodType(str, enum.Enum):
+    """Types of evaluation periods - inherits from str to be pickle-serializable for Streamlit session state"""
     DAILY = "DAILY"
     WEEKLY = "WEEKLY"
     MONTHLY = "MONTHLY"
@@ -48,7 +48,7 @@ class PeriodType(enum.Enum):
     CUSTOM = "CUSTOM"
 
 
-class PeriodStatus(enum.Enum):
+class PeriodStatus(str, enum.Enum):
     """Status of evaluation periods"""
     ACTIVE = "ACTIVE"
     COMPLETED = "COMPLETED"

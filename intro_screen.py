@@ -256,41 +256,149 @@ def render_intro_screen():
     # Zentriertes Layout mit CSS (Emoji-Filterung zentral über emoji_toggle.py)
     st.markdown("""
         <style>
-        /* Dunkelgrauer Hintergrund für gesamte Seite */
+        /* Modernes Design: Helles Grau, Orange Akzente, Schwarze Schattierungen */
         .stApp {
-            background-color: #1a1a1a !important;
+            background: #e8e8e8 !important;
         }
         [data-testid="stAppViewContainer"] {
-            background-color: #1a1a1a !important;
+            background: #e8e8e8 !important;
         }
         [data-testid="stHeader"] {
-            background-color: #1a1a1a !important;
+            background-color: rgba(170, 170, 170, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.15) !important;
         }
         
-        /* Eingabefelder - dunkelgrau mit weißer Schrift */
-        .stTextInput > div > div > input {
-            background-color: #2d2d2d !important;
-            color: #ffffff !important;
-            border: 2px solid #444444 !important;
+        /* TABS - Dunkleres Grau Design mit Orange Akzenten */
+        .stTabs {
+            background-color: transparent !important;
+        }
+        .stTabs [data-baseweb="tab-list"] {
+            background-color: #a7a7a7 !important;
+            border-radius: 12px !important;
+            padding: 8px !important;
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.25) !important;
+            gap: 8px !important;
+        }
+        .stTabs [data-baseweb="tab"] {
+            background-color: transparent !important;
+            color: #000000 !important;
             border-radius: 8px !important;
+            padding: 12px 24px !important;
+            font-weight: 700 !important;
+            border: none !important;
+            transition: all 0.3s ease !important;
         }
-        .stTextInput > div > div > input:focus {
-            border-color: #00ffff !important;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3) !important;
+        .stTabs [data-baseweb="tab"]:hover {
+            background-color: #c9c9c9 !important;
+            color: #FF8C00 !important;
         }
-        .stTextInput > div > div > input::placeholder {
-            color: #888888 !important;
+        .stTabs [aria-selected="true"] {
+            background-color: #c9c9c9 !important;
+            color: #000000 !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.3),
+                        inset 0 -3px 0 #FF8C00 !important;
+        }
+        .stTabs [data-baseweb="tab-panel"] {
+            background-color: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 24px !important;
+            margin-top: 16px !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
         }
         
-        /* Labels - schwarze Schrift */
-        .stTextInput > label {
-            color: #1a202c !important;
+        /* Eingabefelder - Grau mit schwarzen Schattierungen */
+        .stTextInput > div > div > input,
+        .stTextArea > div > div > textarea,
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        textarea {
+            background-color: #a9a9a9 !important;
+            color: #000000 !important;
+            border: 2px solid #cbd5e0 !important;
+            border-radius: 10px !important;
+            padding: 14px 18px !important;
+            font-size: 1rem !important;
             font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15),
+                        inset 0 10px 10px rgba(0, 0, 0, 0.05) !important;
+        }
+        .stTextInput > div > div > input:focus,
+        .stTextArea > div > div > textarea:focus,
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            border-color: #000000 !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
+                        0 0 0 10px rgba(255, 140, 0, 0.15),
+                        inset 0 10px 10px rgba(0, 0, 0, 0.05) !important;
+            transform: translateY(-2px) !important;
+            outline: none !important;
+        }
+        .stTextInput > div > div > input::placeholder,
+        .stTextArea > div > div > textarea::placeholder,
+        textarea::placeholder {
+            color: #000000 !important;
+            opacity: 0.6 !important;
         }
         
-        /* Markdown Text - schwarz */
-        .stMarkdown {
-            color: #1a202c !important;
+        /* Labels - Schwarz und Dick (Fett) */
+        .stTextInput > label,
+        label,
+        .stTextInput label p,
+        .stTextInput label div,
+        .stForm label,
+        .stForm p,
+        div[data-testid="stFormSubmitButton"] + div p,
+        .stExpander summary,
+        .stExpander p {
+            color: #000000 !important;
+            font-weight: 900 !important;
+            font-size: 1rem !important;
+            margin-bottom: 10px !important;
+            text-shadow: none !important;
+            letter-spacing: 0.3px !important;
+        }
+        
+        /* Markdown Text - Schwarz */
+        .stMarkdown,
+        .stMarkdown p,
+        .stMarkdown h1,
+        .stMarkdown h2,
+        .stMarkdown h3,
+        .stMarkdown h4 {
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Info/Alert Boxen - Helles Grau mit Orange Akzenten */
+        .stAlert,
+        div[data-baseweb="notification"] {
+            background-color: #e8e8e8 !important;
+            border-left: 5px solid #ff9800 !important;
+            border-radius: 10px !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.12) !important;
+            color: #000000 !important;
+            font-weight: 600 !important;
+        }
+        .stInfo {
+            background-color: #000000 !important;
+            border-left-color: #ff9800 !important;
+        }
+        .stSuccess {
+            background-color: #000000 !important;
+            border-left-color: #ff9800 !important;
+        }
+        .stWarning {
+            background-color: #000000 !important;
+            border-left-color: #ff9800 !important;
+        }
+        .stError {
+            background-color: #000000 !important;
+            border-left-color: #ff9800 !important;
         }
         
         /* Verstecke leere Streamlit-Container im Intro */
@@ -314,22 +422,26 @@ def render_intro_screen():
         .intro-logo {
             max-width: 750px !important;
             width: 700px !important;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 
+                        0 20px 20px rgba(255, 140, 0, 0.1) !important;
             animation: float 3s ease-in-out infinite;
             position: relative;
             z-index: 10;
             margin: 0 auto;
             display: block;
+            border: 2px solid rgba(255, 140, 0, 0.1);
         }
         .intro-logo-side {
             width: 100%;
             max-width: 100px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1),
+                        0 10px 12px rgba(0, 0, 0, 0.05);
             animation: float 3.5s ease-in-out infinite;
-            opacity: 0.75;
+            opacity: 0.85;
             transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         .intro-logo-side.left {
             grid-column: 1;
@@ -377,19 +489,24 @@ def render_intro_screen():
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
         .intro-title {
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin-bottom: 3rem;
-            text-align: center;
-            color: #1a202c;
-            -webkit-text-stroke: 3px #00ffff;
-            text-stroke: 3px #00ffff;
-            text-shadow: 
-                0 0 5px #00ffff,
-                0 0 10px #00ffff,
-                0 0 15px #00ffff,
-                0 0 20px #00ffff;
+            background: linear-gradient(135deg, #000000 0%, #1a202c 0%, #FF8C00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1));
             animation: shimmer 3s ease-in-out infinite;
+            position: relative;
+        }
+        .intro-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #FF8C00, transparent);
+            border-radius: 2px;
         }
         @keyframes shimmer {
             0% { 
@@ -397,46 +514,116 @@ def render_intro_screen():
                 transform: scale(1);
             }
             50% { 
-                opacity: 0.85;
-                transform: scale(1.02);
+                opacity: 0.9;
+                transform: scale(1.01);
             }
             100% { 
                 opacity: 1;
                 transform: scale(1);
             }
         }
+        
         /* ========================================
-           INTRO BUTTON EFFEKTE: DYNAMISCH (10 Stile)
+           BUTTON STYLES - Orange mit schwarzen Schattierungen
            ======================================== */
-
+        
         /* Intro-spezifische Button-Basis-Styles */
         .stButton button,
         button[data-testid="baseButton-primary"],
         button[data-testid="baseButton-secondary"],
         button[kind="primary"],
         button[kind="secondary"],
-        div[data-baseweb="button"] {
-            font-size: 1.3rem !important;
-            padding: 1rem 2.5rem !important;
-            border-radius: 50px !important;
-            font-weight: 900 !important;
-            color: #000000 !important;
-            text-shadow: none !important;
+        div[data-baseweb="button"],
+        button[type="submit"] {
+            font-size: 1.1rem !important;
+            padding: 14px 32px !important;
+            border-radius: 10px !important;
+            font-weight: 700 !important;
+            transition: all 0.3s ease !important;
+            text-transform: none !important;
         }
         
-        /* Form Submit Button - speziell für Anmelden */
+        /* ANMELDEN Button - Orange mit schwarzen Schattierungen */
         button[type="submit"],
-        .stButton > button[kind="primary"] {
-            background-color: #00ffff !important;
+        .stButton > button[kind="primary"],
+        button[data-testid="baseButton-primary"] {
+            background: linear-gradient(135deg, #000000 0%, #000000 100%) !important;
             color: #000000 !important;
-            font-weight: 900 !important;
+            font-weight: 700 !important;
             border: none !important;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25),
+                        0 10px 10px rgba(255, 140, 0, 0.3) !important;
         }
         button[type="submit"]:hover,
-        .stButton > button[kind="primary"]:hover {
-            background-color: #40e0d0 !important;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5) !important;
+        .stButton > button[kind="primary"]:hover,
+        button[data-testid="baseButton-primary"]:hover {
+            background: linear-gradient(135deg, #000000 0%, #000000 100%) !important;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3),
+                        0 10px 12px rgba(255, 140, 0, 0.4) !important;
+            transform: translateY(-3px) !important;
         }
+        
+        button[type="submit"]:active,
+        .stButton > button[kind="primary"]:active {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        /* Secondary Buttons - Weiß mit schwarzen Schattierungen */
+        button[kind="secondary"],
+        .stButton > button[kind="secondary"] {
+            background-color: #000000 !important;
+            color: #000000 !important;
+            border: 2px solid #cbd5e0 !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+        button[kind="secondary"]:hover {
+            background-color: #f7fafc !important;
+            border-color: #000000 !important;
+            color: #000000 !important;
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.15),
+                        0 0 0 10px rgba(255, 140, 0, 0.1) !important;
+        }
+        
+        /* Checkbox & Radio - Orange Akzente */
+        input[type="checkbox"],
+        input[type="radio"] {
+            accent-color: #FF8C00 !important;
+        }
+        
+        /* Select Dropdown - Grau mit schwarzer Schrift */
+        select,
+        .stSelectbox > div > div > div,
+        .stSelectbox select,
+        div[data-baseweb="select"] > div {
+            background-color: #a9a9a9 !important;
+            color: #a9a9a9 !important;
+            border: 0px solid #a9a9a9 !important;
+            border-radius: 10px !important;
+            padding: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+        select:focus,
+        .stSelectbox > div > div > div:focus {
+            border-color: #FF8C00 !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
+                        0 0 0 3px rgba(255, 140, 0, 0.15) !important;
+        }
+        /* Dropdown Optionen */
+        select option,
+        div[data-baseweb="select"] ul li {
+            background-color: #a9a9a9 !important;
+            color: #000000 !important;
+            font-weight: 600 !important;
+        }
+        select option:hover,
+        div[data-baseweb="select"] ul li:hover {
+            background-color: #c9c9c9 !important;
+            color: #FF8C00 !important;
+        }
+        
+
 
         /* Dynamische Effekte werden aus den globalen Einstellungen geladen */
         </style>
@@ -826,18 +1013,34 @@ def render_intro_screen():
 
         st.markdown("---")
 
-        # Tipp des Tages
+        # Tipp des Tages - Helles Grau mit Orange Akzent und schwarzen Schattierungen
         daily_tip = get_daily_tip()
         st.markdown(f"""
-        <div style="background-color: #d1ecf1; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #0c5460;">
-            <span style="color: #000000; font-weight: bold; font-size: 1.1rem;">Tipp des Tages:</span>
-            <span style="color: #0c5460;"> {daily_tip}</span>
+        <div style="
+            background-color: #aeaeae; 
+            padding: 1.5rem; 
+            border-radius: 12px; 
+            border-left: 5px solid #FF8C00;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15),
+                        0 10px 10px rgba(0, 0, 0, 0.1);
+            margin: 1.5rem 0;">
+            <span style="
+                color: #080908; 
+                font-weight: 900; 
+                font-size: 1.2rem;
+                display: block;
+                margin-bottom: 0.5rem;">💡 Tipp des Tages:</span>
+            <span style="
+                color: #080908; 
+                font-weight: 600;
+                font-size: 1rem;
+                line-height: 1.6;"> {daily_tip}</span>
         </div>
         """, unsafe_allow_html=True)
 
         # Footer (Emoji-Filterung zentral über emoji_toggle.py)
         st.markdown("""
-        <div style="text-align: center; margin-top: 3rem; color: #1a202c; font-size: 1rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">
+        <div style="text-align: center; margin-top: 3rem; color: #000000; font-size: 1rem; text-shadow: 10px 10px 2px rgba(0,0,0,0.1);">
             Ömers All in One DingsBums v2.0 | 2025 | Powered by Ömer
         </div>
         """, unsafe_allow_html=True)
@@ -867,13 +1070,12 @@ def render_registration_form(settings: dict):
     st.markdown("#### Neuen Benutzer registrieren")
 
     # Account-Typ wählen
-    account_type = st.radio(
+    account_type = st.selectbox(
         "Kontotyp",
         options=[
             "privat",
             "firma"],
-        format_func=lambda x: "Privatkunde" if x == "privat" else "Firmenkunde",
-        horizontal=True)
+        format_func=lambda x: "Privatkunde" if x == "privat" else "Firmenkunde")
 
     with st.form("registration_form"):
         st.markdown("##### Pflichtangaben")

@@ -3,7 +3,7 @@ Documentation Verification Script
 ==================================
 
 This script verifies that all modules, classes, and functions
-in the KAI Agent system have proper documentation.
+in the O.M.I Agent system have proper documentation.
 
 Usage:
     python verify_documentation.py
@@ -161,7 +161,7 @@ def verify_module(module_name: str) -> dict:
 def main():
     """Main verification function."""
     print("=" * 60)
-    print("KAI Agent Documentation Verification")
+    print("O.M.I Agent Documentation Verification")
     print("=" * 60)
 
     # Modules to verify

@@ -2249,7 +2249,16 @@ def compare_multiple_heatpumps(
     for idx, hp_data in enumerate(heatpump_list):
         # Alle wichtigen Berechnungen
         jaz_data = calculate_jaz_prognosis(building_data, hp_data)
-        price_data = calculate_price_scenarios(building_data, hp_data)
+        
+        # Economics data für Preisberechnung (Fallback mit Standardwerten)
+        economics_data = {
+            'electricity_price': 32.0,  # ct/kWh
+            'subsidy_amount': 7500,
+            'installation_cost': 6000,
+            'maintenance_cost_annual': 300
+        }
+        
+        price_data = calculate_price_scenarios(building_data, hp_data, economics_data)
         noise_data = calculate_noise_analysis(building_data, hp_data)
         co2_data = calculate_lifecycle_co2(building_data, hp_data)
         maintenance_data = calculate_maintenance_schedule(building_data, hp_data)
@@ -2265,16 +2274,16 @@ def compare_multiple_heatpumps(
             'noise_level_dba': hp_data.get('noise_level', 0),
             'refrigerant': hp_data.get('refrigerant', 'R32'),
             
-            # Berechnete Werte
-            'jaz_realistic': jaz_data['jaz_realistic'],
-            'annual_cost_eur': price_data['comparison']['heatpump']['annual_cost_eur'],
-            'payback_years': price_data['scenarios']['realistic']['payback_year'],
-            'total_cost_20y_eur': price_data['scenarios']['realistic']['years'][-1]['heatpump_cumulative_eur'],
-            'noise_compliant': noise_data['compliance']['night_compliant'],
-            'noise_at_neighbor_dba': noise_data['noise_at_neighbor_dba'],
-            'co2_savings_20y_kg': co2_data['lifecycle_comparison']['savings_vs_old_system_kg'],
-            'maintenance_cost_20y_eur': maintenance_data['summary']['total_cost_20_years_eur'],
-            'tax_benefit_total_eur': tax_data['total_benefit_eur'],
+            # Berechnete Werte - mit Fallbacks für fehlende Daten
+            'jaz_realistic': jaz_data.get('jaz_realistic', 0),
+            'annual_cost_eur': price_data.get('scenarios', {}).get('realistisch', {}).get('yearly_data', [{}])[1].get('cost_wp_annual', 0) if len(price_data.get('scenarios', {}).get('realistisch', {}).get('yearly_data', [])) > 1 else 0,
+            'payback_years': price_data.get('scenarios', {}).get('realistisch', {}).get('payback_year', 0),
+            'total_cost_20y_eur': price_data.get('scenarios', {}).get('realistisch', {}).get('yearly_data', [{}])[-1].get('cumulative_cost_wp', 0) if price_data.get('scenarios', {}).get('realistisch', {}).get('yearly_data', []) else 0,
+            'noise_compliant': noise_data.get('compliance', {}).get('night_compliant', True),
+            'noise_at_neighbor_dba': noise_data.get('noise_at_neighbor_dba', 0),
+            'co2_savings_20y_kg': co2_data.get('lifecycle_comparison', {}).get('savings_vs_old_system_kg', 0),
+            'maintenance_cost_20y_eur': maintenance_data.get('summary', {}).get('total_cost_20_years_eur', 0),
+            'tax_benefit_total_eur': tax_data.get('total_benefit_eur', 0),
             
             # Rohdaten für Details
             '_jaz_data': jaz_data,
@@ -2480,7 +2489,13 @@ def compare_multiple_heatpumps(
             'JAZ unter 3,5: Gebäudedämmung prüfen oder Vorlauftemperatur senken'
         )
     
-    if winner['payback_years'] > 15:
+    # Payback kann String ("> 20") oder int sein
+    payback_years = winner.get('payback_years', 0)
+    if isinstance(payback_years, (int, float)) and payback_years > 15:
+        recommendation['general_advice'].append(
+            'Lange Amortisation: Förderung beantragen (BEG: bis zu 40%)'
+        )
+    elif isinstance(payback_years, str) and payback_years.startswith('>'):
         recommendation['general_advice'].append(
             'Lange Amortisation: Förderung beantragen (BEG: bis zu 40%)'
         )

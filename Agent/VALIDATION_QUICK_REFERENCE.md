@@ -1,4 +1,4 @@
-# KAI Agent Validation - Quick Reference
+# O.M.I Agent Validation - Quick Reference
 
 ## One-Command Validation
 

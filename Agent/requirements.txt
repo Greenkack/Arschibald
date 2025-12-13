@@ -1,6 +1,6 @@
-# KAI Agent Requirements
+# O.M.I Agent Requirements
 # =======================
-# Core dependencies for the KAI Agent system
+# Core dependencies for the O.M.I Agent system
 
 # LangChain and AI
 langchain>=0.1.0

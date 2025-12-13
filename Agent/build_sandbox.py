@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build script for KAI Agent Docker sandbox.
+Build script for O.M.I Agent Docker sandbox.
 
 This script builds the Docker image required for secure code execution.
 Run this script before using the agent's code execution features.
@@ -18,7 +18,7 @@ import docker
 def build_sandbox_image():
     """Build the Docker sandbox image."""
     print("=" * 60)
-    print("KAI Agent Sandbox Builder")
+    print("O.M.I Agent Sandbox Builder")
     print("=" * 60)
     print()
 
@@ -47,7 +47,7 @@ def build_sandbox_image():
     print()
 
     # Build the image
-    image_name = "kai_agent_sandbox"
+    image_name = "O.M.I_agent_sandbox"
     print(f"Building Docker image '{image_name}'...")
     print("This may take a few minutes on first build...")
     print()

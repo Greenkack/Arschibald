@@ -178,7 +178,7 @@ def test_automatic_cleanup():
     import docker
     client = docker.from_env()
     containers = client.containers.list(
-        all=True, filters={"name": "kai-sandbox"})
+        all=True, filters={"name": "O.M.I-sandbox"})
 
     print(f"Leftover containers: {len(containers)}")
     if containers:
@@ -228,7 +228,7 @@ def main():
         print()
         print("Option 2 - Manual build:")
         print("  cd Agent/sandbox")
-        print("  docker build -t kai_agent_sandbox .")
+        print("  docker build -t O.M.I_agent_sandbox .")
         print("!" * 60 + "\n")
         return
 

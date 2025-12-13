@@ -41,7 +41,7 @@ get_call_script('Verkauf')
 save_call_script(
     name='PV-Beratung',
     category='Verkauf',
-    opening_statement='Guten Tag, hier ist KAI...',
+    opening_statement='Guten Tag, hier ist O.M.I...',
     key_points='Kostenersparnis,Umweltschutz'
 )
 ```

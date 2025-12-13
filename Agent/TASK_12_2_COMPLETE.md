@@ -21,7 +21,7 @@ All requirements from Task 12.2 have been successfully implemented:
 
 **Verification**:
 ```bash
-docker run --rm kai_agent_sandbox whoami
+docker run --rm O.M.I_agent_sandbox whoami
 # Output: sandboxuser
 ```
 

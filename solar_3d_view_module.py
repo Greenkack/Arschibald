@@ -1566,20 +1566,20 @@ def _render_3d_view_impl():
         
         st.divider()
         
-        st.markdown("### Konfiguration")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.write(f"**Dachform:** {basis_settings.get('roof_type', roof_type)}")
-            st.write(f"**Belegungsmodus:** {module_settings.get('layout_mode', 'Automatisch')}")
-        
-        with col2:
-            st.write(f"**Aufständerung:** {module_settings.get('mounting_type', 'Süd')}")
-            garage_status = "Ja" if module_settings.get('use_garage', False) else "Nein"
-            facade_status = "Ja" if module_settings.get('use_facade', False) else "Nein"
-            st.write(f"**Garage:** {garage_status}")
-            st.write(f"**Fassade:** {facade_status}")
+        # Konfiguration in auf-/zuklappbarem Expander
+        with st.expander(" Konfiguration", expanded=False):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write(f"**Dachform:** {basis_settings.get('roof_type', roof_type)}")
+                st.write(f"**Belegungsmodus:** {module_settings.get('layout_mode', 'Automatisch')}")
+            
+            with col2:
+                st.write(f"**Aufständerung:** {module_settings.get('mounting_type', 'Süd')}")
+                garage_status = "Ja" if module_settings.get('use_garage', False) else "Nein"
+                facade_status = "Ja" if module_settings.get('use_facade', False) else "Nein"
+                st.write(f"**Garage:** {garage_status}")
+                st.write(f"**Fassade:** {facade_status}")
         
         # Zeige Auswahl-Statistiken
         if selected_modules:
@@ -1592,21 +1592,25 @@ def _render_3d_view_impl():
     
     # Zeige Hilfe
     with st.expander(" Hilfe", expanded=False):
+        # Bedienung in separatem Expander
+        with st.expander(" Bedienung", expanded=False):
+            st.markdown("""
+            **Basis-Einstellungen:**
+            - Passen Sie die Gebäudedimensionen an Ihr Projekt an
+            - Wählen Sie die passende Dachform aus
+            
+            **Modul-Belegung:**
+            - Automatisch: Module werden gleichmäßig verteilt
+            - Manuell: Entfernen Sie einzelne Module nach Bedarf
+            
+            **Erweiterte Kontrolle:**
+            - Aktivieren Sie die Kollisionserkennung
+            - Wählen Sie einzelne Module oder Gruppen aus
+            - Bearbeiten Sie Modul-Eigenschaften
+            """)
+        
         st.markdown("""
-        ### Bedienung
-        
-        **Basis-Einstellungen:**
-        - Passen Sie die Gebäudedimensionen an Ihr Projekt an
-        - Wählen Sie die passende Dachform aus
-        
-        **Modul-Belegung:**
-        - Automatisch: Module werden gleichmäßig verteilt
-        - Manuell: Entfernen Sie einzelne Module nach Bedarf
-        
-        **Erweiterte Kontrolle:**
-        - Aktivieren Sie die Kollisionserkennung
-        - Wählen Sie einzelne Module oder Gruppen aus
-        - Bearbeiten Sie Modul-Eigenschaften
+        ### Weitere Informationen
         
         **Analyse:**
         - Nutzen Sie den Optimierungs-Assistenten für beste Ergebnisse
@@ -1712,9 +1716,31 @@ def _render_3d_view_impl():
             st.caption("Beeindruckende neue Features für professionelle Präsentationen")
             
             feature_tabs = st.tabs([
-                "", "", "", "", "", 
+                " Automatisch", " Manuell", " Bearbeiten", " Übersicht", " Speichern/Laden", 
                 "", "", "", "", ""
             ])
+            
+            # CSS DIREKT NACH Tabs - für transparente Tab-Hintergründe
+            st.markdown("""
+            <style>
+            /* FORCE: Entferne blauen/schwarzen Hintergrund von allen Tabs */
+            div[data-testid="stTabs"] [data-baseweb="tab-list"] {
+                background-color: transparent !important;
+                background: transparent !important;
+            }
+            div[data-testid="stTabs"] [data-baseweb="tab-list"] button {
+                background-color: transparent !important;
+                background: transparent !important;
+            }
+            div[data-testid="stTabs"] [data-baseweb="tab"] {
+                background-color: transparent !important;
+                background: transparent !important;
+            }
+            div[data-testid="stTabs"] [aria-selected="true"] {
+                background-color: rgba(255, 140, 0, 0.1) !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
             
             with feature_tabs[0]:
                 st.markdown("**Sonnenverlauf**")
@@ -1815,6 +1841,28 @@ def _render_3d_view_impl():
                 " Jahreszeiten",
                 "Ertrags-Zeitraffer"
             ])
+            
+            # CSS DIREKT NACH Tabs - für transparente Tab-Hintergründe
+            st.markdown("""
+            <style>
+            /* FORCE: Entferne blauen/schwarzen Hintergrund von Animations-Tabs */
+            div[data-testid="stTabs"] [data-baseweb="tab-list"] {
+                background-color: transparent !important;
+                background: transparent !important;
+            }
+            div[data-testid="stTabs"] [data-baseweb="tab-list"] button {
+                background-color: transparent !important;
+                background: transparent !important;
+            }
+            div[data-testid="stTabs"] [data-baseweb="tab"] {
+                background-color: transparent !important;
+                background: transparent !important;
+            }
+            div[data-testid="stTabs"] [aria-selected="true"] {
+                background-color: rgba(255, 140, 0, 0.1) !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
             
             with animation_tabs[0]:
                 st.markdown("**Sonnenbahn-Animation**")

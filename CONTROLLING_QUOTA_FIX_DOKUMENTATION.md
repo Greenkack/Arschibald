@@ -3,6 +3,7 @@
 ## Zusammenfassung
 
 Die Quota-Berechnungen im Controlling-System wurden korrigiert und erweitert mit:
+
 1. **Datenvalidierung** für Eingabewerte
 2. **Verbesserte Ratio-Beschreibungen** für Quoten > 100%
 3. **Test-Tool** zur Validierung der Berechnungen
@@ -10,15 +11,18 @@ Die Quota-Berechnungen im Controlling-System wurden korrigiert und erweitert mit
 ## Problem-Analyse
 
 ### Original-Problem
+
 User meldete falsche Berechnungen:
+
 - **Quote für QC bestanden: 666.67%** (mathematisch unmöglich für normale Fälle)
 - **Abschlussquote: 0.00%** (bei vorhandenen Daten fragwürdig)
 - **Ratio-Beschreibung: "Jeder 30. Anruf"** (korrekt, aber verwirrend formuliert)
 
 ### Root Cause
+
 Die Berechnungslogik selbst war **KORREKT**. Das Problem lag bei:
 
-1. **Falsche Eingabedaten**: 
+1. **Falsche Eingabedaten**:
    - Dezimalwerte (z.B. 0.3) statt ganzer Zahlen (z.B. 3) für Zählwerte
    - Beispiel: `Verkauf = 0.3` statt `Verkauf = 3`
    - Berechnung: `(2 / 0.3) × 100 = 666.67%` ✓ mathematisch korrekt, aber semantisch falsch!
@@ -59,18 +63,21 @@ if qc_bestanden > verkauf and verkauf > 0:
 ```
 
 **Ergebnis:**
+
 - Warnungen werden geloggt bei problematischen Daten
 - Hilft bei Debugging und Datenqualitätsprüfung
 
 ### 2. Verbesserte Ratio-Beschreibungen
 
 **VORHER:**
+
 ```python
 ratio = round(100 / quota_percentage)
 # Bei 666.67%: ratio = 0 → "Jeder 0. Verkauf"
 ```
 
 **NACHHER:**
+
 ```python
 if quota_percentage > 100:
     # Zeige multiplikativen Faktor statt unmögliche Ratio
@@ -85,6 +92,7 @@ else:
 ```
 
 **Ergebnis:**
+
 - Klar erkennbare Fehlerindikation (⚠️ Symbol)
 - Semantisch korrekte Beschreibung
 - Hinweis zur Datenüberprüfung
@@ -92,17 +100,20 @@ else:
 ### 3. Test-Tool (test_controlling_quota_calculation.py)
 
 **Features:**
+
 - **3 Test-Szenarien**:
   1. Normale Werte (Verkauf = 0)
   2. Korrekte Werte (Verkauf = 3)
   3. Problemfall (Verkauf = 0.3) - demonstriert den Original-Fehler
 
 **Verwendung:**
+
 ```powershell
 python test_controlling_quota_calculation.py
 ```
 
 **Output:**
+
 ```
 ================================================================================
 TEST-SZENARIO 3: PROBLEMFALL
@@ -119,18 +130,20 @@ Ratio: ⚠️ 6.67× pro Verkauf (Daten prüfen!) ← FEHLER!
 ## Geänderte Dateien
 
 ### controlling/analytics.py
+
 - **Methode**: `calculate_ratio_description()` - Erweitert für Quoten > 100%
 - **Methode**: `calculate_quotas()` - Neue Datenvalidierungslogik
 - **Zeilen**: 271-357 (Ratio-Beschreibungen), 357-485 (Datenvalidierung)
 
 ### test_controlling_quota_calculation.py (NEU)
+
 - Vollständiges Test-Tool für Quota-Berechnungen
 - 3 Szenarien + ausführliche Dokumentation
 - Demonstriert Original-Problem und Fix
 
 ## Nächste Schritte
 
-### Für den User:
+### Für den User
 
 1. **Datenquelle identifizieren**:
    - Wo werden Performance-Daten eingegeben?
@@ -141,9 +154,11 @@ Ratio: ⚠️ 6.67× pro Verkauf (Daten prüfen!) ← FEHLER!
    - Bei Import: Daten vor dem Speichern validieren
 
 3. **Test-Tool ausführen**:
+
    ```powershell
    python test_controlling_quota_calculation.py
    ```
+
    - Prüfe, ob Szenario 2 die erwarteten Werte liefert
    - Vergleiche mit tatsächlichen Daten aus der Datenbank
 
@@ -154,11 +169,13 @@ Ratio: ⚠️ 6.67× pro Verkauf (Daten prüfen!) ← FEHLER!
 ### Beispiel: Fehlerhafte Daten korrigieren
 
 **Wenn Validierungswarnung auftritt:**
+
 ```
 ⚠️ Verkauf: 0.3 (erwartet ganze Zahl, nicht Dezimalzahl)
 ```
 
 **Datenbank-Fix (SQL):**
+
 ```sql
 -- Finde fehlerhafte Einträge
 SELECT * FROM performance_data pd
@@ -174,6 +191,7 @@ AND value != CAST(value AS INTEGER);
 ```
 
 **Oder Python (empfohlen):**
+
 ```python
 from controlling.managers import PerformanceDataManager
 
@@ -204,6 +222,7 @@ Alle 10 Quotas nutzen die gleiche Validierungslogik:
 ### Validierungsregeln
 
 **Ganzzahl-Prüfung:**
+
 - Verkauf
 - Kunden terminiert
 - Angefahrene Termine (gesamt)
@@ -211,6 +230,7 @@ Alle 10 Quotas nutzen die gleiche Validierungslogik:
 - QC bestanden
 
 **Logik-Prüfung:**
+
 - QC bestanden ≤ Verkauf
 - Kunden terminiert ≤ Anrufe gesamt
 - Angefahrene Termine ≤ Kunden terminiert (optional)
@@ -218,23 +238,27 @@ Alle 10 Quotas nutzen die gleiche Validierungslogik:
 ### Performance-Impact
 
 **Minimaler Overhead:**
+
 - Validierung läuft nur bei `calculate_quotas()` (nicht pro Einzelberechnung)
 - Komplexität: O(n) für n Kriterien (typisch n=12)
 - Logging nur bei tatsächlichen Warnungen
 
 ## Fazit
 
-### Was wurde behoben:
+### Was wurde behoben
+
 ✅ Ratio-Beschreibungen für Quoten > 100% (kein "Jeder 0. Verkauf" mehr)
 ✅ Datenvalidierung mit aussagekräftigen Warnungen
 ✅ Test-Tool zur Verifizierung der Berechnungen
 
-### Was NICHT geändert wurde:
+### Was NICHT geändert wurde
+
 ✅ Berechnungslogik selbst (war bereits korrekt!)
 ✅ Datenbank-Schema
 ✅ API/Interfaces
 
-### User-Action erforderlich:
+### User-Action erforderlich
+
 ⚠️ **Datenquelle identifizieren und korrigieren**
 ⚠️ **Eingabevalidierung in UI hinzufügen** (falls manuelle Eingabe)
 ⚠️ **Bestehende fehlerhafte Daten in DB korrigieren**

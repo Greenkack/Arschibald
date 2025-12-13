@@ -1,8 +1,8 @@
-# KAI Agent Documentation Guide
+# O.M.I Agent Documentation Guide
 
 ## Overview
 
-This guide provides information about the documentation standards and practices used in the KAI Agent system.
+This guide provides information about the documentation standards and practices used in the O.M.I Agent system.
 
 ## Documentation Standards
 
@@ -518,10 +518,10 @@ Good documentation is essential for:
 - Compliance
 - Knowledge preservation
 
-Follow these guidelines to maintain high-quality documentation throughout the KAI Agent system.
+Follow these guidelines to maintain high-quality documentation throughout the O.M.I Agent system.
 
 ---
 
 **Last Updated**: 2024-10-18
 **Version**: 1.0.0
-**Maintained By**: KAI Agent Development Team
+**Maintained By**: O.M.I Agent Development Team

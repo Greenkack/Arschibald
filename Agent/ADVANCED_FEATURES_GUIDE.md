@@ -1,8 +1,8 @@
-# KAI Agent - Advanced Features Guide
+# O.M.I Agent - Advanced Features Guide
 
 ## Introduction
 
-This guide covers advanced features and capabilities of the KAI Agent system. If you're new to the agent, start with the [Basic Usage Tutorial](BASIC_USAGE_TUTORIAL.md) first.
+This guide covers advanced features and capabilities of the O.M.I Agent system. If you're new to the agent, start with the [Basic Usage Tutorial](BASIC_USAGE_TUTORIAL.md) first.
 
 ## Table of Contents
 

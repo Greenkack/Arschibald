@@ -104,7 +104,7 @@ def render_ui_effects_admin():
         format_func=lambda x: x[1],  # Zeige nur den Namen
         index=current_index,
         disabled=not enabled,
-        help="Wählen Sie aus 10 verschiedenen visuellen Effekt-Stilen"
+        help="Wählen Sie aus 21 verschiedenen visuellen Effekt-Stilen"
     )
 
     selected_effect_key = selected_effect_tuple[0]

@@ -1,6 +1,6 @@
 # Docker Sandbox Usage Guide
 
-Quick reference for using the KAI Agent Docker sandbox for secure code execution.
+Quick reference for using the O.M.I Agent Docker sandbox for secure code execution.
 
 ## Quick Start
 
@@ -204,7 +204,7 @@ except Exception as e:
 ```bash
 # Build the image
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ### Execution Errors
@@ -229,7 +229,7 @@ result = execute_python_code_in_sandbox.invoke({"code": code})
 **Solution**:
 ```bash
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ### Problem: Permission denied (Linux)
@@ -331,7 +331,7 @@ pandas>=2.0.0  # Add pandas
 
 Then rebuild:
 ```bash
-docker build -t kai_agent_sandbox Agent/sandbox
+docker build -t O.M.I_agent_sandbox Agent/sandbox
 ```
 
 ## Integration with Agent
@@ -394,4 +394,4 @@ The Docker sandbox provides:
 - ✅ Error handling
 - ✅ Easy integration
 
-Use it to safely execute untrusted code in the KAI Agent system!
+Use it to safely execute untrusted code in the O.M.I Agent system!

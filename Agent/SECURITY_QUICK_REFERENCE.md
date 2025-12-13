@@ -170,18 +170,18 @@ with open(safe_path, 'r') as f:
 
 ```bash
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ### Verify Security
 
 ```bash
 # Check user
-docker run --rm kai_agent_sandbox whoami
+docker run --rm O.M.I_agent_sandbox whoami
 # Should output: sandboxuser
 
 # Check network isolation
-docker run --rm --network none kai_agent_sandbox ping -c 1 google.com
+docker run --rm --network none O.M.I_agent_sandbox ping -c 1 google.com
 # Should fail
 ```
 

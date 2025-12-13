@@ -1091,7 +1091,7 @@ def main():
         left: -100% !important;
         width: 100% !important;
         height: 100% !important;
-        background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.25), transparent) !important;
+        background: linear-gradient(90deg, transparent, rgba(255, 130, 0, 0.25), transparent) !important;
         transition: left 0.4s ease !important;
         pointer-events: none !important;
         z-index: 1 !important;
@@ -1108,19 +1108,19 @@ def main():
     button[data-testid="stNumberInputStepUp"]:hover,
     button[data-testid="stNumberInputStepDown"]:hover,
     div[data-testid="stNumberInput"] button:hover {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.08) 100%) !important;
-        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2) !important;
+        background: linear-gradient(135deg, rgba(255, 130, 0, 0.15) 100%, rgba(255, 130, 0, 0.08) 0%) !important;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2) !important;
         transform: scale(1.05) !important;
         animation: sliderButtonPulse 1.5s ease-in-out infinite !important;
     }
     
     @keyframes sliderButtonPulse {
         0%, 100% {
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 3px 10px rgba(255, 130, 0, 0.2);
             transform: scale(1.05);
         }
         50% {
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 130, 0, 0.3);
             transform: scale(1.08);
         }
     }
@@ -1130,12 +1130,12 @@ def main():
     button[data-testid="stNumberInputStepDown"]:active,
     div[data-testid="stNumberInput"] button:active {
         transform: scale(0.95) !important;
-        box-shadow: 0 1px 5px rgba(102, 126, 234, 0.3) inset !important;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3) inset !important;
     }
     
     /* Slider Track Hover */
     div[data-testid="stSlider"] div[role="slider"]:hover {
-        box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 8px rgba(255, 130, 0, 0.15) !important;
         transform: scale(1.1) !important;
         transition: all 0.3s ease !important;
     }
@@ -1158,7 +1158,7 @@ def main():
     div[data-testid="stCheckbox"]:hover,
     .stCheckbox:hover,
     label[data-testid="stCheckbox"]:hover {
-        background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%) !important;
+        background: linear-gradient(90deg, rgba(255, 130, 0, 0.05) 100%, transparent 0%) !important;
         padding-left: 8px !important;
         border-radius: 6px !important;
         transform: translateX(3px) !important;
@@ -1176,18 +1176,18 @@ def main():
     /* Checkbox Hover-Effekt - Shimmer */
     div[data-testid="stCheckbox"]:hover input[type="checkbox"],
     .stCheckbox:hover input[type="checkbox"] {
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15) !important;
-        border-color: rgba(102, 126, 234, 0.6) !important;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15) !important;
+        border-color: rgba(255, 130, 0, 0.6) !important;
         animation: checkboxPulse 1.5s ease-in-out infinite !important;
     }
     
     @keyframes checkboxPulse {
         0%, 100% {
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+            box-shadow: 0 0 0 4px rgba(255, 130, 0, 0.15);
             transform: scale(1);
         }
         50% {
-            box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.25);
+            box-shadow: 0 0 0 6px rgba(255, 130, 0, 0.25);
             transform: scale(1.05);
         }
     }
@@ -1196,17 +1196,17 @@ def main():
     div[data-testid="stCheckbox"] input[type="checkbox"]:checked,
     .stCheckbox input[type="checkbox"]:checked,
     input[type="checkbox"]:checked {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(102, 126, 234, 0.7) 100%) !important;
-        border-color: rgba(102, 126, 234, 1) !important;
+        background: linear-gradient(135deg, rgba(255, 130, 0, 0.9) 0%, rgba(255, 130, 0, 0.7) 100%) !important;
+        border-color: rgba(255, 130, 0, 1) !important;
         animation: checkboxCheckedPulse 2s ease-in-out infinite !important;
     }
     
     @keyframes checkboxCheckedPulse {
         0%, 100% {
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
         }
-        50% {
-            box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.3);
+        0% {
+            box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.3);
         }
     }
     
@@ -1229,7 +1229,7 @@ def main():
     /* Radio Buttons - Ähnliche Effekte */
     div[data-testid="stRadio"] label:hover,
     .stRadio label:hover {
-        background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%) !important;
+        background: linear-gradient(90deg, rgba(255, 130, 0, 0.05) 100%, transparent 0%) !important;
         padding-left: 8px !important;
         border-radius: 6px !important;
         transform: translateX(3px) !important;
@@ -1238,7 +1238,7 @@ def main():
     
     div[data-testid="stRadio"] input[type="radio"]:hover,
     .stRadio input[type="radio"]:hover {
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 4px rgba(255, 130, 0, 0.15) !important;
         animation: checkboxPulse 1.5s ease-in-out infinite !important;
     }
     
@@ -1375,7 +1375,7 @@ def main():
                     bottom: 25px !important;
                     right: 25px !important;
                     z-index: 999998 !important;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                    background: linear-gradient(135deg, #d6d6d6 0%, #d6d6d6 100%) !important;
                     color: white !important;
                     border: none !important;
                     border-radius: 50% !important;
@@ -1383,12 +1383,12 @@ def main():
                     height: 65px !important;
                     font-size: 28px !important;
                     cursor: pointer !important;
-                    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5) !important;
+                    box-shadow: 0 6px 25px rgba(255, 130, 0, 0.5) !important;
                     transition: all 0.3s ease !important;
                 }
                 .drawer-button:hover {
                     transform: scale(1.1) !important;
-                    box-shadow: 0 8px 35px rgba(102, 126, 234, 0.7) !important;
+                    box-shadow: 0 8px 35px rgba(255, 130, 0, 0.7) !important;
                 }
                 .drawer-panel {
                     position: fixed !important;
@@ -1396,7 +1396,7 @@ def main():
                     right: -350px !important;
                     width: 350px !important;
                     height: 500px !important;
-                    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+                    background: linear-gradient(180deg, #d6d6d6 0%, #d6d6d6 100%) !important;
                     box-shadow: -5px 0 30px rgba(0,0,0,0.5) !important;
                     z-index: 999999 !important;
                     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -1436,8 +1436,8 @@ def main():
                     width: 100%;
                     padding: 15px;
                     margin: 10px 0;
-                    background: rgba(102, 126, 234, 0.2);
-                    border: 1px solid rgba(102, 126, 234, 0.4);
+                    background: rgba(255, 130, 0, 0.2);
+                    border: 1px solid rgba(255, 130, 0, 0.4);
                     border-radius: 10px;
                     color: white;
                     font-size: 16px;
@@ -1446,7 +1446,7 @@ def main():
                     text-align: left;
                 }
                 .drawer-btn:hover {
-                    background: rgba(102, 126, 234, 0.4);
+                    background: rgba(255, 130, 0, 0.4);
                     transform: translateX(-5px);
                 }
             `;
@@ -1578,7 +1578,7 @@ def main():
         text-align: left !important;
         padding: 14px 16px !important;
         margin: 4px 0 !important;
-        background: rgba(102, 126, 234, 0.08) !important;
+        background: rgba(255, 130, 0, 0.08) !important;
         border: none !important;
         border-left: 3px solid transparent !important;
         border-radius: 0 10px 10px 0 !important;
@@ -1599,7 +1599,7 @@ def main():
         left: -100% !important;
         width: 100% !important;
         height: 100% !important;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent) !important;
+        background: linear-gradient(90deg, transparent, rgba(250, 130, 0, 0.2), transparent) !important;
         transition: left 0.5s !important;
     }
     
@@ -1609,21 +1609,21 @@ def main():
     }
     
     section[data-testid="stSidebar"] .stButton > button:hover {
-        background: rgba(102, 126, 234, 0.15) !important;
+        background: rgba(255, 130, 0, 0.15) !important;
         border-left-color: #667eea !important;
         color: white !important;
         transform: translateX(5px) !important;
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2) !important;
+        box-shadow: 0 6px 20px rgba(255, 130, 0, 0.2) !important;
     }
     
     /* Aktiver Button (Primary) mit Pulse-Animation */
     section[data-testid="stSidebar"] .stButton > button[kind="primary"],
     section[data-testid="stSidebar"] .stButton > button[data-baseweb="button"][class*="primary"] {
-        background: linear-gradient(90deg, rgba(102, 126, 234, 0.25) 0%, rgba(102, 126, 234, 0.1) 100%) !important;
+        background: linear-gradient(90deg, rgba(255, 130, 0, 0.25) 0%, rgba(255, 130, 0, 0.1) 100%) !important;
         border-left-color: #667eea !important;
         color: white !important;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2) !important;
-    }
+        box-shadow: 0 4px 15px rgba(255, 130, 0, 0.2) !important;
+    }0
     
     /* Pulse-Animation für aktiven Button */
     @keyframes sidebarButtonPulse {
@@ -1634,7 +1634,7 @@ def main():
     section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover,
     section[data-testid="stSidebar"] .stButton > button[data-baseweb="button"][class*="primary"]:hover {
         animation: sidebarButtonPulse 2s ease-in-out infinite !important;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3) !important;
+        box-shadow: 0 8px 25px rgba(255, 130, 0, 0.3) !important;
     }
     
     /* Section Titles */
@@ -1666,7 +1666,7 @@ def main():
             st.session_state.active_page = 'input'
         
         # Hauptmenü Sektion
-        st.markdown('<div style="color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0; margin-top: 10px;">HAUPTMENÜ</div>', unsafe_allow_html=True)
+        st.markdown('<div style="color: rgba(255, 130, 0, 0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0; margin-top: 10px;">HAUPTMENÜ</div>', unsafe_allow_html=True)
         
         main_menu = [
             {"icon": "", "label": get_text_gui("menu_item_input"), "key": "input"},
@@ -1692,7 +1692,7 @@ def main():
         st.markdown("---")
         
         # Business Sektion
-        st.markdown('<div style="color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0;">BUSINESS</div>', unsafe_allow_html=True)
+        st.markdown('<div style="color: rgba(255, 130, 0, 0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0;">BUSINESS</div>', unsafe_allow_html=True)
         
         business_menu = [
             {"icon": "", "label": get_text_gui("menu_item_crm"), "key": "crm"},
@@ -1715,7 +1715,7 @@ def main():
         st.markdown("---")
         
         # Tools Sektion
-        st.markdown('<div style="color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0;">TOOLS</div>', unsafe_allow_html=True)
+        st.markdown('<div style="color: rgba(255, 130, 0, 0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0;">TOOLS</div>', unsafe_allow_html=True)
         
         tools_menu = [
             {"icon": "", "label": get_text_gui("menu_item_quick_calc"), "key": "quick_calc"},
@@ -1938,9 +1938,9 @@ def main():
             gap: 0.45rem;
             padding: 0.85rem 0.9rem;
             border-radius: 0 18px 18px 0;
-            border: 1px solid rgba(148, 163, 184, 0.35);
+            border: 1px solid rgba(175, 175, 175, 0.35);
             border-right: none;
-            background: rgba(15, 23, 42, 0.82);
+            background: rgba(255, 130, 0, 0.82);
             backdrop-filter: blur(16px);
             color: #f8fafc;
             cursor: pointer;
@@ -1948,11 +1948,11 @@ def main():
             letter-spacing: 0.14em;
             font-size: 0.68rem;
             font-weight: 600;
-            box-shadow: 0 18px 32px rgba(15, 23, 42, 0.28);
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.28);
         }
         #app-main-drawer.app-drawer--align-right .app-drawer__handle {
             border-left: none;
-            border-right: 1px solid rgba(148, 163, 184, 0.35);
+            border-right: 1px solid rgba(255, 130, 0, 0.35);
             border-radius: 18px 0 0 18px;
         }
         #app-main-drawer .app-drawer__panel {
@@ -1960,12 +1960,12 @@ def main():
             max-height: 90vh;
             display: flex;
             flex-direction: column;
-            background: rgba(15, 23, 42, 0.92);
+            background: rgba(255, 130, 0, 0.92);
             backdrop-filter: blur(28px);
             border-radius: 0 24px 24px 0;
-            border: 1px solid rgba(148, 163, 184, 0.35);
+            border: 1px solid rgba(255, 130, 0, 0.35);
             border-left: none;
-            box-shadow: 0 18px 32px rgba(15, 23, 42, 0.28);
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.28);
             transform: translateX(100%);
             opacity: 0;
             pointer-events: none;
@@ -1974,7 +1974,7 @@ def main():
         }
         #app-main-drawer.app-drawer--align-right .app-drawer__panel {
             border-right: none;
-            border-left: 1px solid rgba(148, 163, 184, 0.35);
+            border-left: 1px solid rgba(255, 130, 0, 0.35);
             border-radius: 24px 0 0 24px;
             transform: translateX(-100%);
         }

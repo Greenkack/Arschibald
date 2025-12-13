@@ -428,7 +428,7 @@ def _render_horizontal_menu_selector(
             padding: 8px;
             margin: 16px 0;
             border: 1px solid rgba(148, 163, 184, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
         }
 
@@ -461,7 +461,7 @@ def _render_horizontal_menu_selector(
             border-color: rgba(96, 165, 250, 0.3) !important;
             color: #e0e7ff !important;
             transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 10px 12px rgba(59, 130, 246, 0.2);
         }
 
         .admin-nav-item.active button {
@@ -469,7 +469,7 @@ def _render_horizontal_menu_selector(
             border-color: rgba(147, 197, 253, 0.6) !important;
             color: #ffffff !important;
             font-weight: 600 !important;
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4), inset 0 10px 0 rgba(255, 255, 255, 0.1);
         }
 
         .admin-nav-icon {
@@ -2542,6 +2542,41 @@ def render_visualization_settings(
     st.title(" Anzeige & Design-Einstellungen")
     st.caption(
         "Zentrale Verwaltung für Themes, UI-Effekte und Diagramm-Visualisierungen")
+
+    # CSS für Tabs - schwarzen Hintergrund entfernen
+    st.markdown("""
+    <style>
+    /* TABS: Schwarzen Hintergrund entfernen */
+    [data-testid="stTabs"] [data-baseweb="tab-list"] {
+        background-color: transparent !important;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+        gap: 10px !important;
+    }
+    
+    /* Tab-Buttons mit orangen Akzenten */
+    [data-testid="stTabs"] [data-baseweb="tab"] {
+        background-color: transparent !important;
+        border: none !important;
+        color: #333333 !important;
+        font-weight: 500 !important;
+        padding: 12px 24px !important;
+        border-radius: 8px 8px 0 0 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    [data-testid="stTabs"] [data-baseweb="tab"]:hover {
+        background-color: rgba(255, 140, 0, 0.1) !important;
+        color: #ff8c00 !important;
+    }
+    
+    [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
+        background-color: rgba(255, 140, 0, 0.15) !important;
+        color: #ff8c00 !important;
+        font-weight: 700 !important;
+        border-bottom: 3px solid #ff8c00 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
     # Tabs für die drei Bereiche
     tab_theme, tab_effects, tab_charts = st.tabs([

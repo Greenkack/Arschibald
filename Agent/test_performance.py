@@ -1,5 +1,5 @@
 """
-Performance Testing Suite for KAI Agent Integration
+Performance Testing Suite for O.M.I Agent Integration
 
 This module tests performance with large knowledge bases, concurrent sessions,
 response times, and resource usage.
@@ -398,7 +398,7 @@ class TestPerformanceMetrics:
         """Generate comprehensive performance report"""
         report = {
             "timestamp": datetime.now().isoformat(),
-            "test_suite": "KAI Agent Performance Tests",
+            "test_suite": "O.M.I Agent Performance Tests",
             "metrics": {}
         }
 
@@ -465,7 +465,7 @@ class TestPerformanceMetrics:
 def run_performance_tests():
     """Run all performance tests and generate report"""
     print("=" * 70)
-    print("KAI AGENT - PERFORMANCE TEST SUITE")
+    print("O.M.I AGENT - PERFORMANCE TEST SUITE")
     print("=" * 70)
 
     # Run pytest with verbose output

@@ -1,5 +1,5 @@
 """
-Security Tests for KAI Agent
+Security Tests for O.M.I Agent
 =============================
 
 Tests security features including input validation, path traversal prevention,

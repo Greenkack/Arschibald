@@ -84,13 +84,33 @@ def render_options(texts: dict[str, str], **kwargs):
 
     # === HEADER MIT MODERNER GESTALTUNG ===
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    <style>
+    /* Code-Blöcke mit grauem Hintergrund */
+    [data-testid="stCode"] {
+        background-color: #f8f9fa !important;
+        border: 1px solid rgba(255, 140, 0, 0.3) !important;
+        box-shadow: 0 10px 12px rgba(0,0,0,0.1) !important;
+        border-radius: 8px !important;
+    }
+    [data-testid="stCode"] pre {
+        background-color: #f8f9fa !important;
+        color: #1a202c !important;
+    }
+    [data-testid="stCode"] code {
+        background-color: #f8f9fa !important;
+        color: #1a202c !important;
+    }
+    </style>
+    <div style="background: #ffffff;
         border-radius: 15px; padding: 25px; margin: 20px 0;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-        <h2 style="color: white; margin: 0; font-weight: 600;">
+        box-shadow: 0 15px 20px rgba(0,0,0,0.15), 0 15px 15px rgba(0,0,0,0.1), inset 0 15px 15px rgba(255,140,0,0.2);
+        border: 2px solid #ff8c00;
+        transition: all 0.3s ease;">
+        <h2 style="color: #1a202c; margin: 0; font-weight: 700;
+            text-shadow: 10px 10px 10px rgba(255,140,0,0.2);">
              Globale Einstellungen
         </h2>
-        <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 14px;">
+        <p style="color: rgba(255,255,250,0.85); margin: 15px 0 0 0; font-size: 14px;">
             Konfigurieren Sie die Anwendung nach Ihren Bedürfnissen
         </p>
     </div>
@@ -226,16 +246,23 @@ def render_options(texts: dict[str, str], **kwargs):
         with col_status2:
             # Debug-Informationen nur im Debug-Modus anzeigen
             if st.session_state.get('app_debug_mode_enabled', True):
-                st.markdown("**Debug-Info:**")
+                st.markdown("""
+                <div style="background: #f8f9fa;
+                    border-radius: 10px; padding: 15px;
+                    box-shadow: 0 10px 12px rgba(0,0,0,0.1);
+                    border: 1px solid rgba(255,140,0,0.3);">
+                    <strong style="color: #ff8c00;">Debug-Info:</strong>
+                </div>
+                """, unsafe_allow_html=True)
                 pvgis_db_raw = load_admin_setting('pvgis_enabled', 'NICHT_GEFUNDEN')
                 pvgis_session = st.session_state.get('pvgis_enabled_checkbox', 'NICHT_GESETZT')
                 st.code(f"""
-Datenbank-Wert: {pvgis_db_raw}
-Session State: {pvgis_session}
-Aktueller Wert: {pvgis_enabled}
-Typ DB: {type(pvgis_db_raw).__name__}
-Typ Session: {type(pvgis_session).__name__}
-            """.strip())
+                    Datenbank-Wert: {pvgis_db_raw}
+                    Session State: {pvgis_session}
+                    Aktueller Wert: {pvgis_enabled}
+                    Typ DB: {type(pvgis_db_raw).__name__}
+                    Typ Session: {type(pvgis_session).__name__}
+                """.strip())
             else:
                 # Kompakte Status-Anzeige
                 st.markdown("**System-Status:**")
@@ -541,7 +568,7 @@ Typ Session: {type(pvgis_session).__name__}
             current_auto_logout = load_admin_setting(
                 'security_auto_logout_minutes', 60)
             auto_logout = st.slider(
-                "⏰ Auto-Logout (Minuten)",
+                " Auto-Logout (Minuten)",
                 min_value=15,
                 max_value=240,
                 value=int(current_auto_logout),
@@ -1029,6 +1056,19 @@ Typ Session: {type(pvgis_session).__name__}
                             st.code(failed)
 
     # === DEBUG INFO ===
+    st.markdown("""
+    <style>
+    /* Debug-Info Bereich Styling */
+    div[data-testid="stExpander"] {
+        background: #ffffff !important;
+        border-radius: 10px !important;
+        box-shadow: 0 15px 16px rgba(0,0,0,0.15), 0 15px 15px rgba(0,0,0,0.1) !important;
+        border: 1px solid rgba(255,140,0,0.2) !important;
+        padding: 5px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     with st.expander(" DEBUG-INFORMATIONEN", expanded=False):
         current_debug_mode = convert_to_bool(
             load_admin_setting('app_debug_mode_enabled', True))

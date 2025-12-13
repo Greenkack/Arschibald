@@ -103,14 +103,14 @@ def execute_python_code_in_sandbox(code: str) -> str:
     Startet einen neuen Container für jede Ausführung, um die Isolation zu gewährleisten.
     """
     client = docker.from_env()
-    container_name = f"kai-sandbox-{int(time.time())}"
+    container_name = f"O.M.I-sandbox-{int(time.time())}"
 
     try:
         print(
             f"INFO: Erstelle und starte Sandbox-Container '{container_name}'...")
-        # 'kai_agent-sandbox' ist der Name, den wir dem Image beim Bauen geben werden.
+        # 'O.M.I_agent-sandbox' ist der Name, den wir dem Image beim Bauen geben werden.
         container = client.containers.run(
-            "kai_agent-sandbox",
+            "O.M.I_agent-sandbox",
             command=["python", "-c", code],
             name=container_name,
             detach=True,
@@ -141,7 +141,7 @@ def execute_python_code_in_sandbox(code: str) -> str:
         return output
 
     except docker.errors.ImageNotFound:
-        return "Fehler: Docker-Image 'kai_agent-sandbox' nicht gefunden. Bitte baue es zuerst mit 'docker build -t kai_agent-sandbox . -f sandbox/Dockerfile'."
+        return "Fehler: Docker-Image 'O.M.I_agent-sandbox' nicht gefunden. Bitte baue es zuerst mit 'docker build -t O.M.I_agent-sandbox . -f sandbox/Dockerfile'."
     except docker.errors.ContainerError as e:
         return f"Fehler innerhalb des Containers: {e}"
     except Exception as e:
@@ -207,7 +207,7 @@ class AgentCore:
         # Arbeitsbereich.
         self.prompt = ChatPromptTemplate.from_messages([
             ("system", """
-            Du bist KAI, ein hochkompetenter, autonomer KI-Softwareentwickler.
+            Du bist O.M.I, ein hochkompetenter, autonomer KI-Softwareentwickler.
             Dein Ziel ist es, die Aufgaben des Benutzers nach bestem Wissen und Gewissen zu erfüllen.
 
             VERHALTENSREGELN:
@@ -244,7 +244,7 @@ class AgentCore:
 
     def run(self, user_input: str):
         """Startet den Agenten mit einer anfänglichen Aufgabe."""
-        print(f"\n--- KAI Agent startet mit der Aufgabe: '{user_input}' ---")
+        print(f"\n--- O.M.I Agent startet mit der Aufgabe: '{user_input}' ---")
         response = self.agent_executor.invoke({"input": user_input})
-        print("\n--- KAI Agent hat die Aufgabe beendet. Finale Antwort: ---")
+        print("\n--- O.M.I Agent hat die Aufgabe beendet. Finale Antwort: ---")
         print(response["output"])

@@ -1,8 +1,8 @@
-# KAI Agent - Autonomous AI Expert System
+# O.M.I Agent - Autonomous AI Expert System
 
 ## Overview
 
-KAI (Künstliche Intelligenz) is an autonomous AI agent with dual expertise in renewable energy consulting and software architecture. It uses the ReAct (Reasoning + Acting) pattern to autonomously execute complex tasks.
+O.M.I (Künstliche Intelligenz) is an autonomous AI agent with dual expertise in renewable energy consulting and software architecture. It uses the ReAct (Reasoning + Acting) pattern to autonomously execute complex tasks.
 
 ## Features
 
@@ -40,7 +40,7 @@ KAI (Künstliche Intelligenz) is an autonomous AI agent with dual expertise in r
 
 3. **Build Docker Sandbox**:
    ```bash
-   docker build -t kai_agent_sandbox -f sandbox/Dockerfile sandbox/
+   docker build -t O.M.I_agent_sandbox -f sandbox/Dockerfile sandbox/
    ```
 
 4. **Add Knowledge Base** (Optional):
@@ -137,7 +137,7 @@ agent/
 
 ### Docker Image Not Found
 ```bash
-docker build -t kai_agent_sandbox -f sandbox/Dockerfile sandbox/
+docker build -t O.M.I_agent_sandbox -f sandbox/Dockerfile sandbox/
 ```
 
 ### API Key Errors
@@ -148,7 +148,7 @@ Add PDF files to `Agent/knowledge_base/` directory
 
 ### Container Cleanup
 ```bash
-docker ps -a | grep kai-sandbox | awk '{print $1}' | xargs docker rm -f
+docker ps -a | grep O.M.I-sandbox | awk '{print $1}' | xargs docker rm -f
 ```
 
 ## Development

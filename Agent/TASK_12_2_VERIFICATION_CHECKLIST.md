@@ -10,12 +10,12 @@ Before running verification:
 
 1. ✅ Docker must be installed
 2. ✅ Docker must be running (Docker Desktop on Windows/Mac)
-3. ✅ Docker image `kai_agent_sandbox` must be built
+3. ✅ Docker image `O.M.I_agent_sandbox` must be built
 
 **Build the image**:
 ```bash
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ## Verification Steps
@@ -23,10 +23,10 @@ docker build -t kai_agent_sandbox .
 ### Step 1: Verify Docker Image Exists
 
 ```bash
-docker images | grep kai_agent_sandbox
+docker images | grep O.M.I_agent_sandbox
 ```
 
-**Expected**: Image `kai_agent_sandbox` is listed
+**Expected**: Image `O.M.I_agent_sandbox` is listed
 
 ### Step 2: Run Automated Security Tests
 
@@ -43,21 +43,21 @@ python test_task_12_2_docker_security.py
 
 **Test**:
 ```bash
-docker run --rm kai_agent_sandbox whoami
+docker run --rm O.M.I_agent_sandbox whoami
 ```
 
 **Expected Output**: `sandboxuser`
 
 **Test**:
 ```bash
-docker run --rm kai_agent_sandbox id
+docker run --rm O.M.I_agent_sandbox id
 ```
 
 **Expected Output**: `uid=1000(sandboxuser) gid=1000(sandboxuser)`
 
 **Test**:
 ```bash
-docker run --rm kai_agent_sandbox cat /etc/shadow
+docker run --rm O.M.I_agent_sandbox cat /etc/shadow
 ```
 
 **Expected Output**: `Permission denied` or `cannot open`
@@ -123,7 +123,7 @@ print(result)
 
 **Inspect Container Configuration**:
 ```bash
-docker inspect kai_agent_sandbox | grep -A 10 "Memory\|Cpu"
+docker inspect O.M.I_agent_sandbox | grep -A 10 "Memory\|Cpu"
 ```
 
 **Expected**: Shows memory and CPU limits configured
@@ -135,13 +135,13 @@ docker inspect kai_agent_sandbox | grep -A 10 "Memory\|Cpu"
 **Test**:
 ```bash
 # Count containers before
-docker ps -a | grep kai-sandbox | wc -l
+docker ps -a | grep O.M.I-sandbox | wc -l
 
 # Run some code
 python -c "from agent.tools.execution_tools import execute_python_code_in_sandbox; execute_python_code_in_sandbox.invoke({'code': 'print(1)'})"
 
 # Count containers after (should be same)
-docker ps -a | grep kai-sandbox | wc -l
+docker ps -a | grep O.M.I-sandbox | wc -l
 ```
 
 **Expected**: Container count is the same before and after (containers are cleaned up)
@@ -158,7 +158,7 @@ result = execute_python_code_in_sandbox.invoke({
 # Check for leftover containers
 import docker
 client = docker.from_env()
-containers = [c for c in client.containers.list(all=True) if 'kai-sandbox' in c.name]
+containers = [c for c in client.containers.list(all=True) if 'O.M.I-sandbox' in c.name]
 print(f"Leftover containers: {len(containers)}")
 ```
 
@@ -350,19 +350,19 @@ All Docker security requirements for Task 12.2 have been implemented:
 
 ### Image Not Found
 
-**Error**: `Docker image 'kai_agent_sandbox' not found`
+**Error**: `Docker image 'O.M.I_agent_sandbox' not found`
 
 **Solution**:
 ```bash
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ### Tests Fail
 
 **Solution**:
 1. Check Docker is running: `docker ps`
-2. Check image exists: `docker images | grep kai_agent_sandbox`
+2. Check image exists: `docker images | grep O.M.I_agent_sandbox`
 3. Review error messages in test output
 4. Check logs: `tail -f Agent/logs/agent.log`
 

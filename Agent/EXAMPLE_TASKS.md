@@ -1,8 +1,8 @@
-# KAI Agent - Example Tasks
+# O.M.I Agent - Example Tasks
 
 ## Introduction
 
-This document provides practical examples of tasks you can give to the KAI Agent. Each example includes the task description, expected behavior, and tips for best results.
+This document provides practical examples of tasks you can give to the O.M.I Agent. Each example includes the task description, expected behavior, and tips for best results.
 
 ## Table of Contents
 

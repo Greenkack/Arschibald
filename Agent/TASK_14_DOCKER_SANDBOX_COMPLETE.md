@@ -65,7 +65,7 @@ python Agent/build_sandbox.py
 
 ```bash
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ### Verification
@@ -278,7 +278,7 @@ result = run_terminal_command_in_sandbox.invoke({"command": command})
 
 ### Image Not Found
 
-**Error**: "Image 'kai_agent_sandbox' not found"
+**Error**: "Image 'O.M.I_agent_sandbox' not found"
 
 **Solution**:
 ```bash
@@ -287,7 +287,7 @@ python Agent/build_sandbox.py
 
 # Or manually
 cd Agent/sandbox
-docker build -t kai_agent_sandbox .
+docker build -t O.M.I_agent_sandbox .
 ```
 
 ### Permission Denied (Linux)
@@ -313,7 +313,7 @@ sudo usermod -aG docker $USER
 4. Try manual build with verbose output:
    ```bash
    cd Agent/sandbox
-   docker build -t kai_agent_sandbox . --progress=plain
+   docker build -t O.M.I_agent_sandbox . --progress=plain
    ```
 
 ### Container Timeout
@@ -437,7 +437,7 @@ Task 14 is **COMPLETE** with comprehensive implementation:
 - ✓ Security features tested
 - ✓ Documentation complete
 
-The Docker sandbox is production-ready and provides secure, isolated code execution for the KAI Agent system.
+The Docker sandbox is production-ready and provides secure, isolated code execution for the O.M.I Agent system.
 
 ## Related Documentation
 
