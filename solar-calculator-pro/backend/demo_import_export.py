@@ -27,7 +27,7 @@ async def demo_csv_import():
 John Doe,john@example.com,+1234567890,30
 Jane Smith,jane@example.com,+0987654321,25
 Bob Johnson,bob@example.com,+1122334455,35
-Invalid User,,invalid_phone,abc
+Invalid User,invalid_phone,abc
 """
     
     # Configure import

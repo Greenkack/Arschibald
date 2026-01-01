@@ -38,7 +38,7 @@ class CSVExportOptions(BaseModel):
     delimiter: str = Field(default=',', description="CSV delimiter")
     encoding: str = Field(default='utf-8', description="File encoding")
     include_headers: bool = Field(default=True, description="Include column headers")
-    decimal_separator: str = Field(default=',', description="Decimal separator (German: ,)")
+    decimal_separator: str = Field(default=',', description="Decimal separator (German: )")
     thousands_separator: str = Field(default='.', description="Thousands separator (German: .)")
 
 

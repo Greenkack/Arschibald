@@ -111,7 +111,7 @@ def check_product_prices():
             SELECT id, brand, model_name, price_euro, capacity_w
             FROM products
             WHERE category='module' AND id=?
-        """, (pid,))
+        """, (pid))
         row = cursor.fetchone()
 
         if row:

@@ -46,8 +46,7 @@ except ImportError:
 from .call_protocol import (
     handle_objection,
     build_argument_structure,
-    generate_closing_statement,
-)
+    generate_closing_statement)
 
 # Import error classes and logging
 from agent.errors import APIError, ConfigurationError
@@ -204,7 +203,7 @@ Goal: {self.goal}
 
 """
         for msg in self.messages:
-            speaker_icon = "" if msg['speaker'] == "KAI" else ""
+            speaker_ if msg['speaker'] == "KAI" else ""
             summary += (
                 f"\n{speaker_icon} {msg['speaker']}: {msg['text']}\n"
             )
@@ -416,7 +415,7 @@ class PhoneNumberDatabase:
                     SELECT contact_id, name, phone_number, email, company, tags, 
                            notes, created_at, last_contacted, call_count
                     FROM contacts WHERE phone_number = ?
-                """, (phone_number,))
+                """, (phone_number))
                 row = cursor.fetchone()
                 
                 if row:
@@ -543,7 +542,7 @@ class PhoneNumberDatabase:
                         AVG(sentiment_score) as avg_sentiment
                     FROM call_history
                     WHERE started_at >= ?
-                """, (since.isoformat(),))
+                """, (since.isoformat()))
                 
                 row = cursor.fetchone()
                 
@@ -1209,7 +1208,7 @@ def get_call_script(category: str = "") -> str:
                     SELECT script_id, name, category, opening_statement, key_points
                     FROM call_scripts WHERE category = ?
                     ORDER BY created_at DESC
-                """, (category,))
+                """, (category))
             else:
                 cursor.execute("""
                     SELECT script_id, name, category, opening_statement, key_points

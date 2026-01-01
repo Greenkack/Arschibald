@@ -307,13 +307,11 @@ _patch_streamlit_ui_safeguards()
 from debug_tools import (
     debug_log,
     init_debug_mode,
-    render_debug_toolbar,
-)
+    render_debug_toolbar)
 from emoji_toggle import initialize_emoji_support
 from financial_calculations import (
     calculate_gross_from_net,
-    calculate_vat_amount,
-)
+    calculate_vat_amount)
 
 initialize_emoji_support()
 
@@ -342,8 +340,7 @@ try:
     from solar_calculator_pricing_integration import (
         get_pricing_display_for_ui,
         solar_pricing_integration,
-        update_pricing_in_session_state,
-    )
+        update_pricing_in_session_state)
     PRICING_INTEGRATION_AVAILABLE = True
 except ImportError as e:
     PRICING_INTEGRATION_AVAILABLE = False
@@ -368,8 +365,7 @@ except ImportError as e:
 try:
     from solar_calculator_pv_mounting import (
         render_pv_mounting_selection,
-        get_selected_mounting_components_summary,
-    )
+        get_selected_mounting_components_summary)
     PV_MOUNTING_INTEGRATION_AVAILABLE = True
 except ImportError as e:
     PV_MOUNTING_INTEGRATION_AVAILABLE = False
@@ -907,8 +903,7 @@ def _display_pricing_information(
             try:
                 from services_integration import (
                     render_services_selection,
-                    update_pricing_with_services,
-                )
+                    update_pricing_with_services)
 
                 # Always update pricing with standard services
                 pricing_display = update_pricing_with_services(
@@ -1009,8 +1004,7 @@ def _display_pricing_information(
                 try:
                     from pricing.dynamic_key_manager import KeyCategory
                     from solar_calculator_pricing_integration import (
-                        SolarCalculatorPricingIntegration,
-                    )
+                        SolarCalculatorPricingIntegration)
 
                     pricing_integration = SolarCalculatorPricingIntegration()
                     if pricing_integration.key_manager:
@@ -1091,16 +1085,14 @@ def _display_pricing_information(
                         "main_components_total", net_total))
                 formatted_component_net = pricing_display.get(
                     "formatted_main_total",
-                    _format_german_currency(component_net_total),
-                )
+                    _format_german_currency(component_net_total))
 
                 zubehor_total = float(
                     pricing_display.get(
                         "optional_components_total", 0.0))
                 formatted_zubehor_total = pricing_display.get(
                     "formatted_optional_total",
-                    _format_german_currency(zubehor_total),
-                )
+                    _format_german_currency(zubehor_total))
 
                 optional_services_total = 0.0
                 display_components = pricing_display.get(
@@ -1116,8 +1108,7 @@ def _display_pricing_information(
                 formatted_extras_total = _format_german_currency(extras_total)
                 formatted_services_total = pricing_display.get(
                     "formatted_services_total",
-                    _format_german_currency(services_total),
-                )
+                    _format_german_currency(services_total))
 
                 provision_percent = float(
                     details.get("provision_percent", 0.0))
@@ -1130,18 +1121,15 @@ def _display_pricing_information(
                 final_end_preis = float(net_total)
                 formatted_final_endpreis = pricing_display.get(
                     "formatted_net_total",
-                    _format_german_currency(final_end_preis),
-                )
+                    _format_german_currency(final_end_preis))
                 minus_mwst_value = float(vat_amount)
                 formatted_minus_mwst = pricing_display.get(
                     "formatted_vat_amount",
-                    _format_german_currency(minus_mwst_value),
-                )
+                    _format_german_currency(minus_mwst_value))
                 preis_mit_mwst = float(gross_total)
                 formatted_preis_mit_mwst = pricing_display.get(
                     "formatted_gross_total",
-                    _format_german_currency(preis_mit_mwst),
-                )
+                    _format_german_currency(preis_mit_mwst))
                 zwischensumme_brutto = preis_mit_mwst
                 formatted_zwischensumme = formatted_preis_mit_mwst
 
@@ -1160,8 +1148,7 @@ def _display_pricing_information(
                         step=0.1,
                         format="%.1f",
                         key="pricing_manual_provision_percent_input",
-                        help="Manuelle Provision in Prozent auf den finalen Angebotspreis",
-                    )
+                        help="Manuelle Provision in Prozent auf den finalen Angebotspreis")
                 with col_prov_euro:
                     provision_euro = st.number_input(
                         "Provision (€)",
@@ -1171,8 +1158,7 @@ def _display_pricing_information(
                         step=10.0,
                         format="%.2f",
                         key="pricing_manual_provision_euro_input",
-                        help="Manuelle Provision als fester Euro-Betrag",
-                    )
+                        help="Manuelle Provision als fester Euro-Betrag")
 
                 # Debounce: bei sehr schnellen Änderungen keine Flut an UI-Updates
                 do_heavy_ui = True
@@ -1262,14 +1248,12 @@ def _display_pricing_information(
                         value=float(details.get("discount_percent", 0.0)),
                         step=0.1,
                         key="pricing_modifications_discount_slider",
-                        help="Prozentualer Rabatt auf den Bruttobetrag",
-                    )
+                        help="Prozentualer Rabatt auf den Bruttobetrag")
                     st.text_area(
                         "Beschreibung für Rabatt",
                         key="pricing_modifications_descriptions_discount_text",
                         help="Beschreibung oder Details zum Rabatt.",
-                        height=80,
-                    )
+                        height=80)
 
                 with col_rebates:
                     rebates_eur = st.slider(
@@ -1279,14 +1263,12 @@ def _display_pricing_information(
                         value=float(details.get("rebates_eur", 0.0)),
                         step=10.0,
                         key="pricing_modifications_rebates_slider",
-                        help="Feste Nachlässe in Euro",
-                    )
+                        help="Feste Nachlässe in Euro")
                     st.text_area(
                         "Beschreibung für Nachlässe",
                         key="pricing_modifications_descriptions_rebates_text",
                         help="Beschreibung oder Details zu den Nachlässen.",
-                        height=80,
-                    )
+                        height=80)
 
                 with col_surcharge:
                     surcharge_percent = st.slider(
@@ -1296,14 +1278,12 @@ def _display_pricing_information(
                         value=float(details.get("surcharge_percent", 0.0)),
                         step=0.1,
                         key="pricing_modifications_surcharge_slider",
-                        help="Prozentualer Zuschlag auf den Bruttobetrag",
-                    )
+                        help="Prozentualer Zuschlag auf den Bruttobetrag")
                     st.text_area(
                         "Beschreibung für Zuschlag",
                         key="pricing_modifications_descriptions_surcharge_text",
                         help="Beschreibung oder Details zum Zuschlag.",
-                        height=80,
-                    )
+                        height=80)
 
                 with col_special:
                     special_costs_eur = st.slider(
@@ -1313,14 +1293,12 @@ def _display_pricing_information(
                         value=float(details.get("special_costs_eur", 0.0)),
                         step=10.0,
                         key="pricing_modifications_special_costs_slider",
-                        help="Zusätzliche Sonderkosten in Euro",
-                    )
+                        help="Zusätzliche Sonderkosten in Euro")
                     st.text_area(
                         "Beschreibung für Sonderkosten",
                         key="pricing_modifications_descriptions_special_costs_text",
                         help="Beschreibung oder Details zu den Sonderkosten.",
-                        height=80,
-                    )
+                        height=80)
 
                 col_misc1, col_misc2 = st.columns(2)
                 with col_misc1:
@@ -1331,22 +1309,19 @@ def _display_pricing_information(
                         value=float(details.get("miscellaneous_eur", 0.0)),
                         step=10.0,
                         key="pricing_modifications_miscellaneous_slider",
-                        help="Sonstige Kosten oder Abzüge in Euro",
-                    )
+                        help="Sonstige Kosten oder Abzüge in Euro")
                     st.text_area(
                         "Beschreibung für Sonstiges",
                         key="pricing_modifications_descriptions_miscellaneous_text",
                         help="Beschreibung oder Details zu Sonstigem.",
-                        height=80,
-                    )
+                        height=80)
 
                 with col_misc2:
                     st.text_area(
                         "Sondervereinbarungen",
                         key="pricing_modifications_special_agreements_text",
                         help="Zusätzliche Informationen oder Vereinbarungen, die im Angebot berücksichtigt werden sollen.",
-                        height=120,
-                    )
+                        height=120)
 
                 discount_percent_amount = 0.0
                 total_discounts = 0.0
@@ -2407,8 +2382,7 @@ def render_solar_calculator(
                 details.get(
                     'include_additional_components',
                     False)),
-            key='include_additional_components_sc_v1',
-        )
+            key='include_additional_components_sc_v1')
 
         def _component_selector_with_pricing(
             label_key: str,
@@ -2416,8 +2390,7 @@ def render_solar_calculator(
             name_key: str,
             id_key: str,
             widget_key: str,
-            quantity_key: str | None = None,
-        ) -> None:
+            quantity_key: str | None = None) -> None:
             """Component selector that displays pricing details and optional quantity."""
 
             fallback_labels = {
@@ -2451,8 +2424,7 @@ def render_solar_calculator(
                     label_text,
                     options=options_with_placeholder,
                     index=selected_index,
-                    key=widget_key,
-                )
+                    key=widget_key)
 
                 details[name_key] = selected_value if selected_value != please_select_text else None
 
@@ -2471,8 +2443,7 @@ def render_solar_calculator(
                         max_value=20,
                         value=current_quantity,
                         step=1,
-                        key=f"{widget_key}_qty",
-                    )
+                        key=f"{widget_key}_qty")
                     details[quantity_key] = new_quantity
 
             if details.get(name_key) and col3:
@@ -2482,8 +2453,7 @@ def render_solar_calculator(
                         try:
                             from product_db import (
                                 calculate_price_by_method,
-                                calculate_selling_price,
-                            )
+                                calculate_selling_price)
 
                             margin_info = calculate_selling_price(
                                 product["id"])
@@ -2503,8 +2473,7 @@ def render_solar_calculator(
                                 base_price=unit_price,
                                 quantity=quantity,
                                 calculate_per=calculate_per,
-                                product_specs=product,
-                            )
+                                product_specs=product)
 
                             st.caption(
                                 f" {
@@ -2539,8 +2508,7 @@ def render_solar_calculator(
                 'selected_wallbox_name',
                 'selected_wallbox_id',
                 'sel_wallbox_sc_v1',
-                'selected_wallbox_quantity',
-            )
+                'selected_wallbox_quantity')
 
             st.markdown("####  Energiemanagement")
             _component_selector_with_pricing(
@@ -2555,8 +2523,7 @@ def render_solar_calculator(
                 'selected_optimizer_name',
                 'selected_optimizer_id',
                 'sel_opti_sc_v1',
-                'selected_optimizer_quantity',
-            )
+                'selected_optimizer_quantity')
 
             st.markdown("####  Bauliche Erweiterungen")
             _component_selector_with_pricing(
@@ -2599,8 +2566,7 @@ def render_solar_calculator(
                         'additional_other_custom',
                         ''),
                     max_chars=120,
-                    key='additional_other_custom_sc_v1',
-                )
+                    key='additional_other_custom_sc_v1')
 
             with col_other2:
                 if details.get('additional_other_custom'):
@@ -2612,8 +2578,7 @@ def render_solar_calculator(
                                 'additional_other_price',
                                 0.0)),
                         step=10.0,
-                        key='additional_other_price_sc_v1',
-                    )
+                        key='additional_other_price_sc_v1')
                 else:
                     details['additional_other_price'] = 0.0
 

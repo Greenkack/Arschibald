@@ -14,8 +14,7 @@ from utils.pv_module_placement_system import (
     PVModule,
     ModulePlacementManager,
     ModuleType,
-    ModuleOrientation,
-)
+    ModuleOrientation)
 
 
 def render_pv_module_3d(module: PVModule, show_selection: bool = True) -> go.Mesh3d:

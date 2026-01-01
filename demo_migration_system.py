@@ -14,8 +14,7 @@ from core.migrations import (
     create_migration,
     get_migration_manager,
     migrate,
-    rollback,
-)
+    rollback)
 
 try:
     from rich.console import Console
@@ -167,8 +166,7 @@ def demo_migration_history():
                     entry["revision"][:8],
                     entry["down_revision"][:8] if entry["down_revision"] else "-",
                     entry["message"] or "No message",
-                    status,
-                )
+                    status)
 
             console.print(table)
 

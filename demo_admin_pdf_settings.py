@@ -10,7 +10,7 @@ from admin_pdf_settings_ui import render_pdf_settings_ui
 # Set page config
 st.set_page_config(
     page_title="PDF & Design Einstellungen Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 

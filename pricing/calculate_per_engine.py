@@ -15,8 +15,7 @@ from typing import Any
 from .pricing_errors import (
     CalculationError,
     ValidationError,
-    safe_pricing_operation,
-)
+    safe_pricing_operation)
 from .pricing_validation import get_pricing_validator
 
 logger = logging.getLogger(__name__)

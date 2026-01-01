@@ -161,8 +161,7 @@ class PVModule:
             is_locked=data.get("is_locked", False),
             group_id=data.get("group_id"),
             name=data.get("name"),
-            notes=data.get("notes", ""),
-        )
+            notes=data.get("notes", ""))
     
     def get_color(self) -> str:
         """Gibt die Farbe des Moduls zurück"""

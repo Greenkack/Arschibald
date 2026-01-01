@@ -48,13 +48,11 @@ class PDFSystemManager:
         debug_log(
             "central_pdf.PDFSystemManager",
             "Initialisiere PDF-System-Manager",
-            category="pdf",
-        )
+            category="pdf")
         with debug_timer(
             "PDF-Systeminitialisierung",
             source="central_pdf.PDFSystemManager",
-            category="pdf",
-        ):
+            category="pdf"):
             self._initialize_systems()
 
     def _sanitize_xml_content(self, text: str) -> str:
@@ -101,8 +99,7 @@ class PDFSystemManager:
         debug_log(
             "central_pdf._initialize_systems",
             "Starte Registrierung verfügbarer Systeme",
-            category="pdf",
-        )
+            category="pdf")
         # Standard PDF Generator
         try:
             from pdf_generator import generate_offer_pdf_with_main_templates as _std
@@ -111,8 +108,7 @@ class PDFSystemManager:
             debug_log(
                 "central_pdf._initialize_systems",
                 "Standard-PDF-System erfolgreich registriert",
-                category="pdf",
-            )
+                category="pdf")
         except (ImportError, ModuleNotFoundError):
             # Fallback auf Legacy
             try:
@@ -121,16 +117,14 @@ class PDFSystemManager:
                 debug_log(
                     "central_pdf._initialize_systems",
                     "Standard-PDF-System (Legacy) registriert",
-                    category="pdf",
-                )
+                    category="pdf")
             except Exception:
                 self.available_systems['standard'] = self._dummy_standard_pdf
                 debug_log(
                     "central_pdf._initialize_systems",
                     "Standard-PDF-System fällt auf Dummy zurück",
                     category="stability",
-                    level=logging.WARNING,
-                )
+                    level=logging.WARNING)
             st.session_state.pdf_standard_available = False
 
         # TOM-90 System
@@ -142,8 +136,7 @@ class PDFSystemManager:
             debug_log(
                 "central_pdf._initialize_systems",
                 "TOM-90-System erfolgreich registriert",
-                category="pdf",
-            )
+                category="pdf")
         except (ImportError, ModuleNotFoundError, Exception) as e:
             print(f"TOM-90 Import Fehler: {e}")
             self.available_systems['tom90'] = self._dummy_tom90_pdf
@@ -153,15 +146,13 @@ class PDFSystemManager:
                 "TOM-90-System Fehler, verwende Dummy",
                 category="stability",
                 error=repr(e),
-                level=logging.WARNING,
-            )
+                level=logging.WARNING)
 
         # Mega Hybrid System
         try:
             from mega_tom90_hybrid_pdf import (
                 MegaTOM90HybridPDFGenerator,
-                generate_mega_hybrid_pdf,
-            )
+                generate_mega_hybrid_pdf)
             # Teste ob das Mega Hybrid System verfügbar ist
             test_generator = MegaTOM90HybridPDFGenerator
             self.available_systems['mega_hybrid'] = generate_mega_hybrid_pdf
@@ -170,8 +161,7 @@ class PDFSystemManager:
             debug_log(
                 "central_pdf._initialize_systems",
                 "Mega-Hybrid-System erfolgreich registriert",
-                category="pdf",
-            )
+                category="pdf")
         except (ImportError, ModuleNotFoundError) as e:
             print(f" Mega Hybrid Import Fehler: {e}")
             self.available_systems['mega_hybrid'] = self._dummy_mega_hybrid_pdf
@@ -181,8 +171,7 @@ class PDFSystemManager:
                 "Mega-Hybrid-System Importfehler, verwende Dummy",
                 category="stability",
                 error=repr(e),
-                level=logging.WARNING,
-            )
+                level=logging.WARNING)
         except Exception as e:
             print(f" Mega Hybrid System Problem: {e}")
             # Bei anderen Fehlern - versuche trotzdem den Import
@@ -195,8 +184,7 @@ class PDFSystemManager:
                     "central_pdf._initialize_systems",
                     "Mega-Hybrid-System verfügbar trotz Warnungen",
                     category="pdf",
-                    warning=repr(e),
-                )
+                    warning=repr(e))
             except:
                 self.available_systems['mega_hybrid'] = self._dummy_mega_hybrid_pdf
                 st.session_state.pdf_mega_hybrid_available = False
@@ -205,8 +193,7 @@ class PDFSystemManager:
                     "Mega-Hybrid-System nur als Dummy verfügbar",
                     category="stability",
                     error=repr(e),
-                    level=logging.WARNING,
-                )
+                    level=logging.WARNING)
 
         # PDF Preview System
         try:
@@ -216,8 +203,7 @@ class PDFSystemManager:
             debug_log(
                 "central_pdf._initialize_systems",
                 "Preview-System erfolgreich registriert",
-                category="visualizations",
-            )
+                category="visualizations")
         except (ImportError, ModuleNotFoundError, Exception) as e:
             print(f"PDF Preview Import Fehler: {e}")
             # Fallback: Preview als verfügbar markieren auch ohne spezielles Modul
@@ -229,15 +215,13 @@ class PDFSystemManager:
                 "Preview-System Fallback aktiviert",
                 category="visualizations",
                 error=repr(e),
-                level=logging.WARNING,
-            )
+                level=logging.WARNING)
 
         debug_log(
             "central_pdf._initialize_systems",
             "Systemregistrierung abgeschlossen",
             category="pdf",
-            registered=list(self.available_systems.keys()),
-        )
+            registered=list(self.available_systems.keys()))
 
     def _dummy_standard_pdf(self, *args, **kwargs):
         st.info(" Standard PDF-Generator (Fallback) - Verwende verfügbare Alternativen")
@@ -378,13 +362,11 @@ class PDFSystemManager:
             "Starte Standard-PDF-Versuch",
             category="pdf",
             arg_count=len(args),
-            kwarg_keys=list(kwargs.keys()),
-        )
+            kwarg_keys=list(kwargs.keys()))
         with debug_timer(
             "Standard-PDF",
             source="central_pdf._try_standard_pdf_generator",
-            category="pdf",
-        ):
+            category="pdf"):
             error_msg = ""
             caught_error: Exception | None = None
             try:
@@ -395,8 +377,7 @@ class PDFSystemManager:
                         "central_pdf._try_standard_pdf_generator",
                         "Standard-PDF Ergebnis",
                         result,
-                        category="pdf",
-                    )
+                        category="pdf")
                 return result
             except Exception as parse_error:
                 debug_log(
@@ -404,8 +385,7 @@ class PDFSystemManager:
                     "Standard-PDF Fehler",
                     category="stability",
                     error=repr(parse_error),
-                    level=logging.ERROR,
-                )
+                    level=logging.ERROR)
                 error_msg = str(parse_error)
                 caught_error = parse_error
 
@@ -415,8 +395,7 @@ class PDFSystemManager:
                 debug_log(
                     "central_pdf._try_standard_pdf_generator",
                     "Erneuter Versuch mit sicheren Parametern",
-                    category="stability",
-                )
+                    category="stability")
 
                 # Entferne problematische Inclusion-Optionen
                 safe_kwargs = kwargs.copy()
@@ -456,8 +435,7 @@ class PDFSystemManager:
                         "Sichere Parameter gescheitert",
                         category="stability",
                         error=repr(e2),
-                        level=logging.ERROR,
-                    )
+                        level=logging.ERROR)
 
                     # Dritter Versuch: Minimale Parameter
                     try:
@@ -481,8 +459,7 @@ class PDFSystemManager:
                                 "central_pdf._try_standard_pdf_generator",
                                 "Standard-PDF Ergebnis (Minimal)",
                                 result,
-                                category="pdf",
-                            )
+                                category="pdf")
                         return result
                     except Exception as e3:
                         st.error(f" Alle Standard-PDF Versuche fehlgeschlagen: {e3}")
@@ -713,14 +690,12 @@ class PDFSystemManager:
             category="pdf",
             requested_layout=layout_choice,
             arg_count=len(args),
-            kwarg_keys=list(kwargs.keys()),
-        )
+            kwarg_keys=list(kwargs.keys()))
 
         with debug_timer(
             "PDF-Generierung",
             source="central_pdf.generate_pdf",
-            category="pdf",
-        ):
+            category="pdf"):
             chosen_layout = layout_choice
 
             # Bei Auto-Modus das beste System wählen
@@ -730,8 +705,7 @@ class PDFSystemManager:
                     "central_pdf.generate_pdf",
                     "Automatische Systemauswahl",
                     category="pdf",
-                    selected_layout=chosen_layout,
-                )
+                    selected_layout=chosen_layout)
 
             # System-spezifische Behandlung
             if chosen_layout == "mega_hybrid":
@@ -747,16 +721,14 @@ class PDFSystemManager:
                                     "central_pdf.generate_pdf",
                                     "Mega Hybrid Ergebnis",
                                     result,
-                                    category="pdf",
-                                )
+                                    category="pdf")
                             return result
                         print(" Mega Hybrid lieferte keine Daten - verwende Fallback")
                         debug_log(
                             "central_pdf.generate_pdf",
                             "Mega Hybrid lieferte keine Daten",
                             category="stability",
-                            level=logging.WARNING,
-                        )
+                            level=logging.WARNING)
                 except Exception as e:
                     print(f" Mega Hybrid Fehler: {e}")
                     debug_log(
@@ -764,8 +736,7 @@ class PDFSystemManager:
                         "Mega Hybrid Fehler",
                         category="stability",
                         error=repr(e),
-                        level=logging.ERROR,
-                    )
+                        level=logging.ERROR)
 
             elif chosen_layout in ("tom90_exact", "tom90"):
                 try:
@@ -780,8 +751,7 @@ class PDFSystemManager:
                                     "central_pdf.generate_pdf",
                                     "TOM-90 Ergebnis",
                                     result,
-                                    category="pdf",
-                                )
+                                    category="pdf")
                             return result
                 except Exception as e:
                     print(f" TOM-90 Fehler: {e}")
@@ -790,8 +760,7 @@ class PDFSystemManager:
                         "TOM-90 Fehler",
                         category="stability",
                         error=repr(e),
-                        level=logging.ERROR,
-                    )
+                        level=logging.ERROR)
 
             elif chosen_layout == "standard":
                 try:
@@ -806,8 +775,7 @@ class PDFSystemManager:
                                     "central_pdf.generate_pdf",
                                     "Standard Ergebnis",
                                     result,
-                                    category="pdf",
-                                )
+                                    category="pdf")
                             return result
                 except Exception as e:
                     print(f" Standard Fehler: {e}")
@@ -816,8 +784,7 @@ class PDFSystemManager:
                         "Standard Fehler",
                         category="stability",
                         error=repr(e),
-                        level=logging.ERROR,
-                    )
+                        level=logging.ERROR)
 
             # Fallback auf bestes verfügbares System
             print(" Automatischer Fallback...")
@@ -825,16 +792,14 @@ class PDFSystemManager:
                 "central_pdf.generate_pdf",
                 "Automatischer Fallback",
                 category="stability",
-                attempted_layout=chosen_layout,
-            )
+                attempted_layout=chosen_layout)
             best_system = self.get_best_available_system()
             if best_system != chosen_layout:  # Verhindere Endlosschleife
                 debug_log(
                     "central_pdf.generate_pdf",
                     "Fallback führt zu neuem System",
                     category="stability",
-                    next_layout=best_system,
-                )
+                    next_layout=best_system)
                 return self.generate_pdf(best_system, *args, **kwargs)
 
             # Letzter Fallback
@@ -843,16 +808,14 @@ class PDFSystemManager:
                 "central_pdf.generate_pdf",
                 "Alle Systeme fehlgeschlagen, nutze Notfall",
                 category="stability",
-                level=logging.ERROR,
-            )
+                level=logging.ERROR)
             result = self._try_emergency_fallback(*args, **kwargs)
             if result and debug_enabled():
                 log_payload(
                     "central_pdf.generate_pdf",
                     "Notfall-PDF",
                     result,
-                    category="pdf",
-                )
+                    category="pdf")
             return result
 
     def get_system(self, system_name: str):
@@ -888,8 +851,7 @@ class PDFSystemManager:
         try:
             from mega_tom90_hybrid_pdf import (
                 MegaTOM90HybridPDFGenerator,
-                generate_mega_hybrid_pdf,
-            )
+                generate_mega_hybrid_pdf)
             # Zusätzliche Validierung - teste ob die Klasse funktional ist
             test_generator = MegaTOM90HybridPDFGenerator
             test_function = generate_mega_hybrid_pdf
@@ -1410,8 +1372,7 @@ class CentralPDFInterface:
                     try:
                         from database import (
                             list_company_image_templates,
-                            list_company_text_templates,
-                        )
+                            list_company_text_templates)
                         all_text_templates = list_company_text_templates(active_company_id)
                         all_image_templates = list_company_image_templates(active_company_id)
 
@@ -2432,7 +2393,7 @@ def show_pdf_system_status():
         st.markdown("**Verfügbare PDF-Systeme:**")
         systems = status.get('available_systems', {})
         for system_name, available in systems.items():
-            icon = "" if available else ""
+             if available else ""
             st.write(f"{icon} {system_name.upper()}")
 
     st.markdown("**Session State:**")

@@ -657,7 +657,7 @@ def render_pdf_ui(
                     header_col1, header_col2, header_col3 = st.columns([3, 1, 1])
                     
                     with header_col1:
-                        type_icon = "" if item['type'] == 'text' else "" if item['type'] == 'image' else ""
+                        type_ if item['type'] == 'text' else "" if item['type'] == 'image' else ""
                         st.markdown(f"**{type_icon} {item['title']} (ID: {item['id']})**")
                     
                     with header_col2:

@@ -56,7 +56,7 @@ def verify_admin_password(username: str, password: str) -> bool:
             SELECT password_hash, is_admin 
             FROM users 
             WHERE username = ? AND is_admin = 1
-        """, (username,))
+        """, (username))
         
         result = cursor.fetchone()
         
@@ -67,7 +67,7 @@ def verify_admin_password(username: str, password: str) -> bool:
         
         # Wenn kein Hash gespeichert, vergleiche Klartext (Legacy-Support)
         if not stored_hash:
-            cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
+            cursor.execute("SELECT password FROM users WHERE username = ?", (username))
             plain_pw = cursor.fetchone()
             if plain_pw:
                 return plain_pw[0] == password
@@ -178,7 +178,7 @@ def save_admin_protected_areas(protected_areas: dict[str, bool]) -> bool:
         cursor.execute("""
             INSERT OR REPLACE INTO admin_settings (key, value)
             VALUES ('protected_admin_areas', ?)
-        """, (json.dumps(protected_areas),))
+        """, (json.dumps(protected_areas)))
         
         conn.commit()
         st.session_state.admin_protected_areas = protected_areas

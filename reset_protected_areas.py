@@ -52,7 +52,7 @@ try:
     cursor.execute("""
         INSERT INTO admin_settings (key, value)
         VALUES ('protected_admin_areas', ?)
-    """, (json.dumps(new_protected_areas),))
+    """, (json.dumps(new_protected_areas)))
     
     conn.commit()
     conn.close()

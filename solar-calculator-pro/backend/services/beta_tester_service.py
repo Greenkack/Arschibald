@@ -16,8 +16,7 @@ from ..models.beta_schemas import (
     BetaTesterUpdate,
     BetaTesterResponse,
     BetaInvitationCreate,
-    BetaInvitationResponse,
-)
+    BetaInvitationResponse)
 from ..core.exceptions import APIError
 
 
@@ -61,8 +60,7 @@ class BetaTesterService:
             areas_of_interest=tester_data.areas_of_interest,
             platform=tester_data.platform,
             status='pending',
-            invited_at=datetime.utcnow(),
-        )
+            invited_at=datetime.utcnow())
         
         self.db.add(tester)
         self.db.commit()
@@ -208,8 +206,7 @@ class BetaTesterService:
             expires_at=datetime.utcnow() + timedelta(days=invitation_data.valid_days),
             max_uses=invitation_data.max_uses,
             uses=0,
-            status='active',
-        )
+            status='active')
         
         self.db.add(invitation)
         self.db.commit()

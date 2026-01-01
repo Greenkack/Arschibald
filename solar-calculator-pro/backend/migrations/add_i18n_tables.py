@@ -26,8 +26,7 @@ translations = Table(
     Column('created_at', DateTime, default=datetime.now),
     Column('updated_at', DateTime, default=datetime.now, onupdate=datetime.now),
     Index('idx_translation_lookup', 'key', 'namespace', 'language'),
-    Index('idx_namespace_language', 'namespace', 'language'),
-)
+    Index('idx_namespace_language', 'namespace', 'language'))
 
 # Define user_language_preferences table
 user_language_preferences = Table(
@@ -37,8 +36,7 @@ user_language_preferences = Table(
     Column('user_id', Integer, ForeignKey('users.id'), unique=True, nullable=False),
     Column('language', String(10), nullable=False, default='de'),
     Column('created_at', DateTime, default=datetime.now),
-    Column('updated_at', DateTime, default=datetime.now, onupdate=datetime.now),
-)
+    Column('updated_at', DateTime, default=datetime.now, onupdate=datetime.now))
 
 # Define translation_history table
 translation_history = Table(
@@ -49,8 +47,7 @@ translation_history = Table(
     Column('old_value', Text),
     Column('new_value', Text, nullable=False),
     Column('modified_by', String(100), nullable=False),
-    Column('modified_at', DateTime, default=datetime.now),
-)
+    Column('modified_at', DateTime, default=datetime.now))
 
 
 def upgrade():

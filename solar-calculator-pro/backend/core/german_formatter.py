@@ -19,7 +19,7 @@ class GermanNumberFormatter:
     
     German format uses:
     - Dot (.) as thousand separator
-    - Comma (,) as decimal separator
+    - Comma () as decimal separator
     - Exactly 2 decimal places for currency and percentages
     
     Examples:

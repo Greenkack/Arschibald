@@ -21,8 +21,7 @@ from core.logging_config import (
     log_error,
     set_log_level,
     setup_logging,
-    track,
-)
+    track)
 
 
 def demo_basic_logging():
@@ -41,22 +40,19 @@ def demo_basic_logging():
         user_id="user_123",
         username="john_doe",
         ip_address="192.168.1.100",
-        login_method="oauth",
-    )
+        login_method="oauth")
 
     logger.warning(
         "cache_miss",
         cache_key="user_profile_123",
         cache_type="redis",
-        ttl_seconds=3600,
-    )
+        ttl_seconds=3600)
 
     logger.error(
         "database_error",
         error_type="ConnectionTimeout",
         database="postgresql",
-        retry_count=3,
-    )
+        retry_count=3)
 
 
 def demo_correlation_id():
@@ -146,8 +142,7 @@ def demo_pii_masking():
             "email": "john@example.com",
             "password": "secret",  # Will be masked
             "preferences": {"theme": "dark", "api_key": "key123"},  # Masked
-        },
-    )
+        })
 
 
 def demo_error_logging():
@@ -180,8 +175,7 @@ def demo_error_logging():
                 "user_id": "user_123",
                 "operation": "load_config",
                 "config_file": "app.json",
-            },
-        )
+            })
 
 
 def demo_event_tracking():
@@ -193,8 +187,7 @@ def demo_event_tracking():
     # Track various user events
     track(
         "user_login",
-        {"user_id": "user_123", "method": "oauth", "provider": "google"},
-    )
+        {"user_id": "user_123", "method": "oauth", "provider": "google"})
 
     track(
         "form_submitted",
@@ -203,13 +196,11 @@ def demo_event_tracking():
             "duration_ms": 1234,
             "fields_filled": 5,
             "success": True,
-        },
-    )
+        })
 
     track(
         "feature_used",
-        {"feature": "export_pdf", "user_tier": "premium", "file_size_mb": 2.5},
-    )
+        {"feature": "export_pdf", "user_tier": "premium", "file_size_mb": 2.5})
 
     track(
         "checkout_completed",
@@ -218,8 +209,7 @@ def demo_event_tracking():
             "total_amount": 149.99,
             "items_count": 3,
             "payment_method": "credit_card",
-        },
-    )
+        })
 
 
 def demo_log_levels():
@@ -284,8 +274,7 @@ def demo_complete_request_flow():
             "request_received",
             method="POST",
             path="/api/orders",
-            content_type="application/json",
-        )
+            content_type="application/json")
 
         with LogContext(user_id="user_123", session="session_abc"):
             # Authentication
@@ -315,15 +304,13 @@ def demo_complete_request_flow():
                     "user_id": "user_123",
                     "total": 149.99,
                     "items": 3,
-                },
-            )
+                })
 
             logger.info(
                 "request_completed",
                 status=201,
                 duration_ms=250,
-                correlation_id=correlation_id,
-            )
+                correlation_id=correlation_id)
 
 
 def main():

@@ -32,8 +32,7 @@ def generate_offer_pdf_with_payment_terms(
     project_data: dict[str, Any],
     analysis_results: dict[str, Any],
     company_info: dict[str, Any],
-    variant_id: str,
-) -> bytes | None:
+    variant_id: str) -> bytes | None:
     """Erzeugt ein Angebots‑PDF mit angehängter Seite für Kosten und Zahlungsplan.
 
     Args:
@@ -53,11 +52,9 @@ def generate_offer_pdf_with_payment_terms(
     add_pdf = create_payment_summary_page(
         analysis_results=analysis_results,
         variant_id=variant_id,
-        schedule=schedule,
-    )
+        schedule=schedule)
     return generate_main_template_pdf_bytes(
         project_data=project_data,
         analysis_results=analysis_results,
         company_info=company_info,
-        additional_pdf=add_pdf,
-    )
+        additional_pdf=add_pdf)

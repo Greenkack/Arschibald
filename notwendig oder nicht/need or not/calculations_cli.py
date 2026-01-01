@@ -54,8 +54,7 @@ def main() -> None:
         texts,
         errors_list,
         simulation_duration_user,
-        electricity_price_increase_user,
-    )
+        electricity_price_increase_user)
 
     json.dump(results, sys.stdout, ensure_ascii=False)
     sys.stdout.flush()

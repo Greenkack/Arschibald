@@ -11,8 +11,7 @@ from session_widgets import (
     session_number_input,
     session_selectbox,
     session_checkbox,
-    persist_calculation_result,
-)
+    persist_calculation_result)
 
 
 def example_customer_form():
@@ -235,7 +234,7 @@ def main():
     """Haupt-Demo-App"""
     st.set_page_config(
         page_title="Phase 3 - Session Persistence Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     

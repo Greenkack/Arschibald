@@ -225,8 +225,7 @@ class DatabaseBridge:
             if category:
                 cursor.execute(
                     "SELECT * FROM products WHERE category = ? ORDER BY brand, model_name",
-                    (category,
-                     ))
+                    (category))
             else:
                 cursor.execute(
                     "SELECT * FROM products ORDER BY category, brand, model_name")
@@ -347,7 +346,7 @@ class DatabaseBridge:
 
             cursor = conn.cursor()
             cursor.execute(
-                "DELETE FROM products WHERE id = ?", (int(product_id),))
+                "DELETE FROM products WHERE id = ?", (int(product_id)))
 
             success = cursor.rowcount > 0
             conn.commit()
@@ -368,7 +367,7 @@ class DatabaseBridge:
 
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM products WHERE id = ?", (int(product_id),))
+                "SELECT * FROM products WHERE id = ?", (int(product_id)))
             row = cursor.fetchone()
             conn.close()
 
@@ -391,8 +390,7 @@ class DatabaseBridge:
             cursor = conn.cursor()
             cursor.execute(
                 "SELECT * FROM products WHERE model_name = ? ORDER BY id DESC LIMIT 1",
-                (model_name,
-                 ))
+                (model_name))
             row = cursor.fetchone()
             conn.close()
 
@@ -453,8 +451,7 @@ class DatabaseBridge:
             cursor = conn.cursor()
             cursor.execute(
                 "SELECT * FROM products WHERE brand = ? ORDER BY category, model_name",
-                (manufacturer,
-                 ))
+                (manufacturer))
             rows = cursor.fetchall()
             conn.close()
 
@@ -494,7 +491,7 @@ class DatabaseBridge:
 
             # Check if logo already exists
             cursor.execute(
-                "SELECT id FROM brand_logos WHERE brand_name = ?", (brand_name,))
+                "SELECT id FROM brand_logos WHERE brand_name = ?", (brand_name))
             existing = cursor.fetchone()
 
             if existing:
@@ -540,7 +537,7 @@ class DatabaseBridge:
                        is_active, created_at, updated_at
                 FROM brand_logos
                 WHERE brand_name = ?
-            """, (brand_name,))
+            """, (brand_name))
 
             row = cursor.fetchone()
             conn.close()
@@ -619,7 +616,7 @@ class DatabaseBridge:
 
             cursor = conn.cursor()
             cursor.execute(
-                "DELETE FROM brand_logos WHERE brand_name = ?", (brand_name,))
+                "DELETE FROM brand_logos WHERE brand_name = ?", (brand_name))
 
             success = cursor.rowcount > 0
             conn.commit()

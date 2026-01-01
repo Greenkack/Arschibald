@@ -1,0 +1,66 @@
+Generic single-database configuration with async support.
+
+# Alembic Database Migrations
+
+This directory contains database migration scripts managed by Alembic.
+
+## Common Commands
+
+### Create a new migration
+```bash
+# Auto-generate migration from model changes
+alembic revision --autogenerate -m "description of changes"
+
+# Create empty migration
+alembic revision -m "description of changes"
+```
+
+### Apply migrations
+```bash
+# Upgrade to latest version
+alembic upgrade head
+
+# Upgrade to specific revision
+alembic upgrade <revision_id>
+
+# Upgrade one step
+alembic upgrade +1
+```
+
+### Rollback migrations
+```bash
+# Downgrade one step
+alembic downgrade -1
+
+# Downgrade to specific revision
+alembic downgrade <revision_id>
+
+# Downgrade to base (remove all migrations)
+alembic downgrade base
+```
+
+### View migration history
+```bash
+# Show current revision
+alembic current
+
+# Show migration history
+alembic history
+
+# Show pending migrations
+alembic history --verbose
+```
+
+## Migration Best Practices
+
+1. **Always review auto-generated migrations** before applying them
+2. **Test migrations** on a development database first
+3. **Create backups** before running migrations on production
+4. **Keep migrations small** and focused on one change
+5. **Write both upgrade and downgrade** functions
+6. **Document complex migrations** with comments
+
+## Async Support
+
+This Alembic configuration supports both sync and async database engines.
+The appropriate mode is automatically selected based on the DATABASE_URL.

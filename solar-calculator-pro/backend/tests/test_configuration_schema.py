@@ -31,12 +31,12 @@ from models.configuration_models import (
 )
 
 # Update Base reference in models
-Configuration.__bases__ = (Base,)
-ConfigurationVersion.__bases__ = (Base,)
-ConfigurationAuditLog.__bases__ = (Base,)
-ConfigurationBackup.__bases__ = (Base,)
-ConfigurationValidationRule.__bases__ = (Base,)
-ConfigurationTemplate.__bases__ = (Base,)
+Configuration.__bases__ = (Base)
+ConfigurationVersion.__bases__ = (Base)
+ConfigurationAuditLog.__bases__ = (Base)
+ConfigurationBackup.__bases__ = (Base)
+ConfigurationValidationRule.__bases__ = (Base)
+ConfigurationTemplate.__bases__ = (Base)
 
 
 @pytest.fixture

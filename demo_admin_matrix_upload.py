@@ -21,7 +21,7 @@ def main():
     
     st.set_page_config(
         page_title="Admin Matrix Upload Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     

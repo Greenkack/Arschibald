@@ -39,8 +39,7 @@ try:
         update_component,
         delete_component,
         get_statistics,
-        search_components,
-    )
+        search_components)
     PV_MOUNTING_DB_AVAILABLE = True
 except ImportError:
     PV_MOUNTING_DB_AVAILABLE = False

@@ -241,8 +241,7 @@ def _evaluate_many(path: str | Path, refs: list[tuple[str, str, str]],
                 address=address,
                 formula=formula,
                 value=v,
-                value_type=_value_type_of(v),
-            ))
+                value_type=_value_type_of(v)))
     finally:
         if engine_name == "xlwings":
             eng.close()
@@ -351,8 +350,7 @@ def safety_check_parity(
     sample_limit: int | None = 1000,
     abs_tol: float = 1e-9,
     rel_tol: float = 1e-9,
-    out_report_csv: str | Path | None = None,
-) -> dict[str, Any]:
+    out_report_csv: str | Path | None = None) -> dict[str, Any]:
     """
     def __getstate__(self):
         """Ermöglicht Pickle-Serialisierung für Session State"""

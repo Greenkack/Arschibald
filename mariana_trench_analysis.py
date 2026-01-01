@@ -247,7 +247,7 @@ class MarianaTrenchAnalyzer:
                 print(f"\n   {db_path.name}: {len(tables)} Tabellen")
                 
                 # Prüfe jede Tabelle
-                for (table_name,) in tables:
+                for (table_name) in tables:
                     cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
                     count = cursor.fetchone()[0]
                     print(f"      • {table_name}: {count} Einträge")

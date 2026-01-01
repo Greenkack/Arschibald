@@ -64,9 +64,9 @@ class TestSpecialProductsCalculation:
         
         # Mock database responses
         cursor.fetchone.side_effect = [
-            (1,),  # First product is special
-            (0,),  # Second product is not special
-            (1,)   # Third product is special
+            (1),  # First product is special
+            (0),  # Second product is not special
+            (1)   # Third product is special
         ]
         
         products = [
@@ -86,7 +86,7 @@ class TestSpecialProductsCalculation:
         _, cursor = mock_db
         
         # Mock database response for name lookup
-        cursor.fetchone.return_value = (1,)
+        cursor.fetchone.return_value = (1)
         
         products = [
             {'model_name': 'Special-Module-X', 'price': 600.0, 'quantity': 1}

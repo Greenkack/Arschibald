@@ -26,8 +26,7 @@ def verify_imports():
             get_current_session,
             get_session_manager,
             persist_input,
-            save_form,
-        )
+            save_form)
 
         print("All core session imports successful")
 
@@ -37,8 +36,7 @@ def verify_imports():
             SessionPersistenceEngine,
             get_persistence_engine,
             persist_session,
-            recover_session,
-        )
+            recover_session)
 
         print("All persistence imports successful")
 
@@ -198,8 +196,7 @@ def verify_api_functions():
             bootstrap_session,
             get_current_session,
             persist_input,
-            save_form,
-        )
+            save_form)
 
         # Test bootstrap_session
         session = bootstrap_session(user_id="api_test")

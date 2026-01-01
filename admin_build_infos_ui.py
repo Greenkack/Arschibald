@@ -132,7 +132,7 @@ def render_build_info_statistics():
             import datetime
             latest_date = datetime.datetime.fromtimestamp(latest_time)
             
-            st.info(f Letzte Änderung: {latest_date.strftime('%d.%m.%Y %H:%M')} - {latest_file.name}")
+            st.info(f"Letzte Änderung: {latest_date.strftime('%d.%m.%Y %H:%M')} - {latest_file.name}")
     
     except Exception as e:
         st.error(f"Fehler beim Laden der Build-Informationen: {e}")

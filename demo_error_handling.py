@@ -495,7 +495,7 @@ def main():
     """Main demo application"""
     st.set_page_config(
         page_title="Error Handling Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     

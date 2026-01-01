@@ -330,8 +330,7 @@ class AppError(Exception):
         status_code: int = 500,
         severity: Optional[ErrorSeverity] = None,
         category: Optional[ErrorCategory] = None,
-        context: Optional[Dict[str, Any]] = None,
-    ):
+        context: Optional[Dict[str, Any]] = None):
         self.error_code = error_code
         self.timestamp = datetime.utcnow()
         self.details = details or {}

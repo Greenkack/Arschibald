@@ -56,7 +56,7 @@ def handle_drawer_action_save_customer():
     """
     try:
         from crm import save_customer
-        from database import get_connection
+        from database import get_db_connection
         
         # Sammle Kundendaten aus Session
         customer_data = {
@@ -77,7 +77,7 @@ def handle_drawer_action_save_customer():
             return False
         
         # Save to CRM
-        conn = get_connection()
+        conn = get_db_connection()
         customer_id = save_customer(conn, customer_data)
         conn.close()
         
@@ -92,26 +92,103 @@ def handle_drawer_action_save_customer():
 def handle_drawer_action_quick_pdf():
     """
     Button 4: Blitz-Angebot
-    Erstellt Standard-PDF direkt ohne UI
+    Erstellt Standard-PDF direkt ohne UI - MIT JOB MANAGER INTEGRATION
     """
     try:
-        from pdf_generator import generate_offer_pdf
-        from database import get_connection
+        from pdf_generator import generate_pdf_job
+        from core_integration import get_job_manager, is_feature_enabled
+        from core.jobs import Job, JobPriority
+        
+        # Prüfe ob Job Manager verfügbar
+        if not is_feature_enabled('jobs'):
+            # Fallback zu synchroner PDF-Generierung
+            return _handle_drawer_action_quick_pdf_sync()
+        
+        job_mgr = get_job_manager()
+        if not job_mgr:
+            # Fallback zu synchroner PDF-Generierung
+            return _handle_drawer_action_quick_pdf_sync()
+        
+        # Baue project_data aus Session zusammen
+        customer_data = st.session_state.get('customer_data', {})
+        system_data = st.session_state.get('system_data', {})
+        
+        project_data = {
+            'customer': customer_data,
+            'customer_name': customer_data.get('name', 'Kunde'),
+            'system': system_data,
+            'prices': st.session_state.get('prices', {}),
+            'economic_data': st.session_state.get('economic_data', {}),
+            'analysis_results': st.session_state.get('calculation_results', {}),
+            'company_info': {'name': customer_data.get('company', 'Kunde')},
+            'texts': st.session_state.get('texts', {}),
+            'inclusion_options': {}
+        }
+        
+        # Registriere Job-Funktion
+        if 'generate_pdf_job' not in job_mgr.function_registry:
+            job_mgr.register_function('generate_pdf_job', generate_pdf_job)
+        
+        # Erstelle Job
+        job = Job(
+            name=f"Blitz-Angebot {customer_data.get('name', 'Kunde')}",
+            function_name='generate_pdf_job',
+            kwargs={
+                'project_data': project_data,
+                'firma_index': 0
+            },
+            priority=JobPriority.HIGH,
+            max_retries=2
+        )
+        
+        # Job enqueuen
+        job_id = job_mgr.enqueue(job)
+        
+        # Speichere Job-ID in Session
+        if 'active_pdf_jobs' not in st.session_state:
+            st.session_state['active_pdf_jobs'] = []
+        st.session_state['active_pdf_jobs'].append(job_id)
+        st.session_state['drawer_pdf_job_id'] = job_id
+        
+        st.success(f" PDF-Job gestartet! Job-ID: {job_id[:8]}...")
+        st.info(" Gehe zum Admin-Panel → Job Manager um den Fortschritt zu sehen")
+        
+        return True
+            
+    except Exception as e:
+        st.session_state['drawer_pdf_error'] = f"Fehler bei PDF-Job: {str(e)}"
+        return False
+
+
+def _handle_drawer_action_quick_pdf_sync():
+    """
+    FALLBACK: Synchrone PDF-Generierung (wenn Job Manager nicht verfügbar)
+    """
+    try:
+        from pdf_generator import generate_offer_pdf_simple
+        from database import get_db_connection
         
         # Hole aktuelle Session-Daten
-        conn = get_connection()
+        conn = get_db_connection()
         
-        # Erstelle PDF mit aktuellen Daten
-        pdf_bytes = generate_offer_pdf(
-            conn=conn,
+        # Baue project_data aus Session zusammen
+        customer_data = st.session_state.get('customer_data', {})
+        system_data = st.session_state.get('system_data', {})
+        
+        project_data = {
+            'customer': customer_data,
+            'system': system_data,
+            'prices': st.session_state.get('prices', {}),
+            'economic_data': st.session_state.get('economic_data', {})
+        }
+        
+        # Erstelle PDF mit vereinfachter Funktion
+        pdf_bytes = generate_offer_pdf_simple(
+            project_data=project_data,
+            analysis_results=st.session_state.get('calculation_results', {}),
+            company_info={'name': customer_data.get('company', 'Kunde')},
             texts=st.session_state.get('texts', {}),
-            customer_data=st.session_state.get('customer_data', {}),
-            system_data=st.session_state.get('system_data', {}),
-            prices=st.session_state.get('prices', {}),
-            economic_data=st.session_state.get('economic_data', {}),
-            calculation_results=st.session_state.get('calculation_results', {}),
-            heatpump_results=st.session_state.get('heatpump_results', None),
-            admin_settings=st.session_state.get('admin_settings', {})
+            inclusion_options={}
         )
         
         conn.close()

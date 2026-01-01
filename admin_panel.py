@@ -50,8 +50,7 @@ except ImportError:
 
 from admin_intro_settings_ui import render_intro_settings_tab
 from admin_payment_terms_ui import (
-    render_comprehensive_admin_payment_terms_ui_with_variants,
-)
+    render_comprehensive_admin_payment_terms_ui_with_variants)
 
 # OPTIMIZED VERSIONS - Memory-Safe mit Pagination
 try:
@@ -147,16 +146,14 @@ from ui_state_manager import (
     ensure_session_defaults,
     keep_session_state_alive,
     mirror_widget_value,
-    set_current_page,
-)
+    set_current_page)
 
 # Attribute-CRUD aus flexibler Attributtabelle (Key/Value)
 try:
     from product_attributes import (
         list_attributes as pa_list_attributes,
         upsert_attribute as pa_upsert_attribute,
-        delete_attribute as pa_delete_attribute,
-    )
+        delete_attribute as pa_delete_attribute)
 except Exception:
     pa_list_attributes = None  # type: ignore
     pa_upsert_attribute = None  # type: ignore
@@ -392,8 +389,7 @@ def _render_horizontal_menu_selector(
     icons: dict[str, str] | None = None,
     *,
     label: str | None = None,
-    help_text: str | None = None,
-) -> str:
+    help_text: str | None = None) -> str:
     """Render a modern vertical sidebar menu with glassmorphism design."""
 
     if not options:
@@ -503,8 +499,7 @@ def _render_horizontal_menu_selector(
         }
         </style>
         """,
-        unsafe_allow_html=True,
-    )
+        unsafe_allow_html=True)
 
     st.markdown('<div class="admin-nav-container">', unsafe_allow_html=True)
 
@@ -521,8 +516,7 @@ def _render_horizontal_menu_selector(
             key=f"{state_key}_{option_key}",
             help=description,
             use_container_width=True,
-            type="primary" if is_active else "secondary",
-        ):
+            type="primary" if is_active else "secondary"):
             st.session_state[state_key] = option_key
             st.rerun()
 
@@ -539,8 +533,7 @@ def _render_stateful_selector(
     *,
     label: str | None = None,
     help_text: str | None = None,
-    widget_suffix: str = "",
-) -> str:
+    widget_suffix: str = "") -> str:
     """Render a radio/select control whose selection persists across reruns.
 
     Args:
@@ -902,8 +895,7 @@ def render_company_crud_tab(
                     ("image_templates", " Bildvorlagen"),
                 ],
                 label=get_text_local("admin_company_detail_selector", "Bereich auswählen"),
-                widget_suffix=f"_{current_company_id_for_docs_crud}",
-            )
+                widget_suffix=f"_{current_company_id_for_docs_crud}")
             st.markdown("---")
 
             if selected_company_tab == "documents":
@@ -2624,15 +2616,14 @@ def render_visualization_settings(
                 active_key = load_admin_setting_func(
                     'app_theme_key', next(iter(themes.keys())))
                 active_index = next((idx for idx, (_, key, _) in enumerate(
-                    theme_entries) if key == active_key), 0, )
+                    theme_entries) if key == active_key), 0)
 
                 selected_title = st.selectbox(
                     "Theme auswählen",
                     options=labels,
                     index=active_index,
                     help="Ändert Farben und Typografie der gesamten Anwendung",
-                    key=f"admin_theme_selector{WIDGET_KEY_SUFFIX}",
-                )
+                    key=f"admin_theme_selector{WIDGET_KEY_SUFFIX}")
                 selected_key = next(
                     key for label, key, _ in theme_entries if label == selected_title)
 
@@ -2702,8 +2693,7 @@ def render_visualization_settings(
                     picker = cols[idx % 2].color_picker(
                         label,
                         value=current_value,
-                        key=f"admin_theme_color_{field_key}{WIDGET_KEY_SUFFIX}",
-                    )
+                        key=f"admin_theme_color_{field_key}{WIDGET_KEY_SUFFIX}")
                     updated_colors[field_key] = picker
 
                 action_cols = st.columns([1, 1, 1])
@@ -2758,8 +2748,7 @@ def render_visualization_settings(
             from ui_effects_library import (
                 get_default_effect,
                 get_effect_info,
-                get_effect_names,
-            )
+                get_effect_names)
 
             # Lade UI-Effekte-Einstellungen
             settings_file = Path("data/ui_effects_settings.json")
@@ -3133,8 +3122,7 @@ def render_pdf_design_settings(
             ("cover_letters", "Anschreiben"),
         ],
         label=get_text_local("admin_pdf_design_selector", "Bereich auswählen"),
-        widget_suffix=WIDGET_KEY_SUFFIX,
-    )
+        widget_suffix=WIDGET_KEY_SUFFIX)
     st.markdown("---")
 
     if selected_pdf_tab == "design":
@@ -3265,8 +3253,7 @@ def render_pdf_design_settings(
                 value=current_design_settings.get(
                     'primary_color',
                     PDF_DESIGN_SETTINGS_DEFAULT['primary_color']),
-                key=f"pdf_primary_color{WIDGET_KEY_SUFFIX}",
-            )
+                key=f"pdf_primary_color{WIDGET_KEY_SUFFIX}")
             secondary_color = st.color_picker(
                 get_text_local(
                     "admin_pdf_secondary_color_label",
@@ -3274,8 +3261,7 @@ def render_pdf_design_settings(
                 value=current_design_settings.get(
                     'secondary_color',
                     PDF_DESIGN_SETTINGS_DEFAULT['secondary_color']),
-                key=f"pdf_secondary_color{WIDGET_KEY_SUFFIX}",
-            )
+                key=f"pdf_secondary_color{WIDGET_KEY_SUFFIX}")
             submitted_pdf_design = st.form_submit_button(
                 get_text_local(
                     "admin_save_pdf_design_button",
@@ -4225,8 +4211,7 @@ def render_admin_panel(
         selector_options,
         icons=ADMIN_TAB_ICONS,
         label=None,
-        help_text=None,
-    )
+        help_text=None)
 
     selected_tab_label = tab_labels_map.get(selected_tab_key, selected_tab_key)
     st.markdown("---")
@@ -4366,8 +4351,7 @@ def render_company_text_templates_tab(company_id: int):
         from database import (
             delete_company_text_template,
             list_company_text_templates,
-            update_company_text_template,
-        )
+            update_company_text_template)
 
         text_templates = list_company_text_templates(company_id)
 
@@ -4501,8 +4485,7 @@ def render_company_image_templates_tab(company_id: int):
             delete_company_image_template,
             get_company_image_template_data,
             list_company_image_templates,
-            update_company_image_template,
-        )
+            update_company_image_template)
 
         image_templates = list_company_image_templates(company_id)
 

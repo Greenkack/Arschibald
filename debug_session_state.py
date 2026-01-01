@@ -6,7 +6,7 @@ Nutze dies um zu prüfen, welche Werte tatsächlich in der App gesetzt sind.
 
 import streamlit as st
 
-st.set_page_config(page_title="Debug Session State", page_icon="")
+st.set_page_config(page_title="Debug Session State", page_)
 
 st.title("Debug: Multi-Offer Session State")
 

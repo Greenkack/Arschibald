@@ -20,8 +20,7 @@ from agent.logging_config import (
     log_api_call,
     log_docker_operation,
     log_tool_execution,
-    setup_logging,
-)
+    setup_logging)
 import sys
 from pathlib import Path
 

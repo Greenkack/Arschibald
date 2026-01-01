@@ -2191,7 +2191,7 @@ def show_pdf_system_status():
         st.markdown("**Verfügbare PDF-Systeme:**")
         systems = status.get('available_systems', {})
         for system_name, available in systems.items():
-            icon = "" if available else ""
+             if available else ""
             st.write(f"{icon} {system_name.upper()}")
     
     st.markdown("**Session State:**")

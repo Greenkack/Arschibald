@@ -39,7 +39,7 @@ def upgrade():
         sa.Column('category', sa.String(length=100), nullable=True),
         sa.Column('uploaded_at', sa.DateTime(), nullable=True),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
+        sa.ForeignKeyConstraint(['product_id'], ['products.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_product_images_id'), 'product_images', ['id'], unique=False)
@@ -60,7 +60,7 @@ def upgrade():
         sa.Column('format', sa.String(length=10), nullable=True),
         sa.Column('cdn_url', sa.String(length=500), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['image_id'], ['product_images.id'], ),
+        sa.ForeignKeyConstraint(['image_id'], ['product_images.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_image_variants_id'), 'image_variants', ['id'], unique=False)
@@ -90,7 +90,7 @@ def upgrade():
         sa.Column('search_text', sa.Text(), nullable=False),
         sa.Column('keywords', sa.JSON(), nullable=True),
         sa.Column('indexed_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['image_id'], ['product_images.id'], ),
+        sa.ForeignKeyConstraint(['image_id'], ['product_images.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_image_search_index_id'), 'image_search_index', ['id'], unique=False)

@@ -1,0 +1,13 @@
+{
+  "base_url": "/",
+  "hostname": "localhost",
+  "password": false,
+  "pid": 13800,
+  "port": 8888,
+  "root_dir": "C:\\PV\\PV\\pvon-master",
+  "secure": false,
+  "sock": "",
+  "token": "d1553b88d596420d6e5148e75e1323d766d590e48588e481",
+  "url": "http://localhost:8888/",
+  "version": "2.15.0"
+}

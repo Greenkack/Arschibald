@@ -30,8 +30,7 @@ try:
         get_company,
         load_admin_setting,
         save_admin_setting,
-        list_company_documents,
-    )
+        list_company_documents)
     from calculations import perform_calculations, calculate_offer_details
     from pdf_generator import generate_offer_pdf_with_main_templates as generate_offer_pdf, create_offer_pdf, merge_pdfs
     from product_db import get_product_by_id, list_products
@@ -156,8 +155,7 @@ class MultiCompanyOfferGenerator:
                 data["salutation"] = cols[0].selectbox(
                     "Anrede",
                     ["Herr", "Frau", "Divers"],
-                    index=["Herr", "Frau", "Divers"].index(data.get("salutation", "Herr")),
-                )
+                    index=["Herr", "Frau", "Divers"].index(data.get("salutation", "Herr")))
                 data["first_name"] = cols[0].text_input(
                     "Vorname", value=data.get("first_name", "")
                 )
@@ -264,8 +262,7 @@ class MultiCompanyOfferGenerator:
                     master = st.checkbox(
                         "Alle erweitern",
                         value=st.session_state.get("multi_offer_extend_all", False),
-                        help="Aktiviert für alle ausgewählten Firmen die erweiterte PDF-Ausgabe (Zusatzseiten).",
-                    )
+                        help="Aktiviert für alle ausgewählten Firmen die erweiterte PDF-Ausgabe (Zusatzseiten).")
                     if master != st.session_state.get("multi_offer_extend_all", False):
                         st.session_state.multi_offer_extend_all = master
                         # Wenn Master aktiv, setze alle auf True; sonst keine Massenänderung der Einzelwerte
@@ -304,8 +301,7 @@ class MultiCompanyOfferGenerator:
         )
         settings["include_storage"] = cols[1].checkbox(
             "Batteriespeicher ins Angebot aufnehmen?",
-            value=settings.get("include_storage", True),
-        )
+            value=settings.get("include_storage", True))
           # NEUE FEATURE: Automatische Preisstaffelung
         st.markdown("###  Automatische Produktrotation & Preisstaffelung")
         auto_cols = st.columns(3)

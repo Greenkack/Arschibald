@@ -26,8 +26,7 @@ class Translation(Base):
     # Composite index for fast lookups
     __table_args__ = (
         Index('idx_translation_lookup', 'key', 'namespace', 'language'),
-        Index('idx_namespace_language', 'namespace', 'language'),
-    )
+        Index('idx_namespace_language', 'namespace', 'language'))
 
     def __repr__(self):
         return f"<Translation {self.namespace}.{self.key} ({self.language})>"

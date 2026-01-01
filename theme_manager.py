@@ -89,8 +89,7 @@ def _build_default_theme() -> ThemeDefinition:
         font_faces=DEFAULT_THEME_CONFIG.get("fontFaces", []),
         sidebar_config=sidebar_cfg if isinstance(sidebar_cfg, Mapping) else {},
         emoji="",
-        preview_path=None,
-    )
+        preview_path=None)
 
 
 @dataclass(frozen=True)
@@ -231,8 +230,7 @@ def load_available_themes() -> dict[str, ThemeDefinition]:
                 font_faces=font_faces,
                 sidebar_config=sidebar_config if isinstance(sidebar_config, Mapping) else {},
                 emoji=emoji,
-                preview_path=_find_preview_image(candidate),
-            )
+                preview_path=_find_preview_image(candidate))
 
     if not themes:
         themes[DEFAULT_THEME_KEY] = _build_default_theme()
@@ -544,8 +542,7 @@ def build_theme_css(theme_key: str) -> str:
             "#f8fafc"))
     secondary_background = _css_var(
         config.get("secondaryBackgroundColor"),
-        DEFAULT_THEME_CONFIG.get("secondaryBackgroundColor", "#e2e8f0"),
-    )
+        DEFAULT_THEME_CONFIG.get("secondaryBackgroundColor", "#e2e8f0"))
     text_color = _css_var(
         config.get("textColor"),
         DEFAULT_THEME_CONFIG.get(
@@ -559,8 +556,7 @@ def build_theme_css(theme_key: str) -> str:
             "#1f2937"))
     code_background = _css_var(
         config.get("codeBackgroundColor"),
-        DEFAULT_THEME_CONFIG.get("codeBackgroundColor", "#0b1120"),
-    )
+        DEFAULT_THEME_CONFIG.get("codeBackgroundColor", "#0b1120"))
 
     sidebar_background = _css_var(
         sidebar_config.get("backgroundColor"),
@@ -568,16 +564,14 @@ def build_theme_css(theme_key: str) -> str:
             "sidebar",
             {}).get(
             "backgroundColor",
-            "#ffffff"),
-    )
+            "#ffffff"))
     sidebar_secondary = _css_var(
         sidebar_config.get("secondaryBackgroundColor"),
         DEFAULT_THEME_CONFIG.get(
             "sidebar",
             {}).get(
             "secondaryBackgroundColor",
-            "#f1f5f9"),
-    )
+            "#f1f5f9"))
 
     primary_soft = _lighten(primary_color, 0.35)
     primary_strong = _darken(primary_color, 0.25)
@@ -629,18 +623,15 @@ def build_theme_css(theme_key: str) -> str:
             background_color,
             0.08),
         0.92 if is_dark_theme else 0.96,
-        fallback="rgba(30, 41, 59, 0.92)" if is_dark_theme else "rgba(241, 245, 249, 0.96)",
-    )
+        fallback="rgba(30, 41, 59, 0.92)" if is_dark_theme else "rgba(241, 245, 249, 0.96)")
     drawer_panel_glow = _hex_to_rgba(
         primary_glow,
         0.14 if is_dark_theme else 0.18,
-        fallback="rgba(37, 99, 235, 0.14)",
-    )
+        fallback="rgba(37, 99, 235, 0.14)")
     drawer_panel_border = _hex_to_rgba(
         "#ffffff" if is_dark_theme else "#0f172a",
         0.2 if is_dark_theme else 0.12,
-        fallback="rgba(255, 255, 255, 0.2)" if is_dark_theme else "rgba(15, 23, 42, 0.12)",
-    )
+        fallback="rgba(255, 255, 255, 0.2)" if is_dark_theme else "rgba(15, 23, 42, 0.12)")
     drawer_panel_shadow = (
         "0 28px 60px rgba(15, 23, 42, 0.55)"
         if is_dark_theme
@@ -651,18 +642,15 @@ def build_theme_css(theme_key: str) -> str:
     drawer_handle_border = _hex_to_rgba(
         primary_depth,
         0.6 if is_dark_theme else 0.35,
-        fallback="rgba(15, 23, 42, 0.45)",
-    )
+        fallback="rgba(15, 23, 42, 0.45)")
     drawer_handle_text = _hex_to_rgba(
         "#ffffff" if is_dark_theme else "#0f172a",
         0.92 if is_dark_theme else 0.88,
-        fallback="rgba(255, 255, 255, 0.92)" if is_dark_theme else "rgba(15, 23, 42, 0.88)",
-    )
+        fallback="rgba(255, 255, 255, 0.92)" if is_dark_theme else "rgba(15, 23, 42, 0.88)")
     drawer_placeholder_color = _hex_to_rgba(
         text_color,
         0.72 if is_dark_theme else 0.64,
-        fallback="rgba(255, 255, 255, 0.7)" if is_dark_theme else "rgba(15, 23, 42, 0.62)",
-    )
+        fallback="rgba(255, 255, 255, 0.7)" if is_dark_theme else "rgba(15, 23, 42, 0.62)")
 
     css = f"""
     <style>

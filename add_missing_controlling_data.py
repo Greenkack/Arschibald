@@ -62,7 +62,7 @@ def add_missing_data():
             JOIN controlling_criteria c ON pd.criterion_id = c.id
             WHERE pd.employee_id = 1 AND pd.date = ?
             ORDER BY c.name
-        """, (today,))
+        """, (today))
         
         print("\n📊 Aktuelle Daten für heute:")
         for row in cursor.fetchall():
@@ -77,7 +77,7 @@ def add_missing_data():
         FROM controlling_performance_data pd
         JOIN controlling_criteria c ON pd.criterion_id = c.id
         WHERE pd.employee_id = 1 AND pd.date = ?
-    """, (today,))
+    """, (today))
     
     data = {row['name']: row['value'] for row in cursor.fetchall()}
     
@@ -132,7 +132,7 @@ def add_missing_data():
         JOIN controlling_criteria c ON pd.criterion_id = c.id
         WHERE pd.employee_id = 1 AND pd.date = ?
         ORDER BY c.name
-    """, (today,))
+    """, (today))
     
     print("\n📊 Aktualisierte Daten:")
     for row in cursor.fetchall():
@@ -147,7 +147,7 @@ def add_missing_data():
         FROM controlling_performance_data pd
         JOIN controlling_criteria c ON pd.criterion_id = c.id
         WHERE pd.employee_id = 1 AND pd.date = ?
-    """, (today,))
+    """, (today))
     all_data = {row['name']: row['value'] for row in cursor.fetchall()}
     
     verkauf = all_data.get('Verkauf', 0)
@@ -157,19 +157,36 @@ def add_missing_data():
     anrufe_gesamt = all_data.get('Getätigte Anrufe gesamt', 0)
     
     print("\n📈 NEUE QUOTAS:")
-    if angefahrene_termine_gesamt > 0:
-        abschlussquote = (verkauf / angefahrene_termine_gesamt) * 100
-        print(f"  Abschlussquote: {abschlussquote:.2f}% ({verkauf}/{angefahrene_termine_gesamt})")
-    else:
-        print(f"  Abschlussquote: 0.00% (Division durch 0)")
     
-    if anrufe_gesamt > 0:
-        terminquote = (kunden_terminiert / anrufe_gesamt) * 100
-        print(f"  Terminvereinbarungsquote: {terminquote:.2f}% ({kunden_terminiert}/{anrufe_gesamt})")
+    # Abschlussquote - Safe Division
+    try:
+        if angefahrene_termine_gesamt and angefahrene_termine_gesamt > 0:
+            abschlussquote = (verkauf / angefahrene_termine_gesamt) * 100
+            print(f"  Abschlussquote: {abschlussquote:.2f}% ({verkauf} von {angefahrene_termine_gesamt})")
+        else:
+            print("  Abschlussquote: 0.00% (keine Termine)")
+    except ZeroDivisionError:
+        print("  Abschlussquote: 0.00% (Division Error)")
     
-    if kunden_terminiert > 0:
-        anfahrquote = (angefahrene_termine / kunden_terminiert) * 100
-        print(f"  Termine-Anfahrquote: {anfahrquote:.2f}% ({angefahrene_termine}/{kunden_terminiert})")
+    # Terminquote - Safe Division
+    try:
+        if anrufe_gesamt and anrufe_gesamt > 0:
+            terminquote = (kunden_terminiert / anrufe_gesamt) * 100
+            print(f"  Terminvereinbarungsquote: {terminquote:.2f}% ({kunden_terminiert} von {anrufe_gesamt})")
+        else:
+            print("  Terminvereinbarungsquote: 0.00% (keine Anrufe)")
+    except ZeroDivisionError:
+        print("  Terminvereinbarungsquote: 0.00% (Division Error)")
+    
+    # Anfahrquote - Safe Division
+    try:
+        if kunden_terminiert and kunden_terminiert > 0:
+            anfahrquote = (angefahrene_termine / kunden_terminiert) * 100
+            print(f"  Termine-Anfahrquote: {anfahrquote:.2f}% ({angefahrene_termine} von {kunden_terminiert})")
+        else:
+            print("  Termine-Anfahrquote: 0.00% (keine Termine)")
+    except ZeroDivisionError:
+        print("  Termine-Anfahrquote: 0.00% (Division Error)")
     
     conn.close()
 

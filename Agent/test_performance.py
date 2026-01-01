@@ -31,8 +31,7 @@ class TestKnowledgeBasePerformance:
         """Test knowledge base search completes within 1 second"""
         from agent.tools.knowledge_tools import (
             knowledge_base_search,
-            setup_knowledge_base,
-        )
+            setup_knowledge_base)
 
         kb_dir = Path(__file__).parent / "knowledge_base"
 
@@ -213,7 +212,7 @@ class TestConcurrentSessions:
             start_time = time.time()
 
             for i in range(5):
-                t = threading.Thread(target=worker, args=(i,))
+                t = threading.Thread(target=worker, args=(i))
                 t.start()
                 threads.append(t)
 
@@ -235,8 +234,7 @@ class TestConcurrentSessions:
         """Test concurrent knowledge base searches"""
         from agent.tools.knowledge_tools import (
             knowledge_base_search,
-            setup_knowledge_base,
-        )
+            setup_knowledge_base)
 
         kb_dir = Path(__file__).parent / "knowledge_base"
 

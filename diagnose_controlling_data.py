@@ -128,7 +128,7 @@ def diagnose_employee(employee_id, days_back=30):
         FROM controlling_employees e
         LEFT JOIN controlling_positions p ON e.position_id = p.id
         WHERE e.id = ?
-    """, (employee_id,))
+    """, (employee_id))
     
     employee = cursor.fetchone()
     conn.close()

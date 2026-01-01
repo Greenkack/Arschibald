@@ -16,8 +16,7 @@ from typing import Any
 
 from financial_calculations import (
     calculate_discount_amount,
-    calculate_surcharge_amount,
-)
+    calculate_surcharge_amount)
 
 from .dynamic_key_manager import DynamicKeyManager
 
@@ -438,8 +437,7 @@ class PricingModificationEngine:
             # Calculate discount amount
             discount_amount = calculate_discount_amount(
                 base_amount,
-                discount.discount_value,
-            )
+                discount.discount_value)
 
             # Apply maximum discount limit if set
             if (discount.maximum_discount and
@@ -457,8 +455,7 @@ class PricingModificationEngine:
                     "percentage": discount.discount_value,
                     "calculated_amount": calculate_discount_amount(
                         base_amount,
-                        discount.discount_value,
-                    ),
+                        discount.discount_value),
                     "applied_amount": discount_amount,
                     "capped": (
                         discount.maximum_discount and
@@ -488,8 +485,7 @@ class PricingModificationEngine:
             # Calculate surcharge amount
             surcharge_amount = calculate_surcharge_amount(
                 base_amount,
-                surcharge.surcharge_value,
-            )
+                surcharge.surcharge_value)
 
             # Apply maximum surcharge limit if set
             if (surcharge.maximum_surcharge and
@@ -507,8 +503,7 @@ class PricingModificationEngine:
                     "percentage": surcharge.surcharge_value,
                     "calculated_amount": calculate_surcharge_amount(
                         base_amount,
-                        surcharge.surcharge_value,
-                    ),
+                        surcharge.surcharge_value),
                     "applied_amount": surcharge_amount,
                     "capped": (
                         surcharge.maximum_surcharge and

@@ -15,7 +15,7 @@ from theming import ThemeManager
 # Seiten-Konfiguration
 st.set_page_config(
     page_title="Form Components Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 
@@ -61,7 +61,7 @@ with tab1:
         label="E-Mail-Adresse",
         type="email",
         placeholder="ihre@email.de",
-        prefix_icon="",
+        prefix_
         help_text="Wir werden Ihre E-Mail niemals weitergeben",
         required=True,
         key="demo_email_input",
@@ -80,7 +80,7 @@ with tab1:
         label="Passwort",
         type="password",
         placeholder="Mindestens 8 Zeichen",
-        prefix_icon="",
+        prefix_
         help_text="Verwenden Sie ein sicheres Passwort",
         required=True,
         key="demo_password_input",
@@ -99,7 +99,7 @@ with tab1:
         label="Alter",
         type="number",
         placeholder="18",
-        suffix_icon="",
+        suffix_
         help_text="Ihr Alter in Jahren",
         key="demo_number_input",
         theme_manager=theme_manager
@@ -297,7 +297,7 @@ with tab5:
             label="E-Mail-Adresse",
             type="email",
             placeholder="max@example.com",
-            prefix_icon="",
+            prefix_
             required=True,
             key="form_email",
             theme_manager=theme_manager
@@ -307,7 +307,7 @@ with tab5:
             label="Telefonnummer",
             type="tel",
             placeholder="+49 123 456789",
-            prefix_icon="",
+            prefix_
             key="form_phone",
             theme_manager=theme_manager
         )
@@ -336,7 +336,7 @@ with tab5:
             label="Passwort",
             type="password",
             placeholder="Mindestens 8 Zeichen",
-            prefix_icon="",
+            prefix_
             required=True,
             key="form_password",
             theme_manager=theme_manager
@@ -346,7 +346,7 @@ with tab5:
             label="Passwort bestätigen",
             type="password",
             placeholder="Passwort wiederholen",
-            prefix_icon="",
+            prefix_
             required=True,
             key="form_password_confirm",
             theme_manager=theme_manager
@@ -466,7 +466,7 @@ with st.sidebar:
     email = input_field(
         label="E-Mail",
         type="email",
-        prefix_icon="",
+        prefix_
         required=True
     )
     ```

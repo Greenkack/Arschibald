@@ -33,7 +33,7 @@ cursor.execute("""
     FROM controlling_performance_data pd
     JOIN controlling_criteria c ON pd.criterion_id = c.id
     WHERE pd.employee_id = ? AND pd.date = '2025-12-07'
-""", (kamuran_id,))
+""", (kamuran_id))
 
 data = {}
 for row in cursor.fetchall():

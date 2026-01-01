@@ -67,8 +67,8 @@ class ShadcnSidebar:
         main_group = MenuGroup(
             title="Hauptmenü",
             items=[
-                MenuItem(label="Dashboard", icon="", key="dashboard"),
-                MenuItem(label="Projekte", icon="", key="projects"),
+                MenuItem(label="Dashboard", key="dashboard"),
+                MenuItem(label="Projekte", key="projects"),
             ]
         )
 
@@ -354,7 +354,7 @@ class ShadcnSidebar:
         # Rendere Gruppen-Header
         if group.collapsible:
             # Kollabier-Icon
-            collapse_icon = "" if not is_collapsed else ""
+            collapse_ if not is_collapsed else ""
 
             header_html = f"""
             <div class="shadcn-group-header shadcn-menu-group-title">
@@ -416,15 +416,15 @@ class ShadcnSidebar:
                 MenuGroup(
                     title="Hauptmenü",
                     items=[
-                        MenuItem("Dashboard", icon="", key="dashboard"),
-                        MenuItem("Projekte", icon="", key="projects"),
+                        MenuItem("Dashboard", key="dashboard"),
+                        MenuItem("Projekte", key="projects"),
                     ]
                 ),
                 MenuGroup(
                     title="Einstellungen",
                     items=[
-                        MenuItem("Profil", icon="", key="profile"),
-                        MenuItem("Themes", icon="", key="themes"),
+                        MenuItem("Profil", key="profile"),
+                        MenuItem("Themes", key="themes"),
                     ]
                 )
             ]
@@ -487,7 +487,7 @@ def create_sidebar_menu(
             MenuGroup(
                 title="Navigation",
                 items=[
-                    MenuItem("Home", icon="", key="home"),
+                    MenuItem("Home", key="home"),
                     MenuItem("About", icon="ℹ", key="about"),
                 ]
             )
@@ -512,23 +512,23 @@ def get_default_menu() -> List[MenuGroup]:
         MenuGroup(
             title="Hauptmenü",
             items=[
-                MenuItem(label="Dashboard", icon="", key="dashboard"),
-                MenuItem(label="Projekte", icon="", key="projects"),
-                MenuItem(label="Berichte", icon="", key="reports"),
+                MenuItem(label="Dashboard", key="dashboard"),
+                MenuItem(label="Projekte", key="projects"),
+                MenuItem(label="Berichte", key="reports"),
             ]
         ),
         MenuGroup(
             title="Verwaltung",
             items=[
-                MenuItem(label="Benutzer", icon="", key="users"),
-                MenuItem(label="Einstellungen", icon="", key="settings"),
+                MenuItem(label="Benutzer", key="users"),
+                MenuItem(label="Einstellungen", key="settings"),
             ]
         ),
         MenuGroup(
             title="Hilfe",
             items=[
-                MenuItem(label="Dokumentation", icon="", key="docs"),
-                MenuItem(label="Support", icon="", key="support"),
+                MenuItem(label="Dokumentation", key="docs"),
+                MenuItem(label="Support", key="support"),
             ]
         )
     ]
@@ -547,17 +547,14 @@ def get_solar_calculator_menu() -> List[MenuGroup]:
             items=[
                 MenuItem(
                     label="Solar-Rechner",
-                    icon="",
                     key="solar_calculator"
                 ),
                 MenuItem(
                     label="Wärmepumpe",
-                    icon="",
                     key="heatpump"
                 ),
                 MenuItem(
                     label="3D-Visualisierung",
-                    icon="",
                     key="3d_view"
                 ),
             ]
@@ -565,17 +562,17 @@ def get_solar_calculator_menu() -> List[MenuGroup]:
         MenuGroup(
             title="Verwaltung",
             items=[
-                MenuItem(label="CRM", icon="", key="crm"),
-                MenuItem(label="Angebote", icon="", key="offers"),
-                MenuItem(label="Produkte", icon="", key="products"),
+                MenuItem(label="CRM", key="crm"),
+                MenuItem(label="Angebote", key="offers"),
+                MenuItem(label="Produkte", key="products"),
             ]
         ),
         MenuGroup(
             title="Administration",
             items=[
-                MenuItem(label="Admin-Panel", icon="", key="admin"),
-                MenuItem(label="Preismatrix", icon="", key="pricing"),
-                MenuItem(label="Themes", icon="", key="themes"),
+                MenuItem(label="Admin-Panel", key="admin"),
+                MenuItem(label="Preismatrix", key="pricing"),
+                MenuItem(label="Themes", key="themes"),
             ]
         )
     ]

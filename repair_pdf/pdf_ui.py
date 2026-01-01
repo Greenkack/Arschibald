@@ -322,7 +322,7 @@ def render_pdf_ui(
         if preset_names:
             selected_preset_name_to_load = st.selectbox(get_text_pdf_ui(texts, "pdf_load_preset_label", "Vorlage laden"), options=[get_text_pdf_ui(texts, "pdf_no_preset_selected_option", "-- Keine Vorlage --")] + preset_names, key="pdf_preset_load_select_v1_stable")
             if selected_preset_name_to_load != get_text_pdf_ui(texts, "pdf_no_preset_selected_option", "-- Keine Vorlage --"):
-                if st.button(get_text_pdf_ui(texts, "pdf_load_selected_preset_button", "Ausgewählte Vorlage anwenden"), key="pdf_load_preset_btn_v1_stable", on_click=load_preset_on_click, args=(selected_preset_name_to_load,)): pass
+                if st.button(get_text_pdf_ui(texts, "pdf_load_selected_preset_button", "Ausgewählte Vorlage anwenden"), key="pdf_load_preset_btn_v1_stable", on_click=load_preset_on_click, args=(selected_preset_name_to_load)): pass
         else: 
             st.caption(get_text_pdf_ui(texts, "pdf_no_presets_available_caption", "Keine Vorlagen gespeichert."))
     with col_preset2:
@@ -1122,14 +1122,12 @@ def render_pdf_ui(
                                         display_name=file_name,
                                         doc_type="offer_pdf",
                                         project_id=created_project_id,
-                                        suggested_filename=file_name,
-                                    )
+                                        suggested_filename=file_name)
                                     # JSON-Snapshot ablegen
                                     snapshot = json.dumps(
                                         {"project_data": project_data, "analysis_results": analysis_results},
                                         ensure_ascii=False,
-                                        default=str,
-                                    ).encode("utf-8")
+                                        default=str).encode("utf-8")
                                     json_name = f"Projekt_Snapshot_{timestamp_file}.json"
                                     _ = add_customer_document(
                                         created_customer_id,
@@ -1137,8 +1135,7 @@ def render_pdf_ui(
                                         display_name=json_name,
                                         doc_type="project_json",
                                         project_id=created_project_id,
-                                        suggested_filename=json_name,
-                                    )
+                                        suggested_filename=json_name)
                                     st.success("Kunde gespeichert und Dokumente in der Kundenakte abgelegt.")
                                     st.session_state["_last_saved_crm_customer_id"] = created_customer_id
                                     st.session_state["_last_saved_crm_project_id"] = created_project_id

@@ -161,7 +161,7 @@ def demo_system_diagnostics(service: MaintenanceService):
     
     print("\nDetailed Results:")
     for diag in result.diagnostics:
-        status_icon = "" if diag.status.value == "healthy" else "" if diag.status.value == "warning" else ""
+        status_ if diag.status.value == "healthy" else "" if diag.status.value == "warning" else ""
         print(f"\n{status_icon} {diag.diagnostic_type.upper()}")
         print(f"   Status: {diag.status.value}")
         print(f"   Metrics: {diag.metrics}")
@@ -215,7 +215,7 @@ def demo_maintenance_logs(service: MaintenanceService):
     logs = service.get_maintenance_logs(limit=10)
     
     for log in logs:
-        status_icon = "" if log.status == "success" else "" if log.status == "failed" else "⏳"
+        status_ if log.status == "success" else "" if log.status == "failed" else "⏳"
         print(f"{status_icon} {log.operation_type.upper()}: {log.operation_name}")
         print(f"   Started: {log.started_at}")
         if log.completed_at:

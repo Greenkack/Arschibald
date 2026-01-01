@@ -269,19 +269,31 @@ def render_intro_screen():
             box-shadow: 0 10px 10px rgba(0, 0, 0, 0.15) !important;
         }
         
-        /* TABS - Dunkleres Grau Design mit Orange Akzenten */
-        .stTabs {
-            background-color: transparent !important;
+        /* TABS - KOMPLETTES STYLING - Weißer Container, schwarze Schrift */
+        /* ALLE Tab-Container auf WEISS - mehrere Selektoren */
+        div.stTabs,
+        [data-testid="stTabs"],
+        [data-baseweb="tab-highlight"],
+        [data-baseweb="tab-border"],
+        [data-baseweb="tab-overflow"] {
+            background-color: #ffffff !important;
         }
-        .stTabs [data-baseweb="tab-list"] {
-            background-color: #a7a7a7 !important;
+        
+        /* Tab-Liste Container - WEISS mit Padding - HÖCHSTE PRIORITÄT */
+        body [data-baseweb="tab-list"],
+        body div[data-baseweb="tab-list"],
+        [data-baseweb="tab-list"] {
+            background-color: #ffffff !important;
             border-radius: 12px !important;
             padding: 8px !important;
             box-shadow: 0 10px 16px rgba(0, 0, 0, 0.25) !important;
             gap: 8px !important;
         }
-        .stTabs [data-baseweb="tab"] {
-            background-color: transparent !important;
+        
+        /* INAKTIVE Tab-Buttons - HELLGRAU Hintergrund, SCHWARZE Schrift - HÖCHSTE PRIORITÄT */
+        body button[data-baseweb="tab"]:not([aria-selected="true"]),
+        button[data-baseweb="tab"]:not([aria-selected="true"]) {
+            background-color: #e8e8e8 !important;
             color: #000000 !important;
             border-radius: 8px !important;
             padding: 12px 24px !important;
@@ -289,17 +301,43 @@ def render_intro_screen():
             border: none !important;
             transition: all 0.3s ease !important;
         }
-        .stTabs [data-baseweb="tab"]:hover {
-            background-color: #c9c9c9 !important;
+        body button[data-baseweb="tab"]:not([aria-selected="true"]) span,
+        button[data-baseweb="tab"]:not([aria-selected="true"]) span {
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Tab-Button Hover - Helleres Grau */
+        button[data-baseweb="tab"]:not([aria-selected="true"]):hover {
+            background-color: #e0e0e0 !important;
             color: #FF8C00 !important;
         }
-        .stTabs [aria-selected="true"] {
-            background-color: #c9c9c9 !important;
-            color: #000000 !important;
-            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.3),
-                        inset 0 -3px 0 #FF8C00 !important;
+        button[data-baseweb="tab"]:not([aria-selected="true"]):hover span {
+            color: #FF8C00 !important;
         }
-        .stTabs [data-baseweb="tab-panel"] {
+        
+        /* AKTIVER Tab - ORANGE mit weißer Schrift - HÖCHSTE PRIORITÄT */
+        body button[data-baseweb="tab"][aria-selected="true"],
+        button[data-baseweb="tab"][aria-selected="true"] {
+            background-color: #FF8C00 !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 12px 24px !important;
+            font-weight: 700 !important;
+            border: none !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.3) !important;
+        }
+        body button[data-baseweb="tab"][aria-selected="true"] span,
+        button[data-baseweb="tab"][aria-selected="true"] span {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Tab-Panel (Inhaltsbereich) - WEISS */
+        div.stTabs [data-baseweb="tab-panel"],
+        div[data-testid="stTabs"] [data-baseweb="tab-panel"],
+        .stTabs [data-baseweb="tab-panel"],
+        [data-baseweb="tab-panel"] {
             background-color: #ffffff !important;
             border-radius: 12px !important;
             padding: 24px !important;
@@ -307,14 +345,14 @@ def render_intro_screen():
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
         }
         
-        /* Eingabefelder - Grau mit schwarzen Schattierungen */
+        /* Eingabefelder - Weiß mit schwarzer Schrift */
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea,
         input[type="text"],
         input[type="password"],
         input[type="email"],
         textarea {
-            background-color: #a9a9a9 !important;
+            background-color: #ffffff !important;
             color: #000000 !important;
             border: 2px solid #cbd5e0 !important;
             border-radius: 10px !important;
@@ -345,7 +383,7 @@ def render_intro_screen():
             opacity: 0.6 !important;
         }
         
-        /* Labels - Schwarz und Dick (Fett) */
+        /* Labels - Hellgrau und Dick (Fett) */
         .stTextInput > label,
         label,
         .stTextInput label p,
@@ -355,7 +393,7 @@ def render_intro_screen():
         div[data-testid="stFormSubmitButton"] + div p,
         .stExpander summary,
         .stExpander p {
-            color: #000000 !important;
+            color: #6b6b6b !important;
             font-weight: 900 !important;
             font-size: 1rem !important;
             margin-bottom: 10px !important;
@@ -547,7 +585,7 @@ def render_intro_screen():
         button[type="submit"],
         .stButton > button[kind="primary"],
         button[data-testid="baseButton-primary"] {
-            background: linear-gradient(135deg, #000000 0%, #000000 100%) !important;
+            background: linear-gradient(135deg, #FF8C00 0%, #FF6B00 100%) !important;
             color: #000000 !important;
             font-weight: 700 !important;
             border: none !important;
@@ -557,7 +595,7 @@ def render_intro_screen():
         button[type="submit"]:hover,
         .stButton > button[kind="primary"]:hover,
         button[data-testid="baseButton-primary"]:hover {
-            background: linear-gradient(135deg, #000000 0%, #000000 100%) !important;
+            background: linear-gradient(135deg, #FF9500 0%, #FF7A00 100%) !important;
             box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3),
                         0 10px 12px rgba(255, 140, 0, 0.4) !important;
             transform: translateY(-3px) !important;
@@ -572,15 +610,15 @@ def render_intro_screen():
         /* Secondary Buttons - Weiß mit schwarzen Schattierungen */
         button[kind="secondary"],
         .stButton > button[kind="secondary"] {
-            background-color: #000000 !important;
-            color: #000000 !important;
+            background-color: #ffffff !important;
+            color: #ffffff !important;
             border: 2px solid #cbd5e0 !important;
             box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1) !important;
         }
         button[kind="secondary"]:hover {
-            background-color: #f7fafc !important;
+            background-color: #ffffff !important;
             border-color: #000000 !important;
-            color: #000000 !important;
+            color: #ffffff !important;
             box-shadow: 0 10px 16px rgba(0, 0, 0, 0.15),
                         0 0 0 10px rgba(255, 140, 0, 0.1) !important;
         }
@@ -623,7 +661,95 @@ def render_intro_screen():
             color: #FF8C00 !important;
         }
         
-
+        /* ========================================
+           STREAMLIT-MENÜ (3 PUNKTE) - SCHWARZE SCHRIFT
+           ======================================== */
+        
+        /* Header & Menu Button */
+        header[data-testid="stHeader"],
+        header button,
+        button[kind="header"],
+        button[kind="headerNoPadding"],
+        button[data-testid="stHeaderActionButton"] {
+            background-color: rgba(170, 170, 170, 0.95) !important;
+        }
+        
+        /* Menu Button Icon - SCHWARZ */
+        header button,
+        header button *,
+        header button svg,
+        header button svg path,
+        button[kind="header"],
+        button[kind="header"] *,
+        button[kind="headerNoPadding"],
+        button[kind="headerNoPadding"] * {
+            color: #000000 !important;
+            fill: #000000 !important;
+            stroke: #000000 !important;
+        }
+        
+        /* Menu Dropdown Container */
+        [data-testid="stMainMenu"],
+        [data-testid="stMainMenuPopover"],
+        ul[data-testid="main-menu-list"],
+        div[role="menu"],
+        div[role="dialog"] {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        /* Menu Items - SCHWARZE SCHRIFT */
+        [data-testid="stMainMenu"] *,
+        [data-testid="stMainMenuPopover"] *,
+        ul[data-testid="main-menu-list"],
+        ul[data-testid="main-menu-list"] *,
+        ul[data-testid="main-menu-list"] li,
+        ul[data-testid="main-menu-list"] a,
+        ul[data-testid="main-menu-list"] span,
+        ul[data-testid="main-menu-list"] button,
+        div[role="menu"] *,
+        div[role="menuitem"],
+        div[role="menuitem"] *,
+        li[role="menuitem"],
+        li[role="menuitem"] *,
+        div[role="dialog"] *,
+        div[role="dialog"] h1,
+        div[role="dialog"] h2,
+        div[role="dialog"] h3,
+        div[role="dialog"] p,
+        div[role="dialog"] span,
+        div[role="dialog"] label,
+        div[role="dialog"] div {
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Settings Dialog - ALLE Texte SCHWARZ */
+        section[role="dialog"],
+        section[role="dialog"] *,
+        [data-testid="stModal"],
+        [data-testid="stModal"] *,
+        .stModal,
+        .stModal *,
+        div[class*="Modal"],
+        div[class*="Modal"] *,
+        div[class*="ModalDialog"],
+        div[class*="ModalDialog"] * {
+            color: #000000 !important;
+        }
+        
+        /* Menu Items Hover */
+        ul[data-testid="main-menu-list"] li:hover,
+        ul[data-testid="main-menu-list"] li:hover *,
+        div[role="menuitem"]:hover,
+        div[role="menuitem"]:hover *,
+        li[role="menuitem"]:hover,
+        li[role="menuitem"]:hover * {
+            background-color: #f7f9fc !important;
+            color: #FF8C00 !important;
+        }
 
         /* Dynamische Effekte werden aus den globalen Einstellungen geladen */
         </style>
@@ -956,6 +1082,259 @@ def render_intro_screen():
 
         st.markdown("---")
 
+        # INTRO-SCREEN WRAPPER für spezifische Styles
+        st.markdown('<div id="intro-screen-container" class="intro-screen-wrapper">', unsafe_allow_html=True)
+        
+        # INTRO-SPECIFIC STYLES - Überschreiben globale Theme-Styles
+        st.markdown("""
+        <style>
+        /* INTRO-SCREEN SPEZIFISCHE STYLES - HÖCHSTE PRIORITÄT */
+        #intro-screen-container .stTabs [data-baseweb="tab-list"],
+        .intro-screen-wrapper .stTabs [data-baseweb="tab-list"] {
+            background-color: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 8px !important;
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.25) !important;
+            gap: 8px !important;
+        }
+        #intro-screen-container .stTabs [data-baseweb="tab"],
+        .intro-screen-wrapper .stTabs [data-baseweb="tab"],
+        #intro-screen-container button[data-baseweb="tab"],
+        .intro-screen-wrapper button[data-baseweb="tab"] {
+            background-color: #e8e8e8 !important;
+            color: #000000 !important;
+            border-radius: 8px !important;
+            padding: 12px 24px !important;
+            font-weight: 700 !important;
+            border: none !important;
+            border-bottom: none !important;
+            transition: all 0.3s ease !important;
+        }
+        #intro-screen-container .stTabs [data-baseweb="tab"]:hover,
+        .intro-screen-wrapper .stTabs [data-baseweb="tab"]:hover,
+        #intro-screen-container button[data-baseweb="tab"]:hover,
+        .intro-screen-wrapper button[data-baseweb="tab"]:hover {
+            background-color: #f5f5f5 !important;
+            color: #FF8C00 !important;
+            border-bottom: none !important;
+        }
+        #intro-screen-container .stTabs [aria-selected="true"],
+        .intro-screen-wrapper .stTabs [aria-selected="true"],
+        #intro-screen-container button[data-baseweb="tab"][aria-selected="true"],
+        .intro-screen-wrapper button[data-baseweb="tab"][aria-selected="true"] {
+            background-color: #FF8C00 !important;
+            color: #ffffff !important;
+            border-bottom: none !important;
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.3) !important;
+        }
+        #intro-screen-container .stTabs [data-baseweb="tab-panel"],
+        .intro-screen-wrapper .stTabs [data-baseweb="tab-panel"] {
+            background-color: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 24px !important;
+            margin-top: 16px !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+        /* Labels hellgrau */
+        #intro-screen-container .stTextInput > label,
+        .intro-screen-wrapper .stTextInput > label,
+        #intro-screen-container label,
+        .intro-screen-wrapper label,
+        #intro-screen-container .stForm label,
+        .intro-screen-wrapper .stForm label {
+            color: #6b6b6b !important;
+            font-weight: 900 !important;
+        }
+        /* Eingabefelder weiß */
+        #intro-screen-container .stTextInput > div > div > input,
+        .intro-screen-wrapper .stTextInput > div > div > input,
+        #intro-screen-container input[type="text"],
+        .intro-screen-wrapper input[type="text"],
+        #intro-screen-container input[type="password"],
+        .intro-screen-wrapper input[type="password"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # JAVASCRIPT: Styles dynamisch NACH Page-Load injizieren - ABSOLUTE HÖCHSTE PRIORITÄT
+        # ÜBERSCHREIBT ALLES - AUCH THEME-CSS!
+        components.html("""
+        <script>
+        (function() {
+            function applyIntroStyles() {
+                // Entferne alte Styles
+                const oldStyle = document.getElementById('intro-override-styles');
+                if (oldStyle) oldStyle.remove();
+                
+                // Erstelle neuen Style-Block mit absolut höchster Priorität
+                const style = document.createElement('style');
+                style.id = 'intro-override-styles';
+                style.setAttribute('data-intro-priority', 'maximum');
+                style.innerHTML = `
+                    /* ============================================
+                       INTRO-SCREEN ABSOLUTE OVERRIDE STYLES
+                       ÜBERSCHREIBT ALLE THEMES UND CONFIGS!
+                       ============================================ */
+                    /* ============================================
+                       INTRO-SCREEN ABSOLUTE OVERRIDE STYLES
+                       ÜBERSCHREIBT ALLE THEMES UND CONFIGS!
+                       ============================================ */
+                    
+                    /* TAB CONTAINER - WEISS */
+                    body div[data-baseweb="tab-list"],
+                    div[data-baseweb="tab-list"] {
+                        background-color: #ffffff !important;
+                        border-radius: 12px !important;
+                        padding: 8px !important;
+                        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.25) !important;
+                        gap: 8px !important;
+                    }
+                    
+                    /* INAKTIVE TABS - HELLGRAU MIT SCHWARZER SCHRIFT */
+                    body button[data-baseweb="tab"]:not([aria-selected="true"]),
+                    button[data-baseweb="tab"]:not([aria-selected="true"]) {
+                        background-color: #e8e8e8 !important;
+                        color: #000000 !important;
+                        border-radius: 8px !important;
+                        padding: 12px 24px !important;
+                        font-weight: 700 !important;
+                        border: none !important;
+                        border-bottom: none !important;
+                    }
+                    body button[data-baseweb="tab"]:not([aria-selected="true"]) span,
+                    button[data-baseweb="tab"]:not([aria-selected="true"]) span,
+                    body button[data-baseweb="tab"]:not([aria-selected="true"]) *,
+                    button[data-baseweb="tab"]:not([aria-selected="true"]) * {
+                        color: #000000 !important;
+                        font-weight: 700 !important;
+                    }
+                    
+                    /* HOVER STATE */
+                    body button[data-baseweb="tab"]:not([aria-selected="true"]):hover,
+                    button[data-baseweb="tab"]:not([aria-selected="true"]):hover {
+                        background-color: #f5f5f5 !important;
+                        color: #FF8C00 !important;
+                    }
+                    body button[data-baseweb="tab"]:not([aria-selected="true"]):hover span,
+                    button[data-baseweb="tab"]:not([aria-selected="true"]):hover span,
+                    body button[data-baseweb="tab"]:not([aria-selected="true"]):hover *,
+                    button[data-baseweb="tab"]:not([aria-selected="true"]):hover * {
+                        color: #FF8C00 !important;
+                    }
+                    
+                    /* AKTIVER TAB - ORANGE MIT WEISSER SCHRIFT */
+                    body button[data-baseweb="tab"][aria-selected="true"],
+                    button[data-baseweb="tab"][aria-selected="true"] {
+                        background-color: #FF8C00 !important;
+                        color: #ffffff !important;
+                        border-bottom: none !important;
+                        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.3) !important;
+                    }
+                    body button[data-baseweb="tab"][aria-selected="true"] span,
+                    button[data-baseweb="tab"][aria-selected="true"] span,
+                    body button[data-baseweb="tab"][aria-selected="true"] *,
+                    button[data-baseweb="tab"][aria-selected="true"] * {
+                        color: #ffffff !important;
+                        font-weight: 700 !important;
+                    }
+                    
+                    /* TAB PANEL - WEISS */
+                    body div[data-baseweb="tab-panel"],
+                    div[data-baseweb="tab-panel"] {
+                        background-color: #ffffff !important;
+                        border-radius: 12px !important;
+                        padding: 24px !important;
+                        margin-top: 16px !important;
+                        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+                    }
+                    
+                    /* LABELS - SCHWARZ */
+                    .stTextInput > label, .stTextInput label *, 
+                    label, .stForm label, .stForm label p,
+                    .stForm label *, form label, form label * {
+                        color: #000000 !important;
+                        font-weight: 700 !important;
+                    }
+                    
+                    /* INPUT FELDER - WEISS MIT SCHWARZER SCHRIFT */
+                    .stTextInput > div > div > input, 
+                    input[type="text"], input[type="password"], 
+                    input[type="email"], textarea {
+                        background-color: #ffffff !important;
+                        color: #000000 !important;
+                    }
+                `;
+                
+                // Füge Style zum Head hinzu
+                document.head.appendChild(style);
+                
+                // DIREKTES ELEMENT-STYLING für sofortige Wirkung
+                setTimeout(() => {
+                    // Tab-List Container
+                    document.querySelectorAll('[data-baseweb="tab-list"]').forEach(el => {
+                        el.style.setProperty('background-color', '#ffffff', 'important');
+                    });
+                    
+                    // Inaktive Tabs
+                    document.querySelectorAll('button[data-baseweb="tab"]:not([aria-selected="true"])').forEach(el => {
+                        el.style.setProperty('background-color', '#e8e8e8', 'important');
+                        el.style.setProperty('color', '#000000', 'important');
+                        // Auch alle Kind-Elemente
+                        el.querySelectorAll('*').forEach(child => {
+                            child.style.setProperty('color', '#000000', 'important');
+                        });
+                    });
+                    
+                    // Aktive Tabs
+                    document.querySelectorAll('button[data-baseweb="tab"][aria-selected="true"]').forEach(el => {
+                        el.style.setProperty('background-color', '#FF8C00', 'important');
+                        el.style.setProperty('color', '#ffffff', 'important');
+                        // Auch alle Kind-Elemente
+                        el.querySelectorAll('*').forEach(child => {
+                            child.style.setProperty('color', '#ffffff', 'important');
+                        });
+                    });
+                    
+                    // Tab-Panel
+                    document.querySelectorAll('[data-baseweb="tab-panel"]').forEach(el => {
+                        el.style.setProperty('background-color', '#ffffff', 'important');
+                    });
+                    
+                    // Labels
+                    document.querySelectorAll('label, .stForm label, .stTextInput label').forEach(el => {
+                        el.style.setProperty('color', '#000000', 'important');
+                        el.querySelectorAll('*').forEach(child => {
+                            child.style.setProperty('color', '#000000', 'important');
+                        });
+                    });
+                }, 50);
+            }
+            
+            // Mehrfach aufrufen
+            applyIntroStyles();
+            setTimeout(applyIntroStyles, 100);
+            setTimeout(applyIntroStyles, 300);
+            setTimeout(applyIntroStyles, 500);
+            setTimeout(applyIntroStyles, 1000);
+            setTimeout(applyIntroStyles, 2000);
+            setTimeout(applyIntroStyles, 3000);
+            
+            // MutationObserver für dynamische Änderungen
+            const observer = new MutationObserver(() => {
+                applyIntroStyles();
+            });
+            observer.observe(document.body, { 
+                childList: true, 
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class', 'style']
+            });
+        })();
+        </script>
+        """, height=0)
+
         # PFLICHT-LOGIN: Nur Login & Registrierung
         tab1, tab2 = st.tabs(["Anmelden", "Registrieren"])
 
@@ -1013,11 +1392,11 @@ def render_intro_screen():
 
         st.markdown("---")
 
-        # Tipp des Tages - Helles Grau mit Orange Akzent und schwarzen Schattierungen
+        # Tipp des Tages - Weißer Hintergrund mit Orange Akzent und schwarzer Schrift
         daily_tip = get_daily_tip()
         st.markdown(f"""
         <div style="
-            background-color: #aeaeae; 
+            background-color: #ffffff; 
             padding: 1.5rem; 
             border-radius: 12px; 
             border-left: 5px solid #FF8C00;
@@ -1025,16 +1404,20 @@ def render_intro_screen():
                         0 10px 10px rgba(0, 0, 0, 0.1);
             margin: 1.5rem 0;">
             <span style="
-                color: #080908; 
-                font-weight: 900; 
-                font-size: 1.2rem;
-                display: block;
-                margin-bottom: 0.5rem;">💡 Tipp des Tages:</span>
+                color: #000000 !important; 
+                font-weight: 900 !important; 
+                font-size: 1.2rem !important;
+                display: block !important;
+                margin-bottom: 0.5rem !important;
+                opacity: 1 !important;
+                text-shadow: none !important;">💡 Tipp des Tages:</span>
             <span style="
-                color: #080908; 
-                font-weight: 600;
-                font-size: 1rem;
-                line-height: 1.6;"> {daily_tip}</span>
+                color: #000000 !important; 
+                font-weight: 700 !important;
+                font-size: 1rem !important;
+                line-height: 1.6 !important;
+                opacity: 1 !important;
+                text-shadow: none !important;"> {daily_tip}</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1045,6 +1428,9 @@ def render_intro_screen():
         </div>
         """, unsafe_allow_html=True)
 
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Schließe Intro-Screen Container
         st.markdown('</div>', unsafe_allow_html=True)
 
     # Keyboard-Shortcut mit JavaScript
@@ -1078,7 +1464,7 @@ def render_registration_form(settings: dict):
         format_func=lambda x: "Privatkunde" if x == "privat" else "Firmenkunde")
 
     with st.form("registration_form"):
-        st.markdown("##### Pflichtangaben")
+        st.markdown('<h5 style="color: #000000 !important; font-weight: 700 !important;">Pflichtangaben</h5>', unsafe_allow_html=True)
 
         col1, col2 = st.columns(2)
 
@@ -1114,7 +1500,7 @@ def render_registration_form(settings: dict):
                 position = "Privatkunde"
                 department = ""
 
-        st.markdown("##### Optionale Angaben")
+        st.markdown('<h5 style="color: #000000 !important; font-weight: 700 !important;">Optionale Angaben</h5>', unsafe_allow_html=True)
 
         col3, col4 = st.columns(2)
 

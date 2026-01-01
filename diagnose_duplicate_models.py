@@ -39,7 +39,7 @@ def main():
                 SELECT manufacturer
                 FROM products
                 WHERE model_name = ?
-            """, (model,))
+            """, (model))
             
             mfrs = [row[0] for row in cursor.fetchall()]
             print(f"    Hersteller: {', '.join(mfrs)}")
@@ -58,7 +58,7 @@ def main():
             WHERE model_name LIKE ?
             ORDER BY manufacturer
             LIMIT 5
-        """, (f"%{model}%",))
+        """, (f"%{model}%"))
         
         results = cursor.fetchall()
         if results:

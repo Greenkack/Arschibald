@@ -20,8 +20,7 @@ try:
         get_database_metrics,
         run_database_health_check,
         is_feature_enabled,
-        FEATURES,
-    )
+        FEATURES)
     CORE_AVAILABLE = True
 except ImportError:
     CORE_AVAILABLE = False
@@ -302,5 +301,5 @@ Debug Mode: {config.debug}
 
 
 if __name__ == "__main__":
-    st.set_page_config(page_title="Core Status", page_icon="", layout="wide")
+    st.set_page_config(page_title="Core Status", page_ layout="wide")
     render_core_status_dashboard()

@@ -83,7 +83,7 @@ if os.path.exists(DB_PATH):
 
             for template_key in template_checks:
                 cursor.execute(
-                    "SELECT value FROM admin_settings WHERE key = ?", (template_key,))
+                    "SELECT value FROM admin_settings WHERE key = ?", (template_key))
                 result = cursor.fetchone()
                 if result:
                     import json

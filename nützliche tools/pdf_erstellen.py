@@ -37,8 +37,7 @@ for seite in range(1, anzahl_seiten + 1):
                     text,
                     fontsize=schriftgroesse,
                     fontname="helv",  # Standard oder exakte Fontdatei notwendig
-                    fill=farbe,
-                )
+                    fill=farbe)
 
     # Bilder exakt einfügen
     bildpos_file = os.path.join(OUTPUT_DIR, f"seite_{seite}_bilder_positionen.txt")

@@ -11,15 +11,13 @@ try:
         EnhancedPDFGenerator,
         create_pricing_breakdown_section,
         generate_enhanced_pdf_with_pricing,
-        update_pdf_placeholders_with_pricing,
-    )
+        update_pdf_placeholders_with_pricing)
     from pdf_pricing_templates import (
         PricingTemplateConfig,
         PricingTemplateManager,
         create_combined_pricing_template,
         create_heatpump_pricing_template,
-        create_pv_pricing_template,
-    )
+        create_pv_pricing_template)
     from pricing.dynamic_key_manager import DynamicKeyManager, KeyCategory
 
     MODULES_AVAILABLE = True

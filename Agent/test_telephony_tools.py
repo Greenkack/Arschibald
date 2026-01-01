@@ -7,14 +7,12 @@ Simple tests to verify telephony tools functionality.
 
 from agent.tools.telephony_tools import (
     CallTranscript,
-    get_telephony_tools,
-)
+    get_telephony_tools)
 from agent.tools.call_protocol import (
     CallProtocolManager,
     format_protocol_guide,
     get_call_protocol,
-    handle_objection,
-)
+    handle_objection)
 import os
 import sys
 

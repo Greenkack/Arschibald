@@ -16,8 +16,7 @@ from agent.tools.call_protocol import (
     build_argument_structure,
     generate_closing_statement,
     get_call_protocol,
-    handle_objection,
-)
+    handle_objection)
 import os
 import sys
 

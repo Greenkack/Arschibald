@@ -31,8 +31,7 @@ import streamlit as st
 try:
     from payment_terms import (
         get_payment_terms_config,
-        save_payment_terms_config,
-    )
+        save_payment_terms_config)
     PAYMENT_TERMS_AVAILABLE = True
 except ImportError:
     def get_payment_terms_config():

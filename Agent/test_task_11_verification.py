@@ -15,8 +15,7 @@ from agent.errors import (
     ToolError,
     format_error_message,
     get_retry_delay,
-    should_retry,
-)
+    should_retry)
 import os
 import sys
 
@@ -164,8 +163,7 @@ def test_logging_imports():
             log_agent_reasoning,
             log_api_call,
             log_docker_operation,
-            log_tool_execution,
-        )
+            log_tool_execution)
         print("All logging functions imported successfully")
 
         # Test logger creation

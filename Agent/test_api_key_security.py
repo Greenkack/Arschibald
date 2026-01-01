@@ -10,8 +10,7 @@ Requirements: 12.1, 12.2, 12.3, 12.5
 from Agent.config import (
     validate_api_key_format,
     validate_env_file_security,
-    validate_startup_security,
-)
+    validate_startup_security)
 from Agent.agent.security import mask_sensitive_data
 import os
 import sys

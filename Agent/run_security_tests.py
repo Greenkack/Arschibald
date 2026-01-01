@@ -8,8 +8,7 @@ from Agent.agent.security import (
     validate_command,
     validate_filename,
     validate_path,
-    validate_user_input,
-)
+    validate_user_input)
 import os
 import sys
 

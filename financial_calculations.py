@@ -37,8 +37,7 @@ def calculate_payback_years(
     annual_benefit: float | None,
     *,
     allow_infinite: bool = True,
-    default_zero: bool = False,
-) -> float:
+    default_zero: bool = False) -> float:
     """Return the amortisation/payback period in years.
 
     ``allow_infinite`` mirrors historical logic where division by zero yielded
@@ -135,8 +134,7 @@ def aggregate_subtotal(
     base: float | None = 0.0,
     discounts: Iterable[float] | None = None,
     surcharges: Iterable[float] | None = None,
-    additions: Iterable[float] | None = None,
-) -> float:
+    additions: Iterable[float] | None = None) -> float:
     """Aggregate subtotal from base, surcharges, discounts and other add-ons."""
 
     subtotal = _safe_float(base)
@@ -171,8 +169,7 @@ def calculate_final_price(
     discount_amount: float | None = None,
     surcharge_amount: float | None = None,
     additional_costs: float | None = None,
-    vat_rate: float = VAT_RATE_DEFAULT,
-) -> FinalPriceBreakdown:
+    vat_rate: float = VAT_RATE_DEFAULT) -> FinalPriceBreakdown:
     """Return a structured summary of a final price including VAT."""
     def __getstate__(self):
         """Ermöglicht Pickle-Serialisierung für Session State"""
@@ -215,5 +212,4 @@ def calculate_final_price(
         total_surcharges=total_surcharges,
         additional_costs=additionals,
         net_after_modifications=net_after,
-        gross_total=gross_total,
-    )
+        gross_total=gross_total)

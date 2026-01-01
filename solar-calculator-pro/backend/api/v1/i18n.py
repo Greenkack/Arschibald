@@ -19,8 +19,7 @@ from ...models.i18n_schemas import (
     TranslationUpdate,
     TranslationResponse,
     LanguagePreference,
-    TranslationExport,
-)
+    TranslationExport)
 
 router = APIRouter(prefix="/i18n", tags=["i18n"])
 
@@ -29,8 +28,7 @@ router = APIRouter(prefix="/i18n", tags=["i18n"])
 async def get_translations(
     namespace: Optional[str] = "all",
     language: Optional[str] = None,
-    db: Session = Depends(get_db),
-) -> List[TranslationResponse]:
+    db: Session = Depends(get_db)) -> List[TranslationResponse]:
     """
     Get all translations, optionally filtered by namespace and language
     """
@@ -42,8 +40,7 @@ async def get_translations(
 async def get_translation_resource(
     language: str,
     namespace: str,
-    db: Session = Depends(get_db),
-) -> Dict[str, Any]:
+    db: Session = Depends(get_db)) -> Dict[str, Any]:
     """
     Get translation resource for a specific language and namespace
     Used by i18next backend
@@ -55,8 +52,7 @@ async def get_translation_resource(
 @router.post("/translations")
 async def create_translation(
     translation: TranslationCreate,
-    db: Session = Depends(get_db),
-) -> TranslationResponse:
+    db: Session = Depends(get_db)) -> TranslationResponse:
     """
     Create a new translation
     """
@@ -67,8 +63,7 @@ async def create_translation(
 @router.put("/translations")
 async def update_translation(
     translation: TranslationUpdate,
-    db: Session = Depends(get_db),
-) -> TranslationResponse:
+    db: Session = Depends(get_db)) -> TranslationResponse:
     """
     Update an existing translation
     """
@@ -80,8 +75,7 @@ async def update_translation(
 async def delete_translation(
     key: str,
     namespace: str,
-    db: Session = Depends(get_db),
-):
+    db: Session = Depends(get_db)):
     """
     Delete a translation
     """
@@ -93,8 +87,7 @@ async def delete_translation(
 @router.get("/export")
 async def export_translations(
     format: str = "json",
-    db: Session = Depends(get_db),
-) -> StreamingResponse:
+    db: Session = Depends(get_db)) -> StreamingResponse:
     """
     Export all translations as a ZIP file
     """
@@ -116,15 +109,13 @@ async def export_translations(
         media_type="application/zip",
         headers={
             "Content-Disposition": f"attachment; filename=translations_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
-        },
-    )
+        })
 
 
 @router.post("/import")
 async def import_translations(
     file: UploadFile = File(...),
-    db: Session = Depends(get_db),
-):
+    db: Session = Depends(get_db)):
     """
     Import translations from a ZIP or JSON file
     """
@@ -189,8 +180,7 @@ async def get_supported_languages() -> List[Dict[str, Any]]:
 @router.put("/user/language")
 async def update_user_language(
     preference: LanguagePreference,
-    db: Session = Depends(get_db),
-):
+    db: Session = Depends(get_db)):
     """
     Update user's language preference
     """
@@ -202,8 +192,7 @@ async def update_user_language(
 @router.get("/user/{user_id}/language")
 async def get_user_language(
     user_id: int,
-    db: Session = Depends(get_db),
-) -> Dict[str, str]:
+    db: Session = Depends(get_db)) -> Dict[str, str]:
     """
     Get user's language preference
     """
@@ -215,8 +204,7 @@ async def get_user_language(
 @router.get("/missing")
 async def get_missing_translations(
     language: str,
-    db: Session = Depends(get_db),
-) -> List[Dict[str, Any]]:
+    db: Session = Depends(get_db)) -> List[Dict[str, Any]]:
     """
     Get list of missing translations for a language
     """
@@ -229,8 +217,7 @@ async def auto_translate(
     source_language: str,
     target_language: str,
     namespace: Optional[str] = None,
-    db: Session = Depends(get_db),
-):
+    db: Session = Depends(get_db)):
     """
     Auto-translate missing translations using translation service
     """
@@ -241,8 +228,7 @@ async def auto_translate(
 
 @router.get("/statistics")
 async def get_translation_statistics(
-    db: Session = Depends(get_db),
-) -> Dict[str, Any]:
+    db: Session = Depends(get_db)) -> Dict[str, Any]:
     """
     Get translation statistics (completion percentage, missing translations, etc.)
     """

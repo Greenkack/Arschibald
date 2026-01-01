@@ -18,8 +18,7 @@ Requirements tested: 5.1, 5.2, 5.3, 5.4, 5.5
 from agent.tools.execution_tools import (
     _ensure_docker_image_exists,
     execute_python_code_in_sandbox,
-    run_terminal_command_in_sandbox,
-)
+    run_terminal_command_in_sandbox)
 import os
 import sys
 import time
@@ -351,7 +350,7 @@ def test_concurrent_execution():
     # Run 3 containers concurrently
     threads = []
     for i in range(3):
-        thread = threading.Thread(target=run_code, args=(i,))
+        thread = threading.Thread(target=run_code, args=(i))
         threads.append(thread)
         thread.start()
 

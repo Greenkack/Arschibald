@@ -59,7 +59,7 @@ def verify_classes():
     from utils.shadcn_sidebar import MenuItem, MenuGroup, ShadcnSidebar
     
     # MenuItem
-    item = MenuItem(label="Test", icon="", key="test")
+    item = MenuItem(label="Test", key="test")
     assert item.label == "Test"
     assert item.icon == ""
     assert item.key == "test"

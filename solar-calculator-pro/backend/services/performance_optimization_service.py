@@ -267,8 +267,7 @@ class Project(Base):
         Index('idx_project_type', 'project_type'),
         Index('idx_status', 'status'),
         Index('idx_created_at', 'created_at'),
-        Index('idx_customer_status', 'customer_id', 'status'),
-    )
+        Index('idx_customer_status', 'customer_id', 'status'))
 
 class Product(Base):
     __tablename__ = "products"
@@ -284,8 +283,7 @@ class Product(Base):
         Index('idx_category', 'category'),
         Index('idx_manufacturer', 'manufacturer'),
         Index('idx_name_search', 'name', postgresql_using='gin'),
-        Index('idx_price', 'price'),
-    )
+        Index('idx_price', 'price'))
 """,
                     "impact": "Reduces query time by 60-70%"
                 },
@@ -560,8 +558,7 @@ class Product(Base):
     search_vector = Column(TSVECTOR)
     
     __table_args__ = (
-        Index('idx_search_vector', 'search_vector', postgresql_using='gin'),
-    )
+        Index('idx_search_vector', 'search_vector', postgresql_using='gin'))
 
 # Create trigger to update search_vector
 CREATE TRIGGER product_search_vector_update

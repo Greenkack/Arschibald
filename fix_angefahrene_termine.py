@@ -26,7 +26,7 @@ def fix_angefahrene_termine():
         WHERE pd.employee_id = 1 
         AND pd.date = ?
         AND c.name IN ('Angefahrene Termine', 'Angefahrene Termine gesamt')
-    """, (today,))
+    """, (today))
     
     data = {row['name']: {'value': row['value'], 'data_id': row['data_id'], 'criterion_id': row['criterion_id']} 
             for row in cursor.fetchall()}
@@ -94,7 +94,7 @@ def fix_angefahrene_termine():
         WHERE pd.employee_id = 1 AND pd.date = ?
         AND c.name IN ('Angefahrene Termine', 'Kunden terminiert', 'Verkauf', 
                       'Angefahrene Termine gesamt', 'Getätigte Anrufe gesamt')
-    """, (today,))
+    """, (today))
     
     values = {row['name']: row['value'] for row in cursor.fetchall()}
     

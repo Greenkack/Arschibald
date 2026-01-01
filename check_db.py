@@ -18,7 +18,7 @@ try:
 
     # Versuche, die Einspeisetarife zu laden
     cursor.execute(
-        "SELECT value FROM admin_settings WHERE key = ?", ('feed_in_tariffs',))
+        "SELECT value FROM admin_settings WHERE key = ?", ('feed_in_tariffs'))
     row = cursor.fetchone()
 
     if row:

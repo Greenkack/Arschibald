@@ -19,8 +19,7 @@ try:
         get_pv_mounting_component_names_by_manufacturer,
         get_pv_mounting_component_by_name,
         get_pv_mounting_roof_types,
-        PV_MOUNTING_DB_AVAILABLE,
-    )
+        PV_MOUNTING_DB_AVAILABLE)
     from solar_calculator_pv_mounting_integration import (
         calculate_mounting_requirements_from_details,
         update_mounting_quantities_in_details,

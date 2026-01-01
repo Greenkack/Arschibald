@@ -46,6 +46,58 @@ def render_user_management_tab():
     # User Management initialisieren
     um = UserManagement()
 
+    # CSS für Tabs - Transparenter Hintergrund mit Orange Akzenten und Schatten
+    st.markdown("""
+    <style>
+    /* Tab Container - Transparent Background */
+    [data-testid="stTabs"] {
+        background: transparent !important;
+    }
+    
+    /* Tab Liste - Kein schwarzer Hintergrund */
+    [data-testid="stTabs"] [data-baseweb="tab-list"] {
+        background: transparent !important;
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    /* Einzelne Tabs - Weiß mit Schatten */
+    [data-testid="stTabs"] [data-baseweb="tab"] {
+        background: white !important;
+        border-radius: 8px !important;
+        padding: 12px 24px !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+        border: 1px solid #e5e7eb !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* Tab Hover - Orange Glow */
+    [data-testid="stTabs"] [data-baseweb="tab"]:hover {
+        box-shadow: 0 4px 12px rgba(255, 140, 0, 0.2) !important;
+        border-color: #ff8c00 !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* Aktiver Tab - Orange Akzent */
+    [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
+        background: linear-gradient(135deg, #fff 0%, #fff5e6 100%) !important;
+        border: 2px solid #ff8c00 !important;
+        box-shadow: 0 4px 16px rgba(255, 140, 0, 0.25) !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Tab Content - Leichter Schatten */
+    [data-testid="stTabs"] [data-testid="stTabContent"] {
+        background: white !important;
+        border-radius: 8px !important;
+        padding: 24px !important;
+        margin-top: 12px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+        border: 1px solid #e5e7eb !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     # Haupt-Tabs
     tab1, tab2, tab3, tab4 = st.tabs([
         "Benutzerliste",

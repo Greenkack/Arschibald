@@ -15,8 +15,7 @@ from solar_calculator import (
     _ensure_project_data_dicts,
     _get_text,
     _is_session_alive,
-    trace_solar,
-)
+    trace_solar)
 
 # Import shadcn/ui migration helpers
 from utils.shadcn_migration_helpers import (
@@ -27,8 +26,7 @@ from utils.shadcn_migration_helpers import (
     shadcn_badge,
     apply_shadcn_chart_theme,
     shadcn_section,
-    SHADCN_AVAILABLE,
-)
+    SHADCN_AVAILABLE)
 
 # Import components directly
 try:
@@ -160,7 +158,6 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
                 message="Aktivieren Sie eine Preismatrix in den Admin-Einstellungen.",
                 alert_type="info",
                 title="Lösung",
-                icon="",
                 theme_manager=theme_manager
             )
         return
@@ -184,7 +181,6 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
             metric_card(
                 label="Basispreis",
                 value=_format_german_currency(base_price),
-                icon="",
                 size="medium",
                 theme_manager=theme_manager
             )
@@ -193,7 +189,6 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
             metric_card(
                 label="Extras",
                 value=_format_german_currency(extras_price),
-                icon="",
                 size="medium",
                 theme_manager=theme_manager
             )
@@ -202,7 +197,6 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
             metric_card(
                 label="Netto-Gesamt",
                 value=_format_german_currency(net_total),
-                icon="",
                 size="medium",
                 theme_manager=theme_manager
             )
@@ -213,7 +207,6 @@ def display_pricing_with_shadcn(details: dict[str, Any], texts: dict[str, str]) 
         metric_card(
             label=" Brutto-Gesamtpreis",
             value=_format_german_currency(gross_total),
-            icon="",
             size="large",
             theme_manager=theme_manager
         )

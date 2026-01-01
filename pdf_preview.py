@@ -31,9 +31,7 @@ def _show_unavailable(feature_name: str = "PDF-Vorschau") -> None:
             "1⃣ Gehen Sie zu **'Dateneingabe'** → **'Analysestufe'**\n"
             "2⃣ Füllen Sie alle erforderlichen Projektinformationen aus\n"
             "3⃣ Kehren Sie zum Tab **' PDF-Vorschau'** zurück\n\n"
-            "Alternativ: Nutzen Sie **'PDF-Ausgabe'** für direkte PDF-Erzeugung.",
-            icon="",
-        )
+            "Alternativ: Nutzen Sie **'PDF-Ausgabe'** für direkte PDF-Erzeugung.")
     except Exception:
         pass
 

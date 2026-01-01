@@ -26,7 +26,7 @@ def diagnose_employee_calculations(employee_id: int, employee_name: str):
         JOIN controlling_criteria c ON pd.criterion_id = c.id
         WHERE pd.employee_id = ?
         ORDER BY pd.date DESC, c.name
-    """, (employee_id,))
+    """, (employee_id))
     
     all_data = cursor.fetchall()
     

@@ -18,6 +18,56 @@ def render_monitoring_dashboard():
     
     st.title("Anwendungsüberwachung & Auswertung")
     
+    # CSS für Tabs mit Schattierungen und orangenen Akzenten
+    st.markdown("""
+    <style>
+    /* Tab-Container transparent (kein schwarzer Hintergrund) */
+    .stTabs [data-baseweb="tab-list"] {
+        background: transparent !important;
+        gap: 8px !important;
+        padding: 10px 0 !important;
+    }
+    
+    /* Tab-Buttons mit weißem Hintergrund, Schatten und orangen Akzenten */
+    .stTabs [data-baseweb="tab-list"] button {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border: 2px solid transparent !important;
+        border-radius: 12px 12px 0 0 !important;
+        padding: 14px 24px !important;
+        font-weight: 700 !important;
+        color: #2d3748 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06) !important;
+        margin-right: 4px !important;
+    }
+    
+    /* Hover-Effekt mit orangenem Akzent */
+    .stTabs [data-baseweb="tab-list"] button:hover {
+        border-color: rgba(255, 140, 0, 0.4) !important;
+        box-shadow: 0 6px 8px rgba(255, 140, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        transform: translateY(-2px) !important;
+        color: #ff8c00 !important;
+    }
+    
+    /* Aktiver Tab mit orangenen Akzenten und stärkerem Schatten */
+    .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+        background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+        border-color: #ff8c00 !important;
+        border-bottom: 4px solid #ff8c00 !important;
+        color: #ff8c00 !important;
+        box-shadow: 0 8px 12px rgba(255, 140, 0, 0.25), 0 6px 8px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 140, 0, 0.1) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* Tab-Content ohne schwarzen Hintergrund */
+    .stTabs [data-baseweb="tab-panel"] {
+        background: transparent !important;
+        padding: 20px 0 !important;
+        border: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Create tabs
     tabs = st.tabs([
         "Systemstatus",
@@ -52,6 +102,14 @@ def render_health_status():
     """Render overall health status."""
     
     st.header("Anwendungsstatus")
+    
+    # Testdaten-Generator Button
+    col_test1, col_test2 = st.columns([3, 1])
+    with col_test2:
+        if st.button("🧪 Testdaten generieren", use_container_width=True, help="Generiert Beispieldaten für die Anzeige"):
+            _generate_test_data()
+            st.success("Testdaten wurden generiert!")
+            st.rerun()
     
     health = evaluation_system.get_health_status()
     
@@ -116,6 +174,34 @@ def render_health_status():
             st.metric("Erfolgsrate", f"{err['success_rate']*100:.1f}%")
         with col2:
             st.metric("Fehleranzahl", err['error_count'])
+    
+    # Zeige letzte Scan-Ergebnisse
+    st.markdown("---")
+    st.subheader("Letzte Code-Analyse")
+    
+    scan_report = _load_scan_report()
+    if scan_report:
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("Gefundene Issues", scan_report.get('total_issues', 0))
+        with col2:
+            critical = scan_report.get('severity_breakdown', {}).get('CRITICAL', 0)
+            st.metric("Kritisch", critical, delta="-" if critical > 0 else "OK", delta_color="inverse")
+        with col3:
+            high = scan_report.get('severity_breakdown', {}).get('HIGH', 0)
+            st.metric("Hoch", high)
+        with col4:
+            files = len(scan_report.get('top_problematic_files', []))
+            st.metric("Betroffene Dateien", files)
+        
+        # Top Issues anzeigen
+        if scan_report.get('issues'):
+            with st.expander("🔍 Top Issues anzeigen", expanded=False):
+                import pandas as pd
+                issues_df = pd.DataFrame(scan_report['issues'][:10])
+                st.dataframe(issues_df, use_container_width=True)
+    else:
+        st.info("Keine Scan-Ergebnisse verfügbar. Klicken Sie auf 'Rescan Application' um einen Scan durchzuführen.")
 
 
 def render_performance_metrics():
@@ -126,7 +212,13 @@ def render_performance_metrics():
     metrics = evaluation_system.performance_evaluator.metrics
     
     if not metrics:
-        st.info("Noch keine Leistungsdaten verfügbar. Nutzen Sie die Anwendung, um Metriken zu sammeln.")
+        st.warning("Noch keine Leistungsdaten verfügbar. Nutzen Sie die Anwendung, um Metriken zu sammeln.")
+        col1, col2 = st.columns([3, 1])
+        with col2:
+            if st.button("🧪 Testdaten generieren", key="test_perf", use_container_width=True):
+                _generate_test_data()
+                st.success("Testdaten generiert!")
+                st.rerun()
         return
     
     # Recent metrics
@@ -204,7 +296,13 @@ def render_accuracy_metrics():
     metrics = evaluation_system.accuracy_evaluator.metrics
     
     if not metrics:
-        st.info("Noch keine Genauigkeitsdaten verfügbar.")
+        st.warning("Noch keine Genauigkeitsdaten verfügbar.")
+        col1, col2 = st.columns([3, 1])
+        with col2:
+            if st.button("🧪 Testdaten generieren", key="test_acc", use_container_width=True):
+                _generate_test_data()
+                st.success("Testdaten generiert!")
+                st.rerun()
         return
     
     # Validity chart
@@ -261,7 +359,13 @@ def render_error_tracking():
     metrics = evaluation_system.error_rate_evaluator.metrics
     
     if not metrics:
-        st.info("Noch keine Fehlerdaten verfügbar.")
+        st.warning("Noch keine Fehlerdaten verfügbar.")
+        col1, col2 = st.columns([3, 1])
+        with col2:
+            if st.button("🧪 Testdaten generieren", key="test_err", use_container_width=True):
+                _generate_test_data()
+                st.success("Testdaten generiert!")
+                st.rerun()
         return
     
     # Error rate over time
@@ -349,6 +453,53 @@ def render_reports():
                         st.error(f"Fehler beim Laden des Berichts: {e}")
         else:
             st.info("Keine früheren Berichte gefunden.")
+
+
+def _load_scan_report() -> dict:
+    """Lade letzten Scan-Report."""
+    try:
+        import json
+        scan_file = Path("code_analysis_report.json")
+        if scan_file.exists():
+            with open(scan_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception as e:
+        print(f"Fehler beim Laden des Scan-Reports: {e}")
+    return None
+
+
+def _generate_test_data():
+    """Generiere Testdaten für das Monitoring."""
+    try:
+        from app_evaluation import track_success, track_error, evaluate_performance
+        import time
+        import random
+        
+        # Generiere Performance-Daten
+        operations = ['calculation', 'pdf_generation', 'data_input', 'analysis', 'database_query']
+        for _ in range(10):
+            op = random.choice(operations)
+            exec_time = random.uniform(0.05, 2.5)
+            evaluate_performance(op, exec_time)
+            if random.random() > 0.15:  # 85% Erfolgsrate
+                track_success(op)
+            else:
+                track_error(op, "Beispielfehler für Testzwecke")
+        
+        # Generiere Accuracy-Daten
+        from app_evaluation import evaluation_system
+        for _ in range(5):
+            calc_type = random.choice(['pv_yield', 'amortization', 'savings'])
+            result = random.uniform(1000, 50000)
+            expected = result * random.uniform(0.95, 1.05)
+            evaluation_system.accuracy_evaluator.evaluate_calculation(
+                calculation_type=calc_type,
+                result=result,
+                expected=expected
+            )
+        
+    except Exception as e:
+        print(f"Fehler beim Generieren von Testdaten: {e}")
 
 
 if __name__ == "__main__":

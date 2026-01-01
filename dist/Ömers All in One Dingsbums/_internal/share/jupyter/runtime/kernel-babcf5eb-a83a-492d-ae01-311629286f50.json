@@ -1,0 +1,13 @@
+{
+  "shell_port": 12212,
+  "iopub_port": 12213,
+  "stdin_port": 12214,
+  "control_port": 12216,
+  "hb_port": 12215,
+  "ip": "127.0.0.1",
+  "key": "696291e7-ba05b016052c9bf31a70ca0e",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "python3",
+  "jupyter_session": "C:\\PV\\PV\\pvon-master\\basics.ipynb"
+}

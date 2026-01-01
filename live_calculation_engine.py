@@ -103,8 +103,7 @@ def calculate_correct_live_values(results: dict[str, Any]) -> dict[str, Any]:
         investment_brutto,
         annual_total_savings,
         allow_infinite=False,
-        default_zero=True,
-    )
+        default_zero=True)
 
     return {
         'stromtarif_ct_kwh': stromtarif_ct_kwh,

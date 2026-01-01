@@ -69,8 +69,7 @@ try:
         calculate_price_by_method,
         calculate_selling_price,
         get_product_by_id,
-        get_product_by_model_name,
-    )
+        get_product_by_model_name)
     PRODUCT_DB_AVAILABLE = True
 except ImportError as e:
     PRODUCT_DB_AVAILABLE = False

@@ -22,8 +22,7 @@ def render_vertical_carousel_with_confirmation(
     visible_count: int = 5,
     theme: Literal["default", "admin", "sidebar"] = "sidebar",
     label: str | None = None,
-    help_text: str | None = None,
-) -> str:
+    help_text: str | None = None) -> str:
     """
     Rendert ein vertikales Carousel mit Confirmation-Step.
 
@@ -275,8 +274,7 @@ def render_horizontal_carousel(
     visible_count: int = 3,
     theme: Literal["default", "admin"] = "default",
     label: str | None = None,
-    help_text: str | None = None,
-) -> str:
+    help_text: str | None = None) -> str:
     """
     Rendert ein horizontales Carousel (wie im Admin-Panel).
 

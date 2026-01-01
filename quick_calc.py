@@ -84,8 +84,7 @@ def _stabilize_navigation_state() -> None:
         "selected_page_key_prev",
         "last_rendered_page_key",
         "nav_event",
-        "nav_history",
-    )
+        "nav_history")
     existing_keys = [key for key in nav_keys if key in st.session_state]
     if not existing_keys:
         return

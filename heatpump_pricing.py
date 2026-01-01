@@ -24,8 +24,7 @@ try:
         calculate_selling_price,
         get_product_by_id,
         get_product_by_model_name,
-        list_products,
-    )
+        list_products)
 except Exception:  # pragma: no cover – Fallback im Testkontext ohne DB
     def list_products(category: str | None = None, company_id: int | None = None):  # type: ignore
         return []
@@ -52,8 +51,7 @@ try:
         FinalPricingResult,
         PriceComponent,
         PricingEngine,
-        PricingResult,
-    )
+        PricingResult)
     from pricing.profit_margin_manager import ProfitMarginManager
 except ImportError:
     # Fallback classes for standalone operation

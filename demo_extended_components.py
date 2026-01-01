@@ -32,7 +32,7 @@ from components import (
 def main():
     st.set_page_config(
         page_title="Erweiterte shadcn/ui Komponenten Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     
@@ -193,7 +193,7 @@ def main():
             dd = DropdownMenu(theme_manager=st.session_state.theme_manager)
             selected = dd.render(
                 trigger_label="Aktionen",
-                trigger_icon="",
+                trigger_
                 items=[
                     {"label": "Bearbeiten", "icon": "", "value": "edit"},
                     {"label": "Duplizieren", "icon": "", "value": "duplicate"},
@@ -217,7 +217,7 @@ def main():
             dd2 = DropdownMenu(theme_manager=st.session_state.theme_manager)
             selected2 = dd2.render(
                 trigger_label="Exportieren",
-                trigger_icon="",
+                trigger_
                 items=[
                     {"label": "Als PDF", "icon": "", "value": "pdf"},
                     {"label": "Als Excel", "icon": "", "value": "excel"},
@@ -260,7 +260,7 @@ def main():
             pop2 = Popover(theme_manager=st.session_state.theme_manager)
             pop2.render(
                 trigger_label="Hover für Details",
-                trigger_icon="",
+                trigger_
                 title="Tipp",
                 content="Dieser Popover erscheint beim Hovern über "
                        "dem Trigger-Element.",

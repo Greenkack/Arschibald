@@ -145,8 +145,7 @@ try:
         SimpleDocTemplate,
         Spacer,
         Table,
-        TableStyle,
-    )
+        TableStyle)
     _REPORTLAB_AVAILABLE = True
 except ImportError:
     pass
@@ -1987,8 +1986,7 @@ def generate_main_template_pdf_bytes(
     project_data: dict[str, Any],
     analysis_results: dict[str, Any] | None,
     company_info: dict[str, Any],
-    additional_pdf: bytes | None = None,
-) -> bytes | None:
+    additional_pdf: bytes | None = None) -> bytes | None:
     """Erzeugt die 6-seitige Hauptausgabe basierend auf coords/ und pdf_templates_static/notext/.
 
     Nutzt pdf_template_engine: liest YML-Koordinaten, erstellt Text-Overlay nach
@@ -1998,8 +1996,7 @@ def generate_main_template_pdf_bytes(
         from pdf_template_engine import (
             build_dynamic_data,
             generate_overlay,
-            merge_with_background,
-        )
+            merge_with_background)
     except Exception as e:
         print(f"pdf_template_engine nicht verfügbar: {e}")
         return None
@@ -2135,8 +2132,7 @@ def generate_offer_pdf_with_main_templates(
     active_company_id: int | None,
     texts: dict[str, str],
     use_modern_design: bool = True,
-    **kwargs,
-) -> bytes | None:
+    **kwargs) -> bytes | None:
     """Neue Gesamt-Generatorfunktion:
     1) Erzeuge 8-seitige Hauptausgabe per Templates (coords + notext PDFs)  # MIGRATION: Changed from 7 to 8
     2) Erzeuge bisheriges PDF als Zusatz (ohne Deckblatt/Anschreiben)
@@ -2220,8 +2216,7 @@ def generate_offer_pdf_with_main_templates(
             save_admin_setting_func, list_products_func, get_product_by_id_func,
             db_list_company_documents_func, active_company_id, texts,
             use_modern_design=use_modern_design, disable_main_template_combiner=True,
-            **{k: v for k, v in (kwargs or {}).items() if k != 'disable_main_template_combiner'},
-        )
+            **{k: v for k, v in (kwargs or {}).items() if k != 'disable_main_template_combiner'})
         # Debug-Ausgabe zur Analyse, warum evtl. keine Zusatzseiten erscheinen
         try:
             if additional_pdf and _PYPDF_AVAILABLE:
@@ -2262,8 +2257,7 @@ def generate_offer_pdf_with_main_templates(
             active_company_id,
             texts,
             use_modern_design=use_modern_design,
-            **kwargs,
-        )
+            **kwargs)
 
     # Hilfsfunktion: Zusatzseiten mit Footer "Angebot, <Datum>" und "Seite x
     # von XX" versehen
@@ -2838,8 +2832,7 @@ def generate_offer_pdf_simple(
     company_info: dict[str, Any],
     texts: dict[str, str],
     inclusion_options: dict[str, Any] | None = None,
-    **kwargs,
-) -> bytes | None:
+    **kwargs) -> bytes | None:
     def _noop(*a, **k):
         return None
     inclusion_options = inclusion_options or {}
@@ -2864,8 +2857,7 @@ def generate_offer_pdf_simple(
                 'db_list_company_documents_func', lambda *a, **k: []),
             active_company_id=kwargs.get('active_company_id'),
             texts=texts,
-            use_modern_design=kwargs.get('use_modern_design', True),
-        )
+            use_modern_design=kwargs.get('use_modern_design', True))
     except Exception as e:
         print(f"ERROR generate_offer_pdf_simple: {e}")
         raise
@@ -3562,8 +3554,7 @@ def create_offer_pdf(
     offer_data: dict[str, Any],
     output_filename: str,
     module_order: list[dict[str, Any]],  # NEU: Liste der zu rendernden Module
-    theme_name: str,
-):
+    theme_name: str):
     """
     Erstellt ein PDF-Dokument, indem es die Module in der festgelegten Reihenfolge aufruft.
 
@@ -3908,8 +3899,8 @@ def _replace_placeholders(text_template: str,
         "[KundenVorname]": str(customer_data.get("first_name", "")),
         "[KundenAnredeFormell]": str(customer_data.get("salutation", "")),
         "[KundenTitel]": str(customer_data.get("title", "")),
-        "[KundenStrasseNr]": f"{customer_data.get('address', '')} {customer_data.get('house_number', '',)}".strip(),
-        "[KundenPLZOrt]": f"{customer_data.get('zip_code', '')} {customer_data.get('city', '',)}".strip(),
+        "[KundenStrasseNr]": f"{customer_data.get('address', '')} {customer_data.get('house_number', '')}".strip(),
+        "[KundenPLZOrt]": f"{customer_data.get('zip_code', '')} {customer_data.get('city', '')}".strip(),
         "[KundenFirmenname]": str(customer_data.get("company_name", "")),
         "[Agentname]": str(customer_data.get("agent_name", "")),
     }
@@ -4574,8 +4565,7 @@ def generate_offer_pdf(
                 texts=texts,
                 use_modern_design=use_modern_design,
                 disable_main_template_combiner=True,
-                **kwargs,
-            )
+                **kwargs)
             if combined_bytes:
                 return combined_bytes
             print(
@@ -7498,10 +7488,10 @@ def generate_heatpump_offer_pdf(
         
         # Status-Icon
         if 'Optimal' in status:
-            icon = ""
+            
             color_hex = '#2E7D32'
         elif 'Grenz' in status:
-            icon = ""
+            
             color_hex = '#F57C00'
         else:
             icon = "!"
@@ -7675,4 +7665,176 @@ def generate_heatpump_offer_pdf(
     buffer.close()
     
     return pdf_bytes
+
+
+# ============================================================================
+# JOB MANAGER INTEGRATION - Background PDF Generation
+# ============================================================================
+
+def generate_pdf_job(project_data: dict[str, Any], firma_index: int = 0, progress_callback=None) -> dict[str, Any]:
+    """
+    Job-Funktion für Background PDF-Generierung.
+    
+    Args:
+        project_data: Projekt-Daten aus Session State
+        firma_index: Firma-Index (0-6 für Multi-Firma)
+        progress_callback: Optional Callback für Progress Updates
+        
+    Returns:
+        dict mit 'pdf_path', 'pdf_bytes', 'success', 'error'
+    """
+    import traceback
+    from datetime import datetime
+    
+    try:
+        if progress_callback:
+            progress_callback(0.1, f"Starte PDF-Generierung (Firma {firma_index + 1})")
+        
+        # Extrahiere benötigte Daten
+        analysis_results = project_data.get('analysis_results')
+        company_info = project_data.get('company_info', {})
+        texts = project_data.get('texts', {})
+        inclusion_options = project_data.get('inclusion_options', {})
+        
+        if progress_callback:
+            progress_callback(0.3, "Bereite Template vor")
+        
+        # PDF generieren
+        pdf_bytes = generate_offer_pdf_simple(
+            project_data=project_data,
+            analysis_results=analysis_results,
+            company_info=company_info,
+            texts=texts,
+            inclusion_options=inclusion_options
+        )
+        
+        if not pdf_bytes:
+            return {
+                'success': False,
+                'error': 'PDF-Generierung fehlgeschlagen (keine Bytes)'
+            }
+        
+        if progress_callback:
+            progress_callback(0.7, "Speichere PDF")
+        
+        # PDF speichern
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        customer_name = project_data.get('customer_name', 'Kunde').replace(' ', '_')
+        firma_suffix = f"_f{firma_index + 1}" if firma_index > 0 else ""
+        
+        pdf_filename = f"angebot_{customer_name}{firma_suffix}_{timestamp}.pdf"
+        pdf_dir = Path("generated_pdfs")
+        pdf_dir.mkdir(exist_ok=True)
+        
+        pdf_path = pdf_dir / pdf_filename
+        
+        with open(pdf_path, 'wb') as f:
+            f.write(pdf_bytes)
+        
+        if progress_callback:
+            progress_callback(1.0, "PDF erfolgreich erstellt")
+        
+        return {
+            'success': True,
+            'pdf_path': str(pdf_path),
+            'pdf_bytes': pdf_bytes,
+            'firma_index': firma_index,
+            'filename': pdf_filename
+        }
+        
+    except Exception as e:
+        error_msg = f"PDF-Job fehlgeschlagen: {str(e)}"
+        tb = traceback.format_exc()
+        
+        if progress_callback:
+            progress_callback(0.0, f"Fehler: {str(e)}")
+        
+        return {
+            'success': False,
+            'error': error_msg,
+            'traceback': tb,
+            'firma_index': firma_index
+        }
+
+
+def generate_multi_pdf_job(project_data: dict[str, Any], firma_count: int = 7, progress_callback=None) -> dict[str, Any]:
+    """
+    Job-Funktion für Multi-Firma PDF-Generierung (7 PDFs parallel).
+    
+    Args:
+        project_data: Projekt-Daten aus Session State
+        firma_count: Anzahl Firmen (Standard: 7)
+        progress_callback: Optional Callback für Progress Updates
+        
+    Returns:
+        dict mit 'success', 'pdf_paths' (Liste), 'failed_firms', 'total_count'
+    """
+    import concurrent.futures
+    
+    results = {
+        'success': True,
+        'pdf_paths': [],
+        'failed_firms': [],
+        'total_count': firma_count,
+        'completed_count': 0
+    }
+    
+    try:
+        if progress_callback:
+            progress_callback(0.05, f"Starte Multi-Firma PDF-Generierung ({firma_count} Firmen)")
+        
+        # Parallel-Generierung mit ThreadPoolExecutor
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            # Submit alle Firma-Jobs
+            future_to_firma = {
+                executor.submit(generate_pdf_job, project_data, i): i
+                for i in range(firma_count)
+            }
+            
+            # Warte auf Completion und sammle Ergebnisse
+            for future in concurrent.futures.as_completed(future_to_firma):
+                firma_idx = future_to_firma[future]
+                
+                try:
+                    result = future.result()
+                    
+                    if result['success']:
+                        results['pdf_paths'].append(result['pdf_path'])
+                        results['completed_count'] += 1
+                    else:
+                        results['failed_firms'].append({
+                            'firma_index': firma_idx,
+                            'error': result.get('error', 'Unbekannter Fehler')
+                        })
+                        results['success'] = False
+                    
+                    # Progress Update
+                    progress = (results['completed_count'] + len(results['failed_firms'])) / firma_count
+                    if progress_callback:
+                        progress_callback(
+                            progress,
+                            f"Firma {firma_idx + 1}/{firma_count} fertig ({results['completed_count']} erfolgreich)"
+                        )
+                        
+                except Exception as e:
+                    results['failed_firms'].append({
+                        'firma_index': firma_idx,
+                        'error': str(e)
+                    })
+                    results['success'] = False
+        
+        if progress_callback:
+            if results['success']:
+                progress_callback(1.0, f"Alle {firma_count} PDFs erfolgreich erstellt")
+            else:
+                progress_callback(1.0, f"{results['completed_count']}/{firma_count} PDFs erfolgreich, {len(results['failed_firms'])} fehlgeschlagen")
+        
+    except Exception as e:
+        results['success'] = False
+        results['error'] = str(e)
+        
+        if progress_callback:
+            progress_callback(0.0, f"Multi-PDF-Job fehlgeschlagen: {str(e)}")
+    
+    return results
 

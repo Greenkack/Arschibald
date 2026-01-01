@@ -934,7 +934,7 @@ def main():
 
         # DEAKTIVIERT: Toast und visueller Test (verursacht Probleme)
         # if modern_theme_active:
-        #     st.toast(f" Modernes UI aktiviert ({template_count} Templates)", icon="")
+        #     st.toast(f" Modernes UI aktiviert ({template_count} Templates)")
 
     except Exception as e_css_template:
         # Bei Fehler: Log in Console und verliere nicht das Legacy-Theme
@@ -1652,8 +1652,7 @@ def main():
                         labels) else 0,
                     format_func=lambda idx: labels[idx] if 0 <= idx < len(
                         labels) else labels[0],
-                    key="context_menu_company_select_index",
-                )
+                    key="context_menu_company_select_index")
                 st.session_state.context_menu_company_selection = ids[selected_index]
             else:
                 st.info(
@@ -1878,8 +1877,7 @@ def main():
             </aside>
         </div>
         """,
-        unsafe_allow_html=True,
-    )
+        unsafe_allow_html=True)
 
     st.markdown("""
         <script>
@@ -1983,8 +1981,7 @@ def main():
         })();
         </script>
         """,
-        unsafe_allow_html=True,
-    )
+        unsafe_allow_html=True)
 
     if import_errors:
         with st.sidebar:
@@ -2155,8 +2152,7 @@ def main():
             try:
                 from pdf_preview import (
                     PDF_PREVIEW_AVAILABLE,
-                    render_pdf_preview_interface,
-                )
+                    render_pdf_preview_interface)
 
                 if not PDF_PREVIEW_AVAILABLE:
                     st.error(" PDF-Vorschau nicht verfügbar")
@@ -2353,8 +2349,7 @@ def main():
                 crm_module.render_crm( # type: ignore
                     TEXTS,
                     getattr(database_module, 'get_db_connection', None),
-                    show_header=False,
-                )
+                    show_header=False)
             else:
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm", "CRM nicht verfügbar.")))
 
@@ -2362,8 +2357,7 @@ def main():
             if crm_dashboard_ui_module and callable(getattr(crm_dashboard_ui_module, 'render_crm_dashboard', None)):
                 crm_dashboard_ui_module.render_crm_dashboard( # type: ignore
                     TEXTS,
-                    module_name=get_text_gui("crm_tab_dashboard", get_text_gui("menu_item_crm_dashboard")),
-                )
+                    module_name=get_text_gui("crm_tab_dashboard", get_text_gui("menu_item_crm_dashboard")))
             else:
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_dashboard", "CRM Dashboard nicht verfügbar.")))
 
@@ -2371,8 +2365,7 @@ def main():
             if crm_pipeline_ui_module and callable(getattr(crm_pipeline_ui_module, 'render_crm_pipeline', None)):
                 crm_pipeline_ui_module.render_crm_pipeline( # type: ignore
                     TEXTS,
-                    module_name=get_text_gui("crm_tab_pipeline", get_text_gui("menu_item_crm_pipeline")),
-                )
+                    module_name=get_text_gui("crm_tab_pipeline", get_text_gui("menu_item_crm_pipeline")))
             else:
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_pipeline", "CRM Pipeline nicht verfügbar.")))
 
@@ -2380,8 +2373,7 @@ def main():
             if crm_calendar_ui_module and callable(getattr(crm_calendar_ui_module, 'render_crm_calendar', None)):
                 crm_calendar_ui_module.render_crm_calendar( # type: ignore
                     TEXTS,
-                    module_name=get_text_gui("crm_tab_calendar", get_text_gui("menu_item_crm_calendar")),
-                )
+                    module_name=get_text_gui("crm_tab_calendar", get_text_gui("menu_item_crm_calendar")))
             else:
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_calendar", "CRM Kalender nicht verfügbar.")))
 

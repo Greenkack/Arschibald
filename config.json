@@ -1,0 +1,21 @@
+{
+  "app_name": "ARSCHIBALD",
+  "version": "1.0.0",
+  "build": "2025.12.25",
+  "debug": false,
+  "features": {
+    "crm": true,
+    "agent": true,
+    "3d_visualization": true,
+    "pdf_generation": true,
+    "heatpump": true
+  },
+  "database": {
+    "path": "data/app_data.db",
+    "backup_enabled": true
+  },
+  "logging": {
+    "level": "INFO",
+    "path": "logs/"
+  }
+}

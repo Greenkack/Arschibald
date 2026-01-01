@@ -18,8 +18,7 @@ try:
     from pv_mounting_database import (
         initialize_database,
         read_components,
-        search_components,
-    )
+        search_components)
     PV_MOUNTING_DB_AVAILABLE = True
 except ImportError:
     PV_MOUNTING_DB_AVAILABLE = False

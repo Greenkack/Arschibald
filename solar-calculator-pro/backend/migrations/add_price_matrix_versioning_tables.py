@@ -32,8 +32,7 @@ def upgrade(engine):
         Column('approved_by', Integer, ForeignKey('users.id'), nullable=True),
         Column('approved_at', DateTime, nullable=True),
         Column('created_at', DateTime, default=datetime.utcnow),
-        Column('updated_at', DateTime, default=datetime.utcnow, onupdate=datetime.utcnow),
-    )
+        Column('updated_at', DateTime, default=datetime.utcnow, onupdate=datetime.utcnow))
 
     # Price Matrix Version Changes table
     price_matrix_version_changes = Table(
@@ -47,8 +46,7 @@ def upgrade(engine):
         Column('new_value', Text, nullable=True),
         Column('change_description', Text, nullable=True),
         Column('changed_by', Integer, ForeignKey('users.id'), nullable=False),
-        Column('changed_at', DateTime, default=datetime.utcnow),
-    )
+        Column('changed_at', DateTime, default=datetime.utcnow))
 
     # Price Matrix Version Comparisons table
     price_matrix_version_comparisons = Table(
@@ -60,8 +58,7 @@ def upgrade(engine):
         Column('differences', JSON, nullable=False),
         Column('summary', JSON, nullable=True),
         Column('compared_by', Integer, ForeignKey('users.id'), nullable=False),
-        Column('compared_at', DateTime, default=datetime.utcnow),
-    )
+        Column('compared_at', DateTime, default=datetime.utcnow))
 
     # Create all tables
     metadata.create_all(engine)

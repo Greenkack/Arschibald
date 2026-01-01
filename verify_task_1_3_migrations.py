@@ -44,8 +44,7 @@ def verify_imports():
             create_migration,
             get_migration_manager,
             migrate,
-            rollback,
-        )
+            rollback)
 
         console.print("[/green] All migration modules imported successfully")
         return True
@@ -283,8 +282,7 @@ def main():
         Panel.fit(
             "Task 1.3: Database Migration System Verification\n"
             "Verifying Alembic integration with safety features",
-            style="bold white on blue",
-        )
+            style="bold white on blue")
     )
     console.print()
 

@@ -29,8 +29,7 @@ def _load_texts() -> dict[str, str]:
 def _generate_legacy_pdf_optional(
     project_data: dict[str, Any],
     analysis_results: dict[str, Any],
-    company_info: dict[str, Any],
-) -> bytes | None:
+    company_info: dict[str, Any]) -> bytes | None:
     """Erzeugt optional die bisherige PDF-Ausgabe (ohne 7-Seiten-Templates).
 
     Nutzt generate_offer_pdf aus pdf_generator mit disable_main_template_combiner=True,
@@ -44,27 +43,21 @@ def _generate_legacy_pdf_optional(
     # Abhängigkeiten aus DB/Produkt-DB einbinden
     try:
         from database import (
-            get_active_company as db_get_active_company,
-        )
+            get_active_company as db_get_active_company)
         from database import (
-            list_company_documents as db_list_company_documents_func,
-        )
+            list_company_documents as db_list_company_documents_func)
         from database import (
-            load_admin_setting as load_admin_setting_func,
-        )
+            load_admin_setting as load_admin_setting_func)
         from database import (
-            save_admin_setting as save_admin_setting_func,
-        )
+            save_admin_setting as save_admin_setting_func)
     except Exception:
         return None
 
     try:
         from product_db import (
-            get_product_by_id as get_product_by_id_func,
-        )
+            get_product_by_id as get_product_by_id_func)
         from product_db import (
-            list_products as list_products_func,
-        )
+            list_products as list_products_func)
     except Exception:
         # Minimal-Fallbacks
         def list_products_func(*args, **kwargs):
@@ -126,8 +119,7 @@ def main(
     analysis_json: str | None = None,
     company_json: str | None = None,
     additional_pdf_path: str | None = None,
-    output_pdf: str | None = None,
-):
+    output_pdf: str | None = None):
     base_dir = Path(__file__).parent
     coords_dir = base_dir / "coords"
     bg_dir = base_dir / "pdf_templates_static" / "notext"
@@ -257,8 +249,7 @@ def render_ui() -> None:
                     label="PDF herunterladen",
                     data=pdf_bytes,
                     file_name=filename,
-                    mime="application/pdf",
-                )
+                    mime="application/pdf")
             except Exception as e:
                 st.error(f"Fehler bei der PDF-Erzeugung: {e}")
                 import traceback as _tb
@@ -303,5 +294,4 @@ if __name__ == "__main__":
         analysis_json=_get("--analysis"),
         company_json=_get("--company"),
         additional_pdf_path=_get("--append"),
-        output_pdf=_get("--out"),
-    )
+        output_pdf=_get("--out"))

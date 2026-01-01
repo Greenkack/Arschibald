@@ -15,7 +15,7 @@ Statistiken:
 
 Format:
 - Tausender: PUNKT (.)      → 12.345,67 €
-- Dezimal:   KOMMA (,)       → 12.345,67 €
+- Dezimal:   KOMMA ()       → 12.345,67 €
 - Geld:      2 Dezimalstellen → 100,00 €
 
 Verwendung:

@@ -13,8 +13,7 @@ from core import (
     get_current_session,
     get_session_manager,
     persist_input,
-    save_form,
-)
+    save_form)
 from core.session_persistence import get_persistence_engine
 
 

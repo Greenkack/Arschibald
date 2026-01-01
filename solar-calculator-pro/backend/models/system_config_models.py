@@ -45,8 +45,7 @@ class ModuleConfiguration(Base):
     
     __table_args__ = (
         # Unique constraint on module_name + key
-        {'sqlite_autoincrement': True},
-    )
+        {'sqlite_autoincrement': True})
 
 
 class ConfigurationVersion(Base):

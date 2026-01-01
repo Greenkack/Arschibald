@@ -21,8 +21,7 @@ from core.logging_config import (
     log_error,
     set_log_level,
     setup_logging,
-    track,
-)
+    track)
 
 
 def verify_correlation_id():
@@ -239,8 +238,7 @@ def verify_centralized_logging_prep():
             "test_event",
             user_id="123",
             action="login",
-            ip_address="192.168.1.1",
-        )
+            ip_address="192.168.1.1")
 
     output = stream.getvalue()
 

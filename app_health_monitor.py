@@ -106,7 +106,7 @@ class ApplicationHealthMonitor:
         self.monitoring_active = True
         self._monitor_thread = threading.Thread(
             target=self._monitor_loop,
-            args=(interval_seconds,),
+            args=(interval_seconds),
             daemon=True
         )
         self._monitor_thread.start()

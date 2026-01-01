@@ -161,7 +161,7 @@ def add_product(product_data: Dict[str, Any]) -> Optional[int]:
             elif col_name in ["price_euro", "capacity_w", "storage_power_kw", "power_kw", "length_m", "width_m", "weight_kg", "efficiency_percent", "rating", "additional_cost_netto"]: insert_data[col_name] = 0.0
             elif col_name in ["max_cycles", "warranty_years"]: insert_data[col_name] = 0
             else: insert_data[col_name] = None 
-    cursor.execute("SELECT id FROM products WHERE model_name = ?", (insert_data['model_name'],))
+    cursor.execute("SELECT id FROM products WHERE model_name = ?", (insert_data['model_name']))
     if cursor.fetchone(): print(f"product_db.add_product: Fehler - Produkt mit Modellname '{insert_data['model_name']}' existiert bereits."); conn.close(); return None
     fields = ', '.join(insert_data.keys()); placeholders = ', '.join(['?'] * len(insert_data))
     try:
@@ -198,7 +198,7 @@ def delete_product(product_id: Union[int, float]) -> bool:
     if conn is None: print("product_db.delete_product: DB nicht verfügbar."); return False
     create_product_table(conn); cursor = conn.cursor()
     try:
-        cursor.execute("DELETE FROM products WHERE id=?", (int(product_id),)); conn.commit(); deleted_count = cursor.rowcount
+        cursor.execute("DELETE FROM products WHERE id=?", (int(product_id))); conn.commit(); deleted_count = cursor.rowcount
         if deleted_count > 0: print(f"product_db.delete_product: Produkt ID {product_id} erfolgreich gelöscht.")
         else: print(f"product_db.delete_product: Produkt ID {product_id} nicht gefunden, nichts gelöscht.")
         return deleted_count > 0
@@ -235,7 +235,7 @@ def get_product_by_id(product_id: Union[int, float]) -> Optional[Dict[str, Any]]
     if conn is None: print("product_db.get_product_by_id: DB nicht verfügbar."); return None
     create_product_table(conn); cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM products WHERE id=?", (int(product_id),)); row = cursor.fetchone()
+        cursor.execute("SELECT * FROM products WHERE id=?", (int(product_id))); row = cursor.fetchone()
         return dict(row) if row else None
     except sqlite3.Error as e: print(f"product_db.get_product_by_id: SQLite Fehler für ID {product_id}: {e}"); traceback.print_exc(); return None
     finally: conn.close()
@@ -246,7 +246,7 @@ def get_product_by_model_name(model_name: str) -> Optional[Dict[str, Any]]:
     if conn is None: print("product_db.get_product_by_model_name: DB nicht verfügbar."); return None
     create_product_table(conn); cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM products WHERE model_name=? COLLATE NOCASE", (model_name.strip(),)); row = cursor.fetchone()
+        cursor.execute("SELECT * FROM products WHERE model_name=? COLLATE NOCASE", (model_name.strip())); row = cursor.fetchone()
         return dict(row) if row else None
     except sqlite3.Error as e: print(f"product_db.get_product_by_model_name: SQLite Fehler für Modell '{model_name}': {e}"); traceback.print_exc(); return None
     finally: conn.close()
@@ -259,7 +259,7 @@ def get_product_id_by_model_name(model_name: str) -> Optional[int]:
         return None
     create_product_table(conn); cursor = conn.cursor()
     try:
-        cursor.execute("SELECT id FROM products WHERE model_name=? COLLATE NOCASE", (model_name.strip(),)); row = cursor.fetchone()
+        cursor.execute("SELECT id FROM products WHERE model_name=? COLLATE NOCASE", (model_name.strip())); row = cursor.fetchone()
         return int(row[0]) if row else None
     except sqlite3.Error as e: 
         print(f"product_db.get_product_id_by_model_name: SQLite Fehler für Modell '{model_name}': {e}"); 

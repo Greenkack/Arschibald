@@ -22,8 +22,7 @@ def test_imports() -> Tuple[bool, List[str]]:
             apply_shadcn_chart_theme,
             shadcn_section,
             get_theme_manager,
-            SHADCN_AVAILABLE,
-        )
+            SHADCN_AVAILABLE)
         print(" Migration helpers imported successfully")
     except ImportError as e:
         errors.append(f" Failed to import migration helpers: {e}")
@@ -32,8 +31,7 @@ def test_imports() -> Tuple[bool, List[str]]:
         from solar_calculator_shadcn import (
             render_solar_calculator_with_shadcn,
             display_pricing_with_shadcn,
-            apply_chart_theme_to_all_figures,
-        )
+            apply_chart_theme_to_all_figures)
         print(" Solar calculator shadcn module imported successfully")
     except ImportError as e:
         errors.append(f" Failed to import solar_calculator_shadcn: {e}")
@@ -42,8 +40,7 @@ def test_imports() -> Tuple[bool, List[str]]:
         from crm_shadcn import (
             render_crm_with_shadcn,
             render_customer_list_with_cards,
-            render_crm_dashboard_with_metrics,
-        )
+            render_crm_dashboard_with_metrics)
         print(" CRM shadcn module imported successfully")
     except ImportError as e:
         errors.append(f" Failed to import crm_shadcn: {e}")
@@ -52,8 +49,7 @@ def test_imports() -> Tuple[bool, List[str]]:
         from admin_panel_shadcn import (
             render_admin_panel_with_shadcn,
             render_admin_navigation_with_shadcn,
-            render_admin_dashboard_with_metrics,
-        )
+            render_admin_dashboard_with_metrics)
         print(" Admin panel shadcn module imported successfully")
     except ImportError as e:
         errors.append(f" Failed to import admin_panel_shadcn: {e}")

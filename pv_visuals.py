@@ -20,8 +20,7 @@ from chart_styling_improvements import (
     apply_improved_plotly_style,
     create_improved_plotly_line_chart,
     generate_chart_description,
-    save_plotly_chart_to_bytes,
-)
+    save_plotly_chart_to_bytes)
 
 
 # Hilfsfunktion für Texte innerhalb dieses Moduls

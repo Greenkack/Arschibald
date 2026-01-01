@@ -296,7 +296,7 @@ def retry_on_failure(
     max_attempts: int = 3,
     delay_seconds: float = 1.0,
     backoff_factor: float = 2.0,
-    exceptions: tuple = (Exception,)
+    exceptions: tuple = (Exception)
 ):
     """
     Decorator für Retry-Mechanismus.

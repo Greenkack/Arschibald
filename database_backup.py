@@ -168,13 +168,11 @@ def list_customer_documents(
         if project_id is not None:
             cur.execute(
                 "SELECT id, doc_type, display_name, file_name, absolute_file_path, uploaded_at FROM customer_documents WHERE customer_id = ? AND project_id = ? ORDER BY uploaded_at DESC",
-                (customer_id, project_id),
-            )
+                (customer_id, project_id))
         else:
             cur.execute(
                 "SELECT id, doc_type, display_name, file_name, absolute_file_path, uploaded_at FROM customer_documents WHERE customer_id = ? ORDER BY uploaded_at DESC",
-                (customer_id,),
-            )
+                (customer_id))
         rows = cur.fetchall()
         conn.close()
         result: list[dict[str, Any]] = []
@@ -201,8 +199,7 @@ def get_customer_document_file_path(document_id: int) -> str | None:
         cur = conn.cursor()
         cur.execute(
             "SELECT absolute_file_path FROM customer_documents WHERE id = ?",
-            (document_id,
-             ))
+            (document_id))
         row = cur.fetchone()
         conn.close()
         if not row:
@@ -224,8 +221,7 @@ def delete_customer_document(document_id: int) -> bool:
         cur = conn.cursor()
         cur.execute(
             "SELECT absolute_file_path FROM customer_documents WHERE id = ?",
-            (document_id,
-             ))
+            (document_id))
         row = cur.fetchone()
         if not row:
             conn.close()
@@ -239,7 +235,7 @@ def delete_customer_document(document_id: int) -> bool:
             print(
                 f"DB Warnung: Datei konnte nicht gelöscht werden ({abs_path}): {e_rm}")
         cur.execute(
-            "DELETE FROM customer_documents WHERE id = ?", (document_id,))
+            "DELETE FROM customer_documents WHERE id = ?", (document_id))
         conn.commit()
         success = cur.rowcount > 0
         conn.close()
@@ -479,7 +475,7 @@ def load_admin_setting(key: str, default: Any = None) -> Any:
     try:
         _ensure_admin_table(conn)
         cur = conn.cursor()
-        cur.execute("SELECT value FROM admin_settings WHERE key = ?", (key,))
+        cur.execute("SELECT value FROM admin_settings WHERE key = ?", (key))
         row = cur.fetchone()
         if not row:
             return default
@@ -769,7 +765,7 @@ def delete_heat_pump(conn, id):
     """Löscht eine Wärmepumpe."""
     sql = 'DELETE FROM heat_pumps WHERE id = ?'
     cur = conn.cursor()
-    cur.execute(sql, (id,))
+    cur.execute(sql, (id))
     conn.commit()
 
 # Stellen Sie sicher, dass create_heat_pumps_table() beim Initialisieren der DB aufgerufen wird.
@@ -1305,7 +1301,7 @@ def init_db():
 
         for key, default_value in INITIAL_ADMIN_SETTINGS.items():
             cursor.execute(
-                "SELECT value FROM admin_settings WHERE key = ?", (key,))
+                "SELECT value FROM admin_settings WHERE key = ?", (key))
             if cursor.fetchone() is None:
                 value_insert = json.dumps(default_value) if isinstance(
                     default_value, (dict, list)) else int(default_value) if isinstance(
@@ -1314,8 +1310,7 @@ def init_db():
                         'price_matrix_csv_data', 'active_company_id']:
                     cursor.execute(
                         "INSERT INTO admin_settings (key, value, last_modified) VALUES (?, NULL, CURRENT_TIMESTAMP)",
-                        (key,
-                         ))
+                        (key))
                 elif value_insert is not None:
                     cursor.execute(
                         "INSERT INTO admin_settings (key, value, last_modified) VALUES (?, ?, CURRENT_TIMESTAMP)",
@@ -1340,7 +1335,7 @@ def load_admin_setting(key: str, default: Any = None) -> Any:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT value FROM admin_settings WHERE key = ?", (key,))
+            "SELECT value FROM admin_settings WHERE key = ?", (key))
         row = cursor.fetchone()
         if row and row['value'] is not None:
             value_str = row['value']
@@ -1464,8 +1459,7 @@ def list_pdf_templates(template_type: str |
         if template_type:
             cursor.execute(
                 "SELECT * FROM pdf_templates WHERE template_type = ? ORDER BY name COLLATE NOCASE",
-                (template_type,
-                 ))
+                (template_type))
         else:
             cursor.execute(
                 "SELECT * FROM pdf_templates ORDER BY template_type, name COLLATE NOCASE")
@@ -1485,7 +1479,7 @@ def get_pdf_template(template_id: int) -> dict[str, Any] | None:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT * FROM pdf_templates WHERE id = ?", (template_id,))
+            "SELECT * FROM pdf_templates WHERE id = ?", (template_id))
         row = cursor.fetchone()
         return dict(row) if row else None
     except Exception as e:
@@ -1532,7 +1526,7 @@ def delete_pdf_template(template_id: int) -> bool:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "DELETE FROM pdf_templates WHERE id = ?", (template_id,))
+            "DELETE FROM pdf_templates WHERE id = ?", (template_id))
         conn.commit()
         return cursor.rowcount > 0
     except Exception as e:
@@ -1580,8 +1574,7 @@ def add_company(company_data: dict[str, Any]) -> int | None:
         # für '{company_name_to_add_stripped}' aus...") # Bereits im Log
         cursor.execute(
             "SELECT id, name FROM companies WHERE name = ? COLLATE NOCASE",
-            (company_name_to_add_stripped,
-             ))
+            (company_name_to_add_stripped))
         existing_company_by_name_nocase = cursor.fetchone()
 
         if existing_company_by_name_nocase:
@@ -1659,7 +1652,7 @@ def add_company(company_data: dict[str, Any]) -> int | None:
             f"DB ERFOLG: Firma '{company_name_to_add_stripped}' mit ID {new_id} hinzugefügt.")
         if new_id and company_data.get("is_default"):
             cursor.execute(
-                "UPDATE companies SET is_default = 0 WHERE id != ?", (new_id,))
+                "UPDATE companies SET is_default = 0 WHERE id != ?", (new_id))
             save_admin_setting('active_company_id', new_id)
             conn.commit()
         # Nach dem Hinzufügen der Firma Standardtechnik einfügen
@@ -1702,7 +1695,7 @@ def get_company(company_id: int) -> dict[str, Any] | None:
         return None
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM companies WHERE id = ?", (company_id,))
+        cursor.execute("SELECT * FROM companies WHERE id = ?", (company_id))
         row = cursor.fetchone()
         return dict(row) if row else None
     except Exception as e:
@@ -1760,7 +1753,7 @@ def update_company(company_id: int, company_data: dict[str, Any]) -> bool:
         cursor = conn.cursor()
         if update_data_db.get("is_default"):
             cursor.execute(
-                "UPDATE companies SET is_default = 0 WHERE id != ?", (company_id,))
+                "UPDATE companies SET is_default = 0 WHERE id != ?", (company_id))
             save_admin_setting('active_company_id', company_id)
 
         cursor.execute(stmt, values_for_set)
@@ -1789,7 +1782,7 @@ def delete_company(company_id: int) -> bool:
         for doc in docs_to_delete:
             delete_company_document(doc['id'])
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM companies WHERE id = ?", (company_id,))
+        cursor.execute("DELETE FROM companies WHERE id = ?", (company_id))
         conn.commit()
 
         if cursor.rowcount > 0:
@@ -1821,9 +1814,9 @@ def set_default_company(company_id: int) -> bool:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE companies SET is_default = 0 WHERE id != ?", (company_id,))
+            "UPDATE companies SET is_default = 0 WHERE id != ?", (company_id))
         cursor.execute(
-            "UPDATE companies SET is_default = 1 WHERE id = ?", (company_id,))
+            "UPDATE companies SET is_default = 1 WHERE id = ?", (company_id))
         conn.commit()
         if cursor.rowcount > 0:
             return save_admin_setting('active_company_id', company_id)
@@ -2044,7 +2037,7 @@ def list_company_text_templates(
                 FROM company_text_templates
                 WHERE company_id = ?
                 ORDER BY template_type, name COLLATE NOCASE
-            """, (company_id,))
+            """, (company_id))
 
         return [dict(row) for row in cursor.fetchall()]
     except Exception as e:
@@ -2076,7 +2069,7 @@ def list_company_image_templates(
                 FROM company_image_templates
                 WHERE company_id = ?
                 ORDER BY template_type, name COLLATE NOCASE
-            """, (company_id,))
+            """, (company_id))
 
         results = []
         for row in cursor.fetchall():
@@ -2102,7 +2095,7 @@ def get_company_image_template_data(template_id: int) -> bytes | None:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT file_path FROM company_image_templates WHERE id = ?", (template_id,))
+            "SELECT file_path FROM company_image_templates WHERE id = ?", (template_id))
         row = cursor.fetchone()
         if not row:
             return None
@@ -2130,7 +2123,7 @@ def delete_company_text_template(template_id: int) -> bool:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "DELETE FROM company_text_templates WHERE id = ?", (template_id,))
+            "DELETE FROM company_text_templates WHERE id = ?", (template_id))
         conn.commit()
         return cursor.rowcount > 0
     except Exception as e:
@@ -2151,7 +2144,7 @@ def delete_company_image_template(template_id: int) -> bool:
         cursor = conn.cursor()
         # Dateipfad abrufen
         cursor.execute(
-            "SELECT file_path FROM company_image_templates WHERE id = ?", (template_id,))
+            "SELECT file_path FROM company_image_templates WHERE id = ?", (template_id))
         row = cursor.fetchone()
         if row:
             file_path = os.path.join(COMPANY_DOCS_BASE_DIR, row['file_path'])
@@ -2165,7 +2158,7 @@ def delete_company_image_template(template_id: int) -> bool:
 
         # Datenbankeintrag löschen
         cursor.execute(
-            "DELETE FROM company_image_templates WHERE id = ?", (template_id,))
+            "DELETE FROM company_image_templates WHERE id = ?", (template_id))
         conn.commit()
         return cursor.rowcount > 0
     except Exception as e:
@@ -2235,10 +2228,10 @@ def list_company_documents(
         cursor = conn.cursor()
         sql_query = "SELECT id, company_id, document_type, display_name, file_name, absolute_file_path as relative_db_path, uploaded_at FROM company_documents WHERE company_id = ?"
         # <- Typisierung über `Tuple`, nicht `Tuple`
-        params: Tuple = (company_id,)
+        params: Tuple = (company_id)
         if doc_type:
             sql_query += " AND document_type = ?"
-            params += (doc_type,)
+            params += (doc_type)
         sql_query += " ORDER BY document_type, display_name COLLATE NOCASE"
         cursor.execute(sql_query, params)
         rows = cursor.fetchall()
@@ -2260,8 +2253,7 @@ def delete_company_document(document_id: int) -> bool:
     cursor = conn.cursor()
     cursor.execute(
         "SELECT absolute_file_path as relative_db_path FROM company_documents WHERE id = ?",
-        (document_id,
-         ))
+        (document_id))
     row = cursor.fetchone()
     if not row:
         return False
@@ -2270,7 +2262,7 @@ def delete_company_document(document_id: int) -> bool:
         COMPANY_DOCS_BASE_DIR, relative_path_from_db)
     try:
         cursor.execute(
-            "DELETE FROM company_documents WHERE id = ?", (document_id,))
+            "DELETE FROM company_documents WHERE id = ?", (document_id))
         if os.path.exists(actual_absolute_path_to_delete_on_disk):
             try:
                 os.remove(actual_absolute_path_to_delete_on_disk)
@@ -2539,7 +2531,7 @@ def get_customer_by_id(customer_id: int) -> dict[str, Any] | None:
                    created_at, updated_at, notes, project_data
             FROM crm_customers
             WHERE id = ?
-        ''', (customer_id,))
+        ''', (customer_id))
 
         row = cursor.fetchone()
         conn.close()

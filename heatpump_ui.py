@@ -56,7 +56,7 @@ def format_german_number(number, decimals=2):
     """
     Formatiert Zahlen nach deutscher Notation:
     - Tausender-Trennzeichen: Punkt (.)
-    - Dezimal-Trennzeichen: Komma (,)
+    - Dezimal-Trennzeichen: Komma ()
     - Immer 2 Dezimalstellen für Geldbeträge
     
     Beispiel: 12345.67 -> "12.345,67"
@@ -70,7 +70,7 @@ def format_german_number(number, decimals=2):
     else:
         formatted = f"{number:,.{decimals}f}"
     
-    # Tausche Trennzeichen: , -> TEMP, . -> ,, TEMP -> .
+    # Tausche Trennzeichen: , -> TEMP, . -> , TEMP -> .
     formatted = formatted.replace(',', 'TEMP')
     formatted = formatted.replace('.', ',')
     formatted = formatted.replace('TEMP', '.')
@@ -379,26 +379,22 @@ try:
         estimate_annual_heat_demand_kwh_from_consumption,
         estimate_heat_load_kw_from_annual_demand,
         get_default_heating_system_efficiency,
-        recommend_heat_pump,
-    )
+        recommend_heat_pump)
     from heatpump_advanced_features import (
         calculate_insulation_upgrade,
         compare_heating_systems,
         calculate_window_upgrade,
-        create_renovation_roadmap,
-    )
+        create_renovation_roadmap)
     from heatpump_advanced_features_part2 import (
         optimize_heating_schedule,
         simulate_climate_scenarios,
         compare_heatpump_types,
-        simulate_annual_load_profile,
-    )
+        simulate_annual_load_profile)
     from heatpump_advanced_features_part3 import (
         calculate_subsidies,
         calculate_co2_footprint,
         monte_carlo_roi_analysis,
-        benchmark_building,
-    )
+        benchmark_building)
     from heatpump_dynamic_tariff import (
         calculate_dynamic_tariff_comparison,
         calculate_stromcloud_economics,
@@ -406,14 +402,12 @@ try:
         calculate_smart_home_benefits,
         get_dynamic_tariff_pros_cons,
         compare_tariff_providers,
-        simulate_annual_price_profile,
-    )
+        simulate_annual_price_profile)
     from heatpump_dynamic_tariff_charts import (
         create_hourly_price_chart,
         create_annual_cost_chart,
         create_stromcloud_waterfall,
-        create_load_shifting_heatmap,
-    )
+        create_load_shifting_heatmap)
     # Neue erweiterte Features (Phase 1-4)
     from heatpump_advanced_calculations import (
         calculate_jaz_prognosis,
@@ -430,8 +424,7 @@ try:
         calculate_maintenance_schedule,
         simulate_extreme_weather,
         compare_multiple_heatpumps,
-        generate_extended_heatpump_report_data,
-    )
+        generate_extended_heatpump_report_data)
     from heatpump_advanced_charts import (
         create_system_3d_visualization,
         create_kpi_dashboard,
@@ -444,8 +437,7 @@ try:
         create_comparison_radar_chart,
         create_comparison_bar_chart,
         create_comparison_heatmap,
-        create_comparison_cost_chart,
-    )
+        create_comparison_cost_chart)
     from database import get_db_connection
     from locales import get_text
     HEATPUMP_MODULES_AVAILABLE = True
@@ -932,8 +924,7 @@ def render_building_analysis(texts: dict[str, str]) -> dict[str, Any]:
                     heating_system=heating_system,
                     wood_ster_additional=0.0,
                     custom_efficiency=custom_eff /
-                    100.0 if custom_eff else None,
-                )
+                    100.0 if custom_eff else None)
                 heat_load_from_cons = estimate_heat_load_kw_from_annual_demand(
                     annual_heat_kwh, heating_hours=int(heating_hours))
                 # Nimm den höheren Wert zur Sicherheit bzw. ersetze
@@ -2172,8 +2163,7 @@ def render_economics_analysis(
                 xaxis_title="Jahre",
                 yaxis_title="Kumulierter Cashflow (€)",
                 hovermode='x unified',
-                separators=',.'  # Deutsche Trennzeichen für Achsen,
-            )
+                separators=',.'  # Deutsche Trennzeichen für Achsen)
             
             # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig_cashflow)
@@ -2332,8 +2322,7 @@ def render_economics_analysis(
                     yaxis_title="Kumulierte Kosten (€)",
                     hovermode='x unified',
                     height=500,
-                    separators=',.'  # Deutsche Trennzeichen,
-                )
+                    separators=',.'  # Deutsche Trennzeichen)
                 
                 # SHADCN UI THEME ANWENDEN
                 apply_chart_theme(fig_20y)

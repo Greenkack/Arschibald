@@ -16,8 +16,7 @@ try:
     from product_db import (
         get_product_by_id,
         list_products,
-        update_product_pricing_fields,
-    )
+        update_product_pricing_fields)
 except ImportError:
     # Fallback for testing without database
     def get_product_by_id(product_id: int) -> dict[str, Any] | None:

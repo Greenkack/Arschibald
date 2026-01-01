@@ -28,7 +28,7 @@ import plotly.graph_objects as go
 def main():
     st.set_page_config(
         page_title="Theme Cache System Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     

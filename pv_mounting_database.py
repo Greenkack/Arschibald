@@ -224,7 +224,7 @@ def read_component_by_id(component_id: int, include_pdf: bool = False) -> Option
     cursor = conn.cursor()
     
     if include_pdf:
-        cursor.execute("SELECT * FROM mounting_components WHERE id = ?", (component_id,))
+        cursor.execute("SELECT * FROM mounting_components WHERE id = ?", (component_id))
     else:
         # PDF-Bytes ausschließen für Performance
         cursor.execute("""
@@ -233,7 +233,7 @@ def read_component_by_id(component_id: int, include_pdf: bool = False) -> Option
                    quantity_per_module, compatibility, warranty_years, specifications,
                    notes, pdf_filename, created_at, updated_at, is_active
             FROM mounting_components WHERE id = ?
-        """, (component_id,))
+        """, (component_id))
     
     row = cursor.fetchone()
     conn.close()
@@ -304,7 +304,7 @@ def delete_component(component_id: int, soft_delete: bool = True) -> bool:
             (datetime.now().isoformat(), component_id)
         )
     else:
-        cursor.execute("DELETE FROM mounting_components WHERE id = ?", (component_id,))
+        cursor.execute("DELETE FROM mounting_components WHERE id = ?", (component_id))
     
     success = cursor.rowcount > 0
     

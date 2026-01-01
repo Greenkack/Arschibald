@@ -9,8 +9,7 @@ from agent.logging_config import (
     log_api_call,
     log_docker_operation,
     log_tool_execution,
-    setup_logging,
-)
+    setup_logging)
 from agent.errors import (
     APIError,
     ConfigurationError,
@@ -20,8 +19,7 @@ from agent.errors import (
     format_error_message,
     get_error_details,
     get_retry_delay,
-    should_retry,
-)
+    should_retry)
 import os
 import sys
 

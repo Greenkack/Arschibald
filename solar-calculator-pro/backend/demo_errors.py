@@ -16,8 +16,7 @@ from core.errors import (
     PDFGenerationError,
     ErrorHandler,
     handle_errors,
-    ErrorContext,
-)
+    ErrorContext)
 
 
 def demo_basic_error():

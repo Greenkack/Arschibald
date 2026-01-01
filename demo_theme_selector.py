@@ -19,7 +19,7 @@ def main():
     """Haupt-Demo-Funktion"""
     st.set_page_config(
         page_title="Theme Selector Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
 
@@ -38,7 +38,7 @@ def main():
 
         # Callback für Theme-Wechsel
         def on_theme_change(theme_name: str):
-            st.toast(f" Theme gewechselt zu: {theme_name}", icon="")
+            st.toast(f" Theme gewechselt zu: {theme_name}")
 
         # Rendere Theme Selector
         render_theme_selector(

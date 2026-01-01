@@ -36,8 +36,7 @@ _EMOJI_PATTERN = re.compile(
     "\U00002600-\U000026FF"  # Verschiedene Symbole
     "\U00002700-\U000027BF"  # Dingbats
     "\U000024C2-\U0001F251"  # Umschließende Buchstaben/Zahlen
-    "]+",
-)
+    "]+")
 
 _ZERO_WIDTH_JOINER = "\u200d"
 _VARIATION_SELECTOR = "\ufe0f"

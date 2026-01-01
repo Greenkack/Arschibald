@@ -1,0 +1,856 @@
+{
+  "info": {
+    "name": "Solar Calculator Pro API",
+    "description": "Complete API collection for Solar Calculator Pro with authentication, solar calculations, pricing, PDF generation, and CRM",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('access_token', jsonData.access_token);",
+                  "    pm.test('Token received', function() {",
+                  "        pm.expect(jsonData.access_token).to.be.a('string');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Login and receive JWT access token"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "me"]
+            },
+            "description": "Get current authenticated user information"
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            },
+            "description": "Refresh the access token"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            },
+            "description": "Logout and invalidate token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Solar Calculator",
+      "item": [
+        {
+          "name": "Calculate Solar System",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roof_area\": 50.0,\n  \"roof_type\": \"flat\",\n  \"roof_angle\": 30.0,\n  \"orientation\": \"south\",\n  \"module_type\": \"standard\",\n  \"annual_consumption\": 4000.0,\n  \"location\": \"Berlin\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/solar/calculate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "solar", "calculate"]
+            },
+            "description": "Calculate solar system size, production, and savings"
+          },
+          "response": []
+        },
+        {
+          "name": "List Projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/solar/projects?page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "solar", "projects"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "List all solar projects with pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Müller Residence\",\n  \"customer_name\": \"Hans Müller\",\n  \"customer_email\": \"hans@example.com\",\n  \"project_type\": \"solar\",\n  \"data\": {\n    \"roof_area\": 50.0,\n    \"system_size\": 10.5,\n    \"module_count\": 30\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/solar/projects",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "solar", "projects"]
+            },
+            "description": "Create a new solar project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Project",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/solar/projects/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "solar", "projects", "1"]
+            },
+            "description": "Get project details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Müller Residence - Updated\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/solar/projects/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "solar", "projects", "1"]
+            },
+            "description": "Update project details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/solar/projects/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "solar", "projects", "1"]
+            },
+            "description": "Delete a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Generate 3D Visualization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project_id\": 1,\n  \"roof_type\": \"flat\",\n  \"module_count\": 30,\n  \"module_dimensions\": {\n    \"width\": 1.0,\n    \"height\": 2.0\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/solar/3d-visualization",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "solar", "3d-visualization"]
+            },
+            "description": "Generate 3D model of solar installation"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Price Matrix",
+      "item": [
+        {
+          "name": "Get Price Matrix",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pricing/matrix",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "pricing", "matrix"]
+            },
+            "description": "Get current active price matrix"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Price Matrix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file_name\": \"price_matrix_2024.xlsx\",\n  \"file_content\": \"base64_encoded_content\",\n  \"matrix_type\": \"solar_pv\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/pricing/matrix/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "pricing", "matrix", "upload"]
+            },
+            "description": "Upload new price matrix"
+          },
+          "response": []
+        },
+        {
+          "name": "Calculate Price",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"module_count\": 30,\n  \"battery_model\": \"Tesla Powerwall 2\",\n  \"extras\": [\"monitoring\", \"insurance\"],\n  \"discounts\": {\n    \"early_bird\": 0.05\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/pricing/calculate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "pricing", "calculate"]
+            },
+            "description": "Calculate price using INDEX/MATCH logic"
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Matrix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"matrix_data\": {},\n  \"validation_rules\": [\"structure\", \"data_types\", \"formulas\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/pricing/validate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "pricing", "validate"]
+            },
+            "description": "Validate price matrix structure and data"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PDF Generation",
+      "item": [
+        {
+          "name": "Generate PDF",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project_id\": 1,\n  \"template\": \"standard\",\n  \"options\": {\n    \"include_charts\": true,\n    \"include_3d\": true,\n    \"language\": \"de\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/pdf/generate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "pdf", "generate"]
+            },
+            "description": "Generate PDF report for project"
+          },
+          "response": []
+        },
+        {
+          "name": "List Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pdf/templates",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "pdf", "templates"]
+            },
+            "description": "List available PDF templates"
+          },
+          "response": []
+        },
+        {
+          "name": "Preview PDF",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project_id\": 1,\n  \"template\": \"standard\",\n  \"page\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/pdf/preview",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "pdf", "preview"]
+            },
+            "description": "Preview PDF before generation"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products?page=1&page_size=20&category=solar_modules",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                },
+                {
+                  "key": "category",
+                  "value": "solar_modules"
+                }
+              ]
+            },
+            "description": "List products with pagination and filtering"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Solar Module Premium 400W\",\n  \"category\": \"solar_modules\",\n  \"manufacturer\": \"SolarTech\",\n  \"price\": 250.0,\n  \"specifications\": {\n    \"power\": 400,\n    \"efficiency\": 21.5,\n    \"warranty_years\": 25\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"]
+            },
+            "description": "Create new product"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "1"]
+            },
+            "description": "Get product details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 245.0,\n  \"in_stock\": true,\n  \"stock_quantity\": 200\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "1"]
+            },
+            "description": "Update product details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "1"]
+            },
+            "description": "Delete product"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/search?q=solar&category=modules&min_power=400",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "solar"
+                },
+                {
+                  "key": "category",
+                  "value": "modules"
+                },
+                {
+                  "key": "min_power",
+                  "value": "400"
+                }
+              ]
+            },
+            "description": "Search products with filters"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CRM",
+      "item": [
+        {
+          "name": "List Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/customers?page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "customers"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "List all customers"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Maria Schmidt\",\n  \"email\": \"maria@example.com\",\n  \"phone\": \"+49 123 456789\",\n  \"address\": {\n    \"street\": \"Hauptstraße 123\",\n    \"city\": \"Berlin\",\n    \"postal_code\": \"10115\",\n    \"country\": \"Germany\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/customers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "customers"]
+            },
+            "description": "Create new customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/customers/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "customers", "1"]
+            },
+            "description": "Get customer details"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+49 987 654321\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/customers/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "customers", "1"]
+            },
+            "description": "Update customer details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/customers/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "customers", "1"]
+            },
+            "description": "Delete customer"
+          },
+          "response": []
+        },
+        {
+          "name": "List Offers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/offers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "offers"]
+            },
+            "description": "List all offers"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Offer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": 1,\n  \"project_id\": 1,\n  \"amount\": 15675.0,\n  \"valid_until\": \"2024-02-28\",\n  \"status\": \"draft\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/offers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "offers"]
+            },
+            "description": "Create new offer"
+          },
+          "response": []
+        },
+        {
+          "name": "List Tasks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "tasks"]
+            },
+            "description": "List all tasks"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Follow up with customer\",\n  \"description\": \"Call Maria Schmidt about the offer\",\n  \"customer_id\": 1,\n  \"due_date\": \"2024-01-25\",\n  \"priority\": \"high\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/crm/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "crm", "tasks"]
+            },
+            "description": "Create new task"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Data Management",
+      "item": [
+        {
+          "name": "List Records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/data/records?page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "data", "records"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "List all data records with dynamic keys"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data_type\": \"calculation_result\",\n  \"content\": {\n    \"system_size\": 10.5,\n    \"total_cost\": 15000.0\n  },\n  \"metadata\": {\n    \"project_id\": 1,\n    \"created_by\": \"admin\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/data/records",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "data", "records"]
+            },
+            "description": "Create record with dynamic keys and PDF bytes"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Record with PDF Bytes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/data/records/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "data", "records", "1"]
+            },
+            "description": "Get record with PDF bytes included"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Record",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": {\n    \"system_size\": 11.0,\n    \"total_cost\": 16000.0\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/data/records/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "data", "records", "1"]
+            },
+            "description": "Update record and regenerate PDF bytes"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Record",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/data/records/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "data", "records", "1"]
+            },
+            "description": "Delete record"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        },
+        "description": "Check API health status"
+      },
+      "response": []
+    }
+  ]
+}

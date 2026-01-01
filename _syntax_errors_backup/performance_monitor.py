@@ -245,11 +245,11 @@ class DatabaseBenchmark:
         successful_operations = 0
 
         queries = [
-            ("SELECT * FROM products WHERE category = ?", ("Modul",)),
-            ("SELECT * FROM products WHERE calculate_per = ?", ("Stück",)),
-            ("SELECT * FROM products WHERE purchase_price_net > ?", (100.0,)),
+            ("SELECT * FROM products WHERE category = ?", ("Modul")),
+            ("SELECT * FROM products WHERE calculate_per = ?", ("Stück")),
+            ("SELECT * FROM products WHERE purchase_price_net > ?", (100.0)),
             ("SELECT COUNT(*) FROM products GROUP BY category", ()),
-            ("SELECT * FROM products WHERE model_name LIKE ?", ("%Test%",)),
+            ("SELECT * FROM products WHERE model_name LIKE ?", ("%Test%")),
         ]
 
         start_time = time.time()
@@ -322,7 +322,7 @@ class DatabaseBenchmark:
                                END as calculated_price
                         FROM products p
                         WHERE p.id = ?
-                    """, (i % 10 + 1,))  # Cycle through first 10 products
+                    """, (i % 10 + 1))  # Cycle through first 10 products
 
                     result = cursor.fetchone()
                     self.monitor.set_result_count(1 if result else 0)
@@ -376,7 +376,7 @@ class DatabaseBenchmark:
                         conn = self._get_connection()
                         cursor = conn.cursor()
                         cursor.execute(
-                            "SELECT COUNT(*) FROM products WHERE category = ?", ("Modul",))
+                            "SELECT COUNT(*) FROM products WHERE category = ?", ("Modul"))
                         result = cursor.fetchone()
                         self.monitor.set_result_count(1)
                         conn.close()

@@ -356,8 +356,7 @@ def render_options(texts: dict[str, str], **kwargs):
         try:
             from components.progress_settings import (
                 render_progress_settings,
-                render_quick_themes,
-            )
+                render_quick_themes)
             render_progress_settings()
             st.markdown("---")
             render_quick_themes()

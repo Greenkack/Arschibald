@@ -23,8 +23,7 @@ print("=" * 70)
 try:
     from agent.tools.knowledge_tools import (
         clear_knowledge_base_cache,
-        get_cache_info,
-    )
+        get_cache_info)
 
     print("All knowledge base functions imported successfully")
 
@@ -58,8 +57,7 @@ try:
         get_container_stats,
         get_docker_metrics,
         monitor_docker_resources,
-        reset_docker_metrics,
-    )
+        reset_docker_metrics)
 
     print("All Docker optimization functions imported successfully")
 

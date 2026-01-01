@@ -46,13 +46,13 @@ def display_error_message(
     
     # Wähle Streamlit-Komponente basierend auf Severity
     if error_info.severity == ErrorSeverity.CRITICAL:
-        container.error(error_info.user_message, icon="")
+        container.error(error_info.user_message)
     elif error_info.severity == ErrorSeverity.ERROR:
-        container.error(error_info.user_message, icon="")
+        container.error(error_info.user_message)
     elif error_info.severity == ErrorSeverity.WARNING:
-        container.warning(error_info.user_message, icon="")
+        container.warning(error_info.user_message)
     else:
-        container.info(error_info.user_message, icon="")
+        container.info(error_info.user_message)
     
     # Lösungsvorschläge
     if show_suggestions and error_info.suggestions:
@@ -100,8 +100,7 @@ def display_error_with_fallback(
         container.warning(
             f"**Automatischer Fallback aktiviert**\n\n"
             f"{fallback_result.get('message', 'Fallback wurde verwendet')}\n\n"
-            f"Strategie: {fallback_result.get('strategy', 'unbekannt')}",
-            icon=""
+            f"Strategie: {fallback_result.get('strategy', 'unbekannt')}"
         )
     
     # Zeige Hauptfehler
@@ -110,8 +109,7 @@ def display_error_with_fallback(
     # Admin-Benachrichtigung Hinweis
     if error_result.get('admin_notified'):
         container.info(
-            " Der Administrator wurde über diesen Fehler benachrichtigt.",
-            icon=""
+            " Der Administrator wurde über diesen Fehler benachrichtigt."
         )
 
 
@@ -166,8 +164,7 @@ def display_validation_results(
     
     if validation_result.get('valid'):
         container.success(
-            "Matrix ist gültig für Preisberechnung",
-            icon=""
+            "Matrix ist gültig für Preisberechnung"
         )
         
         # Zeige Informationen
@@ -191,8 +188,7 @@ def display_validation_results(
                     st.write(", ".join(info['storage_models']))
     else:
         container.error(
-            "Matrix-Validierung fehlgeschlagen",
-            icon=""
+            "Matrix-Validierung fehlgeschlagen"
         )
         
         # Zeige Fehler
@@ -319,8 +315,7 @@ def display_price_lookup_error(
     if show_fallback_option and error_info.fallback_available:
         container.info(
             "**Automatischer Fallback verfügbar**\n\n"
-            "Das System kann automatisch einen alternativen Wert verwenden.",
-            icon=""
+            "Das System kann automatisch einen alternativen Wert verwenden."
         )
         
         col1, col2 = container.columns(2)
@@ -362,7 +357,7 @@ def display_admin_notification_banner(
     if critical:
         with container.expander(f" {len(critical)} Kritische Fehler", expanded=True):
             for notif in critical:
-                st.error(notif.get('message', ''), icon="")
+                st.error(notif.get('message', ''))
                 if notif.get('recommended_actions'):
                     st.write("**Empfohlene Aktionen:**")
                     for action in notif['recommended_actions']:
@@ -373,7 +368,7 @@ def display_admin_notification_banner(
     if errors:
         with container.expander(f"{len(errors)} Fehler"):
             for notif in errors:
-                st.error(notif.get('message', ''), icon="")
+                st.error(notif.get('message', ''))
                 if notif.get('recommended_actions'):
                     st.write("**Empfohlene Aktionen:**")
                     for action in notif['recommended_actions']:
@@ -384,7 +379,7 @@ def display_admin_notification_banner(
     if warnings:
         with container.expander(f"{len(warnings)} Warnungen"):
             for notif in warnings:
-                st.warning(notif.get('message', ''), icon="")
+                st.warning(notif.get('message', ''))
                 st.divider()
 
 

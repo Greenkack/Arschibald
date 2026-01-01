@@ -21,8 +21,7 @@ try:
         get_all_active_customers,
         get_customer_by_id,
         get_db_connection,
-        update_customer,
-    )
+        update_customer)
     from locales import get_text
     DATABASE_AVAILABLE = True
 except ImportError as e:

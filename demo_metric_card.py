@@ -11,7 +11,7 @@ from theming import ThemeManager
 # Seiten-Konfiguration
 st.set_page_config(
     page_title="MetricCard Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 
@@ -40,7 +40,6 @@ with col1:
     metric_card(
         label="Umsatz",
         value="€45,231",
-        icon="",
         theme_manager=theme_manager
     )
 
@@ -51,7 +50,6 @@ with col2:
         value="1,234",
         trend=12.5,
         trend_label="+12.5% vs. letzter Monat",
-        icon="",
         theme_manager=theme_manager
     )
 
@@ -62,7 +60,6 @@ with col3:
         value="23.4%",
         trend=-5.2,
         trend_label="-5.2% vs. letzter Monat",
-        icon="",
         theme_manager=theme_manager
     )
 
@@ -79,7 +76,6 @@ with col1:
         label="Besucher",
         value="12,345",
         trend=8.2,
-        icon="",
         size="small",
         theme_manager=theme_manager
     )
@@ -90,7 +86,6 @@ with col2:
         label="Besucher",
         value="12,345",
         trend=8.2,
-        icon="",
         size="medium",
         theme_manager=theme_manager
     )
@@ -101,7 +96,6 @@ with col3:
         label="Besucher",
         value="12,345",
         trend=8.2,
-        icon="",
         size="large",
         theme_manager=theme_manager
     )
@@ -119,7 +113,6 @@ with col1:
         label="Conversion Rate",
         value="3.24%",
         trend=1.2,
-        icon="",
         variant="default",
         theme_manager=theme_manager
     )
@@ -130,7 +123,6 @@ with col2:
         label="Conversion Rate",
         value="3.24%",
         trend=1.2,
-        icon="",
         variant="outlined",
         theme_manager=theme_manager
     )
@@ -141,7 +133,6 @@ with col3:
         label="Conversion Rate",
         value="3.24%",
         trend=1.2,
-        icon="",
         variant="elevated",
         theme_manager=theme_manager
     )
@@ -159,7 +150,6 @@ with col1:
         value="€127.50",
         description="Basierend auf 1,234 Bestellungen in diesem Monat",
         trend=5.3,
-        icon="",
         size="large",
         theme_manager=theme_manager
     )
@@ -171,7 +161,6 @@ with col2:
         description="Durchschnittliche Bewertung aus 567 Umfragen",
         trend=0.3,
         trend_label="+0.3 Punkte",
-        icon="",
         size="large",
         theme_manager=theme_manager
     )
@@ -190,7 +179,6 @@ with col1:
         value="+15.2%",
         trend=15.2,
         show_trend_arrow=True,
-        icon="",
         theme_manager=theme_manager
     )
 
@@ -201,7 +189,6 @@ with col2:
         value="+15.2%",
         trend=15.2,
         show_trend_arrow=False,
-        icon="",
         theme_manager=theme_manager
     )
 
@@ -374,7 +361,6 @@ with col1:
         label="Animiert",
         value="€12,345",
         trend=10.5,
-        icon="",
         animate=True,
         theme_manager=theme_manager
     )
@@ -384,7 +370,6 @@ with col2:
         label="Nicht animiert",
         value="€12,345",
         trend=10.5,
-        icon="",
         animate=False,
         theme_manager=theme_manager
     )
@@ -394,7 +379,6 @@ with col3:
         label="Animiert",
         value="€12,345",
         trend=10.5,
-        icon="",
         animate=True,
         theme_manager=theme_manager
     )
@@ -412,8 +396,7 @@ metric_card(
     label="Umsatz",
     value="€45,231",
     trend=12.5,
-    trend_label="+12.5% vs. letzter Monat",
-    icon=""
+    trend_label="+12.5% vs. letzter Monat"
 )
     """, language="python")
 
@@ -426,7 +409,6 @@ metric_card(
     value="€127.50",
     description="Basierend auf 1,234 Bestellungen",
     trend=5.3,
-    icon="",
     size="large"
 )
     """, language="python")

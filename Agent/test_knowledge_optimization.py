@@ -13,8 +13,7 @@ from agent.tools.knowledge_tools import (
     clear_knowledge_base_cache,
     get_cache_info,
     knowledge_base_search,
-    setup_knowledge_base,
-)
+    setup_knowledge_base)
 import os
 import sys
 import tempfile
