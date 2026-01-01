@@ -57,8 +57,7 @@ def upsert_attribute(
         # Versuche Update
         cur.execute(
             "SELECT id FROM product_attributes WHERE product_id = ? AND attribute_key = ?",
-            (int(product_id), attribute_key),
-        )
+            (int(product_id), attribute_key))
         row = cur.fetchone()
         if row:
             attr_id = int(row[0])
@@ -68,8 +67,7 @@ def upsert_attribute(
                  unit,
                  display_order,
                  now_iso,
-                 attr_id),
-            )
+                 attr_id))
             conn.commit()
             return attr_id
         cur.execute(
@@ -80,8 +78,7 @@ def upsert_attribute(
              attribute_value,
              unit,
              display_order or 0,
-             now_iso),
-        )
+             now_iso))
         conn.commit()
         return int(cur.lastrowid)
     except Exception as e:
@@ -108,8 +105,7 @@ def get_attribute(
         cur = conn.cursor()
         cur.execute(
             "SELECT id, product_id, category, attribute_key, attribute_value, unit, display_order, updated_at FROM product_attributes WHERE product_id = ? AND attribute_key = ?",
-            (int(product_id), attribute_key),
-        )
+            (int(product_id), attribute_key))
         row = cur.fetchone()
         if not row:
             return None
@@ -140,8 +136,7 @@ def list_attributes(product_id: int) -> list[dict[str, Any]]:
         cur = conn.cursor()
         cur.execute(
             "SELECT id, product_id, category, attribute_key, attribute_value, unit, display_order, updated_at FROM product_attributes WHERE product_id = ? ORDER BY display_order, attribute_key",
-            (int(product_id),),
-        )
+            (int(product_id)))
         rows = cur.fetchall()
         return [
             {
@@ -172,7 +167,7 @@ def delete_attribute(attribute_id: int) -> bool:
         _ensure_tables(conn)
         cur = conn.cursor()
         cur.execute("DELETE FROM product_attributes WHERE id = ?",
-                    (int(attribute_id),))
+                    (int(attribute_id)))
         conn.commit()
         return cur.rowcount > 0
     except Exception as e:

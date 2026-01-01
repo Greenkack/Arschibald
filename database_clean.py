@@ -168,13 +168,11 @@ def list_customer_documents(
         if project_id is not None:
             cur.execute(
                 "SELECT id, doc_type, display_name, file_name, absolute_file_path, uploaded_at FROM customer_documents WHERE customer_id = ? AND project_id = ? ORDER BY uploaded_at DESC",
-                (customer_id, project_id),
-            )
+                (customer_id, project_id))
         else:
             cur.execute(
                 "SELECT id, doc_type, display_name, file_name, absolute_file_path, uploaded_at FROM customer_documents WHERE customer_id = ? ORDER BY uploaded_at DESC",
-                (customer_id,),
-            )
+                (customer_id))
         rows = cur.fetchall()
         conn.close()
         result: list[dict[str, Any]] = []
@@ -201,8 +199,7 @@ def get_customer_document_file_path(document_id: int) -> str | None:
         cur = conn.cursor()
         cur.execute(
             "SELECT absolute_file_path FROM customer_documents WHERE id = ?",
-            (document_id,
-             ))
+            (document_id))
         row = cur.fetchone()
         conn.close()
         if not row:
@@ -224,8 +221,7 @@ def delete_customer_document(document_id: int) -> bool:
         cur = conn.cursor()
         cur.execute(
             "SELECT absolute_file_path FROM customer_documents WHERE id = ?",
-            (document_id,
-             ))
+            (document_id))
         row = cur.fetchone()
         if not row:
             conn.close()
@@ -239,7 +235,7 @@ def delete_customer_document(document_id: int) -> bool:
             print(
                 f"DB Warnung: Datei konnte nicht gelöscht werden ({abs_path}): {e_rm}")
         cur.execute(
-            "DELETE FROM customer_documents WHERE id = ?", (document_id,))
+            "DELETE FROM customer_documents WHERE id = ?", (document_id))
         conn.commit()
         success = cur.rowcount > 0
         conn.close()
@@ -479,7 +475,7 @@ def load_admin_setting(key: str, default: Any = None) -> Any:
     try:
         _ensure_admin_table(conn)
         cur = conn.cursor()
-        cur.execute("SELECT value FROM admin_settings WHERE key = ?", (key,))
+        cur.execute("SELECT value FROM admin_settings WHERE key = ?", (key))
         row = cur.fetchone()
         if not row:
             return default
@@ -769,7 +765,7 @@ def delete_heat_pump(conn, id):
     """Löscht eine Wärmepumpe."""
     sql = 'DELETE FROM heat_pumps WHERE id = ?'
     cur = conn.cursor()
-    cur.execute(sql, (id,))
+    cur.execute(sql, (id))
     conn.commit()
 
 # Stellen Sie sicher, dass create_heat_pumps_table() beim Initialisieren der DB aufgerufen wird.

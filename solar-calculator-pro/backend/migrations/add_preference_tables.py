@@ -30,8 +30,7 @@ def upgrade():
         sa.Column('created_at', sa.DateTime(), default=datetime.utcnow),
         sa.Column('updated_at', sa.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow),
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
-    )
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'))
     
     # Create indexes for user_preferences
     op.create_index('ix_user_preferences_user_id', 'user_preferences', ['user_id'])
@@ -51,8 +50,7 @@ def upgrade():
         sa.Column('is_system', sa.Boolean(), default=False),
         sa.Column('created_at', sa.DateTime(), default=datetime.utcnow),
         sa.Column('updated_at', sa.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow),
-        sa.PrimaryKeyConstraint('id'),
-    )
+        sa.PrimaryKeyConstraint('id'))
     
     # Create indexes for preference_templates
     op.create_index('ix_preference_templates_name', 'preference_templates', ['name'], unique=True)
@@ -70,8 +68,7 @@ def upgrade():
         sa.Column('sync_data', sa.Text()),
         sa.Column('created_at', sa.DateTime(), default=datetime.utcnow),
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
-    )
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'))
     
     # Create indexes for preference_syncs
     op.create_index('ix_preference_syncs_user_id', 'preference_syncs', ['user_id'])

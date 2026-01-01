@@ -26,7 +26,7 @@ def upgrade():
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('last_used_at', sa.DateTime(), nullable=True),
         sa.Column('verified_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_user_two_factor_id', 'user_two_factor', ['id'])
@@ -49,7 +49,7 @@ def upgrade():
         sa.Column('oidc_sub', sa.String(255), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('last_login_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_user_sso_id', 'user_sso', ['id'])
@@ -69,7 +69,7 @@ def upgrade():
         sa.Column('credential_id', sa.String(255), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('last_used_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_user_biometric_id', 'user_biometric', ['id'])
@@ -97,7 +97,7 @@ def upgrade():
         sa.Column('is_active', sa.Boolean(), default=True),
         sa.Column('revoked_at', sa.DateTime(), nullable=True),
         sa.Column('revoked_reason', sa.String(255), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('session_token'),
         sa.UniqueConstraint('refresh_token')
@@ -125,7 +125,7 @@ def upgrade():
         sa.Column('attempted_at', sa.DateTime(), nullable=False),
         sa.Column('is_suspicious', sa.Boolean(), default=False),
         sa.Column('is_blocked', sa.Boolean(), default=False),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_login_attempts_id', 'login_attempts', ['id'])
@@ -165,7 +165,7 @@ def upgrade():
         sa.Column('user_id', sa.Integer(), nullable=False),
         sa.Column('password_hash', sa.String(255), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_password_history_id', 'password_history', ['id'])
@@ -184,8 +184,8 @@ def upgrade():
         sa.Column('unlocked_by', sa.Integer(), nullable=True),
         sa.Column('unlock_reason', sa.String(255), nullable=True),
         sa.Column('is_active', sa.Boolean(), default=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-        sa.ForeignKeyConstraint(['unlocked_by'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
+        sa.ForeignKeyConstraint(['unlocked_by'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_account_lockouts_id', 'account_lockouts', ['id'])

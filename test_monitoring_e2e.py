@@ -175,7 +175,7 @@ def main():
     total = len(results)
     
     for name, result in results.items():
-        status_icon = "" if result else ""
+        status_ if result else ""
         print(f"{status_icon} {name}")
     
     print(f"\nPassed: {passed}/{total}")

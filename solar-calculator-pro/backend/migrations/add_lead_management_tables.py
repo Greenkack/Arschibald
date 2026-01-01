@@ -53,9 +53,9 @@ def upgrade():
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
         sa.Column('created_by_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['assigned_to_id'], ['users.id'], ),
-        sa.ForeignKeyConstraint(['converted_to_customer_id'], ['customers.id'], ),
-        sa.ForeignKeyConstraint(['created_by_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['assigned_to_id'], ['users.id']),
+        sa.ForeignKeyConstraint(['converted_to_customer_id'], ['customers.id']),
+        sa.ForeignKeyConstraint(['created_by_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_leads_email'), 'leads', ['email'], unique=True)
@@ -79,8 +79,8 @@ def upgrade():
         sa.Column('duration_minutes', sa.Integer(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('created_by_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['lead_id'], ['leads.id'], ),
-        sa.ForeignKeyConstraint(['created_by_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['lead_id'], ['leads.id']),
+        sa.ForeignKeyConstraint(['created_by_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_lead_activities_id'), 'lead_activities', ['id'], unique=False)
@@ -119,7 +119,7 @@ def upgrade():
         sa.Column('priority', sa.Integer(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['assign_to_user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['assign_to_user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_lead_assignment_rules_id'), 'lead_assignment_rules', ['id'], unique=False)
@@ -143,7 +143,7 @@ def upgrade():
         sa.Column('emails_clicked', sa.Integer(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['lead_id'], ['leads.id'], ),
+        sa.ForeignKeyConstraint(['lead_id'], ['leads.id']),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_lead_nurturing_campaigns_id'), 'lead_nurturing_campaigns', ['id'], unique=False)

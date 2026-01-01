@@ -21,8 +21,7 @@ try:
         get_products_with_dynamic_keys,
         list_product_categories,
         list_products,
-        update_product,
-    )
+        update_product)
     PRODUCT_DB_AVAILABLE = True
 except ImportError as e:
     st.error(f"Produktdatenbank nicht verfügbar: {e}")

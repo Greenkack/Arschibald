@@ -11,8 +11,7 @@ from Agent.config import (
     check_api_keys,
     validate_api_key_format,
     validate_env_file_security,
-    validate_startup_security,
-)
+    validate_startup_security)
 from Agent.agent.security import mask_sensitive_data
 import os
 import sys

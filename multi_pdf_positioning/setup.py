@@ -59,5 +59,4 @@ setup(
             'config.py',
             '*.yml',
         ],
-    },
-)
+    })

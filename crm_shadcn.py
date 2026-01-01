@@ -19,8 +19,7 @@ from crm import (
     delete_customer,
     create_tables_crm,
     get_text_crm,
-    trace_crm,
-)
+    trace_crm)
 
 # Import shadcn/ui migration helpers
 from utils.shadcn_migration_helpers import (
@@ -30,8 +29,7 @@ from utils.shadcn_migration_helpers import (
     shadcn_metric,
     shadcn_badge,
     shadcn_section,
-    SHADCN_AVAILABLE,
-)
+    SHADCN_AVAILABLE)
 
 # Import components directly
 try:
@@ -101,7 +99,6 @@ def render_customer_list_with_cards(
     metric_card(
         label="Gesamt Kunden",
         value=str(len(customers)),
-        icon="",
         size="medium",
         theme_manager=theme_manager
     )
@@ -359,7 +356,6 @@ def render_crm_dashboard_with_metrics(
         metric_card(
             label="Gesamt Kunden",
             value=str(total_customers),
-            icon="",
             size="medium",
             theme_manager=theme_manager
         )
@@ -370,7 +366,6 @@ def render_crm_dashboard_with_metrics(
         metric_card(
             label="Mit E-Mail",
             value=str(customers_with_email),
-            icon="",
             size="medium",
             theme_manager=theme_manager
         )
@@ -381,7 +376,6 @@ def render_crm_dashboard_with_metrics(
         metric_card(
             label="Mit Telefon",
             value=str(customers_with_phone),
-            icon="",
             size="medium",
             theme_manager=theme_manager
         )
@@ -392,7 +386,6 @@ def render_crm_dashboard_with_metrics(
         metric_card(
             label="Städte",
             value=str(unique_cities),
-            icon="",
             size="medium",
             theme_manager=theme_manager
         )

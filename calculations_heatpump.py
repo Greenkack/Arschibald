@@ -159,8 +159,7 @@ def calculate_heatpump_economics(
         investment_cost,
         annual_savings,
         allow_infinite=True,
-        default_zero=False,
-    )
+        default_zero=False)
 
     # 20-Jahres-Bilanz
     total_savings_20y = annual_savings * 20 - investment_cost
@@ -251,8 +250,7 @@ def estimate_annual_heat_demand_kwh_from_consumption(
     consumption: dict[str, float],
     heating_system: str,
     wood_ster_additional: float = 0.0,
-    custom_efficiency: float | None = None,
-) -> float:
+    custom_efficiency: float | None = None) -> float:
     """
     Schätzt den jährlichen Wärmebedarf (Nutzwärme) aus aktuellem Verbrauch.
 

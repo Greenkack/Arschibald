@@ -279,7 +279,7 @@ class PricingAuditLogger:
             with sqlite3.connect(str(self.db_path)) as conn:
                 conn.execute(
                     "DELETE FROM audit_events WHERE timestamp < ?",
-                    (cutoff_date.isoformat(),)
+                    (cutoff_date.isoformat())
                 )
                 conn.execute("VACUUM")  # Reclaim space
                 conn.commit()
@@ -297,7 +297,7 @@ class PricingAuditLogger:
             with sqlite3.connect(str(self.db_path)) as conn:
                 cursor = conn.execute(
                     "DELETE FROM audit_events WHERE timestamp < ?",
-                    (cutoff_date.isoformat(),)
+                    (cutoff_date.isoformat())
                 )
                 deleted_count = cursor.rowcount
                 conn.commit()
@@ -525,7 +525,7 @@ class PricingAuditLogger:
                 # Total events
                 cursor = conn.execute(
                     "SELECT COUNT(*) FROM audit_events WHERE timestamp >= ?",
-                    (start_time.isoformat(),)
+                    (start_time.isoformat())
                 )
                 total_events = cursor.fetchone()[0]
 
@@ -535,7 +535,7 @@ class PricingAuditLogger:
                     FROM audit_events
                     WHERE timestamp >= ?
                     GROUP BY event_type
-                """, (start_time.isoformat(),))
+                """, (start_time.isoformat()))
                 events_by_type = dict(cursor.fetchall())
 
                 # Events by severity
@@ -544,7 +544,7 @@ class PricingAuditLogger:
                     FROM audit_events
                     WHERE timestamp >= ?
                     GROUP BY severity
-                """, (start_time.isoformat(),))
+                """, (start_time.isoformat()))
                 events_by_severity = dict(cursor.fetchall())
 
                 # Average duration
@@ -552,7 +552,7 @@ class PricingAuditLogger:
                     SELECT AVG(duration_ms)
                     FROM audit_events
                     WHERE timestamp >= ? AND duration_ms IS NOT NULL
-                """, (start_time.isoformat(),))
+                """, (start_time.isoformat()))
                 avg_duration = cursor.fetchone()[0] or 0.0
 
                 # Error rate
@@ -560,7 +560,7 @@ class PricingAuditLogger:
                     SELECT COUNT(*)
                     FROM audit_events
                     WHERE timestamp >= ? AND severity IN ('error', 'critical')
-                """, (start_time.isoformat(),))
+                """, (start_time.isoformat()))
                 error_count = cursor.fetchone()[0]
                 error_rate = (
                     error_count /

@@ -15,7 +15,7 @@ from components import shadcn_ui_integration as sui
 # Page config
 st.set_page_config(
     page_title="shadcn/ui Integration Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 

@@ -18,9 +18,7 @@ def _show_unavailable(feature_name: str = "Multi-Angebots-Generator") -> None:
             "1⃣ **Mehrere Firmen konfiguriert** im Admin-Panel → Firmenverwaltung\n"
             "2⃣ **Vollständige Projektanalyse** durchgeführt\n"
             "3⃣ **Preiskalkulationen** für alle Firmen abgeschlossen\n\n"
-            " Für **Einzel-Firmen-PDFs** nutzen Sie den Tab **'PDF-Ausgabe'** oben.",
-            icon="",
-        )
+            " Für **Einzel-Firmen-PDFs** nutzen Sie den Tab **'PDF-Ausgabe'** oben.")
     except Exception:
         pass
 

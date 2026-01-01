@@ -14,7 +14,7 @@ from typing import Dict, List
 # Page config
 st.set_page_config(
     page_title="Phase 5: Navigation Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 

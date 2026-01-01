@@ -215,8 +215,7 @@ try:
     from product_db import (
         list_products as real_list_products,
         get_product_by_id as real_get_product_by_id,
-        get_product_by_model_name as real_get_product_by_model_name,
-    )
+        get_product_by_model_name as real_get_product_by_model_name)
 
     if (
         not callable(real_list_products)
@@ -231,14 +230,12 @@ except ImportError:
     real_list_products, real_get_product_by_id, real_get_product_by_model_name = (
         Dummy_list_products_calc,
         Dummy_get_product_by_id_calc,
-        Dummy_get_product_by_model_name_calc,
-    )
+        Dummy_get_product_by_model_name_calc)
 except Exception:
     real_list_products, real_get_product_by_id, real_get_product_by_model_name = (
         Dummy_list_products_calc,
         Dummy_get_product_by_id_calc,
-        Dummy_get_product_by_model_name_calc,
-    )
+        Dummy_get_product_by_model_name_calc)
 
 
 # --- Performance: einfacher Modul-Cache für Preis-Matrix ---
@@ -276,8 +273,7 @@ def _hash_text(text: Optional[str]) -> Optional[str]:
 def load_price_matrix_df_with_cache(
     price_matrix_excel_bytes: Optional[bytes],
     price_matrix_csv_content: Optional[str],
-    errors_list: List[str],
-) -> Tuple[Optional[pd.DataFrame], str]:
+    errors_list: List[str]) -> Tuple[Optional[pd.DataFrame], str]:
     global _PRICE_MATRIX_CACHE
 
     excel_hash = _hash_bytes(price_matrix_excel_bytes) if price_matrix_excel_bytes else None
@@ -371,8 +367,7 @@ def parse_module_price_matrix_csv(
                             decimal=",",
                             index_col=0,
                             thousands=".",
-                            comment="#",
-                        )
+                            comment="#")
                     else:
                         errors_list.append(
                             "Preis-Matrix-CSV: Indexspalte 'Anzahl Module' nicht gefunden und erste Spalte ist nicht als Index geeignet."
@@ -2027,8 +2022,7 @@ def format_kpi_value(
     unit: str = "",
     na_text_key: str = "data_not_available_short",
     precision: int = 2,
-    texts_dict: Optional[Dict[str, str]] = None,
-) -> str:
+    texts_dict: Optional[Dict[str, str]] = None) -> str:
     current_texts = texts_dict if texts_dict is not None else {}
     na_text = current_texts.get(na_text_key, "N/A")
 
@@ -2132,8 +2126,7 @@ def get_pvgis_data(
     system_loss_percent: float = 14.0,
     texts: Optional[Dict[str, str]] = None,
     errors_list: Optional[List[str]] = None,
-    debug_mode_enabled: bool = False,
-) -> Optional[Dict[str, Any]]:
+    debug_mode_enabled: bool = False) -> Optional[Dict[str, Any]]:
     """Holt PV-Produktionsdaten von der PVGIS API."""
     local_errors: List[str] = []  # Für interne Fehler dieser Funktion
     texts = texts if texts is not None else {}  # Sicherstellen, dass texts ein Dict ist
@@ -2154,8 +2147,7 @@ def get_pvgis_data(
         actual_error_msg = (
             texts.get(
                 "pvgis_invalid_peak_power",
-                "PVGIS: Installierte Leistung muss positiv sein.",
-            )
+                "PVGIS: Installierte Leistung muss positiv sein.")
             or ""
         )
         effective_errors_list.append(actual_error_msg)
@@ -2222,8 +2214,7 @@ def get_pvgis_data(
             error_msg_pvgis = (
                 texts.get(
                     "pvgis_incomplete_data",
-                    "PVGIS: Antwort erhalten, aber Daten scheinen unvollständig oder null.",
-                )
+                    "PVGIS: Antwort erhalten, aber Daten scheinen unvollständig oder null.")
                 or ""
             )
             # if debug_mode_enabled: print(f"PVGIS: Unvollständige Daten: monthly_empty={not monthly_production_kwh}, len_monthly={len(monthly_production_kwh)}, annual_zero={annual_production_kwh == 0 and peak_power_kwp > 0}") # Bereinigt
@@ -2261,16 +2252,14 @@ def get_pvgis_data(
         error_msg_pvgis = (
             texts.get(
                 "pvgis_timeout_error",
-                "PVGIS API Zeitüberschreitung (Timeout nach 25s). Bitte Netzwerkverbindung prüfen.",
-            )
+                "PVGIS API Zeitüberschreitung (Timeout nach 25s). Bitte Netzwerkverbindung prüfen.")
             or ""
         )
     except requests.exceptions.ConnectionError as e_conn:
         error_msg_pvgis = (
             texts.get(
                 "pvgis_connection_error",
-                "PVGIS API Verbindungsfehler. Ist das Internet verfügbar und die API erreichbar?",
-            )
+                "PVGIS API Verbindungsfehler. Ist das Internet verfügbar und die API erreichbar?")
             or ""
         ) + f" Details: {e_conn}"
     except (
@@ -2284,8 +2273,7 @@ def get_pvgis_data(
         error_msg_pvgis = (
             texts.get(
                 "pvgis_json_decode_error",
-                "PVGIS API: Fehler beim Lesen der JSON-Antwort. Möglicherweise temporäres API-Problem.",
-            )
+                "PVGIS API: Fehler beim Lesen der JSON-Antwort. Möglicherweise temporäres API-Problem.")
             or ""
         )
     except Exception as e_pvgis_unknown:
@@ -2305,8 +2293,7 @@ def perform_calculations(
     texts: Dict[str, str],
     errors_list: List[str],
     simulation_duration_user: Optional[int] = None,
-    electricity_price_increase_user: Optional[float] = None,
-) -> Dict[str, Any]:
+    electricity_price_increase_user: Optional[float] = None) -> Dict[str, Any]:
     results: Dict[str, Any] = {"calculation_errors": errors_list}
     customer_data = project_data.get("customer_data", {})
     project_details = project_data.get("project_details", {})
@@ -2323,8 +2310,7 @@ def perform_calculations(
         errors_list.append(
             texts.get(
                 "warn_global_constants_fallback",
-                "Warnung: Fallback für globale Konstanten verwendet.",
-            )
+                "Warnung: Fallback für globale Konstanten verwendet.")
         )
 
     app_debug_mode_is_enabled = global_constants.get("app_debug_mode_enabled", False)
@@ -2336,8 +2322,7 @@ def perform_calculations(
     price_matrix_df_for_lookup, pm_source = load_price_matrix_df_with_cache(
         price_matrix_excel_bytes if isinstance(price_matrix_excel_bytes, (bytes, bytearray)) else None,
         price_matrix_csv_content if isinstance(price_matrix_csv_content, str) else None,
-        errors_list,
-    )
+        errors_list)
     results["price_matrix_source_type"] = pm_source
     results["price_matrix_loaded_successfully"] = bool(
         price_matrix_df_for_lookup is not None and not price_matrix_df_for_lookup.empty
@@ -2385,8 +2370,7 @@ def perform_calculations(
         else float(
             economic_data.get(
                 "electricity_price_increase_annual_percent",
-                electricity_price_increase_default_percent,
-            )
+                electricity_price_increase_default_percent)
             or electricity_price_increase_default_percent
         )
     )
@@ -2430,8 +2414,7 @@ def perform_calculations(
     )
     (
         results["jahresstromverbrauch_fuer_hochrechnung_kwh"],
-        results["aktueller_strompreis_fuer_hochrechnung_euro_kwh"],
-    ) = (annual_consumption_kwh_yr, electricity_price_kwh)
+        results["aktueller_strompreis_fuer_hochrechnung_euro_kwh"]) = (annual_consumption_kwh_yr, electricity_price_kwh)
 
     # Anlagengröße
     selected_module_id = project_details.get("selected_module_id")
@@ -2500,8 +2483,7 @@ def perform_calculations(
                 errors_list.append(
                     texts.get(
                         "warn_pvgis_zero_coords",
-                        "PVGIS: Ungültige Standardkoordinaten (0,0) erhalten. Nutze manuelle Ertragsberechnung.",
-                    )
+                        "PVGIS: Ungültige Standardkoordinaten (0,0) erhalten. Nutze manuelle Ertragsberechnung.")
                 )
             elif not (
                 -90 <= lat <= 90 and -180 <= lon <= 180
@@ -2509,8 +2491,7 @@ def perform_calculations(
                 errors_list.append(
                     texts.get(
                         "pvgis_invalid_lat_lon_range",
-                        "PVGIS: Breiten- oder Längengrade außerhalb des gültigen Bereichs.",
-                    )
+                        "PVGIS: Breiten- oder Längengrade außerhalb des gültigen Bereichs.")
                 )
             else:
                 tilt_val = int(project_details.get("roof_inclination_deg", 30) or 30)
@@ -2529,15 +2510,13 @@ def perform_calculations(
                     SYSTEM_LOSS_PVGIS,
                     texts,
                     errors_list,
-                    debug_mode_enabled=app_debug_mode_is_enabled,
-                )
+                    debug_mode_enabled=app_debug_mode_is_enabled)
         except (ValueError, TypeError) as e_coords:
             errors_list.append(
                 (
                     texts.get(
                         "error_geocoding_conversion_calc",
-                        "Fehler Konvertierung Geodaten für PVGIS.",
-                    )
+                        "Fehler Konvertierung Geodaten für PVGIS.")
                     or ""
                 )
                 + f" Details: {e_coords}"
@@ -2632,8 +2611,7 @@ def perform_calculations(
             errors_list.append(
                 texts.get(
                     "warn_invalid_monthly_distribution",
-                    "Ungültige monatliche Produktionsverteilung in Konstanten, nutze gleichmäßige Verteilung.",
-                )
+                    "Ungültige monatliche Produktionsverteilung in Konstanten, nutze gleichmäßige Verteilung.")
             )
         sum_factors = sum(
             monthly_distribution_factors
@@ -2692,8 +2670,7 @@ def perform_calculations(
         errors_list.append(
             texts.get(
                 "warn_invalid_monthly_consumption_distribution",
-                "Ungültige monatliche Verbrauchsverteilung, nutze gleichmäßige Verteilung.",
-            )
+                "Ungültige monatliche Verbrauchsverteilung, nutze gleichmäßige Verteilung.")
         )
     sum_factors_cons = sum(monthly_distribution_factors_consumption)
     normalized_monthly_consumption_distribution = (
@@ -2786,8 +2763,7 @@ def perform_calculations(
             errors_list.append(
                 texts.get(
                     "info_full_feed_in_override",
-                    "Info: Volleinspeisung aktiviert – Eigenverbrauch & Speicher auf 0 gesetzt.",
-                )
+                    "Info: Volleinspeisung aktiviert – Eigenverbrauch & Speicher auf 0 gesetzt.")
             )
 
     eigenverbrauch_pro_jahr_kwh = sum(monthly_direct_self_consumption_kwh) + sum(
@@ -2911,16 +2887,14 @@ def perform_calculations(
                         (
                             texts.get(
                                 "error_no_storage_column_or_price_not_found_in_matrix",
-                                "Fehler: Weder Preis für '{selected_storage_name}' noch für '{no_storage_option_text}' bei {module_count} Modulen in Matrix. Grundpreis 0€.",
-                            )
+                                "Fehler: Weder Preis für '{selected_storage_name}' noch für '{no_storage_option_text}' bei {module_count} Modulen in Matrix. Grundpreis 0€.")
                             or ""
                         ).format(
                             selected_storage_name=storage_name_for_matrix_lookup,
                             no_storage_option_text=texts.get(
                                 "no_storage_option_for_matrix", "Ohne Speicher"
                             ),
-                            module_count=actual_module_count_in_matrix,
-                        )
+                            module_count=actual_module_count_in_matrix)
                     )
 
             try:  # Konvertiere den gefundenen Preiswert sicher zu float
@@ -2934,8 +2908,7 @@ def perform_calculations(
                     (
                         texts.get(
                             "error_invalid_price_in_matrix_conversion",
-                            "Konnte Matrixpreis '{matrix_price_value}' nicht in Zahl umwandeln. Grundpreis 0€.",
-                        )
+                            "Konnte Matrixpreis '{matrix_price_value}' nicht in Zahl umwandeln. Grundpreis 0€.")
                         or ""
                     ).format(matrix_price_value=price_value_from_matrix)
                 )
@@ -2945,8 +2918,7 @@ def perform_calculations(
                 (
                     texts.get(
                         "error_module_count_not_in_matrix",
-                        "Keine passende Modulanzahl (<= {module_quantity}) in Preis-Matrix gefunden. Grundpreis 0€.",
-                    )
+                        "Keine passende Modulanzahl (<= {module_quantity}) in Preis-Matrix gefunden. Grundpreis 0€.")
                     or ""
                 ).format(module_quantity=module_quantity)
             )
@@ -2954,8 +2926,7 @@ def perform_calculations(
         errors_list.append(
             texts.get(
                 "error_price_matrix_not_loaded_or_empty",
-                "Preis-Matrix nicht geladen/leer oder ungültig. Grundpreis 0€.",
-            )
+                "Preis-Matrix nicht geladen/leer oder ungültig. Grundpreis 0€.")
         )
 
     results["base_matrix_price_netto"] = max(
@@ -3079,8 +3050,7 @@ def perform_calculations(
                 cost_scaffolding_netto,
                 cost_custom_netto,
                 total_optional_components_cost_netto,
-            ],
-        )
+            ])
     )
     results.update(
         {
@@ -3144,8 +3114,7 @@ def perform_calculations(
     ):
         for entry in sorted(
             einspeiseverguetung_data_to_use,
-            key=lambda x: float(x.get("kwp_max", 0.0) or 0.0),
-        ):  # Sicherstellen, dass kwp_max ein Float ist
+            key=lambda x: float(x.get("kwp_max", 0.0) or 0.0)):  # Sicherstellen, dass kwp_max ein Float ist
             if results["anlage_kwp"] <= float(
                 entry.get("kwp_max", float("inf")) or float("inf")
             ):  # Sicherstellen, dass kwp_max ein Float ist
@@ -3270,13 +3239,11 @@ def perform_calculations(
     (
         annual_productions_sim_list,
         annual_benefits_sim_list,
-        annual_maintenance_costs_sim_list,
-    ) = ([], [], [])
+        annual_maintenance_costs_sim_list) = ([], [], [])
     (
         annual_cash_flows_yearly_list,
         annual_elec_prices_sim_list,
-        annual_feed_in_tariffs_sim_list,
-    ) = ([], [], [])
+        annual_feed_in_tariffs_sim_list) = ([], [], [])
     annual_revenue_from_feed_in_sim_list = []  # Für detailliertere Analyse
 
     # Wartungskosten
@@ -3430,8 +3397,7 @@ def perform_calculations(
         errors_list.append(
             texts.get(
                 "warn_numpy_financial_missing_for_irr",
-                "Hinweis: numpy_financial nicht installiert, IRR kann nicht berechnet werden.",
-            )
+                "Hinweis: numpy_financial nicht installiert, IRR kann nicht berechnet werden.")
         )
     except (
         Exception
@@ -3441,8 +3407,7 @@ def perform_calculations(
             (
                 texts.get(
                     "error_irr_calculation",
-                    "Fehler bei IRR-Berechnung: {error_details}",
-                )
+                    "Fehler bei IRR-Berechnung: {error_details}")
                 or ""
             ).format(error_details=str(e_irr_calc))
         )
@@ -3458,8 +3423,7 @@ def perform_calculations(
             min(
                 len(annual_productions_sim_list),
                 len(annual_maintenance_costs_sim_list),
-                results["simulation_period_years_effective"],
-            )
+                results["simulation_period_years_effective"])
         ):
             total_discounted_production_lcoe += annual_productions_sim_list[y_idx] / (
                 (1 + discount_rate_lcoe) ** (y_idx + 1)
@@ -3513,8 +3477,7 @@ def perform_calculations(
     results["restwert_anlage_eur_nach_laufzeit"] = max(
         0.0,
         total_investment_netto
-        - (results["afa_linear_pa_eur"] * results["simulation_period_years_effective"]),
-    )
+        - (results["afa_linear_pa_eur"] * results["simulation_period_years_effective"]))
 
     # Eigenkapitalrendite (ROE) - hier vereinfacht als IRR, da keine Fremdfinanzierung modelliert
     results["eigenkapitalrendite_roe_pct"] = results["irr_percent"]
@@ -3576,8 +3539,7 @@ def perform_calculations(
         # Max. was PV für EV liefern kann, ist der geringere Wert aus PV-Anteil am EV-Verbrauch und der gesamten PV-Produktion (die nicht schon für Haushalt weg ist)
         results["eauto_ladung_durch_pv_kwh"] = min(
             future_ev_consump_kwh_calc * (eauto_pv_share_percent_calc / 100.0),
-            annual_pv_production_kwh,
-        )  # Vereinfacht: nimmt von Gesamtproduktion
+            annual_pv_production_kwh)  # Vereinfacht: nimmt von Gesamtproduktion
     else:
         results["eauto_ladung_durch_pv_kwh"] = 0.0
 
@@ -3660,8 +3622,7 @@ def perform_calculations(
             inflation_rate=inflation_rate_percent,
             electricity_price_increase=results[
                 "electricity_price_increase_rate_effective_percent"
-            ],
-        )
+            ])
         results["break_even_scenarios"] = break_even_analyzer.calculate_scenarios()
     except Exception as e:
         if errors_list is not None:
@@ -3674,8 +3635,7 @@ def perform_calculations(
             current_price=electricity_price_kwh,
             pv_production=annual_pv_production_kwh,
             self_consumption=eigenverbrauch_pro_jahr_kwh,
-            feed_in_rate=feed_in_tariff_effective,
-        )
+            feed_in_rate=feed_in_tariff_effective)
         sample_tariffs = [
             {"name": "Aktueller Tarif", "price_per_kwh": electricity_price_kwh},
             {"name": "Ökostromtarif", "price_per_kwh": electricity_price_kwh * 1.1},
@@ -3856,8 +3816,7 @@ def perform_calculations(
             results["speichergrad_deckungsgrad_speicher_pct"],
             results["optimale_speichergröße_kwh_geschaetzt"],
             results["notstromkapazitaet_kwh_pro_tag"],
-            results["batterie_lebensdauer_geschaetzt_jahre"],
-        ) = (0.0, 0.0, 0.0, 0.0)
+            results["batterie_lebensdauer_geschaetzt_jahre"]) = (0.0, 0.0, 0.0, 0.0)
 
     # Verschattungsverlust (aus Eingabe übernehmen)
     results["verschattungsverlust_pct"] = float(
@@ -3930,8 +3889,7 @@ class EnergyPriceComparison:
         current_price: float,
         pv_production: float,
         self_consumption: float,
-        feed_in_rate: float,
-    ):
+        feed_in_rate: float):
         self.current_consumption = current_consumption
         self.current_price = current_price
         self.pv_production = pv_production
@@ -3987,8 +3945,7 @@ class TechnicalDegradation:
         initial_power: float,
         annual_degradation: float,
         warranty_years: int,
-        warranty_power: float,
-    ):
+        warranty_power: float):
         self.initial_power = initial_power
         self.annual_degradation = annual_degradation
         self.warranty_years = warranty_years

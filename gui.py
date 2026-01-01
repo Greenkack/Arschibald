@@ -85,8 +85,7 @@ try:
         log_info,
         log_error,
         log_warning,
-        is_feature_enabled,
-    )
+        is_feature_enabled)
     
     # Initialisiere Core-Module beim App-Start
     if 'core_initialized' not in st.session_state:
@@ -121,7 +120,7 @@ try:
                 
                 # Zeige Recovery-Hinweis (nur einmal)
                 if not st.session_state.get('recovery_notice_shown'):
-                    st.toast("Sitzung wiederhergestellt", icon="")
+                    st.toast("Sitzung wiederhergestellt")
                     st.session_state.recovery_notice_shown = True
             else:
                 st.session_state.user_session_recovered = False
@@ -137,8 +136,7 @@ except Exception as e:
 
 from emoji_toggle import initialize_emoji_support
 from live_preview_helpers import (
-    render_live_cost_preview as render_live_cost_preview_sidebar,
-)
+    render_live_cost_preview as render_live_cost_preview_sidebar)
 import theme_manager
 from ui_state_manager import request_rerun, set_current_page
 
@@ -171,8 +169,7 @@ for _ln in (
     "choreographer.browser_async",
     "asyncio",
     "urllib3",
-    "PIL.PngImagePlugin",
-):
+    "PIL.PngImagePlugin"):
     logging.getLogger(_ln).setLevel(logging.ERROR)
 warnings.filterwarnings("ignore")
 
@@ -463,8 +460,12 @@ def inject_custom_context_menu(nav_lock_enabled: bool) -> Any:
                     background: none;
                     padding: 10px 18px;
                     font-size: 14px;
+                    display: -webkit-flex;
+                    display: -ms-flexbox;
                     display: flex;
                     gap: 10px;
+                    -webkit-align-items: center;
+                    -ms-flex-align: center;
                     align-items: center;
                     color: inherit;
                     cursor: pointer;
@@ -493,7 +494,7 @@ def inject_custom_context_menu(nav_lock_enabled: bool) -> Any:
                     min-width: 210px;
                     background: rgba(17, 24, 39, 0.96);
                     border-radius: 12px;
-                    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+                    box-shadow: 0 10px 48px rgba(0, 0, 0, 0.35);
                     padding: 8px 0;
                     display: none;
                 }}
@@ -1129,11 +1130,11 @@ def main():
         }
         div[data-baseweb="select"] > div:hover {
             border-color: #ff8c00 !important;
-            box-shadow: 0 0 0 15px #ff8c00 !important;
+            box-shadow: 0 0 0 10px #ff8c00 !important;
         }
         div[data-baseweb="select"] > div:focus-within {
             border-color: #ff8c00 !important;
-            box-shadow: 0 0 0 15px rgba(255, 140, 0, 0.2) !important;
+            box-shadow: 0 0 0 10px rgba(255, 140, 0, 0.2) !important;
         }
         div[data-baseweb="select"] > div > div {
             display: flex !important;
@@ -1152,7 +1153,7 @@ def main():
         }
         div[data-baseweb="popover"] {
             border-radius: 8px !important;
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15) !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
         }
         ul[role="listbox"] > li {
             padding: 0.6rem 0.75rem !important;
@@ -1387,18 +1388,18 @@ def main():
     /* Checkbox Hover-Effekt - Shimmer */
     div[data-testid="stCheckbox"]:hover input[type="checkbox"],
     .stCheckbox:hover input[type="checkbox"] {
-        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
         border-color: rgba(102, 126, 234, 0.6) !important;
         animation: checkboxPulse 1.5s ease-in-out infinite !important;
     }
     
     @keyframes checkboxPulse {
         0%, 100% {
-            box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.15);
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15);
             transform: scale(1);
         }
         50% {
-            box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.25);
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.25);
             transform: scale(1.05);
         }
     }
@@ -1485,10 +1486,10 @@ def main():
     
     @keyframes checkboxCheckedPulse {
         0%, 100% {
-            box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.2);
         }
         50% {
-            box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.3);
         }
     }
     
@@ -1520,7 +1521,7 @@ def main():
     
     div[data-testid="stRadio"] input[type="radio"]:hover,
     .stRadio input[type="radio"]:hover {
-        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.15) !important;
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
         animation: checkboxPulse 1.5s ease-in-out infinite !important;
     }
     
@@ -1654,42 +1655,44 @@ def main():
             style.innerHTML = `
                 .drawer-button {
                     position: fixed !important;
-                    bottom: 25px !important;
-                    right: 25px !important;
+                    top: 15px !important;
+                    left: 55% !important;
+                    transform: translateX(-50%) !important;
                     z-index: 999998 !important;
-                    background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%) !important;
+                    background: linear-gradient(135deg, #ffffff 30%, #b3b3b3 70%) !important;
                     color: #000000 !important;
-                    border: 2px solid #ff8c00 !important;
+                    border: 2px solid #000000 !important;
                     border-radius: 15px !important;
-                    width: 150px !important;
-                    height: 50px !important;
-                    font-size: 16px !important;
+                    width: 1400px !important;
+                    height: 20px !important;
+                    font-size: 10px !important;
                     font-weight: bold !important;
                     cursor: pointer !important;
-                    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.6) !important;
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6) !important;
                     transition: all 0.3s ease !important;
                 }
                 .drawer-button:hover {
-                    transform: translateY(-3px) !important;
-                    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8) !important;
-                    background: linear-gradient(135deg, #ff9900 0%, #ff7700 100%) !important;
+                    transform: translateX(-50%) translateY(3px) !important;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+                    background: linear-gradient(135deg, #ffffff 30%, #b3b3b3 70%) !important;
                 }
                 .drawer-panel {
                     position: fixed !important;
-                    bottom: 0 !important;
-                    right: -500px !important;
-                    width: 450px !important;
-                    height: 600px !important;
-                    background: #888888 !important;
-                    box-shadow: -5px 0 30px rgba(0,0,0,0.8) !important;
+                    top: -750px !important;
+                    left: 55% !important;
+                    transform: translateX(-50%) !important;
+                    width: 1400px !important;
+                    height: 700px !important;
+                    background: #c3c3c3 !important;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
                     z-index: 999999 !important;
-                    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                    border-radius: 20px 0 0 20px !important;
+                    transition: top 1.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                    border-radius: 0 0 20px 20px !important;
                     padding: 25px !important;
                     overflow-y: auto !important;
                 }
                 .drawer-panel.open {
-                    right: 0 !important;
+                    top: 0 !important;
                 }
                 .drawer-close {
                     position: absolute;
@@ -1704,7 +1707,7 @@ def main():
                     border-radius: 8px;
                     cursor: pointer;
                     transition: all 0.2s;
-                    box-shadow: 0 15px 16px rgba(0, 0, 0, 0.6);
+                    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.6);
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -1714,7 +1717,7 @@ def main():
                     background: #ff8c00;
                     color: #000000;
                     transform: rotate(90deg);
-                    box-shadow: 0 15px 16px rgba(0, 0, 0, 0.8);
+                    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.8);
                 }
                 .drawer-title {
                     color: #000000;
@@ -1736,13 +1739,13 @@ def main():
                     cursor: pointer;
                     transition: all 0.3s;
                     text-align: left;
-                    box-shadow: 0 15px 16px rgba(0, 0, 0, 0.7), 0 15px 15px rgba(0, 0, 0, 0.5), inset 0 15px 15px rgba(255, 255, 255, 0.3);
+                    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.7), 0 10px 10px rgba(0, 0, 0, 0.5), inset 0 10px 10px rgba(255, 255, 255, 0.3);
                 }
                 .drawer-btn:hover {
-                    background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
+                    background: linear-gradient(135deg, #ffffff 30%, #b3b3b3 70%);
                     color: #000000;
                     transform: translateX(-5px);
-                    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.8), 0 15px 15px rgba(255, 140, 0, 0.4), inset 0 15px 15px rgba(255, 255, 255, 0.3);
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 10px 10px rgba(255, 140, 0, 0.4), inset 0 10px 10px rgba(255, 255, 255, 0.3);
                     border-color: #ff9900;
                 }
             `;
@@ -1755,14 +1758,14 @@ def main():
         drawer.className = 'drawer-panel';
         drawer.innerHTML = `
             <button class="drawer-close">×</button>
-            <div class="drawer-title">Schnellzugriff</div>
+            <div class="drawer-title">nützliche Tools</div>
             <button class="drawer-btn" data-action="voice_command"> Sprachbefehl</button>
             <button class="drawer-btn" data-action="3d_view"> 3D Visualisierung</button>
             <button class="drawer-btn" data-action="save_customer"> Kunde ins CRM</button>
             <button class="drawer-btn" data-action="monitoring"> Überwachung & Diagnose</button>
             <button class="drawer-btn" data-action="quick_pdf"> Blitz-Angebot</button>
             <button class="drawer-btn" data-action="help_menu"> Hilfe-Menü</button>
-            <button class="drawer-btn" data-action="logout" style="background: #fd0100; border-color: #ffffff;"> Abmelden</button>
+            <button class="drawer-btn" data-action="logout" style="background: #ff8c00; border-color: #ffffff;"> Logout</button>
         `;
         parentDoc.body.appendChild(drawer);
         
@@ -1797,8 +1800,8 @@ def main():
         const btn = parentDoc.createElement('button');
         btn.id = 'drawer-btn';
         btn.className = 'drawer-button';
-        btn.innerHTML = '☰ Menü';
-        btn.title = 'Schnellzugriff';
+        btn.innerHTML = '>>  T O O L S';
+        btn.title = 'nützliches';
         
         btn.onclick = function() {
             drawer.classList.toggle('open');
@@ -1810,6 +1813,120 @@ def main():
         };
         
         parentDoc.body.appendChild(btn);
+    })();
+    </script>
+    """, height=0, width=0)
+    
+    # JavaScript: Erzwinge dunkle Schriftfarbe im Streamlit-Menü
+    components.html("""
+    <script>
+    (function forceMenuTextColor() {
+        const parentDoc = window.parent?.document;
+        if (!parentDoc) return;
+        
+        // Style für Menü-Schriftfarbe
+        const styleId = 'force-menu-text-dark';
+        if (!parentDoc.getElementById(styleId)) {
+            const style = parentDoc.createElement('style');
+            style.id = styleId;
+            style.innerHTML = `
+                /* ERZWINGE SCHWARZE SCHRIFT IM STREAMLIT-MENÜ */
+                [data-testid="stMainMenu"] *,
+                [data-testid="stMainMenuPopover"] *,
+                ul[data-testid="main-menu-list"],
+                ul[data-testid="main-menu-list"] *,
+                ul[data-testid="main-menu-list"] li,
+                ul[data-testid="main-menu-list"] a,
+                ul[data-testid="main-menu-list"] span,
+                ul[data-testid="main-menu-list"] button,
+                div[role="menu"],
+                div[role="menu"] *,
+                div[role="menuitem"],
+                div[role="menuitem"] *,
+                li[role="menuitem"],
+                li[role="menuitem"] *,
+                .viewerBadge *,
+                nav[role="navigation"] *,
+                header button,
+                header button *,
+                header svg,
+                header svg path {
+                    color: #000000 !important;
+                    fill: #000000 !important;
+                    stroke: #000000 !important;
+                    font-weight: 700 !important;
+                }
+                
+                /* Menu Container Hintergrund */
+                [data-testid="stMainMenu"],
+                [data-testid="stMainMenuPopover"],
+                ul[data-testid="main-menu-list"],
+                div[role="menu"] {
+                    background-color: #ffffff !important;
+                    border: 2px solid #000000 !important;
+                }
+            `;
+            parentDoc.head.appendChild(style);
+        }
+        
+        // Überwache DOM-Änderungen und wende Farbe direkt an
+        function applyDarkText() {
+            const selectors = [
+                '[data-testid="stMainMenu"]',
+                '[data-testid="stMainMenuPopover"]',
+                'ul[data-testid="main-menu-list"]',
+                'div[role="menu"]',
+                'div[role="menuitem"]',
+                'li[role="menuitem"]',
+                'section[role="dialog"]',
+                '[data-testid="stModal"]',
+                'div[class*="Modal"]',
+                'div[class*="ModalDialog"]',
+                'div[class*="ModalBody"]'
+            ];
+            
+            selectors.forEach(selector => {
+                const elements = parentDoc.querySelectorAll(selector);
+                elements.forEach(el => {
+                    el.style.color = '#000000';
+                    el.style.fontWeight = '700';
+                    
+                    // Alle Kinder
+                    const children = el.querySelectorAll('*');
+                    children.forEach(child => {
+                        child.style.color = '#000000';
+                        child.style.fontWeight = '700';
+                    });
+                });
+            });
+            
+            // Header Buttons
+            const headerButtons = parentDoc.querySelectorAll('header button, header button *');
+            headerButtons.forEach(btn => {
+                btn.style.color = '#000000';
+                btn.style.fill = '#000000';
+            });
+            
+            // Settings Dialog - spezifisch
+            const dialogElements = parentDoc.querySelectorAll('section[role="dialog"] *, [data-testid="stModal"] *');
+            dialogElements.forEach(el => {
+                el.style.color = '#000000';
+                el.style.fontWeight = '600';
+            });
+        }
+        
+        // Sofort anwenden
+        applyDarkText();
+        
+        // Bei DOM-Änderungen wiederholen
+        const observer = new MutationObserver(applyDarkText);
+        observer.observe(parentDoc.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        // Periodisch prüfen (falls Observer nicht greift)
+        setInterval(applyDarkText, 500);
     })();
     </script>
     """, height=0, width=0)
@@ -1886,7 +2003,7 @@ def main():
         border: 4px solid rgba(200, 210, 220, 0.5) !important;
         border-radius: 12px !important;
         padding: 12px 24px !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.12), 0 15px 15px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.08) !important;
         font-weight: 700 !important;
         transition: all 0.3s ease !important;
     }
@@ -1894,7 +2011,7 @@ def main():
     .stButton > button:hover {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
         border-color: #9ca3af !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.15), 0 15px 15px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.1) !important;
         transform: translateY(-2px) !important;
     }
     
@@ -1932,7 +2049,7 @@ def main():
         border-left: 5px solid #ff8c00 !important;
         border-radius: 12px !important;
         padding: 16px 20px !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.12), 0 15px 15px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.08) !important;
         font-weight: 600 !important;
     }
     
@@ -1943,7 +2060,7 @@ def main():
         border-left: 5px solid #ff8c00 !important;
         border-radius: 12px !important;
         padding: 12px 16px !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.1), 0 15px 15px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
         font-weight: 700 !important;
         transition: all 0.3s ease !important;
     }
@@ -2027,7 +2144,7 @@ def main():
         border: 1px solid rgba(200, 210, 220, 0.5) !important;
         border-radius: 12px !important;
         padding: 12px 16px !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.06), 0 15px 15px rgba(0,0,0,0.04) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.06), 0 10px 10px rgba(0,0,0,0.04) !important;
         transition: all 0.3s ease !important;
         font-weight: 600 !important;
     }
@@ -2040,7 +2157,7 @@ def main():
     .stDateInput > div:focus-within,
     .stTimeInput > div:focus-within {
         border-left: 4px solid #ff8c00 !important;
-        box-shadow: 0 15px 16px rgba(255,140,0,0.2), 0 15px 15px rgba(255,140,0,0.15) !important;
+        box-shadow: 0 10px 16px rgba(255,140,0,0.2), 0 10px 10px rgba(255,140,0,0.15) !important;
     }
     
     /* Focus auf Input-Feldern */
@@ -2060,7 +2177,7 @@ def main():
     .stTextArea > div:hover,
     .stDateInput > div:hover,
     .stTimeInput > div:hover {
-        box-shadow: 0 15px 16px rgba(255,140,0,0.1), 0 15px 15px rgba(255,140,0,0.08) !important;
+        box-shadow: 0 10px 16px rgba(255,140,0,0.1), 0 10px 10px rgba(255,140,0,0.08) !important;
     }
     
     .stTextInput > div > div > input:hover,
@@ -2078,7 +2195,7 @@ def main():
         border-left: 3px solid #ff8c00 !important;
         border-radius: 10px !important;
         padding: 10px 14px !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.05), 0 15px 15px rgba(0,0,0,0.03) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.03) !important;
         font-weight: 700 !important;
         transition: all 0.3s ease !important;
     }
@@ -2099,7 +2216,7 @@ def main():
     .stTable, table {
         border-left: 4px solid #ff8c00 !important;
         border-radius: 12px !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.1), 0 15px 15px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
         overflow: hidden !important;
     }
     
@@ -2110,14 +2227,14 @@ def main():
         border-left: 4px solid #ff8c00 !important;
         border-radius: 12px !important;
         padding: 16px !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.1), 0 15px 15px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
         transition: all 0.3s ease !important;
     }
     
     div[data-testid="stMetric"]:hover,
     .stMetric:hover {
         border-left: 5px solid #ff8c00 !important;
-        box-shadow: 0 15px 16px rgba(255,140,0,0.2), 0 15px 15px rgba(0,0,0,0.12) !important;
+        box-shadow: 0 10px 16px rgba(255,140,0,0.2), 0 10px 10px rgba(0,0,0,0.12) !important;
         transform: translateY(-2px) !important;
     }
     
@@ -2169,7 +2286,7 @@ def main():
         font-size: 15px !important;
         font-weight: 700 !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 15px 16px rgba(0, 0, 0, 0.15), 0 15px 15px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
         position: relative !important;
         overflow: hidden !important;
     }
@@ -2197,7 +2314,7 @@ def main():
         border-color: #ff8c00 !important;
         color: #1a202c !important;
         transform: translateY(-2px) !important;
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 15px 15px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.15) !important;
     }
     
     /* Aktiver Button (Primary) - NUR ORANGE AKZENT mit schwarzer Schattierung */
@@ -2208,13 +2325,13 @@ def main():
         border-left: 6px solid #ff8c00 !important;
         color: #1a202c !important;
         font-weight: 700 !important;
-        box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2), 0 15px 15px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.15) !important;
     }
     
     /* Pulse-Animation für aktiven Button mit schwarzer Schattierung */
     @keyframes sidebarButtonPulse {
-        0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2), 0 15px 15px rgba(0, 0, 0, 0.15); }
-        50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 32px rgba(0, 0, 0, 0.3), 0 15px 16px rgba(0, 0, 0, 0.2); }
+        0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.15); }
+        50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3), 0 10px 16px rgba(0, 0, 0, 0.2); }
     }
     
     section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover,
@@ -2233,14 +2350,14 @@ def main():
         border-radius: 10px !important;
         color: #1a202c !important;
         font-weight: 700 !important;
-        box-shadow: 0 15px 16px rgba(0, 0, 0, 0.12), 0 15px 15px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08) !important;
     }
     
     /* Sidebar Divider/Trennlinien */
     section[data-testid="stSidebar"] hr {
         border-top: 2px solid rgba(255, 140, 0, 0.3) !important;
         margin: 20px 0 !important;
-        box-shadow: 0 15px 16px rgba(0, 0, 0, 0.5) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.5) !important;
     }
     
     /* Sidebar Text - dunkle Schrift mit gutem Kontrast */
@@ -2262,7 +2379,162 @@ def main():
         border-radius: 12px !important;
         color: #1a202c !important;
         font-weight: 600 !important;
-        box-shadow: 0 15px 16px rgba(0,0,0,0.1), 0 15px 15px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+    }
+    
+    /* ========== STREAMLIT OPTIONSMENÜ (3 Punkte rechts oben) + SETTINGS DIALOG - SCHWARZE SCHRIFT ========== */
+    /* Header & Toolbar */
+    header[data-testid="stHeader"],
+    header[data-testid="stHeader"] *,
+    [data-testid="stToolbar"],
+    [data-testid="stDecoration"],
+    .main .block-container header {
+        background-color: #d8dce1 !important;
+    }
+    
+    /* Menu Button Icon (3 Punkte) - ALLE VARIANTEN */
+    button[kind="header"],
+    button[kind="headerNoPadding"],
+    button[data-testid="stHeaderActionButton"],
+    button[aria-label*="Settings"],
+    button[aria-label*="menu"],
+    header button,
+    header button svg,
+    header button svg path,
+    [data-testid="stToolbar"] button,
+    [data-testid="stToolbar"] button svg {
+        color: #1a202c !important;
+        fill: #1a202c !important;
+        stroke: #1a202c !important;
+    }
+    
+    /* Dropdown Menu Container - ALLE VARIANTEN */
+    [data-testid="stMainMenu"],
+    [data-testid="stMainMenuPopover"],
+    ul[data-testid="main-menu-list"],
+    div[role="menu"],
+    div[role="dialog"],
+    .stPopover,
+    div[class*="viewerBadge"],
+    nav[role="navigation"] {
+        background-color: #ffffff !important;
+        border: 2px solid #c8d2dc !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Menu Items - TEXT IN SCHWARZ - ALLE VARIANTEN */
+    [data-testid="stMainMenu"] *,
+    [data-testid="stMainMenuPopover"] *,
+    ul[data-testid="main-menu-list"] *,
+    ul[data-testid="main-menu-list"] li,
+    ul[data-testid="main-menu-list"] li *,
+    ul[data-testid="main-menu-list"] a,
+    ul[data-testid="main-menu-list"] span,
+    ul[data-testid="main-menu-list"] button,
+    ul[data-testid="main-menu-list"] div,
+    div[role="menu"] *,
+    div[role="menu"] button,
+    div[role="menu"] a,
+    div[role="menu"] span,
+    div[role="menu"] div,
+    div[role="menuitem"],
+    div[role="menuitem"] *,
+    li[role="menuitem"],
+    li[role="menuitem"] *,
+    nav[role="navigation"] *,
+    .stPopover *,
+    .stPopover span,
+    .stPopover a,
+    .stPopover button {
+        color: #1a202c !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Menu Items Container */
+    ul[data-testid="main-menu-list"] li,
+    div[role="menuitem"],
+    li[role="menuitem"] {
+        padding: 10px 16px !important;
+        transition: background-color 0.2s ease !important;
+        border-radius: 8px !important;
+        margin: 4px 8px !important;
+    }
+    
+    /* Menu Items Hover */
+    ul[data-testid="main-menu-list"] li:hover,
+    ul[data-testid="main-menu-list"] li:hover *,
+    div[role="menuitem"]:hover,
+    div[role="menuitem"]:hover *,
+    li[role="menuitem"]:hover,
+    li[role="menuitem"]:hover *,
+    div[role="menu"] button:hover,
+    div[role="menu"] a:hover {
+        background-color: #f7f9fc !important;
+        color: #ff8c00 !important;
+    }
+    
+    /* Spezielle Streamlit View Badge & Deploy Button */
+    .viewerBadge,
+    .viewerBadge *,
+    .viewerBadge_container,
+    .viewerBadge_container *,
+    [class*="viewerBadge"],
+    [class*="viewerBadge"] * {
+        color: #1a202c !important;
+        fill: #1a202c !important;
+    }
+    
+    /* ========== SETTINGS DIALOG & MODAL - SCHWARZE SCHRIFT ========== */
+    /* Settings Dialog Container */
+    section[role="dialog"],
+    section[role="dialog"] *,
+    [data-testid="stModal"],
+    [data-testid="stModal"] *,
+    .stModal,
+    .stModal *,
+    div[class*="Modal"],
+    div[class*="Modal"] *,
+    div[class*="ModalDialog"],
+    div[class*="ModalDialog"] *,
+    div[class*="ModalBody"],
+    div[class*="ModalBody"] * {
+        color: #000000 !important;
+    }
+    
+    /* Settings Dialog Überschriften */
+    section[role="dialog"] h1,
+    section[role="dialog"] h2,
+    section[role="dialog"] h3,
+    [data-testid="stModal"] h1,
+    [data-testid="stModal"] h2,
+    [data-testid="stModal"] h3,
+    div[class*="Modal"] h1,
+    div[class*="Modal"] h2,
+    div[class*="Modal"] h3 {
+        color: #000000 !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Settings Dialog Text & Labels */
+    section[role="dialog"] p,
+    section[role="dialog"] span,
+    section[role="dialog"] label,
+    section[role="dialog"] div,
+    [data-testid="stModal"] p,
+    [data-testid="stModal"] span,
+    [data-testid="stModal"] label,
+    [data-testid="stModal"] div {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Settings Checkboxes & Radio Labels */
+    section[role="dialog"] input[type="checkbox"] + label,
+    section[role="dialog"] input[type="radio"] + label,
+    [data-testid="stModal"] input[type="checkbox"] + label,
+    [data-testid="stModal"] input[type="radio"] + label {
+        color: #000000 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -2358,6 +2630,79 @@ def main():
                     st.session_state.nav_event = True
                     st.rerun()
         
+        # === JOB MANAGER - AKTIVE JOBS TRACKING ===
+        try:
+            from core_integration import get_job_manager, is_feature_enabled
+            
+            if is_feature_enabled('jobs'):
+                job_mgr = get_job_manager()
+                
+                if job_mgr and 'active_pdf_jobs' in st.session_state and st.session_state['active_pdf_jobs']:
+                    st.markdown("---")
+                    st.markdown('<div style="color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0;"> AKTIVE JOBS</div>', unsafe_allow_html=True)
+                    
+                    # Tracke aktive Jobs
+                    active_jobs = []
+                    completed_jobs = []
+                    
+                    for job_id in st.session_state['active_pdf_jobs']:
+                        result = job_mgr.poll(job_id)
+                        
+                        if not result:
+                            continue
+                        
+                        status = result.status.value if hasattr(result.status, 'value') else str(result.status)
+                        
+                        if status == 'completed':
+                            completed_jobs.append((job_id, result))
+                        elif status in ['running', 'pending', 'queued']:
+                            active_jobs.append((job_id, result))
+                    
+                    # Zeige aktive Jobs mit Progress
+                    for job_id, result in active_jobs:
+                        status = result.status.value if hasattr(result.status, 'value') else str(result.status)
+                        status_emoji = ' ' if status == 'running' else ' '
+                        
+                        st.caption(f"{status_emoji} Job {job_id[:8]}...")
+                        
+                        if result.progress > 0:
+                            st.progress(result.progress, text=result.progress_message or f"{int(result.progress * 100)}%")
+                        else:
+                            st.caption(f"Status: {status}")
+                    
+                    # Zeige completed Jobs mit Download
+                    for job_id, result in completed_jobs:
+                        st.success(f" Job {job_id[:8]}... fertig!")
+                        
+                        # Download-Button für PDF
+                        if result.result and isinstance(result.result, dict):
+                            pdf_path = result.result.get('pdf_path')
+                            filename = result.result.get('filename', 'angebot.pdf')
+                            
+                            if pdf_path and Path(pdf_path).exists():
+                                with open(pdf_path, 'rb') as f:
+                                    pdf_bytes = f.read()
+                                
+                                st.download_button(
+                                    label=" PDF downloaden",
+                                    data=pdf_bytes,
+                                    file_name=filename,
+                                    mime="application/pdf",
+                                    key=f"download_job_{job_id}",
+                                    use_container_width=True
+                                )
+                        
+                        # Entferne completed Job aus active Liste nach 30 Sekunden
+                        # (User hat Zeit zum Download)
+                    
+                    # Auto-Refresh bei laufenden Jobs
+                    if active_jobs:
+                        time.sleep(2)
+                        st.rerun()
+        
+        except Exception as e:
+            pass  # Silently fail wenn Job Manager nicht verfügbar
+        
         # Setze selected_page_key für Kompatibilität
         selected_page_key = st.session_state.active_page
         
@@ -2432,8 +2777,7 @@ def main():
                     options=list(range(len(labels))),
                     index=current_index if 0 <= current_index < len(labels) else 0,
                     format_func=lambda idx: labels[idx] if 0 <= idx < len(labels) else labels[0],
-                    key="context_menu_company_select_index",
-                )
+                    key="context_menu_company_select_index")
                 st.session_state.context_menu_company_selection = ids[selected_index]
             else:
                 st.info("Keine Unternehmen gefunden. Bitte im Admin-Bereich anlegen.")
@@ -2537,15 +2881,23 @@ def main():
             position: fixed;
             bottom: 1.5rem;
             left: 0;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
             gap: 0;
+            -webkit-align-items: stretch;
+            -ms-flex-align: stretch;
             align-items: stretch;
             z-index: 9999;
         }
         #app-main-drawer.app-drawer--align-left {
+            -ms-flex-direction: row;
+            -webkit-flex-direction: row;
             flex-direction: row;
         }
         #app-main-drawer.app-drawer--align-right {
+            -ms-flex-direction: row-reverse;
+            -webkit-flex-direction: row-reverse;
             flex-direction: row-reverse;
             left: auto;
             right: 0;
@@ -2555,8 +2907,14 @@ def main():
         }
         #app-main-drawer .app-drawer__handle {
             pointer-events: auto;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
             justify-content: center;
             gap: 0.45rem;
             padding: 0.85rem 0.9rem;
@@ -2572,7 +2930,7 @@ def main():
             letter-spacing: 0.14em;
             font-size: 0.68rem;
             font-weight: 600;
-            box-shadow: 0 18px 32px rgba(15, 23, 42, 0.28);
+            box-shadow: 0 10px 32px rgba(15, 23, 42, 0.28);
         }
         #app-main-drawer.app-drawer--align-right .app-drawer__handle {
             border-left: none;
@@ -2590,7 +2948,7 @@ def main():
             border-radius: 0 24px 24px 0;
             border: 1px solid rgba(148, 163, 184, 0.35);
             border-left: none;
-            box-shadow: 0 18px 32px rgba(15, 23, 42, 0.28);
+            box-shadow: 0 10px 32px rgba(15, 23, 42, 0.28);
             transform: translateX(100%);
             opacity: 0;
             pointer-events: none;
@@ -2610,8 +2968,7 @@ def main():
         }
         </style>
         """,
-        unsafe_allow_html=True,
-    )
+        unsafe_allow_html=True)
 
     st.markdown(
         f"""
@@ -2631,8 +2988,7 @@ def main():
             </aside>
         </div>
         """,
-        unsafe_allow_html=True,
-    )
+        unsafe_allow_html=True)
 
     st.markdown(
         """
@@ -2737,8 +3093,7 @@ def main():
         })();
         </script>
         """,
-        unsafe_allow_html=True,
-    )
+        unsafe_allow_html=True)
 
     if import_errors:
         with st.sidebar:
@@ -2766,7 +3121,7 @@ def main():
             padding: 2.5rem;
             border-radius: 20px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 15px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.9);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">
@@ -2791,7 +3146,7 @@ def main():
             padding: 2.5rem;
             border-radius: 20px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 16px rgba(0, 0, 0, 0.07), 0 15px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.9);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">
@@ -2875,7 +3230,7 @@ def main():
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 PDF-Angebote
@@ -3008,8 +3363,7 @@ def main():
             try:
                 from pdf_preview import (
                     PDF_PREVIEW_AVAILABLE,
-                    render_pdf_preview_interface,
-                )
+                    render_pdf_preview_interface)
 
                 if not PDF_PREVIEW_AVAILABLE:
                     # Shim-Modul zeigt hilfreiche Meldung mit Schritt-für-Schritt-Anleitung
@@ -3658,32 +4012,173 @@ def main():
             
             with col1:
                 if st.button(" Rescan Application", use_container_width=True):
-                    with st.spinner("Scanning application..."):
-                        from app_diagnostics import scan_and_report
-                        scan_and_report()
-                    st.success("Scan complete! Check code_analysis_report.json")
+                    with st.spinner("Scanne Anwendung... Dies kann einige Sekunden dauern."):
+                        try:
+                            from app_diagnostics import scan_and_report
+                            scan_and_report()
+                            
+                            # Lade und zeige Ergebnisse
+                            import json
+                            from pathlib import Path
+                            scan_file = Path("code_analysis_report.json")
+                            if scan_file.exists():
+                                with open(scan_file, 'r', encoding='utf-8') as f:
+                                    report = json.load(f)
+                                
+                                st.success(f"✅ Scan abgeschlossen! {report.get('total_issues', 0)} Issues gefunden.")
+                                
+                                # Zeige schnelle Zusammenfassung
+                                severity = report.get('severity_breakdown', {})
+                                if severity:
+                                    summary_parts = []
+                                    if severity.get('CRITICAL', 0) > 0:
+                                        summary_parts.append(f"🔴 {severity['CRITICAL']} Kritisch")
+                                    if severity.get('HIGH', 0) > 0:
+                                        summary_parts.append(f"🟠 {severity['HIGH']} Hoch")
+                                    if severity.get('MEDIUM', 0) > 0:
+                                        summary_parts.append(f"🟡 {severity['MEDIUM']} Mittel")
+                                    
+                                    if summary_parts:
+                                        st.info(" | ".join(summary_parts))
+                            else:
+                                st.warning("Scan-Report wurde nicht gefunden.")
+                        except Exception as e:
+                            st.error(f"Fehler beim Scannen: {e}")
+                            import traceback
+                            with st.expander("Fehlerdetails"):
+                                st.code(traceback.format_exc())
                     st.rerun()
             
             with col2:
                 if st.button(" Generate Health Report", use_container_width=True):
+                    st.session_state['show_health_report'] = True
+                
+                if st.session_state.get('show_health_report', False):
                     report = health_monitor.generate_health_report()
-                    st.success("Health report generated!")
-                    st.json(report)
+                    
+                    # Extrahiere Daten aus Report
+                    current = report.get('current_status', {})
+                    trends = report.get('trends', {})
+                    recommendations = report.get('recommendations', [])
+                    
+                    # Container mit weißem Hintergrund
+                    st.markdown("""
+                        <style>
+                        .health-report-card {
+                            background: white;
+                            padding: 1.5rem;
+                            border-radius: 8px;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                            border-left: 4px solid #16a34a;
+                            margin: 1rem 0;
+                        }
+                        .health-metric {
+                            background: #f8fafc;
+                            padding: 1rem;
+                            border-radius: 6px;
+                            margin-bottom: 0.5rem;
+                        }
+                        .health-recommendation {
+                            background: #fef3c7;
+                            padding: 1rem;
+                            border-radius: 6px;
+                            border-left: 3px solid #f59e0b;
+                            margin-top: 1rem;
+                        }
+                        </style>
+                    """, unsafe_allow_html=True)
+                    
+                    with st.container():
+                        st.markdown('<div class="health-report-card">', unsafe_allow_html=True)
+                        st.markdown("### 📊 Health Report")
+                        st.caption(f"Generiert: {report.get('generated_at', '')}")
+                        
+                        # Metrics in Columns
+                        m1, m2, m3, m4 = st.columns(4)
+                        
+                        with m1:
+                            st.markdown('<div class="health-metric">', unsafe_allow_html=True)
+                            st.caption("STATUS")
+                            status = current.get('status', 'UNKNOWN')
+                            if status == 'CRITICAL':
+                                st.markdown(f'<div style="color: #dc2626; font-size: 1.25rem; font-weight: 700; margin: 0;">{status}</div>', unsafe_allow_html=True)
+                            else:
+                                st.markdown(f'<div style="color: #16a34a; font-size: 1.25rem; font-weight: 700; margin: 0;">{status}</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        with m2:
+                            st.markdown('<div class="health-metric">', unsafe_allow_html=True)
+                            st.caption("FEHLERRATE")
+                            st.markdown(f'<div style="font-size: 1.25rem; font-weight: 700; margin: 0;">{current.get("error_rate", 0)}%</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        with m3:
+                            st.markdown('<div class="health-metric">', unsafe_allow_html=True)
+                            st.caption("PERFORMANCE")
+                            st.markdown(f'<div style="font-size: 1.25rem; font-weight: 700; margin: 0;">{current.get("performance_score", 0)}/5.0</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        with m4:
+                            st.markdown('<div class="health-metric">', unsafe_allow_html=True)
+                            st.caption("SPEICHER")
+                            st.markdown(f'<div style="font-size: 1.25rem; font-weight: 700; margin: 0;">{round(current.get("memory_usage_mb", 0), 1)} MB</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Empfehlungen
+                        if recommendations:
+                            st.markdown("""
+                            <div class="health-recommendation">
+                                <div style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">💡 Empfehlungen:</div>
+                            """, unsafe_allow_html=True)
+                            for rec in recommendations:
+                                st.markdown(f'<div style="font-size: 0.8rem; margin-left: 0.5rem;">• {rec}</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Footer
+                        uptime = round(current.get('uptime_seconds', 0), 1)
+                        st.caption(f"Uptime: {uptime}s | Trends: Fehlerrate {trends.get('error_rate', 'stable')} | Performance {trends.get('performance', 'stable')}")
+                        st.markdown('</div>', unsafe_allow_html=True)
             
             with col3:
                 monitoring_active = health_status.get('monitoring_active', False)
                 if monitoring_active:
-                    if st.button("⏸ Stop Monitoring", use_container_width=True):
-                        from app_health_monitor import stop_health_monitoring
-                        stop_health_monitoring()
-                        st.success("Monitoring stopped")
-                        st.rerun()
+                    if st.button("⏸ Stop Monitoring", key="stop_monitoring_btn", use_container_width=True):
+                        try:
+                            from app_health_monitor import stop_health_monitoring
+                            stop_health_monitoring()
+                            
+                            # Session state aufräumen
+                            if 'monitoring_started' in st.session_state:
+                                del st.session_state['monitoring_started']
+                            
+                            st.success("✅ Monitoring gestoppt!")
+                            
+                            # Sofort neu laden
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"❌ Fehler beim Stoppen: {e}")
+                            import traceback
+                            with st.expander("📋 Fehlerdetails"):
+                                st.code(traceback.format_exc())
                 else:
-                    if st.button(" Start Monitoring", use_container_width=True):
-                        from app_health_monitor import start_health_monitoring
-                        start_health_monitoring(interval=60)
-                        st.success("Monitoring started (60s interval)")
-                        st.rerun()
+                    if st.button("▶ Start Monitoring", key="start_monitoring_btn", use_container_width=True):
+                        try:
+                            from app_health_monitor import start_health_monitoring
+                            start_health_monitoring(interval=60)
+                            
+                            # Session state setzen für sofortiges Feedback
+                            if 'monitoring_started' not in st.session_state:
+                                st.session_state['monitoring_started'] = True
+                            
+                            st.success("✅ Monitoring gestartet! (Intervall: 60 Sekunden)")
+                            
+                            # Sofort neu laden
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"❌ Fehler beim Starten: {e}")
+                            import traceback
+                            with st.expander("📋 Fehlerdetails"):
+                                st.code(traceback.format_exc())
         
         except ImportError as e:
             st.error(f"Monitoring module not available: {e}")
@@ -3736,7 +4231,7 @@ def main():
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 CRM & Kundenverwaltung
@@ -3809,8 +4304,7 @@ def main():
                 crm_module.render_crm( # type: ignore
                     TEXTS,
                     getattr(database_module, 'get_db_connection', None),
-                    show_header=False,
-                )
+                    show_header=False)
             else:
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm", "CRM nicht verfügbar.")))
 
@@ -3818,8 +4312,7 @@ def main():
             if crm_dashboard_ui_module and callable(getattr(crm_dashboard_ui_module, 'render_crm_dashboard', None)):
                 crm_dashboard_ui_module.render_crm_dashboard( # type: ignore
                     TEXTS,
-                    module_name=get_text_gui("crm_tab_dashboard", get_text_gui("menu_item_crm_dashboard")),
-                )
+                    module_name=get_text_gui("crm_tab_dashboard", get_text_gui("menu_item_crm_dashboard")))
             else:
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_dashboard", "CRM Dashboard nicht verfügbar.")))
 
@@ -3827,8 +4320,7 @@ def main():
             if crm_pipeline_ui_module and callable(getattr(crm_pipeline_ui_module, 'render_crm_pipeline', None)):
                 crm_pipeline_ui_module.render_crm_pipeline( # type: ignore
                     TEXTS,
-                    module_name=get_text_gui("crm_tab_pipeline", get_text_gui("menu_item_crm_pipeline")),
-                )
+                    module_name=get_text_gui("crm_tab_pipeline", get_text_gui("menu_item_crm_pipeline")))
             else:
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_pipeline", "CRM Pipeline nicht verfügbar.")))
 
@@ -3836,8 +4328,7 @@ def main():
             if crm_calendar_ui_module and callable(getattr(crm_calendar_ui_module, 'render_crm_calendar', None)):
                 crm_calendar_ui_module.render_crm_calendar( # type: ignore
                     TEXTS,
-                    module_name=get_text_gui("crm_tab_calendar", get_text_gui("menu_item_crm_calendar")),
-                )
+                    module_name=get_text_gui("crm_tab_calendar", get_text_gui("menu_item_crm_calendar")))
             else:
                 st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_calendar", "CRM Kalender nicht verfügbar.")))
 
@@ -3848,7 +4339,7 @@ def main():
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 Controlling
@@ -3870,7 +4361,7 @@ def main():
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 Einstellungen
@@ -3958,7 +4449,7 @@ def main():
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 Wärmepumpen-Kalkulation
@@ -3980,7 +4471,7 @@ def main():
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 Solar Calculator
@@ -4002,7 +4493,7 @@ def main():
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         ">
             <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
                 3D PV-Visualisierung

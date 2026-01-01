@@ -35,8 +35,7 @@ try:
         get_di_container,
         # Helpers
         is_feature_enabled,
-        FEATURES,
-    )
+        FEATURES)
     CORE_AVAILABLE = True
 except ImportError as e:
     CORE_AVAILABLE = False
@@ -289,10 +288,54 @@ def _render_phase_5_7():
     if is_feature_enabled('navigation'):
         nav_hist = get_navigation_history()
         if nav_hist:
-            st.success("Aktiv")
-            st.caption("- User Navigation Tracking")
-            st.caption("- Breadcrumbs")
-            st.caption("- Back/Forward Navigation")
+            st.success("Aktiv - User Navigation Tracking System")
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.caption("Navigation Tracking")
+            with col2:
+                st.caption("Breadcrumbs")
+            with col3:
+                st.caption("Back/Forward Navigation")
+            
+            # Show navigation stats if available
+            try:
+                if hasattr(nav_hist, 'history') and hasattr(nav_hist, 'current_index'):
+                    history_size = len(nav_hist.history)
+                    current_idx = nav_hist.current_index
+                    can_back = nav_hist.can_go_back()
+                    can_forward = nav_hist.can_go_forward()
+                    
+                    with st.expander("Navigation Statistics"):
+                        col1, col2, col3, col4 = st.columns(4)
+                        with col1:
+                            st.metric("History Size", history_size)
+                        with col2:
+                            st.metric("Current Position", current_idx + 1 if current_idx >= 0 else 0)
+                        with col3:
+                            st.metric("Can Go Back", "Ja" if can_back else "Nein")
+                        with col4:
+                            st.metric("Can Go Forward", "Ja" if can_forward else "Nein")
+                        
+                        # Show page visit counts
+                        if hasattr(nav_hist, 'get_page_visits'):
+                            page_visits = nav_hist.get_page_visits()
+                            if page_visits:
+                                st.markdown("**Seiten-Besuche:**")
+                                visit_data = sorted(page_visits.items(), key=lambda x: x[1], reverse=True)
+                                for page, count in visit_data[:10]:  # Top 10
+                                    st.text(f"  {page}: {count} Besuche")
+                        
+                        # Show current breadcrumbs
+                        if hasattr(nav_hist, 'get_breadcrumbs'):
+                            breadcrumbs = nav_hist.get_breadcrumbs()
+                            if breadcrumbs:
+                                st.markdown("**Aktuelle Breadcrumbs:**")
+                                for bc in breadcrumbs:
+                                    icon = f"{bc.icon} " if bc.icon else ""
+                                    current = " (aktuell)" if bc.is_current else ""
+                                    st.text(f"  {icon}{bc.label}{current}")
+            except Exception as e:
+                st.error(f"Fehler beim Abrufen der Navigations-Statistiken: {e}")
         else:
             st.warning("Nicht initialisiert")
     else:
@@ -313,26 +356,115 @@ def _render_phase_8_9():
             with col1:
                 st.caption("Job Scheduling")
             with col2:
-                st.caption("Job Notifications")
+                st.caption("Priority Queues")
             with col3:
-                st.caption("Job Management UI")
+                st.caption("Retry & DLQ")
             
-            # Show job stats if available
+            # Show job stats
             try:
                 if hasattr(job_mgr, 'get_stats'):
                     stats = job_mgr.get_stats()
-                    with st.expander("Job Statistics"):
+                    with st.expander("Job Statistics & Management"):
+                        # Main Statistics
+                        st.markdown("**Übersicht:**")
                         col1, col2, col3, col4 = st.columns(4)
                         with col1:
                             st.metric("Total Jobs", stats.get('total', 0))
                         with col2:
-                            st.metric("Running", stats.get('running', 0))
+                            pending = stats.get('pending', 0)
+                            st.metric("Pending", pending, 
+                                     delta="In Queue" if pending > 0 else None)
                         with col3:
-                            st.metric("Completed", stats.get('completed', 0))
+                            running = stats.get('running', 0)
+                            st.metric("Running", running,
+                                     delta="Aktiv" if running > 0 else None)
                         with col4:
-                            st.metric("Failed", stats.get('failed', 0))
-            except:
-                pass
+                            completed = stats.get('completed', 0)
+                            st.metric("Completed", completed)
+                        
+                        col1, col2, col3, col4 = st.columns(4)
+                        with col1:
+                            failed = stats.get('failed', 0)
+                            st.metric("Failed", failed,
+                                     delta="Fehler" if failed > 0 else None,
+                                     delta_color="inverse" if failed > 0 else "off")
+                        with col2:
+                            cancelled = stats.get('cancelled', 0)
+                            st.metric("Cancelled", cancelled)
+                        with col3:
+                            dlq = stats.get('dead_letter', 0)
+                            st.metric("Dead Letter Queue", dlq,
+                                     delta="Benötigt Review" if dlq > 0 else None,
+                                     delta_color="inverse" if dlq > 0 else "off")
+                        with col4:
+                            workers_active = stats.get('workers_active', 0)
+                            workers_total = stats.get('workers', 0)
+                            st.metric("Workers", f"{workers_active}/{workers_total}")
+                        
+                        # Success Rate
+                        total = stats.get('total', 0)
+                        if total > 0:
+                            success_rate = (completed / total) * 100
+                            st.markdown(f"**Erfolgsquote:** {success_rate:.1f}%")
+                            st.progress(success_rate / 100)
+                        
+                        # Recent Jobs
+                        if hasattr(job_mgr, 'get_job_history'):
+                            st.markdown("---")
+                            st.markdown("**Letzte Jobs:**")
+                            
+                            history = job_mgr.get_job_history(limit=10)
+                            if history:
+                                for job, result in history:
+                                    status_emoji = {
+                                        'completed': '✅',
+                                        'failed': '❌',
+                                        'running': '⏳',
+                                        'pending': '⏸️',
+                                        'cancelled': '🚫',
+                                    }.get(result.status.value if hasattr(result.status, 'value') else str(result.status), '❓')
+                                    
+                                    duration = ""
+                                    if result.duration_seconds:
+                                        duration = f" ({result.duration_seconds:.2f}s)"
+                                    
+                                    timestamp = ""
+                                    if result.completed_at:
+                                        timestamp = result.completed_at.strftime("%H:%M:%S")
+                                    elif result.started_at:
+                                        timestamp = result.started_at.strftime("%H:%M:%S")
+                                    
+                                    st.text(f"{status_emoji} {job.name or job.id[:8]} - {timestamp}{duration}")
+                                    
+                                    if result.error:
+                                        st.caption(f"   Error: {result.error[:100]}")
+                            else:
+                                st.caption("Keine Jobs vorhanden")
+                        
+                        # Management Actions
+                        st.markdown("---")
+                        st.markdown("**Management:**")
+                        col1, col2, col3 = st.columns(3)
+                        
+                        with col1:
+                            if hasattr(job_mgr, 'clear_dead_letter_queue'):
+                                if st.button("🗑️ DLQ Leeren", key="clear_dlq"):
+                                    job_mgr.clear_dead_letter_queue()
+                                    st.success("Dead Letter Queue geleert")
+                                    st.rerun()
+                        
+                        with col2:
+                            if hasattr(job_mgr, 'cleanup_old_results'):
+                                if st.button("🧹 Alte Jobs löschen", key="cleanup_jobs"):
+                                    count = job_mgr.cleanup_old_results(retention_days=7)
+                                    st.success(f"{count} alte Jobs gelöscht")
+                                    st.rerun()
+                        
+                        with col3:
+                            if st.button("🔄 Statistiken aktualisieren", key="refresh_stats"):
+                                st.rerun()
+            except Exception as e:
+                st.error(f"Fehler beim Abrufen der Job-Statistiken: {e}")
         else:
             st.warning("Nicht initialisiert")
     else:
@@ -350,16 +482,157 @@ def _render_phase_8_9():
             with col2:
                 st.caption("Rollback Support")
             with col3:
-                st.caption("CLI Integration")
+                st.caption("Auto-Detection")
             
-            # Show migration status if available
+            # Show migration statistics
             try:
-                if hasattr(mig_mgr, 'get_current_version'):
-                    version = mig_mgr.get_current_version()
-                    with st.expander("Migration Status"):
-                        st.write(f"**Current Version:** {version}")
-            except:
-                pass
+                if hasattr(mig_mgr, 'get_stats'):
+                    stats = mig_mgr.get_stats()
+                    
+                    with st.expander("Migration Statistics & Management"):
+                        # Status Badge
+                        status = stats.get('status', 'unknown')
+                        if status == 'ok':
+                            st.success("✅ Datenbank-Schema ist aktuell")
+                        elif status == 'pending':
+                            st.warning(f"⚠️ {stats.get('pending_count', 0)} ausstehende Migration(en)")
+                        elif status == 'uninitialized':
+                            st.info("ℹ️ Datenbank nicht initialisiert")
+                        else:
+                            st.error(f"❌ Fehler: {stats.get('error', 'Unbekannt')}")
+                        
+                        # Main Statistics
+                        st.markdown("**Übersicht:**")
+                        col1, col2, col3, col4 = st.columns(4)
+                        with col1:
+                            current = stats.get('current_version', 'None')
+                            st.metric("Aktuelle Version", current)
+                        with col2:
+                            pending = stats.get('pending_count', 0)
+                            st.metric("Ausstehend", pending,
+                                     delta="Migration erforderlich" if pending > 0 else None,
+                                     delta_color="inverse" if pending > 0 else "off")
+                        with col3:
+                            total = stats.get('total_migrations', 0)
+                            st.metric("Total Migrationen", total)
+                        with col4:
+                            tables = stats.get('database_tables', 0)
+                            st.metric("DB-Tabellen", tables)
+                        
+                        # Last Migration
+                        last_mig = stats.get('last_migration')
+                        if last_mig:
+                            st.markdown("---")
+                            st.markdown("**Letzte Migration:**")
+                            st.text(f"📝 {last_mig.get('revision', 'N/A')}: {last_mig.get('message', 'N/A')}")
+                            if last_mig.get('is_current'):
+                                st.caption("   ✅ Aktuell angewendet")
+                        
+                        # Migration History
+                        if hasattr(mig_mgr, 'get_migration_history'):
+                            st.markdown("---")
+                            st.markdown("**Migrations-Historie (letzte 10):**")
+                            
+                            history = mig_mgr.get_migration_history()
+                            if history:
+                                for i, migration in enumerate(history[:10]):
+                                    is_current = migration.get('is_current', False)
+                                    marker = "➤" if is_current else " "
+                                    rev = migration.get('revision', 'N/A')[:8]
+                                    msg = migration.get('message', 'No description')
+                                    
+                                    status_text = " (CURRENT)" if is_current else ""
+                                    st.text(f"{marker} {rev}: {msg}{status_text}")
+                            else:
+                                st.caption("Keine Migrationen vorhanden")
+                        
+                        # Pending Migrations
+                        if stats.get('pending_count', 0) > 0:
+                            st.markdown("---")
+                            st.markdown("**⚠️ Ausstehende Migrationen:**")
+                            
+                            if hasattr(mig_mgr, 'get_pending_migrations'):
+                                pending_list = mig_mgr.get_pending_migrations()
+                                for pending in pending_list:
+                                    st.text(f"  🔄 {pending}")
+                                
+                                st.info("Diese Migrationen müssen noch angewendet werden. Verwende: `alembic upgrade head`")
+                        
+                        # Validation
+                        if hasattr(mig_mgr, 'validate_migrations'):
+                            st.markdown("---")
+                            st.markdown("**Validierung:**")
+                            
+                            if st.button("🔍 Schema validieren", key="validate_migrations"):
+                                with st.spinner("Validiere Datenbank-Schema..."):
+                                    validation = mig_mgr.validate_migrations()
+                                    
+                                    if validation.get('status') == 'success':
+                                        st.success("✅ Validierung erfolgreich")
+                                    else:
+                                        st.error("❌ Validierung fehlgeschlagen")
+                                    
+                                    # Errors
+                                    errors = validation.get('errors', [])
+                                    if errors:
+                                        st.markdown("**Fehler:**")
+                                        for error in errors:
+                                            st.error(f"  {error}")
+                                    
+                                    # Warnings
+                                    warnings = validation.get('warnings', [])
+                                    if warnings:
+                                        st.markdown("**Warnungen:**")
+                                        for warning in warnings:
+                                            st.warning(f"  {warning}")
+                        
+                        # Management Actions
+                        st.markdown("---")
+                        st.markdown("**Management:**")
+                        
+                        col1, col2, col3 = st.columns(3)
+                        
+                        with col1:
+                            if st.button("🔄 Statistiken aktualisieren", key="refresh_migrations"):
+                                st.rerun()
+                        
+                        with col2:
+                            if pending > 0:
+                                if st.button("⬆️ Migrationen anwenden", key="run_migrations"):
+                                    try:
+                                        with st.spinner("Führe Migrationen aus..."):
+                                            mig_mgr.run_migrations()
+                                        st.success("Migrationen erfolgreich angewendet!")
+                                        st.rerun()
+                                    except Exception as e:
+                                        st.error(f"Fehler: {e}")
+                        
+                        with col3:
+                            if st.button("📋 Historie anzeigen", key="show_history"):
+                                st.info("Siehe 'Migrations-Historie' oben")
+                        
+                        # CLI Commands
+                        st.markdown("---")
+                        st.markdown("**CLI-Befehle:**")
+                        st.code("""
+# Migrationen anwenden
+alembic upgrade head
+
+# Migration erstellen (Auto-detect)
+alembic revision --autogenerate -m "description"
+
+# Rollback zur vorherigen Version
+alembic downgrade -1
+
+# Aktuelle Version anzeigen
+alembic current
+
+# Historie anzeigen
+alembic history
+                        """.strip(), language="bash")
+                        
+            except Exception as e:
+                st.error(f"Fehler beim Abrufen der Migrations-Statistiken: {e}")
         else:
             st.warning("Nicht initialisiert")
     else:
@@ -371,71 +644,192 @@ def _render_phase_10_12():
     st.markdown("### Phase 10-12: Advanced Extensions")
     
     # Phase 10: Cache Extensions
-    st.markdown("#### Cache Extensions")
-    if is_feature_enabled('cache_ext'):
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.markdown("**Cache Invalidator**")
-            invalidator = get_cache_invalidator()
-            if invalidator:
-                st.success("Aktiv")
-                st.caption("Tag-basierte Invalidierung")
-            else:
-                st.warning("Nicht verfügbar")
-        
-        with col2:
-            st.markdown("**Cache Monitor**")
-            monitor = get_cache_monitor()
-            if monitor:
-                st.success("Aktiv")
-                st.caption("Performance Tracking")
-            else:
-                st.warning("Nicht verfügbar")
-        
-        with col3:
-            st.markdown("**Cache Warmer**")
-            warmer = get_cache_warmer()
-            if warmer:
-                st.success("Aktiv")
-                st.caption("Pre-Population")
-            else:
-                st.warning("Nicht verfügbar")
-    else:
-        st.info("Deaktiviert")
+    with st.expander("📦 Phase 10: Cache Extensions", expanded=True):
+        if is_feature_enabled('cache_ext'):
+            try:
+                invalidator = get_cache_invalidator()
+                monitor = get_cache_monitor()
+                warmer = get_cache_warmer()
+                
+                # Status
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.markdown("**Cache Invalidator**")
+                    if invalidator and hasattr(invalidator, 'get_stats'):
+                        inv_stats = invalidator.get_stats()
+                        st.success("✅ Aktiv")
+                        st.metric("Total Invalidations", inv_stats.get('total_invalidations', 0))
+                        st.metric("Rules", inv_stats.get('rules_count', 0))
+                    else:
+                        st.warning("Nicht verfügbar")
+                
+                with col2:
+                    st.markdown("**Cache Monitor**")
+                    if monitor and hasattr(monitor, 'get_stats'):
+                        mon_stats = monitor.get_stats()
+                        st.success("✅ Aktiv")
+                        st.metric("Alerts", mon_stats.get('active_alerts', 0))
+                        st.metric("Metrics Collected", mon_stats.get('total_metrics', 0))
+                    else:
+                        st.warning("Nicht verfügbar")
+                
+                with col3:
+                    st.markdown("**Cache Warmer**")
+                    if warmer and hasattr(warmer, 'get_stats'):
+                        warm_stats = warmer.get_stats()
+                        st.success("✅ Aktiv")
+                        st.metric("Tasks", warm_stats.get('total_tasks', 0))
+                        st.metric("Executed Today", warm_stats.get('executed_today', 0))
+                    else:
+                        st.warning("Nicht verfügbar")
+                
+                # Actions
+                st.markdown("---")
+                col_a, col_b, col_c = st.columns(3)
+                with col_a:
+                    if st.button("🔄 Refresh Stats", key="cache_ext_refresh"):
+                        st.rerun()
+                with col_b:
+                    if st.button("🗑️ Clear Cache", key="cache_ext_clear"):
+                        if invalidator:
+                            try:
+                                invalidator.invalidate_all()
+                                st.success("Cache cleared!")
+                            except Exception as e:
+                                st.error(f"Error: {e}")
+                with col_c:
+                    if st.button("🔥 Warm Cache", key="cache_ext_warm"):
+                        if warmer:
+                            try:
+                                warmer.warm_all()
+                                st.success("Cache warming started!")
+                            except Exception as e:
+                                st.error(f"Error: {e}")
+            
+            except Exception as e:
+                st.error(f"Error loading Cache Extensions: {e}")
+        else:
+            st.info("ℹ️ Deaktiviert (FEATURE_CACHE_EXTENSIONS=false)")
     
     # Phase 11: DB Extensions
-    st.markdown("####  Database Extensions")
-    if is_feature_enabled('db_ext'):
-        perf_mon = get_db_performance_monitor()
-        if perf_mon:
-            st.success("DB Performance Monitor Aktiv")
-            st.caption("- Query Performance Tracking")
-            st.caption("- Slow Query Detection")
-            st.caption("- Optimization Hints")
+    with st.expander("🗄️ Phase 11: Database Extensions", expanded=True):
+        if is_feature_enabled('db_ext'):
+            try:
+                perf_mon = get_db_performance_monitor()
+                
+                if perf_mon and hasattr(perf_mon, 'get_stats'):
+                    stats = perf_mon.get_stats()
+                    
+                    # Status Badge
+                    status = stats.get('status', 'unknown')
+                    status_map = {
+                        'ok': ('✅', 'OK', 'success'),
+                        'degraded': ('⚠️', 'Degraded', 'warning'),
+                        'warning': ('⚠️', 'Warning', 'warning'),
+                        'critical': ('❌', 'Critical', 'error')
+                    }
+                    emoji, status_text, _ = status_map.get(status, ('❓', 'Unknown', 'info'))
+                    st.markdown(f"**Status:** {emoji} {status_text}")
+                    
+                    # Metrics
+                    col1, col2, col3, col4 = st.columns(4)
+                    with col1:
+                        st.metric("Total Queries", stats.get('total_queries', 0))
+                    with col2:
+                        st.metric("Avg Duration", f"{stats.get('avg_duration_ms', 0):.1f}ms")
+                    with col3:
+                        st.metric("Slow Queries", stats.get('total_slow_queries', 0))
+                    with col4:
+                        st.metric("Success Rate", f"{stats.get('success_rate', 0):.1f}%")
+                    
+                    # Slow Queries
+                    st.markdown("**Slow Queries (letzte 5):**")
+                    slow = perf_mon.get_slow_queries(limit=5)
+                    if slow:
+                        for q in slow:
+                            st.markdown(f"- `{q.duration_ms:.0f}ms` - {q.sql[:80]}...")
+                    else:
+                        st.caption("Keine slow queries")
+                    
+                    # Actions
+                    st.markdown("---")
+                    col_a, col_b = st.columns(2)
+                    with col_a:
+                        if st.button("🔄 Refresh Stats", key="db_ext_refresh"):
+                            st.rerun()
+                    with col_b:
+                        if st.button("🗑️ Clear Metrics", key="db_ext_clear"):
+                            try:
+                                perf_mon.clear()
+                                st.success("Metrics cleared!")
+                            except Exception as e:
+                                st.error(f"Error: {e}")
+                
+                else:
+                    st.warning("DB Performance Monitor nicht initialisiert")
+            
+            except Exception as e:
+                st.error(f"Error loading DB Extensions: {e}")
         else:
-            st.warning("Nicht initialisiert")
-    else:
-        st.info("Deaktiviert")
+            st.info("ℹ️ Deaktiviert (FEATURE_DB_EXTENSIONS=false)")
     
     # Phase 12: DI Container
-    st.markdown("#### Dependency Injection")
-    if is_feature_enabled('di'):
-        di_container = get_di_container()
-        if di_container:
-            st.success("DI Container Aktiv")
+    with st.expander("🔌 Phase 12: Dependency Injection", expanded=True):
+        if is_feature_enabled('di'):
             try:
-                if hasattr(di_container, 'get_registered_services'):
-                    services = di_container.get_registered_services()
-                    with st.expander("Registered Services"):
+                di_container = get_di_container()
+                
+                if di_container and hasattr(di_container, 'get_stats'):
+                    stats = di_container.get_stats()
+                    
+                    st.markdown(f"**Status:** ✅ {stats.get('status', 'unknown').upper()}")
+                    
+                    # Metrics
+                    col1, col2, col3, col4 = st.columns(4)
+                    with col1:
+                        st.metric("Services", stats.get('total_services', 0))
+                    with col2:
+                        st.metric("Singletons", stats.get('singleton_count', 0))
+                    with col3:
+                        st.metric("Scoped", stats.get('scoped_count', 0))
+                    with col4:
+                        st.metric("Transient", stats.get('transient_count', 0))
+                    
+                    # Lifetime Breakdown
+                    st.markdown("**Lifetime Distribution:**")
+                    total = stats.get('total_services', 1)
+                    st.progress(stats.get('singleton_count', 0) / total, text=f"Singleton: {stats.get('singleton_count', 0)}")
+                    st.progress(stats.get('scoped_count', 0) / total, text=f"Scoped: {stats.get('scoped_count', 0)}")
+                    st.progress(stats.get('transient_count', 0) / total, text=f"Transient: {stats.get('transient_count', 0)}")
+                    
+                    # Top Resolved Services
+                    st.markdown("**Top Resolved Services:**")
+                    top_resolved = stats.get('top_resolved', [])
+                    if top_resolved:
+                        for svc in top_resolved[:5]:
+                            st.caption(f"- {svc.get('service', 'Unknown')}: {svc.get('count', 0)} resolutions ({svc.get('lifetime', 'unknown')})")
+                    else:
+                        st.caption("Keine Resolutions")
+                    
+                    # Registered Services
+                    if st.checkbox("Show All Services", key="di_show_services"):
+                        services = di_container.get_registered_services()
+                        st.markdown(f"**All Registered Services ({len(services)}):**")
                         for service in services:
                             st.caption(f"- {service}")
-            except:
-                st.caption("Service Locator Pattern")
+                    
+                    # Actions
+                    st.markdown("---")
+                    if st.button("🔄 Refresh Stats", key="di_refresh"):
+                        st.rerun()
+                
+                else:
+                    st.warning("DI Container nicht initialisiert")
+            
+            except Exception as e:
+                st.error(f"Error loading DI Container: {e}")
         else:
-            st.warning("Nicht initialisiert")
-    else:
-        st.info("Deaktiviert")
+            st.info("ℹ️ Deaktiviert (FEATURE_DI_CONTAINER=false)")
 
 
 def _render_performance_metrics():

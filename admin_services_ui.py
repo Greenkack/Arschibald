@@ -225,7 +225,7 @@ def delete_service(service_id: int) -> bool:
             UPDATE services
             SET is_active = 0, updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
-        ''', (service_id,))
+        ''', (service_id))
 
         conn.commit()
         conn.close()
@@ -644,7 +644,7 @@ def render_pdf_order_management():
                 updated_orders[service['id']] = new_order
 
             with col2:
-                status_icon = "" if service['is_standard'] else ""
+                status_ if service['is_standard'] else ""
                 st.write(f"{status_icon} **{service['name']}**")
                 if service['description']:
                     st.caption(service['description'])
@@ -716,7 +716,7 @@ def render_pdf_order_management():
     st.markdown("**So würden die Services in der PDF erscheinen:**")
 
     for i, service in enumerate(services_pdf_order, 1):
-        status_icon = "" if service['is_standard'] else ""
+        status_ if service['is_standard'] else ""
         col1, col2 = st.columns([1, 4])
 
         with col1:

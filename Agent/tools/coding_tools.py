@@ -550,8 +550,7 @@ setup(
             "black>=23.0.0",
             "flake8>=6.1.0",
         ],
-    }},
-)
+    }})
 """
 
 
@@ -605,7 +604,7 @@ def main():
     """Main application entry point."""
     st.set_page_config(
         page_title="{project_name}",
-        page_icon="",
+        page_
         layout="wide"
     )
 
@@ -645,8 +644,7 @@ app.add_middleware(
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
-)
+    allow_headers=["*"])
 
 
 @app.get("/")

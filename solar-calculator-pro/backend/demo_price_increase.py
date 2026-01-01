@@ -257,7 +257,7 @@ def demo_german_formatting():
     service.set_base_price(base_price)
     
     print("All prices are formatted in German:")
-    print(f"  - Decimal separator: comma (,)")
+    print(f"  - Decimal separator: comma ()")
     print(f"  - Thousand separator: dot (.)")
     print(f"  - Currency symbol: €")
     print()

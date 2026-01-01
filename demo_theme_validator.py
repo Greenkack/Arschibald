@@ -17,7 +17,7 @@ from theming.theme_validator import (
 
 
 def main():
-    st.set_page_config(page_title="Theme Validator Demo", page_icon="", layout="wide")
+    st.set_page_config(page_title="Theme Validator Demo", page_ layout="wide")
     
     st.title(" Theme Validator Demo")
     st.markdown("Demonstriert die Validierung von Theme-Dateien")

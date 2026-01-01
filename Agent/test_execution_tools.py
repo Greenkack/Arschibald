@@ -15,8 +15,7 @@ Tests all features including:
 from agent.tools.execution_tools import (
     _ensure_docker_image_exists,
     execute_python_code_in_sandbox,
-    run_terminal_command_in_sandbox,
-)
+    run_terminal_command_in_sandbox)
 import os
 import sys
 import time

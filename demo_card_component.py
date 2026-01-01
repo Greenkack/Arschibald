@@ -12,7 +12,7 @@ from theming import ThemeManager
 # Seiten-Konfiguration
 st.set_page_config(
     page_title="Card Component Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 
@@ -85,7 +85,6 @@ card(
     description="Mit allen Features",
     content="Hauptinhalt hier",
     footer="Footer-Text",
-    icon="",
     badge="Neu",
     badge_variant="success"
 )
@@ -96,7 +95,6 @@ card(
         description="Mit allen Features",
         content="Hauptinhalt hier",
         footer="Footer-Text",
-        icon="",
         badge="Neu",
         badge_variant="success",
         theme_manager=theme_manager
@@ -115,7 +113,6 @@ with col1:
         title="Default Card",
         content="Standard-Variante mit leichtem Schatten und Border",
         variant="default",
-        icon="",
         theme_manager=theme_manager
     )
 
@@ -125,7 +122,6 @@ with col2:
         title="Outlined Card",
         content="Variante mit stärkerem Border, ohne Schatten",
         variant="outlined",
-        icon="",
         theme_manager=theme_manager
     )
 
@@ -135,7 +131,6 @@ with col3:
         title="Elevated Card",
         content="Variante mit starkem Schatten für Hervorhebung",
         variant="elevated",
-        icon="",
         theme_manager=theme_manager
     )
 
@@ -211,7 +206,6 @@ with col1:
         content="<h1 style='margin:0; font-size: 3rem; text-align: center;'>28.5 kWh</h1>",
         footer="↑ 12% vs. gestern",
         variant="elevated",
-        icon="",
         badge="+12%",
         badge_variant="success",
         theme_manager=theme_manager
@@ -231,7 +225,6 @@ with col2:
         """,
         footer="Letzte Prüfung: vor 2 Minuten",
         variant="outlined",
-        icon="",
         badge="Online",
         badge_variant="success",
         theme_manager=theme_manager
@@ -245,7 +238,6 @@ with col3:
         content="Bitte kontaktieren Sie den Service für eine Wartung der Solaranlage.",
         footer="Fällig seit: 10.11.2025",
         variant="default",
-        icon="",
         badge="Dringend",
         badge_variant="warning",
         theme_manager=theme_manager
@@ -265,8 +257,7 @@ card(
         <p>Ändern Sie die Optionen in der Sidebar, um verschiedene Konfigurationen zu testen.</p>
     """,
     footer="Footer-Bereich" if show_footer else None,
-    variant=demo_variant,
-    icon="" if show_icon else None,
+    variant=demo_variant if show_icon else None,
     badge="Demo" if show_badge else None,
     badge_variant=demo_badge_variant,
     hover_effect=hover_effect,
@@ -312,7 +303,6 @@ with col1:
         description="Passen Sie die Parameter an",
         content="",
         variant="outlined",
-        icon="",
         theme_manager=theme_manager
     )
     
@@ -327,7 +317,6 @@ with col2:
         description="Exportieren Sie Ihre Daten",
         content="",
         variant="outlined",
-        icon="",
         theme_manager=theme_manager
     )
     
@@ -345,7 +334,6 @@ card(
     title="Card mit Custom CSS",
     content="Diese Card hat zusätzliches Custom-Styling",
     variant="elevated",
-    icon="",
     custom_css="""
         .shadcn-card-body-* {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

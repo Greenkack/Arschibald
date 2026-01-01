@@ -270,7 +270,7 @@ def main():
     """Hauptfunktion"""
     st.set_page_config(
         page_title="Product Pricing UI Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     

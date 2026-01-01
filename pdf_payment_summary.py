@@ -98,8 +98,7 @@ def create_payment_summary_page(
     analysis_results: dict[str, Any],
     variant_id: str,
     schedule: list[dict[str, Any]] | None = None,
-    title: str = "Kostenzusammenstellung & Zahlungsmodalitäten",
-) -> bytes | None:
+    title: str = "Kostenzusammenstellung & Zahlungsmodalitäten") -> bytes | None:
     """Erstellt eine einzelne PDF‑Seite mit Kostenübersicht und Zahlungsplan.
 
     Args:

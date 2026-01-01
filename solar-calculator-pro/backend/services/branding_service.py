@@ -246,7 +246,7 @@ class BrandingService:
         # If no specific positions, use default from branding
         if not positions:
             if context == "header" and branding.header_logo_enabled:
-                positions = [type('obj', (object,), {
+                positions = [type('obj', (object), {
                     'x': branding.logo_position_x,
                     'y': branding.logo_position_y,
                     'width': branding.logo_width,
@@ -256,7 +256,7 @@ class BrandingService:
                     'scale': 1.0
                 })()]
             elif context == "footer" and branding.footer_logo_enabled:
-                positions = [type('obj', (object,), {
+                positions = [type('obj', (object), {
                     'x': branding.logo_position_x,
                     'y': 50.0,  # Footer position
                     'width': branding.logo_width,

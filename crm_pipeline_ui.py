@@ -776,7 +776,7 @@ class CRMPipeline:
                 SELECT * FROM crm_leads
                 WHERE stage = ?
                 ORDER BY stage_changed_at DESC
-            ''', (stage,))
+            ''', (stage))
 
             leads = []
             for row in cursor.fetchall():
@@ -983,7 +983,7 @@ class CRMPipeline:
             conn = get_db_connection()
             cursor = conn.cursor()
 
-            cursor.execute('DELETE FROM crm_leads WHERE id = ?', (lead_id,))
+            cursor.execute('DELETE FROM crm_leads WHERE id = ?', (lead_id))
 
             conn.commit()
             conn.close()

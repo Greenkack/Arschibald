@@ -8,8 +8,7 @@ from agent.tools.testing_tools import (
     analyze_test_failures,
     extract_failure_details,
     generate_test_summary,
-    parse_pytest_output,
-)
+    parse_pytest_output)
 import os
 import sys
 

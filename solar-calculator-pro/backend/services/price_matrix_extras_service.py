@@ -306,7 +306,7 @@ class PriceMatrixExtrasService:
             cursor = self.db.cursor()
             cursor.execute(
                 "SELECT is_special_product FROM products WHERE id = ?",
-                (product_id,)
+                (product_id)
             )
             row = cursor.fetchone()
             return bool(row[0]) if row and row[0] else False
@@ -322,7 +322,7 @@ class PriceMatrixExtrasService:
             cursor = self.db.cursor()
             cursor.execute(
                 "SELECT is_special_product FROM products WHERE model_name = ?",
-                (model_name,)
+                (model_name)
             )
             row = cursor.fetchone()
             return bool(row[0]) if row and row[0] else False

@@ -292,10 +292,10 @@ def _init_advanced_modules(status: dict):
             _cache_warmer = None
     
     # PHASE 11: DATABASE EXTENSIONS
-    if FEATURES['db_ext'] and _database_manager:
+    if FEATURES['db_ext']:
         try:
-            from core.db_performance_monitor import DBPerformanceMonitor
-            _db_performance_monitor = DBPerformanceMonitor(_database_manager)
+            from core.db_performance import get_db_performance_monitor
+            _db_performance_monitor = get_db_performance_monitor()
             status['db_extensions'] = True
             print("DB Performance Monitor initialized (Query Tracking, Optimization)")
             if _logger:
@@ -305,10 +305,22 @@ def _init_advanced_modules(status: dict):
             print(f"DB Performance Monitor disabled: {e}")
             status['db_extensions'] = False
     
-    # PHASE 12: DEPENDENCY INJECTION (DISABLED - containers.py is for UI, not DI)
-    # NOTE: containers.py is a UI module (StableContainer), not a DI container
-    # To enable DI, create a separate core/di_container.py module
-    status['di'] = False
+    # PHASE 12: DEPENDENCY INJECTION
+    if FEATURES['di']:
+        try:
+            from core.dependency_injection import get_di_container
+            _di_container = get_di_container()
+            status['di'] = True
+            print("DI Container initialized (Service Locator, Auto-Wiring)")
+            if _logger:
+                _logger.info("di_container_initialized")
+            
+            # Register core services
+            _register_di_services()
+        except Exception as e:
+            status['errors'].append(f"DI Container init failed: {e}")
+            print(f"DI Container disabled: {e}")
+            status['di'] = False
 
 
 def _register_di_services():
@@ -316,28 +328,36 @@ def _register_di_services():
     if not _di_container:
         return
     
-    services = {
-        'config': _config,
-        'logger': _logger,
-        'cache': _cache,
-        'session_manager': _session_manager,
-        'database_manager': _database_manager,
-        'security_manager': _security_manager,
-        'router': _router,
-        'form_manager': _form_manager,
-        'widget_manager': _widget_manager,
-        'navigation_history': _navigation_history,
-        'job_manager': _job_manager,
-        'migration_manager': _migration_manager,
-        'cache_invalidator': _cache_invalidator,
-        'cache_monitor': _cache_monitor,
-        'cache_warmer': _cache_warmer,
-        'db_performance_monitor': _db_performance_monitor,
-    }
+    # Register core services as singletons (already instantiated)
+    services = [
+        (_config, 'Config'),
+        (_logger, 'Logger'),
+        (_cache, 'Cache'),
+        (_session_manager, 'SessionManager'),
+        (_database_manager, 'DatabaseManager'),
+        (_security_manager, 'SecurityManager'),
+        (_router, 'Router'),
+        (_form_manager, 'FormManager'),
+        (_widget_manager, 'WidgetManager'),
+        (_navigation_history, 'NavigationHistory'),
+        (_job_manager, 'JobManager'),
+        (_migration_manager, 'MigrationManager'),
+        (_cache_invalidator, 'CacheInvalidator'),
+        (_cache_monitor, 'CacheMonitor'),
+        (_cache_warmer, 'CacheWarmer'),
+        (_db_performance_monitor, 'DBPerformanceMonitor'),
+    ]
     
-    for name, service in services.items():
-        if service is not None:
-            _di_container.register(name, service)
+    from core.dependency_injection import ServiceLifetime
+    
+    for service_instance, service_name in services:
+        if service_instance is not None:
+            # Create a type for the service if it's an instance
+            service_type = type(service_instance)
+            _di_container.register_singleton(
+                service_type=service_type,
+                instance=service_instance
+            )
 
 
 def get_app_config():
@@ -707,11 +727,17 @@ def get_navigation_history():
     return _navigation_history
 
 
-def track_navigation(page, user_id=None):
+def track_navigation(page, user_id=None, params=None, session_id=None, metadata=None):
     """Track user navigation"""
     if _navigation_history:
         try:
-            _navigation_history.track(page, user_id)
+            _navigation_history.push(
+                page=page,
+                user_id=user_id,
+                params=params or {},
+                session_id=session_id,
+                metadata=metadata
+            )
         except Exception as e:
             log_error("navigation_tracking_failed", error=e)
 

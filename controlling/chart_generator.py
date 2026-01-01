@@ -350,13 +350,20 @@ class ChartGenerator:
 
         # 3. Raw Performance Data (alle Kriterien, nicht nur Top 10)
         if raw_data:
-            raw_data_chart = self.create_column_chart(
-                data=raw_data,
-                title="Leistungskriterien Übersicht",
-                x_label="Kriterium",
-                y_label="Anzahl"
-            )
-            figures.append(raw_data_chart)
+            # Filter: Bestimmte Metriken aus Charts entfernen
+            excluded_metrics = ["Getätigte Anrufe gesamt", "Kunden terminiert"]
+            filtered_raw_data = {
+                k: v for k, v in raw_data.items() 
+                if k not in excluded_metrics
+            }
+            if filtered_raw_data:
+                raw_data_chart = self.create_column_chart(
+                    data=filtered_raw_data,
+                    title="Leistungskriterien Übersicht",
+                    x_label="Kriterium",
+                    y_label="Anzahl"
+                )
+                figures.append(raw_data_chart)
 
         # If no figures were created, add a placeholder
         if not figures:

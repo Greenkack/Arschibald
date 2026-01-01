@@ -13,8 +13,7 @@ Run with: python test_task_12_2_docker_security.py
 from agent.tools.execution_tools import (
     DOCKER_IMAGE,
     execute_python_code_in_sandbox,
-    run_terminal_command_in_sandbox,
-)
+    run_terminal_command_in_sandbox)
 import os
 import sys
 import time

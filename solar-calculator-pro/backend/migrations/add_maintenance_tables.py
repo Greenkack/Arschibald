@@ -37,8 +37,7 @@ def upgrade():
         Column('started_at', DateTime(timezone=True), server_default=func.now()),
         Column('completed_at', DateTime(timezone=True), nullable=True),
         Column('duration_seconds', Float, nullable=True),
-        Column('performed_by', String(100), nullable=True),
-    )
+        Column('performed_by', String(100), nullable=True))
 
     # System Diagnostics table
     system_diagnostics = Table(
@@ -50,8 +49,7 @@ def upgrade():
         Column('metrics', JSON),
         Column('issues', JSON, nullable=True),
         Column('recommendations', JSON, nullable=True),
-        Column('checked_at', DateTime(timezone=True), server_default=func.now()),
-    )
+        Column('checked_at', DateTime(timezone=True), server_default=func.now()))
 
     # Cache Entries table
     cache_entries = Table(
@@ -65,8 +63,7 @@ def upgrade():
         Column('last_accessed', DateTime(timezone=True), server_default=func.now()),
         Column('created_at', DateTime(timezone=True), server_default=func.now()),
         Column('expires_at', DateTime(timezone=True), nullable=True),
-        Column('is_valid', Boolean, default=True),
-    )
+        Column('is_valid', Boolean, default=True))
 
     # Temp Files table
     temp_files = Table(
@@ -80,8 +77,7 @@ def upgrade():
         Column('created_at', DateTime(timezone=True), server_default=func.now()),
         Column('last_accessed', DateTime(timezone=True), server_default=func.now()),
         Column('should_delete', Boolean, default=False),
-        Column('delete_after', DateTime(timezone=True), nullable=True),
-    )
+        Column('delete_after', DateTime(timezone=True), nullable=True))
 
     # Create all tables
     metadata.create_all(engine)

@@ -155,7 +155,7 @@ class GermanNumberFormatter:
     
     Formats numbers according to German conventions:
     - Dot (.) as thousands separator
-    - Comma (,) as decimal separator
+    - Comma () as decimal separator
     - 2 decimal places for currency
     """
     

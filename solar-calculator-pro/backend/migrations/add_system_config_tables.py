@@ -35,8 +35,8 @@ def upgrade():
         sa.Column('created_by', sa.Integer(), nullable=True),
         sa.Column('updated_by', sa.Integer(), nullable=True),
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(['created_by'], ['users.id'], ),
-        sa.ForeignKeyConstraint(['updated_by'], ['users.id'], )
+        sa.ForeignKeyConstraint(['created_by'], ['users.id']),
+        sa.ForeignKeyConstraint(['updated_by'], ['users.id'])
     )
     op.create_index('ix_system_configurations_key', 'system_configurations', ['key'], unique=True)
     op.create_index('ix_system_configurations_category', 'system_configurations', ['category'])
@@ -73,7 +73,7 @@ def upgrade():
         sa.Column('changed_at', sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint('id'),
         sa.ForeignKeyConstraint(['configuration_id'], ['system_configurations.id'], ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['changed_by'], ['users.id'], )
+        sa.ForeignKeyConstraint(['changed_by'], ['users.id'])
     )
     op.create_index('ix_configuration_versions_configuration_id', 'configuration_versions', ['configuration_id'])
     
@@ -90,7 +90,7 @@ def upgrade():
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.Column('created_by', sa.Integer(), nullable=True),
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(['created_by'], ['users.id'], )
+        sa.ForeignKeyConstraint(['created_by'], ['users.id'])
     )
     op.create_index('ix_configuration_templates_name', 'configuration_templates', ['name'], unique=True)
     

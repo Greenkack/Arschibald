@@ -67,19 +67,16 @@ from financial_tools import (
     calculate_capital_gains_tax,
     calculate_depreciation,
     calculate_financing_comparison,
-    calculate_leasing_costs,
-)
+    calculate_leasing_costs)
 from live_preview_helpers import (
     _calculate_amortization_time,
     _calculate_final_price_with_modifications,
-    _get_pricing_modifications_from_session,
-)
+    _get_pricing_modifications_from_session)
 from ui_state_manager import (
     commit_widget_value,
     ensure_session_defaults,
     keep_session_state_alive,
-    mirror_widget_value,
-)
+    mirror_widget_value)
 
 try:
     from app_status import import_errors as global_import_errors_analysis
@@ -286,8 +283,7 @@ def format_kpi_value(
     unit: str = "",
     na_text_key: str = "not_applicable_short",
     precision: int = 2,
-    texts_dict: dict[str, str] | None = None,
-) -> str:
+    texts_dict: dict[str, str] | None = None) -> str:
     current_texts = texts_dict if texts_dict is not None else {}
     na_text = get_text(current_texts, na_text_key, "k.A.")
     if value is None:
@@ -824,8 +820,7 @@ def get_final_investment_amount(results: dict[str, Any] = None) -> float:
             _get_baseline_annual_costs_without_pv(
                 st.session_state.get('project_data', {}),
                 st.session_state.get('project_data', {}).get('project_details', {}),
-                results,
-            )
+                results)
         ) or float(annual_total_costs_without_pv)
         inc_pct = float(electricity_price_increase)
         series_no_inc = _compute_annual_cost_series(
@@ -851,21 +846,18 @@ def get_final_investment_amount(results: dict[str, Any] = None) -> float:
             y=series_no_inc,
             name="Ohne Erhöhung",
             marker_color=color_no_inc,
-            hovertemplate="Jahr %{x}: %{y:,.0f} €<extra></extra>",
-        )
+            hovertemplate="Jahr %{x}: %{y:,.0f} €<extra></extra>")
         fig_20y.add_bar(
             x=x_vals,
             y=series_with_inc,
             name="Mit Erhöhung",
             marker_color=color_with_inc,
-            hovertemplate="Jahr %{x}: %{y:,.0f} €<extra></extra>",
-        )
+            hovertemplate="Jahr %{x}: %{y:,.0f} €<extra></extra>")
         fig_20y.update_layout(
             barmode="group",
             title="Jährliche Stromkosten je Jahr (20 Jahre)",
             xaxis_title="Jahr",
-            yaxis_title="€ pro Jahr",
-        )
+            yaxis_title="€ pro Jahr")
         # Shadcn-ähnliches Theme und punktiertes Grid
         _apply_shadcn_like_theme(fig_20y)
         fig_20y.update_yaxes(
@@ -897,8 +889,7 @@ def get_final_investment_amount(results: dict[str, Any] = None) -> float:
             from enhanced_analysis_charts import (
                 create_amortization_chart,
                 create_costs_vs_feed_in_chart,
-                create_dynamic_cost_comparison_chart,
-            )
+                create_dynamic_cost_comparison_chart)
 
             # Amortisationszeit-Chart
             fig_amort, kpi_amort, desc_amort = create_amortization_chart(
@@ -933,8 +924,7 @@ def get_final_investment_amount(results: dict[str, Any] = None) -> float:
                 create_autarky_donut_chart,
                 create_consumption_vs_production_chart,
                 create_feed_in_percentage_donut_chart,
-                create_self_consumption_donut_chart,
-            )
+                create_self_consumption_donut_chart)
 
             # Verbrauch vs. Produktion
             fig_consumption, kpi_consumption, desc_consumption = create_consumption_vs_production_chart(
@@ -993,8 +983,7 @@ def get_final_investment_amount(results: dict[str, Any] = None) -> float:
         try:
             from enhanced_analysis_charts import (
                 create_hourly_daily_production_chart,
-                create_monthly_production_chart,
-            )
+                create_monthly_production_chart)
 
             # Monatliche Produktion
             fig_monthly, kpi_monthly, desc_monthly = create_monthly_production_chart(
@@ -1068,8 +1057,7 @@ def _render_financial_section(
         from enhanced_analysis_charts import (
             create_amortization_chart,
             create_costs_vs_feed_in_chart,
-            create_dynamic_cost_comparison_chart,
-        )
+            create_dynamic_cost_comparison_chart)
 
         # Amortisationszeit-Chart
         fig_amort, kpi_amort, desc_amort = create_amortization_chart(
@@ -1120,8 +1108,7 @@ def _render_energy_section(
             create_feed_in_percentage_donut_chart,
             create_hourly_daily_production_chart,
             create_monthly_production_chart,
-            create_self_consumption_donut_chart,
-        )
+            create_self_consumption_donut_chart)
 
         # Verbrauch vs. Produktion
         fig_consumption, kpi_consumption, desc_consumption = create_consumption_vs_production_chart(
@@ -1195,8 +1182,7 @@ def _render_environment_section(
 
     try:
         from enhanced_analysis_charts import (
-            create_co2_savings_visual_chart,
-        )
+            create_co2_savings_visual_chart)
 
         # CO2-Einsparungen Visual
         fig_co2, kpi_co2, desc_co2 = create_co2_savings_visual_chart(
@@ -1295,8 +1281,7 @@ def create_universal_2d_chart(
     x_label: str = "",
     y_label: str = "",
     default_chart_type: str = "Balken",
-    default_colors: list[str] = None,
-):
+    default_colors: list[str] = None):
     """
     Universelle Funktion für 2D-Diagramme mit Typ- und Farbwahl
     """
@@ -1333,15 +1318,13 @@ def create_universal_2d_chart(
                         else 0
                     )
                 ),
-                key=f"{chart_key}_type",
-            )
+                key=f"{chart_key}_type")
 
         with col3:
             color_scheme = st.selectbox(
                 "Farbschema:",
                 ["Standard", "Grün-Töne", "Blau-Töne", "Warm", "Kalt", "Bunt"],
-                key=f"{chart_key}_colors",
-            )
+                key=f"{chart_key}_colors")
 
         # Farbpaletten definieren
         color_palettes = {
@@ -1397,8 +1380,7 @@ def create_universal_2d_chart(
             xanchor="center",
             yanchor="middle",
             showarrow=False,
-            font=dict(size=14, color="red"),
-        )
+            font=dict(size=14, color="red"))
         fig.update_layout(
             title=title, height=400, margin=dict(
                 l=50, r=50, t=80, b=50))
@@ -1412,8 +1394,7 @@ def _create_chart_by_type(
     colors: list[str],
     title: str,
     x_label: str = "",
-    y_label: str = "",
-):
+    y_label: str = ""):
     """Erstellt das spezifische Diagramm basierend auf dem gewählten Typ"""
 
     # Daten für Diagramm vorbereiten
@@ -1429,8 +1410,7 @@ def _create_chart_by_type(
                 orientation="h",
                 color_discrete_sequence=colors,
                 title=title,
-                labels={"y": x_label, "x": y_label},
-            )
+                labels={"y": x_label, "x": y_label})
         elif chart_type == "Säulen":
             fig = px.bar(
                 df,
@@ -1438,8 +1418,7 @@ def _create_chart_by_type(
                 y="y",
                 color_discrete_sequence=colors,
                 title=title,
-                labels={"x": x_label, "y": y_label},
-            )
+                labels={"x": x_label, "y": y_label})
         elif chart_type == "Strich":
             fig = px.line(
                 df,
@@ -1447,8 +1426,7 @@ def _create_chart_by_type(
                 y="y",
                 color_discrete_sequence=colors,
                 title=title,
-                labels={"x": x_label, "y": y_label},
-            )
+                labels={"x": x_label, "y": y_label})
         elif chart_type in ["Kreis", "Donut"]:
             hole = 0.4 if chart_type == "Donut" else 0
             fig = px.pie(
@@ -1457,8 +1435,7 @@ def _create_chart_by_type(
                 names="x",
                 color_discrete_sequence=colors,
                 title=title,
-                hole=hole,
-            )
+                hole=hole)
 
     elif "labels" in data and "values" in data:
         # Pie/Donut Chart Daten
@@ -1472,8 +1449,7 @@ def _create_chart_by_type(
                 orientation="h",
                 color_discrete_sequence=colors,
                 title=title,
-                labels={"values": y_label, "labels": x_label},
-            )
+                labels={"values": y_label, "labels": x_label})
         elif chart_type == "Säulen":
             fig = px.bar(
                 df,
@@ -1481,8 +1457,7 @@ def _create_chart_by_type(
                 y="values",
                 color_discrete_sequence=colors,
                 title=title,
-                labels={"labels": x_label, "values": y_label},
-            )
+                labels={"labels": x_label, "values": y_label})
         elif chart_type == "Strich":
             fig = px.line(
                 df,
@@ -1490,8 +1465,7 @@ def _create_chart_by_type(
                 y="values",
                 color_discrete_sequence=colors,
                 title=title,
-                labels={"labels": x_label, "values": y_label},
-            )
+                labels={"labels": x_label, "values": y_label})
         elif chart_type in ["Kreis", "Donut"]:
             hole = 0.4 if chart_type == "Donut" else 0
             fig = px.pie(
@@ -1500,8 +1474,7 @@ def _create_chart_by_type(
                 names="labels",
                 color_discrete_sequence=colors,
                 title=title,
-                hole=hole,
-            )
+                hole=hole)
 
     elif isinstance(data, pd.DataFrame):
         # DataFrame direkt verwenden
@@ -1512,24 +1485,21 @@ def _create_chart_by_type(
                 y=data.columns[0],
                 orientation="h",
                 color_discrete_sequence=colors,
-                title=title,
-            )
+                title=title)
         elif chart_type == "Säulen" and len(data.columns) >= 2:
             fig = px.bar(
                 data,
                 x=data.columns[0],
                 y=data.columns[1],
                 color_discrete_sequence=colors,
-                title=title,
-            )
+                title=title)
         elif chart_type == "Strich" and len(data.columns) >= 2:
             fig = px.line(
                 data,
                 x=data.columns[0],
                 y=data.columns[1],
                 color_discrete_sequence=colors,
-                title=title,
-            )
+                title=title)
         elif chart_type in ["Kreis", "Donut"] and len(data.columns) >= 2:
             hole = 0.4 if chart_type == "Donut" else 0
             fig = px.pie(
@@ -1538,8 +1508,7 @@ def _create_chart_by_type(
                 names=data.columns[0],
                 color_discrete_sequence=colors,
                 title=title,
-                hole=hole,
-            )
+                hole=hole)
 
     else:
         # Fallback: Erstelle ein einfaches Fallback-Diagramm
@@ -1555,8 +1524,7 @@ def _create_chart_by_type(
             xanchor="center",
             yanchor="middle",
             showarrow=False,
-            font=dict(size=16, color="red"),
-        )
+            font=dict(size=16, color="red"))
         fig.update_layout(
             title=title, height=400, margin=dict(
                 l=50, r=50, t=80, b=50))
@@ -1577,8 +1545,7 @@ def _create_chart_by_type(
         paper_bgcolor="rgba(0,0,0,0)",
         font=dict(size=12),
         height=400,
-        margin=dict(l=40, r=30, t=60, b=40),
-    )
+        margin=dict(l=40, r=30, t=60, b=40))
 
     return fig
 
@@ -1588,8 +1555,7 @@ def create_four_type_chart(
     title: str,
     chart_key: str,
     x_label: str = "",
-    y_label: str = "",
-):
+    y_label: str = ""):
     """Spezielle Helper-Funktion nur mit vier erlaubten Typen: Balken, Säulen, Kreis, Donut.
     Unterstützt entweder (x,y) oder (labels,values).
     """
@@ -1600,8 +1566,7 @@ def create_four_type_chart(
         chart_type = st.selectbox(
             "Diagrammtyp:",
             ["Säulen", "Balken", "Kreis", "Donut"],
-            key=f"{chart_key}_four_type",
-        )
+            key=f"{chart_key}_four_type")
     try:
         if "x" in data and "y" in data:
             df = pd.DataFrame({"x": data["x"], "y": data["y"]})
@@ -1653,8 +1618,7 @@ def create_four_type_chart(
             fig.add_annotation(
                 text="Unbekanntes Datenformat für vier-Typ-Chart",
                 xref="paper", yref="paper", x=0.5, y=0.5, showarrow=False,
-                font=dict(size=14, color="red"),
-            )
+                font=dict(size=14, color="red"))
             fig.update_layout(title=title)
         _apply_shadcn_like_theme(fig)
         return fig
@@ -1679,8 +1643,7 @@ def create_multi_series_2d_chart(
     chart_key: str,
     x_label: str = "",
     y_label: str = "",
-    default_chart_type: str = "Säulen",
-):
+    default_chart_type: str = "Säulen"):
     """
     Erstellt 2D-Diagramme für mehrere Datenreihen
     """
@@ -1703,15 +1666,13 @@ def create_multi_series_2d_chart(
                     else 0
                 )
             ),
-            key=f"{chart_key}_multi_type",
-        )
+            key=f"{chart_key}_multi_type")
 
     with col3:
         color_scheme = st.selectbox(
             "Farbschema:",
             ["Standard", "Grün-Töne", "Blau-Töne", "Warm", "Kalt", "Bunt"],
-            key=f"{chart_key}_multi_colors",
-        )
+            key=f"{chart_key}_multi_colors")
 
     # Farbpaletten definieren
     color_palettes = {
@@ -1752,8 +1713,7 @@ def create_multi_series_2d_chart(
                     y=df.columns[1:],
                     color_discrete_sequence=colors,
                     title=title,
-                    labels={"value": y_label, "variable": "Datenreihe"},
-                )
+                    labels={"value": y_label, "variable": "Datenreihe"})
                 fig.update_layout(barmode="group")
             elif chart_type == "Balken":
                 fig = px.bar(
@@ -1763,8 +1723,7 @@ def create_multi_series_2d_chart(
                     orientation="h",
                     color_discrete_sequence=colors,
                     title=title,
-                    labels={"value": y_label, "variable": "Datenreihe"},
-                )
+                    labels={"value": y_label, "variable": "Datenreihe"})
                 fig.update_layout(barmode="group")
             elif chart_type == "Strich":
                 fig = px.line(
@@ -1773,8 +1732,7 @@ def create_multi_series_2d_chart(
                     y=df.columns[1:],
                     color_discrete_sequence=colors,
                     title=title,
-                    labels={"value": y_label, "variable": "Datenreihe"},
-                )
+                    labels={"value": y_label, "variable": "Datenreihe"})
             elif chart_type in ("Kreis", "Donut"):
                 # Aggregation: Summe je Datenreihe über alle Kategorien
                 agg_values = {}
@@ -1789,8 +1747,7 @@ def create_multi_series_2d_chart(
                     values="Wert",
                     color_discrete_sequence=colors,
                     title=title,
-                    hole=hole,
-                )
+                    hole=hole)
 
         elif isinstance(data, pd.DataFrame):
             # DataFrame direkt verwenden
@@ -1800,8 +1757,7 @@ def create_multi_series_2d_chart(
                     x=data.columns[0],
                     y=data.columns[1:],
                     color_discrete_sequence=colors,
-                    title=title,
-                )
+                    title=title)
                 fig.update_layout(barmode="group")
             elif chart_type == "Balken":
                 fig = px.bar(
@@ -1810,8 +1766,7 @@ def create_multi_series_2d_chart(
                     x=data.columns[1:],
                     orientation="h",
                     color_discrete_sequence=colors,
-                    title=title,
-                )
+                    title=title)
                 fig.update_layout(barmode="group")
             elif chart_type == "Strich":
                 fig = px.line(
@@ -1819,8 +1774,7 @@ def create_multi_series_2d_chart(
                     x=data.columns[0],
                     y=data.columns[1:],
                     color_discrete_sequence=colors,
-                    title=title,
-                )
+                    title=title)
             elif chart_type in ("Kreis", "Donut"):
                 agg_values = {col: data[col].sum() for col in data.columns[1:]}
                 pie_df = pd.DataFrame(
@@ -1832,8 +1786,7 @@ def create_multi_series_2d_chart(
                     values="Wert",
                     color_discrete_sequence=colors,
                     title=title,
-                    hole=hole,
-                )
+                    hole=hole)
         else:
             # Fallback: Erstelle ein einfaches Fallback-Diagramm
             import plotly.graph_objects as go
@@ -1848,8 +1801,7 @@ def create_multi_series_2d_chart(
                 xanchor="center",
                 yanchor="middle",
                 showarrow=False,
-                font=dict(size=16, color="red"),
-            )
+                font=dict(size=16, color="red"))
             fig.update_layout(
                 title=title, height=400, margin=dict(l=50, r=50, t=80, b=50)
             )
@@ -1873,8 +1825,7 @@ def create_multi_series_2d_chart(
             margin=dict(l=40, r=30, t=60, b=40),
             legend=dict(
                 orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1
-            ),
-        )
+            ))
         _apply_shadcn_like_theme(fig)
 
         return fig
@@ -1893,8 +1844,7 @@ def create_multi_series_2d_chart(
             xanchor="center",
             yanchor="middle",
             showarrow=False,
-            font=dict(size=14, color="red"),
-        )
+            font=dict(size=14, color="red"))
         fig.update_layout(
             title=title, height=400, margin=dict(
                 l=50, r=50, t=80, b=50))
@@ -1924,8 +1874,7 @@ def _apply_custom_style_to_fig(
     fig: go.Figure,
     viz_settings: dict[str, Any],
     chart_specific_key: str | None = None,
-    dynamic_colors: list[str] | None = None,
-):
+    dynamic_colors: list[str] | None = None):
     if not fig:
         return
     # Sichere Behandlung von viz_settings
@@ -1940,31 +1889,26 @@ def _apply_custom_style_to_fig(
     )
     font_family = specific_settings.get(
         "chart_font_family",
-        _safe_viz_get(viz_settings, "chart_font_family", "Arial, sans-serif"),
-    )
+        _safe_viz_get(viz_settings, "chart_font_family", "Arial, sans-serif"))
     font_size_title = int(
         specific_settings.get(
             "chart_font_size_title",
-            _safe_viz_get(viz_settings, "chart_font_size_title", 16),
-        )
+            _safe_viz_get(viz_settings, "chart_font_size_title", 16))
     )
     font_size_axis_label = int(
         specific_settings.get(
             "chart_font_size_axis_label",
-            _safe_viz_get(viz_settings, "chart_font_size_axis_label", 12),
-        )
+            _safe_viz_get(viz_settings, "chart_font_size_axis_label", 12))
     )
     font_size_tick_label = int(
         specific_settings.get(
             "chart_font_size_tick_label",
-            _safe_viz_get(viz_settings, "chart_font_size_tick_label", 10),
-        )
+            _safe_viz_get(viz_settings, "chart_font_size_tick_label", 10))
     )
     fig.update_layout(
         font=dict(family=font_family),
         title_font_size=font_size_title,
-        legend_font_size=font_size_tick_label,
-    )
+        legend_font_size=font_size_tick_label)
     if hasattr(fig.layout, "scene") and fig.layout.scene:
         fig.update_scenes(
             xaxis_title_font_size=font_size_axis_label,
@@ -1972,8 +1916,7 @@ def _apply_custom_style_to_fig(
             zaxis_title_font_size=font_size_axis_label,
             xaxis_tickfont_size=font_size_tick_label,
             yaxis_tickfont_size=font_size_tick_label,
-            zaxis_tickfont_size=font_size_tick_label,
-        )
+            zaxis_tickfont_size=font_size_tick_label)
     else:
         fig.update_xaxes(
             title_font_size=font_size_axis_label,
@@ -1994,8 +1937,7 @@ def _apply_custom_style_to_fig(
                 viz_settings, "primary_chart_color"))
         secondary_color = specific_settings.get(
             "secondary_chart_color",
-            _safe_viz_get(viz_settings, "secondary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "secondary_chart_color"))
         color_discrete_sequence = specific_settings.get(
             "color_discrete_sequence") or _safe_viz_get(viz_settings, "color_discrete_sequence")
         if not color_discrete_sequence and (primary_color or secondary_color):
@@ -2055,8 +1997,7 @@ def _export_plotly_fig_to_bytes(
                 get_text(
                     texts,
                     "analysis_chart_export_error_kaleido_v4",
-                    "Hinweis: Diagramm-Export für PDF fehlgeschlagen (Kaleido?). Details: {error_details}",
-                ).format(
+                    "Hinweis: Diagramm-Export für PDF fehlgeschlagen (Kaleido?). Details: {error_details}").format(
                     error_details=str(e)))
         return None
 
@@ -2114,9 +2055,7 @@ def _apply_shadcn_like_theme(fig: go.Figure) -> None:
                 yanchor="bottom",
                 y=1.02,
                 xanchor="right",
-                x=1,
-            ),
-        )
+                x=1))
         # Achsen: dezente Linien und Gitter
         fig.update_xaxes(
             showgrid=True,
@@ -2125,8 +2064,7 @@ def _apply_shadcn_like_theme(fig: go.Figure) -> None:
             linecolor="rgba(0,0,0,0.15)",
             ticks="outside",
             tickcolor="rgba(0,0,0,0.15)",
-            ticklen=5,
-        )
+            ticklen=5)
         fig.update_yaxes(
             showgrid=True,
             gridcolor="rgba(0,0,0,0.06)",
@@ -2134,8 +2072,7 @@ def _apply_shadcn_like_theme(fig: go.Figure) -> None:
             linecolor="rgba(0,0,0,0.15)",
             ticks="outside",
             tickcolor="rgba(0,0,0,0.15)",
-            ticklen=5,
-        )
+            ticklen=5)
         # Versuche, Balken weicher wirken zu lassen (Illusion durch
         # Marker-Lines und Abstände)
         if hasattr(fig, "data"):
@@ -2156,8 +2093,7 @@ def _apply_shadcn_like_theme(fig: go.Figure) -> None:
             hoverlabel=dict(
                 bgcolor="rgba(255,255,255,0.95)",
                 bordercolor="rgba(0,0,0,0.1)",
-                font=dict(color="#111827"),
-            )
+                font=dict(color="#111827"))
         )
     except Exception:
         # Theme ist best-effort; bei Problemen still ignore
@@ -2167,8 +2103,7 @@ def _apply_shadcn_like_theme(fig: go.Figure) -> None:
 def _get_baseline_annual_costs_without_pv(
     project_data: dict[str, Any] | None,
     project_details: dict[str, Any] | None,
-    analysis_results: dict[str, Any] | None,
-) -> float:
+    analysis_results: dict[str, Any] | None) -> float:
     """Ermittelt die jährlichen Stromkosten (ohne Photovoltaik) mit robusten Fallbacks.
 
     Reihenfolge der Quellen (analog placeholders._get_monthly_cost_eur):
@@ -2274,8 +2209,7 @@ def _add_chart_controls(
     texts: dict[str, str],
     default_type: str,
     supported_types: list[str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     key_type = f"{chart_key_prefix}_type"
     key_color_palette = f"{chart_key_prefix}_color_palette"
     key_primary_color = f"{chart_key_prefix}_primary_color"
@@ -2300,11 +2234,11 @@ def _add_chart_controls(
     default_primary_from_viz = _safe_viz_get(
         viz_settings, chart_key_prefix, {}).get(
         "primary_chart_color", _safe_viz_get(
-            viz_settings, "primary_chart_color", "#1f77b4"), )
+            viz_settings, "primary_chart_color", "#1f77b4"))
     default_secondary_from_viz = _safe_viz_get(
         viz_settings, chart_key_prefix, {}).get(
         "secondary_chart_color", _safe_viz_get(
-            viz_settings, "secondary_chart_color", "#ff7f0e"), )
+            viz_settings, "secondary_chart_color", "#ff7f0e"))
 
     if key_primary_color not in st.session_state:
         st.session_state[key_primary_color] = default_primary_from_viz
@@ -2326,16 +2260,14 @@ def _add_chart_controls(
                 if current_type in type_options_display
                 else 0
             ),
-            key=f"sb_{key_type}",
-        )
+            key=f"sb_{key_type}")
         st.session_state[key_type] = new_type
     with col2:
         selected_color_method = st.selectbox(
             get_text(texts, "chart_select_color_method_label", "Farbwahl"),
             options=["Palette", "Manuell"],
             key=f"radio_{key_color_method}",
-            index=1 if current_color_method_is_manual else 0,
-        )
+            index=1 if current_color_method_is_manual else 0)
         st.session_state[f"color_method_is_manual_{chart_key_prefix}"] = (
             selected_color_method == "Manuell"
         )
@@ -2348,23 +2280,20 @@ def _add_chart_controls(
                     if st.session_state.get(key_color_palette) in PLOTLY_COLOR_PALETTES
                     else 0
                 ),
-                key=f"sb_{key_color_palette}",
-            )
+                key=f"sb_{key_color_palette}")
             st.session_state[key_color_palette] = new_palette
         else:
             new_primary_color = st.color_picker(
                 get_text(texts, "chart_primary_color_label", "Primärfarbe"),
                 value=st.session_state.get(key_primary_color),
-                key=f"cp_{key_primary_color}",
-            )
+                key=f"cp_{key_primary_color}")
             new_secondary_color = st.color_picker(
                 get_text(
                     texts,
                     "chart_secondary_color_label",
                     "Sekundärfarbe (optional)"),
                 value=st.session_state.get(key_secondary_color),
-                key=f"cp_{key_secondary_color}",
-            )
+                key=f"cp_{key_secondary_color}")
             st.session_state[key_primary_color] = new_primary_color
             st.session_state[key_secondary_color] = new_secondary_color
     st.markdown("---")
@@ -2373,8 +2302,7 @@ def _add_chart_controls(
 def render_daily_production_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     """Moderne 2D-Darstellung der Tagesproduktion mit Diagramm- und Farbwahl"""
     # Daten vorbereiten
     hours = list(range(24))
@@ -2396,14 +2324,12 @@ def render_daily_production_switcher(
     chart_type = st.selectbox(
         get_text(texts, "daily_prod_chart_type_label", "Diagrammtyp"),
         ["Säulen", "Balken", "Strich", "Kreis", "Donut"],
-        key="daily_prod_chart_type_switcher",
-    )
+        key="daily_prod_chart_type_switcher")
 
     title = get_text(
         texts,
         "viz_daily_production_title_switcher",
-        "Tagesproduktion (simuliert)",
-    )
+        "Tagesproduktion (simuliert)")
 
     pv_label = get_text(
         texts,
@@ -2432,8 +2358,7 @@ def render_daily_production_switcher(
             names=[f"{h}h" for h in hours],
             values=shares,
             hole=hole,
-            title=title,
-        )
+            title=title)
     else:  # Fallback
         fig.add_trace(go.Bar(x=hours, y=power, name=pv_label))
 
@@ -2442,8 +2367,7 @@ def render_daily_production_switcher(
             title=title,
             xaxis_title="Stunde" if chart_type != "Balken" else pv_label,
             yaxis_title=pv_label if chart_type != "Balken" else "Stunde",
-            template="plotly_white",
-        )
+            template="plotly_white")
     _apply_custom_style_to_fig(fig, viz_settings, "daily_production_switcher")
     with st.expander(title, expanded=False):
         st.plotly_chart(
@@ -2457,8 +2381,7 @@ def render_daily_production_switcher(
 def render_tariff_cube_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     """Moderne 2D-Darstellung der Tagesproduktion mit Diagramm- und Farbwahl"""
 
     # Daten vorbereiten
@@ -2487,8 +2410,7 @@ def render_tariff_cube_switcher(
         chart_key="daily_production",
         x_label="Stunde",
         y_label="Leistung (kWh)",
-        default_chart_type="Säulen",
-    )
+        default_chart_type="Säulen")
 
     if fig:
         with st.expander(daily_title, expanded=False):
@@ -2505,8 +2427,7 @@ def render_tariff_cube_switcher(
 def render_weekly_production_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     """Moderne 2D-Darstellung der Wochenproduktion mit Diagramm- und Farbwahl"""
 
     # Daten vorbereiten
@@ -2541,8 +2462,7 @@ def render_weekly_production_switcher(
         chart_key="weekly_production",
         x_label="Wochentag",
         y_label="Produktion (kWh)",
-        default_chart_type="Säulen",
-    )
+        default_chart_type="Säulen")
 
     if fig:
         with st.expander(weekly_title, expanded=False):
@@ -2559,16 +2479,14 @@ def render_weekly_production_switcher(
 def render_yearly_production_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     """Moderne 2D-Darstellung der Jahresproduktion mit Diagramm- und Farbwahl"""
 
     # Daten vorbereiten
     month_labels = get_text(
         texts,
         "month_names_short_list",
-        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez",
-    ).split(",")
+        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez").split(",")
     if len(month_labels) != 12:
         month_labels = [
             "Jan",
@@ -2594,8 +2512,7 @@ def render_yearly_production_switcher(
             get_text(
                 texts,
                 "viz_data_missing_monthly_prod_switcher",
-                "Monatliche Produktionsdaten für Jahresdiagramm nicht verfügbar.",
-            ))
+                "Monatliche Produktionsdaten für Jahresdiagramm nicht verfügbar."))
 
         # Simuliere realistische Monatsdaten
         anlage_kwp_val = analysis_results.get("anlage_kwp", 5.0)
@@ -2635,16 +2552,14 @@ def render_yearly_production_switcher(
     yearly_title = get_text(
         texts,
         "viz_yearly_prod_bar3d_title_switcher",
-        "Jährliche Photovoltaik-Produktion nach Monaten",
-    )
+        "Jährliche Photovoltaik-Produktion nach Monaten")
     fig = create_universal_2d_chart(
         data=chart_data,
         title=yearly_title,
         chart_key="yearly_production",
         x_label="Monat",
         y_label="Produktion (kWh)",
-        default_chart_type="Säulen",
-    )
+        default_chart_type="Säulen")
 
     if fig:
         with st.expander(yearly_title, expanded=False):
@@ -2661,8 +2576,7 @@ def render_yearly_production_switcher(
 def render_project_roi_matrix_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     """Moderne 2D-Darstellung der Projektrendite mit Diagramm- und Farbwahl"""
 
     # Daten vorbereiten - verwende finalen Investitionsbetrag
@@ -2719,24 +2633,21 @@ def render_project_roi_matrix_switcher(
     proj_title = get_text(
         texts,
         "viz_project_roi_matrix_title_switcher",
-        "Projektrendite-Szenarien (20 Jahre)",
-    )
+        "Projektrendite-Szenarien (20 Jahre)")
     fig = create_universal_2d_chart(
         data=chart_data,
         title=proj_title,
         chart_key="project_roi_matrix",
         x_label="Szenario",
         y_label="ROI (%)",
-        default_chart_type="Säulen",
-    )
+        default_chart_type="Säulen")
 
     if fig:
         with st.expander(proj_title, expanded=False):
             st.plotly_chart(
                 fig,
                 use_container_width=True,
-                key="analysis_project_roi_matrix_switcher_key_v7_2d",
-            )
+                key="analysis_project_roi_matrix_switcher_key_v7_2d")
         analysis_results["project_roi_matrix_switcher_chart_bytes"] = _export_plotly_fig_to_bytes(
             fig, texts)
     else:
@@ -2746,16 +2657,14 @@ def render_project_roi_matrix_switcher(
 def render_feed_in_revenue_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     """Moderne 2D-Darstellung der Einspeisevergütung mit Diagramm- und Farbwahl"""
 
     # Daten vorbereiten
     month_labels = get_text(
         texts,
         "month_names_short_list",
-        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez",
-    ).split(",")
+        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez").split(",")
     if len(month_labels) != 12:
         month_labels = [
             "Jan",
@@ -2786,8 +2695,7 @@ def render_feed_in_revenue_switcher(
             get_text(
                 texts,
                 "viz_data_missing_feed_in_revenue_switcher",
-                "Monatliche Einspeisedaten nicht verfügbar.",
-            )
+                "Monatliche Einspeisedaten nicht verfügbar.")
         )
         # Simuliere realistische Einspeisedaten
         anlage_kwp_val = analysis_results.get("anlage_kwp", 5.0)
@@ -2841,24 +2749,21 @@ def render_feed_in_revenue_switcher(
         "viz_feed_in_revenue_title_switcher",
         f"Monatliche Einspeisevergütung (Tarif: {
             feed_in_tariff_eur_kwh *
-            100:.2f} ct/kWh)",
-    )
+            100:.2f} ct/kWh)")
     fig = create_universal_2d_chart(
         data=chart_data,
         title=feedin_title,
         chart_key="feed_in_revenue",
         x_label="Monat",
         y_label="Einnahmen (€)",
-        default_chart_type="Säulen",
-    )
+        default_chart_type="Säulen")
 
     if fig:
         with st.expander(feedin_title, expanded=False):
             st.plotly_chart(
                 fig,
                 use_container_width=True,
-                key="analysis_feed_in_revenue_switcher_key_v7_2d",
-            )
+                key="analysis_feed_in_revenue_switcher_key_v7_2d")
         analysis_results["feed_in_revenue_switcher_chart_bytes"] = _export_plotly_fig_to_bytes(
             fig, texts)
     else:
@@ -2868,16 +2773,14 @@ def render_feed_in_revenue_switcher(
 def render_production_vs_consumption_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     """Moderne 2D-Darstellung Verbrauch vs. Produktion mit Diagramm- und Farbwahl"""
 
     # Daten vorbereiten
     month_labels = get_text(
         texts,
         "month_names_short_list",
-        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez",
-    ).split(",")
+        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez").split(",")
     if len(month_labels) != 12:
         month_labels = [
             "Jan",
@@ -2908,8 +2811,7 @@ def render_production_vs_consumption_switcher(
             get_text(
                 texts,
                 "viz_data_missing_prod_cons_switcher",
-                "Monatliche Verbrauchs- oder Produktionsdaten nicht verfügbar.",
-            ))
+                "Monatliche Verbrauchs- oder Produktionsdaten nicht verfügbar."))
 
         # Simuliere realistische Daten
         anlage_kwp_val = analysis_results.get("anlage_kwp", 5.0)
@@ -2998,8 +2900,7 @@ def render_production_vs_consumption_switcher(
             color_scheme = st.selectbox(
                 "Farbschema:",
                 ["Standard", "Grün-Blau", "Rot-Grün", "Warm", "Kalt"],
-                key="prod_vs_cons_colors",
-            )
+                key="prod_vs_cons_colors")
 
     # Farbpaletten für Vergleichsdiagramme
     color_palettes = {
@@ -3020,16 +2921,14 @@ def render_production_vs_consumption_switcher(
                 x=month_labels,
                 y=verbrauch,
                 name="Verbrauch (kWh)",
-                marker_color=colors[0],
-            )
+                marker_color=colors[0])
         )
         fig.add_trace(
             go.Bar(
                 x=month_labels,
                 y=produktion,
                 name="Produktion (kWh)",
-                marker_color=colors[1],
-            )
+                marker_color=colors[1])
         )
     elif chart_type == "Strich":
         fig = go.Figure()
@@ -3039,8 +2938,7 @@ def render_production_vs_consumption_switcher(
                 y=verbrauch,
                 mode="lines+markers",
                 name="Verbrauch (kWh)",
-                line=dict(color=colors[0]),
-            )
+                line=dict(color=colors[0]))
         )
         fig.add_trace(
             go.Scatter(
@@ -3048,8 +2946,7 @@ def render_production_vs_consumption_switcher(
                 y=produktion,
                 mode="lines+markers",
                 name="Produktion (kWh)",
-                line=dict(color=colors[1]),
-            )
+                line=dict(color=colors[1]))
         )
         if chart_type == "Säulen":
             fig = px.bar(
@@ -3058,16 +2955,14 @@ def render_production_vs_consumption_switcher(
                 y=["Verbrauch (kWh)", "Produktion (kWh)"],
                 barmode="group",
                 title="Verbrauch vs. Produktion (Jahr 1)",
-                color_discrete_sequence=colors,
-            )
+                color_discrete_sequence=colors)
         elif chart_type == "Strich":
             fig = px.line(
                 df_comparison,
                 x="Monat",
                 y=["Verbrauch (kWh)", "Produktion (kWh)"],
                 title="Verbrauch vs. Produktion (Jahr 1)",
-                color_discrete_sequence=colors,
-            )
+                color_discrete_sequence=colors)
         else:  # Balken horizontal
             fig = px.bar(
                 df_comparison,
@@ -3076,15 +2971,13 @@ def render_production_vs_consumption_switcher(
                 barmode="group",
                 orientation="h",
                 title="Verbrauch vs. Produktion (Jahr 1)",
-                color_discrete_sequence=colors,
-            )
+                color_discrete_sequence=colors)
 
         fig.update_layout(
             xaxis_title="Monat",
             yaxis_title="Energie (kWh)",
             legend_title="Kategorie",
-            template="plotly_white",
-        )
+            template="plotly_white")
         _apply_custom_style_to_fig(fig, viz_settings, "prod_vs_cons_switcher")
 
         st.plotly_chart(
@@ -3098,8 +2991,7 @@ def render_production_vs_consumption_switcher(
 def render_tariff_cube_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     """Tarifvergleich verschiedener Anbieter (Jahreskosten) als 2D Chart.
 
     Zeigt aktuellen Tarif, berechnete Photovoltaik-Gestehungskosten (LCOE) sowie zwei
@@ -3154,15 +3046,13 @@ def render_tariff_cube_switcher(
         title=title,
         x_label=get_text(texts, "provider_label_switcher", "Anbieter"),
         y_label=get_text(texts, "costs_label_switcher", "Kosten (€)"),
-        chart_key="analysis_tariff_cube_switcher_key_v6_final",
-    )
+        chart_key="analysis_tariff_cube_switcher_key_v6_final")
     _apply_custom_style_to_fig(fig, viz_settings, "tariff_cube_switcher")
     with st.expander(title, expanded=False):
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key="analysis_tariff_cube_switcher_plot_key_v6_final",
-        )
+            key="analysis_tariff_cube_switcher_plot_key_v6_final")
     analysis_results["tariff_cube_switcher_chart_bytes"] = _export_plotly_fig_to_bytes(
         fig, texts)
 
@@ -3179,16 +3069,14 @@ def render_tariff_cube_switcher(
     title = get_text(
         texts,
         "viz_tariff_cube_title_switcher",
-        f"Tarifvergleich bei {jahresverbrauch:.2f} kWh/Jahr",
-    )
+        f"Tarifvergleich bei {jahresverbrauch:.2f} kWh/Jahr")
 
     fig = create_universal_2d_chart(
         chart_data,
         title=title,
         x_label="Anbieter",
         y_label="Gesamtkosten €/Jahr",
-        chart_key="analysis_tariff_cube_switcher_key_v6_final",
-    )
+        chart_key="analysis_tariff_cube_switcher_key_v6_final")
 
     if fig:
         _apply_custom_style_to_fig(fig, viz_settings, "tariff_cube_switcher")
@@ -3206,13 +3094,11 @@ def render_tariff_cube_switcher(
 def render_co2_savings_value_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     co2_title = get_text(
         texts,
         "viz_co2_savings_value_switcher",
-        "CO₂-Ersparnis vs. Monetärer Wert (Simuliert)",
-    )
+        "CO₂-Ersparnis vs. Monetärer Wert (Simuliert)")
 
     # Moderne 2D-Visualisierung statt 3D-Kinderzeichnung
     years_effective = int(analysis_results.get(
@@ -3222,8 +3108,7 @@ def render_co2_savings_value_switcher(
             get_text(
                 texts,
                 "viz_data_invalid_years_co2_switcher_v2",
-                "Ungültige Simulationsdauer für CO2-Diagramm.",
-            )
+                "Ungültige Simulationsdauer für CO2-Diagramm.")
         )
         analysis_results["co2_savings_value_switcher_chart_bytes"] = None
         return
@@ -3238,8 +3123,7 @@ def render_co2_savings_value_switcher(
             get_text(
                 texts,
                 "viz_data_missing_co2_prod_switcher_v2",
-                "CO2: Jährl. Produktionsdaten unvollständig.",
-            )
+                "CO2: Jährl. Produktionsdaten unvollständig.")
         )
         analysis_results["co2_savings_value_switcher_chart_bytes"] = None
         return
@@ -3264,8 +3148,7 @@ def render_co2_savings_value_switcher(
             get_text(
                 texts,
                 "viz_data_nan_inf_co2_switcher_v2",
-                "CO2: Ungültige Werte (NaN/Inf) in Diagrammdaten.",
-            )
+                "CO2: Ungültige Werte (NaN/Inf) in Diagrammdaten.")
         )
         analysis_results["co2_savings_value_switcher_chart_bytes"] = None
         return
@@ -3288,16 +3171,14 @@ def render_co2_savings_value_switcher(
     title = get_text(
         texts,
         "viz_co2_savings_value_title_switcher",
-        "CO₂-Einsparnis und simulierter monetärer Wert über Zeit",
-    )
+        "CO₂-Einsparnis und simulierter monetärer Wert über Zeit")
 
     fig = create_universal_2d_chart(
         chart_data,
         title=title,
         x_label="Jahr",
         y_label="Werte",
-        chart_key="analysis_co2_savings_value_switcher_key_v6_final",
-    )
+        chart_key="analysis_co2_savings_value_switcher_key_v6_final")
     #
 
     if fig:
@@ -3305,8 +3186,7 @@ def render_co2_savings_value_switcher(
             st.plotly_chart(
                 fig,
                 use_container_width=True,
-                key="analysis_co2_savings_value_switcher_plot",
-            )
+                key="analysis_co2_savings_value_switcher_plot")
         analysis_results["co2_savings_value_switcher_chart_bytes"] = _export_plotly_fig_to_bytes(
             fig, texts)
     else:
@@ -3320,16 +3200,14 @@ def render_co2_savings_value_switcher(
         st.metric(
             label="Gesamte CO₂-Einsparung",
             value=f"{total_co2_savings:.2f} Tonnen",
-            help=f"Über {years_effective} Jahre hinweg",
-        )
+            help=f"Über {years_effective} Jahre hinweg")
 
     with col2:
         total_co2_value = sum(wert_co2_eur_per_year)
         st.metric(
             label="Gesamtwert CO₂-Einsparung",
             value=f"{total_co2_value:.2f} €",
-            help="Basierend auf prognostizierter CO₂-Preisentwicklung",
-        )
+            help="Basierend auf prognostizierter CO₂-Preisentwicklung")
 
     with col3:
         avg_annual_co2 = (
@@ -3338,15 +3216,13 @@ def render_co2_savings_value_switcher(
         st.metric(
             label="Durchschnitt pro Jahr",
             value=f"{avg_annual_co2:.2f} Tonnen",
-            help="Durchschnittliche jährliche CO₂-Einsparung",
-        )
+            help="Durchschnittliche jährliche CO₂-Einsparung")
 
 
 def render_extended_calculations_dashboard(
     project_data: dict[str, Any],
     analysis_results: dict[str, Any],
-    texts: dict[str, str],
-):
+    texts: dict[str, str]):
     """Rendert das erweiterte Berechnungs-Dashboard"""
     st.header("Erweiterte Berechnungen & Analysen")
     
@@ -3402,8 +3278,7 @@ def render_extended_calculations_dashboard(
                 "grid_purchase_kwh": max(
                     0,
                     system_data.get("annual_consumption_kwh", 4000)
-                    - system_data.get("self_consumption_kwh", 3000),
-                ),
+                    - system_data.get("self_consumption_kwh", 3000)),
                 "grid_independence_percent": (
                     system_data.get("self_consumption_kwh", 3000)
                     / system_data.get("annual_consumption_kwh", 4000)
@@ -3598,21 +3473,18 @@ def render_extended_calculations_dashboard(
             st.metric(
                 "Basis-Eigenverbrauch",
                 f"{opt_results['base_self_consumption_kwh']:,.2f} kWh",
-                f"{opt_results.get('base_self_consumption_ratio', 75):.2f}%",
-            )
+                f"{opt_results.get('base_self_consumption_ratio', 75):.2f}%")
 
         with col2:
             st.metric(
                 "Optimierter Eigenverbrauch",
                 f"{opt_results['optimized_self_consumption_kwh']:,.2f} kWh",
-                f"+{opt_results['optimization_potential_percent']:.2f}%",
-            )
+                f"+{opt_results['optimization_potential_percent']:.2f}%")
 
         with col3:
             st.metric(
                 "Zusätzliche Einsparungen",
-                f"{opt_results['annual_savings_optimization']:,.2f} €/Jahr",
-            )
+                f"{opt_results['annual_savings_optimization']:,.2f} €/Jahr")
 
         # Visualisierung
         fig = go.Figure()
@@ -3631,22 +3503,19 @@ def render_extended_calculations_dashboard(
                     ]
                 ],
                 textposition="auto",
-                marker_color=["#6B7280", "#10B981"],
-            )
+                marker_color=["#6B7280", "#10B981"])
         )
 
         fig.update_layout(
             title="Eigenverbrauchsoptimierung",
             yaxis_title="Eigenverbrauch (kWh)",
-            showlegend=False,
-        )
+            showlegend=False)
 
         with st.expander("Eigenverbrauchsoptimierung", expanded=False):
             st.plotly_chart(
                 fig,
                 use_container_width=True,
-                key="eigenverbrauch_optimization_chart_unique",
-            )
+                key="eigenverbrauch_optimization_chart_unique")
 
     with tabs[1]:  # Netzanalyse
         st.subheader(" Netzanalyse")
@@ -3666,13 +3535,11 @@ def render_extended_calculations_dashboard(
         with col2:
             st.metric(
                 "Netzunabhängigkeit",
-                f"{grid_results['grid_independence_percent']:.2f}%",
-            )
+                f"{grid_results['grid_independence_percent']:.2f}%")
             st.metric(
                 "Spitzenlast-Reduktion",
                 f"{grid_results['peak_load_reduction_kw']:.2f} kW",
-                f"{grid_results['peak_load_cost_savings']:,.2f} €/Jahr",
-            )
+                f"{grid_results['peak_load_cost_savings']:,.2f} €/Jahr")
 
         # Sankey-Diagramm für Energieflüsse
         fig = go.Figure(
@@ -3689,8 +3556,7 @@ def render_extended_calculations_dashboard(
                             "Netzbezug",
                             "Gesamtverbrauch",
                         ],
-                        color=["#F59E0B", "#10B981", "#3B82F6", "#EF4444", "#6B7280"],
-                    ),
+                        color=["#F59E0B", "#10B981", "#3B82F6", "#EF4444", "#6B7280"]),
                     link=dict(
                         source=[0, 0, 3, 1],
                         target=[1, 2, 4, 4],
@@ -3699,9 +3565,7 @@ def render_extended_calculations_dashboard(
                             grid_results["grid_feed_in_kwh"],
                             grid_results["grid_purchase_kwh"],
                             system_data["self_consumption_kwh"],
-                        ],
-                    ),
-                )
+                        ]))
             ]
         )
 
@@ -3731,8 +3595,7 @@ def render_extended_calculations_dashboard(
                 "Teilweise bewölkt": "#FCD34D",
                 "Bewölkt": "#9CA3AF",
                 "Regnerisch": "#6B7280",
-            },
-        )
+            })
 
         st.plotly_chart(
             fig, use_container_width=True, key="weather_analysis_chart_unique"
@@ -3741,8 +3604,7 @@ def render_extended_calculations_dashboard(
         st.metric(
             "Wetterbereinigte Jahreserzeugung",
             f"{weather_results['weather_adjusted_annual_yield_kwh']:,.2f} kWh",
-            f"{weather_results['weather_impact_percent']:+.2f}%",
-        )
+            f"{weather_results['weather_impact_percent']:+.2f}%")
 
     with tabs[3]:  # Degradation
         st.subheader("Degradationsanalyse")
@@ -3764,16 +3626,14 @@ def render_extended_calculations_dashboard(
                 mode="lines+markers",
                 name="Anlagenleistung",
                 line=dict(color="#EF4444", width=3),
-                marker=dict(size=8),
-            )
+                marker=dict(size=8))
         )
 
         fig.update_layout(
             title="Anlagenleistung über Lebensdauer",
             xaxis_title="Jahre",
             yaxis_title="Leistung (kWp)",
-            showlegend=False,
-        )
+            showlegend=False)
 
         st.plotly_chart(
             fig,
@@ -3794,8 +3654,7 @@ def render_extended_calculations_dashboard(
             st.metric(
                 "Leistung nach 10 Jahren",
                 f"{deg_results['power_year_10_kwp']:.2f} kWp",
-                delta_10,
-            )
+                delta_10)
 
         with col2:
             delta_20 = (
@@ -3806,15 +3665,13 @@ def render_extended_calculations_dashboard(
             st.metric(
                 "Leistung nach 20 Jahren",
                 f"{deg_results['power_year_20_kwp']:.2f} kWp",
-                delta_20,
-            )
+                delta_20)
 
         with col3:
             st.metric(
                 "Gesamtenergieverlust",
                 f"{deg_results['total_energy_loss_kwh']:,.2f} kWh",
-                f"Ø {deg_results['average_performance_ratio'] * 100:.2f}%",
-            )
+                f"Ø {deg_results['average_performance_ratio'] * 100:.2f}%")
 
     with tabs[4]:  # Finanzszenarien
         st.subheader("Finanzszenarien")
@@ -3851,15 +3708,13 @@ def render_extended_calculations_dashboard(
                 y=scenarios_df["NPV"],
                 text=[f"{x:,.2f} €" for x in scenarios_df["NPV"]],
                 textposition="auto",
-                marker_color=["#EF4444", "#3B82F6", "#10B981"],
-            )
+                marker_color=["#EF4444", "#3B82F6", "#10B981"])
         )
 
         fig.update_layout(
             title="Kapitalwert (NPV) nach Szenario",
             yaxis_title="NPV (€)",
-            showlegend=False,
-        )
+            showlegend=False)
 
         st.plotly_chart(fig, use_container_width=True,
                         key="npv_scenario_chart_unique")
@@ -3873,8 +3728,7 @@ def render_extended_calculations_dashboard(
                     "Amortisation (Jahre)": "{:.2f}",
                 }
             ),
-            use_container_width=True,
-        )
+            use_container_width=True)
 
     with tabs[5]:  # Umwelt
         st.subheader("Umweltauswirkungen")
@@ -3915,16 +3769,14 @@ def render_extended_calculations_dashboard(
                 mode="lines",
                 fill="tozeroy",
                 name="CO₂-Einsparungen",
-                line=dict(color="#10B981", width=3),
-            )
+                line=dict(color="#10B981", width=3))
         )
 
         fig.update_layout(
             title="Kumulierte CO₂-Einsparungen",
             xaxis_title="Jahre",
             yaxis_title="CO₂-Einsparungen (Tonnen)",
-            showlegend=False,
-        )
+            showlegend=False)
 
         st.plotly_chart(
             fig,
@@ -3966,8 +3818,7 @@ def render_extended_calculations_dashboard(
                 name="Eigenverbrauch",
                 x=battery_options["Größe"],
                 y=battery_options["Eigenverbrauch (%)"],
-                marker_color="#3B82F6",
-            )
+                marker_color="#3B82F6")
         )
 
         fig.add_trace(
@@ -3975,15 +3826,13 @@ def render_extended_calculations_dashboard(
                 name="Steigerung",
                 x=battery_options["Größe"],
                 y=battery_options["Steigerung (%)"],
-                marker_color="#10B981",
-            )
+                marker_color="#10B981")
         )
 
         fig.update_layout(
             title="Eigenverbrauch mit verschiedenen Batteriegrößen",
             yaxis_title="Prozent (%)",
-            barmode="group",
-        )
+            barmode="group")
 
         st.plotly_chart(
             fig,
@@ -4015,14 +3864,12 @@ def render_extended_calculations_dashboard(
 def render_co2_savings_value_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     st.subheader(
         get_text(
             texts,
             "viz_co2_savings_value_switcher",
-            "CO₂-Ersparnis vs. Monetärer Wert (Simuliert)",
-        )
+            "CO₂-Ersparnis vs. Monetärer Wert (Simuliert)")
     )
 
     # Moderne 2D-Visualisierung statt 3D-Kinderzeichnung
@@ -4034,8 +3881,7 @@ def render_co2_savings_value_switcher(
             get_text(
                 texts,
                 "viz_data_invalid_years_co2_switcher_v2",
-                "Ungültige Simulationsdauer für CO2-Diagramm.",
-            )
+                "Ungültige Simulationsdauer für CO2-Diagramm.")
         )
         analysis_results["co2_savings_value_switcher_chart_bytes"] = None
         return
@@ -4050,8 +3896,7 @@ def render_co2_savings_value_switcher(
             get_text(
                 texts,
                 "viz_data_missing_co2_prod_switcher_v2",
-                "CO2: Jährl. Produktionsdaten unvollständig.",
-            )
+                "CO2: Jährl. Produktionsdaten unvollständig.")
         )
         analysis_results["co2_savings_value_switcher_chart_bytes"] = None
         return
@@ -4076,8 +3921,7 @@ def render_co2_savings_value_switcher(
             get_text(
                 texts,
                 "viz_data_nan_inf_co2_switcher_v2",
-                "CO2: Ungültige Werte (NaN/Inf) in Diagrammdaten.",
-            )
+                "CO2: Ungültige Werte (NaN/Inf) in Diagrammdaten.")
         )
         analysis_results["co2_savings_value_switcher_chart_bytes"] = None
         return
@@ -4094,24 +3938,21 @@ def render_co2_savings_value_switcher(
     title = get_text(
         texts,
         "viz_co2_savings_value_title_switcher",
-        "CO₂-Einsparung und monetärer Wert über Zeit",
-    )
+        "CO₂-Einsparung und monetärer Wert über Zeit")
 
     fig = create_universal_2d_chart(
         chart_data,
         title=title,
         x_label="Jahr",
         y_label="Werte",
-        chart_key="co2_savings_modern_2d_chart",
-    )
+        chart_key="co2_savings_modern_2d_chart")
 
     if fig:
         with st.expander(title, expanded=False):
             st.plotly_chart(
                 fig,
                 use_container_width=True,
-                key="analysis_co2_savings_value_switcher_key_v6_final",
-            )
+                key="analysis_co2_savings_value_switcher_key_v6_final")
         analysis_results["co2_savings_value_switcher_chart_bytes"] = (
             _export_plotly_fig_to_bytes(fig, texts)
         )
@@ -4125,15 +3966,13 @@ def render_co2_savings_value_switcher(
         st.metric(
             label="Gesamte CO₂-Einsparung",
             value=f"{total_co2_savings:.2f} Tonnen",
-            help=f"Über {years_effective} Jahre hinweg",
-        )
+            help=f"Über {years_effective} Jahre hinweg")
     with col2:
         total_co2_value = sum(wert_co2_eur_per_year)
         st.metric(
             label="Gesamtwert CO₂-Einsparung",
             value=f"{total_co2_value:.2f} €",
-            help="Basierend auf prognostizierter CO₂-Preisentwicklung",
-        )
+            help="Basierend auf prognostizierter CO₂-Preisentwicklung")
     with col3:
         avg_annual_co2 = (
             total_co2_savings / years_effective if years_effective > 0 else 0
@@ -4141,21 +3980,18 @@ def render_co2_savings_value_switcher(
         st.metric(
             label="Durchschnitt pro Jahr",
             value=f"{avg_annual_co2:.2f} Tonnen",
-            help="Durchschnittliche jährliche CO₂-Einsparung",
-        )
+            help="Durchschnittliche jährliche CO₂-Einsparung")
 
 
 def render_investment_value_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     st.subheader(
         get_text(
             texts,
             "viz_investment_value_subheader_switcher",
-            "Investitionsnutzwert – Wirkung von Maßnahmen (Illustrativ)",
-        )
+            "Investitionsnutzwert – Wirkung von Maßnahmen (Illustrativ)")
     )
     base_investment_raw = get_final_investment_amount(analysis_results)
     annual_benefits_sim_raw = analysis_results.get("annual_benefits_sim")
@@ -4251,16 +4087,14 @@ def render_investment_value_switcher(
     title = get_text(
         texts,
         "viz_investment_value_title_switcher",
-        "Illustrativer Investitionsnutzwert",
-    )
+        "Illustrativer Investitionsnutzwert")
 
     fig = create_universal_2d_chart(
         chart_data,
         title=title,
         x_label="Maßnahme",
         y_label="Gesamtrendite (%)",
-        chart_key="investment_value_modern_2d_chart",
-    )
+        chart_key="investment_value_modern_2d_chart")
     _apply_custom_style_to_fig(fig, viz_settings, "investment_value_switcher")
     with st.expander(title, expanded=False):
         st.plotly_chart(
@@ -4274,14 +4108,12 @@ def render_investment_value_switcher(
 def render_storage_effect_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     st.subheader(
         get_text(
             texts,
             "viz_storage_effect_subheader_switcher",
-            "Speicherwirkung – Kapazität vs. Nutzen (Illustrativ)",
-        )
+            "Speicherwirkung – Kapazität vs. Nutzen (Illustrativ)")
     )
     current_storage_cap_kwh_raw = analysis_results.get(
         "selected_storage_storage_power_kw"
@@ -4367,8 +4199,7 @@ def render_storage_effect_switcher(
         title=title,
         x_label="Speicherkapazität (kWh)",
         y_label="Jährl. Einsparpotenzial (€)",
-        chart_key="storage_effect_modern_2d_chart",
-    )
+        chart_key="storage_effect_modern_2d_chart")
     _apply_custom_style_to_fig(fig, viz_settings, "storage_effect_switcher")
     with st.expander(title, expanded=False):
         st.plotly_chart(
@@ -4382,14 +4213,12 @@ def render_storage_effect_switcher(
 def render_selfuse_stack_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     st.subheader(
         get_text(
             texts,
             "viz_selfuse_stack_subheader_switcher",
-            "Eigenverbrauch vs. Einspeisung - Jährlicher Vergleich",
-        )
+            "Eigenverbrauch vs. Einspeisung - Jährlicher Vergleich")
     )
     years_effective = int(analysis_results.get(
         "simulation_period_years_effective", 0))
@@ -4398,8 +4227,7 @@ def render_selfuse_stack_switcher(
             get_text(
                 texts,
                 "viz_data_insufficient_selfuse_stack",
-                "Simulationsdauer 0, Eigenverbrauchs-Stack nicht anzeigbar.",
-            )
+                "Simulationsdauer 0, Eigenverbrauchs-Stack nicht anzeigbar.")
         )
         analysis_results["selfuse_stack_switcher_chart_bytes"] = None
         return
@@ -4417,8 +4245,7 @@ def render_selfuse_stack_switcher(
             get_text(
                 texts,
                 "viz_data_insufficient_selfuse_stack_prod",
-                "Daten für 'annual_productions_sim' unvollständig.",
-            )
+                "Daten für 'annual_productions_sim' unvollständig.")
         )
         analysis_results["selfuse_stack_switcher_chart_bytes"] = None
         return
@@ -4469,24 +4296,21 @@ def render_selfuse_stack_switcher(
     title = get_text(
         texts,
         "viz_selfuse_stack_title_switcher",
-        "Jährlicher Eigenverbrauch vs. Einspeisung (Simuliert)",
-    )
+        "Jährlicher Eigenverbrauch vs. Einspeisung (Simuliert)")
 
     fig = create_multi_series_2d_chart(
         chart_data,
         title=title,
         x_label="Simulationsjahr",
         y_label="Energie (kWh)",
-        chart_key="analysis_selfuse_stack_switcher_key_v6_final",
-    )
+        chart_key="analysis_selfuse_stack_switcher_key_v6_final")
 
     _apply_custom_style_to_fig(fig, viz_settings, "selfuse_stack_switcher")
     with st.expander(title, expanded=False):
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key="analysis_selfuse_stack_switcher_key_v6_final",
-        )
+            key="analysis_selfuse_stack_switcher_key_v6_final")
     analysis_results["selfuse_stack_switcher_chart_bytes"] = _export_plotly_fig_to_bytes(
         fig, texts)
 
@@ -4494,13 +4318,11 @@ def render_selfuse_stack_switcher(
 def render_cost_growth_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     cost_growth_subheader = get_text(
         texts,
         "viz_cost_growth_subheader_switcher",
-        "Stromkostensteigerung - 2D Szenarien",
-    )
+        "Stromkostensteigerung - 2D Szenarien")
     years_effective = int(analysis_results.get(
         "simulation_period_years_effective", 0))
     if years_effective <= 0:
@@ -4550,24 +4372,21 @@ def render_cost_growth_switcher(
     title = get_text(
         texts,
         "viz_cost_growth_title_switcher",
-        "Entwicklung Strompreis pro kWh (Szenarien)",
-    )
+        "Entwicklung Strompreis pro kWh (Szenarien)")
 
     fig = create_multi_series_2d_chart(
         chart_data,
         title=title,
         x_label="Simulationsjahr",
         y_label="Strompreis (€/kWh)",
-        chart_key="analysis_cost_growth_switcher_key_v6_final",
-    )
+        chart_key="analysis_cost_growth_switcher_key_v6_final")
 
     _apply_custom_style_to_fig(fig, viz_settings, "cost_growth_switcher")
     with st.expander(cost_growth_subheader, expanded=False):
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key="analysis_cost_growth_switcher_key_v6_final",
-        )
+            key="analysis_cost_growth_switcher_key_v6_final")
     analysis_results["cost_growth_switcher_chart_bytes"] = _export_plotly_fig_to_bytes(
         fig, texts)
 
@@ -4575,18 +4394,15 @@ def render_cost_growth_switcher(
 def render_selfuse_ratio_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     selfuse_ratio_subheader = get_text(
         texts,
         "viz_selfuse_ratio_subheader_switcher",
-        "Eigenverbrauchsgrad – Monatliche Bubble View (Jahr 1)",
-    )
+        "Eigenverbrauchsgrad – Monatliche Bubble View (Jahr 1)")
     month_labels = get_text(
         texts,
         "month_names_short_list",
-        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez",
-    ).split(",")
+        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez").split(",")
     if len(month_labels) != 12:
         month_labels = [
             "Jan",
@@ -4619,8 +4435,7 @@ def render_selfuse_ratio_switcher(
             get_text(
                 texts,
                 "viz_data_insufficient_selfuse_ratio",
-                "Daten für monatl. Eigenverbrauchsgrad unvollständig.",
-            )
+                "Daten für monatl. Eigenverbrauchsgrad unvollständig.")
         )
         analysis_results["selfuse_ratio_switcher_chart_bytes"] = None
         return
@@ -4638,23 +4453,20 @@ def render_selfuse_ratio_switcher(
     title = get_text(
         texts,
         "viz_selfuse_ratio_title_switcher",
-        "Monatlicher Eigenversorgungsgrad (Autarkiegrad des Monats) - Jahr 1",
-    )
+        "Monatlicher Eigenversorgungsgrad (Autarkiegrad des Monats) - Jahr 1")
 
     fig = create_universal_2d_chart(
         chart_data,
         title=title,
         x_label="Monat",
         y_label="Eigenversorgungsgrad (%)",
-        chart_key="selfuse_ratio_modern_2d_chart",
-    )
+        chart_key="selfuse_ratio_modern_2d_chart")
     _apply_custom_style_to_fig(fig, viz_settings, "selfuse_ratio_switcher")
     with st.expander(selfuse_ratio_subheader, expanded=False):
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key="analysis_selfuse_ratio_switcher_key_v6_final",
-        )
+            key="analysis_selfuse_ratio_switcher_key_v6_final")
     analysis_results["selfuse_ratio_switcher_chart_bytes"] = (
         _export_plotly_fig_to_bytes(fig, texts)
     )
@@ -4663,14 +4475,12 @@ def render_selfuse_ratio_switcher(
 def render_roi_comparison_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     st.subheader(
         get_text(
             texts,
             "viz_roi_comparison_subheader_switcher",
-            "ROI-Vergleich – Investitionen in 3D (Illustrativ)",
-        )
+            "ROI-Vergleich – Investitionen in 3D (Illustrativ)")
     )
     curr_proj_name = get_text(
         texts, "current_project_label_switcher", "Aktuelles Projekt"
@@ -4718,23 +4528,20 @@ def render_roi_comparison_switcher(
     title = get_text(
         texts,
         "viz_roi_comparison_title_switcher",
-        "ROI-Vergleich – Investitionen (Illustrativ)",
-    )
+        "ROI-Vergleich – Investitionen (Illustrativ)")
 
     fig = create_universal_2d_chart(
         chart_data,
         title=title,
         x_label="Projekt",
         y_label="Jährlicher ROI (%)",
-        chart_key="roi_comparison_modern_2d_chart",
-    )
+        chart_key="roi_comparison_modern_2d_chart")
 
     with st.expander(title, expanded=False):
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key="analysis_roi_comparison_switcher_key_v6_final",
-        )
+            key="analysis_roi_comparison_switcher_key_v6_final")
     analysis_results["roi_comparison_switcher_chart_bytes"] = (
         _export_plotly_fig_to_bytes(fig, texts)
     )
@@ -4743,13 +4550,11 @@ def render_roi_comparison_switcher(
 def render_scenario_comparison_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     scenario_comp_subheader = get_text(
         texts,
         "viz_scenario_comp_subheader_switcher",
-        "Szenarienvergleich – Invest/Ertrag/Bonus (Illustrativ)",
-    )
+        "Szenarienvergleich – Invest/Ertrag/Bonus (Illustrativ)")
     base_invest_raw = get_final_investment_amount(analysis_results)
     benefits_raw = analysis_results.get("annual_benefits_sim", [])
     bonus_raw = analysis_results.get("one_time_bonus_eur")
@@ -4811,8 +4616,7 @@ def render_scenario_comparison_switcher(
         title=title,
         x_label="Szenario",
         y_label="Betrag (€)",
-        chart_key="scenario_comparison_modern_2d_chart",
-    )
+        chart_key="scenario_comparison_modern_2d_chart")
 
     _apply_custom_style_to_fig(
         fig, viz_settings, "scenario_comparison_switcher")
@@ -4820,8 +4624,7 @@ def render_scenario_comparison_switcher(
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key="analysis_scenario_comp_switcher_key_v6_final",
-        )
+            key="analysis_scenario_comp_switcher_key_v6_final")
     analysis_results["scenario_comparison_switcher_chart_bytes"] = (
         _export_plotly_fig_to_bytes(fig, texts)
     )
@@ -4830,18 +4633,15 @@ def render_scenario_comparison_switcher(
 def render_tariff_comparison_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     tariff_comp_subheader = get_text(
         texts,
         "viz_tariff_comp_subheader_switcher",
-        "Vorher/Nachher – Monatliche Stromkosten (Jahr 1)",
-    )
+        "Vorher/Nachher – Monatliche Stromkosten (Jahr 1)")
     month_labels = get_text(
         texts,
         "month_names_short_list",
-        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez",
-    ).split(",")
+        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez").split(",")
     if len(month_labels) != 12:
         month_labels = [
             "Jan",
@@ -4878,8 +4678,7 @@ def render_tariff_comparison_switcher(
             get_text(
                 texts,
                 "viz_data_insufficient_tariff_comp",
-                "Daten für Vorher/Nachher-Stromkosten unvollständig.",
-            )
+                "Daten für Vorher/Nachher-Stromkosten unvollständig.")
         )
         analysis_results["tariff_comparison_switcher_chart_bytes"] = None
         return
@@ -4903,24 +4702,21 @@ def render_tariff_comparison_switcher(
     title = get_text(
         texts,
         "viz_tariff_comp_title_switcher",
-        "Monatliche Stromkosten: Vorher vs. Nachher (Jahr 1)",
-    )
+        "Monatliche Stromkosten: Vorher vs. Nachher (Jahr 1)")
 
     fig = create_multi_series_2d_chart(
         chart_data,
         title=title,
         x_label="Monat",
         y_label="Stromkosten (€)",
-        chart_key="tariff_comparison_modern_2d_chart",
-    )
+        chart_key="tariff_comparison_modern_2d_chart")
 
     _apply_custom_style_to_fig(fig, viz_settings, "tariff_comparison_switcher")
     with st.expander(tariff_comp_subheader, expanded=False):
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key="analysis_tariff_comp_switcher_key_v6_final",
-        )
+            key="analysis_tariff_comp_switcher_key_v6_final")
     analysis_results["tariff_comparison_switcher_chart_bytes"] = (
         _export_plotly_fig_to_bytes(fig, texts)
     )
@@ -4929,13 +4725,11 @@ def render_tariff_comparison_switcher(
 def render_income_projection_switcher(
     analysis_results: dict[str, Any],
     texts: dict[str, str],
-    viz_settings: dict[str, Any],
-):
+    viz_settings: dict[str, Any]):
     income_proj_subheader = get_text(
         texts,
         "viz_income_proj_subheader_switcher",
-        " Einnahmen/Ersparnisprognose – Dynamischer Verlauf",
-    )
+        " Einnahmen/Ersparnisprognose – Dynamischer Verlauf")
     years_effective = int(analysis_results.get(
         "simulation_period_years_effective", 0))
     if years_effective <= 0:
@@ -4958,8 +4752,7 @@ def render_income_projection_switcher(
             get_text(
                 texts,
                 "viz_data_insufficient_income_proj_benefits",
-                "Daten für 'annual_benefits_sim' unvollständig.",
-            )
+                "Daten für 'annual_benefits_sim' unvollständig.")
         )
         analysis_results["income_projection_switcher_chart_bytes"] = None
         return
@@ -4981,23 +4774,20 @@ def render_income_projection_switcher(
     title = get_text(
         texts,
         "viz_income_proj_title_switcher",
-        "Prognose: Kumulierte Einnahmen & Ersparnisse",
-    )
+        "Prognose: Kumulierte Einnahmen & Ersparnisse")
 
     fig = create_universal_2d_chart(
         chart_data,
         title=title,
         x_label="Simulationsjahr",
         y_label="Kumulierte Vorteile (€)",
-        chart_key="income_projection_modern_2d_chart",
-    )
+        chart_key="income_projection_modern_2d_chart")
     _apply_custom_style_to_fig(fig, viz_settings, "income_projection_switcher")
     with st.expander(income_proj_subheader, expanded=False):
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key="analysis_income_proj_switcher_key_v6_final",
-        )
+            key="analysis_income_proj_switcher_key_v6_final")
     analysis_results["income_projection_switcher_chart_bytes"] = (
         _export_plotly_fig_to_bytes(fig, texts)
     )
@@ -5007,8 +4797,7 @@ def _create_monthly_production_consumption_chart(
     analysis_results_local: dict,
     texts_local: dict,
     viz_settings: dict[str, Any],
-    chart_key_prefix: str,
-) -> go.Figure | None:
+    chart_key_prefix: str) -> go.Figure | None:
     # Sichere Behandlung von viz_settings
     if viz_settings is None:
         viz_settings = {}
@@ -5031,8 +4820,7 @@ def _create_monthly_production_consumption_chart(
     month_labels_chart = get_text(
         texts_local,
         "month_names_short_list_chart",
-        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez",
-    ).split(",")
+        "Jan,Feb,Mrz,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez").split(",")
     if len(month_labels_chart) != 12:
         month_labels_chart = [
             "Jan",
@@ -5069,12 +4857,10 @@ def _create_monthly_production_consumption_chart(
     if is_manual_color:
         primary = st.session_state.get(
             f"{chart_key_prefix}_primary_color",
-            _safe_viz_get(viz_settings, "primary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "primary_chart_color"))
         secondary = st.session_state.get(
             f"{chart_key_prefix}_secondary_color",
-            _safe_viz_get(viz_settings, "secondary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "secondary_chart_color"))
         dynamic_color_list = (
             [primary, secondary]
             if primary and secondary
@@ -5083,8 +4869,7 @@ def _create_monthly_production_consumption_chart(
     else:
         palette_name = st.session_state.get(
             f"{chart_key_prefix}_color_palette",
-            _safe_viz_get(viz_settings, "default_color_palette"),
-        )
+            _safe_viz_get(viz_settings, "default_color_palette"))
         if palette_name != "Plotly":
             try:
                 dynamic_color_list = getattr(
@@ -5112,8 +4897,7 @@ def _create_monthly_production_consumption_chart(
                 name=get_text(
                     texts_local,
                     "pv_production_chart_label",
-                    "Photovoltaik Produktion"),
-            ))
+                    "Photovoltaik Produktion")))
         fig.add_trace(
             go.Scatter(
                 x=df_monthly["Monat"],
@@ -5122,8 +4906,7 @@ def _create_monthly_production_consumption_chart(
                 name=get_text(
                     texts_local,
                     "consumption_chart_label",
-                    "Verbrauch"),
-            ))
+                    "Verbrauch")))
     elif selected_chart_type == "bar":
         # Gruppierte Säulen/Balken für Verbrauch vs. Produktion
         fig = px.bar(
@@ -5134,10 +4917,8 @@ def _create_monthly_production_consumption_chart(
             title=get_text(
                 texts_local,
                 "chart_title_monthly_comparison",
-                "Monatlicher Vergleich: Produktion vs. Verbrauch (Jahr 1)",
-            ),
-            labels={"Monat": get_text(texts_local, "month_axis_label_chart", "Monat")},
-        )
+                "Monatlicher Vergleich: Produktion vs. Verbrauch (Jahr 1)"),
+            labels={"Monat": get_text(texts_local, "month_axis_label_chart", "Monat")})
     elif selected_chart_type == "area":
         fig = go.Figure()
         fig.add_trace(
@@ -5149,8 +4930,7 @@ def _create_monthly_production_consumption_chart(
                 name=get_text(
                     texts_local,
                     "photovoltaik_production_chart_label",
-                    "Photovoltaik Produktion"),
-            ))
+                    "Photovoltaik Produktion")))
         fig.add_trace(
             go.Scatter(
                 x=df_monthly["Monat"],
@@ -5160,14 +4940,12 @@ def _create_monthly_production_consumption_chart(
                 name=get_text(
                     texts_local,
                     "consumption_chart_label",
-                    "Verbrauch"),
-            ))
+                    "Verbrauch")))
         fig.update_layout(
             title=get_text(
                 texts_local,
                 "chart_title_monthly_comparison",
-                "Monatlicher Vergleich: Produktion vs. Verbrauch (Jahr 1)",
-            ),
+                "Monatlicher Vergleich: Produktion vs. Verbrauch (Jahr 1)"),
             xaxis_title=get_text(
                 texts_local,
                 "month_axis_label_chart",
@@ -5179,8 +4957,7 @@ def _create_monthly_production_consumption_chart(
             legend_title_text=get_text(
                 texts_local,
                 "legend_title_monthly_chart",
-                "Legende"),
-        )
+                "Legende"))
     # Modernes Theme + Custom-Styles anwenden
     _apply_shadcn_like_theme(fig)
     _apply_custom_style_to_fig(
@@ -5195,8 +4972,7 @@ def _create_electricity_cost_projection_chart(
     analysis_results_local: dict,
     texts_local: dict,
     viz_settings: dict[str, Any],
-    chart_key_prefix: str,
-) -> go.Figure | None:
+    chart_key_prefix: str) -> go.Figure | None:
     # Sichere Behandlung von viz_settings
     if viz_settings is None:
         viz_settings = {}
@@ -5233,15 +5009,13 @@ def _create_electricity_cost_projection_chart(
             get_text(
                 texts_local,
                 "projected_annual_cost_label",
-                "Jährliche Stromkosten ohne Photovoltaik (€)",
-            ): projected_costs,
+                "Jährliche Stromkosten ohne Photovoltaik (€)"): projected_costs,
         }
     )
     title_text_proj = get_text(
         texts_local,
         "chart_title_cost_projection_with_increase",
-        "Stromkosten-Hochrechnung ohne Photovoltaik (mit {steigerung}% p.a. Steigerung)",
-    ).format(
+        "Stromkosten-Hochrechnung ohne Photovoltaik (mit {steigerung}% p.a. Steigerung)").format(
         steigerung=f"{
             price_increase_proj:.2f}")
 
@@ -5255,14 +5029,12 @@ def _create_electricity_cost_projection_chart(
     if is_manual_color:
         primary = st.session_state.get(
             f"{chart_key_prefix}_primary_color",
-            _safe_viz_get(viz_settings, "primary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "primary_chart_color"))
         dynamic_color_list = [primary] if primary else None
     else:
         palette_name = st.session_state.get(
             f"{chart_key_prefix}_color_palette",
-            _safe_viz_get(viz_settings, "default_color_palette"),
-        )
+            _safe_viz_get(viz_settings, "default_color_palette"))
         if palette_name != "Plotly":
             try:
                 dynamic_color_list = getattr(
@@ -5277,11 +5049,9 @@ def _create_electricity_cost_projection_chart(
             y=get_text(
                 texts_local,
                 "projected_annual_cost_label",
-                "Jährliche Stromkosten ohne Photovoltaik (€)",
-            ),
+                "Jährliche Stromkosten ohne Photovoltaik (€)"),
             title=title_text_proj,
-            markers=True,
-        )
+            markers=True)
     elif selected_chart_type == "bar":
         fig = px.bar(
             df_proj,
@@ -5289,11 +5059,9 @@ def _create_electricity_cost_projection_chart(
             y=get_text(
                 texts_local,
                 "projected_annual_cost_label",
-                "Jährliche Stromkosten ohne Photovoltaik (€)",
-            ),
+                "Jährliche Stromkosten ohne Photovoltaik (€)"),
             title=title_text_proj,
-            text_auto=True,
-        )
+            text_auto=True)
     else:  # Fallback zu Linie
         fig = px.line(
             df_proj,
@@ -5301,11 +5069,9 @@ def _create_electricity_cost_projection_chart(
             y=get_text(
                 texts_local,
                 "projected_annual_cost_label",
-                "Jährliche Stromkosten ohne Photovoltaik (€)",
-            ),
+                "Jährliche Stromkosten ohne Photovoltaik (€)"),
             title=title_text_proj,
-            markers=True,
-        )
+            markers=True)
 
     fig.update_yaxes(rangemode="tozero")
     _apply_custom_style_to_fig(
@@ -5320,8 +5086,7 @@ def _create_cumulative_cashflow_chart(
     analysis_results_local: dict,
     texts_local: dict,
     viz_settings: dict[str, Any],
-    chart_key_prefix: str,
-) -> go.Figure | None:
+    chart_key_prefix: str) -> go.Figure | None:
     # Sichere Behandlung von viz_settings
     if viz_settings is None:
         viz_settings = {}
@@ -5357,14 +5122,12 @@ def _create_cumulative_cashflow_chart(
     if is_manual_color:
         primary = st.session_state.get(
             f"{chart_key_prefix}_primary_color",
-            _safe_viz_get(viz_settings, "primary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "primary_chart_color"))
         dynamic_color_list = [primary] if primary else None
     else:
         palette_name = st.session_state.get(
             f"{chart_key_prefix}_color_palette",
-            _safe_viz_get(viz_settings, "default_color_palette"),
-        )
+            _safe_viz_get(viz_settings, "default_color_palette"))
         if palette_name != "Plotly":
             try:
                 dynamic_color_list = getattr(
@@ -5383,10 +5146,8 @@ def _create_cumulative_cashflow_chart(
             title=get_text(
                 texts_local,
                 "chart_title_cumulative_cashflow",
-                "Kumulierter Cashflow über die Laufzeit (2D)",
-            ),
-            markers=True,
-        )
+                "Kumulierter Cashflow über die Laufzeit (2D)"),
+            markers=True)
     elif selected_chart_type == "line":
         fig = px.line(
             df_cf,
@@ -5398,10 +5159,8 @@ def _create_cumulative_cashflow_chart(
             title=get_text(
                 texts_local,
                 "chart_title_cumulative_cashflow",
-                "Kumulierter Cashflow über die Laufzeit (2D)",
-            ),
-            markers=True,
-        )
+                "Kumulierter Cashflow über die Laufzeit (2D)"),
+            markers=True)
     elif selected_chart_type == "bar":
         fig = px.bar(
             df_cf,
@@ -5413,10 +5172,8 @@ def _create_cumulative_cashflow_chart(
             title=get_text(
                 texts_local,
                 "chart_title_cumulative_cashflow",
-                "Kumulierter Cashflow über die Laufzeit (2D)",
-            ),
-            text_auto=True,
-        )
+                "Kumulierter Cashflow über die Laufzeit (2D)"),
+            text_auto=True)
     else:  # Fallback
         fig = px.area(
             df_cf,
@@ -5428,10 +5185,8 @@ def _create_cumulative_cashflow_chart(
             title=get_text(
                 texts_local,
                 "chart_title_cumulative_cashflow",
-                "Kumulierter Cashflow über die Laufzeit (2D)",
-            ),
-            markers=True,
-        )
+                "Kumulierter Cashflow über die Laufzeit (2D)"),
+            markers=True)
 
     fig.add_hline(y=0, line_dash="dash", line_color="red")
     fig.update_yaxes(rangemode="normal")
@@ -5439,8 +5194,7 @@ def _create_cumulative_cashflow_chart(
         fig,
         viz_settings,
         "cumulative_cashflow_chart",
-        dynamic_colors=dynamic_color_list,
-    )
+        dynamic_colors=dynamic_color_list)
     return fig
 
 
@@ -5448,14 +5202,12 @@ def _render_consumption_coverage_pie(
     analysis_results_local: dict,
     texts_local: dict,
     viz_settings: dict[str, Any],
-    chart_key_prefix: str,
-) -> None:
+    chart_key_prefix: str) -> None:
     st.subheader(
         get_text(
             texts_local,
             "self_consumption_grid_header",
-            "Eigenverbrauch & Netzbezug (Jahr 1)",
-        )
+            "Eigenverbrauch & Netzbezug (Jahr 1)")
     )
     # Eigene Vier-Typ-Auswahl (Säulen, Balken, Kreis, Donut)
 
@@ -5479,8 +5231,7 @@ def _render_consumption_coverage_pie(
             get_text(
                 texts_local,
                 "no_data_for_consumption_pie_chart",
-                "Daten für Verbrauchsdeckungsdiagramm nicht verfügbar.",
-            )
+                "Daten für Verbrauchsdeckungsdiagramm nicht verfügbar.")
         )
         analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = None
         return
@@ -5509,12 +5260,10 @@ def _render_consumption_coverage_pie(
     if is_manual_color:
         primary = st.session_state.get(
             f"{chart_key_prefix}_primary_color",
-            _safe_viz_get(viz_settings, "primary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "primary_chart_color"))
         secondary = st.session_state.get(
             f"{chart_key_prefix}_secondary_color",
-            _safe_viz_get(viz_settings, "secondary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "secondary_chart_color"))
         dynamic_color_list = (
             [primary, secondary]
             if primary and secondary
@@ -5523,8 +5272,7 @@ def _render_consumption_coverage_pie(
     else:
         palette_name = st.session_state.get(
             f"{chart_key_prefix}_color_palette",
-            _safe_viz_get(viz_settings, "default_color_palette"),
-        )
+            _safe_viz_get(viz_settings, "default_color_palette"))
         if palette_name != "Plotly":
             try:
                 dynamic_color_list = getattr(
@@ -5536,14 +5284,12 @@ def _render_consumption_coverage_pie(
             viz_settings, "consumption_coverage_chart", {}
         ).get(
             "color_self_supply",
-            _safe_viz_get(viz_settings, "primary_chart_color", "green"),
-        )
+            _safe_viz_get(viz_settings, "primary_chart_color", "green"))
         default_color_2 = _safe_viz_get(
             viz_settings, "consumption_coverage_chart", {}
         ).get(
             "color_grid_draw",
-            _safe_viz_get(viz_settings, "secondary_chart_color", "red"),
-        )
+            _safe_viz_get(viz_settings, "secondary_chart_color", "red"))
         dynamic_color_list = [default_color_1, default_color_2]
 
     if total_cons > 0:
@@ -5571,8 +5317,7 @@ def _render_consumption_coverage_pie(
                 get_text(
                     texts_local,
                     "no_data_for_consumption_pie_chart_filtered",
-                    "Keine signifikanten Anteile für Verbrauchsdeckungsdiagramm.",
-                ))
+                    "Keine signifikanten Anteile für Verbrauchsdeckungsdiagramm."))
             analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = None
             return
         labels, values = zip(*filtered, strict=False)
@@ -5580,22 +5325,19 @@ def _render_consumption_coverage_pie(
         title = get_text(
             texts_local,
             "pie_chart_consumption_coverage_title",
-            "Deckung Gesamtverbrauch",
-        )
+            "Deckung Gesamtverbrauch")
         fig = create_four_type_chart(
             chart_data,
             title=title,
             chart_key=f"{chart_key_prefix}_four",
             x_label="Kategorie",
-            y_label="Anteil (%)",
-        )
+            y_label="Anteil (%)")
         _apply_custom_style_to_fig(
             fig, viz_settings, "consumption_coverage_chart")
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"{chart_key_prefix}_four_type_chart_final",
-        )
+            key=f"{chart_key_prefix}_four_type_chart_final")
         analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = _export_plotly_fig_to_bytes(
             fig, texts_local)
     else:
@@ -5603,8 +5345,7 @@ def _render_consumption_coverage_pie(
             get_text(
                 texts_local,
                 "no_data_for_consumption_pie_chart",
-                "Keine Daten für Verbrauchsdeckungsdiagramm (Gesamtverbrauch ist 0).",
-            ))
+                "Keine Daten für Verbrauchsdeckungsdiagramm (Gesamtverbrauch ist 0)."))
         analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = None
 
 
@@ -5612,8 +5353,7 @@ def _render_pv_usage_pie(
     analysis_results_local: dict,
     texts_local: dict,
     viz_settings: dict[str, Any],
-    chart_key_prefix: str,
-) -> None:
+    chart_key_prefix: str) -> None:
     st.subheader(
         get_text(
             texts_local,
@@ -5646,8 +5386,7 @@ def _render_pv_usage_pie(
             get_text(
                 texts_local,
                 "no_data_for_pv_usage_pie_chart",
-                "Daten für Photovoltaik-Nutzungsdiagramm nicht verfügbar.",
-            )
+                "Daten für Photovoltaik-Nutzungsdiagramm nicht verfügbar.")
         )
         analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = None
         return
@@ -5682,20 +5421,17 @@ def _render_pv_usage_pie(
     if is_manual_color:
         c1 = st.session_state.get(
             f"{chart_key_prefix}_primary_color",
-            _safe_viz_get(viz_settings, "primary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "primary_chart_color"))
         c2 = st.session_state.get(
             f"{chart_key_prefix}_secondary_color",
-            _safe_viz_get(viz_settings, "secondary_chart_color"),
-        )
+            _safe_viz_get(viz_settings, "secondary_chart_color"))
         c3 = st.session_state.get(
             f"{chart_key_prefix}_tertiary_color", "#cccccc")
         dynamic_color_list = [color for color in [c1, c2, c3] if color]
     else:
         palette_name = st.session_state.get(
             f"{chart_key_prefix}_color_palette",
-            _safe_viz_get(viz_settings, "default_color_palette"),
-        )
+            _safe_viz_get(viz_settings, "default_color_palette"))
         if palette_name != "Plotly":
             try:
                 dynamic_color_list = getattr(
@@ -5707,11 +5443,11 @@ def _render_pv_usage_pie(
         default_color_direct = _safe_viz_get(
             viz_settings, "pv_usage_chart", {}).get(
             "color_direct_use", _safe_viz_get(
-                viz_settings, "primary_chart_color", "blue"), )
+                viz_settings, "primary_chart_color", "blue"))
         default_color_storage = _safe_viz_get(
             viz_settings, "pv_usage_chart", {}).get(
             "color_storage_use", _safe_viz_get(
-                viz_settings, "secondary_chart_color", "orange"), )
+                viz_settings, "secondary_chart_color", "orange"))
         default_color_feed_in = _safe_viz_get(
             viz_settings, "pv_usage_chart", {}).get(
             "color_feed_in", "#dddddd")
@@ -5747,8 +5483,7 @@ def _render_pv_usage_pie(
                 get_text(
                     texts_local,
                     "no_data_for_pv_usage_pie_chart_filtered",
-                    "Keine signifikanten Anteile für Photovoltaik-Nutzungsdiagramm.",
-                ))
+                    "Keine signifikanten Anteile für Photovoltaik-Nutzungsdiagramm."))
             analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = None
             return
         labels, values = zip(*filtered, strict=False)
@@ -5762,14 +5497,12 @@ def _render_pv_usage_pie(
             title=title,
             chart_key=f"{chart_key_prefix}_four",
             x_label="Nutzungsart",
-            y_label="Anteil (%)",
-        )
+            y_label="Anteil (%)")
         _apply_custom_style_to_fig(fig, viz_settings, "pv_usage_chart")
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"{chart_key_prefix}_four_type_chart_final",
-        )
+            key=f"{chart_key_prefix}_four_type_chart_final")
         analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = _export_plotly_fig_to_bytes(
             fig, texts_local)
     else:
@@ -5782,8 +5515,7 @@ def _render_pv_usage_pie(
             get_text(
                 texts_local,
                 "no_data_for_pv_usage_pie_chart_prod_zero",
-                "Keine Photovoltaik-Produktion für Nutzungsdiagramm vorhanden.",
-            ))
+                "Keine Photovoltaik-Produktion für Nutzungsdiagramm vorhanden."))
         analysis_results_local[f"{chart_key_prefix}_chart_bytes"] = None
 
 
@@ -5887,8 +5619,7 @@ def integrate_advanced_calculations(texts: dict[str, str]):
             calculation_results,
             project_data,
             texts,
-            session_suffix="advanced_calculations",
-        )
+            session_suffix="advanced_calculations")
 
     with tabs[1]:  # Detaillierte Energieanalyse
         render_detailed_energy_analysis(
@@ -5896,8 +5627,7 @@ def integrate_advanced_calculations(texts: dict[str, str]):
             calculation_results,
             project_data,
             texts,
-            session_suffix="main_analysis",
-        )
+            session_suffix="main_analysis")
 
     with tabs[2]:  # Technische Berechnungen
         render_technical_calculations(
@@ -5905,8 +5635,7 @@ def integrate_advanced_calculations(texts: dict[str, str]):
             calculation_results,
             project_data,
             texts,
-            session_suffix="main_analysis",
-        )
+            session_suffix="main_analysis")
 
     with tabs[3]:  # Finanzielle Szenarien
         render_financial_scenarios(
@@ -5914,8 +5643,7 @@ def integrate_advanced_calculations(texts: dict[str, str]):
             calculation_results,
             project_data,
             texts,
-            session_suffix="main_analysis",
-        )
+            session_suffix="main_analysis")
 
     with tabs[4]:  # Umwelt & Nachhaltigkeit
         render_environmental_calculations(
@@ -5923,8 +5651,7 @@ def integrate_advanced_calculations(texts: dict[str, str]):
             calculation_results,
             project_data,
             texts,
-            session_suffix="main_analysis",
-        )
+            session_suffix="main_analysis")
 
     with tabs[5]:  # Optimierungsvorschläge
         render_optimization_suggestions(
@@ -5932,20 +5659,17 @@ def integrate_advanced_calculations(texts: dict[str, str]):
             calculation_results,
             project_data,
             texts,
-            session_suffix="main_analysis",
-        )
+            session_suffix="main_analysis")
 
     # === OPTIONALE MODERNE CHART-ERWEITERUNG ===
     # Erweiterte Charts falls moderne Design-Features aktiviert sind
     try:
         from analysis_chart_modern_enhancement import (
             create_sample_modern_charts_for_analysis,
-            get_modern_chart_color_sequence,
-        )
+            get_modern_chart_color_sequence)
         from pdf_ui_design_enhancement import (
             get_current_modern_color_scheme_name,
-            get_modern_design_enabled,
-        )
+            get_modern_design_enabled)
 
         if get_modern_design_enabled():
             with st.expander(
@@ -5967,8 +5691,7 @@ def integrate_advanced_calculations(texts: dict[str, str]):
                             st.plotly_chart(
                                 chart_fig,
                                 use_container_width=True,
-                                key=f"modern_{chart_name}",
-                            )
+                                key=f"modern_{chart_name}")
 
                     st.info(
                         " Diese modernen Charts werden in Ihrer PDF-Ausgabe verwendet, wenn moderne Design-Features aktiviert sind."
@@ -5989,8 +5712,7 @@ def render_advanced_economics(
     calc_results: dict[str, Any],
     project_data: dict[str, Any],
     texts: dict[str, str],
-    session_suffix: str = "",
-):
+    session_suffix: str = ""):
     """Erweiterte Wirtschaftlichkeitsberechnungen"""
     import time
     import uuid
@@ -6040,21 +5762,18 @@ def render_advanced_economics(
             st.metric(
                 "LCOE (Standard)",
                 f"{lcoe_result['lcoe_simple']:.3f} €/kWh",
-                help="Einfache Stromgestehungskosten",
-            )
+                help="Einfache Stromgestehungskosten")
         with col2:
             st.metric(
                 "LCOE (Diskontiert)",
                 f"{lcoe_result['lcoe_discounted']:.3f} €/kWh",
-                help="Mit Diskontierung und Degradation",
-            )
+                help="Mit Diskontierung und Degradation")
         with col3:
             st.metric(
                 "Vergleich Netzstrom",
                 f"{(lcoe_result['grid_comparison'] - 1) * 100:.2f}%",
                 delta=f"{lcoe_result['savings_potential']:.2f} €/kWh",
-                help="Ersparnis gegenüber Netzstrom",
-            )
+                help="Ersparnis gegenüber Netzstrom")
 
         # LCOE-Entwicklung visualisieren
         years = list(range(1, 26))
@@ -6067,8 +5786,7 @@ def render_advanced_economics(
                 y=lcoe_evolution,
                 mode="lines+markers",
                 name="LCOE",
-                line=dict(color="#1E3A8A", width=3),
-            )
+                line=dict(color="#1E3A8A", width=3))
         )
 
         # Netzstrompreis als Referenz
@@ -6079,16 +5797,14 @@ def render_advanced_economics(
                 y=grid_price_evolution,
                 mode="lines",
                 name="Netzstrompreis",
-                line=dict(color="#DC2626", width=2, dash="dash"),
-            )
+                line=dict(color="#DC2626", width=2, dash="dash"))
         )
 
         fig.update_layout(
             title="LCOE-Entwicklung über Anlagenlebensdauer",
             xaxis_title="Jahr",
             yaxis_title="Kosten (€/kWh)",
-            hovermode="x unified",
-        )
+            hovermode="x unified")
 
         st.plotly_chart(
             fig,
@@ -6112,8 +5828,7 @@ def render_advanced_economics(
                 mode="lines+markers",
                 fill="tozeroy",
                 name="NPV",
-                line=dict(color="#10B981", width=3),
-            )
+                line=dict(color="#10B981", width=3))
         )
 
         # Break-even Linie
@@ -6127,8 +5842,7 @@ def render_advanced_economics(
             title="NPV-Sensitivität gegenüber Diskontierungsrate",
             xaxis_title="Diskontierungsrate (%)",
             yaxis_title="Net Present Value (€)",
-            showlegend=True,
-        )
+            showlegend=True)
 
         st.plotly_chart(
             fig,
@@ -6155,20 +5869,17 @@ def render_advanced_economics(
             st.metric(
                 "IRR (Internal Rate of Return)",
                 f"{irr_result['irr']:.2f}%",
-                help="Interner Zinsfuß",
-            )
+                help="Interner Zinsfuß")
         with col2:
             st.metric(
                 "MIRR (Modified IRR)",
                 f"{irr_result['mirr']:.2f}%",
-                help="Modifizierter interner Zinsfuß",
-            )
+                help="Modifizierter interner Zinsfuß")
         with col3:
             st.metric(
                 "Profitability Index",
                 f"{irr_result['profitability_index']:.2f}",
-                help="Rentabilitätsindex (>1 = profitabel)",
-            )
+                help="Rentabilitätsindex (>1 = profitabel)")
 
 
 def render_detailed_energy_analysis(
@@ -6176,8 +5887,7 @@ def render_detailed_energy_analysis(
     calc_results: dict[str, Any],
     project_data: dict[str, Any],
     texts: dict[str, str],
-    session_suffix: str = "",
-):
+    session_suffix: str = ""):
     """Detaillierte Energieanalyse"""
     import time
     import uuid
@@ -6225,15 +5935,12 @@ def render_detailed_energy_analysis(
                             "#EF4444",  # Netzbezug
                             "#6B7280",  # Hausverbrauch
                             "#DC2626",  # Verluste
-                        ],
-                    ),
+                        ]),
                     link=dict(
                         source=energy_flows["sources"],
                         target=energy_flows["targets"],
                         value=energy_flows["values"],
-                        color=energy_flows["colors"],
-                    ),
-                )
+                        color=energy_flows["colors"]))
             ]
         )
 
@@ -6245,8 +5952,7 @@ def render_detailed_energy_analysis(
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"detailed_energy_flow_{unique_session_id}",
-        )
+            key=f"detailed_energy_flow_{unique_session_id}")
 
         # Energiebilanz-Tabelle
         st.markdown("### Energiebilanz")
@@ -6263,8 +5969,7 @@ def render_detailed_energy_analysis(
             energy_balance.style.format(
                 {"Menge (kWh)": "{:,.2f}", "Anteil (%)": "{:.2f}%"}
             ),
-            use_container_width=True,
-        )
+            use_container_width=True)
 
     # Lastprofilanalyse
     with st.expander("Lastprofilanalyse", expanded=False):
@@ -6285,8 +5990,7 @@ def render_detailed_energy_analysis(
                 mode="lines",
                 name="Verbrauch",
                 fill="tozeroy",
-                line=dict(color="#EF4444", width=2),
-            )
+                line=dict(color="#EF4444", width=2))
         )
 
         # Photovoltaik-Erzeugung
@@ -6297,8 +6001,7 @@ def render_detailed_energy_analysis(
                 mode="lines",
                 name="Photovoltaik-Erzeugung",
                 fill="tozeroy",
-                line=dict(color="#F59E0B", width=2),
-            )
+                line=dict(color="#F59E0B", width=2))
         )
 
         # Batterieladung/-entladung
@@ -6311,16 +6014,14 @@ def render_detailed_energy_analysis(
                     np.array(
                         load_profile["battery_profile"]) > 0,
                     "#10B981",
-                    "#3B82F6"),
-            ))
+                    "#3B82F6")))
 
         fig.update_layout(
             title="Typischer Tageslastgang",
             xaxis_title="Stunde",
             yaxis_title="Leistung (kW)",
             hovermode="x unified",
-            barmode="overlay",
-        )
+            barmode="overlay")
 
         st.plotly_chart(
             fig,
@@ -6334,26 +6035,22 @@ def render_detailed_energy_analysis(
             st.metric(
                 "Spitzenlast",
                 f"{load_profile['peak_load']:.2f} kW",
-                help="Maximale Verbrauchsleistung",
-            )
+                help="Maximale Verbrauchsleistung")
         with col2:
             st.metric(
                 "Gleichzeitigkeitsfaktor",
                 f"{load_profile['simultaneity_factor']:.2f}",
-                help="Verhältnis Spitzenlast zu installierter Leistung",
-            )
+                help="Verhältnis Spitzenlast zu installierter Leistung")
         with col3:
             st.metric(
                 "Lastdeckungsgrad",
                 f"{load_profile['load_coverage']:.2f}%",
-                help="Anteil der durch Photovoltaik gedeckten Last",
-            )
+                help="Anteil der durch Photovoltaik gedeckten Last")
         with col4:
             st.metric(
                 "Netzbelastung reduziert um",
                 f"{load_profile['grid_relief']:.2f}%",
-                help="Reduktion der Netzbelastung",
-            )
+                help="Reduktion der Netzbelastung")
 
 
 def render_technical_calculations(
@@ -6361,8 +6058,7 @@ def render_technical_calculations(
     calc_results: dict[str, Any],
     project_data: dict[str, Any],
     texts: dict[str, str],
-    session_suffix: str = "",
-):
+    session_suffix: str = ""):
     """Technische Berechnungen"""
     import time
     import uuid
@@ -6414,15 +6110,13 @@ def render_technical_calculations(
                 texttemplate="%{text:.2f}%",
                 textfont={
                     "size": 10},
-                hovertemplate="Monat: %{y}<br>Stunde: %{x}:00<br>Verschattung: %{z:.2f}%<extra></extra>",
-            ))
+                hovertemplate="Monat: %{y}<br>Stunde: %{x}:00<br>Verschattung: %{z:.2f}%<extra></extra>"))
 
         fig.update_layout(
             title="Verschattungsmatrix (% Verlust)",
             xaxis_title="Tagesstunde",
             yaxis_title="Monat",
-            height=400,
-        )
+            height=400)
 
         import uuid
 
@@ -6430,8 +6124,7 @@ def render_technical_calculations(
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"shading_matrix_chart_{unique_session_id}",
-        )
+            key=f"shading_matrix_chart_{unique_session_id}")
         # Verschattungsverluste
         col1, col2, col3 = st.columns(3)
 
@@ -6442,8 +6135,7 @@ def render_technical_calculations(
             st.metric(
                 "Jahresverlust durch Verschattung",
                 f"{annual_loss:.2f}%",
-                delta=f"-{energy_loss_kwh:.2f} kWh",
-            )
+                delta=f"-{energy_loss_kwh:.2f} kWh")
 
         with col2:
             worst_month = shading_analysis.get("worst_month", "Unbekannt")
@@ -6451,8 +6143,7 @@ def render_technical_calculations(
             st.metric(
                 "Kritischster Monat",
                 worst_month,
-                delta=f"{worst_month_loss:.2f}% Verlust",
-            )
+                delta=f"{worst_month_loss:.2f}% Verlust")
 
         with col3:
             optimization_potential = shading_analysis.get(
@@ -6460,8 +6151,7 @@ def render_technical_calculations(
             st.metric(
                 "Optimierungspotential",
                 f"{optimization_potential:.2f} kWh/Jahr",
-                help="Durch Moduloptimierung erreichbar",
-            )
+                help="Durch Moduloptimierung erreichbar")
 
     # Temperatureffekte
     with st.expander("Temperatureffekte", expanded=False):
@@ -6478,8 +6168,7 @@ def render_technical_calculations(
             subplot_titles=(
                 "Modultemperatur",
                 "Leistungsverlust durch Temperatur"),
-            vertical_spacing=0.1,
-        )
+            vertical_spacing=0.1)
 
         # Modultemperatur
         fig.add_trace(
@@ -6488,11 +6177,9 @@ def render_technical_calculations(
                 y=temp_analysis["module_temperatures"],
                 mode="lines+markers",
                 name="Modultemperatur",
-                line=dict(color="#EF4444", width=3),
-            ),
+                line=dict(color="#EF4444", width=3)),
             row=1,
-            col=1,
-        )
+            col=1)
 
         # Umgebungstemperatur als Referenz
         fig.add_trace(
@@ -6501,11 +6188,9 @@ def render_technical_calculations(
                 y=temp_analysis["ambient_temperatures"],
                 mode="lines",
                 name="Umgebungstemperatur",
-                line=dict(color="#3B82F6", width=2, dash="dash"),
-            ),
+                line=dict(color="#3B82F6", width=2, dash="dash")),
             row=1,
-            col=1,
-        )
+            col=1)
 
         # Leistungsverlust
         fig.add_trace(
@@ -6513,11 +6198,9 @@ def render_technical_calculations(
                 x=months,
                 y=temp_analysis["power_loss_percent"],
                 name="Leistungsverlust",
-                marker_color="#F59E0B",
-            ),
+                marker_color="#F59E0B"),
             row=2,
-            col=1,
-        )
+            col=1)
 
         fig.update_xaxes(title_text="Monat", row=2, col=1)
         fig.update_yaxes(title_text="Temperatur (°C)", row=1, col=1)
@@ -6528,8 +6211,7 @@ def render_technical_calculations(
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"tech_calc_{unique_session_id}_additional_chart",
-        )
+            key=f"tech_calc_{unique_session_id}_additional_chart")
 
         # Kennzahlen
         col1, col2, col3 = st.columns(3)
@@ -6538,20 +6220,17 @@ def render_technical_calculations(
             st.metric(
                 "Ø Temperaturverlust",
                 f"{temp_analysis['avg_temp_loss']:.2f}%",
-                help="Durchschnittlicher jährlicher Verlust",
-            )
+                help="Durchschnittlicher jährlicher Verlust")
         with col2:
             st.metric(
                 "Max. Modultemperatur",
                 f"{temp_analysis['max_module_temp']:.2f}°C",
-                delta=f"+{temp_analysis['max_temp_delta']:.2f}°C über Umgebung",
-            )
+                delta=f"+{temp_analysis['max_temp_delta']:.2f}°C über Umgebung")
         with col3:
             st.metric(
                 "Energieverlust",
                 f"{temp_analysis['annual_energy_loss']:.2f} kWh",
-                help="Jährlicher Verlust durch Temperatur",
-            )
+                help="Jährlicher Verlust durch Temperatur")
 
     # Wechselrichter-Effizienz
     with st.expander("Wechselrichter-Effizienzanalyse", expanded=False):
@@ -6571,8 +6250,7 @@ def render_technical_calculations(
                 y=inverter_analysis["efficiency_curve"],
                 mode="lines+markers",
                 name="Wirkungsgrad",
-                line=dict(color="#10B981", width=3),
-            )
+                line=dict(color="#10B981", width=3))
         )
 
         # Betriebspunkte markieren
@@ -6582,8 +6260,7 @@ def render_technical_calculations(
                 y=inverter_analysis["operating_efficiencies"],
                 mode="markers",
                 name="Häufige Betriebspunkte",
-                marker=dict(size=10, color="#EF4444"),
-            )
+                marker=dict(size=10, color="#EF4444"))
         )
 
         fig.update_layout(
@@ -6591,14 +6268,12 @@ def render_technical_calculations(
             xaxis_title="Auslastung (%)",
             yaxis_title="Wirkungsgrad (%)",
             yaxis=dict(range=[90, 100]),
-            hovermode="x unified",
-        )
+            hovermode="x unified")
 
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"inverter_efficiency_curve_chart_{unique_session_id}",
-        )
+            key=f"inverter_efficiency_curve_chart_{unique_session_id}")
 
         # Kennzahlen
         col1, col2, col3, col4 = st.columns(4)
@@ -6607,26 +6282,22 @@ def render_technical_calculations(
             st.metric(
                 "Euro-Wirkungsgrad",
                 f"{inverter_analysis['euro_efficiency']:.2f}%",
-                help="Gewichteter Wirkungsgrad",
-            )
+                help="Gewichteter Wirkungsgrad")
         with col2:
             st.metric(
                 "CEC-Wirkungsgrad",
                 f"{inverter_analysis['cec_efficiency']:.2f}%",
-                help="California Energy Commission Standard",
-            )
+                help="California Energy Commission Standard")
         with col3:
             st.metric(
                 "Verluste",
                 f"{inverter_analysis['annual_losses']:.2f} kWh",
-                delta=f"-{inverter_analysis['loss_percentage']:.2f}%",
-            )
+                delta=f"-{inverter_analysis['loss_percentage']:.2f}%")
         with col4:
             st.metric(
                 "Dimensionierung",
                 f"{inverter_analysis['sizing_factor']:.2f}%",
-                help="DC/AC Verhältnis",
-            )
+                help="DC/AC Verhältnis")
 
 
 def render_financial_scenarios(
@@ -6634,8 +6305,7 @@ def render_financial_scenarios(
     calc_results: dict[str, Any],
     project_data: dict[str, Any],
     texts: dict[str, str],
-    session_suffix: str = "",
-):
+    session_suffix: str = ""):
     """Finanzielle Szenarien"""
     import time
     import uuid
@@ -6664,8 +6334,7 @@ def render_financial_scenarios(
                 max_value=10000,
                 value=1000,
                 step=100,
-                key=f"n_simulations_{unique_session_id}",
-            )
+                key=f"n_simulations_{unique_session_id}")
 
         with col2:
             confidence_level = st.slider(
@@ -6673,8 +6342,7 @@ def render_financial_scenarios(
                 min_value=80,
                 max_value=99,
                 value=95,
-                key=f"confidence_level_{unique_session_id}",
-            )
+                key=f"confidence_level_{unique_session_id}")
 
         with col3:
             if st.button("Simulation starten",
@@ -6698,8 +6366,7 @@ def render_financial_scenarios(
                     nbinsx=50,
                     name="NPV-Verteilung",
                     marker_color="#3B82F6",
-                    opacity=0.7,
-                )
+                    opacity=0.7)
             )
 
             # Konfidenzintervall markieren
@@ -6707,33 +6374,28 @@ def render_financial_scenarios(
                 x=mc_results["npv_lower_bound"],
                 line_dash="dash",
                 line_color="red",
-                annotation_text=f"{(100 - confidence_level) / 2}%",
-            )
+                annotation_text=f"{(100 - confidence_level) / 2}%")
             fig.add_vline(
                 x=mc_results["npv_upper_bound"],
                 line_dash="dash",
                 line_color="red",
-                annotation_text=f"{100 - (100 - confidence_level) / 2}%",
-            )
+                annotation_text=f"{100 - (100 - confidence_level) / 2}%")
             fig.add_vline(
                 x=mc_results["npv_mean"],
                 line_dash="solid",
                 line_color="green",
-                annotation_text="Erwartungswert",
-            )
+                annotation_text="Erwartungswert")
 
             fig.update_layout(
                 title="NPV-Verteilung (Monte-Carlo-Simulation)",
                 xaxis_title="Net Present Value (€)",
                 yaxis_title="Häufigkeit",
-                showlegend=True,
-            )
+                showlegend=True)
 
             st.plotly_chart(
                 fig,
                 use_container_width=True,
-                key=f"npv_distribution_chart_{unique_session_id}",
-            )
+                key=f"npv_distribution_chart_{unique_session_id}")
 
             # Risikokennzahlen
             col1, col2, col3, col4 = st.columns(4)
@@ -6742,25 +6404,21 @@ def render_financial_scenarios(
                 st.metric(
                     "Erwarteter NPV",
                     f"{mc_results['npv_mean']:,.2f} €",
-                    delta=f"σ = {mc_results['npv_std']:,.2f} €",
-                )
+                    delta=f"σ = {mc_results['npv_std']:,.2f} €")
             with col2:
                 st.metric(
                     "Value at Risk (5%)",
                     f"{mc_results['var_5']:,.2f} €",
-                    help="5% Wahrscheinlichkeit für schlechteren Wert",
-                )
+                    help="5% Wahrscheinlichkeit für schlechteren Wert")
             with col3:
                 st.metric(
                     "Erfolgswahrscheinlichkeit",
                     f"{mc_results['success_probability']:.2f}%",
-                    help="Wahrscheinlichkeit für positiven NPV",
-                )
+                    help="Wahrscheinlichkeit für positiven NPV")
             with col4:
                 st.metric(
                     f"{confidence_level}% Konfidenzintervall",
-                    f"{mc_results['npv_lower_bound']:,.2f} - {mc_results['npv_upper_bound']:,.2f} €",
-                )
+                    f"{mc_results['npv_lower_bound']:,.2f} - {mc_results['npv_upper_bound']:,.2f} €")
 
             # Sensitivitätsanalyse
             st.markdown("### Sensitivitätsanalyse")
@@ -6774,8 +6432,7 @@ def render_financial_scenarios(
                 orientation="h",
                 color="impact",
                 color_continuous_scale="RdBu_r",
-                title="Einfluss der Parameter auf NPV",
-            )
+                title="Einfluss der Parameter auf NPV")
 
             fig.update_layout(
                 xaxis_title="Relativer Einfluss auf NPV",
@@ -6784,8 +6441,7 @@ def render_financial_scenarios(
             st.plotly_chart(
                 fig,
                 use_container_width=True,
-                key=f"sensitivity_analysis_chart_{unique_session_id}",
-            )
+                key=f"sensitivity_analysis_chart_{unique_session_id}")
 
     # Förderszenarien
     with st.expander("Förderszenarien", expanded=False):
@@ -6804,24 +6460,21 @@ def render_financial_scenarios(
                     y=scenarios_df[scenario],
                     mode="lines+markers",
                     name=scenario,
-                    line=dict(width=3),
-                )
+                    line=dict(width=3))
             )
 
         fig.update_layout(
             title="Kumulierter Cashflow - Förderszenarien",
             xaxis_title="Jahr",
             yaxis_title="Kumulierter Cashflow (€)",
-            hovermode="x unified",
-        )
+            hovermode="x unified")
 
         fig.add_hline(y=0, line_dash="dash", line_color="black", opacity=0.5)
 
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"subsidy_scenarios_chart_{unique_session_id}",
-        )
+            key=f"subsidy_scenarios_chart_{unique_session_id}")
 
         # Szenario-Vergleich Tabelle
         comparison_df = pd.DataFrame(subsidy_scenarios["comparison"])
@@ -6866,8 +6519,7 @@ def render_environmental_calculations(
     calc_results: dict[str, Any],
     project_data: dict[str, Any],
     texts: dict[str, str],
-    session_suffix: str = "",
-):
+    session_suffix: str = ""):
     """Umwelt- und Nachhaltigkeitsberechnungen"""
     import time
     import uuid
@@ -6899,8 +6551,7 @@ def render_environmental_calculations(
                 mode="lines",
                 name="Kumulative CO₂-Einsparung",
                 fill="tozeroy",
-                line=dict(color="#10B981", width=3),
-            )
+                line=dict(color="#10B981", width=3))
         )
 
         # CO2-Rückzahlung (Herstellung)
@@ -6908,23 +6559,20 @@ def render_environmental_calculations(
             y=co2_analysis["production_emissions"],
             line_dash="dash",
             line_color="red",
-            annotation_text="CO₂ aus Herstellung",
-        )
+            annotation_text="CO₂ aus Herstellung")
 
         # Energy Payback Time
         fig.add_vline(
             x=co2_analysis["carbon_payback_time"],
             line_dash="dot",
             line_color="blue",
-            annotation_text=f"CO₂-Amortisation: {co2_analysis['carbon_payback_time']:.2f} Jahre",
-        )
+            annotation_text=f"CO₂-Amortisation: {co2_analysis['carbon_payback_time']:.2f} Jahre")
 
         fig.update_layout(
             title="CO₂-Bilanz über Anlagenlebensdauer",
             xaxis_title="Jahr",
             yaxis_title="CO₂ (Tonnen)",
-            hovermode="x unified",
-        )
+            hovermode="x unified")
 
         st.plotly_chart(
             fig,
@@ -6938,26 +6586,22 @@ def render_environmental_calculations(
             st.metric(
                 "Gesamte CO₂-Einsparung",
                 f"{co2_analysis['total_co2_savings']:.2f} t",
-                help="Über 25 Jahre",
-            )
+                help="Über 25 Jahre")
         with col2:
             st.metric(
                 "CO₂-Amortisation",
                 f"{co2_analysis['carbon_payback_time']:.2f} Jahre",
-                help="Zeit bis Herstellungs-CO₂ kompensiert",
-            )
+                help="Zeit bis Herstellungs-CO₂ kompensiert")
         with col3:
             st.metric(
                 "Äquivalent Bäume",
                 f"{co2_analysis['tree_equivalent']:,.2f} Bäume",
-                help="Entspricht der CO₂-Bindung von Bäumen",
-            )
+                help="Entspricht der CO₂-Bindung von Bäumen")
         with col4:
             st.metric(
                 "Vermiedene Autokilometer",
                 f"{co2_analysis['car_km_equivalent']:,.2f} km",
-                help="Entspricht CO₂-Emissionen eines PKW",
-            )
+                help="Entspricht CO₂-Emissionen eines PKW")
 
         # Weitere Umweltaspekte
         st.markdown("### Weitere Umweltauswirkungen")
@@ -7011,14 +6655,12 @@ def render_environmental_calculations(
                 "Kupfer": "#F59E0B",
                 "Kunststoff": "#EF4444",
                 "Sonstiges": "#8B5CF6",
-            },
-        )
+            })
 
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"material_composition_chart_{unique_session_id}",
-        )
+            key=f"material_composition_chart_{unique_session_id}")
 
         # Recycling-Potenzial
         col1, col2, col3 = st.columns(3)
@@ -7027,20 +6669,17 @@ def render_environmental_calculations(
             st.metric(
                 "Recyclingquote",
                 f"{recycling_analysis['recycling_rate']:.2f}%",
-                help="Anteil recycelbarer Materialien",
-            )
+                help="Anteil recycelbarer Materialien")
         with col2:
             st.metric(
                 "Materialwert",
                 f"{recycling_analysis['material_value']:,.2f} €",
-                help="Geschätzter Restwert der Materialien",
-            )
+                help="Geschätzter Restwert der Materialien")
         with col3:
             st.metric(
                 "CO₂-Einsparung durch Recycling",
                 f"{recycling_analysis['co2_savings_recycling']:.2f} t",
-                help="Vermiedene Emissionen durch Recycling",
-            )
+                help="Vermiedene Emissionen durch Recycling")
 
 
 def render_optimization_suggestions(
@@ -7048,8 +6687,7 @@ def render_optimization_suggestions(
     calc_results: dict[str, Any],
     project_data: dict[str, Any],
     texts: dict[str, str],
-    session_suffix: str = "",
-):
+    session_suffix: str = ""):
     """Optimierungsvorschläge"""
     import time
     import uuid
@@ -7089,8 +6727,7 @@ def render_optimization_suggestions(
                 "implementation_effort": "Implementierungsaufwand",
                 "benefit_potential": "Nutzenpotenzial (€/Jahr)",
                 "roi_improvement": "ROI-Verbesserung (%)",
-            },
-        )
+            })
 
         # Quadranten hinzufügen
         fig.add_shape(
@@ -7099,36 +6736,31 @@ def render_optimization_suggestions(
             y0=0,
             x1=50,
             y1=potentials_df["benefit_potential"].max(),
-            line=dict(color="gray", width=1, dash="dash"),
-        )
+            line=dict(color="gray", width=1, dash="dash"))
         fig.add_shape(
             type="line",
             x0=0,
             y0=potentials_df["benefit_potential"].mean(),
             x1=100,
             y1=potentials_df["benefit_potential"].mean(),
-            line=dict(color="gray", width=1, dash="dash"),
-        )
+            line=dict(color="gray", width=1, dash="dash"))
 
         # Quadranten-Labels
         fig.add_annotation(
             x=25,
             y=potentials_df["benefit_potential"].max() * 0.9,
             text="Quick Wins",
-            showarrow=False,
-        )
+            showarrow=False)
         fig.add_annotation(
             x=75,
             y=potentials_df["benefit_potential"].max() * 0.9,
             text="Strategische Projekte",
-            showarrow=False,
-        )
+            showarrow=False)
 
         st.plotly_chart(
             fig,
             use_container_width=True,
-            key=f"optimization_matrix_{unique_session_id}",
-        )
+            key=f"optimization_matrix_{unique_session_id}")
 
         # Top-Empfehlungen
         st.markdown("### Top-Empfehlungen")
@@ -7154,8 +6786,7 @@ def render_optimization_suggestions(
                     st.metric(
                         "Nutzen",
                         f"{annual_benefit:,.2f} €/Jahr",
-                        delta=f"+{roi_improvement:.2f}% ROI",
-                    )
+                        delta=f"+{roi_improvement:.2f}% ROI")
 
                 with col3:
                     # Defensive Programmierung: KeyError vermeiden
@@ -7164,8 +6795,7 @@ def render_optimization_suggestions(
                     st.metric(
                         "Investition",
                         f"{investment:,.2f} €",
-                        delta=f"Amortisation: {payback:.2f} Jahre",
-                    )
+                        delta=f"Amortisation: {payback:.2f} Jahre")
 
                 with col4:
                     difficulty_colors = {
@@ -7178,7 +6808,7 @@ def render_optimization_suggestions(
                     st.metric(
                         "Schwierigkeit", f"{
                             difficulty_colors.get(
-                                difficulty, '')} {difficulty}", )
+                                difficulty, '')} {difficulty}")
 
                 st.markdown("---")
 
@@ -7198,8 +6828,7 @@ def render_optimization_suggestions(
                 max_value=90,
                 value=system_optimization["optimal_tilt"],
                 help=f"Optimal: {system_optimization['optimal_tilt']}°",
-                key=f"new_tilt_{unique_session_id}",
-            )
+                key=f"new_tilt_{unique_session_id}")
 
             new_azimuth = st.slider(
                 "Ausrichtung (° von Süd)",
@@ -7207,8 +6836,7 @@ def render_optimization_suggestions(
                 max_value=90,
                 value=system_optimization["optimal_azimuth"],
                 help=f"Optimal: {system_optimization['optimal_azimuth']}°",
-                key=f"new_azimuth_{unique_session_id}",
-            )
+                key=f"new_azimuth_{unique_session_id}")
 
         with col2:
             battery_size = st.slider(
@@ -7220,8 +6848,7 @@ def render_optimization_suggestions(
                 step=0.5,
                 help=f"Optimal: {
                     system_optimization['optimal_battery_size']} kWh",
-                key=f"battery_size_{unique_session_id}",
-            )
+                key=f"battery_size_{unique_session_id}")
 
             dc_ac_ratio = st.slider(
                 "DC/AC Verhältnis",
@@ -7230,8 +6857,7 @@ def render_optimization_suggestions(
                 value=system_optimization["optimal_dc_ac_ratio"],
                 step=0.05,
                 help=f"Optimal: {system_optimization['optimal_dc_ac_ratio']}",
-                key=f"dc_ac_ratio_{unique_session_id}",
-            )
+                key=f"dc_ac_ratio_{unique_session_id}")
 
         # Live-Berechnung der Auswirkungen
         if st.button("Auswirkungen berechnen",
@@ -7243,8 +6869,7 @@ def render_optimization_suggestions(
                     "azimuth": new_azimuth,
                     "battery_size": battery_size,
                     "dc_ac_ratio": dc_ac_ratio,
-                },
-            )
+                })
 
             # Ergebnisse anzeigen
             col1, col2, col3, col4 = st.columns(4)
@@ -7253,28 +6878,25 @@ def render_optimization_suggestions(
                 st.metric(
                     "Ertragssteigerung",
                     f"{impact['yield_increase']:.2f}%",
-                    delta=f"+{impact['additional_kwh']:.2f} kWh/Jahr",
-                )
+                    delta=f"+{impact['additional_kwh']:.2f} kWh/Jahr")
 
             with col2:
                 st.metric(
                     "Autarkiegrad",
                     f"{impact['new_self_sufficiency']:.2f}%",
-                    delta=f"{impact['self_sufficiency_delta']:+.2f}%",
-                )
+                    delta=f"{impact['self_sufficiency_delta']:+.2f}%")
 
             with col3:
                 st.metric(
                     "NPV-Änderung",
                     f"{impact['npv_delta']:,.2f} €",
-                    delta=f"{impact['roi_delta']:+.2f}% ROI",
-                )
+                    delta=f"{impact['roi_delta']:+.2f}% ROI")
 
             with col4:
                 st.metric(
                     "Zusatzinvestition", f"{
                         impact['additional_investment']:,.2f} €", delta=f"Amortisation: {
-                        impact['payback_change']:+.2f} Jahre", )
+                        impact['payback_change']:+.2f} Jahre")
 
 
 # Hauptfunktion für die Integration
@@ -7335,8 +6957,7 @@ def prepare_financing_data_for_pdf_export(
                     loan_result = calculate_annuity(
                         financing_amount,
                         financing_summary["interest_rate"],
-                        financing_summary["loan_term"],
-                    )
+                        financing_summary["loan_term"])
                     if "error" not in loan_result:
                         financing_summary.update(
                             {
@@ -7354,8 +6975,7 @@ def prepare_financing_data_for_pdf_export(
                     leasing_result = calculate_leasing_costs(
                         financing_amount,
                         financing_summary["leasing_factor"],
-                        financing_summary["leasing_term"],
-                    )
+                        financing_summary["leasing_term"])
                     if "error" not in leasing_result:
                         financing_summary.update(
                             {
@@ -7437,13 +7057,11 @@ def render_pricing_modifications_ui():
             100.0,
             key="pricing_modifications_discount_slider",
             step=0.1,
-            help="Prozentualer Rabatt auf den Gesamtpreis.",
-        )
+            help="Prozentualer Rabatt auf den Gesamtpreis.")
         st.text_area(
             "Beschreibung für Rabatt",
             key="pricing_modifications_descriptions_discount_text",
-            help="Beschreibung oder Details zum Rabatt.",
-        )
+            help="Beschreibung oder Details zum Rabatt.")
     with col2:
         st.slider(
             "Nachlässe (€)",
@@ -7451,13 +7069,11 @@ def render_pricing_modifications_ui():
             10000.0,
             key="pricing_modifications_rebates_slider",
             step=10.0,
-            help="Feste Nachlässe in Euro.",
-        )
+            help="Feste Nachlässe in Euro.")
         st.text_area(
             "Beschreibung für Nachlässe",
             key="pricing_modifications_descriptions_rebates_text",
-            help="Beschreibung oder Details zu den Nachlässen.",
-        )
+            help="Beschreibung oder Details zu den Nachlässen.")
     with col3:
         st.slider(
             "Zuschlag (%)",
@@ -7465,13 +7081,11 @@ def render_pricing_modifications_ui():
             100.0,
             key="pricing_modifications_surcharge_slider",
             step=0.1,
-            help="Prozentualer Zuschlag auf den Gesamtpreis.",
-        )
+            help="Prozentualer Zuschlag auf den Gesamtpreis.")
         st.text_area(
             "Beschreibung für Zuschlag",
             key="pricing_modifications_descriptions_surcharge_text",
-            help="Beschreibung oder Details zum Zuschlag.",
-        )
+            help="Beschreibung oder Details zum Zuschlag.")
     with col4:
         st.slider(
             "Sonderkosten (€)",
@@ -7479,31 +7093,26 @@ def render_pricing_modifications_ui():
             10000.0,
             key="pricing_modifications_special_costs_slider",
             step=10.0,
-            help="Zusätzliche Sonderkosten in Euro.",
-        )
+            help="Zusätzliche Sonderkosten in Euro.")
         st.text_area(
             "Beschreibung für Sonderkosten",
             key="pricing_modifications_descriptions_special_costs_text",
-            help="Beschreibung oder Details zu den Sonderkosten.",
-        )
+            help="Beschreibung oder Details zu den Sonderkosten.")
     st.slider(
         "Sonstiges (€)",
         0.0,
         10000.0,
         key="pricing_modifications_miscellaneous_slider",
         step=10.0,
-        help="Sonstige Kosten oder Abzüge in Euro.",
-    )
+        help="Sonstige Kosten oder Abzüge in Euro.")
     st.text_area(
         "Beschreibung für Sonstiges",
         key="pricing_modifications_descriptions_miscellaneous_text",
-        help="Beschreibung oder Details zu Sonstigem.",
-    )
+        help="Beschreibung oder Details zu Sonstigem.")
     st.text_area(
         "Sondervereinbarungen",
         key="pricing_modifications_special_agreements_text",
-        help="Zusätzliche Informationen oder Vereinbarungen, die im Angebot berücksichtigt werden sollen.",
-    )
+        help="Zusätzliche Informationen oder Vereinbarungen, die im Angebot berücksichtigt werden sollen.")
 
 
 # --- Haupt-Render-Funktion ---
@@ -7516,8 +7125,7 @@ def render_analysis(
             get_text(
                 texts,
                 "analysis_module_critical_error",
-                "Kritischer Fehler: Analyse-Modul-Abhängigkeiten nicht verfügbar",
-            ))
+                "Kritischer Fehler: Analyse-Modul-Abhängigkeiten nicht verfügbar"))
         return
 
     init_debug_mode()
@@ -7533,8 +7141,7 @@ def render_analysis(
     try:
         from enhanced_live_preview import (
             render_enhanced_live_preview,
-            render_modern_kpi_section,
-        )
+            render_modern_kpi_section)
         LIVE_PREVIEW_AVAILABLE = True
     except ImportError:
         LIVE_PREVIEW_AVAILABLE = False
@@ -7672,8 +7279,7 @@ def render_analysis(
                     "annual_electricity_cost_savings_eur",
                     "annual_electricity_cost_savings",
                 ],
-                common_sources,
-            )
+                common_sources)
             or 0.0
         )
         feed_in_component = (
@@ -7683,8 +7289,7 @@ def render_analysis(
                     "annual_feedin_revenue_euro",
                     "annual_feed_in_revenue",
                 ],
-                common_sources,
-            )
+                common_sources)
             or 0.0
         )
         combined = savings_components + feed_in_component
@@ -7707,8 +7312,7 @@ def render_analysis(
         baseline_costs = _get_baseline_annual_costs_without_pv(
             project_inputs,
             project_details,
-            calc_results_snapshot or analysis_results_snapshot or {},
-        )
+            calc_results_snapshot or analysis_results_snapshot or {})
         if baseline_costs > 0:
             annual_electricity_costs_default = baseline_costs
     if annual_electricity_costs_default is None or annual_electricity_costs_default <= 0:
@@ -7777,8 +7381,7 @@ def render_analysis(
         {
             "simulation_period_years": 20,
             "electricity_price_increase_annual_percent": 3.0,
-        },
-    )
+        })
     admin_default_sim_years = int(
         admin_defaults_gc.get("simulation_period_years", 20) or 20
     )
@@ -7797,8 +7400,7 @@ def render_analysis(
         current_price_increase_for_ui = float(
             results.get(
                 "electricity_price_increase_rate_effective_percent",
-                admin_default_price_increase,
-            )
+                admin_default_price_increase)
         )
     elif (
         previous_calc_results
@@ -7810,8 +7412,7 @@ def render_analysis(
         current_price_increase_for_ui = float(
             previous_calc_results.get(
                 "electricity_price_increase_rate_effective_percent",
-                admin_default_price_increase,
-            )
+                admin_default_price_increase)
         )
 
     # Sichtbare 20J-Balken – nur vorbereiten (Render unten zwischen
@@ -7823,13 +7424,11 @@ def render_analysis(
         annual_total_costs_without_pv = _get_baseline_annual_costs_without_pv(
             proj,
             proj.get("project_details", {}),
-            current_results,
-        )
+            current_results)
         inc_pct = float(
             current_results.get(
                 "electricity_price_increase_rate_effective_percent",
-                current_price_increase_for_ui,
-            )
+                current_price_increase_for_ui)
             or current_price_increase_for_ui
         )
         years = 20
@@ -7847,13 +7446,11 @@ def render_analysis(
     duration_widget_key = mirror_widget_value(
         "analysis_sim_duration",
         default=int(current_sim_years_for_ui),
-        widget_key="analysis_sim_duration_input_v23",
-    )
+        widget_key="analysis_sim_duration_input_v23")
     price_widget_key = mirror_widget_value(
         "analysis_price_increase_percent",
         default=float(current_price_increase_for_ui),
-        widget_key="analysis_price_increase_input_v23",
-    )
+        widget_key="analysis_price_increase_input_v23")
 
     with st.sidebar.form("analysis_parameters_form"):
         st.number_input(
@@ -7864,8 +7461,7 @@ def render_analysis(
             min_value=1,
             max_value=50,
             step=1,
-            key=duration_widget_key,
-        )
+            key=duration_widget_key)
         st.number_input(
             get_text(
                 texts,
@@ -7875,8 +7471,7 @@ def render_analysis(
             max_value=20.0,
             step=0.1,
             format="%.2f",
-            key=price_widget_key,
-        )
+            key=price_widget_key)
         submitted_analysis_params = st.form_submit_button(
             "Berechnung aktualisieren")
 
@@ -8027,8 +7622,7 @@ def render_analysis(
                 final_investment_analysis,
                 annual_savings_analysis,
                 allow_infinite=False,
-                default_zero=True,
-            )
+                default_zero=True)
             st.metric(
                 "Amortisationszeit (Klassisch)",
                 f"{amortization_years_a:.1f} Jahre",
@@ -8119,8 +7713,7 @@ def render_analysis(
                 final_investment_analysis,
                 annual_electricity_costs_analysis,
                 allow_infinite=False,
-                default_zero=True,
-            )
+                default_zero=True)
 
             st.metric(
                 "Amortisationszeit (Stromkosten)",
@@ -8242,8 +7835,7 @@ def render_analysis(
         texts,
         calculation_errors_for_current_run,
         simulation_duration_user=sim_duration_user_input,
-        electricity_price_increase_user=sim_price_increase_user_input,
-    )
+        electricity_price_increase_user=sim_price_increase_user_input)
     if not results_for_display or not isinstance(results_for_display, dict):
         st.error(get_text(texts, "calculation_no_result_info"))
         if "st" in globals() and hasattr(st, "session_state"):
@@ -8415,23 +8007,19 @@ def render_analysis(
             value=format_kpi_value(
                 results_for_display.get("base_matrix_price_netto"),
                 "€",
-                texts_dict=texts),
-        )
+                texts_dict=texts))
         kpi_cols_row1[1].metric(
             label=get_text(texts, "anlage_size_label"),
             value=format_kpi_value(
                 results_for_display.get("anlage_kwp"), "kWp", texts_dict=texts
-            ),
-        )
+            ))
         kpi_cols_row1[2].metric(
             label=get_text(texts, "annual_pv_production_kwh"),
             value=format_kpi_value(
                 results_for_display.get("annual_pv_production_kwh"),
                 "kWh",
                 precision=0,
-                texts_dict=texts,
-            ),
-        )
+                texts_dict=texts))
         kpi_cols_row2[0].metric(
             label=get_text(
                 texts,
@@ -8441,37 +8029,29 @@ def render_analysis(
                 results_for_display.get("self_supply_rate_percent"),
                 "%",
                 precision=1,
-                texts_dict=texts,
-            ),
-        )
+                texts_dict=texts))
         kpi_cols_row2[1].metric(
             label=get_text(texts, "annual_financial_benefit"),
             value=format_kpi_value(
                 results_for_display.get("annual_financial_benefit_year1"),
                 "€",
-                texts_dict=texts,
-            ),
-        )
+                texts_dict=texts))
         kpi_cols_row2[2].metric(
             label=get_text(texts, "amortization_time_years"),
             value=format_kpi_value(
                 results_for_display.get("amortization_time_years"),
                 "Jahre",
-                texts_dict=texts,
-            ),
-        )
+                texts_dict=texts))
     st.markdown("---")
 
     # Moderne Charts-Sektion
     try:
         from modern_charts import (
             add_live_preview_to_section,
-            render_modern_charts_section,
-        )
+            render_modern_charts_section)
         from universal_chart_modernizer import (
             apply_modern_style_to_figure,
-            modernize_existing_chart,
-        )
+            modernize_existing_chart)
         MODERN_CHARTS_AVAILABLE = True
         CHART_MODERNIZER_AVAILABLE = True
     except ImportError:
@@ -8493,8 +8073,7 @@ def render_analysis(
             texts,
             default_type="bar",
             supported_types=["bar", "line", "area"],
-            viz_settings=viz_settings,
-        )
+            viz_settings=viz_settings)
         fig_monthly_comp = _create_monthly_production_consumption_chart(
             results_for_display, texts, viz_settings, "monthly_compare"
         )
@@ -8507,8 +8086,7 @@ def render_analysis(
                 st.plotly_chart(
                     fig_monthly_comp,
                     use_container_width=True,
-                    key="analysis_monthly_comp_chart_final_v8_corrected",
-                )
+                    key="analysis_monthly_comp_chart_final_v8_corrected")
             results_for_display["monthly_prod_cons_chart_bytes"] = (
                 _export_plotly_fig_to_bytes(fig_monthly_comp, texts)
             )
@@ -8517,8 +8095,7 @@ def render_analysis(
                 get_text(
                     texts,
                     "no_data_for_monthly_comparison_chart_v3",
-                    "Daten für Monatsvergleich (Prod/Verbr) unvollständig.",
-                )
+                    "Daten für Monatsvergleich (Prod/Verbr) unvollständig.")
             )
 
         _add_chart_controls(
@@ -8526,8 +8103,7 @@ def render_analysis(
             texts,
             default_type="line",
             supported_types=["line", "bar"],
-            viz_settings=viz_settings,
-        )
+            viz_settings=viz_settings)
         fig_cost_projection = _create_electricity_cost_projection_chart(
             results_for_display, texts, viz_settings, "cost_projection"
         )
@@ -8540,8 +8116,7 @@ def render_analysis(
                 st.plotly_chart(
                     fig_cost_projection,
                     use_container_width=True,
-                    key="analysis_cost_proj_chart_final_v8_corrected",
-                )
+                    key="analysis_cost_proj_chart_final_v8_corrected")
             results_for_display["cost_projection_chart_bytes"] = (
                 _export_plotly_fig_to_bytes(fig_cost_projection, texts)
             )
@@ -8550,8 +8125,7 @@ def render_analysis(
                 get_text(
                     texts,
                     "no_data_for_cost_projection_chart_v3",
-                    "Daten für Kostenhochrechnung unvollständig.",
-                )
+                    "Daten für Kostenhochrechnung unvollständig.")
             )
 
         col_chart1, col_chart2 = st.columns(2)
@@ -8604,21 +8178,18 @@ def render_analysis(
                     y=series_no_inc,
                     name="Ohne Erhöhung",
                     marker_color=color_no_inc,
-                    hovertemplate="Jahr %{x}: %{y:,.0f} €<extra></extra>",
-                )
+                    hovertemplate="Jahr %{x}: %{y:,.0f} €<extra></extra>")
                 fig_20y.add_bar(
                     x=x_vals,
                     y=series_with_inc,
                     name="Mit Erhöhung",
                     marker_color=color_with_inc,
-                    hovertemplate="Jahr %{x}: %{y:,.0f} €<extra></extra>",
-                )
+                    hovertemplate="Jahr %{x}: %{y:,.0f} €<extra></extra>")
                 fig_20y.update_layout(
                     barmode="group",
                     title="",
                     xaxis_title="Jahr",
-                    yaxis_title="€ pro Jahr",
-                )
+                    yaxis_title="€ pro Jahr")
                 _apply_shadcn_like_theme(fig_20y)
                 fig_20y.update_yaxes(
                     showgrid=True,
@@ -8639,8 +8210,7 @@ def render_analysis(
             texts,
             default_type="area",
             supported_types=["area", "line", "bar"],
-            viz_settings=viz_settings,
-        )
+            viz_settings=viz_settings)
         fig_cum_cf = _create_cumulative_cashflow_chart(
             results_for_display, texts, viz_settings, "cum_cashflow"
         )
@@ -8652,8 +8222,7 @@ def render_analysis(
                 st.plotly_chart(
                     fig_cum_cf,
                     use_container_width=True,
-                    key="analysis_cum_cashflow_chart_final_v8_corrected",
-                )
+                    key="analysis_cum_cashflow_chart_final_v8_corrected")
             results_for_display["cumulative_cashflow_chart_bytes"] = (
                 _export_plotly_fig_to_bytes(fig_cum_cf, texts)
             )
@@ -8662,8 +8231,7 @@ def render_analysis(
                 get_text(
                     texts,
                     "no_data_for_cumulative_cashflow_chart_v3",
-                    "Daten für kum. Cashflow unvollständig.",
-                )
+                    "Daten für kum. Cashflow unvollständig.")
             )
     st.markdown("---")
 
@@ -8854,8 +8422,7 @@ def render_analysis(
                 results_for_display,
                 project_inputs,
                 texts,
-                session_suffix="extended_dashboard",
-            )
+                session_suffix="extended_dashboard")
         except (AttributeError, KeyError) as e:
             st.warning(
                 f"Technische Berechnungen teilweise nicht verfügbar: {e}")
@@ -8866,8 +8433,7 @@ def render_analysis(
                 results_for_display,
                 project_inputs,
                 texts,
-                session_suffix="extended_dashboard",
-            )
+                session_suffix="extended_dashboard")
         except (AttributeError, KeyError) as e:
             st.warning(f"Finanzielle Szenarien teilweise nicht verfügbar: {e}")
 
@@ -8877,8 +8443,7 @@ def render_analysis(
                 results_for_display,
                 project_inputs,
                 texts,
-                session_suffix="extended_dashboard",
-            )
+                session_suffix="extended_dashboard")
         except AttributeError as e:
             st.warning(f"Umweltberechnungen teilweise nicht verfügbar: {e}")
 
@@ -8888,8 +8453,7 @@ def render_analysis(
                 results_for_display,
                 project_inputs,
                 texts,
-                session_suffix="extended_dashboard",
-            )
+                session_suffix="extended_dashboard")
         except AttributeError as e:
             st.warning(f"Optimierungsvorschläge nicht verfügbar: {e}")
         else:
@@ -8901,8 +8465,7 @@ def render_analysis(
     try:
         from modern_dashboard_ui import (
             MODERN_DASHBOARD_AVAILABLE,
-            render_modern_analysis_dashboard,
-        )
+            render_modern_analysis_dashboard)
         if MODERN_DASHBOARD_AVAILABLE:
             with st.expander("Modernes Dashboard", expanded=False):
                 render_modern_analysis_dashboard(texts, results_for_display)
@@ -8940,43 +8503,35 @@ def render_analysis(
                         st.metric(
                             "LCOE", f"{
                                 extended_summary.get(
-                                    'lcoe_stromgestehungskosten', 0):.3f} €/kWh", )
+                                    'lcoe_stromgestehungskosten', 0):.3f} €/kWh")
                         st.metric(
                             "IRR",
-                            f"{extended_summary.get('irr_internal_rate_of_return', 0):.2f}%",
-                        )
+                            f"{extended_summary.get('irr_internal_rate_of_return', 0):.2f}%")
                         st.metric(
                             "CO₂-Einsparung",
-                            f"{extended_summary.get('co2_gesamteinsparung_tonnen', 0):.2f} t",
-                        )
+                            f"{extended_summary.get('co2_gesamteinsparung_tonnen', 0):.2f} t")
 
                     with col2:
                         st.metric(
                             "CO₂-Amortisation",
-                            f"{extended_summary.get('co2_amortisationszeit_jahre', 0):.2f} Jahre",
-                        )
+                            f"{extended_summary.get('co2_amortisationszeit_jahre', 0):.2f} Jahre")
                         st.metric(
                             "Verschattungsverlust",
-                            f"{extended_summary.get('verschattungsverlust_prozent', 0):.2f}%",
-                        )
+                            f"{extended_summary.get('verschattungsverlust_prozent', 0):.2f}%")
                         st.metric(
                             "Temperaturverlust",
-                            f"{extended_summary.get('temperaturverlust_prozent', 0):.2f}%",
-                        )
+                            f"{extended_summary.get('temperaturverlust_prozent', 0):.2f}%")
 
                     with col3:
                         st.metric(
                             "WR-Wirkungsgrad",
-                            f"{extended_summary.get('wechselrichter_wirkungsgrad', 0):.2f}%",
-                        )
+                            f"{extended_summary.get('wechselrichter_wirkungsgrad', 0):.2f}%")
                         st.metric(
                             "Recycling-Quote",
-                            f"{extended_summary.get('recycling_quote_prozent', 0):.2f}%",
-                        )
+                            f"{extended_summary.get('recycling_quote_prozent', 0):.2f}%")
                         st.metric(
                             "Top-Optimierung",
-                            f"{extended_summary.get('top_optimierung_nutzen', 0):.2f} €/Jahr",
-                        )
+                            f"{extended_summary.get('top_optimierung_nutzen', 0):.2f} €/Jahr")
 
                 st.info(
                     " Diese Daten stehen nun für den PDF-Export zur Verfügung und können in Angebotsdokumenten verwendet werden."
@@ -9009,8 +8564,7 @@ def render_analysis(
         get_text(
             texts,
             "analysis_switcher_charts_header_updated",
-            "Zusätzliche Visualisierungen (3D)",
-        )
+            "Zusätzliche Visualisierungen (3D)")
     )
     render_daily_production_switcher(results_for_display, texts, viz_settings)
     st.markdown("---")
@@ -9099,8 +8653,7 @@ def render_analysis(
         debug_log(
             "analysis.session_sync",
             "Synchronisation der Analyseergebnisse fehlgeschlagen",
-            error=str(sync_exc),
-        )
+            error=str(sync_exc))
 
     # Live-Vorschau für Simulationsdetails
     if MODERN_CHARTS_AVAILABLE:
@@ -9166,8 +8719,7 @@ def render_analysis(
                 formatted_df_sim_table = df_sim_table.copy()
                 for (
                     col_sim_fmt_key,
-                    col_sim_fmt_display_name,
-                ) in data_keys_for_table.items():
+                    col_sim_fmt_display_name) in data_keys_for_table.items():
                     if col_sim_fmt_display_name in formatted_df_sim_table.columns:
                         unit_in_table = ""
                         precision_in_table = 2
@@ -9195,8 +8747,7 @@ def render_analysis(
                                     x,
                                     unit=unit_in_table,
                                     precision=precision_in_table,
-                                    texts_dict=texts,
-                                )
+                                    texts_dict=texts)
                                 if pd.notnull(x)
                                 else get_text(texts, "not_applicable_short", "k.A.")
                             )
@@ -9205,15 +8756,13 @@ def render_analysis(
                     formatted_df_sim_table.set_index("Jahr"),
                     use_container_width=True,
                     height=min(350, (sim_years_eff_econ_table + 1) * 35 + 3),
-                    key="analysis_simulation_details_dataframe_v8_corrected",
-                )
+                    key="analysis_simulation_details_dataframe_v8_corrected")
             else:
                 st.info(
                     get_text(
                         texts,
                         "simulation_details_no_data_after_df",
-                        "Simulationsdetails-DataFrame ist leer.",
-                    )
+                        "Simulationsdetails-DataFrame ist leer.")
                 )
         except Exception as e_df_sim:
             st.error(
@@ -9223,8 +8772,7 @@ def render_analysis(
             get_text(
                 texts,
                 "simulation_details_no_data",
-                "Simulationsdetails nicht verfügbar (Simulationsdauer 0 oder Daten fehlen).",
-            ))
+                "Simulationsdetails nicht verfügbar (Simulationsdauer 0 oder Daten fehlen)."))
         st.markdown("---")
     #
     # FINANZIERUNGSANALYSE - Integration der Financial Tools
@@ -9386,8 +8934,7 @@ def render_financing_analysis(
                         total_investment * 0.8),
                     total_investment),
                 step=500.0,
-                key="financing_amount_analysis",
-            )
+                key="financing_amount_analysis")
 
         with col_param2:
             if financing_type == "Bankkredit (Annuität)":
@@ -9397,8 +8944,7 @@ def render_financing_analysis(
                     max_value=12.0,
                     value=customer_data.get("interest_rate_percent", 4.5),
                     step=0.1,
-                    key="interest_rate_analysis",
-                )
+                    key="interest_rate_analysis")
             else:
                 leasing_factor = st.slider(
                     "Leasingfaktor (% pro Monat)",
@@ -9406,8 +8952,7 @@ def render_financing_analysis(
                     max_value=3.0,
                     value=customer_data.get("leasing_factor_percent", 1.2),
                     step=0.1,
-                    key="leasing_factor_analysis",
-                )
+                    key="leasing_factor_analysis")
 
         with col_param3:
             if financing_type == "Bankkredit (Annuität)":
@@ -9416,8 +8961,7 @@ def render_financing_analysis(
                     min_value=5,
                     max_value=25,
                     value=customer_data.get("loan_term_years", 15),
-                    key="loan_term_analysis",
-                )
+                    key="loan_term_analysis")
             else:
                 leasing_term = st.slider(
                     "Leasinglaufzeit (Monate)",
@@ -9425,8 +8969,7 @@ def render_financing_analysis(
                     max_value=180,
                     value=customer_data.get("leasing_term_months", 120),
                     step=12,
-                    key="leasing_term_analysis",
-                )
+                    key="leasing_term_analysis")
 
     # Finanzierungsberechnungen durchführen
     if financing_type == "Bankkredit (Annuität)":
@@ -9462,8 +9005,7 @@ def render_financing_analysis(
                 st.dataframe(
                     tilgungsplan_df.head(24),  # Erste 2 Jahre anzeigen
                     use_container_width=True,
-                    key="tilgungsplan_dataframe",
-                )
+                    key="tilgungsplan_dataframe")
 
                 # Erweiterte Tilgungsplan-Visualisierung
                 fig_tilgung = go.Figure()
@@ -9477,8 +9019,7 @@ def render_financing_analysis(
                         name="Zinsen",
                         fill="tozeroy",
                         stackgroup="one",
-                        line=dict(color="#EF4444", width=2),
-                    )
+                        line=dict(color="#EF4444", width=2))
                 )
                 fig_tilgung.add_trace(
                     go.Scatter(
@@ -9488,8 +9029,7 @@ def render_financing_analysis(
                         name="Tilgung",
                         fill="tonexty",
                         stackgroup="one",
-                        line=dict(color="#10B981", width=2),
-                    )
+                        line=dict(color="#10B981", width=2))
                 )
 
                 # Restschuld als separate Linie
@@ -9500,8 +9040,7 @@ def render_financing_analysis(
                         mode="lines",
                         name="Restschuld",
                         yaxis="y2",
-                        line=dict(color="#3B82F6", width=3, dash="dash"),
-                    )
+                        line=dict(color="#3B82F6", width=3, dash="dash"))
                 )
 
                 fig_tilgung.update_layout(
@@ -9512,16 +9051,14 @@ def render_financing_analysis(
                         title="Restschuld (€)",
                         overlaying="y",
                         side="right",
-                        showgrid=False,
-                    ),
+                        showgrid=False),
                     hovermode="x unified",
                     legend=dict(
                         orientation="h",
                         yanchor="bottom",
                         y=1.02,
                         xanchor="right",
-                        x=1),
-                )
+                        x=1))
                 st.plotly_chart(
                     fig_tilgung,
                     use_container_width=True,
@@ -9545,8 +9082,7 @@ def render_financing_analysis(
                                 for jahr in tilgungsplan_df["jahr"].unique()
                             ],
                             name="Zinsen pro Jahr",
-                            marker_color="#EF4444",
-                        )
+                            marker_color="#EF4444")
                     )
                     fig_zins_anteil.add_trace(
                         go.Bar(
@@ -9558,15 +9094,13 @@ def render_financing_analysis(
                                 for jahr in tilgungsplan_df["jahr"].unique()
                             ],
                             name="Tilgung pro Jahr",
-                            marker_color="#10B981",
-                        )
+                            marker_color="#10B981")
                     )
                     fig_zins_anteil.update_layout(
                         title="Jährliche Zins- und Tilgungsverteilung",
                         xaxis_title="Jahr",
                         yaxis_title="Betrag (€)",
-                        barmode="stack",
-                    )
+                        barmode="stack")
                     st.plotly_chart(fig_zins_anteil, use_container_width=True)
 
                 with col_analysis2:
@@ -9581,8 +9115,7 @@ def render_financing_analysis(
                             y=cumulative_interest,
                             mode="lines",
                             name="Kumulierte Zinsen",
-                            line=dict(color="#EF4444", width=3),
-                        )
+                            line=dict(color="#EF4444", width=3))
                     )
                     fig_cumulative.add_trace(
                         go.Scatter(
@@ -9590,14 +9123,12 @@ def render_financing_analysis(
                             y=cumulative_principal,
                             mode="lines",
                             name="Kumulierte Tilgung",
-                            line=dict(color="#10B981", width=3),
-                        )
+                            line=dict(color="#10B981", width=3))
                     )
                     fig_cumulative.update_layout(
                         title="Kumulierte Zins- und Tilgungszahlungen",
                         xaxis_title="Monat",
-                        yaxis_title="Kumulierte Beträge (€)",
-                    )
+                        yaxis_title="Kumulierte Beträge (€)")
                     st.plotly_chart(fig_cumulative, use_container_width=True)
 
                 # Speichere Daten für PDF-Export
@@ -9625,8 +9156,7 @@ def render_financing_analysis(
             with col_result1:
                 st.metric(
                     "Monatliche Leasingrate",
-                    f"{leasing_result['monatliche_rate']:,.2f} €",
-                )
+                    f"{leasing_result['monatliche_rate']:,.2f} €")
 
             with col_result2:
                 st.metric("Gesamtleasingkosten",
@@ -9668,8 +9198,7 @@ def render_financing_analysis(
                                 ],
                                 hole=0.3,
                                 marker_colors=[
-                                    "#3B82F6", "#EF4444", "#10B981"],
-                            )
+                                    "#3B82F6", "#EF4444", "#10B981"])
                         ]
                     )
                     fig_leasing_costs.update_layout(
@@ -9703,8 +9232,7 @@ def render_financing_analysis(
                             y=cumulative_leasing,
                             mode="lines",
                             name="Kumulierter Cashflow (Leasing)",
-                            line=dict(color="#3B82F6", width=3),
-                        )
+                            line=dict(color="#3B82F6", width=3))
                     )
                     fig_cashflow_comparison.add_trace(
                         go.Scatter(
@@ -9712,14 +9240,12 @@ def render_financing_analysis(
                             y=cumulative_purchase,
                             mode="lines",
                             name="Kumulierter Cashflow (Kauf)",
-                            line=dict(color="#10B981", width=3),
-                        )
+                            line=dict(color="#10B981", width=3))
                     )
                     fig_cashflow_comparison.update_layout(
                         title="Cashflow-Vergleich: Leasing vs. Kauf",
                         xaxis_title="Monat",
-                        yaxis_title="Kumulierter Cashflow (€)",
-                    )
+                        yaxis_title="Kumulierter Cashflow (€)")
                     st.plotly_chart(
                         fig_cashflow_comparison,
                         use_container_width=True)
@@ -9732,15 +9258,13 @@ def render_financing_analysis(
                         y=leasing_cashflow,
                         name="Monatliche Leasingrate",
                         marker_color="#3B82F6",
-                        opacity=0.7,
-                    )
+                        opacity=0.7)
                 )
                 fig_monthly_burden.update_layout(
                     title="Monatliche Belastung über Leasinglaufzeit",
                     xaxis_title="Monat",
                     yaxis_title="Monatliche Belastung (€)",
-                    showlegend=False,
-                )
+                    showlegend=False)
                 st.plotly_chart(fig_monthly_burden, use_container_width=True)
 
                 # Speichere Leasing-Daten für PDF-Export
@@ -9775,8 +9299,7 @@ def render_financing_analysis(
                 max_value=15.0,
                 value=4.5,
                 step=0.1,
-                key="sensitivity_base_rate",
-            )
+                key="sensitivity_base_rate")
 
         with col_sens2:
             rate_variation = st.slider(
@@ -9785,16 +9308,14 @@ def render_financing_analysis(
                 max_value=3.0,
                 value=1.5,
                 step=0.25,
-                key="sensitivity_variation",
-            )
+                key="sensitivity_variation")
 
         with col_sens3:
             analysis_term = st.selectbox(
                 "Analysezeitraum",
                 options=[10, 15, 20, 25],
                 index=1,
-                key="sensitivity_term",
-            )
+                key="sensitivity_term")
 
         # Sensitivitätsanalyse berechnen
         if st.button(" Sensitivitätsanalyse berechnen", key="run_sensitivity"):
@@ -9829,14 +9350,12 @@ def render_financing_analysis(
                             x=scenario_names,
                             y=[r["monthly_payment"] for r in scenario_results],
                             name="Monatliche Rate",
-                            marker_color=["#10B981", "#3B82F6", "#EF4444"],
-                        )
+                            marker_color=["#10B981", "#3B82F6", "#EF4444"])
                     )
                     fig_rates.update_layout(
                         title="Monatliche Raten nach Zinsszenario",
                         xaxis_title="Szenario",
-                        yaxis_title="Monatliche Rate (€)",
-                    )
+                        yaxis_title="Monatliche Rate (€)")
                     st.plotly_chart(fig_rates, use_container_width=True)
 
                 with col_scenario2:
@@ -9846,14 +9365,12 @@ def render_financing_analysis(
                             x=scenario_names,
                             y=[r["total_cost"] for r in scenario_results],
                             name="Gesamtkosten",
-                            marker_color=["#10B981", "#3B82F6", "#EF4444"],
-                        )
+                            marker_color=["#10B981", "#3B82F6", "#EF4444"])
                     )
                     fig_total_costs.update_layout(
                         title="Gesamtkosten nach Zinsszenario",
                         xaxis_title="Szenario",
-                        yaxis_title="Gesamtkosten (€)",
-                    )
+                        yaxis_title="Gesamtkosten (€)")
                     st.plotly_chart(fig_total_costs, use_container_width=True)
 
                 # Szenario-Tabelle
@@ -9945,14 +9462,12 @@ def render_financing_analysis(
                         for r in roi_data
                     ],
                     name="ROI / Jährlicher Nettonutzen",
-                    marker_color=["#10B981", "#3B82F6", "#F59E0B"],
-                )
+                    marker_color=["#10B981", "#3B82F6", "#F59E0B"])
             )
             fig_roi.update_layout(
                 title="ROI-Vergleich Finanzierungsoptionen",
                 xaxis_title="Finanzierungsoption",
-                yaxis_title="ROI (%) / Nettonutzen (k€)",
-            )
+                yaxis_title="ROI (%) / Nettonutzen (k€)")
             st.plotly_chart(fig_roi, use_container_width=True)
 
         with col_roi2:
@@ -9975,15 +9490,13 @@ def render_financing_analysis(
                         y=cumulative_cashflow,
                         mode="lines+markers",
                         name=roi_item["option"],
-                        line=dict(width=3),
-                    )
+                        line=dict(width=3))
                 )
 
             fig_cashflow_evolution.update_layout(
                 title="Kumulierter Cashflow über 10 Jahre",
                 xaxis_title="Jahr",
-                yaxis_title="Kumulierter Cashflow (€)",
-            )
+                yaxis_title="Kumulierter Cashflow (€)")
             fig_cashflow_evolution.add_hline(
                 y=0, line_dash="dash", line_color="black", opacity=0.5
             )
@@ -10023,8 +9536,7 @@ def render_financing_analysis(
         financing_amount,
         interest_rate if financing_type == "Bankkredit (Annuität)" else 4.5,
         loan_term if financing_type == "Bankkredit (Annuität)" else 15,
-        leasing_factor if financing_type == "Leasing" else 1.2,
-    )
+        leasing_factor if financing_type == "Leasing" else 1.2)
 
     if comparison_result:
         col_comp1, col_comp2, col_comp3 = st.columns(3)
@@ -10084,14 +9596,12 @@ def render_financing_analysis(
         with col_tax1:
             st.metric(
                 "Jährliche Abschreibung",
-                f"{depreciation_result['jaehrliche_abschreibung']:,.2f} €",
-            )
+                f"{depreciation_result['jaehrliche_abschreibung']:,.2f} €")
 
         with col_tax2:
             st.metric(
                 "Steuerersparnis (30%)",
-                f"{depreciation_result['steuerersparnis_30_prozent']:,.2f} €",
-            )
+                f"{depreciation_result['steuerersparnis_30_prozent']:,.2f} €")
 
     # Photovoltaik-Ertrag und Steueroptimierung
     annual_pv_revenue = results.get("annual_revenue_feed_in_eur", 0) + results.get(
@@ -10123,8 +9633,7 @@ def render_financing_analysis(
             st.metric(
                 "Gewinn nach 20 Jahren (Barkauf)",
                 f"{final_cash_flow:,.2f} €",
-                delta=None,
-            )
+                delta=None)
 
         # Vereinfachte Finanzierungsrendite
         if financing_type == "Bankkredit (Annuität)" and "error" not in loan_result:
@@ -10140,8 +9649,7 @@ def render_financing_analysis(
                 st.metric(
                     f"Gewinn nach 20 Jahren ({financing_type})",
                     f"{financing_profit:,.2f} €",
-                    delta=f"{financing_profit - final_cash_flow:,.2f} €",
-                )
+                    delta=f"{financing_profit - final_cash_flow:,.2f} €")
 
     st.markdown("---")
 

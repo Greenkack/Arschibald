@@ -18,8 +18,7 @@ try:
         calculate_selling_price,
         get_product_by_id,
         get_product_by_model_name,
-        list_products,
-    )
+        list_products)
 except ImportError:
     # Fallback for testing without database
     def get_product_by_id(product_id: int) -> dict[str, Any] | None:
@@ -236,8 +235,7 @@ class CombinedPricingEngine(PricingEngine):
 
         discount_amount = calculate_discount_amount(
             combined_base,
-            total_discount_pct,
-        )
+            total_discount_pct)
 
         self.logger.info(
             f"System synergy discount: {total_discount_pct}% = {discount_amount} EUR")
@@ -533,8 +531,7 @@ class CombinedPricingEngine(PricingEngine):
 
         subsidy_amount = calculate_discount_amount(
             pv_result.base_price,
-            subsidy_rate,
-        )
+            subsidy_rate)
         return min(subsidy_amount, max_subsidy)
 
     def _calculate_combined_system_bonus(self,
@@ -549,8 +546,7 @@ class CombinedPricingEngine(PricingEngine):
 
             bonus_amount = calculate_discount_amount(
                 combined_result.combined_base_price,
-                bonus_rate,
-            )
+                bonus_rate)
             return min(bonus_amount, max_bonus)
 
         return 0.0

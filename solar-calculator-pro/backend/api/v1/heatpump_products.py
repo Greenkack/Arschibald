@@ -19,8 +19,7 @@ from solar-calculator-pro.backend.models.heatpump_product_schemas import (
     HeatPumpAvailabilityUpdate,
     HeatPumpBulkAvailabilityRequest,
     HeatPumpBulkAvailabilityResponse,
-    HeatPumpType,
-)
+    HeatPumpType)
 from solar-calculator-pro.backend.services.heatpump_product_service import heatpump_product_service
 
 

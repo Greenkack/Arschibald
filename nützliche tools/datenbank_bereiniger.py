@@ -24,7 +24,7 @@ def clean_database(db_path="solar_app.db"):
         print(f" DATENBANK-BEREINIGUNG für {db_path}")
         print(f"Gefundene Tabellen: {len(tables)}")
 
-        for (table_name,) in tables:
+        for (table_name) in tables:
             # Zähle Einträge
             cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
             count = cursor.fetchone()[0]

@@ -38,8 +38,7 @@ class AuditLog(Base):
     __table_args__ = (
         Index('idx_audit_timestamp_action', 'timestamp', 'action'),
         Index('idx_audit_user_timestamp', 'user_id', 'timestamp'),
-        Index('idx_audit_table_record', 'table_name', 'record_id'),
-    )
+        Index('idx_audit_table_record', 'table_name', 'record_id'))
 
 
 class DataAccessLog(Base):
@@ -68,8 +67,7 @@ class DataAccessLog(Base):
     # Indexes for performance
     __table_args__ = (
         Index('idx_access_timestamp_user', 'timestamp', 'user_id'),
-        Index('idx_access_table_timestamp', 'table_name', 'timestamp'),
-    )
+        Index('idx_access_table_timestamp', 'table_name', 'timestamp'))
 
 
 class UserActionLog(Base):
@@ -100,8 +98,7 @@ class UserActionLog(Base):
     __table_args__ = (
         Index('idx_action_timestamp_user', 'timestamp', 'user_id'),
         Index('idx_action_type_timestamp', 'action_type', 'timestamp'),
-        Index('idx_action_category_status', 'action_category', 'status'),
-    )
+        Index('idx_action_category_status', 'action_category', 'status'))
 
 
 class ComplianceLog(Base):
@@ -127,8 +124,7 @@ class ComplianceLog(Base):
     # Indexes for performance
     __table_args__ = (
         Index('idx_compliance_type_timestamp', 'compliance_type', 'timestamp'),
-        Index('idx_compliance_status', 'compliance_status'),
-    )
+        Index('idx_compliance_status', 'compliance_status'))
 
 
 class AuditReport(Base):
@@ -156,5 +152,4 @@ class AuditReport(Base):
     # Indexes for performance
     __table_args__ = (
         Index('idx_report_type_created', 'report_type', 'created_at'),
-        Index('idx_report_status', 'status'),
-    )
+        Index('idx_report_status', 'status'))

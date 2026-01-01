@@ -331,7 +331,7 @@ class SolarCalculatorProductBridge:
                 try:
                     # Check if product exists by model_name
                     cursor.execute(
-                        'SELECT id FROM products WHERE model_name = ?', (item['model_name'],))
+                        'SELECT id FROM products WHERE model_name = ?', (item['model_name']))
                     existing = cursor.fetchone()
 
                     if existing:
@@ -875,8 +875,7 @@ class SolarCalculatorProductBridge:
                 WHERE brand = ? AND (category LIKE '%PV%' OR category LIKE '%modul%' OR category LIKE '%Modul%' OR category = 'pv_modul' OR category = 'PV_Modul' OR category = 'modul' OR category = 'Modul')
                 ORDER BY model_name
                 """,
-                [manufacturer],
-            )
+                [manufacturer])
 
             results: list[dict[str, Any]] = []
             for row in cursor.fetchall():
@@ -929,8 +928,7 @@ class SolarCalculatorProductBridge:
                 WHERE brand = ? AND (category LIKE '%Wechselrichter%' OR category LIKE '%Inverter%')
                 ORDER BY model_name
                 """,
-                [manufacturer],
-            )
+                [manufacturer])
 
             results: list[dict[str, Any]] = []
             for row in cursor.fetchall():
@@ -984,8 +982,7 @@ class SolarCalculatorProductBridge:
                 WHERE brand = ? AND (category LIKE '%Speicher%' OR category LIKE '%Batter%')
                 ORDER BY model_name
                 """,
-                [manufacturer],
-            )
+                [manufacturer])
 
             results: list[dict[str, Any]] = []
             for row in cursor.fetchall():
@@ -1131,8 +1128,7 @@ class SolarCalculatorProductBridge:
                     WHERE kategorie = ? AND hersteller = ?
                     ORDER BY produkt_modell
                     """,
-                    [category, manufacturer],
-                )
+                    [category, manufacturer])
 
                 results: list[dict[str, Any]] = []
                 for row in cursor.fetchall():
@@ -1156,8 +1152,7 @@ class SolarCalculatorProductBridge:
                 WHERE manufacturer = ? AND category = ?
                 ORDER BY model_name
                 """,
-                [manufacturer, category],
-            )
+                [manufacturer, category])
 
             results: list[dict[str, Any]] = []
             for row in cursor.fetchall():
@@ -1711,7 +1706,7 @@ if __name__ == "__main__":
                     conn = bridge.get_connection()
                 conn.row_factory = sqlite3.Row
                 cur = conn.execute(
-                    "SELECT * FROM customers WHERE id = ?", (cid,))
+                    "SELECT * FROM customers WHERE id = ?", (cid))
                 row = cur.fetchone()
                 print(json.dumps(dict(row) if row else None, default=str))
             except Exception as e:
@@ -1799,8 +1794,8 @@ if __name__ == "__main__":
                     conn = bridge.get_connection()
                     cur = conn.cursor()
                     cur.execute(
-                        "DELETE FROM projects WHERE customer_id=?", (cid,))
-                    cur.execute("DELETE FROM customers WHERE id=?", (cid,))
+                        "DELETE FROM projects WHERE customer_id=?", (cid))
+                    cur.execute("DELETE FROM customers WHERE id=?", (cid))
                     conn.commit()
                     print(json.dumps({"success": cur.rowcount > 0}))
             except Exception as e:
@@ -1825,7 +1820,7 @@ if __name__ == "__main__":
                     conn = bridge.get_connection()
                     conn.row_factory = sqlite3.Row
                     rows = conn.execute(
-                        "SELECT * FROM projects WHERE customer_id=? ORDER BY id DESC", (cid,)).fetchall()
+                        "SELECT * FROM projects WHERE customer_id=? ORDER BY id DESC", (cid)).fetchall()
                     print(json.dumps([dict(r) for r in rows], default=str))
             except Exception as e:
                 print(json.dumps({"error": str(e)}))
@@ -1849,7 +1844,7 @@ if __name__ == "__main__":
                     conn = bridge.get_connection()
                     conn.row_factory = sqlite3.Row
                     row = conn.execute(
-                        "SELECT * FROM projects WHERE id=?", (pid,)).fetchone()
+                        "SELECT * FROM projects WHERE id=?", (pid)).fetchone()
                     print(json.dumps(dict(row) if row else None, default=str))
             except Exception as e:
                 print(json.dumps({"error": str(e)}))
@@ -1915,7 +1910,7 @@ if __name__ == "__main__":
                 except Exception:
                     conn = bridge.get_connection()
                     cur = conn.cursor()
-                    cur.execute("DELETE FROM projects WHERE id=?", (pid,))
+                    cur.execute("DELETE FROM projects WHERE id=?", (pid))
                     conn.commit()
                     print(json.dumps({"success": cur.rowcount > 0}))
             except Exception as e:

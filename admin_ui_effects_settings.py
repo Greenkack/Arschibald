@@ -13,8 +13,7 @@ import streamlit as st
 from ui_effects_library import (
     get_default_effect,
     get_effect_info,
-    get_effect_names,
-)
+    get_effect_names)
 
 
 def load_ui_effects_settings():

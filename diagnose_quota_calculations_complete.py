@@ -26,7 +26,7 @@ def diagnose_quota_calculations():
         JOIN controlling_criteria c ON pd.criterion_id = c.id
         WHERE pd.employee_id = 1 AND pd.date = ?
         ORDER BY c.name
-    """, (today,))
+    """, (today))
     
     data = {row['name']: row['value'] for row in cursor.fetchall()}
     

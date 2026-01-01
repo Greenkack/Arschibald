@@ -21,8 +21,7 @@ try:
     from product_attributes import (
         list_attributes as pa_list_attributes,
         upsert_attribute as pa_upsert_attribute,
-        delete_attribute as pa_delete_attribute,
-    )
+        delete_attribute as pa_delete_attribute)
 except Exception:
     pa_list_attributes = None  # type: ignore
     pa_upsert_attribute = None  # type: ignore

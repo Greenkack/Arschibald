@@ -12,7 +12,7 @@ from datetime import datetime
 
 st.set_page_config(
     page_title="State Management Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 

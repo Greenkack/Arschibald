@@ -14,8 +14,7 @@ from typing import Any
 
 from financial_calculations import (
     calculate_discount_amount,
-    calculate_surcharge_amount,
-)
+    calculate_surcharge_amount)
 
 logger = logging.getLogger(__name__)
 
@@ -298,8 +297,7 @@ class AdvancedPricingFormula:
         total_savings = percentage_savings + total_fixed_discount
         total_additions = accessories_cost + calculate_surcharge_amount(
             base_with_accessories - total_savings,
-            total_pct_surcharge,
-        ) + total_fixed_surcharge
+            total_pct_surcharge) + total_fixed_surcharge
 
         # Build formula string
         formula_parts = []

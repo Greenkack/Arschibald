@@ -18,7 +18,7 @@ cursor.execute(
 categories = cursor.fetchall()
 
 for cat in categories:
-    cursor.execute("SELECT COUNT(*) FROM products WHERE category=?", (cat[0],))
+    cursor.execute("SELECT COUNT(*) FROM products WHERE category=?", (cat[0]))
     count = cursor.fetchone()[0]
     print(f"  {cat[0]:<30} ({count} Produkte)")
 

@@ -24,7 +24,7 @@ def main():
     
     st.set_page_config(
         page_title="Hot Reload Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     

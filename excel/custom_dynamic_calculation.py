@@ -58,8 +58,7 @@ def calculate_savings(
     battery_capacity_kwh: float,
     price_eur_per_kwh: float,
     eeg_eur_per_kwh: float,
-    days_per_year: int = 300,
-) -> SavingsResult:
+    days_per_year: int = 300) -> SavingsResult:
     """Calculate annual savings for a PV system with battery storage.
 
     Args:
@@ -111,8 +110,7 @@ def calculate_savings(
         revenue_grid=revenue_grid,
         savings_battery_usage=savings_battery_usage,
         savings_battery_surplus=savings_battery_surplus,
-        total=total,
-    )
+        total=total)
 
 
 if __name__ == "__main__":
@@ -129,7 +127,6 @@ if __name__ == "__main__":
         direct_consumption_kwh=2640,
         battery_capacity_kwh=12.10,
         price_eur_per_kwh=0.35,
-        eeg_eur_per_kwh=0.0786,
-    )
+        eeg_eur_per_kwh=0.0786)
     print("Example calculation result:")
     print(result)

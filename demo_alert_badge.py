@@ -11,7 +11,7 @@ from components.badge import Badge, BadgeGroup, badge, badge_group
 # Seiten-Konfiguration
 st.set_page_config(
     page_title="Alert & Badge Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 
@@ -85,7 +85,6 @@ with tab1:
             message="Neue Nachricht erhalten",
             type="info",
             title="Posteingang",
-            icon="",
             key="alert_custom_1"
         )
 
@@ -93,7 +92,6 @@ with tab1:
         alert_component.render(
             message="Daten wurden gespeichert",
             type="success",
-            icon="",
             key="alert_custom_2"
         )
 
@@ -311,17 +309,17 @@ with tab3:
 
     with col1:
         badge_component.render(
-            text="Verified", variant="success", icon="", key="badge_icon_1"
+            text="Verified", variant="success", key="badge_icon_1"
         )
 
     with col2:
         badge_component.render(
-            text="Premium", variant="warning", icon="", key="badge_icon_2"
+            text="Premium", variant="warning", key="badge_icon_2"
         )
 
     with col3:
         badge_component.render(
-            text="New", variant="info", icon="", key="badge_icon_3"
+            text="New", variant="info", key="badge_icon_3"
         )
 
     st.markdown("---")
@@ -351,15 +349,13 @@ from components.badge import badge
 
 badge(
     text="Quick Badge",
-    variant="success",
-    icon=""
+    variant="success"
 )
     """)
 
     badge(
         text="Quick Badge",
         variant="success",
-        icon="",
         key="badge_convenience"
     )
 

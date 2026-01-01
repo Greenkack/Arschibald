@@ -44,7 +44,7 @@ def is_special_product(product_id: int) -> bool:
         cursor = conn.cursor()
         cursor.execute(
             "SELECT is_special_product FROM products WHERE id = ?",
-            (product_id,)
+            (product_id)
         )
         row = cursor.fetchone()
         
@@ -76,7 +76,7 @@ def is_special_product_by_name(model_name: str) -> bool:
         cursor = conn.cursor()
         cursor.execute(
             "SELECT is_special_product FROM products WHERE model_name = ?",
-            (model_name,)
+            (model_name)
         )
         row = cursor.fetchone()
         
@@ -114,7 +114,7 @@ def get_special_products(category: Optional[str] = None) -> list[dict[str, Any]]
                 FROM products 
                 WHERE is_special_product = 1 AND category = ?
                 ORDER BY category, model_name
-            """, (category,))
+            """, (category))
         else:
             cursor.execute("""
                 SELECT id, category, model_name, brand, price_euro,

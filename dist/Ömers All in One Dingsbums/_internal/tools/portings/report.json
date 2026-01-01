@@ -1,0 +1,8 @@
+{
+  "modules_compared": 112,
+  "missing_counts": {
+    "func": 110,
+    "class": 11,
+    "method": 30
+  }
+}

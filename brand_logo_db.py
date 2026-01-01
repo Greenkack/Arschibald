@@ -82,7 +82,7 @@ def add_brand_logo(
 
         # Prüfen ob Logo bereits existiert
         cursor.execute(
-            "SELECT id FROM brand_logos WHERE brand_name = ?", (brand_name,))
+            "SELECT id FROM brand_logos WHERE brand_name = ?", (brand_name))
         existing = cursor.fetchone()
 
         if existing:
@@ -136,7 +136,7 @@ def get_brand_logo(brand_name: str) -> dict[str, Any] | None:
                    is_active, created_at, updated_at
             FROM brand_logos
             WHERE brand_name = ?
-        """, (brand_name,))
+        """, (brand_name))
 
         result = cursor.fetchone()
         conn.close()
@@ -224,7 +224,7 @@ def delete_brand_logo(brand_name: str) -> bool:
 
         cursor = conn.cursor()
         cursor.execute(
-            "DELETE FROM brand_logos WHERE brand_name = ?", (brand_name,))
+            "DELETE FROM brand_logos WHERE brand_name = ?", (brand_name))
 
         deleted_count = cursor.rowcount
         conn.commit()
@@ -438,7 +438,7 @@ def deactivate_brand_logo(brand_name: str) -> bool:
             UPDATE brand_logos
             SET is_active = 0, updated_at = CURRENT_TIMESTAMP
             WHERE brand_name = ?
-        """, (brand_name,))
+        """, (brand_name))
 
         updated_count = cursor.rowcount
         conn.commit()

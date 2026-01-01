@@ -19,7 +19,7 @@ from theming import ThemeManager
 def main():
     st.set_page_config(
         page_title="shadcn/ui Sidebar Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
 
@@ -90,17 +90,17 @@ def demo_basic_sidebar():
         MenuGroup(
             title="Navigation",
             items=[
-                MenuItem(label="Home", icon="", key="home"),
+                MenuItem(label="Home", key="home"),
                 MenuItem(label="About", icon="ℹ", key="about"),
-                MenuItem(label="Contact", icon="", key="contact"),
+                MenuItem(label="Contact", key="contact"),
             ]
         ),
         MenuGroup(
             title="Features",
             items=[
-                MenuItem(label="Dashboard", icon="", key="dashboard"),
-                MenuItem(label="Analytics", icon="", key="analytics"),
-                MenuItem(label="Reports", icon="", key="reports"),
+                MenuItem(label="Dashboard", key="dashboard"),
+                MenuItem(label="Analytics", key="analytics"),
+                MenuItem(label="Reports", key="reports"),
             ]
         )
     ]
@@ -130,13 +130,11 @@ def demo_with_callbacks():
             items=[
                 MenuItem(
                     label="Dashboard",
-                    icon="",
                     key="dashboard_cb",
                     callback=on_dashboard_click
                 ),
                 MenuItem(
                     label="Einstellungen",
-                    icon="",
                     key="settings_cb",
                     callback=on_settings_click
                 ),
@@ -161,8 +159,8 @@ def demo_collapsible_groups():
         MenuGroup(
             title="Immer sichtbar",
             items=[
-                MenuItem(label="Home", icon="", key="home_coll"),
-                MenuItem(label="Dashboard", icon="", key="dash_coll"),
+                MenuItem(label="Home", key="home_coll"),
+                MenuItem(label="Dashboard", key="dash_coll"),
             ]
         ),
         MenuGroup(
@@ -178,8 +176,8 @@ def demo_collapsible_groups():
         MenuGroup(
             title="Admin-Bereich",
             items=[
-                MenuItem(label="Benutzer", icon="", key="users_coll"),
-                MenuItem(label="Logs", icon="", key="logs_coll"),
+                MenuItem(label="Benutzer", key="users_coll"),
+                MenuItem(label="Logs", key="logs_coll"),
             ],
             collapsible=True,
             collapsed=False
@@ -209,7 +207,7 @@ def demo_with_footer():
         MenuGroup(
             title="Navigation",
             items=[
-                MenuItem(label="Home", icon="", key="home_footer"),
+                MenuItem(label="Home", key="home_footer"),
                 MenuItem(label="About", icon="ℹ", key="about_footer"),
             ]
         )
@@ -234,24 +232,20 @@ def demo_disabled_items():
             items=[
                 MenuItem(
                     label="Verfügbar",
-                    icon="",
                     key="available"
                 ),
                 MenuItem(
                     label="In Entwicklung",
-                    icon="",
                     key="dev",
                     disabled=True
                 ),
                 MenuItem(
                     label="Bald verfügbar",
-                    icon="",
                     key="soon",
                     disabled=True
                 ),
                 MenuItem(
                     label="Beta",
-                    icon="",
                     key="beta"
                 ),
             ]
@@ -331,7 +325,7 @@ groups = [
     MenuGroup(
         title="Navigation",
         items=[
-            MenuItem(label="Home", icon="", key="home"),
+            MenuItem(label="Home", key="home"),
             MenuItem(label="About", icon="ℹ", key="about"),
         ]
     )
@@ -351,7 +345,6 @@ groups = [
         items=[
             MenuItem(
                 label="Button",
-                icon="",
                 key="btn",
                 callback=on_click
             ),
@@ -388,7 +381,6 @@ sidebar.render(groups, footer_content=render_footer)
             st.code("""
 MenuItem(
     label="Bald verfügbar",
-    icon="",
     key="soon",
     disabled=True
 )

@@ -21,7 +21,7 @@ from components.metric_card import MetricCard
 def main():
     st.set_page_config(
         page_title="Performance-Optimierung Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     

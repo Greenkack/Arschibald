@@ -15,8 +15,7 @@ from financial_calculations import (
     aggregate_subtotal,
     calculate_discount_amount,
     calculate_payback_years,
-    calculate_surcharge_amount,
-)
+    calculate_surcharge_amount)
 
 
 def _get_pricing_modifications_from_session() -> dict[str, Any]:
@@ -48,15 +47,13 @@ def _calculate_final_price_with_modifications(
         final_price, discount_percent)
     final_price = aggregate_subtotal(
         base=final_price,
-        discounts=[percent_discount_amount] if percent_discount_amount else None,
-    )
+        discounts=[percent_discount_amount] if percent_discount_amount else None)
 
     percent_surcharge_amount = calculate_surcharge_amount(
         final_price, surcharge_percent)
     final_price = aggregate_subtotal(
         base=final_price,
-        surcharges=[percent_surcharge_amount] if percent_surcharge_amount else None,
-    )
+        surcharges=[percent_surcharge_amount] if percent_surcharge_amount else None)
 
     # Absolute Beträge
     special_discount = modifications.get('special_discount', 0.0)
@@ -65,8 +62,7 @@ def _calculate_final_price_with_modifications(
     final_price = aggregate_subtotal(
         base=final_price,
         discounts=[special_discount] if special_discount else None,
-        additions=[additional_costs] if additional_costs else None,
-    )
+        additions=[additional_costs] if additional_costs else None)
 
     # Gesamte Rabatte und Aufpreise berechnen (für Anzeige)
     total_rebates = percent_discount_amount + special_discount
@@ -183,8 +179,7 @@ def _calculate_amortization_time(
         investment,
         annual_savings,
         allow_infinite=False,
-        default_zero=True,
-    )
+        default_zero=True)
 
 
 def _format_german_number(
@@ -346,8 +341,7 @@ def render_live_cost_preview(results_for_display: dict[str, Any] = None):
                 'netto_mit_provision',
                 'final_offer_price_netto',
             ],
-            default=0.0,
-        ) or 0.0
+            default=0.0) or 0.0
 
         total_rebates = _resolve_numeric([
             'total_discounts',
@@ -383,8 +377,7 @@ def render_live_cost_preview(results_for_display: dict[str, Any] = None):
                         0.0),
                     pricing_modifications_preview.get(
                         'surcharge_percent',
-                        0.0),
-                ))
+                        0.0)))
         total_surcharges = max(total_surcharges or 0.0, 0.0)
 
         vat_amount = _resolve_numeric([
@@ -419,8 +412,7 @@ def render_live_cost_preview(results_for_display: dict[str, Any] = None):
         if netto_betrag <= 0:
             final_price_preview, _, _ = _calculate_final_price_with_modifications(
                 max(results_for_display.get('total_investment_netto', 0.0), 0.0),
-                pricing_modifications_preview,
-            )
+                pricing_modifications_preview)
             netto_betrag = max(final_price_preview - vat_amount, 0.0)
 
         final_offer_price = _resolve_numeric([

@@ -169,8 +169,7 @@ def render_multi_pdf_company_selection(companies: List[Dict]) -> List[int]:
         selected_names = st.multiselect(
             "Firmen auswählen",
             options=list(company_options.keys()),
-            default=[companies[i]["name"] for i in range(min(5, len(companies)))],
-        )
+            default=[companies[i]["name"] for i in range(min(5, len(companies)))])
     
     with col_buttons:
         if st.button("Alle wählen"):

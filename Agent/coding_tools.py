@@ -115,8 +115,7 @@ def execute_python_code_in_sandbox(code: str) -> str:
             name=container_name,
             detach=True,
             # Netzwerkzugriff für den Anfang deaktivieren (höchste Sicherheit)
-            network_disabled=True,
-        )
+            network_disabled=True)
 
         # Warten, bis der Container seine Arbeit beendet hat (mit einem
         # Timeout)

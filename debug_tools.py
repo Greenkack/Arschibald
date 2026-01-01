@@ -214,8 +214,7 @@ def debug_log(
     *,
     category: str = "general",
     level: int = logging.DEBUG,
-    **context: Any,
-) -> None:
+    **context: Any) -> None:
     """Store a debug event in logger and optional Streamlit session state."""
     _ensure_logging_configured()
 
@@ -260,8 +259,7 @@ def log_payload(
     payload: Any,
     *,
     category: str = "general",
-    preview_length: int = 800,
-) -> None:
+    preview_length: int = 800) -> None:
     """Log potentially large payloads (PDF bytes, JSON etc.) safely."""
     info: dict[str, Any] = {}
     if isinstance(payload, (bytes, bytearray)):
@@ -290,8 +288,7 @@ def debug_timer(
             category="stability",
             duration_ms=duration_ms,
             error=repr(exc),
-            level=logging.ERROR,
-        )
+            level=logging.ERROR)
         raise
     else:
         duration_ms = (time.perf_counter() - start) * 1000
@@ -347,8 +344,7 @@ def ensure_instrumentation(
                 debug_log(
                     "debug.instrumentation",
                     f"Ziel nicht gefunden: {target_id}",
-                    category="stability",
-                )
+                    category="stability")
                 registry.add(target_id)
                 continue
 
@@ -357,8 +353,7 @@ def ensure_instrumentation(
                 debug_log(
                     "debug.instrumentation",
                     f"Ziel nicht gefunden: {target_id}",
-                    category="stability",
-                )
+                    category="stability")
                 registry.add(target_id)
                 continue
 
@@ -377,8 +372,7 @@ def ensure_instrumentation(
                     __target,
                     "Aufruf gestartet",
                     category=category,
-                    call=call_summary,
-                )
+                    call=call_summary)
                 start = time.perf_counter()
                 try:
                     result = __func(*args, **kwargs)
@@ -391,8 +385,7 @@ def ensure_instrumentation(
                         duration_ms=duration_ms,
                         error=repr(exc),
                         call=call_summary,
-                        level=logging.ERROR,
-                    )
+                        level=logging.ERROR)
                     raise
                 duration_ms = (time.perf_counter() - start) * 1000
                 result_summary = _summarise_result(result)
@@ -401,8 +394,7 @@ def ensure_instrumentation(
                     "Aufruf erfolgreich",
                     category=category,
                     duration_ms=duration_ms,
-                    result=result_summary,
-                )
+                    result=result_summary)
                 return result
 
             wrapper._debug_instrumented = True  # type: ignore[attr-defined]
@@ -411,15 +403,13 @@ def ensure_instrumentation(
             debug_log(
                 "debug.instrumentation",
                 f"Instrumentiert: {target_id}",
-                category="performance",
-            )
+                category="performance")
         except ImportError as exc:
             debug_log(
                 "debug.instrumentation",
                 f"Import fehlgeschlagen: {target_id}",
                 category="stability",
-                error=repr(exc),
-            )
+                error=repr(exc))
             registry.add(target_id)
 
 
@@ -482,8 +472,7 @@ def render_debug_toolbar(location: str = "sidebar") -> None:
                         toggled = st.checkbox(
                             key,
                             value=value,
-                            key=f"{widget_prefix}debug_category_{key}",
-                        )
+                            key=f"{widget_prefix}debug_category_{key}")
                         if toggled != value:
                             set_category_enabled(key, toggled)
 

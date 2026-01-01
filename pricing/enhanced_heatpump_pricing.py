@@ -17,8 +17,7 @@ try:
         calculate_selling_price,
         get_product_by_id,
         get_product_by_model_name,
-        list_products,
-    )
+        list_products)
 except ImportError:
     # Fallback for testing without database
     def get_product_by_id(product_id: int) -> dict[str, Any] | None:
@@ -54,8 +53,7 @@ try:
         BegConfig,
         ComponentCost,
         calculate_annuity_loan,
-        calculate_beg_subsidy,
-    )
+        calculate_beg_subsidy)
 except ImportError:
     # Fallback definitions if heatpump_pricing is not available
     @dataclass

@@ -11,8 +11,7 @@ try:
     from solar_calculator_pricing_integration import (
         SolarCalculatorPricingIntegration,
         get_pricing_display_for_ui,
-        integrate_pricing_with_solar_calculator,
-    )
+        integrate_pricing_with_solar_calculator)
     INTEGRATION_AVAILABLE = True
 except ImportError as e:
     INTEGRATION_AVAILABLE = False

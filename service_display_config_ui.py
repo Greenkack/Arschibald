@@ -69,9 +69,9 @@ def render_service_display_config(
                 help="Blendet die Werte (rechts) für Dienstleistungen UND Produkte aus.")
         with col2:
             pdf_design_config["service_symbol_color"] = st.color_picker(
-                "Farbe Symbole", value=pdf_design_config["service_symbol_color"],)
+                "Farbe Symbole", value=pdf_design_config["service_symbol_color"])
             pdf_design_config["service_label_color"] = st.color_picker(
-                "Farbe Texte", value=pdf_design_config["service_label_color"],)
+                "Farbe Texte", value=pdf_design_config["service_label_color"])
         reset = st.button(
             "Darstellungs-Optionen zurücksetzen",
             type="secondary",

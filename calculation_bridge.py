@@ -287,8 +287,7 @@ def calculate_live_pricing(base_results, modifications):
             final_price_netto,
             annual_savings,
             allow_infinite=False,
-            default_zero=True,
-        )
+            default_zero=True)
 
         # Simple ROI with new price
         new_roi_percent = (

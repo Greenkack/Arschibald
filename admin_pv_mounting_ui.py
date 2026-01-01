@@ -733,7 +733,7 @@ def main():
     """Hauptfunktion der Streamlit-App."""
     st.set_page_config(
         page_title="PV-Unterkonstruktions-Verwaltung",
-        page_icon="",
+        page_
         layout="wide",
         initial_sidebar_state="expanded"
     )

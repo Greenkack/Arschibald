@@ -21,8 +21,7 @@ class I18nService:
     def get_translations(
         self,
         namespace: Optional[str] = None,
-        language: Optional[str] = None,
-    ) -> List[TranslationResponse]:
+        language: Optional[str] = None) -> List[TranslationResponse]:
         """Get all translations with optional filtering"""
         query = self.db.query(Translation)
 
@@ -50,15 +49,13 @@ class I18nService:
     def get_translation_resource(
         self,
         language: str,
-        namespace: str,
-    ) -> Dict[str, Any]:
+        namespace: str) -> Dict[str, Any]:
         """Get translation resource for i18next backend"""
         translations = (
             self.db.query(Translation)
             .filter(
                 Translation.language == language,
-                Translation.namespace == namespace,
-            )
+                Translation.namespace == namespace)
             .all()
         )
 
@@ -85,8 +82,7 @@ class I18nService:
                 namespace=translation.namespace,
                 language=language,
                 value=value,
-                modified_by=translation.modified_by,
-            )
+                modified_by=translation.modified_by)
             self.db.add(db_translation)
             created_translations.append(db_translation)
 
@@ -97,8 +93,7 @@ class I18nService:
             namespace=translation.namespace,
             translations=translation.translations,
             lastModified=datetime.now().isoformat(),
-            modifiedBy=translation.modified_by,
-        )
+            modifiedBy=translation.modified_by)
 
     def update_translation(self, translation: TranslationUpdate) -> TranslationResponse:
         """Update an existing translation"""
@@ -108,8 +103,7 @@ class I18nService:
                 .filter(
                     Translation.key == translation.key,
                     Translation.namespace == translation.namespace,
-                    Translation.language == language,
-                )
+                    Translation.language == language)
                 .first()
             )
 
@@ -124,8 +118,7 @@ class I18nService:
                     namespace=translation.namespace,
                     language=language,
                     value=value,
-                    modified_by=translation.modified_by,
-                )
+                    modified_by=translation.modified_by)
                 self.db.add(db_translation)
 
         self.db.commit()
@@ -135,15 +128,13 @@ class I18nService:
             namespace=translation.namespace,
             translations=translation.translations,
             lastModified=datetime.now().isoformat(),
-            modifiedBy=translation.modified_by,
-        )
+            modifiedBy=translation.modified_by)
 
     def delete_translation(self, key: str, namespace: str):
         """Delete a translation"""
         self.db.query(Translation).filter(
             Translation.key == key,
-            Translation.namespace == namespace,
-        ).delete()
+            Translation.namespace == namespace).delete()
         self.db.commit()
 
     def export_translations(self) -> Dict[str, Dict[str, Dict[str, str]]]:
@@ -173,8 +164,7 @@ class I18nService:
         language: str,
         namespace: str,
         translations: Dict[str, Any],
-        prefix: str = "",
-    ):
+        prefix: str = ""):
         """Import translations from nested dictionary"""
         for key, value in translations.items():
             full_key = f"{prefix}.{key}" if prefix else key
@@ -189,8 +179,7 @@ class I18nService:
                     .filter(
                         Translation.key == full_key,
                         Translation.namespace == namespace,
-                        Translation.language == language,
-                    )
+                        Translation.language == language)
                     .first()
                 )
 
@@ -203,8 +192,7 @@ class I18nService:
                         namespace=namespace,
                         language=language,
                         value=str(value),
-                        modified_by="import",
-                    )
+                        modified_by="import")
                     self.db.add(db_translation)
 
         self.db.commit()
@@ -223,8 +211,7 @@ class I18nService:
         else:
             preference = UserLanguagePreference(
                 user_id=user_id,
-                language=language,
-            )
+                language=language)
             self.db.add(preference)
 
         self.db.commit()
@@ -271,8 +258,7 @@ class I18nService:
         self,
         source_language: str,
         target_language: str,
-        namespace: Optional[str] = None,
-    ) -> int:
+        namespace: Optional[str] = None) -> int:
         """
         Auto-translate missing translations
         Note: This is a placeholder. In production, integrate with a translation API
@@ -291,8 +277,7 @@ class I18nService:
                 .filter(
                     Translation.key == item["key"],
                     Translation.namespace == item["namespace"],
-                    Translation.language == source_language,
-                )
+                    Translation.language == source_language)
                 .first()
             )
 
@@ -307,8 +292,7 @@ class I18nService:
                     namespace=item["namespace"],
                     language=target_language,
                     value=translated_value,
-                    modified_by="auto-translate",
-                )
+                    modified_by="auto-translate")
                 self.db.add(new_trans)
                 count += 1
 

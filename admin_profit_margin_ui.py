@@ -16,8 +16,7 @@ try:
     from pricing.profit_margin_manager import (
         MarginBreakdown,
         MarginConfig,
-        ProfitMarginManager,
-    )
+        ProfitMarginManager)
     from product_db import get_product_by_id, list_product_categories, list_products
     PRICING_AVAILABLE = True
 except ImportError as e:

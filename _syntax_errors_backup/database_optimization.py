@@ -653,7 +653,7 @@ class PricingQueryBuilder:
             with self.optimizer.get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute(
-                    self.queries['products_by_category_with_pricing'], (category,))
+                    self.queries['products_by_category_with_pricing'], (category))
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             logger.error(f"Failed to get products by category: {e}")
@@ -666,7 +666,7 @@ class PricingQueryBuilder:
             with self.optimizer.get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute(
-                    self.queries['products_by_calculate_per'], (calculate_per,))
+                    self.queries['products_by_calculate_per'], (calculate_per))
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             logger.error(f"Failed to get products by calculate_per: {e}")
@@ -679,7 +679,7 @@ class PricingQueryBuilder:
             with self.optimizer.get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute(
-                    self.queries['product_pricing_calculation'], (product_id,))
+                    self.queries['product_pricing_calculation'], (product_id))
                 row = cursor.fetchone()
                 return dict(row) if row else None
         except Exception as e:

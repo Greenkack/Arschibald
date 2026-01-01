@@ -26,8 +26,7 @@ from core.errors import (
     PDFGenerationError,
     ErrorHandler,
     handle_errors,
-    ErrorContext,
-)
+    ErrorContext)
 
 
 class TestErrorCodes:

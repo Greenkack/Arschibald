@@ -44,7 +44,7 @@ def upgrade():
         sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
         sa.Column('created_by', sa.String(length=100), nullable=True),
         sa.Column('updated_by', sa.String(length=100), nullable=True),
-        sa.ForeignKeyConstraint(['parent_id'], ['configurations.id'], ),
+        sa.ForeignKeyConstraint(['parent_id'], ['configurations.id']),
         sa.PrimaryKeyConstraint('id')
     )
     
@@ -71,7 +71,7 @@ def upgrade():
         sa.Column('previous_value', sa.Text(), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
         sa.Column('created_by', sa.String(length=100), nullable=True),
-        sa.ForeignKeyConstraint(['configuration_id'], ['configurations.id'], ),
+        sa.ForeignKeyConstraint(['configuration_id'], ['configurations.id']),
         sa.PrimaryKeyConstraint('id')
     )
     
@@ -96,7 +96,7 @@ def upgrade():
         sa.Column('status', sa.String(length=50), nullable=False, server_default='success'),
         sa.Column('error_message', sa.Text(), nullable=True),
         sa.Column('timestamp', sa.DateTime(timezone=True), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
-        sa.ForeignKeyConstraint(['configuration_id'], ['configurations.id'], ),
+        sa.ForeignKeyConstraint(['configuration_id'], ['configurations.id']),
         sa.PrimaryKeyConstraint('id')
     )
     

@@ -23,7 +23,7 @@ from utils.shadcn_responsive import (
 # Page Config
 st.set_page_config(
     page_title="Responsive Design Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 

@@ -34,7 +34,7 @@ def upgrade():
         sa.Column('user_agent', sa.Text(), nullable=True),
         sa.Column('session_id', sa.String(length=255), nullable=True),
         sa.Column('request_id', sa.String(length=255), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     
@@ -66,7 +66,7 @@ def upgrade():
         sa.Column('user_agent', sa.Text(), nullable=True),
         sa.Column('session_id', sa.String(length=255), nullable=True),
         sa.Column('request_id', sa.String(length=255), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     
@@ -96,7 +96,7 @@ def upgrade():
         sa.Column('user_agent', sa.Text(), nullable=True),
         sa.Column('session_id', sa.String(length=255), nullable=True),
         sa.Column('request_id', sa.String(length=255), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     
@@ -124,7 +124,7 @@ def upgrade():
         sa.Column('compliance_status', sa.String(length=50), nullable=False),
         sa.Column('details', sa.JSON(), nullable=True),
         sa.Column('notes', sa.Text(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     
@@ -150,7 +150,7 @@ def upgrade():
         sa.Column('file_path', sa.String(length=500), nullable=True),
         sa.Column('file_format', sa.String(length=20), nullable=True),
         sa.Column('status', sa.String(length=50), nullable=False),
-        sa.ForeignKeyConstraint(['created_by_id'], ['users.id'], ),
+        sa.ForeignKeyConstraint(['created_by_id'], ['users.id']),
         sa.PrimaryKeyConstraint('id')
     )
     

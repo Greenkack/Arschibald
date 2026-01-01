@@ -29,7 +29,7 @@ from theming.theme_manager import ThemeManager
 # Page config
 st.set_page_config(
     page_title="shadcn/ui Animations Demo",
-    page_icon="",
+    page_
     layout="wide"
 )
 

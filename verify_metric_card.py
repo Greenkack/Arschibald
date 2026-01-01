@@ -91,8 +91,7 @@ def verify_metric_card():
     try:
         metric.render(
             label="Mit Icon",
-            value="€12,345",
-            icon=""
+            value="€12,345"
         )
         print("    Icon-Support funktioniert")
     except Exception as e:
@@ -156,7 +155,6 @@ def verify_metric_card():
             label="Convenience Test",
             value="€12,345",
             trend=12.5,
-            icon="",
             theme_manager=theme_manager
         )
         print("    metric_card() Funktion")
@@ -185,7 +183,6 @@ def verify_metric_card():
             description="Test Beschreibung",
             trend=12.5,
             trend_label="+12.5% vs. letzter Monat",
-            icon="",
             size="large",
             variant="elevated",
             show_trend_arrow=True,

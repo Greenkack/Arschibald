@@ -302,7 +302,7 @@ def add_product(product_data: dict[str, Any]) -> int | None:
             else:
                 insert_data[col_name] = None
     cursor.execute("SELECT id FROM products WHERE model_name = ?",
-                   (insert_data['model_name'],))
+                   (insert_data['model_name']))
     if cursor.fetchone():
         print(
             f"product_db.add_product: Fehler - Produkt mit Modellname '{
@@ -410,7 +410,7 @@ def delete_product(product_id: int | float) -> bool:
     create_product_table(conn)
     cursor = conn.cursor()
     try:
-        cursor.execute("DELETE FROM products WHERE id=?", (int(product_id),))
+        cursor.execute("DELETE FROM products WHERE id=?", (int(product_id)))
         conn.commit()
         deleted_count = cursor.rowcount
         if deleted_count > 0:
@@ -474,7 +474,7 @@ def get_product_by_id(product_id: int | float) -> dict[str, Any] | None:
     create_product_table(conn)
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM products WHERE id=?", (int(product_id),))
+        cursor.execute("SELECT * FROM products WHERE id=?", (int(product_id)))
         row = cursor.fetchone()
         return dict(row) if row else None
     except sqlite3.Error as e:
@@ -499,8 +499,7 @@ def get_product_by_model_name(model_name: str) -> dict[str, Any] | None:
     try:
         cursor.execute(
             "SELECT * FROM products WHERE model_name=? COLLATE NOCASE",
-            (model_name.strip(),
-             ))
+            (model_name.strip()))
         row = cursor.fetchone()
         return dict(row) if row else None
     except sqlite3.Error as e:
@@ -523,8 +522,7 @@ def get_product_id_by_model_name(model_name: str) -> int | None:
     try:
         cursor.execute(
             "SELECT id FROM products WHERE model_name=? COLLATE NOCASE",
-            (model_name.strip(),
-             ))
+            (model_name.strip()))
         row = cursor.fetchone()
         return int(row[0]) if row else None
     except sqlite3.Error as e:
@@ -823,7 +821,7 @@ def update_product_purchase_price(
     try:
         # Get current purchase price for logging
         cursor.execute(
-            "SELECT purchase_price_net FROM products WHERE id = ?", (int(product_id),))
+            "SELECT purchase_price_net FROM products WHERE id = ?", (int(product_id)))
         row = cursor.fetchone()
         if not row:
             print(
@@ -1194,7 +1192,7 @@ def get_products_by_calculate_per(calculate_per: str) -> list[dict[str, Any]]:
             SELECT * FROM products
             WHERE calculate_per = ?
             ORDER BY category, model_name COLLATE NOCASE
-        """, (calculate_per,))
+        """, (calculate_per))
 
         rows = cursor.fetchall()
         return [dict(row) for row in rows] if rows else []
@@ -1249,7 +1247,7 @@ def update_product_pricing_fields(
     try:
         # Get current values for logging
         cursor.execute("SELECT * FROM products WHERE id = ?",
-                       (int(product_id),))
+                       (int(product_id)))
         current_product = cursor.fetchone()
         if not current_product:
             print(
@@ -1687,8 +1685,7 @@ def validate_calculate_per_integration() -> dict[str, Any]:
     try:
         from pricing.calculate_per_engine import (
             get_supported_calculation_methods,
-            validate_calculation_method,
-        )
+            validate_calculation_method)
 
         # Test basic functionality
         test_results = []

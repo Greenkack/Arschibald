@@ -933,7 +933,7 @@ def render_pdf_ui(
                                                                        3, 1, 1])
 
                     with header_col1:
-                        type_icon = "" if item['type'] == 'text' else "" if item['type'] == 'image' else ""
+                        type_ if item['type'] == 'text' else "" if item['type'] == 'image' else ""
                         st.markdown(
                             f"**{type_icon} {item['title']} (ID: {item['id']})**")
 
@@ -2142,8 +2142,7 @@ def render_pdf_ui(
             try:
                 from analysis import (
                     get_financing_data_summary,
-                    prepare_financing_data_for_pdf_export,
-                )
+                    prepare_financing_data_for_pdf_export)
 
                 # Finanzierungsdaten aus aktuellen Berechnungen extrahieren
                 financing_data = prepare_financing_data_for_pdf_export(
@@ -3242,8 +3241,7 @@ def render_pdf_ui(
                 
                 try:
                     from doc_output_modern_patch import (
-                        enhance_pdf_generation_with_modern_design,
-                    )
+                        enhance_pdf_generation_with_modern_design)
 
                     # Erstelle offer_data Dictionary für erweiterte Generierung
                     offer_data_enhanced = {

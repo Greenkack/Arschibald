@@ -155,8 +155,7 @@ def _ensure_tables(conn: sqlite3.Connection) -> None:
 def _recalc_positions(cur: sqlite3.Cursor, table: str, matrix_id: int) -> None:
     cur.execute(
         f"SELECT id FROM {table} WHERE matrix_id = ? ORDER BY position ASC, id ASC",
-        (matrix_id,
-         ))
+        (matrix_id))
     rows = cur.fetchall()
     for idx, r in enumerate(rows):
         cur.execute(f"UPDATE {table} SET position=? WHERE id=?", (idx, r[0]))
@@ -227,8 +226,7 @@ def set_active_matrix(matrix_id: int) -> bool:
             "UPDATE price_matrix_sets SET is_active=0 WHERE is_active=1")
         cur.execute(
             "UPDATE price_matrix_sets SET is_active=1, updated_at=CURRENT_TIMESTAMP WHERE id=?",
-            (matrix_id,
-             ))
+            (matrix_id))
         conn.commit()
         ok = cur.rowcount > 0
         conn.close()
@@ -262,7 +260,7 @@ def delete_matrix(matrix_id: int) -> bool:
             return False
         _ensure_tables(conn)
         cur = conn.cursor()
-        cur.execute("DELETE FROM price_matrix_sets WHERE id=?", (matrix_id,))
+        cur.execute("DELETE FROM price_matrix_sets WHERE id=?", (matrix_id))
         conn.commit()
         ok = cur.rowcount > 0
         conn.close()
@@ -281,8 +279,7 @@ def clone_matrix(matrix_id: int, new_name: str) -> int | None:
         cur = conn.cursor()
         cur.execute(
             "SELECT id, description, pricing_mode, include_accessories, include_misc FROM price_matrix_sets WHERE id=?",
-            (matrix_id,
-             ))
+            (matrix_id))
         base = cur.fetchone()
         if not base:
             conn.close()
@@ -298,8 +295,7 @@ def clone_matrix(matrix_id: int, new_name: str) -> int | None:
         # Rows
         cur.execute(
             "SELECT id, position, label FROM price_matrix_rows WHERE matrix_id=?",
-            (matrix_id,
-             ))
+            (matrix_id))
         rows_map = {}
         for r in cur.fetchall():
             cur.execute(
@@ -311,8 +307,7 @@ def clone_matrix(matrix_id: int, new_name: str) -> int | None:
         # Columns
         cur.execute(
             "SELECT id, position, label FROM price_matrix_columns WHERE matrix_id=?",
-            (matrix_id,
-             ))
+            (matrix_id))
         cols_map = {}
         for c in cur.fetchall():
             cur.execute(
@@ -324,8 +319,7 @@ def clone_matrix(matrix_id: int, new_name: str) -> int | None:
         # Cells
         cur.execute(
             "SELECT row_id, column_id, value FROM price_matrix_cells WHERE matrix_id=?",
-            (matrix_id,
-             ))
+            (matrix_id))
         for cell in cur.fetchall():
             old_r, old_c, val = cell
             nr = rows_map.get(old_r)
@@ -356,7 +350,7 @@ def add_row(
         _ensure_tables(conn)
         cur = conn.cursor()
         cur.execute(
-            "SELECT COUNT(*) FROM price_matrix_rows WHERE matrix_id=?", (matrix_id,))
+            "SELECT COUNT(*) FROM price_matrix_rows WHERE matrix_id=?", (matrix_id))
         count = cur.fetchone()[0]
         pos = position if position is not None and 0 <= position <= count else count
         # Verschiebe nachfolgende
@@ -390,7 +384,7 @@ def add_column(
         _ensure_tables(conn)
         cur = conn.cursor()
         cur.execute(
-            "SELECT COUNT(*) FROM price_matrix_columns WHERE matrix_id=?", (matrix_id,))
+            "SELECT COUNT(*) FROM price_matrix_columns WHERE matrix_id=?", (matrix_id))
         count = cur.fetchone()[0]
         pos = position if position is not None and 0 <= position <= count else count
         if pos < count:
@@ -421,13 +415,13 @@ def remove_row(row_id: int) -> bool:
         cur = conn.cursor()
         # Matrix ID für Recalc ermitteln
         cur.execute(
-            "SELECT matrix_id, position FROM price_matrix_rows WHERE id=?", (row_id,))
+            "SELECT matrix_id, position FROM price_matrix_rows WHERE id=?", (row_id))
         row = cur.fetchone()
         if not row:
             conn.close()
             return False
         matrix_id, pos = row[0], row[1]
-        cur.execute("DELETE FROM price_matrix_rows WHERE id=?", (row_id,))
+        cur.execute("DELETE FROM price_matrix_rows WHERE id=?", (row_id))
         # Positionen anpassen
         cur.execute(
             "UPDATE price_matrix_rows SET position=position-1 WHERE matrix_id=? AND position> ?",
@@ -449,14 +443,14 @@ def remove_column(column_id: int) -> bool:
         _ensure_tables(conn)
         cur = conn.cursor()
         cur.execute(
-            "SELECT matrix_id, position FROM price_matrix_columns WHERE id=?", (column_id,))
+            "SELECT matrix_id, position FROM price_matrix_columns WHERE id=?", (column_id))
         col = cur.fetchone()
         if not col:
             conn.close()
             return False
         matrix_id, pos = col[0], col[1]
         cur.execute(
-            "DELETE FROM price_matrix_columns WHERE id=?", (column_id,))
+            "DELETE FROM price_matrix_columns WHERE id=?", (column_id))
         cur.execute(
             "UPDATE price_matrix_columns SET position=position-1 WHERE matrix_id=? AND position> ?",
             (matrix_id,
@@ -549,8 +543,7 @@ def get_matrix_full(matrix_id: int) -> dict[str, Any] | None:
         cur = conn.cursor()
         cur.execute(
             "SELECT id, name, description, is_active, pricing_mode, include_accessories, include_misc, created_at, updated_at FROM price_matrix_sets WHERE id=?",
-            (matrix_id,
-             ))
+            (matrix_id))
         meta_row = cur.fetchone()
         if not meta_row:
             conn.close()
@@ -570,20 +563,17 @@ def get_matrix_full(matrix_id: int) -> dict[str, Any] | None:
             "updated_at": meta_row[8]}
         cur.execute(
             "SELECT id, position, label FROM price_matrix_rows WHERE matrix_id=? ORDER BY position ASC",
-            (matrix_id,
-             ))
+            (matrix_id))
         rows = [{"id": r[0], "position": r[1], "label": r[2]}
                 for r in cur.fetchall()]
         cur.execute(
             "SELECT id, position, label FROM price_matrix_columns WHERE matrix_id=? ORDER BY position ASC",
-            (matrix_id,
-             ))
+            (matrix_id))
         cols = [{"id": c[0], "position": c[1], "label": c[2]}
                 for c in cur.fetchall()]
         cur.execute(
             "SELECT row_id, column_id, value, raw_input, data_type FROM price_matrix_cells WHERE matrix_id=?",
-            (matrix_id,
-             ))
+            (matrix_id))
         cells_raw = cur.fetchall()
         cells_map: dict[tuple[int, int], float] = {}
         for rr, cc, val, raw_input, data_type in cells_raw:

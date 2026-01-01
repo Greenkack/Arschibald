@@ -10,8 +10,7 @@ from Agent.config import (
     check_api_keys,
     get_missing_keys,
     validate_env_file_security,
-    validate_startup_security,
-)
+    validate_startup_security)
 import os
 import sys
 from pathlib import Path

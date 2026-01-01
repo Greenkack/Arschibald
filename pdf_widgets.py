@@ -107,8 +107,7 @@ class PDFSectionManager:
             "Drag & Drop Bearbeitung aktivieren",
             value=True,
             help="Aktiviert die erweiterte Bearbeitungsfunktion",
-            key="pdf_dnd_enabled_ui",
-        )
+            key="pdf_dnd_enabled_ui")
         if not enable_drag_drop:
             st.info("Aktivieren Sie Drag & Drop, um die PDF-Reihenfolge anzupassen.")
             return
@@ -169,14 +168,12 @@ class PDFSectionManager:
                 if idx > 0 and st.button(" Nach oben", key=f"up_{section_key}"):
                     st.session_state.pdf_section_order[idx - 1], st.session_state.pdf_section_order[idx] = (
                         st.session_state.pdf_section_order[idx],
-                        st.session_state.pdf_section_order[idx - 1],
-                    )
+                        st.session_state.pdf_section_order[idx - 1])
                     st.rerun()
                 if idx < len(st.session_state.pdf_section_order) - 1 and st.button(" Nach unten", key=f"down_{section_key}"):
                     st.session_state.pdf_section_order[idx + 1], st.session_state.pdf_section_order[idx] = (
                         st.session_state.pdf_section_order[idx],
-                        st.session_state.pdf_section_order[idx + 1],
-                    )
+                        st.session_state.pdf_section_order[idx + 1])
                     st.rerun()
             with col4:
                 if not section.get("required", False) and st.button(" Entfernen", key=f"remove_{section_key}"):
@@ -215,8 +212,7 @@ class PDFSectionManager:
                 "Inhaltstyp",
                 options=available_types,
                 format_func=lambda x: f"{self.content_templates.get(x, {}).get('icon', '')} {self.content_templates.get(x, {}).get('name', x)}",
-                key=f"new_content_type_{section_key}",
-            )
+                key=f"new_content_type_{section_key}")
         with col2:
             if st.button(" Hinzufügen", key=f"add_content_{section_key}"):
                 new_content = {
@@ -276,8 +272,7 @@ class PDFSectionManager:
             "Erlaubte Inhaltstypen",
             options=list(self.content_templates.keys()),
             default=["text", "image"],
-            format_func=lambda x: f"{self.content_templates[x]['icon']} {self.content_templates[x]['name']}",
-        )
+            format_func=lambda x: f"{self.content_templates[x]['icon']} {self.content_templates[x]['name']}")
         # Erstellen-Button und Validierung
         if st.button(" Sektion erstellen", key="create_custom_section"):
             if section_name and content_types:
@@ -371,8 +366,7 @@ def render_pdf_structure_manager(texts: dict[str, str]):
                     data=config_json,
                     file_name=f"pdf_config_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                     mime="application/json",
-                    use_container_width=True,
-                )
+                    use_container_width=True)
                 st.success(" Konfiguration exportiert!")
         with col2:
             st.subheader(" Import")

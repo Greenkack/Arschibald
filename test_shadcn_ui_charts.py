@@ -62,7 +62,7 @@ def test_shadcn_implementation():
             continue
         
         score = data.get("score", 0)
-        icon = "" if score >= 70 else "" if score >= 40 else ""
+         if score >= 70 else "" if score >= 40 else ""
         
         print(f"\n{icon} {filename}: {score:.0f}% Shadcn UI Features")
         

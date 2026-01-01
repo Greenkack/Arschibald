@@ -17,8 +17,7 @@ try:
         DiscountConfig,
         ModificationType,
         PricingModificationEngine,
-        SurchargeConfig,
-    )
+        SurchargeConfig)
     PRICING_AVAILABLE = True
 except ImportError as e:
     st.error(f"Pricing modules not available: {e}")

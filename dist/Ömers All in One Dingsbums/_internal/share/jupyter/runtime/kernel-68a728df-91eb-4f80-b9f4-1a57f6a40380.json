@@ -1,0 +1,13 @@
+{
+  "shell_port": 12623,
+  "iopub_port": 12624,
+  "stdin_port": 12625,
+  "control_port": 12627,
+  "hb_port": 12626,
+  "ip": "127.0.0.1",
+  "key": "059a4aaa-9502c54ab2345dde3a6d0dab",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "python3",
+  "jupyter_session": "C:\\PV\\PV\\pvon-master\\solar_cell.ipynb"
+}

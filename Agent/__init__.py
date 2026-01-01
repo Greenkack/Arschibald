@@ -31,8 +31,7 @@ from agent.errors import (
     DockerError,
     ExecutionError,
     KnowledgeBaseError,
-    ToolError,
-)
+    ToolError)
 
 __all__ = [
     "AgentCore",

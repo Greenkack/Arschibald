@@ -10,8 +10,7 @@ from product_attributes import (
     export_attributes_to_csv,
     import_attributes_from_csv,
     list_attributes,
-    upsert_attribute,
-)
+    upsert_attribute)
 from product_db import get_product_by_model_name, list_products
 
 st.set_page_config(page_title="Produkt-Attribute", layout="wide")

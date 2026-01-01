@@ -13,8 +13,7 @@ from typing import Any
 
 from financial_calculations import (
     calculate_discount_amount,
-    calculate_surcharge_amount,
-)
+    calculate_surcharge_amount)
 
 try:
     from product_db import get_product_by_id, get_product_by_model_name, list_products
@@ -34,14 +33,12 @@ from .dynamic_key_manager import DynamicKeyManager
 from .pricing_audit import (
     audit_price_calculation,
     audit_pricing_error,
-    get_calculation_logger,
-)
+    get_calculation_logger)
 from .pricing_cache import get_cache_manager
 from .pricing_errors import (
     ProductNotFoundError,
     ValidationError,
-    safe_pricing_operation,
-)
+    safe_pricing_operation)
 from .pricing_validation import ValidationSeverity, get_pricing_validator
 from .vat_manager import VATCalculation, get_vat_manager
 

@@ -21,8 +21,7 @@ from agent.errors import (
     ExecutionError,
     format_error_message,
     get_retry_delay,
-    should_retry,
-)
+    should_retry)
 from agent.logging_config import get_logger, log_agent_reasoning
 from agent.tools.search_tools import tavily_search
 from agent.tools.telephony_tools import start_interactive_call, update_call_summary
@@ -39,12 +38,10 @@ from agent.tools.coding_tools import (
     generate_project_structure,
     list_files,
     read_file,
-    write_file,
-)
+    write_file)
 from agent.tools.execution_tools import (
     execute_python_code_in_sandbox,
-    run_terminal_command_in_sandbox,
-)
+    run_terminal_command_in_sandbox)
 from agent.tools.knowledge_tools import knowledge_base_search
 
 

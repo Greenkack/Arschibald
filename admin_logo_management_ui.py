@@ -38,8 +38,7 @@ try:
         delete_brand_logo,
         get_brand_logo,
         list_all_brand_logos,
-        upload_logo_from_file,
-    )
+        upload_logo_from_file)
     LOGO_DB_AVAILABLE = True
 except ImportError as e:
     st.error(f"Logo-Database nicht verfügbar: {e}")

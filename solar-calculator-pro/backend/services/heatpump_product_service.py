@@ -32,8 +32,7 @@ from solar-calculator-pro.backend.models.heatpump_product_schemas import (
     HeatPumpAvailabilityUpdate,
     HeatPumpBulkAvailabilityRequest,
     HeatPumpBulkAvailabilityResponse,
-    HeatPumpType,
-)
+    HeatPumpType)
 
 
 class HeatPumpProductService:
@@ -68,8 +67,7 @@ class HeatPumpProductService:
                             model=model_data.get('model', ''),
                             available=True,
                             stock_level="in_stock",
-                            lead_time_days=14,
-                        )
+                            lead_time_days=14)
             
             print(f"Loaded {len(self.products)} heat pump products")
         except ImportError as e:
@@ -109,8 +107,7 @@ class HeatPumpProductService:
             warranty_years=model_data.get('warranty_years', 2),
             datasheet_url=model_data.get('datasheet_url'),
             image_url=model_data.get('image_url'),
-            metadata=model_data.get('metadata', {}),
-        )
+            metadata=model_data.get('metadata', {}))
 
     # ==================== Product Retrieval ====================
     
@@ -470,8 +467,7 @@ class HeatPumpProductService:
                 estimated_annual_cost=economics.get("annual_cost"),
                 estimated_savings=economics.get("annual_savings"),
                 payback_period_years=economics.get("payback_period"),
-                environmental_impact=economics.get("environmental_impact"),
-            )
+                environmental_impact=economics.get("environmental_impact"))
             recommendations.append(recommendation)
         
         # Sort by suitability score
@@ -487,8 +483,7 @@ class HeatPumpProductService:
             recommendations=recommendations,
             building_analysis=building_analysis,
             estimated_heat_load_kw=heat_load_kw,
-            recommended_power_range=recommended_power_range,
-        )
+            recommended_power_range=recommended_power_range)
 
     def _calculate_heat_load(
         self, request: HeatPumpRecommendationRequest
@@ -563,8 +558,7 @@ class HeatPumpProductService:
         self,
         product: HeatPumpSpecification,
         request: HeatPumpRecommendationRequest,
-        heat_load_kw: float,
-    ) -> Tuple[float, List[str]]:
+        heat_load_kw: float) -> Tuple[float, List[str]]:
         """Calculate suitability score (0-100) and reasons"""
         score = 0.0
         reasons = []
@@ -654,8 +648,7 @@ class HeatPumpProductService:
         self,
         product: HeatPumpSpecification,
         request: HeatPumpRecommendationRequest,
-        heat_load_kw: float,
-    ) -> Dict[str, Any]:
+        heat_load_kw: float) -> Dict[str, Any]:
         """Calculate economic metrics"""
         # Estimate annual heating hours
         heating_hours_per_year = 2000  # Typical for central Europe
@@ -756,8 +749,7 @@ class HeatPumpProductService:
                 available=availability_update.available,
                 stock_level=availability_update.stock_level,
                 lead_time_days=availability_update.lead_time_days,
-                next_delivery_date=availability_update.next_delivery_date,
-            )
+                next_delivery_date=availability_update.next_delivery_date)
             self.availability_cache[product_id] = availability
         
         # Update product availability

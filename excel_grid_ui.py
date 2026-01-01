@@ -2028,7 +2028,7 @@ def _render_csv_import_dialog():
                         delimiter_options = {
                             "Automatisch": None,
                             "Semikolon (;)": ";",
-                            "Komma (,)": ",",
+                            "Komma ()": ",",
                             "Tab": "\t",
                             "Pipe (|)": "|"
                         }
@@ -2330,6 +2330,58 @@ def render_excel_grid_ui():
     
     # Erweiterte Hilfe-Sektion (Task 10)
     with st.expander("Hilfe & Tastenkombinationen", expanded=False):
+        # CSS für Tabs - Transparenter Hintergrund mit Orange Akzenten und Schatten
+        st.markdown("""
+        <style>
+        /* Tab Container im Expander - Transparent Background */
+        .streamlit-expanderContent [data-testid="stTabs"] {
+            background: transparent !important;
+        }
+        
+        /* Tab Liste - Kein schwarzer Hintergrund */
+        .streamlit-expanderContent [data-testid="stTabs"] [data-baseweb="tab-list"] {
+            background: transparent !important;
+            gap: 8px;
+            padding: 8px;
+        }
+        
+        /* Einzelne Tabs - Weiß mit Schatten */
+        .streamlit-expanderContent [data-testid="stTabs"] [data-baseweb="tab"] {
+            background: white !important;
+            border-radius: 8px !important;
+            padding: 12px 24px !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+            border: 1px solid #e5e7eb !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        /* Tab Hover - Orange Glow */
+        .streamlit-expanderContent [data-testid="stTabs"] [data-baseweb="tab"]:hover {
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.2) !important;
+            border-color: #ff8c00 !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Aktiver Tab - Orange Akzent */
+        .streamlit-expanderContent [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
+            background: linear-gradient(135deg, #fff 0%, #fff5e6 100%) !important;
+            border: 2px solid #ff8c00 !important;
+            box-shadow: 0 4px 16px rgba(255, 140, 0, 0.25) !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Tab Content - Leichter Schatten */
+        .streamlit-expanderContent [data-testid="stTabs"] [data-testid="stTabContent"] {
+            background: white !important;
+            border-radius: 8px !important;
+            padding: 24px !important;
+            margin-top: 12px !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+            border: 1px solid #e5e7eb !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
         tab1, tab2, tab3, tab4 = st.tabs(["Excel-Funktionen", "⌨ Tastenkombinationen", "Formatierung", " Fehler & Tipps"])
         
         with tab1:
@@ -2514,7 +2566,7 @@ def _render_csv_export_dialog():
             # Delimiter-Auswahl
             delimiter_options = {
                 "Semikolon (;)": ";",
-                "Komma (,)": ",",
+                "Komma ()": ",",
                 "Tab": "\t",
                 "Pipe (|)": "|"
             }

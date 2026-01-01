@@ -11,8 +11,7 @@ from calculations import (
     get_enhanced_pricing_from_session,
     get_pricing_cache_info,
     invalidate_pricing_cache,
-    update_pricing_on_component_change,
-)
+    update_pricing_on_component_change)
 import sys
 from unittest.mock import Mock
 

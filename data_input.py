@@ -47,8 +47,7 @@ except ImportError:
 from ui_state_manager import (
     ensure_session_defaults,
     keep_session_state_alive,
-    register_persistent_keys,
-)
+    register_persistent_keys)
 
 # Import streamlit_shadcn_ui with fallback
 try:
@@ -64,8 +63,7 @@ try:
         session_text_input,
         session_number_input,
         session_selectbox,
-        session_checkbox,
-    )
+        session_checkbox)
     SESSION_WIDGETS_AVAILABLE = True
 except ImportError:
     # Fallback to standard Streamlit widgets
@@ -727,8 +725,7 @@ def render_data_input(texts: dict[str, str]) -> None:
         options=list(register_options.keys()),
         format_func=lambda code: register_options.get(code, code),
         index=current_index,
-        key="demand_mode_selection_radio_widget",
-    )
+        key="demand_mode_selection_radio_widget")
 
     # Update session state if user changed selection
     if selected_mode_code != current_mode:

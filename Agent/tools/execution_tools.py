@@ -141,8 +141,7 @@ def _run_in_container(
             user="sandboxuser",
 
             # Prevent container from gaining additional privileges
-            privileged=False,
-        )
+            privileged=False)
 
         container_id = container.id
         logger.debug(f"Container created: {container_id[:12]}")

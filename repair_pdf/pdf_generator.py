@@ -329,8 +329,7 @@ def generate_main_template_pdf_bytes(
     project_data: Dict[str, Any],
     analysis_results: Optional[Dict[str, Any]],
     company_info: Dict[str, Any],
-    additional_pdf: Optional[bytes] = None,
-) -> Optional[bytes]:
+    additional_pdf: Optional[bytes] = None) -> Optional[bytes]:
     """Erzeugt die 6-seitige Hauptausgabe basierend auf coords/ und pdf_templates_static/notext/.
 
     Nutzt pdf_template_engine: liest YML-Koordinaten, erstellt Text-Overlay nach
@@ -398,8 +397,7 @@ def generate_offer_pdf_with_main_templates(
     active_company_id: Optional[int],
     texts: Dict[str, str],
     use_modern_design: bool = True,
-    **kwargs,
-) -> Optional[bytes]:
+    **kwargs) -> Optional[bytes]:
     """Neue Gesamt-Generatorfunktion:
     1) Erzeuge 6-seitige Hauptausgabe per Templates (coords + notext PDFs)
     2) Erzeuge bisheriges PDF als Zusatz (ohne Deckblatt/Anschreiben)
@@ -421,8 +419,7 @@ def generate_offer_pdf_with_main_templates(
             save_admin_setting_func, list_products_func, get_product_by_id_func,
             db_list_company_documents_func, active_company_id, texts,
             use_modern_design=use_modern_design, disable_main_template_combiner=True,
-            **{k: v for k, v in (kwargs or {}).items() if k != 'disable_main_template_combiner'},
-        )
+            **{k: v for k, v in (kwargs or {}).items() if k != 'disable_main_template_combiner'})
 
     main6 = generate_main_template_pdf_bytes(project_data, analysis_results, company_info, additional_pdf=additional_pdf)
     if main6 is None:
@@ -433,8 +430,7 @@ def generate_offer_pdf_with_main_templates(
             sections_to_include, inclusion_options, load_admin_setting_func,
             save_admin_setting_func, list_products_func, get_product_by_id_func,
             db_list_company_documents_func, active_company_id, texts,
-            use_modern_design=use_modern_design, **kwargs,
-        )
+            use_modern_design=use_modern_design, **kwargs)
 
     # Hilfsfunktion: Zusatzseiten mit Footer "Angebot, <Datum>" und "Seite x von XX" versehen
     def _overlay_footer_page_numbers(pdf_bytes: bytes, start_number: int, total_pages: int, logo_b64: Optional[str] = None, footer_left_text: Optional[str] = None) -> bytes:
@@ -660,8 +656,7 @@ def generate_offer_pdf_simple(
     company_info: Dict[str, Any],
     texts: Dict[str, str],
     inclusion_options: Optional[Dict[str, Any]] = None,
-    **kwargs,
-) -> Optional[bytes]:
+    **kwargs) -> Optional[bytes]:
     def _noop(*a, **k):
         return None
     inclusion_options = inclusion_options or {}
@@ -683,8 +678,7 @@ def generate_offer_pdf_simple(
             db_list_company_documents_func=kwargs.get('db_list_company_documents_func', lambda *a, **k: []),
             active_company_id=kwargs.get('active_company_id'),
             texts=texts,
-            use_modern_design=kwargs.get('use_modern_design', True),
-        )
+            use_modern_design=kwargs.get('use_modern_design', True))
     except Exception as e:
         print(f"WARN generate_offer_pdf_simple Fallback: {e}")
         return None
@@ -1082,8 +1076,7 @@ def create_offer_pdf(
     offer_data: Dict[str, Any],
     output_filename: str,
     module_order: List[Dict[str, Any]], # NEU: Liste der zu rendernden Module
-    theme_name: str,
-):
+    theme_name: str):
     """
     Erstellt ein PDF-Dokument, indem es die Module in der festgelegten Reihenfolge aufruft.
 
@@ -1320,8 +1313,8 @@ def _replace_placeholders(text_template: str, customer_data: Dict, company_info:
         "[KundenVorname]": str(customer_data.get("first_name", "")),
         "[KundenAnredeFormell]": str(customer_data.get("salutation", "")),
         "[KundenTitel]": str(customer_data.get("title", "")),
-        "[KundenStrasseNr]": f"{customer_data.get('address','')} {customer_data.get('house_number','',)}".strip(),
-        "[KundenPLZOrt]": f"{customer_data.get('zip_code','')} {customer_data.get('city','',)}".strip(),
+        "[KundenStrasseNr]": f"{customer_data.get('address','')} {customer_data.get('house_number','')}".strip(),
+        "[KundenPLZOrt]": f"{customer_data.get('zip_code','')} {customer_data.get('city','')}".strip(),
         "[KundenFirmenname]": str(customer_data.get("company_name", "")),
     }
     if analysis_results_for_placeholder and isinstance(analysis_results_for_placeholder, dict):
@@ -1630,8 +1623,7 @@ def generate_offer_pdf(
                 texts=texts,
                 use_modern_design=use_modern_design,
                 disable_main_template_combiner=True,
-                **kwargs,
-            )
+                **kwargs)
             if combined_bytes:
                 return combined_bytes
             else:

@@ -90,34 +90,43 @@ def render_controlling_page():
     # Globale CSS-Styles für Controlling-Seite
     st.markdown("""
     <style>
-    /* TABS: Schwarzen Hintergrund entfernen */
+    /* TABS: Weißer Hintergrund für Tab-Liste */
     [data-testid="stTabs"] [data-baseweb="tab-list"] {
-        background-color: transparent !important;
-        border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
-        gap: 10px !important;
+        background: #ffffff !important;
+        border-bottom: 2px solid rgba(255, 140, 0, 0.2) !important;
+        gap: 8px !important;
+        padding: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        border-radius: 8px 8px 0 0 !important;
     }
     
-    /* Tab-Buttons mit orangen Akzenten */
+    /* Tab-Buttons mit hellgrauem Hintergrund und orangen Akzenten */
     [data-testid="stTabs"] [data-baseweb="tab"] {
-        background-color: transparent !important;
-        border: none !important;
+        background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%) !important;
+        border: 1px solid rgba(0, 0, 0, 0.15) !important;
         color: #333333 !important;
         font-weight: 500 !important;
         padding: 12px 24px !important;
-        border-radius: 8px 8px 0 0 !important;
+        border-radius: 6px 6px 0 0 !important;
         transition: all 0.3s ease !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
     }
     
     [data-testid="stTabs"] [data-baseweb="tab"]:hover {
-        background-color: rgba(255, 140, 0, 0.1) !important;
+        background: linear-gradient(180deg, #fff5e6 0%, #ffe6cc 100%) !important;
         color: #ff8c00 !important;
+        border-color: rgba(255, 140, 0, 0.3) !important;
+        box-shadow: 0 4px 8px rgba(255, 140, 0, 0.15) !important;
+        transform: translateY(-1px) !important;
     }
     
     [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
-        background-color: rgba(255, 140, 0, 0.15) !important;
+        background: linear-gradient(135deg, #e0e0e0 0%, #c8c8c8 100%) !important;
         color: #ff8c00 !important;
         font-weight: 700 !important;
+        border: 2px solid #ff8c00 !important;
         border-bottom: 3px solid #ff8c00 !important;
+        box-shadow: 0 4px 12px rgba(255, 140, 0, 0.25), inset 0 1px 3px rgba(255, 140, 0, 0.1) !important;
     }
     
     /* BUTTONS: Alle Primary Buttons orange */
@@ -1515,6 +1524,10 @@ def render_team_analysis_tab():
     """
     st.subheader("Team-Auswertung")
 
+    # Generate unique_id for widget keys
+    import uuid
+    unique_id = str(uuid.uuid4())[:8]
+
     db = SessionLocal()
     
     try:
@@ -1840,29 +1853,82 @@ def render_team_analysis_tab():
             
             # Statistiken
             st.markdown("---")
-            st.write("**Statistiken & Leistungsvergleich**")
+            st.markdown("### 📊 Statistiken & Leistungsvergleich")
             
             statistics = team_data.get('statistics', {})
             quota_stats = statistics.get('quota_statistics', {})
             
             if quota_stats:
+                # CSS für kompakte Statistik-Karten
+                st.markdown("""
+                <style>
+                .stat-card {
+                    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+                    padding: 12px;
+                    border-radius: 8px;
+                    border: 1px solid rgba(0,0,0,0.1);
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+                    margin-bottom: 8px;
+                }
+                .stat-label {
+                    font-size: 11px;
+                    color: #666;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 2px;
+                }
+                .stat-value {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #333;
+                    margin: 0;
+                }
+                .stat-person {
+                    font-size: 12px;
+                    color: #555;
+                    margin-top: 4px;
+                }
+                </style>
+                """, unsafe_allow_html=True)
+                
                 for quota_name, stats in quota_stats.items():
-                    with st.expander(f"{quota_name}"):
-                        col_a, col_b, col_c = st.columns(3)
+                    with st.expander(f"📈 {quota_name}", expanded=False):
+                        col_a, col_b, col_c, col_d = st.columns(4)
                         
                         with col_a:
-                            st.markdown("Durchschnitt")
-                            st.markdown(f"<p style='font-size:24px; font-weight:bold; margin:0;'>{stats['average']:.2f}%</p>", unsafe_allow_html=True)
-                            st.markdown("Minimum")
-                            st.markdown(f"<p style='font-size:24px; font-weight:bold; margin:0;'>{stats['min']:.2f}%</p>", unsafe_allow_html=True)
+                            st.markdown(f"""
+                            <div class="stat-card">
+                                <div class="stat-label">Durchschnitt</div>
+                                <div class="stat-value" style="color: #0066cc;">{stats['average']:.2f}%</div>
+                            </div>
+                            """, unsafe_allow_html=True)
                         
                         with col_b:
-                            st.markdown("Maximum")
-                            st.markdown(f"<p style='font-size:24px; font-weight:bold; margin:0;'>{stats['max']:.2f}%</p>", unsafe_allow_html=True)
-                            st.info(f"**Bester:** {stats['best_performer']}")
+                            st.markdown(f"""
+                            <div class="stat-card">
+                                <div class="stat-label">Minimum</div>
+                                <div class="stat-value" style="color: #dc3545;">{stats['min']:.2f}%</div>
+                                <div class="stat-person">🔻 {stats['worst_performer']}</div>
+                            </div>
+                            """, unsafe_allow_html=True)
                         
                         with col_c:
-                            st.warning(f"**Schlechtester:** {stats['worst_performer']}")
+                            st.markdown(f"""
+                            <div class="stat-card">
+                                <div class="stat-label">Maximum</div>
+                                <div class="stat-value" style="color: #28a745;">{stats['max']:.2f}%</div>
+                                <div class="stat-person">🔺 {stats['best_performer']}</div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                        
+                        with col_d:
+                            spread = stats['max'] - stats['min']
+                            st.markdown(f"""
+                            <div class="stat-card">
+                                <div class="stat-label">Spannweite</div>
+                                <div class="stat-value" style="color: #ff8c00;">{spread:.2f}%</div>
+                            </div>
+                            """, unsafe_allow_html=True)
             
             # PDF Export
             st.markdown("---")

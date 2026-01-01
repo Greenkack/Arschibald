@@ -24,8 +24,7 @@ try:
         calculate_irr,
         calculate_net_present_value,
         calculate_payback_period,
-        calculate_total_roi,
-    )
+        calculate_total_roi)
 except ImportError:
     # Fallback constants and functions for testing
     LIFESPAN_YEARS = 25

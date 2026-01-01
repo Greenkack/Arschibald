@@ -9,8 +9,7 @@ import time
 from cache_performance import (
     CacheBenchmark,
     PerformanceMonitor,
-    export_performance_report,
-)
+    export_performance_report)
 from pricing_cache import CacheLevel, PricingCache, get_cache_manager
 
 

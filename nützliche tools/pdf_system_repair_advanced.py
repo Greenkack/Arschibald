@@ -223,19 +223,19 @@ def diagnose_pdf_system_issues():
             # Spezielle Behandlung für bestimmte Keys
             if key in ['central_pdf_custom_images', 'central_pdf_custom_text_blocks']:
                 # Leere Listen sind normal/OK
-                icon = "" if isinstance(value, list) else ""
+                 if isinstance(value, list) else ""
                 display_value = f"[{len(value)} items]" if isinstance(value, list) else str(value)
             elif key == 'central_pdf_generating_lock':
                 # False ist normal/OK für generating_lock
-                icon = "" if value is False else ""
+                 if value is False else ""
                 display_value = "Nicht gesperrt" if value is False else "Gesperrt"
             elif key == 'central_pdf_inclusion_options':
                 # Dict ist normal/OK
-                icon = "" if isinstance(value, dict) else ""
+                 if isinstance(value, dict) else ""
                 display_value = f"{{dict mit {len(value)} keys}}" if isinstance(value, dict) else str(value)
             else:
                 # Standard-Behandlung für andere Keys
-                icon = "" if value else ""
+                 if value else ""
                 display_value = str(value)
 
             st.write(f"{icon} {key}: {display_value}")
@@ -356,7 +356,7 @@ def show_pdf_repair_interface():
 
     for i, (system_name, available) in enumerate(systems.items()):
         with [col1, col2, col3, col4][i]:
-            icon = "" if available else ""
+             if available else ""
             color = "green" if available else "red"
             st.markdown(f"**{icon} {system_name}**")
 

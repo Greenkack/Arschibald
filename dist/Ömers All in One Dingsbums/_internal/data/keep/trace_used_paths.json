@@ -1,0 +1,22 @@
+[
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\.streamlit\\config.toml",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\calculations_extended.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\components\\__init__.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\components\\progress_manager.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\components\\progress_settings.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\database.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\financial_calculations.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pdf_generator.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pdf_templates.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pricing\\__init__.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pricing\\dynamic_key_manager.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pricing\\enhanced_pricing_engine.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pricing\\pricing_audit.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pricing\\pricing_cache.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pricing\\pricing_errors.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pricing\\pricing_validation.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\pricing\\vat_manager.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\product_db.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\theming\\__init__.py",
+  "C:\\Users\\win10\\Desktop\\Bokuk2 - Kopie\\theming\\pdf_styles.py"
+]

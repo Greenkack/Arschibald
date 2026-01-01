@@ -11,8 +11,7 @@ def check_product_image_details():
         # Prüfe spezifisches Produkt
         cursor.execute(
             'SELECT model_name, brand, image_base64 FROM products WHERE model_name = ?',
-            ("Vitovolt 300-DG M440HC",
-             ))
+            ("Vitovolt 300-DG M440HC"))
         result = cursor.fetchone()
 
         if result:

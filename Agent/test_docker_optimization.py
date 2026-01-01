@@ -13,8 +13,7 @@ from agent.tools.execution_tools import (
     clear_container_pool,
     execute_python_code_in_sandbox,
     get_container_stats,
-    run_terminal_command_in_sandbox,
-)
+    run_terminal_command_in_sandbox)
 import os
 import sys
 import threading
@@ -90,7 +89,7 @@ def test_parallel_execution():
     start = time.time()
 
     for i in range(3):
-        thread = threading.Thread(target=execute_task, args=(i,))
+        thread = threading.Thread(target=execute_task, args=(i))
         threads.append(thread)
         thread.start()
 

@@ -29,8 +29,7 @@ def verify_imports():
             load_config_for_environment,
             get_config,
             reset_config,
-            validate_config,
-        )
+            validate_config)
         print("All imports successful")
         return True
     except ImportError as e:

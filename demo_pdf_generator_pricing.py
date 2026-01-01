@@ -14,8 +14,7 @@ try:
     from pdf_generator import PDFGenerator
     from pdf_pricing_integration import (
         EnhancedPDFGenerator,
-        generate_enhanced_pdf_with_pricing,
-    )
+        generate_enhanced_pdf_with_pricing)
     from pdf_pricing_templates import PricingTemplateConfig, PricingTemplateManager
     from pricing.dynamic_key_manager import DynamicKeyManager, KeyCategory
 except ImportError as e:

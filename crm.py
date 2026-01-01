@@ -72,20 +72,15 @@ except Exception as e:
 # Kundenakte: optionale DB-Helfer für Dokumente
 try:
     from database import (
-        add_customer_document as _add_customer_document_db,
-    )
+        add_customer_document as _add_customer_document_db)
     from database import (
-        delete_customer_document as _delete_customer_document_db,
-    )
+        delete_customer_document as _delete_customer_document_db)
     from database import (
-        ensure_customer_documents_table as _ensure_customer_documents_table,
-    )
+        ensure_customer_documents_table as _ensure_customer_documents_table)
     from database import (
-        get_customer_document_file_path as _get_customer_document_file_path,
-    )
+        get_customer_document_file_path as _get_customer_document_file_path)
     from database import (
-        list_customer_documents as _list_customer_documents_db,
-    )
+        list_customer_documents as _list_customer_documents_db)
 except Exception:
     _add_customer_document_db = None
     _list_customer_documents_db = None
@@ -279,7 +274,7 @@ def save_customer(conn: sqlite3.Connection,
 def load_customer(conn: sqlite3.Connection,
                   customer_id: int) -> dict[str, Any] | None:
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM customers WHERE id=?", (customer_id,))
+    cursor.execute("SELECT * FROM customers WHERE id=?", (customer_id))
     row = cursor.fetchone()
     if row:
         columns = [desc[0] for desc in cursor.description]
@@ -289,8 +284,8 @@ def load_customer(conn: sqlite3.Connection,
 
 def delete_customer(conn: sqlite3.Connection, customer_id: int) -> bool:
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM projects WHERE customer_id=?", (customer_id,))
-    cursor.execute("DELETE FROM customers WHERE id=?", (customer_id,))
+    cursor.execute("DELETE FROM projects WHERE customer_id=?", (customer_id))
+    cursor.execute("DELETE FROM customers WHERE id=?", (customer_id))
     conn.commit()
     return cursor.rowcount > 0
 
@@ -343,14 +338,14 @@ def save_project(conn: sqlite3.Connection,
 def load_project(conn: sqlite3.Connection,
                  project_id: int) -> dict[str, Any] | None:
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM projects WHERE id=?", (project_id,))
+    cursor.execute("SELECT * FROM projects WHERE id=?", (project_id))
     row = cursor.fetchone()
     return dict(row) if row else None
 
 
 def delete_project(conn: sqlite3.Connection, project_id: int) -> bool:
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM projects WHERE id=?", (project_id,))
+    cursor.execute("DELETE FROM projects WHERE id=?", (project_id))
     conn.commit()
     return cursor.rowcount > 0
 
@@ -359,7 +354,7 @@ def load_projects_for_customer(
         conn: sqlite3.Connection, customer_id: int) -> list[dict[str, Any]]:
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT * FROM projects WHERE customer_id=?", (customer_id,))
+        "SELECT * FROM projects WHERE customer_id=?", (customer_id))
     rows = cursor.fetchall()
     return [dict(row) for row in rows]
 

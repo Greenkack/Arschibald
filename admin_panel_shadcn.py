@@ -16,8 +16,7 @@ from admin_panel import (
     ADMIN_TAB_KEYS_DEFINITION_GLOBAL,
     ADMIN_TAB_ICONS,
     ADMIN_TAB_DESCRIPTIONS,
-    ADMIN_TAB_LABELS_DE,
-)
+    ADMIN_TAB_LABELS_DE)
 
 # Import shadcn/ui migration helpers
 from utils.shadcn_migration_helpers import (
@@ -27,8 +26,7 @@ from utils.shadcn_migration_helpers import (
     shadcn_metric,
     shadcn_badge,
     shadcn_section,
-    SHADCN_AVAILABLE,
-)
+    SHADCN_AVAILABLE)
 
 # Import components directly
 try:

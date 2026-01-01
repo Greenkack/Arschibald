@@ -17,16 +17,14 @@ from utils.pv_module_placement_system import (
     ModuleType,
     ModuleOrientation,
     ModuleDimensions,
-    PVModule,
-)
+    PVModule)
 from utils.pv_module_rendering_3d import (
     render_all_modules,
     render_module_group_indicator,
     render_roof_surface_wireframe,
     create_grid_helper,
     render_placement_statistics,
-    create_module_transform_gizmo,
-)
+    create_module_transform_gizmo)
 
 
 def init_placement_manager_in_session():

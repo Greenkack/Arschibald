@@ -77,7 +77,7 @@ def has_all_declaration(file_path: Path) -> bool:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
         return '__all__' in content
-    except:
+    except (IOError, OSError):
         return False
 
 def add_all_declaration(file_path: Path, public_names: Set[str]) -> bool:
@@ -122,11 +122,11 @@ def add_all_declaration(file_path: Path, public_names: Set[str]) -> bool:
         if len(sorted_names) <= 5:
             all_decl = f"__all__ = {sorted_names}\n\n"
         else:
-            # Mehrzeilig für bessere Lesbarkeit
-            all_decl = "__all__ = [\n"
-            for name in sorted_names:
-                all_decl += f"    '{name}',\n"
-            all_decl += "]\n\n"
+            # Mehrzeilig für bessere Lesbarkeit - mit list join statt string concat
+            lines = ["__all__ = [\n"]
+            lines.extend(f"    '{name}',\n" for name in sorted_names)
+            lines.append("]\n\n")
+            all_decl = ''.join(lines)
         
         # Einfügen
         lines.insert(insert_position, all_decl)

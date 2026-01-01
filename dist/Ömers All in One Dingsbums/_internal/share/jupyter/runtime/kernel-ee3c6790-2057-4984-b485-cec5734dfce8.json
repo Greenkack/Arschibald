@@ -1,0 +1,13 @@
+{
+  "shell_port": 12732,
+  "iopub_port": 12733,
+  "stdin_port": 12734,
+  "control_port": 12736,
+  "hb_port": 12735,
+  "ip": "127.0.0.1",
+  "key": "bbb43c75-d8355b647529325d82b10b05",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "python3",
+  "jupyter_session": "C:\\PV\\PV\\pvon-master\\solar_cell_IV_curves.ipynb"
+}

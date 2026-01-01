@@ -20,11 +20,9 @@ def test_seite6_data_generation():
         # Import der benötigten Module
         from calculations import (
             calculate_storage_to_consumption_ratio,
-            calculate_storage_to_production_ratio,
-        )
+            calculate_storage_to_production_ratio)
         from pdf_template_engine.placeholders import (
-            build_dynamic_data,
-        )
+            build_dynamic_data)
 
         # Test-Daten erstellen
         test_project_data = {

@@ -87,8 +87,7 @@ class AgentConfig:
             twilio_account_sid=os.getenv("TWILIO_ACCOUNT_SID"),
             twilio_auth_token=os.getenv("TWILIO_AUTH_TOKEN"),
             twilio_phone_number=os.getenv("TWILIO_PHONE_NUMBER"),
-            eleven_labs_api_key=os.getenv("ELEVEN_LABS_API_KEY"),
-        )
+            eleven_labs_api_key=os.getenv("ELEVEN_LABS_API_KEY"))
 
     def validate_telephony(self) -> bool:
         """Check if telephony credentials are configured."""

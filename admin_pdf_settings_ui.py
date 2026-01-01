@@ -143,15 +143,13 @@ def render_pdf_design_settings(load_setting, save_setting):
             primary_color = st.color_picker(
                 "Primärfarbe",
                 value=pdf_design["primary_color"],
-                help="Hauptfarbe für Überschriften und Akzente",
-            )
+                help="Hauptfarbe für Überschriften und Akzente")
 
         with col2:
             secondary_color = st.color_picker(
                 "Sekundärfarbe",
                 value=pdf_design["secondary_color"],
-                help="Farbe für Tabellen und Hintergründe",
-            )
+                help="Farbe für Tabellen und Hintergründe")
 
         st.markdown("---")
 
@@ -164,8 +162,7 @@ def render_pdf_design_settings(load_setting, save_setting):
             index=["Helvetica", "Times-Roman", "Courier"].index(
                 pdf_design["font_family"]
             ),
-            help="Schriftart für das gesamte PDF-Dokument",
-        )
+            help="Schriftart für das gesamte PDF-Dokument")
 
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -175,8 +172,7 @@ def render_pdf_design_settings(load_setting, save_setting):
                 max_value=24,
                 value=pdf_design["font_size_h1"],
                 step=1,
-                help="Schriftgröße für Hauptüberschriften",
-            )
+                help="Schriftgröße für Hauptüberschriften")
 
         with col2:
             font_size_h2 = st.number_input(
@@ -185,8 +181,7 @@ def render_pdf_design_settings(load_setting, save_setting):
                 max_value=20,
                 value=pdf_design["font_size_h2"],
                 step=1,
-                help="Schriftgröße für Unterüberschriften",
-            )
+                help="Schriftgröße für Unterüberschriften")
 
         with col3:
             font_size_body = st.number_input(
@@ -195,8 +190,7 @@ def render_pdf_design_settings(load_setting, save_setting):
                 max_value=14,
                 value=pdf_design["font_size_body"],
                 step=1,
-                help="Schriftgröße für Fließtext",
-            )
+                help="Schriftgröße für Fließtext")
 
         with col4:
             font_size_small = st.number_input(
@@ -205,8 +199,7 @@ def render_pdf_design_settings(load_setting, save_setting):
                 max_value=10,
                 value=pdf_design["font_size_small"],
                 step=1,
-                help="Schriftgröße für Kleintext",
-            )
+                help="Schriftgröße für Kleintext")
 
         st.markdown("---")
 
@@ -219,8 +212,7 @@ def render_pdf_design_settings(load_setting, save_setting):
                 "Logo-Position",
                 options=["left", "center", "right"],
                 index=["left", "center", "right"].index(pdf_design["logo_position"]),
-                help="Position des Logos im PDF-Header",
-            )
+                help="Position des Logos im PDF-Header")
 
         with col2:
             footer_format = st.selectbox(
@@ -234,15 +226,13 @@ def render_pdf_design_settings(load_setting, save_setting):
                 index=["with_page_number", "without_page_number", "custom"].index(
                     pdf_design["footer_format"]
                 ),
-                help="Format des PDF-Footers",
-            )
+                help="Format des PDF-Footers")
 
         if footer_format == "custom":
             custom_footer_text = st.text_input(
                 "Benutzerdefinierter Footer-Text",
                 value=pdf_design["custom_footer_text"],
-                help="Text für benutzerdefinierten Footer",
-            )
+                help="Text für benutzerdefinierten Footer")
         else:
             custom_footer_text = pdf_design["custom_footer_text"]
 
@@ -254,8 +244,7 @@ def render_pdf_design_settings(load_setting, save_setting):
         watermark_enabled = st.checkbox(
             "Wasserzeichen aktivieren",
             value=pdf_design["watermark_enabled"],
-            help="Fügt ein Wasserzeichen zu allen PDF-Seiten hinzu",
-        )
+            help="Fügt ein Wasserzeichen zu allen PDF-Seiten hinzu")
 
         if watermark_enabled:
             col1, col2 = st.columns(2)
@@ -263,8 +252,7 @@ def render_pdf_design_settings(load_setting, save_setting):
                 watermark_text = st.text_input(
                     "Wasserzeichen-Text",
                     value=pdf_design["watermark_text"],
-                    help="Text des Wasserzeichens",
-                )
+                    help="Text des Wasserzeichens")
 
             with col2:
                 watermark_opacity = st.slider(
@@ -273,8 +261,7 @@ def render_pdf_design_settings(load_setting, save_setting):
                     max_value=1.0,
                     value=pdf_design["watermark_opacity"],
                     step=0.05,
-                    help="Transparenz des Wasserzeichens (0 = unsichtbar, 1 = voll sichtbar)",
-                )
+                    help="Transparenz des Wasserzeichens (0 = unsichtbar, 1 = voll sichtbar)")
         else:
             watermark_text = pdf_design["watermark_text"]
             watermark_opacity = pdf_design["watermark_opacity"]
@@ -574,8 +561,7 @@ def render_global_chart_colors(visualization_settings, load_setting, save_settin
             " Speichern",
             type="primary",
             use_container_width=True,
-            key="save_global_colors",
-        ):
+            key="save_global_colors"):
             visualization_settings["global_chart_colors"] = new_colors
 
             if save_setting("visualization_settings", visualization_settings):
@@ -688,8 +674,7 @@ def render_color_palette_library(visualization_settings, load_setting, save_sett
             if st.button(
                 "Palette anwenden",
                 key=f"apply_palette_{palette_key}",
-                use_container_width=True,
-            ):
+                use_container_width=True):
                 visualization_settings["global_chart_colors"] = palette["colors"]
 
                 if save_setting("visualization_settings", visualization_settings):
@@ -782,8 +767,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
         "Kategorie",
         options=list(chart_categories.keys()),
         key="chart_category_select",
-        label_visibility="collapsed",
-    )
+        label_visibility="collapsed")
 
     st.markdown("---")
 
@@ -798,8 +782,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
             chart[1] for chart in charts_in_category if chart[0] == x
         ),
         key="chart_select",
-        label_visibility="collapsed",
-    )
+        label_visibility="collapsed")
 
     selected_chart_name = next(
         chart[1] for chart in charts_in_category if chart[0] == selected_chart_key
@@ -818,8 +801,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
         "Globale Farben verwenden",
         value=chart_config.get("use_global", True),
         key=f"use_global_{selected_chart_key}",
-        help="Wenn aktiviert, werden die globalen Farben verwendet",
-    )
+        help="Wenn aktiviert, werden die globalen Farben verwendet")
 
     if not use_global:
         st.markdown("**Benutzerdefinierte Farben:**")
@@ -827,8 +809,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
         # Get global colors as default
         global_colors = visualization_settings.get(
             "global_chart_colors",
-            ["#1E3A8A", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"],
-        )
+            ["#1E3A8A", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"])
 
         # Get custom colors or use global as default
         custom_colors = chart_config.get("custom_colors", global_colors[:3])
@@ -846,24 +827,21 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
             color1 = st.color_picker(
                 "Primärfarbe",
                 value=custom_colors[0],
-                key=f"custom_color_1_{selected_chart_key}",
-            )
+                key=f"custom_color_1_{selected_chart_key}")
             new_custom_colors.append(color1)
 
         with col2:
             color2 = st.color_picker(
                 "Sekundärfarbe",
                 value=custom_colors[1],
-                key=f"custom_color_2_{selected_chart_key}",
-            )
+                key=f"custom_color_2_{selected_chart_key}")
             new_custom_colors.append(color2)
 
         with col3:
             color3 = st.color_picker(
                 "Akzentfarbe",
                 value=custom_colors[2],
-                key=f"custom_color_3_{selected_chart_key}",
-            )
+                key=f"custom_color_3_{selected_chart_key}")
             new_custom_colors.append(color3)
 
         # Preview
@@ -893,8 +871,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
             " Speichern",
             type="primary",
             use_container_width=True,
-            key=f"save_chart_{selected_chart_key}",
-        ):
+            key=f"save_chart_{selected_chart_key}"):
             # Update chart config
             if use_global:
                 chart_config = {"use_global": True}
@@ -916,8 +893,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
         if st.button(
             " Auf Global zurücksetzen",
             use_container_width=True,
-            key=f"reset_chart_{selected_chart_key}",
-        ):
+            key=f"reset_chart_{selected_chart_key}"):
             # Remove custom settings for this chart
             if selected_chart_key in individual_charts:
                 del individual_charts[selected_chart_key]
@@ -960,8 +936,7 @@ def render_individual_chart_config(visualization_settings, load_setting, save_se
                     )
                     st.markdown(
                         f"- **{chart_name}**: Benutzerdefiniert " f"{color_preview}",
-                        unsafe_allow_html=True,
-                    )
+                        unsafe_allow_html=True)
 
 
 def render_ui_theme_settings(load_setting, save_setting):
@@ -1045,8 +1020,7 @@ def render_ui_theme_settings(load_setting, save_setting):
                 if current_theme_key in predefined_themes
                 else len(predefined_themes)
             ),
-            help="Wählen Sie ein vordefiniertes Theme oder erstellen Sie ein eigenes",
-        )
+            help="Wählen Sie ein vordefiniertes Theme oder erstellen Sie ein eigenes")
 
         # Show theme description
         if selected_theme_key != "custom":
@@ -1061,8 +1035,7 @@ def render_ui_theme_settings(load_setting, save_setting):
                 "Theme aktivieren",
                 type="primary",
                 use_container_width=True,
-                key="activate_theme",
-            ):
+                key="activate_theme"):
                 new_theme_settings = {
                     "active_theme": selected_theme_key,
                     "theme_config": predefined_themes[selected_theme_key],
@@ -1097,37 +1070,32 @@ def render_ui_theme_settings(load_setting, save_setting):
                     "Primärfarbe",
                     value=custom_theme.get("primary_color", "#1E3A8A"),
                     help="Hauptfarbe für wichtige UI-Elemente",
-                    key="theme_primary",
-                )
+                    key="theme_primary")
 
                 background_color = st.color_picker(
                     "Hintergrundfarbe",
                     value=custom_theme.get("background_color", "#FFFFFF"),
                     help="Hintergrundfarbe der Anwendung",
-                    key="theme_background",
-                )
+                    key="theme_background")
 
                 accent_color = st.color_picker(
                     "Akzentfarbe",
                     value=custom_theme.get("accent_color", "#10B981"),
                     help="Farbe für Hervorhebungen und Aktionen",
-                    key="theme_accent",
-                )
+                    key="theme_accent")
 
             with col2:
                 secondary_color = st.color_picker(
                     "Sekundärfarbe",
                     value=custom_theme.get("secondary_color", "#3B82F6"),
                     help="Sekundäre Farbe für UI-Elemente",
-                    key="theme_secondary",
-                )
+                    key="theme_secondary")
 
                 text_color = st.color_picker(
                     "Textfarbe",
                     value=custom_theme.get("text_color", "#1F2937"),
                     help="Haupttextfarbe",
-                    key="theme_text",
-                )
+                    key="theme_text")
 
             st.markdown("---")
 
@@ -1135,8 +1103,7 @@ def render_ui_theme_settings(load_setting, save_setting):
             custom_theme_name = st.text_input(
                 "Theme-Name",
                 value=custom_theme.get("name", "Mein Custom Theme"),
-                help="Geben Sie Ihrem Theme einen Namen",
-            )
+                help="Geben Sie Ihrem Theme einen Namen")
 
             # Save custom theme button
             col1, col2 = st.columns(2)
@@ -1146,8 +1113,7 @@ def render_ui_theme_settings(load_setting, save_setting):
                     " Theme speichern",
                     type="primary",
                     use_container_width=True,
-                    key="save_custom_theme",
-                ):
+                    key="save_custom_theme"):
                     new_custom_theme = {
                         "name": custom_theme_name,
                         "description": "Benutzerdefiniertes Theme",
@@ -1176,8 +1142,7 @@ def render_ui_theme_settings(load_setting, save_setting):
                 if st.button(
                     " Zurücksetzen",
                     use_container_width=True,
-                    key="reset_custom_theme",
-                ):
+                    key="reset_custom_theme"):
                     # Reset to light theme
                     new_theme_settings = {
                         "active_theme": "light",
@@ -1349,8 +1314,7 @@ def render_ui_theme_settings(load_setting, save_setting):
             **Akzentfarbe:** `{preview_theme['accent_color']}`
             <div style="width: 100%; height: 30px; background-color: {preview_theme['accent_color']}; border-radius: 4px; margin: 5px 0;"></div>
             """,
-                unsafe_allow_html=True,
-            )
+                unsafe_allow_html=True)
 
     st.markdown("---")
 
@@ -1372,8 +1336,7 @@ def render_ui_theme_settings(load_setting, save_setting):
     with col2:
         st.metric(
             "Typ",
-            "Vordefiniert" if current_theme_key != "custom" else "Benutzerdefiniert",
-        )
+            "Vordefiniert" if current_theme_key != "custom" else "Benutzerdefiniert")
 
     with col3:
         # Color preview
@@ -1468,8 +1431,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
         format_func=lambda x: template_options[x],
         index=default_index,
         key="template_select",
-        label_visibility="collapsed",
-    )
+        label_visibility="collapsed")
 
     # Get selected template details
     selected_template = next(
@@ -1536,8 +1498,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                     st.image(
                         preview_image_path,
                         caption="Template-Vorschau",
-                        use_container_width=True,
-                    )
+                        use_container_width=True)
                 except Exception as e:
                     st.warning(f"Vorschau konnte nicht geladen werden: {e}")
             else:
@@ -1615,13 +1576,13 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                     try:
                         file_size = os.path.getsize(page_path)
                         size_kb = file_size / 1024
-                        status_icon = ""
+                        status_
                         status_text = f"({size_kb:.1f} KB)"
                     except BaseException:
-                        status_icon = ""
+                        status_
                         status_text = ""
                 else:
-                    status_icon = ""
+                    status_
                     status_text = "(Datei nicht gefunden)"
 
                 st.text(f"{status_icon} Seite {i}: {page_path} {status_text}")
@@ -1646,13 +1607,13 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                     try:
                         file_size = os.path.getsize(coord_path)
                         size_kb = file_size / 1024
-                        status_icon = ""
+                        status_
                         status_text = f"({size_kb:.1f} KB)"
                     except BaseException:
-                        status_icon = ""
+                        status_
                         status_text = ""
                 else:
-                    status_icon = ""
+                    status_
                     status_text = "(Datei nicht gefunden)"
 
                 st.text(f"{status_icon} Seite {i}: {coord_path} {status_text}")
@@ -1686,8 +1647,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
                 "Template aktivieren",
                 type="primary",
                 use_container_width=True,
-                key="activate_template",
-            ):
+                key="activate_template"):
                 pdf_templates["active_template_id"] = selected_template_id
 
                 if save_setting("pdf_templates", pdf_templates):
@@ -1707,8 +1667,7 @@ def render_template_selection(pdf_templates, load_setting, save_setting):
             "Löschen",
             use_container_width=True,
             key="delete_template",
-            help="Template löschen",
-        ):
+            help="Template löschen"):
             # Confirm deletion
             if "confirm_delete" not in st.session_state:
                 st.session_state.confirm_delete = False
@@ -1773,31 +1732,27 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
             "Template-Name *",
             placeholder="z.B. Standard-Template",
             help="Eindeutiger Name für das Template",
-            key="new_template_name",
-        )
+            key="new_template_name")
 
     with col2:
         template_id = st.text_input(
             "Template-ID *",
             placeholder="z.B. standard_template",
             help="Eindeutige ID (nur Kleinbuchstaben, Zahlen und Unterstriche)",
-            key="new_template_id",
-        )
+            key="new_template_id")
 
     template_description = st.text_area(
         "Beschreibung",
         placeholder="Beschreiben Sie das Template...",
         help="Optional: Beschreibung des Templates",
-        key="new_template_description",
-    )
+        key="new_template_description")
 
     # Preview image path (Task 12.2 - Requirement 23.2)
     preview_image_path = st.text_input(
         "Vorschau-Bild (optional)",
         placeholder="z.B. pdf_templates_static/preview_standard.png",
         help="Pfad zu einem Vorschaubild des Templates (PNG, JPG)",
-        key="new_template_preview",
-    )
+        key="new_template_preview")
 
     st.markdown("---")
 
@@ -1816,16 +1771,14 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
             background_paths[f"page_{page_num}_background"] = st.text_input(
                 f"Seite {page_num}",
                 placeholder=f"pdf_templates_static/seite{page_num}.pdf",
-                key=f"bg_page_{page_num}",
-            )
+                key=f"bg_page_{page_num}")
 
         with col2:
             page_num = row * 2 + 2
             background_paths[f"page_{page_num}_background"] = st.text_input(
                 f"Seite {page_num}",
                 placeholder=f"pdf_templates_static/seite{page_num}.pdf",
-                key=f"bg_page_{page_num}",
-            )
+                key=f"bg_page_{page_num}")
 
     st.markdown("---")
 
@@ -1846,16 +1799,14 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
             coord_paths[f"page_{page_num}_coords"] = st.text_input(
                 f"Seite {page_num}",
                 placeholder=f"coords/seite{page_num}.yml",
-                key=f"coord_page_{page_num}",
-            )
+                key=f"coord_page_{page_num}")
 
         with col2:
             page_num = row * 2 + 2
             coord_paths[f"page_{page_num}_coords"] = st.text_input(
                 f"Seite {page_num}",
                 placeholder=f"coords/seite{page_num}.yml",
-                key=f"coord_page_{page_num}",
-            )
+                key=f"coord_page_{page_num}")
 
     st.markdown("---")
 
@@ -1869,8 +1820,7 @@ def render_add_new_template(pdf_templates, load_setting, save_setting):
             " Template hinzufügen",
             type="primary",
             use_container_width=True,
-            key="add_template_button",
-        ):
+            key="add_template_button"):
             # Validate inputs
             errors = []
 
@@ -2076,8 +2026,7 @@ def render_layout_options(load_setting, save_setting):
             f"{layout_info['icon']} **{layout_info['name']}** "
             f"({'Aktiviert' if current_config['enabled'] else 'Deaktiviert'}"
             f"{' •  Standard' if current_config['is_default'] else ''})",
-            expanded=current_config["is_default"],
-        ):
+            expanded=current_config["is_default"]):
             # Layout description
             st.markdown(f"**Beschreibung:** {layout_info['description']}")
             st.markdown(f"**Seitenanzahl:** {layout_info['pages']}")
@@ -2101,8 +2050,7 @@ def render_layout_options(load_setting, save_setting):
                     value=current_config["enabled"],
                     key=f"layout_enabled_{layout_key}",
                     help=f"Layout '{
-                        layout_info['name']}' aktivieren/deaktivieren",
-                )
+                        layout_info['name']}' aktivieren/deaktivieren")
 
                 if enabled != current_config["enabled"]:
                     updated_layouts[layout_key]["enabled"] = enabled
@@ -2120,8 +2068,7 @@ def render_layout_options(load_setting, save_setting):
                         f"Layout '{layout_info['name']}' als Standard festlegen"
                         if enabled
                         else "Layout muss aktiviert sein, um als Standard festgelegt zu werden"
-                    ),
-                )
+                    ))
 
                 if is_default != current_config["is_default"]:
                     # If setting as default, unset all others
@@ -2139,8 +2086,7 @@ def render_layout_options(load_setting, save_setting):
                 " Speichern",
                 key=f"save_layout_{layout_key}",
                 use_container_width=True,
-                type="primary" if changes_made else "secondary",
-            ):
+                type="primary" if changes_made else "secondary"):
                 # Validate: At least one layout must be enabled
                 if not any(cfg["enabled"] for cfg in updated_layouts.values()):
                     _show_error_message("Mindestens ein Layout muss aktiviert sein!")
@@ -2185,8 +2131,7 @@ def render_layout_options(load_setting, save_setting):
             " Alle speichern",
             type="primary",
             use_container_width=True,
-            key="save_all_layouts",
-        ):
+            key="save_all_layouts"):
             # Validate: At least one layout must be enabled
             if not any(cfg["enabled"] for cfg in updated_layouts.values()):
                 _show_error_message("Mindestens ein Layout muss aktiviert sein!")
@@ -2271,8 +2216,8 @@ def render_layout_options(load_setting, save_setting):
         for layout_key, layout_info in available_layouts.items():
             config = updated_layouts[layout_key]
 
-            status_icon = "" if config["enabled"] else ""
-            default_icon = "" if config["is_default"] else ""
+            status_ if config["enabled"] else ""
+            default_ if config["is_default"] else ""
 
             st.markdown(f"{status_icon} **{layout_info['name']}** {default_icon}")
             st.markdown(
@@ -2328,8 +2273,7 @@ def render_import_export(load_setting, save_setting):
             " Konfiguration exportieren",
             type="primary",
             use_container_width=True,
-            key="export_config_btn",
-        ):
+            key="export_config_btn"):
             config_data = _collect_all_design_settings(load_setting)
 
             if config_data:
@@ -2354,8 +2298,7 @@ def render_import_export(load_setting, save_setting):
                         datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                     mime="application/json",
                     use_container_width=True,
-                    key="download_config_btn",
-                )
+                    key="download_config_btn")
 
                 _show_success_message(
                     "Konfiguration erfolgreich exportiert! "
@@ -2378,8 +2321,7 @@ def render_import_export(load_setting, save_setting):
             "JSON-Datei auswählen",
             type=["json"],
             help="Wählen Sie eine zuvor exportierte Konfigurationsdatei",
-            key="import_config_file",
-        )
+            key="import_config_file")
 
         if uploaded_file is not None:
             try:
@@ -2443,8 +2385,7 @@ def render_import_export(load_setting, save_setting):
                     confirm_import = st.checkbox(
                         "Ich bestätige, dass ich alle aktuellen Einstellungen "
                         "überschreiben möchte",
-                        key="confirm_import_checkbox",
-                    )
+                        key="confirm_import_checkbox")
 
                     # Import button
                     if st.button(
@@ -2452,8 +2393,7 @@ def render_import_export(load_setting, save_setting):
                         type="primary",
                         disabled=not confirm_import,
                         use_container_width=True,
-                        key="import_config_btn",
-                    ):
+                        key="import_config_btn"):
                         success = _import_design_settings(imported_config, save_setting)
 
                         if success:
@@ -2750,8 +2690,7 @@ def render_version_management(load_setting, save_setting):
             "Versionsname",
             placeholder="z.B. Corporate Design v1.0",
             help="Geben Sie einen eindeutigen Namen für diese Version ein",
-            key="new_version_name",
-        )
+            key="new_version_name")
 
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)  # Spacing
@@ -2760,8 +2699,7 @@ def render_version_management(load_setting, save_setting):
             type="primary",
             use_container_width=True,
             disabled=not version_name or version_name.strip() == "",
-            key="save_version_btn",
-        ):
+            key="save_version_btn"):
             if version_name.strip() in versions:
                 st.warning(
                     f"Version '{version_name}' existiert bereits. "
@@ -2797,8 +2735,7 @@ def render_version_management(load_setting, save_setting):
             "Beschreibung (optional)",
             placeholder="Beschreiben Sie die Änderungen in dieser Version...",
             help="Optionale Beschreibung für diese Version",
-            key="version_description",
-        )
+            key="version_description")
 
     st.markdown("---")
 
@@ -2862,8 +2799,7 @@ def render_version_management(load_setting, save_setting):
                         " Version laden",
                         use_container_width=True,
                         key=f"load_version_{version_name}",
-                        help="Stellt alle Einstellungen dieser Version wieder her",
-                    ):
+                        help="Stellt alle Einstellungen dieser Version wieder her"):
                         # Show confirmation dialog
                         if "confirm_load_version" not in st.session_state:
                             st.session_state.confirm_load_version = version_name
@@ -2874,8 +2810,7 @@ def render_version_management(load_setting, save_setting):
                         "Löschen",
                         use_container_width=True,
                         key=f"delete_version_{version_name}",
-                        help="Löscht diese Version permanent",
-                    ):
+                        help="Löscht diese Version permanent"):
                         # Show confirmation dialog
                         if "confirm_delete_version" not in st.session_state:
                             st.session_state.confirm_delete_version = version_name
@@ -2899,8 +2834,7 @@ def render_version_management(load_setting, save_setting):
                 "Ja, laden",
                 type="primary",
                 use_container_width=True,
-                key="confirm_load_yes",
-            ):
+                key="confirm_load_yes"):
                 # Load version
                 if _load_version(version_to_load, versions, save_setting):
                     _show_success_message(
@@ -2937,8 +2871,7 @@ def render_version_management(load_setting, save_setting):
                 "Ja, löschen",
                 type="primary",
                 use_container_width=True,
-                key="confirm_delete_yes",
-            ):
+                key="confirm_delete_yes"):
                 # Delete version
                 if version_to_delete in versions:
                     del versions[version_to_delete]
@@ -3120,6 +3053,6 @@ def _show_info_message(message: str):
 # Main entry point for testing
 if __name__ == "__main__":
     st.set_page_config(
-        page_title="PDF & Design Einstellungen", page_icon="", layout="wide"
+        page_title="PDF & Design Einstellungen", page_ layout="wide"
     )
     render_pdf_settings_ui()

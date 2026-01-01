@@ -19,8 +19,7 @@ def test_imports():
             check_api_keys_ui,
             display_agent_status,
             format_agent_output,
-            render_agent_menu,
-        )
+            render_agent_menu)
         print("All UI functions imported successfully")
         return True
     except ImportError as e:

@@ -19,7 +19,7 @@ except ImportError:
 def main():
     st.set_page_config(
         page_title="Logging & Monitoring Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
     

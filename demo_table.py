@@ -14,7 +14,7 @@ from theming.theme_manager import ThemeManager
 def main():
     st.set_page_config(
         page_title="shadcn/ui Table Demo",
-        page_icon="",
+        page_
         layout="wide"
     )
 

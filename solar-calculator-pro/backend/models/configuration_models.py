@@ -61,8 +61,7 @@ class Configuration(Base):
     __table_args__ = (
         Index('idx_config_key_namespace', 'key', 'namespace'),
         Index('idx_config_category_active', 'category', 'is_active'),
-        Index('idx_config_namespace_active', 'namespace', 'is_active'),
-    )
+        Index('idx_config_namespace_active', 'namespace', 'is_active'))
     
     def __repr__(self):
         return f"<Configuration(id={self.id}, key='{self.key}', namespace='{self.namespace}', version={self.version})>"
@@ -98,8 +97,7 @@ class ConfigurationVersion(Base):
     # Indexes
     __table_args__ = (
         Index('idx_version_config_version', 'configuration_id', 'version_number'),
-        Index('idx_version_created_at', 'created_at'),
-    )
+        Index('idx_version_created_at', 'created_at'))
     
     def __repr__(self):
         return f"<ConfigurationVersion(id={self.id}, config_id={self.configuration_id}, version={self.version_number})>"
@@ -143,8 +141,7 @@ class ConfigurationAuditLog(Base):
     __table_args__ = (
         Index('idx_audit_action_timestamp', 'action', 'timestamp'),
         Index('idx_audit_user_timestamp', 'user_id', 'timestamp'),
-        Index('idx_audit_config_timestamp', 'configuration_id', 'timestamp'),
-    )
+        Index('idx_audit_config_timestamp', 'configuration_id', 'timestamp'))
     
     def __repr__(self):
         return f"<ConfigurationAuditLog(id={self.id}, action='{self.action}', timestamp={self.timestamp})>"
@@ -199,8 +196,7 @@ class ConfigurationBackup(Base):
     __table_args__ = (
         Index('idx_backup_type_created', 'backup_type', 'created_at'),
         Index('idx_backup_status', 'status'),
-        Index('idx_backup_expires', 'expires_at'),
-    )
+        Index('idx_backup_expires', 'expires_at'))
     
     def __repr__(self):
         return f"<ConfigurationBackup(id={self.id}, name='{self.backup_name}', created_at={self.created_at})>"
@@ -241,8 +237,7 @@ class ConfigurationValidationRule(Base):
     # Indexes
     __table_args__ = (
         Index('idx_validation_namespace', 'applies_to_namespace'),
-        Index('idx_validation_active', 'is_active'),
-    )
+        Index('idx_validation_active', 'is_active'))
     
     def __repr__(self):
         return f"<ConfigurationValidationRule(id={self.id}, name='{self.rule_name}', type='{self.rule_type}')>"
@@ -285,8 +280,7 @@ class ConfigurationTemplate(Base):
     # Indexes
     __table_args__ = (
         Index('idx_template_type_active', 'template_type', 'is_active'),
-        Index('idx_template_category', 'category'),
-    )
+        Index('idx_template_category', 'category'))
     
     def __repr__(self):
         return f"<ConfigurationTemplate(id={self.id}, name='{self.template_name}', type='{self.template_type}')>"

@@ -252,7 +252,7 @@ class BehavioralAnalysisEngine:
             WHERE user_id = ?
             ORDER BY timestamp DESC
             LIMIT 10
-        """, (user_id,))
+        """, (user_id))
 
         recent_actions = [row[0] for row in cursor.fetchall()]
         conn.close()
@@ -353,8 +353,7 @@ class BehavioralAnalysisEngine:
         # Lade aktuellen Trust Score
         cursor.execute(
             "SELECT trust_score, anomaly_count FROM behavioral_profiles WHERE user_id = ?",
-            (user_id,
-             ))
+            (user_id))
         result = cursor.fetchone()
 
         if result:
@@ -390,7 +389,7 @@ class BehavioralAnalysisEngine:
 
         # Basis-Profil
         cursor.execute(
-            "SELECT * FROM behavioral_profiles WHERE user_id = ?", (user_id,))
+            "SELECT * FROM behavioral_profiles WHERE user_id = ?", (user_id))
         profile_result = cursor.fetchone()
 
         # Aktuelle Anomalien
@@ -400,7 +399,7 @@ class BehavioralAnalysisEngine:
             WHERE user_id = ? AND resolved = 0
             ORDER BY timestamp DESC
             LIMIT 10
-        """, (user_id,))
+        """, (user_id))
         active_anomalies = cursor.fetchall()
 
         # Aktivitäts-Statistiken
@@ -409,7 +408,7 @@ class BehavioralAnalysisEngine:
             FROM user_actions
             WHERE user_id = ?
             GROUP BY action_type
-        """, (user_id,))
+        """, (user_id))
         action_stats = cursor.fetchall()
 
         conn.close()

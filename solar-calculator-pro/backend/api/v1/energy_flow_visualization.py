@@ -109,7 +109,6 @@ def create_heat_pump_nodes(request: EnergyFlowRequest) -> List[EnergyFlowNode]:
             type="source",
             x=0, y=50,
             temperature_c=request.outdoor_temp_c,
-            icon="",
             color="#87CEEB"
         ),
         EnergyFlowNode(
@@ -118,7 +117,6 @@ def create_heat_pump_nodes(request: EnergyFlowRequest) -> List[EnergyFlowNode]:
             type="component",
             x=25, y=50,
             power_kw=request.heating_power_kw * 0.75,
-            icon="",
             color="#4A90D9"
         ),
         EnergyFlowNode(
@@ -127,7 +125,6 @@ def create_heat_pump_nodes(request: EnergyFlowRequest) -> List[EnergyFlowNode]:
             type="component",
             x=50, y=50,
             power_kw=request.electricity_consumption_kw,
-            icon="",
             color="#FFD700"
         ),
         EnergyFlowNode(
@@ -137,7 +134,6 @@ def create_heat_pump_nodes(request: EnergyFlowRequest) -> List[EnergyFlowNode]:
             x=75, y=50,
             power_kw=request.heating_power_kw,
             temperature_c=request.flow_temp_c,
-            icon="",
             color="#FF6B6B"
         ),
         EnergyFlowNode(
@@ -146,7 +142,6 @@ def create_heat_pump_nodes(request: EnergyFlowRequest) -> List[EnergyFlowNode]:
             type="output",
             x=100, y=50,
             temperature_c=request.flow_temp_c,
-            icon="",
             color="#FF4500"
         ),
         EnergyFlowNode(
@@ -155,7 +150,6 @@ def create_heat_pump_nodes(request: EnergyFlowRequest) -> List[EnergyFlowNode]:
             type="source",
             x=50, y=0,
             power_kw=request.electricity_consumption_kw,
-            icon="",
             color="#32CD32"
         )
     ]
@@ -168,7 +162,6 @@ def create_heat_pump_nodes(request: EnergyFlowRequest) -> List[EnergyFlowNode]:
             type="source",
             x=25, y=0,
             power_kw=request.pv_power_kw,
-            icon="",
             color="#FFD700"
         ))
     
@@ -180,7 +173,6 @@ def create_heat_pump_nodes(request: EnergyFlowRequest) -> List[EnergyFlowNode]:
             type="storage",
             x=35, y=25,
             power_kw=request.battery_power_kw,
-            icon="",
             color="#9370DB"
         ))
     

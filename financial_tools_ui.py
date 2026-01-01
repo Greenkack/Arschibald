@@ -41,8 +41,7 @@ def render_financial_tools_section(
             calculate_contracting_costs,
             calculate_depreciation,
             calculate_financing_comparison,
-            calculate_leasing_costs,
-        )
+            calculate_leasing_costs)
 
         total_investment = analysis_results.get('total_investment', 0)
         annual_savings = analysis_results.get('annual_savings_after_pv', 0)

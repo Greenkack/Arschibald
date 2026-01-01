@@ -17,8 +17,7 @@ from solar-calculator-pro.backend.models.heatpump_product_schemas import (
     HeatPumpRecommendationRequest,
     HeatPumpAvailabilityUpdate,
     HeatPumpBulkAvailabilityRequest,
-    HeatPumpType,
-)
+    HeatPumpType)
 
 
 def print_section(title):

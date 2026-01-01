@@ -21,8 +21,7 @@ from core.config import (
     Environment,
     Mode,
     Theme,
-    ComputeMode,
-)
+    ComputeMode)
 
 
 def demo_basic_usage():

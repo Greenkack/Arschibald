@@ -101,8 +101,7 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
-)
+    allow_headers=["*"])
 
 # Register API routers
 app.include_router(system_settings.router, prefix="/api/v1")
@@ -198,5 +197,4 @@ if __name__ == "__main__":
         "main:app",
         host=os.getenv("HOST", "0.0.0.0"),
         port=int(os.getenv("PORT", 8000)),
-        reload=os.getenv("DEBUG", "True") == "True",
-    )
+        reload=os.getenv("DEBUG", "True") == "True")

@@ -7,8 +7,7 @@ from reportlab.platypus import (
     PageBreak,
     Paragraph,
     SimpleDocTemplate,
-    Spacer,
-)
+    Spacer)
 
 # Alle 50 Berechnungsarten, strukturiert:
 berechnungen = [
@@ -189,8 +188,7 @@ berechnungen = [
 
     (31, "Volleinspeisung und Teileinspeisung Vorteile", "Vergleich Voll und Teileinspeisung",
      "Amortisationszeit", "Ersparnisse", "Komplettvergleich Voll und Teileinspeisung",
-     "Einspeisevergütungssatz 20 Jahre",
-     ),
+     "Einspeisevergütungssatz 20 Jahre"),
 
 
 ]
@@ -215,8 +213,7 @@ def pdf_berechnungen(filename="pv_berechnungen_50.pdf"):
         fontSize=9,
         leading=11,
         leftIndent=1 * cm,
-        backColor="#f5f5f5",
-    )
+        backColor="#f5f5f5")
     content = []
 
     # Deckblatt

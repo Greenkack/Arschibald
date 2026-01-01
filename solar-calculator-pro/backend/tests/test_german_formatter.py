@@ -216,7 +216,7 @@ class TestGermanNumberFormatter:
         assert self.formatter.validate("invalid") is False
         assert self.formatter.validate("") is False
         assert self.formatter.validate("12..34") is False
-        assert self.formatter.validate("12,,34") is False
+        assert self.formatter.validate("12,34") is False
     
     def test_validate_non_string(self):
         """Test validation with non-string input"""
@@ -337,7 +337,7 @@ class TestRequirementCompliance:
     def test_requirement_14_1_german_locale(self):
         """
         Requirement 14.1: Format all numbers with German locale (de-DE)
-        using dot (.) as thousand separator and comma (,) as decimal separator
+        using dot (.) as thousand separator and comma () as decimal separator
         """
         # Test thousand separator (dot)
         assert "." in self.formatter.format(1234.56)
@@ -412,7 +412,7 @@ class TestRequirementCompliance:
             "invalid",
             "",
             "12..34",
-            "12,,34"
+            "12,34"
         ]
         for fmt in invalid_formats:
             assert self.formatter.validate(fmt) is False, f"Should not validate: {fmt}"
