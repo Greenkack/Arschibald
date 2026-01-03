@@ -1770,7 +1770,7 @@ def get_company(company_id: int) -> dict[str, Any] | None:
         return None
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM companies WHERE id = ?", (company_id))
+        cursor.execute("SELECT * FROM companies WHERE id = ?", (company_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
     except Exception as e:
@@ -1857,7 +1857,7 @@ def delete_company(company_id: int) -> bool:
         for doc in docs_to_delete:
             delete_company_document(doc['id'])
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM companies WHERE id = ?", (company_id))
+        cursor.execute("DELETE FROM companies WHERE id = ?", (company_id,))
         conn.commit()
 
         if cursor.rowcount > 0:
@@ -1889,9 +1889,9 @@ def set_default_company(company_id: int) -> bool:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE companies SET is_default = 0 WHERE id != ?", (company_id))
+            "UPDATE companies SET is_default = 0 WHERE id != ?", (company_id,))
         cursor.execute(
-            "UPDATE companies SET is_default = 1 WHERE id = ?", (company_id))
+            "UPDATE companies SET is_default = 1 WHERE id = ?", (company_id,))
         conn.commit()
         if cursor.rowcount > 0:
             return save_admin_setting('active_company_id', company_id)

@@ -177,5 +177,8 @@
   "tests/test_robustness.py::TestPerformanceMonitor": true,
   "tests/test_robustness.py::TestExceptions": true,
   "tests/test_dynamic_fields.py::TestDynamicFieldGenerator": true,
-  "tests/test_dynamic_fields.py::TestPDFBytesExporter": true
+  "tests/test_dynamic_fields.py::TestPDFBytesExporter": true,
+  "tests/test_phase3_task9_3_material_integration.py::TestCreatePVModuleWithMaterialWrapper::test_wrapper_loads_from_session_state": true,
+  "tests/test_phase3_task9_3_material_integration.py::TestCreatePVModuleWithMaterialWrapper::test_wrapper_fallback_without_session_state": true,
+  "test_phase4_integration_complete.py": true
 }

@@ -475,7 +475,7 @@ def load_admin_setting(key: str, default: Any = None) -> Any:
     try:
         _ensure_admin_table(conn)
         cur = conn.cursor()
-        cur.execute("SELECT value FROM admin_settings WHERE key = ?", (key))
+        cur.execute("SELECT value FROM admin_settings WHERE key = ?", (key,))
         row = cur.fetchone()
         if not row:
             return default
@@ -1695,7 +1695,7 @@ def get_company(company_id: int) -> dict[str, Any] | None:
         return None
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM companies WHERE id = ?", (company_id))
+        cursor.execute("SELECT * FROM companies WHERE id = ?", (company_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
     except Exception as e:
@@ -1782,7 +1782,7 @@ def delete_company(company_id: int) -> bool:
         for doc in docs_to_delete:
             delete_company_document(doc['id'])
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM companies WHERE id = ?", (company_id))
+        cursor.execute("DELETE FROM companies WHERE id = ?", (company_id,))
         conn.commit()
 
         if cursor.rowcount > 0:

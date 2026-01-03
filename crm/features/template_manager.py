@@ -213,7 +213,7 @@ def get_template_by_id(conn: sqlite3.Connection, template_id: int) -> dict[str, 
     """
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM document_templates WHERE id = ?", (template_id))
+        cursor.execute("SELECT * FROM document_templates WHERE id = ?", (template_id,))
         row = cursor.fetchone()
         
         if row:
@@ -337,7 +337,7 @@ def update_template(
         cursor = conn.cursor()
         
         # Lade aktuelle Version
-        cursor.execute("SELECT version, content FROM document_templates WHERE id = ?", (template_id))
+        cursor.execute("SELECT version, content FROM document_templates WHERE id = ?", (template_id,))
         row = cursor.fetchone()
         if not row:
             return False
@@ -415,7 +415,7 @@ def delete_template(conn: sqlite3.Connection, template_id: int) -> bool:
     """
     try:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM document_templates WHERE id = ?", (template_id))
+        cursor.execute("DELETE FROM document_templates WHERE id = ?", (template_id,))
         conn.commit()
         print(f"Template gelöscht (ID: {template_id})")
         return cursor.rowcount > 0

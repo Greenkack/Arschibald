@@ -158,32 +158,33 @@ def check_api_keys_ui() -> dict[str, bool]:
     missing = get_missing_keys()
 
     if not missing:
-        st.success("All API keys are configured!")
+        st.success("Alle API-Keys sind konfiguriert!")
         return keys_status
 
     # Display missing keys
-    st.error("Missing API Keys")
+    st.error("API-Keys fehlen")
 
-    st.markdown("### Required API Keys Not Found:")
+    st.markdown("### Fehlende erforderliche API-Keys:")
     for key in missing:
         st.markdown(f"- **{key}**")
 
     # Show setup instructions - styled mit weißem Hintergrund und orangenen Akzenten
-    with st.expander("Setup Instructions", expanded=False):
+    with st.expander("Setup-Anleitung", expanded=False):
         instructions_text = get_setup_instructions()
-        st.markdown(f"""
-        <div style="background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
-                    border-left: 4px solid #ff8c00;
-                    border-radius: 8px;
-                    padding: 20px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
-                    font-family: 'Courier New', monospace;
-                    color: #2d3748;
-                    white-space: pre-wrap;
-                    line-height: 1.6;">
-{instructions_text}
-        </div>
-        """, unsafe_allow_html=True)
+        instructions_html = (
+            "<div style=\"background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);"
+            " border-left: 4px solid #ff8c00;"
+            " border-radius: 8px;"
+            " padding: 20px;"
+            " box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);"
+            " font-family: 'Courier New', monospace;"
+            " color: #2d3748;"
+            " white-space: pre-wrap;"
+            " line-height: 1.6;\">"
+            f"{instructions_text}"
+            "</div>"
+        )
+        st.markdown(instructions_html, unsafe_allow_html=True)
 
     return keys_status
 
@@ -216,6 +217,7 @@ def display_agent_status(
     """
     # Show status with optimized progress indicator
     if streaming:
+        st.info(status)
         # Use progress bar for streaming (efficient updates)
         if progress > 0:
             st.progress(progress / 100.0)
@@ -225,183 +227,112 @@ def display_agent_status(
         with st.spinner(status):
             st.markdown(f"**Status:** {status}")
 
-    # Display intermediate steps if available (optimized rendering)
-    if intermediate_steps:
-        # Limit displayed steps for performance
-        max_display_steps = 10
-        total_steps = len(intermediate_steps)
-        display_steps = intermediate_steps[-max_display_steps:]
+    if not intermediate_steps:
+        return
 
-        # Use expander for better performance with many steps
-        expander_title = f" Agent Reasoning Process ({total_steps} steps)"
-        if total_steps > max_display_steps:
-            expander_title += f" - Showing last {max_display_steps}"
+    max_display_steps = 10
+    display_steps = intermediate_steps[-max_display_steps:]
+    total_steps = len(intermediate_steps)
 
-        with st.expander(
-            expander_title,
-            expanded=total_steps <= 3
-        ):
-            # Render steps efficiently (batch rendering)
-            for i, step in enumerate(display_steps, 1):
-                if isinstance(step, tuple) and len(step) >= 2:
-                    action, observation = step[0], step[1]
+    for idx, step in enumerate(display_steps, 1):
+        step_num = total_steps - len(display_steps) + idx
+        st.markdown(f"**Schritt {step_num}**")
 
-                    # Display action (compact format)
-                    col1, col2 = st.columns([1, 4])
-                    with col1:
-                        step_num = total_steps - max_display_steps + i
-                        st.markdown(f"**Step {step_num}**")
-                    with col2:
-                        if hasattr(action, 'tool'):
-                            st.markdown(f"`{action.tool}`")
+        if isinstance(step, tuple) and len(step) >= 2:
+            action, observation = step[0], step[1]
 
-                    # Display input/output in compact format
-                    if hasattr(action, 'tool_input'):
-                        with st.expander(" Input", expanded=False):
-                            # Truncate large inputs
-                            input_str = str(action.tool_input)
-                            if len(input_str) > 200:
-                                st.text(input_str[:200] + "...")
-                            else:
-                                st.json(action.tool_input)
+            if hasattr(action, "tool"):
+                st.markdown(f"Tool: `{action.tool}`")
 
-                    # Truncate long outputs for performance
-                    obs_str = str(observation)
-                    if len(obs_str) > 500:
-                        with st.expander(" Output (truncated)", expanded=False):
-                            st.code(obs_str[:500] + "...", language="text")
-                    else:
-                        with st.expander(" Output", expanded=False):
-                            st.code(obs_str, language="text")
+            if hasattr(action, "tool_input"):
+                st.markdown("**Input:**")
+                st.write(action.tool_input)
 
-                    if i < len(display_steps):
-                        st.markdown("---")
+            obs_str = str(observation)
+            truncated = len(obs_str) > 500
+            with st.expander("Ausgabe (gekürzt)" if truncated else "Ausgabe", expanded=False):
+                st.code(obs_str[:500] + "..." if truncated else obs_str, language="text")
+        else:
+            st.write(step)
+
+        if idx < len(display_steps):
+            st.markdown("---")
 
 
-def format_agent_output(
-        result: dict[str, Any], streaming: bool = False) -> None:
-    """
-    Format and display agent execution results.
+def format_agent_output(result: dict, streaming: bool = False):
+    """Format and display agent execution results."""
 
-    Optimized for performance:
-    - Efficient rendering of large outputs
-    - Progressive disclosure of information
-    - Lazy loading of detailed information
+    intermediate_steps = result.get("intermediate_steps", [])
 
-    Args:
-        result: Dictionary containing agent execution results
-            - output: Final response string
-            - success: Boolean indicating success/failure
-            - error: Error message if failed
-            - execution_time: Time taken in seconds
-            - intermediate_steps: List of reasoning steps
-            - retry_count: Number of retries attempted
-        streaming: Whether to use streaming mode
-
-    Displays:
-        - Formatted text results
-        - Code with syntax highlighting
-        - Error messages with solutions
-        - Execution metrics
-        - File download options
-    """
-    # Display execution metrics in columns
     col1, col2, col3 = st.columns(3)
-
     with col1:
-        if 'execution_time' in result:
-            st.metric(
-                "⏱ Time",
-                "{:.2f}s".format(result['execution_time'])
-            )
+        if "execution_time" in result:
+            st.metric("⏱ Dauer", f"{result['execution_time']:.2f}s")
 
     with col2:
-        if 'retry_count' in result and result['retry_count'] > 0:
-            st.metric(
-                " Retries",
-                result['retry_count']
-            )
+        if result.get("retry_count", 0) > 0:
+            st.metric(" Wiederholungen", result["retry_count"])
 
     with col3:
-        intermediate_steps = result.get('intermediate_steps', [])
         if intermediate_steps:
-            st.metric(
-                " Steps",
-                len(intermediate_steps)
-            )
+            st.metric(" Schritte", len(intermediate_steps))
 
-    # Check if successful
-    if result.get('success', False):
-        st.success("Task completed successfully!")
+    if result.get("success", False):
+        st.success("Aufgabe erfolgreich abgeschlossen!")
+        output = result.get("output", "")
 
-        # Display output
-        output = result.get('output', '')
         if output:
-            st.markdown("###  Result:")
-
-            # Truncate very long outputs for performance
+            st.markdown("### Ergebnis:")
             if len(output) > 5000:
-                with st.expander("View full output", expanded=false):
-                    st.markdown(output[:5000] + "\n\n... (truncated)")
+                with st.expander("Gesamtausgabe anzeigen", expanded=False):
+                    st.markdown(output[:5000] + "\n\n... (gekürzt)")
                     st.download_button(
-                        "Download full output",
+                        "Komplette Ausgabe herunterladen",
                         output,
                         file_name="agent_output.txt",
-                        mime="text/plain"
+                        mime="text/plain",
                     )
             else:
-                # Check if output contains code
-                if '```' in output or 'def ' in output or 'class ' in output:
-                    st.markdown(output)
-                else:
-                    st.markdown(output)
+                st.markdown(output)
 
-        # Display intermediate steps (optimized)
         if intermediate_steps:
             display_agent_status(
-                "Processing complete",
+                "Verarbeitung abgeschlossen",
                 intermediate_steps,
-                streaming=streaming
+                streaming=streaming,
             )
 
-        # Offer file downloads if files were created
-        if 'agent_workspace' in output.lower() or 'file' in output.lower():
-            st.markdown("### Generated Files")
+        if output and ("agent_workspace" in output.lower() or "file" in output.lower()):
+            st.markdown("### Generierte Dateien")
             st.info(
-                "Files have been created in the `agent_workspace` directory. "
-                "You can access them from your file system."
+                "Dateien wurden im Verzeichnis `agent_workspace` erzeugt. "
+                "Du kannst sie im Dateisystem öffnen."
             )
 
     else:
-        # Display error
-        st.error("Task failed")
+        st.error("Aufgabe fehlgeschlagen")
+        error_msg = result.get("error", "Unbekannter Fehler")
 
-        error_msg = result.get('error', 'Unknown error')
-
-        # Truncate very long error messages
         if len(error_msg) > 1000:
-            st.markdown(f"**Error:** {error_msg[:1000]}...")
-            with st.expander("View full error", expanded=False):
+            st.markdown(f"**Fehler:** {error_msg[:1000]}...")
+            with st.expander("Komplette Fehlermeldung", expanded=False):
                 st.code(error_msg, language="text")
         else:
-            st.markdown(f"**Error:** {error_msg}")
+            st.markdown(f"**Fehler:** {error_msg}")
 
-        # Display error type
-        if 'error_type' in result:
-            st.caption(f"Error Type: {result['error_type']}")
+        if "error_type" in result:
+            st.caption(f"Fehlertyp: {result['error_type']}")
 
-        # Display solution if available
-        if 'solution' in result:
-            st.markdown("### Suggested Solution:")
-            st.info(result['solution'])
+        if "solution" in result:
+            st.markdown("### Vorgeschlagene Lösung:")
+            st.info(result["solution"])
 
-        # Display intermediate steps for debugging (collapsed by default)
         if intermediate_steps:
-            with st.expander("Debug Information", expanded=False):
+            with st.expander("Debug-Informationen", expanded=False):
                 display_agent_status(
-                    "Failed during execution",
+                    "Fehler während der Ausführung",
                     intermediate_steps,
-                    streaming=streaming
+                    streaming=streaming,
                 )
 
 
@@ -421,10 +352,10 @@ def render_agent_menu():
         ConfigurationError: If required API keys are missing
     """
     # Page configuration
-    st.title(" A.G.E.N.T. - Autonomous AI Expert System")
+    st.title(" A.G.E.N.T. - Autonomes KI-Expertensystem")
     st.markdown(
-        "**Künstliche Intelligenz** with dual expertise in "
-        "Renewable Energy Consulting and Software Architecture"
+        "**Künstliche Intelligenz** mit Doppelkompetenz in "
+        "Erneuerbare-Energien-Beratung und Softwarearchitektur"
     )
 
     # Welcome message for first-time users (Task 13.2)
@@ -432,21 +363,19 @@ def render_agent_menu():
         st.session_state.first_visit = True
 
     if st.session_state.first_visit:
-        st.info("""
-         **Welcome to O.M.I Agent!**
-
-        This AI assistant can help you with:
-        -  Renewable energy consulting (PV systems, heat pumps)
-        -  Software development (code generation, testing, project setup)
-        -  Complex multi-step workflows
-
-        **Quick Start:** Enter a task below and click "Start Agent".
-        Click the  Help button for detailed instructions and examples.
-        """)
+        st.info(
+            "**Willkommen beim O.M.I Agent!**\n\n"
+            "Dieser KI-Assistent unterstützt Dich bei:\n"
+            "- Beratung zu erneuerbaren Energien (PV-Anlagen, Wärmepumpen)\n"
+            "- Softwareentwicklung (Code-Generierung, Tests, Projekt-Setup)\n"
+            "- Komplexen mehrstufigen Workflows\n\n"
+            "**Schnellstart:** Gib unten eine Aufgabe ein und klicke auf \"Agent starten\".\n"
+            "Über den Button \"Hilfe\" findest Du ausführliche Anleitungen und Beispiele."
+        )
 
         col_dismiss1, col_dismiss2, col_dismiss3 = st.columns([2, 1, 2])
         with col_dismiss2:
-            if st.button("Got it! ", use_container_width=True):
+            if st.button("Verstanden! ", use_container_width=True):
                 st.session_state.first_visit = False
                 st.rerun()
 
@@ -455,14 +384,14 @@ def render_agent_menu():
     # API key validation with help (Task 13.2)
     col_config1, col_config2 = st.columns([6, 1])
     with col_config1:
-        st.markdown("###  Configuration Check")
+        st.markdown("###  Konfigurationsprüfung")
     with col_config2:
-        st.markdown("""
-        <div style="margin-top: 10px;">
-            <span title="API keys are required for the agent to function. OpenAI key is mandatory, others are optional for additional features.">
-                </span>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            "<div style=\"margin-top: 10px;\">"
+            "<span title=\"API keys are required for the agent to function. OpenAI key is mandatory, others are optional for additional features.\"></span>"
+            "</div>",
+            unsafe_allow_html=True,
+        )
 
     keys_status = check_api_keys_ui()
 
@@ -481,17 +410,18 @@ def render_agent_menu():
             """)
             
             # Gestyltes Code-Feld mit weißem Hintergrund und orangen Akzenten
-            st.markdown("""
-            <div style="background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
-                        border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00;
-                        border-radius: 8px; padding: 12px; margin: 10px 0;
-                        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);
-                        font-family: 'Courier New', monospace;">
-                <code style="color: #ffffff; font-size: 14px; font-weight: 600;">
-                    OPENAI_API_KEY=sk-your-key-here
-                </code>
-            </div>
-            """, unsafe_allow_html=True)
+            code_block_html = (
+                "<div style=\"background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);"
+                " border: 2px solid rgba(200, 210, 220, 0.5); border-left: 4px solid #ff8c00;"
+                " border-radius: 8px; padding: 12px; margin: 10px 0;"
+                " box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);"
+                " font-family: 'Courier New', monospace;\">"
+                "<code style=\"color: #ffffff; font-size: 14px; font-weight: 600;\">"
+                "OPENAI_API_KEY=sk-your-key-here"
+                "</code>"
+                "</div>"
+            )
+            st.markdown(code_block_html, unsafe_allow_html=True)
             
             st.markdown("""
             3. **Hole deinen API Key** von [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
@@ -512,69 +442,67 @@ def render_agent_menu():
     # Initialize knowledge base and agent (optimized with lazy loading)
     col_kb1, col_kb2 = st.columns([6, 1])
     with col_kb1:
-        st.markdown("###  Knowledge Base Initialization")
+        st.markdown("### Knowledge Base initialisieren")
     with col_kb2:
-        st.markdown("""
-        <div style="margin-top: 10px;">
-            <span title="The knowledge base contains domain-specific PDF documents that the agent can search for information.">
-                </span>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            "<div style=\"margin-top: 10px;\">"
+            "<span title=\"Die Knowledge Base enthält domänenspezifische PDFs, die der Agent durchsuchen kann.\"></span>"
+            "</div>",
+            unsafe_allow_html=True,
+        )
 
     if 'vector_store' not in st.session_state:
         # Use lazy loading for faster startup
-        with st.spinner("Loading knowledge base..."):
+        with st.spinner("Knowledge Base wird geladen..."):
             try:
                 # Lazy load: defer actual loading until first search
                 st.session_state.vector_store = lazy_load_knowledge_base()
                 if st.session_state.vector_store is not None:
-                    st.success("Knowledge base loaded successfully!")
+                    st.success("Knowledge Base erfolgreich geladen!")
                     st.caption(
-                        "The agent can now search PDF documents for "
-                        "domain-specific information about renewable energy systems.")
+                        "Der Agent kann nun PDF-Dokumente nach fachspezifischen Informationen zu Energiesystemen durchsuchen.")
                 else:
                     st.info(
-                        " Knowledge base is empty. "
-                        "Add PDF files to `Agent/knowledge_base/` directory."
+                        " Knowledge Base ist leer. "
+                        "Lege PDF-Dateien im Ordner `Agent/knowledge_base/` ab."
                     )
-                    with st.expander(" How to Add Documents", expanded=False):
+                    with st.expander(" So fügst du Dokumente hinzu", expanded=False):
                         st.markdown("""
-                        ### Adding Documents to Knowledge Base
+                        ### Dokumente für die Knowledge Base hinzufügen
 
-                        1. **Place PDF files** in the `Agent/knowledge_base/` directory
-                        2. **Restart the application** to index the documents
-                        3. **The agent will automatically** create a searchable index
+                        1. **PDF-Dateien** in den Ordner `Agent/knowledge_base/` legen
+                        2. **Anwendung neu starten**, damit die Dokumente indiziert werden
+                        3. **Der Agent erstellt automatisch** einen durchsuchbaren Index
 
-                        **Recommended Documents:**
-                        - Technical specifications for PV systems
-                        - Heat pump documentation
-                        - Economic analysis guides
-                        - Installation manuals
-                        - Product datasheets
+                        **Empfohlene Dokumente:**
+                        - Technische Spezifikationen für PV-Anlagen
+                        - Wärmepumpen-Dokumentation
+                        - Wirtschaftlichkeits-Leitfäden
+                        - Installationshandbücher
+                        - Produktdatenblätter
 
-                        **Note:** The agent will work without a knowledge base but will have limited domain-specific information.
+                        **Hinweis:** Der Agent funktioniert auch ohne Knowledge Base, hat dann aber weniger domänenspezifische Informationen.
                         """)
             except Exception as e:
-                st.error(f"Failed to load knowledge base: {e}")
+                st.error(f"Knowledge Base konnte nicht geladen werden: {e}")
                 st.info(
-                    "The agent will continue without knowledge base. "
-                    "Add PDF files to the `Agent/knowledge_base/` directory "
-                    "and restart."
+                    "Der Agent läuft ohne Knowledge Base weiter. "
+                    "Lege PDFs in den Ordner `Agent/knowledge_base/` und starte neu."
                 )
                 st.session_state.vector_store = None
 
     # Initialize agent (cached in session state)
     if 'agent_core' not in st.session_state:
-        with st.spinner("Initializing agent..."):
+        with st.spinner("Agent wird initialisiert..."):
             try:
                 # Lazy import to avoid heavy dependencies at app startup
                 from agent.agent_core import AgentCore
                 st.session_state.agent_core = AgentCore(
                     vector_store=st.session_state.vector_store
                 )
-                st.success("Agent initialized successfully!")
+                st.success("Agent erfolgreich initialisiert!")
             except Exception as e:
-                st.error(f"Failed to initialize agent: {e}")
+                st.error(f"Agent konnte nicht initialisiert werden: {e}")
                 # Helpful hint if a known optional dependency is missing
                 if isinstance(e, ModuleNotFoundError) and 'langchain_classic' in str(e):
                     st.info(
@@ -588,7 +516,7 @@ def render_agent_menu():
     st.markdown("---")
 
     # Task input interface
-    st.markdown("### Task Input")
+    st.markdown("### Aufgaben-Eingabe")
     
     # Voice input option
     if st.session_state.get('voice_mode'):
@@ -611,197 +539,194 @@ def render_agent_menu():
     # Help button and dialog (Task 13.2)
     col_help1, col_help2 = st.columns([6, 1])
     with col_help2:
-        if st.button(" Help", use_container_width=True):
+        if st.button(" Hilfe", use_container_width=True):
             st.session_state.show_help_dialog = True
 
     # Help dialog (Task 13.2)
     if st.session_state.get('show_help_dialog', False):
-        with st.expander(" Complete Help Guide", expanded=false):
+        with st.expander(" Vollständige Hilfe", expanded=False):
             st.markdown("""
-            ## How to Use the O.M.I Agent
+            ## So nutzt du den O.M.I Agent
 
-            ### What is O.M.I Agent?
-            O.M.I (Künstliche Intelligenz) is an autonomous AI assistant with dual expertise:
-            - **Renewable Energy Consulting**: Photovoltaics, heat pumps, economic analysis
-            - **Software Architecture**: Code generation, testing, project scaffolding
+            ### Was ist der O.M.I Agent?
+            O.M.I (Künstliche Intelligenz) ist ein autonomer KI-Assistent mit zwei Kernkompetenzen:
+            - **Erneuerbare Energien**: Photovoltaik, Wärmepumpen, Wirtschaftlichkeits-Analysen
+            - **Software-Architektur**: Code-Generierung, Tests, Projekt-Gerüste
 
-            ### How It Works
-            1. **Enter your task** in the text area below
-            2. **Click "Start Agent"** to begin execution
-            3. **Watch the agent think** - see its reasoning process in real-time
-            4. **Review results** - get comprehensive answers, code, or analysis
+            ### So funktioniert es
+            1. **Gib deine Aufgabe** unten im Textfeld ein
+            2. **Klicke auf "Agent starten"**, um die Ausführung zu beginnen
+            3. **Sieh dem Agenten beim Denken zu** - Nachvollziehbares Reasoning in Echtzeit
+            4. **Ergebnisse prüfen** - fundierte Antworten, Code oder Analysen
 
-            ### Task Types You Can Request
+            ### Welche Aufgaben du stellen kannst
 
-            ####  Renewable Energy Consulting
-            - Search knowledge base for technical information
-            - Calculate ROI and amortization times
-            - Prepare customer presentations
-            - Compare different system configurations
-            - Simulate sales calls
+            ####  Beratung Erneuerbare Energien
+            - Knowledge Base nach technischen Infos durchsuchen
+            - ROI und Amortisationszeit berechnen
+            - Kundenpräsentationen vorbereiten
+            - Systemkonfigurationen vergleichen
+            - Verkaufsgespräche simulieren
 
-            ####  Software Development
-            - Generate Python functions with tests
-            - Create complete project structures
-            - Write and execute unit tests
-            - Debug and fix code errors
-            - Generate API endpoints
+            ####  Software-Entwicklung
+            - Python-Funktionen mit Tests erzeugen
+            - Komplette Projektstrukturen anlegen
+            - Unit-Tests schreiben und ausführen
+            - Code debuggen und Fehler beheben
+            - API-Endpunkte generieren
 
-            ####  Combined Workflows
-            - Research → Code → Test → Document
-            - Knowledge search → Calculation → Presentation
-            - Multi-step complex tasks
+            ####  Kombinierte Workflows
+            - Recherche -> Code -> Test -> Dokumentation
+            - Knowledge-Suche -> Berechnung -> Präsentation
+            - Mehrschrittige komplexe Aufgaben
 
-            ### Tips for Best Results
+            ### Tipps für beste Ergebnisse
 
-            **Be Specific**: "Create a Python function to calculate solar panel ROI with parameters: investment, annual_savings, years"
+            **Sei präzise**: "Erstelle eine Python-Funktion zur Berechnung des PV-ROI mit Parametern: investment, annual_savings, years"
 
-            **Provide Context**: "I'm building a customer consultation tool. Create a function that..."
+            **Gib Kontext**: "Ich baue ein Kundenberatungstool. Erstelle eine Funktion, die..."
 
-            **Break Down Complex Tasks**: Instead of "Build a complete app", try:
-            1. "Create project structure"
-            2. "Implement core calculations"
-            3. "Add tests"
+            **Zerlege komplexe Aufgaben**: Statt "Baue eine komplette App" lieber:
+            1. "Projektstruktur anlegen"
+            2. "Kernberechnungen implementieren"
+            3. "Tests hinzufügen"
 
-            **Use Examples**: "Create a function similar to this: [paste example]"
+            **Nutze Beispiele**: "Erstelle eine Funktion ähnlich dieser: [Beispiel einfügen]"
 
-            **Avoid Vague Requests**: "Do something with solar" → Too vague
+            **Vermeide Unklarheiten**: "Mach irgendwas mit Solar" -> zu vage
 
-            ### Available Tools
+            ### Verfügbare Tools
 
-            The agent has access to:
-            -  **Knowledge Base**: Domain-specific PDF documents
-            - **Web Search**: Current information via Tavily API
-            -  **Code Execution**: Secure Docker sandbox
-            - **File Operations**: Read/write in workspace
-            -  **Telephony**: Simulated sales calls
-            -  **Testing**: Automated pytest execution
+            Der Agent hat Zugriff auf:
+            -  **Knowledge Base**: Domänenspezifische PDFs
+            - **Websuche**: Aktuelle Infos via Tavily API
+            -  **Code-Ausführung**: Sichere Docker-Sandbox
+            - **Dateizugriffe**: Lesen/Schreiben im Workspace
+            -  **Telefonie**: Simulierte Verkaufsgespräche
+            -  **Testing**: Automatisiertes pytest
 
-            ### Common Use Cases
+            ### Häufige Anwendungsfälle
 
-            **Quick Information**: "What are the benefits of heat pumps?"
+            **Schnelle Infos**: "Welche Vorteile haben Wärmepumpen?"
 
-            **Calculations**: "Calculate ROI for a 10 kWp PV system with 15,000€ investment"
+            **Berechnungen**: "Berechne den ROI für eine 10 kWp PV-Anlage mit 15.000 € Invest"
 
-            **Code Generation**: "Write a function to calculate annual solar yield"
+            **Code-Generierung**: "Schreibe eine Funktion für den jährlichen Solarertrag"
 
-            **Project Setup**: "Generate a Flask API structure for solar calculations"
+            **Projekt-Setup**: "Erzeuge eine Flask-API-Struktur für Solarkalkulationen"
 
-            **Testing**: "Write unit tests for the calculate_roi function"
+            **Testing**: "Schreibe Unit-Tests für calculate_roi"
 
             ### Troubleshooting
 
-            **Agent not responding?**
-            - Check internet connection
-            - Verify API keys are configured
-            - Try a simpler task first
+            **Agent reagiert nicht?**
+            - Internetverbindung prüfen
+            - API-Keys korrekt hinterlegt?
+            - Zunächst einfachere Aufgabe probieren
 
-            **Unexpected results?**
-            - Rephrase your request more clearly
-            - Provide more context or examples
-            - Break into smaller steps
+            **Unerwartete Ergebnisse?**
+            - Anfrage klarer formulieren
+            - Mehr Kontext oder Beispiele geben
+            - In kleinere Schritte aufteilen
 
-            **Docker errors?**
-            - Ensure Docker is running
-            - Check if sandbox image is built
-            - See troubleshooting guide
+            **Docker-Fehler?**
+            - Läuft Docker?
+            - Ist das Sandbox-Image gebaut?
+            - Siehe Troubleshooting-Guide
 
-            ### Need More Help?
+            ### Noch mehr Hilfe?
 
-             **Documentation**: Check the `Agent/` directory for detailed guides
-            - `README.md` - Overview and quick start
-            - `BASIC_USAGE_TUTORIAL.md` - Beginner guide
-            - `EXAMPLE_TASKS.md` - 20+ example tasks
-            - `TROUBLESHOOTING.md` - Problem solving
-            - `ADVANCED_FEATURES_GUIDE.md` - Advanced usage
+             **Dokumentation**: Im Ordner `Agent/`
+            - `README.md` - Überblick & Quickstart
+            - `BASIC_USAGE_TUTORIAL.md` - Einsteiger-Guide
+            - `EXAMPLE_TASKS.md` - 20+ Beispielaufgaben
+            - `TROUBLESHOOTING.md` - Fehlersuche
+            - `ADVANCED_FEATURES_GUIDE.md` - Fortgeschrittene Nutzung
 
-            **Validation**: Run `python Agent/validate_config.py` to check setup
+            **Validierung**: `python Agent/validate_config.py`
 
-             **Installation**: See `AGENT_INSTALLATION_GUIDE.md` for setup help
+             **Installation**: `AGENT_INSTALLATION_GUIDE.md`
             """)
 
-            if st.button("Close Help", use_container_width=True):
+            if st.button("Hilfe schließen", use_container_width=True):
                 st.session_state.show_help_dialog = False
                 st.rerun()
 
     # Example tasks with categories (Task 13.2)
-    with st.expander("Example Task Suggestions", expanded=False):
+    with st.expander("Beispielaufgaben", expanded=False):
         # CSS für Tabs mit weißem Hintergrund und orangenen Akzenten - VOLLSTÄNDIG
-        st.markdown("""
-        <style>
-        /* Example Tasks Tabs - Alle schwarzen Hintergründe entfernen */
-        div[data-baseweb="tab-list"] {
-            background: transparent !important;
-        }
-        div[data-baseweb="tab-list"] button {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            color: #4a5568 !important;
-            border-radius: 8px 8px 0 0 !important;
-            border: 1px solid rgba(200, 210, 220, 0.5) !important;
-            border-bottom: none !important;
-            padding: 10px 20px !important;
-            margin: 0 2px !important;
-            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;
-            transition: all 0.3s ease !important;
-        }
-        div[data-baseweb="tab-list"] button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3) !important;
-            color: #2d3748 !important;
-        }
-        div[data-baseweb="tab-list"] button[aria-selected="true"] {
-            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
-            color: #1a202c !important;
-            border-bottom: 4px solid #ff8c00 !important;
-            font-weight: 600 !important;
-            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2) !important;
-        }
-        div[data-baseweb="tab-panel"] {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            border-radius: 0 0 8px 8px !important;
-            border: 1px solid rgba(200, 210, 220, 0.5) !important;
-            border-top: none !important;
-            padding: 20px !important;
-            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-        /* Alle verschachtelten Container weiß/transparent */
-        div[data-baseweb="tab-panel"] * {
-            background-color: transparent !important;
-        }
-        div[data-baseweb="tab-panel"] div[data-testid="stVerticalBlock"],
-        div[data-baseweb="tab-panel"] div[data-testid="column"],
-        div[data-baseweb="tab-panel"] div[data-testid="stHorizontalBlock"] {
-            background: transparent !important;
-        }
-        /* Code-Blöcke in Tabs weiß stylen */
-        div[data-baseweb="tab-panel"] pre {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            border-left: 4px solid #ff8c00 !important;
-            border-radius: 8px !important;
-            padding: 15px !important;
-            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;
-        }
-        div[data-baseweb="tab-panel"] code {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            color: #2d3748 !important;
-            font-family: 'Courier New', monospace !important;
-        }
-        /* Markdown Container */
-        div[data-baseweb="tab-panel"] .stMarkdown {
-            background: transparent !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+        css_example_tabs = (
+            "<style>\n"
+            "/* Example Tasks Tabs - Alle schwarzen Hintergründe entfernen */\n"
+            "div[data-baseweb=\"tab-list\"] {\n"
+            "    background: transparent !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-list\"] button {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    color: #4a5568 !important;\n"
+            "    border-radius: 8px 8px 0 0 !important;\n"
+            "    border: 1px solid rgba(200, 210, 220, 0.5) !important;\n"
+            "    border-bottom: none !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-list\"] button:hover {\n"
+            "    transform: translateY(-2px) !important;\n"
+            "    box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3) !important;\n"
+            "    color: #2d3748 !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-list\"] button[aria-selected=\"true\"] {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;\n"
+            "    color: #1a202c !important;\n"
+            "    border-bottom: 4px solid #ff8c00 !important;\n"
+            "    font-weight: 600 !important;\n"
+            "    box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2) !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-panel\"] {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    border-radius: 0 0 8px 8px !important;\n"
+            "    border: 1px solid rgba(200, 210, 220, 0.5) !important;\n"
+            "    border-top: none !important;\n"
+            "    padding: 20px !important;\n"
+            "    box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1) !important;\n"
+            "}\n"
+            "/* Alle verschachtelten Container weiß/transparent */\n"
+            "div[data-baseweb=\"tab-panel\"] * {\n"
+            "    background-color: transparent !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-panel\"] div[data-testid=\"stVerticalBlock\"],\n"
+            "div[data-baseweb=\"tab-panel\"] div[data-testid=\"column\"],\n"
+            "div[data-baseweb=\"tab-panel\"] div[data-testid=\"stHorizontalBlock\"] {\n"
+            "    background: transparent !important;\n"
+            "}\n"
+            "/* Code-Blöcke in Tabs weiß stylen */\n"
+            "div[data-baseweb=\"tab-panel\"] pre {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    border-left: 4px solid #ff8c00 !important;\n"
+            "    border-radius: 8px !important;\n"
+            "    padding: 15px !important;\n"
+            "    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-panel\"] code {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    color: #2d3748 !important;\n"
+            "    font-family: 'Courier New', monospace !important;\n"
+            "}\n"
+            "/* Markdown Container */\n"
+            "div[data-baseweb=\"tab-panel\"] .stMarkdown {\n"
+            "    background: transparent !important;\n"
+            "}\n"
+            "</style>\n"
+        )
+        st.markdown(css_example_tabs, unsafe_allow_html=True)
         
         tab1, tab2, tab3 = st.tabs([
-            " Energy Consulting",
-            " Software Dev",
-            " Combined"
+            " Energieberatung",
+            " Software-Entwicklung",
+            " Kombiniert"
         ])
 
         with tab1:
             st.markdown("""
-            **Quick Information Queries:**
+            **Schnelle Info-Abfragen:**
             ```
             Was sind die wichtigsten Vorteile von Photovoltaik-Anlagen?
             ```
@@ -809,38 +734,38 @@ def render_agent_menu():
             Wie funktioniert eine Luft-Wasser-Wärmepumpe?
             ```
 
-            **Economic Calculations:**
+            **Wirtschaftlichkeits-Berechnungen:**
             ```
             Berechne den ROI für eine 10 kWp PV-Anlage:
-            - Investition: 15.000 €
+            - Investition: 15.000 EUR
             - Jahresverbrauch: 4.500 kWh
-            - Strompreis: 0,35 €/kWh
+            - Strompreis: 0,35 EUR/kWh
             - Eigenverbrauch: 30%
             ```
 
-            **Customer Consultation:**
+            **Kundenberatung:**
             ```
             Erstelle eine Beratung für einen Kunden mit:
-            - Einfamilienhaus, 150 m²
+            - Einfamilienhaus, 150 m^2
             - Jahresverbrauch: 5.000 kWh
-            - Budget: 20.000 €
+            - Budget: 20.000 EUR
             - Interesse: PV + Speicher
             ```
 
-            **Sales Call Simulation:**
+            **Verkaufsgespräch simulieren:**
             ```
             Simuliere einen Beratungsanruf für Photovoltaik.
             Präsentiere die Top 3 Vorteile mit Daten.
             ```
             """)
 
-            if st.button(" Copy Example 1", key="copy_energy_1"):
+            if st.button(" Beispiel 1 übernehmen", key="copy_energy_1"):
                 st.session_state.agent_task_input = "Was sind die wichtigsten Vorteile von Photovoltaik-Anlagen?"
                 st.rerun()
 
         with tab2:
             st.markdown("""
-            **Simple Function:**
+            **Einfache Funktion:**
             ```
             Schreibe eine Python-Funktion zur Berechnung des ROI:
             - Parameter: investment, annual_savings, years
@@ -849,7 +774,7 @@ def render_agent_menu():
             - Mit Unit Tests
             ```
 
-            **Class with TDD:**
+            **Klasse mit TDD:**
             ```
             Entwickle eine Klasse SolarPanel mit TDD:
             - Attribute: manufacturer, model, power_wp, efficiency
@@ -857,7 +782,7 @@ def render_agent_menu():
             - Folge dem TDD-Zyklus
             ```
 
-            **API Endpoint:**
+            **API-Endpunkt:**
             ```
             Erstelle einen Flask REST API Endpoint:
             POST /api/calculate-yield
@@ -866,7 +791,7 @@ def render_agent_menu():
             Mit Validierung und Tests
             ```
 
-            **Project Scaffolding:**
+            **Projektgerüst:**
             ```
             Generiere ein Flask API Projekt für PV-Berechnungen:
             - REST API mit Flask
@@ -876,108 +801,93 @@ def render_agent_menu():
             ```
             """)
 
-            if st.button(" Copy Example 2", key="copy_dev_1"):
+            if st.button(" Beispiel 2 übernehmen", key="copy_dev_1"):
                 st.session_state.agent_task_input = "Schreibe eine Python-Funktion zur Berechnung des ROI mit Type Hints, Docstring und Unit Tests"
                 st.rerun()
 
         with tab3:
-            st.markdown("""
-            **Research → Code → Test:**
-            ```
-            1. Suche in der Wissensdatenbank nach PV-Ertragsdaten
-            2. Erstelle eine Funktion zur Ertragsberechnung
-            3. Schreibe Tests für die Funktion
-            4. Führe die Tests im Sandbox aus
-            ```
+            tab3_content = (
+                "**Recherche -> Code -> Test:**\n"
+                "```\n"
+                "1. Suche in der Wissensdatenbank nach PV-Ertragsdaten\n"
+                "2. Erstelle eine Funktion zur Ertragsberechnung\n"
+                "3. Schreibe Tests für die Funktion\n"
+                "4. Führe die Tests im Sandbox aus\n"
+                "```\n\n"
+                "**Beratungstool:**\n"
+                "```\n"
+                "Erstelle ein Beratungstool:\n"
+                "1. Recherchiere durchschnittliche PV-Erträge\n"
+                "2. Erstelle Ertragsfunktion\n"
+                "3. Erstelle ROI-Funktion\n"
+                "4. Schreibe Tests\n"
+                "5. Erstelle CLI-Tool\n"
+                "6. Generiere Beispiel-Beratung\n"
+                "```\n\n"
+                "**Kompletter Workflow:**\n"
+                "```\n"
+                "Entwickle eine Lösung für Amortisationsberechnung:\n"
+                "- Suche relevante Formeln in der Wissensdatenbank\n"
+                "- Implementiere die Berechnung in Python\n"
+                "- Erstelle Unit Tests\n"
+                "- Generiere Beispielberechnungen\n"
+                "- Erstelle eine Dokumentation\n"
+                "```"
+            )
+            st.markdown(tab3_content)
 
-            **Consultation Tool:**
-            ```
-            Erstelle ein Beratungstool:
-            1. Recherchiere durchschnittliche PV-Erträge
-            2. Erstelle Ertragsfunktion
-            3. Erstelle ROI-Funktion
-            4. Schreibe Tests
-            5. Erstelle CLI-Tool
-            6. Generiere Beispiel-Beratung
-            ```
-
-            **Complete Workflow:**
-            ```
-            Entwickle eine Lösung für Amortisationsberechnung:
-            - Suche relevante Formeln in der Wissensdatenbank
-            - Implementiere die Berechnung in Python
-            - Erstelle Unit Tests
-            - Generiere Beispielberechnungen
-            - Erstelle eine Dokumentation
-            ```
-            """)
-
-            if st.button(" Copy Example 3", key="copy_combined_1"):
+            if st.button(" Beispiel 3 übernehmen", key="copy_combined_1"):
                 st.session_state.agent_task_input = "Suche in der Wissensdatenbank nach PV-Vorteilen, erstelle dann eine Python-Funktion zur Ertragsberechnung mit Tests"
                 st.rerun()
 
     # Usage instructions (Task 13.2)
-    with st.expander("Quick Usage Instructions", expanded=False):
-        st.markdown("""
-        ### Getting Started in 3 Steps
-
-        **Step 1: Enter Your Task**
-        - Type what you want the agent to do in the text area below
-        - Be as specific as possible
-        - Include all necessary details
-
-        **Step 2: Start the Agent**
-        - Click the "Start Agent" button
-        - The agent will begin processing your request
-        - You'll see its thinking process in real-time
-
-        **Step 3: Review Results**
-        - Read the agent's response
-        - Copy any generated code
-        - Download created files if needed
-
-        ### Writing Effective Tasks
-
-        **Good Task Examples:**
-        - "Create a Python function called calculate_roi that takes investment and annual_savings as parameters"
-        - "Search the knowledge base for information about heat pump efficiency (JAZ)"
-        - "Generate a Flask project structure with models, routes, and tests"
-
-        **Tasks to Avoid:**
-        - "Do something" (too vague)
-        - "Help me" (no specific request)
-        - "Fix everything" (no context)
-
-        ### Agent Capabilities
-
-        **Can Do:**
-        - Search knowledge base
-        - Generate Python code
-        - Write and run tests
-        - Create project structures
-        - Perform calculations
-        - Simulate conversations
-        - Search the web (if API key configured)
-
-        **Cannot Do:**
-        - Access your local files outside workspace
-        - Make real phone calls (only simulation)
-        - Access databases directly
-        - Modify existing application code
-        - Execute commands on your system
-
-        ### Tips & Tricks
-
-        **Use the knowledge base first**: The agent will search its knowledge base before using web search
-
-        **Break down complex tasks**: Multi-step tasks work better when broken into phases
-
-        **Provide examples**: Show the agent what you want with examples
-
-        **Iterate**: Start simple, then refine based on results
-
-        **Check the reasoning**: Watch the agent's thinking process to understand its approach
-        """)
+    with st.expander("Kurzanleitung", expanded=False):
+        quickstart_text = (
+            "### In 3 Schritten starten\n\n"
+            "**Schritt 1: Aufgabe eingeben**\n"
+            "- Schreibe unten, was der Agent erledigen soll\n"
+            "- So konkret wie möglich\n"
+            "- Alle benötigten Details angeben\n\n"
+            "**Schritt 2: Agent starten**\n"
+            "- Auf \"Agent starten\" klicken\n"
+            "- Der Agent verarbeitet die Anfrage\n"
+            "- Das Reasoning wird in Echtzeit angezeigt\n\n"
+            "**Schritt 3: Ergebnisse prüfen**\n"
+            "- Antwort lesen\n"
+            "- Generierten Code kopieren\n"
+            "- Erzeugte Dateien bei Bedarf herunterladen\n\n"
+            "### Gute Aufgaben formulieren\n\n"
+            "**Gute Beispiele:**\n"
+            "- \"Erstelle eine Python-Funktion calculate_roi mit Parametern investment und annual_savings\"\n"
+            "- \"Durchsuche die Knowledge Base nach Infos zur Wärmepumpen-Effizienz (JAZ)\"\n"
+            "- \"Generiere eine Flask-Projektstruktur mit Modellen, Routen und Tests\"\n\n"
+            "**Vermeide:**\n"
+            "- \"Mach irgendwas\" (zu vage)\n"
+            "- \"Hilf mir\" (kein konkreter Auftrag)\n"
+            "- \"Fix alles\" (kein Kontext)\n\n"
+            "### Fähigkeiten des Agents\n\n"
+            "**Kann:**\n"
+            "- Knowledge Base durchsuchen\n"
+            "- Python-Code generieren\n"
+            "- Tests schreiben und ausführen\n"
+            "- Projektstrukturen erstellen\n"
+            "- Berechnungen durchführen\n"
+            "- Gespräche simulieren\n"
+            "- Im Web suchen (falls API-Key hinterlegt)\n\n"
+            "**Kann nicht:**\n"
+            "- Lokale Dateien außerhalb des Workspace lesen\n"
+            "- Echte Anrufe tätigen (nur Simulation)\n"
+            "- Direkt auf Datenbanken zugreifen\n"
+            "- Bestehenden Anwendungscode ändern\n"
+            "- Befehle auf deinem System ausführen\n\n"
+            "### Tipps & Tricks\n\n"
+            "**Erst Knowledge Base nutzen**: Der Agent durchsucht zuerst seine Knowledge Base, bevor er ins Web geht.\n\n"
+            "**Komplexes aufteilen**: Mehrschrittige Aufgaben in Phasen aufsplitten.\n\n"
+            "**Beispiele geben**: Zeig, was du willst, mit kurzen Beispielen.\n\n"
+            "**Iterieren**: Einfach starten, dann verfeinern.\n\n"
+            "**Reasoning prüfen**: Beobachte den Denkprozess, um den Ansatz zu verstehen."
+        )
+        st.markdown(quickstart_text)
 
     # ====================================================================
     # TELEPHONY MEGA EXTENSION - ALL NEW FEATURES
@@ -988,89 +898,90 @@ def render_agent_menu():
         st.markdown("Vollständiges Telefonsystem mit 36 Tools für professionelle Anrufverwaltung")
         
         # CSS für Telephony-Tabs - ALLE SCHWARZEN HINTERGRÜNDE ENTFERNEN
-        st.markdown("""
-        <style>
-        /* Telephony Tabs - Komplett weiß ohne schwarze Hintergründe */
-        div[data-baseweb="tab-list"] {
-            background: transparent !important;
-        }
-        div[data-baseweb="tab-list"] button {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            color: #4a5568 !important;
-            border-radius: 8px 8px 0 0 !important;
-            border: 1px solid rgba(200, 210, 220, 0.5) !important;
-            border-bottom: none !important;
-            padding: 10px 20px !important;
-            margin: 0 2px !important;
-            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;
-            transition: all 0.3s ease !important;
-        }
-        div[data-baseweb="tab-list"] button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3) !important;
-            color: #2d3748 !important;
-        }
-        div[data-baseweb="tab-list"] button[aria-selected="true"] {
-            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
-            color: #1a202c !important;
-            border-bottom: 4px solid #ff8c00 !important;
-            font-weight: 600 !important;
-            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2) !important;
-        }
-        div[data-baseweb="tab-panel"] {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            border-radius: 0 0 8px 8px !important;
-            border: 1px solid rgba(200, 210, 220, 0.5) !important;
-            border-top: none !important;
-            padding: 20px !important;
-            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-        /* KRITISCH: Alle verschachtelten Elemente transparent/weiß */
-        div[data-baseweb="tab-panel"] * {
-            background-color: transparent !important;
-        }
-        div[data-baseweb="tab-panel"] div[data-testid="stVerticalBlock"],
-        div[data-baseweb="tab-panel"] div[data-testid="column"],
-        div[data-baseweb="tab-panel"] div[data-testid="stHorizontalBlock"],
-        div[data-baseweb="tab-panel"] .stMarkdown,
-        div[data-baseweb="tab-panel"] .element-container {
-            background: transparent !important;
-        }
-        /* Expander innerhalb der Tabs weiß */
-        div[data-baseweb="tab-panel"] details {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-        }
-        div[data-baseweb="tab-panel"] details summary {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            color: #2d3748 !important;
-        }
-        div[data-baseweb="tab-panel"] details[open] {
-            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
-            border-left: 4px solid #ff8c00 !important;
-        }
-        /* Code-Blöcke weiß stylen */
-        div[data-baseweb="tab-panel"] pre {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            border-left: 4px solid #ff8c00 !important;
-            border-radius: 8px !important;
-            padding: 15px !important;
-            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;
-        }
-        div[data-baseweb="tab-panel"] code {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
-            color: #2d3748 !important;
-            font-family: 'Courier New', monospace !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+        css_telephony_tabs = (
+            "<style>\n"
+            "/* Telephony Tabs - Komplett weiß ohne schwarze Hintergründe */\n"
+            "div[data-baseweb=\"tab-list\"] {\n"
+            "    background: transparent !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-list\"] button {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    color: #4a5568 !important;\n"
+            "    border-radius: 8px 8px 0 0 !important;\n"
+            "    border: 1px solid rgba(200, 210, 220, 0.5) !important;\n"
+            "    border-bottom: none !important;\n"
+            "    padding: 10px 20px !important;\n"
+            "    margin: 0 2px !important;\n"
+            "    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;\n"
+            "    transition: all 0.3s ease !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-list\"] button:hover {\n"
+            "    transform: translateY(-2px) !important;\n"
+            "    box-shadow: 0 10px 12px rgba(255, 140, 0, 0.3) !important;\n"
+            "    color: #2d3748 !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-list\"] button[aria-selected=\"true\"] {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;\n"
+            "    color: #1a202c !important;\n"
+            "    border-bottom: 4px solid #ff8c00 !important;\n"
+            "    font-weight: 600 !important;\n"
+            "    box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2) !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-panel\"] {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    border-radius: 0 0 8px 8px !important;\n"
+            "    border: 1px solid rgba(200, 210, 220, 0.5) !important;\n"
+            "    border-top: none !important;\n"
+            "    padding: 20px !important;\n"
+            "    box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1) !important;\n"
+            "}\n"
+            "/* KRITISCH: Alle verschachtelten Elemente transparent/weiß */\n"
+            "div[data-baseweb=\"tab-panel\"] * {\n"
+            "    background-color: transparent !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-panel\"] div[data-testid=\"stVerticalBlock\"],\n"
+            "div[data-baseweb=\"tab-panel\"] div[data-testid=\"column\"],\n"
+            "div[data-baseweb=\"tab-panel\"] div[data-testid=\"stHorizontalBlock\"],\n"
+            "div[data-baseweb=\"tab-panel\"] .stMarkdown,\n"
+            "div[data-baseweb=\"tab-panel\"] .element-container {\n"
+            "    background: transparent !important;\n"
+            "}\n"
+            "/* Expander innerhalb der Tabs weiß */\n"
+            "div[data-baseweb=\"tab-panel\"] details {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-panel\"] details summary {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    color: #2d3748 !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-panel\"] details[open] {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;\n"
+            "    border-left: 4px solid #ff8c00 !important;\n"
+            "}\n"
+            "/* Code-Blöcke weiß stylen */\n"
+            "div[data-baseweb=\"tab-panel\"] pre {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    border-left: 4px solid #ff8c00 !important;\n"
+            "    border-radius: 8px !important;\n"
+            "    padding: 15px !important;\n"
+            "    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1) !important;\n"
+            "}\n"
+            "div[data-baseweb=\"tab-panel\"] code {\n"
+            "    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;\n"
+            "    color: #2d3748 !important;\n"
+            "    font-family: 'Courier New', monospace !important;\n"
+            "}\n"
+            "</style>\n"
+        )
+        st.markdown(css_telephony_tabs, unsafe_allow_html=True)
         
         # Tabs für verschiedene Bereiche
         phone_tab1, phone_tab2, phone_tab3, phone_tab4, phone_tab5 = st.tabs([
             " Bria Softphone",
             " Kontakte",
-            "Analytics",
-            " Knowledge Base",
-            "Erweiterte Features"
+            " Analysen",
+            " Wissensbasis",
+            " Erweiterte Features"
         ])
         
         # TAB 1: Bria Softphone
@@ -1153,14 +1064,17 @@ def render_agent_menu():
                 
                 if st.button("Kontakt speichern", key="save_contact"):
                     if contact_name and contact_phone:
-                        st.code(f"""add_phone_contact(
-    name='{contact_name}',
-    phone_number='{contact_phone}',
-    email='{contact_email}',
-    company='{contact_company}',
-    tags='{contact_tags}',
-    notes='{contact_notes}'
-)""")
+                        contact_snippet = (
+                            "add_phone_contact(\n"
+                            f"    name='{contact_name}',\n"
+                            f"    phone_number='{contact_phone}',\n"
+                            f"    email='{contact_email}',\n"
+                            f"    company='{contact_company}',\n"
+                            f"    tags='{contact_tags}',\n"
+                            f"    notes='{contact_notes}'\n"
+                            ")"
+                        )
+                        st.code(contact_snippet)
                     else:
                         st.warning("Name und Telefonnummer sind Pflichtfelder")
             
@@ -1176,15 +1090,16 @@ def render_agent_menu():
             
             with st.expander("Bulk Import (CSV/XLSX)", expanded=False):
                 st.markdown("**Mehrere Kontakte auf einmal importieren**")
-                st.markdown("""
-                **Erforderliche Spalten:**
-                - `name` - Kontaktname (Pflicht)
-                - `phone_number` - Telefonnummer (Pflicht)
-                - `email` - E-Mail Adresse (optional)
-                - `company` - Firmenname (optional)
-                - `tags` - Tags kommagetrennt (optional)
-                - `notes` - Notizen (optional)
-                """)
+                bulk_columns = (
+                    "**Erforderliche Spalten:**\n"
+                    "- `name` - Kontaktname (Pflicht)\n"
+                    "- `phone_number` - Telefonnummer (Pflicht)\n"
+                    "- `email` - E-Mail Adresse (optional)\n"
+                    "- `company` - Firmenname (optional)\n"
+                    "- `tags` - Tags kommagetrennt (optional)\n"
+                    "- `notes` - Notizen (optional)"
+                )
+                st.markdown(bulk_columns)
                 
                 import_file = st.text_input("Dateipfad", placeholder="C:/contacts.xlsx", key="import_file")
                 if st.button("Import starten", key="bulk_import"):
@@ -1202,16 +1117,17 @@ def render_agent_menu():
                 
                 if st.button("Statistiken abrufen", key="get_analytics"):
                     st.code(f"get_call_analytics(days={analytics_days})")
-                
-                st.markdown("""
-                **Metriken:**
-                - Gesamtanzahl Anrufe
-                - Erfolgreiche vs. fehlgeschlagene Anrufe
-                - Conversion Rate
-                - Durchschnittliche Anrufdauer
-                - Gesamte Gesprächszeit
-                - Durchschnittliche Stimmung
-                """)
+
+                analytics_metrics = (
+                    "**Metriken:**\n"
+                    "- Gesamtanzahl Anrufe\n"
+                    "- Erfolgreiche vs. fehlgeschlagene Anrufe\n"
+                    "- Conversion Rate\n"
+                    "- Durchschnittliche Anrufdauer\n"
+                    "- Gesamte Gesprächszeit\n"
+                    "- Durchschnittliche Stimmung"
+                )
+                st.markdown(analytics_metrics)
             
             with st.expander("Anruf-Historie durchsuchen", expanded=False):
                 st.markdown("**Vergangene Anrufe finden**")
@@ -1244,14 +1160,15 @@ def render_agent_menu():
                     else:
                         st.warning("Bitte Call ID eingeben")
                 
-                st.markdown("""
-                **Analysiert:**
-                - Positive/Negative Keywords
-                - Sentiment Score (-1 bis +1)
-                - Stimmungskategorie (Positiv/Neutral/Negativ)
-                """)
+                sentiment_info = (
+                    "**Analysiert:**\n"
+                    "- Positive/Negative Schlüsselwörter\n"
+                    "- Stimmungs-Score (-1 bis +1)\n"
+                    "- Stimmungskategorie (Positiv/Neutral/Negativ)"
+                )
+                st.markdown(sentiment_info)
         
-        # TAB 4: Knowledge Base
+        # TAB 4: Wissensbasis
         with phone_tab4:
             with st.expander(" Call-Skript speichern", expanded=False):
                 st.markdown("**Neues Anruf-Skript in Knowledge Base ablegen**")
@@ -1262,20 +1179,23 @@ def render_agent_menu():
                     script_category = st.selectbox("Kategorie", ["Verkauf", "Support", "Beratung", "Follow-up"], key="script_category")
                     script_opening = st.text_area("Eröffnungssatz", placeholder="Guten Tag, hier ist O.M.I von...", key="script_opening", height=100)
                 with col2:
-                    script_keypoints = st.text_input("Key Points (kommagetrennt)", placeholder="Kostenersparnis,Umweltschutz,Unabhängigkeit", key="script_keypoints")
-                    script_objections = st.text_area("Einwandbehandlung", placeholder="JSON format", key="script_objections", height=80)
+                    script_keypoints = st.text_input("Kernpunkte (kommagetrennt)", placeholder="Kostenersparnis,Umweltschutz,Unabhängigkeit", key="script_keypoints")
+                    script_objections = st.text_area("Einwandbehandlung", placeholder="JSON-Format", key="script_objections", height=80)
                     script_closing = st.text_area("Abschlusssatz", placeholder="Vielen Dank für das Gespräch...", key="script_closing", height=80)
                 
                 if st.button("Skript speichern", key="save_script"):
                     if script_name and script_category and script_opening:
-                        st.code(f"""save_call_script(
-    name='{script_name}',
-    category='{script_category}',
-    opening_statement='{script_opening}',
-    key_points='{script_keypoints}',
-    objection_responses='{script_objections}',
-    closing_statement='{script_closing}'
-)""")
+                        script_snippet = (
+                            "save_call_script(\n"
+                            f"    name='{script_name}',\n"
+                            f"    category='{script_category}',\n"
+                            f"    opening_statement='{script_opening}',\n"
+                            f"    key_points='{script_keypoints}',\n"
+                            f"    objection_responses='{script_objections}',\n"
+                            f"    closing_statement='{script_closing}'\n"
+                            ")"
+                        )
+                        st.code(script_snippet)
                     else:
                         st.warning("Name, Kategorie und Eröffnung sind Pflichtfelder")
             
@@ -1292,7 +1212,7 @@ def render_agent_menu():
         
         # TAB 5: Erweiterte Features
         with phone_tab5:
-            with st.expander(" Call Recording", expanded=False):
+            with st.expander(" Anrufaufzeichnung", expanded=False):
                 st.markdown("**Anrufaufnahme starten & transkribieren**")
                 
                 col1, col2 = st.columns(2)
@@ -1318,7 +1238,7 @@ def render_agent_menu():
                         else:
                             st.warning("Bitte Dateipfad angeben")
             
-            with st.expander(" CRM Integration", expanded=False):
+            with st.expander(" CRM-Integration", expanded=False):
                 st.markdown("**Anruf ins CRM-System protokollieren**")
                 
                 col1, col2 = st.columns(2)
@@ -1348,39 +1268,45 @@ def render_agent_menu():
                 
                 if st.button("Wiedervorlage setzen", key="schedule_followup"):
                     if followup_call_id and followup_action:
-                        st.code(f"""schedule_follow_up(
-    call_id='{followup_call_id}',
-    follow_up_date='{followup_date}',
-    follow_up_action='{followup_action}'
-)""")
+                        follow_up_snippet = (
+                            "schedule_follow_up(\n"
+                            f"    call_id='{followup_call_id}',\n"
+                            f"    follow_up_date='{followup_date}',\n"
+                            f"    follow_up_action='{followup_action}'\n"
+                            ")"
+                        )
+                        st.code(follow_up_snippet)
                     else:
                         st.warning("Call ID und Aktion sind Pflichtfelder")
             
-            with st.expander("Auto-Dialer Kampagne", expanded=False):
+            with st.expander("Auto-Dialer-Kampagne", expanded=False):
                 st.markdown("**Automatische Anrufkampagne für Kontakte mit Tag**")
-                
+
                 col1, col2 = st.columns(2)
                 with col1:
                     dialer_tag = st.text_input("Kontakt-Tag", placeholder="lead", key="dialer_tag")
                     dialer_goal = st.text_input("Kampagnenziel", placeholder="Beratungstermin vereinbaren", key="dialer_goal")
                 with col2:
                     dialer_max = st.number_input("Max. Anrufe", min_value=1, max_value=100, value=10, key="dialer_max")
-                
+
                 if st.button("Kampagne starten", key="start_campaign"):
                     if dialer_tag and dialer_goal:
-                        st.code(f"""auto_dialer_campaign(
-    contact_tag='{dialer_tag}',
-    call_goal='{dialer_goal}',
-    max_calls={dialer_max}
-)""")
+                        dialer_snippet = (
+                            "auto_dialer_campaign(\n"
+                            f"    contact_tag='{dialer_tag}',\n"
+                            f"    call_goal='{dialer_goal}',\n"
+                            f"    max_calls={dialer_max}\n"
+                            ")"
+                        )
+                        st.code(dialer_snippet)
                     else:
                         st.warning("Tag und Ziel sind Pflichtfelder")
             
             with st.expander(" Weitere Features", expanded=False):
-                st.markdown("**Zusätzliche Telephony-Tools**")
+                st.markdown("**Zusätzliche Telefonie-Tools**")
                 
                 # Call Tags
-                st.markdown("**Call Tags hinzufügen:**")
+                st.markdown("**Anruf-Tags hinzufügen:**")
                 col1, col2 = st.columns(2)
                 with col1:
                     tag_call_id = st.text_input("Call ID", placeholder="CALL-12345678", key="tag_call_id")
@@ -1396,7 +1322,7 @@ def render_agent_menu():
                 st.markdown("**Konferenzschaltung:**")
                 col1, col2 = st.columns(2)
                 with col1:
-                    conf_call_id = st.text_input("Konferenz Call ID", placeholder="CALL-12345678", key="conf_call_id")
+                    conf_call_id = st.text_input("Konferenz-Anruf-ID", placeholder="CALL-12345678", key="conf_call_id")
                 with col2:
                     conf_participant = st.text_input("Teilnehmer hinzufügen", placeholder="+49301234567", key="conf_participant")
                 if st.button("Teilnehmer hinzufügen", key="add_participant"):
@@ -1421,7 +1347,7 @@ def render_agent_menu():
                 st.markdown("---")
                 
                 # Call Routing
-                st.markdown("**Call Routing konfigurieren:**")
+                st.markdown("**Anruf-Routing konfigurieren:**")
                 routing_rules = st.text_area("Routing-Regeln (JSON)", 
                     placeholder='{"vip": "agent1", "support": "agent2", "sales": "agent3"}',
                     key="routing_rules", height=100)
@@ -1441,19 +1367,20 @@ def render_agent_menu():
                         st.code("check_voicemail()")
 
     # Task input with tooltip (Task 13.2)
-    st.markdown("""
-    <div style="margin-bottom: 5px;">
-        <span style="font-size: 14px; color: #666;">
-         <b>Tip:</b> Be specific about what you want. Include parameters, requirements, and expected output.
-        </span>
-    </div>
-    """, unsafe_allow_html=True)
+    tooltip_html = (
+        "<div style=\"margin-bottom: 5px;\">\n"
+        "    <span style=\"font-size: 14px; color: #666;\">\n"
+        "     <b>Hinweis:</b> Beschreiben Sie konkret, was Sie möchten. Nennen Sie Parameter, Anforderungen und das erwartete Ergebnis.\n"
+        "    </span>\n"
+        "</div>\n"
+    )
+    st.markdown(tooltip_html, unsafe_allow_html=True)
 
     # Task input
     user_task = st.text_area(
-        "Enter your task:",
+        "Aufgabe eingeben:",
         height=100,
-        placeholder="Describe what you want the agent to do...",
+        placeholder="Beschreiben Sie, was der Agent tun soll...",
         key="agent_task_input"
     )
 
@@ -1462,30 +1389,30 @@ def render_agent_menu():
 
     with col1:
         start_button = st.button(
-            "Start Agent",
+            "Agent starten",
             type="primary",
             use_container_width=True,
-            help="Execute the task you entered above. The agent will use its tools to complete your request."
+            help="Führt die oben eingegebene Aufgabe aus. Der Agent nutzt seine Tools, um Ihre Anfrage zu erledigen."
         )
 
     with col2:
         clear_memory = st.button(
-            " Clear Memory",
+            "Speicher leeren",
             use_container_width=True,
-            help="Clear the agent's conversation memory. Use this to start fresh with a new context."
+            help="Löscht den Gesprächsspeicher des Agents. Nutzen Sie dies, um mit neuem Kontext zu starten."
         )
 
     with col3:
         show_status = st.button(
-            "Show Status",
+            "Status anzeigen",
             use_container_width=True,
-            help="Display the current agent status and configuration information.")
+            help="Zeigt den aktuellen Agent-Status und die Konfiguration an.")
 
     # Handle clear memory
     if clear_memory:
         if st.session_state.agent_core is not None and hasattr(st.session_state.agent_core, 'clear_memory'):
             st.session_state.agent_core.clear_memory()
-            st.success("Memory cleared!")
+            st.success("Speicher geleert!")
         else:
             st.warning("Agent nicht initialisiert - kann Memory nicht löschen.")
         st.rerun()

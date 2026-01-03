@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 const axios = require('axios');
 const { EventEmitter } = require('events');
 
@@ -83,14 +84,35 @@ class BackendManager extends EventEmitter {
     this.emit('starting');
 
     try {
+      // Dev helper: if a backend is already running (e.g., launched by npm run backend:dev),
+      // reuse it instead of spawning another instance. This prevents missing-binary errors
+      // in Electron when the packaged backend executable is not present during development.
+      const alreadyRunning = await this.checkExistingBackend();
+      if (alreadyRunning) {
+        this.log('info', `Backend already running at ${this.getUrl()}, skipping spawn`);
+        this.isRunning = true;
+        this.startTime = Date.now();
+        this.restartAttempts = 0;
+        this.emit('started');
+        this.startHealthCheckPolling();
+        return;
+      }
+
       const pythonPath = this.getPythonPath();
       const backendPath = this.getBackendPath();
+      const packagedExists = fs.existsSync(pythonPath);
+      const devMode = process.env.NODE_ENV === 'development' || !packagedExists;
+      const pythonExec = devMode ? (process.platform === 'win32' ? 'python' : 'python3') : pythonPath;
+
+      if (!packagedExists) {
+        this.log('warn', `Packaged backend executable missing at ${pythonPath}, falling back to dev mode`);
+      }
 
       // Spawn backend process
-      if (process.env.NODE_ENV === 'development') {
+      if (devMode) {
         // Development: Run with uvicorn
         this.process = spawn(
-          pythonPath,
+          pythonExec,
           ['-m', 'uvicorn', 'main:app', '--port', this.port.toString(), '--host', '127.0.0.1'],
           {
             cwd: backendPath,
@@ -103,7 +125,7 @@ class BackendManager extends EventEmitter {
         );
       } else {
         // Production: Run bundled executable
-        this.process = spawn(pythonPath, [], {
+        this.process = spawn(pythonExec, [], {
           cwd: backendPath,
           env: { 
             ...process.env, 
@@ -135,6 +157,22 @@ class BackendManager extends EventEmitter {
       // Attempt restart if within retry limit
       await this.handleStartupFailure(error);
     }
+  }
+
+  /**
+   * Check if a backend is already up (useful in development when a separate dev server runs)
+   */
+  async checkExistingBackend() {
+    try {
+      const response = await axios.get(`${this.getUrl()}/health`, { timeout: 1000 });
+      if (response.status === 200) {
+        this.lastHealthCheck = Date.now();
+        return true;
+      }
+    } catch (error) {
+      // Ignore and treat as not running
+    }
+    return false;
   }
 
   /**

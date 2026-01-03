@@ -689,7 +689,7 @@ def test_send_email_with_template_mock():
         
         # Hole Kundendaten
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM customers WHERE id = ?", (customer_id))
+        cursor.execute("SELECT * FROM customers WHERE id = ?", (customer_id,))
         customer_data = dict(cursor.fetchone())
         customer_data['id'] = customer_id
         
@@ -750,7 +750,7 @@ def test_send_email_with_template_failed_mock():
         )
         
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM customers WHERE id = ?", (customer_id))
+        cursor.execute("SELECT * FROM customers WHERE id = ?", (customer_id,))
         customer_data = dict(cursor.fetchone())
         customer_data['id'] = customer_id
         

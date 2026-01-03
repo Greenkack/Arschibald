@@ -410,7 +410,7 @@ def delete_product(product_id: int | float) -> bool:
     create_product_table(conn)
     cursor = conn.cursor()
     try:
-        cursor.execute("DELETE FROM products WHERE id=?", (int(product_id)))
+        cursor.execute("DELETE FROM products WHERE id=?", (int(product_id),))
         conn.commit()
         deleted_count = cursor.rowcount
         if deleted_count > 0:
@@ -474,7 +474,7 @@ def get_product_by_id(product_id: int | float) -> dict[str, Any] | None:
     create_product_table(conn)
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM products WHERE id=?", (int(product_id)))
+        cursor.execute("SELECT * FROM products WHERE id=?", (int(product_id),))
         row = cursor.fetchone()
         return dict(row) if row else None
     except sqlite3.Error as e:

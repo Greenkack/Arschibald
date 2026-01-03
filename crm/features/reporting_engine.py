@@ -706,7 +706,7 @@ class ReportingEngine:
         """
         try:
             cursor = self.conn.cursor()
-            cursor.execute("DELETE FROM saved_reports WHERE id = ?", (template_id))
+            cursor.execute("DELETE FROM saved_reports WHERE id = ?", (template_id,))
             self.conn.commit()
             
             if cursor.rowcount > 0:

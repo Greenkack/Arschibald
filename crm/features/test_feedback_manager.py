@@ -245,13 +245,13 @@ def test_response_sentiment_calculation(test_db, sample_questions):
     # Prüfe Sentiments
     cursor = test_db.cursor()
     
-    cursor.execute("SELECT sentiment FROM feedback_responses WHERE id = ?", (response_id_positive))
+    cursor.execute("SELECT sentiment FROM feedback_responses WHERE id = ?", (response_id_positive,))
     assert cursor.fetchone()['sentiment'] == 'positive'
     
-    cursor.execute("SELECT sentiment FROM feedback_responses WHERE id = ?", (response_id_neutral))
+    cursor.execute("SELECT sentiment FROM feedback_responses WHERE id = ?", (response_id_neutral,))
     assert cursor.fetchone()['sentiment'] == 'neutral'
     
-    cursor.execute("SELECT sentiment FROM feedback_responses WHERE id = ?", (response_id_negative))
+    cursor.execute("SELECT sentiment FROM feedback_responses WHERE id = ?", (response_id_negative,))
     assert cursor.fetchone()['sentiment'] == 'negative'
 
 
@@ -358,7 +358,7 @@ def test_mark_trigger_sent(test_db, sample_questions):
     
     # Prüfe Status
     cursor = test_db.cursor()
-    cursor.execute("SELECT status FROM feedback_triggers WHERE id = ?", (trigger_id))
+    cursor.execute("SELECT status FROM feedback_triggers WHERE id = ?", (trigger_id,))
     assert cursor.fetchone()['status'] == 'sent'
 
 

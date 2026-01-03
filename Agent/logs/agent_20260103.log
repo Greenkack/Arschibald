@@ -1,0 +1,33 @@
+2026-01-03 17:50:34 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 17:51:05 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 17:54:25 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:392 - Lazy loading knowledge base on first use
+2026-01-03 17:54:35 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:90 - Setting up knowledge base from knowledge_base
+2026-01-03 17:54:35 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:157 - Found 0 PDF files in knowledge_base
+2026-01-03 17:54:35 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:160 - No PDF files found in knowledge_base/
+2026-01-03 18:23:14 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 21:53:17 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 21:56:14 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:01:41 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:06:52 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:21:30 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:392 - Lazy loading knowledge base on first use
+2026-01-03 22:21:30 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:90 - Setting up knowledge base from knowledge_base
+2026-01-03 22:21:30 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:157 - Found 0 PDF files in knowledge_base
+2026-01-03 22:21:30 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:160 - No PDF files found in knowledge_base/
+2026-01-03 22:21:30 - agent.agent.tools.telephony_tools - [32mINFO[0m - _init_database:375 - Database initialized at C:\Users\win10\Desktop\Bokuk2 - Kopie\Agent\data\telephony.db
+2026-01-03 22:21:30 - agent.agent.tools.telephony_tools - [32mINFO[0m - __init__:589 - BriaSoftphone initialized (mock mode)
+2026-01-03 22:21:32 - agent.agent.agent_core - [32mINFO[0m - __init__:92 - Initializing AgentCore with model=gpt-4o, temperature=0.7
+2026-01-03 22:28:51 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:47:18 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:48:26 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:49:33 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:51:56 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:56:11 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 22:58:37 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 23:00:31 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 23:01:28 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:392 - Lazy loading knowledge base on first use
+2026-01-03 23:01:28 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:90 - Setting up knowledge base from knowledge_base
+2026-01-03 23:01:28 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:157 - Found 0 PDF files in knowledge_base
+2026-01-03 23:01:28 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:160 - No PDF files found in knowledge_base/
+2026-01-03 23:01:28 - agent.agent.tools.telephony_tools - [32mINFO[0m - _init_database:375 - Database initialized at C:\Users\win10\Desktop\Bokuk2 - Kopie\Agent\data\telephony.db
+2026-01-03 23:01:28 - agent.agent.tools.telephony_tools - [32mINFO[0m - __init__:589 - BriaSoftphone initialized (mock mode)
+2026-01-03 23:01:29 - agent.agent.agent_core - [32mINFO[0m - __init__:92 - Initializing AgentCore with model=gpt-4o, temperature=0.7

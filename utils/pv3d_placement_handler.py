@@ -485,116 +485,33 @@ def handle_auto_placement(
         try:
             positions_3d = []
             
-            # Requirement 2.2.2: Unterscheide zwischen Flachdach und geneigten Dächern
-            if roof_type_normalized == "flachdach":
-                # Flachdach: Alle Module auf gleicher Höhe
-                # Requirement 2.2.3: Mit Aufständerung (0.30m)
-                z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
-                positions_3d = [
-                    (float(x), float(y), float(z_position))
-                    for x, y in grid_positions_2d
-                ]
-                print(f"   Flachdach: Z-Position = {z_position:.2f}m (konstant)")
+            # PHASE 1 - TASK 1.2: Update handle_auto_placement() to use new calculate_z_position()
+            # Requirement 1.1-1.6: Berechne Z-Position individuell für jedes Modul
+            
+            # Für ALLE Dachtypen: Berechne Z-Position individuell pro Modul
+            # Die neue calculate_z_position() Funktion behandelt alle Fälle intern
+            for x, y in grid_positions_2d:
+                # Übergebe Y-Position an calculate_z_position()
+                z = calculate_z_position(
+                    roof_type=roof_type,
+                    roof_pitch=roof_pitch,
+                    roof_width=roof_width,
+                    y_position=y  # NEU: Y-Position für geneigte Dächer
+                )
+                positions_3d.append((float(x), float(y), float(z)))
+            
+            # Logging für Debug-Zwecke
+            if positions_3d:
+                z_values = [z for _, _, z in positions_3d]
+                z_min = min(z_values)
+                z_max = max(z_values)
                 
-            elif roof_type_normalized in ["satteldach", "satteldach mit gaube"]:
-                # Satteldach: Z steigt vom Rand zur Mitte (First)
-                # Module liegen auf der Dachfläche
-                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
-                
-                if roof_pitch > 0:
-                    inclination_rad = math.radians(roof_pitch)
-                    for x, y in grid_positions_2d:
-                        # Requirement 2.2.1: Berechne Z basierend auf Y-Position
-                        # Abstand von Traufe (y = -roof_width/2)
-                        dist_from_eave = y + roof_width / 2
-                        z_offset = dist_from_eave * math.tan(inclination_rad)
-                        z = base_z + z_offset
-                        positions_3d.append((float(x), float(y), float(z)))
-                    print(f"   Satteldach: Z-Position variiert von {base_z:.2f}m bis {base_z + roof_width/2 * math.tan(inclination_rad):.2f}m")
+                if roof_type_normalized == "flachdach":
+                    print(f"   Flachdach: Z-Position = {z_min:.2f}m (konstant)")
+                elif z_min == z_max:
+                    print(f"   {roof_type}: Z-Position = {z_min:.2f}m (konstant, keine Neigung)")
                 else:
-                    # Keine Neigung (sollte nicht vorkommen)
-                    positions_3d = [
-                        (float(x), float(y), float(base_z))
-                        for x, y in grid_positions_2d
-                    ]
-                    print(f"   Satteldach (keine Neigung): Z-Position = {base_z:.2f}m (konstant)")
-                    
-            elif roof_type_normalized in ["walmdach", "krüppelwalmdach"]:
-                # Walmdach/Krüppelwalmdach: Ähnlich wie Satteldach
-                # Z steigt vom Rand zur Mitte
-                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
-                
-                if roof_pitch > 0:
-                    inclination_rad = math.radians(roof_pitch)
-                    for x, y in grid_positions_2d:
-                        # Requirement 2.2.1: Berechne Z basierend auf Y-Position
-                        dist_from_eave = y + roof_width / 2
-                        z_offset = dist_from_eave * math.tan(inclination_rad)
-                        z = base_z + z_offset
-                        positions_3d.append((float(x), float(y), float(z)))
-                    print(f"   {roof_type}: Z-Position variiert von {base_z:.2f}m bis {base_z + roof_width/2 * math.tan(inclination_rad):.2f}m")
-                else:
-                    positions_3d = [
-                        (float(x), float(y), float(base_z))
-                        for x, y in grid_positions_2d
-                    ]
-                    print(f"   {roof_type} (keine Neigung): Z-Position = {base_z:.2f}m (konstant)")
-                    
-            elif roof_type_normalized == "pultdach":
-                # Pultdach: Z steigt linear von vorne nach hinten
-                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
-                
-                if roof_pitch > 0:
-                    inclination_rad = math.radians(roof_pitch)
-                    for x, y in grid_positions_2d:
-                        # Requirement 2.2.1: Berechne Z basierend auf Y-Position
-                        # Abstand von vorderer Kante (y = -roof_width/2)
-                        dist_from_front = y + roof_width / 2
-                        z_offset = dist_from_front * math.tan(inclination_rad)
-                        z = base_z + z_offset
-                        positions_3d.append((float(x), float(y), float(z)))
-                    print(f"   Pultdach: Z-Position variiert von {base_z:.2f}m bis {base_z + roof_width * math.tan(inclination_rad):.2f}m")
-                else:
-                    positions_3d = [
-                        (float(x), float(y), float(base_z))
-                        for x, y in grid_positions_2d
-                    ]
-                    print(f"   Pultdach (keine Neigung): Z-Position = {base_z:.2f}m (konstant)")
-                    
-            elif roof_type_normalized == "zeltdach":
-                # Zeltdach: Z steigt vom Rand zur Mitte (pyramidenförmig)
-                base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
-                
-                if roof_pitch > 0:
-                    inclination_rad = math.radians(roof_pitch)
-                    for x, y in grid_positions_2d:
-                        # Requirement 2.2.1: Berechne Z basierend auf Abstand vom Rand
-                        # Minimaler Abstand von allen 4 Kanten
-                        dist_from_edge = min(
-                            y + roof_width / 2,   # Abstand von vorderer Kante
-                            roof_width / 2 - y,   # Abstand von hinterer Kante
-                            x + roof_length / 2,  # Abstand von linker Kante
-                            roof_length / 2 - x   # Abstand von rechter Kante
-                        )
-                        z_offset = dist_from_edge * math.tan(inclination_rad)
-                        z = base_z + z_offset
-                        positions_3d.append((float(x), float(y), float(z)))
-                    print(f"   Zeltdach: Z-Position variiert von {base_z:.2f}m bis {base_z + min(roof_width, roof_length)/2 * math.tan(inclination_rad):.2f}m")
-                else:
-                    positions_3d = [
-                        (float(x), float(y), float(base_z))
-                        for x, y in grid_positions_2d
-                    ]
-                    print(f"   Zeltdach (keine Neigung): Z-Position = {base_z:.2f}m (konstant)")
-                    
-            else:
-                # Andere/Unbekannte Dachtypen: Konstante Z-Höhe (Fallback)
-                z_position = calculate_z_position(roof_type, roof_pitch, roof_width)
-                positions_3d = [
-                    (float(x), float(y), float(z_position))
-                    for x, y in grid_positions_2d
-                ]
-                print(f"   {roof_type} (Fallback): Z-Position = {z_position:.2f}m (konstant)")
+                    print(f"   {roof_type}: Z-Position variiert von {z_min:.2f}m bis {z_max:.2f}m")
                 
         except (TypeError, ValueError, Exception) as conv_error:
             # Requirement 11.4: Meaningful error messages
@@ -695,55 +612,135 @@ def handle_reset_placement() -> Dict[str, Any]:
         }
 
 
-def calculate_z_position(roof_type: str, roof_pitch: float = 0.0, roof_width: float = 10.0) -> float:
+def calculate_z_position(
+    roof_type: str, 
+    roof_pitch: float = 0.0, 
+    roof_width: float = 10.0,
+    y_position: float = 0.0  # NEU: Y-Position des Moduls für geneigte Dächer
+) -> float:
     """
-    Calculate Z-position (height) for modules based on roof type.
+    Calculate Z-position (height) for modules based on roof type and Y-position.
 
-    TASK 2.2: Modul-Positionierung korrigieren
-    - Berechnet korrekte Z-Position basierend auf Dachtyp
-    - Berücksichtigt Aufständerung für Flachdächer
-    - Berücksichtigt Dachflächen-Position für geneigte Dächer
+    PHASE 1 - TASK 1.1: CRITICAL BUGFIX - Korrekte Modulplatzierung auf geneigten Dächern
+    
+    Diese Funktion wurde erweitert um den y_position Parameter, damit Module auf
+    geneigten Dächern (Satteldach, Walmdach, Pultdach, Zeltdach) korrekt auf der
+    Dachfläche platziert werden, anstatt wie auf Flachdächern behandelt zu werden.
 
     Different roof types require different mounting heights:
-    - Flat roofs: Modules are mounted on elevated frames (Aufständerung) at 30cm
-    - Pitched roofs: Modules are mounted on the roof surface with 15cm clearance
+    - Flat roofs: Modules are mounted on elevated frames (Aufständerung) at 30cm (constant)
+    - Pitched roofs: Modules follow the roof surface, Z varies based on Y-position
 
     Args:
         roof_type: Type of roof (e.g., "Flachdach", "Satteldach", "Pultdach")
-        roof_pitch: Roof pitch angle in degrees (not used for z-position, only for tilt)
-        roof_width: Width of the roof in meters (not used for base z-position)
+        roof_pitch: Roof pitch angle in degrees
+        roof_width: Width of the roof in meters (Y-axis)
+        y_position: Y-position of the module center (NEW - required for pitched roofs)
 
     Returns:
         Z-position in meters above the wall height (relative to roof base)
         This is a RELATIVE position that will be added to wall_height_m
 
     Requirements:
-        - 2.2.1: Korrekte Z-Koordinaten berechnen
-        - 2.2.2: Dachtyp berücksichtigen (Flach vs. Schrägdach)
-        - 2.2.3: Aufständerung für Flachdächer
-        - 6.1: Flat roof with elevated mounting (30° tilt)
-        - 6.2: Gable roof parallel to surface
-        - 6.3: Shed roof parallel to surface
-        - 6.4: Calculate Z-position based on roof type
+        - Requirement 1.1: Module auf Satteldach direkt auf geneigte Dachflächen platzieren
+        - Requirement 1.2: Module auf Walmdach parallel zur Dachfläche ausrichten
+        - Requirement 1.3: Module auf Pultdach mit Dachneigung ausrichten
+        - Requirement 1.4: Module auf Flachdach mit Aufständerung platzieren
+        - Requirement 1.5: Z-Position basierend auf Dachgeometrie und Y-Position berechnen
+        - Requirement 1.6: Korrekte Neigung entsprechend Dachtyp anwenden
+    
+    Mathematical Formula for Pitched Roofs:
+        z = base_z + (y_offset * tan(roof_pitch))
+        
+        Where:
+        - base_z = 0.15m (clearance above roof base / Traufhöhe)
+        - y_offset = distance from eave (lower roof edge)
+        - roof_pitch = roof inclination angle in degrees
     """
     import math
     
     # Normalize roof type string (case-insensitive, strip whitespace)
     roof_type_normalized = roof_type.strip().lower() if roof_type else "flachdach"
 
-    # Requirement 2.2.2, 2.2.3, 6.1: Flat roof with elevated mounting
+    # Requirement 1.4: Flat roof with elevated mounting (constant height)
     if "flach" in roof_type_normalized:
         # Flachdach: Module werden auf Aufständerung montiert
         # 30cm Höhe für Montagegestell (ermöglicht 30° Neigung)
+        # Z-Position ist KONSTANT für alle Module
         return 0.30  # 30cm elevation for mounting frame (Aufständerung)
 
-    # Requirement 2.2.2, 6.2, 6.3: Pitched roofs (Satteldach, Pultdach, etc.)
-    # Modules are mounted on the roof surface
+    # Requirement 1.1: Satteldach - Z steigt vom Rand zur Mitte (First)
+    elif roof_type_normalized in ["satteldach", "satteldach mit gaube"]:
+        base_z = 0.15  # 15cm clearance above roof base (Traufhöhe)
+        
+        if roof_pitch > 0:
+            # Berechne Abstand von Traufe (untere Dachkante bei y = -roof_width/2)
+            dist_from_eave = y_position + roof_width / 2
+            
+            # Berechne Z-Offset basierend auf Dachneigung
+            inclination_rad = math.radians(roof_pitch)
+            z_offset = dist_from_eave * math.tan(inclination_rad)
+            
+            return base_z + z_offset
+        else:
+            # Keine Neigung (sollte nicht vorkommen, aber Fallback)
+            return base_z
+
+    # Requirement 1.3: Pultdach - Z steigt linear von vorne nach hinten
+    elif roof_type_normalized == "pultdach":
+        base_z = 0.15  # 15cm clearance above roof base
+        
+        if roof_pitch > 0:
+            # Berechne Abstand von vorderer Kante (y = -roof_width/2)
+            dist_from_front = y_position + roof_width / 2
+            
+            # Berechne Z-Offset basierend auf Dachneigung
+            inclination_rad = math.radians(roof_pitch)
+            z_offset = dist_from_front * math.tan(inclination_rad)
+            
+            return base_z + z_offset
+        else:
+            return base_z
+
+    # Requirement 1.2: Walmdach/Krüppelwalmdach - Ähnlich wie Satteldach
+    elif roof_type_normalized in ["walmdach", "krüppelwalmdach"]:
+        base_z = 0.15  # 15cm clearance above roof base
+        
+        if roof_pitch > 0:
+            # Berechne Abstand von Traufe
+            dist_from_eave = y_position + roof_width / 2
+            
+            # Berechne Z-Offset basierend auf Dachneigung
+            inclination_rad = math.radians(roof_pitch)
+            z_offset = dist_from_eave * math.tan(inclination_rad)
+            
+            return base_z + z_offset
+        else:
+            return base_z
+
+    # Requirement 1.5: Zeltdach - Z steigt vom Rand zur Mitte (pyramidenförmig)
+    elif roof_type_normalized == "zeltdach":
+        base_z = 0.15  # 15cm clearance above roof base
+        
+        if roof_pitch > 0:
+            # Minimaler Abstand von allen 4 Kanten
+            # Für Zeltdach steigt die Höhe pyramidenförmig zur Mitte
+            dist_from_edge = min(
+                y_position + roof_width / 2,   # Abstand von vorderer Kante
+                roof_width / 2 - y_position    # Abstand von hinterer Kante
+            )
+            
+            # Berechne Z-Offset basierend auf Dachneigung
+            inclination_rad = math.radians(roof_pitch)
+            z_offset = dist_from_edge * math.tan(inclination_rad)
+            
+            return base_z + z_offset
+        else:
+            return base_z
+
+    # Fallback für andere/unbekannte Dachtypen: Konstante Höhe
     else:
-        # Geneigte Dächer: Module liegen auf der Dachfläche
-        # Kleine Erhöhung über Dachbasis für Montage-Schienen
-        # Die tatsächliche Dachneigung wird durch die Dachgeometrie selbst dargestellt
-        # Module folgen der Dachneigung (siehe calculate_tilt_angle)
+        # Geneigte Dächer (unbekannter Typ): Verwende Basis-Höhe
         return 0.15  # 15cm clearance above roof base (Traufhöhe)
 
 
@@ -833,8 +830,14 @@ def handle_manual_add(
         if "placed_module_positions" not in st.session_state:
             st.session_state["placed_module_positions"] = []
 
-        # Calculate Z-position based on roof type
-        z = calculate_z_position(roof_type, roof_pitch, roof_width)
+        # PHASE 1 - TASK 1.3: Update handle_manual_add() to use new calculate_z_position()
+        # Requirement 1.5: Calculate Z-position based on roof geometry and Y-position
+        z = calculate_z_position(
+            roof_type=roof_type,
+            roof_pitch=roof_pitch,
+            roof_width=roof_width,
+            y_position=y  # NEU: Übergebe Y-Position für geneigte Dächer
+        )
 
         # Create new position
         new_position = (x, y, z)
@@ -966,6 +969,892 @@ def handle_remove_selected(
         }
 
 
+# ============================================================================
+# TASK 7.2: SNAP-TO-GRID (MAGNET-FUNKTION)
+# ============================================================================
+
+def snap_to_grid(
+    x: float,
+    y: float,
+    grid_spacing: float = 0.5
+) -> Tuple[float, float]:
+    """
+    Richtet Position am Raster aus (Magnet-Funktion).
+    
+    TASK 7.2: Snap-to-Grid
+    - Rundet Koordinaten auf nächstes Raster-Vielfaches
+    - Konfigurierbare Raster-Größe (0.1m - 1.0m)
+    - Hilft bei präziser Modulplatzierung
+    
+    Args:
+        x: Ursprüngliche X-Position in Metern
+        y: Ursprüngliche Y-Position in Metern
+        grid_spacing: Raster-Abstand in Metern (default: 0.5m)
+    
+    Returns:
+        Tuple (x_snapped, y_snapped): An Raster ausgerichtete Position
+    
+    Requirements:
+        - 5.2: Magnet-Funktion für automatische Raster-Ausrichtung
+    
+    Examples:
+        >>> snap_to_grid(1.23, 2.67, grid_spacing=0.5)
+        (1.0, 2.5)
+        
+        >>> snap_to_grid(1.23, 2.67, grid_spacing=0.1)
+        (1.2, 2.7)
+        
+        >>> snap_to_grid(1.23, 2.67, grid_spacing=1.0)
+        (1.0, 3.0)
+    """
+    # Runde auf nächstes Vielfaches von grid_spacing
+    x_snapped = round(x / grid_spacing) * grid_spacing
+    y_snapped = round(y / grid_spacing) * grid_spacing
+    
+    return x_snapped, y_snapped
+
+
+def handle_manual_move_with_snap(
+    module_index: int,
+    new_x: float,
+    new_y: float,
+    roof_type: str,
+    roof_pitch: float,
+    roof_width: float,
+    roof_length: float,
+    enable_snap: bool = True,
+    grid_spacing: float = 0.5,
+    orientation: str = "portrait"
+) -> Dict[str, Any]:
+    """
+    Verschiebt Modul mit optionaler Raster-Ausrichtung.
+    
+    TASK 7.2: Snap-to-Grid
+    - Verschiebt Modul zu neuer Position
+    - Optional: Richtet Position am Raster aus
+    - Prüft Kollisionen an neuer Position
+    - Aktualisiert Session State
+    
+    Args:
+        module_index: Index des zu verschiebenden Moduls
+        new_x: Neue X-Position
+        new_y: Neue Y-Position
+        roof_type: Dachtyp
+        roof_pitch: Dachneigung in Grad
+        roof_width: Dachbreite in Metern
+        roof_length: Dachlänge in Metern
+        enable_snap: Snap-to-Grid aktivieren? (default: True)
+        grid_spacing: Raster-Größe in Metern (default: 0.5m)
+        orientation: Modul-Orientierung
+    
+    Returns:
+        Dictionary mit:
+            - success: bool - Ob Verschiebung erfolgreich war
+            - message: str - Status oder Fehlermeldung
+            - old_position: Tuple - Alte Position
+            - new_position: Tuple - Neue Position
+    
+    Requirements:
+        - 5.2: Snap-to-Grid Funktionalität
+        - 7.1-7.4: Kollisionserkennung
+        - 9.1-9.2: Session State Management
+    """
+    try:
+        # Hole aktuelle Positionen
+        positions = st.session_state.get("placed_module_positions", [])
+        
+        # Validiere Index
+        if module_index < 0 or module_index >= len(positions):
+            return {
+                "success": False,
+                "message": f"Ungültiger Modul-Index: {module_index}",
+                "old_position": None,
+                "new_position": None
+            }
+        
+        # Speichere alte Position
+        old_position = positions[module_index]
+        
+        # Snap-to-Grid wenn aktiviert
+        if enable_snap:
+            new_x, new_y = snap_to_grid(new_x, new_y, grid_spacing)
+        
+        # Berechne neue Z-Position basierend auf Dachtyp
+        new_z = calculate_z_position(
+            roof_type=roof_type,
+            roof_pitch=roof_pitch,
+            roof_width=roof_width,
+            y_position=new_y
+        )
+        
+        new_position = (new_x, new_y, new_z)
+        
+        # Prüfe Kollision (ohne das zu verschiebende Modul)
+        other_positions = [pos for i, pos in enumerate(positions) if i != module_index]
+        
+        collision_result = check_module_collision(
+            new_position=new_position,
+            existing_positions=other_positions,
+            roof_length=roof_length,
+            roof_width=roof_width,
+            orientation=orientation
+        )
+        
+        # Verhindere Verschiebung bei Kollision
+        if collision_result["collision"]:
+            return {
+                "success": False,
+                "message": f"Kollision erkannt: {collision_result['message']}",
+                "old_position": old_position,
+                "new_position": new_position
+            }
+        
+        # Verschiebe Modul
+        positions[module_index] = new_position
+        st.session_state["placed_module_positions"] = positions
+        
+        # Erstelle Erfolgsmeldung
+        snap_info = " (am Raster ausgerichtet)" if enable_snap else ""
+        message = (
+            f"Modul #{module_index + 1} verschoben{snap_info}\n"
+            f"Von: ({old_position[0]:.2f}, {old_position[1]:.2f}, {old_position[2]:.2f})\n"
+            f"Nach: ({new_x:.2f}, {new_y:.2f}, {new_z:.2f})"
+        )
+        
+        return {
+            "success": True,
+            "message": message,
+            "old_position": old_position,
+            "new_position": new_position
+        }
+        
+    except Exception as e:
+        error_message = f"Fehler beim Verschieben: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+        
+        return {
+            "success": False,
+            "message": error_message,
+            "old_position": None,
+            "new_position": None
+        }
+
+
+# ============================================================================
+# TASK 7.3: KOPIEREN & EINFÜGEN (COPY & PASTE)
+# ============================================================================
+
+def copy_module_group(
+    module_indices: List[int]
+) -> Dict[str, Any]:
+    """
+    Kopiert ausgewählte Module in Zwischenablage.
+    
+    TASK 7.3: Copy & Paste
+    - Kopiert Modul-Positionen in Session State
+    - Ermöglicht Duplizierung von Modul-Gruppen
+    - Speichert relative Positionen für präzises Einfügen
+    
+    Args:
+        module_indices: Liste der zu kopierenden Modul-Indizes
+    
+    Returns:
+        Dictionary mit:
+            - success: bool - Ob Kopieren erfolgreich war
+            - message: str - Status oder Fehlermeldung
+            - clipboard_data: List - Kopierte Modul-Daten
+            - count: int - Anzahl kopierter Module
+    
+    Requirements:
+        - 5.3: Kopieren & Einfügen von Modulen
+        - 9.1-9.2: Session State Management
+    
+    Example:
+        >>> result = copy_module_group([0, 1, 2])
+        >>> print(result["message"])
+        "3 Module kopiert"
+    """
+    try:
+        # Validiere Eingabe
+        if not module_indices:
+            return {
+                "success": False,
+                "message": "Keine Module ausgewählt",
+                "clipboard_data": [],
+                "count": 0
+            }
+        
+        # Hole aktuelle Positionen
+        positions = st.session_state.get("placed_module_positions", [])
+        
+        if not positions:
+            return {
+                "success": False,
+                "message": "Keine Module zum Kopieren vorhanden",
+                "clipboard_data": [],
+                "count": 0
+            }
+        
+        # Kopiere Modul-Daten
+        clipboard = []
+        for idx in module_indices:
+            if 0 <= idx < len(positions):
+                x, y, z = positions[idx]
+                clipboard.append({
+                    "x": float(x),
+                    "y": float(y),
+                    "z": float(z),
+                    "original_index": idx
+                })
+        
+        if not clipboard:
+            return {
+                "success": False,
+                "message": "Keine gültigen Module zum Kopieren",
+                "clipboard_data": [],
+                "count": 0
+            }
+        
+        # Speichere in Session State
+        st.session_state["module_clipboard"] = clipboard
+        
+        return {
+            "success": True,
+            "message": f"{len(clipboard)} Module kopiert",
+            "clipboard_data": clipboard,
+            "count": len(clipboard)
+        }
+        
+    except Exception as e:
+        error_message = f"Fehler beim Kopieren: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+        
+        return {
+            "success": False,
+            "message": error_message,
+            "clipboard_data": [],
+            "count": 0
+        }
+
+
+def paste_module_group(
+    offset_x: float = 1.0,
+    offset_y: float = 1.0,
+    roof_type: str = "Flachdach",
+    roof_pitch: float = 0.0,
+    roof_width: float = 10.0,
+    roof_length: float = 10.0,
+    orientation: str = "portrait",
+    check_collisions: bool = True
+) -> Dict[str, Any]:
+    """
+    Fügt kopierte Module mit Offset ein.
+    
+    TASK 7.3: Copy & Paste
+    - Fügt Module aus Zwischenablage ein
+    - Wendet X/Y-Offset an
+    - Berechnet neue Z-Positionen basierend auf Dachtyp
+    - Optional: Kollisionsprüfung
+    
+    Args:
+        offset_x: X-Offset in Metern (default: 1.0m)
+        offset_y: Y-Offset in Metern (default: 1.0m)
+        roof_type: Dachtyp
+        roof_pitch: Dachneigung in Grad
+        roof_width: Dachbreite in Metern
+        roof_length: Dachlänge in Metern
+        orientation: Modul-Orientierung
+        check_collisions: Kollisionsprüfung aktivieren? (default: True)
+    
+    Returns:
+        Dictionary mit:
+            - success: bool - Ob Einfügen erfolgreich war
+            - message: str - Status oder Fehlermeldung
+            - pasted_positions: List - Eingefügte Positionen
+            - pasted_count: int - Anzahl eingefügter Module
+            - skipped_count: int - Anzahl übersprungener Module (Kollision)
+    
+    Requirements:
+        - 5.3: Kopieren & Einfügen von Modulen
+        - 7.1-7.4: Kollisionserkennung
+        - 9.1-9.2: Session State Management
+    
+    Example:
+        >>> result = paste_module_group(offset_x=2.0, offset_y=1.0)
+        >>> print(result["message"])
+        "3 Module eingefügt"
+    """
+    try:
+        # Hole Zwischenablage
+        clipboard = st.session_state.get("module_clipboard", [])
+        
+        if not clipboard:
+            return {
+                "success": False,
+                "message": "Zwischenablage leer - zuerst Module kopieren",
+                "pasted_positions": [],
+                "pasted_count": 0,
+                "skipped_count": 0
+            }
+        
+        # Hole aktuelle Positionen
+        positions = st.session_state.get("placed_module_positions", [])
+        new_positions = []
+        skipped_count = 0
+        
+        # Füge jedes Modul mit Offset ein
+        for module_data in clipboard:
+            # Berechne neue Position
+            new_x = module_data["x"] + offset_x
+            new_y = module_data["y"] + offset_y
+            
+            # Berechne neue Z-Position basierend auf Dachtyp
+            new_z = calculate_z_position(
+                roof_type=roof_type,
+                roof_pitch=roof_pitch,
+                roof_width=roof_width,
+                y_position=new_y
+            )
+            
+            new_position = (new_x, new_y, new_z)
+            
+            # Optional: Prüfe Kollision
+            if check_collisions:
+                collision_result = check_module_collision(
+                    new_position=new_position,
+                    existing_positions=positions + new_positions,
+                    roof_length=roof_length,
+                    roof_width=roof_width,
+                    orientation=orientation
+                )
+                
+                if collision_result["collision"]:
+                    skipped_count += 1
+                    print(f"Modul übersprungen (Kollision): {collision_result['message']}")
+                    continue
+            
+            # Füge Modul hinzu
+            new_positions.append(new_position)
+        
+        if not new_positions:
+            return {
+                "success": False,
+                "message": (
+                    f"Keine Module eingefügt - "
+                    f"{skipped_count} Module übersprungen (Kollision)"
+                ),
+                "pasted_positions": [],
+                "pasted_count": 0,
+                "skipped_count": skipped_count
+            }
+        
+        # Update Session State
+        positions.extend(new_positions)
+        st.session_state["placed_module_positions"] = positions
+        st.session_state["placed_module_count"] = len(positions)
+        
+        # Erstelle Erfolgsmeldung
+        message = f"{len(new_positions)} Module eingefügt"
+        if skipped_count > 0:
+            message += f" ({skipped_count} übersprungen wegen Kollision)"
+        
+        return {
+            "success": True,
+            "message": message,
+            "pasted_positions": new_positions,
+            "pasted_count": len(new_positions),
+            "skipped_count": skipped_count
+        }
+        
+    except Exception as e:
+        error_message = f"Fehler beim Einfügen: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+        
+        return {
+            "success": False,
+            "message": error_message,
+            "pasted_positions": [],
+            "pasted_count": 0,
+            "skipped_count": 0
+        }
+
+
+# ============================================================================
+# TASK 7.4: VORSCHAU BEI VERSCHIEBEN (MOVE PREVIEW)
+# ============================================================================
+
+def create_move_preview(
+    module_index: int,
+    new_x: float,
+    new_y: float,
+    roof_type: str,
+    roof_pitch: float,
+    roof_width: float,
+    roof_length: float,
+    orientation: str = "portrait"
+) -> Dict[str, Any]:
+    """
+    Erstellt Vorschau für Modul-Verschiebung.
+    
+    TASK 7.4: Move Preview
+    - Zeigt Vorschau der neuen Position
+    - Prüft Kollisionen in Echtzeit
+    - Gibt visuelles Feedback (grün = OK, rot = Kollision)
+    
+    Args:
+        module_index: Index des zu verschiebenden Moduls
+        new_x: Neue X-Position
+        new_y: Neue Y-Position
+        roof_type: Dachtyp
+        roof_pitch: Dachneigung in Grad
+        roof_width: Dachbreite in Metern
+        roof_length: Dachlänge in Metern
+        orientation: Modul-Orientierung
+    
+    Returns:
+        Dictionary mit:
+            - success: bool - Ob Vorschau erstellt wurde
+            - preview_position: Tuple - Vorschau-Position (x, y, z)
+            - has_collision: bool - Ob Kollision erkannt wurde
+            - collision_type: str - Art der Kollision ("none", "module", "boundary")
+            - collision_message: str - Kollisions-Beschreibung
+            - color: str - Farbe für Vorschau ("green", "red")
+    
+    Requirements:
+        - 5.4: Vorschau bei Verschieben
+        - 7.1-7.4: Kollisionserkennung
+    
+    Example:
+        >>> preview = create_move_preview(0, 1.5, 2.0, "Flachdach", 0, 10, 10)
+        >>> if preview["has_collision"]:
+        >>>     print(f"Warnung: {preview['collision_message']}")
+    """
+    try:
+        # Hole aktuelle Positionen
+        positions = st.session_state.get("placed_module_positions", [])
+        
+        # Validiere Index
+        if module_index < 0 or module_index >= len(positions):
+            return {
+                "success": False,
+                "preview_position": None,
+                "has_collision": False,
+                "collision_type": "none",
+                "collision_message": f"Ungültiger Modul-Index: {module_index}",
+                "color": "red"
+            }
+        
+        # Berechne neue Z-Position
+        new_z = calculate_z_position(
+            roof_type=roof_type,
+            roof_pitch=roof_pitch,
+            roof_width=roof_width,
+            y_position=new_y
+        )
+        
+        preview_position = (new_x, new_y, new_z)
+        
+        # Prüfe Kollision (ohne das zu verschiebende Modul)
+        other_positions = [pos for i, pos in enumerate(positions) if i != module_index]
+        
+        collision_result = check_module_collision(
+            new_position=preview_position,
+            existing_positions=other_positions,
+            roof_length=roof_length,
+            roof_width=roof_width,
+            orientation=orientation
+        )
+        
+        # Bestimme Farbe basierend auf Kollision
+        color = "red" if collision_result["collision"] else "green"
+        
+        return {
+            "success": True,
+            "preview_position": preview_position,
+            "has_collision": collision_result["collision"],
+            "collision_type": collision_result["type"],
+            "collision_message": collision_result["message"],
+            "color": color
+        }
+        
+    except Exception as e:
+        error_message = f"Fehler bei Vorschau-Erstellung: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+        
+        return {
+            "success": False,
+            "preview_position": None,
+            "has_collision": False,
+            "collision_type": "none",
+            "collision_message": error_message,
+            "color": "red"
+        }
+
+
+# ============================================================================
+# TASK 7.5: TASTATUR-SHORTCUTS (KEYBOARD SHORTCUTS)
+# ============================================================================
+
+def handle_keyboard_move(
+    module_index: int,
+    direction: str,
+    step_size: float,
+    roof_type: str,
+    roof_pitch: float,
+    roof_width: float,
+    roof_length: float,
+    orientation: str = "portrait"
+) -> Dict[str, Any]:
+    """
+    Verschiebt Modul per Tastatur-Shortcut.
+    
+    TASK 7.5: Keyboard Shortcuts
+    - Pfeiltasten: Verschieben in 4 Richtungen
+    - Konfigurierbare Schrittweite (0.1m oder 0.5m)
+    - Kollisionserkennung
+    
+    Args:
+        module_index: Index des zu verschiebenden Moduls
+        direction: Richtung ("up", "down", "left", "right")
+        step_size: Schrittweite in Metern (0.1 oder 0.5)
+        roof_type: Dachtyp
+        roof_pitch: Dachneigung in Grad
+        roof_width: Dachbreite in Metern
+        roof_length: Dachlänge in Metern
+        orientation: Modul-Orientierung
+    
+    Returns:
+        Dictionary mit:
+            - success: bool - Ob Verschiebung erfolgreich war
+            - message: str - Status oder Fehlermeldung
+            - old_position: Tuple - Alte Position
+            - new_position: Tuple - Neue Position
+            - direction: str - Verwendete Richtung
+            - step_size: float - Verwendete Schrittweite
+    
+    Requirements:
+        - 5.5: Tastatur-Shortcuts
+        - 7.1-7.4: Kollisionserkennung
+        - 9.1-9.2: Session State Management
+    
+    Example:
+        >>> # Pfeiltaste nach rechts (0.5m)
+        >>> result = handle_keyboard_move(0, "right", 0.5, "Flachdach", 0, 10, 10)
+        >>> # Shift + Pfeiltaste nach rechts (0.1m)
+        >>> result = handle_keyboard_move(0, "right", 0.1, "Flachdach", 0, 10, 10)
+    """
+    try:
+        # Hole aktuelle Positionen
+        positions = st.session_state.get("placed_module_positions", [])
+        
+        # Validiere Index
+        if module_index < 0 or module_index >= len(positions):
+            return {
+                "success": False,
+                "message": f"Ungültiger Modul-Index: {module_index}",
+                "old_position": None,
+                "new_position": None,
+                "direction": direction,
+                "step_size": step_size
+            }
+        
+        # Speichere alte Position
+        old_position = positions[module_index]
+        old_x, old_y, old_z = old_position
+        
+        # Berechne neue Position basierend auf Richtung
+        new_x, new_y = old_x, old_y
+        
+        if direction == "up":
+            new_y += step_size  # Nach hinten (Y+)
+        elif direction == "down":
+            new_y -= step_size  # Nach vorne (Y-)
+        elif direction == "left":
+            new_x -= step_size  # Nach links (X-)
+        elif direction == "right":
+            new_x += step_size  # Nach rechts (X+)
+        else:
+            return {
+                "success": False,
+                "message": f"Ungültige Richtung: {direction}",
+                "old_position": old_position,
+                "new_position": None,
+                "direction": direction,
+                "step_size": step_size
+            }
+        
+        # Berechne neue Z-Position
+        new_z = calculate_z_position(
+            roof_type=roof_type,
+            roof_pitch=roof_pitch,
+            roof_width=roof_width,
+            y_position=new_y
+        )
+        
+        new_position = (new_x, new_y, new_z)
+        
+        # Prüfe Kollision (ohne das zu verschiebende Modul)
+        other_positions = [pos for i, pos in enumerate(positions) if i != module_index]
+        
+        collision_result = check_module_collision(
+            new_position=new_position,
+            existing_positions=other_positions,
+            roof_length=roof_length,
+            roof_width=roof_width,
+            orientation=orientation
+        )
+        
+        # Verhindere Verschiebung bei Kollision
+        if collision_result["collision"]:
+            return {
+                "success": False,
+                "message": f"Kollision erkannt: {collision_result['message']}",
+                "old_position": old_position,
+                "new_position": new_position,
+                "direction": direction,
+                "step_size": step_size
+            }
+        
+        # Verschiebe Modul
+        positions[module_index] = new_position
+        st.session_state["placed_module_positions"] = positions
+        
+        # Erstelle Erfolgsmeldung
+        direction_text = {
+            "up": "nach hinten",
+            "down": "nach vorne",
+            "left": "nach links",
+            "right": "nach rechts"
+        }.get(direction, direction)
+        
+        message = (
+            f"Modul #{module_index + 1} {direction_text} verschoben ({step_size}m)\n"
+            f"Von: ({old_x:.2f}, {old_y:.2f}, {old_z:.2f})\n"
+            f"Nach: ({new_x:.2f}, {new_y:.2f}, {new_z:.2f})"
+        )
+        
+        return {
+            "success": True,
+            "message": message,
+            "old_position": old_position,
+            "new_position": new_position,
+            "direction": direction,
+            "step_size": step_size
+        }
+        
+    except Exception as e:
+        error_message = f"Fehler beim Tastatur-Verschieben: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+        
+        return {
+            "success": False,
+            "message": error_message,
+            "old_position": None,
+            "new_position": None,
+            "direction": direction,
+            "step_size": step_size
+        }
+
+
+def handle_keyboard_rotate(
+    module_index: int
+) -> Dict[str, Any]:
+    """
+    Rotiert Modul um 90° per Tastatur-Shortcut (R-Taste).
+    
+    TASK 7.5: Keyboard Shortcuts
+    - Rotiert zwischen "portrait" und "landscape"
+    - Speichert Orientierung in Session State
+    
+    Args:
+        module_index: Index des zu rotierenden Moduls
+    
+    Returns:
+        Dictionary mit:
+            - success: bool - Ob Rotation erfolgreich war
+            - message: str - Status oder Fehlermeldung
+            - old_orientation: str - Alte Orientierung
+            - new_orientation: str - Neue Orientierung
+    
+    Requirements:
+        - 5.5: Tastatur-Shortcuts (R-Taste)
+        - 9.1-9.2: Session State Management
+    
+    Example:
+        >>> result = handle_keyboard_rotate(0)
+        >>> print(result["message"])
+        "Modul #1 rotiert: portrait → landscape"
+    """
+    try:
+        # Hole aktuelle Orientierungen (falls vorhanden)
+        orientations = st.session_state.get("module_orientations", [])
+        positions = st.session_state.get("placed_module_positions", [])
+        
+        # Validiere Index
+        if module_index < 0 or module_index >= len(positions):
+            return {
+                "success": False,
+                "message": f"Ungültiger Modul-Index: {module_index}",
+                "old_orientation": None,
+                "new_orientation": None
+            }
+        
+        # Initialisiere Orientierungen falls nötig
+        if not orientations or len(orientations) != len(positions):
+            orientations = ["portrait"] * len(positions)
+            st.session_state["module_orientations"] = orientations
+        
+        # Hole alte Orientierung
+        old_orientation = orientations[module_index]
+        
+        # Rotiere: portrait ↔ landscape
+        new_orientation = "landscape" if old_orientation == "portrait" else "portrait"
+        
+        # Speichere neue Orientierung
+        orientations[module_index] = new_orientation
+        st.session_state["module_orientations"] = orientations
+        
+        message = f"Modul #{module_index + 1} rotiert: {old_orientation} → {new_orientation}"
+        
+        return {
+            "success": True,
+            "message": message,
+            "old_orientation": old_orientation,
+            "new_orientation": new_orientation
+        }
+        
+    except Exception as e:
+        error_message = f"Fehler beim Rotieren: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+        
+        return {
+            "success": False,
+            "message": error_message,
+            "old_orientation": None,
+            "new_orientation": None
+        }
+
+
+def handle_keyboard_delete(
+    module_indices: List[int]
+) -> Dict[str, Any]:
+    """
+    Löscht Module per Tastatur-Shortcut (Delete-Taste).
+    
+    TASK 7.5: Keyboard Shortcuts
+    - Löscht ausgewählte Module
+    - Aktualisiert Session State
+    
+    Args:
+        module_indices: Liste der zu löschenden Modul-Indizes
+    
+    Returns:
+        Dictionary mit:
+            - success: bool - Ob Löschen erfolgreich war
+            - message: str - Status oder Fehlermeldung
+            - deleted_count: int - Anzahl gelöschter Module
+            - remaining_count: int - Verbleibende Module
+    
+    Requirements:
+        - 5.5: Tastatur-Shortcuts (Delete-Taste)
+        - 9.1-9.2: Session State Management
+    
+    Example:
+        >>> result = handle_keyboard_delete([0, 2, 4])
+        >>> print(result["message"])
+        "3 Module gelöscht (5 verbleibend)"
+    """
+    try:
+        # Validiere Eingabe
+        if not module_indices:
+            return {
+                "success": False,
+                "message": "Keine Module ausgewählt",
+                "deleted_count": 0,
+                "remaining_count": 0
+            }
+        
+        # Hole aktuelle Positionen
+        positions = st.session_state.get("placed_module_positions", [])
+        
+        if not positions:
+            return {
+                "success": False,
+                "message": "Keine Module zum Löschen vorhanden",
+                "deleted_count": 0,
+                "remaining_count": 0
+            }
+        
+        # Sortiere Indizes absteigend (von hinten löschen)
+        sorted_indices = sorted(set(module_indices), reverse=True)
+        
+        # Validiere alle Indizes
+        invalid_indices = [idx for idx in sorted_indices if idx < 0 or idx >= len(positions)]
+        if invalid_indices:
+            return {
+                "success": False,
+                "message": f"Ungültige Indizes: {invalid_indices}",
+                "deleted_count": 0,
+                "remaining_count": len(positions)
+            }
+        
+        # Lösche Module (von hinten nach vorne)
+        deleted_count = 0
+        for idx in sorted_indices:
+            del positions[idx]
+            deleted_count += 1
+        
+        # Aktualisiere Session State
+        st.session_state["placed_module_positions"] = positions
+        st.session_state["placed_module_count"] = len(positions)
+        
+        # Lösche auch Orientierungen falls vorhanden
+        if "module_orientations" in st.session_state:
+            orientations = st.session_state["module_orientations"]
+            for idx in sorted_indices:
+                if idx < len(orientations):
+                    del orientations[idx]
+            st.session_state["module_orientations"] = orientations
+        
+        # Lösche Auswahl
+        if "selected_module_indices" in st.session_state:
+            st.session_state["selected_module_indices"] = []
+        
+        message = f"{deleted_count} Module gelöscht ({len(positions)} verbleibend)"
+        
+        return {
+            "success": True,
+            "message": message,
+            "deleted_count": deleted_count,
+            "remaining_count": len(positions)
+        }
+        
+    except Exception as e:
+        error_message = f"Fehler beim Löschen: {str(e)}"
+        print(error_message)
+        import traceback
+        traceback.print_exc()
+        
+        return {
+            "success": False,
+            "message": error_message,
+            "deleted_count": 0,
+            "remaining_count": 0
+        }
+
+
 def initialize_session_state() -> None:
     """
     Initialize session state variables for module placement.
@@ -1087,20 +1976,15 @@ def handle_move_selected(
                 # Recalculate Z-position based on new X, Y and roof type
                 # For flat roofs, Z stays the same
                 # For pitched roofs, Z depends on position on roof surface
-                if roof_type.lower().strip() == "flachdach":
-                    new_z = old_z  # Z doesn't change for flat roofs
-                else:
-                    # For pitched roofs, recalculate Z based on new Y position
-                    import math
-                    base_z = calculate_z_position(roof_type, roof_pitch, roof_width)
-                    
-                    if roof_pitch > 0:
-                        inclination_rad = math.radians(roof_pitch)
-                        dist_from_eave = new_y + roof_width / 2
-                        z_offset = dist_from_eave * math.tan(inclination_rad)
-                        new_z = base_z + z_offset
-                    else:
-                        new_z = base_z
+                
+                # PHASE 1 - TASK 1.2: Use new calculate_z_position() with y_position
+                # Requirement 1.5: Calculate Z-position based on roof geometry and Y-position
+                new_z = calculate_z_position(
+                    roof_type=roof_type,
+                    roof_pitch=roof_pitch,
+                    roof_width=roof_width,
+                    y_position=new_y  # NEU: Übergebe neue Y-Position
+                )
 
                 new_position = (new_x, new_y, new_z)
 

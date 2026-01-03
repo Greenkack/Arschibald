@@ -180,9 +180,12 @@ if EXTRA not in sys.path:
 try:
     import streamlit_shadcn_ui as sui
     SUI_AVAILABLE = True
-except ImportError:
+except (ImportError, RuntimeError) as e:
+    # RuntimeError bei Streamlit Config-Konflikten (z.B. developmentMode + port)
     SUI_AVAILABLE = False
     sui = None
+    if isinstance(e, RuntimeError):
+        print(f"⚠ shadcn-ui deaktiviert (Config-Konflikt): {e}")
 
 initialize_emoji_support()
 
@@ -2854,10 +2857,13 @@ def main():
     query_params: Dict[str, Any] = {}
     if drawer_position is None:
         if hasattr(st, "query_params"):
-            query_params = dict(getattr(st, "query_params"))  # type: ignore[assignment]
+            try:
+                query_params = dict(st.query_params)
+            except Exception:
+                query_params = {}
         else:
             try:
-                query_params = dict(st.experimental_get_query_params())  # type: ignore[attr-defined]
+                query_params = dict(st.experimental_get_query_params())  # pragma: no cover - legacy fallback
             except Exception:
                 query_params = {}
         candidate = query_params.get("drawer") or query_params.get("drawer_pos")

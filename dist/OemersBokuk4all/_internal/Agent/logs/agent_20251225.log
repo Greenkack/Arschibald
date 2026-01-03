@@ -1,0 +1,6 @@
+2025-12-25 00:46:19 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-12-25 21:41:48 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-12-25 21:42:23 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:392 - Lazy loading knowledge base on first use
+2025-12-25 21:42:33 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:90 - Setting up knowledge base from knowledge_base
+2025-12-25 21:42:33 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:157 - Found 0 PDF files in knowledge_base
+2025-12-25 21:42:33 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:160 - No PDF files found in knowledge_base/

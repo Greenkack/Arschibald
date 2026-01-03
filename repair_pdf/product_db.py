@@ -198,7 +198,7 @@ def delete_product(product_id: Union[int, float]) -> bool:
     if conn is None: print("product_db.delete_product: DB nicht verfügbar."); return False
     create_product_table(conn); cursor = conn.cursor()
     try:
-        cursor.execute("DELETE FROM products WHERE id=?", (int(product_id))); conn.commit(); deleted_count = cursor.rowcount
+        cursor.execute("DELETE FROM products WHERE id=?", (int(product_id),)); conn.commit(); deleted_count = cursor.rowcount
         if deleted_count > 0: print(f"product_db.delete_product: Produkt ID {product_id} erfolgreich gelöscht.")
         else: print(f"product_db.delete_product: Produkt ID {product_id} nicht gefunden, nichts gelöscht.")
         return deleted_count > 0
@@ -235,7 +235,7 @@ def get_product_by_id(product_id: Union[int, float]) -> Optional[Dict[str, Any]]
     if conn is None: print("product_db.get_product_by_id: DB nicht verfügbar."); return None
     create_product_table(conn); cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM products WHERE id=?", (int(product_id))); row = cursor.fetchone()
+        cursor.execute("SELECT * FROM products WHERE id=?", (int(product_id),)); row = cursor.fetchone()
         return dict(row) if row else None
     except sqlite3.Error as e: print(f"product_db.get_product_by_id: SQLite Fehler für ID {product_id}: {e}"); traceback.print_exc(); return None
     finally: conn.close()

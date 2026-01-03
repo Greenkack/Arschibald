@@ -122,7 +122,7 @@ def get_task(task_id: int) -> Optional[dict[str, Any]]:
     
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT * FROM crm_tasks WHERE id = ?", (task_id,))
         row = cursor.fetchone()
         
         if row:
@@ -175,7 +175,7 @@ def update_task(
         cursor = conn.cursor()
         
         # Prüfe ob Task existiert
-        cursor.execute("SELECT id FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT id FROM crm_tasks WHERE id = ?", (task_id,))
         if not cursor.fetchone():
             print(f"Task Manager: Task #{task_id} nicht gefunden")
             return False
@@ -268,7 +268,7 @@ def delete_task(task_id: int) -> bool:
     
     try:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("DELETE FROM crm_tasks WHERE id = ?", (task_id,))
         conn.commit()
         
         if cursor.rowcount > 0:

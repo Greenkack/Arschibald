@@ -1,0 +1,31 @@
+2025-11-10 11:40:11 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 11:42:17 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 11:48:13 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 11:49:42 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 11:49:54 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 12:17:15 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 12:36:48 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 12:42:57 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 13:28:46 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 14:16:01 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 14:40:04 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 15:06:04 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 15:42:18 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 15:44:31 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 17:23:52 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 18:20:27 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 20:20:18 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 20:25:24 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 20:25:41 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 20:47:17 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 20:49:09 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 20:49:26 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 21:20:26 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 21:22:38 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2025-11-10 21:25:14 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:392 - Lazy loading knowledge base on first use
+2025-11-10 21:25:41 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:90 - Setting up knowledge base from knowledge_base
+2025-11-10 21:25:41 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:157 - Found 0 PDF files in knowledge_base
+2025-11-10 21:25:41 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:160 - No PDF files found in knowledge_base/
+2025-11-10 21:25:41 - agent.agent.tools.telephony_tools - [32mINFO[0m - _init_database:376 - Database initialized at C:\Users\win10\Desktop\Bokuk2 - Kopie\Agent\data\telephony.db
+2025-11-10 21:25:41 - agent.agent.tools.telephony_tools - [32mINFO[0m - __init__:590 - BriaSoftphone initialized (mock mode)
+2025-11-10 21:25:43 - agent.agent.agent_core - [32mINFO[0m - __init__:95 - Initializing AgentCore with model=gpt-4o, temperature=0.7

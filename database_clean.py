@@ -475,7 +475,7 @@ def load_admin_setting(key: str, default: Any = None) -> Any:
     try:
         _ensure_admin_table(conn)
         cur = conn.cursor()
-        cur.execute("SELECT value FROM admin_settings WHERE key = ?", (key))
+        cur.execute("SELECT value FROM admin_settings WHERE key = ?", (key,))
         row = cur.fetchone()
         if not row:
             return default

@@ -184,7 +184,7 @@ def run_tests():
             print(f"  Test-Erinnerung eingefügt (ID: {reminder_id})")
             
             # Test-Erinnerung wieder löschen
-            cursor.execute("DELETE FROM crm_reminders WHERE id = ?", (reminder_id))
+            cursor.execute("DELETE FROM crm_reminders WHERE id = ?", (reminder_id,))
             conn.commit()
             print("  Test-Erinnerung gelöscht")
             
