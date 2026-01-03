@@ -283,7 +283,7 @@ def delete_activity(activity_id: int) -> bool:
         
     try:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM crm_activities WHERE id = ?", (activity_id))
+        cursor.execute("DELETE FROM crm_activities WHERE id = ?", (activity_id,))
         conn.commit()
         
         return cursor.rowcount > 0

@@ -76,7 +76,7 @@ class KnowledgeBaseManager:
             Kategorie-Daten oder None
         """
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM kb_categories WHERE id = ?", (category_id))
+        cursor.execute("SELECT * FROM kb_categories WHERE id = ?", (category_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
     
@@ -200,7 +200,7 @@ class KnowledgeBaseManager:
             if cursor.fetchone()[0] > 0:
                 raise ValueError("Kategorie hat Unterkategorien. Verwende cascade=True zum Löschen.")
         
-        cursor.execute("DELETE FROM kb_categories WHERE id = ?", (category_id))
+        cursor.execute("DELETE FROM kb_categories WHERE id = ?", (category_id,))
         self.conn.commit()
         return cursor.rowcount > 0
     
@@ -434,7 +434,7 @@ class KnowledgeBaseManager:
             True bei Erfolg
         """
         cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM kb_articles WHERE id = ?", (article_id))
+        cursor.execute("DELETE FROM kb_articles WHERE id = ?", (article_id,))
         self.conn.commit()
         return cursor.rowcount > 0
     

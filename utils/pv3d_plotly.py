@@ -414,7 +414,7 @@ def create_gabled_roof_with_dormer(length, width, height, base_z,
     return [main_roof, dormer_mesh, window_mesh]
 
 
-def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True, roof_type="Flachdach", invalid=False, module_number=None, module_power_w=400):
+def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", selected=False, show_mounting=True, roof_type="Flachdach", invalid=False, module_number=None, module_power_w=400, material=None):
     """
     Erstellt ein detailliertes PV-Modul mit Dicke und korrekter Rotation.
     Gibt Tuple zurück: (mesh, vertices) für Kanten-Rendering.
@@ -439,17 +439,22 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     - Zeige Leistung (W) im Hover-Text
     - Zeige Ausrichtung (Azimut) im Hover-Text
     
+    TASK 9.3: Material-Integration
+    - Unterstützt ModuleMaterial für realistische Visualisierung
+    - Wendet Material-Farbe, Transparenz und Beleuchtung an
+    
     Args:
         x, y, z: Position des Moduls (absolute Koordinaten)
         azimuth_deg: Azimuth-Winkel (0° = Süd, 90° = West, 180° = Nord, 270° = Ost)
         tilt_deg: Neigungs-Winkel (0° = horizontal, 90° = vertikal)
-        color: Farbe des Moduls (Standard: dunkelblau #1a1a2e)
+        color: Farbe des Moduls (Standard: dunkelblau #1a1a2e) - wird von material überschrieben
         selected: Ob Modul ausgewählt ist (hellblau Farbe #4a90e2)
         show_mounting: Ob Montage-Gestell visualisiert werden soll (aktuell nicht implementiert)
         roof_type: Dachform ("Flachdach", "Satteldach", "Walmdach", etc.)
         invalid: Ob Modul an ungültiger Position ist (rot Farbe #e74c3c)
         module_number: Optionale Modul-Nummer für Anzeige
         module_power_w: Leistung des Moduls in Watt (Standard: 400W)
+        material: Optional ModuleMaterial Objekt für realistische Visualisierung
     
     Returns:
         Tuple (mesh, vertices):
@@ -466,6 +471,8 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         - 8.2.1: Modul-Nummer im Hover-Text
         - 8.2.2: Leistung (W) im Hover-Text
         - 8.2.3: Ausrichtung (Azimut) im Hover-Text
+        - 6.3: Material auf alle Module anwenden
+        - 6.4: Individuelles Material pro Modul
     """
     # TASK 2.1: Modul-Geometrie korrigieren
     # Requirement 2.1.1: Korrekte Modul-Dimensionen verwenden
@@ -532,7 +539,23 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
     j = [1, 3, 2, 5, 3, 6, 0, 7, 5, 7, 4, 1, 6, 4, 5, 0, 7, 5, 6, 1, 4, 6, 7, 2]
     k = [3, 2, 5, 6, 6, 7, 7, 4, 7, 6, 5, 4, 4, 5, 0, 4, 5, 6, 1, 2, 6, 7, 2, 3]
     
+    # TASK 9.3: Material-Integration
+    # Requirement 6.3, 6.4: Verwende Material wenn vorhanden
+    if material is not None:
+        # Material überschreibt Standard-Farbe
+        module_color = material.color
+        module_opacity = material.opacity
+        module_reflectivity = material.reflectivity
+        material_finish = material.finish
+    else:
+        # Fallback auf Standard-Farbe
+        module_color = color
+        module_opacity = 0.9
+        module_reflectivity = 0.1
+        material_finish = None
+    
     # Requirement 2.1.2: Farb-Unterscheidung für verschiedene Modul-Zustände
+    # Status-Farben überschreiben Material-Farbe
     if invalid:
         # Ungültige Position: Rot (#e74c3c)
         module_color = "#e74c3c"
@@ -542,8 +565,7 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         module_color = "#4a90e2"
         module_name = "PV Module (Ausgewählt)"
     else:
-        # Normales Modul: Dunkelblau (Standard #1a1a2e)
-        module_color = color
+        # Normales Modul: Verwende Material-Farbe oder Standard
         module_name = "PV Module"
     
     # Füge Modul-Nummer zum Namen hinzu wenn vorhanden
@@ -596,6 +618,44 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
             "<extra></extra>"
         )
     
+    # TASK 9.3: Beleuchtung basierend auf Material-Finish
+    # Requirement 6.2: Verschiedene Oberflächen-Materialien
+    if material_finish is not None:
+        from utils.pv3d_module_colors import SurfaceFinish
+        
+        if material_finish == SurfaceFinish.GLOSSY:
+            # Glänzend: hohe Spiegelung
+            lighting_config = dict(
+                ambient=0.3,
+                diffuse=0.5,
+                specular=0.8,
+                roughness=0.2
+            )
+        elif material_finish == SurfaceFinish.GLASS_GLASS:
+            # Glas-Glas: transparent mit Reflexionen
+            lighting_config = dict(
+                ambient=0.5,
+                diffuse=0.4,
+                specular=0.6,
+                roughness=0.1
+            )
+        else:  # MATTE
+            # Matt: geringe Spiegelung
+            lighting_config = dict(
+                ambient=0.4,
+                diffuse=0.6,
+                specular=0.2,
+                roughness=0.8
+            )
+    else:
+        # Standard-Beleuchtung
+        lighting_config = dict(
+            ambient=0.5,
+            diffuse=0.9,
+            specular=0.5,
+            roughness=0.2
+        )
+    
     # Erstelle Mesh3d Objekt mit hoher Qualität und Hover-Informationen
     mesh = go.Mesh3d(
         x=final_vertices[:, 0],
@@ -603,21 +663,275 @@ def create_pv_module_3d(x, y, z, azimuth_deg=0, tilt_deg=15, color="#1a1a2e", se
         z=final_vertices[:, 2],
         i=i, j=j, k=k,
         color=module_color,
-        opacity=0.9,  # Leicht transparent für bessere Sichtbarkeit
+        opacity=module_opacity,  # TASK 9.3: Verwende Material-Transparenz
         name=module_name,
         showlegend=False,
-        lighting=dict(
-            ambient=0.5,    # Umgebungslicht
-            diffuse=0.9,    # Diffuses Licht
-            specular=0.5,   # Spiegelung
-            roughness=0.2   # Rauheit
-        ),
+        lighting=lighting_config,  # TASK 9.3: Verwende Material-Beleuchtung
         lightposition=dict(x=100, y=100, z=100),
         contour=dict(show=True, color='black', width=1),  # Schwarze Kanten
         hovertemplate=hover_template  # TASK 8.2: Hover-Text mit Details
     )
     
     return mesh, final_vertices
+
+
+def create_pv_module_3d_with_material(
+    x, y, z,
+    azimuth_deg=0,
+    tilt_deg=15,
+    selected=False,
+    show_mounting=True,
+    roof_type="Flachdach",
+    invalid=False,
+    module_number=None,
+    module_power_w=400,
+    material=None
+):
+    """
+    Erstellt ein PV-Modul mit Material-Unterstützung.
+    
+    TASK 9.3: Integration in Modul-Rendering
+    - Wrapper-Funktion für create_pv_module_3d() mit Material-Support
+    - Lädt Material aus Session State wenn nicht angegeben
+    - Wendet Material-Eigenschaften auf Modul an
+    
+    Args:
+        x, y, z: Position des Moduls (absolute Koordinaten)
+        azimuth_deg: Azimuth-Winkel (0° = Süd, 90° = West, 180° = Nord, 270° = Ost)
+        tilt_deg: Neigungs-Winkel (0° = horizontal, 90° = vertikal)
+        selected: Ob Modul ausgewählt ist (hellblau Farbe #4a90e2)
+        show_mounting: Ob Montage-Gestell visualisiert werden soll
+        roof_type: Dachform ("Flachdach", "Satteldach", "Walmdach", etc.)
+        invalid: Ob Modul an ungültiger Position ist (rot Farbe #e74c3c)
+        module_number: Optionale Modul-Nummer für Anzeige
+        module_power_w: Leistung des Moduls in Watt (Standard: 400W)
+        material: Optional ModuleMaterial Objekt (wenn None, wird aus Session State geladen)
+    
+    Returns:
+        Tuple (mesh, vertices):
+            - mesh: Plotly Mesh3d Objekt für das Modul
+            - vertices: NumPy Array mit finalen Vertex-Positionen (8x3)
+    
+    Requirements:
+        - 6.3: Material auf alle Module anwenden
+        - 6.4: Individuelles Material pro Modul
+    
+    Example:
+        >>> from utils.pv3d_module_colors import MATERIAL_DARK_BLUE
+        >>> mesh, vertices = create_pv_module_3d_with_material(
+        ...     x=0, y=0, z=3.0,
+        ...     material=MATERIAL_DARK_BLUE
+        ... )
+    """
+    # TASK 9.3: Lade Material aus Session State wenn nicht angegeben
+    if material is None:
+        try:
+            import streamlit as st
+            from utils.pv3d_module_colors import get_selected_material_from_session
+            
+            # Requirement 6.3: Verwende global ausgewähltes Material
+            material = get_selected_material_from_session(st.session_state)
+        except Exception as e:
+            # Fallback: Kein Material verwenden
+            print(f"Konnte Material nicht aus Session State laden: {e}")
+            material = None
+    
+    # Rufe create_pv_module_3d() mit Material auf
+    return create_pv_module_3d(
+        x=x,
+        y=y,
+        z=z,
+        azimuth_deg=azimuth_deg,
+        tilt_deg=tilt_deg,
+        color="#1a1a2e",  # Wird von Material überschrieben
+        selected=selected,
+        show_mounting=show_mounting,
+        roof_type=roof_type,
+        invalid=invalid,
+        module_number=module_number,
+        module_power_w=module_power_w,
+        material=material
+    )
+
+
+def create_pv_module_3d_with_highlight(
+    x, y, z,
+    azimuth_deg=0,
+    tilt_deg=15,
+    color="#1a1a2e",
+    selected=False,
+    hover=False,
+    show_mounting=True,
+    roof_type="Flachdach",
+    invalid=False,
+    module_number=None,
+    module_power_w=400
+):
+    """
+    Erstellt ein PV-Modul mit optionaler Hervorhebung.
+    
+    TASK 7.1: Modul-Hervorhebung
+    - Leuchtender Rahmen für ausgewählte Module
+    - Leichtes Glühen bei Hover
+    - Verbesserte Sichtbarkeit der Auswahl
+    
+    Args:
+        x, y, z: Position des Moduls (absolute Koordinaten)
+        azimuth_deg: Azimuth-Winkel (0° = Süd, 90° = West, 180° = Nord, 270° = Ost)
+        tilt_deg: Neigungs-Winkel (0° = horizontal, 90° = vertikal)
+        color: Farbe des Moduls (Standard: dunkelblau #1a1a2e)
+        selected: Modul ist ausgewählt (leuchtender Rahmen)
+        hover: Maus schwebt über Modul (leichtes Glühen)
+        show_mounting: Ob Montage-Gestell visualisiert werden soll
+        roof_type: Dachform ("Flachdach", "Satteldach", "Walmdach", etc.)
+        invalid: Ob Modul an ungültiger Position ist (rot Farbe #e74c3c)
+        module_number: Optionale Modul-Nummer für Anzeige
+        module_power_w: Leistung des Moduls in Watt (Standard: 400W)
+    
+    Returns:
+        Wenn selected=True: Liste [mesh, edges] mit Modul und leuchtenden Kanten
+        Sonst: mesh (einzelnes Mesh3d Objekt)
+        
+        Zusätzlich: vertices (NumPy Array mit finalen Vertex-Positionen)
+    
+    Requirements:
+        - 5.1: Leuchtender Rahmen für ausgewählte Module
+        - 5.1: Leichtes Glühen bei Hover
+    """
+    # Erstelle Basis-Modul mit create_pv_module_3d
+    mesh, vertices = create_pv_module_3d(
+        x, y, z,
+        azimuth_deg=azimuth_deg,
+        tilt_deg=tilt_deg,
+        color=color,
+        selected=selected,
+        show_mounting=show_mounting,
+        roof_type=roof_type,
+        invalid=invalid,
+        module_number=module_number,
+        module_power_w=module_power_w
+    )
+    
+    # Leuchtender Rahmen für ausgewählte Module
+    if selected:
+        # Erstelle Kanten-Linien mit Glow-Effekt
+        edges = create_module_edges_with_glow(
+            vertices,
+            color='#4a90e2',  # Hellblau
+            width=4,
+            glow_intensity=0.9
+        )
+        return [mesh, edges], vertices
+    
+    # Leichtes Glühen bei Hover
+    elif hover:
+        # Erhöhe Beleuchtung für Glow-Effekt
+        mesh.lighting = dict(
+            ambient=0.8,  # Erhöhtes Umgebungslicht
+            diffuse=0.9,
+            specular=0.7,
+            roughness=0.1
+        )
+        mesh.opacity = 0.95
+    
+    return mesh, vertices
+
+
+def create_module_edges_with_glow(
+    vertices: np.ndarray,
+    color: str = '#4a90e2',
+    width: int = 4,
+    glow_intensity: float = 0.9
+) -> go.Scatter3d:
+    """
+    Erstellt leuchtende Kanten für Modul-Hervorhebung.
+    
+    TASK 7.1: Modul-Hervorhebung
+    - Erstellt 3D-Linien entlang der Modul-Kanten
+    - Verwendet leuchtende Farbe für Sichtbarkeit
+    - Konfigurierbare Intensität
+    
+    Args:
+        vertices: NumPy Array mit 8 Vertex-Positionen (8x3)
+        color: Farbe der Kanten (Standard: Hellblau #4a90e2)
+        width: Linienbreite in Pixeln
+        glow_intensity: Transparenz/Intensität (0-1)
+    
+    Returns:
+        Plotly Scatter3d Objekt mit leuchtenden Kanten
+    
+    Requirements:
+        - 5.1: Leuchtender Rahmen für ausgewählte Module
+    """
+    # Extrahiere Kanten-Punkte aus Vertices
+    # Ein Quader hat 12 Kanten, wir zeichnen alle
+    edges_x, edges_y, edges_z = _extract_box_edges(vertices)
+    
+    return go.Scatter3d(
+        x=edges_x,
+        y=edges_y,
+        z=edges_z,
+        mode='lines',
+        line=dict(
+            color=color,
+            width=width
+        ),
+        opacity=glow_intensity,
+        name='Auswahl',
+        showlegend=False,
+        hoverinfo='skip'
+    )
+
+
+def _extract_box_edges(vertices: np.ndarray) -> Tuple[List[float], List[float], List[float]]:
+    """
+    Extrahiert Kanten-Punkte aus Quader-Vertices.
+    
+    Ein Quader hat 12 Kanten:
+    - 4 Kanten unten (Boden)
+    - 4 Kanten oben (Decke)
+    - 4 vertikale Kanten (Verbindungen)
+    
+    Args:
+        vertices: NumPy Array mit 8 Vertex-Positionen (8x3)
+            Reihenfolge: [0-3: unten, 4-7: oben]
+    
+    Returns:
+        Tuple (edges_x, edges_y, edges_z) mit Koordinaten für Plotly Scatter3d
+        None-Werte trennen einzelne Linien-Segmente
+    """
+    # Definiere die 12 Kanten als Vertex-Paare
+    # Format: (start_vertex, end_vertex)
+    edge_pairs = [
+        # Untere 4 Kanten (Boden)
+        (0, 1), (1, 2), (2, 3), (3, 0),
+        # Obere 4 Kanten (Decke)
+        (4, 5), (5, 6), (6, 7), (7, 4),
+        # Vertikale 4 Kanten (Verbindungen)
+        (0, 4), (1, 5), (2, 6), (3, 7)
+    ]
+    
+    edges_x = []
+    edges_y = []
+    edges_z = []
+    
+    for start, end in edge_pairs:
+        # Füge Start-Punkt hinzu
+        edges_x.append(vertices[start, 0])
+        edges_y.append(vertices[start, 1])
+        edges_z.append(vertices[start, 2])
+        
+        # Füge End-Punkt hinzu
+        edges_x.append(vertices[end, 0])
+        edges_y.append(vertices[end, 1])
+        edges_z.append(vertices[end, 2])
+        
+        # Füge None hinzu um Linien-Segment zu trennen
+        edges_x.append(None)
+        edges_y.append(None)
+        edges_z.append(None)
+    
+    return edges_x, edges_y, edges_z
 
 
 def create_sun_marker(azimuth_deg, elevation_deg, distance=20.0):
@@ -1698,6 +2012,29 @@ def build_plotly_scene(
                         y += transform.offset_y
                         z += transform.offset_z
                 
+                # TASK 9.3: Lade Material für dieses Modul
+                # Requirement 6.4: Individuelles Material pro Modul
+                module_material = None
+                try:
+                    from utils.pv3d_module_colors import (
+                        get_module_materials_from_session,
+                        get_selected_material_from_session,
+                        get_material_by_name
+                    )
+                    
+                    # Versuche individuelles Material zu laden
+                    module_materials = st.session_state.get("module_materials", [])
+                    if i < len(module_materials):
+                        material_name = module_materials[i]
+                        module_material = get_material_by_name(material_name)
+                    
+                    # Fallback: Globales Material
+                    if module_material is None:
+                        module_material = get_selected_material_from_session(st.session_state)
+                except Exception as mat_error:
+                    print(f"Fehler beim Laden des Materials für Modul {i}: {mat_error}")
+                    module_material = None
+                
                 # Modul erstellen
                 is_selected = i in selected_modules
                 module, module_vertices = create_pv_module_3d(
@@ -1708,7 +2045,8 @@ def build_plotly_scene(
                     selected=is_selected,
                     roof_type=roof_type,
                     module_number=i + 1,  # TASK 8.2: Add module number
-                    module_power_w=module_power_w  # TASK 8.2: Add module power
+                    module_power_w=module_power_w,  # TASK 8.2: Add module power
+                    material=module_material  # TASK 9.3: Material-Integration
                 )
                 fig.add_trace(module)
                 
@@ -1754,6 +2092,26 @@ def build_plotly_scene(
                         y += transform.offset_y
                         z += transform.offset_z
                 
+                # TASK 9.3: Lade Material für dieses Modul (Fallback)
+                module_material = None
+                try:
+                    from utils.pv3d_module_colors import (
+                        get_selected_material_from_session,
+                        get_material_by_name
+                    )
+                    
+                    # Versuche individuelles Material zu laden
+                    module_materials = st.session_state.get("module_materials", [])
+                    if i < len(module_materials):
+                        material_name = module_materials[i]
+                        module_material = get_material_by_name(material_name)
+                    
+                    # Fallback: Globales Material
+                    if module_material is None:
+                        module_material = get_selected_material_from_session(st.session_state)
+                except Exception:
+                    module_material = None
+                
                 # Create module
                 is_selected = i in selected_modules
                 module, module_vertices = create_pv_module_3d(
@@ -1764,7 +2122,8 @@ def build_plotly_scene(
                     selected=is_selected,
                     roof_type=roof_type,
                     module_number=i + 1,  # TASK 8.2: Add module number
-                    module_power_w=module_power_w  # TASK 8.2: Add module power
+                    module_power_w=module_power_w,  # TASK 8.2: Add module power
+                    material=module_material  # TASK 9.3: Material-Integration
                 )
                 fig.add_trace(module)
                 

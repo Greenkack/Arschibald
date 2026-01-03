@@ -340,7 +340,7 @@ def update_lead_status_from_offer(
     try:
         # Lade Projekt um customer_id zu bekommen
         cursor = conn.cursor()
-        cursor.execute("SELECT customer_id FROM projects WHERE id = ?", (project_id))
+        cursor.execute("SELECT customer_id FROM projects WHERE id = ?", (project_id,))
         row = cursor.fetchone()
         
         if not row:

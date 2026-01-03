@@ -191,7 +191,7 @@ class UserManagement:
         cursor = conn.cursor()
 
         cursor.execute(
-            'SELECT * FROM users WHERE username = ? AND status = "active"', (username))
+            'SELECT * FROM users WHERE username = ? AND status = "active"', (username,))
         row = cursor.fetchone()
 
         if row:
@@ -221,7 +221,7 @@ class UserManagement:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM users WHERE id = ?', (user_id))
+        cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
         row = cursor.fetchone()
 
         if row:
@@ -241,7 +241,7 @@ class UserManagement:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM users WHERE username = ?', (username))
+        cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
         row = cursor.fetchone()
 
         if row:
@@ -263,7 +263,7 @@ class UserManagement:
 
         if status:
             cursor.execute(
-                'SELECT * FROM users WHERE status = ? ORDER BY username', (status))
+                'SELECT * FROM users WHERE status = ? ORDER BY username', (status,))
         else:
             cursor.execute('SELECT * FROM users ORDER BY username')
 
@@ -357,10 +357,10 @@ class UserManagement:
             cursor = conn.cursor()
 
             if hard_delete:
-                cursor.execute('DELETE FROM users WHERE id = ?', (user_id))
+                cursor.execute('DELETE FROM users WHERE id = ?', (user_id,))
             else:
                 cursor.execute(
-                    'UPDATE users SET status = "deleted" WHERE id = ?', (user_id))
+                    'UPDATE users SET status = "deleted" WHERE id = ?', (user_id,))
 
             conn.commit()
             conn.close()
@@ -485,7 +485,7 @@ class UserManagement:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute(
-            'SELECT is_super_admin FROM users WHERE id = ?', (user_id))
+            'SELECT is_super_admin FROM users WHERE id = ?', (user_id,))
         result = cursor.fetchone()
         conn.close()
         return result and result[0] == 1
@@ -525,7 +525,7 @@ class UserManagement:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute(
-            'SELECT username, password_hash, salt FROM users WHERE id = ?', (from_user_id))
+            'SELECT username, password_hash, salt FROM users WHERE id = ?', (from_user_id,))
         row = cursor.fetchone()
 
         if not row:

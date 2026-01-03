@@ -291,7 +291,7 @@ def test_lead_status_update():
     assert result, "Lead-Status-Update fehlgeschlagen"
     
     cursor = conn.cursor()
-    cursor.execute("SELECT stage FROM crm_leads WHERE id = ?", (lead_id))
+    cursor.execute("SELECT stage FROM crm_leads WHERE id = ?", (lead_id,))
     lead_stage = cursor.fetchone()[0]
     assert lead_stage == 'won', f"Lead-Status sollte 'won' sein, ist aber '{lead_stage}'"
     print("Lead-Status erfolgreich auf 'won' aktualisiert")

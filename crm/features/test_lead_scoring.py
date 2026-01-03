@@ -185,7 +185,7 @@ def test_update_lead_score(test_db):
     assert success
     
     # Prüfe ob Score aktualisiert wurde
-    cursor.execute("SELECT score FROM crm_leads WHERE id = ?", (lead_id))
+    cursor.execute("SELECT score FROM crm_leads WHERE id = ?", (lead_id,))
     new_score = cursor.fetchone()[0]
     assert new_score > 0
     

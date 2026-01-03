@@ -983,7 +983,7 @@ class CRMPipeline:
             conn = get_db_connection()
             cursor = conn.cursor()
 
-            cursor.execute('DELETE FROM crm_leads WHERE id = ?', (lead_id))
+            cursor.execute('DELETE FROM crm_leads WHERE id = ?', (lead_id,))
 
             conn.commit()
             conn.close()

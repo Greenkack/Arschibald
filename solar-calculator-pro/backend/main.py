@@ -1,7 +1,7 @@
 """
 FastAPI Backend Entry Point
 """
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
@@ -144,6 +144,17 @@ async def health_check():
         "version": os.getenv("APP_VERSION", "1.0.0"),
         "timestamp": datetime.utcnow().isoformat() + "Z"
     }
+
+
+@app.head(
+    "/health",
+    tags=["health"],
+    summary="Health Check (HEAD)",
+    description="Lightweight health check for HEAD requests used by dev tooling",
+)
+async def health_check_head() -> Response:
+    """Return 200 OK for HEAD health probes without a body."""
+    return Response(status_code=200)
 
 
 @app.get(

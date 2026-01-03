@@ -138,7 +138,7 @@ def get_reminder(reminder_id: int) -> Optional[dict[str, Any]]:
     
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM crm_reminders WHERE id = ?", (reminder_id))
+        cursor.execute("SELECT * FROM crm_reminders WHERE id = ?", (reminder_id,))
         row = cursor.fetchone()
         
         if row:
@@ -221,7 +221,7 @@ def snooze_reminder(reminder_id: int, days: int = 2) -> bool:
         cursor = conn.cursor()
         
         # Lade aktuelle Erinnerung
-        cursor.execute("SELECT due_date, repeat_count FROM crm_reminders WHERE id = ?", (reminder_id))
+        cursor.execute("SELECT due_date, repeat_count FROM crm_reminders WHERE id = ?", (reminder_id,))
         row = cursor.fetchone()
         
         if not row:
@@ -276,7 +276,7 @@ def delete_reminder(reminder_id: int) -> bool:
     
     try:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM crm_reminders WHERE id = ?", (reminder_id))
+        cursor.execute("DELETE FROM crm_reminders WHERE id = ?", (reminder_id,))
         conn.commit()
         
         if cursor.rowcount > 0:

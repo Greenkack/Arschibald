@@ -3,6 +3,7 @@ user_menu.py
 Erweitertes Benutzermenü für Sidebar mit Avatar und Einstellungen
 """
 import hashlib
+import secrets
 
 import streamlit as st
 
@@ -40,10 +41,31 @@ def get_avatar_url(
 
 
 def render_user_menu():
-    """Rendert das erweiterte Benutzermenü in der Sidebar"""
+    """Rendert das erweiterte Benutzermenü in der Sidebar."""
 
     if not st.session_state.get('intro_completed', False):
         return
+
+    # Avatar-Link öffnet über Query-Parameter das Modal
+    params = {}
+    if hasattr(st, "query_params"):
+        try:
+            params = dict(st.query_params)
+        except Exception:
+            params = {}
+    else:
+        try:
+            params = dict(st.experimental_get_query_params())  # pragma: no cover - legacy fallback
+        except Exception:
+            params = {}
+
+    if params.get("open_avatar"):
+        st.session_state['show_profile_image_modal'] = True
+        params.pop("open_avatar", None)
+        if hasattr(st, "query_params"):
+            st.query_params = params
+        else:
+            st.experimental_set_query_params(**params)  # pragma: no cover - legacy fallback
 
     # CSS für besseres Styling - Card-Stil mit ORANGE Akzenten
     st.markdown("""
@@ -79,32 +101,54 @@ def render_user_menu():
     </style>
     """, unsafe_allow_html=True)
 
-    # Hole Benutzer-Daten
+    # Hole Benutzer-Daten (Owner darf auch user_id == 0 sein)
     user_id = st.session_state.get('user_id')
     username = st.session_state.get('username', 'Unbekannt')
     user_rank = st.session_state.get('user_rank', 'Mitarbeiter')
     user_role = st.session_state.get('user_role', 'user')
+    user_permissions = st.session_state.get('user_permissions', {})
+    user_status_state = st.session_state.get('user_status', 'Verfügbar')
 
     um = UserManagement()
     user_data = None
-    if user_id:
+    if user_id is not None:
         user_data = um.get_user(user_id)
+
+    # Fallback, wenn kein Datensatz in der DB gefunden wurde (z. B. Owner)
+    if not user_data:
+        user_data = {
+            'id': user_id,
+            'username': username,
+            'full_name': username,
+            'rank': user_rank,
+            'role': user_role,
+            'permissions': user_permissions,
+            'user_status': user_status_state,
+            'status': 'active',
+            'is_super_admin': 1 if st.session_state.get('is_owner') else 0,
+        }
 
     # Avatar und Basis-Info - KOMPAKT IN EINER ZEILE
     st.markdown("---")
 
     # Avatar URL
     avatar_url = get_avatar_url(
-        email=user_data.get('email') if user_data else None,
+        email=user_data.get('email'),
         username=username,
         user_id=user_id
     )
 
     # Super-Admin Badge und Status
     is_super = user_data and user_data.get('is_super_admin', 0) == 1
+    
+    # FIX #2: Owner bekommt "General-Admin" statt "(owner)" - Owner-Check hinzugefügt
+    is_owner = st.session_state.get('is_owner', False)
 
     # Rang Display (Punkt 2:  General Admin )
-    if is_super:
+    if is_owner:
+        # FIX #2: Owner zeigt ★★★★★ General-Admin ★★★★★
+        rank_display = "★★★★★ General-Admin ★★★★★"
+    elif is_super:
         rank_display = "<span style='font-size: 10px;'></span> General Admin <span style='font-size: 10px;'></span>"
     else:
         rank_display = user_rank
@@ -202,9 +246,9 @@ def render_user_menu():
             # Zeige Avatar
             st.markdown(f"""
             <div style="position: relative; margin-bottom: 10px;">
-                <div class="profile-avatar-container">
-                    <img src="{avatar_url}" class="profile-avatar-img" title="Klicken um Profilbild zu vergrößern">
-                </div>
+                <a href="?open_avatar=1" class="profile-avatar-container" title="Profilbild vergrößern">
+                    <img src="{avatar_url}" class="profile-avatar-img" alt="Profilbild">
+                </a>
             </div>
             """, unsafe_allow_html=True)
 
@@ -301,8 +345,14 @@ def render_profile_tab(um: UserManagement, user_data: dict, is_super: bool):
     else:
         role_display = user_data.get('role', 'N/A')
 
-    # Rang mit Infinity für General Admin
-    rank_display = "Level ∞" if is_super else user_data.get('rank', 'N/A')
+    # FIX #3: Rang mit ★★★★★ für Owner (unten bei owner ersetzen mit 5 sternen)
+    is_owner = st.session_state.get('is_owner', False)
+    if is_owner:
+        rank_display = "★★★★★"  # FIX #3: 5 Sterne für Owner
+    elif is_super:
+        rank_display = "Level ∞"
+    else:
+        rank_display = user_data.get('rank', 'N/A')
 
     # Ausklappbarer Bereich für Profilinformationen
     with st.expander("📋 Profilinformationen anzeigen", expanded=False):
@@ -447,14 +497,19 @@ def render_info_tab(user_data: dict):
     </div>
     """, unsafe_allow_html=True)
 
-    # Account-Details
-    st.markdown(f"**Erstellt am:** {user_data.get('created_at', 'N/A')[:10]}")
-    st.markdown(
-        f"**Letztes Update:** {user_data.get('updated_at', 'N/A')[:10]}")
-
+    # Account-Details (robust gegen fehlende Werte)
+    created_at = user_data.get('created_at')
+    updated_at = user_data.get('updated_at')
     last_login = user_data.get('last_login')
+
+    def _fmt_date(val: str, default: str = 'N/A') -> str:
+        return str(val)[:10] if val else default
+
+    st.markdown(f"**Erstellt am:** {_fmt_date(created_at)}")
+    st.markdown(f"**Letztes Update:** {_fmt_date(updated_at)}")
+
     if last_login:
-        st.markdown(f"**Letzter Login:** {last_login[:19]}")
+        st.markdown(f"**Letzter Login:** {str(last_login)[:19]}")
     else:
         st.markdown("**Letzter Login:** Nie")
 
@@ -658,16 +713,72 @@ def render_profile_editor():
     """, unsafe_allow_html=True)
 
     user_id = st.session_state.get('user_id')
-    if not user_id:
-        st.error("Keine Benutzer-ID gefunden")
-        return
+    if user_id is None:
+        user_id = 0  # Owner/guest fallback
 
     um = UserManagement()
-    user_data = um.get_user(user_id)
+    user_data = um.get_user(user_id) if user_id else None
 
+    # Fallback, wenn kein Eintrag in der DB existiert (z. B. Owner)
     if not user_data:
-        st.error("Benutzer nicht gefunden")
-        return
+        user_data = {
+            'id': user_id,
+            'username': st.session_state.get('username', 'Unbekannt'),
+            'full_name': st.session_state.get('username', 'Unbekannt'),
+            'email': st.session_state.get('email', ''),
+            'phone': '',
+            'phone_extension': '',
+            'user_status': st.session_state.get('user_status', 'Verfügbar'),
+            'about_me': '',
+            'permissions': st.session_state.get('user_permissions', {}),
+            'is_super_admin': 1 if st.session_state.get('is_owner') else 0,
+        }
+        can_save_profile = False
+    else:
+        can_save_profile = True
+
+    def ensure_persisted_user(full_name_value: str = None,
+                              email_value: str = None,
+                              phone_mobile_value: str = None) -> bool:
+        """Stellt sicher, dass ein DB-Datensatz existiert (Owner-Fallbacks)."""
+        nonlocal user_id, user_data, can_save_profile
+
+        if can_save_profile and user_id:
+            return True
+
+        username = (user_data.get('username') or 'owner').strip() or 'owner'
+
+        # Falls der Benutzer bereits existiert, reuse statt IntegrityError zu triggern
+        existing_user = um.get_user_by_username(username)
+        if existing_user:
+            user_id = existing_user['id']
+            user_data.update(existing_user)
+            st.session_state['user_id'] = user_id
+            can_save_profile = True
+            return True
+
+        temp_password = secrets.token_hex(8)
+        created_user_id = um.create_user(
+            username=username,
+            password=temp_password,
+            full_name=full_name_value or user_data.get('full_name', 'Owner'),
+            email=email_value or user_data.get('email', ''),
+            phone=phone_mobile_value or user_data.get('phone', ''),
+            rank=user_data.get('rank', 'Owner'),
+            role=user_data.get('role', 'owner'),
+            permissions=user_data.get('permissions', {}),
+            commission_rate=0.0
+        )
+
+        if created_user_id:
+            user_id = created_user_id
+            user_data['id'] = created_user_id
+            st.session_state['user_id'] = created_user_id
+            can_save_profile = True
+            return True
+
+        st.error("Profil konnte nicht angelegt werden.")
+        return False
 
     # Tabs für verschiedene Bereiche
     tab1, tab2, tab3 = st.tabs(
@@ -760,6 +871,11 @@ def render_profile_editor():
                     " Speichern",
                     use_container_width=True,
                         type="primary"):
+
+                    # Sicherstellen, dass ein persistenter Datensatz existiert
+                    if not ensure_persisted_user(full_name, email, phone_mobile):
+                        st.stop()
+
                     if um.update_user(
                         user_id,
                         full_name=full_name,
@@ -854,10 +970,14 @@ def render_profile_editor():
                     use_container_width=True,
                         type="primary"):
                     try:
-                        # Hier würde das Bild gespeichert werden
-                        # TODO: Implementierung der Bild-Speicherung in der
-                        # Datenbank
                         import base64
+
+                        if not ensure_persisted_user(
+                                user_data.get('full_name'),
+                                user_data.get('email'),
+                                user_data.get('phone')):
+                            st.stop()
+
                         bytes_data = uploaded_file.getvalue()
                         base64_image = base64.b64encode(bytes_data).decode()
 

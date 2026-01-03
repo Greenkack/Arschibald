@@ -295,7 +295,7 @@ def delete_survey(conn: sqlite3.Connection, survey_id: int) -> bool:
     cursor = conn.cursor()
     
     try:
-        cursor.execute("DELETE FROM feedback_surveys WHERE id = ?", (survey_id))
+        cursor.execute("DELETE FROM feedback_surveys WHERE id = ?", (survey_id,))
         conn.commit()
         return cursor.rowcount > 0
         

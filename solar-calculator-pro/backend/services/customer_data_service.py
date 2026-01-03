@@ -161,7 +161,7 @@ class CustomerDataService:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
-            cursor.execute('SELECT * FROM customers WHERE id = ?', (customer_id))
+            cursor.execute('SELECT * FROM customers WHERE id = ?', (customer_id,))
             row = cursor.fetchone()
             conn.close()
             
@@ -212,7 +212,7 @@ class CustomerDataService:
             import sqlite3
             conn = sqlite3.connect(self.database_path)
             cursor = conn.cursor()
-            cursor.execute('DELETE FROM customers WHERE id = ?', (customer_id))
+            cursor.execute('DELETE FROM customers WHERE id = ?', (customer_id,))
             conn.commit()
             conn.close()
             return True

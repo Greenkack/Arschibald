@@ -135,7 +135,7 @@ class PVModuleService:
             conn = sqlite3.connect(self.database_path)
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            cursor.execute('SELECT * FROM pv_modules WHERE id = ?', (module_id))
+            cursor.execute('SELECT * FROM pv_modules WHERE id = ?', (module_id,))
             row = cursor.fetchone()
             conn.close()
             return self._row_to_spec(row) if row else None

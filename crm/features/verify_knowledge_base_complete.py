@@ -43,7 +43,7 @@ def verify_database_tables():
     tables = ['kb_categories', 'kb_articles', 'kb_ratings', 'kb_articles_fts']
     
     for table in tables:
-        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table))
+        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table,))
         if cursor.fetchone():
             print(f"Tabelle '{table}' existiert")
         else:
@@ -54,7 +54,7 @@ def verify_database_tables():
     # Prüfe Trigger
     triggers = ['kb_articles_ai', 'kb_articles_au', 'kb_articles_ad']
     for trigger in triggers:
-        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='trigger' AND name=?", (trigger))
+        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='trigger' AND name=?", (trigger,))
         if cursor.fetchone():
             print(f"Trigger '{trigger}' existiert")
         else:

@@ -2163,7 +2163,7 @@ def render_economics_analysis(
                 xaxis_title="Jahre",
                 yaxis_title="Kumulierter Cashflow (€)",
                 hovermode='x unified',
-                separators=',.'  # Deutsche Trennzeichen für Achsen)
+                separators=',.')  # Deutsche Trennzeichen für Achsen
             
             # SHADCN UI THEME ANWENDEN
             apply_chart_theme(fig_cashflow)
@@ -2322,7 +2322,8 @@ def render_economics_analysis(
                     yaxis_title="Kumulierte Kosten (€)",
                     hovermode='x unified',
                     height=500,
-                    separators=',.'  # Deutsche Trennzeichen)
+                    separators=',.'  # Deutsche Trennzeichen
+                    )
                 
                 # SHADCN UI THEME ANWENDEN
                 apply_chart_theme(fig_20y)

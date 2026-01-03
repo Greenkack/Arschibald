@@ -1353,7 +1353,24 @@ def render_intro_screen():
 
                 if login_button:
                     if username and password:
-                        # Authentifizierung mit UserManagement-System
+                        # OWNER CHECK: Besitzer hat IMMER General-Admin Rechte
+                        OWNER_USERNAME = "TSchwarz"
+                        OWNER_PASSWORDS = ["Timur2014", "Timur2014!"]  # Mit und ohne !
+                        
+                        if username == OWNER_USERNAME and password in OWNER_PASSWORDS:
+                            # Owner Login - IMMER General-Admin mit 100% Rechten
+                            st.session_state['intro_completed'] = True
+                            st.session_state['user_mode'] = 'General-Admin'
+                            st.session_state['user_role'] = 'General-Admin'
+                            st.session_state['username'] = 'T. Schwarz'  # FIX #1: Punkt nach T hinzugefügt
+                            st.session_state['user_id'] = 0  # Owner ID
+                            st.session_state['user_rank'] = 'Owner'
+                            st.session_state['user_permissions'] = {'all': True}  # 100% Rechte
+                            st.session_state['is_owner'] = True
+                            st.success(f"Willkommen zurück, {OWNER_USERNAME}! (General-Admin)")
+                            st.rerun()
+                        
+                        # Reguläre Authentifizierung für andere Benutzer
                         try:
                             from user_management import UserManagement
                             um = UserManagement()
@@ -1623,7 +1640,10 @@ def show_user_info():
             'manager': 'Manager'
         }
 
-        label = mode_labels.get(user_mode, 'Gast')
+        if st.session_state.get('is_owner'):
+            label = 'Besitzer (General-Admin)'
+        else:
+            label = mode_labels.get(user_mode, 'Gast')
 
         st.markdown("---")
         st.markdown("**Angemeldet als:**")

@@ -678,7 +678,7 @@ def get_target_achievement_status(
     
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM sales_targets WHERE id = ?", (target_id))
+        cursor.execute("SELECT * FROM sales_targets WHERE id = ?", (target_id,))
         row = cursor.fetchone()
         
         if not row:
@@ -811,7 +811,7 @@ def auto_update_target_progress_from_pipeline(
         cursor = conn.cursor()
         
         # Lade Ziel-Informationen
-        cursor.execute("SELECT period_start, period_end FROM sales_targets WHERE id = ?", (target_id))
+        cursor.execute("SELECT period_start, period_end FROM sales_targets WHERE id = ?", (target_id,))
         row = cursor.fetchone()
         
         if not row:

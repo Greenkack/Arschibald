@@ -215,7 +215,7 @@ def get_contract_by_id(conn: sqlite3.Connection, contract_id: int) -> dict[str, 
     """
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM contracts WHERE id = ?", (contract_id))
+        cursor.execute("SELECT * FROM contracts WHERE id = ?", (contract_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
     except Exception as e:
@@ -395,7 +395,7 @@ def delete_contract(conn: sqlite3.Connection, contract_id: int) -> bool:
     """
     try:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM contracts WHERE id = ?", (contract_id))
+        cursor.execute("DELETE FROM contracts WHERE id = ?", (contract_id,))
         conn.commit()
         print(f"Vertrag gelöscht (ID: {contract_id})")
         return cursor.rowcount > 0
@@ -494,7 +494,7 @@ def get_warranty_by_id(conn: sqlite3.Connection, warranty_id: int) -> dict[str, 
     """
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM warranties WHERE id = ?", (warranty_id))
+        cursor.execute("SELECT * FROM warranties WHERE id = ?", (warranty_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
     except Exception as e:
@@ -696,7 +696,7 @@ def delete_warranty(conn: sqlite3.Connection, warranty_id: int) -> bool:
     """
     try:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM warranties WHERE id = ?", (warranty_id))
+        cursor.execute("DELETE FROM warranties WHERE id = ?", (warranty_id,))
         conn.commit()
         print(f"Garantie gelöscht (ID: {warranty_id})")
         return cursor.rowcount > 0

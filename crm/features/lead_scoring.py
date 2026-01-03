@@ -203,7 +203,7 @@ def calculate_lead_score(conn: sqlite3.Connection, lead_id: int) -> int:
     cursor = conn.cursor()
     
     # Lade Lead-Daten
-    cursor.execute("SELECT * FROM crm_leads WHERE id = ?", (lead_id))
+    cursor.execute("SELECT * FROM crm_leads WHERE id = ?", (lead_id,))
     lead_row = cursor.fetchone()
     
     if not lead_row:
@@ -308,7 +308,7 @@ def update_lead_score(conn: sqlite3.Connection, lead_id: int, reason: str = "Man
     cursor = conn.cursor()
     
     # Hole aktuellen Score
-    cursor.execute("SELECT score FROM crm_leads WHERE id = ?", (lead_id))
+    cursor.execute("SELECT score FROM crm_leads WHERE id = ?", (lead_id,))
     row = cursor.fetchone()
     
     if not row:
@@ -487,7 +487,7 @@ def delete_scoring_rule(conn: sqlite3.Connection, rule_id: int) -> bool:
     """Löscht eine Scoring-Regel"""
     cursor = conn.cursor()
     
-    cursor.execute("DELETE FROM lead_scoring_rules WHERE id = ?", (rule_id))
+    cursor.execute("DELETE FROM lead_scoring_rules WHERE id = ?", (rule_id,))
     conn.commit()
     
     return cursor.rowcount > 0

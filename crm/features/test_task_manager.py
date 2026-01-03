@@ -95,7 +95,7 @@ def test_create_task_basic():
         task_id = cursor.lastrowid
         
         # Verifiziere
-        cursor.execute("SELECT * FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT * FROM crm_tasks WHERE id = ?", (task_id,))
         task = dict(cursor.fetchone())
         
         assert task['title'] == "Test-Aufgabe", "Titel stimmt nicht"
@@ -134,7 +134,7 @@ def test_create_task_with_associations():
         task_id = cursor.lastrowid
         
         # Verifiziere Zuordnungen
-        cursor.execute("SELECT * FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT * FROM crm_tasks WHERE id = ?", (task_id,))
         task = dict(cursor.fetchone())
         
         assert task['customer_id'] == 123, "Kunden-ID stimmt nicht"
@@ -177,7 +177,7 @@ def test_create_task_validation():
         conn.commit()
         task_id = cursor.lastrowid
         
-        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id,))
         status = cursor.fetchone()['status']
         
         # In der Anwendung würde dies auf 'open' korrigiert
@@ -219,7 +219,7 @@ def test_status_workflow_open_to_in_progress():
         conn.commit()
         
         # Verifiziere
-        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id,))
         status = cursor.fetchone()['status']
         
         assert status == "in_progress", f"Status sollte 'in_progress' sein, ist aber '{status}'"
@@ -257,7 +257,7 @@ def test_status_workflow_to_completed():
         conn.commit()
         
         # Verifiziere
-        cursor.execute("SELECT status, completed_at FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT status, completed_at FROM crm_tasks WHERE id = ?", (task_id,))
         row = cursor.fetchone()
         
         assert row['status'] == "completed", "Status sollte 'completed' sein"
@@ -298,7 +298,7 @@ def test_status_workflow_reopen():
         conn.commit()
         
         # Verifiziere
-        cursor.execute("SELECT status, completed_at FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT status, completed_at FROM crm_tasks WHERE id = ?", (task_id,))
         row = cursor.fetchone()
         
         assert row['status'] == "open", "Status sollte 'open' sein"
@@ -333,7 +333,7 @@ def test_status_workflow_all_transitions():
         # Transition 1: open → in_progress
         cursor.execute("UPDATE crm_tasks SET status = ? WHERE id = ?", ("in_progress", task_id))
         conn.commit()
-        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id,))
         assert cursor.fetchone()['status'] == "in_progress"
         print("   Transition 1: open → in_progress")
         
@@ -342,7 +342,7 @@ def test_status_workflow_all_transitions():
             UPDATE crm_tasks SET status = ?, completed_at = ? WHERE id = ?
         """, ("completed", datetime.now().isoformat(), task_id))
         conn.commit()
-        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id,))
         assert cursor.fetchone()['status'] == "completed"
         print("   Transition 2: in_progress → completed")
         
@@ -351,7 +351,7 @@ def test_status_workflow_all_transitions():
             UPDATE crm_tasks SET status = ?, completed_at = NULL WHERE id = ?
         """, ("open", task_id))
         conn.commit()
-        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id))
+        cursor.execute("SELECT status FROM crm_tasks WHERE id = ?", (task_id,))
         assert cursor.fetchone()['status'] == "open"
         print("   Transition 3: completed → open (reopen)")
         

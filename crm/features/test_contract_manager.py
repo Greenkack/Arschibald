@@ -513,7 +513,7 @@ def test_mark_reminder_notified(test_db):
     assert success is True
     
     # Prüfe Status
-    cursor.execute("SELECT status FROM contract_reminders WHERE id = ?", (reminder_id))
+    cursor.execute("SELECT status FROM contract_reminders WHERE id = ?", (reminder_id,))
     status = cursor.fetchone()[0]
     assert status == 'notified'
 

@@ -110,7 +110,7 @@ class CRMService(BaseService):
         
         try:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM customers WHERE id = ?", (customer_id))
+            cursor.execute("SELECT * FROM customers WHERE id = ?", (customer_id,))
             row = cursor.fetchone()
             
             if row:
@@ -232,7 +232,7 @@ class CRMService(BaseService):
         
         try:
             cursor = conn.cursor()
-            cursor.execute("DELETE FROM customers WHERE id = ?", (customer_id))
+            cursor.execute("DELETE FROM customers WHERE id = ?", (customer_id,))
             conn.commit()
             
             return cursor.rowcount > 0

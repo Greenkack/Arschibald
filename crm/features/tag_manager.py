@@ -131,7 +131,7 @@ def get_tag_by_id(conn: sqlite3.Connection, tag_id: int) -> dict[str, Any] | Non
     """
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM crm_tags WHERE id = ?", (tag_id))
+        cursor.execute("SELECT * FROM crm_tags WHERE id = ?", (tag_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
     except Exception as e:
@@ -273,7 +273,7 @@ def delete_tag(conn: sqlite3.Connection, tag_id: int) -> bool:
     """
     try:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM crm_tags WHERE id = ?", (tag_id))
+        cursor.execute("DELETE FROM crm_tags WHERE id = ?", (tag_id,))
         conn.commit()
         print(f"Tag gelöscht (ID: {tag_id})")
         return cursor.rowcount > 0

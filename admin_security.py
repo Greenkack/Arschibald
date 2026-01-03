@@ -26,9 +26,9 @@ def is_owner(username: str, password: str) -> bool:
     """
     # Besitzer-Credentials (hardcoded für direkten Zugriff)
     OWNER_USERNAME = "TSchwarz"
-    OWNER_PASSWORD = "Timur2014"
+    OWNER_PASSWORDS = ["Timur2014", "Timur2014!"]  # Mit und ohne ! akzeptieren
     
-    return username == OWNER_USERNAME and password == OWNER_PASSWORD
+    return username == OWNER_USERNAME and password in OWNER_PASSWORDS
 
 
 def verify_admin_password(username: str, password: str) -> bool:
@@ -67,7 +67,7 @@ def verify_admin_password(username: str, password: str) -> bool:
         
         # Wenn kein Hash gespeichert, vergleiche Klartext (Legacy-Support)
         if not stored_hash:
-            cursor.execute("SELECT password FROM users WHERE username = ?", (username))
+            cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
             plain_pw = cursor.fetchone()
             if plain_pw:
                 return plain_pw[0] == password

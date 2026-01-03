@@ -483,7 +483,7 @@ def test_import_customer_duplicate_update(test_db):
     
     # Prüfe, dass Daten aktualisiert wurden
     cursor = test_db.cursor()
-    cursor.execute("SELECT city FROM customers WHERE id = ?", (customer_id))
+    cursor.execute("SELECT city FROM customers WHERE id = ?", (customer_id,))
     result = cursor.fetchone()
     assert result[0] == 'Neue Stadt'
 
