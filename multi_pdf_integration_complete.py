@@ -536,11 +536,13 @@ def batch_generate_offers():
                     pdf_content = generate_company_pdf(offer_data)
                     
                     if pdf_content:
-                        filename = f"Angebot_{company_name}_{customer_data.get('last_name', 'Kunde')}.pdf"
+                        # Eindeutiger Dateiname mit Index und sanitiertem Firmennamen
+                        safe_company_name = "".join(c if c.isalnum() or c in (' ', '-', '_') else '_' for c in company_name)
+                        unique_filename = f"Angebot_{i+1:02d}_{safe_company_name}_{customer_data.get('last_name', 'Kunde')}.pdf"
                         generated_pdfs.append({
                             "company_name": company_name,
                             "pdf_content": pdf_content,
-                            "filename": filename,
+                            "filename": unique_filename,
                             "bytes": pdf_content,  # Für CRM-Speicherung
                         })
                         st.success(f"PDF für {company_name} erstellt")

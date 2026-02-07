@@ -221,7 +221,7 @@ async def generate_multi_offer(request: MultiOfferRequest):
         generated_offers = []
         pdf_files = []
         
-        for variant in request.variants:
+        for idx, variant in enumerate(request.variants, start=1):
             if not variant.enabled:
                 continue
             
@@ -229,9 +229,10 @@ async def generate_multi_offer(request: MultiOfferRequest):
             pdf_bytes = generate_single_offer_pdf(variant, base_price)
             final_price = apply_price_modifications(base_price, variant.price_modifications)
             
-            # Create filename
-            safe_name = variant.company.company_name.replace(" ", "_").replace("/", "-")
-            filename = f"Angebot_{safe_name}_{request.customer_name.replace(' ', '_')}.pdf"
+            # Create unique filename with index and sanitized company name
+            safe_name = "".join(c if c.isalnum() or c in (' ', '-', '_') else '_' for c in variant.company.company_name).strip().replace(' ', '_')
+            safe_customer = "".join(c if c.isalnum() or c in (' ', '-', '_') else '_' for c in request.customer_name).strip().replace(' ', '_')
+            filename = f"{idx:02d}_Angebot_{safe_name}_{safe_customer}.pdf"
             
             pdf_files.append((filename, pdf_bytes))
             

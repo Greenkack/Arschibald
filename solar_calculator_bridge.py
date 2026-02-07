@@ -331,7 +331,7 @@ class SolarCalculatorProductBridge:
                 try:
                     # Check if product exists by model_name
                     cursor.execute(
-                        'SELECT id FROM products WHERE model_name = ?', (item['model_name']))
+                        'SELECT id FROM products WHERE model_name = ?', (item['model_name'],))
                     existing = cursor.fetchone()
 
                     if existing:

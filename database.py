@@ -284,7 +284,7 @@ def list_customer_documents(
         else:
             cur.execute(
                 "SELECT id, doc_type, display_name, file_name, absolute_file_path, uploaded_at FROM customer_documents WHERE customer_id = ? ORDER BY uploaded_at DESC",
-                (customer_id))
+                (customer_id,))
         rows = cur.fetchall()
         conn.close()
         result: list[dict[str, Any]] = []
@@ -311,7 +311,7 @@ def get_customer_document_file_path(document_id: int) -> str | None:
         cur = conn.cursor()
         cur.execute(
             "SELECT absolute_file_path FROM customer_documents WHERE id = ?",
-            (document_id))
+            (document_id,))
         row = cur.fetchone()
         conn.close()
         if not row:
@@ -333,7 +333,7 @@ def delete_customer_document(document_id: int) -> bool:
         cur = conn.cursor()
         cur.execute(
             "SELECT absolute_file_path FROM customer_documents WHERE id = ?",
-            (document_id))
+            (document_id,))
         row = cur.fetchone()
         if not row:
             conn.close()
@@ -347,7 +347,7 @@ def delete_customer_document(document_id: int) -> bool:
             print(
                 f"DB Warnung: Datei konnte nicht gelöscht werden ({abs_path}): {e_rm}")
         cur.execute(
-            "DELETE FROM customer_documents WHERE id = ?", (document_id))
+            "DELETE FROM customer_documents WHERE id = ?", (document_id,))
         conn.commit()
         success = cur.rowcount > 0
         conn.close()
@@ -916,7 +916,7 @@ def delete_heat_pump(conn, id):
     """Löscht eine Wärmepumpe."""
     sql = 'DELETE FROM heat_pumps WHERE id = ?'
     cur = conn.cursor()
-    cur.execute(sql, (id))
+    cur.execute(sql, (id,))
     conn.commit()
 
 # Stellen Sie sicher, dass create_heat_pumps_table() beim Initialisieren der DB aufgerufen wird.
@@ -1376,7 +1376,7 @@ def init_db():
 
         for key, default_value in INITIAL_ADMIN_SETTINGS.items():
             cursor.execute(
-                "SELECT value FROM admin_settings WHERE key = ?", (key))
+                "SELECT value FROM admin_settings WHERE key = ?", (key,))
             if cursor.fetchone() is None:
                 value_insert = json.dumps(default_value) if isinstance(
                     default_value, (dict, list)) else int(default_value) if isinstance(
@@ -1385,7 +1385,7 @@ def init_db():
                         'price_matrix_csv_data', 'active_company_id']:
                     cursor.execute(
                         "INSERT INTO admin_settings (key, value, last_modified) VALUES (?, NULL, CURRENT_TIMESTAMP)",
-                        (key))
+                        (key,))
                 elif value_insert is not None:
                     cursor.execute(
                         "INSERT INTO admin_settings (key, value, last_modified) VALUES (?, ?, CURRENT_TIMESTAMP)",
@@ -1534,7 +1534,7 @@ def list_pdf_templates(template_type: str |
         if template_type:
             cursor.execute(
                 "SELECT * FROM pdf_templates WHERE template_type = ? ORDER BY name COLLATE NOCASE",
-                (template_type))
+                (template_type,))
         else:
             cursor.execute(
                 "SELECT * FROM pdf_templates ORDER BY template_type, name COLLATE NOCASE")
@@ -1554,7 +1554,7 @@ def get_pdf_template(template_id: int) -> dict[str, Any] | None:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT * FROM pdf_templates WHERE id = ?", (template_id))
+            "SELECT * FROM pdf_templates WHERE id = ?", (template_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
     except Exception as e:
@@ -1601,7 +1601,7 @@ def delete_pdf_template(template_id: int) -> bool:
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "DELETE FROM pdf_templates WHERE id = ?", (template_id))
+            "DELETE FROM pdf_templates WHERE id = ?", (template_id,))
         conn.commit()
         return cursor.rowcount > 0
     except Exception as e:
@@ -1649,7 +1649,7 @@ def add_company(company_data: dict[str, Any]) -> int | None:
         # für '{company_name_to_add_stripped}' aus...") # Bereits im Log
         cursor.execute(
             "SELECT id, name FROM companies WHERE name = ? COLLATE NOCASE",
-            (company_name_to_add_stripped))
+            (company_name_to_add_stripped,))
         existing_company_by_name_nocase = cursor.fetchone()
 
         if existing_company_by_name_nocase:
@@ -1727,7 +1727,7 @@ def add_company(company_data: dict[str, Any]) -> int | None:
             f"DB ERFOLG: Firma '{company_name_to_add_stripped}' mit ID {new_id} hinzugefügt.")
         if new_id and company_data.get("is_default"):
             cursor.execute(
-                "UPDATE companies SET is_default = 0 WHERE id != ?", (new_id))
+                "UPDATE companies SET is_default = 0 WHERE id != ?", (new_id,))
             save_admin_setting('active_company_id', new_id)
             conn.commit()
         # Nach dem Hinzufügen der Firma Standardtechnik einfügen
@@ -1828,7 +1828,7 @@ def update_company(company_id: int, company_data: dict[str, Any]) -> bool:
         cursor = conn.cursor()
         if update_data_db.get("is_default"):
             cursor.execute(
-                "UPDATE companies SET is_default = 0 WHERE id != ?", (company_id))
+                "UPDATE companies SET is_default = 0 WHERE id != ?", (company_id,))
             save_admin_setting('active_company_id', company_id)
 
         cursor.execute(stmt, values_for_set)
@@ -2328,7 +2328,7 @@ def delete_company_document(document_id: int) -> bool:
     cursor = conn.cursor()
     cursor.execute(
         "SELECT absolute_file_path as relative_db_path FROM company_documents WHERE id = ?",
-        (document_id))
+        (document_id,))
     row = cursor.fetchone()
     if not row:
         return False
@@ -2337,7 +2337,7 @@ def delete_company_document(document_id: int) -> bool:
         COMPANY_DOCS_BASE_DIR, relative_path_from_db)
     try:
         cursor.execute(
-            "DELETE FROM company_documents WHERE id = ?", (document_id))
+            "DELETE FROM company_documents WHERE id = ?", (document_id,))
         if os.path.exists(actual_absolute_path_to_delete_on_disk):
             try:
                 os.remove(actual_absolute_path_to_delete_on_disk)

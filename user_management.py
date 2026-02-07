@@ -591,7 +591,7 @@ class UserManagement:
 
         # Entferne Super-Admin vom alten Benutzer
         cursor.execute(
-            'UPDATE users SET is_super_admin = 0 WHERE id = ?', (from_user_id))
+            'UPDATE users SET is_super_admin = 0 WHERE id = ?', (from_user_id,))
 
         # Setze neuen Super-Admin
         salt = secrets.token_hex(32)

@@ -601,7 +601,7 @@ class CRMCalendar:
             cursor = conn.cursor()
 
             cursor.execute(
-                'DELETE FROM crm_appointments WHERE id = ?', (appointment_id))
+                'DELETE FROM crm_appointments WHERE id = ?', (appointment_id,))
 
             conn.commit()
             conn.close()
