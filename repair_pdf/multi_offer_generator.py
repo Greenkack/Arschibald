@@ -615,10 +615,13 @@ class MultiCompanyOfferGenerator:
                         pdf_content = self._generate_company_pdf(offer_data, company, i)
                         
                         if pdf_content:
+                            # Eindeutigen Dateinamen mit Index und sicherem Firmennamen erstellen
+                            safe_company_name = "".join(c if c.isalnum() or c in (' ', '-', '_') else '_' for c in company_name)
+                            unique_filename = f"Angebot_{i+1:02d}_{safe_company_name}_{customer_data.get('last_name', 'Kunde')}.pdf"
                             generated_pdfs.append({
                                 "company_name": company_name,
                                 "pdf_content": pdf_content,
-                                "filename": f"Angebot_{company_name}_{customer_data.get('last_name', 'Kunde')}.pdf"
+                                "filename": unique_filename
                             })
                             st.success(f" PDF für {company_name} erstellt")
                         else:

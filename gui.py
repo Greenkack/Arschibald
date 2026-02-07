@@ -3899,12 +3899,13 @@ def main():
                                             
                                             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
                                                 
-                                                for firm_name, pdf_bytes in results:
-                                                    # Format: anrede_nachname_angebot_anlagengröße.pdf
+                                                for idx, (firm_name, pdf_bytes) in enumerate(results, start=1):
+                                                    # Format: anrede_nachname_angebot_anlagengröße_firma.pdf (mit Index für Eindeutigkeit)
                                                     safe_anrede = "".join(c for c in anrede if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
                                                     safe_nachname = "".join(c for c in nachname if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    safe_firma = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
                                                     
-                                                    filename = f"{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}.pdf"
+                                                    filename = f"{idx:02d}_{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}_{safe_firma}.pdf"
                                                     zip_file.writestr(filename, pdf_bytes)
                                             
                                             zip_bytes = zip_buffer.getvalue()
@@ -3920,12 +3921,12 @@ def main():
                                             
                                             # Optional: Einzelne Download-Buttons
                                             with st.expander("Einzelne PDFs herunterladen", expanded=False):
-                                                for firm_name, pdf_bytes in results:
+                                                for idx, (firm_name, pdf_bytes) in enumerate(results, start=1):
                                                     safe_anrede = "".join(c for c in anrede if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
                                                     safe_nachname = "".join(c for c in nachname if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
                                                     safe_firma = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
                                                     
-                                                    filename = f"{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}.pdf"
+                                                    filename = f"{idx:02d}_{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}_{safe_firma}.pdf"
                                                     
                                                     st.download_button(
                                                         label=f"{firm_name}",

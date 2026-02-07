@@ -302,7 +302,7 @@ def add_product(product_data: dict[str, Any]) -> int | None:
             else:
                 insert_data[col_name] = None
     cursor.execute("SELECT id FROM products WHERE model_name = ?",
-                   (insert_data['model_name']))
+                   (insert_data['model_name'],))
     if cursor.fetchone():
         print(
             f"product_db.add_product: Fehler - Produkt mit Modellname '{
@@ -499,7 +499,7 @@ def get_product_by_model_name(model_name: str) -> dict[str, Any] | None:
     try:
         cursor.execute(
             "SELECT * FROM products WHERE model_name=? COLLATE NOCASE",
-            (model_name.strip()))
+            (model_name.strip(),))
         row = cursor.fetchone()
         return dict(row) if row else None
     except sqlite3.Error as e:
@@ -522,7 +522,7 @@ def get_product_id_by_model_name(model_name: str) -> int | None:
     try:
         cursor.execute(
             "SELECT id FROM products WHERE model_name=? COLLATE NOCASE",
-            (model_name.strip()))
+            (model_name.strip(),))
         row = cursor.fetchone()
         return int(row[0]) if row else None
     except sqlite3.Error as e:
@@ -821,7 +821,7 @@ def update_product_purchase_price(
     try:
         # Get current purchase price for logging
         cursor.execute(
-            "SELECT purchase_price_net FROM products WHERE id = ?", (int(product_id)))
+            "SELECT purchase_price_net FROM products WHERE id = ?", (int(product_id),))
         row = cursor.fetchone()
         if not row:
             print(
@@ -1192,7 +1192,7 @@ def get_products_by_calculate_per(calculate_per: str) -> list[dict[str, Any]]:
             SELECT * FROM products
             WHERE calculate_per = ?
             ORDER BY category, model_name COLLATE NOCASE
-        """, (calculate_per))
+        """, (calculate_per,))
 
         rows = cursor.fetchall()
         return [dict(row) for row in rows] if rows else []
@@ -1247,7 +1247,7 @@ def update_product_pricing_fields(
     try:
         # Get current values for logging
         cursor.execute("SELECT * FROM products WHERE id = ?",
-                       (int(product_id)))
+                       (int(product_id),))
         current_product = cursor.fetchone()
         if not current_product:
             print(

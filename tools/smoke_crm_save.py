@@ -33,7 +33,7 @@ def main():
     print('saved customer id:', cid)
     cur = conn.cursor()
     cur.execute(
-        'SELECT id, first_name, last_name, email FROM customers WHERE id = ?', (cid))
+        'SELECT id, first_name, last_name, email FROM customers WHERE id = ?', (cid,))
     print('db row:', dict(cur.fetchone()))
 
     proj = {
@@ -45,7 +45,7 @@ def main():
     pid = save_project(conn, proj)
     print('saved project id:', pid)
     cur.execute(
-        'SELECT id, customer_id, project_name FROM projects WHERE id = ?', (pid))
+        'SELECT id, customer_id, project_name FROM projects WHERE id = ?', (pid,))
     print('proj row:', dict(cur.fetchone()))
     conn.close()
 

@@ -31,3 +31,11 @@
 2026-01-03 23:01:28 - agent.agent.tools.telephony_tools - [32mINFO[0m - _init_database:375 - Database initialized at C:\Users\win10\Desktop\Bokuk2 - Kopie\Agent\data\telephony.db
 2026-01-03 23:01:28 - agent.agent.tools.telephony_tools - [32mINFO[0m - __init__:589 - BriaSoftphone initialized (mock mode)
 2026-01-03 23:01:29 - agent.agent.agent_core - [32mINFO[0m - __init__:92 - Initializing AgentCore with model=gpt-4o, temperature=0.7
+2026-01-03 23:37:32 - agent - [32mINFO[0m - setup_logging:247 - Logging configured: level=INFO, file=True, console=True
+2026-01-03 23:37:41 - agent.agent.tools.knowledge_tools - [32mINFO[0m - lazy_load_knowledge_base:392 - Lazy loading knowledge base on first use
+2026-01-03 23:37:41 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:90 - Setting up knowledge base from knowledge_base
+2026-01-03 23:37:41 - agent.agent.tools.knowledge_tools - [32mINFO[0m - setup_knowledge_base:157 - Found 0 PDF files in knowledge_base
+2026-01-03 23:37:41 - agent.agent.tools.knowledge_tools - [33mWARNING[0m - setup_knowledge_base:160 - No PDF files found in knowledge_base/
+2026-01-03 23:37:41 - agent.agent.tools.telephony_tools - [32mINFO[0m - _init_database:375 - Database initialized at C:\Users\win10\Desktop\Bokuk2 - Kopie\Agent\data\telephony.db
+2026-01-03 23:37:41 - agent.agent.tools.telephony_tools - [32mINFO[0m - __init__:589 - BriaSoftphone initialized (mock mode)
+2026-01-03 23:37:42 - agent.agent.agent_core - [32mINFO[0m - __init__:92 - Initializing AgentCore with model=gpt-4o, temperature=0.7
