@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\werkzeug\wsgi.py
+# hypothesis_version: 6.147.0
+
+[1024, 8192, 'CONTENT_LENGTH', 'HTTP_HOST', 'PATH_INFO', 'QUERY_STRING', 'SCRIPT_NAME', 'SERVER_NAME', 'SERVER_PORT', 'close', 'host', 'latin1', 'path', 'query_string', 'readinto', 'replace', 'root_path', 'scheme', 'seek', 'seekable', 'tell', 'wsgi.file_wrapper', 'wsgi.input', 'wsgi.url_scheme']

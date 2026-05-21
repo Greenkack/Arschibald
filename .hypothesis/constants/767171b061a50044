@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\chardet\sbcharsetprober.py
+# hypothesis_version: 6.147.0
+
+[0.01, 0.05, 0.25, 0.95, 0.99, 1.0, 255, 1024]

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\scattermap\_marker.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'allowoverlap', 'angle', 'anglesrc', 'autocolorscale', 'cauto', 'cmax', 'cmid', 'cmin', 'color', 'coloraxis', 'colorbar', 'colorscale', 'colorsrc', 'marker', 'opacity', 'opacitysrc', 'reversescale', 'scattermap', 'scattermap.marker', 'showscale', 'size', 'sizemin', 'sizemode', 'sizeref', 'sizesrc', 'skip_invalid', 'symbol', 'symbolsrc']

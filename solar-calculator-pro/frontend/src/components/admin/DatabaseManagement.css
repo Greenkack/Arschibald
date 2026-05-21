@@ -1,0 +1,179 @@
+/**
+ * Database Management Component Styles
+ */
+
+.database-management {
+  padding: 1rem;
+}
+
+.database-management .p-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.database-management .p-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* Statistics Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  padding: 1rem;
+  background: var(--surface-100);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* Quick Actions */
+.database-management .p-button-lg {
+  padding: 1rem;
+  font-size: 1rem;
+}
+
+.database-management .p-button-lg .p-button-icon {
+  font-size: 1.25rem;
+}
+
+/* Data Table Customization */
+.database-management .p-datatable {
+  font-size: 0.875rem;
+}
+
+.database-management .p-datatable-thead > tr > th {
+  background: var(--surface-100);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 0.75rem;
+}
+
+.database-management .p-datatable-tbody > tr > td {
+  padding: 0.75rem;
+}
+
+.database-management .p-datatable-tbody > tr:hover {
+  background: var(--surface-50);
+}
+
+/* Action Buttons */
+.database-management .p-button-sm {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.database-management .p-button-sm .p-button-icon {
+  font-size: 1rem;
+}
+
+/* Dialog Styles */
+.database-management .p-dialog .p-dialog-header {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem 1.5rem;
+}
+
+.database-management .p-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+.database-management .field {
+  margin-bottom: 1.5rem;
+}
+
+.database-management .field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.database-management .field-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-overlay .p-progressbar {
+  width: 300px;
+}
+
+/* Status Icons */
+.text-green-500 {
+  color: #22c55e;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .database-management {
+    padding: 0.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  .database-management .p-button-lg {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .stat-item {
+    background: var(--surface-800);
+  }
+
+  .database-management .p-datatable-thead > tr > th {
+    background: var(--surface-800);
+  }
+
+  .database-management .p-datatable-tbody > tr:hover {
+    background: var(--surface-700);
+  }
+}

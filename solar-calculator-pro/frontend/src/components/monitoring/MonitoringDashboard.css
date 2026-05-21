@@ -1,0 +1,227 @@
+/**
+ * Monitoring Dashboard Styles
+ */
+
+.monitoring-dashboard {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--text-color);
+}
+
+.header-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Performance Tab */
+.performance-tab {
+  padding: 1rem 0;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  height: 100%;
+}
+
+.metric-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.metric-value {
+  text-align: center;
+}
+
+.metric-value h2 {
+  margin: 0.5rem 0;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+
+.metric-value p {
+  margin: 0.25rem 0;
+  color: var(--text-color-secondary);
+}
+
+.metric-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: var(--surface-ground);
+  border-radius: 4px;
+}
+
+.stat-label {
+  font-weight: 500;
+  color: var(--text-color-secondary);
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
+/* Crashes Tab */
+.crashes-tab {
+  padding: 1rem 0;
+}
+
+.crash-summary {
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  width: 100%;
+}
+
+.crash-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.metric-item {
+  text-align: center;
+}
+
+.metric-item h3 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+.metric-item p {
+  margin: 0.5rem 0 0 0;
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.errors-card {
+  margin-top: 1.5rem;
+}
+
+/* Feedback Tab */
+.feedback-tab {
+  padding: 1rem 0;
+}
+
+.feedback-summary {
+  margin-bottom: 2rem;
+}
+
+.feedback-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.chart-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Updates Tab */
+.updates-tab {
+  padding: 1rem 0;
+}
+
+.adoption-card {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .monitoring-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .crash-metrics,
+  .feedback-metrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .metric-item h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Loading State */
+.monitoring-dashboard .p-progress-spinner {
+  margin: 2rem auto;
+  display: block;
+}
+
+/* Badge Overrides */
+.monitoring-dashboard .p-badge {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Chart Styling */
+.monitoring-dashboard canvas {
+  max-height: 300px;
+}
+
+/* DataTable Styling */
+.monitoring-dashboard .p-datatable {
+  font-size: 0.9rem;
+}
+
+.monitoring-dashboard .p-datatable .p-datatable-thead > tr > th {
+  background: var(--surface-ground);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* Button Styling */
+.monitoring-dashboard .p-button {
+  font-size: 0.9rem;
+}
+
+.monitoring-dashboard .p-button.p-button-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8rem;
+}

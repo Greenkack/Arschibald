@@ -1,0 +1,38 @@
+{
+  "co2_factors": {
+    "oil_kg_per_liter": 2.66,
+    "gas_g_per_kwh": 428,
+    "electricity_g_per_kwh": 420,
+    "pellets_kg_per_ton": 26,
+    "co2_price_euro_per_ton": 55.0
+  },
+  "fuel_prices": {
+    "oil_cent_per_kwh": 10.0,
+    "gas_cent_per_kwh": 12.0,
+    "electricity_cent_per_kwh": 32.0,
+    "pellets_euro_per_ton": 350.0,
+    "wood_euro_per_ster": 80.0
+  },
+  "operating_costs": {
+    "chimney_sweep_gas_oil_annual": 80.0,
+    "chimney_sweep_pellets_annual": 120.0,
+    "chimney_sweep_heatpump_annual": 0.0,
+    "maintenance_gas_annual": 200.0,
+    "maintenance_oil_annual": 250.0,
+    "maintenance_pellets_annual": 300.0,
+    "maintenance_heatpump_annual": 300.0,
+    "repair_gas_annual_avg": 150.0,
+    "repair_oil_annual_avg": 200.0,
+    "repair_pellets_annual_avg": 250.0,
+    "repair_heatpump_annual_avg": 150.0,
+    "pump_power_gas_kwh_annual": 500.0,
+    "pump_power_oil_kwh_annual": 450.0,
+    "pump_power_pellets_kwh_annual": 600.0
+  },
+  "conversion_factors": {
+    "oil_liter_to_kwh": 10.0,
+    "oil_ton_to_liter": 1190.0,
+    "wood_ster_to_kwh": 2000.0,
+    "pellets_kg_to_kwh": 4.9
+  }
+}

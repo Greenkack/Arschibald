@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\jedi\_compatibility.py
+# hypothesis_version: 6.147.0
+
+['Broken pipe', 'pathlib', 'pathlib._local', 'win32']

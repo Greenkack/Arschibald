@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_scatterpolar.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'cliponaxis', 'connectgaps', 'customdata', 'customdatasrc', 'dr', 'dtheta', 'fill', 'fillcolor', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hoveron', 'hovertemplate', 'hovertemplatesrc', 'hovertext', 'hovertextsrc', 'ids', 'idssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'line', 'marker', 'meta', 'metasrc', 'mode', 'name', 'opacity', 'r', 'r0', 'rsrc', 'scatterpolar', 'selected', 'selectedpoints', 'showlegend', 'skip_invalid', 'stream', 'subplot', 'text', 'textfont', 'textposition', 'textpositionsrc', 'textsrc', 'texttemplate', 'texttemplatesrc', 'theta', 'theta0', 'thetasrc', 'thetaunit', 'type', 'uid', 'uirevision', 'unselected', 'visible']

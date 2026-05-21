@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\werkzeug\routing\map.py
+# hypothesis_version: 6.147.0
+
+["!$&'()*+,/:;=@", ',', '--', '.', '/', ':', ':443', ':80', '<invalid>', 'GET', 'HTTP_CONNECTION', 'HTTP_UPGRADE', 'PATH_INFO', 'QUERY_STRING', 'REQUEST_METHOD', 'SCRIPT_NAME', 'ascii', 'http', 'https', 'idna', 'upgrade', 'websocket', 'ws', 'wsgi.url_scheme', 'wss']

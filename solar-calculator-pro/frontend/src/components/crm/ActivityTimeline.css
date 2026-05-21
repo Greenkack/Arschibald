@@ -1,0 +1,65 @@
+/* Activity Timeline Styles */
+
+.activity-timeline {
+  width: 100%;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.customized-timeline .custom-marker {
+  display: flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.customized-timeline .custom-marker i {
+  font-size: 1.25rem;
+}
+
+.activity-card {
+  margin-bottom: 1rem;
+}
+
+.activity-card .activity-header h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.activity-card .text-gray-600 {
+  color: #6b7280;
+}
+
+.activity-card .text-gray-700 {
+  color: #374151;
+}
+
+.activity-card .activity-content {
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.activity-card .activity-content p {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .customized-timeline {
+    align-items: flex-start !important;
+  }
+  
+  .customized-timeline .p-timeline-event-opposite {
+    display: none;
+  }
+}

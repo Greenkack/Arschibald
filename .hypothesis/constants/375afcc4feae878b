@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\controlling\report_generator.py
+# hypothesis_version: 6.147.0
+
+['aggregated_data', 'created_at', 'employee_count', 'employee_id', 'employee_ids', 'employee_name', 'employee_reports', 'end_date', 'generated_at', 'is_comparison', 'position', 'quotas', 'ratio_descriptions', 'ratios', 'report_id', 'report_type', 'start_date']

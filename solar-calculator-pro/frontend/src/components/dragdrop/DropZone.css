@@ -1,0 +1,77 @@
+.drop-zone {
+  position: relative;
+  min-height: 200px;
+  border: 2px dashed var(--surface-border, #dee2e6);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: var(--surface-ground, #f8f9fa);
+  transition: all 0.3s ease;
+}
+
+.drop-zone.active {
+  border-color: var(--primary-color, #3b82f6);
+  background-color: var(--primary-50, #eff6ff);
+  border-width: 3px;
+}
+
+.drop-zone.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.drop-zone-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 150px;
+  color: var(--text-color-secondary, #6c757d);
+  text-align: center;
+}
+
+.drop-zone-empty i {
+  margin-bottom: 0.5rem;
+}
+
+.drop-zone-empty p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.drop-zone-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
+  color: var(--primary-color, #3b82f6);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.drop-zone-overlay i {
+  margin-bottom: 0.5rem;
+  animation: bounce 1s infinite;
+}
+
+.drop-zone-overlay p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

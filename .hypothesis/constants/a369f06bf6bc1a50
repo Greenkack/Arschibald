@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\numpy\lib\index_tricks.py
+# hypothesis_version: 6.147.0
+
+[1.0, ',', 'C', 'c', 'c_', 'diag_indices', 'diag_indices_from', 'fill_diagonal', 'index_exp', 'ix_', 'mgrid', 'multi_index', 'ndenumerate', 'ndindex', 'numpy', 'ogrid', 'r', 'r_', 'ravel_multi_index', 's_', 'unravel_index', 'zerosize_ok']

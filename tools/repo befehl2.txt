@@ -1,0 +1,5 @@
+py tools\repo_porter.py apply `
+  --dst "C:\123456\1\corba 4\corba" `
+  --from_out "C:\Users\win10\Desktop\out_selected"
+# Methoden nur automatisch, wenn gewünscht:
+# ... + `--apply-methods`

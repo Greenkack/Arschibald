@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\core\files\storage\mixins.py
+# hypothesis_version: 6.147.0
+
+['MEDIA_ROOT', 'MEDIA_URL', 'base_location', 'base_url', 'location']

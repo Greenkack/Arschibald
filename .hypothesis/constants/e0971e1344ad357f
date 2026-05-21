@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\trio\testing\_raises_group.py
+# hypothesis_version: 6.147.0
+
+['(group)', 'Base', 'BaseExcT_1', 'BaseExcT_2', 'BaseExcT_co', 'ExcT_1', 'ExcT_2', 'MatchE', '__notes__', 'exception is None', 'group', 'long', 'message', 'unknown type']

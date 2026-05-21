@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\numpy\matrixlib\defmatrix.py
+# hypothesis_version: 6.147.0
+
+[10.0, ',', ';', 'C', 'F', '[]', '__rmul__', 'asmatrix', 'bmat', 'mat', 'matrix', 'numpy', 'unsupported axis']

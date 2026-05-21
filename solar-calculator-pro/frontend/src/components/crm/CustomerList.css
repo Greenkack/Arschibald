@@ -1,0 +1,56 @@
+.customer-list {
+  padding: 1rem;
+}
+
+.search-bar {
+  max-width: 600px;
+}
+
+.customer-datatable {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.customer-datatable .p-datatable-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.customer-datatable .p-datatable-tbody > tr:hover {
+  background-color: #f8f9fa;
+}
+
+.customer-datatable .font-bold {
+  font-weight: 600;
+  color: #495057;
+}
+
+.customer-datatable .text-gray-600 {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.customer-datatable .text-sm {
+  font-size: 0.875rem;
+}
+
+.customer-datatable .flex {
+  display: flex;
+}
+
+.customer-datatable .align-items-center {
+  align-items: center;
+}
+
+.customer-datatable .mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.customer-datatable .mr-2 {
+  margin-right: 0.5rem;
+}
+
+.customer-datatable .gap-2 {
+  gap: 0.5rem;
+}

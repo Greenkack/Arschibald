@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\styles\table.py
+# hypothesis_version: 6.147.0
+
+['PivotStyleLight16', 'TableStyleMedium9', 'blankRow', 'count', 'defaultPivotStyle', 'defaultTableStyle', 'firstColumn', 'firstColumnStripe', 'firstHeaderCell', 'firstRowStripe', 'firstRowSubheading', 'firstSubtotalColumn', 'firstSubtotalRow', 'firstTotalCell', 'headerRow', 'lastColumn', 'lastHeaderCell', 'lastTotalCell', 'pageFieldLabels', 'pageFieldValues', 'secondColumnStripe', 'secondRowStripe', 'secondRowSubheading', 'secondSubtotalColumn', 'secondSubtotalRow', 'tableStyle', 'tableStyleElement', 'tableStyles', 'thirdRowSubheading', 'thirdSubtotalColumn', 'thirdSubtotalRow', 'totalRow', 'wholeTable']

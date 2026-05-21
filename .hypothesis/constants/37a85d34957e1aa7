@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\nodes\as_string.py
+# hypothesis_version: 6.147.0
+
+['\x00', '\n%s%s %s(%s)%s%s\n%s', '\n@', '\n{}"""{}"""', ' -> ', ' = ', ' | ', '!', '"', '"""', "'", "'''", '({} {})', '*', '**', ', ', '.', '...', ':', '@%s\n', 'Const', '[]', '[{} {}]', '_', 'async def', 'break', 'continue', 'def', 'except', 'except*', 'f', 'for {} in {}:\n{}', 'from {} import {}', 'index', 'metaclass=', 'not', 'not ', 'parent', 'pass', 'raise', 'return', 'tuple', 'yield', 'yield from', '{', '{%s}', '{{', '{{{} {}}}', '{{{}: {} {}}}', '{} if {} else {}', '}', '}}']

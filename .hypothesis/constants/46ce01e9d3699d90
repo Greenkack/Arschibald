@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\layout\_polar.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'angularaxis', 'bargap', 'barmode', 'bgcolor', 'domain', 'gridshape', 'hole', 'layout', 'layout.polar', 'polar', 'radialaxis', 'sector', 'skip_invalid', 'uirevision']

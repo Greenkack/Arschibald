@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\manager.py
+# hypothesis_version: 6.147.0
+
+[100, '.', '.__init__', '.egg', '.pyz', '.pyzw', '.whl', '.zip', '???', '__class__', '__main__', '_failed_import_hooks', '_mod_file_cache', '_transform', 'astroid loader', 'astroid_cache', 'builtins', 'max_inferable_values', 'module_denylist', 'optimize_ast', 'prefer_stubs']

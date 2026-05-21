@@ -1,0 +1,174 @@
+/**
+ * PDF History Styles
+ */
+
+.pdf-history {
+  width: 100%;
+}
+
+.history-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.history-card .p-card-body {
+  padding: 0;
+}
+
+.history-card .p-card-content {
+  padding: 0;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.header-left h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.5rem;
+}
+
+.header-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.stat-item i {
+  color: var(--primary-color);
+}
+
+.header-right {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.history-filters {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--surface-50);
+  border-bottom: 1px solid var(--surface-border);
+  flex-wrap: wrap;
+}
+
+.filter-input {
+  min-width: 250px;
+}
+
+.filter-calendar,
+.filter-dropdown {
+  min-width: 200px;
+}
+
+.history-table {
+  border: none;
+}
+
+.filename-cell {
+  display: flex;
+  align-items: center;
+}
+
+.filename-text {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.history-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.history-loading p {
+  color: var(--text-color-secondary);
+  font-size: 1.1rem;
+}
+
+/* DataTable customization */
+.history-table .p-datatable-thead > tr > th {
+  background: var(--surface-ground);
+  color: var(--text-color);
+  font-weight: 600;
+  border-bottom: 2px solid var(--surface-border);
+}
+
+.history-table .p-datatable-tbody > tr {
+  transition: background-color 0.2s;
+}
+
+.history-table .p-datatable-tbody > tr:hover {
+  background: var(--surface-hover);
+}
+
+.history-table .p-datatable-tbody > tr.p-highlight {
+  background: var(--primary-50);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .history-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .history-filters {
+    flex-direction: column;
+  }
+
+  .filter-input,
+  .filter-calendar,
+  .filter-dropdown {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .actions-cell {
+    flex-direction: column;
+  }
+
+  .history-table .p-datatable-tbody > tr > td {
+    padding: 0.5rem;
+  }
+}

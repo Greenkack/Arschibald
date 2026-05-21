@@ -1,0 +1,206 @@
+name: Performance Testing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run performance tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  backend-performance:
+    name: Backend Performance Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install locust pytest-benchmark
+      
+      - name: Start backend server
+        run: |
+          cd backend
+          uvicorn main:app --host 0.0.0.0 --port 8000 &
+          sleep 10
+      
+      - name: Run load tests with Locust
+        run: |
+          cd backend
+          locust -f tests/performance/locustfile.py --headless \
+            --users 100 --spawn-rate 10 --run-time 5m \
+            --host http://localhost:8000 \
+            --html performance-report.html
+      
+      - name: Run benchmark tests
+        run: |
+          cd backend
+          pytest tests/performance/test_benchmarks.py --benchmark-only \
+            --benchmark-json=benchmark-results.json
+      
+      - name: Upload performance reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-performance-reports
+          path: |
+            backend/performance-report.html
+            backend/benchmark-results.json
+  
+  frontend-performance:
+    name: Frontend Performance Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+      
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+      
+      - name: Analyze bundle size
+        run: |
+          cd frontend
+          npm run analyze
+      
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          urls: |
+            http://localhost:3000
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+      
+      - name: Check bundle size
+        uses: andresz1/size-limit-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: frontend
+  
+  e2e-performance:
+    name: E2E Performance Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && pip install -r requirements.txt
+          cd ../frontend && npm ci
+      
+      - name: Install Playwright
+        run: |
+          cd frontend
+          npx playwright install --with-deps
+      
+      - name: Start application
+        run: |
+          cd backend && uvicorn main:app --host 0.0.0.0 --port 8000 &
+          cd frontend && npm run preview &
+          sleep 15
+      
+      - name: Run performance E2E tests
+        run: |
+          cd frontend
+          npx playwright test tests/performance/ --reporter=html
+      
+      - name: Upload E2E performance report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: e2e-performance-report
+          path: frontend/playwright-report/
+  
+  database-performance:
+    name: Database Performance Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest-benchmark
+      
+      - name: Run database benchmarks
+        run: |
+          cd backend
+          pytest tests/performance/test_database_performance.py \
+            --benchmark-only --benchmark-json=db-benchmark.json
+      
+      - name: Upload database benchmark results
+        uses: actions/upload-artifact@v3
+        with:
+          name: database-performance
+          path: backend/db-benchmark.json
+  
+  compare-performance:
+    name: Compare Performance with Baseline
+    needs: [backend-performance, frontend-performance]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download performance artifacts
+        uses: actions/download-artifact@v3
+      
+      - name: Compare with baseline
+        run: |
+          # Compare current performance with baseline
+          # This would typically involve custom scripts
+          echo "Comparing performance metrics..."
+      
+      - name: Comment PR with performance results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            // Read performance results and post comment
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## Performance Test Results\n\nPerformance tests completed. Check artifacts for detailed reports.'
+            });

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\html\Form.py
+# hypothesis_version: 6.147.0
+
+['Form', 'HIDDEN', 'NOVALIDATE', '__init__', '_explicit_args', 'accept', 'acceptCharset', 'accessKey', 'action', 'aria-', 'aria-*', 'autoComplete', 'children', 'className', 'contentEditable', 'dash_html_components', 'data-', 'data-*', 'dir', 'disable_n_clicks', 'draggable', 'encType', 'hidden', 'id', 'key', 'lang', 'method', 'n_clicks', 'n_clicks_timestamp', 'name', 'noValidate', 'novalidate', 'role', 'spellCheck', 'style', 'tabIndex', 'target', 'title']

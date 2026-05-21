@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\trio\_util.py
+# hypothesis_version: 6.147.0
+
+['.', 'ArgsT', 'CallT', 'Deferred', 'Fn', 'Future', 'PosArgsT', 'RetT', 'T', '_', '__module__', '__name__', '__qualname__', 'ag_code', "group can't be empty", 'trio', 'trio.']

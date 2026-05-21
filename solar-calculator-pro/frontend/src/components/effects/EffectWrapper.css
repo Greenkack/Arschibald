@@ -1,0 +1,489 @@
+/**
+ * Task 206: Component-Specific Effects - CSS
+ * ===========================================
+ * Styles for effect wrapper components.
+ */
+
+/* ============================================================================
+   Base Effect Wrapper
+   ============================================================================ */
+
+.effect-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* ============================================================================
+   Button Effects
+   ============================================================================ */
+
+.button-effect {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  background: var(--button-bg, #3b82f6);
+  color: var(--button-text, #ffffff);
+}
+
+.button-effect:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-effect:focus-visible {
+  outline: 2px solid var(--focus-ring, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* Ripple Effect */
+.ripple-enabled {
+  overflow: hidden;
+}
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%) scale(0);
+  animation: rippleAnimation 0.6s ease-out;
+  pointer-events: none;
+  width: 200%;
+  height: 200%;
+}
+
+@keyframes rippleAnimation {
+  to {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+/* ============================================================================
+   Input Effects
+   ============================================================================ */
+
+.input-effect {
+  display: block;
+  border-radius: 0.375rem;
+  border: 1px solid var(--input-border, #d1d5db);
+  background: var(--input-bg, #ffffff);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.input-effect.input-focused {
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 3px var(--primary-color-alpha, rgba(59, 130, 246, 0.2));
+}
+
+.input-effect.input-error {
+  border-color: var(--error-color, #ef4444);
+}
+
+.input-effect.input-error.input-focused {
+  box-shadow: 0 0 0 3px var(--error-color-alpha, rgba(239, 68, 68, 0.2));
+}
+
+.input-effect.input-success {
+  border-color: var(--success-color, #22c55e);
+}
+
+.input-effect.input-success.input-focused {
+  box-shadow: 0 0 0 3px var(--success-color-alpha, rgba(34, 197, 94, 0.2));
+}
+
+/* ============================================================================
+   Card Effects
+   ============================================================================ */
+
+.card-effect {
+  display: block;
+  border-radius: 0.5rem;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--card-border, #e5e7eb);
+  padding: 1rem;
+}
+
+.card-effect.interactive {
+  cursor: pointer;
+}
+
+.card-effect.interactive:focus-visible {
+  outline: 2px solid var(--focus-ring, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   Menu Effects
+   ============================================================================ */
+
+.menu-effect {
+  display: block;
+  border-radius: 0.5rem;
+  background: var(--menu-bg, #ffffff);
+  border: 1px solid var(--menu-border, #e5e7eb);
+  padding: 0.5rem 0;
+  min-width: 200px;
+  transform-origin: top center;
+}
+
+.menu-effect.closed {
+  display: none;
+}
+
+/* ============================================================================
+   Menu Item Effects
+   ============================================================================ */
+
+.menu-item-effect {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: var(--menu-item-text, #374151);
+  transition: background-color 150ms ease;
+}
+
+.menu-item-effect:hover {
+  background-color: var(--menu-item-hover, #f3f4f6);
+}
+
+.menu-item-effect.active {
+  background-color: var(--menu-item-active, #eff6ff);
+  color: var(--primary-color, #3b82f6);
+}
+
+.menu-item-effect:disabled,
+.menu-item-effect[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.menu-item-content {
+  flex: 1;
+}
+
+/* ============================================================================
+   Dropdown Effects
+   ============================================================================ */
+
+.dropdown-effect {
+  position: absolute;
+  z-index: 50;
+  border-radius: 0.5rem;
+  background: var(--dropdown-bg, #ffffff);
+  border: 1px solid var(--dropdown-border, #e5e7eb);
+  padding: 0.5rem 0;
+  min-width: 200px;
+}
+
+.dropdown-effect.position-bottom {
+  top: 100%;
+  left: 0;
+  margin-top: 0.25rem;
+  transform-origin: top left;
+}
+
+.dropdown-effect.position-top {
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 0.25rem;
+  transform-origin: bottom left;
+}
+
+.dropdown-effect.position-left {
+  right: 100%;
+  top: 0;
+  margin-right: 0.25rem;
+  transform-origin: right top;
+}
+
+.dropdown-effect.position-right {
+  left: 100%;
+  top: 0;
+  margin-left: 0.25rem;
+  transform-origin: left top;
+}
+
+/* ============================================================================
+   Modal Effects
+   ============================================================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 200ms ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-effect {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 0.75rem;
+  background: var(--modal-bg, #ffffff);
+  padding: 1.5rem;
+}
+
+/* ============================================================================
+   Toast Effects
+   ============================================================================ */
+
+.toast-effect {
+  position: fixed;
+  z-index: 200;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  background: var(--toast-bg, #ffffff);
+  border-left: 4px solid var(--toast-accent, #3b82f6);
+  min-width: 300px;
+  max-width: 400px;
+}
+
+/* Toast Types */
+.toast-info {
+  --toast-accent: #3b82f6;
+  --toast-bg: #eff6ff;
+}
+
+.toast-success {
+  --toast-accent: #22c55e;
+  --toast-bg: #f0fdf4;
+}
+
+.toast-warning {
+  --toast-accent: #eab308;
+  --toast-bg: #fefce8;
+}
+
+.toast-error {
+  --toast-accent: #ef4444;
+  --toast-bg: #fef2f2;
+}
+
+/* Toast Positions */
+.toast-top-right {
+  top: 1rem;
+  right: 1rem;
+}
+
+.toast-top-left {
+  top: 1rem;
+  left: 1rem;
+}
+
+.toast-bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.toast-bottom-left {
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.toast-top-center {
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toast-bottom-center {
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ============================================================================
+   Badge Effects
+   ============================================================================ */
+
+.badge-effect {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.badge-default {
+  background: var(--badge-default-bg, #f3f4f6);
+  color: var(--badge-default-text, #374151);
+}
+
+.badge-primary {
+  background: var(--badge-primary-bg, #eff6ff);
+  color: var(--badge-primary-text, #3b82f6);
+}
+
+.badge-success {
+  background: var(--badge-success-bg, #f0fdf4);
+  color: var(--badge-success-text, #22c55e);
+}
+
+.badge-warning {
+  background: var(--badge-warning-bg, #fefce8);
+  color: var(--badge-warning-text, #ca8a04);
+}
+
+.badge-danger {
+  background: var(--badge-danger-bg, #fef2f2);
+  color: var(--badge-danger-text, #ef4444);
+}
+
+.badge-effect.pulsing {
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* ============================================================================
+   Skeleton Effects
+   ============================================================================ */
+
+.skeleton-effect {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base, #e5e7eb) 0%,
+    var(--skeleton-highlight, #f3f4f6) 50%,
+    var(--skeleton-base, #e5e7eb) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  border-radius: 0.25rem;
+}
+
+.skeleton-circular {
+  border-radius: 50%;
+}
+
+.skeleton-rectangular {
+  border-radius: 0;
+}
+
+.skeleton-rounded {
+  border-radius: 0.5rem;
+}
+
+/* ============================================================================
+   Dark Mode Support
+   ============================================================================ */
+
+[data-theme="dark"] .button-effect {
+  --button-bg: #2563eb;
+}
+
+[data-theme="dark"] .input-effect {
+  --input-bg: #1f2937;
+  --input-border: #374151;
+}
+
+[data-theme="dark"] .card-effect {
+  --card-bg: #1f2937;
+  --card-border: #374151;
+}
+
+[data-theme="dark"] .menu-effect {
+  --menu-bg: #1f2937;
+  --menu-border: #374151;
+}
+
+[data-theme="dark"] .menu-item-effect {
+  --menu-item-text: #e5e7eb;
+  --menu-item-hover: #374151;
+  --menu-item-active: #1e3a5f;
+}
+
+[data-theme="dark"] .dropdown-effect {
+  --dropdown-bg: #1f2937;
+  --dropdown-border: #374151;
+}
+
+[data-theme="dark"] .modal-effect {
+  --modal-bg: #1f2937;
+}
+
+[data-theme="dark"] .toast-info {
+  --toast-bg: #1e3a5f;
+}
+
+[data-theme="dark"] .toast-success {
+  --toast-bg: #14532d;
+}
+
+[data-theme="dark"] .toast-warning {
+  --toast-bg: #422006;
+}
+
+[data-theme="dark"] .toast-error {
+  --toast-bg: #450a0a;
+}
+
+[data-theme="dark"] .badge-default {
+  --badge-default-bg: #374151;
+  --badge-default-text: #e5e7eb;
+}
+
+[data-theme="dark"] .badge-primary {
+  --badge-primary-bg: #1e3a5f;
+  --badge-primary-text: #93c5fd;
+}
+
+[data-theme="dark"] .badge-success {
+  --badge-success-bg: #14532d;
+  --badge-success-text: #86efac;
+}
+
+[data-theme="dark"] .badge-warning {
+  --badge-warning-bg: #422006;
+  --badge-warning-text: #fde047;
+}
+
+[data-theme="dark"] .badge-danger {
+  --badge-danger-bg: #450a0a;
+  --badge-danger-text: #fca5a5;
+}
+
+[data-theme="dark"] .skeleton-effect {
+  --skeleton-base: #374151;
+  --skeleton-highlight: #4b5563;
+}

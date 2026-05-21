@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\builder.py
+# hypothesis_version: 6.147.0
+
+['#@', '#\\s+type:', '*', '.', '.__init__', '.py', '.pyc', '.pyo', '<?>', '__', '__file__', '__future__', '__init__', '__loader__', 'builtins.object', 'ignore', 'rb', 'utf-8']

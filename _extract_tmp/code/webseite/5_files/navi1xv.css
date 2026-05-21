@@ -1,0 +1,87 @@
+/* navi2xv.pm */
+/* BOX "Rubrikenauswahl" */
+
+.os_prod_title { padding:0 0 11px 0 ; font-weight:600 }
+.os_prod_content { padding: 20px 0 0 0 } 
+.os_prod_content .os_list_vendor { max-width:180px ; margin:-10px 0 20px 0 }
+
+.os_prod_topnavi .teaser { overflow:hidden }
+.os_prod_topnavi .teaser > div { width:500px ; line-height:34px ; height:35px ; padding-left:10px ; color:#000 ; background:#e3e3e3 ; text-transform:uppercase }
+.os_prod_topnavi .subnavi .wrap { line-height:32px ; height:35px ; border-top:1px solid #d7d7d7 ; border-bottom:1px solid #d7d7d7 }
+.os_prod_topnavi .subnavi > div h1 { line-height:32px ; padding:0 ; margin:0 ; font-size:1em ; font-weight: 600}
+.os_prod_topnavi .subnavi button { padding:0 ; margin:-2px 25px 0 0 ; border:0 ; background:none ; font-size:100% }
+
+.os_cat_breadcrumb { }
+.os_cat_breadcrumb .bcrumb div { padding-top:10px ; padding-bottom:10px }
+.os_cat_breadcrumb .bcrumb a { font-size:0.833em }
+
+.os_cat_text.os_cat_tblock3 { margin: 30px 30px 0 0 ; padding-top:30px ; border-top:1px solid #c1c1c1 }
+
+@media screen and ( max-width:767px ) {
+
+	.os_prod_topnavi .subnavi .wrap { line-height:auto ; height:auto }
+	.os_prod_topnavi .subnavi > div h1 { line-height:1.2 ; padding: 8px 0 ; margin:0 ; font-size:1em ;  font-weight: 600 }
+}
+
+/* Rubrikenlinks */
+
+.os_prod_content .os_prod_venimage { padding: 20px 0 }
+.os_prod_content .os_prod_venimage img { width:80% }
+.os_prod_content a { display:block ; color:#000 ; text-decoration:none }
+.os_prod_content a:hover { color:#cb2027 ; text-decoration:none }
+
+/* Listentags für Box */
+
+.os_prod_content ul { margin:0 ; padding:0 ; list-style:none } 
+.os_prod_content li { margin:0 ; padding:0 } 
+
+/* 1. Ebene */
+.os_prod_content ul li { }
+.os_prod_content ul li a { padding:10px 0 10px 0 ; border-top:1px solid #e1e1e1 }
+.os_prod_content > ul > li > a::before { color:#000 ; content:"\f105" ; font-family:"FontAwesome" ; margin-right:7px }
+.os_prod_content_actp_1 > a { color:#cb2027 !important }
+.os_prod_content_actl_1 > a { font-weight:bold !important }
+
+/* 2. Ebene */
+.os_prod_content ul li ul li  { }
+.os_prod_content ul li ul li a { padding:10px 0 10px 15px ; border:0 }
+.os_prod_content_actp_2 > a { color:#cb2027 !important }
+.os_prod_content_actl_2 > a { font-weight:bold !important }
+
+/* 3. Ebene */
+.os_prod_content ul li ul li ul li  { }
+.os_prod_content ul li ul li ul li a { padding:10px 0 10px 30px }
+.os_prod_content_actp_3 > a { color:#cb2027 !important }
+.os_prod_content_actl_3 > a { font-weight:bold !important }
+
+/* 4. Ebene */
+.os_prod_content ul li ul li ul li ul li  { }
+.os_prod_content ul li ul li ul li ul li a { padding:10px 0 10px 45px }
+.os_prod_content_actp_4 > a { color:#cb2027 !important }
+.os_prod_content_actl_4 > a { font-weight:bold !important }
+
+/* 5. Ebene */
+.os_prod_content ul li ul li ul li ul li ul li  { }
+.os_prod_content ul li ul li ul li ul li ul li a { padding:10px 0 10px 60px }
+.os_prod_content_actp_5 > a { color:#cb2027 !important }
+.os_prod_content_actl_5 > a { font-weight:bold !important }
+
+/* 6. Ebene */
+.os_prod_content ul li ul li ul li ul li ul li ul li { }
+.os_prod_content ul li ul li ul li ul li ul li ul li a { padding:10px 0 10px 75px }
+.os_prod_content_actp_6 > a { color:#cb2027 !important }
+.os_prod_content_actl_6 > a { font-weight:bold !important }
+
+/* 7. Ebene */
+.os_prod_content ul li ul li ul li ul li ul li ul li ul li { }
+.os_prod_content ul li ul li ul li ul li ul li ul li ul li a { padding:10px 0 10px 90px }
+.os_prod_content_actp_7 > a { color:#cb2027 !important }
+.os_prod_content_actl_7 > a { font-weight:bold !important }
+
+/* 8. Ebene */
+.os_prod_content ul li ul li ul li ul li ul li ul li ul li ul li { }
+.os_prod_content ul li ul li ul li ul li ul li ul li ul li ul li a { padding:10px 0 10px 105px }
+.os_prod_content_actp_8 > a { color:#cb2027 !important }
+.os_prod_content_actl_8 > a { font-weight:bold !important }
+
+/* usw. -> für weitere Ebenen entsprechend kopieren */

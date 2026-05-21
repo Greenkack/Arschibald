@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\brain\brain_namedtuple_enum.py
+# hypothesis_version: 6.147.0
+
+[',', ', ', 'Enum', 'IntFlag', 'NamedTuple', 'TypeError: ', 'Uninferable', 'ValueError: ', '_', '_%d', '__members__', '_asdict', '_fields', '_ignore_', '_make', '_replace', '_value2member_map_', 'elts', 'enum', 'enum.Enum', 'field_names', 'items', 'name', 'namedtuple', 'rename', 'tuple', 'typename', 'typing', 'typing.NamedTuple']

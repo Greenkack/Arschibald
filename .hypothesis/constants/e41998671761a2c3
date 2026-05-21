@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\helpers.py
+# hypothesis_version: 6.147.0
+
+['__index__', '__len__', 'builtins', 'builtins.int', 'function', 'method', 'module', 'type']

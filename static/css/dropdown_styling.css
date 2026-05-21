@@ -1,0 +1,88 @@
+/* ====================================================================
+   DROPDOWN/SELECTBOX STYLING - Globale Verbesserungen
+   ==================================================================== */
+
+/* Dropdown/Selectbox Container - Verbesserte Zentrierung und Ausrichtung mit ORANGE Akzent */
+div[data-baseweb="select"] {
+    margin-top: 0.25rem !important;
+}
+
+div[data-baseweb="select"] > div {
+    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    border: 1px solid rgba(200, 210, 220, 0.5) !important;
+    border-left: 3px solid rgba(255, 140, 0, 0.4) !important;
+    border-radius: 12px !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.95rem !important;
+    transition: all 0.2s ease !important;
+    min-height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    color: #ff7b00 !important;
+    font-weight: 600 !important;
+}
+
+div[data-baseweb="select"] > div:hover {
+    border-color: #ff8c00 !important;
+    border-left: 4px solid #ff8c00 !important;
+    box-shadow: 0 4px 12px rgb(255, 115, 0), 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fff5e6 100%) !important;
+}
+
+div[data-baseweb="select"] > div:focus-within {
+    border-color: #ff8c00 !important;
+    border-left: 5px solid #ff8c00 !important;
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.35), 0 3px 10px rgba(0, 0, 0, 0.2) !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fff5e6 100%) !important;
+}
+
+/* Dropdown-Text Zentrierung */
+div[data-baseweb="select"] > div > div {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+}
+
+/* Dropdown-Pfeil Styling */
+div[data-baseweb="select"] svg {
+    color: #ff7b00 !important;
+}
+
+/* Label über Dropdowns */
+.stSelectbox > label {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 0.6rem !important;
+    display: block !important;
+}
+
+/* Dropdown-Menü (beim Öffnen) mit ORANGE Akzent */
+div[data-baseweb="popover"] {
+    border-radius: 12px !important;
+    border-left: 1px solid #ff8c00 !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+}
+
+ul[role="listbox"] > li {
+    padding: 0.6rem 0.75rem !important;
+    font-size: 0.95rem !important;
+    transition: all 0.15s ease !important;
+    color: #1a202c !important;
+    font-weight: 600 !important;
+}
+
+ul[role="listbox"] > li:hover {
+    background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%) !important;
+    color: #ff8c00 !important;
+    border-left: 10px solid #ff8c00 !important;
+    padding-left: 0.65rem !important;
+}
+
+ul[role="listbox"] > li[aria-selected="true"] {
+    background: linear-gradient(135deg, #ff8c00 0%, #ff9a1f 100%) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    border-left: 10px solid #d97700 !important;
+}

@@ -1,0 +1,334 @@
+    /* Layout */
+    .hlr-step { display: none; }
+    .hlr-step.hlr-active { display: block; }
+
+    /* Buttons */
+    .hlr-btn { 
+      background: #CA2227; 
+      color: #fff; 
+      border: none; 
+      padding: 12px 24px; 
+      font-size: 16px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      transition: background 0.2s;
+    }
+    .hlr-btn:hover { background: #a81820; }
+    .hlr-btn-secondary { 
+      background: #103F6C; 
+      color: #fff;
+    }
+    .hlr-btn-secondary:hover { background: #0b2c4d; }
+
+    /* Navigation */
+    .hlr-step-nav { 
+      margin-top: 24px; 
+      display: flex; 
+      gap: 12px; 
+      justify-content: space-between;
+    }
+
+    /* Forms */
+    .hlr-form-input { 
+      height: 46px; 
+      padding: 10px; 
+      border: 1px solid #e5dcdc; 
+      background: #f9fafb; 
+      font-size: 15px; 
+      box-sizing: border-box; 
+      width: 100%; 
+    }
+
+    .hlr-form-input:focus { 
+      outline: none; 
+      border-color: #103F6C; 
+    }
+
+    /* Grid layouts */
+    .hlr-grid { display: grid; gap: 16px; }
+    .hlr-grid-cols-1 { grid-template-columns: 1fr; }
+    .hlr-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .hlr-md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .hlr-md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+    /* Flex utilities */
+    .hlr-flex { display: flex; }
+    .hlr-flex-col { flex-direction: column; }
+    .hlr-gap-4 { gap: 16px; }
+    .hlr-items-center { align-items: center; }
+    .hlr-justify-between { justify-content: space-between; }
+    .hlr-justify-end { justify-content: flex-end; }
+    .hlr-justify-start { justify-content: flex-start; }
+
+    /* Spacing */
+    .hlr-mt-4 { margin-top: 16px; }
+    .hlr-mt-6 { margin-top: 24px; }
+    .hlr-mt-8 { margin-top: 32px; }
+    .hlr-mb-6 { margin-bottom: 24px; }
+    .hlr-pb-2 { padding-bottom: 8px; }
+    .hlr-ml-1 { margin-left: 4px; }
+
+    /* Text utilities */
+    .hlr-text-3xl { font-size: 30px; }
+    .hlr-font-bold { font-weight: 700; }
+
+    /* Stepper */
+    .hlr-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 32px 0 12px 0;
+    }
+    .hlr-stepper-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1 1 0;
+      position: relative;
+      cursor: pointer;
+    }
+    .hlr-stepper-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #ddd;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .hlr-stepper-step.hlr-active .hlr-stepper-circle,
+    .hlr-stepper-step.hlr-completed .hlr-stepper-circle {
+      background: #103F6C;
+      color: #fff;
+    }
+    .hlr-stepper-label {
+      font-size: 13px;
+      text-align: center;
+      color: #666;
+      min-width: 80px;
+    }
+    .hlr-stepper-step.hlr-active .hlr-stepper-label,
+    .hlr-stepper-step.hlr-completed .hlr-stepper-label {
+      color: #103F6C;
+      font-weight: 700;
+    }
+    .hlr-stepper-bar {
+      height: 4px;
+      background: #ddd;
+      flex: 1 1 0;
+      margin: 0 4px;
+      border-radius: 2px;
+    }
+    .hlr-progress-bar-wrap {
+      width: 100%;
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .hlr-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #103F6C 60%, #CA2227 100%);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Results */
+    .hlr-result-label { font-weight: 600; }
+    .hlr-result-value { font-weight: 700; color: #103F6C; }
+    
+    /* Main Result Box */
+    .hlr-main-result-box {
+      background:  #f9fafb;
+      padding: 32px 24px;
+      margin: 32px 0;
+      text-align: center;
+      border:1px solid #e5dcdc;
+    }
+    
+    .hlr-main-result-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 16px;
+    }
+    
+    .hlr-main-result-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: #103F6C;
+      margin-bottom: 8px;
+      line-height: 1.1;
+    }
+    
+    .hlr-main-result-unit {
+      font-size: 24px;
+      font-weight: 600;
+      color: #666;
+    }
+    
+    @media (max-width: 768px) {
+      .hlr-main-result-box {
+        padding: 24px 16px;
+        margin: 24px 0;
+      }
+      
+      .hlr-main-result-title {
+        font-size: 18px;
+      }
+      
+      .hlr-main-result-value {
+        font-size: 36px;
+      }
+      
+      .hlr-main-result-unit {
+        font-size: 20px;
+      }
+    }
+
+    /* tooltipHeizlasts */
+    .hlr-tooltipHeizlast {
+      position: relative;
+      display: inline-block;
+    }
+
+    .hlr-tooltipHeizlast .hlr-tooltipHeizlasttext {
+      visibility: hidden;
+      width: 260px;
+      background-color: #103F6C;
+      color: #fff;
+      text-align: left;
+      border-radius: 8px;
+      padding: 10px 14px;
+      position: absolute;
+      z-index: 10;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -130px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .hlr-tooltipHeizlast:hover .hlr-tooltipHeizlasttext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Range Slider Styling */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-track {
+      background: #ddd;
+      height: 8px;
+      border-radius: 4px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      background: #103F6C;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-track {
+      background: #ddd;
+      height: 8px;
+      border-radius: 4px;
+      border: none;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      background: #103F6C;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .hlr-container1 { 
+        margin: 20px auto; 
+        padding: 20px 16px; 
+        border-radius: 16px; 
+      }
+      
+      h1 { font-size: 26px; }
+      h2 { font-size: 22px; }
+      
+      .hlr-grid-cols-3 { grid-template-columns: 1fr; }
+      .hlr-md\:grid-cols-3 { grid-template-columns: 1fr; }
+      .hlr-md\:grid-cols-2 { grid-template-columns: 1fr; }
+      
+      .hlr-stepper-label { font-size: 11px; min-width: 60px; }
+      .hlr-stepper-circle { width: 28px; height: 28px; font-size: 15px; }
+      .hlr-stepper { margin: 20px 0 8px 0; }
+      .hlr-progress-bar-wrap { margin-bottom: 16px; }
+      
+      /* Introduction section mobile optimization */
+      .hlr-introduction {
+        padding: 16px !important;
+        margin: 16px 0 !important;
+      }
+      
+      .hlr-introduction h3 {
+        font-size: 16px !important;
+        margin-bottom: 12px !important;
+      }
+      
+      .hlr-introduction .hlr-md\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .hlr-introduction div[style*="padding: 16px"] {
+        padding: 12px !important;
+      }
+      
+      .hlr-introduction ul {
+        font-size: 13px !important;
+      }
+      
+      .hlr-introduction p {
+        font-size: 14px !important;
+      }
+    }
+    /* generic helper */
+      input[type="checkbox"]:checked { background-color: #103F6C; color: #103F6C; }
+/* PDF Export Button */
+.hlr-pdf-export-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.hlr-pdf-export-btn:hover {
+  background: #218838;
+}
+.hlr-pdf-export-btn svg {
+  width: 20px;
+  height: 20px;
+}

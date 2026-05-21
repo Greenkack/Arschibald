@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\styles\fonts.py
+# hypothesis_version: 6.147.0
+
+['Calibri', 'b', 'baseline', 'charset', 'color', 'condense', 'double', 'doubleAccounting', 'extend', 'family', 'font', 'i', 'major', 'minor', 'name', 'outline', 'scheme', 'shadow', 'single', 'singleAccounting', 'strike', 'subscript', 'superscript', 'sz', 'u', 'val', 'vertAlign', '{%s}u']

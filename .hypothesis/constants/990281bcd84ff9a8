@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_surface.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'autocolorscale', 'cauto', 'cmax', 'cmid', 'cmin', 'coloraxis', 'colorbar', 'colorscale', 'connectgaps', 'contours', 'customdata', 'customdatasrc', 'hidesurface', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hovertemplate', 'hovertemplatesrc', 'hovertext', 'hovertextsrc', 'ids', 'idssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'lighting', 'lightposition', 'meta', 'metasrc', 'name', 'opacity', 'opacityscale', 'reversescale', 'scene', 'showlegend', 'showscale', 'skip_invalid', 'stream', 'surface', 'surfacecolor', 'surfacecolorsrc', 'text', 'textsrc', 'type', 'uid', 'uirevision', 'visible', 'x', 'xcalendar', 'xhoverformat', 'xsrc', 'y', 'ycalendar', 'yhoverformat', 'ysrc', 'z', 'zcalendar', 'zhoverformat', 'zsrc']

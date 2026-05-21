@@ -1,0 +1,332 @@
+/**
+ * PDF Configuration Manager Styles
+ */
+
+.pdf-configuration-manager {
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.pdf-config-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.pdf-config-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.pdf-config-validation {
+  margin-bottom: 1.5rem;
+}
+
+.pdf-config-validation .p-message {
+  margin-bottom: 0.5rem;
+}
+
+.pdf-config-info {
+  margin-bottom: 1.5rem;
+}
+
+.pdf-config-section {
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.pdf-config-section h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #444;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.p-field {
+  margin-bottom: 1.5rem;
+}
+
+.p-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.p-field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.p-field-checkbox label {
+  margin: 0;
+  color: #555;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.p-dropdown,
+.p-inputtext,
+.p-inputnumber {
+  width: 100%;
+}
+
+.p-slider {
+  width: 100%;
+}
+
+.p-panel {
+  margin-bottom: 1rem;
+}
+
+.p-panel .p-panel-header {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  font-weight: 600;
+}
+
+.p-panel .p-panel-content {
+  padding: 1.5rem;
+  background: #ffffff;
+}
+
+.p-datatable {
+  margin-top: 1rem;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: #f5f5f5;
+  color: #333;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
+}
+
+.p-tabview .p-tabview-nav {
+  background: #f5f5f5;
+  border-bottom: 2px solid #ddd;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: #007bff;
+  border-bottom: 3px solid #007bff;
+}
+
+.p-tabview .p-tabview-panels {
+  padding: 2rem 1rem;
+  background: #ffffff;
+}
+
+.p-button {
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.p-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.p-button-secondary {
+  background: #6c757d;
+  border-color: #6c757d;
+}
+
+.p-button-secondary:hover {
+  background: #5a6268;
+  border-color: #545b62;
+}
+
+.p-dialog .p-dialog-header {
+  background: #f5f5f5;
+  border-bottom: 2px solid #ddd;
+  padding: 1.5rem;
+}
+
+.p-dialog .p-dialog-content {
+  padding: 2rem;
+}
+
+.p-message {
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.p-message.p-message-error {
+  background: #fee;
+  border-left: 4px solid #dc3545;
+  color: #721c24;
+}
+
+.p-message.p-message-warn {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  color: #856404;
+}
+
+.p-message.p-message-info {
+  background: #d1ecf1;
+  border-left: 4px solid #17a2b8;
+  color: #0c5460;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pdf-configuration-manager {
+    padding: 1rem;
+  }
+
+  .pdf-config-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .pdf-config-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .pdf-config-actions .p-button {
+    width: 100%;
+  }
+
+  .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .pdf-config-section {
+    padding: 1rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .pdf-configuration-manager {
+    background: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  .pdf-config-header h2 {
+    color: #e0e0e0;
+  }
+
+  .pdf-config-section {
+    background: #2a2a2a;
+  }
+
+  .pdf-config-section h3 {
+    color: #e0e0e0;
+    border-bottom-color: #444;
+  }
+
+  .p-field label,
+  .p-field-checkbox label {
+    color: #ccc;
+  }
+
+  .p-panel .p-panel-header {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #e0e0e0;
+  }
+
+  .p-panel .p-panel-content {
+    background: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  .p-datatable .p-datatable-thead > tr > th {
+    background: #2a2a2a;
+    color: #e0e0e0;
+  }
+
+  .p-tabview .p-tabview-nav {
+    background: #2a2a2a;
+    border-bottom-color: #444;
+  }
+
+  .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    color: #ccc;
+  }
+
+  .p-tabview .p-tabview-panels {
+    background: #1e1e1e;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pdf-config-section {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Loading State */
+.p-button.p-button-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.p-button.p-button-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

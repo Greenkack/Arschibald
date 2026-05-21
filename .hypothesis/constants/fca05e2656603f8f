@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_scattercarpet.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'a', 'asrc', 'b', 'bsrc', 'carpet', 'connectgaps', 'customdata', 'customdatasrc', 'fill', 'fillcolor', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hoveron', 'hovertemplate', 'hovertemplatesrc', 'hovertext', 'hovertextsrc', 'ids', 'idssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'line', 'marker', 'meta', 'metasrc', 'mode', 'name', 'opacity', 'scattercarpet', 'selected', 'selectedpoints', 'showlegend', 'skip_invalid', 'stream', 'text', 'textfont', 'textposition', 'textpositionsrc', 'textsrc', 'texttemplate', 'texttemplatesrc', 'type', 'uid', 'uirevision', 'unselected', 'visible', 'xaxis', 'yaxis', 'zorder']

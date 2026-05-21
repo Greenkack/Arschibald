@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\utils\http.py
+# hypothesis_version: 6.147.0
+
+[b'\n=', b'=', 100, 2048, "!$&'()*+,;=", '"', '"%s"', "'", '(?P<day>[ 0-9][0-9])', '(?P<day>[0-9]{2})', '(?P<mon>\\w{3})', '(?P<year>[0-9]{2})', '(?P<year>[0-9]{4})', '*', ',', '.', '/', '/%2F{}', '//', '///', ':/?#[]@', ';', '=', 'C', '\\', '\\"', '\\\\', '^[\\t \\x21-\\x7e]*$', '^\\w{3} %s %s %s %s$', 'ascii', 'attachment', 'day', "filename*=utf-8''{}", 'filename="{}"', 'hour', 'http', 'https', 'inline', 'items', 'min', 'mon', 'sec', 'year']

@@ -1,0 +1,36 @@
+.custom-confirm-dialog .p-dialog-header {
+  background: var(--surface-section);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--surface-border);
+  padding: 1.25rem;
+}
+
+.custom-confirm-dialog .p-dialog-content {
+  background: var(--surface-card);
+  color: var(--text-color);
+  padding: 1.5rem;
+}
+
+.custom-confirm-dialog .p-confirm-dialog-message {
+  margin-left: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.custom-confirm-dialog .p-dialog-footer {
+  background: var(--surface-section);
+  border-top: 1px solid var(--surface-border);
+  padding: 1rem 1.25rem;
+}
+
+.custom-confirm-dialog .p-confirm-dialog-icon {
+  font-size: 2rem;
+  color: var(--orange-500);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .custom-confirm-dialog {
+    width: 90vw !important;
+  }
+}

@@ -1,0 +1,71 @@
+.file-drop-zone {
+  border: 2px dashed var(--surface-border, #dee2e6);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  background-color: var(--surface-ground, #f8f9fa);
+  cursor: pointer;
+  position: relative;
+}
+
+.file-drop-zone:hover:not(.disabled) {
+  border-color: var(--primary-color, #3b82f6);
+  background-color: var(--surface-hover, #e9ecef);
+}
+
+.file-drop-zone.dragging-over {
+  border-color: var(--primary-color, #3b82f6);
+  background-color: var(--primary-50, #eff6ff);
+  transform: scale(1.02);
+}
+
+.file-drop-zone.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-drop-label {
+  display: block;
+  cursor: pointer;
+  width: 100%;
+}
+
+.file-drop-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-drop-content i {
+  color: var(--primary-color, #3b82f6);
+}
+
+.file-drop-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color, #495057);
+  margin: 0;
+}
+
+.file-drop-hint {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary, #6c757d);
+  margin: 0;
+}
+
+.file-drop-error {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: var(--red-50, #fef2f2);
+  border: 1px solid var(--red-500, #ef4444);
+  border-radius: 4px;
+  color: var(--red-700, #b91c1c);
+  font-size: 0.875rem;
+}

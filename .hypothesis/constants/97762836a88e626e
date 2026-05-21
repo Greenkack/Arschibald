@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\workbook\properties.py
+# hypothesis_version: 6.147.0
+
+[124519, 'A1', 'R1C1', 'all', 'always', 'auto', 'autoNoTable', 'calcPr', 'fileVersion', 'manual', 'never', 'placeholders', 'userSet', 'workbookPr']

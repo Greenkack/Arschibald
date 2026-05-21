@@ -1,0 +1,2930 @@
+{
+  "calculation_functions": [
+    "calculate_degradation_analysis",
+    "calculate_annuity",
+    "render_technical_calculations",
+    "calculate_irr_advanced",
+    "Dummy_get_product_by_model_name_calc",
+    "integrate_advanced_calculations",
+    "calculate_environmental_impact",
+    "calculate_detailed_co2_analysis",
+    "calculate_lcoe_advanced",
+    "calculate_optimistic_scenario",
+    "_calculate_grid_interaction",
+    "calculate_financial_scenarios",
+    "calculate_grid_analysis",
+    "Dummy_get_product_by_id_calc",
+    "calculate_conservative_scenario",
+    "calculate_degradation",
+    "calculate_capital_gains_tax",
+    "calculate_scenarios",
+    "calculate_contracting_costs",
+    "_calculate_weather_impact",
+    "_calculate_degradation",
+    "_calculate_energy_independence",
+    "calculate_npv_sensitivity",
+    "_calculate_final_price_with_correct_formula",
+    "calculate_offer_details",
+    "calculate_energy_optimization",
+    "calculate_subsidy_scenarios",
+    "prepare_advanced_calculations_for_pdf_export",
+    "calculate_load_profile_analysis",
+    "calculate_financing_comparison",
+    "calculate_break_even_with_price_increase",
+    "_compute_annual_cost_series",
+    "Dummy_list_products_calc",
+    "perform_calculations",
+    "_analyze_pricing_key_categories",
+    "_update_enhanced_pricing_in_calculation_results",
+    "_calculate_carbon_footprint",
+    "_calculate_dynamic_pricing",
+    "calculate_temperature_effects",
+    "calculate_weather_impact",
+    "_calculate_peak_shaving",
+    "calculate_enhanced_pricing",
+    "calculate_break_even_with_inflation",
+    "render_extended_calculations_dashboard",
+    "calculate_leasing_costs",
+    "calculate_inverter_efficiency",
+    "calculate_battery_optimization",
+    "calculate_recycling_potential",
+    "calculate_shading_analysis",
+    "calculate_storage_to_consumption_ratio",
+    "Dummy_load_admin_setting_calc",
+    "_calculate_battery_cycles",
+    "calculate_detailed_energy_flows",
+    "calculate_depreciation",
+    "calculate_storage_to_production_ratio",
+    "_calculate_maintenance",
+    "_calculate_shading",
+    "render_environmental_calculations",
+    "render_advanced_calculations_section"
+  ],
+  "chart_functions": [
+    "save_chart_selection_to_persistent_storage",
+    "initialize_chart_selection_state",
+    "_get_chart_description",
+    "_create_monthly_production_consumption_chart",
+    "load_chart_selection_from_persistent_storage",
+    "_export_plotly_fig_to_bytes",
+    "_sanitize_chart_title",
+    "_get_all_available_chart_keys",
+    "_create_electricity_cost_projection_chart",
+    "_create_cumulative_cashflow_chart",
+    "prepare_chart_data_for_pdf_generation",
+    "render_chart_selection_ui",
+    "create_multi_series_2d_chart",
+    "get_chart_generation_errors",
+    "_plotly_chart_collapsible",
+    "render_chart_preview_grid",
+    "check_chart_availability",
+    "render_chart_preview_interface",
+    "_create_chart_by_type",
+    "generate_selected_charts_only",
+    "render_chart_generation_status",
+    "_add_chart_controls",
+    "_ensure_plotly_chart_unwrapped",
+    "create_four_type_chart",
+    "manage_chart_selection_persistence",
+    "render_chart_selection_info_panel",
+    "create_universal_2d_chart",
+    "validate_chart_data_availability",
+    "generate_chart_thumbnail",
+    "render_chart_preview_tabs",
+    "render_chart_preview_carousel",
+    "_build_chart_kpi_html"
+  ],
+  "financial_functions": [
+    "_get_financing_recommendation",
+    "get_financing_data_summary",
+    "integrate_advanced_calculations",
+    "_generate_basic_keys",
+    "calculate_financial_scenarios",
+    "_dummy_generate_offer_pdf",
+    "_generate_pricing_keys",
+    "prepare_financing_data_for_pdf_export",
+    "_render_financial_section",
+    "calculate_financing_comparison",
+    "generate_maintenance_schedule",
+    "render_comprehensive_admin_payment_terms_ui_with_variants",
+    "generate_selected_charts_only",
+    "render_advanced_financial_analysis",
+    "_generate_automatic_keys",
+    "get_payment_data_for_pdf",
+    "generate_offer_pdf_with_main_templates",
+    "generate_main_template_pdf_bytes",
+    "_generate_cache_key",
+    "_generate_complete_salutation_line",
+    "render_financing_analysis",
+    "prepare_payment_data_for_pdf_generation",
+    "generate_offer_pdf",
+    "render_financial_scenarios",
+    "generate_offer_pdf_simple",
+    "generate_optimization_suggestions",
+    "generate_chart_thumbnail"
+  ],
+  "detailed_results": {
+    "analysis.py": {
+      "file": "analysis.py",
+      "total_functions": 89,
+      "total_classes": 2,
+      "calculations": [
+        {
+          "name": "perform_calculations",
+          "lineno": 70,
+          "docstring": null,
+          "args": [
+            "project_data",
+            "texts",
+            "errors_list",
+            "simulation_duration_user",
+            "electricity_price_increase_user"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "integrate_advanced_calculations",
+          "lineno": 985,
+          "docstring": "Integrator für erweiterte Berechnungen und Analysen",
+          "args": [
+            "texts"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_compute_annual_cost_series",
+          "lineno": 1954,
+          "docstring": "Erzeugt eine Jahreskosten-Serie über 'years' Jahre.\n\n- base_annual_cost: Startwert in Jahr 1 (€/Jahr)\n- inc_percent: jährliche Preissteigerung in % (z. B. 5.0)\nRückgabe: Liste der jährlichen Kosten je Jahr (nicht kumuliert).",
+          "args": [
+            "base_annual_cost",
+            "years",
+            "inc_percent"
+          ],
+          "returns": "list[float]",
+          "class": null
+        },
+        {
+          "name": "render_extended_calculations_dashboard",
+          "lineno": 3007,
+          "docstring": "Rendert das erweiterte Berechnungs-Dashboard",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "texts"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "calculate_energy_optimization",
+          "lineno": 3018,
+          "docstring": null,
+          "args": [
+            "self",
+            "system_data"
+          ],
+          "returns": null,
+          "class": "MockExtendedCalculations"
+        },
+        {
+          "name": "calculate_grid_analysis",
+          "lineno": 3031,
+          "docstring": null,
+          "args": [
+            "self",
+            "system_data"
+          ],
+          "returns": null,
+          "class": "MockExtendedCalculations"
+        },
+        {
+          "name": "calculate_weather_impact",
+          "lineno": 3051,
+          "docstring": null,
+          "args": [
+            "self",
+            "system_data"
+          ],
+          "returns": null,
+          "class": "MockExtendedCalculations"
+        },
+        {
+          "name": "calculate_degradation_analysis",
+          "lineno": 3062,
+          "docstring": null,
+          "args": [
+            "self",
+            "system_data"
+          ],
+          "returns": null,
+          "class": "MockExtendedCalculations"
+        },
+        {
+          "name": "calculate_financial_scenarios",
+          "lineno": 3075,
+          "docstring": null,
+          "args": [
+            "self",
+            "system_data"
+          ],
+          "returns": null,
+          "class": "MockExtendedCalculations"
+        },
+        {
+          "name": "calculate_environmental_impact",
+          "lineno": 3095,
+          "docstring": null,
+          "args": [
+            "self",
+            "system_data"
+          ],
+          "returns": null,
+          "class": "MockExtendedCalculations"
+        },
+        {
+          "name": "calculate_battery_optimization",
+          "lineno": 3110,
+          "docstring": null,
+          "args": [
+            "self",
+            "system_data"
+          ],
+          "returns": null,
+          "class": "MockExtendedCalculations"
+        },
+        {
+          "name": "integrate_advanced_calculations",
+          "lineno": 5327,
+          "docstring": "Haupt-Integration der erweiterten Berechnungen",
+          "args": [
+            "texts"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_technical_calculations",
+          "lineno": 5796,
+          "docstring": "Technische Berechnungen",
+          "args": [
+            "integrator",
+            "calc_results",
+            "project_data",
+            "texts",
+            "session_suffix"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_environmental_calculations",
+          "lineno": 6283,
+          "docstring": "Umwelt- und Nachhaltigkeitsberechnungen",
+          "args": [
+            "integrator",
+            "calc_results",
+            "project_data",
+            "texts",
+            "session_suffix"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "prepare_advanced_calculations_for_pdf_export",
+          "lineno": 9148,
+          "docstring": "Bereitet erweiterte Berechnungen für PDF-Export vor",
+          "args": [
+            "calc_results",
+            "project_data",
+            "texts"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "render_advanced_calculations_section",
+          "lineno": 9291,
+          "docstring": "Rendert die erweiterte Berechnungssektion",
+          "args": [
+            "project_data",
+            "calc_results",
+            "texts"
+          ],
+          "returns": null,
+          "class": null
+        }
+      ],
+      "charts": [
+        {
+          "name": "_plotly_chart_collapsible",
+          "lineno": 127,
+          "docstring": "Wrappt Plotly-Charts in einen zugeklappten Expander.\n\n- Titel: aus fig.layout.title.text, sonst aus kwargs['expander_title'], sonst generisch.\n- expanded=False: immer zu Beginn zugeklappt.",
+          "args": [
+            "figure_or_data"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_ensure_plotly_chart_unwrapped",
+          "lineno": 157,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "create_universal_2d_chart",
+          "lineno": 1063,
+          "docstring": "Universelle Funktion für 2D-Diagramme mit Typ- und Farbwahl",
+          "args": [
+            "data",
+            "title",
+            "chart_key",
+            "x_label",
+            "y_label",
+            "default_chart_type",
+            "default_colors"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_create_chart_by_type",
+          "lineno": 1178,
+          "docstring": "Erstellt das spezifische Diagramm basierend auf dem gewählten Typ",
+          "args": [
+            "data",
+            "chart_type",
+            "colors",
+            "title",
+            "x_label",
+            "y_label"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "create_four_type_chart",
+          "lineno": 1352,
+          "docstring": "Spezielle Helper-Funktion nur mit vier erlaubten Typen: Balken, Säulen, Kreis, Donut.\nUnterstützt entweder (x,y) oder (labels,values).",
+          "args": [
+            "data",
+            "title",
+            "chart_key",
+            "x_label",
+            "y_label"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "create_multi_series_2d_chart",
+          "lineno": 1412,
+          "docstring": "Erstellt 2D-Diagramme für mehrere Datenreihen",
+          "args": [
+            "data",
+            "title",
+            "chart_key",
+            "x_label",
+            "y_label",
+            "default_chart_type"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_export_plotly_fig_to_bytes",
+          "lineno": 1750,
+          "docstring": null,
+          "args": [
+            "fig",
+            "texts"
+          ],
+          "returns": "bytes | None",
+          "class": null
+        },
+        {
+          "name": "_add_chart_controls",
+          "lineno": 1973,
+          "docstring": null,
+          "args": [
+            "chart_key_prefix",
+            "texts",
+            "default_type",
+            "supported_types",
+            "viz_settings"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_create_monthly_production_consumption_chart",
+          "lineno": 4551,
+          "docstring": null,
+          "args": [
+            "analysis_results_local",
+            "texts_local",
+            "viz_settings",
+            "chart_key_prefix"
+          ],
+          "returns": "go.Figure | None",
+          "class": null
+        },
+        {
+          "name": "_create_electricity_cost_projection_chart",
+          "lineno": 4728,
+          "docstring": null,
+          "args": [
+            "analysis_results_local",
+            "texts_local",
+            "viz_settings",
+            "chart_key_prefix"
+          ],
+          "returns": "go.Figure | None",
+          "class": null
+        },
+        {
+          "name": "_create_cumulative_cashflow_chart",
+          "lineno": 4853,
+          "docstring": null,
+          "args": [
+            "analysis_results_local",
+            "texts_local",
+            "viz_settings",
+            "chart_key_prefix"
+          ],
+          "returns": "go.Figure | None",
+          "class": null
+        }
+      ],
+      "financial_features": [
+        {
+          "name": "_render_financial_section",
+          "lineno": 847,
+          "docstring": "Finanzielle Analyse-Sektion",
+          "args": [
+            "results",
+            "texts",
+            "viz_settings"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "integrate_advanced_calculations",
+          "lineno": 985,
+          "docstring": "Integrator für erweiterte Berechnungen und Analysen",
+          "args": [
+            "texts"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "calculate_financial_scenarios",
+          "lineno": 3075,
+          "docstring": null,
+          "args": [
+            "self",
+            "system_data"
+          ],
+          "returns": null,
+          "class": "MockExtendedCalculations"
+        },
+        {
+          "name": "integrate_advanced_calculations",
+          "lineno": 5327,
+          "docstring": "Haupt-Integration der erweiterten Berechnungen",
+          "args": [
+            "texts"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_financial_scenarios",
+          "lineno": 6058,
+          "docstring": "Finanzielle Szenarien",
+          "args": [
+            "integrator",
+            "calc_results",
+            "project_data",
+            "texts",
+            "session_suffix"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "prepare_financing_data_for_pdf_export",
+          "lineno": 6684,
+          "docstring": "Bereitet alle Finanzierungsdaten für PDF-Export vor",
+          "args": [
+            "results",
+            "texts"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "get_financing_data_summary",
+          "lineno": 6786,
+          "docstring": "Gibt eine Übersicht über verfügbare Finanzierungsdaten für PDF-Export zurück",
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_financing_analysis",
+          "lineno": 8373,
+          "docstring": "Rendert eine umfassende Finanzierungsanalyse mit verschiedenen Finanzierungsoptionen.",
+          "args": [
+            "results",
+            "texts",
+            "viz_settings"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_advanced_financial_analysis",
+          "lineno": 9330,
+          "docstring": "Rendert erweiterte Finanzanalyse",
+          "args": [
+            "results",
+            "texts"
+          ],
+          "returns": null,
+          "class": null
+        }
+      ],
+      "all_functions": [
+        {
+          "name": "perform_calculations",
+          "lineno": 70,
+          "docstring": null,
+          "args": [
+            "project_data",
+            "texts",
+            "errors_list",
+            "simulation_duration_user",
+            "electricity_price_increase_user"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "__getattr__",
+          "lineno": 76,
+          "docstring": null,
+          "args": [
+            "self",
+            "name"
+          ],
+          "returns": null,
+          "class": "ExtendedCalculations"
+        },
+        {
+          "name": "dummy",
+          "lineno": 77,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": "ExtendedCalculations"
+        },
+        {
+          "name": "load_admin_setting",
+          "lineno": 94,
+          "docstring": null,
+          "args": [
+            "key",
+            "default"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_plotly_chart_collapsible",
+          "lineno": 127,
+          "docstring": "Wrappt Plotly-Charts in einen zugeklappten Expander.\n\n- Titel: aus fig.layout.title.text, sonst aus kwargs['expander_title'], sonst generisch.\n- expanded=False: immer zu Beginn zugeklappt.",
+          "args": [
+            "figure_or_data"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_ensure_plotly_chart_unwrapped",
+          "lineno": 157,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_smart_expander",
+          "lineno": 188,
+          "docstring": null,
+          "args": [
+            "label",
+            "expanded"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "get_text",
+          "lineno": 218,
+          "docstring": null,
+          "args": [
+            "texts_dict",
+            "key",
+            "fallback_text"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "format_kpi_value",
+          "lineno": 226,
+          "docstring": null,
+          "args": [
+            "value",
+            "unit",
+            "na_text_key",
+            "precision",
+            "texts_dict"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "render_pricing_modifications_ui",
+          "lineno": 298,
+          "docstring": "Zeigt die UI für Preismodifikationen (Rabatte, Aufschläge etc.)",
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_render_overview_section",
+          "lineno": 310,
+          "docstring": "Übersichts-Sektion mit umfassenden KPIs rendern",
+          "args": [
+            "results",
+            "texts",
+            "viz_settings"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "get_final_investment_amount",
+          "lineno": 362,
+          "docstring": "Holt den finalen Investitionsbetrag mit korrekter Priorität:\n1. Preisänderungen (höchste Priorität)\n2. Provision \n3. Basis-Nettobetrag\n4. Fallback aus results",
+          "args": [
+            "results"
+          ],
+          "returns": "float",
+          "class": null
+        },
+        {
+          "name": "_render_financial_section",
+          "lineno": 847,
+          "docstring": "Finanzielle Analyse-Sektion",
+          "args": [
+            "results",
+            "texts",
+            "viz_settings"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_render_energy_section",
+          "lineno": 888,
+          "docstring": "Energie-Analyse-Sektion",
+          "args": [
+            "results",
+            "texts",
+            "viz_settings"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_render_technical_section",
+          "lineno": 954,
+          "docstring": "Technische Analyse-Sektion",
+          "args": [
+            "results",
+            "texts",
+            "viz_settings"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_render_environment_section",
+          "lineno": 961,
+          "docstring": "Umwelt-Analyse-Sektion",
+          "args": [
+            "results",
+            "texts",
+            "viz_settings"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "integrate_advanced_calculations",
+          "lineno": 985,
+          "docstring": "Integrator für erweiterte Berechnungen und Analysen",
+          "args": [
+            "texts"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_create_kpi_card",
+          "lineno": 1008,
+          "docstring": "Erstellt eine einzelne KPI-Karte im Streamlit-Layout.",
+          "args": [
+            "label",
+            "value",
+            "help_text"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_get_default_viz_settings",
+          "lineno": 1013,
+          "docstring": "Lädt Standard-Visualisierungseinstellungen",
+          "args": [],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "load_viz_settings",
+          "lineno": 1025,
+          "docstring": "Lädt Visualisierungseinstellungen aus der DB oder verwendet Defaults.",
+          "args": [
+            "db_load_func"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        }
+      ]
+    },
+    "doc_output.py": {
+      "file": "doc_output.py",
+      "total_functions": 9,
+      "total_classes": 0,
+      "calculations": [],
+      "charts": [],
+      "financial_features": [
+        {
+          "name": "_dummy_generate_offer_pdf",
+          "lineno": 51,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        }
+      ],
+      "all_functions": [
+        {
+          "name": "_dummy_load_admin_setting_pdf_ui",
+          "lineno": 42,
+          "docstring": null,
+          "args": [
+            "key",
+            "default"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_save_admin_setting_pdf_ui",
+          "lineno": 50,
+          "docstring": null,
+          "args": [
+            "key",
+            "value"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_generate_offer_pdf",
+          "lineno": 51,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_get_active_company_details",
+          "lineno": 56,
+          "docstring": null,
+          "args": [],
+          "returns": "dict[str, Any] | None",
+          "class": null
+        },
+        {
+          "name": "_dummy_list_company_documents",
+          "lineno": 58,
+          "docstring": null,
+          "args": [
+            "company_id",
+            "doc_type"
+          ],
+          "returns": "list[dict[str, Any]]",
+          "class": null
+        },
+        {
+          "name": "get_text_pdf_ui",
+          "lineno": 76,
+          "docstring": null,
+          "args": [
+            "texts_dict",
+            "key",
+            "fallback_text"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "_show_pdf_data_status",
+          "lineno": 81,
+          "docstring": "Zeigt den Status der verfügbaren Daten für die PDF-Erstellung an und gibt zurück, ob die Daten ausreichen.",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "texts"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "render_pdf_ui",
+          "lineno": 161,
+          "docstring": null,
+          "args": [
+            "texts",
+            "project_data",
+            "analysis_results",
+            "load_admin_setting_func",
+            "save_admin_setting_func",
+            "list_products_func",
+            "get_product_by_id_func",
+            "get_active_company_details_func",
+            "db_list_company_documents_func"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "show_pdf_generation_ui_with_status",
+          "lineno": 2389,
+          "docstring": "Erweiterte PDF-Generierungs-UI mit Datenstatus-Anzeige und besseren Fallback-Optionen.",
+          "args": [
+            "texts",
+            "project_data",
+            "analysis_results",
+            "load_admin_setting_func",
+            "save_admin_setting_func",
+            "list_products_func",
+            "get_product_by_id_func",
+            "get_active_company_details_func",
+            "db_list_company_documents_func"
+          ],
+          "returns": null,
+          "class": null
+        }
+      ]
+    },
+    "pdf_generator.py": {
+      "file": "pdf_generator.py",
+      "total_functions": 117,
+      "total_classes": 9,
+      "calculations": [
+        {
+          "name": "_analyze_pricing_key_categories",
+          "lineno": 1507,
+          "docstring": "Analyze pricing keys by category\n\nReturns:\n    Dictionary with category names and counts",
+          "args": [
+            "self"
+          ],
+          "returns": "dict[str, int]",
+          "class": "PDFGenerator"
+        }
+      ],
+      "charts": [
+        {
+          "name": "_sanitize_chart_title",
+          "lineno": 2379,
+          "docstring": "Entfernt alle Klammerzusätze wie \"(Jahr 1)\", \"(3D)\" aus einem Titel und trimmt Whitespace.",
+          "args": [
+            "raw_title"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "_build_chart_kpi_html",
+          "lineno": 2434,
+          "docstring": "Erzeugt eine kompakte KPI-Zeile passend zum Diagramm. Leerstring, wenn nichts Passendes vorhanden ist.",
+          "args": [
+            "chart_key",
+            "analysis",
+            "texts"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "_get_chart_description",
+          "lineno": 2962,
+          "docstring": "Gibt eine ausführliche, persönliche und ansprechende Beschreibung für das angegebene Diagramm zurück.\n\nArgs:\n    chart_key: Schlüssel des Diagramms\n    texts: Text-Dictionary\n    analysis_results: Optional - Analyseergebnisse mit dynamisch generierten Beschreibungen\n    \nReturns:\n    Formatierte Beschreibung als String",
+          "args": [
+            "chart_key",
+            "texts",
+            "analysis_results"
+          ],
+          "returns": "str",
+          "class": null
+        }
+      ],
+      "financial_features": [
+        {
+          "name": "_generate_pricing_keys",
+          "lineno": 156,
+          "docstring": "Generate dynamic pricing keys for PDF integration",
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "_generate_basic_keys",
+          "lineno": 1114,
+          "docstring": "Generate basic keys from offer data",
+          "args": [
+            "self"
+          ],
+          "returns": "dict[str, str]",
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "_generate_automatic_keys",
+          "lineno": 1142,
+          "docstring": "Generate automatic keys from offer items and pricing data\n\nReturns:\n    Dictionary with automatically generated keys",
+          "args": [
+            "self"
+          ],
+          "returns": "dict[str, str]",
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "_generate_basic_keys",
+          "lineno": 1429,
+          "docstring": "Generate basic keys from offer data\n\nReturns:\n    Dictionary with basic dynamic keys",
+          "args": [
+            "self"
+          ],
+          "returns": "dict[str, str]",
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "generate_main_template_pdf_bytes",
+          "lineno": 1616,
+          "docstring": "Erzeugt die 6-seitige Hauptausgabe basierend auf coords/ und pdf_templates_static/notext/.\n\nNutzt pdf_template_engine: liest YML-Koordinaten, erstellt Text-Overlay nach\nPlatzhalter-Mapping und fusioniert mit den sechs statischen Template-PDFs.",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "company_info",
+            "additional_pdf"
+          ],
+          "returns": "bytes | None",
+          "class": null
+        },
+        {
+          "name": "generate_offer_pdf_with_main_templates",
+          "lineno": 1745,
+          "docstring": "Neue Gesamt-Generatorfunktion:\n1) Erzeuge 8-seitige Hauptausgabe per Templates (coords + notext PDFs)  # MIGRATION: Changed from 7 to 8\n2) Erzeuge bisheriges PDF als Zusatz (ohne Deckblatt/Anschreiben)\n3) Hänge es an die 8 Seiten an und liefere Bytes  # MIGRATION: Changed from 7 to 8",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "company_info",
+            "company_logo_base64",
+            "selected_title_image_b64",
+            "selected_offer_title_text",
+            "selected_cover_letter_text",
+            "sections_to_include",
+            "inclusion_options",
+            "load_admin_setting_func",
+            "save_admin_setting_func",
+            "list_products_func",
+            "get_product_by_id_func",
+            "db_list_company_documents_func",
+            "active_company_id",
+            "texts",
+            "use_modern_design"
+          ],
+          "returns": "bytes | None",
+          "class": null
+        },
+        {
+          "name": "generate_offer_pdf_simple",
+          "lineno": 2395,
+          "docstring": null,
+          "args": [
+            "project_data",
+            "analysis_results",
+            "company_info",
+            "texts",
+            "inclusion_options"
+          ],
+          "returns": "bytes | None",
+          "class": null
+        },
+        {
+          "name": "_generate_complete_salutation_line",
+          "lineno": 3141,
+          "docstring": null,
+          "args": [
+            "customer_data",
+            "texts"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "generate_offer_pdf",
+          "lineno": 3736,
+          "docstring": null,
+          "args": [
+            "project_data",
+            "analysis_results",
+            "company_info",
+            "company_logo_base64",
+            "selected_title_image_b64",
+            "selected_offer_title_text",
+            "selected_cover_letter_text",
+            "sections_to_include",
+            "inclusion_options",
+            "load_admin_setting_func",
+            "save_admin_setting_func",
+            "list_products_func",
+            "get_product_by_id_func",
+            "db_list_company_documents_func",
+            "active_company_id",
+            "texts",
+            "use_modern_design"
+          ],
+          "returns": "bytes | None",
+          "class": null
+        }
+      ],
+      "all_functions": [
+        {
+          "name": "get_cover_letter_template",
+          "lineno": 33,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "get_project_summary_template",
+          "lineno": 36,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_filter_unwanted_words_from_model_name",
+          "lineno": 42,
+          "docstring": "Dummy-Funktion: Gibt den model_name unverändert zurück.\nFilter wurde entfernt wie gewünscht.\n\nArgs:\n    model_name: Modellname\n\nReturns:\n    Unveränderten Modellnamen",
+          "args": [
+            "model_name"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "__init__",
+          "lineno": 94,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PdfReader"
+        },
+        {
+          "name": "pages",
+          "lineno": 96,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PdfReader"
+        },
+        {
+          "name": "__init__",
+          "lineno": 99,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PdfWriter"
+        },
+        {
+          "name": "add_page",
+          "lineno": 100,
+          "docstring": null,
+          "args": [
+            "self",
+            "page"
+          ],
+          "returns": null,
+          "class": "PdfWriter"
+        },
+        {
+          "name": "write",
+          "lineno": 101,
+          "docstring": null,
+          "args": [
+            "self",
+            "stream"
+          ],
+          "returns": null,
+          "class": "PdfWriter"
+        },
+        {
+          "name": "__init__",
+          "lineno": 105,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PdfReader"
+        },
+        {
+          "name": "pages",
+          "lineno": 107,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PdfReader"
+        },
+        {
+          "name": "__init__",
+          "lineno": 110,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PdfWriter"
+        },
+        {
+          "name": "add_page",
+          "lineno": 111,
+          "docstring": null,
+          "args": [
+            "self",
+            "page"
+          ],
+          "returns": null,
+          "class": "PdfWriter"
+        },
+        {
+          "name": "write",
+          "lineno": 112,
+          "docstring": null,
+          "args": [
+            "self",
+            "stream"
+          ],
+          "returns": null,
+          "class": "PdfWriter"
+        },
+        {
+          "name": "__init__",
+          "lineno": 119,
+          "docstring": null,
+          "args": [
+            "self",
+            "offer_data",
+            "module_order",
+            "theme_name",
+            "filename",
+            "pricing_data"
+          ],
+          "returns": null,
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "_init_pricing_integration",
+          "lineno": 140,
+          "docstring": "Initialize pricing system integration",
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "_generate_pricing_keys",
+          "lineno": 156,
+          "docstring": "Generate dynamic pricing keys for PDF integration",
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "_header_footer",
+          "lineno": 211,
+          "docstring": "Erstellt die Kopf- und Fußzeile für jede Seite.",
+          "args": [
+            "self",
+            "canvas",
+            "doc"
+          ],
+          "returns": null,
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "create_pdf",
+          "lineno": 245,
+          "docstring": "Hauptfunktion, die alle Module zusammensetzt und das PDF speichert.",
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "_get_module_map",
+          "lineno": 295,
+          "docstring": "Get mapping of module IDs to their drawing functions",
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PDFGenerator"
+        },
+        {
+          "name": "_draw_cover_page",
+          "lineno": 307,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "PDFGenerator"
+        }
+      ]
+    },
+    "pdf_ui.py": {
+      "file": "pdf_ui.py",
+      "total_functions": 44,
+      "total_classes": 0,
+      "calculations": [],
+      "charts": [
+        {
+          "name": "check_chart_availability",
+          "lineno": 233,
+          "docstring": "Prüft ob ein Diagramm basierend auf den Projektdaten verfügbar ist.\n\nArgs:\n    chart_key: Schlüssel des Diagramms\n    project_data: Projekt-Daten mit customer_data, project_details, etc.\n    analysis_results: Analyse-Ergebnisse mit berechneten Werten\n    \nReturns:\n    True wenn Diagramm verfügbar, sonst False",
+          "args": [
+            "chart_key",
+            "project_data",
+            "analysis_results"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "render_chart_selection_ui",
+          "lineno": 447,
+          "docstring": "Rendert die Diagrammauswahl-UI mit Kategorisierung und Verfügbarkeits-Prüfung.\n\nArgs:\n    project_data: Projekt-Daten\n    analysis_results: Analyse-Ergebnisse\n    texts: Übersetzungstexte\n    \nReturns:\n    Liste der ausgewählten Diagramm-Schlüssel",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "texts"
+          ],
+          "returns": "list[str]",
+          "class": null
+        },
+        {
+          "name": "generate_chart_thumbnail",
+          "lineno": 591,
+          "docstring": "Generiert ein Thumbnail (Vorschaubild) für ein Diagramm.\n\nArgs:\n    chart_bytes: PNG-Bytes des Original-Diagramms\n    thumbnail_width: Breite des Thumbnails in Pixeln\n    thumbnail_height: Höhe des Thumbnails in Pixeln\n    \nReturns:\n    PNG-Bytes des Thumbnails oder None bei Fehler",
+          "args": [
+            "chart_bytes",
+            "thumbnail_width",
+            "thumbnail_height"
+          ],
+          "returns": "bytes | None",
+          "class": null
+        },
+        {
+          "name": "render_chart_preview_grid",
+          "lineno": 698,
+          "docstring": "Rendert ein Grid mit Vorschaubildern der ausgewählten Diagramme.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    analysis_results: Analyse-Ergebnisse mit generierten Diagrammen\n    columns: Anzahl der Spalten im Grid",
+          "args": [
+            "selected_charts",
+            "analysis_results",
+            "columns"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_chart_preview_carousel",
+          "lineno": 770,
+          "docstring": "Rendert eine Karussell-Ansicht der ausgewählten Diagramme.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    analysis_results: Analyse-Ergebnisse mit generierten Diagrammen",
+          "args": [
+            "selected_charts",
+            "analysis_results"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_chart_preview_tabs",
+          "lineno": 835,
+          "docstring": "Rendert Tabs mit Vorschaubildern gruppiert nach Kategorien.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    analysis_results: Analyse-Ergebnisse mit generierten Diagrammen",
+          "args": [
+            "selected_charts",
+            "analysis_results"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_chart_preview_interface",
+          "lineno": 903,
+          "docstring": "Hauptfunktion zum Rendern der Diagramm-Vorschau-Oberfläche.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    analysis_results: Analyse-Ergebnisse mit generierten Diagrammen\n    preview_mode: Vorschau-Modus ('grid', 'carousel', 'tabs')",
+          "args": [
+            "selected_charts",
+            "analysis_results",
+            "preview_mode"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "initialize_chart_selection_state",
+          "lineno": 949,
+          "docstring": "Initialisiert den Session State für die Diagrammauswahl.",
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "save_chart_selection_to_persistent_storage",
+          "lineno": 963,
+          "docstring": "Speichert die Diagrammauswahl persistent in der Datenbank.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    save_admin_setting_func: Funktion zum Speichern von Admin-Einstellungen\n    \nReturns:\n    True wenn erfolgreich gespeichert, sonst False",
+          "args": [
+            "selected_charts",
+            "save_admin_setting_func"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "load_chart_selection_from_persistent_storage",
+          "lineno": 993,
+          "docstring": "Lädt die gespeicherte Diagrammauswahl aus der Datenbank.\n\nArgs:\n    load_admin_setting_func: Funktion zum Laden von Admin-Einstellungen\n    \nReturns:\n    Liste der gespeicherten Diagramm-Schlüssel oder leere Liste",
+          "args": [
+            "load_admin_setting_func"
+          ],
+          "returns": "list[str]",
+          "class": null
+        },
+        {
+          "name": "render_chart_selection_info_panel",
+          "lineno": 1053,
+          "docstring": "Rendert ein Info-Panel mit Details zur Diagrammauswahl.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel",
+          "args": [
+            "selected_charts"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "manage_chart_selection_persistence",
+          "lineno": 1120,
+          "docstring": "Verwaltet das Laden und Speichern der Diagrammauswahl.\n\nArgs:\n    load_admin_setting_func: Funktion zum Laden von Admin-Einstellungen\n    save_admin_setting_func: Funktion zum Speichern von Admin-Einstellungen",
+          "args": [
+            "load_admin_setting_func",
+            "save_admin_setting_func"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "generate_selected_charts_only",
+          "lineno": 1209,
+          "docstring": "Generiert nur die ausgewählten Diagramme und gibt aktualisierte analysis_results zurück.\n\nArgs:\n    project_data: Projekt-Daten\n    analysis_results: Bestehende Analyse-Ergebnisse\n    selected_charts: Liste der zu generierenden Diagramm-Schlüssel\n    \nReturns:\n    Aktualisierte analysis_results mit nur den ausgewählten Diagrammen",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "selected_charts"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "validate_chart_data_availability",
+          "lineno": 1246,
+          "docstring": "Validiert ob alle benötigten Daten für ein Diagramm vorhanden sind.\n\nArgs:\n    chart_key: Schlüssel des zu validierenden Diagramms\n    project_data: Projekt-Daten\n    analysis_results: Analyse-Ergebnisse\n    \nReturns:\n    Tuple (is_valid, error_message)",
+          "args": [
+            "chart_key",
+            "project_data",
+            "analysis_results"
+          ],
+          "returns": "tuple[bool, str]",
+          "class": null
+        },
+        {
+          "name": "get_chart_generation_errors",
+          "lineno": 1279,
+          "docstring": "Ermittelt alle Fehler bei der Diagramm-Generierung.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramme\n    project_data: Projekt-Daten\n    analysis_results: Analyse-Ergebnisse\n    \nReturns:\n    Dictionary mit chart_key -> error_message für fehlerhafte Diagramme",
+          "args": [
+            "selected_charts",
+            "project_data",
+            "analysis_results"
+          ],
+          "returns": "dict[str, str]",
+          "class": null
+        },
+        {
+          "name": "render_chart_generation_status",
+          "lineno": 1305,
+          "docstring": "Zeigt den Status der Diagramm-Generierung an.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramme\n    project_data: Projekt-Daten\n    analysis_results: Analyse-Ergebnisse",
+          "args": [
+            "selected_charts",
+            "project_data",
+            "analysis_results"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "prepare_chart_data_for_pdf_generation",
+          "lineno": 1352,
+          "docstring": "Bereitet die Daten für die PDF-Generierung vor, indem nur ausgewählte Diagramme inkludiert werden.\n\nArgs:\n    project_data: Original Projekt-Daten\n    analysis_results: Original Analyse-Ergebnisse\n    selected_charts: Liste der ausgewählten Diagramme\n    \nReturns:\n    Tuple (prepared_project_data, prepared_analysis_results)",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "selected_charts"
+          ],
+          "returns": "tuple[dict[str, Any], dict[str, Any]]",
+          "class": null
+        },
+        {
+          "name": "_get_all_available_chart_keys",
+          "lineno": 1401,
+          "docstring": null,
+          "args": [
+            "analysis_results",
+            "chart_key_map"
+          ],
+          "returns": "list[str]",
+          "class": null
+        }
+      ],
+      "financial_features": [
+        {
+          "name": "_dummy_generate_offer_pdf",
+          "lineno": 44,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "generate_chart_thumbnail",
+          "lineno": 591,
+          "docstring": "Generiert ein Thumbnail (Vorschaubild) für ein Diagramm.\n\nArgs:\n    chart_bytes: PNG-Bytes des Original-Diagramms\n    thumbnail_width: Breite des Thumbnails in Pixeln\n    thumbnail_height: Höhe des Thumbnails in Pixeln\n    \nReturns:\n    PNG-Bytes des Thumbnails oder None bei Fehler",
+          "args": [
+            "chart_bytes",
+            "thumbnail_width",
+            "thumbnail_height"
+          ],
+          "returns": "bytes | None",
+          "class": null
+        },
+        {
+          "name": "generate_selected_charts_only",
+          "lineno": 1209,
+          "docstring": "Generiert nur die ausgewählten Diagramme und gibt aktualisierte analysis_results zurück.\n\nArgs:\n    project_data: Projekt-Daten\n    analysis_results: Bestehende Analyse-Ergebnisse\n    selected_charts: Liste der zu generierenden Diagramm-Schlüssel\n    \nReturns:\n    Aktualisierte analysis_results mit nur den ausgewählten Diagrammen",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "selected_charts"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "prepare_payment_data_for_pdf_generation",
+          "lineno": 3879,
+          "docstring": "Bereitet die ausgewählten Zahlungsmodalitäten für die PDF-Generierung vor.\n\nArgs:\n    load_admin_setting_func: Funktion zum Laden der Admin-Einstellungen\n\nReturns:\n    Dictionary mit Zahlungsdaten für PDF-Generator oder None",
+          "args": [
+            "load_admin_setting_func"
+          ],
+          "returns": "dict[str, Any] | None",
+          "class": null
+        },
+        {
+          "name": "get_payment_data_for_pdf",
+          "lineno": 3983,
+          "docstring": "Convenience-Funktion zum Abrufen der Zahlungsdaten für PDF-Generatoren.\n\nReturns:\n    Zahlungsdaten oder None",
+          "args": [],
+          "returns": null,
+          "class": null
+        }
+      ],
+      "all_functions": [
+        {
+          "name": "_dummy_load_admin_setting_pdf_ui",
+          "lineno": 27,
+          "docstring": null,
+          "args": [
+            "key",
+            "default"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_save_admin_setting_pdf_ui",
+          "lineno": 41,
+          "docstring": null,
+          "args": [
+            "key",
+            "value"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_generate_offer_pdf",
+          "lineno": 44,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_get_active_company_details",
+          "lineno": 49,
+          "docstring": null,
+          "args": [],
+          "returns": "dict[str, Any] | None",
+          "class": null
+        },
+        {
+          "name": "_dummy_list_company_documents",
+          "lineno": 53,
+          "docstring": null,
+          "args": [
+            "company_id",
+            "doc_type"
+          ],
+          "returns": "list[dict[str, Any]]",
+          "class": null
+        },
+        {
+          "name": "_format_decimal_de",
+          "lineno": 57,
+          "docstring": null,
+          "args": [
+            "value",
+            "decimals"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "_format_percent_de",
+          "lineno": 65,
+          "docstring": null,
+          "args": [
+            "value"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "_format_currency_de",
+          "lineno": 69,
+          "docstring": null,
+          "args": [
+            "value"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "show_pdf_preview_interface",
+          "lineno": 89,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "create_pdf_template_presets",
+          "lineno": 93,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "check_chart_availability",
+          "lineno": 233,
+          "docstring": "Prüft ob ein Diagramm basierend auf den Projektdaten verfügbar ist.\n\nArgs:\n    chart_key: Schlüssel des Diagramms\n    project_data: Projekt-Daten mit customer_data, project_details, etc.\n    analysis_results: Analyse-Ergebnisse mit berechneten Werten\n    \nReturns:\n    True wenn Diagramm verfügbar, sonst False",
+          "args": [
+            "chart_key",
+            "project_data",
+            "analysis_results"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "render_chart_selection_ui",
+          "lineno": 447,
+          "docstring": "Rendert die Diagrammauswahl-UI mit Kategorisierung und Verfügbarkeits-Prüfung.\n\nArgs:\n    project_data: Projekt-Daten\n    analysis_results: Analyse-Ergebnisse\n    texts: Übersetzungstexte\n    \nReturns:\n    Liste der ausgewählten Diagramm-Schlüssel",
+          "args": [
+            "project_data",
+            "analysis_results",
+            "texts"
+          ],
+          "returns": "list[str]",
+          "class": null
+        },
+        {
+          "name": "generate_chart_thumbnail",
+          "lineno": 591,
+          "docstring": "Generiert ein Thumbnail (Vorschaubild) für ein Diagramm.\n\nArgs:\n    chart_bytes: PNG-Bytes des Original-Diagramms\n    thumbnail_width: Breite des Thumbnails in Pixeln\n    thumbnail_height: Höhe des Thumbnails in Pixeln\n    \nReturns:\n    PNG-Bytes des Thumbnails oder None bei Fehler",
+          "args": [
+            "chart_bytes",
+            "thumbnail_width",
+            "thumbnail_height"
+          ],
+          "returns": "bytes | None",
+          "class": null
+        },
+        {
+          "name": "create_placeholder_thumbnail",
+          "lineno": 633,
+          "docstring": "Erstellt ein Platzhalter-Thumbnail wenn kein Diagramm verfügbar ist.\n\nArgs:\n    width: Breite des Platzhalters in Pixeln\n    height: Höhe des Platzhalters in Pixeln\n    text: Text der im Platzhalter angezeigt wird\n    \nReturns:\n    PNG-Bytes des Platzhalters",
+          "args": [
+            "width",
+            "height",
+            "text"
+          ],
+          "returns": "bytes",
+          "class": null
+        },
+        {
+          "name": "render_chart_preview_grid",
+          "lineno": 698,
+          "docstring": "Rendert ein Grid mit Vorschaubildern der ausgewählten Diagramme.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    analysis_results: Analyse-Ergebnisse mit generierten Diagrammen\n    columns: Anzahl der Spalten im Grid",
+          "args": [
+            "selected_charts",
+            "analysis_results",
+            "columns"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_chart_preview_carousel",
+          "lineno": 770,
+          "docstring": "Rendert eine Karussell-Ansicht der ausgewählten Diagramme.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    analysis_results: Analyse-Ergebnisse mit generierten Diagrammen",
+          "args": [
+            "selected_charts",
+            "analysis_results"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_chart_preview_tabs",
+          "lineno": 835,
+          "docstring": "Rendert Tabs mit Vorschaubildern gruppiert nach Kategorien.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    analysis_results: Analyse-Ergebnisse mit generierten Diagrammen",
+          "args": [
+            "selected_charts",
+            "analysis_results"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_chart_preview_interface",
+          "lineno": 903,
+          "docstring": "Hauptfunktion zum Rendern der Diagramm-Vorschau-Oberfläche.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    analysis_results: Analyse-Ergebnisse mit generierten Diagrammen\n    preview_mode: Vorschau-Modus ('grid', 'carousel', 'tabs')",
+          "args": [
+            "selected_charts",
+            "analysis_results",
+            "preview_mode"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "initialize_chart_selection_state",
+          "lineno": 949,
+          "docstring": "Initialisiert den Session State für die Diagrammauswahl.",
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "save_chart_selection_to_persistent_storage",
+          "lineno": 963,
+          "docstring": "Speichert die Diagrammauswahl persistent in der Datenbank.\n\nArgs:\n    selected_charts: Liste der ausgewählten Diagramm-Schlüssel\n    save_admin_setting_func: Funktion zum Speichern von Admin-Einstellungen\n    \nReturns:\n    True wenn erfolgreich gespeichert, sonst False",
+          "args": [
+            "selected_charts",
+            "save_admin_setting_func"
+          ],
+          "returns": "bool",
+          "class": null
+        }
+      ]
+    },
+    "calculations.py": {
+      "file": "calculations.py",
+      "total_functions": 73,
+      "total_classes": 8,
+      "calculations": [
+        {
+          "name": "Dummy_load_admin_setting_calc",
+          "lineno": 64,
+          "docstring": null,
+          "args": [
+            "key",
+            "default"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "Dummy_list_products_calc",
+          "lineno": 204,
+          "docstring": null,
+          "args": [
+            "category"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "Dummy_get_product_by_id_calc",
+          "lineno": 208,
+          "docstring": null,
+          "args": [
+            "product_id"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "Dummy_get_product_by_model_name_calc",
+          "lineno": 212,
+          "docstring": null,
+          "args": [
+            "model_name"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_update_enhanced_pricing_in_calculation_results",
+          "lineno": 646,
+          "docstring": "Update calculation results with enhanced pricing data if available",
+          "args": [
+            "results"
+          ],
+          "returns": "None",
+          "class": null
+        },
+        {
+          "name": "calculate_enhanced_pricing",
+          "lineno": 743,
+          "docstring": "Calculate pricing using the enhanced pricing system\n\nArgs:\n    components: List of component dictionaries with product info and quantities\n    system_type: Type of system (\"pv\", \"heatpump\", \"combined\")\n    vat_rate: VAT rate in percent\n    use_cache: Whether to use cached results if available\n    \nReturns:\n    Enhanced pricing calculation result or None if calculation fails",
+          "args": [
+            "components",
+            "system_type",
+            "vat_rate",
+            "use_cache"
+          ],
+          "returns": "dict[str, Any] | None",
+          "class": null
+        },
+        {
+          "name": "_calculate_final_price_with_correct_formula",
+          "lineno": 849,
+          "docstring": "Berechnet den finalen Preis mit der korrekten Formel: Matrixpreis + Zubehör - Rabatte.\n\nArgs:\n    base_matrix_price: Basis-Matrixpreis (netto)\n    additional_costs: Zusätzliche Kosten (Zubehör, etc.)\n    pricing_modifications: Dictionary mit Preismodifikationen\n    vat_rate_percent: MwSt-Satz in Prozent\n    one_time_bonus: Einmaliger Bonus (wird abgezogen)\n    debug_mode: Ob Debug-Ausgaben aktiviert sind\n    \nReturns:\n    Dictionary mit finalen Preisberechnungen",
+          "args": [
+            "base_matrix_price",
+            "additional_costs",
+            "pricing_modifications",
+            "vat_rate_percent",
+            "one_time_bonus",
+            "debug_mode"
+          ],
+          "returns": "dict[str, float]",
+          "class": null
+        },
+        {
+          "name": "_calculate_degradation",
+          "lineno": 1015,
+          "docstring": "Berechnet die Degradation über 25 Jahre",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_shading",
+          "lineno": 1040,
+          "docstring": "Berechnet detaillierte Verschattungsverluste",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_grid_interaction",
+          "lineno": 1091,
+          "docstring": "Analysiert die Netzinteraktion",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_battery_cycles",
+          "lineno": 1139,
+          "docstring": "Berechnet Batteriezyklen und Lebensdauer",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_weather_impact",
+          "lineno": 1169,
+          "docstring": "Berechnet den Einfluss von Wetterbedingungen",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_maintenance",
+          "lineno": 1214,
+          "docstring": "Erstellt einen Wartungsplan mit Kosten",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_carbon_footprint",
+          "lineno": 1282,
+          "docstring": "Berechnet detaillierte CO2-Bilanz",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_peak_shaving",
+          "lineno": 1318,
+          "docstring": "Berechnet Lastspitzenkappung",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_dynamic_pricing",
+          "lineno": 1380,
+          "docstring": "Optimierung bei dynamischen Strompreisen",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "_calculate_energy_independence",
+          "lineno": 1435,
+          "docstring": "Analysiert Energieunabhängigkeit über Zeit",
+          "args": [
+            "self",
+            "base_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_shading_analysis",
+          "lineno": 1494,
+          "docstring": "Stub für Verschattungsanalyse - noch nicht implementiert",
+          "args": [
+            "self",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_subsidy_scenarios",
+          "lineno": 1517,
+          "docstring": "Stub für Förderszenarien - noch nicht implementiert",
+          "args": [
+            "self",
+            "calc_results"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_detailed_co2_analysis",
+          "lineno": 1616,
+          "docstring": "Stub für detaillierte CO2-Analyse - noch nicht implementiert",
+          "args": [
+            "self",
+            "calc_results"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_recycling_potential",
+          "lineno": 1644,
+          "docstring": "Stub für Recycling-Potenzial - noch nicht implementiert",
+          "args": [
+            "self",
+            "calc_results",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_lcoe_advanced",
+          "lineno": 1693,
+          "docstring": "LCOE-Berechnung (Levelized Cost of Energy)",
+          "args": [
+            "self",
+            "lcoe_params"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_npv_sensitivity",
+          "lineno": 1748,
+          "docstring": "NPV-Sensitivitätsanalyse",
+          "args": [
+            "self",
+            "calc_results",
+            "discount_rate"
+          ],
+          "returns": "float",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_irr_advanced",
+          "lineno": 1764,
+          "docstring": "Erweiterte IRR-Berechnung",
+          "args": [
+            "self",
+            "calc_results"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_detailed_energy_flows",
+          "lineno": 1798,
+          "docstring": "Detaillierte Energieflüsse für Sankey-Diagramm",
+          "args": [
+            "self",
+            "calc_results"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_load_profile_analysis",
+          "lineno": 1871,
+          "docstring": "Lastprofilanalyse",
+          "args": [
+            "self",
+            "calc_results",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_shading_analysis",
+          "lineno": 1964,
+          "docstring": "Verschattungsanalyse",
+          "args": [
+            "self",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_temperature_effects",
+          "lineno": 2020,
+          "docstring": "Temperatureffekte auf die PV-Anlage",
+          "args": [
+            "self",
+            "calc_results",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_inverter_efficiency",
+          "lineno": 2056,
+          "docstring": "Wechselrichter-Effizienzanalyse",
+          "args": [
+            "self",
+            "calc_results",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_subsidy_scenarios",
+          "lineno": 2196,
+          "docstring": "Förderszenarien berechnen",
+          "args": [
+            "self",
+            "calc_results"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "calculate_detailed_co2_analysis",
+          "lineno": 2295,
+          "docstring": "Detaillierte CO2-Bilanz",
+          "args": [
+            "self",
+            "calc_results"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "perform_calculations",
+          "lineno": 2720,
+          "docstring": null,
+          "args": [
+            "project_data",
+            "texts",
+            "errors_list",
+            "simulation_duration_user",
+            "electricity_price_increase_user"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_scenarios",
+          "lineno": 4428,
+          "docstring": "Berechnet verschiedene Break-Even Szenarien",
+          "args": [
+            "self"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "BreakEvenAnalysis"
+        },
+        {
+          "name": "calculate_break_even_with_price_increase",
+          "lineno": 4461,
+          "docstring": "Break-Even Berechnung mit Strompreissteigerung",
+          "args": [
+            "self"
+          ],
+          "returns": "float",
+          "class": "BreakEvenAnalysis"
+        },
+        {
+          "name": "calculate_break_even_with_inflation",
+          "lineno": 4477,
+          "docstring": "Break-Even Berechnung mit Inflation (Real-Betrachtung)",
+          "args": [
+            "self"
+          ],
+          "returns": "float",
+          "class": "BreakEvenAnalysis"
+        },
+        {
+          "name": "calculate_optimistic_scenario",
+          "lineno": 4500,
+          "docstring": "Optimistisches Szenario mit erhöhter Strompreissteigerung",
+          "args": [
+            "self"
+          ],
+          "returns": "float",
+          "class": "BreakEvenAnalysis"
+        },
+        {
+          "name": "calculate_conservative_scenario",
+          "lineno": 4518,
+          "docstring": "Konservatives Szenario mit reduzierter Strompreissteigerung",
+          "args": [
+            "self"
+          ],
+          "returns": "float",
+          "class": "BreakEvenAnalysis"
+        },
+        {
+          "name": "calculate_degradation",
+          "lineno": 4603,
+          "docstring": null,
+          "args": [
+            "self",
+            "years"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "TechnicalDegradation"
+        },
+        {
+          "name": "calculate_offer_details",
+          "lineno": 4697,
+          "docstring": "Berechnet detaillierte Angebotsdaten für einen Kunden.\n\nArgs:\n    customer_id: Optional - ID des Kunden\n    project_data: Optional - Projektdaten für die Berechnung\n\nReturns:\n    Dict mit Angebotsdaten",
+          "args": [
+            "customer_id",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_storage_to_consumption_ratio",
+          "lineno": 4773,
+          "docstring": "Berechnet das Verhältnis der Speicherkapazität zum durchschnittlichen Tagesverbrauch\n\nArgs:\n    storage_capacity_kwh (float): Speicherkapazität in kWh\n    daily_consumption_kwh (float): Durchschnittlicher Tagesverbrauch in kWh\n\nReturns:\n    float: Prozentsatz der Speicherkapazität im Verhältnis zum Tagesverbrauch",
+          "args": [
+            "storage_capacity_kwh",
+            "daily_consumption_kwh"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "calculate_storage_to_production_ratio",
+          "lineno": 4788,
+          "docstring": "Berechnet das Verhältnis der Speicherkapazität zur durchschnittlichen PV-Tagesproduktion\n\nArgs:\n    storage_capacity_kwh (float): Speicherkapazität in kWh\n    daily_pv_production_kwh (float): Durchschnittliche PV-Tagesproduktion in kWh\n\nReturns:\n    float: Prozentsatz der Speicherkapazität im Verhältnis zur PV-Tagesproduktion",
+          "args": [
+            "storage_capacity_kwh",
+            "daily_pv_production_kwh"
+          ],
+          "returns": null,
+          "class": null
+        }
+      ],
+      "charts": [],
+      "financial_features": [
+        {
+          "name": "_generate_cache_key",
+          "lineno": 558,
+          "docstring": "Generate cache key for calculation data",
+          "args": [
+            "self",
+            "calculation_data"
+          ],
+          "returns": "str",
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "generate_optimization_suggestions",
+          "lineno": 1553,
+          "docstring": "Stub für Optimierungsvorschläge - noch nicht implementiert",
+          "args": [
+            "self",
+            "calc_results",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "generate_optimization_suggestions",
+          "lineno": 2352,
+          "docstring": "Optimierungsvorschläge generieren",
+          "args": [
+            "self",
+            "calc_results",
+            "project_data"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "AdvancedCalculationsIntegrator"
+        },
+        {
+          "name": "generate_maintenance_schedule",
+          "lineno": 4653,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "MaintenanceMonitoring"
+        }
+      ],
+      "all_functions": [
+        {
+          "name": "info",
+          "lineno": 50,
+          "docstring": null,
+          "args": [
+            "msg"
+          ],
+          "returns": null,
+          "class": "DummySt"
+        },
+        {
+          "name": "warning",
+          "lineno": 52,
+          "docstring": null,
+          "args": [
+            "msg"
+          ],
+          "returns": null,
+          "class": "DummySt"
+        },
+        {
+          "name": "error",
+          "lineno": 54,
+          "docstring": null,
+          "args": [
+            "msg"
+          ],
+          "returns": null,
+          "class": "DummySt"
+        },
+        {
+          "name": "info",
+          "lineno": 57,
+          "docstring": null,
+          "args": [
+            "msg"
+          ],
+          "returns": null,
+          "class": "sidebar"
+        },
+        {
+          "name": "Dummy_load_admin_setting_calc",
+          "lineno": 64,
+          "docstring": null,
+          "args": [
+            "key",
+            "default"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "Dummy_list_products_calc",
+          "lineno": 204,
+          "docstring": null,
+          "args": [
+            "category"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "Dummy_get_product_by_id_calc",
+          "lineno": 208,
+          "docstring": null,
+          "args": [
+            "product_id"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "Dummy_get_product_by_model_name_calc",
+          "lineno": 212,
+          "docstring": null,
+          "args": [
+            "model_name"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_collect_pricing_modifications_from_session",
+          "lineno": 266,
+          "docstring": "Sammelt alle Preismodifikationen aus verschiedenen Session State Quellen.\n\nReturns:\n    Dictionary mit standardisierten Preismodifikationen",
+          "args": [],
+          "returns": "dict[str, float]",
+          "class": null
+        },
+        {
+          "name": "_to_float",
+          "lineno": 278,
+          "docstring": null,
+          "args": [
+            "val",
+            "default"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "__init__",
+          "lineno": 318,
+          "docstring": null,
+          "args": [
+            "self"
+          ],
+          "returns": null,
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "get_pricing_engine",
+          "lineno": 331,
+          "docstring": "Get or create pricing engine for system type",
+          "args": [
+            "self",
+            "system_type"
+          ],
+          "returns": null,
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "update_pricing_in_session_state",
+          "lineno": 342,
+          "docstring": "Update session state with enhanced pricing calculations\n\nArgs:\n    calculation_data: Complete calculation data including components and modifications\n    system_type: Type of system (\"pv\", \"heatpump\", \"combined\")\n    \nReturns:\n    True if update was successful, False otherwise",
+          "args": [
+            "self",
+            "calculation_data",
+            "system_type"
+          ],
+          "returns": "bool",
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "get_cached_pricing",
+          "lineno": 459,
+          "docstring": "Get cached pricing data if available and valid\n\nArgs:\n    calculation_data: Current calculation data to check against cache\n    system_type: Type of system (\"pv\", \"heatpump\", \"combined\")\n    \nReturns:\n    Cached pricing data if valid, None otherwise",
+          "args": [
+            "self",
+            "calculation_data",
+            "system_type"
+          ],
+          "returns": "dict[str, Any] | None",
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "invalidate_pricing_cache",
+          "lineno": 498,
+          "docstring": "Invalidate pricing cache for specific system type or all systems\n\nArgs:\n    system_type: System type to invalidate, or None for all systems",
+          "args": [
+            "self",
+            "system_type"
+          ],
+          "returns": "None",
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "get_pricing_modifications_from_session",
+          "lineno": 541,
+          "docstring": "Get pricing modifications from session state in enhanced format\n\nReturns:\n    Dictionary with pricing modifications compatible with enhanced pricing engine",
+          "args": [
+            "self"
+          ],
+          "returns": "dict[str, Any]",
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "_generate_cache_key",
+          "lineno": 558,
+          "docstring": "Generate cache key for calculation data",
+          "args": [
+            "self",
+            "calculation_data"
+          ],
+          "returns": "str",
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "_update_legacy_pricing_fields",
+          "lineno": 579,
+          "docstring": "Update legacy pricing fields in session state for backward compatibility",
+          "args": [
+            "self",
+            "final_result",
+            "system_type"
+          ],
+          "returns": "None",
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "_invalidate_dependent_caches",
+          "lineno": 619,
+          "docstring": "Invalidate caches that depend on pricing calculations",
+          "args": [
+            "self",
+            "system_type"
+          ],
+          "returns": "None",
+          "class": "EnhancedPricingSessionManager"
+        },
+        {
+          "name": "_update_enhanced_pricing_in_calculation_results",
+          "lineno": 646,
+          "docstring": "Update calculation results with enhanced pricing data if available",
+          "args": [
+            "results"
+          ],
+          "returns": "None",
+          "class": null
+        }
+      ]
+    },
+    "financial_tools.py": {
+      "file": "financial_tools.py",
+      "total_functions": 7,
+      "total_classes": 0,
+      "calculations": [
+        {
+          "name": "calculate_annuity",
+          "lineno": 10,
+          "docstring": "Echte Berechnung einer Annuität (Kredit mit gleichbleibenden Raten).\n\nArgs:\n    principal: Darlehenssumme in Euro\n    annual_interest_rate: Jährlicher Zinssatz in Prozent\n    duration_years: Laufzeit in Jahren\n\nReturns:\n    Dict mit monatlicher Rate, Gesamtzinsen, Tilgungsplan etc.",
+          "args": [
+            "principal",
+            "annual_interest_rate",
+            "duration_years"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_leasing_costs",
+          "lineno": 67,
+          "docstring": "Echte Leasingkostenberechnung mit verschiedenen Modellen.\n\nArgs:\n    total_investment: Investitionssumme\n    leasing_factor: Monatlicher Leasingfaktor in Prozent\n    duration_months: Laufzeit in Monaten\n    residual_value_percent: Restwert in Prozent (für Kilometerleasing)\n\nReturns:\n    Dict mit Leasingraten, Gesamtkosten, Kostenvergleich",
+          "args": [
+            "total_investment",
+            "leasing_factor",
+            "duration_months",
+            "residual_value_percent"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_depreciation",
+          "lineno": 106,
+          "docstring": "Echte Abschreibungsberechnung mit verschiedenen Methoden.\n\nArgs:\n    initial_value: Anschaffungswert\n    useful_life_years: Nutzungsdauer\n    method: \"linear\" oder \"degressive\"\n\nReturns:\n    Dict mit Abschreibungstabelle und Steuerersparnis",
+          "args": [
+            "initial_value",
+            "useful_life_years",
+            "method"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_financing_comparison",
+          "lineno": 144,
+          "docstring": "Vergleich verschiedener Finanzierungsoptionen.\n\nReturns:\n    Comprehensive comparison of financing options",
+          "args": [
+            "investment",
+            "annual_interest_rate",
+            "duration_years",
+            "leasing_factor"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_capital_gains_tax",
+          "lineno": 194,
+          "docstring": "Echte KESt-Berechnung für PV-Anlagen.\n\nArgs:\n    profit: Gewinn aus PV-Anlage\n    tax_rate: Steuersatz in Prozent (Standard: 26.375% in AT)\n\nReturns:\n    Dict mit Steuerberechnung",
+          "args": [
+            "profit",
+            "tax_rate"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_contracting_costs",
+          "lineno": 223,
+          "docstring": "Echte Contracting-Kostenberechnung.\n\nReturns:\n    Detailed contracting cost analysis",
+          "args": [
+            "base_fee",
+            "consumption_price",
+            "consumed_kwh",
+            "period_years"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        }
+      ],
+      "charts": [],
+      "financial_features": [
+        {
+          "name": "calculate_financing_comparison",
+          "lineno": 144,
+          "docstring": "Vergleich verschiedener Finanzierungsoptionen.\n\nReturns:\n    Comprehensive comparison of financing options",
+          "args": [
+            "investment",
+            "annual_interest_rate",
+            "duration_years",
+            "leasing_factor"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "_get_financing_recommendation",
+          "lineno": 172,
+          "docstring": "Gibt eine Finanzierungsempfehlung basierend auf den Gesamtkosten.",
+          "args": [
+            "credit_result",
+            "leasing_result",
+            "cash_investment",
+            "opportunity_cost"
+          ],
+          "returns": "str",
+          "class": null
+        }
+      ],
+      "all_functions": [
+        {
+          "name": "calculate_annuity",
+          "lineno": 10,
+          "docstring": "Echte Berechnung einer Annuität (Kredit mit gleichbleibenden Raten).\n\nArgs:\n    principal: Darlehenssumme in Euro\n    annual_interest_rate: Jährlicher Zinssatz in Prozent\n    duration_years: Laufzeit in Jahren\n\nReturns:\n    Dict mit monatlicher Rate, Gesamtzinsen, Tilgungsplan etc.",
+          "args": [
+            "principal",
+            "annual_interest_rate",
+            "duration_years"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_leasing_costs",
+          "lineno": 67,
+          "docstring": "Echte Leasingkostenberechnung mit verschiedenen Modellen.\n\nArgs:\n    total_investment: Investitionssumme\n    leasing_factor: Monatlicher Leasingfaktor in Prozent\n    duration_months: Laufzeit in Monaten\n    residual_value_percent: Restwert in Prozent (für Kilometerleasing)\n\nReturns:\n    Dict mit Leasingraten, Gesamtkosten, Kostenvergleich",
+          "args": [
+            "total_investment",
+            "leasing_factor",
+            "duration_months",
+            "residual_value_percent"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_depreciation",
+          "lineno": 106,
+          "docstring": "Echte Abschreibungsberechnung mit verschiedenen Methoden.\n\nArgs:\n    initial_value: Anschaffungswert\n    useful_life_years: Nutzungsdauer\n    method: \"linear\" oder \"degressive\"\n\nReturns:\n    Dict mit Abschreibungstabelle und Steuerersparnis",
+          "args": [
+            "initial_value",
+            "useful_life_years",
+            "method"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_financing_comparison",
+          "lineno": 144,
+          "docstring": "Vergleich verschiedener Finanzierungsoptionen.\n\nReturns:\n    Comprehensive comparison of financing options",
+          "args": [
+            "investment",
+            "annual_interest_rate",
+            "duration_years",
+            "leasing_factor"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "_get_financing_recommendation",
+          "lineno": 172,
+          "docstring": "Gibt eine Finanzierungsempfehlung basierend auf den Gesamtkosten.",
+          "args": [
+            "credit_result",
+            "leasing_result",
+            "cash_investment",
+            "opportunity_cost"
+          ],
+          "returns": "str",
+          "class": null
+        },
+        {
+          "name": "calculate_capital_gains_tax",
+          "lineno": 194,
+          "docstring": "Echte KESt-Berechnung für PV-Anlagen.\n\nArgs:\n    profit: Gewinn aus PV-Anlage\n    tax_rate: Steuersatz in Prozent (Standard: 26.375% in AT)\n\nReturns:\n    Dict mit Steuerberechnung",
+          "args": [
+            "profit",
+            "tax_rate"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        },
+        {
+          "name": "calculate_contracting_costs",
+          "lineno": 223,
+          "docstring": "Echte Contracting-Kostenberechnung.\n\nReturns:\n    Detailed contracting cost analysis",
+          "args": [
+            "base_fee",
+            "consumption_price",
+            "consumed_kwh",
+            "period_years"
+          ],
+          "returns": "dict[str, Any]",
+          "class": null
+        }
+      ]
+    },
+    "admin_panel.py": {
+      "file": "admin_panel.py",
+      "total_functions": 40,
+      "total_classes": 0,
+      "calculations": [],
+      "charts": [],
+      "financial_features": [
+        {
+          "name": "render_comprehensive_admin_payment_terms_ui_with_variants",
+          "lineno": 65,
+          "docstring": null,
+          "args": [
+            "load_func",
+            "save_func",
+            "suffix"
+          ],
+          "returns": null,
+          "class": null
+        }
+      ],
+      "all_functions": [
+        {
+          "name": "render_product_admin_ui",
+          "lineno": 51,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_comprehensive_admin_payment_terms_ui_with_variants",
+          "lineno": 65,
+          "docstring": null,
+          "args": [
+            "load_func",
+            "save_func",
+            "suffix"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "render_services_admin_ui",
+          "lineno": 75,
+          "docstring": null,
+          "args": [],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_load_admin_setting",
+          "lineno": 145,
+          "docstring": null,
+          "args": [
+            "key",
+            "default"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_save_admin_setting",
+          "lineno": 153,
+          "docstring": null,
+          "args": [
+            "key",
+            "value"
+          ],
+          "returns": null,
+          "class": null
+        },
+        {
+          "name": "_dummy_list_products",
+          "lineno": 154,
+          "docstring": null,
+          "args": [
+            "category"
+          ],
+          "returns": "list[dict[str, Any]]",
+          "class": null
+        },
+        {
+          "name": "_dummy_add_product",
+          "lineno": 155,
+          "docstring": null,
+          "args": [
+            "product_data"
+          ],
+          "returns": "int | None",
+          "class": null
+        },
+        {
+          "name": "_dummy_update_product",
+          "lineno": 156,
+          "docstring": null,
+          "args": [
+            "product_id",
+            "product_data"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "_dummy_delete_product",
+          "lineno": 157,
+          "docstring": null,
+          "args": [
+            "product_id"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "_dummy_get_product_by_id",
+          "lineno": 158,
+          "docstring": null,
+          "args": [
+            "product_id"
+          ],
+          "returns": "dict[str, Any] | None",
+          "class": null
+        },
+        {
+          "name": "_dummy_get_product_by_model_name",
+          "lineno": 159,
+          "docstring": null,
+          "args": [
+            "model_name"
+          ],
+          "returns": "dict[str, Any] | None",
+          "class": null
+        },
+        {
+          "name": "_dummy_list_product_categories",
+          "lineno": 160,
+          "docstring": null,
+          "args": [],
+          "returns": "list[str]",
+          "class": null
+        },
+        {
+          "name": "_dummy_list_companies",
+          "lineno": 161,
+          "docstring": null,
+          "args": [],
+          "returns": "list[dict[str, Any]]",
+          "class": null
+        },
+        {
+          "name": "_dummy_add_company",
+          "lineno": 162,
+          "docstring": null,
+          "args": [
+            "company_data"
+          ],
+          "returns": "int | None",
+          "class": null
+        },
+        {
+          "name": "_dummy_get_company_by_id",
+          "lineno": 163,
+          "docstring": null,
+          "args": [
+            "company_id"
+          ],
+          "returns": "dict[str, Any] | None",
+          "class": null
+        },
+        {
+          "name": "_dummy_update_company",
+          "lineno": 164,
+          "docstring": null,
+          "args": [
+            "company_id",
+            "company_data"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "_dummy_delete_company",
+          "lineno": 165,
+          "docstring": null,
+          "args": [
+            "company_id"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "_dummy_set_default_company",
+          "lineno": 166,
+          "docstring": null,
+          "args": [
+            "company_id"
+          ],
+          "returns": "bool",
+          "class": null
+        },
+        {
+          "name": "_dummy_add_company_document",
+          "lineno": 167,
+          "docstring": null,
+          "args": [
+            "company_id",
+            "display_name",
+            "document_type",
+            "original_filename",
+            "file_content_bytes"
+          ],
+          "returns": "int | None",
+          "class": null
+        },
+        {
+          "name": "_dummy_list_company_documents",
+          "lineno": 168,
+          "docstring": null,
+          "args": [
+            "company_id",
+            "doc_type"
+          ],
+          "returns": "list[dict[str, Any]]",
+          "class": null
+        }
+      ]
+    }
+  }
+}

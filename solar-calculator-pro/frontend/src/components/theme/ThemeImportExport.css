@@ -1,0 +1,20 @@
+.theme-import-export {
+  padding: 1rem;
+}
+
+.import-export-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.export-content,
+.import-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.file-upload-section {
+  margin: 0.5rem 0;
+}

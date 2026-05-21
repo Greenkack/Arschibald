@@ -1,0 +1,27 @@
+/* Task Form Styles */
+
+.task-form .field {
+  margin-bottom: 1.5rem;
+}
+
+.task-form .field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.task-form .p-inputtext,
+.task-form .p-inputtextarea,
+.task-form .p-dropdown,
+.task-form .p-calendar {
+  width: 100%;
+}
+
+.task-form .formgrid {
+  margin-bottom: 0;
+}
+
+.task-form .formgrid .field {
+  margin-bottom: 1.5rem;
+}

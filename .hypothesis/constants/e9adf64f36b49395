@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\simplejson\scanner.py
+# hypothesis_version: 6.147.0
+
+['"', '-', '-Infinity', 'Expecting value', 'I', 'Infinity', 'JSONDecodeError', 'N', 'NaN', '[', 'f', 'false', 'make_scanner', 'n', 'null', 't', 'true', '{']

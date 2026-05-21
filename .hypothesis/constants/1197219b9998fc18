@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\layout\ternary\_caxis.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'caxis', 'color', 'dtick', 'exponentformat', 'gridcolor', 'griddash', 'gridwidth', 'hoverformat', 'labelalias', 'layer', 'layout.ternary', 'layout.ternary.caxis', 'linecolor', 'linewidth', 'min', 'minexponent', 'nticks', 'separatethousands', 'showexponent', 'showgrid', 'showline', 'showticklabels', 'showtickprefix', 'showticksuffix', 'skip_invalid', 'tick0', 'tickangle', 'tickcolor', 'tickfont', 'tickformat', 'tickformatstops', 'ticklabelstep', 'ticklen', 'tickmode', 'tickprefix', 'ticks', 'ticksuffix', 'ticktext', 'ticktextsrc', 'tickvals', 'tickvalssrc', 'tickwidth', 'title', 'uirevision']

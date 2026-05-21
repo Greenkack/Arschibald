@@ -1,0 +1,36 @@
+{
+  "project_data": {
+    "customer_name": "Maria Beispiel",
+    "customer_address": "Wärmepumpenweg 456, 67890 Heizstadt",
+    "customer_phone": "+49 456 789123",
+    "customer_email": "maria@beispiel.de",
+    "heat_pump_type": "Luft-Wasser-Wärmepumpe",
+    "heating_capacity_kw": 12.0,
+    "cop_value": 4.2,
+    "installation_type": "Außenaufstellung",
+    "heating_area_sqm": 180,
+    "existing_heating": "Gasheizung"
+  },
+  "calculation_results": {
+    "total_investment_netto": 25000.00,
+    "total_investment_brutto": 29750.00,
+    "annual_heating_cost_savings": 1800.00,
+    "annual_energy_consumption_kwh": 4500,
+    "payback_period_years": 12.5,
+    "roi_percent": 8.2,
+    "co2_savings_tons_per_year": 3.8,
+    "efficiency_rating": "A+++",
+    "final_price": 29750.00
+  },
+  "company_info": {
+    "name": "Wärmepumpen Profis GmbH",
+    "address": "Heizungsstraße 10, 98765 Wärmestadt",
+    "phone": "+49 321 654987",
+    "email": "info@waermepumpen-profis.de",
+    "website": "www.waermepumpen-profis.de",
+    "tax_number": "987/654/32101"
+  },
+  "output_file": "test_wp_angebot.pdf",
+  "pdf_type": "heatpump",
+  "page_count": 16
+}

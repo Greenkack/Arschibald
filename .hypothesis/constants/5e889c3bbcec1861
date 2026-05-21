@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\controlling\analytics.py
+# hypothesis_version: 6.147.0
+
+[0.0, 100, 'Abschlussquote', 'Angebot erhalten', 'Angefahrene Termine', 'Folgetermin gemacht', 'Kunden terminiert', 'QC bestanden', 'Quote für Angebote', 'Quote für zu teuer', 'Termine-Anfahrquote', 'Verkauf', 'Zu teuer gewesen', 'employee_id', 'employee_name', 'employees', 'end_date', 'keine Daten', 'period_type', 'position', 'quotas', 'ratios', 'raw_data', 'start_date']

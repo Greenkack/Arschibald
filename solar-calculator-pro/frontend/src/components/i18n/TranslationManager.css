@@ -1,0 +1,123 @@
+/**
+ * Translation Manager Styles
+ */
+
+.translation-manager {
+  padding: 1.5rem;
+}
+
+.search-bar {
+  margin: 1rem 0;
+}
+
+.search-bar .p-input-icon-left {
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-bar input {
+  width: 100%;
+}
+
+.translation-table {
+  margin-top: 1rem;
+}
+
+.translation-cell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.translation-text {
+  display: block;
+  padding: 0.5rem 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.translation-edit-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+.translation-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+.translation-import-dialog .p-dialog-content {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* RTL Support */
+[dir='rtl'] .toolbar-left,
+[dir='rtl'] .toolbar-right {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .action-buttons {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .dialog-actions {
+  flex-direction: row-reverse;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .translation-manager {
+    padding: 1rem;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    flex-wrap: wrap;
+  }
+
+  .translation-edit-dialog {
+    width: 95vw !important;
+  }
+
+  .translation-cell {
+    max-width: 150px;
+  }
+}

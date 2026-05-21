@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\aiosqlite\core.py
+# hypothesis_version: 6.147.0
+
+[0.01, 0.25, 'Connection', 'Connection closed', 'Cursor', 'DEFERRED', 'EXCLUSIVE', 'IMMEDIATE', 'aiosqlite', 'connect', 'executing %s', 'main', 'no active connection', 'utf-8']

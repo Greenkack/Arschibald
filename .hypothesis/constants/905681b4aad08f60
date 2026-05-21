@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\layout\polar\_angularaxis.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'angularaxis', 'autotypenumbers', 'categoryarray', 'categoryarraysrc', 'categoryorder', 'color', 'direction', 'dtick', 'exponentformat', 'gridcolor', 'griddash', 'gridwidth', 'hoverformat', 'labelalias', 'layer', 'layout.polar', 'linecolor', 'linewidth', 'minexponent', 'minorloglabels', 'nticks', 'period', 'rotation', 'separatethousands', 'showexponent', 'showgrid', 'showline', 'showticklabels', 'showtickprefix', 'showticksuffix', 'skip_invalid', 'thetaunit', 'tick0', 'tickangle', 'tickcolor', 'tickfont', 'tickformat', 'tickformatstops', 'ticklabelstep', 'ticklen', 'tickmode', 'tickprefix', 'ticks', 'ticksuffix', 'ticktext', 'ticktextsrc', 'tickvals', 'tickvalssrc', 'tickwidth', 'type', 'uirevision', 'visible']

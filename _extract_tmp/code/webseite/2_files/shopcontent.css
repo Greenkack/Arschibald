@@ -1,0 +1,249 @@
+
+/* ---------- ANSICHT CONTENT-SEITEN ---------- */
+
+/* Navigation BLOCK */
+
+.os_contentnavi { margin-right:20px ; margin-top:15px }
+.os_contentnavi ul { margin-top:20px ; border-top: 1px solid #e1e1e1 }
+.os_contentnavi ul a { display:block ; padding: 8px 0 ; border-bottom: 1px solid #e1e1e1 }
+.os_contentnavi ul a.active { color:#B20000 }
+
+/* Content */
+
+.os_contenttext { line-height:1.5 ; font-size:1.083em ; margin-top:15px }
+.os_contenttext h1 { padding-bottom:15px ; margin: 0 0 30px 0 ; font-size:1.333em ; font-weight:600 ; border-bottom:1px solid #e1e1e1 }
+.os_contenttext h2 { margin: 15px 0 25px 0 ; font-size:1.250em ; font-weight:600 }
+.os_contenttext a { text-decoration:underline }
+.os_contenttext p { padding: 15px 0 15px 0 }
+.os_contenttext ul { margin: 20px 0 20px 0 ; padding-left: 15px  }
+.os_contenttext ul li { margin-left:0 ; padding:6px 0 6px 0 }
+.os_contenttext ul li a { text-decoration:none }
+
+/* SPECIAL : Kontaktform */
+
+.os_form_mailer_formgroup .control-label { font-weight:normal }
+.os_form_mailer_formgroup .form-group.mand .control-label { font-weight:bold }
+
+/* SPECIAL : Schnellbestellung */
+
+.os_fastorder_form td , .os_fastorder_form th { padding: 4px 8px }
+
+/* SPEZIAL : Youtube-Video responsive */
+
+.os_content_youtube { position:relative ; padding-bottom:56.25% ; height:0 ; overflow:hidden }
+.os_content_youtube iframe { position:absolute ; top:0 ; left:0 ; width:100% ; height:100% }
+.os_content_youtube.ratio4x3 { padding-bottom:75% }
+
+/* SPEZIAL : Produkt-Plugin */
+
+#os_list_prod { line-height:1.2 ; font-size:1em }
+
+/* Zweispaltiges Layout */
+
+#erste_spalte {
+    margin: 0px auto;
+    width: 39%;
+    float: left;
+    }
+
+#zweite_spalte {
+    margin: 0 auto;
+    width:58%;
+    float:right
+    }
+
+#call {
+    margin:0 !important;
+    float:left;
+    width:49%;
+    background-color: #f1f1f1;
+    text-align: center;
+    }
+
+#mail {
+    margin:0 !important;
+    float:right;
+    width:49%;
+    background-color: #f1f1f1;
+    text-align: center;
+    }
+
+
+/* Tabelle : Festpreisangebot */
+
+.os_content_festpreis {
+width: 50%!important;
+min-width: 250px;
+}
+
+table .solidline {
+border-bottom: 2px solid darkgrey!important;
+}
+
+
+.os_content_festpreis th{
+text-align: left!important;
+}
+
+.os_content_festpreis td{
+text-align: right!important;
+}
+
+.os_content_festpreis .big {
+font-size: 1.3em!important;
+}
+
+.os_content_festpreis .small {
+font-size: 0.8em!important;
+}
+
+
+h1.headline {
+    line-height: 1.5!important;
+    border-bottom: 0px!important;
+    margin-left: 10px;
+    }
+
+h4.headline {
+    font-family: arial;
+    line-height: 1.1!important;
+    font-size: 2.3em!important;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    }
+    
+p.big {
+    font-size: 1.8em;
+    text-align: center;
+    }
+
+ul.checkmark {
+    list-style-type:none;
+}    
+
+ul.checkmark li:before {
+    content:"\2713\0020";
+    font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', Arial;
+    font-size: 1.1em;
+    font-weight: bold;
+    }
+    
+.cta {
+    margin-bottom: 35px;
+    background: radial-gradient(circle, white 60%, #eb4b0a 100%);
+    background-image: radial-gradient(circle, white 60%, #eb4b0a 100%);
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat-x: initial;
+    background-repeat-y: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: initial;
+}
+
+
+@media screen and (max-width: 4000px) {
+#innogyvisual .einfachmietenbox {
+    position: absolute;
+    z-index: 10;
+    text-align: left;
+    width: 200px;
+    height: 120px;
+    left: 100px;
+    right: auto;
+    top: 8rem;
+    background-color: #eb4b0a;
+    padding: 15px;
+    }
+    
+    .einfachmietenbox {
+    font-size: 1rem;
+    color: white;
+    }
+    
+    .ctaimage {
+        margin-left: 25%;
+        margin-right: auto;
+        width: 100%;
+        max-width: 50%;
+        min-width: 50%;
+    }
+    
+}
+
+@media screen and (max-width: 780px) {
+
+#erste_spalte {
+    margin: 0px auto;
+    width: 100%;
+    }
+
+
+#zweite_spalte {
+    margin: 0 auto;
+    width:100%;
+    }
+
+#call {
+    margin:0 !important;
+    width:100%;
+    background-color: #f1f1f1;
+    text-align: center;
+    }
+
+#mail {
+    margin-top: 2% !important;
+    width:100%;
+    background-color: #f1f1f1;
+    text-align: center;
+    }
+    
+    
+#innogyvisual .einfachmietenbox {
+    position: fixed ;
+    z-index: 10;
+    text-align: left;
+    width: 100%;
+    height: 30px;
+    left: 0;
+    right: auto;
+    top: -3rem;
+    background-color: #eb4b0a;
+    padding: 3px;
+    margin-bottom: 25px;
+}
+    
+.einfachmietenbox {
+    font-size: 0.7em;
+    color: white;
+    }
+    
+    .ctaimage {
+        margin-left: 10%;
+        margin-right: auto;
+        width: 100%;
+        max-width: 50%;
+        min-width: 80%;
+    }
+    
+    
+}
+
+@keyframes colorize {
+    0% {
+        -webkit-filter: grayscale(100%);
+        filter: grayscale(100%);
+    }
+    100% {
+        -webkit-filter: grayscale(0%);
+        filter: grayscale(0%);
+    }
+
+}
+
+
+/* ---------- END ---------- */

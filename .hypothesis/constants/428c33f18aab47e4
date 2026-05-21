@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\httpx\_api.py
+# hypothesis_version: 6.147.0
+
+['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put', 'request', 'stream']

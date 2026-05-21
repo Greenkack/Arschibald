@@ -1,0 +1,69 @@
+.user-settings {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.settings-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 1rem;
+}
+
+.settings-section h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-color);
+  font-size: 1.25rem;
+}
+
+.setting-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.setting-item label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.setting-item .p-dropdown {
+  width: 100%;
+  max-width: 300px;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  color: var(--text-color-secondary);
+}
+
+@media (max-width: 768px) {
+  .setting-item {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .setting-item .p-dropdown {
+    max-width: 100%;
+  }
+}

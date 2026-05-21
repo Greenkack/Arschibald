@@ -1,0 +1,120 @@
+.heat-pump-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  font-size: 1.2rem;
+  color: var(--text-color-secondary);
+}
+
+.heat-load-result {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.heat-load-result h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.heat-load-value {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+.heat-load-result p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.info-message,
+.coming-soon {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-color-secondary);
+}
+
+.info-message i,
+.coming-soon i {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.info-message p,
+.coming-soon p {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Tab styling */
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+}
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.p-tabview .p-tabview-panels {
+  padding: 2rem;
+  background: var(--surface-card);
+  border-radius: 0 0 8px 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .heat-pump-page {
+    padding: 1rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .page-header p {
+    font-size: 1rem;
+  }
+
+  .heat-load-value {
+    font-size: 2rem;
+  }
+
+  .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .p-tabview .p-tabview-panels {
+    padding: 1rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .page-header h1 {
+    color: var(--primary-color-text);
+  }
+}

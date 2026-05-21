@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\brain\brain_random.py
+# hypothesis_version: 6.147.0
+
+['col_offset', 'end_col_offset', 'end_lineno', 'lineno', 'parent', 'postinit', 'sample']

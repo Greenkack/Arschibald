@@ -1,0 +1,258 @@
+/**
+ * Inverter Selector Component Styles
+ */
+
+.inverter-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card Headers */
+.inverter-selector h4 {
+  margin: 0 0 1rem 0;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
+/* Sizing Card */
+.sizing-card .sizing-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.sizing-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: var(--surface-ground);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.sizing-item.highlight {
+  background: var(--primary-50);
+  border: 2px solid var(--primary-color);
+}
+
+.sizing-item .label {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+}
+
+.sizing-item .value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.sizing-item.highlight .value {
+  color: var(--primary-color);
+}
+
+/* Selection Card */
+.selection-controls {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.selection-controls .field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.selection-controls .field label {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.checkbox-field {
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding-bottom: 0.5rem;
+}
+
+.auto-selection {
+  margin-top: 1rem;
+}
+
+/* Details Card */
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.details-header h4 {
+  margin: 0;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: var(--surface-ground);
+  border-radius: 6px;
+}
+
+.spec-item.highlight {
+  background: var(--green-50);
+  border: 1px solid var(--green-200);
+}
+
+.spec-label {
+  font-size: 0.7rem;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+}
+
+.spec-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.features {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.features-label {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  margin-right: 0.5rem;
+}
+
+.feature-tag {
+  font-size: 0.75rem;
+}
+
+/* Compatibility Card */
+.compatibility-score {
+  margin-bottom: 1rem;
+}
+
+.compatibility-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background: var(--surface-ground);
+}
+
+.check-item.ok {
+  background: var(--green-50);
+  border-left: 4px solid var(--green-500);
+}
+
+.check-item.ok .pi {
+  color: var(--green-500);
+}
+
+.check-item.fehler {
+  background: var(--red-50);
+  border-left: 4px solid var(--red-500);
+}
+
+.check-item.fehler .pi {
+  color: var(--red-500);
+}
+
+.check-item.warnung {
+  background: var(--orange-50);
+  border-left: 4px solid var(--orange-500);
+}
+
+.check-item.warnung .pi {
+  color: var(--orange-500);
+}
+
+.check-name {
+  font-weight: 600;
+  min-width: 120px;
+}
+
+.check-details {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+/* Inverter List Card */
+.inverter-list-card {
+  max-height: 400px;
+  overflow: auto;
+}
+
+/* Details Dialog */
+.inverter-details-dialog .details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inverter-details-dialog .details-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.inverter-details-dialog .details-table td:first-child {
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  width: 40%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sizing-card .sizing-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sizing-card .sizing-info,
+  .specs-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .selection-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .check-item {
+    flex-wrap: wrap;
+  }
+  
+  .check-name {
+    min-width: auto;
+    width: 100%;
+  }
+}

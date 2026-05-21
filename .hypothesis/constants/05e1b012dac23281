@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\_orm_constructors.py
+# hypothesis_version: 6.147.0
+
+['*', '1.4', '2.0', '_T', 'aliased', 'all', 'auto', 'autoflush', 'default', 'default_factory', 'dynamic', 'expire_on_commit', 'init', 'kw_only', 'lazy', 'query_expression', 'save-update, merge', 'select']

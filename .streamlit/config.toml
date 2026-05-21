@@ -1,0 +1,75 @@
+# ---------- SERVER ----------
+[server]
+headless = false
+fileWatcherType = "poll"           # "auto"|"watchdog"|"poll"|"none"
+enableCORS = true
+enableXsrfProtection = true
+maxUploadSize = 512                 # MB
+# Stabilität & Performance
+runOnSave = false                    # Auto-reload bei Dateiänderungen
+enableStaticServing = true          # Statische Dateien effizienter bereitstellen
+enableWebsocketCompression = true   # WebSocket Kompression für bessere Performance
+port = 8501                         # Standard-Port (funktioniert mit developmentMode=false)
+address = "localhost"               # Server-Adresse
+baseUrlPath = ""                    # Base URL Path für Reverse Proxy
+# Memory & Connection Management
+maxMessageSize = 500                # Max WebSocket Message Size in MB
+
+# ---------- BROWSER ----------
+[browser]
+serverAddress = "localhost"
+serverPort = 8501
+gatherUsageStats = true           # Keine Telemetrie an Streamlit senden
+
+# ---------- CLIENT ----------
+[client]
+showErrorDetails = true            # Verstecke Fehler-Details im Production-Modus
+toolbarMode = "developer"             # Minimale Toolbar ohne "Running..." Meldungen
+showSidebarNavigation = true
+
+# ---------- RUNNER ----------
+[runner]
+magicEnabled = true
+# Stabilität & Performance
+fastReruns = true                   # Schnellere Reruns bei kleinen Änderungen
+postScriptGC = true                 # Garbage Collection nach Script-Ausführung
+# Memory Management
+enforceSerializableSessionState = true  # Für komplexe Objekte in Session State
+
+# ---------- THEME ----------
+[theme]
+base = "light"                       # "light"|"dark" - Auf Light geändert für Card-Sichtbarkeit
+primaryColor = "#ff7800"             # Dunkler Text für Kontrast (vorher #ff7800)
+backgroundColor = "#d8dce1"          # Dunkles Grau für Hintergrund
+secondaryBackgroundColor = "#e5e7ea" # Helleres Grau für Sidebar/Cards
+textColor = "#1a202c"                # Dunkler Text (Schwarz)
+linkColor = "#1a202c"                # Link-Farbe (Schwarz statt Orange)
+codeBackgroundColor = "rgba(172, 172, 172, 1)"      # Code-Block Hintergrund (sehr hell)
+font = "Nunito, sans-serif"          # Haupt-Schriftart
+baseFontSize = 16                    # px
+headingFont = "Nunito, sans-serif"   # Überschriften-Schriftart
+
+# Font-Einbindung für Nunito
+[[theme.fontFaces]]
+family = "Nunito"
+url = "https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap"
+weight = "400"
+style = "normal"
+
+# ---------- LOGGER ----------
+[logger]
+level = "error"
+messageFormat = "%(asctime)s %(message)s"
+# Stabilität
+enableRich = false                  # Einfaches Logging (weniger Overhead)
+
+# ---------- DEPRECATION ----------
+# Alle veralteten Optionen entfernt
+
+# ---------- GLOBAL ----------
+[global]
+# Development vs Production
+developmentMode = false              # Production-Modus (kompatibel mit server.port)
+# Performance
+showWarningOnDirectExecution = false # Keine Warnung bei direkter Ausführung
+unitTest = false                    # Unit-Test-Modus deaktiviert

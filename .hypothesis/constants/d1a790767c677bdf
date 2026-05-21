@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\layout\template\data\__init__.py
+# hypothesis_version: 6.147.0
+
+['._bar.Bar', '._barpolar.Barpolar', '._box.Box', '._carpet.Carpet', '._cone.Cone', '._contour.Contour', '._funnel.Funnel', '._heatmap.Heatmap', '._icicle.Icicle', '._image.Image', '._mesh3d.Mesh3d', '._ohlc.Ohlc', '._parcats.Parcats', '._pie.Pie', '._sankey.Sankey', '._scatter.Scatter', '._splom.Splom', '._sunburst.Sunburst', '._surface.Surface', '._table.Table', '._treemap.Treemap', '._violin.Violin', '._volume.Volume']

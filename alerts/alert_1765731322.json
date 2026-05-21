@@ -1,0 +1,8 @@
+{
+  "timestamp": "2025-12-14T17:55:22.862749",
+  "status": "CRITICAL",
+  "error_rate": 0.0,
+  "performance_score": 5.0,
+  "code_quality_score": 0,
+  "message": "Application in CRITICAL state"
+}

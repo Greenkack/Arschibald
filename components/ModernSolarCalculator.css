@@ -1,0 +1,175 @@
+/* ModernSolarCalculator.css */
+
+.modern-solar-calculator {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.step-content {
+  min-height: 500px;
+}
+
+.p-inputgroup .p-button {
+  min-width: 3rem;
+}
+
+.loading-container {
+  min-height: 400px;
+}
+
+.info-panel {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.total-price-panel {
+  background-color: #e3f2fd;
+  border-radius: 6px;
+}
+
+.price-display {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1976d2;
+}
+
+/* PrimeReact utility classes (if not provided by theme) */
+.p-text-center { text-align: center; }
+
+.p-mb-0 { margin-bottom: 0 !important; }
+.p-mb-2 { margin-bottom: 0.5rem !important; }
+.p-mb-3 { margin-bottom: 1rem !important; }
+.p-mb-4 { margin-bottom: 1.5rem !important; }
+.p-mt-2 { margin-top: 0.5rem !important; }
+.p-mt-3 { margin-top: 1rem !important; }
+.p-mr-2 { margin-right: 0.5rem !important; }
+.p-ml-2 { margin-left: 0.5rem !important; }
+.p-ml-3 { margin-left: 1rem !important; }
+
+.p-p-4 { padding: 1.5rem !important; }
+
+.p-d-block { display: block !important; }
+.p-d-flex { display: flex !important; }
+.p-jc-center { justify-content: center !important; }
+.p-jc-between { justify-content: space-between !important; }
+.p-ai-center { align-items: center !important; }
+
+.p-grid { 
+  display: flex; 
+  flex-wrap: wrap; 
+  margin-right: -0.5rem; 
+  margin-left: -0.5rem; 
+}
+
+.p-col-12 { 
+  flex: 0 0 auto; 
+  padding: 0.5rem; 
+  width: 100%; 
+}
+
+.p-col-6 { 
+  flex: 0 0 auto; 
+  padding: 0.5rem; 
+  width: 50%; 
+}
+
+.p-col-4 { 
+  flex: 0 0 auto; 
+  padding: 0.5rem; 
+  width: 33.3333%; 
+}
+
+.p-col-3 { 
+  flex: 0 0 auto; 
+  padding: 0.5rem; 
+  width: 25%; 
+}
+
+@media (min-width: 768px) {
+  .p-md-6 { width: 50%; }
+  .p-md-4 { width: 33.3333%; }
+  .p-md-5 { width: 41.6667%; }
+  .p-md-3 { width: 25%; }
+}
+
+.p-fluid .p-inputtext,
+.p-fluid .p-inputnumber-input,
+.p-fluid .p-dropdown {
+  width: 100%;
+}
+
+/* Component specific styles */
+.solar-calculator-steps {
+  margin-bottom: 2rem;
+}
+
+.module-quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quantity-button {
+  min-width: 3rem;
+  height: 3rem;
+}
+
+.calculation-results {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  margin: 1rem 0;
+}
+
+.result-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.product-selection-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.product-selection-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wizard-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section h4 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.success-message {
+  color: #2e7d32;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}

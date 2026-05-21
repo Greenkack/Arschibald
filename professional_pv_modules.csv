@@ -1,0 +1,29 @@
+category,brand,model_name,price_euro,capacity_w,efficiency_percent,length_m,width_m,weight_kg,warranty_years,origin_country,description
+pv_modul,ViessmannPV,Vitovolt 300-DG M440HC,180,440,22,2.1,1.0,22,25,Germany,Hocheffizienz monokristallines PV-Modul
+pv_modul,ViessmannPV,Vitovolt 300-DG M445HC,185,445,22,2.1,1.0,22.5,25,Germany,Hocheffizienz monokristallines PV-Modul
+pv_modul,ViessmannPV,Vitovolt 300-DG M450HC,190,450,22,2.1,1.0,23,25,Germany,Hocheffizienz monokristallines PV-Modul
+pv_modul,ViessmannPV,Vitovolt 300-DG M455HC,195,455,22,2.1,1.0,23.5,25,Germany,Hocheffizienz monokristallines PV-Modul
+pv_modul,ViessmannPV,Vitovolt 300-DG M460HC,200,460,22,2.1,1.0,24,25,Germany,Hocheffizienz monokristallines PV-Modul
+pv_modul,ViessmannPV,Vitovolt 300-DG M470HC,210,470,22,2.1,1.0,24.5,25,Germany,Hocheffizienz monokristallines PV-Modul
+pv_modul,ViessmannPV,Vitovolt 300-DG M480HC,220,480,22,2.1,1.0,25,25,Germany,Hocheffizienz monokristallines PV-Modul
+pv_modul,SolarfabrikPV,Mono S4 Trendline 440W,175,440,22,2.1,1.0,22,25,Germany,Deutsche Qualität PV-Module
+pv_modul,SolarfabrikPV,Mono S4 Trendline 445W,180,445,22,2.1,1.0,22.5,25,Germany,Deutsche Qualität PV-Module
+pv_modul,SolarfabrikPV,Mono S4 Trendline 450W,185,450,22,2.1,1.0,23,25,Germany,Deutsche Qualität PV-Module
+pv_modul,SolarfabrikPV,Mono S4 Trendline 455W,190,455,22,2.1,1.0,23.5,25,Germany,Deutsche Qualität PV-Module
+pv_modul,SolarfabrikPV,Mono S4 Trendline 460W,195,460,22,2.1,1.0,24,25,Germany,Deutsche Qualität PV-Module
+pv_modul,SolarfabrikPV,Mono S4 Trendline 475W,205,475,22,2.1,1.0,24.5,25,Germany,Deutsche Qualität PV-Module
+pv_modul,SolarfabrikPV,Mono S4 Trendline 485W,215,485,22,2.1,1.0,25,25,Germany,Deutsche Qualität PV-Module
+pv_modul,TrinaSolarPV,Vertex S+ TSM-440,160,440,22.2,2.1,1.0,22,25,China,210mm Wafer N-Type Technologie
+pv_modul,TrinaSolarPV,Vertex S+ TSM-445,165,445,22.2,2.1,1.0,22.5,25,China,210mm Wafer N-Type Technologie
+pv_modul,TrinaSolarPV,Vertex S+ TSM-450,170,450,22.2,2.1,1.0,23,25,China,210mm Wafer N-Type Technologie
+pv_modul,TrinaSolarPV,Vertex S+ TSM-455,175,455,22.2,2.1,1.0,23.5,25,China,210mm Wafer N-Type Technologie
+pv_modul,TrinaSolarPV,Vertex S+ TSM-460,180,460,22.2,2.1,1.0,24,25,China,210mm Wafer N-Type Technologie
+pv_modul,TrinaSolarPV,Vertex S+ TSM-470,190,470,22.2,2.1,1.0,24.5,25,China,210mm Wafer N-Type Technologie
+pv_modul,TrinaSolarPV,Vertex S+ TSM-475,195,475,22.2,2.1,1.0,25,25,China,210mm Wafer N-Type Technologie
+pv_modul,AikoSolarPV,Neostar 2S+ 440W,165,440,22.5,2.1,1.0,22,25,China,N-Type TOPCon Technologie
+pv_modul,AikoSolarPV,Neostar 2S+ 445W,170,445,22.5,2.1,1.0,22.5,25,China,N-Type TOPCon Technologie
+pv_modul,AikoSolarPV,Neostar 2S+ 450W,175,450,22.5,2.1,1.0,23,25,China,N-Type TOPCon Technologie
+pv_modul,AikoSolarPV,Neostar 2S+ 455W,180,455,22.5,2.1,1.0,23.5,25,China,N-Type TOPCon Technologie
+pv_modul,AikoSolarPV,Neostar 2S+ 460W,185,460,22.5,2.1,1.0,24,25,China,N-Type TOPCon Technologie
+pv_modul,AikoSolarPV,Neostar 2S+ 470W,195,470,22.5,2.1,1.0,24.5,25,China,N-Type TOPCon Technologie
+pv_modul,AikoSolarPV,Neostar 2S+ 480W,205,480,22.5,2.1,1.0,25,25,China,N-Type TOPCon Technologie
